@@ -136,6 +136,8 @@ pub struct State {
     log: RefCell<Vec<Interaction>>,
     /// The next interaction to replay.
     cursor: Cell<usize>,
+    /// The functions whose checks are running, outermost first.
+    checking: RefCell<Vec<u32>>,
     /// Mismatches kept per function; later ones only count in `stats`.
     pub keep_per_function: Cell<usize>,
     pub mismatches: RefCell<Vec<Mismatch>>,
@@ -147,6 +149,11 @@ impl State {
         self.active.get()
     }
 
+    /// Whether a check of the port of `addr` is running.
+    pub fn is_checking(&self, addr: u32) -> bool {
+        self.checking.borrow().contains(&addr)
+    }
+
     /// Whether the original side of a check is running.
     pub fn in_original(&self) -> bool {
         matches!(self.phase.get(), Phase::Original | Phase::Replay)
@@ -155,6 +162,15 @@ impl State {
     pub fn clear(&self) {
         self.mismatches.borrow_mut().clear();
         self.stats.borrow_mut().clear();
+    }
+
+    /// How far checks have got through the world's interactions: it grows while the original
+    /// makes them and while the port replays them, where video fields do not advance.
+    pub fn progress(&self) -> usize {
+        match self.phase.get() {
+            Phase::Original => self.log.borrow().len(),
+            _ => self.cursor.get(),
+        }
     }
 }
 
@@ -186,7 +202,9 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
         CHECKING.with(|c| c.set(true));
         state.log.borrow_mut().clear();
         state.cursor.set(0);
+        state.checking.borrow_mut().clear();
     }
+    state.checking.borrow_mut().push(addr);
     let regs0 = ctx.regs.snapshot();
     let sp = regs0.gpr[1];
     let start = state.cursor.get();
@@ -292,6 +310,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     ctx.regs.restore(&regs1);
     state.cursor.set(end);
     state.phase.set(enclosing);
+    state.checking.borrow_mut().pop();
     if outermost {
         state.active.set(false);
         CHECKING.with(|c| c.set(false));

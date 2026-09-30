@@ -342,14 +342,17 @@ fn run() -> ExitCode {
     sdk.schedule(hw::field_start(fields), |_| panic::panic_any(Stop));
 
     // Every heartbeat, report progress; if no field passed in a while, show where it spins.
-    let last_fields = Cell::new(0u64);
+    let last_fields = Cell::new((0u64, 0usize));
     let stuck = Cell::new(0u32);
     let pcs: std::cell::RefCell<HashMap<u32, u32>> = Default::default();
     let interp2 = interp.clone();
     ctx.set_heartbeat(move |ctx, pc| {
         let sdk = ctx.ext::<Sdk>();
         let f = sdk.hw.fields.get();
-        if f == last_fields.get() {
+        // A port under lockstep replays the original's interrupts, so fields stand still
+        // while it runs; its progress through the replay shows it is not stuck.
+        let progress = (f, ctx.lockstep.progress());
+        if progress == last_fields.get() {
             stuck.set(stuck.get() + 1);
             *pcs.borrow_mut().entry(pc).or_default() += 1;
             if stuck.get() >= 8 {
@@ -358,6 +361,9 @@ fn run() -> ExitCode {
                 for (n, pc) in hot.iter().take(8) {
                     eprintln!("  {n:4} x {}", ctx.name_of(*pc));
                 }
+                // Lockstep may catch this and go on, from before the port that spun.
+                stuck.set(0);
+                pcs.borrow_mut().clear();
                 panic!(
                     "stuck: no video field for {} instructions",
                     8 * ssbm_rt::HEARTBEAT
@@ -366,7 +372,7 @@ fn run() -> ExitCode {
         } else {
             stuck.set(0);
             pcs.borrow_mut().clear();
-            last_fields.set(f);
+            last_fields.set(progress);
         }
         eprintln!(
             "field {f:6}  {:>6} M instructions  {} draws  at {}",

@@ -511,11 +511,15 @@ impl Ctx {
             Mode::Native if e.external => (e.native)(self),
             Mode::Original if self.has_backend() => self.run_original(addr),
             // The original side of a check runs originals throughout; anywhere else a call to a
-            // port under lockstep is checked, nested inside any check already running.
+            // port under lockstep is checked, nested inside any check already running, unless
+            // that function is already under check: nested checks of a recursion would rerun
+            // the rest of it at every level.
             Mode::Lockstep if self.has_backend() && self.lockstep.in_original() => {
                 self.run_original(addr)
             }
-            Mode::Lockstep if self.has_backend() => lockstep::run(self, addr, e.native, e.returns),
+            Mode::Lockstep if self.has_backend() && !self.lockstep.is_checking(addr) => {
+                lockstep::run(self, addr, e.native, e.returns)
+            }
             _ => self.run_native(addr, e.native),
         }
     }
