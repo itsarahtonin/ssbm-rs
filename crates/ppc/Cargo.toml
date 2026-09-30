@@ -1,0 +1,12 @@
+[package]
+name = "ssbm-ppc"
+description = "Gekko interpreter that runs the original code in dev builds"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+gekko-fp.workspace = true
+ssbm-rt.workspace = true

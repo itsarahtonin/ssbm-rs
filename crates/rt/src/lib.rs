@@ -93,8 +93,15 @@ pub struct Ctx {
     mmio: OnceCell<Box<dyn Mmio>>,
     names: OnceCell<Box<dyn Fn(u32) -> Option<String>>>,
     hooks: RefCell<HashMap<u32, Hook>>,
+    /// Per MEM1 word: `FLAG_NATIVE` and `FLAG_HOOK`, so the interpreter checks cheaply.
+    flags: Box<[Cell<u8>]>,
     pub lockstep: lockstep::State,
 }
+
+/// The word starts a function with a native implementation.
+pub const FLAG_NATIVE: u8 = 1;
+/// The word has a hook.
+pub const FLAG_HOOK: u8 = 2;
 
 impl Default for Ctx {
     fn default() -> Self {
@@ -113,7 +120,28 @@ impl Ctx {
             mmio: OnceCell::new(),
             names: OnceCell::new(),
             hooks: RefCell::default(),
+            flags: vec![Cell::new(0); (MEM1_SIZE / 4) as usize].into_boxed_slice(),
             lockstep: lockstep::State::default(),
+        }
+    }
+
+    /// `FLAG_*` bits for the word at `addr`.
+    #[inline]
+    pub fn flags_at(&self, addr: u32) -> u8 {
+        match ssbm_mem::phys(addr, 4) {
+            Some(p) => self.flags[(p / 4) as usize].get(),
+            None => 0,
+        }
+    }
+
+    fn set_flag(&self, addr: u32, flag: u8, on: bool) {
+        if let Some(p) = ssbm_mem::phys(addr, 4) {
+            let cell = &self.flags[(p / 4) as usize];
+            cell.set(if on {
+                cell.get() | flag
+            } else {
+                cell.get() & !flag
+            });
         }
     }
 
@@ -281,6 +309,7 @@ impl Ctx {
 
     /// Registers a native implementation for the function at `addr`.
     pub fn register(&self, addr: u32, native: Native) {
+        self.set_flag(addr, FLAG_NATIVE, true);
         self.dispatch.borrow_mut().insert(
             addr,
             Entry {
@@ -340,7 +369,13 @@ impl Ctx {
     // Hooks run when original code reaches an address; ported code calls `run_hook`.
 
     pub fn set_hook(&self, addr: u32, hook: Hook) {
+        self.set_flag(addr, FLAG_HOOK, true);
         self.hooks.borrow_mut().insert(addr, hook);
+    }
+
+    pub fn remove_hook(&self, addr: u32) {
+        self.set_flag(addr, FLAG_HOOK, false);
+        self.hooks.borrow_mut().remove(&addr);
     }
 
     pub fn has_hook(&self, addr: u32) -> bool {

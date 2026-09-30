@@ -1141,6 +1141,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "ssbm-ppc"
+version = "0.1.0"
+dependencies = [
+ "gekko-fp",
+ "ssbm-rt",
+]
+
+[[package]]
 name = "ssbm-rt"
 version = "0.1.0"
 dependencies = [
