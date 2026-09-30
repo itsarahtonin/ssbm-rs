@@ -1009,10 +1009,7 @@ pub fn mpColl_800439FC<'a>(ctx: &'a Ctx, coll: CollData<'a>) {
         ((coll).ecb().right().x())
     });
     f1 = fp::fmadds((coll).ceiling().normal().y(), right_dx, right_x);
-    f2 = fp::fadds(
-        fp::fneg((fp::fmuls((coll).ceiling().normal().x(), right_dx))),
-        right_y,
-    );
+    f2 = fp::fnmsubs((coll).ceiling().normal().x(), right_dx, right_y);
     if !(fns::mpCheckLeftWall(
         ctx,
         f1,
@@ -1065,10 +1062,7 @@ pub fn mpColl_80043ADC<'a>(ctx: &'a Ctx, coll: CollData<'a>) {
     } else {
         ((coll).ecb().left().x())
     });
-    f1 = fp::fadds(
-        fp::fneg((fp::fmuls((coll).ceiling().normal().y(), left_dx))),
-        left_x,
-    );
+    f1 = fp::fnmsubs((coll).ceiling().normal().y(), left_dx, left_x);
     f2 = fp::fmadds((coll).ceiling().normal().x(), left_dx, left_y);
     if !(fns::mpCheckRightWall(
         ctx,
@@ -1163,10 +1157,7 @@ pub fn mpColl_80043C6C<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32, ignor
         null::<Vec<'a>>(ctx),
     ) != 1_i32.wrapping_neg()
     {
-        let mut floor_x: f64 = fp::fadds(
-            fp::fneg((fp::fmuls((coll).floor().normal().y(), right_dx))),
-            pos.x(),
-        );
+        let mut floor_x: f64 = fp::fnmsubs((coll).floor().normal().y(), right_dx, pos.x());
         let mut floor_y: f64 = fp::fmadds((coll).floor().normal().x(), right_dx, pos.y());
         if (fns::mpCheckLeftWall(
             ctx,
@@ -1316,10 +1307,7 @@ pub fn mpColl_80043F40<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32, ignor
     ) != 1_i32.wrapping_neg()
     {
         let mut floor_x: f64 = fp::fmadds((coll).floor().normal().y(), left_dx, pos.x());
-        let mut floor_y: f64 = fp::fadds(
-            fp::fneg((fp::fmuls((coll).floor().normal().x(), left_dx))),
-            pos.y(),
-        );
+        let mut floor_y: f64 = fp::fnmsubs((coll).floor().normal().x(), left_dx, pos.y());
         if (fns::mpCheckRightWall(
             ctx,
             floor_x,
@@ -1360,13 +1348,9 @@ pub fn mpColl_80043F40<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32, ignor
         f1 = fp::fadds(2.0, pos.x());
         f2 = pos.y();
         pos.set_x(fp::fmadds(2.0, left_dx, f1));
-        pos.set_y(fp::fadds(
-            fp::fneg(
-                (fp::fmuls(
-                    2.0,
-                    (fp::fsubs((coll).ecb().left().y(), (coll).ecb().bottom().y())),
-                )),
-            ),
+        pos.set_y(fp::fnmsubs(
+            2.0,
+            (fp::fsubs((coll).ecb().left().y(), (coll).ecb().bottom().y())),
             f2,
         ));
         if (fns::mpCheckFloor(

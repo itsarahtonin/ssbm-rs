@@ -203,7 +203,7 @@ pub fn itNesspkthundertrail_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>
                 ),
             ));
         }
-        inl_HSD_JObjSetRotationX_unfused(ctx, jobj, fp::fmuls(angle, fp::fneg((ip).facing_dir())));
+        inl_HSD_JObjSetRotationX_unfused(ctx, jobj, angle, fp::fneg((ip).facing_dir()));
     }
 }
 
@@ -302,9 +302,8 @@ fn inl_HSD_JObjSetScaleZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
     }
 }
 
-fn inl_HSD_JObjSetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
+fn inl_HSD_JObjSetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x__a: f64, x__c: f64) {
     let mut jobj = jobj;
-    let mut x = x;
     (if !Handle::is_null((jobj)) {
         ({ () })
     } else {
@@ -325,7 +324,7 @@ fn inl_HSD_JObjSetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64
             cstr(ctx, 0x803f6c08),
         )
     });
-    (jobj).rotate().set_x(x);
+    (jobj).rotate().set_x(fp::fmuls(x__a, x__c));
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         {
             if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {

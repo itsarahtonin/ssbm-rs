@@ -390,10 +390,8 @@ pub fn itNokonoko_UnkMotion5_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj));
         var_f2 = inl_lt_zero_unfused(
             ctx,
-            fp::fmuls(
-                57.295780181884766,
-                inl_HSD_JObjGetRotationY_unfused(ctx, jobj),
-            ),
+            57.295780181884766,
+            inl_HSD_JObjGetRotationY_unfused(ctx, jobj),
         );
         Handle::copy_from(pos, (ip).pos());
         pos.set_y(fp::fadds(pos.y(), 0.10000000149011612));
@@ -771,9 +769,8 @@ fn inl_HSD_JObjGetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64
     return (jobj).rotate().y();
 }
 
-fn inl_lt_zero_unfused<'a>(ctx: &'a Ctx, val: f64) -> f64 {
-    let mut val = val;
-    if val < 0.0 {
+fn inl_lt_zero_unfused<'a>(ctx: &'a Ctx, val__a: f64, val__c: f64) -> f64 {
+    if fp::fmuls(val__a, val__c) < 0.0 {
         return fp::fneg(1.0);
     } else {
         return 1.0;

@@ -593,7 +593,8 @@ pub fn grRCruise_801FFADC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             inl_HSD_JObjAddTranslationZ(
                 ctx,
                 temp_r29_2,
-                fp::fmuls(fp::fneg(350.0), fns::Ground_801C0498(ctx)),
+                fp::fneg(350.0),
+                fns::Ground_801C0498(ctx),
             );
         }
         gobj = fns::Ground_GetMapGObj(ctx, 2_i32);
@@ -2069,9 +2070,8 @@ fn inl_HSD_JObjSetTranslate<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec
     }
 }
 
-fn inl_HSD_JObjAddTranslationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
+fn inl_HSD_JObjAddTranslationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z__a: f64, z__c: f64) {
     let mut jobj = jobj;
-    let mut z = z;
     (if !Handle::is_null((jobj)) {
         ({ () })
     } else {
@@ -2084,7 +2084,7 @@ fn inl_HSD_JObjAddTranslationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
     });
     (jobj)
         .translate()
-        .set_z(fp::fadds((jobj).translate().z(), z));
+        .set_z(fp::fmadds(z__a, z__c, (jobj).translate().z()));
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         {
             if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {

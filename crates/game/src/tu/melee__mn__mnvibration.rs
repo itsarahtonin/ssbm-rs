@@ -515,11 +515,7 @@ pub fn mnVibration_CreatePortPanels<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 );
                 fns::HSD_JObjReqAnimAll(ctx, new_jobj, 0.0);
                 fns::HSD_JObjAnimAll(ctx, new_jobj);
-                inl_HSD_JObjSetTranslateX_unfused(
-                    ctx,
-                    new_jobj,
-                    fp::fmuls(spacing, fp::frsp(i as f64)),
-                );
+                inl_HSD_JObjSetTranslateX_unfused(ctx, new_jobj, spacing, fp::frsp(i as f64));
                 if (((fns::HSD_PadCopyStatus(ctx).get(((i as u8) as i32)).err() as u8) as i8)
                     as i32)
                     != 0_i32
@@ -595,7 +591,7 @@ pub fn mnVibration_CreateNameRow<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: u8,
     );
     fns::HSD_JObjReqAnimAll(ctx, new_jobj, fp::frsp(name_flag as f64));
     fns::HSD_JObjAnimAll(ctx, new_jobj);
-    inl_HSD_JObjSetTranslateY(ctx, new_jobj, fp::fmuls(spacing, fp::frsp(arg2 as f64)));
+    inl_HSD_JObjSetTranslateY(ctx, new_jobj, spacing, fp::frsp(arg2 as f64));
     fns::HSD_JObjAddChild(ctx, (data).jobjs().at(17_i32).get(), new_jobj);
 }
 
@@ -1519,9 +1515,8 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     return result;
 }
 
-fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
+fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x__a: f64, x__c: f64) {
     let mut jobj = jobj;
-    let mut x = x;
     (if !Handle::is_null((jobj)) {
         ({ () })
     } else {
@@ -1532,7 +1527,7 @@ fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f6
             ptr::<ArrV<'a, i8, 0>>(ctx, 0x804d4ffc).at(0),
         )
     });
-    (jobj).translate().set_x(x);
+    (jobj).translate().set_x(fp::fmuls(x__a, x__c));
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         {
             if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
@@ -1542,9 +1537,8 @@ fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f6
     }
 }
 
-fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
+fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a: f64, y__c: f64) {
     let mut jobj = jobj;
-    let mut y = y;
     (if !Handle::is_null((jobj)) {
         ({ () })
     } else {
@@ -1555,7 +1549,7 @@ fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
             ptr::<ArrV<'a, i8, 0>>(ctx, 0x804d4ffc).at(0),
         )
     });
-    (jobj).translate().set_y(y);
+    (jobj).translate().set_y(fp::fmuls(y__a, y__c));
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         {
             if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {

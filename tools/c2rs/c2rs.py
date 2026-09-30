@@ -494,7 +494,8 @@ def strip(c):
 
 
 class Translator:
-    def __init__(self, unit, fn_cursor, fuse=None, inline=False, asm=None, reg_ptrs=frozenset()):
+    def __init__(self, unit, fn_cursor, fuse=None, inline=False, asm=None, reg_ptrs=frozenset(),
+                 forward=None):
         self.u = unit
         self.f = FnCtx(unit.name, fn_cursor)
         self.line = fn_cursor.location.line
@@ -510,6 +511,10 @@ class Translator:
         # the original keeps in registers (("ptr", parameter) keys).
         self.decisions = {}
         self.reg_ptrs = reg_ptrs
+        # An inline copy's float parameters used once, whose argument is a product: they take
+        # the product's factors, as MWCC substitutes the argument into that use (name -> negated).
+        self.forward = forward or {}
+        self.forwarded = {}  # parameter name -> (factor a, factor c, negated)
         self.in_args = 0
         self._call_sites = None
 
@@ -546,8 +551,16 @@ class Translator:
                 continue
             if pt["k"] == "arr":
                 pt = {"k": "ptr", "to": pt["of"]}
-            params.append(f"{ident(rname)}: {self.u.rust_value_ty(pt)}")
             key = a.get_usr() or pname
+            if self.inline:
+                self.decisions[("fwd", a.spelling)] = self.forward.get(a.spelling)
+            if a.spelling in self.forward:
+                fa, fc = ident(rname + "__a"), ident(rname + "__c")
+                params.append(f"{fa}: {self.u.rust_value_ty(pt)}, {fc}: {self.u.rust_value_ty(pt)}")
+                self.forwarded[a.spelling] = (fa, fc, self.forward[a.spelling])
+                self.f.locals[key] = (rname, pt, "fwd")
+                continue
+            params.append(f"{ident(rname)}: {self.u.rust_value_ty(pt)}")
             if key in self.f.escaping:
                 slot = self.stack_slot(rname + "__slot", pt)
                 pre.append(f"{slot}.set({ident(rname)});")
@@ -1273,6 +1286,11 @@ class Translator:
             return Expr(self.int_literal(val, t), t, True)
         if r.kind == CK.FUNCTION_DECL:
             return self.fn_value(c)
+        if r.kind == CK.PARM_DECL and r.spelling in self.forwarded:
+            t = self.u.ctype(c.type)
+            a, cc, neg = self.forwarded[r.spelling]
+            v = self.arith_op("*", Expr(a, t, True), Expr(cc, t, True), t)
+            return Expr(f"fp::fneg({v.code})", t, True) if neg else v
         if r.kind == CK.VAR_DECL and (r.get_usr() or r.spelling) not in self.f.locals \
                 and self.u.prog.global_(r.spelling, self.u.name) is None:
             # A header constant (`static const T x = 0;`) that MWCC folded into its uses.
@@ -1446,9 +1464,20 @@ class Translator:
 
     # Fused multiply-add, as MWCC contracts them.
 
-    def product(self, node, t):
-        """(a, c) if node is a multiply in precision t, else None."""
+    def product(self, node, t, negated=False):
+        """(a, c, negated) if node is a multiply in precision t, else None. With `negated`, the
+        negation of one counts too, as MWCC contracts it on the right of an add or subtract. A
+        parameter that stands for its argument's product counts as that product."""
         n = strip(node)
+        if negated and n.kind == CK.UNARY_OPERATOR and                 UNOPS.get(_lib.clang_getCursorUnaryOperatorKind(n)) == "-":
+            p = self.product(children(n)[0], t, True)
+            return None if p is None else (p[0], p[1], not p[2])
+        if n.kind == CK.DECL_REF_EXPR and n.referenced is not None and \
+                n.referenced.kind == CK.PARM_DECL and same_type(self.u.ctype(n.type), t):
+            fwd = self.forwarded.get(n.referenced.spelling)
+            if fwd is not None:
+                a, c, neg = fwd
+                return Expr(a, t, True), Expr(c, t, True), neg
         if n.kind != CK.BINARY_OPERATOR or BINOPS.get(_lib.clang_getCursorBinaryOperatorKind(n)) != "*":
             return None
         if not same_type(self.u.ctype(n.type), t):
@@ -1458,7 +1487,7 @@ class Translator:
         # already holds in registers, not of loads from memory.
         if self.in_args and (self.is_load(a) or self.is_load(c)):
             return None
-        return self.convert(self.expr(a), t), self.convert(self.expr(c), t)
+        return self.convert(self.expr(a), t), self.convert(self.expr(c), t), False
 
     def fused(self, kind, a, c, b, t):
         fn = {"madd": "fmadd", "msub": "fmsub", "nmsub": "fnmsub", "nmadd": "fnmadd"}[kind]
@@ -1470,27 +1499,36 @@ class Translator:
             return None
         # When both sides are products, MWCC computes the right one and fuses the left one:
         # `a*b + c*d` is fmadds(a, b, c*d).
-        p = self.product(left, t)
-        if p is not None:
-            b = self.convert(self.expr(right), t)
-            return self.fused("madd" if op == "+" else "msub", p[0], p[1], b, t)
-        p = self.product(right, t)
-        if p is not None:
-            b = self.convert(self.expr(left), t)
-            return self.fused("madd" if op == "+" else "nmsub", p[0], p[1], b, t)
+        # A negated product is contracted only where neither side is a plain product.
+        for negated in (False, True):
+            p = self.product(left, t, negated)
+            if p is not None:
+                a, c, neg = p
+                b = self.convert(self.expr(right), t)
+                if op == "+":
+                    return self.fused("nmsub" if neg else "madd", a, c, b, t)
+                return self.fused("nmadd" if neg else "msub", a, c, b, t)
+            p = self.product(right, t, negated)
+            if p is not None:
+                a, c, neg = p
+                b = self.convert(self.expr(left), t)
+                if op == "+":
+                    return self.fused("nmsub" if neg else "madd", a, c, b, t)
+                return self.fused("madd" if neg else "nmsub", a, c, b, t)
         return None
 
     def try_fuse(self, op, cur, rhs_node, t):
         """`cur += a * c` and `cur -= a * c`."""
         if not self.fuse or self.in_args:
             return None
-        p = self.product(rhs_node, t)
+        p = self.product(rhs_node, t, True)
         if p is None:
             return None
+        a, c, neg = p
         # `cur -= a * (b*c + d)` keeps its multiply and subtract (ftCo_800925A4).
-        if op == "-" and any(FUSED_RE.match(x.code.lstrip("(")) for x in p):
+        if op == "-" and not neg and any(FUSED_RE.match(x.code.lstrip("(")) for x in (a, c)):
             return None
-        return self.fused("madd" if op == "+" else "nmsub", p[0], p[1], cur, t)
+        return self.fused("madd" if (op == "+") != neg else "nmsub", a, c, cur, t)
 
     # Conditions and comparisons.
 
@@ -1554,13 +1592,15 @@ class Translator:
             if f is not None and self.inlined_in_original(f.get("symbol") or name, callee.referenced):
                 # The original has no call here: MWCC inlined the function, so its code runs
                 # as part of this one, and patches to the function's own copy do not apply.
+                defn = callee.referenced.get_definition()
+                fwd = self.forward_args(defn, args)
                 try:
-                    rname = self.u.request_inline(callee.referenced.get_definition(), self.fuse, self,
-                                                  self.reg_ptr_args(callee.referenced, args))
+                    rname = self.u.request_inline(defn, self.fuse, self, self.reg_ptr_args(callee.referenced, args),
+                                                  {pn: neg for pn, (_, _, neg) in fwd.values()})
                 except Unsupported as e:
                     self.u.inline_fallbacks.append((self.f.cursor.spelling, name, str(e)))
                 else:
-                    argv = self.call_args(ft, args, inlined=True)
+                    argv = self.forwarding(self.call_args(ft, args, inlined=True), fwd)
                     if t["k"] == "rec":
                         return self.sret_call(rname, argv, t)
                     return Expr(f"{rname}(ctx{''.join(', ' + a for a in argv)})", t, False)
@@ -1585,11 +1625,13 @@ class Translator:
                 if t["k"] == "void" or st["ret"]["k"] == "void":
                     return Expr(res.code, t, False)
                 return self.convert(res, t, explicit=True)
-            argv = self.call_args(ft, args, inlined=True)
             defn = callee.referenced.get_definition()
             if defn is None:
                 raise Unsupported(f"call to {name}, which has no address or body")
-            rname = self.u.request_inline(defn, self.fuse, self, self.reg_ptr_args(defn, args))
+            fwd = self.forward_args(defn, args)
+            argv = self.forwarding(self.call_args(ft, args, inlined=True), fwd)
+            rname = self.u.request_inline(defn, self.fuse, self, self.reg_ptr_args(defn, args),
+                                          {pn: neg for pn, (_, _, neg) in fwd.values()})
             if t["k"] == "rec":
                 return self.sret_call(rname, argv, t)
             return Expr(f"{rname}(ctx{''.join(', ' + a for a in argv)})", t, False)
@@ -1679,6 +1721,46 @@ class Translator:
         while n.kind == CK.CSTYLE_CAST_EXPR or (n.kind == CK.UNEXPOSED_EXPR and len(children(n)) == 1):
             n = strip(children(n)[-1])
         return self.is_memory(n)
+
+    def forward_args(self, fn, args):
+        """The arguments of a call to an inline function that MWCC substitutes into their
+        parameter's one use: products, for a float parameter the body reads once and never
+        changes. Index -> (parameter name, (factor a, factor c, negated))."""
+        params = [a for a in fn.get_children() if a.kind == CK.PARM_DECL]
+        body = [x for x in children(fn) if x.kind == CK.COMPOUND_STMT]
+        if not body:
+            return {}
+        uses, changed = {}, set()
+        for x in body[0].walk_preorder():
+            if x.kind == CK.DECL_REF_EXPR and x.referenced is not None and x.referenced.kind == CK.PARM_DECL:
+                uses[x.referenced.spelling] = uses.get(x.referenced.spelling, 0) + 1
+            target = None
+            if x.kind == CK.COMPOUND_ASSIGNMENT_OPERATOR or (
+                    x.kind == CK.BINARY_OPERATOR and BINOPS.get(_lib.clang_getCursorBinaryOperatorKind(x)) == "="):
+                target = strip(children(x)[0])
+            elif x.kind == CK.UNARY_OPERATOR and UNOPS.get(_lib.clang_getCursorUnaryOperatorKind(x)) in \
+                    ("&", "++", "--", "post++", "post--"):
+                target = strip(children(x)[0])
+            if target is not None and target.kind == CK.DECL_REF_EXPR and target.referenced is not None:
+                changed.add(target.referenced.spelling)
+        out = {}
+        self.in_args += 1
+        try:
+            for i, (param, arg) in enumerate(zip(params, args)):
+                pt = self.u.ctype(param.type)
+                if not is_float(pt) or uses.get(param.spelling, 0) != 1 or param.spelling in changed:
+                    continue
+                p = self.product(arg, pt, True)
+                if p is not None:
+                    out[i] = (param.spelling, (p[0].code, p[1].code, p[2]))
+        finally:
+            self.in_args -= 1
+        return out
+
+    @staticmethod
+    def forwarding(argv, fwd):
+        """Call arguments with each forwarded product passed as its two factors."""
+        return [f"{fwd[i][1][0]}, {fwd[i][1][1]}" if i in fwd else a for i, a in enumerate(argv)]
 
     def reg_ptr_args(self, fn, args):
         """The callee's pointer parameters whose argument is the address of a local the
@@ -2183,7 +2265,7 @@ def translate_unit(args):
 PROGRAM = []
 
 
-def _request_inline(self, defn, fuse, caller, reg_ptrs=frozenset()):
+def _request_inline(self, defn, fuse, caller, reg_ptrs=frozenset(), forward=None):
     """An inline function's Rust name, translating it on first use. MWCC contracts inlined
     code as its caller's, and inlines the calls in it as the function it ends up in does, so
     there is a copy for each way of doing both."""
@@ -2193,7 +2275,11 @@ def _request_inline(self, defn, fuse, caller, reg_ptrs=frozenset()):
         return self.inline_active[base]  # recursion: the copy being translated
     asm = caller.asm
 
+    forward = forward or {}
+
     def holds(key, value):
+        if isinstance(key, tuple) and key[0] == "fwd":
+            return forward.get(key[1]) == value
         if isinstance(key, tuple):
             return (key[1] in reg_ptrs) == value
         return (asm is not None and asm.get(key, 0) == 0) == value
@@ -2210,7 +2296,7 @@ def _request_inline(self, defn, fuse, caller, reg_ptrs=frozenset()):
     rname = base if not variants else f"{base}_{len(variants) + 1}"
     self.inline_active[base] = rname
     try:
-        tr = Translator(self, defn, fuse, inline=True, asm=asm, reg_ptrs=reg_ptrs)
+        tr = Translator(self, defn, fuse, inline=True, asm=asm, reg_ptrs=reg_ptrs, forward=forward)
         code = tr.function()
     except Unsupported as e:
         raise Unsupported(f"inline {name}: {e}")

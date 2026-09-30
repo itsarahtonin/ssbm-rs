@@ -1302,12 +1302,14 @@ pub fn grShrineRoute_8020A8A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         inl_HSD_JObjSetTranslateX(
             ctx,
             (gp).u().shrineroute3().xC4(),
-            fp::fmuls(300.0, fns::cosf(ctx, angle)),
+            300.0,
+            fns::cosf(ctx, angle),
         );
         inl_HSD_JObjSetTranslateY(
             ctx,
             (gp).u().shrineroute3().xC4(),
-            fp::fmuls(300.0, fns::sinf(ctx, angle)),
+            300.0,
+            fns::sinf(ctx, angle),
         );
         (gp).u().shrineroute3().set_xD8(fp::fmuls(
             0.04363323003053665,
@@ -1941,9 +1943,8 @@ fn inl_HSD_LObjGetNext_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>) -> HSD_LObj
     return null(ctx);
 }
 
-fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
+fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x__a: f64, x__c: f64) {
     let mut jobj = jobj;
-    let mut x = x;
     (if !Handle::is_null((jobj)) {
         ({ () })
     } else {
@@ -1954,7 +1955,7 @@ fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
             cstr(ctx, 0x803b8360),
         )
     });
-    (jobj).translate().set_x(x);
+    (jobj).translate().set_x(fp::fmuls(x__a, x__c));
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         {
             if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
@@ -1964,9 +1965,8 @@ fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
     }
 }
 
-fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
+fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a: f64, y__c: f64) {
     let mut jobj = jobj;
-    let mut y = y;
     (if !Handle::is_null((jobj)) {
         ({ () })
     } else {
@@ -1977,7 +1977,7 @@ fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
             cstr(ctx, 0x803b8360),
         )
     });
-    (jobj).translate().set_y(y);
+    (jobj).translate().set_y(fp::fmuls(y__a, y__c));
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         {
             if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {

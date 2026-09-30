@@ -38,12 +38,8 @@ pub fn ft_800CB6EC<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) {
         inl_HSD_JObjAddRotationY(
             ctx,
             ((fp).parts()).joint(),
-            fp::fneg(
-                (fp::fmuls(
-                    (fp::fdivs(180.0, fp::frsp(arg1 as f64))),
-                    0.01745329238474369,
-                )),
-            ),
+            (fp::fdivs(180.0, fp::frsp(arg1 as f64))),
+            0.01745329238474369,
         );
         if (fp).mv().co().jumpaerial().x0() == (div_i32(arg1, 2_i32)) {
             (fp).set_facing_dir(fp::fneg((fp).facing_dir()));
@@ -602,9 +598,8 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     return result;
 }
 
-fn inl_HSD_JObjAddRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
+fn inl_HSD_JObjAddRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a: f64, y__c: f64) {
     let mut jobj = jobj;
-    let mut y = y;
     (if !Handle::is_null((jobj)) {
         ({ () })
     } else {
@@ -615,7 +610,9 @@ fn inl_HSD_JObjAddRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
             cstr(ctx, 0x803b74f0),
         )
     });
-    (jobj).rotate().set_y(fp::fadds((jobj).rotate().y(), y));
+    (jobj)
+        .rotate()
+        .set_y(fp::fnmsubs(y__a, y__c, (jobj).rotate().y()));
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         {
             if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
@@ -778,12 +775,8 @@ fn inl_ft_800CB6EC<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) {
         inl_HSD_JObjAddRotationY(
             ctx,
             ((fp).parts()).joint(),
-            fp::fneg(
-                (fp::fmuls(
-                    (fp::fdivs(180.0, fp::frsp(arg1 as f64))),
-                    0.01745329238474369,
-                )),
-            ),
+            (fp::fdivs(180.0, fp::frsp(arg1 as f64))),
+            0.01745329238474369,
         );
         if (fp).mv().co().jumpaerial().x0() == (div_i32(arg1, 2_i32)) {
             (fp).set_facing_dir(fp::fneg((fp).facing_dir()));

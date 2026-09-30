@@ -430,7 +430,7 @@ pub fn grOldPupupu_80210D10<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     spawn = fns::grOldPupupu_802108B4(ctx, 2_i32);
                     if !Handle::is_null(spawn) {
                         jobj = inl_grOldPupupu_GetSpawnJObj(ctx, spawn);
-                        inl_HSD_JObjSetTranslateX(ctx, jobj, fp::fmuls(direction, x));
+                        inl_HSD_JObjSetTranslateX(ctx, jobj, direction, x);
                         inl_HSD_JObjSetTranslateY(ctx, jobj, y);
                         inl_HSD_JObjSetTranslateZ(ctx, jobj, z);
                         fns::grAnime_801C7FF8(
@@ -1043,9 +1043,8 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     return result;
 }
 
-fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
+fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x__a: f64, x__c: f64) {
     let mut jobj = jobj;
-    let mut x = x;
     (if !Handle::is_null((jobj)) {
         ({ () })
     } else {
@@ -1056,7 +1055,7 @@ fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
             cstr(ctx, 0x803e6698),
         )
     });
-    (jobj).translate().set_x(x);
+    (jobj).translate().set_x(fp::fmuls(x__a, x__c));
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         {
             if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {

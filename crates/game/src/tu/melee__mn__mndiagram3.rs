@@ -147,7 +147,8 @@ pub fn mnDiagram3_PopulateRankings<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                                 inl_HSD_JObjSetTranslateY(
                                     ctx,
                                     icon,
-                                    fp::fmuls(row_spacing, fp::frsp(i as f64)),
+                                    row_spacing,
+                                    fp::frsp(i as f64),
                                 );
                                 fns::HSD_JObjAddChild(ctx, (data).jobjs().at(6_i32).get(), icon);
                             }
@@ -202,11 +203,7 @@ pub fn mnDiagram3_PopulateRankings<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                                 (fighter_rank.x0().idx() as i32),
                                 0_i32,
                             );
-                            inl_HSD_JObjSetTranslateY(
-                                ctx,
-                                icon,
-                                fp::fmuls(row_spacing, fp::frsp(i as f64)),
-                            );
+                            inl_HSD_JObjSetTranslateY(ctx, icon, row_spacing, fp::frsp(i as f64));
                             fns::HSD_JObjAddChild(ctx, (data).jobjs().at(6_i32).get(), icon);
                             {
                                 let mut rank_3: u8 = (i as u8);
@@ -819,9 +816,8 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     return result;
 }
 
-fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
+fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a: f64, y__c: f64) {
     let mut jobj = jobj;
-    let mut y = y;
     (if !Handle::is_null((jobj)) {
         ({ () })
     } else {
@@ -832,7 +828,7 @@ fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
             cstr(ctx, 0x803eec1c),
         )
     });
-    (jobj).translate().set_y(y);
+    (jobj).translate().set_y(fp::fmuls(y__a, y__c));
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         {
             if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
@@ -1011,6 +1007,29 @@ fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
     }
 }
 
+fn inl_HSD_JObjSetTranslateY_2<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
+    let mut jobj = jobj;
+    let mut y = y;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803eec1c),
+            (0x213_i32 as u32),
+            cstr(ctx, 0x803eec1c),
+        )
+    });
+    (jobj).translate().set_y(y);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
 fn inl_HSD_JObjGetTranslationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     let mut jobj = jobj;
     (if !Handle::is_null((jobj)) {
@@ -1060,7 +1079,7 @@ fn inl_mnDiagram3_PositionPopup<'a>(ctx: &'a Ctx, popup: HSD_JObj<'a>, n: u8, cu
         popup,
         inl_HSD_JObjGetTranslationX(ctx, (cur).jobjs().at(8_i32).get()),
     );
-    inl_HSD_JObjSetTranslateY(
+    inl_HSD_JObjSetTranslateY_2(
         ctx,
         popup,
         fp::fmadds(

@@ -912,9 +912,8 @@ fn inl_HSD_JObjGetTranslationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> 
     return (jobj).translate().y();
 }
 
-fn inl_HSD_JObjSetTranslateY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
+fn inl_HSD_JObjSetTranslateY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a: f64, y__c: f64) {
     let mut jobj = jobj;
-    let mut y = y;
     (if !Handle::is_null((jobj)) {
         ({ () })
     } else {
@@ -925,7 +924,7 @@ fn inl_HSD_JObjSetTranslateY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f6
             cstr(ctx, 0x803ef740),
         )
     });
-    (jobj).translate().set_y(y);
+    (jobj).translate().set_y(fp::fmuls(y__a, y__c));
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         {
             if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
@@ -986,7 +985,8 @@ fn inl_mnEvent_SetPageCursorY_unfused<'a>(
     inl_HSD_JObjSetTranslateY_unfused(
         ctx,
         (jobj_0B).get(),
-        fp::fmuls(fp::frsp(page as f64), (fp::fsubs(y_b, y_a))),
+        fp::frsp(page as f64),
+        (fp::fsubs(y_b, y_a)),
     );
 }
 
@@ -997,6 +997,29 @@ fn inl_GET_EVENTDATA_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> MnEventDat
 
 fn inl_getMainConEv_unfused<'a>(ctx: &'a Ctx) -> StaticModelDesc<'a> {
     return fns::MenMainConEv(ctx);
+}
+
+fn inl_HSD_JObjSetTranslateY_unfused_2<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
+    let mut jobj = jobj;
+    let mut y = y;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803ef740),
+            (0x213_i32 as u32),
+            cstr(ctx, 0x803ef740),
+        )
+    });
+    (jobj).translate().set_y(y);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
 }
 
 fn inl_mnEvent_SetPageY_unfused<'a>(
@@ -1011,7 +1034,7 @@ fn inl_mnEvent_SetPageY_unfused<'a>(
     let mut y_a = y_a;
     let mut y_b = y_b;
     y_b = fp::fmuls(fp::frsp(page as f64), (fp::fsubs(y_b, y_a)));
-    inl_HSD_JObjSetTranslateY_unfused(ctx, jobj_0B, y_b);
+    inl_HSD_JObjSetTranslateY_unfused_2(ctx, jobj_0B, y_b);
 }
 
 /// Registers this unit's ports.

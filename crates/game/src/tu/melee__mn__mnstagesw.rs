@@ -726,18 +726,15 @@ pub fn mnStageSw_80236CBC<'a>(ctx: &'a Ctx, arg0: i8) -> HSD_GObj<'a> {
                 cursor_jobj = inl_mnStageSw_CreateCursor(ctx, user_data, i, anims);
                 if i < 15_i32 {
                     fns::HSD_JObjAddChild(ctx, (user_data).x2C(), cursor_jobj);
-                    inl_HSD_JObjAddTranslationY(
-                        ctx,
-                        cursor_jobj,
-                        fp::fmuls(y_spacing, fp::frsp(i as f64)),
-                    );
+                    inl_HSD_JObjAddTranslationY(ctx, cursor_jobj, y_spacing, fp::frsp(i as f64));
                 } else {
                     let mut parent: HSD_JObj<'a> = (user_data).x34();
                     fns::HSD_JObjAddChild(ctx, parent, cursor_jobj);
                     inl_HSD_JObjAddTranslationY(
                         ctx,
                         cursor_jobj,
-                        fp::fmuls(y_spacing, fp::frsp((i.wrapping_sub(15_i32)) as f64)),
+                        y_spacing,
+                        fp::frsp((i.wrapping_sub(15_i32)) as f64),
                     );
                 }
             }
@@ -1116,9 +1113,8 @@ fn inl_mnStageSw_CreateCursor<'a>(
     return cursor_jobj;
 }
 
-fn inl_HSD_JObjAddTranslationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
+fn inl_HSD_JObjAddTranslationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a: f64, y__c: f64) {
     let mut jobj = jobj;
-    let mut y = y;
     (if !Handle::is_null((jobj)) {
         ({ () })
     } else {
@@ -1131,7 +1127,7 @@ fn inl_HSD_JObjAddTranslationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     });
     (jobj)
         .translate()
-        .set_y(fp::fadds((jobj).translate().y(), y));
+        .set_y(fp::fmadds(y__a, y__c, (jobj).translate().y()));
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         {
             if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {

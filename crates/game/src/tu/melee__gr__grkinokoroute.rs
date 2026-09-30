@@ -292,36 +292,32 @@ pub fn grKinokoRoute_802078F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     inl_HSD_JObjSetTranslateX_unfused(
                         ctx,
                         (cursor.gp()).u().kinokoroute().entries().get(0_i32).jobj(),
-                        fp::fmuls(
-                            scale,
-                            (fp::fadds(
-                                (cursor.gp())
-                                    .u()
-                                    .kinokoroute()
-                                    .entries()
-                                    .get(0_i32)
-                                    .pos()
-                                    .x(),
-                                pos.x(),
-                            )),
-                        ),
+                        scale,
+                        (fp::fadds(
+                            (cursor.gp())
+                                .u()
+                                .kinokoroute()
+                                .entries()
+                                .get(0_i32)
+                                .pos()
+                                .x(),
+                            pos.x(),
+                        )),
                     );
                     inl_HSD_JObjSetTranslateY_unfused(
                         ctx,
                         (cursor.gp()).u().kinokoroute().entries().get(0_i32).jobj(),
-                        fp::fmuls(
-                            scale,
-                            (fp::fadds(
-                                (cursor.gp())
-                                    .u()
-                                    .kinokoroute()
-                                    .entries()
-                                    .get(0_i32)
-                                    .pos()
-                                    .y(),
-                                pos.y(),
-                            )),
-                        ),
+                        scale,
+                        (fp::fadds(
+                            (cursor.gp())
+                                .u()
+                                .kinokoroute()
+                                .entries()
+                                .get(0_i32)
+                                .pos()
+                                .y(),
+                            pos.y(),
+                        )),
                     );
                 }
             }
@@ -913,9 +909,8 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     return result;
 }
 
-fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
+fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x__a: f64, x__c: f64) {
     let mut jobj = jobj;
-    let mut x = x;
     (if !Handle::is_null((jobj)) {
         ({ () })
     } else {
@@ -926,7 +921,7 @@ fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f6
             cstr(ctx, 0x803b82e8),
         )
     });
-    (jobj).translate().set_x(x);
+    (jobj).translate().set_x(fp::fmuls(x__a, x__c));
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         {
             if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
@@ -936,9 +931,8 @@ fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f6
     }
 }
 
-fn inl_HSD_JObjSetTranslateY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
+fn inl_HSD_JObjSetTranslateY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a: f64, y__c: f64) {
     let mut jobj = jobj;
-    let mut y = y;
     (if !Handle::is_null((jobj)) {
         ({ () })
     } else {
@@ -949,7 +943,7 @@ fn inl_HSD_JObjSetTranslateY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f6
             cstr(ctx, 0x803b82e8),
         )
     });
-    (jobj).translate().set_y(y);
+    (jobj).translate().set_y(fp::fmuls(y__a, y__c));
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         {
             if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
