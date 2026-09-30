@@ -2,9 +2,14 @@
 
 //! Boots the game headless on original code and reports progress.
 //!
-//! `ssbm-run [disc] [--fields N] [--replay FILE]` runs for N video fields (default 600, ten
-//! seconds), playing back a Slippi replay if given. The disc
-//! path defaults to `SSBM_DISC`.
+//! `ssbm-run [disc] [--fields N] [--replay FILE] [--fp hardware|slippi]` runs for N video fields
+//! (default 600, ten seconds), playing back a Slippi replay if given. Floating point follows
+//! Slippi's Dolphin for replays and the hardware otherwise, unless `--fp` says. The disc path
+//! defaults to `SSBM_DISC`.
+//!
+//! A replay run checks the replay it records against the original, and fails on any divergence
+//! not listed in the `--known FILE` (one per line, as reported; `#` starts a comment).
+//! `--write-known FILE` writes this run's divergences in that form.
 
 use std::cell::Cell;
 use std::collections::HashMap;
@@ -24,6 +29,9 @@ fn main() -> ExitCode {
     let mut disc_path = std::env::var("SSBM_DISC").ok();
     let mut fields = 600;
     let mut replay_path = None;
+    let mut fp_mode = None;
+    let mut known_path = None;
+    let mut write_known = None;
     let mut args = std::env::args().skip(1);
     while let Some(a) = args.next() {
         match a.as_str() {
@@ -34,11 +42,22 @@ fn main() -> ExitCode {
                     .expect("--fields N")
             }
             "--replay" => replay_path = Some(args.next().expect("--replay FILE")),
+            "--known" => known_path = Some(args.next().expect("--known FILE")),
+            "--write-known" => write_known = Some(args.next().expect("--write-known FILE")),
+            "--fp" => {
+                fp_mode = match args.next().as_deref() {
+                    Some("hardware") => Some(gekko_fp::FpMode::Hardware),
+                    Some("slippi") => Some(gekko_fp::FpMode::Slippi),
+                    _ => panic!("--fp hardware|slippi"),
+                }
+            }
             _ => disc_path = Some(a),
         }
     }
     let Some(disc_path) = disc_path else {
-        eprintln!("usage: ssbm-run [disc] [--fields N] [--replay FILE]  (or set SSBM_DISC)");
+        eprintln!(
+            "usage: ssbm-run [disc] [--fields N] [--replay FILE] [--fp hardware|slippi] [--known FILE] [--write-known FILE]  (or set SSBM_DISC)"
+        );
         return ExitCode::FAILURE;
     };
     let disc = match Disc::open(&disc_path) {
@@ -73,22 +92,42 @@ fn main() -> ExitCode {
         gekko_fp::set_fp_mode(gekko_fp::FpMode::Slippi);
         ssbm_slippi::install(&ctx, replay)
     });
+    if let Some(mode) = fp_mode {
+        gekko_fp::set_fp_mode(mode);
+    }
     let slippi: Option<Rc<ssbm_slippi::Device>> = slippi;
 
-    if std::env::var_os("LBMEM_TRACE").is_some() {
-        // Allocation requests from the game's file heaps: handle, size, free space.
-        ctx.set_hook(
-            ssbm_sdk::sym("lbMemory_80014FC8"),
-            Rc::new(|ctx| {
-                let h = ctx.regs.r(3);
-                let size = ctx.regs.r(4);
-                let (lo, hi) = (ctx.read_u32(h + 4), ctx.read_u32(h + 8));
-                eprintln!(
-                    "lbMemory alloc {size:#x} from heap {h:08X} [{lo:08X}..{hi:08X}] lr {}",
-                    ctx.name_of(ctx.regs.lr.get())
-                );
-            }),
-        );
+    // CALLS=name,... logs each call to these functions (symbols or hex addresses) with its
+    // first four arguments.
+    if let Ok(names) = std::env::var("CALLS") {
+        for name in names.split(',').map(str::trim) {
+            let dev = slippi.clone();
+            let addr = u32::from_str_radix(name.trim_start_matches("0x"), 16)
+                .unwrap_or_else(|_| ssbm_sdk::sym(name));
+            let name = name.to_owned();
+            ctx.set_hook(
+                addr,
+                Rc::new(move |ctx| {
+                    let when = match &dev {
+                        Some(dev) => format!(
+                            "frame {}",
+                            dev.frames_read.get() as i32 + ssbm_slippi::replay::GAME_FIRST_FRAME
+                                - 1
+                        ),
+                        None => format!("field {}", ctx.ext::<Sdk>().hw.fields.get()),
+                    };
+                    let r = &ctx.regs;
+                    eprintln!(
+                        "{when}: {name}({:08X}, {:08X}, {:08X}, {:08X}) from {}",
+                        r.r(3),
+                        r.r(4),
+                        r.r(5),
+                        r.r(6),
+                        ctx.name_of(r.lr.get())
+                    );
+                }),
+            );
+        }
     }
 
     // WATCH=port,offset,from,to logs writes to a fighter field during replay frames
@@ -199,6 +238,20 @@ fn main() -> ExitCode {
 
     let result = panic::catch_unwind(AssertUnwindSafe(|| {
         let entry = boot::boot(&ctx, boot::DEFAULT_CLOCK);
+        // FILL_ARENA=byte fills the heap arena with that byte as main starts, to show whether a
+        // divergence depends on memory the game never initializes.
+        if let Ok(byte) = std::env::var("FILL_ARENA") {
+            let byte = u8::from_str_radix(&byte, 16).unwrap();
+            ctx.set_hook(
+                ssbm_sdk::sym("main"),
+                Rc::new(move |ctx| {
+                    let lo = ctx.read_u32(ssbm_sdk::sym("__OSArenaLo"));
+                    let hi = ctx.read_u32(ssbm_sdk::sym("__OSArenaHi"));
+                    eprintln!("filling arena {lo:08X}..{hi:08X} with {byte:02X}");
+                    ctx.fill(lo, byte, hi - lo);
+                }),
+            );
+        }
         if slippi.is_some() {
             ssbm_slippi::apply_bootloader(&ctx);
         }
@@ -206,6 +259,7 @@ fn main() -> ExitCode {
         ctx.invoke(entry);
     }));
     let executed = interp.executed.get();
+    let mut replay_ok = true;
     if let Some(dev) = &slippi {
         for line in dev.log.borrow().iter() {
             eprintln!("slippi: {line}");
@@ -217,15 +271,40 @@ fn main() -> ExitCode {
             dev.terminated.get()
         );
         let report = ssbm_slippi::compare::compare(&dev.replay.events, &dev.recorded.borrow());
+        let known: Vec<String> = known_path
+            .map(|p| std::fs::read_to_string(p).unwrap_or_default())
+            .unwrap_or_default()
+            .lines()
+            .map(str::trim)
+            .filter(|l| !l.is_empty() && !l.starts_with('#'))
+            .map(str::to_owned)
+            .collect();
+        let lines: Vec<String> = report.divergences.iter().map(|d| d.to_string()).collect();
+        let unexpected: Vec<_> = report
+            .divergences
+            .iter()
+            .zip(&lines)
+            .filter(|(_, l)| !known.contains(l))
+            .map(|(d, _)| d)
+            .collect();
+        let gone = known.iter().filter(|k| !lines.contains(k)).count();
+        replay_ok = unexpected.is_empty() && report.missing == 0;
         eprintln!(
-            "replay check: {} events compared through frame {:?}, {} not reached, {} diverge",
+            "replay check: {} events compared through frame {:?}, {} not reached, {} diverge ({} known), {} known no longer diverge",
             report.compared,
             report.last_frame_compared,
             report.missing,
-            report.divergences.len()
+            report.divergences.len(),
+            report.divergences.len() - unexpected.len(),
+            gone
         );
+        if let Some(path) = &write_known {
+            let mut text = lines.join("\n");
+            text.push('\n');
+            std::fs::write(path, text).unwrap_or_else(|e| panic!("{path}: {e}"));
+        }
         let mut kinds: Vec<(&str, &str, usize, i32)> = Vec::new();
-        for d in &report.divergences {
+        for d in &unexpected {
             match kinds.iter_mut().find(|k| k.0 == d.event && k.1 == d.field) {
                 Some(k) => k.2 += 1,
                 None => kinds.push((d.event, d.field, 1, d.frame)),
@@ -234,8 +313,11 @@ fn main() -> ExitCode {
         for (event, field, n, first) in &kinds {
             eprintln!("  {n:6} x {event} {field}, first on frame {first}");
         }
-        for d in report.divergences.iter().take(6) {
+        for d in unexpected.iter().take(6) {
             eprintln!("  {d}");
+        }
+        for (event, frame, port) in &report.first_missing {
+            eprintln!("  not reached: frame {frame}: {event} port {}", port + 1);
         }
     }
     eprintln!(
@@ -249,7 +331,13 @@ fn main() -> ExitCode {
             eprintln!("the game returned from its entry point");
             ExitCode::FAILURE
         }
-        Err(p) if p.is::<Stop>() => ExitCode::SUCCESS,
+        Err(p) if p.is::<Stop>() => {
+            if replay_ok {
+                ExitCode::SUCCESS
+            } else {
+                ExitCode::FAILURE
+            }
+        }
         Err(p) => {
             let msg = p
                 .downcast_ref::<String>()
