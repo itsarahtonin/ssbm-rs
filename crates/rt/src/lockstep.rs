@@ -63,6 +63,22 @@ pub enum Diff {
         original: Option<String>,
         port: Option<String>,
     },
+    /// The first of the checked function's own calls that differs between the sides, as
+    /// (callee, r3 to r6), when calls are traced.
+    Call {
+        index: usize,
+        original: Option<(String, [u32; 4])>,
+        port: Option<(String, [u32; 4])>,
+    },
+}
+
+/// The calls one check's function makes itself, on each side, while calls are traced.
+#[derive(Default)]
+struct CallTrace {
+    depth: u32,
+    port_side: bool,
+    original: Vec<(u32, [u32; 4])>,
+    port: Vec<(u32, [u32; 4])>,
 }
 
 #[derive(Clone, Debug)]
@@ -148,6 +164,13 @@ pub struct State {
     /// Ports checked as often as that, to run unchecked once no check is running: a mode that
     /// changed between the sides of a check would give them different callees.
     checked_enough: RefCell<Vec<u32>>,
+    /// Whether each check records the calls its function makes, to name the first that
+    /// differs when it mismatches.
+    pub trace_calls: Cell<bool>,
+    traces: RefCell<Vec<CallTrace>>,
+    /// How many argument registers each callee takes, as ports' calls pass them: registers
+    /// past them hold leftovers, which differ between the sides without meaning anything.
+    arity: RefCell<BTreeMap<u32, usize>>,
     pub mismatches: RefCell<Vec<Mismatch>>,
     pub stats: RefCell<BTreeMap<u32, Stats>>,
 }
@@ -155,6 +178,35 @@ pub struct State {
 impl State {
     pub fn is_active(&self) -> bool {
         self.active.get()
+    }
+
+    /// A call to `addr` starts: returns which check's trace it belongs to, if traced.
+    pub(crate) fn call_starts(&self, addr: u32, args: [u32; 4]) -> Option<usize> {
+        let mut traces = self.traces.borrow_mut();
+        let at = traces.len().checked_sub(1)?;
+        let t = &mut traces[at];
+        t.depth += 1;
+        if t.depth == 1 {
+            if t.port_side {
+                t.port.push((addr, args));
+            } else {
+                t.original.push((addr, args));
+            }
+        }
+        Some(at)
+    }
+
+    /// A port calls `addr` with `n` argument registers.
+    pub(crate) fn note_arity(&self, addr: u32, n: usize) {
+        self.arity.borrow_mut().insert(addr, n.min(4));
+    }
+
+    pub(crate) fn call_ends(&self, trace: Option<usize>) {
+        if let Some(at) = trace
+            && let Some(t) = self.traces.borrow_mut().get_mut(at)
+        {
+            t.depth -= 1;
+        }
     }
 
     /// Whether a check of the port of `addr` is running.
@@ -215,6 +267,10 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
         state.checking.borrow_mut().clear();
     }
     state.checking.borrow_mut().push(addr);
+    let traced = state.trace_calls.get();
+    if traced {
+        state.traces.borrow_mut().push(CallTrace::default());
+    }
     let regs0 = ctx.regs.snapshot();
     let sp = regs0.gpr[1];
     let start = state.cursor.get();
@@ -237,6 +293,8 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
         ctx.end_stack_shadow();
     }
     let original = original_panic.as_ref().map(|p| panic_text(p.as_ref()));
+    // Where the original asked its caller to continue, if not after the call.
+    let original_resume = ctx.take_resume_at();
     let j1 = ctx.mem.end_journal();
     let regs1 = ctx.regs.snapshot();
     let s1 = ctx.mem.capture(j1.keys());
@@ -250,6 +308,10 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     ctx.regs.restore(&regs0);
     state.phase.set(Phase::Port);
     state.cursor.set(start);
+    if traced && let Some(t) = state.traces.borrow_mut().last_mut() {
+        t.port_side = true;
+        t.depth = 0;
+    }
     ctx.mem.begin_journal();
     clear_stack(ctx, sp);
     let mut port = catch_unwind(AssertUnwindSafe(|| ctx.run_native(addr, native)))
@@ -268,6 +330,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
             format!("{} (in {})", panic_text(p.as_ref()), inner.join(" < "))
         });
     ctx.truncate_natives(natives);
+    let port_resume = ctx.take_resume_at();
     let j2 = ctx.mem.end_journal();
     let regs2 = ctx.regs.snapshot();
     let s2 = ctx.mem.capture(j2.keys());
@@ -327,10 +390,47 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
         ctx.mem.restore(&j3);
     }
 
+    if traced && let Some(t) = state.traces.borrow_mut().pop() {
+        if !diffs.is_empty() {
+            let n = t.original.len().max(t.port.len());
+            let arity = state.arity.borrow();
+            // Locals lie at different stack addresses on the two sides: pointers to them match.
+            let stack = ctx.stack_floor(sp, STACK_SCRATCH)..sp;
+            let same = |a: Option<&(u32, [u32; 4])>, b: Option<&(u32, [u32; 4])>| match (a, b) {
+                (Some(&(fa, xa)), Some(&(fb, xb))) => {
+                    let k = arity.get(&fa).copied().unwrap_or(4);
+                    fa == fb
+                        && (0..k).all(|i| {
+                            xa[i] == xb[i] || (stack.contains(&xa[i]) && stack.contains(&xb[i]))
+                        })
+                }
+                (a, b) => a == b,
+            };
+            if let Some(index) = (0..n).find(|&i| !same(t.original.get(i), t.port.get(i))) {
+                let describe = |c: Option<&(u32, [u32; 4])>| c.map(|&(a, args)| (ctx.name_of(a), args));
+                diffs.push(Diff::Call {
+                    index,
+                    original: describe(t.original.get(index)),
+                    port: describe(t.port.get(index)),
+                });
+            }
+        }
+    }
+    if original_resume != port_resume {
+        diffs.push(Diff::Reg {
+            name: "resume at",
+            original: original_resume.map_or(0, u64::from),
+            port: port_resume.map_or(0, u64::from),
+        });
+    }
+
     // Continue from the original's results.
     ctx.mem.restore(&j2);
     ctx.mem.restore(&s1);
     ctx.regs.restore(&regs1);
+    if let Some(at) = original_resume {
+        ctx.resume_at(at);
+    }
     state.cursor.set(end);
     state.phase.set(enclosing);
     state.checking.borrow_mut().pop();
@@ -465,7 +565,9 @@ fn interact(ctx: &Ctx, kind: Kind, f: impl FnOnce() -> u32) -> u32 {
 /// Calls an external function.
 pub(crate) fn external(ctx: &Ctx, addr: u32, native: Native) {
     interact(ctx, Kind::Call(addr), || {
+        let original = ctx.running_original.replace(false);
         native(ctx);
+        ctx.running_original.set(original);
         ctx.regs.r(3)
     });
 }
@@ -539,6 +641,10 @@ fn compare(ctx: &Ctx, a: &Outcome, b: &Outcome, returns: Returns, sp: u32) -> Ve
         Returns::Int => regs.push(r3),
         Returns::Int64 => regs.extend([r3, r4]),
         Returns::Float => regs.push(f1),
+    }
+    // Where a side stopped, such as at a longjmp, its registers are not results.
+    if a.panic.is_some() || b.panic.is_some() {
+        regs.clear();
     }
     for (name, o, p) in regs {
         if o != p {

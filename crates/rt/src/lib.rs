@@ -140,6 +140,8 @@ pub struct Ctx {
     /// what hears of reads of the rest.
     shadow: RefCell<Option<StackShadow>>,
     shadow_on: Cell<bool>,
+    /// Whether original code, rather than a port, an SDK stand-in or a hook, is running.
+    running_original: Cell<bool>,
     uninit_hook: RefCell<Option<UninitHook>>,
     /// The running thread's stack, as (lowest address, top), where the OS layer knows it.
     stack_bounds: RefCell<Option<StackBounds>>,
@@ -211,6 +213,7 @@ impl Ctx {
             resolver: RefCell::default(),
             shadow: RefCell::default(),
             shadow_on: Cell::new(false),
+            running_original: Cell::new(false),
             uninit_hook: RefCell::default(),
             stack_bounds: RefCell::default(),
         }
@@ -298,7 +301,7 @@ impl Ctx {
                 off < sh.written.len() && !sh.written[off]
             })
         });
-        if unwritten {
+        if unwritten && self.running_original.get() {
             // The hook may read memory itself.
             self.shadow_on.set(false);
             if let Some(hook) = self.uninit_hook.borrow().as_ref() {
@@ -721,6 +724,16 @@ impl Ctx {
 
     /// Runs the function at `addr` with arguments already in registers.
     pub fn invoke(&self, addr: u32) {
+        if !self.lockstep.trace_calls.get() {
+            return self.invoke_traced(addr);
+        }
+        let args = [self.regs.r(3), self.regs.r(4), self.regs.r(5), self.regs.r(6)];
+        let trace = self.lockstep.call_starts(addr, args);
+        self.invoke_traced(addr);
+        self.lockstep.call_ends(trace);
+    }
+
+    fn invoke_traced(&self, addr: u32) {
         let resolved = || {
             let resolver = self.resolver.borrow();
             resolver.as_ref().is_some_and(|r| r(self, addr))
@@ -735,7 +748,11 @@ impl Ctx {
             Mode::Native if e.external && self.lockstep.is_active() => {
                 lockstep::external(self, addr, e.native)
             }
-            Mode::Native if e.external => (e.native)(self),
+            Mode::Native if e.external => {
+                let original = self.running_original.replace(false);
+                (e.native)(self);
+                self.running_original.set(original);
+            }
             Mode::Original if self.has_backend() => self.run_original(addr),
             // The original side of a check runs originals throughout; anywhere else a call to a
             // port under lockstep is checked, nested inside any check already running, unless
@@ -757,7 +774,9 @@ impl Ctx {
             self.run_hook(addr);
         }
         self.natives.borrow_mut().push(addr);
+        let original = self.running_original.replace(false);
         native(self);
+        self.running_original.set(original);
         self.natives.borrow_mut().pop();
     }
 
@@ -797,9 +816,11 @@ impl Ctx {
         let run = self.last_run.get() + 1;
         self.last_run.set(run);
         let outer = self.current_run.replace(run);
+        let was_original = self.running_original.get();
         let mut resume = None;
         // A `longjmp` to a buffer saved in this run unwinds to here and goes on from there.
         loop {
+            self.running_original.set(true);
             let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| match resume {
                 None => b.run(self, addr),
                 Some(pc) => b.resume(self, pc),
@@ -810,12 +831,14 @@ impl Ctx {
                     Ok(pc) => resume = Some(pc),
                     Err(p) => {
                         self.current_run.set(outer);
+                        self.running_original.set(was_original);
                         std::panic::resume_unwind(p);
                     }
                 },
             }
         }
         self.current_run.set(outer);
+        self.running_original.set(was_original);
     }
 
     // Hooks run when original code reaches an address; ported code calls `run_hook`.
@@ -837,11 +860,13 @@ impl Ctx {
     pub fn run_hook(&self, addr: u32) {
         let hook = self.hooks.borrow().get(&addr).cloned();
         if let Some(hook) = hook {
+            let original = self.running_original.replace(false);
             if self.lockstep.is_active() {
                 lockstep::hook(self, addr, &hook);
             } else {
                 hook(self);
             }
+            self.running_original.set(original);
         }
     }
 

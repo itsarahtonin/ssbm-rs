@@ -303,6 +303,9 @@ all_tuples!(
 
 impl Ctx {
     fn call_with(&self, addr: u32, r: ArgRegs) {
+        if self.lockstep.trace_calls.get() {
+            self.lockstep.note_arity(addr, r.gpr - 3);
+        }
         // Arguments past the registers go at 8(r1), which the caller's frame holds for them as
         // the original's does, so the callee runs at the original's stack addresses.
         let sp = self.regs.r(1);

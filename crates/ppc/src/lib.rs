@@ -39,12 +39,25 @@ impl Interpreter {
 
 impl Backend for Interpreter {
     fn run(&self, ctx: &Ctx, addr: u32) {
+        let ret = ctx.regs.lr.get();
         ctx.regs.lr.set(RETURN_SENTINEL);
-        self.resume(ctx, addr);
+        let end = self.resume_to_sentinel(ctx, addr);
+        // A code that returns past its function's caller returns past the sentinel: the port
+        // that called continues as far past its own return address.
+        if end != RETURN_SENTINEL {
+            ctx.resume_at(ret.wrapping_add(end - RETURN_SENTINEL));
+        }
     }
 
-    fn resume(&self, ctx: &Ctx, mut pc: u32) {
-        while pc != RETURN_SENTINEL {
+    fn resume(&self, ctx: &Ctx, pc: u32) {
+        self.resume_to_sentinel(ctx, pc);
+    }
+}
+
+impl Interpreter {
+    /// Runs from `pc` until a return to the sentinel, or past it; returns where.
+    fn resume_to_sentinel(&self, ctx: &Ctx, mut pc: u32) -> u32 {
+        while pc < RETURN_SENTINEL {
             if ctx.flags_at(pc) & FLAG_HOOK != 0 {
                 ctx.run_hook(pc);
             }
@@ -65,6 +78,7 @@ impl Backend for Interpreter {
                 ctx.beat(pc);
             }
         }
+        pc
     }
 }
 

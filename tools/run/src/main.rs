@@ -412,6 +412,11 @@ fn run() -> ExitCode {
         }
         ctx.lockstep.keep_per_function.set(2);
         // LOCKSTEP_CALLS=N checks each port's first N calls, then lets it run unchecked.
+        // LOCKSTEP_TRACE_CALLS=1 names, in a mismatch, the first of the function's own calls
+        // that differs between the sides.
+        ctx.lockstep
+            .trace_calls
+            .set(std::env::var_os("LOCKSTEP_TRACE_CALLS").is_some());
         if let Some(n) = std::env::var("LOCKSTEP_CALLS").ok().and_then(|v| v.parse().ok()) {
             ctx.lockstep.calls_per_function.set(Some(n));
         }
