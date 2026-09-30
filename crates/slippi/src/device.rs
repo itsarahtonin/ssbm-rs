@@ -85,12 +85,12 @@ impl Device {
         }
     }
 
-    /// The game sends `data`.
     /// The replay's own codes that playback applies.
     pub fn gecko_list(&self) -> &[u8] {
         &self.gecko_list
     }
 
+    /// The game sends `data`.
     pub fn dma_write(&self, data: &[u8]) {
         let mut at = 0;
         if data.first() == Some(&cmd::RECEIVE_COMMANDS) && data.len() > 1 {

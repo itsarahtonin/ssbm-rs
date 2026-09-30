@@ -156,7 +156,9 @@ pub fn playback_list(replay_codes: &[u8]) -> Vec<u8> {
     crate::device::filter_codes(replay_codes)
 }
 
-/// A code list's lines from its raw bytes, up to the `F0`/`FF` terminator.
+/// A code list's lines from its raw bytes. The `F0`/`FF` terminator only ends a list where a
+/// code starts, so it is left for [`targets`] to find: inside a `C2` code's instructions, a
+/// word such as `FF800890` (`fmr`) is an instruction.
 pub fn lines(raw: &[u8]) -> Vec<(u32, u32)> {
     raw.as_chunks::<8>()
         .0
@@ -167,7 +169,6 @@ pub fn lines(raw: &[u8]) -> Vec<(u32, u32)> {
                 u32::from_be_bytes([c[4], c[5], c[6], c[7]]),
             )
         })
-        .take_while(|&(a, _)| a >> 24 != 0xFF)
         .collect()
 }
 
@@ -219,5 +220,24 @@ $Beta
         // Branch from 0x80002000 to the body at 0x80001810, and back to 0x80002004.
         assert_eq!(ctx.read_u32(0x8000_2000), branch(0x8000_2000, 0x8000_1810));
         assert_eq!(ctx.read_u32(0x8000_1814), branch(0x8000_1814, 0x8000_2004));
+    }
+
+    #[test]
+    fn targets_look_past_instructions_that_look_like_terminators() {
+        let mut raw = Vec::new();
+        for (a, d) in [
+            (0xC206_A880, 1),
+            (0xFF80_0890, 0x6000_0000),
+            (0x0400_1000, 1),
+            (0xFF00_0000, 0),
+            (0x0400_2000, 2),
+        ] {
+            raw.extend_from_slice(&u32::to_be_bytes(a));
+            raw.extend_from_slice(&u32::to_be_bytes(d));
+        }
+        assert_eq!(
+            targets(&lines(&raw)),
+            [(0x8006_A880, 4), (0x8000_1000, 4)]
+        );
     }
 }
