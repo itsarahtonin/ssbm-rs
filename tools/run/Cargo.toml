@@ -14,4 +14,5 @@ ssbm-ppc.workspace = true
 ssbm-rt.workspace = true
 ssbm-sdk.workspace = true
 ssbm-slippi.workspace = true
+ssbm-game.workspace = true
 ssbm-types.workspace = true

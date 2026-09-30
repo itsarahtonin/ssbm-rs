@@ -10,6 +10,11 @@
 //! A replay run checks the replay it records against the original, and fails on any divergence
 //! not listed in the `--known FILE` (one per line, as reported; `#` starts a comment).
 //! `--write-known FILE` writes this run's divergences in that form.
+//!
+//! `--port UNITS` runs the Rust ports of those decomp units (comma-separated unit names or
+//! prefixes such as `melee/ft`, or `all`) instead of their original code. With `--lockstep`,
+//! every call to a ported function runs the original too and compares, and the run fails on
+//! any mismatch.
 
 use std::cell::Cell;
 use std::collections::HashMap;
@@ -32,6 +37,8 @@ fn main() -> ExitCode {
     let mut fp_mode = None;
     let mut known_path = None;
     let mut write_known = None;
+    let mut ports: Vec<String> = Vec::new();
+    let mut lockstep = false;
     let mut args = std::env::args().skip(1);
     while let Some(a) = args.next() {
         match a.as_str() {
@@ -43,6 +50,13 @@ fn main() -> ExitCode {
             }
             "--replay" => replay_path = Some(args.next().expect("--replay FILE")),
             "--known" => known_path = Some(args.next().expect("--known FILE")),
+            "--port" => ports.extend(
+                args.next()
+                    .expect("--port UNITS")
+                    .split(',')
+                    .map(|s| s.trim().to_owned()),
+            ),
+            "--lockstep" => lockstep = true,
             "--write-known" => write_known = Some(args.next().expect("--write-known FILE")),
             "--fp" => {
                 fp_mode = match args.next().as_deref() {
@@ -96,6 +110,28 @@ fn main() -> ExitCode {
         gekko_fp::set_fp_mode(mode);
     }
     let slippi: Option<Rc<ssbm_slippi::Device>> = slippi;
+
+    // Ported units replace their original code.
+    let before: std::collections::BTreeSet<u32> = ctx.registered().into_iter().collect();
+    let units = ssbm_game::register(&ctx, |unit| {
+        ports.iter().any(|p| {
+            p == "all" || unit == p || unit.starts_with(&format!("{}/", p.trim_end_matches('/')))
+        })
+    });
+    let ported: Vec<u32> = ctx
+        .registered()
+        .into_iter()
+        .filter(|a| !before.contains(a))
+        .collect();
+    if !ports.is_empty() {
+        eprintln!("ported: {units} units, {} functions", ported.len());
+    }
+    if lockstep {
+        for &addr in &ported {
+            ctx.set_mode(addr, ssbm_rt::Mode::Lockstep);
+        }
+        ctx.lockstep.keep_per_function.set(2);
+    }
 
     // CALLS=name,... logs each call to these functions (symbols or hex addresses) with its
     // first four arguments.
@@ -320,6 +356,33 @@ fn main() -> ExitCode {
             eprintln!("  not reached: frame {frame}: {event} port {}", port + 1);
         }
     }
+    let mut lockstep_ok = true;
+    if lockstep {
+        let stats = ctx.lockstep.stats.borrow();
+        let calls: u64 = stats.values().map(|s| s.calls).sum();
+        let bad: Vec<_> = stats.iter().filter(|(_, s)| s.mismatches > 0).collect();
+        eprintln!(
+            "lockstep: {calls} calls to {} of {} ported functions, {} functions mismatch",
+            stats.len(),
+            ported.len(),
+            bad.len()
+        );
+        for (addr, s) in bad.iter().take(20) {
+            eprintln!(
+                "  {}: {} of {} calls mismatch",
+                ctx.name_of(**addr),
+                s.mismatches,
+                s.calls
+            );
+        }
+        for m in ctx.lockstep.mismatches.borrow().iter().take(10) {
+            eprintln!("  {} call {}:", ctx.name_of(m.function), m.call);
+            for d in m.diffs.iter().take(6) {
+                eprintln!("    {d:X?}");
+            }
+        }
+        lockstep_ok = bad.is_empty();
+    }
     eprintln!(
         "{} fields, {} M instructions, {} draws",
         sdk.hw.fields.get(),
@@ -332,7 +395,7 @@ fn main() -> ExitCode {
             ExitCode::FAILURE
         }
         Err(p) if p.is::<Stop>() => {
-            if replay_ok {
+            if replay_ok && lockstep_ok {
                 ExitCode::SUCCESS
             } else {
                 ExitCode::FAILURE
