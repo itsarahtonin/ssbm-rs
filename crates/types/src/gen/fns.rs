@@ -2985,7 +2985,7 @@ use crate::records::*;
 #[inline] pub fn Camera_Create<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80030688, ()) }
 #[inline] pub fn Camera_80030730<'a>(ctx: &'a Ctx, arg8: f64) -> () { ctx.call(0x80030730, (Single(gekko_fp::frsp(arg8)), )) }
 #[inline] pub fn Camera_SetBackgroundColor<'a>(ctx: &'a Ctx, r: u8, g: u8, b: u8) -> () { ctx.call(0x80030740, (r, g, b, )) }
-#[inline] pub fn Camera_GetBackgroundColor<'a>(ctx: &'a Ctx, __ret: _GXColor<'a>) -> () { ctx.call(0x80030758, (__ret, )) }
+#[inline] pub fn Camera_GetBackgroundColor<'a>(ctx: &'a Ctx, __ret: _GXColor<'a>) -> () { ctx.call::<_, ()>(0x80030758, ()); ctx.put_small_ret(Handle::addr(__ret), 4) }
 #[inline] pub fn Camera_GetTransformPosition<'a>(ctx: &'a Ctx, arg0: Vec<'a>) -> () { ctx.call(0x80030788, (arg0, )) }
 #[inline] pub fn Camera_GetTransformInterest<'a>(ctx: &'a Ctx, arg0: Vec<'a>) -> () { ctx.call(0x800307ac, (arg0, )) }
 #[inline] pub fn Camera_800307D0<'a>(ctx: &'a Ctx, left: Val<'a, F32>, center: Val<'a, F32>, right: Val<'a, F32>) -> i32 { ctx.call(0x800307d0, (left, center, right, )) }
@@ -10158,7 +10158,7 @@ use crate::records::*;
 #[inline] pub fn fn_801607F4<'a>(ctx: &'a Ctx, arg0: i32) -> u8 { ctx.call(0x801607f4, (arg0, )) }
 #[inline] pub fn fn_80160840<'a>(ctx: &'a Ctx, arg0: u8) -> u8 { ctx.call(0x80160840, (arg0, )) }
 #[inline] pub fn gm_80160854<'a>(ctx: &'a Ctx, slot: u8, team: u8, is_teams: u8, slot_type: u8) -> u32 { ctx.call(0x80160854, (slot, team, is_teams, slot_type, )) }
-#[inline] pub fn gm_80160968<'a>(ctx: &'a Ctx, __ret: _GXColor<'a>, arg0: u32) -> () { ctx.call(0x80160968, (__ret, arg0, )) }
+#[inline] pub fn gm_80160968<'a>(ctx: &'a Ctx, __ret: _GXColor<'a>, arg0: u32) -> () { ctx.call::<_, ()>(0x80160968, (arg0, )); ctx.put_small_ret(Handle::addr(__ret), 4) }
 #[inline] pub fn gm_80160980<'a>(ctx: &'a Ctx, ckind: u8) -> Val<'a, i8> { ctx.call(0x80160980, (ckind, )) }
 #[inline] pub fn fn_801609E0<'a>(ctx: &'a Ctx, ckind: u8) -> Val<'a, i8> { ctx.call(0x801609e0, (ckind, )) }
 #[inline] pub fn gm_80160A60<'a>(ctx: &'a Ctx, arg0: i32) -> Val<'a, i8> { ctx.call(0x80160a60, (arg0, )) }
@@ -10583,7 +10583,7 @@ use crate::records::*;
 #[inline] pub fn fn_80174B4C<'a>(ctx: &'a Ctx, data: ResultsData<'a>, slot: i32) -> () { ctx.call(0x80174b4c, (data, slot, )) }
 #[inline] pub fn fn_80174FD0<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: i32) -> () { ctx.call(0x80174fd0, (jobj, arg1, )) }
 #[inline] pub fn fn_80175038<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, flag: i32) -> () { ctx.call(0x80175038, (gobj, flag, )) }
-#[inline] pub fn fn_8017507C<'a>(ctx: &'a Ctx, __ret: _GXColor<'a>, slot: i32) -> () { ctx.call(0x8017507c, (__ret, slot, )) }
+#[inline] pub fn fn_8017507C<'a>(ctx: &'a Ctx, __ret: _GXColor<'a>, slot: i32) -> () { ctx.call::<_, ()>(0x8017507c, (slot, )); ctx.put_small_ret(Handle::addr(__ret), 4) }
 #[inline] pub fn fn_80175240<'a>(ctx: &'a Ctx, slot: i32) -> () { ctx.call(0x80175240, (slot, )) }
 #[inline] pub fn fn_8017556C<'a>(ctx: &'a Ctx, slot: i32) -> () { ctx.call(0x8017556c, (slot, )) }
 #[inline] pub fn fn_801756E0<'a>(ctx: &'a Ctx, slot: i32) -> () { ctx.call(0x801756e0, (slot, )) }
@@ -17596,8 +17596,8 @@ use crate::records::*;
 #[inline] pub fn DevText_SetScale<'a>(ctx: &'a Ctx, text: DevText<'a>, x: f64, y: f64) -> () { ctx.call(0x80302b10, (text, Single(gekko_fp::frsp(x)), Single(gekko_fp::frsp(y)), )) }
 #[inline] pub fn DevText_SetXY<'a>(ctx: &'a Ctx, text: DevText<'a>, x: i32, y: i32) -> () { ctx.call(0x80302b1c, (text, x, y, )) }
 #[inline] pub fn DevText_StoreColorIndex<'a>(ctx: &'a Ctx, text: DevText<'a>, index: u8) -> u8 { ctx.call(0x80302b48, (text, index, )) }
-#[inline] pub fn DevText_SetTextColor<'a>(ctx: &'a Ctx, __ret: _GXColor<'a>, text: DevText<'a>, color: _GXColor<'a>) -> () { let color__copy = ctx.stack_alloc(<_GXColor<'a> as Handle<'a>>::SIZE); let color__tmp: _GXColor<'a> = color__copy.get(); color__tmp.copy_from(color);ctx.call(0x80302b64, (__ret, text, color__tmp, )) }
-#[inline] pub fn DevText_SetBGColor<'a>(ctx: &'a Ctx, __ret: _GXColor<'a>, text: DevText<'a>, color: _GXColor<'a>) -> () { let color__copy = ctx.stack_alloc(<_GXColor<'a> as Handle<'a>>::SIZE); let color__tmp: _GXColor<'a> = color__copy.get(); color__tmp.copy_from(color);ctx.call(0x80302b90, (__ret, text, color__tmp, )) }
+#[inline] pub fn DevText_SetTextColor<'a>(ctx: &'a Ctx, __ret: _GXColor<'a>, text: DevText<'a>, color: _GXColor<'a>) -> () { let color__copy = ctx.stack_alloc(<_GXColor<'a> as Handle<'a>>::SIZE); let color__tmp: _GXColor<'a> = color__copy.get(); color__tmp.copy_from(color);ctx.call::<_, ()>(0x80302b64, (text, color__tmp, )); ctx.put_small_ret(Handle::addr(__ret), 4) }
+#[inline] pub fn DevText_SetBGColor<'a>(ctx: &'a Ctx, __ret: _GXColor<'a>, text: DevText<'a>, color: _GXColor<'a>) -> () { let color__copy = ctx.stack_alloc(<_GXColor<'a> as Handle<'a>>::SIZE); let color__tmp: _GXColor<'a> = color__copy.get(); color__tmp.copy_from(color);ctx.call::<_, ()>(0x80302b90, (text, color__tmp, )); ctx.put_small_ret(Handle::addr(__ret), 4) }
 #[inline] pub fn DevText_Erase<'a>(ctx: &'a Ctx, text: DevText<'a>) -> () { ctx.call(0x80302bb0, (text, )) }
 #[inline] pub fn DevText_Print<'a>(ctx: &'a Ctx, text: DevText<'a>, str: Val<'a, i8>) -> () { ctx.call(0x80302be4, (text, str, )) }
 #[inline] pub fn DevText_PrintInt<'a>(ctx: &'a Ctx, text: DevText<'a>, num: i32) -> () { ctx.call(0x80302d0c, (text, num, )) }
@@ -37096,7 +37096,7 @@ pub mod abi {
     #[inline] pub fn Camera_Create(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     #[inline] pub fn Camera_80030730(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, f64) -> ()) { let (arg8, ): (Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg8.0), ctx); }
     #[inline] pub fn Camera_SetBackgroundColor(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u8, u8, u8) -> ()) { let (r, g, b, ): (u8, u8, u8, ) = Args::take_all(ctx); Ret::put(__f(ctx, r, g, b), ctx); }
-    #[inline] pub fn Camera_GetBackgroundColor(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, _GXColor<'a>) -> ()) { let (__ret, ): (_GXColor<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, __ret), ctx); }
+    #[inline] pub fn Camera_GetBackgroundColor(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, _GXColor<'a>) -> ()) { let (): () = Args::take_all(ctx); let __slot = ctx.stack_alloc(8); __f(ctx, __slot.get()); ctx.take_small_ret(__slot.base(), 4); }
     #[inline] pub fn Camera_GetTransformPosition(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>) -> ()) { let (arg0, ): (Vec<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
     #[inline] pub fn Camera_GetTransformInterest(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>) -> ()) { let (arg0, ): (Vec<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
     #[inline] pub fn Camera_800307D0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Val<'a, F32>, Val<'a, F32>, Val<'a, F32>) -> i32) { let (left, center, right, ): (Val<'_, F32>, Val<'_, F32>, Val<'_, F32>, ) = Args::take_all(ctx); Ret::put(__f(ctx, left, center, right), ctx); }
@@ -44269,7 +44269,7 @@ pub mod abi {
     #[inline] pub fn fn_801607F4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> u8) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
     #[inline] pub fn fn_80160840(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u8) -> u8) { let (arg0, ): (u8, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
     #[inline] pub fn gm_80160854(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u8, u8, u8, u8) -> u32) { let (slot, team, is_teams, slot_type, ): (u8, u8, u8, u8, ) = Args::take_all(ctx); Ret::put(__f(ctx, slot, team, is_teams, slot_type), ctx); }
-    #[inline] pub fn gm_80160968(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, _GXColor<'a>, u32) -> ()) { let (__ret, arg0, ): (_GXColor<'_>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, __ret, arg0), ctx); }
+    #[inline] pub fn gm_80160968(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, _GXColor<'a>, u32) -> ()) { let (arg0, ): (u32, ) = Args::take_all(ctx); let __slot = ctx.stack_alloc(8); __f(ctx, __slot.get(), arg0); ctx.take_small_ret(__slot.base(), 4); }
     #[inline] pub fn gm_80160980(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u8) -> Val<'a, i8>) { let (ckind, ): (u8, ) = Args::take_all(ctx); Ret::put(__f(ctx, ckind), ctx); }
     #[inline] pub fn fn_801609E0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u8) -> Val<'a, i8>) { let (ckind, ): (u8, ) = Args::take_all(ctx); Ret::put(__f(ctx, ckind), ctx); }
     #[inline] pub fn gm_80160A60(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> Val<'a, i8>) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
@@ -44694,7 +44694,7 @@ pub mod abi {
     #[inline] pub fn fn_80174B4C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ResultsData<'a>, i32) -> ()) { let (data, slot, ): (ResultsData<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, data, slot), ctx); }
     #[inline] pub fn fn_80174FD0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_JObj<'a>, i32) -> ()) { let (jobj, arg1, ): (HSD_JObj<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, jobj, arg1), ctx); }
     #[inline] pub fn fn_80175038(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, i32) -> ()) { let (gobj, flag, ): (HSD_GObj<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj, flag), ctx); }
-    #[inline] pub fn fn_8017507C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, _GXColor<'a>, i32) -> ()) { let (__ret, slot, ): (_GXColor<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, __ret, slot), ctx); }
+    #[inline] pub fn fn_8017507C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, _GXColor<'a>, i32) -> ()) { let (slot, ): (i32, ) = Args::take_all(ctx); let __slot = ctx.stack_alloc(8); __f(ctx, __slot.get(), slot); ctx.take_small_ret(__slot.base(), 4); }
     #[inline] pub fn fn_80175240(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> ()) { let (slot, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, slot), ctx); }
     #[inline] pub fn fn_8017556C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> ()) { let (slot, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, slot), ctx); }
     #[inline] pub fn fn_801756E0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> ()) { let (slot, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, slot), ctx); }
@@ -51707,8 +51707,8 @@ pub mod abi {
     #[inline] pub fn DevText_SetScale(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, DevText<'a>, f64, f64) -> ()) { let (text, x, y, ): (DevText<'_>, Single, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, text, x.0, y.0), ctx); }
     #[inline] pub fn DevText_SetXY(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, DevText<'a>, i32, i32) -> ()) { let (text, x, y, ): (DevText<'_>, i32, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, text, x, y), ctx); }
     #[inline] pub fn DevText_StoreColorIndex(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, DevText<'a>, u8) -> u8) { let (text, index, ): (DevText<'_>, u8, ) = Args::take_all(ctx); Ret::put(__f(ctx, text, index), ctx); }
-    #[inline] pub fn DevText_SetTextColor(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, _GXColor<'a>, DevText<'a>, _GXColor<'a>) -> ()) { let (__ret, text, color, ): (_GXColor<'_>, DevText<'_>, _GXColor<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, __ret, text, color), ctx); }
-    #[inline] pub fn DevText_SetBGColor(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, _GXColor<'a>, DevText<'a>, _GXColor<'a>) -> ()) { let (__ret, text, color, ): (_GXColor<'_>, DevText<'_>, _GXColor<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, __ret, text, color), ctx); }
+    #[inline] pub fn DevText_SetTextColor(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, _GXColor<'a>, DevText<'a>, _GXColor<'a>) -> ()) { let (text, color, ): (DevText<'_>, _GXColor<'_>, ) = Args::take_all(ctx); let __slot = ctx.stack_alloc(8); __f(ctx, __slot.get(), text, color); ctx.take_small_ret(__slot.base(), 4); }
+    #[inline] pub fn DevText_SetBGColor(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, _GXColor<'a>, DevText<'a>, _GXColor<'a>) -> ()) { let (text, color, ): (DevText<'_>, _GXColor<'_>, ) = Args::take_all(ctx); let __slot = ctx.stack_alloc(8); __f(ctx, __slot.get(), text, color); ctx.take_small_ret(__slot.base(), 4); }
     #[inline] pub fn DevText_Erase(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, DevText<'a>) -> ()) { let (text, ): (DevText<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, text), ctx); }
     #[inline] pub fn DevText_Print(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, DevText<'a>, Val<'a, i8>) -> ()) { let (text, str, ): (DevText<'_>, Val<'_, i8>, ) = Args::take_all(ctx); Ret::put(__f(ctx, text, str), ctx); }
     #[inline] pub fn DevText_PrintInt(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, DevText<'a>, i32) -> ()) { let (text, num, ): (DevText<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, text, num), ctx); }

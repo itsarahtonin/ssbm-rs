@@ -664,6 +664,23 @@ impl Ctx {
         }
     }
 
+    /// Stores at `addr` a struct of 4 or 8 bytes that a function returned in r3 and r4, as
+    /// the EABI returns structs of up to 8 bytes.
+    pub fn put_small_ret(&self, addr: u32, size: u32) {
+        self.write_u32(addr, self.regs.r(3));
+        if size > 4 {
+            self.write_u32(addr + 4, self.regs.r(4));
+        }
+    }
+
+    /// Returns the struct of 4 or 8 bytes at `addr` in r3 and r4, as the EABI does.
+    pub fn take_small_ret(&self, addr: u32, size: u32) {
+        self.regs.set_r(3, self.read_u32(addr));
+        if size > 4 {
+            self.regs.set_r(4, self.read_u32(addr + 4));
+        }
+    }
+
     /// Reserves `size` bytes on the emulated stack for locals whose address escapes. The
     /// block starts 8 bytes above r1, leaving room for a callee's back chain and saved LR.
     pub fn stack_alloc(&self, size: u32) -> StackFrame<'_> {

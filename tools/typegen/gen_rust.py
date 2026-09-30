@@ -229,7 +229,11 @@ class Gen:
         pnames = list(f.get("param_names") or [])
         params, puts, abi_types, abi_args, abi_pass = [], [], [], [], []
         sret = self.ret(ft["ret"]) == "sret"
-        if sret:
+        # The EABI returns structs of up to 8 bytes in r3 and r4, not through a pointer.
+        small = small_struct(self.records, ft["ret"]) if sret else None
+        if small:
+            params.append(f"__ret: {self.rec_names[ft['ret']['id']]}<'a>")
+        if sret and not small:
             rty = f"{self.rec_names[ft['ret']['id']]}<'a>"
             params.append(f"__ret: {rty}")
             puts.append("__ret")
@@ -258,17 +262,35 @@ class Gen:
             body = "".join(pre) + f"ctx.call_variadic({addr:#x}, {tuple_}, varargs)"
         else:
             body = "".join(pre) + f"ctx.call({addr:#x}, {tuple_})"
+        if small:
+            body = "".join(pre) + f"ctx.call::<_, ()>({addr:#x}, {tuple_}); ctx.put_small_ret(Handle::addr(__ret), {small})"
         sig = ", ".join(["ctx: &'a Ctx"] + params)
         stub = f"#[inline] pub fn {rid}<'a>({sig}) -> {ret} {{ {body} }}"
+        take = (f"let {tuple_args(abi_args)}: ({''.join(t.replace(chr(39) + 'a', chr(39) + '_') + ', ' for t in abi_types)}) = "
+                f"Args::take_all(ctx); ")
+        if small:
+            rty = f"{self.rec_names[ft['ret']['id']]}<'a>"
+            fn_types = ", ".join(["&'a Ctx", rty] + [t.replace("Single", "f64") for t in abi_types])
+            abi = (f"#[inline] pub fn {rid}(ctx: &Ctx, __f: for<'a> fn({fn_types}) -> ()) {{ {take}"
+                   f"let __slot = ctx.stack_alloc(8); __f(ctx, __slot.get(){''.join(', ' + a for a in abi_pass)}); "
+                   f"ctx.take_small_ret(__slot.base(), {small}); }}")
+            return stub, abi
         fn_types = ", ".join(["&'a Ctx"] + [t.replace("Single", "f64") for t in abi_types])
-        abi = (f"#[inline] pub fn {rid}(ctx: &Ctx, __f: for<'a> fn({fn_types}) -> {ret}) {{ "
-               f"let {tuple_args(abi_args)}: ({''.join(t.replace(chr(39) + 'a', chr(39) + '_') + ', ' for t in abi_types)}) = Args::take_all(ctx); "
+        abi = (f"#[inline] pub fn {rid}(ctx: &Ctx, __f: for<'a> fn({fn_types}) -> {ret}) {{ {take}"
                f"Ret::put(__f(ctx, {', '.join(abi_pass)}), ctx); }}")
         return stub, abi
 
     def global_(self, g):
         name, addr, t = g["name"], g["addr"], g["type"]
         return f"#[inline] pub fn {ident(name)}(ctx: &Ctx) -> {self.handle_ty(t).replace(chr(39) + 'a', chr(39) + '_')} {{ At::new(ctx, {addr:#x}).field(0) }}"
+
+
+def small_struct(records, t):
+    """The size of a struct the EABI returns in registers (4 or 8 bytes), else None."""
+    if t["k"] != "rec":
+        return None
+    size = (records.get(t["id"]) or {}).get("size")
+    return size if size in (4, 8) else None
 
 
 def tuple_args(names):
