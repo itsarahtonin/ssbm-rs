@@ -226,6 +226,9 @@ class FnCtx:
         self.labels = 0
         self.targets = []  # Loop objects and switch labels
         self.escaping = set()
+        # Bytes past their start that code reaches in locals through `&x + k`, which the
+        # decomp uses to hit the original's stack slots.
+        self.reach = {}
         self.temps = 0
         self.ret = None
         self.sret = False
@@ -721,6 +724,9 @@ class Translator:
                         target.referenced.kind in (CK.VAR_DECL, CK.PARM_DECL):
                     r = target.referenced
                     self.f.escaping.add(vkey(r))
+            if n.kind == CK.BINARY_OPERATOR and \
+                    BINOPS.get(_lib.clang_getCursorBinaryOperatorKind(n)) in ("+", "-"):
+                self.note_reach(n)
 
     def check_gotos(self, body):
         """Gotos become breaks out of blocks and continues of loops, which only reach labels
@@ -750,10 +756,32 @@ class Translator:
             if up is None or around.kind != CK.COMPOUND_STMT:
                 self.f.cfg = True
 
+    def note_reach(self, n):
+        """Records how far `&x + k` reaches past local x's start. The port gives x that much
+        room, so the access lands in x's own slot rather than on a neighbor's."""
+        a, b = (strip(k) for k in children(n))
+        if BINOPS.get(_lib.clang_getCursorBinaryOperatorKind(n)) == "+" and \
+                b.kind == CK.UNARY_OPERATOR:
+            a, b = b, a
+        if a.kind != CK.UNARY_OPERATOR or _lib.clang_getCursorUnaryOperatorKind(a) != 5:
+            return
+        target = strip(children(a)[0])
+        k = evaluate(b)
+        if target.kind != CK.DECL_REF_EXPR or target.referenced is None or \
+                target.referenced.kind != CK.VAR_DECL or not isinstance(k, int):
+            return
+        if BINOPS.get(_lib.clang_getCursorBinaryOperatorKind(n)) == "-":
+            k = -k
+        if k < 0:
+            raise Unsupported("address before a local")
+        size = max(self.u.size_of(self.u.ctype(target.type)), 1)
+        key = vkey(target.referenced)
+        self.f.reach[key] = max(self.f.reach.get(key, 0), (k + 1) * size)
+
     # Stack slots.
 
-    def stack_slot(self, name, t):
-        size = max(self.u.size_of(t), 1)
+    def stack_slot(self, name, t, key=None):
+        size = max(self.u.size_of(t), self.f.reach.get(key, 0), 1)
         align = max(self.u.align_of(t), 4)
         off = (self.f.frame_size + align - 1) & ~(align - 1)
         self.f.frame_size = off + size
@@ -1302,7 +1330,7 @@ class Translator:
             return [f"{ident(rname)} = {self.convert(self.expr(init), t).code};"]
         on_stack = t["k"] in ("rec", "arr") or key in self.f.escaping
         if on_stack:
-            slot = self.stack_slot(base, t)
+            slot = self.stack_slot(base, t, key)
             self.f.locals[key] = (slot, t, "stack")
             if init is None:
                 return []

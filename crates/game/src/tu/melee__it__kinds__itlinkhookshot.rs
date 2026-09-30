@@ -2988,7 +2988,7 @@ fn inl_it_802A2EE4_inline_alt_pad<'a>(ctx: &'a Ctx, item_link: ItemLink<'a>, pos
 }
 
 fn inl_it_802A4BFC_sqrtf_offset<'a>(ctx: &'a Ctx, x: f64) -> f64 {
-    let __frame = ctx.stack_frame(0x10);
+    let __frame = ctx.stack_frame(0x28);
     let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
     let mut x = x;
     if x > 0.0 {
