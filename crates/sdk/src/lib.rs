@@ -20,7 +20,7 @@ use std::rc::Rc;
 use std::sync::OnceLock;
 
 use ssbm_disc::Disc;
-use ssbm_rt::Ctx;
+use ssbm_rt::{Ctx, MSR_EE};
 
 pub mod boot;
 mod devices;
@@ -123,6 +123,19 @@ impl Sdk {
             .unwrap_or_else(|e| panic!("disc read of {} bytes at {offset:#x}: {e}", buf.len()));
     }
 
+    /// Interrupt and event state, for diagnostics.
+    pub fn describe(&self, ctx: &Ctx) -> String {
+        format!(
+            "msr {:08X}, pending interrupts {:08X}, masks {:08X}/{:08X}, next event {:?}, now {}",
+            ctx.regs.msr.get(),
+            self.pending.get(),
+            ctx.read_u32(INTERRUPT_MASK_GLOBAL),
+            ctx.read_u32(INTERRUPT_MASK_USER),
+            self.events.borrow().peek().map(|e| e.0.at),
+            Self::now(ctx)
+        )
+    }
+
     /// The current time base value.
     pub fn now(ctx: &Ctx) -> u64 {
         ctx.regs.tb.get()
@@ -144,9 +157,44 @@ impl Sdk {
         self.schedule(Self::now(ctx) + delay, run);
     }
 
-    /// Raises OS interrupt `n`; its handler runs at the next wait point where it is unmasked.
-    pub fn raise(&self, n: u32) {
+    /// Raises OS interrupt `n`. Its handler runs now if interrupts are enabled and it is
+    /// unmasked, or else as soon as they are.
+    pub fn raise(&self, ctx: &Ctx, n: u32) {
         self.pending.set(self.pending.get() | (0x8000_0000 >> n));
+        if std::env::var_os("SDK_TRACE").is_some() {
+            eprintln!(
+                "raise {n} ee {} in_service {} at tb {}",
+                ctx.regs.msr.get() & MSR_EE != 0,
+                self.in_service.get(),
+                Self::now(ctx)
+            );
+        }
+        if ctx.regs.msr.get() & MSR_EE != 0 {
+            Self::take_interrupts(ctx);
+        }
+    }
+
+    /// Takes pending interrupts and events that are due, if any, as the CPU would when
+    /// interrupts are enabled.
+    fn take_interrupts(ctx: &Ctx) {
+        let sdk = ctx.ext::<Sdk>();
+        if std::env::var_os("SDK_TRACE").is_some() && sdk.pending.get() != 0 {
+            eprintln!(
+                "take: in_service {} pending {:08X} lr {:08X}",
+                sdk.in_service.get(),
+                sdk.pending.get(),
+                ctx.regs.lr.get()
+            );
+        }
+        if sdk.in_service.get() {
+            return;
+        }
+        let now = Self::now(ctx);
+        let due = sdk.events.borrow().peek().is_some_and(|e| e.0.at <= now);
+        let masked = ctx.read_u32(INTERRUPT_MASK_GLOBAL) | ctx.read_u32(INTERRUPT_MASK_USER);
+        if due || sdk.pending.get() & !masked != 0 {
+            sdk.as_interrupt(ctx, || sdk.service(ctx));
+        }
     }
 
     fn next_due(&self, now: u64) -> Option<Event> {
@@ -166,6 +214,9 @@ impl Sdk {
             return false;
         }
         let n = ready.leading_zeros();
+        if std::env::var_os("SDK_TRACE").is_some() {
+            eprintln!("deliver {n}");
+        }
         self.pending.set(self.pending.get() & !(0x8000_0000 >> n));
         let handler = ctx.read_u32(INTERRUPT_TABLE + 4 * n);
         if handler != 0 {
@@ -241,8 +292,6 @@ impl Sdk {
     }
 }
 
-const MSR_EE: u32 = 1 << 15;
-
 /// The address of a decomp symbol. Panics on unknown names.
 pub fn sym(name: &str) -> u32 {
     static MAP: OnceLock<HashMap<&'static str, u32>> = OnceLock::new();
@@ -269,6 +318,7 @@ pub fn install(ctx: &Ctx, disc: Disc) -> Rc<Sdk> {
         sym("lb_800195D0"),
         Rc::new(|ctx| Sdk::wait(ctx, GAME_WAIT_STEP)),
     );
+    ctx.set_interrupt_check(Rc::new(Sdk::take_interrupts));
     sdk
 }
 

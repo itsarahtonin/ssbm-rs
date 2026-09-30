@@ -1,0 +1,12 @@
+[package]
+name = "ssbm-slippi"
+description = "Slippi replay playback and recording in the dev runtime"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+ssbm-rt.workspace = true
+thiserror.workspace = true

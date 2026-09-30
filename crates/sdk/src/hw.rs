@@ -37,6 +37,7 @@ const PI_FIFO_END: u32 = 0x3010;
 const PI_FIFO_WPTR: u32 = 0x3014;
 const PI_FLIPPER_REV: u32 = 0x302C;
 const DSP_CSR: u32 = 0x500A;
+const AR_INFO: u32 = 0x5012;
 const AR_MODE: u32 = 0x5016;
 const AR_DMA_MM: u32 = 0x5020;
 const AR_DMA_AR: u32 = 0x5024;
@@ -170,7 +171,7 @@ impl Hw {
 
     fn read(&self, ctx: &Ctx, addr: u32, size: u32) -> u32 {
         // Time passes between reads, so loops that poll a register finish.
-        ctx.regs.tb.set(ctx.regs.tb.get() + MMIO_READ_STEP);
+        ctx.tick(MMIO_READ_STEP);
         let off = addr - BASE;
         match (off, size) {
             (CP_STATUS, 2) => 0x000E, // FIFO empty, reads and commands idle
@@ -336,24 +337,24 @@ impl Hw {
         self.set_cp_ptr(CP_FIFO_RPTR, rptr);
         self.set_cp_ptr(CP_FIFO_DISTANCE, 0);
         for e in effects {
-            self.pe_effect(sdk, e);
+            self.pe_effect(ctx, sdk, e);
         }
     }
 
-    fn pe_effect(&self, sdk: &Sdk, e: Effect) {
+    fn pe_effect(&self, ctx: &Ctx, sdk: &Sdk, e: Effect) {
         let int = self.get16(PE_INTERRUPT);
         match e {
             Effect::Finish => {
                 if int & PE_FINISH_ENABLE != 0 {
                     self.set16(PE_INTERRUPT, int | PE_FINISH_INT);
-                    sdk.raise(irq::PI_PE_FINISH);
+                    sdk.raise(ctx, irq::PI_PE_FINISH);
                 }
             }
             Effect::Token { token, interrupt } => {
                 self.set16(PE_TOKEN, token);
                 if interrupt && int & PE_TOKEN_ENABLE != 0 {
                     self.set16(PE_INTERRUPT, int | PE_TOKEN_INT);
-                    sdk.raise(irq::PI_PE_TOKEN);
+                    sdk.raise(ctx, irq::PI_PE_TOKEN);
                 }
             }
         }
@@ -402,25 +403,36 @@ impl Hw {
             let sr = hw.get32(DI_SR) | 0x10;
             hw.set32(DI_SR, sr);
             if sr & 0x08 != 0 {
-                sdk.raise(irq::PI_DI);
+                sdk.raise(ctx, irq::PI_DI);
             }
         });
     }
 
     // ARAM and audio DMA.
 
+    /// ARAM DMA, including the address aliasing the SDK's ARAM size probe looks for: while the
+    /// ARAM mode is 4, writes below 4 MB are mirrored 4 MB up, and addresses past the 16 MB of
+    /// ARAM reach the (empty) expansion port.
     fn aram_dma(&self, ctx: &Ctx, sdk: &Rc<Sdk>) {
         let mm = 0x8000_0000 | (self.get32(AR_DMA_MM) & 0x03FF_FFE0);
-        let ar = (self.get32(AR_DMA_AR) as usize) & (ARAM_SIZE - 1);
+        let ar = (self.get32(AR_DMA_AR) & 0x03FF_FFFF) as usize;
         let cnt_h = self.get16(AR_DMA_CNT_H);
         let len = ((u32::from(cnt_h & 0x3FF) << 16) | u32::from(self.get16(AR_DMA_CNT_L))) as usize;
+        let to_mram = cnt_h & 0x8000 != 0;
+        let probe_mirror = self.get16(AR_INFO) & 0xF == 4;
         let mut aram = self.aram.borrow_mut();
         for i in 0..len {
-            let a = (ar + i) & (ARAM_SIZE - 1);
-            if cnt_h & 0x8000 != 0 {
-                ctx.write_u8(mm + i as u32, aram[a]);
-            } else {
-                aram[a] = ctx.read_u8(mm + i as u32);
+            let a = ar + i;
+            let m = mm + i as u32;
+            if to_mram {
+                let v = if a < ARAM_SIZE { aram[a] } else { 0 };
+                ctx.write_u8(m, v);
+            } else if a < ARAM_SIZE {
+                let v = ctx.read_u8(m);
+                aram[a] = v;
+                if probe_mirror && a < 0x40_0000 {
+                    aram[a + 0x40_0000] = v;
+                }
             }
         }
         drop(aram);
@@ -429,7 +441,7 @@ impl Hw {
         let csr = self.get16(DSP_CSR) | CSR_ARINT;
         self.set16(DSP_CSR, csr);
         if csr & CSR_ARINTMSK != 0 {
-            sdk.raise(irq::DSP_ARAM);
+            sdk.raise(ctx, irq::DSP_ARAM);
         }
     }
 
@@ -449,7 +461,7 @@ impl Hw {
             let csr = hw.get16(DSP_CSR) | CSR_AIDINT;
             hw.set16(DSP_CSR, csr);
             if csr & CSR_AIDINTMSK != 0 {
-                sdk.raise(irq::DSP_AI);
+                sdk.raise(ctx, irq::DSP_AI);
             }
             hw.ai_schedule(ctx, &sdk);
         });
@@ -476,7 +488,7 @@ impl Hw {
     // Video.
 
     /// Starts video field `n` and raises the display interrupts that fall at its start.
-    fn vi_field(&self, sdk: &Sdk, n: u64) {
+    fn vi_field(&self, ctx: &Ctx, sdk: &Sdk, n: u64) {
         self.fields.set(n + 1);
         let second_half = n % 2 == 1;
         if !second_half {
@@ -493,12 +505,12 @@ impl Hw {
             }
         }
         if raised {
-            sdk.raise(irq::PI_VI);
+            sdk.raise(ctx, irq::PI_VI);
         }
         let next = n + 1;
         sdk.schedule(field_start(next), move |ctx| {
             let sdk = ctx.ext::<Sdk>();
-            sdk.hw.vi_field(&sdk, next);
+            sdk.hw.vi_field(ctx, &sdk, next);
         });
     }
 }
@@ -507,6 +519,6 @@ pub(crate) fn install(ctx: &Ctx) {
     let sdk = ctx.ext::<Sdk>();
     sdk.schedule(field_start(1), |ctx| {
         let sdk = ctx.ext::<Sdk>();
-        sdk.hw.vi_field(&sdk, 1);
+        sdk.hw.vi_field(ctx, &sdk, 1);
     });
 }

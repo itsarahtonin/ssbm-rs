@@ -18,6 +18,7 @@ ssbm-rt = { path = "crates/rt" }
 ssbm-types = { path = "crates/types" }
 ssbm-ppc = { path = "crates/ppc" }
 ssbm-sdk = { path = "crates/sdk" }
+ssbm-slippi = { path = "crates/slippi" }
 nod = "2.0.0-alpha.9"
 peppi = "2.1.2"
 ssbm-data = "0.1"

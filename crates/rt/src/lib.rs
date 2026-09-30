@@ -104,7 +104,18 @@ pub struct Ctx {
     ext: RefCell<HashMap<TypeId, Rc<dyn Any>>>,
     /// Called by the interpreter every `HEARTBEAT` instructions with the current PC.
     heartbeat: RefCell<Option<Heartbeat>>,
+    /// Called when interrupts are enabled or time passes, so pending ones can be taken.
+    interrupt_check: RefCell<Option<Hook>>,
+    /// A debugging watchpoint: writes to `[start, start + len)` call `watch_hook`.
+    watch: Cell<(u32, u32)>,
+    watch_hook: RefCell<Option<WatchHook>>,
 }
+
+/// Called with the address and size of a write to the watched range.
+pub type WatchHook = Rc<dyn Fn(&Ctx, u32, u32)>;
+
+/// `MSR[EE]`: external interrupts enabled.
+pub const MSR_EE: u32 = 1 << 15;
 
 /// Instructions between heartbeats.
 pub const HEARTBEAT: u64 = 1 << 24;
@@ -135,6 +146,68 @@ impl Ctx {
             lockstep: lockstep::State::default(),
             ext: RefCell::default(),
             heartbeat: RefCell::default(),
+            interrupt_check: RefCell::default(),
+            watch: Cell::new((0, 0)),
+            watch_hook: RefCell::default(),
+        }
+    }
+
+    /// Calls `hook` after every write that touches `[addr, addr + len)`. For debugging.
+    pub fn set_watch(&self, addr: u32, len: u32, hook: WatchHook) {
+        self.watch.set((addr, len));
+        *self.watch_hook.borrow_mut() = Some(hook);
+    }
+
+    /// Moves the watched range, keeping the hook.
+    pub fn move_watch(&self, addr: u32, len: u32) {
+        self.watch.set((addr, len));
+    }
+
+    #[inline]
+    fn watched(&self, addr: u32, len: u32) {
+        let (start, n) = self.watch.get();
+        let past = addr.wrapping_add(len).wrapping_sub(start);
+        if n != 0 && past.wrapping_sub(1) < n + len - 1 {
+            let hook = self.watch_hook.borrow().clone();
+            if let Some(hook) = hook {
+                hook(self, addr, len);
+            }
+        }
+    }
+
+    /// Sets what runs when interrupts become enabled or time passes: the device layer takes
+    /// pending interrupts and due events there, as the CPU would take an exception.
+    pub fn set_interrupt_check(&self, f: Hook) {
+        *self.interrupt_check.borrow_mut() = Some(f);
+    }
+
+    fn check_interrupts(&self) {
+        let f = self.interrupt_check.borrow().clone();
+        if let Some(f) = f {
+            f(self);
+        }
+    }
+
+    /// Writes MSR, as `mtmsr` does: enabling interrupts lets pending ones in.
+    pub fn set_msr(&self, v: u32) {
+        let old = self.regs.msr.replace(v);
+        if (old ^ v) & MSR_EE != 0 && std::env::var_os("MSR_TRACE").is_some() {
+            eprintln!(
+                "msr ee {} lr {}",
+                v & MSR_EE != 0,
+                self.name_of(self.regs.lr.get())
+            );
+        }
+        if old & MSR_EE == 0 && v & MSR_EE != 0 {
+            self.check_interrupts();
+        }
+    }
+
+    /// Lets `ticks` of time base pass, as code that reads the clock or polls hardware does.
+    pub fn tick(&self, ticks: u64) {
+        self.regs.tb.set(self.regs.tb.get() + ticks);
+        if self.regs.msr.get() & MSR_EE != 0 {
+            self.check_interrupts();
         }
     }
 
@@ -297,6 +370,7 @@ impl Ctx {
         if self.mem.write_u8(addr, v).is_err() {
             self.write_slow(addr, 1, u64::from(v));
         }
+        self.watched(addr, 1);
     }
 
     #[inline]
@@ -304,6 +378,7 @@ impl Ctx {
         if self.mem.write_u16(addr, v).is_err() {
             self.write_slow(addr, 2, u64::from(v));
         }
+        self.watched(addr, 2);
     }
 
     #[inline]
@@ -311,6 +386,7 @@ impl Ctx {
         if self.mem.write_u32(addr, v).is_err() {
             self.write_slow(addr, 4, u64::from(v));
         }
+        self.watched(addr, 4);
     }
 
     #[inline]
@@ -319,6 +395,7 @@ impl Ctx {
             self.write_slow(addr, 4, v >> 32);
             self.write_slow(addr.wrapping_add(4), 4, v & 0xFFFF_FFFF);
         }
+        self.watched(addr, 8);
     }
 
     /// Reads `n` (1..=8) bytes as a big-endian integer.

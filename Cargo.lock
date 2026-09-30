@@ -1170,10 +1170,12 @@ dependencies = [
 name = "ssbm-run"
 version = "0.1.0"
 dependencies = [
+ "gekko-fp",
  "ssbm-disc",
  "ssbm-ppc",
  "ssbm-rt",
  "ssbm-sdk",
+ "ssbm-slippi",
  "ssbm-types",
 ]
 
@@ -1186,6 +1188,14 @@ dependencies = [
  "ssbm-ppc",
  "ssbm-rt",
  "ssbm-types",
+]
+
+[[package]]
+name = "ssbm-slippi"
+version = "0.1.0"
+dependencies = [
+ "ssbm-rt",
+ "thiserror",
 ]
 
 [[package]]

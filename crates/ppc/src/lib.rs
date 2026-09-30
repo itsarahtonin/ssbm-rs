@@ -6,7 +6,7 @@
 //! original interleave freely. Exceptions and interrupts are not emulated: the SDK layer
 //! stands in for the code that would handle them.
 
-use std::cell::Cell;
+use std::cell::{Cell, RefCell};
 
 use gekko_fp::{self as fp, Ps};
 use ssbm_rt::{Backend, Ctx, FLAG_HOOK, FLAG_NATIVE, HEARTBEAT, Mode, RETURN_SENTINEL, spr};
@@ -17,6 +17,25 @@ mod quant;
 #[derive(Default)]
 pub struct Interpreter {
     pub executed: Cell<u64>,
+    /// The instruction being executed, for crash reports.
+    pub pc: Cell<u32>,
+    /// The latest jumps, as (from, to), for crash reports.
+    jumps: RefCell<[(u32, u32); JUMPS]>,
+    next_jump: Cell<usize>,
+}
+
+const JUMPS: usize = 32;
+
+impl Interpreter {
+    /// The latest jumps, oldest first.
+    pub fn recent_jumps(&self) -> Vec<(u32, u32)> {
+        let jumps = self.jumps.borrow();
+        let at = self.next_jump.get();
+        (0..JUMPS)
+            .map(|i| jumps[(at + i) % JUMPS])
+            .filter(|j| j.1 != 0 || j.0 != 0)
+            .collect()
+    }
 }
 
 impl Backend for Interpreter {
@@ -28,8 +47,15 @@ impl Backend for Interpreter {
             if ctx.flags_at(pc) & FLAG_HOOK != 0 {
                 ctx.run_hook(pc);
             }
+            self.pc.set(pc);
             let w = ctx.read_u32(pc);
+            let from = pc;
             pc = step(ctx, pc, w);
+            if pc != from.wrapping_add(4) {
+                let i = self.next_jump.get();
+                self.jumps.borrow_mut()[i] = (from, pc);
+                self.next_jump.set((i + 1) % JUMPS);
+            }
             n += 1;
             if n.is_multiple_of(HEARTBEAT) {
                 self.executed.set(self.executed.get() + HEARTBEAT);
@@ -567,7 +593,7 @@ fn op31(ctx: &Ctx, pc: u32, w: u32) {
         922 => logical(r(ctx, d) as i16 as u32),
         954 => logical(r(ctx, d) as i8 as u32),
         83 => set_r(ctx, d, ctx.regs.msr.get()),
-        146 => ctx.regs.msr.set(r(ctx, d)),
+        146 => ctx.set_msr(r(ctx, d)),
         144 => {
             let crm = (w >> 12) & 0xFF;
             let v = r(ctx, d);
@@ -587,7 +613,7 @@ fn op31(ctx: &Ctx, pc: u32, w: u32) {
             set_r(ctx, d, ctx.regs.get_spr(n));
             if n == spr::TBL_R {
                 // Time passes between reads, so loops that wait on the time base finish.
-                ctx.regs.tb.set(ctx.regs.tb.get() + TB_READ_STEP);
+                ctx.tick(TB_READ_STEP);
             }
         }
         467 => {
