@@ -32,7 +32,8 @@ pub struct Mem {
     mem1: Box<[Cell<u8>]>,
     /// `JOURNAL` and `LOG` bits: what writes must also record.
     recording: Cell<u8>,
-    journal: RefCell<Pages>,
+    /// Nested journals, innermost last; each holds pages first written at its level.
+    journal: RefCell<Vec<Pages>>,
     log: RefCell<Vec<(u32, Vec<u8>)>>,
 }
 
@@ -81,7 +82,7 @@ impl Mem {
         Self {
             mem1: vec![Cell::new(0); MEM1_SIZE as usize].into_boxed_slice(),
             recording: Cell::new(0),
-            journal: RefCell::new(Pages::new()),
+            journal: RefCell::default(),
             log: RefCell::default(),
         }
     }
@@ -126,7 +127,8 @@ impl Mem {
         if recording & JOURNAL != 0 {
             let phys = addr & 0x3FFF_FFFF;
             let len = data.len() as u32;
-            let mut journal = self.journal.borrow_mut();
+            let mut journals = self.journal.borrow_mut();
+            let journal = journals.last_mut().expect("journaling without a journal");
             for page in phys / PAGE_SIZE..=(phys + len.max(1) - 1) / PAGE_SIZE {
                 journal
                     .entry(page)
@@ -171,17 +173,28 @@ impl Mem {
         self.write_u64(addr, value.to_bits())
     }
 
-    /// Starts recording the original contents of every page written from now on.
+    /// Starts recording the original contents of every page written from now on. Journals
+    /// nest: an inner one records what is written while it is open.
     pub fn begin_journal(&self) {
-        assert!(!self.is_journaling(), "journals do not nest");
-        self.journal.borrow_mut().clear();
+        self.journal.borrow_mut().push(Pages::new());
         self.recording.set(self.recording.get() | JOURNAL);
     }
 
-    /// Stops recording and returns the original contents of the pages written.
+    /// Stops the innermost journal and returns the original contents of the pages written
+    /// while it was open. The enclosing journal takes over the pages it had not yet seen, so
+    /// it can still roll back to where it began.
     pub fn end_journal(&self) -> Pages {
-        self.recording.set(self.recording.get() & !JOURNAL);
-        std::mem::take(&mut *self.journal.borrow_mut())
+        let mut journals = self.journal.borrow_mut();
+        let done = journals.pop().expect("no journal to end");
+        match journals.last_mut() {
+            Some(outer) => {
+                for (page, data) in &done {
+                    outer.entry(*page).or_insert_with(|| data.clone());
+                }
+            }
+            None => self.recording.set(self.recording.get() & !JOURNAL),
+        }
+        done
     }
 
     pub fn is_journaling(&self) -> bool {
@@ -292,5 +305,26 @@ mod tests {
         assert_eq!(mem.read_u8(0x8010_0000).unwrap(), 0);
         mem.restore(&changed);
         assert_eq!(mem.read_u32(0x8000_1FFE).unwrap(), 0x1234_5678);
+    }
+
+    #[test]
+    fn nested_journals_roll_back_to_their_own_start() {
+        let mem = Mem::new();
+        mem.write_u32(0x8000_0000, 1).unwrap();
+        mem.begin_journal();
+        mem.write_u32(0x8000_0000, 2).unwrap();
+        mem.begin_journal();
+        mem.write_u32(0x8000_0000, 3).unwrap();
+        mem.write_u32(0x8000_5000, 9).unwrap();
+        let inner = mem.end_journal();
+        mem.restore(&inner);
+        assert_eq!(mem.read_u32(0x8000_0000).unwrap(), 2);
+        assert_eq!(mem.read_u32(0x8000_5000).unwrap(), 0);
+        mem.write_u32(0x8000_5000, 8).unwrap();
+        let outer = mem.end_journal();
+        assert!(!mem.is_journaling());
+        mem.restore(&outer);
+        assert_eq!(mem.read_u32(0x8000_0000).unwrap(), 1);
+        assert_eq!(mem.read_u32(0x8000_5000).unwrap(), 0);
     }
 }

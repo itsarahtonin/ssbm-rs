@@ -9,9 +9,13 @@
 //! in. Each is logged in order with the memory writes and time it caused. The port must make
 //! the same interactions in the same order; each is replayed from the log instead of happening
 //! again, and any other sequence is a mismatch.
+//!
+//! Checks nest: when a port under check calls another port, that call is checked too, against
+//! its original run from the same state, replaying the same stretch of the log. So a mismatch
+//! is reported at the innermost port that has it, and callers still see correct results.
 
 use std::cell::{Cell, RefCell};
-use std::collections::{BTreeMap, VecDeque};
+use std::collections::BTreeMap;
 use std::panic::{AssertUnwindSafe, catch_unwind, panic_any, resume_unwind};
 
 use gekko_fp::Ps;
@@ -20,6 +24,11 @@ use crate::{Ctx, Hook, Mmio, Native, PAGE_SIZE, Pages};
 
 /// Stack below the caller's r1 holds frames and scratch that ports need not reproduce.
 pub const STACK_SCRATCH: u32 = 0x1_0000;
+
+/// Stack below r1 cleared before each side of a check. Ports lay out their frames differently,
+/// so bytes neither side writes, such as a local struct's padding, would otherwise be
+/// different garbage on each side.
+const STACK_CLEARED: u32 = 0x1000;
 
 /// Which registers hold a function's result, and so are compared.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
@@ -67,13 +76,19 @@ pub struct Mismatch {
 pub struct Stats {
     pub calls: u64,
     pub mismatches: u64,
+    /// Calls whose results differ only because the original reads stack memory it never
+    /// wrote, which ports lay out differently.
+    pub uninitialized: u64,
 }
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 enum Phase {
     #[default]
     Idle,
+    /// The outermost original run: interactions happen and are logged.
     Original,
+    /// The original run of a nested check: interactions replay from the log.
+    Replay,
     Port,
 }
 
@@ -92,6 +107,8 @@ enum Kind {
     },
     /// A point where pending interrupts could be taken.
     Interrupts,
+    /// A hook reached by original code, such as the SDK layer's wait points.
+    Hook(u32),
 }
 
 /// One interaction the original had with the world outside game memory.
@@ -114,7 +131,9 @@ pub struct State {
     phase: Cell<Phase>,
     /// Nesting of interactions while the original runs; only the outermost is logged.
     depth: Cell<u32>,
-    log: RefCell<VecDeque<Interaction>>,
+    log: RefCell<Vec<Interaction>>,
+    /// The next interaction to replay.
+    cursor: Cell<usize>,
     /// Mismatches kept per function; later ones only count in `stats`.
     pub keep_per_function: Cell<usize>,
     pub mismatches: RefCell<Vec<Mismatch>>,
@@ -128,7 +147,7 @@ impl State {
 
     /// Whether the original side of a check is running.
     pub fn in_original(&self) -> bool {
-        self.phase.get() == Phase::Original
+        matches!(self.phase.get(), Phase::Original | Phase::Replay)
     }
 
     pub fn clear(&self) {
@@ -137,8 +156,13 @@ impl State {
     }
 }
 
-fn panic_text(p: Box<dyn std::any::Any + Send>) -> String {
-    if let Some(f) = p.downcast_ref::<crate::Fault>() {
+/// Panic payload: a check's side made a different interaction than the log holds.
+struct Diverged(String);
+
+fn panic_text(p: &(dyn std::any::Any + Send)) -> String {
+    if let Some(d) = p.downcast_ref::<Diverged>() {
+        d.0.clone()
+    } else if let Some(f) = p.downcast_ref::<crate::Fault>() {
         f.to_string()
     } else if let Some(s) = p.downcast_ref::<String>() {
         s.clone()
@@ -149,37 +173,67 @@ fn panic_text(p: Box<dyn std::any::Any + Send>) -> String {
     }
 }
 
+/// Checks a call to the port of `addr`: the outermost check when none is running, or a nested
+/// one when a port under check calls another.
 pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     let state = &ctx.lockstep;
-    state.active.set(true);
-    state.log.borrow_mut().clear();
+    let outermost = !state.active.get();
+    let enclosing = state.phase.get();
+    if outermost {
+        state.active.set(true);
+        CHECKING.with(|c| c.set(true));
+        state.log.borrow_mut().clear();
+        state.cursor.set(0);
+    }
     let regs0 = ctx.regs.snapshot();
     let sp = regs0.gpr[1];
+    let start = state.cursor.get();
+    let natives = ctx.natives_depth();
 
-    state.phase.set(Phase::Original);
+    state.phase.set(if outermost {
+        Phase::Original
+    } else {
+        Phase::Replay
+    });
     ctx.mem.begin_journal();
-    let original = catch_unwind(AssertUnwindSafe(|| ctx.run_original(addr)))
-        .err()
-        .map(panic_text);
+    clear_stack(ctx, sp);
+    let original_panic = catch_unwind(AssertUnwindSafe(|| ctx.run_original(addr))).err();
+    let original = original_panic.as_ref().map(|p| panic_text(p.as_ref()));
     let j1 = ctx.mem.end_journal();
     let regs1 = ctx.regs.snapshot();
     let s1 = ctx.mem.capture(j1.keys());
+    let end = if outermost {
+        state.log.borrow().len()
+    } else {
+        state.cursor.get()
+    };
 
     ctx.mem.restore(&j1);
     ctx.regs.restore(&regs0);
     state.phase.set(Phase::Port);
+    state.cursor.set(start);
     ctx.mem.begin_journal();
-    let mut port = catch_unwind(AssertUnwindSafe(|| native(ctx)))
+    clear_stack(ctx, sp);
+    let mut port = catch_unwind(AssertUnwindSafe(|| ctx.run_native(addr, native)))
         .err()
-        .map(panic_text);
+        .map(|p| {
+            // Name the ports that were running when it failed, innermost first.
+            let inner: Vec<String> = ctx.native_stack()[natives..]
+                .iter()
+                .rev()
+                .take(4)
+                .map(|a| ctx.name_of(*a))
+                .collect();
+            format!("{} (in {})", panic_text(p.as_ref()), inner.join(" < "))
+        });
+    ctx.truncate_natives(natives);
     let j2 = ctx.mem.end_journal();
     let regs2 = ctx.regs.snapshot();
-    state.phase.set(Phase::Idle);
-    let left = state.log.borrow_mut().pop_front();
-    if let (None, None, Some(x)) = (&original, &port, left) {
+    let at = state.cursor.get();
+    if original.is_none() && port.is_none() && at < end {
         port = Some(format!(
             "the port stopped before the original's {}",
-            describe(ctx, x.kind)
+            describe(ctx, state.log.borrow()[at].kind)
         ));
     }
 
@@ -211,17 +265,43 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
         }
     }
     compare_pages(ctx, &j1, &s1, &j2, sp, &mut diffs);
+    let uninitialized = !diffs.is_empty()
+        && original.is_none()
+        && reads_uninitialized_stack(
+            ctx,
+            addr,
+            (start, end),
+            &j1,
+            &s1,
+            &j2,
+            &regs0,
+            &regs1,
+            sp,
+            returns,
+        );
 
     // Continue from the original's results.
     ctx.mem.restore(&j2);
     ctx.mem.restore(&s1);
     ctx.regs.restore(&regs1);
-    state.active.set(false);
+    state.cursor.set(end);
+    state.phase.set(enclosing);
+    if outermost {
+        state.active.set(false);
+        CHECKING.with(|c| c.set(false));
+    }
 
+    // A nested original that cannot follow the enclosing log, or faults, was called with
+    // different inputs: the enclosing port is at fault, and its own check reports it.
+    if !outermost && let Some(p) = original_panic {
+        resume_unwind(p);
+    }
     let mut stats = state.stats.borrow_mut();
     let entry = stats.entry(addr).or_default();
     entry.calls += 1;
-    if !diffs.is_empty() {
+    if uninitialized {
+        entry.uninitialized += 1;
+    } else if !diffs.is_empty() {
         entry.mismatches += 1;
         let keep = state.keep_per_function.get().max(1) as u64;
         if entry.mismatches <= keep {
@@ -233,12 +313,82 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
         }
     }
     drop(stats);
-    if let Some(msg) = original {
-        panic!(
-            "original {} panicked under lockstep: {msg}",
-            ctx.name_of(addr)
-        );
+    // The original's panic is the run's to handle, such as the end of a run.
+    if let Some(p) = original_panic {
+        resume_unwind(p);
     }
+}
+
+fn clear_stack(ctx: &Ctx, sp: u32) {
+    fill_stack(ctx, sp, 0);
+}
+
+fn fill_stack(ctx: &Ctx, sp: u32, byte: u8) {
+    let start = sp.saturating_sub(STACK_CLEARED);
+    let _ = ctx.mem.write_bytes(start, &[byte; STACK_CLEARED as usize]);
+}
+
+/// After a mismatch: runs the original again from the same state with other leftovers on the
+/// stack. If its results change, it reads stack memory it never wrote, and the port cannot
+/// be expected to match it. Leaves memory as it was before the check.
+#[allow(clippy::too_many_arguments)]
+fn reads_uninitialized_stack(
+    ctx: &Ctx,
+    addr: u32,
+    (start, end): (usize, usize),
+    j1: &Pages,
+    s1: &Pages,
+    j2: &Pages,
+    regs0: &crate::RegsSnapshot,
+    regs1: &crate::RegsSnapshot,
+    sp: u32,
+    returns: Returns,
+) -> bool {
+    let state = &ctx.lockstep;
+    ctx.mem.restore(j2);
+    ctx.regs.restore(regs0);
+    let phase = state.phase.get();
+    state.phase.set(Phase::Replay);
+    state.cursor.set(start);
+    ctx.mem.begin_journal();
+    fill_stack(ctx, sp, 0x5A);
+    let again = catch_unwind(AssertUnwindSafe(|| ctx.run_original(addr)));
+    let j3 = ctx.mem.end_journal();
+    let regs3 = ctx.regs.snapshot();
+    let followed = again.is_ok() && state.cursor.get() == end;
+    state.phase.set(phase);
+    let mut diffs = Vec::new();
+    if followed {
+        let mut pages = j1.clone();
+        for (page, data) in &j3 {
+            pages.entry(*page).or_insert_with(|| data.clone());
+        }
+        let first: Pages = pages
+            .keys()
+            .map(|p| {
+                (
+                    *p,
+                    s1.get(p)
+                        .or_else(|| j1.get(p))
+                        .or_else(|| j3.get(p))
+                        .unwrap()
+                        .clone(),
+                )
+            })
+            .collect();
+        compare_pages(ctx, &Pages::new(), &first, &pages, sp, &mut diffs);
+    }
+    let regs_differ = match returns {
+        Returns::Nothing => false,
+        Returns::Int => regs1.gpr[3] != regs3.gpr[3],
+        Returns::Int64 => regs1.gpr[3..5] != regs3.gpr[3..5],
+        Returns::Float | Returns::Unknown => {
+            regs1.fpr[1].ps0.to_bits() != regs3.fpr[1].ps0.to_bits()
+                || (returns == Returns::Unknown && regs1.gpr[3..5] != regs3.gpr[3..5])
+        }
+    };
+    ctx.mem.restore(&j3);
+    !followed || !diffs.is_empty() || regs_differ
 }
 
 fn describe(ctx: &Ctx, kind: Kind) -> String {
@@ -249,6 +399,7 @@ fn describe(ctx: &Ctx, kind: Kind) -> String {
             format!("{len}-byte write of {value:#X} to {addr:#010X}")
         }
         Kind::Interrupts => "interrupt point".to_owned(),
+        Kind::Hook(addr) => format!("hook at {}", ctx.name_of(addr)),
     }
 }
 
@@ -268,7 +419,7 @@ fn interact(ctx: &Ctx, kind: Kind, f: impl FnOnce() -> u32) -> u32 {
                 Err(p) => resume_unwind(p),
             };
             let regs = &ctx.regs;
-            state.log.borrow_mut().push_back(Interaction {
+            state.log.borrow_mut().push(Interaction {
                 kind,
                 writes,
                 value,
@@ -279,10 +430,12 @@ fn interact(ctx: &Ctx, kind: Kind, f: impl FnOnce() -> u32) -> u32 {
             });
             value
         }
-        Phase::Port => {
-            let next = state.log.borrow_mut().pop_front();
-            match next {
+        Phase::Port | Phase::Replay => {
+            let at = state.cursor.get();
+            let log = state.log.borrow();
+            match log.get(at) {
                 Some(x) if x.kind == kind => {
+                    state.cursor.set(at + 1);
                     for (at, bytes) in &x.writes {
                         // The original's writes were to mapped memory, so these succeed.
                         let _ = ctx.mem.write_bytes(*at, bytes);
@@ -296,11 +449,15 @@ fn interact(ctx: &Ctx, kind: Kind, f: impl FnOnce() -> u32) -> u32 {
                     }
                     x.value
                 }
-                other => panic_any(format!(
-                    "the port made a {} where the original made {}",
-                    describe(ctx, kind),
-                    other.map_or_else(|| "none".to_owned(), |x| describe(ctx, x.kind))
-                )),
+                other => {
+                    let other = other.map(|x| x.kind);
+                    drop(log);
+                    panic_any(Diverged(format!(
+                        "the port made a {} where the original made {}",
+                        describe(ctx, kind),
+                        other.map_or_else(|| "none".to_owned(), |k| describe(ctx, k))
+                    )))
+                }
             }
         }
         _ => f(),
@@ -326,6 +483,23 @@ pub(crate) fn mmio_write(ctx: &Ctx, mmio: &dyn Mmio, addr: u32, len: u32, value:
         mmio.write(ctx, addr, len, value);
         0
     });
+}
+
+/// A hook that original code reached.
+pub(crate) fn hook(ctx: &Ctx, addr: u32, hook: &Hook) {
+    interact(ctx, Kind::Hook(addr), || {
+        hook(ctx);
+        0
+    });
+}
+
+thread_local! {
+    static CHECKING: Cell<bool> = const { Cell::new(false) };
+}
+
+/// Whether this thread is inside a lockstep check, whose panics lockstep catches and reports.
+pub fn checking() -> bool {
+    CHECKING.with(Cell::get)
 }
 
 /// A point where pending interrupts may be taken.

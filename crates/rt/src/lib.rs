@@ -112,6 +112,8 @@ pub struct Ctx {
     heartbeat: RefCell<Option<Heartbeat>>,
     /// Called when interrupts are enabled or time passes, so pending ones can be taken.
     interrupt_check: RefCell<Option<Hook>>,
+    /// Ports running, innermost last. A panic leaves it as it was, for the report.
+    natives: RefCell<Vec<u32>>,
     /// A debugging watchpoint: writes to `[start, start + len)` call `watch_hook`.
     watch: Cell<(u32, u32)>,
     watch_hook: RefCell<Option<WatchHook>>,
@@ -153,6 +155,7 @@ impl Ctx {
             ext: RefCell::default(),
             heartbeat: RefCell::default(),
             interrupt_check: RefCell::default(),
+            natives: RefCell::default(),
             watch: Cell::new((0, 0)),
             watch_hook: RefCell::default(),
         }
@@ -449,7 +452,11 @@ impl Ctx {
     }
 
     /// Registers a port of the game function at `addr`, whose result is where `returns` says.
+    /// An external stand-in already there stays: it replaces the original on purpose.
     pub fn register_port(&self, addr: u32, native: Native, returns: Returns) {
+        if self.entry(addr).is_some_and(|e| e.external) {
+            return;
+        }
         self.register(addr, native);
         if let Some(e) = self.dispatch.borrow_mut().get_mut(&addr) {
             e.returns = returns;
@@ -501,17 +508,40 @@ impl Ctx {
             Mode::Native if e.external && self.lockstep.is_active() => {
                 lockstep::external(self, addr, e.native)
             }
-            Mode::Native => (e.native)(self),
+            Mode::Native if e.external => (e.native)(self),
             Mode::Original if self.has_backend() => self.run_original(addr),
-            Mode::Lockstep if self.has_backend() && !self.lockstep.is_active() => {
-                lockstep::run(self, addr, e.native, e.returns)
-            }
-            // Nested inside a lockstep run: the original side runs originals throughout.
+            // The original side of a check runs originals throughout; anywhere else a call to a
+            // port under lockstep is checked, nested inside any check already running.
             Mode::Lockstep if self.has_backend() && self.lockstep.in_original() => {
                 self.run_original(addr)
             }
-            _ => (e.native)(self),
+            Mode::Lockstep if self.has_backend() => lockstep::run(self, addr, e.native, e.returns),
+            _ => self.run_native(addr, e.native),
         }
+    }
+
+    /// Runs a port, after any hook at its entry, which original code would run on reaching it.
+    pub(crate) fn run_native(&self, addr: u32, native: Native) {
+        if self.flags_at(addr) & FLAG_HOOK != 0 {
+            self.run_hook(addr);
+        }
+        self.natives.borrow_mut().push(addr);
+        native(self);
+        self.natives.borrow_mut().pop();
+    }
+
+    /// The ports that were running when a run stopped, innermost last.
+    pub fn native_stack(&self) -> Vec<u32> {
+        self.natives.borrow().clone()
+    }
+
+    pub(crate) fn natives_depth(&self) -> usize {
+        self.natives.borrow().len()
+    }
+
+    /// Forgets ports a caught panic left running.
+    pub(crate) fn truncate_natives(&self, depth: usize) {
+        self.natives.borrow_mut().truncate(depth);
     }
 
     /// Runs the original code at `addr`, which needs a backend.
@@ -541,11 +571,30 @@ impl Ctx {
     pub fn run_hook(&self, addr: u32) {
         let hook = self.hooks.borrow().get(&addr).cloned();
         if let Some(hook) = hook {
-            hook(self);
+            if self.lockstep.is_active() {
+                lockstep::hook(self, addr, &hook);
+            } else {
+                hook(self);
+            }
         }
     }
 
     // Stack.
+
+    /// A stack frame of exactly `size` bytes, as a function's prologue (`stwu r1, -size(r1)`)
+    /// makes one; the block for locals starts 8 bytes above r1, past the back chain and the
+    /// word a callee saves LR in.
+    pub fn stack_frame(&self, size: u32) -> StackFrame<'_> {
+        let old = self.regs.r(1);
+        let new = old - size;
+        self.write_u32(new, old);
+        self.regs.set_r(1, new);
+        StackFrame {
+            ctx: self,
+            old,
+            base: new + 8,
+        }
+    }
 
     /// Reserves `size` bytes on the emulated stack for locals whose address escapes. The
     /// block starts 8 bytes above r1, leaving room for a callee's back chain and saved LR.
