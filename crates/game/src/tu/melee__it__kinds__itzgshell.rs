@@ -806,14 +806,12 @@ pub fn itZrshell_UnkMotion9_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         inl_HSD_JObjAddRotationY_unfused(
             ctx,
             jobj,
-            fp::fmuls(
-                (attrs).x20(),
-                (if ((ip).x40_vel().x()) < fp::frsp(0_i32 as f64) {
-                    fp::fneg(((ip).x40_vel().x()))
-                } else {
-                    ((ip).x40_vel().x())
-                }),
-            ),
+            (attrs).x20(),
+            (if ((ip).x40_vel().x()) < fp::frsp(0_i32 as f64) {
+                fp::fneg(((ip).x40_vel().x()))
+            } else {
+                ((ip).x40_vel().x())
+            }),
         );
     }
     return 0_i32;
@@ -931,7 +929,8 @@ pub fn itZrshell_UnkMotion11_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         inl_HSD_JObjAddRotationY_unfused(
             ctx,
             jobj,
-            fp::fmuls(0.01745329238474369, (ip).xDD4_itemVar().zgshell().xE00()),
+            0.01745329238474369,
+            (ip).xDD4_itemVar().zgshell().xE00(),
         );
         (ip).xDD4_itemVar()
             .zgshell()
@@ -1384,9 +1383,8 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     return result;
 }
 
-fn inl_HSD_JObjAddRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
+fn inl_HSD_JObjAddRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a: f64, y__c: f64) {
     let mut jobj = jobj;
-    let mut y = y;
     (if !Handle::is_null((jobj)) {
         ({ () })
     } else {
@@ -1397,7 +1395,9 @@ fn inl_HSD_JObjAddRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64
             cstr(ctx, 0x803b86e8),
         )
     });
-    (jobj).rotate().set_y(fp::fadds((jobj).rotate().y(), y));
+    (jobj)
+        .rotate()
+        .set_y(fp::fadds((jobj).rotate().y(), fp::fmuls(y__a, y__c)));
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         {
             if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
@@ -1423,14 +1423,12 @@ fn inl_Item_UpdateRollingShellRotation_unfused<'a>(
     inl_HSD_JObjAddRotationY_unfused(
         ctx,
         jobj,
-        fp::fmuls(
-            (rotation_rate).get(),
-            (if ((ip).x40_vel().x()) < fp::frsp(0_i32 as f64) {
-                fp::fneg(((ip).x40_vel().x()))
-            } else {
-                ((ip).x40_vel().x())
-            }),
-        ),
+        (rotation_rate).get(),
+        (if ((ip).x40_vel().x()) < fp::frsp(0_i32 as f64) {
+            fp::fneg(((ip).x40_vel().x()))
+        } else {
+            ((ip).x40_vel().x())
+        }),
     );
 }
 

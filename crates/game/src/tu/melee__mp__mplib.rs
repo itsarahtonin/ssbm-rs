@@ -1542,9 +1542,8 @@ pub fn mpLib_8004ED5C<'a>(
     if inl_mpLineGetPrev(ctx, line_id) != 1_i32.wrapping_neg() {
         distance = inl_sqrtf(
             ctx,
-            fp::fmadds(
-                (fp::fsubs(x0_f0, x1_f2)),
-                (fp::fsubs(x0_f0, x1_f2)),
+            fp::fadds(
+                (fp::fmuls((fp::fsubs(x0_f0, x1_f2)), (fp::fsubs(x0_f0, x1_f2)))),
                 (fp::fmuls((fp::fsubs(y0_f1, y1_f3)), (fp::fsubs(y0_f1, y1_f3)))),
             ),
         );
@@ -1558,9 +1557,8 @@ pub fn mpLib_8004ED5C<'a>(
         if !(calculated_distance != 0) {
             distance = inl_sqrtf(
                 ctx,
-                fp::fmadds(
-                    (fp::fsubs(x0_f0, x1_f2)),
-                    (fp::fsubs(x0_f0, x1_f2)),
+                fp::fadds(
+                    (fp::fmuls((fp::fsubs(x0_f0, x1_f2)), (fp::fsubs(x0_f0, x1_f2)))),
                     (fp::fmuls((fp::fsubs(y0_f1, y1_f3)), (fp::fsubs(y0_f1, y1_f3)))),
                 ),
             );
@@ -6117,9 +6115,8 @@ pub fn mpLib_800511A4_RightWall<'a>(
                 unreachable!();
             }
             34 => {
-                dist2 = fp::fmadds(
-                    (fp::fsubs(int_x.get(), x1)),
-                    (fp::fsubs(int_x.get(), x1)),
+                dist2 = fp::fadds(
+                    (fp::fmuls((fp::fsubs(int_x.get(), x1)), (fp::fsubs(int_x.get(), x1)))),
                     (fp::fmuls((fp::fsubs(int_y.get(), y1)), (fp::fsubs(int_y.get(), y1)))),
                 );
                 __state = if fp::fmadds(
@@ -6206,9 +6203,8 @@ pub fn mpLib_800511A4_RightWall<'a>(
                 unreachable!();
             }
             49 => {
-                dist2 = fp::fmadds(
-                    (fp::fsubs(int_x.get(), x1)),
-                    (fp::fsubs(int_x.get(), x1)),
+                dist2 = fp::fadds(
+                    (fp::fmuls((fp::fsubs(int_x.get(), x1)), (fp::fsubs(int_x.get(), x1)))),
                     (fp::fmuls((fp::fsubs(int_y.get(), y1)), (fp::fsubs(int_y.get(), y1)))),
                 );
                 __state = if fp::fmadds(
@@ -6572,9 +6568,8 @@ pub fn mpLib_800515A0_LeftWall<'a>(
                 unreachable!();
             }
             34 => {
-                dist2 = fp::fmadds(
-                    (fp::fsubs(int_x.get(), x1)),
-                    (fp::fsubs(int_x.get(), x1)),
+                dist2 = fp::fadds(
+                    (fp::fmuls((fp::fsubs(int_x.get(), x1)), (fp::fsubs(int_x.get(), x1)))),
                     (fp::fmuls((fp::fsubs(int_y.get(), y1)), (fp::fsubs(int_y.get(), y1)))),
                 );
                 __state = if fp::fmadds(
@@ -6661,9 +6656,8 @@ pub fn mpLib_800515A0_LeftWall<'a>(
                 unreachable!();
             }
             49 => {
-                dist2 = fp::fmadds(
-                    (fp::fsubs(int_x.get(), x1)),
-                    (fp::fsubs(int_x.get(), x1)),
+                dist2 = fp::fadds(
+                    (fp::fmuls((fp::fsubs(int_x.get(), x1)), (fp::fsubs(int_x.get(), x1)))),
                     (fp::fmuls((fp::fsubs(int_y.get(), y1)), (fp::fsubs(int_y.get(), y1)))),
                 );
                 __state = if fp::fmadds(
@@ -16260,9 +16254,11 @@ fn inl_mpLineGetPrev<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                 .x0())
                 .v1_idx() as i32),
             ));
-            if fp::fmadds(
-                (fp::fsubs((v0).pos().x(), (v1).pos().x())),
-                (fp::fsubs((v0).pos().x(), (v1).pos().x())),
+            if fp::fadds(
+                (fp::fmuls(
+                    (fp::fsubs((v0).pos().x(), (v1).pos().x())),
+                    (fp::fsubs((v0).pos().x(), (v1).pos().x())),
+                )),
                 (fp::fmuls(
                     (fp::fsubs((v0).pos().y(), (v1).pos().y())),
                     (fp::fsubs((v0).pos().y(), (v1).pos().y())),
@@ -16340,9 +16336,11 @@ fn inl_mpLineGetNext<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                 .x0())
                 .v0_idx() as i32),
             ));
-            if fp::fmadds(
-                (fp::fsubs((v1).pos().x(), (v0).pos().x())),
-                (fp::fsubs((v1).pos().x(), (v0).pos().x())),
+            if fp::fadds(
+                (fp::fmuls(
+                    (fp::fsubs((v1).pos().x(), (v0).pos().x())),
+                    (fp::fsubs((v1).pos().x(), (v0).pos().x())),
+                )),
                 (fp::fmuls(
                     (fp::fsubs((v1).pos().y(), (v0).pos().y())),
                     (fp::fsubs((v1).pos().y(), (v0).pos().y())),

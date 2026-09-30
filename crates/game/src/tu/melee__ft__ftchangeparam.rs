@@ -47,7 +47,7 @@ pub fn ftCo_CalcYScaledKnockback<'a>(ctx: &'a Ctx, arg0: f64, scale: f64, arg2: 
     if arg2 < 0.0 {
         return fp::fdivs(
             arg0,
-            fns::ftCo_CalcYScaledKnockback(ctx, 1.0, scale, fp::fneg(arg2)),
+            inl_ftCo_CalcYScaledKnockback(ctx, 1.0, scale, fp::fneg(arg2)),
         );
     }
     if (scale >= 1.0) || (arg2 <= 1.0) {
@@ -62,225 +62,225 @@ pub fn ftCo_800CF6E8<'a>(ctx: &'a Ctx, attr: ftCo_DatAttrs<'a>, scale: f64) {
     let mut scale = scale;
     let mut cur: Val<'a, F32> = null(ctx);
     if scale != 1.0 {
-        (attr).set_slow_walk_max(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_slow_walk_max(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).slow_walk_max(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x10(),
         ));
-        (attr).set_mid_walk_point(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_mid_walk_point(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).mid_walk_point(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x14(),
         ));
-        (attr).set_fast_walk_min(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_fast_walk_min(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).fast_walk_min(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x18(),
         ));
-        (attr).set_dash_max_velocity(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_dash_max_velocity(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).dash_max_velocity(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x1C(),
         ));
-        (attr).set_run_animation_scaling(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_run_animation_scaling(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).run_animation_scaling(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x20(),
         ));
-        (attr).set_jump_startup_time(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_jump_startup_time(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).jump_startup_time(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x24(),
         ));
-        (attr).set_jump_v_initial_velocity(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_jump_v_initial_velocity(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).jump_v_initial_velocity(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x28(),
         ));
-        (attr).set_hop_v_initial_velocity(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_hop_v_initial_velocity(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).hop_v_initial_velocity(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x2C(),
         ));
-        (attr).set_gravity(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_gravity(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).gravity(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x30(),
         ));
-        (attr).set_terminal_velocity(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_terminal_velocity(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).terminal_velocity(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x34(),
         ));
-        (attr).set_air_drift_stick_mul(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_air_drift_stick_mul(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).air_drift_stick_mul(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x38(),
         ));
-        (attr).set_aerial_drift_base(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_aerial_drift_base(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).aerial_drift_base(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x3C(),
         ));
-        (attr).set_air_drift_max(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_air_drift_max(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).air_drift_max(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x40(),
         ));
-        (attr).set_fast_fall_velocity(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_fast_fall_velocity(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).fast_fall_velocity(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x44(),
         ));
-        (attr).set_weight(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_weight(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).weight(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x48(),
         ));
-        (attr).set_shield_break_initial_velocity(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_shield_break_initial_velocity(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).shield_break_initial_velocity(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x4C(),
         ));
-        (attr).set_ledge_jump_horizontal_velocity(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_ledge_jump_horizontal_velocity(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).ledge_jump_horizontal_velocity(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x50(),
         ));
-        (attr).set_ledge_jump_vertical_velocity(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_ledge_jump_vertical_velocity(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).ledge_jump_vertical_velocity(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x54(),
         ));
-        (attr).set_item_throw_velocity_multiplier(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_item_throw_velocity_multiplier(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).item_throw_velocity_multiplier(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x58(),
         ));
-        (attr).set_heavy_throw_velocity_multiplier(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_heavy_throw_velocity_multiplier(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).heavy_throw_velocity_multiplier(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x5C(),
         ));
         cur = (attr).xBC().size_ref();
-        (cur).set(fns::ftCo_CalcYScaledKnockback(
+        (cur).set(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (cur).get(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x60(),
         ));
         cur = (attr).xDC_ref();
-        (cur).set(fns::ftCo_CalcYScaledKnockback(
+        (cur).set(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (cur).get(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x64(),
         ));
-        (Handle::add(cur, 1_i32)).set(fns::ftCo_CalcYScaledKnockback(
+        (Handle::add(cur, 1_i32)).set(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (Handle::add(cur, 1_i32)).get(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x68(),
         ));
-        (attr).set_normal_landing_lag(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_normal_landing_lag(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).normal_landing_lag(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x6C(),
         ));
-        (attr).set_landingairn_lag(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_landingairn_lag(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).landingairn_lag(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x70(),
         ));
-        (attr).set_landingairf_lag(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_landingairf_lag(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).landingairf_lag(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x74(),
         ));
-        (attr).set_landingairb_lag(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_landingairb_lag(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).landingairb_lag(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x78(),
         ));
-        (attr).set_landingairhi_lag(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_landingairhi_lag(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).landingairhi_lag(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x7C(),
         ));
-        (attr).set_landingairlw_lag(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_landingairlw_lag(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).landingairlw_lag(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x80(),
         ));
-        (attr).set_name_tag_height(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_name_tag_height(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).name_tag_height(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x84(),
         ));
-        (attr).set_screw_attack_launch_velocity(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_screw_attack_launch_velocity(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).screw_attack_launch_velocity(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x88(),
         ));
-        (attr).set_damageicejump_vel_y(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_damageicejump_vel_y(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).damageicejump_vel_y(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x8C(),
         ));
-        (attr).set_damageicejump_vel_x_mult(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_damageicejump_vel_x_mult(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).damageicejump_vel_x_mult(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x90(),
         ));
-        (attr).x170().set_x(fns::ftCo_CalcYScaledKnockback(
+        (attr).x170().set_x(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).x170().x(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x94(),
         ));
-        (attr).x170().set_y(fns::ftCo_CalcYScaledKnockback(
+        (attr).x170().set_y(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).x170().y(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x94(),
         ));
-        (attr).x170().set_z(fns::ftCo_CalcYScaledKnockback(
+        (attr).x170().set_z(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).x170().z(),
             scale,
             (fns::Fighter_804D6524(ctx).get()).x94(),
         ));
-        (attr).set_x17C(fns::ftCo_CalcYScaledKnockback(
+        (attr).set_x17C(inl_ftCo_CalcYScaledKnockback(
             ctx,
             (attr).x17C(),
             scale,
@@ -317,7 +317,7 @@ pub fn ftCo_800D0CBC<'a>(ctx: &'a Ctx, fgp: HSD_GObj<'a>) {
         orig_scale = (fp).x34_scale().y();
         scale = fp::fmuls(
             scale,
-            fns::ftCo_CalcYScaledKnockback(
+            inl_ftCo_CalcYScaledKnockback(
                 ctx,
                 1.0,
                 orig_scale,
@@ -348,7 +348,7 @@ pub fn ftCo_800D0CBC<'a>(ctx: &'a Ctx, fgp: HSD_GObj<'a>) {
 pub fn ftCo_800D0EC8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> f64 {
     let __frame = ctx.stack_frame(0x28);
     let mut fp = fp;
-    return fp::fneg(fns::ftCo_CalcYScaledKnockback(
+    return fp::fneg(inl_ftCo_CalcYScaledKnockback(
         ctx,
         (fns::p_ftCommonData(ctx).get()).x310(),
         (fp).x34_scale().y(),
@@ -579,6 +579,35 @@ pub fn ftCo_800D105C<'a>(ctx: &'a Ctx, fgp: HSD_GObj<'a>) {
             (attr).set_x1C(fp::fmuls((attr).x1C(), (fp).x34_scale().y()));
         }
     }
+}
+
+fn inl_ftCo_CalcYScaledKnockback<'a>(ctx: &'a Ctx, arg0: f64, scale: f64, arg2: f64) -> f64 {
+    let mut arg0 = arg0;
+    let mut scale = scale;
+    let mut arg2 = arg2;
+    (if scale != 0.0 {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803c6fec),
+            (11_i32 as u32),
+            cstr(ctx, 0x803c6fec),
+        )
+    });
+    if arg2 == 0.0 {
+        return arg0;
+    }
+    if arg2 < 0.0 {
+        return fp::fdivs(
+            arg0,
+            fns::ftCo_CalcYScaledKnockback(ctx, 1.0, scale, fp::fneg(arg2)),
+        );
+    }
+    if (scale >= 1.0) || (arg2 <= 1.0) {
+        return fp::fmadds(fp::fmuls((fp::fsubs(scale, 1.0)), arg0), arg2, arg0);
+    }
+    return fp::fdivs(fp::fmuls(arg0, scale), arg2);
 }
 
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {

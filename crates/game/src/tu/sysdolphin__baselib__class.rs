@@ -549,7 +549,7 @@ pub fn ForgetClassLibraryReal<'a>(ctx: &'a Ctx, class_info: _HSD_ClassInfo<'a>) 
         'c2: {
             next = (cur).head().next();
             (cur).head().set_next(null::<_HSD_ClassInfo<'a>>(ctx));
-            fns::ForgetClassLibraryReal(ctx, cur);
+            inl_ForgetClassLibraryReal_unfused(ctx, cur);
             cur = next;
         }
     }
@@ -600,7 +600,7 @@ pub fn hsdDumpClassStat<'a>(ctx: &'a Ctx, info: _HSD_ClassInfo<'a>, recursive: i
     let mut recursive = recursive;
     let mut level = level;
     if Handle::is_null(info) {
-        fns::hsdDumpClassStat(ctx, fns::hsdClass(ctx), 1_i32, level);
+        inl_hsdDumpClassStat_unfused(ctx, fns::hsdClass(ctx), 1_i32, level);
     } else if (((info).head().flags() & (1_i32 as u32)) != 0) {
         inl_DumpClassStat_unfused(ctx, info, level);
         if (recursive != 0) {
@@ -608,7 +608,7 @@ pub fn hsdDumpClassStat<'a>(ctx: &'a Ctx, info: _HSD_ClassInfo<'a>, recursive: i
             info = (info).head().child();
             'l1: while !Handle::is_null(info) {
                 'c2: {
-                    fns::hsdDumpClassStat(ctx, info, 1_i32, level);
+                    inl_hsdDumpClassStat_unfused(ctx, info, 1_i32, level);
                     info = (info).head().next();
                 }
             }
@@ -735,6 +735,28 @@ fn inl_class_set_flags_unfused<'a>(
         .set_flags((((class_info).head().flags() & ((!reset) as u32)) | (set as u32)));
 }
 
+fn inl_ForgetClassLibraryReal_unfused<'a>(ctx: &'a Ctx, class_info: _HSD_ClassInfo<'a>) {
+    let mut class_info = class_info;
+    let mut cur: _HSD_ClassInfo<'a> = (class_info).head().child();
+    let mut next: _HSD_ClassInfo<'a> = null(ctx);
+    'l1: while !Handle::is_null(cur) {
+        'c2: {
+            next = (cur).head().next();
+            (cur).head().set_next(null::<_HSD_ClassInfo<'a>>(ctx));
+            fns::ForgetClassLibraryReal(ctx, cur);
+            cur = next;
+        }
+    }
+    (class_info).amnesia().call::<_, ()>((class_info,));
+    (class_info)
+        .head()
+        .set_child(null::<_HSD_ClassInfo<'a>>(ctx));
+    (class_info)
+        .head()
+        .set_parent(null::<_HSD_ClassInfo<'a>>(ctx));
+    inl_class_set_flags_unfused(ctx, class_info, 0_i32, 1_i32);
+}
+
 fn inl_ForgetClassLibraryChild_unfused<'a>(
     ctx: &'a Ctx,
     library_name: Val<'a, i8>,
@@ -775,6 +797,32 @@ fn inl_DumpClassStat_unfused<'a>(ctx: &'a Ctx, info: _HSD_ClassInfo<'a>, level: 
             VarArg::Int((info).head().nb_peak() as u32),
         ],
     );
+}
+
+fn inl_hsdDumpClassStat_unfused<'a>(
+    ctx: &'a Ctx,
+    info: _HSD_ClassInfo<'a>,
+    recursive: i32,
+    level: i32,
+) {
+    let mut info = info;
+    let mut recursive = recursive;
+    let mut level = level;
+    if Handle::is_null(info) {
+        fns::hsdDumpClassStat(ctx, fns::hsdClass(ctx), 1_i32, level);
+    } else if (((info).head().flags() & (1_i32 as u32)) != 0) {
+        inl_DumpClassStat_unfused(ctx, info, level);
+        if (recursive != 0) {
+            level = level.wrapping_add(2_i32);
+            info = (info).head().child();
+            'l1: while !Handle::is_null(info) {
+                'c2: {
+                    fns::hsdDumpClassStat(ctx, info, 1_i32, level);
+                    info = (info).head().next();
+                }
+            }
+        }
+    }
 }
 
 /// Registers this unit's ports.

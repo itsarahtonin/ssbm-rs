@@ -1221,16 +1221,8 @@ pub fn grRCruise_8020071C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (gp).u().rcruise().x18(),
         (gp).u().rcruise().x20(),
     ));
-    inl_HSD_JObjSetRotationZ(
-        ctx,
-        jobj,
-        fp::fmuls(0.01745329238474369, (gp).u().rcruise().x18()),
-    );
-    inl_HSD_JObjSetRotationZ(
-        ctx,
-        jobj5,
-        fp::fmuls(0.01745329238474369, (gp).u().rcruise().x18()),
-    );
+    inl_HSD_JObjSetRotationZ(ctx, jobj, 0.01745329238474369, (gp).u().rcruise().x18());
+    inl_HSD_JObjSetRotationZ(ctx, jobj5, 0.01745329238474369, (gp).u().rcruise().x18());
     (gp).u().rcruise().set_x30((gp).u().rcruise().x34());
     (gp).u().rcruise().set_x34(0_i32);
     (gp).u().rcruise().set_x28(0.0);
@@ -2117,9 +2109,8 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     return x;
 }
 
-fn inl_HSD_JObjSetRotationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
+fn inl_HSD_JObjSetRotationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z__a: f64, z__c: f64) {
     let mut jobj = jobj;
-    let mut z = z;
     (if !Handle::is_null((jobj)) {
         ({ () })
     } else {
@@ -2140,7 +2131,7 @@ fn inl_HSD_JObjSetRotationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
             cstr(ctx, 0x803b828c),
         )
     });
-    (jobj).rotate().set_z(z);
+    (jobj).rotate().set_z(fp::fmuls(z__a, z__c));
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         {
             if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {

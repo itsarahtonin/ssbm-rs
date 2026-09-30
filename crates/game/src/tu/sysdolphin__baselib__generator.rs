@@ -269,7 +269,7 @@ pub fn hsd_8039D5DC<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
     });
     'l3: while !Handle::is_null(jobj) {
         'c4: {
-            fns::hsd_8039D5DC(ctx, jobj);
+            inl_hsd_8039D5DC_unfused(ctx, jobj);
             jobj = (if Handle::is_null(jobj) {
                 null::<HSD_JObj<'a>>(ctx)
             } else {
@@ -1222,14 +1222,12 @@ pub fn hsd_8039DAD4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) -> f64 {
                         emit_pos.set_y(fp::fadds(emit_pos.y(), (r#gen).pos().y()));
                         emit_pos.set_z(fp::fadds(emit_pos.z(), (r#gen).pos().z()));
                         {
-                            let mut mag: f64 = fp::fmadds(
-                                (r#gen).aux().rect().zz(),
-                                (r#gen).aux().rect().zz(),
-                                fp::fmadds(
-                                    (r#gen).aux().rect().zx(),
-                                    (r#gen).aux().rect().zx(),
+                            let mut mag: f64 = fp::fadds(
+                                fp::fadds(
+                                    fp::fmuls((r#gen).aux().rect().zx(), (r#gen).aux().rect().zx()),
                                     fp::fmuls((r#gen).aux().rect().zy(), (r#gen).aux().rect().zy()),
                                 ),
+                                fp::fmuls((r#gen).aux().rect().zz(), (r#gen).aux().rect().zz()),
                             );
                             mag = inl_sqrtf(ctx, mag);
                             {
@@ -1865,6 +1863,43 @@ fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
         return;
     }
     fns::HSD_JObjSetupMatrixSub(ctx, jobj);
+}
+
+fn inl_hsd_8039D5DC_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    let mut next: HSD_Generator<'a> = null(ctx);
+    let mut r#gen: HSD_Generator<'a> = null(ctx);
+    if Handle::is_null(jobj) {
+        return;
+    }
+    r#gen = fns::hsd_804D78FC(ctx).get();
+    'l1: while !Handle::is_null(r#gen) {
+        'c2: {
+            next = (r#gen).next();
+            if Handle::addr((r#gen).jobj()) == Handle::addr(jobj) {
+                fns::hsd_8039D4DC(ctx, r#gen);
+            }
+            r#gen = next;
+        }
+    }
+    if (((jobj).flags() & (0x1000_i32 as u32)) != 0) {
+        return;
+    }
+    jobj = (if Handle::is_null(jobj) {
+        null::<HSD_JObj<'a>>(ctx)
+    } else {
+        (jobj).child()
+    });
+    'l3: while !Handle::is_null(jobj) {
+        'c4: {
+            fns::hsd_8039D5DC(ctx, jobj);
+            jobj = (if Handle::is_null(jobj) {
+                null::<HSD_JObj<'a>>(ctx)
+            } else {
+                (jobj).next()
+            });
+        }
+    }
 }
 
 fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {

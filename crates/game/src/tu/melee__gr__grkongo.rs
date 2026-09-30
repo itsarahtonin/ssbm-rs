@@ -2035,16 +2035,20 @@ pub fn fn_801D8134<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<'a>) -> 
     if ((gp).u().kongo3().xC6() as i32) == 0_i32 {
         let _ = fns::Ground_801C4DA0(ctx, pos_gnd, unk_);
         fns::ftLib_GetPos(ctx, arg1, pos_ft);
-        if fp::fmadds(
-            (fp::fsubs(pos_gnd.z(), pos_ft.z())),
-            (fp::fsubs(pos_gnd.z(), pos_ft.z())),
-            fp::fmadds(
-                (fp::fsubs(pos_gnd.x(), pos_ft.x())),
-                (fp::fsubs(pos_gnd.x(), pos_ft.x())),
+        if fp::fadds(
+            fp::fadds(
+                fp::fmuls(
+                    (fp::fsubs(pos_gnd.x(), pos_ft.x())),
+                    (fp::fsubs(pos_gnd.x(), pos_ft.x())),
+                ),
                 fp::fmuls(
                     (fp::fsubs(pos_gnd.y(), pos_ft.y())),
                     (fp::fsubs(pos_gnd.y(), pos_ft.y())),
                 ),
+            ),
+            fp::fmuls(
+                (fp::fsubs(pos_gnd.z(), pos_ft.z())),
+                (fp::fsubs(pos_gnd.z(), pos_ft.z())),
             ),
         ) < fp::fmuls(
             (statics::melee__gr__grkongo::yakumono_param(ctx).get()).unk28(),

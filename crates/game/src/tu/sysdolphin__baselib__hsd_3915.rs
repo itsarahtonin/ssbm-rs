@@ -122,36 +122,28 @@ pub fn DrawASCII<'a>(ctx: &'a Ctx, chr: i32, x: f64, y: f64, color: _GXColor<'a>
                     fns::GXBegin(ctx, 184_i32, 0_i32, (2_i32 as u16));
                     inl_GXPosition2f32(
                         ctx,
-                        fp::frsp(fp::fadd(
-                            fp::fmul(
-                                statics::sysdolphin__baselib__hsd_3915::lbl_804D6070(ctx).get(),
-                                0.3,
-                            ),
+                        fp::frsp(fp::fmadd(
+                            statics::sysdolphin__baselib__hsd_3915::lbl_804D6070(ctx).get(),
+                            0.3,
                             x,
                         )),
-                        fp::frsp(fp::fadd(
-                            fp::fmul(
-                                statics::sysdolphin__baselib__hsd_3915::lbl_804D6074(ctx).get(),
-                                0.3,
-                            ),
+                        fp::frsp(fp::fmadd(
+                            statics::sysdolphin__baselib__hsd_3915::lbl_804D6074(ctx).get(),
+                            0.3,
                             y,
                         )),
                     );
                     inl_GXColor4u8(ctx, (color).r(), (color).g(), (color).b(), (color).a());
                     inl_GXPosition2f32(
                         ctx,
-                        fp::frsp(fp::fadd(
-                            fp::fmul(
-                                statics::sysdolphin__baselib__hsd_3915::lbl_804D6070(ctx).get(),
-                                0.3,
-                            ),
+                        fp::frsp(fp::fmadd(
+                            statics::sysdolphin__baselib__hsd_3915::lbl_804D6070(ctx).get(),
+                            0.3,
                             x,
                         )),
-                        fp::frsp(fp::fadd(
-                            fp::fmul(
-                                statics::sysdolphin__baselib__hsd_3915::lbl_804D6074(ctx).get(),
-                                0.7,
-                            ),
+                        fp::frsp(fp::fmadd(
+                            statics::sysdolphin__baselib__hsd_3915::lbl_804D6074(ctx).get(),
+                            0.7,
                             y,
                         )),
                     );
@@ -228,42 +220,34 @@ pub fn DrawASCII<'a>(ctx: &'a Ctx, chr: i32, x: f64, y: f64, color: _GXColor<'a>
             fns::GXBegin(ctx, 168_i32, 0_i32, (2_i32 as u16));
             inl_GXPosition2f32(
                 ctx,
-                fp::fadds(
-                    fp::fmuls(
-                        statics::sysdolphin__baselib__hsd_3915::lbl_804D6070(ctx).get(),
-                        (fp::fmuls(
-                            0.10999999940395355,
-                            fp::frsp((sar_i32((p0 as i32), (4_i32 as u32))) as f64),
-                        )),
-                    ),
+                fp::fmadds(
+                    statics::sysdolphin__baselib__hsd_3915::lbl_804D6070(ctx).get(),
+                    (fp::fmuls(
+                        0.10999999940395355,
+                        fp::frsp((sar_i32((p0 as i32), (4_i32 as u32))) as f64),
+                    )),
                     x,
                 ),
-                fp::fadds(
-                    fp::fmuls(
-                        statics::sysdolphin__baselib__hsd_3915::lbl_804D6074(ctx).get(),
-                        (fp::fmuls(0.10999999940395355, fp::frsp(((p0 as i32) & 15_i32) as f64))),
-                    ),
+                fp::fmadds(
+                    statics::sysdolphin__baselib__hsd_3915::lbl_804D6074(ctx).get(),
+                    (fp::fmuls(0.10999999940395355, fp::frsp(((p0 as i32) & 15_i32) as f64))),
                     y,
                 ),
             );
             inl_GXColor4u8(ctx, (color).r(), (color).g(), (color).b(), (color).a());
             inl_GXPosition2f32(
                 ctx,
-                fp::fadds(
-                    fp::fmuls(
-                        statics::sysdolphin__baselib__hsd_3915::lbl_804D6070(ctx).get(),
-                        (fp::fmuls(
-                            0.10999999940395355,
-                            fp::frsp((sar_i32((p1 as i32), (4_i32 as u32))) as f64),
-                        )),
-                    ),
+                fp::fmadds(
+                    statics::sysdolphin__baselib__hsd_3915::lbl_804D6070(ctx).get(),
+                    (fp::fmuls(
+                        0.10999999940395355,
+                        fp::frsp((sar_i32((p1 as i32), (4_i32 as u32))) as f64),
+                    )),
                     x,
                 ),
-                fp::fadds(
-                    fp::fmuls(
-                        statics::sysdolphin__baselib__hsd_3915::lbl_804D6074(ctx).get(),
-                        (fp::fmuls(0.10999999940395355, fp::frsp(((p1 as i32) & 15_i32) as f64))),
-                    ),
+                fp::fmadds(
+                    statics::sysdolphin__baselib__hsd_3915::lbl_804D6074(ctx).get(),
+                    (fp::fmuls(0.10999999940395355, fp::frsp(((p1 as i32) & 15_i32) as f64))),
                     y,
                 ),
             );

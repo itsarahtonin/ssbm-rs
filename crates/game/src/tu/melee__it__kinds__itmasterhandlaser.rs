@@ -252,9 +252,11 @@ pub fn it_802F063C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: HSD_GObj<'a>) {
                         __t2
                     }),
                     (fp::fsubs(pos_0.z(), pos_2.z())),
-                    fp::fmadds(
-                        (fp::fsubs(pos_0.x(), pos_2.x())),
-                        (fp::fsubs(pos_0.x(), pos_2.x())),
+                    fp::fadds(
+                        (fp::fmuls(
+                            (fp::fsubs(pos_0.x(), pos_2.x())),
+                            (fp::fsubs(pos_0.x(), pos_2.x())),
+                        )),
                         (fp::fmuls(
                             (fp::fsubs(pos_0.y(), pos_2.y())),
                             (fp::fsubs(pos_0.y(), pos_2.y())),
@@ -267,9 +269,11 @@ pub fn it_802F063C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: HSD_GObj<'a>) {
                 (fp::fdivs(
                     inl_sqrtf_store(
                         ctx,
-                        fp::fmadds(
-                            (fp::fsubs(pos_0.x(), pos_1.x())),
-                            (fp::fsubs(pos_0.x(), pos_1.x())),
+                        fp::fadds(
+                            (fp::fmuls(
+                                (fp::fsubs(pos_0.x(), pos_1.x())),
+                                (fp::fsubs(pos_0.x(), pos_1.x())),
+                            )),
                             (fp::fmuls(
                                 (fp::fsubs(pos_0.y(), pos_1.y())),
                                 (fp::fsubs(pos_0.y(), pos_1.y())),
@@ -279,9 +283,11 @@ pub fn it_802F063C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: HSD_GObj<'a>) {
                     ),
                     inl_sqrtf_store(
                         ctx,
-                        fp::fmadds(
-                            (fp::fsubs(pos_0.x(), pos_2.x())),
-                            (fp::fsubs(pos_0.x(), pos_2.x())),
+                        fp::fadds(
+                            (fp::fmuls(
+                                (fp::fsubs(pos_0.x(), pos_2.x())),
+                                (fp::fsubs(pos_0.x(), pos_2.x())),
+                            )),
                             (fp::fmuls(
                                 (fp::fsubs(pos_0.y(), pos_2.y())),
                                 (fp::fsubs(pos_0.y(), pos_2.y())),

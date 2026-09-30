@@ -795,12 +795,6 @@ fn inl_ftCheckThrowB0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     return 0;
 }
 
-fn inl_ftFx_SpecialN_FtGetHoldJoint_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>) {
-    let mut gobj = gobj;
-    let mut pos = pos;
-    inl_ftFox_SpecialN_GetHoldJoint_unfused(ctx, gobj, pos, 4.263599872589111);
-}
-
 fn inl_ftFx_SpecialN_ItGetHoldJoint_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>) {
     let mut gobj = gobj;
     let mut pos = pos;

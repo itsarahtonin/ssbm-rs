@@ -962,19 +962,13 @@ pub fn ftCo_8009E1D4<'a>(
         return arg1;
     }
     if !Handle::is_null((arg0).child()) {
-        temp = statics::melee__ft__ftdynamics::ftCo_8009E1D4(
-            ctx,
-            (arg0).child(),
-            (arg1).child(),
-            arg2,
-        );
+        temp = inl_ftCo_8009E1D4_unfused(ctx, (arg0).child(), (arg1).child(), arg2);
         if !Handle::is_null(temp) {
             return temp;
         }
     }
     if !Handle::is_null((arg0).next()) {
-        temp =
-            statics::melee__ft__ftdynamics::ftCo_8009E1D4(ctx, (arg0).next(), (arg1).next(), arg2);
+        temp = inl_ftCo_8009E1D4_unfused(ctx, (arg0).next(), (arg1).next(), arg2);
         if !Handle::is_null(temp) {
             return temp;
         }
@@ -1047,7 +1041,7 @@ pub fn ftCo_8009E318<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: f64)
         }
     }
     {
-        let mut walk_jobj: HSD_JObj<'a> = statics::melee__ft__ftdynamics::ftCo_8009E1D4(
+        let mut walk_jobj: HSD_JObj<'a> = inl_ftCo_8009E1D4_unfused(
             ctx,
             (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj))),
             (fp).x8AC_animSkeleton(),
@@ -1672,6 +1666,40 @@ fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
         return;
     }
     fns::HSD_JObjSetupMatrixSub(ctx, jobj);
+}
+
+fn inl_ftCo_8009E1D4_unfused<'a>(
+    ctx: &'a Ctx,
+    arg0: HSD_JObj<'a>,
+    arg1: HSD_JObj<'a>,
+    arg2: HSD_JObj<'a>,
+) -> HSD_JObj<'a> {
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut temp: HSD_JObj<'a> = null(ctx);
+    if Handle::addr(arg0) == Handle::addr(arg2) {
+        return arg1;
+    }
+    if !Handle::is_null((arg0).child()) {
+        temp = statics::melee__ft__ftdynamics::ftCo_8009E1D4(
+            ctx,
+            (arg0).child(),
+            (arg1).child(),
+            arg2,
+        );
+        if !Handle::is_null(temp) {
+            return temp;
+        }
+    }
+    if !Handle::is_null((arg0).next()) {
+        temp =
+            statics::melee__ft__ftdynamics::ftCo_8009E1D4(ctx, (arg0).next(), (arg1).next(), arg2);
+        if !Handle::is_null(temp) {
+            return temp;
+        }
+    }
+    return null::<HSD_JObj<'a>>(ctx);
 }
 
 /// Registers this unit's ports.

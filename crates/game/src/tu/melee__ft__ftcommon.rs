@@ -2244,11 +2244,9 @@ pub fn ftCommon_8007FDA0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     temp_r30 = (fp).co_attrs().x130();
     phi_f31 = inl_my_fminf(
         ctx,
-        fp::fadds(
-            fp::fmuls(
-                (fns::p_ftCommonData(ctx).get()).x710(),
-                fp::frsp((fp).x2024() as f64),
-            ),
+        fp::fmadds(
+            (fns::p_ftCommonData(ctx).get()).x710(),
+            fp::frsp((fp).x2024() as f64),
             (fns::p_ftCommonData(ctx).get()).x708(),
         ),
         (fns::p_ftCommonData(ctx).get()).x70C(),

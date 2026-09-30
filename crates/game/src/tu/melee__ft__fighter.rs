@@ -3100,7 +3100,7 @@ pub fn Fighter_UnkRecursiveFunc_8006D044<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             new_gobj = __t1;
             __t1
         });
-        fns::Fighter_UnkRecursiveFunc_8006D044(ctx, new_gobj);
+        inl_Fighter_UnkRecursiveFunc_8006D044_unfused(ctx, new_gobj);
     }
 }
 
@@ -3359,7 +3359,7 @@ pub fn Fighter_procCollResolve<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         .set_x189C_unk_num_frames((fp).dmg().x195c_hitlag_frames());
                 }
                 if !((fp).x2219_b5() != 0) {
-                    fns::Fighter_UnkRecursiveFunc_8006D044(ctx, gobj);
+                    inl_Fighter_UnkRecursiveFunc_8006D044(ctx, gobj);
                 }
             }
         } else {
@@ -3367,7 +3367,7 @@ pub fn Fighter_procCollResolve<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
         if (((fp).x221A_b0() as i32) != 0) || ((fp).dmg().x1958() != 0.0) {
             if !((fp).x2219_b5() != 0) {
-                fns::Fighter_UnkRecursiveFunc_8006D044(ctx, gobj);
+                inl_Fighter_UnkRecursiveFunc_8006D044(ctx, gobj);
             }
             if ((fp).x221A_b0() != 0) {
                 (fp).set_x2219_b7((1_i32 as u8));
@@ -4239,6 +4239,25 @@ fn inl_setBit_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp).set_x2219_b7((1_i32 as u8));
 }
 
+fn inl_Fighter_UnkRecursiveFunc_8006D044_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if !Handle::is_null((fp).pre_hitlag_cb()) {
+        (fp).pre_hitlag_cb().call::<_, ()>((gobj,));
+    }
+    (fp).set_x2219_b5((1_i32 as u8));
+    if (!Handle::is_null((fp).x1A5C())) && (!((fp).x2219_b7() != 0)) {
+        let mut new_gobj: HSD_GObj<'a> = gobj;
+        inl_setBit_unfused(ctx, {
+            let __t1 = (fp).x1A5C();
+            new_gobj = __t1;
+            __t1
+        });
+        fns::Fighter_UnkRecursiveFunc_8006D044(ctx, new_gobj);
+    }
+}
+
 fn inl_Fighter_8006D10C_Inline2_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let mut fp = fp;
     let mut gobj: HSD_GObj<'a> = (fp).x1A5C();
@@ -4268,6 +4287,30 @@ fn inl_Fighter_UnkTakeDamage_8006CC30<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg0: f
     let mut arg0 = arg0;
     fns::Fighter_TakeDamage_8006CC7C(ctx, fp, arg0);
     fns::ftCommon_8007EA90(ctx, fp, fp::fctiwz(arg0));
+}
+
+fn inl_setBit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+    (fp).set_x2219_b7((1_i32 as u8));
+}
+
+fn inl_Fighter_UnkRecursiveFunc_8006D044<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+    if !Handle::is_null((fp).pre_hitlag_cb()) {
+        (fp).pre_hitlag_cb().call::<_, ()>((gobj,));
+    }
+    (fp).set_x2219_b5((1_i32 as u8));
+    if (!Handle::is_null((fp).x1A5C())) && (!((fp).x2219_b7() != 0)) {
+        let mut new_gobj: HSD_GObj<'a> = gobj;
+        inl_setBit(ctx, {
+            let __t1 = (fp).x1A5C();
+            new_gobj = __t1;
+            __t1
+        });
+        fns::Fighter_UnkRecursiveFunc_8006D044(ctx, new_gobj);
+    }
 }
 
 /// Registers this unit's ports.

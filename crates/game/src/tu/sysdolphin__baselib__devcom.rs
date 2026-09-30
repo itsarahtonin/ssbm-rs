@@ -140,8 +140,8 @@ pub fn HSD_DevComStdCallback<'a>(ctx: &'a Ctx, request: ARQRequest<'a>) {
     statics::sysdolphin__baselib__devcom::devComRelayBufFlag(ctx)
         .at(i)
         .set((0_i32 as u8));
-    fns::HSD_DevComDVDWakeUp(ctx);
-    fns::HSD_DevComARAMWakeUp(ctx);
+    inl_HSD_DevComDVDWakeUp_unfused(ctx);
+    inl_HSD_DevComARAMWakeUp_unfused(ctx);
 }
 
 pub fn HSD_DevComARAMCallback<'a>(ctx: &'a Ctx, request: ARQRequest<'a>) {
@@ -192,6 +192,1440 @@ pub fn HSD_DevComARAMCallback<'a>(ctx: &'a Ctx, request: ARQRequest<'a>) {
 
 pub fn HSD_DevComARAMWakeUp<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
+    let mut enabled: i32 = 0;
+    let mut req_idx: i32 = 0;
+    let mut xfer_size2: u32 = 0;
+    let mut arq_callback: FnPtr<'a> = null(ctx);
+    let mut arq_callback2: FnPtr<'a> = null(ctx);
+    enabled = fns::OSDisableInterrupts(ctx);
+    if (statics::sysdolphin__baselib__devcom::aramstate(ctx).get() as i32) != 0_i32 {
+        let _ = fns::OSRestoreInterrupts(ctx, enabled);
+        return;
+    }
+    statics::sysdolphin__baselib__devcom::aramDC(ctx).set(
+        statics::sysdolphin__baselib__devcom::devComStatus(ctx)
+            .at(3_i32)
+            .get(),
+    );
+    if !Handle::is_null(
+        statics::sysdolphin__baselib__devcom::devComStatus(ctx)
+            .at(3_i32)
+            .get(),
+    ) {
+        if ((statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).cancelflag() != 0) {
+            if !Handle::is_null(
+                (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).callback(),
+            ) {
+                (statics::sysdolphin__baselib__devcom::aramDC(ctx).get())
+                    .callback()
+                    .call::<_, ()>((
+                        (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).dcReq(),
+                        (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).args(),
+                        null::<Addr<'a>>(ctx),
+                        1_i32,
+                    ));
+            }
+            statics::sysdolphin__baselib__devcom::HSD_DevComUnlink(
+                ctx,
+                statics::sysdolphin__baselib__devcom::aramDC(ctx).get(),
+            );
+            let _ = fns::OSRestoreInterrupts(ctx, enabled);
+            inl_HSD_DevComARAMWakeUp_unfused_2(ctx);
+            return;
+        }
+        req_idx = inl_getRelayBufIdx_unfused(ctx);
+        if req_idx >= 0_i32 {
+            if ((statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).r#type() as i32) == 3_i32
+            {
+                let mut xfer_size: u32 = 0;
+                if (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).size()
+                    > (0x4000_i32 as u32)
+                {
+                    arq_callback = fnptr(ctx, 0x8038eb50);
+                    xfer_size = (0x4000_i32 as u32);
+                } else {
+                    arq_callback = fnptr(ctx, 0x8038ebcc);
+                    xfer_size = (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).size();
+                }
+                {
+                    let mut p: Val<'a, i32> =
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
+                            .get(req_idx)
+                            .at(0);
+                    let mut i: i32 = 0;
+                    {
+                        i = 0x1000_i32;
+                        'l1: while i > 0_i32 {
+                            'c2: {
+                                ({
+                                    let __t1 = p;
+                                    p = Handle::add(p, 1);
+                                    __t1
+                                })
+                                .set(0_i32);
+                            }
+                            i = i.wrapping_sub(1);
+                        }
+                    }
+                }
+                fns::DCStoreRange(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
+                            .get(req_idx)
+                            .at(0),
+                    ),
+                    (0x4000_i32 as u32),
+                );
+                fns::ARQPostRequest(
+                    ctx,
+                    statics::sysdolphin__baselib__devcom::devComARQR(ctx)
+                        .get(req_idx)
+                        .get(0),
+                    (0_i32 as u32),
+                    (0_i32 as u32),
+                    (1_i32 as u32),
+                    Handle::addr(
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
+                            .get(req_idx)
+                            .at(0),
+                    ),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).dest(),
+                    xfer_size,
+                    arq_callback,
+                );
+                (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).set_dest(
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get())
+                        .dest()
+                        .wrapping_add(xfer_size),
+                );
+                (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).set_size(
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get())
+                        .size()
+                        .wrapping_sub(xfer_size),
+                );
+                statics::sysdolphin__baselib__devcom::aramstate(ctx).set((1_i32 as u8));
+            } else if ((statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).r#type() as i32)
+                == 11_i32
+            {
+                fns::DCStoreRange(
+                    ctx,
+                    ptr::<Addr<'a>>(
+                        ctx,
+                        (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).src() as u32,
+                    ),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).size(),
+                );
+                fns::ARQPostRequest(
+                    ctx,
+                    statics::sysdolphin__baselib__devcom::devComARQR(ctx)
+                        .get(req_idx)
+                        .get(0),
+                    (0_i32 as u32),
+                    (0_i32 as u32),
+                    (1_i32 as u32),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).src(),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).dest(),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).size(),
+                    fnptr(ctx, 0x8038ebcc),
+                );
+                statics::sysdolphin__baselib__devcom::aramstate(ctx).set((1_i32 as u8));
+            } else if ((statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).r#type() as i32)
+                == 25_i32
+            {
+                fns::DCInvalidateRange(
+                    ctx,
+                    ptr::<Addr<'a>>(
+                        ctx,
+                        (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).dest() as u32,
+                    ),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).size(),
+                );
+                fns::ARQPostRequest(
+                    ctx,
+                    statics::sysdolphin__baselib__devcom::devComARQR(ctx)
+                        .get(req_idx)
+                        .get(0),
+                    (0_i32 as u32),
+                    (1_i32 as u32),
+                    (1_i32 as u32),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).src(),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).dest(),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).size(),
+                    fnptr(ctx, 0x8038ebcc),
+                );
+                statics::sysdolphin__baselib__devcom::aramstate(ctx).set((1_i32 as u8));
+            } else if ((statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).r#type() as i32)
+                == 26_i32
+            {
+                fns::DCInvalidateRange(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
+                            .get(req_idx)
+                            .at(0),
+                    ),
+                    (0x4000_i32 as u32),
+                );
+                fns::ARQPostRequest(
+                    ctx,
+                    statics::sysdolphin__baselib__devcom::devComARQR(ctx)
+                        .get(req_idx)
+                        .get(0),
+                    (0_i32 as u32),
+                    (1_i32 as u32),
+                    (1_i32 as u32),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).src(),
+                    Handle::addr(
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
+                            .get(req_idx)
+                            .at(0),
+                    ),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).size(),
+                    fnptr(ctx, 0x8038ebcc),
+                );
+                statics::sysdolphin__baselib__devcom::aramstate(ctx).set((1_i32 as u8));
+            } else if ((statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).r#type() as i32)
+                == 27_i32
+            {
+                fns::DCInvalidateRange(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
+                            .get(req_idx)
+                            .at(0),
+                    ),
+                    (0x4000_i32 as u32),
+                );
+                if (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).size()
+                    > (0x4000_i32 as u32)
+                {
+                    arq_callback2 = fnptr(ctx, 0x8038eb50);
+                    xfer_size2 = (0x4000_i32 as u32);
+                } else {
+                    arq_callback2 = fnptr(ctx, 0x8038ebcc);
+                    xfer_size2 = (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).size();
+                }
+                fns::ARQPostRequest(
+                    ctx,
+                    statics::sysdolphin__baselib__devcom::devComARQR(ctx)
+                        .get(req_idx)
+                        .get(1_i32),
+                    (0_i32 as u32),
+                    (1_i32 as u32),
+                    (1_i32 as u32),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).src(),
+                    Handle::addr(
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
+                            .get(req_idx)
+                            .at(0),
+                    ),
+                    xfer_size2,
+                    null::<FnPtr<'a>>(ctx),
+                );
+                fns::ARQPostRequest(
+                    ctx,
+                    statics::sysdolphin__baselib__devcom::devComARQR(ctx)
+                        .get(req_idx)
+                        .get(0_i32),
+                    (0_i32 as u32),
+                    (0_i32 as u32),
+                    (1_i32 as u32),
+                    Handle::addr(
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
+                            .get(req_idx)
+                            .at(0),
+                    ),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).dest(),
+                    xfer_size2,
+                    arq_callback2,
+                );
+                (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).set_src(
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get())
+                        .src()
+                        .wrapping_add(xfer_size2),
+                );
+                (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).set_dest(
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get())
+                        .dest()
+                        .wrapping_add(xfer_size2),
+                );
+                (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).set_size(
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get())
+                        .size()
+                        .wrapping_sub(xfer_size2),
+                );
+                statics::sysdolphin__baselib__devcom::aramstate(ctx).set((1_i32 as u8));
+            }
+        }
+    }
+    let _ = fns::OSRestoreInterrupts(ctx, enabled);
+}
+
+pub fn HSD_DevComDVDStdCallback<'a>(ctx: &'a Ctx, request: ARQRequest<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut request = request;
+    let mut i: i32 = 0;
+    if Handle::addr(request)
+        == Handle::addr(
+            statics::sysdolphin__baselib__devcom::devComARQR(ctx)
+                .get(0_i32)
+                .get(0_i32),
+        )
+    {
+        i = 0_i32;
+    } else if Handle::addr(request)
+        == Handle::addr(
+            statics::sysdolphin__baselib__devcom::devComARQR(ctx)
+                .get(1_i32)
+                .get(0_i32),
+        )
+    {
+        i = 1_i32;
+    } else {
+        (if ((0_i32) != 0) {
+            ({ () })
+        } else {
+            fns::__assert(
+                ctx,
+                cstr(ctx, 0x804083c0),
+                (244_i32 as u32),
+                cstr(ctx, 0x804083c0),
+            )
+        });
+    }
+    statics::sysdolphin__baselib__devcom::devComRelayBufFlag(ctx)
+        .at(i)
+        .set((0_i32 as u8));
+    inl_HSD_DevComDVDWakeUp_unfused(ctx);
+    inl_HSD_DevComARAMWakeUp_unfused(ctx);
+}
+
+pub fn HSD_DevComDVDARAMEndCallback<'a>(ctx: &'a Ctx, request: ARQRequest<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut request = request;
+    let mut i: i32 = 0;
+    inl_HSD_DevComDVDStdCallback_unfused(ctx, request);
+    if Handle::addr(request)
+        == Handle::addr(
+            statics::sysdolphin__baselib__devcom::devComARQR(ctx)
+                .get(0_i32)
+                .get(0_i32),
+        )
+    {
+        i = 0_i32;
+    } else {
+        i = 1_i32;
+    }
+    if (!Handle::is_null(
+        (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77FC(ctx)
+            .at(i)
+            .get())
+        .callback(),
+    )) && (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D7804(ctx).get() == 0_i32)
+    {
+        (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77FC(ctx)
+            .at(i)
+            .get())
+        .callback()
+        .call::<_, ()>((
+            (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77FC(ctx)
+                .at(i)
+                .get())
+            .dcReq(),
+            (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77FC(ctx)
+                .at(i)
+                .get())
+            .args(),
+            null::<Addr<'a>>(ctx),
+            ((statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77FC(ctx)
+                .at(i)
+                .get())
+            .cancelflag() as i32),
+        ));
+    }
+    inl_HSD_DevComARAMCallback_inline_unfused(
+        ctx,
+        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77FC(ctx)
+            .at(i)
+            .get(),
+    );
+    statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77FC(ctx)
+        .at(i)
+        .set(null::<HSD_DevCom<'a>>(ctx));
+}
+
+pub fn HSD_DevComDVDMemCallback<'a>(ctx: &'a Ctx, result: i32, unused: DVDFileInfo<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut result = result;
+    let mut unused = unused;
+    let mut dc: HSD_DevCom<'a> = null(ctx);
+    let mut enabled: i32 = 0;
+    if result == 1_i32.wrapping_neg() {
+        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D7804(ctx).set(1_i32);
+    }
+    if (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).size() > (0x80000_i32 as u32) {
+        (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).set_src(
+            (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get())
+                .src()
+                .wrapping_add((0x80000_i32 as u32)),
+        );
+        (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).set_dest(
+            (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get())
+                .dest()
+                .wrapping_add((0x80000_i32 as u32)),
+        );
+        (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).set_size(
+            (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get())
+                .size()
+                .wrapping_sub((0x80000_i32 as u32)),
+        );
+        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F5(ctx).set((0_i32 as u8));
+        inl_HSD_DevComDVDWakeUp_unfused_2(ctx);
+        return;
+    }
+    if (!Handle::is_null((statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).callback()))
+        && (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D7804(ctx).get() == 0_i32)
+    {
+        (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get())
+            .callback()
+            .call::<_, ()>((
+                (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).dcReq(),
+                (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).args(),
+                null::<Addr<'a>>(ctx),
+                ((statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).cancelflag() as i32),
+            ));
+    }
+    statics::sysdolphin__baselib__devcom::HSD_DevComUnlink(
+        ctx,
+        statics::sysdolphin__baselib__devcom::dvdDC(ctx).get(),
+    );
+    dc = statics::sysdolphin__baselib__devcom::dvdDC(ctx).get();
+    enabled = fns::OSDisableInterrupts(ctx);
+    (dc).set_next(statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F0(ctx).get());
+    statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F0(ctx).set(dc);
+    let _ = fns::OSRestoreInterrupts(ctx, enabled);
+    statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F5(ctx).set((0_i32 as u8));
+    inl_HSD_DevComDVDWakeUp_unfused_2(ctx);
+}
+
+pub fn HSD_DevComDVDCallback<'a>(ctx: &'a Ctx, result: i32, unused: DVDFileInfo<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut result = result;
+    let mut unused = unused;
+    let mut dc: HSD_DevCom<'a> = null(ctx);
+    let mut enabled: i32 = 0;
+    let mut r#type: u16 = 0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if result == 1_i32.wrapping_neg() {
+        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D7804(ctx).set(1_i32);
+    }
+    r#type = (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).r#type();
+    if (r#type as i32) == 34_i32 {
+        (if (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).size() <= (0x4000_i32 as u32) {
+            ({ () })
+        } else {
+            fns::__assert(
+                ctx,
+                cstr(ctx, 0x804083c0),
+                (0x13a_i32 as u32),
+                cstr(ctx, 0x804083c0),
+            )
+        });
+        (if !Handle::is_null(((statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).callback()))
+        {
+            ({ () })
+        } else {
+            fns::__assert(
+                ctx,
+                cstr(ctx, 0x804083c0),
+                (0x13b_i32 as u32),
+                cstr(ctx, 0x804083c0),
+            )
+        });
+        if statics::sysdolphin__baselib__devcom::HSD_DevCom_804D7804(ctx).get() == 0_i32 {
+            (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get())
+                .callback()
+                .call::<_, ()>((
+                    (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).dcReq(),
+                    (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).args(),
+                    Handle::cast::<Addr<'a>>(
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
+                            .get(
+                                (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F6(ctx)
+                                    .get() as i32),
+                            )
+                            .at(0),
+                    ),
+                    ((statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).cancelflag() as i32),
+                ));
+        }
+        statics::sysdolphin__baselib__devcom::HSD_DevComUnlink(
+            ctx,
+            statics::sysdolphin__baselib__devcom::dvdDC(ctx).get(),
+        );
+        dc = statics::sysdolphin__baselib__devcom::dvdDC(ctx).get();
+        enabled = fns::OSDisableInterrupts(ctx);
+        (dc).set_next(statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F0(ctx).get());
+        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F0(ctx).set(dc);
+        let _ = fns::OSRestoreInterrupts(ctx, enabled);
+        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F5(ctx).set((0_i32 as u8));
+        statics::sysdolphin__baselib__devcom::devComRelayBufFlag(ctx)
+            .at((statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F6(ctx).get() as i32))
+            .set((0_i32 as u8));
+        inl_HSD_DevComDVDWakeUp_unfused_2(ctx);
+        inl_HSD_DevComARAMWakeUp_unfused_2(ctx);
+    } else if (r#type as i32) == 35_i32 {
+        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F7(ctx)
+            .set(statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F6(ctx).get());
+        if (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).size() > (0x4000_i32 as u32) {
+            fns::ARQPostRequest(
+                ctx,
+                statics::sysdolphin__baselib__devcom::devComARQR(ctx)
+                    .get(
+                        (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F7(ctx).get()
+                            as i32),
+                    )
+                    .get(0),
+                (0_i32 as u32),
+                (0_i32 as u32),
+                (1_i32 as u32),
+                Handle::addr(
+                    statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
+                        .get(
+                            (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F7(ctx).get()
+                                as i32),
+                        )
+                        .at(0),
+                ),
+                (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).dest(),
+                (0x4000_i32 as u32),
+                fnptr(ctx, 0x8038f098),
+            );
+            (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).set_src(
+                (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get())
+                    .src()
+                    .wrapping_add((0x4000_i32 as u32)),
+            );
+            (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).set_dest(
+                (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get())
+                    .dest()
+                    .wrapping_add((0x4000_i32 as u32)),
+            );
+            (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).set_size(
+                (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get())
+                    .size()
+                    .wrapping_sub((0x4000_i32 as u32)),
+            );
+            statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F5(ctx).set((0_i32 as u8));
+            inl_HSD_DevComDVDWakeUp_unfused_2(ctx);
+        } else {
+            statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77FC(ctx)
+                .at((statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F7(ctx).get() as i32))
+                .set(statics::sysdolphin__baselib__devcom::dvdDC(ctx).get());
+            fns::ARQPostRequest(
+                ctx,
+                statics::sysdolphin__baselib__devcom::devComARQR(ctx)
+                    .get(
+                        (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F7(ctx).get()
+                            as i32),
+                    )
+                    .get(0),
+                (0_i32 as u32),
+                (0_i32 as u32),
+                (1_i32 as u32),
+                Handle::addr(
+                    statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
+                        .get(
+                            (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F7(ctx).get()
+                                as i32),
+                        )
+                        .at(0),
+                ),
+                (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).dest(),
+                (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).size(),
+                fnptr(ctx, 0x8038f110),
+            );
+            statics::sysdolphin__baselib__devcom::HSD_DevComUnlink(
+                ctx,
+                statics::sysdolphin__baselib__devcom::dvdDC(ctx).get(),
+            );
+            statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F5(ctx).set((0_i32 as u8));
+            inl_HSD_DevComDVDWakeUp_unfused_2(ctx);
+        }
+    }
+}
+
+pub fn HSD_DevComDVDWakeUp<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut enabled: i32 = fns::OSDisableInterrupts(ctx);
+    let mut i: i32 = 0;
+    let mut buf_idx: i32 = 0;
+    if (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F5(ctx).get() as i32) != 0_i32 {
+        let _ = fns::OSRestoreInterrupts(ctx, enabled);
+        return;
+    }
+    {
+        i = 0_i32;
+        'l1: while i < 3_i32 {
+            'c2: {
+                if !Handle::is_null(
+                    ({
+                        let __t1 = statics::sysdolphin__baselib__devcom::devComStatus(ctx)
+                            .at(i)
+                            .get();
+                        statics::sysdolphin__baselib__devcom::dvdDC(ctx).set(__t1);
+                        __t1
+                    }),
+                ) {
+                    if ((statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).cancelflag() != 0)
+                    {
+                        if !Handle::is_null(
+                            (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).callback(),
+                        ) {
+                            (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get())
+                                .callback()
+                                .call::<_, ()>((
+                                    (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get())
+                                        .dcReq(),
+                                    (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).args(),
+                                    null::<Addr<'a>>(ctx),
+                                    1_i32,
+                                ));
+                        }
+                        statics::sysdolphin__baselib__devcom::HSD_DevComUnlink(
+                            ctx,
+                            statics::sysdolphin__baselib__devcom::dvdDC(ctx).get(),
+                        );
+                        let _ = fns::OSRestoreInterrupts(ctx, enabled);
+                        inl_HSD_DevComDVDWakeUp_unfused_2(ctx);
+                        return;
+                    }
+                    let _ = fns::DVDFastOpen(
+                        ctx,
+                        (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).file(),
+                        statics::sysdolphin__baselib__devcom::fileinfo(ctx),
+                    );
+                    if ((statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).r#type() as i32)
+                        == 33_i32
+                    {
+                        let _ = fns::DVDReadAsyncPrio(
+                            ctx,
+                            statics::sysdolphin__baselib__devcom::fileinfo(ctx),
+                            ptr::<Addr<'a>>(
+                                ctx,
+                                (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).dest()
+                                    as u32,
+                            ),
+                            ((if ((statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).size())
+                                < ((0x80000_i32) as u32)
+                            {
+                                ((statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).size())
+                            } else {
+                                ((0x80000_i32) as u32)
+                            }) as i32),
+                            ((statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).src() as i32),
+                            fnptr(ctx, 0x8038f210),
+                            2_i32,
+                        );
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F5(ctx)
+                            .set((1_i32 as u8));
+                        let _ = fns::OSRestoreInterrupts(ctx, enabled);
+                        return;
+                    }
+                    buf_idx = inl_getRelayBufIdx_unfused(ctx);
+                    if buf_idx >= 0_i32 {
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F6(ctx)
+                            .set((buf_idx as u8));
+                        let _ = fns::DVDReadAsyncPrio(
+                            ctx,
+                            statics::sysdolphin__baselib__devcom::fileinfo(ctx),
+                            Handle::cast::<Addr<'a>>(
+                                statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
+                                    .get(buf_idx)
+                                    .at(0),
+                            ),
+                            ((if ((statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).size())
+                                < ((0x4000_i32) as u32)
+                            {
+                                ((statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).size())
+                            } else {
+                                ((0x4000_i32) as u32)
+                            }) as i32),
+                            ((statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).src() as i32),
+                            fnptr(ctx, 0x8038f2f0),
+                            2_i32,
+                        );
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F5(ctx)
+                            .set((1_i32 as u8));
+                        let _ = fns::OSRestoreInterrupts(ctx, enabled);
+                        return;
+                    }
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    let _ = fns::OSRestoreInterrupts(ctx, enabled);
+}
+
+pub fn HSD_DevComRequest<'a>(
+    ctx: &'a Ctx,
+    file: i32,
+    src: u32,
+    dest: u32,
+    size: u32,
+    r#type: i32,
+    pri: i32,
+    cb: FnPtr<'a>,
+    args: u32,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x60);
+    let mut file = file;
+    let mut src = src;
+    let mut dest = dest;
+    let mut size = size;
+    let mut r#type = r#type;
+    let mut pri = pri;
+    let mut cb = cb;
+    let mut args = args;
+    let mut enabled: i32 = 0;
+    let mut dc: HSD_DevCom<'a> = null(ctx);
+    let mut result: i32 = 0;
+    enabled = fns::OSDisableInterrupts(ctx);
+    if !Handle::is_null(
+        ({
+            let __t1 = statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F0(ctx).get();
+            dc = __t1;
+            __t1
+        }),
+    ) {
+        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F0(ctx).set((dc).next());
+        let _ = fns::OSRestoreInterrupts(ctx, enabled);
+    } else {
+        dc = Handle::cast::<HSD_DevCom<'a>>(fns::HSD_AudioMalloc(
+            ctx,
+            36_u32.wrapping_mul((16_i32 as u32)),
+        ));
+        inl_DevComLinkNext_unfused(ctx, dc);
+        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F0(ctx)
+            .set((Handle::add(dc, 1_i32)));
+        let _ = fns::OSRestoreInterrupts(ctx, enabled);
+    }
+    (if !Handle::is_null((dc)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804083c0),
+            (0x1b5_i32 as u32),
+            cstr(ctx, 0x804083c0),
+        )
+    });
+    (if !((inl_HSD_DevComGetDestType_unfused(ctx, r#type) == 2_i32) && (size > (0x4000_i32 as u32)))
+    {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804083c0),
+            (0x1b8_i32 as u32),
+            cstr(ctx, 0x804083c0),
+        )
+    });
+    (if rem_u32(src, (32_i32 as u32)) == (0_i32 as u32) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804083c0),
+            (0x1ba_i32 as u32),
+            cstr(ctx, 0x804083c0),
+        )
+    });
+    (if rem_u32(dest, (32_i32 as u32)) == (0_i32 as u32) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804083c0),
+            (0x1bb_i32 as u32),
+            cstr(ctx, 0x804083c0),
+        )
+    });
+    (if rem_u32(size, (32_i32 as u32)) == (0_i32 as u32) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804083c0),
+            (0x1bc_i32 as u32),
+            cstr(ctx, 0x804083c0),
+        )
+    });
+    (if size != (0_i32 as u32) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804083c0),
+            (0x1bd_i32 as u32),
+            cstr(ctx, 0x804083c0),
+        )
+    });
+    pri = (if (r#type & 56_i32) == 32_i32 {
+        pri
+    } else {
+        3_i32
+    });
+    (dc).set_file(file);
+    (dc).set_src(src);
+    (dc).set_dest(dest);
+    (dc).set_size(size);
+    (dc).set_type((r#type as u16));
+    (dc).set_cancelflag((0_i32 as u16));
+    (dc).set_callback(cb);
+    (dc).set_args(args);
+    enabled = fns::OSDisableInterrupts(ctx);
+    result = statics::sysdolphin__baselib__devcom::HSD_DevCom_804D6050(ctx)
+        .get()
+        .wrapping_add(pri);
+    (dc).set_dcReq(result);
+    statics::sysdolphin__baselib__devcom::HSD_DevCom_804D6050(ctx).set(
+        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D6050(ctx)
+            .get()
+            .wrapping_add(4_i32),
+    );
+    if !Handle::is_null(
+        statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330(ctx)
+            .at(pri)
+            .get(),
+    ) {
+        (statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330(ctx)
+            .at(pri)
+            .get())
+        .set_next(dc);
+    }
+    statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330(ctx)
+        .at(pri)
+        .set(dc);
+    (dc).set_next(null::<HSD_DevCom<'a>>(ctx));
+    if Handle::is_null(
+        statics::sysdolphin__baselib__devcom::devComStatus(ctx)
+            .at(pri)
+            .get(),
+    ) {
+        statics::sysdolphin__baselib__devcom::devComStatus(ctx)
+            .at(pri)
+            .set(dc);
+        inl_HSD_DevComDVDWakeUp_unfused(ctx);
+        inl_HSD_DevComARAMWakeUp_unfused(ctx);
+    }
+    let _ = fns::OSRestoreInterrupts(ctx, enabled);
+    return result;
+}
+
+pub fn HSD_DevComCancelEx<'a>(
+    ctx: &'a Ctx,
+    dcReq: i32,
+    flags: u32,
+    cb: FnPtr<'a>,
+    args: u32,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x38);
+    let mut dcReq = dcReq;
+    let mut flags = flags;
+    let mut cb = cb;
+    let mut args = args;
+    let mut dc: HSD_DevCom<'a> = null(ctx);
+    let mut enabled: i32 = fns::OSDisableInterrupts(ctx);
+    if !Handle::is_null(
+        ({
+            let __t1 = inl_HSD_DevComCancelEx_inline_unfused(ctx, dcReq);
+            dc = __t1;
+            __t1
+        }),
+    ) {
+        let mut tmp: i32 = (dcReq & 3_i32);
+        if ((flags & (1_i32 as u32)) != 0) {
+            (dc).set_callback(cb);
+        }
+        if ((flags & (2_i32 as u32)) != 0) {
+            (dc).set_args(args);
+        }
+        if Handle::addr(
+            statics::sysdolphin__baselib__devcom::devComStatus(ctx)
+                .at(tmp)
+                .get(),
+        ) == Handle::addr(dc)
+        {
+            (dc).set_cancelflag((1_i32 as u16));
+        } else {
+            if !Handle::is_null((dc).callback()) {
+                (dc).callback().call::<_, ()>((
+                    (dc).dcReq(),
+                    (dc).args(),
+                    null::<Addr<'a>>(ctx),
+                    1_i32,
+                ));
+            }
+            statics::sysdolphin__baselib__devcom::HSD_DevComUnlink(ctx, dc);
+        }
+    } else {
+        let mut i: i32 = 0;
+        {
+            i = 0_i32;
+            'l1: while i < 2_i32 {
+                'c2: {
+                    let mut dc_2: HSD_DevCom<'a> =
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77FC(ctx)
+                            .at(i)
+                            .get();
+                    if (!Handle::is_null(dc_2)) && ((dc_2).dcReq() == dcReq) {
+                        (dc_2).set_callback(cb);
+                        (dc_2).set_args(args);
+                        (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77FC(ctx)
+                            .at(i)
+                            .get())
+                        .set_cancelflag((1_i32 as u16));
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    }
+    let _ = fns::OSRestoreInterrupts(ctx, enabled);
+    return 0_i32;
+}
+
+fn inl_HSD_DevComUnlink_unfused<'a>(ctx: &'a Ctx, dc: HSD_DevCom<'a>) {
+    let mut dc = dc;
+    let mut curr: HSD_DevCom<'a> = null(ctx);
+    let mut enabled: i32 = 0;
+    let mut i: i32 = 0;
+    'goto_cleanup: {
+        enabled = fns::OSDisableInterrupts(ctx);
+        i = ((dc).dcReq() & 3_i32);
+        if Handle::addr(
+            statics::sysdolphin__baselib__devcom::devComStatus(ctx)
+                .at(i)
+                .get(),
+        ) == Handle::addr(dc)
+        {
+            statics::sysdolphin__baselib__devcom::devComStatus(ctx)
+                .at(i)
+                .set((dc).next());
+            if Handle::addr(
+                statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330(ctx)
+                    .at(i)
+                    .get(),
+            ) == Handle::addr(dc)
+            {
+                statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330(ctx)
+                    .at(i)
+                    .set(null::<HSD_DevCom<'a>>(ctx));
+            }
+            break 'goto_cleanup;
+        }
+        {
+            curr = statics::sysdolphin__baselib__devcom::devComStatus(ctx)
+                .at(i)
+                .get();
+            'l1: while !Handle::is_null((curr).next()) {
+                'c2: {
+                    if Handle::addr((curr).next()) == Handle::addr(dc) {
+                        (curr).set_next((dc).next());
+                        if Handle::addr(
+                            statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330(ctx)
+                                .at(i)
+                                .get(),
+                        ) == Handle::addr(dc)
+                        {
+                            statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330(ctx)
+                                .at(i)
+                                .set(curr);
+                        }
+                        let _ = fns::OSRestoreInterrupts(ctx, enabled);
+                        return;
+                    }
+                }
+                curr = (curr).next();
+            }
+        }
+        (if ((0_i32) != 0) {
+            ({ () })
+        } else {
+            fns::__assert(
+                ctx,
+                cstr(ctx, 0x804083c0),
+                (73_i32 as u32),
+                cstr(ctx, 0x804083c0),
+            )
+        });
+    }
+    let _ = fns::OSRestoreInterrupts(ctx, enabled);
+}
+
+fn inl_getRelayBufIdx_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    let mut i: i32 = 0;
+    {
+        i = 0_i32;
+        'l1: while i < 2_i32 {
+            'c2: {
+                if !(statics::sysdolphin__baselib__devcom::devComRelayBufFlag(ctx)
+                    .at(i)
+                    .get()
+                    != 0)
+                {
+                    statics::sysdolphin__baselib__devcom::devComRelayBufFlag(ctx)
+                        .at(i)
+                        .set((1_i32 as u8));
+                    return i;
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return 1_i32.wrapping_neg();
+}
+
+fn inl_HSD_DevComDVDWakeUp_unfused<'a>(ctx: &'a Ctx) {
+    let mut enabled: i32 = fns::OSDisableInterrupts(ctx);
+    let mut i: i32 = 0;
+    let mut buf_idx: i32 = 0;
+    if (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F5(ctx).get() as i32) != 0_i32 {
+        let _ = fns::OSRestoreInterrupts(ctx, enabled);
+        return;
+    }
+    {
+        i = 0_i32;
+        'l1: while i < 3_i32 {
+            'c2: {
+                if !Handle::is_null(
+                    ({
+                        let __t1 = statics::sysdolphin__baselib__devcom::devComStatus(ctx)
+                            .at(i)
+                            .get();
+                        statics::sysdolphin__baselib__devcom::dvdDC(ctx).set(__t1);
+                        __t1
+                    }),
+                ) {
+                    if ((statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).cancelflag() != 0)
+                    {
+                        if !Handle::is_null(
+                            (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).callback(),
+                        ) {
+                            (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get())
+                                .callback()
+                                .call::<_, ()>((
+                                    (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get())
+                                        .dcReq(),
+                                    (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).args(),
+                                    null::<Addr<'a>>(ctx),
+                                    1_i32,
+                                ));
+                        }
+                        inl_HSD_DevComUnlink_unfused(
+                            ctx,
+                            statics::sysdolphin__baselib__devcom::dvdDC(ctx).get(),
+                        );
+                        let _ = fns::OSRestoreInterrupts(ctx, enabled);
+                        fns::HSD_DevComDVDWakeUp(ctx);
+                        return;
+                    }
+                    let _ = fns::DVDFastOpen(
+                        ctx,
+                        (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).file(),
+                        statics::sysdolphin__baselib__devcom::fileinfo(ctx),
+                    );
+                    if ((statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).r#type() as i32)
+                        == 33_i32
+                    {
+                        let _ = fns::DVDReadAsyncPrio(
+                            ctx,
+                            statics::sysdolphin__baselib__devcom::fileinfo(ctx),
+                            ptr::<Addr<'a>>(
+                                ctx,
+                                (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).dest()
+                                    as u32,
+                            ),
+                            ((if ((statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).size())
+                                < ((0x80000_i32) as u32)
+                            {
+                                ((statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).size())
+                            } else {
+                                ((0x80000_i32) as u32)
+                            }) as i32),
+                            ((statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).src() as i32),
+                            fnptr(ctx, 0x8038f210),
+                            2_i32,
+                        );
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F5(ctx)
+                            .set((1_i32 as u8));
+                        let _ = fns::OSRestoreInterrupts(ctx, enabled);
+                        return;
+                    }
+                    buf_idx = inl_getRelayBufIdx_unfused(ctx);
+                    if buf_idx >= 0_i32 {
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F6(ctx)
+                            .set((buf_idx as u8));
+                        let _ = fns::DVDReadAsyncPrio(
+                            ctx,
+                            statics::sysdolphin__baselib__devcom::fileinfo(ctx),
+                            Handle::cast::<Addr<'a>>(
+                                statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
+                                    .get(buf_idx)
+                                    .at(0),
+                            ),
+                            ((if ((statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).size())
+                                < ((0x4000_i32) as u32)
+                            {
+                                ((statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).size())
+                            } else {
+                                ((0x4000_i32) as u32)
+                            }) as i32),
+                            ((statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).src() as i32),
+                            fnptr(ctx, 0x8038f2f0),
+                            2_i32,
+                        );
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F5(ctx)
+                            .set((1_i32 as u8));
+                        let _ = fns::OSRestoreInterrupts(ctx, enabled);
+                        return;
+                    }
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    let _ = fns::OSRestoreInterrupts(ctx, enabled);
+}
+
+fn inl_HSD_DevComARAMWakeUp_unfused<'a>(ctx: &'a Ctx) {
+    let mut enabled: i32 = 0;
+    let mut req_idx: i32 = 0;
+    let mut xfer_size2: u32 = 0;
+    let mut arq_callback: FnPtr<'a> = null(ctx);
+    let mut arq_callback2: FnPtr<'a> = null(ctx);
+    enabled = fns::OSDisableInterrupts(ctx);
+    if (statics::sysdolphin__baselib__devcom::aramstate(ctx).get() as i32) != 0_i32 {
+        let _ = fns::OSRestoreInterrupts(ctx, enabled);
+        return;
+    }
+    statics::sysdolphin__baselib__devcom::aramDC(ctx).set(
+        statics::sysdolphin__baselib__devcom::devComStatus(ctx)
+            .at(3_i32)
+            .get(),
+    );
+    if !Handle::is_null(
+        statics::sysdolphin__baselib__devcom::devComStatus(ctx)
+            .at(3_i32)
+            .get(),
+    ) {
+        if ((statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).cancelflag() != 0) {
+            if !Handle::is_null(
+                (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).callback(),
+            ) {
+                (statics::sysdolphin__baselib__devcom::aramDC(ctx).get())
+                    .callback()
+                    .call::<_, ()>((
+                        (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).dcReq(),
+                        (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).args(),
+                        null::<Addr<'a>>(ctx),
+                        1_i32,
+                    ));
+            }
+            inl_HSD_DevComUnlink_unfused(
+                ctx,
+                statics::sysdolphin__baselib__devcom::aramDC(ctx).get(),
+            );
+            let _ = fns::OSRestoreInterrupts(ctx, enabled);
+            fns::HSD_DevComARAMWakeUp(ctx);
+            return;
+        }
+        req_idx = inl_getRelayBufIdx_unfused(ctx);
+        if req_idx >= 0_i32 {
+            if ((statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).r#type() as i32) == 3_i32
+            {
+                let mut xfer_size: u32 = 0;
+                if (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).size()
+                    > (0x4000_i32 as u32)
+                {
+                    arq_callback = fnptr(ctx, 0x8038eb50);
+                    xfer_size = (0x4000_i32 as u32);
+                } else {
+                    arq_callback = fnptr(ctx, 0x8038ebcc);
+                    xfer_size = (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).size();
+                }
+                {
+                    let mut p: Val<'a, i32> =
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
+                            .get(req_idx)
+                            .at(0);
+                    let mut i: i32 = 0;
+                    {
+                        i = 0x1000_i32;
+                        'l1: while i > 0_i32 {
+                            'c2: {
+                                ({
+                                    let __t1 = p;
+                                    p = Handle::add(p, 1);
+                                    __t1
+                                })
+                                .set(0_i32);
+                            }
+                            i = i.wrapping_sub(1);
+                        }
+                    }
+                }
+                fns::DCStoreRange(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
+                            .get(req_idx)
+                            .at(0),
+                    ),
+                    (0x4000_i32 as u32),
+                );
+                fns::ARQPostRequest(
+                    ctx,
+                    statics::sysdolphin__baselib__devcom::devComARQR(ctx)
+                        .get(req_idx)
+                        .get(0),
+                    (0_i32 as u32),
+                    (0_i32 as u32),
+                    (1_i32 as u32),
+                    Handle::addr(
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
+                            .get(req_idx)
+                            .at(0),
+                    ),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).dest(),
+                    xfer_size,
+                    arq_callback,
+                );
+                (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).set_dest(
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get())
+                        .dest()
+                        .wrapping_add(xfer_size),
+                );
+                (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).set_size(
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get())
+                        .size()
+                        .wrapping_sub(xfer_size),
+                );
+                statics::sysdolphin__baselib__devcom::aramstate(ctx).set((1_i32 as u8));
+            } else if ((statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).r#type() as i32)
+                == 11_i32
+            {
+                fns::DCStoreRange(
+                    ctx,
+                    ptr::<Addr<'a>>(
+                        ctx,
+                        (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).src() as u32,
+                    ),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).size(),
+                );
+                fns::ARQPostRequest(
+                    ctx,
+                    statics::sysdolphin__baselib__devcom::devComARQR(ctx)
+                        .get(req_idx)
+                        .get(0),
+                    (0_i32 as u32),
+                    (0_i32 as u32),
+                    (1_i32 as u32),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).src(),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).dest(),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).size(),
+                    fnptr(ctx, 0x8038ebcc),
+                );
+                statics::sysdolphin__baselib__devcom::aramstate(ctx).set((1_i32 as u8));
+            } else if ((statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).r#type() as i32)
+                == 25_i32
+            {
+                fns::DCInvalidateRange(
+                    ctx,
+                    ptr::<Addr<'a>>(
+                        ctx,
+                        (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).dest() as u32,
+                    ),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).size(),
+                );
+                fns::ARQPostRequest(
+                    ctx,
+                    statics::sysdolphin__baselib__devcom::devComARQR(ctx)
+                        .get(req_idx)
+                        .get(0),
+                    (0_i32 as u32),
+                    (1_i32 as u32),
+                    (1_i32 as u32),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).src(),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).dest(),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).size(),
+                    fnptr(ctx, 0x8038ebcc),
+                );
+                statics::sysdolphin__baselib__devcom::aramstate(ctx).set((1_i32 as u8));
+            } else if ((statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).r#type() as i32)
+                == 26_i32
+            {
+                fns::DCInvalidateRange(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
+                            .get(req_idx)
+                            .at(0),
+                    ),
+                    (0x4000_i32 as u32),
+                );
+                fns::ARQPostRequest(
+                    ctx,
+                    statics::sysdolphin__baselib__devcom::devComARQR(ctx)
+                        .get(req_idx)
+                        .get(0),
+                    (0_i32 as u32),
+                    (1_i32 as u32),
+                    (1_i32 as u32),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).src(),
+                    Handle::addr(
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
+                            .get(req_idx)
+                            .at(0),
+                    ),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).size(),
+                    fnptr(ctx, 0x8038ebcc),
+                );
+                statics::sysdolphin__baselib__devcom::aramstate(ctx).set((1_i32 as u8));
+            } else if ((statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).r#type() as i32)
+                == 27_i32
+            {
+                fns::DCInvalidateRange(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
+                            .get(req_idx)
+                            .at(0),
+                    ),
+                    (0x4000_i32 as u32),
+                );
+                if (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).size()
+                    > (0x4000_i32 as u32)
+                {
+                    arq_callback2 = fnptr(ctx, 0x8038eb50);
+                    xfer_size2 = (0x4000_i32 as u32);
+                } else {
+                    arq_callback2 = fnptr(ctx, 0x8038ebcc);
+                    xfer_size2 = (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).size();
+                }
+                fns::ARQPostRequest(
+                    ctx,
+                    statics::sysdolphin__baselib__devcom::devComARQR(ctx)
+                        .get(req_idx)
+                        .get(1_i32),
+                    (0_i32 as u32),
+                    (1_i32 as u32),
+                    (1_i32 as u32),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).src(),
+                    Handle::addr(
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
+                            .get(req_idx)
+                            .at(0),
+                    ),
+                    xfer_size2,
+                    null::<FnPtr<'a>>(ctx),
+                );
+                fns::ARQPostRequest(
+                    ctx,
+                    statics::sysdolphin__baselib__devcom::devComARQR(ctx)
+                        .get(req_idx)
+                        .get(0_i32),
+                    (0_i32 as u32),
+                    (0_i32 as u32),
+                    (1_i32 as u32),
+                    Handle::addr(
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
+                            .get(req_idx)
+                            .at(0),
+                    ),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).dest(),
+                    xfer_size2,
+                    arq_callback2,
+                );
+                (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).set_src(
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get())
+                        .src()
+                        .wrapping_add(xfer_size2),
+                );
+                (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).set_dest(
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get())
+                        .dest()
+                        .wrapping_add(xfer_size2),
+                );
+                (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).set_size(
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get())
+                        .size()
+                        .wrapping_sub(xfer_size2),
+                );
+                statics::sysdolphin__baselib__devcom::aramstate(ctx).set((1_i32 as u8));
+            }
+        }
+    }
+    let _ = fns::OSRestoreInterrupts(ctx, enabled);
+}
+
+fn inl_HSD_DevComARAMCallback_inline_unfused<'a>(ctx: &'a Ctx, devcom: HSD_DevCom<'a>) {
+    let mut devcom = devcom;
+    let mut enabled: i32 = fns::OSDisableInterrupts(ctx);
+    (devcom).set_next(statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F0(ctx).get());
+    statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F0(ctx).set(devcom);
+    let _ = fns::OSRestoreInterrupts(ctx, enabled);
+}
+
+fn inl_HSD_DevComStdCallback_unfused<'a>(ctx: &'a Ctx, request: ARQRequest<'a>) {
+    let mut request = request;
+    let mut i: i32 = 0;
+    if Handle::addr(request)
+        == Handle::addr(
+            statics::sysdolphin__baselib__devcom::devComARQR(ctx)
+                .get(0_i32)
+                .get(0_i32),
+        )
+    {
+        i = 0_i32;
+    } else if Handle::addr(request)
+        == Handle::addr(
+            statics::sysdolphin__baselib__devcom::devComARQR(ctx)
+                .get(1_i32)
+                .get(0_i32),
+        )
+    {
+        i = 1_i32;
+    } else {
+        (if ((0_i32) != 0) {
+            ({ () })
+        } else {
+            fns::__assert(
+                ctx,
+                cstr(ctx, 0x804083c0),
+                (88_i32 as u32),
+                cstr(ctx, 0x804083c0),
+            )
+        });
+    }
+    statics::sysdolphin__baselib__devcom::aramstate(ctx).set((0_i32 as u8));
+    statics::sysdolphin__baselib__devcom::devComRelayBufFlag(ctx)
+        .at(i)
+        .set((0_i32 as u8));
+    fns::HSD_DevComDVDWakeUp(ctx);
+    fns::HSD_DevComARAMWakeUp(ctx);
+}
+
+fn inl_HSD_DevComARAMWakeUp_unfused_2<'a>(ctx: &'a Ctx) {
     let mut enabled: i32 = 0;
     let mut req_idx: i32 = 0;
     let mut xfer_size2: u32 = 0;
@@ -462,8 +1896,7 @@ pub fn HSD_DevComARAMWakeUp<'a>(ctx: &'a Ctx) {
     let _ = fns::OSRestoreInterrupts(ctx, enabled);
 }
 
-pub fn HSD_DevComDVDStdCallback<'a>(ctx: &'a Ctx, request: ARQRequest<'a>) {
-    let __frame = ctx.stack_frame(0x18);
+fn inl_HSD_DevComDVDStdCallback_unfused<'a>(ctx: &'a Ctx, request: ARQRequest<'a>) {
     let mut request = request;
     let mut i: i32 = 0;
     if Handle::addr(request)
@@ -501,269 +1934,7 @@ pub fn HSD_DevComDVDStdCallback<'a>(ctx: &'a Ctx, request: ARQRequest<'a>) {
     fns::HSD_DevComARAMWakeUp(ctx);
 }
 
-pub fn HSD_DevComDVDARAMEndCallback<'a>(ctx: &'a Ctx, request: ARQRequest<'a>) {
-    let __frame = ctx.stack_frame(0x20);
-    let mut request = request;
-    let mut i: i32 = 0;
-    inl_HSD_DevComDVDStdCallback_unfused(ctx, request);
-    if Handle::addr(request)
-        == Handle::addr(
-            statics::sysdolphin__baselib__devcom::devComARQR(ctx)
-                .get(0_i32)
-                .get(0_i32),
-        )
-    {
-        i = 0_i32;
-    } else {
-        i = 1_i32;
-    }
-    if (!Handle::is_null(
-        (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77FC(ctx)
-            .at(i)
-            .get())
-        .callback(),
-    )) && (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D7804(ctx).get() == 0_i32)
-    {
-        (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77FC(ctx)
-            .at(i)
-            .get())
-        .callback()
-        .call::<_, ()>((
-            (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77FC(ctx)
-                .at(i)
-                .get())
-            .dcReq(),
-            (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77FC(ctx)
-                .at(i)
-                .get())
-            .args(),
-            null::<Addr<'a>>(ctx),
-            ((statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77FC(ctx)
-                .at(i)
-                .get())
-            .cancelflag() as i32),
-        ));
-    }
-    inl_HSD_DevComARAMCallback_inline_unfused(
-        ctx,
-        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77FC(ctx)
-            .at(i)
-            .get(),
-    );
-    statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77FC(ctx)
-        .at(i)
-        .set(null::<HSD_DevCom<'a>>(ctx));
-}
-
-pub fn HSD_DevComDVDMemCallback<'a>(ctx: &'a Ctx, result: i32, unused: DVDFileInfo<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let mut result = result;
-    let mut unused = unused;
-    let mut dc: HSD_DevCom<'a> = null(ctx);
-    let mut enabled: i32 = 0;
-    if result == 1_i32.wrapping_neg() {
-        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D7804(ctx).set(1_i32);
-    }
-    if (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).size() > (0x80000_i32 as u32) {
-        (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).set_src(
-            (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get())
-                .src()
-                .wrapping_add((0x80000_i32 as u32)),
-        );
-        (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).set_dest(
-            (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get())
-                .dest()
-                .wrapping_add((0x80000_i32 as u32)),
-        );
-        (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).set_size(
-            (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get())
-                .size()
-                .wrapping_sub((0x80000_i32 as u32)),
-        );
-        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F5(ctx).set((0_i32 as u8));
-        fns::HSD_DevComDVDWakeUp(ctx);
-        return;
-    }
-    if (!Handle::is_null((statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).callback()))
-        && (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D7804(ctx).get() == 0_i32)
-    {
-        (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get())
-            .callback()
-            .call::<_, ()>((
-                (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).dcReq(),
-                (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).args(),
-                null::<Addr<'a>>(ctx),
-                ((statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).cancelflag() as i32),
-            ));
-    }
-    statics::sysdolphin__baselib__devcom::HSD_DevComUnlink(
-        ctx,
-        statics::sysdolphin__baselib__devcom::dvdDC(ctx).get(),
-    );
-    dc = statics::sysdolphin__baselib__devcom::dvdDC(ctx).get();
-    enabled = fns::OSDisableInterrupts(ctx);
-    (dc).set_next(statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F0(ctx).get());
-    statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F0(ctx).set(dc);
-    let _ = fns::OSRestoreInterrupts(ctx, enabled);
-    statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F5(ctx).set((0_i32 as u8));
-    fns::HSD_DevComDVDWakeUp(ctx);
-}
-
-pub fn HSD_DevComDVDCallback<'a>(ctx: &'a Ctx, result: i32, unused: DVDFileInfo<'a>) {
-    let __frame = ctx.stack_frame(0x20);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let mut result = result;
-    let mut unused = unused;
-    let mut dc: HSD_DevCom<'a> = null(ctx);
-    let mut enabled: i32 = 0;
-    let mut r#type: u16 = 0;
-    'l1: loop {
-        'c2: {}
-        if !(0_i32 != 0) {
-            break 'l1;
-        }
-    }
-    if result == 1_i32.wrapping_neg() {
-        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D7804(ctx).set(1_i32);
-    }
-    r#type = (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).r#type();
-    if (r#type as i32) == 34_i32 {
-        (if (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).size() <= (0x4000_i32 as u32) {
-            ({ () })
-        } else {
-            fns::__assert(
-                ctx,
-                cstr(ctx, 0x804083c0),
-                (0x13a_i32 as u32),
-                cstr(ctx, 0x804083c0),
-            )
-        });
-        (if !Handle::is_null(((statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).callback()))
-        {
-            ({ () })
-        } else {
-            fns::__assert(
-                ctx,
-                cstr(ctx, 0x804083c0),
-                (0x13b_i32 as u32),
-                cstr(ctx, 0x804083c0),
-            )
-        });
-        if statics::sysdolphin__baselib__devcom::HSD_DevCom_804D7804(ctx).get() == 0_i32 {
-            (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get())
-                .callback()
-                .call::<_, ()>((
-                    (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).dcReq(),
-                    (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).args(),
-                    Handle::cast::<Addr<'a>>(
-                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
-                            .get(
-                                (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F6(ctx)
-                                    .get() as i32),
-                            )
-                            .at(0),
-                    ),
-                    ((statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).cancelflag() as i32),
-                ));
-        }
-        statics::sysdolphin__baselib__devcom::HSD_DevComUnlink(
-            ctx,
-            statics::sysdolphin__baselib__devcom::dvdDC(ctx).get(),
-        );
-        dc = statics::sysdolphin__baselib__devcom::dvdDC(ctx).get();
-        enabled = fns::OSDisableInterrupts(ctx);
-        (dc).set_next(statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F0(ctx).get());
-        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F0(ctx).set(dc);
-        let _ = fns::OSRestoreInterrupts(ctx, enabled);
-        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F5(ctx).set((0_i32 as u8));
-        statics::sysdolphin__baselib__devcom::devComRelayBufFlag(ctx)
-            .at((statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F6(ctx).get() as i32))
-            .set((0_i32 as u8));
-        fns::HSD_DevComDVDWakeUp(ctx);
-        fns::HSD_DevComARAMWakeUp(ctx);
-    } else if (r#type as i32) == 35_i32 {
-        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F7(ctx)
-            .set(statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F6(ctx).get());
-        if (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).size() > (0x4000_i32 as u32) {
-            fns::ARQPostRequest(
-                ctx,
-                statics::sysdolphin__baselib__devcom::devComARQR(ctx)
-                    .get(
-                        (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F7(ctx).get()
-                            as i32),
-                    )
-                    .get(0),
-                (0_i32 as u32),
-                (0_i32 as u32),
-                (1_i32 as u32),
-                Handle::addr(
-                    statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
-                        .get(
-                            (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F7(ctx).get()
-                                as i32),
-                        )
-                        .at(0),
-                ),
-                (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).dest(),
-                (0x4000_i32 as u32),
-                fnptr(ctx, 0x8038f098),
-            );
-            (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).set_src(
-                (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get())
-                    .src()
-                    .wrapping_add((0x4000_i32 as u32)),
-            );
-            (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).set_dest(
-                (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get())
-                    .dest()
-                    .wrapping_add((0x4000_i32 as u32)),
-            );
-            (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).set_size(
-                (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get())
-                    .size()
-                    .wrapping_sub((0x4000_i32 as u32)),
-            );
-            statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F5(ctx).set((0_i32 as u8));
-            fns::HSD_DevComDVDWakeUp(ctx);
-        } else {
-            statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77FC(ctx)
-                .at((statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F7(ctx).get() as i32))
-                .set(statics::sysdolphin__baselib__devcom::dvdDC(ctx).get());
-            fns::ARQPostRequest(
-                ctx,
-                statics::sysdolphin__baselib__devcom::devComARQR(ctx)
-                    .get(
-                        (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F7(ctx).get()
-                            as i32),
-                    )
-                    .get(0),
-                (0_i32 as u32),
-                (0_i32 as u32),
-                (1_i32 as u32),
-                Handle::addr(
-                    statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
-                        .get(
-                            (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F7(ctx).get()
-                                as i32),
-                        )
-                        .at(0),
-                ),
-                (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).dest(),
-                (statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).size(),
-                fnptr(ctx, 0x8038f110),
-            );
-            statics::sysdolphin__baselib__devcom::HSD_DevComUnlink(
-                ctx,
-                statics::sysdolphin__baselib__devcom::dvdDC(ctx).get(),
-            );
-            statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F5(ctx).set((0_i32 as u8));
-            fns::HSD_DevComDVDWakeUp(ctx);
-        }
-    }
-}
-
-pub fn HSD_DevComDVDWakeUp<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x18);
+fn inl_HSD_DevComDVDWakeUp_unfused_2<'a>(ctx: &'a Ctx) {
     let mut enabled: i32 = fns::OSDisableInterrupts(ctx);
     let mut i: i32 = 0;
     let mut buf_idx: i32 = 0;
@@ -873,343 +2044,6 @@ pub fn HSD_DevComDVDWakeUp<'a>(ctx: &'a Ctx) {
         }
     }
     let _ = fns::OSRestoreInterrupts(ctx, enabled);
-}
-
-pub fn HSD_DevComRequest<'a>(
-    ctx: &'a Ctx,
-    file: i32,
-    src: u32,
-    dest: u32,
-    size: u32,
-    r#type: i32,
-    pri: i32,
-    cb: FnPtr<'a>,
-    args: u32,
-) -> i32 {
-    let __frame = ctx.stack_frame(0x60);
-    let mut file = file;
-    let mut src = src;
-    let mut dest = dest;
-    let mut size = size;
-    let mut r#type = r#type;
-    let mut pri = pri;
-    let mut cb = cb;
-    let mut args = args;
-    let mut enabled: i32 = 0;
-    let mut dc: HSD_DevCom<'a> = null(ctx);
-    let mut result: i32 = 0;
-    enabled = fns::OSDisableInterrupts(ctx);
-    if !Handle::is_null(
-        ({
-            let __t1 = statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F0(ctx).get();
-            dc = __t1;
-            __t1
-        }),
-    ) {
-        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F0(ctx).set((dc).next());
-        let _ = fns::OSRestoreInterrupts(ctx, enabled);
-    } else {
-        dc = Handle::cast::<HSD_DevCom<'a>>(fns::HSD_AudioMalloc(
-            ctx,
-            36_u32.wrapping_mul((16_i32 as u32)),
-        ));
-        inl_DevComLinkNext_unfused(ctx, dc);
-        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F0(ctx)
-            .set((Handle::add(dc, 1_i32)));
-        let _ = fns::OSRestoreInterrupts(ctx, enabled);
-    }
-    (if !Handle::is_null((dc)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x804083c0),
-            (0x1b5_i32 as u32),
-            cstr(ctx, 0x804083c0),
-        )
-    });
-    (if !((inl_HSD_DevComGetDestType_unfused(ctx, r#type) == 2_i32) && (size > (0x4000_i32 as u32)))
-    {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x804083c0),
-            (0x1b8_i32 as u32),
-            cstr(ctx, 0x804083c0),
-        )
-    });
-    (if rem_u32(src, (32_i32 as u32)) == (0_i32 as u32) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x804083c0),
-            (0x1ba_i32 as u32),
-            cstr(ctx, 0x804083c0),
-        )
-    });
-    (if rem_u32(dest, (32_i32 as u32)) == (0_i32 as u32) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x804083c0),
-            (0x1bb_i32 as u32),
-            cstr(ctx, 0x804083c0),
-        )
-    });
-    (if rem_u32(size, (32_i32 as u32)) == (0_i32 as u32) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x804083c0),
-            (0x1bc_i32 as u32),
-            cstr(ctx, 0x804083c0),
-        )
-    });
-    (if size != (0_i32 as u32) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x804083c0),
-            (0x1bd_i32 as u32),
-            cstr(ctx, 0x804083c0),
-        )
-    });
-    pri = (if (r#type & 56_i32) == 32_i32 {
-        pri
-    } else {
-        3_i32
-    });
-    (dc).set_file(file);
-    (dc).set_src(src);
-    (dc).set_dest(dest);
-    (dc).set_size(size);
-    (dc).set_type((r#type as u16));
-    (dc).set_cancelflag((0_i32 as u16));
-    (dc).set_callback(cb);
-    (dc).set_args(args);
-    enabled = fns::OSDisableInterrupts(ctx);
-    result = statics::sysdolphin__baselib__devcom::HSD_DevCom_804D6050(ctx)
-        .get()
-        .wrapping_add(pri);
-    (dc).set_dcReq(result);
-    statics::sysdolphin__baselib__devcom::HSD_DevCom_804D6050(ctx).set(
-        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D6050(ctx)
-            .get()
-            .wrapping_add(4_i32),
-    );
-    if !Handle::is_null(
-        statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330(ctx)
-            .at(pri)
-            .get(),
-    ) {
-        (statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330(ctx)
-            .at(pri)
-            .get())
-        .set_next(dc);
-    }
-    statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330(ctx)
-        .at(pri)
-        .set(dc);
-    (dc).set_next(null::<HSD_DevCom<'a>>(ctx));
-    if Handle::is_null(
-        statics::sysdolphin__baselib__devcom::devComStatus(ctx)
-            .at(pri)
-            .get(),
-    ) {
-        statics::sysdolphin__baselib__devcom::devComStatus(ctx)
-            .at(pri)
-            .set(dc);
-        fns::HSD_DevComDVDWakeUp(ctx);
-        fns::HSD_DevComARAMWakeUp(ctx);
-    }
-    let _ = fns::OSRestoreInterrupts(ctx, enabled);
-    return result;
-}
-
-pub fn HSD_DevComCancelEx<'a>(
-    ctx: &'a Ctx,
-    dcReq: i32,
-    flags: u32,
-    cb: FnPtr<'a>,
-    args: u32,
-) -> i32 {
-    let __frame = ctx.stack_frame(0x38);
-    let mut dcReq = dcReq;
-    let mut flags = flags;
-    let mut cb = cb;
-    let mut args = args;
-    let mut dc: HSD_DevCom<'a> = null(ctx);
-    let mut enabled: i32 = fns::OSDisableInterrupts(ctx);
-    if !Handle::is_null(
-        ({
-            let __t1 = inl_HSD_DevComCancelEx_inline_unfused(ctx, dcReq);
-            dc = __t1;
-            __t1
-        }),
-    ) {
-        let mut tmp: i32 = (dcReq & 3_i32);
-        if ((flags & (1_i32 as u32)) != 0) {
-            (dc).set_callback(cb);
-        }
-        if ((flags & (2_i32 as u32)) != 0) {
-            (dc).set_args(args);
-        }
-        if Handle::addr(
-            statics::sysdolphin__baselib__devcom::devComStatus(ctx)
-                .at(tmp)
-                .get(),
-        ) == Handle::addr(dc)
-        {
-            (dc).set_cancelflag((1_i32 as u16));
-        } else {
-            if !Handle::is_null((dc).callback()) {
-                (dc).callback().call::<_, ()>((
-                    (dc).dcReq(),
-                    (dc).args(),
-                    null::<Addr<'a>>(ctx),
-                    1_i32,
-                ));
-            }
-            statics::sysdolphin__baselib__devcom::HSD_DevComUnlink(ctx, dc);
-        }
-    } else {
-        let mut i: i32 = 0;
-        {
-            i = 0_i32;
-            'l1: while i < 2_i32 {
-                'c2: {
-                    let mut dc_2: HSD_DevCom<'a> =
-                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77FC(ctx)
-                            .at(i)
-                            .get();
-                    if (!Handle::is_null(dc_2)) && ((dc_2).dcReq() == dcReq) {
-                        (dc_2).set_callback(cb);
-                        (dc_2).set_args(args);
-                        (statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77FC(ctx)
-                            .at(i)
-                            .get())
-                        .set_cancelflag((1_i32 as u16));
-                    }
-                }
-                i = i.wrapping_add(1);
-            }
-        }
-    }
-    let _ = fns::OSRestoreInterrupts(ctx, enabled);
-    return 0_i32;
-}
-
-fn inl_HSD_DevComARAMCallback_inline_unfused<'a>(ctx: &'a Ctx, devcom: HSD_DevCom<'a>) {
-    let mut devcom = devcom;
-    let mut enabled: i32 = fns::OSDisableInterrupts(ctx);
-    (devcom).set_next(statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F0(ctx).get());
-    statics::sysdolphin__baselib__devcom::HSD_DevCom_804D77F0(ctx).set(devcom);
-    let _ = fns::OSRestoreInterrupts(ctx, enabled);
-}
-
-fn inl_HSD_DevComStdCallback_unfused<'a>(ctx: &'a Ctx, request: ARQRequest<'a>) {
-    let mut request = request;
-    let mut i: i32 = 0;
-    if Handle::addr(request)
-        == Handle::addr(
-            statics::sysdolphin__baselib__devcom::devComARQR(ctx)
-                .get(0_i32)
-                .get(0_i32),
-        )
-    {
-        i = 0_i32;
-    } else if Handle::addr(request)
-        == Handle::addr(
-            statics::sysdolphin__baselib__devcom::devComARQR(ctx)
-                .get(1_i32)
-                .get(0_i32),
-        )
-    {
-        i = 1_i32;
-    } else {
-        (if ((0_i32) != 0) {
-            ({ () })
-        } else {
-            fns::__assert(
-                ctx,
-                cstr(ctx, 0x804083c0),
-                (88_i32 as u32),
-                cstr(ctx, 0x804083c0),
-            )
-        });
-    }
-    statics::sysdolphin__baselib__devcom::aramstate(ctx).set((0_i32 as u8));
-    statics::sysdolphin__baselib__devcom::devComRelayBufFlag(ctx)
-        .at(i)
-        .set((0_i32 as u8));
-    fns::HSD_DevComDVDWakeUp(ctx);
-    fns::HSD_DevComARAMWakeUp(ctx);
-}
-
-fn inl_getRelayBufIdx_unfused<'a>(ctx: &'a Ctx) -> i32 {
-    let mut i: i32 = 0;
-    {
-        i = 0_i32;
-        'l1: while i < 2_i32 {
-            'c2: {
-                if !(statics::sysdolphin__baselib__devcom::devComRelayBufFlag(ctx)
-                    .at(i)
-                    .get()
-                    != 0)
-                {
-                    statics::sysdolphin__baselib__devcom::devComRelayBufFlag(ctx)
-                        .at(i)
-                        .set((1_i32 as u8));
-                    return i;
-                }
-            }
-            i = i.wrapping_add(1);
-        }
-    }
-    return 1_i32.wrapping_neg();
-}
-
-fn inl_HSD_DevComDVDStdCallback_unfused<'a>(ctx: &'a Ctx, request: ARQRequest<'a>) {
-    let mut request = request;
-    let mut i: i32 = 0;
-    if Handle::addr(request)
-        == Handle::addr(
-            statics::sysdolphin__baselib__devcom::devComARQR(ctx)
-                .get(0_i32)
-                .get(0_i32),
-        )
-    {
-        i = 0_i32;
-    } else if Handle::addr(request)
-        == Handle::addr(
-            statics::sysdolphin__baselib__devcom::devComARQR(ctx)
-                .get(1_i32)
-                .get(0_i32),
-        )
-    {
-        i = 1_i32;
-    } else {
-        (if ((0_i32) != 0) {
-            ({ () })
-        } else {
-            fns::__assert(
-                ctx,
-                cstr(ctx, 0x804083c0),
-                (244_i32 as u32),
-                cstr(ctx, 0x804083c0),
-            )
-        });
-    }
-    statics::sysdolphin__baselib__devcom::devComRelayBufFlag(ctx)
-        .at(i)
-        .set((0_i32 as u8));
-    fns::HSD_DevComDVDWakeUp(ctx);
-    fns::HSD_DevComARAMWakeUp(ctx);
 }
 
 fn inl_DevComLinkNext_unfused<'a>(ctx: &'a Ctx, dc: HSD_DevCom<'a>) {

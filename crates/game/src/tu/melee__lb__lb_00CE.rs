@@ -223,18 +223,22 @@ pub fn lb_8000D148<'a>(
         let mut threshold_squared: f64 = 0.0;
         let mut dist_squared_02: f64 = 0.0;
         let mut dist_squared_12: f64 = 0.0;
-        dist_squared_02 = fp::fmadds(
-            (fp::fsubs(point0_x, point2_x)),
-            (fp::fsubs(point0_x, point2_x)),
+        dist_squared_02 = fp::fadds(
+            fp::fmuls(
+                (fp::fsubs(point0_x, point2_x)),
+                (fp::fsubs(point0_x, point2_x)),
+            ),
             fp::fmuls(
                 (fp::fsubs(point0_y, point2_y)),
                 (fp::fsubs(point0_y, point2_y)),
             ),
         );
         threshold_squared = fp::fmuls(threshold, threshold);
-        dist_squared_12 = fp::fmadds(
-            (fp::fsubs(point1_x, point2_x)),
-            (fp::fsubs(point1_x, point2_x)),
+        dist_squared_12 = fp::fadds(
+            fp::fmuls(
+                (fp::fsubs(point1_x, point2_x)),
+                (fp::fsubs(point1_x, point2_x)),
+            ),
             fp::fmuls(
                 (fp::fsubs(point1_y, point2_y)),
                 (fp::fsubs(point1_y, point2_y)),

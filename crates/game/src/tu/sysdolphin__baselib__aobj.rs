@@ -382,9 +382,7 @@ pub fn JObjForeachAnim<'a>(
             obj = (obj).child();
             'l1: while !Handle::is_null(obj) {
                 'c2: {
-                    statics::sysdolphin__baselib__aobj::JObjForeachAnim(
-                        ctx, obj, mask, func, arg_type, arg,
-                    );
+                    inl_JObjForeachAnim_unfused(ctx, obj, mask, func, arg_type, arg);
                 }
                 obj = (obj).next();
             }
@@ -617,6 +615,76 @@ fn inl_RObjForeachAnim_unfused<'a>(
                 }
             }
             robj = (robj).next();
+        }
+    }
+}
+
+fn inl_JObjForeachAnim_unfused<'a>(
+    ctx: &'a Ctx,
+    obj: HSD_JObj<'a>,
+    mask: i32,
+    func: FnPtr<'a>,
+    arg_type: i32,
+    arg: _callbackArg<'a>,
+) {
+    let mut obj = obj;
+    let mut mask = mask;
+    let mut func = func;
+    let mut arg_type = arg_type;
+    let mut arg = arg;
+    (if !Handle::is_null((obj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80405fc0),
+            (0x19d_i32 as u32),
+            cstr(ctx, 0x80405fc0),
+        )
+    });
+    if (((mask as u32) & ((enums::JOBJ_MASK as i32) as u32)) != 0)
+        && (!Handle::is_null((obj).aobj()))
+    {
+        statics::sysdolphin__baselib__aobj::callbackForeachFunc(
+            ctx,
+            (obj).aobj(),
+            Handle::cast::<Addr<'a>>(obj),
+            (enums::JOBJ_TYPE as i32),
+            Handle::cast::<Addr<'a>>(func),
+            arg_type,
+            arg,
+        );
+    }
+    if ((if (((obj).flags()
+        & (((shl_i32(1_i32, (5_i32 as u32))) | (shl_i32(1_i32, (14_i32 as u32)))) as u32))
+        != 0)
+    {
+        0_i32
+    } else {
+        1_i32
+    }) != 0)
+    {
+        statics::sysdolphin__baselib__aobj::DObjForeachAnim(
+            ctx,
+            (obj).u().dobj(),
+            mask,
+            func,
+            arg_type,
+            arg,
+        );
+    }
+    inl_RObjForeachAnim_unfused(ctx, (obj).robj(), mask, func, arg_type, arg);
+    if !(((obj).flags() & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0) {
+        {
+            obj = (obj).child();
+            'l1: while !Handle::is_null(obj) {
+                'c2: {
+                    statics::sysdolphin__baselib__aobj::JObjForeachAnim(
+                        ctx, obj, mask, func, arg_type, arg,
+                    );
+                }
+                obj = (obj).next();
+            }
         }
     }
 }

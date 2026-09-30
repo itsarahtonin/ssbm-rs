@@ -1581,14 +1581,12 @@ pub fn lbColl_800077A0<'a>(
         diff_ba.set_x(fp::fsubs((b).x(), (a).x()));
         diff_ba.set_y(fp::fsubs((b).y(), (a).y()));
         diff_ba.set_z(fp::fsubs((b).z(), (a).z()));
-        dot_diff_cb = fp::fmadds(
-            diff_cb.z(),
-            diff_cb.z(),
-            fp::fmadds(
-                diff_cb.x(),
-                diff_cb.x(),
+        dot_diff_cb = fp::fadds(
+            fp::fadds(
+                fp::fmuls(diff_cb.x(), diff_cb.x()),
                 fp::fmuls(diff_cb.y(), diff_cb.y()),
             ),
+            fp::fmuls(diff_cb.z(), diff_cb.z()),
         );
         if (inl_approximatelyZero(ctx, dot_diff_cb) != 0) {
             scl = 0.0;

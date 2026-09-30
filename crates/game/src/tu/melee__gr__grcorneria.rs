@@ -802,10 +802,8 @@ pub fn grCorneria_801DDAC4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     inl_HSD_JObjSetScaleX_unfused(
         ctx,
         jobj,
-        fp::fmuls(
-            scale,
-            (statics::melee__gr__grcorneria::yakumono_param(ctx).get()).x70(),
-        ),
+        scale,
+        (statics::melee__gr__grcorneria::yakumono_param(ctx).get()).x70(),
     );
     inl_HSD_JObjSetScaleY_unfused(ctx, jobj, scale);
     inl_HSD_JObjSetScaleZ_unfused(ctx, jobj, scale);
@@ -1172,7 +1170,7 @@ pub fn grCorneria_801DE568<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     scale,
                     (statics::melee__gr__grcorneria::yakumono_param(ctx).get()).x70(),
                 );
-                inl_HSD_JObjSetScaleX_unfused(ctx, jobj, s);
+                inl_HSD_JObjSetScaleX_unfused_2(ctx, jobj, s);
             }
             {
                 let mut s_2: f64 = fp::fmuls(
@@ -1276,26 +1274,20 @@ pub fn grCorneria_801DE8E4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     inl_HSD_JObjSetScaleX_unfused(
         ctx,
         jobj,
-        fp::fmuls(
-            scale,
-            (statics::melee__gr__grcorneria::yakumono_param(ctx).get()).x70(),
-        ),
+        scale,
+        (statics::melee__gr__grcorneria::yakumono_param(ctx).get()).x70(),
     );
-    inl_HSD_JObjSetScaleY_unfused(
+    inl_HSD_JObjSetScaleY_unfused_2(
         ctx,
         jobj,
-        fp::fmuls(
-            scale,
-            (statics::melee__gr__grcorneria::yakumono_param(ctx).get()).x70(),
-        ),
+        scale,
+        (statics::melee__gr__grcorneria::yakumono_param(ctx).get()).x70(),
     );
-    inl_HSD_JObjSetScaleZ_unfused(
+    inl_HSD_JObjSetScaleZ_unfused_2(
         ctx,
         jobj,
-        fp::fmuls(
-            scale,
-            (statics::melee__gr__grcorneria::yakumono_param(ctx).get()).x70(),
-        ),
+        scale,
+        (statics::melee__gr__grcorneria::yakumono_param(ctx).get()).x70(),
     );
     inl_Ground_ResetStarFoxArwingState_unfused(ctx, gp);
     (gp).u().corneria2().set_xF8(fp::fctiwz(
@@ -1996,26 +1988,20 @@ pub fn grCorneria_801DF8D0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     inl_HSD_JObjSetScaleX_unfused(
         ctx,
         jobj,
-        fp::fmuls(
-            scale,
-            (statics::melee__gr__grcorneria::yakumono_param(ctx).get()).x70(),
-        ),
+        scale,
+        (statics::melee__gr__grcorneria::yakumono_param(ctx).get()).x70(),
     );
-    inl_HSD_JObjSetScaleY_unfused(
+    inl_HSD_JObjSetScaleY_unfused_2(
         ctx,
         jobj,
-        fp::fmuls(
-            scale,
-            (statics::melee__gr__grcorneria::yakumono_param(ctx).get()).x70(),
-        ),
+        scale,
+        (statics::melee__gr__grcorneria::yakumono_param(ctx).get()).x70(),
     );
-    inl_HSD_JObjSetScaleZ_unfused(
+    inl_HSD_JObjSetScaleZ_unfused_2(
         ctx,
         jobj,
-        fp::fmuls(
-            scale,
-            (statics::melee__gr__grcorneria::yakumono_param(ctx).get()).x70(),
-        ),
+        scale,
+        (statics::melee__gr__grcorneria::yakumono_param(ctx).get()).x70(),
     );
     inl_Ground_ResetStarFoxArwingState_unfused(ctx, gp);
     (gp).u().corneria2().set_xF8(fp::fctiwz(
@@ -3376,7 +3362,7 @@ pub fn grCorneria_801E1BF0<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
     inl_HSD_JObjSetRotationX_unfused(ctx, jobj, 0.0);
     inl_HSD_JObjSetRotationY_unfused(ctx, jobj, 0.0);
     inl_HSD_JObjSetRotationZ_unfused(ctx, jobj, 0.0);
-    inl_HSD_JObjSetScaleX_unfused(ctx, jobj, 1.0);
+    inl_HSD_JObjSetScaleX_unfused_2(ctx, jobj, 1.0);
     inl_HSD_JObjSetScaleY_unfused(ctx, jobj, 1.0);
     inl_HSD_JObjSetScaleZ_unfused(ctx, jobj, 1.0);
     (gp).u().corneria().xC4().flags().set_b0((1_i32 as u8));
@@ -4213,9 +4199,8 @@ fn inl_HSD_GObjGetHSDObj<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     return (gobj).hsd_obj();
 }
 
-fn inl_HSD_JObjSetScaleX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
+fn inl_HSD_JObjSetScaleX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x__a: f64, x__c: f64) {
     let mut jobj = jobj;
-    let mut x = x;
     (if !Handle::is_null((jobj)) {
         ({ () })
     } else {
@@ -4226,7 +4211,7 @@ fn inl_HSD_JObjSetScaleX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
             cstr(ctx, 0x803b8094),
         )
     });
-    (jobj).scale().set_x(x);
+    (jobj).scale().set_x(fp::fmuls(x__a, x__c));
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         {
             if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
@@ -4462,6 +4447,29 @@ fn inl_Ground_UpdateStarFoxArwingVisibility_unfused<'a>(
     inl_HSD_JObjSetTranslate_unfused(ctx, jobj, (gp).u().arwing().xE0());
 }
 
+fn inl_HSD_JObjSetScaleX_unfused_2<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
+    let mut jobj = jobj;
+    let mut x = x;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8094),
+            (0x192_i32 as u32),
+            cstr(ctx, 0x803b8094),
+        )
+    });
+    (jobj).scale().set_x(x);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
 fn inl_Ground_ClearStarFoxArwingGObjs_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>) {
     let mut gp = gp;
     (gp).u()
@@ -4547,6 +4555,50 @@ fn inl_Ground_DisableStarFoxArwingGObjs_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>
         .article_gobjs()
         .at(1_i32)
         .set(ptr::<HSD_GObj<'a>>(ctx, 1_i32.wrapping_neg() as u32));
+}
+
+fn inl_HSD_JObjSetScaleY_unfused_2<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a: f64, y__c: f64) {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8094),
+            (0x1a4_i32 as u32),
+            cstr(ctx, 0x803b8094),
+        )
+    });
+    (jobj).scale().set_y(fp::fmuls(y__a, y__c));
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_HSD_JObjSetScaleZ_unfused_2<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z__a: f64, z__c: f64) {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8094),
+            (0x1b6_i32 as u32),
+            cstr(ctx, 0x803b8094),
+        )
+    });
+    (jobj).scale().set_z(fp::fmuls(z__a, z__c));
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
 }
 
 fn inl_Ground_ResetStarFoxArwingState_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>) {

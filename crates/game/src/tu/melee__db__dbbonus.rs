@@ -179,7 +179,7 @@ pub fn fn_80228E54<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32, arg2: i32) {
                     if y_pos >= 30_i32 {
                         temp_r4 = arg1.wrapping_add(1_i32);
                         if temp_r4 < 2_i32 {
-                            statics::melee__db__dbbonus::fn_80228E54(ctx, arg0, temp_r4, bonus);
+                            inl_fn_80228E54_unfused(ctx, arg0, temp_r4, bonus);
                             return;
                         }
                         fns::DevText_Printf(ctx, text, cstr(ctx, 0x803eae48), &[]);
@@ -368,7 +368,95 @@ pub fn fn_CheckBonusInfo<'a>(ctx: &'a Ctx, player: i32) {
         if !Handle::is_null(fns::Player_GetEntity(ctx, player)) {
             fns::pl_80039450(ctx, player);
         }
-        statics::melee__db__dbbonus::fn_80228E54(ctx, player, 0_i32, 0_i32);
+        inl_fn_80228E54_unfused(ctx, player, 0_i32, 0_i32);
+    }
+}
+
+fn inl_fn_80228E54_unfused<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32, arg2: i32) {
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut text: DevText<'a> = null(ctx);
+    let mut temp_r4: i32 = 0;
+    let mut bonus: i32 = 0;
+    let mut y_pos: i32 = 0;
+    y_pos = 0_i32;
+    text = (Handle::add(statics::melee__db__dbbonus::db_804D6B9C(ctx).get(), arg1)).text();
+    fns::DevText_Erase(ctx, text);
+    fns::DevText_SetCursorXY(ctx, text, 0_i32, 0_i32);
+    if arg1 == 0_i32 {
+        fns::DevText_Printf(
+            ctx,
+            text,
+            cstr(ctx, 0x803eae18),
+            &[
+                VarArg::Int(fns::gm_GetMatchEndPlayerScore(ctx, 0_i32) as u32),
+                VarArg::Int(fns::gm_GetMatchEndPlayerScore(ctx, 1_i32) as u32),
+            ],
+        );
+        fns::DevText_Printf(
+            ctx,
+            text,
+            cstr(ctx, 0x803eae28),
+            &[
+                VarArg::Int(fns::gm_GetMatchEndPlayerScore(ctx, 2_i32) as u32),
+                VarArg::Int(fns::gm_GetMatchEndPlayerScore(ctx, 3_i32) as u32),
+            ],
+        );
+        fns::DevText_Printf(
+            ctx,
+            text,
+            cstr(ctx, 0x803eae38),
+            &[
+                VarArg::Int(arg0.wrapping_add(1_i32) as u32),
+                VarArg::Int(arg1 as u32),
+            ],
+        );
+        y_pos = 3_i32;
+    }
+    fns::DevText_SetCursorXY(ctx, text, 0_i32, y_pos);
+    {
+        bonus = arg2;
+        'l1: while bonus < 215_i32 {
+            'c2: {
+                if fns::pl_80039418(ctx, arg0, bonus) != (0_i32 as u32) {
+                    if y_pos >= 30_i32 {
+                        temp_r4 = arg1.wrapping_add(1_i32);
+                        if temp_r4 < 2_i32 {
+                            statics::melee__db__dbbonus::fn_80228E54(ctx, arg0, temp_r4, bonus);
+                            return;
+                        }
+                        fns::DevText_Printf(ctx, text, cstr(ctx, 0x803eae48), &[]);
+                        return;
+                    }
+                    if (fns::gmDecisionGetType(ctx, bonus) as u32) == (0_i32 as u32) {
+                        fns::DevText_Printf(
+                            ctx,
+                            text,
+                            cstr(ctx, 0x804d4b18),
+                            &[VarArg::Int(Handle::addr(
+                                (Handle::add(fns::db_bonus_names(ctx).get(), bonus)).get(),
+                            ))],
+                        );
+                    } else {
+                        fns::DevText_Printf(
+                            ctx,
+                            text,
+                            cstr(ctx, 0x804d4b1c),
+                            &[
+                                VarArg::Int(Handle::addr(
+                                    (Handle::add(fns::db_bonus_names(ctx).get(), bonus)).get(),
+                                )),
+                                VarArg::Int(fns::pl_80039418(ctx, arg0, bonus) as u32),
+                            ],
+                        );
+                    }
+                    y_pos = y_pos.wrapping_add(1_i32);
+                    fns::DevText_SetCursorXY(ctx, text, 0_i32, y_pos);
+                }
+            }
+            bonus = bonus.wrapping_add(1);
+        }
     }
 }
 

@@ -73,7 +73,7 @@ pub fn mnSnap_80253184<'a>(ctx: &'a Ctx) {
                 (p52).set((p52).get().wrapping_add(1_i32));
                 (p51).set((p51).get().wrapping_sub(1_i32));
                 if (p51).get() != 0_i32 {
-                    fns::mnSnap_80253184(ctx);
+                    inl_mnSnap_80253184_unfused(ctx);
                 }
             }
         }
@@ -209,7 +209,7 @@ pub fn mnSnap_8025329C<'a>(ctx: &'a Ctx) {
                 (p52).set((p52).get().wrapping_add(1_i32));
                 (p51).set((p51).get().wrapping_sub(1_i32));
                 if (p51).get() != 0_i32 {
-                    fns::mnSnap_80253184(ctx);
+                    inl_mnSnap_80253184_unfused(ctx);
                 }
             }
         }
@@ -235,7 +235,7 @@ pub fn mnSnap_8025329C<'a>(ctx: &'a Ctx) {
                 (p52).set((p52).get().wrapping_add(1_i32));
                 (p51).set((p51).get().wrapping_sub(1_i32));
                 if (p51).get() != 0_i32 {
-                    fns::mnSnap_80253184(ctx);
+                    inl_mnSnap_80253184_unfused(ctx);
                 }
             }
         }
@@ -401,7 +401,7 @@ pub fn mnSnap_80253640<'a>(ctx: &'a Ctx, page: i32) {
         (p52).set((p52).get().wrapping_add(1_i32));
         (p51).set((p51).get().wrapping_sub(1_i32));
         if (p51).get() != 0_i32 {
-            fns::mnSnap_80253184(ctx);
+            inl_mnSnap_80253184_unfused(ctx);
         }
     }
     if (p50).get() == 0_i32 {
@@ -3929,6 +3929,59 @@ pub fn mnSnap_80257F24<'a>(ctx: &'a Ctx) {
     gobj = fns::GObj_Create(ctx, (0_i32 as u16), (1_i32 as u8), (128_i32 as u8));
     proc = fns::HSD_GObj_SetupProc(ctx, gobj, fnptr(ctx, 0x80257d7c), (0_i32 as u8));
     (proc).set_flags_3((fns::HSD_GObj_804D783C(ctx).get() as u8));
+}
+
+fn inl_mnSnap_80253184_unfused<'a>(ctx: &'a Ctx) {
+    let mut snap: mnSnap_State<'a> = statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx);
+    let mut p57: Val<'a, i32> = null(ctx);
+    let mut p52: Val<'a, i32> = null(ctx);
+    let mut p51: Val<'a, i32> = null(ctx);
+    let mut p4F: Val<'a, i32> = null(ctx);
+    let mut p50: Val<'a, i32> = null(ctx);
+    let mut p58: Val<'a, i32> = null(ctx);
+    p4F = (snap).cur_page_ref();
+    p52 = (snap).load_idx_ref();
+    p50 = (snap).active_slot_ref();
+    ({
+        let __t1 = (snap).card_result_ref();
+        p57 = __t1;
+        __t1
+    })
+    .set(fns::lbSnap_8001E058(
+        ctx,
+        (p50).get(),
+        (p52).get().wrapping_add(((p4F).get().wrapping_mul(4_i32))),
+    ));
+    if (p57).get() == 8_i32 {
+        fns::mnSnap_80254298(ctx);
+        return;
+    }
+    if (p57).get() != 11_i32 {
+        p58 = (snap).thumb_loaded().at(0_i32);
+        (Handle::add(p58, (p52).get())).set(1_i32);
+        (p52).set((p52).get().wrapping_add(1_i32));
+        p51 = (snap).pending_loads_ref();
+        (p51).set((p51).get().wrapping_sub(1_i32));
+        if (p51).get() != 0_i32 {
+            (p57).set(fns::lbSnap_8001E058(
+                ctx,
+                (p50).get(),
+                (p52).get().wrapping_add(((p4F).get().wrapping_mul(4_i32))),
+            ));
+            if (p57).get() == 8_i32 {
+                fns::mnSnap_80254298(ctx);
+                return;
+            }
+            if (p57).get() != 11_i32 {
+                (Handle::add(p58, (p52).get())).set(1_i32);
+                (p52).set((p52).get().wrapping_add(1_i32));
+                (p51).set((p51).get().wrapping_sub(1_i32));
+                if (p51).get() != 0_i32 {
+                    fns::mnSnap_80253184(ctx);
+                }
+            }
+        }
+    }
 }
 
 fn inl_mnSnap_GetLoadIdx_unfused<'a>(ctx: &'a Ctx, snap: mnSnap_State<'a>) -> Val<'a, i32> {

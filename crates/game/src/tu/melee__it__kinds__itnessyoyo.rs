@@ -956,9 +956,11 @@ pub fn it_802BFEC4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::PSMTXConcat(ctx, ((link2).jobj()).mtx().get(0), m.get(0), m.get(0));
     (ip).xDD4_itemVar().nessyoyo().set_x4(inl_my_sqrtf(
         ctx,
-        fp::fmadds(
-            (fp::fsubs((link1).pos().x(), m.get(0_i32).at(3_i32).get())),
-            (fp::fsubs((link1).pos().x(), m.get(0_i32).at(3_i32).get())),
+        fp::fadds(
+            fp::fmuls(
+                (fp::fsubs((link1).pos().x(), m.get(0_i32).at(3_i32).get())),
+                (fp::fsubs((link1).pos().x(), m.get(0_i32).at(3_i32).get())),
+            ),
             fp::fmuls(
                 (fp::fsubs((link1).pos().y(), m.get(1_i32).at(3_i32).get())),
                 (fp::fsubs((link1).pos().y(), m.get(1_i32).at(3_i32).get())),

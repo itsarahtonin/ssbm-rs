@@ -408,12 +408,10 @@ pub fn lbShadow_8000F38C<'a>(ctx: &'a Ctx, arg0: i32) {
             lightDir.set_x(fns::lbShadow_804D7B70(ctx).get());
         }
         let _ = fns::lbVector_Diff(ctx, lightPos, lightDir, lightVec);
-        dist = fp::fmadds(
-            lightVec.z(),
-            lightVec.z(),
-            (fp::fmadds(
-                lightVec.x(),
-                lightVec.x(),
+        dist = fp::fadds(
+            (fp::fmuls(lightVec.z(), lightVec.z())),
+            (fp::fadds(
+                (fp::fmuls(lightVec.x(), lightVec.x())),
                 (fp::fmuls(lightVec.y(), lightVec.y())),
             )),
         );
@@ -433,9 +431,8 @@ pub fn lbShadow_8000F38C<'a>(ctx: &'a Ctx, arg0: i32) {
             lightDir.set_z(fns::lbShadow_804D7B70(ctx).get());
             upVec.set_z(fns::lbShadow_804D7B70(ctx).get());
         } else {
-            let mut xz_sq: f64 = fp::fmadds(
-                lightVec.x(),
-                lightVec.x(),
+            let mut xz_sq: f64 = fp::fadds(
+                (fp::fmuls(lightVec.x(), lightVec.x())),
                 (fp::fmuls(lightVec.z(), lightVec.z())),
             );
             if xz_sq > fns::lbShadow_804D7B8C(ctx).get() {

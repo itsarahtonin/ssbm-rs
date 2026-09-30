@@ -55,7 +55,7 @@ pub fn HSD_FObjRemoveAll<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) {
     if Handle::is_null(fobj) {
         return;
     }
-    fns::HSD_FObjRemoveAll(ctx, (fobj).next());
+    inl_HSD_FObjRemoveAll_unfused(ctx, (fobj).next());
     fns::HSD_FObjRemove(ctx, fobj);
 }
 
@@ -497,7 +497,7 @@ pub fn HSD_FObjLoadDesc<'a>(ctx: &'a Ctx, desc: _HSD_FObjDesc<'a>) -> HSD_FObj<'
     let mut desc = desc;
     if !Handle::is_null(desc) {
         let mut fobj: HSD_FObj<'a> = fns::HSD_FObjAlloc(ctx);
-        (fobj).set_next(fns::HSD_FObjLoadDesc(ctx, (desc).next()));
+        (fobj).set_next(inl_HSD_FObjLoadDesc_unfused(ctx, (desc).next()));
         (fobj).set_startframe((fp::fctiwz((desc).startframe()) as i16));
         (fobj).set_obj_type((desc).r#type());
         (fobj).set_frac_value((desc).frac_value());
@@ -542,6 +542,15 @@ pub fn HSD_FObjFree<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) {
 
 fn inl_HSD_FObjGetAllocData_unfused<'a>(ctx: &'a Ctx) -> _HSD_ObjAllocData<'a> {
     return fns::fobj_alloc_data(ctx);
+}
+
+fn inl_HSD_FObjRemoveAll_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) {
+    let mut fobj = fobj;
+    if Handle::is_null(fobj) {
+        return;
+    }
+    fns::HSD_FObjRemoveAll(ctx, (fobj).next());
+    fns::HSD_FObjRemove(ctx, fobj);
 }
 
 fn inl_HSD_FObjSetState_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>, state: u32) -> u32 {
@@ -884,6 +893,23 @@ fn inl_FObjLoadWait_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) -> u32 {
     }
     #[allow(unreachable_code)]
     return 0;
+}
+
+fn inl_HSD_FObjLoadDesc_unfused<'a>(ctx: &'a Ctx, desc: _HSD_FObjDesc<'a>) -> HSD_FObj<'a> {
+    let mut desc = desc;
+    if !Handle::is_null(desc) {
+        let mut fobj: HSD_FObj<'a> = fns::HSD_FObjAlloc(ctx);
+        (fobj).set_next(fns::HSD_FObjLoadDesc(ctx, (desc).next()));
+        (fobj).set_startframe((fp::fctiwz((desc).startframe()) as i16));
+        (fobj).set_obj_type((desc).r#type());
+        (fobj).set_frac_value((desc).frac_value());
+        (fobj).set_frac_slope((desc).frac_slope());
+        (fobj).set_ad_head((desc).ad());
+        (fobj).set_length((desc).length());
+        (fobj).set_flags((0_i32 as u8));
+        return fobj;
+    }
+    return null::<HSD_FObj<'a>>(ctx);
 }
 
 /// Registers this unit's ports.

@@ -286,7 +286,7 @@ pub fn lbMemory_8001529C<'a>(ctx: &'a Ctx, h: Handle_<'a>, cb: FnPtr<'a>, arg: u
         'l1: while !Handle::is_null(block) {
             'c2: {
                 if Handle::addr((block).addr()) != (fns::lbMemory_804318B0(ctx).compact_cursor()) {
-                    statics::melee__lb__lbmemory::lbMemory_80015320(
+                    inl_lbMemory_80015320_unfused(
                         ctx,
                         0_i32,
                         Handle::addr(block),
@@ -361,7 +361,7 @@ pub fn lbMemory_80015320<'a>(ctx: &'a Ctx, arg0: i32, arg1: u32, arg2: Addr<'a>,
         }
         fns::lbMemory_804318B0(ctx)
             .set_compact_cursor(Handle::addr((block).addr()).wrapping_add((block).size()));
-        statics::melee__lb__lbmemory::lbMemory_80015320(
+        inl_lbMemory_80015320_unfused(
             ctx,
             0_i32,
             Handle::addr((block).next()),
@@ -503,6 +503,81 @@ fn inl_start_ram_copy_unfused<'a>(
         )) as i64),
         fnptr(ctx, 0x80015184),
     );
+}
+
+fn inl_lbMemory_80015320_unfused<'a>(
+    ctx: &'a Ctx,
+    arg0: i32,
+    arg1: u32,
+    arg2: Addr<'a>,
+    cancelflag: i32,
+) {
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut cancelflag = cancelflag;
+    let mut block: HSD_AllocEntry<'a> = ptr::<HSD_AllocEntry<'a>>(ctx, arg1 as u32);
+    let mut current: Addr<'a> =
+        ptr::<Addr<'a>>(ctx, (fns::lbMemory_804318B0(ctx).compact_cursor()) as u32);
+    let mut src: Addr<'a> = null(ctx);
+    (if !(cancelflag != 0) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803ba324),
+            (251_i32 as u32),
+            cstr(ctx, 0x803ba324),
+        )
+    });
+    if !Handle::is_null(block) {
+        if Handle::addr((block).addr()) != Handle::addr(current) {
+            src = (block).addr();
+            (block).set_addr(current);
+            fns::lbMemory_804318B0(ctx)
+                .set_compact_cursor(Handle::addr((block).addr()).wrapping_add((block).size()));
+            if Handle::addr((block).addr()) < 0x80000000_u32 {
+                let _ = fns::HSD_DevComRequest(
+                    ctx,
+                    0_i32,
+                    Handle::addr(src),
+                    Handle::addr(current),
+                    ((((block).size())
+                        .wrapping_add((32_i32 as u32))
+                        .wrapping_sub((1_i32 as u32)))
+                        & ((!(32_i32.wrapping_sub(1_i32))) as u32)),
+                    27_i32,
+                    1_i32,
+                    fnptr(ctx, 0x80015320),
+                    Handle::addr((block).next()),
+                );
+            } else {
+                inl_start_ram_copy_unfused(
+                    ctx,
+                    src,
+                    current,
+                    ((((block).size())
+                        .wrapping_add((32_i32 as u32))
+                        .wrapping_sub((1_i32 as u32)))
+                        & ((!(32_i32.wrapping_sub(1_i32))) as u32)),
+                    (block).next(),
+                );
+            }
+            return;
+        }
+        fns::lbMemory_804318B0(ctx)
+            .set_compact_cursor(Handle::addr((block).addr()).wrapping_add((block).size()));
+        statics::melee__lb__lbmemory::lbMemory_80015320(
+            ctx,
+            0_i32,
+            Handle::addr((block).next()),
+            null::<Addr<'a>>(ctx),
+            0_i32,
+        );
+        return;
+    }
+    (fns::lbMemory_804318B0(ctx).compact_cb())
+        .call::<_, ()>(((fns::lbMemory_804318B0(ctx).compact_arg()),));
 }
 
 fn inl_lbMemory_80014E24_unfused<'a>(

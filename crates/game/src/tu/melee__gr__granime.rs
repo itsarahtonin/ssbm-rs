@@ -617,9 +617,7 @@ pub fn grAnime_801C7228<'a>(
             obj = (obj).child();
             'l1: while !Handle::is_null(obj) {
                 'c2: {
-                    statics::melee__gr__granime::grAnime_801C7228(
-                        ctx, obj, flags, func, r#type, param, arg5,
-                    );
+                    inl_grAnime_801C7228_unfused(ctx, obj, flags, func, r#type, param, arg5);
                 }
                 obj = (obj).next();
             }
@@ -1310,14 +1308,14 @@ pub fn grAnime_801C8578<'a>(
     }
     if !Handle::is_null((joint).child()) {
         (counter).set((counter).get().wrapping_sub(1_i32));
-        joint = fns::grAnime_801C8578(ctx, (joint).child(), counter);
+        joint = inl_grAnime_801C8578_unfused(ctx, (joint).child(), counter);
         if (counter).get() == 0_i32 {
             return joint;
         }
     }
     if !Handle::is_null((joint).next()) {
         (counter).set((counter).get().wrapping_sub(1_i32));
-        joint = fns::grAnime_801C8578(ctx, (joint).next(), counter);
+        joint = inl_grAnime_801C8578_unfused(ctx, (joint).next(), counter);
         if (counter).get() == 0_i32 {
             return joint;
         }
@@ -1906,6 +1904,47 @@ fn inl_grAnime_RObjForeachAnim_unfused<'a>(
     }
 }
 
+fn inl_grAnime_801C7228_unfused<'a>(
+    ctx: &'a Ctx,
+    obj: HSD_JObj<'a>,
+    flags: i32,
+    func: Addr<'a>,
+    r#type: u32,
+    param: Addr<'a>,
+    arg5: i32,
+) {
+    let mut obj = obj;
+    let mut flags = flags;
+    let mut func = func;
+    let mut r#type = r#type;
+    let mut param = param;
+    let mut arg5 = arg5;
+    if (inl_grAnime_801C6F50_wrapped_unfused(ctx, obj, flags, func, r#type, param) != 0) {
+        statics::melee__gr__granime::grAnime_801C70E0(
+            ctx,
+            (obj).u().dobj(),
+            flags,
+            func,
+            r#type,
+            param,
+        );
+    }
+    inl_grAnime_RObjForeachAnim_unfused(ctx, (obj).robj(), flags, func, r#type, param);
+    if (arg5 != 0) && (!(((obj).flags() & (0x1000_i32 as u32)) != 0)) {
+        {
+            obj = (obj).child();
+            'l1: while !Handle::is_null(obj) {
+                'c2: {
+                    statics::melee__gr__granime::grAnime_801C7228(
+                        ctx, obj, flags, func, r#type, param, arg5,
+                    );
+                }
+                obj = (obj).next();
+            }
+        }
+    }
+}
+
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
@@ -1961,6 +2000,33 @@ fn inl_grAnime_801C8318_unfused<'a>(
         );
     });
     return sp14.get();
+}
+
+fn inl_grAnime_801C8578_unfused<'a>(
+    ctx: &'a Ctx,
+    joint: HSD_Joint<'a>,
+    counter: Val<'a, i32>,
+) -> HSD_Joint<'a> {
+    let mut joint = joint;
+    let mut counter = counter;
+    if (counter).get() == 0_i32 {
+        return joint;
+    }
+    if !Handle::is_null((joint).child()) {
+        (counter).set((counter).get().wrapping_sub(1_i32));
+        joint = fns::grAnime_801C8578(ctx, (joint).child(), counter);
+        if (counter).get() == 0_i32 {
+            return joint;
+        }
+    }
+    if !Handle::is_null((joint).next()) {
+        (counter).set((counter).get().wrapping_sub(1_i32));
+        joint = fns::grAnime_801C8578(ctx, (joint).next(), counter);
+        if (counter).get() == 0_i32 {
+            return joint;
+        }
+    }
+    return joint;
 }
 
 fn inl_grAnime_801C8578_noinline_unfused<'a>(

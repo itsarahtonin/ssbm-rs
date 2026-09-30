@@ -752,7 +752,7 @@ pub fn HSD_RObjLoadDesc<'a>(ctx: &'a Ctx, robjdesc: HSD_RObjDesc<'a>) -> HSD_ROb
     let mut robj: HSD_RObj<'a> = null(ctx);
     if !Handle::is_null(robjdesc) {
         robj = fns::HSD_RObjAlloc(ctx);
-        (robj).set_next(fns::HSD_RObjLoadDesc(ctx, (robjdesc).next()));
+        (robj).set_next(inl_HSD_RObjLoadDesc_unfused(ctx, (robjdesc).next()));
         (robj).set_flags((robjdesc).flags());
         's1: {
             let __case = match ((robj).flags() & (0x70000000_i32 as u32)) {
@@ -1736,6 +1736,94 @@ fn inl_HSD_RObjResolveRefs_unfused<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>, desc: H
             }
         }
     }
+}
+
+fn inl_HSD_RObjLoadDesc_unfused<'a>(ctx: &'a Ctx, robjdesc: HSD_RObjDesc<'a>) -> HSD_RObj<'a> {
+    let mut robjdesc = robjdesc;
+    let mut robj: HSD_RObj<'a> = null(ctx);
+    if !Handle::is_null(robjdesc) {
+        robj = fns::HSD_RObjAlloc(ctx);
+        (robj).set_next(fns::HSD_RObjLoadDesc(ctx, (robjdesc).next()));
+        (robj).set_flags((robjdesc).flags());
+        's1: {
+            let __case = match ((robj).flags() & (0x70000000_i32 as u32)) {
+                0x10000000_u32 => 0,
+                0x20000000_u32 => 1,
+                0_u32 => 2,
+                0x30000000_u32 => 3,
+                0x40000000_u32 => 4,
+                _ => 5,
+            };
+            if __case <= 0 {
+                break 's1;
+            }
+            if __case <= 1 {
+                {
+                    's2: {
+                        let __case = match ((robj).flags() & (0xfffffff_i32 as u32)) {
+                            1_u32 => 0,
+                            2_u32 => 0,
+                            3_u32 => 0,
+                            4_u32 => 0,
+                            5_u32 => 0,
+                            6_u32 => 0,
+                            _ => 1,
+                        };
+                        if __case <= 0 {
+                            (robj)
+                                .u()
+                                .set_limit(fp::fmuls(0.01745329238474369, (robjdesc).u().limit()));
+                            break 's2;
+                        }
+                        if __case <= 1 {
+                            (robj).u().set_limit((robjdesc).u().limit());
+                            break 's2;
+                        }
+                    }
+                }
+                break 's1;
+            }
+            if __case <= 2 {
+                statics::sysdolphin__baselib__robj::expLoadDesc(
+                    ctx,
+                    (robj).u().exp(),
+                    (robjdesc).u().exp(),
+                );
+                break 's1;
+            }
+            if __case <= 3 {
+                statics::sysdolphin__baselib__robj::bcexpLoadDesc(
+                    ctx,
+                    (robj).u().exp(),
+                    (robjdesc).u().bcexp(),
+                );
+                (robj).set_flags(((robj).flags() & ((!0x70000000_i32) as u32)));
+                break 's1;
+            }
+            if __case <= 4 {
+                (robj)
+                    .u()
+                    .ik_hint()
+                    .set_bone_length(((robjdesc).u().ik_hint()).bone_length());
+                (robj)
+                    .u()
+                    .ik_hint()
+                    .set_rotate_x(((robjdesc).u().ik_hint()).rotate_x());
+                break 's1;
+            }
+            if __case <= 5 {
+                fns::HSD_Panic(
+                    ctx,
+                    cstr(ctx, 0x803b9580),
+                    (0x3c0_i32 as u32),
+                    cstr(ctx, 0x80406ef8),
+                );
+                break 's1;
+            }
+        }
+        return robj;
+    }
+    return null::<HSD_RObj<'a>>(ctx);
 }
 
 fn inl_HSD_RObjRemove_unfused<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>) {

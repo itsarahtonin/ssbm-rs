@@ -38,16 +38,16 @@ pub fn mn_8022EC18<'a>(
     let mut arg2 = arg2;
     let mut temp_f1: f64 = 0.0;
     let mut var_f31: f64 = 0.0;
-    temp_f1 = fns::mn_8022F298(ctx, arg0);
+    temp_f1 = inl_mn_8022F298_unfused(ctx, arg0);
     if (!((arg1).start_frame() <= temp_f1)) || (!(temp_f1 <= (arg1).end_frame())) {
         fns::HSD_JObjReqAnimAll(ctx, arg0, ((arg1).start_frame_ref()).get());
         fns::mn_8022F3D8(ctx, arg0, (255_u32 as u8), arg2);
     }
     if (arg1).loop_frame() == fp::fneg(0.10000000149011612) {
-        var_f31 = fns::mn_8022F298(ctx, arg0);
+        var_f31 = inl_mn_8022F298_unfused(ctx, arg0);
         if var_f31 < (arg1).end_frame() {
             fns::HSD_JObjAnimAll(ctx, arg0);
-            var_f31 = fns::mn_8022F298(ctx, arg0);
+            var_f31 = inl_mn_8022F298_unfused(ctx, arg0);
             if var_f31 > (arg1).end_frame() {
                 var_f31 = (arg1).end_frame();
                 fns::HSD_JObjReqAnimAll(ctx, arg0, var_f31);
@@ -57,7 +57,7 @@ pub fn mn_8022EC18<'a>(
         }
     } else {
         fns::HSD_JObjAnimAll(ctx, arg0);
-        var_f31 = fns::mn_8022F298(ctx, arg0);
+        var_f31 = inl_mn_8022F298_unfused(ctx, arg0);
         if var_f31 >= (arg1).end_frame() {
             var_f31 = fp::fadds(
                 (arg1).loop_frame(),
@@ -77,16 +77,16 @@ pub fn mn_8022ED6C<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, anim_loop: AnimLoopSett
     let mut anim_loop = anim_loop;
     let mut end_frame: f64 = 0.0;
     let mut cur_frame: f64 = 0.0;
-    cur_frame = fns::mn_8022F298(ctx, jobj);
+    cur_frame = inl_mn_8022F298_unfused(ctx, jobj);
     if !(((anim_loop).start_frame() <= cur_frame) && (cur_frame <= (anim_loop).end_frame())) {
         fns::HSD_JObjReqAnimAll(ctx, jobj, ((anim_loop).start_frame_ref()).get());
     }
     if (anim_loop).loop_frame() == fp::fneg(0.10000000149011612) {
-        cur_frame = fns::mn_8022F298(ctx, jobj);
+        cur_frame = inl_mn_8022F298_unfused(ctx, jobj);
         end_frame = (anim_loop).end_frame();
         if cur_frame < end_frame {
             fns::HSD_JObjAnimAll(ctx, jobj);
-            cur_frame = fns::mn_8022F298(ctx, jobj);
+            cur_frame = inl_mn_8022F298_unfused(ctx, jobj);
             end_frame = (anim_loop).end_frame();
             if cur_frame > end_frame {
                 cur_frame = end_frame;
@@ -96,7 +96,7 @@ pub fn mn_8022ED6C<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, anim_loop: AnimLoopSett
         }
     } else {
         fns::HSD_JObjAnimAll(ctx, jobj);
-        cur_frame = fns::mn_8022F298(ctx, jobj);
+        cur_frame = inl_mn_8022F298_unfused(ctx, jobj);
         end_frame = (anim_loop).end_frame();
         if cur_frame >= end_frame {
             cur_frame = fp::fadds((anim_loop).loop_frame(), (fp::fsubs(cur_frame, end_frame)));
@@ -121,16 +121,16 @@ pub fn mn_8022EE84<'a>(
     let mut temp_f0_2: f64 = 0.0;
     let mut temp_f1: f64 = 0.0;
     let mut var_f31: f64 = 0.0;
-    temp_f1 = fns::mn_8022F298(ctx, arg0);
+    temp_f1 = inl_mn_8022F298_unfused(ctx, arg0);
     if (!((arg1).start_frame() <= temp_f1)) || (!(temp_f1 <= (arg1).end_frame())) {
         fns::HSD_JObjReqAnim(ctx, arg0, ((arg1).start_frame_ref()).get());
         fns::mn_8022F3D8(ctx, arg0, (255_i32 as u8), arg2);
     }
     if (arg1).loop_frame() == fp::fneg(0.10000000149011612) {
-        var_f31 = fns::mn_8022F298(ctx, arg0);
+        var_f31 = inl_mn_8022F298_unfused(ctx, arg0);
         if (arg1).end_frame() != var_f31 {
             fns::HSD_JObjAnim(ctx, arg0);
-            var_f31 = fns::mn_8022F298(ctx, arg0);
+            var_f31 = inl_mn_8022F298_unfused(ctx, arg0);
             temp_f0 = (arg1).end_frame();
             if var_f31 > temp_f0 {
                 var_f31 = temp_f0;
@@ -141,7 +141,7 @@ pub fn mn_8022EE84<'a>(
         }
     } else {
         fns::HSD_JObjAnim(ctx, arg0);
-        var_f31 = fns::mn_8022F298(ctx, arg0);
+        var_f31 = inl_mn_8022F298_unfused(ctx, arg0);
         temp_f0_2 = (arg1).end_frame();
         if var_f31 >= temp_f0_2 {
             var_f31 = fp::fadds((arg1).loop_frame(), (fp::fsubs(var_f31, temp_f0_2)));
@@ -160,15 +160,15 @@ pub fn mn_8022EFD8<'a>(ctx: &'a Ctx, arg0: HSD_JObj<'a>, arg1: AnimLoopSettings<
     let mut temp_f0_2: f64 = 0.0;
     let mut temp_f1: f64 = 0.0;
     let mut var_f31: f64 = 0.0;
-    temp_f1 = fns::mn_8022F298(ctx, arg0);
+    temp_f1 = inl_mn_8022F298_unfused(ctx, arg0);
     if (!((arg1).start_frame() <= temp_f1)) || (!(temp_f1 <= (arg1).end_frame())) {
         fns::HSD_JObjReqAnim(ctx, arg0, ((arg1).start_frame_ref()).get());
     }
     if (arg1).loop_frame() == fp::fneg(0.10000000149011612) {
-        var_f31 = fns::mn_8022F298(ctx, arg0);
+        var_f31 = inl_mn_8022F298_unfused(ctx, arg0);
         if (arg1).end_frame() != var_f31 {
             fns::HSD_JObjAnim(ctx, arg0);
-            var_f31 = fns::mn_8022F298(ctx, arg0);
+            var_f31 = inl_mn_8022F298_unfused(ctx, arg0);
             if var_f31 > (arg1).end_frame() {
                 var_f31 = (arg1).end_frame();
                 fns::HSD_JObjReqAnim(ctx, arg0, var_f31);
@@ -177,7 +177,7 @@ pub fn mn_8022EFD8<'a>(ctx: &'a Ctx, arg0: HSD_JObj<'a>, arg1: AnimLoopSettings<
         }
     } else {
         fns::HSD_JObjAnim(ctx, arg0);
-        var_f31 = fns::mn_8022F298(ctx, arg0);
+        var_f31 = inl_mn_8022F298_unfused(ctx, arg0);
         temp_f0_2 = (arg1).end_frame();
         if var_f31 >= temp_f0_2 {
             var_f31 = fp::fadds((arg1).loop_frame(), (fp::fsubs(var_f31, temp_f0_2)));
@@ -301,7 +301,7 @@ pub fn mn_8022F298<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
         jobj = (jobj).child();
         'l1: while !Handle::is_null(jobj) {
             'c2: {
-                let mut frame: f64 = fns::mn_8022F298(ctx, jobj);
+                let mut frame: f64 = inl_mn_8022F298_unfused(ctx, jobj);
                 if frame != fp::fneg(1.0) {
                     return frame;
                 }
@@ -419,6 +419,48 @@ pub fn mn_8022F4CC<'a>(ctx: &'a Ctx) {
     fns::HSD_SisLib_803A5E70(ctx);
     fns::mn_8022EBDC(ctx);
     let _ = fns::mnCharSel_802640A0(ctx);
+}
+
+fn inl_mn_8022F298_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
+    let mut jobj = jobj;
+    let mut aobj: HSD_AObj<'a> = null(ctx);
+    let mut dobj: HSD_DObj<'a> = null(ctx);
+    let mut mobj: HSD_MObj<'a> = null(ctx);
+    let mut tobj: HSD_TObj<'a> = null(ctx);
+    aobj = (jobj).aobj();
+    if !Handle::is_null(aobj) {
+        return (aobj).curr_frame();
+    }
+    dobj = (jobj).u().dobj();
+    if !Handle::is_null(dobj) {
+        mobj = (dobj).mobj();
+        if !Handle::is_null(mobj) {
+            aobj = (mobj).aobj();
+            if !Handle::is_null(aobj) {
+                return (aobj).curr_frame();
+            }
+            tobj = (mobj).tobj();
+            if !Handle::is_null(tobj) {
+                aobj = (tobj).aobj();
+                if !Handle::is_null(aobj) {
+                    return (aobj).curr_frame();
+                }
+            }
+        }
+    }
+    if !(((jobj).flags() & (0x1000_i32 as u32)) != 0) {
+        jobj = (jobj).child();
+        'l1: while !Handle::is_null(jobj) {
+            'c2: {
+                let mut frame: f64 = fns::mn_8022F298(ctx, jobj);
+                if frame != fp::fneg(1.0) {
+                    return frame;
+                }
+                jobj = (jobj).next();
+            }
+        }
+    }
+    return fp::fneg(1.0);
 }
 
 fn inl_mn_8022F0F0_unfused<'a>(ctx: &'a Ctx, arg0: i32) {

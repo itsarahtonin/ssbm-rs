@@ -834,10 +834,8 @@ pub fn grOnett_801E43E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 inl_HSD_JObjAddRotationY(
                     ctx,
                     (car_jobj).child(),
-                    fp::fmuls(
-                        0.01745329238474369,
-                        (statics::melee__gr__gronett::yakumono_param(ctx).get()).x5C(),
-                    ),
+                    0.01745329238474369,
+                    (statics::melee__gr__gronett::yakumono_param(ctx).get()).x5C(),
                 );
                 let _ = fns::grLib_801C9808(ctx, 44_i32, 0_i32, car_jobj2);
                 inl_HSD_JObjAddTranslationX(ctx, car_jobj, (gp).u().onettcar().car_speed());
@@ -1694,9 +1692,8 @@ fn inl_grOnett_WaitCar<'a>(ctx: &'a Ctx, gp: Ground<'a>, saved_car: i8) {
     }
 }
 
-fn inl_HSD_JObjAddRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
+fn inl_HSD_JObjAddRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a: f64, y__c: f64) {
     let mut jobj = jobj;
-    let mut y = y;
     (if !Handle::is_null((jobj)) {
         ({ () })
     } else {
@@ -1707,7 +1704,9 @@ fn inl_HSD_JObjAddRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
             cstr(ctx, 0x803b80c0),
         )
     });
-    (jobj).rotate().set_y(fp::fadds((jobj).rotate().y(), y));
+    (jobj)
+        .rotate()
+        .set_y(fp::fmadds(y__a, y__c, (jobj).rotate().y()));
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         {
             if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {

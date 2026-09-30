@@ -1560,9 +1560,11 @@ pub fn fn_8003F654<'a>(ctx: &'a Ctx, slot: i32, index: i32, pos: Vec<'a>, prevPo
         if b34 == 1_i32 {
             dist = inl_sqrtf(
                 ctx,
-                fp::fmadds(
-                    (fp::fsubs((prevPos).x(), (pos).x())),
-                    (fp::fsubs((prevPos).x(), (pos).x())),
+                fp::fadds(
+                    (fp::fmuls(
+                        (fp::fsubs((prevPos).x(), (pos).x())),
+                        (fp::fsubs((prevPos).x(), (pos).x())),
+                    )),
                     (fp::fmuls(
                         (fp::fsubs((prev_pos2).y(), (pos).y())),
                         (fp::fsubs((prevPos).y(), (pos).y())),

@@ -1906,7 +1906,10 @@ fn inl_lbVector_Len_xy<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
     let mut vec = vec;
     return fns::sqrtf(
         ctx,
-        fp::fmadds((vec).x(), (vec).x(), fp::fmuls((vec).y(), (vec).y())),
+        fp::fadds(
+            fp::fmuls((vec).x(), (vec).x()),
+            fp::fmuls((vec).y(), (vec).y()),
+        ),
     );
 }
 

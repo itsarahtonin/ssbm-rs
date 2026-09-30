@@ -700,9 +700,11 @@ pub fn ftCo_Damage_OnExitHitlag<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut isPointInCircle: i32 = 0;
-    if (fp::fmadds(
-        ((fp).input().lstick().get(0_i32).x()),
-        ((fp).input().lstick().get(0_i32).x()),
+    if (fp::fadds(
+        (fp::fmuls(
+            ((fp).input().lstick().get(0_i32).x()),
+            ((fp).input().lstick().get(0_i32).x()),
+        )),
         (fp::fmuls(
             ((fp).input().lstick().get(0_i32).y()),
             ((fp).input().lstick().get(0_i32).y()),

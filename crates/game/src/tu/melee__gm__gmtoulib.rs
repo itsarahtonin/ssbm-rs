@@ -892,7 +892,7 @@ pub fn fn_8018B090<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                                     ((Handle::add(entries, idx)).slots().get(k).x2C()).hsd_obj(),
                                 );
                                 if ((Handle::add(entries, idx)).x2() as i32) != 0_i32 {
-                                    inl_HSD_JObjSetTranslateY(ctx, jobj_2, fp::fneg((fp::fsubs(fp::frsp((Handle::add(entries, idx)).slots().get(k).x40() as f64), (fp::fmuls(0.10000000149011612, fp::frsp((Handle::add(arr, rem_i32(statics::melee__gm__gmtoulib::lbl_804D6630(ctx).get(), 10_i32))).get() as f64)))))));
+                                    inl_HSD_JObjSetTranslateY(ctx, jobj_2, fp::fneg((fp::fnmsubs(0.10000000149011612, fp::frsp((Handle::add(arr, rem_i32(statics::melee__gm__gmtoulib::lbl_804D6630(ctx).get(), 10_i32))).get() as f64), fp::frsp((Handle::add(entries, idx)).slots().get(k).x40() as f64)))));
                                 } else {
                                     's11: {
                                         let __case = match ((Handle::add(entries, idx)).x4() as i32)
@@ -904,22 +904,22 @@ pub fn fn_8018B090<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                                         };
                                         if __case <= 0 {
                                             if k == 0_i32 {
-                                                inl_HSD_JObjSetTranslateY(ctx, jobj_2, fp::fneg((fp::fadds((fp::fmuls(0.10000000149011612, fp::frsp((Handle::add(arr, rem_i32(statics::melee__gm__gmtoulib::lbl_804D6630(ctx).get(), 10_i32))).get() as f64))), fp::frsp((Handle::add(entries, idx)).slots().get(k).x40() as f64)))));
+                                                inl_HSD_JObjSetTranslateY(ctx, jobj_2, fp::fneg((fp::fmadds(0.10000000149011612, fp::frsp((Handle::add(arr, rem_i32(statics::melee__gm__gmtoulib::lbl_804D6630(ctx).get(), 10_i32))).get() as f64), fp::frsp((Handle::add(entries, idx)).slots().get(k).x40() as f64)))));
                                             } else {
-                                                inl_HSD_JObjSetTranslateY(ctx, jobj_2, fp::fneg((fp::fsubs(fp::frsp((Handle::add(entries, idx)).slots().get(k).x40() as f64), (fp::fmuls(0.10000000149011612, fp::frsp((Handle::add(arr, rem_i32(statics::melee__gm__gmtoulib::lbl_804D6630(ctx).get(), 10_i32))).get() as f64)))))));
+                                                inl_HSD_JObjSetTranslateY(ctx, jobj_2, fp::fneg((fp::fnmsubs(0.10000000149011612, fp::frsp((Handle::add(arr, rem_i32(statics::melee__gm__gmtoulib::lbl_804D6630(ctx).get(), 10_i32))).get() as f64), fp::frsp((Handle::add(entries, idx)).slots().get(k).x40() as f64)))));
                                             }
                                             break 's11;
                                         }
                                         if __case <= 1 {
                                             if k <= 1_i32 {
-                                                inl_HSD_JObjSetTranslateY(ctx, jobj_2, fp::fneg((fp::fadds((fp::fmuls(0.10000000149011612, fp::frsp((Handle::add(arr, rem_i32(statics::melee__gm__gmtoulib::lbl_804D6630(ctx).get(), 10_i32))).get() as f64))), fp::frsp((Handle::add(entries, idx)).slots().get(k).x40() as f64)))));
+                                                inl_HSD_JObjSetTranslateY(ctx, jobj_2, fp::fneg((fp::fmadds(0.10000000149011612, fp::frsp((Handle::add(arr, rem_i32(statics::melee__gm__gmtoulib::lbl_804D6630(ctx).get(), 10_i32))).get() as f64), fp::frsp((Handle::add(entries, idx)).slots().get(k).x40() as f64)))));
                                             } else {
-                                                inl_HSD_JObjSetTranslateY(ctx, jobj_2, fp::fneg((fp::fsubs(fp::frsp((Handle::add(entries, idx)).slots().get(k).x40() as f64), (fp::fmuls(0.10000000149011612, fp::frsp((Handle::add(arr, rem_i32(statics::melee__gm__gmtoulib::lbl_804D6630(ctx).get(), 10_i32))).get() as f64)))))));
+                                                inl_HSD_JObjSetTranslateY(ctx, jobj_2, fp::fneg((fp::fnmsubs(0.10000000149011612, fp::frsp((Handle::add(arr, rem_i32(statics::melee__gm__gmtoulib::lbl_804D6630(ctx).get(), 10_i32))).get() as f64), fp::frsp((Handle::add(entries, idx)).slots().get(k).x40() as f64)))));
                                             }
                                             break 's11;
                                         }
                                         if __case <= 2 {
-                                            inl_HSD_JObjSetTranslateY(ctx, jobj_2, fp::fneg((fp::fadds((fp::fmuls(0.10000000149011612, fp::frsp((Handle::add(arr, rem_i32(statics::melee__gm__gmtoulib::lbl_804D6630(ctx).get(), 10_i32))).get() as f64))), fp::frsp((Handle::add(entries, idx)).slots().get(k).x40() as f64)))));
+                                            inl_HSD_JObjSetTranslateY(ctx, jobj_2, fp::fneg((fp::fmadds(0.10000000149011612, fp::frsp((Handle::add(arr, rem_i32(statics::melee__gm__gmtoulib::lbl_804D6630(ctx).get(), 10_i32))).get() as f64), fp::frsp((Handle::add(entries, idx)).slots().get(k).x40() as f64)))));
                                             break 's11;
                                         }
                                     }

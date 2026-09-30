@@ -76,7 +76,7 @@ pub fn grMaterial_801C8858<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: u32) {
     });
     'l1: while !Handle::is_null(jobj) {
         'c2: {
-            fns::grMaterial_801C8858(ctx, jobj, arg1);
+            inl_grMaterial_801C8858_unfused(ctx, jobj, arg1);
             jobj = (if Handle::is_null(jobj) {
                 null::<HSD_JObj<'a>>(ctx)
             } else {
@@ -136,7 +136,7 @@ pub fn grMaterial_801C8A04<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: u32) {
     });
     'l1: while !Handle::is_null(jobj) {
         'c2: {
-            fns::grMaterial_801C8A04(ctx, jobj, arg1);
+            inl_grMaterial_801C8A04_unfused(ctx, jobj, arg1);
             jobj = (if Handle::is_null(jobj) {
                 null::<HSD_JObj<'a>>(ctx)
             } else {
@@ -216,7 +216,7 @@ pub fn grMaterial_801C8B68<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: i32) {
                             var_r30 = inl_HSD_JObjGetChild_unfused(ctx, jobj);
                             'l3: while !Handle::is_null(var_r30) {
                                 'c4: {
-                                    fns::grMaterial_801C8B68(ctx, var_r30, arg1);
+                                    inl_grMaterial_801C8B68_unfused(ctx, var_r30, arg1);
                                     var_r30 = inl_HSD_JObjGetNext_unfused(ctx, var_r30);
                                 }
                             }
@@ -551,7 +551,7 @@ pub fn grMaterial_801C92C0<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
                 }
                 'l7: while !Handle::is_null(grandchild) {
                     'c8: {
-                        fns::grMaterial_801C92C0(ctx, grandchild);
+                        inl_grMaterial_801C92C0_unfused(ctx, grandchild);
                         if Handle::is_null(grandchild) {
                             grandchild = null::<HSD_JObj<'a>>(ctx);
                         } else {
@@ -637,7 +637,7 @@ pub fn grMaterial_801C94D8<'a>(ctx: &'a Ctx, obj: Addr<'a>) {
         }
         'l3: while !Handle::is_null(var_r30_2) {
             'c4: {
-                fns::grMaterial_801C92C0(ctx, var_r30_2);
+                inl_grMaterial_801C92C0_unfused(ctx, var_r30_2);
                 if Handle::is_null(var_r30_2) {
                     var_r30_2 = null::<HSD_JObj<'a>>(ctx);
                 } else {
@@ -703,6 +703,58 @@ pub fn grMaterial_801C9698<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+fn inl_grMaterial_801C8858_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: u32) {
+    let __frame = ctx.stack_frame(0x28);
+    let unused: ArrV<'a, u32, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut jobj = jobj;
+    let mut arg1 = arg1;
+    if Handle::is_null(jobj) {
+        return;
+    }
+    fns::grMaterial_801C87D0(ctx, jobj, arg1);
+    jobj = (if Handle::is_null(jobj) {
+        null::<HSD_JObj<'a>>(ctx)
+    } else {
+        (jobj).child()
+    });
+    'l1: while !Handle::is_null(jobj) {
+        'c2: {
+            fns::grMaterial_801C8858(ctx, jobj, arg1);
+            jobj = (if Handle::is_null(jobj) {
+                null::<HSD_JObj<'a>>(ctx)
+            } else {
+                (jobj).next()
+            });
+        }
+    }
+}
+
+fn inl_grMaterial_801C8A04_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: u32) {
+    let __frame = ctx.stack_frame(0x28);
+    let unused: ArrV<'a, u32, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut jobj = jobj;
+    let mut arg1 = arg1;
+    if Handle::is_null(jobj) {
+        return;
+    }
+    statics::melee__gr__grmaterial::grMaterial_801C897C(ctx, jobj, arg1);
+    jobj = (if Handle::is_null(jobj) {
+        null::<HSD_JObj<'a>>(ctx)
+    } else {
+        (jobj).child()
+    });
+    'l1: while !Handle::is_null(jobj) {
+        'c2: {
+            fns::grMaterial_801C8A04(ctx, jobj, arg1);
+            jobj = (if Handle::is_null(jobj) {
+                null::<HSD_JObj<'a>>(ctx)
+            } else {
+                (jobj).next()
+            });
+        }
+    }
+}
+
 fn inl_HSD_JObjGetParent_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
     let mut jobj = jobj;
     if Handle::is_null(jobj) {
@@ -734,6 +786,76 @@ fn inl_HSD_JObjGetNext_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj
     }
     #[allow(unreachable_code)]
     return null(ctx);
+}
+
+fn inl_grMaterial_801C8B68_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: i32) {
+    let mut jobj = jobj;
+    let mut arg1 = arg1;
+    let mut var_r30: HSD_JObj<'a> = null(ctx);
+    let mut var_r0: i32 = 0;
+    let mut var_r3: i32 = 0;
+    var_r3 = 0_i32;
+    if !Handle::is_null(jobj) {
+        if arg1 != 0_i32 {
+        } else {
+            if (((jobj).flags() & (0x4000_i32 as u32)) != 0) {
+                var_r0 = 1_i32;
+            } else {
+                var_r0 = 0_i32;
+            }
+            if (var_r0 != 0) {
+                var_r3 = 1_i32;
+            }
+        }
+        if (var_r3 != 0) {
+            fns::HSD_IDInsertToTable(
+                ctx,
+                null::<_HSD_IDTable<'a>>(ctx),
+                Handle::addr(jobj),
+                Handle::cast::<Addr<'a>>(jobj),
+            );
+        }
+        if !(((jobj).flags() & (0x1000_i32 as u32)) != 0) {
+            jobj = inl_HSD_JObjGetChild_unfused(ctx, jobj);
+            'l1: while !Handle::is_null(jobj) {
+                'c2: {
+                    var_r30 = jobj;
+                    var_r3 = 0_i32;
+                    if !Handle::is_null(jobj) {
+                        if arg1 != 0_i32 {
+                        } else {
+                            if (((jobj).flags() & (0x4000_i32 as u32)) != 0) {
+                                var_r0 = 1_i32;
+                            } else {
+                                var_r0 = 0_i32;
+                            }
+                            if (var_r0 != 0) {
+                                var_r3 = 1_i32;
+                            }
+                        }
+                        if (var_r3 != 0) {
+                            fns::HSD_IDInsertToTable(
+                                ctx,
+                                null::<_HSD_IDTable<'a>>(ctx),
+                                Handle::addr(var_r30),
+                                Handle::cast::<Addr<'a>>(var_r30),
+                            );
+                        }
+                        if !(((jobj).flags() & (0x1000_i32 as u32)) != 0) {
+                            var_r30 = inl_HSD_JObjGetChild_unfused(ctx, jobj);
+                            'l3: while !Handle::is_null(var_r30) {
+                                'c4: {
+                                    fns::grMaterial_801C8B68(ctx, var_r30, arg1);
+                                    var_r30 = inl_HSD_JObjGetNext_unfused(ctx, var_r30);
+                                }
+                            }
+                        }
+                    }
+                    jobj = inl_HSD_JObjGetNext_unfused(ctx, jobj);
+                }
+            }
+        }
+    }
 }
 
 fn inl_grMaterial_GetOverlay_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>) -> ColorOverlay<'a> {
@@ -913,6 +1035,123 @@ fn inl_fn_801C8EF8_inline_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>, mobj: HSD_MO
                 .set_alpha_d((enums::GX_CA_ZERO as i32));
         }
         fns::HSD_SetupTevStage(ctx, tevdesc);
+    }
+}
+
+fn inl_grMaterial_801C92C0_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let __frame = ctx.stack_frame(0x28);
+    let unused: ArrV<'a, u32, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut jobj = jobj;
+    let mut dobj: HSD_DObj<'a> = null(ctx);
+    let mut grandchild: HSD_JObj<'a> = null(ctx);
+    let mut mobj: HSD_MObj<'a> = null(ctx);
+    let mut cond: i32 = 0;
+    if Handle::is_null(jobj) {
+        return;
+    }
+    if (((jobj).flags() & (0x4020_i32 as u32)) != 0) {
+        cond = 0_i32;
+    } else {
+        cond = 1_i32;
+    }
+    if cond != 0_i32 {
+        dobj = fns::HSD_JObjGetDObj(ctx, jobj);
+        'l1: while !Handle::is_null(dobj) {
+            'c2: {
+                if !Handle::is_null(
+                    ({
+                        let __t1 = (if !Handle::is_null(dobj) {
+                            (dobj).mobj()
+                        } else {
+                            null::<HSD_MObj<'a>>(ctx)
+                        });
+                        mobj = __t1;
+                        __t1
+                    }),
+                ) {
+                    let _ = fns::hsdChangeClass(
+                        ctx,
+                        Handle::cast::<Addr<'a>>(mobj),
+                        Handle::cast::<Addr<'a>>(
+                            statics::melee__gr__grmaterial::grMaterial_803E0A20(ctx),
+                        ),
+                    );
+                }
+                dobj = (if !Handle::is_null(dobj) {
+                    (dobj).next()
+                } else {
+                    null::<HSD_DObj<'a>>(ctx)
+                });
+            }
+        }
+    }
+    jobj = (if Handle::is_null(jobj) {
+        null::<HSD_JObj<'a>>(ctx)
+    } else {
+        (jobj).child()
+    });
+    'l3: while !Handle::is_null(jobj) {
+        'c4: {
+            grandchild = jobj;
+            if !Handle::is_null(jobj) {
+                if (((jobj).flags() & (0x4020_i32 as u32)) != 0) {
+                    cond = 0_i32;
+                } else {
+                    cond = 1_i32;
+                }
+                if cond != 0_i32 {
+                    dobj = fns::HSD_JObjGetDObj(ctx, grandchild);
+                    'l5: while !Handle::is_null(dobj) {
+                        'c6: {
+                            if !Handle::is_null(
+                                ({
+                                    let __t2 = (if !Handle::is_null(dobj) {
+                                        (dobj).mobj()
+                                    } else {
+                                        null::<HSD_MObj<'a>>(ctx)
+                                    });
+                                    mobj = __t2;
+                                    __t2
+                                }),
+                            ) {
+                                let _ = fns::hsdChangeClass(
+                                    ctx,
+                                    Handle::cast::<Addr<'a>>(mobj),
+                                    Handle::cast::<Addr<'a>>(
+                                        statics::melee__gr__grmaterial::grMaterial_803E0A20(ctx),
+                                    ),
+                                );
+                            }
+                            dobj = (if !Handle::is_null(dobj) {
+                                (dobj).next()
+                            } else {
+                                null::<HSD_DObj<'a>>(ctx)
+                            });
+                        }
+                    }
+                }
+                if Handle::is_null(jobj) {
+                    grandchild = null::<HSD_JObj<'a>>(ctx);
+                } else {
+                    grandchild = (jobj).child();
+                }
+                'l7: while !Handle::is_null(grandchild) {
+                    'c8: {
+                        fns::grMaterial_801C92C0(ctx, grandchild);
+                        if Handle::is_null(grandchild) {
+                            grandchild = null::<HSD_JObj<'a>>(ctx);
+                        } else {
+                            grandchild = (grandchild).next();
+                        }
+                    }
+                }
+            }
+            jobj = (if Handle::is_null(jobj) {
+                null::<HSD_JObj<'a>>(ctx)
+            } else {
+                (jobj).next()
+            });
+        }
     }
 }
 

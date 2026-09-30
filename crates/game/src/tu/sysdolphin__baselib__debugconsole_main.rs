@@ -2756,7 +2756,7 @@ pub fn hsd_80397520<'a>(ctx: &'a Ctx, node_ptr: Addr<'a>) {
         )) && (!Handle::is_null(child2))
         {
             if !Handle::is_null((child2).child()) {
-                fns::hsd_80397520(ctx, Handle::cast::<Addr<'a>>((child2).child()));
+                inl_hsd_80397520_unfused(ctx, Handle::cast::<Addr<'a>>((child2).child()));
             }
             if !Handle::is_null((child2).callback()) {
                 (child2).callback().call::<_, ()>((child2,));
@@ -3600,7 +3600,7 @@ pub fn fn_80397814<'a>(ctx: &'a Ctx, arg: Addr<'a>) -> Addr<'a> {
                 unreachable!();
             }
             164 => {
-                fns::hsd_80397520(
+                inl_hsd_80397520_unfused(
                     ctx,
                     Handle::cast::<Addr<'a>>(inl_ps_node_child_unfused(ctx, node)),
                 );
@@ -3833,7 +3833,7 @@ pub fn fn_80397814<'a>(ctx: &'a Ctx, arg: Addr<'a>) -> Addr<'a> {
                 unreachable!();
             }
             206 => {
-                fns::hsd_80397520(
+                inl_hsd_80397520_unfused(
                     ctx,
                     Handle::cast::<Addr<'a>>(inl_ps_node_child_unfused(ctx, node)),
                 );
@@ -4171,6 +4171,46 @@ fn inl_hsd_80396884_draw_char_unfused<'a>(ctx: &'a Ctx, ch: i8, b6: i32) {
 
 fn inl_hsd_80396E40_get_x50_unfused<'a>(ctx: &'a Ctx) -> Addr<'a> {
     return statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x50();
+}
+
+fn inl_hsd_80397520_unfused<'a>(ctx: &'a Ctx, node_ptr: Addr<'a>) {
+    let mut node_ptr = node_ptr;
+    let mut child1: PSNode<'a> = null(ctx);
+    let mut child2: PSNode<'a> = null(ctx);
+    let mut node: PSNode<'a> = Handle::cast::<PSNode<'a>>(node_ptr);
+    if Handle::is_null(node) {
+        return;
+    }
+    if (!Handle::is_null(
+        ({
+            let __t1 = (node).child();
+            child1 = __t1;
+            __t1
+        }),
+    )) && (!Handle::is_null(child1))
+    {
+        if (!Handle::is_null(
+            ({
+                let __t2 = (child1).child();
+                child2 = __t2;
+                __t2
+            }),
+        )) && (!Handle::is_null(child2))
+        {
+            if !Handle::is_null((child2).child()) {
+                fns::hsd_80397520(ctx, Handle::cast::<Addr<'a>>((child2).child()));
+            }
+            if !Handle::is_null((child2).callback()) {
+                (child2).callback().call::<_, ()>((child2,));
+            }
+        }
+        if !Handle::is_null((child1).callback()) {
+            (child1).callback().call::<_, ()>((child1,));
+        }
+    }
+    if !Handle::is_null((node).callback()) {
+        (node).callback().call::<_, ()>((node,));
+    }
 }
 
 fn inl_ps_set_initial_node_unfused<'a>(ctx: &'a Ctx, node: _ExcptNode<'a>) {

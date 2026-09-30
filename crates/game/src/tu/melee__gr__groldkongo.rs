@@ -591,12 +591,10 @@ pub fn stageGObj2_GObjProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             inl_HSD_JObjSetTranslateY(
                 ctx,
                 jobj,
-                fp::fadds(
-                    (fp::fmuls(
-                        (statics::melee__gr__groldkongo::yakumono_param(ctx).get())
-                            .rrange_bird_random_offset_y(),
-                        (fp::fmsubs(2.0, ({ fns::HSD_Randf(ctx) }), 1.0)),
-                    )),
+                fp::fmadds(
+                    (statics::melee__gr__groldkongo::yakumono_param(ctx).get())
+                        .rrange_bird_random_offset_y(),
+                    (fp::fmsubs(2.0, ({ fns::HSD_Randf(ctx) }), 1.0)),
                     70.0,
                 ),
             );
@@ -680,16 +678,20 @@ pub fn grOldKongo_80210454<'a>(ctx: &'a Ctx, ground_gobj: HSD_GObj<'a>, keep: HS
         }
         let _ = fns::Ground_801C4DA0(ctx, pos_gnd, unk_);
         fns::ftLib_GetPos(ctx, keep, pos_ft);
-        if !(fp::fmadds(
-            (fp::fsubs(pos_gnd.z(), pos_ft.z())),
-            (fp::fsubs(pos_gnd.z(), pos_ft.z())),
-            fp::fmadds(
-                (fp::fsubs(pos_gnd.x(), pos_ft.x())),
-                (fp::fsubs(pos_gnd.x(), pos_ft.x())),
+        if !(fp::fadds(
+            fp::fadds(
+                fp::fmuls(
+                    (fp::fsubs(pos_gnd.x(), pos_ft.x())),
+                    (fp::fsubs(pos_gnd.x(), pos_ft.x())),
+                ),
                 fp::fmuls(
                     (fp::fsubs(pos_gnd.y(), pos_ft.y())),
                     (fp::fsubs(pos_gnd.y(), pos_ft.y())),
                 ),
+            ),
+            fp::fmuls(
+                (fp::fsubs(pos_gnd.z(), pos_ft.z())),
+                (fp::fsubs(pos_gnd.z(), pos_ft.z())),
             ),
         ) < fp::fmuls(
             (statics::melee__gr__groldkongo::yakumono_param(ctx).get()).rframe_barrel_in(),

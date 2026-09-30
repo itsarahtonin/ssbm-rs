@@ -58,7 +58,7 @@ pub fn lb_80011B74<'a>(ctx: &'a Ctx, dobj: HSD_DObj<'a>, flags: u32) {
     let mut dobj = dobj;
     let mut flags = flags;
     if !Handle::is_null((dobj).next()) {
-        fns::lb_80011B74(ctx, (dobj).next(), flags);
+        inl_lb_80011B74_unfused(ctx, (dobj).next(), flags);
     }
     ((dobj).mobj()).set_rendermode((((dobj).mobj()).rendermode() | flags));
 }
@@ -68,10 +68,10 @@ pub fn lb_80011C18<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, flags: u32) {
     let mut jobj = jobj;
     let mut flags = flags;
     if !Handle::is_null((jobj).child()) {
-        fns::lb_80011C18(ctx, (jobj).child(), flags);
+        inl_lb_80011C18_unfused(ctx, (jobj).child(), flags);
     }
     if !Handle::is_null((jobj).next()) {
-        fns::lb_80011C18(ctx, (jobj).next(), flags);
+        inl_lb_80011C18_unfused(ctx, (jobj).next(), flags);
     }
     if (inl_checkJObjFlags_unfused(ctx, jobj) != 0) {
         if !Handle::is_null((jobj).u().dobj()) {
@@ -1193,6 +1193,15 @@ fn inl_HSD_LObjSetNext_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, next: HSD_L
     (lobj).set_next(next);
 }
 
+fn inl_lb_80011B74_unfused<'a>(ctx: &'a Ctx, dobj: HSD_DObj<'a>, flags: u32) {
+    let mut dobj = dobj;
+    let mut flags = flags;
+    if !Handle::is_null((dobj).next()) {
+        fns::lb_80011B74(ctx, (dobj).next(), flags);
+    }
+    ((dobj).mobj()).set_rendermode((((dobj).mobj()).rendermode() | flags));
+}
+
 fn inl_checkJObjFlags_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     let mut jobj = jobj;
     return (if (((jobj).flags()
@@ -1203,6 +1212,22 @@ fn inl_checkJObjFlags_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         1_i32
     });
+}
+
+fn inl_lb_80011C18_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, flags: u32) {
+    let mut jobj = jobj;
+    let mut flags = flags;
+    if !Handle::is_null((jobj).child()) {
+        fns::lb_80011C18(ctx, (jobj).child(), flags);
+    }
+    if !Handle::is_null((jobj).next()) {
+        fns::lb_80011C18(ctx, (jobj).next(), flags);
+    }
+    if (inl_checkJObjFlags_unfused(ctx, jobj) != 0) {
+        if !Handle::is_null((jobj).u().dobj()) {
+            fns::lb_80011B74(ctx, (jobj).u().dobj(), flags);
+        }
+    }
 }
 
 fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {

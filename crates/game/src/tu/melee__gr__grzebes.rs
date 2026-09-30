@@ -1004,9 +1004,11 @@ pub fn grZebes_801D99E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     } else {
                         (fp::fsubs((gp).u().zebes5().xD4(), (gp).u().zebes5().xD8()))
                     });
-                    discriminant = fp::fmsubs(
-                        (statics::melee__gr__grzebes::yakumono_param(ctx).get()).x98(),
-                        (statics::melee__gr__grzebes::yakumono_param(ctx).get()).x98(),
+                    discriminant = fp::fsubs(
+                        (fp::fmuls(
+                            (statics::melee__gr__grzebes::yakumono_param(ctx).get()).x98(),
+                            (statics::melee__gr__grzebes::yakumono_param(ctx).get()).x98(),
+                        )),
                         fp::fdivs(
                             (fp::fmuls(4.0, diff)),
                             (statics::melee__gr__grzebes::yakumono_param(ctx).get()).x9C(),
@@ -2698,19 +2700,21 @@ pub fn grZebes_801DBB60<'a>(ctx: &'a Ctx, yaku: HSD_GObj<'a>) -> i32 {
                                         && (j != 0_i32))
                                         && (j != 6_i32)
                                     {
-                                        dist_sq = fp::fmadds(
-                                            (fp::fsubs(
-                                                ei_x,
-                                                statics::melee__gr__grzebes::grZe_8049F170(ctx)
-                                                    .get(j)
-                                                    .x08_x(),
-                                            )),
-                                            (fp::fsubs(
-                                                ei_x,
-                                                statics::melee__gr__grzebes::grZe_8049F170(ctx)
-                                                    .get(j)
-                                                    .x08_x(),
-                                            )),
+                                        dist_sq = fp::fadds(
+                                            fp::fmuls(
+                                                (fp::fsubs(
+                                                    ei_x,
+                                                    statics::melee__gr__grzebes::grZe_8049F170(ctx)
+                                                        .get(j)
+                                                        .x08_x(),
+                                                )),
+                                                (fp::fsubs(
+                                                    ei_x,
+                                                    statics::melee__gr__grzebes::grZe_8049F170(ctx)
+                                                        .get(j)
+                                                        .x08_x(),
+                                                )),
+                                            ),
                                             fp::fmuls(
                                                 (fp::fsubs(
                                                     ei_y,

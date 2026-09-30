@@ -1927,7 +1927,7 @@ pub fn Camera_8002BA00<'a>(ctx: &'a Ctx, slot: i32, arg1: i32) -> i32 {
     if !Handle::is_null(fns::Player_GetEntity(ctx, slot)) {
         return slot;
     }
-    return fns::Camera_8002BA00(ctx, slot, arg1);
+    return inl_Camera_8002BA00_unfused(ctx, slot, arg1);
 }
 
 pub fn Camera_8002BAA8<'a>(ctx: &'a Ctx, zoom_amt: f64) {
@@ -2269,7 +2269,7 @@ pub fn Camera_8002C1A8<'a>(ctx: &'a Ctx) {
     if dir != 0_i32 {
         scale = inl_getPauseScale(ctx);
         statics::melee__cm__camera::game_camera(ctx).set_x304(
-            (fns::Camera_8002BA00(
+            (inl_Camera_8002BA00(
                 ctx,
                 (statics::melee__cm__camera::game_camera(ctx).x304() as i32),
                 dir,
@@ -2518,7 +2518,7 @@ pub fn Camera_8002C908<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
     slot_ptr = statics::melee__cm__camera::game_camera(ctx).x304_ref();
     'l1: while !(inl_get_subject_pos(ctx, subject_pos, slot_ptr) != 0) {
         'c2: {
-            (slot_ptr).set((fns::Camera_8002BA00(ctx, ((slot_ptr).get() as i32), 1_i32) as i8));
+            (slot_ptr).set((inl_Camera_8002BA00(ctx, ((slot_ptr).get() as i32), 1_i32) as i8));
         }
     }
     fns::Camera_8002C5B4(ctx, statics::melee__cm__camera::game_camera(ctx).x2D0());
@@ -2648,7 +2648,7 @@ pub fn Camera_8002CB0C<'a>(ctx: &'a Ctx, bounds: CameraBounds<'a>) {
     }
     if dir != 0_i32 {
         slot = (camera).x2C4_ref();
-        (slot).set((fns::Camera_8002BA00(ctx, ((slot).get() as i32), dir) as i8));
+        (slot).set((inl_Camera_8002BA00_unfused(ctx, ((slot).get() as i32), dir) as i8));
         x308_ptr = (camera).x308();
         'l1: while (((((slot).get() as i32) == 10_i32)
             || (!(inl_get_subject_pos_unfused(ctx, x308_ptr, slot) != 0)))
@@ -2662,7 +2662,7 @@ pub fn Camera_8002CB0C<'a>(ctx: &'a Ctx, bounds: CameraBounds<'a>) {
             || (fns::ftLib_IsSleeping(ctx, entity) != 0)
         {
             'c2: {
-                (slot).set((fns::Camera_8002BA00(ctx, ((slot).get() as i32), dir) as i8));
+                (slot).set((inl_Camera_8002BA00_unfused(ctx, ((slot).get() as i32), dir) as i8));
             }
         }
         selected_slot = ((slot).get() as i32);
@@ -2736,7 +2736,7 @@ pub fn Camera_8002CDDC<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
             || (fns::ftLib_IsSleeping(ctx, gobj) != 0)
         {
             'c2: {
-                (slot_ptr).set((fns::Camera_8002BA00(ctx, ((slot_ptr).get() as i32), 1_i32) as i8));
+                (slot_ptr).set((inl_Camera_8002BA00(ctx, ((slot_ptr).get() as i32), 1_i32) as i8));
             }
         }
     }
@@ -5293,7 +5293,7 @@ pub fn Camera_8002F9E4<'a>(ctx: &'a Ctx, arg0: i8, arg1: i8) {
     let mut scale: f64 = 0.0;
     statics::melee__cm__camera::game_camera(ctx).set_mode((enums::CAMERA_FREE as i32));
     statics::melee__cm__camera::game_camera(ctx)
-        .set_x304((fns::Camera_8002BA00(ctx, (arg0 as i32).wrapping_sub(1_i32), 1_i32) as i8));
+        .set_x304((inl_Camera_8002BA00(ctx, (arg0 as i32).wrapping_sub(1_i32), 1_i32) as i8));
     statics::melee__cm__camera::game_camera(ctx).set_x305(arg1);
     statics::melee__cm__camera::game_camera(ctx).set_x32C(fns::cm_803BCCA0(ctx).x40());
     statics::melee__cm__camera::game_camera(ctx)
@@ -5465,7 +5465,7 @@ pub fn Camera_8002FC7C<'a>(ctx: &'a Ctx, arg0: i8, arg1: i8) {
     let mut x304_check: i8 = 0;
     statics::melee__cm__camera::game_camera(ctx).set_mode((enums::CAMERA_FREE as i32));
     statics::melee__cm__camera::game_camera(ctx)
-        .set_x304((fns::Camera_8002BA00(ctx, (arg0 as i32).wrapping_sub(1_i32), 1_i32) as i8));
+        .set_x304((inl_Camera_8002BA00(ctx, (arg0 as i32).wrapping_sub(1_i32), 1_i32) as i8));
     statics::melee__cm__camera::game_camera(ctx).set_x305(arg1);
     statics::melee__cm__camera::game_camera(ctx).set_x32C(fns::cm_803BCCA0(ctx).x40());
     statics::melee__cm__camera::game_camera(ctx)
@@ -6807,6 +6807,32 @@ fn inl_get_substick_y_unfused<'a>(ctx: &'a Ctx, arg0: HSD_PadStatus<'a>) -> f64 
     return (arg0).nml_subStickY();
 }
 
+fn inl_Camera_8002BA00_unfused<'a>(ctx: &'a Ctx, slot: i32, arg1: i32) -> i32 {
+    let mut slot = slot;
+    let mut arg1 = arg1;
+    if slot == 10_i32 {
+        if arg1 > 0_i32 {
+            slot = 0_i32;
+        } else if arg1 < 0_i32 {
+            slot = 5_i32;
+        }
+    } else {
+        slot = slot.wrapping_add(arg1);
+        if slot < 0_i32 {
+            slot = 10_i32;
+        } else if slot > 5_i32 {
+            slot = 10_i32;
+        }
+    }
+    if slot == 10_i32 {
+        return 10_i32;
+    }
+    if !Handle::is_null(fns::Player_GetEntity(ctx, slot)) {
+        return slot;
+    }
+    return fns::Camera_8002BA00(ctx, slot, arg1);
+}
+
 fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     let mut x = x;
     let mut y: f64 = 0.0;
@@ -6877,14 +6903,42 @@ fn inl_getPauseScale<'a>(ctx: &'a Ctx) -> f64 {
     );
 }
 
+fn inl_Camera_8002BA00<'a>(ctx: &'a Ctx, slot: i32, arg1: i32) -> i32 {
+    let mut slot = slot;
+    let mut arg1 = arg1;
+    if slot == 10_i32 {
+        if arg1 > 0_i32 {
+            slot = 0_i32;
+        } else if arg1 < 0_i32 {
+            slot = 5_i32;
+        }
+    } else {
+        slot = slot.wrapping_add(arg1);
+        if slot < 0_i32 {
+            slot = 10_i32;
+        } else if slot > 5_i32 {
+            slot = 10_i32;
+        }
+    }
+    if slot == 10_i32 {
+        return 10_i32;
+    }
+    if !Handle::is_null(fns::Player_GetEntity(ctx, slot)) {
+        return slot;
+    }
+    return fns::Camera_8002BA00(ctx, slot, arg1);
+}
+
 fn inl_lbVector_Len<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
     let mut vec = vec;
     return fns::sqrtf(
         ctx,
-        fp::fmadds(
-            (vec).z(),
-            (vec).z(),
-            fp::fmadds((vec).x(), (vec).x(), fp::fmuls((vec).y(), (vec).y())),
+        fp::fadds(
+            fp::fadds(
+                fp::fmuls((vec).x(), (vec).x()),
+                fp::fmuls((vec).y(), (vec).y()),
+            ),
+            fp::fmuls((vec).z(), (vec).z()),
         ),
     );
 }

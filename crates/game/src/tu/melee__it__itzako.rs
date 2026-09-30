@@ -1139,10 +1139,9 @@ fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64
 fn inl_product_xyz<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>) -> f64 {
     let mut a = a;
     let mut b = b;
-    return (fp::fmadds(
-        (a).z(),
-        (b).z(),
-        fp::fmadds((a).x(), (b).x(), fp::fmuls((a).y(), (b).y())),
+    return (fp::fadds(
+        fp::fadds(fp::fmuls((a).x(), (b).x()), fp::fmuls((a).y(), (b).y())),
+        fp::fmuls((a).z(), (b).z()),
     ));
 }
 

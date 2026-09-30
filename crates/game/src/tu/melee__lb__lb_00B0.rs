@@ -246,8 +246,8 @@ pub fn lb_8000B804<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, joint: HSD_Joint<'a>) {
     Handle::copy_from((jobj).translate(), (joint).position());
     fns::HSD_JObjClearFlags(ctx, jobj, ((shl_i32(1_i32, (17_i32 as u32))) as u32));
     fns::HSD_JObjSetFlags(ctx, jobj, ((shl_i32(1_i32, (6_i32 as u32))) as u32));
-    fns::lb_8000B804(ctx, (jobj).next(), (joint).next());
-    fns::lb_8000B804(ctx, (jobj).child(), (joint).child());
+    inl_lb_8000B804_unfused(ctx, (jobj).next(), (joint).next());
+    inl_lb_8000B804_unfused(ctx, (jobj).child(), (joint).child());
 }
 
 pub fn lb_8000B9D8<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: Ptr<'a, Val<'a, F32>>, arg2: i32) {
@@ -369,11 +369,11 @@ pub fn lbFindJObjWithAObj<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> 
     if !Handle::is_null((jobj).aobj()) {
         return jobj;
     }
-    tmp = statics::melee__lb__lb_00B0::lbFindJObjWithAObj(ctx, (jobj).child());
+    tmp = inl_lbFindJObjWithAObj_unfused(ctx, (jobj).child());
     if !Handle::is_null(tmp) {
         return tmp;
     }
-    tmp = statics::melee__lb__lb_00B0::lbFindJObjWithAObj(ctx, (jobj).next());
+    tmp = inl_lbFindJObjWithAObj_unfused(ctx, (jobj).next());
     if !Handle::is_null(tmp) {
         return tmp;
     }
@@ -383,7 +383,7 @@ pub fn lbFindJObjWithAObj<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> 
 pub fn lbGetJObjFramerate<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     let __frame = ctx.stack_frame(0x18);
     let mut jobj = jobj;
-    jobj = statics::melee__lb__lb_00B0::lbFindJObjWithAObj(ctx, jobj);
+    jobj = inl_lbFindJObjWithAObj_unfused(ctx, jobj);
     if !Handle::is_null(jobj) {
         return ((jobj).aobj()).framerate();
     }
@@ -393,7 +393,7 @@ pub fn lbGetJObjFramerate<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
 pub fn lbGetJObjCurrFrame<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     let __frame = ctx.stack_frame(0x18);
     let mut jobj = jobj;
-    jobj = statics::melee__lb__lb_00B0::lbFindJObjWithAObj(ctx, jobj);
+    jobj = inl_lbFindJObjWithAObj_unfused(ctx, jobj);
     if !Handle::is_null(jobj) {
         return ((jobj).aobj()).curr_frame();
     }
@@ -403,7 +403,7 @@ pub fn lbGetJObjCurrFrame<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
 pub fn lbGetJObjEndFrame<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     let __frame = ctx.stack_frame(0x18);
     let mut jobj = jobj;
-    jobj = statics::melee__lb__lb_00B0::lbFindJObjWithAObj(ctx, jobj);
+    jobj = inl_lbFindJObjWithAObj_unfused(ctx, jobj);
     if !Handle::is_null(jobj) {
         return ((jobj).aobj()).end_frame();
     }
@@ -420,11 +420,11 @@ pub fn lb_8000BECC<'a>(ctx: &'a Ctx, animjoint: HSD_AnimJoint<'a>) -> HSD_AnimJo
     if !Handle::is_null((animjoint).aobjdesc()) {
         return animjoint;
     }
-    tmp = statics::melee__lb__lb_00B0::lb_8000BECC(ctx, (animjoint).child());
+    tmp = inl_lb_8000BECC_unfused(ctx, (animjoint).child());
     if !Handle::is_null(tmp) {
         return tmp;
     }
-    tmp = statics::melee__lb__lb_00B0::lb_8000BECC(ctx, (animjoint).next());
+    tmp = inl_lb_8000BECC_unfused(ctx, (animjoint).next());
     if !Handle::is_null(tmp) {
         return tmp;
     }
@@ -434,7 +434,7 @@ pub fn lb_8000BECC<'a>(ctx: &'a Ctx, animjoint: HSD_AnimJoint<'a>) -> HSD_AnimJo
 pub fn lb_8000BFF0<'a>(ctx: &'a Ctx, animjoint: HSD_AnimJoint<'a>) -> f64 {
     let __frame = ctx.stack_frame(0x18);
     let mut animjoint = animjoint;
-    animjoint = statics::melee__lb__lb_00B0::lb_8000BECC(ctx, animjoint);
+    animjoint = inl_lb_8000BECC_unfused(ctx, animjoint);
     if !Handle::is_null(animjoint) {
         return ((animjoint).aobjdesc()).end_frame();
     }
@@ -1240,6 +1240,63 @@ fn inl_HSD_JObjGetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
         )
     });
     Handle::copy_from((scale), (jobj).scale());
+}
+
+fn inl_lb_8000B804_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, joint: HSD_Joint<'a>) {
+    let mut jobj = jobj;
+    let mut joint = joint;
+    if (Handle::is_null(jobj)) || (Handle::is_null(joint)) {
+        return;
+    }
+    (jobj).rotate().set_x((joint).rotation().x());
+    (jobj).rotate().set_y((joint).rotation().y());
+    (jobj).rotate().set_z((joint).rotation().z());
+    Handle::copy_from((jobj).scale(), (joint).scale());
+    Handle::copy_from((jobj).translate(), (joint).position());
+    fns::HSD_JObjClearFlags(ctx, jobj, ((shl_i32(1_i32, (17_i32 as u32))) as u32));
+    fns::HSD_JObjSetFlags(ctx, jobj, ((shl_i32(1_i32, (6_i32 as u32))) as u32));
+    fns::lb_8000B804(ctx, (jobj).next(), (joint).next());
+    fns::lb_8000B804(ctx, (jobj).child(), (joint).child());
+}
+
+fn inl_lbFindJObjWithAObj_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
+    let mut jobj = jobj;
+    let mut tmp: HSD_JObj<'a> = null(ctx);
+    if Handle::is_null(jobj) {
+        return null::<HSD_JObj<'a>>(ctx);
+    }
+    if !Handle::is_null((jobj).aobj()) {
+        return jobj;
+    }
+    tmp = statics::melee__lb__lb_00B0::lbFindJObjWithAObj(ctx, (jobj).child());
+    if !Handle::is_null(tmp) {
+        return tmp;
+    }
+    tmp = statics::melee__lb__lb_00B0::lbFindJObjWithAObj(ctx, (jobj).next());
+    if !Handle::is_null(tmp) {
+        return tmp;
+    }
+    return null::<HSD_JObj<'a>>(ctx);
+}
+
+fn inl_lb_8000BECC_unfused<'a>(ctx: &'a Ctx, animjoint: HSD_AnimJoint<'a>) -> HSD_AnimJoint<'a> {
+    let mut animjoint = animjoint;
+    let mut tmp: HSD_AnimJoint<'a> = null(ctx);
+    if Handle::is_null(animjoint) {
+        return null::<HSD_AnimJoint<'a>>(ctx);
+    }
+    if !Handle::is_null((animjoint).aobjdesc()) {
+        return animjoint;
+    }
+    tmp = statics::melee__lb__lb_00B0::lb_8000BECC(ctx, (animjoint).child());
+    if !Handle::is_null(tmp) {
+        return tmp;
+    }
+    tmp = statics::melee__lb__lb_00B0::lb_8000BECC(ctx, (animjoint).next());
+    if !Handle::is_null(tmp) {
+        return tmp;
+    }
+    return null::<HSD_AnimJoint<'a>>(ctx);
 }
 
 fn inl_lb_8000C07C_unfused<'a>(

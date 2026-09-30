@@ -1212,24 +1212,22 @@ pub fn grVenom_80204F20<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             inl_HSD_JObjSetScaleZ_unfused(
                 ctx,
                 jobj,
-                fp::fmuls(
-                    scale,
-                    (Handle::cast::<Val<'a, F32>>(
-                        (Handle::add(
-                            Handle::cast::<Val<'a, u8>>(
-                                statics::melee__gr__grvenom::yakumono_param(ctx).get(),
-                            ),
-                            52_i32,
-                        )),
-                    ))
-                    .get(),
-                ),
+                scale,
+                (Handle::cast::<Val<'a, F32>>(
+                    (Handle::add(
+                        Handle::cast::<Val<'a, u8>>(
+                            statics::melee__gr__grvenom::yakumono_param(ctx).get(),
+                        ),
+                        52_i32,
+                    )),
+                ))
+                .get(),
             );
             break 'goto_done_scale;
         }
         inl_HSD_JObjSetScaleX_unfused(ctx, jobj, scale);
         inl_HSD_JObjSetScaleY_unfused(ctx, jobj, scale);
-        inl_HSD_JObjSetScaleZ_unfused(ctx, jobj, scale);
+        inl_HSD_JObjSetScaleZ_unfused_2(ctx, jobj, scale);
     }
     (gp).u().venom().set_xD4(1_i32);
     (gp).u().venom().set_xD8(0_i32);
@@ -1496,7 +1494,7 @@ pub fn grVenom_80205758<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     scale,
                     (statics::melee__gr__grvenom::yakumono_param(ctx).get()).x34(),
                 );
-                inl_HSD_JObjSetScaleZ_unfused(ctx, jobj, s_3);
+                inl_HSD_JObjSetScaleZ_unfused_2(ctx, jobj, s_3);
             }
         }
         let _ = fns::Ground_UpdateMapColl(ctx, gobj);
@@ -1583,29 +1581,23 @@ pub fn grVenom_80205AD4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 's1;
         }
     }
-    inl_HSD_JObjSetScaleX_unfused(
+    inl_HSD_JObjSetScaleX_unfused_2(
         ctx,
         jobj,
-        fp::fmuls(
-            scale,
-            (statics::melee__gr__grvenom::yakumono_param(ctx).get()).x34(),
-        ),
+        scale,
+        (statics::melee__gr__grvenom::yakumono_param(ctx).get()).x34(),
     );
-    inl_HSD_JObjSetScaleY_unfused(
+    inl_HSD_JObjSetScaleY_unfused_2(
         ctx,
         jobj,
-        fp::fmuls(
-            scale,
-            (statics::melee__gr__grvenom::yakumono_param(ctx).get()).x34(),
-        ),
+        scale,
+        (statics::melee__gr__grvenom::yakumono_param(ctx).get()).x34(),
     );
     inl_HSD_JObjSetScaleZ_unfused(
         ctx,
         jobj,
-        fp::fmuls(
-            scale,
-            (statics::melee__gr__grvenom::yakumono_param(ctx).get()).x34(),
-        ),
+        scale,
+        (statics::melee__gr__grvenom::yakumono_param(ctx).get()).x34(),
     );
     inl_Ground_ResetStarFoxArwingState_unfused(ctx, gp);
     (gp).u().venom().set_xF8(fp::fctiwz(
@@ -2216,29 +2208,23 @@ pub fn grVenom_80206874<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 's1;
         }
     }
-    inl_HSD_JObjSetScaleX_unfused(
+    inl_HSD_JObjSetScaleX_unfused_2(
         ctx,
         jobj,
-        fp::fmuls(
-            scale,
-            (statics::melee__gr__grvenom::yakumono_param(ctx).get()).x34(),
-        ),
+        scale,
+        (statics::melee__gr__grvenom::yakumono_param(ctx).get()).x34(),
     );
-    inl_HSD_JObjSetScaleY_unfused(
+    inl_HSD_JObjSetScaleY_unfused_2(
         ctx,
         jobj,
-        fp::fmuls(
-            scale,
-            (statics::melee__gr__grvenom::yakumono_param(ctx).get()).x34(),
-        ),
+        scale,
+        (statics::melee__gr__grvenom::yakumono_param(ctx).get()).x34(),
     );
     inl_HSD_JObjSetScaleZ_unfused(
         ctx,
         jobj,
-        fp::fmuls(
-            scale,
-            (statics::melee__gr__grvenom::yakumono_param(ctx).get()).x34(),
-        ),
+        scale,
+        (statics::melee__gr__grvenom::yakumono_param(ctx).get()).x34(),
     );
     inl_Ground_ResetStarFoxArwingState_unfused(ctx, gp);
     (gp).u().venom().set_xF8(fp::fctiwz(
@@ -2701,7 +2687,29 @@ fn inl_HSD_JObjSetScaleY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     }
 }
 
-fn inl_HSD_JObjSetScaleZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
+fn inl_HSD_JObjSetScaleZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z__a: f64, z__c: f64) {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b82d0),
+            (0x1b6_i32 as u32),
+            cstr(ctx, 0x803b82d0),
+        )
+    });
+    (jobj).scale().set_z(fp::fmuls(z__a, z__c));
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_HSD_JObjSetScaleZ_unfused_2<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
     let mut jobj = jobj;
     let mut z = z;
     (if !Handle::is_null((jobj)) {
@@ -2890,6 +2898,50 @@ fn inl_Ground_DisableStarFoxArwingGObjs_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>
         .article_gobjs()
         .at(1_i32)
         .set(ptr::<HSD_GObj<'a>>(ctx, 1_i32.wrapping_neg() as u32));
+}
+
+fn inl_HSD_JObjSetScaleX_unfused_2<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x__a: f64, x__c: f64) {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b82d0),
+            (0x192_i32 as u32),
+            cstr(ctx, 0x803b82d0),
+        )
+    });
+    (jobj).scale().set_x(fp::fmuls(x__a, x__c));
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_HSD_JObjSetScaleY_unfused_2<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a: f64, y__c: f64) {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b82d0),
+            (0x1a4_i32 as u32),
+            cstr(ctx, 0x803b82d0),
+        )
+    });
+    (jobj).scale().set_y(fp::fmuls(y__a, y__c));
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
 }
 
 fn inl_Ground_ResetStarFoxArwingState_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>) {

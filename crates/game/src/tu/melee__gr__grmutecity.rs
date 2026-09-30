@@ -375,7 +375,8 @@ pub fn grMuteCity_801F0290<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         inl_HSD_JObjSetRotationZ_unfused(
             ctx,
             (gp).u().mutecity2().xC8(),
-            fp::fmuls(rot_z, (gp).u().mutecity2().xD0()),
+            rot_z,
+            (gp).u().mutecity2().xD0(),
         );
     }
     fns::grMuteCity_801F290C(ctx, gobj);
@@ -2334,12 +2335,10 @@ pub fn grMuteCity_801F1A34<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<
                     let _ = fns::grLib_801C96F8(ctx, 0x11a_i32, 0_i32, car_pos);
                     if sound_count < 1_i32 {
                         if car_pos.z() < 0.0 {
-                            spline_t = fp::fmadds(
-                                car_pos.z(),
-                                car_pos.z(),
-                                (fp::fmadds(
-                                    car_pos.x(),
-                                    car_pos.x(),
+                            spline_t = fp::fadds(
+                                (fp::fmuls(car_pos.z(), car_pos.z())),
+                                (fp::fadds(
+                                    (fp::fmuls(car_pos.x(), car_pos.x())),
                                     (fp::fmuls(car_pos.y(), car_pos.y())),
                                 )),
                             );
@@ -2977,9 +2976,8 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     return result;
 }
 
-fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
+fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z__a: f64, z__c: f64) {
     let mut jobj = jobj;
-    let mut z = z;
     (if !Handle::is_null((jobj)) {
         ({ () })
     } else {
@@ -3000,7 +2998,7 @@ fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64
             cstr(ctx, 0x803b81b8),
         )
     });
-    (jobj).rotate().set_z(z);
+    (jobj).rotate().set_z(fp::fmuls(z__a, z__c));
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         {
             if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {

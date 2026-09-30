@@ -2513,11 +2513,13 @@ fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'
     return (gobj).hsd_obj();
 }
 
-fn inl_it_link_lerp<'a>(ctx: &'a Ctx, a: f64, b: f64, t: f64) -> f64 {
-    let mut a = a;
-    let mut b = b;
+fn inl_it_link_lerp<'a>(ctx: &'a Ctx, a__a: f64, a__c: f64, b__a: f64, b__c: f64, t: f64) -> f64 {
     let mut t = t;
-    return fp::fmadds(t, a, fp::fmuls((fp::fsubs(1.0, t)), b));
+    return fp::fmadds(
+        t,
+        fp::fmuls(a__a, a__c),
+        fp::fmuls((fp::fsubs(1.0, t)), fp::fmuls(b__a, b__c)),
+    );
 }
 
 fn inl_it_link_attr_math<'a>(
@@ -2546,8 +2548,10 @@ fn inl_it_link_attr_math<'a>(
     if arg8 > 1.0 {
         var_f1 = inl_it_link_lerp(
             ctx,
-            fp::fmuls(fp::frsp((attr).xC() as f64), (attr).x30()),
-            fp::fmuls(fp::frsp((attr).xC() as f64), (attr).x10()),
+            fp::frsp((attr).xC() as f64),
+            (attr).x30(),
+            fp::frsp((attr).xC() as f64),
+            (attr).x10(),
             (attr).x8(),
         );
     } else {

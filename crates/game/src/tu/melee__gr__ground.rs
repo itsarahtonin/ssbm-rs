@@ -815,7 +815,7 @@ pub fn Ground_801C126C<'a>(
     if !Handle::is_null((node).child()) {
         if !Handle::is_null(
             ({
-                let __t1 = statics::melee__gr__ground::Ground_801C126C(ctx, (node).child(), depth);
+                let __t1 = inl_Ground_801C126C_unfused(ctx, (node).child(), depth);
                 result = __t1;
                 __t1
             }),
@@ -826,7 +826,7 @@ pub fn Ground_801C126C<'a>(
     if !Handle::is_null((node).next()) {
         if !Handle::is_null(
             ({
-                let __t2 = statics::melee__gr__ground::Ground_801C126C(ctx, (node).next(), depth);
+                let __t2 = inl_Ground_801C126C_unfused(ctx, (node).next(), depth);
                 result = __t2;
                 __t2
             }),
@@ -850,7 +850,7 @@ pub fn Ground_801C13D0<'a>(ctx: &'a Ctx, arg0: i32, depth: i32) -> HSD_JObj<'a> 
             joint = (Handle::add(((archive).unk4()).unk8(), arg0)).unk0();
         } else {
             tmp_depth.set(depth);
-            joint = statics::melee__gr__ground::Ground_801C126C(
+            joint = inl_Ground_801C126C_unfused(
                 ctx,
                 (Handle::add(((archive).unk4()).unk8(), arg0)).unk0(),
                 tmp_depth,
@@ -2879,11 +2879,11 @@ pub fn Ground_801C3E18<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_AObj<'a> {
     if !Handle::is_null((jobj).aobj()) {
         return (jobj).aobj();
     }
-    result = statics::melee__gr__ground::Ground_801C3E18(ctx, (jobj).child());
+    result = inl_Ground_801C3E18_unfused(ctx, (jobj).child());
     if !Handle::is_null(result) {
         return result;
     }
-    result = statics::melee__gr__ground::Ground_801C3E18(ctx, (jobj).next());
+    result = inl_Ground_801C3E18_unfused(ctx, (jobj).next());
     if !Handle::is_null(result) {
         return result;
     }
@@ -2893,7 +2893,7 @@ pub fn Ground_801C3E18<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_AObj<'a> {
 pub fn Ground_801C3F20<'a>(ctx: &'a Ctx, arg0: HSD_JObj<'a>) -> f64 {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
-    let mut aobj: HSD_AObj<'a> = statics::melee__gr__ground::Ground_801C3E18(ctx, arg0);
+    let mut aobj: HSD_AObj<'a> = inl_Ground_801C3E18_unfused(ctx, arg0);
     if !Handle::is_null(aobj) {
         return (aobj).curr_frame();
     }
@@ -3981,6 +3981,43 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
     }
 }
 
+fn inl_Ground_801C126C_unfused<'a>(
+    ctx: &'a Ctx,
+    node: HSD_Joint<'a>,
+    depth: Val<'a, i32>,
+) -> HSD_Joint<'a> {
+    let mut node = node;
+    let mut depth = depth;
+    let mut result: HSD_Joint<'a> = null(ctx);
+    (depth).set((depth).get().wrapping_sub(1_i32));
+    if (depth).get() < 0_i32 {
+        return node;
+    }
+    if !Handle::is_null((node).child()) {
+        if !Handle::is_null(
+            ({
+                let __t1 = statics::melee__gr__ground::Ground_801C126C(ctx, (node).child(), depth);
+                result = __t1;
+                __t1
+            }),
+        ) {
+            return result;
+        }
+    }
+    if !Handle::is_null((node).next()) {
+        if !Handle::is_null(
+            ({
+                let __t2 = statics::melee__gr__ground::Ground_801C126C(ctx, (node).next(), depth);
+                result = __t2;
+                __t2
+            }),
+        ) {
+            return result;
+        }
+    }
+    return null::<HSD_Joint<'a>>(ctx);
+}
+
 fn inl_alloc_user_data_ground_unfused<'a>(ctx: &'a Ctx) -> Ground<'a> {
     let mut gp: Ground<'a> = null(ctx);
     gp = Handle::cast::<Ground<'a>>(fns::HSD_MemAlloc(ctx, (0x204_u32 as i32)));
@@ -4222,6 +4259,26 @@ fn inl_HSD_JObjGetParent_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JO
     }
     #[allow(unreachable_code)]
     return null(ctx);
+}
+
+fn inl_Ground_801C3E18_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_AObj<'a> {
+    let mut jobj = jobj;
+    let mut result: HSD_AObj<'a> = null(ctx);
+    if Handle::is_null(jobj) {
+        return null::<HSD_AObj<'a>>(ctx);
+    }
+    if !Handle::is_null((jobj).aobj()) {
+        return (jobj).aobj();
+    }
+    result = statics::melee__gr__ground::Ground_801C3E18(ctx, (jobj).child());
+    if !Handle::is_null(result) {
+        return result;
+    }
+    result = statics::melee__gr__ground::Ground_801C3E18(ctx, (jobj).next());
+    if !Handle::is_null(result) {
+        return result;
+    }
+    return null::<HSD_AObj<'a>>(ctx);
 }
 
 fn inl_removeStageGObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

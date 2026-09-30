@@ -167,7 +167,7 @@ pub fn grLib_801C9908<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
         jobj = inl_HSD_JObjGetChild_unfused(ctx, jobj);
         'l3: while !Handle::is_null(jobj) {
             'c4: {
-                fns::grLib_801C9908(ctx, jobj);
+                inl_grLib_801C9908_unfused(ctx, jobj);
             }
             jobj = inl_HSD_JObjGetNext_unfused(ctx, jobj);
         }
@@ -470,6 +470,40 @@ fn inl_HSD_JObjGetNext_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj
     }
     #[allow(unreachable_code)]
     return null(ctx);
+}
+
+fn inl_grLib_801C9908_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    let mut cur: HSD_Generator<'a> = null(ctx);
+    let mut next: HSD_Generator<'a> = null(ctx);
+    if Handle::is_null(jobj) {
+        return;
+    }
+    {
+        cur = fns::hsd_804D78FC(ctx).get();
+        'l1: while !Handle::is_null(cur) {
+            'c2: {
+                next = (cur).next();
+                if Handle::addr((cur).jobj()) == Handle::addr(jobj) {
+                    (cur).set_type(((((cur).r#type() as i32) | 128_i32) as u16));
+                    fns::hsd_8039D4DC(ctx, cur);
+                }
+            }
+            cur = next;
+        }
+    }
+    if (((jobj).flags() & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0) {
+        return;
+    }
+    {
+        jobj = inl_HSD_JObjGetChild_unfused(ctx, jobj);
+        'l3: while !Handle::is_null(jobj) {
+            'c4: {
+                fns::grLib_801C9908(ctx, jobj);
+            }
+            jobj = inl_HSD_JObjGetNext_unfused(ctx, jobj);
+        }
+    }
 }
 
 fn inl_HSD_JObjGetTranslationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {

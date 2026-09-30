@@ -82,12 +82,12 @@ pub fn bisectValue<'a>(ctx: &'a Ctx, val: i32, table: ItemPickTable<'a>, lo: i32
     }
     mid = div_i32((lo.wrapping_add(hi)), 2_i32);
     if ((Handle::add((table).xC(), mid)).get() as i32) > val {
-        return statics::melee__it__itspawn::bisectValue(ctx, val, table, lo, mid);
+        return inl_bisectValue_unfused(ctx, val, table, lo, mid);
     } else {
         if ((Handle::add((table).xC(), mid.wrapping_add(1_i32))).get() as i32) > val {
             return mid;
         }
-        return statics::melee__it__itspawn::bisectValue(ctx, val, table, mid, hi);
+        return inl_bisectValue_unfused(ctx, val, table, mid, hi);
     }
     #[allow(unreachable_code)]
     return 0;
@@ -99,7 +99,7 @@ pub fn it_8026C65C<'a>(ctx: &'a Ctx, table: ItemPickTable<'a>) -> i32 {
     let mut temp_r6: i32 = ((table).x8() as i32);
     return ((Handle::add(
         (table).x4(),
-        statics::melee__it__itspawn::bisectValue(
+        inl_bisectValue_unfused(
             ctx,
             fns::HSD_Randi(ctx, temp_r6),
             table,
@@ -519,6 +519,34 @@ pub fn it_8026D3CC<'a>(ctx: &'a Ctx) -> i32 {
     result = (result | inl_it_8026D324_unfused(ctx, (enums::It_Kind_Tomato as i32)));
     result = (result | inl_it_8026D324_unfused(ctx, (enums::It_Kind_Foods as i32)));
     return result;
+}
+
+fn inl_bisectValue_unfused<'a>(
+    ctx: &'a Ctx,
+    val: i32,
+    table: ItemPickTable<'a>,
+    lo: i32,
+    hi: i32,
+) -> i32 {
+    let mut val = val;
+    let mut table = table;
+    let mut lo = lo;
+    let mut hi = hi;
+    let mut mid: i32 = 0;
+    if lo == hi.wrapping_sub(1_i32) {
+        return lo;
+    }
+    mid = div_i32((lo.wrapping_add(hi)), 2_i32);
+    if ((Handle::add((table).xC(), mid)).get() as i32) > val {
+        return statics::melee__it__itspawn::bisectValue(ctx, val, table, lo, mid);
+    } else {
+        if ((Handle::add((table).xC(), mid.wrapping_add(1_i32))).get() as i32) > val {
+            return mid;
+        }
+        return statics::melee__it__itspawn::bisectValue(ctx, val, table, mid, hi);
+    }
+    #[allow(unreachable_code)]
+    return 0;
 }
 
 fn inl_it_8026C65C_unfused<'a>(ctx: &'a Ctx, table: ItemPickTable<'a>) -> i32 {

@@ -1072,9 +1072,8 @@ pub fn it_8027737C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, pos: Vec<'a>) {
         (item).x7C().set_x(fp::fmuls((item).x7C().x(), temp_f1));
         (item).x7C().set_y(fp::fmuls((item).x7C().y(), temp_f1));
     }
-    if fp::fmadds(
-        ((item).x7C().x()),
-        ((item).x7C().x()),
+    if fp::fadds(
+        (fp::fmuls(((item).x7C().x()), ((item).x7C().x()))),
         (fp::fmuls(((item).x7C().y()), ((item).x7C().y()))),
     ) < (fns::it_804D6D28(ctx).get()).xCC()
     {
@@ -1233,7 +1232,7 @@ pub fn it_8027781C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     Handle::copy_from(sp30, fns::it_803B857C(ctx));
     speed = inl_return_sqrt_value(ctx, (item).x40_vel());
     if (((coll).env_flags() & 63_i32) != 0)
-        && (inl_product_xy(ctx, (item).x40_vel(), (coll).left_facing_wall().normal()) < 0.0)
+        && (inl_product_xy_2(ctx, (item).x40_vel(), (coll).left_facing_wall().normal()) < 0.0)
     {
         Handle::copy_from(sp48, (item).x40_vel());
         fns::lbVector_Mirror(ctx, sp48, (coll).left_facing_wall().normal());
@@ -1244,7 +1243,7 @@ pub fn it_8027781C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
         chk = 1_i32;
     }
     if (((coll).env_flags() & 0xfc0_i32) != 0)
-        && (inl_product_xy(ctx, (item).x40_vel(), (coll).right_facing_wall().normal()) < 0.0)
+        && (inl_product_xy_2(ctx, (item).x40_vel(), (coll).right_facing_wall().normal()) < 0.0)
     {
         Handle::copy_from(sp48, (item).x40_vel());
         fns::lbVector_Mirror(ctx, sp48, (coll).right_facing_wall().normal());
@@ -1255,7 +1254,7 @@ pub fn it_8027781C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
         chk = 1_i32;
     }
     if (((coll).env_flags() & (0x2000_i32 | 0x4000_i32)) != 0)
-        && (inl_product_xy(ctx, (item).x40_vel(), (coll).ceiling().normal()) < 0.0)
+        && (inl_product_xy_2(ctx, (item).x40_vel(), (coll).ceiling().normal()) < 0.0)
     {
         Handle::copy_from(sp48, (item).x40_vel());
         fns::lbVector_Mirror(ctx, sp48, (coll).ceiling().normal());
@@ -1266,7 +1265,7 @@ pub fn it_8027781C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
         chk = 1_i32;
     }
     if (((coll).env_flags() & (0x8000_i32 | 0x10000_i32)) != 0)
-        && (inl_product_xy(ctx, (item).x40_vel(), (coll).floor().normal()) < 0.0)
+        && (inl_product_xy_2(ctx, (item).x40_vel(), (coll).floor().normal()) < 0.0)
     {
         Handle::copy_from(sp48, (item).x40_vel());
         fns::lbVector_Mirror(ctx, sp48, (coll).floor().normal());
@@ -1604,7 +1603,7 @@ fn inl_sqrtf_accurate_sp18<'a>(ctx: &'a Ctx, x: f64) -> f64 {
 fn inl_product_xy<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>) -> f64 {
     let mut a = a;
     let mut b = b;
-    return (fp::fmadds((a).x(), (b).x(), fp::fmuls((a).y(), (b).y())));
+    return (fp::fadds(fp::fmuls((a).x(), (b).x()), fp::fmuls((a).y(), (b).y())));
 }
 
 fn inl_sqrtf_accurate_local<'a>(ctx: &'a Ctx, x: f64) -> f64 {
@@ -1637,6 +1636,12 @@ fn inl_sqrtf_accurate_local<'a>(ctx: &'a Ctx, x: f64) -> f64 {
 fn inl_return_sqrt_value<'a>(ctx: &'a Ctx, v: Vec<'a>) -> f64 {
     let mut v = v;
     return inl_sqrtf_accurate_local(ctx, inl_product_xy(ctx, v, v));
+}
+
+fn inl_product_xy_2<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>) -> f64 {
+    let mut a = a;
+    let mut b = b;
+    return (fp::fmadds((a).x(), (b).x(), fp::fmuls((a).y(), (b).y())));
 }
 
 /// Registers this unit's ports.

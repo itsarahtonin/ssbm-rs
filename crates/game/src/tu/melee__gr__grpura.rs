@@ -744,7 +744,7 @@ pub fn grPura_80213128<'a>(ctx: &'a Ctx, dobj: HSD_DObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let mut dobj = dobj;
     if !Handle::is_null((dobj).next()) {
-        statics::melee__gr__grpura::grPura_80213128(ctx, (dobj).next());
+        inl_grPura_80213128_unfused(ctx, (dobj).next());
     }
     inl_compileDObjList_unfused(ctx, dobj);
     if !Handle::is_null((dobj).mobj()) {
@@ -756,10 +756,10 @@ pub fn grPura_80213250<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let mut jobj = jobj;
     if !Handle::is_null((jobj).child()) {
-        statics::melee__gr__grpura::grPura_80213250(ctx, (jobj).child());
+        inl_grPura_80213250_unfused(ctx, (jobj).child());
     }
     if !Handle::is_null((jobj).next()) {
-        statics::melee__gr__grpura::grPura_80213250(ctx, (jobj).next());
+        inl_grPura_80213250_unfused(ctx, (jobj).next());
     }
     if ((if (((jobj).flags()
         & (((shl_i32(1_i32, (5_i32 as u32))) | (shl_i32(1_i32, (14_i32 as u32)))) as u32))
@@ -1213,6 +1213,39 @@ fn inl_compileDObjList_unfused<'a>(ctx: &'a Ctx, dobj: HSD_DObj<'a>) {
             }
             dobj = (dobj).next();
         }
+    }
+}
+
+fn inl_grPura_80213128_unfused<'a>(ctx: &'a Ctx, dobj: HSD_DObj<'a>) {
+    let mut dobj = dobj;
+    if !Handle::is_null((dobj).next()) {
+        statics::melee__gr__grpura::grPura_80213128(ctx, (dobj).next());
+    }
+    inl_compileDObjList_unfused(ctx, dobj);
+    if !Handle::is_null((dobj).mobj()) {
+        fns::HSD_MObjCompileTev(ctx, (dobj).mobj());
+    }
+}
+
+fn inl_grPura_80213250_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if !Handle::is_null((jobj).child()) {
+        statics::melee__gr__grpura::grPura_80213250(ctx, (jobj).child());
+    }
+    if !Handle::is_null((jobj).next()) {
+        statics::melee__gr__grpura::grPura_80213250(ctx, (jobj).next());
+    }
+    if ((if (((jobj).flags()
+        & (((shl_i32(1_i32, (5_i32 as u32))) | (shl_i32(1_i32, (14_i32 as u32)))) as u32))
+        != 0)
+    {
+        0_i32
+    } else {
+        1_i32
+    }) != 0)
+        && (!Handle::is_null((jobj).u().dobj()))
+    {
+        statics::melee__gr__grpura::grPura_80213128(ctx, (jobj).u().dobj());
     }
 }
 

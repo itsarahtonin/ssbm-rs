@@ -194,71 +194,65 @@ pub fn fn_8018325C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: i32) {
                     .get(),
             ),
         );
-        inl_HSD_JObjSetScaleX_unfused(
+        inl_HSD_JObjSetScaleX_unfused_2(
             ctx,
             jobj,
-            fp::fmuls(
-                (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
-                    .x6A8()
-                    .get(
-                        (statics::melee__gm__gm_1832::lbl_8047368C(ctx)
-                            .xF1()
-                            .at(arg1)
-                            .get() as i32),
-                    )
-                    .x08()
-                    .x(),
-                (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
-                    .x678()
-                    .get((statics::melee__gm__gm_1832::lbl_8047368C(ctx).xEF() as i32))
-                    .vals()
-                    .at(arg1)
-                    .get(),
-            ),
+            (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
+                .x6A8()
+                .get(
+                    (statics::melee__gm__gm_1832::lbl_8047368C(ctx)
+                        .xF1()
+                        .at(arg1)
+                        .get() as i32),
+                )
+                .x08()
+                .x(),
+            (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
+                .x678()
+                .get((statics::melee__gm__gm_1832::lbl_8047368C(ctx).xEF() as i32))
+                .vals()
+                .at(arg1)
+                .get(),
         );
-        inl_HSD_JObjSetScaleY_unfused(
+        inl_HSD_JObjSetScaleY_unfused_2(
             ctx,
             jobj,
-            fp::fmuls(
-                (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
-                    .x6A8()
-                    .get(
-                        (statics::melee__gm__gm_1832::lbl_8047368C(ctx)
-                            .xF1()
-                            .at(arg1)
-                            .get() as i32),
-                    )
-                    .x08()
-                    .y(),
-                (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
-                    .x678()
-                    .get((statics::melee__gm__gm_1832::lbl_8047368C(ctx).xEF() as i32))
-                    .vals()
-                    .at(arg1)
-                    .get(),
-            ),
+            (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
+                .x6A8()
+                .get(
+                    (statics::melee__gm__gm_1832::lbl_8047368C(ctx)
+                        .xF1()
+                        .at(arg1)
+                        .get() as i32),
+                )
+                .x08()
+                .y(),
+            (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
+                .x678()
+                .get((statics::melee__gm__gm_1832::lbl_8047368C(ctx).xEF() as i32))
+                .vals()
+                .at(arg1)
+                .get(),
         );
         inl_HSD_JObjSetScaleZ_unfused(
             ctx,
             jobj,
-            fp::fmuls(
-                (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
-                    .x6A8()
-                    .get(
-                        (statics::melee__gm__gm_1832::lbl_8047368C(ctx)
-                            .xF1()
-                            .at(arg1)
-                            .get() as i32),
-                    )
-                    .x08()
-                    .z(),
-                (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
-                    .x678()
-                    .get((statics::melee__gm__gm_1832::lbl_8047368C(ctx).xEF() as i32))
-                    .vals()
-                    .at(arg1)
-                    .get(),
-            ),
+            (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
+                .x6A8()
+                .get(
+                    (statics::melee__gm__gm_1832::lbl_8047368C(ctx)
+                        .xF1()
+                        .at(arg1)
+                        .get() as i32),
+                )
+                .x08()
+                .z(),
+            (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
+                .x678()
+                .get((statics::melee__gm__gm_1832::lbl_8047368C(ctx).xEF() as i32))
+                .vals()
+                .at(arg1)
+                .get(),
         );
     } else {
         inl_HSD_JObjAddTranslationX_unfused(
@@ -306,71 +300,65 @@ pub fn fn_8018325C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: i32) {
                     .get(),
             ),
         );
-        inl_HSD_JObjSetScaleX_unfused(
+        inl_HSD_JObjSetScaleX_unfused_2(
             ctx,
             jobj,
-            fp::fmuls(
-                (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
-                    .x6C()
-                    .get(
-                        (statics::melee__gm__gm_1832::lbl_8047368C(ctx)
-                            .xF1()
-                            .at(arg1)
-                            .get() as i32),
-                    )
-                    .x08()
-                    .x(),
-                (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
-                    .x3C()
-                    .get((statics::melee__gm__gm_1832::lbl_8047368C(ctx).xEF() as i32))
-                    .vals()
-                    .at(arg1)
-                    .get(),
-            ),
+            (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
+                .x6C()
+                .get(
+                    (statics::melee__gm__gm_1832::lbl_8047368C(ctx)
+                        .xF1()
+                        .at(arg1)
+                        .get() as i32),
+                )
+                .x08()
+                .x(),
+            (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
+                .x3C()
+                .get((statics::melee__gm__gm_1832::lbl_8047368C(ctx).xEF() as i32))
+                .vals()
+                .at(arg1)
+                .get(),
         );
-        inl_HSD_JObjSetScaleY_unfused(
+        inl_HSD_JObjSetScaleY_unfused_2(
             ctx,
             jobj,
-            fp::fmuls(
-                (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
-                    .x6C()
-                    .get(
-                        (statics::melee__gm__gm_1832::lbl_8047368C(ctx)
-                            .xF1()
-                            .at(arg1)
-                            .get() as i32),
-                    )
-                    .x08()
-                    .y(),
-                (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
-                    .x3C()
-                    .get((statics::melee__gm__gm_1832::lbl_8047368C(ctx).xEF() as i32))
-                    .vals()
-                    .at(arg1)
-                    .get(),
-            ),
+            (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
+                .x6C()
+                .get(
+                    (statics::melee__gm__gm_1832::lbl_8047368C(ctx)
+                        .xF1()
+                        .at(arg1)
+                        .get() as i32),
+                )
+                .x08()
+                .y(),
+            (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
+                .x3C()
+                .get((statics::melee__gm__gm_1832::lbl_8047368C(ctx).xEF() as i32))
+                .vals()
+                .at(arg1)
+                .get(),
         );
         inl_HSD_JObjSetScaleZ_unfused(
             ctx,
             jobj,
-            fp::fmuls(
-                (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
-                    .x6C()
-                    .get(
-                        (statics::melee__gm__gm_1832::lbl_8047368C(ctx)
-                            .xF1()
-                            .at(arg1)
-                            .get() as i32),
-                    )
-                    .x08()
-                    .z(),
-                (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
-                    .x3C()
-                    .get((statics::melee__gm__gm_1832::lbl_8047368C(ctx).xEF() as i32))
-                    .vals()
-                    .at(arg1)
-                    .get(),
-            ),
+            (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
+                .x6C()
+                .get(
+                    (statics::melee__gm__gm_1832::lbl_8047368C(ctx)
+                        .xF1()
+                        .at(arg1)
+                        .get() as i32),
+                )
+                .x08()
+                .z(),
+            (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
+                .x3C()
+                .get((statics::melee__gm__gm_1832::lbl_8047368C(ctx).xEF() as i32))
+                .vals()
+                .at(arg1)
+                .get(),
         );
     }
     {
@@ -523,123 +511,111 @@ pub fn fn_80184138<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: i32) {
         ),
     );
     if statics::melee__gm__gm_1832::lbl_8047368C(ctx).model_scale_kind() == 2_i32 {
-        inl_HSD_JObjSetScaleX_unfused(
+        inl_HSD_JObjSetScaleX_unfused_2(
             ctx,
             jobj,
-            fp::fmuls(
-                (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
-                    .x6C()
-                    .get(
-                        (statics::melee__gm__gm_1832::lbl_8047368C(ctx)
-                            .xF4()
-                            .at(arg1)
-                            .get() as i32),
-                    )
-                    .x08()
-                    .x(),
-                scl,
-            ),
+            (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
+                .x6C()
+                .get(
+                    (statics::melee__gm__gm_1832::lbl_8047368C(ctx)
+                        .xF4()
+                        .at(arg1)
+                        .get() as i32),
+                )
+                .x08()
+                .x(),
+            scl,
         );
-        inl_HSD_JObjSetScaleY_unfused(
+        inl_HSD_JObjSetScaleY_unfused_2(
             ctx,
             jobj,
-            fp::fmuls(
-                (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
-                    .x6C()
-                    .get(
-                        (statics::melee__gm__gm_1832::lbl_8047368C(ctx)
-                            .xF4()
-                            .at(arg1)
-                            .get() as i32),
-                    )
-                    .x08()
-                    .y(),
-                scl,
-            ),
+            (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
+                .x6C()
+                .get(
+                    (statics::melee__gm__gm_1832::lbl_8047368C(ctx)
+                        .xF4()
+                        .at(arg1)
+                        .get() as i32),
+                )
+                .x08()
+                .y(),
+            scl,
         );
         inl_HSD_JObjSetScaleZ_unfused(
             ctx,
             jobj,
-            fp::fmuls(
-                (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
-                    .x6C()
-                    .get(
-                        (statics::melee__gm__gm_1832::lbl_8047368C(ctx)
-                            .xF4()
-                            .at(arg1)
-                            .get() as i32),
-                    )
-                    .x08()
-                    .z(),
-                scl,
-            ),
+            (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
+                .x6C()
+                .get(
+                    (statics::melee__gm__gm_1832::lbl_8047368C(ctx)
+                        .xF4()
+                        .at(arg1)
+                        .get() as i32),
+                )
+                .x08()
+                .z(),
+            scl,
         );
     } else {
-        inl_HSD_JObjSetScaleX_unfused(
+        inl_HSD_JObjSetScaleX_unfused_2(
             ctx,
             jobj,
-            fp::fmuls(
-                (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
-                    .x6C()
-                    .get(
-                        (statics::melee__gm__gm_1832::lbl_8047368C(ctx)
-                            .xF4()
-                            .at(arg1)
-                            .get() as i32),
-                    )
-                    .x08()
-                    .x(),
-                (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
-                    .x3C()
-                    .get((statics::melee__gm__gm_1832::lbl_8047368C(ctx).xF0() as i32))
-                    .vals()
-                    .at(arg1)
-                    .get(),
-            ),
+            (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
+                .x6C()
+                .get(
+                    (statics::melee__gm__gm_1832::lbl_8047368C(ctx)
+                        .xF4()
+                        .at(arg1)
+                        .get() as i32),
+                )
+                .x08()
+                .x(),
+            (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
+                .x3C()
+                .get((statics::melee__gm__gm_1832::lbl_8047368C(ctx).xF0() as i32))
+                .vals()
+                .at(arg1)
+                .get(),
         );
-        inl_HSD_JObjSetScaleY_unfused(
+        inl_HSD_JObjSetScaleY_unfused_2(
             ctx,
             jobj,
-            fp::fmuls(
-                (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
-                    .x6C()
-                    .get(
-                        (statics::melee__gm__gm_1832::lbl_8047368C(ctx)
-                            .xF4()
-                            .at(arg1)
-                            .get() as i32),
-                    )
-                    .x08()
-                    .y(),
-                (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
-                    .x3C()
-                    .get((statics::melee__gm__gm_1832::lbl_8047368C(ctx).xF0() as i32))
-                    .vals()
-                    .at(arg1)
-                    .get(),
-            ),
+            (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
+                .x6C()
+                .get(
+                    (statics::melee__gm__gm_1832::lbl_8047368C(ctx)
+                        .xF4()
+                        .at(arg1)
+                        .get() as i32),
+                )
+                .x08()
+                .y(),
+            (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
+                .x3C()
+                .get((statics::melee__gm__gm_1832::lbl_8047368C(ctx).xF0() as i32))
+                .vals()
+                .at(arg1)
+                .get(),
         );
         inl_HSD_JObjSetScaleZ_unfused(
             ctx,
             jobj,
-            fp::fmuls(
-                (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
-                    .x6C()
-                    .get(
-                        (statics::melee__gm__gm_1832::lbl_8047368C(ctx)
-                            .xF4()
-                            .at(arg1)
-                            .get() as i32),
-                    )
-                    .x08()
-                    .z(),
-                (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
-                    .x3C()
-                    .get((statics::melee__gm__gm_1832::lbl_8047368C(ctx).xF0() as i32))
-                    .vals()
-                    .at(arg1)
-                    .get(),
-            ),
+            (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
+                .x6C()
+                .get(
+                    (statics::melee__gm__gm_1832::lbl_8047368C(ctx)
+                        .xF4()
+                        .at(arg1)
+                        .get() as i32),
+                )
+                .x08()
+                .z(),
+            (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
+                .x3C()
+                .get((statics::melee__gm__gm_1832::lbl_8047368C(ctx).xF0() as i32))
+                .vals()
+                .at(arg1)
+                .get(),
         );
     }
     {
@@ -2780,9 +2756,52 @@ fn inl_HSD_JObjAddTranslationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: 
     }
 }
 
-fn inl_HSD_JObjSetScaleZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
+fn inl_HSD_JObjSetScaleX_unfused_2<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x__a: f64, x__c: f64) {
     let mut jobj = jobj;
-    let mut z = z;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803d92b8),
+            (0x192_i32 as u32),
+            cstr(ctx, 0x803d92b8),
+        )
+    });
+    (jobj).scale().set_x(fp::fmuls(x__a, x__c));
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_HSD_JObjSetScaleY_unfused_2<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a: f64, y__c: f64) {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803d92b8),
+            (0x1a4_i32 as u32),
+            cstr(ctx, 0x803d92b8),
+        )
+    });
+    (jobj).scale().set_y(fp::fmuls(y__a, y__c));
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_HSD_JObjSetScaleZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z__a: f64, z__c: f64) {
+    let mut jobj = jobj;
     (if !Handle::is_null((jobj)) {
         ({ () })
     } else {
@@ -2793,7 +2812,7 @@ fn inl_HSD_JObjSetScaleZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
             cstr(ctx, 0x803d92b8),
         )
     });
-    (jobj).scale().set_z(z);
+    (jobj).scale().set_z(fp::fmuls(z__a, z__c));
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         {
             if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {

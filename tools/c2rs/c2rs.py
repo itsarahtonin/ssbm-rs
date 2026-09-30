@@ -229,6 +229,9 @@ class FnCtx:
         # Bytes past their start that code reaches in locals through `&x + k`, which the
         # decomp uses to hit the original's stack slots.
         self.reach = {}
+        # Locals set once to a variable that never changes: MWCC propagates such copies, so
+        # expressions through either are the same value. vkey -> the variable's declaration.
+        self.aliases = {}
         self.temps = 0
         self.ret = None
         self.sret = False
@@ -567,7 +570,7 @@ def strip(c):
 
 class Translator:
     def __init__(self, unit, fn_cursor, fuse=None, inline=False, asm=None, reg_ptrs=frozenset(),
-                 forward=None):
+                 forward=None, same=frozenset()):
         self.u = unit
         self.f = FnCtx(unit.name, fn_cursor)
         self.line = fn_cursor.location.line
@@ -583,6 +586,8 @@ class Translator:
         # the original keeps in registers (("ptr", parameter) keys).
         self.decisions = {}
         self.reg_ptrs = reg_ptrs
+        # Pairs of this inline copy's parameters whose arguments are the same value.
+        self.same = same
         self.force_cfg = False
         # An inline copy's float parameters used once, whose argument is a product: they take
         # the product's factors, as MWCC substitutes the argument into that use (name -> negated).
@@ -727,6 +732,7 @@ class Translator:
             if n.kind == CK.BINARY_OPERATOR and \
                     BINOPS.get(_lib.clang_getCursorBinaryOperatorKind(n)) in ("+", "-"):
                 self.note_reach(n)
+        self.find_aliases(node)
 
     def check_gotos(self, body):
         """Gotos become breaks out of blocks and continues of loops, which only reach labels
@@ -755,6 +761,50 @@ class Translator:
                 up = parent.get(up.hash)
             if up is None or around.kind != CK.COMPOUND_STMT:
                 self.f.cfg = True
+
+    def find_aliases(self, body):
+        """Fills self.f.aliases: locals assigned once, to a variable assigned at most once."""
+        sets, source = {}, {}
+        params = [a for a in children(self.f.cursor) if a.kind == CK.PARM_DECL]
+        for a in params:
+            sets[vkey(a)] = 1
+        for n in body.walk_preorder():
+            target, value = None, None
+            if n.kind == CK.VAR_DECL and n.storage_class not in (ci.StorageClass.STATIC,
+                                                                ci.StorageClass.EXTERN):
+                init = var_init(n)
+                sets.setdefault(vkey(n), 0)
+                if init is not None:
+                    sets[vkey(n)] += 1
+                    source[vkey(n)] = (n, init)
+                continue
+            if n.kind == CK.BINARY_OPERATOR and BINOPS.get(_lib.clang_getCursorBinaryOperatorKind(n)) == "=":
+                target, value = strip(children(n)[0]), children(n)[1]
+            elif n.kind == CK.COMPOUND_ASSIGNMENT_OPERATOR:
+                target = strip(children(n)[0])
+            elif n.kind == CK.UNARY_OPERATOR and UNOPS.get(_lib.clang_getCursorUnaryOperatorKind(n)) in \
+                    ("&", "++", "--", "post++", "post--"):
+                target = strip(children(n)[0])
+                if UNOPS.get(_lib.clang_getCursorUnaryOperatorKind(n)) == "&":
+                    value = None
+                    if target.kind == CK.DECL_REF_EXPR and target.referenced is not None:
+                        sets[vkey(target.referenced)] = 99  # its address escapes
+                    continue
+            if target is None or target.kind != CK.DECL_REF_EXPR or target.referenced is None:
+                continue
+            key = vkey(target.referenced)
+            sets[key] = sets.get(key, 0) + 1
+            if value is not None:
+                source[key] = (target.referenced, value)
+        for key, (decl, value) in source.items():
+            v = strip(value)
+            if sets.get(key) != 1 or v.kind != CK.DECL_REF_EXPR or v.referenced is None or \
+                    v.referenced.kind not in (CK.VAR_DECL, CK.PARM_DECL):
+                continue
+            if sets.get(vkey(v.referenced), 2) > 1 or \
+                    not same_type(self.u.ctype(decl.type), self.u.ctype(v.referenced.type)):
+                continue
+            self.f.aliases[key] = v.referenced
 
     def note_reach(self, n):
         """Records how far `&x + k` reaches past local x's start. The port gives x that much
@@ -1973,11 +2023,120 @@ class Translator:
         if not same_type(self.u.ctype(n.type), t):
             return None
         a, c = children(n)
-        # In the arguments of a call it inlines, MWCC contracts only products of values it
-        # already holds in registers, not of loads from memory.
-        if self.in_args and (self.is_load(a) or self.is_load(c)):
+        if self.is_square(a, c):
             return None
         return self.convert(self.expr(a), t), self.convert(self.expr(c), t), False
+
+    def is_square(self, a, c):
+        """Whether a product squares a value MWCC loads or computes, `v->x * v->x` or
+        `(a - b) * (a - b)`: it computes such a square apart and never contracts it."""
+        if not self.same_value(a, c):
+            return False
+        n = strip(a)
+        return n.kind not in (CK.DECL_REF_EXPR, CK.MEMBER_REF_EXPR) or self.is_memory(n)
+
+    def resolve(self, decl):
+        seen = 0
+        while vkey(decl) in self.f.aliases and seen < 8:
+            decl, seen = self.f.aliases[vkey(decl)], seen + 1
+        return vkey(decl)
+
+    def same_value(self, a, b):
+        """Whether two C expressions compute the same value, as MWCC's common subexpressions
+        and copy propagation see it."""
+        a, b = strip(a), strip(b)
+        if a.kind == CK.DECL_REF_EXPR and b.kind == CK.DECL_REF_EXPR:
+            ra, rb = a.referenced, b.referenced
+            if ra is None or rb is None:
+                return False
+            if self.inline and ra.kind == CK.PARM_DECL and rb.kind == CK.PARM_DECL and \
+                    ra.spelling != rb.spelling:
+                pair = tuple(sorted((ra.spelling, rb.spelling)))
+                same = frozenset(pair) in self.same
+                self.decisions[("same",) + pair] = same
+                return same
+            return self.resolve(ra) == self.resolve(rb)
+        if a.kind != b.kind:
+            return False
+        ka, kb = children(a), children(b)
+        if len(ka) != len(kb):
+            return False
+        if a.kind == CK.MEMBER_REF_EXPR:
+            return a.spelling == b.spelling and bool(ka) and self.same_value(ka[0], kb[0])
+        if a.kind == CK.ARRAY_SUBSCRIPT_EXPR:
+            return all(self.same_value(x, y) for x, y in zip(ka, kb))
+        if a.kind == CK.UNARY_OPERATOR:
+            op = UNOPS.get(_lib.clang_getCursorUnaryOperatorKind(a))
+            return op == UNOPS.get(_lib.clang_getCursorUnaryOperatorKind(b)) and \
+                op in ("*", "-", "+", "~", "&") and self.same_value(ka[0], kb[0])
+        if a.kind == CK.BINARY_OPERATOR:
+            op = BINOPS.get(_lib.clang_getCursorBinaryOperatorKind(a))
+            return op == BINOPS.get(_lib.clang_getCursorBinaryOperatorKind(b)) and \
+                op in ("*", "/", "+", "-", "&", "|", "^", "<<", ">>") and \
+                all(self.same_value(x, y) for x, y in zip(ka, kb))
+        if a.kind in (CK.INTEGER_LITERAL, CK.FLOATING_LITERAL):
+            va, vb = evaluate(a), evaluate(b)
+            return va is not None and va == vb and a.type.spelling == b.type.spelling
+        if a.kind == CK.CSTYLE_CAST_EXPR:
+            return a.type.spelling == b.type.spelling and self.same_value(ka[-1], kb[-1])
+        return False
+
+    CALL_WEIGHT = 1000
+
+    def weight(self, node):
+        """Registers MWCC's code generator reckons an expression needs, as in Sethi-Ullman
+        numbering: of two operands it computes the heavier one first. Constants weigh
+        nothing, and a side with a call goes first."""
+        n = strip(node)
+        k = n.kind
+        if k in (CK.INTEGER_LITERAL, CK.FLOATING_LITERAL, CK.CHARACTER_LITERAL):
+            return 0
+        if k == CK.DECL_REF_EXPR:
+            r = n.referenced
+            return 0 if r is not None and r.kind in (CK.ENUM_CONSTANT_DECL, CK.FUNCTION_DECL) else 1
+        if k in (CK.MEMBER_REF_EXPR, CK.ARRAY_SUBSCRIPT_EXPR):
+            inner = max((self.weight(x) for x in children(n)), default=0)
+            return inner if inner >= self.CALL_WEIGHT else 1
+        if k == CK.CSTYLE_CAST_EXPR:
+            return self.weight(children(n)[-1])
+        if k == CK.UNARY_OPERATOR:
+            op = UNOPS.get(_lib.clang_getCursorUnaryOperatorKind(n))
+            w = self.weight(children(n)[0])
+            return max(w, 1) if op in ("*", "&") else w
+        if k == CK.BINARY_OPERATOR or k == CK.CONDITIONAL_OPERATOR:
+            ws = [self.weight(x) for x in children(n)[-2:]]
+            return ws[0] + 1 if ws[0] == ws[1] else max(ws)
+        if k == CK.CALL_EXPR:
+            callee = strip(children(n)[0]) if children(n) else None
+            ref = callee.referenced if callee is not None and callee.kind == CK.DECL_REF_EXPR else None
+            if ref is not None and ref.kind == CK.FUNCTION_DECL and ref.get_definition() is not None \
+                    and self.inlined_in_original(ref.spelling, ref):
+                return 1
+            return self.CALL_WEIGHT
+        return 1
+
+    def is_plain_product(self, node, t):
+        """Whether product(node, t) would find a product to contract, without translating."""
+        n = strip(node)
+        if n.kind == CK.DECL_REF_EXPR and n.referenced is not None and \
+                n.referenced.kind == CK.PARM_DECL and same_type(self.u.ctype(n.type), t):
+            return n.referenced.spelling in self.forwarded
+        if n.kind != CK.BINARY_OPERATOR or BINOPS.get(_lib.clang_getCursorBinaryOperatorKind(n)) != "*":
+            return False
+        if not same_type(self.u.ctype(n.type), t):
+            return False
+        a, c = children(n)
+        return not self.is_square(a, c)
+
+    def right_first(self, left, right):
+        """For `left + right` with both products: whether MWCC computes the left one first
+        and contracts the right one. It computes the heavier side first, and on a tie the
+        right one; a side with a call goes first, the left one if both have calls."""
+        wl, wr = self.weight(left), self.weight(right)
+        cl, cr = wl >= self.CALL_WEIGHT, wr >= self.CALL_WEIGHT
+        if cl or cr:
+            return cl
+        return wl > wr
 
     def fused(self, kind, a, c, b, t):
         fn = {"madd": "fmadd", "msub": "fmsub", "nmsub": "fnmsub", "nmadd": "fnmadd"}[kind]
@@ -1987,9 +2146,14 @@ class Translator:
     def try_fuse_binary(self, op, left, right, t):
         if not self.fuse:
             return None
-        # When both sides are products, MWCC computes the right one and fuses the left one:
-        # `a*b + c*d` is fmadds(a, b, c*d).
+        # When both sides of an add are products, MWCC computes one and fuses the other: the
+        # left one, `a*b + c*d` being fmadds(a, b, c*d), unless it computes the left one first
+        # (right_first). Of a subtract it fuses the left one.
         # A negated product is contracted only where neither side is a plain product.
+        if op == "+" and self.is_plain_product(left, t) and self.is_plain_product(right, t) and \
+                self.right_first(left, right):
+            a, c, neg = self.product(right, t)
+            return self.fused("nmsub" if neg else "madd", a, c, self.convert(self.expr(left), t), t)
         for negated in (False, True):
             p = self.product(left, t, negated)
             if p is not None:
@@ -2095,7 +2259,8 @@ class Translator:
                 fwd = self.forward_args(defn, args)
                 try:
                     rname = self.u.request_inline(defn, self.fuse, self, self.reg_ptr_args(callee.referenced, args),
-                                                  {pn: neg for pn, (_, _, neg) in fwd.values()})
+                                                  {pn: neg for pn, (_, _, neg) in fwd.values()},
+                                                  self.same_args(defn, args))
                 except Unsupported as e:
                     self.u.inline_fallbacks.append((self.f.cursor.spelling, name, str(e)))
                 else:
@@ -2130,7 +2295,8 @@ class Translator:
             fwd = self.forward_args(defn, args)
             argv = self.forwarding(self.call_args(ft, args, inlined=True), fwd)
             rname = self.u.request_inline(defn, self.fuse, self, self.reg_ptr_args(defn, args),
-                                          {pn: neg for pn, (_, _, neg) in fwd.values()})
+                                          {pn: neg for pn, (_, _, neg) in fwd.values()},
+                                          self.same_args(defn, args))
             if t["k"] == "rec":
                 return self.sret_call(rname, argv, t)
             return Expr(f"{rname}(ctx{''.join(', ' + a for a in argv)})", t, False)
@@ -2177,6 +2343,11 @@ class Translator:
                         self._nested_sites[k] = self._nested_sites.get(k, 0) + 1
         sites = self._call_sites.get(ref.spelling, 0)
         if n == self._nested_sites.get(ref.spelling, 0):
+            return True
+        # A recursive function MWCC inlines once: each copy keeps its calls to itself.
+        own = sum(1 for y in defn.walk_preorder()
+                  if y.kind == CK.CALL_EXPR and y.referenced is not None and y.referenced.spelling == ref.spelling)
+        if own and sites and n == sites * own:
             return True
         if n < sites:
             # Some calls inlined, some not; which ones is not known, so all stay calls.
@@ -2263,6 +2434,17 @@ class Translator:
         """Call arguments with each forwarded product passed as its two factors."""
         return [f"{fwd[i][1][0]}, {fwd[i][1][1]}" if i in fwd else a for i, a in enumerate(argv)]
 
+    def same_args(self, fn, args):
+        """Pairs of the callee's parameters whose arguments here are the same value, which
+        MWCC sees as one once it substitutes them."""
+        params = [a.spelling for a in fn.get_children() if a.kind == CK.PARM_DECL]
+        out = set()
+        for i in range(min(len(params), len(args))):
+            for j in range(i + 1, min(len(params), len(args))):
+                if self.same_value(args[i], args[j]):
+                    out.add(frozenset((params[i], params[j])))
+        return frozenset(out)
+
     def reg_ptr_args(self, fn, args):
         """The callee's pointer parameters whose argument is the address of a local the
         original keeps in registers, or such a parameter of this inline copy."""
@@ -2279,7 +2461,8 @@ class Translator:
                     r = target.referenced
                     local = r.semantic_parent is None or r.semantic_parent.kind != CK.TRANSLATION_UNIT
                     if local and r.storage_class != ci.StorageClass.STATIC and \
-                            vkey(r) not in self.stack_resident():
+                            vkey(r) not in self.stack_resident() and \
+                            not self.used_beyond_members(fn.get_definition(), param):
                         out.add(param.spelling)
             elif self.inline and n.kind == CK.DECL_REF_EXPR and n.referenced is not None and \
                     n.referenced.kind == CK.PARM_DECL and n.referenced.type.kind == ci.TypeKind.POINTER:
@@ -2289,12 +2472,45 @@ class Translator:
                     out.add(param.spelling)
         return frozenset(out)
 
+    @staticmethod
+    def used_beyond_members(defn, param):
+        """Whether a function uses a pointer parameter other than to reach members, so the
+        local it points at is used as a whole (or escapes) where MWCC inlines the call."""
+        if defn is None:
+            return True
+
+        def walk(node, parent):
+            if node.kind == CK.DECL_REF_EXPR and node.referenced is not None and \
+                    node.referenced.kind == CK.PARM_DECL and node.referenced.spelling == param.spelling:
+                if parent is None or parent.kind != CK.MEMBER_REF_EXPR:
+                    return True
+            up = parent if node.kind in (CK.UNEXPOSED_EXPR, CK.PAREN_EXPR, CK.CSTYLE_CAST_EXPR) else node
+            return any(walk(k, up) for k in node.get_children())
+
+        body = [x for x in children(defn) if x.kind == CK.COMPOUND_STMT]
+        return bool(body) and walk(body[0], None)
+
     def stack_resident(self):
-        """Locals whose address goes somewhere other than an argument of an inlined call."""
+        """Locals MWCC keeps in memory: those whose address goes somewhere other than an
+        argument of an inlined call, and structs it copies as a whole (MWCC keeps a struct's
+        members in registers only when code uses nothing but its members)."""
         if getattr(self, "_stack_resident", None) is None:
             out = set()
 
+            def local_struct(r):
+                return r is not None and r.kind == CK.VAR_DECL and \
+                    r.storage_class not in (ci.StorageClass.STATIC, ci.StorageClass.EXTERN) and \
+                    r.semantic_parent is not None and r.semantic_parent.kind != CK.TRANSLATION_UNIT and \
+                    self.u.ctype(r.type)["k"] == "rec"
+
             def walk(node, parent):
+                if node.kind == CK.DECL_REF_EXPR and local_struct(node.referenced) and \
+                        (parent is None or parent.kind not in (CK.MEMBER_REF_EXPR, CK.UNARY_OPERATOR)):
+                    out.add(vkey(node.referenced))
+                if node.kind == CK.VAR_DECL and local_struct(node):
+                    init = var_init(node)
+                    if init is not None and strip(init).kind != CK.INIT_LIST_EXPR:
+                        out.add(vkey(node))
                 if node.kind == CK.UNARY_OPERATOR and _lib.clang_getCursorUnaryOperatorKind(node) == 5:
                     target = strip(children(node)[0])
                     if target.kind == CK.DECL_REF_EXPR and target.referenced is not None and \
@@ -2810,7 +3026,7 @@ def translate_unit(args):
 PROGRAM = []
 
 
-def _request_inline(self, defn, fuse, caller, reg_ptrs=frozenset(), forward=None):
+def _request_inline(self, defn, fuse, caller, reg_ptrs=frozenset(), forward=None, same=frozenset()):
     """An inline function's Rust name, translating it on first use. MWCC contracts inlined
     code as its caller's, and inlines the calls in it as the function it ends up in does, so
     there is a copy for each way of doing both."""
@@ -2825,6 +3041,8 @@ def _request_inline(self, defn, fuse, caller, reg_ptrs=frozenset(), forward=None
     def holds(key, value):
         if isinstance(key, tuple) and key[0] == "fwd":
             return forward.get(key[1]) == value
+        if isinstance(key, tuple) and key[0] == "same":
+            return (frozenset(key[1:]) in same) == value
         if isinstance(key, tuple):
             return (key[1] in reg_ptrs) == value
         return (asm is not None and asm.get(key, 0) == 0) == value
@@ -2844,7 +3062,8 @@ def _request_inline(self, defn, fuse, caller, reg_ptrs=frozenset(), forward=None
     inlines = dict(self.inlines)
     all_variants = {k: list(v) for k, v in self.inline_variants.items()}
     try:
-        tr = Translator(self, defn, fuse, inline=True, asm=asm, reg_ptrs=reg_ptrs, forward=forward)
+        tr = Translator(self, defn, fuse, inline=True, asm=asm, reg_ptrs=reg_ptrs, forward=forward,
+                        same=same)
         code = tr.function()
     except Exception as e:
         self.inlines, self.inline_variants = inlines, all_variants

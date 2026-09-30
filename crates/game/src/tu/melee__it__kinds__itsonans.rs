@@ -244,7 +244,8 @@ pub fn it_802CD4FC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 inl_HSD_JObjSetRotationZ_unfused(
                     ctx,
                     ((ip).xBBC_dynamicBoneTable()).bones().at(4_i32).get(),
-                    fp::fmuls(0.01745329238474369, (ip).xDD4_itemVar().sonans().x64()),
+                    0.01745329238474369,
+                    (ip).xDD4_itemVar().sonans().x64(),
                 );
                 __state = 5;
             }
@@ -490,9 +491,8 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     return result;
 }
 
-fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
+fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z__a: f64, z__c: f64) {
     let mut jobj = jobj;
-    let mut z = z;
     (if !Handle::is_null((jobj)) {
         ({ () })
     } else {
@@ -513,7 +513,7 @@ fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64
             cstr(ctx, 0x803f7ca0),
         )
     });
-    (jobj).rotate().set_z(z);
+    (jobj).rotate().set_z(fp::fmuls(z__a, z__c));
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         {
             if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
