@@ -154,7 +154,7 @@ pub fn ftCo_800C2600<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: u32) {
                             d2 = fp::fmadds(
                                 delta.z(),
                                 delta.z(),
-                                (fp::fmadds(delta.x(), delta.x(), fp::fmuls(delta.y(), delta.y()))),
+                                (fp::fmadds(delta.y(), delta.y(), fp::fmuls(delta.x(), delta.x()))),
                             );
                             d2 = inl_sqrtf(ctx, d2);
                             totalDist = fp::fadds(totalDist, d2);

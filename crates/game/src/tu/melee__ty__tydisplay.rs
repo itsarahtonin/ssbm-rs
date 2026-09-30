@@ -2779,7 +2779,7 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
 fn inl__tyDisplay_80318CB4_calc_dist_sq<'a>(ctx: &'a Ctx, dz: f64, dx: f64) -> f64 {
     let mut dz = dz;
     let mut dx = dx;
-    return fp::fmadds(dx, dx, fp::fmuls(dz, dz));
+    return fp::fmadds(dz, dz, fp::fmuls(dx, dx));
 }
 
 fn inl__tyDisplay_80318CB4_sort_pos<'a>(ctx: &'a Ctx, grid: TyDspGrid<'a>, n2: i32) {

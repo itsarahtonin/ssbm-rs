@@ -2338,9 +2338,9 @@ pub fn grMuteCity_801F1A34<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<
                                 car_pos.z(),
                                 car_pos.z(),
                                 (fp::fmadds(
-                                    car_pos.x(),
-                                    car_pos.x(),
-                                    (fp::fmuls(car_pos.y(), car_pos.y())),
+                                    car_pos.y(),
+                                    car_pos.y(),
+                                    (fp::fmuls(car_pos.x(), car_pos.x())),
                                 )),
                             );
                             distance = inl_sqrtf(ctx, spline_t);

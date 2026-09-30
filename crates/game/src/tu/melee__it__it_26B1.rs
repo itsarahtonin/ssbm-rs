@@ -1125,7 +1125,7 @@ pub fn it_8026C258<'a>(ctx: &'a Ctx, pos: Vec<'a>, facing_dir: f64) -> HSD_GObj<
                 {
                     let mut dist_x: f64 = fp::fsubs((pos).x(), (ip).pos().x());
                     let mut dist_y: f64 = fp::fsubs((pos).y(), (ip).pos().y());
-                    let mut sq_dist: f64 = fp::fmadds(dist_x, dist_x, fp::fmuls(dist_y, dist_y));
+                    let mut sq_dist: f64 = fp::fmadds(dist_y, dist_y, fp::fmuls(dist_x, dist_x));
                     if sq_dist < min_sq_dist {
                         min_sq_dist = sq_dist;
                         result = cur;

@@ -5027,8 +5027,8 @@ pub fn Camera_800307D0<'a>(
         inl_project_ground_x(ctx, center, eye_pos, forward.x(), forward.z());
         s = fns::sinf(ctx, half_fov);
         c = fns::cosf(ctx, half_fov);
-        edge_x = fp::fmadds(forward.x(), c, (fp::fmuls(forward.z(), s)));
-        edge_z = fp::fmsubs(forward.z(), c, (fp::fmuls(forward.x(), s)));
+        edge_x = fp::fmadds(forward.z(), s, (fp::fmuls(forward.x(), c)));
+        edge_z = fp::fnmsubs(forward.x(), s, (fp::fmuls(forward.z(), c)));
         if (fp::frsp(
             (if (edge_z) < fp::frsp(0_i32 as f64) {
                 fp::fneg((edge_z))
@@ -5046,8 +5046,8 @@ pub fn Camera_800307D0<'a>(
         }
         s2 = fns::sinf(ctx, fp::fneg(half_fov));
         c2 = fns::cosf(ctx, fp::fneg(half_fov));
-        edge_x2 = fp::fmadds(forward.x(), c2, (fp::fmuls(forward.z(), s2)));
-        edge_z2 = fp::fmsubs(forward.z(), c2, (fp::fmuls(forward.x(), s2)));
+        edge_x2 = fp::fmadds(forward.z(), s2, (fp::fmuls(forward.x(), c2)));
+        edge_z2 = fp::fnmsubs(forward.x(), s2, (fp::fmuls(forward.z(), c2)));
         if (fp::frsp(
             (if (edge_z2) < fp::frsp(0_i32 as f64) {
                 fp::fneg((edge_z2))

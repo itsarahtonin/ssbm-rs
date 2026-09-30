@@ -558,14 +558,14 @@ pub fn mpRemap2d<'a>(
     dy = fp::fsubs(ay1, ay0);
     f30 = fp::fsubs(px, ax0);
     f29 = fp::fsubs(py, ay0);
-    dist2 = fp::fmadd(dy, dy, (fp::fmul(dx, dx)));
+    dist2 = fp::fmadd(dx, dx, (fp::fmul(dy, dy)));
     if (if (dist2) < (0_i32 as f64) {
         fp::fneg((dist2))
     } else {
         (dist2)
     }) > 0.0001
     {
-        let mut t: f64 = fp::fdiv((fp::fmadd(dy, f29, fp::fmul(dx, f30))), dist2);
+        let mut t: f64 = fp::fdiv((fp::fmadd(dx, f30, fp::fmul(dy, f29))), dist2);
         if t > 1.0 {
             t = 1.0;
         } else if t < 0.0 {

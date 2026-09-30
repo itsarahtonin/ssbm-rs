@@ -115,22 +115,22 @@ pub fn hsd_803B3408<'a>(ctx: &'a Ctx, image: Val<'a, u8>, x: i32, y: i32, width:
                                                                     & 248_i32)
                                                                     as f64,
                                                             ),
-                                                            (fp::fmsubs(
-                                                                fp::fneg(0.16869999468326569),
+                                                            (fp::fnmsubs(
+                                                                0.3312999904155731,
                                                                 fp::frsp(
                                                                     ((sar_i32(
                                                                         (pixel as i32),
-                                                                        8_u32,
-                                                                    )) & 248_i32)
+                                                                        3_u32,
+                                                                    )) & 252_i32)
                                                                         as f64,
                                                                 ),
                                                                 (fp::fmuls(
-                                                                    0.3312999904155731,
+                                                                    fp::fneg(0.16869999468326569),
                                                                     fp::frsp(
                                                                         ((sar_i32(
                                                                             (pixel as i32),
-                                                                            3_u32,
-                                                                        )) & 252_i32)
+                                                                            8_u32,
+                                                                        )) & 248_i32)
                                                                             as f64,
                                                                     ),
                                                                 )),
@@ -164,22 +164,22 @@ pub fn hsd_803B3408<'a>(ctx: &'a Ctx, image: Val<'a, u8>, x: i32, y: i32, width:
                                                                     & 248_i32)
                                                                     as f64,
                                                             ),
-                                                            (fp::fmsubs(
-                                                                0.5,
+                                                            (fp::fnmsubs(
+                                                                0.4187000095844269,
                                                                 fp::frsp(
                                                                     ((sar_i32(
                                                                         (pixel as i32),
-                                                                        8_u32,
-                                                                    )) & 248_i32)
+                                                                        3_u32,
+                                                                    )) & 252_i32)
                                                                         as f64,
                                                                 ),
                                                                 (fp::fmuls(
-                                                                    0.4187000095844269,
+                                                                    0.5,
                                                                     fp::frsp(
                                                                         ((sar_i32(
                                                                             (pixel as i32),
-                                                                            3_u32,
-                                                                        )) & 252_i32)
+                                                                            8_u32,
+                                                                        )) & 248_i32)
                                                                             as f64,
                                                                     ),
                                                                 )),
@@ -234,7 +234,7 @@ pub fn hsd_803B3408<'a>(ctx: &'a Ctx, image: Val<'a, u8>, x: i32, y: i32, width:
                                                                         ),
                                                                 ))
                                                                 .get();
-                                                                (Handle::add(luma_base.get(), pixel_index.wrapping_mul(64_i32))).set((fp::fctiwz((fp::fmadds(0.11400000005960464, fp::frsp(((((pixel as i32).wrapping_mul(8_i32)) & 248_i32)) as f64), (fp::fmadds(0.29899999499320984, fp::frsp((((sar_i32((pixel as i32), 8_u32)) & 248_i32)) as f64), (fp::fmuls(0.5870000123977661, fp::frsp((((sar_i32((pixel as i32), 3_u32)) & 252_i32)) as f64)))))))).wrapping_sub(128_i32)));
+                                                                (Handle::add(luma_base.get(), pixel_index.wrapping_mul(64_i32))).set((fp::fctiwz((fp::fmadds(0.11400000005960464, fp::frsp(((((pixel as i32).wrapping_mul(8_i32)) & 248_i32)) as f64), (fp::fmadds(0.5870000123977661, fp::frsp((((sar_i32((pixel as i32), 3_u32)) & 252_i32)) as f64), (fp::fmuls(0.29899999499320984, fp::frsp((((sar_i32((pixel as i32), 8_u32)) & 248_i32)) as f64)))))))).wrapping_sub(128_i32)));
                                                             }
                                                             pixel_index =
                                                                 pixel_index.wrapping_add(1);
@@ -350,13 +350,13 @@ pub fn fn_803B376C<'a>(ctx: &'a Ctx, arg0: Val<'a, u8>) {
                 ));
                 (Handle::add(work_r4, 6_i32)).set(fp::fctiwz(
                     (fp::fmadd(
-                        fp::fneg(0.92388),
-                        scratch_f27_2,
-                        (fp::fmul(0.382683, scratch_f26)),
+                        0.382683,
+                        scratch_f26,
+                        (fp::fmul(fp::fneg(0.92388), scratch_f27_2)),
                     )),
                 ));
                 (Handle::add(work_r4, 2_i32)).set(fp::fctiwz(
-                    (fp::fmadd(0.382683, scratch_f27_2, (fp::fmul(0.92388, scratch_f26)))),
+                    (fp::fmadd(0.92388, scratch_f26, (fp::fmul(0.382683, scratch_f27_2)))),
                 ));
                 scratch_f8_2 =
                     fp::frsp((fp::fmul(0.707107, (fp::fsubs(scratch_f8, scratch_f11_2)))));
@@ -367,23 +367,23 @@ pub fn fn_803B376C<'a>(ctx: &'a Ctx, arg0: Val<'a, u8>) {
                 scratch_f28_3 = fp::fadds(fp::fneg(scratch_f11_3), scratch_f28_2);
                 scratch_f27_4 = fp::fadds(scratch_f27_3, scratch_f8_2);
                 (Handle::add(work_r4, 7_i32)).set(fp::fctiwz(
-                    (fp::fmadd(0.980785, scratch_f26_2, (fp::fmul(0.19509, scratch_f30_2)))),
+                    (fp::fmadd(0.19509, scratch_f30_2, (fp::fmul(0.980785, scratch_f26_2)))),
                 ));
                 (Handle::add(work_r4, 5_i32)).set(fp::fctiwz(
-                    (fp::fmadd(0.83147, scratch_f27_4, (fp::fmul(0.55557, scratch_f28_3)))),
+                    (fp::fmadd(0.55557, scratch_f28_3, (fp::fmul(0.83147, scratch_f27_4)))),
                 ));
                 (Handle::add(work_r4, 3_i32)).set(fp::fctiwz(
                     (fp::fmadd(
-                        fp::fneg(0.55557),
-                        scratch_f27_4,
-                        (fp::fmul(0.83147, scratch_f28_3)),
+                        0.83147,
+                        scratch_f28_3,
+                        (fp::fmul(fp::fneg(0.55557), scratch_f27_4)),
                     )),
                 ));
                 (Handle::add(work_r4, 1_i32)).set(fp::fctiwz(
                     (fp::fmadd(
-                        fp::fneg(0.19509),
-                        scratch_f26_2,
-                        (fp::fmul(0.980785, scratch_f30_2)),
+                        0.980785,
+                        scratch_f30_2,
+                        (fp::fmul(fp::fneg(0.19509), scratch_f26_2)),
                     )),
                 ));
                 work_r4 = Handle::add(work_r4, 8_i32);
@@ -425,13 +425,13 @@ pub fn fn_803B376C<'a>(ctx: &'a Ctx, arg0: Val<'a, u8>) {
                 ));
                 (Handle::add(work_r4_2, 48_i32)).set(fp::fctiwz(
                     (fp::fmadd(
-                        fp::fneg(0.92388),
-                        scratch_f28_5,
-                        (fp::fmul(0.382683, scratch_f27_5)),
+                        0.382683,
+                        scratch_f27_5,
+                        (fp::fmul(fp::fneg(0.92388), scratch_f28_5)),
                     )),
                 ));
                 (Handle::add(work_r4_2, 16_i32)).set(fp::fctiwz(
-                    (fp::fmadd(0.382683, scratch_f28_5, (fp::fmul(0.92388, scratch_f27_5)))),
+                    (fp::fmadd(0.92388, scratch_f27_5, (fp::fmul(0.382683, scratch_f28_5)))),
                 ));
                 scratch_f8_4 =
                     fp::frsp((fp::fmul(0.707107, (fp::fsubs(scratch_f8_3, scratch_f11_5)))));
@@ -442,23 +442,23 @@ pub fn fn_803B376C<'a>(ctx: &'a Ctx, arg0: Val<'a, u8>) {
                 scratch_f29_3 = fp::fadds(fp::fneg(scratch_f11_6), scratch_f29_2);
                 scratch_f28_7 = fp::fadds(scratch_f28_6, scratch_f8_4);
                 (Handle::add(work_r4_2, 56_i32)).set(fp::fctiwz(
-                    (fp::fmadd(0.980785, scratch_f27_6, (fp::fmul(0.19509, scratch_f30_4)))),
+                    (fp::fmadd(0.19509, scratch_f30_4, (fp::fmul(0.980785, scratch_f27_6)))),
                 ));
                 (Handle::add(work_r4_2, 40_i32)).set(fp::fctiwz(
-                    (fp::fmadd(0.83147, scratch_f28_7, (fp::fmul(0.55557, scratch_f29_3)))),
+                    (fp::fmadd(0.55557, scratch_f29_3, (fp::fmul(0.83147, scratch_f28_7)))),
                 ));
                 (Handle::add(work_r4_2, 24_i32)).set(fp::fctiwz(
                     (fp::fmadd(
-                        fp::fneg(0.55557),
-                        scratch_f28_7,
-                        (fp::fmul(0.83147, scratch_f29_3)),
+                        0.83147,
+                        scratch_f29_3,
+                        (fp::fmul(fp::fneg(0.55557), scratch_f28_7)),
                     )),
                 ));
                 (Handle::add(work_r4_2, 8_i32)).set(fp::fctiwz(
                     (fp::fmadd(
-                        fp::fneg(0.19509),
-                        scratch_f27_6,
-                        (fp::fmul(0.980785, scratch_f30_4)),
+                        0.980785,
+                        scratch_f30_4,
+                        (fp::fmul(fp::fneg(0.19509), scratch_f27_6)),
                     )),
                 ));
                 work_r4_2 = Handle::add(work_r4_2, 1_i32);

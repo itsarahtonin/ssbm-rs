@@ -429,11 +429,11 @@ pub fn ifMagnify_802FBBDC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
                                     fp::frsp((colors.get(2_i32).a() as i32) as f64),
                                     mix2,
                                     fp::fmadds(
-                                        fp::frsp((colors.get(0_i32).a() as i32) as f64),
-                                        mix1,
+                                        fp::frsp((colors.get(1_i32).a() as i32) as f64),
+                                        mix0,
                                         (fp::fmuls(
-                                            fp::frsp((colors.get(1_i32).a() as i32) as f64),
-                                            mix0,
+                                            fp::frsp((colors.get(0_i32).a() as i32) as f64),
+                                            mix1,
                                         )),
                                     ),
                                 ),
@@ -449,11 +449,11 @@ pub fn ifMagnify_802FBBDC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
                                     fp::frsp((colors.get(2_i32).r() as i32) as f64),
                                     mix2,
                                     fp::fmadds(
-                                        fp::frsp((colors.get(0_i32).r() as i32) as f64),
-                                        mix1,
+                                        fp::frsp((colors.get(1_i32).r() as i32) as f64),
+                                        mix0,
                                         (fp::fmuls(
-                                            fp::frsp((colors.get(1_i32).r() as i32) as f64),
-                                            mix0,
+                                            fp::frsp((colors.get(0_i32).r() as i32) as f64),
+                                            mix1,
                                         )),
                                     ),
                                 ),
@@ -469,11 +469,11 @@ pub fn ifMagnify_802FBBDC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
                                     fp::frsp((colors.get(2_i32).g() as i32) as f64),
                                     mix2,
                                     fp::fmadds(
-                                        fp::frsp((colors.get(0_i32).g() as i32) as f64),
-                                        mix1,
+                                        fp::frsp((colors.get(1_i32).g() as i32) as f64),
+                                        mix0,
                                         (fp::fmuls(
-                                            fp::frsp((colors.get(1_i32).g() as i32) as f64),
-                                            mix0,
+                                            fp::frsp((colors.get(0_i32).g() as i32) as f64),
+                                            mix1,
                                         )),
                                     ),
                                 ),
@@ -489,11 +489,11 @@ pub fn ifMagnify_802FBBDC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
                                     fp::frsp((colors.get(2_i32).b() as i32) as f64),
                                     mix2,
                                     fp::fmadds(
-                                        fp::frsp((colors.get(0_i32).b() as i32) as f64),
-                                        mix1,
+                                        fp::frsp((colors.get(1_i32).b() as i32) as f64),
+                                        mix0,
                                         (fp::fmuls(
-                                            fp::frsp((colors.get(1_i32).b() as i32) as f64),
-                                            mix0,
+                                            fp::frsp((colors.get(0_i32).b() as i32) as f64),
+                                            mix1,
                                         )),
                                     ),
                                 ),

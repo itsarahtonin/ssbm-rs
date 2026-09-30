@@ -667,12 +667,12 @@ pub fn ftCo_8008E5A4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         let mut kb_x: f64 = (fp).x8c_kb_vel().x();
         let mut kb_y: f64 = (fp).x8c_kb_vel().y();
         let mut kb_vel_x_neg: f64 = fp::fneg(kb_x);
-        let mut kb_mag: f64 = fp::fmadds(kb_vel_x_neg, kb_vel_x_neg, fp::fmuls(kb_y, kb_y));
+        let mut kb_mag: f64 = fp::fmadds(kb_y, kb_y, fp::fmuls(kb_vel_x_neg, kb_vel_x_neg));
         if !(kb_mag < 9.999999747378752e-06_f64) {
             let mut f3: f64 = fp::fmadds(
-                kb_y,
-                (fp).input().lstick().get(0_i32).x(),
-                fp::fmuls(kb_vel_x_neg, (fp).input().lstick().get(0_i32).y()),
+                kb_vel_x_neg,
+                (fp).input().lstick().get(0_i32).y(),
+                fp::fmuls(kb_y, (fp).input().lstick().get(0_i32).x()),
             );
             let mut f30: f64 = fp::fdivs(fp::fmuls(f3, f3), kb_mag);
             lstick_vec3.set_x((fp).input().lstick().get(0_i32).x());
@@ -709,11 +709,11 @@ pub fn ftCo_Damage_OnExitHitlag<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut isPointInCircle: i32 = 0;
     if (fp::fmadds(
-        ((fp).input().lstick().get(0_i32).x()),
-        ((fp).input().lstick().get(0_i32).x()),
+        ((fp).input().lstick().get(0_i32).y()),
+        ((fp).input().lstick().get(0_i32).y()),
         (fp::fmuls(
-            ((fp).input().lstick().get(0_i32).y()),
-            ((fp).input().lstick().get(0_i32).y()),
+            ((fp).input().lstick().get(0_i32).x()),
+            ((fp).input().lstick().get(0_i32).x()),
         )),
     )) >= (fp::fmuls(
         ((fns::p_ftCommonData(ctx).get()).sdi_min_stick_mag()),
@@ -1259,7 +1259,7 @@ fn inl_calcAngle<'a>(ctx: &'a Ctx, angle: f64) -> f64 {
     let mut sm: f64 = (fp::fdivs(3.1415927410125732, 2.0));
     let mut x: f64 = fp::fadds(ca, cm);
     let mut y: f64 = fp::fadds(fns::sinf(ctx, angle), fns::sinf(ctx, sm));
-    if fp::fmadds(x, x, fp::fmuls(y, y)) <= 9.999999747378752e-05_f64 {
+    if fp::fmadds(y, y, fp::fmuls(x, x)) <= 9.999999747378752e-05_f64 {
         return fp::frsp(0_i32 as f64);
     }
     return fns::atan2f(ctx, y, x);

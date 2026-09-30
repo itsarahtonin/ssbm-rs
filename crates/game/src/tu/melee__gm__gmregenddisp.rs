@@ -151,9 +151,9 @@ pub fn gm_801A85E4<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: i32, arg2: i32) {
             0.01745329238474369,
             (fp::fsubs(
                 fp::fmadds(
-                    45.0,
-                    fp::frsp(idx as f64),
-                    (fp::fmuls(2.0, fns::HSD_Randf(ctx))),
+                    2.0,
+                    fns::HSD_Randf(ctx),
+                    (fp::fmuls(45.0, fp::frsp(idx as f64))),
                 ),
                 1.0,
             )),
@@ -182,9 +182,12 @@ pub fn gm_801A85E4<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: i32, arg2: i32) {
             0.01745329238474369,
             (fp::fsubs(
                 fp::fmadds(
-                    25.714284896850586,
-                    fp::frsp((idx.wrapping_sub(5_i32)) as f64),
-                    (fp::fmuls(4.0, fns::HSD_Randf(ctx))),
+                    4.0,
+                    fns::HSD_Randf(ctx),
+                    (fp::fmuls(
+                        25.714284896850586,
+                        fp::frsp((idx.wrapping_sub(5_i32)) as f64),
+                    )),
                 ),
                 2.0,
             )),

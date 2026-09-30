@@ -182,9 +182,9 @@ pub fn it_8028D56C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, f1: f64, f2: f64) -> f6
             .x4_specialAttributes(),
     );
     let mut f: f64 = fp::fmadds(
-        f1,
-        fp::fneg((attrs).x14().x()),
-        (fp::fmuls(fp::fneg((attrs).x14().y()), f2)),
+        fp::fneg((attrs).x14().y()),
+        f2,
+        (fp::fmuls(f1, fp::fneg((attrs).x14().x()))),
     );
     return fp::fmuls(f, (attrs).x14().z());
 }

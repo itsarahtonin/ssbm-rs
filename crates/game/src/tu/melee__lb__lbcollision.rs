@@ -149,12 +149,12 @@ pub fn lbColl_80005C44<'a>(
         let mut d1_dot_d1: f64 = fp::fmadds(
             d1.z(),
             d1.z(),
-            fp::fmadds(d1.x(), d1.x(), fp::fmuls(d1.y(), d1.y())),
+            fp::fmadds(d1.y(), d1.y(), fp::fmuls(d1.x(), d1.x())),
         );
         let mut d1_dot_d2: f64 = fp::fmadds(
             d1.z(),
             d2_z,
-            fp::fmadds(d1.x(), d2_x, fp::fmuls(d1.y(), d2_y)),
+            fp::fmadds(d1.y(), d2_y, fp::fmuls(d1.x(), d2_x)),
         );
         let mut scale: f64 = 0.0;
         if (inl_approximatelyZero(ctx, d1_dot_d1) != 0) {
@@ -178,7 +178,7 @@ pub fn lbColl_80005C44<'a>(
         < fp::fmadds(
             (d2_z),
             (d2_z),
-            fp::fmadds((d2_x), (d2_x), (fp::fmuls((d2_y), (d2_y)))),
+            fp::fmadds((d2_y), (d2_y), (fp::fmuls((d2_x), (d2_x)))),
         )
     {
         return 0_i32;
@@ -222,12 +222,12 @@ pub fn lbColl_80005EBC<'a>(
     d1_dot_d1 = fp::fmadds(
         d1.z(),
         d1.z(),
-        fp::fmadds(d1.x(), d1.x(), fp::fmuls(d1.y(), d1.y())),
+        fp::fmadds(d1.y(), d1.y(), fp::fmuls(d1.x(), d1.x())),
     );
     d1_dot_d2 = fp::fmadds(
         d1.z(),
         d2.z(),
-        fp::fmadds(d1.x(), d2.x(), fp::fmuls(d1.y(), d2.y())),
+        fp::fmadds(d1.y(), d2.y(), fp::fmuls(d1.x(), d2.x())),
     );
     scale = fp::fdivs(fp::fneg(d1_dot_d2), d1_dot_d1);
     if scale > 1.0 {
@@ -239,7 +239,7 @@ pub fn lbColl_80005EBC<'a>(
     y = fp::fsubs(fp::fmadds(d1.y(), scale, sp50.y()), (arg2).y());
     z = fp::fsubs(fp::fmadds(d1.z(), scale, sp50.z()), (arg2).z());
     (arg3).set(scale);
-    return fp::fmadds(z, z, fp::fmadds(x, x, fp::fmuls(y, y)));
+    return fp::fmadds(z, z, fp::fmadds(y, y, fp::fmuls(x, x)));
 }
 
 pub fn lbColl_80005FC0<'a>(
@@ -270,8 +270,8 @@ pub fn lbColl_80005FC0<'a>(
     Handle::copy_from(sp38, (arg2));
     d2.set_x(fp::fsubs(sp50.x(), sp38.x()));
     d2.set_y(fp::fsubs(sp50.y(), sp38.y()));
-    d1_dot_d1 = fp::fmadds(d1.x(), d1.x(), fp::fmuls(d1.y(), d1.y()));
-    d1_dot_d2 = fp::fmadds(d1.x(), d2.x(), fp::fmuls(d1.y(), d2.y()));
+    d1_dot_d1 = fp::fmadds(d1.y(), d1.y(), fp::fmuls(d1.x(), d1.x()));
+    d1_dot_d2 = fp::fmadds(d1.y(), d2.y(), fp::fmuls(d1.x(), d2.x()));
     scale = fp::fdivs(fp::fneg(d1_dot_d2), d1_dot_d1);
     if scale > 1.0 {
         scale = 1.0;
@@ -281,7 +281,7 @@ pub fn lbColl_80005FC0<'a>(
     x = fp::fsubs(fp::fmadds(d1.x(), scale, sp50.x()), (arg2).x());
     y = fp::fsubs(fp::fmadds(d1.y(), scale, sp50.y()), (arg2).y());
     (arg3).set(scale);
-    return fp::fmadds(x, x, fp::fmuls(y, y));
+    return fp::fmadds(y, y, fp::fmuls(x, x));
 }
 
 pub fn lbColl_80006094<'a>(
@@ -466,30 +466,31 @@ pub fn lbColl_80006094<'a>(
                         d1_len_sq = fp::fmadds(
                             d1_z,
                             d1_z,
-                            (fp::fmadds(d1_x, d1_x, (fp::fmuls(d1_y, d1_y)))),
+                            (fp::fmadds(d1_y, d1_y, (fp::fmuls(d1_x, d1_x)))),
                         );
                         d2_len_sq = fp::fmadds(
                             d2_z,
                             d2_z,
-                            (fp::fmadds(d2_x, d2_x, (fp::fmuls(d2_y, d2_y)))),
+                            (fp::fmadds(d2_y, d2_y, (fp::fmuls(d2_x, d2_x)))),
                         );
                         d1_dot_d2 = fp::fmadds(
                             d1_z,
                             d2_z,
-                            (fp::fmadds(d1_x, d2_x, (fp::fmuls(d1_y, d2_y)))),
+                            (fp::fmadds(d1_y, d2_y, (fp::fmuls(d1_x, d2_x)))),
                         );
                         offset_delta_z = fp::fsubs(arg4_offset.z(), arg5_offset.z());
                         d2_dot_offset_delta = fp::fmadds(
                             d2_z,
                             offset_delta_z,
-                            (fp::fmadds(d2_x, offset_delta_x, (fp::fmuls(d2_y, offset_delta_y)))),
+                            (fp::fmadds(d2_y, offset_delta_y, (fp::fmuls(d2_x, offset_delta_x)))),
                         );
                         d1_dot_offset_delta = fp::fmadds(
                             d1_z,
                             offset_delta_z,
-                            (fp::fmadds(d1_x, offset_delta_x, (fp::fmuls(d1_y, offset_delta_y)))),
+                            (fp::fmadds(d1_y, offset_delta_y, (fp::fmuls(d1_x, offset_delta_x)))),
                         );
-                        denom = fp::fmsubs(d1_len_sq, d2_len_sq, (fp::fmuls(d1_dot_d2, d1_dot_d2)));
+                        denom =
+                            fp::fnmsubs(d1_dot_d2, d1_dot_d2, (fp::fmuls(d1_len_sq, d2_len_sq)));
                         {
                             let mut arg5_scl: f64 = 0.0;
                             if (inl_approximatelyZero(ctx, d2_len_sq) != 0) {
@@ -529,17 +530,17 @@ pub fn lbColl_80006094<'a>(
                                         arg4_offset_z,
                                         arg4_offset_z,
                                         (fp::fmadds(
-                                            arg4_mid_x,
-                                            arg4_mid_x,
-                                            (fp::fmuls(arg4_mid_y, arg4_mid_y)),
+                                            arg4_mid_y,
+                                            arg4_mid_y,
+                                            (fp::fmuls(arg4_mid_x, arg4_mid_x)),
                                         )),
                                     )) < (fp::fmadds(
                                         arg1_mid_z,
                                         arg1_mid_z,
                                         (fp::fmadds(
-                                            arg1_mid_x,
-                                            arg1_mid_x,
-                                            (fp::fmuls(arg1_mid_y, arg1_mid_y)),
+                                            arg1_mid_y,
+                                            arg1_mid_y,
+                                            (fp::fmuls(arg1_mid_x, arg1_mid_x)),
                                         )),
                                     )) {
                                         let mut scale: f64 = 0.0;
@@ -554,11 +555,11 @@ pub fn lbColl_80006094<'a>(
                                                 d1.z(),
                                                 (fp::fsubs(c3.z(), a2.z())),
                                                 (fp::fmadds(
-                                                    d1.x(),
-                                                    (fp::fsubs(c3.x(), a2.x())),
+                                                    d1.y(),
+                                                    (fp::fsubs(c3.y(), a2.y())),
                                                     (fp::fmuls(
-                                                        d1.y(),
-                                                        (fp::fsubs(c3.y(), a2.y())),
+                                                        d1.x(),
+                                                        (fp::fsubs(c3.x(), a2.x())),
                                                     )),
                                                 )),
                                             );
@@ -568,9 +569,9 @@ pub fn lbColl_80006094<'a>(
                                                     d1.z(),
                                                     d1.z(),
                                                     (fp::fmadds(
-                                                        d1.x(),
-                                                        d1.x(),
-                                                        (fp::fmuls(d1.y(), d1.y())),
+                                                        d1.y(),
+                                                        d1.y(),
+                                                        (fp::fmuls(d1.x(), d1.x())),
                                                     )),
                                                 )),
                                             );
@@ -594,11 +595,11 @@ pub fn lbColl_80006094<'a>(
                                                 d2.z(),
                                                 (fp::fsubs(c2.z(), b0.z())),
                                                 (fp::fmadds(
-                                                    d2.x(),
-                                                    (fp::fsubs(c2.x(), b0.x())),
+                                                    d2.y(),
+                                                    (fp::fsubs(c2.y(), b0.y())),
                                                     (fp::fmuls(
-                                                        d2.y(),
-                                                        (fp::fsubs(c2.y(), b0.y())),
+                                                        d2.x(),
+                                                        (fp::fsubs(c2.x(), b0.x())),
                                                     )),
                                                 )),
                                             );
@@ -608,9 +609,9 @@ pub fn lbColl_80006094<'a>(
                                                     d2.z(),
                                                     d2.z(),
                                                     (fp::fmadds(
-                                                        d2.x(),
-                                                        d2.x(),
-                                                        (fp::fmuls(d2.y(), d2.y())),
+                                                        d2.y(),
+                                                        d2.y(),
+                                                        (fp::fmuls(d2.x(), d2.x())),
                                                     )),
                                                 )),
                                             );
@@ -624,18 +625,18 @@ pub fn lbColl_80006094<'a>(
                                     }
                                 } else {
                                     arg4_scl = fp::fdivs(
-                                        (fp::fmsubs(
-                                            d1_dot_d2,
-                                            d2_dot_offset_delta,
-                                            (fp::fmuls(d2_len_sq, d1_dot_offset_delta)),
+                                        (fp::fnmsubs(
+                                            d2_len_sq,
+                                            d1_dot_offset_delta,
+                                            (fp::fmuls(d1_dot_d2, d2_dot_offset_delta)),
                                         )),
                                         denom,
                                     );
                                     arg5_scl = fp::fdivs(
-                                        (fp::fmsubs(
-                                            d1_len_sq,
-                                            d2_dot_offset_delta,
-                                            (fp::fmuls(d1_dot_d2, d1_dot_offset_delta)),
+                                        (fp::fnmsubs(
+                                            d1_dot_d2,
+                                            d1_dot_offset_delta,
+                                            (fp::fmuls(d1_len_sq, d2_dot_offset_delta)),
                                         )),
                                         denom,
                                     );
@@ -848,23 +849,23 @@ pub fn lbColl_800067F8<'a>(
                         diff_dc.set_x(fp::fsubs(d_x, c1.x()));
                         diff_dc.set_y(fp::fsubs(d_y, c1_y));
                         sqdist2_ba = fp::fmadds(
-                            diff_ba.x(),
-                            diff_ba.x(),
-                            fp::fmuls(diff_ba.y(), diff_ba.y()),
+                            diff_ba.y(),
+                            diff_ba.y(),
+                            fp::fmuls(diff_ba.x(), diff_ba.x()),
                         );
                         sqdist2_dc = fp::fmadds(
-                            diff_dc.x(),
-                            diff_dc.x(),
-                            fp::fmuls(diff_dc.y(), diff_dc.y()),
+                            diff_dc.y(),
+                            diff_dc.y(),
+                            fp::fmuls(diff_dc.x(), diff_dc.x()),
                         );
                         dot2_diff_ba_dc = fp::fmadds(
-                            diff_ba.x(),
-                            diff_dc.x(),
-                            fp::fmuls(diff_ba.y(), diff_dc.y()),
+                            diff_ba.y(),
+                            diff_dc.y(),
+                            fp::fmuls(diff_ba.x(), diff_dc.x()),
                         );
                         diff_ac_x = fp::fsubs(a1.x(), c1.x());
                         dot2_diff_dc_ac =
-                            fp::fmadds(diff_dc.x(), diff_ac_x, fp::fmuls(diff_dc.y(), diff_ac_y));
+                            fp::fmadds(diff_dc.y(), diff_ac_y, fp::fmuls(diff_dc.x(), diff_ac_x));
                         {
                             y_product = fp::fmuls(diff_ba.y(), diff_ac_y);
                             dot2_diff_ba_ac = fp::fmadds(diff_ba.x(), diff_ac_x, y_product);
@@ -899,11 +900,11 @@ pub fn lbColl_800067F8<'a>(
                                 {
                                     let mut a_mid_x: f64 = fp::fsubs(a1.x(), mid.x());
                                     let mut b_mid_x: f64 = fp::fsubs(b_x, mid.x());
-                                    if (fp::fmadds(a_mid_x, a_mid_x, fp::fmuls(a_mid_y, a_mid_y)))
+                                    if (fp::fmadds(a_mid_y, a_mid_y, fp::fmuls(a_mid_x, a_mid_x)))
                                         < (fp::fmadds(
-                                            b_mid_x,
-                                            b_mid_x,
-                                            fp::fmuls(b_mid_y, b_mid_y),
+                                            b_mid_y,
+                                            b_mid_y,
+                                            fp::fmuls(b_mid_x, b_mid_x),
                                         ))
                                     {
                                         let mut scale: f64 = 0.0;
@@ -918,11 +919,11 @@ pub fn lbColl_800067F8<'a>(
                                                 d1.z(),
                                                 (fp::fsubs(c3.z(), a2.z())),
                                                 (fp::fmadds(
-                                                    d1.x(),
-                                                    (fp::fsubs(c3.x(), a2.x())),
+                                                    d1.y(),
+                                                    (fp::fsubs(c3.y(), a2.y())),
                                                     (fp::fmuls(
-                                                        d1.y(),
-                                                        (fp::fsubs(c3.y(), a2.y())),
+                                                        d1.x(),
+                                                        (fp::fsubs(c3.x(), a2.x())),
                                                     )),
                                                 )),
                                             );
@@ -932,9 +933,9 @@ pub fn lbColl_800067F8<'a>(
                                                     d1.z(),
                                                     d1.z(),
                                                     (fp::fmadds(
-                                                        d1.x(),
-                                                        d1.x(),
-                                                        (fp::fmuls(d1.y(), d1.y())),
+                                                        d1.y(),
+                                                        d1.y(),
+                                                        (fp::fmuls(d1.x(), d1.x())),
                                                     )),
                                                 )),
                                             );
@@ -958,11 +959,11 @@ pub fn lbColl_800067F8<'a>(
                                                 d2.z(),
                                                 (fp::fsubs(c2.z(), b0.z())),
                                                 (fp::fmadds(
-                                                    d2.x(),
-                                                    (fp::fsubs(c2.x(), b0.x())),
+                                                    d2.y(),
+                                                    (fp::fsubs(c2.y(), b0.y())),
                                                     (fp::fmuls(
-                                                        d2.y(),
-                                                        (fp::fsubs(c2.y(), b0.y())),
+                                                        d2.x(),
+                                                        (fp::fsubs(c2.x(), b0.x())),
                                                     )),
                                                 )),
                                             );
@@ -972,9 +973,9 @@ pub fn lbColl_800067F8<'a>(
                                                     d2.z(),
                                                     d2.z(),
                                                     (fp::fmadds(
-                                                        d2.x(),
-                                                        d2.x(),
-                                                        (fp::fmuls(d2.y(), d2.y())),
+                                                        d2.y(),
+                                                        d2.y(),
+                                                        (fp::fmuls(d2.x(), d2.x())),
                                                     )),
                                                 )),
                                             );
@@ -989,18 +990,18 @@ pub fn lbColl_800067F8<'a>(
                                 }
                             } else {
                                 scl_e = fp::fdivs(
-                                    (fp::fmsubs(
-                                        dot2_diff_ba_dc,
-                                        dot2_diff_dc_ac,
-                                        (fp::fmuls(sqdist2_dc, dot2_diff_ba_ac)),
+                                    (fp::fnmsubs(
+                                        sqdist2_dc,
+                                        dot2_diff_ba_ac,
+                                        (fp::fmuls(dot2_diff_ba_dc, dot2_diff_dc_ac)),
                                     )),
                                     determinant,
                                 );
                                 scl_f = fp::fdivs(
-                                    (fp::fmsubs(
-                                        sqdist2_ba,
-                                        dot2_diff_dc_ac,
-                                        (fp::fmuls(dot2_diff_ba_dc, dot2_diff_ba_ac)),
+                                    (fp::fnmsubs(
+                                        dot2_diff_ba_dc,
+                                        dot2_diff_ba_ac,
+                                        (fp::fmuls(sqdist2_ba, dot2_diff_dc_ac)),
                                     )),
                                     determinant,
                                 );
@@ -1051,7 +1052,7 @@ pub fn lbColl_800067F8<'a>(
     {
         let mut x_4: f64 = fp::fsubs((e).x(), (f).x());
         let mut y_5: f64 = fp::fsubs((e).y(), (f).y());
-        distance_sq = fp::fmadds(x_4, x_4, fp::fmuls(y_5, y_5));
+        distance_sq = fp::fmadds(y_5, y_5, fp::fmuls(x_4, x_4));
         if fp::fmuls(sum_pq, sum_pq) < distance_sq {
             return 0_i32;
         }
@@ -1243,12 +1244,12 @@ pub fn lbColl_80006E58<'a>(
     hurt_start_dot = fp::fmadds(
         axis.z(),
         offset.z(),
-        (fp::fmadds(axis.x(), offset.x(), fp::fmuls(axis.y(), offset.y()))),
+        (fp::fmadds(axis.y(), offset.y(), fp::fmuls(axis.x(), offset.x()))),
     );
     segment_dot = fp::fmadds(
         hit_delta.z(),
         axis.z(),
-        (fp::fmadds(hit_delta.x(), axis.x(), fp::fmuls(midpoint.y(), axis.y()))),
+        (fp::fmadds(midpoint.y(), axis.y(), fp::fmuls(hit_delta.x(), axis.x()))),
     );
     {
         'l5: loop {
@@ -1261,19 +1262,19 @@ pub fn lbColl_80006E58<'a>(
             hit_delta.z(),
             offset.z(),
             (fp::fmadds(
-                hit_delta.x(),
-                offset.x(),
-                fp::fmuls(midpoint.y(), offset.y()),
+                midpoint.y(),
+                offset.y(),
+                fp::fmuls(hit_delta.x(), offset.x()),
             )),
         );
     }
     hurt_len_sq = fp::fmuls(axis.y(), axis.y());
     hurt_len_sq = fp::fmadds(axis.x(), axis.x(), hurt_len_sq);
     hurt_len_sq = fp::fmadds(axis.z(), axis.z(), hurt_len_sq);
-    closest_denom = fp::fmsubs(
-        hit_len_sq,
-        hurt_len_sq,
-        (fp::fmuls(segment_dot, segment_dot)),
+    closest_denom = fp::fnmsubs(
+        segment_dot,
+        segment_dot,
+        (fp::fmuls(hit_len_sq, hurt_len_sq)),
     );
     if (inl_approximatelyZero(ctx, hurt_len_sq) != 0) {
         if (inl_approximatelyZero(ctx, hit_len_sq) != 0) {
@@ -1303,17 +1304,17 @@ pub fn lbColl_80006E58<'a>(
                 separation.z(),
                 separation.z(),
                 (fp::fmadds(
-                    separation.x(),
-                    separation.x(),
-                    (fp::fmuls(separation.y(), separation.y())),
+                    separation.y(),
+                    separation.y(),
+                    (fp::fmuls(separation.x(), separation.x())),
                 )),
             )) < (fp::fmadds(
                 midpoint.z(),
                 midpoint.z(),
                 (fp::fmadds(
-                    midpoint.x(),
-                    midpoint.x(),
-                    (fp::fmuls(midpoint.y(), midpoint.y())),
+                    midpoint.y(),
+                    midpoint.y(),
+                    (fp::fmuls(midpoint.x(), midpoint.x())),
                 )),
             )) {
                 'l7: loop {
@@ -1334,9 +1335,9 @@ pub fn lbColl_80006E58<'a>(
                         d1.z(),
                         (fp::fsubs(c3.z(), a2.z())),
                         (fp::fmadds(
-                            d1.x(),
-                            (fp::fsubs(c3.x(), a2.x())),
-                            (fp::fmuls(d1.y(), (fp::fsubs(c3.y(), a2.y())))),
+                            d1.y(),
+                            (fp::fsubs(c3.y(), a2.y())),
+                            (fp::fmuls(d1.x(), (fp::fsubs(c3.x(), a2.x())))),
                         )),
                     );
                     hurt_param_from_hit_start = fp::fdivs(
@@ -1344,7 +1345,7 @@ pub fn lbColl_80006E58<'a>(
                         (fp::fmadds(
                             d1.z(),
                             d1.z(),
-                            (fp::fmadds(d1.x(), d1.x(), (fp::fmuls(d1.y(), d1.y())))),
+                            (fp::fmadds(d1.y(), d1.y(), (fp::fmuls(d1.x(), d1.x())))),
                         )),
                     );
                 }
@@ -1367,9 +1368,9 @@ pub fn lbColl_80006E58<'a>(
                         d1_2.z(),
                         (fp::fsubs(c2.z(), b0.z())),
                         (fp::fmadds(
-                            d1_2.x(),
-                            (fp::fsubs(c2.x(), b0.x())),
-                            (fp::fmuls(d1_2.y(), (fp::fsubs(c2.y(), b0.y())))),
+                            d1_2.y(),
+                            (fp::fsubs(c2.y(), b0.y())),
+                            (fp::fmuls(d1_2.x(), (fp::fsubs(c2.x(), b0.x())))),
                         )),
                     );
                     hurt_param_from_hit_end = fp::fdivs(
@@ -1377,7 +1378,7 @@ pub fn lbColl_80006E58<'a>(
                         (fp::fmadds(
                             d1_2.z(),
                             d1_2.z(),
-                            (fp::fmadds(d1_2.x(), d1_2.x(), (fp::fmuls(d1_2.y(), d1_2.y())))),
+                            (fp::fmadds(d1_2.y(), d1_2.y(), (fp::fmuls(d1_2.x(), d1_2.x())))),
                         )),
                     );
                 }
@@ -1390,18 +1391,18 @@ pub fn lbColl_80006E58<'a>(
             }
         } else {
             hit_param = fp::fdivs(
-                (fp::fmsubs(
-                    segment_dot,
-                    hurt_start_dot,
-                    (fp::fmuls(hurt_len_sq, hit_start_dot)),
+                (fp::fnmsubs(
+                    hurt_len_sq,
+                    hit_start_dot,
+                    (fp::fmuls(segment_dot, hurt_start_dot)),
                 )),
                 closest_denom,
             );
             hurt_param = fp::fdivs(
-                (fp::fmsubs(
-                    hit_len_sq,
-                    hurt_start_dot,
-                    (fp::fmuls(segment_dot, hit_start_dot)),
+                (fp::fnmsubs(
+                    segment_dot,
+                    hit_start_dot,
+                    (fp::fmuls(hit_len_sq, hurt_start_dot)),
                 )),
                 closest_denom,
             );
@@ -1473,9 +1474,9 @@ pub fn lbColl_80006E58<'a>(
         separation.z(),
         separation.z(),
         (fp::fmadds(
-            separation.x(),
-            separation.x(),
-            (fp::fmuls(separation.y(), separation.y())),
+            separation.y(),
+            separation.y(),
+            (fp::fmuls(separation.x(), separation.x())),
         )),
     );
     axis.set_x(inl_sqrtf(ctx, closest_dist_sq));
@@ -1497,9 +1498,9 @@ pub fn lbColl_80006E58<'a>(
         separation.z(),
         separation.z(),
         (fp::fmadds(
-            separation.x(),
-            separation.x(),
-            (fp::fmuls(separation.y(), separation.y())),
+            separation.y(),
+            separation.y(),
+            (fp::fmuls(separation.x(), separation.x())),
         )),
     );
     local_dist_sq = inl_sqrtf(ctx, local_dist_sq);
@@ -1588,9 +1589,9 @@ pub fn lbColl_800077A0<'a>(
             diff_cb.z(),
             diff_cb.z(),
             fp::fmadds(
-                diff_cb.x(),
-                diff_cb.x(),
-                fp::fmuls(diff_cb.y(), diff_cb.y()),
+                diff_cb.y(),
+                diff_cb.y(),
+                fp::fmuls(diff_cb.x(), diff_cb.x()),
             ),
         );
         if (inl_approximatelyZero(ctx, dot_diff_cb) != 0) {
@@ -1600,27 +1601,24 @@ pub fn lbColl_800077A0<'a>(
                 fp::fmuls(2.0, diff_cb.z()),
                 diff_ba.z(),
                 fp::fmadds(
-                    fp::fmuls(2.0, diff_cb.x()),
-                    diff_ba.x(),
-                    fp::fmuls(fp::fmuls(2.0, diff_cb.y()), diff_ba.y()),
+                    fp::fmuls(2.0, diff_cb.y()),
+                    diff_ba.y(),
+                    fp::fmuls(fp::fmuls(2.0, diff_cb.x()), diff_ba.x()),
                 ),
             );
             ba_dot = fp::fmadds(
                 diff_ba.z(),
                 diff_ba.z(),
                 fp::fmadds(
-                    diff_ba.x(),
-                    diff_ba.x(),
-                    fp::fmuls(diff_ba.y(), diff_ba.y()),
+                    diff_ba.y(),
+                    diff_ba.y(),
+                    fp::fmuls(diff_ba.x(), diff_ba.x()),
                 ),
             );
-            n1 = fp::fmsubs(
-                n0,
-                n0,
-                (fp::fmuls(
-                    fp::fmuls(4.0, dot_diff_cb),
-                    fp::fneg((fp::fmsubs(offset_dist, offset_dist, ba_dot))),
-                )),
+            n1 = fp::fnmsubs(
+                fp::fmuls(4.0, dot_diff_cb),
+                fp::fneg((fp::fmsubs(offset_dist, offset_dist, ba_dot))),
+                fp::fmuls(n0, n0),
             );
             if n1 < 0.0 {
                 n1 = 0.0;
@@ -2932,7 +2930,7 @@ fn inl_end<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>, unk_sum: f64) -> i32 {
     let mut x: f64 = fp::fsubs((a).x(), (b).x());
     let mut y: f64 = fp::fsubs((a).y(), (b).y());
     let mut z: f64 = fp::fsubs((a).z(), (b).z());
-    if fp::fmuls(unk_sum, unk_sum) < fp::fmadds(z, z, (fp::fmadds(x, x, fp::fmuls(y, y)))) {
+    if fp::fmuls(unk_sum, unk_sum) < fp::fmadds(z, z, (fp::fmadds(y, y, fp::fmuls(x, x)))) {
         return 0_i32;
     }
     return 1_i32;
@@ -2978,7 +2976,7 @@ fn inl_sqrDistance<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>) -> f64 {
     let mut x: f64 = fp::fsubs((a).x(), (b).x());
     let mut y: f64 = fp::fsubs((a).y(), (b).y());
     let mut z: f64 = fp::fsubs((a).z(), (b).z());
-    return fp::fmadds(z, z, fp::fmadds(x, x, fp::fmuls(y, y)));
+    return fp::fmadds(z, z, fp::fmadds(y, y, fp::fmuls(x, x)));
 }
 
 fn inl_sqrtf_store<'a>(ctx: &'a Ctx, x: f64, y: Val<'a, F32>) -> f64 {

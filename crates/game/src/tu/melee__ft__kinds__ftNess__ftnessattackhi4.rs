@@ -294,15 +294,15 @@ pub fn ftNs_AttackHi4_YoyoSetHitPosUnk<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos
     (fp).u()
         .ns()
         .yoyo_hitbox_pos()
-        .set_x((fp::fmadds(sp3C.x(), pos_unk, (fp::fmuls(sp30.x(), pos_update)))));
+        .set_x((fp::fmadds(sp30.x(), pos_update, (fp::fmuls(sp3C.x(), pos_unk)))));
     (fp).u()
         .ns()
         .yoyo_hitbox_pos()
-        .set_y((fp::fmadds(sp3C.y(), pos_unk, (fp::fmuls(sp30.y(), pos_update)))));
+        .set_y((fp::fmadds(sp30.y(), pos_update, (fp::fmuls(sp3C.y(), pos_unk)))));
     (fp).u()
         .ns()
         .yoyo_hitbox_pos()
-        .set_z((fp::fmadds(sp3C.z(), pos_unk, (fp::fmuls(sp30.z(), pos_update)))));
+        .set_z((fp::fmadds(sp30.z(), pos_update, (fp::fmuls(sp3C.z(), pos_unk)))));
 }
 
 pub fn ftNs_AttackHi4_YoyoCheckNoObstruct<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
@@ -1158,15 +1158,15 @@ fn inl_lerpYoyoHitPos<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, t: f64) {
     (fp).u()
         .ns()
         .yoyo_hitbox_pos()
-        .set_x(fp::fmadds(pos.x(), t, fp::fmuls(prev.x(), u)));
+        .set_x(fp::fmadds(prev.x(), u, fp::fmuls(pos.x(), t)));
     (fp).u()
         .ns()
         .yoyo_hitbox_pos()
-        .set_y(fp::fmadds(pos.y(), t, fp::fmuls(prev.y(), u)));
+        .set_y(fp::fmadds(prev.y(), u, fp::fmuls(pos.y(), t)));
     (fp).u()
         .ns()
         .yoyo_hitbox_pos()
-        .set_z(fp::fmadds(pos.z(), t, fp::fmuls(prev.z(), u)));
+        .set_z(fp::fmadds(prev.z(), u, fp::fmuls(pos.z(), t)));
 }
 
 fn inl_updateYoyoHitPos<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

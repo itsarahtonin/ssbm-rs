@@ -728,7 +728,7 @@ fn inl_hsd_80391F28_len<'a>(ctx: &'a Ctx, dy: f64, dx: f64) -> f64 {
     let mut dy = dy;
     let mut dx = dx;
     let mut len: f64 = 0.0;
-    len = fp::fmadds(dx, dx, (fp::fmuls(dy, dy)));
+    len = fp::fmadds(dy, dy, (fp::fmuls(dx, dx)));
     if len > 0.0 {
         let mut e: f64 = fp::frsqrte(len);
         e = fp::fmul(

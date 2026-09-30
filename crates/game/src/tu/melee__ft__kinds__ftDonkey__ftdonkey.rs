@@ -158,10 +158,10 @@ pub fn ftDk_Init_8010DB3C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             i = 0_i32;
             'l1: while i < 4_i32 {
                 'c2: {
-                    let mut temp_f5: f64 = fp::fmsubs(
+                    let mut temp_f5: f64 = fp::fnmsubs(
                         (donkey_attr).SpecialLw().x68(),
-                        fp::frsp(i as f64),
-                        (fp::fmuls((donkey_attr).SpecialLw().x68(), 1.5)),
+                        1.5,
+                        (fp::fmuls((donkey_attr).SpecialLw().x68(), fp::frsp(i as f64))),
                     );
                     let mut temp_f3: f64 =
                         fp::fmuls((donkey_attr).SpecialLw().x6C(), (fp).facing_dir());

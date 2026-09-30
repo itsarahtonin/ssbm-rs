@@ -412,9 +412,9 @@ pub fn lbShadow_8000F38C<'a>(ctx: &'a Ctx, arg0: i32) {
             lightVec.z(),
             lightVec.z(),
             (fp::fmadds(
-                lightVec.x(),
-                lightVec.x(),
-                (fp::fmuls(lightVec.y(), lightVec.y())),
+                lightVec.y(),
+                lightVec.y(),
+                (fp::fmuls(lightVec.x(), lightVec.x())),
             )),
         );
         dist = inl_sqrtf(ctx, dist);
@@ -434,9 +434,9 @@ pub fn lbShadow_8000F38C<'a>(ctx: &'a Ctx, arg0: i32) {
             upVec.set_z(fns::lbShadow_804D7B70(ctx).get());
         } else {
             let mut xz_sq: f64 = fp::fmadds(
-                lightVec.x(),
-                lightVec.x(),
-                (fp::fmuls(lightVec.z(), lightVec.z())),
+                lightVec.z(),
+                lightVec.z(),
+                (fp::fmuls(lightVec.x(), lightVec.x())),
             );
             if xz_sq > fns::lbShadow_804D7B8C(ctx).get() {
                 upVec.set_z(fns::lbShadow_804D7B70(ctx).get());
@@ -618,7 +618,7 @@ fn inl_splGetBezierTangent<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, u: f64) {
     let mut u2: f64 = fp::fmuls(u, u);
     let mut bez0: f64 = fp::fmuls(fp::fmuls(fp::fneg(3.0), u_1), u_1);
     let mut bez1: f64 = fp::fmuls(3.0, (fp::fmadds(3.0, u2, (fp::fnmsubs(4.0, u, 1.0)))));
-    let mut bez2: f64 = fp::fmuls(3.0, (fp::fmsubs(2.0, u, (fp::fmuls(3.0, u2)))));
+    let mut bez2: f64 = fp::fmuls(3.0, (fp::fnmsubs(3.0, u2, (fp::fmuls(2.0, u)))));
     let mut bez3: f64 = fp::fmuls(3.0, u2);
     (p).set_x(fp::fmadds(
         (Handle::add(cp, 3_i32)).x(),
@@ -627,9 +627,9 @@ fn inl_splGetBezierTangent<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, u: f64) {
             (Handle::add(cp, 2_i32)).x(),
             bez2,
             fp::fmadds(
-                (Handle::add(cp, 0_i32)).x(),
-                bez0,
-                (fp::fmuls((Handle::add(cp, 1_i32)).x(), bez1)),
+                (Handle::add(cp, 1_i32)).x(),
+                bez1,
+                (fp::fmuls((Handle::add(cp, 0_i32)).x(), bez0)),
             ),
         ),
     ));
@@ -640,9 +640,9 @@ fn inl_splGetBezierTangent<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, u: f64) {
             (Handle::add(cp, 2_i32)).y(),
             bez2,
             fp::fmadds(
-                (Handle::add(cp, 0_i32)).y(),
-                bez0,
-                (fp::fmuls((Handle::add(cp, 1_i32)).y(), bez1)),
+                (Handle::add(cp, 1_i32)).y(),
+                bez1,
+                (fp::fmuls((Handle::add(cp, 0_i32)).y(), bez0)),
             ),
         ),
     ));
@@ -653,9 +653,9 @@ fn inl_splGetBezierTangent<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, u: f64) {
             (Handle::add(cp, 2_i32)).z(),
             bez2,
             fp::fmadds(
-                (Handle::add(cp, 0_i32)).z(),
-                bez0,
-                (fp::fmuls((Handle::add(cp, 1_i32)).z(), bez1)),
+                (Handle::add(cp, 1_i32)).z(),
+                bez1,
+                (fp::fmuls((Handle::add(cp, 0_i32)).z(), bez0)),
             ),
         ),
     ));
@@ -669,10 +669,10 @@ fn inl_splGetBSplineTangent<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, u: f64) {
     let mut u_1: f64 = fp::fsubs(1.0, u);
     let mut half: f64 = 0.5;
     let mut b0: f64 = fp::fmuls(u_1, (fp::fmuls(fp::fneg(half), u_1)));
-    let mut b1: f64 = fp::fmuls(half, (fp::fmsubs(3.0, u2, (fp::fmuls(4.0, u)))));
+    let mut b1: f64 = fp::fmuls(half, (fp::fnmsubs(4.0, u, (fp::fmuls(3.0, u2)))));
     let mut b2: f64 = fp::fmuls(
         half,
-        (fp::fadds(1.0, (fp::fmadds(fp::fneg(3.0), u2, (fp::fmuls(2.0, u)))))),
+        (fp::fadds(1.0, (fp::fmadds(2.0, u, (fp::fmuls(fp::fneg(3.0), u2)))))),
     );
     let mut b3: f64 = fp::fmuls(half, u2);
     (p).set_x(fp::fmadds(
@@ -682,9 +682,9 @@ fn inl_splGetBSplineTangent<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, u: f64) {
             (Handle::add(cp, 2_i32)).x(),
             b2,
             fp::fmadds(
-                (Handle::add(cp, 0_i32)).x(),
-                b0,
-                (fp::fmuls((Handle::add(cp, 1_i32)).x(), b1)),
+                (Handle::add(cp, 1_i32)).x(),
+                b1,
+                (fp::fmuls((Handle::add(cp, 0_i32)).x(), b0)),
             ),
         ),
     ));
@@ -695,9 +695,9 @@ fn inl_splGetBSplineTangent<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, u: f64) {
             (Handle::add(cp, 2_i32)).y(),
             b2,
             fp::fmadds(
-                (Handle::add(cp, 0_i32)).y(),
-                b0,
-                (fp::fmuls((Handle::add(cp, 1_i32)).y(), b1)),
+                (Handle::add(cp, 1_i32)).y(),
+                b1,
+                (fp::fmuls((Handle::add(cp, 0_i32)).y(), b0)),
             ),
         ),
     ));
@@ -708,9 +708,9 @@ fn inl_splGetBSplineTangent<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, u: f64) {
             (Handle::add(cp, 2_i32)).z(),
             b2,
             fp::fmadds(
-                (Handle::add(cp, 0_i32)).z(),
-                b0,
-                (fp::fmuls((Handle::add(cp, 1_i32)).z(), b1)),
+                (Handle::add(cp, 1_i32)).z(),
+                b1,
+                (fp::fmuls((Handle::add(cp, 0_i32)).z(), b0)),
             ),
         ),
     ));
@@ -728,22 +728,22 @@ fn inl_splGetCardinalTangent<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, tension:
     let mut car3: f64 = 0.0;
     car0 = fp::fmuls(
         tension,
-        (fp::fsubs((fp::fmadds(fp::fneg(3.0), u2, (fp::fmuls(4.0, u)))), 1.0)),
+        (fp::fsubs((fp::fmadds(4.0, u, (fp::fmuls(fp::fneg(3.0), u2)))), 1.0)),
     );
     car1 = fp::fmadds(
-        fp::fmuls(3.0, (fp::fsubs(2.0, tension))),
-        u2,
-        (fp::fmuls(fp::fmuls(2.0, (fp::fsubs(tension, 3.0))), u)),
+        fp::fmuls(2.0, (fp::fsubs(tension, 3.0))),
+        u,
+        (fp::fmuls(fp::fmuls(3.0, (fp::fsubs(2.0, tension))), u2)),
     );
     car2 = fp::fadds(
         tension,
         (fp::fmadds(
-            fp::fmuls(3.0, (fp::fsubs(tension, 2.0))),
-            u2,
-            (fp::fmuls(fp::fmuls(2.0, fp::fneg((fp::fmsubs(2.0, tension, 3.0)))), u)),
+            fp::fmuls(2.0, fp::fneg((fp::fmsubs(2.0, tension, 3.0)))),
+            u,
+            (fp::fmuls(fp::fmuls(3.0, (fp::fsubs(tension, 2.0))), u2)),
         )),
     );
-    car3 = fp::fmuls(tension, (fp::fmsubs(3.0, u2, (fp::fmuls(2.0, u)))));
+    car3 = fp::fmuls(tension, (fp::fnmsubs(2.0, u, (fp::fmuls(3.0, u2)))));
     (p).set_x(fp::fmadds(
         (Handle::add(cp, 3_i32)).x(),
         car3,
@@ -751,9 +751,9 @@ fn inl_splGetCardinalTangent<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, tension:
             (Handle::add(cp, 2_i32)).x(),
             car2,
             fp::fmadds(
-                (Handle::add(cp, 0_i32)).x(),
-                car0,
-                (fp::fmuls((Handle::add(cp, 1_i32)).x(), car1)),
+                (Handle::add(cp, 1_i32)).x(),
+                car1,
+                (fp::fmuls((Handle::add(cp, 0_i32)).x(), car0)),
             ),
         ),
     ));
@@ -764,9 +764,9 @@ fn inl_splGetCardinalTangent<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, tension:
             (Handle::add(cp, 2_i32)).y(),
             car2,
             fp::fmadds(
-                (Handle::add(cp, 0_i32)).y(),
-                car0,
-                (fp::fmuls((Handle::add(cp, 1_i32)).y(), car1)),
+                (Handle::add(cp, 1_i32)).y(),
+                car1,
+                (fp::fmuls((Handle::add(cp, 0_i32)).y(), car0)),
             ),
         ),
     ));
@@ -777,9 +777,9 @@ fn inl_splGetCardinalTangent<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, tension:
             (Handle::add(cp, 2_i32)).z(),
             car2,
             fp::fmadds(
-                (Handle::add(cp, 0_i32)).z(),
-                car0,
-                (fp::fmuls((Handle::add(cp, 1_i32)).z(), car1)),
+                (Handle::add(cp, 1_i32)).z(),
+                car1,
+                (fp::fmuls((Handle::add(cp, 0_i32)).z(), car0)),
             ),
         ),
     ));

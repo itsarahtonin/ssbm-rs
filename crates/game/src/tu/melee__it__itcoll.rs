@@ -523,14 +523,14 @@ pub fn it_80270CD8<'a>(ctx: &'a Ctx, ip: Item<'a>, hit: HitCapsule<'a>) -> f64 {
                 (fp::fmuls(
                     (attr).x1C_damage_mul(),
                     (fp::fmadds(
-                        (fns::it_804D6D28(ctx).get()).x80_float().at(10_i32).get(),
-                        (fns::it_804D6D28(ctx).get()).x80_float().at(8_i32).get(),
+                        (fns::it_804D6D28(ctx).get()).x80_float().at(9_i32).get(),
                         (fp::fmuls(
-                            (fns::it_804D6D28(ctx).get()).x80_float().at(9_i32).get(),
-                            (fp::fmuls(
-                                (fns::it_804D6D28(ctx).get()).x80_float().at(10_i32).get(),
-                                fp::frsp((hit).x28() as f64),
-                            )),
+                            (fns::it_804D6D28(ctx).get()).x80_float().at(10_i32).get(),
+                            fp::frsp((hit).x28() as f64),
+                        )),
+                        (fp::fmuls(
+                            (fns::it_804D6D28(ctx).get()).x80_float().at(10_i32).get(),
+                            (fns::it_804D6D28(ctx).get()).x80_float().at(8_i32).get(),
                         )),
                     )),
                 )),
@@ -546,17 +546,14 @@ pub fn it_80270CD8<'a>(ctx: &'a Ctx, ip: Item<'a>, hit: HitCapsule<'a>) -> f64 {
                 (fp::fmuls(
                     (attr).x1C_damage_mul(),
                     (fp::fmadds(
-                        (fns::it_804D6D28(ctx).get()).x80_float().at(8_i32).get(),
-                        (fp::fadds(fp::frsp((ip).xC9C() as f64), fp::frsp((ip).xCA0() as f64))),
+                        (fns::it_804D6D28(ctx).get()).x80_float().at(9_i32).get(),
                         (fp::fmuls(
-                            (fns::it_804D6D28(ctx).get()).x80_float().at(9_i32).get(),
-                            (fp::fmuls(
-                                (hit).damage(),
-                                (fp::fadds(
-                                    fp::frsp((ip).xC9C() as f64),
-                                    fp::frsp((ip).xCA0() as f64),
-                                )),
-                            )),
+                            (hit).damage(),
+                            (fp::fadds(fp::frsp((ip).xC9C() as f64), fp::frsp((ip).xCA0() as f64))),
+                        )),
+                        (fp::fmuls(
+                            (fns::it_804D6D28(ctx).get()).x80_float().at(8_i32).get(),
+                            (fp::fadds(fp::frsp((ip).xC9C() as f64), fp::frsp((ip).xCA0() as f64))),
                         )),
                     )),
                 )),
@@ -619,20 +616,23 @@ pub fn it_80270E30<'a>(ctx: &'a Ctx, arg_item_gobj: HSD_GObj<'a>) {
                                 (fp::fmuls(
                                     (attr).x1C_damage_mul(),
                                     (fp::fmadds(
-                                        (fns::it_804D6D28(ctx).get()).x80_float().at(10_i32).get(),
-                                        (fns::it_804D6D28(ctx).get()).x80_float().at(8_i32).get(),
+                                        (fns::it_804D6D28(ctx).get()).x80_float().at(9_i32).get(),
                                         (fp::fmuls(
                                             (fns::it_804D6D28(ctx).get())
                                                 .x80_float()
-                                                .at(9_i32)
+                                                .at(10_i32)
                                                 .get(),
-                                            (fp::fmuls(
-                                                (fns::it_804D6D28(ctx).get())
-                                                    .x80_float()
-                                                    .at(10_i32)
-                                                    .get(),
-                                                fp::frsp((hit).x28() as f64),
-                                            )),
+                                            fp::frsp((hit).x28() as f64),
+                                        )),
+                                        (fp::fmuls(
+                                            (fns::it_804D6D28(ctx).get())
+                                                .x80_float()
+                                                .at(10_i32)
+                                                .get(),
+                                            (fns::it_804D6D28(ctx).get())
+                                                .x80_float()
+                                                .at(8_i32)
+                                                .get(),
                                         )),
                                     )),
                                 )),
@@ -648,22 +648,22 @@ pub fn it_80270E30<'a>(ctx: &'a Ctx, arg_item_gobj: HSD_GObj<'a>) {
                                 (fp::fmuls(
                                     (attr).x1C_damage_mul(),
                                     (fp::fmadds(
-                                        (fns::it_804D6D28(ctx).get()).x80_float().at(8_i32).get(),
-                                        (fp::fadds(
-                                            fp::frsp((arg_item).xC9C() as f64),
-                                            fp::frsp((arg_item).xCA0() as f64),
+                                        (fns::it_804D6D28(ctx).get()).x80_float().at(9_i32).get(),
+                                        (fp::fmuls(
+                                            (hit).damage(),
+                                            (fp::fadds(
+                                                fp::frsp((arg_item).xC9C() as f64),
+                                                fp::frsp((arg_item).xCA0() as f64),
+                                            )),
                                         )),
                                         (fp::fmuls(
                                             (fns::it_804D6D28(ctx).get())
                                                 .x80_float()
-                                                .at(9_i32)
+                                                .at(8_i32)
                                                 .get(),
-                                            (fp::fmuls(
-                                                (hit).damage(),
-                                                (fp::fadds(
-                                                    fp::frsp((arg_item).xC9C() as f64),
-                                                    fp::frsp((arg_item).xCA0() as f64),
-                                                )),
+                                            (fp::fadds(
+                                                fp::frsp((arg_item).xC9C() as f64),
+                                                fp::frsp((arg_item).xCA0() as f64),
                                             )),
                                         )),
                                     )),

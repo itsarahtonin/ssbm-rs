@@ -232,7 +232,7 @@ pub fn ft_80089B08<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             dy = fp::fsubs(sp38.y(), sp2C.y());
             dx = sp38.x();
             dx = fp::fsubs(dx, sp2C.x());
-            line_len = fp::fmadds(dx, dx, fp::fmuls(dy, dy));
+            line_len = fp::fmadds(dy, dy, fp::fmuls(dx, dx));
             if line_len > 0.0 {
                 let mut guess: f64 = fp::frsqrte(line_len);
                 guess = fp::fmul(

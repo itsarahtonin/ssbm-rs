@@ -689,12 +689,12 @@ pub fn mpColl_LoadECB_Fixed<'a>(ctx: &'a Ctx, coll: CollData<'a>) {
         rot_bot_y = fp::fmuls(orig_bottom_y, cos);
         inl_update_min_max_2(ctx, left_x, right_x, rot_bot_x);
         inl_update_min_max_2(ctx, bottom_y, top_y, rot_bot_y);
-        rot_right_x = fp::fmsubs(orig_right_x, cos, (fp::fmuls(midpoint_x, sin)));
-        rot_right_y = fp::fmadds(orig_right_x, sin, (fp::fmuls(midpoint_x, cos)));
+        rot_right_x = fp::fnmsubs(midpoint_x, sin, (fp::fmuls(orig_right_x, cos)));
+        rot_right_y = fp::fmadds(midpoint_x, cos, (fp::fmuls(orig_right_x, sin)));
         inl_update_min_max_2(ctx, left_x, right_x, rot_right_x);
         inl_update_min_max_2(ctx, bottom_y, top_y, rot_right_y);
-        rot_left_x = fp::fmsubs(orig_left_x, cos, (fp::fmuls(midpoint_x, sin)));
-        rot_left_y = fp::fmadds(orig_left_x, sin, (fp::fmuls(midpoint_x, cos)));
+        rot_left_x = fp::fnmsubs(midpoint_x, sin, (fp::fmuls(orig_left_x, cos)));
+        rot_left_y = fp::fmadds(midpoint_x, cos, (fp::fmuls(orig_left_x, sin)));
         inl_update_min_max_2(ctx, left_x, right_x, rot_left_x);
         inl_update_min_max_2(ctx, bottom_y, top_y, rot_left_y);
     }

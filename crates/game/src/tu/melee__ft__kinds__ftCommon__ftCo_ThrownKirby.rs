@@ -165,9 +165,9 @@ pub fn ftCo_ThrownKirbyStar_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         Handle::copy_from(self_vel, (fp).self_vel());
         fns::lbVector_Mirror(ctx, (fp).self_vel(), normal);
         if fp::fmadds(
-            self_vel.x(),
-            (fp).self_vel().x(),
-            fp::fmuls(self_vel.y(), (fp).self_vel().y()),
+            self_vel.y(),
+            (fp).self_vel().y(),
+            fp::fmuls(self_vel.x(), (fp).self_vel().x()),
         ) < fp::frsp(0_i32 as f64)
         {
             fns::ftCo_800BE494(ctx, gobj);
@@ -252,9 +252,9 @@ pub fn ftCo_ThrownCopyStar_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         Handle::copy_from(self_vel, (fp).self_vel());
         fns::lbVector_Mirror(ctx, (fp).self_vel(), normal);
         if fp::fmadds(
-            self_vel.x(),
-            (fp).self_vel().x(),
-            fp::fmuls(self_vel.y(), (fp).self_vel().y()),
+            self_vel.y(),
+            (fp).self_vel().y(),
+            fp::fmuls(self_vel.x(), (fp).self_vel().x()),
         ) < fp::frsp(0_i32 as f64)
         {
             fns::ftCo_800BE494(ctx, gobj);

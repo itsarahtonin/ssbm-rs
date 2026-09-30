@@ -42,16 +42,16 @@ pub fn HSD_QuatLib_8037EC4C<'a>(
     let mut z: f64 = 0.0;
     let mut w: f64 = 0.0;
     x = fp::fadds(
-        fp::fmadds((q).w(), (p).x(), fp::fmuls((p).w(), (q).x())),
-        (fp::fmsubs((p).y(), (q).z(), fp::fmuls((q).y(), (p).z()))),
+        fp::fmadds((p).w(), (q).x(), fp::fmuls((q).w(), (p).x())),
+        (fp::fnmsubs((q).y(), (p).z(), fp::fmuls((p).y(), (q).z()))),
     );
     y = fp::fadds(
-        fp::fmadds((q).w(), (p).y(), fp::fmuls((p).w(), (q).y())),
-        (fp::fmsubs((q).x(), (p).z(), fp::fmuls((p).x(), (q).z()))),
+        fp::fmadds((p).w(), (q).y(), fp::fmuls((q).w(), (p).y())),
+        (fp::fnmsubs((p).x(), (q).z(), fp::fmuls((q).x(), (p).z()))),
     );
     z = fp::fadds(
-        fp::fmadds((q).w(), (p).z(), fp::fmuls((p).w(), (q).z())),
-        (fp::fmsubs((p).x(), (q).y(), fp::fmuls((q).x(), (p).y()))),
+        fp::fmadds((p).w(), (q).z(), fp::fmuls((q).w(), (p).z())),
+        (fp::fnmsubs((q).x(), (p).y(), fp::fmuls((p).x(), (q).y()))),
     );
     w = fp::fmsubs(
         (p).w(),
@@ -59,7 +59,7 @@ pub fn HSD_QuatLib_8037EC4C<'a>(
         (fp::fmadds(
             (p).z(),
             (q).z(),
-            (fp::fmadds((p).x(), (q).x(), fp::fmuls((p).y(), (q).y()))),
+            (fp::fmadds((p).y(), (q).y(), fp::fmuls((p).x(), (q).x()))),
         )),
     );
     (out).set_x(x);
@@ -95,17 +95,17 @@ pub fn EulerToQuat<'a>(ctx: &'a Ctx, euler: Vec<'a>, q: Quaternion<'a>) -> i32 {
     sz = fns::sinf(ctx, fp::fmuls(0.5, (euler).z()));
     ss = fp::fmuls(sy, sz);
     cc = fp::fmuls(cy, cz);
-    (q).set_w(fp::fmadds(cx, cc, fp::fmuls(sx, ss)));
-    (q).set_x(fp::fmsubs(sx, cc, fp::fmuls(cx, ss)));
+    (q).set_w(fp::fmadds(sx, ss, fp::fmuls(cx, cc)));
+    (q).set_x(fp::fnmsubs(cx, ss, fp::fmuls(sx, cc)));
     (q).set_y(fp::fmadds(
-        cz,
-        (fp::fmuls(cx, sy)),
-        fp::fmuls(sz, (fp::fmuls(sx, cy))),
-    ));
-    (q).set_z(fp::fmsubs(
         sz,
-        (fp::fmuls(cx, cy)),
-        fp::fmuls(cz, (fp::fmuls(sx, sy))),
+        (fp::fmuls(sx, cy)),
+        fp::fmuls(cz, (fp::fmuls(cx, sy))),
+    ));
+    (q).set_z(fp::fnmsubs(
+        cz,
+        (fp::fmuls(sx, sy)),
+        fp::fmuls(sz, (fp::fmuls(cx, cy))),
     ));
     return 0_i32;
 }
@@ -134,7 +134,7 @@ pub fn HSD_QuatLib_8037EF28<'a>(
         fp::fmadds(
             (p).z(),
             (q).z(),
-            fp::fmadds((p).x(), (q).x(), fp::fmuls((p).y(), (q).y())),
+            fp::fmadds((p).y(), (q).y(), fp::fmuls((p).x(), (q).x())),
         ),
     );
     if (fp::fadds(1.0, cosom)) > 1.000000013351432e-10_f64 {
@@ -147,10 +147,10 @@ pub fn HSD_QuatLib_8037EF28<'a>(
             sq = t;
             sp = fp::frsp((fp::fsub(1.0, t)));
         }
-        (out).set_x(fp::fmadds(sp, (p).x(), fp::fmuls(sq, (q).x())));
-        (out).set_y(fp::fmadds(sp, (p).y(), fp::fmuls(sq, (q).y())));
-        (out).set_z(fp::fmadds(sp, (p).z(), fp::fmuls(sq, (q).z())));
-        (out).set_w(fp::fmadds(sp, (p).w(), fp::fmuls(sq, (q).w())));
+        (out).set_x(fp::fmadds(sq, (q).x(), fp::fmuls(sp, (p).x())));
+        (out).set_y(fp::fmadds(sq, (q).y(), fp::fmuls(sp, (p).y())));
+        (out).set_z(fp::fmadds(sq, (q).z(), fp::fmuls(sp, (p).z())));
+        (out).set_w(fp::fmadds(sq, (q).w(), fp::fmuls(sp, (p).w())));
     } else {
         (out).set_x(fp::fneg((p).y()));
         (out).set_y((p).x());
@@ -175,10 +175,10 @@ pub fn HSD_QuatLib_8037EF28<'a>(
                     )),
                 ),
             );
-            (out).set_x(fp::fmadds(sp, (p).x(), fp::fmuls(sq, (q).x())));
-            (out).set_y(fp::fmadds(sp, (p).y(), fp::fmuls(sq, (q).y())));
-            (out).set_z(fp::fmadds(sp, (p).z(), fp::fmuls(sq, (q).z())));
-            (out).set_w(fp::fmadds(sp, (p).w(), fp::fmuls(sq, (q).w())));
+            (out).set_x(fp::fmadds(sq, (q).x(), fp::fmuls(sp, (p).x())));
+            (out).set_y(fp::fmadds(sq, (q).y(), fp::fmuls(sp, (p).y())));
+            (out).set_z(fp::fmadds(sq, (q).z(), fp::fmuls(sp, (p).z())));
+            (out).set_w(fp::fmadds(sq, (q).w(), fp::fmuls(sp, (p).w())));
         } else {
             t = fp::fsubs(t, 0.5);
             t2 = fp::fmuls(2.0, t);
@@ -195,10 +195,10 @@ pub fn HSD_QuatLib_8037EF28<'a>(
                 ctx,
                 fp::frsp((fp::fmul((fp::fdiv(3.141592653589793, (2_i32 as f64))), t2))),
             );
-            (out).set_x(fp::fmadds(sp, (p).x(), fp::fmuls(sq, (q).x())));
-            (out).set_y(fp::fmadds(sp, (p).y(), fp::fmuls(sq, (q).y())));
-            (out).set_z(fp::fmadds(sp, (p).z(), fp::fmuls(sq, (q).z())));
-            (out).set_w(fp::fmadds(sp, (p).w(), fp::fmuls(sq, (q).w())));
+            (out).set_x(fp::fmadds(sq, (q).x(), fp::fmuls(sp, (p).x())));
+            (out).set_y(fp::fmadds(sq, (q).y(), fp::fmuls(sp, (p).y())));
+            (out).set_z(fp::fmadds(sq, (q).z(), fp::fmuls(sp, (p).z())));
+            (out).set_w(fp::fmadds(sq, (q).w(), fp::fmuls(sp, (p).w())));
         }
     }
     return 0_i32;

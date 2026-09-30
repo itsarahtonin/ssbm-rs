@@ -1906,7 +1906,7 @@ fn inl_it_link_lerp<'a>(ctx: &'a Ctx, a: f64, b: f64, t: f64) -> f64 {
     let mut a = a;
     let mut b = b;
     let mut t = t;
-    return fp::fmadds(t, a, fp::fmuls((fp::fsubs(1.0, t)), b));
+    return fp::fmadds((fp::fsubs(1.0, t)), b, fp::fmuls(t, a));
 }
 
 fn inl_it_802A2568_inline<'a>(

@@ -218,15 +218,15 @@ pub fn ft_80085154<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut lstick_y: f64 = fns::sinf(ctx, (fp).lstick_angle());
     let mut temp_f0: f64 = (fp).x6A4_transNOffset().y();
     let mut temp_f3: f64 = fp::fmuls((fp).x6A4_transNOffset().z(), (fp).facing_dir());
-    (fp).self_vel().set_x(fp::fmsubs(
-        temp_f3,
-        lstick_x,
-        (fp::fmuls(temp_f0, lstick_y)),
+    (fp).self_vel().set_x(fp::fnmsubs(
+        temp_f0,
+        lstick_y,
+        (fp::fmuls(temp_f3, lstick_x)),
     ));
     (fp).self_vel().set_y(fp::fmadds(
-        temp_f3,
-        lstick_y,
-        (fp::fmuls(temp_f0, lstick_x)),
+        temp_f0,
+        lstick_x,
+        (fp::fmuls(temp_f3, lstick_y)),
     ));
 }
 

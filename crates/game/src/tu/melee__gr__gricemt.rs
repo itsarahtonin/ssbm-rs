@@ -923,19 +923,16 @@ pub fn stageGObj10_GObjProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 (gp).u().icemt10().x0().state().cur(),
                 (statics::melee__gr__gricemt::yakumono_param(ctx).get()).xA0(),
             );
-            if fp::fmsubs(
-                (gp).u().icemt10().x0().state().cur(),
+            if fp::fnmsubs(
                 ratio,
                 (fp::fmuls(
+                    fp::fmuls(
+                        0.5,
+                        (statics::melee__gr__gricemt::yakumono_param(ctx).get()).xA0(),
+                    ),
                     ratio,
-                    (fp::fmuls(
-                        fp::fmuls(
-                            0.5,
-                            (statics::melee__gr__gricemt::yakumono_param(ctx).get()).xA0(),
-                        ),
-                        ratio,
-                    )),
                 )),
+                fp::fmuls((gp).u().icemt10().x0().state().cur(), ratio),
             ) > dist
             {
                 (gp).u().icemt10().x0().state().set_cur(fp::fsubs(

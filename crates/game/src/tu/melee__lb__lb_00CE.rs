@@ -205,7 +205,7 @@ pub fn lb_8000D148<'a>(
         let mut diff_01_x: f64 = fp::fsubs(point1_x, point0_x);
         let mut diff_01_y: f64 = fp::fsubs(point0_y, point1_y);
         let mut cross: f64 = fp::fmuls(point0_y, point1_x);
-        dist_01 = fp::fmadds(diff_01_x, diff_01_x, (fp::fmuls(diff_01_y, diff_01_y)));
+        dist_01 = fp::fmadds(diff_01_y, diff_01_y, (fp::fmuls(diff_01_x, diff_01_x)));
         cross = fp::fmsubs(point0_x, point1_y, cross);
         if dist_01 < 9.999999747378752e-06_f64 {
             return 0_i32;
@@ -213,7 +213,7 @@ pub fn lb_8000D148<'a>(
         dist_01 = inl_sqrtf(ctx, dist_01);
         var_f0 = fp::fadds(
             cross,
-            (fp::fmadds(diff_01_x, point2_x, (fp::fmuls(diff_01_y, point2_y)))),
+            (fp::fmadds(diff_01_y, point2_y, (fp::fmuls(diff_01_x, point2_x)))),
         );
         if var_f0 < 0.0 {
             var_f0 = fp::fneg(var_f0);
@@ -224,20 +224,20 @@ pub fn lb_8000D148<'a>(
         let mut dist_squared_02: f64 = 0.0;
         let mut dist_squared_12: f64 = 0.0;
         dist_squared_02 = fp::fmadds(
-            (fp::fsubs(point0_x, point2_x)),
-            (fp::fsubs(point0_x, point2_x)),
+            (fp::fsubs(point0_y, point2_y)),
+            (fp::fsubs(point0_y, point2_y)),
             fp::fmuls(
-                (fp::fsubs(point0_y, point2_y)),
-                (fp::fsubs(point0_y, point2_y)),
+                (fp::fsubs(point0_x, point2_x)),
+                (fp::fsubs(point0_x, point2_x)),
             ),
         );
         threshold_squared = fp::fmuls(threshold, threshold);
         dist_squared_12 = fp::fmadds(
-            (fp::fsubs(point1_x, point2_x)),
-            (fp::fsubs(point1_x, point2_x)),
+            (fp::fsubs(point1_y, point2_y)),
+            (fp::fsubs(point1_y, point2_y)),
             fp::fmuls(
-                (fp::fsubs(point1_y, point2_y)),
-                (fp::fsubs(point1_y, point2_y)),
+                (fp::fsubs(point1_x, point2_x)),
+                (fp::fsubs(point1_x, point2_x)),
             ),
         );
         if dist_squared_02 < threshold_squared {

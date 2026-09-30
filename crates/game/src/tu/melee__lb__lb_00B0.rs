@@ -566,34 +566,34 @@ pub fn lb_8000C490<'a>(
     let mut sum_square_diffs: f64 = 0.0;
     let mut sum_square_sums: f64 = 0.0;
     (arg2).translate().set_x(fp::fmadds(
-        (jobj1).translate().x(),
-        arg8,
-        (fp::fmuls((jobj2).translate().x(), arg9)),
+        (jobj2).translate().x(),
+        arg9,
+        (fp::fmuls((jobj1).translate().x(), arg8)),
     ));
     (arg2).translate().set_y(fp::fmadds(
-        (jobj1).translate().y(),
-        arg8,
-        (fp::fmuls((jobj2).translate().y(), arg9)),
+        (jobj2).translate().y(),
+        arg9,
+        (fp::fmuls((jobj1).translate().y(), arg8)),
     ));
     (arg2).translate().set_z(fp::fmadds(
-        (jobj1).translate().z(),
-        arg8,
-        (fp::fmuls((jobj2).translate().z(), arg9)),
+        (jobj2).translate().z(),
+        arg9,
+        (fp::fmuls((jobj1).translate().z(), arg8)),
     ));
     (arg2).scale().set_x(fp::fmadds(
-        (jobj1).scale().x(),
-        arg8,
-        (fp::fmuls((jobj2).scale().x(), arg9)),
+        (jobj2).scale().x(),
+        arg9,
+        (fp::fmuls((jobj1).scale().x(), arg8)),
     ));
     (arg2).scale().set_y(fp::fmadds(
-        (jobj1).scale().y(),
-        arg8,
-        (fp::fmuls((jobj2).scale().y(), arg9)),
+        (jobj2).scale().y(),
+        arg9,
+        (fp::fmuls((jobj1).scale().y(), arg8)),
     ));
     (arg2).scale().set_z(fp::fmadds(
-        (jobj1).scale().z(),
-        arg8,
-        (fp::fmuls((jobj2).scale().z(), arg9)),
+        (jobj2).scale().z(),
+        arg9,
+        (fp::fmuls((jobj1).scale().z(), arg8)),
     ));
     is_quat_1 = ((fns::HSD_JObjGetFlags(ctx, jobj1) & (0x20000_i32 as u32)) as i32);
     is_quat_2 = ((fns::HSD_JObjGetFlags(ctx, jobj2) & (0x20000_i32 as u32)) as i32);
@@ -738,34 +738,34 @@ pub fn lb_8000C868<'a>(
     let mut phi_f1_2: f64 = 0.0;
     let mut phi_f1_3: f64 = 0.0;
     (arg2).translate().set_x(fp::fmadds(
-        (arg0).position().x(),
-        arg8,
-        (fp::fmuls((arg1).translate().x(), arg9)),
+        (arg1).translate().x(),
+        arg9,
+        (fp::fmuls((arg0).position().x(), arg8)),
     ));
     (arg2).translate().set_y(fp::fmadds(
-        (arg0).position().y(),
-        arg8,
-        (fp::fmuls((arg1).translate().y(), arg9)),
+        (arg1).translate().y(),
+        arg9,
+        (fp::fmuls((arg0).position().y(), arg8)),
     ));
     (arg2).translate().set_z(fp::fmadds(
-        (arg0).position().z(),
-        arg8,
-        (fp::fmuls((arg1).translate().z(), arg9)),
+        (arg1).translate().z(),
+        arg9,
+        (fp::fmuls((arg0).position().z(), arg8)),
     ));
     (arg2).scale().set_x(fp::fmadds(
-        (arg0).scale().x(),
-        arg8,
-        (fp::fmuls((arg1).scale().x(), arg9)),
+        (arg1).scale().x(),
+        arg9,
+        (fp::fmuls((arg0).scale().x(), arg8)),
     ));
     (arg2).scale().set_y(fp::fmadds(
-        (arg0).scale().y(),
-        arg8,
-        (fp::fmuls((arg1).scale().y(), arg9)),
+        (arg1).scale().y(),
+        arg9,
+        (fp::fmuls((arg0).scale().y(), arg8)),
     ));
     (arg2).scale().set_z(fp::fmadds(
-        (arg0).scale().z(),
-        arg8,
-        (fp::fmuls((arg1).scale().z(), arg9)),
+        (arg1).scale().z(),
+        arg9,
+        (fp::fmuls((arg0).scale().z(), arg8)),
     ));
     temp_r31 = ((fns::HSD_JObjGetFlags(ctx, arg1) & (0x20000_i32 as u32)) as i32);
     if temp_r31 == 0_i32 {

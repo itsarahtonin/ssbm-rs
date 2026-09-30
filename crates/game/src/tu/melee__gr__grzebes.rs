@@ -2702,29 +2702,29 @@ pub fn grZebes_801DBB60<'a>(ctx: &'a Ctx, yaku: HSD_GObj<'a>) -> i32 {
                                     {
                                         dist_sq = fp::fmadds(
                                             (fp::fsubs(
-                                                ei_x,
+                                                ei_y,
                                                 statics::melee__gr__grzebes::grZe_8049F170(ctx)
                                                     .get(j)
-                                                    .x08_x(),
+                                                    .x0C_y(),
                                             )),
                                             (fp::fsubs(
-                                                ei_x,
+                                                ei_y,
                                                 statics::melee__gr__grzebes::grZe_8049F170(ctx)
                                                     .get(j)
-                                                    .x08_x(),
+                                                    .x0C_y(),
                                             )),
                                             fp::fmuls(
                                                 (fp::fsubs(
-                                                    ei_y,
+                                                    ei_x,
                                                     statics::melee__gr__grzebes::grZe_8049F170(ctx)
                                                         .get(j)
-                                                        .x0C_y(),
+                                                        .x08_x(),
                                                 )),
                                                 (fp::fsubs(
-                                                    ei_y,
+                                                    ei_x,
                                                     statics::melee__gr__grzebes::grZe_8049F170(ctx)
                                                         .get(j)
-                                                        .x0C_y(),
+                                                        .x08_x(),
                                                 )),
                                             ),
                                         );
@@ -2794,7 +2794,7 @@ pub fn grZebes_801DBB60<'a>(ctx: &'a Ctx, yaku: HSD_GObj<'a>) -> i32 {
             dy = fp::fsubs(y2, y1);
             dx = fp::fsubs(x2, x1);
             width = 1.0;
-            inv_len_sq = fp::fdivs(1.0, (fp::fmadds(dx, dx, fp::fmuls(dy, dy))));
+            inv_len_sq = fp::fdivs(1.0, (fp::fmadds(dy, dy, fp::fmuls(dx, dx))));
             {
                 k = 0_i32;
                 'l7: while k < 20_i32 {
@@ -2807,9 +2807,9 @@ pub fn grZebes_801DBB60<'a>(ctx: &'a Ctx, yaku: HSD_GObj<'a>) -> i32 {
                             let mut dpx: f64 = fp::fsubs(by, y1);
                             let mut dpy: f64 = fp::fsubs(bx, x1);
                             let mut t: f64 =
-                                fp::fmuls(inv_len_sq, (fp::fmadds(dx, dpy, fp::fmuls(dy, dpx))));
+                                fp::fmuls(inv_len_sq, (fp::fmadds(dy, dpx, fp::fmuls(dx, dpy))));
                             if t < 0.0 {
-                                bx = fp::fmadds(dpy, dpy, fp::fmuls(dpx, dpx));
+                                bx = fp::fmadds(dpx, dpx, fp::fmuls(dpy, dpy));
                             } else if t > 1.0 {
                                 dpx = fp::fsubs(bx, x2);
                                 dpy = inl_grZebes_Subtract(ctx, by, y2);
@@ -2922,7 +2922,7 @@ pub fn grZebes_801DBB60<'a>(ctx: &'a Ctx, yaku: HSD_GObj<'a>) -> i32 {
                                     dy = fp::fsubs(y2, y1);
                                     dx = fp::fsubs(x2, x1);
                                     inv_len_sq =
-                                        fp::fdivs(1.0, (fp::fmadds(dx, dx, fp::fmuls(dy, dy))));
+                                        fp::fdivs(1.0, (fp::fmadds(dy, dy, fp::fmuls(dx, dx))));
                                 }
                             }
                         }

@@ -829,9 +829,9 @@ pub fn it_8027737C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, pos: Vec<'a>) {
         (item).x7C().set_y(fp::fmuls((item).x7C().y(), temp_f1));
     }
     if fp::fmadds(
-        ((item).x7C().x()),
-        ((item).x7C().x()),
-        (fp::fmuls(((item).x7C().y()), ((item).x7C().y()))),
+        ((item).x7C().y()),
+        ((item).x7C().y()),
+        (fp::fmuls(((item).x7C().x()), ((item).x7C().x()))),
     ) < (fns::it_804D6D28(ctx).get()).xCC()
     {
         (item).xDC8_word().flags().set_x1F((0_i32 as u32));
@@ -946,9 +946,9 @@ pub fn it_8027770C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
             (item).x40_vel().z(),
             sp38.z(),
             (fp::fmadds(
-                (item).x40_vel().x(),
-                sp38.x(),
-                (fp::fmuls((item).x40_vel().y(), sp38.y())),
+                (item).x40_vel().y(),
+                sp38.y(),
+                (fp::fmuls((item).x40_vel().x(), sp38.x())),
             )),
         )) < 0.0
         {
@@ -1288,7 +1288,7 @@ fn inl_return_sqrt_value<'a>(ctx: &'a Ctx, v: Vec<'a>) -> f64 {
 fn inl_product_xy<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>) -> f64 {
     let mut a = a;
     let mut b = b;
-    return (fp::fmadds((a).x(), (b).x(), fp::fmuls((a).y(), (b).y())));
+    return (fp::fmadds((a).y(), (b).y(), fp::fmuls((a).x(), (b).x())));
 }
 
 fn inl_sqrtf_accurate_local<'a>(ctx: &'a Ctx, x: f64) -> f64 {

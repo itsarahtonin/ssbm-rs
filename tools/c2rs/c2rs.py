@@ -1440,14 +1440,16 @@ class Translator:
     def try_fuse_binary(self, op, left, right, t):
         if not self.fuse or self.in_args:
             return None
-        p = self.product(left, t)
-        if p is not None:
-            b = self.convert(self.expr(right), t)
-            return self.fused("madd" if op == "+" else "msub", p[0], p[1], b, t)
+        # When both sides are products, MWCC computes the left one and fuses the right one:
+        # `a*b + c*d` is fmadds(c, d, a*b).
         p = self.product(right, t)
         if p is not None:
             b = self.convert(self.expr(left), t)
             return self.fused("madd" if op == "+" else "nmsub", p[0], p[1], b, t)
+        p = self.product(left, t)
+        if p is not None:
+            b = self.convert(self.expr(right), t)
+            return self.fused("madd" if op == "+" else "msub", p[0], p[1], b, t)
         return None
 
     def try_fuse(self, op, cur, rhs_node, t):
