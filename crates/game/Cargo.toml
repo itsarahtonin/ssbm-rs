@@ -1,0 +1,13 @@
+[package]
+name = "ssbm-game"
+description = "The game's code ported to Rust, translated from the decomp by tools/c2rs"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+gekko-fp.workspace = true
+ssbm-rt.workspace = true
+ssbm-types.workspace = true

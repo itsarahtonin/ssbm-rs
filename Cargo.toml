@@ -1,7 +1,7 @@
 [workspace]
 resolver = "3"
 members = ["crates/*", "tools/*"]
-exclude = ["tools/typegen"]
+exclude = ["tools/typegen", "tools/c2rs"]
 
 [workspace.package]
 version = "0.1.0"
@@ -19,6 +19,7 @@ ssbm-types = { path = "crates/types" }
 ssbm-ppc = { path = "crates/ppc" }
 ssbm-sdk = { path = "crates/sdk" }
 ssbm-slippi = { path = "crates/slippi" }
+ssbm-game = { path = "crates/game" }
 nod = "2.0.0-alpha.9"
 peppi = "2.1.2"
 ssbm-data = "0.1"

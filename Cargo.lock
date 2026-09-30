@@ -1143,6 +1143,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "ssbm-game"
+version = "0.1.0"
+dependencies = [
+ "gekko-fp",
+ "ssbm-rt",
+ "ssbm-types",
+]
+
+[[package]]
 name = "ssbm-mem"
 version = "0.1.0"
 dependencies = [
@@ -1172,6 +1181,7 @@ version = "0.1.0"
 dependencies = [
  "gekko-fp",
  "ssbm-disc",
+ "ssbm-game",
  "ssbm-ppc",
  "ssbm-rt",
  "ssbm-sdk",
