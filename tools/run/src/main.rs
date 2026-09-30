@@ -638,4 +638,8 @@ impl ssbm_rt::Backend for RcBackend {
     fn run(&self, ctx: &Ctx, addr: u32) {
         self.0.run(ctx, addr)
     }
+
+    fn resume(&self, ctx: &Ctx, pc: u32) {
+        self.0.resume(ctx, pc)
+    }
 }

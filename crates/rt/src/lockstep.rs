@@ -180,7 +180,9 @@ impl State {
 struct Diverged(String);
 
 fn panic_text(p: &(dyn std::any::Any + Send)) -> String {
-    if let Some(d) = p.downcast_ref::<Diverged>() {
+    if let Some(j) = crate::jump::describe(p) {
+        j
+    } else if let Some(d) = p.downcast_ref::<Diverged>() {
         d.0.clone()
     } else if let Some(f) = p.downcast_ref::<crate::Fault>() {
         f.to_string()
@@ -238,6 +240,9 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     let mut port = catch_unwind(AssertUnwindSafe(|| ctx.run_native(addr, native)))
         .err()
         .map(|p| {
+            if let Some(j) = crate::jump::describe(p.as_ref()) {
+                return j;
+            }
             // Name the ports that were running when it failed, innermost first.
             let inner: Vec<String> = ctx.native_stack()[natives..]
                 .iter()
@@ -265,6 +270,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
         panic: port,
     };
     let mut diffs = compare(
+        ctx,
         &Outcome {
             before: &j1,
             after: &s1,
@@ -298,7 +304,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
                 regs: &regs3,
                 panic: None,
             };
-            diffs = compare(&cleared, &ported, returns, sp);
+            diffs = compare(ctx, &cleared, &ported, returns, sp);
             uninitialized = diffs.is_empty();
         } else {
             uninitialized = true;
@@ -489,9 +495,10 @@ struct Outcome<'a> {
 
 /// The differences between two runs from the same state: their failures, result registers
 /// and memory.
-fn compare(a: &Outcome, b: &Outcome, returns: Returns, sp: u32) -> Vec<Diff> {
+fn compare(ctx: &Ctx, a: &Outcome, b: &Outcome, returns: Returns, sp: u32) -> Vec<Diff> {
     let mut diffs = Vec::new();
-    if a.panic.is_some() || b.panic.is_some() {
+    // The same panic on both sides, such as the same longjmp, is the same behavior.
+    if a.panic != b.panic {
         diffs.push(Diff::Panic {
             original: a.panic.clone(),
             port: b.panic.clone(),
@@ -520,9 +527,16 @@ fn compare(a: &Outcome, b: &Outcome, returns: Returns, sp: u32) -> Vec<Diff> {
     }
 
     // Frames below the caller's stack pointer, plus the back chain and saved LR words the
-    // callee writes into the caller's frame, are linkage rather than results.
+    // callee writes into the caller's frame, are linkage rather than results. So are jump
+    // buffers: a port's `setjmp` saves no registers there, and only `longjmp` reads them.
     let sp = sp & 0x3FFF_FFFF;
     let scratch = sp.saturating_sub(STACK_SCRATCH)..sp + 8;
+    let jump_buffers: Vec<std::ops::Range<u32>> = ctx
+        .jump_buffers
+        .borrow()
+        .iter()
+        .map(|&env| (env & 0x3FFF_FFFF)..(env & 0x3FFF_FFFF) + crate::jump::JMP_BUF_SIZE)
+        .collect();
     let mut pages: Vec<u32> = a.after.keys().chain(b.after.keys()).copied().collect();
     pages.sort_unstable();
     pages.dedup();
@@ -534,7 +548,10 @@ fn compare(a: &Outcome, b: &Outcome, returns: Returns, sp: u32) -> Vec<Diff> {
         let mut i = 0;
         while i < PAGE_SIZE as usize {
             let phys = page * PAGE_SIZE + i as u32;
-            if expected[i] == actual[i] || scratch.contains(&phys) {
+            if expected[i] == actual[i]
+                || scratch.contains(&phys)
+                || jump_buffers.iter().any(|r| r.contains(&phys))
+            {
                 i += 1;
                 continue;
             }

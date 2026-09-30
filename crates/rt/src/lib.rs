@@ -15,6 +15,7 @@ use std::rc::Rc;
 pub use ssbm_mem::{MEM1_SIZE, Mem, PAGE_SIZE, Pages};
 
 mod call;
+mod jump;
 mod handle;
 pub mod lockstep;
 mod regs;
@@ -59,6 +60,9 @@ pub struct Entry {
 pub trait Backend {
     /// Runs the function at `addr` until it returns.
     fn run(&self, ctx: &Ctx, addr: u32);
+    /// Goes on running original code at `pc`, as after a `longjmp`, until the function the run
+    /// started with returns.
+    fn resume(&self, ctx: &Ctx, pc: u32);
 }
 
 /// Hardware registers at `0xCC00_0000`, including the GX write-gather pipe.
@@ -114,19 +118,18 @@ pub struct Ctx {
     interrupt_check: RefCell<Option<Hook>>,
     /// Ports running, innermost last. A panic leaves it as it was, for the report.
     natives: RefCell<Vec<u32>>,
-    /// The jump buffers of the `setjmp`s ports are inside, innermost last.
-    jump_targets: RefCell<Vec<u32>>,
+    /// Jump buffers and where they were saved, latest last.
+    jump_targets: RefCell<Vec<(u32, jump::Target)>>,
+    /// Every jump buffer ever saved to.
+    jump_buffers: RefCell<std::collections::BTreeSet<u32>>,
+    /// The innermost interpreter run's id, and the last id given out.
+    current_run: Cell<u64>,
+    last_run: Cell<u64>,
     /// Where the original code that called the running native continues, if not after the call.
     resume_at: Cell<Option<u32>>,
     /// A debugging watchpoint: writes to `[start, start + len)` call `watch_hook`.
     watch: Cell<(u32, u32)>,
     watch_hook: RefCell<Option<WatchHook>>,
-}
-
-/// Panic payload of a `longjmp` to a port's `setjmp`, which catches it.
-struct LongJmp {
-    env: u32,
-    value: i32,
 }
 
 /// Called with the address and size of a write to the watched range.
@@ -167,6 +170,9 @@ impl Ctx {
             interrupt_check: RefCell::default(),
             natives: RefCell::default(),
             jump_targets: RefCell::default(),
+            jump_buffers: RefCell::default(),
+            current_run: Cell::new(0),
+            last_run: Cell::new(0),
             resume_at: Cell::new(None),
             watch: Cell::new((0, 0)),
             watch_hook: RefCell::default(),
@@ -560,39 +566,6 @@ impl Ctx {
         self.natives.borrow_mut().truncate(depth);
     }
 
-    /// `if (setjmp(env) == 0) body` in a port: runs `body`, which a `longjmp` to `env` from
-    /// anywhere inside it, ported or original, ends early. Returns 0 when the body finishes,
-    /// else the value the `longjmp` passed. As after the original's `longjmp`, the registers a
-    /// call preserves hold what they held at the `setjmp`.
-    pub fn setjmp(&self, env: u32, body: impl FnOnce()) -> i32 {
-        let saved = self.regs.snapshot();
-        let natives = self.natives_depth();
-        let targets = self.jump_targets.borrow().len();
-        self.jump_targets.borrow_mut().push(env);
-        let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(body));
-        self.jump_targets.borrow_mut().truncate(targets);
-        match result {
-            Ok(()) => 0,
-            Err(p) => match p.downcast::<LongJmp>() {
-                Ok(jump) if jump.env == env => {
-                    self.truncate_natives(natives);
-                    let r = &self.regs;
-                    for i in [1, 2].into_iter().chain(13..32) {
-                        r.set_r(i, saved.gpr[i]);
-                    }
-                    for i in 14..32 {
-                        r.fpr[i].set(saved.fpr[i]);
-                    }
-                    r.cr.set(saved.cr);
-                    r.fpscr.set(saved.fpscr);
-                    if jump.value == 0 { 1 } else { jump.value }
-                }
-                Ok(jump) => std::panic::resume_unwind(jump),
-                Err(p) => std::panic::resume_unwind(p),
-            },
-        }
-    }
-
     /// Makes the original code that called the running native continue at `addr` rather than
     /// after the call, as a `longjmp` to the original's `setjmp` does.
     pub fn resume_at(&self, addr: u32) {
@@ -604,20 +577,33 @@ impl Ctx {
         self.resume_at.take()
     }
 
-    /// `longjmp(env, value)` to a `setjmp` in a port: unwinds to it, and does not return. Returns
-    /// if no port's `setjmp` saved `env`, which leaves the jump to the original's.
-    pub fn longjmp(&self, env: u32, value: i32) {
-        if self.jump_targets.borrow().contains(&env) {
-            std::panic::resume_unwind(Box::new(LongJmp { env, value }));
-        }
-    }
-
     /// Runs the original code at `addr`, which needs a backend.
     pub fn run_original(&self, addr: u32) {
-        match self.backend.get() {
-            Some(b) => b.run(self, addr),
-            None => panic!("no implementation of {}", self.name_of(addr)),
+        let Some(b) = self.backend.get() else {
+            panic!("no implementation of {}", self.name_of(addr));
+        };
+        let run = self.last_run.get() + 1;
+        self.last_run.set(run);
+        let outer = self.current_run.replace(run);
+        let mut resume = None;
+        // A `longjmp` to a buffer saved in this run unwinds to here and goes on from there.
+        loop {
+            let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| match resume {
+                None => b.run(self, addr),
+                Some(pc) => b.resume(self, pc),
+            }));
+            match result {
+                Ok(()) => break,
+                Err(p) => match self.landing(run, p) {
+                    Ok(pc) => resume = Some(pc),
+                    Err(p) => {
+                        self.current_run.set(outer);
+                        std::panic::resume_unwind(p);
+                    }
+                },
+            }
         }
+        self.current_run.set(outer);
     }
 
     // Hooks run when original code reaches an address; ported code calls `run_hook`.

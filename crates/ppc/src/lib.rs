@@ -41,7 +41,10 @@ impl Interpreter {
 impl Backend for Interpreter {
     fn run(&self, ctx: &Ctx, addr: u32) {
         ctx.regs.lr.set(RETURN_SENTINEL);
-        let mut pc = addr;
+        self.resume(ctx, addr);
+    }
+
+    fn resume(&self, ctx: &Ctx, mut pc: u32) {
         while pc != RETURN_SENTINEL {
             if ctx.flags_at(pc) & FLAG_HOOK != 0 {
                 ctx.run_hook(pc);
