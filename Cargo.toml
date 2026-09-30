@@ -1,0 +1,21 @@
+[workspace]
+resolver = "3"
+members = ["crates/*", "tools/*"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "GPL-3.0-or-later"
+rust-version = "1.98"
+publish = false
+
+[workspace.dependencies]
+gekko-fp = { path = "crates/gekko-fp" }
+ssbm-mem = { path = "crates/mem" }
+ssbm-disc = { path = "crates/disc" }
+nod = "2.0.0-alpha.9"
+peppi = "2.1.2"
+ssbm-data = "0.1"
+sha1 = "0.10"
+thiserror = "2"
+num-bigint = "0.4"

@@ -1,0 +1,85 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Test vectors from Dolphin's UnitTests (GPL-2.0-or-later).
+
+mod common;
+
+use common::Rng;
+use gekko_fp::{fres, frsqrte};
+
+#[rustfmt::skip]
+const DOUBLE_TEST_VALUES: [u64; 57] = [
+    0x0000_0000_0000_0000, 0x0000_0000_0000_0001, 0x0000_0000_0100_0000, 0x000F_FFFF_FFFF_FFFF,
+    0x0010_0000_0000_0000, 0x0010_0000_0000_0002, 0x3FF0_0000_0000_0000, 0x7FEF_FFFF_FFFF_FFFF,
+    0x7FF0_0000_0000_0000, 0x7FF0_0000_0000_0001, 0x7FF7_FFFF_FFFF_FFFF, 0x7FF8_0000_0000_0000,
+    0x7FFF_FFFF_FFFF_FFFF, 0x8000_0000_0000_0000, 0x8000_0000_0000_0001, 0x8000_0000_0100_0000,
+    0x800F_FFFF_FFFF_FFFF, 0x8010_0000_0000_0000, 0x8010_0000_0000_0002, 0xBFF0_0000_0000_0000,
+    0xFFEF_FFFF_FFFF_FFFF, 0xFFF0_0000_0000_0000, 0xFFF0_0000_0000_0001, 0xFFF7_FFFF_FFFF_FFFF,
+    0xFFF8_0000_0000_0000, 0xFFFF_FFFF_FFFF_FFFF, 0x3800_0000_0000_0000, 0x3810_0000_0000_0000,
+    0xB800_0000_0000_0000, 0xB810_0000_0000_0000, 0x3800_1234_5678_9ABC, 0x3810_1234_5678_9ABC,
+    0xB800_1234_5678_9ABC, 0xB810_1234_5678_9ABC, 0x3680_0000_0000_0000, 0x36A0_0000_0000_0000,
+    0x36B0_0000_0000_0000, 0xB680_0000_0000_0000, 0xB6A0_0000_0000_0000, 0xB6B0_0000_0000_0000,
+    0x3680_1234_5678_9ABC, 0x36A0_1234_5678_9ABC, 0x36B0_1234_5678_9ABC, 0xB680_1234_5678_9ABC,
+    0xB6A0_1234_5678_9ABC, 0xB6B0_1234_5678_9ABC, 0x47C0_0000_0000_0000, 0x47D0_0000_0000_0000,
+    0xC7C0_0000_0000_0000, 0xC7D0_0000_0000_0000, 0x37F0_0000_0000_0000, 0x37E0_0000_0000_0000,
+    0xB7F0_0000_0000_0000, 0xB7E0_0000_0000_0000, 0x3FF8_0000_0000_0000, 0x408F_4000_0000_0000,
+    0xC008_0000_0000_0000,
+];
+
+#[rustfmt::skip]
+const FRSQRTE_EXPECTED: [u64; 57] = [
+    0x7FF0_0000_0000_0000, 0x617F_FE80_0000_0000, 0x60BF_FE80_0000_0000, 0x5FE0_0008_2C00_0000,
+    0x5FDF_FE80_0000_0000, 0x5FDF_FE80_0000_0000, 0x3FEF_FE80_0000_0000, 0x1FF0_0008_2C00_0000,
+    0x0000_0000_0000_0000, 0x7FF8_0000_0000_0001, 0x7FFF_FFFF_FFFF_FFFF, 0x7FF8_0000_0000_0000,
+    0x7FFF_FFFF_FFFF_FFFF, 0xFFF0_0000_0000_0000, 0x7FF8_0000_0000_0000, 0x7FF8_0000_0000_0000,
+    0x7FF8_0000_0000_0000, 0x7FF8_0000_0000_0000, 0x7FF8_0000_0000_0000, 0x7FF8_0000_0000_0000,
+    0x7FF8_0000_0000_0000, 0x7FF8_0000_0000_0000, 0xFFF8_0000_0000_0001, 0xFFFF_FFFF_FFFF_FFFF,
+    0xFFF8_0000_0000_0000, 0xFFFF_FFFF_FFFF_FFFF, 0x43E6_9FA0_0000_0000, 0x43DF_FE80_0000_0000,
+    0x7FF8_0000_0000_0000, 0x7FF8_0000_0000_0000, 0x43E6_9360_6000_0000, 0x43DF_ED30_7000_0000,
+    0x7FF8_0000_0000_0000, 0x7FF8_0000_0000_0000, 0x44A6_9FA0_0000_0000, 0x4496_9FA0_0000_0000,
+    0x448F_FE80_0000_0000, 0x7FF8_0000_0000_0000, 0x7FF8_0000_0000_0000, 0x7FF8_0000_0000_0000,
+    0x44A6_9360_6000_0000, 0x4496_9360_6000_0000, 0x448F_ED30_7000_0000, 0x7FF8_0000_0000_0000,
+    0x7FF8_0000_0000_0000, 0x7FF8_0000_0000_0000, 0x3C06_9FA0_0000_0000, 0x3BFF_FE80_0000_0000,
+    0x7FF8_0000_0000_0000, 0x7FF8_0000_0000_0000, 0x43EF_FE80_0000_0000, 0x43F6_9FA0_0000_0000,
+    0x7FF8_0000_0000_0000, 0x7FF8_0000_0000_0000, 0x3FEA_2040_0000_0000, 0x3FA0_3108_0000_0000,
+    0x7FF8_0000_0000_0000,
+];
+
+#[test]
+fn frsqrte_matches_dolphin_vectors() {
+    for (input, expected) in DOUBLE_TEST_VALUES.iter().zip(FRSQRTE_EXPECTED) {
+        let actual = frsqrte(f64::from_bits(*input)).to_bits();
+        assert_eq!(actual, expected, "frsqrte({input:016X})");
+    }
+}
+
+#[test]
+fn fres_special_cases() {
+    assert_eq!(fres(0.0), f64::INFINITY);
+    assert_eq!(fres(-0.0), f64::NEG_INFINITY);
+    assert_eq!(fres(f64::INFINITY).to_bits(), 0);
+    assert_eq!(fres(f64::NEG_INFINITY).to_bits(), 0x8000_0000_0000_0000);
+    assert_eq!(fres(2f64.powi(-129)), f64::from(f32::MAX));
+    assert_eq!(fres(-(2f64.powi(-129))), -f64::from(f32::MAX));
+    assert_eq!(fres(2f64.powi(126)), 0.0);
+    assert!(fres(2f64.powi(125)) > 0.0);
+    assert_eq!(
+        fres(f64::from_bits(0x7FF0_0000_0000_0001)).to_bits(),
+        0x7FF8_0000_0000_0001
+    );
+}
+
+#[test]
+fn estimates_stay_close_and_single_representable() {
+    let mut rng = Rng(0xE571_3A7E_0000_0001);
+    for _ in 0..100_000 {
+        let x = f64::from(rng.f32_in(1, 250).abs());
+        let r = fres(x);
+        assert!((r * x - 1.0).abs() < 1.0 / 1024.0, "fres({x:e}) = {r:e}");
+        assert_eq!(f64::from(r as f32), r, "fres({x:e}) is not a single");
+        let s = frsqrte(x);
+        assert!(
+            (s * s * x - 1.0).abs() < 1.0 / 512.0,
+            "frsqrte({x:e}) = {s:e}"
+        );
+    }
+}

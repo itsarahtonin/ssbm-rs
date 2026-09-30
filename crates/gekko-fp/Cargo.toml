@@ -1,0 +1,11 @@
+[package]
+name = "gekko-fp"
+description = "Bit-exact floating-point operations of the GameCube's Gekko CPU"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dev-dependencies]
+num-bigint.workspace = true
