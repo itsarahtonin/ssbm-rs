@@ -36,6 +36,121 @@ pub fn __DVDInitWA<'a>(ctx: &'a Ctx) {
     fns::OSInitAlarm(ctx);
 }
 
+pub fn __DVDInterruptHandler<'a>(ctx: &'a Ctx, unused: i16, context: OSContext<'a>) {
+    let __frame = ctx.stack_frame(0x2e8);
+    let exceptionContext: OSContext<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut unused = unused;
+    let mut context = context;
+    let mut cause: u32 = 0;
+    let mut reg: u32 = 0;
+    let mut intr: u32 = 0;
+    let mut mask: u32 = 0;
+    cause = (0_i32 as u32);
+    fns::OSCancelAlarm(ctx, statics::dolphin__dvd__dvdlow::AlarmForTimeout(ctx));
+    if (statics::dolphin__dvd__dvdlow::LastCommandWasRead(ctx).get() != 0) {
+        statics::dolphin__dvd__dvdlow::LastReadFinished(ctx)
+            .set(ctx.call::<_, i64>(0x8034c410, ()));
+        statics::dolphin__dvd__dvdlow::FirstRead(ctx).set(0_i32);
+        statics::dolphin__dvd__dvdlow::Prev(ctx)
+            .set_bootFilePosition(statics::dolphin__dvd__dvdlow::Curr(ctx).bootFilePosition());
+        statics::dolphin__dvd__dvdlow::Prev(ctx)
+            .set_FSTPosition(statics::dolphin__dvd__dvdlow::Curr(ctx).FSTPosition());
+        statics::dolphin__dvd__dvdlow::Prev(ctx)
+            .set_FSTLength(statics::dolphin__dvd__dvdlow::Curr(ctx).FSTLength());
+        if statics::dolphin__dvd__dvdlow::StopAtNextInt(ctx).get() == 1_i32 {
+            cause = (cause | (8_i32 as u32));
+        }
+    }
+    statics::dolphin__dvd__dvdlow::LastCommandWasRead(ctx).set(0_i32);
+    statics::dolphin__dvd__dvdlow::StopAtNextInt(ctx).set(0_i32);
+    reg = (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 0_i32)).get();
+    mask = (reg & (42_i32 as u32));
+    intr = ((reg & (84_i32 as u32)) & (shl_u32(mask, (1_i32 as u32))));
+    if ((intr & (64_i32 as u32)) != 0) {
+        cause = (cause | (8_i32 as u32));
+    }
+    if ((intr & (16_i32 as u32)) != 0) {
+        cause = (cause | (1_i32 as u32));
+    }
+    if ((intr & (4_i32 as u32)) != 0) {
+        cause = (cause | (2_i32 as u32));
+    }
+    if (cause != 0) {
+        statics::dolphin__dvd__dvdlow::ResetOccurred(ctx).set((0_i32 as u32));
+    }
+    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 0_i32)).set((intr | mask));
+    if (statics::dolphin__dvd__dvdlow::ResetOccurred(ctx).get() != (0_i32 as u32))
+        && ((ctx
+            .call::<_, i64>(0x8034c410, ())
+            .wrapping_sub(statics::dolphin__dvd__dvdlow::LastResetEnd(ctx).get()))
+            < ((((200_i32) as u32).wrapping_mul(
+                (div_u32(
+                    (div_u32(
+                        ((ptr::<Val<'a, u32>>(
+                            ctx,
+                            ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                        ))
+                        .get()),
+                        (4_i32 as u32),
+                    )),
+                    (0x3e8_i32 as u32),
+                )),
+            )) as i64))
+    {
+        reg = (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 1_i32)).get();
+        mask = (reg & (2_i32 as u32));
+        intr = ((reg & (4_i32 as u32)) & (shl_u32(mask, (1_i32 as u32))));
+        if ((intr & (4_i32 as u32)) != 0) {
+            if !Handle::is_null(statics::dolphin__dvd__dvdlow::ResetCoverCallback(ctx).get()) {
+                statics::dolphin__dvd__dvdlow::ResetCoverCallback(ctx)
+                    .get()
+                    .call::<_, ()>(((4_i32 as u32),));
+            }
+            statics::dolphin__dvd__dvdlow::ResetCoverCallback(ctx).set(null::<FnPtr<'a>>(ctx));
+        }
+        (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 1_i32))
+            .set((Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 1_i32)).get());
+    } else if (statics::dolphin__dvd__dvdlow::WaitingCoverClose(ctx).get() != 0) {
+        reg = (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 1_i32)).get();
+        mask = (reg & (2_i32 as u32));
+        intr = ((reg & (4_i32 as u32)) & (shl_u32(mask, (1_i32 as u32))));
+        if ((intr & (4_i32 as u32)) != 0) {
+            cause = (cause | (4_i32 as u32));
+        }
+        (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 1_i32)).set((intr | mask));
+        statics::dolphin__dvd__dvdlow::WaitingCoverClose(ctx).set(0_i32);
+    } else {
+        (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 1_i32)).set((0_i32 as u32));
+    }
+    if ((cause & (8_i32 as u32)) != 0)
+        && (statics::dolphin__dvd__dvdlow::Breaking(ctx).get() == 0_i32)
+    {
+        cause = (cause & 0xfffffff7_u32);
+    }
+    if ((cause & (1_i32 as u32)) != 0) {
+        if (inl_ProcessNextCommand_unfused(ctx) != 0) {
+            return;
+        }
+    } else {
+        statics::dolphin__dvd__dvdlow::CommandList(ctx)
+            .get(0_i32)
+            .set_cmd(1_i32.wrapping_neg());
+        statics::dolphin__dvd__dvdlow::NextCommandNumber(ctx).set(0_i32);
+    }
+    fns::OSClearContext(ctx, exceptionContext);
+    fns::OSSetCurrentContext(ctx, exceptionContext);
+    if cause != (0_i32 as u32) {
+        let mut callback: FnPtr<'a> = statics::dolphin__dvd__dvdlow::Callback(ctx).get();
+        statics::dolphin__dvd__dvdlow::Callback(ctx).set(null::<FnPtr<'a>>(ctx));
+        if !Handle::is_null(callback) {
+            callback.call::<_, ()>((cause,));
+        }
+        statics::dolphin__dvd__dvdlow::Breaking(ctx).set(0_i32);
+    }
+    fns::OSClearContext(ctx, exceptionContext);
+    fns::OSSetCurrentContext(ctx, context);
+}
+
 pub fn AlarmHandler<'a>(ctx: &'a Ctx, alarm: OSAlarm<'a>, context: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut alarm = alarm;
@@ -59,6 +174,55 @@ pub fn AlarmHandlerForTimeout<'a>(ctx: &'a Ctx, alarm: OSAlarm<'a>, context: OSC
     }
     fns::OSClearContext(ctx, tmpContext);
     fns::OSSetCurrentContext(ctx, context);
+}
+
+pub fn Read<'a>(ctx: &'a Ctx, addr: Addr<'a>, length: u32, offset: u32, callback: FnPtr<'a>) {
+    let __frame = ctx.stack_frame(0x28);
+    let mut addr = addr;
+    let mut length = length;
+    let mut offset = offset;
+    let mut callback = callback;
+    statics::dolphin__dvd__dvdlow::StopAtNextInt(ctx).set(0_i32);
+    statics::dolphin__dvd__dvdlow::LastCommandWasRead(ctx).set(1_i32);
+    statics::dolphin__dvd__dvdlow::Callback(ctx).set(callback);
+    statics::dolphin__dvd__dvdlow::LastReadIssued(ctx).set(ctx.call::<_, i64>(0x8034c410, ()));
+    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 2_i32)).set(0xa8000000_u32);
+    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 3_i32))
+        .set(div_u32(offset, (4_i32 as u32)));
+    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 4_i32)).set(length);
+    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 5_i32)).set(Handle::addr(addr));
+    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 6_i32)).set(length);
+    statics::dolphin__dvd__dvdlow::LastLength(ctx).set((length as i32));
+    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 7_i32)).set((3_i32 as u32));
+    if length > (0xa00000_i32 as u32) {
+        inl_SetTimeoutAlarm_unfused(
+            ctx,
+            ((((20_i32) as u32).wrapping_mul(
+                (div_u32(
+                    ((ptr::<Val<'a, u32>>(
+                        ctx,
+                        ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                    ))
+                    .get()),
+                    (4_i32 as u32),
+                )),
+            )) as i64),
+        );
+    } else {
+        inl_SetTimeoutAlarm_unfused(
+            ctx,
+            ((((10_i32) as u32).wrapping_mul(
+                (div_u32(
+                    ((ptr::<Val<'a, u32>>(
+                        ctx,
+                        ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                    ))
+                    .get()),
+                    (4_i32 as u32),
+                )),
+            )) as i64),
+        );
+    }
 }
 
 pub fn SeekTwiceBeforeRead<'a>(
@@ -109,6 +273,122 @@ pub fn SeekTwiceBeforeRead<'a>(
         .set_cmd(1_i32.wrapping_neg());
     statics::dolphin__dvd__dvdlow::NextCommandNumber(ctx).set(0_i32);
     let _ = fns::DVDLowSeek(ctx, newOffset, callback);
+}
+
+pub fn DVDLowRead<'a>(
+    ctx: &'a Ctx,
+    addr: Addr<'a>,
+    length: u32,
+    offset: u32,
+    callback: FnPtr<'a>,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x40);
+    let mut addr = addr;
+    let mut length = length;
+    let mut offset = offset;
+    let mut callback = callback;
+    let mut diff: i64 = 0;
+    let mut prev: u32 = 0;
+    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 6_i32)).set(length);
+    statics::dolphin__dvd__dvdlow::Curr(ctx).set_bootFilePosition(addr);
+    statics::dolphin__dvd__dvdlow::Curr(ctx).set_FSTPosition(length);
+    statics::dolphin__dvd__dvdlow::Curr(ctx).set_FSTLength(offset);
+    if statics::dolphin__dvd__dvdlow::WorkAroundType(ctx).get() == (0_i32 as u32) {
+        inl_DoJustRead_unfused(ctx, addr, length, offset, callback);
+    } else if statics::dolphin__dvd__dvdlow::WorkAroundType(ctx).get() == (1_i32 as u32) {
+        if (statics::dolphin__dvd__dvdlow::FirstRead(ctx).get() != 0) {
+            statics::dolphin__dvd__dvdlow::SeekTwiceBeforeRead(ctx, addr, length, offset, callback);
+        } else if !(inl_HitCache_unfused(ctx) != 0) {
+            inl_DoJustRead_unfused(ctx, addr, length, offset, callback);
+        } else {
+            prev = shr_u32(
+                (statics::dolphin__dvd__dvdlow::Prev(ctx)
+                    .FSTLength()
+                    .wrapping_add(statics::dolphin__dvd__dvdlow::Prev(ctx).FSTPosition())
+                    .wrapping_sub((1_i32 as u32))),
+                (15_i32 as u32),
+            );
+            if (prev
+                == shr_u32(
+                    statics::dolphin__dvd__dvdlow::Curr(ctx).FSTLength(),
+                    (15_i32 as u32),
+                ))
+                || (prev.wrapping_add((1_i32 as u32))
+                    == shr_u32(
+                        statics::dolphin__dvd__dvdlow::Curr(ctx).FSTLength(),
+                        (15_i32 as u32),
+                    ))
+            {
+                diff = ctx
+                    .call::<_, i64>(0x8034c410, ())
+                    .wrapping_sub(statics::dolphin__dvd__dvdlow::LastReadFinished(ctx).get());
+                if ((((5_i32) as u32).wrapping_mul(
+                    (div_u32(
+                        (div_u32(
+                            ((ptr::<Val<'a, u32>>(
+                                ctx,
+                                ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                            ))
+                            .get()),
+                            (4_i32 as u32),
+                        )),
+                        (0x3e8_i32 as u32),
+                    )),
+                )) as i64)
+                    < diff
+                {
+                    inl_DoJustRead_unfused(ctx, addr, length, offset, callback);
+                } else {
+                    inl_WaitBeforeRead_unfused(
+                        ctx,
+                        addr,
+                        length,
+                        offset,
+                        callback,
+                        ((((5_i32) as u32).wrapping_mul(
+                            (div_u32(
+                                (div_u32(
+                                    ((ptr::<Val<'a, u32>>(
+                                        ctx,
+                                        ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                                    ))
+                                    .get()),
+                                    (4_i32 as u32),
+                                )),
+                                (0x3e8_i32 as u32),
+                            )),
+                        )) as i64)
+                            .wrapping_sub(diff)
+                            .wrapping_add(
+                                ((div_u32(
+                                    (((0x1f4_i32) as u32).wrapping_mul(
+                                        (div_u32(
+                                            (div_u32(
+                                                ((ptr::<Val<'a, u32>>(
+                                                    ctx,
+                                                    ((shl_i32(0x8000_i32, (16_i32 as u32)))
+                                                        | 248_i32)
+                                                        as u32,
+                                                ))
+                                                .get()),
+                                                (4_i32 as u32),
+                                            )),
+                                            (0x1e848_i32 as u32),
+                                        )),
+                                    )),
+                                    (8_i32 as u32),
+                                )) as i64),
+                            ),
+                    );
+                }
+            } else {
+                statics::dolphin__dvd__dvdlow::SeekTwiceBeforeRead(
+                    ctx, addr, length, offset, callback,
+                );
+            }
+        }
+    }
+    return 1_i32;
 }
 
 pub fn DVDLowSeek<'a>(ctx: &'a Ctx, offset: u32, callback: FnPtr<'a>) -> i32 {
@@ -344,6 +624,41 @@ pub fn DVDLowAudioBufferConfig<'a>(
     return 1_i32;
 }
 
+pub fn DVDLowReset<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut reg: u32 = 0;
+    let mut resetStart: i64 = 0;
+    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 1_i32)).set((2_i32 as u32));
+    reg = (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc003000_u32 as u32)), 9_i32)).get();
+    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc003000_u32 as u32)), 9_i32))
+        .set(((reg & 0xfffffffb_u32) | (1_i32 as u32)));
+    resetStart = ctx.call::<_, i64>(0x8034c410, ());
+    'l1: while (ctx.call::<_, i64>(0x8034c410, ()).wrapping_sub(resetStart))
+        < ((div_u32(
+            (((12_i32) as u32).wrapping_mul(
+                (div_u32(
+                    (div_u32(
+                        ((ptr::<Val<'a, u32>>(
+                            ctx,
+                            ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                        ))
+                        .get()),
+                        (4_i32 as u32),
+                    )),
+                    (0x1e848_i32 as u32),
+                )),
+            )),
+            (8_i32 as u32),
+        )) as i64)
+    {
+        'c2: {}
+    }
+    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc003000_u32 as u32)), 9_i32))
+        .set(((reg | (4_i32 as u32)) | (1_i32 as u32)));
+    statics::dolphin__dvd__dvdlow::ResetOccurred(ctx).set((1_i32 as u32));
+    statics::dolphin__dvd__dvdlow::LastResetEnd(ctx).set(ctx.call::<_, i64>(0x8034c410, ()));
+}
+
 pub fn DVDLowBreak<'a>(ctx: &'a Ctx) -> i32 {
     statics::dolphin__dvd__dvdlow::StopAtNextInt(ctx).set(1_i32);
     statics::dolphin__dvd__dvdlow::Breaking(ctx).set(1_i32);
@@ -404,6 +719,17 @@ fn inl_ProcessNextCommand_unfused<'a>(ctx: &'a Ctx) -> i32 {
     return 0_i32;
 }
 
+fn inl_SetTimeoutAlarm_unfused<'a>(ctx: &'a Ctx, timeout: i64) {
+    let mut timeout = timeout;
+    fns::OSCreateAlarm(ctx, statics::dolphin__dvd__dvdlow::AlarmForTimeout(ctx));
+    fns::OSSetAlarm(
+        ctx,
+        statics::dolphin__dvd__dvdlow::AlarmForTimeout(ctx),
+        timeout,
+        fnptr(ctx, 0x80336e98),
+    );
+}
+
 fn inl_DoJustRead_unfused<'a>(
     ctx: &'a Ctx,
     addr: Addr<'a>,
@@ -452,14 +778,44 @@ fn inl_HitCache_unfused<'a>(ctx: &'a Ctx) -> i32 {
     return 0_i32;
 }
 
-fn inl_SetTimeoutAlarm_unfused<'a>(ctx: &'a Ctx, timeout: i64) {
+fn inl_WaitBeforeRead_unfused<'a>(
+    ctx: &'a Ctx,
+    addr: Addr<'a>,
+    length: u32,
+    offset: u32,
+    callback: FnPtr<'a>,
+    timeout: i64,
+) {
+    let mut addr = addr;
+    let mut length = length;
+    let mut offset = offset;
+    let mut callback = callback;
     let mut timeout = timeout;
-    fns::OSCreateAlarm(ctx, statics::dolphin__dvd__dvdlow::AlarmForTimeout(ctx));
+    statics::dolphin__dvd__dvdlow::CommandList(ctx)
+        .get(0_i32)
+        .set_cmd(1_i32);
+    statics::dolphin__dvd__dvdlow::CommandList(ctx)
+        .get(0_i32)
+        .set_addr(addr);
+    statics::dolphin__dvd__dvdlow::CommandList(ctx)
+        .get(0_i32)
+        .set_length(length);
+    statics::dolphin__dvd__dvdlow::CommandList(ctx)
+        .get(0_i32)
+        .set_offset(offset);
+    statics::dolphin__dvd__dvdlow::CommandList(ctx)
+        .get(0_i32)
+        .set_callback(callback);
+    statics::dolphin__dvd__dvdlow::CommandList(ctx)
+        .get(1_i32)
+        .set_cmd(1_i32.wrapping_neg());
+    statics::dolphin__dvd__dvdlow::NextCommandNumber(ctx).set(0_i32);
+    fns::OSCreateAlarm(ctx, statics::dolphin__dvd__dvdlow::AlarmForWA(ctx));
     fns::OSSetAlarm(
         ctx,
-        statics::dolphin__dvd__dvdlow::AlarmForTimeout(ctx),
+        statics::dolphin__dvd__dvdlow::AlarmForWA(ctx),
         timeout,
-        fnptr(ctx, 0x80336e98),
+        fnptr(ctx, 0x80336e14),
     );
 }
 
@@ -469,6 +825,14 @@ pub fn register(ctx: &Ctx) {
         0x80336ae0,
         |ctx| {
             Ret::put(__DVDInitWA(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80336b20,
+        |ctx| {
+            let (a0, a1): (i16, OSContext<'_>) = Args::take_all(ctx);
+            Ret::put(__DVDInterruptHandler(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );
@@ -489,12 +853,28 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x80336f08,
+        |ctx| {
+            let (a0, a1, a2, a3): (Addr<'_>, u32, u32, FnPtr<'_>) = Args::take_all(ctx);
+            Ret::put(Read(ctx, a0, a1, a2, a3), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x80337018,
         |ctx| {
             let (a0, a1, a2, a3): (Addr<'_>, u32, u32, FnPtr<'_>) = Args::take_all(ctx);
             Ret::put(SeekTwiceBeforeRead(ctx, a0, a1, a2, a3), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80337098,
+        |ctx| {
+            let (a0, a1, a2, a3): (Addr<'_>, u32, u32, FnPtr<'_>) = Args::take_all(ctx);
+            Ret::put(DVDLowRead(ctx, a0, a1, a2, a3), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x80337330,
@@ -567,6 +947,13 @@ pub fn register(ctx: &Ctx) {
             Ret::put(DVDLowAudioBufferConfig(ctx, a0, a1, a2), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x80337808,
+        |ctx| {
+            Ret::put(DVDLowReset(ctx), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x803378c4,

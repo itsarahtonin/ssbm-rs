@@ -168,6 +168,97 @@ pub fn splGetSplinePoint<'a>(ctx: &'a Ctx, p: Vec<'a>, spline: HSD_Spline<'a>, u
     }
 }
 
+pub fn splArcLengthGetParameter<'a>(ctx: &'a Ctx, spl: HSD_Spline<'a>, arg1: f64) -> f64 {
+    let __frame = ctx.stack_frame(0xe0);
+    let mut spl = spl;
+    let mut arg1 = arg1;
+    let mut idx: i32 = 0_i32;
+    let mut start: f64 = 0.0;
+    let mut end: f64 = 1.0;
+    let mut result: f64 = 0.0;
+    if arg1 <= 0.0 {
+        return start;
+    }
+    if arg1 >= 1.0 {
+        return end;
+    }
+    'l1: while (Handle::add((spl).segLength(), idx.wrapping_add(1_i32))).get() < arg1 {
+        'c2: {
+            idx = idx.wrapping_add(1);
+        }
+    }
+    's3: {
+        let __case = match ((spl).r#type() as i32) {
+            0_i32 => 0,
+            1_i32 => 1,
+            2_i32 => 1,
+            3_i32 => 1,
+            _ => 2,
+        };
+        if __case <= 0 {
+            {
+                result = fp::fdivs(
+                    (fp::fsubs(arg1, (Handle::add((spl).segLength(), idx)).get())),
+                    (fp::fsubs(
+                        (Handle::add((spl).segLength(), idx.wrapping_add(1_i32))).get(),
+                        (Handle::add((spl).segLength(), idx)).get(),
+                    )),
+                );
+            }
+            break 's3;
+        }
+        if __case <= 1 {
+            {
+                let mut var_f22: f64 = fp::fmuls(
+                    (spl).totalLength(),
+                    (fp::fsubs(arg1, (Handle::add((spl).segLength(), idx)).get())),
+                );
+                'l4: while (if (fp::fsubs(start, end)) < fp::frsp(0_i32 as f64) {
+                    fp::fneg((fp::fsubs(start, end)))
+                } else {
+                    (fp::fsubs(start, end))
+                }) >= 9.999999747378752e-06_f64
+                {
+                    'c5: {
+                        let mut coeffs: Val<'a, F32> = inl_spl_GetCoeffs(ctx, spl, idx);
+                        let mut dx: f64 = 0.0;
+                        let mut middle: f64 = 0.0;
+                        let mut simpsons: f64 = 0.0;
+                        result = fp::fdivs((fp::fadds(start, end)), 2.0);
+                        dx = inl_spl_GetArcLengthDx(ctx, start, result);
+                        middle =
+                            inl_spl_IterateSimpsonsMiddle(ctx, coeffs, dx, fp::fadds(start, dx));
+                        simpsons = fp::fdivs(
+                            fp::fmuls(
+                                dx,
+                                (fp::fadds(
+                                    fp::fadds(
+                                        middle,
+                                        inl_splArcLengthPolynomial(ctx, coeffs, start),
+                                    ),
+                                    inl_splArcLengthPolynomial(ctx, coeffs, result),
+                                )),
+                            ),
+                            3.0,
+                        );
+                        if var_f22 < (fp::fadds(9.999999747378752e-06_f64, simpsons)) {
+                            end = result;
+                        } else {
+                            start = result;
+                            var_f22 = fp::fsubs(var_f22, simpsons);
+                        }
+                    }
+                }
+            }
+            break 's3;
+        }
+    }
+    return fp::fdivs(
+        (fp::fadds(result, fp::frsp(idx as f64))),
+        (fp::fsubs(fp::frsp(((spl).numcv() as i32) as f64), 1.0)),
+    );
+}
+
 pub fn splArcLengthPoint<'a>(ctx: &'a Ctx, vec3: Vec<'a>, spline: HSD_Spline<'a>, farg0: f64) {
     let __frame = ctx.stack_frame(0x20);
     let mut vec3 = vec3;
@@ -371,6 +462,57 @@ fn inl_spl_GetArcLengthDx<'a>(ctx: &'a Ctx, start: f64, midpoint: f64) -> f64 {
     return fp::fdivs((fp::fsubs(midpoint, start)), 8.0);
 }
 
+fn inl_splArcLengthPolynomial<'a>(ctx: &'a Ctx, coeffs: Val<'a, F32>, t: f64) -> f64 {
+    let mut coeffs = coeffs;
+    let mut t = t;
+    let mut t2: f64 = fp::fmuls(t, t);
+    let mut t3: f64 = fp::fmuls(t2, t);
+    let mut t4: f64 = fp::fmuls(t3, t);
+    let mut result: f64 = fp::fadds(
+        fp::fmadds(
+            (Handle::add(coeffs, 3_i32)).get(),
+            t,
+            fp::fmadds(
+                (Handle::add(coeffs, 2_i32)).get(),
+                t2,
+                fp::fmadds(
+                    (Handle::add(coeffs, 0_i32)).get(),
+                    t4,
+                    (fp::fmuls((Handle::add(coeffs, 1_i32)).get(), t3)),
+                ),
+            ),
+        ),
+        (Handle::add(coeffs, 4_i32)).get(),
+    );
+    if (result < 0.0) && (result > fp::fneg(0.0010000000474974513)) {
+        result = 0.0;
+    }
+    return fns::sqrtf(ctx, result);
+}
+
+fn inl_spl_IterateSimpsonsMiddle<'a>(ctx: &'a Ctx, coeffs: Val<'a, F32>, dx: f64, t: f64) -> f64 {
+    let mut coeffs = coeffs;
+    let mut dx = dx;
+    let mut t = t;
+    let mut var_f24: f64 = 0.0;
+    let mut i: i32 = 0;
+    {
+        i = 2_i32;
+        'l1: while i <= 8_i32 {
+            'c2: {
+                if !((i & 1_i32) != 0) {
+                    var_f24 = fp::fmadds(4.0, inl_splArcLengthPolynomial(ctx, coeffs, t), var_f24);
+                } else {
+                    var_f24 = fp::fmadds(2.0, inl_splArcLengthPolynomial(ctx, coeffs, t), var_f24);
+                }
+                t = fp::fadds(t, dx);
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return var_f24;
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -389,6 +531,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(splGetSplinePoint(ctx, a0, a1, a2.0), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80378f38,
+        |ctx| {
+            let (a0, a1): (HSD_Spline<'_>, Single) = Args::take_all(ctx);
+            Ret::put(splArcLengthGetParameter(ctx, a0, a1.0), ctx);
+        },
+        Returns::Float,
     );
     ctx.register_port(
         0x803792c8,

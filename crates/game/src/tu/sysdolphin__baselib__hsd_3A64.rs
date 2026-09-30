@@ -32,48 +32,46 @@ pub fn HSD_SisLib_803A6478<'a>(ctx: &'a Ctx, dst: Val<'a, u8>, src: Val<'a, u8>)
     'l1: while ((src).get() as i32) != 0_i32 {
         'c2: {
             if ((src).get() as i32) >= 32_i32 {
+                let __t3 = ({
+                    let __t2 = src;
+                    src = Handle::add(src, 1);
+                    __t2
+                })
+                .get();
                 ({
                     let __t1 = dst;
                     dst = Handle::add(dst, 1);
                     __t1
                 })
-                .set(
-                    ({
-                        let __t2 = src;
-                        src = Handle::add(src, 1);
-                        __t2
-                    })
-                    .get(),
-                );
-                ({
-                    let __t3 = dst;
-                    dst = Handle::add(dst, 1);
-                    __t3
+                .set(__t3);
+                let __t6 = ({
+                    let __t5 = src;
+                    src = Handle::add(src, 1);
+                    __t5
                 })
-                .set(
-                    ({
-                        let __t4 = src;
-                        src = Handle::add(src, 1);
-                        __t4
-                    })
-                    .get(),
-                );
+                .get();
+                ({
+                    let __t4 = dst;
+                    dst = Handle::add(dst, 1);
+                    __t4
+                })
+                .set(__t6);
             } else {
                 's3: {
                     let __case = match ({
-                        let __t7 = ({
-                            let __t6 = src;
+                        let __t9 = ({
+                            let __t8 = src;
                             src = Handle::add(src, 1);
-                            __t6
+                            __t8
                         })
                         .get();
                         ({
-                            let __t5 = dst;
+                            let __t7 = dst;
                             dst = Handle::add(dst, 1);
-                            __t5
+                            __t7
                         })
-                        .set(__t7);
-                        __t7
+                        .set(__t9);
+                        __t9
                     } as i32)
                     {
                         6_i32 => 0,
@@ -87,62 +85,58 @@ pub fn HSD_SisLib_803A6478<'a>(ctx: &'a Ctx, dst: Val<'a, u8>, src: Val<'a, u8>)
                         _ => 3,
                     };
                     if __case <= 0 {
-                        ({
-                            let __t8 = dst;
-                            dst = Handle::add(dst, 1);
-                            __t8
+                        let __t12 = ({
+                            let __t11 = src;
+                            src = Handle::add(src, 1);
+                            __t11
                         })
-                        .set(
-                            ({
-                                let __t9 = src;
-                                src = Handle::add(src, 1);
-                                __t9
-                            })
-                            .get(),
-                        );
-                    }
-                    if __case <= 1 {
+                        .get();
                         ({
                             let __t10 = dst;
                             dst = Handle::add(dst, 1);
                             __t10
                         })
-                        .set(
-                            ({
-                                let __t11 = src;
-                                src = Handle::add(src, 1);
-                                __t11
-                            })
-                            .get(),
-                        );
+                        .set(__t12);
                     }
-                    if __case <= 2 {
-                        ({
-                            let __t12 = dst;
-                            dst = Handle::add(dst, 1);
-                            __t12
-                        })
-                        .set(
-                            ({
-                                let __t13 = src;
-                                src = Handle::add(src, 1);
-                                __t13
-                            })
-                            .get(),
-                        );
-                        ({
-                            let __t14 = dst;
-                            dst = Handle::add(dst, 1);
+                    if __case <= 1 {
+                        let __t15 = ({
+                            let __t14 = src;
+                            src = Handle::add(src, 1);
                             __t14
                         })
-                        .set(
-                            ({
-                                let __t15 = src;
-                                src = Handle::add(src, 1);
-                                __t15
-                            })
-                            .get(),
-                        );
+                        .get();
+                        ({
+                            let __t13 = dst;
+                            dst = Handle::add(dst, 1);
+                            __t13
+                        })
+                        .set(__t15);
+                    }
+                    if __case <= 2 {
+                        let __t18 = ({
+                            let __t17 = src;
+                            src = Handle::add(src, 1);
+                            __t17
+                        })
+                        .get();
+                        ({
+                            let __t16 = dst;
+                            dst = Handle::add(dst, 1);
+                            __t16
+                        })
+                        .set(__t18);
+                        let __t21 = ({
+                            let __t20 = src;
+                            src = Handle::add(src, 1);
+                            __t20
+                        })
+                        .get();
+                        ({
+                            let __t19 = dst;
+                            dst = Handle::add(dst, 1);
+                            __t19
+                        })
+                        .set(__t21);
                     }
                 }
             }
@@ -575,48 +569,46 @@ fn inl_HSD_SisLib_803A6478_unfused<'a>(
     'l1: while ((src).get() as i32) != 0_i32 {
         'c2: {
             if ((src).get() as i32) >= 32_i32 {
+                let __t3 = ({
+                    let __t2 = src;
+                    src = Handle::add(src, 1);
+                    __t2
+                })
+                .get();
                 ({
                     let __t1 = dst;
                     dst = Handle::add(dst, 1);
                     __t1
                 })
-                .set(
-                    ({
-                        let __t2 = src;
-                        src = Handle::add(src, 1);
-                        __t2
-                    })
-                    .get(),
-                );
-                ({
-                    let __t3 = dst;
-                    dst = Handle::add(dst, 1);
-                    __t3
+                .set(__t3);
+                let __t6 = ({
+                    let __t5 = src;
+                    src = Handle::add(src, 1);
+                    __t5
                 })
-                .set(
-                    ({
-                        let __t4 = src;
-                        src = Handle::add(src, 1);
-                        __t4
-                    })
-                    .get(),
-                );
+                .get();
+                ({
+                    let __t4 = dst;
+                    dst = Handle::add(dst, 1);
+                    __t4
+                })
+                .set(__t6);
             } else {
                 's3: {
                     let __case = match ({
-                        let __t7 = ({
-                            let __t6 = src;
+                        let __t9 = ({
+                            let __t8 = src;
                             src = Handle::add(src, 1);
-                            __t6
+                            __t8
                         })
                         .get();
                         ({
-                            let __t5 = dst;
+                            let __t7 = dst;
                             dst = Handle::add(dst, 1);
-                            __t5
+                            __t7
                         })
-                        .set(__t7);
-                        __t7
+                        .set(__t9);
+                        __t9
                     } as i32)
                     {
                         6_i32 => 0,
@@ -630,62 +622,58 @@ fn inl_HSD_SisLib_803A6478_unfused<'a>(
                         _ => 3,
                     };
                     if __case <= 0 {
-                        ({
-                            let __t8 = dst;
-                            dst = Handle::add(dst, 1);
-                            __t8
+                        let __t12 = ({
+                            let __t11 = src;
+                            src = Handle::add(src, 1);
+                            __t11
                         })
-                        .set(
-                            ({
-                                let __t9 = src;
-                                src = Handle::add(src, 1);
-                                __t9
-                            })
-                            .get(),
-                        );
-                    }
-                    if __case <= 1 {
+                        .get();
                         ({
                             let __t10 = dst;
                             dst = Handle::add(dst, 1);
                             __t10
                         })
-                        .set(
-                            ({
-                                let __t11 = src;
-                                src = Handle::add(src, 1);
-                                __t11
-                            })
-                            .get(),
-                        );
+                        .set(__t12);
                     }
-                    if __case <= 2 {
-                        ({
-                            let __t12 = dst;
-                            dst = Handle::add(dst, 1);
-                            __t12
-                        })
-                        .set(
-                            ({
-                                let __t13 = src;
-                                src = Handle::add(src, 1);
-                                __t13
-                            })
-                            .get(),
-                        );
-                        ({
-                            let __t14 = dst;
-                            dst = Handle::add(dst, 1);
+                    if __case <= 1 {
+                        let __t15 = ({
+                            let __t14 = src;
+                            src = Handle::add(src, 1);
                             __t14
                         })
-                        .set(
-                            ({
-                                let __t15 = src;
-                                src = Handle::add(src, 1);
-                                __t15
-                            })
-                            .get(),
-                        );
+                        .get();
+                        ({
+                            let __t13 = dst;
+                            dst = Handle::add(dst, 1);
+                            __t13
+                        })
+                        .set(__t15);
+                    }
+                    if __case <= 2 {
+                        let __t18 = ({
+                            let __t17 = src;
+                            src = Handle::add(src, 1);
+                            __t17
+                        })
+                        .get();
+                        ({
+                            let __t16 = dst;
+                            dst = Handle::add(dst, 1);
+                            __t16
+                        })
+                        .set(__t18);
+                        let __t21 = ({
+                            let __t20 = src;
+                            src = Handle::add(src, 1);
+                            __t20
+                        })
+                        .get();
+                        ({
+                            let __t19 = dst;
+                            dst = Handle::add(dst, 1);
+                            __t19
+                        })
+                        .set(__t21);
                     }
                 }
             }

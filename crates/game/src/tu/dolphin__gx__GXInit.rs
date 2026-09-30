@@ -69,6 +69,755 @@ pub fn __GXDefaultTlutRegionCallback<'a>(ctx: &'a Ctx, idx: u32) -> _GXTlutRegio
     return (fns::gx(ctx).get()).TlutRegions().get((idx as i32));
 }
 
+pub fn GXInit<'a>(ctx: &'a Ctx, base: Addr<'a>, size: u32) -> GXFifoObj<'a> {
+    let __frame = ctx.stack_frame(0x48);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut base = base;
+    let mut size = size;
+    let mut i: u32 = 0;
+    let mut reg: u32 = 0;
+    let mut freqBase: u32 = 0;
+    (fns::gx(ctx).get()).set_inDispList((0_i32 as u8));
+    (fns::gx(ctx).get()).set_dlSaveContext((1_i32 as u8));
+    (fns::gx(ctx).get()).set_tcsManEnab((0_i32 as u32));
+    (fns::gx(ctx).get()).set_vNum((0_i32 as u16));
+    fns::__piReg(ctx).set(Handle::cast::<Val<'a, u32>>(
+        (ptr::<Addr<'a>>(
+            ctx,
+            (((shl_i32(0xc000_i32, (16_i32 as u32))) as u32).wrapping_add(((0xc003000_i32) as u32)))
+                as u32,
+        )),
+    ));
+    fns::__cpReg(ctx).set(Handle::cast::<Val<'a, u16>>(
+        (ptr::<Addr<'a>>(
+            ctx,
+            (((shl_i32(0xc000_i32, (16_i32 as u32))) as u32).wrapping_add(((0xc000000_i32) as u32)))
+                as u32,
+        )),
+    ));
+    fns::__peReg(ctx).set(Handle::cast::<Val<'a, u16>>(
+        (ptr::<Addr<'a>>(
+            ctx,
+            (((shl_i32(0xc000_i32, (16_i32 as u32))) as u32).wrapping_add(((0xc001000_i32) as u32)))
+                as u32,
+        )),
+    ));
+    fns::__memReg(ctx).set(Handle::cast::<Val<'a, u16>>(
+        (ptr::<Addr<'a>>(
+            ctx,
+            (((shl_i32(0xc000_i32, (16_i32 as u32))) as u32).wrapping_add(((0xc004000_i32) as u32)))
+                as u32,
+        )),
+    ));
+    fns::__GXFifoInit(ctx);
+    fns::GXInitFifoBase(ctx, fns::FifoObj(ctx), base, size);
+    fns::GXSetCPUFifo(ctx, fns::FifoObj(ctx));
+    fns::GXSetGPFifo(ctx, fns::FifoObj(ctx));
+    fns::__GXPEInit(ctx);
+    inl_EnableWriteGatherPipe_unfused(ctx);
+    (fns::gx(ctx).get()).set_genMode((0_i32 as u32));
+    'l1: loop {
+        'c2: {
+            (fns::gx(ctx).get()).set_genMode(
+                ((((fns::gx(ctx).get()).genMode())
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
+                        ((24_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((0_i32) as u32), ((24_i32) as u32)))),
+            );
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    (fns::gx(ctx).get()).set_bpMask((255_i32 as u32));
+    'l3: loop {
+        'c4: {
+            (fns::gx(ctx).get()).set_bpMask(
+                ((((fns::gx(ctx).get()).bpMask())
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
+                        ((24_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((15_i32) as u32), ((24_i32) as u32)))),
+            );
+        }
+        if !(0_i32 != 0) {
+            break 'l3;
+        }
+    }
+    (fns::gx(ctx).get()).set_lpSize((0_i32 as u32));
+    'l5: loop {
+        'c6: {
+            (fns::gx(ctx).get()).set_lpSize(
+                ((((fns::gx(ctx).get()).lpSize())
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
+                        ((24_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((34_i32) as u32), ((24_i32) as u32)))),
+            );
+        }
+        if !(0_i32 != 0) {
+            break 'l5;
+        }
+    }
+    {
+        i = (0_i32 as u32);
+        'l7: while i < (16_i32 as u32) {
+            'c8: {
+                (fns::gx(ctx).get())
+                    .tevc()
+                    .at((i as i32))
+                    .set((0_i32 as u32));
+                (fns::gx(ctx).get())
+                    .teva()
+                    .at((i as i32))
+                    .set((0_i32 as u32));
+                (fns::gx(ctx).get())
+                    .tref()
+                    .at((div_u32(i, (2_i32 as u32)) as i32))
+                    .set((0_i32 as u32));
+                (fns::gx(ctx).get())
+                    .texmapId()
+                    .at((i as i32))
+                    .set(((enums::GX_TEXMAP_NULL as i32) as u32));
+                'l9: loop {
+                    'c10: {
+                        (fns::gx(ctx).get()).tevc().at((i as i32)).set(
+                            ((((fns::gx(ctx).get()).tevc().at((i as i32)).get())
+                                & ((!(shl_i32(
+                                    ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
+                                    ((24_i32) as u32),
+                                ))) as u32))
+                                | (shl_u32(
+                                    ((192_i32 as u32).wrapping_add(i.wrapping_mul((2_i32 as u32)))),
+                                    ((24_i32) as u32),
+                                ))),
+                        );
+                    }
+                    if !(0_i32 != 0) {
+                        break 'l9;
+                    }
+                }
+                'l11: loop {
+                    'c12: {
+                        (fns::gx(ctx).get()).teva().at((i as i32)).set(
+                            ((((fns::gx(ctx).get()).teva().at((i as i32)).get())
+                                & ((!(shl_i32(
+                                    ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
+                                    ((24_i32) as u32),
+                                ))) as u32))
+                                | (shl_u32(
+                                    ((193_i32 as u32).wrapping_add(i.wrapping_mul((2_i32 as u32)))),
+                                    ((24_i32) as u32),
+                                ))),
+                        );
+                    }
+                    if !(0_i32 != 0) {
+                        break 'l11;
+                    }
+                }
+                'l13: loop {
+                    'c14: {
+                        (fns::gx(ctx).get())
+                            .tevKsel()
+                            .at((div_u32(i, (2_i32 as u32)) as i32))
+                            .set(
+                                ((((fns::gx(ctx).get())
+                                    .tevKsel()
+                                    .at((div_u32(i, (2_i32 as u32)) as i32))
+                                    .get())
+                                    & ((!(shl_i32(
+                                        ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
+                                        ((24_i32) as u32),
+                                    ))) as u32))
+                                    | (shl_u32(
+                                        ((246_i32 as u32).wrapping_add(div_u32(i, (2_i32 as u32)))),
+                                        ((24_i32) as u32),
+                                    ))),
+                            );
+                    }
+                    if !(0_i32 != 0) {
+                        break 'l13;
+                    }
+                }
+                'l15: loop {
+                    'c16: {
+                        (fns::gx(ctx).get())
+                            .tref()
+                            .at((div_u32(i, (2_i32 as u32)) as i32))
+                            .set(
+                                ((((fns::gx(ctx).get())
+                                    .tref()
+                                    .at((div_u32(i, (2_i32 as u32)) as i32))
+                                    .get())
+                                    & ((!(shl_i32(
+                                        ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
+                                        ((24_i32) as u32),
+                                    ))) as u32))
+                                    | (shl_u32(
+                                        ((40_i32 as u32).wrapping_add(div_u32(i, (2_i32 as u32)))),
+                                        ((24_i32) as u32),
+                                    ))),
+                            );
+                    }
+                    if !(0_i32 != 0) {
+                        break 'l15;
+                    }
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    (fns::gx(ctx).get()).set_iref((0_i32 as u32));
+    'l17: loop {
+        'c18: {
+            (fns::gx(ctx).get()).set_iref(
+                ((((fns::gx(ctx).get()).iref())
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
+                        ((24_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((39_i32) as u32), ((24_i32) as u32)))),
+            );
+        }
+        if !(0_i32 != 0) {
+            break 'l17;
+        }
+    }
+    {
+        i = (0_i32 as u32);
+        'l19: while i < (8_i32 as u32) {
+            'c20: {
+                (fns::gx(ctx).get())
+                    .suTs0()
+                    .at((i as i32))
+                    .set((0_i32 as u32));
+                (fns::gx(ctx).get())
+                    .suTs1()
+                    .at((i as i32))
+                    .set((0_i32 as u32));
+                'l21: loop {
+                    'c22: {
+                        (fns::gx(ctx).get()).suTs0().at((i as i32)).set(
+                            ((((fns::gx(ctx).get()).suTs0().at((i as i32)).get())
+                                & ((!(shl_i32(
+                                    ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
+                                    ((24_i32) as u32),
+                                ))) as u32))
+                                | (shl_u32(
+                                    ((48_i32 as u32).wrapping_add(i.wrapping_mul((2_i32 as u32)))),
+                                    ((24_i32) as u32),
+                                ))),
+                        );
+                    }
+                    if !(0_i32 != 0) {
+                        break 'l21;
+                    }
+                }
+                'l23: loop {
+                    'c24: {
+                        (fns::gx(ctx).get()).suTs1().at((i as i32)).set(
+                            ((((fns::gx(ctx).get()).suTs1().at((i as i32)).get())
+                                & ((!(shl_i32(
+                                    ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
+                                    ((24_i32) as u32),
+                                ))) as u32))
+                                | (shl_u32(
+                                    ((49_i32 as u32).wrapping_add(i.wrapping_mul((2_i32 as u32)))),
+                                    ((24_i32) as u32),
+                                ))),
+                        );
+                    }
+                    if !(0_i32 != 0) {
+                        break 'l23;
+                    }
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    'l25: loop {
+        'c26: {
+            (fns::gx(ctx).get()).set_suScis0(
+                ((((fns::gx(ctx).get()).suScis0())
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
+                        ((24_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((32_i32) as u32), ((24_i32) as u32)))),
+            );
+        }
+        if !(0_i32 != 0) {
+            break 'l25;
+        }
+    }
+    'l27: loop {
+        'c28: {
+            (fns::gx(ctx).get()).set_suScis1(
+                ((((fns::gx(ctx).get()).suScis1())
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
+                        ((24_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((33_i32) as u32), ((24_i32) as u32)))),
+            );
+        }
+        if !(0_i32 != 0) {
+            break 'l27;
+        }
+    }
+    'l29: loop {
+        'c30: {
+            (fns::gx(ctx).get()).set_cmode0(
+                ((((fns::gx(ctx).get()).cmode0())
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
+                        ((24_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((65_i32) as u32), ((24_i32) as u32)))),
+            );
+        }
+        if !(0_i32 != 0) {
+            break 'l29;
+        }
+    }
+    'l31: loop {
+        'c32: {
+            (fns::gx(ctx).get()).set_cmode1(
+                ((((fns::gx(ctx).get()).cmode1())
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
+                        ((24_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((66_i32) as u32), ((24_i32) as u32)))),
+            );
+        }
+        if !(0_i32 != 0) {
+            break 'l31;
+        }
+    }
+    'l33: loop {
+        'c34: {
+            (fns::gx(ctx).get()).set_zmode(
+                ((((fns::gx(ctx).get()).zmode())
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
+                        ((24_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((64_i32) as u32), ((24_i32) as u32)))),
+            );
+        }
+        if !(0_i32 != 0) {
+            break 'l33;
+        }
+    }
+    'l35: loop {
+        'c36: {
+            (fns::gx(ctx).get()).set_peCtrl(
+                ((((fns::gx(ctx).get()).peCtrl())
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
+                        ((24_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((67_i32) as u32), ((24_i32) as u32)))),
+            );
+        }
+        if !(0_i32 != 0) {
+            break 'l35;
+        }
+    }
+    'l37: loop {
+        'c38: {
+            (fns::gx(ctx).get()).set_cpTex(
+                ((((fns::gx(ctx).get()).cpTex())
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((2_i32) as u32))).wrapping_sub(1_i32)),
+                        ((7_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((0_i32) as u32), ((7_i32) as u32)))),
+            );
+        }
+        if !(0_i32 != 0) {
+            break 'l37;
+        }
+    }
+    (fns::gx(ctx).get()).set_dirtyState((0_i32 as u32));
+    (fns::gx(ctx).get()).set_dirtyVAT((0_i32 as u8));
+    freqBase = div_u32(
+        ((ptr::<Val<'a, u32>>(
+            ctx,
+            ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+        ))
+        .get()),
+        (0x1f4_i32 as u32),
+    );
+    fns::__GXFlushTextureState(ctx);
+    reg = (((shr_u32(freqBase, (11_i32 as u32))) | (0x400_i32 as u32)) | (0x69000000_i32 as u32));
+    'l39: loop {
+        'c40: {
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((97_i32) as u8));
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32((reg));
+        }
+        if !(0_i32 != 0) {
+            break 'l39;
+        }
+    }
+    fns::__GXFlushTextureState(ctx);
+    reg =
+        (((div_u32(freqBase, (0x1080_i32 as u32))) | (0x200_i32 as u32)) | (0x46000000_i32 as u32));
+    'l41: loop {
+        'c42: {
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((97_i32) as u8));
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32((reg));
+        }
+        if !(0_i32 != 0) {
+            break 'l41;
+        }
+    }
+    {
+        i = ((enums::GX_VTXFMT0 as i32) as u32);
+        'l43: while i < ((enums::GX_MAX_VTXFMT as i32) as u32) {
+            'c44: {
+                'l45: loop {
+                    'c46: {
+                        (fns::gx(ctx).get()).vatA().at((i as i32)).set(
+                            ((((fns::gx(ctx).get()).vatA().at((i as i32)).get())
+                                & ((!(shl_i32(
+                                    ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)),
+                                    ((30_i32) as u32),
+                                ))) as u32))
+                                | (shl_u32(((1_i32) as u32), ((30_i32) as u32)))),
+                        );
+                    }
+                    if !(0_i32 != 0) {
+                        break 'l45;
+                    }
+                }
+                'l47: loop {
+                    'c48: {
+                        (fns::gx(ctx).get()).vatB().at((i as i32)).set(
+                            ((((fns::gx(ctx).get()).vatB().at((i as i32)).get())
+                                & ((!(shl_i32(
+                                    ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)),
+                                    ((31_i32) as u32),
+                                ))) as u32))
+                                | (shl_u32(((1_i32) as u32), ((31_i32) as u32)))),
+                        );
+                    }
+                    if !(0_i32 != 0) {
+                        break 'l47;
+                    }
+                }
+                {
+                    let mut regAddr: i32 = 0;
+                    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((8_i32) as u8));
+                    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32))
+                        .set_u8(((i | (128_i32 as u32)) as u8));
+                    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32))
+                        .set_u32(((fns::gx(ctx).get()).vatB().at((i as i32)).get()));
+                    regAddr = (i.wrapping_sub((12_i32 as u32)) as i32);
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    {
+        let mut reg1: u32 = (0_i32 as u32);
+        let mut reg2: u32 = (0_i32 as u32);
+        'l49: loop {
+            'c50: {
+                reg1 = (((reg1)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)),
+                        ((0_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((1_i32) as u32), ((0_i32) as u32))));
+            }
+            if !(0_i32 != 0) {
+                break 'l49;
+            }
+        }
+        'l51: loop {
+            'c52: {
+                reg1 = (((reg1)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)),
+                        ((1_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((1_i32) as u32), ((1_i32) as u32))));
+            }
+            if !(0_i32 != 0) {
+                break 'l51;
+            }
+        }
+        'l53: loop {
+            'c54: {
+                reg1 = (((reg1)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)),
+                        ((2_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((1_i32) as u32), ((2_i32) as u32))));
+            }
+            if !(0_i32 != 0) {
+                break 'l53;
+            }
+        }
+        'l55: loop {
+            'c56: {
+                reg1 = (((reg1)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)),
+                        ((3_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((1_i32) as u32), ((3_i32) as u32))));
+            }
+            if !(0_i32 != 0) {
+                break 'l55;
+            }
+        }
+        'l57: loop {
+            'c58: {
+                reg1 = (((reg1)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)),
+                        ((4_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((1_i32) as u32), ((4_i32) as u32))));
+            }
+            if !(0_i32 != 0) {
+                break 'l57;
+            }
+        }
+        'l59: loop {
+            'c60: {
+                reg1 = (((reg1)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)),
+                        ((5_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((1_i32) as u32), ((5_i32) as u32))));
+            }
+            if !(0_i32 != 0) {
+                break 'l59;
+            }
+        }
+        'l61: loop {
+            'c62: {
+                (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((16_i32) as u8));
+                (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32))
+                    .set_u32(((0x1000_i32.wrapping_add((0_i32))) as u32));
+                (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32((reg1));
+            }
+            if !(0_i32 != 0) {
+                break 'l61;
+            }
+        }
+        'l63: loop {
+            'c64: {
+                reg2 = (((reg2)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)),
+                        ((0_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((1_i32) as u32), ((0_i32) as u32))));
+            }
+            if !(0_i32 != 0) {
+                break 'l63;
+            }
+        }
+        'l65: loop {
+            'c66: {
+                (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((16_i32) as u8));
+                (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32))
+                    .set_u32(((0x1000_i32.wrapping_add((18_i32))) as u32));
+                (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32((reg2));
+            }
+            if !(0_i32 != 0) {
+                break 'l65;
+            }
+        }
+    }
+    {
+        let mut reg_2: u32 = (0_i32 as u32);
+        'l67: loop {
+            'c68: {
+                reg_2 = (((reg_2)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)),
+                        ((0_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((1_i32) as u32), ((0_i32) as u32))));
+            }
+            if !(0_i32 != 0) {
+                break 'l67;
+            }
+        }
+        'l69: loop {
+            'c70: {
+                reg_2 = (((reg_2)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)),
+                        ((1_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((1_i32) as u32), ((1_i32) as u32))));
+            }
+            if !(0_i32 != 0) {
+                break 'l69;
+            }
+        }
+        'l71: loop {
+            'c72: {
+                reg_2 = (((reg_2)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)),
+                        ((2_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((1_i32) as u32), ((2_i32) as u32))));
+            }
+            if !(0_i32 != 0) {
+                break 'l71;
+            }
+        }
+        'l73: loop {
+            'c74: {
+                reg_2 = (((reg_2)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)),
+                        ((3_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((1_i32) as u32), ((3_i32) as u32))));
+            }
+            if !(0_i32 != 0) {
+                break 'l73;
+            }
+        }
+        'l75: loop {
+            'c76: {
+                reg_2 = (((reg_2)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
+                        ((24_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((88_i32) as u32), ((24_i32) as u32))));
+            }
+            if !(0_i32 != 0) {
+                break 'l75;
+            }
+        }
+        'l77: loop {
+            'c78: {
+                (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((97_i32) as u8));
+                (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32((reg_2));
+            }
+            if !(0_i32 != 0) {
+                break 'l77;
+            }
+        }
+    }
+    {
+        i = (0_i32 as u32);
+        'l79: while i < (8_i32 as u32) {
+            'c80: {
+                fns::GXInitTexCacheRegion(
+                    ctx,
+                    (fns::gx(ctx).get()).TexRegions().get((i as i32)),
+                    (0_i32 as u8),
+                    i.wrapping_mul((0x8000_i32 as u32)),
+                    0_i32,
+                    (0x80000_i32 as u32).wrapping_add(i.wrapping_mul((0x8000_i32 as u32))),
+                    0_i32,
+                );
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    {
+        i = (0_i32 as u32);
+        'l81: while i < (4_i32 as u32) {
+            'c82: {
+                fns::GXInitTexCacheRegion(
+                    ctx,
+                    (fns::gx(ctx).get()).TexRegionsCI().get((i as i32)),
+                    (0_i32 as u8),
+                    (i.wrapping_mul((2_i32 as u32)).wrapping_add((8_i32 as u32)))
+                        .wrapping_mul((0x8000_i32 as u32)),
+                    0_i32,
+                    (i.wrapping_mul((2_i32 as u32)).wrapping_add((9_i32 as u32)))
+                        .wrapping_mul((0x8000_i32 as u32)),
+                    0_i32,
+                );
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    {
+        i = (0_i32 as u32);
+        'l83: while i < (16_i32 as u32) {
+            'c84: {
+                fns::GXInitTlutRegion(
+                    ctx,
+                    (fns::gx(ctx).get()).TlutRegions().get((i as i32)),
+                    (0xc0000_i32 as u32).wrapping_add(i.wrapping_mul((0x2000_i32 as u32))),
+                    16_i32,
+                );
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    {
+        i = (0_i32 as u32);
+        'l85: while i < (4_i32 as u32) {
+            'c86: {
+                fns::GXInitTlutRegion(
+                    ctx,
+                    (fns::gx(ctx).get())
+                        .TlutRegions()
+                        .get((i.wrapping_add((16_i32 as u32)) as i32)),
+                    (0xe0000_i32 as u32).wrapping_add(i.wrapping_mul((0x8000_i32 as u32))),
+                    64_i32,
+                );
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    (Handle::add(fns::__cpReg(ctx).get(), 3_i32)).set((0_i32 as u16));
+    'l87: loop {
+        'c88: {
+            (fns::gx(ctx).get()).set_perfSel(
+                ((((fns::gx(ctx).get()).perfSel())
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
+                        ((4_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((0_i32) as u32), ((4_i32) as u32)))),
+            );
+        }
+        if !(0_i32 != 0) {
+            break 'l87;
+        }
+    }
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8((8_i32 as u8));
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8((32_i32 as u8));
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32))
+        .set_s32(((fns::gx(ctx).get()).perfSel() as i32));
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8((16_i32 as u8));
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_s32(0x1006_i32);
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_s32(0_i32);
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8((97_i32 as u8));
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_s32(0x23000000_i32);
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8((97_i32 as u8));
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_s32(0x24000000_i32);
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8((97_i32 as u8));
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_s32(0x67000000_i32);
+    fns::__GXSetTmemConfig(ctx, (0_i32 as u32));
+    statics::dolphin__gx__GXInit::__GXInitGX(ctx);
+    return fns::FifoObj(ctx);
+}
+
 pub fn __GXInitGX<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x78);
     let identity_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
@@ -568,6 +1317,17 @@ pub fn __GXInitGX<'a>(ctx: &'a Ctx) {
     fns::GXClearGPMetric(ctx);
 }
 
+fn inl_EnableWriteGatherPipe_unfused<'a>(ctx: &'a Ctx) {
+    let mut hid2: u32 = ctx.call::<_, u32>(0x80335ea8, ());
+    fns::PPCMtwpar(
+        ctx,
+        (Handle::addr((ptr::<Addr<'a>>(ctx, 0xcc008000_u32 as u32)))
+            .wrapping_sub(((shl_i32(0xc000_i32, (16_i32 as u32))) as u32))),
+    );
+    hid2 = (hid2 | (0x40000000_i32 as u32));
+    fns::PPCMthid2(ctx, hid2);
+}
+
 fn inl_GXSetTexCoordGen_unfused<'a>(
     ctx: &'a Ctx,
     dst_coord: i32,
@@ -605,6 +1365,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (u32,) = Args::take_all(ctx);
             Ret::put(__GXDefaultTlutRegionCallback(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8033a780,
+        |ctx| {
+            let (a0, a1): (Addr<'_>, u32) = Args::take_all(ctx);
+            Ret::put(GXInit(ctx, a0, a1), ctx);
         },
         Returns::Int,
     );

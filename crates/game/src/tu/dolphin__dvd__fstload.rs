@@ -82,6 +82,138 @@ pub fn cb<'a>(ctx: &'a Ctx, result: i32, block: DVDCommandBlock<'a>) {
     }
 }
 
+pub fn __fstLoad<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x60);
+    let idTmpBuf: ArrV<'a, u8, 63> = frame_at(ctx, &__frame, 0x0);
+    let mut bootInfo: OSBootInfo_s<'a> = null(ctx);
+    let mut id: DVDDiskID<'a> = null(ctx);
+    let mut state: i32 = 0;
+    let mut arenaHi: Addr<'a> = null(ctx);
+    arenaHi = fns::OSGetArenaHi(ctx);
+    bootInfo = Handle::cast::<OSBootInfo_s<'a>>(
+        (ptr::<Addr<'a>>(
+            ctx,
+            (((shl_i32(0x8000_i32, (16_i32 as u32))) as u32).wrapping_add(((0_i32) as u32))) as u32,
+        )),
+    );
+    statics::dolphin__dvd__fstload::idTmp(ctx).set(Handle::cast::<DVDDiskID<'a>>(ptr::<Addr<'a>>(
+        ctx,
+        ((Handle::addr(idTmpBuf.at(0))
+            .wrapping_add((32_i32 as u32))
+            .wrapping_sub((1_i32 as u32)))
+            & ((!(32_i32.wrapping_sub(1_i32))) as u32)) as u32,
+    )));
+    statics::dolphin__dvd__fstload::bb2(ctx).set(Handle::cast::<DVDBB2<'a>>(ptr::<Addr<'a>>(
+        ctx,
+        ((Handle::addr(statics::dolphin__dvd__fstload::bb2Buf(ctx).at(0))
+            .wrapping_add((32_i32 as u32))
+            .wrapping_sub((1_i32 as u32)))
+            & ((!(32_i32.wrapping_sub(1_i32))) as u32)) as u32,
+    )));
+    fns::DVDReset(ctx);
+    let _ = fns::DVDReadDiskID(
+        ctx,
+        At::new(ctx, 0x804a7698).field::<DVDCommandBlock<'a>>(0),
+        statics::dolphin__dvd__fstload::idTmp(ctx).get(),
+        fnptr(ctx, 0x8033a4a0),
+    );
+    'l1: loop {
+        'c2: {
+            state = ctx.call::<_, i32>(0x80339b4c, ());
+            if state == 0_i32 {
+                break 'l1;
+            }
+            's3: {
+                let __case = match state {
+                    (-1_i32) => 0,
+                    1_i32 => 1,
+                    2_i32 => 2,
+                    3_i32 => 3,
+                    4_i32 => 4,
+                    5_i32 => 5,
+                    7_i32 => 6,
+                    _ => 7,
+                };
+                if __case <= 0 {
+                    break 's3;
+                }
+                if __case <= 1 {
+                    break 's3;
+                }
+                if __case <= 2 {
+                    break 's3;
+                }
+                if __case <= 3 {
+                    break 's3;
+                }
+                if __case <= 4 {
+                    break 's3;
+                }
+                if __case <= 5 {
+                    break 's3;
+                }
+                if __case <= 6 {
+                    break 's3;
+                }
+            }
+        }
+    }
+    (bootInfo).set_FSTLocation((statics::dolphin__dvd__fstload::bb2(ctx).get()).FSTAddress());
+    (bootInfo).set_FSTMaxLength((statics::dolphin__dvd__fstload::bb2(ctx).get()).FSTMaxLength());
+    id = (bootInfo).DVDDiskID();
+    let _ = fns::memcpy(
+        ctx,
+        Handle::cast::<Addr<'a>>(id),
+        Handle::cast::<Addr<'a>>(statics::dolphin__dvd__fstload::idTmp(ctx).get()),
+        (32_i32 as u32),
+    );
+    fns::OSReport(ctx, cstr(ctx, 0x80400ff0), &[]);
+    fns::OSReport(
+        ctx,
+        cstr(ctx, 0x80400fd8),
+        &[
+            VarArg::Int(((id).gameName().at(0_i32).get() as i32) as u32),
+            VarArg::Int(((id).gameName().at(1_i32).get() as i32) as u32),
+            VarArg::Int(((id).gameName().at(2_i32).get() as i32) as u32),
+            VarArg::Int(((id).gameName().at(3_i32).get() as i32) as u32),
+        ],
+    );
+    fns::OSReport(
+        ctx,
+        cstr(ctx, 0x80400ff4),
+        &[
+            VarArg::Int(((id).company().at(0_i32).get() as i32) as u32),
+            VarArg::Int(((id).company().at(1_i32).get() as i32) as u32),
+        ],
+    );
+    fns::OSReport(
+        ctx,
+        cstr(ctx, 0x8040100c),
+        &[VarArg::Int(((id).diskNumber() as i32) as u32)],
+    );
+    fns::OSReport(
+        ctx,
+        cstr(ctx, 0x80401020),
+        &[VarArg::Int(((id).gameVersion() as i32) as u32)],
+    );
+    fns::OSReport(
+        ctx,
+        cstr(ctx, 0x80401034),
+        &[VarArg::Int(Handle::addr(
+            (if !(((id).streaming()) != 0) {
+                cstr(ctx, 0x804d5b9c)
+            } else {
+                cstr(ctx, 0x804d5ba0)
+            }),
+        ))],
+    );
+    fns::OSReport(ctx, cstr(ctx, 0x80400ff0), &[]);
+    fns::OSSetArenaHi(
+        ctx,
+        (statics::dolphin__dvd__fstload::bb2(ctx).get()).FSTAddress(),
+    );
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -89,6 +221,13 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (i32, DVDCommandBlock<'_>) = Args::take_all(ctx);
             Ret::put(cb(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8033a578,
+        |ctx| {
+            Ret::put(__fstLoad(ctx), ctx);
         },
         Returns::Nothing,
     );

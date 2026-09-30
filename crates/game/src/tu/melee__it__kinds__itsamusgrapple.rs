@@ -2459,7 +2459,7 @@ fn inl_HSD_JObjCopyMtx_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, mtx: ArrV<'
             cstr(ctx, 0x803b8668),
         )
     });
-    (if true {
+    (if !Handle::is_null((mtx)) {
         ({ () })
     } else {
         fns::__assert(
@@ -2469,11 +2469,7 @@ fn inl_HSD_JObjCopyMtx_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, mtx: ArrV<'
             cstr(ctx, 0x803b8668),
         )
     });
-    fns::PSMTXCopy(
-        ctx,
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(mtx).get(0),
-        (jobj).mtx().get(0),
-    );
+    fns::PSMTXCopy(ctx, mtx, (jobj).mtx().get(0));
 }
 
 fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
@@ -2495,18 +2491,9 @@ fn inl_fn_802B7E34_anim_inline_unfused<'a>(
         let mut link: ItemLink<'a> = (ip).xDD4_itemVar().samusgrapple().x0();
         jobj = Handle::cast::<HSD_JObj<'a>>(((link).gobj()).hsd_obj());
         inl_HSD_JObjSetupMatrix_unfused(ctx, (link).jobj());
-        fns::PSMTXIdentity(ctx, Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(m).get(0));
-        fns::PSMTXConcat(
-            ctx,
-            ((link).jobj()).mtx().get(0),
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(m).get(0),
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(m).get(0),
-        );
-        inl_HSD_JObjCopyMtx_unfused(
-            ctx,
-            jobj,
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(m).get(0),
-        );
+        fns::PSMTXIdentity(ctx, m);
+        fns::PSMTXConcat(ctx, ((link).jobj()).mtx().get(0), m, m);
+        inl_HSD_JObjCopyMtx_unfused(ctx, jobj, m);
         (jobj).set_flags(((jobj).flags() | (0x3800000_i32 as u32)));
         {
             if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
@@ -2544,7 +2531,7 @@ fn inl_samus_grapple_setup_pos_unfused<'a>(
     let mut link = link;
     let mut pos = pos;
     let mut m = m;
-    fns::PSMTXIdentity(ctx, Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(m).get(0));
+    fns::PSMTXIdentity(ctx, m);
     inl_HSD_JObjSetupMatrix_unfused(ctx, (link).jobj());
     (pos).set_x(((link).jobj()).mtx().get(0_i32).at(3_i32).get());
     (pos).set_y(((link).jobj()).mtx().get(1_i32).at(3_i32).get());
@@ -2664,7 +2651,7 @@ fn inl_it_802B9328_attach<'a>(ctx: &'a Ctx, link: ItemLink<'a>, pos: Vec<'a>, m:
     let mut link = link;
     let mut pos = pos;
     let mut m = m;
-    fns::PSMTXIdentity(ctx, Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(m).get(0));
+    fns::PSMTXIdentity(ctx, m);
     inl_HSD_JObjSetupMatrix(ctx, (link).jobj());
     (pos).set_x(((link).jobj()).mtx().get(0_i32).at(3_i32).get());
     (pos).set_y(((link).jobj()).mtx().get(1_i32).at(3_i32).get());
@@ -2755,18 +2742,9 @@ fn inl_fn_802B7E34_inline_unfused<'a>(
     let mut link: ItemLink<'a> = (ip).xDD4_itemVar().samusgrapple().x0();
     jobj = Handle::cast::<HSD_JObj<'a>>(((link).gobj()).hsd_obj());
     inl_HSD_JObjSetupMatrix_unfused(ctx, (link).jobj());
-    fns::PSMTXIdentity(ctx, Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(m).get(0));
-    fns::PSMTXConcat(
-        ctx,
-        ((link).jobj()).mtx().get(0),
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(m).get(0),
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(m).get(0),
-    );
-    inl_HSD_JObjCopyMtx_unfused(
-        ctx,
-        jobj,
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(m).get(0),
-    );
+    fns::PSMTXIdentity(ctx, m);
+    fns::PSMTXConcat(ctx, ((link).jobj()).mtx().get(0), m, m);
+    inl_HSD_JObjCopyMtx_unfused(ctx, jobj, m);
     (jobj).set_flags(((jobj).flags() | (0x3800000_i32 as u32)));
     {
         if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {

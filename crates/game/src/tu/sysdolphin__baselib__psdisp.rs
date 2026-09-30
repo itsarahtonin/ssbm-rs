@@ -347,6 +347,920 @@ pub fn getColorMatAmb<'a>(
     }
 }
 
+pub fn psDispParticles<'a>(ctx: &'a Ctx, target_link: u32, sw: u32) {
+    let __frame = ctx.stack_frame(0x9a0);
+    let tlut_obj: psdisp_Tlut<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp764: _GXTexObj<'a> = frame_at(ctx, &__frame, 0xc);
+    let sorted_particles: Ptr<'a, HSD_Particle<'a>> = frame_at(ctx, &__frame, 0x2c);
+    let non_edge_particles: Ptr<'a, HSD_Particle<'a>> = frame_at(ctx, &__frame, 0x30);
+    let billboard_mtx: psdisp_Mtx<'a> = frame_at(ctx, &__frame, 0x34);
+    let gx_tlut_obj: _GXTlutObj<'a> = frame_at(ctx, &__frame, 0x64);
+    let temp_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x70);
+    let mut target_link = target_link;
+    let mut sw = sw;
+    let mut sp7B4: i32 = 0;
+    let mut sp7B0: Addr<'a> = null(ctx);
+    let mut sp7AC: u32 = 0;
+    let mut sp7A8: u32 = 0;
+    let mut sp7A5: u8 = 0;
+    let mut sp7A4: u8 = 0;
+    let mut needs_setup: i32 = 0;
+    let mut sp79C: Addr<'a> = null(ctx);
+    let mut stack_pad: i32 = 0;
+    let mut y2: f64 = 0.0;
+    let mut alpha_compare_mode: i32 = 0;
+    let mut prev_tex_interp_near: i32 = 0;
+    let mut prev_kind: u32 = 0;
+    let mut pp: HSD_Particle<'a> = null(ctx);
+    alpha_compare_mode = 0_i32;
+    prev_tex_interp_near = 0_i32;
+    sp7A5 = (0_i32 as u8);
+    sp7A4 = (255_i32 as u8);
+    needs_setup = 1_i32;
+    if sw == (0_i32 as u32) {
+        if (statics::sysdolphin__baselib__psdisp::psFrameNum(ctx).get() as u32) < 255_u32 {
+            statics::sysdolphin__baselib__psdisp::psFrameNum(ctx).set(
+                ((statics::sysdolphin__baselib__psdisp::psFrameNum(ctx).get() as i32)
+                    .wrapping_add(1_i32) as u8),
+            );
+            return;
+        }
+        statics::sysdolphin__baselib__psdisp::psFrameNum(ctx).set((1_i32 as u8));
+        return;
+    }
+    sp7B4 = 0_i32;
+    'l1: loop {
+        'c2: {
+            if ((target_link & ((shl_i32(1_i32, (sp7B4 as u32))) as u32)) != 0) {
+                let _ = fns::particleSort(
+                    ctx,
+                    sp7B4,
+                    statics::sysdolphin__baselib__psdisp::psFrameNum(ctx).get(),
+                    sorted_particles,
+                    non_edge_particles,
+                );
+                if sw == (1_i32 as u32) {
+                    pp = sorted_particles.get();
+                } else {
+                    pp = non_edge_particles.get();
+                }
+                'l3: while !Handle::is_null(pp) {
+                    'c4: {
+                        let mut tex_group: _HSD_PSTexGroup<'a> = null::<_HSD_PSTexGroup<'a>>(ctx);
+                        let mut form_group: _HSD_PSFormGroup<'a> =
+                            null::<_HSD_PSFormGroup<'a>>(ctx);
+                        let mut form: Val<'a, u8> = null::<Val<'a, u8>>(ctx);
+                        let mut image: Addr<'a> = null(ctx);
+                        let mut tlut: Addr<'a> = null(ctx);
+                        let mut blend_mode: u32 = 0;
+                        let mut alpha0: u8 = 0;
+                        let mut alpha1: u8 = 0;
+                        let mut wrap_s: i32 = 0;
+                        let mut wrap_t: i32 = 0;
+                        let mut scale_s: f64 = 0.0;
+                        let mut scale_t: f64 = 0.0;
+                        let mut fmt: i32 = 0;
+                        let mut tex_table: Ptr<'a, Val<'a, u8>> = null(ctx);
+                        let mut width: u32 = 0;
+                        let mut height: u32 = 0;
+                        if (sw == (1_i32 as u32))
+                            && (!(((pp).kind() & ((enums::TexEdge as i32) as u32)) != 0))
+                        {
+                            break 'l3;
+                        }
+                        if !((pp).size() < 1.1920928955078125e-07_f64) {
+                            if needs_setup != 0_i32 {
+                                sp79C = null::<Addr<'a>>(ctx);
+                                statics::sysdolphin__baselib__psdisp::prevPointSize(ctx)
+                                    .set(1_i32.wrapping_neg());
+                                sp7B0 = null::<Addr<'a>>(ctx);
+                                statics::sysdolphin__baselib__psdisp::prevLineWidth(ctx)
+                                    .set(1_i32.wrapping_neg());
+                                statics::sysdolphin__baselib__psdisp::prevChanCtrl(ctx)
+                                    .set(1_i32.wrapping_neg());
+                                fns::psSetupTevInvalidState(ctx);
+                                sp7A8 = (1_i32.wrapping_neg() as u32);
+                                prev_kind = (prev_kind & 0xfeffffff_u32);
+                                sp7AC = (1_i32.wrapping_neg() as u32);
+                                fns::HSD_FogSet(ctx, null::<HSD_Fog<'a>>(ctx));
+                                statics::sysdolphin__baselib__psdisp::prevChanMat(ctx).set_r({
+                                    let __t2 = {
+                                        let __t1 = (255_i32 as u8);
+                                        statics::sysdolphin__baselib__psdisp::prevChanMat(ctx)
+                                            .set_b(__t1);
+                                        __t1
+                                    };
+                                    statics::sysdolphin__baselib__psdisp::prevChanMat(ctx)
+                                        .set_g(__t2);
+                                    __t2
+                                });
+                                statics::sysdolphin__baselib__psdisp::prevChanAmb(ctx).set_r({
+                                    let __t4 = {
+                                        let __t3 = (255_i32 as u8);
+                                        statics::sysdolphin__baselib__psdisp::prevChanAmb(ctx)
+                                            .set_b(__t3);
+                                        __t3
+                                    };
+                                    statics::sysdolphin__baselib__psdisp::prevChanAmb(ctx)
+                                        .set_g(__t4);
+                                    __t4
+                                });
+                                statics::sysdolphin__baselib__psdisp::prevChanMat(ctx).set_a({
+                                    let __t5 = (255_i32 as u8);
+                                    statics::sysdolphin__baselib__psdisp::prevChanAmb(ctx)
+                                        .set_a(__t5);
+                                    __t5
+                                });
+                                fns::GXSetChanMatColor(
+                                    ctx,
+                                    (enums::GX_COLOR0A0 as i32),
+                                    statics::sysdolphin__baselib__psdisp::prevChanMat(ctx),
+                                );
+                                fns::GXSetChanAmbColor(
+                                    ctx,
+                                    (enums::GX_COLOR0A0 as i32),
+                                    statics::sysdolphin__baselib__psdisp::prevChanAmb(ctx),
+                                );
+                                fns::psSetupTevInvalidState(ctx);
+                                fns::psSetupTevCommon(ctx);
+                                inl_psSetColor(
+                                    ctx,
+                                    statics::sysdolphin__baselib__psdisp::prevColorPrim(ctx),
+                                    (255_i32 as u8),
+                                );
+                                inl_psSetColor(
+                                    ctx,
+                                    statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx),
+                                    (0_i32 as u8),
+                                );
+                                inl_psSetColor(
+                                    ctx,
+                                    statics::sysdolphin__baselib__psdisp::prevColorMat(ctx),
+                                    (255_i32 as u8),
+                                );
+                                fns::GXSetTevColor(
+                                    ctx,
+                                    (enums::GX_TEVREG0 as i32),
+                                    statics::sysdolphin__baselib__psdisp::prevColorPrim(ctx),
+                                );
+                                fns::GXSetTevColor(
+                                    ctx,
+                                    (enums::GX_TEVREG1 as i32),
+                                    statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx),
+                                );
+                                fns::GXSetTevColor(
+                                    ctx,
+                                    (enums::GX_TEVREG2 as i32),
+                                    statics::sysdolphin__baselib__psdisp::prevColorMat(ctx),
+                                );
+                                statics::sysdolphin__baselib__psdisp::HSD_PSDisp_804D792C(ctx)
+                                    .set(1_i32.wrapping_neg());
+                                fns::GXSetZCompLoc(ctx, (0_i32 as u8));
+                                fns::HSD_CObjGetViewingMtx(
+                                    ctx,
+                                    fns::HSD_CObjGetCurrent(ctx),
+                                    statics::sysdolphin__baselib__psdisp::vmtx(ctx).get(0),
+                                );
+                                let _ = fns::PSMTXInverse(
+                                    ctx,
+                                    statics::sysdolphin__baselib__psdisp::vmtx(ctx).get(0),
+                                    statics::sysdolphin__baselib__psdisp::rvmtx(ctx).get(0),
+                                );
+                                {
+                                    let mut w0: f64 = 0.0;
+                                    let mut x_offset: f64 = 0.0;
+                                    let mut x_scale: f64 = 0.0;
+                                    let mut w1: f64 = 0.0;
+                                    let mut y_offset: f64 = 0.0;
+                                    let mut y_scale: f64 = 0.0;
+                                    let mut w2: f64 = 0.0;
+                                    let mut w3: f64 = 0.0;
+                                    let mut y0: f64 = 0.0;
+                                    let mut y1: f64 = 0.0;
+                                    fns::GXGetProjectionv(
+                                        ctx,
+                                        statics::sysdolphin__baselib__psdisp::prj(ctx).at(0),
+                                    );
+                                    if 0.0
+                                        == statics::sysdolphin__baselib__psdisp::prj(ctx)
+                                            .at(0_i32)
+                                            .get()
+                                    {
+                                        x_scale = statics::sysdolphin__baselib__psdisp::prj(ctx)
+                                            .at(1_i32)
+                                            .get();
+                                        x_offset = statics::sysdolphin__baselib__psdisp::prj(ctx)
+                                            .at(2_i32)
+                                            .get();
+                                        w0 = statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                                            .get(2_i32)
+                                            .at(0_i32)
+                                            .get();
+                                        statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                            .get(0_i32)
+                                            .at(0_i32)
+                                            .set(fp::fmadds(
+                                                x_scale,
+                                                statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                                                    .get(0_i32)
+                                                    .at(0_i32)
+                                                    .get(),
+                                                fp::fmuls(x_offset, w0),
+                                            ));
+                                        w1 = statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                                            .get(2_i32)
+                                            .at(1_i32)
+                                            .get();
+                                        statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                            .get(0_i32)
+                                            .at(1_i32)
+                                            .set(fp::fmadds(
+                                                x_scale,
+                                                statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                                                    .get(0_i32)
+                                                    .at(1_i32)
+                                                    .get(),
+                                                fp::fmuls(x_offset, w1),
+                                            ));
+                                        w2 = statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                                            .get(2_i32)
+                                            .at(2_i32)
+                                            .get();
+                                        statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                            .get(0_i32)
+                                            .at(2_i32)
+                                            .set(fp::fmadds(
+                                                x_scale,
+                                                statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                                                    .get(0_i32)
+                                                    .at(2_i32)
+                                                    .get(),
+                                                fp::fmuls(x_offset, w2),
+                                            ));
+                                        w3 = statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                                            .get(2_i32)
+                                            .at(3_i32)
+                                            .get();
+                                        statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                            .get(0_i32)
+                                            .at(3_i32)
+                                            .set(fp::fmadds(
+                                                x_scale,
+                                                statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                                                    .get(0_i32)
+                                                    .at(3_i32)
+                                                    .get(),
+                                                fp::fmuls(x_offset, w3),
+                                            ));
+                                        y_scale = statics::sysdolphin__baselib__psdisp::prj(ctx)
+                                            .at(3_i32)
+                                            .get();
+                                        y_offset = statics::sysdolphin__baselib__psdisp::prj(ctx)
+                                            .at(4_i32)
+                                            .get();
+                                        y0 = fp::fmuls(y_offset, w0);
+                                        y1 = fp::fmuls(y_offset, w1);
+                                        y2 = fp::fmuls(y_offset, w2);
+                                        statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                            .get(1_i32)
+                                            .at(0_i32)
+                                            .set(fp::fmadds(
+                                                y_scale,
+                                                statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                                                    .get(1_i32)
+                                                    .at(0_i32)
+                                                    .get(),
+                                                y0,
+                                            ));
+                                        statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                            .get(1_i32)
+                                            .at(1_i32)
+                                            .set(fp::fmadds(
+                                                y_scale,
+                                                statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                                                    .get(1_i32)
+                                                    .at(1_i32)
+                                                    .get(),
+                                                y1,
+                                            ));
+                                        statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                            .get(1_i32)
+                                            .at(2_i32)
+                                            .set(fp::fmadds(
+                                                y_scale,
+                                                statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                                                    .get(1_i32)
+                                                    .at(2_i32)
+                                                    .get(),
+                                                y2,
+                                            ));
+                                        statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                            .get(1_i32)
+                                            .at(3_i32)
+                                            .set(fp::fmadds(
+                                                y_scale,
+                                                statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                                                    .get(1_i32)
+                                                    .at(3_i32)
+                                                    .get(),
+                                                (fp::fmuls(y_offset, w3)),
+                                            ));
+                                    } else {
+                                        statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                            .get(0_i32)
+                                            .at(0_i32)
+                                            .set(fp::fmadds(
+                                                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                                                    .at(1_i32)
+                                                    .get(),
+                                                statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                                                    .get(0_i32)
+                                                    .at(0_i32)
+                                                    .get(),
+                                                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                                                    .at(2_i32)
+                                                    .get(),
+                                            ));
+                                        statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                            .get(0_i32)
+                                            .at(1_i32)
+                                            .set(fp::fmadds(
+                                                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                                                    .at(1_i32)
+                                                    .get(),
+                                                statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                                                    .get(0_i32)
+                                                    .at(1_i32)
+                                                    .get(),
+                                                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                                                    .at(2_i32)
+                                                    .get(),
+                                            ));
+                                        statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                            .get(0_i32)
+                                            .at(2_i32)
+                                            .set(fp::fmadds(
+                                                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                                                    .at(1_i32)
+                                                    .get(),
+                                                statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                                                    .get(0_i32)
+                                                    .at(2_i32)
+                                                    .get(),
+                                                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                                                    .at(2_i32)
+                                                    .get(),
+                                            ));
+                                        statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                            .get(0_i32)
+                                            .at(3_i32)
+                                            .set(fp::fmadds(
+                                                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                                                    .at(1_i32)
+                                                    .get(),
+                                                statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                                                    .get(0_i32)
+                                                    .at(3_i32)
+                                                    .get(),
+                                                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                                                    .at(2_i32)
+                                                    .get(),
+                                            ));
+                                        statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                            .get(1_i32)
+                                            .at(0_i32)
+                                            .set(fp::fmadds(
+                                                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                                                    .at(3_i32)
+                                                    .get(),
+                                                statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                                                    .get(1_i32)
+                                                    .at(0_i32)
+                                                    .get(),
+                                                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                                                    .at(4_i32)
+                                                    .get(),
+                                            ));
+                                        statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                            .get(1_i32)
+                                            .at(1_i32)
+                                            .set(fp::fmadds(
+                                                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                                                    .at(3_i32)
+                                                    .get(),
+                                                statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                                                    .get(1_i32)
+                                                    .at(1_i32)
+                                                    .get(),
+                                                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                                                    .at(4_i32)
+                                                    .get(),
+                                            ));
+                                        statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                            .get(1_i32)
+                                            .at(2_i32)
+                                            .set(fp::fmadds(
+                                                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                                                    .at(3_i32)
+                                                    .get(),
+                                                statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                                                    .get(1_i32)
+                                                    .at(2_i32)
+                                                    .get(),
+                                                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                                                    .at(4_i32)
+                                                    .get(),
+                                            ));
+                                        statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                            .get(1_i32)
+                                            .at(3_i32)
+                                            .set(fp::fmadds(
+                                                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                                                    .at(3_i32)
+                                                    .get(),
+                                                statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                                                    .get(1_i32)
+                                                    .at(3_i32)
+                                                    .get(),
+                                                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                                                    .at(4_i32)
+                                                    .get(),
+                                            ));
+                                    }
+                                    inl_psUpdateBillboardAxes(
+                                        ctx,
+                                        (Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(
+                                            statics::sysdolphin__baselib__psdisp::rvmtx(ctx).get(0),
+                                        ))
+                                        .get(0),
+                                    );
+                                }
+                                fns::GXLoadPosMtxImm(
+                                    ctx,
+                                    statics::sysdolphin__baselib__psdisp::vmtx(ctx).get(0),
+                                    ((enums::GX_PNMTX0 as i32) as u32),
+                                );
+                                Handle::copy_from(
+                                    billboard_mtx,
+                                    statics::sysdolphin__baselib__psdisp::HSD_PSDisp_803B9628(ctx),
+                                );
+                                fns::GXLoadPosMtxImm(
+                                    ctx,
+                                    billboard_mtx.mtx().get(0),
+                                    ((enums::GX_PNMTX1 as i32) as u32),
+                                );
+                                statics::sysdolphin__baselib__psdisp::HSD_PSDisp_804D7948(ctx)
+                                    .at(0_i32)
+                                    .set((enums::GX_PNMTX1 as i32));
+                                inl_psSetCurrentMtx(ctx, (enums::GX_PNMTX0 as i32));
+                                fns::GXEnableTexOffsets(
+                                    ctx,
+                                    (enums::GX_TEXCOORD0 as i32),
+                                    (1_i32 as u8),
+                                    (1_i32 as u8),
+                                );
+                                fns::GXSetCullMode(ctx, (enums::GX_CULL_BACK as i32));
+                                fns::GXSetArray(
+                                    ctx,
+                                    (enums::GX_VA_TEX0 as i32),
+                                    Handle::cast::<Addr<'a>>(
+                                        statics::sysdolphin__baselib__psdisp::HSD_PSDisp_8040C340(
+                                            ctx,
+                                        )
+                                        .at(0),
+                                    ),
+                                    ((2_i32) as u8),
+                                );
+                                inl_psSetupVtxFormat(
+                                    ctx,
+                                    (enums::GX_VTXFMT0 as i32),
+                                    0_i32,
+                                    1_i32,
+                                    (enums::GX_RGB565 as i32),
+                                );
+                                inl_psSetupVtxFormat(
+                                    ctx,
+                                    (enums::GX_VTXFMT1 as i32),
+                                    0_i32,
+                                    0_i32,
+                                    (enums::GX_RGB565 as i32),
+                                );
+                                inl_psSetupVtxFormat(
+                                    ctx,
+                                    (enums::GX_VTXFMT2 as i32),
+                                    1_i32,
+                                    1_i32,
+                                    (enums::GX_RGB565 as i32),
+                                );
+                                inl_psSetupVtxFormat(
+                                    ctx,
+                                    (enums::GX_VTXFMT3 as i32),
+                                    1_i32,
+                                    0_i32,
+                                    (enums::GX_RGB565 as i32),
+                                );
+                                inl_psSetupVtxFormat(
+                                    ctx,
+                                    (enums::GX_VTXFMT4 as i32),
+                                    0_i32,
+                                    1_i32,
+                                    (enums::GX_RGBA6 as i32),
+                                );
+                                inl_psSetupVtxFormat(
+                                    ctx,
+                                    (enums::GX_VTXFMT5 as i32),
+                                    1_i32,
+                                    1_i32,
+                                    (enums::GX_RGBA6 as i32),
+                                );
+                                needs_setup = 0_i32;
+                            }
+                            blend_mode = ((shr_u32((pp).kind(), 22_u32)) & (3_i32 as u32));
+                            inl_setBlendMode(ctx, (blend_mode as i32));
+                            if ((pp).aCmpCount() as i32) != 0_i32 {
+                                let mut scale: i32 = div_i32(
+                                    (0x10000_i32.wrapping_mul(((pp).aCmpRemain() as i32))),
+                                    ((pp).aCmpCount() as i32),
+                                );
+                                alpha0 = (sar_i32(
+                                    ((shl_i32(((pp).aCmpParam1Target() as i32), (16_i32 as u32)))
+                                        .wrapping_add(
+                                            scale.wrapping_mul(
+                                                (((pp).aCmpParam1() as i32).wrapping_sub(
+                                                    ((pp).aCmpParam1Target() as i32),
+                                                )),
+                                            ),
+                                        )),
+                                    (16_i32 as u32),
+                                ) as u8);
+                                alpha1 = (sar_i32(
+                                    ((shl_i32(((pp).aCmpParam2Target() as i32), (16_i32 as u32)))
+                                        .wrapping_add(
+                                            scale.wrapping_mul(
+                                                (((pp).aCmpParam2() as i32).wrapping_sub(
+                                                    ((pp).aCmpParam2Target() as i32),
+                                                )),
+                                            ),
+                                        )),
+                                    (16_i32 as u32),
+                                ) as u8);
+                            } else {
+                                alpha0 = (pp).aCmpParam1();
+                                alpha1 = (pp).aCmpParam2();
+                            }
+                            if ((alpha_compare_mode != ((pp).aCmpMode() as i32))
+                                || ((sp7A5 as i32) != (alpha0 as i32)))
+                                || ((sp7A4 as i32) != (alpha1 as i32))
+                            {
+                                sp7A5 = alpha0;
+                                alpha_compare_mode = ((pp).aCmpMode() as i32);
+                                sp7A4 = alpha1;
+                                fns::GXSetAlphaCompare(
+                                    ctx,
+                                    ((sar_i32(alpha_compare_mode, (3_i32 as u32))) & 7_i32),
+                                    sp7A5,
+                                    ((sar_i32(alpha_compare_mode, (6_i32 as u32))) & 3_i32),
+                                    (alpha_compare_mode & 7_i32),
+                                    sp7A4,
+                                );
+                            }
+                            fns::psSetupTev(ctx, pp);
+                            inl_setupChanCtrl(ctx, pp);
+                            inl_setupChanReg(ctx, pp);
+                            inl_setupTevReg(ctx, pp);
+                            if ((pp).kind() & ((enums::TexEdge as i32) as u32)) != sp7AC {
+                                sp7AC = ((pp).kind() & ((enums::TexEdge as i32) as u32));
+                                if (sp7AC as i32) != 0_i32 {
+                                    fns::GXSetZMode(
+                                        ctx,
+                                        (1_i32 as u8),
+                                        (enums::GX_LEQUAL as i32),
+                                        (1_i32 as u8),
+                                    );
+                                } else {
+                                    fns::GXSetZMode(
+                                        ctx,
+                                        (1_i32 as u8),
+                                        (enums::GX_LEQUAL as i32),
+                                        (0_i32 as u8),
+                                    );
+                                }
+                            }
+                            if (((pp).kind() ^ prev_kind) & ((enums::DispFog as i32) as u32))
+                                != (0_i32 as u32)
+                            {
+                                if (((pp).kind() & ((enums::DispFog as i32) as u32)) != 0) {
+                                    fns::HSD_FogSet(
+                                        ctx,
+                                        statics::sysdolphin__baselib__psdisp::HSD_PSDisp_804D7908(
+                                            ctx,
+                                        )
+                                        .get(),
+                                    );
+                                } else {
+                                    fns::HSD_FogSet(ctx, null::<HSD_Fog<'a>>(ctx));
+                                }
+                            }
+                            if (!Handle::is_null(
+                                (Handle::add((fns::psNumCmdList(ctx).at(0)), ((pp).bank() as i32)))
+                                    .get(),
+                            )) && (!Handle::is_null(
+                                ({
+                                    let __t6 = (Handle::add(
+                                        (Handle::add(
+                                            (fns::psNumCmdList(ctx).at(0)),
+                                            ((pp).bank() as i32),
+                                        ))
+                                        .get(),
+                                        ((pp).texGroup() as i32),
+                                    ))
+                                    .get();
+                                    form_group = __t6;
+                                    __t6
+                                }),
+                            )) {
+                                form = (form_group).formTable().at(((pp).poseNum() as i32)).get();
+                            } else {
+                                form = null::<Val<'a, u8>>(ctx);
+                            }
+                            if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+                                if (((pp).kind() & ((enums::MirrorS as i32) as u32)) != 0) {
+                                    scale_s = 2.0;
+                                    wrap_s = (enums::GX_MIRROR as i32);
+                                } else {
+                                    scale_s = 1.0;
+                                    wrap_s = (enums::GX_CLAMP as i32);
+                                }
+                                if (((pp).kind() & ((enums::MirrorT as i32) as u32)) != 0) {
+                                    scale_t = 2.0;
+                                    wrap_t = (enums::GX_MIRROR as i32);
+                                } else {
+                                    scale_t = 1.0;
+                                    wrap_t = (enums::GX_CLAMP as i32);
+                                }
+                                if ((pp).kind()
+                                    & (((enums::MirrorS as i32) | (enums::MirrorT as i32)) as u32))
+                                    != sp7A8
+                                {
+                                    sp7A8 = ((pp).kind()
+                                        & (((enums::MirrorS as i32) | (enums::MirrorT as i32))
+                                            as u32));
+                                    sp7B0 = null::<Addr<'a>>(ctx);
+                                    fns::PSMTXScale(ctx, temp_mtx.get(0), scale_s, scale_t, 1.0);
+                                    if (((pp).kind() & ((enums::MirrorT as i32) as u32)) != 0) {
+                                        temp_mtx.get(1_i32).at(3_i32).set(1.0);
+                                    }
+                                    fns::GXLoadTexMtxImm(
+                                        ctx,
+                                        temp_mtx.get(0),
+                                        ((enums::GX_TEXMTX0 as i32) as u32),
+                                        (enums::GX_MTX2x4 as i32),
+                                    );
+                                    fns::GXSetTexCoordGen2(
+                                        ctx,
+                                        (enums::GX_TEXCOORD0 as i32),
+                                        (enums::GX_TG_MTX2x4 as i32),
+                                        (enums::GX_TG_TEX0 as i32),
+                                        ((enums::GX_TEXMTX0 as i32) as u32),
+                                        (0_i32 as u8),
+                                        ((enums::GX_PTIDENTITY as i32) as u32),
+                                    );
+                                }
+                                tex_group = (Handle::add(
+                                    fns::psTexGroupArray(ctx).at(((pp).bank() as i32)).get(),
+                                    ((pp).texGroup() as i32),
+                                ))
+                                .get();
+                                if !Handle::is_null(tex_group) {
+                                    fmt = ((tex_group).fmt() as i32);
+                                    tex_table = (tex_group).texTable().at(0);
+                                    width = (tex_group).width();
+                                    height = (tex_group).height();
+                                } else {
+                                    fmt = 0_i32;
+                                    height = (0_i32 as u32);
+                                    width = (0_i32 as u32);
+                                    tex_table = null::<Ptr<'a, Val<'a, u8>>>(ctx);
+                                }
+                                if !Handle::is_null(tex_table) {
+                                    image = Handle::cast::<Addr<'a>>(
+                                        (Handle::add(tex_table, ((pp).poseNum() as i32))).get(),
+                                    );
+                                } else {
+                                    image = null::<Addr<'a>>(ctx);
+                                }
+                                if ((fmt as u32) == ((enums::GX_TF_C4 as i32) as u32))
+                                    || ((fmt as u32) == ((enums::GX_TF_C8 as i32) as u32))
+                                {
+                                    if !Handle::is_null(tex_table) {
+                                        let mut palettes: Ptr<'a, Addr<'a>> = Handle::cast::<
+                                            Ptr<'a, Addr<'a>>,
+                                        >(
+                                            (Handle::add(tex_table, ((tex_group).num() as i32))),
+                                        );
+                                        if !Handle::is_null(palettes) {
+                                            if ((pp).palNum() as i32) != 255_i32 {
+                                                tlut =
+                                                    (Handle::add(palettes, ((pp).palNum() as i32)))
+                                                        .get();
+                                            } else if !(((pp).kind()
+                                                & ((enums::ComTLUT as i32) as u32))
+                                                != 0)
+                                            {
+                                                tlut = (Handle::add(
+                                                    palettes,
+                                                    ((pp).poseNum() as i32),
+                                                ))
+                                                .get();
+                                            } else {
+                                                tlut = (Handle::add(palettes, 0_i32)).get();
+                                            }
+                                            if Handle::addr(tlut) != Handle::addr(sp79C) {
+                                                tlut_obj.set_fmt(
+                                                    (((tex_group).tlutfmt() as u8) as i32),
+                                                );
+                                                tlut_obj.set_tlut_name(
+                                                    ((enums::GX_TLUT0 as i32) as u32),
+                                                );
+                                                tlut_obj.set_n_entries(
+                                                    ((if (fmt as u32)
+                                                        == ((enums::GX_TF_C4 as i32) as u32)
+                                                    {
+                                                        16_i32
+                                                    } else {
+                                                        0x100_i32
+                                                    })
+                                                        as u16),
+                                                );
+                                                fns::GXInitTlutObj(
+                                                    ctx,
+                                                    gx_tlut_obj,
+                                                    tlut,
+                                                    tlut_obj.fmt(),
+                                                    tlut_obj.n_entries(),
+                                                );
+                                                fns::GXLoadTlut(
+                                                    ctx,
+                                                    gx_tlut_obj,
+                                                    tlut_obj.tlut_name(),
+                                                );
+                                            }
+                                            sp7B0 = null::<Addr<'a>>(ctx);
+                                        }
+                                    }
+                                }
+                                if (Handle::addr(sp7B0) != Handle::addr(image))
+                                    && (!Handle::is_null(image))
+                                {
+                                    sp7B0 = image;
+                                    's5: {
+                                        let __case = match (fmt as u32) {
+                                            8_u32 => 0,
+                                            9_u32 => 0,
+                                            0_u32 => 1,
+                                            1_u32 => 1,
+                                            2_u32 => 1,
+                                            3_u32 => 1,
+                                            4_u32 => 1,
+                                            5_u32 => 1,
+                                            6_u32 => 1,
+                                            14_u32 => 1,
+                                            _ => 2,
+                                        };
+                                        if __case <= 0 {
+                                            fns::GXInitTexObjCI(
+                                                ctx,
+                                                sp764,
+                                                image,
+                                                (width as u16),
+                                                (height as u16),
+                                                fmt,
+                                                wrap_s,
+                                                wrap_t,
+                                                (0_i32 as u8),
+                                                ((enums::GX_TLUT0 as i32) as u32),
+                                            );
+                                            break 's5;
+                                        }
+                                        if __case <= 1 {
+                                            fns::GXInitTexObj(
+                                                ctx,
+                                                sp764,
+                                                image,
+                                                (width as u16),
+                                                (height as u16),
+                                                fmt,
+                                                wrap_s,
+                                                wrap_t,
+                                                (0_i32 as u8),
+                                            );
+                                            break 's5;
+                                        }
+                                        if __case <= 2 {
+                                            (if ((0_i32) != 0) {
+                                                ({ () })
+                                            } else {
+                                                fns::__assert(
+                                                    ctx,
+                                                    cstr(ctx, 0x800055fc),
+                                                    (0x862_i32 as u32),
+                                                    cstr(ctx, 0x800055fc),
+                                                )
+                                            });
+                                            break 's5;
+                                        }
+                                    }
+                                    prev_tex_interp_near = (((pp).kind()
+                                        & ((enums::TexInterpNear as i32) as u32))
+                                        as i32);
+                                    fns::GXInitTexObjLOD(
+                                        ctx,
+                                        sp764,
+                                        (if prev_tex_interp_near != 0_i32 {
+                                            (enums::GX_NEAR as i32)
+                                        } else {
+                                            (enums::GX_LINEAR as i32)
+                                        }),
+                                        (if (((pp).kind() & ((enums::TexInterpNear as i32) as u32))
+                                            != 0)
+                                        {
+                                            (enums::GX_NEAR as i32)
+                                        } else {
+                                            (enums::GX_LINEAR as i32)
+                                        }),
+                                        0.0,
+                                        0.0,
+                                        0.0,
+                                        (0_i32 as u8),
+                                        (0_i32 as u8),
+                                        (enums::GX_ANISO_1 as i32),
+                                    );
+                                    fns::GXLoadTexObj(ctx, sp764, (enums::GX_TEXMAP0 as i32));
+                                }
+                                if (prev_tex_interp_near as u32)
+                                    != ((pp).kind() & ((enums::TexInterpNear as i32) as u32))
+                                {
+                                    prev_tex_interp_near = (((pp).kind()
+                                        & ((enums::TexInterpNear as i32) as u32))
+                                        as i32);
+                                    fns::GXInitTexObjLOD(
+                                        ctx,
+                                        sp764,
+                                        (if prev_tex_interp_near != 0_i32 {
+                                            (enums::GX_NEAR as i32)
+                                        } else {
+                                            (enums::GX_LINEAR as i32)
+                                        }),
+                                        (if (((pp).kind() & ((enums::TexInterpNear as i32) as u32))
+                                            as i32)
+                                            != 0_i32
+                                        {
+                                            (enums::GX_NEAR as i32)
+                                        } else {
+                                            (enums::GX_LINEAR as i32)
+                                        }),
+                                        0.0,
+                                        0.0,
+                                        0.0,
+                                        (0_i32 as u8),
+                                        (0_i32 as u8),
+                                        (enums::GX_ANISO_1 as i32),
+                                    );
+                                    fns::GXLoadTexObj(ctx, sp764, (enums::GX_TEXMAP0 as i32));
+                                }
+                            }
+                            if (((pp).kind() & ((enums::DispPoint as i32) as u32)) != 0) {
+                                if !Handle::is_null((pp).appsrt()) {
+                                    inl_psDispSubAPPSRTPoint(ctx, pp);
+                                } else {
+                                    if (((pp).kind() & ((enums::Trail as i32) as u32)) != 0) {
+                                        pp = inl_psDispSubPointTrail(ctx, pp);
+                                    } else {
+                                        pp = inl_psDispSubPoint(ctx, pp);
+                                    }
+                                }
+                            } else if !Handle::is_null((pp).appsrt()) {
+                                inl_psDispSubAppSRT(ctx, pp, form);
+                            } else {
+                                inl_psDispSub(ctx, pp, form);
+                            }
+                        }
+                        prev_kind = (pp).kind();
+                        pp = (pp).next();
+                    }
+                }
+            }
+            sp7B4 = sp7B4.wrapping_add(1_i32);
+        }
+        if !(sp7B4 < 16_i32) {
+            break 'l1;
+        }
+    }
+    if needs_setup == 0_i32 {
+        fns::HSD_StateInvalidate(ctx, 1_i32.wrapping_neg());
+    }
+}
+
 fn inl_psSetColor<'a>(ctx: &'a Ctx, color: _GXColor<'a>, value: u8) {
     let mut color = color;
     let mut value = value;
@@ -354,6 +1268,3106 @@ fn inl_psSetColor<'a>(ctx: &'a Ctx, color: _GXColor<'a>, value: u8) {
     (color).set_g(value);
     (color).set_b(value);
     (color).set_a(value);
+}
+
+fn inl_psUpdateBillboardAxes<'a>(ctx: &'a Ctx, inv_view: ArrV<'a, F32, 4>) {
+    let mut inv_view = inv_view;
+    let mut right_x: f64 = 0.0;
+    let mut up_x: f64 = 0.0;
+    let mut right_y: f64 = 0.0;
+    let mut up_y: f64 = 0.0;
+    let mut right_z: f64 = 0.0;
+    let mut up_z: f64 = 0.0;
+    right_x = (Handle::add(inv_view, 0_i32)).at(0_i32).get();
+    up_x = (Handle::add(inv_view, 0_i32)).at(1_i32).get();
+    statics::sysdolphin__baselib__psdisp::HSD_PSDisp_804D7914(ctx).set(fp::fadds(right_x, up_x));
+    statics::sysdolphin__baselib__psdisp::HSD_PSDisp_804D7918(ctx).set(fp::fsubs(right_x, up_x));
+    right_y = (Handle::add(inv_view, 1_i32)).at(0_i32).get();
+    up_y = (Handle::add(inv_view, 1_i32)).at(1_i32).get();
+    statics::sysdolphin__baselib__psdisp::HSD_PSDisp_804D791C(ctx).set(fp::fadds(right_y, up_y));
+    statics::sysdolphin__baselib__psdisp::HSD_PSDisp_804D7920(ctx).set(fp::fsubs(right_y, up_y));
+    right_z = (Handle::add(inv_view, 2_i32)).at(0_i32).get();
+    up_z = (Handle::add(inv_view, 2_i32)).at(1_i32).get();
+    statics::sysdolphin__baselib__psdisp::HSD_PSDisp_804D7924(ctx).set(fp::fadds(right_z, up_z));
+    statics::sysdolphin__baselib__psdisp::HSD_PSDisp_804D7928(ctx).set(fp::fsubs(right_z, up_z));
+}
+
+fn inl_psSetCurrentMtx<'a>(ctx: &'a Ctx, idx: i32) {
+    let mut idx = idx;
+    if (statics::sysdolphin__baselib__psdisp::HSD_PSDisp_804D7948(ctx)
+        .at(0_i32)
+        .get() as u32)
+        != (idx as u32)
+    {
+        statics::sysdolphin__baselib__psdisp::HSD_PSDisp_804D7948(ctx)
+            .at(0_i32)
+            .set(idx);
+        fns::GXSetCurrentMtx(ctx, (idx as u32));
+    }
+}
+
+fn inl_psSetupVtxFormat<'a>(
+    ctx: &'a Ctx,
+    format: i32,
+    has_color: i32,
+    has_texture: i32,
+    texture_type: i32,
+) {
+    let mut format = format;
+    let mut has_color = has_color;
+    let mut has_texture = has_texture;
+    let mut texture_type = texture_type;
+    fns::GXSetVtxAttrFmt(
+        ctx,
+        format,
+        (enums::GX_VA_POS as i32),
+        (enums::GX_TEX_ST as i32),
+        (enums::GX_RGBA6 as i32),
+        (0_u32 as u8),
+    );
+    if (has_color != 0) {
+        fns::GXSetVtxAttrFmt(
+            ctx,
+            format,
+            (enums::GX_VA_CLR0 as i32),
+            (enums::GX_TEX_ST as i32),
+            (enums::GX_RGBA8 as i32),
+            (0_u32 as u8),
+        );
+    }
+    if (has_texture != 0) {
+        fns::GXSetVtxAttrFmt(
+            ctx,
+            format,
+            (enums::GX_VA_TEX0 as i32),
+            (enums::GX_TEX_ST as i32),
+            texture_type,
+            (0_u32 as u8),
+        );
+    }
+}
+
+fn inl_setBlendMode<'a>(ctx: &'a Ctx, blend_mode: i32) {
+    let mut blend_mode = blend_mode;
+    if statics::sysdolphin__baselib__psdisp::HSD_PSDisp_804D792C(ctx).get() != blend_mode {
+        statics::sysdolphin__baselib__psdisp::HSD_PSDisp_804D792C(ctx).set(blend_mode);
+        's1: {
+            let __case = match blend_mode {
+                0_i32 => 0,
+                1_i32 => 1,
+                _ => 2,
+            };
+            if __case <= 0 {
+                fns::GXSetBlendMode(
+                    ctx,
+                    (enums::GX_BM_BLEND as i32),
+                    (enums::GX_BL_SRCALPHA as i32),
+                    (enums::GX_BL_INVSRCALPHA as i32),
+                    (enums::GX_LO_CLEAR as i32),
+                );
+                break 's1;
+            }
+            if __case <= 1 {
+                fns::GXSetBlendMode(
+                    ctx,
+                    (enums::GX_BM_BLEND as i32),
+                    (enums::GX_BL_SRCALPHA as i32),
+                    (enums::GX_BL_ONE as i32),
+                    (enums::GX_LO_CLEAR as i32),
+                );
+                break 's1;
+            }
+            if __case <= 2 {
+                fns::OSReport(ctx, cstr(ctx, 0x8040c370), &[]);
+                break 's1;
+            }
+        }
+    }
+}
+
+fn inl_setupChanCtrl<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>) {
+    let mut pp = pp;
+    let mut chan_state: u32 =
+        ((pp).kind() & (((enums::DispLighting as i32) | (enums::Trail as i32)) as u32));
+    if chan_state != (statics::sysdolphin__baselib__psdisp::prevChanCtrl(ctx).get() as u32) {
+        statics::sysdolphin__baselib__psdisp::prevChanCtrl(ctx).set((chan_state as i32));
+        fns::GXSetNumChans(ctx, (1_i32 as u8));
+        's1: {
+            let __case = match statics::sysdolphin__baselib__psdisp::prevChanCtrl(ctx).get() {
+                0x100000_i32 => 0,
+                i32::MIN => 1,
+                (-2146435072_i32) => 2,
+                _ => 3,
+            };
+            if __case <= 0 {
+                fns::GXSetChanCtrl(
+                    ctx,
+                    (enums::GX_COLOR0A0 as i32),
+                    (0_i32 as u8),
+                    (enums::GX_SRC_VTX as i32),
+                    (enums::GX_SRC_VTX as i32),
+                    (0_i32 as u32),
+                    (enums::GX_DF_NONE as i32),
+                    (enums::GX_AF_NONE as i32),
+                );
+                break 's1;
+            }
+            if __case <= 1 {
+                fns::GXSetChanCtrl(
+                    ctx,
+                    (enums::GX_COLOR0 as i32),
+                    (1_i32 as u8),
+                    (enums::GX_SRC_REG as i32),
+                    (enums::GX_SRC_REG as i32),
+                    (fns::HSD_LObjGetLightMaskDiffuse(ctx) as u32),
+                    (enums::GX_DF_NONE as i32),
+                    (if (fns::HSD_LObjGetLightMaskAttnFunc(ctx) != 0) {
+                        (enums::GX_AF_SPOT as i32)
+                    } else {
+                        (enums::GX_AF_NONE as i32)
+                    }),
+                );
+                fns::GXSetChanCtrl(
+                    ctx,
+                    (enums::GX_ALPHA0 as i32),
+                    (0_i32 as u8),
+                    (enums::GX_SRC_REG as i32),
+                    (enums::GX_SRC_REG as i32),
+                    (0_i32 as u32),
+                    (enums::GX_DF_NONE as i32),
+                    (enums::GX_AF_NONE as i32),
+                );
+                break 's1;
+            }
+            if __case <= 2 {
+                fns::GXSetChanCtrl(
+                    ctx,
+                    (enums::GX_COLOR0 as i32),
+                    (1_i32 as u8),
+                    (enums::GX_SRC_REG as i32),
+                    (enums::GX_SRC_REG as i32),
+                    (fns::HSD_LObjGetLightMaskDiffuse(ctx) as u32),
+                    (enums::GX_DF_NONE as i32),
+                    (if (fns::HSD_LObjGetLightMaskAttnFunc(ctx) != 0) {
+                        (enums::GX_AF_SPOT as i32)
+                    } else {
+                        (enums::GX_AF_NONE as i32)
+                    }),
+                );
+                fns::GXSetChanCtrl(
+                    ctx,
+                    (enums::GX_ALPHA0 as i32),
+                    (0_i32 as u8),
+                    (enums::GX_SRC_VTX as i32),
+                    (enums::GX_SRC_VTX as i32),
+                    (0_i32 as u32),
+                    (enums::GX_DF_NONE as i32),
+                    (enums::GX_AF_NONE as i32),
+                );
+                break 's1;
+            }
+            if __case <= 3 {
+                fns::GXSetChanCtrl(
+                    ctx,
+                    (enums::GX_COLOR0A0 as i32),
+                    (0_i32 as u8),
+                    (enums::GX_SRC_REG as i32),
+                    (enums::GX_SRC_REG as i32),
+                    (0_i32 as u32),
+                    (enums::GX_DF_NONE as i32),
+                    (enums::GX_AF_NONE as i32),
+                );
+                break 's1;
+            }
+        }
+    }
+}
+
+fn inl_setupChanReg<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let prim_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let amb_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let mat_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let mut pp = pp;
+    let mut lobj: HSD_LObj<'a> = null(ctx);
+    if (((pp).kind() & ((enums::DispLighting as i32) as u32)) != 0) {
+        statics::sysdolphin__baselib__psdisp::getColorMatAmb(ctx, pp, mat_color, amb_color);
+        if (((pp).kind() & ((enums::PrimEnv as i32) as u32)) != 0) {
+            prim_color.set_r({
+                let __t2 = {
+                    let __t1 = (255_i32 as u8);
+                    prim_color.set_b(__t1);
+                    __t1
+                };
+                prim_color.set_g(__t2);
+                __t2
+            });
+        } else {
+            statics::sysdolphin__baselib__psdisp::getColorPrimEnv(ctx, pp, prim_color, mat_color);
+            amb_color.set_r(
+                ((sar_i32(
+                    ((amb_color.r() as i32).wrapping_mul((prim_color.r() as i32))),
+                    (8_i32 as u32),
+                )) as u8),
+            );
+            amb_color.set_g(
+                ((sar_i32(
+                    ((amb_color.g() as i32).wrapping_mul((prim_color.g() as i32))),
+                    (8_i32 as u32),
+                )) as u8),
+            );
+            amb_color.set_b(
+                ((sar_i32(
+                    ((amb_color.b() as i32).wrapping_mul((prim_color.b() as i32))),
+                    (8_i32 as u32),
+                )) as u8),
+            );
+        }
+        if (((prim_color.r() as i32)
+            != (statics::sysdolphin__baselib__psdisp::prevChanMat(ctx).r() as i32))
+            || ((prim_color.g() as i32)
+                != (statics::sysdolphin__baselib__psdisp::prevChanMat(ctx).g() as i32)))
+            || ((prim_color.b() as i32)
+                != (statics::sysdolphin__baselib__psdisp::prevChanMat(ctx).b() as i32))
+        {
+            Handle::copy_from(
+                statics::sysdolphin__baselib__psdisp::prevChanMat(ctx),
+                prim_color,
+            );
+            fns::GXSetChanMatColor(
+                ctx,
+                (enums::GX_COLOR0 as i32),
+                statics::sysdolphin__baselib__psdisp::prevChanMat(ctx),
+            );
+        }
+        lobj = fns::HSD_LObjGetActiveByID(ctx, (enums::GX_MAX_LIGHT as i32));
+        if !Handle::is_null(lobj) {
+            fns::HSD_MulColor(ctx, amb_color, (lobj).color(), amb_color);
+        } else {
+            amb_color.set_r({
+                let __t4 = {
+                    let __t3 = (0_i32 as u8);
+                    amb_color.set_b(__t3);
+                    __t3
+                };
+                amb_color.set_g(__t4);
+                __t4
+            });
+        }
+        if (((amb_color.r() as i32)
+            != (statics::sysdolphin__baselib__psdisp::prevChanAmb(ctx).r() as i32))
+            || ((amb_color.g() as i32)
+                != (statics::sysdolphin__baselib__psdisp::prevChanAmb(ctx).g() as i32)))
+            || ((amb_color.b() as i32)
+                != (statics::sysdolphin__baselib__psdisp::prevChanAmb(ctx).b() as i32))
+        {
+            Handle::copy_from(
+                statics::sysdolphin__baselib__psdisp::prevChanAmb(ctx),
+                amb_color,
+            );
+            fns::GXSetChanAmbColor(
+                ctx,
+                (enums::GX_COLOR0 as i32),
+                statics::sysdolphin__baselib__psdisp::prevChanAmb(ctx),
+            );
+        }
+    }
+}
+
+fn inl_setupTevReg<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let prim_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let env_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let mat_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let amb_color: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let mut pp = pp;
+    statics::sysdolphin__baselib__psdisp::getColorPrimEnv(ctx, pp, prim_color, env_color);
+    if (((pp).kind() & ((enums::PrimEnv as i32) as u32)) != 0)
+        || ((!(((pp).kind() & ((enums::DispLighting as i32) as u32)) != 0))
+            && (!(((pp).kind() & ((enums::Trail as i32) as u32)) != 0)))
+    {
+        if ((((statics::sysdolphin__baselib__psdisp::prevColorPrim(ctx).r() as i32)
+            != (prim_color.r() as i32))
+            || ((statics::sysdolphin__baselib__psdisp::prevColorPrim(ctx).g() as i32)
+                != (prim_color.g() as i32)))
+            || ((statics::sysdolphin__baselib__psdisp::prevColorPrim(ctx).b() as i32)
+                != (prim_color.b() as i32)))
+            || ((statics::sysdolphin__baselib__psdisp::prevColorPrim(ctx).a() as i32)
+                != (prim_color.a() as i32))
+        {
+            Handle::copy_from(
+                statics::sysdolphin__baselib__psdisp::prevColorPrim(ctx),
+                prim_color,
+            );
+            fns::GXSetTevColor(
+                ctx,
+                (enums::GX_TEVREG0 as i32),
+                statics::sysdolphin__baselib__psdisp::prevColorPrim(ctx),
+            );
+        }
+        if (((pp).kind() & ((enums::PrimEnv as i32) as u32)) != 0) {
+            if ((((statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx).r() as i32)
+                != (env_color.r() as i32))
+                || ((statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx).g() as i32)
+                    != (env_color.g() as i32)))
+                || ((statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx).b() as i32)
+                    != (env_color.b() as i32)))
+                || ((statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx).a() as i32)
+                    != (env_color.a() as i32))
+            {
+                Handle::copy_from(
+                    statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx),
+                    env_color,
+                );
+                fns::GXSetTevColor(
+                    ctx,
+                    (enums::GX_TEVREG1 as i32),
+                    statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx),
+                );
+            }
+        } else if ((((statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx).r() as i32)
+            != 0_i32)
+            || ((statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx).g() as i32) != 0_i32))
+            || ((statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx).b() as i32) != 0_i32))
+            || ((statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx).a() as i32) != 0_i32)
+        {
+            statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx).set_r({
+                let __t3 = {
+                    let __t2 = {
+                        let __t1 = (0_i32 as u8);
+                        statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx).set_a(__t1);
+                        __t1
+                    };
+                    statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx).set_b(__t2);
+                    __t2
+                };
+                statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx).set_g(__t3);
+                __t3
+            });
+            fns::GXSetTevColor(
+                ctx,
+                (enums::GX_TEVREG1 as i32),
+                statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx),
+            );
+        }
+    }
+    if (((pp).kind() & ((enums::DispLighting as i32) as u32)) != 0) {
+        statics::sysdolphin__baselib__psdisp::getColorMatAmb(ctx, pp, mat_color, amb_color);
+        if (((pp).kind() & ((enums::PrimEnv as i32) as u32)) != 0) {
+            if ((((statics::sysdolphin__baselib__psdisp::prevColorMat(ctx).r() as i32)
+                != (mat_color.r() as i32))
+                || ((statics::sysdolphin__baselib__psdisp::prevColorMat(ctx).g() as i32)
+                    != (mat_color.g() as i32)))
+                || ((statics::sysdolphin__baselib__psdisp::prevColorMat(ctx).b() as i32)
+                    != (mat_color.b() as i32)))
+                || ((statics::sysdolphin__baselib__psdisp::prevColorMat(ctx).a() as i32)
+                    != (mat_color.a() as i32))
+            {
+                Handle::copy_from(
+                    statics::sysdolphin__baselib__psdisp::prevColorMat(ctx),
+                    mat_color,
+                );
+                fns::GXSetTevColor(
+                    ctx,
+                    (enums::GX_TEVREG2 as i32),
+                    statics::sysdolphin__baselib__psdisp::prevColorMat(ctx),
+                );
+            }
+        } else {
+            mat_color.set_a(
+                ((sar_i32(
+                    ((mat_color.a() as i32).wrapping_mul((prim_color.a() as i32))),
+                    (8_i32 as u32),
+                )) as u8),
+            );
+            if ((((statics::sysdolphin__baselib__psdisp::prevColorMat(ctx).r() as i32)
+                != (mat_color.r() as i32))
+                || ((statics::sysdolphin__baselib__psdisp::prevColorMat(ctx).g() as i32)
+                    != (mat_color.g() as i32)))
+                || ((statics::sysdolphin__baselib__psdisp::prevColorMat(ctx).b() as i32)
+                    != (mat_color.b() as i32)))
+                || ((statics::sysdolphin__baselib__psdisp::prevColorMat(ctx).a() as i32)
+                    != (mat_color.a() as i32))
+            {
+                Handle::copy_from(
+                    statics::sysdolphin__baselib__psdisp::prevColorMat(ctx),
+                    mat_color,
+                );
+                fns::GXSetTevColor(
+                    ctx,
+                    (enums::GX_TEVREG2 as i32),
+                    statics::sysdolphin__baselib__psdisp::prevColorMat(ctx),
+                );
+            }
+        }
+    }
+}
+
+fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+    let mut x = x;
+    let mut y: f64 = 0.0;
+    if x > 0.0 {
+        let mut guess: f64 = fp::frsqrte(x);
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        y = fp::frsp((fp::fmul(x, guess)));
+        return y;
+    }
+    return x;
+}
+
+fn inl_getClrTrail<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, color: _GXColor<'a>) {
+    let __frame = ctx.stack_frame(0x10);
+    let env_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut pp = pp;
+    let mut color = color;
+    's1: {
+        let __case = match ((pp).kind()
+            & (((enums::DispLighting as i32) | (enums::PrimEnv as i32)) as u32))
+        {
+            0_u32 => 0,
+            0x80000000_u32 => 0,
+            128_u32 => 1,
+            0x80000080_u32 => 1,
+            _ => 2,
+        };
+        if __case <= 0 {
+            statics::sysdolphin__baselib__psdisp::getColorPrimEnv(ctx, pp, color, env_color);
+            break 's1;
+        }
+        if __case <= 1 {
+            (color).set_r({
+                let __t3 = {
+                    let __t2 = {
+                        let __t1 = (255_i32 as u8);
+                        (color).set_a(__t1);
+                        __t1
+                    };
+                    (color).set_b(__t2);
+                    __t2
+                };
+                (color).set_g(__t3);
+                __t3
+            });
+            break 's1;
+        }
+    }
+}
+
+fn inl_GXPosition3f32<'a>(ctx: &'a Ctx, x: f64, y: f64, z: f64) {
+    let mut x = x;
+    let mut y = y;
+    let mut z = z;
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(x);
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(y);
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(z);
+}
+
+fn inl_GXColor4u8<'a>(ctx: &'a Ctx, x: u8, y: u8, z: u8, w: u8) {
+    let mut x = x;
+    let mut y = y;
+    let mut z = z;
+    let mut w = w;
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(x);
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(y);
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(z);
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(w);
+}
+
+fn inl_GXTexCoord1x8<'a>(ctx: &'a Ctx, x: u8) {
+    let mut x = x;
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(x);
+}
+
+fn inl_psDispSubAPPSRTPoint<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>) {
+    let __frame = ctx.stack_frame(0x58);
+    let scratch_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let scratch_scale: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let x: Val<'a, F32> = frame_at(ctx, &__frame, 0x3c);
+    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x40);
+    let z: Val<'a, F32> = frame_at(ctx, &__frame, 0x44);
+    let draw_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x48);
+    let mut pp = pp;
+    let mut cur_x: f64 = 0.0;
+    let mut cur_y: f64 = 0.0;
+    let mut cur_z: f64 = 0.0;
+    let mut prev_x: f64 = 0.0;
+    let mut prev_y: f64 = 0.0;
+    let mut prev_z: f64 = 0.0;
+    let mut w: u8 = 0;
+    inl_psSetCurrentMtx(ctx, (enums::GX_PNMTX1 as i32));
+    if !Handle::is_null((pp).appsrt()) {
+        if (((pp).appsrt()).frameNum() as i32)
+            != (statics::sysdolphin__baselib__psdisp::psFrameNum(ctx).get() as i32)
+        {
+            let mut scale_x: f64 = 0.0;
+            let mut scale_y: f64 = 0.0;
+            if (((pp).appsrt()).status() as i32) != (enums::PS_APPSTATUS_STILL as i32) {
+                let mut translate: Vec<'a> = ((pp).appsrt()).translate();
+                let mut rotate: Vec<'a> = Handle::cast::<Vec<'a>>(((pp).appsrt()).rot());
+                let mut scale: Vec<'a> = ((pp).appsrt()).scale();
+                let mut mmtx: ArrV<'a, F32, 4> = ((pp).appsrt()).mmtx().get(0);
+                fns::HSD_MtxSRT(ctx, mmtx, scale, rotate, translate, null::<Vec<'a>>(ctx));
+            }
+            if (((pp).appsrt()).status() as i32) == (enums::PS_APPSTATUS_ONCE as i32) {
+                ((pp).appsrt()).set_status(((enums::PS_APPSTATUS_STILL as i32) as u8));
+            }
+            fns::PSMTXConcat(
+                ctx,
+                statics::sysdolphin__baselib__psdisp::vmtx(ctx).get(0),
+                ((pp).appsrt()).mmtx().get(0),
+                Handle::cast::<ArrV<'a, F32, 4>>(((pp).appsrt()).ssx_ref()),
+            );
+            scale_x = fp::fadds(
+                fp::fadds(
+                    fp::fmuls(((pp).appsrt()).ssx(), ((pp).appsrt()).ssx()),
+                    fp::fmuls(((pp).appsrt()).x74(), ((pp).appsrt()).x74()),
+                ),
+                fp::fmuls(((pp).appsrt()).x84(), ((pp).appsrt()).x84()),
+            );
+            scale_x = inl_sqrtf(ctx, scale_x);
+            ((pp).appsrt()).set_x94(scale_x);
+            scale_y = fp::fadds(
+                fp::fadds(
+                    fp::fmuls(((pp).appsrt()).ssy(), ((pp).appsrt()).ssy()),
+                    fp::fmuls(((pp).appsrt()).x78(), ((pp).appsrt()).x78()),
+                ),
+                fp::fmuls(((pp).appsrt()).x88(), ((pp).appsrt()).x88()),
+            );
+            scale_y = inl_sqrtf(ctx, scale_y);
+            ((pp).appsrt()).set_x98(scale_y);
+            if (((pp).appsrt()).xA2() as i32) != 0_i32 {
+                fns::PSMTXIdentity(ctx, scratch_mtx.get(0));
+                scratch_mtx
+                    .get(0_i32)
+                    .at(3_i32)
+                    .set(((pp).appsrt()).translate().x());
+                scratch_mtx
+                    .get(1_i32)
+                    .at(3_i32)
+                    .set(((pp).appsrt()).translate().y());
+                scratch_mtx
+                    .get(2_i32)
+                    .at(3_i32)
+                    .set(((pp).appsrt()).translate().z());
+                fns::PSMTXConcat(
+                    ctx,
+                    statics::sysdolphin__baselib__psdisp::vmtx(ctx).get(0),
+                    scratch_mtx.get(0),
+                    scratch_mtx.get(0),
+                );
+                fns::HSD_MtxGetScale(ctx, scratch_mtx.get(0), scratch_scale);
+                fns::PSMTXScale(
+                    ctx,
+                    Handle::cast::<ArrV<'a, F32, 4>>(((pp).appsrt()).ssx_ref()),
+                    scratch_scale.x(),
+                    scratch_scale.y(),
+                    scratch_scale.z(),
+                );
+                ((pp).appsrt()).set_x70(scratch_mtx.get(0_i32).at(3_i32).get());
+                ((pp).appsrt()).set_x80(scratch_mtx.get(1_i32).at(3_i32).get());
+                ((pp).appsrt()).set_x90(scratch_mtx.get(2_i32).at(3_i32).get());
+            }
+        }
+        ((pp).appsrt()).set_frameNum(statics::sysdolphin__baselib__psdisp::psFrameNum(ctx).get());
+    }
+    cur_x = fp::fadds(
+        ((pp).appsrt()).x70(),
+        (fp::fmadds(
+            ((pp).appsrt()).x6C(),
+            (pp).pos().z(),
+            (fp::fmadds(
+                ((pp).appsrt()).ssx(),
+                (pp).pos().x(),
+                fp::fmuls(((pp).appsrt()).ssy(), (pp).pos().y()),
+            )),
+        )),
+    );
+    cur_y = fp::fadds(
+        ((pp).appsrt()).x80(),
+        (fp::fmadds(
+            ((pp).appsrt()).x7C(),
+            (pp).pos().z(),
+            (fp::fmadds(
+                ((pp).appsrt()).x74(),
+                (pp).pos().x(),
+                fp::fmuls(((pp).appsrt()).x78(), (pp).pos().y()),
+            )),
+        )),
+    );
+    cur_z = fp::fadds(
+        ((pp).appsrt()).x90(),
+        (fp::fmadds(
+            ((pp).appsrt()).x8C(),
+            (pp).pos().z(),
+            (fp::fmadds(
+                ((pp).appsrt()).x84(),
+                (pp).pos().x(),
+                fp::fmuls(((pp).appsrt()).x88(), (pp).pos().y()),
+            )),
+        )),
+    );
+    if (((pp).kind() & ((enums::Tornado as i32) as u32)) != 0) {
+        statics::sysdolphin__baselib__psdisp::calcTornadoLastPos(ctx, pp, x, y, z);
+        prev_x = fp::fadds(
+            ((pp).appsrt()).x70(),
+            (fp::fmadds(
+                ((pp).appsrt()).x6C(),
+                z.get(),
+                (fp::fmadds(
+                    ((pp).appsrt()).ssx(),
+                    x.get(),
+                    fp::fmuls(((pp).appsrt()).ssy(), y.get()),
+                )),
+            )),
+        );
+        prev_y = fp::fadds(
+            ((pp).appsrt()).x80(),
+            (fp::fmadds(
+                ((pp).appsrt()).x7C(),
+                z.get(),
+                (fp::fmadds(
+                    ((pp).appsrt()).x74(),
+                    x.get(),
+                    fp::fmuls(((pp).appsrt()).x78(), y.get()),
+                )),
+            )),
+        );
+        prev_z = fp::fadds(
+            ((pp).appsrt()).x90(),
+            (fp::fmadds(
+                ((pp).appsrt()).x8C(),
+                z.get(),
+                (fp::fmadds(
+                    ((pp).appsrt()).x84(),
+                    x.get(),
+                    fp::fmuls(((pp).appsrt()).x88(), y.get()),
+                )),
+            )),
+        );
+    } else {
+        prev_x = fp::fadds(
+            ((pp).appsrt()).x70(),
+            (fp::fmadds(
+                ((pp).appsrt()).x6C(),
+                (fp::fsubs((pp).pos().z(), (pp).vel().z())),
+                (fp::fmadds(
+                    ((pp).appsrt()).ssx(),
+                    (fp::fsubs((pp).pos().x(), (pp).vel().x())),
+                    fp::fmuls(
+                        ((pp).appsrt()).ssy(),
+                        (fp::fsubs((pp).pos().y(), (pp).vel().y())),
+                    ),
+                )),
+            )),
+        );
+        prev_y = fp::fadds(
+            ((pp).appsrt()).x80(),
+            (fp::fmadds(
+                ((pp).appsrt()).x7C(),
+                (fp::fsubs((pp).pos().z(), (pp).vel().z())),
+                (fp::fmadds(
+                    ((pp).appsrt()).x74(),
+                    (fp::fsubs((pp).pos().x(), (pp).vel().x())),
+                    fp::fmuls(
+                        ((pp).appsrt()).x78(),
+                        (fp::fsubs((pp).pos().y(), (pp).vel().y())),
+                    ),
+                )),
+            )),
+        );
+        prev_z = fp::fadds(
+            ((pp).appsrt()).x90(),
+            (fp::fmadds(
+                ((pp).appsrt()).x8C(),
+                (fp::fsubs((pp).pos().z(), (pp).vel().z())),
+                (fp::fmadds(
+                    ((pp).appsrt()).x84(),
+                    (fp::fsubs((pp).pos().x(), (pp).vel().x())),
+                    fp::fmuls(
+                        ((pp).appsrt()).x88(),
+                        (fp::fsubs((pp).pos().y(), (pp).vel().y())),
+                    ),
+                )),
+            )),
+        );
+    }
+    w = (fp::fctiwz(
+        (if (pp).size() > 42.5 {
+            255.0
+        } else {
+            fp::fmuls(6.0, (pp).size())
+        }),
+    ) as u8);
+    if (((pp).kind() & ((enums::Trail as i32) as u32)) != 0) {
+        if statics::sysdolphin__baselib__psdisp::prevLineWidth(ctx).get() != (w as i32) {
+            statics::sysdolphin__baselib__psdisp::prevLineWidth(ctx).set((w as i32));
+            fns::GXSetLineWidth(ctx, w, (enums::GX_TO_ONE as i32));
+        }
+        inl_getClrTrail(ctx, pp, draw_color);
+        if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+            fns::setVtxDesc(ctx, 2_i32);
+            fns::GXBegin(
+                ctx,
+                (enums::GX_LINES as i32),
+                (enums::GX_VTXFMT2 as i32),
+                (2_i32 as u16),
+            );
+        } else {
+            fns::setVtxDesc(ctx, 3_i32);
+            fns::GXBegin(
+                ctx,
+                (enums::GX_LINES as i32),
+                (enums::GX_VTXFMT3 as i32),
+                (2_i32 as u16),
+            );
+        }
+        inl_GXPosition3f32(ctx, prev_x, prev_y, prev_z);
+        inl_GXColor4u8(
+            ctx,
+            draw_color.r(),
+            draw_color.g(),
+            draw_color.b(),
+            (fp::fctiwz((fp::fmuls(fp::frsp(draw_color.a() as f64), (pp).trail()))) as u8),
+        );
+        if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+            inl_GXTexCoord1x8(ctx, (0_i32 as u8));
+        }
+        inl_GXPosition3f32(ctx, cur_x, cur_y, cur_z);
+        inl_GXColor4u8(
+            ctx,
+            draw_color.r(),
+            draw_color.g(),
+            draw_color.b(),
+            draw_color.a(),
+        );
+        if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+            inl_GXTexCoord1x8(ctx, (1_i32 as u8));
+        }
+    } else {
+        if statics::sysdolphin__baselib__psdisp::prevPointSize(ctx).get() != (w as i32) {
+            statics::sysdolphin__baselib__psdisp::prevPointSize(ctx).set((w as i32));
+            fns::GXSetPointSize(ctx, w, (enums::GX_TO_ONE as i32));
+        }
+        if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+            fns::setVtxDesc(ctx, 0_i32);
+            fns::GXBegin(
+                ctx,
+                (enums::GX_POINTS as i32),
+                (enums::GX_VTXFMT0 as i32),
+                (1_i32 as u16),
+            );
+        } else {
+            fns::setVtxDesc(ctx, 1_i32);
+            fns::GXBegin(
+                ctx,
+                (enums::GX_POINTS as i32),
+                (enums::GX_VTXFMT1 as i32),
+                (1_i32 as u16),
+            );
+        }
+        inl_GXPosition3f32(ctx, cur_x, cur_y, cur_z);
+        if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+            inl_GXTexCoord1x8(ctx, (1_i32 as u8));
+        }
+    }
+}
+
+fn inl_psDispSubPointTrail<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>) -> HSD_Particle<'a> {
+    let __frame = ctx.stack_frame(0x220);
+    let vbuf: Arr<'a, Vec<'a>, 32> = frame_at(ctx, &__frame, 0x0);
+    let cbuf: Arr<'a, _GXColor<'a>, 32> = frame_at(ctx, &__frame, 0x180);
+    let x: Val<'a, F32> = frame_at(ctx, &__frame, 0x200);
+    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x204);
+    let z: Val<'a, F32> = frame_at(ctx, &__frame, 0x208);
+    let x_2: Val<'a, F32> = frame_at(ctx, &__frame, 0x20c);
+    let y_2: Val<'a, F32> = frame_at(ctx, &__frame, 0x210);
+    let z_2: Val<'a, F32> = frame_at(ctx, &__frame, 0x214);
+    let mut pp = pp;
+    let mut p: Vec<'a> = null(ctx);
+    let mut c: _GXColor<'a> = null(ctx);
+    let mut last: HSD_Particle<'a> = null(ctx);
+    let mut q: HSD_Particle<'a> = null(ctx);
+    let mut count: i32 = 0;
+    let mut i: i32 = 0;
+    let mut w: u8 = 0;
+    inl_psSetCurrentMtx(ctx, (enums::GX_PNMTX0 as i32));
+    w = (fp::fctiwz(
+        (if (pp).size() > 42.5 {
+            255.0
+        } else {
+            fp::fmuls(6.0, (pp).size())
+        }),
+    ) as u8);
+    if statics::sysdolphin__baselib__psdisp::prevLineWidth(ctx).get() != (w as i32) {
+        statics::sysdolphin__baselib__psdisp::prevLineWidth(ctx).set((w as i32));
+        fns::GXSetLineWidth(ctx, w, (enums::GX_TO_ONE as i32));
+    }
+    p = vbuf.get(0);
+    c = cbuf.get(0);
+    {
+        let mut dst: Vec<'a> = {
+            let __t1 = p;
+            p = Handle::add(p, 1);
+            __t1
+        };
+        (dst).set_x((pp).pos().x());
+        (dst).set_y((pp).pos().y());
+        (dst).set_z((pp).pos().z());
+    }
+    if (((pp).kind() & ((enums::Tornado as i32) as u32)) != 0) {
+        statics::sysdolphin__baselib__psdisp::calcTornadoLastPos(ctx, pp, x, y, z);
+        (p).set_x(x.get());
+        (p).set_y(y.get());
+        (p).set_z(z.get());
+        p = Handle::add(p, 1);
+    } else {
+        (p).set_x(fp::fsubs((pp).pos().x(), (pp).vel().x()));
+        (p).set_y(fp::fsubs((pp).pos().y(), (pp).vel().y()));
+        (p).set_z(fp::fsubs((pp).pos().z(), (pp).vel().z()));
+        p = Handle::add(p, 1);
+    }
+    inl_getClrTrail(ctx, pp, c);
+    Handle::copy_from((Handle::add(c, 1_i32)), (Handle::add(c, 0_i32)));
+    count = 1_i32;
+    (Handle::add(c, 1_i32)).set_a(
+        (fp::fctiwz((fp::fmuls(fp::frsp((Handle::add(c, 1_i32)).a() as f64), (pp).trail()))) as u8),
+    );
+    c = Handle::add(c, 2_i32);
+    last = pp;
+    q = (pp).next();
+    'l1: while !Handle::is_null(q) {
+        'c2: {
+            if ((((q).size() == (pp).size()) && (Handle::is_null((q).appsrt())))
+                && (!((((q).kind() ^ (pp).kind()) & 0xc0100400_u32) != 0)))
+                && (!(((q).kind() & ((enums::DispPoint as i32) as u32)) != 0))
+            {
+                {
+                    let mut dst_2: Vec<'a> = {
+                        let __t2 = p;
+                        p = Handle::add(p, 1);
+                        __t2
+                    };
+                    (dst_2).set_x((q).pos().x());
+                    (dst_2).set_y((q).pos().y());
+                    (dst_2).set_z((q).pos().z());
+                }
+                if (((q).kind() & ((enums::Tornado as i32) as u32)) != 0) {
+                    statics::sysdolphin__baselib__psdisp::calcTornadoLastPos(ctx, q, x_2, y_2, z_2);
+                    (p).set_x(x_2.get());
+                    (p).set_y(y_2.get());
+                    (p).set_z(z_2.get());
+                    p = Handle::add(p, 1);
+                } else {
+                    (p).set_x(fp::fsubs((q).pos().x(), (q).vel().x()));
+                    (p).set_y(fp::fsubs((q).pos().y(), (q).vel().y()));
+                    (p).set_z(fp::fsubs((q).pos().z(), (q).vel().z()));
+                    p = Handle::add(p, 1);
+                }
+                inl_getClrTrail(ctx, q, c);
+                Handle::copy_from((Handle::add(c, 1_i32)), (Handle::add(c, 0_i32)));
+                count = count.wrapping_add(1);
+                (Handle::add(c, 1_i32)).set_a(
+                    (fp::fctiwz(
+                        (fp::fmuls(fp::frsp((Handle::add(c, 1_i32)).a() as f64), (q).trail())),
+                    ) as u8),
+                );
+                c = Handle::add(c, 2_i32);
+                if count == 16_i32 {
+                    p = vbuf.get(0);
+                    c = cbuf.get(0);
+                    if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+                        fns::setVtxDesc(ctx, 2_i32);
+                        fns::GXBegin(
+                            ctx,
+                            (enums::GX_LINES as i32),
+                            (enums::GX_VTXFMT2 as i32),
+                            (32_u32 as u16),
+                        );
+                    } else {
+                        fns::setVtxDesc(ctx, 3_i32);
+                        fns::GXBegin(
+                            ctx,
+                            (enums::GX_LINES as i32),
+                            (enums::GX_VTXFMT3 as i32),
+                            (32_u32 as u16),
+                        );
+                    }
+                    {
+                        i = count;
+                        'l3: while i != 0_i32 {
+                            'c4: {
+                                inl_GXPosition3f32(
+                                    ctx,
+                                    (Handle::add(p, 1_i32)).x(),
+                                    (Handle::add(p, 1_i32)).y(),
+                                    (Handle::add(p, 1_i32)).z(),
+                                );
+                                inl_GXColor4u8(
+                                    ctx,
+                                    (Handle::add(c, 1_i32)).r(),
+                                    (Handle::add(c, 1_i32)).g(),
+                                    (Handle::add(c, 1_i32)).b(),
+                                    (Handle::add(c, 1_i32)).a(),
+                                );
+                                if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+                                    inl_GXTexCoord1x8(ctx, (0_i32 as u8));
+                                }
+                                inl_GXPosition3f32(
+                                    ctx,
+                                    (Handle::add(p, 0_i32)).x(),
+                                    (Handle::add(p, 0_i32)).y(),
+                                    (Handle::add(p, 0_i32)).z(),
+                                );
+                                inl_GXColor4u8(
+                                    ctx,
+                                    (Handle::add(c, 0_i32)).r(),
+                                    (Handle::add(c, 0_i32)).g(),
+                                    (Handle::add(c, 0_i32)).b(),
+                                    (Handle::add(c, 0_i32)).a(),
+                                );
+                                if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+                                    inl_GXTexCoord1x8(ctx, (1_i32 as u8));
+                                }
+                                p = Handle::add(p, 2_i32);
+                                c = Handle::add(c, 2_i32);
+                            }
+                            i = i.wrapping_sub(1);
+                        }
+                    }
+                    p = vbuf.get(0);
+                    c = cbuf.get(0);
+                    count = 0_i32;
+                }
+                last = q;
+                q = (q).next();
+            } else {
+                break 'l1;
+            }
+        }
+    }
+    if count != 0_i32 {
+        let mut draw_colors: _GXColor<'a> = null(ctx);
+        p = vbuf.get(0);
+        draw_colors = cbuf.get(0);
+        if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+            fns::setVtxDesc(ctx, 2_i32);
+            fns::GXBegin(
+                ctx,
+                (enums::GX_LINES as i32),
+                (enums::GX_VTXFMT2 as i32),
+                (count.wrapping_mul(2_i32) as u16),
+            );
+        } else {
+            fns::setVtxDesc(ctx, 3_i32);
+            fns::GXBegin(
+                ctx,
+                (enums::GX_LINES as i32),
+                (enums::GX_VTXFMT3 as i32),
+                (count.wrapping_mul(2_i32) as u16),
+            );
+        }
+        {
+            i = count;
+            'l5: while i != 0_i32 {
+                'c6: {
+                    inl_GXPosition3f32(
+                        ctx,
+                        (Handle::add(p, 1_i32)).x(),
+                        (Handle::add(p, 1_i32)).y(),
+                        (Handle::add(p, 1_i32)).z(),
+                    );
+                    inl_GXColor4u8(
+                        ctx,
+                        (Handle::add(draw_colors, 1_i32)).r(),
+                        (Handle::add(draw_colors, 1_i32)).g(),
+                        (Handle::add(draw_colors, 1_i32)).b(),
+                        (Handle::add(draw_colors, 1_i32)).a(),
+                    );
+                    if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+                        inl_GXTexCoord1x8(ctx, (0_i32 as u8));
+                    }
+                    inl_GXPosition3f32(
+                        ctx,
+                        (Handle::add(p, 0_i32)).x(),
+                        (Handle::add(p, 0_i32)).y(),
+                        (Handle::add(p, 0_i32)).z(),
+                    );
+                    inl_GXColor4u8(
+                        ctx,
+                        (Handle::add(draw_colors, 0_i32)).r(),
+                        (Handle::add(draw_colors, 0_i32)).g(),
+                        (Handle::add(draw_colors, 0_i32)).b(),
+                        (Handle::add(draw_colors, 0_i32)).a(),
+                    );
+                    if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+                        inl_GXTexCoord1x8(ctx, (1_i32 as u8));
+                    }
+                    p = Handle::add(p, 2_i32);
+                    draw_colors = Handle::add(draw_colors, 2_i32);
+                }
+                i = i.wrapping_sub(1);
+            }
+        }
+    }
+    return last;
+}
+
+fn inl_psDispSubPoint<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>) -> HSD_Particle<'a> {
+    let __frame = ctx.stack_frame(0xc8);
+    let buf: Arr<'a, Vec<'a>, 16> = frame_at(ctx, &__frame, 0x0);
+    let mut pp = pp;
+    let mut p: Vec<'a> = null(ctx);
+    let mut last: HSD_Particle<'a> = null(ctx);
+    let mut q: HSD_Particle<'a> = null(ctx);
+    let mut count: i32 = 0;
+    let mut i: i32 = 0;
+    let mut w: u8 = 0;
+    inl_psSetCurrentMtx(ctx, (enums::GX_PNMTX0 as i32));
+    w = (fp::fctiwz(
+        (if (pp).size() > 42.5 {
+            255.0
+        } else {
+            fp::fmuls(6.0, (pp).size())
+        }),
+    ) as u8);
+    if statics::sysdolphin__baselib__psdisp::prevPointSize(ctx).get() != (w as i32) {
+        statics::sysdolphin__baselib__psdisp::prevPointSize(ctx).set((w as i32));
+        fns::GXSetPointSize(ctx, w, (enums::GX_TO_ONE as i32));
+    }
+    last = pp;
+    p = buf.get(0);
+    (p).set_x((pp).pos().x());
+    (p).set_y((pp).pos().y());
+    (p).set_z((pp).pos().z());
+    p = Handle::add(p, 1);
+    count = 1_i32;
+    q = (pp).next();
+    'l1: while !Handle::is_null(q) {
+        'c2: {
+            if ((((((((((q).size() == (pp).size()) && (Handle::is_null((q).appsrt())))
+                && (!((((q).kind() ^ (pp).kind()) & 0xc0100400_u32) != 0)))
+                && (((q).primColCount() as i32) == 0_i32))
+                && (((q).primCol().r() as i32) == ((pp).primCol().r() as i32)))
+                && (((q).primCol().g() as i32) == ((pp).primCol().g() as i32)))
+                && (((q).primCol().b() as i32) == ((pp).primCol().b() as i32)))
+                && (((q).primCol().a() as i32) == ((pp).primCol().a() as i32)))
+                && (!(((q).kind() & ((enums::DispPoint as i32) as u32)) != 0)))
+                && ((!(((pp).kind() & ((enums::DispLighting as i32) as u32)) != 0))
+                    || ((((((((q).matColCount() as i32) == 0_i32)
+                        && (((q).ambColCount() as i32) == 0_i32))
+                        && (((q).matRGB() as i32) == ((pp).matRGB() as i32)))
+                        && (((q).matA() as i32) == ((pp).matA() as i32)))
+                        && (((q).ambRGB() as i32) == ((pp).ambRGB() as i32)))
+                        && (((q).ambA() as i32) == ((pp).ambA() as i32))))
+            {
+                count = count.wrapping_add(1);
+                (p).set_x((q).pos().x());
+                (p).set_y((q).pos().y());
+                (p).set_z((q).pos().z());
+                p = Handle::add(p, 1);
+                if count == 16_i32 {
+                    p = buf.get(0);
+                    if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+                        fns::setVtxDesc(ctx, 0_i32);
+                        fns::GXBegin(
+                            ctx,
+                            (enums::GX_POINTS as i32),
+                            (enums::GX_VTXFMT0 as i32),
+                            (16_u32 as u16),
+                        );
+                    } else {
+                        fns::setVtxDesc(ctx, 1_i32);
+                        fns::GXBegin(
+                            ctx,
+                            (enums::GX_POINTS as i32),
+                            (enums::GX_VTXFMT1 as i32),
+                            (16_u32 as u16),
+                        );
+                    }
+                    {
+                        i = count;
+                        'l3: while i != 0_i32 {
+                            'c4: {
+                                inl_GXPosition3f32(ctx, (p).x(), (p).y(), (p).z());
+                                p = Handle::add(p, 1);
+                                if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+                                    inl_GXTexCoord1x8(ctx, (1_i32 as u8));
+                                }
+                            }
+                            i = i.wrapping_sub(1);
+                        }
+                    }
+                    p = buf.get(0);
+                    count = 0_i32;
+                }
+                q = ({
+                    let __t1 = q;
+                    last = __t1;
+                    __t1
+                })
+                .next();
+            } else {
+                break 'l1;
+            }
+        }
+    }
+    if count != 0_i32 {
+        p = buf.get(0);
+        if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+            fns::setVtxDesc(ctx, 0_i32);
+            fns::GXBegin(
+                ctx,
+                (enums::GX_POINTS as i32),
+                (enums::GX_VTXFMT0 as i32),
+                (count as u16),
+            );
+        } else {
+            fns::setVtxDesc(ctx, 1_i32);
+            fns::GXBegin(
+                ctx,
+                (enums::GX_POINTS as i32),
+                (enums::GX_VTXFMT1 as i32),
+                (count as u16),
+            );
+        }
+        {
+            i = count;
+            'l5: while i != 0_i32 {
+                'c6: {
+                    inl_GXPosition3f32(ctx, (p).x(), (p).y(), (p).z());
+                    p = Handle::add(p, 1);
+                    if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+                        inl_GXTexCoord1x8(ctx, (1_i32 as u8));
+                    }
+                }
+                i = i.wrapping_sub(1);
+            }
+        }
+        if !Handle::is_null(q) {}
+    }
+    return last;
+}
+
+fn inl_psScaleAppSRTAxes<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, mtx: ArrV<'a, F32, 4>) {
+    let mut pp = pp;
+    let mut mtx = mtx;
+    (Handle::add(mtx, 0_i32)).at(0_i32).set(fp::fmuls(
+        (Handle::add(mtx, 0_i32)).at(0_i32).get(),
+        (pp).size(),
+    ));
+    (Handle::add(mtx, 1_i32)).at(0_i32).set(fp::fmuls(
+        (Handle::add(mtx, 1_i32)).at(0_i32).get(),
+        (pp).size(),
+    ));
+    (Handle::add(mtx, 2_i32)).at(0_i32).set(fp::fmuls(
+        (Handle::add(mtx, 2_i32)).at(0_i32).get(),
+        (pp).size(),
+    ));
+    (Handle::add(mtx, 0_i32)).at(1_i32).set(fp::fmuls(
+        (Handle::add(mtx, 0_i32)).at(1_i32).get(),
+        (pp).size(),
+    ));
+    (Handle::add(mtx, 1_i32)).at(1_i32).set(fp::fmuls(
+        (Handle::add(mtx, 1_i32)).at(1_i32).get(),
+        (pp).size(),
+    ));
+    (Handle::add(mtx, 2_i32)).at(1_i32).set(fp::fmuls(
+        (Handle::add(mtx, 2_i32)).at(1_i32).get(),
+        (pp).size(),
+    ));
+    (Handle::add(mtx, 0_i32)).at(2_i32).set(fp::fmuls(
+        (Handle::add(mtx, 0_i32)).at(2_i32).get(),
+        (pp).size(),
+    ));
+    (Handle::add(mtx, 1_i32)).at(2_i32).set(fp::fmuls(
+        (Handle::add(mtx, 1_i32)).at(2_i32).get(),
+        (pp).size(),
+    ));
+    (Handle::add(mtx, 2_i32)).at(2_i32).set(fp::fmuls(
+        (Handle::add(mtx, 2_i32)).at(2_i32).get(),
+        (pp).size(),
+    ));
+}
+
+fn inl_psMaskAbsF32<'a>(ctx: &'a Ctx, value: Val<'a, F32>) {
+    let mut value = value;
+    (Handle::cast::<Val<'a, i32>>(value))
+        .set(((Handle::cast::<Val<'a, i32>>(value)).get() & 0x7fffffff_i32));
+}
+
+fn inl_psMaskAbsLtF32<'a>(ctx: &'a Ctx, value: f64, limit: f64) -> i32 {
+    let __frame = ctx.stack_frame(0x10);
+    let value__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    value__slot.set(value);
+    let mut limit = limit;
+    inl_psMaskAbsF32(ctx, value__slot);
+    return (value__slot.get() < limit) as i32;
+}
+
+fn inl_psMaskAbsGtF32<'a>(ctx: &'a Ctx, value: f64, limit: f64) -> i32 {
+    let __frame = ctx.stack_frame(0x10);
+    let value__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    value__slot.set(value);
+    let mut limit = limit;
+    inl_psMaskAbsF32(ctx, value__slot);
+    return (value__slot.get() > limit) as i32;
+}
+
+fn inl_psDispSubAppSRT<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, texform: Val<'a, u8>) {
+    let __frame = ctx.stack_frame(0x78);
+    let draw_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let pad: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let scratch_scale: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let x: Val<'a, F32> = frame_at(ctx, &__frame, 0x48);
+    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x4c);
+    let z: Val<'a, F32> = frame_at(ctx, &__frame, 0x50);
+    let prev_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x54);
+    let prev_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x58);
+    let prev_z: Val<'a, F32> = frame_at(ctx, &__frame, 0x5c);
+    let tx: Val<'a, F32> = frame_at(ctx, &__frame, 0x60);
+    let ty: Val<'a, F32> = frame_at(ctx, &__frame, 0x64);
+    let tz: Val<'a, F32> = frame_at(ctx, &__frame, 0x68);
+    let draw_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x6c);
+    let mut pp = pp;
+    let mut texform = texform;
+    let mut x_extent: f64 = 0.0;
+    let mut y_extent: f64 = 0.0;
+    let mut ax: f64 = 0.0;
+    let mut ay: f64 = 0.0;
+    let mut bx: f64 = 0.0;
+    let mut by: f64 = 0.0;
+    let mut angle: f64 = 0.0;
+    let mut it: Val<'a, u8> = texform;
+    let mut w0: f64 = 0.0;
+    let mut w1: f64 = 0.0;
+    let mut w0inv: f64 = 0.0;
+    let mut w1inv: f64 = 0.0;
+    let mut f11: f64 = 0.0;
+    let mut f8: f64 = 0.0;
+    let mut f12: f64 = 0.0;
+    let mut f13: f64 = 0.0;
+    let mut f16: f64 = 0.0;
+    let mut f20: f64 = 0.0;
+    let mut f17: f64 = 0.0;
+    let mut f18: f64 = 0.0;
+    let mut f20b: f64 = 0.0;
+    let mut s7F8: f64 = 0.0;
+    let mut s7FC: f64 = 0.0;
+    let mut s800: f64 = 0.0;
+    let mut s804: f64 = 0.0;
+    let mut s808: f64 = 0.0;
+    let mut prev_pos_x: f64 = 0.0;
+    let mut prev_pos_y: f64 = 0.0;
+    let mut prev_pos_z: f64 = 0.0;
+    let mut cur_x: f64 = 0.0;
+    let mut cur_y: f64 = 0.0;
+    let mut cur_z: f64 = 0.0;
+    if (((pp).appsrt()).frameNum() as i32)
+        != (statics::sysdolphin__baselib__psdisp::psFrameNum(ctx).get() as i32)
+    {
+        let mut scale_x: f64 = 0.0;
+        let mut scale_y: f64 = 0.0;
+        if (((pp).appsrt()).status() as i32) != (enums::PS_APPSTATUS_STILL as i32) {
+            let mut translate: Vec<'a> = ((pp).appsrt()).translate();
+            let mut rotate: Vec<'a> = Handle::cast::<Vec<'a>>(((pp).appsrt()).rot());
+            let mut scale: Vec<'a> = ((pp).appsrt()).scale();
+            let mut mmtx: ArrV<'a, F32, 4> = ((pp).appsrt()).mmtx().get(0);
+            fns::HSD_MtxSRT(ctx, mmtx, scale, rotate, translate, null::<Vec<'a>>(ctx));
+        }
+        if (((pp).appsrt()).status() as i32) == (enums::PS_APPSTATUS_ONCE as i32) {
+            ((pp).appsrt()).set_status(((enums::PS_APPSTATUS_STILL as i32) as u8));
+        }
+        fns::PSMTXConcat(
+            ctx,
+            statics::sysdolphin__baselib__psdisp::vmtx(ctx).get(0),
+            ((pp).appsrt()).mmtx().get(0),
+            Handle::cast::<ArrV<'a, F32, 4>>(((pp).appsrt()).ssx_ref()),
+        );
+        scale_x = fp::fadds(
+            fp::fadds(
+                fp::fmuls(((pp).appsrt()).ssx(), ((pp).appsrt()).ssx()),
+                fp::fmuls(((pp).appsrt()).x74(), ((pp).appsrt()).x74()),
+            ),
+            fp::fmuls(((pp).appsrt()).x84(), ((pp).appsrt()).x84()),
+        );
+        scale_x = inl_sqrtf(ctx, scale_x);
+        ((pp).appsrt()).set_x94(scale_x);
+        scale_y = fp::fadds(
+            fp::fadds(
+                fp::fmuls(((pp).appsrt()).ssy(), ((pp).appsrt()).ssy()),
+                fp::fmuls(((pp).appsrt()).x78(), ((pp).appsrt()).x78()),
+            ),
+            fp::fmuls(((pp).appsrt()).x88(), ((pp).appsrt()).x88()),
+        );
+        scale_y = inl_sqrtf(ctx, scale_y);
+        ((pp).appsrt()).set_x98(scale_y);
+        if (((pp).appsrt()).xA2() as i32) != 0_i32 {
+            fns::PSMTXIdentity(ctx, draw_mtx.get(0));
+            draw_mtx
+                .get(0_i32)
+                .at(3_i32)
+                .set(((pp).appsrt()).translate().x());
+            draw_mtx
+                .get(1_i32)
+                .at(3_i32)
+                .set(((pp).appsrt()).translate().y());
+            draw_mtx
+                .get(2_i32)
+                .at(3_i32)
+                .set(((pp).appsrt()).translate().z());
+            fns::PSMTXConcat(
+                ctx,
+                statics::sysdolphin__baselib__psdisp::vmtx(ctx).get(0),
+                draw_mtx.get(0),
+                draw_mtx.get(0),
+            );
+            fns::HSD_MtxGetScale(ctx, draw_mtx.get(0), scratch_scale);
+            fns::PSMTXScale(
+                ctx,
+                Handle::cast::<ArrV<'a, F32, 4>>(((pp).appsrt()).ssx_ref()),
+                scratch_scale.x(),
+                scratch_scale.y(),
+                scratch_scale.z(),
+            );
+            ((pp).appsrt()).set_x70(draw_mtx.get(0_i32).at(3_i32).get());
+            ((pp).appsrt()).set_x80(draw_mtx.get(1_i32).at(3_i32).get());
+            ((pp).appsrt()).set_x90(draw_mtx.get(2_i32).at(3_i32).get());
+        }
+        ((pp).appsrt()).set_frameNum(statics::sysdolphin__baselib__psdisp::psFrameNum(ctx).get());
+    }
+    {
+        let mut pos_x: f64 = 0.0;
+        let mut pos_y: f64 = 0.0;
+        fns::PSMTXCopy(
+            ctx,
+            Handle::cast::<ArrV<'a, F32, 4>>(((pp).appsrt()).ssx_ref()),
+            draw_mtx.get(0),
+        );
+        cur_x = fp::fadds(
+            draw_mtx.get(0_i32).at(3_i32).get(),
+            (fp::fmadds(
+                draw_mtx.get(0_i32).at(2_i32).get(),
+                (pp).pos().z(),
+                (fp::fmadds(
+                    draw_mtx.get(0_i32).at(0_i32).get(),
+                    ({
+                        let __t7 = (pp).pos().x();
+                        pos_x = __t7;
+                        __t7
+                    }),
+                    fp::fmuls(
+                        draw_mtx.get(0_i32).at(1_i32).get(),
+                        ({
+                            let __t8 = (pp).pos().y();
+                            pos_y = __t8;
+                            __t8
+                        }),
+                    ),
+                )),
+            )),
+        );
+        cur_y = fp::fadds(
+            draw_mtx.get(1_i32).at(3_i32).get(),
+            (fp::fmadds(
+                draw_mtx.get(1_i32).at(2_i32).get(),
+                (pp).pos().z(),
+                (fp::fmadds(
+                    draw_mtx.get(1_i32).at(0_i32).get(),
+                    pos_x,
+                    fp::fmuls(draw_mtx.get(1_i32).at(1_i32).get(), pos_y),
+                )),
+            )),
+        );
+        cur_z = fp::fadds(
+            draw_mtx.get(2_i32).at(3_i32).get(),
+            (fp::fmadds(
+                draw_mtx.get(2_i32).at(2_i32).get(),
+                (pp).pos().z(),
+                (fp::fmadds(
+                    draw_mtx.get(2_i32).at(0_i32).get(),
+                    pos_x,
+                    fp::fmuls(draw_mtx.get(2_i32).at(1_i32).get(), pos_y),
+                )),
+            )),
+        );
+        if (((pp).kind() & ((enums::Tornado as i32) as u32)) != 0) {
+            statics::sysdolphin__baselib__psdisp::calcTornadoLastPos(ctx, pp, x, y, z);
+            prev_pos_x = fp::fadds(
+                draw_mtx.get(0_i32).at(3_i32).get(),
+                (fp::fmadds(
+                    draw_mtx.get(0_i32).at(2_i32).get(),
+                    z.get(),
+                    (fp::fmadds(
+                        draw_mtx.get(0_i32).at(0_i32).get(),
+                        x.get(),
+                        fp::fmuls(draw_mtx.get(0_i32).at(1_i32).get(), y.get()),
+                    )),
+                )),
+            );
+            prev_pos_y = fp::fadds(
+                draw_mtx.get(1_i32).at(3_i32).get(),
+                (fp::fmadds(
+                    draw_mtx.get(1_i32).at(2_i32).get(),
+                    z.get(),
+                    (fp::fmadds(
+                        draw_mtx.get(1_i32).at(0_i32).get(),
+                        x.get(),
+                        fp::fmuls(draw_mtx.get(1_i32).at(1_i32).get(), y.get()),
+                    )),
+                )),
+            );
+            prev_pos_z = fp::fadds(
+                draw_mtx.get(2_i32).at(3_i32).get(),
+                (fp::fmadds(
+                    draw_mtx.get(2_i32).at(2_i32).get(),
+                    z.get(),
+                    (fp::fmadds(
+                        draw_mtx.get(2_i32).at(0_i32).get(),
+                        x.get(),
+                        fp::fmuls(draw_mtx.get(2_i32).at(1_i32).get(), y.get()),
+                    )),
+                )),
+            );
+        } else {
+            let mut dz: f64 = fp::fsubs((pp).pos().z(), (pp).vel().z());
+            let mut dx: f64 = fp::fsubs((pp).pos().x(), (pp).vel().x());
+            let mut dy: f64 = fp::fsubs((pp).pos().y(), (pp).vel().y());
+            prev_pos_x = fp::fadds(
+                draw_mtx.get(0_i32).at(3_i32).get(),
+                (fp::fmadds(
+                    draw_mtx.get(0_i32).at(2_i32).get(),
+                    dz,
+                    (fp::fmadds(
+                        draw_mtx.get(0_i32).at(0_i32).get(),
+                        dx,
+                        fp::fmuls(draw_mtx.get(0_i32).at(1_i32).get(), dy),
+                    )),
+                )),
+            );
+            prev_pos_y = fp::fadds(
+                draw_mtx.get(1_i32).at(3_i32).get(),
+                (fp::fmadds(
+                    draw_mtx.get(1_i32).at(2_i32).get(),
+                    dz,
+                    (fp::fmadds(
+                        draw_mtx.get(1_i32).at(0_i32).get(),
+                        dx,
+                        fp::fmuls(draw_mtx.get(1_i32).at(1_i32).get(), dy),
+                    )),
+                )),
+            );
+            prev_pos_z = fp::fadds(
+                draw_mtx.get(2_i32).at(3_i32).get(),
+                (fp::fmadds(
+                    draw_mtx.get(2_i32).at(2_i32).get(),
+                    dz,
+                    (fp::fmadds(
+                        draw_mtx.get(2_i32).at(0_i32).get(),
+                        dx,
+                        fp::fmuls(draw_mtx.get(2_i32).at(1_i32).get(), dy),
+                    )),
+                )),
+            );
+        }
+        inl_psScaleAppSRTAxes(ctx, pp, draw_mtx.get(0));
+    }
+    x_extent = fp::fmuls(((pp).appsrt()).x94(), (pp).size());
+    y_extent = fp::fmuls(((pp).appsrt()).x98(), (pp).size());
+    if Handle::is_null(it) {
+        ay = y_extent;
+        by = fp::fneg(ay);
+        ax = {
+            let __t9 = x_extent;
+            bx = __t9;
+            __t9
+        };
+    } else {
+        ay = 0.0;
+        ax = x_extent;
+        by = fp::fneg(y_extent);
+        bx = ay;
+    }
+    if (((pp).kind() & ((enums::Trail as i32) as u32)) != 0)
+        || (((pp).kind() & ((enums::DirVec as i32) as u32)) != 0)
+    {
+        let mut vf1: f64 = 0.0;
+        let mut vf2: f64 = 0.0;
+        let mut m00: f64 = ((pp).appsrt()).ssx();
+        let mut m01: f64 = ((pp).appsrt()).ssy();
+        let mut m02: f64 = ((pp).appsrt()).x6C();
+        let mut m03: f64 = ((pp).appsrt()).x70();
+        let mut m10: f64 = ((pp).appsrt()).x74();
+        let mut m11: f64 = ((pp).appsrt()).x78();
+        let mut m12: f64 = ((pp).appsrt()).x7C();
+        let mut m13: f64 = ((pp).appsrt()).x80();
+        let mut m20: f64 = ((pp).appsrt()).x84();
+        let mut m21: f64 = ((pp).appsrt()).x88();
+        let mut m22: f64 = ((pp).appsrt()).x8C();
+        let mut m23: f64 = ((pp).appsrt()).x90();
+        if 0.0
+            == statics::sysdolphin__baselib__psdisp::prj(ctx)
+                .at(0_i32)
+                .get()
+        {
+            if (((pp).kind() & ((enums::Tornado as i32) as u32)) != 0) {
+                statics::sysdolphin__baselib__psdisp::calcTornadoLastPos(
+                    ctx, pp, prev_x, prev_y, prev_z,
+                );
+            } else {
+                prev_x.set(fp::fsubs((pp).pos().x(), (pp).vel().x()));
+                prev_y.set(fp::fsubs((pp).pos().y(), (pp).vel().y()));
+                prev_z.set(fp::fsubs((pp).pos().z(), (pp).vel().z()));
+            }
+            w0 = fp::fadds(
+                ((pp).appsrt()).x90(),
+                (fp::fmadds(
+                    ((pp).appsrt()).x8C(),
+                    (pp).pos().z(),
+                    (fp::fmadds(
+                        ((pp).appsrt()).x84(),
+                        (pp).pos().x(),
+                        fp::fmuls(((pp).appsrt()).x88(), (pp).pos().y()),
+                    )),
+                )),
+            );
+            s808 = fp::fmadds(
+                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                    .at(1_i32)
+                    .get(),
+                ((pp).appsrt()).ssx(),
+                fp::fmuls(
+                    statics::sysdolphin__baselib__psdisp::prj(ctx)
+                        .at(2_i32)
+                        .get(),
+                    ((pp).appsrt()).x84(),
+                ),
+            );
+            s804 = fp::fmadds(
+                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                    .at(1_i32)
+                    .get(),
+                ((pp).appsrt()).ssy(),
+                fp::fmuls(
+                    statics::sysdolphin__baselib__psdisp::prj(ctx)
+                        .at(2_i32)
+                        .get(),
+                    ((pp).appsrt()).x88(),
+                ),
+            );
+            f16 = fp::fmadds(
+                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                    .at(1_i32)
+                    .get(),
+                ((pp).appsrt()).x6C(),
+                fp::fmuls(
+                    statics::sysdolphin__baselib__psdisp::prj(ctx)
+                        .at(2_i32)
+                        .get(),
+                    ((pp).appsrt()).x8C(),
+                ),
+            );
+            f20 = fp::fmadds(
+                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                    .at(1_i32)
+                    .get(),
+                ((pp).appsrt()).x70(),
+                fp::fmuls(
+                    statics::sysdolphin__baselib__psdisp::prj(ctx)
+                        .at(2_i32)
+                        .get(),
+                    ((pp).appsrt()).x90(),
+                ),
+            );
+            f12 = fp::fmadds(
+                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                    .at(3_i32)
+                    .get(),
+                ((pp).appsrt()).x74(),
+                fp::fmuls(
+                    statics::sysdolphin__baselib__psdisp::prj(ctx)
+                        .at(4_i32)
+                        .get(),
+                    ((pp).appsrt()).x84(),
+                ),
+            );
+            f8 = fp::fmadds(
+                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                    .at(3_i32)
+                    .get(),
+                ((pp).appsrt()).x78(),
+                fp::fmuls(
+                    statics::sysdolphin__baselib__psdisp::prj(ctx)
+                        .at(4_i32)
+                        .get(),
+                    ((pp).appsrt()).x88(),
+                ),
+            );
+            f11 = fp::fmadds(
+                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                    .at(3_i32)
+                    .get(),
+                ((pp).appsrt()).x7C(),
+                fp::fmuls(
+                    statics::sysdolphin__baselib__psdisp::prj(ctx)
+                        .at(4_i32)
+                        .get(),
+                    ((pp).appsrt()).x8C(),
+                ),
+            );
+            f13 = fp::fmadds(
+                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                    .at(3_i32)
+                    .get(),
+                ((pp).appsrt()).x80(),
+                fp::fmuls(
+                    statics::sysdolphin__baselib__psdisp::prj(ctx)
+                        .at(4_i32)
+                        .get(),
+                    ((pp).appsrt()).x90(),
+                ),
+            );
+            if 0.0 == w0 {
+                return;
+            }
+            w0inv = fp::fdivs(fp::fneg(1.0), w0);
+            w1 = fp::fadds(
+                ((pp).appsrt()).x90(),
+                (fp::fmadds(
+                    ((pp).appsrt()).x8C(),
+                    prev_z.get(),
+                    (fp::fmadds(
+                        ((pp).appsrt()).x84(),
+                        prev_x.get(),
+                        fp::fmuls(((pp).appsrt()).x88(), prev_y.get()),
+                    )),
+                )),
+            );
+            if 0.0 == w1 {
+                return;
+            }
+            w1inv = fp::fdivs(fp::fneg(1.0), w1);
+            vf1 = fp::fmsubs(
+                w0inv,
+                (fp::fadds(
+                    f20,
+                    (fp::fmadds(
+                        f16,
+                        (pp).pos().z(),
+                        (fp::fmadds(s808, (pp).pos().x(), fp::fmuls(s804, (pp).pos().y()))),
+                    )),
+                )),
+                fp::fmuls(
+                    w1inv,
+                    (fp::fadds(
+                        f20,
+                        (fp::fmadds(
+                            f16,
+                            prev_z.get(),
+                            (fp::fmadds(s808, prev_x.get(), fp::fmuls(s804, prev_y.get()))),
+                        )),
+                    )),
+                ),
+            );
+            vf2 = fp::fmsubs(
+                w0inv,
+                (fp::fadds(
+                    f13,
+                    (fp::fmadds(
+                        f11,
+                        (pp).pos().z(),
+                        (fp::fmadds(f12, (pp).pos().x(), fp::fmuls(f8, (pp).pos().y()))),
+                    )),
+                )),
+                fp::fmuls(
+                    w1inv,
+                    (fp::fadds(
+                        f13,
+                        (fp::fmadds(
+                            f11,
+                            prev_z.get(),
+                            (fp::fmadds(f12, prev_x.get(), fp::fmuls(f8, prev_y.get()))),
+                        )),
+                    )),
+                ),
+            );
+        } else {
+            s800 = fp::fmadds(
+                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                    .at(1_i32)
+                    .get(),
+                ((pp).appsrt()).ssx(),
+                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                    .at(2_i32)
+                    .get(),
+            );
+            s7FC = fp::fmadds(
+                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                    .at(1_i32)
+                    .get(),
+                ((pp).appsrt()).ssy(),
+                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                    .at(2_i32)
+                    .get(),
+            );
+            s7F8 = fp::fmadds(
+                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                    .at(1_i32)
+                    .get(),
+                ((pp).appsrt()).x6C(),
+                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                    .at(2_i32)
+                    .get(),
+            );
+            f17 = fp::fmadds(
+                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                    .at(3_i32)
+                    .get(),
+                ((pp).appsrt()).x74(),
+                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                    .at(4_i32)
+                    .get(),
+            );
+            f18 = fp::fmadds(
+                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                    .at(3_i32)
+                    .get(),
+                ((pp).appsrt()).x78(),
+                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                    .at(4_i32)
+                    .get(),
+            );
+            f20b = fp::fmadds(
+                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                    .at(3_i32)
+                    .get(),
+                ((pp).appsrt()).x7C(),
+                statics::sysdolphin__baselib__psdisp::prj(ctx)
+                    .at(4_i32)
+                    .get(),
+            );
+            if (((pp).kind() & ((enums::Tornado as i32) as u32)) != 0) {
+                statics::sysdolphin__baselib__psdisp::calcTornadoLastPos(ctx, pp, tx, ty, tz);
+                {
+                    let mut dx_2: f64 = 0.0;
+                    let mut dy_2: f64 = 0.0;
+                    let mut dz_2: f64 = 0.0;
+                    dy_2 = fp::fsubs((pp).pos().y(), ty.get());
+                    dx_2 = fp::fsubs((pp).pos().x(), tx.get());
+                    dz_2 = fp::fsubs((pp).pos().z(), tz.get());
+                    vf1 = fp::fmadds(s7F8, dz_2, (fp::fmadds(s800, dx_2, fp::fmuls(s7FC, dy_2))));
+                    vf2 = fp::fmadds(f20b, dz_2, (fp::fmadds(f17, dx_2, fp::fmuls(f18, dy_2))));
+                }
+            } else {
+                let mut vz: f64 = 0.0;
+                let mut vx: f64 = 0.0;
+                let mut vy: f64 = 0.0;
+                vy = (pp).vel().y();
+                vx = (pp).vel().x();
+                vz = (pp).vel().z();
+                vf1 = fp::fmadds(s7F8, vz, (fp::fmadds(s800, vx, fp::fmuls(s7FC, vy))));
+                vf2 = fp::fmadds(f20b, vz, (fp::fmadds(f17, vx, fp::fmuls(f18, vy))));
+            }
+        }
+        if (inl_psMaskAbsLtF32(ctx, vf2, 1.1754943508222875e-38_f64) != 0) {
+            angle = (if fp::fneg(vf1) >= 0.0 {
+                1.5707963705062866
+            } else {
+                fp::fneg(1.5707963705062866)
+            });
+        } else {
+            angle = fns::atan2f(ctx, fp::fneg(vf1), vf2);
+        }
+        if (((pp).kind() & ((enums::DirVec as i32) as u32)) != 0) {
+            angle = fp::fadds(angle, (pp).rotate());
+        }
+    } else {
+        angle = (pp).rotate();
+    }
+    if (inl_psMaskAbsGtF32(ctx, angle, 0.01) != 0) {
+        let mut c: f64 = fns::cosf(ctx, angle);
+        let mut s: f64 = fns::sinf(ctx, angle);
+        let mut old_x: f64 = ax;
+        ax = fp::fmsubs(c, ax, fp::fmuls(s, ay));
+        ay = fp::fmadds(s, old_x, fp::fmuls(c, ay));
+        old_x = bx;
+        bx = fp::fmsubs(c, bx, fp::fmuls(s, by));
+        by = fp::fmadds(s, old_x, fp::fmuls(c, by));
+    }
+    inl_psSetCurrentMtx(ctx, (enums::GX_PNMTX1 as i32));
+    if (((pp).kind() & ((enums::Trail as i32) as u32)) != 0) {
+        let mut xl: f64 = 0.0;
+        let mut yl: f64 = 0.0;
+        let mut zl: f64 = 0.0;
+        inl_getClrTrail(ctx, pp, draw_color);
+        if Handle::is_null(it) {
+            if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+                fns::setVtxDesc(ctx, 2_i32);
+                fns::GXBegin(
+                    ctx,
+                    (enums::GX_QUADS as i32),
+                    (enums::GX_VTXFMT2 as i32),
+                    (4_u32 as u16),
+                );
+            } else {
+                fns::setVtxDesc(ctx, 3_i32);
+                fns::GXBegin(
+                    ctx,
+                    (enums::GX_QUADS as i32),
+                    (enums::GX_VTXFMT3 as i32),
+                    (4_u32 as u16),
+                );
+            }
+            inl_GXPosition3f32(
+                ctx,
+                fp::fadds(fp::fneg(ax), prev_pos_x),
+                fp::fadds(fp::fneg(ay), prev_pos_y),
+                prev_pos_z,
+            );
+            inl_GXColor4u8(
+                ctx,
+                draw_color.r(),
+                draw_color.g(),
+                draw_color.b(),
+                (fp::fctiwz((fp::fmuls(fp::frsp(draw_color.a() as f64), (pp).trail()))) as u8),
+            );
+            if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+                inl_GXTexCoord1x8(
+                    ctx,
+                    (((shr_u32((pp).kind(), (16_i32 as u32))) & (12_i32 as u32)) as u8),
+                );
+            }
+            inl_GXPosition3f32(
+                ctx,
+                fp::fadds(fp::fneg(bx), cur_x),
+                fp::fadds(fp::fneg(by), cur_y),
+                cur_z,
+            );
+            inl_GXColor4u8(
+                ctx,
+                draw_color.r(),
+                draw_color.g(),
+                draw_color.b(),
+                draw_color.a(),
+            );
+            if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+                inl_GXTexCoord1x8(
+                    ctx,
+                    (((shr_u32((pp).kind(), (16_i32 as u32))) & (12_i32 as u32))
+                        .wrapping_add((1_i32 as u32)) as u8),
+                );
+            }
+            inl_GXPosition3f32(ctx, fp::fadds(ax, cur_x), fp::fadds(ay, cur_y), cur_z);
+            inl_GXColor4u8(
+                ctx,
+                draw_color.r(),
+                draw_color.g(),
+                draw_color.b(),
+                draw_color.a(),
+            );
+            if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+                inl_GXTexCoord1x8(
+                    ctx,
+                    (((shr_u32((pp).kind(), (16_i32 as u32))) & (12_i32 as u32))
+                        .wrapping_add((2_i32 as u32)) as u8),
+                );
+            }
+            inl_GXPosition3f32(
+                ctx,
+                fp::fadds(bx, prev_pos_x),
+                fp::fadds(by, prev_pos_y),
+                prev_pos_z,
+            );
+            inl_GXColor4u8(
+                ctx,
+                draw_color.r(),
+                draw_color.g(),
+                draw_color.b(),
+                (fp::fctiwz((fp::fmuls(fp::frsp(draw_color.a() as f64), (pp).trail()))) as u8),
+            );
+            if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+                inl_GXTexCoord1x8(
+                    ctx,
+                    (((shr_u32((pp).kind(), (16_i32 as u32))) & (12_i32 as u32))
+                        .wrapping_add((3_i32 as u32)) as u8),
+                );
+            }
+        } else {
+            let mut trail_alpha: f64 = fp::fmuls(255.0, (fp::fsubs(1.0, (pp).trail())));
+            let mut axis_len: f64 = inl_sqrtf(ctx, fp::fmadds(bx, bx, fp::fmuls(by, by)));
+            if axis_len != 0.0 {
+                let mut dx_3: f64 = fp::fsubs(cur_x, prev_pos_x);
+                let mut dy_3: f64 = fp::fsubs(cur_y, prev_pos_y);
+                let mut dz_3: f64 = fp::fsubs(cur_z, prev_pos_z);
+                let mut primitive_count: u32 = 0;
+                xl = fp::fmuls(dx_3, dx_3);
+                yl = fp::fmuls(dy_3, dy_3);
+                zl = fp::fmuls(dz_3, dz_3);
+                axis_len = fp::fdivs(inl_sqrtf(ctx, fp::fadds(zl, (fp::fadds(xl, yl)))), axis_len);
+                primitive_count = (Handle::cast::<Val<'a, u32>>(it)).get();
+                bx = fp::fmuls(bx, axis_len);
+                by = fp::fmuls(by, axis_len);
+                it = Handle::add(it, (4_u32 as i32));
+                {
+                    'l1: while primitive_count != (0_i32 as u32) {
+                        'c2: {
+                            let mut primitive: i32 = ((Handle::add(it, 0_i32)).get() as i32);
+                            let mut count: u8 = (Handle::add(it, 1_i32)).get();
+                            let mut i: i32 = 0;
+                            it = Handle::add(it, 4_i32);
+                            if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+                                fns::setVtxDesc(ctx, 5_i32);
+                                fns::GXBegin(
+                                    ctx,
+                                    primitive,
+                                    (enums::GX_VTXFMT5 as i32),
+                                    (count as u16),
+                                );
+                            } else {
+                                fns::setVtxDesc(ctx, 3_i32);
+                                fns::GXBegin(
+                                    ctx,
+                                    primitive,
+                                    (enums::GX_VTXFMT3 as i32),
+                                    (count as u16),
+                                );
+                            }
+                            {
+                                i = (count as i32);
+                                'l3: while i > 0_i32 {
+                                    'c4: {
+                                        let mut s_2: f64 = (Handle::cast::<Val<'a, F32>>(
+                                            (Handle::add(it, 0_i32)),
+                                        ))
+                                        .get();
+                                        let mut sx: f64 = fp::fmuls(2.0, (fp::fsubs(s_2, 0.5)));
+                                        let mut t: f64 = 0.0;
+                                        let mut tx_2: f64 = 0.0;
+                                        let mut converted_alpha: i32 = 0;
+                                        let mut alpha: i32 = 0;
+                                        if (((pp).kind() & ((enums::TexFlipS as i32) as u32)) != 0)
+                                        {
+                                            s_2 = fp::fsubs(1.0, s_2);
+                                        }
+                                        t = (Handle::cast::<Val<'a, F32>>(
+                                            (Handle::add(it, 4_i32)),
+                                        ))
+                                        .get();
+                                        it = Handle::add(it, 8_i32);
+                                        alpha = fp::fctiwz((fp::fnmsubs(t, trail_alpha, 255.0)));
+                                        converted_alpha =
+                                            fp::fctiwz((fp::fnmsubs(t, trail_alpha, 255.0)));
+                                        if converted_alpha < 0_i32 {
+                                            alpha = 0_i32;
+                                        }
+                                        if alpha > 255_i32 {
+                                            alpha = 255_i32;
+                                        }
+                                        tx_2 = fp::fmuls(2.0, (fp::fsubs(t, 0.5)));
+                                        if (((pp).kind() & ((enums::TexFlipT as i32) as u32)) != 0)
+                                        {
+                                            t = fp::fsubs(1.0, t);
+                                        }
+                                        inl_GXPosition3f32(
+                                            ctx,
+                                            fp::fmadds(bx, tx_2, fp::fmadds(ax, sx, cur_x)),
+                                            fp::fmadds(by, tx_2, fp::fmadds(ay, sx, cur_y)),
+                                            cur_z,
+                                        );
+                                        inl_GXColor4u8(
+                                            ctx,
+                                            draw_color.r(),
+                                            draw_color.g(),
+                                            draw_color.b(),
+                                            (alpha as u8),
+                                        );
+                                        if (((pp).kind() & ((enums::DispTexture as i32) as u32))
+                                            != 0)
+                                        {
+                                            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32))
+                                                .set_f32(s_2);
+                                            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32))
+                                                .set_f32(t);
+                                        }
+                                    }
+                                    i = i.wrapping_sub(1);
+                                }
+                            }
+                        }
+                        primitive_count = primitive_count.wrapping_sub(1);
+                    }
+                }
+            }
+        }
+    } else if Handle::is_null(it) {
+        if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+            fns::setVtxDesc(ctx, 0_i32);
+            fns::GXBegin(
+                ctx,
+                (enums::GX_QUADS as i32),
+                (enums::GX_VTXFMT0 as i32),
+                (4_u32 as u16),
+            );
+        } else {
+            fns::setVtxDesc(ctx, 1_i32);
+            fns::GXBegin(
+                ctx,
+                (enums::GX_QUADS as i32),
+                (enums::GX_VTXFMT1 as i32),
+                (4_u32 as u16),
+            );
+        }
+        (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(fp::fadds(fp::fneg(ax), cur_x));
+        (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(fp::fadds(fp::fneg(ay), cur_y));
+        (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(cur_z);
+        if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32))
+                .set_u8((((shr_u32((pp).kind(), (16_i32 as u32))) & (12_i32 as u32)) as u8));
+        }
+        (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(fp::fadds(fp::fneg(bx), cur_x));
+        (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(fp::fadds(fp::fneg(by), cur_y));
+        (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(cur_z);
+        if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(
+                (((shr_u32((pp).kind(), (16_i32 as u32))) & (12_i32 as u32))
+                    .wrapping_add((1_i32 as u32)) as u8),
+            );
+        }
+        (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(fp::fadds(ax, cur_x));
+        (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(fp::fadds(ay, cur_y));
+        (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(cur_z);
+        if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(
+                (((shr_u32((pp).kind(), (16_i32 as u32))) & (12_i32 as u32))
+                    .wrapping_add((2_i32 as u32)) as u8),
+            );
+        }
+        (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(fp::fadds(bx, cur_x));
+        (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(fp::fadds(by, cur_y));
+        (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(cur_z);
+        if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(
+                (((shr_u32((pp).kind(), (16_i32 as u32))) & (12_i32 as u32))
+                    .wrapping_add((3_i32 as u32)) as u8),
+            );
+        }
+    } else {
+        let mut primitive_count_2: u32 = (Handle::cast::<Val<'a, u32>>(it)).get();
+        it = Handle::add(it, (4_u32 as i32));
+        {
+            'l5: while primitive_count_2 != (0_i32 as u32) {
+                'c6: {
+                    let mut prim: i32 = ((Handle::add(it, 0_i32)).get() as i32);
+                    let mut count_2: u8 = (Handle::add(it, 1_i32)).get();
+                    let mut i_2: i32 = 0;
+                    it = Handle::add(it, 4_i32);
+                    if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+                        fns::setVtxDesc(ctx, 4_i32);
+                        fns::GXBegin(ctx, prim, (enums::GX_VTXFMT4 as i32), (count_2 as u16));
+                    } else {
+                        fns::setVtxDesc(ctx, 1_i32);
+                        fns::GXBegin(ctx, prim, (enums::GX_VTXFMT1 as i32), (count_2 as u16));
+                    }
+                    {
+                        i_2 = (count_2 as i32);
+                        'l7: while i_2 > 0_i32 {
+                            'c8: {
+                                let mut s_3: f64 =
+                                    (Handle::cast::<Val<'a, F32>>((Handle::add(it, 0_i32)))).get();
+                                let mut sx_2: f64 = fp::fmuls(2.0, (fp::fsubs(s_3, 0.5)));
+                                let mut t_2: f64 = 0.0;
+                                let mut tx_3: f64 = 0.0;
+                                if (((pp).kind() & ((enums::TexFlipS as i32) as u32)) != 0) {
+                                    s_3 = fp::fsubs(1.0, s_3);
+                                }
+                                t_2 =
+                                    (Handle::cast::<Val<'a, F32>>((Handle::add(it, 4_i32)))).get();
+                                it = Handle::add(it, 8_i32);
+                                tx_3 = fp::fmuls(2.0, (fp::fsubs(t_2, 0.5)));
+                                if (((pp).kind() & ((enums::TexFlipT as i32) as u32)) != 0) {
+                                    t_2 = fp::fsubs(1.0, t_2);
+                                }
+                                inl_GXPosition3f32(
+                                    ctx,
+                                    fp::fmadds(bx, tx_3, fp::fmadds(ax, sx_2, cur_x)),
+                                    fp::fmadds(by, tx_3, fp::fmadds(ay, sx_2, cur_y)),
+                                    cur_z,
+                                );
+                                if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+                                    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(s_3);
+                                    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(t_2);
+                                }
+                            }
+                            i_2 = i_2.wrapping_sub(1);
+                        }
+                    }
+                }
+                primitive_count_2 = primitive_count_2.wrapping_sub(1);
+            }
+        }
+    }
+}
+
+fn inl_psAbsLtF32<'a>(ctx: &'a Ctx, value: f64, limit: f64) -> i32 {
+    let __frame = ctx.stack_frame(0x10);
+    let value__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    value__slot.set(value);
+    let mut limit = limit;
+    (Handle::cast::<Val<'a, i32>>(value__slot))
+        .set(((Handle::cast::<Val<'a, i32>>(value__slot)).get() & 0x7fffffff_i32));
+    return (value__slot.get() < limit) as i32;
+}
+
+fn inl_psDispSubAbsLtF32<'a>(ctx: &'a Ctx, value: f64, limit: f64) -> i32 {
+    let mut value = value;
+    let mut limit = limit;
+    return inl_psAbsLtF32(ctx, value, limit);
+}
+
+fn inl_psAbsGtF32<'a>(ctx: &'a Ctx, value: f64, limit: f64) -> i32 {
+    let __frame = ctx.stack_frame(0x10);
+    let value__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    value__slot.set(value);
+    let mut limit = limit;
+    (Handle::cast::<Val<'a, i32>>(value__slot))
+        .set(((Handle::cast::<Val<'a, i32>>(value__slot)).get() & 0x7fffffff_i32));
+    return (value__slot.get() > limit) as i32;
+}
+
+fn inl_psDispSubAbsGtF32<'a>(ctx: &'a Ctx, value: f64, limit: f64) -> i32 {
+    let mut value = value;
+    let mut limit = limit;
+    return inl_psAbsGtF32(ctx, value, limit);
+}
+
+fn inl_psDispSubMakePolygon<'a>(
+    ctx: &'a Ctx,
+    pp: HSD_Particle<'a>,
+    texform: Val<'a, u8>,
+    x: f64,
+    y: f64,
+    z: f64,
+    x0: f64,
+    y0: f64,
+    z0: f64,
+    x1: f64,
+    y1: f64,
+    z1: f64,
+    color: _GXColor<'a>,
+    prev_x: Val<'a, F32>,
+    prev_y: Val<'a, F32>,
+    prev_z: Val<'a, F32>,
+) {
+    let __frame = ctx.stack_frame(0x18);
+    let right: Vec2<'a> = frame_at(ctx, &__frame, 0x0);
+    let up: Vec2<'a> = frame_at(ctx, &__frame, 0x8);
+    let mut pp = pp;
+    let mut texform = texform;
+    let mut x = x;
+    let mut y = y;
+    let mut z = z;
+    let mut x0 = x0;
+    let mut y0 = y0;
+    let mut z0 = z0;
+    let mut x1 = x1;
+    let mut y1 = y1;
+    let mut z1 = z1;
+    let mut color = color;
+    let mut prev_x = prev_x;
+    let mut prev_y = prev_y;
+    let mut prev_z = prev_z;
+    let mut right_z: f64 = 0.0;
+    let mut up_z: f64 = 0.0;
+    let mut it: Val<'a, u8> = texform;
+    let mut cx: f64 = 0.0;
+    right.set_x(x0);
+    right.set_y(y0);
+    right_z = z0;
+    up.set_x(x1);
+    up.set_y(y1);
+    up_z = z1;
+    inl_psSetCurrentMtx(ctx, (enums::GX_PNMTX0 as i32));
+    if (((pp).kind() & ((enums::Trail as i32) as u32)) != 0) {
+        if (((pp).kind() & ((enums::Tornado as i32) as u32)) != 0) {
+            statics::sysdolphin__baselib__psdisp::calcTornadoLastPos(
+                ctx, pp, prev_x, prev_y, prev_z,
+            );
+        } else {
+            (prev_x).set(fp::fsubs(x, (pp).vel().x()));
+            (prev_y).set(fp::fsubs(y, (pp).vel().y()));
+            (prev_z).set(fp::fsubs(z, (pp).vel().z()));
+        }
+        inl_getClrTrail(ctx, pp, color);
+        if Handle::is_null(it) {
+            if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+                fns::setVtxDesc(ctx, 2_i32);
+                fns::GXBegin(
+                    ctx,
+                    (enums::GX_QUADS as i32),
+                    (enums::GX_VTXFMT2 as i32),
+                    (4_i32 as u16),
+                );
+            } else {
+                fns::setVtxDesc(ctx, 3_i32);
+                fns::GXBegin(
+                    ctx,
+                    (enums::GX_QUADS as i32),
+                    (enums::GX_VTXFMT3 as i32),
+                    (4_i32 as u16),
+                );
+            }
+            inl_GXPosition3f32(
+                ctx,
+                fp::fsubs(((prev_x).get()), right.x()),
+                fp::fsubs(((prev_y).get()), right.y()),
+                fp::fsubs(((prev_z).get()), right_z),
+            );
+            {
+                let mut a: u8 = (color).a();
+                let mut b: u8 = (color).b();
+                let mut g: u8 = (color).g();
+                let mut r: u16 = ((color).r() as u16);
+                inl_GXColor4u8(
+                    ctx,
+                    (r as u8),
+                    g,
+                    b,
+                    (fp::fctiwz((fp::fmuls(fp::frsp(a as f64), (pp).trail()))) as u8),
+                );
+            }
+            if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+                let mut tex_base: u8 =
+                    (((shr_u32((pp).kind(), (16_i32 as u32))) & (12_i32 as u32)) as u8);
+                (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(tex_base);
+            }
+            inl_GXPosition3f32(
+                ctx,
+                fp::fsubs(x, up.x()),
+                fp::fsubs(y, up.y()),
+                fp::fsubs(z, up_z),
+            );
+            {
+                let mut a_2: u8 = (color).a();
+                let mut b_2: u8 = (color).b();
+                let mut g_2: u8 = (color).g();
+                let mut r_2: u16 = ((color).r() as u16);
+                inl_GXColor4u8(ctx, (r_2 as u8), g_2, b_2, a_2);
+            }
+            if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+                (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(
+                    (((shr_u32((pp).kind(), (16_i32 as u32))) & (12_i32 as u32))
+                        .wrapping_add((1_i32 as u32)) as u8),
+                );
+            }
+            inl_GXPosition3f32(
+                ctx,
+                fp::fadds(x, right.x()),
+                fp::fadds(y, right.y()),
+                fp::fadds(z, right_z),
+            );
+            {
+                let mut a_3: u8 = (color).a();
+                let mut b_3: u8 = (color).b();
+                let mut g_3: u8 = (color).g();
+                let mut r_3: u16 = ((color).r() as u16);
+                inl_GXColor4u8(ctx, (r_3 as u8), g_3, b_3, a_3);
+            }
+            if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+                (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(
+                    (((shr_u32((pp).kind(), (16_i32 as u32))) & (12_i32 as u32))
+                        .wrapping_add((2_i32 as u32)) as u8),
+                );
+            }
+            inl_GXPosition3f32(
+                ctx,
+                fp::fadds(((prev_x).get()), up.x()),
+                fp::fadds(((prev_y).get()), up.y()),
+                fp::fadds(((prev_z).get()), up_z),
+            );
+            {
+                let mut a_4: u8 = (color).a();
+                let mut alpha: f64 = fp::fmuls(fp::frsp(a_4 as f64), (pp).trail());
+                let mut b_4: u8 = (color).b();
+                let mut g_4: u8 = (color).g();
+                let mut r_4: u16 = ((color).r() as u16);
+                inl_GXColor4u8(ctx, (r_4 as u8), g_4, b_4, (fp::fctiwz(alpha) as u8));
+            }
+            if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+                (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(
+                    (((shr_u32((pp).kind(), (16_i32 as u32))) & (12_i32 as u32))
+                        .wrapping_add((3_i32 as u32)) as u8),
+                );
+            }
+        } else {
+            let mut trail_alpha: f64 = fp::fmuls(255.0, (fp::fsubs(1.0, (pp).trail())));
+            let mut up_len: f64 = inl_sqrtf(
+                ctx,
+                fp::fmadds(
+                    up_z,
+                    up_z,
+                    fp::fmadds(up.x(), up.x(), fp::fmuls(up.y(), up.y())),
+                ),
+            );
+            if up_len != 0.0 {
+                let mut dz: f64 = fp::fsubs(z, ((prev_z).get()));
+                let mut dx: f64 = fp::fsubs(x, ((prev_x).get()));
+                let mut dy: f64 = fp::fsubs(y, ((prev_y).get()));
+                let mut xl: f64 = fp::fmuls(dx, dx);
+                let mut yl: f64 = fp::fmuls(dy, dy);
+                let mut zl: f64 = fp::fmuls(dz, dz);
+                let mut segment_len: f64 = inl_sqrtf(ctx, fp::fadds(zl, (fp::fadds(xl, yl))));
+                let mut ratio: f64 = fp::fdivs(segment_len, up_len);
+                let mut primitive_count: u32 = (Handle::cast::<Val<'a, u32>>(it)).get();
+                it = Handle::add(it, (4_u32 as i32));
+                up.set_x(fp::fmuls(up.x(), ratio));
+                up.set_y(fp::fmuls(up.y(), ratio));
+                up_z = fp::fmuls(up_z, ratio);
+                {
+                    'l1: while primitive_count != (0_i32 as u32) {
+                        'c2: {
+                            let mut primitive: i32 = ((Handle::add(it, 0_i32)).get() as i32);
+                            let mut count: u8 = (Handle::add(it, 1_i32)).get();
+                            let mut i: i32 = 0;
+                            it = Handle::add(it, 4_i32);
+                            if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+                                fns::setVtxDesc(ctx, 5_i32);
+                                fns::GXBegin(
+                                    ctx,
+                                    primitive,
+                                    (enums::GX_VTXFMT5 as i32),
+                                    (count as u16),
+                                );
+                            } else {
+                                fns::setVtxDesc(ctx, 3_i32);
+                                fns::GXBegin(
+                                    ctx,
+                                    primitive,
+                                    (enums::GX_VTXFMT3 as i32),
+                                    (count as u16),
+                                );
+                            }
+                            {
+                                i = (count as i32);
+                                'l3: while i > 0_i32 {
+                                    'c4: {
+                                        let mut s: f64 = (Handle::cast::<Val<'a, F32>>(
+                                            (Handle::add(it, 0_i32)),
+                                        ))
+                                        .get();
+                                        let mut sx: f64 = fp::fmuls(2.0, (fp::fsubs(s, 0.5)));
+                                        let mut t: f64 = 0.0;
+                                        let mut tx: f64 = 0.0;
+                                        let mut converted_alpha: i32 = 0;
+                                        let mut alpha_2: i32 = 0;
+                                        if (((pp).kind() & ((enums::TexFlipS as i32) as u32)) != 0)
+                                        {
+                                            s = fp::fsubs(1.0, s);
+                                        }
+                                        t = (Handle::cast::<Val<'a, F32>>(
+                                            (Handle::add(it, 4_i32)),
+                                        ))
+                                        .get();
+                                        it = Handle::add(it, 8_i32);
+                                        alpha_2 = fp::fctiwz((fp::fnmsubs(t, trail_alpha, 255.0)));
+                                        converted_alpha =
+                                            fp::fctiwz((fp::fnmsubs(t, trail_alpha, 255.0)));
+                                        if converted_alpha < 0_i32 {
+                                            alpha_2 = 0_i32;
+                                        }
+                                        if alpha_2 > 255_i32 {
+                                            alpha_2 = 255_i32;
+                                        }
+                                        tx = fp::fmuls(2.0, (fp::fsubs(t, 0.5)));
+                                        if (((pp).kind() & ((enums::TexFlipT as i32) as u32)) != 0)
+                                        {
+                                            t = fp::fsubs(1.0, t);
+                                        }
+                                        (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(
+                                            fp::fmadds(up.x(), tx, (fp::fmadds(right.x(), sx, x))),
+                                        );
+                                        (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(
+                                            fp::fmadds(up.y(), tx, (fp::fmadds(right.y(), sx, y))),
+                                        );
+                                        (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(
+                                            fp::fmadds(up_z, tx, (fp::fmadds(right_z, sx, z))),
+                                        );
+                                        inl_GXColor4u8(
+                                            ctx,
+                                            (color).r(),
+                                            (color).g(),
+                                            (color).b(),
+                                            (alpha_2 as u8),
+                                        );
+                                        if (((pp).kind() & ((enums::DispTexture as i32) as u32))
+                                            != 0)
+                                        {
+                                            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32))
+                                                .set_f32(s);
+                                            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32))
+                                                .set_f32(t);
+                                        }
+                                    }
+                                    i = i.wrapping_sub(1);
+                                }
+                            }
+                        }
+                        primitive_count = primitive_count.wrapping_sub(1);
+                    }
+                }
+            }
+        }
+    } else if Handle::is_null(it) {
+        if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+            fns::setVtxDesc(ctx, 0_i32);
+            fns::GXBegin(
+                ctx,
+                (enums::GX_QUADS as i32),
+                (enums::GX_VTXFMT0 as i32),
+                (4_i32 as u16),
+            );
+        } else {
+            fns::setVtxDesc(ctx, 1_i32);
+            fns::GXBegin(
+                ctx,
+                (enums::GX_QUADS as i32),
+                (enums::GX_VTXFMT1 as i32),
+                (4_i32 as u16),
+            );
+        }
+        inl_GXPosition3f32(
+            ctx,
+            ({
+                let __t1 = fp::fsubs(x, right.x());
+                cx = __t1;
+                __t1
+            }),
+            fp::fsubs(y, right.y()),
+            fp::fsubs(z, right_z),
+        );
+        if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32))
+                .set_u8((((shr_u32((pp).kind(), (16_i32 as u32))) & (12_i32 as u32)) as u8));
+        }
+        inl_GXPosition3f32(
+            ctx,
+            ({
+                let __t2 = fp::fsubs(x, up.x());
+                cx = __t2;
+                __t2
+            }),
+            fp::fsubs(y, up.y()),
+            fp::fsubs(z, up_z),
+        );
+        if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(
+                (((shr_u32((pp).kind(), (16_i32 as u32))) & (12_i32 as u32))
+                    .wrapping_add((1_i32 as u32)) as u8),
+            );
+        }
+        inl_GXPosition3f32(
+            ctx,
+            ({
+                let __t3 = fp::fadds(x, right.x());
+                cx = __t3;
+                __t3
+            }),
+            fp::fadds(y, right.y()),
+            fp::fadds(z, right_z),
+        );
+        if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(
+                (((shr_u32((pp).kind(), (16_i32 as u32))) & (12_i32 as u32))
+                    .wrapping_add((2_i32 as u32)) as u8),
+            );
+        }
+        inl_GXPosition3f32(
+            ctx,
+            fp::fadds(x, up.x()),
+            fp::fadds(y, up.y()),
+            fp::fadds(z, up_z),
+        );
+        if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(
+                (((shr_u32((pp).kind(), (16_i32 as u32))) & (12_i32 as u32))
+                    .wrapping_add((3_i32 as u32)) as u8),
+            );
+        }
+    } else {
+        let mut primitive_count_2: u32 = (Handle::cast::<Val<'a, u32>>(it)).get();
+        it = Handle::add(it, (4_u32 as i32));
+        {
+            'l5: while primitive_count_2 != (0_i32 as u32) {
+                'c6: {
+                    let mut primitive_2: i32 = ((Handle::add(it, 0_i32)).get() as i32);
+                    let mut count_2: u8 = (Handle::add(it, 1_i32)).get();
+                    let mut i_2: i32 = 0;
+                    it = Handle::add(it, 4_i32);
+                    if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+                        fns::setVtxDesc(ctx, 4_i32);
+                        fns::GXBegin(
+                            ctx,
+                            primitive_2,
+                            (enums::GX_VTXFMT4 as i32),
+                            (count_2 as u16),
+                        );
+                    } else {
+                        fns::setVtxDesc(ctx, 1_i32);
+                        fns::GXBegin(
+                            ctx,
+                            primitive_2,
+                            (enums::GX_VTXFMT1 as i32),
+                            (count_2 as u16),
+                        );
+                    }
+                    {
+                        i_2 = (count_2 as i32);
+                        'l7: while i_2 > 0_i32 {
+                            'c8: {
+                                let mut s_2: f64 =
+                                    (Handle::cast::<Val<'a, F32>>((Handle::add(it, 0_i32)))).get();
+                                let mut sx_2: f64 = fp::fmuls(2.0, (fp::fsubs(s_2, 0.5)));
+                                let mut t_2: f64 = 0.0;
+                                let mut tx_2: f64 = 0.0;
+                                if (((pp).kind() & ((enums::TexFlipS as i32) as u32)) != 0) {
+                                    s_2 = fp::fsubs(1.0, s_2);
+                                }
+                                t_2 =
+                                    (Handle::cast::<Val<'a, F32>>((Handle::add(it, 4_i32)))).get();
+                                it = Handle::add(it, 8_i32);
+                                tx_2 = fp::fmuls(2.0, (fp::fsubs(t_2, 0.5)));
+                                if (((pp).kind() & ((enums::TexFlipT as i32) as u32)) != 0) {
+                                    t_2 = fp::fsubs(1.0, t_2);
+                                }
+                                inl_GXPosition3f32(
+                                    ctx,
+                                    fp::fmadds(up.x(), tx_2, fp::fmadds(right.x(), sx_2, x)),
+                                    fp::fmadds(up.y(), tx_2, fp::fmadds(right.y(), sx_2, y)),
+                                    fp::fmadds(up_z, tx_2, fp::fmadds(right_z, sx_2, z)),
+                                );
+                                if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
+                                    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(s_2);
+                                    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(t_2);
+                                }
+                            }
+                            i_2 = i_2.wrapping_sub(1);
+                        }
+                    }
+                }
+                primitive_count_2 = primitive_count_2.wrapping_sub(1);
+            }
+        }
+    }
+}
+
+fn inl_psDispSub<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, texform: Val<'a, u8>) {
+    let __frame = ctx.stack_frame(0x70);
+    let prev_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    let prev_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
+    let prev_z: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
+    let prev_x_2: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
+    let prev_y_2: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
+    let prev_z_2: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
+    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x18);
+    let axis: Vec<'a> = frame_at(ctx, &__frame, 0x48);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x54);
+    let prev_x_3: Val<'a, F32> = frame_at(ctx, &__frame, 0x58);
+    let prev_y_3: Val<'a, F32> = frame_at(ctx, &__frame, 0x5c);
+    let prev_z_3: Val<'a, F32> = frame_at(ctx, &__frame, 0x60);
+    let mut pp = pp;
+    let mut texform = texform;
+    let mut right_y: f64 = 0.0;
+    let mut right_x: f64 = 0.0;
+    let mut right_z: f64 = 0.0;
+    let mut up_x: f64 = 0.0;
+    let mut up_y: f64 = 0.0;
+    let mut up_z: f64 = 0.0;
+    let mut angle: f64 = 0.0;
+    let mut x: f64 = 0.0;
+    let mut y: f64 = 0.0;
+    let mut z: f64 = 0.0;
+    x = (pp).pos().x();
+    y = (pp).pos().y();
+    z = (pp).pos().z();
+    if !Handle::is_null(texform) {
+        right_x = fp::fmuls(
+            statics::sysdolphin__baselib__psdisp::rvmtx(ctx)
+                .get(0_i32)
+                .at(0_i32)
+                .get(),
+            (pp).size(),
+        );
+        up_x = fp::fmuls(
+            fp::fneg(
+                statics::sysdolphin__baselib__psdisp::rvmtx(ctx)
+                    .get(0_i32)
+                    .at(1_i32)
+                    .get(),
+            ),
+            (pp).size(),
+        );
+        right_y = fp::fmuls(
+            statics::sysdolphin__baselib__psdisp::rvmtx(ctx)
+                .get(1_i32)
+                .at(0_i32)
+                .get(),
+            (pp).size(),
+        );
+        up_y = fp::fmuls(
+            fp::fneg(
+                statics::sysdolphin__baselib__psdisp::rvmtx(ctx)
+                    .get(1_i32)
+                    .at(1_i32)
+                    .get(),
+            ),
+            (pp).size(),
+        );
+        right_z = fp::fmuls(
+            statics::sysdolphin__baselib__psdisp::rvmtx(ctx)
+                .get(2_i32)
+                .at(0_i32)
+                .get(),
+            (pp).size(),
+        );
+        up_z = fp::fmuls(
+            fp::fneg(
+                statics::sysdolphin__baselib__psdisp::rvmtx(ctx)
+                    .get(2_i32)
+                    .at(1_i32)
+                    .get(),
+            ),
+            (pp).size(),
+        );
+    } else {
+        right_x = fp::fmuls(
+            statics::sysdolphin__baselib__psdisp::HSD_PSDisp_804D7914(ctx).get(),
+            (pp).size(),
+        );
+        up_x = fp::fmuls(
+            statics::sysdolphin__baselib__psdisp::HSD_PSDisp_804D7918(ctx).get(),
+            (pp).size(),
+        );
+        right_y = fp::fmuls(
+            statics::sysdolphin__baselib__psdisp::HSD_PSDisp_804D791C(ctx).get(),
+            (pp).size(),
+        );
+        up_y = fp::fmuls(
+            statics::sysdolphin__baselib__psdisp::HSD_PSDisp_804D7920(ctx).get(),
+            (pp).size(),
+        );
+        right_z = fp::fmuls(
+            statics::sysdolphin__baselib__psdisp::HSD_PSDisp_804D7924(ctx).get(),
+            (pp).size(),
+        );
+        up_z = fp::fmuls(
+            statics::sysdolphin__baselib__psdisp::HSD_PSDisp_804D7928(ctx).get(),
+            (pp).size(),
+        );
+    }
+    if (((pp).kind() & ((enums::Trail as i32) as u32)) != 0)
+        || (((pp).kind() & ((enums::DirVec as i32) as u32)) != 0)
+    {
+        let mut x_2: f64 = 0.0;
+        let mut y_2: f64 = 0.0;
+        if 0.0
+            == statics::sysdolphin__baselib__psdisp::prj(ctx)
+                .at(0_i32)
+                .get()
+        {
+            let mut w0: f64 = 0.0;
+            let mut w0inv: f64 = 0.0;
+            let mut w1: f64 = 0.0;
+            let mut w1inv: f64 = 0.0;
+            let mut pv13: f64 = 0.0;
+            let mut pv03: f64 = 0.0;
+            if (((pp).kind() & ((enums::Tornado as i32) as u32)) != 0) {
+                statics::sysdolphin__baselib__psdisp::calcTornadoLastPos(
+                    ctx, pp, prev_x, prev_y, prev_z,
+                );
+            } else {
+                prev_x.set(fp::fsubs((pp).pos().x(), (pp).vel().x()));
+                prev_y.set(fp::fsubs((pp).pos().y(), (pp).vel().y()));
+                prev_z.set(fp::fsubs((pp).pos().z(), (pp).vel().z()));
+            }
+            w0 = fp::fadds(
+                statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                    .get(2_i32)
+                    .at(3_i32)
+                    .get(),
+                (fp::fmadds(
+                    statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                        .get(2_i32)
+                        .at(2_i32)
+                        .get(),
+                    (pp).pos().z(),
+                    (fp::fmadds(
+                        statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                            .get(2_i32)
+                            .at(0_i32)
+                            .get(),
+                        (pp).pos().x(),
+                        fp::fmuls(
+                            statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                                .get(2_i32)
+                                .at(1_i32)
+                                .get(),
+                            (pp).pos().y(),
+                        ),
+                    )),
+                )),
+            );
+            if 0.0 == w0 {
+                return;
+            }
+            w0inv = fp::fdivs(fp::fneg(1.0), w0);
+            w1 = fp::fadds(
+                statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                    .get(2_i32)
+                    .at(3_i32)
+                    .get(),
+                (fp::fmadds(
+                    statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                        .get(2_i32)
+                        .at(2_i32)
+                        .get(),
+                    prev_z.get(),
+                    (fp::fmadds(
+                        statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                            .get(2_i32)
+                            .at(0_i32)
+                            .get(),
+                        prev_x.get(),
+                        fp::fmuls(
+                            statics::sysdolphin__baselib__psdisp::vmtx(ctx)
+                                .get(2_i32)
+                                .at(1_i32)
+                                .get(),
+                            prev_y.get(),
+                        ),
+                    )),
+                )),
+            );
+            if 0.0 == w1 {
+                return;
+            }
+            w1inv = fp::fdivs(fp::fneg(1.0), w1);
+            pv03 = statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                .get(0_i32)
+                .at(3_i32)
+                .get();
+            pv13 = statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                .get(1_i32)
+                .at(3_i32)
+                .get();
+            x_2 = fp::fmsubs(
+                w0inv,
+                (fp::fadds(
+                    pv03,
+                    (fp::fmadds(
+                        statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                            .get(0_i32)
+                            .at(2_i32)
+                            .get(),
+                        (pp).pos().z(),
+                        (fp::fmadds(
+                            statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                .get(0_i32)
+                                .at(0_i32)
+                                .get(),
+                            (pp).pos().x(),
+                            fp::fmuls(
+                                statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                    .get(0_i32)
+                                    .at(1_i32)
+                                    .get(),
+                                (pp).pos().y(),
+                            ),
+                        )),
+                    )),
+                )),
+                fp::fmuls(
+                    w1inv,
+                    (fp::fadds(
+                        pv03,
+                        (fp::fmadds(
+                            statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                .get(0_i32)
+                                .at(2_i32)
+                                .get(),
+                            prev_z.get(),
+                            (fp::fmadds(
+                                statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                    .get(0_i32)
+                                    .at(0_i32)
+                                    .get(),
+                                prev_x.get(),
+                                fp::fmuls(
+                                    statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                        .get(0_i32)
+                                        .at(1_i32)
+                                        .get(),
+                                    prev_y.get(),
+                                ),
+                            )),
+                        )),
+                    )),
+                ),
+            );
+            y_2 = fp::fmsubs(
+                w0inv,
+                (fp::fadds(
+                    pv13,
+                    (fp::fmadds(
+                        statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                            .get(1_i32)
+                            .at(2_i32)
+                            .get(),
+                        (pp).pos().z(),
+                        (fp::fmadds(
+                            statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                .get(1_i32)
+                                .at(0_i32)
+                                .get(),
+                            (pp).pos().x(),
+                            fp::fmuls(
+                                statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                    .get(1_i32)
+                                    .at(1_i32)
+                                    .get(),
+                                (pp).pos().y(),
+                            ),
+                        )),
+                    )),
+                )),
+                fp::fmuls(
+                    w1inv,
+                    (fp::fadds(
+                        pv13,
+                        (fp::fmadds(
+                            statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                .get(1_i32)
+                                .at(2_i32)
+                                .get(),
+                            prev_z.get(),
+                            (fp::fmadds(
+                                statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                    .get(1_i32)
+                                    .at(0_i32)
+                                    .get(),
+                                prev_x.get(),
+                                fp::fmuls(
+                                    statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                                        .get(1_i32)
+                                        .at(1_i32)
+                                        .get(),
+                                    prev_y.get(),
+                                ),
+                            )),
+                        )),
+                    )),
+                ),
+            );
+        } else if (((pp).kind() & ((enums::Tornado as i32) as u32)) != 0) {
+            let mut dx: f64 = 0.0;
+            let mut dy: f64 = 0.0;
+            let mut dz: f64 = 0.0;
+            statics::sysdolphin__baselib__psdisp::calcTornadoLastPos(
+                ctx, pp, prev_x_2, prev_y_2, prev_z_2,
+            );
+            dx = fp::fsubs((pp).pos().x(), prev_x_2.get());
+            dy = fp::fsubs((pp).pos().y(), prev_y_2.get());
+            dz = fp::fsubs((pp).pos().z(), prev_z_2.get());
+            x_2 = fp::fmadds(
+                statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                    .get(0_i32)
+                    .at(2_i32)
+                    .get(),
+                dz,
+                (fp::fmadds(
+                    statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                        .get(0_i32)
+                        .at(0_i32)
+                        .get(),
+                    dx,
+                    fp::fmuls(
+                        statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                            .get(0_i32)
+                            .at(1_i32)
+                            .get(),
+                        dy,
+                    ),
+                )),
+            );
+            y_2 = fp::fmadds(
+                statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                    .get(1_i32)
+                    .at(2_i32)
+                    .get(),
+                dz,
+                (fp::fmadds(
+                    statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                        .get(1_i32)
+                        .at(0_i32)
+                        .get(),
+                    dx,
+                    fp::fmuls(
+                        statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                            .get(1_i32)
+                            .at(1_i32)
+                            .get(),
+                        dy,
+                    ),
+                )),
+            );
+        } else {
+            x_2 = fp::fmadds(
+                statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                    .get(0_i32)
+                    .at(2_i32)
+                    .get(),
+                (pp).vel().z(),
+                (fp::fmadds(
+                    statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                        .get(0_i32)
+                        .at(0_i32)
+                        .get(),
+                    (pp).vel().x(),
+                    fp::fmuls(
+                        statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                            .get(0_i32)
+                            .at(1_i32)
+                            .get(),
+                        (pp).vel().y(),
+                    ),
+                )),
+            );
+            y_2 = fp::fmadds(
+                statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                    .get(1_i32)
+                    .at(2_i32)
+                    .get(),
+                (pp).vel().z(),
+                (fp::fmadds(
+                    statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                        .get(1_i32)
+                        .at(0_i32)
+                        .get(),
+                    (pp).vel().x(),
+                    fp::fmuls(
+                        statics::sysdolphin__baselib__psdisp::pvmtx(ctx)
+                            .get(1_i32)
+                            .at(1_i32)
+                            .get(),
+                        (pp).vel().y(),
+                    ),
+                )),
+            );
+        }
+        if (inl_psDispSubAbsLtF32(ctx, y_2, 1.1754943508222875e-38_f64) != 0) {
+            angle = (if x_2 >= 0.0 {
+                1.5707963705062866
+            } else {
+                fp::fneg(1.5707963705062866)
+            });
+        } else {
+            angle = fns::atan2f(ctx, x_2, y_2);
+        }
+        if (((pp).kind() & ((enums::DirVec as i32) as u32)) != 0) {
+            angle = fp::fadds(angle, (pp).rotate());
+        }
+    } else {
+        angle = (pp).rotate();
+    }
+    if (inl_psDispSubAbsGtF32(ctx, angle, 0.01) != 0) {
+        let mut rx: f64 = right_x;
+        let mut ry: f64 = right_y;
+        let mut rz: f64 = right_z;
+        let mut ux: f64 = up_x;
+        let mut uz: f64 = up_z;
+        let mut uy: f64 = up_y;
+        let mut ax: f64 = 0.0;
+        let mut ay: f64 = 0.0;
+        let mut az: f64 = 0.0;
+        ax = fp::fmsubs(ry, uz, fp::fmuls(rz, uy));
+        {
+            let mut axis_y_product: f64 = fp::fmuls(rx, uz);
+            ay = fp::fmsubs(rz, ux, axis_y_product);
+        }
+        az = fp::fmsubs(rx, uy, fp::fmuls(ry, ux));
+        axis.set_x(ax);
+        axis.set_y(ay);
+        axis.set_z(az);
+        fns::PSMTXRotAxisRad(ctx, mtx.get(0), axis, angle);
+        right_x = fp::fmadds(
+            mtx.get(0_i32).at(2_i32).get(),
+            rz,
+            (fp::fmadds(
+                mtx.get(0_i32).at(0_i32).get(),
+                rx,
+                fp::fmuls(mtx.get(0_i32).at(1_i32).get(), ry),
+            )),
+        );
+        right_y = fp::fmadds(
+            mtx.get(1_i32).at(2_i32).get(),
+            rz,
+            (fp::fmadds(
+                mtx.get(1_i32).at(0_i32).get(),
+                rx,
+                fp::fmuls(mtx.get(1_i32).at(1_i32).get(), ry),
+            )),
+        );
+        right_z = fp::fmadds(
+            mtx.get(2_i32).at(2_i32).get(),
+            rz,
+            (fp::fmadds(
+                mtx.get(2_i32).at(0_i32).get(),
+                rx,
+                fp::fmuls(mtx.get(2_i32).at(1_i32).get(), ry),
+            )),
+        );
+        up_x = fp::fmadds(
+            mtx.get(0_i32).at(2_i32).get(),
+            uz,
+            (fp::fmadds(
+                mtx.get(0_i32).at(0_i32).get(),
+                ux,
+                fp::fmuls(mtx.get(0_i32).at(1_i32).get(), uy),
+            )),
+        );
+        up_y = fp::fmadds(
+            mtx.get(1_i32).at(2_i32).get(),
+            uz,
+            (fp::fmadds(
+                mtx.get(1_i32).at(0_i32).get(),
+                ux,
+                fp::fmuls(mtx.get(1_i32).at(1_i32).get(), uy),
+            )),
+        );
+        up_z = fp::fmadds(
+            mtx.get(2_i32).at(2_i32).get(),
+            uz,
+            (fp::fmadds(
+                mtx.get(2_i32).at(0_i32).get(),
+                ux,
+                fp::fmuls(mtx.get(2_i32).at(1_i32).get(), uy),
+            )),
+        );
+    }
+    {
+        inl_psDispSubMakePolygon(
+            ctx, pp, texform, x, y, z, right_x, right_y, right_z, up_x, up_y, up_z, color,
+            prev_x_3, prev_y_3, prev_z_3,
+        );
+    }
 }
 
 /// Registers this unit's ports.
@@ -388,6 +4402,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1, a2): (HSD_Particle<'_>, _GXColor<'_>, _GXColor<'_>) = Args::take_all(ctx);
             Ret::put(getColorMatAmb(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x803a0088,
+        |ctx| {
+            let (a0, a1): (u32, u32) = Args::take_all(ctx);
+            Ret::put(psDispParticles(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );

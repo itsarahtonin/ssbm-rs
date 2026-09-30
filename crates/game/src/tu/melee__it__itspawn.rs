@@ -259,28 +259,24 @@ pub fn it_8026CB9C<'a>(ctx: &'a Ctx, counts: Val<'a, i32>, mask: u64, weight: f6
         }
     }
     (spawner).x4().set_size((cnt as u8));
+    let __t2 = Handle::cast::<Val<'a, u8>>(fns::HSD_MemAlloc(ctx, cnt.wrapping_mul(4_i32)));
     ({
         let __t1 = (spawner).x4().x4_ref();
         item_kinds = __t1;
         __t1
     })
-    .set(Handle::cast::<Val<'a, u8>>(fns::HSD_MemAlloc(
-        ctx,
-        cnt.wrapping_mul(4_i32),
-    )));
+    .set(__t2);
+    let __t4 = Handle::cast::<Val<'a, u16>>(fns::HSD_MemAlloc(ctx, cnt.wrapping_mul(4_i32)));
     ({
-        let __t2 = (spawner).x4().xC_ref();
-        weights = __t2;
-        __t2
-    })
-    .set(Handle::cast::<Val<'a, u16>>(fns::HSD_MemAlloc(
-        ctx,
-        cnt.wrapping_mul(4_i32),
-    )));
-    idx = ({
-        let __t3 = 0_i32;
-        cnt2 = __t3;
+        let __t3 = (spawner).x4().xC_ref();
+        weights = __t3;
         __t3
+    })
+    .set(__t4);
+    idx = ({
+        let __t5 = 0_i32;
+        cnt2 = __t5;
+        __t5
     });
     mask = backup;
     p2 = counts;
@@ -338,28 +334,24 @@ pub fn it_8026CD50<'a>(ctx: &'a Ctx, counts: Val<'a, i32>, mask: u64, weight: f6
         }
     }
     fns::it_804A0E50(ctx).set_size((cnt as u8));
+    let __t2 = Handle::cast::<Val<'a, u8>>(fns::HSD_MemAlloc(ctx, cnt.wrapping_mul(4_i32)));
     ({
         let __t1 = fns::it_804A0E50(ctx).x4_ref();
         item_kinds = __t1;
         __t1
     })
-    .set(Handle::cast::<Val<'a, u8>>(fns::HSD_MemAlloc(
-        ctx,
-        cnt.wrapping_mul(4_i32),
-    )));
+    .set(__t2);
+    let __t4 = Handle::cast::<Val<'a, u16>>(fns::HSD_MemAlloc(ctx, cnt.wrapping_mul(4_i32)));
     ({
-        let __t2 = fns::it_804A0E50(ctx).xC_ref();
-        weights = __t2;
-        __t2
-    })
-    .set(Handle::cast::<Val<'a, u16>>(fns::HSD_MemAlloc(
-        ctx,
-        cnt.wrapping_mul(4_i32),
-    )));
-    idx = ({
-        let __t3 = 0_i32;
-        cnt2 = __t3;
+        let __t3 = fns::it_804A0E50(ctx).xC_ref();
+        weights = __t3;
         __t3
+    })
+    .set(__t4);
+    idx = ({
+        let __t5 = 0_i32;
+        cnt2 = __t5;
+        __t5
     });
     mask = backup;
     p2 = Handle::add(counts, (enums::It_Kind_BombHei as i32));

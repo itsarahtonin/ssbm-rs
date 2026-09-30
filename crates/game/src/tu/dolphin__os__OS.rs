@@ -35,6 +35,55 @@ pub fn OSGetConsoleType<'a>(ctx: &'a Ctx) -> u32 {
     return (statics::dolphin__os__OS::BootInfo(ctx).get()).consoleType();
 }
 
+pub fn ClearArena<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x10);
+    if ctx.call::<_, u32>(0x803486b4, ()) != 0x80000000_u32 {
+        let _ = fns::memset(
+            ctx,
+            fns::OSGetArenaLo(ctx),
+            0_i32,
+            Handle::addr(fns::OSGetArenaHi(ctx)).wrapping_sub(Handle::addr(fns::OSGetArenaLo(ctx))),
+        );
+    } else {
+        let mut boot_region_start: u32 = ((ptr::<Val<'a, u32>>(ctx, 0x812fdff0_u32 as u32)).get());
+        let mut boot_region_end: u32 = ((ptr::<Val<'a, u32>>(ctx, 0x812fdfec_u32 as u32)).get());
+        if boot_region_start == (0_i32 as u32) {
+            let _ = fns::memset(
+                ctx,
+                fns::OSGetArenaLo(ctx),
+                0_i32,
+                Handle::addr(fns::OSGetArenaHi(ctx))
+                    .wrapping_sub(Handle::addr(fns::OSGetArenaLo(ctx))),
+            );
+        } else if Handle::addr(fns::OSGetArenaLo(ctx)) < boot_region_start {
+            if Handle::addr(fns::OSGetArenaHi(ctx)) <= boot_region_start {
+                let _ = fns::memset(
+                    ctx,
+                    fns::OSGetArenaLo(ctx),
+                    0_i32,
+                    Handle::addr(fns::OSGetArenaHi(ctx))
+                        .wrapping_sub(Handle::addr(fns::OSGetArenaLo(ctx))),
+                );
+            } else {
+                let _ = fns::memset(
+                    ctx,
+                    fns::OSGetArenaLo(ctx),
+                    0_i32,
+                    boot_region_start.wrapping_sub(Handle::addr(fns::OSGetArenaLo(ctx))),
+                );
+                if Handle::addr(fns::OSGetArenaHi(ctx)) > boot_region_end {
+                    let _ = fns::memset(
+                        ctx,
+                        ptr::<Addr<'a>>(ctx, boot_region_end as u32),
+                        0_i32,
+                        Handle::addr(fns::OSGetArenaHi(ctx)).wrapping_sub(boot_region_end),
+                    );
+                }
+            }
+        }
+    }
+}
+
 pub fn __OSSetExceptionHandler<'a>(ctx: &'a Ctx, exception: u8, handler: FnPtr<'a>) -> FnPtr<'a> {
     let mut exception = exception;
     let mut handler = handler;
@@ -74,6 +123,13 @@ pub fn register(ctx: &Ctx) {
             Ret::put(OSGetConsoleType(ctx), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x80342ebc,
+        |ctx| {
+            Ret::put(ClearArena(ctx), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x803435b4,

@@ -26,6 +26,250 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn MatToQuat<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, q: Quaternion<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x48);
+    let q3: ArrV<'a, F32, 3> = frame_at(ctx, &__frame, 0x0);
+    let nxt: ArrV<'a, i32, 3> = frame_at(ctx, &__frame, 0xc);
+    let lenCol: ArrV<'a, F32, 3> = frame_at(ctx, &__frame, 0x18);
+    let mut m = m;
+    let mut q = q;
+    nxt.at(0).set(1_i32);
+    nxt.at(1).set(2_i32);
+    nxt.at(2).set(0_i32);
+    let mut s: f64 = 0.0;
+    let mut scale: f64 = 0.0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut k: i32 = 0;
+    lenCol.at(0_i32).set(inl_sqrtf(
+        ctx,
+        fp::fadds(
+            fp::fadds(
+                fp::fmuls(
+                    (Handle::add(m, 0_i32)).at(0_i32).get(),
+                    (Handle::add(m, 0_i32)).at(0_i32).get(),
+                ),
+                fp::fmuls(
+                    (Handle::add(m, 1_i32)).at(0_i32).get(),
+                    (Handle::add(m, 1_i32)).at(0_i32).get(),
+                ),
+            ),
+            fp::fmuls(
+                (Handle::add(m, 2_i32)).at(0_i32).get(),
+                (Handle::add(m, 2_i32)).at(0_i32).get(),
+            ),
+        ),
+    ));
+    lenCol.at(1_i32).set(inl_sqrtf(
+        ctx,
+        fp::fadds(
+            fp::fadds(
+                fp::fmuls(
+                    (Handle::add(m, 0_i32)).at(1_i32).get(),
+                    (Handle::add(m, 0_i32)).at(1_i32).get(),
+                ),
+                fp::fmuls(
+                    (Handle::add(m, 1_i32)).at(1_i32).get(),
+                    (Handle::add(m, 1_i32)).at(1_i32).get(),
+                ),
+            ),
+            fp::fmuls(
+                (Handle::add(m, 2_i32)).at(1_i32).get(),
+                (Handle::add(m, 2_i32)).at(1_i32).get(),
+            ),
+        ),
+    ));
+    lenCol.at(2_i32).set(inl_sqrtf(
+        ctx,
+        fp::fadds(
+            fp::fadds(
+                fp::fmuls(
+                    (Handle::add(m, 0_i32)).at(2_i32).get(),
+                    (Handle::add(m, 0_i32)).at(2_i32).get(),
+                ),
+                fp::fmuls(
+                    (Handle::add(m, 1_i32)).at(2_i32).get(),
+                    (Handle::add(m, 1_i32)).at(2_i32).get(),
+                ),
+            ),
+            fp::fmuls(
+                (Handle::add(m, 2_i32)).at(2_i32).get(),
+                (Handle::add(m, 2_i32)).at(2_i32).get(),
+            ),
+        ),
+    ));
+    s = fp::fadds(
+        fp::fadds(
+            fp::fdivs(
+                (Handle::add(m, 0_i32)).at(0_i32).get(),
+                lenCol.at(0_i32).get(),
+            ),
+            fp::fdivs(
+                (Handle::add(m, 1_i32)).at(1_i32).get(),
+                lenCol.at(1_i32).get(),
+            ),
+        ),
+        fp::fdivs(
+            (Handle::add(m, 2_i32)).at(2_i32).get(),
+            lenCol.at(2_i32).get(),
+        ),
+    );
+    if s > 0.0 {
+        s = inl_sqrtf(ctx, fp::fadds(1.0, s));
+        (q).set_w(fp::fmuls(0.5, s));
+        scale = fp::fdivs(0.5, s);
+        (q).set_x(fp::fmuls(
+            scale,
+            (fp::fsubs(
+                (fp::fdivs(
+                    (Handle::add(m, 2_i32)).at(1_i32).get(),
+                    lenCol.at(1_i32).get(),
+                )),
+                (fp::fdivs(
+                    (Handle::add(m, 1_i32)).at(2_i32).get(),
+                    lenCol.at(2_i32).get(),
+                )),
+            )),
+        ));
+        (q).set_y(fp::fmuls(
+            scale,
+            (fp::fsubs(
+                (fp::fdivs(
+                    (Handle::add(m, 0_i32)).at(2_i32).get(),
+                    lenCol.at(2_i32).get(),
+                )),
+                (fp::fdivs(
+                    (Handle::add(m, 2_i32)).at(0_i32).get(),
+                    lenCol.at(0_i32).get(),
+                )),
+            )),
+        ));
+        (q).set_z(fp::fmuls(
+            scale,
+            (fp::fsubs(
+                (fp::fdivs(
+                    (Handle::add(m, 1_i32)).at(0_i32).get(),
+                    lenCol.at(0_i32).get(),
+                )),
+                (fp::fdivs(
+                    (Handle::add(m, 0_i32)).at(1_i32).get(),
+                    lenCol.at(1_i32).get(),
+                )),
+            )),
+        ));
+    } else {
+        i = 0_i32;
+        if fp::fdivs(
+            (Handle::add(m, 1_i32)).at(1_i32).get(),
+            lenCol.at(1_i32).get(),
+        ) > fp::fdivs(
+            (Handle::add(m, 0_i32)).at(0_i32).get(),
+            lenCol.at(0_i32).get(),
+        ) {
+            i = 1_i32;
+        }
+        if fp::fdivs(
+            (Handle::add(m, 2_i32)).at(2_i32).get(),
+            lenCol.at(2_i32).get(),
+        ) > fp::fdivs((Handle::add(m, i)).at(i).get(), lenCol.at(i).get())
+        {
+            i = 2_i32;
+        }
+        j = nxt.at(i).get();
+        k = nxt.at(j).get();
+        s = inl_sqrtf(
+            ctx,
+            fp::fadds(
+                1.0,
+                (fp::fsubs(
+                    (fp::fsubs(
+                        (fp::fdivs((Handle::add(m, i)).at(i).get(), lenCol.at(i).get())),
+                        (fp::fdivs((Handle::add(m, j)).at(j).get(), lenCol.at(j).get())),
+                    )),
+                    (fp::fdivs((Handle::add(m, k)).at(k).get(), lenCol.at(k).get())),
+                )),
+            ),
+        );
+        scale = fp::fdivs(0.5, s);
+        q3.at(i).set(fp::fmuls(0.5, s));
+        (q).set_w(fp::fmuls(
+            scale,
+            (fp::fsubs(
+                (fp::fdivs((Handle::add(m, k)).at(j).get(), lenCol.at(j).get())),
+                (fp::fdivs((Handle::add(m, j)).at(k).get(), lenCol.at(k).get())),
+            )),
+        ));
+        q3.at(j).set(fp::fmuls(
+            scale,
+            (fp::fadds(
+                (fp::fdivs((Handle::add(m, j)).at(i).get(), lenCol.at(i).get())),
+                (fp::fdivs((Handle::add(m, i)).at(j).get(), lenCol.at(j).get())),
+            )),
+        ));
+        q3.at(k).set(fp::fmuls(
+            scale,
+            (fp::fadds(
+                (fp::fdivs((Handle::add(m, k)).at(i).get(), lenCol.at(i).get())),
+                (fp::fdivs((Handle::add(m, i)).at(k).get(), lenCol.at(k).get())),
+            )),
+        ));
+        (q).set_x(q3.at(0_i32).get());
+        (q).set_y(q3.at(1_i32).get());
+        (q).set_z(q3.at(2_i32).get());
+    }
+    return 0_i32;
+}
+
+pub fn HSD_QuatLib_8037EB28<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, euler: Vec<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x28);
+    let mut m = m;
+    let mut euler = euler;
+    let mut len: f64 = 0.0;
+    len = inl_sqrtf(
+        ctx,
+        fp::fadds(
+            fp::fmuls(
+                (Handle::add(m, 0_i32)).at(0_i32).get(),
+                (Handle::add(m, 0_i32)).at(0_i32).get(),
+            ),
+            fp::fmuls(
+                (Handle::add(m, 1_i32)).at(0_i32).get(),
+                (Handle::add(m, 1_i32)).at(0_i32).get(),
+            ),
+        ),
+    );
+    if len > 1e-05_f64 {
+        (euler).set_x(fns::atan2f(
+            ctx,
+            (Handle::add(m, 2_i32)).at(1_i32).get(),
+            (Handle::add(m, 2_i32)).at(2_i32).get(),
+        ));
+        (euler).set_y(fns::atan2f(
+            ctx,
+            fp::fneg((Handle::add(m, 2_i32)).at(0_i32).get()),
+            len,
+        ));
+        (euler).set_z(fns::atan2f(
+            ctx,
+            (Handle::add(m, 1_i32)).at(0_i32).get(),
+            (Handle::add(m, 0_i32)).at(0_i32).get(),
+        ));
+    } else {
+        (euler).set_x(fns::atan2f(
+            ctx,
+            fp::fneg((Handle::add(m, 1_i32)).at(2_i32).get()),
+            (Handle::add(m, 1_i32)).at(1_i32).get(),
+        ));
+        (euler).set_y(fns::atan2f(
+            ctx,
+            fp::fneg((Handle::add(m, 2_i32)).at(0_i32).get()),
+            len,
+        ));
+        (euler).set_z(0.0);
+    }
+    return 0_i32;
+}
+
 pub fn HSD_QuatLib_8037EC4C<'a>(
     ctx: &'a Ctx,
     p: Quaternion<'a>,
@@ -261,6 +505,22 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x8037e708,
+        |ctx| {
+            let (a0, a1): (ArrV<'_, F32, 4>, Quaternion<'_>) = Args::take_all(ctx);
+            Ret::put(MatToQuat(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8037eb28,
+        |ctx| {
+            let (a0, a1): (ArrV<'_, F32, 4>, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(HSD_QuatLib_8037EB28(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
     ctx.register_port(
         0x8037ec4c,
         |ctx| {

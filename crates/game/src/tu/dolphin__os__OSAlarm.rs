@@ -26,9 +26,99 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn OSInitAlarm<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x8);
+    if Handle::addr(fns::__OSGetExceptionHandler(ctx, (8_i32 as u8)))
+        != Handle::addr(fnptr(ctx, 0x80343df8))
+    {
+        statics::dolphin__os__OSAlarm::AlarmQueue(ctx).set_head({
+            let __t1 = null::<OSAlarm<'a>>(ctx);
+            statics::dolphin__os__OSAlarm::AlarmQueue(ctx).set_tail(__t1);
+            __t1
+        });
+        let _ = fns::__OSSetExceptionHandler(ctx, (8_i32 as u8), fnptr(ctx, 0x80343df8));
+    }
+}
+
 pub fn OSCreateAlarm<'a>(ctx: &'a Ctx, alarm: OSAlarm<'a>) {
     let mut alarm = alarm;
     (alarm).set_handler(null::<FnPtr<'a>>(ctx));
+}
+
+pub fn InsertAlarm<'a>(ctx: &'a Ctx, alarm: OSAlarm<'a>, fire: i64, handler: FnPtr<'a>) {
+    let __frame = ctx.stack_frame(0x40);
+    let mut alarm = alarm;
+    let mut fire = fire;
+    let mut handler = handler;
+    let mut next: OSAlarm<'a> = null(ctx);
+    let mut prev: OSAlarm<'a> = null(ctx);
+    if (0_i32 as i64) < (alarm).period() {
+        let mut time: i64 = ctx.call::<_, i64>(0x8034c410, ());
+        fire = (alarm).start();
+        if (alarm).start() < time {
+            fire = fire.wrapping_add(
+                (alarm).period().wrapping_mul(
+                    (div_i64((time.wrapping_sub((alarm).start())), (alarm).period())
+                        .wrapping_add((1_i32 as i64))),
+                ),
+            );
+        }
+    }
+    (alarm).set_handler(handler);
+    (alarm).set_fire(fire);
+    {
+        next = statics::dolphin__os__OSAlarm::AlarmQueue(ctx).head();
+        'l1: while !Handle::is_null(next) {
+            'c2: {
+                if (next).fire() <= fire {
+                    break 'c2;
+                }
+                (alarm).set_prev((next).prev());
+                (next).set_prev(alarm);
+                (alarm).set_next(next);
+                prev = (alarm).prev();
+                if !Handle::is_null(prev) {
+                    (prev).set_next(alarm);
+                } else {
+                    statics::dolphin__os__OSAlarm::AlarmQueue(ctx).set_head(alarm);
+                    inl_SetTimer_unfused(ctx, alarm);
+                }
+                return;
+            }
+            next = (next).next();
+        }
+    }
+    (alarm).set_next(null::<OSAlarm<'a>>(ctx));
+    prev = statics::dolphin__os__OSAlarm::AlarmQueue(ctx).tail();
+    statics::dolphin__os__OSAlarm::AlarmQueue(ctx).set_tail(alarm);
+    (alarm).set_prev(prev);
+    if !Handle::is_null(prev) {
+        (prev).set_next(alarm);
+    } else {
+        statics::dolphin__os__OSAlarm::AlarmQueue(ctx).set_head({
+            let __t1 = alarm;
+            statics::dolphin__os__OSAlarm::AlarmQueue(ctx).set_tail(__t1);
+            __t1
+        });
+        inl_SetTimer_unfused(ctx, alarm);
+    }
+}
+
+pub fn OSSetAlarm<'a>(ctx: &'a Ctx, alarm: OSAlarm<'a>, tick: i64, handler: FnPtr<'a>) {
+    let __frame = ctx.stack_frame(0x38);
+    let mut alarm = alarm;
+    let mut tick = tick;
+    let mut handler = handler;
+    let mut enabled: i32 = 0;
+    enabled = fns::OSDisableInterrupts(ctx);
+    (alarm).set_period((0_i32 as i64));
+    statics::dolphin__os__OSAlarm::InsertAlarm(
+        ctx,
+        alarm,
+        ctx.call::<_, i64>(0x8034c410, ()).wrapping_add(tick),
+        handler,
+    );
+    let _ = fns::OSRestoreInterrupts(ctx, enabled);
 }
 
 pub fn OSSetPeriodicAlarm<'a>(
@@ -51,8 +141,101 @@ pub fn OSSetPeriodicAlarm<'a>(
     let _ = fns::OSRestoreInterrupts(ctx, enabled);
 }
 
+pub fn OSCancelAlarm<'a>(ctx: &'a Ctx, alarm: OSAlarm<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut alarm = alarm;
+    let mut next: OSAlarm<'a> = null(ctx);
+    let mut enabled: i32 = 0;
+    enabled = fns::OSDisableInterrupts(ctx);
+    if Handle::is_null((alarm).handler()) {
+        let _ = fns::OSRestoreInterrupts(ctx, enabled);
+        return;
+    }
+    next = (alarm).next();
+    if Handle::is_null(next) {
+        statics::dolphin__os__OSAlarm::AlarmQueue(ctx).set_tail((alarm).prev());
+    } else {
+        (next).set_prev((alarm).prev());
+    }
+    if !Handle::is_null((alarm).prev()) {
+        ((alarm).prev()).set_next(next);
+    } else {
+        statics::dolphin__os__OSAlarm::AlarmQueue(ctx).set_head(next);
+        if !Handle::is_null(next) {
+            inl_SetTimer_unfused(ctx, next);
+        }
+    }
+    (alarm).set_handler(null::<FnPtr<'a>>(ctx));
+    let _ = fns::OSRestoreInterrupts(ctx, enabled);
+}
+
+pub fn DecrementerExceptionCallback<'a>(ctx: &'a Ctx, exception: u8, context: OSContext<'a>) {
+    let __frame = ctx.stack_frame(0x2f0);
+    let exceptionContext: OSContext<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut exception = exception;
+    let mut context = context;
+    let mut alarm: OSAlarm<'a> = null(ctx);
+    let mut next: OSAlarm<'a> = null(ctx);
+    let mut handler: FnPtr<'a> = null(ctx);
+    let mut time: i64 = 0;
+    time = ctx.call::<_, i64>(0x8034c410, ());
+    alarm = statics::dolphin__os__OSAlarm::AlarmQueue(ctx).head();
+    if Handle::is_null(alarm) {
+        fns::OSLoadContext(ctx, context);
+    }
+    if time < (alarm).fire() {
+        inl_SetTimer_unfused(ctx, alarm);
+        fns::OSLoadContext(ctx, context);
+    }
+    next = (alarm).next();
+    statics::dolphin__os__OSAlarm::AlarmQueue(ctx).set_head(next);
+    if Handle::is_null(next) {
+        statics::dolphin__os__OSAlarm::AlarmQueue(ctx).set_tail(null::<OSAlarm<'a>>(ctx));
+    } else {
+        (next).set_prev(null::<OSAlarm<'a>>(ctx));
+    }
+    handler = (alarm).handler();
+    (alarm).set_handler(null::<FnPtr<'a>>(ctx));
+    if (0_i32 as i64) < (alarm).period() {
+        statics::dolphin__os__OSAlarm::InsertAlarm(ctx, alarm, (0_i32 as i64), handler);
+    }
+    if !Handle::is_null(statics::dolphin__os__OSAlarm::AlarmQueue(ctx).head()) {
+        inl_SetTimer_unfused(ctx, statics::dolphin__os__OSAlarm::AlarmQueue(ctx).head());
+    }
+    let _ = fns::OSDisableScheduler(ctx);
+    fns::OSClearContext(ctx, exceptionContext);
+    fns::OSSetCurrentContext(ctx, exceptionContext);
+    handler.call::<_, ()>((alarm, context));
+    fns::OSClearContext(ctx, exceptionContext);
+    fns::OSSetCurrentContext(ctx, context);
+    let _ = fns::OSEnableScheduler(ctx);
+    fns::__OSReschedule(ctx);
+    fns::OSLoadContext(ctx, context);
+}
+
+fn inl_SetTimer_unfused<'a>(ctx: &'a Ctx, alarm: OSAlarm<'a>) {
+    let mut alarm = alarm;
+    let mut delta: i64 = (alarm)
+        .fire()
+        .wrapping_sub(ctx.call::<_, i64>(0x8034c410, ()));
+    if delta < (0_i32 as i64) {
+        fns::PPCMtdec(ctx, (0_i32 as u32));
+    } else if delta < (0x80000000_u32 as i64) {
+        fns::PPCMtdec(ctx, (delta as u32));
+    } else {
+        fns::PPCMtdec(ctx, (0x7fffffff_i32 as u32));
+    }
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x80343720,
+        |ctx| {
+            Ret::put(OSInitAlarm(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
     ctx.register_port(
         0x8034376c,
         |ctx| {
@@ -62,10 +245,42 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x80343778,
+        |ctx| {
+            let (a0, a1, a2): (OSAlarm<'_>, i64, FnPtr<'_>) = Args::take_all(ctx);
+            Ret::put(InsertAlarm(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x803439c8,
+        |ctx| {
+            let (a0, a1, a2): (OSAlarm<'_>, i64, FnPtr<'_>) = Args::take_all(ctx);
+            Ret::put(OSSetAlarm(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x80343a30,
         |ctx| {
             let (a0, a1, a2, a3): (OSAlarm<'_>, i64, i64, FnPtr<'_>) = Args::take_all(ctx);
             Ret::put(OSSetPeriodicAlarm(ctx, a0, a1, a2, a3), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80343aac,
+        |ctx| {
+            let (a0,): (OSAlarm<'_>,) = Args::take_all(ctx);
+            Ret::put(OSCancelAlarm(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80343bc8,
+        |ctx| {
+            let (a0, a1): (u8, OSContext<'_>) = Args::take_all(ctx);
+            Ret::put(DecrementerExceptionCallback(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );

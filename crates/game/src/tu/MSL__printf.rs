@@ -895,12 +895,7 @@ pub fn float2str<'a>(
                 };
             }
             1 => {
-                num = ((Handle::cast::<Val<'a, F64>>(fns::__va_arg(
-                    ctx,
-                    Handle::cast::<Arr<'a, __va_list_t<'a>, 1>>(arg).get(0),
-                    3_u8,
-                )))
-                .get());
+                num = ((Handle::cast::<Val<'a, F64>>(fns::__va_arg(ctx, arg, 3_u8))).get());
                 __state = 2;
             }
             2 => {
@@ -911,12 +906,7 @@ pub fn float2str<'a>(
                 };
             }
             3 => {
-                num = ((Handle::cast::<Val<'a, F64>>(fns::__va_arg(
-                    ctx,
-                    Handle::cast::<Arr<'a, __va_list_t<'a>, 1>>(arg).get(0),
-                    3_u8,
-                )))
-                .get());
+                num = ((Handle::cast::<Val<'a, F64>>(fns::__va_arg(ctx, arg, 3_u8))).get());
                 __state = 2;
             }
             4 => {
@@ -1169,12 +1159,12 @@ pub fn float2str<'a>(
             }
             54 => {
                 __state = if ({
-                    let __t2 = (dec.exp() as i32)
+                    let __t3 = (dec.exp() as i32)
                         .wrapping_neg()
                         .wrapping_add((dec.sig().length() as i32))
                         .wrapping_sub(1_i32);
-                    frac_digits = __t2;
-                    __t2
+                    frac_digits = __t3;
+                    __t3
                 }) < 0_i32
                 {
                     99
@@ -1328,17 +1318,16 @@ pub fn float2str<'a>(
                 };
             }
             80 => {
+                let __t2 = ({
+                    q = Handle::add(q, -1);
+                    q
+                })
+                .get();
                 ({
                     p = Handle::add(p, -1);
                     p
                 })
-                .set(
-                    ({
-                        q = Handle::add(q, -1);
-                        q
-                    })
-                    .get(),
-                );
+                .set(__t2);
                 __state = 81;
             }
             81 => {
@@ -1455,12 +1444,12 @@ pub fn float2str<'a>(
                         .wrapping_sub((frac_digits.wrapping_sub((format).precision()))),
                 );
                 __state = if ({
-                    let __t3 = (dec.exp() as i32)
+                    let __t4 = (dec.exp() as i32)
                         .wrapping_neg()
                         .wrapping_add((dec.sig().length() as i32))
                         .wrapping_sub(1_i32);
-                    frac_digits = __t3;
-                    __t3
+                    frac_digits = __t4;
+                    __t4
                 }) < 0_i32
                 {
                     105
@@ -1470,9 +1459,9 @@ pub fn float2str<'a>(
             }
             103 => {
                 __state = if ({
-                    let __t4 = (dec.exp() as i32).wrapping_add(1_i32);
-                    int_digits = __t4;
-                    __t4
+                    let __t5 = (dec.exp() as i32).wrapping_add(1_i32);
+                    int_digits = __t5;
+                    __t5
                 }) < 0_i32
                 {
                     108
@@ -1558,17 +1547,16 @@ pub fn float2str<'a>(
                 };
             }
             121 => {
+                let __t6 = ({
+                    q = Handle::add(q, -1);
+                    q
+                })
+                .get();
                 ({
                     p = Handle::add(p, -1);
                     p
                 })
-                .set(
-                    ({
-                        q = Handle::add(q, -1);
-                        q
-                    })
-                    .get(),
-                );
+                .set(__t6);
                 __state = 122;
             }
             122 => {
@@ -1668,17 +1656,16 @@ pub fn float2str<'a>(
                 __state = if digits < int_digits { 143 } else { 145 };
             }
             143 => {
+                let __t7 = ({
+                    q = Handle::add(q, -1);
+                    q
+                })
+                .get();
                 ({
                     p = Handle::add(p, -1);
                     p
                 })
-                .set(
-                    ({
-                        q = Handle::add(q, -1);
-                        q
-                    })
-                    .get(),
-                );
+                .set(__t7);
                 __state = 144;
             }
             144 => {
@@ -1828,7 +1815,7 @@ pub fn vprintf<'a>(ctx: &'a Ctx, format: Val<'a, i8>, arg: __va_list_t<'a>) -> i
         fnptr(ctx, 0x80323fec),
         Handle::cast::<Addr<'a>>((fns::__files(ctx).get(1_i32))),
         format,
-        Handle::cast::<Arr<'a, __va_list_t<'a>, 1>>(arg).get(0),
+        arg,
     );
 }
 
@@ -1854,7 +1841,7 @@ pub fn vsnprintf<'a>(
         fnptr(ctx, 0x80323f80),
         Handle::cast::<Addr<'a>>(osc),
         format,
-        Handle::cast::<Arr<'a, __va_list_t<'a>, 1>>(arg).get(0),
+        arg,
     );
     (Handle::add(
         s,

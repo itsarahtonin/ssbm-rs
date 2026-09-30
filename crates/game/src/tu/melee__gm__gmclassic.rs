@@ -688,6 +688,94 @@ pub fn gmClassic_801B3A34<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     fns::gm_LoadRumbleEnabled(ctx, new_var);
 }
 
+pub fn gmClassic_801B3B40<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
+    let __frame = ctx.stack_frame(0x48);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let sp18: Val<'a, i32> = frame_at(ctx, &__frame, 0x10);
+    let sp14: Val<'a, i32> = frame_at(ctx, &__frame, 0x14);
+    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
+    let mut arg0 = arg0;
+    let mut mei: MatchExitInfo<'a> = null(ctx);
+    let mut asd: UnkAllstarData<'a> = null(ctx);
+    let mut exit_result: i32 = 0;
+    let mut entry: gm_803DDEC8Struct<'a> = null(ctx);
+    let mut idx: i32 = 0;
+    let mut char_id: u8 = 0;
+    let mut time_ptr: Val<'a, u32> = null(ctx);
+    let mut best_ptr: Val<'a, i32> = null(ctx);
+    let mut id: u8 = 0;
+    let mut mask: i32 = 0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    mei = Handle::cast::<MatchExitInfo<'a>>(fns::gm_GetGameModeStateExitData(ctx, arg0));
+    asd = fns::gm_GetAllStarData(ctx);
+    entry = statics::melee__gm__gmclassic::gmClassic_803DDEC8(ctx)
+        .x00()
+        .get(((fns::gm_8017BE84(ctx, ((arg0).id() as u32)) as u8) as i32));
+    exit_result = (mei).x8();
+    id = (arg0).id();
+    idx = ((fns::gm_8017BE84(ctx, (id as u32)) as u16) as i32).wrapping_sub(1_i32);
+    if exit_result != 0_i32 {
+        fns::gm_804908A0(ctx).at(idx).set((2_i32 as u8));
+    } else {
+        fns::gm_804908A0(ctx).at(idx).set((1_i32 as u8));
+    }
+    if (fns::gm_8017D7AC(ctx, mei, (asd).x0(), (105_i32 as u8)) != 0_i32)
+        && (((Handle::add(entry, 1_i32)).x0() as i32) == 13_i32)
+    {
+        fns::gm_8017CBAC(
+            ctx,
+            Handle::cast::<UnkAdventureData<'a>>(asd),
+            fns::gmMainLib_8015CDC8(ctx),
+            (21_i32 as u8),
+        );
+    }
+    if (((entry).x1() as i32) == 128_i32) && (((entry).x2() as i32) == 1_i32) {
+        char_id = fns::gm_CKindToSelKind(ctx, ((asd).x0().x0().ckind() as u8));
+        time_ptr = fns::gmMainLib_8015D438(ctx, char_id);
+        best_ptr = fns::gmMainLib_8015D450(ctx, char_id);
+        fns::Ground_801C1DE4(ctx, sp18, sp14);
+        if sp18.get() == 0_i32 {
+            mask = shl_i32(1_i32, ((char_id as i32) as u32));
+            if (((asd).x0().x0().ckind() as i32) != 0) && (((asd).x0().x0().ckind() as i32) != 0) {}
+            if !((mask & (fns::gmMainLib_8015EDBC(ctx)).x8()) != 0) {
+                (best_ptr).set(((mei).match_end().frame_count() as i32));
+                let __t1 = (fns::gmMainLib_8015EDBC(ctx)).x8_ref();
+                __t1.set((__t1.get() | mask));
+            } else {
+                if ((best_ptr).get() as u32) > (mei).match_end().frame_count() {
+                    (best_ptr).set(((mei).match_end().frame_count() as i32));
+                }
+            }
+            let __t2 = (fns::gmMainLib_8015ED98(ctx)).x1C_ref();
+            __t2.set((__t2.get() | mask));
+            let __t3 = (fns::gmMainLib_8015EDB0(ctx)).x4_ref();
+            __t3.set((__t3.get() | mask));
+        }
+        if fns::gmMainLib_8015D48C(ctx, char_id) == 0_i32 {
+            if sp18.get() == 0_i32 {
+                fns::gmMainLib_8015D4E8(ctx, char_id, 1_i32);
+                (time_ptr).set((mei).match_end().frame_count());
+                return;
+            }
+            {
+                let mut diff: u32 = (sp14.get().wrapping_sub(sp18.get()) as u32);
+                if ((time_ptr).get()) < diff {
+                    (time_ptr).set((sp14.get().wrapping_sub(sp18.get()) as u32));
+                }
+            }
+        } else if sp18.get() == 0_i32 {
+            if ((time_ptr).get()) > (mei).match_end().frame_count() {
+                (time_ptr).set((mei).match_end().frame_count());
+            }
+        }
+    }
+}
+
 pub fn gmClassic_801B3D44<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut scene = scene;
@@ -896,6 +984,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (GameModeState<'_>,) = Args::take_all(ctx);
             Ret::put(gmClassic_801B3A34(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801b3b40,
+        |ctx| {
+            let (a0,): (GameModeState<'_>,) = Args::take_all(ctx);
+            Ret::put(gmClassic_801B3B40(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

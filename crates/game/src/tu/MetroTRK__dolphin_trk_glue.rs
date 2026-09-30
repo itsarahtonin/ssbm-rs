@@ -34,6 +34,49 @@ pub fn TRKEXICallBack<'a>(ctx: &'a Ctx, interrupt: i16, v_ctx: OSContext<'a>) {
     statics::MetroTRK__dolphin_trk_glue::TRKLoadContext(ctx, v_ctx, (0x500_i32 as u32));
 }
 
+pub fn InitMetroTRKCommTable<'a>(ctx: &'a Ctx, hwId: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x8);
+    let mut hwId = hwId;
+    let mut isStub: i32 = 0;
+    if hwId == (enums::HARDWARE_NDEV as i32) {
+        isStub = fns::Hu_IsStub(ctx);
+        statics::MetroTRK__dolphin_trk_glue::gDBCommTable(ctx)
+            .set_initialize_func(fnptr(ctx, 0x8032b608));
+        statics::MetroTRK__dolphin_trk_glue::gDBCommTable(ctx)
+            .set_initinterrupts_func(fnptr(ctx, 0x8032b680));
+        statics::MetroTRK__dolphin_trk_glue::gDBCommTable(ctx)
+            .set_peek_func(fnptr(ctx, 0x8032b6d4));
+        statics::MetroTRK__dolphin_trk_glue::gDBCommTable(ctx)
+            .set_read_func(fnptr(ctx, 0x8032b770));
+        statics::MetroTRK__dolphin_trk_glue::gDBCommTable(ctx)
+            .set_write_func(fnptr(ctx, 0x8032b7fc));
+        statics::MetroTRK__dolphin_trk_glue::gDBCommTable(ctx)
+            .set_open_func(fnptr(ctx, 0x8032ba5c));
+        statics::MetroTRK__dolphin_trk_glue::gDBCommTable(ctx)
+            .set_close_func(fnptr(ctx, 0x8032ba60));
+        return isStub;
+    } else {
+        isStub = ctx.call::<_, i32>(0x8032afdc, ());
+        statics::MetroTRK__dolphin_trk_glue::gDBCommTable(ctx)
+            .set_initialize_func(fnptr(ctx, 0x8032afb4));
+        statics::MetroTRK__dolphin_trk_glue::gDBCommTable(ctx)
+            .set_initinterrupts_func(fnptr(ctx, 0x8032afb8));
+        statics::MetroTRK__dolphin_trk_glue::gDBCommTable(ctx)
+            .set_peek_func(fnptr(ctx, 0x8032afbc));
+        statics::MetroTRK__dolphin_trk_glue::gDBCommTable(ctx)
+            .set_read_func(fnptr(ctx, 0x8032afc4));
+        statics::MetroTRK__dolphin_trk_glue::gDBCommTable(ctx)
+            .set_write_func(fnptr(ctx, 0x8032afcc));
+        statics::MetroTRK__dolphin_trk_glue::gDBCommTable(ctx)
+            .set_open_func(fnptr(ctx, 0x8032afd4));
+        statics::MetroTRK__dolphin_trk_glue::gDBCommTable(ctx)
+            .set_close_func(fnptr(ctx, 0x8032afd8));
+        return isStub;
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 pub fn TRKUARTInterruptHandler<'a>(ctx: &'a Ctx) {}
 
 pub fn TRKInitializeIntDrivenUART<'a>(
@@ -128,6 +171,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(TRKEXICallBack(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8032ace8,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(InitMetroTRKCommTable(ctx, a0), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x8032add0,

@@ -1071,6 +1071,93 @@ pub fn mpColl_800436E4<'a>(ctx: &'a Ctx, coll: CollData<'a>, arg1: f64) {
     }
 }
 
+pub fn mpColl_80043754<'a>(ctx: &'a Ctx, cb: FnPtr<'a>, coll: CollData<'a>, flags: u32) -> i32 {
+    let __frame = ctx.stack_frame(0x88);
+    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let mut cb = cb;
+    let mut coll = coll;
+    let mut flags = flags;
+    let mut dist_right_x: f64 = 0.0;
+    let mut dist_right_y: f64 = 0.0;
+    let mut x: f64 = 0.0;
+    let mut y: f64 = 0.0;
+    let mut dist_left_x: f64 = 0.0;
+    let mut dist_top_y: f64 = 0.0;
+    let mut step: i32 = 0;
+    let mut steps: i32 = 0;
+    let mut ret: i32 = 0;
+    let _ = fns::lbVector_Diff(ctx, (coll).cur_pos(), (coll).last_pos(), vel);
+    x = (if (vel.x()) < fp::frsp(0_i32 as f64) {
+        fp::fneg((vel.x()))
+    } else {
+        (vel.x())
+    });
+    y = (if (vel.y()) < fp::frsp(0_i32 as f64) {
+        fp::fneg((vel.y()))
+    } else {
+        (vel.y())
+    });
+    dist_left_x = fp::fsubs((coll).desired_ecb().left().x(), (coll).ecb().left().x());
+    dist_left_x = (if (dist_left_x) < fp::frsp(0_i32 as f64) {
+        fp::fneg((dist_left_x))
+    } else {
+        (dist_left_x)
+    });
+    dist_right_x = fp::fsubs((coll).desired_ecb().right().x(), (coll).ecb().right().x());
+    if dist_right_x < fp::frsp(0_i32 as f64) {
+        dist_right_x = fp::fneg(dist_right_x);
+    }
+    if dist_left_x < dist_right_x {
+        dist_left_x = dist_right_x;
+    }
+    dist_top_y = fp::fsubs((coll).desired_ecb().top().y(), (coll).ecb().top().y());
+    dist_top_y = (if (dist_top_y) < fp::frsp(0_i32 as f64) {
+        fp::fneg((dist_top_y))
+    } else {
+        (dist_top_y)
+    });
+    dist_right_y = fp::fsubs((coll).desired_ecb().right().y(), (coll).ecb().right().y());
+    if dist_right_y < fp::frsp(0_i32 as f64) {
+        dist_right_y = fp::fneg(dist_right_y);
+    }
+    if dist_top_y < dist_right_y {
+        dist_top_y = dist_right_y;
+    }
+    x = inl_max_inline_unfused(ctx, x, dist_left_x);
+    y = inl_max_inline_unfused(ctx, y, dist_top_y);
+    x = inl_max_inline_unfused(ctx, x, y);
+    if x > 6.0 {
+        steps = fp::fctiwz(fp::fdivs(x, 6.0));
+        steps = steps.wrapping_add(1_i32);
+        vel.set_x(fp::fdivs(vel.x(), fp::frsp(steps as f64)));
+        vel.set_y(fp::fdivs(vel.y(), fp::frsp(steps as f64)));
+        vel.set_z(fp::fdivs(vel.z(), fp::frsp(steps as f64)));
+    } else {
+        steps = 1_i32;
+    }
+    step = 0_i32;
+    Handle::copy_from((coll).cur_pos(), (coll).last_pos());
+    (coll).x34_flags().set_b5((0_i32 as u8));
+    'l1: while (step < steps) && (!((coll).x34_flags().b5() != 0)) {
+        'c2: {
+            fns::mpCollInterpolateECB(
+                ctx,
+                coll,
+                fp::fdivs(1.0, fp::frsp((steps.wrapping_sub(step)) as f64)),
+            );
+            Handle::copy_from((coll).prev_pos(), (coll).cur_pos());
+            let _ = fns::lbVector_Add(ctx, (coll).cur_pos(), vel);
+            fns::mpCollCheckBounding(ctx, coll, flags);
+            ret = cb.call::<_, i32>((coll, flags));
+            fns::mpUncheckBounding(ctx);
+            step = step.wrapping_add(1_i32);
+            (coll).set_x38(fns::mpColl_804D64AC(ctx).get());
+        }
+    }
+    return ret;
+}
+
 pub fn mpColl_800439FC<'a>(ctx: &'a Ctx, coll: CollData<'a>) {
     let __frame = ctx.stack_frame(0x30);
     let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x0);
@@ -6716,6 +6803,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(mpColl_800436E4(ctx, a0, a1.0), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80043754,
+        |ctx| {
+            let (a0, a1, a2): (FnPtr<'_>, CollData<'_>, u32) = Args::take_all(ctx);
+            Ret::put(mpColl_80043754(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x800439fc,

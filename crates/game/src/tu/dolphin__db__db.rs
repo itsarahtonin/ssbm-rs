@@ -51,6 +51,23 @@ pub fn DBIsDebuggerPresent<'a>(ctx: &'a Ctx) -> i32 {
     return ((fns::__DBInterface(ctx).get()).bPresent() as i32);
 }
 
+pub fn __DBExceptionDestinationAux<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut contextAddr: Val<'a, u32> = null(ctx);
+    let mut context: OSContext<'a> = null(ctx);
+    contextAddr = Handle::cast::<Val<'a, u32>>(ptr::<Addr<'a>>(ctx, 192_i32 as u32));
+    context = Handle::cast::<OSContext<'a>>(
+        (ptr::<Addr<'a>>(
+            ctx,
+            (((shl_i32(0x8000_i32, (16_i32 as u32))) as u32).wrapping_add(((contextAddr).get())))
+                as u32,
+        )),
+    );
+    fns::OSReport(ctx, cstr(ctx, 0x80400bf0), &[]);
+    fns::OSDumpContext(ctx, context);
+    ctx.call::<_, ()>(0x80335e94, ());
+}
+
 pub fn __DBIsExceptionMarked<'a>(ctx: &'a Ctx, exception: u8) -> i32 {
     let mut exception = exception;
     let mut mask: u32 = ((shl_i32(1_i32, ((exception as i32) as u32))) as u32);
@@ -72,6 +89,13 @@ pub fn register(ctx: &Ctx) {
             Ret::put(DBIsDebuggerPresent(ctx), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x80335f04,
+        |ctx| {
+            Ret::put(__DBExceptionDestinationAux(ctx), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x80335f5c,

@@ -626,6 +626,47 @@ pub fn HSD_PadReset<'a>(ctx: &'a Ctx) {
     let _ = fns::OSRestoreInterrupts(ctx, intr);
 }
 
+pub fn HSD_PadInit<'a>(
+    ctx: &'a Ctx,
+    qnum: u8,
+    queue: HSD_PadData<'a>,
+    nb_list: u16,
+    listdatap: HSD_PadRumbleListData<'a>,
+) {
+    let __frame = ctx.stack_frame(0x78);
+    let mut qnum = qnum;
+    let mut queue = queue;
+    let mut nb_list = nb_list;
+    let mut listdatap = listdatap;
+    let mut i: i32 = 0;
+    let mut p: PadLibData<'a> = fns::HSD_PadLibData(ctx);
+    Handle::copy_from((p), fns::default_libinfo_data(ctx));
+    (p).set_qnum(qnum);
+    (p).set_queue(queue);
+    fns::HSD_PadRumbleInit(ctx, nb_list, Handle::cast::<Addr<'a>>(listdatap));
+    {
+        i = 0_i32;
+        'l1: while i < 4_i32 {
+            'c2: {
+                Handle::copy_from(
+                    fns::HSD_PadMasterStatus(ctx).get(i),
+                    fns::default_status_data(ctx),
+                );
+                Handle::copy_from(
+                    fns::HSD_PadCopyStatus(ctx).get(i),
+                    fns::default_status_data(ctx),
+                );
+                Handle::copy_from(
+                    fns::HSD_PadGameStatus(ctx).get(i),
+                    fns::default_status_data(ctx),
+                );
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    let _ = ctx.call::<_, i32>(0x8034d7ec, ());
+}
+
 fn inl_HSD_PadRawQueueShift_unfused<'a>(ctx: &'a Ctx, qnum: u8, qptr: Val<'a, u8>) {
     let mut qnum = qnum;
     let mut qptr = qptr;
@@ -985,6 +1026,15 @@ pub fn register(ctx: &Ctx) {
         0x80377d18,
         |ctx| {
             Ret::put(HSD_PadReset(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80377d98,
+        |ctx| {
+            let (a0, a1, a2, a3): (u8, HSD_PadData<'_>, u16, HSD_PadRumbleListData<'_>) =
+                Args::take_all(ctx);
+            Ret::put(HSD_PadInit(ctx, a0, a1, a2, a3), ctx);
         },
         Returns::Nothing,
     );

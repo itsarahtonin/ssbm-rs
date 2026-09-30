@@ -1737,13 +1737,7 @@ pub fn HSD_SynthSFXVolumeEnvelope<'a>(ctx: &'a Ctx) -> i32 {
                         'c6: {
                             if ((node).user_vol().get(k).x4_ref()).get() != 0_i32 {
                                 let mut c: i32 = (node).user_vol().get(k).x4();
-                                (Handle::add(
-                                    ((node).user_vol().get(k).volume_ref()),
-                                    inl_user_vol_dst_offset_unfused(ctx, k)
-                                        .wrapping_sub(k.wrapping_mul(3_i32))
-                                        .wrapping_sub(1_i32),
-                                ))
-                                .set(fp::fadds(
+                                let __t1 = fp::fadds(
                                     fp::fdivs(
                                         (fp::fmuls(
                                             (Handle::add(
@@ -1761,7 +1755,14 @@ pub fn HSD_SynthSFXVolumeEnvelope<'a>(ctx: &'a Ctx) -> i32 {
                                         (node).user_vol().get(k).volume(),
                                         fp::frsp(c as f64),
                                     ),
-                                ));
+                                );
+                                (Handle::add(
+                                    ((node).user_vol().get(k).volume_ref()),
+                                    inl_user_vol_dst_offset_unfused(ctx, k)
+                                        .wrapping_sub(k.wrapping_mul(3_i32))
+                                        .wrapping_sub(1_i32),
+                                ))
+                                .set(__t1);
                                 (node)
                                     .user_vol()
                                     .get(k)

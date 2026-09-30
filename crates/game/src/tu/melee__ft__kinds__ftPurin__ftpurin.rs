@@ -166,7 +166,7 @@ pub fn ftPr_Init_UnkMtxFunc0<'a>(
         fns::HSD_JObjDispAll(
             ctx,
             (fp).u().pr().x223C(),
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0),
+            vmtx,
             fns::HSD_GObj_80390EB8(ctx, arg1),
             (0_i32 as u32),
         );
@@ -399,7 +399,7 @@ fn inl_HSD_JObjCopyMtx_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, mtx: ArrV<'
             cstr(ctx, 0x803cfef0),
         )
     });
-    (if true {
+    (if !Handle::is_null((mtx)) {
         ({ () })
     } else {
         fns::__assert(
@@ -409,11 +409,7 @@ fn inl_HSD_JObjCopyMtx_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, mtx: ArrV<'
             cstr(ctx, 0x803cfef0),
         )
     });
-    fns::PSMTXCopy(
-        ctx,
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(mtx).get(0),
-        (jobj).mtx().get(0),
-    );
+    fns::PSMTXCopy(ctx, mtx, (jobj).mtx().get(0));
 }
 
 fn inl_Fighter_OnItemDrop_unfused<'a>(

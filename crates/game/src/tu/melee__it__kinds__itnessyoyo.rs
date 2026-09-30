@@ -1282,7 +1282,7 @@ fn inl_HSD_JObjCopyMtx_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, mtx: ArrV<'
             cstr(ctx, 0x803b8698),
         )
     });
-    (if true {
+    (if !Handle::is_null((mtx)) {
         ({ () })
     } else {
         fns::__assert(
@@ -1292,11 +1292,7 @@ fn inl_HSD_JObjCopyMtx_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, mtx: ArrV<'
             cstr(ctx, 0x803b8698),
         )
     });
-    fns::PSMTXCopy(
-        ctx,
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(mtx).get(0),
-        (jobj).mtx().get(0),
-    );
+    fns::PSMTXCopy(ctx, mtx, (jobj).mtx().get(0));
 }
 
 fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {

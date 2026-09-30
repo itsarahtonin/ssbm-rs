@@ -26,6 +26,236 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn GXProject<'a>(
+    ctx: &'a Ctx,
+    x: f64,
+    y: f64,
+    z: f64,
+    mtx: ArrV<'a, F32, 4>,
+    pm: Val<'a, F32>,
+    vp: Val<'a, F32>,
+    sx: Val<'a, F32>,
+    sy: Val<'a, F32>,
+    sz: Val<'a, F32>,
+) {
+    let __frame = ctx.stack_frame(0x18);
+    let peye: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut x = x;
+    let mut y = y;
+    let mut z = z;
+    let mut mtx = mtx;
+    let mut pm = pm;
+    let mut vp = vp;
+    let mut sx = sx;
+    let mut sy = sy;
+    let mut sz = sz;
+    let mut xc: f64 = 0.0;
+    let mut yc: f64 = 0.0;
+    let mut zc: f64 = 0.0;
+    let mut wc: f64 = 0.0;
+    peye.set_x(fp::fadds(
+        (Handle::add(mtx, 0_i32)).at(3_i32).get(),
+        (fp::fadds(
+            (fp::fmuls((Handle::add(mtx, 0_i32)).at(2_i32).get(), z)),
+            (fp::fadds(
+                (fp::fmuls((Handle::add(mtx, 0_i32)).at(0_i32).get(), x)),
+                (fp::fmuls((Handle::add(mtx, 0_i32)).at(1_i32).get(), y)),
+            )),
+        )),
+    ));
+    peye.set_y(fp::fadds(
+        (Handle::add(mtx, 1_i32)).at(3_i32).get(),
+        (fp::fadds(
+            (fp::fmuls((Handle::add(mtx, 1_i32)).at(2_i32).get(), z)),
+            (fp::fadds(
+                (fp::fmuls((Handle::add(mtx, 1_i32)).at(0_i32).get(), x)),
+                (fp::fmuls((Handle::add(mtx, 1_i32)).at(1_i32).get(), y)),
+            )),
+        )),
+    ));
+    peye.set_z(fp::fadds(
+        (Handle::add(mtx, 2_i32)).at(3_i32).get(),
+        (fp::fadds(
+            (fp::fmuls((Handle::add(mtx, 2_i32)).at(2_i32).get(), z)),
+            (fp::fadds(
+                (fp::fmuls((Handle::add(mtx, 2_i32)).at(0_i32).get(), x)),
+                (fp::fmuls((Handle::add(mtx, 2_i32)).at(1_i32).get(), y)),
+            )),
+        )),
+    ));
+    if (Handle::add(pm, 0_i32)).get() == 0.0 {
+        xc = fp::fadds(
+            (fp::fmuls(peye.x(), (Handle::add(pm, 1_i32)).get())),
+            (fp::fmuls(peye.z(), (Handle::add(pm, 2_i32)).get())),
+        );
+        yc = fp::fadds(
+            (fp::fmuls(peye.y(), (Handle::add(pm, 3_i32)).get())),
+            (fp::fmuls(peye.z(), (Handle::add(pm, 4_i32)).get())),
+        );
+        zc = fp::fadds(
+            (Handle::add(pm, 6_i32)).get(),
+            (fp::fmuls(peye.z(), (Handle::add(pm, 5_i32)).get())),
+        );
+        wc = fp::fdivs(1.0, fp::fneg(peye.z()));
+    } else {
+        xc = fp::fadds(
+            (Handle::add(pm, 2_i32)).get(),
+            (fp::fmuls(peye.x(), (Handle::add(pm, 1_i32)).get())),
+        );
+        yc = fp::fadds(
+            (Handle::add(pm, 4_i32)).get(),
+            (fp::fmuls(peye.y(), (Handle::add(pm, 3_i32)).get())),
+        );
+        zc = fp::fadds(
+            (Handle::add(pm, 6_i32)).get(),
+            (fp::fmuls(peye.z(), (Handle::add(pm, 5_i32)).get())),
+        );
+        wc = 1.0;
+    }
+    (sx).set(fp::fadds(
+        (fp::fdivs((Handle::add(vp, 2_i32)).get(), 2.0)),
+        (fp::fadds(
+            (Handle::add(vp, 0_i32)).get(),
+            (fp::fmuls(
+                wc,
+                (fp::fdivs(fp::fmuls(xc, (Handle::add(vp, 2_i32)).get()), 2.0)),
+            )),
+        )),
+    ));
+    (sy).set(fp::fadds(
+        (fp::fdivs((Handle::add(vp, 3_i32)).get(), 2.0)),
+        (fp::fadds(
+            (Handle::add(vp, 1_i32)).get(),
+            (fp::fmuls(
+                wc,
+                (fp::fdivs(fp::fmuls(fp::fneg(yc), (Handle::add(vp, 3_i32)).get()), 2.0)),
+            )),
+        )),
+    ));
+    (sz).set(fp::fadds(
+        (Handle::add(vp, 5_i32)).get(),
+        (fp::fmuls(
+            wc,
+            (fp::fmuls(
+                zc,
+                (fp::fsubs(
+                    (Handle::add(vp, 5_i32)).get(),
+                    (Handle::add(vp, 4_i32)).get(),
+                )),
+            )),
+        )),
+    ));
+}
+
+pub fn GXSetProjection<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, r#type: i32) {
+    let mut mtx = mtx;
+    let mut r#type = r#type;
+    let mut reg: u32 = 0;
+    (fns::gx(ctx).get()).set_projType((r#type as u32));
+    (fns::gx(ctx).get())
+        .projMtx()
+        .at(0_i32)
+        .set((Handle::add(mtx, 0_i32)).at(0_i32).get());
+    (fns::gx(ctx).get())
+        .projMtx()
+        .at(2_i32)
+        .set((Handle::add(mtx, 1_i32)).at(1_i32).get());
+    (fns::gx(ctx).get())
+        .projMtx()
+        .at(4_i32)
+        .set((Handle::add(mtx, 2_i32)).at(2_i32).get());
+    (fns::gx(ctx).get())
+        .projMtx()
+        .at(5_i32)
+        .set((Handle::add(mtx, 2_i32)).at(3_i32).get());
+    if (r#type as u32) == ((enums::GX_ORTHOGRAPHIC as i32) as u32) {
+        (fns::gx(ctx).get())
+            .projMtx()
+            .at(1_i32)
+            .set((Handle::add(mtx, 0_i32)).at(3_i32).get());
+        (fns::gx(ctx).get())
+            .projMtx()
+            .at(3_i32)
+            .set((Handle::add(mtx, 1_i32)).at(3_i32).get());
+    } else {
+        (fns::gx(ctx).get())
+            .projMtx()
+            .at(1_i32)
+            .set((Handle::add(mtx, 0_i32)).at(2_i32).get());
+        (fns::gx(ctx).get())
+            .projMtx()
+            .at(3_i32)
+            .set((Handle::add(mtx, 1_i32)).at(2_i32).get());
+    }
+    reg = (0x61020_i32 as u32);
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((16_i32) as u8));
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32((reg));
+    'l1: loop {
+        'c2: {
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32))
+                .set_f32(((fns::gx(ctx).get()).projMtx().at(0_i32).get()));
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    'l3: loop {
+        'c4: {
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32))
+                .set_f32(((fns::gx(ctx).get()).projMtx().at(1_i32).get()));
+        }
+        if !(0_i32 != 0) {
+            break 'l3;
+        }
+    }
+    'l5: loop {
+        'c6: {
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32))
+                .set_f32(((fns::gx(ctx).get()).projMtx().at(2_i32).get()));
+        }
+        if !(0_i32 != 0) {
+            break 'l5;
+        }
+    }
+    'l7: loop {
+        'c8: {
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32))
+                .set_f32(((fns::gx(ctx).get()).projMtx().at(3_i32).get()));
+        }
+        if !(0_i32 != 0) {
+            break 'l7;
+        }
+    }
+    'l9: loop {
+        'c10: {
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32))
+                .set_f32(((fns::gx(ctx).get()).projMtx().at(4_i32).get()));
+        }
+        if !(0_i32 != 0) {
+            break 'l9;
+        }
+    }
+    'l11: loop {
+        'c12: {
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32))
+                .set_f32(((fns::gx(ctx).get()).projMtx().at(5_i32).get()));
+        }
+        if !(0_i32 != 0) {
+            break 'l11;
+        }
+    }
+    'l13: loop {
+        'c14: {
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32))
+                .set_u32(((fns::gx(ctx).get()).projType()));
+        }
+        if !(0_i32 != 0) {
+            break 'l13;
+        }
+    }
+    (fns::gx(ctx).get()).set_bpSent((1_i32 as u16));
+}
+
 pub fn GXGetProjectionv<'a>(ctx: &'a Ctx, ptr_: Val<'a, F32>) {
     let __frame = ctx.stack_frame(0x18);
     let mut ptr_ = ptr_;
@@ -36,6 +266,42 @@ pub fn GXGetProjectionv<'a>(ctx: &'a Ctx, ptr_: Val<'a, F32>) {
     (Handle::add(ptr_, 4_i32)).set((fns::gx(ctx).get()).projMtx().at(3_i32).get());
     (Handle::add(ptr_, 5_i32)).set((fns::gx(ctx).get()).projMtx().at(4_i32).get());
     (Handle::add(ptr_, 6_i32)).set((fns::gx(ctx).get()).projMtx().at(5_i32).get());
+}
+
+pub fn GXLoadPosMtxImm<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, id: u32) {
+    let __frame = ctx.stack_frame(0x8);
+    let mut mtx = mtx;
+    let mut id = id;
+    let mut reg: u32 = 0;
+    let mut addr: u32 = 0;
+    addr = id.wrapping_mul((4_i32 as u32));
+    reg = (addr | (0xb0000_i32 as u32));
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((16_i32) as u8));
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32((reg));
+    statics::dolphin__gx__GXTransform::WriteMTXPS4x3(
+        ctx,
+        mtx,
+        (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).f32_ref(),
+    );
+}
+
+pub fn GXLoadNrmMtxImm<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, id: u32) {
+    let __frame = ctx.stack_frame(0x8);
+    let mut mtx = mtx;
+    let mut id = id;
+    let mut reg: u32 = 0;
+    let mut addr: u32 = 0;
+    addr = id
+        .wrapping_mul((3_i32 as u32))
+        .wrapping_add((0x400_i32 as u32));
+    reg = (addr | (0x80000_i32 as u32));
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((16_i32) as u8));
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32((reg));
+    statics::dolphin__gx__GXTransform::WriteMTXPS3x3from3x4(
+        ctx,
+        mtx,
+        (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).f32_ref(),
+    );
 }
 
 pub fn GXSetCurrentMtx<'a>(ctx: &'a Ctx, id: u32) {
@@ -57,6 +323,44 @@ pub fn GXSetCurrentMtx<'a>(ctx: &'a Ctx, id: u32) {
         }
     }
     fns::__GXSetMatrixIndex(ctx, (enums::GX_VA_PNMTXIDX as i32));
+}
+
+pub fn GXLoadTexMtxImm<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, id: u32, r#type: i32) {
+    let __frame = ctx.stack_frame(0x8);
+    let mut mtx = mtx;
+    let mut id = id;
+    let mut r#type = r#type;
+    let mut reg: u32 = 0;
+    let mut addr: u32 = 0;
+    let mut count: u32 = 0;
+    if id >= ((enums::GX_PTTEXMTX0 as i32) as u32) {
+        addr = (id.wrapping_sub(((enums::GX_PTTEXMTX0 as i32) as u32)))
+            .wrapping_mul((4_i32 as u32))
+            .wrapping_add((0x500_i32 as u32));
+    } else {
+        addr = id.wrapping_mul((4_i32 as u32));
+    }
+    count = ((if (r#type as u32) == ((enums::GX_MTX2x4 as i32) as u32) {
+        8_i32
+    } else {
+        12_i32
+    }) as u32);
+    reg = (addr | (shl_u32((count.wrapping_sub((1_i32 as u32))), (16_i32 as u32))));
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((16_i32) as u8));
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32((reg));
+    if (r#type as u32) == ((enums::GX_MTX3x4 as i32) as u32) {
+        statics::dolphin__gx__GXTransform::WriteMTXPS4x3(
+            ctx,
+            mtx,
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).f32_ref(),
+        );
+    } else {
+        statics::dolphin__gx__GXTransform::WriteMTXPS4x2(
+            ctx,
+            mtx,
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).f32_ref(),
+        );
+    }
 }
 
 pub fn GXSetViewportJitter<'a>(
@@ -421,6 +725,35 @@ pub fn __GXSetMatrixIndex<'a>(ctx: &'a Ctx, matIdxAttr: i32) {
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
+        0x80341148,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5, a6, a7, a8): (
+                Single,
+                Single,
+                Single,
+                ArrV<'_, F32, 4>,
+                Val<'_, F32>,
+                Val<'_, F32>,
+                Val<'_, F32>,
+                Val<'_, F32>,
+                Val<'_, F32>,
+            ) = Args::take_all(ctx);
+            Ret::put(
+                GXProject(ctx, a0.0, a1.0, a2.0, a3, a4, a5, a6, a7, a8),
+                ctx,
+            );
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x803412bc,
+        |ctx| {
+            let (a0, a1): (ArrV<'_, F32, 4>, i32) = Args::take_all(ctx);
+            Ret::put(GXSetProjection(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x80341390,
         |ctx| {
             let (a0,): (Val<'_, F32>,) = Args::take_all(ctx);
@@ -429,10 +762,34 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x80341494,
+        |ctx| {
+            let (a0, a1): (ArrV<'_, F32, 4>, u32) = Args::take_all(ctx);
+            Ret::put(GXLoadPosMtxImm(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x803414d0,
+        |ctx| {
+            let (a0, a1): (ArrV<'_, F32, 4>, u32) = Args::take_all(ctx);
+            Ret::put(GXLoadNrmMtxImm(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x80341510,
         |ctx| {
             let (a0,): (u32,) = Args::take_all(ctx);
             Ret::put(GXSetCurrentMtx(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8034154c,
+        |ctx| {
+            let (a0, a1, a2): (ArrV<'_, F32, 4>, u32, i32) = Args::take_all(ctx);
+            Ret::put(GXLoadTexMtxImm(ctx, a0, a1, a2), ctx);
         },
         Returns::Nothing,
     );

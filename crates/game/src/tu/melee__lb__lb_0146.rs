@@ -227,6 +227,55 @@ pub fn lb_80014770<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: i32) -> i32 {
     return 0_i32;
 }
 
+pub fn lb_800149E0<'a>(ctx: &'a Ctx, arg0: ArrV<'a, F32, 4>, arg1: u32) -> i32 {
+    let __frame = ctx.stack_frame(0x38);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if arg1 == (0_i32 as u32) {
+        fns::HSD_StateInitDirect(ctx, 0_i32, (2_i32 as u32));
+        {
+            let mut mtx: ArrV<'a, F32, 4> = (fns::HSD_CObjGetCurrent(ctx)).view_mtx().get(0);
+            fns::GXLoadPosMtxImm(ctx, mtx, (0_i32 as u32));
+            fns::GXSetLineWidth(ctx, (12_i32 as u8), (enums::GX_TO_ONE as i32));
+            fns::GXBegin(
+                ctx,
+                (enums::GX_LINESTRIP as i32),
+                (enums::GX_VTXFMT0 as i32),
+                (2_i32 as u16),
+            );
+            {
+                let mut y: f64 = (Handle::add(arg0, 1_i32)).at(0_i32).get();
+                inl_GXPosition3f32_unfused(ctx, (Handle::add(arg0, 0_i32)).at(2_i32).get(), y, 0.0);
+                inl_GXColor4u8_unfused(
+                    ctx,
+                    statics::melee__lb__lb_0146::yellow(ctx).r(),
+                    statics::melee__lb__lb_0146::yellow(ctx).g(),
+                    statics::melee__lb__lb_0146::yellow(ctx).b(),
+                    statics::melee__lb__lb_0146::yellow(ctx).a(),
+                );
+                inl_GXPosition3f32_unfused(ctx, (Handle::add(arg0, 0_i32)).at(3_i32).get(), y, 0.0);
+                inl_GXColor4u8_unfused(
+                    ctx,
+                    statics::melee__lb__lb_0146::yellow(ctx).r(),
+                    statics::melee__lb__lb_0146::yellow(ctx).g(),
+                    statics::melee__lb__lb_0146::yellow(ctx).b(),
+                    statics::melee__lb__lb_0146::yellow(ctx).a(),
+                );
+            }
+            inl_GXEnd_unfused(ctx);
+        }
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
 fn inl_GXPosition3f32_unfused<'a>(ctx: &'a Ctx, x: f64, y: f64, z: f64) {
     let mut x = x;
     let mut y = y;
@@ -264,6 +313,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (Vec<'_>, i32) = Args::take_all(ctx);
             Ret::put(lb_80014770(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x800149e0,
+        |ctx| {
+            let (a0, a1): (ArrV<'_, F32, 4>, u32) = Args::take_all(ctx);
+            Ret::put(lb_800149E0(ctx, a0, a1), ctx);
         },
         Returns::Int,
     );

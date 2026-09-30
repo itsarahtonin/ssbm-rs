@@ -26,6 +26,14 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn LCEnable<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x10);
+    let mut enabled: i32 = 0;
+    enabled = fns::OSDisableInterrupts(ctx);
+    statics::dolphin__os__OSCache::__LCEnable(ctx);
+    let _ = fns::OSRestoreInterrupts(ctx, enabled);
+}
+
 pub fn LCStoreData<'a>(ctx: &'a Ctx, destAddr: Addr<'a>, srcAddr: Addr<'a>, nBytes: u32) -> u32 {
     let __frame = ctx.stack_frame(0x28);
     let mut destAddr = destAddr;
@@ -60,8 +68,82 @@ pub fn LCStoreData<'a>(ctx: &'a Ctx, destAddr: Addr<'a>, srcAddr: Addr<'a>, nByt
     return numTransactions;
 }
 
+pub fn L2GlobalInvalidate<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x10);
+    inl_L2Disable_unfused(ctx);
+    fns::PPCMtl2cr(
+        ctx,
+        (ctx.call::<_, u32>(0x80335e74, ()) | (0x200000_i32 as u32)),
+    );
+    'l1: while ((ctx.call::<_, u32>(0x80335e74, ()) & 1_u32) != 0) {
+        'c2: {}
+    }
+    fns::PPCMtl2cr(
+        ctx,
+        (ctx.call::<_, u32>(0x80335e74, ()) & ((!0x200000_i32) as u32)),
+    );
+    'l3: while ((ctx.call::<_, u32>(0x80335e74, ()) & 1_u32) != 0) {
+        'c4: {
+            fns::DBPrintf(ctx, cstr(ctx, 0x80401bf0), &[]);
+        }
+    }
+}
+
+pub fn __OSCacheInit<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x10);
+    if !((ctx.call::<_, u32>(0x80335e6c, ()) & 0x8000_u32) != 0) {
+        fns::ICEnable(ctx);
+        fns::DBPrintf(ctx, cstr(ctx, 0x80401d9c), &[]);
+    }
+    if !((ctx.call::<_, u32>(0x80335e6c, ()) & 0x4000_u32) != 0) {
+        fns::DCEnable(ctx);
+        fns::DBPrintf(ctx, cstr(ctx, 0x80401db8), &[]);
+    }
+    if !((ctx.call::<_, u32>(0x80335e74, ()) & 0x80000000_u32) != 0) {
+        inl_L2Init_unfused(ctx);
+        inl_L2Enable_unfused(ctx);
+        fns::DBPrintf(ctx, cstr(ctx, 0x80401dd4), &[]);
+    }
+    let _ = fns::OSSetErrorHandler(ctx, (1_i32 as u16), fnptr(ctx, 0x80344bdc));
+    fns::DBPrintf(ctx, cstr(ctx, 0x80401dec), &[]);
+}
+
+fn inl_L2Disable_unfused<'a>(ctx: &'a Ctx) {
+    ();
+    fns::PPCMtl2cr(
+        ctx,
+        (ctx.call::<_, u32>(0x80335e74, ()) & (!0x80000000_u32)),
+    );
+    ();
+}
+
+fn inl_L2Init_unfused<'a>(ctx: &'a Ctx) {
+    let mut oldMSR: u32 = 0;
+    oldMSR = ctx.call::<_, u32>(0x80335e5c, ());
+    ();
+    fns::PPCMtmsr(ctx, ((32_i32 | 16_i32) as u32));
+    ();
+    inl_L2Disable_unfused(ctx);
+    fns::L2GlobalInvalidate(ctx);
+    fns::PPCMtmsr(ctx, oldMSR);
+}
+
+fn inl_L2Enable_unfused<'a>(ctx: &'a Ctx) {
+    fns::PPCMtl2cr(
+        ctx,
+        ((ctx.call::<_, u32>(0x80335e74, ()) | 0x80000000_u32) & ((!0x200000_i32) as u32)),
+    );
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x803449fc,
+        |ctx| {
+            Ret::put(LCEnable(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
     ctx.register_port(
         0x80344a80,
         |ctx| {
@@ -69,5 +151,19 @@ pub fn register(ctx: &Ctx) {
             Ret::put(LCStoreData(ctx, a0, a1, a2), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x80344b44,
+        |ctx| {
+            Ret::put(L2GlobalInvalidate(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80344d3c,
+        |ctx| {
+            Ret::put(__OSCacheInit(ctx), ctx);
+        },
+        Returns::Nothing,
     );
 }

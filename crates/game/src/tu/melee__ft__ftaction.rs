@@ -132,6 +132,28 @@ pub fn ftAction_80071028<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<
     }
 }
 
+pub fn ftAction_800711DC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
+    let mut gobj = gobj;
+    let mut cmd = cmd;
+    'l1: loop {
+        'c2: {
+            let mut i: i32 = 0;
+            {
+                i = 0_i32;
+                'l3: while i < (5_i32) {
+                    'c4: {
+                        (cmd).x8().set_u(Handle::add((cmd).x8().u(), 1));
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+}
+
 pub fn ftAction_8007121C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
     let __frame = ctx.stack_frame(0x50);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
@@ -292,6 +314,28 @@ pub fn ftAction_8007121C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<
     fns::ftCommon_80080484(ctx, fp);
 }
 
+pub fn ftAction_800715EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
+    let mut gobj = gobj;
+    let mut cmd = cmd;
+    'l1: loop {
+        'c2: {
+            let mut i: i32 = 0;
+            {
+                i = 0_i32;
+                'l3: while i < (5_i32) {
+                    'c4: {
+                        (cmd).x8().set_u(Handle::add((cmd).x8().u(), 1));
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+}
+
 pub fn ftAction_8007162C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let mut gobj = gobj;
@@ -304,6 +348,28 @@ pub fn ftAction_8007162C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<
     'l1: loop {
         'c2: {
             (cmd).x8().set_u(Handle::add((cmd).x8().u(), 1));
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+}
+
+pub fn ftAction_8007168C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
+    let mut gobj = gobj;
+    let mut cmd = cmd;
+    'l1: loop {
+        'c2: {
+            let mut i: i32 = 0;
+            {
+                i = 0_i32;
+                'l3: while i < (1_i32) {
+                    'c4: {
+                        (cmd).x8().set_u(Handle::add((cmd).x8().u(), 1));
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
         }
         if !(0_i32 != 0) {
             break 'l1;
@@ -327,6 +393,28 @@ pub fn ftAction_8007169C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<
     'l1: loop {
         'c2: {
             (cmd).x8().set_u(Handle::add((cmd).x8().u(), 1));
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+}
+
+pub fn ftAction_800716F8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
+    let mut gobj = gobj;
+    let mut cmd = cmd;
+    'l1: loop {
+        'c2: {
+            let mut i: i32 = 0;
+            {
+                i = 0_i32;
+                'l3: while i < (1_i32) {
+                    'c4: {
+                        (cmd).x8().set_u(Handle::add((cmd).x8().u(), 1));
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
         }
         if !(0_i32 != 0) {
             break 'l1;
@@ -367,6 +455,28 @@ pub fn ftAction_80071708<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<
     }
 }
 
+pub fn ftAction_80071774<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
+    let mut gobj = gobj;
+    let mut cmd = cmd;
+    'l1: loop {
+        'c2: {
+            let mut i: i32 = 0;
+            {
+                i = 0_i32;
+                'l3: while i < (1_i32) {
+                    'c4: {
+                        (cmd).x8().set_u(Handle::add((cmd).x8().u(), 1));
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+}
+
 pub fn ftAction_80071784<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
@@ -386,6 +496,28 @@ pub fn ftAction_80071784<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<
     }
 }
 
+pub fn ftAction_800717C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
+    let mut gobj = gobj;
+    let mut cmd = cmd;
+    'l1: loop {
+        'c2: {
+            let mut i: i32 = 0;
+            {
+                i = 0_i32;
+                'l3: while i < (1_i32) {
+                    'c4: {
+                        (cmd).x8().set_u(Handle::add((cmd).x8().u(), 1));
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+}
+
 pub fn ftAction_800717D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
@@ -394,6 +526,28 @@ pub fn ftAction_800717D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<
     'l1: loop {
         'c2: {
             (cmd).x8().set_u(Handle::add((cmd).x8().u(), 1));
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+}
+
+pub fn ftAction_80071810<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
+    let mut gobj = gobj;
+    let mut cmd = cmd;
+    'l1: loop {
+        'c2: {
+            let mut i: i32 = 0;
+            {
+                i = 0_i32;
+                'l3: while i < (1_i32) {
+                    'c4: {
+                        (cmd).x8().set_u(Handle::add((cmd).x8().u(), 1));
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
         }
         if !(0_i32 != 0) {
             break 'l1;
@@ -822,6 +976,28 @@ pub fn ftAction_80071B50<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<
     }
 }
 
+pub fn ftAction_80071CA4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
+    let mut gobj = gobj;
+    let mut cmd = cmd;
+    'l1: loop {
+        'c2: {
+            let mut i: i32 = 0;
+            {
+                i = 0_i32;
+                'l3: while i < (3_i32) {
+                    'c4: {
+                        (cmd).x8().set_u(Handle::add((cmd).x8().u(), 1));
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+}
+
 pub fn ftAction_80071CCC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let mut gobj = gobj;
@@ -848,6 +1024,28 @@ pub fn ftAction_80071CCC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<
             if !(0_i32 != 0) {
                 break 'l3;
             }
+        }
+    }
+}
+
+pub fn ftAction_80071D30<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
+    let mut gobj = gobj;
+    let mut cmd = cmd;
+    'l1: loop {
+        'c2: {
+            let mut i: i32 = 0;
+            {
+                i = 0_i32;
+                'l3: while i < (1_i32) {
+                    'c4: {
+                        (cmd).x8().set_u(Handle::add((cmd).x8().u(), 1));
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
         }
     }
 }
@@ -951,6 +1149,28 @@ pub fn ftAction_80071E04<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<
         }
         if !(0_i32 != 0) {
             break 'l5;
+        }
+    }
+}
+
+pub fn ftAction_80071F0C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
+    let mut gobj = gobj;
+    let mut cmd = cmd;
+    'l1: loop {
+        'c2: {
+            let mut i: i32 = 0;
+            {
+                i = 0_i32;
+                'l3: while i < (3_i32) {
+                    'c4: {
+                        (cmd).x8().set_u(Handle::add((cmd).x8().u(), 1));
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
         }
     }
 }
@@ -1356,6 +1576,50 @@ pub fn ftAction_80071FC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<
         }
         if __case <= 7 {
             return;
+        }
+    }
+}
+
+pub fn ftAction_800722C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
+    let mut gobj = gobj;
+    let mut cmd = cmd;
+    'l1: loop {
+        'c2: {
+            let mut i: i32 = 0;
+            {
+                i = 0_i32;
+                'l3: while i < (7_i32) {
+                    'c4: {
+                        (cmd).x8().set_u(Handle::add((cmd).x8().u(), 1));
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+}
+
+pub fn ftAction_800726C0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
+    let mut gobj = gobj;
+    let mut cmd = cmd;
+    'l1: loop {
+        'c2: {
+            let mut i: i32 = 0;
+            {
+                i = 0_i32;
+                'l3: while i < (4_i32) {
+                    'c4: {
+                        (cmd).x8().set_u(Handle::add((cmd).x8().u(), 1));
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
         }
     }
 }
@@ -1848,6 +2112,28 @@ pub fn ftAction_80072CD8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<
     (cmd).x8().set_u(Handle::add((cmd).x8().u(), 1));
 }
 
+pub fn ftAction_80072E24<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
+    let mut gobj = gobj;
+    let mut cmd = cmd;
+    'l1: loop {
+        'c2: {
+            let mut i: i32 = 0;
+            {
+                i = 0_i32;
+                'l3: while i < (3_i32) {
+                    'c4: {
+                        (cmd).x8().set_u(Handle::add((cmd).x8().u(), 1));
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+}
+
 pub fn ftAction_80072E4C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
     let __frame = ctx.stack_frame(0x78);
     let sp64: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
@@ -1917,6 +2203,28 @@ pub fn ftAction_80072E4C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<
     fns::ftCommon_8007EBAC(ctx, fp, 22_u32, 0_u32);
 }
 
+pub fn ftAction_80072FE0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
+    let mut gobj = gobj;
+    let mut cmd = cmd;
+    'l1: loop {
+        'c2: {
+            let mut i: i32 = 0;
+            {
+                i = 0_i32;
+                'l3: while i < (3_i32) {
+                    'c4: {
+                        (cmd).x8().set_u(Handle::add((cmd).x8().u(), 1));
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+}
+
 pub fn ftAction_80073008<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
     let __frame = ctx.stack_frame(0x38);
     let mut gobj = gobj;
@@ -1952,6 +2260,28 @@ pub fn ftAction_80073008<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<
         charge_frames,
         dmg_mult,
     );
+}
+
+pub fn ftAction_8007309C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
+    let mut gobj = gobj;
+    let mut cmd = cmd;
+    'l1: loop {
+        'c2: {
+            let mut i: i32 = 0;
+            {
+                i = 0_i32;
+                'l3: while i < (2_i32) {
+                    'c4: {
+                        (cmd).x8().set_u(Handle::add((cmd).x8().u(), 1));
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
 }
 
 pub fn ftAction_800730B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
@@ -2055,6 +2385,28 @@ pub fn ftAction_80073118<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<
         }
     }
     let _ = fns::ftCo_8009E714(ctx, gobj, (idx as i32), timer, x, y, mag, decay_amt, angle);
+}
+
+pub fn ftAction_8007320C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
+    let mut gobj = gobj;
+    let mut cmd = cmd;
+    'l1: loop {
+        'c2: {
+            let mut i: i32 = 0;
+            {
+                i = 0_i32;
+                'l3: while i < (4_i32) {
+                    'c4: {
+                        (cmd).x8().set_u(Handle::add((cmd).x8().u(), 1));
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
 }
 
 pub fn ftAction_80073240<'a>(ctx: &'a Ctx, fighter_gobj: HSD_GObj<'a>) {
@@ -2216,10 +2568,26 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x800711dc,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
+            Ret::put(ftAction_800711DC(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x8007121c,
         |ctx| {
             let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
             Ret::put(ftAction_8007121C(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x800715ec,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
+            Ret::put(ftAction_800715EC(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );
@@ -2232,10 +2600,26 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x8007168c,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
+            Ret::put(ftAction_8007168C(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x8007169c,
         |ctx| {
             let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
             Ret::put(ftAction_8007169C(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x800716f8,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
+            Ret::put(ftAction_800716F8(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );
@@ -2248,6 +2632,14 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x80071774,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
+            Ret::put(ftAction_80071774(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x80071784,
         |ctx| {
             let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
@@ -2256,10 +2648,26 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x800717c8,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
+            Ret::put(ftAction_800717C8(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x800717d8,
         |ctx| {
             let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
             Ret::put(ftAction_800717D8(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80071810,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
+            Ret::put(ftAction_80071810(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );
@@ -2368,10 +2776,26 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x80071ca4,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
+            Ret::put(ftAction_80071CA4(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x80071ccc,
         |ctx| {
             let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
             Ret::put(ftAction_80071CCC(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80071d30,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
+            Ret::put(ftAction_80071D30(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );
@@ -2408,6 +2832,14 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x80071f0c,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
+            Ret::put(ftAction_80071F0C(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x80071f34,
         |ctx| {
             let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
@@ -2436,6 +2868,22 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
             Ret::put(ftAction_80071FC8(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x800722c8,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
+            Ret::put(ftAction_800722C8(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x800726c0,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
+            Ret::put(ftAction_800726C0(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );
@@ -2632,6 +3080,14 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x80072e24,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
+            Ret::put(ftAction_80072E24(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x80072e4c,
         |ctx| {
             let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
@@ -2640,10 +3096,26 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x80072fe0,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
+            Ret::put(ftAction_80072FE0(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x80073008,
         |ctx| {
             let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
             Ret::put(ftAction_80073008(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8007309c,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
+            Ret::put(ftAction_8007309C(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );
@@ -2668,6 +3140,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
             Ret::put(ftAction_80073118(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8007320c,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
+            Ret::put(ftAction_8007320C(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );

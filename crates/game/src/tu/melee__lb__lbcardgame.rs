@@ -319,6 +319,24 @@ pub fn lb_8001CDB4<'a>(ctx: &'a Ctx) {
     }
 }
 
+pub fn lbCardGame_SaveChanges<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x10);
+    (if ((statics::melee__lb__lbcardgame::state(ctx).enable()) != 0) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bab64),
+            (255_i32 as u32),
+            cstr(ctx, 0x803bab64),
+        )
+    });
+    let __t1 = fns::gmMainLib_8015FC74(ctx);
+    let __t2 = (fns::gm_GetPowerTime(ctx));
+    __t2.set(__t2.get().wrapping_add(__t1));
+    statics::melee__lb__lbcardgame::state(ctx).set_dirty(1_i32);
+}
+
 pub fn lbCardGame_DecideGameMode<'a>(ctx: &'a Ctx) -> u8 {
     let __frame = ctx.stack_frame(0x8);
     let _ = statics::melee__lb__lbcardgame::updateCardStatus(ctx);
@@ -757,6 +775,13 @@ pub fn register(ctx: &Ctx) {
         0x8001cdb4,
         |ctx| {
             Ret::put(lb_8001CDB4(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8001ce00,
+        |ctx| {
+            Ret::put(lbCardGame_SaveChanges(ctx), ctx);
         },
         Returns::Nothing,
     );

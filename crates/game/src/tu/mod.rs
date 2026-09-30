@@ -97,6 +97,7 @@ pub mod dolphin__hio__hio;
 pub mod dolphin__mcc__fio;
 pub mod dolphin__mcc__mcc;
 pub mod dolphin__mtx__mtx;
+pub mod dolphin__mtx__mtx44;
 pub mod dolphin__odenotstub__odenotstub;
 pub mod dolphin__os__OS;
 pub mod dolphin__os__OSAlarm;
@@ -1230,6 +1231,7 @@ pub static UNITS: &[(&str, Register)] = &[
     ("dolphin/mcc/fio", dolphin__mcc__fio::register),
     ("dolphin/mcc/mcc", dolphin__mcc__mcc::register),
     ("dolphin/mtx/mtx", dolphin__mtx__mtx::register),
+    ("dolphin/mtx/mtx44", dolphin__mtx__mtx44::register),
     (
         "dolphin/odenotstub/odenotstub",
         dolphin__odenotstub__odenotstub::register,

@@ -947,6 +947,152 @@ pub fn gm_GetFFAOutcome<'a>(ctx: &'a Ctx) -> i32 {
     return (enums::OUTCOME_NONE as i32);
 }
 
+pub fn gm_GetTeamBattleOutcome<'a>(ctx: &'a Ctx) -> i32 {
+    let __frame = ctx.stack_frame(0x38);
+    let teamStocks: ArrV<'a, i16, 5> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0xc);
+    let mut i: i32 = 0;
+    let mut isSingleplayer: i32 = 0;
+    let mut var_r0_2: i32 = 0;
+    let mut notSinglePlayer: i32 = 0;
+    let mut notSinglePlayer_2: i32 = 0;
+    let mut slot: i32 = 0;
+    let mut eliminatedTeamCount: i32 = 0;
+    let mut enemyStocksCount: i32 = 0;
+    let mut teamCount: i32 = 0;
+    let mut enemyCharacterCount: i32 = 0;
+    let mut slot_2: i32 = 0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if (statics::melee__gm__gmvs::controller(ctx).start().x4_2() != 0) {
+        enemyStocksCount = 0_i32;
+        enemyCharacterCount = 0_i32;
+        if fns::Player_GetP1Stock(ctx) == 0_i32 {
+            return (enums::OUTCOME_1P_GAME_OVER as i32);
+        }
+        if (statics::melee__gm__gmvs::controller(ctx)
+            .state()
+            .is_singleplayer() as i32)
+            == 1_i32
+        {
+            isSingleplayer = 1_i32;
+        } else {
+            isSingleplayer = 0_i32;
+        }
+        if ((isSingleplayer != 0) && (fns::fn_8016A1E4(ctx) != 0_i32))
+            && (fns::fn_801693A8(ctx) == 0_i32)
+        {
+            var_r0_2 = 5_i32;
+        } else {
+            var_r0_2 = 0_i32;
+        }
+        if var_r0_2 != 0_i32 {
+            return (enums::OUTCOME_UNK_1P_HORDE_BATTLE_VICTORY as i32);
+        }
+        if (statics::melee__gm__gmvs::controller(ctx)
+            .state()
+            .is_singleplayer() as i32)
+            == 0_i32
+        {
+            notSinglePlayer = 1_i32;
+        } else {
+            notSinglePlayer = 0_i32;
+        }
+        if (notSinglePlayer != 0)
+            && (!(statics::melee__gm__gmvs::controller(ctx).start().x5_1() != 0))
+        {
+            {
+                slot = 0_i32;
+                'l3: while slot < 6_i32 {
+                    'c4: {
+                        if ((fns::Player_GetFlagsBit1(ctx, slot) == 0_i32)
+                            && ((fns::Player_GetPlayerSlotType(ctx, slot) as u32)
+                                != ((enums::Gm_PKind_NA as i32) as u32)))
+                            && (!Handle::is_null(fns::Player_GetEntity(ctx, slot)))
+                        {
+                            if fns::Player_GetTeam(ctx, slot) != fns::Player_GetTeam(ctx, 0_i32) {
+                                enemyStocksCount =
+                                    enemyStocksCount.wrapping_add(fns::Player_GetStocks(ctx, slot));
+                                enemyCharacterCount = enemyCharacterCount.wrapping_add(1_i32);
+                            }
+                        }
+                    }
+                    slot = slot.wrapping_add(1);
+                }
+            }
+            if (enemyCharacterCount != 0_i32) && (enemyStocksCount == 0_i32) {
+                return (enums::OUTCOME_TEAM_ELIMINATION as i32);
+            }
+        }
+    }
+    if (statics::melee__gm__gmvs::controller(ctx)
+        .state()
+        .is_singleplayer() as i32)
+        == 0_i32
+    {
+        notSinglePlayer_2 = 1_i32;
+    } else {
+        notSinglePlayer_2 = 0_i32;
+    }
+    if (notSinglePlayer_2 != 0)
+        && ((statics::melee__gm__gmvs::controller(ctx)
+            .start()
+            .match_kind() as i32)
+            == 1_i32)
+    {
+        teamCount = 0_i32;
+        eliminatedTeamCount = 0_i32;
+        let _ = fns::memset(
+            ctx,
+            Handle::cast::<Addr<'a>>(teamStocks.at(0)),
+            1_i32.wrapping_neg(),
+            10_u32,
+        );
+        {
+            slot_2 = 0_i32;
+            'l5: while slot_2 < 6_i32 {
+                'c6: {
+                    if (fns::Player_GetPlayerSlotType(ctx, slot_2) as u32)
+                        != ((enums::Gm_PKind_NA as i32) as u32)
+                    {
+                        if (teamStocks.at(fns::Player_GetTeam(ctx, slot_2)).get() as i32)
+                            == 1_i32.wrapping_neg()
+                        {
+                            let __t1 = (fns::Player_GetStocks(ctx, slot_2) as i16);
+                            teamStocks.at(fns::Player_GetTeam(ctx, slot_2)).set(__t1);
+                            teamCount = teamCount.wrapping_add(1);
+                        } else {
+                            let __t2 = fns::Player_GetStocks(ctx, slot_2);
+                            let __t3 = teamStocks.at(fns::Player_GetTeam(ctx, slot_2));
+                            __t3.set(((__t3.get() as i32).wrapping_add(__t2) as i16));
+                        }
+                    }
+                }
+                slot_2 = slot_2.wrapping_add(1);
+            }
+        }
+        {
+            i = 0_i32;
+            'l7: while i < 5_i32 {
+                'c8: {
+                    if (teamStocks.at(i).get() as i32) == 0_i32 {
+                        eliminatedTeamCount = eliminatedTeamCount.wrapping_add(1);
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+        if eliminatedTeamCount >= teamCount.wrapping_sub(1_i32) {
+            return (enums::OUTCOME_TEAM_ELIMINATION as i32);
+        }
+    }
+    return (enums::OUTCOME_NONE as i32);
+}
+
 pub fn gm_GetMatchOutcome<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
@@ -3863,6 +4009,13 @@ pub fn register(ctx: &Ctx) {
         0x8016bf74,
         |ctx| {
             Ret::put(gm_GetFFAOutcome(ctx), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8016c0c8,
+        |ctx| {
+            Ret::put(gm_GetTeamBattleOutcome(ctx), ctx);
         },
         Returns::Int,
     );

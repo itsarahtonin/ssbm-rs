@@ -604,6 +604,170 @@ pub fn setupShapeAnimVtxDesc<'a>(ctx: &'a Ctx, pobj: HSD_PObj<'a>) {
     statics::sysdolphin__baselib__pobj::prev_vtxdesc(ctx).set(null::<HSD_VtxDescList<'a>>(ctx));
 }
 
+pub fn get_shape_vertex_xyz<'a>(
+    ctx: &'a Ctx,
+    shape_set: HSD_ShapeSet<'a>,
+    shape_id: i32,
+    arrayidx: i32,
+    dst: Val<'a, F32>,
+) {
+    let __frame = ctx.stack_frame(0x68);
+    let mut shape_set = shape_set;
+    let mut shape_id = shape_id;
+    let mut arrayidx = arrayidx;
+    let mut dst = dst;
+    let mut index_array: Val<'a, u8> = (Handle::add((shape_set).vertex_idx_list(), shape_id)).get();
+    let mut idx: i32 = 0;
+    let mut src_base: Addr<'a> = null(ctx);
+    if (((shape_set).vertex_desc()).attr_type() as u32) == ((enums::GX_INDEX16 as i32) as u32) {
+        idx = ((Handle::add(index_array, arrayidx.wrapping_mul(2_i32))).get() as i32);
+        idx = (shl_i32(idx, (8_i32 as u32))).wrapping_add(
+            ((Handle::add(
+                index_array,
+                arrayidx.wrapping_mul(2_i32).wrapping_add(1_i32),
+            ))
+            .get() as i32),
+        );
+    } else {
+        idx = ((Handle::add(index_array, arrayidx)).get() as i32);
+    }
+    (if (((shape_set).vertex_desc()).comp_cnt() as u32) == ((enums::GX_POS_XYZ as i32) as u32) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x8040639c),
+            (0x242_i32 as u32),
+            cstr(ctx, 0x8040639c),
+        )
+    });
+    src_base = Handle::cast::<Addr<'a>>(Handle::add(
+        (Handle::cast::<Val<'a, u8>>(((shape_set).vertex_desc()).vertex())),
+        idx.wrapping_mul((((shape_set).vertex_desc()).stride() as i32)),
+    ));
+    if (((shape_set).vertex_desc()).comp_type() as u32) == ((enums::GX_F32 as i32) as u32) {
+        let _ = fns::memcpy(ctx, Handle::cast::<Addr<'a>>(dst), src_base, 12_u32);
+    } else {
+        let mut decimal_point: i32 =
+            shl_i32(1_i32, ((((shape_set).vertex_desc()).frac() as i32) as u32));
+        's1: {
+            let __case = match (((shape_set).vertex_desc()).comp_type() as u32) {
+                0_u32 => 0,
+                1_u32 => 1,
+                2_u32 => 2,
+                3_u32 => 3,
+                _ => 4,
+            };
+            if __case <= 0 {
+                inl_decode_u8_xyz_unfused(ctx, src_base, dst, decimal_point);
+                break 's1;
+            }
+            if __case <= 1 {
+                inl_decode_s8_xyz_unfused(ctx, src_base, dst, decimal_point);
+                break 's1;
+            }
+            if __case <= 2 {
+                inl_decode_u16_xyz_unfused(ctx, src_base, dst, decimal_point);
+                break 's1;
+            }
+            if __case <= 3 {
+                inl_decode_s16_xyz_unfused(ctx, src_base, dst, decimal_point);
+                break 's1;
+            }
+            if __case <= 4 {
+                fns::HSD_Panic(
+                    ctx,
+                    cstr(ctx, 0x8040639c),
+                    (0x479_i32 as u32),
+                    cstr(ctx, 0x804064ec),
+                );
+            }
+        }
+    }
+}
+
+pub fn get_shape_normal_xyz<'a>(
+    ctx: &'a Ctx,
+    shape_set: HSD_ShapeSet<'a>,
+    shape_id: i32,
+    arrayidx: i32,
+    dst: Val<'a, F32>,
+) {
+    let __frame = ctx.stack_frame(0x68);
+    let mut shape_set = shape_set;
+    let mut shape_id = shape_id;
+    let mut arrayidx = arrayidx;
+    let mut dst = dst;
+    let mut index_array: Val<'a, u8> = (Handle::add((shape_set).normal_idx_list(), shape_id)).get();
+    let mut idx: i32 = 0;
+    let mut src_base: Addr<'a> = null(ctx);
+    if (((shape_set).normal_desc()).attr_type() as u32) == ((enums::GX_INDEX16 as i32) as u32) {
+        idx = ((Handle::add(index_array, arrayidx.wrapping_mul(2_i32))).get() as i32);
+        idx = (shl_i32(idx, (8_i32 as u32))).wrapping_add(
+            ((Handle::add(
+                index_array,
+                arrayidx.wrapping_mul(2_i32).wrapping_add(1_i32),
+            ))
+            .get() as i32),
+        );
+    } else {
+        idx = ((Handle::add(index_array, arrayidx)).get() as i32);
+    }
+    (if (((shape_set).normal_desc()).comp_cnt() as u32) == ((enums::GX_NRM_XYZ as i32) as u32) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x8040639c),
+            (0x26f_i32 as u32),
+            cstr(ctx, 0x8040639c),
+        )
+    });
+    src_base = Handle::cast::<Addr<'a>>(Handle::add(
+        (Handle::cast::<Val<'a, u8>>(((shape_set).normal_desc()).vertex())),
+        idx.wrapping_mul((((shape_set).normal_desc()).stride() as i32)),
+    ));
+    if (((shape_set).normal_desc()).comp_type() as u32) == ((enums::GX_F32 as i32) as u32) {
+        let _ = fns::memcpy(ctx, Handle::cast::<Addr<'a>>(dst), src_base, 12_u32);
+    } else {
+        let mut decimal_point: i32 =
+            shl_i32(1_i32, ((((shape_set).normal_desc()).frac() as i32) as u32));
+        's1: {
+            let __case = match (((shape_set).normal_desc()).comp_type() as u32) {
+                0_u32 => 0,
+                1_u32 => 1,
+                2_u32 => 2,
+                3_u32 => 3,
+                _ => 4,
+            };
+            if __case <= 0 {
+                inl_decode_u8_xyz_unfused(ctx, src_base, dst, decimal_point);
+                break 's1;
+            }
+            if __case <= 1 {
+                inl_decode_s8_xyz_unfused(ctx, src_base, dst, decimal_point);
+                break 's1;
+            }
+            if __case <= 2 {
+                inl_decode_u16_xyz_unfused(ctx, src_base, dst, decimal_point);
+                break 's1;
+            }
+            if __case <= 3 {
+                inl_decode_s16_xyz_unfused(ctx, src_base, dst, decimal_point);
+                break 's1;
+            }
+            if __case <= 4 {
+                fns::HSD_Panic(
+                    ctx,
+                    cstr(ctx, 0x8040639c),
+                    (0x4b8_i32 as u32),
+                    cstr(ctx, 0x80406538),
+                );
+            }
+        }
+    }
+}
+
 pub fn get_shape_nbt_xyz<'a>(
     ctx: &'a Ctx,
     shape_set: HSD_ShapeSet<'a>,
@@ -1777,19 +1941,11 @@ pub fn SetupRigidModelMtx<'a>(
         inl_HSD_PObjSetMtxMark_unfused(ctx, 0_i32, Handle::cast::<Addr<'a>>(jobj), (1_i32 as u32));
     }
     fns::GXSetCurrentMtx(ctx, ((enums::GX_PNMTX0 as i32) as u32));
-    fns::GXLoadPosMtxImm(
-        ctx,
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
-        ((enums::GX_PNMTX0 as i32) as u32),
-    );
+    fns::GXLoadPosMtxImm(ctx, pmtx, ((enums::GX_PNMTX0 as i32) as u32));
     inl_HSD_PerfCountMtxLoad_unfused(ctx);
     flags = inl_GetSetupFlags_unfused(ctx, jobj, rendermode);
     if (((flags as u32) & ((enums::SETUP_NORMAL as i32) as u32)) != 0) {
-        fns::HSD_MtxInverseTranspose(
-            ctx,
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
-            n.get(0),
-        );
+        fns::HSD_MtxInverseTranspose(ctx, pmtx, n.get(0));
         if (((jobj).flags() & ((shl_i32(1_i32, (7_i32 as u32))) as u32)) != 0) {
             fns::GXLoadNrmMtxImm(ctx, n.get(0), ((enums::GX_PNMTX0 as i32) as u32));
             inl_HSD_PerfCountMtxLoad_unfused(ctx);
@@ -1847,18 +2003,10 @@ pub fn SetupSharedVtxModelMtx<'a>(
     flags = (flags | inl_GetSetupFlags_unfused(ctx, jobj, rendermode));
     {
         fns::GXSetCurrentMtx(ctx, ((enums::GX_PNMTX0 as i32) as u32));
-        fns::GXLoadPosMtxImm(
-            ctx,
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
-            ((enums::GX_PNMTX0 as i32) as u32),
-        );
+        fns::GXLoadPosMtxImm(ctx, pmtx, ((enums::GX_PNMTX0 as i32) as u32));
         inl_HSD_PerfCountMtxLoad_unfused(ctx);
         if (((flags as u32) & ((enums::SETUP_NORMAL as i32) as u32)) != 0) {
-            fns::HSD_MtxInverseTranspose(
-                ctx,
-                Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
-                n0.get(0),
-            );
+            fns::HSD_MtxInverseTranspose(ctx, pmtx, n0.get(0));
             if (((jobj).flags() & (128_i32 as u32)) != 0) {
                 fns::GXLoadNrmMtxImm(ctx, n0.get(0), ((enums::GX_PNMTX0 as i32) as u32));
                 inl_HSD_PerfCountMtxLoad_unfused(ctx);
@@ -1876,12 +2024,7 @@ pub fn SetupSharedVtxModelMtx<'a>(
     }
     {
         inl_HSD_JObjSetupMatrix_unfused(ctx, (pobj).u().jobj());
-        fns::PSMTXConcat(
-            ctx,
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0),
-            ((pobj).u().jobj()).mtx().get(0),
-            m.get(0),
-        );
+        fns::PSMTXConcat(ctx, vmtx, ((pobj).u().jobj()).mtx().get(0), m.get(0));
         fns::GXLoadPosMtxImm(ctx, m.get(0), ((enums::GX_PNMTX1 as i32) as u32));
         inl_HSD_PerfCountMtxLoad_unfused(ctx);
         if (((flags as u32) & ((enums::SETUP_NORMAL as i32) as u32)) != 0) {
@@ -2067,12 +2210,7 @@ pub fn SetupEnvelopeModelMtx<'a>(
                 if !Handle::is_null(right) {
                     fns::PSMTXConcat(ctx, mtxp, right, mtx_2.get(0));
                 }
-                fns::PSMTXConcat(
-                    ctx,
-                    Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0),
-                    mtxp,
-                    tmp.get(0),
-                );
+                fns::PSMTXConcat(ctx, vmtx, mtxp, tmp.get(0));
                 fns::GXLoadPosMtxImm(ctx, tmp.get(0), (mtx_no as u32));
                 inl_HSD_PerfCountMtxLoad_unfused(ctx);
                 if (((flags as u32) & ((enums::SETUP_NORMAL as i32) as u32)) != 0) {
@@ -2120,40 +2258,24 @@ pub fn PObjSetupMtx<'a>(
         if __case <= 0 {
             if !(!Handle::is_null((pobj).u().jobj())) {
                 statics::sysdolphin__baselib__pobj::SetupRigidModelMtx(
-                    ctx,
-                    pobj,
-                    Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0),
-                    Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
-                    rendermode,
+                    ctx, pobj, vmtx, pmtx, rendermode,
                 );
             } else {
                 statics::sysdolphin__baselib__pobj::SetupSharedVtxModelMtx(
-                    ctx,
-                    pobj,
-                    Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0),
-                    Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
-                    rendermode,
+                    ctx, pobj, vmtx, pmtx, rendermode,
                 );
             }
             break 's1;
         }
         if __case <= 1 {
             statics::sysdolphin__baselib__pobj::SetupRigidModelMtx(
-                ctx,
-                pobj,
-                Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0),
-                Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
-                rendermode,
+                ctx, pobj, vmtx, pmtx, rendermode,
             );
             break 's1;
         }
         if __case <= 2 {
             statics::sysdolphin__baselib__pobj::SetupEnvelopeModelMtx(
-                ctx,
-                pobj,
-                Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0),
-                Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
-                rendermode,
+                ctx, pobj, vmtx, pmtx, rendermode,
             );
             break 's1;
         }
@@ -2200,12 +2322,7 @@ pub fn HSD_PObjDisp<'a>(
     }
     (Handle::cast::<HSD_PObjInfo<'a>>(((Handle::cast::<_HSD_Class<'a>>(pobj)).class_info())))
         .setup_mtx()
-        .call::<_, ()>((
-            pobj,
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0),
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
-            rendermode,
-        ));
+        .call::<_, ()>((pobj, vmtx, pmtx, rendermode));
     if (((pobj).flags() as i32) & 0x3000_i32) == (shl_i32(1_i32, (12_i32 as u32))) {
         inl_PObjDispShapeAnim_unfused(ctx, pobj, rendermode);
     } else {
@@ -2510,6 +2627,82 @@ fn inl_HSD_PObjResolveRefs_unfused<'a>(ctx: &'a Ctx, pobj: HSD_PObj<'a>, pdesc: 
             break 's1;
         }
     }
+}
+
+fn inl_decode_u8_xyz_unfused<'a>(ctx: &'a Ctx, src_base: Addr<'a>, dst: Val<'a, F32>, scale: i32) {
+    let mut src_base = src_base;
+    let mut dst = dst;
+    let mut scale = scale;
+    let mut src: Val<'a, u8> = Handle::cast::<Val<'a, u8>>(src_base);
+    (Handle::add(dst, 0_i32)).set(fp::fdivs(
+        fp::frsp((Handle::add(src, 0_i32)).get() as f64),
+        fp::frsp(scale as f64),
+    ));
+    (Handle::add(dst, 1_i32)).set(fp::fdivs(
+        fp::frsp((Handle::add(src, 1_i32)).get() as f64),
+        fp::frsp(scale as f64),
+    ));
+    (Handle::add(dst, 2_i32)).set(fp::fdivs(
+        fp::frsp((Handle::add(src, 2_i32)).get() as f64),
+        fp::frsp(scale as f64),
+    ));
+}
+
+fn inl_decode_s8_xyz_unfused<'a>(ctx: &'a Ctx, src_base: Addr<'a>, dst: Val<'a, F32>, scale: i32) {
+    let mut src_base = src_base;
+    let mut dst = dst;
+    let mut scale = scale;
+    let mut src: Val<'a, i8> = Handle::cast::<Val<'a, i8>>(src_base);
+    (Handle::add(dst, 0_i32)).set(fp::fdivs(
+        fp::frsp((Handle::add(src, 0_i32)).get() as f64),
+        fp::frsp(scale as f64),
+    ));
+    (Handle::add(dst, 1_i32)).set(fp::fdivs(
+        fp::frsp((Handle::add(src, 1_i32)).get() as f64),
+        fp::frsp(scale as f64),
+    ));
+    (Handle::add(dst, 2_i32)).set(fp::fdivs(
+        fp::frsp((Handle::add(src, 2_i32)).get() as f64),
+        fp::frsp(scale as f64),
+    ));
+}
+
+fn inl_decode_u16_xyz_unfused<'a>(ctx: &'a Ctx, src_base: Addr<'a>, dst: Val<'a, F32>, scale: i32) {
+    let mut src_base = src_base;
+    let mut dst = dst;
+    let mut scale = scale;
+    let mut src: Val<'a, u16> = Handle::cast::<Val<'a, u16>>(src_base);
+    (Handle::add(dst, 0_i32)).set(fp::fdivs(
+        fp::frsp((Handle::add(src, 0_i32)).get() as f64),
+        fp::frsp(scale as f64),
+    ));
+    (Handle::add(dst, 1_i32)).set(fp::fdivs(
+        fp::frsp((Handle::add(src, 1_i32)).get() as f64),
+        fp::frsp(scale as f64),
+    ));
+    (Handle::add(dst, 2_i32)).set(fp::fdivs(
+        fp::frsp((Handle::add(src, 2_i32)).get() as f64),
+        fp::frsp(scale as f64),
+    ));
+}
+
+fn inl_decode_s16_xyz_unfused<'a>(ctx: &'a Ctx, src_base: Addr<'a>, dst: Val<'a, F32>, scale: i32) {
+    let mut src_base = src_base;
+    let mut dst = dst;
+    let mut scale = scale;
+    let mut src: Val<'a, i16> = Handle::cast::<Val<'a, i16>>(src_base);
+    (Handle::add(dst, 0_i32)).set(fp::fdivs(
+        fp::frsp((Handle::add(src, 0_i32)).get() as f64),
+        fp::frsp(scale as f64),
+    ));
+    (Handle::add(dst, 1_i32)).set(fp::fdivs(
+        fp::frsp((Handle::add(src, 1_i32)).get() as f64),
+        fp::frsp(scale as f64),
+    ));
+    (Handle::add(dst, 2_i32)).set(fp::fdivs(
+        fp::frsp((Handle::add(src, 2_i32)).get() as f64),
+        fp::frsp(scale as f64),
+    ));
 }
 
 fn inl_GXTexCoord1u8_unfused<'a>(ctx: &'a Ctx, x: u8) {
@@ -2966,6 +3159,22 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_PObj<'_>,) = Args::take_all(ctx);
             Ret::put(setupShapeAnimVtxDesc(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8036c4d4,
+        |ctx| {
+            let (a0, a1, a2, a3): (HSD_ShapeSet<'_>, i32, i32, Val<'_, F32>) = Args::take_all(ctx);
+            Ret::put(get_shape_vertex_xyz(ctx, a0, a1, a2, a3), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8036c860,
+        |ctx| {
+            let (a0, a1, a2, a3): (HSD_ShapeSet<'_>, i32, i32, Val<'_, F32>) = Args::take_all(ctx);
+            Ret::put(get_shape_normal_xyz(ctx, a0, a1, a2, a3), ctx);
         },
         Returns::Nothing,
     );

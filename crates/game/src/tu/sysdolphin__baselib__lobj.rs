@@ -330,6 +330,69 @@ pub fn HSD_LObjSetup<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, color: _GXColor<'a>, 
     }
 }
 
+pub fn HSD_LObjSetupSpecularInit<'a>(ctx: &'a Ctx, pmtx: ArrV<'a, F32, 4>) {
+    let __frame = ctx.stack_frame(0x50);
+    let cdir: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let jpos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let half: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let ldir: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let mut pmtx = pmtx;
+    let mut i: i32 = 0;
+    let mut num: i32 = 0;
+    jpos.set_x((Handle::add(pmtx, 0_i32)).at(3_i32).get());
+    jpos.set_y((Handle::add(pmtx, 1_i32)).at(3_i32).get());
+    jpos.set_z((Handle::add(pmtx, 2_i32)).at(3_i32).get());
+    fns::PSVECNormalize(ctx, jpos, cdir);
+    num = inl_HSD_LObjGetNbActive_unfused(ctx);
+    {
+        i = 0_i32;
+        'l1: while i < num {
+            'c2: {
+                let mut lobj: HSD_LObj<'a> = inl_HSD_LObjGetActiveByIndex_unfused(ctx, i);
+                if ((lobj).spec_id() as u32) == ((enums::GX_LIGHT_NULL as i32) as u32) {
+                    break 'c2;
+                }
+                's3: {
+                    let __case = match inl_HSD_LObjGetType_unfused(ctx, lobj) {
+                        2_u32 => 0,
+                        3_u32 => 0,
+                        1_u32 => 1,
+                        _ => 2,
+                    };
+                    if __case <= 0 {
+                        fns::PSVECSubtract(ctx, jpos, (lobj).lvec(), ldir);
+                        fns::PSVECNormalize(ctx, ldir, ldir);
+                        fns::PSVECAdd(ctx, ldir, cdir, half);
+                        break 's3;
+                    }
+                    if __case <= 1 {
+                        fns::PSVECAdd(ctx, (lobj).lvec(), cdir, half);
+                        break 's3;
+                    }
+                    if __case <= 2 {
+                        (if ((0_i32) != 0) {
+                            ({ () })
+                        } else {
+                            fns::__assert(
+                                ctx,
+                                cstr(ctx, 0x803b94a0),
+                                (0x14f_i32 as u32),
+                                cstr(ctx, 0x803b94a0),
+                            )
+                        });
+                    }
+                }
+                fns::PSVECNormalize(ctx, half, half);
+                fns::GXInitLightDir(ctx, (lobj).spec_lightobj(), half.x(), half.y(), half.z());
+                (lobj).set_flags(
+                    ((((lobj).flags() as i32) | (shl_i32(1_i32, (8_i32 as u32)))) as u16),
+                );
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+}
+
 pub fn setup_spec_lightobj<'a>(
     ctx: &'a Ctx,
     lobj: HSD_LObj<'a>,
@@ -366,22 +429,12 @@ pub fn setup_spec_lightobj<'a>(
             };
             if __case <= 0 {
                 let _ = fns::HSD_LObjGetPosition(ctx, lobj, (lobj).lvec());
-                fns::PSMTXMultVec(
-                    ctx,
-                    Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(mtx).get(0),
-                    (lobj).lvec(),
-                    (lobj).lvec(),
-                );
+                fns::PSMTXMultVec(ctx, mtx, (lobj).lvec(), (lobj).lvec());
                 break 's1;
             }
             if __case <= 1 {
                 inl_HSD_LObjGetLightVector_unfused(ctx, lobj, (lobj).lvec());
-                fns::PSMTXMultVecSR(
-                    ctx,
-                    Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(mtx).get(0),
-                    (lobj).lvec(),
-                    (lobj).lvec(),
-                );
+                fns::PSMTXMultVecSR(ctx, mtx, (lobj).lvec(), (lobj).lvec());
                 fns::PSVECNormalize(ctx, (lobj).lvec(), (lobj).lvec());
                 break 's1;
             }
@@ -412,12 +465,7 @@ pub fn setup_point_lightobj<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, mtx: ArrV<'a, 
     fns::GXInitLightColor(ctx, (lobj).lightobj(), (lobj).color());
     Handle::copy_from((lobj).hw_color(), (lobj).color());
     let _ = fns::HSD_LObjGetPosition(ctx, lobj, lpos);
-    fns::PSMTXMultVec(
-        ctx,
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(mtx).get(0),
-        lpos,
-        lpos,
-    );
+    fns::PSMTXMultVec(ctx, mtx, lpos, lpos);
     fns::GXInitLightPos(ctx, (lobj).lightobj(), lpos.x(), lpos.y(), lpos.z());
     fns::GXInitLightPos(ctx, (lobj).spec_lightobj(), lpos.x(), lpos.y(), lpos.z());
     if ((((lobj).flags() as i32) & 64_i32) != 0) {
@@ -448,19 +496,9 @@ pub fn setup_spot_lightobj<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, mtx: ArrV<'a, F
     let mut lobj = lobj;
     let mut mtx = mtx;
     let _ = fns::HSD_LObjGetPosition(ctx, lobj, lpos);
-    fns::PSMTXMultVec(
-        ctx,
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(mtx).get(0),
-        lpos,
-        lpos,
-    );
+    fns::PSMTXMultVec(ctx, mtx, lpos, lpos);
     inl_HSD_LObjGetLightVector_unfused(ctx, lobj, ldir);
-    fns::PSMTXMultVecSR(
-        ctx,
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(mtx).get(0),
-        ldir,
-        ldir,
-    );
+    fns::PSMTXMultVecSR(ctx, mtx, ldir, ldir);
     fns::PSVECNormalize(ctx, ldir, ldir);
     fns::GXInitLightPos(ctx, (lobj).lightobj(), lpos.x(), lpos.y(), lpos.z());
     fns::GXInitLightPos(ctx, (lobj).spec_lightobj(), lpos.x(), lpos.y(), lpos.z());
@@ -1368,6 +1406,23 @@ fn inl_HSD_LObjGetType_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>) -> u32 {
         as u32);
 }
 
+fn inl_HSD_LObjGetNbActive_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    return statics::sysdolphin__baselib__lobj::nb_active_lights(ctx).get();
+}
+
+fn inl_HSD_LObjGetActiveByIndex_unfused<'a>(ctx: &'a Ctx, idx: i32) -> HSD_LObj<'a> {
+    let mut idx = idx;
+    if (0_i32 <= idx) && (idx < 9_i32.wrapping_sub(1_i32)) {
+        return statics::sysdolphin__baselib__lobj::active_lights(ctx)
+            .at(idx)
+            .get();
+    } else {
+        return null::<HSD_LObj<'a>>(ctx);
+    }
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
 fn inl_HSD_LObjGetLightVector_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, dir: Vec<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let position: Vec<'a> = frame_at(ctx, &__frame, 0x0);
@@ -1428,10 +1483,6 @@ fn inl_HSD_LObjSetActive_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>) {
         .at(idx)
         .set(lobj);
     (lobj).set_id(fns::HSD_Index2LightID(ctx, (idx as u32)));
-}
-
-fn inl_HSD_LObjGetNbActive_unfused<'a>(ctx: &'a Ctx) -> i32 {
-    return statics::sysdolphin__baselib__lobj::nb_active_lights(ctx).get();
 }
 
 fn inl_setup_infinite_lightobj_unfused<'a>(
@@ -1513,19 +1564,6 @@ fn inl_HSD_LObjGetActiveByID_unfused<'a>(ctx: &'a Ctx, id: i32) -> HSD_LObj<'a> 
     let mut id = id;
     let mut idx: i32 = (fns::HSD_LightID2Index(ctx, id) as i32);
     if (0_i32 <= idx) && (idx < 9_i32) {
-        return statics::sysdolphin__baselib__lobj::active_lights(ctx)
-            .at(idx)
-            .get();
-    } else {
-        return null::<HSD_LObj<'a>>(ctx);
-    }
-    #[allow(unreachable_code)]
-    return null(ctx);
-}
-
-fn inl_HSD_LObjGetActiveByIndex_unfused<'a>(ctx: &'a Ctx, idx: i32) -> HSD_LObj<'a> {
-    let mut idx = idx;
-    if (0_i32 <= idx) && (idx < 9_i32.wrapping_sub(1_i32)) {
         return statics::sysdolphin__baselib__lobj::active_lights(ctx)
             .at(idx)
             .get();
@@ -1991,6 +2029,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1, a2): (HSD_LObj<'_>, _GXColor<'_>, Single) = Args::take_all(ctx);
             Ret::put(HSD_LObjSetup(ctx, a0, a1, a2.0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8036597c,
+        |ctx| {
+            let (a0,): (ArrV<'_, F32, 4>,) = Args::take_all(ctx);
+            Ret::put(HSD_LObjSetupSpecularInit(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

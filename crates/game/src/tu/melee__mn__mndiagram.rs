@@ -376,19 +376,18 @@ pub fn mnDiagram_FormatDecimalNumber<'a>(
             i = 0_i32;
             'l3: while i < decimal_places {
                 'c4: {
+                    let __t3 = (fns::mn_GetDigitAt(
+                        ctx,
+                        decimal_part,
+                        (decimal_places.wrapping_sub(1_i32)).wrapping_sub(i),
+                    )
+                    .wrapping_add(48_i32) as i8);
                     (Handle::add(buf, {
                         let __t2 = digit_count;
                         digit_count = digit_count.wrapping_add(1);
                         __t2
                     }))
-                    .set(
-                        (fns::mn_GetDigitAt(
-                            ctx,
-                            decimal_part,
-                            (decimal_places.wrapping_sub(1_i32)).wrapping_sub(i),
-                        )
-                        .wrapping_add(48_i32) as i8),
-                    );
+                    .set(__t3);
                 }
                 i = i.wrapping_add(1);
             }

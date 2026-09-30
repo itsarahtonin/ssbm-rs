@@ -112,13 +112,7 @@ pub fn grDisplay_801C5B90<'a>(
                     }
                 }
                 fns::lbShadow_8000EFEC(ctx);
-                fns::HSD_JObjDisp(
-                    ctx,
-                    jobj,
-                    Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0),
-                    (flags as i32),
-                    rendermode,
-                );
+                fns::HSD_JObjDisp(ctx, jobj, vmtx, (flags as i32), rendermode);
             }
             if (((jobj).flags() & (shl_u32(flags, (28_i32 as u32)))) != 0) {
                 {
@@ -126,11 +120,7 @@ pub fn grDisplay_801C5B90<'a>(
                     'l3: while !Handle::is_null(jobj) {
                         'c4: {
                             statics::melee__gr__grdisplay::grDisplay_801C5B90(
-                                ctx,
-                                jobj,
-                                Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0),
-                                flags,
-                                rendermode,
+                                ctx, jobj, vmtx, flags, rendermode,
                             );
                         }
                         jobj = (jobj).next();

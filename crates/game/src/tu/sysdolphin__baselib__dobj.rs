@@ -346,12 +346,7 @@ pub fn HSD_DObjDisp<'a>(
                     ((Handle::cast::<_HSD_Class<'a>>(p)).class_info()),
                 ))
                 .disp()
-                .call::<_, ()>((
-                    p,
-                    Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0),
-                    Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
-                    rendermode,
-                ));
+                .call::<_, ()>((p, vmtx, pmtx, rendermode));
             }
             p = (p).next();
         }

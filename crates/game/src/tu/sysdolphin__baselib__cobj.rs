@@ -274,7 +274,7 @@ pub fn makeProjectionMtx<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, mtx: ArrV<'a, F32
             projection_type = (enums::GX_PERSPECTIVE as i32);
             fns::MTXPerspective(
                 ctx,
-                Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 4>>(mtx).get(0),
+                mtx,
                 (cobj).projection_param().perspective().fov(),
                 (cobj).projection_param().perspective().aspect(),
                 (cobj).near(),
@@ -286,7 +286,7 @@ pub fn makeProjectionMtx<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, mtx: ArrV<'a, F32
             projection_type = (enums::GX_PERSPECTIVE as i32);
             fns::MTXFrustum(
                 ctx,
-                Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 4>>(mtx).get(0),
+                mtx,
                 (cobj).projection_param().perspective().fov(),
                 (cobj).projection_param().perspective().aspect(),
                 (cobj).projection_param().frustum().left(),
@@ -300,7 +300,7 @@ pub fn makeProjectionMtx<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, mtx: ArrV<'a, F32
             projection_type = (enums::GX_ORTHOGRAPHIC as i32);
             fns::MTXOrtho(
                 ctx,
-                Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 4>>(mtx).get(0),
+                mtx,
                 (cobj).projection_param().perspective().fov(),
                 (cobj).projection_param().perspective().aspect(),
                 (cobj).projection_param().frustum().left(),
@@ -1049,11 +1049,7 @@ pub fn HSD_CObjGetViewingMtx<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, mtx: ArrV<'a,
     let __frame = ctx.stack_frame(0x18);
     let mut cobj = cobj;
     let mut mtx = mtx;
-    fns::PSMTXCopy(
-        ctx,
-        fns::HSD_CObjGetViewingMtxPtr(ctx, cobj),
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(mtx).get(0),
-    );
+    fns::PSMTXCopy(ctx, fns::HSD_CObjGetViewingMtxPtr(ctx, cobj), mtx);
 }
 
 pub fn HSD_CObjGetInvViewingMtxPtrDirect<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> ArrV<'a, F32, 4> {
@@ -2008,7 +2004,7 @@ fn inl_makeProjectionMtx_unfused<'a>(
             projection_type = (enums::GX_PERSPECTIVE as i32);
             fns::MTXPerspective(
                 ctx,
-                Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 4>>(mtx).get(0),
+                mtx,
                 (cobj).projection_param().perspective().fov(),
                 (cobj).projection_param().perspective().aspect(),
                 (cobj).near(),
@@ -2020,7 +2016,7 @@ fn inl_makeProjectionMtx_unfused<'a>(
             projection_type = (enums::GX_PERSPECTIVE as i32);
             fns::MTXFrustum(
                 ctx,
-                Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 4>>(mtx).get(0),
+                mtx,
                 (cobj).projection_param().perspective().fov(),
                 (cobj).projection_param().perspective().aspect(),
                 (cobj).projection_param().frustum().left(),
@@ -2034,7 +2030,7 @@ fn inl_makeProjectionMtx_unfused<'a>(
             projection_type = (enums::GX_ORTHOGRAPHIC as i32);
             fns::MTXOrtho(
                 ctx,
-                Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 4>>(mtx).get(0),
+                mtx,
                 (cobj).projection_param().perspective().fov(),
                 (cobj).projection_param().perspective().aspect(),
                 (cobj).projection_param().frustum().left(),

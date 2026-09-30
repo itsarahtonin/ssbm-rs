@@ -8789,12 +8789,13 @@ pub fn ftCo_800AF78C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     (data).set_xF9_b6((1_i32 as u8));
     (data).set_xF9_b7((1_i32 as u8));
     (data).set_xF9_b1((0_i32 as u8));
+    let __t3 = statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A4BEC(ctx, fp);
     ({
         let __t2 = (fp).cpu().x44_ref();
         target_slot = __t2;
         __t2
     })
-    .set(statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A4BEC(ctx, fp));
+    .set(__t3);
     inl_ftCo_CpuUpdateFoodItemTarget(ctx, fp, is_food);
     inl_ftCo_CpuUpdateSpecialItemTarget(ctx, fp);
     inl_ftCo_CpuUpdateTargetDistance(ctx, fp);

@@ -26,6 +26,51 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn lb_80019230<'a>(ctx: &'a Ctx) -> i32 {
+    let __frame = ctx.stack_frame(0x8);
+    let mut result: i32 = 0;
+    's1: {
+        let __case = match ctx.call::<_, i32>(0x80339b4c, ()) {
+            5_i32 => 0,
+            4_i32 => 1,
+            6_i32 => 2,
+            11_i32 => 3,
+            (-1_i32) => 4,
+            1_i32 => 5,
+            _ => 6,
+        };
+        if __case <= 0 {
+            result = 0_i32;
+            break 's1;
+        }
+        if __case <= 1 {
+            result = 1_i32;
+            break 's1;
+        }
+        if __case <= 2 {
+            result = 2_i32;
+            break 's1;
+        }
+        if __case <= 3 {
+            result = 3_i32;
+            break 's1;
+        }
+        if __case <= 4 {
+            result = 4_i32;
+            break 's1;
+        }
+        if __case <= 5 {
+            result = 5_i32;
+            break 's1;
+        }
+        if __case <= 6 {
+            result = 1_i32.wrapping_neg();
+            break 's1;
+        }
+    }
+    return result;
+}
+
 pub fn lb_800192A8<'a>(ctx: &'a Ctx, cb: FnPtr<'a>) {
     let __frame = ctx.stack_frame(0x30);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
@@ -216,6 +261,13 @@ pub fn lb_800192A8<'a>(ctx: &'a Ctx, cb: FnPtr<'a>) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x80019230,
+        |ctx| {
+            Ret::put(lb_80019230(ctx), ctx);
+        },
+        Returns::Int,
+    );
     ctx.register_port(
         0x800192a8,
         |ctx| {

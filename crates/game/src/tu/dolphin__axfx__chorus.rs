@@ -220,6 +220,191 @@ pub fn AXFXChorusSettings<'a>(ctx: &'a Ctx, c: AXFX_CHORUS<'a>) -> i32 {
     return 1_i32;
 }
 
+pub fn AXFXChorusCallback<'a>(
+    ctx: &'a Ctx,
+    bufferUpdate: AXFX_BUFFERUPDATE<'a>,
+    chorus: AXFX_CHORUS<'a>,
+) {
+    let __frame = ctx.stack_frame(0x38);
+    let mut bufferUpdate = bufferUpdate;
+    let mut chorus = chorus;
+    let mut leftD: Val<'a, i32> = null(ctx);
+    let mut rightD: Val<'a, i32> = null(ctx);
+    let mut surD: Val<'a, i32> = null(ctx);
+    let mut leftS: Val<'a, i32> = null(ctx);
+    let mut rightS: Val<'a, i32> = null(ctx);
+    let mut surS: Val<'a, i32> = null(ctx);
+    let mut i: u32 = 0;
+    let mut nextCurrentLast: u8 = 0;
+    nextCurrentLast = (rem_i32(
+        (((chorus).work().currentLast() as i32).wrapping_add(1_i32)),
+        3_i32,
+    ) as u8);
+    leftD = (chorus)
+        .work()
+        .lastLeft()
+        .at((nextCurrentLast as i32))
+        .get();
+    rightD = (chorus)
+        .work()
+        .lastRight()
+        .at((nextCurrentLast as i32))
+        .get();
+    surD = (chorus).work().lastSur().at((nextCurrentLast as i32)).get();
+    leftS = (bufferUpdate).left();
+    rightS = (bufferUpdate).right();
+    surS = (bufferUpdate).surround();
+    {
+        i = (0_i32 as u32);
+        'l1: while i < (160_i32 as u32) {
+            'c2: {
+                let __t3 = ({
+                    let __t2 = leftS;
+                    leftS = Handle::add(leftS, 1);
+                    __t2
+                })
+                .get();
+                ({
+                    let __t1 = leftD;
+                    leftD = Handle::add(leftD, 1);
+                    __t1
+                })
+                .set(__t3);
+                let __t6 = ({
+                    let __t5 = rightS;
+                    rightS = Handle::add(rightS, 1);
+                    __t5
+                })
+                .get();
+                ({
+                    let __t4 = rightD;
+                    rightD = Handle::add(rightD, 1);
+                    __t4
+                })
+                .set(__t6);
+                let __t9 = ({
+                    let __t8 = surS;
+                    surS = Handle::add(surS, 1);
+                    __t8
+                })
+                .get();
+                ({
+                    let __t7 = surD;
+                    surD = Handle::add(surD, 1);
+                    __t7
+                })
+                .set(__t9);
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    (chorus).work().src().set_pitchHi(
+        ((sar_i32((chorus).work().pitchOffset(), (16_i32 as u32))).wrapping_add(1_i32) as u32),
+    );
+    (chorus).work().src().set_pitchLo(
+        (shl_i32(
+            ((chorus).work().pitchOffset() & 0xffff_i32),
+            (16_i32 as u32),
+        ) as u32),
+    );
+    if {
+        (chorus)
+            .work()
+            .set_pitchOffsetPeriodCount((chorus).work().pitchOffsetPeriodCount().wrapping_sub(1));
+        (chorus).work().pitchOffsetPeriodCount()
+    } == (0_i32 as u32)
+    {
+        (chorus)
+            .work()
+            .set_pitchOffsetPeriodCount((chorus).work().pitchOffsetPeriod());
+        (chorus)
+            .work()
+            .set_pitchOffset((chorus).work().pitchOffset().wrapping_neg());
+    }
+    {
+        i = (0_i32 as u32);
+        'l3: while i < (3_i32 as u32) {
+            'c4: {
+                (chorus)
+                    .work()
+                    .src()
+                    .set_posHi((chorus).work().currentPosHi());
+                (chorus)
+                    .work()
+                    .src()
+                    .set_posLo((chorus).work().currentPosLo());
+                's5: {
+                    let __case = match i {
+                        0_u32 => 0,
+                        1_u32 => 1,
+                        2_u32 => 2,
+                        _ => 3,
+                    };
+                    if __case <= 0 {
+                        (chorus)
+                            .work()
+                            .src()
+                            .set_smpBase((chorus).work().lastLeft().at(0_i32).get());
+                        (chorus).work().src().set_dest((bufferUpdate).left());
+                        (chorus)
+                            .work()
+                            .src()
+                            .set_old((chorus).work().oldLeft().at(0_i32));
+                        break 's5;
+                    }
+                    if __case <= 1 {
+                        (chorus)
+                            .work()
+                            .src()
+                            .set_smpBase((chorus).work().lastRight().at(0_i32).get());
+                        (chorus).work().src().set_dest((bufferUpdate).right());
+                        (chorus)
+                            .work()
+                            .src()
+                            .set_old((chorus).work().oldRight().at(0_i32));
+                        break 's5;
+                    }
+                    if __case <= 2 {
+                        (chorus)
+                            .work()
+                            .src()
+                            .set_smpBase((chorus).work().lastSur().at(0_i32).get());
+                        (chorus).work().src().set_dest((bufferUpdate).surround());
+                        (chorus)
+                            .work()
+                            .src()
+                            .set_old((chorus).work().oldSur().at(0_i32));
+                        break 's5;
+                    }
+                }
+                's6: {
+                    let __case = match (chorus).work().src().pitchHi() {
+                        0_u32 => 0,
+                        1_u32 => 1,
+                        _ => 2,
+                    };
+                    if __case <= 0 {
+                        statics::dolphin__axfx__chorus::do_src1(ctx, (chorus).work().src());
+                        break 's6;
+                    }
+                    if __case <= 1 {
+                        statics::dolphin__axfx__chorus::do_src2(ctx, (chorus).work().src());
+                        break 's6;
+                    }
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    (chorus)
+        .work()
+        .set_currentPosHi((rem_u32((chorus).work().src().posHi(), (0x1e0_i32 as u32))));
+    (chorus)
+        .work()
+        .set_currentPosLo((chorus).work().src().posLo());
+    (chorus).work().set_currentLast(nextCurrentLast);
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -245,5 +430,13 @@ pub fn register(ctx: &Ctx) {
             Ret::put(AXFXChorusSettings(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x8035d540,
+        |ctx| {
+            let (a0, a1): (AXFX_BUFFERUPDATE<'_>, AXFX_CHORUS<'_>) = Args::take_all(ctx);
+            Ret::put(AXFXChorusCallback(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
     );
 }

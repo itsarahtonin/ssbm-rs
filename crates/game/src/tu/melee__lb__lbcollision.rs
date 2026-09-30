@@ -1781,6 +1781,297 @@ pub fn lbColl_80007BCC<'a>(
     );
 }
 
+pub fn lbColl_80007DD8<'a>(
+    ctx: &'a Ctx,
+    capsule: HitCapsule<'a>,
+    hit: HitResult<'a>,
+    hit_transform: ArrV<'a, F32, 4>,
+    arg3: Vec<'a>,
+    angle: Val<'a, F32>,
+    scale: f64,
+) {
+    let __frame = ctx.stack_frame(0x88);
+    let unused_result: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let transformed_hit: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xc);
+    let mut capsule = capsule;
+    let mut hit = hit;
+    let mut hit_transform = hit_transform;
+    let mut arg3 = arg3;
+    let mut angle = angle;
+    let mut scale = scale;
+    let mut dist_offset: f64 = 0.0;
+    if Handle::addr(hit_transform)
+        != Handle::addr(At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0))
+    {
+        fns::PSMTXConcat(
+            ctx,
+            hit_transform,
+            inl_HSD_JObjGetMtxPtr_unfused(ctx, (hit).bone()),
+            transformed_hit.get(0),
+        );
+    }
+    if ((capsule).x43_b1() != 0) {
+        dist_offset = (capsule).scale();
+    } else {
+        dist_offset = fp::fmuls((capsule).scale(), scale);
+    }
+    fns::lbColl_800077A0(
+        ctx,
+        (hit).pos(),
+        (if Handle::addr(hit_transform)
+            != Handle::addr(At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0))
+        {
+            transformed_hit.get(0)
+        } else {
+            inl_HSD_JObjGetMtxPtr_unfused(ctx, (hit).bone())
+        }),
+        (capsule).x58(),
+        (capsule).x4C(),
+        unused_result,
+        arg3,
+        angle,
+        (hit).size(),
+        dist_offset,
+    );
+}
+
+pub fn lbColl_80007ECC<'a>(
+    ctx: &'a Ctx,
+    arg0: HitCapsule<'a>,
+    arg1: HurtCapsule<'a>,
+    arg2: ArrV<'a, F32, 4>,
+    hit_scl_y: f64,
+    hurt_scl_y: f64,
+    hurt_pos_z: f64,
+) -> i32 {
+    let __frame = ctx.stack_frame(0xa8);
+    let sp70: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp64: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp34: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x18);
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut hit_scl_y = hit_scl_y;
+    let mut hurt_scl_y = hurt_scl_y;
+    let mut hurt_pos_z = hurt_pos_z;
+    let mut hit_radius: f64 = 0.0;
+    let mut hurt_mtx: ArrV<'a, F32, 4> = null(ctx);
+    if ((arg1).state() as u32) == ((enums::HurtCapsule_Enabled as i32) as u32) {
+        if !((arg1).skip_update_pos() != 0) {
+            fns::lb_8000B1CC(ctx, (arg1).bone(), (arg1).a_offset(), (arg1).a_pos());
+            fns::lb_8000B1CC(ctx, (arg1).bone(), (arg1).b_offset(), (arg1).b_pos());
+            if Handle::addr(arg2)
+                != Handle::addr(At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0))
+            {
+                (arg1).b_pos().set_z(hurt_pos_z);
+                (arg1).a_pos().set_z(hurt_pos_z);
+            }
+            (arg1).set_skip_update_pos((1_i32 as u8));
+        }
+        if Handle::addr(arg2)
+            != Handle::addr(At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0))
+        {
+            fns::PSMTXConcat(
+                ctx,
+                arg2,
+                inl_HSD_JObjGetMtxPtr_unfused(ctx, (arg1).bone()),
+                sp34.get(0),
+            );
+        }
+        if Handle::addr(arg2)
+            != Handle::addr(At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0))
+        {
+            hurt_mtx = sp34.get(0);
+        } else {
+            hurt_mtx = inl_HSD_JObjGetMtxPtr_unfused(ctx, (arg1).bone());
+        }
+        if ((arg0).x43_b1() != 0) {
+            hit_radius = (arg0).scale();
+        } else {
+            hit_radius = fp::fmuls((arg0).scale(), hit_scl_y);
+        }
+        return statics::melee__lb__lbcollision::lbColl_80006E58(
+            ctx,
+            (arg0).x58(),
+            (arg0).x4C(),
+            (arg1).a_pos(),
+            (arg1).b_pos(),
+            sp70,
+            sp64,
+            hurt_mtx,
+            (arg0).hurt_coll_pos(),
+            (arg0).coll_distance_ref(),
+            hit_radius,
+            (arg1).scale(),
+            fp::fmuls(3.0, hurt_scl_y),
+        );
+    }
+    return 0_i32;
+}
+
+pub fn lbColl_8000805C<'a>(
+    ctx: &'a Ctx,
+    arg0: HitCapsule<'a>,
+    arg1: HurtCapsule<'a>,
+    arg2: ArrV<'a, F32, 4>,
+    arg3: i32,
+    arg4: f64,
+    arg5: f64,
+    arg6: f64,
+) -> i32 {
+    let __frame = ctx.stack_frame(0xa8);
+    let sp74: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp68: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp38: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x18);
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut arg3 = arg3;
+    let mut arg4 = arg4;
+    let mut arg5 = arg5;
+    let mut arg6 = arg6;
+    let mut var_r9: ArrV<'a, F32, 4> = null(ctx);
+    let mut hit_radius: f64 = 0.0;
+    if ((arg1).state() as u32) != ((enums::HurtCapsule_Intangible as i32) as u32) {
+        if !((arg1).skip_update_pos() != 0) {
+            fns::lb_8000B1CC(ctx, (arg1).bone(), (arg1).a_offset(), (arg1).a_pos());
+            fns::lb_8000B1CC(ctx, (arg1).bone(), (arg1).b_offset(), (arg1).b_pos());
+            if Handle::addr(arg2)
+                != Handle::addr(At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0))
+            {
+                (arg1).b_pos().set_z(arg6);
+                (arg1).a_pos().set_z(arg6);
+            }
+            (arg1).set_skip_update_pos((1_i32 as u8));
+        }
+        if arg3 != 0_i32 {
+            (arg0).hurt_coll_pos().set_x(fp::fmuls(
+                0.5,
+                (fp::fadds((arg1).a_pos().x(), (arg1).b_pos().x())),
+            ));
+            (arg0).hurt_coll_pos().set_y(fp::fmuls(
+                0.5,
+                (fp::fadds((arg1).a_pos().y(), (arg1).b_pos().y())),
+            ));
+            (arg0).hurt_coll_pos().set_z(fp::fmuls(
+                0.5,
+                (fp::fadds((arg1).a_pos().z(), (arg1).b_pos().z())),
+            ));
+            (arg0).set_coll_distance(5.0);
+            return 1_i32;
+        }
+        if Handle::addr(arg2)
+            != Handle::addr(At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0))
+        {
+            fns::PSMTXConcat(
+                ctx,
+                arg2,
+                inl_HSD_JObjGetMtxPtr_unfused(ctx, (arg1).bone()),
+                sp38.get(0),
+            );
+        }
+        if Handle::addr(arg2)
+            != Handle::addr(At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0))
+        {
+            var_r9 = sp38.get(0);
+        } else {
+            var_r9 = inl_HSD_JObjGetMtxPtr_unfused(ctx, (arg1).bone());
+        }
+        if ((arg0).x43_b1() != 0) {
+            hit_radius = (arg0).scale();
+        } else {
+            hit_radius = fp::fmuls((arg0).scale(), arg4);
+        }
+        return statics::melee__lb__lbcollision::lbColl_80006E58(
+            ctx,
+            (arg0).x58(),
+            (arg0).x4C(),
+            (arg1).a_pos(),
+            (arg1).b_pos(),
+            sp74,
+            sp68,
+            var_r9,
+            (arg0).hurt_coll_pos(),
+            (arg0).coll_distance_ref(),
+            hit_radius,
+            (arg1).scale(),
+            fp::fmuls(3.0, arg5),
+        );
+    }
+    return 0_i32;
+}
+
+pub fn lbColl_80008248<'a>(
+    ctx: &'a Ctx,
+    arg0: HitCapsule<'a>,
+    arg1: HurtCapsule<'a>,
+    arg2: ArrV<'a, F32, 4>,
+    arg3: f64,
+    arg4: f64,
+    arg5: f64,
+) -> i32 {
+    let __frame = ctx.stack_frame(0xa8);
+    let sp70: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp64: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp34: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x18);
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut arg3 = arg3;
+    let mut arg4 = arg4;
+    let mut arg5 = arg5;
+    let mut var_f1: f64 = 0.0;
+    let mut var_r9: ArrV<'a, F32, 4> = null(ctx);
+    if !((arg1).skip_update_pos() != 0) {
+        fns::lb_8000B1CC(ctx, (arg1).bone(), (arg1).a_offset(), (arg1).a_pos());
+        fns::lb_8000B1CC(ctx, (arg1).bone(), (arg1).b_offset(), (arg1).b_pos());
+        if Handle::addr(arg2)
+            != Handle::addr(At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0))
+        {
+            (arg1).b_pos().set_z(arg5);
+            (arg1).a_pos().set_z(arg5);
+        }
+        (arg1).set_skip_update_pos((1_i32 as u8));
+    }
+    if Handle::addr(arg2)
+        != Handle::addr(At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0))
+    {
+        fns::PSMTXConcat(
+            ctx,
+            arg2,
+            inl_HSD_JObjGetMtxPtr_unfused(ctx, (arg1).bone()),
+            sp34.get(0),
+        );
+    }
+    if Handle::addr(arg2)
+        != Handle::addr(At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0))
+    {
+        var_r9 = sp34.get(0);
+    } else {
+        var_r9 = inl_HSD_JObjGetMtxPtr_unfused(ctx, (arg1).bone());
+    }
+    if ((arg0).x43_b1() != 0) {
+        var_f1 = (arg0).scale();
+    } else {
+        var_f1 = fp::fmuls((arg0).scale(), arg3);
+    }
+    return statics::melee__lb__lbcollision::lbColl_80006E58(
+        ctx,
+        (arg0).x58(),
+        (arg0).x4C(),
+        (arg1).a_pos(),
+        (arg1).b_pos(),
+        sp70,
+        sp64,
+        var_r9,
+        (arg0).hurt_coll_pos(),
+        (arg0).coll_distance_ref(),
+        var_f1,
+        (arg1).scale(),
+        fp::fmuls(3.0, arg4),
+    );
+}
+
 pub fn lbColl_800083C4<'a>(ctx: &'a Ctx, arg0: HurtCapsule<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
@@ -2931,6 +3222,71 @@ pub fn lbColl_8000A1A8<'a>(
     return 0_i32;
 }
 
+pub fn lbColl_8000A244<'a>(
+    ctx: &'a Ctx,
+    hurt: HurtCapsule<'a>,
+    arg1: u32,
+    arg2: ArrV<'a, F32, 4>,
+    arg3: f64,
+) -> i32 {
+    let __frame = ctx.stack_frame(0xe8);
+    let sp9C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let sp90: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let sp84: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let mut hurt = hurt;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut arg3 = arg3;
+    let mut temp_f31: f64 = 0.0;
+    let mut var_r28: ArrV<'a, F32, 4> = null(ctx);
+    let mut temp_r31_2: _GXColor<'a> = null(ctx);
+    let mut var_r0: u32 = 0;
+    let mut temp_r3: _GXColor<'a> = null(ctx);
+    temp_r3 = fns::lbColl_803B9928(ctx).get((hurt).state()).pad();
+    if ((temp_r3).a() as i32) == 255_i32 {
+        var_r0 = (0_i32 as u32);
+    } else {
+        var_r0 = (2_i32 as u32);
+    }
+    if var_r0 == arg1 {
+        if !((hurt).skip_update_pos() != 0) {
+            fns::lb_8000B1CC(ctx, (hurt).bone(), (hurt).a_offset(), (hurt).a_pos());
+            fns::lb_8000B1CC(ctx, (hurt).bone(), (hurt).b_offset(), (hurt).b_pos());
+            if Handle::addr(arg2)
+                != Handle::addr(At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0))
+            {
+                (hurt).b_pos().set_z(arg3);
+                (hurt).a_pos().set_z(arg3);
+            }
+            (hurt).set_skip_update_pos((1_i32 as u8));
+        }
+        if Handle::addr(arg2)
+            != Handle::addr(At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0))
+        {
+            fns::PSMTXConcat(
+                ctx,
+                arg2,
+                inl_HSD_JObjGetMtxPtr_unfused(ctx, (hurt).bone()),
+                sp9C.get(0),
+            );
+        }
+        temp_f31 = (hurt).scale();
+        temp_r31_2 = fns::lbColl_803B9928(ctx).get((hurt).state()).pad_x();
+        Handle::copy_from(sp84, (hurt).b_pos());
+        Handle::copy_from(sp90, (hurt).a_pos());
+        if Handle::addr(arg2)
+            != Handle::addr(At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0))
+        {
+            var_r28 = sp9C.get(0);
+        } else {
+            var_r28 = inl_HSD_JObjGetMtxPtr_unfused(ctx, (hurt).bone());
+        }
+        inl_lbColl_DrawHitResult_unfused(ctx, var_r28, sp90, sp84, temp_r3, temp_r31_2, temp_f31);
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
 pub fn lbColl_8000A460<'a>(ctx: &'a Ctx, hurt: Fighter_x1670_t<'a>, arg1: u32) -> i32 {
     let __frame = ctx.stack_frame(0x48);
     let mut hurt = hurt;
@@ -2959,6 +3315,101 @@ pub fn lbColl_8000A460<'a>(ctx: &'a Ctx, hurt: Fighter_x1670_t<'a>, arg1: u32) -
     return 0_i32;
 }
 
+pub fn lbColl_8000A584<'a>(
+    ctx: &'a Ctx,
+    hurt: HurtCapsule<'a>,
+    arg1: u32,
+    arg2: u32,
+    arg3: ArrV<'a, F32, 4>,
+    arg8: f64,
+) -> i32 {
+    let __frame = ctx.stack_frame(0xf8);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let spA0: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x4);
+    let sp94: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let sp88: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let mut hurt = hurt;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut arg3 = arg3;
+    let mut arg8 = arg8;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    {
+        let mut temp_f31: f64 = 0.0;
+        let mut temp_r31_2: _GXColor<'a> = null(ctx);
+        let mut var_r0: u32 = 0;
+        let mut var_r4: u32 = 0;
+        let mut temp_r3: _GXColor<'a> = null(ctx);
+        var_r4 = arg1;
+        if ((hurt).state() as u32) == ((enums::HurtCapsule_Intangible as i32) as u32) {
+            var_r4 = (2_i32 as u32);
+        }
+        temp_r3 = fns::lbColl_803B9928(ctx).get((var_r4 as i32)).pad();
+        if ((temp_r3).a() as i32) == 255_i32 {
+            var_r0 = (0_i32 as u32);
+        } else {
+            var_r0 = (2_i32 as u32);
+        }
+        if var_r0 == arg2 {
+            if !((hurt).skip_update_pos() != 0) {
+                fns::lb_8000B1CC(ctx, (hurt).bone(), (hurt).a_offset(), (hurt).a_pos());
+                fns::lb_8000B1CC(ctx, (hurt).bone(), (hurt).b_offset(), (hurt).b_pos());
+                if Handle::addr(arg3)
+                    != Handle::addr(
+                        At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0),
+                    )
+                {
+                    (hurt).b_pos().set_z(arg8);
+                    (hurt).a_pos().set_z(arg8);
+                }
+                (hurt).set_skip_update_pos((1_i32 as u8));
+            }
+            if Handle::addr(arg3)
+                != Handle::addr(At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0))
+            {
+                fns::PSMTXConcat(
+                    ctx,
+                    arg3,
+                    inl_HSD_JObjGetMtxPtr_unfused(ctx, (hurt).bone()),
+                    spA0.get(0),
+                );
+            }
+            temp_f31 = (hurt).scale();
+            temp_r31_2 = fns::lbColl_803B9928(ctx).get((var_r4 as i32)).pad_x();
+            Handle::copy_from(sp88, (hurt).b_pos());
+            Handle::copy_from(sp94, (hurt).a_pos());
+            if Handle::addr(arg3)
+                != Handle::addr(At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0))
+            {
+                hurt = Handle::cast::<HurtCapsule<'a>>(spA0.get(0));
+            } else {
+                hurt = Handle::cast::<HurtCapsule<'a>>(inl_HSD_JObjGetMtxPtr_unfused(
+                    ctx,
+                    (hurt).bone(),
+                ));
+            }
+            inl_lbColl_DrawHitResult_unfused(
+                ctx,
+                Handle::cast::<ArrV<'a, F32, 4>>(hurt),
+                sp94,
+                sp88,
+                temp_r3,
+                temp_r31_2,
+                temp_f31,
+            );
+            return 1_i32;
+        }
+        return 0_i32;
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 pub fn lbColl_8000A78C<'a>(
     ctx: &'a Ctx,
     hit: HitResult<'a>,
@@ -2978,7 +3429,7 @@ pub fn lbColl_8000A78C<'a>(
         ctx,
         hit,
         arg1,
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(arg2).get(0),
+        arg2,
         pos_z,
         statics::melee__lb__lbcollision::lbColl_804D36C4(ctx),
         statics::melee__lb__lbcollision::lbColl_804D36C8(ctx),
@@ -3007,7 +3458,7 @@ pub fn lbColl_8000A95C<'a>(
         ctx,
         hit,
         arg1,
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(arg2).get(0),
+        arg2,
         pos_z,
         statics::melee__lb__lbcollision::lbColl_804D36CC(ctx),
         statics::melee__lb__lbcollision::lbColl_804D36D0(ctx),
@@ -3481,6 +3932,67 @@ pub fn register(ctx: &Ctx) {
         Returns::Int,
     );
     ctx.register_port(
+        0x80007dd8,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5): (
+                HitCapsule<'_>,
+                HitResult<'_>,
+                ArrV<'_, F32, 4>,
+                Vec<'_>,
+                Val<'_, F32>,
+                Single,
+            ) = Args::take_all(ctx);
+            Ret::put(lbColl_80007DD8(ctx, a0, a1, a2, a3, a4, a5.0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80007ecc,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5): (
+                HitCapsule<'_>,
+                HurtCapsule<'_>,
+                ArrV<'_, F32, 4>,
+                Single,
+                Single,
+                Single,
+            ) = Args::take_all(ctx);
+            Ret::put(lbColl_80007ECC(ctx, a0, a1, a2, a3.0, a4.0, a5.0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8000805c,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5, a6): (
+                HitCapsule<'_>,
+                HurtCapsule<'_>,
+                ArrV<'_, F32, 4>,
+                i32,
+                Single,
+                Single,
+                Single,
+            ) = Args::take_all(ctx);
+            Ret::put(lbColl_8000805C(ctx, a0, a1, a2, a3, a4.0, a5.0, a6.0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80008248,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5): (
+                HitCapsule<'_>,
+                HurtCapsule<'_>,
+                ArrV<'_, F32, 4>,
+                Single,
+                Single,
+                Single,
+            ) = Args::take_all(ctx);
+            Ret::put(lbColl_80008248(ctx, a0, a1, a2, a3.0, a4.0, a5.0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
         0x800083c4,
         |ctx| {
             let (a0,): (HurtCapsule<'_>,) = Args::take_all(ctx);
@@ -3633,10 +4145,28 @@ pub fn register(ctx: &Ctx) {
         Returns::Int,
     );
     ctx.register_port(
+        0x8000a244,
+        |ctx| {
+            let (a0, a1, a2, a3): (HurtCapsule<'_>, u32, ArrV<'_, F32, 4>, Single) =
+                Args::take_all(ctx);
+            Ret::put(lbColl_8000A244(ctx, a0, a1, a2, a3.0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
         0x8000a460,
         |ctx| {
             let (a0, a1): (Fighter_x1670_t<'_>, u32) = Args::take_all(ctx);
             Ret::put(lbColl_8000A460(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8000a584,
+        |ctx| {
+            let (a0, a1, a2, a3, a4): (HurtCapsule<'_>, u32, u32, ArrV<'_, F32, 4>, Single) =
+                Args::take_all(ctx);
+            Ret::put(lbColl_8000A584(ctx, a0, a1, a2, a3, a4.0), ctx);
         },
         Returns::Int,
     );

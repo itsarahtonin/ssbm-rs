@@ -1141,15 +1141,14 @@ pub fn fn_80161C90<'a>(ctx: &'a Ctx, arg0: MatchEnd<'a>, arg1: i32, s: GmStats<'
             (((s).walk_distance()) as u32).wrapping_add(((p).x50()))
         }) as i32),
     );
-    (fns::gmMainLib_8015EDBC(ctx)).set_x10(
-        ((if ((p).x50()).wrapping_add((((fns::gmMainLib_8015EDBC(ctx)).x10()) as u32))
-            > (0xffffffff_u32)
-        {
-            (0xffffffff_u32)
-        } else {
-            ((p).x50()).wrapping_add((((fns::gmMainLib_8015EDBC(ctx)).x10()) as u32))
-        }) as i32),
-    );
+    let __t1 = ((if ((p).x50()).wrapping_add((((fns::gmMainLib_8015EDBC(ctx)).x10()) as u32))
+        > (0xffffffff_u32)
+    {
+        (0xffffffff_u32)
+    } else {
+        ((p).x50()).wrapping_add((((fns::gmMainLib_8015EDBC(ctx)).x10()) as u32))
+    }) as i32);
+    (fns::gmMainLib_8015EDBC(ctx)).set_x10(__t1);
     (s).set_run_distance(
         ((if (((s).run_distance()) as u32).wrapping_add(((p).x54())) > (0xffffffff_u32) {
             (0xffffffff_u32)
@@ -2656,6 +2655,19 @@ pub fn gm_801641CC<'a>(ctx: &'a Ctx, arg0: u8) -> u16 {
     return (statics::melee__gm__gm_1601::lbl_803B7808(ctx)
         .at((arg0 as i32))
         .get() as u16);
+}
+
+pub fn gm_801641E4<'a>(ctx: &'a Ctx, stage: u8, enable: u8) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut stage = stage;
+    let mut enable = enable;
+    if (enable != 0) {
+        let __t1 = (fns::gmMainLib_GetGamePrefs(ctx)).stage_mask_ref();
+        __t1.set((__t1.get() | (shl_i32(1_i32, ((stage as i32) as u32)) as u32)));
+    } else {
+        let __t2 = (fns::gmMainLib_GetGamePrefs(ctx)).stage_mask_ref();
+        __t2.set((__t2.get() & ((!(shl_i32(1_i32, ((stage as i32) as u32)))) as u32)));
+    }
 }
 
 pub fn gm_IsStageUnlocked<'a>(ctx: &'a Ctx, stkind: u16) -> i32 {
@@ -6905,6 +6917,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(gm_801641CC(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x801641e4,
+        |ctx| {
+            let (a0, a1): (u8, u8) = Args::take_all(ctx);
+            Ret::put(gm_801641E4(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x80164250,

@@ -26,6 +26,201 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn __strtoul<'a>(
+    ctx: &'a Ctx,
+    base: i32,
+    max_width: i32,
+    ReadProc: FnPtr<'a>,
+    ReadProcArg: Addr<'a>,
+    chars_scanned: Val<'a, i32>,
+    negative: Val<'a, i32>,
+    overflow: Val<'a, i32>,
+) -> u32 {
+    let __frame = ctx.stack_frame(0x60);
+    let mut base = base;
+    let mut max_width = max_width;
+    let mut ReadProc = ReadProc;
+    let mut ReadProcArg = ReadProcArg;
+    let mut chars_scanned = chars_scanned;
+    let mut negative = negative;
+    let mut overflow = overflow;
+    let mut scan_state: i32 = (enums::start as i32);
+    let mut count: i32 = 0_i32;
+    let mut value: u32 = (0_i32 as u32);
+    let mut value_max: u32 = (0_i32 as u32);
+    let mut c: i32 = 0;
+    (negative).set({
+        let __t1 = 0_i32;
+        (overflow).set(__t1);
+        __t1
+    });
+    if (((base < 0_i32) || (base == 1_i32)) || (base > 36_i32)) || (max_width < 1_i32) {
+        scan_state = (enums::failure as i32);
+    } else {
+        c = ({
+            count = count.wrapping_add(1);
+            ReadProc.call::<_, i32>((ReadProcArg, 0_i32, (enums::__GetAChar as i32)))
+        });
+    }
+    if base != 0_i32 {
+        value_max = div_u32(0xffffffff_u32, (base as u32));
+    }
+    'l1: while ((count <= max_width) && (c != 1_i32.wrapping_neg()))
+        && (!((scan_state & ((enums::finished as i32) | (enums::failure as i32))) != 0))
+    {
+        'c2: {
+            's3: {
+                let __case = match scan_state {
+                    1_i32 => 0,
+                    2_i32 => 1,
+                    4_i32 => 2,
+                    8_i32 => 3,
+                    16_i32 => 3,
+                    _ => 4,
+                };
+                if __case <= 0 {
+                    if (inl_isspace_unfused(ctx, c) != 0) {
+                        c = ({
+                            count = count.wrapping_add(1);
+                            ReadProc.call::<_, i32>((
+                                ReadProcArg,
+                                0_i32,
+                                (enums::__GetAChar as i32),
+                            ))
+                        });
+                        break 's3;
+                    }
+                    if c == 43_i32 {
+                        c = ({
+                            count = count.wrapping_add(1);
+                            ReadProc.call::<_, i32>((
+                                ReadProcArg,
+                                0_i32,
+                                (enums::__GetAChar as i32),
+                            ))
+                        });
+                    } else if c == 45_i32 {
+                        c = ({
+                            count = count.wrapping_add(1);
+                            ReadProc.call::<_, i32>((
+                                ReadProcArg,
+                                0_i32,
+                                (enums::__GetAChar as i32),
+                            ))
+                        });
+                        (negative).set(1_i32);
+                    }
+                    scan_state = (enums::check_for_zero as i32);
+                    break 's3;
+                }
+                if __case <= 1 {
+                    if (base == 0_i32) || (base == 16_i32) {
+                        if c == 48_i32 {
+                            scan_state = (enums::leading_zero as i32);
+                            c = ({
+                                count = count.wrapping_add(1);
+                                ReadProc.call::<_, i32>((
+                                    ReadProcArg,
+                                    0_i32,
+                                    (enums::__GetAChar as i32),
+                                ))
+                            });
+                            break 's3;
+                        }
+                    }
+                    scan_state = (enums::need_digit as i32);
+                    break 's3;
+                }
+                if __case <= 2 {
+                    if (c == 88_i32) || (c == 120_i32) {
+                        base = 16_i32;
+                        scan_state = (enums::need_digit as i32);
+                        c = ({
+                            count = count.wrapping_add(1);
+                            ReadProc.call::<_, i32>((
+                                ReadProcArg,
+                                0_i32,
+                                (enums::__GetAChar as i32),
+                            ))
+                        });
+                        break 's3;
+                    }
+                    if base == 0_i32 {
+                        base = 8_i32;
+                    }
+                    scan_state = (enums::digit_loop as i32);
+                    break 's3;
+                }
+                if __case <= 3 {
+                    if base == 0_i32 {
+                        base = 10_i32;
+                    }
+                    if !(value_max != 0) {
+                        value_max = div_u32(0xffffffff_u32, (base as u32));
+                    }
+                    if (inl_isdigit_unfused(ctx, c) != 0) {
+                        if ({
+                            c = c.wrapping_sub(48_i32);
+                            c
+                        }) >= base
+                        {
+                            if scan_state == (enums::digit_loop as i32) {
+                                scan_state = (enums::finished as i32);
+                            } else {
+                                scan_state = (enums::failure as i32);
+                            }
+                            c = c.wrapping_add(48_i32);
+                            break 's3;
+                        }
+                    } else if (!(inl_isalpha_unfused(ctx, c) != 0))
+                        || ((fns::toupper(ctx, c)
+                            .wrapping_sub(65_i32)
+                            .wrapping_add(10_i32))
+                            >= base)
+                    {
+                        if scan_state == (enums::digit_loop as i32) {
+                            scan_state = (enums::finished as i32);
+                        } else {
+                            scan_state = (enums::failure as i32);
+                        }
+                        break 's3;
+                    } else {
+                        c = fns::toupper(ctx, c)
+                            .wrapping_sub(65_i32)
+                            .wrapping_add(10_i32);
+                    }
+                    if value > value_max {
+                        (overflow).set(1_i32);
+                    }
+                    value = value.wrapping_mul((base as u32));
+                    if (c as u32) > (0xffffffff_u32.wrapping_sub(value)) {
+                        (overflow).set(1_i32);
+                    }
+                    value = value.wrapping_add((c as u32));
+                    scan_state = (enums::digit_loop as i32);
+                    c = ({
+                        count = count.wrapping_add(1);
+                        ReadProc.call::<_, i32>((ReadProcArg, 0_i32, (enums::__GetAChar as i32)))
+                    });
+                    break 's3;
+                }
+            }
+        }
+    }
+    if !((scan_state
+        & (((enums::leading_zero as i32) | (enums::digit_loop as i32)) | (enums::finished as i32)))
+        != 0)
+    {
+        value = (0_i32 as u32);
+        count = 0_i32;
+    } else {
+        count = count.wrapping_sub(1);
+    }
+    (chars_scanned).set(count);
+    let _ = ReadProc.call::<_, i32>((ReadProcArg, c, (enums::__UngetAChar as i32)));
+    return value;
+}
+
 pub fn strtoul<'a>(ctx: &'a Ctx, str: Val<'a, i8>, end: Ptr<'a, Val<'a, i8>>, base: i32) -> u32 {
     let __frame = ctx.stack_frame(0x30);
     let count: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
@@ -60,8 +255,48 @@ pub fn strtoul<'a>(ctx: &'a Ctx, str: Val<'a, i8>, end: Ptr<'a, Val<'a, i8>>, ba
     return value;
 }
 
+fn inl_isspace_unfused<'a>(ctx: &'a Ctx, c: i32) -> i32 {
+    let mut c = c;
+    return ((ptr::<ArrV<'a, u8, 0>>(ctx, 0x803b8c30)
+        .at(((c as u8) as i32))
+        .get() as i32)
+        & (2_i32 | 4_i32));
+}
+
+fn inl_isdigit_unfused<'a>(ctx: &'a Ctx, c: i32) -> i32 {
+    let mut c = c;
+    return ((ptr::<ArrV<'a, u8, 0>>(ctx, 0x803b8c30)
+        .at(((c as u8) as i32))
+        .get() as i32)
+        & 16_i32);
+}
+
+fn inl_isalpha_unfused<'a>(ctx: &'a Ctx, c: i32) -> i32 {
+    let mut c = c;
+    return ((ptr::<ArrV<'a, u8, 0>>(ctx, 0x803b8c30)
+        .at(((c as u8) as i32))
+        .get() as i32)
+        & (64_i32 | 128_i32));
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x80325bd0,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5, a6): (
+                i32,
+                i32,
+                FnPtr<'_>,
+                Addr<'_>,
+                Val<'_, i32>,
+                Val<'_, i32>,
+                Val<'_, i32>,
+            ) = Args::take_all(ctx);
+            Ret::put(__strtoul(ctx, a0, a1, a2, a3, a4, a5, a6), ctx);
+        },
+        Returns::Int,
+    );
     ctx.register_port(
         0x80325b24,
         |ctx| {

@@ -239,6 +239,31 @@ pub fn DBGReadStatus<'a>(ctx: &'a Ctx, param_1: Addr<'a>) -> i32 {
     return (!(error != 0) as i32);
 }
 
+pub fn MWCallback<'a>(ctx: &'a Ctx, interrupt: u32, context: OSContext<'a>) {
+    let __frame = ctx.stack_frame(0x8);
+    let mut interrupt = interrupt;
+    let mut context = context;
+    statics::dolphin__odenotstub__odenotstub::EXIInputFlag(ctx).set((1_i32 as u8));
+    if !Handle::is_null(statics::dolphin__odenotstub__odenotstub::MTRCallback(ctx).get()) {
+        statics::dolphin__odenotstub__odenotstub::MTRCallback(ctx)
+            .get()
+            .call::<_, ()>(((0_i32 as i16), context));
+    }
+}
+
+pub fn DBGHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'a>) {
+    let __frame = ctx.stack_frame(0x8);
+    let mut interrupt = interrupt;
+    let mut context = context;
+    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc003000_u32 as u32)), 0_i32))
+        .set((0x1000_i32 as u32));
+    if !Handle::is_null(statics::dolphin__odenotstub__odenotstub::DBGCallback(ctx).get()) {
+        statics::dolphin__odenotstub__odenotstub::DBGCallback(ctx)
+            .get()
+            .call::<_, ()>(((interrupt as u32), context));
+    }
+}
+
 pub fn DBInitComm<'a>(ctx: &'a Ctx, inputFlagPtr: Val<'a, i32>, mtrCallback: Val<'a, i32>) {
     let __frame = ctx.stack_frame(0x20);
     let mut inputFlagPtr = inputFlagPtr;
@@ -532,6 +557,22 @@ pub fn register(ctx: &Ctx) {
             Ret::put(DBGReadStatus(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x8032b58c,
+        |ctx| {
+            let (a0, a1): (u32, OSContext<'_>) = Args::take_all(ctx);
+            Ret::put(MWCallback(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8032b5c8,
+        |ctx| {
+            let (a0, a1): (i16, OSContext<'_>) = Args::take_all(ctx);
+            Ret::put(DBGHandler(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x8032b608,

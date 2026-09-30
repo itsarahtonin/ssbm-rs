@@ -334,7 +334,7 @@ pub fn __CARDUnlock<'a>(ctx: &'a Ctx, chan: i32, flashID: Val<'a, u8>) -> i32 {
     (task).set_done_cb(fnptr(ctx, 0x803543fc));
     (task).set_req_cb(null::<FnPtr<'a>>(ctx));
     let _ = fns::DSPAddTask(ctx, task);
-    dp = Handle::cast::<Val<'a, u32>>(Handle::cast::<ArrV<'a, u8, 12>>(flashID).at(0));
+    dp = Handle::cast::<Val<'a, u32>>(flashID);
     ({
         let __t6 = dp;
         dp = Handle::add(dp, 1);

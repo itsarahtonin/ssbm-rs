@@ -5111,6 +5111,13 @@ pub fn fn_803AF3F0<'a>(
     } else if secondary_count < file_blocks.get() {
         'l13: while (secondary_count < file_blocks.get()) && (free_count > 0_i32) {
             'c14: {
+                let __t2 = block_map
+                    .get(2_i32)
+                    .at({
+                        free_count = free_count.wrapping_sub(1);
+                        free_count
+                    })
+                    .get();
                 block_map
                     .get(1_i32)
                     .at({
@@ -5118,15 +5125,7 @@ pub fn fn_803AF3F0<'a>(
                         secondary_count = secondary_count.wrapping_add(1);
                         __t1
                     })
-                    .set(
-                        block_map
-                            .get(2_i32)
-                            .at({
-                                free_count = free_count.wrapping_sub(1);
-                                free_count
-                            })
-                            .get(),
-                    );
+                    .set(__t2);
             }
         }
         if secondary_count < file_blocks.get() {
@@ -5139,9 +5138,9 @@ pub fn fn_803AF3F0<'a>(
                             block_map
                                 .get(1_i32)
                                 .at({
-                                    let __t2 = secondary_count;
+                                    let __t3 = secondary_count;
                                     secondary_count = secondary_count.wrapping_add(1);
-                                    __t2
+                                    __t3
                                 })
                                 .set(primary);
                             block_map.get(0_i32).at(i).set(1_i32.wrapping_neg());
@@ -5171,9 +5170,9 @@ pub fn fn_803AF3F0<'a>(
                 let mut chunk: i32 = 0;
                 if (remaining as u32)
                     > (({
-                        let __t3 = inl_fn_803AF3F0_chunk_size_unfused(ctx, state);
-                        chunk = __t3;
-                        __t3
+                        let __t4 = inl_fn_803AF3F0_chunk_size_unfused(ctx, state);
+                        chunk = __t4;
+                        __t4
                     }) as u32)
                 {
                     if r#async != 0_i32 {

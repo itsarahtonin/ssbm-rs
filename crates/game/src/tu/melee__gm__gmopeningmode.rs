@@ -55,6 +55,181 @@ pub fn onExitTitle<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     }
 }
 
+pub fn gm_SetupTitleDemo<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x148);
+    let character_pool: ArrV<'a, i32, 29> = frame_at(ctx, &__frame, 0x0);
+    let stage_pool: ArrV<'a, i32, 30> = frame_at(ctx, &__frame, 0x74);
+    let mut pool: Val<'a, i32> = null(ctx);
+    let mut c: i32 = 0;
+    let mut count: i32 = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut a: i32 = 0;
+    let mut pick: i32 = 0;
+    let mut dup: i32 = 0;
+    let mut prev: i32 = 0;
+    let mut cur_id: u8 = 0;
+    count = 0_i32;
+    {
+        c = 0_i32;
+        'l1: while c < (enums::CKind_Playable_Count as i32) {
+            'c2: {
+                if fns::gm_IsCKindUnlocked(ctx, (c as u8)) != 0_i32 {
+                    character_pool.at(count).set(c);
+                    count = count.wrapping_add(1_i32);
+                }
+            }
+            c = c.wrapping_add(1);
+        }
+    }
+    character_pool
+        .at(count)
+        .set((enums::CKind_Playable_Count as i32));
+    {
+        i = 0_i32;
+        'l3: while i < count {
+            'c4: {
+                {
+                    j = i.wrapping_add(1_i32);
+                    'l5: while j < count {
+                        'c6: {
+                            if inl_gm_GetCharacterUsageDirect_unfused(
+                                ctx,
+                                character_pool.at(i).get(),
+                            ) > inl_gm_GetCharacterUsage_unfused(ctx, character_pool.at(j).get())
+                            {
+                                a = character_pool.at(i).get();
+                                character_pool.at(i).set(character_pool.at(j).get());
+                                character_pool.at(j).set(a);
+                            }
+                        }
+                        j = j.wrapping_add(1);
+                    }
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    c = 0_i32;
+    pool = character_pool.at(0);
+    'l7: loop {
+        'c8: {
+            'l9: loop {
+                'c10: {
+                    j = (Handle::add(pool, fns::HSD_Randi(ctx, 8_i32))).get();
+                    dup = 0_i32;
+                    {
+                        pick = 0_i32;
+                        'l11: while pick < c {
+                            'c12: {
+                                if ((j
+                                    == statics::melee__gm__gmopeningmode::gm_801BF648(ctx, pick))
+                                    || ((j == (enums::CKind_Zelda as i32))
+                                        && (statics::melee__gm__gmopeningmode::gm_801BF648(
+                                            ctx, pick,
+                                        ) == (enums::CKind_Seak as i32))))
+                                    || ((j == (enums::CKind_Seak as i32))
+                                        && (statics::melee__gm__gmopeningmode::gm_801BF648(
+                                            ctx, pick,
+                                        ) == (enums::CKind_Zelda as i32)))
+                                {
+                                    dup = 1_i32;
+                                }
+                            }
+                            pick = pick.wrapping_add(1);
+                        }
+                    }
+                }
+                if !(dup != 0_i32) {
+                    break 'l9;
+                }
+            }
+            statics::melee__gm__gmopeningmode::gm_801BF634(ctx, c, j);
+            statics::melee__gm__gmopeningmode::gm_801BF65C(ctx, c, (0_i32 as i8));
+            c = c.wrapping_add(1_i32);
+            let __t1 = (inl_gm_GetRandomHistory_unfused(ctx))
+                .character_usage()
+                .at(j);
+            __t1.set(((__t1.get() as i32).wrapping_add(1_i32) as u8));
+        }
+        if !(c < 4_i32) {
+            break 'l7;
+        }
+    }
+    statics::melee__gm__gmopeningmode::gm_801BF6C8(ctx, fns::HSD_Randi(ctx, 4_i32));
+    'l13: loop {
+        'c14: {
+            statics::melee__gm__gmopeningmode::gm_801BF6E8(ctx, fns::HSD_Randi(ctx, 4_i32));
+            prev = fns::gm_801BF6F8(ctx);
+            c = fns::gm_801BF6D8(ctx);
+        }
+        if !(c == prev) {
+            break 'l13;
+        }
+    }
+    c = ({
+        let __t2 = 0_i32;
+        count = __t2;
+        __t2
+    });
+    'l15: loop {
+        'c16: {
+            if fns::gm_80164430(ctx, fns::gm_801641CC(ctx, (c as u8))) != 0_i32 {
+                stage_pool.at(count).set(c);
+                count = count.wrapping_add(1_i32);
+            }
+            c = c.wrapping_add(1_i32);
+        }
+        if !(c < 29_i32) {
+            break 'l15;
+        }
+    }
+    stage_pool.at(count).set(29_i32);
+    {
+        i = 0_i32;
+        'l17: while i < count {
+            'c18: {
+                {
+                    j = i.wrapping_add(1_i32);
+                    'l19: while j < count {
+                        'c20: {
+                            if inl_gm_GetStageUsage_unfused(ctx, stage_pool.at(i).get())
+                                > inl_gm_GetStageUsage_unfused(ctx, stage_pool.at(j).get())
+                            {
+                                a = stage_pool.at(i).get();
+                                stage_pool.at(i).set(stage_pool.at(j).get());
+                                stage_pool.at(j).set(a);
+                            }
+                        }
+                        j = j.wrapping_add(1);
+                    }
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    'l21: loop {
+        'c22: {
+            count = stage_pool.at(fns::HSD_Randi(ctx, 8_i32)).get();
+            cur_id = statics::melee__gm__gmopeningmode::gm_801BF694(ctx);
+            prev = ((cur_id as i32) & 255_i32);
+            c = (fns::gm_801641CC(ctx, (count as u8)) as i32);
+        }
+        if !(c == prev) {
+            break 'l21;
+        }
+    }
+    statics::melee__gm__gmopeningmode::gm_801BF684(
+        ctx,
+        (fns::gm_801641CC(ctx, (count as u8)) as i32),
+    );
+    let __t3 = (inl_gm_GetRandomHistory_unfused(ctx))
+        .stage_usage()
+        .at(count);
+    __t3.set(((__t3.get() as i32).wrapping_add(1_i32) as u8));
+    statics::melee__gm__gmopeningmode::gm_801BF6A8(ctx, fns::HSD_Randi(ctx, 4_i32));
+}
+
 pub fn gm_PreloadTitleDemo<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
     let mut var_r31: GameCache<'a> = null(ctx);
@@ -336,6 +511,14 @@ fn inl_gm_GetCharacterUsage_unfused<'a>(ctx: &'a Ctx, index: i32) -> i32 {
         .get() as i32);
 }
 
+fn inl_gm_GetStageUsage_unfused<'a>(ctx: &'a Ctx, index: i32) -> i32 {
+    let mut index = index;
+    return ((inl_gm_GetRandomHistory_unfused(ctx))
+        .stage_usage()
+        .at(index)
+        .get() as i32);
+}
+
 fn inl_gm_801BEFA4_inner3_unfused<'a>(ctx: &'a Ctx, ckind: i32) {
     let mut ckind = ckind;
     fns::gm_801BEFA4(ctx, ckind);
@@ -383,6 +566,13 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (GameModeState<'_>,) = Args::take_all(ctx);
             Ret::put(onExitTitle(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801bf128,
+        |ctx| {
+            Ret::put(gm_SetupTitleDemo(ctx), ctx);
         },
         Returns::Nothing,
     );

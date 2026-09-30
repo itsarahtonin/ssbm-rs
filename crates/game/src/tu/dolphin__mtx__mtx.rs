@@ -35,13 +35,265 @@ pub fn MTXRotRad<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, axis: i8, rad: f64) {
     let mut cosA: f64 = 0.0;
     sinA = fns::sinf(ctx, rad);
     cosA = fns::cosf(ctx, rad);
-    fns::PSMTXRotTrig(
-        ctx,
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(m).get(0),
-        axis,
-        sinA,
-        cosA,
+    fns::PSMTXRotTrig(ctx, m, axis, sinA, cosA);
+}
+
+pub fn C_MTXLookAt<'a>(
+    ctx: &'a Ctx,
+    m: ArrV<'a, F32, 4>,
+    camPos: Vec<'a>,
+    camUp: Vec<'a>,
+    target: Vec<'a>,
+) {
+    let __frame = ctx.stack_frame(0x50);
+    let vLook: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vRight: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let vUp: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let mut m = m;
+    let mut camPos = camPos;
+    let mut camUp = camUp;
+    let mut target = target;
+    vLook.set_x(fp::fsubs((camPos).x(), (target).x()));
+    vLook.set_y(fp::fsubs((camPos).y(), (target).y()));
+    vLook.set_z(fp::fsubs((camPos).z(), (target).z()));
+    fns::PSVECNormalize(ctx, vLook, vLook);
+    fns::PSVECCrossProduct(ctx, camUp, vLook, vRight);
+    fns::PSVECNormalize(ctx, vRight, vRight);
+    fns::PSVECCrossProduct(ctx, vLook, vRight, vUp);
+    (Handle::add(m, 0_i32)).at(0_i32).set(vRight.x());
+    (Handle::add(m, 0_i32)).at(1_i32).set(vRight.y());
+    (Handle::add(m, 0_i32)).at(2_i32).set(vRight.z());
+    (Handle::add(m, 0_i32)).at(3_i32).set(fp::fneg(
+        (fp::fadds(
+            (fp::fmuls((camPos).z(), vRight.z())),
+            (fp::fadds(
+                (fp::fmuls((camPos).x(), vRight.x())),
+                (fp::fmuls((camPos).y(), vRight.y())),
+            )),
+        )),
+    ));
+    (Handle::add(m, 1_i32)).at(0_i32).set(vUp.x());
+    (Handle::add(m, 1_i32)).at(1_i32).set(vUp.y());
+    (Handle::add(m, 1_i32)).at(2_i32).set(vUp.z());
+    (Handle::add(m, 1_i32)).at(3_i32).set(fp::fneg(
+        (fp::fadds(
+            (fp::fmuls((camPos).z(), vUp.z())),
+            (fp::fadds(
+                (fp::fmuls((camPos).x(), vUp.x())),
+                (fp::fmuls((camPos).y(), vUp.y())),
+            )),
+        )),
+    ));
+    (Handle::add(m, 2_i32)).at(0_i32).set(vLook.x());
+    (Handle::add(m, 2_i32)).at(1_i32).set(vLook.y());
+    (Handle::add(m, 2_i32)).at(2_i32).set(vLook.z());
+    (Handle::add(m, 2_i32)).at(3_i32).set(fp::fneg(
+        (fp::fadds(
+            (fp::fmuls((camPos).z(), vLook.z())),
+            (fp::fadds(
+                (fp::fmuls((camPos).x(), vLook.x())),
+                (fp::fmuls((camPos).y(), vLook.y())),
+            )),
+        )),
+    ));
+}
+
+pub fn MTXLightFrustum<'a>(
+    ctx: &'a Ctx,
+    m: ArrV<'a, F32, 4>,
+    t: f64,
+    b: f64,
+    l: f64,
+    r: f64,
+    n: f64,
+    scaleS: f64,
+    scaleT: f64,
+    transS: f64,
+    transT: f64,
+) {
+    let __frame = ctx.stack_frame(0x30);
+    let mut m = m;
+    let mut t = t;
+    let mut b = b;
+    let mut l = l;
+    let mut r = r;
+    let mut n = n;
+    let mut scaleS = scaleS;
+    let mut scaleT = scaleT;
+    let mut transS = transS;
+    let mut transT = transT;
+    let mut tmp: f64 = 0.0;
+    tmp = fp::fdivs(fp::frsp(1_i32 as f64), (fp::fsubs(r, l)));
+    (Handle::add(m, 0_i32)).at(0_i32).set(
+        (fp::fmuls(
+            scaleS,
+            (fp::fmuls(fp::fmuls(fp::frsp(2_i32 as f64), n), tmp)),
+        )),
     );
+    (Handle::add(m, 0_i32))
+        .at(1_i32)
+        .set(fp::frsp(0_i32 as f64));
+    (Handle::add(m, 0_i32)).at(2_i32).set(fp::fsubs(
+        (fp::fmuls(scaleS, (fp::fmuls(tmp, (fp::fadds(r, l)))))),
+        transS,
+    ));
+    (Handle::add(m, 0_i32))
+        .at(3_i32)
+        .set(fp::frsp(0_i32 as f64));
+    tmp = fp::fdivs(fp::frsp(1_i32 as f64), (fp::fsubs(t, b)));
+    (Handle::add(m, 1_i32))
+        .at(0_i32)
+        .set(fp::frsp(0_i32 as f64));
+    (Handle::add(m, 1_i32)).at(1_i32).set(
+        (fp::fmuls(
+            scaleT,
+            (fp::fmuls(fp::fmuls(fp::frsp(2_i32 as f64), n), tmp)),
+        )),
+    );
+    (Handle::add(m, 1_i32)).at(2_i32).set(fp::fsubs(
+        (fp::fmuls(scaleT, (fp::fmuls(tmp, (fp::fadds(t, b)))))),
+        transT,
+    ));
+    (Handle::add(m, 1_i32))
+        .at(3_i32)
+        .set(fp::frsp(0_i32 as f64));
+    (Handle::add(m, 2_i32))
+        .at(0_i32)
+        .set(fp::frsp(0_i32 as f64));
+    (Handle::add(m, 2_i32))
+        .at(1_i32)
+        .set(fp::frsp(0_i32 as f64));
+    (Handle::add(m, 2_i32))
+        .at(2_i32)
+        .set(fp::frsp(1_i32.wrapping_neg() as f64));
+    (Handle::add(m, 2_i32))
+        .at(3_i32)
+        .set(fp::frsp(0_i32 as f64));
+}
+
+pub fn MTXLightPerspective<'a>(
+    ctx: &'a Ctx,
+    m: ArrV<'a, F32, 4>,
+    fovY: f64,
+    aspect: f64,
+    scaleS: f64,
+    scaleT: f64,
+    transS: f64,
+    transT: f64,
+) {
+    let __frame = ctx.stack_frame(0x58);
+    let mut m = m;
+    let mut fovY = fovY;
+    let mut aspect = aspect;
+    let mut scaleS = scaleS;
+    let mut scaleT = scaleT;
+    let mut transS = transS;
+    let mut transT = transT;
+    let mut angle: f64 = 0.0;
+    let mut cot: f64 = 0.0;
+    angle = (fp::fmuls(0.5, fovY));
+    angle = fp::fmuls(angle, 0.01745329238474369);
+    cot = fp::fdivs(fp::frsp(1_i32 as f64), fns::tanf(ctx, angle));
+    (Handle::add(m, 0_i32))
+        .at(0_i32)
+        .set((fp::fmuls(scaleS, (fp::fdivs(cot, aspect)))));
+    (Handle::add(m, 0_i32))
+        .at(1_i32)
+        .set(fp::frsp(0_i32 as f64));
+    (Handle::add(m, 0_i32)).at(2_i32).set(fp::fneg(transS));
+    (Handle::add(m, 0_i32))
+        .at(3_i32)
+        .set(fp::frsp(0_i32 as f64));
+    (Handle::add(m, 1_i32))
+        .at(0_i32)
+        .set(fp::frsp(0_i32 as f64));
+    (Handle::add(m, 1_i32))
+        .at(1_i32)
+        .set((fp::fmuls(cot, scaleT)));
+    (Handle::add(m, 1_i32)).at(2_i32).set(fp::fneg(transT));
+    (Handle::add(m, 1_i32))
+        .at(3_i32)
+        .set(fp::frsp(0_i32 as f64));
+    (Handle::add(m, 2_i32))
+        .at(0_i32)
+        .set(fp::frsp(0_i32 as f64));
+    (Handle::add(m, 2_i32))
+        .at(1_i32)
+        .set(fp::frsp(0_i32 as f64));
+    (Handle::add(m, 2_i32))
+        .at(2_i32)
+        .set(fp::frsp(1_i32.wrapping_neg() as f64));
+    (Handle::add(m, 2_i32))
+        .at(3_i32)
+        .set(fp::frsp(0_i32 as f64));
+}
+
+pub fn MTXLightOrtho<'a>(
+    ctx: &'a Ctx,
+    m: ArrV<'a, F32, 4>,
+    t: f64,
+    b: f64,
+    l: f64,
+    r: f64,
+    scaleS: f64,
+    scaleT: f64,
+    transS: f64,
+    transT: f64,
+) {
+    let mut m = m;
+    let mut t = t;
+    let mut b = b;
+    let mut l = l;
+    let mut r = r;
+    let mut scaleS = scaleS;
+    let mut scaleT = scaleT;
+    let mut transS = transS;
+    let mut transT = transT;
+    let mut tmp: f64 = 0.0;
+    tmp = fp::fdivs(fp::frsp(1_i32 as f64), (fp::fsubs(r, l)));
+    (Handle::add(m, 0_i32))
+        .at(0_i32)
+        .set((fp::fmuls(fp::fmuls(fp::frsp(2_i32 as f64), tmp), scaleS)));
+    (Handle::add(m, 0_i32))
+        .at(1_i32)
+        .set(fp::frsp(0_i32 as f64));
+    (Handle::add(m, 0_i32))
+        .at(2_i32)
+        .set(fp::frsp(0_i32 as f64));
+    (Handle::add(m, 0_i32)).at(3_i32).set(
+        (fp::fadds(
+            transS,
+            (fp::fmuls(scaleS, (fp::fmuls(tmp, fp::fneg((fp::fadds(r, l))))))),
+        )),
+    );
+    tmp = fp::fdivs(fp::frsp(1_i32 as f64), (fp::fsubs(t, b)));
+    (Handle::add(m, 1_i32))
+        .at(0_i32)
+        .set(fp::frsp(0_i32 as f64));
+    (Handle::add(m, 1_i32))
+        .at(1_i32)
+        .set((fp::fmuls(fp::fmuls(fp::frsp(2_i32 as f64), tmp), scaleT)));
+    (Handle::add(m, 1_i32))
+        .at(2_i32)
+        .set(fp::frsp(0_i32 as f64));
+    (Handle::add(m, 1_i32)).at(3_i32).set(
+        (fp::fadds(
+            transT,
+            (fp::fmuls(scaleT, (fp::fmuls(tmp, fp::fneg((fp::fadds(t, b))))))),
+        )),
+    );
+    (Handle::add(m, 2_i32))
+        .at(0_i32)
+        .set(fp::frsp(0_i32 as f64));
+    (Handle::add(m, 2_i32))
+        .at(1_i32)
+        .set(fp::frsp(0_i32 as f64));
+    (Handle::add(m, 2_i32))
+        .at(2_i32)
+        .set(fp::frsp(0_i32 as f64));
+    (Handle::add(m, 2_i32))
+        .at(3_i32)
+        .set(fp::frsp(1_i32 as f64));
 }
 
 /// Registers this unit's ports.
@@ -51,6 +303,79 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1, a2): (ArrV<'_, F32, 4>, i8, Single) = Args::take_all(ctx);
             Ret::put(MTXRotRad(ctx, a0, a1, a2.0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80342734,
+        |ctx| {
+            let (a0, a1, a2, a3): (ArrV<'_, F32, 4>, Vec<'_>, Vec<'_>, Vec<'_>) =
+                Args::take_all(ctx);
+            Ret::put(C_MTXLookAt(ctx, a0, a1, a2, a3), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x803428c0,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9): (
+                ArrV<'_, F32, 4>,
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+            ) = Args::take_all(ctx);
+            Ret::put(
+                MTXLightFrustum(
+                    ctx, a0, a1.0, a2.0, a3.0, a4.0, a5.0, a6.0, a7.0, a8.0, a9.0,
+                ),
+                ctx,
+            );
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80342954,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5, a6): (
+                ArrV<'_, F32, 4>,
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+            ) = Args::take_all(ctx);
+            Ret::put(
+                MTXLightPerspective(ctx, a0, a1.0, a2.0, a3.0, a4.0, a5.0, a6.0),
+                ctx,
+            );
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80342a20,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5, a6, a7, a8): (
+                ArrV<'_, F32, 4>,
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+            ) = Args::take_all(ctx);
+            Ret::put(
+                MTXLightOrtho(ctx, a0, a1.0, a2.0, a3.0, a4.0, a5.0, a6.0, a7.0, a8.0),
+                ctx,
+            );
         },
         Returns::Nothing,
     );

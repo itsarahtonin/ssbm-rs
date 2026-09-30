@@ -1232,8 +1232,8 @@ class Translator:
                     break
             elif tok == ";" and depth == 1:
                 semis.append(i)
-        if len(semis) != 2:
-            raise Unsupported("for header")
+        if len(semis) != 2 or toks[:1] != ["for"]:
+            return self.for_parts_counted(kids)
         has_init, has_cond, has_incr = semis[0] > 2, semis[1] > semis[0] + 1, i > semis[1] + 1
         idx = 0
         init = kids[idx] if has_init else None
@@ -1244,34 +1244,18 @@ class Translator:
         idx += has_incr
         return init, cond_node, incr, kids[idx]
 
+    @staticmethod
+    def for_parts_counted(kids):
+        """for_parts where a macro hides the header's tokens: all four parts, or a body alone,
+        are told apart by their count."""
+        if len(kids) == 4:
+            return tuple(kids)
+        if len(kids) == 1:
+            return None, None, None, kids[0]
+        raise Unsupported("for header")
+
     def for_stmt(self, n):
-        # libclang lists only the parts that are present; tell them apart by position.
-        toks = [t.spelling for t in n.get_tokens()]
-        kids = children(n)
-        # Find which clauses exist from the parenthesized header.
-        depth, semis, i = 0, [], 0
-        for i, tok in enumerate(toks):
-            if tok == "(":
-                depth += 1
-            elif tok == ")":
-                depth -= 1
-                if depth == 0:
-                    break
-            elif tok == ";" and depth == 1:
-                semis.append(i)
-        if len(semis) != 2:
-            raise Unsupported("for header")
-        has_init = semis[0] > 2
-        has_cond = semis[1] > semis[0] + 1
-        has_incr = i > semis[1] + 1
-        idx = 0
-        init = kids[idx] if has_init else None
-        idx += has_init
-        cond_node = kids[idx] if has_cond else None
-        idx += has_cond
-        incr = kids[idx] if has_incr else None
-        idx += has_incr
-        body = kids[idx]
+        init, cond_node, incr, body = self.for_parts(n)
         out = ["{"]
         if init is not None:
             out += self.indent(self.stmt(init) if init.kind == CK.DECL_STMT else self.effect(init))
@@ -1566,7 +1550,11 @@ class Translator:
             at = self.u.ctype(strip(a).type)
             idx = self.expr(i)
             if at["k"] == "arr" and self.is_pointer_local(strip(a)):
-                at = {"k": "ptr", "to": at["of"]}
+                # An array parameter: index the pointer it holds.
+                rname, pt, _ = self.f.locals[vkey(strip(a).referenced)]
+                p = Expr(ident(rname), pt, True)
+                return self.deref_lvalue(Expr(f"Handle::add({p.code}, {self.convert(idx, INT).code})", pt,
+                                              idx.pure))
             if at["k"] == "arr":
                 return self.index_lvalue(self.lvalue(a), at, idx)
             p = self.expr(a)
@@ -1649,19 +1637,40 @@ class Translator:
         t = lv.ty
         if t["k"] == "rec":
             v = self.expr(b)
+            if not lv.pure and not v.pure:
+                raise Unsupported("struct assignment with effects on both sides")
             return [f"Handle::copy_from({lv.addr_code}, {v.code});"]
         v = self.convert(self.expr(b), t)
-        return [lv.write(v.code) + ";"]
+        pre = []
+        if not lv.pure and not v.pure:
+            # MWCC evaluates the right side first, then where it goes.
+            tmp = self.f.temp()
+            pre.append(f"let {tmp} = {v.code};")
+            v = Expr(tmp, t, True)
+        return pre + [lv.write(v.code) + ";"]
+
+    def pinned(self, lv, pre):
+        """An impure lvalue as one whose address a temporary holds, computed once."""
+        tmp = self.f.temp()
+        pre.append(f"let {tmp} = {lv.addr()};")
+        return self.handle_lvalue(tmp, lv.ty)
 
     def compound(self, c):
         op = BINOPS[_lib.clang_getCursorBinaryOperatorKind(c)][:-1]
         a, b = children(c)
         lv = self.lvalue(a)
         pre = []
-        if not lv.pure:
-            raise Unsupported("compound assignment to an impure lvalue")
-        cur = Expr(lv.read(), lv.ty, True)
         rhs = self.expr(b)
+        if not lv.pure:
+            if not rhs.pure:
+                if op in ("+", "-") and is_float(lv.ty) and self.product(b, lv.ty, True) is not None:
+                    raise Unsupported("fused compound assignment with effects on both sides")
+                # MWCC evaluates the right side first, then where it goes.
+                tmp = self.f.temp()
+                pre.append(f"let {tmp} = {rhs.code};")
+                rhs = Expr(tmp, rhs.ty, True)
+            lv = self.pinned(lv, pre)
+        cur = Expr(lv.read(), lv.ty, True)
         if is_ptr(lv.ty):
             if op not in "+-":
                 raise Unsupported("pointer compound op")
@@ -1681,21 +1690,22 @@ class Translator:
 
     def incdec(self, c, op):
         lv = self.lvalue(children(c)[0])
+        pre = []
         if not lv.pure:
-            raise Unsupported("increment of an impure lvalue")
+            lv = self.pinned(lv, pre)
         delta = 1 if "+" in op else -1
         cur = lv.read()
         t = lv.ty
         if is_ptr(t):
-            return [lv.write(f"Handle::add({cur}, {delta})") + ";"]
+            return pre + [lv.write(f"Handle::add({cur}, {delta})") + ";"]
         if is_float(t):
             one = self.convert(Expr("1.0", DOUBLE, True), t)
             fn = "fadd" if t["size"] == 8 else "fadds"
             fn = fn if delta > 0 else fn.replace("add", "sub")
-            return [lv.write(f"fp::{fn}({cur}, {one.code})") + ";"]
+            return pre + [lv.write(f"fp::{fn}({cur}, {one.code})") + ";"]
         if delta > 0:
-            return [lv.write(f"{cur}.wrapping_add(1)") + ";"]
-        return [lv.write(f"{cur}.wrapping_sub(1)") + ";"]
+            return pre + [lv.write(f"{cur}.wrapping_add(1)") + ";"]
+        return pre + [lv.write(f"{cur}.wrapping_sub(1)") + ";"]
 
     def expr(self, c):
         self.line = c.location.line
@@ -1783,9 +1793,10 @@ class Translator:
             # MWCC compiles with `-enum int`: enums are signed ints, where clang makes an
             # enum without negative values unsigned.
             to = INT
-        if to["k"] == "ptr" and from_t["k"] == "arr" and self.is_pointer_local(inner):
+        if from_t["k"] == "arr" and self.is_pointer_local(inner):
+            # An array parameter holds a pointer, and stays one.
             v = self.expr(child)
-            return self.convert(v, to)
+            return v if to["k"] == "arr" else self.convert(v, to)
         if to["k"] == "ptr" and from_t["k"] == "arr":
             if inner.kind == CK.STRING_LITERAL:
                 v = self.expr(inner)
@@ -1793,6 +1804,9 @@ class Translator:
             lv = self.lvalue(child)
             return self.convert(self.decay(lv, from_t), to)
         if to["k"] == "ptr" and from_t["k"] == "fn":
+            if inner.kind == CK.UNARY_OPERATOR and UNOPS.get(_lib.clang_getCursorUnaryOperatorKind(inner)) == "*":
+                # `*fp` names the function fp points at, which decays back to fp.
+                return self.convert(self.expr(children(inner)[0]), to)
             return self.convert(self.fn_value(inner), to)
         v = self.expr(child)
         return self.convert(v, to)
@@ -1840,6 +1854,10 @@ class Translator:
                 return Expr(self.int_literal(int(val), t), t, True)
             if val is not None and is_float(t):
                 return Expr(rust_float(f32(val) if t["size"] == 4 else val), t, True)
+        if self.is_pointer_local(c):
+            # An array parameter is the pointer it holds, as the array would decay to.
+            rname, pt, _ = self.f.locals[vkey(r)]
+            return Expr(ident(rname), pt, True)
         lv = self.lvalue(c)
         if lv.ty["k"] in ("rec", "arr"):
             return Expr(lv.addr_code, lv.ty, True)
@@ -2252,6 +2270,11 @@ class Translator:
                     ft = {**ft, "params": [], "variadic": False}
                 elif f is not None and f["type"].get("params") is not None:
                     ft = f["type"]
+                else:
+                    ft = self.unprototyped(ft, args)
+                if not ft.get("variadic") and len(ft["params"]) < len(args):
+                    # `f()` called with arguments: they go in registers all the same.
+                    ft = self.unprototyped(ft, args)
             if f is not None and self.inlined_in_original(f.get("symbol") or name, callee.referenced):
                 # The original has no call here: MWCC inlined the function, so its code runs
                 # as part of this one, and patches to the function's own copy do not apply.
@@ -2579,6 +2602,26 @@ class Translator:
         if len(kids) > 2:
             out += [f"if {tmp} != 0 {{"] + self.indent(self.block(kids[2])) + ["}"]
         return out
+
+    def unprototyped(self, ft, args):
+        """The type a call to a function declared without a prototype passes its arguments
+        as: C gives them the default promotions."""
+        params = []
+        for a in args:
+            at = self.u.ctype(a.type)
+            if is_float(at):
+                params.append(DOUBLE)
+            elif is_int(at) or at["k"] == "enum":
+                params.append(promote(at) if is_int(at) else INT)
+            elif at["k"] == "ptr":
+                params.append(at)
+            elif at["k"] == "arr":
+                params.append({"k": "ptr", "to": at["of"]})
+            elif at["k"] == "fn":
+                params.append({"k": "ptr", "to": at})
+            else:
+                raise Unsupported("struct argument without a prototype")
+        return {**ft, "params": params, "variadic": False}
 
     def raw_call(self, addr, ft, args, t):
         if ft.get("params") is None:
@@ -2990,6 +3033,9 @@ def translate_unit(args):
         try:
             code = tr.function()
         except Unsupported as e:
+            if os.environ.get("C2RS_TRACE") == name:
+                import traceback
+                traceback.print_exc()
             unit.skipped.append((name, f"{e} (line {tr.line})"))
             continue
         except Exception as e:  # noqa: BLE001

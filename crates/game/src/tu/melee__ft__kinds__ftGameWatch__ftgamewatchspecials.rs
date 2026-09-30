@@ -223,6 +223,39 @@ pub fn ftGw_SpecialS_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     inl_ftGameWatch_SpecialS_SetVars_unfused(ctx, gobj);
 }
 
+pub fn ftGw_SpecialAirS_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x28);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut gawAttrs: _ftGameWatchAttributes<'a> =
+        Handle::cast::<_ftGameWatchAttributes<'a>>((fp).dat_attrs());
+    let __t1 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
+        .self_vel()
+        .x_ref();
+    __t1.set(fp::fdivs(
+        __t1.get(),
+        (gawAttrs).x20_GAMEWATCH_JUDGE_MOMENTUM_PRESERVE(),
+    ));
+    let _ = fns::ftGw_SpecialS_GetRandomInt(ctx, gobj);
+    fns::Fighter_ChangeMotionState(
+        ctx,
+        gobj,
+        (fp).u()
+            .gw()
+            .x222C_judgeVar1()
+            .wrapping_add((enums::ftGw_MS_SpecialAirS1 as i32)),
+        0_u32,
+        0.0,
+        1.0,
+        0.0,
+        null::<HSD_GObj<'a>>(ctx),
+    );
+    fns::ftAnim_8006EBA4(ctx, gobj);
+    inl_ftGameWatch_SpecialS_SetVars_unfused(ctx, gobj);
+}
+
 pub fn ftGw_SpecialS_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
@@ -475,6 +508,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(ftGw_SpecialS_Enter(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8014c828,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftGw_SpecialAirS_Enter(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

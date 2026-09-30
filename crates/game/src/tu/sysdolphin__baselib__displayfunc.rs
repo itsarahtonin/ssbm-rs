@@ -243,12 +243,7 @@ pub fn HSD_JObjMakePositionMtx<'a>(
     let mut vmtx = vmtx;
     let mut pmtx = pmtx;
     if (((jobj).flags() & (0xe00_i32 as u32)) != 0) {
-        fns::PSMTXConcat(
-            ctx,
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0),
-            (jobj).mtx().get(0),
-            mtx.get(0),
-        );
+        fns::PSMTXConcat(ctx, vmtx, (jobj).mtx().get(0), mtx.get(0));
         's1: {
             let __case = match ((jobj).flags() & (0xe00_i32 as u32)) {
                 0x200_u32 => 0,
@@ -262,7 +257,7 @@ pub fn HSD_JObjMakePositionMtx<'a>(
                     ctx,
                     jobj,
                     mtx.get(0),
-                    Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
+                    pmtx,
                 );
                 break 's1;
             }
@@ -271,7 +266,7 @@ pub fn HSD_JObjMakePositionMtx<'a>(
                     ctx,
                     jobj,
                     mtx.get(0),
-                    Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
+                    pmtx,
                 );
                 break 's1;
             }
@@ -280,17 +275,12 @@ pub fn HSD_JObjMakePositionMtx<'a>(
                     ctx,
                     jobj,
                     mtx.get(0),
-                    Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
+                    pmtx,
                 );
                 break 's1;
             }
             if __case <= 3 {
-                inl_mkRBillBoardMtx_unfused(
-                    ctx,
-                    jobj,
-                    mtx.get(0),
-                    Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
-                );
+                inl_mkRBillBoardMtx_unfused(ctx, jobj, mtx.get(0), pmtx);
                 break 's1;
             }
             if __case <= 4 {
@@ -303,12 +293,7 @@ pub fn HSD_JObjMakePositionMtx<'a>(
             }
         }
     } else {
-        fns::PSMTXConcat(
-            ctx,
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0),
-            (jobj).mtx().get(0),
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
-        );
+        fns::PSMTXConcat(ctx, vmtx, (jobj).mtx().get(0), pmtx);
     }
 }
 
@@ -668,6 +653,64 @@ pub fn _HSD_ZListClear<'a>(ctx: &'a Ctx) {
         statics::sysdolphin__baselib__displayfunc::zlist_xlu_top(ctx),
     );
     statics::sysdolphin__baselib__displayfunc::zlist_xlu_nb(ctx).set(0_i32);
+}
+
+pub fn HSD_JObjDisp<'a>(
+    ctx: &'a Ctx,
+    jobj: HSD_JObj<'a>,
+    vmtx: ArrV<'a, F32, 4>,
+    trsp_mask: i32,
+    rendermode: u32,
+) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut jobj = jobj;
+    let mut vmtx = vmtx;
+    let mut trsp_mask = trsp_mask;
+    let mut rendermode = rendermode;
+    if !Handle::is_null(jobj) {
+        if ((if (((jobj).flags()
+            & (((shl_i32(1_i32, (5_i32 as u32))) | (shl_i32(1_i32, (14_i32 as u32)))) as u32))
+            != 0)
+        {
+            0_i32
+        } else {
+            1_i32
+        }) != 0)
+        {
+            fns::HSD_JObjDispDObj(ctx, jobj, vmtx, trsp_mask, rendermode);
+        } else if ((if (((jobj).flags() & ((shl_i32(1_i32, (5_i32 as u32))) as u32)) != 0) {
+            1_i32
+        } else {
+            0_i32
+        }) != 0)
+            && (!Handle::is_null(
+                statics::sysdolphin__baselib__displayfunc::sptcl_callback(ctx).get(),
+            ))
+        {
+            let mut sp: _HSD_SList<'a> = null(ctx);
+            {
+                sp = (jobj).u().ptcl();
+                'l1: while !Handle::is_null(sp) {
+                    'c2: {
+                        if ((Handle::addr((sp).data())) & 0x80000000_u32) != (0_i32 as u32) {
+                            let mut bank: u32 = ((63_i32 as u32) & (Handle::addr((sp).data())));
+                            let mut offset: u32 =
+                                ((shr_u32((Handle::addr((sp).data())), (6_i32 as u32)))
+                                    & (0xffffff_i32 as u32));
+                            statics::sysdolphin__baselib__displayfunc::sptcl_callback(ctx)
+                                .get()
+                                .call::<_, ()>((0_i32, (bank as i32), (offset as i32), jobj));
+                        }
+                        (sp).set_data(ptr::<Addr<'a>>(
+                            ctx,
+                            (Handle::addr((sp).data()) & (0x7fffffff_i32 as u32)) as u32,
+                        ));
+                    }
+                    sp = (sp).next();
+                }
+            }
+        }
+    }
 }
 
 pub fn HSD_JObjSetSPtclCallback<'a>(ctx: &'a Ctx, func: FnPtr<'a>) {
@@ -1250,6 +1293,14 @@ pub fn register(ctx: &Ctx) {
         0x80374910,
         |ctx| {
             Ret::put(_HSD_ZListClear(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x803749b0,
+        |ctx| {
+            let (a0, a1, a2, a3): (HSD_JObj<'_>, ArrV<'_, F32, 4>, i32, u32) = Args::take_all(ctx);
+            Ret::put(HSD_JObjDisp(ctx, a0, a1, a2, a3), ctx);
         },
         Returns::Nothing,
     );

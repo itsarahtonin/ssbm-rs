@@ -2555,6 +2555,72 @@ pub fn tyDisplay_8031C2EC<'a>(ctx: &'a Ctx) -> i32 {
     return fns::Toy_80305058(ctx, 2_i32, 0_i32, 1_i32, 60.0);
 }
 
+pub fn tyDisplay_8031C354<'a>(
+    ctx: &'a Ctx,
+    id: i32,
+    buf: Val<'a, i32>,
+    max: i32,
+    kind: i32,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x48);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut id = id;
+    let mut buf = buf;
+    let mut max = max;
+    let mut kind = kind;
+    let mut data: TyDspEntry<'a> = null(ctx);
+    let mut other: TyDspEntry<'a> = null(ctx);
+    let mut i: i32 = 0;
+    let mut count: i32 = 0;
+    let mut val: i32 = 0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if id == 1_i32.wrapping_neg() {
+        return 0_i32;
+    }
+    data = fns::tyDisplay_8031B9DC(ctx, id);
+    if kind == 99_i32 {
+        kind = fp::fctiwz(fns::Toy_803060BC(ctx, id, 6_i32));
+    }
+    count = 0_i32;
+    {
+        i = 0_i32;
+        'l3: while i < 0x125_i32 {
+            'c4: {
+                if i == id {
+                    break 'c4;
+                }
+                if fns::Toy_80304CC8(ctx, i) == 0_i32 {
+                    break 'c4;
+                }
+                if fns::Toy_803049F4(ctx, i) == 0_i32 {
+                    break 'c4;
+                }
+                other = fns::tyDisplay_8031B9DC(ctx, i);
+                val = fp::fctiwz(fns::Toy_803060BC(ctx, i, 6_i32));
+                if ((other).x04() as i32) != ((data).x04() as i32) {
+                    break 'c4;
+                }
+                if val != kind {
+                    break 'c4;
+                }
+                count = count.wrapping_add(1);
+                (buf).set(i);
+                buf = Handle::add(buf, 1);
+                if count >= max {
+                    break 'l3;
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return count;
+}
+
 pub fn tyDisplay_8031C454<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x230);
     let names1: TyDspArchNames<'a> = frame_at(ctx, &__frame, 0x0);
@@ -3859,6 +3925,14 @@ pub fn register(ctx: &Ctx) {
         0x8031c2ec,
         |ctx| {
             Ret::put(tyDisplay_8031C2EC(ctx), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8031c354,
+        |ctx| {
+            let (a0, a1, a2, a3): (i32, Val<'_, i32>, i32, i32) = Args::take_all(ctx);
+            Ret::put(tyDisplay_8031C354(ctx, a0, a1, a2, a3), ctx);
         },
         Returns::Int,
     );

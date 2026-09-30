@@ -3590,6 +3590,19 @@ pub fn mn_IsFighterUnlocked<'a>(ctx: &'a Ctx, selkind: i32) -> i32 {
     return fns::gm_IsCKindUnlocked(ctx, fns::gm_SelKindToCKind(ctx, (selkind as u8)));
 }
 
+pub fn mn_8022E978<'a>(ctx: &'a Ctx, item_idx: u8, enable: u8) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut item_idx = item_idx;
+    let mut enable = enable;
+    if (enable != 0) {
+        let __t1 = (fns::gmMainLib_GetGamePrefs(ctx)).item_mask_ref();
+        __t1.set((__t1.get() | (shl_i32(1_i32, ((item_idx as i32) as u32)) as u64)));
+    } else {
+        let __t2 = (fns::gmMainLib_GetGamePrefs(ctx)).item_mask_ref();
+        __t2.set((__t2.get() & ((!(shl_i32(1_i32, ((item_idx as i32) as u32)))) as u64)));
+    }
+}
+
 pub fn mn_8022EA08<'a>(ctx: &'a Ctx, buf: Val<'a, i8>, num: u32) {
     let __frame = ctx.stack_frame(0x28);
     let mut buf = buf;
@@ -4829,6 +4842,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(mn_IsFighterUnlocked(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x8022e978,
+        |ctx| {
+            let (a0, a1): (u8, u8) = Args::take_all(ctx);
+            Ret::put(mn_8022E978(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x8022ea08,

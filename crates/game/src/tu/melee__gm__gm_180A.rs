@@ -46,15 +46,14 @@ pub fn gm_80180B18<'a>(ctx: &'a Ctx) {
         'l1: while i < 27_i32 {
             'c2: {
                 let mut idx: u8 = fns::gm_CKindToSelKind(ctx, (i as u8));
+                let __t1 = (div_u32(
+                    ((fns::gmMainLib_8015D06C(ctx, idx)).get() as u32),
+                    (10_i32 as u32),
+                ) as i32);
                 statics::melee__gm__gm_180A::lbl_80472E48(ctx)
                     .x14()
                     .at((fns::gm_CKindToSelKind(ctx, (i as u8)) as i32))
-                    .set(
-                        (div_u32(
-                            ((fns::gmMainLib_8015D06C(ctx, idx)).get() as u32),
-                            (10_i32 as u32),
-                        ) as i32),
-                    );
+                    .set(__t1);
             }
             i = i.wrapping_add(1);
         }

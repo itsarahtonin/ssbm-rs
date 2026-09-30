@@ -82,6 +82,23 @@ pub fn HSD_AObjInitEndCallBack<'a>(ctx: &'a Ctx) {
     statics::sysdolphin__baselib__aobj::HSD_AObj_804D7630(ctx).set(0_i32);
 }
 
+pub fn HSD_AObjInvokeCallBacks<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut list: _HSD_SList<'a> = null(ctx);
+    if (statics::sysdolphin__baselib__aobj::HSD_AObj_804D762C(ctx).get() != 0_i32)
+        && (statics::sysdolphin__baselib__aobj::HSD_AObj_804D7630(ctx).get() == 0_i32)
+    {
+        list = statics::sysdolphin__baselib__aobj::endcallback_list(ctx).get();
+        'l1: while !Handle::is_null(list) {
+            'c2: {
+                let mut func: FnPtr<'a> = Handle::cast::<FnPtr<'a>>((list).data());
+                func.call::<_, ()>(());
+                list = (list).next();
+            }
+        }
+    }
+}
+
 pub fn HSD_AObjReqAnim<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>, frame: f64) {
     let __frame = ctx.stack_frame(0x8);
     let mut aobj = aobj;
@@ -209,6 +226,94 @@ pub fn HSD_AObjFree<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>) {
         inl_HSD_AObjGetAllocData_unfused(ctx),
         Handle::cast::<Addr<'a>>(aobj),
     );
+}
+
+pub fn callbackForeachFunc<'a>(
+    ctx: &'a Ctx,
+    aobj: HSD_AObj<'a>,
+    obj: Addr<'a>,
+    r#type: i32,
+    func: Addr<'a>,
+    arg_type: i32,
+    arg: _callbackArg<'a>,
+) {
+    let __frame = ctx.stack_frame(0x8);
+    let mut aobj = aobj;
+    let mut obj = obj;
+    let mut r#type = r#type;
+    let mut func = func;
+    let mut arg_type = arg_type;
+    let mut arg = arg;
+    's1: {
+        let __case = match (arg_type as u32) {
+            0_u32 => 0,
+            1_u32 => 1,
+            2_u32 => 2,
+            3_u32 => 3,
+            4_u32 => 4,
+            8_u32 => 5,
+            5_u32 => 6,
+            6_u32 => 7,
+            7_u32 => 8,
+            9_u32 => 9,
+            10_u32 => 10,
+            11_u32 => 11,
+            _ => 12,
+        };
+        if __case <= 0 {
+            Handle::cast::<FnPtr<'a>>(func).call::<_, ()>((aobj,));
+            return;
+        }
+        if __case <= 1 {
+            Handle::cast::<FnPtr<'a>>(func).call::<_, ()>((aobj, Single(fp::frsp((arg).f()))));
+            return;
+        }
+        if __case <= 2 {
+            Handle::cast::<FnPtr<'a>>(func).call::<_, ()>((aobj, (arg).v()));
+            return;
+        }
+        if __case <= 3 {
+            Handle::cast::<FnPtr<'a>>(func).call::<_, ()>((aobj, (arg).d()));
+            return;
+        }
+        if __case <= 4 {
+            Handle::cast::<FnPtr<'a>>(func).call::<_, ()>((aobj, obj));
+            return;
+        }
+        if __case <= 5 {
+            Handle::cast::<FnPtr<'a>>(func).call::<_, ()>((aobj, obj, r#type));
+            return;
+        }
+        if __case <= 6 {
+            Handle::cast::<FnPtr<'a>>(func).call::<_, ()>((aobj, obj, Single(fp::frsp((arg).f()))));
+            return;
+        }
+        if __case <= 7 {
+            Handle::cast::<FnPtr<'a>>(func).call::<_, ()>((aobj, obj, (arg).v()));
+            return;
+        }
+        if __case <= 8 {
+            Handle::cast::<FnPtr<'a>>(func).call::<_, ()>((aobj, obj, (arg).d()));
+            return;
+        }
+        if __case <= 9 {
+            Handle::cast::<FnPtr<'a>>(func).call::<_, ()>((
+                aobj,
+                obj,
+                r#type,
+                Single(fp::frsp((arg).f())),
+            ));
+            return;
+        }
+        if __case <= 10 {
+            Handle::cast::<FnPtr<'a>>(func).call::<_, ()>((aobj, obj, r#type, (arg).v()));
+            return;
+        }
+        if __case <= 11 {
+            Handle::cast::<FnPtr<'a>>(func).call::<_, ()>((aobj, obj, r#type, (arg).d()));
+            return;
+        }
+    }
 }
 
 pub fn TObjForeachAnim<'a>(
@@ -745,6 +850,13 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x803640b0,
+        |ctx| {
+            Ret::put(HSD_AObjInvokeCallBacks(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x8036410c,
         |ctx| {
             let (a0, a1): (HSD_AObj<'_>, Single) = Args::take_all(ctx);
@@ -788,6 +900,21 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_AObj<'_>,) = Args::take_all(ctx);
             Ret::put(HSD_AObjFree(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x803645d8,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5): (
+                HSD_AObj<'_>,
+                Addr<'_>,
+                i32,
+                Addr<'_>,
+                i32,
+                _callbackArg<'_>,
+            ) = Args::take_all(ctx);
+            Ret::put(callbackForeachFunc(ctx, a0, a1, a2, a3, a4, a5), ctx);
         },
         Returns::Nothing,
     );

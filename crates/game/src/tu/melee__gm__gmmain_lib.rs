@@ -271,6 +271,16 @@ pub fn gmMainLib_8015CE44<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) -> Val<'a, i8>
     return null(ctx);
 }
 
+pub fn gmMainLib_8015CEB4<'a>(ctx: &'a Ctx, arg0: i32) {
+    let __frame = ctx.stack_frame(0x8);
+    let mut arg0 = arg0;
+    let __t1 = inl_bitset64_mask_unfused(ctx, (arg0 as u32));
+    let __t2 = (inl_gmMainLib_GetCardData_unfused(ctx))
+        .save_data()
+        .x1A68_ref();
+    __t2.set((__t2.get() | __t1));
+}
+
 pub fn gmMainLib_8015CEFC<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
@@ -332,6 +342,21 @@ pub fn gmMainLib_8015CFCC<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
     return (inl_selkind_mask_unfused(ctx, arg0) & (fns::gmMainLib_8015ED98(ctx)).xC());
 }
 
+pub fn gmMainLib_8015D00C<'a>(ctx: &'a Ctx, arg0: u8) {
+    let __frame = ctx.stack_frame(0x28);
+    let mut arg0 = arg0;
+    (Handle::add(
+        inl_GetPersistentFighterDataBase_unfused(ctx, inl_gmMainLib_GetCardData_unfused(ctx)),
+        (arg0 as i32),
+    ))
+    .x7A()
+    .x0()
+    .set_b0((1_i32 as u8));
+    let __t1 = inl_selkind_mask_unfused(ctx, arg0);
+    let __t2 = (fns::gmMainLib_8015ED98(ctx)).xC_ref();
+    __t2.set((__t2.get() | __t1));
+}
+
 pub fn gmMainLib_8015D06C<'a>(ctx: &'a Ctx, arg0: u8) -> Val<'a, i32> {
     let mut arg0 = arg0;
     return (inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
@@ -363,6 +388,20 @@ pub fn gmMainLib_8015D0F4<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
     return inl_selkind_bit_unfused(ctx, (fns::gmMainLib_8015ED98(ctx)).x10(), arg0);
+}
+
+pub fn gmMainLib_8015D134<'a>(ctx: &'a Ctx, arg0: u8) {
+    let __frame = ctx.stack_frame(0x28);
+    let mut arg0 = arg0;
+    (Handle::add(
+        inl_GetPersistentFighterDataBase_unfused(ctx, inl_gmMainLib_GetCardData_unfused(ctx)),
+        (arg0 as i32),
+    ))
+    .x7C()
+    .set_b4((1_i32 as u16));
+    let __t1 = inl_selkind_mask_unfused(ctx, arg0);
+    let __t2 = (fns::gmMainLib_8015ED98(ctx)).x10_ref();
+    __t2.set((__t2.get() | __t1));
 }
 
 pub fn gmMainLib_8015D194<'a>(ctx: &'a Ctx, arg0: u8) -> Val<'a, u8> {
@@ -407,6 +446,20 @@ pub fn gmMainLib_8015D21C<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
     return inl_selkind_bit_unfused(ctx, (fns::gmMainLib_8015ED98(ctx)).x14(), arg0);
 }
 
+pub fn gmMainLib_8015D25C<'a>(ctx: &'a Ctx, arg0: u8) {
+    let __frame = ctx.stack_frame(0x28);
+    let mut arg0 = arg0;
+    (Handle::add(
+        inl_GetPersistentFighterDataBase_unfused(ctx, inl_gmMainLib_GetCardData_unfused(ctx)),
+        (arg0 as i32),
+    ))
+    .x7C()
+    .set_b5((1_i32 as u16));
+    let __t1 = inl_selkind_mask_unfused(ctx, arg0);
+    let __t2 = (fns::gmMainLib_8015ED98(ctx)).x14_ref();
+    __t2.set((__t2.get() | __t1));
+}
+
 pub fn gmMainLib_8015D2BC<'a>(ctx: &'a Ctx, arg0: u8) -> Val<'a, u8> {
     let mut arg0 = arg0;
     return (inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
@@ -447,6 +500,20 @@ pub fn gmMainLib_8015D344<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
     return inl_selkind_bit_unfused(ctx, (fns::gmMainLib_8015ED98(ctx)).x18(), arg0);
+}
+
+pub fn gmMainLib_8015D384<'a>(ctx: &'a Ctx, arg0: u8) {
+    let __frame = ctx.stack_frame(0x28);
+    let mut arg0 = arg0;
+    (Handle::add(
+        inl_GetPersistentFighterDataBase_unfused(ctx, inl_gmMainLib_GetCardData_unfused(ctx)),
+        (arg0 as i32),
+    ))
+    .x7C()
+    .set_b6((1_i32 as u16));
+    let __t1 = inl_selkind_mask_unfused(ctx, arg0);
+    let __t2 = (fns::gmMainLib_8015ED98(ctx)).x18_ref();
+    __t2.set((__t2.get() | __t1));
 }
 
 pub fn gmMainLib_8015D3E4<'a>(ctx: &'a Ctx, arg0: u8) -> Val<'a, u8> {
@@ -665,7 +732,8 @@ pub fn gmMainLib_8015D818<'a>(ctx: &'a Ctx, arg0: u32) -> i32 {
     let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     if fns::gmMainLib_8015D94C(ctx, arg0) == 0_i32 {
-        (inl_gmMainLib_8015D804_unfused(ctx, (arg0 as i32))).set(fns::lbTime_GetTimeInSeconds(ctx));
+        let __t1 = fns::lbTime_GetTimeInSeconds(ctx);
+        (inl_gmMainLib_8015D804_unfused(ctx, (arg0 as i32))).set(__t1);
         statics::melee__gm__gmmain_lib::gmMainLib_8015D888(ctx, arg0);
         fns::gmMainLib_8015D8FC(ctx, arg0);
         return 1_i32;
@@ -762,7 +830,8 @@ pub fn gmMainLib_8015D984<'a>(ctx: &'a Ctx, arg0: u32) -> i32 {
         }
     }
     if fns::gmMainLib_8015DA90(ctx, arg0) == 0_i32 {
-        (inl_gmMainLib_8015D970_unfused(ctx, (arg0 as i32))).set(fns::lbTime_GetTimeInSeconds(ctx));
+        let __t1 = fns::lbTime_GetTimeInSeconds(ctx);
+        (inl_gmMainLib_8015D970_unfused(ctx, (arg0 as i32))).set(__t1);
         fns::gmMainLib_8015D9F4(ctx, arg0);
         fns::gmMainLib_8015DA40(ctx, arg0);
         return 1_i32;
@@ -1156,16 +1225,74 @@ pub fn gmMainLib_8015EDD4<'a>(ctx: &'a Ctx) -> i32 {
     return (((inl_gmMainLib_GetCardData_unfused(ctx)).save_data().x186C() as i32) & 4_i32);
 }
 
+pub fn gmMainLib_8015EDE4<'a>(ctx: &'a Ctx) {
+    let __t1 = (inl_gmMainLib_GetCardData_unfused(ctx))
+        .save_data()
+        .x186C_ref();
+    __t1.set((((__t1.get() as i32) | 4_i32) as u8));
+}
+
+pub fn gmMainLib_8015EDF8<'a>(ctx: &'a Ctx) {
+    let __t1 = (inl_gmMainLib_GetCardData_unfused(ctx))
+        .save_data()
+        .x186C_ref();
+    __t1.set((((__t1.get() as i32) & (!4_i32)) as u8));
+}
+
 pub fn gmMainLib_8015EE0C<'a>(ctx: &'a Ctx) -> i32 {
     return (((inl_gmMainLib_GetCardData_unfused(ctx)).save_data().x186C() as i32) & 1_i32);
+}
+
+pub fn gmMainLib_8015EE1C<'a>(ctx: &'a Ctx) {
+    let __t1 = (inl_gmMainLib_GetCardData_unfused(ctx))
+        .save_data()
+        .x186C_ref();
+    __t1.set((((__t1.get() as i32) | 1_i32) as u8));
+}
+
+pub fn gmMainLib_8015EE30<'a>(ctx: &'a Ctx) {
+    let __t1 = (inl_gmMainLib_GetCardData_unfused(ctx))
+        .save_data()
+        .x186C_ref();
+    __t1.set((((__t1.get() as i32) & (!1_i32)) as u8));
 }
 
 pub fn gmMainLib_8015EE44<'a>(ctx: &'a Ctx) -> i32 {
     return (((inl_gmMainLib_GetCardData_unfused(ctx)).save_data().x186C() as i32) & 2_i32);
 }
 
+pub fn gmMainLib_8015EE54<'a>(ctx: &'a Ctx) {
+    let __t1 = (inl_gmMainLib_GetCardData_unfused(ctx))
+        .save_data()
+        .x186C_ref();
+    __t1.set((((__t1.get() as i32) | 2_i32) as u8));
+}
+
+pub fn gmMainLib_8015EE68<'a>(ctx: &'a Ctx) {
+    let __t1 = (inl_gmMainLib_GetCardData_unfused(ctx))
+        .save_data()
+        .x186C_ref();
+    __t1.set((((__t1.get() as i32) & (!2_i32)) as u8));
+    (inl_gmMainLib_GetGamePrefs_unfused(ctx))
+        .set_stage_mask(fns::gmMainLib_DefaultGamePrefs(ctx).stage_mask());
+}
+
 pub fn gmMainLib_8015EE90<'a>(ctx: &'a Ctx) -> i32 {
     return (((inl_gmMainLib_GetCardData_unfused(ctx)).save_data().x186C() as i32) & 8_i32);
+}
+
+pub fn gmMainLib_8015EEA0<'a>(ctx: &'a Ctx) {
+    let __t1 = (inl_gmMainLib_GetCardData_unfused(ctx))
+        .save_data()
+        .x186C_ref();
+    __t1.set((((__t1.get() as i32) | 8_i32) as u8));
+}
+
+pub fn gmMainLib_8015EEB4<'a>(ctx: &'a Ctx) {
+    let __t1 = (inl_gmMainLib_GetCardData_unfused(ctx))
+        .save_data()
+        .x186C_ref();
+    __t1.set((((__t1.get() as i32) & (!8_i32)) as u8));
 }
 
 pub fn gmMainLib_8015EEC8<'a>(ctx: &'a Ctx) {
@@ -1594,6 +1721,22 @@ pub fn gmMainLib_8015FC74<'a>(ctx: &'a Ctx) -> i32 {
     prev = fns::gmMainLib_8046B0F0(ctx).x10();
     fns::gmMainLib_8046B0F0(ctx).set_x10((fns::lbTime_GetTimeInSeconds(ctx) as i32));
     return fns::gmMainLib_8046B0F0(ctx).x10().wrapping_sub(prev);
+}
+
+pub fn gmMainLib_8015FCC0<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x10);
+    let mut tmp: gmMainLib_8046B0F0_t<'a> = fns::gmMainLib_8046B0F0(ctx);
+    (tmp).set_skip_intro(
+        (if ctx.call::<_, u32>(0x803486b4, ()) == 0x80000000_u32 {
+            1_i32
+        } else {
+            0_i32
+        }),
+    );
+    (tmp).set_resetting(0_i32);
+    (tmp).set_progressive(0_i32);
+    (tmp).set_xC(0_i32);
+    (tmp).set_x10((fns::lbTime_GetTimeInSeconds(ctx) as i32));
 }
 
 fn inl_gmMainLib_GetCardData_unfused<'a>(ctx: &'a Ctx) -> GmCardData<'a> {
@@ -2203,6 +2346,14 @@ pub fn register(ctx: &Ctx) {
         Returns::Int,
     );
     ctx.register_port(
+        0x8015ceb4,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(gmMainLib_8015CEB4(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x8015cefc,
         |ctx| {
             let (a0,): (i32,) = Args::take_all(ctx);
@@ -2257,6 +2408,14 @@ pub fn register(ctx: &Ctx) {
         Returns::Int,
     );
     ctx.register_port(
+        0x8015d00c,
+        |ctx| {
+            let (a0,): (u8,) = Args::take_all(ctx);
+            Ret::put(gmMainLib_8015D00C(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x8015d06c,
         |ctx| {
             let (a0,): (u8,) = Args::take_all(ctx);
@@ -2295,6 +2454,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(gmMainLib_8015D0F4(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x8015d134,
+        |ctx| {
+            let (a0,): (u8,) = Args::take_all(ctx);
+            Ret::put(gmMainLib_8015D134(ctx, a0), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x8015d194,
@@ -2345,6 +2512,14 @@ pub fn register(ctx: &Ctx) {
         Returns::Int,
     );
     ctx.register_port(
+        0x8015d25c,
+        |ctx| {
+            let (a0,): (u8,) = Args::take_all(ctx);
+            Ret::put(gmMainLib_8015D25C(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x8015d2bc,
         |ctx| {
             let (a0,): (u8,) = Args::take_all(ctx);
@@ -2391,6 +2566,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(gmMainLib_8015D344(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x8015d384,
+        |ctx| {
+            let (a0,): (u8,) = Args::take_all(ctx);
+            Ret::put(gmMainLib_8015D384(ctx, a0), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x8015d3e4,
@@ -2894,11 +3077,39 @@ pub fn register(ctx: &Ctx) {
         Returns::Int,
     );
     ctx.register_port(
+        0x8015ede4,
+        |ctx| {
+            Ret::put(gmMainLib_8015EDE4(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8015edf8,
+        |ctx| {
+            Ret::put(gmMainLib_8015EDF8(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x8015ee0c,
         |ctx| {
             Ret::put(gmMainLib_8015EE0C(ctx), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x8015ee1c,
+        |ctx| {
+            Ret::put(gmMainLib_8015EE1C(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8015ee30,
+        |ctx| {
+            Ret::put(gmMainLib_8015EE30(ctx), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x8015ee44,
@@ -2908,11 +3119,39 @@ pub fn register(ctx: &Ctx) {
         Returns::Int,
     );
     ctx.register_port(
+        0x8015ee54,
+        |ctx| {
+            Ret::put(gmMainLib_8015EE54(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8015ee68,
+        |ctx| {
+            Ret::put(gmMainLib_8015EE68(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x8015ee90,
         |ctx| {
             Ret::put(gmMainLib_8015EE90(ctx), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x8015eea0,
+        |ctx| {
+            Ret::put(gmMainLib_8015EEA0(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8015eeb4,
+        |ctx| {
+            Ret::put(gmMainLib_8015EEB4(ctx), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x8015eec8,
@@ -3038,5 +3277,12 @@ pub fn register(ctx: &Ctx) {
             Ret::put(gmMainLib_8015FC74(ctx), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x8015fcc0,
+        |ctx| {
+            Ret::put(gmMainLib_8015FCC0(ctx), ctx);
+        },
+        Returns::Nothing,
     );
 }

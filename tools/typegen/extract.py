@@ -257,10 +257,14 @@ def parse_unit(args):
     root, unit_name, source = args
     os.chdir(root)
     index = ci.Index.create()
-    tu, _ = parse(index, source)
+    tu, asm = parse(index, source)
     errors = [f"{d.location}: {d.spelling}" for d in tu.diagnostics if d.severity >= ci.Diagnostic.Error]
     col = Collector(unit_name)
     col.visit(tu.cursor, source)
+    for f in col.functions:
+        # An assembly function is defined here too, though clang sees only its declaration.
+        if f["name"] in asm:
+            f["asm"] = True
     return unit_name, source, errors, col.records, col.enums, col.typedefs, col.functions, col.globals
 
 
@@ -301,7 +305,7 @@ def main():
             enums.update(ens)
             typedefs.update(tds)
             for f in fns:
-                if not f["defined"] and f["static"]:
+                if not f["defined"] and f["static"] and not f.get("asm"):
                     continue
                 cands = [s for s in by_name.get(f["name"], []) if s["type"] == "function"]
                 if not cands:

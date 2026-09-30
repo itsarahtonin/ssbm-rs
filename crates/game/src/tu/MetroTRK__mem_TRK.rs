@@ -39,17 +39,16 @@ pub fn TRK_memcpy<'a>(ctx: &'a Ctx, dst: Addr<'a>, src: Addr<'a>, n: u32) -> Add
     } != (0_i32 as u32)
     {
         'c2: {
+            let __t1 = ({
+                s = Handle::add(s, 1);
+                s
+            })
+            .get();
             ({
                 d = Handle::add(d, 1);
                 d
             })
-            .set(
-                ({
-                    s = Handle::add(s, 1);
-                    s
-                })
-                .get(),
-            );
+            .set(__t1);
         }
     }
     return dst;

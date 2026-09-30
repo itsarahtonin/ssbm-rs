@@ -124,80 +124,6 @@ pub fn IsNameUnique<'a>(ctx: &'a Ctx, name: Val<'a, i8>) -> i32 {
     return 0_i32;
 }
 
-pub fn DeleteName<'a>(ctx: &'a Ctx, arg0: u8) {
-    let __frame = ctx.stack_frame(0x1d0);
-    let _2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let temp: NameTagData<'a> = frame_at(ctx, &__frame, 0x8);
-    let mut arg0 = arg0;
-    let mut i: i32 = 0;
-    let mut longpos: u64 = 0;
-    let mut pos: i32 = 0;
-    let mut j: i32 = 0;
-    let mut p: Val<'a, u16> = null(ctx);
-    let mut k: i32 = 0;
-    let mut pos_u8: u8 = 0;
-    pos = (arg0 as i32);
-    i = 0_i32;
-    'l1: loop {
-        'c2: {
-            if fns::IsNameValid(ctx, ((i as u8) as i32)) != 0_i32 {
-                p = Handle::cast::<Val<'a, u16>>(
-                    (Handle::add(
-                        Handle::cast::<Val<'a, u8>>(fns::GetPersistentNameData(ctx, i)),
-                        pos.wrapping_mul(2_i32),
-                    )),
-                );
-                {
-                    k = pos;
-                    'l3: while k < 120_i32 {
-                        'c4: {
-                            if k == 119_i32 {
-                                (p).set((0_i32 as u16));
-                            } else {
-                                (p).set((Handle::add(p, 1_i32)).get());
-                            }
-                            p = Handle::add(p, 1);
-                        }
-                        k = k.wrapping_add(1);
-                    }
-                }
-            }
-            i = i.wrapping_add(1);
-        }
-        if !(i < 120_i32) {
-            break 'l1;
-        }
-    }
-    'l5: while pos < 120_i32 {
-        'c6: {
-            j = pos.wrapping_add(1_i32);
-            'l7: while j < 120_i32 {
-                'c8: {
-                    longpos = (pos as u64);
-                    if fns::IsNameValid(ctx, ((longpos as u8) as i32)) == 0_i32 {
-                        if fns::IsNameValid(ctx, ((j as u8) as i32)) != 0_i32 {
-                            Handle::copy_from(
-                                temp,
-                                (fns::GetPersistentNameData(ctx, ((pos as u8) as i32))),
-                            );
-                            Handle::copy_from(
-                                (fns::GetPersistentNameData(ctx, ((pos as u8) as i32))),
-                                (fns::GetPersistentNameData(ctx, ((j as u8) as i32))),
-                            );
-                            Handle::copy_from(
-                                (fns::GetPersistentNameData(ctx, ((j as u8) as i32))),
-                                temp,
-                            );
-                        }
-                    }
-                    j = j.wrapping_add(1);
-                }
-            }
-            pos = pos.wrapping_add(1);
-        }
-    }
-}
-
 pub fn IsNameValid<'a>(ctx: &'a Ctx, slot: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut slot = slot;
@@ -3254,14 +3180,6 @@ pub fn register(ctx: &Ctx) {
             Ret::put(IsNameUnique(ctx, a0), ctx);
         },
         Returns::Int,
-    );
-    ctx.register_port(
-        0x80237834,
-        |ctx| {
-            let (a0,): (u8,) = Args::take_all(ctx);
-            Ret::put(DeleteName(ctx, a0), ctx);
-        },
-        Returns::Nothing,
     );
     ctx.register_port(
         0x802379bc,

@@ -59,6 +59,26 @@ pub fn GXSetMisc<'a>(ctx: &'a Ctx, token: i32, val: u32) {
     }
 }
 
+pub fn GXSetDrawDone<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut reg: u32 = 0;
+    let mut enabled: i32 = 0;
+    enabled = fns::OSDisableInterrupts(ctx);
+    reg = (0x45000002_i32 as u32);
+    'l1: loop {
+        'c2: {
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((97_i32) as u8));
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32((reg));
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    inl_GXFlush_unfused(ctx);
+    statics::dolphin__gx__GXMisc::DrawDone(ctx).set((0_i32 as u8));
+    let _ = fns::OSRestoreInterrupts(ctx, enabled);
+}
+
 pub fn GXWaitDrawDone<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x10);
     let mut enabled: i32 = 0;
@@ -522,6 +542,23 @@ pub fn __GXPEInit<'a>(ctx: &'a Ctx) {
     (Handle::add(fns::__peReg(ctx).get(), 5_i32)).set((reg as u16));
 }
 
+fn inl_GXFlush_unfused<'a>(ctx: &'a Ctx) {
+    let mut i: u32 = 0;
+    if ((fns::gx(ctx).get()).dirtyState() != 0) {
+        fns::__GXSetDirtyState(ctx);
+    }
+    {
+        i = (8_i32 as u32);
+        'l1: while i > (0_i32 as u32) {
+            'c2: {
+                (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32(((0_i32) as u32));
+            }
+            i = i.wrapping_sub(1);
+        }
+    }
+    ctx.call::<_, ()>(0x80335e8c, ());
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -529,6 +566,13 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (i32, u32) = Args::take_all(ctx);
             Ret::put(GXSetMisc(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8033cc38,
+        |ctx| {
+            Ret::put(GXSetDrawDone(ctx), ctx);
         },
         Returns::Nothing,
     );

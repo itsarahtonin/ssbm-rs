@@ -1021,6 +1021,7 @@ pub fn ifStock_802F98E8<'a>(ctx: &'a Ctx, player: u8, b: u8) {
                     .player()
                     .get((player as i32))
                     .set_coins(fns::Player_GetCoins(ctx, (player as i32)));
+                let __t2 = fns::Player_GetStocks(ctx, (player as i32));
                 ({
                     let __t1 = statics::melee__if__ifstock::ifStock_804A1378(ctx)
                         .player()
@@ -1029,7 +1030,7 @@ pub fn ifStock_802F98E8<'a>(ctx: &'a Ctx, player: u8, b: u8) {
                     stocks = __t1;
                     __t1
                 })
-                .set(fns::Player_GetStocks(ctx, (player as i32)));
+                .set(__t2);
                 if (stocks).get() < 0_i32 {
                     (stocks).set(1_i32);
                 }

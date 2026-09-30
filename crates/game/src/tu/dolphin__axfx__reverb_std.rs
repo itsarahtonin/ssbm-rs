@@ -268,6 +268,25 @@ pub fn AXFXReverbStdShutdown<'a>(ctx: &'a Ctx, rev: AXFX_REVERBSTD<'a>) -> i32 {
     return 1_i32;
 }
 
+pub fn AXFXReverbStdCallback<'a>(
+    ctx: &'a Ctx,
+    bufferUpdate: AXFX_BUFFERUPDATE<'a>,
+    reverb: AXFX_REVERBSTD<'a>,
+) {
+    let __frame = ctx.stack_frame(0x8);
+    let mut bufferUpdate = bufferUpdate;
+    let mut reverb = reverb;
+    if ((reverb).tempDisableFX() as i32) == 0_i32 {
+        inl_ReverbSTDCallback_unfused(
+            ctx,
+            (bufferUpdate).left(),
+            (bufferUpdate).right(),
+            (bufferUpdate).surround(),
+            (reverb).rv(),
+        );
+    }
+}
+
 fn inl_DLsetdelay_unfused<'a>(ctx: &'a Ctx, dl: AXFX_REVSTD_DELAYLINE<'a>, lag: i32) {
     let mut dl = dl;
     let mut lag = lag;
@@ -305,6 +324,20 @@ fn inl_DLdelete_unfused<'a>(ctx: &'a Ctx, dl: AXFX_REVSTD_DELAYLINE<'a>) {
     fns::__AXFXFree(ctx)
         .get()
         .call::<_, ()>((Handle::cast::<Addr<'a>>((dl).inputs()),));
+}
+
+fn inl_ReverbSTDCallback_unfused<'a>(
+    ctx: &'a Ctx,
+    left: Val<'a, i32>,
+    right: Val<'a, i32>,
+    surround: Val<'a, i32>,
+    rv: AXFX_REVSTD_WORK<'a>,
+) {
+    let mut left = left;
+    let mut right = right;
+    let mut surround = surround;
+    let mut rv = rv;
+    statics::dolphin__axfx__reverb_std::HandleReverb(ctx, left, rv);
 }
 
 /// Registers this unit's ports.
@@ -347,5 +380,13 @@ pub fn register(ctx: &Ctx) {
             Ret::put(AXFXReverbStdShutdown(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x8035ce78,
+        |ctx| {
+            let (a0, a1): (AXFX_BUFFERUPDATE<'_>, AXFX_REVERBSTD<'_>) = Args::take_all(ctx);
+            Ret::put(AXFXReverbStdCallback(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
     );
 }

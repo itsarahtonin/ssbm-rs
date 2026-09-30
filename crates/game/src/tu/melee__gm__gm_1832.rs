@@ -953,19 +953,18 @@ pub fn fn_80184AB8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                                 statics::melee__gm__gm_1832::lbl_803D9414(ctx).at(0);
                             'l6: while ((src).get() as i32) != 0_i32 {
                                 'c7: {
+                                    let __t3 = ({
+                                        let __t2 = src;
+                                        src = Handle::add(src, 1);
+                                        __t2
+                                    })
+                                    .get();
                                     sp10.at({
                                         let __t1 = i;
                                         i = i.wrapping_add(1);
                                         __t1
                                     })
-                                    .set(
-                                        ({
-                                            let __t2 = src;
-                                            src = Handle::add(src, 1);
-                                            __t2
-                                        })
-                                        .get(),
-                                    );
+                                    .set(__t3);
                                 }
                             }
                         }
@@ -973,19 +972,18 @@ pub fn fn_80184AB8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                         i = i.wrapping_add(1);
                         'l8: while ((name).get() as i32) != 0_i32 {
                             'c9: {
-                                sp10.at({
-                                    let __t3 = i;
-                                    i = i.wrapping_add(1);
-                                    __t3
+                                let __t6 = ({
+                                    let __t5 = name;
+                                    name = Handle::add(name, 1);
+                                    __t5
                                 })
-                                .set(
-                                    ({
-                                        let __t4 = name;
-                                        name = Handle::add(name, 1);
-                                        __t4
-                                    })
-                                    .get(),
-                                );
+                                .get();
+                                sp10.at({
+                                    let __t4 = i;
+                                    i = i.wrapping_add(1);
+                                    __t4
+                                })
+                                .set(__t6);
                             }
                         }
                         sp10.at(i).set((0_i32 as i8));
@@ -995,38 +993,36 @@ pub fn fn_80184AB8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                                 statics::melee__gm__gm_1832::lbl_804D40A0(ctx).at(0);
                             'l10: while ((name).get() as i32) != 0_i32 {
                                 'c11: {
-                                    sp10.at({
-                                        let __t5 = i;
-                                        i = i.wrapping_add(1);
-                                        __t5
+                                    let __t9 = ({
+                                        let __t8 = name;
+                                        name = Handle::add(name, 1);
+                                        __t8
                                     })
-                                    .set(
-                                        ({
-                                            let __t6 = name;
-                                            name = Handle::add(name, 1);
-                                            __t6
-                                        })
-                                        .get(),
-                                    );
+                                    .get();
+                                    sp10.at({
+                                        let __t7 = i;
+                                        i = i.wrapping_add(1);
+                                        __t7
+                                    })
+                                    .set(__t9);
                                 }
                             }
                             sp10.at(i).set((32_i32 as i8));
                             i = i.wrapping_add(1);
                             'l12: while ((src2).get() as i32) != 0_i32 {
                                 'c13: {
-                                    sp10.at({
-                                        let __t7 = i;
-                                        i = i.wrapping_add(1);
-                                        __t7
+                                    let __t12 = ({
+                                        let __t11 = src2;
+                                        src2 = Handle::add(src2, 1);
+                                        __t11
                                     })
-                                    .set(
-                                        ({
-                                            let __t8 = src2;
-                                            src2 = Handle::add(src2, 1);
-                                            __t8
-                                        })
-                                        .get(),
-                                    );
+                                    .get();
+                                    sp10.at({
+                                        let __t10 = i;
+                                        i = i.wrapping_add(1);
+                                        __t10
+                                    })
+                                    .set(__t12);
                                 }
                             }
                             sp10.at(i).set((0_i32 as i8));

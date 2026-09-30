@@ -52,6 +52,75 @@ pub fn __OSGetInterruptHandler<'a>(ctx: &'a Ctx, interrupt: i16) -> FnPtr<'a> {
     .get();
 }
 
+pub fn __OSInterruptInit<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x10);
+    statics::dolphin__os__OSInterrupt::InterruptHandlerTable(ctx).set(Handle::cast::<
+        Ptr<'a, FnPtr<'a>>,
+    >(
+        (ptr::<Addr<'a>>(
+            ctx,
+            (((shl_i32(0x8000_i32, (16_i32 as u32))) as u32).wrapping_add(((0x3040_i32) as u32)))
+                as u32,
+        )),
+    ));
+    let _ = fns::memset(
+        ctx,
+        Handle::cast::<Addr<'a>>(
+            statics::dolphin__os__OSInterrupt::InterruptHandlerTable(ctx).get(),
+        ),
+        0_i32,
+        (32_i32 as u32).wrapping_mul(4_u32),
+    );
+    (Handle::cast::<Val<'a, u32>>(
+        (ptr::<Addr<'a>>(
+            ctx,
+            (((shl_i32(0x8000_i32, (16_i32 as u32))) as u32).wrapping_add(((196_i32) as u32)))
+                as u32,
+        )),
+    ))
+    .set((0_i32 as u32));
+    (Handle::cast::<Val<'a, u32>>(
+        (ptr::<Addr<'a>>(
+            ctx,
+            (((shl_i32(0x8000_i32, (16_i32 as u32))) as u32).wrapping_add(((200_i32) as u32)))
+                as u32,
+        )),
+    ))
+    .set((0_i32 as u32));
+    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc003000_u32 as u32)), 1_i32)).set((240_i32 as u32));
+    let _ = fns::__OSMaskInterrupts(
+        ctx,
+        (((((((((shr_u32(0x80000000_u32, ((0_i32) as u32)))
+            | (shr_u32(0x80000000_u32, ((1_i32) as u32))))
+            | (shr_u32(0x80000000_u32, ((2_i32) as u32))))
+            | (shr_u32(0x80000000_u32, ((3_i32) as u32))))
+            | (shr_u32(0x80000000_u32, ((4_i32) as u32))))
+            | (((shr_u32(0x80000000_u32, ((5_i32) as u32)))
+                | (shr_u32(0x80000000_u32, ((6_i32) as u32))))
+                | (shr_u32(0x80000000_u32, ((7_i32) as u32)))))
+            | (shr_u32(0x80000000_u32, ((8_i32) as u32))))
+            | ((((((((shr_u32(0x80000000_u32, ((9_i32) as u32)))
+                | (shr_u32(0x80000000_u32, ((10_i32) as u32))))
+                | (shr_u32(0x80000000_u32, ((11_i32) as u32))))
+                | (shr_u32(0x80000000_u32, ((12_i32) as u32))))
+                | (shr_u32(0x80000000_u32, ((13_i32) as u32))))
+                | (shr_u32(0x80000000_u32, ((14_i32) as u32))))
+                | (shr_u32(0x80000000_u32, ((15_i32) as u32))))
+                | (shr_u32(0x80000000_u32, ((16_i32) as u32)))))
+            | ((((((((((shr_u32(0x80000000_u32, ((17_i32) as u32)))
+                | (shr_u32(0x80000000_u32, ((20_i32) as u32))))
+                | (shr_u32(0x80000000_u32, ((21_i32) as u32))))
+                | (shr_u32(0x80000000_u32, ((22_i32) as u32))))
+                | (shr_u32(0x80000000_u32, ((23_i32) as u32))))
+                | (shr_u32(0x80000000_u32, ((24_i32) as u32))))
+                | (shr_u32(0x80000000_u32, ((18_i32) as u32))))
+                | (shr_u32(0x80000000_u32, ((19_i32) as u32))))
+                | (shr_u32(0x80000000_u32, ((25_i32) as u32))))
+                | (shr_u32(0x80000000_u32, ((26_i32) as u32))))),
+    );
+    let _ = fns::__OSSetExceptionHandler(ctx, (4_i32 as u8), fnptr(ctx, 0x80347b80));
+}
+
 pub fn SetInterruptMask<'a>(ctx: &'a Ctx, mask: u32, current: u32) -> u32 {
     let mut mask = mask;
     let mut current = current;
@@ -527,6 +596,13 @@ pub fn register(ctx: &Ctx) {
             Ret::put(__OSGetInterruptHandler(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x803473e0,
+        |ctx| {
+            Ret::put(__OSInterruptInit(ctx), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x80347454,

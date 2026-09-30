@@ -625,7 +625,7 @@ pub fn ftKb_UnkMtxFunc0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, mtx: Ar
         fns::HSD_JObjDispAll(
             ctx,
             (fp).u().kb().hat().jobj(),
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(mtx).get(0),
+            mtx,
             fns::HSD_GObj_80390EB8(ctx, arg1),
             (0_i32 as u32),
         );
@@ -2750,7 +2750,7 @@ fn inl_HSD_JObjCopyMtx_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, mtx: ArrV<'
             cstr(ctx, 0x803b7548),
         )
     });
-    (if true {
+    (if !Handle::is_null((mtx)) {
         ({ () })
     } else {
         fns::__assert(
@@ -2760,11 +2760,7 @@ fn inl_HSD_JObjCopyMtx_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, mtx: ArrV<'
             cstr(ctx, 0x803b7548),
         )
     });
-    fns::PSMTXCopy(
-        ctx,
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(mtx).get(0),
-        (jobj).mtx().get(0),
-    );
+    fns::PSMTXCopy(ctx, mtx, (jobj).mtx().get(0));
 }
 
 fn inl_ftKb_SpecialN_insert_joint_refs_unfused<'a>(

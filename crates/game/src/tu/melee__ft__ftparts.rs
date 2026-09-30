@@ -39,11 +39,9 @@ pub fn ftParts_JObjMakePositionMtx<'a>(
     let mut rmtx = rmtx;
     let mut fighter: Fighter<'a> =
         Handle::cast::<Fighter<'a>>((fns::HSD_GObj_804D7814(ctx).get()).user_data());
-    fns::hsdJObj(ctx).make_pmtx().call::<_, ()>((
-        jobj,
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(mtx).get(0),
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(rmtx).get(0),
-    ));
+    fns::hsdJObj(ctx)
+        .make_pmtx()
+        .call::<_, ()>((jobj, mtx, rmtx));
     if (fighter).x34_scale().z() != 1.0 {
         let mut scale_z: f64 = inl_HSD_JObjGetScaleZ_unfused(ctx, jobj);
         let mut scale_y: f64 = inl_HSD_JObjGetScaleY_unfused(ctx, jobj);
@@ -57,15 +55,11 @@ pub fn ftParts_JObjMakePositionMtx<'a>(
         );
         fns::PSMTXConcat(
             ctx,
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(rmtx).get(0),
+            rmtx,
             temp_mtx.get(0),
             fns::ft_jobj_scale(ctx).mtx().get(0),
         );
-        fns::HSD_MtxInverse(
-            ctx,
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(rmtx).get(0),
-            temp_mtx.get(0),
-        );
+        fns::HSD_MtxInverse(ctx, rmtx, temp_mtx.get(0));
         fns::PSMTXConcat(
             ctx,
             fns::ft_jobj_scale(ctx).mtx().get(0),
@@ -154,7 +148,7 @@ pub fn ftPartsSetupRigidMtx<'a>(
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut tmp: ArrV<'a, F32, 4> = null(ctx);
     let mut flags: i32 = 0;
-    tmp = Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0);
+    tmp = pmtx;
     jobj = fns::HSD_JObjGetCurrent(ctx);
     fns::HSD_PObjGetMtxMark(ctx, 0_i32, mark_obj, mark);
     if (Handle::addr(mark_obj.get()) != Handle::addr(Handle::cast::<Addr<'a>>(jobj)))
@@ -442,12 +436,9 @@ pub fn ftParts_PObjSetupMtx<'a>(
     let mut pmtx = pmtx;
     let mut rendermode = rendermode;
     if !(fns::ft_jobj_scale(ctx).has_z_scale() != 0) {
-        fns::hsdPObj(ctx).setup_mtx().call::<_, ()>((
-            pobj,
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0),
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
-            rendermode,
-        ));
+        fns::hsdPObj(ctx)
+            .setup_mtx()
+            .call::<_, ()>((pobj, vmtx, pmtx, rendermode));
         return;
     }
     's1: {
@@ -459,42 +450,18 @@ pub fn ftParts_PObjSetupMtx<'a>(
         };
         if __case <= 0 {
             if Handle::is_null((pobj).u().jobj()) {
-                fns::ftPartsSetupRigidMtx(
-                    ctx,
-                    pobj,
-                    Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0),
-                    Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
-                    rendermode,
-                );
+                fns::ftPartsSetupRigidMtx(ctx, pobj, vmtx, pmtx, rendermode);
             } else {
-                fns::ftPartsSetupSharedVtxMtx(
-                    ctx,
-                    pobj,
-                    Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0),
-                    Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
-                    rendermode,
-                );
+                fns::ftPartsSetupSharedVtxMtx(ctx, pobj, vmtx, pmtx, rendermode);
             }
             break 's1;
         }
         if __case <= 1 {
-            fns::ftPartsSetupRigidMtx(
-                ctx,
-                pobj,
-                Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0),
-                Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
-                rendermode,
-            );
+            fns::ftPartsSetupRigidMtx(ctx, pobj, vmtx, pmtx, rendermode);
             break 's1;
         }
         if __case <= 2 {
-            fns::ftPartsSetupEnvelopeMtx(
-                ctx,
-                pobj,
-                Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0),
-                Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
-                rendermode,
-            );
+            fns::ftPartsSetupEnvelopeMtx(ctx, pobj, vmtx, pmtx, rendermode);
             break 's1;
         }
     }
@@ -2026,20 +1993,12 @@ fn inl_ftPartsSetupZScaleMtx_unfused<'a>(
         fns::PSMTXConcat(
             ctx,
             fns::ft_jobj_scale(ctx).mtx().get(0),
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(src).get(0),
+            src,
             scale_mtx.get(0),
         );
-        fns::HSD_MtxInverseTranspose(
-            ctx,
-            scale_mtx.get(0),
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(dst).get(0),
-        );
+        fns::HSD_MtxInverseTranspose(ctx, scale_mtx.get(0), dst);
     } else {
-        fns::HSD_MtxInverseTranspose(
-            ctx,
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(src).get(0),
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(dst).get(0),
-        );
+        fns::HSD_MtxInverseTranspose(ctx, src, dst);
     }
 }
 
@@ -2053,11 +2012,7 @@ fn inl_ftPartsSetupNrmMtx_unfused<'a>(
     let mut mtx = mtx;
     let mut id = id;
     if (((jobj).flags() & ((shl_i32(1_i32, (7_i32 as u32))) as u32)) != 0) {
-        fns::GXLoadNrmMtxImm(
-            ctx,
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(mtx).get(0),
-            (id as u32),
-        );
+        fns::GXLoadNrmMtxImm(ctx, mtx, (id as u32));
         inl_HSD_PerfCountMtxLoad_unfused(ctx);
     }
 }
@@ -2065,12 +2020,7 @@ fn inl_ftPartsSetupNrmMtx_unfused<'a>(
 fn inl_ftPartsSetupTexMtx_unfused<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, id: i32) {
     let mut mtx = mtx;
     let mut id = id;
-    fns::GXLoadTexMtxImm(
-        ctx,
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(mtx).get(0),
-        (id as u32),
-        (enums::GX_MTX3x4 as i32),
-    );
+    fns::GXLoadTexMtxImm(ctx, mtx, (id as u32), (enums::GX_MTX3x4 as i32));
     inl_HSD_PerfCountMtxLoad_unfused(ctx);
 }
 

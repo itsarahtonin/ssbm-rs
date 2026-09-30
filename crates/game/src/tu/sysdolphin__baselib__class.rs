@@ -26,6 +26,79 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn ClassInfoInit<'a>(ctx: &'a Ctx, info: _HSD_ClassInfo<'a>) {
+    let __frame = ctx.stack_frame(0x8);
+    let mut info = info;
+    if ((info).head().flags() & (1_i32 as u32)) == (0_i32 as u32) {
+        (info).head().info_init().call::<_, ()>(());
+    }
+}
+
+pub fn hsdInitClassInfo<'a>(
+    ctx: &'a Ctx,
+    class_info: _HSD_ClassInfo<'a>,
+    parent_info: _HSD_ClassInfo<'a>,
+    base_class_library: Val<'a, i8>,
+    r#type: Val<'a, i8>,
+    info_size: i32,
+    class_size: i32,
+) {
+    let __frame = ctx.stack_frame(0x28);
+    let mut class_info = class_info;
+    let mut parent_info = parent_info;
+    let mut base_class_library = base_class_library;
+    let mut r#type = r#type;
+    let mut info_size = info_size;
+    let mut class_size = class_size;
+    (class_info).head().set_flags((1_i32 as u32));
+    (class_info).head().set_library_name(base_class_library);
+    (class_info).head().set_class_name(r#type);
+    (class_info).head().set_obj_size((class_size as i16));
+    (class_info).head().set_info_size((info_size as i16));
+    (class_info).head().set_parent(parent_info);
+    (class_info)
+        .head()
+        .set_child(null::<_HSD_ClassInfo<'a>>(ctx));
+    (class_info)
+        .head()
+        .set_next(null::<_HSD_ClassInfo<'a>>(ctx));
+    (class_info).head().set_nb_exist((0_i32 as u32));
+    (class_info).head().set_nb_peak((0_i32 as u32));
+    if !Handle::is_null(parent_info) {
+        if ((parent_info).head().flags() & (1_i32 as u32)) == (0_i32 as u32) {
+            (parent_info).head().info_init().call::<_, ()>(());
+        }
+        (if ((class_info).head().obj_size() as i32) >= ((parent_info).head().obj_size() as i32) {
+            ({ () })
+        } else {
+            fns::__assert(
+                ctx,
+                cstr(ctx, 0x80407594),
+                (51_i32 as u32),
+                cstr(ctx, 0x80407594),
+            )
+        });
+        (if ((class_info).head().info_size() as i32) >= ((parent_info).head().info_size() as i32) {
+            ({ () })
+        } else {
+            fns::__assert(
+                ctx,
+                cstr(ctx, 0x80407594),
+                (52_i32 as u32),
+                cstr(ctx, 0x80407594),
+            )
+        });
+        let _ = fns::memcpy(
+            ctx,
+            Handle::cast::<Addr<'a>>((class_info).alloc_ref()),
+            Handle::cast::<Addr<'a>>((parent_info).alloc_ref()),
+            ((parent_info).head().info_size() as u32).wrapping_sub(40_u32),
+        );
+        (class_info).head().set_next((parent_info).head().child());
+        (parent_info).head().set_child(class_info);
+    }
+}
+
 pub fn OSReport_PrintSpaces<'a>(ctx: &'a Ctx, count: i32) {
     let __frame = ctx.stack_frame(0x18);
     let mut count = count;
@@ -827,6 +900,29 @@ fn inl_hsdDumpClassStat_unfused<'a>(
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x80381be4,
+        |ctx| {
+            let (a0,): (_HSD_ClassInfo<'_>,) = Args::take_all(ctx);
+            Ret::put(ClassInfoInit(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80381c18,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5): (
+                _HSD_ClassInfo<'_>,
+                _HSD_ClassInfo<'_>,
+                Val<'_, i8>,
+                Val<'_, i8>,
+                i32,
+                i32,
+            ) = Args::take_all(ctx);
+            Ret::put(hsdInitClassInfo(ctx, a0, a1, a2, a3, a4, a5), ctx);
+        },
+        Returns::Nothing,
+    );
     ctx.register_port(
         0x80381d08,
         |ctx| {

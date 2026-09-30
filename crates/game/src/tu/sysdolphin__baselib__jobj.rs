@@ -878,7 +878,7 @@ pub fn HSD_JObjDispAll<'a>(
     let mut vmtx = vmtx;
     let mut flags = flags;
     let mut rendermode = rendermode;
-    let mut new_var: ArrV<'a, F32, 4> = Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0);
+    let mut new_var: ArrV<'a, F32, 4> = vmtx;
     if !Handle::is_null(jobj) {
         if (((jobj).flags() & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0) {
             if !(((jobj).flags() & ((shl_i32(1_i32, (4_i32 as u32))) as u32)) != 0) {

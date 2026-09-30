@@ -38,16 +38,17 @@ pub fn mnSnap_80253184<'a>(ctx: &'a Ctx) {
     p4F = (snap).cur_page_ref();
     p52 = (snap).load_idx_ref();
     p50 = (snap).active_slot_ref();
+    let __t2 = fns::lbSnap_8001E058(
+        ctx,
+        (p50).get(),
+        (p52).get().wrapping_add(((p4F).get().wrapping_mul(4_i32))),
+    );
     ({
         let __t1 = (snap).card_result_ref();
         p57 = __t1;
         __t1
     })
-    .set(fns::lbSnap_8001E058(
-        ctx,
-        (p50).get(),
-        (p52).get().wrapping_add(((p4F).get().wrapping_mul(4_i32))),
-    ));
+    .set(__t2);
     if (p57).get() == 8_i32 {
         fns::mnSnap_80254298(ctx);
         return;
@@ -3942,16 +3943,17 @@ fn inl_mnSnap_80253184_unfused<'a>(ctx: &'a Ctx) {
     p4F = (snap).cur_page_ref();
     p52 = (snap).load_idx_ref();
     p50 = (snap).active_slot_ref();
+    let __t2 = fns::lbSnap_8001E058(
+        ctx,
+        (p50).get(),
+        (p52).get().wrapping_add(((p4F).get().wrapping_mul(4_i32))),
+    );
     ({
         let __t1 = (snap).card_result_ref();
         p57 = __t1;
         __t1
     })
-    .set(fns::lbSnap_8001E058(
-        ctx,
-        (p50).get(),
-        (p52).get().wrapping_add(((p4F).get().wrapping_mul(4_i32))),
-    ));
+    .set(__t2);
     if (p57).get() == 8_i32 {
         fns::mnSnap_80254298(ctx);
         return;

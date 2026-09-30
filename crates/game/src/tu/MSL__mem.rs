@@ -60,17 +60,16 @@ pub fn memmove<'a>(ctx: &'a Ctx, dst: Addr<'a>, src: Addr<'a>, len: u32) -> Addr
             } > (0_i32 as u32)
             {
                 'c2: {
+                    let __t1 = ({
+                        csrc = Handle::add(csrc, 1);
+                        csrc
+                    })
+                    .get();
                     ({
                         cdst = Handle::add(cdst, 1);
                         cdst
                     })
-                    .set(
-                        ({
-                            csrc = Handle::add(csrc, 1);
-                            csrc
-                        })
-                        .get(),
-                    );
+                    .set(__t1);
                 }
             }
         } else {
@@ -83,17 +82,16 @@ pub fn memmove<'a>(ctx: &'a Ctx, dst: Addr<'a>, src: Addr<'a>, len: u32) -> Addr
             } > (0_i32 as u32)
             {
                 'c4: {
+                    let __t2 = ({
+                        csrc = Handle::add(csrc, -1);
+                        csrc
+                    })
+                    .get();
                     ({
                         cdst = Handle::add(cdst, -1);
                         cdst
                     })
-                    .set(
-                        ({
-                            csrc = Handle::add(csrc, -1);
-                            csrc
-                        })
-                        .get(),
-                    );
+                    .set(__t2);
                 }
             }
         }

@@ -776,12 +776,7 @@ pub fn fn_8018A000<'a>(ctx: &'a Ctx) -> HSD_Text<'a> {
     } else {
         fns::HSD_SisLib_803A62A0(ctx, 0_i32, cstr(ctx, 0x803d9904), cstr(ctx, 0x803d98f0));
     }
-    ({
-        let __t1 = fns::gm_80473814(ctx).text_ref();
-        text_ptr = __t1;
-        __t1
-    })
-    .set(fns::HSD_SisLib_803A5ACC(
+    let __t2 = fns::HSD_SisLib_803A5ACC(
         ctx,
         0_i32,
         0_i32,
@@ -797,7 +792,13 @@ pub fn fn_8018A000<'a>(ctx: &'a Ctx) -> HSD_Text<'a> {
         0.10000000149011612,
         167.0,
         16.0,
-    ));
+    );
+    ({
+        let __t1 = fns::gm_80473814(ctx).text_ref();
+        text_ptr = __t1;
+        __t1
+    })
+    .set(__t2);
     text = (text_ptr).get();
     let _ = fns::lbLang_IsSettingUS(ctx);
     fns::HSD_SisLib_803A6368(
@@ -914,6 +915,25 @@ fn inl_HSD_JObjGetTranslation2_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, tra
 fn inl_gm_801891F4_GetMenuValues_unfused<'a>(ctx: &'a Ctx, sub: CssSubStruct<'a>) -> Val<'a, i32> {
     let mut sub = sub;
     return (sub).menu_values().at(0);
+}
+
+fn inl_sfxForward_unfused<'a>(ctx: &'a Ctx) {
+    fns::lbAudioAx_80024030(ctx, 1_i32);
+}
+
+fn inl_sfxBack_unfused<'a>(ctx: &'a Ctx) {
+    fns::lbAudioAx_80024030(ctx, 0_i32);
+}
+
+fn inl_gm_801891F4_GetTickRate_unfused<'a>(ctx: &'a Ctx) -> u32 {
+    return (div_u32(
+        ((ptr::<Val<'a, u32>>(
+            ctx,
+            ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+        ))
+        .get()),
+        (4_i32 as u32),
+    ));
 }
 
 fn inl_resetText<'a>(ctx: &'a Ctx, text: HSD_Text<'a>) {

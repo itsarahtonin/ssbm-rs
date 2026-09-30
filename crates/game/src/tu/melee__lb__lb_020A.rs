@@ -26,6 +26,118 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn fn_80020AEC<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, out: ArrV<'a, F32, 4>) {
+    let __frame = ctx.stack_frame(0xa8);
+    let tmp: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let col: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x3c);
+    let mut jobj = jobj;
+    let mut out = out;
+    let mut cur: HSD_JObj<'a> = null(ctx);
+    let mut i: i32 = 0;
+    let mut scale_mag: f64 = 0.0;
+    fns::HSD_MtxInverseConcat(
+        ctx,
+        inl_HSD_JObjGetMtxPtr(ctx, inl_HSD_JObjGetParent(ctx, jobj)),
+        inl_HSD_JObjGetMtxPtr(ctx, jobj),
+        out,
+    );
+    {
+        i = 0_i32;
+        'l1: while i < 3_i32 {
+            'c2: {
+                let mut mag: f64 = 0.0;
+                let mut scale_sq: f64 = 0.0;
+                let mut factor: f64 = 0.0;
+                col.set_x((Handle::add(out, 0_i32)).at(i).get());
+                col.set_y((Handle::add(out, 1_i32)).at(i).get());
+                col.set_z((Handle::add(out, 2_i32)).at(i).get());
+                mag = fns::PSVECMag(ctx, col);
+                if mag > 1.000000013351432e-10_f64 {
+                    mag = fp::fdivs(1.0, mag);
+                }
+                {
+                    let mut sx: f64 = 0.0;
+                    let mut sy: f64 = 0.0;
+                    let mut sz: f64 = 0.0;
+                    sy = (jobj).mtx().get(1_i32).at(i).get();
+                    sx = (jobj).mtx().get(0_i32).at(i).get();
+                    sz = (jobj).mtx().get(2_i32).at(i).get();
+                    sy = fp::fmuls(sy, sy);
+                    sx = fp::fmuls(sx, sx);
+                    sz = fp::fmuls(sz, sz);
+                    scale_sq = fp::fadds(sy, sx);
+                    scale_sq = fp::fadds(sz, scale_sq);
+                }
+                if scale_sq > 0.0 {
+                    let mut e: f64 = fp::frsqrte(scale_sq);
+                    e = fp::fmul(
+                        fp::fmul(0.5, e),
+                        fp::fneg((fp::fmsub(scale_sq, (fp::fmul(e, e)), 3.0))),
+                    );
+                    e = fp::fmul(
+                        fp::fmul(0.5, e),
+                        fp::fneg((fp::fmsub(scale_sq, (fp::fmul(e, e)), 3.0))),
+                    );
+                    e = fp::fmul(
+                        fp::fmul(0.5, e),
+                        fp::fneg((fp::fmsub(scale_sq, (fp::fmul(e, e)), 3.0))),
+                    );
+                    scale_mag = fp::frsp((fp::fmul(scale_sq, e)));
+                    scale_sq = scale_mag;
+                }
+                factor = fp::fmuls(mag, scale_sq);
+                col.set_x(fp::fmuls(col.x(), factor));
+                col.set_y(fp::fmuls(col.y(), factor));
+                col.set_z(fp::fmuls(col.z(), factor));
+                (Handle::add(out, 0_i32)).at(i).set(col.x());
+                (Handle::add(out, 1_i32)).at(i).set(col.y());
+                (Handle::add(out, 2_i32)).at(i).set(col.z());
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    cur = inl_HSD_JObjGetParent(ctx, jobj);
+    'l3: while !Handle::is_null(cur) {
+        'c4: {
+            if !Handle::is_null(inl_HSD_JObjGetParent(ctx, cur)) {
+                fns::HSD_MtxInverseConcat(
+                    ctx,
+                    inl_HSD_JObjGetMtxPtr(ctx, inl_HSD_JObjGetParent(ctx, cur)),
+                    inl_HSD_JObjGetMtxPtr(ctx, cur),
+                    tmp.get(0),
+                );
+            } else {
+                fns::PSMTXCopy(ctx, inl_HSD_JObjGetMtxPtr(ctx, cur), tmp.get(0));
+            }
+            {
+                i = 0_i32;
+                'l5: while i < 3_i32 {
+                    'c6: {
+                        let mut mag_2: f64 = 0.0;
+                        col.set_x(tmp.get(0_i32).at(i).get());
+                        col.set_y(tmp.get(1_i32).at(i).get());
+                        col.set_z(tmp.get(2_i32).at(i).get());
+                        mag_2 = fns::PSVECMag(ctx, col);
+                        if mag_2 > 9.999999747378752e-06_f64 {
+                            mag_2 = fp::fdivs(1.0, mag_2);
+                        }
+                        col.set_x(fp::fmuls(col.x(), mag_2));
+                        col.set_y(fp::fmuls(col.y(), mag_2));
+                        col.set_z(fp::fmuls(col.z(), mag_2));
+                        tmp.get(0_i32).at(i).set(col.x());
+                        tmp.get(1_i32).at(i).set(col.y());
+                        tmp.get(2_i32).at(i).set(col.z());
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+            fns::PSMTXConcat(ctx, tmp.get(0), out, out);
+            cur = inl_HSD_JObjGetParent(ctx, cur);
+        }
+    }
+}
+
 pub fn lbBgFlash_80020E38<'a>(
     ctx: &'a Ctx,
     jobj: HSD_JObj<'a>,
@@ -640,6 +752,14 @@ fn inl_fabs<'a>(ctx: &'a Ctx, f: f64) -> f64 {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x80020aec,
+        |ctx| {
+            let (a0, a1): (HSD_JObj<'_>, ArrV<'_, F32, 4>) = Args::take_all(ctx);
+            Ret::put(fn_80020AEC(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
     ctx.register_port(
         0x80020e38,
         |ctx| {

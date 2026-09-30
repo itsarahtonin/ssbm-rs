@@ -640,12 +640,9 @@ pub fn lbRefract_DObjDispReset<'a>(
     let mut vmtx = vmtx;
     let mut pmtx = pmtx;
     let mut rendermode = rendermode;
-    fns::hsdDObj(ctx).disp().call::<_, ()>((
-        dobj,
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0),
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
-        rendermode,
-    ));
+    fns::hsdDObj(ctx)
+        .disp()
+        .call::<_, ()>((dobj, vmtx, pmtx, rendermode));
     fns::GXSetTevDirect(ctx, 0_i32);
     fns::GXSetNumIndStages(ctx, (0_i32 as u8));
     fns::HSD_StateInvalidate(ctx, 1_i32.wrapping_neg());

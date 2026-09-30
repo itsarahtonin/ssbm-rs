@@ -26,6 +26,19 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn db_ClearFPUExceptions<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x10);
+    let mut v_ctx: OSContext<'a> = null(ctx);
+    fns::PPCMtmsr(
+        ctx,
+        (ctx.call::<_, u32>(0x80335e5c, ()) | (0x900_i32 as u32)),
+    );
+    v_ctx = fns::OSGetCurrentContext(ctx);
+    fns::OSSaveFPUContext(ctx, v_ctx);
+    (v_ctx).set_fpscr(((v_ctx).fpscr() & (0xfffff_i32 as u32)));
+    fns::OSLoadFPUContext(ctx, v_ctx);
+}
+
 pub fn fn_HSDPanicHandler<'a>(ctx: &'a Ctx, v_ctx: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut v_ctx = v_ctx;
@@ -80,6 +93,13 @@ pub fn db_SetupCrashHandler<'a>(ctx: &'a Ctx) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x80228a64,
+        |ctx| {
+            Ret::put(db_ClearFPUExceptions(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
     ctx.register_port(
         0x80228ab4,
         |ctx| {

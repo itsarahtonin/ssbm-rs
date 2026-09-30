@@ -1095,12 +1095,7 @@ pub fn efLib_CreateGenerator_Attach_Scale<'a>(
         ctx,
         generator,
         id,
-        ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-            ctx,
-            Handle::cast::<Arr<'a, __va_list_t<'a>, 1>>(vlist).get(0),
-            1_u8,
-        )))
-        .get()),
+        ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
     );
     if !Handle::is_null(generator.get()) {
         inl_HSD_JObjGetScale_unfused(
@@ -1134,23 +1129,15 @@ pub fn efLib_CreateGenerator_AppSRT_SetScale<'a>(
         ctx,
         generator,
         gfx_id,
-        ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-            ctx,
-            Handle::cast::<Arr<'a, __va_list_t<'a>, 1>>(vlist).get(0),
-            1_u8,
-        )))
-        .get()),
+        ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
     );
     if !Handle::is_null(generator.get()) {
         ((generator.get()).appsrt()).scale().set_x({
             let __t2 = {
-                let __t1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(
-                    ctx,
-                    Handle::cast::<Arr<'a, __va_list_t<'a>, 1>>(vlist).get(0),
-                    1_u8,
-                )))
-                .get())
-                .get();
+                let __t1 =
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get())
+                    .get();
                 ((generator.get()).appsrt()).scale().set_z(__t1);
                 __t1
             };
@@ -1175,21 +1162,11 @@ pub fn efLib_CreateGenerator_AppSRT_SetFacingDir<'a>(
         ctx,
         generator,
         gfx_id,
-        ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-            ctx,
-            Handle::cast::<Arr<'a, __va_list_t<'a>, 1>>(vlist).get(0),
-            1_u8,
-        )))
-        .get()),
+        ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
     );
     if !Handle::is_null(generator.get()) {
-        direction = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(
-            ctx,
-            Handle::cast::<Arr<'a, __va_list_t<'a>, 1>>(vlist).get(0),
-            1_u8,
-        )))
-        .get())
-        .get();
+        direction =
+            ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()).get();
         ((generator.get()).appsrt()).rot().set_y(fp::frsp(
             (if direction < 0.0 {
                 fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))))
@@ -1214,21 +1191,11 @@ pub fn efLib_CreateGenerator_AppSRT_SetFacingDirScale<'a>(
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut id: i32 = 0;
     id = gfx_id;
-    jobj = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-        ctx,
-        Handle::cast::<Arr<'a, __va_list_t<'a>, 1>>(vlist).get(0),
-        1_u8,
-    )))
-    .get());
+    jobj = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
     inl_eflib_create_generator_add_appsrt_unfused(ctx, generator, id, jobj);
     if !Handle::is_null(generator.get()) {
-        direction = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(
-            ctx,
-            Handle::cast::<Arr<'a, __va_list_t<'a>, 1>>(vlist).get(0),
-            1_u8,
-        )))
-        .get())
-        .get();
+        direction =
+            ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()).get();
         ((generator.get()).appsrt()).rot().set_y(fp::frsp(
             (if direction < 0.0 {
                 fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))))
@@ -1238,13 +1205,10 @@ pub fn efLib_CreateGenerator_AppSRT_SetFacingDirScale<'a>(
         ));
         ((generator.get()).appsrt()).scale().set_x({
             let __t2 = {
-                let __t1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(
-                    ctx,
-                    Handle::cast::<Arr<'a, __va_list_t<'a>, 1>>(vlist).get(0),
-                    1_u8,
-                )))
-                .get())
-                .get();
+                let __t1 =
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get())
+                    .get();
                 ((generator.get()).appsrt()).scale().set_z(__t1);
                 __t1
             };

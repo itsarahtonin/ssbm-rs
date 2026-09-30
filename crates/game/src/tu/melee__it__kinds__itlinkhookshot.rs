@@ -506,6 +506,41 @@ pub fn itLinkhookshot_UnkMotion1_Phys<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
         .set_x10(fnptr(ctx, 0x802a2ee4));
 }
 
+pub fn fn_802A3110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x70);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let mut arg0 = arg0;
+    let mut item: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, arg0)));
+    let mut attr: itLinkHookshotAttributes<'a> = null(ctx);
+    let mut item_link: ItemLink<'a> = null(ctx);
+    let mut fp: Fighter<'a> = null(ctx);
+    attr = Handle::cast::<itLinkHookshotAttributes<'a>>(
+        ((item).xC4_article_data()).x4_specialAttributes(),
+    );
+    fp = Handle::cast::<Fighter<'a>>(((item).owner()).user_data());
+    item_link = (item).xDD4_itemVar().linkhookshot().x0();
+    inl_fn_802A3110_inline_unfused(ctx, item_link, vec);
+    's1: {
+        let __case = match fns::it_802A5320(ctx, item_link, vec, attr, fp) {
+            1_i32 => 0,
+            2_i32 => 1,
+            _ => 2,
+        };
+        if __case <= 0 {
+            (item_link)
+                .vel()
+                .set_x(fp::fmuls((item_link).vel().x(), fp::fneg((attr).x0())));
+            break 's1;
+        }
+        if __case <= 1 {
+            fns::it_802A76EC(ctx, arg0);
+            break 's1;
+        }
+    }
+    fns::it_802A7168(ctx, item, vec, (fp).x34_scale().y());
+}
+
 pub fn itLinkhookshot_UnkMotion2_Phys<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let mut arg0 = arg0;
     let mut item: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, arg0)));
@@ -2743,6 +2778,36 @@ fn inl_it_802A2EE4_inline_alt_unfused<'a>(ctx: &'a Ctx, item_link: ItemLink<'a>,
     (pos).set_z(m.get(2_i32).at(3_i32).get());
 }
 
+fn inl_mtx_reset_unfused<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>) {
+    let mut m = m;
+    let mut zero: f64 = 0.0;
+    (Handle::add(m, 0_i32)).at(3_i32).set(zero);
+    (Handle::add(m, 1_i32)).at(3_i32).set(zero);
+    (Handle::add(m, 2_i32))
+        .at(3_i32)
+        .set(fns::it_804D6D48(ctx).get());
+}
+
+fn inl_vec3_eq_mtx_unfused<'a>(ctx: &'a Ctx, vec: Vec<'a>, m: ArrV<'a, F32, 4>) {
+    let mut vec = vec;
+    let mut m = m;
+    (vec).set_x((Handle::add(m, 0_i32)).at(3_i32).get());
+    (vec).set_y((Handle::add(m, 1_i32)).at(3_i32).get());
+    (vec).set_z((Handle::add(m, 2_i32)).at(3_i32).get());
+}
+
+fn inl_fn_802A3110_inline_unfused<'a>(ctx: &'a Ctx, item_link: ItemLink<'a>, pos: Vec<'a>) {
+    let __frame = ctx.stack_frame(0x38);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let mut item_link = item_link;
+    let mut pos = pos;
+    fns::PSMTXIdentity(ctx, m.get(0));
+    inl_mtx_reset_unfused(ctx, m.get(0));
+    inl_HSD_JObjSetupMatrix_unfused(ctx, (item_link).jobj());
+    fns::PSMTXConcat(ctx, ((item_link).jobj()).mtx().get(0), m.get(0), m.get(0));
+    inl_vec3_eq_mtx_unfused(ctx, pos, m.get(0));
+}
+
 fn inl_fn_802A33A0_GetFighter_unfused<'a>(ctx: &'a Ctx, item: Item<'a>) -> Fighter<'a> {
     let mut item = item;
     return Handle::cast::<Fighter<'a>>(((item).owner()).user_data());
@@ -3117,7 +3182,7 @@ fn inl_HSD_JObjCopyMtx_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, mtx: ArrV<'
             cstr(ctx, 0x803b8650),
         )
     });
-    (if true {
+    (if !Handle::is_null((mtx)) {
         ({ () })
     } else {
         fns::__assert(
@@ -3127,11 +3192,7 @@ fn inl_HSD_JObjCopyMtx_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, mtx: ArrV<'
             cstr(ctx, 0x803b8650),
         )
     });
-    fns::PSMTXCopy(
-        ctx,
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(mtx).get(0),
-        (jobj).mtx().get(0),
-    );
+    fns::PSMTXCopy(ctx, mtx, (jobj).mtx().get(0));
 }
 
 fn inl_it_802A6A78_get_next<'a>(ctx: &'a Ctx, link_0: ItemLink<'a>, link_1: Ptr<'a, ItemLink<'a>>) {
@@ -3384,6 +3445,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(itLinkhookshot_UnkMotion1_Phys(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x802a3110,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(fn_802A3110(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

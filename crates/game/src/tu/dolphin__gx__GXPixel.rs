@@ -391,6 +391,69 @@ pub fn GXSetFog<'a>(
     (fns::gx(ctx).get()).set_bpSent((0_i32 as u16));
 }
 
+pub fn GXInitFogAdjTable<'a>(
+    ctx: &'a Ctx,
+    table: _GXFogAdjTable<'a>,
+    width: u16,
+    projmtx: ArrV<'a, F32, 4>,
+) {
+    let __frame = ctx.stack_frame(0x80);
+    let mut table = table;
+    let mut width = width;
+    let mut projmtx = projmtx;
+    let mut xi: f64 = 0.0;
+    let mut iw: f64 = 0.0;
+    let mut rangeVal: f64 = 0.0;
+    let mut nearZ: f64 = 0.0;
+    let mut sideX: f64 = 0.0;
+    let mut i: u32 = 0;
+    if 0.0 == (Handle::add(projmtx, 3_i32)).at(3_i32).get() {
+        nearZ = fp::fdivs(
+            (Handle::add(projmtx, 2_i32)).at(3_i32).get(),
+            (fp::fsubs((Handle::add(projmtx, 2_i32)).at(2_i32).get(), 1.0)),
+        );
+        sideX = fp::fdivs(
+            (fp::fmuls(
+                nearZ,
+                (fp::fadds(1.0, (Handle::add(projmtx, 0_i32)).at(2_i32).get())),
+            )),
+            (Handle::add(projmtx, 0_i32)).at(0_i32).get(),
+        );
+    } else {
+        nearZ = fp::fdivs(
+            (fp::fadds(1.0, (Handle::add(projmtx, 2_i32)).at(3_i32).get())),
+            (Handle::add(projmtx, 2_i32)).at(2_i32).get(),
+        );
+        sideX = fp::fdivs(
+            fp::fneg((fp::fsubs((Handle::add(projmtx, 0_i32)).at(3_i32).get(), 1.0))),
+            (Handle::add(projmtx, 0_i32)).at(0_i32).get(),
+        );
+    }
+    iw = fp::fdivs(2.0, fp::frsp((width as i32) as f64));
+    {
+        i = (0_i32 as u32);
+        'l1: while i < (10_i32 as u32) {
+            'c2: {
+                xi = fp::frsp(shl_u32((i.wrapping_add((1_i32 as u32))), (5_i32 as u32)) as f64);
+                xi = fp::fmuls(xi, iw);
+                xi = fp::fmuls(xi, sideX);
+                rangeVal = inl_sqrtf_unfused(
+                    ctx,
+                    fp::fadds(
+                        1.0,
+                        (fp::fdivs((fp::fmuls(xi, xi)), (fp::fmuls(nearZ, nearZ)))),
+                    ),
+                );
+                (table).r().at((i as i32)).set(
+                    ((cvt_fp2unsigned(ctx, (fp::fmuls(256.0, rangeVal))) & (0xfff_i32 as u32))
+                        as u16),
+                );
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+}
+
 pub fn GXSetFogRangeAdj<'a>(ctx: &'a Ctx, enable: u8, center: u16, table: _GXFogAdjTable<'a>) {
     let mut enable = enable;
     let mut center = center;
@@ -1116,6 +1179,29 @@ pub fn GXSetFieldMode<'a>(ctx: &'a Ctx, field_mode: u8, half_aspect_ratio: u8) {
     fns::__GXFlushTextureState(ctx);
 }
 
+fn inl_sqrtf_unfused<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+    let mut x = x;
+    let mut y: f64 = 0.0;
+    if x > 0.0 {
+        let mut guess: f64 = fp::frsqrte(x);
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
+        );
+        y = fp::frsp((fp::fmul(x, guess)));
+        return y;
+    }
+    return x;
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -1124,6 +1210,14 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1, a2, a3, a4, a5): (i32, Single, Single, Single, Single, _GXColor<'_>) =
                 Args::take_all(ctx);
             Ret::put(GXSetFog(ctx, a0, a1.0, a2.0, a3.0, a4.0, a5), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80340974,
+        |ctx| {
+            let (a0, a1, a2): (_GXFogAdjTable<'_>, u16, ArrV<'_, F32, 4>) = Args::take_all(ctx);
+            Ret::put(GXInitFogAdjTable(ctx, a0, a1, a2), ctx);
         },
         Returns::Nothing,
     );

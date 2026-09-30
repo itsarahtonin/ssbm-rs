@@ -730,6 +730,815 @@ pub fn GXSetCopyClear<'a>(ctx: &'a Ctx, clear_clr: _GXColor<'a>, clear_z: u32) {
     (fns::gx(ctx).get()).set_bpSent((0_i32 as u16));
 }
 
+pub fn GXSetCopyFilter<'a>(
+    ctx: &'a Ctx,
+    aa: u8,
+    sample_pattern: ArrV<'a, u8, 2>,
+    vf: u8,
+    vfilter: Val<'a, u8>,
+) {
+    let __frame = ctx.stack_frame(0x50);
+    let msLoc: ArrV<'a, u32, 4> = frame_at(ctx, &__frame, 0x0);
+    let mut aa = aa;
+    let mut sample_pattern = sample_pattern;
+    let mut vf = vf;
+    let mut vfilter = vfilter;
+    let mut coeff0: u32 = 0;
+    let mut coeff1: u32 = 0;
+    if (aa as i32) != 0_i32 {
+        msLoc.at(0_i32).set((0_i32 as u32));
+        'l1: loop {
+            'c2: {
+                msLoc.at(0_i32).set(
+                    (((msLoc.at(0_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
+                            ((0_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((Handle::add(sample_pattern, 0_i32)).at(0_i32).get()) as u32),
+                            ((0_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l1;
+            }
+        }
+        'l3: loop {
+            'c4: {
+                msLoc.at(0_i32).set(
+                    (((msLoc.at(0_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
+                            ((4_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((Handle::add(sample_pattern, 0_i32)).at(1_i32).get()) as u32),
+                            ((4_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l3;
+            }
+        }
+        'l5: loop {
+            'c6: {
+                msLoc.at(0_i32).set(
+                    (((msLoc.at(0_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
+                            ((8_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((Handle::add(sample_pattern, 1_i32)).at(0_i32).get()) as u32),
+                            ((8_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l5;
+            }
+        }
+        'l7: loop {
+            'c8: {
+                msLoc.at(0_i32).set(
+                    (((msLoc.at(0_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
+                            ((12_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((Handle::add(sample_pattern, 1_i32)).at(1_i32).get()) as u32),
+                            ((12_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l7;
+            }
+        }
+        'l9: loop {
+            'c10: {
+                msLoc.at(0_i32).set(
+                    (((msLoc.at(0_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
+                            ((16_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((Handle::add(sample_pattern, 2_i32)).at(0_i32).get()) as u32),
+                            ((16_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l9;
+            }
+        }
+        'l11: loop {
+            'c12: {
+                msLoc.at(0_i32).set(
+                    (((msLoc.at(0_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
+                            ((20_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((Handle::add(sample_pattern, 2_i32)).at(1_i32).get()) as u32),
+                            ((20_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l11;
+            }
+        }
+        'l13: loop {
+            'c14: {
+                msLoc.at(0_i32).set(
+                    (((msLoc.at(0_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
+                            ((24_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(((1_i32) as u32), ((24_i32) as u32)))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l13;
+            }
+        }
+        msLoc.at(1_i32).set((0_i32 as u32));
+        'l15: loop {
+            'c16: {
+                msLoc.at(1_i32).set(
+                    (((msLoc.at(1_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
+                            ((0_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((Handle::add(sample_pattern, 3_i32)).at(0_i32).get()) as u32),
+                            ((0_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l15;
+            }
+        }
+        'l17: loop {
+            'c18: {
+                msLoc.at(1_i32).set(
+                    (((msLoc.at(1_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
+                            ((4_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((Handle::add(sample_pattern, 3_i32)).at(1_i32).get()) as u32),
+                            ((4_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l17;
+            }
+        }
+        'l19: loop {
+            'c20: {
+                msLoc.at(1_i32).set(
+                    (((msLoc.at(1_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
+                            ((8_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((Handle::add(sample_pattern, 4_i32)).at(0_i32).get()) as u32),
+                            ((8_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l19;
+            }
+        }
+        'l21: loop {
+            'c22: {
+                msLoc.at(1_i32).set(
+                    (((msLoc.at(1_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
+                            ((12_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((Handle::add(sample_pattern, 4_i32)).at(1_i32).get()) as u32),
+                            ((12_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l21;
+            }
+        }
+        'l23: loop {
+            'c24: {
+                msLoc.at(1_i32).set(
+                    (((msLoc.at(1_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
+                            ((16_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((Handle::add(sample_pattern, 5_i32)).at(0_i32).get()) as u32),
+                            ((16_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l23;
+            }
+        }
+        'l25: loop {
+            'c26: {
+                msLoc.at(1_i32).set(
+                    (((msLoc.at(1_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
+                            ((20_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((Handle::add(sample_pattern, 5_i32)).at(1_i32).get()) as u32),
+                            ((20_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l25;
+            }
+        }
+        'l27: loop {
+            'c28: {
+                msLoc.at(1_i32).set(
+                    (((msLoc.at(1_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
+                            ((24_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(((2_i32) as u32), ((24_i32) as u32)))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l27;
+            }
+        }
+        msLoc.at(2_i32).set((0_i32 as u32));
+        'l29: loop {
+            'c30: {
+                msLoc.at(2_i32).set(
+                    (((msLoc.at(2_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
+                            ((0_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((Handle::add(sample_pattern, 6_i32)).at(0_i32).get()) as u32),
+                            ((0_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l29;
+            }
+        }
+        'l31: loop {
+            'c32: {
+                msLoc.at(2_i32).set(
+                    (((msLoc.at(2_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
+                            ((4_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((Handle::add(sample_pattern, 6_i32)).at(1_i32).get()) as u32),
+                            ((4_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l31;
+            }
+        }
+        'l33: loop {
+            'c34: {
+                msLoc.at(2_i32).set(
+                    (((msLoc.at(2_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
+                            ((8_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((Handle::add(sample_pattern, 7_i32)).at(0_i32).get()) as u32),
+                            ((8_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l33;
+            }
+        }
+        'l35: loop {
+            'c36: {
+                msLoc.at(2_i32).set(
+                    (((msLoc.at(2_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
+                            ((12_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((Handle::add(sample_pattern, 7_i32)).at(1_i32).get()) as u32),
+                            ((12_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l35;
+            }
+        }
+        'l37: loop {
+            'c38: {
+                msLoc.at(2_i32).set(
+                    (((msLoc.at(2_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
+                            ((16_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((Handle::add(sample_pattern, 8_i32)).at(0_i32).get()) as u32),
+                            ((16_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l37;
+            }
+        }
+        'l39: loop {
+            'c40: {
+                msLoc.at(2_i32).set(
+                    (((msLoc.at(2_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
+                            ((20_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((Handle::add(sample_pattern, 8_i32)).at(1_i32).get()) as u32),
+                            ((20_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l39;
+            }
+        }
+        'l41: loop {
+            'c42: {
+                msLoc.at(2_i32).set(
+                    (((msLoc.at(2_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
+                            ((24_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(((3_i32) as u32), ((24_i32) as u32)))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l41;
+            }
+        }
+        msLoc.at(3_i32).set((0_i32 as u32));
+        'l43: loop {
+            'c44: {
+                msLoc.at(3_i32).set(
+                    (((msLoc.at(3_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
+                            ((0_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((Handle::add(sample_pattern, 9_i32)).at(0_i32).get()) as u32),
+                            ((0_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l43;
+            }
+        }
+        'l45: loop {
+            'c46: {
+                msLoc.at(3_i32).set(
+                    (((msLoc.at(3_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
+                            ((4_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((Handle::add(sample_pattern, 9_i32)).at(1_i32).get()) as u32),
+                            ((4_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l45;
+            }
+        }
+        'l47: loop {
+            'c48: {
+                msLoc.at(3_i32).set(
+                    (((msLoc.at(3_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
+                            ((8_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((Handle::add(sample_pattern, 10_i32)).at(0_i32).get()) as u32),
+                            ((8_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l47;
+            }
+        }
+        'l49: loop {
+            'c50: {
+                msLoc.at(3_i32).set(
+                    (((msLoc.at(3_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
+                            ((12_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((Handle::add(sample_pattern, 10_i32)).at(1_i32).get()) as u32),
+                            ((12_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l49;
+            }
+        }
+        'l51: loop {
+            'c52: {
+                msLoc.at(3_i32).set(
+                    (((msLoc.at(3_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
+                            ((16_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((Handle::add(sample_pattern, 11_i32)).at(0_i32).get()) as u32),
+                            ((16_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l51;
+            }
+        }
+        'l53: loop {
+            'c54: {
+                msLoc.at(3_i32).set(
+                    (((msLoc.at(3_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
+                            ((20_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((Handle::add(sample_pattern, 11_i32)).at(1_i32).get()) as u32),
+                            ((20_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l53;
+            }
+        }
+        'l55: loop {
+            'c56: {
+                msLoc.at(3_i32).set(
+                    (((msLoc.at(3_i32).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
+                            ((24_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(((4_i32) as u32), ((24_i32) as u32)))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l55;
+            }
+        }
+    } else {
+        msLoc.at(0_i32).set((0x1666666_i32 as u32));
+        msLoc.at(1_i32).set((0x2666666_i32 as u32));
+        msLoc.at(2_i32).set((0x3666666_i32 as u32));
+        msLoc.at(3_i32).set((0x4666666_i32 as u32));
+    }
+    'l57: loop {
+        'c58: {
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((97_i32) as u8));
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32((msLoc.at(0_i32).get()));
+        }
+        if !(0_i32 != 0) {
+            break 'l57;
+        }
+    }
+    'l59: loop {
+        'c60: {
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((97_i32) as u8));
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32((msLoc.at(1_i32).get()));
+        }
+        if !(0_i32 != 0) {
+            break 'l59;
+        }
+    }
+    'l61: loop {
+        'c62: {
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((97_i32) as u8));
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32((msLoc.at(2_i32).get()));
+        }
+        if !(0_i32 != 0) {
+            break 'l61;
+        }
+    }
+    'l63: loop {
+        'c64: {
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((97_i32) as u8));
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32((msLoc.at(3_i32).get()));
+        }
+        if !(0_i32 != 0) {
+            break 'l63;
+        }
+    }
+    coeff0 = (0_i32 as u32);
+    'l65: loop {
+        'c66: {
+            coeff0 = (((coeff0)
+                & ((!(shl_i32(
+                    ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
+                    ((24_i32) as u32),
+                ))) as u32))
+                | (shl_u32(((83_i32) as u32), ((24_i32) as u32))));
+        }
+        if !(0_i32 != 0) {
+            break 'l65;
+        }
+    }
+    coeff1 = (0_i32 as u32);
+    'l67: loop {
+        'c68: {
+            coeff1 = (((coeff1)
+                & ((!(shl_i32(
+                    ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
+                    ((24_i32) as u32),
+                ))) as u32))
+                | (shl_u32(((84_i32) as u32), ((24_i32) as u32))));
+        }
+        if !(0_i32 != 0) {
+            break 'l67;
+        }
+    }
+    if (vf as i32) != 0_i32 {
+        'l69: loop {
+            'c70: {
+                coeff0 = (((coeff0)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((6_i32) as u32))).wrapping_sub(1_i32)),
+                        ((0_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(
+                        (((Handle::add(vfilter, 0_i32)).get()) as u32),
+                        ((0_i32) as u32),
+                    )));
+            }
+            if !(0_i32 != 0) {
+                break 'l69;
+            }
+        }
+        'l71: loop {
+            'c72: {
+                coeff0 = (((coeff0)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((6_i32) as u32))).wrapping_sub(1_i32)),
+                        ((6_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(
+                        (((Handle::add(vfilter, 1_i32)).get()) as u32),
+                        ((6_i32) as u32),
+                    )));
+            }
+            if !(0_i32 != 0) {
+                break 'l71;
+            }
+        }
+        'l73: loop {
+            'c74: {
+                coeff0 = (((coeff0)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((6_i32) as u32))).wrapping_sub(1_i32)),
+                        ((12_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(
+                        (((Handle::add(vfilter, 2_i32)).get()) as u32),
+                        ((12_i32) as u32),
+                    )));
+            }
+            if !(0_i32 != 0) {
+                break 'l73;
+            }
+        }
+        'l75: loop {
+            'c76: {
+                coeff0 = (((coeff0)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((6_i32) as u32))).wrapping_sub(1_i32)),
+                        ((18_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(
+                        (((Handle::add(vfilter, 3_i32)).get()) as u32),
+                        ((18_i32) as u32),
+                    )));
+            }
+            if !(0_i32 != 0) {
+                break 'l75;
+            }
+        }
+        'l77: loop {
+            'c78: {
+                coeff1 = (((coeff1)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((6_i32) as u32))).wrapping_sub(1_i32)),
+                        ((0_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(
+                        (((Handle::add(vfilter, 4_i32)).get()) as u32),
+                        ((0_i32) as u32),
+                    )));
+            }
+            if !(0_i32 != 0) {
+                break 'l77;
+            }
+        }
+        'l79: loop {
+            'c80: {
+                coeff1 = (((coeff1)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((6_i32) as u32))).wrapping_sub(1_i32)),
+                        ((6_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(
+                        (((Handle::add(vfilter, 5_i32)).get()) as u32),
+                        ((6_i32) as u32),
+                    )));
+            }
+            if !(0_i32 != 0) {
+                break 'l79;
+            }
+        }
+        'l81: loop {
+            'c82: {
+                coeff1 = (((coeff1)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((6_i32) as u32))).wrapping_sub(1_i32)),
+                        ((12_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(
+                        (((Handle::add(vfilter, 6_i32)).get()) as u32),
+                        ((12_i32) as u32),
+                    )));
+            }
+            if !(0_i32 != 0) {
+                break 'l81;
+            }
+        }
+    } else {
+        'l83: loop {
+            'c84: {
+                coeff0 = (((coeff0)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((6_i32) as u32))).wrapping_sub(1_i32)),
+                        ((0_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((0_i32) as u32), ((0_i32) as u32))));
+            }
+            if !(0_i32 != 0) {
+                break 'l83;
+            }
+        }
+        'l85: loop {
+            'c86: {
+                coeff0 = (((coeff0)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((6_i32) as u32))).wrapping_sub(1_i32)),
+                        ((6_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((0_i32) as u32), ((6_i32) as u32))));
+            }
+            if !(0_i32 != 0) {
+                break 'l85;
+            }
+        }
+        'l87: loop {
+            'c88: {
+                coeff0 = (((coeff0)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((6_i32) as u32))).wrapping_sub(1_i32)),
+                        ((12_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((21_i32) as u32), ((12_i32) as u32))));
+            }
+            if !(0_i32 != 0) {
+                break 'l87;
+            }
+        }
+        'l89: loop {
+            'c90: {
+                coeff0 = (((coeff0)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((6_i32) as u32))).wrapping_sub(1_i32)),
+                        ((18_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((22_i32) as u32), ((18_i32) as u32))));
+            }
+            if !(0_i32 != 0) {
+                break 'l89;
+            }
+        }
+        'l91: loop {
+            'c92: {
+                coeff1 = (((coeff1)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((6_i32) as u32))).wrapping_sub(1_i32)),
+                        ((0_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((21_i32) as u32), ((0_i32) as u32))));
+            }
+            if !(0_i32 != 0) {
+                break 'l91;
+            }
+        }
+        'l93: loop {
+            'c94: {
+                coeff1 = (((coeff1)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((6_i32) as u32))).wrapping_sub(1_i32)),
+                        ((6_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((0_i32) as u32), ((6_i32) as u32))));
+            }
+            if !(0_i32 != 0) {
+                break 'l93;
+            }
+        }
+        'l95: loop {
+            'c96: {
+                coeff1 = (((coeff1)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((6_i32) as u32))).wrapping_sub(1_i32)),
+                        ((12_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((0_i32) as u32), ((12_i32) as u32))));
+            }
+            if !(0_i32 != 0) {
+                break 'l95;
+            }
+        }
+    }
+    'l97: loop {
+        'c98: {
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((97_i32) as u8));
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32((coeff0));
+        }
+        if !(0_i32 != 0) {
+            break 'l97;
+        }
+    }
+    'l99: loop {
+        'c100: {
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((97_i32) as u8));
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32((coeff1));
+        }
+        if !(0_i32 != 0) {
+            break 'l99;
+        }
+    }
+    (fns::gx(ctx).get()).set_bpSent((0_i32 as u16));
+}
+
 pub fn GXSetDispCopyGamma<'a>(ctx: &'a Ctx, gamma: i32) {
     let mut gamma = gamma;
     'l1: loop {
@@ -1376,6 +2185,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (_GXColor<'_>, u32) = Args::take_all(ctx);
             Ret::put(GXSetCopyClear(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8033d908,
+        |ctx| {
+            let (a0, a1, a2, a3): (u8, ArrV<'_, u8, 2>, u8, Val<'_, u8>) = Args::take_all(ctx);
+            Ret::put(GXSetCopyFilter(ctx, a0, a1, a2, a3), ctx);
         },
         Returns::Nothing,
     );

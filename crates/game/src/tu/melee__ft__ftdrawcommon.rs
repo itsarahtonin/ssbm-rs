@@ -631,23 +631,10 @@ fn inl_ftDrawCommon_8008051C_inline_unfused<'a>(
     if (fns::ftLib_GetShakeOffset(ctx, gobj, sp54) != 0) {
         let mut current: HSD_CObj<'a> = fns::HSD_CObjGetCurrent(ctx);
         let mut mtx: ArrV<'a, F32, 4> = (current).view_mtx().get(0);
-        fns::PSMTXIdentity(
-            ctx,
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(sp18).get(0),
-        );
-        inl_mtx_thing_2_unfused(
-            ctx,
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(sp18).get(0),
-            sp54,
-            v,
-        );
-        fns::PSMTXConcat(
-            ctx,
-            mtx,
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(sp18).get(0),
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(sp70).get(0),
-        );
-        return Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(sp70).get(0);
+        fns::PSMTXIdentity(ctx, sp18);
+        inl_mtx_thing_2_unfused(ctx, sp18, sp54, v);
+        fns::PSMTXConcat(ctx, mtx, sp18, sp70);
+        return sp70;
     }
     return null::<ArrV<'a, F32, 4>>(ctx);
 }

@@ -26,15 +26,1043 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn HSD_MtxInverse<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dest: ArrV<'a, F32, 4>) {
+    let __frame = ctx.stack_frame(0x60);
+    let tempMatrix: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let mut src = src;
+    let mut dest = dest;
+    let mut m: Arr<'a, ArrV<'a, F32, 4>, 3> = null(ctx);
+    let mut det: f64 = inl_HSD_CalcDeterminantMatrix3x4(ctx, src);
+    if inl_fabsf_bitwise(ctx, det) < 1.000000013351432e-10_f64 {
+        fns::PSMTXIdentity(ctx, dest);
+        return;
+    }
+    if Handle::addr(src) == Handle::addr(dest) {
+        fns::PSMTXCopy(ctx, src, tempMatrix.get(0));
+        m = tempMatrix;
+    } else {
+        m = Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(src);
+    }
+    det = fp::fdivs(1.0, det);
+    (Handle::add(dest, 0_i32)).at(0_i32).set(fp::fmuls(
+        (fp::fmsubs(
+            (m).get(1_i32).at(1_i32).get(),
+            (m).get(2_i32).at(2_i32).get(),
+            fp::fmuls(
+                (m).get(2_i32).at(1_i32).get(),
+                (m).get(1_i32).at(2_i32).get(),
+            ),
+        )),
+        det,
+    ));
+    (Handle::add(dest, 0_i32)).at(1_i32).set(fp::fmuls(
+        fp::fneg(
+            (fp::fmsubs(
+                (m).get(0_i32).at(1_i32).get(),
+                (m).get(2_i32).at(2_i32).get(),
+                fp::fmuls(
+                    (m).get(2_i32).at(1_i32).get(),
+                    (m).get(0_i32).at(2_i32).get(),
+                ),
+            )),
+        ),
+        det,
+    ));
+    (Handle::add(dest, 0_i32)).at(2_i32).set(fp::fmuls(
+        (fp::fmsubs(
+            (m).get(0_i32).at(1_i32).get(),
+            (m).get(1_i32).at(2_i32).get(),
+            fp::fmuls(
+                (m).get(1_i32).at(1_i32).get(),
+                (m).get(0_i32).at(2_i32).get(),
+            ),
+        )),
+        det,
+    ));
+    (Handle::add(dest, 1_i32)).at(0_i32).set(fp::fmuls(
+        fp::fneg(
+            (fp::fmsubs(
+                (m).get(1_i32).at(0_i32).get(),
+                (m).get(2_i32).at(2_i32).get(),
+                fp::fmuls(
+                    (m).get(2_i32).at(0_i32).get(),
+                    (m).get(1_i32).at(2_i32).get(),
+                ),
+            )),
+        ),
+        det,
+    ));
+    (Handle::add(dest, 1_i32)).at(1_i32).set(fp::fmuls(
+        (fp::fmsubs(
+            (m).get(0_i32).at(0_i32).get(),
+            (m).get(2_i32).at(2_i32).get(),
+            fp::fmuls(
+                (m).get(2_i32).at(0_i32).get(),
+                (m).get(0_i32).at(2_i32).get(),
+            ),
+        )),
+        det,
+    ));
+    (Handle::add(dest, 1_i32)).at(2_i32).set(fp::fmuls(
+        fp::fneg(
+            (fp::fmsubs(
+                (m).get(0_i32).at(0_i32).get(),
+                (m).get(1_i32).at(2_i32).get(),
+                fp::fmuls(
+                    (m).get(1_i32).at(0_i32).get(),
+                    (m).get(0_i32).at(2_i32).get(),
+                ),
+            )),
+        ),
+        det,
+    ));
+    (Handle::add(dest, 2_i32)).at(0_i32).set(fp::fmuls(
+        (fp::fmsubs(
+            (m).get(1_i32).at(0_i32).get(),
+            (m).get(2_i32).at(1_i32).get(),
+            fp::fmuls(
+                (m).get(2_i32).at(0_i32).get(),
+                (m).get(1_i32).at(1_i32).get(),
+            ),
+        )),
+        det,
+    ));
+    (Handle::add(dest, 2_i32)).at(1_i32).set(fp::fmuls(
+        fp::fneg(
+            (fp::fmsubs(
+                (m).get(0_i32).at(0_i32).get(),
+                (m).get(2_i32).at(1_i32).get(),
+                fp::fmuls(
+                    (m).get(2_i32).at(0_i32).get(),
+                    (m).get(0_i32).at(1_i32).get(),
+                ),
+            )),
+        ),
+        det,
+    ));
+    (Handle::add(dest, 2_i32)).at(2_i32).set(fp::fmuls(
+        (fp::fmsubs(
+            (m).get(0_i32).at(0_i32).get(),
+            (m).get(1_i32).at(1_i32).get(),
+            fp::fmuls(
+                (m).get(1_i32).at(0_i32).get(),
+                (m).get(0_i32).at(1_i32).get(),
+            ),
+        )),
+        det,
+    ));
+    (Handle::add(dest, 0_i32)).at(3_i32).set(fp::fneg(
+        (fp::fmsubs(
+            (Handle::add(dest, 0_i32)).at(2_i32).get(),
+            (Handle::add(src, 2_i32)).at(3_i32).get(),
+            (fp::fmsubs(
+                fp::fneg((Handle::add(dest, 0_i32)).at(0_i32).get()),
+                (Handle::add(src, 0_i32)).at(3_i32).get(),
+                fp::fmuls(
+                    (Handle::add(dest, 0_i32)).at(1_i32).get(),
+                    (Handle::add(src, 1_i32)).at(3_i32).get(),
+                ),
+            )),
+        )),
+    ));
+    (Handle::add(dest, 1_i32)).at(3_i32).set(fp::fneg(
+        (fp::fmsubs(
+            (Handle::add(dest, 1_i32)).at(2_i32).get(),
+            (Handle::add(src, 2_i32)).at(3_i32).get(),
+            (fp::fmsubs(
+                fp::fneg((Handle::add(dest, 1_i32)).at(0_i32).get()),
+                (Handle::add(src, 0_i32)).at(3_i32).get(),
+                fp::fmuls(
+                    (Handle::add(dest, 1_i32)).at(1_i32).get(),
+                    (Handle::add(src, 1_i32)).at(3_i32).get(),
+                ),
+            )),
+        )),
+    ));
+    (Handle::add(dest, 2_i32)).at(3_i32).set(fp::fneg(
+        (fp::fmsubs(
+            (Handle::add(dest, 2_i32)).at(2_i32).get(),
+            (Handle::add(src, 2_i32)).at(3_i32).get(),
+            (fp::fmsubs(
+                fp::fneg((Handle::add(dest, 2_i32)).at(0_i32).get()),
+                (Handle::add(src, 0_i32)).at(3_i32).get(),
+                fp::fmuls(
+                    (Handle::add(dest, 2_i32)).at(1_i32).get(),
+                    (Handle::add(src, 1_i32)).at(3_i32).get(),
+                ),
+            )),
+        )),
+    ));
+}
+
+pub fn HSD_MtxInverseConcat<'a>(
+    ctx: &'a Ctx,
+    inv: ArrV<'a, F32, 4>,
+    src: ArrV<'a, F32, 4>,
+    dest: ArrV<'a, F32, 4>,
+) {
+    let __frame = ctx.stack_frame(0x80);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let mut inv = inv;
+    let mut src = src;
+    let mut dest = dest;
+    let mut det: f64 = 0.0;
+    let mut temp1: f64 = 0.0;
+    let mut temp2: f64 = 0.0;
+    let mut temp3: f64 = 0.0;
+    let mut temp4: f64 = 0.0;
+    let mut temp5: f64 = 0.0;
+    let mut temp6: f64 = 0.0;
+    let mut temp7: f64 = 0.0;
+    let mut temp8: f64 = 0.0;
+    let mut temp9: f64 = 0.0;
+    let mut temp10: f64 = 0.0;
+    let mut temp11: f64 = 0.0;
+    let mut temp12: f64 = 0.0;
+    let mut new_var: f64 = 0.0;
+    det = inl_HSD_CalcDeterminantMatrix3x4(ctx, inv);
+    if inl_fabsf_bitwise(ctx, det) < 1.000000013351432e-10_f64 {
+        if Handle::addr(src) != Handle::addr(dest) {
+            fns::PSMTXCopy(ctx, src, dest);
+        }
+    } else {
+        det = fp::fdivs(1.0, det);
+        temp1 = fp::fmuls(
+            (fp::fmsubs(
+                (Handle::add(inv, 1_i32)).at(1_i32).get(),
+                (Handle::add(inv, 2_i32)).at(2_i32).get(),
+                (fp::fmuls(
+                    (Handle::add(inv, 2_i32)).at(1_i32).get(),
+                    (Handle::add(inv, 1_i32)).at(2_i32).get(),
+                )),
+            )),
+            det,
+        );
+        temp2 = fp::fmuls(
+            (fp::fneg(
+                (fp::fmsubs(
+                    (Handle::add(inv, 0_i32)).at(1_i32).get(),
+                    (Handle::add(inv, 2_i32)).at(2_i32).get(),
+                    (fp::fmuls(
+                        (Handle::add(inv, 2_i32)).at(1_i32).get(),
+                        (Handle::add(inv, 0_i32)).at(2_i32).get(),
+                    )),
+                )),
+            )),
+            det,
+        );
+        new_var = (Handle::add(inv, 1_i32)).at(1_i32).get();
+        temp3 = fp::fmuls(
+            (fp::fneg(
+                (fp::fmsubs(
+                    (Handle::add(inv, 1_i32)).at(0_i32).get(),
+                    (Handle::add(inv, 2_i32)).at(2_i32).get(),
+                    (fp::fmuls(
+                        (Handle::add(inv, 2_i32)).at(0_i32).get(),
+                        (Handle::add(inv, 1_i32)).at(2_i32).get(),
+                    )),
+                )),
+            )),
+            det,
+        );
+        temp7 = fp::fmuls(
+            (fp::fmsubs(
+                (Handle::add(inv, 0_i32)).at(1_i32).get(),
+                (Handle::add(inv, 1_i32)).at(2_i32).get(),
+                (fp::fmuls(new_var, (Handle::add(inv, 0_i32)).at(2_i32).get())),
+            )),
+            det,
+        );
+        temp4 = fp::fmuls(
+            (fp::fmsubs(
+                (Handle::add(inv, 0_i32)).at(0_i32).get(),
+                (Handle::add(inv, 2_i32)).at(2_i32).get(),
+                (fp::fmuls(
+                    (Handle::add(inv, 2_i32)).at(0_i32).get(),
+                    (Handle::add(inv, 0_i32)).at(2_i32).get(),
+                )),
+            )),
+            det,
+        );
+        temp8 = fp::fmuls(
+            (fp::fneg(
+                (fp::fmsubs(
+                    (Handle::add(inv, 0_i32)).at(0_i32).get(),
+                    (Handle::add(inv, 1_i32)).at(2_i32).get(),
+                    (fp::fmuls(
+                        (Handle::add(inv, 1_i32)).at(0_i32).get(),
+                        (Handle::add(inv, 0_i32)).at(2_i32).get(),
+                    )),
+                )),
+            )),
+            det,
+        );
+        temp5 = fp::fmuls(
+            (fp::fmsubs(
+                (Handle::add(inv, 1_i32)).at(0_i32).get(),
+                (Handle::add(inv, 2_i32)).at(1_i32).get(),
+                (fp::fmuls((Handle::add(inv, 2_i32)).at(0_i32).get(), new_var)),
+            )),
+            det,
+        );
+        temp6 = fp::fmuls(
+            (fp::fneg(
+                (fp::fmsubs(
+                    (Handle::add(inv, 0_i32)).at(0_i32).get(),
+                    (Handle::add(inv, 2_i32)).at(1_i32).get(),
+                    (fp::fmuls(
+                        (Handle::add(inv, 2_i32)).at(0_i32).get(),
+                        (Handle::add(inv, 0_i32)).at(1_i32).get(),
+                    )),
+                )),
+            )),
+            det,
+        );
+        temp9 = fp::fmuls(
+            (fp::fmsubs(
+                (Handle::add(inv, 0_i32)).at(0_i32).get(),
+                (Handle::add(inv, 1_i32)).at(1_i32).get(),
+                (fp::fmuls(
+                    (Handle::add(inv, 1_i32)).at(0_i32).get(),
+                    (Handle::add(inv, 0_i32)).at(1_i32).get(),
+                )),
+            )),
+            det,
+        );
+        temp10 = fp::fneg(
+            (fp::fmsubs(
+                temp7,
+                (Handle::add(inv, 2_i32)).at(3_i32).get(),
+                (fp::fmsubs(
+                    (fp::fneg(temp1)),
+                    (Handle::add(inv, 0_i32)).at(3_i32).get(),
+                    (fp::fmuls(temp2, (Handle::add(inv, 1_i32)).at(3_i32).get())),
+                )),
+            )),
+        );
+        temp11 = fp::fneg(
+            (fp::fmsubs(
+                temp8,
+                (Handle::add(inv, 2_i32)).at(3_i32).get(),
+                (fp::fmsubs(
+                    (fp::fneg(temp3)),
+                    (Handle::add(inv, 0_i32)).at(3_i32).get(),
+                    (fp::fmuls(temp4, (Handle::add(inv, 1_i32)).at(3_i32).get())),
+                )),
+            )),
+        );
+        temp12 = fp::fneg(
+            (fp::fmsubs(
+                temp9,
+                (Handle::add(inv, 2_i32)).at(3_i32).get(),
+                (fp::fmsubs(
+                    (fp::fneg(temp5)),
+                    ({
+                        let __t4 = (Handle::add(inv, 0_i32)).at(3_i32).get();
+                        new_var = __t4;
+                        __t4
+                    }),
+                    (fp::fmuls(temp6, (Handle::add(inv, 1_i32)).at(3_i32).get())),
+                )),
+            )),
+        );
+        if (Handle::addr(inv) == Handle::addr(dest)) || (Handle::addr(src) == Handle::addr(dest)) {
+            m.get(0_i32).at(0_i32).set(fp::fmadds(
+                temp7,
+                (Handle::add(src, 2_i32)).at(0_i32).get(),
+                (fp::fmadds(
+                    temp1,
+                    (Handle::add(src, 0_i32)).at(0_i32).get(),
+                    fp::fmuls(temp2, (Handle::add(src, 1_i32)).at(0_i32).get()),
+                )),
+            ));
+            m.get(0_i32).at(1_i32).set(fp::fmadds(
+                temp7,
+                (Handle::add(src, 2_i32)).at(1_i32).get(),
+                (fp::fmadds(
+                    temp1,
+                    (Handle::add(src, 0_i32)).at(1_i32).get(),
+                    fp::fmuls(temp2, (Handle::add(src, 1_i32)).at(1_i32).get()),
+                )),
+            ));
+            m.get(0_i32).at(2_i32).set(fp::fmadds(
+                temp7,
+                (Handle::add(src, 2_i32)).at(2_i32).get(),
+                (fp::fmadds(
+                    temp1,
+                    (Handle::add(src, 0_i32)).at(2_i32).get(),
+                    fp::fmuls(temp2, (Handle::add(src, 1_i32)).at(2_i32).get()),
+                )),
+            ));
+            m.get(0_i32).at(3_i32).set(fp::fadds(
+                fp::fmadds(
+                    temp7,
+                    (Handle::add(src, 2_i32)).at(3_i32).get(),
+                    (fp::fmadds(
+                        temp1,
+                        (Handle::add(src, 0_i32)).at(3_i32).get(),
+                        fp::fmuls(temp2, (Handle::add(src, 1_i32)).at(3_i32).get()),
+                    )),
+                ),
+                temp10,
+            ));
+            m.get(1_i32).at(0_i32).set(fp::fmadds(
+                temp8,
+                (Handle::add(src, 2_i32)).at(0_i32).get(),
+                (fp::fmadds(
+                    temp3,
+                    (Handle::add(src, 0_i32)).at(0_i32).get(),
+                    fp::fmuls(temp4, (Handle::add(src, 1_i32)).at(0_i32).get()),
+                )),
+            ));
+            m.get(1_i32).at(1_i32).set(fp::fmadds(
+                temp8,
+                (Handle::add(src, 2_i32)).at(1_i32).get(),
+                (fp::fmadds(
+                    temp3,
+                    (Handle::add(src, 0_i32)).at(1_i32).get(),
+                    fp::fmuls(temp4, (Handle::add(src, 1_i32)).at(1_i32).get()),
+                )),
+            ));
+            m.get(1_i32).at(2_i32).set(fp::fmadds(
+                temp8,
+                (Handle::add(src, 2_i32)).at(2_i32).get(),
+                (fp::fmadds(
+                    temp3,
+                    (Handle::add(src, 0_i32)).at(2_i32).get(),
+                    fp::fmuls(temp4, (Handle::add(src, 1_i32)).at(2_i32).get()),
+                )),
+            ));
+            m.get(1_i32).at(3_i32).set(fp::fadds(
+                fp::fmadds(
+                    temp8,
+                    (Handle::add(src, 2_i32)).at(3_i32).get(),
+                    (fp::fmadds(
+                        temp3,
+                        (Handle::add(src, 0_i32)).at(3_i32).get(),
+                        fp::fmuls(temp4, (Handle::add(src, 1_i32)).at(3_i32).get()),
+                    )),
+                ),
+                temp11,
+            ));
+            m.get(2_i32).at(0_i32).set(fp::fmadds(
+                temp9,
+                (Handle::add(src, 2_i32)).at(0_i32).get(),
+                (fp::fmadds(
+                    temp5,
+                    (Handle::add(src, 0_i32)).at(0_i32).get(),
+                    fp::fmuls(temp6, (Handle::add(src, 1_i32)).at(0_i32).get()),
+                )),
+            ));
+            m.get(2_i32).at(1_i32).set(fp::fmadds(
+                temp9,
+                (Handle::add(src, 2_i32)).at(1_i32).get(),
+                (fp::fmadds(
+                    temp5,
+                    (Handle::add(src, 0_i32)).at(1_i32).get(),
+                    fp::fmuls(temp6, (Handle::add(src, 1_i32)).at(1_i32).get()),
+                )),
+            ));
+            m.get(2_i32).at(2_i32).set(fp::fmadds(
+                temp9,
+                (Handle::add(src, 2_i32)).at(2_i32).get(),
+                (fp::fmadds(
+                    temp5,
+                    (Handle::add(src, 0_i32)).at(2_i32).get(),
+                    fp::fmuls(temp6, (Handle::add(src, 1_i32)).at(2_i32).get()),
+                )),
+            ));
+            m.get(2_i32).at(3_i32).set(fp::fadds(
+                fp::fmadds(
+                    temp9,
+                    (Handle::add(src, 2_i32)).at(3_i32).get(),
+                    (fp::fmadds(
+                        temp5,
+                        (Handle::add(src, 0_i32)).at(3_i32).get(),
+                        fp::fmuls(temp6, (Handle::add(src, 1_i32)).at(3_i32).get()),
+                    )),
+                ),
+                temp12,
+            ));
+            fns::PSMTXCopy(ctx, m.get(0), dest);
+        } else {
+            (Handle::add(dest, 0_i32)).at(0_i32).set(fp::fmadds(
+                temp7,
+                (Handle::add(src, 2_i32)).at(0_i32).get(),
+                (fp::fmadds(
+                    temp1,
+                    (Handle::add(src, 0_i32)).at(0_i32).get(),
+                    fp::fmuls(temp2, (Handle::add(src, 1_i32)).at(0_i32).get()),
+                )),
+            ));
+            (Handle::add(dest, 0_i32)).at(1_i32).set(fp::fmadds(
+                temp7,
+                (Handle::add(src, 2_i32)).at(1_i32).get(),
+                (fp::fmadds(
+                    temp1,
+                    (Handle::add(src, 0_i32)).at(1_i32).get(),
+                    fp::fmuls(temp2, (Handle::add(src, 1_i32)).at(1_i32).get()),
+                )),
+            ));
+            (Handle::add(dest, 0_i32)).at(2_i32).set(fp::fmadds(
+                temp7,
+                (Handle::add(src, 2_i32)).at(2_i32).get(),
+                (fp::fmadds(
+                    temp1,
+                    (Handle::add(src, 0_i32)).at(2_i32).get(),
+                    fp::fmuls(temp2, (Handle::add(src, 1_i32)).at(2_i32).get()),
+                )),
+            ));
+            (Handle::add(dest, 0_i32)).at(3_i32).set(fp::fadds(
+                fp::fmadds(
+                    temp7,
+                    (Handle::add(src, 2_i32)).at(3_i32).get(),
+                    (fp::fmadds(
+                        temp1,
+                        (Handle::add(src, 0_i32)).at(3_i32).get(),
+                        fp::fmuls(temp2, (Handle::add(src, 1_i32)).at(3_i32).get()),
+                    )),
+                ),
+                temp10,
+            ));
+            (Handle::add(dest, 1_i32)).at(0_i32).set(fp::fmadds(
+                temp8,
+                (Handle::add(src, 2_i32)).at(0_i32).get(),
+                (fp::fmadds(
+                    temp3,
+                    (Handle::add(src, 0_i32)).at(0_i32).get(),
+                    fp::fmuls(temp4, (Handle::add(src, 1_i32)).at(0_i32).get()),
+                )),
+            ));
+            (Handle::add(dest, 1_i32)).at(1_i32).set(fp::fmadds(
+                temp8,
+                (Handle::add(src, 2_i32)).at(1_i32).get(),
+                (fp::fmadds(
+                    temp3,
+                    (Handle::add(src, 0_i32)).at(1_i32).get(),
+                    fp::fmuls(temp4, (Handle::add(src, 1_i32)).at(1_i32).get()),
+                )),
+            ));
+            (Handle::add(dest, 1_i32)).at(2_i32).set(fp::fmadds(
+                temp8,
+                (Handle::add(src, 2_i32)).at(2_i32).get(),
+                (fp::fmadds(
+                    temp3,
+                    (Handle::add(src, 0_i32)).at(2_i32).get(),
+                    fp::fmuls(temp4, (Handle::add(src, 1_i32)).at(2_i32).get()),
+                )),
+            ));
+            (Handle::add(dest, 1_i32)).at(3_i32).set(fp::fadds(
+                fp::fmadds(
+                    temp8,
+                    (Handle::add(src, 2_i32)).at(3_i32).get(),
+                    (fp::fmadds(
+                        temp3,
+                        (Handle::add(src, 0_i32)).at(3_i32).get(),
+                        fp::fmuls(temp4, (Handle::add(src, 1_i32)).at(3_i32).get()),
+                    )),
+                ),
+                temp11,
+            ));
+            (Handle::add(dest, 2_i32)).at(0_i32).set(fp::fmadds(
+                temp9,
+                (Handle::add(src, 2_i32)).at(0_i32).get(),
+                (fp::fmadds(
+                    temp5,
+                    (Handle::add(src, 0_i32)).at(0_i32).get(),
+                    fp::fmuls(temp6, (Handle::add(src, 1_i32)).at(0_i32).get()),
+                )),
+            ));
+            (Handle::add(dest, 2_i32)).at(1_i32).set(fp::fmadds(
+                temp9,
+                (Handle::add(src, 2_i32)).at(1_i32).get(),
+                (fp::fmadds(
+                    temp5,
+                    (Handle::add(src, 0_i32)).at(1_i32).get(),
+                    fp::fmuls(temp6, (Handle::add(src, 1_i32)).at(1_i32).get()),
+                )),
+            ));
+            (Handle::add(dest, 2_i32)).at(2_i32).set(fp::fmadds(
+                temp9,
+                (Handle::add(src, 2_i32)).at(2_i32).get(),
+                (fp::fmadds(
+                    temp5,
+                    (Handle::add(src, 0_i32)).at(2_i32).get(),
+                    fp::fmuls(temp6, (Handle::add(src, 1_i32)).at(2_i32).get()),
+                )),
+            ));
+            (Handle::add(dest, 2_i32)).at(3_i32).set(fp::fadds(
+                fp::fmadds(
+                    temp9,
+                    (Handle::add(src, 2_i32)).at(3_i32).get(),
+                    (fp::fmadds(
+                        temp5,
+                        (Handle::add(src, 0_i32)).at(3_i32).get(),
+                        fp::fmuls(temp6, (Handle::add(src, 1_i32)).at(3_i32).get()),
+                    )),
+                ),
+                temp12,
+            ));
+        }
+    }
+}
+
+pub fn HSD_MtxInverseTranspose<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dest: ArrV<'a, F32, 4>) {
+    let __frame = ctx.stack_frame(0x60);
+    let tempMatrix: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let mut src = src;
+    let mut dest = dest;
+    let mut m: Arr<'a, ArrV<'a, F32, 4>, 3> = null(ctx);
+    let mut det: f64 = inl_HSD_CalcDeterminantMatrix3x4(ctx, src);
+    m = Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(src);
+    if inl_fabsf_bitwise(ctx, det) < 1.000000013351432e-10_f64 {
+        if Handle::addr((m).get(0)) != Handle::addr(dest) {
+            fns::PSMTXCopy(ctx, (m).get(0), dest);
+        }
+    } else {
+        if Handle::addr((m).get(0)) == Handle::addr(dest) {
+            fns::PSMTXCopy(ctx, (m).get(0), tempMatrix.get(0));
+            m = tempMatrix;
+        }
+        det = fp::fdivs(1.0, det);
+        (Handle::add(dest, 0_i32)).at(0_i32).set(fp::fmuls(
+            (fp::fmsubs(
+                (m).get(1_i32).at(1_i32).get(),
+                (m).get(2_i32).at(2_i32).get(),
+                (fp::fmuls(
+                    (m).get(2_i32).at(1_i32).get(),
+                    (m).get(1_i32).at(2_i32).get(),
+                )),
+            )),
+            det,
+        ));
+        (Handle::add(dest, 1_i32)).at(0_i32).set(fp::fmuls(
+            fp::fneg(
+                (fp::fmsubs(
+                    (m).get(0_i32).at(1_i32).get(),
+                    (m).get(2_i32).at(2_i32).get(),
+                    (fp::fmuls(
+                        (m).get(2_i32).at(1_i32).get(),
+                        (m).get(0_i32).at(2_i32).get(),
+                    )),
+                )),
+            ),
+            det,
+        ));
+        (Handle::add(dest, 2_i32)).at(0_i32).set(fp::fmuls(
+            (fp::fmsubs(
+                (m).get(0_i32).at(1_i32).get(),
+                (m).get(1_i32).at(2_i32).get(),
+                (fp::fmuls(
+                    (m).get(1_i32).at(1_i32).get(),
+                    (m).get(0_i32).at(2_i32).get(),
+                )),
+            )),
+            det,
+        ));
+        (Handle::add(dest, 0_i32)).at(1_i32).set(fp::fmuls(
+            fp::fneg(
+                (fp::fmsubs(
+                    (m).get(1_i32).at(0_i32).get(),
+                    (m).get(2_i32).at(2_i32).get(),
+                    (fp::fmuls(
+                        (m).get(2_i32).at(0_i32).get(),
+                        (m).get(1_i32).at(2_i32).get(),
+                    )),
+                )),
+            ),
+            det,
+        ));
+        (Handle::add(dest, 1_i32)).at(1_i32).set(fp::fmuls(
+            (fp::fmsubs(
+                (m).get(0_i32).at(0_i32).get(),
+                (m).get(2_i32).at(2_i32).get(),
+                (fp::fmuls(
+                    (m).get(2_i32).at(0_i32).get(),
+                    (m).get(0_i32).at(2_i32).get(),
+                )),
+            )),
+            det,
+        ));
+        (Handle::add(dest, 2_i32)).at(1_i32).set(fp::fmuls(
+            fp::fneg(
+                (fp::fmsubs(
+                    (m).get(0_i32).at(0_i32).get(),
+                    (m).get(1_i32).at(2_i32).get(),
+                    (fp::fmuls(
+                        (m).get(1_i32).at(0_i32).get(),
+                        (m).get(0_i32).at(2_i32).get(),
+                    )),
+                )),
+            ),
+            det,
+        ));
+        (Handle::add(dest, 0_i32)).at(2_i32).set(fp::fmuls(
+            (fp::fmsubs(
+                (m).get(1_i32).at(0_i32).get(),
+                (m).get(2_i32).at(1_i32).get(),
+                (fp::fmuls(
+                    (m).get(2_i32).at(0_i32).get(),
+                    (m).get(1_i32).at(1_i32).get(),
+                )),
+            )),
+            det,
+        ));
+        (Handle::add(dest, 1_i32)).at(2_i32).set(fp::fmuls(
+            fp::fneg(
+                (fp::fmsubs(
+                    (m).get(0_i32).at(0_i32).get(),
+                    (m).get(2_i32).at(1_i32).get(),
+                    (fp::fmuls(
+                        (m).get(2_i32).at(0_i32).get(),
+                        (m).get(0_i32).at(1_i32).get(),
+                    )),
+                )),
+            ),
+            det,
+        ));
+        (Handle::add(dest, 2_i32)).at(2_i32).set(fp::fmuls(
+            (fp::fmsubs(
+                (m).get(0_i32).at(0_i32).get(),
+                (m).get(1_i32).at(1_i32).get(),
+                (fp::fmuls(
+                    (m).get(1_i32).at(0_i32).get(),
+                    (m).get(0_i32).at(1_i32).get(),
+                )),
+            )),
+            det,
+        ));
+        (Handle::add(dest, 0_i32))
+            .at(3_i32)
+            .set(fp::frsp(0_i32 as f64));
+        (Handle::add(dest, 1_i32))
+            .at(3_i32)
+            .set(fp::frsp(0_i32 as f64));
+        (Handle::add(dest, 2_i32))
+            .at(3_i32)
+            .set(fp::frsp(0_i32 as f64));
+    }
+}
+
+pub fn HSD_MtxGetRotation<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, vec: Vec<'a>) {
+    let __frame = ctx.stack_frame(0x68);
+    let mut m = m;
+    let mut vec = vec;
+    let mut length0: f64 = 0.0;
+    let mut length1: f64 = 0.0;
+    let mut length2: f64 = 0.0;
+    let mut testVal_1: f64 = 0.0;
+    let mut val_01: f64 = 0.0;
+    length0 = inl_sqrtf(
+        ctx,
+        fp::fadds(
+            fp::fadds(
+                fp::fmuls(
+                    (Handle::add(m, 0_i32)).at(0_i32).get(),
+                    (Handle::add(m, 0_i32)).at(0_i32).get(),
+                ),
+                fp::fmuls(
+                    (Handle::add(m, 1_i32)).at(0_i32).get(),
+                    (Handle::add(m, 1_i32)).at(0_i32).get(),
+                ),
+            ),
+            fp::fmuls(
+                (Handle::add(m, 2_i32)).at(0_i32).get(),
+                (Handle::add(m, 2_i32)).at(0_i32).get(),
+            ),
+        ),
+    );
+    if !(length0 < 1.1754943508222875e-38_f64) {
+        length1 = inl_sqrtf(
+            ctx,
+            fp::fadds(
+                fp::fadds(
+                    fp::fmuls(
+                        (Handle::add(m, 0_i32)).at(1_i32).get(),
+                        (Handle::add(m, 0_i32)).at(1_i32).get(),
+                    ),
+                    fp::fmuls(
+                        (Handle::add(m, 1_i32)).at(1_i32).get(),
+                        (Handle::add(m, 1_i32)).at(1_i32).get(),
+                    ),
+                ),
+                fp::fmuls(
+                    (Handle::add(m, 2_i32)).at(1_i32).get(),
+                    (Handle::add(m, 2_i32)).at(1_i32).get(),
+                ),
+            ),
+        );
+        if !(length1 < 1.1754943508222875e-38_f64) {
+            length2 = inl_sqrtf(
+                ctx,
+                fp::fadds(
+                    fp::fadds(
+                        fp::fmuls(
+                            (Handle::add(m, 0_i32)).at(2_i32).get(),
+                            (Handle::add(m, 0_i32)).at(2_i32).get(),
+                        ),
+                        fp::fmuls(
+                            (Handle::add(m, 1_i32)).at(2_i32).get(),
+                            (Handle::add(m, 1_i32)).at(2_i32).get(),
+                        ),
+                    ),
+                    fp::fmuls(
+                        (Handle::add(m, 2_i32)).at(2_i32).get(),
+                        (Handle::add(m, 2_i32)).at(2_i32).get(),
+                    ),
+                ),
+            );
+            if !(length2 < 1.1754943508222875e-38_f64) {
+                testVal_1 = fp::fneg((Handle::add(m, 2_i32)).at(0_i32).get());
+                testVal_1 = fp::fdivs(testVal_1, length0);
+                if testVal_1 >= 1.0 {
+                    val_01 = fp::frsp(fp::fdiv(3.141592653589793, (2_i32 as f64)));
+                } else if testVal_1 <= fp::frsp(1_i32.wrapping_neg() as f64) {
+                    val_01 = fp::frsp(fp::fdiv(fp::fneg(3.141592653589793), (2_i32 as f64)));
+                } else {
+                    val_01 = fns::asinf(ctx, testVal_1);
+                }
+                (vec).set_y(val_01);
+                if fns::cosf(ctx, (vec).y()) >= 1.1754943508222875e-38_f64 {
+                    let mut testVal_2_pre: f64 =
+                        fp::fdivs((Handle::add(m, 2_i32)).at(2_i32).get(), length2);
+                    let mut testVal_3_pre: f64 =
+                        fp::fdivs((Handle::add(m, 2_i32)).at(1_i32).get(), length1);
+                    (vec).set_x(inl_calcVal(ctx, testVal_2_pre, testVal_3_pre));
+                    (vec).set_z(inl_calcVal(
+                        ctx,
+                        (Handle::add(m, 0_i32)).at(0_i32).get(),
+                        (Handle::add(m, 1_i32)).at(0_i32).get(),
+                    ));
+                    return;
+                }
+                (vec).set_x(inl_calcVal(
+                    ctx,
+                    (Handle::add(m, 1_i32)).at(1_i32).get(),
+                    (Handle::add(m, 0_i32)).at(1_i32).get(),
+                ));
+                (vec).set_z(fp::frsp(0_i32 as f64));
+                return;
+            }
+        }
+    }
+    (vec).set_x(fp::frsp(0_i32 as f64));
+    (vec).set_y(fp::frsp(0_i32 as f64));
+    (vec).set_z(fp::frsp(0_i32 as f64));
+}
+
+pub fn HSD_MtxGetTranslate<'a>(ctx: &'a Ctx, mat: ArrV<'a, F32, 4>, vec: Vec<'a>) {
+    let mut mat = mat;
+    let mut vec = vec;
+    (vec).set_x((Handle::add(mat, 0_i32)).at(3_i32).get());
+    (vec).set_y((Handle::add(mat, 1_i32)).at(3_i32).get());
+    (vec).set_z((Handle::add(mat, 2_i32)).at(3_i32).get());
+}
+
+pub fn HSD_MtxGetScale<'a>(ctx: &'a Ctx, arg0: ArrV<'a, F32, 4>, arg1: Vec<'a>) {
+    let __frame = ctx.stack_frame(0x58);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let vec3: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let vec4: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut scale: f64 = 0.0;
+    vec1.set_x((Handle::add(arg0, 0_i32)).at(0_i32).get());
+    vec1.set_y((Handle::add(arg0, 1_i32)).at(0_i32).get());
+    vec1.set_z((Handle::add(arg0, 2_i32)).at(0_i32).get());
+    (arg1).set_x(fns::PSVECMag(ctx, vec1));
+    fns::PSVECNormalize(ctx, vec1, vec1);
+    vec2.set_x((Handle::add(arg0, 0_i32)).at(1_i32).get());
+    vec2.set_y((Handle::add(arg0, 1_i32)).at(1_i32).get());
+    vec2.set_z((Handle::add(arg0, 2_i32)).at(1_i32).get());
+    fns::PSVECScale(ctx, vec1, vec4, fns::PSVECDotProduct(ctx, vec1, vec2));
+    fns::PSVECSubtract(ctx, vec2, vec4, vec2);
+    (arg1).set_y(fns::PSVECMag(ctx, vec2));
+    fns::PSVECNormalize(ctx, vec2, vec2);
+    vec3.set_x((Handle::add(arg0, 0_i32)).at(2_i32).get());
+    vec3.set_y((Handle::add(arg0, 1_i32)).at(2_i32).get());
+    vec3.set_z((Handle::add(arg0, 2_i32)).at(2_i32).get());
+    fns::PSVECScale(ctx, vec2, vec4, fns::PSVECDotProduct(ctx, vec2, vec3));
+    fns::PSVECSubtract(ctx, vec3, vec4, vec3);
+    fns::PSVECScale(ctx, vec1, vec4, fns::PSVECDotProduct(ctx, vec1, vec3));
+    fns::PSVECSubtract(ctx, vec3, vec4, vec3);
+    (arg1).set_z(fns::PSVECMag(ctx, vec3));
+    fns::PSVECNormalize(ctx, vec3, vec3);
+    fns::PSVECCrossProduct(ctx, vec2, vec3, vec4);
+    if fns::PSVECDotProduct(ctx, vec1, vec4) < 0.0 {
+        scale = fp::fneg(1.0);
+        (arg1).set_x(fp::frsp(fp::fmul((arg1).x(), scale)));
+        (arg1).set_y(fp::frsp(fp::fmul((arg1).y(), scale)));
+        (arg1).set_z(fp::frsp(fp::fmul((arg1).z(), scale)));
+    }
+}
+
+pub fn HSD_MkRotationMtx<'a>(ctx: &'a Ctx, arg0: ArrV<'a, F32, 4>, arg1: Vec<'a>) {
+    let __frame = ctx.stack_frame(0x40);
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut sinX: f64 = 0.0;
+    let mut cosX: f64 = 0.0;
+    let mut sinY: f64 = 0.0;
+    let mut cosY: f64 = 0.0;
+    let mut sinZ: f64 = 0.0;
+    let mut cosZ: f64 = 0.0;
+    let mut temp1: f64 = 0.0;
+    let mut temp2: f64 = 0.0;
+    sinX = fns::sinf(ctx, (arg1).x());
+    cosX = fns::cosf(ctx, (arg1).x());
+    sinY = fns::sinf(ctx, (arg1).y());
+    cosY = fns::cosf(ctx, (arg1).y());
+    sinZ = fns::sinf(ctx, (arg1).z());
+    cosZ = fns::cosf(ctx, (arg1).z());
+    temp1 = fp::fmuls(sinX, sinY);
+    (Handle::add(arg0, 0_i32))
+        .at(0_i32)
+        .set(fp::fmuls(cosY, cosZ));
+    (Handle::add(arg0, 1_i32))
+        .at(0_i32)
+        .set(fp::fmuls(cosY, sinZ));
+    (Handle::add(arg0, 2_i32)).at(0_i32).set(fp::fneg(sinY));
+    temp2 = fp::fmuls(cosX, sinY);
+    (Handle::add(arg0, 0_i32))
+        .at(1_i32)
+        .set(fp::fmsubs(cosZ, temp1, (fp::fmuls(cosX, sinZ))));
+    (Handle::add(arg0, 1_i32))
+        .at(1_i32)
+        .set(fp::fmadds(sinZ, temp1, (fp::fmuls(cosX, cosZ))));
+    (Handle::add(arg0, 2_i32))
+        .at(1_i32)
+        .set(fp::fmuls(sinX, cosY));
+    (Handle::add(arg0, 0_i32))
+        .at(2_i32)
+        .set(fp::fmadds(cosZ, temp2, (fp::fmuls(sinX, sinZ))));
+    (Handle::add(arg0, 1_i32))
+        .at(2_i32)
+        .set(fp::fmsubs(sinZ, temp2, (fp::fmuls(sinX, cosZ))));
+    (Handle::add(arg0, 2_i32))
+        .at(2_i32)
+        .set(fp::fmuls(cosX, cosY));
+    (Handle::add(arg0, 0_i32))
+        .at(3_i32)
+        .set(fp::frsp(0_i32 as f64));
+    (Handle::add(arg0, 1_i32))
+        .at(3_i32)
+        .set(fp::frsp(0_i32 as f64));
+    (Handle::add(arg0, 2_i32))
+        .at(3_i32)
+        .set(fp::frsp(0_i32 as f64));
+}
+
 pub fn HSD_MtxQuat<'a>(ctx: &'a Ctx, arg0: ArrV<'a, F32, 4>, arg1: Quaternion<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
-    fns::PSMTXQuat(
-        ctx,
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(arg0).get(0),
-        arg1,
-    );
+    fns::PSMTXQuat(ctx, arg0, arg1);
+}
+
+pub fn HSD_MtxSRT<'a>(
+    ctx: &'a Ctx,
+    m: ArrV<'a, F32, 4>,
+    vec1: Vec<'a>,
+    vec2: Vec<'a>,
+    vec3: Vec<'a>,
+    vec4: Vec<'a>,
+) {
+    let __frame = ctx.stack_frame(0x88);
+    let mut m = m;
+    let mut vec1 = vec1;
+    let mut vec2 = vec2;
+    let mut vec3 = vec3;
+    let mut vec4 = vec4;
+    let mut vec1x_2: f64 = 0.0;
+    let mut vec1y_2: f64 = 0.0;
+    let mut vec1z_2: f64 = 0.0;
+    let mut vec1x_1: f64 = 0.0;
+    let mut vec1y_1: f64 = 0.0;
+    let mut vec1z_1: f64 = 0.0;
+    let mut vec1x: f64 = 0.0;
+    let mut vec1y: f64 = 0.0;
+    let mut vec1z: f64 = 0.0;
+    let mut sinX: f64 = fns::sinf(ctx, (vec2).x());
+    let mut cosX: f64 = fns::cosf(ctx, (vec2).x());
+    let mut sinY: f64 = fns::sinf(ctx, (vec2).y());
+    let mut cosY: f64 = fns::cosf(ctx, (vec2).y());
+    let mut sinZ: f64 = fns::sinf(ctx, (vec2).z());
+    let mut cosZ: f64 = fns::cosf(ctx, (vec2).z());
+    vec1x_2 = {
+        let __t2 = {
+            let __t1 = (vec1).x();
+            vec1x = __t1;
+            __t1
+        };
+        vec1x_1 = __t2;
+        __t2
+    };
+    vec1y_2 = {
+        let __t4 = {
+            let __t3 = (vec1).y();
+            vec1y = __t3;
+            __t3
+        };
+        vec1y_1 = __t4;
+        __t4
+    };
+    vec1z_2 = {
+        let __t6 = {
+            let __t5 = (vec1).z();
+            vec1z = __t5;
+            __t5
+        };
+        vec1z_1 = __t6;
+        __t6
+    };
+    if !Handle::is_null(vec4) {
+        let mut temp1: f64 = fp::frsp(fp::fdiv(1.0, (vec4).x()));
+        let mut temp2: f64 = fp::frsp(fp::fdiv(1.0, (vec4).y()));
+        let mut temp3: f64 = fp::frsp(fp::fdiv(1.0, (vec4).z()));
+        vec1y_2 = fp::fmuls(vec1y_2, fp::fmuls((vec4).y(), temp1));
+        vec1z_2 = fp::fmuls(vec1z_2, fp::fmuls((vec4).z(), temp1));
+        vec1x_1 = fp::fmuls(vec1x_1, fp::fmuls((vec4).x(), temp2));
+        vec1z_1 = fp::fmuls(vec1z_1, fp::fmuls((vec4).z(), temp2));
+        vec1x = fp::fmuls(vec1x, fp::fmuls((vec4).x(), temp3));
+        vec1y = fp::fmuls(vec1y, fp::fmuls((vec4).y(), temp3));
+    }
+    (Handle::add(m, 0_i32))
+        .at(0_i32)
+        .set(fp::fmuls(cosZ, (fp::fmuls(vec1x_2, cosY))));
+    (Handle::add(m, 1_i32))
+        .at(0_i32)
+        .set(fp::fmuls(sinZ, (fp::fmuls(vec1x_1, cosY))));
+    (Handle::add(m, 2_i32))
+        .at(0_i32)
+        .set(fp::fmuls(fp::fneg(vec1x), sinY));
+    (Handle::add(m, 0_i32)).at(1_i32).set(fp::fmuls(
+        vec1y_2,
+        (fp::fmsubs(cosZ, (fp::fmuls(sinX, sinY)), (fp::fmuls(cosX, sinZ)))),
+    ));
+    (Handle::add(m, 1_i32)).at(1_i32).set(fp::fmuls(
+        vec1y_1,
+        (fp::fmadds(sinZ, (fp::fmuls(sinX, sinY)), (fp::fmuls(cosX, cosZ)))),
+    ));
+    (Handle::add(m, 2_i32))
+        .at(1_i32)
+        .set(fp::fmuls(cosY, (fp::fmuls(vec1y, sinX))));
+    (Handle::add(m, 0_i32)).at(2_i32).set(fp::fmuls(
+        vec1z_2,
+        (fp::fmadds(cosZ, (fp::fmuls(cosX, sinY)), (fp::fmuls(sinX, sinZ)))),
+    ));
+    (Handle::add(m, 1_i32)).at(2_i32).set(fp::fmuls(
+        vec1z_1,
+        (fp::fmsubs(sinZ, (fp::fmuls(cosX, sinY)), (fp::fmuls(sinX, cosZ)))),
+    ));
+    (Handle::add(m, 2_i32))
+        .at(2_i32)
+        .set(fp::fmuls(cosY, (fp::fmuls(vec1z, cosX))));
+    (Handle::add(m, 0_i32)).at(3_i32).set((vec3).x());
+    (Handle::add(m, 1_i32)).at(3_i32).set((vec3).y());
+    (Handle::add(m, 2_i32)).at(3_i32).set((vec3).z());
 }
 
 pub fn HSD_MtxSRTQuat<'a>(
@@ -52,29 +1080,13 @@ pub fn HSD_MtxSRTQuat<'a>(
     let mut arg2 = arg2;
     let mut arg3 = arg3;
     let mut arg4 = arg4;
-    fns::PSMTXScale(
-        ctx,
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(arg0).get(0),
-        (arg1).x(),
-        (arg1).y(),
-        (arg1).z(),
-    );
+    fns::PSMTXScale(ctx, arg0, (arg1).x(), (arg1).y(), (arg1).z());
     if !Handle::is_null(arg4) {
         fns::PSMTXScale(ctx, temp.get(0), (arg4).x(), (arg4).y(), (arg4).z());
-        fns::PSMTXConcat(
-            ctx,
-            temp.get(0),
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(arg0).get(0),
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(arg0).get(0),
-        );
+        fns::PSMTXConcat(ctx, temp.get(0), arg0, arg0);
     }
     fns::PSMTXQuat(ctx, temp.get(0), arg2);
-    fns::PSMTXConcat(
-        ctx,
-        temp.get(0),
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(arg0).get(0),
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(arg0).get(0),
-    );
+    fns::PSMTXConcat(ctx, temp.get(0), arg0, arg0);
     if !Handle::is_null(arg4) {
         fns::PSMTXScale(
             ctx,
@@ -83,20 +1095,278 @@ pub fn HSD_MtxSRTQuat<'a>(
             fp::frsp(fp::fdiv(1.0, (arg4).y())),
             fp::frsp(fp::fdiv(1.0, (arg4).z())),
         );
-        fns::PSMTXConcat(
-            ctx,
-            temp.get(0),
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(arg0).get(0),
-            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(arg0).get(0),
-        );
+        fns::PSMTXConcat(ctx, temp.get(0), arg0, arg0);
     }
     fns::PSMTXTrans(ctx, temp.get(0), (arg3).x(), (arg3).y(), (arg3).z());
-    fns::PSMTXConcat(
-        ctx,
-        temp.get(0),
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(arg0).get(0),
-        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(arg0).get(0),
+    fns::PSMTXConcat(ctx, temp.get(0), arg0, arg0);
+}
+
+pub fn HSD_MtxScaledAdd<'a>(
+    ctx: &'a Ctx,
+    arg0: ArrV<'a, F32, 4>,
+    arg1: ArrV<'a, F32, 4>,
+    arg2: ArrV<'a, F32, 4>,
+    arg3: f64,
+) {
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut arg3 = arg3;
+    let mut arr0: Val<'a, F32> = ((Handle::add(arg0, 0_i32)).at(0_i32));
+    let mut arr1: Val<'a, F32> = ((Handle::add(arg1, 0_i32)).at(0_i32));
+    let mut arr2: Val<'a, F32> = ((Handle::add(arg2, 0_i32)).at(0_i32));
+    let __t6 = fp::fmadds(
+        arg3,
+        ({
+            let __t4 = arr0;
+            arr0 = Handle::add(arr0, 1);
+            __t4
+        })
+        .get(),
+        ({
+            let __t5 = arr1;
+            arr1 = Handle::add(arr1, 1);
+            __t5
+        })
+        .get(),
     );
+    ({
+        let __t1 = arr2;
+        arr2 = Handle::add(arr2, 1);
+        __t1
+    })
+    .set(__t6);
+    let __t12 = fp::fmadds(
+        arg3,
+        ({
+            let __t10 = arr0;
+            arr0 = Handle::add(arr0, 1);
+            __t10
+        })
+        .get(),
+        ({
+            let __t11 = arr1;
+            arr1 = Handle::add(arr1, 1);
+            __t11
+        })
+        .get(),
+    );
+    ({
+        let __t7 = arr2;
+        arr2 = Handle::add(arr2, 1);
+        __t7
+    })
+    .set(__t12);
+    let __t18 = fp::fmadds(
+        arg3,
+        ({
+            let __t16 = arr0;
+            arr0 = Handle::add(arr0, 1);
+            __t16
+        })
+        .get(),
+        ({
+            let __t17 = arr1;
+            arr1 = Handle::add(arr1, 1);
+            __t17
+        })
+        .get(),
+    );
+    ({
+        let __t13 = arr2;
+        arr2 = Handle::add(arr2, 1);
+        __t13
+    })
+    .set(__t18);
+    let __t24 = fp::fmadds(
+        arg3,
+        ({
+            let __t22 = arr0;
+            arr0 = Handle::add(arr0, 1);
+            __t22
+        })
+        .get(),
+        ({
+            let __t23 = arr1;
+            arr1 = Handle::add(arr1, 1);
+            __t23
+        })
+        .get(),
+    );
+    ({
+        let __t19 = arr2;
+        arr2 = Handle::add(arr2, 1);
+        __t19
+    })
+    .set(__t24);
+    let __t30 = fp::fmadds(
+        arg3,
+        ({
+            let __t28 = arr0;
+            arr0 = Handle::add(arr0, 1);
+            __t28
+        })
+        .get(),
+        ({
+            let __t29 = arr1;
+            arr1 = Handle::add(arr1, 1);
+            __t29
+        })
+        .get(),
+    );
+    ({
+        let __t25 = arr2;
+        arr2 = Handle::add(arr2, 1);
+        __t25
+    })
+    .set(__t30);
+    let __t36 = fp::fmadds(
+        arg3,
+        ({
+            let __t34 = arr0;
+            arr0 = Handle::add(arr0, 1);
+            __t34
+        })
+        .get(),
+        ({
+            let __t35 = arr1;
+            arr1 = Handle::add(arr1, 1);
+            __t35
+        })
+        .get(),
+    );
+    ({
+        let __t31 = arr2;
+        arr2 = Handle::add(arr2, 1);
+        __t31
+    })
+    .set(__t36);
+    let __t42 = fp::fmadds(
+        arg3,
+        ({
+            let __t40 = arr0;
+            arr0 = Handle::add(arr0, 1);
+            __t40
+        })
+        .get(),
+        ({
+            let __t41 = arr1;
+            arr1 = Handle::add(arr1, 1);
+            __t41
+        })
+        .get(),
+    );
+    ({
+        let __t37 = arr2;
+        arr2 = Handle::add(arr2, 1);
+        __t37
+    })
+    .set(__t42);
+    let __t48 = fp::fmadds(
+        arg3,
+        ({
+            let __t46 = arr0;
+            arr0 = Handle::add(arr0, 1);
+            __t46
+        })
+        .get(),
+        ({
+            let __t47 = arr1;
+            arr1 = Handle::add(arr1, 1);
+            __t47
+        })
+        .get(),
+    );
+    ({
+        let __t43 = arr2;
+        arr2 = Handle::add(arr2, 1);
+        __t43
+    })
+    .set(__t48);
+    let __t54 = fp::fmadds(
+        arg3,
+        ({
+            let __t52 = arr0;
+            arr0 = Handle::add(arr0, 1);
+            __t52
+        })
+        .get(),
+        ({
+            let __t53 = arr1;
+            arr1 = Handle::add(arr1, 1);
+            __t53
+        })
+        .get(),
+    );
+    ({
+        let __t49 = arr2;
+        arr2 = Handle::add(arr2, 1);
+        __t49
+    })
+    .set(__t54);
+    let __t60 = fp::fmadds(
+        arg3,
+        ({
+            let __t58 = arr0;
+            arr0 = Handle::add(arr0, 1);
+            __t58
+        })
+        .get(),
+        ({
+            let __t59 = arr1;
+            arr1 = Handle::add(arr1, 1);
+            __t59
+        })
+        .get(),
+    );
+    ({
+        let __t55 = arr2;
+        arr2 = Handle::add(arr2, 1);
+        __t55
+    })
+    .set(__t60);
+    let __t66 = fp::fmadds(
+        arg3,
+        ({
+            let __t64 = arr0;
+            arr0 = Handle::add(arr0, 1);
+            __t64
+        })
+        .get(),
+        ({
+            let __t65 = arr1;
+            arr1 = Handle::add(arr1, 1);
+            __t65
+        })
+        .get(),
+    );
+    ({
+        let __t61 = arr2;
+        arr2 = Handle::add(arr2, 1);
+        __t61
+    })
+    .set(__t66);
+    let __t72 = fp::fmadds(
+        arg3,
+        ({
+            let __t70 = arr0;
+            arr0 = Handle::add(arr0, 1);
+            __t70
+        })
+        .get(),
+        ({
+            let __t71 = arr1;
+            arr1 = Handle::add(arr1, 1);
+            __t71
+        })
+        .get(),
+    );
+    ({
+        let __t67 = arr2;
+        arr2 = Handle::add(arr2, 1);
+        __t67
+    })
+    .set(__t72);
 }
 
 pub fn HSD_VecAlloc<'a>(ctx: &'a Ctx) -> Addr<'a> {
@@ -176,6 +1446,61 @@ pub fn HSD_MtxInitAllocData<'a>(ctx: &'a Ctx) {
     );
 }
 
+fn inl_HSD_CalcDeterminantMatrix3x4<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>) -> f64 {
+    let mut m = m;
+    return fp::fnmsubs(
+        fp::fmuls(
+            (Handle::add(m, 0_i32)).at(0_i32).get(),
+            (Handle::add(m, 2_i32)).at(1_i32).get(),
+        ),
+        (Handle::add(m, 1_i32)).at(2_i32).get(),
+        fp::fnmsubs(
+            fp::fmuls(
+                (Handle::add(m, 1_i32)).at(0_i32).get(),
+                (Handle::add(m, 0_i32)).at(1_i32).get(),
+            ),
+            (Handle::add(m, 2_i32)).at(2_i32).get(),
+            fp::fnmsubs(
+                fp::fmuls(
+                    (Handle::add(m, 2_i32)).at(0_i32).get(),
+                    (Handle::add(m, 1_i32)).at(1_i32).get(),
+                ),
+                (Handle::add(m, 0_i32)).at(2_i32).get(),
+                fp::fmadds(
+                    fp::fmuls(
+                        (Handle::add(m, 0_i32)).at(2_i32).get(),
+                        (Handle::add(m, 1_i32)).at(0_i32).get(),
+                    ),
+                    (Handle::add(m, 2_i32)).at(1_i32).get(),
+                    fp::fmadds(
+                        fp::fmuls(
+                            (Handle::add(m, 0_i32)).at(0_i32).get(),
+                            (Handle::add(m, 1_i32)).at(1_i32).get(),
+                        ),
+                        (Handle::add(m, 2_i32)).at(2_i32).get(),
+                        fp::fmuls(
+                            fp::fmuls(
+                                (Handle::add(m, 0_i32)).at(1_i32).get(),
+                                (Handle::add(m, 1_i32)).at(2_i32).get(),
+                            ),
+                            (Handle::add(m, 2_i32)).at(0_i32).get(),
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    );
+}
+
+fn inl_fabsf_bitwise<'a>(ctx: &'a Ctx, v: f64) -> f64 {
+    let __frame = ctx.stack_frame(0x10);
+    let v__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    v__slot.set(v);
+    (Handle::cast::<Val<'a, u32>>(v__slot))
+        .set(((Handle::cast::<Val<'a, u32>>(v__slot)).get() & (!0x80000000_u32)));
+    return v__slot.get();
+}
+
 fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     let mut x = x;
     let mut y: f64 = 0.0;
@@ -199,6 +1524,22 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     return x;
 }
 
+fn inl_calcVal<'a>(ctx: &'a Ctx, x: f64, y: f64) -> f64 {
+    let mut x = x;
+    let mut y = y;
+    if inl_fabsf_bitwise(ctx, x) <= 1.1754943508222875e-38_f64 {
+        if y >= fp::frsp(0_i32 as f64) {
+            return fp::frsp(fp::fdiv(3.141592653589793, (2_i32 as f64)));
+        } else {
+            return fp::frsp(fp::fdiv(fp::fneg(3.141592653589793), (2_i32 as f64)));
+        }
+    } else {
+        return fns::atan2f(ctx, y, x);
+    }
+    #[allow(unreachable_code)]
+    return 0.0;
+}
+
 fn inl_HSD_VecGetAllocData_unfused<'a>(ctx: &'a Ctx) -> _HSD_ObjAllocData<'a> {
     return fns::HSD_Mtx_804C2310(ctx);
 }
@@ -210,10 +1551,76 @@ fn inl_HSD_MtxGetAllocData_unfused<'a>(ctx: &'a Ctx) -> _HSD_ObjAllocData<'a> {
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
+        0x80379310,
+        |ctx| {
+            let (a0, a1): (ArrV<'_, F32, 4>, ArrV<'_, F32, 4>) = Args::take_all(ctx);
+            Ret::put(HSD_MtxInverse(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80379598,
+        |ctx| {
+            let (a0, a1, a2): (ArrV<'_, F32, 4>, ArrV<'_, F32, 4>, ArrV<'_, F32, 4>) =
+                Args::take_all(ctx);
+            Ret::put(HSD_MtxInverseConcat(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80379a20,
+        |ctx| {
+            let (a0, a1): (ArrV<'_, F32, 4>, ArrV<'_, F32, 4>) = Args::take_all(ctx);
+            Ret::put(HSD_MtxInverseTranspose(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80379c24,
+        |ctx| {
+            let (a0, a1): (ArrV<'_, F32, 4>, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(HSD_MtxGetRotation(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80379f6c,
+        |ctx| {
+            let (a0, a1): (ArrV<'_, F32, 4>, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(HSD_MtxGetTranslate(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80379f88,
+        |ctx| {
+            let (a0, a1): (ArrV<'_, F32, 4>, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(HSD_MtxGetScale(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8037a120,
+        |ctx| {
+            let (a0, a1): (ArrV<'_, F32, 4>, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(HSD_MkRotationMtx(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x8037a230,
         |ctx| {
             let (a0, a1): (ArrV<'_, F32, 4>, Quaternion<'_>) = Args::take_all(ctx);
             Ret::put(HSD_MtxQuat(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8037a250,
+        |ctx| {
+            let (a0, a1, a2, a3, a4): (ArrV<'_, F32, 4>, Vec<'_>, Vec<'_>, Vec<'_>, Vec<'_>) =
+                Args::take_all(ctx);
+            Ret::put(HSD_MtxSRT(ctx, a0, a1, a2, a3, a4), ctx);
         },
         Returns::Nothing,
     );
@@ -228,6 +1635,15 @@ pub fn register(ctx: &Ctx) {
                 Vec<'_>,
             ) = Args::take_all(ctx);
             Ret::put(HSD_MtxSRTQuat(ctx, a0, a1, a2, a3, a4), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8037a54c,
+        |ctx| {
+            let (a0, a1, a2, a3): (ArrV<'_, F32, 4>, ArrV<'_, F32, 4>, ArrV<'_, F32, 4>, Single) =
+                Args::take_all(ctx);
+            Ret::put(HSD_MtxScaledAdd(ctx, a0, a1, a2, a3.0), ctx);
         },
         Returns::Nothing,
     );

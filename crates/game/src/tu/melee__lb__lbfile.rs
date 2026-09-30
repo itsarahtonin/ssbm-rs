@@ -106,6 +106,12 @@ pub fn lbFileGetFullName<'a>(ctx: &'a Ctx, basename: Val<'a, i8>) -> Val<'a, i8>
                     )
                 });
             }
+            let __t3 = ({
+                let __t2 = cur;
+                cur = Handle::add(cur, 1);
+                __t2
+            })
+            .get();
             At::new(ctx, 0x80432058)
                 .field::<ArrV<'a, i8, 32>>(0)
                 .at({
@@ -113,14 +119,7 @@ pub fn lbFileGetFullName<'a>(ctx: &'a Ctx, basename: Val<'a, i8>) -> Val<'a, i8>
                     pos = pos.wrapping_add(1);
                     __t1
                 })
-                .set(
-                    ({
-                        let __t2 = cur;
-                        cur = Handle::add(cur, 1);
-                        __t2
-                    })
-                    .get(),
-                );
+                .set(__t3);
         }
     }
     if (((Handle::add(cur, 0_i32)).get() as i32) != 0_i32)
@@ -135,9 +134,9 @@ pub fn lbFileGetFullName<'a>(ctx: &'a Ctx, basename: Val<'a, i8>) -> Val<'a, i8>
         At::new(ctx, 0x80432058)
             .field::<ArrV<'a, i8, 32>>(0)
             .at({
-                let __t3 = pos;
+                let __t4 = pos;
                 pos = pos.wrapping_add(1);
-                __t3
+                __t4
             })
             .set((46_i32 as i8));
         if (fns::lbLang_IsSettingUS(ctx) != 0) {
@@ -161,9 +160,9 @@ pub fn lbFileGetFullName<'a>(ctx: &'a Ctx, basename: Val<'a, i8>) -> Val<'a, i8>
         At::new(ctx, 0x80432058)
             .field::<ArrV<'a, i8, 32>>(0)
             .at({
-                let __t4 = pos;
+                let __t5 = pos;
                 pos = pos.wrapping_add(1);
-                __t4
+                __t5
             })
             .set((46_i32 as i8));
         if (fns::lbLang_IsSavedLanguageUS(ctx) != 0) {

@@ -525,6 +525,105 @@ pub fn fn_UpdateItemAndPokemonMenu<'a>(ctx: &'a Ctx, player: i32) {
     }
 }
 
+pub fn db_CheckAndSpawnItem<'a>(ctx: &'a Ctx, player: i32) {
+    let __frame = ctx.stack_frame(0x68);
+    let spawnItem: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut player = player;
+    let mut mask: i32 = (((((((((((shl_i32(1_i32, (0_i32 as u32)))
+        | (shl_i32(1_i32, (1_i32 as u32))))
+        | (shl_i32(1_i32, (3_i32 as u32))))
+        | (shl_i32(1_i32, (4_i32 as u32))))
+        | (shl_i32(1_i32, (5_i32 as u32))))
+        | (shl_i32(1_i32, (6_i32 as u32))))
+        | (shl_i32(1_i32, (8_i32 as u32))))
+        | (shl_i32(1_i32, (9_i32 as u32))))
+        | (shl_i32(1_i32, (10_i32 as u32))))
+        | (shl_i32(1_i32, (11_i32 as u32))))
+        | (shl_i32(1_i32, (12_i32 as u32))));
+    if (fns::db_ButtonsDown(ctx, player) & (mask as u32)) != (0_i32 as u32) {
+        return;
+    }
+    if (fns::db_ButtonsPressed(ctx, player) & ((shl_i32(1_i32, (2_i32 as u32))) as u32))
+        == (0_i32 as u32)
+    {
+        return;
+    }
+    spawnItem
+        .set_kind(statics::melee__db__dbitem::db_ItemAndPokemonMenu(ctx).CurrentlySelectedItem());
+    if (fns::Item_80266F3C(ctx) == 0_i32) && (spawnItem.kind() < (enums::It_Kind_L_Gun_Ray as i32))
+    {
+        return;
+    }
+    fns::Player_LoadPlayerCoords(ctx, player, spawnItem.prev_pos());
+    spawnItem
+        .prev_pos()
+        .set_y(fp::fadds(spawnItem.prev_pos().y(), 60.0));
+    spawnItem.prev_pos().set_z(0.0);
+    Handle::copy_from(spawnItem.pos(), spawnItem.prev_pos());
+    spawnItem.set_facing_dir(fns::it_8026B684(ctx, spawnItem.prev_pos()));
+    spawnItem.set_x3C_damage((0_i32 as i16));
+    spawnItem.vel().set_x({
+        let __t2 = {
+            let __t1 = 0.0;
+            spawnItem.vel().set_z(__t1);
+            __t1
+        };
+        spawnItem.vel().set_y(__t2);
+        __t2
+    });
+    spawnItem.set_x0_parent_gobj(null::<HSD_GObj<'a>>(ctx));
+    spawnItem.set_x4_parent_gobj2(spawnItem.x0_parent_gobj());
+    spawnItem.x44_flag().x0().set_b0((1_i32 as u8));
+    spawnItem.set_x40(0_i32);
+    if (spawnItem.kind() < (enums::It_Kind_L_Gun_Ray as i32))
+        && ((fns::Item_804A0C64(ctx).x0() as u32) >= ((fns::it_804D6D28(ctx).get()).x0() as u32))
+    {
+        fns::OSReport(ctx, cstr(ctx, 0x803eaca0), &[]);
+        return;
+    }
+    if (spawnItem.kind() < (enums::It_Kind_Octarock_Stone as i32))
+        && ((fns::Item_804A0C64(ctx).x2C() as u32) >= ((fns::it_804D6D28(ctx).get()).x14() as u32))
+    {
+        fns::OSReport(ctx, cstr(ctx, 0x803eacb0), &[]);
+        return;
+    }
+    if ((spawnItem.kind() < (enums::It_Kind_Old_Kuri as i32))
+        || (spawnItem.kind() >= (enums::It_Kind_Arwing_Laser as i32)))
+        || (!Handle::is_null(
+            fns::it_804A0F60(ctx)
+                .at(spawnItem
+                    .kind()
+                    .wrapping_sub((enums::It_Kind_Old_Kuri as i32)))
+                .get(),
+        ))
+    {
+        if (spawnItem.kind() != (enums::It_Kind_M_Ball as i32)) || (fns::it_8026C704(ctx) == 0_i32)
+        {
+            {
+                let mut gobj: HSD_GObj<'a> = fns::Item_80268B18(ctx, spawnItem);
+                if !Handle::is_null(gobj) {
+                    let __t3 =
+                        (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
+                            .xDAA()
+                            .xDAA_flag()
+                            .byte_ref();
+                    __t3.set(
+                        (((__t3.get() as i32)
+                            | statics::melee__db__dbitem::db_ShowItemCollisionBubbles(ctx).get())
+                            as u8),
+                    );
+                    let _ = fns::efSync_Spawn(
+                        ctx,
+                        0x420_i32,
+                        gobj,
+                        &[VarArg::Int(Handle::addr(spawnItem.prev_pos()))],
+                    );
+                }
+            }
+        }
+    }
+}
+
 pub fn fn_CheckItemAndPokemonMenu<'a>(ctx: &'a Ctx, player: i32) {
     let __frame = ctx.stack_frame(0x18);
     let mut player = player;
@@ -759,6 +858,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (i32,) = Args::take_all(ctx);
             Ret::put(fn_UpdateItemAndPokemonMenu(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x802262e0,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(db_CheckAndSpawnItem(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

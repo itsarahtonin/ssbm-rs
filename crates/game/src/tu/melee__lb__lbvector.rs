@@ -301,6 +301,83 @@ pub fn lbVector_Lerp<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>, result: Vec<'a>, 
     return result;
 }
 
+pub fn lbVector_8000DE38<'a>(ctx: &'a Ctx, points: Vec<'a>, v: Vec<'a>, c: f64) -> Vec<'a> {
+    let mut points = points;
+    let mut v = v;
+    let mut c = c;
+    let mut var1: f64 = 0.0;
+    let mut var2: f64 = 0.0;
+    if c > 1.0 {
+        c = 1.0;
+    } else if c < 0.0 {
+        c = 0.0;
+    }
+    var1 = fp::fmadds(
+        (Handle::add(points, 2_i32)).x(),
+        2.0,
+        fp::fmsubs(
+            (Handle::add(points, 0_i32)).x(),
+            2.0,
+            fp::fmuls((Handle::add(points, 1_i32)).x(), 4.0),
+        ),
+    );
+    var2 = fp::fsubs(
+        fp::fmadds(
+            (Handle::add(points, 0_i32)).x(),
+            fp::fneg(3.0),
+            fp::fmuls((Handle::add(points, 1_i32)).x(), 4.0),
+        ),
+        (Handle::add(points, 2_i32)).x(),
+    );
+    (v).set_x(fp::fadds(
+        (Handle::add(points, 0_i32)).x(),
+        (fp::fmadds(fp::fmuls(var1, c), c, fp::fmuls(var2, c))),
+    ));
+    var1 = fp::fmadds(
+        (Handle::add(points, 2_i32)).y(),
+        2.0,
+        fp::fmsubs(
+            (Handle::add(points, 0_i32)).y(),
+            2.0,
+            fp::fmuls((Handle::add(points, 1_i32)).y(), 4.0),
+        ),
+    );
+    var2 = fp::fsubs(
+        fp::fmadds(
+            (Handle::add(points, 0_i32)).y(),
+            fp::fneg(3.0),
+            fp::fmuls((Handle::add(points, 1_i32)).y(), 4.0),
+        ),
+        (Handle::add(points, 2_i32)).y(),
+    );
+    (v).set_y(fp::fadds(
+        (Handle::add(points, 0_i32)).y(),
+        (fp::fmadds(fp::fmuls(var1, c), c, fp::fmuls(var2, c))),
+    ));
+    var1 = fp::fmadds(
+        (Handle::add(points, 2_i32)).z(),
+        2.0,
+        fp::fmsubs(
+            (Handle::add(points, 0_i32)).z(),
+            2.0,
+            fp::fmuls((Handle::add(points, 1_i32)).z(), 4.0),
+        ),
+    );
+    var2 = fp::fsubs(
+        fp::fmadds(
+            (Handle::add(points, 0_i32)).z(),
+            fp::fneg(3.0),
+            fp::fmuls((Handle::add(points, 1_i32)).z(), 4.0),
+        ),
+        (Handle::add(points, 2_i32)).z(),
+    );
+    (v).set_z(fp::fadds(
+        (Handle::add(points, 0_i32)).z(),
+        (fp::fmadds(fp::fmuls(var1, c), c, fp::fmuls(var2, c))),
+    ));
+    return v;
+}
+
 pub fn lbVector_EulerAnglesFromONB<'a>(
     ctx: &'a Ctx,
     result_angles: Vec<'a>,
@@ -539,6 +616,39 @@ pub fn lbVector_WorldToScreen<'a>(
         (screenCoords).z_ref(),
     );
     return screenCoords;
+}
+
+pub fn lbVector_CreateEulerMatrix<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, angles: Quaternion<'a>) {
+    let mut m = m;
+    let mut angles = angles;
+    let mut sx: f64 = inl_lbvector_sin(ctx, (angles).x());
+    let mut cx: f64 = inl_lbvector_cos(ctx, (angles).x());
+    let mut sy: f64 = inl_lbvector_sin(ctx, (angles).y());
+    let mut cy: f64 = inl_lbvector_cos(ctx, (angles).y());
+    let mut sz: f64 = inl_lbvector_sin(ctx, (angles).z());
+    let mut cz: f64 = inl_lbvector_cos(ctx, (angles).z());
+    let mut sxsy: f64 = fp::fmuls(sx, sy);
+    let mut cxsy: f64 = fp::fmuls(cx, sy);
+    (Handle::add(m, 0_i32)).at(0_i32).set(fp::fmuls(cy, cz));
+    (Handle::add(m, 1_i32)).at(0_i32).set(fp::fmuls(cy, sz));
+    (Handle::add(m, 2_i32)).at(0_i32).set(fp::fneg(sy));
+    (Handle::add(m, 0_i32))
+        .at(1_i32)
+        .set(fp::fmsubs(cz, sxsy, fp::fmuls(cx, sz)));
+    (Handle::add(m, 1_i32))
+        .at(1_i32)
+        .set(fp::fmadds(sz, sxsy, fp::fmuls(cx, cz)));
+    (Handle::add(m, 2_i32)).at(1_i32).set(fp::fmuls(sx, cy));
+    (Handle::add(m, 0_i32))
+        .at(2_i32)
+        .set(fp::fmadds(cz, cxsy, fp::fmuls(sx, sz)));
+    (Handle::add(m, 1_i32))
+        .at(2_i32)
+        .set(fp::fmsubs(sz, cxsy, fp::fmuls(sx, cz)));
+    (Handle::add(m, 2_i32)).at(2_i32).set(fp::fmuls(cx, cy));
+    (Handle::add(m, 0_i32)).at(3_i32).set(0.0);
+    (Handle::add(m, 1_i32)).at(3_i32).set(0.0);
+    (Handle::add(m, 2_i32)).at(3_i32).set(0.0);
 }
 
 pub fn lbVector_8000E838<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>, c: Vec<'a>, d: Vec<'a>) -> f64 {
@@ -930,6 +1040,14 @@ pub fn register(ctx: &Ctx) {
         Returns::Int,
     );
     ctx.register_port(
+        0x8000de38,
+        |ctx| {
+            let (a0, a1, a2): (Vec<'_>, Vec<'_>, Single) = Args::take_all(ctx);
+            Ret::put(lbVector_8000DE38(ctx, a0, a1, a2.0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
         0x8000df0c,
         |ctx| {
             let (a0, a1, a2, a3): (Vec<'_>, Vec<'_>, Vec<'_>, Vec<'_>) = Args::take_all(ctx);
@@ -968,6 +1086,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(lbVector_WorldToScreen(ctx, a0, a1, a2, a3), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x8000e530,
+        |ctx| {
+            let (a0, a1): (ArrV<'_, F32, 4>, Quaternion<'_>) = Args::take_all(ctx);
+            Ret::put(lbVector_CreateEulerMatrix(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x8000e838,
