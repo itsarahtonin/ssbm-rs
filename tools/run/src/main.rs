@@ -31,6 +31,7 @@ use ssbm_ppc::Interpreter;
 use ssbm_rt::{Ctx, Stop};
 use ssbm_sdk::{Sdk, boot, hw};
 
+mod matches;
 mod monkey;
 
 /// Ports lockstep does not check (see where they are set).
@@ -147,6 +148,7 @@ fn run() -> ExitCode {
     let mut lockstep = false;
     let mut lockstep_from = 0u64;
     let mut monkey_seed: Option<u64> = None;
+    let mut match_seed: Option<u64> = None;
     let mut start_mode: Option<u32> = None;
     let mut args = std::env::args().skip(1);
     while let Some(a) = args.next() {
@@ -179,6 +181,13 @@ fn run() -> ExitCode {
                     args.next()
                         .and_then(|v| v.parse().ok())
                         .expect("--monkey SEED"),
+                )
+            }
+            "--matches" => {
+                match_seed = Some(
+                    args.next()
+                        .and_then(|v| v.parse().ok())
+                        .expect("--matches SEED"),
                 )
             }
             "--mode" => {
@@ -250,6 +259,11 @@ fn run() -> ExitCode {
     // (GameModeKind, in hex) instead of the title screen. MODES=1 logs each mode entered.
     if let Some(seed) = monkey_seed {
         monkey::install(&sdk, seed, 0);
+    }
+    // --matches SEED gives each match of the debug VS mode (--mode e) random fighters, stage
+    // and items.
+    if let Some(seed) = match_seed {
+        matches::install(&ctx, seed);
     }
     let log_modes = std::env::var_os("MODES").is_some();
     if start_mode.is_some() || log_modes {

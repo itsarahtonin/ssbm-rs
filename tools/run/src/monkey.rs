@@ -23,9 +23,13 @@ const Y: u16 = 0x0800;
 const START: u16 = 0x1000;
 
 /// xorshift64*: small, and the same everywhere.
-struct Rng(Cell<u64>);
+pub struct Rng(Cell<u64>);
 
 impl Rng {
+    pub fn new(seed: u64) -> Self {
+        Self(Cell::new(seed.max(1)))
+    }
+
     fn next(&self) -> u64 {
         let mut x = self.0.get();
         x ^= x >> 12;
@@ -36,8 +40,13 @@ impl Rng {
     }
 
     /// Whether an event of probability `p` percent happens.
-    fn chance(&self, p: u64) -> bool {
+    pub fn chance(&self, p: u64) -> bool {
         self.next() % 100 < p
+    }
+
+    /// A number below `n`.
+    pub fn below(&self, n: u64) -> u64 {
+        self.next() % n
     }
 
     fn stick(&self) -> i8 {
@@ -97,7 +106,7 @@ fn press(rng: &Rng) -> PadStatus {
 
 /// Changes each controller's input every few fields, from field `from` on.
 pub fn install(sdk: &Rc<Sdk>, seed: u64, from: u64) {
-    let rng = Rc::new(Rng(Cell::new(seed.max(1))));
+    let rng = Rc::new(Rng::new(seed));
     schedule(sdk, rng, from);
 }
 
