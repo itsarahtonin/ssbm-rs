@@ -1,0 +1,12 @@
+[package]
+name = "replay-sort"
+description = "Sorts Slippi replays by platform, controller fixes and Gecko codes, and picks a smoke set"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+peppi.workspace = true
+ssbm-data.workspace = true
