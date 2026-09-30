@@ -231,6 +231,87 @@ pub fn mkBillBoardMtx<'a>(
     inl_HSD_MtxSetColVec(ctx, dst, 3_i32, pos);
 }
 
+pub fn HSD_JObjMakePositionMtx<'a>(
+    ctx: &'a Ctx,
+    jobj: HSD_JObj<'a>,
+    vmtx: ArrV<'a, F32, 4>,
+    pmtx: ArrV<'a, F32, 4>,
+) {
+    let __frame = ctx.stack_frame(0xc0);
+    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let mut jobj = jobj;
+    let mut vmtx = vmtx;
+    let mut pmtx = pmtx;
+    if (((jobj).flags() & (0xe00_i32 as u32)) != 0) {
+        fns::PSMTXConcat(
+            ctx,
+            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0),
+            (jobj).mtx().get(0),
+            mtx.get(0),
+        );
+        's1: {
+            let __case = match ((jobj).flags() & (0xe00_i32 as u32)) {
+                0x200_u32 => 0,
+                0x400_u32 => 1,
+                0x600_u32 => 2,
+                0x800_u32 => 3,
+                _ => 4,
+            };
+            if __case <= 0 {
+                statics::sysdolphin__baselib__displayfunc::mkBillBoardMtx(
+                    ctx,
+                    jobj,
+                    mtx.get(0),
+                    Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
+                );
+                break 's1;
+            }
+            if __case <= 1 {
+                statics::sysdolphin__baselib__displayfunc::mkVBillBoardMtx(
+                    ctx,
+                    jobj,
+                    mtx.get(0),
+                    Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
+                );
+                break 's1;
+            }
+            if __case <= 2 {
+                statics::sysdolphin__baselib__displayfunc::mkHBillBoardMtx(
+                    ctx,
+                    jobj,
+                    mtx.get(0),
+                    Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
+                );
+                break 's1;
+            }
+            if __case <= 3 {
+                inl_mkRBillBoardMtx_unfused(
+                    ctx,
+                    jobj,
+                    mtx.get(0),
+                    Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
+                );
+                break 's1;
+            }
+            if __case <= 4 {
+                fns::HSD_Panic(
+                    ctx,
+                    cstr(ctx, 0x80406ae0),
+                    (0x142_i32 as u32),
+                    cstr(ctx, 0x80406b14),
+                );
+            }
+        }
+    } else {
+        fns::PSMTXConcat(
+            ctx,
+            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0),
+            (jobj).mtx().get(0),
+            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
+        );
+    }
+}
+
 pub fn _HSD_mkEnvelopeModelNodeMtx<'a>(
     ctx: &'a Ctx,
     m: HSD_JObj<'a>,
@@ -313,6 +394,108 @@ pub fn HSD_JObjDispSub<'a>(
     }
     fns::HSD_DObjSetCurrent(ctx, null::<HSD_DObj<'a>>(ctx));
     fns::HSD_JObjSetCurrent(ctx, null::<HSD_JObj<'a>>(ctx));
+}
+
+pub fn HSD_JObjDispDObj<'a>(
+    ctx: &'a Ctx,
+    jobj: HSD_JObj<'a>,
+    vmtx: ArrV<'a, F32, 4>,
+    trsp_mask: i32,
+    rendermode: u32,
+) {
+    let __frame = ctx.stack_frame(0x70);
+    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let mut jobj = jobj;
+    let mut vmtx = vmtx;
+    let mut trsp_mask = trsp_mask;
+    let mut rendermode = rendermode;
+    let mut cobj: HSD_CObj<'a> = null(ctx);
+    if ((jobj).flags() & ((shl_i32(1_i32, (4_i32 as u32))) as u32)) == (0_i32 as u32) {
+        let mut xlu_bits: u32 = ((jobj).flags() & ((shl_i32(trsp_mask, (18_i32 as u32))) as u32));
+        if xlu_bits != (0_i32 as u32) {
+            inl_HSD_JObjSetupMatrix_unfused(ctx, jobj);
+            if Handle::is_null(vmtx) {
+                cobj = fns::HSD_CObjGetCurrent(ctx);
+                vmtx = inl_HSD_CObjGetViewingMtxPtrDirect_unfused(ctx, cobj);
+            }
+            (Handle::cast::<HSD_JObjInfo<'a>>(((jobj).object().parent().class_info())))
+                .make_pmtx()
+                .call::<_, ()>((jobj, vmtx, mtx.get(0)));
+            if (xlu_bits & (0x40000_i32 as u32)) != (0_i32 as u32) {
+                (Handle::cast::<HSD_JObjInfo<'a>>(((jobj).object().parent().class_info())))
+                    .disp()
+                    .call::<_, ()>((
+                        jobj,
+                        vmtx,
+                        mtx.get(0),
+                        (enums::HSD_TRSP_OPA as i32),
+                        rendermode,
+                    ));
+            }
+            if statics::sysdolphin__baselib__displayfunc::zsort_listing(ctx).get() == 0_i32 {
+                if (xlu_bits & (0x100000_i32 as u32)) != (0_i32 as u32) {
+                    (Handle::cast::<HSD_JObjInfo<'a>>(((jobj).object().parent().class_info())))
+                        .disp()
+                        .call::<_, ()>((
+                            jobj,
+                            vmtx,
+                            mtx.get(0),
+                            (enums::HSD_TRSP_TEXEDGE as i32),
+                            rendermode,
+                        ));
+                }
+                if (xlu_bits & (0x80000_i32 as u32)) != (0_i32 as u32) {
+                    (Handle::cast::<HSD_JObjInfo<'a>>(((jobj).object().parent().class_info())))
+                        .disp()
+                        .call::<_, ()>((
+                            jobj,
+                            vmtx,
+                            mtx.get(0),
+                            (enums::HSD_TRSP_XLU as i32),
+                            rendermode,
+                        ));
+                }
+            } else {
+                if (xlu_bits & ((0x100000_i32 | 0x80000_i32) as u32)) != (0_i32 as u32) {
+                    let mut zlist: _HSD_ZList<'a> = null(ctx);
+                    zlist = inl_HSD_ZListAlloc_unfused(ctx);
+                    fns::PSMTXCopy(ctx, mtx.get(0), (zlist).pmtx().get(0));
+                    if !Handle::is_null(vmtx) {
+                        (zlist).set_vmtx(Handle::cast::<ArrV<'a, F32, 4>>(fns::HSD_MtxAlloc(ctx)));
+                        fns::PSMTXCopy(ctx, vmtx, (zlist).vmtx());
+                    }
+                    (zlist).set_jobj(jobj);
+                    (zlist).set_rendermode(rendermode);
+                    (statics::sysdolphin__baselib__displayfunc::zlist_bottom(ctx).get()).set(zlist);
+                    statics::sysdolphin__baselib__displayfunc::zlist_bottom(ctx)
+                        .set((zlist).next_ref());
+                    if (xlu_bits & (0x100000_i32 as u32)) != (0_i32 as u32) {
+                        (statics::sysdolphin__baselib__displayfunc::zlist_texedge_bottom(ctx)
+                            .get())
+                        .set(zlist);
+                        statics::sysdolphin__baselib__displayfunc::zlist_texedge_bottom(ctx)
+                            .set((zlist).sort().texedge_ref());
+                        statics::sysdolphin__baselib__displayfunc::zlist_texedge_nb(ctx).set(
+                            statics::sysdolphin__baselib__displayfunc::zlist_texedge_nb(ctx)
+                                .get()
+                                .wrapping_add(1_i32),
+                        );
+                    }
+                    if (xlu_bits & (0x80000_i32 as u32)) != (0_i32 as u32) {
+                        (statics::sysdolphin__baselib__displayfunc::zlist_xlu_bottom(ctx).get())
+                            .set(zlist);
+                        statics::sysdolphin__baselib__displayfunc::zlist_xlu_bottom(ctx)
+                            .set((zlist).sort().xlu_ref());
+                        statics::sysdolphin__baselib__displayfunc::zlist_xlu_nb(ctx).set(
+                            statics::sysdolphin__baselib__displayfunc::zlist_xlu_nb(ctx)
+                                .get()
+                                .wrapping_add(1_i32),
+                        );
+                    }
+                }
+            }
+        }
+    }
 }
 
 pub fn zlist_sort<'a>(ctx: &'a Ctx, list: _HSD_ZList<'a>, nb: i32, offset: i32) -> _HSD_ZList<'a> {
@@ -790,6 +973,62 @@ fn inl_HSD_MtxSetColVec<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, col: i32, vec: 
     (Handle::add(mtx, 2_i32)).at(col).set((vec).z());
 }
 
+fn inl_HSD_MtxColMag_unfused<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, col: i32) -> f64 {
+    let mut mtx = mtx;
+    let mut col = col;
+    return fns::sqrtf(
+        ctx,
+        fp::fadds(
+            fp::fadds(
+                (fp::fmuls(
+                    (Handle::add(mtx, 0_i32)).at(col).get(),
+                    (Handle::add(mtx, 0_i32)).at(col).get(),
+                )),
+                (fp::fmuls(
+                    (Handle::add(mtx, 1_i32)).at(col).get(),
+                    (Handle::add(mtx, 1_i32)).at(col).get(),
+                )),
+            ),
+            (fp::fmuls(
+                (Handle::add(mtx, 2_i32)).at(col).get(),
+                (Handle::add(mtx, 2_i32)).at(col).get(),
+            )),
+        ),
+    );
+}
+
+fn inl_mkRBillBoardMtx_unfused<'a>(
+    ctx: &'a Ctx,
+    jobj: HSD_JObj<'a>,
+    src: ArrV<'a, F32, 4>,
+    dst: ArrV<'a, F32, 4>,
+) {
+    let __frame = ctx.stack_frame(0x68);
+    let rot: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let scl: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x30);
+    let mut jobj = jobj;
+    let mut src = src;
+    let mut dst = dst;
+    let mut sx: f64 = 0.0;
+    let mut sy: f64 = 0.0;
+    let mut sz: f64 = 0.0;
+    sx = inl_HSD_MtxColMag_unfused(ctx, src, 0_i32);
+    sy = inl_HSD_MtxColMag_unfused(ctx, src, 1_i32);
+    sz = inl_HSD_MtxColMag_unfused(ctx, src, 2_i32);
+    fns::PSMTXScale(ctx, scl.get(0), sx, sy, sz);
+    fns::MTXRotRad(ctx, rot.get(0), (122_i32 as i8), (jobj).rotate().z());
+    rot.get(0_i32)
+        .at(3_i32)
+        .set((Handle::add(src, 0_i32)).at(3_i32).get());
+    rot.get(1_i32)
+        .at(3_i32)
+        .set((Handle::add(src, 1_i32)).at(3_i32).get());
+    rot.get(2_i32)
+        .at(3_i32)
+        .set((Handle::add(src, 2_i32)).at(3_i32).get());
+    fns::PSMTXConcat(ctx, rot.get(0), scl.get(0), dst);
+}
+
 fn inl_HSD_JObjFindSkeleton_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
     let mut jobj = jobj;
     (if !Handle::is_null((jobj)) {
@@ -819,12 +1058,54 @@ fn inl_HSD_JObjFindSkeleton_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD
     return null::<HSD_JObj<'a>>(ctx);
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80406ae0),
+            (228_i32 as u32),
+            cstr(ctx, 0x80406ae0),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
+fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+        return;
+    }
+    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
+}
+
 fn inl_HSD_CObjGetViewingMtxPtrDirect_unfused<'a>(
     ctx: &'a Ctx,
     cobj: HSD_CObj<'a>,
 ) -> ArrV<'a, F32, 4> {
     let mut cobj = cobj;
     return (cobj).view_mtx().get(0);
+}
+
+fn inl_HSD_ZListAlloc_unfused<'a>(ctx: &'a Ctx) -> _HSD_ZList<'a> {
+    let mut list: _HSD_ZList<'a> = null(ctx);
+    list = Handle::cast::<_HSD_ZList<'a>>(fns::HSD_ObjAlloc(ctx, fns::zlist_alloc_data(ctx)));
+    let _ = fns::memset(
+        ctx,
+        Handle::cast::<Addr<'a>>((list).vmtx_ref()),
+        0_i32,
+        72_u32.wrapping_sub(48_u32),
+    );
+    return list;
 }
 
 fn inl_HSD_ZListFree_unfused<'a>(ctx: &'a Ctx, ptr_: _HSD_ZList<'a>) {
@@ -910,6 +1191,15 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x803740e8,
+        |ctx| {
+            let (a0, a1, a2): (HSD_JObj<'_>, ArrV<'_, F32, 4>, ArrV<'_, F32, 4>) =
+                Args::take_all(ctx);
+            Ret::put(HSD_JObjMakePositionMtx(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x803742ac,
         |ctx| {
             let (a0, a1): (HSD_JObj<'_>, ArrV<'_, F32, 4>) = Args::take_all(ctx);
@@ -923,6 +1213,14 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1, a2, a3, a4): (HSD_JObj<'_>, ArrV<'_, F32, 4>, ArrV<'_, F32, 4>, i32, u32) =
                 Args::take_all(ctx);
             Ret::put(HSD_JObjDispSub(ctx, a0, a1, a2, a3, a4), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80374480,
+        |ctx| {
+            let (a0, a1, a2, a3): (HSD_JObj<'_>, ArrV<'_, F32, 4>, i32, u32) = Args::take_all(ctx);
+            Ret::put(HSD_JObjDispDObj(ctx, a0, a1, a2, a3), ctx);
         },
         Returns::Nothing,
     );

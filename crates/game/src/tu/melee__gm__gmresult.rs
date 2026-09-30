@@ -580,6 +580,21 @@ pub fn fn_80174FD0<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: i32) {
     fns::HSD_TObjAnim(ctx, tobj);
 }
 
+pub fn fn_80175038<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, flag: i32) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut gobj = gobj;
+    let mut flag = flag;
+    fns::HSD_JObjDispAll(
+        ctx,
+        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj))),
+        At::new(ctx, 0_i32 as u32)
+            .field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0)
+            .get(0),
+        fns::HSD_GObj_80390EB8(ctx, flag),
+        0_u32,
+    );
+}
+
 pub fn fn_8017507C<'a>(ctx: &'a Ctx, __ret: _GXColor<'a>, slot: i32) {
     let __frame = ctx.stack_frame(0x30);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
@@ -3710,6 +3725,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (HSD_JObj<'_>, i32) = Args::take_all(ctx);
             Ret::put(fn_80174FD0(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80175038,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
+            Ret::put(fn_80175038(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );

@@ -96,6 +96,7 @@ pub mod dolphin__gx__GXTransform;
 pub mod dolphin__hio__hio;
 pub mod dolphin__mcc__fio;
 pub mod dolphin__mcc__mcc;
+pub mod dolphin__mtx__mtx;
 pub mod dolphin__odenotstub__odenotstub;
 pub mod dolphin__os__OS;
 pub mod dolphin__os__OSAlarm;
@@ -936,6 +937,7 @@ pub mod melee__lb__lb_0146;
 pub mod melee__lb__lb_0192;
 pub mod melee__lb__lb_0195;
 pub mod melee__lb__lb_01F8;
+pub mod melee__lb__lb_020A;
 pub mod melee__lb__lb_0219;
 pub mod melee__lb__lbanim;
 pub mod melee__lb__lbarchive;
@@ -1227,6 +1229,7 @@ pub static UNITS: &[(&str, Register)] = &[
     ("dolphin/hio/hio", dolphin__hio__hio::register),
     ("dolphin/mcc/fio", dolphin__mcc__fio::register),
     ("dolphin/mcc/mcc", dolphin__mcc__mcc::register),
+    ("dolphin/mtx/mtx", dolphin__mtx__mtx::register),
     (
         "dolphin/odenotstub/odenotstub",
         dolphin__odenotstub__odenotstub::register,
@@ -3678,6 +3681,7 @@ pub static UNITS: &[(&str, Register)] = &[
     ("melee/lb/lb_0192", melee__lb__lb_0192::register),
     ("melee/lb/lb_0195", melee__lb__lb_0195::register),
     ("melee/lb/lb_01F8", melee__lb__lb_01F8::register),
+    ("melee/lb/lb_020A", melee__lb__lb_020A::register),
     ("melee/lb/lb_0219", melee__lb__lb_0219::register),
     ("melee/lb/lbanim", melee__lb__lbanim::register),
     ("melee/lb/lbarchive", melee__lb__lbarchive::register),

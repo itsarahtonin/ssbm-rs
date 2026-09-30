@@ -1708,6 +1708,81 @@ pub fn lbColl_80007B78<'a>(
     );
 }
 
+pub fn lbColl_80007BCC<'a>(
+    ctx: &'a Ctx,
+    arg0: HitCapsule<'a>,
+    shield_hit: HitResult<'a>,
+    arg2: Addr<'a>,
+    arg3: i32,
+    arg4: f64,
+    arg5: f64,
+    arg6: f64,
+) -> i32 {
+    let __frame = ctx.stack_frame(0xa8);
+    let sp74: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp68: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp38: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x18);
+    let mut arg0 = arg0;
+    let mut shield_hit = shield_hit;
+    let mut arg2 = arg2;
+    let mut arg3 = arg3;
+    let mut arg4 = arg4;
+    let mut arg5 = arg5;
+    let mut arg6 = arg6;
+    let mut hurt_mtx: ArrV<'a, F32, 4> = null(ctx);
+    let mut hit_radius: f64 = 0.0;
+    if !((shield_hit).skip_update_pos() != 0) {
+        fns::lb_8000B1CC(
+            ctx,
+            (shield_hit).bone(),
+            (shield_hit).offset(),
+            (shield_hit).pos(),
+        );
+        if !Handle::is_null(arg2) {
+            (shield_hit).pos().set_z(arg6);
+        }
+        (shield_hit).set_skip_update_pos((1_i32 as u8));
+    }
+    if arg3 != 0_i32 {
+        Handle::copy_from((arg0).hurt_coll_pos(), (shield_hit).pos());
+        (arg0).set_coll_distance(0.0);
+        return 1_i32;
+    }
+    if !Handle::is_null(arg2) {
+        fns::PSMTXConcat(
+            ctx,
+            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(arg2).get(0),
+            inl_HSD_JObjGetMtxPtr_unfused(ctx, (shield_hit).bone()),
+            sp38.get(0),
+        );
+    }
+    if !Handle::is_null(arg2) {
+        hurt_mtx = sp38.get(0);
+    } else {
+        hurt_mtx = inl_HSD_JObjGetMtxPtr_unfused(ctx, (shield_hit).bone());
+    }
+    if ((arg0).x43_b1() != 0) {
+        hit_radius = (arg0).scale();
+    } else {
+        hit_radius = fp::fmuls((arg0).scale(), arg4);
+    }
+    return statics::melee__lb__lbcollision::lbColl_80006E58(
+        ctx,
+        (arg0).x58(),
+        (arg0).x4C(),
+        (shield_hit).pos(),
+        (shield_hit).pos(),
+        sp74,
+        sp68,
+        hurt_mtx,
+        (arg0).hurt_coll_pos(),
+        (arg0).coll_distance_ref(),
+        hit_radius,
+        (shield_hit).size(),
+        fp::fmuls(20.0, arg5),
+    );
+}
+
 pub fn lbColl_800083C4<'a>(ctx: &'a Ctx, arg0: HurtCapsule<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
@@ -2858,6 +2933,121 @@ pub fn lbColl_8000A1A8<'a>(
     return 0_i32;
 }
 
+pub fn lbColl_8000A460<'a>(ctx: &'a Ctx, hurt: Fighter_x1670_t<'a>, arg1: u32) -> i32 {
+    let __frame = ctx.stack_frame(0x48);
+    let mut hurt = hurt;
+    let mut arg1 = arg1;
+    let mut var_r0: u32 = 0;
+    let mut r31: _GXColor<'a> = statics::melee__lb__lbcollision::lbColl_804D36E0(ctx);
+    let mut r30: _GXColor<'a> = statics::melee__lb__lbcollision::lbColl_804D36E4(ctx);
+    if ((r31).a() as i32) == 255_i32 {
+        var_r0 = (0_i32 as u32);
+    } else {
+        var_r0 = (2_i32 as u32);
+    }
+    if var_r0 == arg1 {
+        inl_HSD_JObjSetupMatrix_unfused(ctx, (hurt).jobj());
+        fns::lbColl_800096B4(
+            ctx,
+            inl_HSD_JObjGetMtxPtr_unfused(ctx, (hurt).jobj()),
+            (hurt).v1(),
+            (hurt).v1(),
+            r31,
+            r30,
+            (hurt).v2(),
+        );
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
+pub fn lbColl_8000A78C<'a>(
+    ctx: &'a Ctx,
+    hit: HitResult<'a>,
+    arg1: u32,
+    arg2: ArrV<'a, F32, 4>,
+    pos_z: f64,
+) -> i32 {
+    let __frame = ctx.stack_frame(0xe8);
+    let sp9C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let sp90: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let sp84: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let mut hit = hit;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut pos_z = pos_z;
+    return inl_lbColl_DrawHit_unfused(
+        ctx,
+        hit,
+        arg1,
+        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(arg2).get(0),
+        pos_z,
+        statics::melee__lb__lbcollision::lbColl_804D36C4(ctx),
+        statics::melee__lb__lbcollision::lbColl_804D36C8(ctx),
+        sp9C.get(0),
+        sp90,
+        sp84,
+    );
+}
+
+pub fn lbColl_8000A95C<'a>(
+    ctx: &'a Ctx,
+    hit: HitResult<'a>,
+    arg1: u32,
+    arg2: ArrV<'a, F32, 4>,
+    pos_z: f64,
+) -> i32 {
+    let __frame = ctx.stack_frame(0xe8);
+    let sp9C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let sp90: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let sp84: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let mut hit = hit;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut pos_z = pos_z;
+    return inl_lbColl_DrawHit_unfused(
+        ctx,
+        hit,
+        arg1,
+        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(arg2).get(0),
+        pos_z,
+        statics::melee__lb__lbcollision::lbColl_804D36CC(ctx),
+        statics::melee__lb__lbcollision::lbColl_804D36D0(ctx),
+        sp9C.get(0),
+        sp90,
+        sp84,
+    );
+}
+
+pub fn lbColl_8000AB2C<'a>(
+    ctx: &'a Ctx,
+    hit: HitResult<'a>,
+    arg1: u32,
+    arg2: ArrV<'a, F32, 4>,
+    pos_z: f64,
+) -> i32 {
+    let __frame = ctx.stack_frame(0xe8);
+    let sp9C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let sp90: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let sp84: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let mut hit = hit;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut pos_z = pos_z;
+    return inl_lbColl_DrawHit_unfused(
+        ctx,
+        hit,
+        arg1,
+        arg2,
+        pos_z,
+        statics::melee__lb__lbcollision::lbColl_804D36D4(ctx),
+        statics::melee__lb__lbcollision::lbColl_804D36D8(ctx),
+        sp9C.get(0),
+        sp90,
+        sp84,
+    );
+}
+
 pub fn lbColl_8000ACFC<'a>(ctx: &'a Ctx, victim: Addr<'a>, hitbox: HitCapsule<'a>) -> i32 {
     let mut victim = victim;
     let mut hitbox = hitbox;
@@ -2969,6 +3159,52 @@ fn inl_sqrtf_store<'a>(ctx: &'a Ctx, x: f64, y: Val<'a, F32>) -> f64 {
     return x;
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b9880),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b9880),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
+fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+        return;
+    }
+    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
+}
+
+fn inl_HSD_JObjGetMtxPtr_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'a, F32, 4> {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b9880),
+            (0x2bb_i32 as u32),
+            cstr(ctx, 0x803b9880),
+        )
+    });
+    inl_HSD_JObjSetupMatrix_unfused(ctx, jobj);
+    return (jobj).mtx().get(0);
+}
+
 fn inl_isSmall<'a>(ctx: &'a Ctx, x: f64) -> i32 {
     let mut x = x;
     if (x < 9.999999747378752e-06_f64) && (x > fp::fneg(9.999999747378752e-06_f64)) {
@@ -2998,6 +3234,98 @@ fn inl_GXColor4u8_unfused<'a>(ctx: &'a Ctx, x: u8, y: u8, z: u8, w: u8) {
     (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(y);
     (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(z);
     (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(w);
+}
+
+fn inl_lbColl_DrawHitResult_unfused<'a>(
+    ctx: &'a Ctx,
+    mtx: ArrV<'a, F32, 4>,
+    a: Vec<'a>,
+    b: Vec<'a>,
+    c0: _GXColor<'a>,
+    c1: _GXColor<'a>,
+    size: f64,
+) {
+    let __frame = ctx.stack_frame(0x50);
+    let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp3C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x18);
+    let mut mtx = mtx;
+    let mut a = a;
+    let mut b = b;
+    let mut c0 = c0;
+    let mut c1 = c1;
+    let mut size = size;
+    fns::HSD_MtxInverse(ctx, mtx, sp3C.get(0));
+    fns::PSMTXMultVec(ctx, sp3C.get(0), a, sp30);
+    fns::PSMTXMultVec(ctx, sp3C.get(0), b, sp24);
+    fns::lbColl_800096B4(ctx, mtx, sp30, sp24, c0, c1, size);
+}
+
+fn inl_lbColl_DrawHit_unfused<'a>(
+    ctx: &'a Ctx,
+    hit: HitResult<'a>,
+    arg1: u32,
+    arg2: ArrV<'a, F32, 4>,
+    pos_z: f64,
+    color: _GXColor<'a>,
+    secondary_color: _GXColor<'a>,
+    hit_mtx: ArrV<'a, F32, 4>,
+    pos_a: Vec<'a>,
+    pos_b: Vec<'a>,
+) -> i32 {
+    let mut hit = hit;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut pos_z = pos_z;
+    let mut color = color;
+    let mut secondary_color = secondary_color;
+    let mut hit_mtx = hit_mtx;
+    let mut pos_a = pos_a;
+    let mut pos_b = pos_b;
+    let mut temp_f31: f64 = 0.0;
+    let mut var_r31: ArrV<'a, F32, 4> = null(ctx);
+    let mut var_r0: u32 = 0;
+    if ((color).a() as i32) == 255_i32 {
+        var_r0 = (0_i32 as u32);
+    } else {
+        var_r0 = (2_i32 as u32);
+    }
+    if var_r0 == arg1 {
+        if !((hit).skip_update_pos() != 0) {
+            fns::lb_8000B1CC(ctx, (hit).bone(), (hit).offset(), (hit).pos());
+            if !Handle::is_null(arg2) {
+                (hit).pos().set_z(pos_z);
+            }
+            (hit).set_skip_update_pos((1_i32 as u8));
+        }
+        if !Handle::is_null(arg2) {
+            fns::PSMTXConcat(
+                ctx,
+                arg2,
+                inl_HSD_JObjGetMtxPtr_unfused(ctx, (hit).bone()),
+                hit_mtx,
+            );
+        }
+        temp_f31 = (hit).size();
+        Handle::copy_from((pos_b), (hit).pos());
+        Handle::copy_from((pos_a), (hit).pos());
+        if !Handle::is_null(arg2) {
+            var_r31 = hit_mtx;
+        } else {
+            var_r31 = inl_HSD_JObjGetMtxPtr_unfused(ctx, (hit).bone());
+        }
+        inl_lbColl_DrawHitResult_unfused(
+            ctx,
+            var_r31,
+            pos_a,
+            pos_b,
+            color,
+            secondary_color,
+            temp_f31,
+        );
+        return 1_i32;
+    }
+    return 0_i32;
 }
 
 /// Registers this unit's ports.
@@ -3135,6 +3463,22 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1, a2, a3): (Fighter_x1614_t<'_>, Fighter_x1614_t<'_>, Single, Single) =
                 Args::take_all(ctx);
             Ret::put(lbColl_80007B78(ctx, a0, a1, a2.0, a3.0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80007bcc,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5, a6): (
+                HitCapsule<'_>,
+                HitResult<'_>,
+                Addr<'_>,
+                i32,
+                Single,
+                Single,
+                Single,
+            ) = Args::take_all(ctx);
+            Ret::put(lbColl_80007BCC(ctx, a0, a1, a2, a3, a4.0, a5.0, a6.0), ctx);
         },
         Returns::Int,
     );
@@ -3287,6 +3631,41 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1, a2): (Fighter_x1614_t<'_>, i32, Single) = Args::take_all(ctx);
             Ret::put(lbColl_8000A1A8(ctx, a0, a1, a2.0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8000a460,
+        |ctx| {
+            let (a0, a1): (Fighter_x1670_t<'_>, u32) = Args::take_all(ctx);
+            Ret::put(lbColl_8000A460(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8000a78c,
+        |ctx| {
+            let (a0, a1, a2, a3): (HitResult<'_>, u32, ArrV<'_, F32, 4>, Single) =
+                Args::take_all(ctx);
+            Ret::put(lbColl_8000A78C(ctx, a0, a1, a2, a3.0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8000a95c,
+        |ctx| {
+            let (a0, a1, a2, a3): (HitResult<'_>, u32, ArrV<'_, F32, 4>, Single) =
+                Args::take_all(ctx);
+            Ret::put(lbColl_8000A95C(ctx, a0, a1, a2, a3.0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8000ab2c,
+        |ctx| {
+            let (a0, a1, a2, a3): (HitResult<'_>, u32, ArrV<'_, F32, 4>, Single) =
+                Args::take_all(ctx);
+            Ret::put(lbColl_8000AB2C(ctx, a0, a1, a2, a3.0), ctx);
         },
         Returns::Int,
     );

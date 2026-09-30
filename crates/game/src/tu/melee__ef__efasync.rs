@@ -349,6 +349,234 @@ pub fn efAsync_QueueInit<'a>(ctx: &'a Ctx) {
     fns::HSD_ObjAllocInit(ctx, fns::efAsync_AllocData(ctx), 36_u32, 4_u32);
 }
 
+fn inl_HSD_GObjGetHSDObj<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).hsd_obj();
+}
+
+fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bfb24),
+            (228_i32 as u32),
+            cstr(ctx, 0x803bfb24),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
+fn inl_HSD_JObjSetScale<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
+    let mut jobj = jobj;
+    let mut scale = scale;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bfb24),
+            (0x17e_i32 as u32),
+            cstr(ctx, 0x803bfb24),
+        )
+    });
+    (if !Handle::is_null((scale)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bfb24),
+            (0x17f_i32 as u32),
+            cstr(ctx, 0x803bfb24),
+        )
+    });
+    Handle::copy_from((jobj).scale(), (scale));
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_HSD_JObjSetRotationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
+    let mut jobj = jobj;
+    let mut z = z;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bfb24),
+            (0x151_i32 as u32),
+            cstr(ctx, 0x803bfb24),
+        )
+    });
+    (if !(((jobj).flags() & ((shl_i32(1_i32, (17_i32 as u32))) as u32)) != 0) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bfb24),
+            (0x152_i32 as u32),
+            cstr(ctx, 0x803bfb24),
+        )
+    });
+    (jobj).rotate().set_z(z);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_efAsync_SetEffectRandomRotationZ<'a>(ctx: &'a Ctx, effect: EF_Effect<'a>) {
+    let mut effect = effect;
+    inl_HSD_JObjSetRotationZ(
+        ctx,
+        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, (effect).gobj()))),
+        fp::frsp(fp::fmul(6.283185307179586, fns::HSD_Randf(ctx))),
+    );
+}
+
+fn inl_HSD_JObjSetRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
+    let mut jobj = jobj;
+    let mut y = y;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bfb24),
+            (0x13d_i32 as u32),
+            cstr(ctx, 0x803bfb24),
+        )
+    });
+    (if !(((jobj).flags() & ((shl_i32(1_i32, (17_i32 as u32))) as u32)) != 0) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bfb24),
+            (0x13e_i32 as u32),
+            cstr(ctx, 0x803bfb24),
+        )
+    });
+    (jobj).rotate().set_y(y);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_efAsync_SetEffectFacingDir<'a>(ctx: &'a Ctx, effect: EF_Effect<'a>, facing_dir: f64) {
+    let mut effect = effect;
+    let mut facing_dir = facing_dir;
+    let mut rotation: f64 = 0.0;
+    if facing_dir < 0.0 {
+        rotation = fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))));
+    } else {
+        rotation = (fp::fdiv(3.141592653589793, (2_i32 as f64)));
+    }
+    inl_HSD_JObjSetRotationY(
+        ctx,
+        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, (effect).gobj()))),
+        fp::frsp(rotation),
+    );
+}
+
+fn inl_efAsync_SetEffectRotationZFromPtr<'a>(
+    ctx: &'a Ctx,
+    effect: EF_Effect<'a>,
+    rotation: Val<'a, F32>,
+) {
+    let mut effect = effect;
+    let mut rotation = rotation;
+    inl_HSD_JObjSetRotationZ(
+        ctx,
+        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, (effect).gobj()))),
+        (rotation).get(),
+    );
+}
+
+fn inl_HSD_JObjGetScale<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
+    let mut jobj = jobj;
+    let mut scale = scale;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bfb24),
+            (0x1c8_i32 as u32),
+            cstr(ctx, 0x803bfb24),
+        )
+    });
+    (if !Handle::is_null((scale)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bfb24),
+            (0x1c9_i32 as u32),
+            cstr(ctx, 0x803bfb24),
+        )
+    });
+    Handle::copy_from((scale), (jobj).scale());
+}
+
+fn inl_efAsync_SetEffectScale<'a>(ctx: &'a Ctx, effect: EF_Effect<'a>, scale: Vec<'a>) {
+    let mut effect = effect;
+    let mut scale = scale;
+    inl_HSD_JObjSetScale(
+        ctx,
+        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, (effect).gobj()))),
+        scale,
+    );
+}
+
+fn inl_efAsync_GetEffectJObj<'a>(ctx: &'a Ctx, effect: EF_Effect<'a>) -> HSD_JObj<'a> {
+    let mut effect = effect;
+    return (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, (effect).gobj())));
+}
+
+fn inl_HSD_JObjGetChild<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
+    let mut jobj = jobj;
+    if Handle::is_null(jobj) {
+        return null::<HSD_JObj<'a>>(ctx);
+    } else {
+        return (jobj).child();
+    }
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
+fn inl_HSD_JObjGetNext<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
+    let mut jobj = jobj;
+    if Handle::is_null(jobj) {
+        return null::<HSD_JObj<'a>>(ctx);
+    } else {
+        return (jobj).next();
+    }
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(

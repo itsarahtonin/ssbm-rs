@@ -287,6 +287,127 @@ pub fn HSD_VIGetXFBDrawEnable<'a>(ctx: &'a Ctx) -> i32 {
     return 0;
 }
 
+pub fn HSD_VICopyEFB2XFBPtr<'a>(ctx: &'a Ctx, vi: _HSD_VIStatus<'a>, buffer: Addr<'a>, rpass: i32) {
+    let __frame = ctx.stack_frame(0x38);
+    let mut vi = vi;
+    let mut buffer = buffer;
+    let mut rpass = rpass;
+    let mut rmode: _GXRenderModeObj<'a> = (vi).rmode();
+    let mut n_xfb_lines: i32 = 0;
+    let mut lines: u16 = 0;
+    let mut offset: u32 = 0;
+    fns::GXSetCopyFilter(
+        ctx,
+        (rmode).aa(),
+        Handle::cast::<Arr<'a, ArrV<'a, u8, 2>, 12>>((rmode).sample_pattern().get(0)).get(0),
+        (vi).vf(),
+        Handle::cast::<ArrV<'a, u8, 7>>((rmode).vfilter().at(0)).at(0),
+    );
+    fns::GXSetDispCopyGamma(ctx, (vi).gamma());
+    fns::HSD_StateSetColorUpdate(ctx, ((vi).update_clr() as i32));
+    fns::HSD_StateSetAlphaUpdate(ctx, ((vi).update_alpha() as i32));
+    fns::HSD_StateSetZMode(
+        ctx,
+        ((vi).update_z() as i32),
+        (enums::GX_LEQUAL as i32),
+        ((1_i32 as u8) as i32),
+    );
+    fns::GXSetCopyClear(ctx, (vi).clear_clr(), (vi).clear_z());
+    's1: {
+        let __case = match (rpass as u32) {
+            0_u32 => 0,
+            1_u32 => 1,
+            2_u32 => 2,
+            _ => 3,
+        };
+        if __case <= 0 {
+            fns::GXSetCopyClamp(
+                ctx,
+                ((enums::GX_CLAMP_TOP as i32) | (enums::GX_CLAMP_BOTTOM as i32)),
+            );
+            fns::GXSetDispCopySrc(
+                ctx,
+                (0_i32 as u16),
+                (0_i32 as u16),
+                (rmode).fbWidth(),
+                (rmode).efbHeight(),
+            );
+            n_xfb_lines = (fns::GXSetDispCopyYScale(
+                ctx,
+                fp::fdivs(
+                    fp::frsp(((rmode).xfbHeight()) as f64),
+                    fp::frsp(((rmode).efbHeight()) as f64),
+                ),
+            ) as i32);
+            fns::GXSetDispCopyDst(ctx, (rmode).fbWidth(), (n_xfb_lines as u16));
+            fns::GXCopyDisp(ctx, buffer, (1_i32 as u8));
+            break 's1;
+        }
+        if __case <= 1 {
+            inl_HSD_VICopyEFB2XFBHiResoAA_unfused(ctx, rmode);
+            fns::GXSetCopyClamp(ctx, (enums::GX_CLAMP_TOP as i32));
+            lines = (((rmode).efbHeight() as i32).wrapping_sub(4_i32) as u16);
+            fns::GXSetDispCopySrc(
+                ctx,
+                (0_i32 as u16),
+                (0_i32 as u16),
+                (rmode).fbWidth(),
+                lines,
+            );
+            fns::GXCopyDisp(ctx, buffer, (1_i32 as u8));
+            fns::GXPixModeSync(ctx);
+            return;
+        }
+        if __case <= 2 {
+            inl_HSD_VICopyEFB2XFBHiResoAA_unfused(ctx, rmode);
+            fns::GXSetCopyClamp(ctx, (enums::GX_CLAMP_BOTTOM as i32));
+            lines = (((rmode).efbHeight() as i32).wrapping_sub(4_i32) as u16);
+            fns::GXSetDispCopySrc(
+                ctx,
+                (0_i32 as u16),
+                (4_i32 as u16),
+                (rmode).fbWidth(),
+                lines,
+            );
+            offset = (((((((((rmode).fbWidth()) as i32).wrapping_add(15_i32)) & (!15_i32)) as u16)
+                as i32)
+                .wrapping_mul((lines as i32)) as u32)
+                .wrapping_mul((2_i32 as u32)));
+            fns::GXCopyDisp(
+                ctx,
+                ptr::<Addr<'a>>(ctx, (Handle::addr(buffer).wrapping_add(offset)) as u32),
+                (1_i32 as u8),
+            );
+            fns::GXSetDispCopySrc(
+                ctx,
+                (0_i32 as u16),
+                (0_i32 as u16),
+                (rmode).fbWidth(),
+                (4_i32 as u16),
+            );
+            fns::GXSetCopyClamp(
+                ctx,
+                ((enums::GX_CLAMP_TOP as i32) | (enums::GX_CLAMP_BOTTOM as i32)),
+            );
+            fns::GXCopyDisp(
+                ctx,
+                Handle::cast::<Addr<'a>>(statics::sysdolphin__baselib__video::garbage(ctx).at(0)),
+                (1_i32 as u8),
+            );
+            break 's1;
+        }
+        if __case <= 3 {
+            fns::HSD_Panic(
+                ctx,
+                cstr(ctx, 0x80406d0c),
+                (0x207_i32 as u32),
+                cstr(ctx, 0x80406cec),
+            );
+        }
+    }
+    fns::GXPixModeSync(ctx);
+}
+
 pub fn HSD_VICopyXFBAsync<'a>(ctx: &'a Ctx, rpass: i32) {
     let __frame = ctx.stack_frame(0x38);
     let mut rpass = rpass;
@@ -506,6 +627,20 @@ fn inl_HSD_VIGetNbXFB_unfused<'a>(ctx: &'a Ctx) -> i32 {
     return fns::HSD_VIData(ctx).nb_xfb();
 }
 
+fn inl_HSD_VICopyEFB2XFBHiResoAA_unfused<'a>(ctx: &'a Ctx, rmode: _GXRenderModeObj<'a>) {
+    let mut rmode = rmode;
+    let mut n_xfb_lines: i32 = 0;
+    fns::GXSetDispCopySrc(
+        ctx,
+        (0_i32 as u16),
+        (0_i32 as u16),
+        (rmode).fbWidth(),
+        (((rmode).efbHeight() as i32).wrapping_sub(4_i32) as u16),
+    );
+    n_xfb_lines = (fns::GXSetDispCopyYScale(ctx, fp::frsp(1.0)) as i32);
+    fns::GXSetDispCopyDst(ctx, (rmode).fbWidth(), (n_xfb_lines as u16));
+}
+
 fn inl_HSD_VIWaitXFBDrawEnable_unfused<'a>(ctx: &'a Ctx) -> i32 {
     let mut idx: i32 = 0;
     'goto_ret: {
@@ -673,6 +808,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(HSD_VIGetXFBDrawEnable(ctx), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x80375f74,
+        |ctx| {
+            let (a0, a1, a2): (_HSD_VIStatus<'_>, Addr<'_>, i32) = Args::take_all(ctx);
+            Ret::put(HSD_VICopyEFB2XFBPtr(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x803761c0,

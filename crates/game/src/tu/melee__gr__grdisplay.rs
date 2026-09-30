@@ -26,6 +26,222 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn grDisplay_801C5B90<'a>(
+    ctx: &'a Ctx,
+    jobj: HSD_JObj<'a>,
+    vmtx: ArrV<'a, F32, 4>,
+    flags: u32,
+    rendermode: u32,
+) {
+    let __frame = ctx.stack_frame(0x90);
+    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let fighter_pos: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let unused: ArrV<'a, u32, 6> = frame_at(ctx, &__frame, 0x3c);
+    let mut jobj = jobj;
+    let mut vmtx = vmtx;
+    let mut flags = flags;
+    let mut rendermode = rendermode;
+    let mut cur: HSD_GObj<'a> = null(ctx);
+    let mut cobj: HSD_CObj<'a> = null(ctx);
+    if !Handle::is_null(jobj) {
+        if (((jobj).flags() & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0) {
+            if !(((jobj).flags() & ((shl_i32(1_i32, (4_i32 as u32))) as u32)) != 0) {
+                let mut child: HSD_JObj<'a> = null(ctx);
+                inl_HSD_JObjSetupMatrix_unfused(ctx, jobj);
+                if (!Handle::is_null(
+                    ({
+                        let __t1 = (jobj).child();
+                        child = __t1;
+                        __t1
+                    }),
+                )) && (inl_HSD_JObjMtxIsDirty_unfused(ctx, child) != 0)
+                {
+                    fns::HSD_JObjSetupMatrixSub(ctx, child);
+                }
+                fns::HSD_MtxInverseConcat(
+                    ctx,
+                    ((jobj).child()).mtx().get(0),
+                    (jobj).mtx().get(0),
+                    mtx.get(0),
+                );
+                cobj = fns::HSD_CObjGetCurrent(ctx);
+                (if !Handle::is_null((cobj)) {
+                    ({ () })
+                } else {
+                    fns::__assert(
+                        ctx,
+                        cstr(ctx, 0x803e074c),
+                        (41_i32 as u32),
+                        cstr(ctx, 0x803e074c),
+                    )
+                });
+                fns::PSMTXConcat(
+                    ctx,
+                    inl_HSD_CObjGetViewingMtxPtrDirect_unfused(ctx, cobj),
+                    mtx.get(0),
+                    mtx.get(0),
+                );
+                statics::melee__gr__grdisplay::grDisplay_801C5B90(
+                    ctx,
+                    (jobj).child(),
+                    mtx.get(0),
+                    flags,
+                    rendermode,
+                );
+            }
+        } else {
+            if (((jobj).flags() & (shl_u32(flags, (18_i32 as u32)))) != 0) {
+                {
+                    cur = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 8_i32)).get();
+                    'l1: while !Handle::is_null(cur) {
+                        'c2: {
+                            let mut shadow: LbShadow<'a> = fns::ftLib_GetShadow(ctx, cur);
+                            fns::ftLib_GetPos(ctx, cur, fighter_pos);
+                            if (fns::Camera_80030B24(ctx) != 0)
+                                || (fns::stage_info(ctx)
+                                    .on_check_shadow_render()
+                                    .call::<_, i32>((fighter_pos, 1_i32.wrapping_neg(), jobj))
+                                    != 0)
+                            {
+                                (shadow).set_x0_b4((0_i32 as u8));
+                            } else {
+                                (shadow).set_x0_b4((1_i32 as u8));
+                            }
+                        }
+                        cur = (cur).next();
+                    }
+                }
+                fns::lbShadow_8000EFEC(ctx);
+                fns::HSD_JObjDisp(
+                    ctx,
+                    jobj,
+                    Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0),
+                    (flags as i32),
+                    rendermode,
+                );
+            }
+            if (((jobj).flags() & (shl_u32(flags, (28_i32 as u32)))) != 0) {
+                {
+                    jobj = (jobj).child();
+                    'l3: while !Handle::is_null(jobj) {
+                        'c4: {
+                            statics::melee__gr__grdisplay::grDisplay_801C5B90(
+                                ctx,
+                                jobj,
+                                Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0),
+                                flags,
+                                rendermode,
+                            );
+                        }
+                        jobj = (jobj).next();
+                    }
+                }
+            }
+        }
+    }
+}
+
+pub fn grDisplay_801C5DB0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
+    let __frame = ctx.stack_frame(0x78);
+    let unused: ArrV<'a, u32, 14> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut code = code;
+    let mut gp: Ground<'a> = null(ctx);
+    let mut camgobj: HSD_GObj<'a> = null(ctx);
+    let mut foggobj: HSD_GObj<'a> = null(ctx);
+    let mut fog: HSD_Fog<'a> = null(ctx);
+    let mut i: i32 = 0;
+    let mut fighter: HSD_GObj<'a> = null(ctx);
+    gp = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if ((gp).x11_flags().b012() as i32) == fns::Camera_8003108C(ctx) {
+        if !Handle::is_null((gp).x18()) {
+            if ((Handle::addr((gp).x18()) as i32) & (!0x7fffffff_i32)) == 0_i32 {
+                fns::OSReport(
+                    ctx,
+                    cstr(ctx, 0x803e073c),
+                    &[VarArg::Int(Handle::addr((gp).x18()))],
+                );
+            }
+            if Handle::addr((fns::HSD_GObj_804D7818(ctx).get()).hsd_obj())
+                != Handle::addr(((gp).x18()).hsd_obj())
+            {
+                let mut cobj: HSD_CObj<'a> = null(ctx);
+                if ((gp).x10_flags().b3() as i32) == 0_i32 {
+                    return;
+                }
+                camgobj = fns::Camera_80030A50(ctx);
+                if Handle::is_null(camgobj) {
+                    return;
+                }
+                if Handle::is_null(
+                    ({
+                        let __t1 = (Handle::cast::<HSD_CObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(
+                            ctx, camgobj,
+                        )));
+                        cobj = __t1;
+                        __t1
+                    }),
+                ) {
+                    return;
+                }
+                if Handle::addr(fns::HSD_CObjGetCurrent(ctx)) != Handle::addr(cobj) {
+                    return;
+                }
+            }
+        } else if fns::Ground_801C2C8C(ctx, (fns::HSD_GObj_804D7818(ctx).get()).hsd_obj()) != 0_i32
+        {
+            return;
+        }
+        if (fns::Camera_80030A78(ctx) == 0_i32) && (fns::Camera_80030AC4(ctx) != 0_i32) {
+            if ((gp).x10_flags().b2() as i32) == 0_i32 {
+                fns::HSD_FogSet(ctx, null::<HSD_Fog<'a>>(ctx));
+            }
+            fns::HSD_StateInvalidate(ctx, 1_i32.wrapping_neg());
+            if ((gp).x10_flags().b5() as i32) != 0_i32 {
+                let mut jobj: HSD_JObj<'a> =
+                    (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
+                statics::melee__gr__grdisplay::grDisplay_801C5B90(
+                    ctx,
+                    jobj,
+                    At::new(ctx, 0_i32 as u32)
+                        .field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0)
+                        .get(0),
+                    fns::HSD_GObj_80390EB8(ctx, code),
+                    (0_i32 as u32),
+                );
+            } else {
+                {
+                    fighter = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 8_i32)).get();
+                    'l1: while !Handle::is_null(fighter) {
+                        'c2: {
+                            let mut shadow: LbShadow<'a> = fns::ftLib_GetShadow(ctx, fighter);
+                            (shadow).set_x0_b4((0_i32 as u8));
+                            fns::lbShadow_8000EEE0(ctx, fighter);
+                        }
+                        fighter = (fighter).next();
+                    }
+                }
+                fns::HSD_GObj_JObjCallback(ctx, gobj, code);
+            }
+            if ((((gp).x10_flags().b2() as i32) == 0_i32) && (fns::Camera_80030A78(ctx) == 0_i32))
+                && (fns::Ground_801C1E18(ctx) != 0_i32)
+            {
+                foggobj = fns::Ground_801C1E84(ctx);
+                if !Handle::is_null(foggobj) {
+                    if !Handle::is_null((foggobj).hsd_obj()) {
+                        fns::HSD_FogSet(
+                            ctx,
+                            (Handle::cast::<HSD_Fog<'a>>(inl_HSD_GObjGetHSDObj_unfused(
+                                ctx, foggobj,
+                            ))),
+                        );
+                    }
+                }
+            }
+        }
+    }
+}
+
 pub fn grDisplay_801C5F60<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
     let __frame = ctx.stack_frame(0x20);
     let mut gobj = gobj;
@@ -40,6 +256,44 @@ pub fn grDisplay_801C5F60<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
     }
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803e074c),
+            (228_i32 as u32),
+            cstr(ctx, 0x803e074c),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
+fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+        return;
+    }
+    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
+}
+
+fn inl_HSD_CObjGetViewingMtxPtrDirect_unfused<'a>(
+    ctx: &'a Ctx,
+    cobj: HSD_CObj<'a>,
+) -> ArrV<'a, F32, 4> {
+    let mut cobj = cobj;
+    return (cobj).view_mtx().get(0);
+}
+
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
@@ -52,6 +306,22 @@ fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x801c5b90,
+        |ctx| {
+            let (a0, a1, a2, a3): (HSD_JObj<'_>, ArrV<'_, F32, 4>, u32, u32) = Args::take_all(ctx);
+            Ret::put(grDisplay_801C5B90(ctx, a0, a1, a2, a3), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801c5db0,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
+            Ret::put(grDisplay_801C5DB0(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
     ctx.register_port(
         0x801c5f60,
         |ctx| {

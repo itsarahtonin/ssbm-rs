@@ -108,12 +108,23 @@ def sdk_headers():
     return [(path, text.replace("#ifdef __MWERKS__\ntypedef signed long s32;", "#if 1\ntypedef signed long s32;", 1))]
 
 
+def msl_headers():
+    """MSL's stdarg.h as clang should see it: `va_arg` passes __va_arg the class of its type,
+    which MWCC computes, as a call c2rs can compute it from."""
+    path = "src/MSL/stdarg.h"
+    text = open(path, encoding="utf-8").read()
+    return [(path, text.replace("#define _var_arg_typeof(e) 0",
+                                "unsigned char __c2rs_va_type(void*);\n"
+                                "#define _var_arg_typeof(e) __c2rs_va_type((e*) 0)", 1))]
+
+
 def parse(index, source, extra=()):
     """Parses a unit as its compiler would see it, as far as clang can. Returns (translation
     unit, names of assembly functions left out)."""
     text = open(source, encoding="utf-8", errors="replace").read()
     fixed, asm = without_asm_bodies(text)
     unsaved = [(source, fixed)] if fixed != text else []
+    unsaved += msl_headers()
     if source.replace("\\", "/").startswith(SDK_SRC + "/"):
         unsaved += sdk_headers()
     return index.parse(source, args=flags_for(source) + list(extra), unsaved_files=unsaved or None), asm

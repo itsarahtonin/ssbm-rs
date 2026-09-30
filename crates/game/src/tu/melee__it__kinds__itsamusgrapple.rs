@@ -571,12 +571,141 @@ pub fn it_802B7C18<'a>(
     return item_gobj;
 }
 
+pub fn fn_802B7E34<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x80);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x30);
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, (ip).owner())));
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    inl_samus_grapple_state_sync_unfused(ctx, fp);
+    inl_fn_802B7E34_anim_inline_unfused(ctx, gobj, ip, m.get(0));
+    if (inl_samus_grapple_fighter_compare_unfused(ctx, (fp).motion_id()) != 0) {
+        return;
+    }
+    fns::it_802B7B84(ctx, gobj);
+}
+
 pub fn itSamusgrapple_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
         .xDD4_itemVar()
         .samusgrapple()
         .set_unk_10(fnptr(ctx, 0x802b7e34));
+}
+
+pub fn fn_802B805C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0xa0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let normal: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let pos2: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let _padA: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x24);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x28);
+    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x58);
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut attrs: itSamusGrappleAttributes<'a> = null(ctx);
+    let mut link: ItemLink<'a> = null(ctx);
+    let mut fp: Fighter<'a> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    attrs = Handle::cast::<itSamusGrappleAttributes<'a>>(
+        ((ip).xC4_article_data()).x4_specialAttributes(),
+    );
+    fp = Handle::cast::<Fighter<'a>>(((ip).owner()).user_data());
+    inl_samus_grapple_state_sync_unfused(ctx, fp);
+    link = (ip).xDD4_itemVar().samusgrapple().x0();
+    if (!(inl_samus_grapple_fighter_compare_unfused(ctx, (fp).motion_id()) != 0))
+        && (!((((link).next()).x2C_b0()) != 0))
+    {
+        fns::it_802B7B84(ctx, gobj);
+        return;
+    }
+    inl_samus_grapple_setup_pos_unfused(ctx, link, pos, m.get(0));
+    's3: {
+        let __case = match fns::it_802B9328(
+            ctx,
+            link,
+            pos,
+            attrs,
+            Handle::cast::<Fighter<'a>>(((ip).owner()).user_data()),
+        ) {
+            1_i32 => 0,
+            2_i32 => 1,
+            3_i32 => 2,
+            _ => 3,
+        };
+        if __case <= 0 {
+            if (fp).motion_id() == 0x165_i32 {
+                fns::ftCo_800C3CC0(ctx, (ip).owner());
+                fns::it_802BAB40(ctx, gobj);
+                {
+                    let mut link2: ItemLink<'a> = (ip).xDD4_itemVar().samusgrapple().x0();
+                    Handle::copy_from(pos2, (link2).pos());
+                    {
+                        let mut link_gobj: HSD_GObj<'a> =
+                            ((ip).xDD4_itemVar().samusgrapple().x0()).gobj();
+                        let _ = fns::efSync_Spawn(
+                            ctx,
+                            0x41c_i32,
+                            link_gobj,
+                            &[
+                                VarArg::Int(Handle::addr(pos2)),
+                                VarArg::Int(Handle::addr(link2)),
+                            ],
+                        );
+                        let _ = fns::efSync_Spawn(
+                            ctx,
+                            0x3f1_i32,
+                            link_gobj,
+                            &[
+                                VarArg::Int(Handle::addr(pos2)),
+                                VarArg::Int(Handle::addr((fp).facing_dir_ref())),
+                            ],
+                        );
+                    }
+                }
+                return;
+            }
+            (link)
+                .vel()
+                .set_x(fp::fmuls((link).vel().x(), fp::fneg((attrs).x0())));
+            fns::it_802BAA08(ctx, gobj);
+            fns::ftCommon_8007E2F4(ctx, fp, (0_i32 as i16));
+            break 's3;
+        }
+        if __case <= 1 {
+            {
+                Handle::copy_from(normal, (link).coll_data().floor().normal());
+                let _ = fns::lbVector_Normalize(ctx, normal);
+                fns::lbVector_Mirror(ctx, (link).vel(), normal);
+                (link)
+                    .vel()
+                    .set_y(fp::fmuls((link).vel().y(), (attrs).x0()));
+                fns::it_802BAA08(ctx, gobj);
+                fns::ftCommon_8007E2F4(ctx, fp, (0_i32 as i16));
+                break 's3;
+            }
+        }
+        if __case <= 2 {
+            fns::it_802BA9B8(ctx, gobj);
+            fns::ftCommon_8007E2F4(ctx, fp, (0_i32 as i16));
+            break 's3;
+        }
+    }
+    fns::it_802A7168(ctx, ip, pos, (fp).x34_scale().y());
+    inl_samus_grapple_anim_unfused(ctx, gobj);
 }
 
 pub fn itSamusgrapple_UnkMotion1_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -587,12 +716,103 @@ pub fn itSamusgrapple_UnkMotion1_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         .set_unk_10(fnptr(ctx, 0x802b805c));
 }
 
+pub fn fn_802B8384<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x90);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp5C: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x1c);
+    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x4c);
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut owner: HSD_GObj<'a> = (ip).owner();
+    let mut attrs: itSamusGrappleAttributes<'a> = Handle::cast::<itSamusGrappleAttributes<'a>>(
+        ((ip).xC4_article_data()).x4_specialAttributes(),
+    );
+    let mut link: ItemLink<'a> = null(ctx);
+    let mut fp: Fighter<'a> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    fp = Handle::cast::<Fighter<'a>>((owner).user_data());
+    link = (ip).xDD4_itemVar().samusgrapple().x0();
+    inl_samus_grapple_setup_pos_unfused(ctx, link, pos, m.get(0));
+    's3: {
+        let __case = match fns::it_802B99A0(ctx, link, pos, attrs, fp) {
+            1_i32 => 0,
+            2_i32 => 1,
+            3_i32 => 2,
+            _ => 3,
+        };
+        if __case <= 0 {
+            (link)
+                .vel()
+                .set_x(fp::fmuls((link).vel().x(), fp::fneg((attrs).x0())));
+            break 's3;
+        }
+        if __case <= 1 {
+            Handle::copy_from(sp5C, (link).coll_data().floor().normal());
+            let _ = fns::lbVector_Normalize(ctx, sp5C);
+            fns::lbVector_Mirror(ctx, (link).vel(), sp5C);
+            (link)
+                .vel()
+                .set_y(fp::fmuls((link).vel().y(), (attrs).x0()));
+            break 's3;
+        }
+        if __case <= 2 {
+            fns::it_802BA9B8(ctx, gobj);
+            break 's3;
+        }
+    }
+    fns::it_802A7168(ctx, ip, pos, (fp).x34_scale().y());
+    inl_samus_grapple_anim_unfused(ctx, gobj);
+}
+
 pub fn itSamusgrapple_UnkMotion2_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
         .xDD4_itemVar()
         .samusgrapple()
         .set_unk_10(fnptr(ctx, 0x802b8384));
+}
+
+pub fn fn_802B8524<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x88);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x40);
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut attrs: itSamusGrappleAttributes<'a> = Handle::cast::<itSamusGrappleAttributes<'a>>(
+        ((ip).xC4_article_data()).x4_specialAttributes(),
+    );
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>(((ip).owner()).user_data());
+    let mut fp2: Fighter<'a> = fp;
+    let mut link: ItemLink<'a> = (ip).xDD4_itemVar().samusgrapple().x4();
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    inl_samus_grapple_setup_pos_unfused(ctx, link, pos, m.get(0));
+    fns::it_802B9CE8(
+        ctx,
+        link,
+        pos,
+        attrs,
+        Handle::cast::<Fighter<'a>>(((ip).owner()).user_data()),
+    );
+    fns::it_802A7168(ctx, ip, pos, (fp2).x34_scale().y());
+    inl_samus_grapple_anim_unfused(ctx, gobj);
+    if (inl_samus_grapple_fighter_compare_unfused(ctx, (fp).motion_id()) != 0) {
+        return;
+    }
+    fns::it_802BAA58(ctx, gobj);
 }
 
 pub fn itSamusgrapple_UnkMotion3_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -603,12 +823,88 @@ pub fn itSamusgrapple_UnkMotion3_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         .set_unk_10(fnptr(ctx, 0x802b8524));
 }
 
+pub fn fn_802B8684<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x80);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x40);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = null(ctx);
+    let mut fp2: Fighter<'a> = null(ctx);
+    let mut ip: Item<'a> = null(ctx);
+    let mut attrs: itSamusGrappleAttributes<'a> = null(ctx);
+    let mut link: ItemLink<'a> = null(ctx);
+    let mut retract_speed: f64 = 0.0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    ip = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    attrs = Handle::cast::<itSamusGrappleAttributes<'a>>(
+        ((ip).xC4_article_data()).x4_specialAttributes(),
+    );
+    fp = Handle::cast::<Fighter<'a>>(((ip).owner()).user_data());
+    fp2 = fp;
+    link = (ip).xDD4_itemVar().samusgrapple().x4();
+    inl_samus_grapple_setup_pos_unfused(ctx, link, pos, m.get(0));
+    if ((fp2).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        retract_speed = (attrs).x4C();
+    } else {
+        retract_speed = fp::frsp(fp::fmul(2.0, (attrs).x4C()));
+    }
+    if (fns::it_802BA194(ctx, link, pos, attrs, retract_speed) != 0) {
+        if !(inl_samus_grapple_fighter_compare_unfused(ctx, (fp2).motion_id()) != 0) {
+            fns::it_802B7B84(ctx, gobj);
+            return;
+        }
+        fns::itSamusGrapple_Logic53_PickedUp(ctx, gobj);
+    }
+    fns::it_802A7168(ctx, ip, pos, (fp2).x34_scale().y());
+    inl_samus_grapple_anim_unfused(ctx, gobj);
+}
+
 pub fn itSamusgrapple_UnkMotion4_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
         .xDD4_itemVar()
         .samusgrapple()
         .set_unk_10(fnptr(ctx, 0x802b8684));
+}
+
+pub fn fn_802B8814<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x88);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let _pad2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x40);
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut attrs: itSamusGrappleAttributes<'a> = Handle::cast::<itSamusGrappleAttributes<'a>>(
+        ((ip).xC4_article_data()).x4_specialAttributes(),
+    );
+    let mut link: ItemLink<'a> = null(ctx);
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>(((ip).owner()).user_data());
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if ((ip).xDD4_itemVar().samusgrapple().x14() as i32) != 0_i32 {
+        fns::it_802B7B84(ctx, gobj);
+        return;
+    }
+    link = (ip).xDD4_itemVar().samusgrapple().x4();
+    inl_samus_grapple_setup_pos_unfused(ctx, link, pos, m.get(0));
+    if fns::it_802BA2D8(ctx, link, pos, attrs, (attrs).x54()) != 0_i32 {
+        (ip).xDD4_itemVar().samusgrapple().set_x14((1_i32 as u8));
+        return;
+    }
+    fns::it_802A7168(ctx, ip, pos, (fp).x34_scale().y());
+    inl_samus_grapple_anim_unfused(ctx, gobj);
 }
 
 pub fn itSamusgrapple_UnkMotion5_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -619,6 +915,50 @@ pub fn itSamusgrapple_UnkMotion5_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         .set_unk_10(fnptr(ctx, 0x802b8814));
 }
 
+pub fn fn_802B895C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x80);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x40);
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut attrs: itSamusGrappleAttributes<'a> = Handle::cast::<itSamusGrappleAttributes<'a>>(
+        ((ip).xC4_article_data()).x4_specialAttributes(),
+    );
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>(((ip).owner()).user_data());
+    let mut link: ItemLink<'a> = (ip).xDD4_itemVar().samusgrapple().x4();
+    let mut fp2: Fighter<'a> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    fp2 = fp;
+    inl_samus_grapple_setup_pos_unfused(ctx, link, pos, m.get(0));
+    if (inl_itGrappleCheckCollision_unfused(ctx, (ip).xDD4_itemVar().samusgrapple().x0(), fp2, pos)
+        != 0)
+    {
+        fns::ftCo_80090780(ctx, (ip).owner());
+        fns::it_802B7B84(ctx, gobj);
+        return;
+    }
+    if (fns::it_802B9FD4(ctx, (ip).xDD4_itemVar().samusgrapple().x0(), pos, attrs) != 0) {
+        fns::it_802BABB8(ctx, gobj);
+        return;
+    }
+    fns::it_802A7168(ctx, ip, pos, (fp2).x34_scale().y());
+    inl_samus_grapple_anim_unfused(ctx, gobj);
+    if ((fp2).ground_or_air() as u32) != ((enums::GA_Air as i32) as u32) {
+        fns::it_802BAA58(ctx, gobj);
+        return;
+    }
+    if (((fp2).input().pressed_buttons() & (0x100_i32 as u32)) != 0) {
+        fns::it_802BAB7C(ctx, gobj);
+    }
+}
+
 pub fn itSamusgrapple_UnkMotion6_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
@@ -627,12 +967,161 @@ pub fn itSamusgrapple_UnkMotion6_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         .set_unk_10(fnptr(ctx, 0x802b895c));
 }
 
+pub fn fn_802B8B54<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0xb8);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let _pad2: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x10);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x28);
+    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x58);
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut attrs: itSamusGrappleAttributes<'a> = Handle::cast::<itSamusGrappleAttributes<'a>>(
+        ((ip).xC4_article_data()).x4_specialAttributes(),
+    );
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>(((ip).owner()).user_data());
+    let mut link: ItemLink<'a> = null(ctx);
+    let mut da: _ftSamusAttributes<'a> = null(ctx);
+    let mut fp2: Fighter<'a> = null(ctx);
+    let mut dx: f64 = 0.0;
+    let mut dy: f64 = 0.0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    da = Handle::cast::<_ftSamusAttributes<'a>>((fp).dat_attrs());
+    link = (ip).xDD4_itemVar().samusgrapple().x4();
+    fp2 = fp;
+    inl_samus_grapple_setup_pos_unfused(ctx, link, pos, m.get(0));
+    dx = fp::fsubs((fp2).cur_pos().x(), pos.x());
+    dy = fp::fsubs((fp2).cur_pos().y(), pos.y());
+    if fns::it_802BA3BC(
+        ctx,
+        (ip).xDD4_itemVar().samusgrapple().x4(),
+        (ip).xDD4_itemVar().samusgrapple().x0(),
+        pos,
+        attrs,
+        (attrs).x4C(),
+    ) != 0_i32
+    {
+        (fp2).cur_pos().set_x(fp::fadds(pos.x(), dx));
+        (fp2).cur_pos().set_y(fp::fadds(pos.y(), dy));
+        if (fns::ftCo_800C3A14(ctx, (ip).owner()) != 0)
+            && (Handle::is_null(fns::ft_80082E3C(ctx, (ip).owner())))
+        {
+            fns::ftCliffCommon_80081370(ctx, (ip).owner());
+        } else {
+            (fp2).self_vel().set_x(0.0);
+            fns::ftCo_8009B390(ctx, (ip).owner(), (da).xCC());
+        }
+        fns::it_802B7B84(ctx, gobj);
+        return;
+    }
+    (fp2).cur_pos().set_x(fp::fadds(pos.x(), dx));
+    (fp2).cur_pos().set_y(fp::fadds(pos.y(), dy));
+    fns::it_802A7168(ctx, ip, pos, (fp2).x34_scale().y());
+    inl_samus_grapple_anim_unfused(ctx, gobj);
+    if ((fp2).ground_or_air() as u32) != ((enums::GA_Air as i32) as u32) {
+        fns::it_802BAA58(ctx, gobj);
+    }
+}
+
 pub fn itSamusgrapple_UnkMotion7_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
         .xDD4_itemVar()
         .samusgrapple()
         .set_unk_10(fnptr(ctx, 0x802b8b54));
+}
+
+pub fn fn_802B8D38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0xa8);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let _pad2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0xc);
+    let saved_pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let _pad3: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x24);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x28);
+    let _pad: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x58);
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut attrs: itSamusGrappleAttributes<'a> = Handle::cast::<itSamusGrappleAttributes<'a>>(
+        ((ip).xC4_article_data()).x4_specialAttributes(),
+    );
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>(((ip).owner()).user_data());
+    let mut link: ItemLink<'a> = (ip).xDD4_itemVar().samusgrapple().x4();
+    let mut fp2: Fighter<'a> = null(ctx);
+    let mut old_x: f64 = 0.0;
+    let mut old_y: f64 = 0.0;
+    fp2 = fp;
+    inl_samus_grapple_setup_pos_unfused(ctx, link, pos, m.get(0));
+    if (inl_itGrappleCheckCollision_unfused(ctx, (ip).xDD4_itemVar().samusgrapple().x0(), fp2, pos)
+        != 0)
+    {
+        fns::ftCo_80090780(ctx, (ip).owner());
+        fns::it_802B7B84(ctx, gobj);
+        return;
+    }
+    old_x = fp::fsubs((fp2).cur_pos().x(), pos.x());
+    old_y = fp::fsubs((fp2).cur_pos().y(), pos.y());
+    Handle::copy_from(saved_pos, (fp2).cur_pos());
+    fns::it_802BA5DC(
+        ctx,
+        (ip).xDD4_itemVar().samusgrapple().x4(),
+        (ip).xDD4_itemVar().samusgrapple().x0(),
+        pos,
+        attrs,
+    );
+    (fp2).cur_pos().set_x(fp::fadds(pos.x(), old_x));
+    (fp2).cur_pos().set_y(fp::fadds(pos.y(), old_y));
+    {
+        let mut tmp: f64 = 0.0;
+        tmp = fp::fadds(
+            (fp2).self_vel().x(),
+            (fp::fsubs((fp2).cur_pos().x(), saved_pos.x())),
+        );
+        (fp2).self_vel().set_x(tmp);
+        (fp2).pos_delta().set_x(tmp);
+        tmp = fp::fadds(
+            (fp2).self_vel().y(),
+            (fp::fsubs((fp2).cur_pos().y(), saved_pos.y())),
+        );
+        (fp2).self_vel().set_y(tmp);
+        (fp2).pos_delta().set_y(tmp);
+    }
+    fns::it_802A7168(ctx, ip, pos, (fp2).x34_scale().y());
+    inl_samus_grapple_anim_unfused(ctx, gobj);
+    if (((ip).xDD4_itemVar().samusgrapple().x16() as i32) != 0_i32)
+        && (((fp2).input().held_buttons().at(0_i32).get() & (64_i32 as u32)) != 0)
+    {
+        (fp2)
+            .mv()
+            .ss()
+            .grapple()
+            .set_x4(fp::fadds((fp2).mv().ss().grapple().x4(), 1.0));
+    }
+    if ((fp2).ground_or_air() as u32) != ((enums::GA_Air as i32) as u32) {
+        fns::it_802BAA58(ctx, gobj);
+        return;
+    }
+    if (((fp2).input().pressed_buttons() & (0x100_i32 as u32)) != 0) {
+        fns::it_802BAB7C(ctx, gobj);
+        return;
+    }
+    if {
+        let __t1 = (fp2).mv().ss().grapple().x4();
+        (fp2)
+            .mv()
+            .ss()
+            .grapple()
+            .set_x4(fp::fsubs((fp2).mv().ss().grapple().x4(), fp::frsp(1.0)));
+        __t1
+    } <= fp::frsp(0_i32 as f64)
+    {
+        fns::ftCo_80090780(ctx, (ip).owner());
+        fns::it_802B7B84(ctx, gobj);
+    }
 }
 
 pub fn itSamusgrapple_UnkMotion8_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -752,6 +1241,161 @@ pub fn it_802B91C4<'a>(
             prev = (prev).prev();
         }
     }
+}
+
+pub fn it_802B9328<'a>(
+    ctx: &'a Ctx,
+    link: ItemLink<'a>,
+    pos: Vec<'a>,
+    attrs: itSamusGrappleAttributes<'a>,
+    fp: Fighter<'a>,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x190);
+    let _padA: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let dir: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let d2: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let _padB: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x28);
+    let attach_pos_1: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let _padC: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x38);
+    let attach_pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let _padD: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4c);
+    let attach_pos_3: Vec<'a> = frame_at(ctx, &__frame, 0x54);
+    let _padE: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x60);
+    let hitbox_data: itSamusGrapple_HitboxData<'a> = frame_at(ctx, &__frame, 0x64);
+    let _padF: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x7c);
+    let m1: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x80);
+    let _padG: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xb0);
+    let m2: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xb4);
+    let _padH: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xe4);
+    let m3: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xe8);
+    let _padI: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x118);
+    let mut link = link;
+    let mut pos = pos;
+    let mut attrs = attrs;
+    let mut fp = fp;
+    let mut cur: ItemLink<'a> = null(ctx);
+    let mut next: ItemLink<'a> = null(ctx);
+    let mut grapple_ip: Item<'a> = Handle::cast::<Item<'a>>(((fp).u().ss().x223C()).user_data());
+    let mut da: _ftSamusAttributes<'a> =
+        Handle::cast::<_ftSamusAttributes<'a>>(((fp).ft_data()).ext_attr());
+    let mut result: i32 = 0;
+    let mut d: f64 = 0.0;
+    if (fp).motion_id() == 212_i32 {
+        if (fp).mv().ss().unk7().x0() == fp::frsp((da).xA0() as f64) {
+            inl_it_802B9328_attach(ctx, link, attach_pos_1, m1.get(0));
+        }
+    } else if (fp).motion_id() == 214_i32 {
+        if (fp).mv().ss().unk7().x0() == fp::frsp((da).xB0() as f64) {
+            inl_it_802B9328_attach(ctx, link, attach_pos_2, m2.get(0));
+        }
+    } else if (fp).motion_id() == 0x165_i32 {
+        if (fp).mv().ss().unk7().x0() == fp::frsp((da).xC0() as f64) {
+            inl_it_802B9328_attach(ctx, link, attach_pos_3, m3.get(0));
+        }
+    }
+    if (((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32))
+        && (((grapple_ip).xDD4_itemVar().samusgrapple().x16() as i32) == 1_i32)
+    {
+        if (((fp).input().pressed_buttons() & (0x100_i32 as u32)) != 0) {
+            Handle::copy_from(hitbox_data.create_hitbox(), fns::it_803B8660(ctx));
+            fns::ftColl_8007AFF8(ctx, (fp).gobj());
+            fns::it_802B7160(ctx, (fp).gobj(), hitbox_data);
+            (grapple_ip).xDD4_itemVar().samusgrapple().set_x16(
+                (grapple_ip)
+                    .xDD4_itemVar()
+                    .samusgrapple()
+                    .x16()
+                    .wrapping_add(1),
+            );
+        } else {
+            fns::ftColl_8007AFF8(ctx, (fp).gobj());
+        }
+    }
+    next = (link).next();
+    if (((fp).input().held_buttons().at(0_i32).get() & (64_i32 as u32)) != 0)
+        && (((grapple_ip).xDD4_itemVar().samusgrapple().x16() as i32) == 1_i32)
+    {
+        let mut target: Fighter<'a> = fns::ftCo_800A4A40(ctx, fp);
+        if !Handle::is_null(target) {
+            d2.set_x(fp::fsubs((target).cur_pos().x(), (link).pos().x()));
+            d2.set_y(fp::fsubs((target).cur_pos().y(), (link).pos().y()));
+            d2.set_z(fp::fsubs((target).cur_pos().z(), (link).pos().z()));
+            let _ = fns::lbVector_Normalize(ctx, d2);
+            (link).vel().set_x(fp::fmuls(d2.x(), (attrs).x40()));
+            (link).vel().set_y(fp::fmuls(d2.y(), (attrs).x40()));
+            (link).vel().set_z(fp::fmuls(d2.z(), (attrs).x40()));
+        }
+    }
+    fns::it_802A4420(ctx, link);
+    result = fns::it_802A3D90(ctx, link);
+    if result != 0_i32 {
+        if ((result & 63_i32) != 0) {
+            result = 1_i32;
+            (link).set_x1CC((link).coll_data().left_facing_wall().index());
+        } else if ((result & 0xfc0_i32) != 0) {
+            result = 1_i32;
+            (link).set_x1CC((link).coll_data().right_facing_wall().index());
+        } else {
+            result = 2_i32;
+        }
+    }
+    cur = link;
+    'l1: while !Handle::is_null(next) {
+        'c2: {
+            if ((next).x2C_b0() != 0) {
+                (next).vel().set_y(fp::fsubs(
+                    (next).vel().y(),
+                    inl_it_802B9328_grav(ctx, (next).vel().y()),
+                ));
+                (next)
+                    .pos()
+                    .set_y(fp::fadds((next).pos().y(), (next).vel().y()));
+                d = fns::it_802A3C98(ctx, (next).pos(), (cur).pos(), dir);
+                if d > (attrs).x38() {
+                    (next)
+                        .pos()
+                        .set_x(fp::fmadds(dir.x(), (attrs).x38(), (cur).pos().x()));
+                    (next)
+                        .pos()
+                        .set_y(fp::fmadds(dir.y(), (attrs).x38(), (cur).pos().y()));
+                    (next)
+                        .pos()
+                        .set_z(fp::fmadds(dir.z(), (attrs).x38(), (cur).pos().z()));
+                } else if d < (attrs).x3C() {
+                    (next)
+                        .pos()
+                        .set_x(fp::fmadds(dir.x(), (attrs).x3C(), (cur).pos().x()));
+                    (next)
+                        .pos()
+                        .set_y(fp::fmadds(dir.y(), (attrs).x3C(), (cur).pos().y()));
+                    (next)
+                        .pos()
+                        .set_z(fp::fmadds(dir.z(), (attrs).x3C(), (cur).pos().z()));
+                }
+                fns::it_802A43EC(ctx, next);
+            } else {
+                if fns::it_802A3C98(ctx, pos, (cur).pos(), dir) > (attrs).x38() {
+                    (next)
+                        .pos()
+                        .set_x(fp::fmadds(dir.x(), (attrs).x38(), (cur).pos().x()));
+                    (next)
+                        .pos()
+                        .set_y(fp::fmadds(dir.y(), (attrs).x38(), (cur).pos().y()));
+                    (next)
+                        .pos()
+                        .set_z(fp::fmadds(dir.z(), (attrs).x38(), (cur).pos().z()));
+                    (next).set_x2C_b0((1_i32 as u8));
+                    fns::it_802A43B8(ctx, next);
+                } else {
+                    return result;
+                }
+            }
+            cur = next;
+            next = (next).next();
+        }
+    }
+    fns::it_802B900C(ctx, cur, pos, attrs, (attrs).x38());
+    return 3_i32;
 }
 
 pub fn it_802B99A0<'a>(
@@ -1594,6 +2238,31 @@ pub fn it_802BAC80<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn it_802BACC4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0xb0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let _pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x14);
+    let m2: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x44);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if !Handle::is_null((fp).u().ss().x223C()) {
+        let mut ip: Item<'a> =
+            (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, (fp).u().ss().x223C())));
+        let mut attrs: itSamusGrappleAttributes<'a> = Handle::cast::<itSamusGrappleAttributes<'a>>(
+            ((ip).xC4_article_data()).x4_specialAttributes(),
+        );
+        let mut link: ItemLink<'a> = (ip).xDD4_itemVar().samusgrapple().x0();
+        inl_samus_grapple_setup_pos_unfused(ctx, link, pos, m.get(0));
+        if (fns::it_802BA760(ctx, link, pos, attrs, fp) != 0) {
+            let _ = inl_fn_802B7E34_inline_unfused(ctx, (fp).u().ss().x223C(), ip, m2.get(0));
+        } else {
+            fns::it_802A7168(ctx, ip, pos, (fp).x34_scale().y());
+        }
+    }
+}
+
 pub fn itSamusGrapple_Logic53_EvtUnk<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let mut gobj = gobj;
@@ -1747,6 +2416,205 @@ fn inl_samus_grapple_state_sync_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     }
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8668),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b8668),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
+fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+        return;
+    }
+    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
+}
+
+fn inl_HSD_JObjCopyMtx_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, mtx: ArrV<'a, F32, 4>) {
+    let mut jobj = jobj;
+    let mut mtx = mtx;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8668),
+            (0x2c2_i32 as u32),
+            cstr(ctx, 0x803b8668),
+        )
+    });
+    (if true {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8668),
+            (0x2c3_i32 as u32),
+            cstr(ctx, 0x803b8668),
+        )
+    });
+    fns::PSMTXCopy(
+        ctx,
+        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(mtx).get(0),
+        (jobj).mtx().get(0),
+    );
+}
+
+fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).hsd_obj();
+}
+
+fn inl_fn_802B7E34_anim_inline_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    ip: Item<'a>,
+    m: ArrV<'a, F32, 4>,
+) {
+    let mut gobj = gobj;
+    let mut ip = ip;
+    let mut m = m;
+    {
+        let mut jobj: HSD_JObj<'a> = null(ctx);
+        let mut link: ItemLink<'a> = (ip).xDD4_itemVar().samusgrapple().x0();
+        jobj = Handle::cast::<HSD_JObj<'a>>(((link).gobj()).hsd_obj());
+        inl_HSD_JObjSetupMatrix_unfused(ctx, (link).jobj());
+        fns::PSMTXIdentity(ctx, Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(m).get(0));
+        fns::PSMTXConcat(
+            ctx,
+            ((link).jobj()).mtx().get(0),
+            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(m).get(0),
+            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(m).get(0),
+        );
+        inl_HSD_JObjCopyMtx_unfused(
+            ctx,
+            jobj,
+            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(m).get(0),
+        );
+        (jobj).set_flags(((jobj).flags() | (0x3800000_i32 as u32)));
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+    {
+        let mut ip_2: Item<'a> =
+            (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+        let mut link_2: ItemLink<'a> = null(ctx);
+        fns::HSD_JObjAnimAll(
+            ctx,
+            (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj))),
+        );
+        link_2 = (ip_2).xDD4_itemVar().samusgrapple().x4();
+        'l1: while !Handle::is_null(link_2) {
+            'c2: {
+                fns::HSD_JObjAnimAll(
+                    ctx,
+                    Handle::cast::<HSD_JObj<'a>>(((link_2).gobj()).hsd_obj()),
+                );
+                link_2 = (link_2).prev();
+            }
+        }
+    }
+}
+
+fn inl_samus_grapple_setup_pos_unfused<'a>(
+    ctx: &'a Ctx,
+    link: ItemLink<'a>,
+    pos: Vec<'a>,
+    m: ArrV<'a, F32, 4>,
+) {
+    let mut link = link;
+    let mut pos = pos;
+    let mut m = m;
+    fns::PSMTXIdentity(ctx, Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(m).get(0));
+    inl_HSD_JObjSetupMatrix_unfused(ctx, (link).jobj());
+    (pos).set_x(((link).jobj()).mtx().get(0_i32).at(3_i32).get());
+    (pos).set_y(((link).jobj()).mtx().get(1_i32).at(3_i32).get());
+    (pos).set_z(((link).jobj()).mtx().get(2_i32).at(3_i32).get());
+}
+
+fn inl_samus_grapple_anim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut link: ItemLink<'a> = null(ctx);
+    fns::HSD_JObjAnimAll(
+        ctx,
+        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj))),
+    );
+    link = (ip).xDD4_itemVar().samusgrapple().x4();
+    'l1: while !Handle::is_null(link) {
+        'c2: {
+            fns::HSD_JObjAnimAll(ctx, Handle::cast::<HSD_JObj<'a>>(((link).gobj()).hsd_obj()));
+            link = (link).prev();
+        }
+    }
+}
+
+fn inl_itGrappleCheckCollision_unfused<'a>(
+    ctx: &'a Ctx,
+    head: ItemLink<'a>,
+    fp: Fighter<'a>,
+    pos: Vec<'a>,
+) -> i32 {
+    let mut head = head;
+    let mut fp = fp;
+    let mut pos = pos;
+    let mut head_pos: Vec<'a> = (head).pos();
+    if (fns::mpCheckAllRemap(
+        ctx,
+        null::<Vec<'a>>(ctx),
+        null::<Val<'a, i32>>(ctx),
+        null::<Val<'a, u32>>(ctx),
+        null::<Vec<'a>>(ctx),
+        1_i32.wrapping_neg(),
+        1_i32.wrapping_neg(),
+        (pos).x(),
+        (pos).y(),
+        (head).pos().x(),
+        (head).pos().y(),
+    ) != 0)
+    {
+        return 1_i32;
+    } else if (fns::mpCheckAllRemap(
+        ctx,
+        null::<Vec<'a>>(ctx),
+        null::<Val<'a, i32>>(ctx),
+        null::<Val<'a, u32>>(ctx),
+        null::<Vec<'a>>(ctx),
+        1_i32.wrapping_neg(),
+        1_i32.wrapping_neg(),
+        (fp).cur_pos().x(),
+        (fp).cur_pos().y(),
+        (head_pos).x(),
+        (head_pos).y(),
+    ) != 0)
+    {
+        return 1_i32;
+    } else {
+        return 0_i32;
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 fn inl_samus_grapple_calc_grav<'a>(ctx: &'a Ctx, vel_y: f64) -> f64 {
     let mut vel_y = vel_y;
     if fns::HSD_Randf(ctx) > 0.9 {
@@ -1754,6 +2622,67 @@ fn inl_samus_grapple_calc_grav<'a>(ctx: &'a Ctx, vel_y: f64) -> f64 {
             return fp::fneg((fp::fmsubs(0.6000000238418579, fns::HSD_Randf(ctx), vel_y)));
         } else {
             return fp::fmadds(0.6000000238418579, fns::HSD_Randf(ctx), vel_y);
+        }
+    } else {
+        return 0.0;
+    }
+    #[allow(unreachable_code)]
+    return 0.0;
+}
+
+fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8668),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b8668),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
+fn inl_HSD_JObjSetupMatrix<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+        return;
+    }
+    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
+}
+
+fn inl_it_802B9328_attach<'a>(ctx: &'a Ctx, link: ItemLink<'a>, pos: Vec<'a>, m: ArrV<'a, F32, 4>) {
+    let mut link = link;
+    let mut pos = pos;
+    let mut m = m;
+    fns::PSMTXIdentity(ctx, Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(m).get(0));
+    inl_HSD_JObjSetupMatrix(ctx, (link).jobj());
+    (pos).set_x(((link).jobj()).mtx().get(0_i32).at(3_i32).get());
+    (pos).set_y(((link).jobj()).mtx().get(1_i32).at(3_i32).get());
+    (pos).set_z(((link).jobj()).mtx().get(2_i32).at(3_i32).get());
+    Handle::copy_from((link).pos(), (pos));
+    Handle::copy_from((link).coll_data().cur_pos(), (link).pos());
+    Handle::copy_from((link).coll_data().last_pos(), (link).coll_data().cur_pos());
+    (link).set_x2C_b0((1_i32 as u8));
+}
+
+fn inl_it_802B9328_grav<'a>(ctx: &'a Ctx, vely: f64) -> f64 {
+    let mut vely = vely;
+    let mut one: f64 = 1.0;
+    if fns::HSD_Randf(ctx) > 0.9 {
+        if vely < 0.0 {
+            return fp::fneg((fp::fmsubs(one, fns::HSD_Randf(ctx), vely)));
+        } else {
+            return fp::fmadds(one, fns::HSD_Randf(ctx), vely);
         }
     } else {
         return 0.0;
@@ -1813,6 +2742,40 @@ fn inl_Item_RetractChain_unfused<'a>(
     (remaining_out).set(remaining);
 }
 
+fn inl_fn_802B7E34_inline_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    ip: Item<'a>,
+    m: ArrV<'a, F32, 4>,
+) -> Item<'a> {
+    let mut gobj = gobj;
+    let mut ip = ip;
+    let mut m = m;
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut link: ItemLink<'a> = (ip).xDD4_itemVar().samusgrapple().x0();
+    jobj = Handle::cast::<HSD_JObj<'a>>(((link).gobj()).hsd_obj());
+    inl_HSD_JObjSetupMatrix_unfused(ctx, (link).jobj());
+    fns::PSMTXIdentity(ctx, Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(m).get(0));
+    fns::PSMTXConcat(
+        ctx,
+        ((link).jobj()).mtx().get(0),
+        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(m).get(0),
+        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(m).get(0),
+    );
+    inl_HSD_JObjCopyMtx_unfused(
+        ctx,
+        jobj,
+        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(m).get(0),
+    );
+    (jobj).set_flags(((jobj).flags() | (0x3800000_i32 as u32)));
+    {
+        if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+            fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+        }
+    }
+    return (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -1864,10 +2827,26 @@ pub fn register(ctx: &Ctx) {
         Returns::Int,
     );
     ctx.register_port(
+        0x802b7e34,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(fn_802B7E34(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x802b8048,
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(itSamusgrapple_UnkMotion0_Phys(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x802b805c,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(fn_802B805C(ctx, a0), ctx);
         },
         Returns::Nothing,
     );
@@ -1880,10 +2859,26 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x802b8384,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(fn_802B8384(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x802b8510,
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(itSamusgrapple_UnkMotion2_Phys(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x802b8524,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(fn_802B8524(ctx, a0), ctx);
         },
         Returns::Nothing,
     );
@@ -1896,10 +2891,26 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x802b8684,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(fn_802B8684(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x802b8800,
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(itSamusgrapple_UnkMotion4_Phys(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x802b8814,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(fn_802B8814(ctx, a0), ctx);
         },
         Returns::Nothing,
     );
@@ -1912,6 +2923,14 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x802b895c,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(fn_802B895C(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x802b8b40,
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
@@ -1920,10 +2939,26 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x802b8b54,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(fn_802B8B54(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x802b8d24,
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(itSamusgrapple_UnkMotion7_Phys(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x802b8d38,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(fn_802B8D38(ctx, a0), ctx);
         },
         Returns::Nothing,
     );
@@ -1952,6 +2987,19 @@ pub fn register(ctx: &Ctx) {
             Ret::put(it_802B91C4(ctx, a0, a1, a2, a3.0), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x802b9328,
+        |ctx| {
+            let (a0, a1, a2, a3): (
+                ItemLink<'_>,
+                Vec<'_>,
+                itSamusGrappleAttributes<'_>,
+                Fighter<'_>,
+            ) = Args::take_all(ctx);
+            Ret::put(it_802B9328(ctx, a0, a1, a2, a3), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x802b99a0,
@@ -2131,6 +3179,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(it_802BAC80(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x802bacc4,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(it_802BACC4(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

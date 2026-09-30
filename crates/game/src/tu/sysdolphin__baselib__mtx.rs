@@ -26,6 +26,79 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn HSD_MtxQuat<'a>(ctx: &'a Ctx, arg0: ArrV<'a, F32, 4>, arg1: Quaternion<'a>) {
+    let __frame = ctx.stack_frame(0x8);
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    fns::PSMTXQuat(
+        ctx,
+        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(arg0).get(0),
+        arg1,
+    );
+}
+
+pub fn HSD_MtxSRTQuat<'a>(
+    ctx: &'a Ctx,
+    arg0: ArrV<'a, F32, 4>,
+    arg1: Vec<'a>,
+    arg2: Quaternion<'a>,
+    arg3: Vec<'a>,
+    arg4: Vec<'a>,
+) {
+    let __frame = ctx.stack_frame(0x60);
+    let temp: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut arg3 = arg3;
+    let mut arg4 = arg4;
+    fns::PSMTXScale(
+        ctx,
+        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(arg0).get(0),
+        (arg1).x(),
+        (arg1).y(),
+        (arg1).z(),
+    );
+    if !Handle::is_null(arg4) {
+        fns::PSMTXScale(ctx, temp.get(0), (arg4).x(), (arg4).y(), (arg4).z());
+        fns::PSMTXConcat(
+            ctx,
+            temp.get(0),
+            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(arg0).get(0),
+            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(arg0).get(0),
+        );
+    }
+    fns::PSMTXQuat(ctx, temp.get(0), arg2);
+    fns::PSMTXConcat(
+        ctx,
+        temp.get(0),
+        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(arg0).get(0),
+        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(arg0).get(0),
+    );
+    if !Handle::is_null(arg4) {
+        fns::PSMTXScale(
+            ctx,
+            temp.get(0),
+            fp::frsp(fp::fdiv(1.0, (arg4).x())),
+            fp::frsp(fp::fdiv(1.0, (arg4).y())),
+            fp::frsp(fp::fdiv(1.0, (arg4).z())),
+        );
+        fns::PSMTXConcat(
+            ctx,
+            temp.get(0),
+            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(arg0).get(0),
+            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(arg0).get(0),
+        );
+    }
+    fns::PSMTXTrans(ctx, temp.get(0), (arg3).x(), (arg3).y(), (arg3).z());
+    fns::PSMTXConcat(
+        ctx,
+        temp.get(0),
+        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(arg0).get(0),
+        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(arg0).get(0),
+    );
+}
+
 pub fn HSD_VecAlloc<'a>(ctx: &'a Ctx) -> Addr<'a> {
     let __frame = ctx.stack_frame(0x10);
     let mut vec: Addr<'a> = fns::HSD_ObjAlloc(ctx, fns::HSD_Mtx_804C2310(ctx));
@@ -136,6 +209,28 @@ fn inl_HSD_MtxGetAllocData_unfused<'a>(ctx: &'a Ctx) -> _HSD_ObjAllocData<'a> {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x8037a230,
+        |ctx| {
+            let (a0, a1): (ArrV<'_, F32, 4>, Quaternion<'_>) = Args::take_all(ctx);
+            Ret::put(HSD_MtxQuat(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8037a43c,
+        |ctx| {
+            let (a0, a1, a2, a3, a4): (
+                ArrV<'_, F32, 4>,
+                Vec<'_>,
+                Quaternion<'_>,
+                Vec<'_>,
+                Vec<'_>,
+            ) = Args::take_all(ctx);
+            Ret::put(HSD_MtxSRTQuat(ctx, a0, a1, a2, a3, a4), ctx);
+        },
+        Returns::Nothing,
+    );
     ctx.register_port(
         0x8037a610,
         |ctx| {

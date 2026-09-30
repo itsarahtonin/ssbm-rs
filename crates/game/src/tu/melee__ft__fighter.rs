@@ -2336,6 +2336,37 @@ pub fn Fighter_procInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn Fighter_UnkApplyTransformation_8006C0F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0xa8);
+    let mtx1: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let mtx2: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x30);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x60);
+    let translation: Vec<'a> = frame_at(ctx, &__frame, 0x6c);
+    let rotation: Quaternion<'a> = frame_at(ctx, &__frame, 0x78);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if (fp).x34_scale().z() != 1.0 {
+        let mut jobj: HSD_JObj<'a> =
+            (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
+        inl_HSD_JObjSetupMatrix_unfused(ctx, jobj);
+        fns::HSD_MtxInverse(ctx, inl_HSD_JObjGetMtxPtr_unfused(ctx, jobj), mtx1.get(0));
+        inl_HSD_JObjGetScale_unfused(ctx, jobj, scale);
+        scale.set_x(fns::ftCommon_GetModelScale(ctx, fp));
+        inl_HSD_JObjGetRotation_unfused(ctx, jobj, rotation);
+        inl_HSD_JObjGetTranslation_unfused(ctx, jobj, translation);
+        fns::HSD_MtxSRT(
+            ctx,
+            mtx2.get(0),
+            scale,
+            Handle::cast::<Vec<'a>>(rotation),
+            translation,
+            null::<Vec<'a>>(ctx),
+        );
+        fns::PSMTXConcat(ctx, mtx2.get(0), mtx1.get(0), (fp).x44_mtx().get(0));
+    }
+}
+
 pub fn Fighter_procIK<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
@@ -2386,7 +2417,7 @@ pub fn Fighter_procCollPos<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if !((fp).is_sleeping() != 0) {
         fns::efAsync_QueueFlush(ctx, gobj, (fp).x60C_ref());
-        fns::Fighter_UnkApplyTransformation_8006C0F0(ctx, gobj);
+        inl_Fighter_UnkApplyTransformation_8006C0F0_unfused(ctx, gobj);
         if !((fp).x2219_b5() != 0) {
             if !Handle::is_null((fp).accessory4_cb()) {
                 (fp).accessory4_cb().call::<_, ()>((gobj,));
@@ -3560,6 +3591,56 @@ fn inl___fpclassifyf<'a>(ctx: &'a Ctx, x: f64) -> i32 {
     return 0;
 }
 
+fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+        return;
+    }
+    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
+}
+
+fn inl_HSD_JObjGetMtxPtr_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'a, F32, 4> {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7488),
+            (0x2bb_i32 as u32),
+            cstr(ctx, 0x803b7488),
+        )
+    });
+    inl_HSD_JObjSetupMatrix_unfused(ctx, jobj);
+    return (jobj).mtx().get(0);
+}
+
+fn inl_HSD_JObjGetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
+    let mut jobj = jobj;
+    let mut scale = scale;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7488),
+            (0x1c8_i32 as u32),
+            cstr(ctx, 0x803b7488),
+        )
+    });
+    (if !Handle::is_null((scale)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7488),
+            (0x1c9_i32 as u32),
+            cstr(ctx, 0x803b7488),
+        )
+    });
+    Handle::copy_from((scale), (jobj).scale());
+}
+
 fn inl___fpclassifyf_unfused<'a>(ctx: &'a Ctx, x: f64) -> i32 {
     let __frame = ctx.stack_frame(0x10);
     let x__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
@@ -3592,6 +3673,37 @@ fn inl___fpclassifyf_unfused<'a>(ctx: &'a Ctx, x: f64) -> i32 {
     }
     #[allow(unreachable_code)]
     return 0;
+}
+
+fn inl_Fighter_UnkApplyTransformation_8006C0F0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x90);
+    let mtx1: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let mtx2: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x30);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x60);
+    let translation: Vec<'a> = frame_at(ctx, &__frame, 0x6c);
+    let rotation: Quaternion<'a> = frame_at(ctx, &__frame, 0x78);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if (fp).x34_scale().z() != 1.0 {
+        let mut jobj: HSD_JObj<'a> =
+            (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
+        inl_HSD_JObjSetupMatrix_unfused(ctx, jobj);
+        fns::HSD_MtxInverse(ctx, inl_HSD_JObjGetMtxPtr_unfused(ctx, jobj), mtx1.get(0));
+        inl_HSD_JObjGetScale_unfused(ctx, jobj, scale);
+        scale.set_x(fns::ftCommon_GetModelScale(ctx, fp));
+        inl_HSD_JObjGetRotation_unfused(ctx, jobj, rotation);
+        inl_HSD_JObjGetTranslation_unfused(ctx, jobj, translation);
+        fns::HSD_MtxSRT(
+            ctx,
+            mtx2.get(0),
+            scale,
+            Handle::cast::<Vec<'a>>(rotation),
+            translation,
+            null::<Vec<'a>>(ctx),
+        );
+        fns::PSMTXConcat(ctx, mtx2.get(0), mtx1.get(0), (fp).x44_mtx().get(0));
+    }
 }
 
 fn inl_setBit_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -3790,6 +3902,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(Fighter_procInput(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8006c0f0,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(Fighter_UnkApplyTransformation_8006C0F0(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

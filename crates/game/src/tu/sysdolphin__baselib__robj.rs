@@ -198,6 +198,81 @@ pub fn HSD_RObjAddAnimAll<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>, anim: HSD_RObjAn
     }
 }
 
+pub fn HSD_RObjGetGlobalPosition<'a>(
+    ctx: &'a Ctx,
+    robj: HSD_RObj<'a>,
+    r#type: i32,
+    p: Vec<'a>,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x40);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut robj = robj;
+    let mut r#type = r#type;
+    let mut p = p;
+    v.set_x(fp::frsp(0_i32 as f64));
+    v.set_y(fp::frsp(0_i32 as f64));
+    v.set_z(fp::frsp(0_i32 as f64));
+    let mut rp: HSD_RObj<'a> = null(ctx);
+    let mut n: i32 = 0_i32;
+    if Handle::is_null(robj) {
+        return 0_i32;
+    }
+    {
+        rp = robj;
+        'l1: while !Handle::is_null(rp) {
+            'c2: {
+                if (if ((rp).flags() & (0x70000000_i32 as u32)) == (0x10000000_i32 as u32) {
+                    1_i32
+                } else {
+                    0_i32
+                }) != 0_i32
+                {
+                    if ((if (((rp).flags() & 0x80000000_u32) != 0) {
+                        1_i32
+                    } else {
+                        0_i32
+                    }) != 0_i32)
+                        && ((r#type as u32) == inl_HSD_RObjGetConstraintType_unfused(ctx, rp))
+                    {
+                        (if !Handle::is_null(((rp).u().jobj())) {
+                            ({ () })
+                        } else {
+                            fns::__assert(
+                                ctx,
+                                cstr(ctx, 0x803b9580),
+                                (224_i32 as u32),
+                                cstr(ctx, 0x803b9580),
+                            )
+                        });
+                        inl_HSD_JObjSetupMatrix_unfused(ctx, (rp).u().jobj());
+                        n = n.wrapping_add(1_i32);
+                        v.set_x(fp::fadds(
+                            v.x(),
+                            ((rp).u().jobj()).mtx().get(0_i32).at(3_i32).get(),
+                        ));
+                        v.set_y(fp::fadds(
+                            v.y(),
+                            ((rp).u().jobj()).mtx().get(1_i32).at(3_i32).get(),
+                        ));
+                        v.set_z(fp::fadds(
+                            v.z(),
+                            ((rp).u().jobj()).mtx().get(2_i32).at(3_i32).get(),
+                        ));
+                    }
+                }
+            }
+            rp = (rp).next();
+        }
+    }
+    if n != 0_i32 {
+        let mut f: f64 = fp::fdivs(fp::frsp(1.0), fp::frsp(n as f64));
+        (p).set_x(fp::fmuls(f, v.x()));
+        (p).set_y(fp::fmuls(f, v.y()));
+        (p).set_z(fp::fmuls(f, v.z()));
+    }
+    return n;
+}
+
 pub fn set_dirup_matrix<'a>(
     ctx: &'a Ctx,
     dir_ptr: Vec<'a>,
@@ -321,6 +396,160 @@ pub fn resolveCnsDirUp<'a>(
             update_func,
         );
     }
+}
+
+pub fn resolveCnsOrientation<'a>(
+    ctx: &'a Ctx,
+    robj: HSD_RObj<'a>,
+    obj: Addr<'a>,
+    update_func: FnPtr<'a>,
+) {
+    let __frame = ctx.stack_frame(0xf8);
+    let mtx0: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x30);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let mtx1: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x40);
+    let mut robj = robj;
+    let mut obj = obj;
+    let mut update_func = update_func;
+    let mut sval: f64 = 0.0;
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut i: i32 = 0;
+    (if !Handle::is_null((obj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b9580),
+            (0x163_i32 as u32),
+            cstr(ctx, 0x803b9580),
+        )
+    });
+    robj = inl_inlined_HSD_RObjGetByType(ctx, robj, (0x10000000_i32 as u32), (4_i32 as u32));
+    if Handle::is_null(robj) {
+        return;
+    }
+    if (!((fns::HSD_JObjGetFlags(ctx, (robj).u().jobj()) & (8_i32 as u32)) != 0))
+        || (Handle::is_null(inl_jobj_parent(ctx, (robj).u().jobj())))
+    {
+        fns::PSMTXCopy(
+            ctx,
+            inl_HSD_JObjGetMtxPtr(ctx, (robj).u().jobj()),
+            mtx0.get(0),
+        );
+        jobj = Handle::cast::<HSD_JObj<'a>>(obj);
+        {
+            i = 0_i32;
+            'l1: while i < 3_i32 {
+                'c2: {
+                    inl_HSD_MtxColVec(ctx, mtx0.get(0), i, v);
+                    sval = fns::PSVECMag(ctx, v);
+                    if sval > 1.000000013351432e-10_f64 {
+                        sval = fp::fdivs(1.0, sval);
+                    }
+                    sval = fp::fmuls(sval, inl_HSD_MtxColMag(ctx, (jobj).mtx().get(0), i));
+                    v.set_x(fp::fmuls(v.x(), sval));
+                    v.set_y(fp::fmuls(v.y(), sval));
+                    v.set_z(fp::fmuls(v.z(), sval));
+                    update_func.call::<_, ()>((
+                        obj,
+                        statics::sysdolphin__baselib__robj::HSD_RObj_80406E74(ctx)
+                            .at(i)
+                            .get(),
+                        Handle::cast::<HSD_ObjData<'a>>(v),
+                    ));
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    } else {
+        fns::HSD_MtxInverseConcat(
+            ctx,
+            inl_HSD_JObjGetMtxPtr(ctx, inl_jobj_parent(ctx, (robj).u().jobj())),
+            inl_HSD_JObjGetMtxPtr(ctx, (robj).u().jobj()),
+            mtx1.get(0),
+        );
+        jobj = Handle::cast::<HSD_JObj<'a>>(obj);
+        {
+            i = 0_i32;
+            'l3: while i < 3_i32 {
+                'c4: {
+                    v.set_x(mtx1.get(0_i32).at(i).get());
+                    v.set_y(mtx1.get(1_i32).at(i).get());
+                    v.set_z(mtx1.get(2_i32).at(i).get());
+                    sval = fns::PSVECMag(ctx, v);
+                    if sval > 1.000000013351432e-10_f64 {
+                        sval = fp::fdivs(1.0, sval);
+                    }
+                    sval = fp::fmuls(sval, inl_HSD_MtxColMag(ctx, (jobj).mtx().get(0), i));
+                    v.set_x(fp::fmuls(v.x(), sval));
+                    v.set_y(fp::fmuls(v.y(), sval));
+                    v.set_z(fp::fmuls(v.z(), sval));
+                    mtx1.get(0_i32).at(i).set(v.x());
+                    mtx1.get(1_i32).at(i).set(v.y());
+                    mtx1.get(2_i32).at(i).set(v.z());
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+        jobj = inl_jobj_parent(ctx, (robj).u().jobj());
+        'l5: while !Handle::is_null(jobj) {
+            'c6: {
+                if !Handle::is_null(inl_jobj_parent(ctx, jobj)) {
+                    fns::HSD_MtxInverseConcat(
+                        ctx,
+                        inl_HSD_JObjGetMtxPtr(ctx, inl_jobj_parent(ctx, jobj)),
+                        inl_HSD_JObjGetMtxPtr(ctx, jobj),
+                        mtx0.get(0),
+                    );
+                } else {
+                    fns::PSMTXCopy(ctx, inl_HSD_JObjGetMtxPtr(ctx, jobj), mtx0.get(0));
+                }
+                {
+                    i = 0_i32;
+                    'l7: while i < 3_i32 {
+                        'c8: {
+                            v.set_x(mtx0.get(0_i32).at(i).get());
+                            v.set_y(mtx0.get(1_i32).at(i).get());
+                            v.set_z(mtx0.get(2_i32).at(i).get());
+                            sval = fns::PSVECMag(ctx, v);
+                            if sval > 1.000000013351432e-10_f64 {
+                                sval = fp::fdivs(1.0, sval);
+                            }
+                            v.set_x(fp::fmuls(v.x(), sval));
+                            v.set_y(fp::fmuls(v.y(), sval));
+                            v.set_z(fp::fmuls(v.z(), sval));
+                            mtx0.get(0_i32).at(i).set(v.x());
+                            mtx0.get(1_i32).at(i).set(v.y());
+                            mtx0.get(2_i32).at(i).set(v.z());
+                        }
+                        i = i.wrapping_add(1);
+                    }
+                }
+                fns::PSMTXConcat(ctx, mtx0.get(0), mtx1.get(0), mtx1.get(0));
+                jobj = inl_jobj_parent(ctx, jobj);
+            }
+        }
+        {
+            i = 0_i32;
+            'l9: while i < 3_i32 {
+                'c10: {
+                    v.set_x(mtx1.get(0_i32).at(i).get());
+                    v.set_y(mtx1.get(1_i32).at(i).get());
+                    v.set_z(mtx1.get(2_i32).at(i).get());
+                    update_func.call::<_, ()>((
+                        obj,
+                        statics::sysdolphin__baselib__robj::HSD_RObj_80406E74(ctx)
+                            .at(i)
+                            .get(),
+                        Handle::cast::<HSD_ObjData<'a>>(v),
+                    ));
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    }
+    update_func.call::<_, ()>((obj, 55_i32, null::<HSD_ObjData<'a>>(ctx)));
 }
 
 pub fn resolveLimits<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>, obj: Addr<'a>, update_func: FnPtr<'a>) {
@@ -675,6 +904,324 @@ pub fn HSD_RObjFree<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>) {
     );
 }
 
+pub fn expEvaluate<'a>(
+    ctx: &'a Ctx,
+    exp: HSD_Exp<'a>,
+    r#type: u32,
+    obj: Addr<'a>,
+    update_func: FnPtr<'a>,
+) {
+    let __frame = ctx.stack_frame(0x98);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
+    let sp1C: HSD_ObjData<'a> = frame_at(ctx, &__frame, 0x1c);
+    let mut exp = exp;
+    let mut r#type = r#type;
+    let mut obj = obj;
+    let mut update_func = update_func;
+    let mut rvalue: HSD_Rvalue<'a> = null(ctx);
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut temp_f31: f64 = 0.0;
+    let mut cur_arg: Val<'a, F32> = null(ctx);
+    let mut cur_bit: i32 = 0;
+    let mut robj: HSD_RObj<'a> = Handle::cast::<HSD_RObj<'a>>(obj);
+    if (exp).nb_args() == (1_i32.wrapping_neg() as u32) {
+        let mut nb_args: u32 = (0_i32 as u32);
+        let mut rvalue_2: HSD_Rvalue<'a> = null(ctx);
+        {
+            rvalue_2 = (exp).rvalue();
+            'l1: while !Handle::is_null(rvalue_2) {
+                'c2: {
+                    nb_args = nb_args.wrapping_add(fns::HSD_GetNbBits(ctx, (rvalue_2).flags()));
+                }
+                rvalue_2 = (rvalue_2).next();
+            }
+        }
+        (exp).set_nb_args(nb_args);
+    }
+    if Handle::is_null(statics::sysdolphin__baselib__robj::arg_buf(ctx).get()) {
+        if statics::sysdolphin__baselib__robj::arg_buf_size(ctx).get() == (0_i32 as u32) {
+            statics::sysdolphin__baselib__robj::arg_buf_size(ctx).set((100_i32 as u32));
+        }
+        statics::sysdolphin__baselib__robj::arg_buf(ctx).set(Handle::cast::<Val<'a, F32>>(
+            fns::HSD_MemAlloc(
+                ctx,
+                (statics::sysdolphin__baselib__robj::arg_buf_size(ctx)
+                    .get()
+                    .wrapping_mul(4_u32) as i32),
+            ),
+        ));
+    }
+    if statics::sysdolphin__baselib__robj::arg_buf_size(ctx).get() < (exp).nb_args() {
+        fns::OSReport(
+            ctx,
+            cstr(ctx, 0x80406f2c),
+            &[
+                VarArg::Int((exp).nb_args() as u32),
+                VarArg::Int(statics::sysdolphin__baselib__robj::arg_buf_size(ctx).get() as u32),
+            ],
+        );
+        fns::HSD_Panic(
+            ctx,
+            cstr(ctx, 0x803b9580),
+            (0x45e_i32 as u32),
+            cstr(ctx, 0x803b9580),
+        );
+    }
+    cur_arg = statics::sysdolphin__baselib__robj::arg_buf(ctx).get();
+    temp_f31 = 57.295780181884766;
+    {
+        rvalue = (exp).rvalue();
+        'l3: while !Handle::is_null(rvalue) {
+            'c4: {
+                jobj = (rvalue).jobj();
+                (if !Handle::is_null((jobj)) {
+                    ({ () })
+                } else {
+                    fns::__assert(
+                        ctx,
+                        cstr(ctx, 0x803b9580),
+                        (0x2d8_i32 as u32),
+                        cstr(ctx, 0x803b9580),
+                    )
+                });
+                inl_HSD_JObjSetupMatrix_unfused(ctx, (rvalue).jobj());
+                {
+                    cur_bit = 1_i32;
+                    'l5: while (cur_bit != 0) && ((cur_bit as u32) <= (rvalue).flags()) {
+                        'c6: {
+                            's7: {
+                                let __case = match ((rvalue).flags() & (cur_bit as u32)) {
+                                    1_u32 => 0,
+                                    2_u32 => 1,
+                                    4_u32 => 2,
+                                    8_u32 => 3,
+                                    16_u32 => 4,
+                                    32_u32 => 5,
+                                    64_u32 => 6,
+                                    128_u32 => 7,
+                                    0x100_u32 => 8,
+                                    0x200_u32 => 9,
+                                    0x400_u32 => 10,
+                                    0x800_u32 => 10,
+                                    0x10000_u32 => 11,
+                                    0x20000_u32 => 12,
+                                    0x40000_u32 => 13,
+                                    0x100000_u32 => 14,
+                                    0x200000_u32 => 15,
+                                    0x400000_u32 => 16,
+                                    0x800000_u32 => 17,
+                                    0x1000000_u32 => 18,
+                                    0x2000000_u32 => 19,
+                                    _ => 20,
+                                };
+                                if __case <= 0 {
+                                    ({
+                                        let __t1 = cur_arg;
+                                        cur_arg = Handle::add(cur_arg, 1);
+                                        __t1
+                                    })
+                                    .set(fp::fmuls(temp_f31, (jobj).rotate().x()));
+                                    break 's7;
+                                }
+                                if __case <= 1 {
+                                    ({
+                                        let __t2 = cur_arg;
+                                        cur_arg = Handle::add(cur_arg, 1);
+                                        __t2
+                                    })
+                                    .set(fp::fmuls(temp_f31, (jobj).rotate().y()));
+                                    break 's7;
+                                }
+                                if __case <= 2 {
+                                    ({
+                                        let __t3 = cur_arg;
+                                        cur_arg = Handle::add(cur_arg, 1);
+                                        __t3
+                                    })
+                                    .set(fp::fmuls(temp_f31, (jobj).rotate().z()));
+                                    break 's7;
+                                }
+                                if __case <= 3 {
+                                    break 's7;
+                                }
+                                if __case <= 4 {
+                                    ({
+                                        let __t4 = cur_arg;
+                                        cur_arg = Handle::add(cur_arg, 1);
+                                        __t4
+                                    })
+                                    .set((jobj).translate().x());
+                                    break 's7;
+                                }
+                                if __case <= 5 {
+                                    ({
+                                        let __t5 = cur_arg;
+                                        cur_arg = Handle::add(cur_arg, 1);
+                                        __t5
+                                    })
+                                    .set((jobj).translate().y());
+                                    break 's7;
+                                }
+                                if __case <= 6 {
+                                    ({
+                                        let __t6 = cur_arg;
+                                        cur_arg = Handle::add(cur_arg, 1);
+                                        __t6
+                                    })
+                                    .set((jobj).translate().z());
+                                    break 's7;
+                                }
+                                if __case <= 7 {
+                                    ({
+                                        let __t7 = cur_arg;
+                                        cur_arg = Handle::add(cur_arg, 1);
+                                        __t7
+                                    })
+                                    .set((jobj).scale().x());
+                                    break 's7;
+                                }
+                                if __case <= 8 {
+                                    ({
+                                        let __t8 = cur_arg;
+                                        cur_arg = Handle::add(cur_arg, 1);
+                                        __t8
+                                    })
+                                    .set((jobj).scale().y());
+                                    break 's7;
+                                }
+                                if __case <= 9 {
+                                    ({
+                                        let __t9 = cur_arg;
+                                        cur_arg = Handle::add(cur_arg, 1);
+                                        __t9
+                                    })
+                                    .set((jobj).scale().z());
+                                    break 's7;
+                                }
+                                if __case <= 10 {
+                                    break 's7;
+                                }
+                                if __case <= 11 {
+                                    fns::HSD_MtxGetRotation(ctx, (jobj).mtx().get(0), sp2C);
+                                    ({
+                                        let __t10 = cur_arg;
+                                        cur_arg = Handle::add(cur_arg, 1);
+                                        __t10
+                                    })
+                                    .set(fp::fmuls(temp_f31, sp2C.x()));
+                                    break 's7;
+                                }
+                                if __case <= 12 {
+                                    fns::HSD_MtxGetRotation(ctx, (jobj).mtx().get(0), sp2C);
+                                    ({
+                                        let __t11 = cur_arg;
+                                        cur_arg = Handle::add(cur_arg, 1);
+                                        __t11
+                                    })
+                                    .set(fp::fmuls(temp_f31, sp2C.y()));
+                                    break 's7;
+                                }
+                                if __case <= 13 {
+                                    fns::HSD_MtxGetRotation(ctx, (jobj).mtx().get(0), sp2C);
+                                    ({
+                                        let __t12 = cur_arg;
+                                        cur_arg = Handle::add(cur_arg, 1);
+                                        __t12
+                                    })
+                                    .set(fp::fmuls(temp_f31, sp2C.z()));
+                                    break 's7;
+                                }
+                                if __case <= 14 {
+                                    ({
+                                        let __t13 = cur_arg;
+                                        cur_arg = Handle::add(cur_arg, 1);
+                                        __t13
+                                    })
+                                    .set((jobj).mtx().get(0_i32).at(3_i32).get());
+                                    break 's7;
+                                }
+                                if __case <= 15 {
+                                    ({
+                                        let __t14 = cur_arg;
+                                        cur_arg = Handle::add(cur_arg, 1);
+                                        __t14
+                                    })
+                                    .set((jobj).mtx().get(1_i32).at(3_i32).get());
+                                    break 's7;
+                                }
+                                if __case <= 16 {
+                                    ({
+                                        let __t15 = cur_arg;
+                                        cur_arg = Handle::add(cur_arg, 1);
+                                        __t15
+                                    })
+                                    .set((jobj).mtx().get(2_i32).at(3_i32).get());
+                                    break 's7;
+                                }
+                                if __case <= 17 {
+                                    fns::HSD_MtxGetScale(ctx, (jobj).mtx().get(0), scale);
+                                    ({
+                                        let __t16 = cur_arg;
+                                        cur_arg = Handle::add(cur_arg, 1);
+                                        __t16
+                                    })
+                                    .set(scale.x());
+                                    break 's7;
+                                }
+                                if __case <= 18 {
+                                    fns::HSD_MtxGetScale(ctx, (jobj).mtx().get(0), scale);
+                                    ({
+                                        let __t17 = cur_arg;
+                                        cur_arg = Handle::add(cur_arg, 1);
+                                        __t17
+                                    })
+                                    .set(scale.y());
+                                    break 's7;
+                                }
+                                if __case <= 19 {
+                                    fns::HSD_MtxGetScale(ctx, (jobj).mtx().get(0), scale);
+                                    ({
+                                        let __t18 = cur_arg;
+                                        cur_arg = Handle::add(cur_arg, 1);
+                                        __t18
+                                    })
+                                    .set(scale.z());
+                                    break 's7;
+                                }
+                            }
+                        }
+                        cur_bit = shl_i32(cur_bit, (1_i32 as u32));
+                    }
+                }
+            }
+            rvalue = (rvalue).next();
+        }
+    }
+    if ((exp).is_bytecode() != 0) {
+        sp1C.set_fv(fns::HSD_ByteCodeEval(
+            ctx,
+            (exp).expr().bytecode(),
+            statics::sysdolphin__baselib__robj::arg_buf(ctx).get(),
+            ((exp).nb_args() as i32),
+        ));
+    } else {
+        sp1C.set_fv(
+            (exp)
+                .expr()
+                .func()
+                .call::<_, f64>((Handle::cast::<Addr<'a>>(
+                    statics::sysdolphin__baselib__robj::arg_buf(ctx).get(),
+                ),)),
+        );
+    }
+    if r#type.wrapping_sub((1_i32 as u32)) <= (2_i32 as u32) {
+        sp1C.set_fv(fp::fmuls(sp1C.fv(), 0.01745329238474369));
+    }
+    update_func.call::<_, ()>((obj, (r#type as i32), sp1C));
+}
+
 pub fn dummy_func<'a>(ctx: &'a Ctx, unused: Addr<'a>) -> f64 {
     let mut unused = unused;
     return 0.0;
@@ -904,6 +1451,36 @@ fn inl_HSD_RObjGetConstraintType_unfused<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>) -
     return ((robj).flags() & (0xfffffff_i32 as u32));
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b9580),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b9580),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
+fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+        return;
+    }
+    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
+}
+
 fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     let mut x = x;
     let mut y: f64 = 0.0;
@@ -980,6 +1557,85 @@ fn inl_jobj_parent<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
         return null::<HSD_JObj<'a>>(ctx);
     }
     return (jobj).parent();
+}
+
+fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b9580),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b9580),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
+fn inl_HSD_JObjSetupMatrix<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+        return;
+    }
+    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
+}
+
+fn inl_HSD_JObjGetMtxPtr<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'a, F32, 4> {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b9580),
+            (0x2bb_i32 as u32),
+            cstr(ctx, 0x803b9580),
+        )
+    });
+    inl_HSD_JObjSetupMatrix(ctx, jobj);
+    return (jobj).mtx().get(0);
+}
+
+fn inl_HSD_MtxColVec<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, col: i32, vec: Vec<'a>) {
+    let mut mtx = mtx;
+    let mut col = col;
+    let mut vec = vec;
+    (vec).set_x((Handle::add(mtx, 0_i32)).at(col).get());
+    (vec).set_y((Handle::add(mtx, 1_i32)).at(col).get());
+    (vec).set_z((Handle::add(mtx, 2_i32)).at(col).get());
+}
+
+fn inl_HSD_MtxColMag<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, col: i32) -> f64 {
+    let mut mtx = mtx;
+    let mut col = col;
+    return inl_sqrtf(
+        ctx,
+        fp::fadds(
+            fp::fadds(
+                (fp::fmuls(
+                    (Handle::add(mtx, 0_i32)).at(col).get(),
+                    (Handle::add(mtx, 0_i32)).at(col).get(),
+                )),
+                (fp::fmuls(
+                    (Handle::add(mtx, 1_i32)).at(col).get(),
+                    (Handle::add(mtx, 1_i32)).at(col).get(),
+                )),
+            ),
+            (fp::fmuls(
+                (Handle::add(mtx, 2_i32)).at(col).get(),
+                (Handle::add(mtx, 2_i32)).at(col).get(),
+            )),
+        ),
+    );
 }
 
 fn inl_RObjHasLimitReftype_unfused<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>) -> i32 {
@@ -1292,6 +1948,14 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x8037b230,
+        |ctx| {
+            let (a0, a1, a2): (HSD_RObj<'_>, i32, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(HSD_RObjGetGlobalPosition(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
         0x8037b400,
         |ctx| {
             let (a0, a1, a2, a3, a4): (Vec<'_>, Vec<'_>, Vec<'_>, Addr<'_>, FnPtr<'_>) =
@@ -1305,6 +1969,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1, a2): (HSD_RObj<'_>, Addr<'_>, FnPtr<'_>) = Args::take_all(ctx);
             Ret::put(resolveCnsDirUp(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8037b7b0,
+        |ctx| {
+            let (a0, a1, a2): (HSD_RObj<'_>, Addr<'_>, FnPtr<'_>) = Args::take_all(ctx);
+            Ret::put(resolveCnsOrientation(ctx, a0, a1, a2), ctx);
         },
         Returns::Nothing,
     );
@@ -1368,6 +2040,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_RObj<'_>,) = Args::take_all(ctx);
             Ret::put(HSD_RObjFree(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8037c4cc,
+        |ctx| {
+            let (a0, a1, a2, a3): (HSD_Exp<'_>, u32, Addr<'_>, FnPtr<'_>) = Args::take_all(ctx);
+            Ret::put(expEvaluate(ctx, a0, a1, a2, a3), ctx);
         },
         Returns::Nothing,
     );

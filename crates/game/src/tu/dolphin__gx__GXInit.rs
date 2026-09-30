@@ -69,6 +69,505 @@ pub fn __GXDefaultTlutRegionCallback<'a>(ctx: &'a Ctx, idx: u32) -> _GXTlutRegio
     return (fns::gx(ctx).get()).TlutRegions().get((idx as i32));
 }
 
+pub fn __GXInitGX<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x78);
+    let identity_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let clear: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
+    let black: _GXColor<'a> = frame_at(ctx, &__frame, 0x34);
+    let white: _GXColor<'a> = frame_at(ctx, &__frame, 0x38);
+    clear.set_r((64_i32 as u8));
+    clear.set_g((64_i32 as u8));
+    clear.set_b((64_i32 as u8));
+    clear.set_a((255_i32 as u8));
+    black.set_r((0_i32 as u8));
+    black.set_g((0_i32 as u8));
+    black.set_b((0_i32 as u8));
+    black.set_a((0_i32 as u8));
+    white.set_r((255_i32 as u8));
+    white.set_g((255_i32 as u8));
+    white.set_b((255_i32 as u8));
+    white.set_a((255_i32 as u8));
+    let mut i: u32 = 0;
+    let mut rmode: _GXRenderModeObj<'a> = null(ctx);
+    's1: {
+        let __case = match fns::VIGetTvFormat(ctx) {
+            0_u32 => 0,
+            1_u32 => 1,
+            2_u32 => 2,
+            _ => 3,
+        };
+        if __case <= 0 {
+            rmode = fns::GXNtsc480IntDf(ctx);
+            break 's1;
+        }
+        if __case <= 1 {
+            rmode = fns::GXPal528IntDf(ctx);
+            break 's1;
+        }
+        if __case <= 2 {
+            rmode = fns::GXMpal480IntDf(ctx);
+            break 's1;
+        }
+        if __case <= 3 {
+            rmode = fns::GXNtsc480IntDf(ctx);
+            break 's1;
+        }
+    }
+    fns::GXSetCopyClear(ctx, clear, (0xffffff_i32 as u32));
+    inl_GXSetTexCoordGen_unfused(
+        ctx,
+        (enums::GX_TEXCOORD0 as i32),
+        (enums::GX_TG_MTX2x4 as i32),
+        (enums::GX_TG_TEX0 as i32),
+        60_u32,
+    );
+    inl_GXSetTexCoordGen_unfused(
+        ctx,
+        (enums::GX_TEXCOORD1 as i32),
+        (enums::GX_TG_MTX2x4 as i32),
+        (enums::GX_TG_TEX1 as i32),
+        60_u32,
+    );
+    inl_GXSetTexCoordGen_unfused(
+        ctx,
+        (enums::GX_TEXCOORD2 as i32),
+        (enums::GX_TG_MTX2x4 as i32),
+        (enums::GX_TG_TEX2 as i32),
+        60_u32,
+    );
+    inl_GXSetTexCoordGen_unfused(
+        ctx,
+        (enums::GX_TEXCOORD3 as i32),
+        (enums::GX_TG_MTX2x4 as i32),
+        (enums::GX_TG_TEX3 as i32),
+        60_u32,
+    );
+    inl_GXSetTexCoordGen_unfused(
+        ctx,
+        (enums::GX_TEXCOORD4 as i32),
+        (enums::GX_TG_MTX2x4 as i32),
+        (enums::GX_TG_TEX4 as i32),
+        60_u32,
+    );
+    inl_GXSetTexCoordGen_unfused(
+        ctx,
+        (enums::GX_TEXCOORD5 as i32),
+        (enums::GX_TG_MTX2x4 as i32),
+        (enums::GX_TG_TEX5 as i32),
+        60_u32,
+    );
+    inl_GXSetTexCoordGen_unfused(
+        ctx,
+        (enums::GX_TEXCOORD6 as i32),
+        (enums::GX_TG_MTX2x4 as i32),
+        (enums::GX_TG_TEX6 as i32),
+        60_u32,
+    );
+    inl_GXSetTexCoordGen_unfused(
+        ctx,
+        (enums::GX_TEXCOORD7 as i32),
+        (enums::GX_TG_MTX2x4 as i32),
+        (enums::GX_TG_TEX7 as i32),
+        60_u32,
+    );
+    fns::GXSetNumTexGens(ctx, (1_i32 as u8));
+    fns::GXClearVtxDesc(ctx);
+    fns::GXInvalidateVtxCache(ctx);
+    fns::GXSetLineWidth(ctx, (6_i32 as u8), 0_i32);
+    fns::GXSetPointSize(ctx, (6_i32 as u8), 0_i32);
+    fns::GXEnableTexOffsets(ctx, 0_i32, (0_i32 as u8), (0_i32 as u8));
+    fns::GXEnableTexOffsets(ctx, 1_i32, (0_i32 as u8), (0_i32 as u8));
+    fns::GXEnableTexOffsets(ctx, 2_i32, (0_i32 as u8), (0_i32 as u8));
+    fns::GXEnableTexOffsets(ctx, 3_i32, (0_i32 as u8), (0_i32 as u8));
+    fns::GXEnableTexOffsets(ctx, 4_i32, (0_i32 as u8), (0_i32 as u8));
+    fns::GXEnableTexOffsets(ctx, 5_i32, (0_i32 as u8), (0_i32 as u8));
+    fns::GXEnableTexOffsets(ctx, 6_i32, (0_i32 as u8), (0_i32 as u8));
+    fns::GXEnableTexOffsets(ctx, 7_i32, (0_i32 as u8), (0_i32 as u8));
+    identity_mtx.get(0_i32).at(0_i32).set(1.0);
+    identity_mtx.get(0_i32).at(1_i32).set(0.0);
+    identity_mtx.get(0_i32).at(2_i32).set(0.0);
+    identity_mtx.get(0_i32).at(3_i32).set(0.0);
+    identity_mtx.get(1_i32).at(0_i32).set(0.0);
+    identity_mtx.get(1_i32).at(1_i32).set(1.0);
+    identity_mtx.get(1_i32).at(2_i32).set(0.0);
+    identity_mtx.get(1_i32).at(3_i32).set(0.0);
+    identity_mtx.get(2_i32).at(0_i32).set(0.0);
+    identity_mtx.get(2_i32).at(1_i32).set(0.0);
+    identity_mtx.get(2_i32).at(2_i32).set(1.0);
+    identity_mtx.get(2_i32).at(3_i32).set(0.0);
+    fns::GXLoadPosMtxImm(ctx, identity_mtx.get(0), ((enums::GX_PNMTX0 as i32) as u32));
+    fns::GXLoadNrmMtxImm(ctx, identity_mtx.get(0), ((enums::GX_PNMTX0 as i32) as u32));
+    fns::GXSetCurrentMtx(ctx, ((enums::GX_PNMTX0 as i32) as u32));
+    fns::GXLoadTexMtxImm(
+        ctx,
+        identity_mtx.get(0),
+        ((enums::GX_IDENTITY as i32) as u32),
+        (enums::GX_MTX3x4 as i32),
+    );
+    fns::GXLoadTexMtxImm(
+        ctx,
+        identity_mtx.get(0),
+        ((enums::GX_PTIDENTITY as i32) as u32),
+        (enums::GX_MTX3x4 as i32),
+    );
+    fns::GXSetViewport(
+        ctx,
+        0.0,
+        0.0,
+        fp::frsp((rmode).fbWidth() as f64),
+        fp::frsp((rmode).xfbHeight() as f64),
+        0.0,
+        1.0,
+    );
+    fns::GXSetCoPlanar(ctx, (0_i32 as u8));
+    fns::GXSetCullMode(ctx, (enums::GX_CULL_BACK as i32));
+    fns::GXSetClipMode(ctx, (enums::GX_CLIP_ENABLE as i32));
+    fns::GXSetScissor(
+        ctx,
+        (0_i32 as u32),
+        (0_i32 as u32),
+        ((rmode).fbWidth() as u32),
+        ((rmode).efbHeight() as u32),
+    );
+    fns::GXSetScissorBoxOffset(ctx, 0_i32, 0_i32);
+    fns::GXSetNumChans(ctx, (0_i32 as u8));
+    fns::GXSetChanCtrl(
+        ctx,
+        (enums::GX_COLOR0A0 as i32),
+        (0_i32 as u8),
+        (enums::GX_SRC_REG as i32),
+        (enums::GX_SRC_VTX as i32),
+        ((enums::GX_LIGHT_NULL as i32) as u32),
+        (enums::GX_DF_NONE as i32),
+        (enums::GX_AF_NONE as i32),
+    );
+    fns::GXSetChanAmbColor(ctx, (enums::GX_COLOR0A0 as i32), black);
+    fns::GXSetChanMatColor(ctx, (enums::GX_COLOR0A0 as i32), white);
+    fns::GXSetChanCtrl(
+        ctx,
+        (enums::GX_COLOR1A1 as i32),
+        (0_i32 as u8),
+        (enums::GX_SRC_REG as i32),
+        (enums::GX_SRC_VTX as i32),
+        ((enums::GX_LIGHT_NULL as i32) as u32),
+        (enums::GX_DF_NONE as i32),
+        (enums::GX_AF_NONE as i32),
+    );
+    fns::GXSetChanAmbColor(ctx, (enums::GX_COLOR1A1 as i32), black);
+    fns::GXSetChanMatColor(ctx, (enums::GX_COLOR1A1 as i32), white);
+    fns::GXInvalidateTexAll(ctx);
+    (fns::gx(ctx).get()).set_nextTexRgn((0_i32 as u32));
+    (fns::gx(ctx).get()).set_nextTexRgnCI((0_i32 as u32));
+    let _ = fns::GXSetTexRegionCallback(ctx, fnptr(ctx, 0x8033a6e0));
+    let _ = fns::GXSetTlutRegionCallback(ctx, fnptr(ctx, 0x8033a75c));
+    fns::GXSetTevOrder(
+        ctx,
+        (enums::GX_TEVSTAGE0 as i32),
+        (enums::GX_TEXCOORD0 as i32),
+        (enums::GX_TEXMAP0 as i32),
+        (enums::GX_COLOR0A0 as i32),
+    );
+    fns::GXSetTevOrder(
+        ctx,
+        (enums::GX_TEVSTAGE1 as i32),
+        (enums::GX_TEXCOORD1 as i32),
+        (enums::GX_TEXMAP1 as i32),
+        (enums::GX_COLOR0A0 as i32),
+    );
+    fns::GXSetTevOrder(
+        ctx,
+        (enums::GX_TEVSTAGE2 as i32),
+        (enums::GX_TEXCOORD2 as i32),
+        (enums::GX_TEXMAP2 as i32),
+        (enums::GX_COLOR0A0 as i32),
+    );
+    fns::GXSetTevOrder(
+        ctx,
+        (enums::GX_TEVSTAGE3 as i32),
+        (enums::GX_TEXCOORD3 as i32),
+        (enums::GX_TEXMAP3 as i32),
+        (enums::GX_COLOR0A0 as i32),
+    );
+    fns::GXSetTevOrder(
+        ctx,
+        (enums::GX_TEVSTAGE4 as i32),
+        (enums::GX_TEXCOORD4 as i32),
+        (enums::GX_TEXMAP4 as i32),
+        (enums::GX_COLOR0A0 as i32),
+    );
+    fns::GXSetTevOrder(
+        ctx,
+        (enums::GX_TEVSTAGE5 as i32),
+        (enums::GX_TEXCOORD5 as i32),
+        (enums::GX_TEXMAP5 as i32),
+        (enums::GX_COLOR0A0 as i32),
+    );
+    fns::GXSetTevOrder(
+        ctx,
+        (enums::GX_TEVSTAGE6 as i32),
+        (enums::GX_TEXCOORD6 as i32),
+        (enums::GX_TEXMAP6 as i32),
+        (enums::GX_COLOR0A0 as i32),
+    );
+    fns::GXSetTevOrder(
+        ctx,
+        (enums::GX_TEVSTAGE7 as i32),
+        (enums::GX_TEXCOORD7 as i32),
+        (enums::GX_TEXMAP7 as i32),
+        (enums::GX_COLOR0A0 as i32),
+    );
+    fns::GXSetTevOrder(
+        ctx,
+        (enums::GX_TEVSTAGE8 as i32),
+        (enums::GX_TEXCOORD_NULL as i32),
+        (enums::GX_TEXMAP_NULL as i32),
+        (enums::GX_COLOR_NULL as i32),
+    );
+    fns::GXSetTevOrder(
+        ctx,
+        (enums::GX_TEVSTAGE9 as i32),
+        (enums::GX_TEXCOORD_NULL as i32),
+        (enums::GX_TEXMAP_NULL as i32),
+        (enums::GX_COLOR_NULL as i32),
+    );
+    fns::GXSetTevOrder(
+        ctx,
+        (enums::GX_TEVSTAGE10 as i32),
+        (enums::GX_TEXCOORD_NULL as i32),
+        (enums::GX_TEXMAP_NULL as i32),
+        (enums::GX_COLOR_NULL as i32),
+    );
+    fns::GXSetTevOrder(
+        ctx,
+        (enums::GX_TEVSTAGE11 as i32),
+        (enums::GX_TEXCOORD_NULL as i32),
+        (enums::GX_TEXMAP_NULL as i32),
+        (enums::GX_COLOR_NULL as i32),
+    );
+    fns::GXSetTevOrder(
+        ctx,
+        (enums::GX_TEVSTAGE12 as i32),
+        (enums::GX_TEXCOORD_NULL as i32),
+        (enums::GX_TEXMAP_NULL as i32),
+        (enums::GX_COLOR_NULL as i32),
+    );
+    fns::GXSetTevOrder(
+        ctx,
+        (enums::GX_TEVSTAGE13 as i32),
+        (enums::GX_TEXCOORD_NULL as i32),
+        (enums::GX_TEXMAP_NULL as i32),
+        (enums::GX_COLOR_NULL as i32),
+    );
+    fns::GXSetTevOrder(
+        ctx,
+        (enums::GX_TEVSTAGE14 as i32),
+        (enums::GX_TEXCOORD_NULL as i32),
+        (enums::GX_TEXMAP_NULL as i32),
+        (enums::GX_COLOR_NULL as i32),
+    );
+    fns::GXSetTevOrder(
+        ctx,
+        (enums::GX_TEVSTAGE15 as i32),
+        (enums::GX_TEXCOORD_NULL as i32),
+        (enums::GX_TEXMAP_NULL as i32),
+        (enums::GX_COLOR_NULL as i32),
+    );
+    fns::GXSetNumTevStages(ctx, (1_i32 as u8));
+    fns::GXSetTevOp(
+        ctx,
+        (enums::GX_TEVSTAGE0 as i32),
+        (enums::GX_REPLACE as i32),
+    );
+    fns::GXSetAlphaCompare(
+        ctx,
+        (enums::GX_ALWAYS as i32),
+        (0_i32 as u8),
+        (enums::GX_AOP_AND as i32),
+        (enums::GX_ALWAYS as i32),
+        (0_i32 as u8),
+    );
+    fns::GXSetZTexture(
+        ctx,
+        (enums::GX_ZT_DISABLE as i32),
+        (enums::GX_TF_Z8 as i32),
+        (0_i32 as u32),
+    );
+    {
+        i = ((enums::GX_TEVSTAGE0 as i32) as u32);
+        'l2: while i < ((enums::GX_MAX_TEVSTAGE as i32) as u32) {
+            'c3: {
+                fns::GXSetTevKColorSel(ctx, (i as i32), (enums::GX_TEV_KCSEL_1_4 as i32));
+                fns::GXSetTevKAlphaSel(ctx, (i as i32), (enums::GX_TEV_KASEL_1 as i32));
+                fns::GXSetTevSwapMode(
+                    ctx,
+                    (i as i32),
+                    (enums::GX_TEV_SWAP0 as i32),
+                    (enums::GX_TEV_SWAP0 as i32),
+                );
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    fns::GXSetTevSwapModeTable(
+        ctx,
+        (enums::GX_TEV_SWAP0 as i32),
+        (enums::GX_CH_RED as i32),
+        (enums::GX_CH_GREEN as i32),
+        (enums::GX_CH_BLUE as i32),
+        (enums::GX_CH_ALPHA as i32),
+    );
+    fns::GXSetTevSwapModeTable(
+        ctx,
+        (enums::GX_TEV_SWAP1 as i32),
+        (enums::GX_CH_RED as i32),
+        (enums::GX_CH_RED as i32),
+        (enums::GX_CH_RED as i32),
+        (enums::GX_CH_ALPHA as i32),
+    );
+    fns::GXSetTevSwapModeTable(
+        ctx,
+        (enums::GX_TEV_SWAP2 as i32),
+        (enums::GX_CH_GREEN as i32),
+        (enums::GX_CH_GREEN as i32),
+        (enums::GX_CH_GREEN as i32),
+        (enums::GX_CH_ALPHA as i32),
+    );
+    fns::GXSetTevSwapModeTable(
+        ctx,
+        (enums::GX_TEV_SWAP3 as i32),
+        (enums::GX_CH_BLUE as i32),
+        (enums::GX_CH_BLUE as i32),
+        (enums::GX_CH_BLUE as i32),
+        (enums::GX_CH_ALPHA as i32),
+    );
+    {
+        i = ((enums::GX_TEVSTAGE0 as i32) as u32);
+        'l4: while i < ((enums::GX_MAX_TEVSTAGE as i32) as u32) {
+            'c5: {
+                fns::GXSetTevDirect(ctx, (i as i32));
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    fns::GXSetNumIndStages(ctx, (0_i32 as u8));
+    fns::GXSetIndTexCoordScale(
+        ctx,
+        (enums::GX_INDTEXSTAGE0 as i32),
+        (enums::GX_ITS_1 as i32),
+        (enums::GX_ITS_1 as i32),
+    );
+    fns::GXSetIndTexCoordScale(
+        ctx,
+        (enums::GX_INDTEXSTAGE1 as i32),
+        (enums::GX_ITS_1 as i32),
+        (enums::GX_ITS_1 as i32),
+    );
+    fns::GXSetIndTexCoordScale(
+        ctx,
+        (enums::GX_INDTEXSTAGE2 as i32),
+        (enums::GX_ITS_1 as i32),
+        (enums::GX_ITS_1 as i32),
+    );
+    fns::GXSetIndTexCoordScale(
+        ctx,
+        (enums::GX_INDTEXSTAGE3 as i32),
+        (enums::GX_ITS_1 as i32),
+        (enums::GX_ITS_1 as i32),
+    );
+    fns::GXSetFog(
+        ctx,
+        (enums::GX_FOG_NONE as i32),
+        0.0,
+        1.0,
+        0.10000000149011612,
+        1.0,
+        black,
+    );
+    fns::GXSetFogRangeAdj(
+        ctx,
+        (0_i32 as u8),
+        (0_i32 as u16),
+        null::<_GXFogAdjTable<'a>>(ctx),
+    );
+    fns::GXSetBlendMode(
+        ctx,
+        (enums::GX_BM_NONE as i32),
+        (enums::GX_BL_SRCALPHA as i32),
+        (enums::GX_BL_INVSRCALPHA as i32),
+        (enums::GX_LO_CLEAR as i32),
+    );
+    fns::GXSetColorUpdate(ctx, (1_i32 as u8));
+    fns::GXSetAlphaUpdate(ctx, (1_i32 as u8));
+    fns::GXSetZMode(ctx, (1_i32 as u8), (enums::GX_LEQUAL as i32), (1_i32 as u8));
+    fns::GXSetZCompLoc(ctx, (1_i32 as u8));
+    fns::GXSetDither(ctx, (1_i32 as u8));
+    fns::GXSetDstAlpha(ctx, (0_i32 as u8), (0_i32 as u8));
+    fns::GXSetPixelFmt(
+        ctx,
+        (enums::GX_PF_RGB8_Z24 as i32),
+        (enums::GX_ZC_LINEAR as i32),
+    );
+    fns::GXSetFieldMask(ctx, (1_i32 as u8), (1_i32 as u8));
+    fns::GXSetFieldMode(
+        ctx,
+        (rmode).field_rendering(),
+        ((if ((rmode).viHeight() as i32) == 2_i32.wrapping_mul(((rmode).xfbHeight() as i32)) {
+            ((1_i32 as u8) as i32)
+        } else {
+            ((0_i32 as u8) as i32)
+        }) as u8),
+    );
+    fns::GXSetDispCopySrc(
+        ctx,
+        (0_i32 as u16),
+        (0_i32 as u16),
+        (rmode).fbWidth(),
+        (rmode).efbHeight(),
+    );
+    fns::GXSetDispCopyDst(ctx, (rmode).fbWidth(), (rmode).efbHeight());
+    let _ = fns::GXSetDispCopyYScale(
+        ctx,
+        fp::fdivs(
+            fp::frsp(((rmode).xfbHeight()) as f64),
+            fp::frsp(((rmode).efbHeight()) as f64),
+        ),
+    );
+    fns::GXSetCopyClamp(
+        ctx,
+        ((enums::GX_CLAMP_TOP as i32) | (enums::GX_CLAMP_BOTTOM as i32)),
+    );
+    fns::GXSetCopyFilter(
+        ctx,
+        (rmode).aa(),
+        Handle::cast::<Arr<'a, ArrV<'a, u8, 2>, 12>>((rmode).sample_pattern().get(0)).get(0),
+        (1_i32 as u8),
+        Handle::cast::<ArrV<'a, u8, 7>>((rmode).vfilter().at(0)).at(0),
+    );
+    fns::GXSetDispCopyGamma(ctx, (enums::GX_GM_1_0 as i32));
+    fns::GXSetDispCopyFrame2Field(ctx, (enums::GX_COPY_PROGRESSIVE as i32));
+    fns::GXClearBoundingBox(ctx);
+    fns::GXPokeColorUpdate(ctx, (1_i32 as u8));
+    fns::GXPokeAlphaUpdate(ctx, (1_i32 as u8));
+    fns::GXPokeDither(ctx, (0_i32 as u8));
+    fns::GXPokeBlendMode(
+        ctx,
+        (enums::GX_BM_NONE as i32),
+        (enums::GX_BL_ZERO as i32),
+        (enums::GX_BL_ONE as i32),
+        (enums::GX_LO_SET as i32),
+    );
+    fns::GXPokeAlphaMode(ctx, (enums::GX_ALWAYS as i32), (0_i32 as u8));
+    fns::GXPokeAlphaRead(ctx, (enums::GX_READ_FF as i32));
+    fns::GXPokeDstAlpha(ctx, (0_i32 as u8), (0_i32 as u8));
+    fns::GXPokeZMode(ctx, (1_i32 as u8), (enums::GX_ALWAYS as i32), (1_i32 as u8));
+    fns::GXSetGPMetric(
+        ctx,
+        (enums::GX_PERF0_NONE as i32),
+        (enums::GX_PERF1_NONE as i32),
+    );
+    fns::GXClearGPMetric(ctx);
+}
+
 fn inl_GXSetTexCoordGen_unfused<'a>(
     ctx: &'a Ctx,
     dst_coord: i32,
@@ -108,5 +607,12 @@ pub fn register(ctx: &Ctx) {
             Ret::put(__GXDefaultTlutRegionCallback(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x8033af40,
+        |ctx| {
+            Ret::put(__GXInitGX(ctx), ctx);
+        },
+        Returns::Nothing,
     );
 }

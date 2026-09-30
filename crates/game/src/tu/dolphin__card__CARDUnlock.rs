@@ -170,6 +170,187 @@ pub fn DummyLen<'a>(ctx: &'a Ctx) -> i32 {
     return tmp;
 }
 
+pub fn __CARDUnlock<'a>(ctx: &'a Ctx, chan: i32, flashID: Val<'a, u8>) -> i32 {
+    let __frame = ctx.stack_frame(0x110);
+    let rbuf: ArrV<'a, u8, 64> = frame_at(ctx, &__frame, 0x0);
+    let mut chan = chan;
+    let mut flashID = flashID;
+    let mut init_val: u32 = 0;
+    let mut data: u32 = 0;
+    let mut dummy: i32 = 0;
+    let mut rlen: i32 = 0;
+    let mut rshift: u32 = 0;
+    let mut fsts: u8 = 0;
+    let mut wk: u32 = 0;
+    let mut wk1: u32 = 0;
+    let mut Ans1: u32 = (0_i32 as u32);
+    let mut Ans2: u32 = (0_i32 as u32);
+    let mut dp: Val<'a, u32> = null(ctx);
+    let mut para1A: u32 = (0_i32 as u32);
+    let mut para1B: u32 = (0_i32 as u32);
+    let mut para2A: u32 = (0_i32 as u32);
+    let mut para2B: u32 = (0_i32 as u32);
+    let mut card: CARDControl<'a> = null(ctx);
+    let mut task: STRUCT_DSP_TASK<'a> = null(ctx);
+    let mut param: CARDDecParam<'a> = null(ctx);
+    let mut input: Val<'a, u8> = null(ctx);
+    let mut output: Val<'a, u8> = null(ctx);
+    card = fns::__CARDBlock(ctx).get(chan);
+    task = (card).task();
+    param = Handle::cast::<CARDDecParam<'a>>((card).workArea());
+    input = (Handle::add(Handle::cast::<Val<'a, u8>>(param), (16_u32 as i32)));
+    input = ptr::<Val<'a, u8>>(
+        ctx,
+        ((Handle::addr((input))
+            .wrapping_add((32_i32 as u32))
+            .wrapping_sub((1_i32 as u32)))
+            & ((!(32_i32.wrapping_sub(1_i32))) as u32)) as u32,
+    );
+    output = Handle::add(input, 32_i32);
+    fsts = (0_i32 as u8);
+    init_val = inl_GetInitVal_unfused(ctx);
+    dummy = statics::dolphin__card__CARDUnlock::DummyLen(ctx);
+    rlen = dummy;
+    if statics::dolphin__card__CARDUnlock::ReadArrayUnlock(
+        ctx,
+        chan,
+        init_val,
+        Handle::cast::<Addr<'a>>(rbuf.at(0)),
+        rlen,
+        0_i32,
+    ) < 0_i32
+    {
+        return (3_i32.wrapping_neg());
+    }
+    rshift = ((dummy.wrapping_mul(8_i32).wrapping_add(1_i32)) as u32);
+    wk = inl_exnor_1st_unfused(ctx, init_val, rshift);
+    wk1 = (!(((wk ^ (shr_u32(wk, (7_i32 as u32)))) ^ (shr_u32(wk, (15_i32 as u32))))
+        ^ (shr_u32(wk, (23_i32 as u32)))));
+    (card).set_scramble((wk | ((shl_u32(wk1, (31_i32 as u32))) & 0x80000000_u32)));
+    (card).set_scramble(statics::dolphin__card__CARDUnlock::bitrev(
+        ctx,
+        (card).scramble(),
+    ));
+    dummy = statics::dolphin__card__CARDUnlock::DummyLen(ctx);
+    rlen = 20_i32.wrapping_add(dummy);
+    data = (0_i32 as u32);
+    if statics::dolphin__card__CARDUnlock::ReadArrayUnlock(
+        ctx,
+        chan,
+        data,
+        Handle::cast::<Addr<'a>>(rbuf.at(0)),
+        rlen,
+        1_i32,
+    ) < 0_i32
+    {
+        return (3_i32.wrapping_neg());
+    }
+    dp = Handle::cast::<Val<'a, u32>>(rbuf.at(0));
+    para1A = ({
+        let __t1 = dp;
+        dp = Handle::add(dp, 1);
+        __t1
+    })
+    .get();
+    para1B = ({
+        let __t2 = dp;
+        dp = Handle::add(dp, 1);
+        __t2
+    })
+    .get();
+    Ans1 = ({
+        let __t3 = dp;
+        dp = Handle::add(dp, 1);
+        __t3
+    })
+    .get();
+    para2A = ({
+        let __t4 = dp;
+        dp = Handle::add(dp, 1);
+        __t4
+    })
+    .get();
+    para2B = ({
+        let __t5 = dp;
+        dp = Handle::add(dp, 1);
+        __t5
+    })
+    .get();
+    para1A = (para1A ^ (card).scramble());
+    rshift = (32_i32 as u32);
+    wk = inl_exnor_unfused(ctx, (card).scramble(), rshift);
+    wk1 = (!(((wk ^ (shl_u32(wk, (7_i32 as u32)))) ^ (shl_u32(wk, (15_i32 as u32))))
+        ^ (shl_u32(wk, (23_i32 as u32)))));
+    (card).set_scramble((wk | ((shr_u32(wk1, (31_i32 as u32))) & (1_i32 as u32))));
+    para1B = (para1B ^ (card).scramble());
+    rshift = (32_i32 as u32);
+    wk = inl_exnor_unfused(ctx, (card).scramble(), rshift);
+    wk1 = (!(((wk ^ (shl_u32(wk, (7_i32 as u32)))) ^ (shl_u32(wk, (15_i32 as u32))))
+        ^ (shl_u32(wk, (23_i32 as u32)))));
+    (card).set_scramble((wk | ((shr_u32(wk1, (31_i32 as u32))) & (1_i32 as u32))));
+    Ans1 = (Ans1 ^ (card).scramble());
+    rshift = (32_i32 as u32);
+    wk = inl_exnor_unfused(ctx, (card).scramble(), rshift);
+    wk1 = (!(((wk ^ (shl_u32(wk, (7_i32 as u32)))) ^ (shl_u32(wk, (15_i32 as u32))))
+        ^ (shl_u32(wk, (23_i32 as u32)))));
+    (card).set_scramble((wk | ((shr_u32(wk1, (31_i32 as u32))) & (1_i32 as u32))));
+    para2A = (para2A ^ (card).scramble());
+    rshift = (32_i32 as u32);
+    wk = inl_exnor_unfused(ctx, (card).scramble(), rshift);
+    wk1 = (!(((wk ^ (shl_u32(wk, (7_i32 as u32)))) ^ (shl_u32(wk, (15_i32 as u32))))
+        ^ (shl_u32(wk, (23_i32 as u32)))));
+    (card).set_scramble((wk | ((shr_u32(wk1, (31_i32 as u32))) & (1_i32 as u32))));
+    para2B = (para2B ^ (card).scramble());
+    rshift = ((dummy.wrapping_mul(8_i32)) as u32);
+    wk = inl_exnor_unfused(ctx, (card).scramble(), rshift);
+    wk1 = (!(((wk ^ (shl_u32(wk, (7_i32 as u32)))) ^ (shl_u32(wk, (15_i32 as u32))))
+        ^ (shl_u32(wk, (23_i32 as u32)))));
+    (card).set_scramble((wk | ((shr_u32(wk1, (31_i32 as u32))) & (1_i32 as u32))));
+    rshift = (32_i32.wrapping_add(1_i32) as u32);
+    wk = inl_exnor_unfused(ctx, (card).scramble(), rshift);
+    wk1 = (!(((wk ^ (shl_u32(wk, (7_i32 as u32)))) ^ (shl_u32(wk, (15_i32 as u32))))
+        ^ (shl_u32(wk, (23_i32 as u32)))));
+    (card).set_scramble((wk | ((shr_u32(wk1, (31_i32 as u32))) & (1_i32 as u32))));
+    (Handle::cast::<Val<'a, u32>>((Handle::add(input, 0_i32)))).set(para2A);
+    (Handle::cast::<Val<'a, u32>>((Handle::add(input, 4_i32)))).set(para2B);
+    (param).set_inputAddr(input);
+    (param).set_inputLength((8_i32 as u32));
+    (param).set_outputAddr(output);
+    (param).set_aramAddr((0_i32 as u32));
+    fns::DCFlushRange(ctx, Handle::cast::<Addr<'a>>(input), (8_i32 as u32));
+    fns::DCInvalidateRange(ctx, Handle::cast::<Addr<'a>>(output), (4_i32 as u32));
+    fns::DCFlushRange(ctx, Handle::cast::<Addr<'a>>(param), 16_u32);
+    (task).set_priority((255_i32 as u32));
+    (task).set_iram_mmem_addr(ptr::<Val<'a, u16>>(
+        ctx,
+        (Handle::addr(statics::dolphin__card__CARDUnlock::CardData(ctx).at(0))
+            .wrapping_sub(((shl_i32(0x8000_i32, (16_i32 as u32))) as u32))) as u32,
+    ));
+    (task).set_iram_length((0x160_i32 as u32));
+    (task).set_iram_addr((0_i32 as u32));
+    (task).set_dsp_init_vector((16_i32 as u16));
+    (task).set_init_cb(fnptr(ctx, 0x8035438c));
+    (task).set_res_cb(null::<FnPtr<'a>>(ctx));
+    (task).set_done_cb(fnptr(ctx, 0x803543fc));
+    (task).set_req_cb(null::<FnPtr<'a>>(ctx));
+    let _ = fns::DSPAddTask(ctx, task);
+    dp = Handle::cast::<Val<'a, u32>>(Handle::cast::<ArrV<'a, u8, 12>>(flashID).at(0));
+    ({
+        let __t6 = dp;
+        dp = Handle::add(dp, 1);
+        __t6
+    })
+    .set(para1A);
+    ({
+        let __t7 = dp;
+        dp = Handle::add(dp, 1);
+        __t7
+    })
+    .set(para1B);
+    (dp).set(Ans1);
+    return 0_i32;
+}
+
 pub fn InitCallback<'a>(ctx: &'a Ctx, _task: Addr<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut _task = _task;
@@ -375,6 +556,14 @@ pub fn register(ctx: &Ctx) {
         0x803537bc,
         |ctx| {
             Ret::put(DummyLen(ctx), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80353850,
+        |ctx| {
+            let (a0, a1): (i32, Val<'_, u8>) = Args::take_all(ctx);
+            Ret::put(__CARDUnlock(ctx, a0, a1), ctx);
         },
         Returns::Int,
     );

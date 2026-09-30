@@ -894,6 +894,40 @@ pub fn it_802BC94C<'a>(
     return 1_i32;
 }
 
+pub fn it_802BCA30<'a>(ctx: &'a Ctx, ip: Item<'a>) {
+    let __frame = ctx.stack_frame(0x68);
+    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x3c);
+    let mut ip = ip;
+    let mut link: ItemLink<'a> = (ip).xDD4_itemVar().seakchain().x0();
+    let mut jobj0: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>(((link).gobj()).hsd_obj());
+    Handle::copy_from(vec, fns::it_803B868C(ctx));
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    inl_HSD_JObjSetupMatrix_unfused(ctx, (link).jobj());
+    fns::PSMTXIdentity(ctx, mtx.get(0));
+    mtx.get(0_i32).at(3_i32).set(vec.x());
+    mtx.get(1_i32).at(3_i32).set(vec.y());
+    mtx.get(2_i32).at(3_i32).set(vec.z());
+    fns::PSMTXConcat(ctx, ((link).jobj()).mtx().get(0), mtx.get(0), mtx.get(0));
+    inl_HSD_JObjCopyMtx_unfused(ctx, jobj0, mtx.get(0));
+    (jobj0).set_flags(
+        ((jobj0).flags()
+            | ((((shl_i32(1_i32, (23_i32 as u32))) | (shl_i32(1_i32, (24_i32 as u32))))
+                | (shl_i32(1_i32, (25_i32 as u32)))) as u32)),
+    );
+    {
+        if (!Handle::is_null(jobj0)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj0) != 0)) {
+            fns::HSD_JObjSetMtxDirtySub(ctx, jobj0);
+        }
+    }
+}
+
 pub fn it_802BCB88<'a>(ctx: &'a Ctx, ip: Item<'a>, vec: Vec<'a>) {
     let __frame = ctx.stack_frame(0xa0);
     let pos0: Vec<'a> = frame_at(ctx, &__frame, 0x0);
@@ -1289,11 +1323,6 @@ fn inl_Item_RetractChain_unfused<'a>(
     (remaining_out).set(remaining);
 }
 
-fn inl_it_802BCB88_prev_unfused<'a>(ctx: &'a Ctx, link: ItemLink<'a>) -> ItemLink<'a> {
-    let mut link = link;
-    return (link).prev();
-}
-
 fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     let mut jobj = jobj;
     let mut result: i32 = 0;
@@ -1314,6 +1343,49 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         result = 1_i32;
     }
     return result;
+}
+
+fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+        return;
+    }
+    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
+}
+
+fn inl_HSD_JObjCopyMtx_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, mtx: ArrV<'a, F32, 4>) {
+    let mut jobj = jobj;
+    let mut mtx = mtx;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8680),
+            (0x2c2_i32 as u32),
+            cstr(ctx, 0x803b8680),
+        )
+    });
+    (if true {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8680),
+            (0x2c3_i32 as u32),
+            cstr(ctx, 0x803b8680),
+        )
+    });
+    fns::PSMTXCopy(
+        ctx,
+        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(mtx).get(0),
+        (jobj).mtx().get(0),
+    );
+}
+
+fn inl_it_802BCB88_prev_unfused<'a>(ctx: &'a Ctx, link: ItemLink<'a>) -> ItemLink<'a> {
+    let mut link = link;
+    return (link).prev();
 }
 
 fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
@@ -1473,6 +1545,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(it_802BC94C(ctx, a0, a1, a2, a3.0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x802bca30,
+        |ctx| {
+            let (a0,): (Item<'_>,) = Args::take_all(ctx);
+            Ret::put(it_802BCA30(ctx, a0), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x802bcb88,

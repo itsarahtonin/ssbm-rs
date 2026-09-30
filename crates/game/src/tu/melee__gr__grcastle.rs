@@ -2611,6 +2611,64 @@ pub fn grCastle_801D0D24<'a>(ctx: &'a Ctx) {
     }
 }
 
+pub fn grCastle_801D0D84<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let __frame = ctx.stack_frame(0x70);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let dir: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let fwd: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let cross: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let rot: Quaternion<'a> = frame_at(ctx, &__frame, 0x30);
+    let mut jobj = jobj;
+    let mut rot_y: f64 = 0.0;
+    let mut len: f64 = 0.0;
+    let mut wind_len: f64 = 0.0;
+    let mut angle: f64 = 0.0;
+    let mut correction: f64 = 0.0;
+    if Handle::is_null(jobj) {
+        return;
+    }
+    inl_HSD_JObjSetupMatrix_unfused(ctx, jobj);
+    pos.set_x((jobj).mtx().get(0_i32).at(3_i32).get());
+    pos.set_y((jobj).mtx().get(1_i32).at(3_i32).get());
+    pos.set_z((jobj).mtx().get(2_i32).at(3_i32).get());
+    Handle::copy_from(rot, (jobj).rotate());
+    rot_y = rot.y();
+    wind_len = fns::lb_800103B8(ctx, pos, dir);
+    dir.set_y(0.0);
+    len = fns::lbVector_Normalize(ctx, dir);
+    fwd.set_x(fns::cosf(ctx, rot_y));
+    fwd.set_y(0.0);
+    fwd.set_z(fp::fneg(fns::sinf(ctx, rot_y)));
+    angle = fns::lbVector_Angle(ctx, fwd, dir);
+    {
+        let mut near_zero: i32 = 0;
+        if (angle < 9.999999747378752e-06_f64) && (angle > fp::fneg(9.999999747378752e-06_f64)) {
+            near_zero = 1_i32;
+        } else {
+            near_zero = 0_i32;
+        }
+        if near_zero == 0_i32 {
+            correction = fp::fmuls(len, (fp::fmuls(wind_len, fns::sinf(ctx, angle))));
+            if correction < 0.0 {
+                correction = fp::fneg(correction);
+            }
+            fns::PSVECCrossProduct(ctx, fwd, dir, cross);
+            if cross.y() > 0.0 {
+                rot.set_y(fp::fadds(rot_y, correction));
+            } else {
+                rot.set_y(fp::fsubs(rot_y, correction));
+            }
+        }
+    }
+    if rot.y() > 3.1415926292538643 {
+        rot.set_y(fp::frsp((fp::fsub(rot.y(), 6.283185258507729))));
+    } else if rot.y() < fp::fneg(3.1415926292538643) {
+        rot.set_y(fp::frsp(fp::fadd(rot.y(), 6.283185258507729)));
+    }
+    inl_HSD_JObjSetRotation_unfused(ctx, jobj, rot);
+    fns::HSD_JObjClearFlagsAll(ctx, jobj, ((shl_i32(1_i32, (17_i32 as u32))) as u32));
+}
+
 pub fn grCastle_801D0FF0<'a>(ctx: &'a Ctx) -> f64 {
     let __frame = ctx.stack_frame(0x8);
     return fp::fmuls(50.0, fns::Ground_801C0498(ctx));
@@ -3097,6 +3155,14 @@ fn inl_grCastle_801D06CC_sub_unfused<'a>(
         (arg0).x10C().at(i).set(null::<HSD_GObj<'a>>(ctx));
         fns::Ground_801C53EC(ctx, 0x53020_u32);
     }
+}
+
+fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+        return;
+    }
+    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
 }
 
 /// Registers this unit's ports.
@@ -3668,6 +3734,14 @@ pub fn register(ctx: &Ctx) {
         0x801d0d24,
         |ctx| {
             Ret::put(grCastle_801D0D24(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801d0d84,
+        |ctx| {
+            let (a0,): (HSD_JObj<'_>,) = Args::take_all(ctx);
+            Ret::put(grCastle_801D0D84(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

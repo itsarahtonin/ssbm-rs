@@ -134,6 +134,45 @@ pub fn ftPr_Init_8013C494<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn ftPr_Init_UnkMtxFunc0<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    arg1: i32,
+    vmtx: ArrV<'a, F32, 4>,
+) {
+    let __frame = ctx.stack_frame(0x38);
+    let mut gobj = gobj;
+    let mut arg1 = arg1;
+    let mut vmtx = vmtx;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if (!Handle::is_null((fp).u().pr().x223C())) && (((fp).x2225_b2() as i32) != 0) {
+        let mut mtx: ArrV<'a, F32, 4> = inl_HSD_JObjGetMtxPtr_unfused(
+            ctx,
+            (Handle::add((fp).parts(), (enums::FtPart_LLegJA as i32))).joint(),
+        );
+        let mut jobj: HSD_JObj<'a> = (fp).u().pr().x223C();
+        inl_HSD_JObjCopyMtx_unfused(ctx, (fp).u().pr().x223C(), mtx);
+        (jobj).set_flags(
+            ((jobj).flags()
+                | ((((shl_i32(1_i32, (23_i32 as u32))) | (shl_i32(1_i32, (24_i32 as u32))))
+                    | (shl_i32(1_i32, (25_i32 as u32)))) as u32)),
+        );
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+        fns::HSD_JObjDispAll(
+            ctx,
+            (fp).u().pr().x223C(),
+            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0),
+            fns::HSD_GObj_80390EB8(ctx, arg1),
+            (0_i32 as u32),
+        );
+    }
+}
+
 pub fn ftPr_Init_UnkIntBoolFunc0<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32, arg2: i32) {
     let __frame = ctx.stack_frame(0x8);
     let mut fp = fp;
@@ -301,6 +340,82 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803cfef0),
+            (228_i32 as u32),
+            cstr(ctx, 0x803cfef0),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
+fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+        return;
+    }
+    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
+}
+
+fn inl_HSD_JObjGetMtxPtr_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'a, F32, 4> {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803cfef0),
+            (0x2bb_i32 as u32),
+            cstr(ctx, 0x803cfef0),
+        )
+    });
+    inl_HSD_JObjSetupMatrix_unfused(ctx, jobj);
+    return (jobj).mtx().get(0);
+}
+
+fn inl_HSD_JObjCopyMtx_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, mtx: ArrV<'a, F32, 4>) {
+    let mut jobj = jobj;
+    let mut mtx = mtx;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803cfef0),
+            (0x2c2_i32 as u32),
+            cstr(ctx, 0x803cfef0),
+        )
+    });
+    (if true {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803cfef0),
+            (0x2c3_i32 as u32),
+            cstr(ctx, 0x803cfef0),
+        )
+    });
+    fns::PSMTXCopy(
+        ctx,
+        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(mtx).get(0),
+        (jobj).mtx().get(0),
+    );
+}
+
 fn inl_Fighter_OnItemDrop_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -376,6 +491,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(ftPr_Init_8013C494(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8013c4f0,
+        |ctx| {
+            let (a0, a1, a2): (HSD_GObj<'_>, i32, ArrV<'_, F32, 4>) = Args::take_all(ctx);
+            Ret::put(ftPr_Init_UnkMtxFunc0(ctx, a0, a1, a2), ctx);
         },
         Returns::Nothing,
     );

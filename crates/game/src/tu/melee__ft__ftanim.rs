@@ -237,6 +237,36 @@ pub fn ftAnim_GetNextJointInTree<'a>(
     (pdepth).set(i);
 }
 
+pub fn ftAnim_8006DF0C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let __frame = ctx.stack_frame(0x60);
+    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let mut fp = fp;
+    let mut temp_r31: HSD_JObj<'a> = null(ctx);
+    let mut temp_r30: HSD_JObj<'a> = null(ctx);
+    if ((fp).x2221_b2() != 0) {
+        temp_r30 = (Handle::add((fp).parts(), 0_i32)).joint();
+        temp_r31 = (Handle::add((fp).parts(), ((((fp).ft_data()).x8()).x10() as i32))).joint();
+        fns::lb_8000B1CC(
+            ctx,
+            (Handle::add(
+                (fp).parts(),
+                fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_HipN as i32)),
+            ))
+            .joint(),
+            (fns::p_ftCommonData(ctx).get()).x808(),
+            vec,
+        );
+        fns::HSD_MtxInverse(
+            ctx,
+            inl_HSD_JObjGetMtxPtr_unfused(ctx, temp_r30),
+            mtx.get(0),
+        );
+        fns::PSMTXMultVec(ctx, mtx.get(0), vec, vec);
+        inl_HSD_JObjSetTranslate_unfused(ctx, temp_r31, vec);
+    }
+}
+
 pub fn ftAnim_8006E054<'a>(
     ctx: &'a Ctx,
     fp: Fighter<'a>,
@@ -2077,32 +2107,6 @@ pub fn ftAnim_80070FD0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     return 0_i32;
 }
 
-fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
-    let mut jobj = jobj;
-    let mut translate = translate;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803c0660),
-            (0x237_i32 as u32),
-            cstr(ctx, 0x803c0660),
-        )
-    });
-    (if !Handle::is_null((translate)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803c0660),
-            (0x238_i32 as u32),
-            cstr(ctx, 0x803c0660),
-        )
-    });
-    Handle::copy_from((translate), (jobj).translate());
-}
-
 fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     let mut jobj = jobj;
     let mut result: i32 = 0;
@@ -2123,6 +2127,30 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         result = 1_i32;
     }
     return result;
+}
+
+fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+        return;
+    }
+    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
+}
+
+fn inl_HSD_JObjGetMtxPtr_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'a, F32, 4> {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803c0660),
+            (0x2bb_i32 as u32),
+            cstr(ctx, 0x803c0660),
+        )
+    });
+    inl_HSD_JObjSetupMatrix_unfused(ctx, jobj);
+    return (jobj).mtx().get(0);
 }
 
 fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
@@ -2156,6 +2184,32 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
             }
         }
     }
+}
+
+fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
+    let mut jobj = jobj;
+    let mut translate = translate;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803c0660),
+            (0x237_i32 as u32),
+            cstr(ctx, 0x803c0660),
+        )
+    });
+    (if !Handle::is_null((translate)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803c0660),
+            (0x238_i32 as u32),
+            cstr(ctx, 0x803c0660),
+        )
+    });
+    Handle::copy_from((translate), (jobj).translate());
 }
 
 fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
@@ -2514,6 +2568,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (Ptr<'_, HSD_Joint<'_>>, Val<'_, i32>) = Args::take_all(ctx);
             Ret::put(ftAnim_GetNextJointInTree(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8006df0c,
+        |ctx| {
+            let (a0,): (Fighter<'_>,) = Args::take_all(ctx);
+            Ret::put(ftAnim_8006DF0C(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

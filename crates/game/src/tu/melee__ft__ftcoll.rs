@@ -4481,6 +4481,108 @@ pub fn ftColl_8007BBCC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> f64 {
     return dmg_;
 }
 
+pub fn ftColl_8007BC90<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x48);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
+    let mut cur: HSD_GObj<'a> = null(ctx);
+    let mut i: u32 = 0;
+    let mut hit: HitCapsule<'a> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    (fp).set_target_item_gobj(null::<HSD_GObj<'a>>(ctx));
+    (fp).set_unk_grab_val(3.4028234663852886e+38_f64);
+    {
+        cur = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 9_i32)).get();
+        'l3: while !Handle::is_null(cur) {
+            'c4: {
+                let mut ip: Item<'a> = null(ctx);
+                'goto_next_item: {
+                    ip = Handle::cast::<Item<'a>>((cur).user_data());
+                    if (ip).xD0C() != 0_i32 {
+                        break 'c4;
+                    }
+                    if !((ip).xDD0_flag().x0().b4() != 0) {
+                        break 'c4;
+                    }
+                    if ((ip).xD09() as i32) != 0_i32 {
+                        break 'c4;
+                    }
+                    {
+                        i = (0_i32 as u32);
+                        'l5: while i < (4_i32 as u32) {
+                            'c6: {
+                                hit = inl_HitCapsuleGetPtr_unfused(ctx, fp, i);
+                                if ((hit).state() as u32)
+                                    == ((enums::HitCapsule_Disabled as i32) as u32)
+                                {
+                                    break 'c6;
+                                }
+                                if (hit).element() != ((enums::HitElement_Catch as i32) as u32) {
+                                    break 'c6;
+                                }
+                                if (!((hit).x40_b2() != 0))
+                                    || (((ip).ground_or_air() as u32)
+                                        != ((enums::GA_Air as i32) as u32))
+                                {
+                                    if !((hit).x40_b3() != 0) {
+                                        break 'c6;
+                                    }
+                                    if ((ip).ground_or_air() as u32)
+                                        != ((enums::GA_Ground as i32) as u32)
+                                    {
+                                        break 'c6;
+                                    }
+                                }
+                                if (fns::lbColl_8000ACFC(ctx, Handle::cast::<Addr<'a>>(ip), hit)
+                                    != 0)
+                                {
+                                    break 'c6;
+                                }
+                                {
+                                    let mut j: u32 = 0;
+                                    {
+                                        j = (0_i32 as u32);
+                                        'l7: while j < ((ip).xAC8_hurtboxNum() as u32) {
+                                            'c8: {
+                                                if (fns::lbColl_80007ECC(
+                                                    ctx,
+                                                    hit,
+                                                    (ip).xACC_itemHurtbox().get((j as i32)),
+                                                    At::new(ctx, 0_i32 as u32)
+                                                        .field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0)
+                                                        .get(0),
+                                                    (fp).x34_scale().y(),
+                                                    (ip).scl(),
+                                                    0.0,
+                                                ) != 0)
+                                                {
+                                                    inl_updateItemGrabTarget_unfused(
+                                                        ctx, fp, hit, ip,
+                                                    );
+                                                    break 'goto_next_item;
+                                                }
+                                            }
+                                            j = j.wrapping_add(1);
+                                        }
+                                    }
+                                }
+                            }
+                            i = i.wrapping_add(1);
+                        }
+                    }
+                }
+            }
+            cur = (cur).next();
+        }
+    }
+}
+
 pub fn ftColl_8007BE3C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x68);
     let mut gobj = gobj;
@@ -5187,6 +5289,30 @@ fn inl_ftColl_GetHitStatus_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
         ret = (fp).x198C();
     }
     return ret;
+}
+
+fn inl_updateItemGrabTarget_unfused<'a>(
+    ctx: &'a Ctx,
+    fp: Fighter<'a>,
+    hit: HitCapsule<'a>,
+    ip: Item<'a>,
+) {
+    let mut fp = fp;
+    let mut hit = hit;
+    let mut ip = ip;
+    let mut dist: f64 = 0.0;
+    fns::ftColl_80076808(ctx, fp, hit, 0_i32, Handle::cast::<Addr<'a>>(ip), 0_i32);
+    dist = fp::fsubs((ip).pos().x(), (fp).cur_pos().x());
+    if dist < 0.0 {
+        dist = fp::fneg(dist);
+    }
+    if dist < (fp).unk_grab_val() {
+        let mut item_gobj: HSD_GObj<'a> = (ip).entity();
+        (fp).set_x1A64(Handle::cast::<Addr<'a>>(item_gobj));
+        (fp).set_target_item_gobj(item_gobj);
+        (fp).x221B().set_x221B_b6((1_i32 as u8));
+        (fp).set_unk_grab_val(dist);
+    }
 }
 
 fn inl_ftColl_80076640_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, dmg_: Val<'a, F32>) -> i32 {
@@ -5941,6 +6067,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(ftColl_8007BBCC(ctx, a0), ctx);
         },
         Returns::Float,
+    );
+    ctx.register_port(
+        0x8007bc90,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftColl_8007BC90(ctx, a0), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x8007be3c,

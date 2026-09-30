@@ -179,6 +179,86 @@ pub fn HSD_JObjWalkTree<'a>(
     }
 }
 
+pub fn HSD_JObjMakeMatrix<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut jobj = jobj;
+    let mut scl: Vec<'a> = null(ctx);
+    inl_HSD_JObjSetupMatrix_unfused(ctx, (jobj).parent());
+    if (((jobj).flags() & (8_i32 as u32)) != 0) {
+        if (!Handle::is_null((jobj).parent())) && (!Handle::is_null(((jobj).parent()).scl())) {
+            if Handle::is_null((jobj).scl()) {
+                (jobj).set_scl(Handle::cast::<Vec<'a>>(fns::HSD_VecAlloc(ctx)));
+            }
+            Handle::copy_from(((jobj).scl()), (((jobj).parent()).scl()));
+        } else {
+            if !Handle::is_null((jobj).scl()) {
+                fns::HSD_VecFree(ctx, Handle::cast::<Addr<'a>>((jobj).scl()));
+                (jobj).set_scl(null::<Vec<'a>>(ctx));
+            }
+        }
+    } else {
+        if Handle::is_null((jobj).scl()) {
+            (jobj).set_scl(Handle::cast::<Vec<'a>>(fns::HSD_VecAlloc(ctx)));
+        }
+        if (!Handle::is_null((jobj).parent())) && (!Handle::is_null(((jobj).parent()).scl())) {
+            ((jobj).scl()).set_x(fp::fmuls((jobj).scale().x(), (((jobj).parent()).scl()).x()));
+            ((jobj).scl()).set_y(fp::fmuls((jobj).scale().y(), (((jobj).parent()).scl()).y()));
+            ((jobj).scl()).set_z(fp::fmuls((jobj).scale().z(), (((jobj).parent()).scl()).z()));
+        } else {
+            Handle::copy_from(((jobj).scl()), (jobj).scale());
+        }
+    }
+    if (((jobj).flags() & (0x20000_i32 as u32)) != 0) {
+        if (inl_has_scl_unfused(ctx, (jobj).parent()) != 0) {
+            scl = ((jobj).parent()).scl();
+        } else {
+            scl = null::<Vec<'a>>(ctx);
+        }
+        fns::HSD_MtxSRTQuat(
+            ctx,
+            (jobj).mtx().get(0),
+            (jobj).scale(),
+            (jobj).rotate(),
+            (jobj).translate(),
+            scl,
+        );
+    } else {
+        if (inl_has_scl_unfused(ctx, (jobj).parent()) != 0) {
+            scl = ((jobj).parent()).scl();
+        } else {
+            scl = null::<Vec<'a>>(ctx);
+        }
+        fns::HSD_MtxSRT(
+            ctx,
+            (jobj).mtx().get(0),
+            (jobj).scale(),
+            Handle::cast::<Vec<'a>>((jobj).rotate()),
+            (jobj).translate(),
+            scl,
+        );
+    }
+    if !Handle::is_null((jobj).parent()) {
+        fns::PSMTXConcat(
+            ctx,
+            ((jobj).parent()).mtx().get(0),
+            (jobj).mtx().get(0),
+            (jobj).mtx().get(0),
+        );
+    }
+    if (!Handle::is_null((jobj).aobj())) && (!Handle::is_null(((jobj).aobj()).hsd_obj())) {
+        let mut aobj_jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>(((jobj).aobj()).hsd_obj());
+        inl_HSD_JObjSetupMatrix_unfused(
+            ctx,
+            Handle::cast::<HSD_JObj<'a>>(((jobj).aobj()).hsd_obj()),
+        );
+        fns::PSMTXMultVec(ctx, (aobj_jobj).mtx().get(0), (jobj).translate(), vec);
+        (jobj).mtx().get(0_i32).at(3_i32).set(vec.x());
+        (jobj).mtx().get(1_i32).at(3_i32).set(vec.y());
+        (jobj).mtx().get(2_i32).at(3_i32).set(vec.z());
+    }
+}
+
 pub fn HSD_JObjRemoveAnimByFlags<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, flags: u32) {
     let __frame = ctx.stack_frame(0x18);
     let mut jobj = jobj;
@@ -777,6 +857,65 @@ pub fn HSD_JObjAnimAll<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
         fns::HSD_AObjInitEndCallBack(ctx);
         fns::JObjAnimAll(ctx, jobj);
         fns::HSD_AObjInvokeCallBacks(ctx);
+    }
+}
+
+pub fn HSD_JObjDispAll<'a>(
+    ctx: &'a Ctx,
+    jobj: HSD_JObj<'a>,
+    vmtx: ArrV<'a, F32, 4>,
+    flags: u32,
+    rendermode: u32,
+) {
+    let __frame = ctx.stack_frame(0x60);
+    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x30);
+    let mut jobj = jobj;
+    let mut vmtx = vmtx;
+    let mut flags = flags;
+    let mut rendermode = rendermode;
+    let mut new_var: ArrV<'a, F32, 4> = Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0);
+    if !Handle::is_null(jobj) {
+        if (((jobj).flags() & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0) {
+            if !(((jobj).flags() & ((shl_i32(1_i32, (4_i32 as u32))) as u32)) != 0) {
+                let mut cobj: HSD_CObj<'a> = null(ctx);
+                inl_HSD_JObjSetupMatrix_unfused(ctx, jobj);
+                inl_HSD_JObjSetupMatrix_unfused(ctx, (jobj).child());
+                let _ = fns::PSMTXInverse(ctx, ((jobj).child()).mtx().get(0), mtx.get(0));
+                fns::PSMTXConcat(ctx, (jobj).mtx().get(0), mtx.get(0), mtx.get(0));
+                cobj = fns::HSD_CObjGetCurrent(ctx);
+                (if !Handle::is_null((cobj)) {
+                    ({ () })
+                } else {
+                    fns::__assert(
+                        ctx,
+                        cstr(ctx, 0x803b94c4),
+                        (0x247_i32 as u32),
+                        cstr(ctx, 0x803b94c4),
+                    )
+                });
+                fns::PSMTXConcat(
+                    ctx,
+                    inl_HSD_CObjGetViewingMtxPtrDirect_unfused(ctx, cobj),
+                    mtx.get(0),
+                    mtx.get(0),
+                );
+                fns::HSD_JObjDispAll(ctx, (jobj).child(), mtx.get(0), flags, rendermode);
+            }
+        } else {
+            if (((jobj).flags() & (shl_u32(flags, (18_i32 as u32)))) != 0) {
+                fns::HSD_JObjDisp(ctx, jobj, new_var, (flags as i32), rendermode);
+            }
+            if (((jobj).flags() & (shl_u32(flags, (28_i32 as u32)))) != 0) {
+                let mut child: HSD_JObj<'a> = (jobj).child();
+                'l1: while !Handle::is_null(child) {
+                    'c2: {
+                        fns::HSD_JObjDispAll(ctx, child, new_var, flags, rendermode);
+                        child = (child).next();
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -2198,6 +2337,23 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     return result;
 }
 
+fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+        return;
+    }
+    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
+}
+
+fn inl_has_scl_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0_i32;
+    if (!Handle::is_null(jobj)) && (!Handle::is_null((jobj).scl())) {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjRemoveAnimByFlags_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, flags: u32) {
     let mut jobj = jobj;
     let mut flags = flags;
@@ -2543,6 +2699,14 @@ fn inl_HSD_JObjAnim_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
             fns::HSD_DObjAnimAll(ctx, (jobj).u().dobj());
         }
     }
+}
+
+fn inl_HSD_CObjGetViewingMtxPtrDirect_unfused<'a>(
+    ctx: &'a Ctx,
+    cobj: HSD_CObj<'a>,
+) -> ArrV<'a, F32, 4> {
+    let mut cobj = cobj;
+    return (cobj).view_mtx().get(0);
 }
 
 fn inl_JObjLoadJointSub_unfused<'a>(
@@ -2987,6 +3151,14 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x8036f1f8,
+        |ctx| {
+            let (a0,): (HSD_JObj<'_>,) = Args::take_all(ctx);
+            Ret::put(HSD_JObjMakeMatrix(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x8036f4c8,
         |ctx| {
             let (a0, a1): (HSD_JObj<'_>, u32) = Args::take_all(ctx);
@@ -3113,6 +3285,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_JObj<'_>,) = Args::take_all(ctx);
             Ret::put(HSD_JObjAnimAll(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x803709dc,
+        |ctx| {
+            let (a0, a1, a2, a3): (HSD_JObj<'_>, ArrV<'_, F32, 4>, u32, u32) = Args::take_all(ctx);
+            Ret::put(HSD_JObjDispAll(ctx, a0, a1, a2, a3), ctx);
         },
         Returns::Nothing,
     );

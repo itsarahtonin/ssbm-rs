@@ -258,6 +258,62 @@ pub fn HSD_CObjReqAnim<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, startframe: f64) {
     fns::HSD_WObjReqAnim(ctx, (cobj).interest(), startframe);
 }
 
+pub fn makeProjectionMtx<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, mtx: ArrV<'a, F32, 4>) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let mut cobj = cobj;
+    let mut mtx = mtx;
+    let mut projection_type: i32 = 0;
+    's1: {
+        let __case = match ((cobj).projection_type() as i32) {
+            1_i32 => 0,
+            2_i32 => 1,
+            3_i32 => 2,
+            _ => 3,
+        };
+        if __case <= 0 {
+            projection_type = (enums::GX_PERSPECTIVE as i32);
+            fns::MTXPerspective(
+                ctx,
+                Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 4>>(mtx).get(0),
+                (cobj).projection_param().perspective().fov(),
+                (cobj).projection_param().perspective().aspect(),
+                (cobj).near(),
+                (cobj).far(),
+            );
+            break 's1;
+        }
+        if __case <= 1 {
+            projection_type = (enums::GX_PERSPECTIVE as i32);
+            fns::MTXFrustum(
+                ctx,
+                Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 4>>(mtx).get(0),
+                (cobj).projection_param().perspective().fov(),
+                (cobj).projection_param().perspective().aspect(),
+                (cobj).projection_param().frustum().left(),
+                (cobj).projection_param().frustum().right(),
+                (cobj).near(),
+                (cobj).far(),
+            );
+            break 's1;
+        }
+        if __case <= 2 {
+            projection_type = (enums::GX_ORTHOGRAPHIC as i32);
+            fns::MTXOrtho(
+                ctx,
+                Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 4>>(mtx).get(0),
+                (cobj).projection_param().perspective().fov(),
+                (cobj).projection_param().perspective().aspect(),
+                (cobj).projection_param().frustum().left(),
+                (cobj).projection_param().frustum().right(),
+                (cobj).near(),
+                (cobj).far(),
+            );
+            break 's1;
+        }
+    }
+    return projection_type;
+}
+
 pub fn setupNormalCamera<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0xc8);
     let p: Arr<'a, ArrV<'a, F32, 4>, 4> = frame_at(ctx, &__frame, 0x0);
@@ -313,7 +369,7 @@ pub fn setupNormalCamera<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> i32 {
         cvt_fp2unsigned(ctx, width),
         cvt_fp2unsigned(ctx, height),
     );
-    projection_type = fns::makeProjectionMtx(ctx, cobj, p.get(0));
+    projection_type = inl_makeProjectionMtx_unfused(ctx, cobj, p.get(0));
     fns::GXSetProjection(ctx, p.get(0), projection_type);
     return 1_i32;
 }
@@ -924,6 +980,17 @@ pub fn HSD_CObjMtxIsDirty<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> i32 {
             && ((((cobj).eyepos()).flags() & (2_i32 as u32)) != 0)))
         || ((!Handle::is_null((cobj).interest()))
             && ((((cobj).interest()).flags() & (2_i32 as u32)) != 0))) as i32;
+}
+
+pub fn HSD_CObjGetViewingMtx<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, mtx: ArrV<'a, F32, 4>) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut cobj = cobj;
+    let mut mtx = mtx;
+    fns::PSMTXCopy(
+        ctx,
+        fns::HSD_CObjGetViewingMtxPtr(ctx, cobj),
+        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(mtx).get(0),
+    );
 }
 
 pub fn HSD_CObjGetInvViewingMtxPtrDirect<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> ArrV<'a, F32, 4> {
@@ -1859,6 +1926,65 @@ fn inl_HSD_VIGetRenderMode_unfused<'a>(ctx: &'a Ctx) -> _GXRenderModeObj<'a> {
     return fns::HSD_VIData(ctx).current().vi().rmode();
 }
 
+fn inl_makeProjectionMtx_unfused<'a>(
+    ctx: &'a Ctx,
+    cobj: HSD_CObj<'a>,
+    mtx: ArrV<'a, F32, 4>,
+) -> i32 {
+    let mut cobj = cobj;
+    let mut mtx = mtx;
+    let mut projection_type: i32 = 0;
+    's1: {
+        let __case = match ((cobj).projection_type() as i32) {
+            1_i32 => 0,
+            2_i32 => 1,
+            3_i32 => 2,
+            _ => 3,
+        };
+        if __case <= 0 {
+            projection_type = (enums::GX_PERSPECTIVE as i32);
+            fns::MTXPerspective(
+                ctx,
+                Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 4>>(mtx).get(0),
+                (cobj).projection_param().perspective().fov(),
+                (cobj).projection_param().perspective().aspect(),
+                (cobj).near(),
+                (cobj).far(),
+            );
+            break 's1;
+        }
+        if __case <= 1 {
+            projection_type = (enums::GX_PERSPECTIVE as i32);
+            fns::MTXFrustum(
+                ctx,
+                Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 4>>(mtx).get(0),
+                (cobj).projection_param().perspective().fov(),
+                (cobj).projection_param().perspective().aspect(),
+                (cobj).projection_param().frustum().left(),
+                (cobj).projection_param().frustum().right(),
+                (cobj).near(),
+                (cobj).far(),
+            );
+            break 's1;
+        }
+        if __case <= 2 {
+            projection_type = (enums::GX_ORTHOGRAPHIC as i32);
+            fns::MTXOrtho(
+                ctx,
+                Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 4>>(mtx).get(0),
+                (cobj).projection_param().perspective().fov(),
+                (cobj).projection_param().perspective().aspect(),
+                (cobj).projection_param().frustum().left(),
+                (cobj).projection_param().frustum().right(),
+                (cobj).near(),
+                (cobj).far(),
+            );
+            break 's1;
+        }
+    }
+    return projection_type;
+}
+
 fn inl_HSD_VIGetRenderMode<'a>(ctx: &'a Ctx) -> _GXRenderModeObj<'a> {
     return fns::HSD_VIData(ctx).current().vi().rmode();
 }
@@ -2483,6 +2609,14 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x80367b68,
+        |ctx| {
+            let (a0, a1): (HSD_CObj<'_>, ArrV<'_, F32, 4>) = Args::take_all(ctx);
+            Ret::put(makeProjectionMtx(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
         0x80367c28,
         |ctx| {
             let (a0,): (HSD_CObj<'_>,) = Args::take_all(ctx);
@@ -2624,6 +2758,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(HSD_CObjMtxIsDirty(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x803695f0,
+        |ctx| {
+            let (a0, a1): (HSD_CObj<'_>, ArrV<'_, F32, 4>) = Args::take_all(ctx);
+            Ret::put(HSD_CObjGetViewingMtx(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x80369624,

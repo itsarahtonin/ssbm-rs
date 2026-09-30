@@ -150,6 +150,174 @@ pub fn lb_8000FD18<'a>(ctx: &'a Ctx, desc: DynamicsDesc<'a>) {
     (desc).set_data(null::<DynamicsData<'a>>(ctx));
 }
 
+pub fn lb_8000FD48<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, desc: DynamicsDesc<'a>, max_count: u32) {
+    let __frame = ctx.stack_frame(0x58);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let mut jobj = jobj;
+    let mut desc = desc;
+    let mut max_count = max_count;
+    let mut prev: DynamicsData<'a> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if Handle::is_null(desc) {
+        return;
+    }
+    if Handle::is_null(jobj) {
+        (desc).set_data(null::<DynamicsData<'a>>(ctx));
+        return;
+    }
+    (desc).set_count((0_i32 as u32));
+    'l3: while ((desc).count() as i32) < (max_count as i32) {
+        'c4: {
+            if ((desc).count() as i32) == 0_i32 {
+                (desc).set_data(
+                    ({
+                        let __t1 = inl_popDynamicsData(ctx);
+                        prev = __t1;
+                        __t1
+                    }),
+                );
+            } else {
+                (prev).set_next(inl_popDynamicsData(ctx));
+                prev = (prev).next();
+            }
+            if Handle::is_null(prev) {
+                return;
+            }
+            {
+                if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                    fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+                }
+            }
+            inl_HSD_JObjSetupMatrix(ctx, jobj);
+            (prev).desc().lb_unk0().set_jobj(jobj);
+            Handle::copy_from((prev).desc().lb_unk0().rotate(), (jobj).rotate());
+            Handle::copy_from((prev).desc().lb_unk0().scale(), (jobj).scale());
+            Handle::copy_from((prev).desc().lb_unk0().translate(), (jobj).translate());
+            (prev)
+                .desc()
+                .lb_unk0()
+                .unk_2C()
+                .set_x((jobj).mtx().get(0_i32).at(3_i32).get());
+            (prev)
+                .desc()
+                .lb_unk0()
+                .unk_2C()
+                .set_y((jobj).mtx().get(1_i32).at(3_i32).get());
+            (prev)
+                .desc()
+                .lb_unk0()
+                .unk_2C()
+                .set_z((jobj).mtx().get(2_i32).at(3_i32).get());
+            Handle::copy_from(
+                (prev).desc().lb_unk0().unk_58(),
+                (prev).desc().lb_unk0().rotate(),
+            );
+            (prev).desc().lb_unk0().unk_38().set_x(1.0);
+            (prev).desc().lb_unk0().unk_38().set_y(0.0);
+            (prev).desc().lb_unk0().unk_38().set_z(0.0);
+            (prev).desc().lb_unk0().set_unk_44(0.0);
+            (prev).desc().lb_unk0().set_unk_8C(0.0);
+            (prev).desc().lb_unk0().set_unk_48(0.0);
+            (prev).set_next(null::<DynamicsData<'a>>(ctx));
+            (prev).set_unk_94(0_i32);
+            jobj = (jobj).child();
+            (desc).set_count((desc).count().wrapping_add(1));
+        }
+    }
+    prev = (desc).data();
+    {
+        let mut next: DynamicsData<'a> = null(ctx);
+        'l5: while !Handle::is_null(
+            ({
+                let __t3 = (prev).next();
+                next = __t3;
+                __t3
+            }),
+        ) {
+            'c6: {
+                let mut dx: f64 = 0.0;
+                let mut dy: f64 = 0.0;
+                let mut dz: f64 = 0.0;
+                let mut dist_sq: f64 = 0.0;
+                dx = fp::fsubs(
+                    (prev).desc().lb_unk0().unk_2C().x(),
+                    (next).desc().lb_unk0().unk_2C().x(),
+                );
+                dy = fp::fsubs(
+                    (prev).desc().lb_unk0().unk_2C().y(),
+                    (next).desc().lb_unk0().unk_2C().y(),
+                );
+                dz = fp::fsubs(
+                    (prev).desc().lb_unk0().unk_2C().z(),
+                    (next).desc().lb_unk0().unk_2C().z(),
+                );
+                if ({
+                    let __t2 = fp::fmadds(dz, dz, (fp::fmadds(dx, dx, fp::fmuls(dy, dy))));
+                    dist_sq = __t2;
+                    __t2
+                }) > 0.0
+                {
+                    let mut y: f64 = 0.0;
+                    let mut guess: f64 = fp::frsqrte(dist_sq);
+                    guess = fp::fmul(
+                        fp::fmul(0.5, guess),
+                        (fp::fnmsub(fp::fmul(guess, guess), dist_sq, 3.0)),
+                    );
+                    guess = fp::fmul(
+                        fp::fmul(0.5, guess),
+                        (fp::fnmsub(fp::fmul(guess, guess), dist_sq, 3.0)),
+                    );
+                    guess = fp::fmul(
+                        fp::fmul(0.5, guess),
+                        (fp::fnmsub(fp::fmul(guess, guess), dist_sq, 3.0)),
+                    );
+                    y = fp::frsp((fp::fmul(dist_sq, guess)));
+                    dist_sq = y;
+                }
+                (prev).desc().lb_unk0().set_unk_48(dist_sq);
+                next = (prev).next();
+                {
+                    let mut tx: f64 = 0.0;
+                    let mut ty: f64 = 0.0;
+                    let mut tz: f64 = 0.0;
+                    tx = (if ((next).desc().lb_unk0().translate().x()) < fp::frsp(0_i32 as f64) {
+                        fp::fneg(((next).desc().lb_unk0().translate().x()))
+                    } else {
+                        ((next).desc().lb_unk0().translate().x())
+                    });
+                    ty = (if ((next).desc().lb_unk0().translate().y()) < fp::frsp(0_i32 as f64) {
+                        fp::fneg(((next).desc().lb_unk0().translate().y()))
+                    } else {
+                        ((next).desc().lb_unk0().translate().y())
+                    });
+                    tz = (if ((next).desc().lb_unk0().translate().z()) < fp::frsp(0_i32 as f64) {
+                        fp::fneg(((next).desc().lb_unk0().translate().z()))
+                    } else {
+                        ((next).desc().lb_unk0().translate().z())
+                    });
+                    if tz > ty {
+                        if tz > tx {
+                            (prev).desc().lb_unk0().set_unk_54(1_i32.wrapping_neg());
+                        } else {
+                            (prev).desc().lb_unk0().set_unk_54(0_i32);
+                        }
+                    } else if ty > tx {
+                        (prev).desc().lb_unk0().set_unk_54(1_i32);
+                    } else {
+                        (prev).desc().lb_unk0().set_unk_54(0_i32);
+                    }
+                }
+                prev = (prev).next();
+            }
+        }
+    }
+}
+
 pub fn lb_800100B0<'a>(ctx: &'a Ctx, arg0: lb_80011A50_t<'a>, arg1: f64) -> lb_80011A50_t<'a> {
     let mut arg0 = arg0;
     let mut arg1 = arg1;
@@ -293,6 +461,793 @@ pub fn lb_800103D8<'a>(
     return 0;
 }
 
+pub fn lb_8001044C<'a>(
+    ctx: &'a Ctx,
+    desc: DynamicsDesc<'a>,
+    colliders_raw: Addr<'a>,
+    num_colliders: i32,
+    pos_y: f64,
+    use_floor_fn: i32,
+    part: i32,
+    first_active: i32,
+    ground_check: i32,
+) {
+    let __frame = ctx.stack_frame(0x420);
+    let parent_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let temp_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x30);
+    let natural_dir: Vec<'a> = frame_at(ctx, &__frame, 0x60);
+    let current_dir: Vec<'a> = frame_at(ctx, &__frame, 0x6c);
+    let link_dir: Vec<'a> = frame_at(ctx, &__frame, 0x78);
+    let adj_dir: Vec<'a> = frame_at(ctx, &__frame, 0x84);
+    let saved_dir: Vec<'a> = frame_at(ctx, &__frame, 0x90);
+    let rotation_axis: Vec<'a> = frame_at(ctx, &__frame, 0x9c);
+    let bone_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xa8);
+    let constrained_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xd8);
+    let trans_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x108);
+    let scale_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x138);
+    let _padA: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x168);
+    let local_axis: Vec<'a> = frame_at(ctx, &__frame, 0x16c);
+    let euler_angles: Vec<'a> = frame_at(ctx, &__frame, 0x178);
+    let angle_quat: Quaternion<'a> = frame_at(ctx, &__frame, 0x184);
+    let euler_quat: Quaternion<'a> = frame_at(ctx, &__frame, 0x194);
+    let result_quat: Quaternion<'a> = frame_at(ctx, &__frame, 0x1a4);
+    let stiffness_axis: Vec<'a> = frame_at(ctx, &__frame, 0x1b4);
+    let grav_dir: Vec<'a> = frame_at(ctx, &__frame, 0x1c0);
+    let gravity_axis: Vec<'a> = frame_at(ctx, &__frame, 0x1cc);
+    let next_pos: Vec<'a> = frame_at(ctx, &__frame, 0x1d8);
+    let force_dir: Vec<'a> = frame_at(ctx, &__frame, 0x1e4);
+    let force_axis: Vec<'a> = frame_at(ctx, &__frame, 0x1f0);
+    let clamp_dir: Vec<'a> = frame_at(ctx, &__frame, 0x1fc);
+    let clamp_axis: Vec<'a> = frame_at(ctx, &__frame, 0x208);
+    let convergence_axis: Vec<'a> = frame_at(ctx, &__frame, 0x214);
+    let deviation_axis: Vec<'a> = frame_at(ctx, &__frame, 0x220);
+    let next_bone_pos: Vec<'a> = frame_at(ctx, &__frame, 0x22c);
+    let coll_dir: Vec<'a> = frame_at(ctx, &__frame, 0x238);
+    let collision_point: Vec<'a> = frame_at(ctx, &__frame, 0x244);
+    let avoidance_axis: Vec<'a> = frame_at(ctx, &__frame, 0x250);
+    let _padB: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x25c);
+    let floor_point: Vec<'a> = frame_at(ctx, &__frame, 0x26c);
+    let floor_normal: Vec<'a> = frame_at(ctx, &__frame, 0x278);
+    let unused: Vec<'a> = frame_at(ctx, &__frame, 0x284);
+    let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x290);
+    let floor_flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x294);
+    let floor_cross: Vec<'a> = frame_at(ctx, &__frame, 0x298);
+    let gnd_norm: Vec<'a> = frame_at(ctx, &__frame, 0x2a4);
+    let unused_b: Vec<'a> = frame_at(ctx, &__frame, 0x2b0);
+    let floor_point2: Vec<'a> = frame_at(ctx, &__frame, 0x2bc);
+    let floor_normal2: Vec<'a> = frame_at(ctx, &__frame, 0x2c8);
+    let unused2: Vec<'a> = frame_at(ctx, &__frame, 0x2d4);
+    let line_id2: Val<'a, i32> = frame_at(ctx, &__frame, 0x2e0);
+    let floor_flags2: Val<'a, u32> = frame_at(ctx, &__frame, 0x2e4);
+    let floor_cross2: Vec<'a> = frame_at(ctx, &__frame, 0x2e8);
+    let gnd_norm2: Vec<'a> = frame_at(ctx, &__frame, 0x2f4);
+    let rotation: Quaternion<'a> = frame_at(ctx, &__frame, 0x300);
+    let mut desc = desc;
+    let mut colliders_raw = colliders_raw;
+    let mut num_colliders = num_colliders;
+    let mut pos_y = pos_y;
+    let mut use_floor_fn = use_floor_fn;
+    let mut part = part;
+    let mut first_active = first_active;
+    let mut ground_check = ground_check;
+    let mut parent_jobj: HSD_JObj<'a> = null(ctx);
+    let mut sp8: i32 = 0;
+    let mut cur: DynamicsData<'a> = null(ctx);
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut collider: lb_Collider<'a> = null(ctx);
+    let mut on_ground: i32 = 0;
+    let mut loop_index: i32 = 0;
+    if (statics::melee__lb__lb_00F9::lb_804D63B8(ctx).get() as i32) != 0_i32 {
+        return;
+    }
+    if Handle::is_null(desc) {
+        return;
+    }
+    cur = (desc).data();
+    if Handle::is_null(cur) {
+        return;
+    }
+    if (part as u32) > (255_i32 as u32) {
+        return;
+    }
+    on_ground = 0_i32;
+    loop_index = 0_i32;
+    {
+        let mut i: i32 = 0;
+        {
+            i = 0_i32;
+            'l1: while i < part {
+                'c2: {
+                    cur = (cur).next();
+                    loop_index = loop_index.wrapping_add(1);
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    }
+    parent_jobj = ((cur).desc().lb_unk0().jobj()).parent();
+    if !Handle::is_null(parent_jobj) {
+        {
+            if (!Handle::is_null(parent_jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, parent_jobj) != 0))
+            {
+                fns::HSD_JObjSetMtxDirtySub(ctx, parent_jobj);
+            }
+        }
+        inl_HSD_JObjSetupMatrix(ctx, parent_jobj);
+        fns::PSMTXCopy(ctx, (parent_jobj).mtx().get(0), parent_mtx.get(0));
+    } else {
+        fns::PSMTXIdentity(ctx, parent_mtx.get(0));
+    }
+    jobj = (cur).desc().lb_unk0().jobj();
+    'l3: while !Handle::is_null((cur).next()) {
+        'c4: {
+            let mut angle_diff: f64 = 0.0;
+            let mut force_mag: f64 = 0.0;
+            fns::PSMTXTrans(
+                ctx,
+                trans_mtx.get(0),
+                (jobj).translate().x(),
+                (jobj).translate().y(),
+                (jobj).translate().z(),
+            );
+            fns::PSMTXConcat(ctx, parent_mtx.get(0), trans_mtx.get(0), bone_mtx.get(0));
+            fns::lbVector_CreateEulerMatrix(ctx, temp_mtx.get(0), (cur).desc().lb_unk0().unk_58());
+            fns::PSMTXConcat(
+                ctx,
+                bone_mtx.get(0),
+                temp_mtx.get(0),
+                constrained_mtx.get(0),
+            );
+            fns::lbVector_CreateEulerMatrix(ctx, temp_mtx.get(0), (jobj).rotate());
+            fns::PSMTXConcat(ctx, bone_mtx.get(0), temp_mtx.get(0), bone_mtx.get(0));
+            fns::PSMTXScale(
+                ctx,
+                scale_mtx.get(0),
+                (jobj).scale().x(),
+                (jobj).scale().y(),
+                (jobj).scale().z(),
+            );
+            fns::PSMTXConcat(ctx, bone_mtx.get(0), scale_mtx.get(0), bone_mtx.get(0));
+            fns::PSMTXConcat(
+                ctx,
+                constrained_mtx.get(0),
+                scale_mtx.get(0),
+                constrained_mtx.get(0),
+            );
+            (cur)
+                .desc()
+                .lb_unk0()
+                .unk_2C()
+                .set_x(bone_mtx.get(0_i32).at(3_i32).get());
+            (cur)
+                .desc()
+                .lb_unk0()
+                .unk_2C()
+                .set_y(bone_mtx.get(1_i32).at(3_i32).get());
+            (cur)
+                .desc()
+                .lb_unk0()
+                .unk_2C()
+                .set_z(bone_mtx.get(2_i32).at(3_i32).get());
+            fns::PSMTXMultVec(
+                ctx,
+                constrained_mtx.get(0),
+                ((jobj).child()).translate(),
+                natural_dir,
+            );
+            natural_dir.set_x(fp::fsubs(
+                natural_dir.x(),
+                (cur).desc().lb_unk0().unk_2C().x(),
+            ));
+            natural_dir.set_y(fp::fsubs(
+                natural_dir.y(),
+                (cur).desc().lb_unk0().unk_2C().y(),
+            ));
+            natural_dir.set_z(fp::fsubs(
+                natural_dir.z(),
+                (cur).desc().lb_unk0().unk_2C().z(),
+            ));
+            fns::PSMTXMultVec(
+                ctx,
+                bone_mtx.get(0),
+                ((jobj).child()).translate(),
+                current_dir,
+            );
+            current_dir.set_x(fp::fsubs(
+                current_dir.x(),
+                (cur).desc().lb_unk0().unk_2C().x(),
+            ));
+            current_dir.set_y(fp::fsubs(
+                current_dir.y(),
+                (cur).desc().lb_unk0().unk_2C().y(),
+            ));
+            current_dir.set_z(fp::fsubs(
+                current_dir.z(),
+                (cur).desc().lb_unk0().unk_2C().z(),
+            ));
+            link_dir.set_x(fp::fsubs(
+                ((cur).next()).desc().lb_unk0().unk_2C().x(),
+                (cur).desc().lb_unk0().unk_2C().x(),
+            ));
+            link_dir.set_y(fp::fsubs(
+                ((cur).next()).desc().lb_unk0().unk_2C().y(),
+                (cur).desc().lb_unk0().unk_2C().y(),
+            ));
+            link_dir.set_z(fp::fsubs(
+                ((cur).next()).desc().lb_unk0().unk_2C().z(),
+                (cur).desc().lb_unk0().unk_2C().z(),
+            ));
+            let _ = fns::lbVector_Normalize(ctx, natural_dir);
+            let _ = fns::lbVector_Normalize(ctx, current_dir);
+            let _ = fns::lbVector_Normalize(ctx, link_dir);
+            {
+                Handle::copy_from(saved_dir, link_dir);
+                if fp::fmuls((cur).desc().lb_unk0().unk_4C(), (desc).pos().x()) < 1.0 {
+                    let mut stiff_angle: f64 = (if (fns::lbVector_Angle(ctx, link_dir, current_dir))
+                        < fp::frsp(0_i32 as f64)
+                    {
+                        fp::fneg((fns::lbVector_Angle(ctx, link_dir, current_dir)))
+                    } else {
+                        (fns::lbVector_Angle(ctx, link_dir, current_dir))
+                    });
+                    if stiff_angle != 0.0 {
+                        fns::PSVECCrossProduct(ctx, link_dir, current_dir, stiffness_axis);
+                        let _ = fns::lbVector_Normalize(ctx, stiffness_axis);
+                        fns::lbVector_RotateAboutUnitAxis(
+                            ctx,
+                            link_dir,
+                            stiffness_axis,
+                            fp::fmuls(
+                                stiff_angle,
+                                fp::frsp(
+                                    (fp::fsub(
+                                        1.0,
+                                        (fp::fmuls(
+                                            (cur).desc().lb_unk0().unk_4C(),
+                                            (desc).pos().x(),
+                                        )),
+                                    )),
+                                ),
+                            ),
+                        );
+                    }
+                }
+                {
+                    let mut grav_angle: f64 = 0.0;
+                    Handle::copy_from(grav_dir, fns::lb_803B7280(ctx).v0());
+                    grav_angle = fns::lbVector_Angle(ctx, link_dir, grav_dir);
+                    if grav_angle != 0.0 {
+                        let mut grav_rot: f64 =
+                            fp::fmuls((cur).desc().lb_unk0().unk_8C(), fns::sinf(ctx, grav_angle));
+                        if grav_rot < 0.0 {
+                            grav_rot = fp::fneg(grav_rot);
+                        }
+                        {
+                            fns::PSVECCrossProduct(ctx, link_dir, grav_dir, gravity_axis);
+                            let _ = fns::lbVector_Normalize(ctx, gravity_axis);
+                            fns::lbVector_RotateAboutUnitAxis(
+                                ctx,
+                                link_dir,
+                                gravity_axis,
+                                grav_rot,
+                            );
+                        }
+                    }
+                }
+                force_mag = 0.0;
+                if (!Handle::is_null(statics::melee__lb__lb_00F9::lb_804D63B0(ctx).get()))
+                    && (first_active <= loop_index)
+                {
+                    let mut next_node: DynamicsData<'a> = (cur).next();
+                    Handle::copy_from(next_pos, (next_node).desc().lb_unk0().unk_2C());
+                    force_mag = fns::lb_800101C8(ctx, next_pos, force_dir);
+                    {
+                        let mut force_angle: f64 = fns::lbVector_Angle(ctx, link_dir, force_dir);
+                        if force_angle != 0.0 {
+                            let mut force_rot: f64 = fp::fdivs(
+                                (fp::fmuls(force_mag, fns::sinf(ctx, force_angle))),
+                                (cur).desc().lb_unk0().unk_48(),
+                            );
+                            if force_rot < 0.0 {
+                                force_rot = fp::fneg(force_rot);
+                            }
+                            {
+                                fns::PSVECCrossProduct(ctx, link_dir, force_dir, force_axis);
+                                let _ = fns::lbVector_Normalize(ctx, force_axis);
+                                fns::lbVector_RotateAboutUnitAxis(
+                                    ctx, link_dir, force_axis, force_rot,
+                                );
+                            }
+                        }
+                    }
+                }
+                if 0.0 != (cur).desc().lb_unk0().unk_44() {
+                    fns::lbVector_RotateAboutUnitAxis(
+                        ctx,
+                        link_dir,
+                        (cur).desc().lb_unk0().unk_38(),
+                        (cur).desc().lb_unk0().unk_44(),
+                    );
+                }
+                if force_mag
+                    < fp::fmuls(
+                        (cur).desc().lb_unk0().unk_8C(),
+                        (cur).desc().lb_unk0().unk_48(),
+                    )
+                {
+                    Handle::copy_from(clamp_dir, saved_dir);
+                    if fns::lbVector_Angle(ctx, clamp_dir, link_dir)
+                        > (cur).desc().lb_unk0().unk_88()
+                    {
+                        fns::PSVECCrossProduct(ctx, clamp_dir, link_dir, clamp_axis);
+                        let _ = fns::lbVector_Normalize(ctx, clamp_axis);
+                        fns::lbVector_RotateAboutUnitAxis(
+                            ctx,
+                            clamp_dir,
+                            clamp_axis,
+                            (cur).desc().lb_unk0().unk_88(),
+                        );
+                        Handle::copy_from(link_dir, clamp_dir);
+                    }
+                }
+                if (cur).desc().lb_unk0().unk_50() > 0.0 {
+                    if fns::lbVector_Angle(ctx, natural_dir, link_dir)
+                        < (cur).desc().lb_unk0().unk_50()
+                    {
+                        Handle::copy_from(link_dir, natural_dir);
+                    } else {
+                        fns::PSVECCrossProduct(ctx, link_dir, natural_dir, convergence_axis);
+                        let _ = fns::lbVector_Normalize(ctx, convergence_axis);
+                        fns::lbVector_RotateAboutUnitAxis(
+                            ctx,
+                            link_dir,
+                            convergence_axis,
+                            (cur).desc().lb_unk0().unk_50(),
+                        );
+                    }
+                }
+                {
+                    let mut dev_angle: f64 = fns::lbVector_Angle(ctx, natural_dir, link_dir);
+                    if dev_angle > (cur).desc().lb_unk0().unk_68() {
+                        fns::PSVECCrossProduct(ctx, link_dir, natural_dir, deviation_axis);
+                        let _ = fns::lbVector_Normalize(ctx, deviation_axis);
+                        fns::lbVector_RotateAboutUnitAxis(
+                            ctx,
+                            link_dir,
+                            deviation_axis,
+                            fp::fsubs(dev_angle, (cur).desc().lb_unk0().unk_68()),
+                        );
+                    }
+                }
+                if num_colliders != 0_i32 {
+                    let _ = fns::lbVector_Normalize(ctx, link_dir);
+                    collider = Handle::cast::<lb_Collider<'a>>(colliders_raw);
+                    {
+                        let mut ci: i32 = 0;
+                        {
+                            ci = 0_i32;
+                            'l5: while ci < num_colliders {
+                                'c6: {
+                                    next_bone_pos.set_x(fp::fmadds(
+                                        link_dir.x(),
+                                        (cur).desc().lb_unk0().unk_48(),
+                                        (cur).desc().lb_unk0().unk_2C().x(),
+                                    ));
+                                    next_bone_pos.set_y(fp::fmadds(
+                                        link_dir.y(),
+                                        (cur).desc().lb_unk0().unk_48(),
+                                        (cur).desc().lb_unk0().unk_2C().y(),
+                                    ));
+                                    next_bone_pos.set_z(fp::fmadds(
+                                        link_dir.z(),
+                                        (cur).desc().lb_unk0().unk_48(),
+                                        (cur).desc().lb_unk0().unk_2C().z(),
+                                    ));
+                                    coll_dir.set_x(fp::fsubs(
+                                        (collider).position().x(),
+                                        (cur).desc().lb_unk0().unk_2C().x(),
+                                    ));
+                                    coll_dir.set_y(fp::fsubs(
+                                        (collider).position().y(),
+                                        (cur).desc().lb_unk0().unk_2C().y(),
+                                    ));
+                                    coll_dir.set_z(fp::fsubs(
+                                        (collider).position().z(),
+                                        (cur).desc().lb_unk0().unk_2C().z(),
+                                    ));
+                                    {
+                                        let mut coll_dist: f64 = inl_sqrtf(
+                                            ctx,
+                                            fp::fadds(
+                                                fp::fmuls(coll_dir.z(), coll_dir.z()),
+                                                (fp::fadds(
+                                                    fp::fmuls(coll_dir.x(), coll_dir.x()),
+                                                    fp::fmuls(coll_dir.y(), coll_dir.y()),
+                                                )),
+                                            ),
+                                        );
+                                        if (coll_dist > (collider).radius())
+                                            && (fns::lbColl_80005C44(
+                                                ctx,
+                                                (cur).desc().lb_unk0().unk_2C(),
+                                                next_bone_pos,
+                                                (collider).position(),
+                                                collision_point,
+                                                0.10000000149011612,
+                                                (collider).radius(),
+                                            ) != 0_i32)
+                                        {
+                                            let mut coll_angle: f64 =
+                                                fns::lbVector_Angle(ctx, coll_dir, link_dir);
+                                            if 0.0 != coll_angle {
+                                                let mut adj_radius: f64 =
+                                                    fp::frsp((fp::fadd(0.1, (collider).radius())));
+                                                let mut side_sq: f64 = inl_sqrtf(
+                                                    ctx,
+                                                    fp::fmsubs(
+                                                        coll_dist,
+                                                        coll_dist,
+                                                        fp::fmuls(adj_radius, adj_radius),
+                                                    ),
+                                                );
+                                                {
+                                                    let mut avoidance_angle: f64 =
+                                                        fns::atan2f(ctx, adj_radius, side_sq);
+                                                    if avoidance_angle < 0.0 {
+                                                        avoidance_angle = fp::fneg(avoidance_angle);
+                                                    }
+                                                    avoidance_angle =
+                                                        fp::fsubs(avoidance_angle, coll_angle);
+                                                    if avoidance_angle > 0.0 {
+                                                        fns::PSVECCrossProduct(
+                                                            ctx,
+                                                            coll_dir,
+                                                            link_dir,
+                                                            avoidance_axis,
+                                                        );
+                                                        let _ = fns::lbVector_Normalize(
+                                                            ctx,
+                                                            avoidance_axis,
+                                                        );
+                                                        fns::lbVector_RotateAboutUnitAxis(
+                                                            ctx,
+                                                            link_dir,
+                                                            avoidance_axis,
+                                                            avoidance_angle,
+                                                        );
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    collider = Handle::add(collider, 1);
+                                }
+                                ci = ci.wrapping_add(1);
+                            }
+                        }
+                    }
+                }
+                if ground_check != 0_i32 {
+                    if on_ground != 0_i32 {
+                        Handle::copy_from(gnd_norm, fns::lb_803B7280(ctx).v1());
+                        let _ = fns::lbVector_Normalize(ctx, link_dir);
+                        {
+                            let mut end_x: f64 = fp::fmadds(
+                                link_dir.x(),
+                                (cur).desc().lb_unk0().unk_48(),
+                                (cur).desc().lb_unk0().unk_2C().x(),
+                            );
+                            let mut end_y: f64 = fp::fmadds(
+                                link_dir.y(),
+                                (cur).desc().lb_unk0().unk_48(),
+                                (cur).desc().lb_unk0().unk_2C().y(),
+                            );
+                            let mut floor_hit: i32 = 0;
+                            if use_floor_fn != 0_i32 {
+                                floor_hit = statics::melee__lb__lb_00F9::lb_800103D8(
+                                    ctx,
+                                    floor_point,
+                                    end_x,
+                                    fp::frsp((fp::fadd(1.0, end_y))),
+                                    end_x,
+                                    fp::frsp((fp::fsub(end_y, 1.0))),
+                                    pos_y,
+                                );
+                            } else {
+                                sp8 = 0_i32;
+                                floor_hit = fns::mpCheckFloor(
+                                    ctx,
+                                    end_x,
+                                    fp::frsp((fp::fadd(1.0, end_y))),
+                                    end_x,
+                                    fp::frsp((fp::fsub(end_y, 1.0))),
+                                    0.10000000149011612,
+                                    floor_point,
+                                    line_id,
+                                    floor_flags,
+                                    floor_normal,
+                                    1_i32.wrapping_neg(),
+                                    1_i32.wrapping_neg(),
+                                    1_i32.wrapping_neg(),
+                                    null::<FnPtr<'a>>(ctx),
+                                    null::<HSD_GObj<'a>>(ctx),
+                                );
+                            }
+                            fns::PSVECCrossProduct(ctx, gnd_norm, link_dir, floor_cross);
+                            let _ = fns::lbVector_Normalize(ctx, floor_cross);
+                            fns::lbVector_RotateAboutUnitAxis(
+                                ctx,
+                                gnd_norm,
+                                floor_cross,
+                                1.5707963705062866,
+                            );
+                            Handle::copy_from(link_dir, gnd_norm);
+                            if floor_hit != 0_i32 {
+                                on_ground = 1_i32;
+                            } else {
+                                on_ground = 0_i32;
+                            }
+                        }
+                    } else {
+                        Handle::copy_from(gnd_norm2, fns::lb_803B7280(ctx).v2());
+                        let _ = fns::lbVector_Normalize(ctx, link_dir);
+                        {
+                            let mut floor_hit2: i32 = 0;
+                            if use_floor_fn != 0_i32 {
+                                floor_hit2 = statics::melee__lb__lb_00F9::lb_800103D8(
+                                    ctx,
+                                    floor_point2,
+                                    (cur).desc().lb_unk0().unk_2C().x(),
+                                    fp::frsp((fp::fadd(1.0, (cur).desc().lb_unk0().unk_2C().y()))),
+                                    (cur).desc().lb_unk0().unk_2C().x(),
+                                    (cur).desc().lb_unk0().unk_2C().y(),
+                                    pos_y,
+                                );
+                            } else {
+                                sp8 = 0_i32;
+                                floor_hit2 = fns::mpCheckFloor(
+                                    ctx,
+                                    (cur).desc().lb_unk0().unk_2C().x(),
+                                    fp::frsp((fp::fadd(1.0, (cur).desc().lb_unk0().unk_2C().y()))),
+                                    (cur).desc().lb_unk0().unk_2C().x(),
+                                    (cur).desc().lb_unk0().unk_2C().y(),
+                                    0.10000000149011612,
+                                    floor_point2,
+                                    line_id2,
+                                    floor_flags2,
+                                    floor_normal2,
+                                    1_i32.wrapping_neg(),
+                                    1_i32.wrapping_neg(),
+                                    1_i32.wrapping_neg(),
+                                    null::<FnPtr<'a>>(ctx),
+                                    null::<HSD_GObj<'a>>(ctx),
+                                );
+                            }
+                            if floor_hit2 != 0_i32 {
+                                fns::PSVECCrossProduct(ctx, gnd_norm2, link_dir, floor_cross2);
+                                let _ = fns::lbVector_Normalize(ctx, floor_cross2);
+                                fns::lbVector_RotateAboutUnitAxis(
+                                    ctx,
+                                    gnd_norm2,
+                                    floor_cross2,
+                                    1.5707963705062866,
+                                );
+                                on_ground = 1_i32;
+                                Handle::copy_from(link_dir, gnd_norm2);
+                            } else {
+                                let mut end_x2: f64 = fp::fmadds(
+                                    link_dir.x(),
+                                    (cur).desc().lb_unk0().unk_48(),
+                                    (cur).desc().lb_unk0().unk_2C().x(),
+                                );
+                                let mut end_y2: f64 = fp::fmadds(
+                                    link_dir.y(),
+                                    (cur).desc().lb_unk0().unk_48(),
+                                    (cur).desc().lb_unk0().unk_2C().y(),
+                                );
+                                let mut floor_hit3: i32 = 0;
+                                if use_floor_fn != 0_i32 {
+                                    floor_hit3 = statics::melee__lb__lb_00F9::lb_800103D8(
+                                        ctx,
+                                        floor_point2,
+                                        (cur).desc().lb_unk0().unk_2C().x(),
+                                        (cur).desc().lb_unk0().unk_2C().y(),
+                                        end_x2,
+                                        end_y2,
+                                        pos_y,
+                                    );
+                                } else {
+                                    sp8 = 0_i32;
+                                    floor_hit3 = fns::mpCheckFloor(
+                                        ctx,
+                                        (cur).desc().lb_unk0().unk_2C().x(),
+                                        (cur).desc().lb_unk0().unk_2C().y(),
+                                        end_x2,
+                                        end_y2,
+                                        0.10000000149011612,
+                                        floor_point2,
+                                        line_id2,
+                                        floor_flags2,
+                                        floor_normal2,
+                                        1_i32.wrapping_neg(),
+                                        1_i32.wrapping_neg(),
+                                        1_i32.wrapping_neg(),
+                                        null::<FnPtr<'a>>(ctx),
+                                        null::<HSD_GObj<'a>>(ctx),
+                                    );
+                                }
+                                if floor_hit3 != 0_i32 {
+                                    let mut height_diff: f64 =
+                                        inl_groundHeight(ctx, cur, floor_point2);
+                                    let mut horiz_dist: f64 = inl_sqrtf(
+                                        ctx,
+                                        fp::fneg(
+                                            (fp::fmsubs(
+                                                height_diff,
+                                                height_diff,
+                                                fp::fmuls(
+                                                    (cur).desc().lb_unk0().unk_48(),
+                                                    (cur).desc().lb_unk0().unk_48(),
+                                                ),
+                                            )),
+                                        ),
+                                    );
+                                    let mut ground_angle: f64 =
+                                        (if (fns::atan2f(ctx, horiz_dist, height_diff))
+                                            < fp::frsp(0_i32 as f64)
+                                        {
+                                            fp::fneg((fns::atan2f(ctx, horiz_dist, height_diff)))
+                                        } else {
+                                            (fns::atan2f(ctx, horiz_dist, height_diff))
+                                        });
+                                    fns::PSVECCrossProduct(ctx, gnd_norm2, link_dir, floor_cross2);
+                                    let _ = fns::lbVector_Normalize(ctx, floor_cross2);
+                                    fns::lbVector_RotateAboutUnitAxis(
+                                        ctx,
+                                        gnd_norm2,
+                                        floor_cross2,
+                                        ground_angle,
+                                    );
+                                    on_ground = 1_i32;
+                                    Handle::copy_from(link_dir, gnd_norm2);
+                                } else {
+                                    on_ground = 0_i32;
+                                }
+                            }
+                        }
+                    }
+                }
+                angle_diff = fns::lbVector_Angle(ctx, current_dir, link_dir);
+                fns::PSVECCrossProduct(ctx, current_dir, link_dir, rotation_axis);
+                let _ = fns::lbVector_Normalize(ctx, rotation_axis);
+                {
+                    Handle::copy_from(adj_dir, current_dir);
+                    fns::lbVector_RotateAboutUnitAxis(ctx, adj_dir, rotation_axis, angle_diff);
+                    Handle::copy_from(link_dir, adj_dir);
+                }
+                if on_ground != 0_i32 {
+                    (cur).desc().lb_unk0().set_unk_44(0.0);
+                } else {
+                    (cur)
+                        .desc()
+                        .lb_unk0()
+                        .set_unk_44(fns::lbVector_Angle(ctx, saved_dir, link_dir));
+                }
+                {
+                    let mut ang_vel: f64 = (cur).desc().lb_unk0().unk_44();
+                    if ang_vel < 0.0 {
+                        ang_vel = fp::fneg(ang_vel);
+                    }
+                    if ang_vel > 0.0 {
+                        fns::PSVECCrossProduct(
+                            ctx,
+                            saved_dir,
+                            link_dir,
+                            (cur).desc().lb_unk0().unk_38(),
+                        );
+                        let _ = fns::lbVector_Normalize(ctx, (cur).desc().lb_unk0().unk_38());
+                    }
+                }
+                {
+                    let mut ang_vel2: f64 = (cur).desc().lb_unk0().unk_44();
+                    if 0.0 != ang_vel2 {
+                        let mut damping: f64 = (cur).desc().lb_unk0().unk_84();
+                        if ang_vel2 > damping {
+                            (cur)
+                                .desc()
+                                .lb_unk0()
+                                .set_unk_44(fp::fsubs(ang_vel2, damping));
+                        } else if ang_vel2 < fp::fneg(damping) {
+                            (cur)
+                                .desc()
+                                .lb_unk0()
+                                .set_unk_44(fp::fadds(ang_vel2, damping));
+                        } else {
+                            (cur).desc().lb_unk0().set_unk_44(0.0);
+                        }
+                    }
+                }
+            }
+            if !(inl_approximatelyZero(ctx, angle_diff) != 0) {
+                fns::PSMTXTranspose(ctx, parent_mtx.get(0), bone_mtx.get(0));
+                fns::PSMTXMultVec(ctx, bone_mtx.get(0), rotation_axis, local_axis);
+                if !(inl_approximatelyZeroVec3(ctx, local_axis) != 0) {
+                    let _ = fns::HSD_QuatLib_8037ECE0(ctx, local_axis, angle_quat, angle_diff);
+                    euler_angles.set_x((jobj).rotate().x());
+                    euler_angles.set_y((jobj).rotate().y());
+                    euler_angles.set_z((jobj).rotate().z());
+                    let _ = fns::EulerToQuat(ctx, euler_angles, euler_quat);
+                    let _ = fns::HSD_QuatLib_8037EC4C(ctx, angle_quat, euler_quat, result_quat);
+                    fns::PSMTXQuat(ctx, bone_mtx.get(0), result_quat);
+                    let _ = fns::HSD_QuatLib_8037EB28(
+                        ctx,
+                        bone_mtx.get(0),
+                        Handle::cast::<Vec<'a>>(rotation),
+                    );
+                    inl_HSD_JObjSetRotation(ctx, jobj, rotation);
+                    fns::HSD_JObjClearFlagsAll(ctx, jobj, 0x20000_u32);
+                }
+            }
+            {
+                let mut axis: i32 = (cur).desc().lb_unk0().unk_54();
+                if axis == 1_i32.wrapping_neg() {
+                    let mut rot_z: f64 = inl_HSD_JObjGetRotationZ(ctx, jobj);
+                    rot_z = fp::fmuls(rot_z, 0.8999999761581421);
+                    inl_HSD_JObjSetRotationZ(ctx, jobj, rot_z);
+                } else if axis == 0_i32 {
+                    let mut rot_x: f64 = inl_HSD_JObjGetRotationX(ctx, jobj);
+                    rot_x = fp::fmuls(rot_x, 0.8999999761581421);
+                    inl_HSD_JObjSetRotationX(ctx, jobj, rot_x);
+                } else {
+                    let mut rot_y: f64 = inl_HSD_JObjGetRotationY(ctx, jobj);
+                    rot_y = fp::fmuls(rot_y, 0.8999999761581421);
+                    inl_HSD_JObjSetRotationY(ctx, jobj, rot_y);
+                }
+            }
+            fns::PSMTXConcat(ctx, parent_mtx.get(0), trans_mtx.get(0), parent_mtx.get(0));
+            fns::lbVector_CreateEulerMatrix(ctx, temp_mtx.get(0), (jobj).rotate());
+            fns::PSMTXConcat(ctx, parent_mtx.get(0), temp_mtx.get(0), parent_mtx.get(0));
+            fns::PSMTXConcat(ctx, parent_mtx.get(0), scale_mtx.get(0), parent_mtx.get(0));
+            jobj = (jobj).child();
+            loop_index = loop_index.wrapping_add(1_i32);
+            cur = (cur).next();
+        }
+    }
+    fns::PSMTXTrans(
+        ctx,
+        temp_mtx.get(0),
+        (jobj).translate().x(),
+        (jobj).translate().y(),
+        (jobj).translate().z(),
+    );
+    fns::PSMTXConcat(ctx, parent_mtx.get(0), temp_mtx.get(0), parent_mtx.get(0));
+    fns::lbVector_CreateEulerMatrix(ctx, temp_mtx.get(0), (jobj).rotate());
+    fns::PSMTXConcat(ctx, parent_mtx.get(0), temp_mtx.get(0), parent_mtx.get(0));
+    fns::PSMTXScale(
+        ctx,
+        temp_mtx.get(0),
+        (jobj).scale().x(),
+        (jobj).scale().y(),
+        (jobj).scale().z(),
+    );
+    fns::PSMTXConcat(ctx, parent_mtx.get(0), temp_mtx.get(0), parent_mtx.get(0));
+    (cur)
+        .desc()
+        .lb_unk0()
+        .unk_2C()
+        .set_x(parent_mtx.get(0_i32).at(3_i32).get());
+    (cur)
+        .desc()
+        .lb_unk0()
+        .unk_2C()
+        .set_y(parent_mtx.get(1_i32).at(3_i32).get());
+    (cur)
+        .desc()
+        .lb_unk0()
+        .unk_2C()
+        .set_z(parent_mtx.get(2_i32).at(3_i32).get());
+}
+
 pub fn lb_800115F4<'a>(ctx: &'a Ctx) {
     let mut total_scale: f64 = 0.0;
     let mut cur: lb_80011A50_t<'a> = statics::melee__lb__lb_00F9::lb_804D63B0(ctx).get();
@@ -423,6 +1378,92 @@ pub fn lb_80011710<'a>(ctx: &'a Ctx, arg0: DynamicsDesc<'a>, arg1: DynamicsDesc<
     }
 }
 
+pub fn lb_800117F4<'a>(
+    ctx: &'a Ctx,
+    arg0: DynamicsDesc<'a>,
+    arg1: _GXColor<'a>,
+    arg2: _GXColor<'a>,
+    arg3: i32,
+    arg4: u32,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x88);
+    let view_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x30);
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut arg3 = arg3;
+    let mut arg4 = arg4;
+    let mut cur: DynamicsData<'a> = null(ctx);
+    let mut i: i32 = 0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if ((arg1).a() as i32) < 255_i32 {
+        if arg4 != (2_i32 as u32) {
+            return 0_i32;
+        }
+    } else if arg4 != (0_i32 as u32) {
+        return 0_i32;
+    }
+    fns::HSD_StateInitDirect(ctx, 0_i32, (2_i32 as u32));
+    fns::HSD_CObjGetViewingMtx(ctx, fns::HSD_CObjGetCurrent(ctx), view_mtx.get(0_i32));
+    fns::GXLoadPosMtxImm(ctx, view_mtx.get(0_i32), (0_i32 as u32));
+    fns::GXSetLineWidth(ctx, (12_i32 as u8), (enums::GX_TO_ONE as i32));
+    fns::GXBegin(
+        ctx,
+        (enums::GX_LINESTRIP as i32),
+        (enums::GX_VTXFMT0 as i32),
+        ((arg0).count() as u16),
+    );
+    {
+        cur = (arg0).data();
+        i = 0_i32;
+        'l3: while !Handle::is_null(cur) {
+            'c4: {
+                inl_HSD_JObjSetMtxDirtyInline_unfused(ctx, (cur).desc().lb_unk0().jobj());
+                inl_HSD_JObjSetupMatrix_unfused(ctx, (cur).desc().lb_unk0().jobj());
+                {
+                    let mut x: f64 = ((cur).desc().lb_unk0().jobj())
+                        .mtx()
+                        .get(0_i32)
+                        .at(3_i32)
+                        .get();
+                    let mut y: f64 = ((cur).desc().lb_unk0().jobj())
+                        .mtx()
+                        .get(1_i32)
+                        .at(3_i32)
+                        .get();
+                    let mut z: f64 = ((cur).desc().lb_unk0().jobj())
+                        .mtx()
+                        .get(2_i32)
+                        .at(3_i32)
+                        .get();
+                    if i < arg3 {
+                        inl_GXPosition3f32_unfused(ctx, x, y, z);
+                        inl_GXColor4u8_unfused(
+                            ctx,
+                            (div_i32(((arg1).r() as i32), 2_i32) as u8),
+                            (div_i32(((arg1).g() as i32), 2_i32) as u8),
+                            (div_i32(((arg1).b() as i32), 2_i32) as u8),
+                            (arg1).a(),
+                        );
+                    } else {
+                        inl_GXPosition3f32_unfused(ctx, x, y, z);
+                        inl_GXColor4u8_unfused(ctx, (arg1).r(), (arg1).g(), (arg1).b(), (arg1).a());
+                    }
+                }
+            }
+            cur = (cur).next();
+            i = i.wrapping_add(1);
+        }
+    }
+    return 1_i32;
+}
+
 pub fn lb_800119DC<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: i32, arg2: f64, arg3: f64, arg4: f64) {
     let __frame = ctx.stack_frame(0x58);
     let sp1C: lb_80011A50_t<'a> = frame_at(ctx, &__frame, 0x0);
@@ -541,6 +1582,14 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     return result;
 }
 
+fn inl_HSD_JObjSetupMatrix<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+        return;
+    }
+    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
+}
+
 fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx) -> lb_80011A50_t<'a> {
     let mut ret: lb_80011A50_t<'a> = statics::melee__lb__lb_00F9::lb_804D63AC(ctx).get();
     if Handle::is_null(ret) {
@@ -578,6 +1627,250 @@ fn inl_inlineA1_unfused<'a>(ctx: &'a Ctx) -> lb_80011A50_t<'a> {
     return null(ctx);
 }
 
+fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+    let mut x = x;
+    let mut y: f64 = 0.0;
+    if x > 0.0 {
+        let mut guess: f64 = fp::frsqrte(x);
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        y = fp::frsp((fp::fmul(x, guess)));
+        return y;
+    }
+    return x;
+}
+
+fn inl_absf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+    let mut x = x;
+    if x < 0.0 {
+        x = fp::fneg(x);
+    }
+    return x;
+}
+
+fn inl_groundHeight<'a>(ctx: &'a Ctx, data: DynamicsData<'a>, floor_point: Vec<'a>) -> f64 {
+    let mut data = data;
+    let mut floor_point = floor_point;
+    return inl_absf(
+        ctx,
+        fp::fsubs((data).desc().lb_unk0().unk_2C().y(), (floor_point).y()),
+    );
+}
+
+fn inl_approximatelyZero<'a>(ctx: &'a Ctx, x: f64) -> i32 {
+    let mut x = x;
+    let mut result: i32 = 0;
+    if (x < 9.999999747378752e-06_f64) && (x > fp::fneg(9.999999747378752e-06_f64)) {
+        result = 1_i32;
+    } else {
+        result = 0_i32;
+    }
+    return result;
+}
+
+fn inl_approximatelyZeroVec3<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> i32 {
+    let mut result: i32 = 0;
+    if (((((vec.x() >= 9.999999747378752e-06_f64)
+        || (vec.x() <= fp::fneg(9.999999747378752e-06_f64)))
+        || (vec.y() >= 9.999999747378752e-06_f64))
+        || (vec.y() <= fp::fneg(9.999999747378752e-06_f64)))
+        || (vec.z() >= 9.999999747378752e-06_f64))
+        || (vec.z() <= fp::fneg(9.999999747378752e-06_f64))
+    {
+        result = 0_i32;
+    } else {
+        result = 1_i32;
+    }
+    return result;
+}
+
+fn inl_HSD_JObjSetRotation<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate: Quaternion<'a>) {
+    let mut jobj = jobj;
+    let mut rotate = rotate;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7280),
+            (0x114_i32 as u32),
+            cstr(ctx, 0x803b7280),
+        )
+    });
+    (if !Handle::is_null((rotate)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7280),
+            (0x115_i32 as u32),
+            cstr(ctx, 0x803b7280),
+        )
+    });
+    Handle::copy_from((jobj).rotate(), (rotate));
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_HSD_JObjGetRotationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7280),
+            (0x178_i32 as u32),
+            cstr(ctx, 0x803b7280),
+        )
+    });
+    return (jobj).rotate().z();
+}
+
+fn inl_HSD_JObjSetRotationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
+    let mut jobj = jobj;
+    let mut z = z;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7280),
+            (0x151_i32 as u32),
+            cstr(ctx, 0x803b7280),
+        )
+    });
+    (if !(((jobj).flags() & ((shl_i32(1_i32, (17_i32 as u32))) as u32)) != 0) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7280),
+            (0x152_i32 as u32),
+            cstr(ctx, 0x803b7280),
+        )
+    });
+    (jobj).rotate().set_z(z);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_HSD_JObjGetRotationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7280),
+            (0x16c_i32 as u32),
+            cstr(ctx, 0x803b7280),
+        )
+    });
+    return (jobj).rotate().x();
+}
+
+fn inl_HSD_JObjSetRotationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
+    let mut jobj = jobj;
+    let mut x = x;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7280),
+            (0x129_i32 as u32),
+            cstr(ctx, 0x803b7280),
+        )
+    });
+    (if !(((jobj).flags() & ((shl_i32(1_i32, (17_i32 as u32))) as u32)) != 0) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7280),
+            (0x12a_i32 as u32),
+            cstr(ctx, 0x803b7280),
+        )
+    });
+    (jobj).rotate().set_x(x);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_HSD_JObjGetRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7280),
+            (0x172_i32 as u32),
+            cstr(ctx, 0x803b7280),
+        )
+    });
+    return (jobj).rotate().y();
+}
+
+fn inl_HSD_JObjSetRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
+    let mut jobj = jobj;
+    let mut y = y;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7280),
+            (0x13d_i32 as u32),
+            cstr(ctx, 0x803b7280),
+        )
+    });
+    (if !(((jobj).flags() & ((shl_i32(1_i32, (17_i32 as u32))) as u32)) != 0) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7280),
+            (0x13e_i32 as u32),
+            cstr(ctx, 0x803b7280),
+        )
+    });
+    (jobj).rotate().set_y(y);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
 fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     let mut jobj = jobj;
     let mut result: i32 = 0;
@@ -605,6 +1898,34 @@ fn inl_HSD_JObjSetMtxDirtyInline_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
     if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
         fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
     }
+}
+
+fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+        return;
+    }
+    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
+}
+
+fn inl_GXPosition3f32_unfused<'a>(ctx: &'a Ctx, x: f64, y: f64, z: f64) {
+    let mut x = x;
+    let mut y = y;
+    let mut z = z;
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(x);
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(y);
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(z);
+}
+
+fn inl_GXColor4u8_unfused<'a>(ctx: &'a Ctx, x: u8, y: u8, z: u8, w: u8) {
+    let mut x = x;
+    let mut y = y;
+    let mut z = z;
+    let mut w = w;
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(x);
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(y);
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(z);
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(w);
 }
 
 /// Registers this unit's ports.
@@ -636,6 +1957,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (DynamicsDesc<'_>,) = Args::take_all(ctx);
             Ret::put(lb_8000FD18(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8000fd48,
+        |ctx| {
+            let (a0, a1, a2): (HSD_JObj<'_>, DynamicsDesc<'_>, u32) = Args::take_all(ctx);
+            Ret::put(lb_8000FD48(ctx, a0, a1, a2), ctx);
         },
         Returns::Nothing,
     );
@@ -673,6 +2002,23 @@ pub fn register(ctx: &Ctx) {
         Returns::Int,
     );
     ctx.register_port(
+        0x8001044c,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5, a6, a7): (
+                DynamicsDesc<'_>,
+                Addr<'_>,
+                i32,
+                Single,
+                i32,
+                i32,
+                i32,
+                i32,
+            ) = Args::take_all(ctx);
+            Ret::put(lb_8001044C(ctx, a0, a1, a2, a3.0, a4, a5, a6, a7), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x800115f4,
         |ctx| {
             Ret::put(lb_800115F4(ctx), ctx);
@@ -686,6 +2032,15 @@ pub fn register(ctx: &Ctx) {
             Ret::put(lb_80011710(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x800117f4,
+        |ctx| {
+            let (a0, a1, a2, a3, a4): (DynamicsDesc<'_>, _GXColor<'_>, _GXColor<'_>, i32, u32) =
+                Args::take_all(ctx);
+            Ret::put(lb_800117F4(ctx, a0, a1, a2, a3, a4), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x800119dc,

@@ -7717,6 +7717,276 @@ pub fn mpLib_80055E24<'a>(ctx: &'a Ctx, joint_id: i32) {
     );
 }
 
+pub fn mpLib_80055E9C<'a>(ctx: &'a Ctx, joint_id: i32) {
+    let __frame = ctx.stack_frame(0x70);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x4);
+    let unused_2: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x10);
+    let mut joint_id = joint_id;
+    let mut f31: f64 = 0.0;
+    let mut f30: f64 = 0.0;
+    let mut f0: f64 = 0.0;
+    let mut f1: f64 = 0.0;
+    let mut f2: f64 = 0.0;
+    let mut f3: f64 = 0.0;
+    let mut m0_3: f64 = 0.0;
+    let mut m1_3: f64 = 0.0;
+    let mut m0_0: f64 = 0.0;
+    let mut joint: CollJoint<'a> = null(ctx);
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut vtx_count: i32 = 0;
+    let mut v_r26: CollVtx<'a> = null(ctx);
+    let mut var_r25: i32 = 0;
+    let mut v_r4: CollVtx<'a> = null(ctx);
+    let mut var_r6: i32 = 0;
+    let mut mtx: ArrV<'a, F32, 4> = null(ctx);
+    let mut i: i32 = 0;
+    'goto_after1: {
+        'goto_after0: {
+            'l1: loop {
+                'c2: {}
+                if !(0_i32 != 0) {
+                    break 'l1;
+                }
+            }
+            fns::mpColl_804D64AC(ctx).set(fns::mpColl_804D64AC(ctx).get().wrapping_add(1_i32));
+            joint = (Handle::add(
+                statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                joint_id,
+            ));
+            vtx_count = (((joint).inner()).vtx_count() as i32);
+            v_r4 = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((joint).inner()).vtx_start() as i32),
+            ));
+            {
+                i = 0_i32;
+                'l3: while i < vtx_count {
+                    'c4: {
+                        (v_r4).set_x10((v_r4).pos().x());
+                        (v_r4).set_x14((v_r4).pos().y());
+                    }
+                    i = i.wrapping_add(1);
+                    v_r4 = Handle::add(v_r4, 1);
+                }
+            }
+            jobj = (joint).x20();
+            if Handle::is_null(jobj) {
+                return;
+            }
+            if ((fns::HSD_JObjGetFlags(ctx, jobj) & ((shl_i32(1_i32, (4_i32 as u32))) as u32)) != 0)
+            {
+                if !(((joint).flags() & ((enums::CollJoint_Hidden as i32) as u32)) != 0) {
+                    fns::mpJointHide(ctx, joint_id);
+                    var_r6 = 0_i32;
+                    if (!(((joint).flags()
+                        & (((enums::CollJoint_Hidden as i32) | (enums::CollJoint_B11 as i32))
+                            as u32))
+                        != 0))
+                        && (((joint).flags() & ((enums::CollJoint_Enabled as i32) as u32)) != 0)
+                    {
+                        var_r6 = 1_i32;
+                    }
+                    fns::mpIsland_8005B334(
+                        ctx,
+                        joint_id,
+                        (((joint).inner()).vtx_start() as i32),
+                        (((joint).inner()).vtx_count() as i32),
+                        var_r6,
+                    );
+                }
+                return;
+            }
+            (joint).set_xE((1_i32 as u8));
+            var_r25 = 0_i32;
+            inl_HSD_JObjSetupMatrix(ctx, jobj);
+            mtx = inl_HSD_JObjGetMtxPtr(ctx, jobj);
+            m0_0 = (Handle::add((Handle::cast::<Val<'a, F32>>(mtx)), 0_i32)).get();
+            if (m0_0 == (Handle::add(mtx, 1_i32)).at(1_i32).get())
+                && (m0_0 == (Handle::add(mtx, 2_i32)).at(2_i32).get())
+            {
+                m0_3 = (Handle::add(mtx, 0_i32)).at(3_i32).get();
+                m1_3 = (Handle::add(mtx, 1_i32)).at(3_i32).get();
+                v_r4 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((joint).inner()).vtx_start() as i32),
+                ));
+                {
+                    i = 0_i32;
+                    'l5: while i < vtx_count {
+                        'c6: {
+                            (v_r4).pos().set_x(fp::fmadds((v_r4).x0(), m0_0, m0_3));
+                            (v_r4).pos().set_y(fp::fmadds((v_r4).x4(), m0_0, m1_3));
+                        }
+                        i = i.wrapping_add(1);
+                        v_r4 = Handle::add(v_r4, 1);
+                    }
+                }
+                (joint).bounding_min().set_x(fp::fsubs(
+                    (fp::fmadds(((joint).inner()).left_bound(), m0_0, m0_3)),
+                    30.0,
+                ));
+                (joint).bounding_min().set_y(fp::fsubs(
+                    (fp::fmadds(((joint).inner()).bottom_bound(), m0_0, m1_3)),
+                    30.0,
+                ));
+                (joint).bounding_max().set_x(fp::fadds(
+                    30.0,
+                    (fp::fmadds(((joint).inner()).right_bound(), m0_0, m0_3)),
+                ));
+                (joint).bounding_max().set_y(fp::fadds(
+                    30.0,
+                    (fp::fmadds(((joint).inner()).top_bound(), m0_0, m1_3)),
+                ));
+                (joint).set_flags(((joint).flags() | ((enums::CollJoint_B8 as i32) as u32)));
+                break 'goto_after0;
+            }
+            i = 0_i32;
+            v_r26 = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((joint).inner()).vtx_start() as i32),
+            ));
+            f31 = 0.0;
+            'l7: while i < vtx_count {
+                'c8: {
+                    sp28.set_x((v_r26).x0());
+                    sp28.set_y((v_r26).x4());
+                    sp28.set_z(f31);
+                    fns::PSMTXMultVec(ctx, (jobj).mtx().get(0), sp28, sp28);
+                    (v_r26).pos().set_x(sp28.x());
+                    (v_r26).pos().set_y(sp28.y());
+                    if (((statics::melee__mp__mplib::mpLib_804D64CC(ctx).get() == 0_i32)
+                        || ((v_r26).pos().x() != (v_r26).x10()))
+                        || ((v_r26).pos().y() != (v_r26).x14()))
+                        || ({
+                            var_r25 = var_r25.wrapping_add(1);
+                            var_r25
+                        } <= 1_i32)
+                    {
+                        i = i.wrapping_add(1_i32);
+                        v_r26 = Handle::add(v_r26, 1_i32);
+                    } else {
+                        break 'goto_after1;
+                    }
+                }
+            }
+            {
+                mtx = inl_HSD_JObjGetMtxPtr(ctx, jobj);
+                f1 = 0.0;
+                if (((((f1 != (Handle::add(mtx, 0_i32)).at(1_i32).get())
+                    || (f1 != (Handle::add(mtx, 0_i32)).at(2_i32).get()))
+                    || (f1 != (Handle::add(mtx, 1_i32)).at(0_i32).get()))
+                    || (f1 != (Handle::add(mtx, 1_i32)).at(2_i32).get()))
+                    || (f1 != (Handle::add(mtx, 2_i32)).at(0_i32).get()))
+                    || (f1 != (Handle::add(mtx, 2_i32)).at(1_i32).get())
+                {
+                    (joint).set_flags(((joint).flags() | ((enums::CollJoint_B9 as i32) as u32)));
+                }
+                (joint).set_flags(((joint).flags() | ((enums::CollJoint_B8 as i32) as u32)));
+                if !(((joint).flags() & ((enums::CollJoint_B10 as i32) as u32)) != 0) {
+                    sp28.set_x(((joint).inner()).left_bound());
+                    sp28.set_y(((joint).inner()).bottom_bound());
+                    sp28.set_z(0.0);
+                    fns::PSMTXMultVec(ctx, (jobj).mtx().get(0), sp28, sp28);
+                    (joint).bounding_min().set_x(sp28.x());
+                    (joint).bounding_min().set_y(sp28.y());
+                    sp28.set_x(((joint).inner()).right_bound());
+                    sp28.set_y(((joint).inner()).top_bound());
+                    sp28.set_z(0.0);
+                    fns::PSMTXMultVec(ctx, (jobj).mtx().get(0), sp28, sp28);
+                    (joint).bounding_max().set_x(sp28.x());
+                    (joint).bounding_max().set_y(sp28.y());
+                    if (((joint).flags() & ((enums::CollJoint_B9 as i32) as u32)) != 0) {
+                        sp28.set_x(((joint).inner()).right_bound());
+                        sp28.set_y(((joint).inner()).bottom_bound());
+                        sp28.set_z(0.0);
+                        fns::PSMTXMultVec(ctx, (jobj).mtx().get(0), sp28, sp28);
+                        f30 = sp28.x();
+                        f31 = sp28.y();
+                        sp28.set_x(((joint).inner()).left_bound());
+                        sp28.set_y(((joint).inner()).top_bound());
+                        sp28.set_z(0.0);
+                        fns::PSMTXMultVec(ctx, (jobj).mtx().get(0), sp28, sp28);
+                        f1 = (joint).bounding_min().x();
+                        f0 = (joint).bounding_max().x();
+                        f2 = sp28.x();
+                        f3 = sp28.y();
+                        if f1 > f0 {
+                            (joint).bounding_min().set_x(f0);
+                        }
+                        if (joint).bounding_min().x() > f30 {
+                            (joint).bounding_min().set_x(f30);
+                        }
+                        if (joint).bounding_min().x() > f2 {
+                            (joint).bounding_min().set_x(f2);
+                        }
+                        if (joint).bounding_max().x() < f1 {
+                            (joint).bounding_max().set_x(f1);
+                        }
+                        if (joint).bounding_max().x() < f30 {
+                            (joint).bounding_max().set_x(f30);
+                        }
+                        if (joint).bounding_max().x() < f2 {
+                            (joint).bounding_max().set_x(f2);
+                        }
+                        f1 = (joint).bounding_min().y();
+                        f0 = (joint).bounding_max().y();
+                        if f1 > f0 {
+                            (joint).bounding_min().set_y(f0);
+                        }
+                        if (joint).bounding_min().y() > f31 {
+                            (joint).bounding_min().set_y(f31);
+                        }
+                        if (joint).bounding_min().y() > f3 {
+                            (joint).bounding_min().set_y(f3);
+                        }
+                        if (joint).bounding_max().y() < f1 {
+                            (joint).bounding_max().set_y(f1);
+                        }
+                        if (joint).bounding_max().y() < f31 {
+                            (joint).bounding_max().set_y(f31);
+                        }
+                        if (joint).bounding_max().y() < f3 {
+                            (joint).bounding_max().set_y(f3);
+                        }
+                    }
+                    (joint)
+                        .bounding_min()
+                        .set_x(fp::fsubs((joint).bounding_min().x(), 30.0));
+                    (joint)
+                        .bounding_max()
+                        .set_x(fp::fadds((joint).bounding_max().x(), 30.0));
+                    (joint)
+                        .bounding_min()
+                        .set_y(fp::fsubs((joint).bounding_min().y(), 30.0));
+                    (joint)
+                        .bounding_max()
+                        .set_y(fp::fadds((joint).bounding_max().y(), 30.0));
+                }
+            }
+        }
+        fns::mpJointUpdateDynamics(ctx, joint_id);
+    }
+    if (((joint).flags() & ((enums::CollJoint_Hidden as i32) as u32)) != 0) {
+        fns::mpJointUnhide(ctx, joint_id);
+    }
+    var_r6 = 0_i32;
+    if (!(((joint).flags()
+        & (((enums::CollJoint_Hidden as i32) | (enums::CollJoint_B11 as i32)) as u32))
+        != 0))
+        && (((joint).flags() & ((enums::CollJoint_Enabled as i32) as u32)) != 0)
+    {
+        var_r6 = 1_i32;
+    }
+    fns::mpIsland_8005B334(
+        ctx,
+        joint_id,
+        (((joint).inner()).vtx_start() as i32),
+        (((joint).inner()).vtx_count() as i32),
+        var_r6,
+    );
+}
+
 pub fn mpJointUpdateBounding<'a>(ctx: &'a Ctx, joint_id: i32) {
     let mut joint_id = joint_id;
     let mut joint: CollJoint<'a> = (Handle::add(
@@ -12206,6 +12476,52 @@ fn inl_HSD_JObjGetParent_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JO
     return null(ctx);
 }
 
+fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bd3ec),
+            (228_i32 as u32),
+            cstr(ctx, 0x803bd3ec),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
+fn inl_HSD_JObjSetupMatrix<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+        return;
+    }
+    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
+}
+
+fn inl_HSD_JObjGetMtxPtr<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'a, F32, 4> {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bd3ec),
+            (0x2bb_i32 as u32),
+            cstr(ctx, 0x803bd3ec),
+        )
+    });
+    inl_HSD_JObjSetupMatrix(ctx, jobj);
+    return (jobj).mtx().get(0);
+}
+
 fn inl_mpVtxSetPos_unfused<'a>(ctx: &'a Ctx, vtx_id: i32, x: f64, y: f64) {
     let mut vtx_id = vtx_id;
     let mut x = x;
@@ -12933,6 +13249,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (i32,) = Args::take_all(ctx);
             Ret::put(mpLib_80055E24(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80055e9c,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(mpLib_80055E9C(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

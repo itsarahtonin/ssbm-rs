@@ -108,9 +108,85 @@ pub fn ftCo_800CDE74<'a>(ctx: &'a Ctx, fighter_gobj: HSD_GObj<'a>) {
     fns::ft_80084DB0(ctx, fighter_gobj);
 }
 
+pub fn ftCo_800CDE94<'a>(ctx: &'a Ctx, fighter: Fighter<'a>, arg1: Vec<'a>, arg2: Vec<'a>) {
+    let __frame = ctx.stack_frame(0x30);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut fighter = fighter;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut fighterbone_jobj: HSD_JObj<'a> = null(ctx);
+    let mut scale: f64 = 0.0;
+    let mut inverse_scale: f64 = 0.0;
+    fighterbone_jobj = (Handle::add(
+        (fighter).parts(),
+        ((((fighter).ft_data()).x8()).x10() as i32),
+    ))
+    .joint();
+    Handle::copy_from(pos, (arg1));
+    scale = (fighter).x34_scale().y();
+    if scale != 1.0 {
+        inverse_scale = fp::fdivs(1.0, scale);
+        pos.set_x(fp::fmuls(pos.x(), inverse_scale));
+        pos.set_y(fp::fmuls(pos.y(), inverse_scale));
+        pos.set_z(fp::fmuls(pos.z(), inverse_scale));
+    }
+    fns::PSMTXMultVec(
+        ctx,
+        inl_HSD_JObjGetMtxPtr_unfused(ctx, fighterbone_jobj),
+        pos,
+        arg2,
+    );
+}
+
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804d3ccc),
+            (228_i32 as u32),
+            cstr(ctx, 0x804d3ccc),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
+fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+        return;
+    }
+    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
+}
+
+fn inl_HSD_JObjGetMtxPtr_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'a, F32, 4> {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804d3ccc),
+            (0x2bb_i32 as u32),
+            cstr(ctx, 0x804d3ccc),
+        )
+    });
+    inl_HSD_JObjSetupMatrix_unfused(ctx, jobj);
+    return (jobj).mtx().get(0);
 }
 
 /// Registers this unit's ports.
@@ -152,6 +228,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(ftCo_800CDE74(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x800cde94,
+        |ctx| {
+            let (a0, a1, a2): (Fighter<'_>, Vec<'_>, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(ftCo_800CDE94(ctx, a0, a1, a2), ctx);
         },
         Returns::Nothing,
     );

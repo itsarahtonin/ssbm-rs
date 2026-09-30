@@ -121,6 +121,109 @@ pub fn it_8026EC54<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: u16, arg2: Val<'a
     }
 }
 
+pub fn it_8026ECE0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: u32) -> u32 {
+    let __frame = ctx.stack_frame(0x30);
+    let mut gobj = gobj;
+    let mut arg1 = arg1;
+    let mut ip: Item<'a> = null(ctx);
+    let mut ret: u32 = 0;
+    let mut idx: u32 = 0;
+    ret = (0_i32 as u32);
+    ip = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if (ip).kind() == (enums::It_Kind_Unk4 as i32) {
+        if ((((ip).xDAA().xDAA_flag().x0().b0() as i32) != 0)
+            && ((((ip).xDD4_itemVar().it_266F().x18().x0().b0() as i32) != 0)
+                || (((ip).xDD4_itemVar().it_266F().x18().x0().b1() as i32) != 0)))
+            && (fns::lbColl_8000A10C(ctx, (ip).xDD4_itemVar().it_266F().x1C(), arg1, (ip).scl())
+                != 0)
+        {
+            ret = (1_i32 as u32);
+        }
+    } else {
+        if ((ip).xDAA().xDAA_flag().x0().b6() != 0) {
+            if ((ip).xDAA().xDAA_flag().x0().b2() != 0) {
+                idx = 0_u32;
+                'l1: while idx < 4_u32 {
+                    'c2: {
+                        if fns::lbColl_80009F54(
+                            ctx,
+                            (ip).x5D4_hitboxes().get((idx as i32)).hit(),
+                            arg1,
+                            (ip).scl(),
+                        ) != 0_i32
+                        {
+                            ret = (1_i32 as u32);
+                        }
+                        idx = idx.wrapping_add(1);
+                    }
+                }
+            }
+            if (!((ip).xDC8_word().flags().x13() != 0))
+                && (((ip).xDAA().xDAA_flag().x0().b1() as i32) != 0)
+            {
+                if (ip).xD0C() == 0_i32 {
+                    idx = 0_u32;
+                    'l3: while idx < ((ip).xAC8_hurtboxNum() as u32) {
+                        'c4: {
+                            if fns::lbColl_8000A244(
+                                ctx,
+                                (ip).xACC_itemHurtbox().get((idx as i32)),
+                                arg1,
+                                At::new(ctx, 0_i32 as u32)
+                                    .field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0)
+                                    .get(0),
+                                0.0,
+                            ) != 0_i32
+                            {
+                                ret = (1_i32 as u32);
+                            }
+                            idx = idx.wrapping_add(1);
+                        }
+                    }
+                } else {
+                    idx = 0_u32;
+                    'l5: while idx < ((ip).xAC8_hurtboxNum() as u32) {
+                        'c6: {
+                            if fns::lbColl_8000A584(
+                                ctx,
+                                (ip).xACC_itemHurtbox().get((idx as i32)),
+                                ((ip).xD0C() as u32),
+                                arg1,
+                                null::<ArrV<'a, F32, 4>>(ctx),
+                                0.0,
+                            ) != 0_i32
+                            {
+                                ret = (1_i32 as u32);
+                            }
+                            idx = idx.wrapping_add(1);
+                        }
+                    }
+                }
+            }
+        }
+        if ((((ip).xDAA().xDAA_flag().x0().b4() as i32) != 0)
+            && (((ip).xDC8_word().flags().x15() as i32) != 0))
+            && (fns::lbGx_8001E2F8(
+                ctx,
+                Handle::cast::<Quaternion<'a>>((ip).xBCC_unk()),
+                (ip).pos(),
+                fns::it_804D5168(ctx),
+                arg1,
+                (ip).facing_dir(),
+            ) != 0_i32)
+        {
+            ret = (1_i32 as u32);
+        }
+        if ((((ip).xDAA().xDAA_flag().x0().b3() as i32) != 0)
+            && (((ip).xDD0_flag().x0().b0() as i32) != 0))
+            && (fns::lb_800149E0(ctx, Handle::cast::<ArrV<'a, F32, 4>>((ip).xB54()), arg1) != 0_i32)
+        {
+            ret = (1_i32 as u32);
+        }
+    }
+    return ret;
+}
+
 pub fn it_8026EECC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x60);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
@@ -367,6 +470,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(it_8026EC54(ctx, a0, a1, a2), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8026ece0,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, u32) = Args::take_all(ctx);
+            Ret::put(it_8026ECE0(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x8026eecc,

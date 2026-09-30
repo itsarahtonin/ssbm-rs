@@ -317,6 +317,55 @@ pub fn HSD_DObjResolveRefsAll<'a>(ctx: &'a Ctx, dobj: HSD_DObj<'a>, desc: HSD_DO
     }
 }
 
+pub fn HSD_DObjDisp<'a>(
+    ctx: &'a Ctx,
+    dobj: HSD_DObj<'a>,
+    vmtx: ArrV<'a, F32, 4>,
+    pmtx: ArrV<'a, F32, 4>,
+    rendermode: u32,
+) {
+    let __frame = ctx.stack_frame(0x30);
+    let mut dobj = dobj;
+    let mut vmtx = vmtx;
+    let mut pmtx = pmtx;
+    let mut rendermode = rendermode;
+    let mut p: HSD_PObj<'a> = null(ctx);
+    fns::HSD_MObjSetCurrent(ctx, (dobj).mobj());
+    if (rendermode & (0x4000000_i32 as u32)) == (0_i32 as u32) {
+        (Handle::cast::<HSD_MObjInfo<'a>>(
+            ((Handle::cast::<_HSD_Class<'a>>((dobj).mobj())).class_info()),
+        ))
+        .setup()
+        .call::<_, ()>(((dobj).mobj(), rendermode));
+    }
+    {
+        p = (dobj).pobj();
+        'l1: while !Handle::is_null(p) {
+            'c2: {
+                (Handle::cast::<HSD_PObjInfo<'a>>(
+                    ((Handle::cast::<_HSD_Class<'a>>(p)).class_info()),
+                ))
+                .disp()
+                .call::<_, ()>((
+                    p,
+                    Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(vmtx).get(0),
+                    Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(pmtx).get(0),
+                    rendermode,
+                ));
+            }
+            p = (p).next();
+        }
+    }
+    if (rendermode & (0x4000000_i32 as u32)) == (0_i32 as u32) {
+        (Handle::cast::<HSD_MObjInfo<'a>>(
+            ((Handle::cast::<_HSD_Class<'a>>((dobj).mobj())).class_info()),
+        ))
+        .unset()
+        .call::<_, ()>(((dobj).mobj(), rendermode));
+    }
+    fns::HSD_MObjSetCurrent(ctx, null::<HSD_MObj<'a>>(ctx));
+}
+
 pub fn DObjRelease<'a>(ctx: &'a Ctx, o: _HSD_Class<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut o = o;
@@ -576,6 +625,15 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (HSD_DObj<'_>, HSD_DObjDesc<'_>) = Args::take_all(ctx);
             Ret::put(HSD_DObjResolveRefsAll(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8035e388,
+        |ctx| {
+            let (a0, a1, a2, a3): (HSD_DObj<'_>, ArrV<'_, F32, 4>, ArrV<'_, F32, 4>, u32) =
+                Args::take_all(ctx);
+            Ret::put(HSD_DObjDisp(ctx, a0, a1, a2, a3), ctx);
         },
         Returns::Nothing,
     );

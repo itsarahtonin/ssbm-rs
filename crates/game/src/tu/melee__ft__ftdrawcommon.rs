@@ -68,6 +68,399 @@ pub fn ftDrawCommon_8008051C<'a>(
     return null::<ArrV<'a, F32, 4>>(ctx);
 }
 
+pub fn ftDrawCommon_800805C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: i32) {
+    let __frame = ctx.stack_frame(0xd8);
+    let spAC: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let spA8: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let sp78: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x8);
+    let sp18: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x38);
+    let _pad: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x68);
+    let sp54: Vec<'a> = frame_at(ctx, &__frame, 0x74);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0x80);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x8c);
+    let mut gobj = gobj;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut i: i32 = 0;
+    let mut fighter_2: i32 = 0;
+    let mut fighter: Fighter<'a> = null(ctx);
+    let mut phi_r24: u32 = 0;
+    let mut do_invalidate: u32 = 0;
+    let mut mtx: ArrV<'a, F32, 4> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    fighter = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    do_invalidate = (0_i32 as u32);
+    if ((fighter).x21FC_flag().x0().b6() as i32) != 0_i32 {
+        {
+            i = 0_i32;
+            'l3: while (i as u32) < (div_u32(0x4e0_u32, 0x138_u32)) {
+                'c4: {
+                    if (fns::lbColl_80009F54(
+                        ctx,
+                        (fighter).x914().get(i),
+                        (arg1 as u32),
+                        (fighter).x34_scale().y(),
+                    ) != 0)
+                    {
+                        do_invalidate = (1_i32 as u32);
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+        if ((fighter).x221D_b6() != 0) {
+            {
+                i = 0_i32;
+                'l5: while (i as u32) < ((fighter).hurt_capsules_len() as u32) {
+                    'c6: {
+                        if fns::lbColl_8000A584(
+                            ctx,
+                            (fighter).hurt_capsules().get(i).capsule(),
+                            (1_i32 as u32),
+                            (arg1 as u32),
+                            fns::ftCommon_8007F804(ctx, fighter),
+                            (fighter).cur_pos().z(),
+                        ) != 0_i32
+                        {
+                            do_invalidate = (1_i32 as u32);
+                        }
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+        } else {
+            fighter_2 = (fighter).x1988();
+            if (fighter_2 == 0_i32) && ((fighter).x198C() == 0_i32) {
+                {
+                    i = 0_i32;
+                    'l7: while (i as u32) < ((fighter).hurt_capsules_len() as u32) {
+                        'c8: {
+                            if (fns::lbColl_8000A244(
+                                ctx,
+                                (fighter).hurt_capsules().get(i).capsule(),
+                                (arg1 as u32),
+                                fns::ftCommon_8007F804(ctx, fighter),
+                                (fighter).cur_pos().z(),
+                            ) != 0)
+                            {
+                                do_invalidate = (1_i32 as u32);
+                            }
+                        }
+                        i = i.wrapping_add(1);
+                    }
+                }
+            } else {
+                if ((fighter).x198C() == 2_i32) || (fighter_2 == 2_i32) {
+                    phi_r24 = (2_i32 as u32);
+                } else {
+                    phi_r24 = (1_i32 as u32);
+                }
+                {
+                    i = 0_i32;
+                    'l9: while (i as u32) < ((fighter).hurt_capsules_len() as u32) {
+                        'c10: {
+                            if (fns::lbColl_8000A584(
+                                ctx,
+                                (fighter).hurt_capsules().get(i).capsule(),
+                                phi_r24,
+                                (arg1 as u32),
+                                fns::ftCommon_8007F804(ctx, fighter),
+                                (fighter).cur_pos().z(),
+                            ) != 0)
+                            {
+                                do_invalidate = (1_i32 as u32);
+                            }
+                        }
+                        i = i.wrapping_add(1);
+                    }
+                }
+            }
+        }
+        if (((fighter).reflecting() as i32) != 0)
+            && (fns::lbColl_8000A95C(
+                ctx,
+                (fighter).reflect_hit(),
+                (arg1 as u32),
+                fns::ftCommon_8007F804(ctx, fighter),
+                (fighter).cur_pos().z(),
+            ) != 0)
+        {
+            do_invalidate = (1_i32 as u32);
+        }
+        if (((fighter).x2218_b6() as i32) != 0)
+            && (fns::lbColl_8000AB2C(
+                ctx,
+                (fighter).absorb_hit(),
+                (arg1 as u32),
+                fns::ftCommon_8007F804(ctx, fighter),
+                (fighter).cur_pos().z(),
+            ) != 0)
+        {
+            do_invalidate = (1_i32 as u32);
+        }
+        if (((fighter).x221B().x221B_b0() as i32) != 0)
+            && (fns::lbColl_8000A78C(
+                ctx,
+                (fighter).shield_hit(),
+                (arg1 as u32),
+                fns::ftCommon_8007F804(ctx, fighter),
+                (fighter).cur_pos().z(),
+            ) != 0)
+        {
+            do_invalidate = (1_i32 as u32);
+        }
+    }
+    if ((fighter).x21FC_flag().x0().b5() as i32) != 0_i32 {
+        {
+            i = 0_i32;
+            'l11: while (i as u32) < ((fighter).x166C() as u32) {
+                'c12: {
+                    if (fns::lbColl_8000A460(ctx, (fighter).x1670().get(i), (arg1 as u32)) != 0) {
+                        do_invalidate = (1_i32 as u32);
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+        {
+            i = 0_i32;
+            'l13: while (i as u32) < ((fighter).dynamics_num() as u32) {
+                'c14: {
+                    Handle::copy_from(
+                        spAC,
+                        statics::melee__ft__ftdrawcommon::ftDrawCommon_804D836C(ctx),
+                    );
+                    Handle::copy_from(
+                        spA8,
+                        statics::melee__ft__ftdrawcommon::ftDrawCommon_804D8370(ctx),
+                    );
+                    if (fns::lb_800117F4(
+                        ctx,
+                        (fighter).dynamic_bone_sets().get(i).dyn_desc(),
+                        spAC,
+                        spA8,
+                        (fighter).dynamic_bone_sets().get(i).bone_id(),
+                        (arg1 as u32),
+                    ) != 0)
+                    {
+                        do_invalidate = (1_i32 as u32);
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    }
+    if (((fighter).x21FC_flag().x0().b3() as i32) != 0)
+        && (fns::ftCo_800B395C(ctx, gobj, arg1) != 0_i32)
+    {
+        do_invalidate = (1_i32 as u32);
+    }
+    if ((((fighter).x21FC_flag().x0().b4() as i32) != 0) && (((fighter).x2223_b5() as i32) != 0))
+        && (fns::lb_80014770(ctx, (fighter).dmg().x1930().x0(), arg1) != 0)
+    {
+        do_invalidate = (1_i32 as u32);
+    }
+    if ((fighter).x21FC_flag().x0().b2() as i32) != 0_i32 {
+        let mut temp_r24: itPickup<'a> = (fighter).x294_itPickup();
+        if ((fighter).ground_or_air() as u32) == (0_i32 as u32) {
+            if (fns::lbGx_8001E2F8(
+                ctx,
+                (temp_r24).gr_light_offset(),
+                (fighter).cur_pos(),
+                statics::melee__ft__ftdrawcommon::ftDrawCommon_804D3A88(ctx),
+                (arg1 as u32),
+                (fighter).facing_dir(),
+            ) != 0)
+            {
+                do_invalidate = (1_i32 as u32);
+            }
+            if (fns::lbGx_8001E2F8(
+                ctx,
+                (temp_r24).gr_heavy_offset(),
+                (fighter).cur_pos(),
+                statics::melee__ft__ftdrawcommon::ftDrawCommon_804D3A90(ctx),
+                (arg1 as u32),
+                (fighter).facing_dir(),
+            ) != 0)
+            {
+                do_invalidate = (1_i32 as u32);
+            }
+        } else if (fns::lbGx_8001E2F8(
+            ctx,
+            (temp_r24).air_light_offset(),
+            (fighter).cur_pos(),
+            statics::melee__ft__ftdrawcommon::ftDrawCommon_804D3A8C(ctx),
+            (arg1 as u32),
+            (fighter).facing_dir(),
+        ) != 0)
+        {
+            do_invalidate = (1_i32 as u32);
+        }
+    }
+    if ((((fighter).x21FC_flag().x0().b1() as i32) != 0) && (!((fighter).x2227_b2() != 0)))
+        && (fns::lbColl_8000A044(
+            ctx,
+            (fighter).x1064_thrownHitbox(),
+            (arg1 as u32),
+            (fighter).x34_scale().y(),
+        ) != 0)
+    {
+        do_invalidate = (1_i32 as u32);
+    }
+    if (((fighter).x21FC_flag().x0().b0() as i32) != 0) && (!((fighter).x2229_b4() != 0)) {
+        {
+            i = 0_i32;
+            'l15: while (i as u32) < (div_u32(88_u32, 44_u32)) {
+                'c16: {
+                    if (fns::lbColl_8000A1A8(
+                        ctx,
+                        (fighter).x1614().get(i),
+                        arg1,
+                        (fighter).x34_scale().y(),
+                    ) != 0)
+                    {
+                        do_invalidate = (1_i32 as u32);
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    }
+    if (do_invalidate != 0) {
+        fns::HSD_StateInvalidate(ctx, 1_i32.wrapping_neg());
+    }
+    if !((fighter).x21FC_flag().x0().b7() != 0) {
+        return;
+    }
+    if ((!((fighter).invisible() != 0)) && (!((fighter).x221E_b5() != 0))) && (arg2 != 0) {
+        fns::ftParts_800750C8(ctx, fighter, 1_i32, 0_i32);
+        fns::ftParts_800750C8(ctx, fighter, 4_i32, 0_i32);
+        if ((((fighter).is_metal() as i32) != 0) || (((fighter).x2226_b5() as i32) != 0))
+            || (((fighter).x2227_b3() as i32) != 0)
+        {
+            fns::ftParts_800750C8(ctx, fighter, 0_i32, 0_i32);
+            fns::ftParts_800750C8(ctx, fighter, 2_i32, 1_i32);
+        } else {
+            fns::ftParts_800750C8(ctx, fighter, 2_i32, 0_i32);
+            fns::ftParts_800750C8(ctx, fighter, 0_i32, 1_i32);
+        }
+        fns::ftCo_8009F5AC(ctx, fighter);
+        (fighter).set_x2223_b2((0_i32 as u8));
+        (fighter).set_x2227_b7((1_i32 as u8));
+        (fighter).set_x2228_b0((0_i32 as u8));
+        mtx =
+            inl_ftDrawCommon_8008051C_inline_unfused(ctx, gobj, sp54, v, sp18.get(0), sp78.get(0));
+        fns::HSD_JObjDispAll(
+            ctx,
+            (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj))),
+            mtx,
+            fns::HSD_GObj_80390EB8(ctx, arg1),
+            (0_i32 as u32),
+        );
+        if !Handle::is_null(fns::ftData_UnkMtxFunc0(ctx).at((fighter).kind()).get()) {
+            fns::ftData_UnkMtxFunc0(ctx)
+                .at((fighter).kind())
+                .get()
+                .call::<_, ()>((gobj, arg1, mtx));
+        }
+        fns::ftCo_800C8AF0(ctx, fighter);
+        fns::ftCo_8009F7F8(ctx, fighter);
+    }
+    if !Handle::is_null((fighter).x20A0_accessory()) {
+        fns::HSD_JObjDispAll(
+            ctx,
+            (fighter).x20A0_accessory(),
+            At::new(ctx, 0_i32 as u32)
+                .field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0)
+                .get(0),
+            fns::HSD_GObj_80390EB8(ctx, arg1),
+            (0_i32 as u32),
+        );
+    }
+    fns::ftCo_800C2600(ctx, gobj, (arg1 as u32));
+}
+
+pub fn ftDrawCommon_80080C28<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, flag_index: i32) {
+    let __frame = ctx.stack_frame(0xc0);
+    let sp70: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let sp18: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x30);
+    let v1: Vec<'a> = frame_at(ctx, &__frame, 0x60);
+    let v2: Vec<'a> = frame_at(ctx, &__frame, 0x6c);
+    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x78);
+    let mut gobj = gobj;
+    let mut flag_index = flag_index;
+    let mut unused: Val<'a, F32> = null(ctx);
+    let mut temp_f31: f64 = 0.0;
+    let mut temp_f0: f64 = 0.0;
+    let mut fighter: Fighter<'a> = null(ctx);
+    let mut vmtx: ArrV<'a, F32, 4> = null(ctx);
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    fighter = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if ((fighter).x21FC_flag().x0().b7() as i32) != 0_i32 {
+        if ((!((fighter).invisible() != 0)) && (!((fighter).x221E_b5() != 0)))
+            && (!((fighter).x2226_b5() != 0))
+        {
+            fns::ftCo_8009F5AC(ctx, fighter);
+            if !Handle::is_null((fighter).x5AC().xC().at(1_i32).get()) {
+                fns::ftParts_800750C8(ctx, fighter, 0_i32, 0_i32);
+                fns::ftParts_800750C8(ctx, fighter, 2_i32, 0_i32);
+                fns::ftParts_800750C8(ctx, fighter, 4_i32, 0_i32);
+                fns::ftParts_800750C8(ctx, fighter, 1_i32, 1_i32);
+            }
+            (fighter).set_x2223_b2((0_i32 as u8));
+            (fighter).set_x2223_b3((0_i32 as u8));
+            (fighter).set_x2227_b7((0_i32 as u8));
+            (fighter).set_x2228_b0((1_i32 as u8));
+            vmtx = inl_ftDrawCommon_8008051C_inline_unfused(
+                ctx,
+                gobj,
+                v1,
+                v2,
+                sp18.get(0),
+                sp70.get(0),
+            );
+            jobj = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
+            fns::HSD_JObjDispAll(
+                ctx,
+                jobj,
+                vmtx,
+                fns::HSD_GObj_80390EB8(ctx, flag_index),
+                (0_i32 as u32),
+            );
+            if !Handle::is_null(fns::ftData_UnkMtxFunc0(ctx).at((fighter).kind()).get()) {
+                fns::ftData_UnkMtxFunc0(ctx)
+                    .at((fighter).kind())
+                    .get()
+                    .call::<_, ()>((gobj, flag_index, vmtx));
+            }
+            fns::ftCo_800C8AF0(ctx, fighter);
+            fns::ftCo_8009F7F8(ctx, fighter);
+        }
+        if !Handle::is_null((fighter).x20A0_accessory()) {
+            fns::HSD_JObjDispAll(
+                ctx,
+                (fighter).x20A0_accessory(),
+                At::new(ctx, 0_i32 as u32)
+                    .field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0)
+                    .get(0),
+                fns::HSD_GObj_80390EB8(ctx, flag_index),
+                (0_i32 as u32),
+            );
+        }
+    }
+}
+
 pub fn ftDrawCommon_80080E18<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0xa0);
     let mut gobj = gobj;
@@ -204,6 +597,66 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_ftDrawCommon_8008051C_inline_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    sp54: Vec<'a>,
+    v: Vec<'a>,
+    sp18: ArrV<'a, F32, 4>,
+    sp70: ArrV<'a, F32, 4>,
+) -> ArrV<'a, F32, 4> {
+    let mut gobj = gobj;
+    let mut sp54 = sp54;
+    let mut v = v;
+    let mut sp18 = sp18;
+    let mut sp70 = sp70;
+    (v).set_x({
+        let __t2 = {
+            let __t1 = 0.0;
+            (v).set_z(__t1);
+            __t1
+        };
+        (v).set_y(__t2);
+        __t2
+    });
+    (sp54).set_x({
+        let __t4 = {
+            let __t3 = 0.0;
+            (sp54).set_z(__t3);
+            __t3
+        };
+        (sp54).set_y(__t4);
+        __t4
+    });
+    if (fns::ftLib_GetShakeOffset(ctx, gobj, sp54) != 0) {
+        let mut current: HSD_CObj<'a> = fns::HSD_CObjGetCurrent(ctx);
+        let mut mtx: ArrV<'a, F32, 4> = (current).view_mtx().get(0);
+        fns::PSMTXIdentity(
+            ctx,
+            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(sp18).get(0),
+        );
+        inl_mtx_thing_2_unfused(
+            ctx,
+            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(sp18).get(0),
+            sp54,
+            v,
+        );
+        fns::PSMTXConcat(
+            ctx,
+            mtx,
+            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(sp18).get(0),
+            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(sp70).get(0),
+        );
+        return Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(sp70).get(0);
+    }
+    return null::<ArrV<'a, F32, 4>>(ctx);
+}
+
+fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).hsd_obj();
+}
+
 fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     let mut jobj = jobj;
     let mut result: i32 = 0;
@@ -282,11 +735,6 @@ fn inl_ftDrawCommon_80080E18_inline2_unfused<'a>(
     inl_HSD_JObjSetTranslate_unfused(ctx, jobj, pos);
 }
 
-fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).hsd_obj();
-}
-
 fn inl_ftDrawCommon_80080E18_inline0_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -358,6 +806,22 @@ pub fn register(ctx: &Ctx) {
             Ret::put(ftDrawCommon_8008051C(ctx, a0, a1), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x800805c8,
+        |ctx| {
+            let (a0, a1, a2): (HSD_GObj<'_>, i32, i32) = Args::take_all(ctx);
+            Ret::put(ftDrawCommon_800805C8(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80080c28,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
+            Ret::put(ftDrawCommon_80080C28(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x80080e18,

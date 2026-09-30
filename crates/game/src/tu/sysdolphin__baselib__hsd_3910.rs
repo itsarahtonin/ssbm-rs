@@ -34,6 +34,22 @@ pub fn HSD_GObj_LObjCallback<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) 
     fns::HSD_LObjSetupInit(ctx, fns::HSD_CObjGetCurrent(ctx));
 }
 
+pub fn HSD_GObj_JObjCallback<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut gobj = gobj;
+    let mut arg1 = arg1;
+    let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
+    fns::HSD_JObjDispAll(
+        ctx,
+        jobj,
+        At::new(ctx, 0_i32 as u32)
+            .field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0)
+            .get(0),
+        fns::HSD_GObj_80390EB8(ctx, arg1),
+        (0_i32 as u32),
+    );
+}
+
 pub fn HSD_GObj_FogCallback<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
@@ -168,6 +184,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
             Ret::put(HSD_GObj_LObjCallback(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80391070,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
+            Ret::put(HSD_GObj_JObjCallback(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );

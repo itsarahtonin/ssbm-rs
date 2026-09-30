@@ -594,6 +594,50 @@ pub fn ftKb_SpecialN_800EEEC4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, kind: i32) {
     }
 }
 
+pub fn ftKb_UnkMtxFunc0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, mtx: ArrV<'a, F32, 4>) {
+    let __frame = ctx.stack_frame(0x38);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut arg1 = arg1;
+    let mut mtx = mtx;
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
+    if Handle::is_null((fp).u().kb().hat().jobj()) {
+        return;
+    }
+    if !((fp).x2225_b2() != 0) {
+        return;
+    }
+    {
+        let mut bone_mtx: ArrV<'a, F32, 4> =
+            inl_HSD_JObjGetMtxPtr_unfused(ctx, (Handle::add((fp).parts(), 6_i32)).joint());
+        let mut jobj: HSD_JObj<'a> = (fp).u().kb().hat().jobj();
+        inl_HSD_JObjCopyMtx_unfused(ctx, (fp).u().kb().hat().jobj(), bone_mtx);
+        (jobj).set_flags(
+            ((jobj).flags()
+                | ((((shl_i32(1_i32, (23_i32 as u32))) | (shl_i32(1_i32, (24_i32 as u32))))
+                    | (shl_i32(1_i32, (25_i32 as u32)))) as u32)),
+        );
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+        fns::HSD_JObjDispAll(
+            ctx,
+            (fp).u().kb().hat().jobj(),
+            Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(mtx).get(0),
+            fns::HSD_GObj_80390EB8(ctx, arg1),
+            (0_i32 as u32),
+        );
+    }
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+}
+
 pub fn ftKb_Init_UnkMotionStates6<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_JObj<'a> {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
@@ -2647,6 +2691,82 @@ fn inl_Fighter_OnKnockbackEnter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ar
     fns::ftAnim_800704F0(ctx, gobj, 0_i32, 3.0);
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7548),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b7548),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
+fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+        return;
+    }
+    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
+}
+
+fn inl_HSD_JObjGetMtxPtr_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'a, F32, 4> {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7548),
+            (0x2bb_i32 as u32),
+            cstr(ctx, 0x803b7548),
+        )
+    });
+    inl_HSD_JObjSetupMatrix_unfused(ctx, jobj);
+    return (jobj).mtx().get(0);
+}
+
+fn inl_HSD_JObjCopyMtx_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, mtx: ArrV<'a, F32, 4>) {
+    let mut jobj = jobj;
+    let mut mtx = mtx;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7548),
+            (0x2c2_i32 as u32),
+            cstr(ctx, 0x803b7548),
+        )
+    });
+    (if true {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7548),
+            (0x2c3_i32 as u32),
+            cstr(ctx, 0x803b7548),
+        )
+    });
+    fns::PSMTXCopy(
+        ctx,
+        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(mtx).get(0),
+        (jobj).mtx().get(0),
+    );
+}
+
 fn inl_ftKb_SpecialN_insert_joint_refs_unfused<'a>(
     ctx: &'a Ctx,
     total_dobjs: Val<'a, i32>,
@@ -3065,6 +3185,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
             Ret::put(ftKb_SpecialN_800EEEC4(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x800eef04,
+        |ctx| {
+            let (a0, a1, a2): (HSD_GObj<'_>, i32, ArrV<'_, F32, 4>) = Args::take_all(ctx);
+            Ret::put(ftKb_UnkMtxFunc0(ctx, a0, a1, a2), ctx);
         },
         Returns::Nothing,
     );

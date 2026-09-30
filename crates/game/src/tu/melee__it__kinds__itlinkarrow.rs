@@ -26,6 +26,41 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn it_802A7D8C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
+    let __frame = ctx.stack_frame(0x28);
+    let mut gobj = gobj;
+    let mut arg1 = arg1;
+    let mut item: Item<'a> = null(ctx);
+    item = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if (!Handle::is_null((item).xDD4_itemVar().linkarrow().xB4().at(0_i32).get()))
+        && ((item).xDAC_itcmd_var0() == 1_u32)
+    {
+        fns::HSD_JObjDispAll(
+            ctx,
+            (item).xDD4_itemVar().linkarrow().xB4().at(0_i32).get(),
+            At::new(ctx, 0_i32 as u32)
+                .field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0)
+                .get(0),
+            fns::HSD_GObj_80390EB8(ctx, arg1),
+            0_u32,
+        );
+    }
+    if (!Handle::is_null((item).xDD4_itemVar().linkarrow().xB4().at(1_i32).get()))
+        && ((item).xDB0_itcmd_var1() == 1_u32)
+    {
+        fns::HSD_JObjDispAll(
+            ctx,
+            (item).xDD4_itemVar().linkarrow().xB4().at(1_i32).get(),
+            At::new(ctx, 0_i32 as u32)
+                .field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0)
+                .get(0),
+            fns::HSD_GObj_80390EB8(ctx, arg1),
+            0_u32,
+        );
+    }
+    fns::it_8026EECC(ctx, gobj, arg1);
+}
+
 pub fn it_802A7E40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
     let quat: Quaternion<'a> = frame_at(ctx, &__frame, 0x0);
@@ -1893,6 +1928,14 @@ fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x802a7d8c,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
+            Ret::put(it_802A7D8C(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
     ctx.register_port(
         0x802a7e40,
         |ctx| {

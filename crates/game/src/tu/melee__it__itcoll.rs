@@ -508,6 +508,438 @@ pub fn it_802701BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn it_802703E8<'a>(ctx: &'a Ctx, arg_item_gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x60);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let mut arg_item_gobj = arg_item_gobj;
+    let mut arg_item: Item<'a> = null(ctx);
+    let mut fighter_gobj: HSD_GObj<'a> = null(ctx);
+    let mut fighter: Fighter<'a> = null(ctx);
+    let mut hit_index: u32 = 0;
+    let mut hit: HitCapsule<'a> = null(ctx);
+    let mut kind: i32 = 0;
+    let mut dmg_: i32 = 0;
+    let mut hurt_index: u32 = 0;
+    let mut ft_team: u32 = 0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    arg_item = Handle::cast::<Item<'a>>((arg_item_gobj).user_data());
+    if ((arg_item).xAC8_hurtboxNum() as i32) == 0_i32 {
+        return;
+    }
+    {
+        fighter_gobj = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 8_i32)).get();
+        'l3: while !Handle::is_null(fighter_gobj) {
+            'c4: {
+                if (Handle::addr((arg_item).owner()) == Handle::addr(fighter_gobj))
+                    && (!((arg_item).xDCE_flag().x0().b0() != 0))
+                {
+                    break 'c4;
+                }
+                fighter = Handle::cast::<Fighter<'a>>((fighter_gobj).user_data());
+                if !(((Handle::is_null((fighter).x1064_thrownHitbox().x134().owner()))
+                    || (Handle::addr((fighter).x1064_thrownHitbox().x134().owner())
+                        != Handle::addr((arg_item).owner())))
+                    || (((arg_item).xDCE_flag().x0().b0() as i32) != 0))
+                {
+                    break 'c4;
+                }
+                if !Handle::is_null((fighter).x1064_thrownHitbox().x134().owner()) {
+                    ft_team =
+                        ((fns::ftLib_GetTeam(ctx, (fighter).x1064_thrownHitbox().x134().owner())
+                            & 255_i32) as u32);
+                } else {
+                    ft_team = ((fighter).team() as u32);
+                }
+                if (((fns::gm_8016B168(ctx) != 0) && (!(fns::gm_8016B0D4(ctx) != 0)))
+                    && (!((arg_item).xDCE_flag().x0().b1() != 0)))
+                    && (ft_team == ((arg_item).x20_team_id() as u32))
+                {
+                    break 'c4;
+                }
+                {
+                    hit_index = (0_i32 as u32);
+                    'l5: while hit_index < (4_i32 as u32) {
+                        'c6: {
+                            hit = (fighter).x914().get((hit_index as i32));
+                            if (((((((hit).state() as u32)
+                                == ((enums::HitCapsule_Disabled as i32) as u32))
+                                || ((hit).element()
+                                    == ((enums::HitElement_Catch as i32) as u32)))
+                                || (((hit).x42_b7() as i32) != 1_i32))
+                                || (((!((hit).x40_b2() != 0))
+                                    || (((arg_item).ground_or_air() as u32)
+                                        != ((enums::GA_Air as i32) as u32)))
+                                    && ((!((hit).x40_b3() != 0))
+                                        || (((arg_item).ground_or_air() as u32)
+                                            != ((enums::GA_Ground as i32) as u32)))))
+                                || (fns::lbColl_8000ACFC(
+                                    ctx,
+                                    Handle::cast::<Addr<'a>>(arg_item),
+                                    hit,
+                                ) != 0))
+                                || ((arg_item).xD0C() == 2_i32)
+                            {
+                                break 'c6;
+                            }
+                            {
+                                hurt_index = (0_i32 as u32);
+                                'l7: while hurt_index < ((arg_item).xAC8_hurtboxNum() as u32) {
+                                    'c8: {
+                                        if !(fns::lbColl_8000805C(
+                                            ctx,
+                                            hit,
+                                            (arg_item).xACC_itemHurtbox().get((hurt_index as i32)),
+                                            At::new(ctx, 0_i32 as u32)
+                                                .field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0)
+                                                .get(0),
+                                            0_i32,
+                                            (fighter).x34_scale().y(),
+                                            (arg_item).scl(),
+                                            0.0,
+                                        ) != 0)
+                                        {
+                                            break 'c8;
+                                        }
+                                        if (hit).element()
+                                            != ((enums::HitElement_Inert as i32) as u32)
+                                        {
+                                            fns::ftColl_80076808(
+                                                ctx,
+                                                fighter,
+                                                hit,
+                                                0_i32,
+                                                Handle::cast::<Addr<'a>>(arg_item),
+                                                0_i32,
+                                            );
+                                            dmg_ = fp::fctiwz((hit).damage());
+                                            (fighter).dmg().set_x1914(dmg_);
+                                            (arg_item)
+                                                .set_xCA0((arg_item).xCA0().wrapping_add(dmg_));
+                                            if dmg_ > (arg_item).xCA4() {
+                                                (arg_item).set_xCA4(dmg_);
+                                            }
+                                            inl_it_8026F9AC_noinline_unfused(
+                                                ctx,
+                                                1_i32,
+                                                Handle::cast::<Addr<'a>>(fighter),
+                                                hit,
+                                                arg_item,
+                                                (arg_item)
+                                                    .xACC_itemHurtbox()
+                                                    .get((hurt_index as i32)),
+                                            );
+                                            fns::it_8027B378(
+                                                ctx,
+                                                (fighter).gobj(),
+                                                (arg_item).entity(),
+                                                fp::frsp(dmg_ as f64),
+                                            );
+                                            kind = (arg_item).kind();
+                                            if ((kind == (enums::It_PKind_Random as i32))
+                                                && (((arg_item).xDD4_itemVar().pokemon().x0()
+                                                    as i32)
+                                                    == 7_i32))
+                                                && ((((hit).sfx_kind() as u32) == 1_u32)
+                                                    || (((hit).sfx_kind() as u32) == 2_u32))
+                                            {
+                                                let _ = fns::lbAudioAx_800237A8(
+                                                    ctx,
+                                                    0x61a87_i32,
+                                                    (127_u32 as i32),
+                                                    (64_u32 as i32),
+                                                );
+                                            } else if ((kind != (enums::It_PKind_Random as i32))
+                                                || (((arg_item).xDD4_itemVar().pokemon().x0()
+                                                    as i32)
+                                                    != 8_i32))
+                                                || ((((hit).sfx_kind() as u32) != 1_u32)
+                                                    && (((hit).sfx_kind() as u32) != 2_u32))
+                                            {
+                                                let _ = fns::lbColl_80005BB0(
+                                                    ctx,
+                                                    hit,
+                                                    1_i32.wrapping_neg(),
+                                                );
+                                            }
+                                        } else {
+                                            (fighter).set_unk_gobj(arg_item_gobj);
+                                        }
+                                        break 'l7;
+                                    }
+                                    hurt_index = hurt_index.wrapping_add(1);
+                                }
+                            }
+                        }
+                        hit_index = hit_index.wrapping_add(1);
+                    }
+                }
+            }
+            fighter_gobj = (fighter_gobj).next();
+        }
+    }
+}
+
+pub fn it_802706D0<'a>(ctx: &'a Ctx, arg_item_gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x78);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
+    let mut arg_item_gobj = arg_item_gobj;
+    let mut hit_index: u32 = 0;
+    let mut hurt_index: u32 = 0;
+    let mut arg_item: Item<'a> = null(ctx);
+    let mut item_gobj: HSD_GObj<'a> = null(ctx);
+    let mut hit: HitCapsule<'a> = null(ctx);
+    let mut chk: i32 = 0;
+    let mut count: i32 = 0;
+    let mut item: Item<'a> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    chk = 0_i32;
+    arg_item = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, arg_item_gobj)));
+    {
+        item_gobj = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 9_i32)).get();
+        'l3: while !Handle::is_null(item_gobj) {
+            'c4: {
+                item = Handle::cast::<Item<'a>>((item_gobj).user_data());
+                if Handle::addr(arg_item_gobj) == Handle::addr(item_gobj) {
+                    chk = 1_i32;
+                    break 'c4;
+                } else if (((((Handle::is_null((arg_item).owner()))
+                    && (Handle::is_null((item).owner())))
+                    && (!((item).xDCD_flag().x0().b7() != 0)))
+                    && (!((arg_item).xDCE_flag().x0().b2() != 0)))
+                    || (((((fns::ftLib_IsFighter(ctx, (item).owner()) != 0)
+                        && (fns::ftLib_IsFighter(ctx, (arg_item).owner()) != 0))
+                        && (fns::ftLib_IsSamePlayer(ctx, (arg_item).owner(), (item).owner())
+                            != 0))
+                        && (!((item).xDCD_flag().x0().b7() != 0)))
+                        && (!((arg_item).xDCE_flag().x0().b2() != 0))))
+                    || (((((fns::gm_8016B168(ctx) != 0) && (!(fns::gm_8016B0D4(ctx) != 0)))
+                        && (!((item).xDCD_flag().x0().b6() != 0)))
+                        && (!((arg_item).xDCE_flag().x0().b1() != 0)))
+                        && (((item).x20_team_id() as i32) == ((arg_item).x20_team_id() as i32)))
+                {
+                    break 'c4;
+                }
+                if (chk != 0) && (!((arg_item).xDD0_flag().x0().b1() != 0)) {
+                    count = 0_i32;
+                    {
+                        hit_index = (0_i32 as u32);
+                        'l5: while hit_index < (4_i32 as u32) {
+                            'c6: {
+                                let mut arg_hit: HitCapsule<'a> =
+                                    (arg_item).x5D4_hitboxes().get((hit_index as i32)).hit();
+                                let mut tmp_hit: HitCapsule<'a> = arg_hit;
+                                if (((((arg_hit).state() as u32)
+                                    != ((enums::HitCapsule_Disabled as i32) as u32))
+                                    && ((arg_hit).element()
+                                        != ((enums::HitElement_Catch as i32) as u32)))
+                                    && (((((arg_hit).x40_b2() as i32) != 0)
+                                        && (((item).ground_or_air() as u32)
+                                            == ((enums::GA_Air as i32) as u32)))
+                                        || ((((arg_hit).x40_b3() as i32) != 0)
+                                            && (((item).ground_or_air() as u32)
+                                                == ((enums::GA_Ground as i32) as u32)))))
+                                    && (!(fns::lbColl_8000ACFC(
+                                        ctx,
+                                        Handle::cast::<Addr<'a>>(item),
+                                        tmp_hit,
+                                    ) != 0))
+                                {
+                                    fns::it_804D6D1C(ctx)
+                                        .at((hit_index as i32))
+                                        .set((1_i32 as u8));
+                                    count = count.wrapping_add(1);
+                                } else {
+                                    fns::it_804D6D1C(ctx)
+                                        .at((hit_index as i32))
+                                        .set((0_i32 as u8));
+                                }
+                            }
+                            hit_index = hit_index.wrapping_add(1);
+                        }
+                    }
+                }
+                {
+                    hit_index = (0_i32 as u32);
+                    'l7: while hit_index < (4_i32 as u32) {
+                        'c8: {
+                            hit = (item).x5D4_hitboxes().get((hit_index as i32)).hit();
+                            if (((((hit).state() as u32)
+                                == ((enums::HitCapsule_Disabled as i32) as u32))
+                                || (((hit).x42_b7() as i32) != 1_i32))
+                                || (((!((hit).x40_b2() != 0))
+                                    || (((arg_item).ground_or_air() as u32)
+                                        != ((enums::GA_Air as i32) as u32)))
+                                    && ((!((hit).x40_b3() != 0))
+                                        || (((arg_item).ground_or_air() as u32)
+                                            != ((enums::GA_Ground as i32) as u32)))))
+                                || (fns::lbColl_8000ACFC(
+                                    ctx,
+                                    Handle::cast::<Addr<'a>>(arg_item),
+                                    hit,
+                                ) != 0)
+                            {
+                                break 'c8;
+                            }
+                            if ((chk != 0) && (!((arg_item).xDD0_flag().x0().b1() != 0)))
+                                && (count != 0_i32)
+                            {
+                                let mut i: u32 = 0;
+                                let mut chk2: i32 = 0_i32;
+                                {
+                                    i = (0_i32 as u32);
+                                    'l9: while i < 4_u32 {
+                                        'c10: {
+                                            if (fns::it_804D6D1C(ctx).at((i as i32)).get() as i32)
+                                                != 0_i32
+                                            {
+                                                let mut arg_hit_2: HitCapsule<'a> = (arg_item)
+                                                    .x5D4_hitboxes()
+                                                    .get((i as i32))
+                                                    .hit();
+                                                let mut tmp_hit_2: HitCapsule<'a> = arg_hit_2;
+                                                if ((hit).element()
+                                                    == ((enums::HitElement_Inert as i32) as u32))
+                                                    || ((arg_hit_2).element()
+                                                        == ((enums::HitElement_Inert as i32)
+                                                            as u32))
+                                                {
+                                                    if ((hit).element() != (arg_hit_2).element())
+                                                        && (fns::lbColl_80007AFC(
+                                                            ctx,
+                                                            hit,
+                                                            tmp_hit_2,
+                                                            (item).scl(),
+                                                            (arg_item).scl(),
+                                                        ) != 0)
+                                                    {
+                                                        if (hit).element()
+                                                            == ((enums::HitElement_Inert as i32)
+                                                                as u32)
+                                                        {
+                                                            (item)
+                                                                .xDCE_flag()
+                                                                .x0()
+                                                                .set_b6((1_i32 as u8));
+                                                            (item).set_toucher(arg_item_gobj);
+                                                        } else {
+                                                            (arg_item)
+                                                                .xDCE_flag()
+                                                                .x0()
+                                                                .set_b6((1_i32 as u8));
+                                                            (arg_item).set_toucher((item).entity());
+                                                        }
+                                                        chk2 = 1_i32;
+                                                        break 'l9;
+                                                    }
+                                                } else if ((((hit).x40_b0() as i32) == 1_i32)
+                                                    && (((arg_hit_2).x40_b0() as i32) == 1_i32))
+                                                    && (fns::lbColl_80007AFC(
+                                                        ctx,
+                                                        hit,
+                                                        tmp_hit_2,
+                                                        (item).scl(),
+                                                        (arg_item).scl(),
+                                                    ) != 0)
+                                                {
+                                                    fns::it_8026FE68(
+                                                        ctx, item, hit, arg_item, tmp_hit_2,
+                                                    );
+                                                    chk2 = 1_i32;
+                                                    break 'l9;
+                                                }
+                                            }
+                                        }
+                                        i = i.wrapping_add(1);
+                                    }
+                                }
+                                if (chk2 != 0) {
+                                    break 'c8;
+                                }
+                            }
+                            if ((arg_item).xAC8_hurtboxNum() as i32) == 0_i32 {
+                                break 'c8;
+                            }
+                            if (hit).element() == ((enums::HitElement_Inert as i32) as u32) {
+                                let mut i_2: u32 = 0;
+                                {
+                                    i_2 = (0_i32 as u32);
+                                    'l11: while i_2 < ((arg_item).xAC8_hurtboxNum() as u32) {
+                                        'c12: {
+                                            if (fns::lbColl_80008248(
+                                                ctx,
+                                                hit,
+                                                (arg_item).xACC_itemHurtbox().get((i_2 as i32)),
+                                                At::new(ctx, 0_i32 as u32)
+                                                    .field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0)
+                                                    .get(0),
+                                                (item).scl(),
+                                                (arg_item).scl(),
+                                                0.0,
+                                            ) != 0)
+                                            {
+                                                (item).xDCE_flag().x0().set_b6((1_i32 as u8));
+                                                (item).set_toucher(arg_item_gobj);
+                                            }
+                                        }
+                                        i_2 = i_2.wrapping_add(1);
+                                    }
+                                }
+                            } else if (arg_item).xD0C() != 2_i32 {
+                                {
+                                    hurt_index = (0_i32 as u32);
+                                    'l13: while hurt_index < ((arg_item).xAC8_hurtboxNum() as u32) {
+                                        'c14: {
+                                            if (fns::lbColl_8000805C(
+                                                ctx,
+                                                hit,
+                                                (arg_item)
+                                                    .xACC_itemHurtbox()
+                                                    .get((hurt_index as i32)),
+                                                At::new(ctx, 0_i32 as u32)
+                                                    .field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0)
+                                                    .get(0),
+                                                0_i32,
+                                                (item).scl(),
+                                                (arg_item).scl(),
+                                                0.0,
+                                            ) != 0)
+                                            {
+                                                inl_it_802706D0_sub3_unfused(
+                                                    ctx,
+                                                    item,
+                                                    arg_item,
+                                                    hit,
+                                                    (arg_item)
+                                                        .xACC_itemHurtbox()
+                                                        .get((hurt_index as i32)),
+                                                );
+                                                break 'l13;
+                                            }
+                                        }
+                                        hurt_index = hurt_index.wrapping_add(1);
+                                    }
+                                }
+                            }
+                        }
+                        hit_index = hit_index.wrapping_add(1);
+                    }
+                }
+            }
+            item_gobj = (item_gobj).next();
+        }
+    }
+}
+
 pub fn it_80270CD8<'a>(ctx: &'a Ctx, ip: Item<'a>, hit: HitCapsule<'a>) -> f64 {
     let __frame = ctx.stack_frame(0x38);
     let mut ip = ip;
@@ -1797,6 +2229,102 @@ fn inl_it_8026FAC4_noinline_unfused<'a>(
     fns::it_8026FAC4(ctx, ip, hit, arg2, arg3, chk);
 }
 
+fn inl_it_8026F9AC_noinline_unfused<'a>(
+    ctx: &'a Ctx,
+    arg0: i32,
+    fighter: Addr<'a>,
+    hit: HitCapsule<'a>,
+    arg_item: Item<'a>,
+    hurt: HurtCapsule<'a>,
+) {
+    let mut arg0 = arg0;
+    let mut fighter = fighter;
+    let mut hit = hit;
+    let mut arg_item = arg_item;
+    let mut hurt = hurt;
+    fns::it_8026F9AC(ctx, arg0, fighter, hit, arg_item, hurt);
+}
+
+fn inl_it_802706D0_sub3_unfused<'a>(
+    ctx: &'a Ctx,
+    item: Item<'a>,
+    arg_item: Item<'a>,
+    hit: HitCapsule<'a>,
+    arg_hurt: HurtCapsule<'a>,
+) {
+    let mut item = item;
+    let mut arg_item = arg_item;
+    let mut hit = hit;
+    let mut arg_hurt = arg_hurt;
+    let mut dir: f64 = 0.0;
+    let mut dmg_: i32 = 0;
+    let mut kind: i32 = 0;
+    inl_it_8026FAC4_noinline_unfused(
+        ctx,
+        item,
+        hit,
+        (if ((((hit).x41_b4()) as i32) != 0) {
+            8_i32
+        } else {
+            0_i32
+        }),
+        Handle::cast::<Addr<'a>>(arg_item),
+        0_i32,
+    );
+    if (if ((item).x40_vel().x()) < fp::frsp(0_i32 as f64) {
+        fp::fneg(((item).x40_vel().x()))
+    } else {
+        ((item).x40_vel().x())
+    }) < (fns::it_804D6D28(ctx).get()).xD4()
+    {
+        if (item).pos().x() > (arg_item).pos().x() {
+            dir = fp::fneg(1.0);
+        } else {
+            dir = 1.0;
+        }
+    } else if (item).x40_vel().x() < 0.0 {
+        dir = fp::fneg(1.0);
+    } else {
+        dir = 1.0;
+    }
+    (item).set_xCB8_outDamageDirection(dir);
+    dmg_ = fp::fctiwz((hit).damage());
+    (item).set_xC34_damageDealt(dmg_);
+    (item).set_xCF4_fighterGObjUnk(null::<HSD_GObj<'a>>(ctx));
+    (item).set_xC38((arg_item).kind());
+    Handle::copy_from((item).xCD4(), (arg_item).pos());
+    (arg_item).set_xCA0((arg_item).xCA0().wrapping_add(dmg_));
+    if dmg_ > (arg_item).xCA4() {
+        (arg_item).set_xCA4(dmg_);
+    }
+    inl_it_8026F9AC_noinline_unfused(
+        ctx,
+        2_i32,
+        Handle::cast::<Addr<'a>>(item),
+        hit,
+        arg_item,
+        arg_hurt,
+    );
+    fns::it_8027B408(
+        ctx,
+        (item).entity(),
+        (arg_item).entity(),
+        fp::frsp(dmg_ as f64),
+    );
+    kind = (arg_item).kind();
+    if ((kind == (enums::It_PKind_Random as i32))
+        && (((arg_item).xDD4_itemVar().pokemon().x0() as i32) == 7_i32))
+        && ((((hit).sfx_kind() as u32) == 1_u32) || (((hit).sfx_kind() as u32) == 2_u32))
+    {
+        let _ = fns::lbAudioAx_800237A8(ctx, 0x61a87_i32, (127_u32 as i32), (64_u32 as i32));
+    } else if ((kind != (enums::It_PKind_Random as i32))
+        || (((arg_item).xDD4_itemVar().pokemon().x0() as i32) != 8_i32))
+        || ((((hit).sfx_kind() as u32) != 1_u32) && (((hit).sfx_kind() as u32) != 2_u32))
+    {
+        let _ = fns::lbColl_80005BB0(ctx, hit, 1_i32.wrapping_neg());
+    }
+}
+
 fn inl_HSD_JObjGetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     let mut jobj = jobj;
     (if !Handle::is_null((jobj)) {
@@ -1972,6 +2500,22 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(it_802701BC(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x802703e8,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(it_802703E8(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x802706d0,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(it_802706D0(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

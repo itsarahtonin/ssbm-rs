@@ -273,6 +273,129 @@ pub fn drawBackgroundRect<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>) {
     inl_GXEnd_unfused(ctx);
 }
 
+pub fn HSD_ShadowStartRender<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>) {
+    let __frame = ctx.stack_frame(0x28);
+    let mut shadow = shadow;
+    let mut cobj: HSD_CObj<'a> = null(ctx);
+    let mut idesc: HSD_ImageDesc<'a> = null(ctx);
+    let mut list: _HSD_SList<'a> = null(ctx);
+    (if !Handle::is_null((shadow)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80407318),
+            (179_i32 as u32),
+            cstr(ctx, 0x80407318),
+        )
+    });
+    (if !Handle::is_null(((shadow).camera())) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80407318),
+            (180_i32 as u32),
+            cstr(ctx, 0x80407318),
+        )
+    });
+    (if !Handle::is_null(((shadow).texture())) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80407318),
+            (181_i32 as u32),
+            cstr(ctx, 0x80407318),
+        )
+    });
+    (if !Handle::is_null((((shadow).texture()).imagedesc())) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80407318),
+            (182_i32 as u32),
+            cstr(ctx, 0x80407318),
+        )
+    });
+    list = (shadow).objects();
+    cobj = (shadow).camera();
+    idesc = ((shadow).texture()).imagedesc();
+    if !Handle::is_null(list) {
+        let _ = fns::HSD_CObjSetCurrent(ctx, cobj);
+        {
+            fns::HSD_StateInitTev(ctx);
+            fns::HSD_SetupTevStageAll(ctx, At::new(ctx, 0x80407370).field::<_HSD_TevDesc<'a>>(0));
+            fns::HSD_StateSetNumTexGens(ctx);
+            fns::HSD_SetupPEMode(
+                ctx,
+                (0_i32 as u32),
+                At::new(ctx, 0x804073e4).field::<HSD_PEDesc<'a>>(0),
+            );
+            At::new(ctx, 0x80407340)
+                .field::<HSD_Chan<'a>>(0)
+                .mat_color()
+                .set_r((255_i32 as u8));
+            At::new(ctx, 0x80407340)
+                .field::<HSD_Chan<'a>>(0)
+                .mat_color()
+                .set_g((255_i32 as u8));
+            At::new(ctx, 0x80407340)
+                .field::<HSD_Chan<'a>>(0)
+                .mat_color()
+                .set_b((255_i32 as u8));
+            fns::HSD_SetupChannelAll(ctx, At::new(ctx, 0x80407340).field::<HSD_Chan<'a>>(0));
+            fns::GXSetScissor(
+                ctx,
+                (0_i32 as u32),
+                (0_i32 as u32),
+                ((idesc).width() as u32),
+                ((idesc).height() as u32),
+            );
+            statics::sysdolphin__baselib__shadow::drawBackgroundRect(ctx, shadow);
+            At::new(ctx, 0x80407340)
+                .field::<HSD_Chan<'a>>(0)
+                .mat_color()
+                .set_r((shadow).intensity());
+            At::new(ctx, 0x80407340)
+                .field::<HSD_Chan<'a>>(0)
+                .mat_color()
+                .set_g((shadow).intensity());
+            At::new(ctx, 0x80407340)
+                .field::<HSD_Chan<'a>>(0)
+                .mat_color()
+                .set_b((shadow).intensity());
+            fns::HSD_SetupChannelAll(ctx, At::new(ctx, 0x80407340).field::<HSD_Chan<'a>>(0));
+            fns::GXSetScissor(
+                ctx,
+                (2_i32 as u32),
+                (2_i32 as u32),
+                (((idesc).width() as i32).wrapping_sub(4_i32) as u32),
+                (((idesc).height() as i32).wrapping_sub(4_i32) as u32),
+            );
+        }
+        {
+            list = (shadow).objects();
+            'l1: while !Handle::is_null(list) {
+                'c2: {
+                    fns::HSD_JObjDispAll(
+                        ctx,
+                        Handle::cast::<HSD_JObj<'a>>((list).data()),
+                        At::new(ctx, 0_i32 as u32)
+                            .field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0)
+                            .get(0),
+                        (((enums::HSD_TRSP_OPA as i32) | (enums::HSD_TRSP_TEXEDGE as i32)) as u32),
+                        ((shl_i32(1_i32, (26_i32 as u32))) as u32),
+                    );
+                }
+                list = (list).next();
+            }
+        }
+        fns::HSD_CObjEndCurrent(ctx);
+    }
+}
+
 pub fn HSD_ShadowEndRender<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut shadow = shadow;
@@ -877,6 +1000,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_Shadow<'_>,) = Args::take_all(ctx);
             Ret::put(drawBackgroundRect(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8037f7a0,
+        |ctx| {
+            let (a0,): (HSD_Shadow<'_>,) = Args::take_all(ctx);
+            Ret::put(HSD_ShadowStartRender(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

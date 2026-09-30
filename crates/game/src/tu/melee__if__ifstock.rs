@@ -211,6 +211,383 @@ pub fn ifStock_802F7EFC<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) -> i32 {
     return 0_i32;
 }
 
+pub fn ifStock_802F8298<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x88);
+    let vecA: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vecB: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let vecC: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let vecD: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let mut gobj = gobj;
+    let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
+    let mut stock: ifStock_804A1378_t<'a> = statics::melee__if__ifstock::ifStock_804A1378(ctx);
+    let mut jobj_anim: HSD_JObj<'a> = jobj;
+    let mut user_data: IfStockUserData<'a> = inl_ifStock_802F8298_update_stocks_unfused(
+        ctx,
+        Handle::cast::<IfStockUserData<'a>>((gobj).user_data()),
+    );
+    let mut i: i32 = 0;
+    let mut jobj2: HSD_JObj<'a> = null(ctx);
+    let mut steal_jobj: HSD_JObj<'a> = null(ctx);
+    if (stock).player().get(((user_data).player() as i32)).stocks() <= 5_i32 {
+        fns::HSD_JObjSetFlagsAll(
+            ctx,
+            (stock).player().get(((user_data).player() as i32)).x3C(),
+            ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+        );
+        {
+            i = 0_i32;
+            'l1: while i < 5_i32 {
+                'c2: {
+                    jobj2 = (stock)
+                        .player()
+                        .get(((user_data).player() as i32))
+                        .x4()
+                        .at(i.wrapping_add(1_i32))
+                        .get();
+                    if i < (stock).player().get(((user_data).player() as i32)).stocks() {
+                        fns::HSD_JObjClearFlagsAll(
+                            ctx,
+                            jobj2,
+                            ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                        );
+                        if (statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                            .get(((user_data).player() as i32))
+                            .flag() as i32)
+                            != 0_i32
+                        {
+                            statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                                .get(((user_data).player() as i32))
+                                .anim()
+                                .at(i)
+                                .set((0_i32 as u8));
+                        } else {
+                            statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                                .get(((user_data).player() as i32))
+                                .anim()
+                                .at(i)
+                                .set((10_i32 as u8));
+                        }
+                    } else {
+                        if (statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                            .get(((user_data).player() as i32))
+                            .flag() as i32)
+                            == 0_i32
+                        {
+                            statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                                .get(((user_data).player() as i32))
+                                .anim()
+                                .at(i)
+                                .set((10_i32 as u8));
+                        }
+                        if (statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                            .get(((user_data).player() as i32))
+                            .anim()
+                            .at(i)
+                            .get() as i32)
+                            == 0_i32
+                        {
+                            inl_HSD_JObjGetTranslation2_unfused(ctx, jobj, vecA);
+                            inl_HSD_JObjGetTranslation2_unfused(
+                                ctx,
+                                (stock)
+                                    .player()
+                                    .get(((user_data).player() as i32))
+                                    .x4()
+                                    .at(i.wrapping_add(1_i32))
+                                    .get(),
+                                vecB,
+                            );
+                            vecB.set_x(fp::fadds(vecB.x(), vecA.x()));
+                            vecB.set_y(fp::fadds(vecB.y(), vecA.y()));
+                            vecB.set_z(fp::fadds(vecB.z(), vecA.z()));
+                            let _ = fns::efSync_Spawn(
+                                ctx,
+                                0x474_i32,
+                                gobj,
+                                &[VarArg::Int(Handle::addr(vecB))],
+                            );
+                        }
+                        inl_ifStock_802F8298_step_anim_unfused(
+                            ctx,
+                            statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                                .get(((user_data).player() as i32))
+                                .anim()
+                                .at(i),
+                        );
+                    }
+                    fns::HSD_JObjReqAnimAll(
+                        ctx,
+                        jobj2,
+                        fp::frsp(
+                            statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                                .get(((user_data).player() as i32))
+                                .anim()
+                                .at(i)
+                                .get() as f64,
+                        ),
+                    );
+                    fns::HSD_TObjReqAnimAll(
+                        ctx,
+                        (((jobj2).u().dobj()).mobj()).tobj(),
+                        inl_ifStock_802F8298_tobj_frame_unfused(ctx, (user_data).player()),
+                    );
+                    fns::HSD_AObjSetRate(ctx, ((((jobj2).u().dobj()).mobj()).tobj()).aobj(), 0.0);
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    } else {
+        fns::HSD_JObjClearFlagsAll(
+            ctx,
+            (stock).player().get(((user_data).player() as i32)).x3C(),
+            ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+        );
+        if (stock).player().get(((user_data).player() as i32)).stocks() >= 10_i32 {
+            fns::HSD_JObjReqAnimAll(
+                ctx,
+                (stock).player().get(((user_data).player() as i32)).x44(),
+                fp::frsp(div_i32(
+                    (stock).player().get(((user_data).player() as i32)).stocks(),
+                    10_i32,
+                ) as f64),
+            );
+            fns::HSD_JObjReqAnimAll(
+                ctx,
+                (stock).player().get(((user_data).player() as i32)).x40(),
+                fp::frsp(rem_i32(
+                    (stock).player().get(((user_data).player() as i32)).stocks(),
+                    10_i32,
+                ) as f64),
+            );
+        } else {
+            fns::HSD_JObjReqAnimAll(
+                ctx,
+                (stock).player().get(((user_data).player() as i32)).x44(),
+                fp::frsp((stock).player().get(((user_data).player() as i32)).stocks() as f64),
+            );
+            fns::HSD_JObjSetFlagsAll(
+                ctx,
+                (stock).player().get(((user_data).player() as i32)).x40(),
+                ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+            );
+        }
+        {
+            i = 0_i32;
+            'l3: while i < 5_i32 {
+                'c4: {
+                    jobj2 = (stock)
+                        .player()
+                        .get(((user_data).player() as i32))
+                        .x4()
+                        .at(i.wrapping_add(1_i32))
+                        .get();
+                    if i == 0_i32 {
+                        statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                            .get(((user_data).player() as i32))
+                            .anim()
+                            .at(i)
+                            .set((0_i32 as u8));
+                    } else {
+                        statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                            .get(((user_data).player() as i32))
+                            .anim()
+                            .at(i)
+                            .set((10_i32 as u8));
+                    }
+                    fns::HSD_JObjReqAnimAll(
+                        ctx,
+                        jobj2,
+                        fp::frsp(
+                            statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                                .get(((user_data).player() as i32))
+                                .anim()
+                                .at(i)
+                                .get() as f64,
+                        ),
+                    );
+                    fns::HSD_TObjReqAnimAll(
+                        ctx,
+                        (((jobj2).u().dobj()).mobj()).tobj(),
+                        inl_ifStock_802F8298_tobj_frame_unfused(ctx, (user_data).player()),
+                    );
+                    fns::HSD_AObjSetRate(ctx, ((((jobj2).u().dobj()).mobj()).tobj()).aobj(), 0.0);
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    }
+    {
+        i = 5_i32;
+        'l5: while i <= 6_i32 {
+            'c6: {
+                steal_jobj = (stock)
+                    .player()
+                    .get(((user_data).player() as i32))
+                    .x4()
+                    .at(i.wrapping_add(1_i32))
+                    .get();
+                if (statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                    .get(((user_data).player() as i32))
+                    .anim()
+                    .at(i)
+                    .get() as i32)
+                    == 0_i32
+                {
+                    fns::HSD_JObjSetFlagsAll(
+                        ctx,
+                        steal_jobj,
+                        ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                    );
+                } else {
+                    fns::HSD_JObjClearFlagsAll(
+                        ctx,
+                        steal_jobj,
+                        ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                    );
+                    if (statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                        .get(((user_data).player() as i32))
+                        .anim()
+                        .at(i)
+                        .get() as i32)
+                        <= 10_i32
+                    {
+                        let _ = fns::lbVector_8000DE38(
+                            ctx,
+                            Handle::cast::<Arr<'a, Vec<'a>, 3>>(
+                                statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                                    .get(((user_data).player() as i32))
+                                    .steal()
+                                    .get(i.wrapping_sub(5_i32))
+                                    .start(),
+                            )
+                            .get(0),
+                            vecC,
+                            fp::fmuls(
+                                0.10000000149011612,
+                                fp::frsp(
+                                    (statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                                        .get(((user_data).player() as i32))
+                                        .anim()
+                                        .at(i)
+                                        .get() as i32) as f64,
+                                ),
+                            ),
+                        );
+                        inl_HSD_JObjGetTranslation2_unfused(
+                            ctx,
+                            (stock)
+                                .player()
+                                .get(((user_data).player() as i32))
+                                .x4()
+                                .at(0_i32)
+                                .get(),
+                            vecD,
+                        );
+                        vecC.set_x(fp::fsubs(vecC.x(), vecD.x()));
+                        vecC.set_y(fp::fsubs(vecC.y(), vecD.y()));
+                        vecC.set_z(fp::fsubs(vecC.z(), vecD.z()));
+                        inl_HSD_JObjSetTranslate_unfused(ctx, steal_jobj, vecC);
+                        if (statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                            .get(((user_data).player() as i32))
+                            .anim()
+                            .at(i)
+                            .get() as i32)
+                            == 1_i32
+                        {
+                            vecC.set_x(
+                                statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                                    .get(((user_data).player() as i32))
+                                    .steal()
+                                    .get(i.wrapping_sub(5_i32))
+                                    .start()
+                                    .x(),
+                            );
+                            vecC.set_y(
+                                statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                                    .get(((user_data).player() as i32))
+                                    .steal()
+                                    .get(i.wrapping_sub(5_i32))
+                                    .start()
+                                    .y(),
+                            );
+                            let _ = fns::efSync_Spawn(
+                                ctx,
+                                0x475_i32,
+                                gobj,
+                                &[VarArg::Int(Handle::addr(vecC))],
+                            );
+                        } else if (statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                            .get(((user_data).player() as i32))
+                            .anim()
+                            .at(i)
+                            .get() as i32)
+                            == 10_i32
+                        {
+                            vecC.set_x(
+                                statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                                    .get(((user_data).player() as i32))
+                                    .steal()
+                                    .get(i.wrapping_sub(5_i32))
+                                    .end()
+                                    .x(),
+                            );
+                            vecC.set_y(
+                                statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                                    .get(((user_data).player() as i32))
+                                    .steal()
+                                    .get(i.wrapping_sub(5_i32))
+                                    .end()
+                                    .y(),
+                            );
+                            let _ = fns::efSync_Spawn(
+                                ctx,
+                                0x476_i32,
+                                gobj,
+                                &[VarArg::Int(Handle::addr(vecC))],
+                            );
+                        }
+                        statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                            .get(((user_data).player() as i32))
+                            .anim()
+                            .at(i)
+                            .set(
+                                statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                                    .get(((user_data).player() as i32))
+                                    .anim()
+                                    .at(i)
+                                    .get()
+                                    .wrapping_add(1),
+                            );
+                    } else {
+                        statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                            .get(((user_data).player() as i32))
+                            .anim()
+                            .at(i)
+                            .set((0_i32 as u8));
+                        statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                            .get(
+                                (statics::melee__if__ifstock::ifStock_804A157C(ctx)
+                                    .get(((user_data).player() as i32))
+                                    .x3()
+                                    .at(i.wrapping_sub(5_i32))
+                                    .get() as i32),
+                            )
+                            .set_flag((1_i32 as u8));
+                    }
+                }
+                fns::HSD_TObjReqAnimAll(
+                    ctx,
+                    (((steal_jobj).u().dobj()).mobj()).tobj(),
+                    inl_ifStock_802F8298_tobj_frame_unfused(ctx, (user_data).player()),
+                );
+                fns::HSD_AObjSetRate(ctx, ((((steal_jobj).u().dobj()).mobj()).tobj()).aobj(), 0.0);
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    fns::HSD_JObjAnimAll(ctx, jobj_anim);
+}
+
 pub fn ifStock_802F89F8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
     let mut gobj = gobj;
@@ -1854,6 +2231,61 @@ fn inl_ifStock_802F8298_tobj_frame_unfused<'a>(ctx: &'a Ctx, player: u8) -> f64 
     return fns::gm_80168BF8(ctx, (player as i32));
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804d57e4),
+            (228_i32 as u32),
+            cstr(ctx, 0x804d57e4),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
+fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
+    let mut jobj = jobj;
+    let mut translate = translate;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804d57e4),
+            (0x1e1_i32 as u32),
+            cstr(ctx, 0x804d57e4),
+        )
+    });
+    (if !Handle::is_null((translate)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804d57e4),
+            (0x1e2_i32 as u32),
+            cstr(ctx, 0x804d57e4),
+        )
+    });
+    Handle::copy_from((jobj).translate(), (translate));
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
@@ -1935,28 +2367,6 @@ fn inl_ifStock_802F89F8_digit_unfused<'a>(ctx: &'a Ctx, coins: i32, position: i3
         }
     }
     return rem_i32((div_i32(coins, divisor)), 10_i32);
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x804d57e4),
-            (228_i32 as u32),
-            cstr(ctx, 0x804d57e4),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjSetTranslateZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
@@ -2063,39 +2473,6 @@ fn inl_fn_802F9410_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     );
     fns::HSD_AObjSetRate(ctx, ((((jobj2).u().dobj()).mobj()).tobj()).aobj(), 0.0);
     fns::HSD_JObjAnimAll(ctx, jobj);
-}
-
-fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
-    let mut jobj = jobj;
-    let mut translate = translate;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x804d57e4),
-            (0x1e1_i32 as u32),
-            cstr(ctx, 0x804d57e4),
-        )
-    });
-    (if !Handle::is_null((translate)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x804d57e4),
-            (0x1e2_i32 as u32),
-            cstr(ctx, 0x804d57e4),
-        )
-    });
-    Handle::copy_from((jobj).translate(), (translate));
-    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
-        {
-            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
-                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
-            }
-        }
-    }
 }
 
 fn inl_ifStock_802F98E8_get_match_info_unfused<'a>(
@@ -2227,6 +2604,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(ifStock_802F7EFC(ctx, a0, a1), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x802f8298,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ifStock_802F8298(ctx, a0), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x802f89f8,

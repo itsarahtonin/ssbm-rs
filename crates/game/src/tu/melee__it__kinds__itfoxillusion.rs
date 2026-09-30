@@ -26,6 +26,27 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn it_8029CD18<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: i32) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut item_gobj = item_gobj;
+    let mut arg1 = arg1;
+    let mut item: Item<'a> =
+        (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
+    let mut jobj: HSD_JObj<'a> = (item).xDD4_itemVar().foxillusion().xDDC();
+    fns::it_8026EECC(ctx, item_gobj, arg1);
+    if !Handle::is_null(jobj) {
+        fns::HSD_JObjDispAll(
+            ctx,
+            jobj,
+            At::new(ctx, 0_i32 as u32)
+                .field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0)
+                .get(0),
+            fns::HSD_GObj_80390EB8(ctx, arg1),
+            (0_i32 as u32),
+        );
+    }
+}
+
 pub fn it_8029CD78<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> HSD_JObj<'a> {
     let __frame = ctx.stack_frame(0x38);
     let quat: Quaternion<'a> = frame_at(ctx, &__frame, 0x0);
@@ -542,6 +563,14 @@ fn inl_itFoxillusion_UnkMotion0_Anim_unfused<'a>(ctx: &'a Ctx, item_gobj: HSD_GO
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x8029cd18,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
+            Ret::put(it_8029CD18(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
     ctx.register_port(
         0x8029cd78,
         |ctx| {

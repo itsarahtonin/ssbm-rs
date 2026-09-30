@@ -107,6 +107,53 @@ pub fn lb_8000B134<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     return 0_i32;
 }
 
+pub fn lb_8000B1CC<'a>(ctx: &'a Ctx, arg0: HSD_JObj<'a>, pos0: Vec<'a>, pos1: Vec<'a>) {
+    let __frame = ctx.stack_frame(0x40);
+    let r: Quaternion<'a> = frame_at(ctx, &__frame, 0x0);
+    let s: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let mut arg0 = arg0;
+    let mut pos0 = pos0;
+    let mut pos1 = pos1;
+    if Handle::is_null(arg0) {
+        Handle::copy_from((pos1), (pos0));
+        return;
+    }
+    if !Handle::is_null(inl_HSD_JObjGetParent_unfused(ctx, arg0)) {
+        inl_HSD_JObjSetupMatrix_unfused(ctx, arg0);
+        if (Handle::is_null(pos0))
+            || (((!((pos0).x() != 0.0)) && (!((pos0).y() != 0.0))) && (!((pos0).z() != 0.0)))
+        {
+            (pos1).set_x((arg0).mtx().get(0_i32).at(3_i32).get());
+            (pos1).set_y((arg0).mtx().get(1_i32).at(3_i32).get());
+            (pos1).set_z((arg0).mtx().get(2_i32).at(3_i32).get());
+        } else {
+            fns::PSMTXMultVec(ctx, (arg0).mtx().get(0), pos0, pos1);
+        }
+        return;
+    }
+    if (Handle::is_null(pos0))
+        || (((!((pos0).x() != 0.0)) && (!((pos0).y() != 0.0))) && (!((pos0).z() != 0.0)))
+    {
+        inl_HSD_JObjGetTranslation_unfused(ctx, arg0, pos1);
+        return;
+    }
+    inl_HSD_JObjGetRotation_unfused(ctx, arg0, r);
+    inl_HSD_JObjGetScale_unfused(ctx, arg0, s);
+    if (((((!(r.x() != 0.0)) && (!(r.y() != 0.0))) && (!(r.z() != 0.0)))
+        && (s.x() == fp::frsp(1_i32 as f64)))
+        && (s.y() == fp::frsp(1_i32 as f64)))
+        && (s.z() == fp::frsp(1_i32 as f64))
+    {
+        inl_HSD_JObjGetTranslation_unfused(ctx, arg0, pos1);
+        (pos1).set_x(fp::fadds((pos1).x(), (pos0).x()));
+        (pos1).set_y(fp::fadds((pos1).y(), (pos0).y()));
+        (pos1).set_z(fp::fadds((pos1).z(), (pos0).z()));
+        return;
+    }
+    inl_HSD_JObjSetupMatrix_unfused(ctx, arg0);
+    fns::PSMTXMultVec(ctx, (arg0).mtx().get(0), pos0, pos1);
+}
+
 pub fn lb_8000B4FC<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, joint: HSD_Joint<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut jobj = jobj;
@@ -1109,6 +1156,92 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     return result;
 }
 
+fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+        return;
+    }
+    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
+}
+
+fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
+    let mut jobj = jobj;
+    let mut translate = translate;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b9fc0),
+            (0x237_i32 as u32),
+            cstr(ctx, 0x803b9fc0),
+        )
+    });
+    (if !Handle::is_null((translate)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b9fc0),
+            (0x238_i32 as u32),
+            cstr(ctx, 0x803b9fc0),
+        )
+    });
+    Handle::copy_from((translate), (jobj).translate());
+}
+
+fn inl_HSD_JObjGetRotation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate: Quaternion<'a>) {
+    let mut jobj = jobj;
+    let mut rotate = rotate;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b9fc0),
+            (0x165_i32 as u32),
+            cstr(ctx, 0x803b9fc0),
+        )
+    });
+    (if !Handle::is_null((rotate)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b9fc0),
+            (0x166_i32 as u32),
+            cstr(ctx, 0x803b9fc0),
+        )
+    });
+    Handle::copy_from((rotate), (jobj).rotate());
+}
+
+fn inl_HSD_JObjGetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
+    let mut jobj = jobj;
+    let mut scale = scale;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b9fc0),
+            (0x1c8_i32 as u32),
+            cstr(ctx, 0x803b9fc0),
+        )
+    });
+    (if !Handle::is_null((scale)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b9fc0),
+            (0x1c9_i32 as u32),
+            cstr(ctx, 0x803b9fc0),
+        )
+    });
+    Handle::copy_from((scale), (jobj).scale());
+}
+
 fn inl_lb_8000C07C_unfused<'a>(
     ctx: &'a Ctx,
     jobj: HSD_JObj<'a>,
@@ -1220,6 +1353,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(lb_8000B134(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x8000b1cc,
+        |ctx| {
+            let (a0, a1, a2): (HSD_JObj<'_>, Vec<'_>, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(lb_8000B1CC(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x8000b4fc,

@@ -2354,6 +2354,22 @@ class Translator:
             return Expr(f"{simple[name]}({v.code})", t, v.pure)
         if name == "__c2rs_inline_asm":
             raise Unsupported("inline asm")
+        if name == "__c2rs_va_type":
+            # MWCC's class of a va_arg type for __va_arg: 0 struct, 1 word, 2 long long, 3 double.
+            arg = strip(args[0])
+            while arg.kind == CK.UNEXPOSED_EXPR and children(arg):
+                arg = strip(children(arg)[-1])
+            pt = self.u.ctype(arg.type)
+            to = pt["to"] if pt["k"] == "ptr" else pt
+            if to["k"] in ("rec",):
+                code = 0
+            elif is_float(to):
+                code = 3
+            elif is_int(to) and int_info(to)[0] == 8:
+                code = 2
+            else:
+                code = 1
+            return Expr(f"{code}_u8", {"k": "int", "size": 1, "signed": False}, True)
         if name == "__cntlzw":
             v = self.convert(self.expr(args[0]), UINT)
             return Expr(f"({v.code}.leading_zeros() as i32)", t, v.pure)
@@ -2433,6 +2449,14 @@ class Translator:
             return Expr(v.code, to, pure)
         if fk == "fn" and tk == "ptr":
             return Expr(v.code, to, pure)
+        # An array parameter takes a pointer, as C decays it: the array at that address.
+        if fk in ("ptr", "arr") and tk == "arr":
+            b = self.u.rust_value_ty(to)
+            if self.u.rust_value_ty(fr) == b:
+                return Expr(v.code, to, pure)
+            return Expr(f"Handle::cast::<{b}>({v.code})", to, pure)
+        if is_int(fr) and tk == "arr":
+            return Expr(f"At::new(ctx, {v.code} as u32).field::<{self.u.rust_value_ty(to)}>(0)", to, pure)
         raise Unsupported(f"conversion {fk} -> {tk}")
 
 
@@ -2536,7 +2560,8 @@ def mwcc_regions(path, gekko_defined):
                         regions.append((top[1], i))
                 continue
             continue
-        if stack and stack[-1][0] and text and not text.startswith(("//", "/*", "*")):
+        # Storage classes alone (`static` for other compilers) do not change the code.
+        if stack and stack[-1][0] and text and not text.startswith(("//", "/*", "*")) and                 not set(text.split()) <= {"static", "inline", "extern"}:
             stack[-1][2] = True
     return regions
 

@@ -353,6 +353,489 @@ pub fn fn_801AAB18<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn fn_801AAB74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0xa8);
+    let bsort_temp: SortBufEntry<'a> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x3c);
+    let mut gobj = gobj;
+    let mut jobj: HSD_JObj<'a> =
+        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
+    let mut name_page_jp: i32 = 0;
+    let mut name_page_en: i32 = 0;
+    let mut title_page: i32 = 0;
+    let mut child: HSD_JObj<'a> = null(ctx);
+    let mut entry_idx: i32 = 0;
+    let mut leaf: HSD_JObj<'a> = null(ctx);
+    let mut text: HSD_Text<'a> = null(ctx);
+    let mut staff_idx: i32 = 0;
+    let mut i: i32 = 0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if statics::melee__gm__gmstaffroll::gm_804D6818(ctx).get() == 0_i32 {
+        {
+            i = 0_i32;
+            'l3: while i < statics::melee__gm__gmstaffroll::gm_804D681C(ctx).get() {
+                'c4: {
+                    fns::HSD_JObjAnimAll(ctx, jobj);
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    }
+    entry_idx = {
+        let __t1 = 0_i32;
+        staff_idx = __t1;
+        __t1
+    };
+    child = (jobj).child();
+    statics::melee__gm__gmstaffroll::gm_804D6800(ctx).set(0_i32);
+    {
+        let mut temp: i32 = entry_idx.wrapping_mul(15_i32);
+        name_page_jp = temp.wrapping_add(3_i32);
+        name_page_en = temp.wrapping_add(4_i32);
+        title_page = temp.wrapping_add(2_i32);
+    }
+    'l5: while !Handle::is_null(child) {
+        'c6: {
+            leaf = ((child).child()).child();
+            if (((!((fns::HSD_JObjGetFlags(ctx, leaf) & (16_i32 as u32)) != 0))
+                && (Handle::is_null(
+                    (Handle::add(
+                        statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                        staff_idx,
+                    ))
+                    .win()
+                    .at(0_i32)
+                    .get(),
+                )))
+                && ((((statics::melee__gm__gmstaffroll::gm_803DBFD8(ctx)
+                    .get(staff_idx)
+                    .has_check() as i32)
+                    == 0_i32)
+                    || (statics::melee__gm__gmstaffroll::gm_803DBFD8(ctx)
+                        .get(staff_idx)
+                        .check()
+                        .call::<_, i32>((statics::melee__gm__gmstaffroll::gm_803DBFD8(ctx)
+                            .get(staff_idx)
+                            .check_arg(),))
+                        != 0_i32))
+                    || (entry_idx == 197_i32)))
+                && ((entry_idx != 94_i32) || (fns::lbLang_IsSavedLanguageJP(ctx) != 0_i32))
+            {
+                (Handle::add(
+                    statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                    staff_idx,
+                ))
+                .win()
+                .at(0_i32)
+                .set(fns::HSD_SisLib_803A5ACC(
+                    ctx,
+                    0_i32,
+                    0_i32,
+                    0.0,
+                    fp::fneg(3.299999952316284),
+                    0.0,
+                    0.0,
+                    100.0,
+                ));
+                ((Handle::add(
+                    statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                    staff_idx,
+                ))
+                .win()
+                .at(0_i32)
+                .get())
+                .set_x4C((1_i32 as u8));
+                ((Handle::add(
+                    statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                    staff_idx,
+                ))
+                .win()
+                .at(0_i32)
+                .get())
+                .set_default_alignment((1_i32 as u8));
+                ((Handle::add(
+                    statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                    staff_idx,
+                ))
+                .win()
+                .at(0_i32)
+                .get())
+                .set_default_kerning((1_i32 as u8));
+                if ((fns::lbLang_IsSavedLanguageJP(ctx) != 0_i32) && (entry_idx < 183_i32))
+                    && (entry_idx != 176_i32)
+                {
+                    text = (Handle::add(
+                        statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                        staff_idx,
+                    ))
+                    .win()
+                    .at(0_i32)
+                    .get();
+                    (text).font_size().set_x(0.20900000631809235);
+                    (text).font_size().set_y(0.20900000631809235);
+                } else {
+                    text = (Handle::add(
+                        statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                        staff_idx,
+                    ))
+                    .win()
+                    .at(0_i32)
+                    .get();
+                    (text).font_size().set_x(0.13679999113082886);
+                    (text).font_size().set_y(0.20900000631809235);
+                }
+                if ((statics::melee__gm__gmstaffroll::gm_803DBFD8(ctx)
+                    .get(staff_idx)
+                    .has_check() as i32)
+                    != 0_i32)
+                    && (statics::melee__gm__gmstaffroll::gm_803DBFD8(ctx)
+                        .get(staff_idx)
+                        .check()
+                        .call::<_, i32>((statics::melee__gm__gmstaffroll::gm_803DBFD8(ctx)
+                            .get(staff_idx)
+                            .check_arg(),))
+                        == 0_i32)
+                {
+                    if fns::lbLang_IsSavedLanguageJP(ctx) != 0_i32 {
+                        fns::HSD_SisLib_803A6368(
+                            ctx,
+                            (Handle::add(
+                                statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                                staff_idx,
+                            ))
+                            .win()
+                            .at(0_i32)
+                            .get(),
+                            statics::melee__gm__gmstaffroll::gm_803DBFD8(ctx)
+                                .get(staff_idx)
+                                .alt_page(),
+                        );
+                    } else {
+                        fns::HSD_SisLib_803A6368(
+                            ctx,
+                            (Handle::add(
+                                statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                                staff_idx,
+                            ))
+                            .win()
+                            .at(0_i32)
+                            .get(),
+                            statics::melee__gm__gmstaffroll::gm_803DBFD8(ctx)
+                                .get(staff_idx)
+                                .alt_page()
+                                .wrapping_add(1_i32),
+                        );
+                    }
+                } else if ((((entry_idx != 183_i32) && (entry_idx != 193_i32))
+                    && (entry_idx != 195_i32))
+                    && (fns::lbLang_IsSavedLanguageJP(ctx) != 0_i32))
+                    || ((((entry_idx == 183_i32) || (entry_idx == 193_i32))
+                        || (entry_idx == 195_i32))
+                        && (fns::lbLang_IsSettingJP(ctx) != 0_i32))
+                {
+                    fns::HSD_SisLib_803A6368(
+                        ctx,
+                        (Handle::add(
+                            statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                            staff_idx,
+                        ))
+                        .win()
+                        .at(0_i32)
+                        .get(),
+                        name_page_jp,
+                    );
+                } else {
+                    fns::HSD_SisLib_803A6368(
+                        ctx,
+                        (Handle::add(
+                            statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                            staff_idx,
+                        ))
+                        .win()
+                        .at(0_i32)
+                        .get(),
+                        name_page_en,
+                    );
+                }
+                (Handle::add(
+                    statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                    staff_idx,
+                ))
+                .win()
+                .at(1_i32)
+                .set(fns::HSD_SisLib_803A5ACC(
+                    ctx,
+                    0_i32,
+                    0_i32,
+                    0.0,
+                    fp::fneg(7.800000190734863),
+                    0.0,
+                    0.0,
+                    100.0,
+                ));
+                ((Handle::add(
+                    statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                    staff_idx,
+                ))
+                .win()
+                .at(1_i32)
+                .get())
+                .set_x4C((1_i32 as u8));
+                ((Handle::add(
+                    statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                    staff_idx,
+                ))
+                .win()
+                .at(1_i32)
+                .get())
+                .set_default_alignment((1_i32 as u8));
+                ((Handle::add(
+                    statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                    staff_idx,
+                ))
+                .win()
+                .at(1_i32)
+                .get())
+                .set_default_kerning((1_i32 as u8));
+                {
+                    text = (Handle::add(
+                        statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                        staff_idx,
+                    ))
+                    .win()
+                    .at(1_i32)
+                    .get();
+                    (text).font_size().set_x(0.10000000149011612);
+                    (text).font_size().set_y(0.10000000149011612);
+                }
+                if ((statics::melee__gm__gmstaffroll::gm_803DBFD8(ctx)
+                    .get(staff_idx)
+                    .has_check() as i32)
+                    == 0_i32)
+                    || (statics::melee__gm__gmstaffroll::gm_803DBFD8(ctx)
+                        .get(staff_idx)
+                        .check()
+                        .call::<_, i32>((statics::melee__gm__gmstaffroll::gm_803DBFD8(ctx)
+                            .get(staff_idx)
+                            .check_arg(),))
+                        != 0_i32)
+                {
+                    fns::HSD_SisLib_803A6368(
+                        ctx,
+                        (Handle::add(
+                            statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                            staff_idx,
+                        ))
+                        .win()
+                        .at(1_i32)
+                        .get(),
+                        title_page,
+                    );
+                }
+                if (Handle::add(
+                    statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                    staff_idx,
+                ))
+                .x8()
+                    >= 1_i32
+                {
+                    Handle::copy_from(
+                        ((Handle::add(
+                            statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                            staff_idx,
+                        ))
+                        .win()
+                        .at(0_i32)
+                        .get())
+                        .active_color(),
+                        statics::melee__gm__gmstaffroll::gm_804D42C8(ctx),
+                    );
+                    Handle::copy_from(
+                        ((Handle::add(
+                            statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                            staff_idx,
+                        ))
+                        .win()
+                        .at(1_i32)
+                        .get())
+                        .active_color(),
+                        statics::melee__gm__gmstaffroll::gm_804D42C8(ctx),
+                    );
+                }
+            } else if ((fns::HSD_JObjGetFlags(ctx, leaf) & (16_i32 as u32)) != 0) {
+                text = (Handle::add(
+                    statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                    staff_idx,
+                ))
+                .win()
+                .at(0_i32)
+                .get();
+                if !Handle::is_null(text) {
+                    fns::HSD_SisLib_803A5CC4(ctx, text);
+                    fns::HSD_SisLib_803A5CC4(
+                        ctx,
+                        (Handle::add(
+                            statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                            staff_idx,
+                        ))
+                        .win()
+                        .at(1_i32)
+                        .get(),
+                    );
+                    (Handle::add(
+                        statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                        staff_idx,
+                    ))
+                    .win()
+                    .at(0_i32)
+                    .set(null::<HSD_Text<'a>>(ctx));
+                }
+            }
+            if ((!((fns::HSD_JObjGetFlags(ctx, leaf) & (16_i32 as u32)) != 0))
+                && ((((statics::melee__gm__gmstaffroll::gm_803DBFD8(ctx)
+                    .get(staff_idx)
+                    .has_check() as i32)
+                    == 0_i32)
+                    || (statics::melee__gm__gmstaffroll::gm_803DBFD8(ctx)
+                        .get(staff_idx)
+                        .check()
+                        .call::<_, i32>((statics::melee__gm__gmstaffroll::gm_803DBFD8(ctx)
+                            .get(staff_idx)
+                            .check_arg(),))
+                        != 0_i32))
+                    || (entry_idx == 197_i32)))
+                && ((entry_idx != 94_i32) || (fns::lbLang_IsSavedLanguageJP(ctx) != 0_i32))
+            {
+                inl_HSD_JObjSetupMatrix_unfused(ctx, leaf);
+                (Handle::add(
+                    statics::melee__gm__gmstaffroll::staffInfoSortBuf(ctx).get(),
+                    statics::melee__gm__gmstaffroll::gm_804D6800(ctx).get(),
+                ))
+                .set_index(entry_idx);
+                (Handle::add(
+                    statics::melee__gm__gmstaffroll::staffInfoSortBuf(ctx).get(),
+                    statics::melee__gm__gmstaffroll::gm_804D6800(ctx).get(),
+                ))
+                .set_jobj(leaf);
+                statics::melee__gm__gmstaffroll::gm_804D6800(ctx).set(
+                    statics::melee__gm__gmstaffroll::gm_804D6800(ctx)
+                        .get()
+                        .wrapping_add(1),
+                );
+            }
+            child = (child).next();
+            staff_idx = staff_idx.wrapping_add(1);
+            name_page_jp = name_page_jp.wrapping_add(15_i32);
+            name_page_en = name_page_en.wrapping_add(15_i32);
+            title_page = title_page.wrapping_add(15_i32);
+            entry_idx = entry_idx.wrapping_add(1);
+        }
+    }
+    fns::HSD_CObjSetupViewingMtx(ctx, statics::melee__gm__gmstaffroll::gm_804D6830(ctx).get());
+    {
+        i = 0_i32;
+        'l7: while i < statics::melee__gm__gmstaffroll::gm_804D6800(ctx).get() {
+            'c8: {
+                fns::PSMTXConcat(
+                    ctx,
+                    (statics::melee__gm__gmstaffroll::gm_804D6830(ctx).get())
+                        .view_mtx()
+                        .get(0),
+                    inl_HSD_JObjGetMtxPtr_unfused(
+                        ctx,
+                        (Handle::add(
+                            statics::melee__gm__gmstaffroll::staffInfoSortBuf(ctx).get(),
+                            i,
+                        ))
+                        .jobj(),
+                    ),
+                    (Handle::add(
+                        statics::melee__gm__gmstaffroll::staffInfoSortBuf(ctx).get(),
+                        i,
+                    ))
+                    .mtx()
+                    .get(0),
+                );
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    {
+        let mut n: i32 = 0;
+        let mut j: i32 = 0;
+        {
+            n = statics::melee__gm__gmstaffroll::gm_804D6800(ctx)
+                .get()
+                .wrapping_sub(1_i32);
+            'l9: while n > 0_i32 {
+                'c10: {
+                    {
+                        j = 0_i32;
+                        'l11: while j < n {
+                            'c12: {
+                                if (Handle::add(
+                                    statics::melee__gm__gmstaffroll::staffInfoSortBuf(ctx).get(),
+                                    j,
+                                ))
+                                .mtx()
+                                .get(2_i32)
+                                .at(3_i32)
+                                .get()
+                                    < (Handle::add(
+                                        statics::melee__gm__gmstaffroll::staffInfoSortBuf(ctx)
+                                            .get(),
+                                        j.wrapping_add(1_i32),
+                                    ))
+                                    .mtx()
+                                    .get(2_i32)
+                                    .at(3_i32)
+                                    .get()
+                                {
+                                    Handle::copy_from(
+                                        bsort_temp,
+                                        (Handle::add(
+                                            statics::melee__gm__gmstaffroll::staffInfoSortBuf(ctx)
+                                                .get(),
+                                            j,
+                                        )),
+                                    );
+                                    Handle::copy_from(
+                                        (Handle::add(
+                                            statics::melee__gm__gmstaffroll::staffInfoSortBuf(ctx)
+                                                .get(),
+                                            j,
+                                        )),
+                                        (Handle::add(
+                                            statics::melee__gm__gmstaffroll::staffInfoSortBuf(ctx)
+                                                .get(),
+                                            j.wrapping_add(1_i32),
+                                        )),
+                                    );
+                                    Handle::copy_from(
+                                        (Handle::add(
+                                            statics::melee__gm__gmstaffroll::staffInfoSortBuf(ctx)
+                                                .get(),
+                                            j.wrapping_add(1_i32),
+                                        )),
+                                        bsort_temp,
+                                    );
+                                }
+                            }
+                            j = j.wrapping_add(1);
+                        }
+                    }
+                }
+                n = n.wrapping_sub(1);
+            }
+        }
+    }
+}
+
 pub fn fn_801AC67C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
@@ -789,6 +1272,52 @@ fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'
     return (gobj).hsd_obj();
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803dbfdc),
+            (228_i32 as u32),
+            cstr(ctx, 0x803dbfdc),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
+fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+        return;
+    }
+    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
+}
+
+fn inl_HSD_JObjGetMtxPtr_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'a, F32, 4> {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803dbfdc),
+            (0x2bb_i32 as u32),
+            cstr(ctx, 0x803dbfdc),
+        )
+    });
+    inl_HSD_JObjSetupMatrix_unfused(ctx, jobj);
+    return (jobj).mtx().get(0);
+}
+
 fn inl_HSD_GObjGetHSDObj<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).hsd_obj();
@@ -1117,6 +1646,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(fn_801AAB18(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801aab74,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(fn_801AAB74(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

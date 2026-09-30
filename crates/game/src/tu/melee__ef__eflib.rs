@@ -400,6 +400,75 @@ pub fn efLib_RemoveLast<'a>(ctx: &'a Ctx) {
     });
 }
 
+pub fn efLib_Update<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x38);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut effect: EF_Effect<'a> = null(ctx);
+    let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
+    's1: {
+        let __case = match (({
+            let __t1 = (Handle::cast::<EF_Effect<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+            effect = __t1;
+            __t1
+        })
+        .state_flags() as i32)
+        {
+            1_i32 => 0,
+            2_i32 => 1,
+            _ => 2,
+        };
+        if __case <= 0 {
+            (effect).set_state_flags((effect).state_flags().wrapping_add(1));
+            break 's1;
+        }
+        if __case <= 1 {
+            return;
+        }
+    }
+    if ((effect).lifetime() as i32) != 0_i32 {
+        let mut param: u16 = (((effect).lifetime() as i32).wrapping_sub(1_i32) as u16);
+        (effect).set_lifetime(param);
+        if (param as i32) == 0_i32 {
+            fns::HSD_GObjFree(ctx, gobj);
+            return;
+        }
+    }
+    if ((effect).scale_flags() as i32) != 0_i32 {
+        if !Handle::is_null(((effect).attach_jobj())) {
+            if !Handle::is_null(inl_HSD_JObjGetParent_unfused(ctx, (effect).attach_jobj())) {
+                let mut attach_jobj: HSD_JObj<'a> = (effect).attach_jobj();
+                if (!Handle::is_null(attach_jobj))
+                    && (inl_HSD_JObjMtxIsDirty_unfused(ctx, attach_jobj) != 0)
+                {
+                    fns::HSD_JObjSetupMatrixSub(ctx, attach_jobj);
+                }
+                if ((((effect).scale_flags() as i32) & 1_i32) != 0) {
+                    fns::HSD_MtxGetScale(
+                        ctx,
+                        inl_HSD_JObjGetMtxPtr_unfused(ctx, (effect).attach_jobj()),
+                        scale,
+                    );
+                }
+            } else if ((((effect).scale_flags() as i32) & 1_i32) != 0) {
+                inl_HSD_JObjGetScale_unfused(ctx, (effect).attach_jobj(), scale);
+            }
+            if ((((effect).scale_flags() as i32) & 1_i32) != 0) {
+                scale.set_x({
+                    let __t2 = scale.y();
+                    scale.set_z(__t2);
+                    __t2
+                });
+                inl_HSD_JObjSetScale_unfused(ctx, jobj, scale);
+            }
+        }
+    }
+    fns::HSD_JObjAnimAll(ctx, jobj);
+    if !Handle::is_null((effect).update()) {
+        (effect).update().call::<_, ()>((effect,));
+    }
+}
+
 pub fn efLib_Create<'a>(ctx: &'a Ctx, gfx_id: i32, parent_gobj: HSD_GObj<'a>) -> EF_Effect<'a> {
     let __frame = ctx.stack_frame(0x28);
     let mut gfx_id = gfx_id;
@@ -1006,6 +1075,184 @@ pub fn efLib_CreateGenerator_Attach_AddAppSRT<'a>(
             .set_type(((((generator).r#type() as i32) | (shl_i32(1_i32, (11_i32 as u32)))) as u16));
     }
     return generator;
+}
+
+pub fn efLib_CreateGenerator_Attach_Scale<'a>(
+    ctx: &'a Ctx,
+    gfx_id: i32,
+    vlist: __va_list_t<'a>,
+    gobj: HSD_GObj<'a>,
+) -> HSD_Generator<'a> {
+    let __frame = ctx.stack_frame(0x30);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let generator: Ptr<'a, HSD_Generator<'a>> = frame_at(ctx, &__frame, 0xc);
+    let mut gfx_id = gfx_id;
+    let mut vlist = vlist;
+    let mut gobj = gobj;
+    let mut id: i32 = 0;
+    id = gfx_id;
+    inl_eflib_create_generator_add_appsrt_unfused(
+        ctx,
+        generator,
+        id,
+        ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
+            ctx,
+            Handle::cast::<Arr<'a, __va_list_t<'a>, 1>>(vlist).get(0),
+            1_u8,
+        )))
+        .get()),
+    );
+    if !Handle::is_null(generator.get()) {
+        inl_HSD_JObjGetScale_unfused(
+            ctx,
+            (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj))),
+            scale,
+        );
+        ((generator.get()).appsrt()).scale().set_x({
+            let __t2 = {
+                let __t1 = scale.y();
+                ((generator.get()).appsrt()).scale().set_z(__t1);
+                __t1
+            };
+            ((generator.get()).appsrt()).scale().set_y(__t2);
+            __t2
+        });
+    }
+    return generator.get();
+}
+
+pub fn efLib_CreateGenerator_AppSRT_SetScale<'a>(
+    ctx: &'a Ctx,
+    gfx_id: i32,
+    vlist: __va_list_t<'a>,
+) -> HSD_Generator<'a> {
+    let __frame = ctx.stack_frame(0x18);
+    let generator: Ptr<'a, HSD_Generator<'a>> = frame_at(ctx, &__frame, 0x0);
+    let mut gfx_id = gfx_id;
+    let mut vlist = vlist;
+    inl_eflib_create_generator_add_appsrt_unfused(
+        ctx,
+        generator,
+        gfx_id,
+        ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
+            ctx,
+            Handle::cast::<Arr<'a, __va_list_t<'a>, 1>>(vlist).get(0),
+            1_u8,
+        )))
+        .get()),
+    );
+    if !Handle::is_null(generator.get()) {
+        ((generator.get()).appsrt()).scale().set_x({
+            let __t2 = {
+                let __t1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(
+                    ctx,
+                    Handle::cast::<Arr<'a, __va_list_t<'a>, 1>>(vlist).get(0),
+                    1_u8,
+                )))
+                .get())
+                .get();
+                ((generator.get()).appsrt()).scale().set_z(__t1);
+                __t1
+            };
+            ((generator.get()).appsrt()).scale().set_y(__t2);
+            __t2
+        });
+    }
+    return generator.get();
+}
+
+pub fn efLib_CreateGenerator_AppSRT_SetFacingDir<'a>(
+    ctx: &'a Ctx,
+    gfx_id: i32,
+    vlist: __va_list_t<'a>,
+) -> HSD_Generator<'a> {
+    let __frame = ctx.stack_frame(0x18);
+    let generator: Ptr<'a, HSD_Generator<'a>> = frame_at(ctx, &__frame, 0x0);
+    let mut gfx_id = gfx_id;
+    let mut vlist = vlist;
+    let mut direction: f64 = 0.0;
+    inl_eflib_create_generator_add_appsrt_unfused(
+        ctx,
+        generator,
+        gfx_id,
+        ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
+            ctx,
+            Handle::cast::<Arr<'a, __va_list_t<'a>, 1>>(vlist).get(0),
+            1_u8,
+        )))
+        .get()),
+    );
+    if !Handle::is_null(generator.get()) {
+        direction = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(
+            ctx,
+            Handle::cast::<Arr<'a, __va_list_t<'a>, 1>>(vlist).get(0),
+            1_u8,
+        )))
+        .get())
+        .get();
+        ((generator.get()).appsrt()).rot().set_y(fp::frsp(
+            (if direction < 0.0 {
+                fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))))
+            } else {
+                (fp::fdiv(3.141592653589793, (2_i32 as f64)))
+            }),
+        ));
+    }
+    return generator.get();
+}
+
+pub fn efLib_CreateGenerator_AppSRT_SetFacingDirScale<'a>(
+    ctx: &'a Ctx,
+    gfx_id: i32,
+    vlist: __va_list_t<'a>,
+) -> HSD_Generator<'a> {
+    let __frame = ctx.stack_frame(0x18);
+    let generator: Ptr<'a, HSD_Generator<'a>> = frame_at(ctx, &__frame, 0x0);
+    let mut gfx_id = gfx_id;
+    let mut vlist = vlist;
+    let mut direction: f64 = 0.0;
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut id: i32 = 0;
+    id = gfx_id;
+    jobj = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
+        ctx,
+        Handle::cast::<Arr<'a, __va_list_t<'a>, 1>>(vlist).get(0),
+        1_u8,
+    )))
+    .get());
+    inl_eflib_create_generator_add_appsrt_unfused(ctx, generator, id, jobj);
+    if !Handle::is_null(generator.get()) {
+        direction = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(
+            ctx,
+            Handle::cast::<Arr<'a, __va_list_t<'a>, 1>>(vlist).get(0),
+            1_u8,
+        )))
+        .get())
+        .get();
+        ((generator.get()).appsrt()).rot().set_y(fp::frsp(
+            (if direction < 0.0 {
+                fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))))
+            } else {
+                (fp::fdiv(3.141592653589793, (2_i32 as f64)))
+            }),
+        ));
+        ((generator.get()).appsrt()).scale().set_x({
+            let __t2 = {
+                let __t1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(
+                    ctx,
+                    Handle::cast::<Arr<'a, __va_list_t<'a>, 1>>(vlist).get(0),
+                    1_u8,
+                )))
+                .get())
+                .get();
+                ((generator.get()).appsrt()).scale().set_z(__t1);
+                __t1
+            };
+            ((generator.get()).appsrt()).scale().set_y(__t2);
+            __t2
+        });
+    }
+    return generator.get();
 }
 
 pub fn efLib_SpawnParticleEffect<'a>(
@@ -2066,6 +2313,89 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     return result;
 }
 
+fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+        return;
+    }
+    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
+}
+
+fn inl_HSD_JObjGetMtxPtr_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'a, F32, 4> {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bf7b4),
+            (0x2bb_i32 as u32),
+            cstr(ctx, 0x803bf7b4),
+        )
+    });
+    inl_HSD_JObjSetupMatrix_unfused(ctx, jobj);
+    return (jobj).mtx().get(0);
+}
+
+fn inl_HSD_JObjGetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
+    let mut jobj = jobj;
+    let mut scale = scale;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bf7b4),
+            (0x1c8_i32 as u32),
+            cstr(ctx, 0x803bf7b4),
+        )
+    });
+    (if !Handle::is_null((scale)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bf7b4),
+            (0x1c9_i32 as u32),
+            cstr(ctx, 0x803bf7b4),
+        )
+    });
+    Handle::copy_from((scale), (jobj).scale());
+}
+
+fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
+    let mut jobj = jobj;
+    let mut scale = scale;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bf7b4),
+            (0x17e_i32 as u32),
+            cstr(ctx, 0x803bf7b4),
+        )
+    });
+    (if !Handle::is_null((scale)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bf7b4),
+            (0x17f_i32 as u32),
+            cstr(ctx, 0x803bf7b4),
+        )
+    });
+    Handle::copy_from((jobj).scale(), (scale));
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
 fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).hsd_obj();
@@ -2138,65 +2468,6 @@ fn inl_eflib_create_effect_and_attach_unfused<'a>(
         }
     }
     return effect;
-}
-
-fn inl_HSD_JObjGetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
-    let mut jobj = jobj;
-    let mut scale = scale;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803bf7b4),
-            (0x1c8_i32 as u32),
-            cstr(ctx, 0x803bf7b4),
-        )
-    });
-    (if !Handle::is_null((scale)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803bf7b4),
-            (0x1c9_i32 as u32),
-            cstr(ctx, 0x803bf7b4),
-        )
-    });
-    Handle::copy_from((scale), (jobj).scale());
-}
-
-fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
-    let mut jobj = jobj;
-    let mut scale = scale;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803bf7b4),
-            (0x17e_i32 as u32),
-            cstr(ctx, 0x803bf7b4),
-        )
-    });
-    (if !Handle::is_null((scale)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803bf7b4),
-            (0x17f_i32 as u32),
-            cstr(ctx, 0x803bf7b4),
-        )
-    });
-    Handle::copy_from((jobj).scale(), (scale));
-    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
-        {
-            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
-                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
-            }
-        }
-    }
 }
 
 fn inl_eflib_create_generator_add_appsrt_unfused<'a>(
@@ -2730,6 +3001,14 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x8005bc50,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(efLib_Update(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x8005be88,
         |ctx| {
             let (a0, a1): (i32, HSD_GObj<'_>) = Args::take_all(ctx);
@@ -2849,6 +3128,41 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (i32, HSD_JObj<'_>) = Args::take_all(ctx);
             Ret::put(efLib_CreateGenerator_Attach_AddAppSRT(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8005cd2c,
+        |ctx| {
+            let (a0, a1, a2): (i32, __va_list_t<'_>, HSD_GObj<'_>) = Args::take_all(ctx);
+            Ret::put(efLib_CreateGenerator_Attach_Scale(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8005ce48,
+        |ctx| {
+            let (a0, a1): (i32, __va_list_t<'_>) = Args::take_all(ctx);
+            Ret::put(efLib_CreateGenerator_AppSRT_SetScale(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8005cf40,
+        |ctx| {
+            let (a0, a1): (i32, __va_list_t<'_>) = Args::take_all(ctx);
+            Ret::put(efLib_CreateGenerator_AppSRT_SetFacingDir(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8005d044,
+        |ctx| {
+            let (a0, a1): (i32, __va_list_t<'_>) = Args::take_all(ctx);
+            Ret::put(
+                efLib_CreateGenerator_AppSRT_SetFacingDirScale(ctx, a0, a1),
+                ctx,
+            );
         },
         Returns::Int,
     );

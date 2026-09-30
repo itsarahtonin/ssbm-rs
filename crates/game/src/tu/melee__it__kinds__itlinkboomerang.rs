@@ -37,6 +37,37 @@ pub fn it_8029FDBC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     });
 }
 
+pub fn it_8029FDDC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
+    let __frame = ctx.stack_frame(0x28);
+    let mut gobj = gobj;
+    let mut arg1 = arg1;
+    let mut i: i32 = 0;
+    let mut ip: Item<'a> = null(ctx);
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    ip = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    fns::it_8026EECC(ctx, gobj, arg1);
+    {
+        i = 0_i32;
+        'l1: while i < 2_i32 {
+            'c2: {
+                jobj = (ip).xDD4_itemVar().linkboomerang().xF90().at(i).get();
+                if !Handle::is_null(jobj) {
+                    fns::HSD_JObjDispAll(
+                        ctx,
+                        jobj,
+                        At::new(ctx, 0_i32 as u32)
+                            .field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0)
+                            .get(0),
+                        fns::HSD_GObj_80390EB8(ctx, arg1),
+                        (0_i32 as u32),
+                    );
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+}
+
 pub fn it_8029FE64<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, i: i32) {
     let __frame = ctx.stack_frame(0x50);
     let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
@@ -1671,6 +1702,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(it_8029FDBC(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x8029fddc,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
+            Ret::put(it_8029FDDC(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x8029fe64,

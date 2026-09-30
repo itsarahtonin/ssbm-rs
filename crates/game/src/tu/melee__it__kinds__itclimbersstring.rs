@@ -559,6 +559,33 @@ pub fn it_802C32D4<'a>(
     return 1_i32;
 }
 
+pub fn it_802C33B8<'a>(ctx: &'a Ctx, ip: Item<'a>) {
+    let __frame = ctx.stack_frame(0x68);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let zero: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let mut ip = ip;
+    let mut link: ItemLink<'a> = (ip).xDD4_itemVar().climbersstring().x4();
+    let mut jobj: HSD_JObj<'a> =
+        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, (link).gobj())));
+    zero.set_x(0.0);
+    zero.set_y(0.0);
+    zero.set_z(0.0);
+    (link).set_x2C_b0((0_i32 as u8));
+    inl_HSD_JObjSetupMatrix_unfused(ctx, (link).jobj());
+    fns::PSMTXIdentity(ctx, m.get(0));
+    m.get(0_i32).at(3_i32).set(zero.x());
+    m.get(1_i32).at(3_i32).set(zero.y());
+    m.get(2_i32).at(3_i32).set(zero.z());
+    fns::PSMTXConcat(ctx, ((link).jobj()).mtx().get(0), m.get(0), m.get(0));
+    inl_HSD_JObjCopyMtx_unfused(ctx, jobj, m.get(0));
+    (jobj).set_flags(((jobj).flags() | (0x3800000_i32 as u32)));
+    {
+        if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+            fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+        }
+    }
+}
+
 pub fn it_802C3520<'a>(ctx: &'a Ctx, ip: Item<'a>, target: Vec<'a>) {
     let __frame = ctx.stack_frame(0x90);
     let next_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
@@ -870,6 +897,44 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     return result;
 }
 
+fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+        return;
+    }
+    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
+}
+
+fn inl_HSD_JObjCopyMtx_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, mtx: ArrV<'a, F32, 4>) {
+    let mut jobj = jobj;
+    let mut mtx = mtx;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b86b0),
+            (0x2c2_i32 as u32),
+            cstr(ctx, 0x803b86b0),
+        )
+    });
+    (if true {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b86b0),
+            (0x2c3_i32 as u32),
+            cstr(ctx, 0x803b86b0),
+        )
+    });
+    fns::PSMTXCopy(
+        ctx,
+        Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(mtx).get(0),
+        (jobj).mtx().get(0),
+    );
+}
+
 fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
     let mut jobj = jobj;
     let mut translate = translate;
@@ -1010,6 +1075,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(it_802C32D4(ctx, a0, a1, a2, a3, a4.0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x802c33b8,
+        |ctx| {
+            let (a0,): (Item<'_>,) = Args::take_all(ctx);
+            Ret::put(it_802C33B8(ctx, a0), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x802c3520,

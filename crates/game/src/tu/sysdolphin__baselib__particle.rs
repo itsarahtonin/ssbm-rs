@@ -26,6 +26,68 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn hsd_803983A4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut r#gen = r#gen;
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    if Handle::is_null(r#gen) {
+        return;
+    }
+    if (((r#gen).kind() & (0x800_i32 as u32)) != 0) {
+        return;
+    }
+    if !((((r#gen).r#type() as i32) & 0x100_i32) != 0) {
+        return;
+    }
+    if Handle::is_null(
+        ({
+            let __t1 = (r#gen).jobj();
+            jobj = __t1;
+            __t1
+        }),
+    ) {
+        return;
+    }
+    inl_HSD_JObjSetupMatrix_unfused(ctx, jobj);
+    if ((((r#gen).r#type() as i32) & 0x200_i32) != 0) {
+        (r#gen)
+            .pos()
+            .set_x(((r#gen).jobj()).mtx().get(0_i32).at(3_i32).get());
+        (r#gen)
+            .pos()
+            .set_y(((r#gen).jobj()).mtx().get(1_i32).at(3_i32).get());
+        (r#gen)
+            .pos()
+            .set_z(((r#gen).jobj()).mtx().get(2_i32).at(3_i32).get());
+    }
+    if ((((r#gen).r#type() as i32) & 0x800_i32) != 0) {
+        if (!Handle::is_null((r#gen).appsrt()))
+            && (Handle::addr(((r#gen).appsrt()).gp()) == Handle::addr(r#gen))
+        {
+            ((r#gen).appsrt())
+                .translate()
+                .set_x(((r#gen).jobj()).mtx().get(0_i32).at(3_i32).get());
+            ((r#gen).appsrt())
+                .translate()
+                .set_y(((r#gen).jobj()).mtx().get(1_i32).at(3_i32).get());
+            ((r#gen).appsrt())
+                .translate()
+                .set_z(((r#gen).jobj()).mtx().get(2_i32).at(3_i32).get());
+        }
+    }
+    if ((((r#gen).r#type() as i32) & 0x1000_i32) != 0) {
+        if (!Handle::is_null((r#gen).appsrt()))
+            && (Handle::addr(((r#gen).appsrt()).gp()) == Handle::addr(r#gen))
+        {
+            fns::HSD_MtxGetScale(
+                ctx,
+                ((r#gen).jobj()).mtx().get(0),
+                ((r#gen).appsrt()).scale(),
+            );
+        }
+    }
+}
+
 pub fn psInitDataBankLoad<'a>(
     ctx: &'a Ctx,
     bank: i32,
@@ -877,6 +939,50 @@ pub fn hsd_80398F8C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, angle: f64) {
     ));
 }
 
+pub fn hsd_803991D8<'a>(
+    ctx: &'a Ctx,
+    r#gen: HSD_Generator<'a>,
+    jobj: HSD_JObj<'a>,
+    force: f64,
+    range: f64,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x30);
+    let mut r#gen = r#gen;
+    let mut jobj = jobj;
+    let mut force = force;
+    let mut range = range;
+    let mut dx: f64 = 0.0;
+    let mut dy: f64 = 0.0;
+    let mut dz: f64 = 0.0;
+    let mut dist_sq: f64 = 0.0;
+    let mut scale: f64 = 0.0;
+    if (Handle::is_null(jobj)) || (range < 0.0) {
+        return 0_i32;
+    }
+    inl_HSD_JObjSetupMatrix(ctx, jobj);
+    dx = fp::fsubs((jobj).mtx().get(0_i32).at(3_i32).get(), (r#gen).fric());
+    dy = fp::fsubs((jobj).mtx().get(1_i32).at(3_i32).get(), (r#gen).size());
+    dz = fp::fsubs((jobj).mtx().get(2_i32).at(3_i32).get(), (r#gen).radius());
+    dist_sq = fp::fmadds(dz, dz, fp::fmadds(dx, dx, fp::fmuls(dy, dy)));
+    if dist_sq <= fp::fmuls(range, range) {
+        return 1_i32;
+    }
+    if dist_sq == 0.0 {
+        return 0_i32;
+    }
+    scale = fp::fdivs(force, dist_sq);
+    (r#gen)
+        .pos()
+        .set_z(fp::fmadds(scale, dx, (r#gen).pos().z()));
+    (r#gen)
+        .vel()
+        .set_x(fp::fmadds(scale, dy, (r#gen).vel().x()));
+    (r#gen)
+        .vel()
+        .set_y(fp::fmadds(scale, dz, (r#gen).vel().y()));
+    return 0_i32;
+}
+
 pub fn hsd_8039CEAC<'a>(ctx: &'a Ctx, mask: u32) {
     let __frame = ctx.stack_frame(0x28);
     let mut mask = mask;
@@ -1055,6 +1161,66 @@ pub fn hsd_8039D0A0<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) {
     }
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80005524),
+            (228_i32 as u32),
+            cstr(ctx, 0x80005524),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
+fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+        return;
+    }
+    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
+}
+
+fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80005524),
+            (228_i32 as u32),
+            cstr(ctx, 0x80005524),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
+fn inl_HSD_JObjSetupMatrix<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+        return;
+    }
+    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
+}
+
 fn inl_psEnableTexture<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, textures: Ptr<'a, Val<'a, u8>>) {
     let mut pp = pp;
     let mut textures = textures;
@@ -1229,6 +1395,14 @@ fn inl_ref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
+        0x803983a4,
+        |ctx| {
+            let (a0,): (HSD_Generator<'_>,) = Args::take_all(ctx);
+            Ret::put(hsd_803983A4(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x803984f4,
         |ctx| {
             let (a0, a1, a2, a3, a4): (
@@ -1366,6 +1540,15 @@ pub fn register(ctx: &Ctx) {
             Ret::put(hsd_80398F8C(ctx, a0, a1.0), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x803991d8,
+        |ctx| {
+            let (a0, a1, a2, a3): (HSD_Generator<'_>, HSD_JObj<'_>, Single, Single) =
+                Args::take_all(ctx);
+            Ret::put(hsd_803991D8(ctx, a0, a1, a2.0, a3.0), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x8039ceac,

@@ -228,6 +228,94 @@ pub fn HSD_WObjSetPosition<'a>(ctx: &'a Ctx, wobj: HSD_WObj<'a>, pos: Vec<'a>) {
     (wobj).set_flags(((wobj).flags() & 0xfffffffe_u32));
 }
 
+pub fn HSD_WObjSetPositionX<'a>(ctx: &'a Ctx, wobj: HSD_WObj<'a>, val: f64) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut wobj = wobj;
+    let mut val = val;
+    let mut jp: HSD_JObj<'a> = null(ctx);
+    if !Handle::is_null(wobj) {
+        if ((wobj).flags() & (1_i32 as u32)) != (0_i32 as u32) {
+            if (!Handle::is_null((wobj).aobj())) && (!Handle::is_null(((wobj).aobj()).hsd_obj())) {
+                jp = Handle::cast::<HSD_JObj<'a>>(((wobj).aobj()).hsd_obj());
+                inl_HSD_JObjSetupMatrix_unfused(
+                    ctx,
+                    Handle::cast::<HSD_JObj<'a>>(((wobj).aobj()).hsd_obj()),
+                );
+                fns::PSMTXMultVec(ctx, (jp).mtx().get(0), (wobj).pos(), (wobj).pos());
+            }
+            (wobj).set_flags(((wobj).flags() & 0xfffffffe_u32));
+        }
+        (wobj).pos().set_x(val);
+        (wobj).set_flags(((wobj).flags() | (2_i32 as u32)));
+    }
+}
+
+pub fn HSD_WObjSetPositionY<'a>(ctx: &'a Ctx, wobj: HSD_WObj<'a>, val: f64) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut wobj = wobj;
+    let mut val = val;
+    let mut jp: HSD_JObj<'a> = null(ctx);
+    if !Handle::is_null(wobj) {
+        if ((wobj).flags() & (1_i32 as u32)) != (0_i32 as u32) {
+            if (!Handle::is_null((wobj).aobj())) && (!Handle::is_null(((wobj).aobj()).hsd_obj())) {
+                jp = Handle::cast::<HSD_JObj<'a>>(((wobj).aobj()).hsd_obj());
+                inl_HSD_JObjSetupMatrix_unfused(
+                    ctx,
+                    Handle::cast::<HSD_JObj<'a>>(((wobj).aobj()).hsd_obj()),
+                );
+                fns::PSMTXMultVec(ctx, (jp).mtx().get(0), (wobj).pos(), (wobj).pos());
+            }
+            (wobj).set_flags(((wobj).flags() & 0xfffffffe_u32));
+        }
+        (wobj).pos().set_y(val);
+        (wobj).set_flags(((wobj).flags() | (2_i32 as u32)));
+    }
+}
+
+pub fn HSD_WObjSetPositionZ<'a>(ctx: &'a Ctx, wobj: HSD_WObj<'a>, val: f64) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut wobj = wobj;
+    let mut val = val;
+    let mut jp: HSD_JObj<'a> = null(ctx);
+    if !Handle::is_null(wobj) {
+        if ((wobj).flags() & (1_i32 as u32)) != (0_i32 as u32) {
+            if (!Handle::is_null((wobj).aobj())) && (!Handle::is_null(((wobj).aobj()).hsd_obj())) {
+                jp = Handle::cast::<HSD_JObj<'a>>(((wobj).aobj()).hsd_obj());
+                inl_HSD_JObjSetupMatrix_unfused(
+                    ctx,
+                    Handle::cast::<HSD_JObj<'a>>(((wobj).aobj()).hsd_obj()),
+                );
+                fns::PSMTXMultVec(ctx, (jp).mtx().get(0), (wobj).pos(), (wobj).pos());
+            }
+            (wobj).set_flags(((wobj).flags() & 0xfffffffe_u32));
+        }
+        (wobj).pos().set_z(val);
+        (wobj).set_flags(((wobj).flags() | (2_i32 as u32)));
+    }
+}
+
+pub fn HSD_WObjGetPosition<'a>(ctx: &'a Ctx, wobj: HSD_WObj<'a>, vec: Vec<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut wobj = wobj;
+    let mut vec = vec;
+    let mut jp: HSD_JObj<'a> = null(ctx);
+    if (Handle::is_null(wobj)) || (Handle::is_null(vec)) {
+        return;
+    }
+    if ((wobj).flags() & (1_i32 as u32)) != (0_i32 as u32) {
+        if (!Handle::is_null((wobj).aobj())) && (!Handle::is_null(((wobj).aobj()).hsd_obj())) {
+            jp = Handle::cast::<HSD_JObj<'a>>(((wobj).aobj()).hsd_obj());
+            inl_HSD_JObjSetupMatrix_unfused(
+                ctx,
+                Handle::cast::<HSD_JObj<'a>>(((wobj).aobj()).hsd_obj()),
+            );
+            fns::PSMTXMultVec(ctx, (jp).mtx().get(0), (wobj).pos(), (wobj).pos());
+        }
+        (wobj).set_flags(((wobj).flags() & 0xfffffffe_u32));
+    }
+    Handle::copy_from((vec), (wobj).pos());
+}
+
 pub fn HSD_WObjAlloc<'a>(ctx: &'a Ctx) -> HSD_WObj<'a> {
     let __frame = ctx.stack_frame(0x10);
     let mut wobj: HSD_WObj<'a> = Handle::cast::<HSD_WObj<'a>>(fns::hsdNew(
@@ -289,6 +377,36 @@ pub fn WObjInfoInit<'a>(ctx: &'a Ctx) {
     (Handle::cast::<_HSD_ClassInfo<'a>>(fns::hsdWObj(ctx))).set_release(fnptr(ctx, 0x8037d864));
     (Handle::cast::<_HSD_ClassInfo<'a>>(fns::hsdWObj(ctx))).set_amnesia(fnptr(ctx, 0x8037d8b8));
     (fns::hsdWObj(ctx)).set_load(fnptr(ctx, 0x8037d2e4));
+}
+
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80406fd4),
+            (228_i32 as u32),
+            cstr(ctx, 0x80406fd4),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
+fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+        return;
+    }
+    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
 }
 
 /// Registers this unit's ports.
@@ -362,6 +480,38 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (HSD_WObj<'_>, Vec<'_>) = Args::take_all(ctx);
             Ret::put(HSD_WObjSetPosition(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8037d4a4,
+        |ctx| {
+            let (a0, a1): (HSD_WObj<'_>, Single) = Args::take_all(ctx);
+            Ret::put(HSD_WObjSetPositionX(ctx, a0, a1.0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8037d578,
+        |ctx| {
+            let (a0, a1): (HSD_WObj<'_>, Single) = Args::take_all(ctx);
+            Ret::put(HSD_WObjSetPositionY(ctx, a0, a1.0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8037d64c,
+        |ctx| {
+            let (a0, a1): (HSD_WObj<'_>, Single) = Args::take_all(ctx);
+            Ret::put(HSD_WObjSetPositionZ(ctx, a0, a1.0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8037d720,
+        |ctx| {
+            let (a0, a1): (HSD_WObj<'_>, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(HSD_WObjGetPosition(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );
