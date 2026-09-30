@@ -133,6 +133,12 @@ pub(crate) fn madd_single(a: f64, c: f64, b: f64, negate_b: bool) -> f64 {
     }
 
     if r.is_nan() {
+        // Slippi's Dolphin picks the NaN after rounding frC, so it rounds a NaN's payload too.
+        let c = if fma_mode() == FmaMode::SlippiDolphin {
+            c_round
+        } else {
+            c
+        };
         fused_nan_result(a, c, b)
     } else {
         r
