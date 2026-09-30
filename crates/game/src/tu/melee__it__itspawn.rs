@@ -161,7 +161,7 @@ pub fn it_8026C75C<'a>(ctx: &'a Ctx, table: ItemPickTable<'a>) -> i32 {
             (tbl).set_size((tbl).size().wrapping_sub(1));
         }
     }
-    kind = fns::it_8026C65C(ctx, tbl);
+    kind = inl_it_8026C65C_unfused(ctx, tbl);
     ret = kind;
     if (chk1 != 0) && (chk2 != 0) {
         (tbl).set_x8((saved as u16));
@@ -515,10 +515,26 @@ pub fn it_8026D324<'a>(ctx: &'a Ctx, kind: i32) -> i32 {
 
 pub fn it_8026D3CC<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let mut result: i32 = fns::it_8026D324(ctx, (enums::It_Kind_Heart as i32));
-    result = (result | fns::it_8026D324(ctx, (enums::It_Kind_Tomato as i32)));
-    result = (result | fns::it_8026D324(ctx, (enums::It_Kind_Foods as i32)));
+    let mut result: i32 = inl_it_8026D324_unfused(ctx, (enums::It_Kind_Heart as i32));
+    result = (result | inl_it_8026D324_unfused(ctx, (enums::It_Kind_Tomato as i32)));
+    result = (result | inl_it_8026D324_unfused(ctx, (enums::It_Kind_Foods as i32)));
     return result;
+}
+
+fn inl_it_8026C65C_unfused<'a>(ctx: &'a Ctx, table: ItemPickTable<'a>) -> i32 {
+    let mut table = table;
+    let mut temp_r6: i32 = ((table).x8() as i32);
+    return ((Handle::add(
+        (table).x4(),
+        statics::melee__it__itspawn::bisectValue(
+            ctx,
+            fns::HSD_Randi(ctx, temp_r6),
+            table,
+            0_i32,
+            ((table).size() as i32),
+        ),
+    ))
+    .get() as i32);
 }
 
 fn inl_it_8026C88C_inline<'a>(ctx: &'a Ctx, alloc: RandomItemSpawner<'a>) {
@@ -659,6 +675,22 @@ fn inl_it_8026D018_inline3<'a>(ctx: &'a Ctx, randf: f64, range: Val<'a, i32>) {
         fp::frsp(fns::it_804A0E30(ctx).x0() as f64),
         fns::Ground_801C2AE8(ctx, fns::Stage_80225194(ctx)),
     )));
+}
+
+fn inl_it_8026D324_unfused<'a>(ctx: &'a Ctx, kind: i32) -> i32 {
+    let mut kind = kind;
+    let mut temp_r29: u64 = fns::it_804A0E30(ctx).x18();
+    let mut temp_r30: Val<'a, i32> = fns::Ground_801C2AD8(ctx);
+    let mut temp_r3: i32 = fns::gm_8016AE80(ctx);
+    if ((temp_r29 == (0_i32 as u64)) || (Handle::is_null(temp_r30)))
+        || (temp_r3 == 1_i32.wrapping_neg())
+    {
+        return 0_i32;
+    }
+    if !((shr_u64(temp_r29, (kind as u32)) & (1_i32 as u64)) != 0) {
+        return 0_i32;
+    }
+    return 1_i32;
 }
 
 /// Registers this unit's ports.

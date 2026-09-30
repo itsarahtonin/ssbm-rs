@@ -442,7 +442,7 @@ pub fn itRshell_UnkMotion5_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             .set_xDD8(fp::fsubs((ip).xDD4_itemVar().rshell().xDD8(), 1.0));
     }
     if (ip).msid() == 5_i32 {
-        fns::it_8028CFE0(ctx, gobj);
+        inl_it_8028CFE0_unfused(ctx, gobj);
     }
     return 0_i32;
 }
@@ -544,7 +544,7 @@ pub fn it_8028E170<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn itRshell_UnkMotion6_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    let _ = fns::itRshell_UnkMotion5_Anim(ctx, gobj);
+    let _ = inl_itRshell_UnkMotion5_Anim_unfused(ctx, gobj);
     return 0_i32;
 }
 
@@ -699,33 +699,6 @@ fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     return (gobj).user_data();
 }
 
-fn inl_Item_UpdateRollingShellRotation_unfused<'a>(
-    ctx: &'a Ctx,
-    gobj: HSD_GObj<'a>,
-    ip: Item<'a>,
-    jobj: HSD_JObj<'a>,
-    rotation_rate: Val<'a, F32>,
-) {
-    let mut gobj = gobj;
-    let mut ip = ip;
-    let mut jobj = jobj;
-    let mut rotation_rate = rotation_rate;
-    fns::it_80276CB8(ctx, gobj);
-    jobj = inl_HSD_JObjGetChild_unfused(ctx, jobj);
-    inl_HSD_JObjAddRotationY_unfused(
-        ctx,
-        jobj,
-        fp::fmuls(
-            (rotation_rate).get(),
-            (if ((ip).x40_vel().x()) < fp::frsp(0_i32 as f64) {
-                fp::fneg(((ip).x40_vel().x()))
-            } else {
-                ((ip).x40_vel().x())
-            }),
-        ),
-    );
-}
-
 fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
     let mut jobj = jobj;
     if Handle::is_null(jobj) {
@@ -735,6 +708,28 @@ fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JOb
     }
     #[allow(unreachable_code)]
     return null(ctx);
+}
+
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f5c74),
+            (228_i32 as u32),
+            cstr(ctx, 0x803f5c74),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjAddRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
@@ -760,26 +755,31 @@ fn inl_HSD_JObjAddRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+fn inl_Item_UpdateRollingShellRotation_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    ip: Item<'a>,
+    jobj: HSD_JObj<'a>,
+    rotation_rate: Val<'a, F32>,
+) {
+    let mut gobj = gobj;
+    let mut ip = ip;
     let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f5c74),
-            (228_i32 as u32),
-            cstr(ctx, 0x803f5c74),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
+    let mut rotation_rate = rotation_rate;
+    fns::it_80276CB8(ctx, gobj);
+    jobj = inl_HSD_JObjGetChild_unfused(ctx, jobj);
+    inl_HSD_JObjAddRotationY_unfused(
+        ctx,
+        jobj,
+        fp::fmuls(
+            (rotation_rate).get(),
+            (if ((ip).x40_vel().x()) < fp::frsp(0_i32 as f64) {
+                fp::fneg(((ip).x40_vel().x()))
+            } else {
+                ((ip).x40_vel().x())
+            }),
+        ),
+    );
 }
 
 fn inl_itRshell_StopInit_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -823,6 +823,44 @@ fn inl_itRshell_ClampVel_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (ip).x40_vel().set_x(fp::frsp(sign as f64));
         (ip).x40_vel()
             .set_x(fp::fmuls((ip).x40_vel().x(), (attrs).xC()));
+    }
+}
+
+fn inl_it_8028CFE0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut attrs: itRShell_Attrs<'a> =
+        Handle::cast::<itRShell_Attrs<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
+    let mut temp: f64 = 0.0;
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if (ip).xDD4_itemVar().rshell().xDDC() <= 0.0 {
+        jobj = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
+        Handle::copy_from(v, (attrs).x48());
+        temp = fp::fneg((ip).facing_dir());
+        v.set_x(fp::fmuls(v.x(), temp));
+        fns::efAsync_Spawn(
+            ctx,
+            gobj,
+            (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).xBC0_ref(),
+            (2_i32 as u32),
+            (0x405_i32 as u32),
+            jobj,
+            &[VarArg::Int(Handle::addr(v))],
+        );
+        (ip).xDD4_itemVar().rshell().set_xDDC((attrs).x44());
+    } else {
+        (ip).xDD4_itemVar()
+            .rshell()
+            .set_xDDC(fp::fsubs((ip).xDD4_itemVar().rshell().xDDC(), 1.0));
     }
 }
 
@@ -915,6 +953,30 @@ fn inl_itRshell_UM5C_GroundSpin_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             ),
         );
     }
+}
+
+fn inl_itRshell_UnkMotion5_Anim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if (ip).xDD4_itemVar().rshell().xDD4() <= 0.0 {
+        return 1_i32;
+    }
+    (ip).xDD4_itemVar()
+        .rshell()
+        .set_xDD4(fp::fsubs((ip).xDD4_itemVar().rshell().xDD4(), 1.0));
+    if (ip).xDD4_itemVar().rshell().xDD8() <= 0.0 {
+        if !((ip).xDCD_flag().x0().b5() != 0) {
+            fns::it_80275444(ctx, gobj);
+        }
+    } else {
+        (ip).xDD4_itemVar()
+            .rshell()
+            .set_xDD8(fp::fsubs((ip).xDD4_itemVar().rshell().xDD8(), 1.0));
+    }
+    if (ip).msid() == 5_i32 {
+        fns::it_8028CFE0(ctx, gobj);
+    }
+    return 0_i32;
 }
 
 /// Registers this unit's ports.

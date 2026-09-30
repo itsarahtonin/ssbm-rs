@@ -47,7 +47,7 @@ pub fn ftCo_800DF1C8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
 pub fn ftCo_800DF21C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut fp = fp;
-    if (inl_canUseCstick_unfused(ctx, fp) != 0) && (fns::ftCo_800DF1C8(ctx, fp) != 0) {
+    if (inl_canUseCstick_unfused(ctx, fp) != 0) && (inl_ftCo_800DF1C8_unfused(ctx, fp) != 0) {
         return 1_i32;
     }
     return 0_i32;
@@ -66,7 +66,7 @@ pub fn ftCo_800DF2D8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
 pub fn ftCo_800DF30C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut fp = fp;
-    if (inl_canUseCstick_unfused(ctx, fp) != 0) && (fns::ftCo_800DF2D8(ctx, fp) != 0) {
+    if (inl_canUseCstick_unfused(ctx, fp) != 0) && (inl_ftCo_800DF2D8_unfused(ctx, fp) != 0) {
         return 1_i32;
     }
     return 0_i32;
@@ -86,7 +86,7 @@ pub fn ftCo_800DF3DC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut fp = fp;
     let mut var_r0_2: i32 = 0;
-    if (inl_canUseCstick_unfused(ctx, fp) != 0) && (fns::ftCo_800DF3A8(ctx, fp) != 0) {
+    if (inl_canUseCstick_unfused(ctx, fp) != 0) && (inl_ftCo_800DF3A8_unfused(ctx, fp) != 0) {
         return 1_i32;
     }
     return 0_i32;
@@ -129,7 +129,7 @@ pub fn ftCo_800DF50C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     } else {
         var_r0 = 0_i32;
     }
-    if (var_r0 != 0) && (fns::ftCo_800DF478(ctx, fp) != 0) {
+    if (var_r0 != 0) && (inl_ftCo_800DF478_unfused(ctx, fp) != 0) {
         return 1_i32;
     }
     return 0_i32;
@@ -302,6 +302,72 @@ fn inl_canUseCstick_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     }
     #[allow(unreachable_code)]
     return 0;
+}
+
+fn inl_ftCo_800DF1C8_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
+    let mut fp = fp;
+    if ((if ((fp).input().cstick().get(1_i32).x()) < fp::frsp(0_i32 as f64) {
+        fp::fneg(((fp).input().cstick().get(1_i32).x()))
+    } else {
+        ((fp).input().cstick().get(1_i32).x())
+    }) < (fns::p_ftCommonData(ctx).get()).dash_smash_stick_threshold())
+        && ((if ((fp).input().cstick().get(0_i32).x()) < fp::frsp(0_i32 as f64) {
+            fp::fneg(((fp).input().cstick().get(0_i32).x()))
+        } else {
+            ((fp).input().cstick().get(0_i32).x())
+        }) >= (fns::p_ftCommonData(ctx).get()).dash_smash_stick_threshold())
+    {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
+fn inl_ftCo_800DF2D8_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
+    let mut fp = fp;
+    if ((fp).input().cstick().get(1_i32).y() < (fns::p_ftCommonData(ctx).get()).xCC())
+        && ((fp).input().cstick().get(0_i32).y() >= (fns::p_ftCommonData(ctx).get()).xCC())
+    {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
+fn inl_ftCo_800DF3A8_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
+    let mut fp = fp;
+    if ((fp).input().cstick().get(1_i32).y() > (fns::p_ftCommonData(ctx).get()).xD4())
+        && ((fp).input().cstick().get(0_i32).y() <= (fns::p_ftCommonData(ctx).get()).xD4())
+    {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
+fn inl_ftCo_800DF478_unfused<'a>(ctx: &'a Ctx, arg0: Fighter<'a>) -> i32 {
+    let mut arg0 = arg0;
+    if (((if ((arg0).input().cstick().get(1_i32).x()) < fp::frsp(0_i32 as f64) {
+        fp::fneg(((arg0).input().cstick().get(1_i32).x()))
+    } else {
+        ((arg0).input().cstick().get(1_i32).x())
+    }) < (fns::p_ftCommonData(ctx).get()).xDC())
+        && ((if ((arg0).input().cstick().get(0_i32).x()) < fp::frsp(0_i32 as f64) {
+            fp::fneg(((arg0).input().cstick().get(0_i32).x()))
+        } else {
+            ((arg0).input().cstick().get(0_i32).x())
+        }) >= (fns::p_ftCommonData(ctx).get()).xDC()))
+        || (((if ((arg0).input().cstick().get(1_i32).y()) < fp::frsp(0_i32 as f64) {
+            fp::fneg(((arg0).input().cstick().get(1_i32).y()))
+        } else {
+            ((arg0).input().cstick().get(1_i32).y())
+        }) < (fns::p_ftCommonData(ctx).get()).xE0())
+            && ((if ((arg0).input().cstick().get(0_i32).y()) < fp::frsp(0_i32 as f64) {
+                fp::fneg(((arg0).input().cstick().get(0_i32).y()))
+            } else {
+                ((arg0).input().cstick().get(0_i32).y())
+            }) >= (fns::p_ftCommonData(ctx).get()).xE0()))
+    {
+        return 1_i32;
+    }
+    return 0_i32;
 }
 
 /// Registers this unit's ports.

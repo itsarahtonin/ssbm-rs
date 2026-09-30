@@ -138,7 +138,7 @@ pub fn it_8026FAC4<'a>(
             'c4: {
                 item = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
                 if (item).xAC4_ignoreItemID() == (arg_item0).xAC4_ignoreItemID() {
-                    fns::it_8026FA2C(
+                    inl_it_8026FA2C_unfused(
                         ctx,
                         item,
                         arg_hit,
@@ -151,7 +151,7 @@ pub fn it_8026FAC4<'a>(
             }
         }
     } else {
-        fns::it_8026FA2C(
+        inl_it_8026FA2C_unfused(
             ctx,
             arg_item0,
             arg_hit,
@@ -303,7 +303,7 @@ pub fn it_8026FE68<'a>(
         } else {
             var_r26 = 3_i32;
         }
-        fns::it_8026FAC4(
+        inl_it_8026FAC4_unfused(
             ctx,
             arg_item2,
             hit3,
@@ -354,7 +354,7 @@ pub fn it_8026FE68<'a>(
         } else {
             var_r26 = 3_i32;
         }
-        fns::it_8026FAC4(
+        inl_it_8026FAC4_unfused(
             ctx,
             arg_item0,
             hit1,
@@ -1666,6 +1666,40 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_it_8026FA2C_unfused<'a>(
+    ctx: &'a Ctx,
+    arg_item0: Item<'a>,
+    arg_hit: HitCapsule<'a>,
+    arg2: i32,
+    arg_item3: Item<'a>,
+    arg_chk: i32,
+) {
+    let mut arg_item0 = arg_item0;
+    let mut arg_hit = arg_hit;
+    let mut arg2 = arg2;
+    let mut arg_item3 = arg_item3;
+    let mut arg_chk = arg_chk;
+    let mut hit: HitCapsule<'a> = null(ctx);
+    let mut i: i32 = 0;
+    {
+        i = 0_i32;
+        'l1: while (i as u32) < (div_u32(0x4f0_u32, 0x13c_u32)) {
+            'c2: {
+                hit = (arg_item0).x5D4_hitboxes().get(i).hit();
+                if (((((hit).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32))
+                    && ((hit).x4() == (arg_hit).x4()))
+                    && (fns::lbColl_80008688(ctx, hit, arg2, Handle::cast::<Addr<'a>>(arg_item3))
+                        != 0))
+                    && (arg_chk != 0)
+                {
+                    fns::it_804D6D1C(ctx).at(i).set((0_i32 as u8));
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+}
+
 fn inl_it_8026FC00_inline_unfused<'a>(
     ctx: &'a Ctx,
     arg_item: Item<'a>,
@@ -1691,6 +1725,59 @@ fn inl_it_8026FC00_inline_unfused<'a>(
             }
             i = i.wrapping_add(1);
         }
+    }
+}
+
+fn inl_it_8026FAC4_unfused<'a>(
+    ctx: &'a Ctx,
+    arg_item0: Item<'a>,
+    arg_hit: HitCapsule<'a>,
+    arg2: i32,
+    arg3: Addr<'a>,
+    chk: i32,
+) {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let mut arg_item0 = arg_item0;
+    let mut arg_hit = arg_hit;
+    let mut arg2 = arg2;
+    let mut arg3 = arg3;
+    let mut chk = chk;
+    let mut item_gobj: HSD_GObj<'a> = null(ctx);
+    let mut item: Item<'a> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if (arg_item0).xAC4_ignoreItemID() != (0_i32 as u32) {
+        item_gobj = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 9_i32)).get();
+        'l3: while !Handle::is_null(item_gobj) {
+            'c4: {
+                item = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
+                if (item).xAC4_ignoreItemID() == (arg_item0).xAC4_ignoreItemID() {
+                    fns::it_8026FA2C(
+                        ctx,
+                        item,
+                        arg_hit,
+                        arg2,
+                        Handle::cast::<Item<'a>>(arg3),
+                        chk,
+                    );
+                }
+                item_gobj = (item_gobj).next();
+            }
+        }
+    } else {
+        fns::it_8026FA2C(
+            ctx,
+            arg_item0,
+            arg_hit,
+            arg2,
+            Handle::cast::<Item<'a>>(arg3),
+            chk,
+        );
     }
 }
 

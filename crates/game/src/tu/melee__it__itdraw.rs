@@ -206,39 +206,6 @@ fn inl_it_8026EECC_inline_0_unfused<'a>(
     return (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
 }
 
-fn inl_it_8026EECC_inline_sw_unfused<'a>(
-    ctx: &'a Ctx,
-    gobj: HSD_GObj<'a>,
-    arg1: i32,
-    pos: Vec<'a>,
-) {
-    let mut gobj = gobj;
-    let mut arg1 = arg1;
-    let mut pos = pos;
-    let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
-    's1: {
-        let __case = match fns::Camera_80031060(ctx) {
-            1_i32 => 0,
-            0_i32 => 1,
-            _ => 2,
-        };
-        if __case <= 0 {
-            if ((ip).xDCF_flag().x0().b3() != 0) {
-                inl_it_8026EECC_inline_1_unfused(ctx, gobj, arg1, pos);
-                inl_it_8026EECC_inline_2_unfused(ctx, gobj, arg1, pos);
-                inl_it_8026EECC_inline_3_unfused(ctx, gobj, arg1, pos);
-            }
-            break 's1;
-        }
-        if __case <= 1 {
-            if !((ip).xDCF_flag().x0().b3() != 0) {
-                inl_it_8026EECC_inline_2_unfused(ctx, gobj, arg1, pos);
-            }
-            break 's1;
-        }
-    }
-}
-
 fn inl_it_8026EECC_inline_1_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, pos: Vec<'a>) {
     let mut gobj = gobj;
     let mut arg1 = arg1;
@@ -342,6 +309,39 @@ fn inl_it_8026EECC_inline_3_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: 
         ((Handle::cast::<Ptr<'a, it_266F_ItemVars<'a>>>((ip).xDD4_itemVar().it_266F())).get()).x8(),
         ((Handle::cast::<Ptr<'a, it_266F_ItemVars<'a>>>((ip).xDD4_itemVar().it_266F())).get()).xC(),
     );
+}
+
+fn inl_it_8026EECC_inline_sw_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    arg1: i32,
+    pos: Vec<'a>,
+) {
+    let mut gobj = gobj;
+    let mut arg1 = arg1;
+    let mut pos = pos;
+    let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
+    's1: {
+        let __case = match fns::Camera_80031060(ctx) {
+            1_i32 => 0,
+            0_i32 => 1,
+            _ => 2,
+        };
+        if __case <= 0 {
+            if ((ip).xDCF_flag().x0().b3() != 0) {
+                inl_it_8026EECC_inline_1_unfused(ctx, gobj, arg1, pos);
+                inl_it_8026EECC_inline_2_unfused(ctx, gobj, arg1, pos);
+                inl_it_8026EECC_inline_3_unfused(ctx, gobj, arg1, pos);
+            }
+            break 's1;
+        }
+        if __case <= 1 {
+            if !((ip).xDCF_flag().x0().b3() != 0) {
+                inl_it_8026EECC_inline_2_unfused(ctx, gobj, arg1, pos);
+            }
+            break 's1;
+        }
+    }
 }
 
 /// Registers this unit's ports.

@@ -977,7 +977,7 @@ pub fn ifStock_802F98E8<'a>(ctx: &'a Ctx, player: u8, b: u8) {
                     color_2 = c2;
                     fns::ifStock_802FB4EC(ctx, (player as i32), color_2);
                 }
-                fns::fn_802F9410(ctx, gobj);
+                inl_fn_802F9410_unfused(ctx, gobj);
             } else {
                 fns::HSD_GObjFree(ctx, gobj);
             }
@@ -1854,6 +1854,11 @@ fn inl_ifStock_802F8298_tobj_frame_unfused<'a>(ctx: &'a Ctx, player: u8) -> f64 
     return fns::gm_80168BF8(ctx, (player as i32));
 }
 
+fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
 fn inl_ifStock_802F89F8_get_data_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -1862,11 +1867,6 @@ fn inl_ifStock_802F89F8_get_data_unfused<'a>(
     let mut user_data: IfStockUserData<'a> =
         Handle::cast::<IfStockUserData<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj));
     return user_data;
-}
-
-fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).user_data();
 }
 
 fn inl_getFirstIconJObj_unfused<'a>(ctx: &'a Ctx, player: i32) -> HSD_JObj<'a> {
@@ -1937,29 +1937,6 @@ fn inl_ifStock_802F89F8_digit_unfused<'a>(ctx: &'a Ctx, coins: i32, position: i3
     return rem_i32((div_i32(coins, divisor)), 10_i32);
 }
 
-fn inl_HSD_JObjSetTranslateZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
-    let mut jobj = jobj;
-    let mut z = z;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x804d57e4),
-            (0x225_i32 as u32),
-            cstr(ctx, 0x804d57e4),
-        )
-    });
-    (jobj).translate().set_z(z);
-    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
-        {
-            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
-                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
-            }
-        }
-    }
-}
-
 fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     let mut jobj = jobj;
     let mut result: i32 = 0;
@@ -1982,13 +1959,27 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     return result;
 }
 
-fn inl_placeEntry_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64, y: f64) {
+fn inl_HSD_JObjSetTranslateZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
     let mut jobj = jobj;
-    let mut x = x;
-    let mut y = y;
-    inl_HSD_JObjSetTranslateZ_unfused(ctx, jobj, 0.0);
-    inl_HSD_JObjSetTranslateX_unfused(ctx, jobj, x);
-    inl_HSD_JObjSetTranslateY_unfused(ctx, jobj, y);
+    let mut z = z;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804d57e4),
+            (0x225_i32 as u32),
+            cstr(ctx, 0x804d57e4),
+        )
+    });
+    (jobj).translate().set_z(z);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
 }
 
 fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
@@ -2035,6 +2026,15 @@ fn inl_HSD_JObjSetTranslateY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f6
             }
         }
     }
+}
+
+fn inl_placeEntry_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64, y: f64) {
+    let mut jobj = jobj;
+    let mut x = x;
+    let mut y = y;
+    inl_HSD_JObjSetTranslateZ_unfused(ctx, jobj, 0.0);
+    inl_HSD_JObjSetTranslateX_unfused(ctx, jobj, x);
+    inl_HSD_JObjSetTranslateY_unfused(ctx, jobj, y);
 }
 
 fn inl_getEntryJObj_unfused<'a>(ctx: &'a Ctx, i: i32) -> HSD_JObj<'a> {
@@ -2106,6 +2106,32 @@ fn inl_ifStock_802F98E8_get_match_info_unfused<'a>(
     let mut data = data;
     let mut player = player;
     return (data).fighters().get(player).x4().flags();
+}
+
+fn inl_fn_802F9410_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut p: IfStockUserData<'a> =
+        Handle::cast::<IfStockUserData<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj));
+    's1: {
+        let __case = match ((p).mode() as i32) {
+            0_i32 => 0,
+            1_i32 => 1,
+            2_i32 => 2,
+            _ => 3,
+        };
+        if __case <= 0 {
+            fns::ifStock_802F8298(ctx, gobj);
+            break 's1;
+        }
+        if __case <= 1 {
+            inl_fn_802F9410_inline_unfused(ctx, gobj);
+            break 's1;
+        }
+        if __case <= 2 {
+            fns::ifStock_802F89F8(ctx, gobj);
+            break 's1;
+        }
+    }
 }
 
 fn inl_ifStock_ClearGObjSlots_unfused<'a>(ctx: &'a Ctx, slots: Ptr<'a, HSD_GObj<'a>>, count: i32) {

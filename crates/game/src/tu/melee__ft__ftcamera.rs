@@ -49,7 +49,7 @@ pub fn ftCamera_80076064<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let mut fp = fp;
     let mut camera_box: CmSubject<'a> = null(ctx);
     camera_box = (fp).x890_cameraBox();
-    fns::ftCamera_80076018(ctx, ((fp).ft_data()).x3C(), spC, (fp).x34_scale().y());
+    inl_ftCamera_80076018_unfused(ctx, ((fp).ft_data()).x3C(), spC, (fp).x34_scale().y());
     (camera_box).set_state((enums::CmSubjectState_Active as i32));
     if (fp).facing_dir() == 1.0 {
         (camera_box).target_ext().h().set_x(spC.x0().z());
@@ -87,7 +87,7 @@ pub fn ftCamera_UpdateCameraBox<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut camera_box: CmSubject<'a> = (fp).x890_cameraBox();
     {
-        fns::ftCamera_80076018(
+        inl_ftCamera_80076018_unfused(
             ctx,
             ((fp).ft_data()).x3C(),
             cam_floats,
@@ -158,6 +158,23 @@ pub fn ftCamera_80076320<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (camera_box)
         .pos()
         .set_y(fns::Stage_GetBlastZoneTopOffset(ctx));
+}
+
+fn inl_ftCamera_80076018_unfused<'a>(
+    ctx: &'a Ctx,
+    r#in: UnkFloat6_Camera<'a>,
+    out: UnkFloat6_Camera<'a>,
+    mul: f64,
+) {
+    let mut r#in = r#in;
+    let mut out = out;
+    let mut mul = mul;
+    (out).x0().set_x(fp::fmuls((r#in).x0().x(), mul));
+    (out).x0().set_y(fp::fmuls((r#in).x0().y(), mul));
+    (out).x0().set_z(fp::fmuls((r#in).x0().z(), mul));
+    (out).xC().set_x(fp::fmuls((r#in).xC().x(), mul));
+    (out).xC().set_y(fp::fmuls((r#in).xC().y(), mul));
+    (out).xC().set_z(fp::fmuls((r#in).xC().z(), mul));
 }
 
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {

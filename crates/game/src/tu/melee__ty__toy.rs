@@ -291,7 +291,7 @@ pub fn Toy_80304A58<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
     let mut v: Val<'a, u16> = inl_getTrophyFlags_unfused(ctx);
-    if (fns::Toy_803049F4(ctx, arg0) != 0) {
+    if (inl_Toy_803049F4_unfused(ctx, arg0) != 0) {
         (Handle::add(v, arg0)).set(((((Handle::add(v, arg0)).get() as i32) ^ 0x4000_i32) as u16));
     }
 }
@@ -458,7 +458,9 @@ pub fn _Toy_80304D30<'a>(ctx: &'a Ctx) -> i32 {
         i = 0_i32;
         'l3: while i < 0x125_i32 {
             'c4: {
-                if (fns::Toy_80304CC8(ctx, i) != 0) && (fns::Toy_803048C0(ctx, i) != 0) {
+                if (inl_Toy_80304CC8_unfused(ctx, i) != 0)
+                    && (inl_Toy_803048C0_unfused(ctx, i) != 0)
+                {
                     x = fp::fctiwz(fns::Toy_803060BC(ctx, i, 6_i32));
                     sp14.at(x).set(sp14.at(x).get().wrapping_add(1));
                     if (x != 8_i32) && (x != 1_i32) {
@@ -481,7 +483,7 @@ pub fn _Toy_80304D30<'a>(ctx: &'a Ctx) -> i32 {
                     'l7: while i < idk {
                         'c8: {
                             if ((1_i32 as u32) < (i as u32)) && (i != 3_i32) {
-                                if !(fns::Toy_80304B0C(ctx, i) != 0) {
+                                if !(inl_Toy_80304B0C_unfused(ctx, i) != 0) {
                                     (Handle::cast::<Val<'a, u8>>(fns::Toy_804A284C(ctx).at(0)))
                                         .set((2_i32 as u8));
                                     fns::Toy_80305918(ctx, (i as i8), 0_i32, 0_i32);
@@ -498,7 +500,7 @@ pub fn _Toy_80304D30<'a>(ctx: &'a Ctx) -> i32 {
                     }
                 }
                 if (4_i32 <= i) && (i <= 6_i32) {
-                    if !(fns::Toy_80304B0C(ctx, i) != 0) {
+                    if !(inl_Toy_80304B0C_unfused(ctx, i) != 0) {
                         (Handle::cast::<Val<'a, u8>>(fns::Toy_804A284C(ctx).at(0)))
                             .set((2_i32 as u8));
                         fns::Toy_80305918(ctx, (i as i8), 0_i32, 0_i32);
@@ -517,7 +519,7 @@ pub fn _Toy_80304D30<'a>(ctx: &'a Ctx) -> i32 {
         'l11: while i < 8_i32 {
             'c12: {
                 if (x != 8_i32) && (x != 1_i32) {
-                    if (fns::Toy_80304B0C(ctx, i) != 0) {
+                    if (inl_Toy_80304B0C_unfused(ctx, i) != 0) {
                         count2 = count2.wrapping_add(fns::Toy_80304B94(ctx, i));
                     }
                 }
@@ -4144,7 +4146,7 @@ pub fn _Toy_80310B48<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (editor).set_repeat_delay(((((editor).repeat_delay() as i32).wrapping_sub(1_i32)) as u8));
         return;
     }
-    buttons = (fns::Toy_80305B88(ctx) as u32);
+    buttons = (inl_Toy_80305B88_unfused(ctx) as u32);
     if ((buttons & ((shl_i32(1_i32, (9_i32 as u32))) as u32)) != 0) {
         inl_sfxBack_unfused(ctx);
         fns::HSD_GObjFree(ctx, gobj);
@@ -4152,7 +4154,7 @@ pub fn _Toy_80310B48<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<TyModeState<'a>>(fns::Toy_804A284C(ctx).at(0))).set_x4((1_i32 as i8));
         return;
     }
-    buttons = (fns::Toy_80305B88(ctx) as u32);
+    buttons = (inl_Toy_80305B88_unfused(ctx) as u32);
     if ((buttons & (((shl_i32(1_i32, (8_i32 as u32))) | (shl_i32(1_i32, (12_i32 as u32)))) as u32))
         != 0)
     {
@@ -4166,7 +4168,7 @@ pub fn _Toy_80310B48<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     'c8: {
                         if ((editor).values().at(slot).get() as i32) != 0_i32 {
                             fns::Toy_80305918(ctx, (slot as i8), 0_i32, 0_i32);
-                            buttons = (fns::Toy_80305B88(ctx) as u32);
+                            buttons = (inl_Toy_80305B88_unfused(ctx) as u32);
                             if ((buttons & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0) {
                                 statics::melee__ty__toy::_Toy_803053C4(
                                     ctx,
@@ -4201,8 +4203,8 @@ pub fn _Toy_80310B48<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (editor).set_gobj(null::<HSD_GObj<'a>>(ctx));
         return;
     }
-    if ((dirX > 0.0) || ((fns::Toy_80305C44(ctx) & (shl_i32(1_i32, (11_i32 as u32)))) != 0))
-        || ((fns::Toy_80305B88(ctx) & (shl_i32(1_i32, (0_i32 as u32)))) != 0)
+    if ((dirX > 0.0) || ((inl_Toy_80305C44_unfused(ctx) & (shl_i32(1_i32, (11_i32 as u32)))) != 0))
+        || ((inl_Toy_80305B88_unfused(ctx) & (shl_i32(1_i32, (0_i32 as u32)))) != 0)
     {
         inl_sfxMove_unfused(ctx);
         (editor)
@@ -4230,8 +4232,8 @@ pub fn _Toy_80310B48<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (editor).set_repeat_delay((4_i32 as u8));
         changed = 1_i32;
     }
-    if ((dirX < 0.0) || ((fns::Toy_80305C44(ctx) & (shl_i32(1_i32, (10_i32 as u32)))) != 0))
-        || ((fns::Toy_80305B88(ctx) & (shl_i32(1_i32, (1_i32 as u32)))) != 0)
+    if ((dirX < 0.0) || ((inl_Toy_80305C44_unfused(ctx) & (shl_i32(1_i32, (10_i32 as u32)))) != 0))
+        || ((inl_Toy_80305B88_unfused(ctx) & (shl_i32(1_i32, (1_i32 as u32)))) != 0)
     {
         inl_sfxMove_unfused(ctx);
         (editor)
@@ -4754,7 +4756,7 @@ pub fn Toy_8031263C<'a>(ctx: &'a Ctx) {
     fns::Toy_804A284C(ctx)
         .at(3_i32)
         .set((((fns::Toy_804A284C(ctx).at(3_i32).get() as i32) | 4_i32) as u16));
-    fns::Toy_803102D0(ctx);
+    inl_Toy_803102D0_unfused(ctx);
     fns::Toy_8031234C(ctx, 0_i32);
 }
 
@@ -4789,6 +4791,59 @@ fn inl_getTrophyFlags_unfused<'a>(ctx: &'a Ctx) -> Val<'a, u16> {
     }
     #[allow(unreachable_code)]
     return null(ctx);
+}
+
+fn inl_Toy_803049F4_unfused<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
+    let mut arg0 = arg0;
+    return (((Handle::add(inl_getTrophyFlags_unfused(ctx), arg0)).get() as i32) & 0x4000_i32);
+}
+
+fn inl_Toy_80304CC8_unfused<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
+    let mut arg0 = arg0;
+    let mut v: Val<'a, i16> = fns::_Toy_sbss_804D6EB4(ctx).get();
+    if (fns::lbLang_IsSettingUS(ctx) != 0) {
+        {
+            'l1: while ((v).get() as i32) != 1_i32.wrapping_neg() {
+                'c2: {
+                    if ((v).get() as i32) == arg0 {
+                        return 0_i32;
+                    }
+                }
+                v = Handle::add(v, 1);
+            }
+        }
+    }
+    return 1_i32;
+}
+
+fn inl_Toy_803048C0_unfused<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
+    let mut arg0 = arg0;
+    return (((Handle::add(inl_getTrophyFlags_unfused(ctx), arg0)).get() as i32) & 255_i32);
+}
+
+fn inl_Toy_80304B0C_unfused<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x10);
+    let s: Val<'a, u16> = frame_at(ctx, &__frame, 0x0);
+    let mut arg0 = arg0;
+    let mut v: Val<'a, u16> = null(ctx);
+    if (fns::gm_IsCurrently1PMode(ctx) != 0)
+        || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
+    {
+        s.set(
+            (((fns::Toy_804A284C(ctx).at(3_i32).get() as i32)
+                | (fns::Toy_804A284C(ctx).at(4_i32).get() as i32)) as u16),
+        );
+        v = s;
+    } else {
+        v = Handle::cast::<Val<'a, u16>>(fns::gmMainLib_GetTrophyCategoryFlags(ctx));
+    }
+    if ((((v).get() as i32) & (shl_i32(1_i32, (arg0 as u32)))) != 0) {
+        return 1_i32;
+    } else {
+        return 0_i32;
+    }
+    #[allow(unreachable_code)]
+    return 0;
 }
 
 fn inl_HSD_PadGetNmlStickY_unfused<'a>(ctx: &'a Ctx, slot: u8) -> f64 {
@@ -4861,6 +4916,28 @@ fn inl_Toy_AddPanelAnims_unfused<'a>(
     fns::HSD_JObjAddAnimAll(ctx, jobj, anim, matanim, shapanim);
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b87a8),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b87a8),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjAddTranslationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     let mut jobj = jobj;
     let mut y = y;
@@ -4884,28 +4961,6 @@ fn inl_HSD_JObjAddTranslationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: 
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b87a8),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b87a8),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjSetScaleX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
@@ -5145,12 +5200,76 @@ fn inl_toy_make_gobj_unfused<'a>(ctx: &'a Ctx) {
     (tg3).set_x4((1_i32 as i8));
 }
 
+fn inl_Toy_80305B88_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut i: i32 = 0;
+    let mut button: u32 = 0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    {
+        i = 0_i32;
+        'l3: while i < 4_i32 {
+            'c4: {
+                if (({
+                    let __t1 = fns::HSD_PadCopyStatus(ctx)
+                        .get(((i as u8) as i32))
+                        .trigger();
+                    button = __t1;
+                    __t1
+                }) != 0)
+                {
+                    fns::gm_801677E8(ctx, (i as i8));
+                    break 'l3;
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return (button as i32);
+}
+
 fn inl_sfxBack_unfused<'a>(ctx: &'a Ctx) {
     fns::lbAudioAx_80024030(ctx, 0_i32);
 }
 
 fn inl_sfxForward_unfused<'a>(ctx: &'a Ctx) {
     fns::lbAudioAx_80024030(ctx, 1_i32);
+}
+
+fn inl_Toy_80305C44_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let mut i: i32 = 0_i32;
+    let mut button: u32 = 0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    {
+        i = 0_i32;
+        'l3: while i < 4_i32 {
+            'c4: {
+                if (({
+                    let __t1 = fns::HSD_PadCopyStatus(ctx).get(((i as u8) as i32)).button();
+                    button = __t1;
+                    __t1
+                }) != 0)
+                {
+                    fns::gm_801677E8(ctx, (i as i8));
+                    break 'l3;
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return (button as i32);
 }
 
 fn inl_sfxMove_unfused<'a>(ctx: &'a Ctx) {
@@ -5185,6 +5304,16 @@ fn inl_GXColor4u8_unfused<'a>(ctx: &'a Ctx, x: u8, y: u8, z: u8, w: u8) {
     (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(w);
 }
 
+fn inl_getDataiDatFilename_unfused<'a>(ctx: &'a Ctx) -> Val<'a, i8> {
+    if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
+        return cstr(ctx, 0x803fe320);
+    } else {
+        return cstr(ctx, 0x803fe32c);
+    }
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
 fn inl_loadTrophyMetadata_unfused<'a>(ctx: &'a Ctx) {
     if Handle::is_null(fns::_Toy_sbss_804D6ED0(ctx).get()) {
         fns::_Toy_sbss_804D6ED0(ctx).set(fns::lbArchive_LoadSymbols(
@@ -5211,19 +5340,25 @@ fn inl_loadTrophyMetadata_unfused<'a>(ctx: &'a Ctx) {
     }
 }
 
-fn inl_getDataiDatFilename_unfused<'a>(ctx: &'a Ctx) -> Val<'a, i8> {
-    if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
-        return cstr(ctx, 0x803fe320);
-    } else {
-        return cstr(ctx, 0x803fe32c);
-    }
-    #[allow(unreachable_code)]
-    return null(ctx);
-}
-
 fn inl__Toy_80304CC8_noinline_unfused<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let mut arg0 = arg0;
     return fns::Toy_80304CC8(ctx, arg0);
+}
+
+fn inl_Toy_803102D0_unfused<'a>(ctx: &'a Ctx) {
+    if Handle::is_null(fns::_Toy_sbss_804D6ECC(ctx).get()) {
+        fns::_Toy_sbss_804D6ECC(ctx).set(fns::lbArchive_LoadSymbols(
+            ctx,
+            cstr(ctx, 0x803fe770),
+            Handle::cast::<Addr<'a>>(fns::_Toy_sbss_804D6EA8(ctx)),
+            &[
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803fe77c))),
+                VarArg::Int(Handle::addr(fns::_Toy_sbss_804D6EA4(ctx))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803fe78c))),
+                VarArg::Int(0_i32 as u32),
+            ],
+        ));
+    }
 }
 
 /// Registers this unit's ports.

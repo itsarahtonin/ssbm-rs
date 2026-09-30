@@ -122,7 +122,7 @@ pub fn fn_800C8E74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     (fp).set_x2224_b3((1_i32 as u8));
     if ((fp).dmg().kb_applied() != 0.0) {
-        inl_fn_800C8_inline_unfused(ctx, gobj);
+        inl_fn_800C8_inline_unfused_2(ctx, gobj);
     }
 }
 
@@ -192,6 +192,36 @@ fn inl_fn_800C8_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 fn inl_getFtVictim_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> HSD_GObj<'a> {
     let mut fp = fp;
     return (fp).victim_gobj();
+}
+
+fn inl_fn_800C8E40_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, sfx: FtSFX<'a>) {
+    let mut fp = fp;
+    let mut sfx = sfx;
+    fns::ft_PlaySFX(
+        ctx,
+        fp,
+        (((fp).ft_data()).x4C_sfx()).xC(),
+        (127_i32 as u8),
+        (64_i32 as u8),
+    );
+}
+
+fn inl_fn_800C8_inline_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut ft_sfx: FtSFX<'a> = ((fp).ft_data()).x4C_sfx();
+    (fp).set_stamina_dead((1_i32 as u8));
+    fns::Fighter_ResetInputData_80068854(ctx, gobj);
+    let _ = fns::ftCo_800BFFD0(ctx, fp, 122_i32, 0_i32);
+    inl_fn_800C8E40_unfused(ctx, fp, ft_sfx);
+    (fp).set_x2225_b6((1_i32 as u8));
+    fns::lbBgFlash_80021C48(ctx, 14_u32, 0_u32);
+    fns::gm_80167470(
+        ctx,
+        ((fp).player_idx() as i32),
+        ((fp).is_sub_fighter() as i32),
+    );
 }
 
 /// Registers this unit's ports.

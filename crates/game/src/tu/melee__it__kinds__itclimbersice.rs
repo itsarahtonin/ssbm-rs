@@ -436,6 +436,17 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
+    let mut jobj = jobj;
+    if Handle::is_null(jobj) {
+        return null::<HSD_JObj<'a>>(ctx);
+    } else {
+        return (jobj).child();
+    }
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
 fn inl_itClimbersice_Spawn2_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut child: HSD_JObj<'a> =
@@ -465,17 +476,6 @@ fn inl_itClimbersice_Spawn2_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             &[],
         );
     }
-}
-
-fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
-    let mut jobj = jobj;
-    if Handle::is_null(jobj) {
-        return null::<HSD_JObj<'a>>(ctx);
-    } else {
-        return (jobj).child();
-    }
-    #[allow(unreachable_code)]
-    return null(ctx);
 }
 
 fn inl_itClimbersice_Spawn_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, spawn1: u32, spawn2: u32) {
@@ -550,6 +550,15 @@ fn inl_itClimbersice_Phys_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::it_80272460(ctx, (ip).x5D4_hitboxes().get(0_i32).hit(), dmg_, gobj);
 }
 
+fn inl_itClimbersIce_sub_x4_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut attr: itClimbersIceAttributes<'a> = Handle::cast::<itClimbersIceAttributes<'a>>(
+        ((ip).xC4_article_data()).x4_specialAttributes(),
+    );
+    (ip).set_xD44_lifeTimer(fp::fsubs((ip).xD44_lifeTimer(), (attr).x4()));
+}
+
 fn inl_itClimbersice_Coll_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -571,15 +580,6 @@ fn inl_itClimbersice_Coll_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         }
     }
     return 0_i32;
-}
-
-fn inl_itClimbersIce_sub_x4_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let mut gobj = gobj;
-    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    let mut attr: itClimbersIceAttributes<'a> = Handle::cast::<itClimbersIceAttributes<'a>>(
-        ((ip).xC4_article_data()).x4_specialAttributes(),
-    );
-    (ip).set_xD44_lifeTimer(fp::fsubs((ip).xD44_lifeTimer(), (attr).x4()));
 }
 
 fn inl_Item_ApplyFallingPhysics_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

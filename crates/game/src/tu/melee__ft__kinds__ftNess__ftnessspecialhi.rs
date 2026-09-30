@@ -126,7 +126,7 @@ pub fn ftNs_SpecialHi_ItemPKThunderRemove<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
     if !Handle::is_null((fp).u().ns().pkthunder_gobj()) {
         (fp).u().ns().set_pkthunder_gobj(null::<HSD_GObj<'a>>(ctx));
     }
-    fns::ftNs_SpecialHiStopGFX(ctx, gobj);
+    inl_ftNs_SpecialHiStopGFX_unfused(ctx, gobj);
     (fp).set_death2_cb(null::<FnPtr<'a>>(ctx));
     (fp).set_take_dmg_cb(null::<FnPtr<'a>>(ctx));
     fns::ftPartSetRotX(ctx, fp, 0_i32, 0.0);
@@ -141,7 +141,7 @@ pub fn ftNs_SpecialHi_TakeDamage<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::it_802AB9C0(ctx, (fp).u().ns().pkthunder_gobj());
         (fp).u().ns().set_pkthunder_gobj(null::<HSD_GObj<'a>>(ctx));
     }
-    fns::ftNs_SpecialHiStopGFX(ctx, gobj);
+    inl_ftNs_SpecialHiStopGFX_unfused(ctx, gobj);
     (fp).set_death2_cb(null::<FnPtr<'a>>(ctx));
     (fp).set_take_dmg_cb(null::<FnPtr<'a>>(ctx));
     fns::ftPartSetRotX(ctx, fp, 0_i32, 0.0);
@@ -555,7 +555,7 @@ pub fn ftNs_SpecialHiHold_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 0.0,
                 null::<HSD_GObj<'a>>(ctx),
             );
-            fns::ftNs_SpecialHiStopGFX(ctx, gobj);
+            inl_ftNs_SpecialHiStopGFX_unfused(ctx, gobj);
         }
     } else if Handle::addr(fns::it_802AB568(ctx, (fp).u().ns().pkthunder_gobj()))
         == Handle::addr(gobj)
@@ -575,7 +575,7 @@ pub fn ftNs_SpecialHiHold_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             0.0,
             null::<HSD_GObj<'a>>(ctx),
         );
-        fns::ftNs_SpecialHiStopGFX(ctx, gobj);
+        inl_ftNs_SpecialHiStopGFX_unfused(ctx, gobj);
     }
 }
 
@@ -693,7 +693,7 @@ pub fn ftNs_SpecialAirHiHold_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 0.0,
                 null::<HSD_GObj<'a>>(ctx),
             );
-            fns::ftNs_SpecialHiStopGFX(ctx, gobj);
+            inl_ftNs_SpecialHiStopGFX(ctx, gobj);
         }
     } else if Handle::addr(fns::it_802AB568(ctx, (fp).u().ns().pkthunder_gobj()))
         == Handle::addr(gobj)
@@ -749,7 +749,7 @@ pub fn ftNs_SpecialAirHiHold_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             0.0,
             null::<HSD_GObj<'a>>(ctx),
         );
-        fns::ftNs_SpecialHiStopGFX(ctx, gobj);
+        inl_ftNs_SpecialHiStopGFX(ctx, gobj);
     }
     'l1: loop {
         'c2: {}
@@ -1290,7 +1290,7 @@ pub fn ftNs_SpecialHi_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         {
             (fp0).set_gr_vel(fp::frsp(0_i32 as f64));
             {
-                fns::ftNs_SpecialHiStopGFX(ctx, gobj);
+                inl_ftNs_SpecialHiStopGFX_unfused(ctx, gobj);
                 fns::ftPartSetRotX(ctx, fp0, 0_i32, fp::frsp(0_i32 as f64));
                 fns::ftCo_80097D40(ctx, gobj);
                 return;
@@ -1553,7 +1553,7 @@ pub fn ftNs_SpecialAirHiRebound_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).self_vel().set_z(0.0);
         (fp).self_vel().set_y(0.0);
         (fp).self_vel().set_x(0.0);
-        fns::ftNs_SpecialHiStopGFX(ctx, gobj);
+        inl_ftNs_SpecialHiStopGFX_unfused(ctx, gobj);
         fns::ftPartSetRotX(ctx, fp, 0_i32, 0.0);
         fns::ftCo_80097D40(ctx, gobj);
         return;
@@ -1592,6 +1592,30 @@ fn inl_check_distance<'a>(ctx: &'a Ctx, pos: Vec<'a>, pair: Vec<'a>) -> i32 {
     return 0_i32;
 }
 
+fn inl_ftNs_SpecialHiStopGFX_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    's1: {
+        let __case = match (fp).motion_id() {
+            0x166_i32 => 0,
+            0x167_i32 => 0,
+            0x168_i32 => 0,
+            0x169_i32 => 0,
+            0x16a_i32 => 0,
+            0x16b_i32 => 0,
+            0x16c_i32 => 0,
+            0x16d_i32 => 0,
+            0x16e_i32 => 0,
+            _ => 1,
+        };
+        if __case <= 0 {
+            fns::efLib_DestroyAll(ctx, gobj);
+            (fp).u().ns().set_pkthunder_gfx((0_i32 as u32));
+        }
+    }
+}
+
 fn inl_Fighter_ClearCmdVars_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let mut fp = fp;
     (fp).cmd_vars().at(3_i32).set((0_i32 as u32));
@@ -1604,6 +1628,28 @@ fn inl_getFtSpecialAttrs_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> 
     let mut fp = fp;
     let mut fighter_attr: Addr<'a> = (fp).dat_attrs();
     return fighter_attr;
+}
+
+fn inl_getFighter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {
+    let mut gobj = gobj;
+    return Handle::cast::<Fighter<'a>>((gobj).user_data());
+}
+
+fn inl_getFtSpecialAttrs<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> {
+    let mut fp = fp;
+    let mut fighter_attr: Addr<'a> = (fp).dat_attrs();
+    return fighter_attr;
+}
+
+fn inl_sign<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+    let mut x = x;
+    let mut r: f64 = 0.0;
+    if x >= 0.0 {
+        r = 1.0;
+    } else {
+        r = fp::fneg(1.0);
+    }
+    return r;
 }
 
 fn inl_NessFloatMath_PKThunder2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -1635,28 +1681,6 @@ fn inl_NessFloatMath_PKThunder2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     ));
 }
 
-fn inl_getFighter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {
-    let mut gobj = gobj;
-    return Handle::cast::<Fighter<'a>>((gobj).user_data());
-}
-
-fn inl_getFtSpecialAttrs<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> {
-    let mut fp = fp;
-    let mut fighter_attr: Addr<'a> = (fp).dat_attrs();
-    return fighter_attr;
-}
-
-fn inl_sign<'a>(ctx: &'a Ctx, x: f64) -> f64 {
-    let mut x = x;
-    let mut r: f64 = 0.0;
-    if x >= 0.0 {
-        r = 1.0;
-    } else {
-        r = fp::fneg(1.0);
-    }
-    return r;
-}
-
 fn inl_startGFX_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, id: i32) {
     let mut gobj = gobj;
     let mut id = id;
@@ -1671,6 +1695,29 @@ fn inl_startGFX_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, id: i32) {
         ))],
     );
     (fp).u().ns().set_pkthunder_gfx((1_i32 as u32));
+}
+
+fn inl_ftNs_SpecialHiStopGFX<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+    's1: {
+        let __case = match (fp).motion_id() {
+            0x166_i32 => 0,
+            0x167_i32 => 0,
+            0x168_i32 => 0,
+            0x169_i32 => 0,
+            0x16a_i32 => 0,
+            0x16b_i32 => 0,
+            0x16c_i32 => 0,
+            0x16d_i32 => 0,
+            0x16e_i32 => 0,
+            _ => 1,
+        };
+        if __case <= 0 {
+            fns::efLib_DestroyAll(ctx, gobj);
+            (fp).u().ns().set_pkthunder_gfx((0_i32 as u32));
+        }
+    }
 }
 
 fn inl_ThunderPhysTimer_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -1701,17 +1748,6 @@ fn inl_getFtSpecialAttrs2<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> {
     return (fp).dat_attrs();
 }
 
-fn inl_lbVector_Len_xy<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
-    let mut vec = vec;
-    return inl_sqrtf(
-        ctx,
-        fp::fadds(
-            fp::fmuls((vec).x(), (vec).x()),
-            fp::fmuls((vec).y(), (vec).y()),
-        ),
-    );
-}
-
 fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     let mut x = x;
     let mut y: f64 = 0.0;
@@ -1733,6 +1769,17 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         return y;
     }
     return x;
+}
+
+fn inl_lbVector_Len_xy<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
+    let mut vec = vec;
+    return inl_sqrtf(
+        ctx,
+        fp::fadds(
+            fp::fmuls((vec).x(), (vec).x()),
+            fp::fmuls((vec).y(), (vec).y()),
+        ),
+    );
 }
 
 fn inl_ftNess_atan2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -1787,6 +1834,13 @@ fn inl_ftCommon_AirToGroundStateChange_unfused<'a>(
     );
 }
 
+fn inl_scaleXY_unfused<'a>(ctx: &'a Ctx, v: Vec<'a>, s: f64) {
+    let mut v = v;
+    let mut s = s;
+    (v).set_x(fp::fmuls((v).x(), s));
+    (v).set_y(fp::fmuls((v).y(), s));
+}
+
 fn inl_rebound_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, normal: Vec<'a>) -> Fighter<'a> {
     let mut gobj = gobj;
     let mut normal = normal;
@@ -1825,13 +1879,6 @@ fn inl_rebound_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, normal: Vec<'a>) ->
     );
     fns::ftAnim_8006EBA4(ctx, gobj);
     return fp;
-}
-
-fn inl_scaleXY_unfused<'a>(ctx: &'a Ctx, v: Vec<'a>, s: f64) {
-    let mut v = v;
-    let mut s = s;
-    (v).set_x(fp::fmuls((v).x(), s));
-    (v).set_y(fp::fmuls((v).y(), s));
 }
 
 /// Registers this unit's ports.

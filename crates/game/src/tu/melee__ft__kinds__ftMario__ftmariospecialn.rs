@@ -159,7 +159,7 @@ pub fn ftMr_SpecialN_ItemFireSpawn<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 ],
             );
         } else {
-            rand_val_800E0D1C = fns::ftMr_SpecialN_VitaminRandom(ctx, gobj);
+            rand_val_800E0D1C = inl_ftMr_SpecialN_VitaminRandom_unfused(ctx, gobj);
             fns::itDrMarioPill_Spawn(
                 ctx,
                 gobj,
@@ -275,6 +275,36 @@ fn inl_pickMegavitamin_unfused<'a>(
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_ftMr_SpecialN_VitaminRandom_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x30);
+    let arr: ArrV<'a, i32, 9> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = null(ctx);
+    let mut r3: i32 = 0;
+    let mut i: i32 = 0;
+    fp = Handle::cast::<Fighter<'a>>((gobj).user_data());
+    {
+        i = {
+            let __t1 = 0_i32;
+            r3 = __t1;
+            __t1
+        };
+        'l1: while i < 9_i32 {
+            'c2: {
+                if (i != (fp).u().mr().x222C_vitaminCurr())
+                    && (i != (fp).u().mr().x2230_vitaminPrev())
+                {
+                    arr.at(r3).set(i);
+                    r3 = r3.wrapping_add(1);
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    r3 = inl_pickMegavitamin_unfused(ctx, fp, arr.at(0), r3);
+    return r3;
 }
 
 fn inl_ftCommon_GroundToAirStateChange_unfused<'a>(

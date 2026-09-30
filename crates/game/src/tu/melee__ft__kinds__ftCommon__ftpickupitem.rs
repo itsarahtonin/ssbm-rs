@@ -391,7 +391,7 @@ pub fn ftpickupitem_800948A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, item_gobj: HS
     } else {
         (fp).set_item_gobj(item_gobj);
     }
-    fns::ftpickupitem_80094818(ctx, gobj, 1_i32);
+    inl_ftpickupitem_80094818_unfused(ctx, gobj, 1_i32);
     {
         let mut ret_part: i32 = 0;
         if fns::itIsHeavy(ctx, item_gobj) == 0_i32 {
@@ -656,6 +656,41 @@ fn inl_ftCheckThrowB3_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     }
     #[allow(unreachable_code)]
     return 0;
+}
+
+fn inl_ftpickupitem_80094818_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut arg1 = arg1;
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if !Handle::is_null((fp).x1978()) {
+        fns::pl_8003E17C(
+            ctx,
+            ((fp).player_idx() as i32),
+            ((fp).is_sub_fighter() as i32),
+            (fp).x1978(),
+        );
+    } else if !Handle::is_null((fp).item_gobj()) {
+        if !Handle::is_null(fns::ftData_OnItemPickupExt(ctx).at((fp).kind()).get()) {
+            fns::ftData_OnItemPickupExt(ctx)
+                .at((fp).kind())
+                .get()
+                .call::<_, ()>((gobj, arg1));
+        }
+        fns::pl_8003E17C(
+            ctx,
+            ((fp).player_idx() as i32),
+            ((fp).is_sub_fighter() as i32),
+            (fp).item_gobj(),
+        );
+    }
 }
 
 /// Registers this unit's ports.

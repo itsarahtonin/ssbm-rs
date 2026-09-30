@@ -2221,6 +2221,13 @@ fn inl_mn_8022F538_GetHoveredSelection_unfused<'a>(ctx: &'a Ctx) -> u8 {
     return (fns::mn_804A04F0(ctx).hovered_selection() as u8);
 }
 
+fn inl_mn_8022FEC8_AnimDigit_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, digit: u8) {
+    let mut jobj = jobj;
+    let mut digit = digit;
+    fns::HSD_JObjReqAnimAll(ctx, jobj, fp::frsp(digit as f64));
+    fns::HSD_JObjAnimAll(ctx, jobj);
+}
+
 fn inl_mn_8022FEC8_AnimStockDigits_unfused<'a>(ctx: &'a Ctx, data: mn_802307F8_t<'a>, value: i32) {
     let mut data = data;
     let mut value = value;
@@ -2234,11 +2241,15 @@ fn inl_mn_8022FEC8_AnimStockDigits_unfused<'a>(ctx: &'a Ctx, data: mn_802307F8_t
     inl_mn_8022FEC8_AnimDigit_unfused(ctx, digit_jobj2, ((rem_i32(value, 10_i32)) as u8));
 }
 
-fn inl_mn_8022FEC8_AnimDigit_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, digit: u8) {
+fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
     let mut jobj = jobj;
-    let mut digit = digit;
-    fns::HSD_JObjReqAnimAll(ctx, jobj, fp::frsp(digit as f64));
-    fns::HSD_JObjAnimAll(ctx, jobj);
+    if Handle::is_null(jobj) {
+        return null::<HSD_JObj<'a>>(ctx);
+    } else {
+        return (jobj).child();
+    }
+    #[allow(unreachable_code)]
+    return null(ctx);
 }
 
 fn inl_mn_8022FEC8_AnimDamageDigits_unfused<'a>(ctx: &'a Ctx, value: u8, data: mn_802307F8_t<'a>) {
@@ -2260,17 +2271,6 @@ fn inl_mn_8022FEC8_AnimDamageDigits_unfused<'a>(ctx: &'a Ctx, value: u8, data: m
         ),
         ((rem_i32((value as i32), 10_i32)) as u8),
     );
-}
-
-fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
-    let mut jobj = jobj;
-    if Handle::is_null(jobj) {
-        return null::<HSD_JObj<'a>>(ctx);
-    } else {
-        return (jobj).child();
-    }
-    #[allow(unreachable_code)]
-    return null(ctx);
 }
 
 fn inl_mn_8022FEC8_GetSettings_unfused<'a>(

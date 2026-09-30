@@ -122,7 +122,7 @@ pub fn ftCo_Attack_800CCF58<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
             cstr(ctx, 0x803c6d70),
         )
     });
-    swing_type = fns::fn_800CCEC4(ctx, fns::itGetKind(ctx, (fp).item_gobj()));
+    swing_type = inl_fn_800CCEC4_unfused(ctx, fns::itGetKind(ctx, (fp).item_gobj()));
     anim_id = inl_get_anim_id_unfused(ctx, fp, swing_type, arg1);
     f = (Handle::add(fns::Fighter_804D654C(ctx).get(), swing_type))
         .at(arg1)
@@ -167,6 +167,56 @@ pub fn ftCo_Attack_800CCF58<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_fn_800CCEC4_unfused<'a>(ctx: &'a Ctx, x: i32) -> i32 {
+    let mut x = x;
+    's1: {
+        let __case = match x {
+            12_i32 => 0,
+            11_i32 => 1,
+            13_i32 => 2,
+            24_i32 => 3,
+            22_i32 => 4,
+            23_i32 => 5,
+            _ => 6,
+        };
+        if __case <= 0 {
+            return 0_i32;
+        }
+        if __case <= 1 {
+            return 1_i32;
+        }
+        if __case <= 2 {
+            return 2_i32;
+        }
+        if __case <= 3 {
+            return 3_i32;
+        }
+        if __case <= 4 {
+            return 4_i32;
+        }
+        if __case <= 5 {
+            return 5_i32;
+        }
+        if __case <= 6 {
+            (if ((0_i32) != 0) {
+                { () }
+            } else {
+                ({
+                    fns::OSReport(ctx, cstr(ctx, 0x803c6de8), &[]);
+                    fns::__assert(
+                        ctx,
+                        cstr(ctx, 0x803c6d70),
+                        (43_i32 as u32),
+                        cstr(ctx, 0x803c6d70),
+                    )
+                })
+            });
+        }
+    }
+    #[allow(unreachable_code)]
+    return 0;
 }
 
 fn inl_get_anim_id_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, swing_type: i32, arg1: i32) -> i32 {

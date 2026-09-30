@@ -366,6 +366,11 @@ pub fn ftKb_PkSpecialAirN_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
 fn inl_doEnter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pk_msid: i32, pc_msid: i32) {
     let mut gobj = gobj;
     let mut pk_msid = pk_msid;
@@ -420,11 +425,6 @@ fn inl_doEnter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pk_msid: i32, pc_ms
         __t3
     });
     fns::ftAnim_8006EBA4(ctx, gobj);
-}
-
-fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).user_data();
 }
 
 fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {

@@ -92,7 +92,7 @@ pub fn gm_8016F208<'a>(ctx: &'a Ctx, kind: i32) -> i32 {
 pub fn fn_8016F280<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
-    return fns::gm_8016F208(ctx, arg0).wrapping_sub(2_i32);
+    return inl_gm_8016F208_unfused(ctx, arg0).wrapping_sub(2_i32);
 }
 
 pub fn gm_8016F2F8<'a>(ctx: &'a Ctx, kind: i32, arg1: u8) -> i32 {
@@ -167,14 +167,14 @@ pub fn fn_8016F39C<'a>(
                 .kind() as i32)
                 < 215_i32
             {
-                flags = (fns::fn_8016F180(ctx, idx) as u8);
+                flags = (inl_fn_8016F180_unfused(ctx, idx) as u8);
                 if (((arg4 as i32) & (flags as i32)) != 0) {
                     if fns::pl_80039418(ctx, (arg5 as i32), idx) != (0_i32 as u32) {
                         matched = 1_i32;
                     }
                 }
             } else {
-                flags = (fns::fn_8016F180(ctx, idx) as u8);
+                flags = (inl_fn_8016F180_unfused(ctx, idx) as u8);
                 if (((arg4 as i32) & (flags as i32)) != 0) {
                     if (fns::fn_801701C0(
                         ctx,
@@ -234,13 +234,13 @@ pub fn fn_8016F548<'a>(ctx: &'a Ctx, arg0: Addr<'a>, arg1: u16, mask: u8, player
                     .kind() as i32)
                     < 215_i32
                 {
-                    if (((mask as i32) & ((fns::fn_8016F180(ctx, i) as u8) as i32)) != 0) {
+                    if (((mask as i32) & ((inl_fn_8016F180_unfused(ctx, i) as u8) as i32)) != 0) {
                         if fns::pl_80039418(ctx, (player_id as i32), i) != (0_i32 as u32) {
                             return i;
                         }
                     }
                 } else {
-                    if (((mask as i32) & ((fns::fn_8016F180(ctx, i) as u8) as i32)) != 0) {
+                    if (((mask as i32) & ((inl_fn_8016F180_unfused(ctx, i) as u8) as i32)) != 0) {
                         if (fns::fn_801701C0(
                             ctx,
                             Handle::cast::<MatchEnd<'a>>(arg0),
@@ -267,13 +267,13 @@ pub fn fn_8016F548<'a>(ctx: &'a Ctx, arg0: Addr<'a>, arg1: u16, mask: u8, player
                     .kind() as i32)
                     < 215_i32
                 {
-                    if (((mask as i32) & ((fns::fn_8016F180(ctx, i) as u8) as i32)) != 0) {
+                    if (((mask as i32) & ((inl_fn_8016F180_unfused(ctx, i) as u8) as i32)) != 0) {
                         if fns::pl_80039418(ctx, (player_id as i32), i) != (0_i32 as u32) {
                             return i;
                         }
                     }
                 } else {
-                    if (((mask as i32) & ((fns::fn_8016F180(ctx, i) as u8) as i32)) != 0) {
+                    if (((mask as i32) & ((inl_fn_8016F180_unfused(ctx, i) as u8) as i32)) != 0) {
                         if (fns::fn_801701C0(
                             ctx,
                             Handle::cast::<MatchEnd<'a>>(arg0),
@@ -326,14 +326,14 @@ pub fn fn_8016F740<'a>(ctx: &'a Ctx, arg0: Addr<'a>, arg1: u16, mask: u8, player
                     .kind() as i32)
                     < 215_i32
                 {
-                    flags = (fns::fn_8016F180(ctx, i) as u8);
+                    flags = (inl_fn_8016F180_unfused(ctx, i) as u8);
                     if (((mask as i32) & (flags as i32)) != 0) {
                         if fns::pl_80039418(ctx, (player_id as i32), i) != (0_i32 as u32) {
                             return i;
                         }
                     }
                 } else {
-                    flags = (fns::fn_8016F180(ctx, i) as u8);
+                    flags = (inl_fn_8016F180_unfused(ctx, i) as u8);
                     if (((mask as i32) & (flags as i32)) != 0) {
                         if (fns::fn_801701C0(
                             ctx,
@@ -384,14 +384,14 @@ pub fn fn_8016F870<'a>(ctx: &'a Ctx, arg0: Addr<'a>, arg1: u16, mask: u8, player
                     .get(i)
                     .kind() as i32);
                 if kind < 215_i32 {
-                    flags = (fns::fn_8016F180(ctx, i) as u8);
+                    flags = (inl_fn_8016F180_unfused(ctx, i) as u8);
                     if (((mask as i32) & (flags as i32)) != 0) {
                         if fns::pl_80039418(ctx, (player_id as i32), i) != (0_i32 as u32) {
                             return i;
                         }
                     }
                 } else {
-                    flags = (fns::fn_8016F180(ctx, i) as u8);
+                    flags = (inl_fn_8016F180_unfused(ctx, i) as u8);
                     if (((mask as i32) & (flags as i32)) != 0) {
                         if (fns::fn_801701C0(
                             ctx,
@@ -435,14 +435,14 @@ pub fn fn_8016F9A8<'a>(ctx: &'a Ctx, arg0: Addr<'a>, arg1: u16, mask: u8, player
                     .kind() as i32)
                     < 215_i32
                 {
-                    flags = (fns::fn_8016F180(ctx, i) as u8);
+                    flags = (inl_fn_8016F180_unfused(ctx, i) as u8);
                     if (((mask as i32) & (flags as i32)) != 0) {
                         if fns::pl_80039418(ctx, (player_id as i32), i) != (0_i32 as u32) {
                             count = count.wrapping_add(1);
                         }
                     }
                 } else {
-                    flags = (fns::fn_8016F180(ctx, i) as u8);
+                    flags = (inl_fn_8016F180_unfused(ctx, i) as u8);
                     if (((mask as i32) & (flags as i32)) != 0) {
                         if (fns::fn_801701C0(
                             ctx,
@@ -640,13 +640,14 @@ pub fn fn_8016FFD4<'a>(ctx: &'a Ctx, arg0: MatchEnd<'a>, arg1: i32, arg2: u8) ->
                     .kind() as i32)
                     < 215_i32
                 {
-                    if (((arg1 & 255_i32) & ((fns::fn_8016F180(ctx, i) as u8) as i32)) != 0)
+                    if (((arg1 & 255_i32) & ((inl_fn_8016F180_unfused(ctx, i) as u8) as i32)) != 0)
                         && (fns::pl_80039418(ctx, (arg2 as i32), i) != (0_i32 as u32))
                     {
                         count = count.wrapping_add(fns::fn_8016FAD4(ctx, arg0, i, arg1, arg2));
                     }
                 } else {
-                    if (((arg1 & 255_i32) & ((fns::fn_8016F180(ctx, i) as u8) as i32)) != 0) {
+                    if (((arg1 & 255_i32) & ((inl_fn_8016F180_unfused(ctx, i) as u8) as i32)) != 0)
+                    {
                         if (fns::fn_801701C0(ctx, arg0, (arg2 as i32), i) as u32) != (0_i32 as u32)
                         {
                             count = count.wrapping_add(fns::fn_8016FAD4(ctx, arg0, i, arg1, arg2));
@@ -682,7 +683,7 @@ pub fn fn_80170110<'a>(ctx: &'a Ctx, arg0: Addr<'a>, idx: i32, mask: i32, player
         .get(idx)
         .kind() as i32);
     let mut flags: u8 = 0;
-    flags = ((fns::fn_8016F180(ctx, kind)) as u8);
+    flags = ((inl_fn_8016F180_unfused(ctx, kind)) as u8);
     if ((((mask as u8) as i32) & (flags as i32)) != 0) {
         if kind < 215_i32 {
             return (fns::pl_80039418(ctx, (player_id as i32), kind) as i32);
@@ -2806,7 +2807,7 @@ pub fn gm_80173224<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) -> u8 {
         ckind = fns::fn_80173098(ctx, arg0);
     }
     if (ckind as i32) == (enums::ChKind_None as i32) {
-        ckind = fns::gm_80172E74(ctx);
+        ckind = inl_gm_80172E74_unfused(ctx);
     }
     return ckind;
 }
@@ -2947,6 +2948,41 @@ pub fn fn_8017367C<'a>(ctx: &'a Ctx) -> i32 {
     return ((fns::gmMainLib_8015EDC8(ctx)).x6() as i32);
 }
 
+fn inl_gm_8016F208_unfused<'a>(ctx: &'a Ctx, kind: i32) -> i32 {
+    let mut kind = kind;
+    let mut curr: lbl_803D5A4C_t<'a> = statics::melee__gm__gm_16F1::lbl_803D5A4C(ctx)
+        .entries()
+        .get(0);
+    'l1: while ((curr).kind() as i32) != kind {
+        'c2: {
+            if ((curr).kind() as i32) == 0x29a_i32 {
+                return 0_i32;
+            }
+            curr = Handle::add(curr, 1);
+        }
+    }
+    if (((curr).x2() as i32) == 222_i32) && (fns::lbLang_IsSettingUS(ctx) != 0) {
+        return 0x102_i32;
+    }
+    return ((curr).x2() as i32);
+}
+
+fn inl_fn_8016F180_unfused<'a>(ctx: &'a Ctx, kind: i32) -> i32 {
+    let mut kind = kind;
+    let mut curr: lbl_803D5A4C_t<'a> = statics::melee__gm__gm_16F1::lbl_803D5A4C(ctx)
+        .entries()
+        .get(0);
+    'l1: while ((curr).kind() as i32) != kind {
+        'c2: {
+            if ((curr).kind() as i32) == 0x29a_i32 {
+                return 0_i32;
+            }
+            curr = Handle::add(curr, 1);
+        }
+    }
+    return ((curr).x4() as i32);
+}
+
 fn inl_fn_8016F39C_GetSisTextId_unfused<'a>(ctx: &'a Ctx, kind: i32) -> u16 {
     let mut kind = kind;
     let mut curr: lbl_803D5A4C_t<'a> = statics::melee__gm__gm_16F1::lbl_803D5A4C(ctx)
@@ -2966,6 +3002,14 @@ fn inl_fn_8016F39C_GetSisTextId_unfused<'a>(ctx: &'a Ctx, kind: i32) -> u16 {
     return (curr).x2();
 }
 
+fn inl_gm_801721EC_1_unfused<'a>(ctx: &'a Ctx, i: u32) -> i32 {
+    let mut i = i;
+    if (fns::gmMainLib_8015D94C(ctx, i) != 0) && (fns::gmMainLib_8015D8D8(ctx, i) != 0) {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
 fn inl_gm_801721EC_2_unfused<'a>(ctx: &'a Ctx) -> i32 {
     let mut i: i32 = 0;
     {
@@ -2982,9 +3026,9 @@ fn inl_gm_801721EC_2_unfused<'a>(ctx: &'a Ctx) -> i32 {
     return 0_i32;
 }
 
-fn inl_gm_801721EC_1_unfused<'a>(ctx: &'a Ctx, i: u32) -> i32 {
-    let mut i = i;
-    if (fns::gmMainLib_8015D94C(ctx, i) != 0) && (fns::gmMainLib_8015D8D8(ctx, i) != 0) {
+fn inl_gm_801721EC_3_unfused<'a>(ctx: &'a Ctx, j: u32) -> i32 {
+    let mut j = j;
+    if (fns::gmMainLib_8015DA1C(ctx, j) != 0) {
         return 1_i32;
     }
     return 0_i32;
@@ -3002,14 +3046,6 @@ fn inl_gm_801721EC_4_unfused<'a>(ctx: &'a Ctx) -> i32 {
             }
             j = j.wrapping_add(1);
         }
-    }
-    return 0_i32;
-}
-
-fn inl_gm_801721EC_3_unfused<'a>(ctx: &'a Ctx, j: u32) -> i32 {
-    let mut j = j;
-    if (fns::gmMainLib_8015DA1C(ctx, j) != 0) {
-        return 1_i32;
     }
     return 0_i32;
 }
@@ -3117,6 +3153,30 @@ fn inl_fn_80173098_CountUnlocked_unfused<'a>(ctx: &'a Ctx) -> i32 {
         }
     }
     return count;
+}
+
+fn inl_gm_80172E74_unfused<'a>(ctx: &'a Ctx) -> u8 {
+    let mut i: i32 = 0;
+    let mut count: i32 = 0_i32;
+    {
+        i = 0_i32;
+        'l1: while i < (enums::SELKIND_COUNT as i32) {
+            'c2: {
+                if ((fns::gm_SelKindToUnlockIndex(ctx, i) as i32) == 11_i32)
+                    && (fns::gmMainLib_8015CFCC(ctx, (i as u8)) != 0)
+                {
+                    count = count.wrapping_add(1_i32);
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    if (count >= 14_i32)
+        && (!(fns::gm_IsCKindUnlocked(ctx, ((enums::CKind_Mars as i32) as u8)) != 0))
+    {
+        return ((enums::CKind_Mars as i32) as u8);
+    }
+    return ((enums::ChKind_None as i32) as u8);
 }
 
 /// Registers this unit's ports.

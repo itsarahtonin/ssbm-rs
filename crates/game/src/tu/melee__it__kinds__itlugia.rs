@@ -167,7 +167,7 @@ pub fn itLugia_UnkMotion3_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     }
     fns::it_8027A160(ctx, child, ip);
     if !(fns::it_80272C6C(ctx, gobj) != 0) {
-        fns::it_802D16D4(ctx, gobj);
+        inl_it_802D16D4_unfused(ctx, gobj);
     }
     return 0_i32;
 }
@@ -719,6 +719,14 @@ fn inl_Item_SetEffectHitlagCallbacks_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
     (ip).set_exited_hitlag(fnptr(ctx, 0x8005bac4));
 }
 
+fn inl_it_802D16D4_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut item: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    fns::Item_80268E5C(ctx, gobj, 3_i32, (enums::ITEM_ANIM_UPDATE as i32));
+    (item).set_entered_hitlag(fnptr(ctx, 0x8005ba40));
+    (item).set_exited_hitlag(fnptr(ctx, 0x8005bac4));
+}
+
 fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
@@ -767,13 +775,6 @@ fn inl_Item_EnterAirStateWithHitlagAndStateDesc_unfused<'a>(ctx: &'a Ctx, gobj: 
     fns::it_80273670(ctx, gobj, 0_i32, 0.0);
 }
 
-fn inl_it_802D208C_inline<'a>(ctx: &'a Ctx, x: f64, y: f64, z: f64) -> f64 {
-    let mut x = x;
-    let mut y = y;
-    let mut z = z;
-    return inl_my_sqrtf(ctx, fp::fadds(fp::fadds(x, y), z));
-}
-
 fn inl_my_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     let mut x = x;
     let mut pad: u32 = 0;
@@ -796,6 +797,13 @@ fn inl_my_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         return y;
     }
     return x;
+}
+
+fn inl_it_802D208C_inline<'a>(ctx: &'a Ctx, x: f64, y: f64, z: f64) -> f64 {
+    let mut x = x;
+    let mut y = y;
+    let mut z = z;
+    return inl_my_sqrtf(ctx, fp::fadds(fp::fadds(x, y), z));
 }
 
 fn inl_Item_TickLifetime_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) -> i32 {

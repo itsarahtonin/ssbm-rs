@@ -52,6 +52,18 @@ pub fn ftCo_800BD000<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, victim_gobj: HSD_GObj
     );
 }
 
+fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
+fn inl_ftCo_ReleaseItemAndVictim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    fns::ftCommon_8007DB58(ctx, gobj);
+    fns::ftCo_8009750C(ctx, gobj);
+    fns::ftCo_800DD168(ctx, gobj);
+}
+
 fn inl_doEnter_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -89,18 +101,6 @@ fn inl_doEnter_unfused<'a>(
     fns::ftAnim_8006EBA4(ctx, gobj);
     fns::ftCommon_8007E2FC(ctx, gobj);
     fns::ftCo_800BD0E8(ctx, gobj, victim_msid);
-}
-
-fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).user_data();
-}
-
-fn inl_ftCo_ReleaseItemAndVictim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let mut gobj = gobj;
-    fns::ftCommon_8007DB58(ctx, gobj);
-    fns::ftCo_8009750C(ctx, gobj);
-    fns::ftCo_800DD168(ctx, gobj);
 }
 
 /// Registers this unit's ports.

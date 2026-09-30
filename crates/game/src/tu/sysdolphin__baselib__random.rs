@@ -53,7 +53,7 @@ pub fn HSD_Randf<'a>(ctx: &'a Ctx) -> f64 {
 pub fn HSD_Randi<'a>(ctx: &'a Ctx, max_val: i32) -> i32 {
     let mut max_val = max_val;
     return div_i32(
-        max_val.wrapping_mul(fns::HSD_Rand(ctx)),
+        max_val.wrapping_mul(inl_HSD_Rand_unfused(ctx)),
         (shl_i32(1_i32, (16_i32 as u32))),
     );
 }
@@ -68,6 +68,16 @@ pub fn _HSD_RandForgetMemory<'a>(ctx: &'a Ctx, low: Addr<'a>, high: Addr<'a>) {
     {
         fns::HSD_RandSeedPtr(ctx).set(statics::sysdolphin__baselib__random::seed(ctx));
     }
+}
+
+fn inl_HSD_Rand_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    (fns::HSD_RandSeedPtr(ctx).get()).set(
+        (fns::HSD_RandSeedPtr(ctx).get())
+            .get()
+            .wrapping_mul((0x343fd_i32 as u32))
+            .wrapping_add((0x269ec3_i32 as u32)),
+    );
+    return (shr_u32((fns::HSD_RandSeedPtr(ctx).get()).get(), (16_i32 as u32)) as i32);
 }
 
 /// Registers this unit's ports.

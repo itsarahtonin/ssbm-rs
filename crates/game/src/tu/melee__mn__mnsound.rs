@@ -514,22 +514,6 @@ fn inl_sfxMove<'a>(ctx: &'a Ctx) {
     fns::lbAudioAx_80024030(ctx, 2_i32);
 }
 
-fn inl_updateCenterText<'a>(ctx: &'a Ctx) {
-    let mut menu: Menu<'a> = Handle::cast::<Menu<'a>>(
-        (statics::melee__mn__mnsound::mnSound_804D6C30(ctx).get()).user_data(),
-    );
-    let mut text_id: i32 = 0;
-    if !Handle::is_null((menu).text()) {
-        fns::HSD_SisLib_803A5CC4(ctx, (menu).text());
-    }
-    if ((menu).unk2() as i32) == 0_i32 {
-        text_id = 187_i32;
-    } else {
-        text_id = 188_i32;
-    }
-    inl_Menu_InitCenterText(ctx, menu, text_id);
-}
-
 fn inl_Menu_InitCenterText<'a>(ctx: &'a Ctx, menu: Menu<'a>, val: i32) {
     let mut menu = menu;
     let mut val = val;
@@ -547,6 +531,22 @@ fn inl_Menu_InitCenterText<'a>(ctx: &'a Ctx, menu: Menu<'a>, val: i32) {
     (text).font_size().set_x(0.05209999904036522);
     (text).font_size().set_y(0.05209999904036522);
     fns::HSD_SisLib_803A6368(ctx, text, val);
+}
+
+fn inl_updateCenterText<'a>(ctx: &'a Ctx) {
+    let mut menu: Menu<'a> = Handle::cast::<Menu<'a>>(
+        (statics::melee__mn__mnsound::mnSound_804D6C30(ctx).get()).user_data(),
+    );
+    let mut text_id: i32 = 0;
+    if !Handle::is_null((menu).text()) {
+        fns::HSD_SisLib_803A5CC4(ctx, (menu).text());
+    }
+    if ((menu).unk2() as i32) == 0_i32 {
+        text_id = 187_i32;
+    } else {
+        text_id = 188_i32;
+    }
+    inl_Menu_InitCenterText(ctx, menu, text_id);
 }
 
 fn inl_HSD_GObjGetHSDObj<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
@@ -618,6 +618,96 @@ fn inl_updateChannelAnim<'a>(
     fns::HSD_JObjAnimAll(ctx, (jobj_anim_2).get());
 }
 
+fn inl_HSD_JObjGetTranslation<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
+    let mut jobj = jobj;
+    let mut translate = translate;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803eeed8),
+            (0x237_i32 as u32),
+            cstr(ctx, 0x803eeed8),
+        )
+    });
+    (if !Handle::is_null((translate)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803eeed8),
+            (0x238_i32 as u32),
+            cstr(ctx, 0x803eeed8),
+        )
+    });
+    Handle::copy_from((translate), (jobj).translate());
+}
+
+fn inl_getVolumePosition<'a>(
+    ctx: &'a Ctx,
+    sound_music_mix: u8,
+    pos_0: Vec<'a>,
+    pos_1: Vec<'a>,
+) -> f64 {
+    let mut sound_music_mix = sound_music_mix;
+    let mut pos_0 = pos_0;
+    let mut pos_1 = pos_1;
+    return fp::fmadds(
+        (fp::fdivs(
+            fp::frsp((((sound_music_mix as i8) as i32).wrapping_add(100_i32)) as f64),
+            200.0,
+        )),
+        (fp::fsubs((pos_1).x(), (pos_0).x())),
+        (pos_0).x(),
+    );
+}
+
+fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803eeed8),
+            (228_i32 as u32),
+            cstr(ctx, 0x803eeed8),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
+fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
+    let mut jobj = jobj;
+    let mut x = x;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803eeed8),
+            (0x201_i32 as u32),
+            cstr(ctx, 0x803eeed8),
+        )
+    });
+    (jobj).translate().set_x(x);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
 fn inl_updateVolumeAnim<'a>(
     ctx: &'a Ctx,
     jobj: HSD_JObj<'a>,
@@ -685,99 +775,14 @@ fn inl_updateVolumeAnim<'a>(
     fns::gm_801602C0(ctx, (sound_music_mix as i8));
 }
 
-fn inl_HSD_JObjGetTranslation<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
-    let mut jobj = jobj;
-    let mut translate = translate;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803eeed8),
-            (0x237_i32 as u32),
-            cstr(ctx, 0x803eeed8),
-        )
-    });
-    (if !Handle::is_null((translate)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803eeed8),
-            (0x238_i32 as u32),
-            cstr(ctx, 0x803eeed8),
-        )
-    });
-    Handle::copy_from((translate), (jobj).translate());
-}
-
-fn inl_getVolumePosition<'a>(
-    ctx: &'a Ctx,
-    sound_music_mix: u8,
-    pos_0: Vec<'a>,
-    pos_1: Vec<'a>,
-) -> f64 {
-    let mut sound_music_mix = sound_music_mix;
-    let mut pos_0 = pos_0;
-    let mut pos_1 = pos_1;
-    return fp::fmadds(
-        (fp::fdivs(
-            fp::frsp((((sound_music_mix as i8) as i32).wrapping_add(100_i32)) as f64),
-            200.0,
-        )),
-        (fp::fsubs((pos_1).x(), (pos_0).x())),
-        (pos_0).x(),
-    );
-}
-
-fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
-    let mut jobj = jobj;
-    let mut x = x;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803eeed8),
-            (0x201_i32 as u32),
-            cstr(ctx, 0x803eeed8),
-        )
-    });
-    (jobj).translate().set_x(x);
-    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
-        {
-            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
-                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
-            }
-        }
-    }
-}
-
-fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803eeed8),
-            (228_i32 as u32),
-            cstr(ctx, 0x803eeed8),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
-}
-
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).hsd_obj();
 }
 
 fn inl_animateSelectedChannel_unfused<'a>(
@@ -815,11 +820,6 @@ fn inl_animateSelectedChannel_unfused<'a>(
         }
         let _ = fns::mn_8022EC18(ctx, (jobj_out).get(), anim, 128_i32);
     }
-}
-
-fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).hsd_obj();
 }
 
 fn inl_chooseVolumeAnim_unfused<'a>(

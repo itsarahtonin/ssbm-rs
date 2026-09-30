@@ -348,6 +348,11 @@ fn inl_itEvyoshiegg_BounceOff_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i
     return 0_i32;
 }
 
+fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).hsd_obj();
+}
+
 fn inl_dmgReceived_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -363,11 +368,6 @@ fn inl_dmgReceived_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (ip).xDD4_itemVar().evyoshiegg().set_xDD8(60_i32);
     fns::it_8026B3A8(ctx, gobj);
     fns::Item_80268E5C(ctx, gobj, 5_i32, (enums::ITEM_ANIM_UPDATE as i32));
-}
-
-fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).hsd_obj();
 }
 
 /// Registers this unit's ports.

@@ -1356,28 +1356,6 @@ fn inl_HSD_JObjGetTranslationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     return (jobj).translate().x();
 }
 
-fn inl_setCursorTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
-    let mut jobj = jobj;
-    let mut x = x;
-    let mut dirty_jobj: HSD_JObj<'a> = jobj;
-    (if !Handle::is_null(jobj) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            fns::mnVibration_804D4FF4(ctx).at(0),
-            (0x3a4_i32 as u32),
-            fns::mnVibration_804D4FFC(ctx).at(0),
-        )
-    });
-    (jobj).translate().set_x(x);
-    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
-        if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
-            fns::HSD_JObjSetMtxDirtySub(ctx, dirty_jobj);
-        }
-    }
-}
-
 fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     let mut jobj = jobj;
     let mut result: i32 = 0;
@@ -1398,6 +1376,28 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         result = 1_i32;
     }
     return result;
+}
+
+fn inl_setCursorTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
+    let mut jobj = jobj;
+    let mut x = x;
+    let mut dirty_jobj: HSD_JObj<'a> = jobj;
+    (if !Handle::is_null(jobj) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            fns::mnVibration_804D4FF4(ctx).at(0),
+            (0x3a4_i32 as u32),
+            fns::mnVibration_804D4FFC(ctx).at(0),
+        )
+    });
+    (jobj).translate().set_x(x);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+            fns::HSD_JObjSetMtxDirtySub(ctx, dirty_jobj);
+        }
+    }
 }
 
 fn inl_setCursorTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
@@ -1495,6 +1495,28 @@ fn inl_HSD_JObjGetTranslationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> 
     return (jobj).translate().x();
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            ptr::<ArrV<'a, i8, 0>>(ctx, 0x804d4ff4).at(0),
+            (0x234_i32 as u32),
+            ptr::<ArrV<'a, i8, 0>>(ctx, 0x804d4ffc).at(0),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
     let mut jobj = jobj;
     let mut x = x;
@@ -1516,28 +1538,6 @@ fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f6
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            ptr::<ArrV<'a, i8, 0>>(ctx, 0x804d4ff4).at(0),
-            (0x234_i32 as u32),
-            ptr::<ArrV<'a, i8, 0>>(ctx, 0x804d4ffc).at(0),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
@@ -1590,6 +1590,17 @@ fn inl_mnVibration_GetNameSlot_unfused<'a>(ctx: &'a Ctx, data: MnVibrationData<'
     return (name_idx as u8);
 }
 
+fn inl_HSD_JObjGetNext_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
+    let mut jobj = jobj;
+    if Handle::is_null(jobj) {
+        return null::<HSD_JObj<'a>>(ctx);
+    } else {
+        return (jobj).next();
+    }
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
 fn inl_mnVibration_GetPortChildAt_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -1616,17 +1627,6 @@ fn inl_mnVibration_GetPortChildAt_unfused<'a>(
         }
     }
     return child;
-}
-
-fn inl_HSD_JObjGetNext_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
-    let mut jobj = jobj;
-    if Handle::is_null(jobj) {
-        return null::<HSD_JObj<'a>>(ctx);
-    } else {
-        return (jobj).next();
-    }
-    #[allow(unreachable_code)]
-    return null(ctx);
 }
 
 fn inl_mnVibration_GetPadIndex_unfused<'a>(ctx: &'a Ctx, port: i32) -> u8 {

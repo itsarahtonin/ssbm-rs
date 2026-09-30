@@ -371,7 +371,7 @@ pub fn ftCo_FireFlowerShoot_Anim<'a>(ctx: &'a Ctx, fighter_gobj: HSD_GObj<'a>) {
 pub fn ftCo_FireFlowerShootAir_Anim<'a>(ctx: &'a Ctx, fighter_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let mut fighter_gobj = fighter_gobj;
-    fns::ftCo_FireFlowerShoot_Anim(ctx, fighter_gobj);
+    inl_ftCo_FireFlowerShoot_Anim_unfused(ctx, fighter_gobj);
 }
 
 pub fn ftCo_FireFlowerShoot_IASA<'a>(ctx: &'a Ctx, fighter_gobj: HSD_GObj<'a>) {
@@ -445,6 +445,21 @@ fn inl_ftCheckThrowB4_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     }
     #[allow(unreachable_code)]
     return 0;
+}
+
+fn inl_ftCo_FireFlowerShoot_Anim_unfused<'a>(ctx: &'a Ctx, fighter_gobj: HSD_GObj<'a>) {
+    let mut fighter_gobj = fighter_gobj;
+    let mut fighter: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, fighter_gobj)));
+    if !Handle::is_null((fighter).item_gobj()) {
+        if (inl_ftCheckThrowB3_unfused(ctx, fighter) != 0) {
+            fns::it_80292E64(ctx, (fighter).item_gobj());
+        }
+        if (inl_ftCheckThrowB4_unfused(ctx, fighter) != 0) {
+            fns::it_80292EAC(ctx, (fighter).item_gobj());
+        }
+        fns::ftCo_800CDE18(ctx, fighter_gobj);
+    }
 }
 
 /// Registers this unit's ports.

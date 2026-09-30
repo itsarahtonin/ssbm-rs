@@ -654,7 +654,7 @@ pub fn itLeadead_UnkMotion4_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     fns::it_8026D62C(ctx, gobj, fnptr(ctx, 0x802e9308));
     if fns::it_80272C6C(ctx, gobj) == 0_i32 {
         if fns::it_80276308(ctx, gobj) != 0_i32 {
-            fns::it_802E9BA0(ctx, gobj);
+            inl_it_802E9BA0_unfused(ctx, gobj);
         } else {
             (ip).xDD4_itemVar().leadead().set_x48(1_i32);
             inl_itLeadead_UnkMotion4_Coll_inline_unfused(ctx, gobj);
@@ -1349,6 +1349,14 @@ fn inl_itLeadead_UnkMotion3_Anim_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj
         .set_x48(((attr).x18() as i32).wrapping_mul(3_i32));
 }
 
+fn inl_it_802E9BA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    inl_itResetVelocity_unfused(ctx, ip);
+    (ip).xDD4_itemVar().leadead().set_x48(140_i32);
+    fns::Item_80268E5C(ctx, gobj, 3_i32, (enums::ITEM_ANIM_UPDATE as i32));
+}
+
 fn inl_itLeadead_UnkMotion4_Coll_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1369,6 +1377,28 @@ fn inl_itLeadead_UnkMotion4_Coll_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj
     }
     fns::it_802EA478(ctx, gobj, 0_i32, 0_i32);
     fns::Item_80268E5C(ctx, gobj, 2_i32, (enums::ITEM_ANIM_UPDATE as i32));
+}
+
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f8eb0),
+            (228_i32 as u32),
+            cstr(ctx, 0x803f8eb0),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetTranslateZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
@@ -1392,28 +1422,6 @@ fn inl_HSD_JObjSetTranslateZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f6
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f8eb0),
-            (228_i32 as u32),
-            cstr(ctx, 0x803f8eb0),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_Item_UpdateZakoVelocity_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ip: Item<'a>) {

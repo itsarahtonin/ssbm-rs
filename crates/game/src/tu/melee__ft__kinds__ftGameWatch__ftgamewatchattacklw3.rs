@@ -97,7 +97,7 @@ pub fn ftGw_AttackLw3_ItemManholeOnDamage<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
     let mut fp: Fighter<'a> = inl_getFighter_unfused(ctx, gobj);
     if !Handle::is_null((fp).u().gw().x2250_manholeGObj2()) {
         fns::it_802C6718(ctx, (fp).u().gw().x2250_manholeGObj2());
-        fns::ftGw_AttackLw3_ItemManholeRemove(ctx, gobj);
+        inl_ftGw_AttackLw3_ItemManholeRemove_unfused(ctx, gobj);
     }
 }
 
@@ -312,6 +312,27 @@ fn inl_getFighter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_ftGw_AttackLw3_ItemManholeRemove_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut manholeGObj: HSD_GObj<'a> = null(ctx);
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    statics::melee__ft__kinds__ftGameWatch__ftgamewatchattacklw3::ftGw_AttackLw3_ItemManholeExitHitlag(ctx, gobj);
+    (fp).u()
+        .gw()
+        .set_x2250_manholeGObj2(null::<HSD_GObj<'a>>(ctx));
+    manholeGObj = (fp).u().gw().x2248_manholeGObj();
+    if !Handle::is_null(manholeGObj) {
+        (fp).set_item_gobj(manholeGObj);
+        (fp).u()
+            .gw()
+            .set_x2248_manholeGObj(null::<HSD_GObj<'a>>(ctx));
+        fns::it_8026BB20(ctx, (fp).item_gobj());
+        fns::it_8026B73C(ctx, (fp).item_gobj());
+        fns::ftpickupitem_80094818(ctx, gobj, 1_i32);
+    }
 }
 
 /// Registers this unit's ports.

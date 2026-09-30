@@ -818,12 +818,12 @@ fn inl_fn_8018846C_noInline_unfused<'a>(ctx: &'a Ctx) -> i32 {
     return fns::fn_8018846C(ctx);
 }
 
-fn inl_fn_801884F8_noinline_2_unfused<'a>(ctx: &'a Ctx) -> i32 {
-    return inl_fn_801884F8_noinline_unfused(ctx);
-}
-
 fn inl_fn_801884F8_noinline_unfused<'a>(ctx: &'a Ctx) -> i32 {
     return fns::fn_801884F8(ctx);
+}
+
+fn inl_fn_801884F8_noinline_2_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    return inl_fn_801884F8_noinline_unfused(ctx);
 }
 
 fn inl_HSD_JObjGetTranslationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {

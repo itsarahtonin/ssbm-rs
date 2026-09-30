@@ -1194,7 +1194,7 @@ pub fn it_8026C3FC<'a>(ctx: &'a Ctx) {
         cur = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 9_i32)).get();
         'l1: while !Handle::is_null(cur) {
             'c2: {
-                fns::it_8026B724(ctx, cur);
+                inl_it_8026B724_unfused(ctx, cur);
             }
             cur = (cur).next();
         }
@@ -1272,6 +1272,12 @@ fn inl_GetItemData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Item<'a> {
 fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_it_8026B724_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
+    (ip).xDC8_word().flags().set_x3((1_i32 as u32));
 }
 
 /// Registers this unit's ports.

@@ -860,33 +860,6 @@ fn inl_Item_InitSpawnCommonFields_unfused<'a>(
     (spawn).set_x40(0_i32);
 }
 
-fn inl_itNessyoyo_UnkMotion3_Anim_UpdateRotation_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let mut ip = ip;
-    let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(
-        ctx,
-        (ip).xDD4_itemVar().nessyoyo().x10(),
-    )));
-    let mut child: HSD_JObj<'a> = null(ctx);
-    'l1: loop {
-        'c2: {}
-        if !(0_i32 != 0) {
-            break 'l1;
-        }
-    }
-    if Handle::is_null((ip).xDD4_itemVar().nessyoyo().x18()) {
-        child = null::<HSD_JObj<'a>>(ctx);
-    } else {
-        child = ((ip).xDD4_itemVar().nessyoyo().x18()).child();
-    }
-    if !Handle::is_null(child) {
-        let mut rot: f64 = inl_HSD_JObjGetRotationX_unfused(ctx, child);
-        rot = fp::fadds(rot, (fp).u().ns().x223C());
-        inl_HSD_JObjSetRotationX_unfused(ctx, child, rot);
-    }
-}
-
 fn inl_HSD_JObjGetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     let mut jobj = jobj;
     (if !Handle::is_null((jobj)) {
@@ -900,6 +873,28 @@ fn inl_HSD_JObjGetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64
         )
     });
     return (jobj).rotate().x();
+}
+
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8698),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b8698),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
@@ -935,26 +930,31 @@ fn inl_HSD_JObjSetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b8698),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b8698),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
+fn inl_itNessyoyo_UnkMotion3_Anim_UpdateRotation_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let mut ip = ip;
+    let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(
+        ctx,
+        (ip).xDD4_itemVar().nessyoyo().x10(),
+    )));
+    let mut child: HSD_JObj<'a> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
     }
-    return result;
+    if Handle::is_null((ip).xDD4_itemVar().nessyoyo().x18()) {
+        child = null::<HSD_JObj<'a>>(ctx);
+    } else {
+        child = ((ip).xDD4_itemVar().nessyoyo().x18()).child();
+    }
+    if !Handle::is_null(child) {
+        let mut rot: f64 = inl_HSD_JObjGetRotationX_unfused(ctx, child);
+        rot = fp::fadds(rot, (fp).u().ns().x223C());
+        inl_HSD_JObjSetRotationX_unfused(ctx, child, rot);
+    }
 }
 
 fn inl_itNessyoyo_UnkMotion3_Anim_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {

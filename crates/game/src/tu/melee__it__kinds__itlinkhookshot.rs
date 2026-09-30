@@ -348,7 +348,7 @@ pub fn it_802A2BA4<'a>(
             arg0,
             fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_RThumbNb as i32)),
         );
-        fns::it_802A2428(ctx, gobj);
+        inl_it_802A2428_unfused(ctx, gobj);
     }
     if ((fp).kind() as u32) == ((enums::Ft_Kind_CLink as i32) as u32) {
         fns::it_804D6D48(ctx).set(6.0);
@@ -789,7 +789,7 @@ pub fn it_802A44CC<'a>(
     let mut inv: f64 = 0.0;
     let mut len: f64 = 0.0;
     link_1 = (link_0).prev();
-    let _ = fns::it_802A3C98(ctx, (link_0).pos(), arg1, vec);
+    let _ = inl_it_802A3C98(ctx, (link_0).pos(), arg1, vec);
     (link_0).pos().set_x(fp::fmadds(vec.x(), arg8, (arg1).x()));
     (link_0).pos().set_y(fp::fmadds(vec.y(), arg8, (arg1).y()));
     (link_0).pos().set_z(fp::fmadds(vec.z(), arg8, (arg1).z()));
@@ -808,7 +808,7 @@ pub fn it_802A44CC<'a>(
                 .pos()
                 .set_z(fp::fadds((link_1).pos().z(), (link_1).vel().z()));
             let _ = fns::it_802A40D0(ctx, link_1, (arg2).x30());
-            len = fns::it_802A3C98(ctx, (link_1).pos(), (link_0).pos(), vec);
+            len = inl_it_802A3C98(ctx, (link_1).pos(), (link_0).pos(), vec);
             if len > (arg2).x30() {
                 (link_1)
                     .pos()
@@ -844,7 +844,7 @@ pub fn it_802A4758<'a>(
     let mut inv: f64 = 0.0;
     let mut len: f64 = 0.0;
     let mut link_1: ItemLink<'a> = (link_0).prev();
-    len = fns::it_802A3C98(ctx, (link_0).pos(), arg1, vec);
+    len = inl_it_802A3C98(ctx, (link_0).pos(), arg1, vec);
     inl_test_comp(
         ctx,
         inl_it_802A4758_permuterslop(ctx, link_0),
@@ -857,9 +857,9 @@ pub fn it_802A4758<'a>(
             (link_1)
                 .vel()
                 .set_y(fp::fsubs((link_1).vel().y(), (arg2).x3C()));
-            fns::it_802A4420(ctx, link_1);
-            fns::it_802A43EC(ctx, link_1);
-            len = fns::it_802A3C98(ctx, (link_1).pos(), (link_0).pos(), vec);
+            inl_it_802A4420(ctx, link_1);
+            inl_it_802A43EC(ctx, link_1);
+            len = inl_it_802A3C98(ctx, (link_1).pos(), (link_0).pos(), vec);
             if len > (arg2).x30() {
                 inl_test_comp(ctx, (link_1).pos(), (link_0).pos(), vec, (arg2).x30_ref());
             }
@@ -887,14 +887,14 @@ pub fn it_802A49B0<'a>(
     let mut inv: f64 = 0.0;
     let mut len: f64 = 0.0;
     link_1 = (link_0).prev();
-    let _ = fns::it_802A3C98(ctx, (link_0).pos(), arg1, vec);
+    let _ = inl_it_802A3C98(ctx, (link_0).pos(), arg1, vec);
     (link_0).pos().set_x(fp::fmadds(vec.x(), arg8, (arg1).x()));
     (link_0).pos().set_y(fp::fmadds(vec.y(), arg8, (arg1).y()));
     (link_0).pos().set_z(fp::fmadds(vec.z(), arg8, (arg1).z()));
     'l1: while !Handle::is_null(link_1) {
         'c2: {
             let _ = fns::it_802A40D0(ctx, link_1, (arg2).x30());
-            len = fns::it_802A3C98(ctx, (link_1).pos(), (link_0).pos(), vec);
+            len = inl_it_802A3C98(ctx, (link_1).pos(), (link_0).pos(), vec);
             if len > (arg2).x30() {
                 (link_1)
                     .pos()
@@ -973,7 +973,7 @@ pub fn it_802A5320<'a>(
                 } else {
                     let _ = fns::it_802A40D0(ctx, link_1, (attr).x30());
                 }
-                len = fns::it_802A3C98(ctx, (link_1).pos(), (cur).pos(), vec);
+                len = inl_it_802A3C98(ctx, (link_1).pos(), (cur).pos(), vec);
                 if len > (attr).x30() {
                     (link_1)
                         .pos()
@@ -991,7 +991,7 @@ pub fn it_802A5320<'a>(
                 );
                 Handle::copy_from((link_1).coll_data().cur_pos(), (link_1).pos());
             } else {
-                len = fns::it_802A3C98(ctx, arg1, (cur).pos(), vec);
+                len = inl_it_802A3C98(ctx, arg1, (cur).pos(), vec);
                 if len > (attr).x30() {
                     (link_1)
                         .pos()
@@ -1076,7 +1076,7 @@ pub fn it_802A5770<'a>(
         .pos()
         .set_z(fp::fadds((cur).pos().z(), (cur).vel().z()));
     let _ = fns::it_802A40D0(ctx, cur, (attr).x30());
-    len = fns::it_802A3C98(ctx, (cur).pos(), anchor, vec);
+    len = inl_it_802A3C98(ctx, (cur).pos(), anchor, vec);
     if len > (attr).x30() {
         (cur)
             .pos()
@@ -1104,7 +1104,7 @@ pub fn it_802A5770<'a>(
                 .pos()
                 .set_z(fp::fadds((link_1).pos().z(), (link_1).vel().z()));
             inl_it_802A5770_inline(ctx, link_1, attr, fp, var_r29);
-            len = fns::it_802A3C98(ctx, (link_1).pos(), (cur).pos(), vec);
+            len = inl_it_802A3C98(ctx, (link_1).pos(), (cur).pos(), vec);
             if len > (attr).x30() {
                 (link_1)
                     .pos()
@@ -1179,7 +1179,7 @@ pub fn it_802A5AE0<'a>(
                     .pos()
                     .set_z(fp::fadds((link_1).pos().z(), (link_1).vel().z()));
                 let _ = fns::it_802A40D0(ctx, link_1, (arg2).x30());
-                len = fns::it_802A3C98(ctx, (link_1).pos(), (cur).pos(), vec);
+                len = inl_it_802A3C98(ctx, (link_1).pos(), (cur).pos(), vec);
                 if len > (arg2).x30() {
                     (link_1)
                         .pos()
@@ -1192,7 +1192,7 @@ pub fn it_802A5AE0<'a>(
                         .set_z(fp::fmadds(vec.z(), (arg2).x30(), (cur).pos().z()));
                 }
             } else {
-                len = fns::it_802A3C98(ctx, arg1, (cur).pos(), vec);
+                len = inl_it_802A3C98(ctx, arg1, (cur).pos(), vec);
                 if len > (arg2).x30() {
                     (link_1)
                         .pos()
@@ -1245,11 +1245,11 @@ pub fn it_802A5E28<'a>(
             link_1 = (link_0).prev();
         }
     }
-    len = fns::it_802A3C98(ctx, (link_0).pos(), arg1, vec);
+    len = inl_it_802A3C98(ctx, (link_0).pos(), arg1, vec);
     'l3: while (!Handle::is_null(link_1)) && (arg8 > len) {
         'c4: {
             (link_0).set_x2C_b0((0_i32 as u8));
-            len = fns::it_802A3C98(ctx, (link_1).pos(), arg1, vec);
+            len = inl_it_802A3C98(ctx, (link_1).pos(), arg1, vec);
             link_0 = link_1;
             link_1 = (link_1).prev();
         }
@@ -1313,11 +1313,11 @@ pub fn it_802A5FE0<'a>(
     }
     fns::it_802A44CC(ctx, link_0, arg2, arg3, (arg3).x30());
     Handle::copy_from((link_0_2).pos(), vec2);
-    len = fns::it_802A3C98(ctx, (link_0).pos(), arg2, vec);
+    len = inl_it_802A3C98(ctx, (link_0).pos(), arg2, vec);
     'l3: while (!Handle::is_null(link_1)) && (arg8 > len) {
         'c4: {
             (link_0).set_x2C_b0((0_i32 as u8));
-            len = fns::it_802A3C98(ctx, (link_1).pos(), arg2, vec);
+            len = inl_it_802A3C98(ctx, (link_1).pos(), arg2, vec);
             link_0 = link_1;
             link_1 = (link_1).prev();
         }
@@ -1334,7 +1334,7 @@ pub fn it_802A5FE0<'a>(
     'l5: while (!Handle::is_null(link_1)) && (((link_1).x2C_b0() as i32) != 0) {
         'c6: {
             var_r31 = var_r31.wrapping_add(1_i32);
-            len = fns::it_802A3C98(ctx, (link_1).pos(), (link_2).pos(), vec);
+            len = inl_it_802A3C98(ctx, (link_1).pos(), (link_2).pos(), vec);
             if len > (arg3).x30() {
                 (link_1)
                     .pos()
@@ -1350,7 +1350,7 @@ pub fn it_802A5FE0<'a>(
             link_1 = (link_1).next();
         }
     }
-    len = fns::it_802A3C98(ctx, arg2, (link_2).pos(), vec);
+    len = inl_it_802A3C98(ctx, arg2, (link_2).pos(), vec);
     if len > (arg3).x30() {
         (arg2).set_x(fp::fmadds(vec.x(), (arg3).x30(), (link_2).pos().x()));
         (arg2).set_y(fp::fmadds(vec.y(), (arg3).x30(), (link_2).pos().y()));
@@ -1458,11 +1458,11 @@ pub fn it_802A678C<'a>(
             link_1 = (link_0).prev();
         }
     }
-    len = fns::it_802A3C98(ctx, (link_0).pos(), arg1, vec);
+    len = inl_it_802A3C98(ctx, (link_0).pos(), arg1, vec);
     'l3: while (!Handle::is_null(link_1)) && (arg8 > len) {
         'c4: {
             (link_0).set_x2C_b0((0_i32 as u8));
-            len = fns::it_802A3C98(ctx, (link_1).pos(), arg1, vec);
+            len = inl_it_802A3C98(ctx, (link_1).pos(), arg1, vec);
             link_0 = link_1;
             link_1 = (link_1).prev();
         }
@@ -1863,6 +1863,13 @@ fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'
     return (gobj).hsd_obj();
 }
 
+fn inl_it_link_lerp<'a>(ctx: &'a Ctx, a: f64, b: f64, t: f64) -> f64 {
+    let mut a = a;
+    let mut b = b;
+    let mut t = t;
+    return fp::fmadds((fp::fsubs(1.0, t)), b, fp::fmuls(t, a));
+}
+
 fn inl_it_link_attr_math<'a>(
     ctx: &'a Ctx,
     attr: itLinkHookshotAttributes<'a>,
@@ -1900,13 +1907,6 @@ fn inl_it_link_attr_math<'a>(
         (fp::fmuls(var_f1, var_f0)),
         (attr).x30(),
     )));
-}
-
-fn inl_it_link_lerp<'a>(ctx: &'a Ctx, a: f64, b: f64, t: f64) -> f64 {
-    let mut a = a;
-    let mut b = b;
-    let mut t = t;
-    return fp::fmadds((fp::fsubs(1.0, t)), b, fp::fmuls(t, a));
 }
 
 fn inl_it_802A2568_inline<'a>(
@@ -2016,6 +2016,22 @@ fn inl_Item_InitSpawnCommonFields_unfused<'a>(
     (spawn).set_x40(0_i32);
 }
 
+fn inl_it_802A2428_unfused<'a>(ctx: &'a Ctx, obj: HSD_GObj<'a>) {
+    let mut obj = obj;
+    let mut temp_f1: f64 = 0.0;
+    let mut item: Item<'a> = null(ctx);
+    let mut item_owner: Item<'a> = null(ctx);
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    item = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, obj)));
+    jobj = Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, obj));
+    item_owner = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, (item).owner())));
+    if !Handle::is_null(item_owner) {
+        temp_f1 = fp::fmuls((item_owner).scl(), ((item).xCC_item_attr()).x60_scale());
+        (item).set_scl(temp_f1);
+        fns::it_80272F7C(ctx, jobj, temp_f1);
+    }
+}
+
 fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
@@ -2049,6 +2065,36 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     return x;
 }
 
+fn inl_it_802A3C98<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: Vec<'a>, arg2: Vec<'a>) -> f64 {
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut inv: f64 = 0.0;
+    let mut len: f64 = 0.0;
+    (arg2).set_x(fp::fsubs((arg0).x(), (arg1).x()));
+    (arg2).set_y(fp::fsubs((arg0).y(), (arg1).y()));
+    (arg2).set_z(fp::fsubs((arg0).z(), (arg1).z()));
+    len = inl_sqrtf(
+        ctx,
+        fp::fadds(
+            fp::fadds(
+                fp::fmuls((arg2).x(), (arg2).x()),
+                fp::fmuls((arg2).y(), (arg2).y()),
+            ),
+            fp::fmuls((arg2).z(), (arg2).z()),
+        ),
+    );
+    if len == 0.0 {
+        inv = fp::frsp(0.0);
+    } else {
+        inv = fp::frsp(fp::fdiv(1.0, len));
+    }
+    (arg2).set_x(fp::fmuls((arg2).x(), inv));
+    (arg2).set_y(fp::fmuls((arg2).y(), inv));
+    (arg2).set_z(fp::fmuls((arg2).z(), inv));
+    return len;
+}
+
 fn inl_it_802A4758_permuterslop<'a>(ctx: &'a Ctx, link_0: ItemLink<'a>) -> Vec<'a> {
     let mut link_0 = link_0;
     return (link_0).pos();
@@ -2068,6 +2114,28 @@ fn inl_test_comp<'a>(
     (vec0).set_x(fp::fmadds((vec2).x(), (arg2).get(), (vec1).x()));
     (vec0).set_y(fp::fmadds((vec2).y(), (arg2).get(), (vec1).y()));
     (vec0).set_z(fp::fmadds((vec2).z(), (arg2).get(), (vec1).z()));
+}
+
+fn inl_it_802A4420<'a>(ctx: &'a Ctx, item_link: ItemLink<'a>) {
+    let mut item_link = item_link;
+    (item_link)
+        .pos()
+        .set_x(fp::fadds((item_link).pos().x(), (item_link).vel().x()));
+    (item_link)
+        .pos()
+        .set_y(fp::fadds((item_link).pos().y(), (item_link).vel().y()));
+    (item_link)
+        .pos()
+        .set_z(fp::fadds((item_link).pos().z(), (item_link).vel().z()));
+}
+
+fn inl_it_802A43EC<'a>(ctx: &'a Ctx, item_link: ItemLink<'a>) {
+    let mut item_link = item_link;
+    Handle::copy_from(
+        (item_link).coll_data().last_pos(),
+        (item_link).coll_data().cur_pos(),
+    );
+    Handle::copy_from((item_link).coll_data().cur_pos(), (item_link).pos());
 }
 
 fn inl_it_802A5770_inline<'a>(
@@ -2179,6 +2247,28 @@ fn inl_it_802A6A78_normalize_diff_rev<'a>(
     return len;
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8650),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b8650),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
     let mut jobj = jobj;
     let mut translate = translate;
@@ -2210,28 +2300,6 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b8650),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b8650),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_itLinkHookshot_Logic20_PickedUp_inline_unfused<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {

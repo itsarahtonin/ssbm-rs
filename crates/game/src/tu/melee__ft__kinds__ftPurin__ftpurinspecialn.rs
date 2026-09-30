@@ -186,7 +186,7 @@ pub fn ftPr_SpecialS_8013DA24<'a>(
         (fp).set_gr_vel(fp::frsp(0_i32 as f64));
     }
     inl_setupPurinCallbacks_unfused(ctx, gobj);
-    fns::ftPr_SpecialS_8013D658(ctx, gobj);
+    inl_ftPr_SpecialS_8013D658_unfused(ctx, gobj);
     (fp).mv()
         .pr()
         .specialn()
@@ -586,7 +586,7 @@ pub fn ftPr_SpecialNEnd_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         .set_facing_dir(fp::frsp(0_i32 as f64));
     inl_scaleAnimStep_unfused(ctx, gobj, scale);
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
-        fns::ftPr_SpecialS_8013D658(ctx, gobj);
+        inl_ftPr_SpecialS_8013D658_unfused(ctx, gobj);
         fns::ft_8008A2BC(ctx, gobj);
     }
 }
@@ -822,7 +822,7 @@ pub fn ftPr_SpecialAirNEnd_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         .set_facing_dir(fp::frsp(0_i32 as f64));
     inl_scaleAnimStep_unfused(ctx, gobj, scale);
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
-        fns::ftPr_SpecialS_8013D658(ctx, gobj);
+        inl_ftPr_SpecialS_8013D658_unfused(ctx, gobj);
         if (da).xD8() == 0.0 {
             fns::ftCo_Fall_Enter(ctx, gobj);
         } else {
@@ -912,12 +912,12 @@ pub fn ftPr_SpecialNStart_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPr_SpecialNLoop_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
-    fns::ftPr_SpecialNStart_Phys(ctx, gobj);
+    inl_ftPr_SpecialNStart_Phys_unfused(ctx, gobj);
 }
 
 pub fn ftPr_SpecialNFull_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
-    fns::ftPr_SpecialNStart_Phys(ctx, gobj);
+    inl_ftPr_SpecialNStart_Phys_unfused(ctx, gobj);
 }
 
 pub fn ftPr_SpecialNRelease_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -1208,7 +1208,7 @@ pub fn ftPr_SpecialNHit_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
     }
     if (fns::ft_800824A0(ctx, gobj, fns::ftPr_Init_803D0610(ctx)) != 0) {
-        fns::ftPr_SpecialS_8013D658(ctx, gobj);
+        inl_ftPr_SpecialS_8013D658_unfused(ctx, gobj);
         fns::ftCommon_8007D7FC(ctx, fp);
         if (da).xD8() == 0.0 {
             fns::ft_8008A2BC(ctx, gobj);
@@ -1252,6 +1252,28 @@ fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'
     return (gobj).hsd_obj();
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804d3ea4),
+            (228_i32 as u32),
+            cstr(ctx, 0x804d3ea4),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
     let mut jobj = jobj;
     let mut scale = scale;
@@ -1285,28 +1307,6 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x804d3ea4),
-            (228_i32 as u32),
-            cstr(ctx, 0x804d3ea4),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
-}
-
 fn inl_setupPurinCallbacks_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
@@ -1315,6 +1315,31 @@ fn inl_setupPurinCallbacks_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp).set_take_dmg_cb(fnptr(ctx, 0x8013d658));
     (fp).set_deal_dmg_cb(fnptr(ctx, 0x8013d764));
     (fp).set_x21F8(fnptr(ctx, 0x8014222c));
+}
+
+fn inl_ftPr_SpecialS_8013D658_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut jobj: HSD_JObj<'a> =
+        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
+    inl_HSD_JObjSetScale_unfused(ctx, jobj, (fp).u().pr().x2230());
+    fns::ftPartSetRotY(
+        ctx,
+        fp,
+        (enums::FtPart_TopN as i32),
+        fp::frsp(fp::fmul(
+            (fp::fdiv(3.141592653589793, (2_i32 as f64))),
+            (fp).facing_dir(),
+        )),
+    );
+    if (fp).mv().pr().specialn().facing_dir() != fp::frsp(0_i32 as f64) {
+        (fp).set_facing_dir((fp).mv().pr().specialn().facing_dir());
+    }
+    (fp).mv()
+        .pr()
+        .specialn()
+        .set_facing_dir(fp::frsp(0_i32 as f64));
 }
 
 fn inl_HSD_JObjGetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
@@ -1472,35 +1497,31 @@ fn inl_ftPr_NormalizeAndSetRollAngle_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a
     );
 }
 
-fn inl_scaleAnimStep<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, scale: Vec<'a>) {
-    let mut gobj = gobj;
-    let mut scale = scale;
-    let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
-    let mut jobj: HSD_JObj<'a> = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, gobj)));
-    let mut frame: i32 = (fp).mv().pr().specialn().x8();
-    if (frame >= 0_i32) && (frame < 4_i32) {
-        (scale).set_x((fp).u().pr().x2230().x());
-        (scale).set_y(fp::fmuls(
-            (fp).u().pr().x2230().y(),
-            fns::ftPr_Init_803D05C8(ctx).at(frame).get(),
-        ));
-        (scale).set_z(fp::fmuls(
-            (fp).u().pr().x2230().z(),
-            fns::ftPr_Init_803D05D8(ctx).at(frame).get(),
-        ));
-        inl_HSD_JObjSetScale(ctx, jobj, scale);
-        (fp).mv()
-            .pr()
-            .specialn()
-            .set_x8((fp).mv().pr().specialn().x8().wrapping_add(1_i32));
-    } else {
-        inl_HSD_JObjSetScale(ctx, jobj, (fp).u().pr().x2230());
-    }
-}
-
 fn inl_HSD_GObjGetHSDObj<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).hsd_obj();
+}
+
+fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804d3ea4),
+            (228_i32 as u32),
+            cstr(ctx, 0x804d3ea4),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetScale<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
@@ -1536,26 +1557,30 @@ fn inl_HSD_JObjSetScale<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
+fn inl_scaleAnimStep<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, scale: Vec<'a>) {
+    let mut gobj = gobj;
+    let mut scale = scale;
+    let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+    let mut jobj: HSD_JObj<'a> = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, gobj)));
+    let mut frame: i32 = (fp).mv().pr().specialn().x8();
+    if (frame >= 0_i32) && (frame < 4_i32) {
+        (scale).set_x((fp).u().pr().x2230().x());
+        (scale).set_y(fp::fmuls(
+            (fp).u().pr().x2230().y(),
+            fns::ftPr_Init_803D05C8(ctx).at(frame).get(),
+        ));
+        (scale).set_z(fp::fmuls(
+            (fp).u().pr().x2230().z(),
+            fns::ftPr_Init_803D05D8(ctx).at(frame).get(),
+        ));
+        inl_HSD_JObjSetScale(ctx, jobj, scale);
+        (fp).mv()
+            .pr()
+            .specialn()
+            .set_x8((fp).mv().pr().specialn().x8().wrapping_add(1_i32));
     } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x804d3ea4),
-            (228_i32 as u32),
-            cstr(ctx, 0x804d3ea4),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
+        inl_HSD_JObjSetScale(ctx, jobj, (fp).u().pr().x2230());
     }
-    return result;
 }
 
 fn inl_ftPr_SpecialAirNChargeRelease_Anim_inline_unfused<'a>(
@@ -1629,6 +1654,19 @@ fn inl_ftPr_JObjSetRotationY_unfused<'a>(
             }
         }
     }
+}
+
+fn inl_ftPr_SpecialNStart_Phys_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    (fp).set_xE4_ground_accel_1(fp::frsp(0_i32 as f64));
+    (fp).set_gr_vel(fp::frsp(0_i32 as f64));
+    (fp).self_vel()
+        .set_x(fp::fmuls((fp).facing_dir(), 9.999999747378752e-05_f64));
+    (fp).self_vel().set_y(fp::frsp(0_i32 as f64));
+    (fp).x74_self_accel().set_y(fp::frsp(0_i32 as f64));
+    (fp).x74_self_accel().set_x(fp::frsp(0_i32 as f64));
 }
 
 fn inl_ftPr_MirrorSpecialN_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {

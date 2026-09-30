@@ -140,11 +140,11 @@ pub fn it_80291DAC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) -> i32 {
         return 1_i32.wrapping_neg();
     }
     level = inl_it_80291DAC_level_unfused(ctx, gobj, arg1);
-    cost = fns::it_80291D38(ctx, gobj, level);
+    cost = inl_it_80291D38_unfused(ctx, gobj, level);
     if (ip).xD4C().wrapping_sub(cost) < 0_i32 {
         'l3: while level > 0_i32 {
             'c4: {
-                cost = fns::it_80291D38(ctx, gobj, level);
+                cost = inl_it_80291D38_unfused(ctx, gobj, level);
                 if (ip).xD4C().wrapping_sub(cost) == 0_i32 {
                     return level;
                 }
@@ -175,7 +175,7 @@ pub fn it_80291F14<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, charge_level: i32) {
     }
     (ip).set_xD4C(
         (ip).xD4C()
-            .wrapping_sub(fns::it_80291D38(ctx, gobj, charge_level)),
+            .wrapping_sub(inl_it_80291D38_unfused(ctx, gobj, charge_level)),
     );
     if (ip).xD4C() < 0_i32 {
         (ip).set_xD4C(0_i32);
@@ -202,7 +202,7 @@ pub fn it_80291FA8<'a>(
             break 'l1;
         }
     }
-    fns::it_80291F14(ctx, gobj, charge_level);
+    inl_it_80291F14_unfused(ctx, gobj, charge_level);
     fns::it_80298DEC(ctx, (ip).owner(), pos, charge_level, scale);
 }
 
@@ -424,18 +424,59 @@ fn inl_it_80291DAC_level_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32
     return 0;
 }
 
-fn inl_Item_StopAndEnterState_unfused<'a>(
-    ctx: &'a Ctx,
-    gobj: HSD_GObj<'a>,
-    ip: Item<'a>,
-    msid: i32,
-) {
+fn inl_it_80291D38_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, charge_level: i32) -> i32 {
     let mut gobj = gobj;
-    let mut ip = ip;
-    let mut msid = msid;
-    inl_itResetVelocity_unfused(ctx, ip);
-    fns::it_8026B390(ctx, gobj);
-    fns::Item_80268E5C(ctx, gobj, msid, (enums::ITEM_ANIM_UPDATE as i32));
+    let mut charge_level = charge_level;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut attrs: itSScopeAttributes<'a> =
+        (Handle::cast::<itSScopeAttributes<'a>>(((ip).xC4_article_data()).x4_specialAttributes()));
+    's1: {
+        let __case = match charge_level {
+            0_i32 => 0,
+            1_i32 => 1,
+            2_i32 => 1,
+            3_i32 => 1,
+            4_i32 => 1,
+            5_i32 => 1,
+            6_i32 => 1,
+            7_i32 => 1,
+            8_i32 => 1,
+            9_i32 => 2,
+            _ => 3,
+        };
+        if __case <= 0 {
+            return fp::fctiwz((attrs).xC().at(0_i32).get());
+        }
+        if __case <= 1 {
+            return fp::fctiwz((attrs).xC().at(charge_level).get());
+        }
+        if __case <= 2 {
+            return fp::fctiwz((attrs).xC().at(9_i32).get());
+        }
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
+fn inl_it_80291F14_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, charge_level: i32) {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut charge_level = charge_level;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    (ip).set_xD4C(
+        (ip).xD4C()
+            .wrapping_sub(fns::it_80291D38(ctx, gobj, charge_level)),
+    );
+    if (ip).xD4C() < 0_i32 {
+        (ip).set_xD4C(0_i32);
+    }
 }
 
 fn inl_itResetVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
@@ -449,6 +490,20 @@ fn inl_itResetVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
         (ip).x40_vel().set_y(__t2);
         __t2
     });
+}
+
+fn inl_Item_StopAndEnterState_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    ip: Item<'a>,
+    msid: i32,
+) {
+    let mut gobj = gobj;
+    let mut ip = ip;
+    let mut msid = msid;
+    inl_itResetVelocity_unfused(ctx, ip);
+    fns::it_8026B390(ctx, gobj);
+    fns::Item_80268E5C(ctx, gobj, msid, (enums::ITEM_ANIM_UPDATE as i32));
 }
 
 fn inl_Item_ApplyFallingPhysics_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

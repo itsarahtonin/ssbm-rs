@@ -444,7 +444,7 @@ pub fn AXDriverInterp<'a>(ctx: &'a Ctx, v: HSD_SM<'a>) {
         'c4: {
             cmd_word = ((v).cmd_stream()).get();
             cmd_type = shr_u32(cmd_word, 24_u32);
-            cmd_size = (fns::parseWait(ctx, cmd_type, cmd_word) as i32);
+            cmd_size = (inl_parseWait_unfused(ctx, cmd_type, cmd_word) as i32);
             if cmd_size != 0_i32 {
                 fns::AXDriverExec(ctx, v);
             }
@@ -831,7 +831,7 @@ pub fn AXDriverCallback<'a>(ctx: &'a Ctx) {
                     break 's5;
                 }
                 if __case <= 1 {
-                    fns::AXDriverUnlink(
+                    inl_AXDriverUnlink_unfused(
                         ctx,
                         v,
                         statics::sysdolphin__baselib__axdriver::AXDriver_804D7794(ctx),
@@ -2459,6 +2459,87 @@ fn inl_AXDriverKeyOff<'a>(ctx: &'a Ctx, v: HSD_SM<'a>) -> i32 {
     (v).set_flags(((v).flags() & ((!0x20000000_i32) as u32)));
     (v).set_flags(((v).flags() & (!0xc0000000_u32)));
     return 1_i32;
+}
+
+fn inl_parseWait_unfused<'a>(ctx: &'a Ctx, param_type: u32, param_value: u32) -> u32 {
+    let mut param_type = param_type;
+    let mut param_value = param_value;
+    's1: {
+        let __case = match param_type {
+            0_u32 => 0,
+            1_u32 => 1,
+            2_u32 => 1,
+            3_u32 => 1,
+            4_u32 => 1,
+            5_u32 => 1,
+            14_u32 => 1,
+            15_u32 => 1,
+            20_u32 => 1,
+            21_u32 => 1,
+            6_u32 => 2,
+            7_u32 => 2,
+            8_u32 => 2,
+            9_u32 => 2,
+            10_u32 => 2,
+            11_u32 => 2,
+            16_u32 => 2,
+            17_u32 => 2,
+            18_u32 => 2,
+            19_u32 => 2,
+            12_u32 => 3,
+            13_u32 => 3,
+            _ => 4,
+        };
+        if __case <= 0 {
+            return (param_value & (0xffffff_i32 as u32));
+        }
+        if __case <= 1 {
+            return (0_i32 as u32);
+        }
+        if __case <= 2 {
+            return (shr_u32(param_value, (8_i32 as u32)) & (0xffff_i32 as u32));
+        }
+        if __case <= 3 {
+            return (shr_u32(param_value, (16_i32 as u32)) & (255_i32 as u32));
+        }
+        if __case <= 4 {
+            return (0_i32 as u32);
+        }
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
+fn inl_AXDriverUnlink_unfused<'a>(ctx: &'a Ctx, v: HSD_SM<'a>, head: Ptr<'a, HSD_SM<'a>>) {
+    let mut v = v;
+    let mut head = head;
+    let mut p: HSD_SM<'a> = null(ctx);
+    let mut n: HSD_SM<'a> = null(ctx);
+    if !Handle::is_null(v) {
+        p = (v).prev();
+        n = (v).next();
+        (v).set_next(null::<HSD_SM<'a>>(ctx));
+        (v).set_prev(null::<HSD_SM<'a>>(ctx));
+        if !Handle::is_null(p) {
+            (p).set_next(n);
+        }
+        if !Handle::is_null(n) {
+            (n).set_prev(p);
+        }
+        if Handle::addr((head).get()) == Handle::addr(v) {
+            (head).set(n);
+        }
+        (if Handle::addr((head).get()) != Handle::addr(v) {
+            ({ () })
+        } else {
+            fns::__assert(
+                ctx,
+                cstr(ctx, 0x803b95f8),
+                (89_i32 as u32),
+                cstr(ctx, 0x803b95f8),
+            )
+        });
+    }
 }
 
 fn inl_AXDriverLink_unfused<'a>(ctx: &'a Ctx, v: HSD_SM<'a>, head: Ptr<'a, HSD_SM<'a>>) {

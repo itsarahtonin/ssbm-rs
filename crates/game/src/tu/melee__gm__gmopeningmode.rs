@@ -324,6 +324,10 @@ fn inl_gm_GetCharacterUsageDirect_unfused<'a>(ctx: &'a Ctx, index: i32) -> i32 {
         .get() as i32);
 }
 
+fn inl_gm_GetRandomHistory_unfused<'a>(ctx: &'a Ctx) -> gm_random_history<'a> {
+    return Handle::cast::<gm_random_history<'a>>(fns::gmMainLib_804D3EE0(ctx).get());
+}
+
 fn inl_gm_GetCharacterUsage_unfused<'a>(ctx: &'a Ctx, index: i32) -> i32 {
     let mut index = index;
     return ((inl_gm_GetRandomHistory_unfused(ctx))
@@ -332,18 +336,9 @@ fn inl_gm_GetCharacterUsage_unfused<'a>(ctx: &'a Ctx, index: i32) -> i32 {
         .get() as i32);
 }
 
-fn inl_gm_GetRandomHistory_unfused<'a>(ctx: &'a Ctx) -> gm_random_history<'a> {
-    return Handle::cast::<gm_random_history<'a>>(fns::gmMainLib_804D3EE0(ctx).get());
-}
-
-fn inl_gm_801BEFA4_noinline_unfused<'a>(ctx: &'a Ctx, ckind: i32) {
+fn inl_gm_801BEFA4_inner3_unfused<'a>(ctx: &'a Ctx, ckind: i32) {
     let mut ckind = ckind;
-    inl_gm_801BEFA4_inner_unfused(ctx, ckind);
-}
-
-fn inl_gm_801BEFA4_inner_unfused<'a>(ctx: &'a Ctx, ckind: i32) {
-    let mut ckind = ckind;
-    inl_gm_801BEFA4_inner2_unfused(ctx, ckind);
+    fns::gm_801BEFA4(ctx, ckind);
 }
 
 fn inl_gm_801BEFA4_inner2_unfused<'a>(ctx: &'a Ctx, ckind: i32) {
@@ -351,19 +346,19 @@ fn inl_gm_801BEFA4_inner2_unfused<'a>(ctx: &'a Ctx, ckind: i32) {
     inl_gm_801BEFA4_inner3_unfused(ctx, ckind);
 }
 
-fn inl_gm_801BEFA4_inner3_unfused<'a>(ctx: &'a Ctx, ckind: i32) {
+fn inl_gm_801BEFA4_inner_unfused<'a>(ctx: &'a Ctx, ckind: i32) {
     let mut ckind = ckind;
-    fns::gm_801BEFA4(ctx, ckind);
+    inl_gm_801BEFA4_inner2_unfused(ctx, ckind);
 }
 
-fn inl_gm_801BEFC0_noinline_unfused<'a>(ctx: &'a Ctx, arg0: i32) {
-    let mut arg0 = arg0;
-    inl_gm_801BEFC0_inner_unfused(ctx, arg0);
+fn inl_gm_801BEFA4_noinline_unfused<'a>(ctx: &'a Ctx, ckind: i32) {
+    let mut ckind = ckind;
+    inl_gm_801BEFA4_inner_unfused(ctx, ckind);
 }
 
-fn inl_gm_801BEFC0_inner_unfused<'a>(ctx: &'a Ctx, arg0: i32) {
+fn inl_gm_801BEFC0_inner3_unfused<'a>(ctx: &'a Ctx, arg0: i32) {
     let mut arg0 = arg0;
-    inl_gm_801BEFC0_inner2_unfused(ctx, arg0);
+    fns::gm_801BEFC0(ctx, arg0);
 }
 
 fn inl_gm_801BEFC0_inner2_unfused<'a>(ctx: &'a Ctx, arg0: i32) {
@@ -371,9 +366,14 @@ fn inl_gm_801BEFC0_inner2_unfused<'a>(ctx: &'a Ctx, arg0: i32) {
     inl_gm_801BEFC0_inner3_unfused(ctx, arg0);
 }
 
-fn inl_gm_801BEFC0_inner3_unfused<'a>(ctx: &'a Ctx, arg0: i32) {
+fn inl_gm_801BEFC0_inner_unfused<'a>(ctx: &'a Ctx, arg0: i32) {
     let mut arg0 = arg0;
-    fns::gm_801BEFC0(ctx, arg0);
+    inl_gm_801BEFC0_inner2_unfused(ctx, arg0);
+}
+
+fn inl_gm_801BEFC0_noinline_unfused<'a>(ctx: &'a Ctx, arg0: i32) {
+    let mut arg0 = arg0;
+    inl_gm_801BEFC0_inner_unfused(ctx, arg0);
 }
 
 /// Registers this unit's ports.

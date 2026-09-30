@@ -850,7 +850,7 @@ pub fn __AXVPBInit<'a>(ctx: &'a Ctx) {
                 (pvpb).set_index(i);
                 (pvpb).set_updateWrite((pvpb).updateData().at(0));
                 (pvpb).set_itdBuffer(Handle::cast::<Addr<'a>>(ppbi));
-                fns::__AXSetPBDefault(ctx, pvpb);
+                inl___AXSetPBDefault_unfused(ctx, pvpb);
                 if i == (63_i32 as u32) {
                     (pvpb).pb().set_nextHi({
                         let __t3 = {
@@ -1433,6 +1433,36 @@ fn inl___AXDumpVPB_unfused<'a>(ctx: &'a Ctx, pvpb: _AXVPB<'a>) {
         __t6
     });
     fns::__AXPushCallbackStack(ctx, pvpb);
+}
+
+fn inl___AXSetPBDefault_unfused<'a>(ctx: &'a Ctx, p: _AXVPB<'a>) {
+    let mut p = p;
+    (p).pb().set_state((0_i32 as u16));
+    (p).pb().itd().set_flag((0_i32 as u16));
+    (p).set_sync((164_i32 as u32));
+    (p).set_updateMS({
+        let __t1 = (0_i32 as u32);
+        (p).set_updateCounter(__t1);
+        __t1
+    });
+    (p).set_updateWrite((p).updateData().at(0));
+    (p).pb().update().updNum().at(0_i32).set({
+        let __t5 = {
+            let __t4 = {
+                let __t3 = {
+                    let __t2 = (0_i32 as u16);
+                    (p).pb().update().updNum().at(4_i32).set(__t2);
+                    __t2
+                };
+                (p).pb().update().updNum().at(3_i32).set(__t3);
+                __t3
+            };
+            (p).pb().update().updNum().at(2_i32).set(__t4);
+            __t4
+        };
+        (p).pb().update().updNum().at(1_i32).set(__t5);
+        __t5
+    });
 }
 
 /// Registers this unit's ports.

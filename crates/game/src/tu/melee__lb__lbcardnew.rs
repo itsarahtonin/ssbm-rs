@@ -299,7 +299,7 @@ pub fn resetState<'a>(
 pub fn onCardComplete<'a>(ctx: &'a Ctx, chan: i32, result: i32) {
     let mut chan = chan;
     let mut result = result;
-    let mut error: i32 = statics::melee__lb__lbcardnew::convertSdkResult(ctx, result);
+    let mut error: i32 = inl_convertSdkResult_unfused(ctx, result);
     if error != 0_i32 {
         statics::melee__lb__lbcardnew::state(ctx).set_saved_error(error);
     }
@@ -357,9 +357,8 @@ pub fn taskMount<'a>(ctx: &'a Ctx) -> i32 {
         statics::melee__lb__lbcardnew::state(ctx).memsize_ref(),
         statics::melee__lb__lbcardnew::state(ctx).sectorsize_ref(),
     );
-    statics::melee__lb__lbcardnew::state(ctx).set_saved_error(
-        statics::melee__lb__lbcardnew::convertSdkResult(ctx, probe_result),
-    );
+    statics::melee__lb__lbcardnew::state(ctx)
+        .set_saved_error(inl_convertSdkResult_unfused(ctx, probe_result));
     if (statics::melee__lb__lbcardnew::state(ctx).saved_error()) == 0_i32 {
         if !Handle::is_null((statics::melee__lb__lbcardnew::state(ctx).status())) {
             (statics::melee__lb__lbcardnew::state(ctx).status()).set(0_i32);
@@ -383,9 +382,8 @@ pub fn taskMount<'a>(ctx: &'a Ctx) -> i32 {
             null::<FnPtr<'a>>(ctx),
             fnptr(ctx, 0x8001a008),
         );
-        statics::melee__lb__lbcardnew::state(ctx).set_saved_error(
-            statics::melee__lb__lbcardnew::convertSdkResult(ctx, mount_result),
-        );
+        statics::melee__lb__lbcardnew::state(ctx)
+            .set_saved_error(inl_convertSdkResult_unfused(ctx, mount_result));
         if ((mount_result == 0_i32) || (mount_result == 6_i32.wrapping_neg()))
             || (mount_result == 13_i32.wrapping_neg())
         {
@@ -430,9 +428,8 @@ pub fn taskCheck<'a>(ctx: &'a Ctx) -> i32 {
         (statics::melee__lb__lbcardnew::state(ctx).chan()),
         fnptr(ctx, 0x8001a008),
     );
-    statics::melee__lb__lbcardnew::state(ctx).set_saved_error(
-        statics::melee__lb__lbcardnew::convertSdkResult(ctx, check_result),
-    );
+    statics::melee__lb__lbcardnew::state(ctx)
+        .set_saved_error(inl_convertSdkResult_unfused(ctx, check_result));
     if (statics::melee__lb__lbcardnew::state(ctx).saved_error())
         == (enums::LbCardResult_Ready as i32)
     {
@@ -455,7 +452,7 @@ pub fn setTaskFilename<'a>(ctx: &'a Ctx, filename: Val<'a, i8>, file_entries: Ad
     let __frame = ctx.stack_frame(0x28);
     let mut filename = filename;
     let mut file_entries = file_entries;
-    let mut task: CardTask<'a> = statics::melee__lb__lbcardnew::getNewTask(ctx);
+    let mut task: CardTask<'a> = inl_getNewTask_unfused(ctx);
     (task).set_type((enums::LbCardNewTask_Open as i32));
     (task).set_result_mask(1_i32);
     if !Handle::is_null(filename) {
@@ -623,9 +620,8 @@ pub fn taskFormat<'a>(ctx: &'a Ctx) -> i32 {
             (statics::melee__lb__lbcardnew::state(ctx).chan()),
             fnptr(ctx, 0x8001a008),
         );
-        statics::melee__lb__lbcardnew::state(ctx).set_saved_error(
-            statics::melee__lb__lbcardnew::convertSdkResult(ctx, format_result),
-        );
+        statics::melee__lb__lbcardnew::state(ctx)
+            .set_saved_error(inl_convertSdkResult_unfused(ctx, format_result));
         if (statics::melee__lb__lbcardnew::state(ctx).saved_error()) == 0_i32 {
             statics::melee__lb__lbcardnew::state(ctx).set_tasks_remaining(
                 statics::melee__lb__lbcardnew::state(ctx)
@@ -663,9 +659,8 @@ pub fn taskDelete<'a>(ctx: &'a Ctx, filename: Val<'a, i8>) -> i32 {
         filename,
         fnptr(ctx, 0x8001a008),
     );
-    statics::melee__lb__lbcardnew::state(ctx).set_saved_error(
-        statics::melee__lb__lbcardnew::convertSdkResult(ctx, delete_result),
-    );
+    statics::melee__lb__lbcardnew::state(ctx)
+        .set_saved_error(inl_convertSdkResult_unfused(ctx, delete_result));
     if (statics::melee__lb__lbcardnew::state(ctx).saved_error()) == 0_i32 {
         statics::melee__lb__lbcardnew::state(ctx).set_tasks_remaining(
             statics::melee__lb__lbcardnew::state(ctx)
@@ -702,9 +697,8 @@ pub fn taskRename<'a>(ctx: &'a Ctx, old_name: Val<'a, i8>, new_name: Val<'a, i8>
         new_name,
         fnptr(ctx, 0x8001a008),
     );
-    statics::melee__lb__lbcardnew::state(ctx).set_saved_error(
-        statics::melee__lb__lbcardnew::convertSdkResult(ctx, rename_result),
-    );
+    statics::melee__lb__lbcardnew::state(ctx)
+        .set_saved_error(inl_convertSdkResult_unfused(ctx, rename_result));
     if (statics::melee__lb__lbcardnew::state(ctx).saved_error()) == 0_i32 {
         statics::melee__lb__lbcardnew::state(ctx).set_tasks_remaining(
             statics::melee__lb__lbcardnew::state(ctx)
@@ -1040,7 +1034,7 @@ pub fn lbCardNew_CompleteAllTasks<'a>(ctx: &'a Ctx, result: i32) -> i32 {
     let mut result = result;
     if result == (enums::LbCardResult_Busy as i32) {
         'l1: while ({
-            let __t1 = fns::lbCardNew_CompleteNextTask(ctx);
+            let __t1 = inl_lbCardNew_CompleteNextTask_unfused(ctx);
             result = __t1;
             __t1
         }) == (enums::LbCardResult_Busy as i32)
@@ -1099,7 +1093,7 @@ pub fn lb_8001B7E0<'a>(
     result = statics::melee__lb__lbcardnew::executeNextTask(ctx, (enums::LbCardResult_16 as i32));
     if result == (enums::LbCardResult_Busy as i32) {
         'l3: while ({
-            let __t1 = fns::lbCardNew_CompleteNextTask(ctx);
+            let __t1 = inl_lbCardNew_CompleteNextTask_unfused(ctx);
             result = __t1;
             __t1
         }) == (enums::LbCardResult_Busy as i32)
@@ -1142,7 +1136,7 @@ pub fn lb_8001B8C8<'a>(ctx: &'a Ctx, chan: i32) -> i32 {
     result = statics::melee__lb__lbcardnew::executeNextTask(ctx, (enums::LbCardResult_16 as i32));
     if result == (enums::LbCardResult_Busy as i32) {
         'l1: while ({
-            let __t1 = fns::lbCardNew_CompleteNextTask(ctx);
+            let __t1 = inl_lbCardNew_CompleteNextTask_unfused(ctx);
             result = __t1;
             __t1
         }) == (enums::LbCardResult_Busy as i32)
@@ -1237,7 +1231,7 @@ pub fn lb_8001BA44<'a>(
     result = statics::melee__lb__lbcardnew::executeNextTask(ctx, 16_i32);
     if result == (enums::LbCardResult_Busy as i32) {
         'l1: while ({
-            let __t1 = fns::lbCardNew_CompleteNextTask(ctx);
+            let __t1 = inl_lbCardNew_CompleteNextTask_unfused(ctx);
             result = __t1;
             __t1
         }) == 11_i32
@@ -1358,7 +1352,7 @@ pub fn lb_8001BC18<'a>(
     result = statics::melee__lb__lbcardnew::executeNextTask(ctx, 16_i32);
     if result == (enums::LbCardResult_Busy as i32) {
         'l1: while ({
-            let __t1 = fns::lbCardNew_CompleteNextTask(ctx);
+            let __t1 = inl_lbCardNew_CompleteNextTask_unfused(ctx);
             result = __t1;
             __t1
         }) == 11_i32
@@ -1406,7 +1400,7 @@ pub fn lb_8001BD34<'a>(
     result = statics::melee__lb__lbcardnew::executeNextTask(ctx, (enums::LbCardResult_16 as i32));
     if result == (enums::LbCardResult_Busy as i32) {
         'l1: while ({
-            let __t1 = fns::lbCardNew_CompleteNextTask(ctx);
+            let __t1 = inl_lbCardNew_CompleteNextTask_unfused(ctx);
             result = __t1;
             __t1
         }) == (enums::LbCardResult_Busy as i32)
@@ -1558,7 +1552,7 @@ pub fn lb_8001BFD8<'a>(
     result = statics::melee__lb__lbcardnew::executeNextTask(ctx, (enums::LbCardResult_16 as i32));
     if result == (enums::LbCardResult_Busy as i32) {
         'l1: while ({
-            let __t1 = fns::lbCardNew_CompleteNextTask(ctx);
+            let __t1 = inl_lbCardNew_CompleteNextTask_unfused(ctx);
             result = __t1;
             __t1
         }) == (enums::LbCardResult_Busy as i32)
@@ -1696,7 +1690,7 @@ pub fn lb_8001C2D8<'a>(
     result = statics::melee__lb__lbcardnew::executeNextTask(ctx, 16_i32);
     if result == (enums::LbCardResult_Busy as i32) {
         'l1: while ({
-            let __t1 = fns::lbCardNew_CompleteNextTask(ctx);
+            let __t1 = inl_lbCardNew_CompleteNextTask_unfused(ctx);
             result = __t1;
             __t1
         }) == 11_i32
@@ -1712,10 +1706,7 @@ pub fn lbCardNew_ProbeEx<'a>(ctx: &'a Ctx, chan: i32) -> i32 {
     let memsize: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
     let sectorsize: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
     let mut chan = chan;
-    return statics::melee__lb__lbcardnew::convertSdkResult(
-        ctx,
-        fns::CARDProbeEx(ctx, chan, memsize, sectorsize),
-    );
+    return inl_convertSdkResult_unfused(ctx, fns::CARDProbeEx(ctx, chan, memsize, sectorsize));
 }
 
 pub fn lb_8001C4A8<'a>(ctx: &'a Ctx, file_entries: Addr<'a>, icon_data: Addr<'a>) -> i32 {
@@ -1803,6 +1794,46 @@ fn inl_resetTaskArray_unfused<'a>(ctx: &'a Ctx) {
     }
 }
 
+fn inl_convertSdkResult_unfused<'a>(ctx: &'a Ctx, sdk_result: i32) -> i32 {
+    let mut sdk_result = sdk_result;
+    's1: {
+        let __case = match sdk_result {
+            (-1_i32) => 0,
+            (-2_i32) => 0,
+            (-3_i32) => 0,
+            (-4_i32) => 1,
+            0_i32 => 2,
+            (-5_i32) => 3,
+            (-128_i32) => 3,
+            (-6_i32) => 4,
+            (-13_i32) => 4,
+            1_i32 => 5,
+            (-14_i32) => 5,
+            _ => 5,
+        };
+        if __case <= 0 {
+            return (enums::LbCardResult_DeviceError as i32);
+        }
+        if __case <= 1 {
+            return (enums::LbCardResult_NoFile as i32);
+        }
+        if __case <= 2 {
+            return (enums::LbCardResult_Ready as i32);
+        }
+        if __case <= 3 {
+            return (enums::LbCardResult_FatalError as i32);
+        }
+        if __case <= 4 {
+            return (enums::LbCardResult_Malformed as i32);
+        }
+        if __case <= 5 {
+            return (enums::LbCardResult_Invalid as i32);
+        }
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 fn inl_convertHsdResult_unfused<'a>(ctx: &'a Ctx, hsd_result: i32) -> i32 {
     let mut hsd_result = hsd_result;
     let mut lb_result: i32 = 0;
@@ -1847,6 +1878,36 @@ fn inl_convertHsdResult_unfused<'a>(ctx: &'a Ctx, hsd_result: i32) -> i32 {
     return lb_result;
 }
 
+fn inl_getNewTask_unfused<'a>(ctx: &'a Ctx) -> CardTask<'a> {
+    let mut i: i32 = 0;
+    let mut result: CardTask<'a> = null(ctx);
+    {
+        i = 0_i32;
+        'l1: while i < (enums::LbCardNewTaskArray_Max as i32) {
+            'c2: {
+                result = statics::melee__lb__lbcardnew::state(ctx)
+                    .task_array()
+                    .get(i);
+                if ((result).r#type() as u32) == ((enums::LbCardNewTask_None as i32) as u32) {
+                    break 'l1;
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    (if i != (enums::LbCardNewTaskArray_Max as i32) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bab5c),
+            (175_i32 as u32),
+            cstr(ctx, 0x803bab5c),
+        )
+    });
+    return result;
+}
+
 fn inl_setupCardEntries_unfused<'a>(
     ctx: &'a Ctx,
     v_ctx: CardState<'a>,
@@ -1880,6 +1941,23 @@ fn inl_setupCardEntries_unfused<'a>(
 fn inl_readCardFileSize_unfused<'a>(ctx: &'a Ctx, file_size: Val<'a, i32>) -> i32 {
     let mut file_size = file_size;
     return (file_size).get();
+}
+
+fn inl_lbCardNew_CompleteNextTask_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    let mut enabled: i32 = 0;
+    let mut result: i32 = 0;
+    fns::hsd_803AAA48(ctx);
+    enabled = fns::OSDisableInterrupts(ctx);
+    if (statics::melee__lb__lbcardnew::state(ctx).tasks_remaining()) != 0_i32 {
+        result = (enums::LbCardResult_Busy as i32);
+    } else {
+        result = (statics::melee__lb__lbcardnew::state(ctx).saved_error());
+    }
+    let _ = fns::OSRestoreInterrupts(ctx, enabled);
+    if result != (enums::LbCardResult_Busy as i32) {
+        result = statics::melee__lb__lbcardnew::executeNextTask(ctx, result);
+    }
+    return result;
 }
 
 fn inl_setupTask_unfused<'a>(ctx: &'a Ctx, r#type: i32, result_mask: i32) -> CardTask<'a> {

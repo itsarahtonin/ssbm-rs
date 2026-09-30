@@ -261,7 +261,7 @@ pub fn itWhispyapple_UnkMotion5_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i3
         );
         fns::it_80276FC4(ctx, gobj, coll);
         if ((coll & 1_i32) != 0) && (fns::it_8026DBC8(ctx, gobj) != 0) {
-            fns::it_802EE6A0(ctx, gobj);
+            inl_it_802EE6A0_unfused(ctx, gobj);
         }
     }
     return 0_i32;
@@ -444,6 +444,22 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).hsd_obj();
+}
+
+fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
+    let mut jobj = jobj;
+    if Handle::is_null(jobj) {
+        return null::<HSD_JObj<'a>>(ctx);
+    } else {
+        return (jobj).child();
+    }
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
 fn inl_itWhispyapple_UnkMotion0_Anim_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> =
@@ -470,22 +486,6 @@ fn inl_itWhispyapple_UnkMotion0_Anim_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_
     return 0_i32;
 }
 
-fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).hsd_obj();
-}
-
-fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
-    let mut jobj = jobj;
-    if Handle::is_null(jobj) {
-        return null::<HSD_JObj<'a>>(ctx);
-    } else {
-        return (jobj).child();
-    }
-    #[allow(unreachable_code)]
-    return null(ctx);
-}
-
 fn inl_itWhispyapple_UnkMotion0_Coll_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
@@ -505,6 +505,18 @@ fn inl_itWhispyapple_UnkMotion0_Coll_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_
             fns::it_802EE6A0(ctx, gobj);
         }
     }
+}
+
+fn inl_it_802EE6A0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = null(ctx);
+    let mut val: f64 = 0.0;
+    ip = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    val = fp::frsp(0_i32 as f64);
+    (ip).x40_vel().set_x(val);
+    (ip).x40_vel().set_y(val);
+    (ip).x40_vel().set_z(val);
+    fns::Item_80268E5C(ctx, gobj, 1_i32, (enums::ITEM_ANIM_UPDATE as i32));
 }
 
 fn inl_itResetVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {

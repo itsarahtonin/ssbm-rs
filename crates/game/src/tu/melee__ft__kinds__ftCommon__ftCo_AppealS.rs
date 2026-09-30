@@ -42,7 +42,7 @@ pub fn ftCo_800DE9B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn ftCo_800DE9D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
-    if (fns::ftCo_800DE9B8(ctx, gobj) != 0) {
+    if (inl_ftCo_800DE9B8_unfused(ctx, gobj) != 0) {
         fns::ftCo_800DEA28(ctx, gobj);
         return 1_i32;
     }
@@ -152,7 +152,7 @@ pub fn ftCo_800DEBD0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     if ((fp).kind() as u32) == ((enums::Ft_Kind_Kirby as i32) as u32) {
         fns::ftKb_SpecialN_800F5D04(ctx, gobj, 1_i32);
     }
-    fns::ftCo_800DEAE8(
+    inl_ftCo_800DEAE8_unfused(
         ctx,
         gobj,
         (enums::ftCo_MS_AppealSR as i32),
@@ -340,6 +340,58 @@ pub fn ftCo_AppealS_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_ftCo_800DE9B8_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    if (((Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
+        .input()
+        .pressed_buttons()
+        & ((shl_i32(1_i32, (3_i32 as u32))) as u32))
+        != 0)
+    {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
+fn inl_ftCo_800DEAE8_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid0: i32, msid1: i32) {
+    let mut gobj = gobj;
+    let mut msid0 = msid0;
+    let mut msid1 = msid1;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut ms: MotionState<'a> = (if msid1 >= (fp).x18() {
+        (Handle::add((fp).x20_actionStateList(), msid1.wrapping_sub((fp).x18())))
+    } else {
+        (Handle::add((fp).x1C_actionStateList(), msid1))
+    });
+    (fp).set_allow_interrupt((0_i32 as u8));
+    if ((fp).facing_dir() == fp::fneg(1.0))
+        && ((fns::ftData_80085FD4(ctx, fp, (ms).anim_id())).x8() != (0_i32 as u32))
+    {
+        fns::Fighter_ChangeMotionState(
+            ctx,
+            gobj,
+            msid1,
+            0_u32,
+            0.0,
+            1.0,
+            0.0,
+            null::<HSD_GObj<'a>>(ctx),
+        );
+    } else {
+        fns::Fighter_ChangeMotionState(
+            ctx,
+            gobj,
+            msid0,
+            0_u32,
+            0.0,
+            1.0,
+            0.0,
+            null::<HSD_GObj<'a>>(ctx),
+        );
+    }
 }
 
 /// Registers this unit's ports.

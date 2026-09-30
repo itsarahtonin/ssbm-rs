@@ -775,7 +775,7 @@ pub fn itLikelike_UnkMotion17_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
     }
     if fns::it_80272C6C(ctx, gobj) == 0_i32 {
         let _ = fns::it_8026D5CC(ctx, gobj);
-        fns::it_802D9DDC(ctx, gobj);
+        inl_it_802D9DDC_unfused(ctx, gobj);
     }
     return 0_i32;
 }
@@ -1015,7 +1015,7 @@ pub fn itLikelike_UnkMotion8_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (ip).xDD4_itemVar()
             .likelike()
             .set_x50(null::<HSD_GObj<'a>>(ctx));
-        fns::it_802D9DDC(ctx, gobj);
+        inl_it_802D9DDC_unfused(ctx, gobj);
         return;
     }
     (ip).xDD4_itemVar()
@@ -1045,7 +1045,7 @@ pub fn itLikelike_UnkMotion8_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
     } else {
         (ip).xDD4_itemVar().likelike().set_x4C(120_i32);
-        fns::it_802D9DDC(ctx, gobj);
+        inl_it_802D9DDC_unfused(ctx, gobj);
         return;
     }
     fns::it_8027C8D0(
@@ -1143,7 +1143,7 @@ pub fn itLikelike_UnkMotion12_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
         if !Handle::is_null((ip).xDD4_itemVar().likelike().x50()) {
             fns::it_802DB8A8(ctx, gobj);
         } else {
-            fns::it_802D9DDC(ctx, gobj);
+            inl_it_802D9DDC_unfused(ctx, gobj);
         }
     }
     return 0_i32;
@@ -1230,7 +1230,7 @@ pub fn itLikelike_UnkMotion9_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         if !Handle::is_null((ip).xDD4_itemVar().likelike().x50()) {
             fns::it_802DB8A8(ctx, gobj);
         } else {
-            fns::it_802D9DDC(ctx, gobj);
+            inl_it_802D9DDC_unfused(ctx, gobj);
         }
     }
     return 0_i32;
@@ -1296,7 +1296,7 @@ pub fn itLikelike_UnkMotion10_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
         if !Handle::is_null((ip).xDD4_itemVar().likelike().x50()) {
             fns::it_802DB8A8(ctx, gobj);
         } else {
-            fns::it_802D9DDC(ctx, gobj);
+            inl_it_802D9DDC_unfused(ctx, gobj);
         }
     }
     return 0_i32;
@@ -1428,7 +1428,7 @@ pub fn it_802DBA68<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::it_80273454(ctx, gobj);
     fns::it_802DBAF0(ctx, gobj, 0_i32, 1_i32);
     (ip).xDD4_itemVar().likelike().set_x4C(120_i32);
-    fns::it_802D9DDC(ctx, gobj);
+    inl_it_802D9DDC_unfused(ctx, gobj);
 }
 
 pub fn it_802DBAF0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: i32, arg2: i32) {
@@ -1526,7 +1526,7 @@ pub fn itLikelike_UnkMotion14_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
     temp_r3 = (ip).xDD4_itemVar().likelike().x4C();
     if temp_r3 >= 40_i32 {
         (ip).xDD4_itemVar().likelike().set_x4C(120_i32);
-        fns::it_802D9DDC(ctx, gobj);
+        inl_it_802D9DDC_unfused(ctx, gobj);
     } else {
         (ip).xDD4_itemVar()
             .likelike()
@@ -1576,7 +1576,7 @@ pub fn itLikelike_UnkMotion15_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
     temp_r3 = (ip).xDD4_itemVar().likelike().x4C();
     if temp_r3 >= 40_i32 {
         (ip).xDD4_itemVar().likelike().set_x4C(120_i32);
-        fns::it_802D9DDC(ctx, gobj);
+        inl_it_802D9DDC_unfused(ctx, gobj);
     } else {
         (ip).xDD4_itemVar()
             .likelike()
@@ -1736,7 +1736,7 @@ pub fn itLikelike_UnkMotion6_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if (ip).xDD4_itemVar().likelike().x4C() == 0_i32 {
         if (ip).xDD4_itemVar().likelike().x38() == 0_i32 {
-            fns::it_802DA104(ctx, gobj);
+            inl_it_802DA104_unfused(ctx, gobj);
             return;
         }
         {
@@ -1893,7 +1893,7 @@ pub fn it_802DC4BC<'a>(ctx: &'a Ctx, arg0: i32, arg1: Vec<'a>, arg2: i32) -> HSD
         if arg0 == 0_i32 {
             inl_it_802DC4BC_ptr_unfused(ctx, gobj, ecb);
         } else {
-            fns::it_802DAD18(ctx, gobj);
+            inl_it_802DAD18_unfused(ctx, gobj);
         }
     }
     return gobj;
@@ -1904,12 +1904,6 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
-fn inl_swapVelocity_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let mut gobj = gobj;
-    let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
-    inl_itSwapVelocity_unfused(ctx, ip);
-}
-
 fn inl_itSwapVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
     let mut ip = ip;
     let mut attr: itLikelikeAttributes<'a> = (Handle::cast::<itLikelikeAttributes<'a>>(
@@ -1918,6 +1912,12 @@ fn inl_itSwapVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
     (ip).set_facing_dir(fp::fneg((ip).facing_dir()));
     (ip).x40_vel()
         .set_x(fp::fmuls((ip).facing_dir(), ((attr).x0().x0_f32()).y()));
+}
+
+fn inl_swapVelocity_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
+    inl_itSwapVelocity_unfused(ctx, ip);
 }
 
 fn inl_Item_ZakoDefeat_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ip: Item<'a>) {
@@ -1969,9 +1969,48 @@ fn inl_likelikeVelocity_unfused<'a>(
     }
 }
 
+fn inl_it_802D9DDC_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    fns::it_8027CAD8(ctx, gobj);
+    let _ = fns::it_8026D5CC(ctx, gobj);
+    fns::it_8027C0A8(ctx, gobj, 0.0, 5.0);
+    fns::it_80275270(ctx, gobj);
+    fns::Item_80268E5C(ctx, gobj, 0_i32, (enums::ITEM_ANIM_UPDATE as i32));
+}
+
 fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).hsd_obj();
+}
+
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b86d8),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b86d8),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
@@ -2007,26 +2046,29 @@ fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b86d8),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b86d8),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
+fn inl_it_802DA104_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut attr: itLikelikeAttributes<'a> = (Handle::cast::<itLikelikeAttributes<'a>>(
+        ((ip).xC4_article_data()).x4_specialAttributes(),
+    ));
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
     }
-    return result;
+    (ip).x40_vel()
+        .set_x(fp::fmuls((ip).facing_dir(), ((attr).x0().x0_f32()).y()));
+    (ip).x40_vel().set_z(0.0);
+    (ip).x40_vel().set_y(0.0);
+    fns::it_802756E0(ctx, gobj);
+    (ip).xDD4_itemVar().likelike().set_x4C((attr).x18());
+    (ip).xDD4_itemVar().likelike().set_x44(60_i32);
+    (ip).xDD4_itemVar().likelike().set_x48(0_i32);
+    fns::Item_80268E5C(ctx, gobj, 1_i32, 1_i32);
 }
 
 fn inl_Item_UpdateZakoVelocity_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ip: Item<'a>) {
@@ -2054,6 +2096,26 @@ fn inl_it_802DC4BC_ptr_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ecb: _itECB
     (ip).xDD4_itemVar().likelike().set_x4C(0_i32);
     fns::it_80273454(ctx, gobj);
     fns::Item_80268E5C(ctx, gobj, 5_i32, (enums::ITEM_ANIM_UPDATE as i32));
+}
+
+fn inl_it_802DAD18_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x28);
+    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    inl_HSD_JObjSetRotationZ_unfused(
+        ctx,
+        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj))),
+        fp::frsp(3.141592653589793),
+    );
+    (ip).xDCE_flag().x0().set_b7((1_i32 as u8));
+    fns::Item_80268E5C(ctx, gobj, 3_i32, (enums::ITEM_ANIM_UPDATE as i32));
 }
 
 /// Registers this unit's ports.

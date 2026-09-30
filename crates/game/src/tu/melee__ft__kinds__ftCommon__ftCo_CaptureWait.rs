@@ -526,38 +526,31 @@ fn inl_fn_800DBBF8_noinline_unfused<'a>(ctx: &'a Ctx, gobj1: HSD_GObj<'a>, gobj2
     fns::fn_800DAA40(ctx, fighter, (gobj2).victim_gobj());
 }
 
-fn inl_ftCo_CaptureWaitLw_Phys_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let mut gobj = gobj;
-    let mut temp_r31: Fighter<'a> = null(ctx);
-    temp_r31 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    fns::ftCommon_8007D5D4(ctx, temp_r31);
-    fns::ftCommon_UnlockECB(ctx, temp_r31);
-    fns::Fighter_ChangeMotionState(
-        ctx,
-        gobj,
-        (enums::ftCo_MS_CaptureWaitHi as i32),
-        0x4000_u32,
-        (temp_r31).cur_anim_frame(),
-        1.0,
-        0.0,
-        null::<HSD_GObj<'a>>(ctx),
-    );
-    fns::fn_800DB5D8(ctx, gobj);
-    fns::fn_800DAA40(ctx, gobj, (temp_r31).victim_gobj());
-    if !((Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).x2226_b2() != 0)
-    {
-        fns::ft_80083C00(ctx, gobj, fnptr(ctx, 0x800dbac4));
-    }
-    inl_HSD_JObjSetTranslate_unfused(
-        ctx,
-        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj))),
-        (temp_r31).cur_pos(),
-    );
-}
-
 fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).hsd_obj();
+}
+
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803c70bc),
+            (228_i32 as u32),
+            cstr(ctx, 0x803c70bc),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
@@ -593,26 +586,33 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803c70bc),
-            (228_i32 as u32),
-            cstr(ctx, 0x803c70bc),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+fn inl_ftCo_CaptureWaitLw_Phys_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut temp_r31: Fighter<'a> = null(ctx);
+    temp_r31 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    fns::ftCommon_8007D5D4(ctx, temp_r31);
+    fns::ftCommon_UnlockECB(ctx, temp_r31);
+    fns::Fighter_ChangeMotionState(
+        ctx,
+        gobj,
+        (enums::ftCo_MS_CaptureWaitHi as i32),
+        0x4000_u32,
+        (temp_r31).cur_anim_frame(),
+        1.0,
+        0.0,
+        null::<HSD_GObj<'a>>(ctx),
+    );
+    fns::fn_800DB5D8(ctx, gobj);
+    fns::fn_800DAA40(ctx, gobj, (temp_r31).victim_gobj());
+    if !((Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).x2226_b2() != 0)
     {
-        result = 1_i32;
+        fns::ft_80083C00(ctx, gobj, fnptr(ctx, 0x800dbac4));
     }
-    return result;
+    inl_HSD_JObjSetTranslate_unfused(
+        ctx,
+        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj))),
+        (temp_r31).cur_pos(),
+    );
 }
 
 fn inl_fn_800DBED4_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

@@ -1052,6 +1052,11 @@ fn inl_ftLuigi_SpecialS_RemoveGFX_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
     fns::ftCommon_8007DB24(ctx, gobj);
 }
 
+fn inl_getFighter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {
+    let mut gobj = gobj;
+    return Handle::cast::<Fighter<'a>>((gobj).user_data());
+}
+
 fn inl_ftLuigi_SpecialS_Setup_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = inl_getFighter_unfused(ctx, gobj);
@@ -1068,11 +1073,6 @@ fn inl_ftLuigi_SpecialS_Setup_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     inl_Fighter_SetEffectHitlagCallbacks_unfused(ctx, fp);
     (fp).set_accessory4_cb(null::<FnPtr<'a>>(ctx));
-}
-
-fn inl_getFighter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {
-    let mut gobj = gobj;
-    return Handle::cast::<Fighter<'a>>((gobj).user_data());
 }
 
 fn inl_getFighter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {

@@ -664,7 +664,7 @@ pub fn ftKb_FxSpecialNEnd_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::it_802AE608(ctx, (fp).u().kb().xB0());
     }
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
-        fns::ftKb_SpecialNFx_800FDEB4(ctx, gobj);
+        inl_ftKb_SpecialNFx_800FDEB4_unfused(ctx, gobj);
         fns::ft_8008A2BC(ctx, gobj);
     }
 }
@@ -786,7 +786,7 @@ pub fn ftKb_FxSpecialAirNEnd_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::it_802AE608(ctx, (fp).u().kb().xB0());
     }
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
-        fns::ftKb_SpecialNFx_800FDEB4(ctx, gobj);
+        inl_ftKb_SpecialNFx_800FDEB4_unfused(ctx, gobj);
         's1: {
             let __case = match ((fp).u().kb().hat().kind() as u32) {
                 1_u32 => 0,
@@ -1081,6 +1081,17 @@ fn inl_ftKbGetEndMotionId_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         }
     }
     return msid;
+}
+
+fn inl_ftKb_SpecialNFx_800FDEB4_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    if !Handle::is_null(gobj) {
+        let mut ft: Fighter<'a> =
+            (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+        if (!Handle::is_null(ft)) && (!Handle::is_null((ft).u().kb().xB0())) {
+            (ft).u().kb().set_xB0(null::<HSD_GObj<'a>>(ctx));
+        }
+    }
 }
 
 fn inl_ftKbGetAirLoopMotionId_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {

@@ -431,11 +431,7 @@ pub fn ftNs_AttackHi4_YoyoSetChargeDamage<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
             .set_x223C((yoyo_attr).x18_SPIN_TEXANIM_SPEED());
     }
     fns::ft_80088510(ctx, fp, 0x334aa_i32, (127_i32 as u8), (64_i32 as u8));
-    statics::melee__ft__kinds__ftNess__ftnessattackhi4::ftNs_AttackHi4_YoyoApplyDamage(
-        ctx,
-        inl_getSmashChargeFrames(ctx, fp),
-        gobj,
-    );
+    inl_ftNs_AttackHi4_YoyoApplyDamage(ctx, inl_getSmashChargeFrames(ctx, fp), gobj);
 }
 
 pub fn ftNs_AttackHi4_YoyoThink_IsRemove<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
@@ -1066,7 +1062,7 @@ pub fn ftNs_AttackHi4Release_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         null::<HSD_GObj<'a>>(ctx),
     );
     fns::ftAnim_8006EBA4(ctx, gobj);
-    fns::ftNs_AttackHi4_YoyoSetChargeDamage(ctx, gobj);
+    inl_ftNs_AttackHi4_YoyoSetChargeDamage_unfused(ctx, gobj);
     (fp).set_x2222_b2((1_i32 as u8));
     (fp).set_deal_dmg_cb(fnptr(ctx, 0x80115c74));
     (fp).set_accessory4_cb(fnptr(ctx, 0x80114eb8));
@@ -1093,6 +1089,36 @@ fn inl_GetItemData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Item<'a> {
     let mut gobj = gobj;
     let mut item_data: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     return item_data;
+}
+
+fn inl_ftNs_AttackHi4_YoyoApplyDamage<'a>(ctx: &'a Ctx, charge_frames: f64, gobj: HSD_GObj<'a>) {
+    let mut charge_frames = charge_frames;
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+    let mut ness_attr: ftNessAttributes<'a> =
+        Handle::cast::<ftNessAttributes<'a>>((fp).dat_attrs());
+    let mut charge_duration: f64 = 0.0;
+    let mut charge_duration2: f64 = 0.0;
+    let mut damage_mul: f64 = 0.0;
+    let mut final_damage: f64 = 0.0;
+    if charge_frames != 0.0 {
+        if (((fp).x914().get(0)).state() as u32) == ((enums::HitCapsule_Enabled as i32) as u32) {
+            let mut mul: f64 = 0.0039059999398887157;
+            charge_duration = (ness_attr).xAC_YOYO_CHARGE_DURATION();
+            charge_duration2 = fp::fdivs(charge_frames, charge_duration);
+            damage_mul = fp::fmsubs((ness_attr).xB0_YOYO_DAMAGE_MUL(), mul, 1.0);
+            final_damage = fp::fmuls(
+                ((fp).x914().get(0)).damage(),
+                (fp::fmadds(damage_mul, charge_duration2, 1.0)),
+            );
+            fns::ftColl_8007ABD0(
+                ctx,
+                (fp).x914().get(0_i32),
+                cvt_fp2unsigned(ctx, final_damage),
+                gobj,
+            );
+        }
+    }
 }
 
 fn inl_getSmashChargeFrames<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> f64 {
@@ -1176,6 +1202,48 @@ fn inl_updateYoyoHitPos<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     fns::ftNs_AttackHi4_YoyoSetUnkPos(ctx, gobj, pos);
     Handle::copy_from((fp).u().ns().yoyo_hitbox_pos(), pos);
+}
+
+fn inl_GetItemData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Item<'a> {
+    let mut gobj = gobj;
+    let mut item_data: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
+    return item_data;
+}
+
+fn inl_getSmashChargeFrames_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> f64 {
+    let mut fp = fp;
+    return (fp).smash_attrs().x2118_frames();
+}
+
+fn inl_ftNs_AttackHi4_YoyoSetChargeDamage_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut yoyo_gobj: HSD_GObj<'a> = null(ctx);
+    (fp).mv().ns().attackhi4().set_yoyoCurrentFrame(14_i32);
+    yoyo_gobj = (fp).u().ns().yoyo_gobj();
+    if !Handle::is_null(yoyo_gobj) {
+        let mut ip: Item<'a> = inl_GetItemData_unfused(ctx, yoyo_gobj);
+        let mut article: Article<'a> = (ip).xC4_article_data();
+        let mut yoyo_attr: itYoyoAttributes<'a> =
+            Handle::cast::<itYoyoAttributes<'a>>((article).x4_specialAttributes());
+        Handle::copy_from(
+            pos,
+            statics::melee__ft__kinds__ftNess__ftnessattackhi4::YoyoChargePos(ctx),
+        );
+        fns::it_802C0010(ctx, yoyo_gobj, pos);
+        (fp).u()
+            .ns()
+            .set_x223C((yoyo_attr).x18_SPIN_TEXANIM_SPEED());
+    }
+    fns::ft_80088510(ctx, fp, 0x334aa_i32, (127_i32 as u8), (64_i32 as u8));
+    statics::melee__ft__kinds__ftNess__ftnessattackhi4::ftNs_AttackHi4_YoyoApplyDamage(
+        ctx,
+        inl_getSmashChargeFrames_unfused(ctx, fp),
+        gobj,
+    );
 }
 
 /// Registers this unit's ports.

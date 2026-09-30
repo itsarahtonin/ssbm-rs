@@ -257,7 +257,7 @@ pub fn fn_80225E6C<'a>(ctx: &'a Ctx, owner: HSD_GObj<'a>, fp: Fighter<'a>) {
         'c2: {
             it = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
             if Handle::addr((it).owner()) == Handle::addr(owner) {
-                fns::db_80225DD8(ctx, item_gobj, owner);
+                inl_db_80225DD8_unfused(ctx, item_gobj, owner);
             }
             item_gobj = (item_gobj).next();
         }
@@ -565,6 +565,29 @@ pub fn fn_CheckItemAndPokemonMenu<'a>(ctx: &'a Ctx, player: i32) {
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_db_80225DD8_unfused<'a>(ctx: &'a Ctx, item: HSD_GObj<'a>, owner: HSD_GObj<'a>) {
+    let mut item = item;
+    let mut owner = owner;
+    let mut it: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item)));
+    if fns::ftLib_IsFighter(ctx, owner) == 0_i32 {
+        it = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item)));
+        (it).xDAA().set_xDAA_byte(
+            ((((it).xDAA().xDAA_byte() as i32)
+                | statics::melee__db__dbitem::db_ShowItemCollisionBubbles(ctx).get())
+                as u8),
+        );
+    } else {
+        let mut x: i32 = 0;
+        (it).xDAA()
+            .set_xDAA_byte(((((it).xDAA().xDAA_byte() as i32) & 252_i32) as u8));
+        x = (fns::fn_8022697C(ctx, owner) as i32);
+        if x != 0_i32 {
+            (it).xDAA()
+                .set_xDAA_byte(((((it).xDAA().xDAA_byte() as i32) | (x & 3_i32)) as u8));
+        }
+    }
 }
 
 fn inl_checkToggleCollisionBubbles_unfused<'a>(ctx: &'a Ctx, player: i32) {

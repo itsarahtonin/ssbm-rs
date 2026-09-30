@@ -43,7 +43,7 @@ pub fn HSD_TExpGetType<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>) -> i32 {
 pub fn HSD_TExpRef<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, sel: u8) {
     let mut texp = texp;
     let mut sel = sel;
-    let mut r#type: i32 = fns::HSD_TExpGetType(ctx, texp);
+    let mut r#type: i32 = inl_HSD_TExpGetType_unfused(ctx, texp);
     's1: {
         let __case = match (r#type as u32) {
             1_u32 => 0,
@@ -81,7 +81,7 @@ pub fn HSD_TExpUnref<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, sel: u8) {
     let mut texp = texp;
     let mut sel = sel;
     let mut i: i32 = 0;
-    let mut r#type: i32 = fns::HSD_TExpGetType(ctx, texp);
+    let mut r#type: i32 = inl_HSD_TExpGetType_unfused(ctx, texp);
     if (r#type as u32) != ((enums::HSD_TE_CNST as i32) as u32) {
         if ((r#type as u32) >= ((enums::HSD_TE_CNST as i32) as u32))
             || ((r#type as u32) != ((enums::HSD_TE_TEV as i32) as u32))
@@ -405,7 +405,7 @@ pub fn HSD_TExpColorOp<'a>(
             cstr(ctx, 0x8040775c),
         )
     });
-    (if (fns::HSD_TExpGetType(ctx, texp) as u32) == ((enums::HSD_TE_TEV as i32) as u32) {
+    (if (inl_HSD_TExpGetType_unfused(ctx, texp) as u32) == ((enums::HSD_TE_TEV as i32) as u32) {
         ({ () })
     } else {
         fns::__assert(
@@ -456,7 +456,7 @@ pub fn HSD_TExpAlphaOp<'a>(
             cstr(ctx, 0x8040775c),
         )
     });
-    (if (fns::HSD_TExpGetType(ctx, texp) as u32) == ((enums::HSD_TE_TEV as i32) as u32) {
+    (if (inl_HSD_TExpGetType_unfused(ctx, texp) as u32) == ((enums::HSD_TE_TEV as i32) as u32) {
         ({ () })
     } else {
         fns::__assert(
@@ -501,7 +501,7 @@ pub fn HSD_TExpColorInSub<'a>(
     (tev)
         .c_in()
         .get(idx)
-        .set_type((fns::HSD_TExpGetType(ctx, exp) as u8));
+        .set_type((inl_HSD_TExpGetType_unfused(ctx, exp) as u8));
     (tev).c_in().get(idx).set_sel((sel as u8));
     (tev).c_in().get(idx).set_exp(exp);
     (tev).c_in().get(idx).set_arg((255_i32 as u8));
@@ -692,14 +692,15 @@ pub fn HSD_TExpColorInSub<'a>(
                             });
                             swap = (tev).c_in().get(idx).sel();
                             's4: {
-                                let __case =
-                                    match (fns::HSD_TExpGetType(ctx, (tev).c_in().get(idx).exp())
-                                        as u32)
-                                    {
-                                        1_u32 => 0,
-                                        4_u32 => 1,
-                                        _ => 2,
-                                    };
+                                let __case = match (inl_HSD_TExpGetType_unfused(
+                                    ctx,
+                                    (tev).c_in().get(idx).exp(),
+                                ) as u32)
+                                {
+                                    1_u32 => 0,
+                                    4_u32 => 1,
+                                    _ => 2,
+                                };
                                 if __case <= 0 {
                                     if (swap as i32) == 1_i32 {
                                         ((tev).c_in().get(idx).exp()).tev().set_c_ref(
@@ -739,14 +740,15 @@ pub fn HSD_TExpColorInSub<'a>(
                             (tev).c_in().get(idx).set_sel(((exp).cnst().comp() as u8));
                             swap_2 = (tev).c_in().get(idx).sel();
                             's5: {
-                                let __case =
-                                    match (fns::HSD_TExpGetType(ctx, (tev).c_in().get(idx).exp())
-                                        as u32)
-                                    {
-                                        1_u32 => 0,
-                                        4_u32 => 1,
-                                        _ => 2,
-                                    };
+                                let __case = match (inl_HSD_TExpGetType_unfused(
+                                    ctx,
+                                    (tev).c_in().get(idx).exp(),
+                                ) as u32)
+                                {
+                                    1_u32 => 0,
+                                    4_u32 => 1,
+                                    _ => 2,
+                                };
                                 if __case <= 0 {
                                     if (swap_2 as i32) == 1_i32 {
                                         ((tev).c_in().get(idx).exp()).tev().set_c_ref(
@@ -1001,7 +1003,7 @@ pub fn HSD_TExpColorIn<'a>(
             cstr(ctx, 0x8040775c),
         )
     });
-    (if (fns::HSD_TExpGetType(ctx, texp) as u32) == ((enums::HSD_TE_TEV as i32) as u32) {
+    (if (inl_HSD_TExpGetType_unfused(ctx, texp) as u32) == ((enums::HSD_TE_TEV as i32) as u32) {
         ({ () })
     } else {
         fns::__assert(
@@ -1038,7 +1040,7 @@ pub fn HSD_TExpAlphaInSub<'a>(
     (tev)
         .a_in()
         .get(idx)
-        .set_type((fns::HSD_TExpGetType(ctx, exp) as u8));
+        .set_type((inl_HSD_TExpGetType_unfused(ctx, exp) as u8));
     (tev).a_in().get(idx).set_arg((255_i32 as u8));
     's1: {
         let __case = match (sel as u32) {
@@ -1183,7 +1185,7 @@ pub fn HSD_TExpAlphaInSub<'a>(
                                 cstr(ctx, 0x8040775c),
                             )
                         });
-                        fns::HSD_TExpRef(
+                        inl_HSD_TExpRef_unfused(
                             ctx,
                             (tev).a_in().get(idx).exp(),
                             (tev).a_in().get(idx).sel(),
@@ -1217,7 +1219,7 @@ pub fn HSD_TExpAlphaInSub<'a>(
                             .a_in()
                             .get(idx)
                             .set_sel(((enums::HSD_TE_X as i32) as u8));
-                        fns::HSD_TExpRef(
+                        inl_HSD_TExpRef_unfused(
                             ctx,
                             (tev).a_in().get(idx).exp(),
                             (tev).a_in().get(idx).sel(),
@@ -1311,7 +1313,7 @@ pub fn HSD_TExpAlphaIn<'a>(
             cstr(ctx, 0x8040775c),
         )
     });
-    (if (fns::HSD_TExpGetType(ctx, texp) as u32) == ((enums::HSD_TE_TEV as i32) as u32) {
+    (if (inl_HSD_TExpGetType_unfused(ctx, texp) as u32) == ((enums::HSD_TE_TEV as i32) as u32) {
         ({ () })
     } else {
         fns::__assert(
@@ -1343,7 +1345,7 @@ pub fn HSD_TExpOrder<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, tex: HSD_TObj<'a>, ch
             cstr(ctx, 0x8040775c),
         )
     });
-    (if (fns::HSD_TExpGetType(ctx, texp) as u32) == ((enums::HSD_TE_TEV as i32) as u32) {
+    (if (inl_HSD_TExpGetType_unfused(ctx, texp) as u32) == ((enums::HSD_TE_TEV as i32) as u32) {
         ({ () })
     } else {
         fns::__assert(
@@ -1943,8 +1945,8 @@ pub fn HSD_TExpCompile<'a>(
         )
     });
     let _ = fns::memset(ctx, Handle::cast::<Addr<'a>>(res), 0_i32, 44_u32);
-    fns::HSD_TExpRef(ctx, texp, ((enums::HSD_TE_RGB as i32) as u8));
-    fns::HSD_TExpRef(ctx, texp, ((enums::HSD_TE_A as i32) as u8));
+    inl_HSD_TExpRef_unfused(ctx, texp, ((enums::HSD_TE_RGB as i32) as u8));
+    inl_HSD_TExpRef_unfused(ctx, texp, ((enums::HSD_TE_A as i32) as u8));
     let _ = fns::HSD_TExpSimplify(ctx, texp);
     num = fns::HSD_TExpMakeDag(ctx, texp, list.get(0));
     fns::HSD_TExpSchedule(ctx, num, list.get(0), order.at(0), res);
@@ -2032,10 +2034,24 @@ pub fn HSD_TExpFreeTevDesc<'a>(ctx: &'a Ctx, tdesc: _HSD_TExpTevDesc<'a>) {
     }
 }
 
+fn inl_HSD_TExpGetType_unfused<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>) -> i32 {
+    let mut texp = texp;
+    if Handle::is_null(texp) {
+        return (enums::HSD_TE_ZERO as i32);
+    }
+    if Handle::addr(texp) == Handle::addr((ptr::<HSD_TExp<'a>>(ctx, 1_i32.wrapping_neg() as u32))) {
+        return (enums::HSD_TE_TEX as i32);
+    }
+    if Handle::addr(texp) == Handle::addr((ptr::<HSD_TExp<'a>>(ctx, 2_i32.wrapping_neg() as u32))) {
+        return (enums::HSD_TE_RAS as i32);
+    }
+    return (texp).r#type();
+}
+
 fn inl_HSD_TExpFree_unfused<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>) {
     let mut texp = texp;
     's1: {
-        let __case = match (fns::HSD_TExpGetType(ctx, texp) as u32) {
+        let __case = match (inl_HSD_TExpGetType_unfused(ctx, texp) as u32) {
             1_u32 => 0,
             4_u32 => 1,
             _ => 2,
@@ -2084,6 +2100,42 @@ fn inl_CnstAlloc_unfused<'a>(ctx: &'a Ctx) -> HSD_TExp<'a> {
         )
     });
     return texp;
+}
+
+fn inl_HSD_TExpRef_unfused<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, sel: u8) {
+    let mut texp = texp;
+    let mut sel = sel;
+    let mut r#type: i32 = inl_HSD_TExpGetType_unfused(ctx, texp);
+    's1: {
+        let __case = match (r#type as u32) {
+            1_u32 => 0,
+            4_u32 => 1,
+            _ => 2,
+        };
+        if __case <= 0 {
+            if (sel as i32) == 1_i32 {
+                (texp)
+                    .tev()
+                    .set_c_ref((texp).tev().c_ref().wrapping_add(1_i32));
+                return;
+            } else {
+                (texp)
+                    .tev()
+                    .set_a_ref((texp).tev().a_ref().wrapping_add(1_i32));
+                return;
+            }
+            break 's1;
+        }
+        if __case <= 1 {
+            (texp)
+                .cnst()
+                .set_ref((((texp).cnst().r#ref() as i32).wrapping_add(1_i32) as u8));
+            break 's1;
+        }
+        if __case <= 2 {
+            break 's1;
+        }
+    }
 }
 
 fn inl_IsThroughColor_unfused<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>) -> i32 {

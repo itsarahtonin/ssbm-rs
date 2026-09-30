@@ -243,30 +243,30 @@ pub fn mnCount_8025072C<'a>(
                     == (Handle::add(entries, idx)).stat_value()
                 {
                     if (mode != 0) {
-                        if fns::mnCount_GetKOKingpin(
+                        if inl_mnCount_GetKOKingpin_unfused(
                             ctx,
                             ((Handle::add(entries, best_idx)).selkind() as i32),
-                        ) > fns::mnCount_GetKOKingpin(
+                        ) > inl_mnCount_GetKOKingpin_unfused(
                             ctx,
                             ((Handle::add(entries, idx)).selkind() as i32),
                         ) {
                             best_idx = idx;
                         }
                     } else {
-                        if fns::mnCount_GetKOKingpin(
+                        if inl_mnCount_GetKOKingpin_unfused(
                             ctx,
                             ((Handle::add(entries, best_idx)).selkind() as i32),
-                        ) < fns::mnCount_GetKOKingpin(
+                        ) < inl_mnCount_GetKOKingpin_unfused(
                             ctx,
                             ((Handle::add(entries, idx)).selkind() as i32),
                         ) {
                             best_idx = idx;
                         }
                     }
-                    if fns::mnCount_GetKOKingpin(
+                    if inl_mnCount_GetKOKingpin_unfused(
                         ctx,
                         ((Handle::add(entries, best_idx)).selkind() as i32),
-                    ) == fns::mnCount_GetKOKingpin(
+                    ) == inl_mnCount_GetKOKingpin_unfused(
                         ctx,
                         ((Handle::add(entries, idx)).selkind() as i32),
                     ) {
@@ -292,17 +292,17 @@ pub fn mnCount_8025072C<'a>(
                 if (Handle::add(entries, start_idx)).stat_value()
                     == (Handle::add(entries, idx)).stat_value()
                 {
-                    if fns::mnCount_GetKOKingpin(
+                    if inl_mnCount_GetKOKingpin_unfused(
                         ctx,
                         ((Handle::add(entries, start_idx)).selkind() as i32),
-                    ) == fns::mnCount_GetKOKingpin(
+                    ) == inl_mnCount_GetKOKingpin_unfused(
                         ctx,
                         ((Handle::add(entries, idx)).selkind() as i32),
                     ) {
-                        if fns::mnCount_GetNoDefenseNelly(
+                        if inl_mnCount_GetNoDefenseNelly_unfused(
                             ctx,
                             ((Handle::add(entries, best_idx)).selkind() as i32),
-                        ) == fns::mnCount_GetNoDefenseNelly(
+                        ) == inl_mnCount_GetNoDefenseNelly_unfused(
                             ctx,
                             ((Handle::add(entries, idx)).selkind() as i32),
                         ) {
@@ -310,20 +310,20 @@ pub fn mnCount_8025072C<'a>(
                             break 'l3;
                         }
                         if (mode != 0) {
-                            if fns::mnCount_GetNoDefenseNelly(
+                            if inl_mnCount_GetNoDefenseNelly_unfused(
                                 ctx,
                                 ((Handle::add(entries, best_idx)).selkind() as i32),
-                            ) < fns::mnCount_GetNoDefenseNelly(
+                            ) < inl_mnCount_GetNoDefenseNelly_unfused(
                                 ctx,
                                 ((Handle::add(entries, idx)).selkind() as i32),
                             ) {
                                 best_idx = idx;
                             }
                         } else {
-                            if fns::mnCount_GetNoDefenseNelly(
+                            if inl_mnCount_GetNoDefenseNelly_unfused(
                                 ctx,
                                 ((Handle::add(entries, best_idx)).selkind() as i32),
-                            ) > fns::mnCount_GetNoDefenseNelly(
+                            ) > inl_mnCount_GetNoDefenseNelly_unfused(
                                 ctx,
                                 ((Handle::add(entries, idx)).selkind() as i32),
                             ) {
@@ -927,13 +927,30 @@ fn inl_mnCount_8025035C_inline_unfused<'a>(ctx: &'a Ctx) -> i32 {
     return 1_i32;
 }
 
+fn inl_mnCount_GetKOKingpin_unfused<'a>(ctx: &'a Ctx, selkind: i32) -> u32 {
+    let mut selkind = selkind;
+    return (fns::mnDiagram_GetFighterTotalKOs(ctx, (selkind as u8)) as u32);
+}
+
+fn inl_mnCount_GetNoDefenseNelly_unfused<'a>(ctx: &'a Ctx, selkind: i32) -> u32 {
+    let mut selkind = selkind;
+    return (fns::mnDiagram_GetFighterTotalFalls(ctx, (selkind as u8)) as u32);
+}
+
+fn inl_mnCount_GetMatchTime_unfused<'a>(ctx: &'a Ctx, selkind: i32) -> u32 {
+    let mut selkind = selkind;
+    return (fns::GetPersistentFighterData(ctx, selkind))
+        .stats()
+        .play_time();
+}
+
 fn inl_mnCount_8025092C_inline_unfused<'a>(ctx: &'a Ctx, i: i32) -> i32 {
     let mut i = i;
     {
         i = 0_i32;
         'l1: while i < (enums::SELKIND_COUNT as i32) {
             'c2: {
-                if fns::mnCount_GetMatchTime(ctx, i) != (0_i32 as u32) {
+                if inl_mnCount_GetMatchTime_unfused(ctx, i) != (0_i32 as u32) {
                     return 0_i32;
                 }
             }

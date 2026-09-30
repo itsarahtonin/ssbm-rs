@@ -74,7 +74,7 @@ pub fn ftGw_SpecialLw_ItemPanicRemove<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if !Handle::is_null((fp).u().gw().x2268_panicGObj()) {
         fns::it_802C7E94(ctx, (fp).u().gw().x2268_panicGObj());
-        fns::ftGw_SpecialLw_ItemPanicSetFlag(ctx, gobj);
+        inl_ftGw_SpecialLw_ItemPanicSetFlag_unfused(ctx, gobj);
     }
 }
 
@@ -777,6 +777,16 @@ fn inl_getFighter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_ftGw_SpecialLw_ItemPanicSetFlag_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    fns::ftGw_SpecialLw_ItemPanicExitHitlag(ctx, gobj);
+    (fp).u().gw().set_x2268_panicGObj(null::<HSD_GObj<'a>>(ctx));
+    (fp).set_death2_cb(null::<FnPtr<'a>>(ctx));
+    (fp).set_take_dmg_cb(null::<FnPtr<'a>>(ctx));
 }
 
 fn inl_ftGameWatch_SpecialLw_SetVars_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

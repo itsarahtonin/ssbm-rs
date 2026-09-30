@@ -66,7 +66,7 @@ pub fn it_802BDB94<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let mut item: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
     if !Handle::is_null(item) {
-        fns::itPeachParasol_Logic60_Destroyed(ctx, item_gobj);
+        inl_itPeachParasol_Logic60_Destroyed_unfused(ctx, item_gobj);
         fns::Item_8026A8EC(ctx, item_gobj);
     }
 }
@@ -118,7 +118,7 @@ pub fn itPeachparasol_UnkMotion2_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>)
         var_r3 = 1_i32;
     }
     if (var_r3 != 0) {
-        fns::itPeachParasol_Logic60_Destroyed(ctx, item_gobj);
+        inl_itPeachParasol_Logic60_Destroyed_unfused(ctx, item_gobj);
         return 1_i32;
     }
     return 0_i32;
@@ -223,6 +223,15 @@ fn inl_Item_AttachToParent_unfused<'a>(
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_itPeachParasol_Logic60_Destroyed_unfused<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
+    let mut item_gobj = item_gobj;
+    let mut item: Item<'a> =
+        (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
+    if (!Handle::is_null((item).owner())) && (fns::ftPe_8011D518(ctx, (item).owner()) != 0) {
+        (item).set_owner(null::<HSD_GObj<'a>>(ctx));
+    }
 }
 
 /// Registers this unit's ports.

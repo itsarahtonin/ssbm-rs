@@ -83,7 +83,7 @@ pub fn lb_8001C8BC<'a>(ctx: &'a Ctx) -> i32 {
         Handle::cast::<Ptr<'a, Addr<'a>>>(statics::melee__lb__lbcardgame::manifest(ctx).get(0)),
         Handle::cast::<Addr<'a>>(statics::melee__lb__lbcardgame::lb_803BAB60(ctx)),
         statics::melee__lb__lbcardgame::lb_8001C658(ctx),
-        statics::melee__lb__lbcardgame::getCurrentIcon(ctx),
+        inl_getCurrentIcon_unfused(ctx),
         (Handle::add(
             (statics::melee__lb__lbcardgame::state(ctx).icon_data()),
             3_i32,
@@ -411,7 +411,7 @@ pub fn lbCardGame_Init<'a>(ctx: &'a Ctx) {
     statics::melee__lb__lbcardgame::state(ctx).set_probe_status(fns::CARDProbe(ctx, 0_i32));
     statics::melee__lb__lbcardgame::state(ctx).set_unk_status(0_i32);
     statics::melee__lb__lbcardgame::state(ctx).set_card_status((enums::LbCardStatus_0 as i32));
-    fns::lbCardGame_Reset(ctx);
+    inl_lbCardGame_Reset_unfused(ctx);
     statics::melee__lb__lbcardgame::manifest(ctx)
         .get(1_i32)
         .set_data(Handle::cast::<Addr<'a>>(
@@ -430,6 +430,22 @@ pub fn lbCardGame_Init<'a>(ctx: &'a Ctx) {
             i = i.wrapping_add(1);
         }
     }
+}
+
+fn inl_getCurrentIcon_unfused<'a>(ctx: &'a Ctx) -> Addr<'a> {
+    let mut idx: i32 = 0;
+    if fns::un_80304470(ctx) != 0_i32 {
+        idx = 2_i32;
+    } else if (fns::gm_80164ABC(ctx) != 0) {
+        idx = 1_i32;
+    } else {
+        idx = 0_i32;
+    }
+    return (Handle::add(
+        (statics::melee__lb__lbcardgame::state(ctx).icon_data()),
+        idx,
+    ))
+    .get();
 }
 
 fn inl_dont_inline_helper_unfused<'a>(ctx: &'a Ctx) -> i32 {
@@ -455,6 +471,28 @@ fn inl_dont_inline_helper_unfused<'a>(ctx: &'a Ctx) -> i32 {
     );
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bab64),
+            (228_i32 as u32),
+            cstr(ctx, 0x803bab64),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
     let mut jobj = jobj;
     let mut x = x;
@@ -478,28 +516,6 @@ fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f6
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803bab64),
-            (228_i32 as u32),
-            cstr(ctx, 0x803bab64),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
-}
-
 fn inl_HSD_JObjSetTranslateY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     let mut jobj = jobj;
     let mut y = y;
@@ -521,6 +537,15 @@ fn inl_HSD_JObjSetTranslateY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f6
             }
         }
     }
+}
+
+fn inl_lbCardGame_Reset_unfused<'a>(ctx: &'a Ctx) {
+    statics::melee__lb__lbcardgame::state(ctx).set_icon_data(null::<Ptr<'a, Addr<'a>>>(ctx));
+    statics::melee__lb__lbcardgame::state(ctx).set_scene_data(null::<SceneDesc<'a>>(ctx));
+    statics::melee__lb__lbcardgame::state(ctx).set_enable(0_i32);
+    statics::melee__lb__lbcardgame::state(ctx).set_dirty(0_i32);
+    statics::melee__lb__lbcardgame::state(ctx).set_x10(0_i32);
+    statics::melee__lb__lbcardgame::state(ctx).set_failed(0_i32);
 }
 
 /// Registers this unit's ports.

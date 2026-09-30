@@ -164,7 +164,8 @@ pub fn ftCo_LiftWalk_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
-    if (!(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0)) && (!(fns::ftCo_80096EF8(ctx, gobj) != 0))
+    if (!(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0))
+        && (!(inl_ftCo_80096EF8_unfused(ctx, gobj) != 0))
     {
         let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
         fns::Fighter_ChangeMotionState(
@@ -380,6 +381,40 @@ pub fn ftCo_8009750C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+fn inl_ftCo_80096EF8_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
+    if fp::fmuls((fp).input().lstick().get(0_i32).x(), (fp).facing_dir())
+        >= (fns::p_ftCommonData(ctx).get()).x228()
+    {
+        fns::ftCo_80096F48(ctx, gobj);
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
+fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803c56fc),
+            (228_i32 as u32),
+            cstr(ctx, 0x803c56fc),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     let mut jobj = jobj;
     let mut y = y;
@@ -411,28 +446,6 @@ fn inl_HSD_JObjSetRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803c56fc),
-            (228_i32 as u32),
-            cstr(ctx, 0x803c56fc),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 /// Registers this unit's ports.

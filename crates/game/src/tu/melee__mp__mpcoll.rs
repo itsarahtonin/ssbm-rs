@@ -3248,7 +3248,7 @@ pub fn mpColl_800471F8<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
     let mut coll = coll;
     fns::mpCollPrev(ctx, coll);
-    fns::mpColl_LoadECB(ctx, coll);
+    inl_mpColl_LoadECB_unfused(ctx, coll);
     return inl_inline0_unfused(ctx, coll, 0_i32, 1_i32);
 }
 
@@ -3265,7 +3265,7 @@ pub fn mpColl_800473CC<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
     let mut coll = coll;
     fns::mpCollPrev(ctx, coll);
-    fns::mpColl_LoadECB(ctx, coll);
+    inl_mpColl_LoadECB_unfused(ctx, coll);
     return inl_inline0_unfused(ctx, coll, 4_i32, 1_i32);
 }
 
@@ -3297,7 +3297,7 @@ pub fn mpColl_800476B4<'a>(
     let mut arg1 = arg1;
     let mut gobj = gobj;
     fns::mpCollPrev(ctx, coll);
-    fns::mpColl_LoadECB(ctx, coll);
+    inl_mpColl_LoadECB_unfused(ctx, coll);
     return inl_inline1_unfused(ctx, coll, 3_i32, arg1, gobj);
 }
 
@@ -3305,7 +3305,7 @@ pub fn mpColl_800477E0<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
     let mut coll = coll;
     fns::mpCollPrev(ctx, coll);
-    fns::mpColl_LoadECB(ctx, coll);
+    inl_mpColl_LoadECB_unfused(ctx, coll);
     return inl_inline0_unfused(ctx, coll, 1_i32, 1_i32);
 }
 
@@ -3337,7 +3337,7 @@ pub fn mpColl_80047AC8<'a>(
     let mut arg1 = arg1;
     let mut arg2 = arg2;
     fns::mpCollPrev(ctx, coll);
-    fns::mpColl_LoadECB(ctx, coll);
+    inl_mpColl_LoadECB_unfused(ctx, coll);
     return inl_inline1_unfused(ctx, coll, 2_i32, arg1, arg2);
 }
 
@@ -3387,7 +3387,7 @@ pub fn mpColl_80047E14<'a>(
     let mut arg1 = arg1;
     let mut arg2 = arg2;
     fns::mpCollPrev(ctx, coll);
-    fns::mpColl_LoadECB(ctx, coll);
+    inl_mpColl_LoadECB_unfused(ctx, coll);
     return inl_inline1_unfused(ctx, coll, 6_i32, arg1, arg2);
 }
 
@@ -6265,6 +6265,26 @@ fn inl_mpColl_80046F78_inline_unfused<'a>(
     }
     #[allow(unreachable_code)]
     return 0;
+}
+
+fn inl_mpColl_LoadECB_unfused<'a>(ctx: &'a Ctx, coll: CollData<'a>) {
+    let mut coll = coll;
+    let mut saved_bottom_x: f64 = 0.0;
+    let mut saved_bottom_y: f64 = 0.0;
+    if (((coll).x130_flags() & ((enums::CollData_X130_Locked as i32) as u32)) != 0) {
+        saved_bottom_x = (coll).desired_ecb().bottom().x();
+        saved_bottom_y = (coll).desired_ecb().bottom().y();
+    }
+    if ((coll).ecb_source().kind() as u32) == ((enums::ECBSource_JObj as i32) as u32) {
+        fns::mpColl_LoadECB_JObj(ctx, coll, (6_i32 as u32));
+    } else {
+        fns::mpColl_LoadECB_Fixed(ctx, coll);
+    }
+    if (((coll).x130_flags() & ((enums::CollData_X130_Locked as i32) as u32)) != 0) {
+        (coll).desired_ecb().bottom().set_x(saved_bottom_x);
+        (coll).desired_ecb().bottom().set_y(saved_bottom_y);
+    }
+    fns::mpColl_80042384(ctx, coll);
 }
 
 fn inl_inline0_unfused<'a>(ctx: &'a Ctx, coll: CollData<'a>, i: i32, j: i32) -> i32 {

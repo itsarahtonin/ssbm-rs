@@ -236,17 +236,6 @@ fn inl_HSD_GObjGetHSDObj<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     return (gobj).hsd_obj();
 }
 
-fn inl_calc_dist_2d_accurate<'a>(ctx: &'a Ctx, v: Vec<'a>) -> f64 {
-    let mut v = v;
-    return inl_sqrtf_accurate(
-        ctx,
-        (fp::fadds(
-            (fp::fmuls(((v).x()), ((v).x()))),
-            (fp::fmuls(((v).y()), ((v).y()))),
-        )),
-    );
-}
-
 fn inl_sqrtf_accurate<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     let mut x = x;
     let mut y: f64 = 0.0;
@@ -272,6 +261,17 @@ fn inl_sqrtf_accurate<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         return y;
     }
     return x;
+}
+
+fn inl_calc_dist_2d_accurate<'a>(ctx: &'a Ctx, v: Vec<'a>) -> f64 {
+    let mut v = v;
+    return inl_sqrtf_accurate(
+        ctx,
+        (fp::fadds(
+            (fp::fmuls(((v).x()), ((v).x()))),
+            (fp::fmuls(((v).y()), ((v).y()))),
+        )),
+    );
 }
 
 /// Registers this unit's ports.

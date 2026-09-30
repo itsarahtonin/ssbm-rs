@@ -300,7 +300,7 @@ pub fn HSD_SynthSFXSampleLoadCallback<'a>(
             );
     } else {
         if !Handle::is_null(statics::sysdolphin__baselib__synth::HSD_Synth_804D7730(ctx).get()) {
-            fns::HSD_AudioFree(
+            inl_HSD_AudioFree_unfused(
                 ctx,
                 Handle::cast::<Addr<'a>>(
                     statics::sysdolphin__baselib__synth::HSD_Synth_804D7730(ctx).get(),
@@ -393,7 +393,7 @@ pub fn HSD_SynthSFXHeaderLoadCallback<'a>(
         statics::sysdolphin__baselib__synth::HSD_Synth_804D7730(ctx).set(Handle::cast::<
             SfxLoadStreamNode<'a>,
         >(
-            fns::HSD_AudioMalloc(
+            inl_HSD_AudioMalloc_unfused(
                 ctx,
                 (((alloc_size.wrapping_add((header_size as u32)))
                     .wrapping_add((32_i32 as u32))
@@ -538,7 +538,7 @@ pub fn HSD_SynthSFXLoad<'a>(
             .wrapping_add(1_i32),
     );
     if statics::sysdolphin__baselib__synth::HSD_Synth_804D772C(ctx).get() == 1_i32 {
-        fns::HSD_SynthSFXLoadNewProc(ctx);
+        inl_HSD_SynthSFXLoadNewProc_unfused(ctx);
     }
     let _ = fns::OSRestoreInterrupts(ctx, enabled);
     return entrynum;
@@ -698,7 +698,7 @@ pub fn HSD_SynthSFXUnloadBank<'a>(ctx: &'a Ctx, bank_id: i32) {
             inl_HSD_SynthSFXGroupDataUnlink_unfused(ctx, (head).get());
             cur = (head).get();
             (head).set(((head).get()).next());
-            fns::HSD_AudioFree(ctx, Handle::cast::<Addr<'a>>(cur));
+            inl_HSD_AudioFree_unfused(ctx, Handle::cast::<Addr<'a>>(cur));
         }
     }
     statics::sysdolphin__baselib__synth::hsd_SynthSFXBank(ctx)
@@ -749,7 +749,7 @@ pub fn HSD_SynthSFXGroupDataRemove<'a>(ctx: &'a Ctx, sfx_id: i32) {
                         if (Handle::addr((cur).prev()) as i32) == sfx_id {
                             inl_HSD_SynthSFXGroupDataUnlink_unfused(ctx, cur);
                             (pcur).set((cur).next());
-                            fns::HSD_AudioFree(ctx, Handle::cast::<Addr<'a>>(cur));
+                            inl_HSD_AudioFree_unfused(ctx, Handle::cast::<Addr<'a>>(cur));
                             return;
                         }
                         pcur = (cur).next_ref();
@@ -1620,7 +1620,7 @@ pub fn HSD_SynthSFXSetPitchRatio<'a>(ctx: &'a Ctx, sfx_id: i32, flag: i32, ratio
             )
         });
         (node).x18().at(flag).set(ratio);
-        fns::HSD_SynthSFXUpdatePitch(ctx, node);
+        inl_HSD_SynthSFXUpdatePitch_unfused(ctx, node);
     }
 }
 
@@ -1859,7 +1859,7 @@ pub fn HSD_SynthSFXVolumeEnvelope<'a>(ctx: &'a Ctx) -> i32 {
                             i = 0_i32;
                             'l13: while i < ((node).voice_count() as i32) {
                                 'c14: {
-                                    fns::HSD_SynthSFXUpdatePitch(ctx, node);
+                                    inl_HSD_SynthSFXUpdatePitch_unfused(ctx, node);
                                 }
                                 i = i.wrapping_add(1);
                             }
@@ -2162,7 +2162,7 @@ pub fn HSD_SynthCallback<'a>(ctx: &'a Ctx) {
                         && ((((node).voice_count() as i32) == 1_i32)
                             || ((((node).voice().at(1_i32).get()).pb().state() as i32) == 0_i32))
                     {
-                        fns::HSD_SynthSFXStopNode(ctx, node);
+                        inl_HSD_SynthSFXStopNode_unfused(ctx, node);
                     }
                 }
             }
@@ -3020,6 +3020,52 @@ fn inl_SfxLoadStreamDataSize_unfused<'a>(ctx: &'a Ctx, size: i32) -> i32 {
     return size.wrapping_add(8_i32);
 }
 
+fn inl_HSD_AudioFree_unfused<'a>(ctx: &'a Ctx, ptr_: Addr<'a>) {
+    let mut ptr_ = ptr_;
+    fns::OSFreeToHeap(ctx, fns::HSD_Synth_804D6018(ctx).get(), ptr_);
+}
+
+fn inl_HSD_AudioMalloc_unfused<'a>(ctx: &'a Ctx, size: u32) -> Addr<'a> {
+    let mut size = size;
+    let mut p: Addr<'a> = fns::OSAllocFromHeap(ctx, fns::HSD_Synth_804D6018(ctx).get(), size);
+    (if !Handle::is_null((p)) {
+        { () }
+    } else {
+        ({
+            fns::OSReport(ctx, cstr(ctx, 0x80407d90), &[]);
+            fns::__assert(
+                ctx,
+                cstr(ctx, 0x80407f2c),
+                (122_i32 as u32),
+                cstr(ctx, 0x80407f2c),
+            )
+        })
+    });
+    return p;
+}
+
+fn inl_HSD_SynthSFXLoadNewProc_unfused<'a>(ctx: &'a Ctx) {
+    if statics::sysdolphin__baselib__synth::HSD_Synth_804D772C(ctx).get() != 0_i32 {
+        let mut enabled: i32 = fns::OSDisableInterrupts(ctx);
+        statics::sysdolphin__baselib__synth::HSD_Synth_804D6028(ctx)
+            .at(0_i32)
+            .set(fns::HSD_DevComRequest(
+                ctx,
+                statics::sysdolphin__baselib__synth::HSD_Synth_804C2A60(ctx)
+                    .get(0_i32)
+                    .entrynum(),
+                (0_i32 as u32),
+                Handle::addr(statics::sysdolphin__baselib__synth::hsd_SynthSFXLoadBuf(ctx).at(0)),
+                (32_i32 as u32),
+                33_i32,
+                1_i32,
+                fnptr(ctx, 0x803887dc),
+                (0_i32 as u32),
+            ));
+        let _ = fns::OSRestoreInterrupts(ctx, enabled);
+    }
+}
+
 fn inl_HSD_SynthSFXGroupDataUnlink_unfused<'a>(ctx: &'a Ctx, vpb: _AXVPB<'a>) {
     let mut vpb = vpb;
     let mut i: i32 = 0;
@@ -3107,6 +3153,31 @@ fn inl_stopRange_unfused<'a>(ctx: &'a Ctx, lo: u32, hi: u32) {
     }
 }
 
+fn inl_HSD_SynthSFXUpdatePitch_unfused<'a>(ctx: &'a Ctx, node: HSD_SynthSFXNode<'a>) {
+    let mut node = node;
+    let mut ratio: f64 = 0.0;
+    if ((((node).flags() as i32) & 4_i32) != 0) {
+        ratio = 0.0;
+    } else {
+        ratio = fp::fmuls(
+            fp::fmuls((node).x14(), (node).x18().at(0_i32).get()),
+            (node).x18().at(1_i32).get(),
+        );
+    }
+    if !((((node).flags() as i32) & 8_i32) != 0) {
+        let mut i: i32 = 0;
+        {
+            i = 0_i32;
+            'l1: while i < ((node).voice_count() as i32) {
+                'c2: {
+                    fns::AXSetVoiceSrcRatio(ctx, (node).voice().at(i).get(), ratio);
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    }
+}
+
 fn inl_user_vol_dst_offset_unfused<'a>(ctx: &'a Ctx, k: i32) -> i32 {
     let mut k = k;
     return k.wrapping_mul(3_i32);
@@ -3165,6 +3236,17 @@ fn inl_my_memzero<'a>(ctx: &'a Ctx, dst_raw: Addr<'a>, size: u32) {
     }
 }
 
+fn inl_HSD_SynthSFXUpdateVolume_unfused<'a>(ctx: &'a Ctx, node: HSD_SynthSFXNode<'a>) {
+    let mut node = node;
+    let mut enabled: i32 = fns::OSDisableInterrupts(ctx);
+    if (!((node).volume_update_pending() != 0)) && (!((((node).flags() as i32) & 8_i32) != 0)) {
+        (node).set_volume_update_pending((1_i32 as u8));
+        (node).set_x20(statics::sysdolphin__baselib__synth::HSD_Synth_804D774C(ctx).get());
+        statics::sysdolphin__baselib__synth::HSD_Synth_804D774C(ctx).set(node);
+    }
+    let _ = fns::OSRestoreInterrupts(ctx, enabled);
+}
+
 fn inl_updateAllVolume_unfused<'a>(ctx: &'a Ctx, mask: u32) {
     let mut mask = mask;
     let mut i: i32 = 0;
@@ -3179,8 +3261,42 @@ fn inl_updateAllVolume_unfused<'a>(ctx: &'a Ctx, mask: u32) {
                 if ((node).x0() > 0_i32)
                     && ((((shl_i32(1_i32, (((node).xB() as i32) as u32))) as u32) & mask) != 0)
                 {
-                    fns::HSD_SynthSFXUpdateVolume(ctx, node);
+                    inl_HSD_SynthSFXUpdateVolume_unfused(ctx, node);
                 }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+}
+
+fn inl_HSD_SynthSFXStopNode_unfused<'a>(ctx: &'a Ctx, node: HSD_SynthSFXNode<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let mut node = node;
+    let mut i: i32 = 0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if ((!((((node).flags() as i32) & 1_i32) != 0)) && (((node).x27() as i32) == 1_i32))
+        && (!Handle::is_null(
+            statics::sysdolphin__baselib__synth::driverInactivatedCallback(ctx).get(),
+        ))
+    {
+        statics::sysdolphin__baselib__synth::driverInactivatedCallback(ctx)
+            .get()
+            .call::<_, ()>(((node).x0(),));
+    }
+    {
+        i = 0_i32;
+        'l3: while i < ((node).voice_count() as i32) {
+            'c4: {
+                fns::AXFreeVoice(ctx, (node).voice().at(i).get());
+                statics::sysdolphin__baselib__synth::hsd_SynthSFXNodes(ctx)
+                    .get((((node).voice().at(i).get()).index() as i32))
+                    .set_x0(0_i32);
             }
             i = i.wrapping_add(1);
         }

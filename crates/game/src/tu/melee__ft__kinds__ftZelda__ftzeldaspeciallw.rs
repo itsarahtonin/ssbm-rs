@@ -369,6 +369,18 @@ fn inl_Fighter_SetEffectHitlagCallbacks_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a
     (fp).set_post_hitlag_cb(fnptr(ctx, 0x8005bac4));
 }
 
+fn inl_getFighterPlus_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
+    return fp;
+}
+
+fn inl_getFtSpecialAttrs_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> {
+    let mut fp = fp;
+    let mut fighter_attr: Addr<'a> = (fp).dat_attrs();
+    return fighter_attr;
+}
+
 fn inl_ftZelda_SpecialLw_StartAction_Helper_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x0);
@@ -398,18 +410,6 @@ fn inl_ftZelda_SpecialLw_StartAction_Helper_unfused<'a>(ctx: &'a Ctx, gobj: HSD_
         (fp::fmuls(fp::frsp((60_i32) as f64), 0.01745329238474369)),
     );
     (fp).set_accessory4_cb(fnptr(ctx, 0x8013adb4));
-}
-
-fn inl_getFighterPlus_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {
-    let mut gobj = gobj;
-    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    return fp;
-}
-
-fn inl_getFtSpecialAttrs_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> {
-    let mut fp = fp;
-    let mut fighter_attr: Addr<'a> = (fp).dat_attrs();
-    return fighter_attr;
 }
 
 fn inl_ftCommon_GroundToAirStateChange_unfused<'a>(

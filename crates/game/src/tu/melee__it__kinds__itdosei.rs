@@ -822,12 +822,26 @@ fn inl_itResetVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
     });
 }
 
-fn inl_HSD_JObjSetRotationZero_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let mut gobj = gobj;
-    let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
-    inl_HSD_JObjSetRotationX_unfused(ctx, jobj, 0.0);
-    inl_HSD_JObjSetRotationY_unfused(ctx, jobj, 0.0);
-    inl_HSD_JObjSetRotationZ_unfused(ctx, jobj, 0.0);
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f55e0),
+            (228_i32 as u32),
+            cstr(ctx, 0x803f55e0),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
@@ -861,28 +875,6 @@ fn inl_HSD_JObjSetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f55e0),
-            (228_i32 as u32),
-            cstr(ctx, 0x803f55e0),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
@@ -951,6 +943,14 @@ fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64
     }
 }
 
+fn inl_HSD_JObjSetRotationZero_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
+    inl_HSD_JObjSetRotationX_unfused(ctx, jobj, 0.0);
+    inl_HSD_JObjSetRotationY_unfused(ctx, jobj, 0.0);
+    inl_HSD_JObjSetRotationZ_unfused(ctx, jobj, 0.0);
+}
+
 fn inl_itDosei_SetSpeed_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ip: Item<'a>, speed: f64) {
     let mut gobj = gobj;
     let mut ip = ip;
@@ -965,12 +965,26 @@ fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     return (gobj).user_data();
 }
 
-fn inl_HSD_JObjSetRotationZero<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let mut gobj = gobj;
-    let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
-    inl_HSD_JObjSetRotationX(ctx, jobj, 0.0);
-    inl_HSD_JObjSetRotationY(ctx, jobj, 0.0);
-    inl_HSD_JObjSetRotationZ(ctx, jobj, 0.0);
+fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f55e0),
+            (228_i32 as u32),
+            cstr(ctx, 0x803f55e0),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetRotationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
@@ -1004,28 +1018,6 @@ fn inl_HSD_JObjSetRotationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f55e0),
-            (228_i32 as u32),
-            cstr(ctx, 0x803f55e0),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjSetRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
@@ -1094,6 +1086,14 @@ fn inl_HSD_JObjSetRotationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
     }
 }
 
+fn inl_HSD_JObjSetRotationZero<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
+    inl_HSD_JObjSetRotationX(ctx, jobj, 0.0);
+    inl_HSD_JObjSetRotationY(ctx, jobj, 0.0);
+    inl_HSD_JObjSetRotationZ(ctx, jobj, 0.0);
+}
+
 fn inl_itDosei_FacingAngle<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, m: f64) -> f64 {
     let mut gobj = gobj;
     let mut m = m;
@@ -1105,40 +1105,6 @@ fn inl_itDosei_FacingAngle<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, m: f64) -> f64 
         (fp::fmuls(facing_dir, m)),
     ));
     return angle;
-}
-
-fn inl_itDosei_SetupWalk_FC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let mut gobj = gobj;
-    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
-    let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
-    let mut attr: itDoseiAttributes<'a> =
-        Handle::cast::<itDoseiAttributes<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
-    (ip).set_xD5C((0_i32 as u32));
-    (ip).xDC8_word().flags().set_x17((1_i32 as u32));
-    (ip).xDC8_word().flags().set_x19((1_i32 as u32));
-    (ip).set_owner(null::<HSD_GObj<'a>>(ctx));
-    fns::it_802762B0(ctx, ip);
-    fns::Item_80268E5C(ctx, gobj, 1_i32, 11_i32);
-    (ip).set_x5D0_animFrameSpeed(1.0);
-    fns::lb_8000BA0C(ctx, jobj, 1.0);
-    inl_HSD_JObjSetRotationZeroWithMtxDirty(ctx, gobj);
-    inl_HSD_JObjSetRotationYWithMtxDirty(
-        ctx,
-        Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()),
-        inl_itDosei_FacingAngle(ctx, gobj, 0.0),
-    );
-    (ip).x40_vel()
-        .set_x(fp::fmuls((ip).facing_dir(), (attr).unk8()));
-    (ip).x40_vel().set_z(0.0);
-    (ip).x40_vel().set_y(0.0);
-}
-
-fn inl_HSD_JObjSetRotationZeroWithMtxDirty<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let mut gobj = gobj;
-    let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
-    inl_HSD_JObjSetRotationXWithMtxDirty(ctx, jobj, 0.0);
-    inl_HSD_JObjSetRotationYWithMtxDirty(ctx, jobj, 0.0);
-    inl_HSD_JObjSetRotationZWithMtxDirty(ctx, jobj, 0.0);
 }
 
 fn inl_HSD_JObjSetRotationXWithMtxDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
@@ -1226,6 +1192,40 @@ fn inl_HSD_JObjSetRotationZWithMtxDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z:
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         fns::HSD_JObjSetMtxDirty(ctx, jobj);
     }
+}
+
+fn inl_HSD_JObjSetRotationZeroWithMtxDirty<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
+    inl_HSD_JObjSetRotationXWithMtxDirty(ctx, jobj, 0.0);
+    inl_HSD_JObjSetRotationYWithMtxDirty(ctx, jobj, 0.0);
+    inl_HSD_JObjSetRotationZWithMtxDirty(ctx, jobj, 0.0);
+}
+
+fn inl_itDosei_SetupWalk_FC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+    let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
+    let mut attr: itDoseiAttributes<'a> =
+        Handle::cast::<itDoseiAttributes<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
+    (ip).set_xD5C((0_i32 as u32));
+    (ip).xDC8_word().flags().set_x17((1_i32 as u32));
+    (ip).xDC8_word().flags().set_x19((1_i32 as u32));
+    (ip).set_owner(null::<HSD_GObj<'a>>(ctx));
+    fns::it_802762B0(ctx, ip);
+    fns::Item_80268E5C(ctx, gobj, 1_i32, 11_i32);
+    (ip).set_x5D0_animFrameSpeed(1.0);
+    fns::lb_8000BA0C(ctx, jobj, 1.0);
+    inl_HSD_JObjSetRotationZeroWithMtxDirty(ctx, gobj);
+    inl_HSD_JObjSetRotationYWithMtxDirty(
+        ctx,
+        Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()),
+        inl_itDosei_FacingAngle(ctx, gobj, 0.0),
+    );
+    (ip).x40_vel()
+        .set_x(fp::fmuls((ip).facing_dir(), (attr).unk8()));
+    (ip).x40_vel().set_z(0.0);
+    (ip).x40_vel().set_y(0.0);
 }
 
 fn inl_HSD_JObjGetChild<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {

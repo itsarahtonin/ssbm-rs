@@ -446,6 +446,12 @@ fn inl_mnInfoBonus_80252F8C_inline0_unfused<'a>(ctx: &'a Ctx, o: mnInfoBonus_804
     );
 }
 
+fn inl_textSize_unfused<'a>(ctx: &'a Ctx, text: HSD_Text<'a>) {
+    let mut text = text;
+    (text).font_size().set_x(0.05209999904036522);
+    (text).font_size().set_y(0.05209999904036522);
+}
+
 fn inl_textSetup_unfused<'a>(ctx: &'a Ctx, o: mnInfoBonus_804A09B0_t<'a>) {
     let mut o = o;
     (o).set_x40(fns::HSD_SisLib_803A5ACC(
@@ -460,12 +466,6 @@ fn inl_textSetup_unfused<'a>(ctx: &'a Ctx, o: mnInfoBonus_804A09B0_t<'a>) {
     ));
     inl_textSize_unfused(ctx, (o).x40());
     fns::HSD_SisLib_803A6368(ctx, (o).x40(), 165_i32);
-}
-
-fn inl_textSize_unfused<'a>(ctx: &'a Ctx, text: HSD_Text<'a>) {
-    let mut text = text;
-    (text).font_size().set_x(0.05209999904036522);
-    (text).font_size().set_y(0.05209999904036522);
 }
 
 /// Registers this unit's ports.

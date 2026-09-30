@@ -472,6 +472,11 @@ pub fn ftFx_SpecialAirNEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::ftCo_AirCatchHit_Coll(ctx, gobj);
 }
 
+fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
 fn inl_ftFox_SpecialN_GetHoldJoint_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -500,11 +505,6 @@ fn inl_ftFox_SpecialN_GetHoldJoint_unfused<'a>(
     );
 }
 
-fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).user_data();
-}
-
 fn inl_Fighter_SetDamageCallback_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
     let mut gobj = gobj;
     let mut cb = cb;
@@ -520,6 +520,12 @@ fn inl_getFtSpecialAttrs_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> 
     return fighter_attr;
 }
 
+fn inl_ftFx_SpecialN_FtGetHoldJoint_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>) {
+    let mut gobj = gobj;
+    let mut pos = pos;
+    inl_ftFox_SpecialN_GetHoldJoint_unfused(ctx, gobj, pos, 4.263599872589111);
+}
+
 fn inl_ftFox_SpecialN_PrepareBlasterShot_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -531,7 +537,7 @@ fn inl_ftFox_SpecialN_PrepareBlasterShot_unfused<'a>(
     let mut fp = fp;
     let mut da = da;
     let mut pos = pos;
-    fns::ftFx_SpecialN_FtGetHoldJoint(ctx, gobj, pos);
+    inl_ftFx_SpecialN_FtGetHoldJoint_unfused(ctx, gobj, pos);
     (pos).set_z(0.0);
     if (fp).facing_dir() == 1.0 {
         return (da).x10_FOX_BLASTER_ANGLE();
@@ -597,6 +603,14 @@ fn inl_ftFox_SpecialN_FireBlasterShot_unfused<'a>(
     }
 }
 
+fn inl_Fighter_ClearCmdVars_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    (fp).cmd_vars().at(3_i32).set((0_i32 as u32));
+    (fp).cmd_vars().at(2_i32).set((0_i32 as u32));
+    (fp).cmd_vars().at(1_i32).set((0_i32 as u32));
+    (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
+}
+
 fn inl_ftFox_SpecialN_InitializeState_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -606,14 +620,6 @@ fn inl_ftFox_SpecialN_InitializeState_unfused<'a>(
     let mut fp = fp;
     inl_Fighter_ClearCmdVars_unfused(ctx, fp);
     fns::ftAnim_8006EBA4(ctx, gobj);
-}
-
-fn inl_Fighter_ClearCmdVars_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
-    let mut fp = fp;
-    (fp).cmd_vars().at(3_i32).set((0_i32 as u32));
-    (fp).cmd_vars().at(2_i32).set((0_i32 as u32));
-    (fp).cmd_vars().at(1_i32).set((0_i32 as u32));
-    (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
 }
 
 fn inl_ftFox_SpecialN_SpawnBlaster_unfused<'a>(
@@ -650,6 +656,17 @@ fn inl_ftFox_SpecialN_SpawnBlaster_unfused<'a>(
     );
 }
 
+fn inl_ftFox_SpecialN_UpdateBlaster_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    fns::it_802ADDD0(ctx, (fp).u().fx().x222C_blasterGObj(), 1_i32);
+    if ((fp).cmd_vars().at(3_i32).get() == (1_i32 as u32))
+        && (!Handle::is_null((fp).u().fx().x222C_blasterGObj()))
+    {
+        (fp).cmd_vars().at(3_i32).set((0_i32 as u32));
+        fns::it_802AE538(ctx, (fp).u().fx().x222C_blasterGObj());
+    }
+}
+
 fn inl_ftFox_SpecialN_StartAnimation_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, loop_msid: i32) {
     let mut gobj = gobj;
     let mut loop_msid = loop_msid;
@@ -670,17 +687,6 @@ fn inl_ftFox_SpecialN_StartAnimation_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a
         inl_Fighter_SetDamageCallback_unfused(ctx, gobj, fnptr(ctx, 0x800e5588));
         (fp).set_accessory4_cb(fnptr(ctx, 0x800e5f28));
         fns::it_802ADDD0(ctx, (fp).u().fx().x222C_blasterGObj(), 1_i32);
-    }
-}
-
-fn inl_ftFox_SpecialN_UpdateBlaster_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
-    let mut fp = fp;
-    fns::it_802ADDD0(ctx, (fp).u().fx().x222C_blasterGObj(), 1_i32);
-    if ((fp).cmd_vars().at(3_i32).get() == (1_i32 as u32))
-        && (!Handle::is_null((fp).u().fx().x222C_blasterGObj()))
-    {
-        (fp).cmd_vars().at(3_i32).set((0_i32 as u32));
-        fns::it_802AE538(ctx, (fp).u().fx().x222C_blasterGObj());
     }
 }
 
@@ -787,6 +793,12 @@ fn inl_ftCheckThrowB0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     }
     #[allow(unreachable_code)]
     return 0;
+}
+
+fn inl_ftFx_SpecialN_ItGetHoldJoint_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>) {
+    let mut gobj = gobj;
+    let mut pos = pos;
+    inl_ftFox_SpecialN_GetHoldJoint_unfused(ctx, gobj, pos, 0.013600001111626625);
 }
 
 fn inl_ftGetAction_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {

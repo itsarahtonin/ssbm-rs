@@ -97,7 +97,7 @@ pub fn HSD_MObjReqAnim<'a>(ctx: &'a Ctx, mobj: HSD_MObj<'a>, startframe: f64) {
     let __frame = ctx.stack_frame(0x20);
     let mut mobj = mobj;
     let mut startframe = startframe;
-    fns::HSD_MObjReqAnimByFlags(ctx, mobj, startframe, (0x7ff_i32 as u32));
+    inl_HSD_MObjReqAnimByFlags_unfused(ctx, mobj, startframe, (0x7ff_i32 as u32));
 }
 
 pub fn MObjUpdateFunc<'a>(ctx: &'a Ctx, obj: Addr<'a>, r#type: i32, val: HSD_ObjData<'a>) {
@@ -1072,6 +1072,24 @@ pub fn MObjInfoInit<'a>(ctx: &'a Ctx) {
     (fns::hsdMObj(ctx)).set_load(fnptr(ctx, 0x80363144));
     (fns::hsdMObj(ctx)).set_make_texp(fnptr(ctx, 0x80363284));
     (fns::hsdMObj(ctx)).set_setup_tev(fnptr(ctx, 0x803639ac));
+}
+
+fn inl_HSD_MObjReqAnimByFlags_unfused<'a>(
+    ctx: &'a Ctx,
+    mobj: HSD_MObj<'a>,
+    startframe: f64,
+    flags: u32,
+) {
+    let mut mobj = mobj;
+    let mut startframe = startframe;
+    let mut flags = flags;
+    if Handle::is_null(mobj) {
+        return;
+    }
+    if ((flags & (4_i32 as u32)) != 0) {
+        fns::HSD_AObjReqAnim(ctx, (mobj).aobj(), startframe);
+    }
+    fns::HSD_TObjReqAnimAllByFlags(ctx, (mobj).tobj(), startframe, flags);
 }
 
 /// Registers this unit's ports.

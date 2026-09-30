@@ -125,7 +125,7 @@ pub fn ftCo_KneeBend_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l7;
         }
     }
-    fns::ftCo_KneeBend_Check_ShortHop(ctx, gobj);
+    inl_ftCo_KneeBend_Check_ShortHop_unfused(ctx, gobj);
 }
 
 pub fn ftCo_KneeBend_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -143,6 +143,28 @@ pub fn ftCo_KneeBend_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_ftCo_KneeBend_Check_ShortHop_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if (((!(((fp).input().held_buttons().at(0_i32).get()
+        & (((shl_i32(1_i32, (10_i32 as u32))) | (shl_i32(1_i32, (11_i32 as u32)))) as u32))
+        != 0))
+        && (((fp).mv().co().kneebend().jump_input() as u32)
+            == ((enums::JumpInput_XY as i32) as u32)))
+        || (((fp).input().lstick().get(0_i32).y()
+            < (fns::p_ftCommonData(ctx).get()).tap_jump_release_threshold())
+            && (((fp).mv().co().kneebend().jump_input() as u32)
+                == ((enums::JumpInput_LStick as i32) as u32))))
+        || (((fp).input().cstick().get(0_i32).y()
+            < (fns::p_ftCommonData(ctx).get()).tap_jump_release_threshold())
+            && (((fp).mv().co().kneebend().jump_input() as u32)
+                == ((enums::JumpInput_CStick as i32) as u32)))
+    {
+        (fp).mv().co().kneebend().set_is_short_hop(1_i32);
+    }
 }
 
 /// Registers this unit's ports.

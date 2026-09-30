@@ -140,7 +140,7 @@ pub fn itFoxillusion_UnkMotion0_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) 
         (temp_r31)
             .xDD4_itemVar()
             .foxillusion()
-            .set_xDDC(fns::it_8029CD78(ctx, item_gobj));
+            .set_xDDC(inl_it_8029CD78_unfused(ctx, item_gobj));
     }
     item = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
     if ((if !Handle::is_null((item).owner()) {
@@ -174,7 +174,7 @@ pub fn itFoxillusion_UnkMotion0_Coll<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i3
 pub fn itFoxillusion_UnkMotion1_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
     let mut item_gobj = item_gobj;
-    return fns::itFoxillusion_UnkMotion0_Anim(ctx, item_gobj);
+    return inl_itFoxillusion_UnkMotion0_Anim_unfused(ctx, item_gobj);
 }
 
 pub fn itFoxillusion_UnkMotion1_Phys<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
@@ -295,6 +295,28 @@ fn inl_HSD_JObjGetRotation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate:
     Handle::copy_from((rotate), (jobj).rotate());
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f6818),
+            (228_i32 as u32),
+            cstr(ctx, 0x803f6818),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetRotation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate: Quaternion<'a>) {
     let mut jobj = jobj;
     let mut rotate = rotate;
@@ -326,28 +348,6 @@ fn inl_HSD_JObjSetRotation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate:
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f6818),
-            (228_i32 as u32),
-            cstr(ctx, 0x803f6818),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_Item_InitSpawnPosition_unfused<'a>(
@@ -394,31 +394,26 @@ fn inl_Item_InitSpawnCommonFields_unfused<'a>(
     (spawn).set_x40(0_i32);
 }
 
-fn inl_itFoxillusion_Phys_unfused<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, ghost_pos: Vec<'a>) {
+fn inl_it_8029CD78_unfused<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> HSD_JObj<'a> {
+    let __frame = ctx.stack_frame(0x18);
+    let quat: Quaternion<'a> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
-    let mut ghost_pos = ghost_pos;
-    let mut item: Item<'a> =
-        (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
-    let mut jobj: HSD_JObj<'a> =
-        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, item_gobj)));
-    let mut ghost_jobj: HSD_JObj<'a> = (item).xDD4_itemVar().foxillusion().xDDC();
-    if !Handle::is_null((item).owner()) {
-        fns::ftFx_SpecialS_CopyGhostPosIndexed(ctx, (item).owner(), 1_i32, (item).pos());
-        inl_HSD_JObjSetRotationX_unfused(
-            ctx,
-            jobj,
-            fns::ftFx_SpecialS_ReturnFloatVarIndexed(ctx, (item).owner(), 1_i32),
-        );
-        if !Handle::is_null(ghost_jobj) {
-            fns::ftFx_SpecialS_CopyGhostPosIndexed(ctx, (item).owner(), 3_i32, ghost_pos);
-            inl_HSD_JObjSetTranslate_unfused(ctx, ghost_jobj, ghost_pos);
-            inl_HSD_JObjSetRotationX_unfused(
-                ctx,
-                ghost_jobj,
-                fns::ftFx_SpecialS_ReturnFloatVarIndexed(ctx, (item).owner(), 3_i32),
-            );
+    let mut temp_r30: HSD_JObj<'a> = null(ctx);
+    let mut temp_r29: HSD_JObj<'a> = null(ctx);
+    let mut item: Item<'a> = null(ctx);
+    item = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
+    temp_r30 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, item_gobj)));
+    if !Handle::is_null((item).xDD4_itemVar().foxillusion().xDDC()) {
+        fns::OSReport(ctx, cstr(ctx, 0x803f6848), &[]);
+        'l1: loop {
+            'c2: {}
         }
     }
+    temp_r29 = fns::HSD_JObjLoadJoint(ctx, (item).xDD4_itemVar().foxillusion().xDD4());
+    inl_HSD_JObjGetRotation_unfused(ctx, temp_r30, quat);
+    inl_HSD_JObjSetRotation_unfused(ctx, temp_r29, quat);
+    fns::it_80272F7C(ctx, temp_r29, (item).scl());
+    return temp_r29;
 }
 
 fn inl_HSD_JObjSetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
@@ -485,6 +480,64 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
             }
         }
     }
+}
+
+fn inl_itFoxillusion_Phys_unfused<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, ghost_pos: Vec<'a>) {
+    let mut item_gobj = item_gobj;
+    let mut ghost_pos = ghost_pos;
+    let mut item: Item<'a> =
+        (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
+    let mut jobj: HSD_JObj<'a> =
+        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, item_gobj)));
+    let mut ghost_jobj: HSD_JObj<'a> = (item).xDD4_itemVar().foxillusion().xDDC();
+    if !Handle::is_null((item).owner()) {
+        fns::ftFx_SpecialS_CopyGhostPosIndexed(ctx, (item).owner(), 1_i32, (item).pos());
+        inl_HSD_JObjSetRotationX_unfused(
+            ctx,
+            jobj,
+            fns::ftFx_SpecialS_ReturnFloatVarIndexed(ctx, (item).owner(), 1_i32),
+        );
+        if !Handle::is_null(ghost_jobj) {
+            fns::ftFx_SpecialS_CopyGhostPosIndexed(ctx, (item).owner(), 3_i32, ghost_pos);
+            inl_HSD_JObjSetTranslate_unfused(ctx, ghost_jobj, ghost_pos);
+            inl_HSD_JObjSetRotationX_unfused(
+                ctx,
+                ghost_jobj,
+                fns::ftFx_SpecialS_ReturnFloatVarIndexed(ctx, (item).owner(), 3_i32),
+            );
+        }
+    }
+}
+
+fn inl_itFoxillusion_UnkMotion0_Anim_unfused<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
+    let mut item_gobj = item_gobj;
+    let mut temp_r31: Item<'a> = null(ctx);
+    let mut item: Item<'a> = null(ctx);
+    temp_r31 = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
+    if ((!Handle::is_null((temp_r31).owner()))
+        && (fns::ftFx_SpecialS_GetCmdVar2(ctx, (temp_r31).owner()) == 2_i32))
+        && (Handle::is_null((temp_r31).xDD4_itemVar().foxillusion().xDDC()))
+    {
+        (temp_r31)
+            .xDD4_itemVar()
+            .foxillusion()
+            .set_xDDC(fns::it_8029CD78(ctx, item_gobj));
+    }
+    item = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
+    if ((if !Handle::is_null((item).owner()) {
+        fns::ftFx_SpecialS_CheckGhostRemove(ctx, (item).owner())
+    } else {
+        1_i32
+    }) != 0)
+    {
+        return 1_i32;
+    }
+    (temp_r31).set_xD44_lifeTimer(fp::fsubs((temp_r31).xD44_lifeTimer(), 1.0));
+    if (temp_r31).xD44_lifeTimer() <= 0.0 {
+        (temp_r31).set_xD44_lifeTimer(0.0);
+        fns::it_8029D798(ctx, item_gobj);
+    }
+    return 0_i32;
 }
 
 /// Registers this unit's ports.

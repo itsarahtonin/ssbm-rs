@@ -62,7 +62,7 @@ pub fn mpIsland_8005A728<'a>(ctx: &'a Ctx) {
     map = fns::mpLib_8004D164(ctx);
     lines = fns::mpGetGroundCollLine(ctx);
     vtx = fns::mpGetGroundCollVtx(ctx);
-    fns::mpIsland_8005A6F8(ctx);
+    inl_mpIsland_8005A6F8_unfused(ctx);
     fns::memzero(
         ctx,
         Handle::cast::<Addr<'a>>(visited.at(0)),
@@ -734,6 +734,18 @@ pub fn mpIsland_8005B334<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32, arg2: i32, arg3
         fns::mpIsland_80458E88(ctx).set_x4(fns::mpIsland_80458E88(ctx).x14());
     }
     fns::mpIsland_80458E88(ctx).set_xC(temp);
+}
+
+fn inl_mpIsland_8005A6F8_unfused<'a>(ctx: &'a Ctx) {
+    fns::mpIsland_80458E88(ctx).set_next(null::<mp_UnkStruct0<'a>>(ctx));
+    fns::mpIsland_80458E88(ctx).set_x4(null::<mp_UnkStruct0<'a>>(ctx));
+    fns::mpIsland_80458E88(ctx).set_x8(null::<mp_UnkStruct0<'a>>(ctx));
+    fns::mpIsland_80458E88(ctx).set_xC(null::<mp_UnkStruct0<'a>>(ctx));
+    fns::mpIsland_80458E88(ctx).set_x18(null::<mp_UnkStruct0<'a>>(ctx));
+    fns::mpIsland_80458E88(ctx).set_x1C(null::<mp_UnkStruct0<'a>>(ctx));
+    fns::mpIsland_80458E88(ctx).set_x10(null::<mp_UnkStruct0<'a>>(ctx));
+    fns::mpIsland_80458E88(ctx).set_x14(null::<mp_UnkStruct0<'a>>(ctx));
+    fns::mpIsland_80458E88(ctx).set_x20(null::<mp_UnkStruct0<'a>>(ctx));
 }
 
 fn inl_mpIsland_AssertSeg_unfused<'a>(ctx: &'a Ctx, mpisp: mp_UnkStruct0<'a>) {

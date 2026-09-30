@@ -572,7 +572,7 @@ pub fn ftCo_BuryWait_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    fns::ftCo_Bury_Coll(ctx, gobj);
+    inl_ftCo_Bury_Coll_unfused(ctx, gobj);
 }
 
 pub fn ftCo_800C13BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -761,6 +761,28 @@ fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'
     return (gobj).hsd_obj();
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803c6bc4),
+            (228_i32 as u32),
+            cstr(ctx, 0x803c6bc4),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
     let mut jobj = jobj;
     let mut z = z;
@@ -792,28 +814,6 @@ fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803c6bc4),
-            (228_i32 as u32),
-            cstr(ctx, 0x803c6bc4),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_ftCo_Bury_GetTranslate_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Vec<'a> {
@@ -851,6 +851,26 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
                 fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
             }
         }
+    }
+}
+
+fn inl_ftCo_Bury_Coll_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if ((!(fns::ft_80082888(ctx, gobj, (fp).mv().co().bury().coll_box()) != 0))
+        || ((fp).mv().co().bury().x20() != (fp).coll_data().floor().index()))
+        || (!Handle::is_null(fns::Ground_801C5700(ctx, (fp).mv().co().bury().x20())))
+    {
+        fns::ftCo_800C13BC(ctx, gobj);
     }
 }
 

@@ -70,8 +70,8 @@ pub fn gm_801602C0<'a>(ctx: &'a Ctx, arg0: i8) {
     let __frame = ctx.stack_frame(0x28);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
-    let mut a: i32 = fns::gm_80160244(ctx, arg0);
-    let mut b: i32 = fns::gm_801601C4(ctx, arg0);
+    let mut a: i32 = inl_gm_80160244_unfused(ctx, arg0);
+    let mut b: i32 = inl_gm_801601C4_unfused(ctx, arg0);
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {
@@ -260,8 +260,10 @@ pub fn gm_SelKindToUnlockIndex<'a>(ctx: &'a Ctx, selkind: i32) -> u8 {
 pub fn gm_CKindToUnlockIndex<'a>(ctx: &'a Ctx, ckind: i32) -> i8 {
     let __frame = ctx.stack_frame(0x8);
     let mut ckind = ckind;
-    return (fns::gm_SelKindToUnlockIndex(ctx, (fns::gm_CKindToSelKind(ctx, (ckind as u8)) as i32))
-        as i8);
+    return (inl_gm_SelKindToUnlockIndex_unfused(
+        ctx,
+        (fns::gm_CKindToSelKind(ctx, (ckind as u8)) as i32),
+    ) as i8);
 }
 
 pub fn gm_GetCKindByUnlockIndex<'a>(ctx: &'a Ctx, unlockable_character_bit_index: i32) -> u8 {
@@ -2853,7 +2855,7 @@ pub fn gm_IsCKindUnlocked<'a>(ctx: &'a Ctx, ckind: u8) -> i32 {
     let mut selkind: u8 = statics::melee__gm__gm_1601::ckind_to_selkind_map(ctx)
         .at((ckind as i32))
         .get();
-    let mut unlock_bit: u8 = fns::gm_SelKindToUnlockIndex(ctx, (selkind as i32));
+    let mut unlock_bit: u8 = inl_gm_SelKindToUnlockIndex_unfused(ctx, (selkind as i32));
     if ((unlock_bit as i32) == 11_i32)
         || ((((unlocked_chars_bitmask).get() as i64)
             & (shl_i64(1_i64, ((unlock_bit as i32) as u32))))
@@ -2872,7 +2874,7 @@ pub fn gm_80164A0C<'a>(ctx: &'a Ctx, ckind: u8) {
     let mut selkind: i32 = (statics::melee__gm__gm_1601::ckind_to_selkind_map(ctx)
         .at((ckind as i32))
         .get() as i32);
-    let mut idx: u8 = fns::gm_SelKindToUnlockIndex(ctx, selkind);
+    let mut idx: u8 = inl_gm_SelKindToUnlockIndex_unfused(ctx, selkind);
     if (idx as i32) != 11_i32 {
         (unlockable_character_bitfield).set(
             ((((unlockable_character_bitfield).get() as u64)
@@ -2916,7 +2918,7 @@ pub fn fn_80164B48<'a>(ctx: &'a Ctx) -> i32 {
     ptr_ = fns::gmMainLib_GetUnlockedCharactersBitmaskPtr(ctx);
     if !(inl_is_character_unlocked_unfused(
         ctx,
-        fns::gm_SelKindToUnlockIndex(
+        inl_gm_SelKindToUnlockIndex_unfused(
             ctx,
             (statics::melee__gm__gm_1601::ckind_to_selkind_map(ctx)
                 .at((enums::CKind_DrMario as i32))
@@ -2930,7 +2932,7 @@ pub fn fn_80164B48<'a>(ctx: &'a Ctx) -> i32 {
     ptr_ = fns::gmMainLib_GetUnlockedCharactersBitmaskPtr(ctx);
     if !(inl_is_character_unlocked_unfused(
         ctx,
-        fns::gm_SelKindToUnlockIndex(
+        inl_gm_SelKindToUnlockIndex_unfused(
             ctx,
             (statics::melee__gm__gm_1601::ckind_to_selkind_map(ctx)
                 .at((enums::CKind_Ganon as i32))
@@ -2944,7 +2946,7 @@ pub fn fn_80164B48<'a>(ctx: &'a Ctx) -> i32 {
     ptr_ = fns::gmMainLib_GetUnlockedCharactersBitmaskPtr(ctx);
     if !(inl_is_character_unlocked_unfused(
         ctx,
-        fns::gm_SelKindToUnlockIndex(
+        inl_gm_SelKindToUnlockIndex_unfused(
             ctx,
             (statics::melee__gm__gm_1601::ckind_to_selkind_map(ctx)
                 .at((enums::CKind_CLink as i32))
@@ -2958,7 +2960,7 @@ pub fn fn_80164B48<'a>(ctx: &'a Ctx) -> i32 {
     ptr_ = fns::gmMainLib_GetUnlockedCharactersBitmaskPtr(ctx);
     if !(inl_is_character_unlocked_unfused(
         ctx,
-        fns::gm_SelKindToUnlockIndex(
+        inl_gm_SelKindToUnlockIndex_unfused(
             ctx,
             (statics::melee__gm__gm_1601::ckind_to_selkind_map(ctx)
                 .at((enums::CKind_Falco as i32))
@@ -2972,7 +2974,7 @@ pub fn fn_80164B48<'a>(ctx: &'a Ctx) -> i32 {
     ptr_ = fns::gmMainLib_GetUnlockedCharactersBitmaskPtr(ctx);
     if !(inl_is_character_unlocked_unfused(
         ctx,
-        fns::gm_SelKindToUnlockIndex(
+        inl_gm_SelKindToUnlockIndex_unfused(
             ctx,
             (statics::melee__gm__gm_1601::ckind_to_selkind_map(ctx)
                 .at((enums::CKind_Pichu as i32))
@@ -2986,7 +2988,7 @@ pub fn fn_80164B48<'a>(ctx: &'a Ctx) -> i32 {
     ptr_ = fns::gmMainLib_GetUnlockedCharactersBitmaskPtr(ctx);
     if !(inl_is_character_unlocked_unfused(
         ctx,
-        fns::gm_SelKindToUnlockIndex(
+        inl_gm_SelKindToUnlockIndex_unfused(
             ctx,
             (statics::melee__gm__gm_1601::ckind_to_selkind_map(ctx)
                 .at((enums::CKind_Emblem as i32))
@@ -4725,7 +4727,7 @@ pub fn gm_80167858<'a>(ctx: &'a Ctx, port: i32, nametag: i32, arg2: i32, arg3: i
     let mut nametag = nametag;
     let mut arg2 = arg2;
     let mut arg3 = arg3;
-    if (fns::gm_RumbleEnabledForPlayer(ctx, port, nametag) != 0) {
+    if (inl_gm_RumbleEnabledForPlayer_unfused(ctx, port, nametag) != 0) {
         fns::lb_80014574(ctx, (port as u8), 3_i32, arg2, arg3);
     }
 }
@@ -4735,7 +4737,7 @@ pub fn gm_801678F8<'a>(ctx: &'a Ctx, port: i32, arg1: i32, arg2: i32) {
     let mut port = port;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
-    fns::gm_80167858(ctx, port, 120_i32, arg1, arg2);
+    inl_gm_80167858_unfused(ctx, port, 120_i32, arg1, arg2);
 }
 
 pub fn gm_SetupPlayerDefaults<'a>(ctx: &'a Ctx, player: PlayerInitData<'a>) {
@@ -4809,7 +4811,7 @@ pub fn gm_InitVsMode<'a>(ctx: &'a Ctx, vs: VsModeData<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let mut vs = vs;
     fns::gm_SetupRulesDefaults(ctx, (vs).start().rules());
-    fns::gm_SetupAllPlayerDefaults(ctx, (vs).start().players().get(0));
+    inl_gm_SetupAllPlayerDefaults_unfused(ctx, (vs).start().players().get(0));
     (vs).set_loser((1_i32.wrapping_neg() as i8));
     (vs).set_ordered_stage_index((1_i32.wrapping_neg() as i8));
     (vs).set_winner((1_i32.wrapping_neg() as i8));
@@ -5783,9 +5785,41 @@ pub fn gm_801692E8<'a>(ctx: &'a Ctx, secs: u32, datetime_: datetime<'a>) {
     }
 }
 
-fn inl_gm_80160244_noinline_unfused<'a>(ctx: &'a Ctx, arg0: i8) -> i32 {
+fn inl_gm_80160244_unfused<'a>(ctx: &'a Ctx, arg0: i8) -> i32 {
     let mut arg0 = arg0;
-    return inl_gm_80160244_inner_unfused(ctx, arg0);
+    let mut temp_f2: f64 = 0.0;
+    temp_f2 = fp::fdivs(
+        fp::frsp(((arg0 as i32).wrapping_add(100_i32)) as f64),
+        200.0,
+    );
+    temp_f2 = fp::fmuls(temp_f2, 100.0);
+    if temp_f2 == 50.0 {
+        return 127_i32;
+    }
+    if temp_f2 > 50.0 {
+        return 127_i32;
+    }
+    return fp::fctiwz((fp::fmuls(127.0, (fp::fdivs(temp_f2, 50.0)))));
+}
+
+fn inl_gm_801601C4_unfused<'a>(ctx: &'a Ctx, arg0: i8) -> i32 {
+    let mut arg0 = arg0;
+    let mut temp_f1: f64 = 0.0;
+    temp_f1 = fp::fdivs(
+        fp::frsp(((arg0 as i32).wrapping_add(100_i32)) as f64),
+        200.0,
+    );
+    temp_f1 = fp::fmuls(temp_f1, 100.0);
+    if temp_f1 == 50.0 {
+        return 127_i32;
+    }
+    if temp_f1 > 50.0 {
+        return fp::fctiwz(fp::fmuls(
+            127.0,
+            (fp::fdivs((fp::fsubs(100.0, temp_f1)), 50.0)),
+        ));
+    }
+    return 127_i32;
 }
 
 fn inl_gm_80160244_inner_unfused<'a>(ctx: &'a Ctx, arg0: i8) -> i32 {
@@ -5793,14 +5827,40 @@ fn inl_gm_80160244_inner_unfused<'a>(ctx: &'a Ctx, arg0: i8) -> i32 {
     return fns::gm_80160244(ctx, arg0);
 }
 
-fn inl_gm_801601C4_noinline_unfused<'a>(ctx: &'a Ctx, arg0: i8) -> i32 {
+fn inl_gm_80160244_noinline_unfused<'a>(ctx: &'a Ctx, arg0: i8) -> i32 {
     let mut arg0 = arg0;
-    return inl_gm_801601C4_inner_unfused(ctx, arg0);
+    return inl_gm_80160244_inner_unfused(ctx, arg0);
 }
 
 fn inl_gm_801601C4_inner_unfused<'a>(ctx: &'a Ctx, arg0: i8) -> i32 {
     let mut arg0 = arg0;
     return fns::gm_801601C4(ctx, arg0);
+}
+
+fn inl_gm_801601C4_noinline_unfused<'a>(ctx: &'a Ctx, arg0: i8) -> i32 {
+    let mut arg0 = arg0;
+    return inl_gm_801601C4_inner_unfused(ctx, arg0);
+}
+
+fn inl_gm_SelKindToUnlockIndex_unfused<'a>(ctx: &'a Ctx, selkind: i32) -> u8 {
+    let mut selkind = selkind;
+    let mut i: i32 = 0;
+    {
+        i = 0_i32;
+        'l1: while i < 11_i32 {
+            'c2: {
+                if (selkind as u32)
+                    == (statics::melee__gm__gm_1601::lbl_803B78C8(ctx)
+                        .get(i)
+                        .selkind() as u32)
+                {
+                    return statics::melee__gm__gm_1601::lbl_803B78C8(ctx).get(i).idx();
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return (11_i32 as u8);
 }
 
 fn inl_get_unlockable_selkind_by_bit_index_unfused<'a>(ctx: &'a Ctx, unlock_bit_index: i32) -> u8 {
@@ -5946,6 +6006,44 @@ fn inl_get_idx_unfused<'a>(ctx: &'a Ctx) -> i32 {
         }
     }
     return 0_i32;
+}
+
+fn inl_gm_RumbleEnabledForPlayer_unfused<'a>(ctx: &'a Ctx, port: i32, nametag: i32) -> i32 {
+    let mut port = port;
+    let mut nametag = nametag;
+    let mut result: i32 = 0_i32;
+    if nametag == 120_i32 {
+        if (fns::GetRumbleSettingOfPort(ctx, port) != 0) {
+            result = 1_i32;
+        }
+    } else if ((fns::GetPersistentNameData(ctx, nametag)).rumble_enabled() != 0) {
+        result = 1_i32;
+    }
+    return result;
+}
+
+fn inl_gm_80167858_unfused<'a>(ctx: &'a Ctx, port: i32, nametag: i32, arg2: i32, arg3: i32) {
+    let mut port = port;
+    let mut nametag = nametag;
+    let mut arg2 = arg2;
+    let mut arg3 = arg3;
+    if (fns::gm_RumbleEnabledForPlayer(ctx, port, nametag) != 0) {
+        fns::lb_80014574(ctx, (port as u8), 3_i32, arg2, arg3);
+    }
+}
+
+fn inl_gm_SetupAllPlayerDefaults_unfused<'a>(ctx: &'a Ctx, player: PlayerInitData<'a>) {
+    let mut player = player;
+    let mut i: i32 = 0;
+    {
+        i = 0_i32;
+        'l1: while i < (enums::Gm_Player_NumMax as i32) {
+            'c2: {
+                fns::gm_SetupPlayerDefaults(ctx, (Handle::add(player, i)));
+            }
+            i = i.wrapping_add(1);
+        }
+    }
 }
 
 fn inl_get_flag_unk_unfused<'a>(ctx: &'a Ctx, temp_r30: u16) -> i32 {

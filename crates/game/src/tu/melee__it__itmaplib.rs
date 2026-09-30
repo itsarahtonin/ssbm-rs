@@ -507,7 +507,7 @@ pub fn it_8027649C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> f64 {
     up.set_z(0.0);
     up.set_x(0.0);
     up.set_y(1.0);
-    fns::it_80276408(ctx, item_gobj, coll, normal);
+    inl_it_80276408_unfused(ctx, item_gobj, coll, normal);
     angle = fns::lbVector_Angle(ctx, normal, up);
     angle = fp::fmuls(
         (ip).facing_dir(),
@@ -534,15 +534,15 @@ pub fn it_802765BC<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: i32) {
     let mut jobj: HSD_JObj<'a> = fns::it_80272CC0(ctx, item_gobj, arg1);
     let mut bit_chk: u32 = (ip).xDC8_word().flags().x17();
     if bit_chk == (0_i32 as u32) {
-        let mut angle: f64 = fns::it_8027649C(ctx, item_gobj);
+        let mut angle: f64 = inl_it_8027649C_unfused(ctx, item_gobj);
         let mut facing: f64 = (ip).facing_dir();
         let mut rot: f64 = fp::fmuls(fp::fneg(facing), angle);
         inl_HSD_JObjSetRotationZ_unfused(ctx, jobj, rot);
     } else if bit_chk == (1_i32 as u32) {
-        let mut angle_2: f64 = fns::it_8027649C(ctx, item_gobj);
+        let mut angle_2: f64 = inl_it_8027649C_unfused(ctx, item_gobj);
         inl_HSD_JObjSetRotationX_unfused(ctx, jobj, angle_2);
     } else {
-        let mut angle_3: f64 = fns::it_8027649C(ctx, item_gobj);
+        let mut angle_3: f64 = inl_it_8027649C_unfused(ctx, item_gobj);
         inl_HSD_JObjSetRotationY_unfused(ctx, jobj, angle_3);
     }
 }
@@ -1099,6 +1099,88 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_it_80276408_unfused<'a>(
+    ctx: &'a Ctx,
+    item_gobj: HSD_GObj<'a>,
+    coll: CollData<'a>,
+    vec: Vec<'a>,
+) {
+    let mut item_gobj = item_gobj;
+    let mut coll = coll;
+    let mut vec = vec;
+    if (((coll).env_flags() & 63_i32) != 0) {
+        Handle::copy_from((vec), (coll).left_facing_wall().normal());
+    }
+    if (((coll).env_flags() & 0xfc0_i32) != 0) {
+        Handle::copy_from((vec), (coll).right_facing_wall().normal());
+    }
+    if (((coll).env_flags() & (0x2000_i32 | 0x4000_i32)) != 0) {
+        Handle::copy_from((vec), (coll).ceiling().normal());
+    }
+    if (((coll).env_flags() & (0x8000_i32 | 0x10000_i32)) != 0) {
+        Handle::copy_from((vec), (coll).floor().normal());
+    }
+}
+
+fn inl_it_8027649C_unfused<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> f64 {
+    let __frame = ctx.stack_frame(0x28);
+    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let up: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
+    let mut item_gobj = item_gobj;
+    let mut angle: f64 = 0.0;
+    let mut ip: Item<'a> =
+        (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
+    let mut coll: CollData<'a> = (ip).x378_itemColl();
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    up.set_z(0.0);
+    up.set_x(0.0);
+    up.set_y(1.0);
+    fns::it_80276408(ctx, item_gobj, coll, normal);
+    angle = fns::lbVector_Angle(ctx, normal, up);
+    angle = fp::fmuls(
+        (ip).facing_dir(),
+        (fp::fmuls(
+            angle,
+            fp::frsp(
+                (if normal.x() < 0.0 {
+                    1_i32.wrapping_neg()
+                } else {
+                    1_i32
+                }) as f64,
+            ),
+        )),
+    );
+    return angle;
+}
+
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8570),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b8570),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
     let mut jobj = jobj;
     let mut z = z;
@@ -1130,28 +1212,6 @@ fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b8570),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b8570),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjSetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
@@ -1280,11 +1340,6 @@ fn inl_sqrtf_accurate_sp18<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     return x;
 }
 
-fn inl_return_sqrt_value<'a>(ctx: &'a Ctx, v: Vec<'a>) -> f64 {
-    let mut v = v;
-    return inl_sqrtf_accurate_local(ctx, inl_product_xy(ctx, v, v));
-}
-
 fn inl_product_xy<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>) -> f64 {
     let mut a = a;
     let mut b = b;
@@ -1316,6 +1371,11 @@ fn inl_sqrtf_accurate_local<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         return y;
     }
     return x;
+}
+
+fn inl_return_sqrt_value<'a>(ctx: &'a Ctx, v: Vec<'a>) -> f64 {
+    let mut v = v;
+    return inl_sqrtf_accurate_local(ctx, inl_product_xy(ctx, v, v));
 }
 
 /// Registers this unit's ports.

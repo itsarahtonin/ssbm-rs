@@ -414,7 +414,7 @@ pub fn _hsdClassDestroy<'a>(ctx: &'a Ctx, cls: _HSD_Class<'a>) {
     (info)
         .head()
         .set_nb_exist((info).head().nb_exist().wrapping_sub((1_i32 as u32)));
-    fns::hsdFreeMemPiece(
+    inl_hsdFreeMemPiece_unfused(
         ctx,
         Handle::cast::<Addr<'a>>(cls),
         ((info).head().obj_size() as i32),
@@ -616,6 +616,40 @@ pub fn hsdDumpClassStat<'a>(ctx: &'a Ctx, info: _HSD_ClassInfo<'a>, recursive: i
     }
 }
 
+fn inl_hsdFreeMemPiece_unfused<'a>(ctx: &'a Ctx, mem: Addr<'a>, size: i32) {
+    let mut mem = mem;
+    let mut size = size;
+    let mut entry: _HSD_MemoryEntry<'a> = null(ctx);
+    let mut piece: _HSD_FreeList<'a> = Handle::cast::<_HSD_FreeList<'a>>(mem);
+    if !Handle::is_null(mem) {
+        entry = fns::GetMemoryEntry(
+            ctx,
+            div_i32((size.wrapping_add(31_i32)), 32_i32).wrapping_sub(1_i32),
+        );
+        (piece).set_next((entry).free_list());
+        (entry).set_free_list(piece);
+        (entry).set_nb_free((entry).nb_free().wrapping_add((1_i32 as u32)));
+    }
+}
+
+fn inl_HSD_GetClassInfo_unfused<'a>(ctx: &'a Ctx, object: HSD_Obj<'a>) -> _HSD_ClassInfo<'a> {
+    let mut object = object;
+    return (object).parent().class_info();
+}
+
+fn inl_HSD_PushClassInfo_unfused<'a>(
+    ctx: &'a Ctx,
+    class_info: _HSD_ClassInfo<'a>,
+) -> _HSD_ClassInfo<'a> {
+    let mut class_info = class_info;
+    let mut ret: _HSD_ClassInfo<'a> = null(ctx);
+    return {
+        let __t1 = class_info;
+        ret = __t1;
+        __t1
+    };
+}
+
 fn inl_hsdChangeClass_inline_unfused<'a>(
     ctx: &'a Ctx,
     object: HSD_Obj<'a>,
@@ -685,24 +719,6 @@ fn inl_hsdChangeClass_inline_unfused<'a>(
         return 1_i32;
     }
     return 0_i32;
-}
-
-fn inl_HSD_GetClassInfo_unfused<'a>(ctx: &'a Ctx, object: HSD_Obj<'a>) -> _HSD_ClassInfo<'a> {
-    let mut object = object;
-    return (object).parent().class_info();
-}
-
-fn inl_HSD_PushClassInfo_unfused<'a>(
-    ctx: &'a Ctx,
-    class_info: _HSD_ClassInfo<'a>,
-) -> _HSD_ClassInfo<'a> {
-    let mut class_info = class_info;
-    let mut ret: _HSD_ClassInfo<'a> = null(ctx);
-    return {
-        let __t1 = class_info;
-        ret = __t1;
-        __t1
-    };
 }
 
 fn inl_class_set_flags_unfused<'a>(

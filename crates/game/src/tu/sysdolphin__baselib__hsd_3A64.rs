@@ -162,7 +162,7 @@ pub fn HSD_SisLib_803A6530<'a>(
     let mut dst_idx = dst_idx;
     let mut src_idx = src_idx;
     let mut sis_table: Ptr<'a, Val<'a, u8>> = fns::HSD_SisLib_804D1124(ctx).at(font_idx).get();
-    return fns::HSD_SisLib_803A6478(
+    return inl_HSD_SisLib_803A6478_unfused(
         ctx,
         (Handle::add(sis_table, dst_idx)).get(),
         (Handle::add(sis_table, src_idx)).get(),
@@ -212,7 +212,7 @@ pub fn HSD_SisLib_803A660C<'a>(ctx: &'a Ctx, font_idx: i32, dst_idx: i32, src_id
             }
         }
     }
-    let _ = fns::HSD_SisLib_803A6478(ctx, dst, src);
+    let _ = inl_HSD_SisLib_803A6478_unfused(ctx, dst, src);
 }
 
 pub fn HSD_SisLib_803A6754<'a>(ctx: &'a Ctx, font_idx: i32, context_id: i32) -> HSD_Text<'a> {
@@ -479,6 +479,136 @@ pub fn HSD_SisLib_803A7664<'a>(ctx: &'a Ctx, text: HSD_Text<'a>) {
     (data).set_end((data).data());
     ((data).end()).set((0_i32 as u8));
     (data).set_count((0_i32 as u32));
+}
+
+fn inl_HSD_SisLib_803A6478_unfused<'a>(
+    ctx: &'a Ctx,
+    dst: Val<'a, u8>,
+    src: Val<'a, u8>,
+) -> Val<'a, u8> {
+    let mut dst = dst;
+    let mut src = src;
+    'l1: while ((src).get() as i32) != 0_i32 {
+        'c2: {
+            if ((src).get() as i32) >= 32_i32 {
+                ({
+                    let __t1 = dst;
+                    dst = Handle::add(dst, 1);
+                    __t1
+                })
+                .set(
+                    ({
+                        let __t2 = src;
+                        src = Handle::add(src, 1);
+                        __t2
+                    })
+                    .get(),
+                );
+                ({
+                    let __t3 = dst;
+                    dst = Handle::add(dst, 1);
+                    __t3
+                })
+                .set(
+                    ({
+                        let __t4 = src;
+                        src = Handle::add(src, 1);
+                        __t4
+                    })
+                    .get(),
+                );
+            } else {
+                's3: {
+                    let __case = match ({
+                        let __t7 = ({
+                            let __t6 = src;
+                            src = Handle::add(src, 1);
+                            __t6
+                        })
+                        .get();
+                        ({
+                            let __t5 = dst;
+                            dst = Handle::add(dst, 1);
+                            __t5
+                        })
+                        .set(__t7);
+                        __t7
+                    } as i32)
+                    {
+                        6_i32 => 0,
+                        7_i32 => 0,
+                        8_i32 => 0,
+                        9_i32 => 0,
+                        10_i32 => 0,
+                        14_i32 => 0,
+                        12_i32 => 1,
+                        5_i32 => 2,
+                        _ => 3,
+                    };
+                    if __case <= 0 {
+                        ({
+                            let __t8 = dst;
+                            dst = Handle::add(dst, 1);
+                            __t8
+                        })
+                        .set(
+                            ({
+                                let __t9 = src;
+                                src = Handle::add(src, 1);
+                                __t9
+                            })
+                            .get(),
+                        );
+                    }
+                    if __case <= 1 {
+                        ({
+                            let __t10 = dst;
+                            dst = Handle::add(dst, 1);
+                            __t10
+                        })
+                        .set(
+                            ({
+                                let __t11 = src;
+                                src = Handle::add(src, 1);
+                                __t11
+                            })
+                            .get(),
+                        );
+                    }
+                    if __case <= 2 {
+                        ({
+                            let __t12 = dst;
+                            dst = Handle::add(dst, 1);
+                            __t12
+                        })
+                        .set(
+                            ({
+                                let __t13 = src;
+                                src = Handle::add(src, 1);
+                                __t13
+                            })
+                            .get(),
+                        );
+                        ({
+                            let __t14 = dst;
+                            dst = Handle::add(dst, 1);
+                            __t14
+                        })
+                        .set(
+                            ({
+                                let __t15 = src;
+                                src = Handle::add(src, 1);
+                                __t15
+                            })
+                            .get(),
+                        );
+                    }
+                }
+            }
+        }
+    }
+    (dst).set((0_i32 as u8));
+    return dst;
 }
 
 fn inl_sisBeginLine_unfused<'a>(

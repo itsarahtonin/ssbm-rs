@@ -889,6 +889,28 @@ fn inl_HSD_JObjGetRotationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     return (jobj).rotate().z();
 }
 
+fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b85ac),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b85ac),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetRotationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
     let mut jobj = jobj;
     let mut x = x;
@@ -920,28 +942,6 @@ fn inl_HSD_JObjSetRotationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b85ac),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b85ac),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjSetRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
@@ -1015,6 +1015,28 @@ fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'
     return (gobj).hsd_obj();
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b85ac),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b85ac),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
     let mut jobj = jobj;
     let mut x = x;
@@ -1046,28 +1068,6 @@ fn inl_HSD_JObjSetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b85ac),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b85ac),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
@@ -1136,11 +1136,6 @@ fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64
     }
 }
 
-fn inl_return_sqrt_value3<'a>(ctx: &'a Ctx, v: Vec<'a>) -> f64 {
-    let mut v = v;
-    return inl_itzako_sqrtf(ctx, inl_product_xyz(ctx, v, v));
-}
-
 fn inl_product_xyz<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>) -> f64 {
     let mut a = a;
     let mut b = b;
@@ -1172,6 +1167,11 @@ fn inl_itzako_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         return y;
     }
     return x;
+}
+
+fn inl_return_sqrt_value3<'a>(ctx: &'a Ctx, v: Vec<'a>) -> f64 {
+    let mut v = v;
+    return inl_itzako_sqrtf(ctx, inl_product_xyz(ctx, v, v));
 }
 
 /// Registers this unit's ports.

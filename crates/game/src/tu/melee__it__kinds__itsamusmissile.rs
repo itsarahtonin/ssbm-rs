@@ -605,6 +605,11 @@ fn inl_itSamusMissile_ClampTurn_unfused<'a>(
     }
 }
 
+fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).hsd_obj();
+}
+
 fn inl_itGetJObjGrandchild_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_JObj<'a> {
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> =
@@ -621,11 +626,6 @@ fn inl_itGetJObjGrandchild_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_
         child = (child).child();
     }
     return child;
-}
-
-fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).hsd_obj();
 }
 
 fn inl_isSamusmissile_MotionAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -671,15 +671,6 @@ fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, vec: Vec<'a>) {
     (ip).x40_vel().set_y((vec).y());
 }
 
-fn inl_itSamusmissile_SetRotationX_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let mut gobj = gobj;
-    let mut jobj: HSD_JObj<'a> =
-        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
-    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    let mut child: HSD_JObj<'a> = inl_HSD_JObjGetChild_unfused(ctx, jobj);
-    inl_HSD_JObjSetRotationX_unfused(ctx, child, (ip).xDD4_itemVar().samusmissile().x8());
-}
-
 fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
     let mut jobj = jobj;
     if Handle::is_null(jobj) {
@@ -689,6 +680,28 @@ fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JOb
     }
     #[allow(unreachable_code)]
     return null(ctx);
+}
+
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f7340),
+            (228_i32 as u32),
+            cstr(ctx, 0x803f7340),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
@@ -724,26 +737,13 @@ fn inl_HSD_JObjSetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f7340),
-            (228_i32 as u32),
-            cstr(ctx, 0x803f7340),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
+fn inl_itSamusmissile_SetRotationX_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut jobj: HSD_JObj<'a> =
+        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut child: HSD_JObj<'a> = inl_HSD_JObjGetChild_unfused(ctx, jobj);
+    inl_HSD_JObjSetRotationX_unfused(ctx, child, (ip).xDD4_itemVar().samusmissile().x8());
 }
 
 fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {

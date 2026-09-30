@@ -287,7 +287,7 @@ pub fn un_80300248<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn un_80300290<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
-    fns::un_802FFD94(
+    inl_un_802FFD94_unfused(
         ctx,
         arg0,
         Handle::cast::<Addr<'a>>(fns::un_803FA658(ctx)),
@@ -367,6 +367,19 @@ fn inl_sfxForward_unfused<'a>(ctx: &'a Ctx) {
 
 fn inl_sfxBack_unfused<'a>(ctx: &'a Ctx) {
     fns::lbAudioAx_80024030(ctx, 0_i32);
+}
+
+fn inl_un_802FFD94_unfused<'a>(ctx: &'a Ctx, arg0: i32, arg1: Addr<'a>, arg2: FnPtr<'a>) {
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut d: un_80304138_objalloc_t<'a> = null(ctx);
+    if arg0 == 1_i32 {
+        d = fns::un_80302DF0(ctx);
+        inl_sfxForward_unfused(ctx);
+        let _ = fns::un_80304210(ctx, d, arg1, 0_i32, 60_i32.wrapping_neg(), 0_i32);
+        fns::un_80302DF8(ctx, fns::un_80302DF0(ctx), arg2);
+    }
 }
 
 /// Registers this unit's ports.

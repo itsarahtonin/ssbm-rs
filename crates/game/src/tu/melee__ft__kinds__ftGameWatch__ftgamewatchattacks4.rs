@@ -76,7 +76,7 @@ pub fn ftGw_AttackS4_ItemTorchOnDamage<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if !Handle::is_null((fp).u().gw().x2254_fireGObj()) {
         fns::itGamewatchFire_802C6A2C(ctx, (fp).u().gw().x2254_fireGObj());
-        fns::ftGw_AttackS4_ItemTorchSetFlag(ctx, gobj);
+        inl_ftGw_AttackS4_ItemTorchSetFlag_unfused(ctx, gobj);
     }
 }
 
@@ -171,6 +171,14 @@ fn inl_getFighter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_ftGw_AttackS4_ItemTorchSetFlag_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    fns::ftGw_AttackS4_ItemTorchExitHitlag(ctx, gobj);
+    (fp).u().gw().set_x2254_fireGObj(null::<HSD_GObj<'a>>(ctx));
 }
 
 /// Registers this unit's ports.

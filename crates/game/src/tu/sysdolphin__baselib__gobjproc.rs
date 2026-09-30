@@ -150,7 +150,7 @@ pub fn HSD_GObjProc_RemoveProc<'a>(ctx: &'a Ctx, gproc: HSD_GObjProc<'a>) {
             .x0()
             .set_delay_remove_proc((1_i32 as u32));
     } else {
-        fns::HSD_GObjProc_UnlinkProcFromGObj(ctx, gproc);
+        inl_HSD_GObjProc_UnlinkProcFromGObj_unfused(ctx, gproc);
         fns::HSD_ObjFree(
             ctx,
             fns::gobjproc_alloc_data(ctx),
@@ -166,7 +166,7 @@ pub fn HSD_GObjProc_RemoveAllProcs<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     'l1: while !Handle::is_null(cur) {
         'c2: {
             let mut next: HSD_GObjProc<'a> = (cur).child();
-            fns::HSD_GObjProc_RemoveProc(ctx, cur);
+            inl_HSD_GObjProc_RemoveProc_unfused(ctx, cur);
             cur = next;
         }
     }
@@ -184,6 +184,46 @@ fn inl_assertProc_unfused<'a>(ctx: &'a Ctx, gproc: HSD_GObjProc<'a>) {
             cstr(ctx, 0x804084b4),
         )
     });
+}
+
+fn inl_HSD_GObjProc_UnlinkProcFromGObj_unfused<'a>(ctx: &'a Ctx, gproc: HSD_GObjProc<'a>) {
+    let mut gproc = gproc;
+    let mut gobj: HSD_GObj<'a> = (gproc).gobj();
+    fns::HSD_GObjProc_UnqueueProc(ctx, gproc);
+    if Handle::addr((gobj).proc()) == Handle::addr(gproc) {
+        (gobj).set_proc((gproc).child());
+    } else {
+        let mut cur: HSD_GObjProc<'a> = (gobj).proc();
+        'l1: while Handle::addr((cur).child()) != Handle::addr(gproc) {
+            'c2: {
+                cur = (cur).child();
+            }
+        }
+        (cur).set_child((gproc).child());
+    }
+}
+
+fn inl_HSD_GObjProc_RemoveProc_unfused<'a>(ctx: &'a Ctx, gproc: HSD_GObjProc<'a>) {
+    let mut gproc = gproc;
+    if (!(fns::HSD_GObj_DelayedProcInfo(ctx)
+        .x0()
+        .x0()
+        .in_delayed_proc()
+        != 0))
+        && (Handle::addr(gproc) == Handle::addr(fns::HSD_GObj_CurrentInvokedProc(ctx).get()))
+    {
+        fns::HSD_GObj_DelayedProcInfo(ctx)
+            .x0()
+            .x0()
+            .set_delay_remove_proc((1_i32 as u32));
+    } else {
+        fns::HSD_GObjProc_UnlinkProcFromGObj(ctx, gproc);
+        fns::HSD_ObjFree(
+            ctx,
+            fns::gobjproc_alloc_data(ctx),
+            Handle::cast::<Addr<'a>>(gproc),
+        );
+    }
 }
 
 /// Registers this unit's ports.

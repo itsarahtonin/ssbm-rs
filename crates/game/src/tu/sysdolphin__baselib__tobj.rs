@@ -153,7 +153,7 @@ pub fn HSD_TObjReqAnimAll<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>, startframe: f64)
     let __frame = ctx.stack_frame(0x20);
     let mut tobj = tobj;
     let mut startframe = startframe;
-    fns::HSD_TObjReqAnimAllByFlags(ctx, tobj, startframe, (16_i32 as u32));
+    inl_HSD_TObjReqAnimAllByFlags_unfused(ctx, tobj, startframe, (16_i32 as u32));
 }
 
 pub fn HSD_TObjAnim<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
@@ -181,7 +181,7 @@ pub fn HSD_TObjAnimAll<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
         i = tobj;
         'l1: while !Handle::is_null(i) {
             'c2: {
-                fns::HSD_TObjAnim(ctx, i);
+                inl_HSD_TObjAnim_unfused(ctx, i);
             }
             i = (i).next();
         }
@@ -1486,10 +1486,7 @@ pub fn HSD_TObjAssignResources<'a>(ctx: &'a Ctx, tobj_top: HSD_TObj<'a>) -> i32 
                         texmap_no = texmap_no.wrapping_add(1);
                         __t1
                     }));
-                    (tobj).set_mtxid(statics::sysdolphin__baselib__tobj::HSD_TexMapID2PTTexMtx(
-                        ctx,
-                        (tobj).id(),
-                    ));
+                    (tobj).set_mtxid(inl_HSD_TexMapID2PTTexMtx_unfused(ctx, (tobj).id()));
                     's5: {
                         let __case = match ((tobj).flags() & ((15_i32) as u32)) {
                             1_u32 => 0,
@@ -2190,7 +2187,7 @@ pub fn TObjRelease<'a>(ctx: &'a Ctx, o: _HSD_Class<'a>) {
     let mut o = o;
     let mut tobj: HSD_TObj<'a> = (Handle::cast::<HSD_TObj<'a>>((o)));
     fns::HSD_AObjRemove(ctx, (tobj).aobj());
-    fns::HSD_TlutRemove(ctx, (tobj).tlut());
+    inl_HSD_TlutRemove_unfused(ctx, (tobj).tlut());
     inl_HSD_TObjTevRemove_unfused(ctx, (tobj).tev());
     if !Handle::is_null((tobj).tluttbl()) {
         let mut i: i32 = 0;
@@ -2198,7 +2195,7 @@ pub fn TObjRelease<'a>(ctx: &'a Ctx, o: _HSD_Class<'a>) {
             i = 0_i32;
             'l1: while !Handle::is_null((Handle::add((tobj).tluttbl(), i)).get()) {
                 'c2: {
-                    fns::HSD_TlutRemove(ctx, (Handle::add((tobj).tluttbl(), i)).get());
+                    inl_HSD_TlutRemove_unfused(ctx, (Handle::add((tobj).tluttbl(), i)).get());
                 }
                 i = i.wrapping_add(1);
             }
@@ -2295,6 +2292,64 @@ fn inl_HSD_TObjReqAnimByFlags_unfused<'a>(
     }
 }
 
+fn inl_HSD_TObjReqAnimAllByFlags_unfused<'a>(
+    ctx: &'a Ctx,
+    tobj: HSD_TObj<'a>,
+    startframe: f64,
+    flags: u32,
+) {
+    let mut tobj = tobj;
+    let mut startframe = startframe;
+    let mut flags = flags;
+    let mut tp: HSD_TObj<'a> = null(ctx);
+    if !Handle::is_null(tobj) {
+        {
+            tp = tobj;
+            'l1: while !Handle::is_null(tp) {
+                'c2: {
+                    inl_HSD_TObjReqAnimByFlags_unfused(ctx, tp, startframe, flags);
+                }
+                tp = (tp).next();
+            }
+        }
+    }
+}
+
+fn inl_HSD_TObjAnim_unfused<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
+    let mut tobj = tobj;
+    if Handle::is_null(tobj) {
+        return;
+    }
+    fns::HSD_AObjInterpretAnim(
+        ctx,
+        (tobj).aobj(),
+        Handle::cast::<Addr<'a>>(tobj),
+        fnptr(ctx, 0x8035e860),
+    );
+}
+
+fn inl_GXSetTexCoordGen_unfused<'a>(
+    ctx: &'a Ctx,
+    dst_coord: i32,
+    func: i32,
+    src_param: i32,
+    mtx: u32,
+) {
+    let mut dst_coord = dst_coord;
+    let mut func = func;
+    let mut src_param = src_param;
+    let mut mtx = mtx;
+    fns::GXSetTexCoordGen2(
+        ctx,
+        dst_coord,
+        func,
+        src_param,
+        mtx,
+        (0_i32 as u8),
+        ((enums::GX_PTIDENTITY as i32) as u32),
+    );
+}
+
 fn inl_setupTextureCoordGen_unfused<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
     let mut tobj = tobj;
     let mut mtxid: u32 = 0;
@@ -2354,31 +2409,54 @@ fn inl_setupTextureCoordGen_unfused<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
     }
 }
 
-fn inl_GXSetTexCoordGen_unfused<'a>(
-    ctx: &'a Ctx,
-    dst_coord: i32,
-    func: i32,
-    src_param: i32,
-    mtx: u32,
-) {
-    let mut dst_coord = dst_coord;
-    let mut func = func;
-    let mut src_param = src_param;
-    let mut mtx = mtx;
-    fns::GXSetTexCoordGen2(
-        ctx,
-        dst_coord,
-        func,
-        src_param,
-        mtx,
-        (0_i32 as u8),
-        ((enums::GX_PTIDENTITY as i32) as u32),
-    );
-}
-
-fn inl_HSD_TObjRemove_unfused<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
-    let mut tobj = tobj;
-    inl_hsdDelete_unfused(ctx, Handle::cast::<Addr<'a>>(tobj));
+fn inl_HSD_TexMapID2PTTexMtx_unfused<'a>(ctx: &'a Ctx, id: i32) -> u32 {
+    let mut id = id;
+    's1: {
+        let __case = match (id as u32) {
+            0_u32 => 0,
+            1_u32 => 1,
+            2_u32 => 2,
+            3_u32 => 3,
+            4_u32 => 4,
+            5_u32 => 5,
+            6_u32 => 6,
+            7_u32 => 7,
+            _ => 8,
+        };
+        if __case <= 0 {
+            return ((enums::GX_PTTEXMTX0 as i32) as u32);
+        }
+        if __case <= 1 {
+            return ((enums::GX_PTTEXMTX1 as i32) as u32);
+        }
+        if __case <= 2 {
+            return ((enums::GX_PTTEXMTX2 as i32) as u32);
+        }
+        if __case <= 3 {
+            return ((enums::GX_PTTEXMTX3 as i32) as u32);
+        }
+        if __case <= 4 {
+            return ((enums::GX_PTTEXMTX4 as i32) as u32);
+        }
+        if __case <= 5 {
+            return ((enums::GX_PTTEXMTX5 as i32) as u32);
+        }
+        if __case <= 6 {
+            return ((enums::GX_PTTEXMTX6 as i32) as u32);
+        }
+        if __case <= 7 {
+            return ((enums::GX_PTTEXMTX7 as i32) as u32);
+        }
+        if __case <= 8 {
+            fns::HSD_Panic(
+                ctx,
+                cstr(ctx, 0x80405574),
+                (0x23e_i32 as u32),
+                cstr(ctx, 0x8040562c),
+            );
+        }
+    }
+    return (0_i32 as u32);
 }
 
 fn inl_hsdDelete_unfused<'a>(ctx: &'a Ctx, object: Addr<'a>) {
@@ -2394,6 +2472,11 @@ fn inl_hsdDelete_unfused<'a>(ctx: &'a Ctx, object: Addr<'a>) {
         .call::<_, ()>((Handle::cast::<_HSD_Class<'a>>(object),));
 }
 
+fn inl_HSD_TObjRemove_unfused<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
+    let mut tobj = tobj;
+    inl_hsdDelete_unfused(ctx, Handle::cast::<Addr<'a>>(tobj));
+}
+
 fn inl_HSD_TObjGetDefaultClass_unfused<'a>(ctx: &'a Ctx) -> _HSD_TObjInfo<'a> {
     return (if !Handle::is_null(statics::sysdolphin__baselib__tobj::default_class(ctx).get()) {
         statics::sysdolphin__baselib__tobj::default_class(ctx).get()
@@ -2402,16 +2485,23 @@ fn inl_HSD_TObjGetDefaultClass_unfused<'a>(ctx: &'a Ctx) -> _HSD_TObjInfo<'a> {
     });
 }
 
-fn inl_HSD_TObjTevRemove_unfused<'a>(ctx: &'a Ctx, tev: _HSD_TObjTev<'a>) {
-    let mut tev = tev;
-    if !Handle::is_null(tev) {
-        inl_HSD_TObjTevFree_unfused(ctx, tev);
+fn inl_HSD_TlutRemove_unfused<'a>(ctx: &'a Ctx, tlut: _HSD_Tlut<'a>) {
+    let mut tlut = tlut;
+    if !Handle::is_null(tlut) {
+        fns::hsdFreeMemPiece(ctx, Handle::cast::<Addr<'a>>(tlut), (16_u32 as i32));
     }
 }
 
 fn inl_HSD_TObjTevFree_unfused<'a>(ctx: &'a Ctx, tev: _HSD_TObjTev<'a>) {
     let mut tev = tev;
     fns::hsdFreeMemPiece(ctx, Handle::cast::<Addr<'a>>(tev), (32_u32 as i32));
+}
+
+fn inl_HSD_TObjTevRemove_unfused<'a>(ctx: &'a Ctx, tev: _HSD_TObjTev<'a>) {
+    let mut tev = tev;
+    if !Handle::is_null(tev) {
+        inl_HSD_TObjTevFree_unfused(ctx, tev);
+    }
 }
 
 /// Registers this unit's ports.

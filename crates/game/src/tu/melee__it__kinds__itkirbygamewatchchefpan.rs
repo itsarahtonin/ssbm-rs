@@ -71,7 +71,7 @@ pub fn it_802C760C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let mut item: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
     if !Handle::is_null(item) {
-        fns::itKirbyGameWatchChefPan_Logic113_Destroyed(ctx, item_gobj);
+        inl_itKirbyGameWatchChefPan_Logic113_Destroyed_unfused(ctx, item_gobj);
         fns::Item_8026A8EC(ctx, item_gobj);
     }
 }
@@ -105,7 +105,7 @@ pub fn itKirbygamewatchchefpan_UnkMotion0_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_
     let mut item: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
     if (inl_itKirbygamewatchchefpan_UnkMotion0_Anim_inline_unfused(ctx, item_gobj) != 0) {
-        fns::itKirbyGameWatchChefPan_Logic113_Destroyed(ctx, item_gobj);
+        inl_itKirbyGameWatchChefPan_Logic113_Destroyed_unfused(ctx, item_gobj);
         return 1_i32;
     }
     return 0_i32;
@@ -171,6 +171,20 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_Item_AttachToParent_unfused<'a>(
+    ctx: &'a Ctx,
+    item_gobj: HSD_GObj<'a>,
+    parent: HSD_GObj<'a>,
+    part: i32,
+) -> HSD_GObj<'a> {
+    let mut item_gobj = item_gobj;
+    let mut parent = parent;
+    let mut part = part;
+    fns::Item_8026AB54(ctx, item_gobj, parent, part);
+    fns::db_80225DD8(ctx, item_gobj, parent);
+    return item_gobj;
+}
+
 fn inl_Item_AttachGameWatchArticle_unfused<'a>(
     ctx: &'a Ctx,
     parent: HSD_GObj<'a>,
@@ -191,18 +205,16 @@ fn inl_Item_AttachGameWatchArticle_unfused<'a>(
     );
 }
 
-fn inl_Item_AttachToParent_unfused<'a>(
+fn inl_itKirbyGameWatchChefPan_Logic113_Destroyed_unfused<'a>(
     ctx: &'a Ctx,
     item_gobj: HSD_GObj<'a>,
-    parent: HSD_GObj<'a>,
-    part: i32,
-) -> HSD_GObj<'a> {
+) {
     let mut item_gobj = item_gobj;
-    let mut parent = parent;
-    let mut part = part;
-    fns::Item_8026AB54(ctx, item_gobj, parent, part);
-    fns::db_80225DD8(ctx, item_gobj, parent);
-    return item_gobj;
+    let mut item: Item<'a> =
+        (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
+    if !Handle::is_null((item).owner()) {
+        fns::ftKb_SpecialNGw_8010D074(ctx, (item).owner());
+    }
 }
 
 fn inl_itKirbygamewatchchefpan_UnkMotion0_Anim_inline_unfused<'a>(

@@ -680,6 +680,20 @@ pub fn lbSnap_8001E290<'a>(ctx: &'a Ctx) {
     }
 }
 
+fn inl_lbSnap_ClearText_unfused<'a>(ctx: &'a Ctx, text: Val<'a, i8>) {
+    let mut text = text;
+    let mut i: i32 = 0;
+    {
+        i = 0_i32;
+        'l1: while i < 33_i32 {
+            'c2: {
+                (Handle::add(text, i)).set((0_i32 as i8));
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+}
+
 fn inl_lbSnap_FormatTime_unfused<'a>(ctx: &'a Ctx, chan: i32, index: i32, text: Val<'a, i8>) {
     let mut chan = chan;
     let mut index = index;
@@ -715,20 +729,6 @@ fn inl_lbSnap_FormatTime_unfused<'a>(ctx: &'a Ctx, chan: i32, index: i32, text: 
             .time() as u32,
         )],
     );
-}
-
-fn inl_lbSnap_ClearText_unfused<'a>(ctx: &'a Ctx, text: Val<'a, i8>) {
-    let mut text = text;
-    let mut i: i32 = 0;
-    {
-        i = 0_i32;
-        'l1: while i < 33_i32 {
-            'c2: {
-                (Handle::add(text, i)).set((0_i32 as i8));
-            }
-            i = i.wrapping_add(1);
-        }
-    }
 }
 
 fn inl_lbSnap_GetMemSnapIconData_unfused<'a>(ctx: &'a Ctx) -> Val<'a, u8> {

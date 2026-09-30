@@ -3996,7 +3996,7 @@ pub fn fn_8002F360<'a>(ctx: &'a Ctx, x: HSD_GObj<'a>) {
 
 pub fn Camera_8002F3AC<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
-    fns::fn_8002F360(ctx, inl_getCameraGObj_unfused(ctx));
+    inl_fn_8002F360_unfused(ctx, inl_getCameraGObj_unfused(ctx));
     Handle::copy_from(
         statics::melee__cm__camera::game_camera(ctx)
             .transform()
@@ -5167,7 +5167,7 @@ pub fn Camera_80030BBC<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: S32Vec2<'a>) -> i3
     let mut py: i32 = 0;
     cobj = (Handle::cast::<HSD_CObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(
         ctx,
-        fns::Camera_80030A50(ctx),
+        inl_Camera_80030A50_unfused(ctx),
     )));
     if Handle::is_null(fns::lbVector_WorldToScreen(ctx, cobj, arg0, point, 1_i32)) {
         return 0_i32;
@@ -5214,7 +5214,7 @@ pub fn Camera_80030CFC<'a>(ctx: &'a Ctx, cam_box: CmSubject<'a>, tolerance: f64)
     let mut range: f64 = 0.0;
     cobj = (Handle::cast::<HSD_CObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(
         ctx,
-        fns::Camera_80030A50(ctx),
+        inl_Camera_80030A50_unfused(ctx),
     )));
     fns::HSD_CObjGetEyePosition(ctx, cobj, eye_pos);
     fns::HSD_CObjGetInterest(ctx, cobj, interest);
@@ -5628,23 +5628,6 @@ fn inl_HSD_PadGetNmlSubStickY<'a>(ctx: &'a Ctx, slot: u8) -> f64 {
         .nml_subStickY();
 }
 
-fn inl_update_transform<'a>(ctx: &'a Ctx, bounds: CameraBounds<'a>, ts: CameraTransformState<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let fighter_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let mut bounds = bounds;
-    let mut ts = ts;
-    let mut delta: f64 = 0.0;
-    fns::Camera_8002958C(ctx, bounds, ts);
-    (ts).set_target_fov(fns::cm_803BCCA0(ctx).x40());
-    delta = fp::fsubs((ts).target_fov(), (ts).fov());
-    (ts).set_fov(fp::fmadds(delta, fns::cm_803BCCA0(ctx).x44(), (ts).fov()));
-    fns::Camera_80029BC4(ctx, bounds, ts);
-    if !(inl_fighter_z_out_of_range(ctx, fighter_pos) != 0) {
-        fns::Camera_80029CF8(ctx, bounds, ts);
-        fns::Camera_8002A768(ctx, ts, 0_i32);
-    }
-}
-
 fn inl_fighter_z_out_of_range<'a>(ctx: &'a Ctx, fighter_pos: Vec<'a>) -> i32 {
     let mut fighter_pos = fighter_pos;
     let mut gobj: HSD_GObj<'a> = null(ctx);
@@ -5663,6 +5646,23 @@ fn inl_fighter_z_out_of_range<'a>(ctx: &'a Ctx, fighter_pos: Vec<'a>) -> i32 {
         }
     }
     return 0_i32;
+}
+
+fn inl_update_transform<'a>(ctx: &'a Ctx, bounds: CameraBounds<'a>, ts: CameraTransformState<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let fighter_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut bounds = bounds;
+    let mut ts = ts;
+    let mut delta: f64 = 0.0;
+    fns::Camera_8002958C(ctx, bounds, ts);
+    (ts).set_target_fov(fns::cm_803BCCA0(ctx).x40());
+    delta = fp::fsubs((ts).target_fov(), (ts).fov());
+    (ts).set_fov(fp::fmadds(delta, fns::cm_803BCCA0(ctx).x44(), (ts).fov()));
+    fns::Camera_80029BC4(ctx, bounds, ts);
+    if !(inl_fighter_z_out_of_range(ctx, fighter_pos) != 0) {
+        fns::Camera_80029CF8(ctx, bounds, ts);
+        fns::Camera_8002A768(ctx, ts, 0_i32);
+    }
 }
 
 fn inl_get_slot_pad_unfused<'a>(ctx: &'a Ctx, arg0: u8) -> HSD_PadStatus<'a> {
@@ -5690,20 +5690,6 @@ fn inl_get_substick_y_unfused<'a>(ctx: &'a Ctx, arg0: HSD_PadStatus<'a>) -> f64 
     return (arg0).nml_subStickY();
 }
 
-fn inl_vec_len<'a>(ctx: &'a Ctx, offset: Vec<'a>) -> f64 {
-    let mut offset = offset;
-    return inl_sqrtf(
-        ctx,
-        fp::fadds(
-            fp::fadds(
-                (fp::fmuls((offset).x(), (offset).x())),
-                (fp::fmuls((offset).y(), (offset).y())),
-            ),
-            (fp::fmuls((offset).z(), (offset).z())),
-        ),
-    );
-}
-
 fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     let mut x = x;
     let mut y: f64 = 0.0;
@@ -5725,6 +5711,20 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         return y;
     }
     return x;
+}
+
+fn inl_vec_len<'a>(ctx: &'a Ctx, offset: Vec<'a>) -> f64 {
+    let mut offset = offset;
+    return inl_sqrtf(
+        ctx,
+        fp::fadds(
+            fp::fadds(
+                (fp::fmuls((offset).x(), (offset).x())),
+                (fp::fmuls((offset).y(), (offset).y())),
+            ),
+            (fp::fmuls((offset).z(), (offset).z())),
+        ),
+    );
 }
 
 fn inl_OrthonormalizeBasis_unfused<'a>(
@@ -5760,16 +5760,6 @@ fn inl_getPauseScale<'a>(ctx: &'a Ctx) -> f64 {
     );
 }
 
-fn inl_Camera_8002C1A8_inline<'a>(ctx: &'a Ctx) {
-    if inl_lbVector_Len(
-        ctx,
-        statics::melee__cm__camera::game_camera(ctx).pause_eye_offset(),
-    ) < 1.0
-    {
-        statics::melee__cm__camera::game_camera(ctx).set_pause_eye_distance(1.0);
-    }
-}
-
 fn inl_lbVector_Len<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
     let mut vec = vec;
     return inl_sqrtf(
@@ -5782,6 +5772,16 @@ fn inl_lbVector_Len<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
             fp::fmuls((vec).z(), (vec).z()),
         ),
     );
+}
+
+fn inl_Camera_8002C1A8_inline<'a>(ctx: &'a Ctx) {
+    if inl_lbVector_Len(
+        ctx,
+        statics::melee__cm__camera::game_camera(ctx).pause_eye_offset(),
+    ) < 1.0
+    {
+        statics::melee__cm__camera::game_camera(ctx).set_pause_eye_distance(1.0);
+    }
 }
 
 fn inl_eye_offset_len<'a>(ctx: &'a Ctx, offset: Vec<'a>) -> f64 {
@@ -5871,6 +5871,11 @@ fn inl_get_subject_pos_unfused<'a>(ctx: &'a Ctx, pos: Vec<'a>, slot_ptr: Val<'a,
     return valid;
 }
 
+fn inl_get_target_interest<'a>(ctx: &'a Ctx, transform: CameraTransformState<'a>) -> Vec<'a> {
+    let mut transform = transform;
+    return (transform).target_interest();
+}
+
 fn inl_track_subject<'a>(
     ctx: &'a Ctx,
     transform: CameraTransformState<'a>,
@@ -5937,11 +5942,6 @@ fn inl_track_subject<'a>(
     let _ = fns::lbVector_Add(ctx, (transform).interest(), interest_diff);
 }
 
-fn inl_get_target_interest<'a>(ctx: &'a Ctx, transform: CameraTransformState<'a>) -> Vec<'a> {
-    let mut transform = transform;
-    return (transform).target_interest();
-}
-
 fn inl_get_subject_x1C<'a>(ctx: &'a Ctx, subject: CmSubject<'a>) -> Vec<'a> {
     let mut subject = subject;
     return (subject).bone_pos();
@@ -6006,6 +6006,22 @@ fn inl_set_bounds_z<'a>(
 
 fn inl_getX378<'a>(ctx: &'a Ctx) -> f64 {
     return statics::melee__cm__camera::game_camera(ctx).x378().f32_v();
+}
+
+fn inl_fn_8002F360_unfused<'a>(ctx: &'a Ctx, x: HSD_GObj<'a>) {
+    let mut x = x;
+    if !Handle::is_null(
+        statics::melee__cm__camera::cm_803BCB18(ctx)
+            .callback()
+            .at(statics::melee__cm__camera::game_camera(ctx).mode())
+            .get(),
+    ) {
+        statics::melee__cm__camera::cm_803BCB18(ctx)
+            .callback()
+            .at(statics::melee__cm__camera::game_camera(ctx).mode())
+            .get()
+            .call::<_, ()>((Handle::cast::<Addr<'a>>(x),));
+    }
 }
 
 fn inl_getCameraGObj_unfused<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
@@ -6121,6 +6137,10 @@ fn inl_same_side<'a>(ctx: &'a Ctx, fwd_z: f64, dir_z: f64) -> i32 {
     let mut fwd_z = fwd_z;
     let mut dir_z = dir_z;
     return (fp::frsp((fp::fmuls(fwd_z, dir_z))) > fp::frsp(0.0)) as i32;
+}
+
+fn inl_Camera_80030A50_unfused<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
+    return statics::melee__cm__camera::game_camera(ctx).gobj();
 }
 
 fn inl_inline_cam_gx_b1_unfused<'a>(ctx: &'a Ctx) -> i64 {

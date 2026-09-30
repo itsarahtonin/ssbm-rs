@@ -206,33 +206,31 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
-fn inl_itNesspkfirepillar_INLINE_Anim_SetScale_unfused<'a>(
-    ctx: &'a Ctx,
-    item_gobj: HSD_GObj<'a>,
-    scale: f64,
-) -> i32 {
-    let __frame = ctx.stack_frame(0x18);
-    let scaling: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let mut item_gobj = item_gobj;
-    let mut scale = scale;
-    let mut jobj: HSD_JObj<'a> =
-        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, item_gobj)));
-    let mut item: Item<'a> =
-        (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
-    scaling.set_z(scale);
-    scaling.set_y(scale);
-    scaling.set_x(scale);
-    inl_HSD_JObjSetScale_unfused(ctx, jobj, scaling);
-    if (item).xD44_lifeTimer() <= 0.0 {
-        return 1_i32;
-    }
-    (item).set_xD44_lifeTimer(fp::fsubs((item).xD44_lifeTimer(), fp::frsp(1.0)));
-    return 0_i32;
-}
-
 fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).hsd_obj();
+}
+
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f6b60),
+            (228_i32 as u32),
+            cstr(ctx, 0x803f6b60),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
@@ -268,26 +266,28 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f6b60),
-            (228_i32 as u32),
-            cstr(ctx, 0x803f6b60),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
+fn inl_itNesspkfirepillar_INLINE_Anim_SetScale_unfused<'a>(
+    ctx: &'a Ctx,
+    item_gobj: HSD_GObj<'a>,
+    scale: f64,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let scaling: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut item_gobj = item_gobj;
+    let mut scale = scale;
+    let mut jobj: HSD_JObj<'a> =
+        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, item_gobj)));
+    let mut item: Item<'a> =
+        (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
+    scaling.set_z(scale);
+    scaling.set_y(scale);
+    scaling.set_x(scale);
+    inl_HSD_JObjSetScale_unfused(ctx, jobj, scaling);
+    if (item).xD44_lifeTimer() <= 0.0 {
+        return 1_i32;
     }
-    return result;
+    (item).set_xD44_lifeTimer(fp::fsubs((item).xD44_lifeTimer(), fp::frsp(1.0)));
+    return 0_i32;
 }
 
 fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {

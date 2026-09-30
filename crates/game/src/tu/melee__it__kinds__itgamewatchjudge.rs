@@ -108,7 +108,7 @@ pub fn it_802C7A84<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let mut item: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
     if !Handle::is_null(item) {
-        fns::itGameWatchJudge_Logic77_Destroyed(ctx, item_gobj);
+        inl_itGameWatchJudge_Logic77_Destroyed_unfused(ctx, item_gobj);
         fns::Item_8026A8EC(ctx, item_gobj);
     }
 }
@@ -148,7 +148,7 @@ pub fn itGamewatchjudge_UnkMotion0_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a
             break 'l1;
         }
     }
-    fns::it_802C78B8(ctx, item_gobj);
+    inl_it_802C78B8_unfused(ctx, item_gobj);
     {
         let mut ip: Item<'a> =
             (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
@@ -159,7 +159,7 @@ pub fn itGamewatchjudge_UnkMotion0_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a
         }
     }
     if (remove != 0) {
-        fns::itGameWatchJudge_Logic77_Destroyed(ctx, item_gobj);
+        inl_itGameWatchJudge_Logic77_Destroyed_unfused(ctx, item_gobj);
         return 1_i32;
     }
     return 0_i32;
@@ -241,6 +241,28 @@ fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JOb
     return null(ctx);
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f7968),
+            (228_i32 as u32),
+            cstr(ctx, 0x803f7968),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     let mut jobj = jobj;
     let mut y = y;
@@ -274,26 +296,30 @@ fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f7968),
-            (228_i32 as u32),
-            cstr(ctx, 0x803f7968),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
+fn inl_itGameWatchJudge_Logic77_Destroyed_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if !Handle::is_null((ip).owner()) {
+        fns::ftGw_SpecialS_ItemJudgementSetFlag(ctx, (ip).owner());
     }
-    return result;
+}
+
+fn inl_it_802C78B8_unfused<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
+    let mut item_gobj = item_gobj;
+    let mut ip: Item<'a> =
+        (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
+    let mut jobj: HSD_JObj<'a> =
+        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, item_gobj)));
+    if !Handle::is_null((ip).owner()) {
+        let mut facing: f64 = fns::ftLib_GetFacingDir(ctx, (ip).owner());
+        let mut child: HSD_JObj<'a> =
+            inl_HSD_JObjGetChild_unfused(ctx, inl_HSD_JObjGetChild_unfused(ctx, jobj));
+        if facing == 1.0 {
+            inl_HSD_JObjSetRotationY_unfused(ctx, child, fp::frsp(3.141592653589793));
+        } else {
+            inl_HSD_JObjSetRotationY_unfused(ctx, child, 0.0);
+        }
+    }
 }
 
 /// Registers this unit's ports.

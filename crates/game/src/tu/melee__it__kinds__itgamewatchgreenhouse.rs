@@ -71,7 +71,7 @@ pub fn itGamewatchGreenhouse_802C6328<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>)
     let mut item: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
     if !Handle::is_null(item) {
-        fns::itGamewatchGreenhouse_Destroyed(ctx, item_gobj);
+        inl_itGamewatchGreenhouse_Destroyed_unfused(ctx, item_gobj);
         fns::Item_8026A8EC(ctx, item_gobj);
     }
 }
@@ -141,7 +141,7 @@ pub fn itGamewatchGreenhouse_Motion3_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<
         }
     }
     if (inl_greenhouse_Check_unfused(ctx, item_gobj) != 0) {
-        fns::itGamewatchGreenhouse_Destroyed(ctx, item_gobj);
+        inl_itGamewatchGreenhouse_Destroyed_unfused(ctx, item_gobj);
         return 1_i32;
     }
     return 0_i32;
@@ -162,7 +162,7 @@ pub fn itGamewatchGreenhouse_Motion2_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<
         fns::Item_80268E5C(ctx, item_gobj, 2_i32, (enums::ITEM_ANIM_UPDATE as i32));
     }
     if (inl_greenhouse_Check_unfused(ctx, item_gobj) != 0) {
-        fns::itGamewatchGreenhouse_Destroyed(ctx, item_gobj);
+        inl_itGamewatchGreenhouse_Destroyed_unfused(ctx, item_gobj);
         return 1_i32;
     }
     return 0_i32;
@@ -228,6 +228,20 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_Item_AttachToParent_unfused<'a>(
+    ctx: &'a Ctx,
+    item_gobj: HSD_GObj<'a>,
+    parent: HSD_GObj<'a>,
+    part: i32,
+) -> HSD_GObj<'a> {
+    let mut item_gobj = item_gobj;
+    let mut parent = parent;
+    let mut part = part;
+    fns::Item_8026AB54(ctx, item_gobj, parent, part);
+    fns::db_80225DD8(ctx, item_gobj, parent);
+    return item_gobj;
+}
+
 fn inl_Item_AttachGameWatchArticle_unfused<'a>(
     ctx: &'a Ctx,
     parent: HSD_GObj<'a>,
@@ -248,18 +262,13 @@ fn inl_Item_AttachGameWatchArticle_unfused<'a>(
     );
 }
 
-fn inl_Item_AttachToParent_unfused<'a>(
-    ctx: &'a Ctx,
-    item_gobj: HSD_GObj<'a>,
-    parent: HSD_GObj<'a>,
-    part: i32,
-) -> HSD_GObj<'a> {
+fn inl_itGamewatchGreenhouse_Destroyed_unfused<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let mut item_gobj = item_gobj;
-    let mut parent = parent;
-    let mut part = part;
-    fns::Item_8026AB54(ctx, item_gobj, parent, part);
-    fns::db_80225DD8(ctx, item_gobj, parent);
-    return item_gobj;
+    let mut item: Item<'a> =
+        (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
+    if !Handle::is_null((item).owner()) {
+        fns::ftGw_Attack11_ItemGreenhouseSetFlag(ctx, (item).owner());
+    }
 }
 
 fn inl_greenhouse_Check_unfused<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {

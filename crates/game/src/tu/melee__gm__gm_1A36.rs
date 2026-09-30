@@ -366,15 +366,6 @@ pub fn gm_801A3EF4<'a>(ctx: &'a Ctx) {
     }
 }
 
-fn inl_updatePad_unfused<'a>(ctx: &'a Ctx, i: i32) {
-    let mut i = i;
-    inl_copyStatus_unfused(ctx, i);
-    inl_mapButtons_unfused(ctx, i);
-    statics::melee__gm__gm_1A36::controller_map(ctx)
-        .xF0()
-        .call::<_, ()>((i,));
-}
-
 fn inl_copyStatus_unfused<'a>(ctx: &'a Ctx, i: i32) {
     let mut i = i;
     let mut c: gm_controller_map<'a> = statics::melee__gm__gm_1A36::controller_map(ctx).x0().get(i);
@@ -438,6 +429,15 @@ fn inl_mapButtons_unfused<'a>(ctx: &'a Ctx, i: i32) {
         (((shl_i32(1_i32, (1_i32 as u32))) | (shl_i32(1_i32, (19_i32 as u32)))) as u64),
         (shl_u64(1_u64, (39_i32 as u32))),
     );
+}
+
+fn inl_updatePad_unfused<'a>(ctx: &'a Ctx, i: i32) {
+    let mut i = i;
+    inl_copyStatus_unfused(ctx, i);
+    inl_mapButtons_unfused(ctx, i);
+    statics::melee__gm__gm_1A36::controller_map(ctx)
+        .xF0()
+        .call::<_, ()>((i,));
 }
 
 /// Registers this unit's ports.

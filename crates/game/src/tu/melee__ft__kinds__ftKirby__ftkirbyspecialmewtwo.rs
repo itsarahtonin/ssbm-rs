@@ -253,7 +253,7 @@ pub fn ftKb_SpecialNMt_801071FC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         );
         inl_ftKb_SpecialNMt_SetRecoil_unfused(ctx, gobj);
         (fp).u().kb().set_x9C(0_i32);
-        fns::ftKb_SpecialNMt_80107040(ctx, gobj);
+        inl_ftKb_SpecialNMt_80107040_unfused(ctx, gobj);
         (fp).set_item_gobj(saved_item);
         if fp::frsp((fp).u().kb().x9C() as f64) == (da).specialn_mt_charge_time() {
             fns::ft_PlaySFX(ctx, fp, 0x30db6_i32, (127_i32 as u8), (64_i32 as u8));
@@ -1442,6 +1442,24 @@ fn inl_ftKb_SpecialNMt_SetRecoil_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             )),
         ));
     }
+}
+
+fn inl_ftKb_SpecialNMt_80107040_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = null(ctx);
+    if Handle::is_null(gobj) {
+        return;
+    }
+    fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if !Handle::is_null((fp).u().kb().x98()) {
+        (fp).u().kb().set_x98(null::<HSD_GObj<'a>>(ctx));
+    }
+    if Handle::is_null(gobj) {
+        return;
+    }
+    fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    fns::efLib_DestroyAll(ctx, gobj);
+    (fp).u().kb().set_xA0(null::<HSD_GObj<'a>>(ctx));
 }
 
 fn inl_Fighter_ClearCmdVars_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {

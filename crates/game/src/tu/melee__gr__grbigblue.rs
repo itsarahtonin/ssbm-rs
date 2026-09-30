@@ -6285,6 +6285,28 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b810c),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b810c),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
     let mut jobj = jobj;
     let mut x = x;
@@ -6306,28 +6328,6 @@ fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f6
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b810c),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b810c),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjSetTranslateY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
@@ -6835,6 +6835,11 @@ fn inl_HSD_GObjGetHSDObj<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     return (gobj).hsd_obj();
 }
 
+fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
 fn inl_grBigBlue_CountCars<'a>(ctx: &'a Ctx) -> i32 {
     let mut i: i32 = 0;
     let mut cars_avail: HSD_JObj<'a> = null::<HSD_JObj<'a>>(ctx);
@@ -6872,11 +6877,6 @@ fn inl_grBigBlue_CountCars<'a>(ctx: &'a Ctx) -> i32 {
     return count;
 }
 
-fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).user_data();
-}
-
 fn inl_grBigBlue_801E8B84_noinline<'a>(
     ctx: &'a Ctx,
     right: f64,
@@ -6889,6 +6889,28 @@ fn inl_grBigBlue_801E8B84_noinline<'a>(
     let mut bottom = bottom;
     let mut top = top;
     return fns::grBigBlue_801E8B84(ctx, right, left, bottom, top);
+}
+
+fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b810c),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b810c),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetTranslate<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
@@ -6922,28 +6944,6 @@ fn inl_HSD_JObjSetTranslate<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b810c),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b810c),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjSetRotationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
@@ -7017,20 +7017,6 @@ fn inl_HSD_JObjAddRotationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
     }
 }
 
-fn inl_grBigBlue_801E8B84_noinline_2<'a>(
-    ctx: &'a Ctx,
-    right: f64,
-    left: f64,
-    bottom: f64,
-    top: f64,
-) -> f64 {
-    let mut right = right;
-    let mut left = left;
-    let mut bottom = bottom;
-    let mut top = top;
-    return inl_grBigBlue_801E8B84_noinline_1(ctx, right, left, bottom, top);
-}
-
 fn inl_grBigBlue_801E8B84_noinline_1<'a>(
     ctx: &'a Ctx,
     right: f64,
@@ -7043,6 +7029,20 @@ fn inl_grBigBlue_801E8B84_noinline_1<'a>(
     let mut bottom = bottom;
     let mut top = top;
     return fns::grBigBlue_801E8B84(ctx, right, left, bottom, top);
+}
+
+fn inl_grBigBlue_801E8B84_noinline_2<'a>(
+    ctx: &'a Ctx,
+    right: f64,
+    left: f64,
+    bottom: f64,
+    top: f64,
+) -> f64 {
+    let mut right = right;
+    let mut left = left;
+    let mut bottom = bottom;
+    let mut top = top;
+    return inl_grBigBlue_801E8B84_noinline_1(ctx, right, left, bottom, top);
 }
 
 fn inl_HSD_JObjAddTranslationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
@@ -7190,6 +7190,13 @@ fn inl_HSD_JObjSetTranslateZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
             }
         }
     }
+}
+
+fn inl_grBigBlue_801EC6C0_inline2<'a>(ctx: &'a Ctx, range: i32, result: Val<'a, i32>) {
+    let mut range = range;
+    let mut result = result;
+    let mut random: i32 = fns::HSD_Randi(ctx, range);
+    (result).set(random);
 }
 
 fn inl_grBigBlue_801EC6C0_inline<'a>(ctx: &'a Ctx, gp: Ground<'a>, car_idx: i32, line_idx: i32) {
@@ -7396,13 +7403,6 @@ fn inl_grBigBlue_801EC6C0_inline<'a>(ctx: &'a Ctx, gp: Ground<'a>, car_idx: i32,
     (Handle::add((gp).u().bigblue().x0_u().car().ranks(), line_idx)).set((1_i32 as u8));
 }
 
-fn inl_grBigBlue_801EC6C0_inline2<'a>(ctx: &'a Ctx, range: i32, result: Val<'a, i32>) {
-    let mut range = range;
-    let mut result = result;
-    let mut random: i32 = fns::HSD_Randi(ctx, range);
-    (result).set(random);
-}
-
 fn inl_grBigBlue_FindClosestCar_unfused<'a>(
     ctx: &'a Ctx,
     gp: Ground<'a>,
@@ -7466,6 +7466,36 @@ fn inl_grBigBlue_FindClosestCar_unfused<'a>(
             ctr = ctr.wrapping_add(1);
         }
     }
+}
+
+fn inl_rand_range<'a>(ctx: &'a Ctx, a: i32, b: i32) -> i32 {
+    let mut a = a;
+    let mut b = b;
+    if a > b {
+        return b.wrapping_add(
+            (if (a.wrapping_sub(b)) != 0_i32 {
+                fns::HSD_Randi(ctx, a.wrapping_sub(b))
+            } else {
+                0_i32
+            }),
+        );
+    } else if a < b {
+        return a.wrapping_add(
+            (if (b.wrapping_sub(a)) != 0_i32 {
+                fns::HSD_Randi(ctx, b.wrapping_sub(a))
+            } else {
+                0_i32
+            }),
+        );
+    } else {
+        return a;
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
+fn inl_grBigBlue_801EE398_sfx<'a>(ctx: &'a Ctx) -> i32 {
+    return fns::HSD_Randi(ctx, 4_i32);
 }
 
 fn inl_grBigBlue_801EE398_inline<'a>(
@@ -8155,36 +8185,6 @@ fn inl_grBigBlue_801EE398_inline<'a>(
             }
         }
     }
-}
-
-fn inl_rand_range<'a>(ctx: &'a Ctx, a: i32, b: i32) -> i32 {
-    let mut a = a;
-    let mut b = b;
-    if a > b {
-        return b.wrapping_add(
-            (if (a.wrapping_sub(b)) != 0_i32 {
-                fns::HSD_Randi(ctx, a.wrapping_sub(b))
-            } else {
-                0_i32
-            }),
-        );
-    } else if a < b {
-        return a.wrapping_add(
-            (if (b.wrapping_sub(a)) != 0_i32 {
-                fns::HSD_Randi(ctx, b.wrapping_sub(a))
-            } else {
-                0_i32
-            }),
-        );
-    } else {
-        return a;
-    }
-    #[allow(unreachable_code)]
-    return 0;
-}
-
-fn inl_grBigBlue_801EE398_sfx<'a>(ctx: &'a Ctx) -> i32 {
-    return fns::HSD_Randi(ctx, 4_i32);
 }
 
 /// Registers this unit's ports.

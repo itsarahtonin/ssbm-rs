@@ -136,7 +136,7 @@ pub fn itGamewatchmanhole_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
         );
     }
     if (inl_itGamewatchmanhole_UnkMotion0_Anim_inline_unfused(ctx, gobj) != 0) {
-        fns::itGameWatchManhole_Logic72_Destroyed(ctx, gobj);
+        inl_itGameWatchManhole_Logic72_Destroyed_unfused(ctx, gobj);
         return 1_i32;
     }
     return 0_i32;
@@ -202,6 +202,20 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_Item_AttachToParent_unfused<'a>(
+    ctx: &'a Ctx,
+    item_gobj: HSD_GObj<'a>,
+    parent: HSD_GObj<'a>,
+    part: i32,
+) -> HSD_GObj<'a> {
+    let mut item_gobj = item_gobj;
+    let mut parent = parent;
+    let mut part = part;
+    fns::Item_8026AB54(ctx, item_gobj, parent, part);
+    fns::db_80225DD8(ctx, item_gobj, parent);
+    return item_gobj;
+}
+
 fn inl_Item_AttachGameWatchArticle_unfused<'a>(
     ctx: &'a Ctx,
     parent: HSD_GObj<'a>,
@@ -220,20 +234,6 @@ fn inl_Item_AttachGameWatchArticle_unfused<'a>(
         parent,
         (Handle::add(attributes, 0_i32)).get(),
     );
-}
-
-fn inl_Item_AttachToParent_unfused<'a>(
-    ctx: &'a Ctx,
-    item_gobj: HSD_GObj<'a>,
-    parent: HSD_GObj<'a>,
-    part: i32,
-) -> HSD_GObj<'a> {
-    let mut item_gobj = item_gobj;
-    let mut parent = parent;
-    let mut part = part;
-    fns::Item_8026AB54(ctx, item_gobj, parent, part);
-    fns::db_80225DD8(ctx, item_gobj, parent);
-    return item_gobj;
 }
 
 fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
@@ -257,6 +257,14 @@ fn inl_itGamewatchmanhole_UnkMotion0_Anim_inline_unfused<'a>(
         return fns::ftGw_AttackLw3_ItemCheckManholeRemove(ctx, (ip).owner());
     }
     return 1_i32;
+}
+
+fn inl_itGameWatchManhole_Logic72_Destroyed_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if !Handle::is_null((ip).owner()) {
+        fns::ftGw_AttackLw3_ItemManholeRemove(ctx, (ip).owner());
+    }
 }
 
 /// Registers this unit's ports.

@@ -37,7 +37,7 @@ pub fn ftCo_800C0658<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> ColorOverlay<'a> {
 
 pub fn ftCo_800C0674<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> ColorOverlay<'a> {
     let mut gobj = gobj;
-    return fns::ftCo_800C0658(
+    return inl_ftCo_800C0658_unfused(
         ctx,
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))),
     );
@@ -45,7 +45,7 @@ pub fn ftCo_800C0674<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> ColorOverlay<'a> {
 
 pub fn ftCo_800C0694<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     let mut fp = fp;
-    return (fns::ftCo_800C0658(ctx, fp)).x28_colanim().i();
+    return (inl_ftCo_800C0658_unfused(ctx, fp)).x28_colanim().i();
 }
 
 pub fn ftCo_800C06B4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
@@ -191,6 +191,15 @@ pub fn ftCo_800C07F8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: u32, arg2: Addr
                 cstr(ctx, 0x803c6b74),
             )
         })
+    });
+}
+
+fn inl_ftCo_800C0658_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> ColorOverlay<'a> {
+    let mut fp = fp;
+    return (if (Handle::addr((fp).x408().x28_colanim().ptr()) as i32) != 0_i32 {
+        (fp).x408()
+    } else {
+        (fp).x488()
     });
 }
 

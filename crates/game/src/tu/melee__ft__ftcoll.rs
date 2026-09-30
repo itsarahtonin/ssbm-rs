@@ -238,7 +238,7 @@ pub fn ftColl_8007699C<'a>(
             < fp::fctiwz((hit0).damage())
         {
             let mut int_dmg: i32 = inl_getEnvDmg(ctx, dmg_);
-            fns::ftColl_80076808(ctx, fp1, hit1, 3_i32, Handle::cast::<Addr<'a>>(fp0), 1_i32);
+            inl_ftColl_80076808(ctx, fp1, hit1, 3_i32, Handle::cast::<Addr<'a>>(fp0), 1_i32);
             inl_updateClankDamage(ctx, fp1, hit1, int_dmg, (fp0).cur_pos(), 0_i32);
             let _ = fns::efSync_Spawn(
                 ctx,
@@ -254,7 +254,7 @@ pub fn ftColl_8007699C<'a>(
             < fp::fctiwz((hit1).damage())
         {
             let mut int_dmg_2: i32 = inl_getEnvDmg(ctx, dmg__2);
-            fns::ftColl_80076808(ctx, fp0, hit0, 3_i32, Handle::cast::<Addr<'a>>(fp1), 0_i32);
+            inl_ftColl_80076808(ctx, fp0, hit0, 3_i32, Handle::cast::<Addr<'a>>(fp1), 0_i32);
             inl_updateClankDamage(ctx, fp0, hit0, int_dmg_2, (fp1).cur_pos(), 1_i32);
             let _ = fns::efSync_Spawn(
                 ctx,
@@ -275,7 +275,7 @@ pub fn ftColl_80076CBC<'a>(ctx: &'a Ctx, fp0: Fighter<'a>, hit0: HitCapsule<'a>,
     let mut fp0 = fp0;
     let mut hit0 = hit0;
     let mut fp1 = fp1;
-    fns::ftColl_80076808(ctx, fp0, hit0, 1_i32, Handle::cast::<Addr<'a>>(fp1), 0_i32);
+    inl_ftColl_80076808_unfused(ctx, fp0, hit0, 1_i32, Handle::cast::<Addr<'a>>(fp1), 0_i32);
     {
         let mut int_dmg: i32 = inl_getEnvDmg_unfused(ctx, (hit0).damage());
         if int_dmg > (fp0).dmg().x1924() {
@@ -840,7 +840,7 @@ pub fn ftColl_80077970<'a>(
             < fp::fctiwz((hit1).damage())
         {
             let mut int_dmg: i32 = inl_getEnvDmg(ctx, dmg_);
-            fns::ftColl_80076808(ctx, fp, hit2, 3_i32, Handle::cast::<Addr<'a>>(item), 1_i32);
+            inl_ftColl_80076808(ctx, fp, hit2, 3_i32, Handle::cast::<Addr<'a>>(item), 1_i32);
             inl_updateClankDamage(ctx, fp, hit2, int_dmg, (item).pos(), 0_i32);
             let _ = fns::efSync_Spawn(
                 ctx,
@@ -2203,7 +2203,7 @@ pub fn ftColl_80079C70<'a>(
     let mut hit = hit;
     let mut unk_count = unk_count;
     let mut co: ftCo_DatAttrs<'a> = (fp).co_attrs();
-    return fns::ftColl_80079AB0(
+    return inl_ftColl_80079AB0(
         ctx,
         fp,
         hit,
@@ -2388,7 +2388,7 @@ pub fn ftColl_8007A06C<'a>(
                             unk_count = ((entry).size_of_xC() as i32);
                             attacker_fp = Handle::cast::<Fighter<'a>>(((entry).gobj()).user_data());
                             hit = (entry).xC().hit0();
-                            kb = fns::ftColl_80079C70(ctx, fp, attacker_fp, hit, unk_count);
+                            kb = inl_ftColl_80079C70(ctx, fp, attacker_fp, hit, unk_count);
                             if arg4 != 0_i32 {
                                 let mut dmg_: u32 = cvt_fp2unsigned(ctx, (entry).x20());
                                 let mut effect: i32 =
@@ -2799,7 +2799,7 @@ pub fn ftColl_8007AC9C<'a>(ctx: &'a Ctx, arg0: HitCapsule<'a>, arg1: i32, arg2: 
     let mut arg2 = arg2;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((arg2).user_data());
     (arg0).set_kb_angle(arg1);
-    if (fns::ftColl_8007AC68(ctx, (arg1 as u32)) != 0) {
+    if (inl_ftColl_8007AC68_unfused(ctx, (arg1 as u32)) != 0) {
         if !((fp).x2074().x10().x0().x2084_b0() != 0) {
             (fp).x2074().x10().x0().set_x2084_b0((1_i32 as u8));
             fns::pl_80037ECC(ctx, arg2);
@@ -3623,7 +3623,7 @@ pub fn ftColl_8007BE3C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::ftColl_80076640(ctx, fp, (fp).dmg().x1898_ref()) != 0) {
+    if (inl_ftColl_80076640_unfused(ctx, fp, (fp).dmg().x1898_ref()) != 0) {
         's1: {
             let __case = match (inl_HSD_GObjGetClassifier_unfused(ctx, (fp).dmg().x1894()) as i32) {
                 4_i32 => 0,
@@ -3631,11 +3631,21 @@ pub fn ftColl_8007BE3C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 _ => 2,
             };
             if __case <= 0 {
-                fns::ftColl_8007891C(ctx, (fp).dmg().x1894(), (fp).gobj(), (fp).dmg().x1898());
+                inl_ftColl_8007891C_unfused(
+                    ctx,
+                    (fp).dmg().x1894(),
+                    (fp).gobj(),
+                    (fp).dmg().x1898(),
+                );
                 break 's1;
             }
             if __case <= 1 {
-                fns::ftColl_80078998(ctx, (fp).dmg().x1894(), (fp).gobj(), (fp).dmg().x1898());
+                inl_ftColl_80078998_unfused(
+                    ctx,
+                    (fp).dmg().x1894(),
+                    (fp).gobj(),
+                    (fp).dmg().x1898(),
+                );
                 break 's1;
             }
         }
@@ -3675,6 +3685,43 @@ fn inl_getEnvDmg<'a>(ctx: &'a Ctx, dmg_: f64) -> i32 {
     return 0_i32;
 }
 
+fn inl_ftColl_80076808<'a>(
+    ctx: &'a Ctx,
+    fp: Fighter<'a>,
+    hit: HitCapsule<'a>,
+    arg2: i32,
+    victim: Addr<'a>,
+    arg4: i32,
+) {
+    let mut fp = fp;
+    let mut hit = hit;
+    let mut arg2 = arg2;
+    let mut victim = victim;
+    let mut arg4 = arg4;
+    let mut j: i8 = 0;
+    let mut i: u32 = 0;
+    {
+        i = (0_i32 as u32);
+        j = (0_i32 as i8);
+        'l1: while i < (div_u32(0x4e0_u32, 0x138_u32)) {
+            'c2: {
+                let mut cur: HitCapsule<'a> = (fp).x914().get((i as i32));
+                if (((((cur).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32))
+                    && ((cur).x4() == (hit).x4()))
+                    && (fns::lbColl_80008688(ctx, cur, arg2, victim) != 0))
+                    && (arg4 != 0)
+                {
+                    statics::melee__ft__ftcoll::ftColl_804D6560(ctx)
+                        .at((j as i32))
+                        .set((0_i32 as i8));
+                }
+            }
+            i = i.wrapping_add(1);
+            j = j.wrapping_add(1);
+        }
+    }
+}
+
 fn inl_updateClankDamage<'a>(
     ctx: &'a Ctx,
     fp: Fighter<'a>,
@@ -3712,6 +3759,43 @@ fn inl_updateClankDamage<'a>(
                 }
                 (fp).dmg().set_facing_dir(facing_dir);
             }
+        }
+    }
+}
+
+fn inl_ftColl_80076808_unfused<'a>(
+    ctx: &'a Ctx,
+    fp: Fighter<'a>,
+    hit: HitCapsule<'a>,
+    arg2: i32,
+    victim: Addr<'a>,
+    arg4: i32,
+) {
+    let mut fp = fp;
+    let mut hit = hit;
+    let mut arg2 = arg2;
+    let mut victim = victim;
+    let mut arg4 = arg4;
+    let mut j: i8 = 0;
+    let mut i: u32 = 0;
+    {
+        i = (0_i32 as u32);
+        j = (0_i32 as i8);
+        'l1: while i < (div_u32(0x4e0_u32, 0x138_u32)) {
+            'c2: {
+                let mut cur: HitCapsule<'a> = (fp).x914().get((i as i32));
+                if (((((cur).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32))
+                    && ((cur).x4() == (hit).x4()))
+                    && (fns::lbColl_80008688(ctx, cur, arg2, victim) != 0))
+                    && (arg4 != 0)
+                {
+                    statics::melee__ft__ftcoll::ftColl_804D6560(ctx)
+                        .at((j as i32))
+                        .set((0_i32 as i8));
+                }
+            }
+            i = i.wrapping_add(1);
+            j = j.wrapping_add(1);
         }
     }
 }
@@ -3976,6 +4060,140 @@ fn inl_ftColl_GetDamageCount<'a>(ctx: &'a Ctx, fp: Fighter<'a>, ftd: ftCommonDat
     return fp::fctiwz((fp).dmg().x1830_percent());
 }
 
+fn inl_ftColl_80079AB0<'a>(
+    ctx: &'a Ctx,
+    fp: Fighter<'a>,
+    hit: HitCapsule<'a>,
+    unk_count: u32,
+    arg3: f64,
+    attack: f64,
+    defense: f64,
+    weight: f64,
+) -> f64 {
+    let mut fp = fp;
+    let mut hit = hit;
+    let mut unk_count = unk_count;
+    let mut arg3 = arg3;
+    let mut attack = attack;
+    let mut defense = defense;
+    let mut weight = weight;
+    let mut ftd: ftCommonData<'a> = fns::p_ftCommonData(ctx).get();
+    let mut decay: f64 = 0.0;
+    let mut result: f64 = 0.0;
+    let mut w: f64 = weight;
+    w = fp::fmuls(w, (ftd).xF4());
+    if (hit).x28() != (0_i32 as u32) {
+        let mut x118: f64 = 0.0;
+        decay = (ftd).xF8();
+        x118 = (ftd).x118();
+        result = (fp::fmuls(
+            (defense),
+            (fp::fmuls(
+                (attack),
+                (fp::fmuls(
+                    (arg3),
+                    (fp::fmadds(
+                        fp::fmuls(0.009999999776482582, fp::frsp((hit).x24() as f64)),
+                        (fp::fmadds(
+                            (ftd).x11C(),
+                            (fp::fmuls(
+                                (fp::fsubs(
+                                    (ftd).xF8(),
+                                    (fp::fdivs(
+                                        (fp::fmuls((w), (ftd).xF8())),
+                                        (fp::fadds((1.0), (w))),
+                                    )),
+                                )),
+                                (fp::fmadds(
+                                    (ftd).x114(),
+                                    (fp::fmuls(x118, fp::frsp((hit).x28() as f64))),
+                                    fp::fmuls(x118, (ftd).x110()),
+                                )),
+                            )),
+                            (ftd).x120(),
+                        )),
+                        fp::frsp((hit).x2C() as f64),
+                    )),
+                )),
+            )),
+        ));
+    } else {
+        let mut count: i32 = 0;
+        count = inl_ftColl_GetDamageCount(ctx, fp, ftd);
+        result = (fp::fmuls(
+            (defense),
+            (fp::fmuls(
+                (attack),
+                (fp::fmuls(
+                    (arg3),
+                    (fp::fmadds(
+                        fp::fmuls(0.009999999776482582, fp::frsp((hit).x24() as f64)),
+                        (fp::fmadds(
+                            (ftd).x11C(),
+                            (fp::fmuls(
+                                (fp::fsubs(
+                                    (ftd).xF8(),
+                                    (fp::fdivs(
+                                        (fp::fmuls((w), (ftd).xF8())),
+                                        (fp::fadds((1.0), (w))),
+                                    )),
+                                )),
+                                (fp::fmadds(
+                                    (ftd).x114(),
+                                    (fp::fmuls(
+                                        fp::frsp(unk_count as f64),
+                                        (fp::fadds(
+                                            fp::frsp(count as f64),
+                                            (fp).dmg().x1838_percentTemp(),
+                                        )),
+                                    )),
+                                    fp::fmuls(
+                                        (ftd).x110(),
+                                        (fp::fadds(
+                                            fp::frsp(count as f64),
+                                            (fp).dmg().x1838_percentTemp(),
+                                        )),
+                                    ),
+                                )),
+                            )),
+                            (ftd).x120(),
+                        )),
+                        fp::frsp((hit).x2C() as f64),
+                    )),
+                )),
+            )),
+        ));
+    }
+    if result >= (ftd).x108() {
+        result = (ftd).x108();
+    }
+    return result;
+}
+
+fn inl_ftColl_80079C70<'a>(
+    ctx: &'a Ctx,
+    fp: Fighter<'a>,
+    attacker: Fighter<'a>,
+    hit: HitCapsule<'a>,
+    unk_count: i32,
+) -> f64 {
+    let mut fp = fp;
+    let mut attacker = attacker;
+    let mut hit = hit;
+    let mut unk_count = unk_count;
+    let mut co: ftCo_DatAttrs<'a> = (fp).co_attrs();
+    return fns::ftColl_80079AB0(
+        ctx,
+        fp,
+        hit,
+        (unk_count as u32),
+        fns::gm_8016B248(ctx),
+        fns::Player_GetAttackRatio(ctx, ((attacker).player_idx() as i32)),
+        fns::Player_GetDefenseRatio(ctx, ((fp).player_idx() as i32)),
+        (co).weight(),
+    );
+}
+
 fn inl_spawnHitEffect<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -4036,6 +4254,17 @@ fn inl_spawnHitEffect<'a>(
     }
 }
 
+fn inl_ftColl_8007AC68_unfused<'a>(ctx: &'a Ctx, kb_angle: u32) -> i32 {
+    let mut kb_angle = kb_angle;
+    if ((kb_angle != (0x169_i32 as u32))
+        && ((fns::p_ftCommonData(ctx).get()).unk_kb_angle_min() <= kb_angle))
+        && (kb_angle <= (fns::p_ftCommonData(ctx).get()).unk_kb_angle_max())
+    {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
 fn inl_inlineC0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     let mut fp = fp;
     return fns::ftCo_800C0694(ctx, fp);
@@ -4057,9 +4286,103 @@ fn inl_ftColl_GetHitStatus_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     return ret;
 }
 
+fn inl_ftColl_80076640_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, dmg_: Val<'a, F32>) -> i32 {
+    let mut fp = fp;
+    let mut dmg_ = dmg_;
+    let mut env_dmg: i32 = inl_getEnvDmg_unfused(ctx, (dmg_).get());
+    if ((fp).x221C_b4() != 0) {
+        (fp).dmg()
+            .set_x1834(fp::fsubs((fp).dmg().x1834(), (dmg_).get()));
+        if (fp).dmg().x1834() < fp::frsp(0_i32 as f64) {
+            (dmg_).set(fp::fneg((fp).dmg().x1834()));
+            (fp).set_x221C_b4((0_i32 as u16));
+        }
+    }
+    if !((fp).x221C_b4() != 0) {
+        if (dmg_).get() > fp::frsp(0x1f4_i32 as f64) {
+            (if ((0_i32) != 0) {
+                { () }
+            } else {
+                ({
+                    fns::OSReport(ctx, cstr(ctx, 0x803c0c58), &[VarArg::Float((dmg_).get())]);
+                    fns::__assert(
+                        ctx,
+                        cstr(ctx, 0x803c0c40),
+                        (125_i32 as u32),
+                        cstr(ctx, 0x803c0c40),
+                    )
+                })
+            });
+        }
+        (fp).dmg()
+            .set_x1838_percentTemp(fp::fadds((fp).dmg().x1838_percentTemp(), (dmg_).get()));
+        if env_dmg > (fp).dmg().x183C_applied() {
+            (fp).dmg().set_x183C_applied(env_dmg);
+        }
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
 fn inl_HSD_GObjGetClassifier_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> u16 {
     let mut gobj = gobj;
     return (gobj).classifier();
+}
+
+fn inl_ftColl_8007891C_unfused<'a>(
+    ctx: &'a Ctx,
+    arg0: HSD_GObj<'a>,
+    arg1: HSD_GObj<'a>,
+    arg2: f64,
+) {
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut fp0: Fighter<'a> = null(ctx);
+    let mut fp1: Fighter<'a> = null(ctx);
+    fns::plStale_UpdateStaleMovesFromFighter(ctx, arg0, arg1);
+    fns::ftColl_80076444(ctx, arg0, arg1);
+    fp0 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, arg0)));
+    fp1 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, arg1)));
+    fns::pl_8003EB30(
+        ctx,
+        arg2,
+        ((fp0).player_idx() as i32),
+        ((fp0).is_sub_fighter() as i32),
+        ((fp1).player_idx() as i32),
+        ((fp1).is_sub_fighter() as i32),
+        ((fp0).x2070().x0().x2073() as i32),
+    );
+}
+
+fn inl_ftColl_80078998_unfused<'a>(
+    ctx: &'a Ctx,
+    arg0: HSD_GObj<'a>,
+    arg1: HSD_GObj<'a>,
+    arg2: f64,
+) {
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut ip: Item<'a> = null(ctx);
+    fns::plStale_UpdateStaleMovesFromItem(ctx, arg0, arg1);
+    fns::ftColl_8007646C(ctx, arg0, arg1);
+    ip = Handle::cast::<Item<'a>>((arg0).user_data());
+    if (fns::ftLib_IsFighter(ctx, (ip).owner()) != 0) {
+        let mut owner_fp: Fighter<'a> =
+            (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, (ip).owner())));
+        let mut victim_fp: Fighter<'a> =
+            (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, arg1)));
+        fns::pl_8003EB30(
+            ctx,
+            arg2,
+            ((owner_fp).player_idx() as i32),
+            ((owner_fp).is_sub_fighter() as i32),
+            ((victim_fp).player_idx() as i32),
+            ((victim_fp).is_sub_fighter() as i32),
+            ((ip).xD90().x0().x2073() as i32),
+        );
+    }
 }
 
 fn inl_getHitEffectId_unfused<'a>(ctx: &'a Ctx, element: i32) -> i32 {

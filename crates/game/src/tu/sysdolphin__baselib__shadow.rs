@@ -34,7 +34,7 @@ pub fn HSD_ShadowInitAllocData<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
     fns::HSD_ObjAllocInit(
         ctx,
-        fns::HSD_ShadowGetAllocData(ctx),
+        inl_HSD_ShadowGetAllocData_unfused(ctx),
         40_u32,
         (4_i32 as u32),
     );
@@ -43,8 +43,10 @@ pub fn HSD_ShadowInitAllocData<'a>(ctx: &'a Ctx) {
 pub fn HSD_ShadowAlloc<'a>(ctx: &'a Ctx) -> HSD_Shadow<'a> {
     let __frame = ctx.stack_frame(0x20);
     let mut shadow: HSD_Shadow<'a> = null(ctx);
-    shadow =
-        Handle::cast::<HSD_Shadow<'a>>(fns::HSD_ObjAlloc(ctx, fns::HSD_ShadowGetAllocData(ctx)));
+    shadow = Handle::cast::<HSD_Shadow<'a>>(fns::HSD_ObjAlloc(
+        ctx,
+        inl_HSD_ShadowGetAllocData_unfused(ctx),
+    ));
     let _ = fns::memset(ctx, Handle::cast::<Addr<'a>>(shadow), 0_i32, 40_u32);
     (shadow).set_camera(fns::HSD_CObjAlloc(ctx));
     (shadow).set_texture(inl_makeShadowTObj_unfused(ctx));
@@ -99,7 +101,7 @@ pub fn HSD_ShadowRemove<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>) {
     fns::HSD_TObjFree(ctx, tobj);
     fns::HSD_ObjFree(
         ctx,
-        fns::HSD_ShadowGetAllocData(ctx),
+        inl_HSD_ShadowGetAllocData_unfused(ctx),
         Handle::cast::<Addr<'a>>(shadow),
     );
 }
@@ -720,6 +722,10 @@ pub fn HSD_ViewingRectAddRect<'a>(
     }
 }
 
+fn inl_HSD_ShadowGetAllocData_unfused<'a>(ctx: &'a Ctx) -> _HSD_ObjAllocData<'a> {
+    return fns::shadow_alloc_data(ctx);
+}
+
 fn inl_makeShadowTObj_unfused<'a>(ctx: &'a Ctx) -> HSD_TObj<'a> {
     let mut shadowTObj: HSD_TObj<'a> = null(ctx);
     shadowTObj = fns::HSD_TObjAlloc(ctx);
@@ -782,11 +788,6 @@ fn inl_GXPosition2f32_unfused<'a>(ctx: &'a Ctx, x: f64, y: f64) {
 
 fn inl_GXEnd_unfused<'a>(ctx: &'a Ctx) {}
 
-fn inl_HSD_JObjRef_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
-    let mut jobj = jobj;
-    inl_ref_INC_unfused(ctx, Handle::cast::<Addr<'a>>(jobj));
-}
-
 fn inl_ref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
     let mut o = o;
     if !Handle::is_null(o) {
@@ -805,6 +806,11 @@ fn inl_ref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
             )
         });
     }
+}
+
+fn inl_HSD_JObjRef_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    inl_ref_INC_unfused(ctx, Handle::cast::<Addr<'a>>(jobj));
 }
 
 fn inl_HSD_CObjGetViewingMtxPtrDirect_unfused<'a>(

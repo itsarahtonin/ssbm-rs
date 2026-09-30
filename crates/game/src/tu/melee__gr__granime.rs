@@ -201,7 +201,7 @@ pub fn grAnime_801C6960<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>, arg1: HSD_RObjAnim
     phi_r30 = arg1;
     'l1: while (!Handle::is_null(phi_r31)) && (!Handle::is_null(phi_r30)) {
         'c2: {
-            statics::melee__gr__granime::grAnime_801C68F4(ctx, phi_r31, phi_r30);
+            inl_grAnime_801C68F4_unfused(ctx, phi_r31, phi_r30);
             phi_r31 = (phi_r31).next();
             phi_r30 = (phi_r30).next();
         }
@@ -254,7 +254,7 @@ pub fn grAnime_801C6A54<'a>(
             let _ =
                 inl_grAnime_801C69FC_for_jobj_unfused(ctx, inl_grAnime_GetAObj_unfused(ctx, jobj));
         }
-        statics::melee__gr__granime::grAnime_801C6960(ctx, (jobj).robj(), (animjoint).robj_anim());
+        inl_grAnime_801C6960_unfused(ctx, (jobj).robj(), (animjoint).robj_anim());
     }
     if ((if (((jobj).flags()
         & (((shl_i32(1_i32, (5_i32 as u32))) | (shl_i32(1_i32, (14_i32 as u32)))) as u32))
@@ -265,7 +265,7 @@ pub fn grAnime_801C6A54<'a>(
         1_i32
     }) != 0)
     {
-        statics::melee__gr__granime::grAnime_801C683C(
+        inl_grAnime_801C683C_unfused(
             ctx,
             (jobj).u().dobj(),
             (if !Handle::is_null(matanimjoint) {
@@ -1265,7 +1265,7 @@ pub fn grAnime_801C83D0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: i
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
-    let mut aobj: HSD_AObj<'a> = fns::grAnime_801C8318(ctx, gobj, arg1, (arg2 as u32));
+    let mut aobj: HSD_AObj<'a> = inl_grAnime_801C8318_unfused(ctx, gobj, arg1, (arg2 as u32));
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {
@@ -1284,7 +1284,7 @@ pub fn grAnime_801C84A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: i
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
-    let mut aobj: HSD_AObj<'a> = fns::grAnime_801C8318(ctx, gobj, arg1, (arg2 as u32));
+    let mut aobj: HSD_AObj<'a> = inl_grAnime_801C8318_unfused(ctx, gobj, arg1, (arg2 as u32));
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {
@@ -1433,6 +1433,16 @@ fn inl_grAnime_801C6710_all_unfused<'a>(
     }
 }
 
+fn inl_grAnime_801C67A8_inner_unfused<'a>(
+    ctx: &'a Ctx,
+    mobj: HSD_MObj<'a>,
+    matanim: _HSD_MatAnim<'a>,
+) {
+    let mut mobj = mobj;
+    let mut matanim = matanim;
+    statics::melee__gr__granime::grAnime_801C67A8(ctx, mobj, matanim);
+}
+
 fn inl_grAnime_801C67A8_noinline_unfused<'a>(
     ctx: &'a Ctx,
     mobj: HSD_MObj<'a>,
@@ -1443,14 +1453,22 @@ fn inl_grAnime_801C67A8_noinline_unfused<'a>(
     inl_grAnime_801C67A8_inner_unfused(ctx, mobj, matanim);
 }
 
-fn inl_grAnime_801C67A8_inner_unfused<'a>(
+fn inl_grAnime_801C68F4_unfused<'a>(
     ctx: &'a Ctx,
-    mobj: HSD_MObj<'a>,
-    matanim: _HSD_MatAnim<'a>,
+    robj: HSD_RObj<'a>,
+    robjanimjoint: HSD_RObjAnimJoint<'a>,
 ) {
-    let mut mobj = mobj;
-    let mut matanim = matanim;
-    statics::melee__gr__granime::grAnime_801C67A8(ctx, mobj, matanim);
+    let mut robj = robj;
+    let mut robjanimjoint = robjanimjoint;
+    if (Handle::is_null(robj)) || (Handle::is_null(robjanimjoint)) {
+        return;
+    }
+    if !Handle::is_null((robjanimjoint).aobjdesc()) {
+        if !Handle::is_null((robj).aobj()) {
+            fns::HSD_AObjRemove(ctx, (robj).aobj());
+        }
+        (robj).set_aobj(fns::HSD_AObjLoadDesc(ctx, (robjanimjoint).aobjdesc()));
+    }
 }
 
 fn inl_grAnime_GetAObj_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_AObj<'a> {
@@ -1481,6 +1499,82 @@ fn inl_grAnime_801C69FC_for_jobj_unfused<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>) -
         }
     }
     return aobj;
+}
+
+fn inl_grAnime_801C6960_unfused<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>, arg1: HSD_RObjAnimJoint<'a>) {
+    let mut robj = robj;
+    let mut arg1 = arg1;
+    let mut phi_r31: HSD_RObj<'a> = null(ctx);
+    let mut phi_r30: HSD_RObjAnimJoint<'a> = null(ctx);
+    if (Handle::is_null(robj)) || (Handle::is_null(arg1)) {
+        return;
+    }
+    phi_r31 = robj;
+    phi_r30 = arg1;
+    'l1: while (!Handle::is_null(phi_r31)) && (!Handle::is_null(phi_r30)) {
+        'c2: {
+            statics::melee__gr__granime::grAnime_801C68F4(ctx, phi_r31, phi_r30);
+            phi_r31 = (phi_r31).next();
+            phi_r30 = (phi_r30).next();
+        }
+    }
+}
+
+fn inl_grAnime_801C683C_unfused<'a>(
+    ctx: &'a Ctx,
+    arg0: HSD_DObj<'a>,
+    arg1: _HSD_MatAnim<'a>,
+    arg2: HSD_ShapeAnimDObj<'a>,
+) {
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut dobj: HSD_DObj<'a> = null(ctx);
+    let mut matanim: _HSD_MatAnim<'a> = null(ctx);
+    let mut sa_dobj: HSD_ShapeAnimDObj<'a> = null(ctx);
+    if Handle::is_null(arg0) {
+        return;
+    }
+    dobj = arg0;
+    matanim = arg1;
+    sa_dobj = arg2;
+    'l1: while !Handle::is_null(dobj) {
+        'c2: {
+            if !Handle::is_null(dobj) {
+                statics::melee__gr__granime::grAnime_801C6620(
+                    ctx,
+                    (dobj).pobj(),
+                    (if !Handle::is_null(sa_dobj) {
+                        (sa_dobj).shapeanim()
+                    } else {
+                        null::<HSD_ShapeAnim<'a>>(ctx)
+                    }),
+                );
+                inl_grAnime_801C67A8_noinline_unfused(ctx, (dobj).mobj(), matanim);
+            }
+            dobj = (dobj).next();
+            matanim = (if !Handle::is_null(matanim) {
+                (matanim).next()
+            } else {
+                null::<_HSD_MatAnim<'a>>(ctx)
+            });
+            sa_dobj = (if !Handle::is_null(sa_dobj) {
+                (sa_dobj).next()
+            } else {
+                null::<HSD_ShapeAnimDObj<'a>>(ctx)
+            });
+        }
+    }
+}
+
+fn inl_grAnime_801C69FC_inner_unfused<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>) -> HSD_AObj<'a> {
+    let mut aobj = aobj;
+    return statics::melee__gr__granime::grAnime_801C69FC(ctx, aobj);
+}
+
+fn inl_grAnime_801C69FC_noinline_unfused<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>) -> HSD_AObj<'a> {
+    let mut aobj = aobj;
+    return inl_grAnime_801C69FC_inner_unfused(ctx, aobj);
 }
 
 fn inl_grAnime_801C6A54_inner_unfused<'a>(
@@ -1533,14 +1627,24 @@ fn inl_grAnime_801C6A54_inner_unfused<'a>(
     }
 }
 
-fn inl_grAnime_801C69FC_noinline_unfused<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>) -> HSD_AObj<'a> {
-    let mut aobj = aobj;
-    return inl_grAnime_801C69FC_inner_unfused(ctx, aobj);
-}
-
-fn inl_grAnime_801C69FC_inner_unfused<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>) -> HSD_AObj<'a> {
-    let mut aobj = aobj;
-    return statics::melee__gr__granime::grAnime_801C69FC(ctx, aobj);
+fn inl_grAnime_801C6A54_noinline_unfused<'a>(
+    ctx: &'a Ctx,
+    jobj: HSD_JObj<'a>,
+    animjoint: HSD_AnimJoint<'a>,
+    matanimjoint: HSD_MatAnimJoint<'a>,
+    shapeanimjoint: HSD_ShapeAnimJoint<'a>,
+) {
+    let mut jobj = jobj;
+    let mut animjoint = animjoint;
+    let mut matanimjoint = matanimjoint;
+    let mut shapeanimjoint = shapeanimjoint;
+    statics::melee__gr__granime::grAnime_801C6A54(
+        ctx,
+        jobj,
+        animjoint,
+        matanimjoint,
+        shapeanimjoint,
+    );
 }
 
 fn inl_grAnime_801C6C0C_inner_unfused<'a>(
@@ -1635,24 +1739,35 @@ fn inl_grAnime_801C6C0C_inner_unfused<'a>(
     }
 }
 
-fn inl_grAnime_801C6A54_noinline_unfused<'a>(
+fn inl_grAnime_801C706C_unfused<'a>(
     ctx: &'a Ctx,
-    jobj: HSD_JObj<'a>,
-    animjoint: HSD_AnimJoint<'a>,
-    matanimjoint: HSD_MatAnimJoint<'a>,
-    shapeanimjoint: HSD_ShapeAnimJoint<'a>,
+    tobj: HSD_TObj<'a>,
+    flags: i32,
+    func: Addr<'a>,
+    r#type: u32,
+    param: Addr<'a>,
 ) {
-    let mut jobj = jobj;
-    let mut animjoint = animjoint;
-    let mut matanimjoint = matanimjoint;
-    let mut shapeanimjoint = shapeanimjoint;
-    statics::melee__gr__granime::grAnime_801C6A54(
-        ctx,
-        jobj,
-        animjoint,
-        matanimjoint,
-        shapeanimjoint,
-    );
+    let mut tobj = tobj;
+    let mut flags = flags;
+    let mut func = func;
+    let mut r#type = r#type;
+    let mut param = param;
+    'l1: while !Handle::is_null(tobj) {
+        'c2: {
+            if ((flags & 0x400_i32) != 0) && (!Handle::is_null((tobj).aobj())) {
+                statics::melee__gr__granime::grAnime_801C6F50(
+                    ctx,
+                    (tobj).aobj(),
+                    Handle::cast::<Addr<'a>>(tobj),
+                    11_u32,
+                    func,
+                    r#type,
+                    param,
+                );
+            }
+            tobj = (tobj).next();
+        }
+    }
 }
 
 fn inl_grAnime_MObjForeachAnim_unfused<'a>(
@@ -1682,7 +1797,7 @@ fn inl_grAnime_MObjForeachAnim_unfused<'a>(
             param,
         );
     }
-    statics::melee__gr__granime::grAnime_801C706C(ctx, (mobj).tobj(), flags, func, r#type, param);
+    inl_grAnime_801C706C_unfused(ctx, (mobj).tobj(), flags, func, r#type, param);
 }
 
 fn inl_grAnime_PObjForeachAnim_unfused<'a>(
@@ -1805,6 +1920,47 @@ fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JOb
     }
     #[allow(unreachable_code)]
     return null(ctx);
+}
+
+fn inl_grAnime_801C8318_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    arg1: i32,
+    arg2: u32,
+) -> HSD_AObj<'a> {
+    let __frame = ctx.stack_frame(0x10);
+    let sp14: Ptr<'a, HSD_AObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut var_r30: i32 = 0_i32;
+    sp14.set(null::<HSD_AObj<'a>>(ctx));
+    jobj = fns::Ground_801C3FA4(ctx, gobj, arg1);
+    if Handle::is_null(jobj) {
+        return null::<HSD_AObj<'a>>(ctx);
+    }
+    if ((arg2 & (1_i32 as u32)) != 0) {
+        var_r30 = (((var_r30 as u32) | (0x220_i32 as u32)) as i32);
+    }
+    if ((arg2 & (2_i32 as u32)) != 0) {
+        var_r30 = (((var_r30 as u32) | (0x7484_i32 as u32)) as i32);
+    }
+    if ((arg2 & (4_i32 as u32)) != 0) {
+        var_r30 = (((var_r30 as u32) | (0x100_i32 as u32)) as i32);
+    }
+    if fns::__setjmp(ctx, fns::grAnime_8049EE40(ctx)) == 0_i32 {
+        fns::HSD_ForeachAnim(
+            ctx,
+            Handle::cast::<Addr<'a>>(jobj),
+            (enums::JOBJ_TYPE as i32),
+            var_r30,
+            Handle::cast::<Addr<'a>>(fnptr(ctx, 0x801c82e8)),
+            (enums::AOBJ_ARG_AV as i32),
+            &[VarArg::Int(Handle::addr(sp14))],
+        );
+    }
+    return sp14.get();
 }
 
 fn inl_grAnime_801C8578_noinline_unfused<'a>(

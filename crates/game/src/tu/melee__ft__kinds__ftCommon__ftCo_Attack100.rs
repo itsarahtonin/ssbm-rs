@@ -194,7 +194,7 @@ pub fn fn_800D6B8C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    fns::ftCo_800D6B00(ctx, gobj, (enums::ftCo_MS_Attack100Start as i32));
+    inl_ftCo_800D6B00_unfused(ctx, gobj, (enums::ftCo_MS_Attack100Start as i32));
 }
 
 pub fn ftCo_Attack100Start_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -451,6 +451,29 @@ pub fn ftCo_800D7268<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_ftCo_800D6B00_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
+    let mut gobj = gobj;
+    let mut msid = msid;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if !(fns::ftpickupitem_80094790(ctx, gobj) != 0) {
+        (fp).x2210().set_throw_flags((0_i32 as u32));
+        fns::Fighter_ChangeMotionState(
+            ctx,
+            gobj,
+            msid,
+            0_u32,
+            0.0,
+            1.0,
+            0.0,
+            null::<HSD_GObj<'a>>(ctx),
+        );
+        fns::ftAnim_8006EBA4(ctx, gobj);
+        (fp).mv().co().attack100().set_x0(0_i32);
+        (fp).mv().co().attack100().set_x4(0_i32);
+    }
 }
 
 /// Registers this unit's ports.

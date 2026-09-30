@@ -201,15 +201,15 @@ pub fn DObjLoad<'a>(ctx: &'a Ctx, dobj: HSD_DObj<'a>, desc: HSD_DObjDesc<'a>) ->
                 _ => 3,
             };
             if __case <= 0 {
-                fns::HSD_DObjModifyFlags(ctx, dobj, (2_i32 as u32), (14_i32 as u32));
+                inl_HSD_DObjModifyFlags_unfused(ctx, dobj, (2_i32 as u32), (14_i32 as u32));
                 break 's1;
             }
             if __case <= 1 {
-                fns::HSD_DObjModifyFlags(ctx, dobj, (8_i32 as u32), (14_i32 as u32));
+                inl_HSD_DObjModifyFlags_unfused(ctx, dobj, (8_i32 as u32), (14_i32 as u32));
                 break 's1;
             }
             if __case <= 2 {
-                fns::HSD_DObjModifyFlags(ctx, dobj, (4_i32 as u32), (14_i32 as u32));
+                inl_HSD_DObjModifyFlags_unfused(ctx, dobj, (4_i32 as u32), (14_i32 as u32));
                 break 's1;
             }
             if __case <= 3 {
@@ -420,9 +420,14 @@ fn inl_HSD_DObjAnim_unfused<'a>(ctx: &'a Ctx, dobj: HSD_DObj<'a>) {
     fns::HSD_MObjAnim(ctx, (dobj).mobj());
 }
 
-fn inl_HSD_DObjRemove_unfused<'a>(ctx: &'a Ctx, dobj: HSD_DObj<'a>) {
+fn inl_HSD_DObjModifyFlags_unfused<'a>(ctx: &'a Ctx, dobj: HSD_DObj<'a>, flags: u32, mask: u32) {
     let mut dobj = dobj;
-    inl_hsdDelete_unfused(ctx, Handle::cast::<Addr<'a>>(dobj));
+    let mut flags = flags;
+    let mut mask = mask;
+    if Handle::is_null(dobj) {
+        return;
+    }
+    (dobj).set_flags((((dobj).flags() & (!mask)) | (flags & mask)));
 }
 
 fn inl_hsdDelete_unfused<'a>(ctx: &'a Ctx, object: Addr<'a>) {
@@ -436,6 +441,11 @@ fn inl_hsdDelete_unfused<'a>(ctx: &'a Ctx, object: Addr<'a>) {
     ((Handle::cast::<_HSD_Class<'a>>(object)).class_info())
         .destroy()
         .call::<_, ()>((Handle::cast::<_HSD_Class<'a>>(object),));
+}
+
+fn inl_HSD_DObjRemove_unfused<'a>(ctx: &'a Ctx, dobj: HSD_DObj<'a>) {
+    let mut dobj = dobj;
+    inl_hsdDelete_unfused(ctx, Handle::cast::<Addr<'a>>(dobj));
 }
 
 fn inl_HSD_DObjResolveRefs_unfused<'a>(ctx: &'a Ctx, dobj: HSD_DObj<'a>, desc: HSD_DObjDesc<'a>) {

@@ -77,7 +77,7 @@ pub fn ftCo_800976A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     arg2.set(1_i32);
     if (fns::ft_80084C74(ctx, gobj, sfx_ids.at(0), arg2, arg3) != 0) {
         if sfx_ids.at(0_i32).get() != 1_i32.wrapping_neg() {
-            fns::ftCo_80097630(ctx, fp, sfx_ids.at(0), dist.get());
+            inl_ftCo_80097630(ctx, fp, sfx_ids.at(0), dist.get());
         }
         if arg3.get() != 1_i32.wrapping_neg() {
             ef_id = arg3.get();
@@ -110,7 +110,7 @@ pub fn ftCo_800976A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fp::frsp(0_i32 as f64),
     );
     if arg2.get() != 0_i32 {
-        fns::ftCo_80097630(ctx, fp, common_sfx_ids, dist.get());
+        inl_ftCo_80097630(ctx, fp, common_sfx_ids, dist.get());
     }
     fns::Camera_RequestQuake(ctx, (enums::QuakeKind_Large as i32), (fp).cur_pos());
     fns::ftCommon_8007EBAC(ctx, fp, (9_i32 as u32), (0_i32 as u32));
@@ -419,6 +419,31 @@ fn inl_ftCo_800976A4_inline<'a>(ctx: &'a Ctx, fp: Fighter<'a>, dist: Val<'a, F32
     let mut fp = fp;
     let mut dist = dist;
     (dist).set(fp::fmuls((dist).get(), (fp).co_attrs().weight()));
+}
+
+fn inl_ftCo_80097630<'a>(ctx: &'a Ctx, fp: Fighter<'a>, sfx_ids: Val<'a, i32>, threshold: f64) {
+    let mut fp = fp;
+    let mut sfx_ids = sfx_ids;
+    let mut threshold = threshold;
+    fns::ft_PlaySFX(
+        ctx,
+        fp,
+        (if threshold >= (fns::p_ftCommonData(ctx).get()).x1F0() {
+            (Handle::add(sfx_ids, 0_i32)).get()
+        } else {
+            (if threshold >= (fns::p_ftCommonData(ctx).get()).x1F4() {
+                (Handle::add(sfx_ids, 1_i32)).get()
+            } else {
+                (if threshold >= (fns::p_ftCommonData(ctx).get()).x1F4() {
+                    (Handle::add(sfx_ids, 2_i32)).get()
+                } else {
+                    (Handle::add(sfx_ids, 3_i32)).get()
+                })
+            })
+        }),
+        (127_i32 as u8),
+        (64_i32 as u8),
+    );
 }
 
 fn inl_ftCo_800978D4_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, param: Val<'a, F32>) {

@@ -540,6 +540,12 @@ fn inl_getFtSpecialAttrs<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> {
     return fighter_attr;
 }
 
+fn inl_getFtSpecialAttrs_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> {
+    let mut fp = fp;
+    let mut fighter_attr: Addr<'a> = (fp).dat_attrs();
+    return fighter_attr;
+}
+
 fn inl_ftSamus_80128B1C_inner_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, angle: f64) {
     let mut gobj = gobj;
     let mut angle = angle;
@@ -558,12 +564,6 @@ fn inl_ftSamus_80128B1C_inner_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, angl
         fp,
         fp::fmuls((ftAttr).air_drift_max(), (samus_attr).x10()),
     );
-}
-
-fn inl_getFtSpecialAttrs_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> {
-    let mut fp = fp;
-    let mut fighter_attr: Addr<'a> = (fp).dat_attrs();
-    return fighter_attr;
 }
 
 /// Registers this unit's ports.

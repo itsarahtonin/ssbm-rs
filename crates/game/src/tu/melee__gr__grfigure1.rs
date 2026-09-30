@@ -156,6 +156,11 @@ pub fn grFigure1_8020E270<'a>(ctx: &'a Ctx, n: i32) {
     let mut n = n;
 }
 
+fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
 fn inl_Ground_SetupStageCallbacks_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -183,11 +188,6 @@ fn inl_Ground_SetupStageCallbacks_unfused<'a>(
     if !Handle::is_null((callbacks).gobj_proc()) {
         let _ = fns::HSD_GObj_SetupProc(ctx, gobj, (callbacks).gobj_proc(), (4_i32 as u8));
     }
-}
-
-fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).user_data();
 }
 
 fn inl_Ground_StartMapAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

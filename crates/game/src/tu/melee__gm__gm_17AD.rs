@@ -419,6 +419,11 @@ fn inl_gmClampResultStat_unfused<'a>(ctx: &'a Ctx, value: i32) -> i32 {
     return value;
 }
 
+fn inl_clampKOs_unfused<'a>(ctx: &'a Ctx, n: i32) -> i32 {
+    let mut n = n;
+    return fns::fn_8017AD04(ctx, n, 0xf423f_i32);
+}
+
 fn inl_getKOs_unfused<'a>(ctx: &'a Ctx, slot: i32, killer: i32, victim: i32) -> i32 {
     let mut slot = slot;
     let mut killer = killer;
@@ -432,11 +437,6 @@ fn inl_getKOs_unfused<'a>(ctx: &'a Ctx, slot: i32, killer: i32, victim: i32) -> 
         return inl_clampKOs_unfused(ctx, kos);
     }
     return 1_i32.wrapping_neg();
-}
-
-fn inl_clampKOs_unfused<'a>(ctx: &'a Ctx, n: i32) -> i32 {
-    let mut n = n;
-    return fns::fn_8017AD04(ctx, n, 0xf423f_i32);
 }
 
 /// Registers this unit's ports.

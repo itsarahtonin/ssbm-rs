@@ -288,6 +288,28 @@ fn inl_HSD_JObjGetScaleX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     return (jobj).scale().x();
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80400124),
+            (228_i32 as u32),
+            cstr(ctx, 0x80400124),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetScaleX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
     let mut jobj = jobj;
     let mut x = x;
@@ -309,28 +331,6 @@ fn inl_HSD_JObjSetScaleX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x80400124),
-            (228_i32 as u32),
-            cstr(ctx, 0x80400124),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjSetScaleY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
@@ -379,18 +379,18 @@ fn inl_HSD_JObjSetScaleZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
     }
 }
 
-fn inl_Stage_InitScene_unfused<'a>(ctx: &'a Ctx, stkind: i32, arg1: Val<'a, i32>) {
-    let mut stkind = stkind;
-    let mut arg1 = arg1;
-    inl_Ground_InitScene_unfused(ctx);
-    fns::Stage_802251E8(ctx, stkind, arg1);
-}
-
 fn inl_Ground_InitScene_unfused<'a>(ctx: &'a Ctx) {
     fns::Camera_Init(ctx, 6_i32);
     fns::lb_8000FCDC(ctx);
     fns::mpColl_80041C78(ctx);
     fns::Ground_801C0378(ctx, 64_i32);
+}
+
+fn inl_Stage_InitScene_unfused<'a>(ctx: &'a Ctx, stkind: i32, arg1: Val<'a, i32>) {
+    let mut stkind = stkind;
+    let mut arg1 = arg1;
+    inl_Ground_InitScene_unfused(ctx);
+    fns::Stage_802251E8(ctx, stkind, arg1);
 }
 
 /// Registers this unit's ports.

@@ -83,7 +83,7 @@ pub fn ftCo_Fall_Enter_YoshiEgg<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_Fall_Enter_YoshiEgg_Kirby<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let mut gobj = gobj;
-    fns::ftCo_Fall_Enter_YoshiEgg(ctx, gobj);
+    inl_ftCo_Fall_Enter_YoshiEgg_unfused(ctx, gobj);
 }
 
 pub fn ftCo_800CC988<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: f64) {
@@ -122,7 +122,7 @@ pub fn ftCo_Fall_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             (enums::ftCo_SM_FallF as i32),
             (enums::ftCo_SM_FallB as i32),
         );
-        fns::ftCo_800CC988(ctx, gobj, (fp).mv().co().fall().x4());
+        inl_ftCo_800CC988_unfused(ctx, gobj, (fp).mv().co().fall().x4());
     }
 }
 
@@ -283,6 +283,47 @@ fn inl_ftCo_Fall_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         return 1_i32;
     }
     return 0_i32;
+}
+
+fn inl_ftCo_Fall_Enter_YoshiEgg_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if !(inl_ftCo_Fall_inline_unfused(ctx, gobj) != 0) {
+        fns::Fighter_ChangeMotionState(
+            ctx,
+            gobj,
+            (enums::ftCo_MS_Fall as i32),
+            64_u32,
+            0.0,
+            1.0,
+            fp::fneg(1.0),
+            null::<HSD_GObj<'a>>(ctx),
+        );
+        (fp).mv().co().fall().set_smid((enums::ftCo_SM_Fall as i32));
+        (fp).mv().co().fall().set_x4(0.0);
+    }
+}
+
+fn inl_ftCo_800CC988_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: f64) {
+    let mut gobj = gobj;
+    let mut arg1 = arg1;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if (arg1 != 0.0) {
+        fns::HSD_JObjAnimAll(ctx, (fp).x8AC_animSkeleton());
+        if arg1 != 1.0 {
+            fns::ftAnim_8006FE9C(
+                ctx,
+                fp,
+                (enums::FtPart_TransN as i32),
+                arg1,
+                fp::fsubs(1.0, arg1),
+            );
+        } else {
+            fns::ftAnim_8006FF74(ctx, fp, (enums::FtPart_TransN as i32));
+        }
+    }
 }
 
 fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {

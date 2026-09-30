@@ -33,22 +33,22 @@ pub fn gm_1601_GetUnkData<'a>(ctx: &'a Ctx) -> lbl_8046B488_t<'a> {
 pub fn gm_80169370<'a>(ctx: &'a Ctx, arg0: i32) -> i8 {
     let mut arg0 = arg0;
     return (Handle::add(
-        (Handle::cast::<Val<'a, i8>>(fns::gm_1601_GetUnkData(ctx))),
+        (Handle::cast::<Val<'a, i8>>(inl_gm_1601_GetUnkData_unfused(ctx))),
         arg0,
     ))
     .get();
 }
 
 pub fn gm_80169384<'a>(ctx: &'a Ctx) -> i32 {
-    return ((fns::gm_1601_GetUnkData(ctx)).x7() as i32);
+    return ((inl_gm_1601_GetUnkData_unfused(ctx)).x7() as i32);
 }
 
 pub fn gm_80169394<'a>(ctx: &'a Ctx) -> i32 {
-    return ((fns::gm_1601_GetUnkData(ctx)).unk_10_b3() as i32);
+    return ((inl_gm_1601_GetUnkData_unfused(ctx)).unk_10_b3() as i32);
 }
 
 pub fn fn_801693A8<'a>(ctx: &'a Ctx) -> i32 {
-    return ((fns::gm_1601_GetUnkData(ctx)).unk_10_b2() as i32);
+    return ((inl_gm_1601_GetUnkData_unfused(ctx)).unk_10_b2() as i32);
 }
 
 pub fn gm_801693BC<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
@@ -63,7 +63,7 @@ pub fn gm_801693BC<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
         }
     }
     if (fns::Player_GetFlagsBit1(ctx, arg0) != 0)
-        && (((fns::gm_1601_GetUnkData(ctx)).x8() as i32) > 1_i32)
+        && (((inl_gm_1601_GetUnkData_unfused(ctx)).x8() as i32) > 1_i32)
     {
         return 1_i32;
     }
@@ -77,13 +77,13 @@ pub fn gm_801693BC<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 
 pub fn fn_80169434<'a>(ctx: &'a Ctx, r#fn: FnPtr<'a>) {
     let mut r#fn = r#fn;
-    (fns::gm_1601_GetUnkData(ctx)).set_x1B8(r#fn);
+    (inl_gm_1601_GetUnkData_unfused(ctx)).set_x1B8(r#fn);
 }
 
 pub fn fn_80169444<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
-    let mut gp: lbl_8046B488_t<'a> = fns::gm_1601_GetUnkData(ctx);
+    let mut gp: lbl_8046B488_t<'a> = inl_gm_1601_GetUnkData_unfused(ctx);
     if !Handle::is_null((gp).x1B8()) {
         if (gp).x1B8().call::<_, i32>((arg0,)) == 1_i32 {
             (gp).set_x1B8(null::<FnPtr<'a>>(ctx));
@@ -98,7 +98,7 @@ pub fn gm_801694A0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 {
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut i: i32 = 0;
-    let mut count: i32 = ((fns::gm_1601_GetUnkData(ctx)).x7() as i32);
+    let mut count: i32 = ((inl_gm_1601_GetUnkData_unfused(ctx)).x7() as i32);
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {
@@ -124,20 +124,20 @@ pub fn gm_801694A0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 {
 }
 
 pub fn gm_80169520<'a>(ctx: &'a Ctx) -> Addr<'a> {
-    return Handle::cast::<Addr<'a>>((fns::gm_1601_GetUnkData(ctx)).x20().at(0));
+    return Handle::cast::<Addr<'a>>((inl_gm_1601_GetUnkData_unfused(ctx)).x20().at(0));
 }
 
 pub fn gm_80169530<'a>(ctx: &'a Ctx) -> Addr<'a> {
-    return Handle::cast::<Addr<'a>>((fns::gm_1601_GetUnkData(ctx)).xA2().at(0));
+    return Handle::cast::<Addr<'a>>((inl_gm_1601_GetUnkData_unfused(ctx)).xA2().at(0));
 }
 
 pub fn gm_80169540<'a>(ctx: &'a Ctx) -> Addr<'a> {
-    return Handle::cast::<Addr<'a>>((fns::gm_1601_GetUnkData(ctx)).x124().at(0));
+    return Handle::cast::<Addr<'a>>((inl_gm_1601_GetUnkData_unfused(ctx)).x124().at(0));
 }
 
 pub fn fn_80169550<'a>(ctx: &'a Ctx, slot: i32) {
     let mut slot = slot;
-    let mut gp: lbl_8046B488_t<'a> = fns::gm_1601_GetUnkData(ctx);
+    let mut gp: lbl_8046B488_t<'a> = inl_gm_1601_GetUnkData_unfused(ctx);
     let mut idx: i8 = (gp).x1A6().at(slot).get();
     (gp).x20()
         .at((idx as i32))
@@ -784,7 +784,7 @@ pub fn gm_8016A164<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut i: i32 = 0;
-    let mut gp: lbl_8046B488_t<'a> = fns::gm_1601_GetUnkData(ctx);
+    let mut gp: lbl_8046B488_t<'a> = inl_gm_1601_GetUnkData_unfused(ctx);
     let mut scene_state: VsSceneState<'a> = fns::gmVs_GetSceneState(ctx);
     'l1: loop {
         'c2: {}
@@ -814,11 +814,11 @@ pub fn gm_8016A164<'a>(ctx: &'a Ctx) {
 }
 
 pub fn fn_8016A1E4<'a>(ctx: &'a Ctx) -> i32 {
-    return ((fns::gm_1601_GetUnkData(ctx)).unk_10_b0() as i32);
+    return ((inl_gm_1601_GetUnkData_unfused(ctx)).unk_10_b0() as i32);
 }
 
 pub fn gm_8016A1F8<'a>(ctx: &'a Ctx) -> i32 {
-    if ((fns::gm_1601_GetUnkData(ctx)).unk_10_b1() != 0) {
+    if ((inl_gm_1601_GetUnkData_unfused(ctx)).unk_10_b1() != 0) {
         return 1_i32;
     }
     return 0_i32;
@@ -829,7 +829,7 @@ pub fn gm_8016A21C<'a>(ctx: &'a Ctx, arg0: StartMeleeRules<'a>) {
     (arg0).set_x54(Handle::cast::<StartMeleeRules_x54<'a>>(Handle::cast::<
         Addr<'a>,
     >(
-        fns::gm_1601_GetUnkData(ctx),
+        inl_gm_1601_GetUnkData_unfused(ctx),
     )));
 }
 
@@ -1025,7 +1025,7 @@ pub fn gm_8016A998<'a>(ctx: &'a Ctx, arg0: i8, arg1: i8) -> i32 {
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut i: i32 = 0;
-    let mut ptr_: lbl_8046B668_t<'a> = fns::gm_8016A98C(ctx);
+    let mut ptr_: lbl_8046B668_t<'a> = inl_gm_8016A98C_unfused(ctx);
     {
         i = 0_i32;
         'l1: while i < 27_i32 {
@@ -1051,7 +1051,7 @@ pub fn gm_8016A9E8<'a>(ctx: &'a Ctx, arg0: u8, arg1: i8) -> i32 {
     let mut arg1 = arg1;
     let mut i: i32 = 0;
     let mut found: i32 = 0;
-    let mut ptr_: lbl_8046B668_t<'a> = fns::gm_8016A98C(ctx);
+    let mut ptr_: lbl_8046B668_t<'a> = inl_gm_8016A98C_unfused(ctx);
     found = 1_i32.wrapping_neg();
     {
         i = 0_i32;
@@ -1133,6 +1133,10 @@ pub fn gm_8016AC44<'a>(ctx: &'a Ctx, ckind: i8, costume_id: i8) -> i32 {
         }
     }
     return 0_i32;
+}
+
+fn inl_gm_1601_GetUnkData_unfused<'a>(ctx: &'a Ctx) -> lbl_8046B488_t<'a> {
+    return statics::melee__gm__gm_16A2::lbl_8046B488(ctx);
 }
 
 fn inl_fn_801695BC_rand_color_unfused<'a>(
@@ -1226,6 +1230,10 @@ fn inl_gm_8016A404_event_player_init_cb_unfused<'a>(
     let mut state: lbl_8046B488_event_player_init_cb_t<'a> =
         Handle::cast::<lbl_8046B488_event_player_init_cb_t<'a>>(gp);
     return (state).event_player_init_cb_ref();
+}
+
+fn inl_gm_8016A98C_unfused<'a>(ctx: &'a Ctx) -> lbl_8046B668_t<'a> {
+    return statics::melee__gm__gm_16A2::lbl_8046B668(ctx);
 }
 
 /// Registers this unit's ports.

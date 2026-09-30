@@ -92,7 +92,7 @@ pub fn ftCo_800C5DDC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn ftCo_HammerFall_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
     let mut gobj = gobj;
-    let _ = fns::ftCo_800C5DDC(ctx, gobj);
+    let _ = inl_ftCo_800C5DDC_unfused(ctx, gobj);
 }
 
 pub fn ftCo_HammerFall_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -135,6 +135,23 @@ fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         ((fp).player_idx() as i32),
         ((fp).is_sub_fighter() as i32),
     );
+}
+
+fn inl_ftCo_800C5DDC_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if ((((fp).x2338().y() != 0_i32)
+        && (((fp).input().pressed_buttons() & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0))
+        && (((fp).input().held_buttons().at(0_i32).get()
+            & ((shl_i32(1_i32, (31_i32 as u32))) as u32))
+            != 0))
+        && (((fp).x683() as i32) >= (fns::p_ftCommonData(ctx).get()).x1C())
+    {
+        inl_inlineA0_unfused(ctx, gobj);
+        return 1_i32;
+    }
+    return 0_i32;
 }
 
 /// Registers this unit's ports.

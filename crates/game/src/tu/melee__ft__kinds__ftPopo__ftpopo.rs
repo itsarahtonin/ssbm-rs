@@ -187,7 +187,12 @@ pub fn ftPp_Init_8011F190<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         return;
     }
     fns::it_802C17DC(ctx, (fp).u().nn().x222C());
-    fns::ftPp_Init_8011F16C(ctx, gobj, (fp).u().nn().x222C());
+    inl_ftPp_Init_8011F16C_unfused(ctx, gobj, (fp).u().nn().x222C());
+}
+
+fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
 }
 
 fn inl_Fighter_OnItemPickup_unfused<'a>(
@@ -236,11 +241,6 @@ fn inl_Fighter_OnItemPickup_unfused<'a>(
             fns::ftAnim_80070C48(ctx, gobj, bool3);
         }
     }
-}
-
-fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).user_data();
 }
 
 fn inl_Fighter_OnItemInvisible_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, flag: i32) {
@@ -292,6 +292,19 @@ fn inl_Fighter_OnKnockbackExit_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg
     let mut arg1 = arg1;
     fns::ftAnim_800704F0(ctx, gobj, arg1, 0.0);
     fns::ftAnim_800704F0(ctx, gobj, 0_i32, 0.0);
+}
+
+fn inl_ftPp_Init_8011F16C_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, item_gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut item_gobj = item_gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if Handle::addr(item_gobj) != Handle::addr((fp).u().nn().x222C()) {
+        return;
+    }
+    (fp).u().nn().set_x222C(null::<HSD_GObj<'a>>(ctx));
+    (fp).set_death2_cb(null::<FnPtr<'a>>(ctx));
+    (fp).set_take_dmg_cb(null::<FnPtr<'a>>(ctx));
 }
 
 /// Registers this unit's ports.

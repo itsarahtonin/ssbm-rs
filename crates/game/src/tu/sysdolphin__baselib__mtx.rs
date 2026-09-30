@@ -81,7 +81,12 @@ pub fn HSD_VecGetAllocData<'a>(ctx: &'a Ctx) -> _HSD_ObjAllocData<'a> {
 
 pub fn HSD_VecInitAllocData<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
-    fns::HSD_ObjAllocInit(ctx, fns::HSD_VecGetAllocData(ctx), 12_u32, (4_i32 as u32));
+    fns::HSD_ObjAllocInit(
+        ctx,
+        inl_HSD_VecGetAllocData_unfused(ctx),
+        12_u32,
+        (4_i32 as u32),
+    );
 }
 
 pub fn HSD_MtxGetAllocData<'a>(ctx: &'a Ctx) -> _HSD_ObjAllocData<'a> {
@@ -90,7 +95,20 @@ pub fn HSD_MtxGetAllocData<'a>(ctx: &'a Ctx) -> _HSD_ObjAllocData<'a> {
 
 pub fn HSD_MtxInitAllocData<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
-    fns::HSD_ObjAllocInit(ctx, fns::HSD_MtxGetAllocData(ctx), 48_u32, (4_i32 as u32));
+    fns::HSD_ObjAllocInit(
+        ctx,
+        inl_HSD_MtxGetAllocData_unfused(ctx),
+        48_u32,
+        (4_i32 as u32),
+    );
+}
+
+fn inl_HSD_VecGetAllocData_unfused<'a>(ctx: &'a Ctx) -> _HSD_ObjAllocData<'a> {
+    return fns::HSD_Mtx_804C2310(ctx);
+}
+
+fn inl_HSD_MtxGetAllocData_unfused<'a>(ctx: &'a Ctx) -> _HSD_ObjAllocData<'a> {
+    return fns::HSD_Mtx_804C233C(ctx);
 }
 
 /// Registers this unit's ports.

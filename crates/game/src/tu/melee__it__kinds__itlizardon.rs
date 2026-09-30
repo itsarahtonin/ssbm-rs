@@ -156,7 +156,7 @@ pub fn itLizardon_UnkMotion2_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             (ip).xDD4_itemVar()
                 .lizardon()
                 .set_x60((ip).xDD4_itemVar().lizardon().x60().wrapping_sub(1));
-            fns::it_802CBAA8(ctx, gobj);
+            inl_it_802CBAA8_unfused(ctx, gobj);
         }
     }
     return 0_i32;
@@ -165,13 +165,13 @@ pub fn itLizardon_UnkMotion2_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn itLizardon_UnkMotion2_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
-    fns::itLizardon_UnkMotion1_Phys(ctx, gobj);
+    inl_itLizardon_UnkMotion1_Phys_unfused(ctx, gobj);
 }
 
 pub fn itLizardon_UnkMotion2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
-    return fns::itLizardon_UnkMotion1_Coll(ctx, gobj);
+    return inl_itLizardon_UnkMotion1_Coll_unfused(ctx, gobj);
 }
 
 pub fn it_802CBD24<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -395,13 +395,13 @@ pub fn itLizardon_UnkMotion3_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn itLizardon_UnkMotion3_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
-    fns::itLizardon_UnkMotion1_Phys(ctx, gobj);
+    inl_itLizardon_UnkMotion1_Phys_unfused(ctx, gobj);
 }
 
 pub fn itLizardon_UnkMotion3_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
-    return fns::itLizardon_UnkMotion1_Coll(ctx, gobj);
+    return inl_itLizardon_UnkMotion1_Coll_unfused(ctx, gobj);
 }
 
 pub fn it_802CC0EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -704,6 +704,68 @@ fn inl_it_802CBAA8_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             ctx,
             (attrs).x2C().wrapping_sub((attrs).x28()),
         )));
+}
+
+fn inl_it_802CBAA8_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut attrs: itLizardonAttributes<'a> =
+        Handle::cast::<itLizardonAttributes<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
+    if (ip).xDD4_itemVar().lizardon().x60() == 1_i32.wrapping_neg() {
+        (ip).xDD4_itemVar().lizardon().set_x60(
+            (Handle::cast::<Val<'a, i32>>(Handle::cast::<Addr<'a>>(((attrs).x4_ref())))).get(),
+        );
+    }
+    fns::Item_80268E5C(ctx, gobj, 2_i32, (enums::ITEM_ANIM_UPDATE as i32));
+    inl_it_802CBAA8_inline_unfused(ctx, gobj);
+    (ip).xDD4_itemVar()
+        .lizardon()
+        .x74()
+        .at(0_i32)
+        .set((attrs).x18().at(0_i32).get());
+    (ip).xDD4_itemVar()
+        .lizardon()
+        .x74()
+        .at(1_i32)
+        .set((attrs).x18().at(1_i32).get());
+    (ip).xDD4_itemVar()
+        .lizardon()
+        .x74()
+        .at(2_i32)
+        .set((attrs).x18().at(2_i32).get());
+    (ip).xDD4_itemVar()
+        .lizardon()
+        .x74()
+        .at(3_i32)
+        .set((attrs).x18().at(3_i32).get());
+    inl_Item_SetEffectHitlagCallbacks_unfused(ctx, ip);
+    (ip).set_on_accessory(fnptr(ctx, 0x802cbd24));
+}
+
+fn inl_itLizardon_UnkMotion1_Phys_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut ip_attr: ItemAttr<'a> = null(ctx);
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        ip_attr = (ip).xCC_item_attr();
+        fns::it_80272860(
+            ctx,
+            gobj,
+            (ip_attr).x10_fall_speed(),
+            (ip_attr).x14_fall_speed_max(),
+        );
+    }
+}
+
+fn inl_itLizardon_UnkMotion1_Coll_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        fns::it_8026E15C(ctx, gobj, fnptr(ctx, 0x802cb93c));
+    } else {
+        fns::it_8026D62C(ctx, gobj, fnptr(ctx, 0x802cb93c));
+    }
+    return 0_i32;
 }
 
 fn inl_it_802CBD24_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

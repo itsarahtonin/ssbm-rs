@@ -174,17 +174,6 @@ fn inl_Item_InitSpawnCommonFields_unfused<'a>(
     (spawn).set_x40(0_i32);
 }
 
-fn inl_itReflectItemAndUpdateRotation_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
-    let mut gobj = gobj;
-    let mut PI_2: f64 = fp::frsp(fp::fdiv(3.141592653589793, (2_i32 as f64)));
-    let mut ip: Item<'a> = Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj));
-    let mut jobj: HSD_JObj<'a> =
-        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
-    let _ = fns::it_80273030(ctx, gobj);
-    inl_HSD_JObjSetRotationY_unfused(ctx, jobj, fp::fmuls(PI_2, (ip).facing_dir()));
-    return 0_i32;
-}
-
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
@@ -193,6 +182,28 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
 fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).hsd_obj();
+}
+
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f7158),
+            (228_i32 as u32),
+            cstr(ctx, 0x803f7158),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
@@ -228,26 +239,15 @@ fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f7158),
-            (228_i32 as u32),
-            cstr(ctx, 0x803f7158),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
+fn inl_itReflectItemAndUpdateRotation_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut PI_2: f64 = fp::frsp(fp::fdiv(3.141592653589793, (2_i32 as f64)));
+    let mut ip: Item<'a> = Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj));
+    let mut jobj: HSD_JObj<'a> =
+        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
+    let _ = fns::it_80273030(ctx, gobj);
+    inl_HSD_JObjSetRotationY_unfused(ctx, jobj, fp::fmuls(PI_2, (ip).facing_dir()));
+    return 0_i32;
 }
 
 fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {

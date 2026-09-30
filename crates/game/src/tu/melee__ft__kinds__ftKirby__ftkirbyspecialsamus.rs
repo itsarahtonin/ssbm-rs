@@ -766,16 +766,6 @@ fn inl_ftKb_SpecialNSs_DestroyChargeShot_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GOb
     }
 }
 
-fn inl_ftKb_ChargeShot_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let mut gobj = gobj;
-    let mut fp: Fighter<'a> =
-        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if !Handle::is_null(gobj) {
-        inl_ftKb_SpecialNSs_it_802B5974_unfused(ctx, gobj);
-        inl_ftKb_SpecialNSs_DestroyChargeShot_unfused(ctx, gobj);
-    }
-}
-
 fn inl_ftKb_SpecialNSs_it_802B5974_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
@@ -783,6 +773,16 @@ fn inl_ftKb_SpecialNSs_it_802B5974_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>)
     if !Handle::is_null((fp).u().kb().xA4()) {
         fns::it_802B5974(ctx, Handle::cast::<HSD_GObj<'a>>((fp).u().kb().xA4()));
         (fp).u().kb().set_xA4(null::<Addr<'a>>(ctx));
+    }
+}
+
+fn inl_ftKb_ChargeShot_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if !Handle::is_null(gobj) {
+        inl_ftKb_SpecialNSs_it_802B5974_unfused(ctx, gobj);
+        inl_ftKb_SpecialNSs_DestroyChargeShot_unfused(ctx, gobj);
     }
 }
 

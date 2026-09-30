@@ -783,18 +783,18 @@ fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'
     return (gobj).hsd_obj();
 }
 
-fn inl_Stage_InitScene_unfused<'a>(ctx: &'a Ctx, stkind: i32, arg1: Val<'a, i32>) {
-    let mut stkind = stkind;
-    let mut arg1 = arg1;
-    inl_Ground_InitScene_unfused(ctx);
-    fns::Stage_802251E8(ctx, stkind, arg1);
-}
-
 fn inl_Ground_InitScene_unfused<'a>(ctx: &'a Ctx) {
     fns::Camera_Init(ctx, 6_i32);
     fns::lb_8000FCDC(ctx);
     fns::mpColl_80041C78(ctx);
     fns::Ground_801C0378(ctx, 64_i32);
+}
+
+fn inl_Stage_InitScene_unfused<'a>(ctx: &'a Ctx, stkind: i32, arg1: Val<'a, i32>) {
+    let mut stkind = stkind;
+    let mut arg1 = arg1;
+    inl_Ground_InitScene_unfused(ctx);
+    fns::Stage_802251E8(ctx, stkind, arg1);
 }
 
 fn inl_initImages_unfused<'a>(ctx: &'a Ctx) {
@@ -820,58 +820,26 @@ fn inl_initImages_unfused<'a>(ctx: &'a Ctx) {
     }
 }
 
-fn inl_gm_801A7070_SetupMain_unfused<'a>(ctx: &'a Ctx, priority: u8) {
-    let mut priority = priority;
-    let mut jobj: HSD_JObj<'a> = null(ctx);
-    let mut gobj: HSD_GObj<'a> = null(ctx);
-    let mut player_jobj: HSD_JObj<'a> = null(ctx);
-    let mut scale: f64 = 0.0;
-    gobj = fns::GObj_Create(ctx, (14_i32 as u16), (15_i32 as u8), priority);
-    fns::gm_804D6768(ctx).set(gobj);
-    jobj = fns::HSD_JObjLoadJoint(ctx, fns::gm_804D6798(ctx).get());
-    fns::HSD_GObjObject_80390A70(
-        ctx,
-        gobj,
-        fns::HSD_GObj_JObjKind(ctx).get(),
-        Handle::cast::<Addr<'a>>(jobj),
-    );
-    fns::GObj_SetupGXLink(
-        ctx,
-        gobj,
-        fnptr(ctx, 0x80391070),
-        (11_i32 as u8),
-        (0_i32 as u32),
-    );
-    scale = statics::melee__gm__gmregtyfall::gm_803DB2EC(ctx)
-        .at(fns::gm_801BEFB0(ctx))
-        .get();
-    inl_HSD_JObjSetScaleX_unfused(ctx, jobj, scale);
-    inl_HSD_JObjSetScaleY_unfused(ctx, jobj, scale);
-    inl_HSD_JObjSetScaleZ_unfused(ctx, jobj, scale);
-    let _ = fns::HSD_GObj_SetupProc(ctx, gobj, fnptr(ctx, 0x801a6664), (23_i32 as u8));
-    player_jobj = fns::Player_80036EA0(ctx, 0_i32);
-    fns::lb_8000C1C0(
-        ctx,
-        inl_HSD_JObjGetChild_unfused(
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
             ctx,
-            inl_HSD_JObjGetChild_unfused(
-                ctx,
-                inl_HSD_JObjGetChild_unfused(ctx, inl_HSD_JObjGetChild_unfused(ctx, jobj)),
-            ),
-        ),
-        player_jobj,
-    );
-    fns::lb_8000C290(
-        ctx,
-        inl_HSD_JObjGetChild_unfused(
-            ctx,
-            inl_HSD_JObjGetChild_unfused(
-                ctx,
-                inl_HSD_JObjGetChild_unfused(ctx, inl_HSD_JObjGetChild_unfused(ctx, jobj)),
-            ),
-        ),
-        player_jobj,
-    );
+            cstr(ctx, 0x803db2c8),
+            (228_i32 as u32),
+            cstr(ctx, 0x803db2c8),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetScaleX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
@@ -895,28 +863,6 @@ fn inl_HSD_JObjSetScaleX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803db2c8),
-            (228_i32 as u32),
-            cstr(ctx, 0x803db2c8),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjSetScaleY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
@@ -976,21 +922,15 @@ fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JOb
     return null(ctx);
 }
 
-fn inl_gm_801A7070_SetupTrophy_unfused<'a>(ctx: &'a Ctx, priority: u8) {
+fn inl_gm_801A7070_SetupMain_unfused<'a>(ctx: &'a Ctx, priority: u8) {
     let mut priority = priority;
-    let mut trophy: i32 = 0;
-    let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
-    let mut child: HSD_JObj<'a> = null(ctx);
-    let mut target: HSD_JObj<'a> = null(ctx);
-    let mut val: f64 = 0.0;
+    let mut gobj: HSD_GObj<'a> = null(ctx);
+    let mut player_jobj: HSD_JObj<'a> = null(ctx);
     let mut scale: f64 = 0.0;
     gobj = fns::GObj_Create(ctx, (14_i32 as u16), (15_i32 as u8), priority);
-    fns::gm_804D6778(ctx).set(gobj);
-    jobj = fns::HSD_JObjLoadJoint(
-        ctx,
-        ((Handle::add((fns::gm_804D67AC(ctx).get()).models(), 0_i32)).get()).joint(),
-    );
+    fns::gm_804D6768(ctx).set(gobj);
+    jobj = fns::HSD_JObjLoadJoint(ctx, fns::gm_804D6798(ctx).get());
     fns::HSD_GObjObject_80390A70(
         ctx,
         gobj,
@@ -1004,49 +944,36 @@ fn inl_gm_801A7070_SetupTrophy_unfused<'a>(ctx: &'a Ctx, priority: u8) {
         (11_i32 as u8),
         (0_i32 as u32),
     );
-    trophy = inl_getCurrentTrophy_unfused(ctx);
-    child = (if Handle::is_null(jobj) {
-        null::<HSD_JObj<'a>>(ctx)
-    } else {
-        (jobj).child()
-    });
-    val = fp::fneg(fns::Toy_803060BC(ctx, trophy, 0_i32));
-    inl_HSD_JObjSetTranslateXWithMtxDirty_unfused(ctx, child, val);
-    val = fp::fneg(fns::Toy_803060BC(ctx, trophy, 1_i32));
-    inl_HSD_JObjSetTranslateYWithMtxDirty_unfused(ctx, child, val);
-    val = fp::fneg(fns::Toy_803060BC(ctx, trophy, 2_i32));
-    inl_HSD_JObjSetTranslateZWithMtxDirty_unfused(ctx, child, val);
-    val = fp::fneg((fp::fmuls(0.01745329238474369, fns::Toy_803060BC(ctx, trophy, 5_i32))));
-    inl_HSD_JObjSetRotationYWithMtxDirty_unfused(ctx, child, val);
-    scale = fp::fdivs(1.0, fns::Toy_803060BC(ctx, trophy, 3_i32));
-    val = fns::Toy_803060BC(ctx, trophy, 4_i32);
-    scale = fp::fmuls(val, scale);
-    inl_HSD_JObjSetScaleXWithMtxDirty_unfused(ctx, child, scale);
-    inl_HSD_JObjSetScaleYWithMtxDirty_unfused(ctx, child, scale);
-    inl_HSD_JObjSetScaleZWithMtxDirty_unfused(ctx, child, scale);
-    val = statics::melee__gm__gmregtyfall::gm_803DB2EC(ctx)
+    scale = statics::melee__gm__gmregtyfall::gm_803DB2EC(ctx)
         .at(fns::gm_801BEFB0(ctx))
         .get();
-    inl_HSD_JObjSetScaleX_unfused(ctx, jobj, val);
-    inl_HSD_JObjSetScaleY_unfused(ctx, jobj, val);
-    inl_HSD_JObjSetScaleZ_unfused(ctx, jobj, val);
-    let _ = fns::HSD_GObj_SetupProc(ctx, gobj, fnptr(ctx, 0x801a6844), (23_i32 as u8));
-    target = Handle::cast::<HSD_JObj<'a>>((fns::gm_804D6768(ctx).get()).hsd_obj());
-    target = inl_HSD_JObjGetNext_unfused(
+    inl_HSD_JObjSetScaleX_unfused(ctx, jobj, scale);
+    inl_HSD_JObjSetScaleY_unfused(ctx, jobj, scale);
+    inl_HSD_JObjSetScaleZ_unfused(ctx, jobj, scale);
+    let _ = fns::HSD_GObj_SetupProc(ctx, gobj, fnptr(ctx, 0x801a6664), (23_i32 as u8));
+    player_jobj = fns::Player_80036EA0(ctx, 0_i32);
+    fns::lb_8000C1C0(
         ctx,
         inl_HSD_JObjGetChild_unfused(
             ctx,
             inl_HSD_JObjGetChild_unfused(
                 ctx,
-                inl_HSD_JObjGetChild_unfused(
-                    ctx,
-                    inl_HSD_JObjGetChild_unfused(ctx, inl_HSD_JObjGetChild_unfused(ctx, target)),
-                ),
+                inl_HSD_JObjGetChild_unfused(ctx, inl_HSD_JObjGetChild_unfused(ctx, jobj)),
             ),
         ),
+        player_jobj,
     );
-    fns::lb_8000C1C0(ctx, Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()), target);
-    fns::lb_8000C290(ctx, Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()), target);
+    fns::lb_8000C290(
+        ctx,
+        inl_HSD_JObjGetChild_unfused(
+            ctx,
+            inl_HSD_JObjGetChild_unfused(
+                ctx,
+                inl_HSD_JObjGetChild_unfused(ctx, inl_HSD_JObjGetChild_unfused(ctx, jobj)),
+            ),
+        ),
+        player_jobj,
+    );
 }
 
 fn inl_getCurrentTrophy_unfused<'a>(ctx: &'a Ctx) -> i32 {
@@ -1205,6 +1132,79 @@ fn inl_HSD_JObjGetNext_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj
     }
     #[allow(unreachable_code)]
     return null(ctx);
+}
+
+fn inl_gm_801A7070_SetupTrophy_unfused<'a>(ctx: &'a Ctx, priority: u8) {
+    let mut priority = priority;
+    let mut trophy: i32 = 0;
+    let mut gobj: HSD_GObj<'a> = null(ctx);
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut child: HSD_JObj<'a> = null(ctx);
+    let mut target: HSD_JObj<'a> = null(ctx);
+    let mut val: f64 = 0.0;
+    let mut scale: f64 = 0.0;
+    gobj = fns::GObj_Create(ctx, (14_i32 as u16), (15_i32 as u8), priority);
+    fns::gm_804D6778(ctx).set(gobj);
+    jobj = fns::HSD_JObjLoadJoint(
+        ctx,
+        ((Handle::add((fns::gm_804D67AC(ctx).get()).models(), 0_i32)).get()).joint(),
+    );
+    fns::HSD_GObjObject_80390A70(
+        ctx,
+        gobj,
+        fns::HSD_GObj_JObjKind(ctx).get(),
+        Handle::cast::<Addr<'a>>(jobj),
+    );
+    fns::GObj_SetupGXLink(
+        ctx,
+        gobj,
+        fnptr(ctx, 0x80391070),
+        (11_i32 as u8),
+        (0_i32 as u32),
+    );
+    trophy = inl_getCurrentTrophy_unfused(ctx);
+    child = (if Handle::is_null(jobj) {
+        null::<HSD_JObj<'a>>(ctx)
+    } else {
+        (jobj).child()
+    });
+    val = fp::fneg(fns::Toy_803060BC(ctx, trophy, 0_i32));
+    inl_HSD_JObjSetTranslateXWithMtxDirty_unfused(ctx, child, val);
+    val = fp::fneg(fns::Toy_803060BC(ctx, trophy, 1_i32));
+    inl_HSD_JObjSetTranslateYWithMtxDirty_unfused(ctx, child, val);
+    val = fp::fneg(fns::Toy_803060BC(ctx, trophy, 2_i32));
+    inl_HSD_JObjSetTranslateZWithMtxDirty_unfused(ctx, child, val);
+    val = fp::fneg((fp::fmuls(0.01745329238474369, fns::Toy_803060BC(ctx, trophy, 5_i32))));
+    inl_HSD_JObjSetRotationYWithMtxDirty_unfused(ctx, child, val);
+    scale = fp::fdivs(1.0, fns::Toy_803060BC(ctx, trophy, 3_i32));
+    val = fns::Toy_803060BC(ctx, trophy, 4_i32);
+    scale = fp::fmuls(val, scale);
+    inl_HSD_JObjSetScaleXWithMtxDirty_unfused(ctx, child, scale);
+    inl_HSD_JObjSetScaleYWithMtxDirty_unfused(ctx, child, scale);
+    inl_HSD_JObjSetScaleZWithMtxDirty_unfused(ctx, child, scale);
+    val = statics::melee__gm__gmregtyfall::gm_803DB2EC(ctx)
+        .at(fns::gm_801BEFB0(ctx))
+        .get();
+    inl_HSD_JObjSetScaleX_unfused(ctx, jobj, val);
+    inl_HSD_JObjSetScaleY_unfused(ctx, jobj, val);
+    inl_HSD_JObjSetScaleZ_unfused(ctx, jobj, val);
+    let _ = fns::HSD_GObj_SetupProc(ctx, gobj, fnptr(ctx, 0x801a6844), (23_i32 as u8));
+    target = Handle::cast::<HSD_JObj<'a>>((fns::gm_804D6768(ctx).get()).hsd_obj());
+    target = inl_HSD_JObjGetNext_unfused(
+        ctx,
+        inl_HSD_JObjGetChild_unfused(
+            ctx,
+            inl_HSD_JObjGetChild_unfused(
+                ctx,
+                inl_HSD_JObjGetChild_unfused(
+                    ctx,
+                    inl_HSD_JObjGetChild_unfused(ctx, inl_HSD_JObjGetChild_unfused(ctx, target)),
+                ),
+            ),
+        ),
+    );
+    fns::lb_8000C1C0(ctx, Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()), target);
+    fns::lb_8000C290(ctx, Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()), target);
 }
 
 fn inl_sfxForward_unfused<'a>(ctx: &'a Ctx) {

@@ -225,7 +225,7 @@ pub fn mn_8022F138<'a>(ctx: &'a Ctx, arg0: u16, arg1: u16) {
         i = (arg0 as i32);
         'l3: while i <= (arg1 as i32) {
             'c4: {
-                fns::mn_8022F0F0(ctx, i);
+                inl_mn_8022F0F0_unfused(ctx, i);
             }
             i = i.wrapping_add(1);
         }
@@ -419,6 +419,27 @@ pub fn mn_8022F4CC<'a>(ctx: &'a Ctx) {
     fns::HSD_SisLib_803A5E70(ctx);
     fns::mn_8022EBDC(ctx);
     let _ = fns::mnCharSel_802640A0(ctx);
+}
+
+fn inl_mn_8022F0F0_unfused<'a>(ctx: &'a Ctx, arg0: i32) {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut arg0 = arg0;
+    let mut curr: HSD_GObj<'a> =
+        (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), ((arg0 as u8) as i32))).get();
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    'l3: while !Handle::is_null(curr) {
+        'c4: {
+            let mut next: HSD_GObj<'a> = (curr).next();
+            fns::HSD_GObjFree(ctx, curr);
+            curr = next;
+        }
+    }
 }
 
 fn inl_mn_8022F1A8_inline_unfused<'a>(ctx: &'a Ctx, arg0: u8) {

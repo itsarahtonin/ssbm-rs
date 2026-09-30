@@ -133,7 +133,7 @@ pub fn ftCo_80099390<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32, arg2: i32)
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
     (fp).mv().co().escape().set_x4(0_i32);
-    statics::melee__ft__kinds__ftCommon__ftCo_Escape::ftCo_80099314(ctx, gobj, msid, arg2);
+    inl_ftCo_80099314_unfused(ctx, gobj, msid, arg2);
     (fp).set_anim_cb(fnptr(ctx, 0x80099564));
     (fp).set_coll_cb(fnptr(ctx, 0x80099754));
 }
@@ -147,7 +147,7 @@ pub fn ftCo_80099438<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32, arg2: i32)
     ctx.fill(Handle::addr(unused), 0, 0x8);
     unused.at(0).set((0_i32 as u8));
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    statics::melee__ft__kinds__ftCommon__ftCo_Escape::ftCo_80099314(ctx, gobj, msid, arg2);
+    inl_ftCo_80099314_unfused(ctx, gobj, msid, arg2);
     fns::ftParts_80074B0C(ctx, gobj, 0_i32, 1_i32);
     fns::ftYs_Init_8012BDA0(ctx, gobj);
     (fp).set_anim_cb(fnptr(ctx, 0x80099644));
@@ -181,7 +181,7 @@ pub fn ftCo_80099564<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::ftSs_SpecialLw_8012AF38(ctx, gobj);
         (fp).mv().co().escape().set_x4(0_i32);
     }
-    fns::ftCo_Escape_Anim(ctx, gobj);
+    inl_ftCo_Escape_Anim_unfused(ctx, gobj);
 }
 
 pub fn ftCo_80099644<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -315,7 +315,7 @@ pub fn ftCo_80099954<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     if ((fp).x5F4_arr().get(0_i32).idx() as i32) == 1_i32 {
         fns::ftYs_Init_8012BE3C(ctx, gobj);
     }
-    statics::melee__ft__kinds__ftCommon__ftCo_Escape::ftCo_800998EC(ctx, gobj);
+    inl_ftCo_800998EC_unfused(ctx, gobj);
 }
 
 pub fn ftCo_EscapeN_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -356,6 +356,27 @@ fn inl_inlineA1_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     return 0_i32;
 }
 
+fn inl_ftCo_80099314_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32, arg2: i32) {
+    let mut gobj = gobj;
+    let mut msid = msid;
+    let mut arg2 = arg2;
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
+    (fp).x2210().set_throw_flags((0_i32 as u32));
+    fns::Fighter_ChangeMotionState(
+        ctx,
+        gobj,
+        msid,
+        0_u32,
+        fp::frsp(0_i32 as f64),
+        fp::frsp(1_i32 as f64),
+        fp::frsp(0_i32 as f64),
+        null::<HSD_GObj<'a>>(ctx),
+    );
+    fns::ftAnim_8006EBA4(ctx, gobj);
+    (fp).set_x221D_b5((1_i32 as u16));
+    (fp).mv().co().escape().set_x0(arg2);
+}
+
 fn inl_ftCheckThrowB3_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     let mut fp = fp;
     if ((fp).x2210().x0().throw_flags_b3() != 0) {
@@ -368,6 +389,18 @@ fn inl_ftCheckThrowB3_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     return 0;
 }
 
+fn inl_ftCo_Escape_Anim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
+    if (inl_ftCheckThrowB3_unfused(ctx, fp) != 0) {
+        (fp).set_facing_dir(fp::fneg((fp).facing_dir()));
+    }
+    if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
+        (fp).set_gr_vel(fp::frsp(0_i32 as f64));
+        fns::ft_8008A2BC(ctx, gobj);
+    }
+}
+
 fn inl_inlineB0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     let mut fp = fp;
     if ((fp).input().lstick().get(0_i32).y() <= (fns::p_ftCommonData(ctx).get()).x314())
@@ -376,6 +409,23 @@ fn inl_inlineB0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
         return 1_i32;
     }
     return 0_i32;
+}
+
+fn inl_ftCo_800998EC_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
+    fns::Fighter_ChangeMotionState(
+        ctx,
+        gobj,
+        (enums::ftCo_MS_EscapeN as i32),
+        0_u32,
+        fp::frsp(0_i32 as f64),
+        fp::frsp(1_i32 as f64),
+        fp::frsp(0_i32 as f64),
+        null::<HSD_GObj<'a>>(ctx),
+    );
+    fns::ftAnim_8006EBA4(ctx, gobj);
+    (fp).set_x221D_b5((1_i32 as u16));
 }
 
 /// Registers this unit's ports.

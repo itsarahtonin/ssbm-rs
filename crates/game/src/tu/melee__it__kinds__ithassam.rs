@@ -492,6 +492,28 @@ fn inl_HSD_JObjGetRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     return (jobj).rotate().y();
 }
 
+fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f7cf8),
+            (228_i32 as u32),
+            cstr(ctx, 0x803f7cf8),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     let mut jobj = jobj;
     let mut y = y;
@@ -525,7 +547,22 @@ fn inl_HSD_JObjSetRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+fn inl_itHassam_802CE400_sub_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32, flags: i32) {
+    let mut gobj = gobj;
+    let mut msid = msid;
+    let mut flags = flags;
+    let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
+    fns::Item_80268E5C(ctx, gobj, msid, flags);
+    (ip).set_entered_hitlag(fnptr(ctx, 0x8005ba40));
+    (ip).set_exited_hitlag(fnptr(ctx, 0x8005bac4));
+    fns::it_8027A160(
+        ctx,
+        ((ip).xBBC_dynamicBoneTable()).bones().at(2_i32).get(),
+        ip,
+    );
+}
+
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     let mut jobj = jobj;
     let mut result: i32 = 0;
     (if !Handle::is_null((jobj)) {
@@ -545,21 +582,6 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         result = 1_i32;
     }
     return result;
-}
-
-fn inl_itHassam_802CE400_sub_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32, flags: i32) {
-    let mut gobj = gobj;
-    let mut msid = msid;
-    let mut flags = flags;
-    let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
-    fns::Item_80268E5C(ctx, gobj, msid, flags);
-    (ip).set_entered_hitlag(fnptr(ctx, 0x8005ba40));
-    (ip).set_exited_hitlag(fnptr(ctx, 0x8005bac4));
-    fns::it_8027A160(
-        ctx,
-        ((ip).xBBC_dynamicBoneTable()).bones().at(2_i32).get(),
-        ip,
-    );
 }
 
 fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
@@ -593,28 +615,6 @@ fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f7cf8),
-            (228_i32 as u32),
-            cstr(ctx, 0x803f7cf8),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_Item_EnterAirStateWithHitlag_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {

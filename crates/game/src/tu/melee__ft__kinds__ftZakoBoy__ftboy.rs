@@ -90,6 +90,11 @@ pub fn ftBo_Init_LoadSpecialAttrs<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     Handle::copy_from((sA2), (ext_attr));
 }
 
+fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
 fn inl_Fighter_OnItemPickup_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -136,11 +141,6 @@ fn inl_Fighter_OnItemPickup_unfused<'a>(
             fns::ftAnim_80070C48(ctx, gobj, bool3);
         }
     }
-}
-
-fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).user_data();
 }
 
 fn inl_Fighter_OnItemInvisible_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, flag: i32) {

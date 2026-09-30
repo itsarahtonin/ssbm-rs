@@ -174,6 +174,28 @@ fn inl_HSD_JObjGetTranslationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> 
     return (jobj).translate().z();
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804d3bac),
+            (228_i32 as u32),
+            cstr(ctx, 0x804d3bac),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjAddTranslationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
     let mut jobj = jobj;
     let mut z = z;
@@ -197,28 +219,6 @@ fn inl_HSD_JObjAddTranslationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: 
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x804d3bac),
-            (228_i32 as u32),
-            cstr(ctx, 0x804d3bac),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjGetTranslationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
@@ -259,6 +259,13 @@ fn inl_HSD_JObjAddTranslationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: 
             }
         }
     }
+}
+
+fn inl_ftCo_ReleaseItemAndVictim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    fns::ftCommon_8007DB58(ctx, gobj);
+    fns::ftCo_8009750C(ctx, gobj);
+    fns::ftCo_800DD168(ctx, gobj);
 }
 
 fn inl_inlineA0_unfused<'a>(
@@ -303,13 +310,6 @@ fn inl_inlineA0_unfused<'a>(
         .capturekoopa()
         .set_x10(fns::ftKp_SpecialS_80132E20(ctx, (fp).victim_gobj()));
     fns::ftCommon_8007E2FC(ctx, gobj);
-}
-
-fn inl_ftCo_ReleaseItemAndVictim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let mut gobj = gobj;
-    fns::ftCommon_8007DB58(ctx, gobj);
-    fns::ftCo_8009750C(ctx, gobj);
-    fns::ftCo_800DD168(ctx, gobj);
 }
 
 /// Registers this unit's ports.

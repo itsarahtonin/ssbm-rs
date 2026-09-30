@@ -434,7 +434,7 @@ pub fn lb_8000C0E8<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, i: i32, arg2: DynamicMo
     let mut jobj = jobj;
     let mut i = i;
     let mut arg2 = arg2;
-    fns::lb_8000C07C(
+    inl_lb_8000C07C_unfused(
         ctx,
         jobj,
         i,
@@ -499,8 +499,8 @@ pub fn lb_8000C2F8<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, constraint: HSD_JObj<'a
     let __frame = ctx.stack_frame(0x20);
     let mut jobj = jobj;
     let mut constraint = constraint;
-    fns::lb_8000C1C0(ctx, jobj, constraint);
-    fns::lb_8000C290(ctx, jobj, constraint);
+    inl_lb_8000C1C0_unfused(ctx, jobj, constraint);
+    inl_lb_8000C290_unfused(ctx, jobj, constraint);
 }
 
 pub fn lb_8000C390<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
@@ -1107,6 +1107,58 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         result = 1_i32;
     }
     return result;
+}
+
+fn inl_lb_8000C07C_unfused<'a>(
+    ctx: &'a Ctx,
+    jobj: HSD_JObj<'a>,
+    i: i32,
+    arg3: Ptr<'a, HSD_AnimJoint<'a>>,
+    arg4: Ptr<'a, HSD_MatAnimJoint<'a>>,
+    arg5: Ptr<'a, HSD_ShapeAnimJoint<'a>>,
+) {
+    let mut jobj = jobj;
+    let mut i = i;
+    let mut arg3 = arg3;
+    let mut arg4 = arg4;
+    let mut arg5 = arg5;
+    let mut phi_r4: HSD_AnimJoint<'a> = null(ctx);
+    let mut phi_r5: HSD_MatAnimJoint<'a> = null(ctx);
+    let mut phi_r6: HSD_ShapeAnimJoint<'a> = null(ctx);
+    if !Handle::is_null(arg3) {
+        phi_r4 = (Handle::add(arg3, i)).get();
+    } else {
+        phi_r4 = null::<HSD_AnimJoint<'a>>(ctx);
+    }
+    if !Handle::is_null(arg4) {
+        phi_r5 = (Handle::add(arg4, i)).get();
+    } else {
+        phi_r5 = null::<HSD_MatAnimJoint<'a>>(ctx);
+    }
+    if !Handle::is_null(arg5) {
+        phi_r6 = (Handle::add(arg5, i)).get();
+    } else {
+        phi_r6 = null::<HSD_ShapeAnimJoint<'a>>(ctx);
+    }
+    fns::HSD_JObjAddAnimAll(ctx, jobj, phi_r4, phi_r5, phi_r6);
+}
+
+fn inl_lb_8000C1C0_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, constraint: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    let mut constraint = constraint;
+    let mut robj: HSD_RObj<'a> = fns::HSD_RObjAlloc(ctx);
+    fns::HSD_RObjSetFlags(ctx, robj, 0x90000001_u32);
+    fns::HSD_RObjSetConstraintObj(ctx, robj, Handle::cast::<Addr<'a>>(constraint));
+    fns::HSD_JObjPrependRObj(ctx, jobj, robj);
+}
+
+fn inl_lb_8000C290_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, constraint: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    let mut constraint = constraint;
+    let mut robj: HSD_RObj<'a> = fns::HSD_RObjAlloc(ctx);
+    fns::HSD_RObjSetFlags(ctx, robj, 0x90000004_u32);
+    fns::HSD_RObjSetConstraintObj(ctx, robj, Handle::cast::<Addr<'a>>(constraint));
+    fns::HSD_JObjPrependRObj(ctx, jobj, robj);
 }
 
 fn inl_HSD_JObjGetRObj_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_RObj<'a> {

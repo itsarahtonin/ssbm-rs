@@ -250,7 +250,7 @@ pub fn ftCa_SpecialHi_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
-        statics::melee__ft__kinds__ftCaptain__ftcaptainspecialhi::doAirColl(ctx, gobj);
+        inl_doAirColl_unfused(ctx, gobj);
     } else if !(fns::ft_80082708(ctx, gobj) != 0) {
         fns::ftCommon_8007D5D4(ctx, fp);
     }
@@ -297,13 +297,13 @@ pub fn ftCa_SpecialAirHi_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    fns::ftCa_SpecialHi_Phys(ctx, gobj);
+    inl_ftCa_SpecialHi_Phys_unfused(ctx, gobj);
 }
 
 pub fn ftCa_SpecialAirHi_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    fns::ftCa_SpecialHi_Coll(ctx, gobj);
+    inl_ftCa_SpecialHi_Coll_unfused(ctx, gobj);
 }
 
 pub fn ftCa_SpecialLw_800E5128<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -431,7 +431,7 @@ pub fn ftCa_SpecialHiThrow0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
     }
     if ((fp).mv().ca().specialhi().x2_b0() != 0) {
-        fns::ftCa_SpecialHi_Phys(ctx, gobj);
+        inl_ftCa_SpecialHi_Phys_unfused(ctx, gobj);
         ca = (fp).co_attrs();
         {
             let mut vel_y: f64 =
@@ -478,6 +478,26 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_doAirColl_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut da: ftCaptain_DatAttrs<'a> = Handle::cast::<ftCaptain_DatAttrs<'a>>((fp).dat_attrs());
+    if (fns::ft_CheckGroundAndLedge(ctx, gobj, 0_i32) != 0) {
+        if ((fp).mv().ca().specialhi().x2_b1() != 0) {
+            fns::ftCo_LandingFallSpecial_Enter(ctx, gobj, 0_i32, (da).specialhi_landing_lag());
+        } else {
+            fns::ft_80083B68(ctx, gobj);
+        }
+    } else if (((fp).mv().ca().specialhi().x2_b1() as i32) != 0)
+        && (fns::ftCliffCommon_80081298(ctx, gobj) != 0)
+    {
+        fns::ftCliffCommon_80081370(ctx, gobj);
+    }
+}
+
 fn inl_doAirIASA_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
@@ -502,6 +522,73 @@ fn inl_doAirIASA_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 )),
             );
         }
+    }
+}
+
+fn inl_ftCa_SpecialHi_Phys_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut da: ftCaptain_DatAttrs<'a> = Handle::cast::<ftCaptain_DatAttrs<'a>>((fp).dat_attrs());
+    let mut ca: ftCo_DatAttrs<'a> = (fp).co_attrs();
+    (fp).self_vel().set_x((fp).mv().ca().specialhi().vel().x());
+    (fp).self_vel().set_y((fp).mv().ca().specialhi().vel().y());
+    (fp).self_vel().set_z(fp::frsp(0_i32 as f64));
+    if !(fns::ftCommon_CalcSelfAccel_DeaccelQuick(
+        ctx,
+        fp,
+        fp::fmuls((da).specialhi_horz_vel(), (ca).air_drift_max()),
+    ) != 0)
+    {
+        fns::ftCommon_CalcSelfAccel_DriftSimple_NoFriction(
+            ctx,
+            fp,
+            (fns::p_ftCommonData(ctx).get()).x258(),
+            fp::fmuls(
+                (ca).air_drift_stick_mul(),
+                (da).specialhi_air_friction_mul(),
+            ),
+            fp::fmuls((ca).air_drift_max(), (da).specialhi_horz_vel()),
+        );
+    }
+    (fp).mv()
+        .ca()
+        .specialhi()
+        .vel()
+        .set_x(fp::fadds((fp).x74_self_accel().x(), (fp).self_vel().x()));
+    (fp).mv()
+        .ca()
+        .specialhi()
+        .vel()
+        .set_y(fp::fadds((fp).x74_self_accel().y(), (fp).self_vel().y()));
+    fns::ft_80085134(ctx, gobj);
+    (fp).x74_self_accel().set_x({
+        let __t1 = fp::frsp(0_i32 as f64);
+        (fp).x74_self_accel().set_y(__t1);
+        __t1
+    });
+    (fp).self_vel().set_x(fp::fadds(
+        (fp).self_vel().x(),
+        (fp).mv().ca().specialhi().vel().x(),
+    ));
+    (fp).self_vel().set_y(fp::fadds(
+        (fp).self_vel().y(),
+        (fp).mv().ca().specialhi().vel().y(),
+    ));
+}
+
+fn inl_ftCa_SpecialHi_Coll_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        statics::melee__ft__kinds__ftCaptain__ftcaptainspecialhi::doAirColl(ctx, gobj);
+    } else if !(fns::ft_80082708(ctx, gobj) != 0) {
+        fns::ftCommon_8007D5D4(ctx, fp);
     }
 }
 

@@ -537,37 +537,37 @@ pub fn ft_80088C5C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     if ((fp).x214C() != 1_i32.wrapping_neg())
         && (fns::lbAudioAx_800265C4(ctx, gobj, (fp).x214C()) == 1_i32)
     {
-        fns::ft_80088828(ctx, fp);
+        inl_ft_80088828_unfused(ctx, fp);
     }
     if ((fp).x2144() != 1_i32.wrapping_neg())
         && (fns::lbAudioAx_800265C4(ctx, gobj, (fp).x2144()) == 1_i32)
     {
-        fns::ft_80088770(ctx, fp);
+        inl_ft_80088770_unfused(ctx, fp);
     }
     if ((fp).x2148() != 1_i32.wrapping_neg())
         && (fns::lbAudioAx_800265C4(ctx, gobj, (fp).x2148()) == 1_i32)
     {
-        fns::ft_800887CC(ctx, fp);
+        inl_ft_800887CC_unfused(ctx, fp);
     }
     if ((fp).x2150() != 1_i32.wrapping_neg())
         && (fns::lbAudioAx_800265C4(ctx, gobj, (fp).x2150()) == 1_i32)
     {
-        fns::ft_80088884(ctx, fp);
+        inl_ft_80088884_unfused(ctx, fp);
     }
     if ((fp).x2154() != 1_i32.wrapping_neg())
         && (fns::lbAudioAx_800265C4(ctx, gobj, (fp).x2154()) == 1_i32)
     {
-        fns::ft_800888E0(ctx, fp);
+        inl_ft_800888E0_unfused(ctx, fp);
     }
     if ((fp).x2158() != 1_i32.wrapping_neg())
         && (fns::lbAudioAx_800265C4(ctx, gobj, (fp).x2158()) == 1_i32)
     {
-        fns::ft_8008893C(ctx, fp);
+        inl_ft_8008893C_unfused(ctx, fp);
     }
     if ((fp).x215C() != 1_i32.wrapping_neg())
         && (fns::lbAudioAx_800265C4(ctx, gobj, (fp).x215C()) == 1_i32)
     {
-        fns::ft_80088998(ctx, fp);
+        inl_ft_80088998_unfused(ctx, fp);
     }
     let _ = fns::lbAudioAx_80023870(
         ctx,
@@ -822,6 +822,104 @@ fn inl_inline0_unfused<'a>(
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_ft_80088828_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    let _ = fns::lbAudioAx_80023870(
+        ctx,
+        0x83d61_i32,
+        0_i32,
+        64_i32,
+        54_i32
+            .wrapping_add(((fp).player_idx() as i32).wrapping_mul(2_i32))
+            .wrapping_add(((fp).is_sub_fighter() as i32)),
+    );
+    (fp).set_x214C(1_i32.wrapping_neg());
+}
+
+fn inl_ft_80088770_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    let _ = fns::lbAudioAx_80023870(
+        ctx,
+        0x83d61_i32,
+        0_i32,
+        64_i32,
+        30_i32
+            .wrapping_add(((fp).player_idx() as i32).wrapping_mul(2_i32))
+            .wrapping_add(((fp).is_sub_fighter() as i32)),
+    );
+    (fp).set_x2144(1_i32.wrapping_neg());
+}
+
+fn inl_ft_800887CC_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    let _ = fns::lbAudioAx_80023870(
+        ctx,
+        0x83d61_i32,
+        0_i32,
+        64_i32,
+        42_i32
+            .wrapping_add(((fp).player_idx() as i32).wrapping_mul(2_i32))
+            .wrapping_add(((fp).is_sub_fighter() as i32)),
+    );
+    (fp).set_x2148(1_i32.wrapping_neg());
+}
+
+fn inl_ft_80088884_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    let _ = fns::lbAudioAx_80023870(
+        ctx,
+        0x83d61_i32,
+        0_i32,
+        64_i32,
+        66_i32
+            .wrapping_add(((fp).player_idx() as i32).wrapping_mul(2_i32))
+            .wrapping_add(((fp).is_sub_fighter() as i32)),
+    );
+    (fp).set_x2150(1_i32.wrapping_neg());
+}
+
+fn inl_ft_800888E0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    let _ = fns::lbAudioAx_80023870(
+        ctx,
+        0x83d61_i32,
+        0_i32,
+        64_i32,
+        78_i32
+            .wrapping_add(((fp).player_idx() as i32).wrapping_mul(2_i32))
+            .wrapping_add(((fp).is_sub_fighter() as i32)),
+    );
+    (fp).set_x2154(1_i32.wrapping_neg());
+}
+
+fn inl_ft_8008893C_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    let _ = fns::lbAudioAx_80023870(
+        ctx,
+        0x83d61_i32,
+        0_i32,
+        64_i32,
+        90_i32
+            .wrapping_add(((fp).player_idx() as i32).wrapping_mul(2_i32))
+            .wrapping_add(((fp).is_sub_fighter() as i32)),
+    );
+    (fp).set_x2158(1_i32.wrapping_neg());
+}
+
+fn inl_ft_80088998_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    let _ = fns::lbAudioAx_80023870(
+        ctx,
+        0x83d61_i32,
+        0_i32,
+        64_i32,
+        114_i32
+            .wrapping_add(((fp).player_idx() as i32).wrapping_mul(2_i32))
+            .wrapping_add(((fp).is_sub_fighter() as i32)),
+    );
+    (fp).set_x215C(1_i32.wrapping_neg());
 }
 
 fn inl_inlineB0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, move_id: i32) {

@@ -276,9 +276,30 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_decideFighter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    's1: {
+        let __case =
+            match ((Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).kind()
+                as u32)
+            {
+                24_u32 => 0,
+                _ => 1,
+            };
+        if __case <= 0 {
+            fns::ftGw_AttackLw3_Enter(ctx, gobj);
+            return;
+        }
+        if __case <= 1 {
+            statics::melee__ft__kinds__ftCommon__ftCo_AttackLw3::doEnter(ctx, gobj);
+            return;
+        }
+    }
+}
+
 fn inl_wrapper_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
-    statics::melee__ft__kinds__ftCommon__ftCo_AttackLw3::decideFighter(ctx, gobj);
+    inl_decideFighter_unfused(ctx, gobj);
 }
 
 fn inl_checkPadA_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
@@ -287,7 +308,7 @@ fn inl_checkPadA_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if (((fp).input().pressed_buttons() & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
         if ((fp).cmd_vars().at(0_i32).get() != 0) {
-            statics::melee__ft__kinds__ftCommon__ftCo_AttackLw3::decideFighter(ctx, gobj);
+            inl_decideFighter_unfused(ctx, gobj);
             return 1_i32;
         }
         (fp).mv().co().attacklw3().set_x0(1_i32);
@@ -308,7 +329,7 @@ fn inl_checkItemThrowInput_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
             fns::ftCo_800957F4(ctx, gobj, (enums::ftCo_MS_LightThrowLw as i32));
             return 1_i32;
         }
-        statics::melee__ft__kinds__ftCommon__ftCo_AttackLw3::decideFighter(ctx, gobj);
+        inl_decideFighter_unfused(ctx, gobj);
         return 1_i32;
     }
     return 0_i32;

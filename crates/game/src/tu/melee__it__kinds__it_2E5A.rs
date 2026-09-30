@@ -599,6 +599,11 @@ fn inl_it_802E6380_tier_unfused<'a>(
     return off;
 }
 
+fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).hsd_obj();
+}
+
 fn inl_it_802E6380_inline_unfused<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> =
@@ -626,11 +631,6 @@ fn inl_it_802E6380_inline_unfused<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
             (item).xDAA().xDAA_flag().x0().set_b0((1_i32 as u8));
         }
     }
-}
-
-fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).hsd_obj();
 }
 
 fn inl_it_2E5A_ApplyStateDesc_unfused<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, idx: i32) {

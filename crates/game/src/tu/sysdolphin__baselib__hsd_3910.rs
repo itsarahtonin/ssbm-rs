@@ -62,7 +62,7 @@ pub fn HSD_GObj_80391120<'a>(ctx: &'a Ctx, obj: HSD_Obj<'a>) {
 pub fn HSD_GObj_803911C0<'a>(ctx: &'a Ctx, obj: HSD_Obj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut obj = obj;
-    fns::HSD_GObj_80391120(ctx, obj);
+    inl_HSD_GObj_80391120_unfused(ctx, obj);
 }
 
 pub fn HSD_GObj_80391260<'a>(ctx: &'a Ctx, arg0: _HSD_GObjLibInitDataType<'a>) {
@@ -152,6 +152,13 @@ fn inl_hsdDelete_unfused<'a>(ctx: &'a Ctx, object: Addr<'a>) {
     ((Handle::cast::<_HSD_Class<'a>>(object)).class_info())
         .destroy()
         .call::<_, ()>((Handle::cast::<_HSD_Class<'a>>(object),));
+}
+
+fn inl_HSD_GObj_80391120_unfused<'a>(ctx: &'a Ctx, obj: HSD_Obj<'a>) {
+    let mut obj = obj;
+    if (!Handle::is_null(obj)) && (inl_ref_DEC_unfused(ctx, Handle::cast::<Addr<'a>>(obj)) != 0) {
+        inl_hsdDelete_unfused(ctx, Handle::cast::<Addr<'a>>(obj));
+    }
 }
 
 /// Registers this unit's ports.

@@ -704,6 +704,11 @@ pub fn ftCo_DamageIceJump_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::ft_800831CC(ctx, gobj, fnptr(ctx, 0x80096cc8), fnptr(ctx, 0x80082b1c));
 }
 
+fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
 fn inl_ftCo_SpawnEffect_x415_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -724,11 +729,6 @@ fn inl_ftCo_SpawnEffect_x415_unfused<'a>(
         joint,
         &[VarArg::Int(Handle::addr(param))],
     );
-}
-
-fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).user_data();
 }
 
 fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
@@ -762,6 +762,28 @@ fn inl_HSD_JObjGetRotation<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate: Quatern
     Handle::copy_from((rotate), (jobj).rotate());
 }
 
+fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b74b0),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b74b0),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjAddTranslationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     let mut jobj = jobj;
     let mut y = y;
@@ -785,28 +807,6 @@ fn inl_HSD_JObjAddTranslationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b74b0),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b74b0),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjAddTranslationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
@@ -841,6 +841,28 @@ fn inl_ftCo_ReleaseItemAndVictim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::ftCo_800DD168(ctx, gobj);
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b74b0),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b74b0),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjAddRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
     let mut jobj = jobj;
     let mut x = x;
@@ -864,28 +886,6 @@ fn inl_HSD_JObjAddRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b74b0),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b74b0),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
-}
-
 fn inl_ftCo_SpawnEffect_x406<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, vec: Vec<'a>, f: f64) {
     let __frame = ctx.stack_frame(0x10);
     let f__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
@@ -904,20 +904,6 @@ fn inl_ftCo_SpawnEffect_x406<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, vec: Vec<'a>,
             VarArg::Int(Handle::addr(vec)),
             VarArg::Int(Handle::addr(f__slot)),
         ],
-    );
-}
-
-fn inl_ftCo_Speed<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> f64 {
-    let mut fp = fp;
-    return inl_sqrtf(
-        ctx,
-        fp::fadds(
-            fp::fadds(
-                (fp::fmuls((fp).self_vel().x(), (fp).self_vel().x())),
-                (fp::fmuls((fp).self_vel().y(), (fp).self_vel().y())),
-            ),
-            (fp::fmuls((fp).self_vel().z(), (fp).self_vel().z())),
-        ),
     );
 }
 
@@ -942,6 +928,20 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         return y;
     }
     return x;
+}
+
+fn inl_ftCo_Speed<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> f64 {
+    let mut fp = fp;
+    return inl_sqrtf(
+        ctx,
+        fp::fadds(
+            fp::fadds(
+                (fp::fmuls((fp).self_vel().x(), (fp).self_vel().x())),
+                (fp::fmuls((fp).self_vel().y(), (fp).self_vel().y())),
+            ),
+            (fp::fmuls((fp).self_vel().z(), (fp).self_vel().z())),
+        ),
+    );
 }
 
 /// Registers this unit's ports.

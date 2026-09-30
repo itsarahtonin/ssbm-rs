@@ -204,6 +204,18 @@ fn inl_Fighter_ClearCmdVars_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
 }
 
+fn inl_stickGetDir_unfused<'a>(ctx: &'a Ctx, x1: f64, x2: f64) -> f64 {
+    let mut x1 = x1;
+    let mut x2 = x2;
+    if x1 < x2 {
+        return fp::fneg(x1);
+    } else {
+        return x1;
+    }
+    #[allow(unreachable_code)]
+    return 0.0;
+}
+
 fn inl_calcAngleRadians_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, lstick_y: f64) -> f64 {
     let mut gobj = gobj;
     let mut lstick_y = lstick_y;
@@ -228,18 +240,6 @@ fn inl_calcAngleRadians_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, lstick_y: 
         )),
         0.01745329238474369,
     ));
-}
-
-fn inl_stickGetDir_unfused<'a>(ctx: &'a Ctx, x1: f64, x2: f64) -> f64 {
-    let mut x1 = x1;
-    let mut x2 = x2;
-    if x1 < x2 {
-        return fp::fneg(x1);
-    } else {
-        return x1;
-    }
-    #[allow(unreachable_code)]
-    return 0.0;
 }
 
 fn inl_ftCommon_GroundToAirStateChange_unfused<'a>(

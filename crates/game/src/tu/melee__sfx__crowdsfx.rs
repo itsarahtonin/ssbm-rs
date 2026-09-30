@@ -179,7 +179,7 @@ pub fn un_80321D30<'a>(ctx: &'a Ctx, arg0: u32, arg1: f64) {
     cat = fns::un_80322298(ctx, arg1);
     if cat >= 2_i32 {
         if fns::un_80321EBC(ctx, arg0, arg1) != 0_i32 {
-            fns::un_80321CE8(ctx);
+            inl_un_80321CE8_unfused(ctx);
             return;
         }
     }
@@ -192,26 +192,26 @@ pub fn un_80321D30<'a>(ctx: &'a Ctx, arg0: u32, arg1: f64) {
         };
         if __case <= 0 {
             {
-                fns::un_80321CA4(ctx, 0x140_i32);
+                inl_un_80321CA4_unfused(ctx, 0x140_i32);
                 break 's1;
             }
         }
         if __case <= 1 {
             {
-                fns::un_80321CA4(ctx, 0x141_i32);
+                inl_un_80321CA4_unfused(ctx, 0x141_i32);
                 break 's1;
             }
         }
         if __case <= 2 {
             {
-                fns::un_80321CA4(ctx, 0x142_i32);
+                inl_un_80321CA4_unfused(ctx, 0x142_i32);
                 break 's1;
             }
         }
     }
     if arg0 != (0_i32 as u32) {
         if (data).xC() == arg0 {
-            fns::un_80321C70(ctx);
+            inl_un_80321C70_unfused(ctx);
         }
     }
 }
@@ -231,15 +231,15 @@ pub fn un_8032201C<'a>(ctx: &'a Ctx, arg0: u32, cat: i32) -> i32 {
             _ => 4,
         };
         if __case <= 0 {
-            fns::un_80321CA4(ctx, 0x13d_i32);
+            inl_un_80321CA4_unfused(ctx, 0x13d_i32);
             break 's1;
         }
         if __case <= 1 {
-            fns::un_80321CA4(ctx, 0x13e_i32);
+            inl_un_80321CA4_unfused(ctx, 0x13e_i32);
             break 's1;
         }
         if __case <= 2 {
-            fns::un_80321CA4(ctx, 0x13f_i32);
+            inl_un_80321CA4_unfused(ctx, 0x13f_i32);
             break 's1;
         }
         if __case <= 3 {
@@ -248,7 +248,7 @@ pub fn un_8032201C<'a>(ctx: &'a Ctx, arg0: u32, cat: i32) -> i32 {
     }
     if arg0 != (0_i32 as u32) {
         if (data).xC() == arg0 {
-            fns::un_80321C70(ctx);
+            inl_un_80321C70_unfused(ctx);
         }
         gobj = fns::ftLib_FindBySpawnNum(ctx, arg0);
         fns::pl_8003FDC8(
@@ -282,18 +282,44 @@ pub fn un_80322178<'a>(ctx: &'a Ctx, arg: i32) {
             break 's3;
         }
         if __case <= 1 {
-            fns::un_80321CA4(ctx, 0x13d_i32);
+            inl_un_80321CA4_unfused(ctx, 0x13d_i32);
             break 's3;
         }
         if __case <= 2 {
-            fns::un_80321CA4(ctx, 0x13e_i32);
+            inl_un_80321CA4_unfused(ctx, 0x13e_i32);
             break 's3;
         }
         if __case <= 3 {
-            fns::un_80321CA4(ctx, 0x13f_i32);
+            inl_un_80321CA4_unfused(ctx, 0x13f_i32);
             break 's3;
         }
     }
+}
+
+fn inl_un_80321CE8_unfused<'a>(ctx: &'a Ctx) {
+    let mut data: CrowdSFX_UnkStruct<'a> = fns::crowdsfx_ptr(ctx).get();
+    if fns::lbAudioAx_80023710(ctx, (data).x28()) != 0_i32 {
+        let _ = fns::lbAudioAx_800236B8(ctx, (data).x28());
+    }
+    (data).set_x28(1_i32.wrapping_neg());
+}
+
+fn inl_un_80321CA4_unfused<'a>(ctx: &'a Ctx, arg: i32) {
+    let mut arg = arg;
+    let mut data: CrowdSFX_UnkStruct<'a> = fns::crowdsfx_ptr(ctx).get();
+    inl_un_80321CE8_unfused(ctx);
+    (data).set_x28(fns::lbAudioAx_8002411C(ctx, arg));
+}
+
+fn inl_un_80321C70_unfused<'a>(ctx: &'a Ctx) {
+    let mut data: CrowdSFX_UnkStruct<'a> = null(ctx);
+    data = fns::crowdsfx_ptr(ctx).get();
+    if ((data).x18() >= (fns::gCrowdConfig(ctx).get()).max_gasp_count())
+        || ((data).x18() < (fns::gCrowdConfig(ctx).get()).x24())
+    {
+        return;
+    }
+    (data).set_x1C(1_i32);
 }
 
 /// Registers this unit's ports.

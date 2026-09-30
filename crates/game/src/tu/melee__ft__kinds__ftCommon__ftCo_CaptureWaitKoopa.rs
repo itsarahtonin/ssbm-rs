@@ -97,7 +97,7 @@ pub fn ftCo_800BCD00<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_CaptureWaitKoopaAir_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let mut gobj = gobj;
-    fns::ftCo_CaptureWaitKoopa_Anim(ctx, gobj);
+    inl_ftCo_CaptureWaitKoopa_Anim_unfused(ctx, gobj);
 }
 
 pub fn ftCo_CaptureWaitKoopaAir_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -115,6 +115,24 @@ pub fn ftCo_CaptureWaitKoopaAir_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_ftCo_CaptureWaitKoopa_Anim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    ctx.fill(Handle::addr(unused), 0, 0x8);
+    unused.at(0).set((0_i32 as u8));
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    fns::ftCo_800BC458(ctx, gobj);
+    if (fp).grab_timer() <= fp::frsp(0_i32 as f64) {
+        fns::ftCo_800DA698(ctx, (fp).victim_gobj(), 0_i32);
+        (fp).set_facing_dir(fp::fneg((fp).facing_dir()));
+        fns::ftCo_CaptureCut_Enter(ctx, gobj);
+    } else {
+        fns::ftCo_800BC4A8(ctx, gobj);
+    }
 }
 
 /// Registers this unit's ports.

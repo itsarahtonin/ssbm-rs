@@ -433,7 +433,7 @@ pub fn HSD_SisLib_803A5DA0<'a>(ctx: &'a Ctx, font_idx: i32) {
 pub fn HSD_SisLib_803A5E70<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
     let mut curr: sislib_UnkAlloc3<'a> = null(ctx);
-    fns::HSD_SisLib_803A5D30(ctx);
+    inl_HSD_SisLib_803A5D30_unfused(ctx);
     curr = fns::HSD_SisLib_804D797C(ctx).get();
     'l1: while !Handle::is_null(curr) {
         'c2: {
@@ -773,6 +773,22 @@ fn inl_HSD_SisLib_803A5DA0_inline0_unfused<'a>(ctx: &'a Ctx, font_idx: i32) {
                 } else {
                     fns::HSD_SisLib_803A5A2C(ctx, Handle::cast::<Addr<'a>>(curr));
                 }
+            }
+            curr = next;
+        }
+    }
+}
+
+fn inl_HSD_SisLib_803A5D30_unfused<'a>(ctx: &'a Ctx) {
+    let mut curr: HSD_Text<'a> = fns::HSD_SisLib_804D7978(ctx).get();
+    'l1: while !Handle::is_null(curr) {
+        'c2: {
+            let mut next: HSD_Text<'a> = (curr).next();
+            if !Handle::is_null((curr).entity()) {
+                fns::HSD_GObjFree(ctx, (curr).entity());
+                (curr).set_entity(null::<HSD_GObj<'a>>(ctx));
+            } else {
+                fns::HSD_SisLib_803A5A2C(ctx, Handle::cast::<Addr<'a>>(curr));
             }
             curr = next;
         }

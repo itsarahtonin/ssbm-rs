@@ -265,7 +265,7 @@ pub fn itLinkbow_UnkMotion5_Anim<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 {
         };
         if __case <= 0 {
             if ((item).x5CC_currentAnimFrame() == 0.0) || ((item).x5CC_currentAnimFrame() >= 24.0) {
-                fns::itLinkBow_Logic100_Destroyed(ctx, arg0);
+                inl_itLinkBow_Logic100_Destroyed_unfused(ctx, arg0);
                 return 1_i32;
             }
             break 's1;
@@ -420,6 +420,28 @@ fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'
     return (gobj).hsd_obj();
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f6e98),
+            (228_i32 as u32),
+            cstr(ctx, 0x803f6e98),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
     let mut jobj = jobj;
     let mut scale = scale;
@@ -453,26 +475,34 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f6e98),
-            (228_i32 as u32),
-            cstr(ctx, 0x803f6e98),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
+fn inl_itLinkBow_Logic100_Destroyed_unfused<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
+    let mut arg0 = arg0;
+    let mut item: Item<'a> = null(ctx);
+    if !Handle::is_null(arg0) {
+        item = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, arg0)));
+        if !Handle::is_null((item).owner()) {
+            's1: {
+                let __case = match (item).kind() {
+                    76_i32 => 0,
+                    77_i32 => 0,
+                    143_i32 => 1,
+                    142_i32 => 1,
+                    _ => 2,
+                };
+                if __case <= 0 {
+                    fns::ftLk_SpecialN_UnsetFv14(ctx, (item).owner());
+                    break 's1;
+                }
+                if __case <= 1 {
+                    fns::ftKb_SpecialNLk800FB444(ctx, (item).owner());
+                    break 's1;
+                }
+                if __case <= 2 {
+                    break 's1;
+                }
+            }
+        }
     }
-    return result;
 }
 
 /// Registers this unit's ports.

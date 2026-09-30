@@ -514,6 +514,16 @@ pub fn __ARChecksize<'a>(ctx: &'a Ctx) {
     statics::dolphin__ar__ar::__AR_Size(ctx).set(ARAM_size);
 }
 
+fn inl___ARWaitForDMA_unfused<'a>(ctx: &'a Ctx) {
+    'l1: while ((((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 5_i32)).get()
+        as i32)
+        & 0x200_i32)
+        != 0)
+    {
+        'c2: {}
+    }
+}
+
 fn inl___ARWriteDMA_unfused<'a>(ctx: &'a Ctx, mmem_addr: u32, aram_addr: u32, length: u32) {
     let mut mmem_addr = mmem_addr;
     let mut aram_addr = aram_addr;
@@ -559,16 +569,6 @@ fn inl___ARWriteDMA_unfused<'a>(ctx: &'a Ctx, mmem_addr: u32, aram_addr: u32, le
             | (((length & (0xffff_i32 as u32)) as u16) as i32)) as u16),
     );
     inl___ARWaitForDMA_unfused(ctx);
-}
-
-fn inl___ARWaitForDMA_unfused<'a>(ctx: &'a Ctx) {
-    'l1: while ((((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 5_i32)).get()
-        as i32)
-        & 0x200_i32)
-        != 0)
-    {
-        'c2: {}
-    }
 }
 
 fn inl___ARReadDMA_unfused<'a>(ctx: &'a Ctx, mmem_addr: u32, aram_addr: u32, length: u32) {

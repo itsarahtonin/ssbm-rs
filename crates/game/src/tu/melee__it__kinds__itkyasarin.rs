@@ -427,15 +427,15 @@ pub fn itKyasarin_UnkMotion8_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                 _ => 9,
             };
             if __case <= 0 {
-                fns::it_802ECEB0(ctx, gobj);
+                inl_it_802ECEB0_unfused(ctx, gobj);
                 break 's1;
             }
             if __case <= 1 {
-                fns::it_802ECFE0(ctx, gobj);
+                inl_it_802ECFE0_unfused(ctx, gobj);
                 break 's1;
             }
             if __case <= 2 {
-                fns::it_802ED0D0(ctx, gobj);
+                inl_it_802ED0D0_unfused(ctx, gobj);
                 break 's1;
             }
             if __case <= 3 {
@@ -443,19 +443,19 @@ pub fn itKyasarin_UnkMotion8_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                 break 's1;
             }
             if __case <= 4 {
-                fns::it_802ED25C(ctx, gobj);
+                inl_it_802ED25C_unfused(ctx, gobj);
                 break 's1;
             }
             if __case <= 5 {
-                inl_itKyasarin_TurnAround_unfused(ctx, gobj);
+                inl_itKyasarin_TurnAround_unfused_2(ctx, gobj);
                 break 's1;
             }
             if __case <= 6 {
-                fns::it_802ED4F8(ctx, gobj);
+                inl_it_802ED4F8_unfused(ctx, gobj);
                 break 's1;
             }
             if __case <= 7 {
-                fns::it_802ED774(ctx, gobj);
+                inl_it_802ED774_unfused(ctx, gobj);
                 break 's1;
             }
             if __case <= 8 {
@@ -536,7 +536,7 @@ pub fn it_802EDDC0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         inl_itKyasarin_SaveStateAndStop_unfused(ctx, gobj);
     } else if (ip).xDD4_itemVar().kyasarin().x38() < (attr).x44() {
         (ip).set_x5D0_animFrameSpeed((attr).x24());
-        inl_itKyasarin_TurnAround_unfused(ctx, gobj);
+        inl_itKyasarin_TurnAround_unfused_2(ctx, gobj);
     } else {
         {
             let mut ip_2: Item<'a> =
@@ -586,6 +586,28 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f90d0),
+            (228_i32 as u32),
+            cstr(ctx, 0x803f90d0),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     let mut jobj = jobj;
     let mut y = y;
@@ -619,31 +641,14 @@ fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f90d0),
-            (228_i32 as u32),
-            cstr(ctx, 0x803f90d0),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
-}
-
 fn inl_itKyasarin_Randi_unfused<'a>(ctx: &'a Ctx, range: i32) -> i32 {
     let mut range = range;
     return fns::HSD_Randi(ctx, range);
+}
+
+fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).hsd_obj();
 }
 
 fn inl_itKyasarin_TurnAround_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -682,14 +687,44 @@ fn inl_itKyasarin_TurnAround_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (ip).x40_vel().set_y(0.0);
 }
 
-fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).hsd_obj();
-}
-
 fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_it_802ECEB0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut attr: itOldottoseaAttributes<'a> = Handle::cast::<itOldottoseaAttributes<'a>>(
+        ((ip).xC4_article_data()).x4_specialAttributes(),
+    );
+    (ip).x40_vel()
+        .set_x(fp::fmuls((attr).x4(), (ip).facing_dir()));
+    (ip).x40_vel().set_z(0.0);
+    (ip).x40_vel().set_y(0.0);
+    fns::Item_80268E5C(ctx, gobj, 0_i32, (enums::ITEM_ANIM_UPDATE as i32));
+}
+
+fn inl_it_802ECFE0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut attr: itKyasarinAttributes<'a> =
+        Handle::cast::<itKyasarinAttributes<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
+    fns::Item_80268E5C(ctx, gobj, 1_i32, (enums::ITEM_ANIM_UPDATE as i32));
+    fns::it_80273454(ctx, gobj);
+    (ip).xDD4_itemVar().kyasarin().set_x24((attr).x8());
+}
+
+fn inl_it_802ED0D0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut attr: itKyasarinAttributes<'a> =
+        Handle::cast::<itKyasarinAttributes<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
+    (ip).x40_vel()
+        .set_x(fp::fmuls(fp::fneg((attr).x4()), (ip).facing_dir()));
+    (ip).x40_vel().set_z(0.0);
+    (ip).x40_vel().set_y(0.0);
+    fns::Item_80268E5C(ctx, gobj, 2_i32, (enums::ITEM_ANIM_UPDATE as i32));
 }
 
 fn inl_itKyasarin_UnkMotion8_case3_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -700,6 +735,69 @@ fn inl_itKyasarin_UnkMotion8_case3_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>)
     fns::Item_80268E5C(ctx, gobj, 3_i32, (enums::ITEM_ANIM_UPDATE as i32));
     fns::it_80273454(ctx, gobj);
     (ip).xDD4_itemVar().kyasarin().set_x24((attr).xC());
+}
+
+fn inl_it_802ED25C_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut attr: itKyasarinAttributes<'a> =
+        Handle::cast::<itKyasarinAttributes<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
+    (ip).x40_vel()
+        .set_x(fp::fmuls((attr).x4(), (ip).facing_dir()));
+    (ip).x40_vel().set_z(0.0);
+    (ip).x40_vel().set_y(0.0);
+    fns::Item_80268E5C(ctx, gobj, 4_i32, (enums::ITEM_ANIM_UPDATE as i32));
+}
+
+fn inl_it_802ED8BC_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    fns::Item_80268E5C(ctx, gobj, 5_i32, (enums::ITEM_ANIM_UPDATE as i32));
+}
+
+fn inl_itKyasarin_TurnAround_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut jobj: HSD_JObj<'a> =
+        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
+    let mut attr: itKyasarinAttributes<'a> =
+        Handle::cast::<itKyasarinAttributes<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
+    inl_it_802ED8BC_unfused(ctx, gobj);
+    if (ip).xDD4_itemVar().kyasarin().x30() == fp::fneg(1.0) {
+        inl_HSD_JObjSetRotationY_unfused(
+            ctx,
+            jobj,
+            fp::frsp((fp::fmul(3.141592653589793, (ip).xDD4_itemVar().kyasarin().x30()))),
+        );
+    } else {
+        inl_HSD_JObjSetRotationY_unfused(
+            ctx,
+            jobj,
+            fp::frsp(
+                (fp::fmul(
+                    fp::fmul((2_i32 as f64), 3.141592653589793),
+                    (ip).xDD4_itemVar().kyasarin().x30(),
+                )),
+            ),
+        );
+    }
+    (ip).set_facing_dir(fp::fneg((ip).xDD4_itemVar().kyasarin().x30()));
+    (ip).xDCC_flag().set_b3((1_i32 as u8));
+    (ip).x40_vel().set_x(fp::fmuls(
+        (ip).x5D0_animFrameSpeed(),
+        (fp::fmuls((attr).x4(), (ip).facing_dir())),
+    ));
+    (ip).x40_vel().set_z(0.0);
+    (ip).x40_vel().set_y(0.0);
+}
+
+fn inl_it_802ED4F8_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    fns::Item_80268E5C(ctx, gobj, 6_i32, (enums::ITEM_ANIM_UPDATE as i32));
+}
+
+fn inl_it_802ED774_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    fns::Item_80268E5C(ctx, gobj, 7_i32, (enums::ITEM_ANIM_UPDATE as i32));
 }
 
 fn inl_itKyasarin_UnkMotion8_case8_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -717,25 +815,6 @@ fn inl_itKyasarin_SaveStateAndStop_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>)
     (ip).xDD4_itemVar().kyasarin().set_x3C((ip).msid());
     fns::Item_80268E5C(ctx, gobj, 8_i32, (enums::ITEM_ANIM_UPDATE as i32));
     fns::it_80273454(ctx, gobj);
-    fns::it_802756D0(ctx, gobj);
-}
-
-fn inl_itKyasarin_FlipAndFall_unfused<'a>(
-    ctx: &'a Ctx,
-    gobj: HSD_GObj<'a>,
-    jobj: HSD_JObj<'a>,
-    ip: Item<'a>,
-    pos: Vec<'a>,
-) {
-    let mut gobj = gobj;
-    let mut jobj = jobj;
-    let mut ip = ip;
-    let mut pos = pos;
-    let mut coll: CollData<'a> = inl_itKyasarin_GetCollData_unfused(ctx, ip);
-    inl_HSD_JObjSetRotationXWithMtxDirty_unfused(ctx, jobj, fp::frsp(3.141592653589793));
-    fns::it_802762BC(ctx, ip);
-    inl_itKyasarin_SetFallCollPos_unfused(ctx, ip, coll, pos);
-    fns::it_80276100(ctx, gobj, pos);
     fns::it_802756D0(ctx, gobj);
 }
 
@@ -784,6 +863,25 @@ fn inl_itKyasarin_SetFallCollPos_unfused<'a>(
     let mut pos = pos;
     Handle::copy_from((coll).cur_pos(), (ip).pos());
     Handle::copy_from((pos), (ip).pos());
+}
+
+fn inl_itKyasarin_FlipAndFall_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    jobj: HSD_JObj<'a>,
+    ip: Item<'a>,
+    pos: Vec<'a>,
+) {
+    let mut gobj = gobj;
+    let mut jobj = jobj;
+    let mut ip = ip;
+    let mut pos = pos;
+    let mut coll: CollData<'a> = inl_itKyasarin_GetCollData_unfused(ctx, ip);
+    inl_HSD_JObjSetRotationXWithMtxDirty_unfused(ctx, jobj, fp::frsp(3.141592653589793));
+    fns::it_802762BC(ctx, ip);
+    inl_itKyasarin_SetFallCollPos_unfused(ctx, ip, coll, pos);
+    fns::it_80276100(ctx, gobj, pos);
+    fns::it_802756D0(ctx, gobj);
 }
 
 /// Registers this unit's ports.

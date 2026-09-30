@@ -137,7 +137,7 @@ pub fn ftMh_SweepLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             );
             return;
         }
-        fns::ftMh_MS_346_80151918(ctx, gobj);
+        inl_ftMh_MS_346_80151918_unfused(ctx, gobj);
     }
 }
 
@@ -191,6 +191,32 @@ pub fn ftMh_MS_347_80151AC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_ftMh_MS_346_80151918_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut da: ftMasterHand_SpecialAttrs<'a> =
+        Handle::cast::<ftMasterHand_SpecialAttrs<'a>>(((fp).ft_data()).ext_attr());
+    (fp).mv()
+        .mh()
+        .unk0()
+        .xC()
+        .set_x(fp::fsubs((fp).cur_pos().x(), (da).x3C()));
+    (fp).mv().mh().unk0().xC().set_y((da).x38());
+    (fp).mv().mh().unk0().xC().set_z(fp::frsp(0_i32 as f64));
+    fns::Fighter_ChangeMotionState(
+        ctx,
+        gobj,
+        (enums::ftMh_MS_SweepLoop as i32),
+        0_u32,
+        fp::frsp(0_i32 as f64),
+        fp::frsp(1_i32 as f64),
+        fp::frsp(0_i32 as f64),
+        null::<HSD_GObj<'a>>(ctx),
+    );
+    fns::ftAnim_8006EBA4(ctx, gobj);
 }
 
 /// Registers this unit's ports.

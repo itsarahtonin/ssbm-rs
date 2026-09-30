@@ -732,8 +732,11 @@ pub fn mn_8022A5D0<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>, selection: i32) {
                 if fns::mn_80229938(ctx, (fns::mn_804A04F0(ctx).cur_menu() as i32), var_r26)
                     != 0_i32
                 {
-                    var_r24 =
-                        fns::mn_80229A04(ctx, (fns::mn_804A04F0(ctx).cur_menu() as i32), var_r26);
+                    var_r24 = inl_mn_80229A04_unfused(
+                        ctx,
+                        (fns::mn_804A04F0(ctx).cur_menu() as i32),
+                        var_r26,
+                    );
                     let _ = fns::lb_8001204C(
                         ctx,
                         spA0.at(var_r24).get(),
@@ -1359,7 +1362,7 @@ pub fn mn_8022B3A0<'a>(ctx: &'a Ctx, state: u8) -> HSD_GObj<'a> {
                 model = fns::MenMainCursor_Top(ctx);
                 if fns::mn_80229938(ctx, (fns::mn_804A04F0(ctx).cur_menu() as i32), i) != 0_i32 {
                     menu_kind = (fns::mn_804A04F0(ctx).cur_menu() as i32);
-                    unlocked_index = (fns::mn_80229A04(ctx, menu_kind, i) as u8);
+                    unlocked_index = (inl_mn_80229A04_unfused(ctx, menu_kind, i) as u8);
                     fns::HSD_JObjReqAnim(
                         ctx,
                         option_jobjs.at((unlocked_index as i32)).get(),
@@ -1480,7 +1483,7 @@ pub fn mn_8022B3A0<'a>(ctx: &'a Ctx, state: u8) -> HSD_GObj<'a> {
     }
     fns::HSD_JObjReqAnimAll(ctx, hover_jobj, (hover_anim).start_frame());
     fns::HSD_JObjAnimAll(ctx, hover_jobj);
-    statics::melee__mn__mnmain::mn_80229A7C(
+    inl_mn_80229A7C_unfused(
         ctx,
         user_data,
         ((user_data).menu_kind() as i32),
@@ -1876,9 +1879,9 @@ pub fn fn_8022C128<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let mut lobj: HSD_LObj<'a> =
         (Handle::cast::<HSD_LObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, arg0)));
     fns::HSD_LObjAnimAll(ctx, lobj);
-    color = fns::mn_8022BFBC(
+    color = inl_mn_8022BFBC_unfused(
         ctx,
-        fns::mn_8022C010(
+        inl_mn_8022C010_unfused(
             ctx,
             (fns::mn_804A04F0(ctx).cur_menu() as i32),
             (fns::mn_804A04F0(ctx).hovered_selection() as i32),
@@ -1927,9 +1930,9 @@ pub fn mn_8022C304<'a>(ctx: &'a Ctx) {
         Handle::cast::<Addr<'a>>(lobj),
     );
     fns::mn_804A04F0(ctx).set_light_lerp_frames((0_i32 as u8));
-    fns::mn_804A04F0(ctx).set_light_color(fns::mn_8022BFBC(
+    fns::mn_804A04F0(ctx).set_light_color(inl_mn_8022BFBC_unfused(
         ctx,
-        fns::mn_8022C010(
+        inl_mn_8022C010_unfused(
             ctx,
             (fns::mn_804A04F0(ctx).cur_menu() as i32),
             (fns::mn_804A04F0(ctx).hovered_selection() as i32),
@@ -3548,9 +3551,9 @@ pub fn mnMain_Scene_OnEnter<'a>(ctx: &'a Ctx, user_data: Addr<'a>) {
         fns::lbAudioAx_8002392C(ctx);
     }
     inl_mn_8022DDA8_inline_unfused(ctx, hovered_selection);
-    let _ = fns::mn_8022BCF8(ctx);
-    fns::mn_8022BEDC(ctx, inl_mn_8022BE34_OnEnter_unfused(ctx, pos));
-    let _ = fns::mn_80229B2C(ctx);
+    let _ = inl_mn_8022BCF8_unfused(ctx);
+    inl_mn_8022BEDC_unfused(ctx, inl_mn_8022BE34_OnEnter_unfused(ctx, pos));
+    let _ = inl_mn_80229B2C_unfused(ctx);
     let _ = fns::mn_80229DC0(ctx);
     's1: {
         let __case = match ((data).menu_kind() as i32) {
@@ -3700,6 +3703,28 @@ fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'
     return (gobj).hsd_obj();
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b84e8),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b84e8),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetScaleY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     let mut jobj = jobj;
     let mut y = y;
@@ -3721,28 +3746,6 @@ fn inl_HSD_JObjSetScaleY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b84e8),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b84e8),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
@@ -3835,6 +3838,25 @@ fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64
             }
         }
     }
+}
+
+fn inl_mn_80229A04_unfused<'a>(ctx: &'a Ctx, kind: i32, selection: i32) -> i32 {
+    let mut kind = kind;
+    let mut selection = selection;
+    let mut i: i32 = 0;
+    let mut count: i32 = 0_i32;
+    {
+        i = 0_i32;
+        'l1: while i < selection {
+            'c2: {
+                if fns::mn_80229938(ctx, kind, i) != 0_i32 {
+                    count = count.wrapping_add(1);
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return count;
 }
 
 fn inl_HSD_JObjGetScaleY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
@@ -4019,6 +4041,135 @@ fn inl_CountUnlockedSelections_unfused<'a>(ctx: &'a Ctx, kind: i32) -> u8 {
 fn inl_GetSelectionFrameOffset_unfused<'a>(ctx: &'a Ctx, selection: i32) -> i32 {
     let mut selection = selection;
     return 2_i32.wrapping_mul(selection);
+}
+
+fn inl_mn_80229A7C_unfused<'a>(
+    ctx: &'a Ctx,
+    data: _MainMenuData<'a>,
+    menu_kind: i32,
+    selection: i32,
+) {
+    let mut data = data;
+    let mut menu_kind = menu_kind;
+    let mut selection = selection;
+    let mut temp_r3: HSD_Text<'a> = null(ctx);
+    let mut text: HSD_Text<'a> = null(ctx);
+    let mut sis_idx: Val<'a, u16> = null(ctx);
+    if !Handle::is_null((data).description()) {
+        fns::HSD_SisLib_803A5CC4(ctx, (data).description());
+        (data).set_description(null::<HSD_Text<'a>>(ctx));
+    }
+    sis_idx = fns::mn_803EB6B0(ctx).get(menu_kind).description_indices();
+    if !Handle::is_null(sis_idx) {
+        text = fns::HSD_SisLib_803A5ACC(
+            ctx,
+            0_i32,
+            (fns::mn_804D6BB4(ctx).get() as i32),
+            fp::fneg(9.5),
+            9.100000381469727,
+            17.0,
+            364.6833190917969,
+            38.387718200683594,
+        );
+        (data).set_description(text);
+        (text).font_size().set_x(0.05209999904036522);
+        (text).font_size().set_y(0.05209999904036522);
+        fns::HSD_SisLib_803A6368(ctx, text, ((Handle::add(sis_idx, selection)).get() as i32));
+    }
+}
+
+fn inl_mn_8022BFBC_unfused<'a>(ctx: &'a Ctx, arg0: i32) -> _GXColor<'a> {
+    let mut arg0 = arg0;
+    's1: {
+        let __case = match arg0 {
+            0_i32 => 0,
+            1_i32 => 1,
+            2_i32 => 2,
+            3_i32 => 3,
+            4_i32 => 4,
+            _ => 5,
+        };
+        if __case <= 0 {
+            return statics::melee__mn__mnmain::mn_804D4B50(ctx);
+        }
+        if __case <= 1 {
+            return statics::melee__mn__mnmain::mn_804D4B54(ctx);
+        }
+        if __case <= 2 {
+            return statics::melee__mn__mnmain::mn_804D4B58(ctx);
+        }
+        if __case <= 3 {
+            return statics::melee__mn__mnmain::mn_804D4B5C(ctx);
+        }
+        if __case <= 4 {
+            return statics::melee__mn__mnmain::mn_804D4B60(ctx);
+        }
+    }
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
+fn inl_mn_8022C010_unfused<'a>(ctx: &'a Ctx, menu_kind: i32, selection: i32) -> i32 {
+    let mut menu_kind = menu_kind;
+    let mut selection = selection;
+    if menu_kind == (enums::MENU_KIND_MAIN as i32) {
+        return selection;
+    }
+    's1: {
+        let __case = match menu_kind {
+            1_i32 => 0,
+            6_i32 => 0,
+            7_i32 => 0,
+            8_i32 => 0,
+            9_i32 => 0,
+            10_i32 => 0,
+            33_i32 => 0,
+            2_i32 => 1,
+            11_i32 => 1,
+            12_i32 => 1,
+            13_i32 => 1,
+            14_i32 => 1,
+            15_i32 => 1,
+            16_i32 => 1,
+            17_i32 => 1,
+            18_i32 => 1,
+            3_i32 => 2,
+            4_i32 => 3,
+            19_i32 => 3,
+            20_i32 => 3,
+            21_i32 => 3,
+            22_i32 => 3,
+            23_i32 => 3,
+            24_i32 => 3,
+            5_i32 => 4,
+            25_i32 => 4,
+            26_i32 => 4,
+            27_i32 => 4,
+            28_i32 => 4,
+            29_i32 => 4,
+            30_i32 => 4,
+            31_i32 => 4,
+            32_i32 => 4,
+            _ => 5,
+        };
+        if __case <= 0 {
+            return 0_i32;
+        }
+        if __case <= 1 {
+            return 1_i32;
+        }
+        if __case <= 2 {
+            return 2_i32;
+        }
+        if __case <= 3 {
+            return 3_i32;
+        }
+        if __case <= 4 {
+            return 4_i32;
+        }
+    }
+    #[allow(unreachable_code)]
+    return 0;
 }
 
 fn inl_LerpLightColor_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, div: i32) {
@@ -4232,6 +4383,72 @@ fn inl_mn_8022DDA8_inline_unfused<'a>(ctx: &'a Ctx, sp2B4: Val<'a, u16>) {
     );
 }
 
+fn inl_mn_8022BCF8_unfused<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
+    let mut gobj: HSD_GObj<'a> = null(ctx);
+    let mut fog: HSD_Fog<'a> = null(ctx);
+    gobj = fns::GObj_Create(ctx, (1_i32 as u16), (2_i32 as u8), (128_i32 as u8));
+    statics::melee__mn__mnmain::mn_804D6BA8(ctx).set(gobj);
+    fog = fns::HSD_FogLoadDesc(ctx, fns::MenMain_fog(ctx).get());
+    fns::HSD_GObjObject_80390A70(
+        ctx,
+        gobj,
+        (fns::HSD_GObj_FogKind(ctx).get() as u8),
+        Handle::cast::<Addr<'a>>(fog),
+    );
+    fns::GObj_SetupGXLink(
+        ctx,
+        gobj,
+        fnptr(ctx, 0x8022bcd4),
+        (1_i32 as u8),
+        (128_i32 as u32),
+    );
+    return gobj;
+}
+
+fn inl_mn_8022BEDC_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut temp_r3: HSD_GObj<'a> = null(ctx);
+    let mut cobj: HSD_CObj<'a> = null(ctx);
+    fns::mn_804D6BB5(ctx).set(
+        (fns::HSD_SisLib_803A611C(
+            ctx,
+            0_i32,
+            gobj,
+            (7_i32 as u16),
+            (8_i32 as u8),
+            (128_i32 as u8),
+            (5_i32 as u8),
+            (128_i32 as u8),
+            (0_i32 as u32),
+        ) as u8),
+    );
+    temp_r3 = fns::GObj_Create(ctx, (2_i32 as u16), (3_i32 as u8), (128_i32 as u8));
+    statics::melee__mn__mnmain::mn_804D6BB0(ctx).set(temp_r3);
+    cobj = fns::HSD_CObjLoadDesc(ctx, fns::MenMain_cam(ctx).get());
+    fns::HSD_GObjObject_80390A70(
+        ctx,
+        temp_r3,
+        fns::HSD_GObj_CameraKind(ctx).get(),
+        Handle::cast::<Addr<'a>>(cobj),
+    );
+    fns::GObj_SetupGXLinkMax(ctx, temp_r3, fnptr(ctx, 0x803910d8), (0_i32 as u32));
+    (temp_r3).set_gxlink_prios((128_i32 as u64));
+    let _ = fns::HSD_GObj_SetupProc(ctx, temp_r3, fnptr(ctx, 0x8022ba1c), (0_i32 as u8));
+    fns::mn_804D6BB4(ctx).set(
+        (fns::HSD_SisLib_803A611C(
+            ctx,
+            0_i32,
+            temp_r3,
+            (7_i32 as u16),
+            (8_i32 as u8),
+            (128_i32 as u8),
+            (7_i32 as u8),
+            (128_i32 as u8),
+            (0_i32 as u32),
+        ) as u8),
+    );
+}
+
 fn inl_mn_8022BE34_OnEnter_unfused<'a>(ctx: &'a Ctx, pos: Vec<'a>) -> HSD_GObj<'a> {
     let mut pos = pos;
     let mut gobj: HSD_GObj<'a> =
@@ -4250,6 +4467,37 @@ fn inl_mn_8022BE34_OnEnter_unfused<'a>(ctx: &'a Ctx, pos: Vec<'a>) -> HSD_GObj<'
     (gobj).set_gxlink_prios((127_i32 as u64));
     let _ = fns::HSD_GObj_SetupProc(ctx, gobj, fnptr(ctx, 0x8022ba1c), (0_i32 as u8));
     return gobj;
+}
+
+fn inl_mn_80229B2C_unfused<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
+    let mut temp_r30: HSD_GObj<'a> = null(ctx);
+    let mut temp_r3: HSD_JObj<'a> = null(ctx);
+    temp_r30 = fns::GObj_Create(ctx, (4_i32 as u16), (5_i32 as u8), (128_i32 as u8));
+    temp_r3 = fns::HSD_JObjLoadJoint(ctx, fns::MenMainBack_Top(ctx).joint());
+    fns::HSD_GObjObject_80390A70(
+        ctx,
+        temp_r30,
+        fns::HSD_GObj_JObjKind(ctx).get(),
+        Handle::cast::<Addr<'a>>(temp_r3),
+    );
+    fns::GObj_SetupGXLink(
+        ctx,
+        temp_r30,
+        fnptr(ctx, 0x80391070),
+        (2_i32 as u8),
+        (128_i32 as u32),
+    );
+    let _ = fns::HSD_GObj_SetupProc(ctx, temp_r30, fnptr(ctx, 0x8022eae0), (0_i32 as u8));
+    fns::HSD_JObjAddAnimAll(
+        ctx,
+        temp_r3,
+        fns::MenMainBack_Top(ctx).animjoint(),
+        fns::MenMainBack_Top(ctx).matanim_joint(),
+        fns::MenMainBack_Top(ctx).shapeanim_joint(),
+    );
+    fns::HSD_JObjReqAnimAll(ctx, temp_r3, 0.0);
+    fns::HSD_JObjAnimAll(ctx, temp_r3);
+    return temp_r30;
 }
 
 /// Registers this unit's ports.

@@ -418,7 +418,7 @@ pub fn pl_8004182C<'a>(ctx: &'a Ctx, slot: i32) {
         i = 0_i32;
         'l1: while i < ((div_u32(20_u32, 4_u32)) as i32) {
             'c2: {
-                fns::fn_80041770(
+                inl_fn_80041770_unfused(
                     ctx,
                     slot,
                     (var_r30).x4().get(i).x2(),
@@ -536,7 +536,7 @@ pub fn pl_80041BFC<'a>(ctx: &'a Ctx, slot: i32) {
         i = 0_i32;
         'l1: while i < ((div_u32(40_u32, 8_u32)) as i32) {
             'c2: {
-                fns::fn_80041BC8(
+                inl_fn_80041BC8_unfused(
                     ctx,
                     slot,
                     ((var_r31).x4().get(i).x4_b0() as u32),
@@ -562,6 +562,33 @@ fn inl_pl_CalculateAverage_unfused<'a>(ctx: &'a Ctx, val: f64, total: f64) -> f6
         )
     });
     return fp::fdivs(val, total);
+}
+
+fn inl_fn_80041770_unfused<'a>(ctx: &'a Ctx, slot: i32, arg1: u8, arg2: u32) {
+    let mut slot = slot;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    if (arg1 as i32) >= 5_i32 {
+        fns::pl_80038824(ctx, slot, 125_i32);
+    } else if (arg1 as i32) >= 4_i32 {
+        fns::pl_80038824(ctx, slot, 124_i32);
+    } else if (arg1 as i32) >= 3_i32 {
+        fns::pl_80038824(ctx, slot, 123_i32);
+    } else if (arg1 as i32) >= 2_i32 {
+        fns::pl_80038824(ctx, slot, 122_i32);
+    }
+    if (arg2 != (0_i32 as u32)) && ((arg1 as i32) != 0_i32) {
+        fns::pl_80038824(ctx, slot, 120_i32);
+    }
+}
+
+fn inl_fn_80041BC8_unfused<'a>(ctx: &'a Ctx, arg0: i32, arg1: u32, arg2: u32) {
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    if (arg2 != 0) && (!(arg1 != 0)) {
+        fns::pl_80038824(ctx, arg0, 200_i32);
+    }
 }
 
 /// Registers this unit's ports.

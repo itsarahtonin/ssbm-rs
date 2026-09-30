@@ -436,10 +436,10 @@ pub fn gm_Scene_Title_OnEnter<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
     );
     fns::lbAudioAx_8002702C(ctx, (2_i32 as u32), (4_i32 as u64));
     fns::lbAudioAx_80027168(ctx);
-    let _ = fns::gmTitle_801A1A3C(ctx);
-    fns::gmTitle_801A19AC(ctx);
-    fns::gmTitle_801A1944(ctx);
-    fns::gmTitle_801A185C(ctx);
+    let _ = inl_gmTitle_801A1A3C_unfused(ctx);
+    inl_gmTitle_801A19AC_unfused(ctx);
+    inl_gmTitle_801A1944_unfused(ctx);
+    inl_gmTitle_801A185C_unfused(ctx);
     let _ = fns::gmTitle_801A165C(ctx);
     fns::lbAudioAx_80027648(ctx);
     fns::gm_PreloadTitleDemo(ctx);
@@ -477,6 +477,28 @@ pub fn gm_Scene_Title_OnEnter<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
     }
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803da4f0),
+            (228_i32 as u32),
+            cstr(ctx, 0x803da4f0),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
     let mut jobj = jobj;
     let mut translate = translate;
@@ -510,31 +532,19 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803da4f0),
-            (228_i32 as u32),
-            cstr(ctx, 0x803da4f0),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
-}
-
 fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).hsd_obj();
+}
+
+fn inl_isActiveTitle_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    if ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TITLE as i32))
+        || (((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_OPENING_MV as i32))
+            && ((fns::gm_GetCurrentSceneIndex(ctx) as i32) == (enums::GS_VS as i32)))
+    {
+        return 0_i32;
+    }
+    return 1_i32;
 }
 
 fn inl_fn_801A1498_inline_unfused<'a>(ctx: &'a Ctx) {
@@ -575,16 +585,6 @@ fn inl_fn_801A1498_inline_unfused<'a>(ctx: &'a Ctx) {
     fns::HSD_JObjAnimAll(ctx, jobj);
 }
 
-fn inl_isActiveTitle_unfused<'a>(ctx: &'a Ctx) -> i32 {
-    if ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TITLE as i32))
-        || (((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_OPENING_MV as i32))
-            && ((fns::gm_GetCurrentSceneIndex(ctx) as i32) == (enums::GS_VS as i32)))
-    {
-        return 0_i32;
-    }
-    return 1_i32;
-}
-
 fn inl_isEmblemUnlocked_unfused<'a>(ctx: &'a Ctx) -> i32 {
     if (fns::gm_IsCKindUnlocked(ctx, ((enums::CKind_Mars as i32) as u8)) != 0)
         || (fns::gm_IsCKindUnlocked(ctx, ((enums::CKind_Emblem as i32) as u8)) != 0)
@@ -596,6 +596,85 @@ fn inl_isEmblemUnlocked_unfused<'a>(ctx: &'a Ctx) -> i32 {
 
 fn inl_sfxForward_unfused<'a>(ctx: &'a Ctx) {
     fns::lbAudioAx_80024030(ctx, 1_i32);
+}
+
+fn inl_gmTitle_801A1A3C_unfused<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
+    let mut gobj: HSD_GObj<'a> =
+        fns::GObj_Create(ctx, (10_i32 as u16), (3_i32 as u8), (0_i32 as u8));
+    let mut fog: HSD_Fog<'a> =
+        fns::HSD_FogLoadDesc(ctx, statics::melee__gm__gmtitle::fog_desc(ctx).get());
+    fns::HSD_GObjObject_80390A70(
+        ctx,
+        gobj,
+        (fns::HSD_GObj_FogKind(ctx).get() as u8),
+        Handle::cast::<Addr<'a>>(fog),
+    );
+    fns::GObj_SetupGXLink(
+        ctx,
+        gobj,
+        fnptr(ctx, 0x803910b4),
+        (0_i32 as u8),
+        (0_i32 as u32),
+    );
+    let _ = fns::HSD_GObj_SetupProc(ctx, gobj, fnptr(ctx, 0x801a1a18), (0_i32 as u8));
+    return gobj;
+}
+
+fn inl_gmTitle_801A19AC_unfused<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj: HSD_GObj<'a> =
+        fns::GObj_Create(ctx, (11_i32 as u16), (3_i32 as u8), (128_i32 as u8));
+    let mut lobj: HSD_LObj<'a> =
+        fns::lb_80011AC4(ctx, statics::melee__gm__gmtitle::list_list(ctx).get());
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    fns::HSD_GObjObject_80390A70(
+        ctx,
+        gobj,
+        (fns::HSD_GObj_LightKind(ctx).get() as u8),
+        Handle::cast::<Addr<'a>>(lobj),
+    );
+    fns::GObj_SetupGXLink(
+        ctx,
+        gobj,
+        fnptr(ctx, 0x80391044),
+        (0_i32 as u8),
+        (0_i32 as u32),
+    );
+}
+
+fn inl_gmTitle_801A1944_unfused<'a>(ctx: &'a Ctx) {
+    let mut gobj: HSD_GObj<'a> =
+        fns::GObj_Create(ctx, (19_i32 as u16), (20_i32 as u8), (0_i32 as u8));
+    let mut cobj: HSD_CObj<'a> =
+        fns::lb_80013B14(ctx, statics::melee__gm__gmtitle::cobj_desc(ctx).get());
+    fns::HSD_GObjObject_80390A70(
+        ctx,
+        gobj,
+        fns::HSD_GObj_CameraKind(ctx).get(),
+        Handle::cast::<Addr<'a>>(cobj),
+    );
+    fns::GObj_SetupGXLinkMax(ctx, gobj, fnptr(ctx, 0x801a18d4), (0_i32 as u32));
+}
+
+fn inl_gmTitle_801A185C_unfused<'a>(ctx: &'a Ctx) {
+    let mut gobj: HSD_GObj<'a> =
+        fns::GObj_Create(ctx, (19_i32 as u16), (20_i32 as u8), (0_i32 as u8));
+    let mut cobj: HSD_CObj<'a> =
+        fns::lb_80013B14(ctx, statics::melee__gm__gmtitle::cobj_desc(ctx).get());
+    fns::HSD_GObjObject_80390A70(
+        ctx,
+        gobj,
+        fns::HSD_GObj_CameraKind(ctx).get(),
+        Handle::cast::<Addr<'a>>(cobj),
+    );
+    fns::GObj_SetupGXLinkMax(ctx, gobj, fnptr(ctx, 0x801a1814), (12_i32 as u32));
+    (gobj).set_gxlink_prios((0x209_i32 as u64));
 }
 
 /// Registers this unit's ports.

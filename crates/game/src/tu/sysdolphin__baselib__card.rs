@@ -2491,7 +2491,13 @@ pub fn fn_803AD16C<'a>(ctx: &'a Ctx, state: CardState<'a>) -> i32 {
                                             let mut logical: i32 =
                                                 ids.at(phys).get().wrapping_sub(blocks_before);
                                             if (logical >= 0_i32) && (logical < file_blocks) {
-                                                if (cur_seq == 1_i32.wrapping_neg()) || (statics::sysdolphin__baselib__card::fn_803ACB74(ctx, cur_seq, seq.at(phys).get()) > 0_i32) {
+                                                if (cur_seq == 1_i32.wrapping_neg())
+                                                    || (inl_fn_803ACB74_unfused(
+                                                        ctx,
+                                                        cur_seq,
+                                                        seq.at(phys).get(),
+                                                    ) > 0_i32)
+                                                {
                                                     cur_seq = seq.at(phys).get();
                                                 }
                                             }
@@ -2682,10 +2688,7 @@ pub fn fn_803AD16C<'a>(ctx: &'a Ctx, state: CardState<'a>) -> i32 {
                                             if dup < 0_i32 {
                                                 dup = phys;
                                             } else {
-                                                offset =
-                                                    statics::sysdolphin__baselib__card::fn_803ACBE8(
-                                                        ctx, state, phys,
-                                                    );
+                                                offset = inl_fn_803ACBE8_unfused(ctx, state, phys);
                                                 if phys == 0_i32 {
                                                     ret = 0x101_i32.wrapping_neg();
                                                 } else {
@@ -2956,7 +2959,7 @@ pub fn fn_803ADF90<'a>(
                         if chunk != (state).block_seqs().at(scan_idx).get() {
                             status = 0x104_i32.wrapping_neg();
                         }
-                        if statics::sysdolphin__baselib__card::fn_803ACB74(
+                        if inl_fn_803ACB74_unfused(
                             ctx,
                             chunk,
                             (state).block_seqs().at(scan_idx).get(),
@@ -3447,14 +3450,13 @@ pub fn fn_803B1338<'a>(ctx: &'a Ctx, state: CardState<'a>, r#async: i32) -> i32 
         spare_blocks = 0_i32;
         block_id = 1_i32;
         phys = 1_i32;
-        if (statics::sysdolphin__baselib__card::fn_803AC634(ctx, state, 0_i32) as i32) != 0_i32 {
+        if (inl_fn_803AC634_unfused(ctx, state, 0_i32) as i32) != 0_i32 {
             let mut i: i32 = 0;
             let mut offset: i32 = 0;
             let mut hdr_offset: i32 = 0;
             let mut data_start: u32 = 0;
             let mut sector_size: u32 = 0;
-            file_blocks =
-                (statics::sysdolphin__baselib__card::fn_803AC634(ctx, state, 0_i32) as i32);
+            file_blocks = (inl_fn_803AC634_unfused(ctx, state, 0_i32) as i32);
             offset = 0_i32;
             sector_size = (state).sector_size();
             data_start = (state).header_size().wrapping_add((48_i32 as u32));
@@ -3829,11 +3831,9 @@ pub fn fn_803B1338<'a>(ctx: &'a Ctx, state: CardState<'a>, r#async: i32) -> i32 
             let mut block_idx: i32 = 0;
             let mut file_id: i32 = 0;
             index = 1_i32;
-            if (statics::sysdolphin__baselib__card::fn_803AC634(ctx, state, 0_i32) as i32) != 0_i32
-            {
+            if (inl_fn_803AC634_unfused(ctx, state, 0_i32) as i32) != 0_i32 {
                 index = ((index as u32).wrapping_add(
-                    statics::sysdolphin__baselib__card::fn_803AC634(ctx, state, 0_i32)
-                        .wrapping_sub((1_i32 as u32)),
+                    inl_fn_803AC634_unfused(ctx, state, 0_i32).wrapping_sub((1_i32 as u32)),
                 ) as i32);
             }
             {
@@ -3841,9 +3841,7 @@ pub fn fn_803B1338<'a>(ctx: &'a Ctx, state: CardState<'a>, r#async: i32) -> i32 
                 'l14: while file_id < 9_i32 {
                     'c15: {
                         let mut offset_3: i32 = 0;
-                        file_blocks =
-                            (statics::sysdolphin__baselib__card::fn_803AC634(ctx, state, file_id)
-                                as i32);
+                        file_blocks = (inl_fn_803AC634_unfused(ctx, state, file_id) as i32);
                         offset_3 = 0_i32;
                         if file_blocks > 0_i32 {
                             's16: {
@@ -4847,6 +4845,30 @@ fn inl_fn_803AC6B8_blocks_before_unfused<'a>(
     return total;
 }
 
+fn inl_fn_803ACB74_unfused<'a>(ctx: &'a Ctx, seq_a: i32, seq_b: i32) -> i32 {
+    let mut seq_a = seq_a;
+    let mut seq_b = seq_b;
+    if seq_a < 0_i32 {
+        return 1_i32.wrapping_neg();
+    }
+    if seq_b < 0_i32 {
+        return 1_i32;
+    }
+    if (seq_a == 0_i32) && (seq_b == 255_i32) {
+        return 1_i32;
+    }
+    if (seq_a == 255_i32) && (seq_b == 0_i32) {
+        return 1_i32.wrapping_neg();
+    }
+    if seq_a.wrapping_sub(seq_b) > 128_i32 {
+        return 1_i32.wrapping_neg();
+    }
+    if seq_a.wrapping_sub(seq_b) < 128_i32.wrapping_neg() {
+        return 1_i32;
+    }
+    return seq_a.wrapping_sub(seq_b);
+}
+
 fn inl_fn_803AD16C_total_blocks_unfused<'a>(ctx: &'a Ctx, state: CardState<'a>) -> i32 {
     let mut state = state;
     return (state).num_blocks();
@@ -4867,6 +4889,22 @@ fn inl_fn_803AD16C_logical_index_unfused<'a>(ctx: &'a Ctx, blocks_before: i32, i
     let mut blocks_before = blocks_before;
     let mut i = i;
     return blocks_before.wrapping_add(i);
+}
+
+fn inl_fn_803ACBE8_unfused<'a>(ctx: &'a Ctx, state: CardState<'a>, block_idx: i32) -> i32 {
+    let mut state = state;
+    let mut block_idx = block_idx;
+    let mut sector_size: u32 = (state).sector_size();
+    let mut temp: u32 = (state).header_size().wrapping_add(sector_size);
+    let mut num: u32 = temp.wrapping_add((47_i32 as u32));
+    temp = div_u32(num, sector_size);
+    {
+        let mut sector: u32 = temp.wrapping_sub((1_i32 as u32));
+        sector = (block_idx as u32).wrapping_add(sector);
+        return (sector_size.wrapping_mul(sector) as i32);
+    }
+    #[allow(unreachable_code)]
+    return 0;
 }
 
 fn inl_fn_803AD16C_queue_clear_unfused<'a>(
@@ -4946,6 +4984,10 @@ fn inl_fn_803AD16C_queue_write_unfused<'a>(
     return statics::sysdolphin__baselib__card::fn_803AC168(ctx, cmd);
 }
 
+fn inl_fn_803AD16C_own_unfused<'a>(ctx: &'a Ctx, value: Addr<'a>) {
+    let mut value = value;
+}
+
 fn inl_fn_803AD16C_queue_write_last_unfused<'a>(
     ctx: &'a Ctx,
     state: CardState<'a>,
@@ -4977,10 +5019,6 @@ fn inl_fn_803AD16C_queue_write_last_unfused<'a>(
         .set_offset((size.wrapping_mul(idx) as i32));
     inl_fn_803AD16C_own_unfused(ctx, Handle::cast::<Addr<'a>>(tail.at(0)));
     return statics::sysdolphin__baselib__card::fn_803AC168(ctx, cmd);
-}
-
-fn inl_fn_803AD16C_own_unfused<'a>(ctx: &'a Ctx, value: Addr<'a>) {
-    let mut value = value;
 }
 
 fn inl_calculateFileBlockCount_unfused<'a>(
@@ -5075,6 +5113,31 @@ fn inl_calculateDataBlockSize_unfused<'a>(
     return ((state).sector_size().wrapping_sub((32_i32 as u32)) as i32);
 }
 
+fn inl_queueCardReadCommand_unfused<'a>(
+    ctx: &'a Ctx,
+    state: CardState<'a>,
+    block: i32,
+    data: Addr<'a>,
+    length: i32,
+    offset: i32,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x30);
+    let command: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut state = state;
+    let mut block = block;
+    let mut data = data;
+    let mut length = length;
+    let mut offset = offset;
+    command.set_type((enums::CARD_CMD_READ_BLOCK as i32));
+    command.set_state(state);
+    command.x8().read().set_phys(block);
+    command.x8().read().set_xC(0_i32);
+    command.x8().read().set_data(data);
+    command.x8().read().set_size(length);
+    command.x8().read().set_offset(offset);
+    return statics::sysdolphin__baselib__card::fn_803AC168(ctx, command);
+}
+
 fn inl_queueReadDataBlock_unfused<'a>(
     ctx: &'a Ctx,
     state: CardState<'a>,
@@ -5103,31 +5166,6 @@ fn inl_queueReadDataBlock_unfused<'a>(
     );
 }
 
-fn inl_queueCardReadCommand_unfused<'a>(
-    ctx: &'a Ctx,
-    state: CardState<'a>,
-    block: i32,
-    data: Addr<'a>,
-    length: i32,
-    offset: i32,
-) -> i32 {
-    let __frame = ctx.stack_frame(0x30);
-    let command: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
-    let mut state = state;
-    let mut block = block;
-    let mut data = data;
-    let mut length = length;
-    let mut offset = offset;
-    command.set_type((enums::CARD_CMD_READ_BLOCK as i32));
-    command.set_state(state);
-    command.x8().read().set_phys(block);
-    command.x8().read().set_xC(0_i32);
-    command.x8().read().set_data(data);
-    command.x8().read().set_size(length);
-    command.x8().read().set_offset(offset);
-    return statics::sysdolphin__baselib__card::fn_803AC168(ctx, command);
-}
-
 fn inl_cancelQueuedCardCommands_unfused<'a>(ctx: &'a Ctx) {
     let mut snap: i32 = statics::sysdolphin__baselib__card::hsd_804D7998(ctx).get();
     if snap >= 0_i32 {
@@ -5147,6 +5185,51 @@ fn inl_cancelQueuedCardCommands_unfused<'a>(ctx: &'a Ctx) {
         }
         statics::sysdolphin__baselib__card::curr_tail(ctx).set(snap);
     }
+}
+
+fn inl_cardDataBlockOffset_unfused<'a>(
+    ctx: &'a Ctx,
+    state: CardState<'a>,
+    sector_size: u32,
+    data_block: i32,
+) -> i32 {
+    let mut state = state;
+    let mut sector_size = sector_size;
+    let mut data_block = data_block;
+    let mut temp: u32 = (state).header_size().wrapping_add(sector_size);
+    let mut idx: u32 = 0;
+    temp = div_u32((temp.wrapping_add((47_i32 as u32))), sector_size);
+    idx = temp.wrapping_sub((1_i32 as u32));
+    idx = (data_block as u32).wrapping_add(idx);
+    return (sector_size.wrapping_mul(idx) as i32);
+}
+
+fn inl_retryCardRead_unfused<'a>(
+    ctx: &'a Ctx,
+    info: CARDFileInfo<'a>,
+    buffer: Addr<'a>,
+    length: i32,
+    offset: i32,
+) -> i32 {
+    let mut info = info;
+    let mut buffer = buffer;
+    let mut length = length;
+    let mut offset = offset;
+    let mut result: i32 = 0;
+    let mut retries: i32 = 0;
+    {
+        retries = 0_i32;
+        'l1: while retries < 10_i32 {
+            'c2: {
+                result = fns::CARDRead(ctx, info, buffer, length, offset);
+                if result != 1_i32.wrapping_neg() {
+                    break 'l1;
+                }
+            }
+            retries = retries.wrapping_add(1);
+        }
+    }
+    return result;
 }
 
 fn inl_readCardDataBlockFirst_unfused<'a>(
@@ -5205,67 +5288,6 @@ fn inl_readCardDataBlockFirst_unfused<'a>(
     return 0_i32;
 }
 
-fn inl_cardDataBlockOffset_unfused<'a>(
-    ctx: &'a Ctx,
-    state: CardState<'a>,
-    sector_size: u32,
-    data_block: i32,
-) -> i32 {
-    let mut state = state;
-    let mut sector_size = sector_size;
-    let mut data_block = data_block;
-    let mut temp: u32 = (state).header_size().wrapping_add(sector_size);
-    let mut idx: u32 = 0;
-    temp = div_u32((temp.wrapping_add((47_i32 as u32))), sector_size);
-    idx = temp.wrapping_sub((1_i32 as u32));
-    idx = (data_block as u32).wrapping_add(idx);
-    return (sector_size.wrapping_mul(idx) as i32);
-}
-
-fn inl_retryCardRead_unfused<'a>(
-    ctx: &'a Ctx,
-    info: CARDFileInfo<'a>,
-    buffer: Addr<'a>,
-    length: i32,
-    offset: i32,
-) -> i32 {
-    let mut info = info;
-    let mut buffer = buffer;
-    let mut length = length;
-    let mut offset = offset;
-    let mut result: i32 = 0;
-    let mut retries: i32 = 0;
-    {
-        retries = 0_i32;
-        'l1: while retries < 10_i32 {
-            'c2: {
-                result = fns::CARDRead(ctx, info, buffer, length, offset);
-                if result != 1_i32.wrapping_neg() {
-                    break 'l1;
-                }
-            }
-            retries = retries.wrapping_add(1);
-        }
-    }
-    return result;
-}
-
-fn inl_queueClearDataBlock_unfused<'a>(
-    ctx: &'a Ctx,
-    state: CardState<'a>,
-    dst: Val<'a, u8>,
-    size: i32,
-) -> i32 {
-    let mut state = state;
-    let mut dst = dst;
-    let mut size = size;
-    return (if size == 0_i32 {
-        0_i32
-    } else {
-        inl_queueCardClearCommand_unfused(ctx, state, dst, size)
-    });
-}
-
 fn inl_queueCardClearCommand_unfused<'a>(
     ctx: &'a Ctx,
     state: CardState<'a>,
@@ -5286,6 +5308,22 @@ fn inl_queueCardClearCommand_unfused<'a>(
     command.x8().clear().set_x14(0_i32);
     command.x8().clear().set_x0(0_i32);
     return statics::sysdolphin__baselib__card::fn_803AC168(ctx, command);
+}
+
+fn inl_queueClearDataBlock_unfused<'a>(
+    ctx: &'a Ctx,
+    state: CardState<'a>,
+    dst: Val<'a, u8>,
+    size: i32,
+) -> i32 {
+    let mut state = state;
+    let mut dst = dst;
+    let mut size = size;
+    return (if size == 0_i32 {
+        0_i32
+    } else {
+        inl_queueCardClearCommand_unfused(ctx, state, dst, size)
+    });
 }
 
 fn inl_readCardDataBlockFinal_unfused<'a>(
@@ -5525,6 +5563,52 @@ fn inl_fn_803B0E9C_write_block_final_unfused<'a>(
     return result;
 }
 
+fn inl_fn_803AC634_unfused<'a>(ctx: &'a Ctx, state: CardState<'a>, file_idx: i32) -> u32 {
+    let mut state = state;
+    let mut file_idx = file_idx;
+    if (state).file_sizes().at(file_idx).get() <= 0_i32 {
+        return (0_i32 as u32);
+    }
+    if file_idx == 0_i32 {
+        let mut usable: u32 = 0;
+        let mut sector_size: u32 = (state).sector_size();
+        let mut remaining: i32 = 0;
+        remaining = (state).file_sizes().at(0_i32).get();
+        remaining = remaining.wrapping_sub(
+            ((({
+                let __t1 = sector_size.wrapping_sub((32_i32 as u32));
+                usable = __t1;
+                __t1
+            })
+            .wrapping_sub(rem_u32(
+                ((state).header_size().wrapping_add((48_i32 as u32))),
+                sector_size,
+            ))) as i32),
+        );
+        if remaining <= 0_i32 {
+            return (1_i32 as u32);
+        }
+        return div_u32(
+            ((remaining as u32)
+                .wrapping_add(sector_size)
+                .wrapping_sub((33_i32 as u32))),
+            usable,
+        )
+        .wrapping_add((1_i32 as u32));
+    }
+    {
+        let mut sector_size_2: u32 = (state).sector_size();
+        return div_u32(
+            (((state).file_sizes().at(file_idx).get() as u32)
+                .wrapping_add(sector_size_2)
+                .wrapping_sub((33_i32 as u32))),
+            (sector_size_2.wrapping_sub((32_i32 as u32))),
+        );
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 fn inl_fn_803B1338_queue_write_unfused<'a>(
     ctx: &'a Ctx,
     state: CardState<'a>,
@@ -5544,7 +5628,7 @@ fn inl_fn_803B1338_queue_write_unfused<'a>(
     let mut file_idx = file_idx;
     let mut init_buf = init_buf;
     let mut buf = buf;
-    let mut ofs: i32 = statics::sysdolphin__baselib__card::fn_803ACBE8(ctx, state, phys);
+    let mut ofs: i32 = inl_fn_803ACBE8_unfused(ctx, state, phys);
     let mut result: i32 = 0;
     if phys == 0_i32 {
         if block_id != 0_i32 {
@@ -5608,7 +5692,7 @@ fn inl_fn_803B1338_queue_write_data_unfused<'a>(
     let mut file_idx = file_idx;
     let mut init_buf = init_buf;
     let mut buf = buf;
-    let mut ofs: i32 = statics::sysdolphin__baselib__card::fn_803ACBE8(ctx, state, phys);
+    let mut ofs: i32 = inl_fn_803ACBE8_unfused(ctx, state, phys);
     let mut data: Val<'a, u8> = inl_fn_803B1338_data_at_unfused(ctx, fdata, offset);
     let mut size: i32 = inl_fn_803B1338_data_size_unfused(ctx, state);
     let mut result: i32 = 0;
@@ -5670,6 +5754,48 @@ fn inl_retryCardOpen_unfused<'a>(
     return result;
 }
 
+fn inl_initHeaderBlockCommand_unfused<'a>(
+    ctx: &'a Ctx,
+    buf: CardCmd<'a>,
+    state: CardState<'a>,
+    block: u32,
+    comment: Addr<'a>,
+    banner: Addr<'a>,
+    icons: Addr<'a>,
+) {
+    let mut buf = buf;
+    let mut state = state;
+    let mut block = block;
+    let mut comment = comment;
+    let mut banner = banner;
+    let mut icons = icons;
+    (buf).set_type((enums::CARD_CMD_READ_HEADER as i32));
+    (buf).set_state(state);
+    (buf).x8().read_header().set_index((block as i32));
+    (buf).x8().read_header().set_comment(comment);
+    (buf).x8().read_header().set_banner(banner);
+    (buf).x8().read_header().set_icons(icons);
+}
+
+fn inl_queueHeaderBlock_unfused<'a>(
+    ctx: &'a Ctx,
+    state: CardState<'a>,
+    block: u32,
+    comment: Addr<'a>,
+    banner: Addr<'a>,
+    icons: Addr<'a>,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x30);
+    let buf: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut state = state;
+    let mut block = block;
+    let mut comment = comment;
+    let mut banner = banner;
+    let mut icons = icons;
+    inl_initHeaderBlockCommand_unfused(ctx, buf, state, block, comment, banner, icons);
+    return statics::sysdolphin__baselib__card::fn_803AC168(ctx, buf);
+}
+
 fn inl_queueHeaderBlocks_unfused<'a>(
     ctx: &'a Ctx,
     state: CardState<'a>,
@@ -5701,48 +5827,6 @@ fn inl_queueHeaderBlocks_unfused<'a>(
         }
     }
     return 0_i32;
-}
-
-fn inl_queueHeaderBlock_unfused<'a>(
-    ctx: &'a Ctx,
-    state: CardState<'a>,
-    block: u32,
-    comment: Addr<'a>,
-    banner: Addr<'a>,
-    icons: Addr<'a>,
-) -> i32 {
-    let __frame = ctx.stack_frame(0x30);
-    let buf: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
-    let mut state = state;
-    let mut block = block;
-    let mut comment = comment;
-    let mut banner = banner;
-    let mut icons = icons;
-    inl_initHeaderBlockCommand_unfused(ctx, buf, state, block, comment, banner, icons);
-    return statics::sysdolphin__baselib__card::fn_803AC168(ctx, buf);
-}
-
-fn inl_initHeaderBlockCommand_unfused<'a>(
-    ctx: &'a Ctx,
-    buf: CardCmd<'a>,
-    state: CardState<'a>,
-    block: u32,
-    comment: Addr<'a>,
-    banner: Addr<'a>,
-    icons: Addr<'a>,
-) {
-    let mut buf = buf;
-    let mut state = state;
-    let mut block = block;
-    let mut comment = comment;
-    let mut banner = banner;
-    let mut icons = icons;
-    (buf).set_type((enums::CARD_CMD_READ_HEADER as i32));
-    (buf).set_state(state);
-    (buf).x8().read_header().set_index((block as i32));
-    (buf).x8().read_header().set_comment(comment);
-    (buf).x8().read_header().set_banner(banner);
-    (buf).x8().read_header().set_icons(icons);
 }
 
 fn inl_rollbackCardCommands_unfused<'a>(ctx: &'a Ctx, snap: i32) {

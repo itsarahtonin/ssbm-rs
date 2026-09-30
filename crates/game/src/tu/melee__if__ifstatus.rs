@@ -301,7 +301,7 @@ pub fn ifStatus_802F5EC0<'a>(
     let mut anim_base: Ptr<'a, Ptr<'a, HSD_MatAnimJoint<'a>>> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut i: i32 = 0;
-    let mut hud: HudIndex<'a> = fns::ifStatus_GetHUDInfo(ctx);
+    let mut hud: HudIndex<'a> = inl_ifStatus_GetHUDInfo_unfused(ctx);
     if Handle::is_null((state).HUD_parent_entity()) {
         gobj = fns::GObj_Create(ctx, (14_i32 as u16), (15_i32 as u8), (0_i32 as u8));
         jobj = inl_ifStatus_LoadDamageJObj_unfused(ctx, hud);
@@ -414,7 +414,7 @@ pub fn ifStatus_802F61FC<'a>(
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut tobj: HSD_TObj<'a> = null(ctx);
     let mut mobj: HSD_MObj<'a> = null(ctx);
-    let mut hud: HudIndex<'a> = fns::ifStatus_GetHUDInfo(ctx);
+    let mut hud: HudIndex<'a> = inl_ifStatus_GetHUDInfo_unfused(ctx);
     let mut idx: u8 = (player_idx as u8);
     inl_ifStatus_GetPlayerCharacter_unfused(ctx, player_idx, chara);
     if Handle::is_null((state).next()) {
@@ -528,7 +528,7 @@ pub fn ifStatus_802F6508<'a>(ctx: &'a Ctx, arg0: i32) {
         }) as i32)
             != 0)
     {
-        hud_player = (fns::ifStatus_GetHUDInfo(ctx))
+        hud_player = (inl_ifStatus_GetHUDInfo_unfused(ctx))
             .players()
             .get(((arg0 as u8) as i32));
         (hud_player).set_damage_percent((1_i32.wrapping_neg() as i16));
@@ -579,7 +579,7 @@ pub fn ifStatus_802F66A4<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
     let mrk: Ptr<'a, Ptr<'a, DynamicModelDesc<'a>>> = frame_at(ctx, &__frame, 0x0);
     let num: Ptr<'a, Ptr<'a, DynamicModelDesc<'a>>> = frame_at(ctx, &__frame, 0x4);
-    let mut hud: HudIndex<'a> = fns::ifStatus_GetHUDInfo(ctx);
+    let mut hud: HudIndex<'a> = inl_ifStatus_GetHUDInfo_unfused(ctx);
     fns::lbArchive_LoadSections(
         ctx,
         (fns::ifAll_GetArchive(ctx)).get(),
@@ -602,7 +602,7 @@ pub fn ifStatus_802F66A4<'a>(ctx: &'a Ctx) {
     statics::melee__if__ifstatus::ifStatus_804D6D60(ctx).set((0_i32 as u8));
     fns::memzero(
         ctx,
-        Handle::cast::<Addr<'a>>((fns::ifStatus_GetHUDInfo(ctx)).players().get(0)),
+        Handle::cast::<Addr<'a>>((inl_ifStatus_GetHUDInfo_unfused(ctx)).players().get(0)),
         (0x258_u32 as i32),
     );
 }
@@ -612,7 +612,7 @@ pub fn ifStatus_802F6788<'a>(ctx: &'a Ctx, player_idx: u8) {
     let mut player_idx = player_idx;
     let mut player_hud: IfDamageState<'a> = null(ctx);
     let mut p_idx: i8 = (player_idx as i8);
-    player_hud = (fns::ifStatus_GetHUDInfo(ctx))
+    player_hud = (inl_ifStatus_GetHUDInfo_unfused(ctx))
         .players()
         .get(((p_idx as i32) & 255_i32));
     if !Handle::is_null((player_hud).HUD_parent_entity()) {
@@ -634,7 +634,9 @@ pub fn ifStatus_802F6804<'a>(ctx: &'a Ctx) {
         i = 0_i32;
         'l1: while i < 6_i32 {
             'c2: {
-                v = (fns::ifStatus_GetHUDInfo(ctx)).players().get((i & 255_i32));
+                v = (inl_ifStatus_GetHUDInfo_unfused(ctx))
+                    .players()
+                    .get((i & 255_i32));
                 if !Handle::is_null((v).HUD_parent_entity()) {
                     fns::HSD_GObjFree(ctx, (v).HUD_parent_entity());
                     (v).set_HUD_parent_entity(null::<HSD_GObj<'a>>(ctx));
@@ -652,7 +654,7 @@ pub fn ifStatus_802F6804<'a>(ctx: &'a Ctx) {
 
 pub fn ifStatus_802F6898<'a>(ctx: &'a Ctx) {
     let mut i: i32 = 0;
-    let mut v: HudIndex<'a> = fns::ifStatus_GetHUDInfo(ctx);
+    let mut v: HudIndex<'a> = inl_ifStatus_GetHUDInfo_unfused(ctx);
     {
         i = 0_i32;
         'l1: while i < 6_i32 {
@@ -669,7 +671,7 @@ pub fn ifStatus_802F6898<'a>(ctx: &'a Ctx) {
 
 pub fn ifStatus_802F68F0<'a>(ctx: &'a Ctx) {
     let mut i: i32 = 0;
-    let mut v: HudIndex<'a> = fns::ifStatus_GetHUDInfo(ctx);
+    let mut v: HudIndex<'a> = inl_ifStatus_GetHUDInfo_unfused(ctx);
     {
         i = 0_i32;
         'l1: while i < 6_i32 {
@@ -691,7 +693,9 @@ pub fn ifStatus_802F6948<'a>(ctx: &'a Ctx, player_idx: i32) {
     let mut small_thing: StartMeleeRules<'a> = null(ctx);
     let mut hud_player_flags: IfDamageFlags<'a> = null(ctx);
     small_thing = fns::gm_GetStartMeleeRules(ctx);
-    hud_player = (fns::ifStatus_GetHUDInfo(ctx)).players().get(player_idx);
+    hud_player = (inl_ifStatus_GetHUDInfo_unfused(ctx))
+        .players()
+        .get(player_idx);
     hud_player_flags = (hud_player).flags();
     if ((hud_player_flags).explode_animation() as i32) != 1_i32 {
         (hud_player_flags).set_explode_animation((1_i32 as u8));
@@ -744,7 +748,9 @@ pub fn ifStatus_802F6E3C<'a>(ctx: &'a Ctx, player_num: i32) {
     let __frame = ctx.stack_frame(0x18);
     let mut player_num = player_num;
     let mut player: IfDamageState<'a> = null(ctx);
-    player = (fns::ifStatus_GetHUDInfo(ctx)).players().get(player_num);
+    player = (inl_ifStatus_GetHUDInfo_unfused(ctx))
+        .players()
+        .get(player_num);
     if !Handle::is_null((player).HUD_parent_entity()) {
         fns::HSD_GObj_80390CAC(ctx, (player).HUD_parent_entity());
     }
@@ -792,6 +798,28 @@ fn inl_fabsf_bitwise<'a>(ctx: &'a Ctx, v: f64) -> f64 {
     return v__slot.get();
 }
 
+fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f95f0),
+            (228_i32 as u32),
+            cstr(ctx, 0x803f95f0),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjAddTranslationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
     let mut jobj = jobj;
     let mut x = x;
@@ -815,28 +843,6 @@ fn inl_HSD_JObjAddTranslationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f95f0),
-            (228_i32 as u32),
-            cstr(ctx, 0x803f95f0),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjGetTranslationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
@@ -879,6 +885,28 @@ fn inl_HSD_JObjAddTranslationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     }
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f95f0),
+            (228_i32 as u32),
+            cstr(ctx, 0x803f95f0),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
     let mut jobj = jobj;
     let mut x = x;
@@ -900,28 +928,6 @@ fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f6
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f95f0),
-            (228_i32 as u32),
-            cstr(ctx, 0x803f95f0),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjSetTranslateY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
@@ -961,6 +967,10 @@ fn inl_offset_rand_unfused<'a>(ctx: &'a Ctx) -> f64 {
     return fp::fsubs(fns::HSD_Randf(ctx), 0.5);
 }
 
+fn inl_ifStatus_GetHUDInfo_unfused<'a>(ctx: &'a Ctx) -> HudIndex<'a> {
+    return fns::ifStatus_HudInfo(ctx);
+}
+
 fn inl_find_player_by_entity_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> IfDamageState<'a> {
     let mut gobj = gobj;
     let mut i: i32 = 0;
@@ -969,13 +979,13 @@ fn inl_find_player_by_entity_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> If
         'l1: while i < 6_i32 {
             'c2: {
                 if Handle::addr(
-                    (fns::ifStatus_GetHUDInfo(ctx))
+                    (inl_ifStatus_GetHUDInfo_unfused(ctx))
                         .players()
                         .get(i)
                         .HUD_parent_entity(),
                 ) == Handle::addr(gobj)
                 {
-                    return (fns::ifStatus_GetHUDInfo(ctx)).players().get(i);
+                    return (inl_ifStatus_GetHUDInfo_unfused(ctx)).players().get(i);
                 }
             }
             i = i.wrapping_add(1);
@@ -992,13 +1002,15 @@ fn inl_getPlayerByHUDParent_unfused<'a>(ctx: &'a Ctx, parent: HSD_GObj<'a>) -> I
         'l1: while var_ctr < 6_i32 {
             'c2: {
                 if Handle::addr(
-                    (fns::ifStatus_GetHUDInfo(ctx))
+                    (inl_ifStatus_GetHUDInfo_unfused(ctx))
                         .players()
                         .get(var_ctr)
                         .HUD_parent_entity(),
                 ) == Handle::addr(parent)
                 {
-                    return (fns::ifStatus_GetHUDInfo(ctx)).players().get(var_ctr);
+                    return (inl_ifStatus_GetHUDInfo_unfused(ctx))
+                        .players()
+                        .get(var_ctr);
                 }
             }
             var_ctr = var_ctr.wrapping_add(1);
@@ -1014,10 +1026,14 @@ fn inl_getPlayerByNext_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> IfDamage
         i = 0_i32;
         'l1: while i < 6_i32 {
             'c2: {
-                if Handle::addr((fns::ifStatus_GetHUDInfo(ctx)).players().get(i).next())
-                    == Handle::addr(gobj)
+                if Handle::addr(
+                    (inl_ifStatus_GetHUDInfo_unfused(ctx))
+                        .players()
+                        .get(i)
+                        .next(),
+                ) == Handle::addr(gobj)
                 {
-                    return (fns::ifStatus_GetHUDInfo(ctx)).players().get(i);
+                    return (inl_ifStatus_GetHUDInfo_unfused(ctx)).players().get(i);
                 }
             }
             i = i.wrapping_add(1);
@@ -1034,13 +1050,6 @@ fn inl_ifStatus_LoadDamageJObj_unfused<'a>(ctx: &'a Ctx, hud: HudIndex<'a>) -> H
 fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).hsd_obj();
-}
-
-fn inl_ifStatus_SetHUDPosition_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, idx: u8) {
-    let mut jobj = jobj;
-    let mut idx = idx;
-    let mut pos: Vec<'a> = fns::ifAll_GetPlayerHUDPosition(ctx, (idx as i32));
-    inl_HSD_JObjSetTranslate_unfused(ctx, jobj, pos);
 }
 
 fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
@@ -1074,6 +1083,13 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
             }
         }
     }
+}
+
+fn inl_ifStatus_SetHUDPosition_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, idx: u8) {
+    let mut jobj = jobj;
+    let mut idx = idx;
+    let mut pos: Vec<'a> = fns::ifAll_GetPlayerHUDPosition(ctx, (idx as i32));
+    inl_HSD_JObjSetTranslate_unfused(ctx, jobj, pos);
 }
 
 fn inl_ifStatus_GetDamageJObj_unfused<'a>(
@@ -1211,7 +1227,9 @@ fn inl_ifStatus_TriggerStockLoss_unfused<'a>(ctx: &'a Ctx, player_idx: i32, call
     big_thing = fns::gmVs_GetSceneController(ctx);
     (big_thing).state().set_unk_D((player_idx as u8));
     small_thing = fns::gm_GetStartMeleeRules(ctx);
-    hud_player = (fns::ifStatus_GetHUDInfo(ctx)).players().get(player_idx);
+    hud_player = (inl_ifStatus_GetHUDInfo_unfused(ctx))
+        .players()
+        .get(player_idx);
     hud_player_flags = (hud_player).flags();
     if ((hud_player_flags).explode_animation() as i32) != 1_i32 {
         (hud_player_flags).set_explode_animation((1_i32 as u8));

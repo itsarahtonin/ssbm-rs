@@ -315,10 +315,7 @@ pub fn DBWrite<'a>(ctx: &'a Ctx, data: Addr<'a>, size: u32) -> i32 {
     enabled = fns::OSDisableInterrupts(ctx);
     'l1: loop {
         'c2: {
-            let _ = statics::dolphin__odenotstub__odenotstub::DBGReadStatus(
-                ctx,
-                Handle::cast::<Addr<'a>>(busyFlag),
-            );
+            let _ = inl_DBGReadStatus_unfused(ctx, Handle::cast::<Addr<'a>>(busyFlag));
         }
         if !((busyFlag.get() & (2_i32 as u32)) != 0) {
             break 'l1;
@@ -350,10 +347,7 @@ pub fn DBWrite<'a>(ctx: &'a Ctx, data: Addr<'a>, size: u32) -> i32 {
     }
     'l5: loop {
         'c6: {
-            let _ = statics::dolphin__odenotstub__odenotstub::DBGReadStatus(
-                ctx,
-                Handle::cast::<Addr<'a>>(busyFlag),
-            );
+            let _ = inl_DBGReadStatus_unfused(ctx, Handle::cast::<Addr<'a>>(busyFlag));
         }
         if !((busyFlag.get() & (2_i32 as u32)) != 0) {
             break 'l5;
@@ -369,11 +363,7 @@ pub fn DBWrite<'a>(ctx: &'a Ctx, data: Addr<'a>, size: u32) -> i32 {
     }
     'l9: loop {
         'c10: {
-            'l11: while !(statics::dolphin__odenotstub__odenotstub::DBGReadStatus(
-                ctx,
-                Handle::cast::<Addr<'a>>(busyFlag),
-            ) != 0)
-            {
+            'l11: while !(inl_DBGReadStatus_unfused(ctx, Handle::cast::<Addr<'a>>(busyFlag)) != 0) {
                 'c12: {}
             }
         }
@@ -449,6 +439,35 @@ fn inl_CheckMailBox_unfused<'a>(ctx: &'a Ctx) {
             statics::dolphin__odenotstub__odenotstub::EXIInputFlag(ctx).set((1_i32 as u8));
         }
     }
+}
+
+fn inl_DBGReadStatus_unfused<'a>(ctx: &'a Ctx, param_1: Addr<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x10);
+    let value: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let mut param_1 = param_1;
+    let mut error: i32 = 0_i32;
+    if !(inl_DBGEXISelect_unfused(ctx, (4_i32 as u32)) != 0) {
+        return 0_i32;
+    }
+    value.set((0x40000000_i32 as u32));
+    error = (error
+        | (!(statics::dolphin__odenotstub__odenotstub::DBGEXIImm(
+            ctx,
+            Handle::cast::<Addr<'a>>(Handle::cast::<Val<'a, u8>>(value)),
+            2_i32,
+            (1_i32 as u32),
+        ) != 0) as i32));
+    error = (error | (!(inl_DBGEXISync_unfused(ctx) != 0) as i32));
+    error = (error
+        | (!(statics::dolphin__odenotstub__odenotstub::DBGEXIImm(
+            ctx,
+            param_1,
+            (4_u32 as i32),
+            (0_i32 as u32),
+        ) != 0) as i32));
+    error = (error | (!(inl_DBGEXISync_unfused(ctx) != 0) as i32));
+    error = (error | (!(inl_DBGEXIDeselect_unfused(ctx) != 0) as i32));
+    return (!(error != 0) as i32);
 }
 
 fn inl_DBGWriteMailbox_unfused<'a>(ctx: &'a Ctx, param_1: u32) -> i32 {

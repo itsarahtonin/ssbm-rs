@@ -166,7 +166,7 @@ pub fn fn_8017EDDC<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut p: UnkAllstarData<'a> = null(ctx);
     if (fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_CLASSIC as i32) {
-        p = fns::gm_GetAllStarData(ctx);
+        p = inl_gm_GetAllStarData_unfused(ctx);
         if ((((p).x0().xC().xD() as i32) == 0_i32) && (((p).x0().x0().cpu_level() as i32) >= 2_i32))
             && ((p).x0().xC().x20() < (0x5208_i32 as u32))
         {
@@ -242,6 +242,12 @@ pub fn fn_8017EE40<'a>(ctx: &'a Ctx, arg0_int: i32) {
             i = i.wrapping_add(1);
         }
     }
+}
+
+fn inl_gm_GetAllStarData_unfused<'a>(ctx: &'a Ctx) -> UnkAllstarData<'a> {
+    return Handle::cast::<UnkAllstarData<'a>>(
+        statics::melee__gm__gm_17EB::lbl_80472CB0(ctx).at(0),
+    );
 }
 
 /// Registers this unit's ports.

@@ -308,6 +308,11 @@ pub fn grStory_801E36D8<'a>(ctx: &'a Ctx, a: Vec<'a>, unused: i32, jobj: HSD_JOb
     return 0;
 }
 
+fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
 fn inl_Ground_SetupStageCallbacks_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -337,9 +342,12 @@ fn inl_Ground_SetupStageCallbacks_unfused<'a>(
     }
 }
 
-fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).user_data();
+fn inl_randi_unfused<'a>(ctx: &'a Ctx, max_val: i32) -> i32 {
+    let mut max_val = max_val;
+    if max_val != 0_i32 {
+        return fns::HSD_Randi(ctx, max_val);
+    }
+    return 0_i32;
 }
 
 fn inl_reset_shyguy_timer_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>) {
@@ -354,17 +362,17 @@ fn inl_reset_shyguy_timer_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>) {
     (gp).u().shyguys().set_timer(120_i32);
 }
 
-fn inl_randi_unfused<'a>(ctx: &'a Ctx, max_val: i32) -> i32 {
+fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
+fn inl_randi<'a>(ctx: &'a Ctx, max_val: i32) -> i32 {
     let mut max_val = max_val;
     if max_val != 0_i32 {
         return fns::HSD_Randi(ctx, max_val);
     }
     return 0_i32;
-}
-
-fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).user_data();
 }
 
 fn inl_reset_shyguy_timer<'a>(ctx: &'a Ctx, gp: Ground<'a>) {
@@ -377,14 +385,6 @@ fn inl_reset_shyguy_timer<'a>(ctx: &'a Ctx, gp: Ground<'a>) {
         ) as f64),
     )));
     (gp).u().shyguys().set_timer(120_i32);
-}
-
-fn inl_randi<'a>(ctx: &'a Ctx, max_val: i32) -> i32 {
-    let mut max_val = max_val;
-    if max_val != 0_i32 {
-        return fns::HSD_Randi(ctx, max_val);
-    }
-    return 0_i32;
 }
 
 fn inl_set_shyguy_spawn_count<'a>(ctx: &'a Ctx, gp: Ground<'a>, rarity: i32) {

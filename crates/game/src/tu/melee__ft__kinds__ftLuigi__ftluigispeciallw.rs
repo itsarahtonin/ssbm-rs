@@ -340,6 +340,12 @@ fn inl_Fighter_SetDamageCallback_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, c
     (fp).set_death2_cb(cb);
 }
 
+fn inl_Fighter_SetEffectHitlagCallbacks_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    (fp).set_pre_hitlag_cb(fnptr(ctx, 0x8005ba40));
+    (fp).set_post_hitlag_cb(fnptr(ctx, 0x8005bac4));
+}
+
 fn inl_ftLuigi_SpecialLw_SetGFX_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
@@ -348,12 +354,6 @@ fn inl_ftLuigi_SpecialLw_SetGFX_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let _ = fns::efSync_Spawn(ctx, 0x509_i32, gobj, &[VarArg::Int(Handle::addr(hsd_obj))]);
     (fp).set_x2219_b0((1_i32 as u8));
     inl_Fighter_SetEffectHitlagCallbacks_unfused(ctx, fp);
-}
-
-fn inl_Fighter_SetEffectHitlagCallbacks_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
-    let mut fp = fp;
-    (fp).set_pre_hitlag_cb(fnptr(ctx, 0x8005ba40));
-    (fp).set_post_hitlag_cb(fnptr(ctx, 0x8005bac4));
 }
 
 fn inl_getFtSpecialAttrsD_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> {
@@ -365,6 +365,11 @@ fn inl_getFtSpecialAttrs_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> 
     let mut fp = fp;
     let mut fighter_attr: Addr<'a> = (fp).dat_attrs();
     return fighter_attr;
+}
+
+fn inl_getFighter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {
+    let mut gobj = gobj;
+    return Handle::cast::<Fighter<'a>>((gobj).user_data());
 }
 
 fn inl_ftLuigi_SpecialLw_GroundToAir_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -387,11 +392,6 @@ fn inl_ftLuigi_SpecialLw_GroundToAir_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a
     fns::ftCommon_ClampFallSpeed(ctx, fp, (luigiAttrs).x90_LUIGI_CYCLONE_TAP_GRAVITY());
     fns::ftCommon_ClampSelfVelX(ctx, fp, (luigiAttrs).x78_LUIGI_CYCLONE_MOMENTUM_X_AIR());
     inl_Fighter_SetEffectHitlagCallbacks_unfused(ctx, fp);
-}
-
-fn inl_getFighter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {
-    let mut gobj = gobj;
-    return Handle::cast::<Fighter<'a>>((gobj).user_data());
 }
 
 fn inl_ftLuigi_SpecialLw_UnkAngle_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

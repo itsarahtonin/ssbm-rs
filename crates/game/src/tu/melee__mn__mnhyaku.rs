@@ -361,21 +361,6 @@ fn inl_mnHyaku_8024C68C_inline_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, val
     fns::HSD_JObjAnimAll(ctx, jobj);
 }
 
-fn inl_mnHyaku_8024C68C_inline_2_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let mut gobj = gobj;
-    let mut menu: Menu<'a> = (Handle::cast::<Menu<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if !Handle::is_null((menu).text()) {
-        fns::HSD_SisLib_803A5CC4(ctx, (menu).text());
-    }
-    inl_Menu_InitCenterText_unfused(
-        ctx,
-        menu,
-        (statics::melee__mn__mnhyaku::vals(ctx)
-            .at(((menu).cursor() as i32))
-            .get() as i32),
-    );
-}
-
 fn inl_Menu_InitCenterText_unfused<'a>(ctx: &'a Ctx, menu: Menu<'a>, val: i32) {
     let mut menu = menu;
     let mut val = val;
@@ -393,6 +378,21 @@ fn inl_Menu_InitCenterText_unfused<'a>(ctx: &'a Ctx, menu: Menu<'a>, val: i32) {
     (text).font_size().set_x(0.05209999904036522);
     (text).font_size().set_y(0.05209999904036522);
     fns::HSD_SisLib_803A6368(ctx, text, val);
+}
+
+fn inl_mnHyaku_8024C68C_inline_2_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut menu: Menu<'a> = (Handle::cast::<Menu<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if !Handle::is_null((menu).text()) {
+        fns::HSD_SisLib_803A5CC4(ctx, (menu).text());
+    }
+    inl_Menu_InitCenterText_unfused(
+        ctx,
+        menu,
+        (statics::melee__mn__mnhyaku::vals(ctx)
+            .at(((menu).cursor() as i32))
+            .get() as i32),
+    );
 }
 
 fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {

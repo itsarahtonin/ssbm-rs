@@ -113,7 +113,7 @@ pub fn itMasterhandlaser_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if fns::it_80272C6C(ctx, gobj) == 0_i32 {
-        fns::it_802F0484(ctx, gobj);
+        inl_it_802F0484_unfused(ctx, gobj);
     }
     if ((ip).xDD4_itemVar().masterhandlaser().x0() != 0) {
         fns::lb_8000C390(ctx, (ip).xDD4_itemVar().masterhandlaser().x10());
@@ -197,6 +197,20 @@ fn inl_Item_InitSpawnCommonFields_unfused<'a>(
     (spawn).set_x40(0_i32);
 }
 
+fn inl_it_802F0484_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut attrs: itMasterHandLaserAttributes<'a> = Handle::cast::<itMasterHandLaserAttributes<'a>>(
+        ((ip).xC4_article_data()).x4_specialAttributes(),
+    );
+    fns::Item_80268E5C(ctx, gobj, 0_i32, (enums::ITEM_ANIM_UPDATE as i32));
+    (ip).set_on_accessory(fnptr(ctx, 0x802f05a8));
+    (ip).xDD4_itemVar().masterhandlaser().set_x0(0_i32);
+    (ip).xDD4_itemVar()
+        .masterhandlaser()
+        .set_x8(fp::fctiwz((attrs).x4()));
+}
+
 fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
@@ -211,6 +225,28 @@ fn inl_HSD_JObjGetChild<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
     }
     #[allow(unreachable_code)]
     return null(ctx);
+}
+
+fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f9378),
+            (228_i32 as u32),
+            cstr(ctx, 0x803f9378),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetTranslate<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
@@ -244,28 +280,6 @@ fn inl_HSD_JObjSetTranslate<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f9378),
-            (228_i32 as u32),
-            cstr(ctx, 0x803f9378),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 /// Registers this unit's ports.

@@ -952,6 +952,45 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_setDeadFlags_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if ((fp).x221D_b6() != 0) {
+        fns::ft_800880D8(ctx, fp);
+        (fp).set_x2004(0_i32);
+    }
+    (fp).set_x2219_b1((1_i32 as u8));
+    (fp).set_x221E_b1((1_i32 as u8));
+    (fp).set_x221E_b2((1_i32 as u8));
+}
+
+fn inl_setDeadInvisible_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    (fp).set_invisible((1_i32 as u8));
+    (fp).set_x221F_b1((1_i32 as u8));
+}
+
+fn inl_playDeadSfx_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, sfx: FtSFX<'a>) {
+    let mut fp = fp;
+    let mut sfx = sfx;
+    fns::ftCo_800D38B8(ctx, fp, (sfx).x4());
+    fns::ftCo_800D38B8(ctx, fp, (sfx).x8());
+}
+
+fn inl_processDeath_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut sfx: FtSFX<'a> = ((fp).ft_data()).x4C_sfx();
+    inl_setDeadInvisible_unfused(ctx, fp);
+    fns::Camera_RequestQuake(ctx, (enums::QuakeKind_Large as i32), (fp).cur_pos());
+    fns::ftCo_800D35FC(ctx, fp);
+    fns::ftCo_800D34E0(ctx, gobj);
+    fns::ft_80088C5C(ctx, gobj);
+    inl_playDeadSfx_unfused(ctx, fp, sfx);
+}
+
 fn inl_enterDead_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
     let mut gobj = gobj;
     let mut msid = msid;
@@ -979,45 +1018,6 @@ fn inl_enterDead_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
         ((fp).is_sub_fighter() as i32),
     );
     inl_processDeath_unfused(ctx, gobj);
-}
-
-fn inl_setDeadFlags_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let mut gobj = gobj;
-    let mut fp: Fighter<'a> =
-        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).x221D_b6() != 0) {
-        fns::ft_800880D8(ctx, fp);
-        (fp).set_x2004(0_i32);
-    }
-    (fp).set_x2219_b1((1_i32 as u8));
-    (fp).set_x221E_b1((1_i32 as u8));
-    (fp).set_x221E_b2((1_i32 as u8));
-}
-
-fn inl_processDeath_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let mut gobj = gobj;
-    let mut fp: Fighter<'a> =
-        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    let mut sfx: FtSFX<'a> = ((fp).ft_data()).x4C_sfx();
-    inl_setDeadInvisible_unfused(ctx, fp);
-    fns::Camera_RequestQuake(ctx, (enums::QuakeKind_Large as i32), (fp).cur_pos());
-    fns::ftCo_800D35FC(ctx, fp);
-    fns::ftCo_800D34E0(ctx, gobj);
-    fns::ft_80088C5C(ctx, gobj);
-    inl_playDeadSfx_unfused(ctx, fp, sfx);
-}
-
-fn inl_setDeadInvisible_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
-    let mut fp = fp;
-    (fp).set_invisible((1_i32 as u8));
-    (fp).set_x221F_b1((1_i32 as u8));
-}
-
-fn inl_playDeadSfx_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, sfx: FtSFX<'a>) {
-    let mut fp = fp;
-    let mut sfx = sfx;
-    fns::ftCo_800D38B8(ctx, fp, (sfx).x4());
-    fns::ftCo_800D38B8(ctx, fp, (sfx).x8());
 }
 
 fn inl_clampDeadPos_unfused<'a>(ctx: &'a Ctx, v: Val<'a, F32>, min: f64, max: f64) {
@@ -1083,6 +1083,28 @@ fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     return (gobj).user_data();
 }
 
+fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7500),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b7500),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjAddRotationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
     let mut jobj = jobj;
     let mut x = x;
@@ -1106,7 +1128,12 @@ fn inl_HSD_JObjAddRotationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).hsd_obj();
+}
+
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     let mut jobj = jobj;
     let mut result: i32 = 0;
     (if !Handle::is_null((jobj)) {
@@ -1126,11 +1153,6 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         result = 1_i32;
     }
     return result;
-}
-
-fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).hsd_obj();
 }
 
 fn inl_HSD_JObjSetRotation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate: Quaternion<'a>) {
@@ -1164,28 +1186,6 @@ fn inl_HSD_JObjSetRotation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate:
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b7500),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b7500),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjAddRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {

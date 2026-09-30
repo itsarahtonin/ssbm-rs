@@ -92,7 +92,7 @@ pub fn un_8032233C<'a>(ctx: &'a Ctx, arg0: u32, arg1: u32) {
     }
     gobj = fns::ftLib_FindBySpawnNum(ctx, arg0);
     kb_mag = fns::ftLib_GetCrowdKnockback(ctx, fns::ftLib_FindBySpawnNum(ctx, arg1));
-    cat = fns::un_80322298(ctx, kb_mag);
+    cat = inl_un_80322298_unfused(ctx, kb_mag);
     if cat == 0_i32 {
         return;
     }
@@ -145,8 +145,8 @@ pub fn un_803224DC<'a>(ctx: &'a Ctx, spawn_id: i32, pos_x: f64, kb_mag: f64) -> 
     let mut spawn_id = spawn_id;
     let mut pos_x = pos_x;
     let mut kb_mag = kb_mag;
-    let mut cat: i32 = fns::un_80322298(ctx, kb_mag);
-    if (fns::un_80322258(ctx, pos_x) != 0) {
+    let mut cat: i32 = inl_un_80322298_unfused(ctx, kb_mag);
+    if (inl_un_80322258_unfused(ctx, pos_x) != 0) {
         return fns::un_8032201C(ctx, (spawn_id as u32), cat);
     }
     return 0_i32;
@@ -174,6 +174,32 @@ pub fn un_80322598<'a>(ctx: &'a Ctx, arg0: i32, arg1: f64) -> i32 {
     let _ = fns::un_8032201C(ctx, (arg0 as u32), cat);
     #[allow(unreachable_code)]
     return 0;
+}
+
+fn inl_un_80322298_unfused<'a>(ctx: &'a Ctx, arg: f64) -> i32 {
+    let mut arg = arg;
+    let mut vdata: CrowdConfig<'a> = fns::gCrowdConfig(ctx).get();
+    if arg >= (vdata).kb_threshold_high() {
+        return 3_i32;
+    }
+    if arg >= (vdata).kb_threshold_mid() {
+        return 2_i32;
+    }
+    if arg >= (vdata).kb_threshold_low() {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
+fn inl_un_80322258_unfused<'a>(ctx: &'a Ctx, arg: f64) -> i32 {
+    let mut arg = arg;
+    let mut val2c: f64 = (fns::gCrowdConfig(ctx).get()).horiz_margin();
+    if (arg < fp::fadds(val2c, fns::mpLib_80458868(ctx).get(1_i32).left()))
+        || (arg > fp::fsubs(fns::mpLib_80458868(ctx).get(1_i32).right(), val2c))
+    {
+        return 1_i32;
+    }
+    return 0_i32;
 }
 
 /// Registers this unit's ports.

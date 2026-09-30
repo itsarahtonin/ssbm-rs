@@ -1215,6 +1215,14 @@ fn inl_ftMewtwo_SpecialN_SetRecoil_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>)
     }
 }
 
+fn inl_ftMewtwo_SpecialN_SetCall_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
+    (fp).set_death2_cb(fnptr(ctx, 0x80144ee4));
+    (fp).set_take_dmg_cb(fnptr(ctx, 0x80144f18));
+    (fp).set_death3_cb(fnptr(ctx, 0x80144ee4));
+}
+
 fn inl_ftMewtwo_SpecialN_ChangeAction_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = inl_getFighter_unfused(ctx, gobj);
@@ -1247,14 +1255,6 @@ fn inl_ftMewtwo_SpecialN_ChangeAction_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'
     (fp).mv().mt().SpecialN().set_releaseLag(releaseLag);
     (fp).mv().mt().SpecialN().set_chargeLevel(0.0);
     fns::ftAnim_8006EBA4(ctx, gobj);
-}
-
-fn inl_ftMewtwo_SpecialN_SetCall_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let mut gobj = gobj;
-    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    (fp).set_death2_cb(fnptr(ctx, 0x80144ee4));
-    (fp).set_take_dmg_cb(fnptr(ctx, 0x80144f18));
-    (fp).set_death3_cb(fnptr(ctx, 0x80144ee4));
 }
 
 fn inl_ftMewtwo_SpecialAirN_ChangeAction_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -1398,6 +1398,11 @@ fn inl_ftCommon_AirToGroundStateChange_unfused<'a>(
     );
 }
 
+fn inl_ftGetKind_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
+    let mut fp = fp;
+    return (fp).kind();
+}
+
 fn inl_ftMewtwo_SpecialN_LaunchShadowBall_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x0);
@@ -1439,11 +1444,6 @@ fn inl_ftMewtwo_SpecialN_LaunchShadowBall_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GO
             fns::ft_PlaySFX(ctx, fp, 0x30db3_i32, (127_i32 as u8), (64_i32 as u8));
         }
     }
-}
-
-fn inl_ftGetKind_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
-    let mut fp = fp;
-    return (fp).kind();
 }
 
 /// Registers this unit's ports.

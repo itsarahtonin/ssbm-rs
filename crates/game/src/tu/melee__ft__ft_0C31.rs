@@ -587,6 +587,28 @@ fn inl_HSD_JObjGetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
     Handle::copy_from((scale), (jobj).scale());
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804d3c84),
+            (228_i32 as u32),
+            cstr(ctx, 0x804d3c84),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
     let mut jobj = jobj;
     let mut scale = scale;
@@ -620,7 +642,12 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
+fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     let mut jobj = jobj;
     let mut result: i32 = 0;
     (if !Handle::is_null((jobj)) {
@@ -640,11 +667,6 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         result = 1_i32;
     }
     return result;
-}
-
-fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).user_data();
 }
 
 fn inl_HSD_JObjSetScale<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
@@ -678,28 +700,6 @@ fn inl_HSD_JObjSetScale<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x804d3c84),
-            (228_i32 as u32),
-            cstr(ctx, 0x804d3c84),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjSetRotation<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate: Quaternion<'a>) {
@@ -768,6 +768,16 @@ fn inl_HSD_JObjSetTranslate<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec
     }
 }
 
+fn inl_HSD_JObjSetMtxDirtyOutOfLineLeaf<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    fns::HSD_JObjSetMtxDirty(ctx, jobj);
+}
+
+fn inl_HSD_JObjSetMtxDirtyOutOfLine<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    inl_HSD_JObjSetMtxDirtyOutOfLineLeaf(ctx, jobj);
+}
+
 fn inl_HSD_JObjSetTranslateWithMtxDirtyOutOfLine<'a>(
     ctx: &'a Ctx,
     jobj: HSD_JObj<'a>,
@@ -799,16 +809,6 @@ fn inl_HSD_JObjSetTranslateWithMtxDirtyOutOfLine<'a>(
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         inl_HSD_JObjSetMtxDirtyOutOfLine(ctx, jobj);
     }
-}
-
-fn inl_HSD_JObjSetMtxDirtyOutOfLine<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
-    let mut jobj = jobj;
-    inl_HSD_JObjSetMtxDirtyOutOfLineLeaf(ctx, jobj);
-}
-
-fn inl_HSD_JObjSetMtxDirtyOutOfLineLeaf<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
-    let mut jobj = jobj;
-    fns::HSD_JObjSetMtxDirty(ctx, jobj);
 }
 
 /// Registers this unit's ports.

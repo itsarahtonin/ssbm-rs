@@ -69,7 +69,7 @@ pub fn it_802C7E94<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if !Handle::is_null(ip) {
-        fns::itGameWatchPanic_Logic78_Destroyed(ctx, gobj);
+        inl_itGameWatchPanic_Logic78_Destroyed_unfused(ctx, gobj);
         fns::Item_8026A8EC(ctx, gobj);
     }
 }
@@ -186,6 +186,20 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_Item_AttachToParent_unfused<'a>(
+    ctx: &'a Ctx,
+    item_gobj: HSD_GObj<'a>,
+    parent: HSD_GObj<'a>,
+    part: i32,
+) -> HSD_GObj<'a> {
+    let mut item_gobj = item_gobj;
+    let mut parent = parent;
+    let mut part = part;
+    fns::Item_8026AB54(ctx, item_gobj, parent, part);
+    fns::db_80225DD8(ctx, item_gobj, parent);
+    return item_gobj;
+}
+
 fn inl_Item_AttachGameWatchArticle_unfused<'a>(
     ctx: &'a Ctx,
     parent: HSD_GObj<'a>,
@@ -206,18 +220,12 @@ fn inl_Item_AttachGameWatchArticle_unfused<'a>(
     );
 }
 
-fn inl_Item_AttachToParent_unfused<'a>(
-    ctx: &'a Ctx,
-    item_gobj: HSD_GObj<'a>,
-    parent: HSD_GObj<'a>,
-    part: i32,
-) -> HSD_GObj<'a> {
-    let mut item_gobj = item_gobj;
-    let mut parent = parent;
-    let mut part = part;
-    fns::Item_8026AB54(ctx, item_gobj, parent, part);
-    fns::db_80225DD8(ctx, item_gobj, parent);
-    return item_gobj;
+fn inl_itGameWatchPanic_Logic78_Destroyed_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if !Handle::is_null((ip).owner()) {
+        fns::ftGw_SpecialLw_ItemPanicSetFlag(ctx, (ip).owner());
+    }
 }
 
 /// Registers this unit's ports.

@@ -736,6 +736,33 @@ fn inl_HSD_JObjGetNext_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj
     return null(ctx);
 }
 
+fn inl_grMaterial_GetOverlay_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>) -> ColorOverlay<'a> {
+    let mut gp = gp;
+    return (gp).color_overlay();
+}
+
+fn inl_grMaterial_SetTExpReg_unfused<'a>(ctx: &'a Ctx, cnst: _HSD_TECnst<'a>) {
+    let mut cnst = cnst;
+    fns::HSD_TExpSetReg(ctx, Handle::cast::<HSD_TExp<'a>>(cnst));
+}
+
+fn inl_grMaterial_GetFreeColorReg_unfused<'a>(
+    ctx: &'a Ctx,
+    cnst: _HSD_TECnst<'a>,
+    mobj: HSD_MObj<'a>,
+    start: i32,
+) -> i32 {
+    let mut cnst = cnst;
+    let mut mobj = mobj;
+    let mut start = start;
+    return fns::lbGetFreeColorRegister(ctx, start, mobj, Handle::cast::<HSD_TExp<'a>>(cnst));
+}
+
+fn inl_grMaterial_GetKColorSel_unfused<'a>(ctx: &'a Ctx, reg: i32) -> i32 {
+    let mut reg = reg;
+    return fns::lb_8000CCA4(ctx, reg);
+}
+
 fn inl_fn_801C8EF8_inline_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>, mobj: HSD_MObj<'a>) {
     let __frame = ctx.stack_frame(0x100);
     let cnst_pad: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
@@ -887,33 +914,6 @@ fn inl_fn_801C8EF8_inline_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>, mobj: HSD_MO
         }
         fns::HSD_SetupTevStage(ctx, tevdesc);
     }
-}
-
-fn inl_grMaterial_GetOverlay_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>) -> ColorOverlay<'a> {
-    let mut gp = gp;
-    return (gp).color_overlay();
-}
-
-fn inl_grMaterial_SetTExpReg_unfused<'a>(ctx: &'a Ctx, cnst: _HSD_TECnst<'a>) {
-    let mut cnst = cnst;
-    fns::HSD_TExpSetReg(ctx, Handle::cast::<HSD_TExp<'a>>(cnst));
-}
-
-fn inl_grMaterial_GetFreeColorReg_unfused<'a>(
-    ctx: &'a Ctx,
-    cnst: _HSD_TECnst<'a>,
-    mobj: HSD_MObj<'a>,
-    start: i32,
-) -> i32 {
-    let mut cnst = cnst;
-    let mut mobj = mobj;
-    let mut start = start;
-    return fns::lbGetFreeColorRegister(ctx, start, mobj, Handle::cast::<HSD_TExp<'a>>(cnst));
-}
-
-fn inl_grMaterial_GetKColorSel_unfused<'a>(ctx: &'a Ctx, reg: i32) -> i32 {
-    let mut reg = reg;
-    return fns::lb_8000CCA4(ctx, reg);
 }
 
 fn inl_grMaterial_801C9604_inline_unfused<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> Ground<'a> {

@@ -2596,43 +2596,6 @@ pub fn hsd_80397DFC<'a>(ctx: &'a Ctx, size: u32) {
     ));
 }
 
-fn inl_hsd_80394F48_rule_unfused<'a>(
-    ctx: &'a Ctx,
-    width: i32,
-    color: Ptr<'a, Addr<'a>>,
-    i: Val<'a, i32>,
-) {
-    let mut width = width;
-    let mut color = color;
-    let mut i = i;
-    inl_hsd_80394F48_putc_unfused(ctx, (43_i32 as u8), color);
-    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).set_x4(
-        statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
-            .x4()
-            .wrapping_add(11_i32),
-    );
-    {
-        (i).set(0_i32);
-        'l1: while (i).get() < width {
-            'c2: {
-                inl_hsd_80394F48_putc_unfused(ctx, (45_i32 as u8), color);
-                statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).set_x4(
-                    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
-                        .x4()
-                        .wrapping_add(11_i32),
-                );
-            }
-            (i).set((i).get().wrapping_add(1));
-        }
-    }
-    inl_hsd_80394F48_putc_unfused(ctx, (43_i32 as u8), color);
-    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).set_x4(
-        statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
-            .x4()
-            .wrapping_add(11_i32),
-    );
-}
-
 fn inl_hsd_80394F48_putc_unfused<'a>(ctx: &'a Ctx, ch: u8, color: Ptr<'a, Addr<'a>>) {
     let mut ch = ch;
     let mut color = color;
@@ -2683,6 +2646,43 @@ fn inl_hsd_80394F48_putc_unfused<'a>(ctx: &'a Ctx, ch: u8, color: Ptr<'a, Addr<'
             (color).get(),
         );
     }
+}
+
+fn inl_hsd_80394F48_rule_unfused<'a>(
+    ctx: &'a Ctx,
+    width: i32,
+    color: Ptr<'a, Addr<'a>>,
+    i: Val<'a, i32>,
+) {
+    let mut width = width;
+    let mut color = color;
+    let mut i = i;
+    inl_hsd_80394F48_putc_unfused(ctx, (43_i32 as u8), color);
+    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).set_x4(
+        statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
+            .x4()
+            .wrapping_add(11_i32),
+    );
+    {
+        (i).set(0_i32);
+        'l1: while (i).get() < width {
+            'c2: {
+                inl_hsd_80394F48_putc_unfused(ctx, (45_i32 as u8), color);
+                statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).set_x4(
+                    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
+                        .x4()
+                        .wrapping_add(11_i32),
+                );
+            }
+            (i).set((i).get().wrapping_add(1));
+        }
+    }
+    inl_hsd_80394F48_putc_unfused(ctx, (43_i32 as u8), color);
+    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).set_x4(
+        statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
+            .x4()
+            .wrapping_add(11_i32),
+    );
 }
 
 fn inl_hsd_803957C0_get_x50_unfused<'a>(ctx: &'a Ctx) -> Addr<'a> {

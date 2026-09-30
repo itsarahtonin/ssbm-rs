@@ -225,7 +225,7 @@ pub fn lbShadow_8000EFEC<'a>(ctx: &'a Ctx) {
                             (lbshadow).set_x0_b2((1_i32 as u8));
                         }
                     }
-                    fns::lbShadow_8000EEE0(ctx, cur);
+                    inl_lbShadow_8000EEE0_unfused(ctx, cur);
                 }
             }
             cur = (cur).next();
@@ -783,6 +783,27 @@ fn inl_splGetCardinalTangent<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, tension:
             ),
         ),
     ));
+}
+
+fn inl_lbShadow_8000EEE0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut lbshadow: LbShadow<'a> = null(ctx);
+    if (fns::ftLib_IsFighter(ctx, gobj) != 0) {
+        lbshadow = fns::ftLib_GetShadow(ctx, gobj);
+        if !Handle::is_null(lbshadow) {
+            let mut var_r4: i32 = ((((((((lbshadow).x0_b0() as i32) != 0)
+                || (((lbshadow).x0_b1() as i32) != 0))
+                || (((lbshadow).x0_b2() as i32) != 0))
+                || (((lbshadow).x0_b3() as i32) != 0))
+                || (((lbshadow).x0_b4() as i32) != 0))
+                || (((lbshadow).x0_b5() as i32) != 0)) as i32;
+            if (!(var_r4 != 0)) && (fns::ftLib_CastsShadow(ctx, gobj) != 0) {
+                fns::HSD_ShadowSetActive(ctx, (lbshadow).shadow(), 1_i32);
+            } else {
+                fns::HSD_ShadowSetActive(ctx, (lbshadow).shadow(), 0_i32);
+            }
+        }
+    }
 }
 
 fn inl_GXPosition3f32_unfused<'a>(ctx: &'a Ctx, x: f64, y: f64, z: f64) {

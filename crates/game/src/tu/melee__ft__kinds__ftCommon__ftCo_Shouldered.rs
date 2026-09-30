@@ -80,7 +80,7 @@ pub fn ftCo_8009C640<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
     );
     (fp).mv().co().shouldered().set_x0(fp::frsp(0_i32 as f64));
     (fp).mv().co().shouldered().set_x4(0_i32);
-    fns::ftCo_8009C5A4(ctx, gobj, msid);
+    inl_ftCo_8009C5A4(ctx, gobj, msid);
 }
 
 pub fn ftCo_8009C744<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -232,6 +232,33 @@ pub fn ftCo_Shouldered_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_Shouldered_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
+}
+
+fn inl_ftCo_8009C5A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
+    let mut gobj = gobj;
+    let mut msid = msid;
+    let mut unused1: u32 = 0;
+    let mut unused2: u32 = 0;
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
+    if ((fp).motion_id() != msid) || (msid != (enums::ftCo_MS_ShoulderedWait as i32)) {
+        fns::Fighter_ChangeMotionState(
+            ctx,
+            gobj,
+            msid,
+            (if (((fp).x2222_b6() as i32) != 0) {
+                0x200000_u32
+            } else {
+                0_u32
+            }),
+            fp::frsp(0_i32 as f64),
+            fp::frsp(1_i32 as f64),
+            fp::frsp(0_i32 as f64),
+            (fp).victim_gobj(),
+        );
+        fns::ftCommon_8007E2FC(ctx, gobj);
+        fns::ftCommon_8007E2F4(ctx, fp, (0x1ff_i32 as i16));
+        (fp).set_accessory1_cb(fnptr(ctx, 0x800db464));
+    }
 }
 
 fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> f64 {

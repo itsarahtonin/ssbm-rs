@@ -879,6 +879,28 @@ fn inl_HSD_JObjGetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64
     return (jobj).rotate().z();
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f590c),
+            (228_i32 as u32),
+            cstr(ctx, 0x803f590c),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
     let mut jobj = jobj;
     let mut z = z;
@@ -910,28 +932,6 @@ fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f590c),
-            (228_i32 as u32),
-            cstr(ctx, 0x803f590c),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjGetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
@@ -982,6 +982,19 @@ fn inl_HSD_JObjSetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64
     }
 }
 
+fn inl_itResetVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
+    let mut ip = ip;
+    (ip).x40_vel().set_x({
+        let __t2 = {
+            let __t1 = 0.0;
+            (ip).x40_vel().set_z(__t1);
+            __t1
+        };
+        (ip).x40_vel().set_y(__t2);
+        __t2
+    });
+}
+
 fn inl_Item_StopAndEnterState_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -994,19 +1007,6 @@ fn inl_Item_StopAndEnterState_unfused<'a>(
     inl_itResetVelocity_unfused(ctx, ip);
     fns::it_8026B390(ctx, gobj);
     fns::Item_80268E5C(ctx, gobj, msid, (enums::ITEM_ANIM_UPDATE as i32));
-}
-
-fn inl_itResetVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
-    let mut ip = ip;
-    (ip).x40_vel().set_x({
-        let __t2 = {
-            let __t1 = 0.0;
-            (ip).x40_vel().set_z(__t1);
-            __t1
-        };
-        (ip).x40_vel().set_y(__t2);
-        __t2
-    });
 }
 
 fn inl_itTaru_UnkMotion4_Phys_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -1039,6 +1039,16 @@ fn inl_it_802886C4_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, zero: Ve
     }
 }
 
+fn inl_itTaru_RandCheck_unfused<'a>(ctx: &'a Ctx, attr: itTaruAttributes<'a>) -> i32 {
+    let mut attr = attr;
+    let mut x4: i32 = (attr).x4();
+    let mut x0: i32 = (attr).x0();
+    if fns::HSD_Randi(ctx, x0.wrapping_add(x4)) < x0 {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
 fn inl_it_3F14_Logic2_inline_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -1061,7 +1071,7 @@ fn inl_it_3F14_Logic2_inline_unfused<'a>(
     }
 }
 
-fn inl_itTaru_RandCheck_unfused<'a>(ctx: &'a Ctx, attr: itTaruAttributes<'a>) -> i32 {
+fn inl_itTaru_RandCheck<'a>(ctx: &'a Ctx, attr: itTaruAttributes<'a>) -> i32 {
     let mut attr = attr;
     let mut x4: i32 = (attr).x4();
     let mut x0: i32 = (attr).x0();
@@ -1091,16 +1101,6 @@ fn inl_it_3F14_Logic2_inline<'a>(
     } else {
         fns::it_802885C8(ctx, gobj);
     }
-}
-
-fn inl_itTaru_RandCheck<'a>(ctx: &'a Ctx, attr: itTaruAttributes<'a>) -> i32 {
-    let mut attr = attr;
-    let mut x4: i32 = (attr).x4();
-    let mut x0: i32 = (attr).x0();
-    if fns::HSD_Randi(ctx, x0.wrapping_add(x4)) < x0 {
-        return 1_i32;
-    }
-    return 0_i32;
 }
 
 /// Registers this unit's ports.

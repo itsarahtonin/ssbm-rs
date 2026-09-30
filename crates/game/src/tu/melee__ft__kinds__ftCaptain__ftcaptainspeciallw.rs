@@ -412,7 +412,7 @@ pub fn ftCa_SpecialLwEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCa_SpecialLwEndAir_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    fns::ftCa_SpecialLwEnd_Coll(ctx, gobj);
+    inl_ftCa_SpecialLwEnd_Coll_unfused(ctx, gobj);
 }
 
 pub fn ftCa_SpecialAirLw_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -546,6 +546,39 @@ fn inl_ftCa_Special_Inline_SetFlags_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>
     (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
 }
 
+fn inl_ftCa_SpecialLwEnd_Coll_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        if (fp).cmd_vars().at(1_i32).get() != (0_i32 as u32) {
+            if !(fns::ft_800827A0(ctx, gobj) != 0) {
+                fns::ftCommon_8007D5D4(ctx, fp);
+            }
+        } else if !(fns::ft_80082708(ctx, gobj) != 0) {
+            fns::ftCommon_8007D5D4(ctx, fp);
+        }
+    } else if (fns::ft_80081D0C(ctx, gobj) != 0) {
+        fns::ftCommon_8007D7FC(ctx, fp);
+    }
+}
+
+fn inl_resetCmdAndThrow_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    (fp).cmd_vars().at(0_i32).set({
+        let __t2 = {
+            let __t1 = (0_i32 as u32);
+            (fp).cmd_vars().at(2_i32).set(__t1);
+            __t1
+        };
+        (fp).cmd_vars().at(1_i32).set(__t2);
+        __t2
+    });
+    (fp).x2210().set_throw_flags((0_i32 as u32));
+}
+
 fn inl_doColl_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
     let __frame = ctx.stack_frame(0x18);
     let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
@@ -575,22 +608,6 @@ fn inl_doColl_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
             null::<HSD_GObj<'a>>(ctx),
         );
     }
-}
-
-fn inl_resetCmdAndThrow_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let mut gobj = gobj;
-    let mut fp: Fighter<'a> =
-        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    (fp).cmd_vars().at(0_i32).set({
-        let __t2 = {
-            let __t1 = (0_i32 as u32);
-            (fp).cmd_vars().at(2_i32).set(__t1);
-            __t1
-        };
-        (fp).cmd_vars().at(1_i32).set(__t2);
-        __t2
-    });
-    (fp).x2210().set_throw_flags((0_i32 as u32));
 }
 
 /// Registers this unit's ports.

@@ -553,7 +553,7 @@ pub fn ftKb_NsSpecialAirNHold_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    fns::ftKb_NsSpecialAirNStart_Phys(ctx, gobj);
+    inl_ftKb_NsSpecialAirNStart_Phys_unfused(ctx, gobj);
 }
 
 pub fn ftKb_NsSpecialAirNEnd_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -566,7 +566,7 @@ pub fn ftKb_NsSpecialAirNEnd_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    fns::ftKb_NsSpecialAirNStart_Phys(ctx, gobj);
+    inl_ftKb_NsSpecialAirNStart_Phys_unfused(ctx, gobj);
 }
 
 pub fn ftKb_NsSpecialNStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -735,6 +735,40 @@ fn inl_ftKb_SetNsFlashAttr_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         .ns()
         .specialn()
         .set_charge_release_delay((da).specialn_ns_charge_release_delay());
+}
+
+fn inl_ftKb_NsSpecialAirNStart_Phys_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut da: ftKb_DatAttrs<'a> = Handle::cast::<ftKb_DatAttrs<'a>>((fp).dat_attrs());
+    let mut airFriction: f64 = 0.0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if (fp).mv().ns().specialn().falling_acceleration_delay() != 0_i32 {
+        (fp).mv().ns().specialn().set_falling_acceleration_delay(
+            (fp).mv()
+                .ns()
+                .specialn()
+                .falling_acceleration_delay()
+                .wrapping_sub(1),
+        );
+    } else {
+        fns::ftCommon_Fall(
+            ctx,
+            fp,
+            (da).specialn_ns_gravity(),
+            (fp).co_attrs().terminal_velocity(),
+        );
+    }
+    airFriction = (fp).co_attrs().aerial_friction();
+    fns::ftCommon_CalcSelfAccel_Deaccel(ctx, fp, airFriction);
 }
 
 fn inl_ftCommon_GroundToAirStateChange_unfused<'a>(

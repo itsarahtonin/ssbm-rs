@@ -288,18 +288,18 @@ fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'
     return (gobj).hsd_obj();
 }
 
-fn inl_Stage_InitScene_unfused<'a>(ctx: &'a Ctx, stkind: i32, arg1: Val<'a, i32>) {
-    let mut stkind = stkind;
-    let mut arg1 = arg1;
-    inl_Ground_InitScene_unfused(ctx);
-    fns::Stage_802251E8(ctx, stkind, arg1);
-}
-
 fn inl_Ground_InitScene_unfused<'a>(ctx: &'a Ctx) {
     fns::Camera_Init(ctx, 6_i32);
     fns::lb_8000FCDC(ctx);
     fns::mpColl_80041C78(ctx);
     fns::Ground_801C0378(ctx, 64_i32);
+}
+
+fn inl_Stage_InitScene_unfused<'a>(ctx: &'a Ctx, stkind: i32, arg1: Val<'a, i32>) {
+    let mut stkind = stkind;
+    let mut arg1 = arg1;
+    inl_Ground_InitScene_unfused(ctx);
+    fns::Stage_802251E8(ctx, stkind, arg1);
 }
 
 /// Registers this unit's ports.

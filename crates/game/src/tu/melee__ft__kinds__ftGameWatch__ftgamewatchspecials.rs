@@ -104,7 +104,7 @@ pub fn ftGw_SpecialS_ItemJudgementRemove<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if !Handle::is_null((fp).u().gw().x2264_judgementGObj()) {
         fns::it_802C7A84(ctx, (fp).u().gw().x2264_judgementGObj());
-        fns::ftGw_SpecialS_ItemJudgementSetFlag(ctx, gobj);
+        inl_ftGw_SpecialS_ItemJudgementSetFlag_unfused(ctx, gobj);
     }
 }
 
@@ -365,6 +365,18 @@ pub fn ftGw_SpecialAirS_AirToGround<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_ftGw_SpecialS_ItemJudgementSetFlag_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    statics::melee__ft__kinds__ftGameWatch__ftgamewatchspecials::ftGw_SpecialS_ItemJudgementExitHitlag(ctx, gobj);
+    (fp).u()
+        .gw()
+        .set_x2264_judgementGObj(null::<HSD_GObj<'a>>(ctx));
+    (fp).set_death2_cb(null::<FnPtr<'a>>(ctx));
+    (fp).set_take_dmg_cb(null::<FnPtr<'a>>(ctx));
 }
 
 fn inl_getFighter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {

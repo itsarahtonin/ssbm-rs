@@ -98,7 +98,7 @@ pub fn ftGw_AttackAirN_ItemParachuteRemove<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>)
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if !Handle::is_null((fp).u().gw().x2258_parachuteGObj()) {
         fns::it_802C6D6C(ctx, (fp).u().gw().x2258_parachuteGObj());
-        fns::ftGw_AttackAirN_ItemParachuteSetFlag(ctx, gobj);
+        inl_ftGw_AttackAirN_ItemParachuteSetFlag_unfused(ctx, gobj);
     }
 }
 
@@ -186,7 +186,7 @@ pub fn ftGw_AttackAirN_ItemTurtleRemove<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if !Handle::is_null((fp).u().gw().x225C_turtleGObj()) {
         fns::it_802C7074(ctx, (fp).u().gw().x225C_turtleGObj());
-        fns::ftGw_AttackAirN_ItemTurtleSetFlag(ctx, gobj);
+        inl_ftGw_AttackAirN_ItemTurtleSetFlag_unfused(ctx, gobj);
     }
 }
 
@@ -274,7 +274,7 @@ pub fn ftGw_AttackAirN_ItemSparkyRemove<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if !Handle::is_null((fp).u().gw().x2260_sparkyGObj()) {
         fns::it_802C7340(ctx, (fp).u().gw().x2260_sparkyGObj());
-        fns::ftGw_AttackAirN_ItemSparkySetFlag(ctx, gobj);
+        inl_ftGw_AttackAirN_ItemSparkySetFlag_unfused(ctx, gobj);
     }
 }
 
@@ -678,9 +678,51 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_ftGw_AttackAirN_ItemParachuteSetFlag_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    statics::melee__ft__kinds__ftGameWatch__ftgamewatchattackair::ftGw_AttackAirN_ExitItemHitlag(
+        ctx, gobj,
+    );
+    (fp).u()
+        .gw()
+        .set_x2258_parachuteGObj(null::<HSD_GObj<'a>>(ctx));
+    (fp).set_death2_cb(null::<FnPtr<'a>>(ctx));
+    (fp).set_take_dmg_cb(null::<FnPtr<'a>>(ctx));
+}
+
 fn inl_getFighter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {
     let mut gobj = gobj;
     return Handle::cast::<Fighter<'a>>((gobj).user_data());
+}
+
+fn inl_ftGw_AttackAirN_ItemTurtleSetFlag_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    statics::melee__ft__kinds__ftGameWatch__ftgamewatchattackair::ftGw_AttackAirN_ExitItemHitlag(
+        ctx, gobj,
+    );
+    (fp).u()
+        .gw()
+        .set_x225C_turtleGObj(null::<HSD_GObj<'a>>(ctx));
+    (fp).set_death2_cb(null::<FnPtr<'a>>(ctx));
+    (fp).set_take_dmg_cb(null::<FnPtr<'a>>(ctx));
+}
+
+fn inl_ftGw_AttackAirN_ItemSparkySetFlag_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    statics::melee__ft__kinds__ftGameWatch__ftgamewatchattackair::ftGw_AttackAirN_ExitItemHitlag(
+        ctx, gobj,
+    );
+    (fp).u()
+        .gw()
+        .set_x2260_sparkyGObj(null::<HSD_GObj<'a>>(ctx));
+    (fp).set_death2_cb(null::<FnPtr<'a>>(ctx));
+    (fp).set_take_dmg_cb(null::<FnPtr<'a>>(ctx));
 }
 
 /// Registers this unit's ports.

@@ -345,6 +345,11 @@ fn inl_getFtSpecialAttrsD<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> {
     return (fp).dat_attrs();
 }
 
+fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
 fn inl_ftMewtwo_SpecialLw_SetCall<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
@@ -352,11 +357,6 @@ fn inl_ftMewtwo_SpecialLw_SetCall<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).set_death2_cb(fnptr(ctx, 0x80144ee4));
         (fp).set_take_dmg_cb(fnptr(ctx, 0x80144f18));
     }
-}
-
-fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).user_data();
 }
 
 /// Registers this unit's ports.

@@ -310,7 +310,7 @@ pub fn ftCo_AttackS4_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     if ((fp).allow_interrupt() != 0) {
         'l13: loop {
             'c14: {
-                if ((fns::ftCo_AttackS4_CheckInput(ctx, gobj)) != 0) {
+                if ((inl_ftCo_AttackS4_CheckInput_unfused(ctx, gobj)) != 0) {
                     return;
                 }
             }
@@ -502,6 +502,43 @@ fn inl_Fighter_SetEffectHitlagCallbacks_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a
     let mut fp = fp;
     (fp).set_pre_hitlag_cb(fnptr(ctx, 0x8005ba40));
     (fp).set_post_hitlag_cb(fnptr(ctx, 0x8005bac4));
+}
+
+fn inl_ftCo_AttackS4_CheckInput_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut stick_x_sign: f64 = 0.0;
+    let mut stick_angle: f64 = 0.0;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if (inl_checkLStick_unfused(ctx, fp) != 0) {
+        stick_x_sign = (if (fp).input().lstick().get(0_i32).x() >= fp::frsp(0_i32 as f64) {
+            fp::frsp(1_i32 as f64)
+        } else {
+            fp::frsp(1_i32.wrapping_neg() as f64)
+        });
+        stick_angle = fns::ftCo_GetLStickAngle(ctx, fp);
+    } else if (fns::ftCo_800DF1C8(ctx, fp) != 0) {
+        stick_x_sign = (if (fp).input().cstick().get(0_i32).x() >= fp::frsp(0_i32 as f64) {
+            fp::frsp(1_i32 as f64)
+        } else {
+            fp::frsp(1_i32.wrapping_neg() as f64)
+        });
+        stick_angle = fns::ftCo_GetCStickAngle(ctx, fp);
+    } else {
+        return 0_i32;
+    }
+    if (statics::melee__ft__kinds__ftCommon__ftCo_AttackS4::checkItemThrow(ctx, gobj, stick_x_sign)
+        != 0)
+    {
+        return 1_i32;
+    }
+    statics::melee__ft__kinds__ftCommon__ftCo_AttackS4::decideFighter(
+        ctx,
+        gobj,
+        stick_x_sign,
+        stick_angle,
+    );
+    return 1_i32;
 }
 
 /// Registers this unit's ports.

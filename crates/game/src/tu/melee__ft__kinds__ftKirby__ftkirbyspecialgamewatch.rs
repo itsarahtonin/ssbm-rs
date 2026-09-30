@@ -193,7 +193,7 @@ pub fn ftKb_SpecialNGw_8010D0A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if !Handle::is_null((fp).u().kb().xDC()) {
         fns::it_802C760C(ctx, (fp).u().kb().xDC());
-        fns::ftKb_SpecialNGw_8010D074(ctx, gobj);
+        inl_ftKb_SpecialNGw_8010D074_unfused(ctx, gobj);
     }
 }
 
@@ -490,6 +490,14 @@ pub fn ftKb_SpecialNGw_8010D6D0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: f64)
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_ftKb_SpecialNGw_8010D074_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    fns::ftKb_SpecialNGw_8010D130(ctx, gobj);
+    (fp).u().kb().set_xDC(null::<HSD_GObj<'a>>(ctx));
 }
 
 fn inl_setGwVars_unfused<'a>(ctx: &'a Ctx, fighter_gobj: HSD_GObj<'a>) {

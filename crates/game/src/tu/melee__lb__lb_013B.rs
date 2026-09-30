@@ -446,11 +446,17 @@ pub fn lb_800145F4<'a>(ctx: &'a Ctx) {
         i = 0_i32;
         'l1: while i < 4_i32 {
             'c2: {
-                fns::lb_800145C0(ctx, (i as u8));
+                inl_lb_800145C0_unfused(ctx, (i as u8));
             }
             i = i.wrapping_add(1);
         }
     }
+}
+
+fn inl_lb_800145C0_unfused<'a>(ctx: &'a Ctx, slot: u8) {
+    let mut slot = slot;
+    fns::HSD_PadRumbleRemove(ctx, slot);
+    fns::HSD_PadRumbleOn(ctx, slot);
 }
 
 /// Registers this unit's ports.

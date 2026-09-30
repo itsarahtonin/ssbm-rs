@@ -918,6 +918,11 @@ pub fn grPushOn_80219528<'a>(ctx: &'a Ctx, arg: Vec<'a>, arg0: i32, jobj: HSD_JO
     return 1_i32;
 }
 
+fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
 fn inl_Ground_SetupStageCallbacks_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -945,11 +950,6 @@ fn inl_Ground_SetupStageCallbacks_unfused<'a>(
     if !Handle::is_null((callbacks).gobj_proc()) {
         let _ = fns::HSD_GObj_SetupProc(ctx, gobj, (callbacks).gobj_proc(), (4_i32 as u8));
     }
-}
-
-fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).user_data();
 }
 
 fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {

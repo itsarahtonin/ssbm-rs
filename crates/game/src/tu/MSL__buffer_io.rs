@@ -63,8 +63,20 @@ pub fn __flush_buffer<'a>(ctx: &'a Ctx, file: _IO_FILE<'a>, bytes_flushed: Val<'
         }
         (file).set_position((file).position().wrapping_add((file).buffer_len()));
     }
-    fns::__prep_buffer(ctx, file);
+    inl___prep_buffer_unfused(ctx, file);
     return 0_i32;
+}
+
+fn inl___prep_buffer_unfused<'a>(ctx: &'a Ctx, file: _IO_FILE<'a>) {
+    let mut file = file;
+    (file).set_buffer_ptr((file).buffer());
+    (file).set_buffer_len((file).buffer_size());
+    (file).set_buffer_len(
+        (file)
+            .buffer_len()
+            .wrapping_sub(((file).position() & (file).buffer_alignment())),
+    );
+    (file).set_buffer_pos((file).position());
 }
 
 /// Registers this unit's ports.

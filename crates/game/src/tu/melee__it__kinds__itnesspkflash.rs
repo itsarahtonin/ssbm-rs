@@ -572,37 +572,26 @@ fn inl_HSD_GObjGetHSDObj<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     return (gobj).hsd_obj();
 }
 
-fn inl_itNesspkflash_SetScale<'a>(
-    ctx: &'a Ctx,
-    jobj: HSD_JObj<'a>,
-    ip: Item<'a>,
-    attr: itFlashAttributes<'a>,
-) {
-    let __frame = ctx.stack_frame(0x18);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     let mut jobj = jobj;
-    let mut ip = ip;
-    let mut attr = attr;
-    scale.set_x({
-        let __t2 = {
-            let __t1 = fp::fmadds(
-                (ip).xDD4_itemVar().pkflush().xDD8_PKFlash(),
-                (fp::fdivs(
-                    (fp::fsubs(
-                        (attr).xC_FLASH_GRAPHIC_SIZE_GROWTH_MUL(),
-                        (attr).x8_FLASH_GRAPHIC_SIZE_INIT_MUL(),
-                    )),
-                    (attr).x4_FLASH_HITBOX_SIZE_MUL(),
-                )),
-                (attr).x8_FLASH_GRAPHIC_SIZE_INIT_MUL(),
-            );
-            scale.set_z(__t1);
-            __t1
-        };
-        scale.set_y(__t2);
-        __t2
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f6b70),
+            (228_i32 as u32),
+            cstr(ctx, 0x803f6b70),
+        )
     });
-    inl_HSD_JObjSetScale(ctx, jobj, scale);
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetScale<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
@@ -638,7 +627,58 @@ fn inl_HSD_JObjSetScale<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+fn inl_itNesspkflash_SetScale<'a>(
+    ctx: &'a Ctx,
+    jobj: HSD_JObj<'a>,
+    ip: Item<'a>,
+    attr: itFlashAttributes<'a>,
+) {
+    let __frame = ctx.stack_frame(0x18);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut jobj = jobj;
+    let mut ip = ip;
+    let mut attr = attr;
+    scale.set_x({
+        let __t2 = {
+            let __t1 = fp::fmadds(
+                (ip).xDD4_itemVar().pkflush().xDD8_PKFlash(),
+                (fp::fdivs(
+                    (fp::fsubs(
+                        (attr).xC_FLASH_GRAPHIC_SIZE_GROWTH_MUL(),
+                        (attr).x8_FLASH_GRAPHIC_SIZE_INIT_MUL(),
+                    )),
+                    (attr).x4_FLASH_HITBOX_SIZE_MUL(),
+                )),
+                (attr).x8_FLASH_GRAPHIC_SIZE_INIT_MUL(),
+            );
+            scale.set_z(__t1);
+            __t1
+        };
+        scale.set_y(__t2);
+        __t2
+    });
+    inl_HSD_JObjSetScale(ctx, jobj, scale);
+}
+
+fn inl_itResetVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
+    let mut ip = ip;
+    (ip).x40_vel().set_x({
+        let __t2 = {
+            let __t1 = 0.0;
+            (ip).x40_vel().set_z(__t1);
+            __t1
+        };
+        (ip).x40_vel().set_y(__t2);
+        __t2
+    });
+}
+
+fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).hsd_obj();
+}
+
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     let mut jobj = jobj;
     let mut result: i32 = 0;
     (if !Handle::is_null((jobj)) {
@@ -658,24 +698,6 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         result = 1_i32;
     }
     return result;
-}
-
-fn inl_itResetVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
-    let mut ip = ip;
-    (ip).x40_vel().set_x({
-        let __t2 = {
-            let __t1 = 0.0;
-            (ip).x40_vel().set_z(__t1);
-            __t1
-        };
-        (ip).x40_vel().set_y(__t2);
-        __t2
-    });
-}
-
-fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).hsd_obj();
 }
 
 fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
@@ -709,28 +731,6 @@ fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f6b70),
-            (228_i32 as u32),
-            cstr(ctx, 0x803f6b70),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 /// Registers this unit's ports.

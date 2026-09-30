@@ -2846,6 +2846,21 @@ fn inl__tyDisplay_80318CB4_sort_pos<'a>(ctx: &'a Ctx, grid: TyDspGrid<'a>, n2: i
     }
 }
 
+fn inl_tyDisplay_GetGridSortElem<'a>(
+    ctx: &'a Ctx,
+    offset: u32,
+    grid: TyDspGrid<'a>,
+) -> TySortElem<'a> {
+    let mut offset = offset;
+    let mut grid = grid;
+    return ptr::<TySortElem<'a>>(
+        ctx,
+        (Handle::addr(grid)
+            .wrapping_add(offset)
+            .wrapping_add((20_i32 as u32))) as u32,
+    );
+}
+
 fn inl__tyDisplay_80318CB4_sort<'a>(ctx: &'a Ctx, cfg: TyDspConfig<'a>, grid: TyDspGrid<'a>) {
     let __frame = ctx.stack_frame(0x28);
     let temps: _tyDisplay_80318CB4_sort_temps<'a> = frame_at(ctx, &__frame, 0x0);
@@ -2913,19 +2928,72 @@ fn inl__tyDisplay_80318CB4_sort<'a>(ctx: &'a Ctx, cfg: TyDspConfig<'a>, grid: Ty
     }
 }
 
-fn inl_tyDisplay_GetGridSortElem<'a>(
-    ctx: &'a Ctx,
-    offset: u32,
-    grid: TyDspGrid<'a>,
-) -> TySortElem<'a> {
-    let mut offset = offset;
-    let mut grid = grid;
-    return ptr::<TySortElem<'a>>(
-        ctx,
-        (Handle::addr(grid)
-            .wrapping_add(offset)
-            .wrapping_add((20_i32 as u32))) as u32,
-    );
+fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8b8c),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b8b8c),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
+fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
+    let mut jobj = jobj;
+    let mut x = x;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8b8c),
+            (0x201_i32 as u32),
+            cstr(ctx, 0x803b8b8c),
+        )
+    });
+    (jobj).translate().set_x(x);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_HSD_JObjSetTranslateZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
+    let mut jobj = jobj;
+    let mut z = z;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8b8c),
+            (0x225_i32 as u32),
+            cstr(ctx, 0x803b8b8c),
+        )
+    });
+    (jobj).translate().set_z(z);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
 }
 
 fn inl__tyDisplay_80318CB4_place_toys<'a>(ctx: &'a Ctx, grid: TyDspGrid<'a>, cfg: TyDspConfig<'a>) {
@@ -2975,72 +3043,19 @@ fn inl__tyDisplay_80318CB4_place_toys<'a>(ctx: &'a Ctx, grid: TyDspGrid<'a>, cfg
     }
 }
 
-fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
-    let mut jobj = jobj;
-    let mut x = x;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b8b8c),
-            (0x201_i32 as u32),
-            cstr(ctx, 0x803b8b8c),
-        )
-    });
-    (jobj).translate().set_x(x);
-    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
-        {
-            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
-                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
-            }
-        }
-    }
-}
-
-fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b8b8c),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b8b8c),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
-}
-
-fn inl_HSD_JObjSetTranslateZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
-    let mut jobj = jobj;
-    let mut z = z;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b8b8c),
-            (0x225_i32 as u32),
-            cstr(ctx, 0x803b8b8c),
-        )
-    });
-    (jobj).translate().set_z(z);
-    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
-        {
-            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
-                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
-            }
-        }
-    }
+fn inl_tyDisplay_GetGridSortElem_unfused<'a>(
+    ctx: &'a Ctx,
+    offset: u32,
+    grid: TyDspGrid<'a>,
+) -> TySortElem<'a> {
+    let mut offset = offset;
+    let mut grid = grid;
+    return ptr::<TySortElem<'a>>(
+        ctx,
+        (Handle::addr(grid)
+            .wrapping_add(offset)
+            .wrapping_add((20_i32 as u32))) as u32,
+    );
 }
 
 fn inl__tyDisplay_80319540_sort_unfused<'a>(
@@ -3114,19 +3129,26 @@ fn inl__tyDisplay_80319540_sort_unfused<'a>(
     }
 }
 
-fn inl_tyDisplay_GetGridSortElem_unfused<'a>(
-    ctx: &'a Ctx,
-    offset: u32,
-    grid: TyDspGrid<'a>,
-) -> TySortElem<'a> {
-    let mut offset = offset;
-    let mut grid = grid;
-    return ptr::<TySortElem<'a>>(
-        ctx,
-        (Handle::addr(grid)
-            .wrapping_add(offset)
-            .wrapping_add((20_i32 as u32))) as u32,
-    );
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8b8c),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b8b8c),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
@@ -3150,28 +3172,6 @@ fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f6
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b8b8c),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b8b8c),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjSetTranslateZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {

@@ -82,7 +82,7 @@ pub fn HSD_SetupChannelAll<'a>(ctx: &'a Ctx, channel: HSD_Chan<'a>) {
             channel = (channel).next();
         }
     }
-    fns::HSD_StateSetNumChans(ctx, ((num as u8) as i32));
+    inl_HSD_StateSetNumChans_unfused(ctx, ((num as u8) as i32));
 }
 
 pub fn HSD_StateRegisterTexGen<'a>(ctx: &'a Ctx, coord: i32) {
@@ -202,7 +202,7 @@ pub fn HSD_SetupTevStageAll<'a>(ctx: &'a Ctx, desc: _HSD_TevDesc<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut desc = desc;
     statics::sysdolphin__baselib__tev::current_tev(ctx).set(inl_setupTevStages_unfused(ctx, desc));
-    fns::HSD_StateSetNumTevStages(ctx);
+    inl_HSD_StateSetNumTevStages_unfused(ctx);
 }
 
 pub fn HSD_Channel2Num<'a>(ctx: &'a Ctx, chan: i32) -> i32 {
@@ -753,6 +753,13 @@ pub fn _HSD_StateInvalidateTexCoordGen<'a>(ctx: &'a Ctx) {
     statics::sysdolphin__baselib__tev::num_tex_gens(ctx).set(0_i32);
 }
 
+fn inl_HSD_StateSetNumChans_unfused<'a>(ctx: &'a Ctx, num: i32) {
+    let mut num = num;
+    if statics::sysdolphin__baselib__tev::prev_num_chans(ctx).get() != num {
+        fns::GXSetNumChans(ctx, (num as u8));
+    }
+}
+
 fn inl_setupTevStages_unfused<'a>(ctx: &'a Ctx, desc: _HSD_TevDesc<'a>) -> i32 {
     let mut desc = desc;
     let mut num: i32 = 0_i32;
@@ -767,6 +774,14 @@ fn inl_setupTevStages_unfused<'a>(ctx: &'a Ctx, desc: _HSD_TevDesc<'a>) -> i32 {
         }
     }
     return num;
+}
+
+fn inl_HSD_StateSetNumTevStages_unfused<'a>(ctx: &'a Ctx) {
+    fns::GXSetNumTevStages(
+        ctx,
+        (statics::sysdolphin__baselib__tev::current_tev(ctx).get() as u8),
+    );
+    statics::sysdolphin__baselib__tev::current_tev(ctx).set(0_i32);
 }
 
 /// Registers this unit's ports.

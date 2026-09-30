@@ -89,6 +89,11 @@ pub fn ftCo_ItemParasolFallSpecial_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::ft_8008370C(ctx, gobj, fnptr(ctx, 0x800d5c54));
 }
 
+fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
 fn inl_ftCo_ItemParasolGetFallMotionId_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -109,11 +114,6 @@ fn inl_ftCo_ItemParasolGetFallMotionId_unfused<'a>(
     }
     #[allow(unreachable_code)]
     return 0;
-}
-
-fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).user_data();
 }
 
 fn inl_ftCo_ItemParasol_Phys_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

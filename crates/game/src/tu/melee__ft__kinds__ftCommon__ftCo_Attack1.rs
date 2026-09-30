@@ -349,7 +349,7 @@ pub fn checkAttack12<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         }
     }
     if ((fp).mv().co().attack1().x0() != 0) && (((fp).x2218_b1() as i32) != 0) {
-        statics::melee__ft__kinds__ftCommon__ftCo_Attack1::doAttack12(ctx, gobj);
+        inl_doAttack12_unfused(ctx, gobj);
         return 1_i32;
     }
     return 0_i32;
@@ -554,7 +554,7 @@ pub fn checkAttack13<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         }
     }
     if ((fp).mv().co().attack1().x0() != 0) && (((fp).x2218_b1() as i32) != 0) {
-        statics::melee__ft__kinds__ftCommon__ftCo_Attack1::doAttack13(ctx, gobj);
+        inl_doAttack13_unfused(ctx, gobj);
         return 1_i32;
     }
     return 0_i32;
@@ -643,6 +643,61 @@ fn inl_doAttack12Normal_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).set_hitlag_mul((fp).co_attrs().jab_3_input_window());
         (fp).set_unk_msid((enums::ftCo_MS_Attack12 as i32));
         (fp).mv().co().attack1().set_x0(0_i32);
+    }
+}
+
+fn inl_doAttack12_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    's1: {
+        let __case =
+            match ((Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).kind()
+                as u32)
+            {
+                12_u32 => 0,
+                23_u32 => 0,
+                _ => 1,
+            };
+        if __case <= 0 {
+            inl_doAttack12Rapid_unfused(ctx, gobj);
+            return;
+        }
+        if __case <= 1 {
+            inl_doAttack12Normal_unfused(ctx, gobj);
+            return;
+        }
+    }
+}
+
+fn inl_doAttack13_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    's1: {
+        let __case = match ((fp).kind() as u32) {
+            18_u32 => 0,
+            _ => 1,
+        };
+        if __case <= 0 {
+            inl_doAttack12Rapid_unfused(ctx, gobj);
+            return;
+        }
+        if __case <= 1 {
+            if !(fns::ftpickupitem_80094790(ctx, gobj) != 0) {
+                (fp).set_allow_interrupt((0_i32 as u8));
+                (fp).set_x2218_b1((0_i32 as u8));
+                fns::Fighter_ChangeMotionState(
+                    ctx,
+                    gobj,
+                    (enums::ftCo_MS_Attack13 as i32),
+                    0_u32,
+                    fp::frsp(0_i32 as f64),
+                    fp::frsp(1_i32 as f64),
+                    fp::frsp(0_i32 as f64),
+                    null::<HSD_GObj<'a>>(ctx),
+                );
+            }
+            return;
+        }
     }
 }
 

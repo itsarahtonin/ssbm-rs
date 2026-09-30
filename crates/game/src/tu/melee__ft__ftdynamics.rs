@@ -1228,40 +1228,26 @@ pub fn ftCo_8009EAF8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let _ = fns::Ground_801C4E20(ctx);
 }
 
-fn inl_ftCo_8009CB40_inline_unfused<'a>(ctx: &'a Ctx, data: DynamicsData<'a>) {
-    let mut data = data;
-    (data).desc().lb_unk0().unk_2C().set_x(
-        ((data).desc().lb_unk0().jobj())
-            .mtx()
-            .get(0_i32)
-            .at(3_i32)
-            .get(),
-    );
-    (data).desc().lb_unk0().unk_2C().set_y(
-        ((data).desc().lb_unk0().jobj())
-            .mtx()
-            .get(1_i32)
-            .at(3_i32)
-            .get(),
-    );
-    (data).desc().lb_unk0().unk_2C().set_z(
-        ((data).desc().lb_unk0().jobj())
-            .mtx()
-            .get(2_i32)
-            .at(3_i32)
-            .get(),
-    );
-    (data).desc().lb_unk0().set_unk_44(0.0);
-    inl_HSD_JObjSetTranslate_unfused(
-        ctx,
-        (data).desc().lb_unk0().jobj(),
-        (data).desc().lb_unk0().translate(),
-    );
-    inl_HSD_JObjSetScale_unfused(
-        ctx,
-        (data).desc().lb_unk0().jobj(),
-        (data).desc().lb_unk0().scale(),
-    );
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803c5754),
+            (228_i32 as u32),
+            cstr(ctx, 0x803c5754),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
@@ -1297,28 +1283,6 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803c5754),
-            (228_i32 as u32),
-            cstr(ctx, 0x803c5754),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
-}
-
 fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
     let mut jobj = jobj;
     let mut scale = scale;
@@ -1350,6 +1314,42 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
             }
         }
     }
+}
+
+fn inl_ftCo_8009CB40_inline_unfused<'a>(ctx: &'a Ctx, data: DynamicsData<'a>) {
+    let mut data = data;
+    (data).desc().lb_unk0().unk_2C().set_x(
+        ((data).desc().lb_unk0().jobj())
+            .mtx()
+            .get(0_i32)
+            .at(3_i32)
+            .get(),
+    );
+    (data).desc().lb_unk0().unk_2C().set_y(
+        ((data).desc().lb_unk0().jobj())
+            .mtx()
+            .get(1_i32)
+            .at(3_i32)
+            .get(),
+    );
+    (data).desc().lb_unk0().unk_2C().set_z(
+        ((data).desc().lb_unk0().jobj())
+            .mtx()
+            .get(2_i32)
+            .at(3_i32)
+            .get(),
+    );
+    (data).desc().lb_unk0().set_unk_44(0.0);
+    inl_HSD_JObjSetTranslate_unfused(
+        ctx,
+        (data).desc().lb_unk0().jobj(),
+        (data).desc().lb_unk0().translate(),
+    );
+    inl_HSD_JObjSetScale_unfused(
+        ctx,
+        (data).desc().lb_unk0().jobj(),
+        (data).desc().lb_unk0().scale(),
+    );
 }
 
 fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {

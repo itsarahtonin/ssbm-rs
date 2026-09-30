@@ -2056,6 +2056,28 @@ fn inl_HSD_JObjGetTranslationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     return (jobj).translate().x();
 }
 
+fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8958),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b8958),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjAddTranslationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
     let mut jobj = jobj;
     let mut x = x;
@@ -2079,28 +2101,6 @@ fn inl_HSD_JObjAddTranslationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b8958),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b8958),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjGetTranslationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
@@ -2480,6 +2480,28 @@ fn inl_HSD_JObjGetTranslationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> 
     return (jobj).translate().y();
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8958),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b8958),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetTranslateY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     let mut jobj = jobj;
     let mut y = y;
@@ -2501,28 +2523,6 @@ fn inl_HSD_JObjSetTranslateY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f6
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b8958),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b8958),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjAddTranslationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
@@ -2743,6 +2743,10 @@ fn inl_sfxMove<'a>(ctx: &'a Ctx) {
     fns::lbAudioAx_80024030(ctx, 2_i32);
 }
 
+fn inl_tyFigupon_GetED4_unfused<'a>(ctx: &'a Ctx) -> TyFiguponED4<'a> {
+    return Handle::cast::<TyFiguponED4<'a>>(fns::Toy_sbss_804D6ED4(ctx).get());
+}
+
 fn inl_tyFigupon_InitScene_unfused<'a>(
     ctx: &'a Ctx,
     ef4_2: Ptr<'a, un_804D6EF4_t<'a>>,
@@ -2763,10 +2767,6 @@ fn inl_tyFigupon_InitScene_unfused<'a>(
         );
     }
     return ed4;
-}
-
-fn inl_tyFigupon_GetED4_unfused<'a>(ctx: &'a Ctx) -> TyFiguponED4<'a> {
-    return Handle::cast::<TyFiguponED4<'a>>(fns::Toy_sbss_804D6ED4(ctx).get());
 }
 
 fn inl_HSD_JObjAddTranslationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {

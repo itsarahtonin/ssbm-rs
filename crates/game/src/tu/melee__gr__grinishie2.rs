@@ -835,6 +835,11 @@ pub fn grInishie2_801FDFF0<'a>(ctx: &'a Ctx, arg: Vec<'a>, arg0: i32, jobj: HSD_
     return 1_i32;
 }
 
+fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
 fn inl_Ground_StartMapAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
@@ -842,9 +847,9 @@ fn inl_Ground_StartMapAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::grAnime_801C8138(ctx, gobj, (gp).map_id(), 0_i32);
 }
 
-fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
-    return (gobj).user_data();
+    return (gobj).hsd_obj();
 }
 
 fn inl_Ground_InitMapCollAndAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -857,9 +862,26 @@ fn inl_Ground_InitMapCollAndAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::grAnime_801C8138(ctx, gobj, (gp).map_id(), 0_i32);
 }
 
-fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).hsd_obj();
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803e4a60),
+            (228_i32 as u32),
+            cstr(ctx, 0x803e4a60),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
@@ -893,28 +915,6 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803e4a60),
-            (228_i32 as u32),
-            cstr(ctx, 0x803e4a60),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjAddTranslationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
@@ -1018,6 +1018,19 @@ fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, tran
     Handle::copy_from((translate), (jobj).translate());
 }
 
+fn inl_checkBlastZone_unfused<'a>(ctx: &'a Ctx, pos: Vec<'a>) -> i32 {
+    let mut pos = pos;
+    if (pos).x() > fns::Stage_GetBlastZoneRightOffset(ctx) {
+        return 1_i32;
+    } else if (pos).x() < fns::Stage_GetBlastZoneLeftOffset(ctx) {
+        return 1_i32;
+    } else {
+        return 0_i32;
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 fn inl_grInishie2_801FDED8_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
@@ -1046,19 +1059,6 @@ fn inl_grInishie2_801FDED8_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
         );
         fns::Ground_801C4A08(ctx, gobj);
     }
-}
-
-fn inl_checkBlastZone_unfused<'a>(ctx: &'a Ctx, pos: Vec<'a>) -> i32 {
-    let mut pos = pos;
-    if (pos).x() > fns::Stage_GetBlastZoneRightOffset(ctx) {
-        return 1_i32;
-    } else if (pos).x() < fns::Stage_GetBlastZoneLeftOffset(ctx) {
-        return 1_i32;
-    } else {
-        return 0_i32;
-    }
-    #[allow(unreachable_code)]
-    return 0;
 }
 
 /// Registers this unit's ports.

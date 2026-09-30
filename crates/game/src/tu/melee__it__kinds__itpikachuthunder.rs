@@ -379,6 +379,32 @@ fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'
     return (gobj).hsd_obj();
 }
 
+fn inl_pika_scale_unfused<'a>(ctx: &'a Ctx, a: f64, b: f64) -> f64 {
+    let mut a = a;
+    let mut b = b;
+    let mut f: f64 = fp::fdivs(fp::fmuls(10000.0, a), b);
+    f = fp::fdivs(
+        fp::frsp((fp::fctiwz((fp::fadds(f, fp::frsp(1_i32 as f64))))) as f64),
+        10000.0,
+    );
+    return f;
+}
+
+fn inl_itPikachuthunder_UnkMotion2_ScaleCall_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    fns::it_80275594(
+        ctx,
+        gobj,
+        0_i32,
+        inl_pika_scale_unfused(
+            ctx,
+            (ip).xDD4_itemVar().pikachuthunder().x10(),
+            (ip).xDD4_itemVar().pikachuthunder().xC(),
+        ),
+    );
+}
+
 fn inl_itPikachuthunder_UnkMotion2_UpdateScale_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -409,30 +435,26 @@ fn inl_itPikachuthunder_UnkMotion2_UpdateScale_unfused<'a>(ctx: &'a Ctx, gobj: H
     }
 }
 
-fn inl_pika_scale_unfused<'a>(ctx: &'a Ctx, a: f64, b: f64) -> f64 {
-    let mut a = a;
-    let mut b = b;
-    let mut f: f64 = fp::fdivs(fp::fmuls(10000.0, a), b);
-    f = fp::fdivs(
-        fp::frsp((fp::fctiwz((fp::fadds(f, fp::frsp(1_i32 as f64))))) as f64),
-        10000.0,
-    );
-    return f;
-}
-
-fn inl_itPikachuthunder_UnkMotion2_ScaleCall_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let mut gobj = gobj;
-    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    fns::it_80275594(
-        ctx,
-        gobj,
-        0_i32,
-        inl_pika_scale_unfused(
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
             ctx,
-            (ip).xDD4_itemVar().pikachuthunder().x10(),
-            (ip).xDD4_itemVar().pikachuthunder().xC(),
-        ),
-    );
+            cstr(ctx, 0x803f70d0),
+            (228_i32 as u32),
+            cstr(ctx, 0x803f70d0),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetScaleY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
@@ -456,28 +478,6 @@ fn inl_HSD_JObjSetScaleY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f70d0),
-            (228_i32 as u32),
-            cstr(ctx, 0x803f70d0),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 /// Registers this unit's ports.

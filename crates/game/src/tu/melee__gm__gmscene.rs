@@ -186,7 +186,7 @@ pub fn gm_801A4970<'a>(ctx: &'a Ctx, db_input: gm_DbPauseInputHandlers<'a>) {
     if (!Handle::is_null((db_input).check_pause()))
         && ((db_input).check_pause().call::<_, i32>(()) != 0)
     {
-        if (fns::gm_GetDbPauseFlag(ctx, 0_i32) != 0) {
+        if (inl_gm_GetDbPauseFlag_unfused(ctx, 0_i32) != 0) {
             statics::melee__gm__gmscene::gm_80479D58(ctx)
                 .unk_10()
                 .set_x0(
@@ -202,7 +202,7 @@ pub fn gm_801A4970<'a>(ctx: &'a Ctx, db_input: gm_DbPauseInputHandlers<'a>) {
                 );
         }
     }
-    if (fns::gm_GetDbPauseFlag(ctx, 0_i32) != 0) {
+    if (inl_gm_GetDbPauseFlag_unfused(ctx, 0_i32) != 0) {
         if (!Handle::is_null((db_input).check_framestep()))
             && ((db_input).check_framestep().call::<_, i32>(()) != 0)
         {
@@ -234,7 +234,7 @@ pub fn gm_SetDbPauseInputHandlers<'a>(
 }
 
 pub fn gm_801A4B1C<'a>(ctx: &'a Ctx) {
-    fns::gm_SetDbPauseInputHandlers(ctx, fnptr(ctx, 0x801a46f4), fnptr(ctx, 0x801a47e4));
+    inl_gm_SetDbPauseInputHandlers_unfused(ctx, fnptr(ctx, 0x801a46f4), fnptr(ctx, 0x801a47e4));
 }
 
 pub fn gm_SetPreGObjProcCallback<'a>(ctx: &'a Ctx, cb: FnPtr<'a>) {
@@ -358,8 +358,8 @@ pub fn gm_801A4D34<'a>(ctx: &'a Ctx, on_frame: FnPtr<'a>, info: GameSceneInfo<'a
                         {
                             fns::gm_801A4970(ctx, (temp_r25).unk_10().db_input());
                         }
-                        if (fns::gm_801A46B8(ctx, 0_i32) != 0)
-                            || (!(fns::gm_GetDbPauseFlag(ctx, 0_i32) != 0))
+                        if (inl_gm_801A46B8_unfused(ctx, 0_i32) != 0)
+                            || (!(inl_gm_GetDbPauseFlag_unfused(ctx, 0_i32) != 0))
                         {
                             (temp_r25).unk_10().set_unk_38_0((1_i32 as u8));
                         } else {
@@ -465,6 +465,49 @@ pub fn gm_801A4D34<'a>(ctx: &'a Ctx, on_frame: FnPtr<'a>, info: GameSceneInfo<'a
         }
     }
     fns::HSD_VIWaitXFBFlush(ctx);
+}
+
+fn inl_gm_GetDbPauseFlag_unfused<'a>(ctx: &'a Ctx, bit: i32) -> i32 {
+    let mut bit = bit;
+    return (((statics::melee__gm__gmscene::gm_80479D58(ctx).unk_10().x0() as u64)
+        & (shl_u64(1_u64, (bit as u32)))) as i32);
+}
+
+fn inl_gm_SetDbPauseInputHandlers_unfused<'a>(
+    ctx: &'a Ctx,
+    check_db_pause: FnPtr<'a>,
+    check_db_framestep: FnPtr<'a>,
+) {
+    let mut check_db_pause = check_db_pause;
+    let mut check_db_framestep = check_db_framestep;
+    statics::melee__gm__gmscene::gm_80479D58(ctx)
+        .unk_10()
+        .db_input()
+        .set_check_pause(check_db_pause);
+    statics::melee__gm__gmscene::gm_80479D58(ctx)
+        .unk_10()
+        .db_input()
+        .set_check_framestep(check_db_framestep);
+}
+
+fn inl_gm_SetPreGObjProcCallback_unfused<'a>(ctx: &'a Ctx, cb: FnPtr<'a>) {
+    let mut cb = cb;
+    statics::melee__gm__gmscene::gm_80479D58(ctx)
+        .unk_10()
+        .set_pre_gobj_proc(cb);
+}
+
+fn inl_gm_801A4B50_unfused<'a>(ctx: &'a Ctx, arg0: i32) {
+    let mut arg0 = arg0;
+    statics::melee__gm__gmscene::gm_80479D58(ctx)
+        .unk_10()
+        .set_unk_34(arg0);
+}
+
+fn inl_gm_801A46B8_unfused<'a>(ctx: &'a Ctx, bit: i32) -> i32 {
+    let mut bit = bit;
+    return (((statics::melee__gm__gmscene::gm_80479D58(ctx).unk_10().x2() as u64)
+        & (shl_u64(1_u64, (bit as u32)))) as i32);
 }
 
 fn inl_maybe_gm_801A48A4_unfused<'a>(ctx: &'a Ctx, i: u8) -> u64 {

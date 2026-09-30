@@ -49,7 +49,7 @@ pub fn OSAllocFromArenaLo<'a>(ctx: &'a Ctx, size: u32, align: u32) -> Addr<'a> {
     let mut align = align;
     let mut ptr_: Addr<'a> = null(ctx);
     let mut arenaLo: Val<'a, u8> = null(ctx);
-    ptr_ = fns::OSGetArenaLo(ctx);
+    ptr_ = inl_OSGetArenaLo_unfused(ctx);
     arenaLo = Handle::cast::<Val<'a, u8>>({
         let __t1 = ptr::<Addr<'a>>(
             ctx,
@@ -69,7 +69,7 @@ pub fn OSAllocFromArenaLo<'a>(ctx: &'a Ctx, size: u32, align: u32) -> Addr<'a> {
             .wrapping_sub((1_i32 as u32)))
             & (!((align).wrapping_sub((1_i32 as u32))))) as u32,
     );
-    fns::OSSetArenaLo(ctx, Handle::cast::<Addr<'a>>(arenaLo));
+    inl_OSSetArenaLo_unfused(ctx, Handle::cast::<Addr<'a>>(arenaLo));
     return ptr_;
 }
 
@@ -78,7 +78,7 @@ pub fn OSAllocFromArenaHi<'a>(ctx: &'a Ctx, size: u32, align: u32) -> Addr<'a> {
     let mut align = align;
     let mut ptr_: Addr<'a> = null(ctx);
     let mut arenaHi: Val<'a, u8> = null(ctx);
-    arenaHi = Handle::cast::<Val<'a, u8>>(fns::OSGetArenaHi(ctx));
+    arenaHi = Handle::cast::<Val<'a, u8>>(inl_OSGetArenaHi_unfused(ctx));
     arenaHi = ptr::<Val<'a, u8>>(
         ctx,
         ((Handle::addr((arenaHi))) & (!((align).wrapping_sub((1_i32 as u32))))) as u32,
@@ -92,8 +92,26 @@ pub fn OSAllocFromArenaHi<'a>(ctx: &'a Ctx, size: u32, align: u32) -> Addr<'a> {
         ptr_ = __t1;
         __t1
     });
-    fns::OSSetArenaHi(ctx, Handle::cast::<Addr<'a>>(arenaHi));
+    inl_OSSetArenaHi_unfused(ctx, Handle::cast::<Addr<'a>>(arenaHi));
     return ptr_;
+}
+
+fn inl_OSGetArenaLo_unfused<'a>(ctx: &'a Ctx) -> Addr<'a> {
+    return statics::dolphin__os__OSArena::__OSArenaLo(ctx).get();
+}
+
+fn inl_OSSetArenaLo_unfused<'a>(ctx: &'a Ctx, newLo: Addr<'a>) {
+    let mut newLo = newLo;
+    statics::dolphin__os__OSArena::__OSArenaLo(ctx).set(newLo);
+}
+
+fn inl_OSGetArenaHi_unfused<'a>(ctx: &'a Ctx) -> Addr<'a> {
+    return statics::dolphin__os__OSArena::__OSArenaHi(ctx).get();
+}
+
+fn inl_OSSetArenaHi_unfused<'a>(ctx: &'a Ctx, newHi: Addr<'a>) {
+    let mut newHi = newHi;
+    statics::dolphin__os__OSArena::__OSArenaHi(ctx).set(newHi);
 }
 
 /// Registers this unit's ports.

@@ -79,13 +79,13 @@ pub fn fn_801965C4<'a>(ctx: &'a Ctx) {
     temp_r3 = fns::gm_GetTournamentData(ctx);
     (temp_r3).set_x2D((1_i32 as u8));
     temp_r4 = (temp_r3).stage_selection_type();
-    if (fns::fn_80196594(ctx, temp_r3) != 0) {
+    if (inl_fn_80196594_unfused(ctx, temp_r3) != 0) {
         (temp_r3).set_x32((1_i32 as u8));
         fns::gm_SetNextGameModeStateId(ctx, (3_i32 as u8));
         fns::gm_801A4B60(ctx);
         return;
     }
-    if (fns::fn_80196564(ctx, temp_r3) != 0) {
+    if (inl_fn_80196564_unfused(ctx, temp_r3) != 0) {
         (temp_r3).set_x32((1_i32 as u8));
         (temp_r3).set_x28((statics::melee__gm__gmtou_1::lbl_804D4190(ctx).get() as u32));
     }
@@ -1861,7 +1861,7 @@ pub fn fn_80198D18<'a>(ctx: &'a Ctx) {
         fnptr(ctx, 0x80196e30),
         80.0,
     );
-    fns::fn_80198C60(ctx);
+    inl_fn_80198C60_unfused(ctx);
     gobj = fns::GObj_Create(ctx, (14_i32 as u16), (26_i32 as u8), (0_i32 as u8));
     fns::HSD_GObjObject_80390A70(
         ctx,
@@ -1902,7 +1902,7 @@ pub fn fn_80198EBC<'a>(ctx: &'a Ctx) {
     let mut jobj2: HSD_JObj<'a> = null(ctx);
     let mut j16: HSD_JObj<'a> = null(ctx);
     td = fns::gm_GetTournamentData(ctx);
-    fns::fn_80198D18(ctx);
+    inl_fn_80198D18(ctx);
     {
         i = 0_i32;
         'l1: while i < ((td).x30() as i32) {
@@ -3270,6 +3270,26 @@ pub fn fn_8019BA04<'a>(ctx: &'a Ctx, state: Val<'a, i32>) {
     let mut state = state;
 }
 
+fn inl_fn_80196594_unfused<'a>(ctx: &'a Ctx, arg0: TmData<'a>) -> i32 {
+    let mut arg0 = arg0;
+    if (((arg0).stage_selection_type() == 2_i32) && (((arg0).x32() as i32) == 0_i32))
+        || ((arg0).stage_selection_type() == 3_i32)
+    {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
+fn inl_fn_80196564_unfused<'a>(ctx: &'a Ctx, arg0: TmData<'a>) -> i32 {
+    let mut arg0 = arg0;
+    if (((arg0).stage_selection_type() == 0_i32) && (((arg0).x32() as i32) == 0_i32))
+        || ((arg0).stage_selection_type() == 1_i32)
+    {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
 fn inl_gmTournament_IsPlayerSetupOption<'a>(ctx: &'a Ctx) -> i32 {
     if ((fns::gm_GetTournamentData(ctx)).cur_option() >= 27_i32)
         && ((fns::gm_GetTournamentData(ctx)).cur_option() <= 30_i32)
@@ -3277,6 +3297,28 @@ fn inl_gmTournament_IsPlayerSetupOption<'a>(ctx: &'a Ctx) -> i32 {
         return 1_i32;
     }
     return 0_i32;
+}
+
+fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7ce0),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b7ce0),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
@@ -3300,28 +3342,6 @@ fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b7ce0),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b7ce0),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_gmTournament_GetPlayerX<'a>(ctx: &'a Ctx, player_count: u8, player: i32) -> f64 {
@@ -3395,6 +3415,28 @@ fn inl_gmTournament_SetPlayerX<'a>(ctx: &'a Ctx, x: Val<'a, F32>, player_count: 
     }
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7ce0),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b7ce0),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetTranslateZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
     let mut jobj = jobj;
     let mut z = z;
@@ -3416,28 +3458,6 @@ fn inl_HSD_JObjSetTranslateZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f6
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b7ce0),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b7ce0),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
@@ -3567,6 +3587,129 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
             }
         }
     }
+}
+
+fn inl_fn_80198C60_unfused<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x20);
+    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let mut td: TmData<'a> = null(ctx);
+    let mut text: HSD_Text<'a> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    td = fns::gm_GetTournamentData(ctx);
+    (td).x524().at(2_i32).set(fns::HSD_SisLib_803A6754(
+        ctx,
+        0_i32,
+        fns::lbl_804D663C(ctx).get(),
+    ));
+    text = (td).x524().at(2_i32).get();
+    (text).font_size().set_x(0.054944999516010284);
+    (text).font_size().set_y(0.07999999821186066);
+    ((td).x524().at(2_i32).get()).set_default_alignment((1_i32 as u8));
+    ((td).x524().at(2_i32).get()).set_default_kerning((1_i32 as u8));
+    (td).x524().at(3_i32).set(fns::HSD_SisLib_803A6754(
+        ctx,
+        0_i32,
+        fns::lbl_804D663C(ctx).get(),
+    ));
+    ((td).x524().at(3_i32).get()).set_default_alignment((1_i32 as u8));
+    ((td).x524().at(3_i32).get()).set_default_kerning((1_i32 as u8));
+    let _ = fns::HSD_SisLib_803A6B98(
+        ctx,
+        (td).x524().at(3_i32).get(),
+        320.0,
+        250.0,
+        cstr(ctx, 0x804d41b0),
+        &[],
+    );
+    fns::HSD_SisLib_803A7548(ctx, (td).x524().at(3_i32).get(), 0_i32, 1.5, 1.5);
+}
+
+fn inl_fn_80198D18<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x20);
+    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj: HSD_GObj<'a> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    let _ = fns::gm_GetTournamentData(ctx);
+    gobj = fns::fn_80190174(
+        ctx,
+        ((statics::melee__gm__gmtou_1::lbl_804D666C(ctx).get()).cameras()).desc(),
+    );
+    let _ = fns::fn_801901F8(
+        ctx,
+        ((statics::melee__gm__gmtou_1::lbl_804D666C(ctx).get()).cameras()).desc(),
+    );
+    fns::fn_801902F0(ctx, (Handle::addr(gobj) as i32));
+    fns::fn_8019027C(
+        ctx,
+        Handle::cast::<Addr<'a>>((statics::melee__gm__gmtou_1::lbl_804D666C(ctx).get()).lights()),
+    );
+    let _ = fns::fn_8019035C(
+        ctx,
+        0_i32,
+        (Handle::add(
+            (statics::melee__gm__gmtou_1::lbl_804D666C(ctx).get()).models(),
+            5_i32,
+        ))
+        .get(),
+        0_i32,
+        26_i32,
+        2_i32,
+        1_i32,
+        fnptr(ctx, 0x80196dbc),
+        0.0,
+    );
+    let _ = fns::fn_8019035C(
+        ctx,
+        0_i32,
+        (Handle::add(
+            (statics::melee__gm__gmtou_1::lbl_804D666C(ctx).get()).models(),
+            4_i32,
+        ))
+        .get(),
+        0_i32,
+        26_i32,
+        2_i32,
+        1_i32,
+        fnptr(ctx, 0x80196e30),
+        80.0,
+    );
+    fns::fn_80198C60(ctx);
+    gobj = fns::GObj_Create(ctx, (14_i32 as u16), (26_i32 as u8), (0_i32 as u8));
+    fns::HSD_GObjObject_80390A70(
+        ctx,
+        gobj,
+        (fns::HSD_GObj_FogKind(ctx).get() as u8),
+        Handle::cast::<Addr<'a>>(
+            ({
+                fns::HSD_FogLoadDesc(
+                    ctx,
+                    (Handle::add(
+                        (statics::melee__gm__gmtou_1::lbl_804D666C(ctx).get()).fogs(),
+                        0_i32,
+                    ))
+                    .desc(),
+                )
+            }),
+        ),
+    );
+    fns::GObj_SetupGXLink(
+        ctx,
+        gobj,
+        fnptr(ctx, 0x803910b4),
+        (0_i32 as u8),
+        (0_i32 as u32),
+    );
+    fns::fn_80198BA0(ctx);
 }
 
 fn inl_HSD_JObjGetChild<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {

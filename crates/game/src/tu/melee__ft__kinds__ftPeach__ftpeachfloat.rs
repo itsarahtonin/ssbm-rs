@@ -58,7 +58,7 @@ pub fn ftPe_8011BAD8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if ((fp).kind() as u32) == ((enums::Ft_Kind_Peach as i32) as u32) {
         if ((fp).self_vel().y() <= fp::frsp(0_i32 as f64)) && ((fp).u().pe().has_float() != 0) {
-            if (fns::ftPe_Float_CheckContinueInput(ctx, fp) != 0) {
+            if (inl_ftPe_Float_CheckContinueInput_unfused(ctx, fp) != 0) {
                 fns::ftPe_8011BB6C(ctx, gobj, 1_i32);
                 return 1_i32;
             }
@@ -161,6 +161,15 @@ fn inl_checkStartFloatInput_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32
     return (((temp_r6).input().lstick().get(0_i32).y()
         <= fp::fneg((fns::p_ftCommonData(ctx).get()).x88()))
         && (((temp_r6).input().held_buttons().at(0_i32).get()
+            & (((shl_i32(1_i32, (10_i32 as u32))) | (shl_i32(1_i32, (11_i32 as u32)))) as u32))
+            != 0)) as i32;
+}
+
+fn inl_ftPe_Float_CheckContinueInput_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
+    let mut fp = fp;
+    return (((fp).input().lstick().get(0_i32).y()
+        >= (fns::p_ftCommonData(ctx).get()).tap_jump_threshold())
+        || (((fp).input().held_buttons().at(0_i32).get()
             & (((shl_i32(1_i32, (10_i32 as u32))) | (shl_i32(1_i32, (11_i32 as u32)))) as u32))
             != 0)) as i32;
 }

@@ -296,8 +296,8 @@ pub fn itEgg_Logic3_DmgDealt<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     if ((ip).xDD4_itemVar().egg().x0() != 0) {
         return 0_i32;
     }
-    if (statics::melee__it__kinds__itegg::it_80288DC4(ctx, gobj) != 0) {
-        statics::melee__it__kinds__itegg::it_80289094(ctx, gobj);
+    if (inl_it_80288DC4_unfused(ctx, gobj) != 0) {
+        inl_it_80289094_unfused(ctx, gobj);
         return 0_i32;
     }
     let _ = fns::efSync_Spawn(
@@ -307,7 +307,7 @@ pub fn itEgg_Logic3_DmgDealt<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         &[VarArg::Int(Handle::addr((ip).pos()))],
     );
     fns::Item_8026AE84(ctx, ip, 244_i32, (127_i32 as u8), (64_i32 as u8));
-    statics::melee__it__kinds__itegg::it_80289158(ctx, gobj);
+    inl_it_80289158_unfused(ctx, gobj);
     return 0_i32;
 }
 
@@ -321,7 +321,7 @@ pub fn itEgg_Logic3_Clanked<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             break 'l1;
         }
     }
-    return fns::itEgg_Logic3_DmgDealt(ctx, gobj);
+    return inl_itEgg_Logic3_DmgDealt_unfused(ctx, gobj);
 }
 
 pub fn itEgg_Logic3_HitShield<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
@@ -334,7 +334,7 @@ pub fn itEgg_Logic3_HitShield<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             break 'l1;
         }
     }
-    return fns::itEgg_Logic3_DmgDealt(ctx, gobj);
+    return inl_itEgg_Logic3_DmgDealt_unfused(ctx, gobj);
 }
 
 pub fn itEgg_Logic3_Reflected<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
@@ -347,7 +347,7 @@ pub fn itEgg_Logic3_Reflected<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             break 'l1;
         }
     }
-    return fns::itEgg_Logic3_DmgDealt(ctx, gobj);
+    return inl_itEgg_Logic3_DmgDealt_unfused(ctx, gobj);
 }
 
 pub fn itEgg_Logic3_DmgReceived<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
@@ -360,7 +360,7 @@ pub fn itEgg_Logic3_DmgReceived<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             break 'l1;
         }
     }
-    return fns::itEgg_Logic3_DmgDealt(ctx, gobj);
+    return inl_itEgg_Logic3_DmgDealt_unfused(ctx, gobj);
 }
 
 pub fn itEgg_Logic3_EnteredAir<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -447,6 +447,94 @@ fn inl_Item_ApplyFallingPhysics_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).hsd_obj();
+}
+
+fn inl_it_80288DC4_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut attrs: itEgg_ItemVars<'a> =
+        Handle::cast::<itEgg_ItemVars<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
+    if inl_attrRand_unfused(ctx, attrs) == 0_i32 {
+        return 1_i32;
+    }
+    {
+        pos.set_x({
+            let __t2 = {
+                let __t1 = 0.0;
+                pos.set_z(__t1);
+                __t1
+            };
+            pos.set_y(__t2);
+            __t2
+        });
+        if (fns::it_8026F8B4(ctx, gobj, (ip).pos(), pos, 0_i32) != 0) {
+            return 0_i32;
+        }
+    }
+    let _ = fns::it_8026F3D4(
+        ctx,
+        gobj,
+        null::<it_8026F3D4_arg1_t<'a>>(ctx),
+        (attrs).x0(),
+        0_i32,
+    );
+    return 0_i32;
+}
+
+fn inl_it_80289094_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    fns::it_8026BB44(ctx, gobj);
+    fns::it_80272C08(ctx, gobj);
+    fns::it_802756D0(ctx, gobj);
+    fns::it_8026B3A8(ctx, gobj);
+    fns::it_8026BD24(ctx, gobj);
+    fns::it_8027518C(ctx, gobj);
+    (ip).x40_vel().set_x(fp::frsp(0_i32 as f64));
+    (ip).x40_vel().set_y(fp::frsp(0_i32 as f64));
+    (ip).xDCF_flag().x0().set_b2((1_i32 as u8));
+    (ip).xDD4_itemVar().egg().set_x0(1_i32);
+    (ip).xDD4_itemVar().egg().set_rand_max(20_i32);
+    fns::Item_80268E5C(ctx, gobj, 5_i32, (enums::ITEM_ANIM_UPDATE as i32));
+}
+
+fn inl_it_80289158_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut jobj: HSD_JObj<'a> =
+        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    fns::HSD_JObjSetFlagsAll(ctx, jobj, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
+    fns::it_802756D0(ctx, gobj);
+    (ip).x40_vel().set_x(0.0);
+    (ip).x40_vel().set_y(0.0);
+    (ip).xDCF_flag().x0().set_b2((1_i32 as u8));
+    (ip).xDD4_itemVar().egg().set_x0(1_i32);
+    (ip).xDD4_itemVar().egg().set_rand_max(40_i32);
+    fns::it_8026B3A8(ctx, gobj);
+    fns::Item_80268E5C(ctx, gobj, 6_i32, (enums::ITEM_ANIM_UPDATE as i32));
+}
+
+fn inl_itEgg_Logic3_DmgDealt_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
+    if ((ip).xDD4_itemVar().egg().x0() != 0) {
+        return 0_i32;
+    }
+    if (statics::melee__it__kinds__itegg::it_80288DC4(ctx, gobj) != 0) {
+        statics::melee__it__kinds__itegg::it_80289094(ctx, gobj);
+        return 0_i32;
+    }
+    let _ = fns::efSync_Spawn(
+        ctx,
+        0x4d0_i32,
+        gobj,
+        &[VarArg::Int(Handle::addr((ip).pos()))],
+    );
+    fns::Item_8026AE84(ctx, ip, 244_i32, (127_i32 as u8), (64_i32 as u8));
+    statics::melee__it__kinds__itegg::it_80289158(ctx, gobj);
+    return 0_i32;
 }
 
 /// Registers this unit's ports.

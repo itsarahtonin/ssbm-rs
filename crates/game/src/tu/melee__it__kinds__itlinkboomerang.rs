@@ -256,7 +256,7 @@ pub fn itLinkBoomerang_Logic18_Destroyed<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut ip: Item<'a> = null(ctx);
     ip = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     inl_remove_boomerang_unfused(ctx, gobj);
-    fns::it_802A0810(ctx, gobj);
+    inl_it_802A0810_unfused(ctx, gobj);
     (ip).set_owner(null::<HSD_GObj<'a>>(ctx));
     (ip).xDC8_word().flags().set_x13((0_i32 as u32));
 }
@@ -413,7 +413,7 @@ pub fn itLinkboomerang_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> 
         && (fns::ftLk_SpecialS_Is2071b0_5to13(ctx, (ip).xDD4_itemVar().linkboomerang().xF98())
             != 0_i32)
     {
-        fns::it_802A07B4(ctx, gobj);
+        inl_it_802A07B4_unfused(ctx, gobj);
     }
     return 0_i32;
 }
@@ -975,6 +975,28 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f6928),
+            (228_i32 as u32),
+            cstr(ctx, 0x803f6928),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
     let mut jobj = jobj;
     let mut translate = translate;
@@ -1006,28 +1028,6 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f6928),
-            (228_i32 as u32),
-            cstr(ctx, 0x803f6928),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjSetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
@@ -1306,6 +1306,43 @@ fn inl_remove_boomerang_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+fn inl_it_802A0810_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = null(ctx);
+    let mut i: i32 = 0;
+    ip = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    {
+        i = 0_i32;
+        'l1: while i < 2_i32 {
+            'c2: {
+                if !Handle::is_null((ip).xDD4_itemVar().linkboomerang().xF90().at(i).get()) {
+                    fns::HSD_JObjRemoveAll(
+                        ctx,
+                        (ip).xDD4_itemVar().linkboomerang().xF90().at(i).get(),
+                    );
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    (ip).xDD4_itemVar()
+        .linkboomerang()
+        .xF90()
+        .at(1_i32)
+        .set(null::<HSD_JObj<'a>>(ctx));
+    (ip).xDD4_itemVar()
+        .linkboomerang()
+        .xF90()
+        .at(0_i32)
+        .set(null::<HSD_JObj<'a>>(ctx));
+}
+
+fn inl_it_8029FE64_no_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, i: i32) {
+    let mut gobj = gobj;
+    let mut i = i;
+    fns::it_8029FE64(ctx, gobj, i);
+}
+
 fn inl_it_802A0C34_sub_1_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
@@ -1330,12 +1367,6 @@ fn inl_it_802A0C34_sub_1_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             (ip).set_xDB4_itcmd_var2((2_i32 as u32));
         }
     }
-}
-
-fn inl_it_8029FE64_no_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, i: i32) {
-    let mut gobj = gobj;
-    let mut i = i;
-    fns::it_8029FE64(ctx, gobj, i);
 }
 
 fn inl_it_802A0C34_sub_2_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, rot: Vec<'a>) {
@@ -1378,6 +1409,12 @@ fn inl_it_802A0C34_sub_2_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, rot: Vec<
         (ip).xDD4_itemVar().linkboomerang().set_xDD8(dd8);
     }
     fns::it_802A0930(ctx, gobj);
+}
+
+fn inl_it_802A07B4_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    inl_remove_boomerang_unfused(ctx, gobj);
+    fns::Item_8026A8EC(ctx, gobj);
 }
 
 fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
@@ -1573,6 +1610,20 @@ fn inl_itLinkboomerang_UnkMotion3_Phys_add_clamp<'a>(
     return x;
 }
 
+fn inl_remove_boomerang<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = null(ctx);
+    let mut owner: HSD_GObj<'a> = null(ctx);
+    ip = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+    owner = (ip).owner();
+    if ((!Handle::is_null(owner))
+        && (Handle::addr(owner) == Handle::addr((ip).xDD4_itemVar().linkboomerang().xF98())))
+        && ((ip).xDD4_itemVar().linkboomerang().xDE8() != 1_i32)
+    {
+        let _ = fns::ftLk_SpecialS_RemoveBoomerang0(ctx, owner);
+    }
+}
+
 fn inl_itLinkboomerang_UnkMotion3_Phys_sub<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, angle: f64) {
     let mut gobj = gobj;
     let mut angle = angle;
@@ -1603,20 +1654,6 @@ fn inl_itLinkboomerang_UnkMotion3_Phys_sub<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>,
             }
         }
         fns::it_802A0810(ctx, gobj);
-    }
-}
-
-fn inl_remove_boomerang<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let mut gobj = gobj;
-    let mut ip: Item<'a> = null(ctx);
-    let mut owner: HSD_GObj<'a> = null(ctx);
-    ip = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
-    owner = (ip).owner();
-    if ((!Handle::is_null(owner))
-        && (Handle::addr(owner) == Handle::addr((ip).xDD4_itemVar().linkboomerang().xF98())))
-        && ((ip).xDD4_itemVar().linkboomerang().xDE8() != 1_i32)
-    {
-        let _ = fns::ftLk_SpecialS_RemoveBoomerang0(ctx, owner);
     }
 }
 

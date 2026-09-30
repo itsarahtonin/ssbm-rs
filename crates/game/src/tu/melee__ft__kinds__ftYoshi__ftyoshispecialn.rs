@@ -712,6 +712,57 @@ fn inl_checkAnimEnd_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>)
     }
 }
 
+fn inl_ftYs_SpecialN_GetBoneIndex_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    return fns::ftParts_GetBoneIndex(
+        ctx,
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))),
+        (enums::FtPart_TransN2 as i32),
+    );
+}
+
+fn inl_ftYs_SpecialN_SetupItemVel_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, out: Vec<'a>) {
+    let mut gobj = gobj;
+    let mut out = out;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut da: _ftYoshiAttributes<'a> = Handle::cast::<_ftYoshiAttributes<'a>>((fp).dat_attrs());
+    (out).set_x(fp::fmuls(fp::fneg((fp).facing_dir()), (da).x10()));
+    (out).set_y((da).x14());
+    (out).set_z(0.0);
+}
+
+fn inl_ftYs_SpecialN_GetFacingDir_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> f64 {
+    let mut gobj = gobj;
+    return (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).facing_dir();
+}
+
+fn inl_ftYs_SpecialN_GetDatAttr24_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> f64 {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut da: ftYs_DatAttrs<'a> = Handle::cast::<ftYs_DatAttrs<'a>>((fp).dat_attrs());
+    return (da).x24();
+}
+
+fn inl_ftYs_SpecialN_GetDatAttr18_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> f64 {
+    let mut gobj = gobj;
+    let mut da: _ftYoshiAttributes<'a> = Handle::cast::<_ftYoshiAttributes<'a>>(
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).dat_attrs(),
+    );
+    return (da).x18();
+}
+
+fn inl_ftYs_SpecialN_8012CDB4_unfused<'a>(ctx: &'a Ctx) -> f64 {
+    let mut ea: _ftYoshiAttributes<'a> = Handle::cast::<_ftYoshiAttributes<'a>>(
+        (fns::gFtDataList(ctx)
+            .at((enums::Ft_Kind_Yoshi as i32))
+            .get())
+        .ext_attr(),
+    );
+    return fp::fdivs((ea).x44(), (ea).x18());
+}
+
 fn inl_inlineB0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, on_anim_end: FnPtr<'a>) {
     let __frame = ctx.stack_frame(0x38);
     let item_attrs: itYoshiEggLay_DatAttrs<'a> = frame_at(ctx, &__frame, 0x0);
@@ -773,18 +824,18 @@ fn inl_inlineB0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, on_anim_end: FnPtr
                             ctx,
                             (Handle::add(
                                 (fp_2).parts(),
-                                fns::ftYs_SpecialN_GetBoneIndex(ctx, gobj),
+                                inl_ftYs_SpecialN_GetBoneIndex_unfused(ctx, gobj),
                             ))
                             .joint(),
                             null::<Vec<'a>>(ctx),
                             item_attrs.pos(),
                         );
                     }
-                    fns::ftYs_SpecialN_SetupItemVel(ctx, gobj, item_attrs.vel());
-                    item_attrs.set_float2(fns::ftYs_SpecialN_GetFacingDir(ctx, gobj));
-                    item_attrs.set_lifetime(fns::ftYs_SpecialN_GetDatAttr24(ctx, gobj));
-                    item_attrs.set_x24(fns::ftYs_SpecialN_GetDatAttr18(ctx, gobj));
-                    item_attrs.set_float3(fns::ftYs_SpecialN_8012CDB4(ctx));
+                    inl_ftYs_SpecialN_SetupItemVel_unfused(ctx, gobj, item_attrs.vel());
+                    item_attrs.set_float2(inl_ftYs_SpecialN_GetFacingDir_unfused(ctx, gobj));
+                    item_attrs.set_lifetime(inl_ftYs_SpecialN_GetDatAttr24_unfused(ctx, gobj));
+                    item_attrs.set_x24(inl_ftYs_SpecialN_GetDatAttr18_unfused(ctx, gobj));
+                    item_attrs.set_float3(inl_ftYs_SpecialN_8012CDB4_unfused(ctx));
                     item_attrs.set_kind((enums::It_Kind_Yoshi_EggLay as i32));
                     fns::it_802F2F34(ctx, gobj, item_attrs);
                     (fp).mv().ys().specialn().set_x0_b0((0_i32 as u8));
@@ -795,6 +846,20 @@ fn inl_inlineB0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, on_anim_end: FnPtr
                 on_anim_end.call::<_, ()>((gobj,));
             }
         }
+    }
+}
+
+fn inl_getFtVictim_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> HSD_GObj<'a> {
+    let mut fp = fp;
+    return (fp).victim_gobj();
+}
+
+fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    let mut victim_gobj: HSD_GObj<'a> = inl_getFtVictim_unfused(ctx, fp);
+    if !Handle::is_null(victim_gobj) {
+        fns::ftCo_800BBC88(ctx, victim_gobj);
+        (fp).cmd_vars().at(1_i32).set((0_i32 as u32));
     }
 }
 
@@ -818,20 +883,6 @@ fn inl_inlineA1_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, anim_end_cb: FnPtr
     if fns::ftAnim_IsFramesRemaining(ctx, gobj) == 0_i32 {
         anim_end_cb.call::<_, ()>((gobj,));
     }
-}
-
-fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
-    let mut fp = fp;
-    let mut victim_gobj: HSD_GObj<'a> = inl_getFtVictim_unfused(ctx, fp);
-    if !Handle::is_null(victim_gobj) {
-        fns::ftCo_800BBC88(ctx, victim_gobj);
-        (fp).cmd_vars().at(1_i32).set((0_i32 as u32));
-    }
-}
-
-fn inl_getFtVictim_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> HSD_GObj<'a> {
-    let mut fp = fp;
-    return (fp).victim_gobj();
 }
 
 /// Registers this unit's ports.

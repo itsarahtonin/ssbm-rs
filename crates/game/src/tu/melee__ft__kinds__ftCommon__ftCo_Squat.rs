@@ -38,13 +38,13 @@ pub fn ftCo_Squat_CheckInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn fn_800D5F84<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
-    return fns::ftCo_Squat_CheckInput(ctx, gobj);
+    return inl_ftCo_Squat_CheckInput_unfused(ctx, gobj);
 }
 
 pub fn ftCo_800D5FB0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
-    if (fns::ftCo_Squat_CheckInput(ctx, gobj) != 0) {
+    if (inl_ftCo_Squat_CheckInput_unfused(ctx, gobj) != 0) {
         statics::melee__ft__kinds__ftCommon__ftCo_Squat::ftCo_Squat_Enter(ctx, gobj);
         return 1_i32;
     }
@@ -276,6 +276,16 @@ pub fn ftCo_Squat_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_ftCo_Squat_CheckInput_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if (fp).input().lstick().get(0_i32).y() < fp::fneg((fns::p_ftCommonData(ctx).get()).x90()) {
+        return 1_i32;
+    }
+    return 0_i32;
 }
 
 fn inl_ftCo_Squat_IASA_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {

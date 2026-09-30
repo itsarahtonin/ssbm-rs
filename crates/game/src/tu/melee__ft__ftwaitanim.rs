@@ -80,7 +80,7 @@ pub fn ftCo_8008A7A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: WaitStruct<'a>)
         {
             let mut temp: i32 = 0;
             temp = (fp).anim_id();
-            fns::ftCo_8008A6D8(ctx, gobj, (fp).anim_id());
+            inl_ftCo_8008A6D8_unfused(ctx, gobj, (fp).anim_id());
             return;
         }
         {
@@ -134,6 +134,34 @@ pub fn ftCo_8008A7A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: WaitStruct<'a>)
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_ftCo_8008A6D8_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, anim_id: i32) {
+    let mut gobj = gobj;
+    let mut anim_id = anim_id;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if anim_id != 1_i32.wrapping_neg() {
+        let mut anim: Fighter_WaitAnimData<'a> = (Handle::add((fp).x24(), anim_id));
+        let mut blend_data: ArrV<'a, u8, 2> = (Handle::add((fp).x28(), anim_id));
+        fns::ftData_80085CD8(ctx, fp, fp, anim_id);
+        (fp).set_anim_id(anim_id);
+        fns::ftCo_8009E7B4(ctx, fp, blend_data);
+        (fp).x3E4_fighterCmdScript().x8().set_u((anim).xC());
+        (fp).x3E4_fighterCmdScript().set_loop_count((0_i32 as u32));
+        if !Handle::is_null((fp).x590()) {
+            (fp).x594().set_x594_s32((anim).x10_animCurrFlags());
+            fns::ftAnim_8006EBE8(
+                ctx,
+                gobj,
+                0.0,
+                1.0,
+                fp::frsp((blend_data).at(0_i32).get() as f64),
+            );
+        }
+        (fp).x3E4_fighterCmdScript().set_timer(0.0);
+        fns::ftAnim_8006EBA4(ctx, gobj);
+    }
 }
 
 fn inl_getAnimID_unfused<'a>(ctx: &'a Ctx, arg1: WaitStruct<'a>) -> i32 {

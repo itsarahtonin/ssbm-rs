@@ -2716,7 +2716,7 @@ pub fn ftCo_800B9CBC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
         (temp_r31).set_x34((temp_r31).x34().wrapping_sub(1));
         return 0_i32;
     }
-    fns::ftCo_800B9704(ctx, fp);
+    inl_ftCo_800B9704(ctx, fp);
     if (fns::ftCo_800A1BA8(ctx, fp) != 0) {
         return 0_i32;
     }
@@ -2965,13 +2965,13 @@ pub fn ftCo_800BA2E8<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Fighter<'a>) -> i3
         if fns::ftCo_800A2A70(ctx, fp, 0_i32)
             > (Handle::add((fns::Fighter_804D64FC(ctx).get()).x20(), (fp).kind())).get()
         {
-            fns::ftCo_800BA160(ctx, fp);
+            inl_ftCo_800BA160_unfused(ctx, fp);
             return 1_i32;
         }
         if fns::ftCo_800A2A70(ctx, fp, 1_i32)
             > (Handle::add((fns::Fighter_804D64FC(ctx).get()).x20(), (fp).kind())).get()
         {
-            fns::ftCo_800BA224(ctx, fp);
+            inl_ftCo_800BA224_unfused(ctx, fp);
             return 1_i32;
         }
         return 0_i32;
@@ -2979,13 +2979,13 @@ pub fn ftCo_800BA2E8<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Fighter<'a>) -> i3
         if fns::ftCo_800A2A70(ctx, fp, 1_i32)
             > (Handle::add((fns::Fighter_804D64FC(ctx).get()).x20(), (fp).kind())).get()
         {
-            fns::ftCo_800BA224(ctx, fp);
+            inl_ftCo_800BA224_unfused(ctx, fp);
             return 1_i32;
         }
         if fns::ftCo_800A2A70(ctx, fp, 0_i32)
             > (Handle::add((fns::Fighter_804D64FC(ctx).get()).x20(), (fp).kind())).get()
         {
-            fns::ftCo_800BA160(ctx, fp);
+            inl_ftCo_800BA160_unfused(ctx, fp);
             return 1_i32;
         }
         return 0_i32;
@@ -3012,9 +3012,9 @@ pub fn ftCo_800BA674<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Fighter<'a>) {
                 (Handle::add((fns::Fighter_804D64FC(ctx).get()).x20(), (fp).kind())).get(),
             )
         {
-            fns::ftCo_800BA160(ctx, fp);
+            inl_ftCo_800BA160_unfused(ctx, fp);
         } else {
-            fns::ftCo_800BA224(ctx, fp);
+            inl_ftCo_800BA224_unfused(ctx, fp);
         }
     } else {
         if fns::ftCo_800A2A70(ctx, fp, 1_i32)
@@ -3023,9 +3023,9 @@ pub fn ftCo_800BA674<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Fighter<'a>) {
                 (Handle::add((fns::Fighter_804D64FC(ctx).get()).x20(), (fp).kind())).get(),
             )
         {
-            fns::ftCo_800BA224(ctx, fp);
+            inl_ftCo_800BA224_unfused(ctx, fp);
         } else {
-            fns::ftCo_800BA160(ctx, fp);
+            inl_ftCo_800BA160_unfused(ctx, fp);
         }
     }
 }
@@ -3910,9 +3910,101 @@ fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, tran
     Handle::copy_from((translate), (jobj).translate());
 }
 
+fn inl_ftCo_800B9704<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    let mut cpu: CpuFighter<'a> = (fp).cpu();
+    let mut rand: f64 = fns::HSD_Randf(ctx);
+    (cpu).set_x34(fp::fctiwz(fp::fmadds(
+        fp::frsp((10_i32.wrapping_sub((cpu).level())) as f64),
+        (fp::fmadds(rand, 15.0, 15.0)),
+        10.0,
+    )));
+    if ((cpu).kind() as u32) == (7_i32 as u32) {
+        (cpu).set_x34(div_i32((cpu).x34(), 2_i32));
+    }
+}
+
 fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_ftCo_800BA160_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    inl_ftCo_CpuSetNeutralStick_unfused(ctx, fp);
+    fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_ReleaseR as i32) as u8));
+    fns::ftCo_800B46B8(
+        ctx,
+        fp,
+        ((enums::CpuCmd_WaitFor as i32) as u8),
+        (1_i32 as u8),
+    );
+    fns::ftCo_800B46B8(
+        ctx,
+        fp,
+        ((enums::CpuCmd_SetLstickX as i32) as u8),
+        (127_i32 as u8),
+    );
+    fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_PressR as i32) as u8));
+    fns::ftCo_800B46B8(
+        ctx,
+        fp,
+        ((enums::CpuCmd_WaitFor as i32) as u8),
+        (2_i32 as u8),
+    );
+    fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_ReleaseR as i32) as u8));
+    fns::ftCo_800B46B8(
+        ctx,
+        fp,
+        ((enums::CpuCmd_WaitFor as i32) as u8),
+        (5_i32 as u8),
+    );
+    fns::ftCo_800B46B8(
+        ctx,
+        fp,
+        ((enums::CpuCmd_SetLstickX as i32) as u8),
+        (0_i32 as u8),
+    );
+    fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_Done as i32) as u8));
+}
+
+fn inl_ftCo_800BA224_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    inl_ftCo_CpuSetNeutralStick_unfused(ctx, fp);
+    fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_ReleaseR as i32) as u8));
+    fns::ftCo_800B46B8(
+        ctx,
+        fp,
+        ((enums::CpuCmd_WaitFor as i32) as u8),
+        (1_i32 as u8),
+    );
+    fns::ftCo_800B46B8(
+        ctx,
+        fp,
+        ((enums::CpuCmd_SetLstickX as i32) as u8),
+        (127_i32.wrapping_neg() as u8),
+    );
+    fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_PressR as i32) as u8));
+    fns::ftCo_800B46B8(
+        ctx,
+        fp,
+        ((enums::CpuCmd_WaitFor as i32) as u8),
+        (2_i32 as u8),
+    );
+    fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_ReleaseR as i32) as u8));
+    fns::ftCo_800B46B8(
+        ctx,
+        fp,
+        ((enums::CpuCmd_WaitFor as i32) as u8),
+        (5_i32 as u8),
+    );
+    fns::ftCo_800B46B8(
+        ctx,
+        fp,
+        ((enums::CpuCmd_SetLstickX as i32) as u8),
+        (0_i32 as u8),
+    );
+    fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_Done as i32) as u8));
 }
 
 fn inl_ftCo_CpuIsRollOrAirDodge_unfused<'a>(ctx: &'a Ctx, id: i32) -> i32 {

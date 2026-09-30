@@ -578,13 +578,6 @@ fn inl_inlineA1_unfused<'a>(ctx: &'a Ctx) -> lb_80011A50_t<'a> {
     return null(ctx);
 }
 
-fn inl_HSD_JObjSetMtxDirtyInline_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
-    let mut jobj = jobj;
-    if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
-        fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
-    }
-}
-
 fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     let mut jobj = jobj;
     let mut result: i32 = 0;
@@ -605,6 +598,13 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         result = 1_i32;
     }
     return result;
+}
+
+fn inl_HSD_JObjSetMtxDirtyInline_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+        fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+    }
 }
 
 /// Registers this unit's ports.

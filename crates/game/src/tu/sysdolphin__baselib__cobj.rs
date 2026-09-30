@@ -671,7 +671,7 @@ pub fn HSD_CObjSetCurrent<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> i32 {
     if !(result != 0) {
         return 0_i32;
     } else {
-        fns::HSD_CObjSetupViewingMtx(ctx, cobj);
+        inl_HSD_CObjSetupViewingMtx_unfused(ctx, cobj);
         return 1_i32;
     }
     #[allow(unreachable_code)]
@@ -730,7 +730,11 @@ pub fn HSD_CObjGetInterest<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, interest: Vec<'
             cstr(ctx, 0x80406224),
         )
     });
-    fns::HSD_WObjGetPosition(ctx, fns::HSD_CObjGetInterestWObj(ctx, cobj), interest);
+    fns::HSD_WObjGetPosition(
+        ctx,
+        inl_HSD_CObjGetInterestWObj_unfused(ctx, cobj),
+        interest,
+    );
 }
 
 pub fn HSD_CObjSetInterest<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, interest: Vec<'a>) {
@@ -747,7 +751,11 @@ pub fn HSD_CObjSetInterest<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, interest: Vec<'
             cstr(ctx, 0x80406224),
         )
     });
-    fns::HSD_WObjSetPosition(ctx, fns::HSD_CObjGetInterestWObj(ctx, cobj), interest);
+    fns::HSD_WObjSetPosition(
+        ctx,
+        inl_HSD_CObjGetInterestWObj_unfused(ctx, cobj),
+        interest,
+    );
 }
 
 pub fn HSD_CObjGetEyePosition<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, position: Vec<'a>) {
@@ -764,7 +772,11 @@ pub fn HSD_CObjGetEyePosition<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, position: Ve
             cstr(ctx, 0x80406224),
         )
     });
-    fns::HSD_WObjGetPosition(ctx, fns::HSD_CObjGetEyePositionWObj(ctx, cobj), position);
+    fns::HSD_WObjGetPosition(
+        ctx,
+        inl_HSD_CObjGetEyePositionWObj_unfused(ctx, cobj),
+        position,
+    );
 }
 
 pub fn HSD_CObjSetEyePosition<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, position: Vec<'a>) {
@@ -781,7 +793,11 @@ pub fn HSD_CObjSetEyePosition<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, position: Ve
             cstr(ctx, 0x80406224),
         )
     });
-    fns::HSD_WObjSetPosition(ctx, fns::HSD_CObjGetEyePositionWObj(ctx, cobj), position);
+    fns::HSD_WObjSetPosition(
+        ctx,
+        inl_HSD_CObjGetEyePositionWObj_unfused(ctx, cobj),
+        position,
+    );
 }
 
 pub fn HSD_CObjGetEyeVector<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, eye: Vec<'a>) -> i32 {
@@ -794,8 +810,8 @@ pub fn HSD_CObjGetEyeVector<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, eye: Vec<'a>) 
         && (!Handle::is_null((cobj).interest())))
         && (!Handle::is_null(eye))
     {
-        fns::HSD_CObjGetEyePosition(ctx, cobj, eyepos);
-        fns::HSD_CObjGetInterest(ctx, cobj, interest);
+        inl_HSD_CObjGetEyePosition_unfused(ctx, cobj, eyepos);
+        inl_HSD_CObjGetInterest_unfused(ctx, cobj, interest);
         ctx.call::<_, ()>(0x80342d78, (interest, eyepos, eye));
         if inl_vec_normalize_check_unfused(ctx, eye, eye) == 0_i32 {
             return 0_i32;
@@ -838,8 +854,8 @@ pub fn HSD_CObjGetEyeDistance<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> f64 {
             cstr(ctx, 0x80406224),
         )
     });
-    fns::HSD_CObjGetEyePosition(ctx, cobj, position);
-    fns::HSD_CObjGetInterest(ctx, cobj, interest);
+    inl_HSD_CObjGetEyePosition_unfused(ctx, cobj, position);
+    inl_HSD_CObjGetInterest_unfused(ctx, cobj, interest);
     ctx.call::<_, ()>(0x80342d78, (interest, position, look_vector));
     return ctx.call::<_, f64>(0x80342dfc, (look_vector,));
 }
@@ -873,8 +889,8 @@ pub fn HSD_CObjGetLeftVector<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, left: Vec<'a>
     let mut cobj = cobj;
     let mut left = left;
     if (!Handle::is_null(cobj)) && (!Handle::is_null(left)) {
-        if fns::HSD_CObjGetEyeVector(ctx, cobj, eye) == 0_i32 {
-            if fns::HSD_CObjGetUpVector(ctx, cobj, up) == 0_i32 {
+        if inl_HSD_CObjGetEyeVector_unfused(ctx, cobj, eye) == 0_i32 {
+            if inl_HSD_CObjGetUpVector_unfused(ctx, cobj, up) == 0_i32 {
                 ctx.call::<_, ()>(0x80342e58, (up, eye, left));
                 if !(inl_vec_normalize_check_unfused(ctx, left, left) != 0) {
                     return 0_i32;
@@ -938,10 +954,12 @@ pub fn HSD_CObjGetViewingMtxPtr<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> ArrV<'a
             break 'l1;
         }
     }
-    if (!(((cobj).flags() & (2_i32 as u32)) != 0)) && (fns::HSD_CObjMtxIsDirty(ctx, cobj) != 0) {
-        fns::HSD_CObjGetEyePosition(ctx, cobj, eyepos);
+    if (!(((cobj).flags() & (2_i32 as u32)) != 0))
+        && (inl_HSD_CObjMtxIsDirty_unfused(ctx, cobj) != 0)
+    {
+        inl_HSD_CObjGetEyePosition_unfused(ctx, cobj, eyepos);
         let _ = inl_get_up_vector_for_viewing_mtx_unfused(ctx, cobj, up_vec);
-        fns::HSD_CObjGetInterest(ctx, cobj, interest);
+        inl_HSD_CObjGetInterest_unfused(ctx, cobj, interest);
         fns::C_MTXLookAt(ctx, (cobj).view_mtx().get(0), eyepos, up_vec, interest);
         inl_HSD_WObjClearFlags_unfused(ctx, (cobj).eyepos(), (2_i32 as u32));
         inl_HSD_WObjClearFlags_unfused(ctx, (cobj).interest(), (2_i32 as u32));
@@ -964,17 +982,19 @@ pub fn HSD_CObjGetInvViewingMtxPtr<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> ArrV
             break 'l1;
         }
     }
-    if (!(((cobj).flags() & (2_i32 as u32)) != 0)) && (fns::HSD_CObjMtxIsDirty(ctx, cobj) != 0) {
-        fns::HSD_CObjGetEyePosition(ctx, cobj, eyepos);
+    if (!(((cobj).flags() & (2_i32 as u32)) != 0))
+        && (inl_HSD_CObjMtxIsDirty_unfused(ctx, cobj) != 0)
+    {
+        inl_HSD_CObjGetEyePosition_unfused(ctx, cobj, eyepos);
         let _ = inl_get_up_vector_for_viewing_mtx_unfused(ctx, cobj, up_vec);
-        fns::HSD_CObjGetInterest(ctx, cobj, interest);
+        inl_HSD_CObjGetInterest_unfused(ctx, cobj, interest);
         fns::C_MTXLookAt(ctx, (cobj).view_mtx().get(0), eyepos, up_vec, interest);
         inl_HSD_WObjClearFlags_unfused(ctx, (cobj).eyepos(), (2_i32 as u32));
         inl_HSD_WObjClearFlags_unfused(ctx, (cobj).interest(), (2_i32 as u32));
         fns::HSD_CObjClearFlags(ctx, cobj, (0x40000000_i32 as u32));
         fns::HSD_CObjSetFlags(ctx, cobj, 0x80000000_u32);
     }
-    return fns::HSD_CObjGetInvViewingMtxPtrDirect(ctx, cobj);
+    return inl_HSD_CObjGetInvViewingMtxPtrDirect_unfused(ctx, cobj);
 }
 
 pub fn HSD_CObjSetRoll<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, roll: f64) {
@@ -1651,7 +1671,7 @@ pub fn HSD_CObjLoadDesc<'a>(ctx: &'a Ctx, desc: HSD_CObjDesc<'a>) -> HSD_CObj<'a
                 }),
             ))
         {
-            cobj = fns::HSD_CObjAlloc(ctx);
+            cobj = inl_HSD_CObjAlloc_unfused(ctx);
         } else {
             cobj = Handle::cast::<HSD_CObj<'a>>(fns::hsdNew(ctx, info));
             (if !Handle::is_null((cobj)) {
@@ -1685,7 +1705,7 @@ pub fn CObjInit<'a>(ctx: &'a Ctx, o: _HSD_Class<'a>) -> i32 {
     }
     cobj = (Handle::cast::<HSD_CObj<'a>>((o)));
     if !Handle::is_null(cobj) {
-        fns::HSD_CObjSetMtxDirty(ctx, cobj);
+        inl_HSD_CObjSetMtxDirty_unfused(ctx, cobj);
     }
     (cobj).set_eyepos(fns::HSD_WObjAlloc(ctx));
     (cobj).set_interest(fns::HSD_WObjAlloc(ctx));
@@ -1699,9 +1719,9 @@ pub fn CObjRelease<'a>(ctx: &'a Ctx, o: _HSD_Class<'a>) {
     let mut interest: HSD_WObj<'a> = null(ctx);
     let mut cobj: HSD_CObj<'a> = (Handle::cast::<HSD_CObj<'a>>((o)));
     fns::HSD_AObjRemove(ctx, (cobj).aobj());
-    eyepos = fns::HSD_CObjGetEyePositionWObj(ctx, cobj);
+    eyepos = inl_HSD_CObjGetEyePositionWObj_unfused(ctx, cobj);
     inl_HSD_WObjUnref_unfused(ctx, eyepos);
-    interest = fns::HSD_CObjGetInterestWObj(ctx, cobj);
+    interest = inl_HSD_CObjGetInterestWObj_unfused(ctx, cobj);
     inl_HSD_WObjUnref_unfused(ctx, interest);
     if !Handle::is_null((cobj).proj_mtx()) {
         fns::HSD_MtxFree(ctx, Handle::cast::<Addr<'a>>((cobj).proj_mtx()));
@@ -1801,8 +1821,104 @@ fn inl_setupOffscreenCamera_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> i32
     return 1_i32;
 }
 
+fn inl_HSD_CObjSetupViewingMtx_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) {
+    let __frame = ctx.stack_frame(0x30);
+    let eyepos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let up_vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let mut cobj = cobj;
+    if (!(((cobj).flags() & (2_i32 as u32)) != 0)) && (fns::HSD_CObjMtxIsDirty(ctx, cobj) != 0) {
+        fns::HSD_CObjGetEyePosition(ctx, cobj, eyepos);
+        let _ = fns::HSD_CObjGetUpVector(ctx, cobj, up_vec);
+        fns::HSD_CObjGetInterest(ctx, cobj, interest);
+        fns::C_MTXLookAt(ctx, (cobj).view_mtx().get(0), eyepos, up_vec, interest);
+        inl_HSD_WObjClearFlags_unfused(ctx, (cobj).eyepos(), (2_i32 as u32));
+        inl_HSD_WObjClearFlags_unfused(ctx, (cobj).interest(), (2_i32 as u32));
+        fns::HSD_CObjClearFlags(ctx, cobj, (0x40000000_i32 as u32));
+        fns::HSD_CObjSetFlags(ctx, cobj, 0x80000000_u32);
+    }
+}
+
+fn inl_HSD_CObjGetInterestWObj_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> HSD_WObj<'a> {
+    let mut cobj = cobj;
+    (if !Handle::is_null((cobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80406224),
+            (0x20d_i32 as u32),
+            cstr(ctx, 0x80406224),
+        )
+    });
+    return (cobj).interest();
+}
+
+fn inl_HSD_CObjGetEyePositionWObj_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> HSD_WObj<'a> {
+    let mut cobj = cobj;
+    (if !Handle::is_null((cobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80406224),
+            (0x219_i32 as u32),
+            cstr(ctx, 0x80406224),
+        )
+    });
+    return (cobj).eyepos();
+}
+
+fn inl_HSD_CObjGetEyePosition_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, position: Vec<'a>) {
+    let mut cobj = cobj;
+    let mut position = position;
+    (if !Handle::is_null((cobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80406224),
+            (0x231_i32 as u32),
+            cstr(ctx, 0x80406224),
+        )
+    });
+    fns::HSD_WObjGetPosition(
+        ctx,
+        inl_HSD_CObjGetEyePositionWObj_unfused(ctx, cobj),
+        position,
+    );
+}
+
+fn inl_HSD_CObjGetInterest_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, interest: Vec<'a>) {
+    let mut cobj = cobj;
+    let mut interest = interest;
+    (if !Handle::is_null((cobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80406224),
+            (0x225_i32 as u32),
+            cstr(ctx, 0x80406224),
+        )
+    });
+    fns::HSD_WObjGetPosition(
+        ctx,
+        inl_HSD_CObjGetInterestWObj_unfused(ctx, cobj),
+        interest,
+    );
+}
+
+fn inl_fabsf_bitwise_unfused<'a>(ctx: &'a Ctx, v: f64) -> f64 {
+    let __frame = ctx.stack_frame(0x10);
+    let v__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    v__slot.set(v);
+    (Handle::cast::<Val<'a, u32>>(v__slot))
+        .set(((Handle::cast::<Val<'a, u32>>(v__slot)).get() & (!0x80000000_u32)));
+    return v__slot.get();
+}
+
 fn inl_vec_normalize_check_unfused<'a>(ctx: &'a Ctx, src: Vec<'a>, dst: Vec<'a>) -> i32 {
-    let __frame = ctx.stack_frame(0x38);
     let mut src = src;
     let mut dst = dst;
     if (!(!Handle::is_null(src))) || (!(!Handle::is_null(dst))) {
@@ -1818,7 +1934,69 @@ fn inl_vec_normalize_check_unfused<'a>(ctx: &'a Ctx, src: Vec<'a>, dst: Vec<'a>)
     return 0_i32;
 }
 
-fn inl_fabsf_bitwise_unfused<'a>(ctx: &'a Ctx, v: f64) -> f64 {
+fn inl_HSD_CObjGetEyePositionWObj<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> HSD_WObj<'a> {
+    let mut cobj = cobj;
+    (if !Handle::is_null((cobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80406224),
+            (0x219_i32 as u32),
+            cstr(ctx, 0x80406224),
+        )
+    });
+    return (cobj).eyepos();
+}
+
+fn inl_HSD_CObjGetEyePosition<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, position: Vec<'a>) {
+    let mut cobj = cobj;
+    let mut position = position;
+    (if !Handle::is_null((cobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80406224),
+            (0x231_i32 as u32),
+            cstr(ctx, 0x80406224),
+        )
+    });
+    fns::HSD_WObjGetPosition(ctx, inl_HSD_CObjGetEyePositionWObj(ctx, cobj), position);
+}
+
+fn inl_HSD_CObjGetInterestWObj<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> HSD_WObj<'a> {
+    let mut cobj = cobj;
+    (if !Handle::is_null((cobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80406224),
+            (0x20d_i32 as u32),
+            cstr(ctx, 0x80406224),
+        )
+    });
+    return (cobj).interest();
+}
+
+fn inl_HSD_CObjGetInterest<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, interest: Vec<'a>) {
+    let mut cobj = cobj;
+    let mut interest = interest;
+    (if !Handle::is_null((cobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80406224),
+            (0x225_i32 as u32),
+            cstr(ctx, 0x80406224),
+        )
+    });
+    fns::HSD_WObjGetPosition(ctx, inl_HSD_CObjGetInterestWObj(ctx, cobj), interest);
+}
+
+fn inl_fabsf_bitwise<'a>(ctx: &'a Ctx, v: f64) -> f64 {
     let __frame = ctx.stack_frame(0x10);
     let v__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
     v__slot.set(v);
@@ -1827,19 +2005,105 @@ fn inl_fabsf_bitwise_unfused<'a>(ctx: &'a Ctx, v: f64) -> f64 {
     return v__slot.get();
 }
 
+fn inl_vec_normalize_check<'a>(ctx: &'a Ctx, src: Vec<'a>, dst: Vec<'a>) -> i32 {
+    let mut src = src;
+    let mut dst = dst;
+    if (!(!Handle::is_null(src))) || (!(!Handle::is_null(dst))) {
+        return 1_i32.wrapping_neg();
+    }
+    if ((inl_fabsf_bitwise(ctx, (src).x()) <= 1.1754943508222875e-38_f64)
+        && (inl_fabsf_bitwise(ctx, (src).y()) <= 1.1754943508222875e-38_f64))
+        && (inl_fabsf_bitwise(ctx, (src).z()) <= 1.1754943508222875e-38_f64)
+    {
+        return 1_i32.wrapping_neg();
+    }
+    fns::PSVECNormalize(ctx, src, dst);
+    return 0_i32;
+}
+
+fn inl_HSD_CObjGetEyeVector<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, eye: Vec<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x20);
+    let eyepos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let interest: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let mut cobj = cobj;
+    let mut eye = eye;
+    if (((!Handle::is_null(cobj)) && (!Handle::is_null((cobj).eyepos())))
+        && (!Handle::is_null((cobj).interest())))
+        && (!Handle::is_null(eye))
+    {
+        inl_HSD_CObjGetEyePosition(ctx, cobj, eyepos);
+        inl_HSD_CObjGetInterest(ctx, cobj, interest);
+        ctx.call::<_, ()>(0x80342d78, (interest, eyepos, eye));
+        if inl_vec_normalize_check(ctx, eye, eye) == 0_i32 {
+            return 0_i32;
+        }
+    }
+    if !Handle::is_null(eye) {
+        (eye).set_x(0.0);
+        (eye).set_y(0.0);
+        (eye).set_z(fp::fneg(1.0));
+    }
+    return 1_i32.wrapping_neg();
+}
+
 fn inl_cobj_get_up_x_unfused<'a>(ctx: &'a Ctx, up: Vec<'a>) -> f64 {
     let mut up = up;
     return (up).x();
 }
 
-fn inl_get_up_vector_for_viewing_mtx_unfused<'a>(
-    ctx: &'a Ctx,
-    cobj: HSD_CObj<'a>,
-    up: Vec<'a>,
-) -> i32 {
+fn inl_HSD_CObjGetEyeVector_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, eye: Vec<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x20);
+    let eyepos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let interest: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let mut cobj = cobj;
+    let mut eye = eye;
+    if (((!Handle::is_null(cobj)) && (!Handle::is_null((cobj).eyepos())))
+        && (!Handle::is_null((cobj).interest())))
+        && (!Handle::is_null(eye))
+    {
+        inl_HSD_CObjGetEyePosition_unfused(ctx, cobj, eyepos);
+        inl_HSD_CObjGetInterest_unfused(ctx, cobj, interest);
+        ctx.call::<_, ()>(0x80342d78, (interest, eyepos, eye));
+        if inl_vec_normalize_check_unfused(ctx, eye, eye) == 0_i32 {
+            return 0_i32;
+        }
+    }
+    if !Handle::is_null(eye) {
+        (eye).set_x(0.0);
+        (eye).set_y(0.0);
+        (eye).set_z(fp::fneg(1.0));
+    }
+    return 1_i32.wrapping_neg();
+}
+
+fn inl_HSD_CObjGetUpVector_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, up: Vec<'a>) -> i32 {
     let mut cobj = cobj;
     let mut up = up;
-    return inl_get_up_vector_for_viewing_mtx_inner_unfused(ctx, cobj, up);
+    if (!Handle::is_null(cobj)) && (!Handle::is_null(up)) {
+        if ((cobj).flags() & (1_i32 as u32)) != (0_i32 as u32) {
+            Handle::copy_from((up), (cobj).u().up());
+            return 0_i32;
+        }
+        if statics::sysdolphin__baselib__cobj::roll2upvec(ctx, cobj, up, (cobj).u().roll()) == 0_i32
+        {
+            return 0_i32;
+        }
+    }
+    if !Handle::is_null(up) {
+        (up).set_x(0.0);
+        (up).set_y(1.0);
+        (up).set_z(0.0);
+    }
+    return 1_i32.wrapping_neg();
+}
+
+fn inl_HSD_CObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> i32 {
+    let mut cobj = cobj;
+    return (((((cobj).flags() & ((shl_i32(1_i32, (30_i32 as u32))) as u32)) != 0)
+        || ((!Handle::is_null((cobj).eyepos()))
+            && ((((cobj).eyepos()).flags() & (2_i32 as u32)) != 0)))
+        || ((!Handle::is_null((cobj).interest()))
+            && ((((cobj).interest()).flags() & (2_i32 as u32)) != 0))) as i32;
 }
 
 fn inl_get_up_vector_for_viewing_mtx_inner_unfused<'a>(
@@ -1852,6 +2116,16 @@ fn inl_get_up_vector_for_viewing_mtx_inner_unfused<'a>(
     return fns::HSD_CObjGetUpVector(ctx, cobj, up);
 }
 
+fn inl_get_up_vector_for_viewing_mtx_unfused<'a>(
+    ctx: &'a Ctx,
+    cobj: HSD_CObj<'a>,
+    up: Vec<'a>,
+) -> i32 {
+    let mut cobj = cobj;
+    let mut up = up;
+    return inl_get_up_vector_for_viewing_mtx_inner_unfused(ctx, cobj, up);
+}
+
 fn inl_HSD_CObjGetViewingMtxPtrDirect_unfused<'a>(
     ctx: &'a Ctx,
     cobj: HSD_CObj<'a>,
@@ -1860,21 +2134,53 @@ fn inl_HSD_CObjGetViewingMtxPtrDirect_unfused<'a>(
     return (cobj).view_mtx().get(0);
 }
 
-fn inl_HSD_WObjUnref_unfused<'a>(ctx: &'a Ctx, wobj: HSD_WObj<'a>) {
-    let mut wobj = wobj;
-    if Handle::is_null(wobj) {
-        return;
-    }
-    if inl_ref_DEC_unfused(ctx, Handle::cast::<Addr<'a>>(wobj)) != 0_i32 {
-        if !Handle::is_null(wobj) {
-            ((wobj).parent().parent().class_info())
-                .release()
-                .call::<_, ()>((Handle::cast::<_HSD_Class<'a>>(wobj),));
-            ((wobj).parent().parent().class_info())
-                .destroy()
-                .call::<_, ()>((Handle::cast::<_HSD_Class<'a>>(wobj),));
+fn inl_HSD_CObjGetInvViewingMtxPtrDirect_unfused<'a>(
+    ctx: &'a Ctx,
+    cobj: HSD_CObj<'a>,
+) -> ArrV<'a, F32, 4> {
+    let mut cobj = cobj;
+    if (((cobj).flags() & ((shl_i32(1_i32, (31_i32 as u32))) as u32)) != 0) {
+        if Handle::is_null((cobj).proj_mtx()) {
+            (cobj).set_proj_mtx(Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(
+                fns::HSD_MtxAlloc(ctx),
+            ));
         }
+        let _ = fns::PSMTXInverse(ctx, (cobj).view_mtx().get(0), ((cobj).proj_mtx()).get(0));
+        fns::HSD_CObjClearFlags(ctx, cobj, ((shl_i32(1_i32, (31_i32 as u32))) as u32));
     }
+    return ((cobj).proj_mtx()).get(0);
+}
+
+fn inl_HSD_CObjAlloc_unfused<'a>(ctx: &'a Ctx) -> HSD_CObj<'a> {
+    let mut cobj: HSD_CObj<'a> = (Handle::cast::<HSD_CObj<'a>>(
+        (fns::hsdNew(
+            ctx,
+            (if !Handle::is_null(statics::sysdolphin__baselib__cobj::default_class(ctx).get()) {
+                statics::sysdolphin__baselib__cobj::default_class(ctx).get()
+            } else {
+                fns::hsdCObj(ctx).parent().parent()
+            }),
+        )),
+    ));
+    (if !Handle::is_null((cobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80406224),
+            (0x4e4_i32 as u32),
+            cstr(ctx, 0x80406224),
+        )
+    });
+    return cobj;
+}
+
+fn inl_HSD_CObjSetMtxDirty_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) {
+    let mut cobj = cobj;
+    (cobj).set_flags(
+        ((cobj).flags()
+            | (((shl_i32(1_i32, (30_i32 as u32))) | (shl_i32(1_i32, (31_i32 as u32)))) as u32)),
+    );
 }
 
 fn inl_ref_DEC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) -> i32 {
@@ -1896,6 +2202,23 @@ fn inl_ref_DEC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) -> i32 {
         __t2
     } as i32)
         == 0_i32) as i32;
+}
+
+fn inl_HSD_WObjUnref_unfused<'a>(ctx: &'a Ctx, wobj: HSD_WObj<'a>) {
+    let mut wobj = wobj;
+    if Handle::is_null(wobj) {
+        return;
+    }
+    if inl_ref_DEC_unfused(ctx, Handle::cast::<Addr<'a>>(wobj)) != 0_i32 {
+        if !Handle::is_null(wobj) {
+            ((wobj).parent().parent().class_info())
+                .release()
+                .call::<_, ()>((Handle::cast::<_HSD_Class<'a>>(wobj),));
+            ((wobj).parent().parent().class_info())
+                .destroy()
+                .call::<_, ()>((Handle::cast::<_HSD_Class<'a>>(wobj),));
+        }
+    }
 }
 
 /// Registers this unit's ports.

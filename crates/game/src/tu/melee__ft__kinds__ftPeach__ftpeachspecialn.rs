@@ -94,7 +94,7 @@ pub fn ftPe_SpecialN_OnDeath2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if !Handle::is_null((fp).u().pe().toad_gobj()) {
         fns::it_802BDF40(ctx, (fp).u().pe().toad_gobj());
-        fns::ftPe_SpecialN_DoDeath2(ctx, gobj);
+        inl_ftPe_SpecialN_DoDeath2_unfused(ctx, gobj);
     }
 }
 
@@ -414,7 +414,7 @@ pub fn onUnkHit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     if !Handle::is_null((fp).u().pe().toad_gobj()) {
         fns::it_802BE100(ctx, (fp).u().pe().toad_gobj());
     }
-    statics::melee__ft__kinds__ftPeach__ftpeachspecialn::setupHitColl(ctx, gobj);
+    inl_setupHitColl_unfused(ctx, gobj);
 }
 
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
@@ -443,6 +443,16 @@ fn inl_doHitAccessory4_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (enums::It_Kind_Peach_ToadSpore as i32),
         (fp).facing_dir(),
     );
+}
+
+fn inl_ftPe_SpecialN_DoDeath2_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    statics::melee__ft__kinds__ftPeach__ftpeachspecialn::onExitHitlag(ctx, gobj);
+    (fp).u().pe().set_toad_gobj(null::<HSD_GObj<'a>>(ctx));
+    (fp).set_death2_cb(null::<FnPtr<'a>>(ctx));
+    (fp).set_take_dmg_cb(null::<FnPtr<'a>>(ctx));
 }
 
 fn inl_reset_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -589,6 +599,18 @@ fn inl_doHitAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
         cb.call::<_, ()>((gobj,));
     }
+}
+
+fn inl_setupHitColl_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if !Handle::is_null((fp).u().pe().toad_gobj()) {
+        (fp).set_death2_cb(fnptr(ctx, 0x8011b704));
+        (fp).set_take_dmg_cb(fnptr(ctx, 0x8011b704));
+    }
+    (fp).set_pre_hitlag_cb(fnptr(ctx, 0x8011e348));
+    (fp).set_post_hitlag_cb(fnptr(ctx, 0x8011e378));
 }
 
 /// Registers this unit's ports.

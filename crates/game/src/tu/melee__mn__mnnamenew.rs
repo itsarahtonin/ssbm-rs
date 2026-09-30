@@ -1934,6 +1934,16 @@ fn inl_mnNameNew_SetKeyColor_unfused<'a>(
     fns::HSD_SisLib_803A74F0(ctx, text, index, color_ptr);
 }
 
+fn inl_GetAutoNameCharacter_unfused<'a>(
+    ctx: &'a Ctx,
+    names: Ptr<'a, Val<'a, u8>>,
+    char_idx: i32,
+) -> u8 {
+    let mut names = names;
+    let mut char_idx = char_idx;
+    return (Handle::add(((names).get()), char_idx)).get();
+}
+
 fn inl_PickAutoNameInline_unfused<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 {
     let mut arg0 = arg0;
     let mut cur_text: Val<'a, i8> = null(ctx);
@@ -2052,16 +2062,6 @@ fn inl_PickAutoNameInline_unfused<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 {
     return (null_ch as i32);
 }
 
-fn inl_GetAutoNameCharacter_unfused<'a>(
-    ctx: &'a Ctx,
-    names: Ptr<'a, Val<'a, u8>>,
-    char_idx: i32,
-) -> u8 {
-    let mut names = names;
-    let mut char_idx = char_idx;
-    return (Handle::add(((names).get()), char_idx)).get();
-}
-
 fn inl_AddCharacterToName_getGlyphs_unfused<'a>(
     ctx: &'a Ctx,
     arg0: ArrP<'a, Val<'a, i8>, 4>,
@@ -2093,6 +2093,28 @@ fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JOb
     }
     #[allow(unreachable_code)]
     return null(ctx);
+}
+
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8530),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b8530),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
@@ -2128,33 +2150,28 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b8530),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b8530),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
-}
-
 fn inl_GlyphVariantCount_unfused<'a>(ctx: &'a Ctx, count: u16, out: Val<'a, i32>) {
     let mut count = count;
     let mut out = out;
     count = (((count as i32) & 255_i32) as u16);
     (out).set((count as i32));
+}
+
+fn inl_AnimateGlyphVariant_unfused<'a>(
+    ctx: &'a Ctx,
+    variant: HSD_JObj<'a>,
+    user_data: GlyphVariantEntry<'a>,
+    i: i32,
+) {
+    let mut variant = variant;
+    let mut user_data = user_data;
+    let mut i = i;
+    fns::HSD_JObjReqAnimAll(
+        ctx,
+        variant,
+        fp::frsp(((((user_data).selection() as i32) == i) as i32) as f64),
+    );
+    fns::HSD_JObjAnimAll(ctx, variant);
 }
 
 fn inl_CreateGlyphVariant_unfused<'a>(
@@ -2179,23 +2196,6 @@ fn inl_CreateGlyphVariant_unfused<'a>(
     );
     inl_AnimateGlyphVariant_unfused(ctx, variant, user_data, i);
     (out).set(variant);
-}
-
-fn inl_AnimateGlyphVariant_unfused<'a>(
-    ctx: &'a Ctx,
-    variant: HSD_JObj<'a>,
-    user_data: GlyphVariantEntry<'a>,
-    i: i32,
-) {
-    let mut variant = variant;
-    let mut user_data = user_data;
-    let mut i = i;
-    fns::HSD_JObjReqAnimAll(
-        ctx,
-        variant,
-        fp::frsp(((((user_data).selection() as i32) == i) as i32) as f64),
-    );
-    fns::HSD_JObjAnimAll(ctx, variant);
 }
 
 fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {

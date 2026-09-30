@@ -1210,6 +1210,11 @@ fn inl_ftCommon_AirToGroundStateChange_unfused<'a>(
     );
 }
 
+fn inl_returnStateVar<'a>(ctx: &'a Ctx, stateVar: i32) -> f64 {
+    let mut stateVar = stateVar;
+    return fp::frsp(stateVar as f64);
+}
+
 fn inl_getAttrStuff<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let mut arg0 = arg0;
     let mut temp_r30: Fighter<'a> = Handle::cast::<Fighter<'a>>((arg0).user_data());
@@ -1242,11 +1247,6 @@ fn inl_getAttrStuff<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             )),
         ),
     );
-}
-
-fn inl_returnStateVar<'a>(ctx: &'a Ctx, stateVar: i32) -> f64 {
-    let mut stateVar = stateVar;
-    return fp::frsp(stateVar as f64);
 }
 
 fn inl_MagnetStateVarCalc_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

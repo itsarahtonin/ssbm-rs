@@ -875,6 +875,11 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     return x;
 }
 
+fn inl_getFighter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {
+    let mut gobj = gobj;
+    return Handle::cast::<Fighter<'a>>((gobj).user_data());
+}
+
 fn inl_ftMewtwo_SpecialHi_SetVars<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = inl_getFighter(ctx, gobj);
@@ -892,11 +897,6 @@ fn inl_ftMewtwo_SpecialHi_SetVars<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::ftColl_8007B62C(ctx, gobj, 2_i32);
     (fp).set_invisible((1_i32 as u8));
     fns::ft_PlaySFX(ctx, fp, 0x30da1_i32, (127_i32 as u8), (64_i32 as u8));
-}
-
-fn inl_getFighter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {
-    let mut gobj = gobj;
-    return Handle::cast::<Fighter<'a>>((gobj).user_data());
 }
 
 fn inl_stickGetDir<'a>(ctx: &'a Ctx, x1: f64, x2: f64) -> f64 {

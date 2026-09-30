@@ -262,6 +262,18 @@ fn inl_getFtSpecialAttrs_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> 
     return fighter_attr;
 }
 
+fn inl_stickGetDir_unfused<'a>(ctx: &'a Ctx, x1: f64, x2: f64) -> f64 {
+    let mut x1 = x1;
+    let mut x2 = x2;
+    if x1 < x2 {
+        return fp::fneg(x1);
+    } else {
+        return x1;
+    }
+    #[allow(unreachable_code)]
+    return 0.0;
+}
+
 fn inl_ftCaptain_SpecialN_GetAngleVel_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> f64 {
     let mut fp = fp;
     let mut da: ftCaptain_DatAttrs<'a> = Handle::cast::<ftCaptain_DatAttrs<'a>>((fp).dat_attrs());
@@ -295,18 +307,6 @@ fn inl_ftCaptain_SpecialN_GetAngleVel_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>)
                 )),
             );
         }
-    }
-    #[allow(unreachable_code)]
-    return 0.0;
-}
-
-fn inl_stickGetDir_unfused<'a>(ctx: &'a Ctx, x1: f64, x2: f64) -> f64 {
-    let mut x1 = x1;
-    let mut x2 = x2;
-    if x1 < x2 {
-        return fp::fneg(x1);
-    } else {
-        return x1;
     }
     #[allow(unreachable_code)]
     return 0.0;

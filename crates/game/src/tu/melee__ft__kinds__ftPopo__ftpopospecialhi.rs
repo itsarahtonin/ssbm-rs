@@ -120,7 +120,7 @@ pub fn ftPp_SpecialS_80121164<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if !Handle::is_null((fp).u().pp().x2238()) {
         fns::it_802C2750(ctx, (fp).u().pp().x2238());
-        fns::ftPp_SpecialS_8012114C(ctx, gobj);
+        inl_ftPp_SpecialS_8012114C_unfused(ctx, gobj);
     }
 }
 
@@ -1265,6 +1265,15 @@ fn inl_my_sqrtf<'a>(ctx: &'a Ctx, x: f64, y: Val<'a, F32>) -> f64 {
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_ftPp_SpecialS_8012114C_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    (fp).u().pp().set_x2238(null::<HSD_GObj<'a>>(ctx));
+    (fp).set_death3_cb(null::<FnPtr<'a>>(ctx));
+    (fp).set_take_dmg_cb(null::<FnPtr<'a>>(ctx));
 }
 
 fn inl_ftGetFacingDirInt_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {

@@ -398,7 +398,7 @@ pub fn ftLk_SpecialAirS2_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftLk_SpecialAirS1Empty_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    fns::ftLk_SpecialAirS1_Anim(ctx, gobj);
+    inl_ftLk_SpecialAirS1_Anim_unfused(ctx, gobj);
 }
 
 pub fn ftLk_SpecialS2_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -583,6 +583,13 @@ fn inl_doS2Anim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
     }
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
         cb.call::<_, ()>((gobj,));
+    }
+}
+
+fn inl_ftLk_SpecialAirS1_Anim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
+        fns::ftCo_Fall_Enter(ctx, gobj);
     }
 }
 

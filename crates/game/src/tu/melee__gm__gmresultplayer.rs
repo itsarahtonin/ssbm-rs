@@ -1576,6 +1576,15 @@ fn inl_fn_80178BB4_init_players_unfused<'a>(
     }
 }
 
+fn inl_fn_80179350_inline_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    return fns::fn_801791E4(ctx);
+}
+
+fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).hsd_obj();
+}
+
 fn inl_fn_80179350_update_unfused<'a>(
     ctx: &'a Ctx,
     data: ResultsData<'a>,
@@ -1681,15 +1690,6 @@ fn inl_fn_80179350_update_unfused<'a>(
             }
         }
     }
-}
-
-fn inl_fn_80179350_inline_unfused<'a>(ctx: &'a Ctx) -> i32 {
-    return fns::fn_801791E4(ctx);
-}
-
-fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).hsd_obj();
 }
 
 /// Registers this unit's ports.

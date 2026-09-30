@@ -423,6 +423,30 @@ fn inl_findState_unfused<'a>(ctx: &'a Ctx, state: GameModeState<'a>) -> GameMode
     return null::<GameModeState<'a>>(ctx);
 }
 
+fn inl_firstState_unfused<'a>(ctx: &'a Ctx, state: GameModeState<'a>, next_id: u8) -> u8 {
+    let mut state = state;
+    let mut next_id = next_id;
+    {
+        'l1: while ((state).id() as i32) != ((1_i32.wrapping_neg() as u8) as i32) {
+            'c2: {
+                'l3: loop {
+                    'c4: {
+                        if ((state).id() as i32) == (next_id as i32) {
+                            break 'l3;
+                        }
+                    }
+                    if !(0_i32 != 0) {
+                        break 'l3;
+                    }
+                }
+                return (state).id();
+            }
+            state = Handle::add(state, 1);
+        }
+    }
+    return (0_i32 as u8);
+}
+
 fn inl_nextState_unfused<'a>(ctx: &'a Ctx, states: GameModeState<'a>) -> u8 {
     let mut states = states;
     let mut next: GameModeState<'a> = states;
@@ -452,30 +476,6 @@ fn inl_nextState_unfused<'a>(ctx: &'a Ctx, states: GameModeState<'a>) -> u8 {
         }
     }
     return inl_firstState_unfused(ctx, states, next_id);
-}
-
-fn inl_firstState_unfused<'a>(ctx: &'a Ctx, state: GameModeState<'a>, next_id: u8) -> u8 {
-    let mut state = state;
-    let mut next_id = next_id;
-    {
-        'l1: while ((state).id() as i32) != ((1_i32.wrapping_neg() as u8) as i32) {
-            'c2: {
-                'l3: loop {
-                    'c4: {
-                        if ((state).id() as i32) == (next_id as i32) {
-                            break 'l3;
-                        }
-                    }
-                    if !(0_i32 != 0) {
-                        break 'l3;
-                    }
-                }
-                return (state).id();
-            }
-            state = Handle::add(state, 1);
-        }
-    }
-    return (0_i32 as u8);
 }
 
 fn inl_findMode_unfused<'a>(ctx: &'a Ctx, kind: u8) -> GameMode<'a> {

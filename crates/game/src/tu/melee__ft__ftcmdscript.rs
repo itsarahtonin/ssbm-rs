@@ -737,8 +737,8 @@ pub fn ftCo_800B46B8<'a>(ctx: &'a Ctx, fp: Fighter<'a>, cmd: u8, arg: u8) {
     let mut fp = fp;
     let mut cmd = cmd;
     let mut arg = arg;
-    fns::ftCo_800B463C(ctx, fp, cmd);
-    fns::ftCo_800B463C(ctx, fp, arg);
+    inl_ftCo_800B463C_unfused(ctx, fp, cmd);
+    inl_ftCo_800B463C_unfused(ctx, fp, arg);
 }
 
 pub fn ftCo_800B4778<'a>(ctx: &'a Ctx, fp: Fighter<'a>, cmd: u8, arg1: u8, arg2: u8) {
@@ -747,9 +747,9 @@ pub fn ftCo_800B4778<'a>(ctx: &'a Ctx, fp: Fighter<'a>, cmd: u8, arg1: u8, arg2:
     let mut cmd = cmd;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
-    fns::ftCo_800B463C(ctx, fp, cmd);
-    fns::ftCo_800B463C(ctx, fp, arg1);
-    fns::ftCo_800B463C(ctx, fp, arg2);
+    inl_ftCo_800B463C_unfused(ctx, fp, cmd);
+    inl_ftCo_800B463C_unfused(ctx, fp, arg1);
+    inl_ftCo_800B463C_unfused(ctx, fp, arg2);
 }
 
 pub fn ftCo_800B4880<'a>(ctx: &'a Ctx, fp: Fighter<'a>, script_idx: i32) {
@@ -760,26 +760,26 @@ pub fn ftCo_800B4880<'a>(ctx: &'a Ctx, fp: Fighter<'a>, script_idx: i32) {
         (Handle::add((fns::Fighter_804D64FC(ctx).get()).cmdscripts(), script_idx)).get();
     'l1: while ((cmd).get() as i32) != (enums::CpuCmd_Done as i32) {
         'c2: {
-            fns::ftCo_800B463C(ctx, fp, (cmd).get());
+            inl_ftCo_800B463C_unfused(ctx, fp, (cmd).get());
             if ((cmd).get() as i32) > (enums::CpuCmd_OneArgEnd as i32) {
                 cmd = Handle::add(cmd, 1);
-                fns::ftCo_800B463C(ctx, fp, (cmd).get());
+                inl_ftCo_800B463C_unfused(ctx, fp, (cmd).get());
             }
             if ((cmd).get() as i32) > (enums::CpuCmd_ZeroArgEnd as i32) {
                 cmd = Handle::add(cmd, 1);
-                fns::ftCo_800B463C(ctx, fp, (cmd).get());
+                inl_ftCo_800B463C_unfused(ctx, fp, (cmd).get());
             }
             cmd = Handle::add(cmd, 1);
         }
     }
-    fns::ftCo_800B463C(ctx, fp, (cmd).get());
+    inl_ftCo_800B463C_unfused(ctx, fp, (cmd).get());
 }
 
 pub fn ftCo_800B49F4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut fp = fp;
     let mut data: CpuFighter<'a> = (fp).cpu();
-    fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_Done as i32) as u8));
+    inl_ftCo_800B463C_unfused(ctx, fp, ((enums::CpuCmd_Done as i32) as u8));
     (data).set_csP((data).buffer().at(0));
     (data).set_command_duration((1_i32 as u32));
 }
@@ -796,7 +796,38 @@ pub fn ftCo_800B4A78<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     (data).set_ltrigger((0_i32 as u8));
     (data).set_csP(null::<Val<'a, i8>>(ctx));
     (data).set_command_duration((0_i32 as u32));
-    fns::ftCo_800B462C(ctx, fp);
+    inl_ftCo_800B462C_unfused(ctx, fp);
+}
+
+fn inl_ftCo_800B463C_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, cmd: u8) {
+    let mut fp = fp;
+    let mut cmd = cmd;
+    let mut data: CpuFighter<'a> = (fp).cpu();
+    if Handle::addr((data).write_pos())
+        >= Handle::addr(Handle::add((data).buffer().at(0), (0x100_u32 as i32)))
+    {
+        (if ((0_i32) != 0) {
+            { () }
+        } else {
+            ({
+                fns::OSReport(ctx, cstr(ctx, 0x803c60e0), &[]);
+                fns::__assert(
+                    ctx,
+                    cstr(ctx, 0x803c6104),
+                    (0x14b_i32 as u32),
+                    cstr(ctx, 0x803c6104),
+                )
+            })
+        });
+    }
+    ((data).write_pos()).set((cmd as i8));
+    (data).set_write_pos(Handle::add((data).write_pos(), 1));
+}
+
+fn inl_ftCo_800B462C_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    let mut data: CpuFighter<'a> = (fp).cpu();
+    (data).set_write_pos((data).buffer().at(0));
 }
 
 /// Registers this unit's ports.

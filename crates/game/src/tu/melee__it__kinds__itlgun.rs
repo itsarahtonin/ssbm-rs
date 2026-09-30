@@ -245,6 +245,19 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_itResetVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
+    let mut ip = ip;
+    (ip).x40_vel().set_x({
+        let __t2 = {
+            let __t1 = 0.0;
+            (ip).x40_vel().set_z(__t1);
+            __t1
+        };
+        (ip).x40_vel().set_y(__t2);
+        __t2
+    });
+}
+
 fn inl_Item_StopAndEnterState_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -257,19 +270,6 @@ fn inl_Item_StopAndEnterState_unfused<'a>(
     inl_itResetVelocity_unfused(ctx, ip);
     fns::it_8026B390(ctx, gobj);
     fns::Item_80268E5C(ctx, gobj, msid, (enums::ITEM_ANIM_UPDATE as i32));
-}
-
-fn inl_itResetVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
-    let mut ip = ip;
-    (ip).x40_vel().set_x({
-        let __t2 = {
-            let __t1 = 0.0;
-            (ip).x40_vel().set_z(__t1);
-            __t1
-        };
-        (ip).x40_vel().set_y(__t2);
-        __t2
-    });
 }
 
 fn inl_Item_ApplyFallingPhysics_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

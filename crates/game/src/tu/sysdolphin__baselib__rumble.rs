@@ -69,7 +69,7 @@ pub fn HSD_PadRumbleRemove<'a>(ctx: &'a Ctx, no: u8) {
     'l1: while !Handle::is_null(r4) {
         'c2: {
             let mut r30: HSD_PadRumbleListData<'a> = (r4).next();
-            fns::HSD_PadRumbleFree(ctx, r28, r4);
+            inl_HSD_PadRumbleFree_unfused(ctx, r28, r4);
             r4 = r30;
         }
     }
@@ -83,7 +83,7 @@ pub fn HSD_PadRumbleRemoveAll<'a>(ctx: &'a Ctx) {
         i = 0_i32;
         'l1: while i < 4_i32 {
             'c2: {
-                fns::HSD_PadRumbleRemove(ctx, (i as u8));
+                inl_HSD_PadRumbleRemove_unfused(ctx, (i as u8));
             }
             i = i.wrapping_add(1);
         }
@@ -101,7 +101,7 @@ pub fn HSD_PadRumbleRemoveId<'a>(ctx: &'a Ctx, no: u8, id: i32) {
         'c2: {
             let mut r6: HSD_PadRumbleListData<'a> = (r7).next();
             if (r7).id() == (id as u32) {
-                fns::HSD_PadRumbleFree(ctx, r31, r7);
+                inl_HSD_PadRumbleFree_unfused(ctx, r31, r7);
             }
             r7 = r6;
         }
@@ -288,7 +288,7 @@ pub fn HSD_PadRumbleInterpret<'a>(ctx: &'a Ctx) {
                         'c4: {
                             r28 = (r29).next();
                             if fns::HSD_PadRumbleInterpret1(ctx, r29, (r30).status_ref()) != 0_i32 {
-                                fns::HSD_PadRumbleFree(ctx, r30, r29);
+                                inl_HSD_PadRumbleFree_unfused(ctx, r30, r29);
                             }
                             r29 = r28;
                         }
@@ -358,6 +358,41 @@ pub fn HSD_PadRumbleInit<'a>(ctx: &'a Ctx, a: u16, b: Addr<'a>) {
             i = i.wrapping_add(1);
         }
     }
+}
+
+fn inl_HSD_PadRumbleFree_unfused<'a>(
+    ctx: &'a Ctx,
+    a: HSD_RumbleData<'a>,
+    b: HSD_PadRumbleListData<'a>,
+) {
+    let mut a = a;
+    let mut b = b;
+    let mut r6: RumbleInfo<'a> = fns::HSD_PadLibData(ctx).rumble_info();
+    let mut r5: Ptr<'a, HSD_PadRumbleListData<'a>> = (a).listdatap_ref();
+    'l1: while Handle::addr(((r5).get())) != Handle::addr(b) {
+        'c2: {
+            r5 = ((r5).get()).next_ref();
+        }
+    }
+    (r5).set((b).next());
+    (a).set_nb_list((a).nb_list().wrapping_sub(1));
+    (b).set_next((r6).listdatap());
+    (r6).set_listdatap(b);
+}
+
+fn inl_HSD_PadRumbleRemove_unfused<'a>(ctx: &'a Ctx, no: u8) {
+    let mut no = no;
+    let mut r28: HSD_RumbleData<'a> = fns::HSD_Rumble_804C22E0(ctx).get((no as i32));
+    let mut r29: i32 = fns::OSDisableInterrupts(ctx);
+    let mut r4: HSD_PadRumbleListData<'a> = (r28).listdatap();
+    'l1: while !Handle::is_null(r4) {
+        'c2: {
+            let mut r30: HSD_PadRumbleListData<'a> = (r4).next();
+            fns::HSD_PadRumbleFree(ctx, r28, r4);
+            r4 = r30;
+        }
+    }
+    let _ = fns::OSRestoreInterrupts(ctx, r29);
 }
 
 fn inl_HSD_PadRumblePause_unfused<'a>(ctx: &'a Ctx, no: u8, status: i32) {

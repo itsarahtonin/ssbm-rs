@@ -119,6 +119,11 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_HSD_GObjGetNext_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_GObj<'a> {
+    let mut gobj = gobj;
+    return (gobj).next();
+}
+
 fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
@@ -148,11 +153,6 @@ fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             cur = inl_HSD_GObjGetNext_unfused(ctx, cur);
         }
     }
-}
-
-fn inl_HSD_GObjGetNext_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_GObj<'a> {
-    let mut gobj = gobj;
-    return (gobj).next();
 }
 
 /// Registers this unit's ports.

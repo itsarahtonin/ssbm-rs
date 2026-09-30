@@ -902,6 +902,11 @@ fn inl_ftCommon_AirToGroundStateChange_unfused<'a>(
     );
 }
 
+fn inl_getFighter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {
+    let mut gobj = gobj;
+    return Handle::cast::<Fighter<'a>>((gobj).user_data());
+}
+
 fn inl_ftZelda_80139D60_Helper_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
     let mut result: i32 = 0;
@@ -917,11 +922,6 @@ fn inl_ftZelda_80139D60_Helper_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> 
         result = 1_i32;
     }
     return result;
-}
-
-fn inl_getFighter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {
-    let mut gobj = gobj;
-    return Handle::cast::<Fighter<'a>>((gobj).user_data());
 }
 
 fn inl_ftCommon_HandleTeleportCollisions_unfused<'a>(

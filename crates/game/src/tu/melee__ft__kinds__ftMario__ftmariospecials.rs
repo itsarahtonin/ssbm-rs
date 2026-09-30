@@ -81,7 +81,7 @@ pub fn ftMr_SpecialS_RemoveCape<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if !Handle::is_null((fp).u().mr().x223C_capeGObj()) {
         fns::it_802B2674(ctx, (fp).u().mr().x223C_capeGObj());
-        fns::ftMr_SpecialS_Reset(ctx, gobj);
+        inl_ftMr_SpecialS_Reset_unfused(ctx, gobj);
     }
 }
 
@@ -325,6 +325,16 @@ fn inl_setCallbacks_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     }
     (fp).set_pre_hitlag_cb(fnptr(ctx, 0x800e13c8));
     (fp).set_post_hitlag_cb(fnptr(ctx, 0x800e13f8));
+}
+
+fn inl_ftMr_SpecialS_Reset_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    fns::ftMr_SpecialS_ExitHitlag(ctx, gobj);
+    (fp).u().mr().set_x223C_capeGObj(null::<HSD_GObj<'a>>(ctx));
+    (fp).set_death2_cb(null::<FnPtr<'a>>(ctx));
+    (fp).set_take_dmg_cb(null::<FnPtr<'a>>(ctx));
 }
 
 fn inl_changeAction_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {

@@ -254,14 +254,6 @@ fn inl_Item_EnterAirStateWithHitlagAndStateDesc_unfused<'a>(ctx: &'a Ctx, gobj: 
     fns::it_80273670(ctx, gobj, 0_i32, 0.0);
 }
 
-fn inl_itThunder_UnkMotion0_Phys_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let mut gobj = gobj;
-    let mut item: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    fns::it_80273454(ctx, gobj);
-    inl_itThunder_UnkMotion0_Phys_inline2_unfused(ctx, gobj);
-    (item).xDD1_flag().x0().set_b1((1_i32 as u8));
-}
-
 fn inl_itThunder_UnkMotion0_Phys_inline2_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut item: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -277,6 +269,14 @@ fn inl_itThunder_UnkMotion0_Phys_inline2_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GOb
     (item).set_entered_hitlag(fnptr(ctx, 0x8005ba40));
     (item).set_exited_hitlag(fnptr(ctx, 0x8005bac4));
     (item).set_on_accessory(fnptr(ctx, 0x802ccbf8));
+}
+
+fn inl_itThunder_UnkMotion0_Phys_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut item: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    fns::it_80273454(ctx, gobj);
+    inl_itThunder_UnkMotion0_Phys_inline2_unfused(ctx, gobj);
+    (item).xDD1_flag().x0().set_b1((1_i32 as u8));
 }
 
 /// Registers this unit's ports.

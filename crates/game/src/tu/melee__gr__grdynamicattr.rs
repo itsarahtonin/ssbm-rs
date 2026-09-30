@@ -144,11 +144,6 @@ pub fn grDynamicAttr_801CA284<'a>(ctx: &'a Ctx, v: Vec<'a>, arg1: i32) -> i32 {
     return 0_i32;
 }
 
-fn inl_do_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
-    let mut x = x;
-    return inl_sqrtf(ctx, x);
-}
-
 fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     let mut x = x;
     let mut y: f64 = 0.0;
@@ -170,6 +165,11 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         return y;
     }
     return x;
+}
+
+fn inl_do_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+    let mut x = x;
+    return inl_sqrtf(ctx, x);
 }
 
 /// Registers this unit's ports.

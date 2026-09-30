@@ -184,7 +184,7 @@ pub fn ftLk_SpecialHi_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
-        fns::ftLk_SpecialAirHi_Phys(ctx, gobj);
+        inl_ftLk_SpecialAirHi_Phys_unfused(ctx, gobj);
     } else {
         fns::ft_80084F3C(ctx, gobj);
     }
@@ -275,6 +275,32 @@ fn inl_Fighter_SetEffectHitlagCallbacks_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a
     let mut fp = fp;
     (fp).set_pre_hitlag_cb(fnptr(ctx, 0x8005ba40));
     (fp).set_post_hitlag_cb(fnptr(ctx, 0x8005bac4));
+}
+
+fn inl_ftLk_SpecialAirHi_Phys_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut ca: ftCo_DatAttrs<'a> = (fp).co_attrs();
+    let mut da: ftLk_DatAttrs<'a> = Handle::cast::<ftLk_DatAttrs<'a>>((fp).dat_attrs());
+    fns::ftCommon_Fall(
+        ctx,
+        fp,
+        fp::fmuls((ca).gravity(), (da).specialhi_grav_mul()),
+        (ca).terminal_velocity(),
+    );
+    fns::ftCommon_CalcSelfAccel_DriftSimple(
+        ctx,
+        fp,
+        fp::frsp(0_i32 as f64),
+        fp::fmuls(
+            (ca).air_drift_stick_mul(),
+            (da).specialairhi_drift_stick_mul(),
+        ),
+        fp::fmuls((ca).air_drift_max(), (da).specialairhi_drift_max_mul()),
+    );
 }
 
 /// Registers this unit's ports.

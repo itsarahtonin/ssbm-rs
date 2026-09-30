@@ -339,7 +339,7 @@ pub fn ftCo_PassiveWall_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     } else {
         'l21: loop {
             'c22: {
-                if !(fns::ftCo_800C1E0C(ctx, fp) != 0) {
+                if !(inl_ftCo_800C1E0C_unfused(ctx, fp) != 0) {
                     return;
                 }
             }
@@ -423,6 +423,17 @@ fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     );
     (fp).active_timer().lstick().set_y((254_i32 as u8));
     (fp).mv().co().passivewall().set_timer(0_i32);
+}
+
+fn inl_ftCo_800C1E0C_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
+    let mut fp = fp;
+    if (fp::frsp(((fp).x67E() as i32) as f64) < (fns::p_ftCommonData(ctx).get()).x250())
+        || ((fp).input().lstick().get(0_i32).y()
+            >= (fns::p_ftCommonData(ctx).get()).tap_jump_threshold())
+    {
+        return 1_i32;
+    }
+    return 0_i32;
 }
 
 /// Registers this unit's ports.

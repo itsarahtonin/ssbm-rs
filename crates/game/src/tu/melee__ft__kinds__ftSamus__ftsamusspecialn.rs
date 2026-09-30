@@ -148,7 +148,7 @@ pub fn ftSs_SpecialN_801293BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             inl_ftSamus_801293BC_inner_unfused(ctx, gobj);
         }
         (fp).u().ss().set_x2230((0_u32 as i32));
-        fns::ftSs_SpecialN_801291F0(ctx, gobj);
+        inl_ftSs_SpecialN_801291F0_unfused(ctx, gobj);
         let _ = fns::efSync_Spawn(
             ctx,
             0x486_i32,
@@ -686,6 +686,26 @@ fn inl_ftSamus_801293BC_inner_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             (fp::fmuls((samus_attr).x1C(), fp::frsp(x2230 as f64))),
         )),
     );
+}
+
+fn inl_ftSs_SpecialN_801291F0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if !Handle::is_null(gobj) {
+        let mut fp: Fighter<'a> =
+            (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+        if !Handle::is_null((fp).u().ss().x222C()) {
+            (fp).u().ss().set_x222C(null::<HSD_GObj<'a>>(ctx));
+        }
+        inl_ftSamus_destroyAllEF_unfused(ctx, gobj);
+    }
 }
 
 fn inl_Fighter_ClearCmdVars_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {

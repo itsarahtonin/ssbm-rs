@@ -43,7 +43,7 @@ pub fn ftCo_Turn_CheckInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::ftCo_800C97A8(ctx, gobj) != 0) {
+    if (inl_ftCo_800C97A8_unfused(ctx, gobj) != 0) {
         fns::ftCo_Turn_Enter_Basic(ctx, gobj);
         return 1_i32;
     }
@@ -103,7 +103,7 @@ pub fn ftCo_Turn_Enter_Basic<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    fns::ftCo_Turn_Enter(
+    inl_ftCo_Turn_Enter_unfused(
         ctx,
         gobj,
         (enums::ftCo_MS_Turn as i32),
@@ -135,7 +135,7 @@ pub fn ftCo_Turn_Anim_Inner<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_Turn_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    fns::ftCo_Turn_Anim_Inner(ctx, gobj);
+    inl_ftCo_Turn_Anim_Inner_unfused(ctx, gobj);
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
         fns::ft_8008A2BC(ctx, gobj);
     }
@@ -394,6 +394,75 @@ pub fn ftCo_Turn_Enter_Smash<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_ftCo_800C97A8_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if fp::fmuls((fp).input().lstick().get(0_i32).x(), (fp).facing_dir())
+        <= (fns::p_ftCommonData(ctx).get()).x34()
+    {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
+fn inl_ftCo_Turn_Enter_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    msid: i32,
+    flags: u32,
+    arg3: f64,
+    frames_to_turn: f64,
+    anim_start: f64,
+) {
+    let mut gobj = gobj;
+    let mut msid = msid;
+    let mut flags = flags;
+    let mut arg3 = arg3;
+    let mut frames_to_turn = frames_to_turn;
+    let mut anim_start = anim_start;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    (fp).mv().co().turn().set_has_turned(0_i32);
+    (fp).mv().co().turn().set_just_turned(0_i32);
+    (fp).mv()
+        .co()
+        .turn()
+        .set_facing_after(fp::fneg((fp).facing_dir()));
+    (fp).mv().co().turn().set_frames_to_turn(frames_to_turn);
+    (fp).mv().co().turn().set_x8(arg3);
+    (fp).mv().co().turn().set_x1C((0_i32 as u32));
+    fns::Fighter_ChangeMotionState(
+        ctx,
+        gobj,
+        msid,
+        flags,
+        anim_start,
+        1.0,
+        0.0,
+        null::<HSD_GObj<'a>>(ctx),
+    );
+    fns::ftAnim_8006EBA4(ctx, gobj);
+}
+
+fn inl_ftCo_Turn_Anim_Inner_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if (fp).mv().co().turn().frames_to_turn() > 0.0 {
+        (fp).mv()
+            .co()
+            .turn()
+            .set_frames_to_turn(fp::fsubs((fp).mv().co().turn().frames_to_turn(), 1.0));
+        return;
+    }
+    if !((fp).mv().co().turn().has_turned() != 0) {
+        (fp).mv().co().turn().set_has_turned(1_i32);
+        (fp).mv().co().turn().set_just_turned(1_i32);
+        (fp).set_facing_dir(fp::fneg((fp).facing_dir()));
+    }
 }
 
 /// Registers this unit's ports.

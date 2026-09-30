@@ -67,7 +67,7 @@ pub fn ftCo_800951D0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    if (!Handle::is_null((fp).item_gobj())) && (fns::ftCo_80094E54(ctx, fp) != 0) {
+    if (!Handle::is_null((fp).item_gobj())) && (inl_ftCo_80094E54_unfused(ctx, fp) != 0) {
         statics::melee__ft__kinds__ftCommon__ftCo_ItemThrow::ftCo_80095A30(ctx, gobj);
         return 1_i32;
     }
@@ -78,7 +78,7 @@ pub fn ftCo_80095254<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    if (!Handle::is_null((fp).item_gobj())) && (fns::ftCo_80094E54(ctx, fp) != 0) {
+    if (!Handle::is_null((fp).item_gobj())) && (inl_ftCo_80094E54_unfused(ctx, fp) != 0) {
         fns::ftCo_800957F4(ctx, gobj, (enums::ftCo_MS_LightThrowDash as i32));
         return 1_i32;
     }
@@ -118,7 +118,7 @@ pub fn ftCo_80095328<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: Val<'a, i32>) -
         var_f29 = 0.0;
         var_f30 = 0.0;
         angle = fns::ftCo_GetCStickAngle(ctx, fp);
-    } else if (!Handle::is_null((fp).item_gobj())) && (fns::ftCo_80094E54(ctx, fp) != 0) {
+    } else if (!Handle::is_null((fp).item_gobj())) && (inl_ftCo_80094E54_unfused(ctx, fp) != 0) {
         var_f31 = (fp).input().lstick().get(0_i32).x();
         var_f28 = (fp).input().lstick().get(0_i32).y();
         var_f30 = fp::frsp((fp).active_sticky().lstick().x() as f64);
@@ -190,7 +190,7 @@ pub fn ftCo_8009563C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    if ((!Handle::is_null((fp).item_gobj())) && (fns::ftCo_80094E54(ctx, fp) != 0))
+    if ((!Handle::is_null((fp).item_gobj())) && (inl_ftCo_80094E54_unfused(ctx, fp) != 0))
         && ((fp).mv().co().itemthrow4().unk_timer() != 0_i32)
     {
         fns::ftCo_800957F4(
@@ -294,7 +294,7 @@ pub fn ftCo_800957F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
         anim_spd = __t1;
         __t1
     });
-    statics::melee__ft__kinds__ftCommon__ftCo_ItemThrow::ftCo_80095700(ctx, gobj, msid);
+    inl_ftCo_80095700_unfused(ctx, gobj, msid);
     fns::Fighter_ChangeMotionState(
         ctx,
         gobj,
@@ -678,6 +678,19 @@ pub fn ftCo_80096498<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+fn inl_ftCo_80094E54_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
+    let mut fp = fp;
+    if (((fp).input().pressed_buttons() & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0)
+        && ((((fp).input().held_buttons().at(0_i32).get()
+            & ((shl_i32(1_i32, (31_i32 as u32))) as u32))
+            != 0)
+            || (!(fns::it_8026B30C(ctx, (fp).item_gobj()) != 0)))
+    {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
@@ -700,6 +713,35 @@ fn inl_getAnimSpeed_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) -> 
         )),
     );
     return speed;
+}
+
+fn inl_ftCo_80095700_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
+    let mut gobj = gobj;
+    let mut arg1 = arg1;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    's1: {
+        let __case = match arg1 {
+            95_i32 => 0,
+            101_i32 => 0,
+            105_i32 => 0,
+            109_i32 => 0,
+            113_i32 => 0,
+            117_i32 => 0,
+            _ => 1,
+        };
+        if __case <= 0 {
+            (fp).mv()
+                .co()
+                .itemthrow()
+                .set_facing_dir(fp::fneg((fp).facing_dir()));
+            return;
+        }
+        if __case <= 1 {
+            (fp).mv().co().itemthrow().set_facing_dir((fp).facing_dir());
+            return;
+        }
+    }
 }
 
 fn inl_getFtAttrs_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> ftCo_DatAttrs<'a> {

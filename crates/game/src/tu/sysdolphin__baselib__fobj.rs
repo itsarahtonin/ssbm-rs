@@ -32,7 +32,12 @@ pub fn HSD_FObjGetAllocData<'a>(ctx: &'a Ctx) -> _HSD_ObjAllocData<'a> {
 
 pub fn HSD_FObjInitAllocData<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
-    fns::HSD_ObjAllocInit(ctx, fns::HSD_FObjGetAllocData(ctx), 48_u32, (4_i32 as u32));
+    fns::HSD_ObjAllocInit(
+        ctx,
+        inl_HSD_FObjGetAllocData_unfused(ctx),
+        48_u32,
+        (4_i32 as u32),
+    );
 }
 
 pub fn HSD_FObjRemove<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) {
@@ -108,7 +113,7 @@ pub fn HSD_FObjStopAnim<'a>(
         return;
     }
     inl_FObj_FlushKeyData_unfused(ctx, fobj, obj, obj_update, rate);
-    let _ = fns::HSD_FObjSetState(ctx, fobj, (0_i32 as u32));
+    let _ = inl_HSD_FObjSetState_unfused(ctx, fobj, (0_i32 as u32));
 }
 
 pub fn HSD_FObjStopAnimAll<'a>(
@@ -126,7 +131,7 @@ pub fn HSD_FObjStopAnimAll<'a>(
     {
         'l1: while !Handle::is_null(fobj) {
             'c2: {
-                fns::HSD_FObjStopAnim(ctx, fobj, obj, obj_update, rate);
+                inl_HSD_FObjStopAnim_unfused(ctx, fobj, obj, obj_update, rate);
             }
             fobj = (fobj).next();
         }
@@ -507,8 +512,10 @@ pub fn HSD_FObjLoadDesc<'a>(ctx: &'a Ctx, desc: _HSD_FObjDesc<'a>) -> HSD_FObj<'
 
 pub fn HSD_FObjAlloc<'a>(ctx: &'a Ctx) -> HSD_FObj<'a> {
     let __frame = ctx.stack_frame(0x10);
-    let mut new: HSD_FObj<'a> =
-        Handle::cast::<HSD_FObj<'a>>(fns::HSD_ObjAlloc(ctx, fns::HSD_FObjGetAllocData(ctx)));
+    let mut new: HSD_FObj<'a> = Handle::cast::<HSD_FObj<'a>>(fns::HSD_ObjAlloc(
+        ctx,
+        inl_HSD_FObjGetAllocData_unfused(ctx),
+    ));
     (if !Handle::is_null((new)) {
         ({ () })
     } else {
@@ -528,9 +535,24 @@ pub fn HSD_FObjFree<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) {
     let mut fobj = fobj;
     fns::HSD_ObjFree(
         ctx,
-        fns::HSD_FObjGetAllocData(ctx),
+        inl_HSD_FObjGetAllocData_unfused(ctx),
         Handle::cast::<Addr<'a>>(fobj),
     );
+}
+
+fn inl_HSD_FObjGetAllocData_unfused<'a>(ctx: &'a Ctx) -> _HSD_ObjAllocData<'a> {
+    return fns::fobj_alloc_data(ctx);
+}
+
+fn inl_HSD_FObjSetState_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>, state: u32) -> u32 {
+    let mut fobj = fobj;
+    let mut state = state;
+    if !Handle::is_null(fobj) {
+        (fobj).set_flags(
+            (((state & (15_i32 as u32)) | ((((fobj).flags() as i32) & 240_i32) as u32)) as u8),
+        );
+    }
+    return state;
 }
 
 fn inl_HSD_FObjReqAnim_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>, startframe: f64) {
@@ -550,7 +572,7 @@ fn inl_HSD_FObjReqAnim_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>, startframe:
     (fobj).set_p1(0.0);
     (fobj).set_d0(0.0);
     (fobj).set_d1(0.0);
-    let _ = fns::HSD_FObjSetState(ctx, fobj, (1_i32 as u32));
+    let _ = inl_HSD_FObjSetState_unfused(ctx, fobj, (1_i32 as u32));
 }
 
 fn inl_FObj_FlushKeyData_unfused<'a>(
@@ -569,57 +591,22 @@ fn inl_FObj_FlushKeyData_unfused<'a>(
     }
 }
 
-fn inl_FObjLoadData_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) -> u32 {
+fn inl_HSD_FObjStopAnim_unfused<'a>(
+    ctx: &'a Ctx,
+    fobj: HSD_FObj<'a>,
+    obj: Addr<'a>,
+    obj_update: FnPtr<'a>,
+    rate: f64,
+) {
     let mut fobj = fobj;
-    if (((Handle::addr((fobj).ad()).wrapping_sub(Handle::addr((fobj).ad_head())) as i32) / 1)
-        as u32)
-        >= (fobj).length()
-    {
-        return (6_i32 as u32);
-    } else {
-        (fobj).set_op_intrp((fobj).op());
-        if ((fobj).nb_pack() as i32) == 0_i32 {
-            (fobj).set_op(inl_parseOpCode_unfused(ctx, (fobj).ad_ref()));
-            (fobj).set_nb_pack(
-                (statics::sysdolphin__baselib__fobj::parsePackInfo(ctx, (fobj).ad_ref()) as u16),
-            );
-        }
-        (fobj).set_nb_pack((((fobj).nb_pack() as i32).wrapping_sub(1_i32) as u16));
-        's1: {
-            let __case = match ((fobj).op() as i32) {
-                1_i32 => 0,
-                2_i32 => 1,
-                3_i32 => 2,
-                4_i32 => 3,
-                5_i32 => 4,
-                6_i32 => 5,
-                _ => 6,
-            };
-            if __case <= 0 {
-                return inl_FObjAnimCON_unfused(ctx, fobj);
-            }
-            if __case <= 1 {
-                return inl_FObjAnimLinear_unfused(ctx, fobj);
-            }
-            if __case <= 2 {
-                return inl_FObjAnimSPL0_unfused(ctx, fobj);
-            }
-            if __case <= 3 {
-                return inl_FObjAnimSPL_unfused(ctx, fobj);
-            }
-            if __case <= 4 {
-                return inl_FObjAnimSLP_unfused(ctx, fobj);
-            }
-            if __case <= 5 {
-                return inl_FObjAnimKey_unfused(ctx, fobj);
-            }
-            if __case <= 6 {
-                return (0_i32 as u32);
-            }
-        }
+    let mut obj = obj;
+    let mut obj_update = obj_update;
+    let mut rate = rate;
+    if Handle::is_null(fobj) {
+        return;
     }
-    #[allow(unreachable_code)]
-    return 0;
+    inl_FObj_FlushKeyData_unfused(ctx, fobj, obj, obj_update, rate);
+    let _ = inl_HSD_FObjSetState_unfused(ctx, fobj, (0_i32 as u32));
 }
 
 fn inl_parseOpCode_unfused<'a>(ctx: &'a Ctx, curr_parse: Ptr<'a, Val<'a, u8>>) -> u8 {
@@ -796,28 +783,54 @@ fn inl_FObjAnimKey_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) -> u32 {
     );
 }
 
-fn inl_FObjLoadWait_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) -> u32 {
+fn inl_FObjLoadData_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) -> u32 {
     let mut fobj = fobj;
-    let mut st: u32 = fns::HSD_FObjGetState(ctx, fobj);
-    (if st == (3_i32 as u32) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x80406364),
-            (210_i32 as u32),
-            cstr(ctx, 0x80406364),
-        )
-    });
     if (((Handle::addr((fobj).ad()).wrapping_sub(Handle::addr((fobj).ad_head())) as i32) / 1)
         as u32)
         >= (fobj).length()
     {
         return (6_i32 as u32);
     } else {
-        (fobj).set_fterm((inl_parseWait_unfused(ctx, (fobj).ad_ref()) as u16));
-        (fobj).set_flags(((((fobj).flags() as i32) | 32_i32) as u8));
-        return fns::HSD_FObjSetState(ctx, fobj, (2_i32 as u32));
+        (fobj).set_op_intrp((fobj).op());
+        if ((fobj).nb_pack() as i32) == 0_i32 {
+            (fobj).set_op(inl_parseOpCode_unfused(ctx, (fobj).ad_ref()));
+            (fobj).set_nb_pack(
+                (statics::sysdolphin__baselib__fobj::parsePackInfo(ctx, (fobj).ad_ref()) as u16),
+            );
+        }
+        (fobj).set_nb_pack((((fobj).nb_pack() as i32).wrapping_sub(1_i32) as u16));
+        's1: {
+            let __case = match ((fobj).op() as i32) {
+                1_i32 => 0,
+                2_i32 => 1,
+                3_i32 => 2,
+                4_i32 => 3,
+                5_i32 => 4,
+                6_i32 => 5,
+                _ => 6,
+            };
+            if __case <= 0 {
+                return inl_FObjAnimCON_unfused(ctx, fobj);
+            }
+            if __case <= 1 {
+                return inl_FObjAnimLinear_unfused(ctx, fobj);
+            }
+            if __case <= 2 {
+                return inl_FObjAnimSPL0_unfused(ctx, fobj);
+            }
+            if __case <= 3 {
+                return inl_FObjAnimSPL_unfused(ctx, fobj);
+            }
+            if __case <= 4 {
+                return inl_FObjAnimSLP_unfused(ctx, fobj);
+            }
+            if __case <= 5 {
+                return inl_FObjAnimKey_unfused(ctx, fobj);
+            }
+            if __case <= 6 {
+                return (0_i32 as u32);
+            }
+        }
     }
     #[allow(unreachable_code)]
     return 0;
@@ -844,6 +857,33 @@ fn inl_parseWait_unfused<'a>(ctx: &'a Ctx, adp: Ptr<'a, Val<'a, u8>>) -> i32 {
         }
     }
     return wait;
+}
+
+fn inl_FObjLoadWait_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) -> u32 {
+    let mut fobj = fobj;
+    let mut st: u32 = fns::HSD_FObjGetState(ctx, fobj);
+    (if st == (3_i32 as u32) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80406364),
+            (210_i32 as u32),
+            cstr(ctx, 0x80406364),
+        )
+    });
+    if (((Handle::addr((fobj).ad()).wrapping_sub(Handle::addr((fobj).ad_head())) as i32) / 1)
+        as u32)
+        >= (fobj).length()
+    {
+        return (6_i32 as u32);
+    } else {
+        (fobj).set_fterm((inl_parseWait_unfused(ctx, (fobj).ad_ref()) as u16));
+        (fobj).set_flags(((((fobj).flags() as i32) | 32_i32) as u8));
+        return fns::HSD_FObjSetState(ctx, fobj, (2_i32 as u32));
+    }
+    #[allow(unreachable_code)]
+    return 0;
 }
 
 /// Registers this unit's ports.

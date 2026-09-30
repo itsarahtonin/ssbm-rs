@@ -2450,7 +2450,7 @@ pub fn fn_800F1CA0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn ftKb_SpecialN_800F1CD8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
-    if (fns::fn_800F1CA0(ctx, gobj) != 0) {
+    if (inl_fn_800F1CA0_unfused(ctx, gobj) != 0) {
         return 1_i32;
     }
     return 0_i32;
@@ -2847,6 +2847,30 @@ fn inl_ftKb_LoadHatParts_unfused<'a>(
         (fp).u().kb().x44(),
         (fp).u().kb().hat().x14(),
     );
+}
+
+fn inl_fn_800F1CA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    's1: {
+        let __case = match ((fp).u().kb().hat().kind() as u32) {
+            2_u32 => 0,
+            7_u32 => 0,
+            10_u32 => 0,
+            11_u32 => 0,
+            13_u32 => 0,
+            _ => 1,
+        };
+        if __case <= 0 {
+            return 1_i32;
+        }
+        if __case <= 1 {
+            return 0_i32;
+        }
+    }
+    #[allow(unreachable_code)]
+    return 0;
 }
 
 /// Registers this unit's ports.

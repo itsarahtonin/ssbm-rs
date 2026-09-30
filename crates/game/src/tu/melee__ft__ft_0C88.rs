@@ -74,7 +74,7 @@ pub fn ftCo_800C89A0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    fns::ftCo_800C88A0(ctx, fp);
+    inl_ftCo_800C88A0_unfused(ctx, fp);
     (fp).set_x2226_b4((fp).x2226_b3());
     if ((fp).x2226_b4() != 0) {
         inl_ftCo_800C88D4_inline_unfused(ctx, gobj);
@@ -89,7 +89,7 @@ pub fn ftCo_800C8A64<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     (fp).set_x2030(0_i32);
     if !((fp).x2226_b3() != 0) {
-        fns::ftCo_800C88A0(ctx, fp);
+        inl_ftCo_800C88A0_unfused(ctx, fp);
         fns::ft_800C0098(ctx, fp);
         fns::ft_800C8170(ctx, fp);
         fns::lbRefSetUnuse(ctx);
@@ -146,6 +146,15 @@ fn inl_ftCo_800C88D4_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::ft_800C80A4(ctx, fp);
     fns::lbRefract_80022BB8(ctx);
     (fp).set_x221F_b2((1_i32 as u8));
+}
+
+fn inl_ftCo_800C88A0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    (fp).set_x2226_b4((0_i32 as u8));
+    (fp).set_x2226_b5((0_i32 as u8));
+    (fp).smash_attrs().set_x2134_vibrateFrame((0_i32 as u8));
+    (fp).set_x2030(0_i32);
+    (fp).set_x2226_b7((0_i32 as u8));
 }
 
 /// Registers this unit's ports.

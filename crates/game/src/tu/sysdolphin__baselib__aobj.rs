@@ -119,12 +119,12 @@ pub fn HSD_AObjLoadDesc<'a>(ctx: &'a Ctx, aobjdesc: HSD_AObjDesc<'a>) -> HSD_AOb
     let mut phi_r30: HSD_Obj<'a> = null(ctx);
     if !Handle::is_null(aobjdesc) {
         aobj = fns::HSD_AObjAlloc(ctx);
-        fns::HSD_AObjSetFlags(ctx, aobj, (aobjdesc).flags());
+        inl_HSD_AObjSetFlags_unfused(ctx, aobj, (aobjdesc).flags());
         fns::HSD_AObjSetRewindFrame(ctx, aobj, 0.0);
         fns::HSD_AObjSetEndFrame(ctx, aobj, (aobjdesc).end_frame());
         fobjdesc = (aobjdesc).fobjdesc();
         fobj = fns::HSD_FObjLoadDesc(ctx, fobjdesc);
-        fns::HSD_AObjSetFObj(ctx, aobj, fobj);
+        inl_HSD_AObjSetFObj_unfused(ctx, aobj, fobj);
         id = (aobjdesc).obj_id();
         if id != 0_u32 {
             let mut hsd_obj: HSD_Obj<'a> =
@@ -178,8 +178,10 @@ pub fn HSD_AObjRemove<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>) {
 
 pub fn HSD_AObjAlloc<'a>(ctx: &'a Ctx) -> HSD_AObj<'a> {
     let __frame = ctx.stack_frame(0x10);
-    let mut new: HSD_AObj<'a> =
-        Handle::cast::<HSD_AObj<'a>>(fns::HSD_ObjAlloc(ctx, fns::HSD_AObjGetAllocData(ctx)));
+    let mut new: HSD_AObj<'a> = Handle::cast::<HSD_AObj<'a>>(fns::HSD_ObjAlloc(
+        ctx,
+        inl_HSD_AObjGetAllocData_unfused(ctx),
+    ));
     (if !Handle::is_null((new)) {
         ({ () })
     } else {
@@ -204,7 +206,7 @@ pub fn HSD_AObjFree<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>) {
     }
     fns::HSD_ObjFree(
         ctx,
-        fns::HSD_AObjGetAllocData(ctx),
+        inl_HSD_AObjGetAllocData_unfused(ctx),
         Handle::cast::<Addr<'a>>(aobj),
     );
 }
@@ -374,14 +376,7 @@ pub fn JObjForeachAnim<'a>(
             arg,
         );
     }
-    statics::sysdolphin__baselib__aobj::RObjForeachAnim(
-        ctx,
-        (obj).robj(),
-        mask,
-        func,
-        arg_type,
-        arg,
-    );
+    inl_RObjForeachAnim_unfused(ctx, (obj).robj(), mask, func, arg_type, arg);
     if !(((obj).flags() & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0) {
         {
             obj = (obj).child();
@@ -448,6 +443,28 @@ pub fn _HSD_AObjForgetMemory<'a>(ctx: &'a Ctx, low: Addr<'a>, high: Addr<'a>) {
     statics::sysdolphin__baselib__aobj::endcallback_list(ctx).set(null::<_HSD_SList<'a>>(ctx));
 }
 
+fn inl_HSD_AObjSetFlags_unfused<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>, flags: u32) {
+    let mut aobj = aobj;
+    let mut flags = flags;
+    if !Handle::is_null(aobj) {
+        flags = (flags
+            & (((shl_i32(1_i32, (29_i32 as u32))) | (shl_i32(1_i32, (28_i32 as u32)))) as u32));
+        (aobj).set_flags(((aobj).flags() | flags));
+    }
+}
+
+fn inl_HSD_AObjSetFObj_unfused<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>, fobj: HSD_FObj<'a>) {
+    let mut aobj = aobj;
+    let mut fobj = fobj;
+    if !(!Handle::is_null(aobj)) {
+        return;
+    }
+    if !Handle::is_null((aobj).fobj()) {
+        fns::HSD_FObjRemoveAll(ctx, (aobj).fobj());
+    }
+    (aobj).set_fobj(fobj);
+}
+
 fn inl_ref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
     let mut o = o;
     if !Handle::is_null(o) {
@@ -465,6 +482,45 @@ fn inl_ref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
                 cstr(ctx, 0x80405fc0),
             )
         });
+    }
+}
+
+fn inl_HSD_AObjGetAllocData_unfused<'a>(ctx: &'a Ctx) -> _HSD_ObjAllocData<'a> {
+    return fns::aobj_alloc_data(ctx);
+}
+
+fn inl_TObjForeachAnim_unfused<'a>(
+    ctx: &'a Ctx,
+    tobj: HSD_TObj<'a>,
+    mask: i32,
+    func: FnPtr<'a>,
+    arg_type: i32,
+    arg: _callbackArg<'a>,
+) {
+    let mut tobj = tobj;
+    let mut mask = mask;
+    let mut func = func;
+    let mut arg_type = arg_type;
+    let mut arg = arg;
+    {
+        'l1: while !Handle::is_null(tobj) {
+            'c2: {
+                if (((mask as u32) & ((enums::TOBJ_MASK as i32) as u32)) != 0)
+                    && (!Handle::is_null((tobj).aobj()))
+                {
+                    statics::sysdolphin__baselib__aobj::callbackForeachFunc(
+                        ctx,
+                        (tobj).aobj(),
+                        Handle::cast::<Addr<'a>>(tobj),
+                        (enums::TOBJ_TYPE as i32),
+                        Handle::cast::<Addr<'a>>(func),
+                        arg_type,
+                        arg,
+                    );
+                }
+            }
+            tobj = (tobj).next();
+        }
     }
 }
 
@@ -497,14 +553,7 @@ fn inl_MObjForeachAnim_unfused<'a>(
             arg,
         );
     }
-    statics::sysdolphin__baselib__aobj::TObjForeachAnim(
-        ctx,
-        (mobj).tobj(),
-        mask,
-        func,
-        arg_type,
-        arg,
-    );
+    inl_TObjForeachAnim_unfused(ctx, (mobj).tobj(), mask, func, arg_type, arg);
 }
 
 fn inl_PObjForeachAnim_unfused<'a>(
@@ -534,6 +583,41 @@ fn inl_PObjForeachAnim_unfused<'a>(
             arg_type,
             arg,
         );
+    }
+}
+
+fn inl_RObjForeachAnim_unfused<'a>(
+    ctx: &'a Ctx,
+    robj: HSD_RObj<'a>,
+    mask: i32,
+    func: FnPtr<'a>,
+    arg_type: i32,
+    arg: _callbackArg<'a>,
+) {
+    let mut robj = robj;
+    let mut mask = mask;
+    let mut func = func;
+    let mut arg_type = arg_type;
+    let mut arg = arg;
+    {
+        'l1: while !Handle::is_null(robj) {
+            'c2: {
+                if (((mask as u32) & ((enums::ROBJ_MASK as i32) as u32)) != 0)
+                    && (!Handle::is_null((robj).aobj()))
+                {
+                    statics::sysdolphin__baselib__aobj::callbackForeachFunc(
+                        ctx,
+                        (robj).aobj(),
+                        Handle::cast::<Addr<'a>>(robj),
+                        (enums::ROBJ_TYPE as i32),
+                        Handle::cast::<Addr<'a>>(func),
+                        arg_type,
+                        arg,
+                    );
+                }
+            }
+            robj = (robj).next();
+        }
     }
 }
 

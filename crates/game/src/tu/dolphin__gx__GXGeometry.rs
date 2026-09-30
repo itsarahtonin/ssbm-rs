@@ -52,7 +52,7 @@ pub fn GXBegin<'a>(ctx: &'a Ctx, r#type: i32, vtxfmt: i32, nverts: u16) {
     let mut vtxfmt = vtxfmt;
     let mut nverts = nverts;
     if (fns::gx(ctx).get()).dirtyState() != (0_i32 as u32) {
-        fns::__GXSetDirtyState(ctx);
+        inl___GXSetDirtyState_unfused(ctx);
     }
     if (Handle::cast::<Val<'a, u32>>((fns::gx(ctx).get()).unk_ref())).get() == (0_i32 as u32) {
         fns::__GXSendFlushPrim(ctx);
@@ -311,6 +311,25 @@ pub fn __GXSetGenMode<'a>(ctx: &'a Ctx) {
         }
     }
     (fns::gx(ctx).get()).set_bpSent((0_i32 as u16));
+}
+
+fn inl___GXSetDirtyState_unfused<'a>(ctx: &'a Ctx) {
+    if (((fns::gx(ctx).get()).dirtyState() & (1_i32 as u32)) != 0) {
+        fns::__GXSetSUTexRegs(ctx);
+    }
+    if (((fns::gx(ctx).get()).dirtyState() & (2_i32 as u32)) != 0) {
+        fns::__GXUpdateBPMask(ctx);
+    }
+    if (((fns::gx(ctx).get()).dirtyState() & (4_i32 as u32)) != 0) {
+        fns::__GXSetGenMode(ctx);
+    }
+    if (((fns::gx(ctx).get()).dirtyState() & (8_i32 as u32)) != 0) {
+        fns::__GXSetVCD(ctx);
+    }
+    if (((fns::gx(ctx).get()).dirtyState() & (16_i32 as u32)) != 0) {
+        fns::__GXSetVAT(ctx);
+    }
+    (fns::gx(ctx).get()).set_dirtyState((0_i32 as u32));
 }
 
 /// Registers this unit's ports.

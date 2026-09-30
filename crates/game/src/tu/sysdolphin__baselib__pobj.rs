@@ -1939,11 +1939,6 @@ fn inl_HSD_EnvelopeAlloc_unfused<'a>(ctx: &'a Ctx) -> HSD_Envelope<'a> {
     return envelope;
 }
 
-fn inl_HSD_PObjRemove_unfused<'a>(ctx: &'a Ctx, pobj: HSD_PObj<'a>) {
-    let mut pobj = pobj;
-    inl_hsdDelete_unfused(ctx, Handle::cast::<Addr<'a>>(pobj));
-}
-
 fn inl_hsdDelete_unfused<'a>(ctx: &'a Ctx, object: Addr<'a>) {
     let mut object = object;
     if Handle::is_null(object) {
@@ -1955,6 +1950,11 @@ fn inl_hsdDelete_unfused<'a>(ctx: &'a Ctx, object: Addr<'a>) {
     ((Handle::cast::<_HSD_Class<'a>>(object)).class_info())
         .destroy()
         .call::<_, ()>((Handle::cast::<_HSD_Class<'a>>(object),));
+}
+
+fn inl_HSD_PObjRemove_unfused<'a>(ctx: &'a Ctx, pobj: HSD_PObj<'a>) {
+    let mut pobj = pobj;
+    inl_hsdDelete_unfused(ctx, Handle::cast::<Addr<'a>>(pobj));
 }
 
 fn inl_HSD_PObjGetDefaultClass_unfused<'a>(ctx: &'a Ctx) -> HSD_PObjInfo<'a> {
@@ -1969,13 +1969,6 @@ fn inl_HSD_IDGetData_unfused<'a>(ctx: &'a Ctx, id: u32, success: Val<'a, i32>) -
     let mut id = id;
     let mut success = success;
     return fns::HSD_IDGetDataFromTable(ctx, null::<_HSD_IDTable<'a>>(ctx), id, success);
-}
-
-fn inl_HSD_JObjRefThis_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
-    let mut jobj = jobj;
-    if !Handle::is_null(jobj) {
-        inl_iref_INC_unfused(ctx, Handle::cast::<Addr<'a>>(jobj));
-    }
 }
 
 fn inl_iref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
@@ -1995,6 +1988,13 @@ fn inl_iref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
             cstr(ctx, 0x8040639c),
         )
     });
+}
+
+fn inl_HSD_JObjRefThis_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if !Handle::is_null(jobj) {
+        inl_iref_INC_unfused(ctx, Handle::cast::<Addr<'a>>(jobj));
+    }
 }
 
 fn inl_HSD_PObjResolveRefs_unfused<'a>(ctx: &'a Ctx, pobj: HSD_PObj<'a>, pdesc: HSD_PObjDesc<'a>) {
@@ -2118,6 +2118,70 @@ fn inl_GXColor4u8_unfused<'a>(ctx: &'a Ctx, x: u8, y: u8, z: u8, w: u8) {
 
 fn inl_GXEnd_unfused<'a>(ctx: &'a Ctx) {}
 
+fn inl_HSD_PObjGetMtxMark_unfused<'a>(
+    ctx: &'a Ctx,
+    idx: i32,
+    obj: Ptr<'a, Addr<'a>>,
+    mark: Val<'a, u32>,
+) {
+    let mut idx = idx;
+    let mut obj = obj;
+    let mut mark = mark;
+    (if !Handle::is_null((obj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x8040639c),
+            (0x3d2_i32 as u32),
+            cstr(ctx, 0x8040639c),
+        )
+    });
+    (if !Handle::is_null((mark)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x8040639c),
+            (0x3d3_i32 as u32),
+            cstr(ctx, 0x8040639c),
+        )
+    });
+    if (idx < 0_i32) || (2_i32 <= idx) {
+        (obj).set(null::<Addr<'a>>(ctx));
+        (mark).set((0_i32 as u32));
+    } else {
+        (obj).set(
+            statics::sysdolphin__baselib__pobj::mtx_mark(ctx)
+                .get(idx)
+                .obj(),
+        );
+        (mark).set(
+            statics::sysdolphin__baselib__pobj::mtx_mark(ctx)
+                .get(idx)
+                .mark(),
+        );
+    }
+}
+
+fn inl_HSD_PObjSetMtxMark_unfused<'a>(ctx: &'a Ctx, idx: i32, obj: Addr<'a>, mark: u32) {
+    let mut idx = idx;
+    let mut obj = obj;
+    let mut mark = mark;
+    if idx >= 2_i32 {
+        return;
+    }
+    if (0_i32 <= idx) && (idx < 2_i32) {
+    } else {
+        statics::sysdolphin__baselib__pobj::mtx_mark(ctx)
+            .get(idx)
+            .set_obj(obj);
+        statics::sysdolphin__baselib__pobj::mtx_mark(ctx)
+            .get(idx)
+            .set_mark(mark);
+    }
+}
+
 fn inl_GetSetupFlags_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rendermode: u32) -> i32 {
     let mut jobj = jobj;
     let mut rendermode = rendermode;
@@ -2148,6 +2212,34 @@ fn inl_GetSetupFlags_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rendermode: u
     return flags;
 }
 
+fn inl_HSD_PObjClearMtxMark_unfused<'a>(ctx: &'a Ctx, obj: Addr<'a>, mark: u32) {
+    let mut obj = obj;
+    let mut mark = mark;
+    let mut i: i32 = 0;
+    {
+        i = 0_i32;
+        'l1: while i < 2_i32 {
+            'c2: {
+                statics::sysdolphin__baselib__pobj::mtx_mark(ctx)
+                    .get(i)
+                    .set_obj(obj);
+                statics::sysdolphin__baselib__pobj::mtx_mark(ctx)
+                    .get(i)
+                    .set_mark(mark);
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+}
+
+fn inl_HSD_ShapeSetFree_unfused<'a>(ctx: &'a Ctx, shape_set: HSD_ShapeSet<'a>) {
+    let mut shape_set = shape_set;
+    if !(!Handle::is_null(shape_set)) {
+        return;
+    }
+    fns::hsdFreeMemPiece(ctx, Handle::cast::<Addr<'a>>(shape_set), (36_u32 as i32));
+}
+
 fn inl_HSD_ShapeSetRemove_unfused<'a>(ctx: &'a Ctx, shape_set: HSD_ShapeSet<'a>) {
     let mut shape_set = shape_set;
     if Handle::is_null(shape_set) {
@@ -2160,12 +2252,11 @@ fn inl_HSD_ShapeSetRemove_unfused<'a>(ctx: &'a Ctx, shape_set: HSD_ShapeSet<'a>)
     inl_HSD_ShapeSetFree_unfused(ctx, shape_set);
 }
 
-fn inl_HSD_ShapeSetFree_unfused<'a>(ctx: &'a Ctx, shape_set: HSD_ShapeSet<'a>) {
-    let mut shape_set = shape_set;
-    if !(!Handle::is_null(shape_set)) {
-        return;
+fn inl_HSD_EnvelopeFree_unfused<'a>(ctx: &'a Ctx, env: HSD_Envelope<'a>) {
+    let mut env = env;
+    if !Handle::is_null(env) {
+        fns::hsdFreeMemPiece(ctx, Handle::cast::<Addr<'a>>(env), (12_u32 as i32));
     }
-    fns::hsdFreeMemPiece(ctx, Handle::cast::<Addr<'a>>(shape_set), (36_u32 as i32));
 }
 
 fn inl_HSD_EnvelopeListFree_unfused<'a>(ctx: &'a Ctx, list: _HSD_SList<'a>) {
@@ -2183,13 +2274,6 @@ fn inl_HSD_EnvelopeListFree_unfused<'a>(ctx: &'a Ctx, list: _HSD_SList<'a>) {
             }
             list = fns::HSD_SListRemove(ctx, list);
         }
-    }
-}
-
-fn inl_HSD_EnvelopeFree_unfused<'a>(ctx: &'a Ctx, env: HSD_Envelope<'a>) {
-    let mut env = env;
-    if !Handle::is_null(env) {
-        fns::hsdFreeMemPiece(ctx, Handle::cast::<Addr<'a>>(env), (12_u32 as i32));
     }
 }
 

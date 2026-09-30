@@ -376,7 +376,7 @@ pub fn it_802D58EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLucky_UnkMotion3_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
-    return fns::it_802D5884(ctx, gobj);
+    return inl_it_802D5884_unfused(ctx, gobj);
 }
 
 pub fn itLucky_UnkMotion3_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -428,7 +428,7 @@ pub fn itLucky_Logic44_EnteredAir<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802D5A2C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
-    return fns::it_802D5884(ctx, gobj);
+    return inl_it_802D5884_unfused(ctx, gobj);
 }
 
 pub fn it_802D5A64<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -454,17 +454,17 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_Item_SetEffectHitlagCallbacks_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
+    let mut ip = ip;
+    (ip).set_entered_hitlag(fnptr(ctx, 0x8005ba40));
+    (ip).set_exited_hitlag(fnptr(ctx, 0x8005bac4));
+}
+
 fn inl_it_802D533C_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     (ip).set_xDAC_itcmd_var0((0_i32 as u32));
     inl_Item_SetEffectHitlagCallbacks_unfused(ctx, ip);
-}
-
-fn inl_Item_SetEffectHitlagCallbacks_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
-    let mut ip = ip;
-    (ip).set_entered_hitlag(fnptr(ctx, 0x8005ba40));
-    (ip).set_exited_hitlag(fnptr(ctx, 0x8005bac4));
 }
 
 fn inl_it_802D546C_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -534,6 +534,16 @@ fn inl_itResetVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
         (ip).x40_vel().set_y(__t2);
         __t2
     });
+}
+
+fn inl_it_802D5884_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    (ip).set_xD44_lifeTimer(fp::fsubs((ip).xD44_lifeTimer(), 1.0));
+    if (ip).xD44_lifeTimer() <= 0.0 {
+        return 1_i32;
+    }
+    return 0_i32;
 }
 
 /// Registers this unit's ports.

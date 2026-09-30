@@ -32,7 +32,12 @@ pub fn HSD_IDGetAllocData<'a>(ctx: &'a Ctx) -> _HSD_ObjAllocData<'a> {
 
 pub fn HSD_IDInitAllocData<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
-    fns::HSD_ObjAllocInit(ctx, fns::HSD_IDGetAllocData(ctx), 12_u32, (4_i32 as u32));
+    fns::HSD_ObjAllocInit(
+        ctx,
+        inl_HSD_IDGetAllocData_unfused(ctx),
+        12_u32,
+        (4_i32 as u32),
+    );
 }
 
 pub fn HSD_IDSetup<'a>(ctx: &'a Ctx) {
@@ -154,6 +159,10 @@ pub fn _HSD_IDForgetMemory<'a>(ctx: &'a Ctx, low: Addr<'a>, high: Addr<'a>) {
     );
 }
 
+fn inl_HSD_IDGetAllocData_unfused<'a>(ctx: &'a Ctx) -> _HSD_ObjAllocData<'a> {
+    return fns::hsd_iddata(ctx);
+}
+
 fn inl_hash_unfused<'a>(ctx: &'a Ctx, id: u32) -> u32 {
     let mut id = id;
     return rem_u32(id, (101_i32 as u32));
@@ -161,7 +170,8 @@ fn inl_hash_unfused<'a>(ctx: &'a Ctx, id: u32) -> u32 {
 
 fn inl_IDEntryAlloc_unfused<'a>(ctx: &'a Ctx) -> _IDEntry<'a> {
     let mut entry: _IDEntry<'a> = null(ctx);
-    entry = Handle::cast::<_IDEntry<'a>>(fns::HSD_ObjAlloc(ctx, fns::HSD_IDGetAllocData(ctx)));
+    entry =
+        Handle::cast::<_IDEntry<'a>>(fns::HSD_ObjAlloc(ctx, inl_HSD_IDGetAllocData_unfused(ctx)));
     (if !Handle::is_null((entry)) {
         ({ () })
     } else {
@@ -180,7 +190,7 @@ fn inl_IDEntryFree_unfused<'a>(ctx: &'a Ctx, entry: _IDEntry<'a>) {
     let mut entry = entry;
     fns::HSD_ObjFree(
         ctx,
-        fns::HSD_IDGetAllocData(ctx),
+        inl_HSD_IDGetAllocData_unfused(ctx),
         Handle::cast::<Addr<'a>>(entry),
     );
 }

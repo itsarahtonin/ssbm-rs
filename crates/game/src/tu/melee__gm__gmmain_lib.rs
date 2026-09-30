@@ -35,22 +35,27 @@ pub fn gmMainLib_GetCardData<'a>(ctx: &'a Ctx) -> GmCardData<'a> {
 }
 
 pub fn gmMainLib_GetNameTagDataBanks<'a>(ctx: &'a Ctx) -> NameTagDataBank<'a> {
-    return (fns::gmMainLib_GetCardData(ctx)).nametag_banks().get(0);
+    return (inl_gmMainLib_GetCardData_unfused(ctx))
+        .nametag_banks()
+        .get(0);
 }
 
 pub fn gmMainLib_GetGamePrefs<'a>(ctx: &'a Ctx) -> GamePrefs<'a> {
-    return (fns::gmMainLib_GetCardData(ctx)).save_data().x1CB0();
+    return (inl_gmMainLib_GetCardData_unfused(ctx)).save_data().x1CB0();
 }
 
 pub fn GetPersistentFighterData<'a>(ctx: &'a Ctx, selkind: i32) -> FighterData<'a> {
     let mut selkind = selkind;
-    let mut base: FighterData<'a> = (fns::gmMainLib_GetCardData(ctx)).save_data().x1F2C().get(0);
+    let mut base: FighterData<'a> = (inl_gmMainLib_GetCardData_unfused(ctx))
+        .save_data()
+        .x1F2C()
+        .get(0);
     return (Handle::add(base, selkind));
 }
 
 pub fn gmMainLib_GetTrophyFlags<'a>(ctx: &'a Ctx) -> Addr<'a> {
     return Handle::cast::<Addr<'a>>(
-        (fns::gmMainLib_GetCardData(ctx))
+        (inl_gmMainLib_GetCardData_unfused(ctx))
             .save_data()
             .trophy_flags()
             .at(0),
@@ -59,14 +64,14 @@ pub fn gmMainLib_GetTrophyFlags<'a>(ctx: &'a Ctx) -> Addr<'a> {
 
 pub fn gmMainLib_GetTrophyCategoryFlags<'a>(ctx: &'a Ctx) -> Addr<'a> {
     return Handle::cast::<Addr<'a>>(
-        (fns::gmMainLib_GetCardData(ctx))
+        (inl_gmMainLib_GetCardData_unfused(ctx))
             .save_data()
             .trophy_category_flags_ref(),
     );
 }
 
 pub fn gmMainLib_GetTrophyCount<'a>(ctx: &'a Ctx) -> Val<'a, i16> {
-    return (fns::gmMainLib_GetCardData(ctx))
+    return (inl_gmMainLib_GetCardData_unfused(ctx))
         .save_data()
         .trophy_count_ref();
 }
@@ -75,7 +80,9 @@ pub fn GetPersistentNameData<'a>(ctx: &'a Ctx, arg0: i32) -> NameTagData<'a> {
     let mut arg0 = arg0;
     return inl_GetNameTagSlot_unfused(
         ctx,
-        (fns::gmMainLib_GetCardData(ctx)).nametag_banks().get(0),
+        (inl_gmMainLib_GetCardData_unfused(ctx))
+            .nametag_banks()
+            .get(0),
         arg0,
     );
 }
@@ -85,87 +92,129 @@ pub fn gmMainLib_8015CCE4<'a>(ctx: &'a Ctx) -> gmm_x0_44_t<'a> {
 }
 
 pub fn gmMainLib_8015CCF0<'a>(ctx: &'a Ctx) -> Val<'a, u32> {
-    return (fns::gmMainLib_GetCardData(ctx)).save_data().x1A48_ref();
+    return (inl_gmMainLib_GetCardData_unfused(ctx))
+        .save_data()
+        .x1A48_ref();
 }
 
 pub fn gmMainLib_8015CCFC<'a>(ctx: &'a Ctx) -> Addr<'a> {
-    return Handle::cast::<Addr<'a>>((fns::gmMainLib_GetCardData(ctx)).save_data().x1A4C_ref());
+    return Handle::cast::<Addr<'a>>(
+        (inl_gmMainLib_GetCardData_unfused(ctx))
+            .save_data()
+            .x1A4C_ref(),
+    );
 }
 
 pub fn gmMainLib_GetVsPlayContestants<'a>(ctx: &'a Ctx) -> Addr<'a> {
-    return Handle::cast::<Addr<'a>>((fns::gmMainLib_GetCardData(ctx)).save_data().x1A30_ref());
+    return Handle::cast::<Addr<'a>>(
+        (inl_gmMainLib_GetCardData_unfused(ctx))
+            .save_data()
+            .x1A30_ref(),
+    );
 }
 
 pub fn gmMainLib_GetVsPlayTime<'a>(ctx: &'a Ctx) -> Addr<'a> {
-    return Handle::cast::<Addr<'a>>((fns::gmMainLib_GetCardData(ctx)).save_data().x1A34_ref());
+    return Handle::cast::<Addr<'a>>(
+        (inl_gmMainLib_GetCardData_unfused(ctx))
+            .save_data()
+            .x1A34_ref(),
+    );
 }
 
 pub fn gmMainLib_GetCombinedVSPlayTime<'a>(ctx: &'a Ctx) -> Addr<'a> {
-    return Handle::cast::<Addr<'a>>((fns::gmMainLib_GetCardData(ctx)).save_data().x1A38_ref());
+    return Handle::cast::<Addr<'a>>(
+        (inl_gmMainLib_GetCardData_unfused(ctx))
+            .save_data()
+            .x1A38_ref(),
+    );
 }
 
 pub fn gmMainLib_GetTimeMatchTotal<'a>(ctx: &'a Ctx) -> Val<'a, u32> {
-    return (fns::gmMainLib_GetCardData(ctx))
+    return (inl_gmMainLib_GetCardData_unfused(ctx))
         .save_data()
         .time_matches_ref();
 }
 
 pub fn gmMainLib_GetStockMatchTotal<'a>(ctx: &'a Ctx) -> Val<'a, u32> {
-    return (fns::gmMainLib_GetCardData(ctx))
+    return (inl_gmMainLib_GetCardData_unfused(ctx))
         .save_data()
         .stock_matches_ref();
 }
 
 pub fn gmMainLib_GetCoinMatchTotal<'a>(ctx: &'a Ctx) -> Val<'a, u32> {
-    return (fns::gmMainLib_GetCardData(ctx))
+    return (inl_gmMainLib_GetCardData_unfused(ctx))
         .save_data()
         .coin_matches_ref();
 }
 
 pub fn gmMainLib_GetBonusMatchTotal<'a>(ctx: &'a Ctx) -> Val<'a, u32> {
-    return (fns::gmMainLib_GetCardData(ctx))
+    return (inl_gmMainLib_GetCardData_unfused(ctx))
         .save_data()
         .bonus_matches_ref();
 }
 
 pub fn gmMainLib_GetStaminaMatchTotal<'a>(ctx: &'a Ctx) -> Val<'a, u32> {
-    return (fns::gmMainLib_GetCardData(ctx))
+    return (inl_gmMainLib_GetCardData_unfused(ctx))
         .save_data()
         .stamina_matches_ref();
 }
 
 pub fn gmMainLib_GetMatchResetCounter<'a>(ctx: &'a Ctx) -> Val<'a, u32> {
-    return (fns::gmMainLib_GetCardData(ctx))
+    return (inl_gmMainLib_GetCardData_unfused(ctx))
         .save_data()
         .match_resets_ref();
 }
 
 pub fn gmMainLib_GetSingleplayerTime<'a>(ctx: &'a Ctx) -> Addr<'a> {
-    return Handle::cast::<Addr<'a>>((fns::gmMainLib_GetCardData(ctx)).save_data().x1A3C_ref());
+    return Handle::cast::<Addr<'a>>(
+        (inl_gmMainLib_GetCardData_unfused(ctx))
+            .save_data()
+            .x1A3C_ref(),
+    );
 }
 
 pub fn gmMainLib_8015CD80<'a>(ctx: &'a Ctx) -> Addr<'a> {
-    return Handle::cast::<Addr<'a>>((fns::gmMainLib_GetCardData(ctx)).save_data().x1A44_ref());
+    return Handle::cast::<Addr<'a>>(
+        (inl_gmMainLib_GetCardData_unfused(ctx))
+            .save_data()
+            .x1A44_ref(),
+    );
 }
 
 pub fn gmMainLib_GetPowerCount<'a>(ctx: &'a Ctx) -> Addr<'a> {
-    return Handle::cast::<Addr<'a>>((fns::gmMainLib_GetCardData(ctx)).save_data().x1A50_ref());
+    return Handle::cast::<Addr<'a>>(
+        (inl_gmMainLib_GetCardData_unfused(ctx))
+            .save_data()
+            .x1A50_ref(),
+    );
 }
 
 pub fn gm_GetPowerTime<'a>(ctx: &'a Ctx) -> Val<'a, i32> {
-    return (fns::gmMainLib_GetCardData(ctx)).save_data().x1A54_ref();
+    return (inl_gmMainLib_GetCardData_unfused(ctx))
+        .save_data()
+        .x1A54_ref();
 }
 
 pub fn gmMainLib_GetTotalDamage<'a>(ctx: &'a Ctx) -> Addr<'a> {
-    return Handle::cast::<Addr<'a>>((fns::gmMainLib_GetCardData(ctx)).save_data().x1A58_ref());
+    return Handle::cast::<Addr<'a>>(
+        (inl_gmMainLib_GetCardData_unfused(ctx))
+            .save_data()
+            .x1A58_ref(),
+    );
 }
 
 pub fn gmMainLib_GetKOTotal<'a>(ctx: &'a Ctx) -> Val<'a, i32> {
-    return (fns::gmMainLib_GetCardData(ctx)).save_data().x1A5C_ref();
+    return (inl_gmMainLib_GetCardData_unfused(ctx))
+        .save_data()
+        .x1A5C_ref();
 }
 
 pub fn gmMainLib_GetSelfDestructTotal<'a>(ctx: &'a Ctx) -> Addr<'a> {
-    return Handle::cast::<Addr<'a>>((fns::gmMainLib_GetCardData(ctx)).save_data().x1A60_ref());
+    return Handle::cast::<Addr<'a>>(
+        (inl_gmMainLib_GetCardData_unfused(ctx))
+            .save_data()
+            .x1A60_ref(),
+    );
 }
 
 pub fn gmMainLib_8015CDC8<'a>(ctx: &'a Ctx) -> gmm_x0_528_t<'a> {
@@ -211,7 +260,9 @@ pub fn gmMainLib_8015CE44<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) -> Val<'a, i8>
     } else {
         return (inl_GetNameTagSlot_unfused(
             ctx,
-            (fns::gmMainLib_GetCardData(ctx)).nametag_banks().get(0),
+            (inl_gmMainLib_GetCardData_unfused(ctx))
+                .nametag_banks()
+                .get(0),
             arg1,
         ))
         .x1A2_ref();
@@ -240,7 +291,7 @@ pub fn gmMainLib_8015CEFC<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 
 pub fn gmMainLib_8015CF5C<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let mut arg0 = arg0;
-    return (fns::gmMainLib_GetCardData(ctx))
+    return (inl_gmMainLib_GetCardData_unfused(ctx))
         .save_data()
         .x1A70()
         .at(arg0)
@@ -250,7 +301,7 @@ pub fn gmMainLib_8015CF5C<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn gmMainLib_8015CF70<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
     let mut arg0 = arg0;
     let mut arg1 = arg1;
-    (fns::gmMainLib_GetCardData(ctx))
+    (inl_gmMainLib_GetCardData_unfused(ctx))
         .save_data()
         .x1A70()
         .at(arg0)
@@ -258,13 +309,13 @@ pub fn gmMainLib_8015CF70<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
 }
 
 pub fn gmMainLib_8015CF84<'a>(ctx: &'a Ctx) {
-    (fns::gmMainLib_GetCardData(ctx))
+    (inl_gmMainLib_GetCardData_unfused(ctx))
         .save_data()
         .set_x1B3C((1_i32 as u8));
 }
 
 pub fn gmMainLib_8015CF94<'a>(ctx: &'a Ctx) -> i32 {
-    if ((fns::gmMainLib_GetCardData(ctx)).save_data().x1B3C() != 0) {
+    if ((inl_gmMainLib_GetCardData_unfused(ctx)).save_data().x1B3C() != 0) {
         return 1_i32;
     }
     return 0_i32;
@@ -272,7 +323,7 @@ pub fn gmMainLib_8015CF94<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn gmMainLib_8015CFB4<'a>(ctx: &'a Ctx, arg0: u8) -> Val<'a, i8> {
     let mut arg0 = arg0;
-    return (fns::GetPersistentFighterData(ctx, (arg0 as i32))).x78_ref();
+    return (inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32))).x78_ref();
 }
 
 pub fn gmMainLib_8015CFCC<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
@@ -283,7 +334,7 @@ pub fn gmMainLib_8015CFCC<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
 
 pub fn gmMainLib_8015D06C<'a>(ctx: &'a Ctx, arg0: u8) -> Val<'a, i32> {
     let mut arg0 = arg0;
-    return (fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    return (inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .x84_ref();
 }
@@ -296,14 +347,14 @@ pub fn gmMainLib_8015D084<'a>(ctx: &'a Ctx, selkind: u8) -> Val<'a, i32> {
 
 pub fn gmMainLib_8015D0C0<'a>(ctx: &'a Ctx, arg0: u8) -> Val<'a, i32> {
     let mut arg0 = arg0;
-    return (fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    return (inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .x88_ref();
 }
 
 pub fn gmMainLib_8015D0D8<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
     let mut arg0 = arg0;
-    return ((fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    return ((inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .b4() as i32);
 }
@@ -316,14 +367,14 @@ pub fn gmMainLib_8015D0F4<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
 
 pub fn gmMainLib_8015D194<'a>(ctx: &'a Ctx, arg0: u8) -> Val<'a, u8> {
     let mut arg0 = arg0;
-    return (fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    return (inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .x80_ref();
 }
 
 pub fn gmMainLib_8015D1AC<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
     let mut arg0 = arg0;
-    return ((fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    return ((inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .b789() as i32);
 }
@@ -331,21 +382,21 @@ pub fn gmMainLib_8015D1AC<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
 pub fn gmMainLib_8015D1C8<'a>(ctx: &'a Ctx, arg0: u8, stocks: i32) {
     let mut arg0 = arg0;
     let mut stocks = stocks;
-    (fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    (inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .set_b789((stocks as u16));
 }
 
 pub fn gmMainLib_8015D1E8<'a>(ctx: &'a Ctx, arg0: u8) -> Val<'a, i32> {
     let mut arg0 = arg0;
-    return (fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    return (inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .x8C_ref();
 }
 
 pub fn gmMainLib_8015D200<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
     let mut arg0 = arg0;
-    return ((fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    return ((inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .b5() as i32);
 }
@@ -358,14 +409,14 @@ pub fn gmMainLib_8015D21C<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
 
 pub fn gmMainLib_8015D2BC<'a>(ctx: &'a Ctx, arg0: u8) -> Val<'a, u8> {
     let mut arg0 = arg0;
-    return (fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    return (inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .x81_ref();
 }
 
 pub fn gmMainLib_8015D2D4<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
     let mut arg0 = arg0;
-    return ((fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    return ((inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .b10_to_12() as i32);
 }
@@ -373,21 +424,21 @@ pub fn gmMainLib_8015D2D4<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
 pub fn gmMainLib_8015D2F0<'a>(ctx: &'a Ctx, arg0: u8, stocks: i32) {
     let mut arg0 = arg0;
     let mut stocks = stocks;
-    (fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    (inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .set_b10_to_12((stocks as u16));
 }
 
 pub fn gmMainLib_8015D310<'a>(ctx: &'a Ctx, arg0: u8) -> Val<'a, i32> {
     let mut arg0 = arg0;
-    return (fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    return (inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .x90_ref();
 }
 
 pub fn gmMainLib_8015D328<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
     let mut arg0 = arg0;
-    return ((fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    return ((inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .b6() as i32);
 }
@@ -400,14 +451,14 @@ pub fn gmMainLib_8015D344<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
 
 pub fn gmMainLib_8015D3E4<'a>(ctx: &'a Ctx, arg0: u8) -> Val<'a, u8> {
     let mut arg0 = arg0;
-    return (fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    return (inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .x82_ref();
 }
 
 pub fn gmMainLib_8015D3FC<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
     let mut arg0 = arg0;
-    return ((fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    return ((inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .b13_to_15() as i32);
 }
@@ -415,14 +466,14 @@ pub fn gmMainLib_8015D3FC<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
 pub fn gmMainLib_8015D418<'a>(ctx: &'a Ctx, arg0: u8, stocks: i32) {
     let mut arg0 = arg0;
     let mut stocks = stocks;
-    (fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    (inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .set_b13_to_15((stocks as u16));
 }
 
 pub fn gmMainLib_8015D438<'a>(ctx: &'a Ctx, arg0: u8) -> Val<'a, u32> {
     let mut arg0 = arg0;
-    return (fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    return (inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .x94_ref();
 }
@@ -435,7 +486,7 @@ pub fn gmMainLib_8015D450<'a>(ctx: &'a Ctx, arg0: u8) -> Val<'a, i32> {
 
 pub fn gmMainLib_8015D48C<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
     let mut arg0 = arg0;
-    return ((fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    return ((inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .b0() as i32);
 }
@@ -449,13 +500,13 @@ pub fn gmMainLib_8015D4A8<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
 pub fn gmMainLib_8015D4E8<'a>(ctx: &'a Ctx, arg0: u8, arg1: i32) {
     let mut arg0 = arg0;
     let mut arg1 = arg1;
-    (fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    (inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .set_b0((arg1 as u16));
 }
 
 pub fn gmMainLib_8015D508<'a>(ctx: &'a Ctx) -> i32 {
-    let mut card: GmCardData<'a> = fns::gmMainLib_GetCardData(ctx);
+    let mut card: GmCardData<'a> = inl_gmMainLib_GetCardData_unfused(ctx);
     let mut i: i32 = 0;
     {
         i = 0_i32;
@@ -512,14 +563,14 @@ pub fn gmMainLib_8015D640<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn gmMainLib_8015D6A4<'a>(ctx: &'a Ctx, arg0: u8) -> Val<'a, i32> {
     let mut arg0 = arg0;
-    return (fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    return (inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .x98_ref();
 }
 
 pub fn gmMainLib_8015D6BC<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
     let mut arg0 = arg0;
-    return ((fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    return ((inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .b1() as i32);
 }
@@ -527,21 +578,21 @@ pub fn gmMainLib_8015D6BC<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
 pub fn gmMainLib_8015D6D8<'a>(ctx: &'a Ctx, arg0: u8, arg1: i32) {
     let mut arg0 = arg0;
     let mut arg1 = arg1;
-    (fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    (inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .set_b1((arg1 as u16));
 }
 
 pub fn gmMainLib_8015D6F8<'a>(ctx: &'a Ctx, arg0: u8) -> Val<'a, i32> {
     let mut arg0 = arg0;
-    return (fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    return (inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .x9C_ref();
 }
 
 pub fn gmMainLib_8015D710<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
     let mut arg0 = arg0;
-    return ((fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    return ((inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .b2() as i32);
 }
@@ -549,63 +600,63 @@ pub fn gmMainLib_8015D710<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
 pub fn gmMainLib_8015D72C<'a>(ctx: &'a Ctx, arg0: u8, arg1: i32) {
     let mut arg0 = arg0;
     let mut arg1 = arg1;
-    (fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    (inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .set_b2((arg1 as u16));
 }
 
 pub fn gmMainLib_8015D74C<'a>(ctx: &'a Ctx, arg0: u8) -> Val<'a, u16> {
     let mut arg0 = arg0;
-    return (fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    return (inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .xA0_ref();
 }
 
 pub fn gmMainLib_8015D764<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
     let mut arg0 = arg0;
-    return ((fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    return ((inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .b3() as i32);
 }
 
 pub fn gmMainLib_8015D780<'a>(ctx: &'a Ctx, arg0: u8) {
     let mut arg0 = arg0;
-    (fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    (inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .set_b3((1_i32 as u16));
 }
 
 pub fn gmMainLib_8015D7A4<'a>(ctx: &'a Ctx, arg0: u8) -> Val<'a, u16> {
     let mut arg0 = arg0;
-    return (fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    return (inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .xA2_ref();
 }
 
 pub fn gmMainLib_8015D7BC<'a>(ctx: &'a Ctx, arg0: u8) -> Val<'a, i32> {
     let mut arg0 = arg0;
-    return (fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    return (inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .xA4_ref();
 }
 
 pub fn gmMainLib_8015D7D4<'a>(ctx: &'a Ctx, arg0: u8) -> Val<'a, i32> {
     let mut arg0 = arg0;
-    return (fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    return (inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .xA8_ref();
 }
 
 pub fn gmMainLib_8015D7EC<'a>(ctx: &'a Ctx, arg0: u8) -> Val<'a, u16> {
     let mut arg0 = arg0;
-    return (fns::GetPersistentFighterData(ctx, (arg0 as i32)))
+    return (inl_GetPersistentFighterData_unfused(ctx, (arg0 as i32)))
         .x7C()
         .x7E_ref();
 }
 
 pub fn gmMainLib_8015D804<'a>(ctx: &'a Ctx, arg0: i32) -> Val<'a, u32> {
     let mut arg0 = arg0;
-    let mut thing: GmCardData<'a> = fns::gmMainLib_GetCardData(ctx);
+    let mut thing: GmCardData<'a> = inl_gmMainLib_GetCardData_unfused(ctx);
     return (thing).save_data().x1B80().at(arg0);
 }
 
@@ -614,7 +665,7 @@ pub fn gmMainLib_8015D818<'a>(ctx: &'a Ctx, arg0: u32) -> i32 {
     let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     if fns::gmMainLib_8015D94C(ctx, arg0) == 0_i32 {
-        (fns::gmMainLib_8015D804(ctx, (arg0 as i32))).set(fns::lbTime_GetTimeInSeconds(ctx));
+        (inl_gmMainLib_8015D804_unfused(ctx, (arg0 as i32))).set(fns::lbTime_GetTimeInSeconds(ctx));
         statics::melee__gm__gmmain_lib::gmMainLib_8015D888(ctx, arg0);
         fns::gmMainLib_8015D8FC(ctx, arg0);
         return 1_i32;
@@ -626,7 +677,10 @@ pub fn gmMainLib_8015D888<'a>(ctx: &'a Ctx, arg0: u32) {
     let mut arg0 = arg0;
     inl_bitset_set_unfused(
         ctx,
-        (fns::gmMainLib_GetCardData(ctx)).save_data().x1B40().at(0),
+        (inl_gmMainLib_GetCardData_unfused(ctx))
+            .save_data()
+            .x1B40()
+            .at(0),
         arg0,
     );
 }
@@ -635,7 +689,10 @@ pub fn gmMainLib_8015D8B0<'a>(ctx: &'a Ctx, arg0: u32) {
     let mut arg0 = arg0;
     inl_bitset_clear_unfused(
         ctx,
-        (fns::gmMainLib_GetCardData(ctx)).save_data().x1B40().at(0),
+        (inl_gmMainLib_GetCardData_unfused(ctx))
+            .save_data()
+            .x1B40()
+            .at(0),
         arg0,
     );
 }
@@ -644,7 +701,10 @@ pub fn gmMainLib_8015D8D8<'a>(ctx: &'a Ctx, arg0: u32) -> i32 {
     let mut arg0 = arg0;
     return (inl_bitset_test_unfused(
         ctx,
-        (fns::gmMainLib_GetCardData(ctx)).save_data().x1B40().at(0),
+        (inl_gmMainLib_GetCardData_unfused(ctx))
+            .save_data()
+            .x1B40()
+            .at(0),
         arg0,
     ) as i32);
 }
@@ -653,7 +713,10 @@ pub fn gmMainLib_8015D8FC<'a>(ctx: &'a Ctx, arg0: u32) {
     let mut arg0 = arg0;
     inl_bitset_set_unfused(
         ctx,
-        (fns::gmMainLib_GetCardData(ctx)).save_data().x1B4C().at(0),
+        (inl_gmMainLib_GetCardData_unfused(ctx))
+            .save_data()
+            .x1B4C()
+            .at(0),
         arg0,
     );
 }
@@ -662,7 +725,10 @@ pub fn gmMainLib_8015D924<'a>(ctx: &'a Ctx, arg0: u32) {
     let mut arg0 = arg0;
     inl_bitset_clear_unfused(
         ctx,
-        (fns::gmMainLib_GetCardData(ctx)).save_data().x1B4C().at(0),
+        (inl_gmMainLib_GetCardData_unfused(ctx))
+            .save_data()
+            .x1B4C()
+            .at(0),
         arg0,
     );
 }
@@ -671,14 +737,17 @@ pub fn gmMainLib_8015D94C<'a>(ctx: &'a Ctx, arg0: u32) -> i32 {
     let mut arg0 = arg0;
     return (inl_bitset_test_word_unfused(
         ctx,
-        (fns::gmMainLib_GetCardData(ctx)).save_data().x1B4C().at(0),
+        (inl_gmMainLib_GetCardData_unfused(ctx))
+            .save_data()
+            .x1B4C()
+            .at(0),
         arg0,
     ) as i32);
 }
 
 pub fn gmMainLib_8015D970<'a>(ctx: &'a Ctx, idx: i32) -> Val<'a, u32> {
     let mut idx = idx;
-    let mut trophies: gmm_x0_44_t<'a> = fns::gmMainLib_8015CCE4(ctx);
+    let mut trophies: gmm_x0_44_t<'a> = inl_gmMainLib_8015CCE4_unfused(ctx);
     return (trophies).times().at(idx);
 }
 
@@ -693,7 +762,7 @@ pub fn gmMainLib_8015D984<'a>(ctx: &'a Ctx, arg0: u32) -> i32 {
         }
     }
     if fns::gmMainLib_8015DA90(ctx, arg0) == 0_i32 {
-        (fns::gmMainLib_8015D970(ctx, (arg0 as i32))).set(fns::lbTime_GetTimeInSeconds(ctx));
+        (inl_gmMainLib_8015D970_unfused(ctx, (arg0 as i32))).set(fns::lbTime_GetTimeInSeconds(ctx));
         fns::gmMainLib_8015D9F4(ctx, arg0);
         fns::gmMainLib_8015DA40(ctx, arg0);
         return 1_i32;
@@ -703,20 +772,30 @@ pub fn gmMainLib_8015D984<'a>(ctx: &'a Ctx, arg0: u32) -> i32 {
 
 pub fn gmMainLib_8015D9F4<'a>(ctx: &'a Ctx, arg0: u32) {
     let mut arg0 = arg0;
-    inl_bitset_set_unfused(ctx, (fns::gmMainLib_8015CCE4(ctx)).flags().at(0), arg0);
+    inl_bitset_set_unfused(
+        ctx,
+        (inl_gmMainLib_8015CCE4_unfused(ctx)).flags().at(0),
+        arg0,
+    );
 }
 
 pub fn gmMainLib_8015DA1C<'a>(ctx: &'a Ctx, arg0: u32) -> i32 {
     let mut arg0 = arg0;
-    return (inl_bitset_test_unfused(ctx, (fns::gmMainLib_8015CCE4(ctx)).flags().at(0), arg0)
-        as i32);
+    return (inl_bitset_test_unfused(
+        ctx,
+        (inl_gmMainLib_8015CCE4_unfused(ctx)).flags().at(0),
+        arg0,
+    ) as i32);
 }
 
 pub fn gmMainLib_8015DA40<'a>(ctx: &'a Ctx, arg0: u32) {
     let mut arg0 = arg0;
     inl_bitset_set_unfused(
         ctx,
-        (fns::gmMainLib_GetCardData(ctx)).save_data().x1B58().at(0),
+        (inl_gmMainLib_GetCardData_unfused(ctx))
+            .save_data()
+            .x1B58()
+            .at(0),
         arg0,
     );
 }
@@ -725,7 +804,10 @@ pub fn gmMainLib_8015DA68<'a>(ctx: &'a Ctx, arg0: u32) {
     let mut arg0 = arg0;
     inl_bitset_clear_unfused(
         ctx,
-        (fns::gmMainLib_GetCardData(ctx)).save_data().x1B58().at(0),
+        (inl_gmMainLib_GetCardData_unfused(ctx))
+            .save_data()
+            .x1B58()
+            .at(0),
         arg0,
     );
 }
@@ -734,7 +816,10 @@ pub fn gmMainLib_8015DA90<'a>(ctx: &'a Ctx, arg0: u32) -> i32 {
     let mut arg0 = arg0;
     return (inl_bitset_test_word_unfused(
         ctx,
-        (fns::gmMainLib_GetCardData(ctx)).save_data().x1B58().at(0),
+        (inl_gmMainLib_GetCardData_unfused(ctx))
+            .save_data()
+            .x1B58()
+            .at(0),
         arg0,
     ) as i32);
 }
@@ -743,7 +828,10 @@ pub fn gmMainLib_8015DAB4<'a>(ctx: &'a Ctx, arg0: u32) {
     let mut arg0 = arg0;
     inl_bitset_set_unfused(
         ctx,
-        (fns::gmMainLib_GetCardData(ctx)).save_data().x1C88().at(0),
+        (inl_gmMainLib_GetCardData_unfused(ctx))
+            .save_data()
+            .x1C88()
+            .at(0),
         arg0,
     );
 }
@@ -752,7 +840,10 @@ pub fn gmMainLib_8015DADC<'a>(ctx: &'a Ctx, arg0: u32) -> i32 {
     let mut arg0 = arg0;
     return (inl_bitset_test_unfused(
         ctx,
-        (fns::gmMainLib_GetCardData(ctx)).save_data().x1C88().at(0),
+        (inl_gmMainLib_GetCardData_unfused(ctx))
+            .save_data()
+            .x1C88()
+            .at(0),
         arg0,
     ) as i32);
 }
@@ -821,7 +912,7 @@ pub fn gmMainLib_8015DBF4<'a>(ctx: &'a Ctx, arg0: i32) {
     base = (fns::gmMainLib_804D3EE0(ctx).get()).modes();
     inl_gmMainLib_AdjustNameTag_unfused(
         ctx,
-        (fns::gmMainLib_8015CDC8(ctx)).nametag_ref(),
+        (inl_gmMainLib_8015CDC8_unfused(ctx)).nametag_ref(),
         (arg0 as u8),
     );
     inl_gmMainLib_AdjustNameTag_unfused(
@@ -939,7 +1030,7 @@ pub fn gmMainLib_8015EA80<'a>(ctx: &'a Ctx) {
             break 'l1;
         }
     }
-    fns::gmMainLib_8015CDEC(ctx);
+    inl_gmMainLib_8015CDEC_unfused(ctx);
     inl_SetDefaultHandicaps_unfused(ctx, (modes).table().get((enums::GmVsMode_Melee as i32)));
     inl_SetDefaultHandicaps_unfused(
         ctx,
@@ -990,7 +1081,7 @@ pub fn gmMainLib_8015ED30<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn GetRumbleSettingOfPort<'a>(ctx: &'a Ctx, port: i32) -> i32 {
     let mut port = port;
-    return ((fns::gmMainLib_GetCardData(ctx))
+    return ((inl_gmMainLib_GetCardData_unfused(ctx))
         .save_data()
         .x1CB0()
         .rumble_enabled()
@@ -1001,7 +1092,7 @@ pub fn GetRumbleSettingOfPort<'a>(ctx: &'a Ctx, port: i32) -> i32 {
 pub fn gmMainLib_SetRumbleEnabled<'a>(ctx: &'a Ctx, port: i32, enabled: i32) {
     let mut port = port;
     let mut enabled = enabled;
-    (fns::gmMainLib_GetGamePrefs(ctx))
+    (inl_gmMainLib_GetGamePrefs_unfused(ctx))
         .rumble_enabled()
         .at(port)
         .set((enabled as u8));
@@ -1019,54 +1110,62 @@ pub fn gmMainLib_8015ED68<'a>(ctx: &'a Ctx, port: i32) {
 }
 
 pub fn gmMainLib_8015ED74<'a>(ctx: &'a Ctx) -> u8 {
-    return ((fns::gmMainLib_GetGamePrefs(ctx)).sound_balance() as u8);
+    return ((inl_gmMainLib_GetGamePrefs_unfused(ctx)).sound_balance() as u8);
 }
 
 pub fn gmMainLib_8015ED80<'a>(ctx: &'a Ctx, arg0: i8) {
     let mut arg0 = arg0;
-    (fns::gmMainLib_GetGamePrefs(ctx)).set_sound_balance(arg0);
+    (inl_gmMainLib_GetGamePrefs_unfused(ctx)).set_sound_balance(arg0);
 }
 
 pub fn gmMainLib_GetUnlockedCharactersBitmaskPtr<'a>(ctx: &'a Ctx) -> Val<'a, u16> {
-    return (fns::gmMainLib_GetCardData(ctx))
+    return (inl_gmMainLib_GetCardData_unfused(ctx))
         .save_data()
         .unlocked_characters_ref();
 }
 
 pub fn gmMainLib_8015ED98<'a>(ctx: &'a Ctx) -> gmm_retval_ED98<'a> {
-    return (fns::gmMainLib_GetCardData(ctx)).save_data().unk_8();
+    return (inl_gmMainLib_GetCardData_unfused(ctx)).save_data().unk_8();
 }
 
 pub fn gmMainLib_8015EDA4<'a>(ctx: &'a Ctx) -> Val<'a, u16> {
-    return (fns::gmMainLib_GetCardData(ctx)).save_data().x186A_ref();
+    return (inl_gmMainLib_GetCardData_unfused(ctx))
+        .save_data()
+        .x186A_ref();
 }
 
 pub fn gmMainLib_8015EDB0<'a>(ctx: &'a Ctx) -> gmm_retval_EDB0<'a> {
-    return (fns::gmMainLib_GetCardData(ctx)).save_data().unk_28();
+    return (inl_gmMainLib_GetCardData_unfused(ctx))
+        .save_data()
+        .unk_28();
 }
 
 pub fn gmMainLib_8015EDBC<'a>(ctx: &'a Ctx) -> gmm_retval_EDBC<'a> {
-    return (fns::gmMainLib_GetCardData(ctx)).save_data().unk_30();
+    return (inl_gmMainLib_GetCardData_unfused(ctx))
+        .save_data()
+        .unk_30();
 }
 
 pub fn gmMainLib_8015EDC8<'a>(ctx: &'a Ctx) -> gmm_x1868_1A8_t<'a> {
-    return (fns::gmMainLib_GetCardData(ctx)).save_data().unk_1A8();
+    return (inl_gmMainLib_GetCardData_unfused(ctx))
+        .save_data()
+        .unk_1A8();
 }
 
 pub fn gmMainLib_8015EDD4<'a>(ctx: &'a Ctx) -> i32 {
-    return (((fns::gmMainLib_GetCardData(ctx)).save_data().x186C() as i32) & 4_i32);
+    return (((inl_gmMainLib_GetCardData_unfused(ctx)).save_data().x186C() as i32) & 4_i32);
 }
 
 pub fn gmMainLib_8015EE0C<'a>(ctx: &'a Ctx) -> i32 {
-    return (((fns::gmMainLib_GetCardData(ctx)).save_data().x186C() as i32) & 1_i32);
+    return (((inl_gmMainLib_GetCardData_unfused(ctx)).save_data().x186C() as i32) & 1_i32);
 }
 
 pub fn gmMainLib_8015EE44<'a>(ctx: &'a Ctx) -> i32 {
-    return (((fns::gmMainLib_GetCardData(ctx)).save_data().x186C() as i32) & 2_i32);
+    return (((inl_gmMainLib_GetCardData_unfused(ctx)).save_data().x186C() as i32) & 2_i32);
 }
 
 pub fn gmMainLib_8015EE90<'a>(ctx: &'a Ctx) -> i32 {
-    return (((fns::gmMainLib_GetCardData(ctx)).save_data().x186C() as i32) & 8_i32);
+    return (((inl_gmMainLib_GetCardData_unfused(ctx)).save_data().x186C() as i32) & 8_i32);
 }
 
 pub fn gmMainLib_8015EEC8<'a>(ctx: &'a Ctx) {
@@ -1083,7 +1182,7 @@ pub fn gmMainLib_8015EEC8<'a>(ctx: &'a Ctx) {
         i = 0_i32;
         'l3: while i < (enums::SELKIND_COUNT as i32) {
             'c4: {
-                let mut data: FighterData<'a> = fns::GetPersistentFighterData(ctx, i);
+                let mut data: FighterData<'a> = inl_GetPersistentFighterData_unfused(ctx, i);
                 fns::memzero(ctx, Handle::cast::<Addr<'a>>((data).x7C()), (48_u32 as i32));
             }
             i = i.wrapping_add(1);
@@ -1091,7 +1190,11 @@ pub fn gmMainLib_8015EEC8<'a>(ctx: &'a Ctx) {
     }
     fns::memzero(
         ctx,
-        Handle::cast::<Addr<'a>>((fns::gmMainLib_GetCardData(ctx)).save_data().x1A68_ref()),
+        Handle::cast::<Addr<'a>>(
+            (inl_gmMainLib_GetCardData_unfused(ctx))
+                .save_data()
+                .x1A68_ref(),
+        ),
         ((Handle::addr((null::<GmSaveData<'a>>(ctx)).x1B40()))
             .wrapping_sub((Handle::addr((null::<GmSaveData<'a>>(ctx)).x1A68_ref())))
             as i32),
@@ -1191,7 +1294,7 @@ pub fn gmMainLib_8015F260<'a>(ctx: &'a Ctx) {
         i = 0_i32;
         'l3: while i < 120_i32 {
             'c4: {
-                fns::InitializePersistentNameData(ctx, i);
+                inl_InitializePersistentNameData_unfused(ctx, i);
             }
             i = i.wrapping_add(1);
         }
@@ -1202,7 +1305,7 @@ pub fn gmMainLib_8015F464<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
     fns::memzero(
         ctx,
-        Handle::cast::<Addr<'a>>(fns::gmMainLib_8015ED98(ctx)),
+        Handle::cast::<Addr<'a>>(inl_gmMainLib_8015ED98_unfused(ctx)),
         (32_u32 as i32),
     );
 }
@@ -1211,7 +1314,7 @@ pub fn gmMainLib_8015F490<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
     fns::memzero(
         ctx,
-        Handle::cast::<Addr<'a>>(fns::gmMainLib_8015EDB0(ctx)),
+        Handle::cast::<Addr<'a>>(inl_gmMainLib_8015EDB0_unfused(ctx)),
         (8_u32 as i32),
     );
 }
@@ -1220,18 +1323,18 @@ pub fn gmMainLib_8015F4BC<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
     fns::memzero(
         ctx,
-        Handle::cast::<Addr<'a>>(fns::gmMainLib_8015EDBC(ctx)),
+        Handle::cast::<Addr<'a>>(inl_gmMainLib_8015EDBC_unfused(ctx)),
         (0x178_u32 as i32),
     );
 }
 
 pub fn gmMainLib_8015F4E8<'a>(ctx: &'a Ctx) -> u32 {
-    return ((fns::gmMainLib_GetGamePrefs(ctx)).deflicker() as u32);
+    return ((inl_gmMainLib_GetGamePrefs_unfused(ctx)).deflicker() as u32);
 }
 
 pub fn gmMainLib_8015F4F4<'a>(ctx: &'a Ctx, arg0: u8) {
     let mut arg0 = arg0;
-    (fns::gmMainLib_GetCardData(ctx))
+    (inl_gmMainLib_GetCardData_unfused(ctx))
         .save_data()
         .x1CB0()
         .set_deflicker(arg0);
@@ -1241,13 +1344,13 @@ pub fn gmMainLib_8015F500<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
     let mut mode: _GXRenderModeObj<'a> = null(ctx);
     if (fns::gmMainLib_8046B0F0(ctx).progressive() != 0) {
-        mode = (if (fns::gmMainLib_8015F4E8(ctx) != 0) {
+        mode = (if (inl_gmMainLib_8015F4E8_unfused(ctx) != 0) {
             fns::gmMainLib_803D4A80(ctx)
         } else {
             fns::GXNtsc480Prog(ctx)
         });
     } else {
-        mode = (if (fns::gmMainLib_8015F4E8(ctx) != 0) {
+        mode = (if (inl_gmMainLib_8015F4E8_unfused(ctx) != 0) {
             fns::GXNtsc480IntDf(ctx)
         } else {
             fns::GXNtsc480Int(ctx)
@@ -1359,7 +1462,7 @@ pub fn gmMainLib_8015F600<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
                     let mut bank: NameTagDataBank<'a> = null(ctx);
                     let mut idx: i32 = 0;
                     idx = j.wrapping_add(bank_offset);
-                    fns::InitializePersistentNameData(ctx, idx);
+                    inl_InitializePersistentNameData_unfused(ctx, idx);
                     bank = (fns::gmMainLib_804D3EE0(ctx).get())
                         .thing()
                         .nametag_banks()
@@ -1493,6 +1596,10 @@ pub fn gmMainLib_8015FC74<'a>(ctx: &'a Ctx) -> i32 {
     return fns::gmMainLib_8046B0F0(ctx).x10().wrapping_sub(prev);
 }
 
+fn inl_gmMainLib_GetCardData_unfused<'a>(ctx: &'a Ctx) -> GmCardData<'a> {
+    return (fns::gmMainLib_804D3EE0(ctx).get()).thing();
+}
+
 fn inl_GetNameTagSlot_unfused<'a>(
     ctx: &'a Ctx,
     banks: NameTagDataBank<'a>,
@@ -1508,6 +1615,15 @@ fn inl_GetNameTagSlot_unfused<'a>(
 fn inl_bitset64_mask_unfused<'a>(ctx: &'a Ctx, bit: u32) -> i64 {
     let mut bit = bit;
     return shl_i64(1_i64, bit);
+}
+
+fn inl_GetPersistentFighterData_unfused<'a>(ctx: &'a Ctx, selkind: i32) -> FighterData<'a> {
+    let mut selkind = selkind;
+    let mut base: FighterData<'a> = (inl_gmMainLib_GetCardData_unfused(ctx))
+        .save_data()
+        .x1F2C()
+        .get(0);
+    return (Handle::add(base, selkind));
 }
 
 fn inl_selkind_mask_unfused<'a>(ctx: &'a Ctx, kind: u8) -> i32 {
@@ -1529,6 +1645,17 @@ fn inl_selkind_bit_unfused<'a>(ctx: &'a Ctx, word: i32, kind: u8) -> i32 {
     return (word & inl_selkind_mask_unfused(ctx, kind));
 }
 
+fn inl_gmMainLib_8015D804_unfused<'a>(ctx: &'a Ctx, arg0: i32) -> Val<'a, u32> {
+    let mut arg0 = arg0;
+    let mut thing: GmCardData<'a> = inl_gmMainLib_GetCardData_unfused(ctx);
+    return (thing).save_data().x1B80().at(arg0);
+}
+
+fn inl_bitset_mask_unfused<'a>(ctx: &'a Ctx, bit: u32) -> u32 {
+    let mut bit = bit;
+    return (shl_i32(1_i32, (rem_u32(bit, (32_i32 as u32)))) as u32);
+}
+
 fn inl_bitset_set_unfused<'a>(ctx: &'a Ctx, words: Val<'a, u32>, bit: u32) {
     let mut words = words;
     let mut bit = bit;
@@ -1536,11 +1663,6 @@ fn inl_bitset_set_unfused<'a>(ctx: &'a Ctx, words: Val<'a, u32>, bit: u32) {
         ((Handle::add(words, (div_u32(bit, (32_i32 as u32)) as i32))).get()
             | inl_bitset_mask_unfused(ctx, bit)),
     );
-}
-
-fn inl_bitset_mask_unfused<'a>(ctx: &'a Ctx, bit: u32) -> u32 {
-    let mut bit = bit;
-    return (shl_i32(1_i32, (rem_u32(bit, (32_i32 as u32)))) as u32);
 }
 
 fn inl_bitset_clear_unfused<'a>(ctx: &'a Ctx, words: Val<'a, u32>, bit: u32) {
@@ -1564,6 +1686,20 @@ fn inl_bitset_test_word_unfused<'a>(ctx: &'a Ctx, words: Val<'a, u32>, bit: u32)
     let mut bit = bit;
     let mut word: u32 = (Handle::add(words, (div_u32(bit, (32_i32 as u32)) as i32))).get();
     return (word & inl_bitset_mask_unfused(ctx, bit));
+}
+
+fn inl_gmMainLib_8015CCE4_unfused<'a>(ctx: &'a Ctx) -> gmm_x0_44_t<'a> {
+    return (fns::gmMainLib_804D3EE0(ctx).get()).unk_44();
+}
+
+fn inl_gmMainLib_8015D970_unfused<'a>(ctx: &'a Ctx, idx: i32) -> Val<'a, u32> {
+    let mut idx = idx;
+    let mut trophies: gmm_x0_44_t<'a> = inl_gmMainLib_8015CCE4_unfused(ctx);
+    return (trophies).times().at(idx);
+}
+
+fn inl_gmMainLib_8015CDC8_unfused<'a>(ctx: &'a Ctx) -> gmm_x0_528_t<'a> {
+    return (fns::gmMainLib_804D3EE0(ctx).get()).vs().unk_51C();
 }
 
 fn inl_gmMainLib_AdjustNameTag_unfused<'a>(ctx: &'a Ctx, tag_ptr: Val<'a, u8>, tag: u8) {
@@ -1609,6 +1745,47 @@ fn inl_gmMainLib_ClearNameTag_unfused<'a>(ctx: &'a Ctx, tag_ptr: Val<'a, u8>, ta
     }
 }
 
+fn inl_gmMainLib_8015CE44_unfused<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) -> Val<'a, i8> {
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    if arg1 == 120_i32 {
+        if arg0 < 4_i32 {
+            return (fns::gmMainLib_804D3EE0(ctx).get())
+                .modes()
+                .nametags()
+                .at(arg0);
+        }
+        return null::<Val<'a, i8>>(ctx);
+    } else {
+        return (inl_GetNameTagSlot_unfused(
+            ctx,
+            (inl_gmMainLib_GetCardData_unfused(ctx))
+                .nametag_banks()
+                .get(0),
+            arg1,
+        ))
+        .x1A2_ref();
+    }
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
+fn inl_gmMainLib_8015CDEC_unfused<'a>(ctx: &'a Ctx) {
+    let mut i: i32 = 0;
+    {
+        i = 0_i32;
+        'l1: while i < (enums::Gm_Player_NumMax as i32) {
+            'c2: {
+                let mut ptr_: Val<'a, i8> = inl_gmMainLib_8015CE44_unfused(ctx, i, 120_i32);
+                if !Handle::is_null(ptr_) {
+                    (ptr_).set((5_i32 as i8));
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+}
+
 fn inl_SetDefaultHandicaps_unfused<'a>(ctx: &'a Ctx, mode: VsModeData<'a>) {
     let mut mode = mode;
     let mut p: PlayerInitData<'a> = (mode).start().players().get(0);
@@ -1624,11 +1801,15 @@ fn inl_SetDefaultHandicaps_unfused<'a>(ctx: &'a Ctx, mode: VsModeData<'a>) {
     }
 }
 
+fn inl_gmMainLib_GetGamePrefs_unfused<'a>(ctx: &'a Ctx) -> GamePrefs<'a> {
+    return (inl_gmMainLib_GetCardData_unfused(ctx)).save_data().x1CB0();
+}
+
 fn inl_ResetPersistentFighterData_unfused<'a>(ctx: &'a Ctx, i: i32) {
     let mut i = i;
     let mut j: i32 = 0_i32;
     let mut base: FighterData<'a> =
-        inl_GetPersistentFighterDataBase_unfused(ctx, fns::gmMainLib_GetCardData(ctx));
+        inl_GetPersistentFighterDataBase_unfused(ctx, inl_gmMainLib_GetCardData_unfused(ctx));
     {
         'l1: while (enums::SELKIND_COUNT as i32) > j {
             'c2: {
@@ -1643,6 +1824,68 @@ fn inl_ResetPersistentFighterData_unfused<'a>(ctx: &'a Ctx, i: i32) {
     fns::gmMainLib_8015EF30(ctx, (Handle::add(base, ((i as u8) as i32))).stats());
 }
 
+fn inl_InitializePersistentNameData_unfused<'a>(ctx: &'a Ctx, arg0: i32) {
+    let __frame = ctx.stack_frame(0x18);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let mut arg0 = arg0;
+    let mut data: NameTagData<'a> = null(ctx);
+    let mut bank: NameTagDataBank<'a> = null(ctx);
+    let mut i: i32 = 0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    bank = (fns::gmMainLib_804D3EE0(ctx).get())
+        .thing()
+        .nametag_banks()
+        .get(0);
+    data = (Handle::add(bank, div_i32(((arg0 as u8) as i32), 19_i32)))
+        .inner()
+        .get(rem_i32(((arg0 as u8) as i32), 19_i32));
+    {
+        i = 0_i32;
+        'l3: while i < 120_i32 {
+            'c4: {
+                (data).vs_kos().at(i).set((0_i32 as u16));
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    fns::gmMainLib_8015EF30(ctx, (data).stats());
+    {
+        i = 0_i32;
+        'l5: while i < (enums::SELKIND_COUNT as i32) {
+            'c6: {
+                (data).play_time_by_fighter().at(i).set((0_i32 as u32));
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    (data).set_x1A2((5_i32 as i8));
+}
+
+fn inl_gmMainLib_8015ED98_unfused<'a>(ctx: &'a Ctx) -> gmm_retval_ED98<'a> {
+    return (inl_gmMainLib_GetCardData_unfused(ctx)).save_data().unk_8();
+}
+
+fn inl_gmMainLib_8015EDB0_unfused<'a>(ctx: &'a Ctx) -> gmm_retval_EDB0<'a> {
+    return (inl_gmMainLib_GetCardData_unfused(ctx))
+        .save_data()
+        .unk_28();
+}
+
+fn inl_gmMainLib_8015EDBC_unfused<'a>(ctx: &'a Ctx) -> gmm_retval_EDBC<'a> {
+    return (inl_gmMainLib_GetCardData_unfused(ctx))
+        .save_data()
+        .unk_30();
+}
+
+fn inl_gmMainLib_8015F4E8_unfused<'a>(ctx: &'a Ctx) -> u32 {
+    return ((inl_gmMainLib_GetGamePrefs_unfused(ctx)).deflicker() as u32);
+}
+
 fn inl_ResetAllPersistentFighterData_unfused<'a>(ctx: &'a Ctx) {
     let mut i: i32 = 0;
     {
@@ -1651,8 +1894,10 @@ fn inl_ResetAllPersistentFighterData_unfused<'a>(ctx: &'a Ctx) {
             'c2: {
                 let mut j: i32 = 0_i32;
                 let mut k: u8 = (i as u8);
-                let mut base: FighterData<'a> =
-                    inl_GetPersistentFighterDataBase_unfused(ctx, fns::gmMainLib_GetCardData(ctx));
+                let mut base: FighterData<'a> = inl_GetPersistentFighterDataBase_unfused(
+                    ctx,
+                    inl_gmMainLib_GetCardData_unfused(ctx),
+                );
                 {
                     'l3: while (enums::SELKIND_COUNT as i32) > j {
                         'c4: {
@@ -1671,7 +1916,38 @@ fn inl_ResetAllPersistentFighterData_unfused<'a>(ctx: &'a Ctx) {
     }
 }
 
+fn inl_gmMainLib_GetGamePrefs_unfused_2<'a>(ctx: &'a Ctx) -> GamePrefs<'a> {
+    return (fns::gmMainLib_GetCardData(ctx)).save_data().x1CB0();
+}
+
+fn inl_gmMainLib_8015F4E8_unfused_2<'a>(ctx: &'a Ctx) -> u32 {
+    return ((inl_gmMainLib_GetGamePrefs_unfused_2(ctx)).deflicker() as u32);
+}
+
+fn inl_gmMainLib_8015F500_unfused<'a>(ctx: &'a Ctx) {
+    let mut mode: _GXRenderModeObj<'a> = null(ctx);
+    if (fns::gmMainLib_8046B0F0(ctx).progressive() != 0) {
+        mode = (if (inl_gmMainLib_8015F4E8_unfused_2(ctx) != 0) {
+            fns::gmMainLib_803D4A80(ctx)
+        } else {
+            fns::GXNtsc480Prog(ctx)
+        });
+    } else {
+        mode = (if (inl_gmMainLib_8015F4E8_unfused_2(ctx) != 0) {
+            fns::GXNtsc480IntDf(ctx)
+        } else {
+            fns::GXNtsc480Int(ctx)
+        });
+    }
+    fns::HSD_VISetConfigure(ctx, mode);
+}
+
 fn inl_setupAudioVideo_unfused<'a>(ctx: &'a Ctx) {
+    fns::lbAudioAx_80028690(ctx);
+    inl_gmMainLib_8015F500_unfused(ctx);
+}
+
+fn inl_setupAudioVideo_unfused_2<'a>(ctx: &'a Ctx) {
     fns::lbAudioAx_80028690(ctx);
     fns::gmMainLib_8015F500(ctx);
 }
@@ -1687,7 +1963,7 @@ fn inl_resetSaveData_unfused<'a>(ctx: &'a Ctx) {
             i = i.wrapping_add(1);
         }
     }
-    inl_setupAudioVideo_unfused(ctx);
+    inl_setupAudioVideo_unfused_2(ctx);
 }
 
 /// Registers this unit's ports.

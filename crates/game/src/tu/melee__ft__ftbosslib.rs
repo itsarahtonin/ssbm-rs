@@ -311,7 +311,7 @@ pub fn ftBossLib_GetMotionId<'a>(ctx: &'a Ctx, kind: i32) -> i32 {
     let __frame = ctx.stack_frame(0x28);
     let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut kind = kind;
-    let mut gobj: HSD_GObj<'a> = fns::ftBossLib_GetFighterGObj(ctx, kind);
+    let mut gobj: HSD_GObj<'a> = inl_ftBossLib_GetFighterGObj_unfused(ctx, kind);
     if !Handle::is_null(gobj) {
         return fns::ftLib_GetMotionId(ctx, gobj);
     } else {
@@ -324,7 +324,8 @@ pub fn ftBossLib_GetMotionId<'a>(ctx: &'a Ctx, kind: i32) -> i32 {
 pub fn ftBossLib_8015C4C4<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x30);
     let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
-    let mut gobj: HSD_GObj<'a> = fns::ftBossLib_GetFighterGObj(ctx, (enums::Ft_Kind_CrezyH as i32));
+    let mut gobj: HSD_GObj<'a> =
+        inl_ftBossLib_GetFighterGObj_unfused(ctx, (enums::Ft_Kind_CrezyH as i32));
     if !Handle::is_null(gobj) {
         return (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
             .u()
@@ -339,7 +340,7 @@ pub fn ftBossLib_8015C530<'a>(ctx: &'a Ctx, cpu_level: i32) -> i32 {
     let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut cpu_level = cpu_level;
     let mut gobj: HSD_GObj<'a> =
-        fns::ftBossLib_GetFighterGObj(ctx, (enums::Ft_Kind_MasterH as i32));
+        inl_ftBossLib_GetFighterGObj_unfused(ctx, (enums::Ft_Kind_MasterH as i32));
     if !Handle::is_null(gobj) {
         let mut ftCo_DatAttrs_: ftMasterHand_SpecialAttrs<'a> = Handle::cast::<
             ftMasterHand_SpecialAttrs<'a>,
@@ -420,7 +421,7 @@ pub fn ftBossLib_8015C6BC<'a>(ctx: &'a Ctx) -> ftMasterHand_SpecialAttrs<'a> {
     let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     {
         let mut gobj: HSD_GObj<'a> =
-            fns::ftBossLib_GetFighterGObj(ctx, (enums::Ft_Kind_MasterH as i32));
+            inl_ftBossLib_GetFighterGObj_unfused(ctx, (enums::Ft_Kind_MasterH as i32));
         if Handle::is_null(gobj) {
             return null::<ftMasterHand_SpecialAttrs<'a>>(ctx);
         }
@@ -446,7 +447,7 @@ pub fn ftBossLib_8015C6BC<'a>(ctx: &'a Ctx) -> ftMasterHand_SpecialAttrs<'a> {
 pub fn ftBossLib_8015C74C<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x30);
     let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
-    let mut da: ftMasterHand_SpecialAttrs<'a> = fns::ftBossLib_8015C6BC(ctx);
+    let mut da: ftMasterHand_SpecialAttrs<'a> = inl_ftBossLib_8015C6BC_unfused(ctx);
     if Handle::is_null(da) {
         return 1_i32.wrapping_neg();
     }
@@ -456,7 +457,7 @@ pub fn ftBossLib_8015C74C<'a>(ctx: &'a Ctx) -> i32 {
 pub fn ftBossLib_8015C7EC<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x30);
     let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
-    let mut da: ftMasterHand_SpecialAttrs<'a> = fns::ftBossLib_8015C6BC(ctx);
+    let mut da: ftMasterHand_SpecialAttrs<'a> = inl_ftBossLib_8015C6BC_unfused(ctx);
     if Handle::is_null(da) {
         return 1_i32.wrapping_neg();
     }
@@ -466,7 +467,7 @@ pub fn ftBossLib_8015C7EC<'a>(ctx: &'a Ctx) -> i32 {
 pub fn ftBossLib_8015C88C<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x30);
     let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
-    let mut da: ftMasterHand_SpecialAttrs<'a> = fns::ftBossLib_8015C6BC(ctx);
+    let mut da: ftMasterHand_SpecialAttrs<'a> = inl_ftBossLib_8015C6BC_unfused(ctx);
     if Handle::is_null(da) {
         return 1_i32.wrapping_neg();
     }
@@ -476,7 +477,7 @@ pub fn ftBossLib_8015C88C<'a>(ctx: &'a Ctx) -> i32 {
 pub fn ftBossLib_8015C92C<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x30);
     let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
-    let mut da: ftMasterHand_SpecialAttrs<'a> = fns::ftBossLib_8015C6BC(ctx);
+    let mut da: ftMasterHand_SpecialAttrs<'a> = inl_ftBossLib_8015C6BC_unfused(ctx);
     if Handle::is_null(da) {
         return 1_i32.wrapping_neg();
     }
@@ -486,7 +487,7 @@ pub fn ftBossLib_8015C92C<'a>(ctx: &'a Ctx) -> i32 {
 pub fn ftBossLib_8015C9CC<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x30);
     let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
-    let mut da: ftMasterHand_SpecialAttrs<'a> = fns::ftBossLib_8015C6BC(ctx);
+    let mut da: ftMasterHand_SpecialAttrs<'a> = inl_ftBossLib_8015C6BC_unfused(ctx);
     if Handle::is_null(da) {
         return 1_i32.wrapping_neg();
     }
@@ -500,7 +501,7 @@ pub fn ftBossLib_8015CA6C<'a>(ctx: &'a Ctx, arg0: i32) {
     fns::Player_80036790(ctx, 0_i32, fp::frsp(arg0 as f64));
     {
         let mut mh_gobj: HSD_GObj<'a> =
-            fns::ftBossLib_GetFighterGObj(ctx, (enums::Ft_Kind_MasterH as i32));
+            inl_ftBossLib_GetFighterGObj_unfused(ctx, (enums::Ft_Kind_MasterH as i32));
         if !Handle::is_null(mh_gobj) {
             fns::ftLib_80086A4C(ctx, mh_gobj, fp::frsp(arg0 as f64));
         }
@@ -533,20 +534,6 @@ fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     return (gobj).user_data();
 }
 
-fn inl_my_lbvector_Len<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
-    let mut vec = vec;
-    return inl_sqrtf(
-        ctx,
-        fp::fadds(
-            fp::fadds(
-                fp::fmuls((vec).x(), (vec).x()),
-                fp::fmuls((vec).y(), (vec).y()),
-            ),
-            fp::fmuls((vec).z(), (vec).z()),
-        ),
-    );
-}
-
 fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     let mut x = x;
     let mut y: f64 = 0.0;
@@ -570,6 +557,20 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     return x;
 }
 
+fn inl_my_lbvector_Len<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
+    let mut vec = vec;
+    return inl_sqrtf(
+        ctx,
+        fp::fadds(
+            fp::fadds(
+                fp::fmuls((vec).x(), (vec).x()),
+                fp::fmuls((vec).y(), (vec).y()),
+            ),
+            fp::fmuls((vec).z(), (vec).z()),
+        ),
+    );
+}
+
 fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).hsd_obj();
@@ -578,6 +579,28 @@ fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b75e8),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b75e8),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetRotation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate: Quaternion<'a>) {
@@ -613,32 +636,57 @@ fn inl_HSD_JObjSetRotation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate:
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b75e8),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b75e8),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+fn inl_ftBossLib_GetFighterGObj_unfused<'a>(ctx: &'a Ctx, kind: i32) -> HSD_GObj<'a> {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut kind = kind;
+    let mut cur: HSD_GObj<'a> = null(ctx);
     {
-        result = 1_i32;
+        cur = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 8_i32)).get();
+        'l1: while !Handle::is_null(cur) {
+            'c2: {
+                if kind == fns::ftLib_GetKind(ctx, cur) {
+                    return cur;
+                }
+            }
+            cur = (cur).next();
+        }
     }
-    return result;
+    return null::<HSD_GObj<'a>>(ctx);
+}
+
+fn inl_ftBossLib_8015C6BC_unfused<'a>(ctx: &'a Ctx) -> ftMasterHand_SpecialAttrs<'a> {
+    let __frame = ctx.stack_frame(0x18);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    {
+        let mut gobj: HSD_GObj<'a> =
+            inl_ftBossLib_GetFighterGObj_unfused(ctx, (enums::Ft_Kind_MasterH as i32));
+        if Handle::is_null(gobj) {
+            return null::<ftMasterHand_SpecialAttrs<'a>>(ctx);
+        }
+        {
+            let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
+            if Handle::is_null(fp) {
+                return null::<ftMasterHand_SpecialAttrs<'a>>(ctx);
+            }
+            {
+                let mut ftCo_DatAttrs_: ftMasterHand_SpecialAttrs<'a> =
+                    Handle::cast::<ftMasterHand_SpecialAttrs<'a>>(((fp).ft_data()).ext_attr());
+                if Handle::is_null(ftCo_DatAttrs_) {
+                    return null::<ftMasterHand_SpecialAttrs<'a>>(ctx);
+                }
+                return ftCo_DatAttrs_;
+            }
+        }
+    }
+    #[allow(unreachable_code)]
+    return null(ctx);
 }
 
 fn inl_func_8015CA6C_inline_unfused<'a>(ctx: &'a Ctx, arg0: i32) {
     let mut arg0 = arg0;
     let mut ch_gobj: HSD_GObj<'a> =
-        fns::ftBossLib_GetFighterGObj(ctx, (enums::Ft_Kind_CrezyH as i32));
+        inl_ftBossLib_GetFighterGObj_unfused(ctx, (enums::Ft_Kind_CrezyH as i32));
     if !Handle::is_null(ch_gobj) {
         fns::ftLib_80086A4C(ctx, ch_gobj, fp::frsp(arg0 as f64));
     }

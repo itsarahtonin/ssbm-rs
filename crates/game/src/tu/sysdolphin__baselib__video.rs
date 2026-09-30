@@ -82,19 +82,13 @@ pub fn HSD_VIPostRetraceCB<'a>(ctx: &'a Ctx, retraceCount: u32) {
     let mut idx: i32 = 0;
     let mut next: i32 = 0;
     if ({
-        let __t1 = statics::sysdolphin__baselib__video::HSD_VISearchXFBByStatus(
-            ctx,
-            (enums::HSD_VI_XFB_NEXT as i32),
-        );
+        let __t1 = inl_HSD_VISearchXFBByStatus_unfused(ctx, (enums::HSD_VI_XFB_NEXT as i32));
         next = __t1;
         __t1
     }) != 1_i32.wrapping_neg()
     {
         if ({
-            let __t2 = statics::sysdolphin__baselib__video::HSD_VISearchXFBByStatus(
-                ctx,
-                (enums::HSD_VI_XFB_DISPLAY as i32),
-            );
+            let __t2 = inl_HSD_VISearchXFBByStatus_unfused(ctx, (enums::HSD_VI_XFB_DISPLAY as i32));
             idx = __t2;
             __t2
         }) != 1_i32.wrapping_neg()
@@ -109,10 +103,8 @@ pub fn HSD_VIPostRetraceCB<'a>(ctx: &'a Ctx, retraceCount: u32) {
             .get(next)
             .set_status((enums::HSD_VI_XFB_DISPLAY as i32));
         if ({
-            let __t3 = statics::sysdolphin__baselib__video::HSD_VISearchXFBByStatus(
-                ctx,
-                (enums::HSD_VI_XFB_DRAWDONE as i32),
-            );
+            let __t3 =
+                inl_HSD_VISearchXFBByStatus_unfused(ctx, (enums::HSD_VI_XFB_DRAWDONE as i32));
             idx = __t3;
             __t3
         }) != 1_i32.wrapping_neg()
@@ -123,10 +115,7 @@ pub fn HSD_VIPostRetraceCB<'a>(ctx: &'a Ctx, retraceCount: u32) {
                 .set_status((enums::HSD_VI_XFB_NEXT as i32));
         }
     } else if ({
-        let __t4 = statics::sysdolphin__baselib__video::HSD_VISearchXFBByStatus(
-            ctx,
-            (enums::HSD_VI_XFB_COPYEFB as i32),
-        );
+        let __t4 = inl_HSD_VISearchXFBByStatus_unfused(ctx, (enums::HSD_VI_XFB_COPYEFB as i32));
         idx = __t4;
         __t4
     }) != 1_i32.wrapping_neg()
@@ -185,10 +174,8 @@ pub fn HSD_VIDrawDoneXFB<'a>(ctx: &'a Ctx, idx: i32) {
         )
     });
     (fns::HSD_VIData(ctx)).xfb().get(idx).set_status(
-        (if statics::sysdolphin__baselib__video::HSD_VISearchXFBByStatus(
-            ctx,
-            (enums::HSD_VI_XFB_NEXT as i32),
-        ) != 1_i32.wrapping_neg()
+        (if inl_HSD_VISearchXFBByStatus_unfused(ctx, (enums::HSD_VI_XFB_NEXT as i32))
+            != 1_i32.wrapping_neg()
         {
             (enums::HSD_VI_XFB_DRAWDONE as i32)
         } else {
@@ -226,36 +213,26 @@ pub fn HSD_VIGetXFBLastDrawDone<'a>(ctx: &'a Ctx) -> i32 {
     let mut idx: i32 = 1_i32.wrapping_neg();
     intr = fns::OSDisableInterrupts(ctx);
     if ({
-        let __t1 = statics::sysdolphin__baselib__video::HSD_VISearchXFBByStatus(
-            ctx,
-            (enums::HSD_VI_XFB_WAITDONE as i32),
-        );
+        let __t1 = inl_HSD_VISearchXFBByStatus_unfused(ctx, (enums::HSD_VI_XFB_WAITDONE as i32));
         idx = __t1;
         __t1
     }) == 1_i32.wrapping_neg()
     {
         if ({
-            let __t2 = statics::sysdolphin__baselib__video::HSD_VISearchXFBByStatus(
-                ctx,
-                (enums::HSD_VI_XFB_DRAWDONE as i32),
-            );
+            let __t2 =
+                inl_HSD_VISearchXFBByStatus_unfused(ctx, (enums::HSD_VI_XFB_DRAWDONE as i32));
             idx = __t2;
             __t2
         }) == 1_i32.wrapping_neg()
         {
             if ({
-                let __t3 = statics::sysdolphin__baselib__video::HSD_VISearchXFBByStatus(
-                    ctx,
-                    (enums::HSD_VI_XFB_NEXT as i32),
-                );
+                let __t3 =
+                    inl_HSD_VISearchXFBByStatus_unfused(ctx, (enums::HSD_VI_XFB_NEXT as i32));
                 idx = __t3;
                 __t3
             }) == 1_i32.wrapping_neg()
             {
-                idx = statics::sysdolphin__baselib__video::HSD_VISearchXFBByStatus(
-                    ctx,
-                    (enums::HSD_VI_XFB_DISPLAY as i32),
-                );
+                idx = inl_HSD_VISearchXFBByStatus_unfused(ctx, (enums::HSD_VI_XFB_DISPLAY as i32));
             }
         }
     }
@@ -350,16 +327,30 @@ pub fn HSD_VIInit<'a>(
     fns::VIConfigure(ctx, (fns::HSD_VIData(ctx)).current().vi().rmode());
     fns::VISetBlack(ctx, (fns::HSD_VIData(ctx)).current().vi().black());
     fns::VIFlush(ctx);
-    idx = statics::sysdolphin__baselib__video::HSD_VISearchXFBByStatus(
-        ctx,
-        (enums::HSD_VI_XFB_FREE as i32),
-    );
+    idx = inl_HSD_VISearchXFBByStatus_unfused(ctx, (enums::HSD_VI_XFB_FREE as i32));
     fns::HSD_VICopyEFB2XFBPtr(
         ctx,
         inl_HSD_VIGetVIStatus_unfused(ctx),
         inl_HSD_VIGetXFBPtr_unfused(ctx, idx),
         (enums::HSD_RP_SCREEN as i32),
     );
+}
+
+fn inl_HSD_VISearchXFBByStatus_unfused<'a>(ctx: &'a Ctx, status: i32) -> i32 {
+    let mut status = status;
+    let mut i: i32 = 0;
+    {
+        i = 0_i32;
+        'l1: while i < 3_i32 {
+            'c2: {
+                if (fns::HSD_VIData(ctx)).xfb().get(i).status() == status {
+                    return i;
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return 1_i32.wrapping_neg();
 }
 
 fn inl_HSD_VIGetNbXFB_unfused<'a>(ctx: &'a Ctx) -> i32 {

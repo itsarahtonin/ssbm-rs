@@ -48,7 +48,7 @@ pub fn ftCo_80099F9C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     if (fns::ftCo_800C5240(ctx, gobj) != 0) {
         return fns::ftCo_800C60C8(ctx, gobj);
     }
-    if (!((fp).mv().co().pass().x0() != 0)) && (fns::ftCo_80099F1C(ctx, gobj) != 0) {
+    if (!((fp).mv().co().pass().x0() != 0)) && (inl_ftCo_80099F1C_unfused(ctx, gobj) != 0) {
         (fp).mv().co().pass().set_x0(1_i32);
         (fp).mv()
             .co()
@@ -66,7 +66,7 @@ pub fn ftCo_8009A080<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     if (((fp).input().held_buttons().at(0_i32).get() & ((shl_i32(1_i32, (31_i32 as u32))) as u32))
         != 0)
-        && (fns::ftCo_80099F1C(ctx, gobj) != 0)
+        && (inl_ftCo_80099F1C_unfused(ctx, gobj) != 0)
     {
         fns::ftCo_8009A228(ctx, gobj);
         return 1_i32;
@@ -241,6 +241,19 @@ pub fn ftCo_Pass_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
     fns::ft_80082F28(ctx, gobj);
+}
+
+fn inl_ftCo_80099F1C_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
+    if (((fp).input().lstick().get(0_i32).y() <= fp::fneg((fns::p_ftCommonData(ctx).get()).x464()))
+        && (fp::frsp(((fp).active_timer().lstick().y() as i32) as f64)
+            < (fns::p_ftCommonData(ctx).get()).x468()))
+        && (fns::mpColl_IsOnPlatform(ctx, (fp).coll_data()) != 0)
+    {
+        return 1_i32;
+    }
+    return 0_i32;
 }
 
 /// Registers this unit's ports.

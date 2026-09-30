@@ -143,7 +143,7 @@ pub fn HSD_RObjRemoveAnimAllByFlags<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>, flags:
 pub fn HSD_RObjRemoveAnimAll<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut robj = robj;
-    fns::HSD_RObjRemoveAnimAllByFlags(ctx, robj, (0x7ff_i32 as u32));
+    inl_HSD_RObjRemoveAnimAllByFlags_unfused(ctx, robj, (0x7ff_i32 as u32));
 }
 
 pub fn HSD_RObjReqAnimAllByFlags<'a>(
@@ -173,7 +173,7 @@ pub fn HSD_RObjReqAnimAll<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>, startframe: f64)
     let __frame = ctx.stack_frame(0x20);
     let mut robj = robj;
     let mut startframe = startframe;
-    fns::HSD_RObjReqAnimAllByFlags(ctx, robj, startframe, (0x7ff_i32 as u32));
+    inl_HSD_RObjReqAnimAllByFlags_unfused(ctx, robj, startframe, (0x7ff_i32 as u32));
 }
 
 pub fn HSD_RObjAddAnimAll<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>, anim: HSD_RObjAnimJoint<'a>) {
@@ -638,7 +638,7 @@ pub fn HSD_RObjRemoveAll<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>) {
         'l1: while !Handle::is_null(robj) {
             'c2: {
                 next = (robj).next();
-                fns::HSD_RObjRemove(ctx, robj);
+                inl_HSD_RObjRemove_unfused(ctx, robj);
             }
             robj = next;
         }
@@ -647,8 +647,10 @@ pub fn HSD_RObjRemoveAll<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>) {
 
 pub fn HSD_RObjAlloc<'a>(ctx: &'a Ctx) -> HSD_RObj<'a> {
     let __frame = ctx.stack_frame(0x10);
-    let mut new: HSD_RObj<'a> =
-        Handle::cast::<HSD_RObj<'a>>(fns::HSD_ObjAlloc(ctx, fns::HSD_RObjGetAllocData(ctx)));
+    let mut new: HSD_RObj<'a> = Handle::cast::<HSD_RObj<'a>>(fns::HSD_ObjAlloc(
+        ctx,
+        inl_HSD_RObjGetAllocData_unfused(ctx),
+    ));
     (if !Handle::is_null((new)) {
         ({ () })
     } else {
@@ -668,7 +670,7 @@ pub fn HSD_RObjFree<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>) {
     let mut robj = robj;
     fns::HSD_ObjFree(
         ctx,
-        fns::HSD_RObjGetAllocData(ctx),
+        inl_HSD_RObjGetAllocData_unfused(ctx),
         Handle::cast::<Addr<'a>>(robj),
     );
 }
@@ -827,6 +829,22 @@ fn inl_HSD_RObjRemoveAnimByFlags_unfused<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>, f
     }
 }
 
+fn inl_HSD_RObjRemoveAnimAllByFlags_unfused<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>, flags: u32) {
+    let mut robj = robj;
+    let mut flags = flags;
+    if Handle::is_null(robj) {
+        return;
+    }
+    {
+        'l1: while !Handle::is_null(robj) {
+            'c2: {
+                inl_HSD_RObjRemoveAnimByFlags_unfused(ctx, robj, flags);
+            }
+            robj = (robj).next();
+        }
+    }
+}
+
 fn inl_HSD_RObjReqAnimByFlags_unfused<'a>(
     ctx: &'a Ctx,
     robj: HSD_RObj<'a>,
@@ -841,6 +859,28 @@ fn inl_HSD_RObjReqAnimByFlags_unfused<'a>(
     }
     if (!Handle::is_null((robj).aobj())) && ((flags & (128_i32 as u32)) != (0_i32 as u32)) {
         fns::HSD_AObjReqAnim(ctx, (robj).aobj(), startframe);
+    }
+}
+
+fn inl_HSD_RObjReqAnimAllByFlags_unfused<'a>(
+    ctx: &'a Ctx,
+    robj: HSD_RObj<'a>,
+    startframe: f64,
+    flags: u32,
+) {
+    let mut robj = robj;
+    let mut startframe = startframe;
+    let mut flags = flags;
+    if Handle::is_null(robj) {
+        return;
+    }
+    {
+        'l1: while !Handle::is_null(robj) {
+            'c2: {
+                inl_HSD_RObjReqAnimByFlags_unfused(ctx, robj, startframe, flags);
+            }
+            robj = (robj).next();
+        }
     }
 }
 
@@ -966,6 +1006,38 @@ fn inl_RObjHasFlags2_unfused<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>) -> i32 {
     return 0_i32;
 }
 
+fn inl_HSD_IDGetData_unfused<'a>(ctx: &'a Ctx, id: u32, success: Val<'a, i32>) -> Addr<'a> {
+    let mut id = id;
+    let mut success = success;
+    return fns::HSD_IDGetDataFromTable(ctx, null::<_HSD_IDTable<'a>>(ctx), id, success);
+}
+
+fn inl_iref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
+    let mut o = o;
+    (Handle::cast::<HSD_Obj<'a>>(o)).set_ref_count_individual(
+        (Handle::cast::<HSD_Obj<'a>>(o))
+            .ref_count_individual()
+            .wrapping_add(1),
+    );
+    (if ((Handle::cast::<HSD_Obj<'a>>(o)).ref_count_individual() as i32) != 0_i32 {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b9580),
+            (118_i32 as u32),
+            cstr(ctx, 0x803b9580),
+        )
+    });
+}
+
+fn inl_HSD_JObjRefThis_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    if !Handle::is_null(jobj) {
+        inl_iref_INC_unfused(ctx, Handle::cast::<Addr<'a>>(jobj));
+    }
+}
+
 fn inl_HSD_RObjResolveRefs_unfused<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>, desc: HSD_RObjDesc<'a>) {
     let mut robj = robj;
     let mut desc = desc;
@@ -1010,36 +1082,35 @@ fn inl_HSD_RObjResolveRefs_unfused<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>, desc: H
     }
 }
 
-fn inl_HSD_IDGetData_unfused<'a>(ctx: &'a Ctx, id: u32, success: Val<'a, i32>) -> Addr<'a> {
-    let mut id = id;
-    let mut success = success;
-    return fns::HSD_IDGetDataFromTable(ctx, null::<_HSD_IDTable<'a>>(ctx), id, success);
-}
-
-fn inl_HSD_JObjRefThis_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
-    let mut jobj = jobj;
-    if !Handle::is_null(jobj) {
-        inl_iref_INC_unfused(ctx, Handle::cast::<Addr<'a>>(jobj));
+fn inl_HSD_RObjRemove_unfused<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>) {
+    let mut robj = robj;
+    if !Handle::is_null(robj) {
+        's1: {
+            let __case = match ((robj).flags() & (0x70000000_i32 as u32)) {
+                0x10000000_u32 => 0,
+                0_u32 => 1,
+                _ => 2,
+            };
+            if __case <= 0 {
+                fns::HSD_JObjUnrefThis(ctx, (robj).u().jobj());
+                break 's1;
+            }
+            if __case <= 1 {
+                fns::HSD_RvalueRemoveAll(ctx, (robj).u().exp().rvalue());
+                break 's1;
+            }
+        }
+        fns::HSD_AObjRemove(ctx, (robj).aobj());
+        fns::HSD_RObjFree(ctx, robj);
     }
 }
 
-fn inl_iref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
-    let mut o = o;
-    (Handle::cast::<HSD_Obj<'a>>(o)).set_ref_count_individual(
-        (Handle::cast::<HSD_Obj<'a>>(o))
-            .ref_count_individual()
-            .wrapping_add(1),
-    );
-    (if ((Handle::cast::<HSD_Obj<'a>>(o)).ref_count_individual() as i32) != 0_i32 {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b9580),
-            (118_i32 as u32),
-            cstr(ctx, 0x803b9580),
-        )
-    });
+fn inl_HSD_RObjGetAllocData_unfused<'a>(ctx: &'a Ctx) -> _HSD_ObjAllocData<'a> {
+    return fns::robj_alloc_data(ctx);
+}
+
+fn inl_HSD_RvalueObjGetAllocData_unfused<'a>(ctx: &'a Ctx) -> _HSD_ObjAllocData<'a> {
+    return fns::rvalue_alloc_data(ctx);
 }
 
 fn inl_HSD_RvalueRemove_unfused<'a>(ctx: &'a Ctx, rvalue: HSD_Rvalue<'a>) {
@@ -1048,10 +1119,29 @@ fn inl_HSD_RvalueRemove_unfused<'a>(ctx: &'a Ctx, rvalue: HSD_Rvalue<'a>) {
         fns::HSD_JObjUnrefThis(ctx, (rvalue).jobj());
         fns::HSD_ObjFree(
             ctx,
-            fns::HSD_RvalueObjGetAllocData(ctx),
+            inl_HSD_RvalueObjGetAllocData_unfused(ctx),
             Handle::cast::<Addr<'a>>(rvalue),
         );
     }
+}
+
+fn inl_HSD_RvalueAlloc_unfused<'a>(ctx: &'a Ctx) -> HSD_Rvalue<'a> {
+    let mut rvalue: HSD_Rvalue<'a> = Handle::cast::<HSD_Rvalue<'a>>(fns::HSD_ObjAlloc(
+        ctx,
+        inl_HSD_RvalueObjGetAllocData_unfused(ctx),
+    ));
+    (if !Handle::is_null((rvalue)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b9580),
+            (0x333_i32 as u32),
+            cstr(ctx, 0x803b9580),
+        )
+    });
+    let _ = fns::memset(ctx, Handle::cast::<Addr<'a>>(rvalue), 0_i32, 12_u32);
+    return rvalue;
 }
 
 fn inl_loadRvalue_unfused<'a>(ctx: &'a Ctx, list: HSD_RvalueList<'a>) -> HSD_Rvalue<'a> {
@@ -1076,23 +1166,6 @@ fn inl_loadRvalue_unfused<'a>(ctx: &'a Ctx, list: HSD_RvalueList<'a>) -> HSD_Rva
         }
     }
     return Handle::cast::<HSD_Rvalue<'a>>(rv.next());
-}
-
-fn inl_HSD_RvalueAlloc_unfused<'a>(ctx: &'a Ctx) -> HSD_Rvalue<'a> {
-    let mut rvalue: HSD_Rvalue<'a> =
-        Handle::cast::<HSD_Rvalue<'a>>(fns::HSD_ObjAlloc(ctx, fns::HSD_RvalueObjGetAllocData(ctx)));
-    (if !Handle::is_null((rvalue)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b9580),
-            (0x333_i32 as u32),
-            cstr(ctx, 0x803b9580),
-        )
-    });
-    let _ = fns::memset(ctx, Handle::cast::<Addr<'a>>(rvalue), 0_i32, 12_u32);
-    return rvalue;
 }
 
 fn inl_HSD_RvalueResolveRefs_unfused<'a>(

@@ -103,9 +103,9 @@ pub fn ftMh_MS_389_80150DC4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>,
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if (fp).u().mh().x2258() == (enums::ftMh_MS_Wait2_0 as i32) {
-        fns::ftMh_MS_389_80150D28(ctx, gobj);
+        inl_ftMh_MS_389_80150D28_unfused(ctx, gobj);
     } else {
-        fns::ftMh_MS_389_80150C8C(ctx, gobj);
+        inl_ftMh_MS_389_80150C8C_unfused(ctx, gobj);
     }
     (fp).mv().mh().unk0().set_x4(cb);
     Handle::copy_from((fp).mv().mh().unk0().xC(), (pos));
@@ -177,12 +177,78 @@ pub fn ftMh_MS_389_80151018<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     pos.set_y((da).x30_pos2().y());
     pos.set_z(fp::frsp(0_i32 as f64));
     (fp).u().mh().set_x2258((enums::ftMh_MS_Wait2_1 as i32));
-    fns::ftMh_MS_389_80150DC4(ctx, gobj, fnptr(ctx, 0x8014ffdc), pos);
+    inl_ftMh_MS_389_80150DC4_unfused(ctx, gobj, fnptr(ctx, 0x8014ffdc), pos);
 }
 
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_ftMh_MS_389_80150D28_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if ((fp).u().mh().x2258() == (enums::ftMh_MS_Wait2_0 as i32))
+        || ((fp).u().mh().x2258() == (enums::ftMh_MS_Wait2_1 as i32))
+    {
+        fns::Fighter_ChangeMotionState(
+            ctx,
+            gobj,
+            (enums::ftMh_MS_Wait2_1 as i32),
+            0_u32,
+            (fp).cur_anim_frame(),
+            fp::frsp(1_i32 as f64),
+            fp::frsp(0_i32 as f64),
+            null::<HSD_GObj<'a>>(ctx),
+        );
+    } else {
+        fns::Fighter_ChangeMotionState(
+            ctx,
+            gobj,
+            (enums::ftMh_MS_Wait2_1 as i32),
+            0_u32,
+            fp::frsp(0_i32 as f64),
+            fp::frsp(1_i32 as f64),
+            fp::frsp(0_i32 as f64),
+            null::<HSD_GObj<'a>>(ctx),
+        );
+        fns::ftAnim_8006EBA4(ctx, gobj);
+    }
+    (fp).u().mh().set_x2258((enums::ftMh_MS_Wait2_1 as i32));
+}
+
+fn inl_ftMh_MS_389_80150C8C_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if ((fp).u().mh().x2258() == (enums::ftMh_MS_Wait1_0 as i32))
+        || ((fp).u().mh().x2258() == (enums::ftMh_MS_Wait1_2 as i32))
+    {
+        fns::Fighter_ChangeMotionState(
+            ctx,
+            gobj,
+            (enums::ftMh_MS_Wait1_2 as i32),
+            0_u32,
+            (fp).cur_anim_frame(),
+            fp::frsp(1_i32 as f64),
+            fp::frsp(0_i32 as f64),
+            null::<HSD_GObj<'a>>(ctx),
+        );
+    } else {
+        fns::Fighter_ChangeMotionState(
+            ctx,
+            gobj,
+            (enums::ftMh_MS_Wait1_2 as i32),
+            0_u32,
+            fp::frsp(0_i32 as f64),
+            fp::frsp(1_i32 as f64),
+            fp::frsp(0_i32 as f64),
+            null::<HSD_GObj<'a>>(ctx),
+        );
+        fns::ftAnim_8006EBA4(ctx, gobj);
+    }
+    (fp).u().mh().set_x2258((enums::ftMh_MS_Wait1_2 as i32));
 }
 
 fn inl_ftMh_UpdateBossMotion_unfused<'a>(
@@ -203,6 +269,28 @@ fn inl_ftMh_UpdateBossMotion_unfused<'a>(
         (da).x2C(),
         (da).x28(),
     );
+}
+
+fn inl_ftMh_MS_389_80150DC4_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    cb: FnPtr<'a>,
+    pos: Vec<'a>,
+) {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut cb = cb;
+    let mut pos = pos;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if (fp).u().mh().x2258() == (enums::ftMh_MS_Wait2_0 as i32) {
+        fns::ftMh_MS_389_80150D28(ctx, gobj);
+    } else {
+        fns::ftMh_MS_389_80150C8C(ctx, gobj);
+    }
+    (fp).mv().mh().unk0().set_x4(cb);
+    Handle::copy_from((fp).mv().mh().unk0().xC(), (pos));
 }
 
 /// Registers this unit's ports.

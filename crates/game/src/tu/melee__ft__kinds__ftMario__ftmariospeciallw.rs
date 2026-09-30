@@ -291,29 +291,6 @@ fn inl_setCmdVar2_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp).cmd_vars().at(2_i32).set((0_i32 as u32));
 }
 
-fn inl_doStartMotion_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let mut gobj = gobj;
-    let mut fp: Fighter<'a> = null(ctx);
-    let mut sa: ftMario_DatAttrs<'a> = null(ctx);
-    fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    sa = Handle::cast::<ftMario_DatAttrs<'a>>((fp).dat_attrs());
-    (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
-    (fp).cmd_vars().at(1_i32).set((0_i32 as u32));
-    (fp).mv()
-        .mr()
-        .SpecialLw()
-        .set_groundVelX(fp::frsp(0_i32 as f64));
-    (fp).mv()
-        .mr()
-        .SpecialLw()
-        .set_unk(((sa).speciallw().unk0().wrapping_add(1_i32)));
-    (fp).mv().mr().SpecialLw().set_isUnkColl(0_i32);
-    inl_setCallbacks_unfused(ctx, gobj);
-    inl_setGfx_unfused(ctx, gobj);
-}
-
 fn inl_setCallbacks_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
@@ -339,6 +316,29 @@ fn inl_setGfx_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp).set_post_hitlag_cb(fnptr(ctx, 0x8005bac4));
 }
 
+fn inl_doStartMotion_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = null(ctx);
+    let mut sa: ftMario_DatAttrs<'a> = null(ctx);
+    fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    sa = Handle::cast::<ftMario_DatAttrs<'a>>((fp).dat_attrs());
+    (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
+    (fp).cmd_vars().at(1_i32).set((0_i32 as u32));
+    (fp).mv()
+        .mr()
+        .SpecialLw()
+        .set_groundVelX(fp::frsp(0_i32 as f64));
+    (fp).mv()
+        .mr()
+        .SpecialLw()
+        .set_unk(((sa).speciallw().unk0().wrapping_add(1_i32)));
+    (fp).mv().mr().SpecialLw().set_isUnkColl(0_i32);
+    inl_setCallbacks_unfused(ctx, gobj);
+    inl_setGfx_unfused(ctx, gobj);
+}
+
 fn inl_unsetCallbacks_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
@@ -352,6 +352,11 @@ fn inl_GetMarioAttr_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> ftMario_DatAtt
     let mut mario_attr: ftMario_DatAttrs<'a> =
         Handle::cast::<ftMario_DatAttrs<'a>>((fp).dat_attrs());
     return mario_attr;
+}
+
+fn inl_getFighter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {
+    let mut gobj = gobj;
+    return Handle::cast::<Fighter<'a>>((gobj).user_data());
 }
 
 fn inl_doPhys_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -374,11 +379,6 @@ fn inl_doPhys_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::ftCommon_ClampSelfVelX(ctx, fp, (sa).speciallw().air_momentum_x());
     (fp).set_pre_hitlag_cb(fnptr(ctx, 0x8005ba40));
     (fp).set_post_hitlag_cb(fnptr(ctx, 0x8005bac4));
-}
-
-fn inl_getFighter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {
-    let mut gobj = gobj;
-    return Handle::cast::<Fighter<'a>>((gobj).user_data());
 }
 
 fn inl_doColl_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

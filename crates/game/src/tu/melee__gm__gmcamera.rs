@@ -923,6 +923,28 @@ fn inl_gmCamera_801A2BF0_get_translate_x_unfused<'a>(ctx: &'a Ctx, px18: Val<'a,
     return fp::fneg(5.0);
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803da6b0),
+            (228_i32 as u32),
+            cstr(ctx, 0x803da6b0),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
     let mut jobj = jobj;
     let mut x = x;
@@ -946,26 +968,8 @@ fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f6
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803da6b0),
-            (228_i32 as u32),
-            cstr(ctx, 0x803da6b0),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
+fn inl_sfxMove_unfused<'a>(ctx: &'a Ctx) {
+    fns::lbAudioAx_80024030(ctx, 2_i32);
 }
 
 fn inl_gmCamera_801A2D44_update_selection_unfused<'a>(
@@ -1041,10 +1045,6 @@ fn inl_gmCamera_801A2D44_update_selection_unfused<'a>(
             inl_HSD_JObjSetTranslateX_unfused(ctx, (jobj_b).get(), translate_x);
         }
     }
-}
-
-fn inl_sfxMove_unfused<'a>(ctx: &'a Ctx) {
-    fns::lbAudioAx_80024030(ctx, 2_i32);
 }
 
 fn inl_gmCamera_801A31FC_inline_unfused<'a>(ctx: &'a Ctx, mdl: DynamicModelDesc<'a>) {

@@ -777,7 +777,7 @@ pub fn mnDiagram_SortFightersByKOs<'a>(ctx: &'a Ctx) {
                             .at(i)
                             .get() as i32),
                     )
-                    .set((fns::mnDiagram_GetFighterTotalKOs(ctx, fighter) as u32));
+                    .set((inl_mnDiagram_GetFighterTotalKOs_unfused(ctx, fighter) as u32));
             }
             i = i.wrapping_add(1);
             dst_iter = Handle::add(dst_iter, 1);
@@ -861,7 +861,9 @@ pub fn mnDiagram_SortNamesByKOs<'a>(ctx: &'a Ctx) {
         'l1: while n < 120_i32 {
             'c2: {
                 (dst_iter).set((n as u8));
-                (tp).set((fns::mnDiagram_GetNameTotalKOs(ctx, ((n & 255_i32) as u8)) as u32));
+                (tp).set(
+                    (inl_mnDiagram_GetNameTotalKOs_unfused(ctx, ((n & 255_i32) as u8)) as u32),
+                );
             }
             n = n.wrapping_add(1);
             dst_iter = Handle::add(dst_iter, 1);
@@ -883,12 +885,12 @@ pub fn mnDiagram_SortNamesByKOs<'a>(ctx: &'a Ctx) {
                         'c6: {
                             if (!Handle::is_null(fns::GetNameText(ctx, ((candidate).get() as i32))))
                                 && ((totals
-                                    .at((fns::mnDiagram_GetNameByIndex(ctx, max_idx) as i32))
+                                    .at((inl_mnDiagram_GetNameByIndex_unfused(ctx, max_idx) as i32))
                                     .get()
                                     < totals.at(((candidate).get() as i32)).get())
                                     || ((Handle::is_null(fns::GetNameText(
                                         ctx,
-                                        (fns::mnDiagram_GetNameByIndex(ctx, max_idx) as i32),
+                                        (inl_mnDiagram_GetNameByIndex_unfused(ctx, max_idx) as i32),
                                     ))) && (!Handle::is_null(fns::GetNameText(
                                         ctx,
                                         ((candidate).get() as i32),
@@ -1079,7 +1081,7 @@ pub fn mnDiagram_InputProc<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             );
             return;
         }
-        count = fns::mnDiagram_CountUnlockedFighters(ctx);
+        count = inl_mnDiagram_CountUnlockedFighters_unfused(ctx);
         if (inl_getHoveredColumn_unfused(ctx) as i32) >= count {
             fns::mn_804A04F0(ctx).set_hovered_selection(
                 ((((fns::mn_804A04F0(ctx).hovered_selection() as i32) & 0xff00_i32)
@@ -1231,7 +1233,7 @@ pub fn mnDiagram_InputProc<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             }
         }
     } else {
-        count = fns::mnDiagram_CountUnlockedFighters(ctx);
+        count = inl_mnDiagram_CountUnlockedFighters_unfused(ctx);
         if ((input & ((enums::MenuInput_Up as i32) as u32)) != 0) {
             col.set((inl_getHoveredColumn_unfused(ctx) as i32));
             if (col.get() > 0_i32) && (count > (col.get().wrapping_sub(1_i32))) {
@@ -2117,7 +2119,7 @@ pub fn mnDiagram_DrawGridValues<'a>(
                                         );
                                     }
                                 } else {
-                                    entry_count = fns::mnDiagram_CountUnlockedFighters(ctx);
+                                    entry_count = inl_mnDiagram_CountUnlockedFighters_unfused(ctx);
                                     if entry_count > bottom_col {
                                         fns::mnDiagram_DrawCellValue(
                                             ctx,
@@ -2194,7 +2196,7 @@ pub fn mnDiagram_DrawGridValues<'a>(
                         }
                     }
                 } else {
-                    entry_count = fns::mnDiagram_CountUnlockedFighters(ctx);
+                    entry_count = inl_mnDiagram_CountUnlockedFighters_unfused(ctx);
                     if entry_count > row {
                         {
                             fighter_col = 0_i32;
@@ -2202,7 +2204,8 @@ pub fn mnDiagram_DrawGridValues<'a>(
                                 'c8: {
                                     if (fighter_col == 7_i32)
                                         || (({
-                                            entry_count = fns::mnDiagram_CountUnlockedFighters(ctx);
+                                            entry_count =
+                                                inl_mnDiagram_CountUnlockedFighters_unfused(ctx);
                                             ((entry_count > fighter_col) as i32)
                                         }) != 0)
                                     {
@@ -2211,7 +2214,7 @@ pub fn mnDiagram_DrawGridValues<'a>(
                                                 ctx, row_start, row,
                                             ) as i32);
                                         if fighter_col == 7_i32 {
-                                            total_kos = fns::mnDiagram_GetFighterTotalKOs(
+                                            total_kos = inl_mnDiagram_GetFighterTotalKOs_unfused(
                                                 ctx,
                                                 (row_fighter as u8),
                                             );
@@ -2430,7 +2433,7 @@ pub fn mnDiagram_DrawFighterHeaders<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: 
         'l1: while i < 7_i32 {
             'c2: {
                 joint_data = fns::MenMainFaceB_Top(ctx);
-                unlocked_count = fns::mnDiagram_CountUnlockedFighters(ctx);
+                unlocked_count = inl_mnDiagram_CountUnlockedFighters_unfused(ctx);
                 if unlocked_count > i {
                     inl_getVisibleFighter_unfused(ctx, arg2, i, col_fighter);
                     col_jobj = inl_mnDiagram_LoadHeaderIcon_unfused(
@@ -2465,7 +2468,7 @@ pub fn mnDiagram_DrawFighterHeaders<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: 
         i = 0_i32;
         'l3: while i < 10_i32 {
             'c4: {
-                unlocked_count = fns::mnDiagram_CountUnlockedFighters(ctx);
+                unlocked_count = inl_mnDiagram_CountUnlockedFighters_unfused(ctx);
                 if unlocked_count > i {
                     inl_getVisibleFighter_unfused(ctx, arg1, i, row_fighter);
                     row_jobj = fns::HSD_JObjLoadJoint(ctx, (joint_data).joint());
@@ -2742,7 +2745,7 @@ pub fn mnDiagram_CreateScreen<'a>(ctx: &'a Ctx, arg0: u8) {
             statics::melee__mn__mndiagram::mnDiagram_IntroAnim(ctx).end_frame(),
         );
         fns::HSD_JObjAnimAll(ctx, anim_jobj);
-        fns::mnDiagram_CreateCursor(ctx);
+        inl_mnDiagram_CreateCursor_unfused(ctx);
         count = inl_getEntryCount_unfused(ctx, user_data);
         inl_updateScrollArrowVisibility_unfused(
             ctx,
@@ -2965,6 +2968,53 @@ fn inl_allPlayTimesZero_unfused<'a>(ctx: &'a Ctx, name_idx: i32) -> i32 {
     return 1_i32;
 }
 
+fn inl_mnDiagram_GetFighterTotalKOs_unfused<'a>(ctx: &'a Ctx, field_index: u8) -> i32 {
+    let mut field_index = field_index;
+    let mut total: i32 = 0_i32;
+    let mut selkind: i32 = 0;
+    {
+        selkind = 0_i32;
+        'l1: while selkind < (enums::SELKIND_COUNT as i32) {
+            'c2: {
+                if fns::mn_IsFighterUnlocked(ctx, selkind) != 0_i32 {
+                    total = total.wrapping_add(
+                        ((fns::GetPersistentFighterData(ctx, (field_index as i32)))
+                            .fighter_kos()
+                            .at(((selkind as u8) as i32))
+                            .get() as i32),
+                    );
+                }
+            }
+            selkind = selkind.wrapping_add(1);
+        }
+    }
+    return total;
+}
+
+fn inl_mnDiagram_GetNameTotalKOs_unfused<'a>(ctx: &'a Ctx, field_index: u8) -> i32 {
+    let mut field_index = field_index;
+    let mut total: i32 = 0_i32;
+    let mut i: i32 = 0;
+    {
+        i = 0_i32;
+        'l1: while i < 120_i32 {
+            'c2: {
+                if !Handle::is_null(fns::GetNameText(ctx, (i & 255_i32))) {
+                    total =
+                        total.wrapping_add(inl_getNamePairKOs_unfused(ctx, field_index, (i as u8)));
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return total;
+}
+
+fn inl_mnDiagram_GetNameByIndex_unfused<'a>(ctx: &'a Ctx, idx: i32) -> u8 {
+    let mut idx = idx;
+    return fns::mnDiagram_NameDisplayOrder(ctx).at(idx).get();
+}
+
 fn inl_Menu_GetAllInputs_unfused<'a>(ctx: &'a Ctx) -> u64 {
     return {
         let __t1 = (fns::mn_80229624(ctx, (4_i32 as u32)) as u64);
@@ -2999,7 +3049,7 @@ fn inl_mnDiagram_GetVisibleNameCursorFrom_unfused<'a>(ctx: &'a Ctx, start: i32, 
                 }
                 if !(Handle::is_null(fns::GetNameText(
                     ctx,
-                    (fns::mnDiagram_GetNameByIndex(ctx, start) as i32),
+                    (inl_mnDiagram_GetNameByIndex_unfused(ctx, start) as i32),
                 ))) {
                     break 'l3;
                 }
@@ -3007,7 +3057,7 @@ fn inl_mnDiagram_GetVisibleNameCursorFrom_unfused<'a>(ctx: &'a Ctx, start: i32, 
             rank = rank.wrapping_sub(1);
         }
     }
-    return fns::mnDiagram_GetNameByIndex(ctx, start);
+    return inl_mnDiagram_GetNameByIndex_unfused(ctx, start);
 }
 
 fn inl_getHoveredRow_unfused<'a>(ctx: &'a Ctx) -> i32 {
@@ -3122,6 +3172,23 @@ fn inl_saveCursorPositions_unfused<'a>(ctx: &'a Ctx, data: Diagram<'a>) {
 
 fn inl_getHoveredColumn_unfused<'a>(ctx: &'a Ctx) -> u8 {
     return (fns::mn_804A04F0(ctx).hovered_selection() as u8);
+}
+
+fn inl_mnDiagram_CountUnlockedFighters_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    let mut i: i32 = 0;
+    let mut count: i32 = 0_i32;
+    {
+        i = 0_i32;
+        'l1: while i < (enums::SELKIND_COUNT as i32) {
+            'c2: {
+                if (fns::mn_IsFighterUnlocked(ctx, i) != 0) {
+                    count = count.wrapping_add(1);
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return count;
 }
 
 fn inl_sfxMove_unfused<'a>(ctx: &'a Ctx) {
@@ -3344,6 +3411,28 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803ee730),
+            (228_i32 as u32),
+            cstr(ctx, 0x803ee730),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
     let mut jobj = jobj;
     let mut x = x;
@@ -3365,28 +3454,6 @@ fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f6
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803ee730),
-            (228_i32 as u32),
-            cstr(ctx, 0x803ee730),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
@@ -3517,6 +3584,28 @@ fn inl_requestIntegerAnimFrame<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, frame: i32)
     fns::HSD_JObjReqAnimAll(ctx, jobj, fp::frsp(frame as f64));
 }
 
+fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803ee730),
+            (228_i32 as u32),
+            cstr(ctx, 0x803ee730),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
     let mut jobj = jobj;
     let mut x = x;
@@ -3538,28 +3627,6 @@ fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803ee730),
-            (228_i32 as u32),
-            cstr(ctx, 0x803ee730),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
@@ -3585,6 +3652,11 @@ fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     }
 }
 
+fn inl_mnDiagram_GetFighterByIndex_unfused<'a>(ctx: &'a Ctx, idx: i32) -> u8 {
+    let mut idx = idx;
+    return fns::mnDiagram_FighterDisplayOrder(ctx).at(idx).get();
+}
+
 fn inl_mnDiagram_GetVisibleFighterCursorFrom2_unfused<'a>(
     ctx: &'a Ctx,
     start: i32,
@@ -3595,7 +3667,7 @@ fn inl_mnDiagram_GetVisibleFighterCursorFrom2_unfused<'a>(
     'l1: while rank >= 0_i32 {
         'c2: {
             if rank == 0_i32 {
-                return fns::mnDiagram_GetFighterByIndex(ctx, start);
+                return inl_mnDiagram_GetFighterByIndex_unfused(ctx, start);
             }
             'l3: loop {
                 'c4: {
@@ -3606,7 +3678,7 @@ fn inl_mnDiagram_GetVisibleFighterCursorFrom2_unfused<'a>(
                 }
                 if !(fns::mn_IsFighterUnlocked(
                     ctx,
-                    (fns::mnDiagram_GetFighterByIndex(ctx, start) as i32),
+                    (inl_mnDiagram_GetFighterByIndex_unfused(ctx, start) as i32),
                 ) == 0_i32)
                 {
                     break 'l3;
@@ -3710,7 +3782,7 @@ fn inl_getVisibleFighter_unfused<'a>(ctx: &'a Ctx, start: i32, rank: i32, fighte
                 }
                 if !(fns::mn_IsFighterUnlocked(
                     ctx,
-                    (fns::mnDiagram_GetFighterByIndex(ctx, start) as i32),
+                    (inl_mnDiagram_GetFighterByIndex_unfused(ctx, start) as i32),
                 ) == 0_i32)
                 {
                     break 'l3;
@@ -3789,6 +3861,37 @@ fn inl_getColumnReferenceX<'a>(ctx: &'a Ctx, data: Diagram<'a>) -> f64 {
 fn inl_getRowReferenceY<'a>(ctx: &'a Ctx, data: Diagram<'a>) -> f64 {
     let mut data = data;
     return inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(9_i32).get());
+}
+
+fn inl_mnDiagram_CreateCursor_unfused<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x30);
+    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
+    let mut model: StaticModelDesc<'a> = null(ctx);
+    let mut gobj: HSD_GObj<'a> = null(ctx);
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    model = fns::MenMainCursorB1_Top(ctx);
+    gobj = fns::GObj_Create(ctx, (6_i32 as u16), (7_i32 as u8), (128_i32 as u8));
+    jobj = fns::HSD_JObjLoadJoint(ctx, (model).joint());
+    fns::HSD_GObjObject_80390A70(
+        ctx,
+        gobj,
+        fns::HSD_GObj_JObjKind(ctx).get(),
+        Handle::cast::<Addr<'a>>(jobj),
+    );
+    fns::GObj_SetupGXLink(
+        ctx,
+        gobj,
+        fnptr(ctx, 0x80391070),
+        (4_i32 as u8),
+        (128_i32 as u32),
+    );
+    let _ = fns::HSD_GObj_SetupProc(ctx, gobj, fnptr(ctx, 0x80243038), (0_i32 as u8));
 }
 
 fn inl_getEntryCount_unfused<'a>(ctx: &'a Ctx, data: Diagram<'a>) -> i32 {

@@ -590,6 +590,24 @@ pub fn fn_803B6820<'a>(
     }
 }
 
+fn inl_jpeg_clamp<'a>(ctx: &'a Ctx, value: f64) -> i32 {
+    let mut value = value;
+    let mut result: i32 = 0;
+    let mut clamped: u16 = 0;
+    if value < 0.0 {
+        return 0_i32;
+    }
+    if 255.0 < value {
+        return 255_i32;
+    }
+    result = (({
+        let __t1 = ((fp::fctiwz(value) as u8) as u16);
+        clamped = __t1;
+        __t1
+    }) as i32);
+    return result;
+}
+
 fn inl_jpeg_store_rgb565<'a>(
     ctx: &'a Ctx,
     out: JpegOutput<'a>,
@@ -639,24 +657,6 @@ fn inl_jpeg_store_rgb565<'a>(
             | ((shl_i32((pixel.green() as i32), (3_i32 as u32))) & 0x7e0_i32))
             | (sar_i32((pixel.blue() as i32), 3_u32))) as u16),
     );
-}
-
-fn inl_jpeg_clamp<'a>(ctx: &'a Ctx, value: f64) -> i32 {
-    let mut value = value;
-    let mut result: i32 = 0;
-    let mut clamped: u16 = 0;
-    if value < 0.0 {
-        return 0_i32;
-    }
-    if 255.0 < value {
-        return 255_i32;
-    }
-    result = (({
-        let __t1 = ((fp::fctiwz(value) as u8) as u16);
-        clamped = __t1;
-        __t1
-    }) as i32);
-    return result;
 }
 
 /// Registers this unit's ports.

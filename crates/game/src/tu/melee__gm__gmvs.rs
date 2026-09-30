@@ -44,35 +44,39 @@ pub fn fn_8016AE60<'a>(ctx: &'a Ctx) -> lbl_8046B488_t<'a> {
 }
 
 pub fn gm_8016AE80<'a>(ctx: &'a Ctx) -> i32 {
-    return ((fns::gm_GetStartMeleeRules(ctx)).item_freq() as i32);
+    return ((inl_gm_GetStartMeleeRules_unfused(ctx)).item_freq() as i32);
 }
 
 pub fn gm_8016AE94<'a>(ctx: &'a Ctx) -> f64 {
-    return (fns::gmVs_GetSceneController(ctx)).state().unk_34();
+    return (inl_gmVs_GetSceneController_unfused(ctx)).state().unk_34();
 }
 
 pub fn gm_8016AEA4<'a>(ctx: &'a Ctx) -> u64 {
-    return (fns::gm_GetStartMeleeRules(ctx)).x20();
+    return (inl_gm_GetStartMeleeRules_unfused(ctx)).x20();
 }
 
 pub fn gm_8016AEB8<'a>(ctx: &'a Ctx) -> i32 {
-    return (fns::gm_GetStartMeleeRules(ctx)).x28();
+    return (inl_gm_GetStartMeleeRules_unfused(ctx)).x28();
 }
 
 pub fn gm_8016AEC8<'a>(ctx: &'a Ctx) -> i32 {
-    return ((fns::gm_GetStartMeleeRules(ctx)).sd_penalty() as i32);
+    return ((inl_gm_GetStartMeleeRules_unfused(ctx)).sd_penalty() as i32);
 }
 
 pub fn gm_GetFrameCount<'a>(ctx: &'a Ctx) -> u32 {
-    return (fns::gmVs_GetSceneController(ctx)).state().frame_count();
+    return (inl_gmVs_GetSceneController_unfused(ctx))
+        .state()
+        .frame_count();
 }
 
 pub fn gm_8016AEEC<'a>(ctx: &'a Ctx) -> u32 {
-    return (fns::gmVs_GetSceneController(ctx)).state().timer_seconds();
+    return (inl_gmVs_GetSceneController_unfused(ctx))
+        .state()
+        .timer_seconds();
 }
 
 pub fn gm_8016AEFC<'a>(ctx: &'a Ctx) -> u16 {
-    return (fns::gmVs_GetSceneController(ctx)).state().unk_2C();
+    return (inl_gmVs_GetSceneController_unfused(ctx)).state().unk_2C();
 }
 
 pub fn gm_8016AF0C<'a>(ctx: &'a Ctx) -> u16 {
@@ -80,7 +84,7 @@ pub fn gm_8016AF0C<'a>(ctx: &'a Ctx) -> u16 {
     let mut tmp: i32 = fp::fctiwz(fp::fdivs(
         fp::fmuls(
             99.0,
-            fp::frsp(((fns::gmVs_GetSceneController(ctx)).state().unk_2C() as i32) as f64),
+            fp::frsp(((inl_gmVs_GetSceneController_unfused(ctx)).state().unk_2C() as i32) as f64),
         ),
         59.0,
     ));
@@ -94,7 +98,7 @@ pub fn gm_8016AF0C<'a>(ctx: &'a Ctx) -> u16 {
 pub fn GetMatchTimer<'a>(ctx: &'a Ctx, arg0: Val<'a, i32>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
-    let mut data: VsSceneController<'a> = fns::gmVs_GetSceneController(ctx);
+    let mut data: VsSceneController<'a> = inl_gmVs_GetSceneController_unfused(ctx);
     if (!Handle::is_null(arg0)) && (((data).start().timer_enabled() as i32) != 0) {
         if (fns::gm_8016B110(ctx) != 0) {
             (arg0).set(
@@ -112,7 +116,7 @@ pub fn GetMatchTimer<'a>(ctx: &'a Ctx, arg0: Val<'a, i32>) -> i32 {
 }
 
 pub fn gm_GetStKind<'a>(ctx: &'a Ctx) -> u16 {
-    return (fns::gm_GetStartMeleeRules(ctx)).stkind();
+    return (inl_gm_GetStartMeleeRules_unfused(ctx)).stkind();
 }
 
 pub fn gm_8016B014<'a>(ctx: &'a Ctx) -> i32 {
@@ -125,7 +129,9 @@ pub fn gm_8016B014<'a>(ctx: &'a Ctx) -> i32 {
             break 'l1;
         }
     }
-    if (((fns::gm_GetStartMeleeRules(ctx)).x4_2() as i32) != 0) && (!(fns::gm_8016A1F8(ctx) != 0)) {
+    if (((inl_gm_GetStartMeleeRules_unfused(ctx)).x4_2() as i32) != 0)
+        && (!(fns::gm_8016A1F8(ctx) != 0))
+    {
         {
             i = 1_i32;
             'l3: while i < 6_i32 {
@@ -146,47 +152,47 @@ pub fn gm_8016B014<'a>(ctx: &'a Ctx) -> i32 {
 }
 
 pub fn gm_8016B094<'a>(ctx: &'a Ctx) -> i32 {
-    return (((fns::gm_GetStartMeleeRules(ctx)).match_kind() as i32) == 1_i32) as i32;
+    return (((inl_gm_GetStartMeleeRules_unfused(ctx)).match_kind() as i32) == 1_i32) as i32;
 }
 
 pub fn gm_8016B0B4<'a>(ctx: &'a Ctx) -> i32 {
-    return (((fns::gm_GetStartMeleeRules(ctx)).match_kind() as i32) == 2_i32) as i32;
+    return (((inl_gm_GetStartMeleeRules_unfused(ctx)).match_kind() as i32) == 2_i32) as i32;
 }
 
 pub fn gm_8016B0D4<'a>(ctx: &'a Ctx) -> i32 {
-    return ((fns::gm_GetStartMeleeRules(ctx)).friendly_fire() as i32);
+    return ((inl_gm_GetStartMeleeRules_unfused(ctx)).friendly_fire() as i32);
 }
 
 pub fn gm_8016B0E8<'a>(ctx: &'a Ctx) -> i32 {
-    return ((fns::gm_GetStartMeleeRules(ctx)).x4_2() as i32);
+    return ((inl_gm_GetStartMeleeRules_unfused(ctx)).x4_2() as i32);
 }
 
 pub fn gm_8016B0FC<'a>(ctx: &'a Ctx) -> i32 {
-    return ((fns::gm_GetStartMeleeRules(ctx)).single_button() as i32);
+    return ((inl_gm_GetStartMeleeRules_unfused(ctx)).single_button() as i32);
 }
 
 pub fn gm_8016B110<'a>(ctx: &'a Ctx) -> i32 {
-    return ((fns::gm_GetStartMeleeRules(ctx)).timer_counts_up() as i32);
+    return ((inl_gm_GetStartMeleeRules_unfused(ctx)).timer_counts_up() as i32);
 }
 
 pub fn gm_8016B124<'a>(ctx: &'a Ctx) -> i32 {
-    return ((fns::gm_GetStartMeleeRules(ctx)).x2_1() as i32);
+    return ((inl_gm_GetStartMeleeRules_unfused(ctx)).x2_1() as i32);
 }
 
 pub fn fn_8016B138<'a>(ctx: &'a Ctx) {
-    (fns::gm_GetStartMeleeRules(ctx)).set_is_teams((0_i32 as u8));
+    (inl_gm_GetStartMeleeRules_unfused(ctx)).set_is_teams((0_i32 as u8));
 }
 
 pub fn gm_8016B14C<'a>(ctx: &'a Ctx) -> i32 {
-    return (((fns::gm_GetStartMeleeRules(ctx)).is_teams() as i32) == 0_i32) as i32;
+    return (((inl_gm_GetStartMeleeRules_unfused(ctx)).is_teams() as i32) == 0_i32) as i32;
 }
 
 pub fn gm_8016B168<'a>(ctx: &'a Ctx) -> i32 {
-    return (((fns::gm_GetStartMeleeRules(ctx)).is_teams() as i32) == 1_i32) as i32;
+    return (((inl_gm_GetStartMeleeRules_unfused(ctx)).is_teams() as i32) == 1_i32) as i32;
 }
 
 pub fn gm_8016B184<'a>(ctx: &'a Ctx) -> i32 {
-    if ((fns::gmVs_GetSceneController(ctx))
+    if ((inl_gmVs_GetSceneController_unfused(ctx))
         .state()
         .is_singleplayer() as i32)
         == 1_i32
@@ -197,23 +203,23 @@ pub fn gm_8016B184<'a>(ctx: &'a Ctx) -> i32 {
 }
 
 pub fn gm_8016B1A8<'a>(ctx: &'a Ctx) -> i32 {
-    return (((fns::gm_GetStartMeleeRules(ctx)).x9() as i32) == 1_i32) as i32;
+    return (((inl_gm_GetStartMeleeRules_unfused(ctx)).x9() as i32) == 1_i32) as i32;
 }
 
 pub fn gm_8016B1C4<'a>(ctx: &'a Ctx) -> i32 {
-    return ((fns::gm_GetStartMeleeRules(ctx)).x5_2() as i32);
+    return ((inl_gm_GetStartMeleeRules_unfused(ctx)).x5_2() as i32);
 }
 
 pub fn gm_8016B1D8<'a>(ctx: &'a Ctx) -> i32 {
-    return ((fns::gm_GetStartMeleeRules(ctx)).x5_3() as i32);
+    return ((inl_gm_GetStartMeleeRules_unfused(ctx)).x5_3() as i32);
 }
 
 pub fn gm_8016B1EC<'a>(ctx: &'a Ctx) -> i32 {
-    return (((fns::gmVs_GetSceneController(ctx)).state().unk_0() as i32) == 0_i32) as i32;
+    return (((inl_gmVs_GetSceneController_unfused(ctx)).state().unk_0() as i32) == 0_i32) as i32;
 }
 
 pub fn gm_8016B204<'a>(ctx: &'a Ctx) -> i32 {
-    let mut rules: StartMeleeRules<'a> = fns::gm_GetStartMeleeRules(ctx);
+    let mut rules: StartMeleeRules<'a> = inl_gm_GetStartMeleeRules_unfused(ctx);
     if ((rules).time_limit() == (0_i32 as u32)) || (!((rules).timer_enabled() != 0)) {
         return 1_i32;
     }
@@ -221,16 +227,16 @@ pub fn gm_8016B204<'a>(ctx: &'a Ctx) -> i32 {
 }
 
 pub fn gm_8016B238<'a>(ctx: &'a Ctx) -> i32 {
-    return ((fns::gm_GetStartMeleeRules(ctx)).x6() as i32);
+    return ((inl_gm_GetStartMeleeRules_unfused(ctx)).x6() as i32);
 }
 
 pub fn gm_8016B248<'a>(ctx: &'a Ctx) -> f64 {
-    return (fns::gm_GetStartMeleeRules(ctx)).x30();
+    return (inl_gm_GetStartMeleeRules_unfused(ctx)).x30();
 }
 
 pub fn gm_8016B258<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let mut arg0 = arg0;
-    return ((fns::gmVs_GetSceneController(ctx))
+    return ((inl_gmVs_GetSceneController_unfused(ctx))
         .state()
         .fighters()
         .get(arg0)
@@ -240,35 +246,35 @@ pub fn gm_8016B258<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 }
 
 pub fn gm_8016B328<'a>(ctx: &'a Ctx) {
-    (fns::gmVs_GetSceneController(ctx))
+    (inl_gmVs_GetSceneController_unfused(ctx))
         .state()
         .set_terminate_match((1_i32 as u8));
 }
 
 pub fn gm_8016B33C<'a>(ctx: &'a Ctx, arg0: i32) {
     let mut arg0 = arg0;
-    (fns::gmVs_GetSceneController(ctx))
+    (inl_gmVs_GetSceneController_unfused(ctx))
         .state()
         .set_unk_B((arg0.wrapping_add(1_i32) as u8));
 }
 
 pub fn gm_8016B350<'a>(ctx: &'a Ctx, arg0: i32) {
     let mut arg0 = arg0;
-    (fns::gmVs_GetSceneController(ctx))
+    (inl_gmVs_GetSceneController_unfused(ctx))
         .state()
         .set_unk_10(arg0.wrapping_add(1_i32));
 }
 
 pub fn gm_8016B364<'a>(ctx: &'a Ctx, arg0: i32) {
     let mut arg0 = arg0;
-    (fns::gmVs_GetSceneController(ctx))
+    (inl_gmVs_GetSceneController_unfused(ctx))
         .state()
         .set_unk_14(arg0.wrapping_add(1_i32));
 }
 
 pub fn gm_8016B378<'a>(ctx: &'a Ctx, arg0: i8) {
     let mut arg0 = arg0;
-    (fns::gmVs_GetSceneController(ctx))
+    (inl_gmVs_GetSceneController_unfused(ctx))
         .state()
         .set_unk_18((arg0 as u8));
 }
@@ -276,7 +282,7 @@ pub fn gm_8016B378<'a>(ctx: &'a Ctx, arg0: i8) {
 pub fn fn_8016B388<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
     let mut arg0 = arg0;
     let mut arg1 = arg1;
-    (fns::gmVs_GetSceneController(ctx))
+    (inl_gmVs_GetSceneController_unfused(ctx))
         .state()
         .fighters()
         .get(arg0)
@@ -358,7 +364,7 @@ pub fn fn_8016B4BC<'a>(ctx: &'a Ctx) -> i32 {
         }
     }
     {
-        if (fns::gm_8016B1A8(ctx) != 0) {
+        if (inl_gm_8016B1A8_unfused(ctx) != 0) {
             fns::Ground_801C1DE4(ctx, sp8, spC);
             if sp8.get() == 0_i32 {
                 return 1_i32;
@@ -372,7 +378,7 @@ pub fn fn_8016B4BC<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn fn_8016B510<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x8);
-    if (((fns::gm_GetStartMeleeRules(ctx)).x9() as i32) == 2_i32)
+    if (((inl_gm_GetStartMeleeRules_unfused(ctx)).x9() as i32) == 2_i32)
         && (fns::Ground_801C1D98(ctx) != 0)
     {
         return 1_i32;
@@ -413,7 +419,7 @@ pub fn fn_8016B5B0<'a>(ctx: &'a Ctx) -> f64 {
             break 'l1;
         }
     }
-    if (fns::gm_IsCurrently1PMode_inline(ctx) != 0) {
+    if (inl_gm_IsCurrently1PMode_inline_unfused(ctx) != 0) {
         let mut var_f1: f64 = 3.0;
         if (statics::melee__gm__gmvs::controller(ctx).state().unk_0() as i32) != 0_i32 {
             if (((vsscene).state().match_result() as i32) == (enums::OUTCOME_TIMEOUT as i32))
@@ -467,7 +473,7 @@ pub fn gm_8016B6E8<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
-    let mut tmp: VsSceneController<'a> = fns::gmVs_GetSceneController(ctx);
+    let mut tmp: VsSceneController<'a> = inl_gmVs_GetSceneController_unfused(ctx);
     if arg0 == 0_i32 {
         (tmp)
             .state()
@@ -476,13 +482,13 @@ pub fn gm_8016B6E8<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
 }
 
 pub fn fn_8016B728<'a>(ctx: &'a Ctx) -> u8 {
-    return (fns::gmVs_GetSceneController(ctx)).state().unk_C();
+    return (inl_gmVs_GetSceneController_unfused(ctx)).state().unk_C();
 }
 
 pub fn fn_8016B738<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
-    let mut tmp: VsSceneController<'a> = fns::gmVs_GetSceneController(ctx);
+    let mut tmp: VsSceneController<'a> = inl_gmVs_GetSceneController_unfused(ctx);
     (tmp)
         .state()
         .set_unk_C((fns::lbTime_8000AF74(ctx, ((tmp).state().unk_C() as u32), arg0) as u8));
@@ -495,7 +501,7 @@ pub fn gm_8016B774<'a>(ctx: &'a Ctx) -> MatchEnd<'a> {
 pub fn fn_8016B784<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
-    (fns::gmVs_GetSceneController(ctx))
+    (inl_gmVs_GetSceneController_unfused(ctx))
         .state()
         .set_hud_enabled((1_i32 as u8));
     fns::grStadium_801D4150(ctx);
@@ -517,7 +523,7 @@ pub fn fn_8016B7F8<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x18);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
-    let mut tmp: VsSceneController<'a> = fns::gmVs_GetSceneController(ctx);
+    let mut tmp: VsSceneController<'a> = inl_gmVs_GetSceneController_unfused(ctx);
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {
@@ -562,7 +568,7 @@ pub fn fn_8016B88C<'a>(ctx: &'a Ctx, arg0: i32) {
     if arg0 == 0_i32 {
         fns::grStadium_801D40C8(ctx);
     }
-    (fns::gmVs_GetSceneController(ctx))
+    (inl_gmVs_GetSceneController_unfused(ctx))
         .state()
         .set_hud_enabled((0_i32 as u8));
 }
@@ -571,12 +577,12 @@ pub fn gm_8016B8D4<'a>(ctx: &'a Ctx, arg0: i32, slot_type: u8) {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
     let mut slot_type = slot_type;
-    (fns::gmVs_GetSceneController(ctx))
+    (inl_gmVs_GetSceneController_unfused(ctx))
         .state()
         .fighters()
         .get(arg0)
         .set_x1((130_i32 as u8));
-    (fns::gmVs_GetSceneController(ctx))
+    (inl_gmVs_GetSceneController_unfused(ctx))
         .state()
         .fighters()
         .get(arg0)
@@ -602,7 +608,7 @@ pub fn fn_8016B918<'a>(ctx: &'a Ctx) {
             break 'l1;
         }
     }
-    rules = fns::gm_GetStartMeleeRules(ctx);
+    rules = inl_gm_GetStartMeleeRules_unfused(ctx);
     if !((rules).is_vs() != 0) {
         return;
     }
@@ -719,7 +725,7 @@ pub fn gm_DefaultVSGetPauser<'a>(ctx: &'a Ctx) -> i32 {
             break 'l1;
         }
     }
-    if ((fns::gm_IsCurrently1PMode_inline(ctx) != 0)
+    if ((inl_gm_IsCurrently1PMode_inline_unfused(ctx) != 0)
         || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_CHALLENGER_APPROACH as i32)))
         || (((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_VS as i32))
             && ((fns::gm_GetCurrentSceneIndex(ctx) as i32) == 129_i32))
@@ -1016,7 +1022,7 @@ pub fn gm_GetMatchOutcome<'a>(ctx: &'a Ctx) -> i32 {
 pub fn fn_8016C46C<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
-    if ((fns::gmVs_GetSceneController(ctx)).state().unk_9() as i32) != 0_i32 {
+    if ((inl_gmVs_GetSceneController_unfused(ctx)).state().unk_9() as i32) != 0_i32 {
         's1: {
             let __case = match (fns::gm_GetCurrentGameMode(ctx) as i32) {
                 3_i32 => 0,
@@ -1091,7 +1097,7 @@ pub fn gm_8016C5C0<'a>(ctx: &'a Ctx, pl_slot: i32) -> i32 {
     let __frame = ctx.stack_frame(0x20);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut pl_slot = pl_slot;
-    let mut tmp: MatchEnd<'a> = fns::gm_8016B774(ctx);
+    let mut tmp: MatchEnd<'a> = inl_gm_8016B774_unfused(ctx);
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {
@@ -1102,7 +1108,7 @@ pub fn gm_8016C5C0<'a>(ctx: &'a Ctx, pl_slot: i32) -> i32 {
         (tmp).set_x0(fns::gm_801A4BA8(ctx));
         fns::gm_80166378(ctx, tmp);
     }
-    if !((fns::gm_GetStartMeleeRules(ctx)).is_teams() != 0) {
+    if !((inl_gm_GetStartMeleeRules_unfused(ctx)).is_teams() != 0) {
         return ((tmp).player_standings().get(pl_slot).is_big_loser() as i32);
     }
     return ((tmp)
@@ -1122,7 +1128,7 @@ pub fn gm_GetMatchEndPlayerScore<'a>(ctx: &'a Ctx, pl_slot: i32) -> i32 {
             break 'l1;
         }
     }
-    match_end = fns::gm_8016B774(ctx);
+    match_end = inl_gm_8016B774_unfused(ctx);
     if (match_end).x0() != fns::gm_801A4BA8(ctx) {
         (match_end).set_x0(fns::gm_801A4BA8(ctx));
         fns::gm_80166378(ctx, match_end);
@@ -1140,7 +1146,7 @@ pub fn gm_8016C6C0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 {
             break 'l1;
         }
     }
-    return fns::gm_8016C5C0(ctx, (fns::ftLib_GetPlayerIndex(ctx, arg0) as i32));
+    return inl_gm_8016C5C0_unfused(ctx, (fns::ftLib_GetPlayerIndex(ctx, arg0) as i32));
 }
 
 pub fn gm_8016C75C<'a>(ctx: &'a Ctx, player: HSD_GObj<'a>) -> i32 {
@@ -1154,7 +1160,7 @@ pub fn gm_8016C75C<'a>(ctx: &'a Ctx, player: HSD_GObj<'a>) -> i32 {
             break 'l1;
         }
     }
-    match_end = fns::gm_8016B774(ctx);
+    match_end = inl_gm_8016B774_unfused(ctx);
     if (match_end).x0() != fns::gm_801A4BA8(ctx) {
         (match_end).set_x0(fns::gm_801A4BA8(ctx));
         fns::gm_80166378(ctx, match_end);
@@ -1581,13 +1587,13 @@ pub fn fn_8016D538<'a>(ctx: &'a Ctx) -> i32 {
             break 'l1;
         }
     }
-    if (fns::gm_8016B3D8(ctx) != 0) {
+    if (inl_gm_8016B3D8_unfused(ctx) != 0) {
         if ((fns::fn_8017DF90(ctx) as i32) == 0_i32)
             && ((fns::gm_GetCurrentSceneIndex(ctx) as i32) == 73_i32)
         {
             result = 1_i32;
         } else {
-            if (fns::gm_8016B184(ctx) != 0) && (fns::fn_801693A8(ctx) != 0_i32) {
+            if (inl_gm_8016B184_unfused(ctx) != 0) && (fns::fn_801693A8(ctx) != 0_i32) {
                 result = 0_i32;
             } else if (statics::melee__gm__gmvs::controller(ctx).start().x5_1() != 0) {
                 result = 0_i32;
@@ -1630,7 +1636,7 @@ pub fn fn_8016D634<'a>(ctx: &'a Ctx) {
     {
         return;
     }
-    if (fns::gm_8016B3D8(ctx) != 0) {
+    if (inl_gm_8016B3D8_unfused(ctx) != 0) {
         fns::pl_80040688(
             ctx,
             0_i32,
@@ -1758,7 +1764,7 @@ pub fn fn_8016D8AC<'a>(ctx: &'a Ctx, arg0: i32, arg1: PlayerInitData<'a>) {
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
-    let mut tmp: VsSceneController<'a> = fns::gmVs_GetSceneController(ctx);
+    let mut tmp: VsSceneController<'a> = inl_gmVs_GetSceneController_unfused(ctx);
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {
@@ -2499,7 +2505,7 @@ pub fn gm_Scene_Vs_OnExit<'a>(ctx: &'a Ctx, user_data: Addr<'a>) {
             .timer_seconds(),
     );
     (data).set_x8((fns::Ground_801C5ABC(ctx) as u32));
-    if ((fns::gm_8016B3D8(ctx) != 0) || (inl_gm_8016E9C8_inline_unfused(ctx) != 0))
+    if ((inl_gm_8016B3D8_unfused(ctx) != 0) || (inl_gm_8016E9C8_inline_unfused(ctx) != 0))
         || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_VS as i32))
     {
         if ((statics::melee__gm__gmvs::controller(ctx)
@@ -2779,6 +2785,47 @@ pub fn fn_8016F160<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) -> i32 {
     return (fns::pl_80039418(ctx, arg0, arg1) as i32);
 }
 
+fn inl_gm_GetStartMeleeRules_unfused<'a>(ctx: &'a Ctx) -> StartMeleeRules<'a> {
+    return statics::melee__gm__gmvs::controller(ctx).start();
+}
+
+fn inl_gmVs_GetSceneController_unfused<'a>(ctx: &'a Ctx) -> VsSceneController<'a> {
+    return statics::melee__gm__gmvs::controller(ctx);
+}
+
+fn inl_gm_8016B1A8_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    return (((inl_gm_GetStartMeleeRules_unfused(ctx)).x9() as i32) == 1_i32) as i32;
+}
+
+fn inl_gm_IsCurrently1PMode_inline_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    's1: {
+        let __case = match (fns::gm_GetCurrentGameMode(ctx) as i32) {
+            3_i32 => 0,
+            4_i32 => 0,
+            5_i32 => 0,
+            15_i32 => 0,
+            28_i32 => 0,
+            32_i32 => 0,
+            33_i32 => 0,
+            34_i32 => 0,
+            35_i32 => 0,
+            36_i32 => 0,
+            37_i32 => 0,
+            38_i32 => 0,
+            43_i32 => 0,
+            _ => 1,
+        };
+        if __case <= 0 {
+            return 1_i32;
+        }
+        if __case <= 1 {
+            return 0_i32;
+        }
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 fn inl_fn_8016B918_inline_unfused<'a>(ctx: &'a Ctx, var_r31: i32) -> i32 {
     let mut var_r31 = var_r31;
     let mut team: i32 = fns::Player_GetTeam(ctx, var_r31);
@@ -2799,6 +2846,34 @@ fn inl_fn_8016B918_inline_unfused<'a>(ctx: &'a Ctx, var_r31: i32) -> i32 {
         }
     }
     return 6_i32;
+}
+
+fn inl_gm_8016B774_unfused<'a>(ctx: &'a Ctx) -> MatchEnd<'a> {
+    return statics::melee__gm__gmvs::controller(ctx).state().x24C();
+}
+
+fn inl_gm_8016C5C0_unfused<'a>(ctx: &'a Ctx, pl_slot: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut pl_slot = pl_slot;
+    let mut tmp: MatchEnd<'a> = inl_gm_8016B774_unfused(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if (tmp).x0() != fns::gm_801A4BA8(ctx) {
+        (tmp).set_x0(fns::gm_801A4BA8(ctx));
+        fns::gm_80166378(ctx, tmp);
+    }
+    if !((inl_gm_GetStartMeleeRules_unfused(ctx)).is_teams() != 0) {
+        return ((tmp).player_standings().get(pl_slot).is_big_loser() as i32);
+    }
+    return ((tmp)
+        .team_standings()
+        .get(((tmp).player_standings().get(pl_slot).team() as i32))
+        .is_big_loser() as i32);
 }
 
 fn inl_gm_GetSlotByPlayerId_unfused<'a>(ctx: &'a Ctx, pauserId: i32) -> i8 {
@@ -2931,6 +3006,36 @@ fn inl_fn_8016CBE8_inline_unfused<'a>(ctx: &'a Ctx) -> i32 {
         }
     }
     return 1_i32.wrapping_neg();
+}
+
+fn inl_gm_8016B3D8_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    's1: {
+        let __case = match (fns::gm_GetCurrentGameMode(ctx) as i32) {
+            3_i32 => 0,
+            4_i32 => 0,
+            5_i32 => 0,
+            _ => 1,
+        };
+        if __case <= 0 {
+            return 1_i32;
+        }
+        if __case <= 1 {
+            return 0_i32;
+        }
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
+fn inl_gm_8016B184_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    if ((inl_gmVs_GetSceneController_unfused(ctx))
+        .state()
+        .is_singleplayer() as i32)
+        == 1_i32
+    {
+        return 1_i32;
+    }
+    return 0_i32;
 }
 
 fn inl_fn_8016C46C_dontinline_unfused<'a>(ctx: &'a Ctx, arg0: i32) {

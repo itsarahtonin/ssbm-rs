@@ -203,6 +203,11 @@ pub fn ftPr_SpecialHi_8013CE7C<'a>(ctx: &'a Ctx, fighter_gobj: HSD_GObj<'a>) {
     (fighter).set_accessory4_cb(null::<FnPtr<'a>>(ctx));
 }
 
+fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
 fn inl_ftPurin_SpecialHi_SetActionFromFacingDirection_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -237,11 +242,6 @@ fn inl_ftPurin_SpecialHi_SetActionFromFacingDirection_unfused<'a>(
             null::<HSD_GObj<'a>>(ctx),
         );
     }
-}
-
-fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).user_data();
 }
 
 fn inl_ftPurin_SpecialHi_SetVars_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

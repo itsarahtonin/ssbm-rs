@@ -356,6 +356,11 @@ fn inl_ftGameWatch_SpecialN_SetVars_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>
     (fp).set_accessory4_cb(fnptr(ctx, 0x8014e4f0));
 }
 
+fn inl_getFtSpecialAttrsD_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> {
+    let mut fp = fp;
+    return (fp).dat_attrs();
+}
+
 fn inl_ftGameWatch_SpecialN_ChefLoop_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
@@ -371,11 +376,6 @@ fn inl_ftGameWatch_SpecialN_ChefLoop_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a
             fns::ftGw_SpecialN_Loop(ctx, gobj, (gawAttrs).x18_GAMEWATCH_CHEF_LOOPFRAME());
         }
     }
-}
-
-fn inl_getFtSpecialAttrsD_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> {
-    let mut fp = fp;
-    return (fp).dat_attrs();
 }
 
 fn inl_ftGameWatch_SpecialAirN_ChefLoop_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

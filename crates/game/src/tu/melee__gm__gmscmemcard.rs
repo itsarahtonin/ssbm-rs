@@ -827,6 +827,10 @@ fn inl_set_gm_804D6870_inline_unfused<'a>(ctx: &'a Ctx) -> u8 {
     return statics::melee__gm__gmscmemcard::gm_804D6870(ctx).get();
 }
 
+fn inl_sfxForward_unfused<'a>(ctx: &'a Ctx) {
+    fns::lbAudioAx_80024030(ctx, 1_i32);
+}
+
 fn inl_gm_801AEDC8_flag_check_unfused<'a>(ctx: &'a Ctx) -> i32 {
     if ((fns::gm_801AEDC8(ctx)
         & (((shl_i32(1_i32, (12_i32 as u32))) | (shl_i32(1_i32, (8_i32 as u32)))) as u32))
@@ -836,10 +840,6 @@ fn inl_gm_801AEDC8_flag_check_unfused<'a>(ctx: &'a Ctx) -> i32 {
         return 1_i32;
     }
     return 0_i32;
-}
-
-fn inl_sfxForward_unfused<'a>(ctx: &'a Ctx) {
-    fns::lbAudioAx_80024030(ctx, 1_i32);
 }
 
 fn inl_unk_inline_unfused<'a>(ctx: &'a Ctx) {

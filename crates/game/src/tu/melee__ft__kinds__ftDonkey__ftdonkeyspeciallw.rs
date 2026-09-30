@@ -251,6 +251,12 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_Fighter_SetEffectHitlagCallbacks_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    (fp).set_pre_hitlag_cb(fnptr(ctx, 0x8005ba40));
+    (fp).set_post_hitlag_cb(fnptr(ctx, 0x8005bac4));
+}
+
 fn inl_ftDonkey_8010DE88_inner_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x10);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
@@ -270,12 +276,6 @@ fn inl_ftDonkey_8010DE88_inner_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).set_x2219_b0((1_i32 as u8));
     }
     inl_Fighter_SetEffectHitlagCallbacks_unfused(ctx, fp);
-}
-
-fn inl_Fighter_SetEffectHitlagCallbacks_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
-    let mut fp = fp;
-    (fp).set_pre_hitlag_cb(fnptr(ctx, 0x8005ba40));
-    (fp).set_post_hitlag_cb(fnptr(ctx, 0x8005bac4));
 }
 
 /// Registers this unit's ports.

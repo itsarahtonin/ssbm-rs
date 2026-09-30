@@ -590,6 +590,14 @@ fn inl_sq<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     return fp::fmuls(x, x);
 }
 
+fn inl_vec2DSqDist<'a>(ctx: &'a Ctx, x: f64, y: f64) -> f64 {
+    let mut x = x;
+    let mut y = y;
+    let mut ret: f64 = 0.0;
+    ret = fp::fmadds(y, y, (fp::fmuls(x, x)));
+    return ret;
+}
+
 fn inl_vec2Dlen<'a>(ctx: &'a Ctx, x: i8, y: i8) -> f64 {
     let mut x = x;
     let mut y = y;
@@ -597,14 +605,6 @@ fn inl_vec2Dlen<'a>(ctx: &'a Ctx, x: i8, y: i8) -> f64 {
         ctx,
         inl_vec2DSqDist(ctx, fp::frsp(x as f64), fp::frsp(y as f64)),
     );
-}
-
-fn inl_vec2DSqDist<'a>(ctx: &'a Ctx, x: f64, y: f64) -> f64 {
-    let mut x = x;
-    let mut y = y;
-    let mut ret: f64 = 0.0;
-    ret = fp::fmadds(y, y, (fp::fmuls(x, x)));
-    return ret;
 }
 
 fn inl_fabs<'a>(ctx: &'a Ctx, f: f64) -> f64 {

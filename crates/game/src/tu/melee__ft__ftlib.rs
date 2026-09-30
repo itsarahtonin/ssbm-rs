@@ -372,7 +372,12 @@ pub fn ftLib_GetCameraBonePos<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, v: Vec<'a>) 
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut r4: ftCo_DatAttrs<'a> = (fp).co_attrs();
     let mut i: i32 = (((fp).ft_data()).x0()).camera_zoom_target_bone();
-    fns::lb_8000B1CC(ctx, fns::ftLib_GetPartJObj(ctx, gobj, i), (r4).x170(), v);
+    fns::lb_8000B1CC(
+        ctx,
+        inl_ftLib_GetPartJObj_unfused(ctx, gobj, i),
+        (r4).x170(),
+        v,
+    );
 }
 
 pub fn ftLib_ReleaseItem<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, other: HSD_GObj<'a>) {
@@ -408,7 +413,7 @@ pub fn ftLib_IsHoldingItem<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: HSD_GObj<
     let mut arg1 = arg1;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (Handle::addr(fns::ftLib_GetItem(ctx, gobj)) == Handle::addr(arg1))
+    if (Handle::addr(inl_ftLib_GetItem_unfused(ctx, gobj)) == Handle::addr(arg1))
         || (Handle::addr((fp).x1978()) == Handle::addr(arg1))
     {
         return 1_i32;
@@ -449,7 +454,7 @@ pub fn ftLib_DisableAllInput<'a>(ctx: &'a Ctx) {
         cur = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 8_i32)).get();
         'l1: while !Handle::is_null(cur) {
             'c2: {
-                fns::ftLib_DisableInput(ctx, cur);
+                inl_ftLib_DisableInput_unfused(ctx, cur);
             }
             cur = (cur).next();
         }
@@ -469,7 +474,7 @@ pub fn ftLib_EnableAllInput<'a>(ctx: &'a Ctx) {
         cur = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 8_i32)).get();
         'l1: while !Handle::is_null(cur) {
             'c2: {
-                fns::ftLib_EnableInput(ctx, cur);
+                inl_ftLib_EnableInput_unfused(ctx, cur);
             }
             cur = (cur).next();
         }
@@ -646,7 +651,7 @@ pub fn ftLib_GetCameraSubject<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> CmSubject
 
 pub fn ftLib_80086B80<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> f64 {
     let mut gobj = gobj;
-    return (fns::ftLib_GetCameraSubject(ctx, gobj))
+    return (inl_ftLib_GetCameraSubject_unfused(ctx, gobj))
         .target_ext()
         .v()
         .z();
@@ -655,14 +660,14 @@ pub fn ftLib_80086B80<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> f64 {
 pub fn ftLib_GetCameraSubjectBonePos<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, v: Vec<'a>) {
     let mut gobj = gobj;
     let mut v = v;
-    let mut cam: CmSubject<'a> = fns::ftLib_GetCameraSubject(ctx, gobj);
+    let mut cam: CmSubject<'a> = inl_ftLib_GetCameraSubject_unfused(ctx, gobj);
     Handle::copy_from((v), (cam).bone_pos());
 }
 
 pub fn ftLib_IsCameraSubjectInBounds<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
-    let mut cam: CmSubject<'a> = fns::ftLib_GetCameraSubject(ctx, gobj);
+    let mut cam: CmSubject<'a> = inl_ftLib_GetCameraSubject_unfused(ctx, gobj);
     return fns::Camera_80031154(ctx, (cam).pos());
 }
 
@@ -706,7 +711,7 @@ pub fn ftLib_StartRumbleAll<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
         cur = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 8_i32)).get();
         'l1: while !Handle::is_null(cur) {
             'c2: {
-                fns::ftLib_StartRumble(ctx, cur, arg0, arg1);
+                inl_ftLib_StartRumble_unfused(ctx, cur, arg0, arg1);
             }
             cur = (cur).next();
         }
@@ -731,7 +736,7 @@ pub fn ftLib_StartItemRumbleAll<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
         cur = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 8_i32)).get();
         'l1: while !Handle::is_null(cur) {
             'c2: {
-                fns::ftLib_StartItemRumble(ctx, cur, arg0, arg1);
+                inl_ftLib_StartItemRumble_unfused(ctx, cur, arg0, arg1);
             }
             cur = (cur).next();
         }
@@ -807,7 +812,7 @@ pub fn ftLib_GetNameTagHeight<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> f64 {
 pub fn ftLib_IsSwordSwing<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
     's1: {
-        let __case = match fns::ftLib_GetMotionId(ctx, gobj) {
+        let __case = match inl_ftLib_GetMotionId_unfused(ctx, gobj) {
             120_i32 => 0,
             121_i32 => 0,
             122_i32 => 0,
@@ -953,7 +958,7 @@ pub fn ftLib_ApplyMetalBox<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, item_gobj: HSD_
 
 pub fn ftLib_80087284<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
-    if fns::ftLib_GetMotionId(ctx, gobj) >= (enums::ftCo_MS_LightThrowF4 as i32) {
+    if inl_ftLib_GetMotionId_unfused(ctx, gobj) >= (enums::ftCo_MS_LightThrowF4 as i32) {
         return 1_i32;
     }
     return 0_i32;
@@ -997,12 +1002,12 @@ pub fn ftLib_IsLastAttackerSubFighter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i
 
 pub fn ftLib_IsSleeping_8008731C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
-    return fns::ftLib_IsSleeping(ctx, gobj);
+    return inl_ftLib_IsSleeping_unfused(ctx, gobj);
 }
 
 pub fn ftLib_IsDead<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
-    let mut msid: i32 = fns::ftLib_GetMotionId(ctx, gobj);
+    let mut msid: i32 = inl_ftLib_GetMotionId_unfused(ctx, gobj);
     if (msid >= (enums::ftCo_MS_DeadDown as i32))
         && (msid <= (enums::ftCo_MS_DeadUpFallHitCameraIce as i32))
     {
@@ -1013,7 +1018,7 @@ pub fn ftLib_IsDead<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn ftLib_IsDeadUp<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
-    let mut msid: i32 = fns::ftLib_GetMotionId(ctx, gobj);
+    let mut msid: i32 = inl_ftLib_GetMotionId_unfused(ctx, gobj);
     if (msid >= (enums::ftCo_MS_DeadUp as i32))
         && (msid <= (enums::ftCo_MS_DeadUpFallHitCameraIce as i32))
     {
@@ -1024,7 +1029,7 @@ pub fn ftLib_IsDeadUp<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn ftLib_IsDeadUpStar<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
-    let mut msid: i32 = fns::ftLib_GetMotionId(ctx, gobj);
+    let mut msid: i32 = inl_ftLib_GetMotionId_unfused(ctx, gobj);
     if (msid >= (enums::ftCo_MS_DeadUpStar as i32))
         && (msid <= (enums::ftCo_MS_DeadUpStarIce as i32))
     {
@@ -1035,7 +1040,7 @@ pub fn ftLib_IsDeadUpStar<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn ftLib_IsDeadUpFall<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
-    let mut msid: i32 = fns::ftLib_GetMotionId(ctx, gobj);
+    let mut msid: i32 = inl_ftLib_GetMotionId_unfused(ctx, gobj);
     if (msid >= (enums::ftCo_MS_DeadUpFall as i32))
         && (msid <= (enums::ftCo_MS_DeadUpFallHitCameraIce as i32))
     {
@@ -1046,7 +1051,7 @@ pub fn ftLib_IsDeadUpFall<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn ftLib_IsRebirth<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
-    let mut msid: i32 = fns::ftLib_GetMotionId(ctx, gobj);
+    let mut msid: i32 = inl_ftLib_GetMotionId_unfused(ctx, gobj);
     if (msid >= (enums::ftCo_MS_Rebirth as i32)) && (msid <= (enums::ftCo_MS_RebirthWait as i32)) {
         return 1_i32;
     }
@@ -1055,7 +1060,7 @@ pub fn ftLib_IsRebirth<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn ftLib_IsEntry<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
-    let mut msid: i32 = fns::ftLib_GetMotionId(ctx, gobj);
+    let mut msid: i32 = inl_ftLib_GetMotionId_unfused(ctx, gobj);
     if (msid >= (enums::ftCo_MS_Entry as i32)) && (msid <= (enums::ftCo_MS_EntryEnd as i32)) {
         return 1_i32;
     }
@@ -1240,7 +1245,7 @@ pub fn ftLib_GetGameWatchColor<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, dst: Addr<'
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
     let mut dst = dst;
-    if (fns::ftLib_GetKind(ctx, gobj) as u32) == ((enums::Ft_Kind_GameWatch as i32) as u32) {
+    if (inl_ftLib_GetKind_unfused(ctx, gobj) as u32) == ((enums::Ft_Kind_GameWatch as i32) as u32) {
         fns::ftGw_Init_8014A7F4(ctx, gobj, Handle::cast::<ItemModStruct<'a>>(dst));
     } else {
         fns::ftKb_Init_800EEB00(
@@ -1255,7 +1260,7 @@ pub fn ftLib_GetGameWatchOutlineColor<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, dst:
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
     let mut dst = dst;
-    if (fns::ftLib_GetKind(ctx, gobj) as u32) == ((enums::Ft_Kind_GameWatch as i32) as u32) {
+    if (inl_ftLib_GetKind_unfused(ctx, gobj) as u32) == ((enums::Ft_Kind_GameWatch as i32) as u32) {
         fns::ftGw_Init_8014A814(ctx, gobj, Handle::cast::<ItemModStruct<'a>>(dst));
     } else {
         fns::ftKb_Init_800EEB1C(ctx, gobj, Handle::cast::<Val<'a, i32>>(dst));
@@ -1318,6 +1323,35 @@ fn inl_sgn_unfused<'a>(ctx: &'a Ctx, x: f64) -> i32 {
     return 0;
 }
 
+fn inl_ftLib_GetPartJObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, part: i32) -> HSD_JObj<'a> {
+    let mut gobj = gobj;
+    let mut part = part;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    return (Handle::add((fp).parts(), part)).joint();
+}
+
+fn inl_ftLib_GetItem_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_GObj<'a> {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    return (fp).item_gobj();
+}
+
+fn inl_ftLib_DisableInput_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
+    fns::Fighter_ResetInputData_80068854(ctx, gobj);
+    (fp).set_input_disabled((1_i32 as u16));
+}
+
+fn inl_ftLib_EnableInput_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    (fp).set_input_disabled((0_i32 as u16));
+}
+
 fn inl_Fighter_GetCollData_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> CollData<'a> {
     let mut fp = fp;
     return (fp).coll_data();
@@ -1339,6 +1373,13 @@ fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'
     return (gobj).hsd_obj();
 }
 
+fn inl_ftLib_GetCameraSubject_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> CmSubject<'a> {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    return (fp).x890_cameraBox();
+}
+
 fn inl_helper_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: i32, val: i32) {
     let mut gobj = gobj;
     let mut arg1 = arg1;
@@ -1356,6 +1397,41 @@ fn inl_helper_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: i32
     if (!((fp).is_sleeping() != 0)) && (!((fp).stamina_dead() != 0)) {
         fns::lb_80014574(ctx, (fp).pad_port(), val, arg1, arg2);
     }
+}
+
+fn inl_ftLib_StartRumble_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: i32) {
+    let mut gobj = gobj;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    inl_helper_unfused(ctx, gobj, arg1, arg2, 0_i32);
+}
+
+fn inl_ftLib_StartItemRumble_unfused<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: i32, arg2: i32) {
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    inl_helper_unfused(ctx, arg0, arg1, arg2, 1_i32);
+}
+
+fn inl_ftLib_GetMotionId_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    return (fp).motion_id();
+}
+
+fn inl_ftLib_IsSleeping_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    return ((fp).is_sleeping() as i32);
+}
+
+fn inl_ftLib_GetKind_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    return (fp).kind();
 }
 
 /// Registers this unit's ports.

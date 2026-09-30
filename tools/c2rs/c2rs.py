@@ -320,12 +320,15 @@ class Unit:
         self.name = name
         self.source = source
         self.col = extract.Collector(name)
-        self.inlines = {}  # name -> Rust code of a translated inline function
-        self.inline_pending = []
+        self.inlines = {}  # Rust name -> code of a translated inline function
+        self.inline_variants = {}  # base Rust name -> [(Rust name, inlining decisions)]
+        self.inline_active = {}  # base Rust name -> Rust name, while translating it
         self.data_ranges = self.read_data_ranges()
         self.skipped = []
         self.ported = []
         self.fuse_check = []
+        self.inline_fallbacks = []  # (caller, callee, why) for inlined calls kept as calls
+        self.inline_partial = set()  # (caller, callee, calls in the asm, calls in the source)
 
     def read_data_ranges(self):
         """The unit's data sections, and how many fused multiply-adds each function's asm has."""
@@ -346,16 +349,16 @@ class Unit:
             if m:
                 current = m.group(1)
                 self.fused_ops[current] = 0
-                self.calls[current] = set()
+                self.calls[current] = {}  # callee -> number of calls in the asm
                 continue
             if line.startswith(".endfn"):
                 current = None
                 continue
             if current and re.search(r"\tf(?:n)?m(?:add|sub)s?\b", line):
                 self.fused_ops[current] += 1
-            m = re.search(r"\tbl (\S+)", line)
-            if current and m:
-                self.calls[current].add(m.group(1))
+            m = re.search(r"\tb[a-z+-]*\s+(?:cr\d, )?([^.\s]\S*)$", line)
+            if current and m and not m.group(1).startswith("0x"):
+                self.calls[current][m.group(1)] = self.calls[current].get(m.group(1), 0) + 1
             m = re.search(r"\tstwu r1, -0x([0-9a-fA-F]+)\(r1\)", line)
             if current and m and current not in self.frame_sizes:
                 self.frame_sizes[current] = int(m.group(1), 16)
@@ -491,13 +494,21 @@ def strip(c):
 
 
 class Translator:
-    def __init__(self, unit, fn_cursor, fuse=None):
+    def __init__(self, unit, fn_cursor, fuse=None, inline=False, asm=None):
         self.u = unit
         self.f = FnCtx(unit.name, fn_cursor)
         self.line = fn_cursor.location.line
         # Whether to contract multiply-adds: only where the original's asm has fused ops.
         self.fuse = fuse if fuse is not None else unit.fused_ops.get(fn_cursor.spelling, 1) > 0
+        # A copy of a function inlined into its callers, which has no frame of its own.
+        self.inline = inline
+        # The calls in the asm of the function this code ends up in: its own, or for an
+        # inline copy, those of the function it is inlined into.
+        self.asm = asm if inline else unit.calls.get(fn_cursor.spelling)
+        # Whether MWCC inlined each function this code calls, as far as the code depends on it.
+        self.decisions = {}
         self.in_args = 0
+        self._call_sites = None
 
     # Entry point.
 
@@ -546,8 +557,8 @@ class Translator:
         lines = [f"pub fn {ident(name)}<'a>(ctx: &'a Ctx{''.join(', ' + p for p in params)}){ret} {{"]
         # The port takes the original's frame size, so functions it calls run at the same
         # stack addresses as under the original, and see the same stack leftovers.
-        original = self.u.frame_sizes.get(name, 0) if self.f.cursor.linkage != ci.LinkageKind.INTERNAL or \
-            name in self.u.frame_sizes else 0
+        original = self.u.frame_sizes.get(name, 0) if not self.inline and (
+            self.f.cursor.linkage != ci.LinkageKind.INTERNAL or name in self.u.frame_sizes) else 0
         needed = (8 + self.f.frame_size + 7) & ~7 if self.f.frame else 0
         size = max(original, needed)
         if size:
@@ -1520,6 +1531,18 @@ class Translator:
                 return special
             ft = self.u.ctype(callee.referenced.type)
             f = self.u.prog.function(name, self.u.name, is_static(callee.referenced))
+            if f is not None and self.inlined_in_original(name, callee.referenced):
+                # The original has no call here: MWCC inlined the function, so its code runs
+                # as part of this one, and patches to the function's own copy do not apply.
+                try:
+                    rname = self.u.request_inline(callee.referenced.get_definition(), self.fuse, self)
+                except Unsupported as e:
+                    self.u.inline_fallbacks.append((self.f.cursor.spelling, name, str(e)))
+                else:
+                    argv = self.call_args(ft, args, inlined=True)
+                    if t["k"] == "rec":
+                        return self.sret_call(rname, argv, t)
+                    return Expr(f"{rname}(ctx{''.join(', ' + a for a in argv)})", t, False)
             if f is not None and not same_signature(ft, f["type"]):
                 # The decomp declares this function differently here than where its stub came
                 # from; call it by address with the types this call site uses.
@@ -1545,7 +1568,7 @@ class Translator:
             defn = callee.referenced.get_definition()
             if defn is None:
                 raise Unsupported(f"call to {name}, which has no address or body")
-            rname = self.u.request_inline(defn, self.fuse)
+            rname = self.u.request_inline(defn, self.fuse, self)
             if t["k"] == "rec":
                 return self.sret_call(rname, argv, t)
             return Expr(f"{rname}(ctx{''.join(', ' + a for a in argv)})", t, False)
@@ -1561,6 +1584,30 @@ class Translator:
             raise Unsupported("struct return through a pointer")
         rty = "()" if t["k"] == "void" else self.u.rust_value_ty(t)
         return Expr(f"{fp_.code}.call::<_, {rty}>(({''.join(a + ', ' for a in argv)}))", t, False)
+
+    def inlined_in_original(self, name, ref):
+        """Whether MWCC inlined every call to `name` here: the function this code ends up in
+        calls it nowhere, and its body is in this unit to inline."""
+        defn = ref.get_definition()
+        if defn is None or ref.type.is_function_variadic():
+            return False
+        n = self.asm.get(name, 0) if self.asm is not None else None
+        self.decisions[name] = n == 0
+        if n == 0:
+            return True
+        if n is None or self.inline:
+            return False
+        if self._call_sites is None:
+            self._call_sites = {}
+            for x in self.f.cursor.walk_preorder():
+                if x.kind == CK.CALL_EXPR and x.referenced is not None:
+                    callee = x.referenced.spelling
+                    self._call_sites[callee] = self._call_sites.get(callee, 0) + 1
+        sites = self._call_sites.get(name, 0)
+        if n < sites:
+            # Some calls inlined, some not; which ones is not known, so all stay calls.
+            self.u.inline_partial.add((self.f.cursor.spelling, name, n, sites))
+        return False
 
     def raw_call(self, addr, ft, args, t):
         if ft.get("params") is None:
@@ -1863,7 +1910,7 @@ def translate_unit(args):
         tu = index.parse(source, args=extract.FLAGS)
         errors = [d.spelling for d in tu.diagnostics if d.severity >= ci.Diagnostic.Error]
     if errors:
-        return unit_name, source, None, [("*", "parse error: " + errors[0])], [], []
+        return unit_name, source, None, [("*", "parse error: " + errors[0])], [], [], {}
     unit = Unit(prog, unit_name, source)
     unit.gekko = gekko
     manual = manual_ports(out_dir, unit_name)
@@ -1907,36 +1954,49 @@ def translate_unit(args):
     for name, asm_n, code in unit.fuse_check:
         if asm_n is not None:
             fuse.append((name, asm_n, fused_count(code.split("{", 1)[1], unit.inlines, (name,), local,
-                                                  unit.calls.get(name, set()))))
+                                                  unit.calls.get(name, {}))))
     unit.fuse_report = fuse
+    inlining = {"fallbacks": unit.inline_fallbacks, "partial": sorted(unit.inline_partial)}
     if not out_fns and not regs:
-        return unit_name, source, None, unit.skipped, unit.ported, fuse
+        return unit_name, source, None, unit.skipped, unit.ported, fuse, inlining
     text = HEADER.format(source=source.replace("\\", "/"), unit=unit_name)
     if manual:
         text += f"use crate::manual::{tu_mod(unit_name)} as manual;\n"
     text += "\n"
     text += "\n\n".join(out_fns + inline_code) + "\n\n"
     text += "/// Registers this unit's ports.\npub fn register(ctx: &Ctx) {\n" + "\n".join(regs) + "\n}\n"
-    return unit_name, source, text, unit.skipped, unit.ported, fuse
+    return unit_name, source, text, unit.skipped, unit.ported, fuse, inlining
 
 
 PROGRAM = []
 
 
-def _request_inline(self, defn, fuse):
+def _request_inline(self, defn, fuse, caller):
     """An inline function's Rust name, translating it on first use. MWCC contracts inlined
-    code as its caller's, so there is a copy for each."""
+    code as its caller's, and inlines the calls in it as the function it ends up in does, so
+    there is a copy for each way of doing both."""
     name = defn.spelling
-    rname = "inl_" + name + ("" if fuse else "_unfused")
-    if rname not in self.inlines:
-        self.inlines[rname] = None
-        try:
-            code = Translator(self, defn, fuse).function()
-            code = code.replace(f"pub fn {ident(name)}<'a>", f"fn {rname}<'a>", 1)
-            self.inlines[rname] = code
-        except Unsupported as e:
-            del self.inlines[rname]
-            raise Unsupported(f"inline {name}: {e}")
+    base = "inl_" + name + ("" if fuse else "_unfused")
+    if base in self.inline_active:
+        return self.inline_active[base]  # recursion: the copy being translated
+    asm = caller.asm
+    variants = self.inline_variants.setdefault(base, [])
+    for rname, decisions in variants:
+        if all((asm is not None and asm.get(n, 0) == 0) == d for n, d in decisions.items()):
+            caller.decisions.update(decisions)
+            return rname
+    rname = base if not variants else f"{base}_{len(variants) + 1}"
+    self.inline_active[base] = rname
+    try:
+        tr = Translator(self, defn, fuse, inline=True, asm=asm)
+        code = tr.function()
+    except Unsupported as e:
+        raise Unsupported(f"inline {name}: {e}")
+    finally:
+        del self.inline_active[base]
+    self.inlines[rname] = code.replace(f"pub fn {ident(name)}<'a>", f"fn {rname}<'a>", 1)
+    variants.append((rname, tr.decisions))
+    caller.decisions.update(tr.decisions)
     return rname
 
 
@@ -2016,7 +2076,10 @@ def main():
     total_ported = total_skipped = 0
     fuse_total = fuse_match = 0
     fuse_examples = []
-    for unit_name, source, text, skipped, ported, fuse in results:
+    fallbacks = partial = 0
+    for unit_name, source, text, skipped, ported, fuse, inlining in results:
+        fallbacks += len(inlining.get("fallbacks", []))
+        partial += len(inlining.get("partial", []))
         for name, asm_n, ours in fuse:
             fuse_total += 1
             if asm_n == ours:
@@ -2033,7 +2096,7 @@ def main():
         elif os.path.exists(path) and not only:
             os.remove(path)
         report[unit_name] = {"ported": ported, "skipped": skipped,
-                             "fused": [f for f in fuse if f[1] != f[2]]}
+                             "fused": [f for f in fuse if f[1] != f[2]], "inlining": inlining}
         total_ported += len(ported)
         total_skipped += len(skipped)
     # The module list covers every unit translated so far, not just this run's.
@@ -2070,6 +2133,8 @@ def main():
     print(f"fused multiply-adds match the asm in {fuse_match} of {fuse_total} functions")
     more = sum(1 for e in fuse_examples if e[3] > e[2])
     print(f"  of the first {len(fuse_examples)} that differ, {more} have more fused ops than the asm")
+    print(f"calls the original inlines but that stay calls: {fallbacks} not translatable inline, "
+          f"{partial} where only some calls are inlined")
     for why, n in sorted(reasons.items(), key=lambda x: -x[1])[:25]:
         print(f"  {n:6} {why}")
 

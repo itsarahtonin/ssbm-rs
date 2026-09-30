@@ -138,7 +138,7 @@ pub fn ftCo_8009872C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             break 'l1;
         }
     }
-    if (fns::ftCo_800986B0(ctx, gobj) != 0) {
+    if (inl_ftCo_800986B0_unfused(ctx, gobj) != 0) {
         fns::ftCo_800987D0(ctx, gobj);
         return 1_i32;
     }
@@ -159,6 +159,19 @@ fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_ftCo_800986B0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if ((!(fns::ftCo_800C5240(ctx, gobj) != 0))
+        && (fp::frsp(((fp).x680() as i32) as f64) < (fns::p_ftCommonData(ctx).get()).x250()))
+        && (((fp).x684() as i32) >= (fns::p_ftCommonData(ctx).get()).x1C())
+    {
+        return 1_i32;
+    }
+    return 0_i32;
 }
 
 /// Registers this unit's ports.

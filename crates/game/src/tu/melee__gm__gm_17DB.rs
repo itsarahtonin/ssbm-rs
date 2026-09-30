@@ -302,7 +302,7 @@ pub fn fn_8017DF90<'a>(ctx: &'a Ctx) -> u8 {
 pub fn gm_8017DFF4<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
-    let mut var_r3: Unk1PData<'a> = fns::fn_8017DEC8(ctx, arg0);
+    let mut var_r3: Unk1PData<'a> = inl_fn_8017DEC8_unfused(ctx, arg0);
     if !Handle::is_null(var_r3) {
         return ((var_r3).x0().cpu_level() as i32);
     }
@@ -311,7 +311,7 @@ pub fn gm_8017DFF4<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 
 pub fn gm_8017E068<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x8);
-    let mut var_r3: Unk1PData<'a> = fns::fn_8017DF28(ctx);
+    let mut var_r3: Unk1PData<'a> = inl_fn_8017DF28_unfused(ctx);
     if !Handle::is_null(var_r3) {
         return ((var_r3).x0().cpu_level() as i32);
     }
@@ -320,7 +320,7 @@ pub fn gm_8017E068<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn fn_8017E0E4<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x8);
-    let mut var_r3: Unk1PData<'a> = fns::fn_8017DF28(ctx);
+    let mut var_r3: Unk1PData<'a> = inl_fn_8017DF28_unfused(ctx);
     if !Handle::is_null(var_r3) {
         return ((var_r3).xC().xC() as i32);
     }
@@ -329,7 +329,7 @@ pub fn fn_8017E0E4<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn fn_8017E160<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x8);
-    let mut var_r3: Unk1PData<'a> = fns::fn_8017DF28(ctx);
+    let mut var_r3: Unk1PData<'a> = inl_fn_8017DF28_unfused(ctx);
     let mut temp_r3_2: Unk1PData_xC<'a> = null(ctx);
     if !Handle::is_null(var_r3) {
         let mut i: i32 = 0;
@@ -449,6 +449,57 @@ pub fn fn_8017E3C8<'a>(ctx: &'a Ctx) {
             i = i.wrapping_add(1);
         }
     }
+}
+
+fn inl_fn_8017DEC8_unfused<'a>(ctx: &'a Ctx, arg0: i32) -> Unk1PData<'a> {
+    let mut arg0 = arg0;
+    's1: {
+        let __case = match arg0 {
+            0_i32 => 0,
+            1_i32 => 1,
+            2_i32 => 2,
+            _ => 3,
+        };
+        if __case <= 0 {
+            return (fns::gm_GetAdventureData(ctx)).x0();
+        }
+        if __case <= 1 {
+            return (fns::gm_GetAllStarData(ctx)).x0();
+        }
+        if __case <= 2 {
+            return fns::gm_80473A18(ctx).x0();
+        }
+        if __case <= 3 {
+            return null::<Unk1PData<'a>>(ctx);
+        }
+    }
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
+fn inl_fn_8017DF28_unfused<'a>(ctx: &'a Ctx) -> Unk1PData<'a> {
+    's1: {
+        let __case = match (fns::gm_GetCurrentGameMode(ctx) as i32) {
+            3_i32 => 0,
+            4_i32 => 1,
+            5_i32 => 2,
+            _ => 3,
+        };
+        if __case <= 0 {
+            return (fns::gm_GetAllStarData(ctx)).x0();
+        }
+        if __case <= 1 {
+            return (fns::gm_GetAdventureData(ctx)).x0();
+        }
+        if __case <= 2 {
+            return fns::gm_80473A18(ctx).x0();
+        }
+        if __case <= 3 {
+            return null::<Unk1PData<'a>>(ctx);
+        }
+    }
+    #[allow(unreachable_code)]
+    return null(ctx);
 }
 
 /// Registers this unit's ports.

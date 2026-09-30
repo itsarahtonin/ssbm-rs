@@ -413,7 +413,7 @@ pub fn itZGShell_Logic11_Thrown<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn itZrshell_UnkMotion3_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    fns::it_802DDBE8(ctx, gobj);
+    inl_it_802DDBE8_unfused(ctx, gobj);
     return 0_i32;
 }
 
@@ -446,7 +446,7 @@ pub fn itZGShell_Logic11_Dropped<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn itZrshell_UnkMotion4_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
-    return fns::itZrshell_UnkMotion3_Anim(ctx, gobj);
+    return inl_itZrshell_UnkMotion3_Anim_unfused(ctx, gobj);
 }
 
 pub fn itZrshell_UnkMotion4_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -542,9 +542,9 @@ pub fn itZrshell_UnkMotion6_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             .zgshell()
             .set_xDF4(fp::fsubs((ip).xDD4_itemVar().zgshell().xDF4(), 1.0));
     }
-    fns::it_802DDBE8(ctx, gobj);
+    inl_it_802DDBE8_unfused(ctx, gobj);
     if ((ip).msid() == 6_i32) || ((ip).msid() == 5_i32) {
-        fns::it_802DDB38(ctx, gobj);
+        inl_it_802DDB38_unfused(ctx, gobj);
     }
     return 0_i32;
 }
@@ -694,7 +694,7 @@ pub fn it_802DEC80<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn itZrshell_UnkMotion8_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    return fns::itZrshell_UnkMotion6_Anim(ctx, gobj);
+    return inl_itZrshell_UnkMotion6_Anim_unfused(ctx, gobj);
 }
 
 pub fn itZrshell_UnkMotion8_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -1176,7 +1176,7 @@ pub fn it_2725_Logic11_HitShield<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     if ((ip).msid() == 3_i32) || ((ip).msid() == 4_i32) {
         fns::itColl_BounceOffVictim(ctx, gobj);
     } else if (((ip).msid() as u32).wrapping_sub(5_u32)) <= (3_i32 as u32) {
-        let _ = fns::it_2725_Logic11_Clanked(ctx, gobj);
+        let _ = inl_it_2725_Logic11_Clanked_unfused(ctx, gobj);
     }
     return 0_i32;
 }
@@ -1351,6 +1351,62 @@ fn inl_get_attrs_unfused<'a>(ctx: &'a Ctx, arg0: Item<'a>) -> itZGShell_Attrs<'a
     return Handle::cast::<itZGShell_Attrs<'a>>(((arg0).xC4_article_data()).x4_specialAttributes());
 }
 
+fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
+    let mut jobj = jobj;
+    if Handle::is_null(jobj) {
+        return null::<HSD_JObj<'a>>(ctx);
+    } else {
+        return (jobj).child();
+    }
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b86e8),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b86e8),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
+fn inl_HSD_JObjAddRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
+    let mut jobj = jobj;
+    let mut y = y;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b86e8),
+            (0x26a_i32 as u32),
+            cstr(ctx, 0x803b86e8),
+        )
+    });
+    (jobj).rotate().set_y(fp::fadds((jobj).rotate().y(), y));
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
 fn inl_Item_UpdateRollingShellRotation_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -1378,60 +1434,82 @@ fn inl_Item_UpdateRollingShellRotation_unfused<'a>(
     );
 }
 
-fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
-    let mut jobj = jobj;
-    if Handle::is_null(jobj) {
-        return null::<HSD_JObj<'a>>(ctx);
-    } else {
-        return (jobj).child();
-    }
-    #[allow(unreachable_code)]
-    return null(ctx);
-}
-
-fn inl_HSD_JObjAddRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
-    let mut jobj = jobj;
-    let mut y = y;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b86e8),
-            (0x26a_i32 as u32),
-            cstr(ctx, 0x803b86e8),
-        )
-    });
-    (jobj).rotate().set_y(fp::fadds((jobj).rotate().y(), y));
-    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
-        {
-            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
-                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+fn inl_it_802DDBE8_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut attrs: itZGShell_Attrs<'a> =
+        Handle::cast::<itZGShell_Attrs<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
+    if ((ip).xDD4_itemVar().zgshell().xE08_b0() != 0) {
+        (ip).xDD4_itemVar()
+            .zgshell()
+            .set_xDFC(fp::fsubs((ip).xDD4_itemVar().zgshell().xDFC(), 1.0));
+        if (ip).xDD4_itemVar().zgshell().xDFC() <= 0.0 {
+            (ip).xDD4_itemVar().zgshell().set_xE08_b0((0_i32 as u8));
+            (ip).xDD4_itemVar().zgshell().set_xDFC((attrs).x28());
+            fns::it_8027572C(ctx, gobj, 0_i32);
+            if ((ip).xDD4_itemVar().zgshell().xE08_b1() != 0) {
+                fns::it_802756E0(ctx, gobj);
             }
         }
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
+fn inl_itZrshell_UnkMotion3_Anim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    fns::it_802DDBE8(ctx, gobj);
+    return 0_i32;
+}
+
+fn inl_it_802DDB38_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut attrs: itZGShell_Attrs<'a> = Handle::cast::<itZGShell_Attrs<'a>>(
+        ((Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).xC4_article_data())
+            .x4_specialAttributes(),
+    );
+    let mut temp: f64 = 0.0;
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    if (ip).xDD4_itemVar().zgshell().xDF8() <= 0.0 {
+        jobj = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
+        Handle::copy_from(v, (attrs).x3C());
+        temp = fp::fneg((ip).facing_dir());
+        v.set_x(fp::fmuls(v.x(), temp));
+        fns::efAsync_Spawn(
             ctx,
-            cstr(ctx, 0x803b86e8),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b86e8),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
+            gobj,
+            (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).xBC0_ref(),
+            (2_i32 as u32),
+            (0x405_i32 as u32),
+            jobj,
+            &[VarArg::Int(Handle::addr(v))],
+        );
+        (ip).xDD4_itemVar().zgshell().set_xDF8((attrs).x38());
+    } else {
+        (ip).xDD4_itemVar()
+            .zgshell()
+            .set_xDF8(fp::fsubs((ip).xDD4_itemVar().zgshell().xDF8(), 1.0));
     }
-    return result;
+}
+
+fn inl_itZrshell_UnkMotion6_Anim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
+    if (ip).xDD4_itemVar().zgshell().xDF4() <= 0.0 {
+        if !((ip).xDCD_flag().x0().b5() != 0) {
+            fns::it_80275444(ctx, gobj);
+        }
+    } else {
+        (ip).xDD4_itemVar()
+            .zgshell()
+            .set_xDF4(fp::fsubs((ip).xDD4_itemVar().zgshell().xDF4(), 1.0));
+    }
+    fns::it_802DDBE8(ctx, gobj);
+    if ((ip).msid() == 6_i32) || ((ip).msid() == 5_i32) {
+        fns::it_802DDB38(ctx, gobj);
+    }
+    return 0_i32;
 }
 
 fn inl_itZGShell_StopAndIdle_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -1487,6 +1565,28 @@ fn inl_HSD_JObjGetChild<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
     return null(ctx);
 }
 
+fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b86e8),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b86e8),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     let mut jobj = jobj;
     let mut y = y;
@@ -1520,28 +1620,6 @@ fn inl_HSD_JObjSetRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b86e8),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b86e8),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
-}
-
 fn inl_itResetVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
     let mut ip = ip;
     (ip).x40_vel().set_x({
@@ -1555,38 +1633,24 @@ fn inl_itResetVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
     });
 }
 
-fn inl_itUpdateVelocityFromBone_unfused<'a>(
-    ctx: &'a Ctx,
-    jobj: HSD_JObj<'a>,
-    ip: Item<'a>,
-    previous_pos: Vec<'a>,
-) {
-    let __frame = ctx.stack_frame(0x20);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let zero: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let mut jobj = jobj;
-    let mut ip = ip;
-    let mut previous_pos = previous_pos;
-    if !Handle::is_null(jobj) {
-        zero.set_x({
-            let __t2 = {
-                let __t1 = 0.0;
-                zero.set_z(__t1);
-                __t1
-            };
-            zero.set_y(__t2);
-            __t2
-        });
-        inl_HSD_JObjGetTranslation_unfused(ctx, jobj, pos);
-        (ip).x40_vel().set_x(fp::fmuls(
-            (ip).facing_dir(),
-            (fp::fsubs(pos.z(), (previous_pos).z())),
-        ));
-        (ip).x40_vel().set_y(fp::fsubs(pos.y(), (previous_pos).y()));
-        (ip).x40_vel().set_z(fp::fsubs(pos.x(), (previous_pos).x()));
-        Handle::copy_from((previous_pos), pos);
-        inl_HSD_JObjSetTranslate_unfused(ctx, jobj, zero);
-    }
+fn inl_it_2725_Logic11_Clanked_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut attrs: itZGShell_Attrs<'a> = null(ctx);
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    attrs = Handle::cast::<itZGShell_Attrs<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
+    fns::it_802756D0(ctx, gobj);
+    fns::it_80275444(ctx, gobj);
+    (ip).x40_vel().set_x(fp::fmuls(
+        fp::fmuls(fp::fneg((ip).x40_vel().x()), (attrs).xC()),
+        fns::HSD_Randf(ctx),
+    ));
+    (ip).x40_vel().set_y((attrs).x10());
+    fns::it_802762BC(ctx, ip);
+    (ip).xDD4_itemVar().zgshell().set_xE1C_b0((1_i32 as u8));
+    (ip).xDD4_itemVar().zgshell().set_xE04((attrs).x34());
+    fns::Item_80268E5C(ctx, gobj, 1_i32, (enums::ITEM_ANIM_UPDATE as i32));
+    fns::it_80274C88(ctx, gobj);
+    return 0_i32;
 }
 
 fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
@@ -1645,6 +1709,40 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
                 fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
             }
         }
+    }
+}
+
+fn inl_itUpdateVelocityFromBone_unfused<'a>(
+    ctx: &'a Ctx,
+    jobj: HSD_JObj<'a>,
+    ip: Item<'a>,
+    previous_pos: Vec<'a>,
+) {
+    let __frame = ctx.stack_frame(0x20);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let zero: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let mut jobj = jobj;
+    let mut ip = ip;
+    let mut previous_pos = previous_pos;
+    if !Handle::is_null(jobj) {
+        zero.set_x({
+            let __t2 = {
+                let __t1 = 0.0;
+                zero.set_z(__t1);
+                __t1
+            };
+            zero.set_y(__t2);
+            __t2
+        });
+        inl_HSD_JObjGetTranslation_unfused(ctx, jobj, pos);
+        (ip).x40_vel().set_x(fp::fmuls(
+            (ip).facing_dir(),
+            (fp::fsubs(pos.z(), (previous_pos).z())),
+        ));
+        (ip).x40_vel().set_y(fp::fsubs(pos.y(), (previous_pos).y()));
+        (ip).x40_vel().set_z(fp::fsubs(pos.x(), (previous_pos).x()));
+        Handle::copy_from((previous_pos), pos);
+        inl_HSD_JObjSetTranslate_unfused(ctx, jobj, zero);
     }
 }
 

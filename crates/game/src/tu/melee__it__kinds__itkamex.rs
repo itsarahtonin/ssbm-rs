@@ -151,7 +151,7 @@ pub fn itKamex_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             (ip).xDD4_itemVar()
                 .pokemon()
                 .set_timer((ip).xDD4_itemVar().pokemon().timer().wrapping_sub(1));
-            fns::it_802CA6A0(ctx, gobj);
+            inl_it_802CA6A0_unfused(ctx, gobj);
         }
     }
     return 0_i32;
@@ -452,6 +452,21 @@ fn inl_Item_SetEffectHitlagCallbacks_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
     (ip).set_exited_hitlag(fnptr(ctx, 0x8005bac4));
 }
 
+fn inl_it_802CA6A0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut attrs: itKamexAttributes<'a> =
+        Handle::cast::<itKamexAttributes<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
+    if (ip).xDD4_itemVar().pokemon().timer() == 1_i32.wrapping_neg() {
+        (ip).xDD4_itemVar().pokemon().set_timer((attrs).timer());
+        (ip).xDD4_itemVar().pokemon().set_x68((attrs).x18());
+        (ip).xDD4_itemVar().pokemon().set_x6C((attrs).x1C());
+    }
+    fns::Item_80268E5C(ctx, gobj, 1_i32, (enums::ITEM_ANIM_UPDATE as i32));
+    inl_Item_SetEffectHitlagCallbacks_unfused(ctx, ip);
+    (ip).set_on_accessory(fnptr(ctx, 0x802ca8dc));
+}
+
 fn inl_Item_EnterAirStateWithHitlag_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
     let mut gobj = gobj;
     let mut msid = msid;
@@ -465,6 +480,28 @@ fn inl_Item_EnterAirStateWithHitlag_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>
 fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f7b08),
+            (228_i32 as u32),
+            cstr(ctx, 0x803f7b08),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
@@ -498,28 +535,6 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f7b08),
-            (228_i32 as u32),
-            cstr(ctx, 0x803f7b08),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {

@@ -235,7 +235,7 @@ pub fn HSD_LObjAnimAll<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>) {
         lp = lobj;
         'l1: while !Handle::is_null(lp) {
             'c2: {
-                fns::HSD_LObjAnim(ctx, lp);
+                inl_HSD_LObjAnim_unfused(ctx, lp);
             }
             lp = (lp).next();
         }
@@ -395,7 +395,7 @@ pub fn HSD_LObjSetupInit<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) {
                     }
                 }
                 inl_HSD_LObjSetActive_unfused(ctx, lobj);
-                idx = fns::HSD_LObjGetNbActive(ctx);
+                idx = inl_HSD_LObjGetNbActive_unfused(ctx);
                 (lobj).set_spec_id((enums::GX_LIGHT_NULL as i32));
                 's4: {
                     let __case = match r#type {
@@ -447,7 +447,7 @@ pub fn HSD_LObjSetupInit<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) {
             list = (list).next();
         }
     }
-    if !(!Handle::is_null(fns::HSD_LObjGetActiveByID(ctx, 0x100_i32))) {
+    if !(!Handle::is_null(inl_HSD_LObjGetActiveByID_unfused(ctx, 0x100_i32))) {
         {
             'l6: while !Handle::is_null(list) {
                 'c7: {
@@ -513,7 +513,7 @@ pub fn HSD_LObjSetupInit<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) {
                 let mut lobj_4: HSD_LObj<'a> = null(ctx);
                 if !(!Handle::is_null(
                     ({
-                        let __t2 = fns::HSD_LObjGetActiveByIndex(ctx, i);
+                        let __t2 = inl_HSD_LObjGetActiveByIndex_unfused(ctx, i);
                         lobj_4 = __t2;
                         __t2
                     }),
@@ -946,8 +946,8 @@ pub fn LObjLoad<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, ldesc: HSD_LightDesc<'a>) 
     let __frame = ctx.stack_frame(0x28);
     let mut lobj = lobj;
     let mut ldesc = ldesc;
-    fns::HSD_LObjSetColor(ctx, lobj, (ldesc).color());
-    fns::HSD_LObjSetFlags(ctx, lobj, ((ldesc).flags() as u32));
+    inl_HSD_LObjSetColor_unfused(ctx, lobj, (ldesc).color());
+    inl_HSD_LObjSetFlags_unfused(ctx, lobj, ((ldesc).flags() as u32));
     's1: {
         let __case = match (((ldesc).flags() as i32)
             & ((shl_i32(1_i32, (0_i32 as u32))) | (shl_i32(1_i32, (1_i32 as u32)))))
@@ -976,7 +976,7 @@ pub fn LObjLoad<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, ldesc: HSD_LightDesc<'a>) 
                 fns::HSD_WObjLoadDesc(ctx, (ldesc).position()),
             );
             if ((((ldesc).attnflags() as i32) & 1_i32) != 0) {
-                fns::HSD_LObjSetFlags(ctx, lobj, ((shl_i32(1_i32, (6_i32 as u32))) as u32));
+                inl_HSD_LObjSetFlags_unfused(ctx, lobj, ((shl_i32(1_i32, (6_i32 as u32))) as u32));
                 inl_HSD_LObjSetAttnK_unfused(
                     ctx,
                     lobj,
@@ -985,7 +985,7 @@ pub fn LObjLoad<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, ldesc: HSD_LightDesc<'a>) 
                     ((ldesc).u().attn()).k2(),
                 );
             } else {
-                fns::HSD_LObjSetDistAttn(
+                inl_HSD_LObjSetDistAttn_unfused(
                     ctx,
                     lobj,
                     ((ldesc).u().point()).ref_dist(),
@@ -1007,7 +1007,7 @@ pub fn LObjLoad<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, ldesc: HSD_LightDesc<'a>) 
                 fns::HSD_WObjLoadDesc(ctx, (ldesc).interest()),
             );
             if ((ldesc).attnflags() as i32) != 0_i32 {
-                fns::HSD_LObjSetFlags(ctx, lobj, ((shl_i32(1_i32, (6_i32 as u32))) as u32));
+                inl_HSD_LObjSetFlags_unfused(ctx, lobj, ((shl_i32(1_i32, (6_i32 as u32))) as u32));
                 inl_HSD_LObjSetAttn_unfused(
                     ctx,
                     lobj,
@@ -1019,14 +1019,14 @@ pub fn LObjLoad<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, ldesc: HSD_LightDesc<'a>) 
                     ((ldesc).u().attn()).k2(),
                 );
             } else {
-                fns::HSD_LObjSetDistAttn(
+                inl_HSD_LObjSetDistAttn_unfused(
                     ctx,
                     lobj,
                     ((ldesc).u().spot()).ref_dist(),
                     ((ldesc).u().spot()).ref_br(),
                     (((ldesc).u().spot()).dist_func() as i32),
                 );
-                fns::HSD_LObjSetSpot(
+                inl_HSD_LObjSetSpot_unfused(
                     ctx,
                     lobj,
                     ((ldesc).u().spot()).cutoff(),
@@ -1135,8 +1135,8 @@ pub fn LObjRelease<'a>(ctx: &'a Ctx, o: _HSD_Class<'a>) {
     let mut o = o;
     let mut lobj: HSD_LObj<'a> = (Handle::cast::<HSD_LObj<'a>>((o)));
     fns::HSD_AObjRemove(ctx, (lobj).aobj());
-    inl_HSD_WObjUnref_unfused(ctx, fns::HSD_LObjGetPositionWObj(ctx, lobj));
-    inl_HSD_WObjUnref_unfused(ctx, fns::HSD_LObjGetInterestWObj(ctx, lobj));
+    inl_HSD_WObjUnref_unfused(ctx, inl_HSD_LObjGetPositionWObj_unfused(ctx, lobj));
+    inl_HSD_WObjUnref_unfused(ctx, inl_HSD_LObjGetInterestWObj_unfused(ctx, lobj));
     ((fns::hsdLObj(ctx)).parent().parent().head().parent())
         .release()
         .call::<_, ()>((o,));
@@ -1176,6 +1176,20 @@ pub fn LObjInfoInit<'a>(ctx: &'a Ctx) {
     (Handle::cast::<_HSD_ClassInfo<'a>>(fns::hsdLObj(ctx))).set_release(fnptr(ctx, 0x803674b4));
     (Handle::cast::<_HSD_ClassInfo<'a>>(fns::hsdLObj(ctx))).set_amnesia(fnptr(ctx, 0x80367628));
     (fns::hsdLObj(ctx)).set_load(fnptr(ctx, 0x80366ea8));
+}
+
+fn inl_HSD_LObjAnim_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>) {
+    let mut lobj = lobj;
+    if !Handle::is_null(lobj) {
+        fns::HSD_AObjInterpretAnim(
+            ctx,
+            (lobj).aobj(),
+            Handle::cast::<Addr<'a>>(lobj),
+            fnptr(ctx, 0x80365488),
+        );
+        fns::HSD_WObjInterpretAnim(ctx, fns::HSD_LObjGetPositionWObj(ctx, lobj));
+        fns::HSD_WObjInterpretAnim(ctx, fns::HSD_LObjGetInterestWObj(ctx, lobj));
+    }
 }
 
 fn inl_HSD_LObjReqAnim_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, startframe: f64) {
@@ -1239,6 +1253,10 @@ fn inl_HSD_LObjSetActive_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>) {
         .at(idx)
         .set(lobj);
     (lobj).set_id(fns::HSD_Index2LightID(ctx, (idx as u32)));
+}
+
+fn inl_HSD_LObjGetNbActive_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    return statics::sysdolphin__baselib__lobj::nb_active_lights(ctx).get();
 }
 
 fn inl_setup_infinite_lightobj_unfused<'a>(
@@ -1316,6 +1334,33 @@ fn inl_setup_diffuse_lightobj_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>) {
     }
 }
 
+fn inl_HSD_LObjGetActiveByID_unfused<'a>(ctx: &'a Ctx, id: i32) -> HSD_LObj<'a> {
+    let mut id = id;
+    let mut idx: i32 = (fns::HSD_LightID2Index(ctx, id) as i32);
+    if (0_i32 <= idx) && (idx < 9_i32) {
+        return statics::sysdolphin__baselib__lobj::active_lights(ctx)
+            .at(idx)
+            .get();
+    } else {
+        return null::<HSD_LObj<'a>>(ctx);
+    }
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
+fn inl_HSD_LObjGetActiveByIndex_unfused<'a>(ctx: &'a Ctx, idx: i32) -> HSD_LObj<'a> {
+    let mut idx = idx;
+    if (0_i32 <= idx) && (idx < 9_i32.wrapping_sub(1_i32)) {
+        return statics::sysdolphin__baselib__lobj::active_lights(ctx)
+            .at(idx)
+            .get();
+    } else {
+        return null::<HSD_LObj<'a>>(ctx);
+    }
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
 fn inl_ref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
     let mut o = o;
     if !Handle::is_null(o) {
@@ -1351,20 +1396,6 @@ fn inl_HSD_LObjGetPriority_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>) -> u8 {
     return ((lobj).priority() as u8);
 }
 
-fn inl_HSD_LObjUnrefThis_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>) {
-    let mut lobj = lobj;
-    if (!Handle::is_null(lobj)) && (inl_ref_DEC_unfused(ctx, Handle::cast::<Addr<'a>>(lobj)) != 0) {
-        if !Handle::is_null(lobj) {
-            ((lobj).parent().parent().class_info())
-                .release()
-                .call::<_, ()>((Handle::cast::<_HSD_Class<'a>>(lobj),));
-            ((lobj).parent().parent().class_info())
-                .destroy()
-                .call::<_, ()>((Handle::cast::<_HSD_Class<'a>>(lobj),));
-        }
-    }
-}
-
 fn inl_ref_DEC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) -> i32 {
     let mut o = o;
     let mut ret: i32 = 0;
@@ -1384,6 +1415,20 @@ fn inl_ref_DEC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) -> i32 {
         __t2
     } as i32)
         == 0_i32) as i32;
+}
+
+fn inl_HSD_LObjUnrefThis_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>) {
+    let mut lobj = lobj;
+    if (!Handle::is_null(lobj)) && (inl_ref_DEC_unfused(ctx, Handle::cast::<Addr<'a>>(lobj)) != 0) {
+        if !Handle::is_null(lobj) {
+            ((lobj).parent().parent().class_info())
+                .release()
+                .call::<_, ()>((Handle::cast::<_HSD_Class<'a>>(lobj),));
+            ((lobj).parent().parent().class_info())
+                .destroy()
+                .call::<_, ()>((Handle::cast::<_HSD_Class<'a>>(lobj),));
+        }
+    }
 }
 
 fn inl_LObjRemoveAll_unfused<'a>(ctx: &'a Ctx) {
@@ -1457,14 +1502,18 @@ fn inl_LObjReplaceAll_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>) {
     }
 }
 
-fn inl_HSD_LObjSetPositionWObj_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, wobj: HSD_WObj<'a>) {
+fn inl_HSD_LObjSetColor_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, color: _GXColor<'a>) {
     let mut lobj = lobj;
-    let mut wobj = wobj;
+    Handle::copy_from((lobj).color(), color);
+}
+
+fn inl_HSD_LObjSetFlags_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, flags: u32) {
+    let mut lobj = lobj;
+    let mut flags = flags;
     if Handle::is_null(lobj) {
         return;
     }
-    inl_HSD_WObjUnref_unfused(ctx, (lobj).position());
-    (lobj).set_position(wobj);
+    (lobj).set_flags(((((lobj).flags() as u32) | flags) as u16));
 }
 
 fn inl_HSD_WObjUnref_unfused<'a>(ctx: &'a Ctx, wobj: HSD_WObj<'a>) {
@@ -1484,6 +1533,16 @@ fn inl_HSD_WObjUnref_unfused<'a>(ctx: &'a Ctx, wobj: HSD_WObj<'a>) {
     }
 }
 
+fn inl_HSD_LObjSetPositionWObj_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, wobj: HSD_WObj<'a>) {
+    let mut lobj = lobj;
+    let mut wobj = wobj;
+    if Handle::is_null(lobj) {
+        return;
+    }
+    inl_HSD_WObjUnref_unfused(ctx, (lobj).position());
+    (lobj).set_position(wobj);
+}
+
 fn inl_HSD_LObjSetAttnK_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, k0: f64, k1: f64, k2: f64) {
     let mut lobj = lobj;
     let mut k0 = k0;
@@ -1497,6 +1556,24 @@ fn inl_HSD_LObjSetAttnK_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, k0: f64, k
     (lobj).u().attn().set_k2(k2);
 }
 
+fn inl_HSD_LObjSetDistAttn_unfused<'a>(
+    ctx: &'a Ctx,
+    lobj: HSD_LObj<'a>,
+    ref_dist: f64,
+    ref_br: f64,
+    dist_func: i32,
+) {
+    let mut lobj = lobj;
+    let mut ref_dist = ref_dist;
+    let mut ref_br = ref_br;
+    let mut dist_func = dist_func;
+    if !Handle::is_null(lobj) {
+        (lobj).u().point().set_ref_dist(ref_dist);
+        (lobj).u().point().set_ref_br(ref_br);
+        (lobj).u().point().set_dist_func((dist_func as u32));
+    }
+}
+
 fn inl_HSD_LObjSetInterestWObj_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, wobj: HSD_WObj<'a>) {
     let mut lobj = lobj;
     let mut wobj = wobj;
@@ -1505,6 +1582,19 @@ fn inl_HSD_LObjSetInterestWObj_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, wob
     }
     inl_HSD_WObjUnref_unfused(ctx, (lobj).interest());
     (lobj).set_interest(wobj);
+}
+
+fn inl_HSD_LObjSetAttnA_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, a0: f64, a1: f64, a2: f64) {
+    let mut lobj = lobj;
+    let mut a0 = a0;
+    let mut a1 = a1;
+    let mut a2 = a2;
+    if Handle::is_null(lobj) {
+        return;
+    }
+    (lobj).u().attn().set_a0(a0);
+    (lobj).u().attn().set_a1(a1);
+    (lobj).u().attn().set_a2(a2);
 }
 
 fn inl_HSD_LObjSetAttn_unfused<'a>(
@@ -1528,17 +1618,22 @@ fn inl_HSD_LObjSetAttn_unfused<'a>(
     inl_HSD_LObjSetAttnK_unfused(ctx, lobj, k0, k1, k2);
 }
 
-fn inl_HSD_LObjSetAttnA_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, a0: f64, a1: f64, a2: f64) {
+fn inl_HSD_LObjSetSpot_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, cutoff: f64, point_func: i32) {
     let mut lobj = lobj;
-    let mut a0 = a0;
-    let mut a1 = a1;
-    let mut a2 = a2;
-    if Handle::is_null(lobj) {
-        return;
+    let mut cutoff = cutoff;
+    let mut point_func = point_func;
+    if !Handle::is_null(lobj) {
+        (lobj).u().point().set_cutoff(cutoff);
+        (lobj).u().point().set_point_func((point_func as u32));
     }
-    (lobj).u().attn().set_a0(a0);
-    (lobj).u().attn().set_a1(a1);
-    (lobj).u().attn().set_a2(a2);
+}
+
+fn inl_HSD_LObjGetDefaultClass_unfused<'a>(ctx: &'a Ctx) -> HSD_LObjInfo<'a> {
+    return (if !Handle::is_null(statics::sysdolphin__baselib__lobj::default_class(ctx).get()) {
+        statics::sysdolphin__baselib__lobj::default_class(ctx).get()
+    } else {
+        fns::hsdLObj(ctx)
+    });
 }
 
 fn inl_HSD_LObjAlloc_unfused<'a>(ctx: &'a Ctx) -> HSD_LObj<'a> {
@@ -1559,12 +1654,20 @@ fn inl_HSD_LObjAlloc_unfused<'a>(ctx: &'a Ctx) -> HSD_LObj<'a> {
     return new;
 }
 
-fn inl_HSD_LObjGetDefaultClass_unfused<'a>(ctx: &'a Ctx) -> HSD_LObjInfo<'a> {
-    return (if !Handle::is_null(statics::sysdolphin__baselib__lobj::default_class(ctx).get()) {
-        statics::sysdolphin__baselib__lobj::default_class(ctx).get()
-    } else {
-        fns::hsdLObj(ctx)
-    });
+fn inl_HSD_LObjGetPositionWObj_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>) -> HSD_WObj<'a> {
+    let mut lobj = lobj;
+    if !Handle::is_null(lobj) {
+        return (lobj).position();
+    }
+    return null::<HSD_WObj<'a>>(ctx);
+}
+
+fn inl_HSD_LObjGetInterestWObj_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>) -> HSD_WObj<'a> {
+    let mut lobj = lobj;
+    if !Handle::is_null(lobj) {
+        return (lobj).interest();
+    }
+    return null::<HSD_WObj<'a>>(ctx);
 }
 
 fn inl_HSD_LObjAddAnim_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, lanim: HSD_LightAnim<'a>) {
@@ -1580,12 +1683,12 @@ fn inl_HSD_LObjAddAnim_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, lanim: HSD_
         (lobj).set_aobj(fns::HSD_AObjLoadDesc(ctx, (lanim).aobjdesc()));
         fns::HSD_WObjAddAnim(
             ctx,
-            fns::HSD_LObjGetPositionWObj(ctx, lobj),
+            inl_HSD_LObjGetPositionWObj_unfused(ctx, lobj),
             (lanim).position_anim(),
         );
         fns::HSD_WObjAddAnim(
             ctx,
-            fns::HSD_LObjGetInterestWObj(ctx, lobj),
+            inl_HSD_LObjGetInterestWObj_unfused(ctx, lobj),
             (lanim).interest_anim(),
         );
     }

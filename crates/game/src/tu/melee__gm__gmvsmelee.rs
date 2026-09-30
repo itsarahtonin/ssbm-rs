@@ -176,7 +176,7 @@ pub fn gmVsMelee_ResetKOCounts<'a>(ctx: &'a Ctx) {
 
 pub fn gmVsMelee_Mode_OnLoad<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
-    fns::gmVsMelee_ResetKOCounts(ctx);
+    inl_gmVsMelee_ResetKOCounts_unfused(ctx);
 }
 
 pub fn gm_Mode_Vs_OnUnload<'a>(ctx: &'a Ctx) {}
@@ -347,7 +347,7 @@ pub fn gmVsMelee_ExitVs<'a>(ctx: &'a Ctx, state: GameModeState<'a>, id0: u8, id1
             i = i.wrapping_add(1);
         }
     }
-    if (fns::gmVsMelee_WasAnyPlayerHuman(ctx, (exit).match_end()) != 0) {
+    if (inl_gmVsMelee_WasAnyPlayerHuman_unfused(ctx, (exit).match_end()) != 0) {
         fns::gm_SetupHumanResultsScreen(
             ctx,
             (exit).match_end().match_kind(),
@@ -460,8 +460,8 @@ pub fn gmVsMelee_ExitResults<'a>(
         fns::gm_80168638(ctx, match_end);
         fns::gm_80168710(ctx, match_end, vs);
     }
-    fns::gmVsMelee_UpdateKOCounts(ctx, ko, match_end);
-    if (fns::gmVsMelee_WasAnyPlayerHuman(ctx, match_end) != 0) {
+    inl_gmVsMelee_UpdateKOCounts_unfused(ctx, ko, match_end);
+    if (inl_gmVsMelee_WasAnyPlayerHuman_unfused(ctx, match_end) != 0) {
         let _ = fns::gm_8016247C(ctx, fns::gm_801688AC(ctx, match_end));
         if ((Handle::add(state, 1_i32)).id() as i32) != 255_i32 {
             let _ = fns::gm_GetVsPlayMatchTotal(ctx);
@@ -554,6 +554,62 @@ pub fn gmVsMelee_ExitResults<'a>(
     }
     inl_lbCardGame_SetupArchive_unfused(ctx);
     fns::gm_SetNextGameModeStateId(ctx, state_id);
+}
+
+fn inl_gmVsMelee_ResetKOCounts_unfused<'a>(ctx: &'a Ctx) {
+    fns::memzero(
+        ctx,
+        Handle::cast::<Addr<'a>>(statics::melee__gm__gmvsmelee::ko_counts(ctx)),
+        (6_u32 as i32),
+    );
+}
+
+fn inl_gmVsMelee_WasAnyPlayerHuman_unfused<'a>(ctx: &'a Ctx, end: MatchEnd<'a>) -> i32 {
+    let mut end = end;
+    let mut i: i32 = 0;
+    {
+        i = 0_i32;
+        'l1: while i < 6_i32 {
+            'c2: {
+                if ((end).player_standings().get(i).pkind() as i32)
+                    == (enums::Gm_PKind_Human as i32)
+                {
+                    return 1_i32;
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return 0_i32;
+}
+
+fn inl_gmVsMelee_UpdateKOCounts_unfused<'a>(
+    ctx: &'a Ctx,
+    ko_counts: Val<'a, u8>,
+    end: MatchEnd<'a>,
+) {
+    let mut ko_counts = ko_counts;
+    let mut end = end;
+    let mut i: i32 = 0;
+    {
+        i = 0_i32;
+        'l1: while i < 6_i32 {
+            'c2: {
+                if ((end).player_standings().get(i).pkind() as i32)
+                    == (enums::Gm_PKind_Human as i32)
+                {
+                    (Handle::add(ko_counts, i)).set(
+                        (fns::lbTime_8000AF74(
+                            ctx,
+                            ((Handle::add(ko_counts, i)).get() as u32),
+                            ((end).player_standings().get(i).x20() as i32),
+                        ) as u8),
+                    );
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
 }
 
 fn inl_lbCardGame_SetupArchive_unfused<'a>(ctx: &'a Ctx) {

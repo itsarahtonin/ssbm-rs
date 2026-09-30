@@ -11,7 +11,7 @@ With no units it translates every C file. `types.json` comes from `tools/typegen
 How C maps to Rust:
 
 - Struct fields go through the generated accessors in `ssbm-types`, and pointers are typed handles, so the code never sees raw offsets.
-- Calls go through the generated dispatch stubs, so a call reaches a port, an SDK stand-in or the original code alike. Inline functions without an address are translated into the calling module.
+- Calls go through the generated dispatch stubs, so a call reaches a port, an SDK stand-in or the original code alike. Inline functions without an address are translated into the calling module, and so are functions the caller's asm never calls because MWCC inlined them: that code runs as part of the caller, as in the original, so patches to the function's own copy, such as Slippi's Gecko codes, do not reach it.
 - Every float operation goes through `gekko-fp`. `a * b + c` and friends become the fused operations MWCC emits for them, and `float` results are rounded to single as the Gekko does.
 - Integer arithmetic wraps, and division and shifts use the Gekko's results for the cases C leaves undefined.
 - Locals whose address is taken, and struct and array locals, live on the emulated stack, so pointers to them are GameCube addresses.

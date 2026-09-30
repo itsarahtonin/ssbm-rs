@@ -221,7 +221,7 @@ pub fn ifTime_UpdateCountdown<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let mut arg0 = arg0;
     let mut x: ifTime_data_t<'a> = statics::melee__if__iftime::ifTime_data(ctx);
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((arg0).hsd_obj());
-    let mut f: i32 = fns::ifTime_GetCountdownSeconds(ctx);
+    let mut f: i32 = inl_ifTime_GetCountdownSeconds_unfused(ctx);
     if f != ((x).countdown_seconds() as i32) {
         (x).set_countdown_seconds((f as u8));
         fns::HSD_JObjRemoveAnimAll(ctx, jobj);
@@ -478,8 +478,44 @@ fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'
     return (gobj).hsd_obj();
 }
 
+fn inl_ifTime_GetCountdownSeconds_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    let mut centiseconds: i32 = (fns::gm_8016AF0C(ctx) as i32);
+    let mut seconds: i32 = (fns::gm_8016AEEC(ctx) as i32);
+    if centiseconds == 0_i32 {
+        seconds = 5_i32.wrapping_sub(seconds);
+    } else {
+        seconds = 4_i32.wrapping_sub(seconds);
+    }
+    if seconds < 0_i32 {
+        seconds = 0_i32;
+    }
+    return seconds;
+}
+
 fn inl_ifTime_GetCountdownSeconds_dontinline_unfused<'a>(ctx: &'a Ctx) -> i32 {
     return fns::ifTime_GetCountdownSeconds(ctx);
+}
+
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f9538),
+            (228_i32 as u32),
+            cstr(ctx, 0x803f9538),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
@@ -513,28 +549,6 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f9538),
-            (228_i32 as u32),
-            cstr(ctx, 0x803f9538),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_ifTime_LoadModels_unfused<'a>(ctx: &'a Ctx) -> i32 {

@@ -204,29 +204,26 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
-fn inl_ftDrawCommon_80080E18_inline2_unfused<'a>(
-    ctx: &'a Ctx,
-    gobj: HSD_GObj<'a>,
-    old: Fighter<'a>,
-) {
-    let mut gobj = gobj;
-    let mut old = old;
-    let mut fp: Fighter<'a> =
-        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
-    let mut pos: Vec<'a> = null(ctx);
-    let mut matrix: ArrV<'a, F32, 4> =
-        fns::HSD_CObjGetInvViewingMtxPtr(ctx, fns::Camera_800310B8(ctx));
-    ctx.call::<_, ()>(
-        0x80342aa8,
-        (
-            matrix,
-            Handle::cast::<Vec<'a>>((old).mv().co().walk().fast_anim_frame_ref()),
-            (fp).cur_pos(),
-        ),
-    );
-    pos = (fp).cur_pos();
-    inl_HSD_JObjSetTranslate_unfused(ctx, jobj, pos);
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803c0ebc),
+            (228_i32 as u32),
+            cstr(ctx, 0x803c0ebc),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
@@ -262,26 +259,34 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803c0ebc),
-            (228_i32 as u32),
-            cstr(ctx, 0x803c0ebc),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
+fn inl_ftDrawCommon_80080E18_inline2_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    old: Fighter<'a>,
+) {
+    let mut gobj = gobj;
+    let mut old = old;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
+    let mut pos: Vec<'a> = null(ctx);
+    let mut matrix: ArrV<'a, F32, 4> =
+        fns::HSD_CObjGetInvViewingMtxPtr(ctx, fns::Camera_800310B8(ctx));
+    ctx.call::<_, ()>(
+        0x80342aa8,
+        (
+            matrix,
+            Handle::cast::<Vec<'a>>((old).mv().co().walk().fast_anim_frame_ref()),
+            (fp).cur_pos(),
+        ),
+    );
+    pos = (fp).cur_pos();
+    inl_HSD_JObjSetTranslate_unfused(ctx, jobj, pos);
+}
+
+fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).hsd_obj();
 }
 
 fn inl_ftDrawCommon_80080E18_inline0_unfused<'a>(
@@ -313,11 +318,6 @@ fn inl_ftDrawCommon_80080E18_inline0_unfused<'a>(
         matrix = fns::ftDrawCommon_8008051C(ctx, gobj, sp54.get(0));
         fns::HSD_JObjDispAll(ctx, jobj, matrix, ret, (0_i32 as u32));
     }
-}
-
-fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).hsd_obj();
 }
 
 fn inl_ftDrawCommon_80080E18_inline1_unfused<'a>(

@@ -236,38 +236,26 @@ fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'
     return (gobj).hsd_obj();
 }
 
-fn inl_setupKoopa_unfused<'a>(ctx: &'a Ctx) {
-    let mut koopa_gobj: HSD_GObj<'a> = null(ctx);
-    let mut jobj: HSD_JObj<'a> = null(ctx);
-    koopa_gobj = fns::GObj_Create(ctx, (14_i32 as u16), (15_i32 as u8), (0_i32 as u8));
-    jobj = fns::HSD_JObjLoadJoint(ctx, statics::melee__vi__vi1202::un_804D7048(ctx).get());
-    fns::HSD_GObjObject_80390A70(
-        ctx,
-        koopa_gobj,
-        fns::HSD_GObj_JObjKind(ctx).get(),
-        Handle::cast::<Addr<'a>>(jobj),
-    );
-    fns::GObj_SetupGXLink(
-        ctx,
-        koopa_gobj,
-        fnptr(ctx, 0x80391070),
-        (11_i32 as u8),
-        (0_i32 as u32),
-    );
-    inl_HSD_JObjSetScaleX_unfused(ctx, jobj, 0.49000000953674316);
-    inl_HSD_JObjSetScaleY_unfused(ctx, jobj, 0.49000000953674316);
-    inl_HSD_JObjSetScaleZ_unfused(ctx, jobj, 0.49000000953674316);
-    fns::lb_8000C1C0(
-        ctx,
-        jobj,
-        statics::melee__vi__vi1202::un_804D704C(ctx).get(),
-    );
-    fns::lb_8000C290(
-        ctx,
-        jobj,
-        statics::melee__vi__vi1202::un_804D704C(ctx).get(),
-    );
-    let _ = fns::HSD_GObj_SetupProc(ctx, koopa_gobj, fnptr(ctx, 0x80321130), (23_i32 as u8));
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804003c4),
+            (228_i32 as u32),
+            cstr(ctx, 0x804003c4),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetScaleX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
@@ -291,28 +279,6 @@ fn inl_HSD_JObjSetScaleX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x804003c4),
-            (228_i32 as u32),
-            cstr(ctx, 0x804003c4),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjSetScaleY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
@@ -361,36 +327,27 @@ fn inl_HSD_JObjSetScaleZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
     }
 }
 
-fn inl_setupStand_unfused<'a>(ctx: &'a Ctx) {
-    let mut stand_gobj: HSD_GObj<'a> = null(ctx);
+fn inl_setupKoopa_unfused<'a>(ctx: &'a Ctx) {
+    let mut koopa_gobj: HSD_GObj<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
-    let mut child: HSD_JObj<'a> = null(ctx);
-    stand_gobj = fns::GObj_Create(ctx, (14_i32 as u16), (15_i32 as u8), (0_i32 as u8));
-    jobj = fns::HSD_JObjLoadJoint(
-        ctx,
-        ((Handle::add(
-            (statics::melee__vi__vi1202::un_804D7044(ctx).get()).models(),
-            0_i32,
-        ))
-        .get())
-        .joint(),
-    );
+    koopa_gobj = fns::GObj_Create(ctx, (14_i32 as u16), (15_i32 as u8), (0_i32 as u8));
+    jobj = fns::HSD_JObjLoadJoint(ctx, statics::melee__vi__vi1202::un_804D7048(ctx).get());
     fns::HSD_GObjObject_80390A70(
         ctx,
-        stand_gobj,
+        koopa_gobj,
         fns::HSD_GObj_JObjKind(ctx).get(),
         Handle::cast::<Addr<'a>>(jobj),
     );
     fns::GObj_SetupGXLink(
         ctx,
-        stand_gobj,
+        koopa_gobj,
         fnptr(ctx, 0x80391070),
         (11_i32 as u8),
         (0_i32 as u32),
     );
-    let _ = fns::HSD_GObj_SetupProc(ctx, stand_gobj, fnptr(ctx, 0x8032110c), (23_i32 as u8));
-    child = inl_HSD_JObjGetChild_unfused(ctx, jobj);
-    inl_vi1202_SetupChild_unfused(ctx, child);
+    inl_HSD_JObjSetScaleX_unfused(ctx, jobj, 0.49000000953674316);
+    inl_HSD_JObjSetScaleY_unfused(ctx, jobj, 0.49000000953674316);
+    inl_HSD_JObjSetScaleZ_unfused(ctx, jobj, 0.49000000953674316);
     fns::lb_8000C1C0(
         ctx,
         jobj,
@@ -401,6 +358,7 @@ fn inl_setupStand_unfused<'a>(ctx: &'a Ctx) {
         jobj,
         statics::melee__vi__vi1202::un_804D704C(ctx).get(),
     );
+    let _ = fns::HSD_GObj_SetupProc(ctx, koopa_gobj, fnptr(ctx, 0x80321130), (23_i32 as u8));
 }
 
 fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
@@ -412,38 +370,6 @@ fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JOb
     }
     #[allow(unreachable_code)]
     return null(ctx);
-}
-
-fn inl_vi1202_SetupChild_unfused<'a>(ctx: &'a Ctx, child: HSD_JObj<'a>) {
-    let mut child = child;
-    let mut scale: f64 = 0.0;
-    inl_HSD_JObjSetTranslateXWithMtxDirty_unfused(
-        ctx,
-        child,
-        fp::fneg(fns::Toy_803060BC(ctx, 31_i32, 0_i32)),
-    );
-    inl_HSD_JObjSetTranslateYWithMtxDirty_unfused(
-        ctx,
-        child,
-        fp::fneg(fns::Toy_803060BC(ctx, 31_i32, 1_i32)),
-    );
-    inl_HSD_JObjSetTranslateZWithMtxDirty_unfused(
-        ctx,
-        child,
-        fp::fneg(fns::Toy_803060BC(ctx, 31_i32, 2_i32)),
-    );
-    scale = fp::fneg(fns::Toy_803060BC(ctx, 31_i32, 5_i32));
-    inl_HSD_JObjSetRotationYWithMtxDirty_unfused(ctx, child, scale);
-    scale = fp::fmuls(
-        0.49000000953674316,
-        (fp::fmuls(
-            fns::Toy_803060BC(ctx, 31_i32, 4_i32),
-            (fp::fdivs(1.0, fns::Toy_803060BC(ctx, 31_i32, 3_i32))),
-        )),
-    );
-    inl_HSD_JObjSetScaleXWithMtxDirty_unfused(ctx, child, scale);
-    inl_HSD_JObjSetScaleYWithMtxDirty_unfused(ctx, child, scale);
-    inl_HSD_JObjSetScaleZWithMtxDirty_unfused(ctx, child, scale);
 }
 
 fn inl_HSD_JObjSetTranslateXWithMtxDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
@@ -587,6 +513,80 @@ fn inl_HSD_JObjSetScaleZWithMtxDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         fns::HSD_JObjSetMtxDirty(ctx, jobj);
     }
+}
+
+fn inl_vi1202_SetupChild_unfused<'a>(ctx: &'a Ctx, child: HSD_JObj<'a>) {
+    let mut child = child;
+    let mut scale: f64 = 0.0;
+    inl_HSD_JObjSetTranslateXWithMtxDirty_unfused(
+        ctx,
+        child,
+        fp::fneg(fns::Toy_803060BC(ctx, 31_i32, 0_i32)),
+    );
+    inl_HSD_JObjSetTranslateYWithMtxDirty_unfused(
+        ctx,
+        child,
+        fp::fneg(fns::Toy_803060BC(ctx, 31_i32, 1_i32)),
+    );
+    inl_HSD_JObjSetTranslateZWithMtxDirty_unfused(
+        ctx,
+        child,
+        fp::fneg(fns::Toy_803060BC(ctx, 31_i32, 2_i32)),
+    );
+    scale = fp::fneg(fns::Toy_803060BC(ctx, 31_i32, 5_i32));
+    inl_HSD_JObjSetRotationYWithMtxDirty_unfused(ctx, child, scale);
+    scale = fp::fmuls(
+        0.49000000953674316,
+        (fp::fmuls(
+            fns::Toy_803060BC(ctx, 31_i32, 4_i32),
+            (fp::fdivs(1.0, fns::Toy_803060BC(ctx, 31_i32, 3_i32))),
+        )),
+    );
+    inl_HSD_JObjSetScaleXWithMtxDirty_unfused(ctx, child, scale);
+    inl_HSD_JObjSetScaleYWithMtxDirty_unfused(ctx, child, scale);
+    inl_HSD_JObjSetScaleZWithMtxDirty_unfused(ctx, child, scale);
+}
+
+fn inl_setupStand_unfused<'a>(ctx: &'a Ctx) {
+    let mut stand_gobj: HSD_GObj<'a> = null(ctx);
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut child: HSD_JObj<'a> = null(ctx);
+    stand_gobj = fns::GObj_Create(ctx, (14_i32 as u16), (15_i32 as u8), (0_i32 as u8));
+    jobj = fns::HSD_JObjLoadJoint(
+        ctx,
+        ((Handle::add(
+            (statics::melee__vi__vi1202::un_804D7044(ctx).get()).models(),
+            0_i32,
+        ))
+        .get())
+        .joint(),
+    );
+    fns::HSD_GObjObject_80390A70(
+        ctx,
+        stand_gobj,
+        fns::HSD_GObj_JObjKind(ctx).get(),
+        Handle::cast::<Addr<'a>>(jobj),
+    );
+    fns::GObj_SetupGXLink(
+        ctx,
+        stand_gobj,
+        fnptr(ctx, 0x80391070),
+        (11_i32 as u8),
+        (0_i32 as u32),
+    );
+    let _ = fns::HSD_GObj_SetupProc(ctx, stand_gobj, fnptr(ctx, 0x8032110c), (23_i32 as u8));
+    child = inl_HSD_JObjGetChild_unfused(ctx, jobj);
+    inl_vi1202_SetupChild_unfused(ctx, child);
+    fns::lb_8000C1C0(
+        ctx,
+        jobj,
+        statics::melee__vi__vi1202::un_804D704C(ctx).get(),
+    );
+    fns::lb_8000C290(
+        ctx,
+        jobj,
+        statics::melee__vi__vi1202::un_804D704C(ctx).get(),
+    );
 }
 
 /// Registers this unit's ports.

@@ -131,6 +131,11 @@ pub fn ftCo_ThrownKoopaAirB_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
 }
 
+fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
 fn inl_ftCo_Thrown_Enter_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -161,11 +166,6 @@ fn inl_ftCo_Thrown_Enter_unfused<'a>(
     );
     (fp).set_accessory1_cb(fnptr(ctx, 0x800de508));
     fns::ftCommon_8007E2F4(ctx, fp, (0x1ff_i32 as i16));
-}
-
-fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).user_data();
 }
 
 /// Registers this unit's ports.

@@ -157,7 +157,7 @@ pub fn AXFreeVoice<'a>(ctx: &'a Ctx, p: _AXVPB<'a>) {
         (p).set_depop((1_i32 as u32));
     }
     fns::__AXSetPBDefault(ctx, p);
-    fns::__AXPushFreeStack(ctx, p);
+    inl___AXPushFreeStack_unfused(ctx, p);
     let _ = fns::OSRestoreInterrupts(ctx, old);
 }
 
@@ -237,6 +237,19 @@ fn inl___AXInitVoiceStacks_unfused<'a>(ctx: &'a Ctx) {
             i = i.wrapping_add(1);
         }
     }
+}
+
+fn inl___AXPushFreeStack_unfused<'a>(ctx: &'a Ctx, p: _AXVPB<'a>) {
+    let mut p = p;
+    (p).set_next(
+        statics::dolphin__ax__AXAlloc::__AXStackHead(ctx)
+            .at(0_i32)
+            .get(),
+    );
+    statics::dolphin__ax__AXAlloc::__AXStackHead(ctx)
+        .at(0_i32)
+        .set(p);
+    (p).set_priority(0_i32);
 }
 
 fn inl___AXPopFreeStack_unfused<'a>(ctx: &'a Ctx) -> _AXVPB<'a> {

@@ -43,7 +43,10 @@ pub fn HSD_DListGetAllocData<'a>(ctx: &'a Ctx) -> _HSD_ObjAllocData<'a> {
 pub fn HSD_SListAlloc<'a>(ctx: &'a Ctx) -> _HSD_SList<'a> {
     let __frame = ctx.stack_frame(0x10);
     let mut list: _HSD_SList<'a> = null(ctx);
-    list = Handle::cast::<_HSD_SList<'a>>(fns::HSD_ObjAlloc(ctx, fns::HSD_SListGetAllocData(ctx)));
+    list = Handle::cast::<_HSD_SList<'a>>(fns::HSD_ObjAlloc(
+        ctx,
+        inl_HSD_SListGetAllocData_unfused(ctx),
+    ));
     (if !Handle::is_null((list)) {
         ({ () })
     } else {
@@ -67,7 +70,7 @@ pub fn HSD_SListAllocAndAppend<'a>(
     let mut next = next;
     let mut data = data;
     let mut list: _HSD_SList<'a> = null(ctx);
-    list = fns::HSD_SListAlloc(ctx);
+    list = inl_HSD_SListAlloc_unfused(ctx);
     (list).set_data(data);
     return fns::HSD_SListAppendList(ctx, next, list);
 }
@@ -81,7 +84,7 @@ pub fn HSD_SListAllocAndPrepend<'a>(
     let mut next = next;
     let mut data = data;
     let mut list: _HSD_SList<'a> = null(ctx);
-    list = fns::HSD_SListAlloc(ctx);
+    list = inl_HSD_SListAlloc_unfused(ctx);
     (list).set_data(data);
     return fns::HSD_SListPrependList(ctx, next, list);
 }
@@ -146,12 +149,36 @@ pub fn HSD_SListRemove<'a>(ctx: &'a Ctx, list: _HSD_SList<'a>) -> _HSD_SList<'a>
         next = (list).next();
         fns::HSD_ObjFree(
             ctx,
-            fns::HSD_SListGetAllocData(ctx),
+            inl_HSD_SListGetAllocData_unfused(ctx),
             Handle::cast::<Addr<'a>>(list),
         );
         return next;
     }
     return null::<_HSD_SList<'a>>(ctx);
+}
+
+fn inl_HSD_SListGetAllocData_unfused<'a>(ctx: &'a Ctx) -> _HSD_ObjAllocData<'a> {
+    return fns::slist_alloc_data(ctx);
+}
+
+fn inl_HSD_SListAlloc_unfused<'a>(ctx: &'a Ctx) -> _HSD_SList<'a> {
+    let mut list: _HSD_SList<'a> = null(ctx);
+    list = Handle::cast::<_HSD_SList<'a>>(fns::HSD_ObjAlloc(
+        ctx,
+        inl_HSD_SListGetAllocData_unfused(ctx),
+    ));
+    (if !Handle::is_null((list)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804d5f54),
+            (33_i32 as u32),
+            cstr(ctx, 0x804d5f54),
+        )
+    });
+    let _ = fns::memset(ctx, Handle::cast::<Addr<'a>>(list), 0_i32, 8_u32);
+    return list;
 }
 
 /// Registers this unit's ports.

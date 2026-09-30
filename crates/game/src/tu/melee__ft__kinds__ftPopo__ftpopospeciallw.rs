@@ -322,6 +322,11 @@ fn inl_ftPp_set_cbs_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp).set_take_dmg_cb(fnptr(ctx, 0x8011f060));
 }
 
+fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
 fn inl_ftPp_SpecialLw_Coll_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
@@ -343,27 +348,6 @@ fn inl_ftPp_SpecialLw_Coll_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
     } else {
         fns::ftPartSetRotX(ctx, fp, 0_i32, 0.0);
     }
-}
-
-fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).user_data();
-}
-
-fn inl_ftPp_SpecialLw_Coll_Land_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let mut gobj = gobj;
-    let mut fp: Fighter<'a> =
-        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    inl_ftCommon_GroundToAirStateChange_unfused(
-        ctx,
-        gobj,
-        fp,
-        (enums::ftPp_MS_SpecialAirLw as i32),
-        0xc4c5282_u32,
-    );
-    inl_ftPp_set_cbs_unfused(ctx, gobj);
-    (fp).set_accessory4_cb(fnptr(ctx, 0x80122d2c));
-    fns::ftCommon_ClampAirDrift(ctx, fp);
 }
 
 fn inl_ftCommon_GroundToAirStateChange_unfused<'a>(
@@ -388,6 +372,22 @@ fn inl_ftCommon_GroundToAirStateChange_unfused<'a>(
         0.0,
         null::<HSD_GObj<'a>>(ctx),
     );
+}
+
+fn inl_ftPp_SpecialLw_Coll_Land_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    inl_ftCommon_GroundToAirStateChange_unfused(
+        ctx,
+        gobj,
+        fp,
+        (enums::ftPp_MS_SpecialAirLw as i32),
+        0xc4c5282_u32,
+    );
+    inl_ftPp_set_cbs_unfused(ctx, gobj);
+    (fp).set_accessory4_cb(fnptr(ctx, 0x80122d2c));
+    fns::ftCommon_ClampAirDrift(ctx, fp);
 }
 
 fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {

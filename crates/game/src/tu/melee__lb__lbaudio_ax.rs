@@ -190,7 +190,7 @@ pub fn lbAudioAx_800233EC<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let mut arg0 = arg0;
     let mut slot: i32 = 0;
     if statics::melee__lb__lbaudio_ax::fn_80026E58(ctx, 33_i32) == 1_i32 {
-        slot = fns::lbAudioAx_80023130(ctx, arg0);
+        slot = inl_lbAudioAx_80023130_unfused(ctx, arg0);
         's1: {
             let __case = match slot {
                 6_i32 => 0,
@@ -248,7 +248,7 @@ pub fn lbAudioAx_800233EC<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
             }
         }
     } else {
-        slot = fns::lbAudioAx_80023130(ctx, arg0);
+        slot = inl_lbAudioAx_80023130_unfused(ctx, arg0);
         's4: {
             let __case = match slot {
                 33_i32 => 0,
@@ -350,16 +350,9 @@ pub fn lbAudioAx_800237A8<'a>(ctx: &'a Ctx, id: i32, vol: i32, pan: i32) -> i32 
     let mut vol = vol;
     let mut pan = pan;
     if id >= 0x83d61_i32 {
-        return statics::melee__lb__lbaudio_ax::fn_80023750(
-            ctx,
-            0x83d60_i32,
-            0_i32,
-            64_i32,
-            0_i32,
-            7_i32,
-        );
+        return inl_fn_80023750_unfused(ctx, 0x83d60_i32, 0_i32, 64_i32, 0_i32, 7_i32);
     } else {
-        return statics::melee__lb__lbaudio_ax::fn_80023750(ctx, id, vol, pan, 0_i32, 7_i32);
+        return inl_fn_80023750_unfused(ctx, id, vol, pan, 0_i32, 7_i32);
     }
     #[allow(unreachable_code)]
     return 0;
@@ -372,7 +365,7 @@ pub fn lbAudioAx_80023870<'a>(ctx: &'a Ctx, id: i32, vol: i32, pan: i32, track: 
     let mut pan = pan;
     let mut track = track;
     if track == 0_i32 {
-        return fns::lbAudioAx_800237A8(ctx, id, vol, pan);
+        return inl_lbAudioAx_800237A8_unfused(ctx, id, vol, pan);
     }
     if id == 0x83d61_i32 {
         fns::HSD_AudioSFXKeyOffTrack(ctx, track);
@@ -422,7 +415,7 @@ pub fn lbAudioAx_80023B24<'a>(ctx: &'a Ctx, id: i32) -> i32 {
     let __frame = ctx.stack_frame(0x30);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut id = id;
-    let mut slot: i32 = fns::lbAudioAx_80023130(ctx, id);
+    let mut slot: i32 = inl_lbAudioAx_80023130_unfused(ctx, id);
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {
@@ -496,7 +489,7 @@ pub fn lbAudioAx_80023B24<'a>(ctx: &'a Ctx, id: i32) -> i32 {
                 .set(2_i32);
         }
     }
-    return statics::melee__lb__lbaudio_ax::fn_80023750(ctx, id, 127_i32, 64_i32, 0_i32, 7_i32);
+    return inl_fn_80023750_unfused(ctx, id, 127_i32, 64_i32, 0_i32, 7_i32);
 }
 
 pub fn fn_80023ED4<'a>(ctx: &'a Ctx, path: Val<'a, i8>, vol: i32, arg2: i32) -> i32 {
@@ -542,13 +535,13 @@ pub fn lbAudioAx_80023F28<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn lbAudioAx_800240B4<'a>(ctx: &'a Ctx, id: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut id = id;
-    return statics::melee__lb__lbaudio_ax::fn_80023750(ctx, id, 127_i32, 64_i32, 0_i32, 5_i32);
+    return inl_fn_80023750_unfused(ctx, id, 127_i32, 64_i32, 0_i32, 5_i32);
 }
 
 pub fn lbAudioAx_8002411C<'a>(ctx: &'a Ctx, id: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut id = id;
-    return statics::melee__lb__lbaudio_ax::fn_80023750(ctx, id, 127_i32, 64_i32, 0_i32, 6_i32);
+    return inl_fn_80023750_unfused(ctx, id, 127_i32, 64_i32, 0_i32, 6_i32);
 }
 
 pub fn lbAudioAx_80024184<'a>(ctx: &'a Ctx, id: i32, vol: i32, pan: i32, track: i32) -> i32 {
@@ -645,7 +638,7 @@ pub fn lbAudioAx_80024184<'a>(ctx: &'a Ctx, id: i32, vol: i32, pan: i32, track: 
             break 's1;
         }
     }
-    return statics::melee__lb__lbaudio_ax::fn_80023750(ctx, id, vol, pan, track, 7_i32);
+    return inl_fn_80023750_unfused(ctx, id, vol, pan, track, 7_i32);
 }
 
 pub fn lbAudioAx_80024304<'a>(ctx: &'a Ctx, id: i32) -> i32 {
@@ -669,13 +662,13 @@ pub fn lbAudioAx_80024304<'a>(ctx: &'a Ctx, id: i32) -> i32 {
             break 's1;
         }
     }
-    return statics::melee__lb__lbaudio_ax::fn_80023750(ctx, id, 127_i32, 64_i32, track, 7_i32);
+    return inl_fn_80023750_unfused(ctx, id, 127_i32, 64_i32, track, 7_i32);
 }
 
 pub fn lbAudioAx_8002438C<'a>(ctx: &'a Ctx, id: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut id = id;
-    return statics::melee__lb__lbaudio_ax::fn_80023750(ctx, id, 127_i32, 64_i32, 0_i32, 8_i32);
+    return inl_fn_80023750_unfused(ctx, id, 127_i32, 64_i32, 0_i32, 8_i32);
 }
 
 pub fn lbAudioAx_800243F4<'a>(ctx: &'a Ctx, id: i32) -> i32 {
@@ -800,7 +793,7 @@ pub fn lbAudioAx_800243F4<'a>(ctx: &'a Ctx, id: i32) -> i32 {
             break 's1;
         }
     }
-    return statics::melee__lb__lbaudio_ax::fn_80023750(ctx, id, 127_i32, 64_i32, track, 7_i32);
+    return inl_fn_80023750_unfused(ctx, id, 127_i32, 64_i32, track, 7_i32);
 }
 
 pub fn fn_800244F4<'a>(ctx: &'a Ctx) {
@@ -1562,7 +1555,7 @@ pub fn fn_800253D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             (Handle::cast::<lbAudioAx_UserData<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
         if !Handle::is_null(ud) {
             if (ud).x3C() == 1.0 {
-                (ud).set_pan(statics::melee__lb__lbaudio_ax::calcPan(
+                (ud).set_pan(inl_calcPan_unfused(
                     ctx,
                     (ud).current_frame(),
                     (ud).end_frame(),
@@ -1570,15 +1563,13 @@ pub fn fn_800253D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                     (ud).pan_right(),
                 ));
             } else {
-                (ud).set_pan(
-                    127_i32.wrapping_sub(statics::melee__lb__lbaudio_ax::calcPan(
-                        ctx,
-                        (ud).current_frame(),
-                        (ud).end_frame(),
-                        (ud).pan_left(),
-                        (ud).pan_right(),
-                    )),
-                );
+                (ud).set_pan(127_i32.wrapping_sub(inl_calcPan_unfused(
+                    ctx,
+                    (ud).current_frame(),
+                    (ud).end_frame(),
+                    (ud).pan_left(),
+                    (ud).pan_right(),
+                )));
             }
         }
     }
@@ -1593,7 +1584,7 @@ pub fn fn_800256BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             (Handle::cast::<lbAudioAx_UserData<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
         if !Handle::is_null(ud) {
             if (ud).x3C() == 1.0 {
-                (ud).set_pan(statics::melee__lb__lbaudio_ax::calcPan(
+                (ud).set_pan(inl_calcPan_unfused(
                     ctx,
                     (ud).current_frame(),
                     (ud).end_frame(),
@@ -1601,15 +1592,13 @@ pub fn fn_800256BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                     (ud).pan_right(),
                 ));
             } else {
-                (ud).set_pan(
-                    127_i32.wrapping_sub(statics::melee__lb__lbaudio_ax::calcPan(
-                        ctx,
-                        (ud).current_frame(),
-                        (ud).end_frame(),
-                        (ud).pan_left(),
-                        (ud).pan_right(),
-                    )),
-                );
+                (ud).set_pan(127_i32.wrapping_sub(inl_calcPan_unfused(
+                    ctx,
+                    (ud).current_frame(),
+                    (ud).end_frame(),
+                    (ud).pan_left(),
+                    (ud).pan_right(),
+                )));
             }
         }
     }
@@ -1641,7 +1630,7 @@ pub fn fn_800259EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         if !Handle::is_null(ud) {
             if !((ud).x44() != 0) {
                 (ud).set_x44(1_i32);
-                let _ = statics::melee__lb__lbaudio_ax::fn_800253D8(ctx, gobj);
+                let _ = inl_fn_800253D8_unfused(ctx, gobj);
             }
         }
     }
@@ -1657,7 +1646,7 @@ pub fn fn_80025A98<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         if !Handle::is_null(ud) {
             if !((ud).x44() != 0) {
                 (ud).set_x44(1_i32);
-                let _ = statics::melee__lb__lbaudio_ax::fn_800253D8(ctx, gobj);
+                let _ = inl_fn_800253D8_unfused(ctx, gobj);
             }
         }
     }
@@ -1671,7 +1660,7 @@ pub fn fn_80025B44<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     if !Handle::is_null(gobj) {
         ud = (Handle::cast::<lbAudioAx_UserData<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
         if !Handle::is_null(ud) {
-            (ud).set_pan(statics::melee__lb__lbaudio_ax::calcPan(
+            (ud).set_pan(inl_calcPan_unfused(
                 ctx,
                 (ud).current_frame(),
                 (ud).end_frame(),
@@ -1690,15 +1679,13 @@ pub fn fn_80025CBC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     if !Handle::is_null(gobj) {
         ud = (Handle::cast::<lbAudioAx_UserData<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
         if !Handle::is_null(ud) {
-            (ud).set_pan(
-                127_i32.wrapping_sub(statics::melee__lb__lbaudio_ax::calcPan(
-                    ctx,
-                    (ud).current_frame(),
-                    (ud).end_frame(),
-                    (ud).pan_left(),
-                    (ud).pan_right(),
-                )),
-            );
+            (ud).set_pan(127_i32.wrapping_sub(inl_calcPan_unfused(
+                ctx,
+                (ud).current_frame(),
+                (ud).end_frame(),
+                (ud).pan_left(),
+                (ud).pan_right(),
+            )));
         }
     }
     return 0_i32;
@@ -1794,8 +1781,8 @@ pub fn fn_800262A0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         return;
     }
     if (ud).voice_id() != 1_i32.wrapping_neg() {
-        fns::lbAudioAx_80024B1C(ctx, (ud).voice_id(), (ud).pan());
-        fns::lbAudioAx_80024B58(ctx, (ud).voice_id(), (ud).vol());
+        inl_lbAudioAx_80024B1C_unfused(ctx, (ud).voice_id(), (ud).pan());
+        inl_lbAudioAx_80024B58_unfused(ctx, (ud).voice_id(), (ud).vol());
     }
     if (((ud).current_frame() != 1_i32.wrapping_neg())
         && ((ud).end_frame() != 1_i32.wrapping_neg()))
@@ -2333,7 +2320,7 @@ pub fn fn_80026C04<'a>(ctx: &'a Ctx, arg0: i32, unused: i32) {
             }
         }
     }
-    slot = statics::melee__lb__lbaudio_ax::fn_80026650(ctx);
+    slot = inl_fn_80026650_unfused(ctx);
     if slot != 1_i32.wrapping_neg() {
         let _ = fns::strcpy(
             ctx,
@@ -2591,7 +2578,7 @@ pub fn fn_80027488<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn lbAudioAx_80027648<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
-    'l1: while statics::melee__lb__lbaudio_ax::fn_80027488(ctx) == 1_i32 {
+    'l1: while inl_fn_80027488_unfused(ctx) == 1_i32 {
         'c2: {
             fns::HSD_SynthSFXWaitForLoadCompletion(ctx, fnptr(ctx, 0x800195d0));
         }
@@ -2604,14 +2591,14 @@ pub fn lbAudioAx_8002785C<'a>(ctx: &'a Ctx) {
     let mut i: i32 = 0;
     let mut stkind: i32 = 0;
     if (fns::gm_8016B184(ctx) != 0) {
-        result = fns::lbAudioAx_80026E84(ctx, fns::Player_GetPlayerCharacter(ctx, 0_i32));
+        result = inl_lbAudioAx_80026E84_unfused(ctx, fns::Player_GetPlayerCharacter(ctx, 0_i32));
         {
             i = 0_i32;
             'l1: while i < 3_i32 {
                 'c2: {
                     if (fns::gm_80169370(ctx, i) as i32) != (enums::ChKind_Max as i32) {
                         let mut opp: i32 = (fns::gm_80169370(ctx, i) as i32);
-                        result = (result | fns::lbAudioAx_80026E84(ctx, opp));
+                        result = (result | inl_lbAudioAx_80026E84_unfused(ctx, opp));
                         if opp == 4_i32 {
                             result = (result | (0x200004000_i64 as u64));
                         }
@@ -2629,7 +2616,10 @@ pub fn lbAudioAx_8002785C<'a>(ctx: &'a Ctx) {
                         != ((enums::Gm_PKind_NA as i32) as u32)
                     {
                         result = (result
-                            | fns::lbAudioAx_80026E84(ctx, fns::Player_GetPlayerCharacter(ctx, i)));
+                            | inl_lbAudioAx_80026E84_unfused(
+                                ctx,
+                                fns::Player_GetPlayerCharacter(ctx, i),
+                            ));
                     }
                 }
                 i = i.wrapping_add(1);
@@ -2649,12 +2639,12 @@ pub fn lbAudioAx_8002785C<'a>(ctx: &'a Ctx) {
             .at(1_i32)
             .get() as i32),
     );
-    result = (result | fns::lbAudioAx_80026EBC(ctx, stkind));
+    result = (result | inl_lbAudioAx_80026EBC_unfused(ctx, stkind));
     if (result != 0) {
         fns::lbAudioAx_80026F2C(ctx, (12_i32 as u32));
         fns::lbAudioAx_8002702C(ctx, (12_i32 as u32), result);
         fns::lbAudioAx_80027168(ctx);
-        fns::lbAudioAx_80027648(ctx);
+        inl_lbAudioAx_80027648_unfused(ctx);
     }
 }
 
@@ -2678,7 +2668,7 @@ pub fn lbAudioAx_80027AB0<'a>(ctx: &'a Ctx, id: i32) {
             fnptr(ctx, 0x800195d0),
         );
         if id != 0x83d61_i32 {
-            let _ = fns::lbAudioAx_800237A8(ctx, id, 127_i32, 64_i32);
+            let _ = inl_lbAudioAx_800237A8_unfused(ctx, id, 127_i32, 64_i32);
         }
         {
             let mut i: i32 = 0;
@@ -2794,7 +2784,7 @@ pub fn lbAudioAx_80027AB0<'a>(ctx: &'a Ctx, id: i32) {
 pub fn lbAudioAx_80027DBC<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
     fns::HSD_AudioSFXKeyOffAll(ctx);
-    let _ = fns::lbAudioAx_800236DC(ctx);
+    let _ = inl_lbAudioAx_800236DC_unfused(ctx);
     fns::lbAudioAx_80024C84(ctx);
     statics::melee__lb__lbaudio_ax::fn_800269AC(ctx);
 }
@@ -2846,7 +2836,7 @@ pub fn lbAudioAx_80027DF8<'a>(ctx: &'a Ctx) {
                     ),
                 );
             } else {
-                fns::lbAudioAx_80024B58(
+                inl_lbAudioAx_80024B58_unfused(
                     ctx,
                     statics::melee__lb__lbaudio_ax::lbl_804D38F0(ctx).get(),
                     statics::melee__lb__lbaudio_ax::lbl_804D6428(ctx).get(),
@@ -2900,7 +2890,7 @@ pub fn lbAudioAx_80027DF8<'a>(ctx: &'a Ctx) {
                     ),
                 );
             } else {
-                fns::lbAudioAx_80024B58(
+                inl_lbAudioAx_80024B58_unfused(
                     ctx,
                     statics::melee__lb__lbaudio_ax::lbl_804D38F4(ctx).get(),
                     statics::melee__lb__lbaudio_ax::lbl_804D642C(ctx).get(),
@@ -2963,7 +2953,7 @@ pub fn lbAudioAx_80027DF8<'a>(ctx: &'a Ctx) {
                         .get()
                         != 0x83d60_i32
                     {
-                        let _ = fns::lbAudioAx_800237A8(
+                        let _ = inl_lbAudioAx_800237A8_unfused(
                             ctx,
                             statics::melee__lb__lbaudio_ax::lbl_8043373C(ctx)
                                 .at(i)
@@ -3001,7 +2991,7 @@ pub fn lbAudioAx_8002835C<'a>(ctx: &'a Ctx) {
 pub fn lbAudioAx_80028690<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
     let mut lang: i32 = 0;
-    let _ = fns::lbAudioAx_80024BD0(ctx);
+    let _ = inl_lbAudioAx_80024BD0_unfused(ctx);
     statics::melee__lb__lbaudio_ax::fn_800244F4(ctx);
     statics::melee__lb__lbaudio_ax::fn_80024654(ctx, 1_i32);
     lang = inl_setup_audio_lang_unfused(ctx);
@@ -3268,6 +3258,85 @@ fn inl_fn_80023254_shift_unfused<'a>(ctx: &'a Ctx, count: i32) {
     }
 }
 
+fn inl_lbAudioAx_80023130_unfused<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
+    let mut arg0 = arg0;
+    let mut i: i32 = 0;
+    if (arg0 >= 0_i32) && (arg0 < 0x83d60_i32) {
+        {
+            i = 0_i32;
+            'l1: while i < 55_i32 {
+                'c2: {
+                    if (statics::melee__lb__lbaudio_ax::s32_arr_803BB8D4(ctx)
+                        .get(i)
+                        .at(0_i32)
+                        .get()
+                        <= arg0)
+                        && (arg0
+                            <= statics::melee__lb__lbaudio_ax::s32_arr_803BB8D4(ctx)
+                                .get(i)
+                                .at(1_i32)
+                                .get())
+                    {
+                        return i;
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    }
+    return 55_i32;
+}
+
+fn inl_fn_80023750_unfused<'a>(
+    ctx: &'a Ctx,
+    id: i32,
+    vol: i32,
+    pan: i32,
+    track: i32,
+    channel: i32,
+) -> i32 {
+    let mut id = id;
+    let mut vol = vol;
+    let mut pan = pan;
+    let mut track = track;
+    let mut channel = channel;
+    vol = vol.wrapping_mul(2_i32);
+    if vol < 0_i32 {
+        vol = 0_i32;
+    }
+    if vol > 255_i32 {
+        vol = 255_i32;
+    }
+    pan = pan.wrapping_mul(2_i32);
+    if pan < 0_i32 {
+        pan = 0_i32;
+    }
+    if pan > 255_i32 {
+        pan = 255_i32;
+    }
+    return fns::HSD_AudioSFXStartParam(ctx, id, (vol as u8), (pan as u8), track, channel);
+}
+
+fn inl_lbAudioAx_800237A8_unfused<'a>(ctx: &'a Ctx, id: i32, vol: i32, pan: i32) -> i32 {
+    let mut id = id;
+    let mut vol = vol;
+    let mut pan = pan;
+    if id >= 0x83d61_i32 {
+        return statics::melee__lb__lbaudio_ax::fn_80023750(
+            ctx,
+            0x83d60_i32,
+            0_i32,
+            64_i32,
+            0_i32,
+            7_i32,
+        );
+    } else {
+        return statics::melee__lb__lbaudio_ax::fn_80023750(ctx, id, vol, pan, 0_i32, 7_i32);
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 fn inl_getAudioLoadData_unfused<'a>(ctx: &'a Ctx, arg0: i32) -> Val<'a, i32> {
     let mut arg0 = arg0;
     if (fns::lbLang_IsSettingUS(ctx) != 0) {
@@ -3360,6 +3429,15 @@ fn inl_getHPSFile_unfused<'a>(ctx: &'a Ctx, arg0: i32) -> Val<'a, i8> {
     return null(ctx);
 }
 
+fn inl_lbAudioAx_800236DC_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    let _ = fns::AXDriverStop(ctx);
+    statics::melee__lb__lbaudio_ax::lbl_804D6418(ctx).set(0_i32);
+    statics::melee__lb__lbaudio_ax::cur_hps_stem(ctx)
+        .at(0_i32)
+        .set((0_i32 as i8));
+    return 1_i32.wrapping_neg();
+}
+
 fn inl_lbAudioAx_80023F28_helper1_unfused<'a>(ctx: &'a Ctx, filename: Val<'a, i8>) -> i32 {
     let mut filename = filename;
     let mut result: i32 = 0;
@@ -3371,7 +3449,7 @@ fn inl_lbAudioAx_80023F28_helper1_unfused<'a>(ctx: &'a Ctx, filename: Val<'a, i8
         filename,
     ) != 0_i32
     {
-        let _ = fns::lbAudioAx_800236DC(ctx);
+        let _ = inl_lbAudioAx_800236DC_unfused(ctx);
         let _ = fns::strcpy(
             ctx,
             statics::melee__lb__lbaudio_ax::cur_hps_stem(ctx).at(0),
@@ -3451,6 +3529,150 @@ fn inl_soundGetPosition_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'
     return 1_i32;
 }
 
+fn inl_calcPan_unfused<'a>(ctx: &'a Ctx, current: i32, end: i32, left: i32, right: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut current = current;
+    let mut end = end;
+    let mut left = left;
+    let mut right = right;
+    let mut result: f64 = 0.0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if current > end {
+        current = end;
+    }
+    if left != right {
+        if left <= right {
+            result = fp::fadds(
+                fp::frsp(left as f64),
+                fp::fdivs(
+                    fp::fmuls(
+                        fp::frsp(current as f64),
+                        (fp::fsubs(fp::frsp(right as f64), fp::frsp(left as f64))),
+                    ),
+                    fp::frsp(end as f64),
+                ),
+            );
+        } else {
+            result = fp::fadds(
+                fp::frsp(right as f64),
+                fp::fdivs(
+                    fp::fmuls(
+                        fp::frsp(current as f64),
+                        (fp::fsubs(fp::frsp(left as f64), fp::frsp(right as f64))),
+                    ),
+                    fp::frsp(end as f64),
+                ),
+            );
+        }
+        if result < 0.0 {
+            result = 0.0;
+        }
+        if result > 127.0 {
+            result = 127.0;
+        }
+        return fp::fctiwz(result);
+    }
+    return 64_i32;
+}
+
+fn inl_fn_800253D8_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    if !Handle::is_null(gobj) {
+        let mut ud: lbAudioAx_UserData<'a> =
+            (Handle::cast::<lbAudioAx_UserData<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+        if !Handle::is_null(ud) {
+            if (ud).x3C() == 1.0 {
+                (ud).set_pan(statics::melee__lb__lbaudio_ax::calcPan(
+                    ctx,
+                    (ud).current_frame(),
+                    (ud).end_frame(),
+                    (ud).pan_left(),
+                    (ud).pan_right(),
+                ));
+            } else {
+                (ud).set_pan(
+                    127_i32.wrapping_sub(statics::melee__lb__lbaudio_ax::calcPan(
+                        ctx,
+                        (ud).current_frame(),
+                        (ud).end_frame(),
+                        (ud).pan_left(),
+                        (ud).pan_right(),
+                    )),
+                );
+            }
+        }
+    }
+    return 0_i32;
+}
+
+fn inl_lbAudioAx_80024B1C_unfused<'a>(ctx: &'a Ctx, voice: i32, pan: i32) {
+    let mut voice = voice;
+    let mut pan = pan;
+    if pan < 0_i32 {
+        pan = 0_i32;
+    }
+    if pan > 127_i32 {
+        pan = 127_i32;
+    }
+    let _ = fns::HSD_AudioSFXSetPan(ctx, voice, (pan.wrapping_mul(2_i32) as u8));
+}
+
+fn inl_lbAudioAx_80024B58_unfused<'a>(ctx: &'a Ctx, voice: i32, vol: i32) {
+    let mut voice = voice;
+    let mut vol = vol;
+    if vol < 0_i32 {
+        vol = 0_i32;
+    }
+    if vol > 127_i32 {
+        vol = 127_i32;
+    }
+    let _ = fns::HSD_AudioSFXSetVolumeEx(ctx, voice, (vol.wrapping_mul(2_i32) as u8));
+}
+
+fn inl_fn_80026650_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    let mut i: i32 = 0;
+    let mut priority: i32 = 0;
+    {
+        priority = 4_i32;
+        'l1: while priority >= 0_i32 {
+            'c2: {
+                {
+                    i = 0_i32;
+                    'l3: while i < 55_i32 {
+                        'c4: {
+                            if ((priority
+                                == (statics::melee__lb__lbaudio_ax::s32_arr_803BB5D0(ctx)
+                                    .get(i)
+                                    .at(1_i32)
+                                    .get() as i32))
+                                && (statics::melee__lb__lbaudio_ax::lbl_804338A4(ctx)
+                                    .at(i)
+                                    .get()
+                                    == 1_i32))
+                                && (statics::melee__lb__lbaudio_ax::lbl_80433984(ctx)
+                                    .at(i)
+                                    .get()
+                                    == 1_i32.wrapping_neg())
+                            {
+                                return i;
+                            }
+                        }
+                        i = i.wrapping_add(1);
+                    }
+                }
+            }
+            priority = priority.wrapping_sub(1);
+        }
+    }
+    return 1_i32.wrapping_neg();
+}
+
 fn inl_lbAudioAx_80027168_inline_unfused<'a>(ctx: &'a Ctx) {
     let mut i: i32 = 0;
     {
@@ -3497,6 +3719,92 @@ fn inl_lbAudioAx_80027168_inline_2_unfused<'a>(ctx: &'a Ctx) {
                 fnptr(ctx, 0x80026c04),
                 0_i32,
             ));
+    }
+}
+
+fn inl_fn_80027488_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    let mut i: i32 = 0;
+    {
+        i = 0_i32;
+        'l1: while i < 55_i32 {
+            'c2: {
+                if (statics::melee__lb__lbaudio_ax::lbl_804338A4(ctx)
+                    .at(i)
+                    .get()
+                    == 1_i32)
+                    && (statics::melee__lb__lbaudio_ax::lbl_80433984(ctx)
+                        .at(i)
+                        .get()
+                        == 1_i32.wrapping_neg())
+                {
+                    return 1_i32;
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    {
+        i = 0_i32;
+        'l3: while i < 55_i32 {
+            'c4: {
+                if (statics::melee__lb__lbaudio_ax::lbl_804338A4(ctx)
+                    .at(i)
+                    .get()
+                    == 1_i32)
+                    && (statics::melee__lb__lbaudio_ax::lbl_80433984(ctx)
+                        .at(i)
+                        .get()
+                        == 1_i32)
+                {
+                    statics::melee__lb__lbaudio_ax::lbl_80433984(ctx)
+                        .at(i)
+                        .set(2_i32);
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return 0_i32;
+}
+
+fn inl_lbAudioAx_80026E84_unfused<'a>(ctx: &'a Ctx, ckind: i32) -> u64 {
+    let mut ckind = ckind;
+    if ((ckind as u32) < (0_i32 as u32)) || ((ckind as u32) >= ((enums::ChKind_Max as i32) as u32))
+    {
+        return (0_i32 as u64);
+    }
+    return statics::melee__lb__lbaudio_ax::lbl_803BB3C0(ctx)
+        .get(ckind)
+        .x8();
+}
+
+fn inl_lbAudioAx_80026EBC_unfused<'a>(ctx: &'a Ctx, stkind: i32) -> u64 {
+    let mut stkind = stkind;
+    let mut imax: i32 = ((div_u32(0x14d_u32, 3_u32)) as i32);
+    let mut grkind: i32 = fns::Stage_8022519C(ctx, stkind);
+    let mut shift: i32 = 0;
+    if ((grkind as u32) < (0_i32 as u32)) || ((grkind as u32) >= (imax as u32)) {
+        return (0_i32 as u64);
+    }
+    if ({
+        let __t1 = (statics::melee__lb__lbaudio_ax::s32_arr_803BB6B0(ctx)
+            .get(grkind)
+            .at(0_i32)
+            .get() as i32);
+        shift = __t1;
+        __t1
+    }) == 55_i32
+    {
+        return (0_i32 as u64);
+    }
+    return shl_u64(1_u64, (shift as u32));
+}
+
+fn inl_lbAudioAx_80027648_unfused<'a>(ctx: &'a Ctx) {
+    'l1: while statics::melee__lb__lbaudio_ax::fn_80027488(ctx) == 1_i32 {
+        'c2: {
+            fns::HSD_SynthSFXWaitForLoadCompletion(ctx, fnptr(ctx, 0x800195d0));
+        }
     }
 }
 
@@ -3548,6 +3856,12 @@ fn inl_lbAudioAx_80027DF8_inline_unfused<'a>(ctx: &'a Ctx) {
             }
         }
     }
+}
+
+fn inl_lbAudioAx_80024BD0_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    let mut mode: u32 = fns::HSD_SynthGetSoundMode(ctx);
+    statics::melee__lb__lbaudio_ax::sound_mode(ctx).set((mode as i32));
+    return (if mode == (1_i32 as u32) { 0_i32 } else { 1_i32 });
 }
 
 /// Registers this unit's ports.

@@ -740,7 +740,7 @@ pub fn ftCo_800A101C<'a>(ctx: &'a Ctx, arg0: Fighter<'a>, arg1: i32, arg2: i32, 
     (temp_r30).set_x48(null::<Addr<'a>>(ctx));
     (temp_r30).set_x50(null::<Item<'a>>(ctx));
     Handle::copy_from((temp_r30).x98(), (arg0).cur_pos());
-    if (fns::ftCo_800A0FB0(
+    if (inl_ftCo_800A0FB0_unfused(
         ctx,
         sp50,
         sp34,
@@ -1221,7 +1221,7 @@ pub fn ftCo_800A20A0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         && (((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32))
     {
         let mut other_fp: Fighter<'a> = (data).x44();
-        if fns::ftCo_800A1AB4(ctx, fp, other_fp)
+        if inl_ftCo_800A1AB4(ctx, fp, other_fp)
             < fp::fmuls(
                 2.0,
                 (Handle::add((fns::Fighter_804D64FC(ctx).get()).x20(), (fp).kind())).get(),
@@ -1920,7 +1920,7 @@ pub fn ftCo_800A3234<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
         let mut bottom_x: f64 = (fp).coll_data().ecb().bottom().x();
         let mut bottom_y: f64 = (fp).coll_data().ecb().bottom().y();
         let mut y: f64 = fp::fadds((fp).coll_data().last_pos().y(), bottom_y);
-        if (fns::ftCo_800A0FB0(
+        if (inl_ftCo_800A0FB0_unfused_2(
             ctx,
             sp34,
             sp18,
@@ -1986,7 +1986,7 @@ pub fn ftCo_800A3554<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: f64) -> i32 {
     if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
         return 0_i32;
     }
-    if !(statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A21FC(ctx, fp) != 0) {
+    if !(inl_ftCo_800A21FC(ctx, fp) != 0) {
         return 0_i32;
     }
     {
@@ -2615,11 +2615,11 @@ pub fn ftCo_800A4A40<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Fighter<'a> {
                 }
                 if Handle::is_null(cur_fp) {
                     cur_fp = fp1;
-                    closest = fns::ftCo_800A1AB4(ctx, fp, fp1);
+                    closest = inl_ftCo_800A1AB4(ctx, fp, fp1);
                     break 'c4;
                 }
                 fp1 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, cur)));
-                distance = fns::ftCo_800A1AB4(ctx, fp, fp1);
+                distance = inl_ftCo_800A1AB4(ctx, fp, fp1);
                 if closest > distance {
                     closest = distance;
                     cur_fp = fp1;
@@ -2655,7 +2655,7 @@ pub fn ftCo_800A4BEC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Fighter<'a> {
                     if (!(inl_inlineD0(ctx, fp, cur_fp) != 0))
                         && (!(inl_ftCo_IsAlly_dontinline(ctx, fp, cur_fp) != 0))
                     {
-                        if !(fns::ftCo_800A1C44(ctx, cur_fp) != 0) {
+                        if !(inl_ftCo_800A1C44(ctx, cur_fp) != 0) {
                             if !(inl_inlineD1(ctx, cur_fp) != 0) {
                                 if ((data).xF9_b0() != 0) {
                                     if Handle::addr(cur_fp)
@@ -2665,12 +2665,12 @@ pub fn ftCo_800A4BEC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Fighter<'a> {
                                     }
                                 } else if Handle::is_null(closest) {
                                     closest = cur_fp;
-                                    best = fns::ftCo_800A1AB4(ctx, fp, cur_fp);
+                                    best = inl_ftCo_800A1AB4(ctx, fp, cur_fp);
                                 } else {
                                     cur_fp = (Handle::cast::<Fighter<'a>>(
                                         inl_HSD_GObjGetUserData(ctx, cur),
                                     ));
-                                    dist = fns::ftCo_800A1AB4(ctx, fp, cur_fp);
+                                    dist = inl_ftCo_800A1AB4(ctx, fp, cur_fp);
                                     if best > dist {
                                         best = dist;
                                         closest = cur_fp;
@@ -2736,10 +2736,10 @@ pub fn ftCo_800A50D4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Fighter<'a> {
                 }
                 if Handle::is_null(closest_fp) {
                     closest_fp = cur_fp;
-                    closest = fns::ftCo_800A1AB4(ctx, fp, cur_fp);
+                    closest = inl_ftCo_800A1AB4(ctx, fp, cur_fp);
                 } else {
                     cur_fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, cur)));
-                    distance = fns::ftCo_800A1AB4(ctx, fp, cur_fp);
+                    distance = inl_ftCo_800A1AB4(ctx, fp, cur_fp);
                     if closest > distance {
                         closest = distance;
                         closest_fp = cur_fp;
@@ -2830,26 +2830,26 @@ pub fn ftCo_800A53DC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Fighter<'a> {
                     if (inl_ftCo_IsAlly_dontinline(ctx, fp, temp_r29) != 0) {
                         break 'c2;
                     }
-                    if (fns::ftCo_800A1C44(ctx, temp_r29) != 0) {
+                    if (inl_ftCo_800A1C44(ctx, temp_r29) != 0) {
                         break 'c2;
                     }
                     temp_r25 = (temp_r29).gobj();
                     if (inl_inlineD1(ctx, temp_r29) != 0) {
                         break 'c2;
                     }
-                    if (fns::ftCo_IsCpuControlled(ctx, temp_r29) != 0) {
+                    if (inl_ftCo_IsCpuControlled(ctx, temp_r29) != 0) {
                         break 'c2;
                     }
                     if Handle::is_null(var_r28) {
                         var_r28 = temp_r29;
                         var_r27 = fns::gm_8016C6C0(ctx, var_r30);
-                        var_f31 = fns::ftCo_800A1AB4(ctx, fp, temp_r29);
+                        var_f31 = inl_ftCo_800A1AB4(ctx, fp, temp_r29);
                     } else {
                         let mut temp_r29_2: i32 = 0;
                         temp_r25_2 =
                             (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, var_r30)));
                         temp_r29_2 = fns::gm_8016C6C0(ctx, var_r30);
-                        temp_f1_3 = fns::ftCo_800A1AB4(ctx, fp, temp_r25_2);
+                        temp_f1_3 = inl_ftCo_800A1AB4(ctx, fp, temp_r25_2);
                         if var_r27 > temp_r29_2 {
                             var_f31 = temp_f1_3;
                             var_r27 = temp_r29_2;
@@ -2881,7 +2881,7 @@ pub fn ftCo_800A53DC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Fighter<'a> {
                 if (inl_ftCo_IsAlly_dontinline(ctx, fp, temp_r29_3) != 0) {
                     break 'c4;
                 }
-                if (fns::ftCo_800A1C44(ctx, temp_r29_3) != 0) {
+                if (inl_ftCo_800A1C44(ctx, temp_r29_3) != 0) {
                     break 'c4;
                 }
                 temp_r25_3 = (temp_r29_3).gobj();
@@ -2891,13 +2891,13 @@ pub fn ftCo_800A53DC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Fighter<'a> {
                 if Handle::is_null(var_r28) {
                     var_r28 = temp_r29_3;
                     var_r27 = fns::gm_8016C6C0(ctx, var_r30_2);
-                    var_f31 = fns::ftCo_800A1AB4(ctx, fp, temp_r29_3);
+                    var_f31 = inl_ftCo_800A1AB4(ctx, fp, temp_r29_3);
                 } else {
                     let mut temp_r29_4: i32 = 0;
                     temp_r25_4 =
                         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, var_r30_2)));
                     temp_r29_4 = fns::gm_8016C6C0(ctx, var_r30_2);
-                    temp_f1_6 = fns::ftCo_800A1AB4(ctx, fp, temp_r25_4);
+                    temp_f1_6 = inl_ftCo_800A1AB4(ctx, fp, temp_r25_4);
                     if var_r27 > temp_r29_4 {
                         var_f31 = temp_f1_6;
                         var_r27 = temp_r29_4;
@@ -3167,7 +3167,7 @@ pub fn ftCo_800A5CE0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Fighter<'a> {
     if Handle::is_null(fp) {
         return null::<Fighter<'a>>(ctx);
     }
-    if (fns::ftCo_800A1C44(ctx, fp) != 0) {
+    if (inl_ftCo_800A1C44(ctx, fp) != 0) {
         return null::<Fighter<'a>>(ctx);
     }
     closest_enemy = null::<Fighter<'a>>(ctx);
@@ -3200,9 +3200,9 @@ pub fn ftCo_800A5CE0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Fighter<'a> {
                 }
                 if Handle::is_null(closest_enemy) {
                     closest_enemy = cur_fp;
-                    closest = fns::ftCo_800A1AB4(ctx, fp, cur_fp);
+                    closest = inl_ftCo_800A1AB4(ctx, fp, cur_fp);
                 } else {
-                    distance = fns::ftCo_800A1AB4(ctx, fp, cur_fp);
+                    distance = inl_ftCo_800A1AB4(ctx, fp, cur_fp);
                     if closest > distance {
                         closest = distance;
                         closest_enemy = cur_fp;
@@ -3297,7 +3297,7 @@ pub fn ftCo_800A61D8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Item<'a> {
                 if !(fns::Item_IsGrabbable(ctx, cur) != 0) {
                     break 'c2;
                 }
-                if !(fns::ftCo_800A5908(ctx, ip) != 0) {
+                if !(inl_ftCo_800A5908(ctx, ip) != 0) {
                     break 'c2;
                 }
                 if (inl_inlineD0_it(ctx, fp, ip) != 0) {
@@ -3400,7 +3400,7 @@ pub fn ftCo_800A6700<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>, arg2: Vec
                     ax = a.x();
                     ay = a.y();
                     px = fp::frsp(fp::fadd(ax, 5.0));
-                    result = fns::ftCo_800A0FB0(
+                    result = inl_ftCo_800A0FB0(
                         ctx,
                         floor_pos,
                         line_id,
@@ -3432,7 +3432,7 @@ pub fn ftCo_800A6700<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>, arg2: Vec
                     ax = b.x();
                     by = b.y();
                     px = fp::frsp(fp::fsub(ax, 5.0));
-                    result = fns::ftCo_800A0FB0(
+                    result = inl_ftCo_800A0FB0(
                         ctx,
                         floor_pos,
                         line_id,
@@ -3982,7 +3982,7 @@ pub fn ftCo_800A75DC<'a>(ctx: &'a Ctx, fp0: Fighter<'a>, fp1: Fighter<'a>) {
             island = fns::mpIsland_8005AB54(ctx, line_id.get());
             if statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A2718(ctx, island) == 0_i32 {
                 x60 = (fp0).cpu().x60_ref();
-                statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1F3C(
+                inl_ftCo_800A1F3C_unfused(
                     ctx,
                     fp0,
                     floor_pos.x(),
@@ -4012,7 +4012,7 @@ pub fn ftCo_800A75DC<'a>(ctx: &'a Ctx, fp0: Fighter<'a>, fp1: Fighter<'a>) {
                             (fp::fsubs((island).x8().x(), (data).x54().x()))
                         });
                         if d < 5.0 {
-                            statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1F3C(
+                            inl_ftCo_800A1F3C_unfused(
                                 ctx,
                                 fp0,
                                 fp::frsp(fp::fadd(5.0, (island).x8().x())),
@@ -4025,7 +4025,7 @@ pub fn ftCo_800A75DC<'a>(ctx: &'a Ctx, fp0: Fighter<'a>, fp1: Fighter<'a>) {
             }
         } else {
             let _ = statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A4768(ctx, fp1, sp18);
-            statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1F3C(
+            inl_ftCo_800A1F3C_unfused(
                 ctx,
                 fp0,
                 sp18.x(),
@@ -4043,7 +4043,7 @@ pub fn ftCo_800A75DC<'a>(ctx: &'a Ctx, fp0: Fighter<'a>, fp1: Fighter<'a>) {
         let mut fp0_island: mp_UnkStruct0<'a> = null(ctx);
         let mut same_island: i32 = 0;
         x60_2 = (fp0).cpu().x60_ref();
-        statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1F3C(
+        inl_ftCo_800A1F3C_unfused(
             ctx,
             fp0,
             (fp1).cur_pos().x(),
@@ -4091,7 +4091,7 @@ pub fn ftCo_800A75DC<'a>(ctx: &'a Ctx, fp0: Fighter<'a>, fp1: Fighter<'a>) {
                 }
             } else {
                 if (fp0).cur_pos().x() > (island_2).x14().x() {
-                    statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1F3C(
+                    inl_ftCo_800A1F3C_unfused(
                         ctx,
                         fp0,
                         fp::frsp(fp::fsub((island_2).x14().x(), 5.0)),
@@ -4123,7 +4123,7 @@ pub fn ftCo_800A7AAC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             break 'l1;
         }
     }
-    partner = statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A589C(ctx, fp);
+    partner = inl_ftCo_800A589C_unfused(ctx, fp);
     if Handle::is_null(partner) {
         return;
     }
@@ -4147,7 +4147,7 @@ pub fn ftCo_800A7AAC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         if result != 0_i32 {
             island = fns::mpIsland_8005AB54(ctx, line_id.get());
             if statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A2718(ctx, island) == 0_i32 {
-                statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1F3C(
+                inl_ftCo_800A1F3C_unfused(
                     ctx,
                     fp,
                     floor_pos.x(),
@@ -4160,7 +4160,7 @@ pub fn ftCo_800A7AAC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                         d = fp::fneg(d);
                     }
                     if d < 5.0 {
-                        statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1F3C(
+                        inl_ftCo_800A1F3C_unfused(
                             ctx,
                             fp,
                             fp::frsp(fp::fsub((island).x14().x(), 5.0)),
@@ -4176,7 +4176,7 @@ pub fn ftCo_800A7AAC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                             (fp::fsubs((island).x8().x(), (data).x54().x()))
                         });
                         if d < 5.0 {
-                            statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1F3C(
+                            inl_ftCo_800A1F3C_unfused(
                                 ctx,
                                 fp,
                                 fp::frsp(fp::fadd(5.0, (island).x8().x())),
@@ -4235,7 +4235,7 @@ pub fn ftCo_800A7AAC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             }
         }
         if result_2 == 0_i32 {
-            statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1F3C(
+            inl_ftCo_800A1F3C_unfused(
                 ctx,
                 fp,
                 (partner).cur_pos().x(),
@@ -4243,7 +4243,7 @@ pub fn ftCo_800A7AAC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                 fp::fadds((data).x56C(), (partner).cpu().x564()),
             );
         } else {
-            statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1F3C(
+            inl_ftCo_800A1F3C_unfused(
                 ctx,
                 fp,
                 partner_pos.x(),
@@ -4301,7 +4301,7 @@ pub fn ftCo_800A7AAC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                     {
                         if fp::fsubs((data).x54().x(), (fp).cur_pos().x()) > 0.0 {
                             if (fp).cur_pos().x() < (island_2).x8().x() {
-                                statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1F3C(
+                                inl_ftCo_800A1F3C_unfused(
                                     ctx,
                                     fp,
                                     fp::frsp(fp::fadd(5.0, (island_2).x8().x())),
@@ -4310,7 +4310,7 @@ pub fn ftCo_800A7AAC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                                 );
                             }
                         } else if (fp).cur_pos().x() > (island_2).x14().x() {
-                            statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1F3C(
+                            inl_ftCo_800A1F3C_unfused(
                                 ctx,
                                 fp,
                                 fp::frsp(fp::fsub((island_2).x14().x(), 5.0)),
@@ -4343,13 +4343,7 @@ pub fn ftCo_800A80E4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                 vec,
             ) != 0)
         {
-            statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1F3C(
-                ctx,
-                fp,
-                vec.x(),
-                vec.y(),
-                5.0,
-            );
+            inl_ftCo_800A1F3C(ctx, fp, vec.x(), vec.y(), 5.0);
         }
     }
 }
@@ -4535,7 +4529,7 @@ pub fn ftCo_800A866C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                 let mut x: f64 = 0.0;
                 let mut y: f64 = floor_pos.y();
                 x = floor_pos.x();
-                statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1F3C(ctx, fp, x, y, 1.0);
+                inl_ftCo_800A1F3C_unfused(ctx, fp, x, y, 1.0);
             }
             if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
                 same_island = 0_i32;
@@ -4563,18 +4557,14 @@ pub fn ftCo_800A866C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                     if (fp).cur_pos().x() < x_2 {
                         let mut y_2: f64 = (island).x8().y();
                         x_2 = fp::frsp(fp::fadd(5.0, x_2));
-                        statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1F3C(
-                            ctx, fp, x_2, y_2, 1.0,
-                        );
+                        inl_ftCo_800A1F3C_unfused(ctx, fp, x_2, y_2, 1.0);
                     }
                 } else {
                     let mut x_3: f64 = (island).x14().x();
                     if (fp).cur_pos().x() > x_3 {
                         let mut y_3: f64 = (island).x14().y();
                         x_3 = fp::frsp(fp::fsub(x_3, 5.0));
-                        statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1F3C(
-                            ctx, fp, x_3, y_3, 1.0,
-                        );
+                        inl_ftCo_800A1F3C_unfused(ctx, fp, x_3, y_3, 1.0);
                     }
                 }
             }
@@ -4715,7 +4705,7 @@ pub fn ftCo_800A8940<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             let mut x: f64 = 0.0;
             let mut y: f64 = floor_pos.y();
             x = floor_pos.x();
-            statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1F3C(ctx, fp, x, y, 5.0);
+            inl_ftCo_800A1F3C(ctx, fp, x, y, 5.0);
         }
     }
 }
@@ -5368,7 +5358,7 @@ pub fn ftCo_800A9CB4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             break 'l1;
         }
     }
-    if (fns::ftCo_800A1CA8(ctx, fp) != 0) {
+    if (inl_ftCo_800A1CA8(ctx, fp) != 0) {
         inl_ftCo_CpuFinishWithNeutralStick(ctx, fp);
         return;
     }
@@ -5795,13 +5785,13 @@ pub fn ftCo_800AA844<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         return;
     }
     statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800AA320(ctx, fp, sp38, sp34);
-    if (fns::ftCo_800A28D0(ctx, fp, 1.0) != 0) {
-        if (((fns::ftCo_800A1CA8(ctx, fp) != 0)
+    if (inl_ftCo_800A28D0_unfused(ctx, fp, 1.0) != 0) {
+        if (((inl_ftCo_800A1CA8_unfused(ctx, fp) != 0)
             && ((fp).coll_data().floor().index() != 1_i32.wrapping_neg()))
             && ((fns::mpLineGetFlags(ctx, (fp).coll_data().floor().index())
                 & ((shl_i32(1_i32, (8_i32 as u32))) as u32))
                 != 0))
-            && (fns::ftCo_800A0FB0(
+            && (inl_ftCo_800A0FB0_unfused_2(
                 ctx,
                 sp28,
                 sp18,
@@ -5969,7 +5959,7 @@ pub fn ftCo_800AACD0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     if !Handle::is_null(temp_r3_2) {
         fns::mpIsland_8005ACE8(ctx, temp_r3_2, sp24, sp18);
         if (((data).x54().x() < sp24.x()) || ((data).x54().x() > sp18.x()))
-            && (!(fns::ftCo_800A2BD4(ctx, fp) != 0))
+            && (!(inl_ftCo_800A2BD4_unfused(ctx, fp) != 0))
         {
             inl_ftCo_CpuTurnAround_unfused(ctx, fp);
             return;
@@ -6257,7 +6247,7 @@ pub fn ftCo_800ABBA8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         let mut y: f64 = 0.0;
         y = sp50.v().y();
         x = sp50.v().x();
-        statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1F3C(ctx, fp, x, y, 5.0);
+        inl_ftCo_800A1F3C(ctx, fp, x, y, 5.0);
     }
     if (data).level() > 7_i32 {
         cx = (fp).cur_pos().x();
@@ -6652,7 +6642,7 @@ pub fn ftCo_800AC7D4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             break 'l1;
         }
     }
-    var_r0 = fns::ftCo_800A3134(ctx, fp);
+    var_r0 = inl_ftCo_800A3134(ctx, fp);
     if var_r0 == 0_i32 {
         inl_ftCo_CpuReturnToPreviousBehavior(ctx, fp, data);
         return;
@@ -6669,7 +6659,7 @@ pub fn ftCo_800AC7D4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     temp_r3 = statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A4BEC(ctx, fp);
     if Handle::is_null(temp_r3) {
         inl_ftCo_CpuHoldUpForOneFrame(ctx, fp);
-    } else if fns::ftCo_800A1AB4(ctx, fp, temp_r3) < 15.0 {
+    } else if inl_ftCo_800A1AB4(ctx, fp, temp_r3) < 15.0 {
         if fns::HSD_Randf(ctx) < fp::fmuls(0.10000000149011612, fp::frsp((data).level() as f64)) {
             fns::ftCo_800B46B8(
                 ctx,
@@ -6753,7 +6743,7 @@ pub fn ftCo_800ACB44<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let mut temp_f2: f64 = 0.0;
     let mut temp_r0_2: i32 = 0;
     let mut var_r0: i32 = 0;
-    var_r0 = fns::ftCo_800A3200(ctx, fp);
+    var_r0 = inl_ftCo_800A3200(ctx, fp);
     if var_r0 == 1_i32 {
         inl_ftCo_CpuFinishWithNeutralStick(ctx, fp);
         return;
@@ -6771,7 +6761,7 @@ pub fn ftCo_800ACB44<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A0AF4(ctx, fp);
         return;
     }
-    temp_f1_2 = fns::ftCo_800A1AB4(ctx, fp, temp_r3);
+    temp_f1_2 = inl_ftCo_800A1AB4(ctx, fp, temp_r3);
     if (((data).xF9_b2() as i32) != 0) && (temp_f1_2 < 30.0) {
         if fp::fmuls(0.10000000149011612, fp::frsp((data).level() as f64)) > fns::HSD_Randf(ctx) {
             inl_ftCo_CpuRetapR(ctx, fp);
@@ -6841,7 +6831,7 @@ pub fn ftCo_800ACD5C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         (data).set_xF8_b5((0_i32 as u8));
         return;
     }
-    if !(fns::ftCo_800A2C08(ctx, fp) != 0) {
+    if !(inl_ftCo_800A2C08_unfused(ctx, fp) != 0) {
         inl_ftCo_CpuTurnAround_unfused(ctx, fp);
         return;
     }
@@ -6977,7 +6967,7 @@ pub fn ftCo_800AD54C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             (clamp.get() as u8),
         );
         inl_ftCo_CpuFinishWithNeutralY_unfused(ctx, fp);
-    } else if (fns::ftCo_800A28D0(ctx, fp, 1.0) != 0) {
+    } else if (inl_ftCo_800A28D0_unfused(ctx, fp, 1.0) != 0) {
         inl_ftCo_CpuTurnAround_unfused(ctx, fp);
     } else if (inl_inlineC0_unfused(ctx, fp) != 0) {
         if fns::HSD_Randf(ctx) < 0.5 {
@@ -7028,7 +7018,7 @@ pub fn ftCo_800AD7FC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     enemy = (data).x44();
     item = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, (fp).item_gobj())));
     if (!Handle::is_null(enemy)) && (((data).kind() as u32) == (29_i32 as u32)) {
-        if !(fns::ftCo_800A2C08(ctx, fp) != 0) {
+        if !(inl_ftCo_800A2C08(ctx, fp) != 0) {
             inl_ftCo_CpuTurnAround(ctx, fp);
         } else {
             angle = fns::lb_8000D008(
@@ -7052,7 +7042,7 @@ pub fn ftCo_800AD7FC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         }
     } else {
         if !Handle::is_null(enemy) {
-            let mut unused_2: f64 = fns::ftCo_800A1AB4(ctx, fp, enemy);
+            let mut unused_2: f64 = inl_ftCo_800A1AB4(ctx, fp, enemy);
             angle = fns::lb_8000D008(
                 ctx,
                 fp::fsubs((enemy).cur_pos().y(), (fp).cur_pos().y()),
@@ -7068,7 +7058,7 @@ pub fn ftCo_800AD7FC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             } else if angle < fp::fneg(1.3089969288557768) {
                 fns::ftCo_800B4880(ctx, fp, 14_i32);
             } else {
-                if !(fns::ftCo_800A2C08(ctx, fp) != 0) {
+                if !(inl_ftCo_800A2C08(ctx, fp) != 0) {
                     if (inl_is_capsule_egg_ball(ctx, (item).kind()) != 0) {
                         fns::ftCo_800B4880(ctx, fp, 14_i32);
                     } else {
@@ -7661,9 +7651,7 @@ pub fn ftCo_800AE7AC<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>, arg2: i32
                     let mut y: f64 = 0.0;
                     y = out.y();
                     x = out.x();
-                    statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1F3C(
-                        ctx, fp, x, y, 5.0,
-                    );
+                    inl_ftCo_800A1F3C_unfused(ctx, fp, x, y, 5.0);
                 } else {
                     statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A75DC(
                         ctx,
@@ -7848,7 +7836,7 @@ pub fn ftCo_800AF290<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     inl_ftCo_CpuUpdateTargetDistance(ctx, fp);
     target = (data).x44();
     if !Handle::is_null(target) {
-        if fns::ftCo_800A1AB4(ctx, fp, target) > (data).x40() {
+        if inl_ftCo_800A1AB4(ctx, fp, target) > (data).x40() {
             statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800AEA8C(ctx, fp);
             return;
         }
@@ -8071,7 +8059,7 @@ pub fn ftCo_800B00F8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     (fp).cpu()
         .set_x44(statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A4BEC(ctx, fp));
     if (!Handle::is_null((fp).item_gobj()))
-        && (!(fns::ftCo_800A5908(
+        && (!(inl_ftCo_800A5908_unfused(
             ctx,
             (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, (fp).item_gobj()))),
         ) != 0))
@@ -8226,8 +8214,7 @@ pub fn ftCo_800B0AF4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut fp = fp;
     let mut data: CpuFighter<'a> = (fp).cpu();
-    let mut nana_fp: Fighter<'a> =
-        statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A589C(ctx, fp);
+    let mut nana_fp: Fighter<'a> = inl_ftCo_800A589C(ctx, fp);
     if (!Handle::is_null(nana_fp)) && (((data).xFA_b7() as i32) != 0) {
         if (inl_inlineJ0(ctx, fp, nana_fp) != 0) {
             (fp).set_facing_dir(fp::fneg((nana_fp).facing_dir()));
@@ -8269,7 +8256,7 @@ pub fn ftCo_800B0CA8<'a>(ctx: &'a Ctx, fp0: Fighter<'a>, fp1: Fighter<'a>) -> i3
     let mut temp_r5: i32 = 0;
     let mut var_r0_4: i32 = 0;
     temp_r5 = (fp1).motion_id();
-    if ((fns::ftCo_800A3200(ctx, fp1) != 0) || (inl_isInCaptureWait_unfused(ctx, fp1) != 0))
+    if ((inl_ftCo_800A3200_unfused(ctx, fp1) != 0) || (inl_isInCaptureWait_unfused(ctx, fp1) != 0))
         || (inl_isInTeeter_unfused(ctx, fp1) != 0)
     {
         return 0_i32;
@@ -8410,7 +8397,7 @@ pub fn ftCo_800B101C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     temp_r31 = (fp).cpu();
     (temp_r31).set_xF9_b2((1_i32 as u8));
     (temp_r31).set_xF9_b4((1_i32 as u8));
-    var_r29 = statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A589C(ctx, fp);
+    var_r29 = inl_ftCo_800A589C(ctx, fp);
     if Handle::is_null(var_r29) {
         statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800AEFB8(ctx, fp);
         return;
@@ -9016,12 +9003,6 @@ pub fn ftCo_800B395C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) -> i32 {
     return 0_i32;
 }
 
-fn inl_ftCo_CpuFinishWithNeutralStick_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
-    let mut fp = fp;
-    inl_ftCo_CpuSetNeutralStick_unfused(ctx, fp);
-    fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_Done as i32) as u8));
-}
-
 fn inl_ftCo_CpuSetNeutralStick_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let mut fp = fp;
     fns::ftCo_800B46B8(
@@ -9036,6 +9017,12 @@ fn inl_ftCo_CpuSetNeutralStick_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         ((enums::CpuCmd_SetLstickY as i32) as u8),
         (0_i32 as u8),
     );
+}
+
+fn inl_ftCo_CpuFinishWithNeutralStick_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    inl_ftCo_CpuSetNeutralStick_unfused(ctx, fp);
+    fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_Done as i32) as u8));
 }
 
 fn inl_ftCo_CpuDoubleJumpAfterDelay_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
@@ -9106,6 +9093,18 @@ fn inl_ftCo_CpuRetapR_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_Done as i32) as u8));
 }
 
+fn inl_ftCo_CpuTapA_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_PressA as i32) as u8));
+    fns::ftCo_800B46B8(
+        ctx,
+        fp,
+        ((enums::CpuCmd_WaitFor as i32) as u8),
+        (1_i32 as u8),
+    );
+    fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_ReleaseA as i32) as u8));
+}
+
 fn inl_ftCo_CpuRetapA_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let mut fp = fp;
     fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_ReleaseA as i32) as u8));
@@ -9119,21 +9118,69 @@ fn inl_ftCo_CpuRetapA_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_Done as i32) as u8));
 }
 
-fn inl_ftCo_CpuTapA_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
-    let mut fp = fp;
-    fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_PressA as i32) as u8));
-    fns::ftCo_800B46B8(
-        ctx,
-        fp,
-        ((enums::CpuCmd_WaitFor as i32) as u8),
-        (1_i32 as u8),
-    );
-    fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_ReleaseA as i32) as u8));
-}
-
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_ftCo_800A0FB0_unfused<'a>(
+    ctx: &'a Ctx,
+    vec_out: Vec<'a>,
+    line_id_out: Val<'a, i32>,
+    flags_out: Val<'a, u32>,
+    normal_out: Vec<'a>,
+    arg4: i32,
+    arg5: i32,
+    arg6: i32,
+    arg7: f64,
+    arg8: f64,
+    arg9: f64,
+    arg10: f64,
+    arg11: f64,
+) -> i32 {
+    let mut vec_out = vec_out;
+    let mut line_id_out = line_id_out;
+    let mut flags_out = flags_out;
+    let mut normal_out = normal_out;
+    let mut arg4 = arg4;
+    let mut arg5 = arg5;
+    let mut arg6 = arg6;
+    let mut arg7 = arg7;
+    let mut arg8 = arg8;
+    let mut arg9 = arg9;
+    let mut arg10 = arg10;
+    let mut arg11 = arg11;
+    (line_id_out).set(1_i32.wrapping_neg());
+    {
+        let mut ret: i32 = fns::mpCheckFloor(
+            ctx,
+            arg7,
+            arg8,
+            arg9,
+            arg10,
+            arg11,
+            vec_out,
+            line_id_out,
+            flags_out,
+            normal_out,
+            arg4,
+            arg5,
+            arg6,
+            null::<FnPtr<'a>>(ctx),
+            null::<HSD_GObj<'a>>(ctx),
+        );
+        if (ret != 0)
+            && (statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1B38(
+                ctx,
+                (line_id_out).get(),
+            ) != 0)
+        {
+            return 0_i32;
+        }
+        return ret;
+    }
+    #[allow(unreachable_code)]
+    return 0;
 }
 
 fn inl_convertStickAxis_unfused<'a>(ctx: &'a Ctx, val: i8) -> f64 {
@@ -9218,6 +9265,17 @@ fn inl_ftCo_800A1CC4_inline1_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, x: f64, 
     (fp).cpu().set_x38(5.0);
 }
 
+fn inl_ftCo_800A1AB4<'a>(ctx: &'a Ctx, fp0: Fighter<'a>, fp1: Fighter<'a>) -> f64 {
+    let mut fp0 = fp0;
+    let mut fp1 = fp1;
+    let mut dx: f64 = fp::fsubs((fp0).cur_pos().x(), (fp1).cur_pos().x());
+    let mut dy: f64 = fp::fsubs((fp0).cur_pos().y(), (fp1).cur_pos().y());
+    return inl_sqrtf(
+        ctx,
+        fp::fadds((fp::fmuls((dx), (dx))), (fp::fmuls((dy), (dy)))),
+    );
+}
+
 fn inl_checkZebesIsland_unfused<'a>(ctx: &'a Ctx, island: mp_UnkStruct0<'a>) -> i32 {
     let mut island = island;
     let mut y: f64 = (island).x14().y();
@@ -9255,6 +9313,72 @@ fn inl_ftCo_800A2C80_inline0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     return 0_i32;
 }
 
+fn inl_ftCo_800A1B38_unfused<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
+    let mut arg0 = arg0;
+    if (((fns::grBigBlue_801EF844(ctx, arg0) != 0) || (fns::grInishie1_801FCAAC(ctx, arg0) != 0))
+        || (fns::grCorneria_801E2D90(ctx, arg0) != 0))
+        || (fns::grVenom_80206D10(ctx, arg0) != 0)
+    {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
+fn inl_ftCo_800A0FB0_unfused_2<'a>(
+    ctx: &'a Ctx,
+    vec_out: Vec<'a>,
+    line_id_out: Val<'a, i32>,
+    flags_out: Val<'a, u32>,
+    normal_out: Vec<'a>,
+    arg4: i32,
+    arg5: i32,
+    arg6: i32,
+    arg7: f64,
+    arg8: f64,
+    arg9: f64,
+    arg10: f64,
+    arg11: f64,
+) -> i32 {
+    let mut vec_out = vec_out;
+    let mut line_id_out = line_id_out;
+    let mut flags_out = flags_out;
+    let mut normal_out = normal_out;
+    let mut arg4 = arg4;
+    let mut arg5 = arg5;
+    let mut arg6 = arg6;
+    let mut arg7 = arg7;
+    let mut arg8 = arg8;
+    let mut arg9 = arg9;
+    let mut arg10 = arg10;
+    let mut arg11 = arg11;
+    (line_id_out).set(1_i32.wrapping_neg());
+    {
+        let mut ret: i32 = fns::mpCheckFloor(
+            ctx,
+            arg7,
+            arg8,
+            arg9,
+            arg10,
+            arg11,
+            vec_out,
+            line_id_out,
+            flags_out,
+            normal_out,
+            arg4,
+            arg5,
+            arg6,
+            null::<FnPtr<'a>>(ctx),
+            null::<HSD_GObj<'a>>(ctx),
+        );
+        if (ret != 0) && (inl_ftCo_800A1B38_unfused(ctx, (line_id_out).get()) != 0) {
+            return 0_i32;
+        }
+        return ret;
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 fn inl_inlineC0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     let mut fp = fp;
     if (((fp).coll_data().env_flags() & (63_i32 | 0xfc0_i32)) != 0) {
@@ -9264,6 +9388,35 @@ fn inl_inlineC0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     }
     #[allow(unreachable_code)]
     return 0;
+}
+
+fn inl_ftCo_800A21FC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x38);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 36> = frame_at(ctx, &__frame, 0xc);
+    let mut fp = fp;
+    let mut data0: mp_UnkStruct0<'a> = null(ctx);
+    let mut data1: CpuFighter<'a> = (fp).cpu();
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        return 0_i32;
+    }
+    data0 = fns::mpIsland_8005AB54(ctx, (fp).coll_data().floor().index());
+    if Handle::is_null(data0) {
+        return 0_i32;
+    }
+    vec.set_x((data1).x54().x());
+    vec.set_y(fp::frsp(fp::fadd(5.0, (data1).x54().y())));
+    vec.set_z(0.0);
+    if Handle::addr(fns::mpIsland_8005AC14(ctx, vec, fp::fneg(10.0))) == Handle::addr(data0) {
+        return 1_i32;
+    }
+    return 0_i32;
 }
 
 fn inl_ftCo_800A2170_it_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, ip: Item<'a>) -> i32 {
@@ -9293,6 +9446,11 @@ fn inl_ftCo_800A2170_it_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, ip: Item<'a>)
 fn inl_ftCo_GetTerminalVelocity<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> f64 {
     let mut fp = fp;
     return (fp).co_attrs().terminal_velocity();
+}
+
+fn inl_ftCo_800A1B38_noinline<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
+    let mut arg0 = arg0;
+    return statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1B38(ctx, arg0);
 }
 
 fn inl_ftCo_800A3908_inline1<'a>(
@@ -9338,11 +9496,6 @@ fn inl_ftCo_800A3908_inline1<'a>(
     return valid;
 }
 
-fn inl_ftCo_800A1B38_noinline<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
-    let mut arg0 = arg0;
-    return statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1B38(ctx, arg0);
-}
-
 fn inl_ftCo_800A3908_inline0<'a>(
     ctx: &'a Ctx,
     fp: Fighter<'a>,
@@ -9369,6 +9522,16 @@ fn inl_ftCo_800A3908_inline0<'a>(
     return 0_i32;
 }
 
+fn inl_ftCo_ApplyStageEntry<'a>(ctx: &'a Ctx, fp: Fighter<'a>, kind: i32) {
+    let mut fp = fp;
+    let mut kind = kind;
+    statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1CC4(
+        ctx,
+        fp,
+        fns::ftCo_803C6594(ctx).at(kind).get(),
+    );
+}
+
 fn inl_ftCo_800A75DC_set_target<'a>(
     ctx: &'a Ctx,
     fp: Fighter<'a>,
@@ -9389,16 +9552,6 @@ fn inl_ftCo_800A75DC_set_target<'a>(
         (data).set_x38(arg3);
         inl_ftCo_ApplyStageEntry(ctx, fp, fns::stage_info(ctx).grkind());
     }
-}
-
-fn inl_ftCo_ApplyStageEntry<'a>(ctx: &'a Ctx, fp: Fighter<'a>, kind: i32) {
-    let mut fp = fp;
-    let mut kind = kind;
-    statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1CC4(
-        ctx,
-        fp,
-        fns::ftCo_803C6594(ctx).at(kind).get(),
-    );
 }
 
 fn inl_ftCo_800A4038_inline1<'a>(
@@ -9535,6 +9688,23 @@ fn inl_ftCo_IsAlly_dontinline<'a>(ctx: &'a Ctx, fp0: Fighter<'a>, fp1: Fighter<'
     return fns::ftCo_IsAlly(ctx, fp0, fp1);
 }
 
+fn inl_ftCo_800A1C44<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
+    let mut fp = fp;
+    if ((fp).x2219_b1() != 0) {
+        return 1_i32;
+    }
+    if (fp).x2164() != 0_i32 {
+        return 1_i32;
+    }
+    if ((fp).x2168() != 0_i32) && ((fp).x2338().x() == 0_i32) {
+        return 1_i32;
+    }
+    if ((fp).is_sleeping() != 0) {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
 fn inl_inlineD0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, fp1: Fighter<'a>) -> i32 {
     let mut fp = fp;
     let mut fp1 = fp1;
@@ -9569,6 +9739,23 @@ fn inl_inlineD1_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     }
     #[allow(unreachable_code)]
     return 0;
+}
+
+fn inl_ftCo_IsCpuControlled<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
+    let mut fp = fp;
+    if (fns::Player_8003248C(
+        ctx,
+        ((fp).player_idx() as i32),
+        ((fp).is_sub_fighter() as i32),
+    ) as u32)
+        != ((enums::Gm_PKind_Cpu as i32) as u32)
+    {
+        return 0_i32;
+    }
+    if ((fp).cpu().kind() as u32) == (5_i32 as u32) {
+        return 0_i32;
+    }
+    return 1_i32;
 }
 
 fn inl_inlineD0_it<'a>(ctx: &'a Ctx, fp: Fighter<'a>, it: Item<'a>) -> i32 {
@@ -9610,6 +9797,20 @@ fn inl_HSD_GObjGetNext<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_GObj<'a> {
     return (gobj).next();
 }
 
+fn inl_ftCo_800A5908<'a>(ctx: &'a Ctx, ip: Item<'a>) -> i32 {
+    let mut ip = ip;
+    if (ip).kind() == (enums::It_Kind_Heart as i32) {
+        return 1_i32;
+    }
+    if (ip).kind() == (enums::It_Kind_Tomato as i32) {
+        return 1_i32;
+    }
+    if (ip).kind() == (enums::It_Kind_Foods as i32) {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
 fn inl_ftCo_800A648C_inline2<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
     return (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 9_i32)).get();
 }
@@ -9634,6 +9835,72 @@ fn inl_ftCo_800A648C_inline1<'a>(ctx: &'a Ctx, ip: Item<'a>) -> i32 {
 fn inl_ftCo_800A648C_inline3<'a>(ctx: &'a Ctx, cur: HSD_GObj<'a>) -> HSD_GObj<'a> {
     let mut cur = cur;
     return (cur).next();
+}
+
+fn inl_ftCo_800A1B38<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
+    let mut arg0 = arg0;
+    if (((fns::grBigBlue_801EF844(ctx, arg0) != 0) || (fns::grInishie1_801FCAAC(ctx, arg0) != 0))
+        || (fns::grCorneria_801E2D90(ctx, arg0) != 0))
+        || (fns::grVenom_80206D10(ctx, arg0) != 0)
+    {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
+fn inl_ftCo_800A0FB0<'a>(
+    ctx: &'a Ctx,
+    vec_out: Vec<'a>,
+    line_id_out: Val<'a, i32>,
+    flags_out: Val<'a, u32>,
+    normal_out: Vec<'a>,
+    arg4: i32,
+    arg5: i32,
+    arg6: i32,
+    arg7: f64,
+    arg8: f64,
+    arg9: f64,
+    arg10: f64,
+    arg11: f64,
+) -> i32 {
+    let mut vec_out = vec_out;
+    let mut line_id_out = line_id_out;
+    let mut flags_out = flags_out;
+    let mut normal_out = normal_out;
+    let mut arg4 = arg4;
+    let mut arg5 = arg5;
+    let mut arg6 = arg6;
+    let mut arg7 = arg7;
+    let mut arg8 = arg8;
+    let mut arg9 = arg9;
+    let mut arg10 = arg10;
+    let mut arg11 = arg11;
+    (line_id_out).set(1_i32.wrapping_neg());
+    {
+        let mut ret: i32 = fns::mpCheckFloor(
+            ctx,
+            arg7,
+            arg8,
+            arg9,
+            arg10,
+            arg11,
+            vec_out,
+            line_id_out,
+            flags_out,
+            normal_out,
+            arg4,
+            arg5,
+            arg6,
+            null::<FnPtr<'a>>(ctx),
+            null::<HSD_GObj<'a>>(ctx),
+        );
+        if (ret != 0) && (inl_ftCo_800A1B38(ctx, (line_id_out).get()) != 0) {
+            return 0_i32;
+        }
+        return ret;
+    }
+    #[allow(unreachable_code)]
+    return 0;
 }
 
 fn inl_ftCo_800A6700_inline0<'a>(ctx: &'a Ctx, fp: Fighter<'a>, x: f64, y: f64) -> i32 {
@@ -9708,6 +9975,36 @@ fn inl_ftCo_800A6D2C_inline0_unfused<'a>(
     );
 }
 
+fn inl_ftCo_800A1F3C_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: f64, arg2: f64, arg3: f64) {
+    let mut fp = fp;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut arg3 = arg3;
+    let mut data: CpuFighter<'a> = (fp).cpu();
+    if (data).x60() == 0_i32 {
+        (data).x54().set_x(arg1);
+        (data).x54().set_y(arg2);
+        (data).set_x38(arg3);
+        statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1CC4(
+            ctx,
+            fp,
+            fns::ftCo_803C6594(ctx)
+                .at(fns::stage_info(ctx).grkind())
+                .get(),
+        );
+    }
+}
+
+fn inl_ftCo_ApplyStageEntry_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, kind: i32) {
+    let mut fp = fp;
+    let mut kind = kind;
+    statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1CC4(
+        ctx,
+        fp,
+        fns::ftCo_803C6594(ctx).at(kind).get(),
+    );
+}
+
 fn inl_ftCo_800A75DC_set_target_unfused<'a>(
     ctx: &'a Ctx,
     fp: Fighter<'a>,
@@ -9730,14 +10027,34 @@ fn inl_ftCo_800A75DC_set_target_unfused<'a>(
     }
 }
 
-fn inl_ftCo_ApplyStageEntry_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, kind: i32) {
+fn inl_ftCo_800A589C_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Fighter<'a> {
     let mut fp = fp;
-    let mut kind = kind;
-    statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1CC4(
-        ctx,
-        fp,
-        fns::ftCo_803C6594(ctx).at(kind).get(),
-    );
+    if Handle::is_null(fp) {
+        return null::<Fighter<'a>>(ctx);
+    }
+    {
+        let mut cur: HSD_GObj<'a> = null(ctx);
+        {
+            cur = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 8_i32)).get();
+            'l1: while !Handle::is_null(cur) {
+                'c2: {
+                    if Handle::addr((fp).gobj()) != Handle::addr(cur) {
+                        let mut cur_fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(
+                            inl_HSD_GObjGetUserData_unfused(ctx, cur),
+                        ));
+                        if ((fp).player_idx() as i32) == ((cur_fp).player_idx() as i32) {
+                            if ((cur_fp).is_sleeping() != 0) {
+                                return null::<Fighter<'a>>(ctx);
+                            }
+                            return cur_fp;
+                        }
+                    }
+                }
+                cur = (cur).next();
+            }
+        }
+    }
+    return null::<Fighter<'a>>(ctx);
 }
 
 fn inl_ftCo_800A75DC_CheckFloor_unfused<'a>(
@@ -9797,6 +10114,26 @@ fn inl_ftCo_800A75DC_CheckFloor_unfused<'a>(
     return result;
 }
 
+fn inl_ftCo_800A1F3C<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: f64, arg2: f64, arg3: f64) {
+    let mut fp = fp;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut arg3 = arg3;
+    let mut data: CpuFighter<'a> = (fp).cpu();
+    if (data).x60() == 0_i32 {
+        (data).x54().set_x(arg1);
+        (data).x54().set_y(arg2);
+        (data).set_x38(arg3);
+        statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1CC4(
+            ctx,
+            fp,
+            fns::ftCo_803C6594(ctx)
+                .at(fns::stage_info(ctx).grkind())
+                .get(),
+        );
+    }
+}
+
 fn inl_ftCo_800A8210_inline0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, out: Vec<'a>) {
     let mut fp = fp;
     let mut out = out;
@@ -9822,9 +10159,9 @@ fn inl_ftCo_800A2718_dontinline_unfused<'a>(ctx: &'a Ctx, arg0: mp_UnkStruct0<'a
     return statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A2718(ctx, arg0);
 }
 
-fn inl_ftCo_800A2718_dontinline3<'a>(ctx: &'a Ctx, arg0: mp_UnkStruct0<'a>) -> i32 {
+fn inl_ftCo_800A2718_dontinline<'a>(ctx: &'a Ctx, arg0: mp_UnkStruct0<'a>) -> i32 {
     let mut arg0 = arg0;
-    return inl_ftCo_800A2718_dontinline2(ctx, arg0);
+    return statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A2718(ctx, arg0);
 }
 
 fn inl_ftCo_800A2718_dontinline2<'a>(ctx: &'a Ctx, arg0: mp_UnkStruct0<'a>) -> i32 {
@@ -9832,9 +10169,9 @@ fn inl_ftCo_800A2718_dontinline2<'a>(ctx: &'a Ctx, arg0: mp_UnkStruct0<'a>) -> i
     return inl_ftCo_800A2718_dontinline(ctx, arg0);
 }
 
-fn inl_ftCo_800A2718_dontinline<'a>(ctx: &'a Ctx, arg0: mp_UnkStruct0<'a>) -> i32 {
+fn inl_ftCo_800A2718_dontinline3<'a>(ctx: &'a Ctx, arg0: mp_UnkStruct0<'a>) -> i32 {
     let mut arg0 = arg0;
-    return statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A2718(ctx, arg0);
+    return inl_ftCo_800A2718_dontinline2(ctx, arg0);
 }
 
 fn inl_ftCo_800A8940_inline0<'a>(
@@ -9888,6 +10225,16 @@ fn inl_ftCo_CpuStartUpSpecial_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_ReleaseB as i32) as u8));
 }
 
+fn inl_angle_x_units_unfused<'a>(ctx: &'a Ctx, angle: f64) -> i32 {
+    let mut angle = angle;
+    return fp::fctiwz(fp::fmuls(127.0, fns::cosf(ctx, angle)));
+}
+
+fn inl_angle_y_units_unfused<'a>(ctx: &'a Ctx, angle: f64) -> i32 {
+    let mut angle = angle;
+    return fp::fctiwz(fp::fmuls(127.0, fns::sinf(ctx, angle)));
+}
+
 fn inl_ftCo_CpuAimPkThunder_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, angle: f64, frames: i32) {
     let mut fp = fp;
     let mut angle = angle;
@@ -9910,16 +10257,6 @@ fn inl_ftCo_CpuAimPkThunder_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, angle: f6
         ((enums::CpuCmd_WaitFor as i32) as u8),
         (frames as u8),
     );
-}
-
-fn inl_angle_x_units_unfused<'a>(ctx: &'a Ctx, angle: f64) -> i32 {
-    let mut angle = angle;
-    return fp::fctiwz(fp::fmuls(127.0, fns::cosf(ctx, angle)));
-}
-
-fn inl_angle_y_units_unfused<'a>(ctx: &'a Ctx, angle: f64) -> i32 {
-    let mut angle = angle;
-    return fp::fctiwz(fp::fmuls(127.0, fns::sinf(ctx, angle)));
 }
 
 fn inl_ftCo_CpuRecoverDiagonally_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
@@ -9971,10 +10308,9 @@ fn inl_ftCo_CpuFinishWithNeutralY<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_Done as i32) as u8));
 }
 
-fn inl_ftCo_CpuFinishWithNeutralStick<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+fn inl_ftCo_800A1CA8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     let mut fp = fp;
-    inl_ftCo_CpuSetNeutralStick(ctx, fp);
-    fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_Done as i32) as u8));
+    return (if ((fp).x2168() != 0) { 1_i32 } else { 0_i32 });
 }
 
 fn inl_ftCo_CpuSetNeutralStick<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
@@ -9991,6 +10327,12 @@ fn inl_ftCo_CpuSetNeutralStick<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         ((enums::CpuCmd_SetLstickY as i32) as u8),
         (0_i32 as u8),
     );
+}
+
+fn inl_ftCo_CpuFinishWithNeutralStick<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    inl_ftCo_CpuSetNeutralStick(ctx, fp);
+    fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_Done as i32) as u8));
 }
 
 fn inl_ftCo_CpuUseAvailableJump<'a>(ctx: &'a Ctx, fp: Fighter<'a>, data: CpuFighter<'a>) {
@@ -10269,6 +10611,62 @@ fn inl_ftCo_CpuTurnAwayFromLedge_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_Done as i32) as u8));
 }
 
+fn inl_ftCo_800A28D0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: f64) -> i32 {
+    let mut fp = fp;
+    let mut arg1 = arg1;
+    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        return 0_i32;
+    }
+    {
+        let mut data: mp_UnkStruct0<'a> =
+            fns::mpIsland_8005AB54(ctx, (fp).coll_data().floor().index());
+        if Handle::is_null(data) {
+            return 0_i32;
+        }
+        {
+            let mut x_offset: f64 = 0.0;
+            if (fp).facing_dir() > 0.0 {
+                x_offset = (if (fp::fsubs((data).x14().x(), (fp).cur_pos().x()))
+                    < fp::frsp(0_i32 as f64)
+                {
+                    fp::fneg((fp::fsubs((data).x14().x(), (fp).cur_pos().x())))
+                } else {
+                    (fp::fsubs((data).x14().x(), (fp).cur_pos().x()))
+                });
+            } else {
+                x_offset =
+                    (if (fp::fsubs((data).x8().x(), (fp).cur_pos().x())) < fp::frsp(0_i32 as f64) {
+                        fp::fneg((fp::fsubs((data).x8().x(), (fp).cur_pos().x())))
+                    } else {
+                        (fp::fsubs((data).x8().x(), (fp).cur_pos().x()))
+                    });
+            }
+            if x_offset < (fp::fmul(5.0, arg1)) {
+                return 1_i32;
+            }
+        }
+    }
+    return 0_i32;
+}
+
+fn inl_ftCo_800A1CA8_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
+    let mut fp = fp;
+    return (if ((fp).x2168() != 0) { 1_i32 } else { 0_i32 });
+}
+
+fn inl_ftCo_800A2BD4_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
+    let mut fp = fp;
+    return (if fp::fmuls(
+        (fp).facing_dir(),
+        (fp::fsubs((fp).cpu().x54().x(), (fp).cur_pos().x())),
+    ) >= 0.0
+    {
+        1_i32
+    } else {
+        0_i32
+    });
+}
+
 fn inl_ftCo_CpuTurnAround_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let mut fp = fp;
     inl_ftCo_CpuSetNeutralStick_unfused(ctx, fp);
@@ -10387,6 +10785,30 @@ fn inl_inlineH1_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, data: CpuFighter<'a>)
     }
 }
 
+fn inl_ftCo_800A3134<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
+    let mut fp = fp;
+    's1: {
+        let __case = match (fp).motion_id() {
+            191_i32 => 0,
+            183_i32 => 0,
+            192_i32 => 1,
+            184_i32 => 1,
+            _ => 2,
+        };
+        if __case <= 0 {
+            return 1_i32;
+        }
+        if __case <= 1 {
+            return 2_i32;
+        }
+        if __case <= 2 {
+            return 0_i32;
+        }
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 fn inl_ftCo_CpuHoldUpForOneFrame<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let mut fp = fp;
     fns::ftCo_800B46B8(
@@ -10410,6 +10832,18 @@ fn inl_ftCo_CpuHoldUpForOneFrame<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     inl_ftCo_CpuFinishWithNeutralY(ctx, fp);
 }
 
+fn inl_ftCo_CpuTapA<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_PressA as i32) as u8));
+    fns::ftCo_800B46B8(
+        ctx,
+        fp,
+        ((enums::CpuCmd_WaitFor as i32) as u8),
+        (1_i32 as u8),
+    );
+    fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_ReleaseA as i32) as u8));
+}
+
 fn inl_ftCo_CpuRetapA<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let mut fp = fp;
     fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_ReleaseA as i32) as u8));
@@ -10423,16 +10857,26 @@ fn inl_ftCo_CpuRetapA<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_Done as i32) as u8));
 }
 
-fn inl_ftCo_CpuTapA<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+fn inl_ftCo_800A3200<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     let mut fp = fp;
-    fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_PressA as i32) as u8));
-    fns::ftCo_800B46B8(
-        ctx,
-        fp,
-        ((enums::CpuCmd_WaitFor as i32) as u8),
-        (1_i32 as u8),
-    );
-    fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_ReleaseA as i32) as u8));
+    's1: {
+        let __case = match (fp).motion_id() {
+            252_i32 => 0,
+            253_i32 => 1,
+            _ => 2,
+        };
+        if __case <= 0 {
+            return 1_i32;
+        }
+        if __case <= 1 {
+            return 2_i32;
+        }
+        if __case <= 2 {
+            return 0_i32;
+        }
+    }
+    #[allow(unreachable_code)]
+    return 0;
 }
 
 fn inl_ftCo_CpuRetapR<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
@@ -10448,11 +10892,29 @@ fn inl_ftCo_CpuRetapR<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_Done as i32) as u8));
 }
 
-fn inl_ftCo_CpuStartCharging_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+fn inl_ftCo_800A2C08_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     let mut fp = fp;
-    inl_ftCo_CpuSetNeutralStick_unfused(ctx, fp);
-    inl_ftCo_CpuTapB_unfused(ctx, fp);
-    fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_Done as i32) as u8));
+    let mut other_fp: Fighter<'a> = (fp).cpu().x44();
+    if Handle::is_null(other_fp) {
+        return 1_i32;
+    }
+    {
+        let mut pos_x_diff: f64 = fp::fsubs((other_fp).cur_pos().x(), (fp).cur_pos().x());
+        if (if (pos_x_diff) < fp::frsp(0_i32 as f64) {
+            fp::fneg((pos_x_diff))
+        } else {
+            (pos_x_diff)
+        }) < 1.0
+        {
+            return 1_i32;
+        }
+        if fp::fmuls(pos_x_diff, (fp).facing_dir()) >= 0.0 {
+            return 1_i32;
+        }
+        return 0_i32;
+    }
+    #[allow(unreachable_code)]
+    return 0;
 }
 
 fn inl_ftCo_CpuTapB_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
@@ -10465,6 +10927,38 @@ fn inl_ftCo_CpuTapB_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         (1_i32 as u8),
     );
     fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_ReleaseB as i32) as u8));
+}
+
+fn inl_ftCo_CpuStartCharging_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    inl_ftCo_CpuSetNeutralStick_unfused(ctx, fp);
+    inl_ftCo_CpuTapB_unfused(ctx, fp);
+    fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_Done as i32) as u8));
+}
+
+fn inl_ftCo_800A2C08<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
+    let mut fp = fp;
+    let mut other_fp: Fighter<'a> = (fp).cpu().x44();
+    if Handle::is_null(other_fp) {
+        return 1_i32;
+    }
+    {
+        let mut pos_x_diff: f64 = fp::fsubs((other_fp).cur_pos().x(), (fp).cur_pos().x());
+        if (if (pos_x_diff) < fp::frsp(0_i32 as f64) {
+            fp::fneg((pos_x_diff))
+        } else {
+            (pos_x_diff)
+        }) < 1.0
+        {
+            return 1_i32;
+        }
+        if fp::fmuls(pos_x_diff, (fp).facing_dir()) >= 0.0 {
+            return 1_i32;
+        }
+        return 0_i32;
+    }
+    #[allow(unreachable_code)]
+    return 0;
 }
 
 fn inl_is_capsule_egg_ball<'a>(ctx: &'a Ctx, kind: i32) -> i32 {
@@ -10519,12 +11013,26 @@ fn inl_ftCo_ItemCheck<'a>(ctx: &'a Ctx, ip: Item<'a>) -> i32 {
     return fns::ftCo_800A5980(ctx, Handle::cast::<Fighter<'a>>(ip));
 }
 
+fn inl_ftCo_800A5908_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) -> i32 {
+    let mut ip = ip;
+    if (ip).kind() == (enums::It_Kind_Heart as i32) {
+        return 1_i32;
+    }
+    if (ip).kind() == (enums::It_Kind_Tomato as i32) {
+        return 1_i32;
+    }
+    if (ip).kind() == (enums::It_Kind_Foods as i32) {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
 fn inl_ftCo_CpuUpdateCommonItemTarget_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let mut fp = fp;
     let mut data: CpuFighter<'a> = null(ctx);
     data = (fp).cpu();
     if (!Handle::is_null((fp).item_gobj()))
-        && (!(fns::ftCo_800A5908(
+        && (!(inl_ftCo_800A5908_unfused(
             ctx,
             (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, (fp).item_gobj()))),
         ) != 0))
@@ -10566,13 +11074,6 @@ fn inl_ftCo_CpuDataShouldAct_unfused<'a>(ctx: &'a Ctx, data: CpuFighter<'a>) -> 
     return 0;
 }
 
-fn inl_ftCo_CpuSetTargetFlags_unfused<'a>(ctx: &'a Ctx, data: CpuFighter<'a>) {
-    let mut data = data;
-    inl_ftCo_CpuSetTargetActive_unfused(ctx, data);
-    inl_ftCo_CpuClearTargetModes_unfused(ctx, data);
-    inl_ftCo_CpuSetTargetReady_unfused(ctx, data);
-}
-
 fn inl_ftCo_CpuSetTargetActive_unfused<'a>(ctx: &'a Ctx, data: CpuFighter<'a>) {
     let mut data = data;
     (data).set_xF8_b0((1_i32 as u8));
@@ -10593,12 +11094,11 @@ fn inl_ftCo_CpuSetTargetReady_unfused<'a>(ctx: &'a Ctx, data: CpuFighter<'a>) {
     (data).set_xF9_b1((1_i32 as u8));
 }
 
-fn inl_ftCo_CpuTargetAct_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
-    let mut fp = fp;
-    statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A20A0(ctx, fp);
-    if (inl_ftCo_CpuShouldAct_unfused(ctx, fp) != 0) {
-        statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A80E4(ctx, fp);
-    }
+fn inl_ftCo_CpuSetTargetFlags_unfused<'a>(ctx: &'a Ctx, data: CpuFighter<'a>) {
+    let mut data = data;
+    inl_ftCo_CpuSetTargetActive_unfused(ctx, data);
+    inl_ftCo_CpuClearTargetModes_unfused(ctx, data);
+    inl_ftCo_CpuSetTargetReady_unfused(ctx, data);
 }
 
 fn inl_ftCo_CpuShouldAct_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
@@ -10616,6 +11116,14 @@ fn inl_ftCo_CpuShouldAct_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     }
     #[allow(unreachable_code)]
     return 0;
+}
+
+fn inl_ftCo_CpuTargetAct_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A20A0(ctx, fp);
+    if (inl_ftCo_CpuShouldAct_unfused(ctx, fp) != 0) {
+        statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A80E4(ctx, fp);
+    }
 }
 
 fn inl_ftCo_CpuInitNoTarget_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, fear_flag: i32) {
@@ -10671,13 +11179,6 @@ fn inl_ftCo_CpuActOnNoTarget_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, data: Cp
     let _ = statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800ADE48(ctx, fp);
 }
 
-fn inl_ftCo_CpuSetTargetFlags<'a>(ctx: &'a Ctx, data: CpuFighter<'a>) {
-    let mut data = data;
-    inl_ftCo_CpuSetTargetActive(ctx, data);
-    inl_ftCo_CpuClearTargetModes(ctx, data);
-    inl_ftCo_CpuSetTargetReady(ctx, data);
-}
-
 fn inl_ftCo_CpuSetTargetActive<'a>(ctx: &'a Ctx, data: CpuFighter<'a>) {
     let mut data = data;
     (data).set_xF8_b0((1_i32 as u8));
@@ -10698,12 +11199,11 @@ fn inl_ftCo_CpuSetTargetReady<'a>(ctx: &'a Ctx, data: CpuFighter<'a>) {
     (data).set_xF9_b1((1_i32 as u8));
 }
 
-fn inl_ftCo_CpuTargetAct<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
-    let mut fp = fp;
-    statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A20A0(ctx, fp);
-    if (inl_ftCo_CpuShouldAct(ctx, fp) != 0) {
-        statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A80E4(ctx, fp);
-    }
+fn inl_ftCo_CpuSetTargetFlags<'a>(ctx: &'a Ctx, data: CpuFighter<'a>) {
+    let mut data = data;
+    inl_ftCo_CpuSetTargetActive(ctx, data);
+    inl_ftCo_CpuClearTargetModes(ctx, data);
+    inl_ftCo_CpuSetTargetReady(ctx, data);
 }
 
 fn inl_ftCo_CpuShouldAct<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
@@ -10721,6 +11221,14 @@ fn inl_ftCo_CpuShouldAct<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     }
     #[allow(unreachable_code)]
     return 0;
+}
+
+fn inl_ftCo_CpuTargetAct<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A20A0(ctx, fp);
+    if (inl_ftCo_CpuShouldAct(ctx, fp) != 0) {
+        statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A80E4(ctx, fp);
+    }
 }
 
 fn inl_ftCo_CpuUpdateFoodItemTarget<'a>(ctx: &'a Ctx, fp: Fighter<'a>, is_food: Val<'a, i32>) {
@@ -10776,7 +11284,7 @@ fn inl_ftCo_CpuUpdateTargetDistance<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         if (!Handle::is_null((data).x44()))
             && (((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32))
         {
-            if fns::ftCo_800A1AB4(ctx, fp, (data).x44())
+            if inl_ftCo_800A1AB4(ctx, fp, (data).x44())
                 < (Handle::add((fns::Fighter_804D64FC(ctx).get()).x20(), (fp).kind())).get()
             {
                 (data).set_xF8_b6((1_i32 as u8));
@@ -10823,13 +11331,7 @@ fn inl_ftCo_CpuApproachFoodItemTarget<'a>(
                         approach_pos,
                     ) != 0_i32)
                 {
-                    statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1F3C(
-                        ctx,
-                        fp,
-                        (approach_pos).x(),
-                        (approach_pos).y(),
-                        5.0,
-                    );
+                    inl_ftCo_800A1F3C(ctx, fp, (approach_pos).x(), (approach_pos).y(), 5.0);
                 }
             }
         }
@@ -10878,6 +11380,35 @@ fn inl_inlineM0_unfused<'a>(ctx: &'a Ctx, x: f64) -> u8 {
     return 0;
 }
 
+fn inl_ftCo_800A589C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Fighter<'a> {
+    let mut fp = fp;
+    if Handle::is_null(fp) {
+        return null::<Fighter<'a>>(ctx);
+    }
+    {
+        let mut cur: HSD_GObj<'a> = null(ctx);
+        {
+            cur = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 8_i32)).get();
+            'l1: while !Handle::is_null(cur) {
+                'c2: {
+                    if Handle::addr((fp).gobj()) != Handle::addr(cur) {
+                        let mut cur_fp: Fighter<'a> =
+                            (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, cur)));
+                        if ((fp).player_idx() as i32) == ((cur_fp).player_idx() as i32) {
+                            if ((cur_fp).is_sleeping() != 0) {
+                                return null::<Fighter<'a>>(ctx);
+                            }
+                            return cur_fp;
+                        }
+                    }
+                }
+                cur = (cur).next();
+            }
+        }
+    }
+    return null::<Fighter<'a>>(ctx);
+}
+
 fn inl_inlineJ0<'a>(ctx: &'a Ctx, fp: Fighter<'a>, nana_fp: Fighter<'a>) -> i32 {
     let mut fp = fp;
     let mut nana_fp = nana_fp;
@@ -10892,6 +11423,28 @@ fn inl_inlineJ0<'a>(ctx: &'a Ctx, fp: Fighter<'a>, nana_fp: Fighter<'a>) -> i32 
         return 1_i32;
     } else {
         return 0_i32;
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
+fn inl_ftCo_800A3200_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
+    let mut fp = fp;
+    's1: {
+        let __case = match (fp).motion_id() {
+            252_i32 => 0,
+            253_i32 => 1,
+            _ => 2,
+        };
+        if __case <= 0 {
+            return 1_i32;
+        }
+        if __case <= 1 {
+            return 2_i32;
+        }
+        if __case <= 2 {
+            return 0_i32;
+        }
     }
     #[allow(unreachable_code)]
     return 0;
@@ -10922,6 +11475,16 @@ fn inl_inlineK0<'a>(ctx: &'a Ctx, fp0: Fighter<'a>) -> i32 {
     return 0;
 }
 
+fn inl_isPopoUpB<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
+    let mut fp = fp;
+    if ((fp).motion_id() >= (enums::ftPp_MS_SpecialHi_0 as i32))
+        && ((fp).motion_id() <= (enums::ftPp_MS_SpecialHi_5 as i32))
+    {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
 fn inl_ftCo_800B101C_inline0<'a>(ctx: &'a Ctx, fp: Fighter<'a>, other: Fighter<'a>) -> i32 {
     let mut fp = fp;
     let mut other = other;
@@ -10944,16 +11507,6 @@ fn inl_ftCo_800B101C_inline0<'a>(ctx: &'a Ctx, fp: Fighter<'a>, other: Fighter<'
     }
     #[allow(unreachable_code)]
     return 0;
-}
-
-fn inl_isPopoUpB<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
-    let mut fp = fp;
-    if ((fp).motion_id() >= (enums::ftPp_MS_SpecialHi_0 as i32))
-        && ((fp).motion_id() <= (enums::ftPp_MS_SpecialHi_5 as i32))
-    {
-        return 1_i32;
-    }
-    return 0_i32;
 }
 
 fn inl_ftCo_CpuUpdateNanaFollow<'a>(
@@ -10979,7 +11532,7 @@ fn inl_ftCo_CpuUpdateCommonItemTarget<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let mut data: CpuFighter<'a> = null(ctx);
     data = (fp).cpu();
     if (!Handle::is_null((fp).item_gobj()))
-        && (!(fns::ftCo_800A5908(
+        && (!(inl_ftCo_800A5908(
             ctx,
             (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, (fp).item_gobj()))),
         ) != 0))

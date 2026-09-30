@@ -1144,6 +1144,15 @@ fn inl_fn_80180630_GetModelDesc_unfused<'a>(
     return (state).x4C();
 }
 
+fn inl_fn_80180630_LoadLightList_unfused<'a>(ctx: &'a Ctx, state: lbl_80472D28_t<'a>) -> Addr<'a> {
+    let mut state = state;
+    return Handle::cast::<Addr<'a>>(fns::lb_80011AC4(ctx, (state).x5C()));
+}
+
+fn inl_fn_80180630_CreateCameraGObj_unfused<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
+    return fns::GObj_Create(ctx, (14_u32 as u16), (14_u32 as u8), (0_u32 as u8));
+}
+
 fn inl_fn_80180630_CreateLightAndCamera_unfused<'a>(
     ctx: &'a Ctx,
     state: lbl_80472D28_t<'a>,
@@ -1167,15 +1176,6 @@ fn inl_fn_80180630_CreateLightAndCamera_unfused<'a>(
         0_u32,
     );
     (cam_gobj).set(inl_fn_80180630_CreateCameraGObj_unfused(ctx));
-}
-
-fn inl_fn_80180630_LoadLightList_unfused<'a>(ctx: &'a Ctx, state: lbl_80472D28_t<'a>) -> Addr<'a> {
-    let mut state = state;
-    return Handle::cast::<Addr<'a>>(fns::lb_80011AC4(ctx, (state).x5C()));
-}
-
-fn inl_fn_80180630_CreateCameraGObj_unfused<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
-    return fns::GObj_Create(ctx, (14_u32 as u16), (14_u32 as u8), (0_u32 as u8));
 }
 
 fn inl_fn_80180630_LoadCameraDesc_unfused<'a>(ctx: &'a Ctx, state: lbl_80472D28_t<'a>) -> Addr<'a> {

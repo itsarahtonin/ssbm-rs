@@ -162,41 +162,31 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
-fn inl_ftCo_CaptureDamageLw_Phys_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let mut gobj = gobj;
-    let mut fp2: Fighter<'a> = null(ctx);
-    let mut pos: Vec<'a> = null(ctx);
-    if (fns::fn_800DAD18(ctx, gobj) != 0) {
-        let mut fp: Fighter<'a> =
-            (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-        fns::Fighter_ChangeMotionState(
-            ctx,
-            gobj,
-            (enums::ftCo_MS_CaptureDamageHi as i32),
-            0x4000_u32,
-            (fp).cur_anim_frame(),
-            1.0,
-            0.0,
-            null::<HSD_GObj<'a>>(ctx),
-        );
-        fns::fn_800DB5D8(ctx, gobj);
-        fns::fn_800DAA40(ctx, gobj, (fp).victim_gobj());
-        fp2 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-        if !((fp2).x2226_b2() != 0) {
-            fns::ft_80083C00(ctx, gobj, fnptr(ctx, 0x800dc384));
-        }
-        pos = (fp).cur_pos();
-        inl_HSD_JObjSetTranslate_unfused(
-            ctx,
-            (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj))),
-            pos,
-        );
-    }
-}
-
 fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).hsd_obj();
+}
+
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803c70cc),
+            (228_i32 as u32),
+            cstr(ctx, 0x803c70cc),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
@@ -232,26 +222,36 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
+fn inl_ftCo_CaptureDamageLw_Phys_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp2: Fighter<'a> = null(ctx);
+    let mut pos: Vec<'a> = null(ctx);
+    if (fns::fn_800DAD18(ctx, gobj) != 0) {
+        let mut fp: Fighter<'a> =
+            (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+        fns::Fighter_ChangeMotionState(
             ctx,
-            cstr(ctx, 0x803c70cc),
-            (228_i32 as u32),
-            cstr(ctx, 0x803c70cc),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
+            gobj,
+            (enums::ftCo_MS_CaptureDamageHi as i32),
+            0x4000_u32,
+            (fp).cur_anim_frame(),
+            1.0,
+            0.0,
+            null::<HSD_GObj<'a>>(ctx),
+        );
+        fns::fn_800DB5D8(ctx, gobj);
+        fns::fn_800DAA40(ctx, gobj, (fp).victim_gobj());
+        fp2 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+        if !((fp2).x2226_b2() != 0) {
+            fns::ft_80083C00(ctx, gobj, fnptr(ctx, 0x800dc384));
+        }
+        pos = (fp).cur_pos();
+        inl_HSD_JObjSetTranslate_unfused(
+            ctx,
+            (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj))),
+            pos,
+        );
     }
-    return result;
 }
 
 fn inl_fn_800DC624_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

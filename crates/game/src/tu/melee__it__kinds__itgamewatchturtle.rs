@@ -187,6 +187,20 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_Item_AttachToParent_unfused<'a>(
+    ctx: &'a Ctx,
+    item_gobj: HSD_GObj<'a>,
+    parent: HSD_GObj<'a>,
+    part: i32,
+) -> HSD_GObj<'a> {
+    let mut item_gobj = item_gobj;
+    let mut parent = parent;
+    let mut part = part;
+    fns::Item_8026AB54(ctx, item_gobj, parent, part);
+    fns::db_80225DD8(ctx, item_gobj, parent);
+    return item_gobj;
+}
+
 fn inl_Item_AttachGameWatchArticle_unfused<'a>(
     ctx: &'a Ctx,
     parent: HSD_GObj<'a>,
@@ -205,20 +219,6 @@ fn inl_Item_AttachGameWatchArticle_unfused<'a>(
         parent,
         (Handle::add(attributes, 0_i32)).get(),
     );
-}
-
-fn inl_Item_AttachToParent_unfused<'a>(
-    ctx: &'a Ctx,
-    item_gobj: HSD_GObj<'a>,
-    parent: HSD_GObj<'a>,
-    part: i32,
-) -> HSD_GObj<'a> {
-    let mut item_gobj = item_gobj;
-    let mut parent = parent;
-    let mut part = part;
-    fns::Item_8026AB54(ctx, item_gobj, parent, part);
-    fns::db_80225DD8(ctx, item_gobj, parent);
-    return item_gobj;
 }
 
 /// Registers this unit's ports.

@@ -213,7 +213,7 @@ pub fn HSD_SetupRenderModeWithCustomPE<'a>(ctx: &'a Ctx, rendermode: u32, pe: HS
 pub fn HSD_SetupRenderMode<'a>(ctx: &'a Ctx, rendermode: u32) {
     let __frame = ctx.stack_frame(0x88);
     let mut rendermode = rendermode;
-    fns::HSD_SetupRenderModeWithCustomPE(ctx, rendermode, null::<HSD_PEDesc<'a>>(ctx));
+    inl_HSD_SetupRenderModeWithCustomPE_unfused(ctx, rendermode, null::<HSD_PEDesc<'a>>(ctx));
 }
 
 pub fn HSD_SetMaterialColor<'a>(
@@ -503,6 +503,21 @@ fn inl_setupTevMode_last_unfused<'a>(ctx: &'a Ctx) {
             .set_tevmode(((enums::GX_PASSCLR as i32) as u32));
         fns::HSD_SetupTevStage(ctx, tevdesc);
     }
+}
+
+fn inl_HSD_SetupRenderModeWithCustomPE_unfused<'a>(
+    ctx: &'a Ctx,
+    rendermode: u32,
+    pe: HSD_PEDesc<'a>,
+) {
+    let mut rendermode = rendermode;
+    let mut pe = pe;
+    inl_setupTevMode_last_unfused(ctx);
+    fns::HSD_SetupPEMode(ctx, rendermode, pe);
+    fns::HSD_SetTevRegAll(ctx);
+    fns::HSD_StateSetNumTevStages(ctx);
+    fns::HSD_StateSetNumTexGens(ctx);
+    fns::HSD_SetupChannelMode(ctx, rendermode);
 }
 
 /// Registers this unit's ports.

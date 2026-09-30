@@ -420,6 +420,99 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).hsd_obj();
+}
+
+fn inl_HSD_JObjGetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
+    let mut jobj = jobj;
+    let mut scale = scale;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804d3bec),
+            (0x1c8_i32 as u32),
+            cstr(ctx, 0x804d3bec),
+        )
+    });
+    (if !Handle::is_null((scale)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804d3bec),
+            (0x1c9_i32 as u32),
+            cstr(ctx, 0x804d3bec),
+        )
+    });
+    Handle::copy_from((scale), (jobj).scale());
+}
+
+fn inl_inlineB0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> f64 {
+    let mut gobj = gobj;
+    return (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
+        .co_attrs()
+        .xDC();
+}
+
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804d3bec),
+            (228_i32 as u32),
+            cstr(ctx, 0x804d3bec),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
+fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
+    let mut jobj = jobj;
+    let mut scale = scale;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804d3bec),
+            (0x17e_i32 as u32),
+            cstr(ctx, 0x804d3bec),
+        )
+    });
+    (if !Handle::is_null((scale)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804d3bec),
+            (0x17f_i32 as u32),
+            cstr(ctx, 0x804d3bec),
+        )
+    });
+    Handle::copy_from((jobj).scale(), (scale));
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
 fn inl_inlineB2_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -501,99 +594,6 @@ fn inl_inlineB2_unfused<'a>(
     );
 }
 
-fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).hsd_obj();
-}
-
-fn inl_HSD_JObjGetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
-    let mut jobj = jobj;
-    let mut scale = scale;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x804d3bec),
-            (0x1c8_i32 as u32),
-            cstr(ctx, 0x804d3bec),
-        )
-    });
-    (if !Handle::is_null((scale)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x804d3bec),
-            (0x1c9_i32 as u32),
-            cstr(ctx, 0x804d3bec),
-        )
-    });
-    Handle::copy_from((scale), (jobj).scale());
-}
-
-fn inl_inlineB0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> f64 {
-    let mut gobj = gobj;
-    return (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
-        .co_attrs()
-        .xDC();
-}
-
-fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
-    let mut jobj = jobj;
-    let mut scale = scale;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x804d3bec),
-            (0x17e_i32 as u32),
-            cstr(ctx, 0x804d3bec),
-        )
-    });
-    (if !Handle::is_null((scale)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x804d3bec),
-            (0x17f_i32 as u32),
-            cstr(ctx, 0x804d3bec),
-        )
-    });
-    Handle::copy_from((jobj).scale(), (scale));
-    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
-        {
-            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
-                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
-            }
-        }
-    }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x804d3bec),
-            (228_i32 as u32),
-            cstr(ctx, 0x804d3bec),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
-}
-
 fn inl_inlineB1_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> f64 {
     let mut gobj = gobj;
     return (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
@@ -604,6 +604,29 @@ fn inl_inlineB1_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> f64 {
 fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+    let mut x = x;
+    let mut y: f64 = 0.0;
+    if x > 0.0 {
+        let mut guess: f64 = fp::frsqrte(x);
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        y = fp::frsp((fp::fmul(x, guess)));
+        return y;
+    }
+    return x;
 }
 
 fn inl_inlineA0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -643,29 +666,6 @@ fn inl_inlineA0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).grab_timer(),
         fns::ftKb_SpecialN_800F5AC0(ctx),
     ));
-}
-
-fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
-    let mut x = x;
-    let mut y: f64 = 0.0;
-    if x > 0.0 {
-        let mut guess: f64 = fp::frsqrte(x);
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
-        );
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
-        );
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
-        );
-        y = fp::frsp((fp::fmul(x, guess)));
-        return y;
-    }
-    return x;
 }
 
 fn inl_inlineC0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

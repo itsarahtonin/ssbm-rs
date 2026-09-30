@@ -846,6 +846,18 @@ fn inl_inlineA1_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::ftCommon_8007E2F4(ctx, fp, (0x1ff_i32 as i16));
 }
 
+fn inl_ftCheckThrowB4_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
+    let mut fp = fp;
+    if ((fp).x2210().x0().throw_flags_b4() != 0) {
+        (fp).x2210().x0().set_throw_flags_b4((0_i32 as u8));
+        return 1_i32;
+    } else {
+        return 0_i32;
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 fn inl_doEndFAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
     let __frame = ctx.stack_frame(0x10);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
@@ -878,18 +890,6 @@ fn inl_doEndFAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
         cb.call::<_, ()>((gobj,));
     }
-}
-
-fn inl_ftCheckThrowB4_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
-    let mut fp = fp;
-    if ((fp).x2210().x0().throw_flags_b4() != 0) {
-        (fp).x2210().x0().set_throw_flags_b4((0_i32 as u8));
-        return 1_i32;
-    } else {
-        return 0_i32;
-    }
-    #[allow(unreachable_code)]
-    return 0;
 }
 
 fn inl_doEndBAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {

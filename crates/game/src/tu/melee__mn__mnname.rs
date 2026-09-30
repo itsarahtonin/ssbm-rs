@@ -600,7 +600,7 @@ pub fn mnName_GetPageCount<'a>(ctx: &'a Ctx) -> i32 {
         i = 0_i32;
         'l1: while i < 120_i32 {
             'c2: {
-                if (fns::IsNameValid(ctx, ((i as u8) as i32)) != 0) {
+                if (inl_IsNameValid_unfused(ctx, ((i as u8) as i32)) != 0) {
                     count = count.wrapping_add(1);
                 }
             }
@@ -620,7 +620,7 @@ pub fn mnName_GetColumnCount<'a>(ctx: &'a Ctx) -> i32 {
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut count: i32 = 0;
     let mut extra: i32 = 0;
-    count = inl_GetNumNameList_unfused(ctx);
+    count = inl_GetNumNameList_unfused_2(ctx);
     if rem_i32(count, 6_i32) != 0_i32 {
         extra = 1_i32;
     } else {
@@ -1875,27 +1875,34 @@ fn inl_mnName_GetHoveredName_unfused<'a>(ctx: &'a Ctx) -> u8 {
         .get();
 }
 
-fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
-    let mut jobj = jobj;
-    let mut x = x;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803ed538),
-            (0x201_i32 as u32),
-            cstr(ctx, 0x803ed538),
-        )
-    });
-    (jobj).translate().set_x(x);
-    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
-        {
-            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
-                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+fn inl_IsNameValid_unfused<'a>(ctx: &'a Ctx, slot: i32) -> i32 {
+    let mut slot = slot;
+    if ((fns::mnName_StringTerminator(ctx).at(0)).get() as i32)
+        == ((fns::GetPersistentNameData(ctx, ((slot as u8) as i32)))
+            .namedata()
+            .at(0_i32)
+            .get() as i32)
+    {
+        return 0_i32;
+    }
+    return 1_i32;
+}
+
+fn inl_GetNumNameList_unfused_2<'a>(ctx: &'a Ctx) -> i32 {
+    let mut i: i32 = 0;
+    let mut count: i32 = 0_i32;
+    {
+        i = 0_i32;
+        'l1: while i < 120_i32 {
+            'c2: {
+                if (inl_IsNameValid_unfused(ctx, ((i as u8) as i32)) != 0) {
+                    count = count.wrapping_add(1);
+                }
             }
+            i = i.wrapping_add(1);
         }
     }
+    return count;
 }
 
 fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
@@ -1918,6 +1925,29 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         result = 1_i32;
     }
     return result;
+}
+
+fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
+    let mut jobj = jobj;
+    let mut x = x;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803ed538),
+            (0x201_i32 as u32),
+            cstr(ctx, 0x803ed538),
+        )
+    });
+    (jobj).translate().set_x(x);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
 }
 
 fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {

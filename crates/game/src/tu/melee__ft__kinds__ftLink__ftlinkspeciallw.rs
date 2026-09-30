@@ -153,6 +153,11 @@ pub fn ftLk_SpecialAirLw_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
 fn inl_doEnter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid0: i32, msid1: i32) {
     let mut gobj = gobj;
     let mut msid0 = msid0;
@@ -174,11 +179,6 @@ fn inl_doEnter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid0: i32, msid1: 
         fns::ftAnim_8006EBA4(ctx, gobj);
         (fp).set_accessory4_cb(fnptr(ctx, 0x800eb7c8));
     }
-}
-
-fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).user_data();
 }
 
 fn inl_ftCheckThrowB0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {

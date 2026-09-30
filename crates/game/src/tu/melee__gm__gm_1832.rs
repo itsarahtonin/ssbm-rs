@@ -2535,6 +2535,28 @@ fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, tran
     Handle::copy_from((translate), (jobj).translate());
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803d92b8),
+            (228_i32 as u32),
+            cstr(ctx, 0x803d92b8),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
     let mut jobj = jobj;
     let mut translate = translate;
@@ -2566,28 +2588,6 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803d92b8),
-            (228_i32 as u32),
-            cstr(ctx, 0x803d92b8),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjAddTranslationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
@@ -2954,6 +2954,13 @@ fn inl_fn_80185A0C_Tail_unfused<'a>(
     statics::melee__gm__gm_1832::lbl_804D65F0(ctx).set(gobj3);
 }
 
+fn inl_gm_80186634_LoadLightList_unfused<'a>(ctx: &'a Ctx) -> Addr<'a> {
+    return Handle::cast::<Addr<'a>>(fns::lb_80011AC4(
+        ctx,
+        (statics::melee__gm__gm_1832::lbl_804D65FC(ctx).get()).lights(),
+    ));
+}
+
 fn inl_gm_80186634_SetupLight_unfused<'a>(ctx: &'a Ctx) {
     let mut gobj: HSD_GObj<'a> = null(ctx);
     gobj = fns::GObj_Create(ctx, (11_i32 as u16), (3_i32 as u8), (0_i32 as u8));
@@ -2970,13 +2977,6 @@ fn inl_gm_80186634_SetupLight_unfused<'a>(ctx: &'a Ctx) {
         (0_i32 as u8),
         (0_i32 as u32),
     );
-}
-
-fn inl_gm_80186634_LoadLightList_unfused<'a>(ctx: &'a Ctx) -> Addr<'a> {
-    return Handle::cast::<Addr<'a>>(fns::lb_80011AC4(
-        ctx,
-        (statics::melee__gm__gm_1832::lbl_804D65FC(ctx).get()).lights(),
-    ));
 }
 
 fn inl_gm_80186634_SetupCamera_unfused<'a>(ctx: &'a Ctx) {

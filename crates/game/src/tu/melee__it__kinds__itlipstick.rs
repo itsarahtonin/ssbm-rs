@@ -230,7 +230,7 @@ pub fn itLipstick_UnkMotion5_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn itLipstick_Logic23_Clanked<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
-    return fns::itLipstick_Logic23_DmgDealt(ctx, gobj);
+    return inl_itLipstick_Logic23_DmgDealt_unfused(ctx, gobj);
 }
 
 pub fn itLipstick_Logic23_Reflected<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
@@ -242,7 +242,7 @@ pub fn itLipstick_Logic23_Reflected<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32
 pub fn itLipstick_Logic23_HitShield<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
-    return fns::itLipstick_Logic23_DmgDealt(ctx, gobj);
+    return inl_itLipstick_Logic23_DmgDealt_unfused(ctx, gobj);
 }
 
 pub fn itLipstick_Logic23_ShieldBounced<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
@@ -287,6 +287,15 @@ fn inl_Item_ApplyFallingPhysics_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (attrs).x14_fall_speed_max(),
     );
     let _ = fns::it_80274658(ctx, gobj, (fns::it_804D6D28(ctx).get()).x68_float());
+}
+
+fn inl_itLipstick_Logic23_DmgDealt_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if ((ip).msid() == 3_i32) || ((ip).msid() == 4_i32) {
+        fns::itColl_BounceOffVictim(ctx, gobj);
+    }
+    return 0_i32;
 }
 
 /// Registers this unit's ports.

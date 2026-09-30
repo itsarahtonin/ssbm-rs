@@ -564,7 +564,7 @@ pub fn itFlipper_DmgDealt<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         fns::it_80272560(ctx, gobj, 1_i32);
         fns::it_802756D0(ctx, gobj);
         if !((ip).xDD4_itemVar().flipper().xDE8_isStageFixed() != 0) {
-            fns::itFlipper_Repel(ctx, gobj, (ip).xC38(), (ip).xCD4());
+            inl_itFlipper_Repel(ctx, gobj, (ip).xC38(), (ip).xCD4());
         }
     }
     return 0_i32;
@@ -613,7 +613,7 @@ pub fn itFlipper_DmgReceived<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         fns::it_80272560(ctx, gobj, 1_i32);
         fns::it_802756D0(ctx, gobj);
         if !((ip).xDD4_itemVar().flipper().xDE8_isStageFixed() != 0) {
-            fns::itFlipper_Repel(ctx, gobj, (ip).xCB4(), (ip).xCE0());
+            inl_itFlipper_Repel_unfused(ctx, gobj, (ip).xCB4(), (ip).xCE0());
         }
     }
     return 0_i32;
@@ -702,6 +702,11 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).hsd_obj();
+}
+
 fn inl_itGetJObjGrandchild_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_JObj<'a> {
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> =
@@ -720,9 +725,26 @@ fn inl_itGetJObjGrandchild_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_
     return child;
 }
 
-fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).hsd_obj();
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f5ed4),
+            (228_i32 as u32),
+            cstr(ctx, 0x803f5ed4),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
@@ -758,26 +780,27 @@ fn inl_HSD_JObjSetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f5ed4),
-            (228_i32 as u32),
-            cstr(ctx, 0x803f5ed4),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
+fn inl_sqrtf_unfused<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+    let mut x = x;
+    let mut y: f64 = 0.0;
+    if x > 0.0 {
+        let mut guess: f64 = fp::frsqrte(x);
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
+        );
+        y = fp::frsp((fp::fmul(x, guess)));
+        return y;
     }
-    return result;
+    return x;
 }
 
 fn inl_spinSpeedDirect_unfused<'a>(
@@ -807,27 +830,17 @@ fn inl_spinSpeedDirect_unfused<'a>(
     return speed;
 }
 
-fn inl_sqrtf_unfused<'a>(ctx: &'a Ctx, x: f64) -> f64 {
-    let mut x = x;
-    let mut y: f64 = 0.0;
-    if x > 0.0 {
-        let mut guess: f64 = fp::frsqrte(x);
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
-        );
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
-        );
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
-        );
-        y = fp::frsp((fp::fmul(x, guess)));
-        return y;
-    }
-    return x;
+fn inl_itResetVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
+    let mut ip = ip;
+    (ip).x40_vel().set_x({
+        let __t2 = {
+            let __t1 = 0.0;
+            (ip).x40_vel().set_z(__t1);
+            __t1
+        };
+        (ip).x40_vel().set_y(__t2);
+        __t2
+    });
 }
 
 fn inl_Item_StopAndEnterState_unfused<'a>(
@@ -842,19 +855,6 @@ fn inl_Item_StopAndEnterState_unfused<'a>(
     inl_itResetVelocity_unfused(ctx, ip);
     fns::it_8026B390(ctx, gobj);
     fns::Item_80268E5C(ctx, gobj, msid, (enums::ITEM_ANIM_UPDATE as i32));
-}
-
-fn inl_itResetVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
-    let mut ip = ip;
-    (ip).x40_vel().set_x({
-        let __t2 = {
-            let __t1 = 0.0;
-            (ip).x40_vel().set_z(__t1);
-            __t1
-        };
-        (ip).x40_vel().set_y(__t2);
-        __t2
-    });
 }
 
 fn inl_itFlipper_RefreshHitboxes_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -888,49 +888,6 @@ fn inl_bounce<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ip: Item<'a>) {
     }
 }
 
-fn inl_spinFromVictim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>) {
-    let mut gobj = gobj;
-    let mut pos = pos;
-    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
-    let mut speed: f64 = 10.0;
-    Handle::copy_from((pos), (ip).pos());
-    if !Handle::is_null((ip).xCF4_fighterGObjUnk()) {
-        let mut fighter: HSD_GObj<'a> = (ip).xCF4_fighterGObjUnk();
-        if (fns::ftLib_IsFighter(ctx, fighter) != 0) {
-            speed = inl_spinSpeed(ctx, gobj, fighter, pos);
-        }
-        (ip).set_xCF4_fighterGObjUnk(null::<HSD_GObj<'a>>(ctx));
-    }
-    fns::itFlipper_AddSpinImpulse(ctx, gobj, pos, (fp::fmuls((speed), 0.01745329238474369)));
-}
-
-fn inl_spinSpeed<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, fighter: HSD_GObj<'a>, pos: Vec<'a>) -> f64 {
-    let __frame = ctx.stack_frame(0x18);
-    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let mut gobj = gobj;
-    let mut fighter = fighter;
-    let mut pos = pos;
-    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
-    let mut attrs: itFlipper_DatAttrs<'a> =
-        Handle::cast::<itFlipper_DatAttrs<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
-    let mut speed: f64 = 0.0;
-    fns::ftLib_GetCameraBonePos(ctx, fighter, pos);
-    fns::ftLib_GetPosDelta(ctx, fighter, vel);
-    speed = fp::fmuls((attrs).x18_spinMultiplier(), inl_lbVector_Len_xy(ctx, vel));
-    return speed;
-}
-
-fn inl_lbVector_Len_xy<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
-    let mut vec = vec;
-    return inl_sqrtf(
-        ctx,
-        fp::fadds(
-            fp::fmuls((vec).x(), (vec).x()),
-            fp::fmuls((vec).y(), (vec).y()),
-        ),
-    );
-}
-
 fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     let mut x = x;
     let mut y: f64 = 0.0;
@@ -954,15 +911,73 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     return x;
 }
 
-fn inl_bounceOrSpin<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+fn inl_lbVector_Len_xy<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
+    let mut vec = vec;
+    return inl_sqrtf(
+        ctx,
+        fp::fadds(
+            fp::fmuls((vec).x(), (vec).x()),
+            fp::fmuls((vec).y(), (vec).y()),
+        ),
+    );
+}
+
+fn inl_spinSpeed<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, fighter: HSD_GObj<'a>, pos: Vec<'a>) -> f64 {
+    let __frame = ctx.stack_frame(0x18);
+    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
-    let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
+    let mut fighter = fighter;
+    let mut pos = pos;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut attrs: itFlipper_DatAttrs<'a> =
         Handle::cast::<itFlipper_DatAttrs<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
-    if !((ip).xDD4_itemVar().flipper().xDD8_isSettled() != 0) {
-        inl_bounce(ctx, gobj, ip);
-    } else {
-        inl_spin(ctx, gobj, ip, attrs);
+    let mut speed: f64 = 0.0;
+    fns::ftLib_GetCameraBonePos(ctx, fighter, pos);
+    fns::ftLib_GetPosDelta(ctx, fighter, vel);
+    speed = fp::fmuls((attrs).x18_spinMultiplier(), inl_lbVector_Len_xy(ctx, vel));
+    return speed;
+}
+
+fn inl_spinFromVictim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>) {
+    let mut gobj = gobj;
+    let mut pos = pos;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+    let mut speed: f64 = 10.0;
+    Handle::copy_from((pos), (ip).pos());
+    if !Handle::is_null((ip).xCF4_fighterGObjUnk()) {
+        let mut fighter: HSD_GObj<'a> = (ip).xCF4_fighterGObjUnk();
+        if (fns::ftLib_IsFighter(ctx, fighter) != 0) {
+            speed = inl_spinSpeed(ctx, gobj, fighter, pos);
+        }
+        (ip).set_xCF4_fighterGObjUnk(null::<HSD_GObj<'a>>(ctx));
+    }
+    fns::itFlipper_AddSpinImpulse(ctx, gobj, pos, (fp::fmuls((speed), 0.01745329238474369)));
+}
+
+fn inl_itFlipper_Repel<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, kind: i32, pos: Vec<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut kind = kind;
+    let mut pos = pos;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+    vec.set_x({
+        let __t2 = {
+            let __t1 = 0.0;
+            vec.set_z(__t1);
+            __t1
+        };
+        vec.set_y(__t2);
+        __t2
+    });
+    if kind == (enums::It_Kind_Flipper as i32) {
+        vec.set_x(fp::fsubs((ip).pos().x(), (pos).x()));
+        vec.set_y(fp::fsubs((ip).pos().y(), (pos).y()));
+        let _ = fns::lbVector_NormalizeXY(ctx, vec);
+        vec.set_x(fp::fmuls(vec.x(), 0.20000000298023224));
+        vec.set_y(fp::fmuls(vec.y(), 0.20000000298023224));
+        (ip).x40_vel().set_x(fp::fadds((ip).x40_vel().x(), vec.x()));
+        (ip).x40_vel().set_y(fp::fadds((ip).x40_vel().y(), vec.y()));
     }
 }
 
@@ -982,20 +997,27 @@ fn inl_spin<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ip: Item<'a>, attrs: itFlipper
     }
 }
 
-fn inl_spinFromAttacker_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>) {
+fn inl_bounceOrSpin<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
-    let mut pos = pos;
-    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    let mut speed: f64 = 10.0;
-    Handle::copy_from((pos), (ip).pos());
-    if !Handle::is_null((ip).xCEC_fighterGObj()) {
-        let mut fighter: HSD_GObj<'a> = (ip).xCEC_fighterGObj();
-        if (fns::ftLib_IsFighter(ctx, fighter) != 0) {
-            speed = inl_spinSpeed_unfused(ctx, gobj, fighter, pos);
-        }
-        (ip).set_xCEC_fighterGObj(null::<HSD_GObj<'a>>(ctx));
+    let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
+    let mut attrs: itFlipper_DatAttrs<'a> =
+        Handle::cast::<itFlipper_DatAttrs<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
+    if !((ip).xDD4_itemVar().flipper().xDD8_isSettled() != 0) {
+        inl_bounce(ctx, gobj, ip);
+    } else {
+        inl_spin(ctx, gobj, ip, attrs);
     }
-    fns::itFlipper_AddSpinImpulse(ctx, gobj, pos, (fp::fmuls((speed), 0.01745329238474369)));
+}
+
+fn inl_lbVector_Len_xy_unfused<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
+    let mut vec = vec;
+    return inl_sqrtf_unfused(
+        ctx,
+        fp::fadds(
+            fp::fmuls((vec).x(), (vec).x()),
+            fp::fmuls((vec).y(), (vec).y()),
+        ),
+    );
 }
 
 fn inl_spinSpeed_unfused<'a>(
@@ -1022,15 +1044,47 @@ fn inl_spinSpeed_unfused<'a>(
     return speed;
 }
 
-fn inl_lbVector_Len_xy_unfused<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
-    let mut vec = vec;
-    return inl_sqrtf_unfused(
-        ctx,
-        fp::fadds(
-            fp::fmuls((vec).x(), (vec).x()),
-            fp::fmuls((vec).y(), (vec).y()),
-        ),
-    );
+fn inl_spinFromAttacker_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>) {
+    let mut gobj = gobj;
+    let mut pos = pos;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut speed: f64 = 10.0;
+    Handle::copy_from((pos), (ip).pos());
+    if !Handle::is_null((ip).xCEC_fighterGObj()) {
+        let mut fighter: HSD_GObj<'a> = (ip).xCEC_fighterGObj();
+        if (fns::ftLib_IsFighter(ctx, fighter) != 0) {
+            speed = inl_spinSpeed_unfused(ctx, gobj, fighter, pos);
+        }
+        (ip).set_xCEC_fighterGObj(null::<HSD_GObj<'a>>(ctx));
+    }
+    fns::itFlipper_AddSpinImpulse(ctx, gobj, pos, (fp::fmuls((speed), 0.01745329238474369)));
+}
+
+fn inl_itFlipper_Repel_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, kind: i32, pos: Vec<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut kind = kind;
+    let mut pos = pos;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    vec.set_x({
+        let __t2 = {
+            let __t1 = 0.0;
+            vec.set_z(__t1);
+            __t1
+        };
+        vec.set_y(__t2);
+        __t2
+    });
+    if kind == (enums::It_Kind_Flipper as i32) {
+        vec.set_x(fp::fsubs((ip).pos().x(), (pos).x()));
+        vec.set_y(fp::fsubs((ip).pos().y(), (pos).y()));
+        let _ = fns::lbVector_NormalizeXY(ctx, vec);
+        vec.set_x(fp::fmuls(vec.x(), 0.20000000298023224));
+        vec.set_y(fp::fmuls(vec.y(), 0.20000000298023224));
+        (ip).x40_vel().set_x(fp::fadds((ip).x40_vel().x(), vec.x()));
+        (ip).x40_vel().set_y(fp::fadds((ip).x40_vel().y(), vec.y()));
+    }
 }
 
 /// Registers this unit's ports.

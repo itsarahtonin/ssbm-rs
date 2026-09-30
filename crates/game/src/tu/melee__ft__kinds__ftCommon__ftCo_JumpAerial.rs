@@ -115,7 +115,7 @@ pub fn ftCo_JumpAerial_CheckInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i3
         }
     }
     co_attrs = (fp).co_attrs();
-    if (fns::ft_did_jump(ctx, fp, arg1) != 0) {
+    if (inl_ft_did_jump_unfused(ctx, fp, arg1) != 0) {
         if (fns::ft_800D2D0C(ctx, gobj) != 0) {
             'l3: loop {
                 'c4: {}
@@ -238,7 +238,7 @@ pub fn ftCo_JumpAerial_Enter_Basic<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (co_attrs).air_jump_v_multiplier(),
     ));
     vel.set_z(0.0);
-    fns::ftCo_800CBAC4(ctx, gobj, msid, vel, 1_i32);
+    inl_ftCo_800CBAC4_unfused(ctx, gobj, msid, vel, 1_i32);
 }
 
 pub fn ftNs_JumpAerial_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -269,7 +269,7 @@ pub fn ftNs_JumpAerial_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     } else {
         (enums::ftCo_MS_JumpAerialB as i32)
     });
-    fns::ftCo_800CBAC4(ctx, gobj, msid, vel, 1_i32);
+    inl_ftCo_800CBAC4_unfused(ctx, gobj, msid, vel, 1_i32);
     (fp).set_phys_cb(fnptr(ctx, 0x800cc654));
     (fp).mv().co().jumpaerial().set_init_h_vel(fp::fmuls(
         (fp).input().lstick().get(0_i32).x(),
@@ -300,7 +300,7 @@ pub fn ftYs_JumpAerial_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     ));
     vel.set_y(0.0);
     vel.set_z(0.0);
-    fns::ftCo_800CBAC4(ctx, gobj, (enums::ftCo_MS_JumpAerialF as i32), vel, 1_i32);
+    inl_ftCo_800CBAC4(ctx, gobj, (enums::ftCo_MS_JumpAerialF as i32), vel, 1_i32);
     (fp).set_phys_cb(fnptr(ctx, 0x800cc6c8));
     (fp).set_anim_cb(fnptr(ctx, 0x800cc3c4));
     (fp).dmg().set_armor1((ys_attrs).x8());
@@ -312,7 +312,7 @@ pub fn ftYs_JumpAerial_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).mv().co().jumpaerial().set_x0(0_i32);
     }
     arg1 = (ys_attrs).x0();
-    fns::ft_800CB6EC(ctx, fp, arg1);
+    inl_ft_800CB6EC(ctx, fp, arg1);
 }
 
 pub fn ftPe_JumpAerial_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -348,7 +348,7 @@ pub fn ftPe_JumpAerial_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     ));
     vel.set_y(0.0);
     vel.set_z(0.0);
-    fns::ftCo_800CBAC4(ctx, gobj, msid, vel, 1_i32);
+    inl_ftCo_800CBAC4_unfused(ctx, gobj, msid, vel, 1_i32);
     (fp_r31).set_phys_cb(fnptr(ctx, 0x800cc6c8));
 }
 
@@ -385,7 +385,7 @@ pub fn ftMt_JumpAerial_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     ));
     vel.set_y(0.0);
     vel.set_z(0.0);
-    fns::ftCo_800CBAC4(ctx, gobj, msid, vel, 1_i32);
+    inl_ftCo_800CBAC4_unfused(ctx, gobj, msid, vel, 1_i32);
     (fp_r31).set_phys_cb(fnptr(ctx, 0x800cc6c8));
 }
 
@@ -410,8 +410,8 @@ pub fn ftYs_JumpAerial_Anim_Cb<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    fns::ftCo_JumpAerial_Anim(ctx, gobj);
-    fns::ft_800CB6EC(ctx, fp, (ys_attrs).x0());
+    inl_ftCo_JumpAerial_Anim(ctx, gobj);
+    inl_ft_800CB6EC(ctx, fp, (ys_attrs).x0());
 }
 
 pub fn ftCo_JumpAerial_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -501,7 +501,7 @@ pub fn ftCo_JumpAerial_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     'l17: loop {
         'c18: {
-            if ((fns::ftCo_800CB870(ctx, gobj)) != 0) {
+            if ((inl_ftCo_800CB870_unfused(ctx, gobj)) != 0) {
                 return;
             }
         }
@@ -580,6 +580,28 @@ pub fn ftCo_JumpAerial_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::ft_800835B0(ctx, gobj, fnptr(ctx, 0x80096cc8), fnptr(ctx, 0x80082b1c));
 }
 
+fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b74f0),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b74f0),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjAddRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     let mut jobj = jobj;
     let mut y = y;
@@ -603,31 +625,28 @@ fn inl_HSD_JObjAddRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b74f0),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b74f0),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
-}
-
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_ft_did_jump_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> i32 {
+    let mut fp = fp;
+    let mut arg1 = arg1;
+    if ((((fp).x1968_jumpsUsed() as i32) < (fp).co_attrs().max_jumps())
+        && ((((fp).input().lstick().get(0_i32).y()
+            >= (fns::p_ftCommonData(ctx).get()).tap_jump_threshold())
+            && (((fp).active_timer().lstick().y() as i32)
+                < (fns::p_ftCommonData(ctx).get()).tap_jump_window()))
+            || (((fp).input().pressed_buttons()
+                & (((shl_i32(1_i32, (10_i32 as u32))) | (shl_i32(1_i32, (11_i32 as u32))))
+                    as u32))
+                != 0)))
+        && (!((arg1 != 0) && (((fp).x68A() as i32) < (fns::p_ftCommonData(ctx).get()).x1C())))
+    {
+        return 1_i32;
+    }
+    return 0_i32;
 }
 
 fn inl_ft_SetVec_unfused<'a>(ctx: &'a Ctx, dst: Vec<'a>, src: Vec<'a>) {
@@ -650,9 +669,146 @@ fn inl_ft_JumpAerial_Sound_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, ftkind: i3
     }
 }
 
+fn inl_ftCo_800CBAC4_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    msid: i32,
+    vel: Vec<'a>,
+    arg3: i32,
+) {
+    let mut gobj = gobj;
+    let mut msid = msid;
+    let mut vel = vel;
+    let mut arg3 = arg3;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    fns::Fighter_ChangeMotionState(
+        ctx,
+        gobj,
+        msid,
+        0x8000_u32,
+        0.0,
+        1.0,
+        0.0,
+        null::<HSD_GObj<'a>>(ctx),
+    );
+    (fp).set_x2221_b7((1_i32 as u8));
+    inl_ft_SetVec_unfused(ctx, (fp).self_vel(), vel);
+    if (arg3 != 0) {
+        (fp).active_timer().lstick().set_y((254_i32 as u8));
+    }
+    (fp).set_x1968_jumpsUsed((((fp).x1968_jumpsUsed() as i32).wrapping_add(1_i32) as u8));
+    fns::ft_80088770(ctx, fp);
+    fns::ft_80088328(
+        ctx,
+        fp,
+        (((fp).ft_data()).x4C_sfx()).x14(),
+        (127_i32 as u8),
+        (64_i32 as u8),
+    );
+    inl_ft_JumpAerial_Sound_unfused(ctx, fp, (fp).kind());
+}
+
 fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_ft_SetVec<'a>(ctx: &'a Ctx, dst: Vec<'a>, src: Vec<'a>) {
+    let mut dst = dst;
+    let mut src = src;
+    (dst).set_x((src).x());
+    (dst).set_y((src).y());
+    (dst).set_z((src).z());
+}
+
+fn inl_ft_JumpAerial_Sound<'a>(ctx: &'a Ctx, fp: Fighter<'a>, ftkind: i32) {
+    let mut fp = fp;
+    let mut ftkind = ftkind;
+    if (((ftkind as u32) != ((enums::Ft_Kind_Mewtwo as i32) as u32))
+        && (((ftkind as u32) >= (16_i32 as u32))
+            || ((ftkind as u32) != ((enums::Ft_Kind_Ness as i32) as u32))))
+        && (!Handle::is_null((fp).x197C()))
+    {
+        fns::ft_PlaySFX(ctx, fp, 0x11b_i32, (127_i32 as u8), (64_i32 as u8));
+    }
+}
+
+fn inl_ftCo_800CBAC4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32, vel: Vec<'a>, arg3: i32) {
+    let mut gobj = gobj;
+    let mut msid = msid;
+    let mut vel = vel;
+    let mut arg3 = arg3;
+    let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+    fns::Fighter_ChangeMotionState(
+        ctx,
+        gobj,
+        msid,
+        0x8000_u32,
+        0.0,
+        1.0,
+        0.0,
+        null::<HSD_GObj<'a>>(ctx),
+    );
+    (fp).set_x2221_b7((1_i32 as u8));
+    inl_ft_SetVec(ctx, (fp).self_vel(), vel);
+    if (arg3 != 0) {
+        (fp).active_timer().lstick().set_y((254_i32 as u8));
+    }
+    (fp).set_x1968_jumpsUsed((((fp).x1968_jumpsUsed() as i32).wrapping_add(1_i32) as u8));
+    fns::ft_80088770(ctx, fp);
+    fns::ft_80088328(
+        ctx,
+        fp,
+        (((fp).ft_data()).x4C_sfx()).x14(),
+        (127_i32 as u8),
+        (64_i32 as u8),
+    );
+    inl_ft_JumpAerial_Sound(ctx, fp, (fp).kind());
+}
+
+fn inl_ft_800CB6EC<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) {
+    let mut fp = fp;
+    let mut arg1 = arg1;
+    if (fp).mv().co().jumpaerial().x0() != 0_i32 {
+        (fp).mv()
+            .co()
+            .jumpaerial()
+            .set_x0((fp).mv().co().jumpaerial().x0().wrapping_sub(1_i32));
+        inl_HSD_JObjAddRotationY(
+            ctx,
+            ((fp).parts()).joint(),
+            fp::fneg(
+                (fp::fmuls(
+                    (fp::fdivs(180.0, fp::frsp(arg1 as f64))),
+                    0.01745329238474369,
+                )),
+            ),
+        );
+        if (fp).mv().co().jumpaerial().x0() == (div_i32(arg1, 2_i32)) {
+            (fp).set_facing_dir(fp::fneg((fp).facing_dir()));
+        }
+    }
+}
+
+fn inl_ftCo_JumpAerial_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
+        fns::ftCo_FallAerial_Enter(ctx, gobj);
+    }
+}
+
+fn inl_ftCo_800CB870_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if (fns::ftCo_800C5240(ctx, gobj) != 0) {
+        return 0_i32;
+    }
+    if ((fp).can_multijump() != 0) {
+        return fns::ftCo_800D730C(ctx, gobj, 0_i32);
+    }
+    return fns::ftCo_JumpAerial_CheckInput(ctx, gobj, 0_i32);
 }
 
 /// Registers this unit's ports.

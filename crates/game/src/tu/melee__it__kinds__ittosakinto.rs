@@ -155,7 +155,7 @@ pub fn itTosakinto_UnkMotion2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
                     .x60_msid()
                     .wrapping_add(1_i32),
             );
-            fns::it_802C90E8(ctx, gobj);
+            inl_it_802C90E8_unfused(ctx, gobj);
         } else {
             (it).xDD4_itemVar().tosakinto().set_x60_msid(
                 (it).xDD4_itemVar()
@@ -172,7 +172,7 @@ pub fn itTosakinto_UnkMotion2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
                 .x60_msid()
                 .wrapping_add(1_i32),
         );
-        fns::it_802C90E8(ctx, gobj);
+        inl_it_802C90E8_unfused(ctx, gobj);
     }
     return 0_i32;
 }
@@ -280,6 +280,28 @@ fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JOb
     return null(ctx);
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f7a48),
+            (228_i32 as u32),
+            cstr(ctx, 0x803f7a48),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
     let mut jobj = jobj;
     let mut scale = scale;
@@ -313,28 +335,6 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f7a48),
-            (228_i32 as u32),
-            cstr(ctx, 0x803f7a48),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
-}
-
 fn inl_Item_TickLifetime_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) -> i32 {
     let mut ip = ip;
     if (ip).xD44_lifeTimer() <= 0.0 {
@@ -342,6 +342,49 @@ fn inl_Item_TickLifetime_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) -> i32 {
     }
     (ip).set_xD44_lifeTimer(fp::fsubs((ip).xD44_lifeTimer(), 1.0));
     return 0_i32;
+}
+
+fn inl_it_802C90E8_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut it: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut attrs: itTosakinto_Attrs<'a> =
+        (Handle::cast::<itTosakinto_Attrs<'a>>(((it).xC4_article_data()).x4_specialAttributes()));
+    let mut msid: i32 = 0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    fns::it_8027ADEC(
+        ctx,
+        0x46e_i32,
+        gobj,
+        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj))),
+        2.0,
+    );
+    fns::it_802762BC(ctx, it);
+    msid = (it).xDD4_itemVar().tosakinto().x60_msid();
+    if msid >= 3_i32 {
+        msid = 0_i32;
+    }
+    (it).xDD4_itemVar().tosakinto().set_x60_msid(msid);
+    fns::Item_80268E5C(
+        ctx,
+        gobj,
+        (it).xDD4_itemVar().tosakinto().x60_msid(),
+        (enums::ITEM_ANIM_UPDATE as i32),
+    );
+    (it).xDD4_itemVar()
+        .tosakinto()
+        .set_x64_vel_x((attrs).x8_vel_x());
+    if fns::HSD_Randi(ctx, 2_i32) != 0_i32 {
+        (it).xDD4_itemVar()
+            .tosakinto()
+            .set_x64_vel_x(fp::fneg((it).xDD4_itemVar().tosakinto().x64_vel_x()));
+    }
 }
 
 /// Registers this unit's ports.

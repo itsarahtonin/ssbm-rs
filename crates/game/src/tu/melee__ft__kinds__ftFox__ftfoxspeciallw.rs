@@ -473,7 +473,7 @@ pub fn ftFx_SpecialLwLoop_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fp::frsp(0_i32 as f64),
         null::<HSD_GObj<'a>>(ctx),
     );
-    statics::melee__ft__kinds__ftFox__ftfoxspeciallw::ftFx_SpecialLw_CreateReflectHit(ctx, gobj);
+    inl_ftFx_SpecialLw_CreateReflectHit_unfused(ctx, gobj);
 }
 
 pub fn ftFx_SpecialAirLwLoop_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -489,7 +489,7 @@ pub fn ftFx_SpecialAirLwLoop_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fp::frsp(0_i32 as f64),
         null::<HSD_GObj<'a>>(ctx),
     );
-    statics::melee__ft__kinds__ftFox__ftfoxspeciallw::ftFx_SpecialLw_CreateReflectHit(ctx, gobj);
+    inl_ftFx_SpecialLw_CreateReflectHit_unfused(ctx, gobj);
 }
 
 pub fn ftFx_SpecialLw_Turn<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -532,7 +532,7 @@ pub fn ftFx_SpecialLwTurn_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     inl_updateRelease(ctx, gobj);
-    statics::melee__ft__kinds__ftFox__ftfoxspeciallw::ftFx_SpecialLw_Turn(ctx, gobj);
+    inl_ftFx_SpecialLw_Turn(ctx, gobj);
     if (fp).mv().fx().SpecialLw().turnFrames() <= 0_i32 {
         let _ = fns::ftFx_SpecialLwHit_Check(ctx, gobj);
     }
@@ -544,7 +544,7 @@ pub fn ftFx_SpecialAirLwTurn_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     inl_updateRelease(ctx, gobj);
-    statics::melee__ft__kinds__ftFox__ftfoxspeciallw::ftFx_SpecialLw_Turn(ctx, gobj);
+    inl_ftFx_SpecialLw_Turn(ctx, gobj);
     if (fp).mv().fx().SpecialLw().turnFrames() <= 0_i32 {
         let _ = fns::ftFx_SpecialLwHit_Check(ctx, gobj);
     }
@@ -671,9 +671,9 @@ pub fn ftFx_SpecialLwHit_Check<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         return 0_i32;
     }
     if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
-        statics::melee__ft__kinds__ftFox__ftfoxspeciallw::ftFx_SpecialLwLoop_Enter(ctx, gobj);
+        inl_ftFx_SpecialLwLoop_Enter_unfused(ctx, gobj);
     } else {
-        statics::melee__ft__kinds__ftFox__ftfoxspeciallw::ftFx_SpecialAirLwLoop_Enter(ctx, gobj);
+        inl_ftFx_SpecialAirLwLoop_Enter_unfused(ctx, gobj);
     }
     return 1_i32;
 }
@@ -685,7 +685,7 @@ pub fn ftFx_SpecialLwHit_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     inl_updateRelease_unfused(ctx, gobj);
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
-        if (fns::ftFx_SpecialLwHit_Check(ctx, gobj) != 0) {
+        if (inl_ftFx_SpecialLwHit_Check_unfused(ctx, gobj) != 0) {
             fns::ftCommon_8007DB24(ctx, gobj);
             (fp).set_accessory4_cb(fnptr(ctx, 0x800e83e0));
         }
@@ -695,7 +695,7 @@ pub fn ftFx_SpecialLwHit_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftFx_SpecialAirLwHit_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let mut gobj = gobj;
-    fns::ftFx_SpecialLwHit_Anim(ctx, gobj);
+    inl_ftFx_SpecialLwHit_Anim_unfused(ctx, gobj);
 }
 
 pub fn ftFx_SpecialLwHit_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -835,7 +835,7 @@ pub fn ftFx_SpecialLwHit_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fp::frsp(0_i32 as f64),
         null::<HSD_GObj<'a>>(ctx),
     );
-    fns::ftFx_SpecialLwHit_SetCall(ctx, gobj);
+    inl_ftFx_SpecialLwHit_SetCall_unfused(ctx, gobj);
     (fp).set_accessory4_cb(fnptr(ctx, 0x800e84d8));
 }
 
@@ -979,6 +979,17 @@ fn inl_Fighter_SetEffectHitlagCallbacks_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a
     (fp).set_post_hitlag_cb(fnptr(ctx, 0x8005bac4));
 }
 
+fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
+fn inl_getFtSpecialAttrs_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> {
+    let mut fp = fp;
+    let mut fighter_attr: Addr<'a> = (fp).dat_attrs();
+    return fighter_attr;
+}
+
 fn inl_ftFox_SpecialLw_SetVars_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
@@ -996,17 +1007,6 @@ fn inl_ftFox_SpecialLw_SetVars_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         .SpecialLw()
         .set_gravityDelay((da).xA4_FOX_REFLECTOR_GRAVITY_DELAY());
     (fp).set_accessory4_cb(fnptr(ctx, 0x800e845c));
-}
-
-fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).user_data();
-}
-
-fn inl_getFtSpecialAttrs_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> {
-    let mut fp = fp;
-    let mut fighter_attr: Addr<'a> = (fp).dat_attrs();
-    return fighter_attr;
 }
 
 fn inl_ftCommon_GroundToAirStateChange_unfused<'a>(
@@ -1057,6 +1057,16 @@ fn inl_ftCommon_AirToGroundStateChange_unfused<'a>(
     );
 }
 
+fn inl_getFighter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {
+    let mut gobj = gobj;
+    return Handle::cast::<Fighter<'a>>((gobj).user_data());
+}
+
+fn inl_getFtAttrs_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> ftCo_DatAttrs<'a> {
+    let mut fp = fp;
+    return (fp).co_attrs();
+}
+
 fn inl_ftFox_SpecialLw_InlinePhys_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ca: ftCo_DatAttrs<'a> = null(ctx);
@@ -1080,14 +1090,17 @@ fn inl_ftFox_SpecialLw_InlinePhys_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
     let _ = fns::ftCommon_CalcSelfAccel_DeaccelQuickAir(ctx, fp);
 }
 
-fn inl_getFighter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {
+fn inl_ftFx_SpecialLw_CreateReflectHit_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
-    return Handle::cast::<Fighter<'a>>((gobj).user_data());
-}
-
-fn inl_getFtAttrs_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> ftCo_DatAttrs<'a> {
-    let mut fp = fp;
-    return (fp).co_attrs();
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
+    let mut da: ftFox_DatAttrs<'a> =
+        Handle::cast::<ftFox_DatAttrs<'a>>(inl_getFtSpecialAttrs_unfused(ctx, fp));
+    fns::ftColl_CreateReflectHit(
+        ctx,
+        gobj,
+        (da).xB0_FOX_REFLECTOR_REFLECTION(),
+        fnptr(ctx, 0x800e9a68),
+    );
 }
 
 fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
@@ -1111,27 +1124,46 @@ fn inl_updateRelease<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+fn inl_ftFx_SpecialLw_Turn<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
+    let mut da: ftFox_DatAttrs<'a> = Handle::cast::<ftFox_DatAttrs<'a>>((fp).dat_attrs());
+    (fp).mv()
+        .fx()
+        .SpecialLw()
+        .set_turnFrames((fp).mv().fx().SpecialLw().turnFrames().wrapping_sub(1));
+    if ((fp).cmd_vars().at(0_i32).get() == (0_i32 as u32))
+        && (fp::frsp((fp).mv().fx().SpecialLw().turnFrames() as f64)
+            <= (da).x9C_FOX_REFLECTOR_TURN_FRAMES())
+    {
+        (fp).cmd_vars().at(0_i32).set((1_i32 as u32));
+        (fp).set_facing_dir(fp::fneg((fp).facing_dir()));
+    }
+    fns::ftPartSetRotY(
+        ctx,
+        fp,
+        0_i32,
+        fp::fneg(
+            (fp::fmsubs(
+                (fp::fdivs(
+                    fp::frsp(180_i32 as f64),
+                    (da).x9C_FOX_REFLECTOR_TURN_FRAMES(),
+                )),
+                0.01745329238474369,
+                fns::ftPartGetRotZ(ctx, fp, 0_i32),
+            )),
+        ),
+    );
+}
+
 fn inl_ftFox_SpecialLw_SetReflectVars_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     (fp).set_reflecting((1_i32 as u8));
     (fp).set_reflect_hit_cb(fnptr(ctx, 0x800e9a68));
-}
-
-fn inl_enterGroundTurn_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let mut gobj = gobj;
-    fns::Fighter_ChangeMotionState(
-        ctx,
-        gobj,
-        (enums::ftFx_MS_SpecialLwTurn as i32),
-        2_u32,
-        fp::frsp(0_i32 as f64),
-        fp::frsp(1_i32 as f64),
-        fp::frsp(0_i32 as f64),
-        null::<HSD_GObj<'a>>(ctx),
-    );
-    inl_ftFox_SpecialLwTurn_SetVarAll_unfused(ctx, gobj);
 }
 
 fn inl_ftFox_SpecialLwTurn_SetVarAll_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -1149,6 +1181,21 @@ fn inl_ftFox_SpecialLwTurn_SetVarAll_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a
     statics::melee__ft__kinds__ftFox__ftfoxspeciallw::ftFx_SpecialLw_Turn(ctx, gobj);
 }
 
+fn inl_enterGroundTurn_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    fns::Fighter_ChangeMotionState(
+        ctx,
+        gobj,
+        (enums::ftFx_MS_SpecialLwTurn as i32),
+        2_u32,
+        fp::frsp(0_i32 as f64),
+        fp::frsp(1_i32 as f64),
+        fp::frsp(0_i32 as f64),
+        null::<HSD_GObj<'a>>(ctx),
+    );
+    inl_ftFox_SpecialLwTurn_SetVarAll_unfused(ctx, gobj);
+}
+
 fn inl_enterAirTurn_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     fns::Fighter_ChangeMotionState(
@@ -1162,6 +1209,36 @@ fn inl_enterAirTurn_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         null::<HSD_GObj<'a>>(ctx),
     );
     inl_ftFox_SpecialLwTurn_SetVarAll_unfused(ctx, gobj);
+}
+
+fn inl_ftFx_SpecialLwLoop_Enter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    fns::Fighter_ChangeMotionState(
+        ctx,
+        gobj,
+        (enums::ftFx_MS_SpecialLwLoop as i32),
+        2_u32,
+        fp::frsp(0_i32 as f64),
+        fp::frsp(1_i32 as f64),
+        fp::frsp(0_i32 as f64),
+        null::<HSD_GObj<'a>>(ctx),
+    );
+    inl_ftFx_SpecialLw_CreateReflectHit_unfused(ctx, gobj);
+}
+
+fn inl_ftFx_SpecialAirLwLoop_Enter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    fns::Fighter_ChangeMotionState(
+        ctx,
+        gobj,
+        (enums::ftFx_MS_SpecialAirLwLoop as i32),
+        2_u32,
+        fp::frsp(0_i32 as f64),
+        fp::frsp(1_i32 as f64),
+        fp::frsp(0_i32 as f64),
+        null::<HSD_GObj<'a>>(ctx),
+    );
+    inl_ftFx_SpecialLw_CreateReflectHit_unfused(ctx, gobj);
 }
 
 fn inl_updateRelease_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -1179,6 +1256,48 @@ fn inl_updateRelease_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             .SpecialLw()
             .set_releaseLag((fp).mv().fx().SpecialLw().releaseLag().wrapping_sub(1));
     }
+}
+
+fn inl_ftFx_SpecialLwHit_Check_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
+    if ((fp).mv().fx().SpecialLw().releaseLag() <= 0_i32)
+        && ((fp).mv().fx().SpecialLw().isRelease() != 0)
+    {
+        if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+            fns::ftFx_SpecialLwEnd_Enter(ctx, gobj);
+        } else {
+            fns::ftFx_SpecialAirLwEnd_Enter(ctx, gobj);
+        }
+        return 0_i32;
+    }
+    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        inl_ftFx_SpecialLwLoop_Enter_unfused(ctx, gobj);
+    } else {
+        inl_ftFx_SpecialAirLwLoop_Enter_unfused(ctx, gobj);
+    }
+    return 1_i32;
+}
+
+fn inl_ftFx_SpecialLwHit_Anim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    inl_updateRelease_unfused(ctx, gobj);
+    if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
+        if (fns::ftFx_SpecialLwHit_Check(ctx, gobj) != 0) {
+            fns::ftCommon_8007DB24(ctx, gobj);
+            (fp).set_accessory4_cb(fnptr(ctx, 0x800e83e0));
+        }
+    }
+}
+
+fn inl_ftFx_SpecialLwHit_SetCall_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    (fp).set_reflecting((1_i32 as u8));
+    (fp).set_reflect_hit_cb(fnptr(ctx, 0x800e9a68));
 }
 
 /// Registers this unit's ports.

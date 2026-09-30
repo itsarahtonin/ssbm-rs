@@ -927,6 +927,12 @@ fn inl_Fighter_ClearCmdVars_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
 }
 
+fn inl_Fighter_SetEffectHitlagCallbacks_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    (fp).set_pre_hitlag_cb(fnptr(ctx, 0x8005ba40));
+    (fp).set_post_hitlag_cb(fnptr(ctx, 0x8005bac4));
+}
+
 fn inl_setCallbacks_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
@@ -936,12 +942,6 @@ fn inl_setCallbacks_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     inl_Fighter_SetEffectHitlagCallbacks_unfused(ctx, fp);
 }
 
-fn inl_Fighter_SetEffectHitlagCallbacks_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
-    let mut fp = fp;
-    (fp).set_pre_hitlag_cb(fnptr(ctx, 0x8005ba40));
-    (fp).set_post_hitlag_cb(fnptr(ctx, 0x8005bac4));
-}
-
 fn inl_clearCallbacks_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
@@ -949,6 +949,12 @@ fn inl_clearCallbacks_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp).set_take_dmg_2_cb(null::<FnPtr<'a>>(ctx));
     (fp).set_pre_hitlag_cb(null::<FnPtr<'a>>(ctx));
     (fp).set_post_hitlag_cb(null::<FnPtr<'a>>(ctx));
+}
+
+fn inl_getFtSpecialAttrs_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> {
+    let mut fp = fp;
+    let mut fighter_attr: Addr<'a> = (fp).dat_attrs();
+    return fighter_attr;
 }
 
 fn inl_updateVelocity_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -964,12 +970,6 @@ fn inl_updateVelocity_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             fp::frsp((fp).mv().dk().specialn().xC() as f64),
         )),
     ));
-}
-
-fn inl_getFtSpecialAttrs_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> {
-    let mut fp = fp;
-    let mut fighter_attr: Addr<'a> = (fp).dat_attrs();
-    return fighter_attr;
 }
 
 fn inl_ftCommon_GroundToAirStateChange_unfused<'a>(

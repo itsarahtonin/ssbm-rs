@@ -180,37 +180,6 @@ pub fn HSD_GObjGXLink_803909D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, other: HSD_
     inl_GObj_GXInsert_unfused(ctx, gobj, 3_i32, other);
 }
 
-fn inl_GObj_GXInsert_unfused<'a>(
-    ctx: &'a Ctx,
-    gobj: HSD_GObj<'a>,
-    r#where: i32,
-    position: HSD_GObj<'a>,
-) {
-    let mut gobj = gobj;
-    let mut r#where = r#where;
-    let mut position = position;
-    's1: {
-        let __case = match r#where {
-            0_i32 => 0,
-            1_i32 => 1,
-            3_i32 => 2,
-            _ => 3,
-        };
-        if __case <= 0 {
-            inl_GObj_GXInsertFromTail_unfused(ctx, gobj);
-            break 's1;
-        }
-        if __case <= 1 {
-            inl_GObj_GXInsertFromHead_unfused(ctx, gobj);
-            break 's1;
-        }
-        if __case <= 2 {
-            fns::GObj_GXReorder(ctx, gobj, (position).prev_gx());
-            break 's1;
-        }
-    }
-}
-
 fn inl_GObj_GXInsertFromTail_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut i: HSD_GObj<'a> =
@@ -248,6 +217,37 @@ fn inl_GObj_GXInsertFromHead_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             (Handle::add(fns::HSD_GObj_804D7820(ctx).get(), ((gobj).gx_link() as i32))).get()
         }),
     );
+}
+
+fn inl_GObj_GXInsert_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    r#where: i32,
+    position: HSD_GObj<'a>,
+) {
+    let mut gobj = gobj;
+    let mut r#where = r#where;
+    let mut position = position;
+    's1: {
+        let __case = match r#where {
+            0_i32 => 0,
+            1_i32 => 1,
+            3_i32 => 2,
+            _ => 3,
+        };
+        if __case <= 0 {
+            inl_GObj_GXInsertFromTail_unfused(ctx, gobj);
+            break 's1;
+        }
+        if __case <= 1 {
+            inl_GObj_GXInsertFromHead_unfused(ctx, gobj);
+            break 's1;
+        }
+        if __case <= 2 {
+            fns::GObj_GXReorder(ctx, gobj, (position).prev_gx());
+            break 's1;
+        }
+    }
 }
 
 /// Registers this unit's ports.

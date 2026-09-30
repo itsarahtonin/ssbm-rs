@@ -256,6 +256,11 @@ pub fn un_802FF78C<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
     return gobj;
 }
 
+fn inl_getEntry_unfused<'a>(ctx: &'a Ctx, slot: i32) -> un_804A1F58_x8_t<'a> {
+    let mut slot = slot;
+    return statics::melee__if__if_2FF2::un_804A1F58(ctx).x8().get(slot);
+}
+
 fn inl_findSlot_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
     let mut i: i32 = 0;
@@ -271,11 +276,6 @@ fn inl_findSlot_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         }
     }
     return 1_i32.wrapping_neg();
-}
-
-fn inl_getEntry_unfused<'a>(ctx: &'a Ctx, slot: i32) -> un_804A1F58_x8_t<'a> {
-    let mut slot = slot;
-    return statics::melee__if__if_2FF2::un_804A1F58(ctx).x8().get(slot);
 }
 
 fn inl_getScore_unfused<'a>(ctx: &'a Ctx, slot: i32) -> i32 {

@@ -594,6 +594,23 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_Fighter_ClearCmdVars_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    (fp).cmd_vars().at(3_i32).set((0_i32 as u32));
+    (fp).cmd_vars().at(2_i32).set((0_i32 as u32));
+    (fp).cmd_vars().at(1_i32).set((0_i32 as u32));
+    (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
+}
+
+fn inl_Fighter_SetDamageCallback_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
+    let mut gobj = gobj;
+    let mut cb = cb;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    (fp).set_take_dmg_cb(cb);
+    (fp).set_death2_cb(cb);
+}
+
 fn inl_doEnter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
     let mut gobj = gobj;
     let mut msid = msid;
@@ -619,23 +636,6 @@ fn inl_doEnter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
     (fp).mv().sk().specialn().set_x8(0_i32);
     inl_Fighter_SetDamageCallback_unfused(ctx, gobj, fnptr(ctx, 0x80110198));
     fns::ftAnim_8006EBA4(ctx, gobj);
-}
-
-fn inl_Fighter_ClearCmdVars_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
-    let mut fp = fp;
-    (fp).cmd_vars().at(3_i32).set((0_i32 as u32));
-    (fp).cmd_vars().at(2_i32).set((0_i32 as u32));
-    (fp).cmd_vars().at(1_i32).set((0_i32 as u32));
-    (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
-}
-
-fn inl_Fighter_SetDamageCallback_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
-    let mut gobj = gobj;
-    let mut cb = cb;
-    let mut fp: Fighter<'a> =
-        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    (fp).set_take_dmg_cb(cb);
-    (fp).set_death2_cb(cb);
 }
 
 fn inl_doIasa_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, end_msid: i32, cancel_msid: i32) {

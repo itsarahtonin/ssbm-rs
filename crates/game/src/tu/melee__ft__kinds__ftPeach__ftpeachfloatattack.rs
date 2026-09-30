@@ -100,7 +100,7 @@ pub fn ftPe_FloatAttackAir_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     if (((fp).allow_interrupt() as i32) != 0)
         && (!(fns::ftCo_80095328(ctx, gobj, null::<Val<'a, i32>>(ctx)) != 0))
     {
-        if !(fns::ftPe_8011BE80(ctx, gobj) != 0) {
+        if !(inl_ftPe_8011BE80_unfused(ctx, gobj) != 0) {
             if (fns::ftCo_800CB870(ctx, gobj) != 0) {
                 return;
             }
@@ -145,6 +145,46 @@ fn inl_ftCheckThrowB3_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     }
     #[allow(unreachable_code)]
     return 0;
+}
+
+fn inl_ftPe_8011BF34_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut msid: i32 = fns::ftCo_AttackAir_GetMsidFromCStick(ctx, fp);
+    (fp).mv().pe().floatattack().set_x0(0_i32);
+    fns::ftCo_AttackAir_EnterFromMsid(
+        ctx,
+        gobj,
+        msid.wrapping_add((enums::ftCo_MS_CaptureDamageKoopa as i32)),
+    );
+}
+
+fn inl_ftPe_8011BE80_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if (((fp).input().pressed_buttons() & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0)
+        || (fns::ftCo_800DF478(ctx, fp) != 0)
+    {
+        if (fp).u().pe().x4() > fp::frsp(0_i32 as f64) {
+            if (fns::ftCo_AttackAir_GetMsidFromCStick(ctx, fp) as u32).wrapping_sub(65_u32)
+                <= (1_i32 as u32)
+            {
+                if (!Handle::is_null((fp).item_gobj()))
+                    && (fns::it_8026B30C(ctx, (fp).item_gobj()) == 3_i32)
+                {
+                    fns::ftCo_800CDDA0(ctx, gobj);
+                    return 1_i32;
+                }
+            }
+            inl_ftPe_8011BF34_unfused(ctx, gobj);
+            return 1_i32;
+        }
+    }
+    return 0_i32;
 }
 
 /// Registers this unit's ports.

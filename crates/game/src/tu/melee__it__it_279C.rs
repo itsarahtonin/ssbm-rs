@@ -349,7 +349,7 @@ pub fn it_8027A4D4<'a>(ctx: &'a Ctx, item: Item<'a>) -> i32 {
         let _ = fns::gm_80172BC4(ctx);
         return 22_i32;
     }
-    rand_int = fns::HSD_Randi(ctx, fns::it_8027A364(ctx, item));
+    rand_int = fns::HSD_Randi(ctx, inl_it_8027A364_unfused(ctx, item));
     var_r3 = 0_i32;
     {
         i = (enums::It_PKind_Start as i32);
@@ -725,7 +725,7 @@ pub fn it_8027B0C4<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, spawn: SpawnItem<'
     let mut spawn = spawn;
     if (fns::ftLib_IsFighter(ctx, (spawn).x0_parent_gobj()) != 0) {
         if (fns::ftLib_IsFighter(ctx, (spawn).x4_parent_gobj2()) != 0) {
-            fns::it_8027B070(ctx, item_gobj, (spawn).x4_parent_gobj2());
+            inl_it_8027B070_unfused(ctx, item_gobj, (spawn).x4_parent_gobj2());
         } else {
             let mut owner_item: Item<'a> =
                 Handle::cast::<Item<'a>>(((spawn).x4_parent_gobj2()).user_data());
@@ -935,6 +935,28 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8588),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b8588),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
     let mut jobj = jobj;
     let mut scale = scale;
@@ -966,28 +988,6 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b8588),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b8588),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjGetScaleX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
@@ -1102,6 +1102,36 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
     }
 }
 
+fn inl_it_8027A364_unfused<'a>(ctx: &'a Ctx, item: Item<'a>) -> i32 {
+    let mut item = item;
+    let mut attr: itPokemonSpawn_DatAttrs<'a> = Handle::cast::<itPokemonSpawn_DatAttrs<'a>>(
+        ((item).xC4_article_data()).x4_specialAttributes(),
+    );
+    let mut ret_val: i32 = 1_i32;
+    let mut i: i32 = 0;
+    let mut start: i32 = (enums::It_PKind_Start as i32);
+    let mut end: i32 = (enums::It_PKind_Terminate as i32);
+    {
+        i = start;
+        'l1: while i < end {
+            'c2: {
+                if (fns::Item_804A0E24(ctx).last_kind() != i)
+                    && (fns::Item_804A0E24(ctx).previous_kind() != i)
+                {
+                    ret_val = ret_val.wrapping_add(
+                        (attr)
+                            .pokemon_spawn_weights()
+                            .at(i.wrapping_sub((enums::It_PKind_Start as i32)))
+                            .get(),
+                    );
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return ret_val;
+}
+
 fn inl_selectPokemonFromList_unfused<'a>(ctx: &'a Ctx, item: Item<'a>, kinds: Val<'a, i32>) -> i32 {
     let mut item = item;
     let mut kinds = kinds;
@@ -1176,6 +1206,22 @@ fn inl_HSD_JObjSetRotation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate:
             }
         }
     }
+}
+
+fn inl_it_8027B070_unfused<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, owner_gobj: HSD_GObj<'a>) {
+    let mut item_gobj = item_gobj;
+    let mut owner_gobj = owner_gobj;
+    let mut item: Item<'a> =
+        (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
+    let mut fighter: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, owner_gobj)));
+    (item).set_xD88_attackID((fighter).x2068_attackID());
+    (item).set_xD8C_attack_instance((fighter).x206C_attack_instance());
+    Handle::copy_from((item).xD90(), (fighter).x2070());
+    Handle::copy_from((item).xD94(), (fighter).x2074().x2074_vec());
+    Handle::copy_from((item).xD9C(), (fighter).x2074().x207C());
+    (item).set_xDA4_word((fighter).x2074().x10().x2084());
+    (item).set_xDA8_short((fighter).x2074().x2088());
 }
 
 /// Registers this unit's ports.

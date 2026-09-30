@@ -315,6 +315,19 @@ fn inl_sfxForward_unfused<'a>(ctx: &'a Ctx) {
     fns::lbAudioAx_80024030(ctx, 1_i32);
 }
 
+fn inl_getStKind_unfused<'a>(ctx: &'a Ctx, data: gm_80187F48_EnterData<'a>) -> i32 {
+    let mut data = data;
+    return ((data).stkind() as i32);
+}
+
+fn inl_gm_80187F48_GetAudioConfig_unfused<'a>(ctx: &'a Ctx, stage_index: u8) -> u64 {
+    let mut stage_index = stage_index;
+    return (fns::lbAudioAx_80026E84(ctx, fns::Player_GetPlayerCharacter(ctx, 0_i32))
+        | statics::melee__gm__gm_1879::gm_1832_NormalAudioMasks(ctx)
+            .at((stage_index as i32))
+            .get());
+}
+
 fn inl_gm_80187F48_OnEnter_inline_unfused<'a>(ctx: &'a Ctx, arg0: gm_80187F48_EnterData<'a>) {
     let mut arg0 = arg0;
     let mut data: gm_1832_804736C0_t<'a> = null(ctx);
@@ -508,19 +521,6 @@ fn inl_gm_80187F48_OnEnter_inline_unfused<'a>(ctx: &'a Ctx, arg0: gm_80187F48_En
         let _ = fns::HSD_GObj_SetupProc(ctx, model_gobj_2, fnptr(ctx, 0x80187cf4), (0_i32 as u8));
     }
     let _ = fns::lbAudioAx_80023F28(ctx, 46_i32);
-}
-
-fn inl_getStKind_unfused<'a>(ctx: &'a Ctx, data: gm_80187F48_EnterData<'a>) -> i32 {
-    let mut data = data;
-    return ((data).stkind() as i32);
-}
-
-fn inl_gm_80187F48_GetAudioConfig_unfused<'a>(ctx: &'a Ctx, stage_index: u8) -> u64 {
-    let mut stage_index = stage_index;
-    return (fns::lbAudioAx_80026E84(ctx, fns::Player_GetPlayerCharacter(ctx, 0_i32))
-        | statics::melee__gm__gm_1879::gm_1832_NormalAudioMasks(ctx)
-            .at((stage_index as i32))
-            .get());
 }
 
 /// Registers this unit's ports.

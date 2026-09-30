@@ -350,7 +350,7 @@ pub fn ftKb_SpecialN_800F5DE8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut da: ftKb_DatAttrs<'a> = Handle::cast::<ftKb_DatAttrs<'a>>((fp).dat_attrs());
-    fns::ftKb_SpecialN_800F5B5C(ctx, gobj, pos);
+    inl_ftKb_SpecialN_800F5B5C(ctx, gobj, pos);
     if fns::it_802F23AC(ctx, (fp).target_item_gobj(), pos)
         < fp::fmuls(
             (da).specialn_inhale_velocity(),
@@ -372,7 +372,7 @@ pub fn ftKb_SpecialN_800F5EA8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut da: ftKb_DatAttrs<'a> = Handle::cast::<ftKb_DatAttrs<'a>>((fp).dat_attrs());
-    fns::ftKb_SpecialN_800F5B5C(ctx, gobj, pos);
+    inl_ftKb_SpecialN_800F5B5C(ctx, gobj, pos);
     if fns::ftCo_800BD19C(ctx, (fp).victim_gobj(), pos)
         < fp::fmuls(
             (da).specialn_inhale_velocity(),
@@ -1225,25 +1225,25 @@ pub fn ftKb_SpecialAirNEnd_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftKb_SpecialNCapture0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
     let mut gobj = gobj;
-    fns::ftKb_SpecialN_800F5DE8(ctx, gobj);
+    inl_ftKb_SpecialN_800F5DE8(ctx, gobj);
 }
 
 pub fn ftKb_SpecialNCapture_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
     let mut gobj = gobj;
-    fns::ftKb_SpecialN_800F5EA8(ctx, gobj);
+    inl_ftKb_SpecialN_800F5EA8(ctx, gobj);
 }
 
 pub fn ftKb_SpecialNCapture1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
-    fns::ftKb_SpecialNCapture0_Anim(ctx, gobj);
+    inl_ftKb_SpecialNCapture0_Anim_unfused(ctx, gobj);
 }
 
 pub fn ftKb_SpecialAirNCapture_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
-    fns::ftKb_SpecialNCapture_Anim(ctx, gobj);
+    inl_ftKb_SpecialNCapture_Anim_unfused(ctx, gobj);
 }
 
 pub fn ftKb_Eat_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -2328,6 +2328,20 @@ fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     return (gobj).user_data();
 }
 
+fn inl_ftKb_SpecialN_800F5B5C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, output: Vec<'a>) {
+    let mut gobj = gobj;
+    let mut output = output;
+    let mut fp: Fighter<'a> = inl_getFighterPlus(ctx, gobj);
+    let mut da: ftKb_DatAttrs<'a> = Handle::cast::<ftKb_DatAttrs<'a>>((fp).dat_attrs());
+    Handle::copy_from((output), (fp).cur_pos());
+    (output).set_x(fp::fmadds(
+        (da).specialn_x_offset_inhaled(),
+        (fp).facing_dir(),
+        (output).x(),
+    ));
+    (output).set_y(fp::fadds((output).y(), (da).specialn_y_offset_inhaled()));
+}
+
 fn inl_ftGetGroundAir<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     let mut fp = fp;
     return (fp).ground_or_air();
@@ -2439,6 +2453,88 @@ fn inl_ftKb_SpecialN_SetThrowCb_unfused<'a>(
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     fns::ftCommon_8007E2D0(ctx, fp, (mask as i16), capture_cb, release_cb, throw_cb);
     (fp).set_x2225_b1((1_i32 as u8));
+}
+
+fn inl_enterCaptureState<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
+    let mut gobj = gobj;
+    let mut msid = msid;
+    let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+    fns::Fighter_ChangeMotionState(
+        ctx,
+        gobj,
+        msid,
+        ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+        0.0,
+        1.0,
+        0.0,
+        null::<HSD_GObj<'a>>(ctx),
+    );
+    fns::ftKb_SpecialN_800F9070(ctx, gobj);
+    fns::ftCommon_8007E2F4(ctx, fp, (0x1ff_i32 as i16));
+}
+
+fn inl_ftKb_SpecialN_800F63EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    inl_enterCaptureState(ctx, gobj, (enums::ftKb_MS_EatAir as i32));
+}
+
+fn inl_ftKb_SpecialN_800F6388<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    inl_enterCaptureState(ctx, gobj, (enums::ftKb_MS_Eat as i32));
+}
+
+fn inl_ftKb_SpecialN_800F5DE8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+    let mut da: ftKb_DatAttrs<'a> = Handle::cast::<ftKb_DatAttrs<'a>>((fp).dat_attrs());
+    inl_ftKb_SpecialN_800F5B5C(ctx, gobj, pos);
+    if fns::it_802F23AC(ctx, (fp).target_item_gobj(), pos)
+        < fp::fmuls(
+            (da).specialn_inhale_velocity(),
+            (da).specialn_inhale_velocity(),
+        )
+    {
+        fns::it_802F2810(ctx, (fp).target_item_gobj());
+        if inl_ftGetGroundAir(ctx, fp) == (enums::GA_Air as i32) {
+            inl_ftKb_SpecialN_800F63EC(ctx, gobj);
+        } else {
+            inl_ftKb_SpecialN_800F6388(ctx, gobj);
+        }
+    }
+}
+
+fn inl_ftKb_SpecialN_800F5EA8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+    let mut da: ftKb_DatAttrs<'a> = Handle::cast::<ftKb_DatAttrs<'a>>((fp).dat_attrs());
+    inl_ftKb_SpecialN_800F5B5C(ctx, gobj, pos);
+    if fns::ftCo_800BD19C(ctx, (fp).victim_gobj(), pos)
+        < fp::fmuls(
+            (da).specialn_inhale_velocity(),
+            (da).specialn_inhale_velocity(),
+        )
+    {
+        fns::ftCo_800BD620(ctx, (fp).victim_gobj());
+        if inl_ftGetGroundAir(ctx, fp) == (enums::GA_Air as i32) {
+            inl_ftKb_SpecialN_800F63EC(ctx, gobj);
+        } else {
+            inl_ftKb_SpecialN_800F6388(ctx, gobj);
+        }
+    }
+}
+
+fn inl_ftKb_SpecialNCapture0_Anim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    fns::ftKb_SpecialN_800F5DE8(ctx, gobj);
+}
+
+fn inl_ftKb_SpecialNCapture_Anim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    fns::ftKb_SpecialN_800F5EA8(ctx, gobj);
 }
 
 fn inl_getFighter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {

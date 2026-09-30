@@ -550,7 +550,7 @@ pub fn lbDvd_GetPreloadCacheScene<'a>(ctx: &'a Ctx) -> PreloadedGameModeState<'a
 }
 
 pub fn lbDvd_8001823C<'a>(ctx: &'a Ctx) {
-    (fns::lbDvd_GetPreloadCacheScene(ctx)).set_mode_scene_changes(
+    (inl_lbDvd_GetPreloadCacheScene_unfused(ctx)).set_mode_scene_changes(
         statics::melee__lb__lbdvd::preloadCache(ctx)
             .new_scene()
             .mode_scene_changes()
@@ -830,34 +830,34 @@ pub fn lbDvd_80018C6C<'a>(ctx: &'a Ctx) {
             _ => 4,
         };
         if __case <= 0 {
-            (fns::lbDvd_GetPreloadCacheScene(ctx))
+            (inl_lbDvd_GetPreloadCacheScene_unfused(ctx))
                 .is_heap_persistent()
                 .at(0_i32)
                 .set(1_i32);
             break 's1;
         }
         if __case <= 1 {
-            (fns::lbDvd_GetPreloadCacheScene(ctx))
+            (inl_lbDvd_GetPreloadCacheScene_unfused(ctx))
                 .is_heap_persistent()
                 .at(0_i32)
                 .set(1_i32);
-            (fns::lbDvd_GetPreloadCacheScene(ctx))
+            (inl_lbDvd_GetPreloadCacheScene_unfused(ctx))
                 .is_heap_persistent()
                 .at(1_i32)
                 .set(1_i32);
             break 's1;
         }
         if __case <= 2 {
-            (fns::lbDvd_GetPreloadCacheScene(ctx))
+            (inl_lbDvd_GetPreloadCacheScene_unfused(ctx))
                 .is_heap_persistent()
                 .at(0_i32)
                 .set(1_i32);
-            (fns::lbDvd_GetPreloadCacheScene(ctx))
+            (inl_lbDvd_GetPreloadCacheScene_unfused(ctx))
                 .is_heap_persistent()
                 .at(1_i32)
                 .set(1_i32);
             Handle::copy_from(
-                (fns::lbDvd_GetPreloadCacheScene(ctx)).game_cache(),
+                (inl_lbDvd_GetPreloadCacheScene_unfused(ctx)).game_cache(),
                 statics::melee__lb__lbdvd::preload_cache_scene(ctx).game_cache(),
             );
         }
@@ -872,7 +872,7 @@ pub fn lbDvd_80018CF4<'a>(ctx: &'a Ctx, arg0: i32) {
     let mut arg0 = arg0;
     let mut i: u32 = 0;
     if statics::melee__lb__lbdvd::preloadCache(ctx).persistent_heaps() != arg0 {
-        (fns::lbDvd_GetPreloadCacheScene(ctx)).set_mode_scene_changes(
+        (inl_lbDvd_GetPreloadCacheScene_unfused(ctx)).set_mode_scene_changes(
             statics::melee__lb__lbdvd::preloadCache(ctx)
                 .new_scene()
                 .mode_scene_changes()
@@ -906,7 +906,7 @@ pub fn lbDvd_80018CF4<'a>(ctx: &'a Ctx, arg0: i32) {
             _ => 4,
         };
         if __case <= 0 {
-            (fns::lbDvd_GetPreloadCacheScene(ctx))
+            (inl_lbDvd_GetPreloadCacheScene_unfused(ctx))
                 .is_heap_persistent()
                 .at(0_i32)
                 .set(
@@ -915,7 +915,7 @@ pub fn lbDvd_80018CF4<'a>(ctx: &'a Ctx, arg0: i32) {
                         .at(0_i32)
                         .get(),
                 );
-            (fns::lbDvd_GetPreloadCacheScene(ctx))
+            (inl_lbDvd_GetPreloadCacheScene_unfused(ctx))
                 .is_heap_persistent()
                 .at(1_i32)
                 .set(
@@ -925,14 +925,14 @@ pub fn lbDvd_80018CF4<'a>(ctx: &'a Ctx, arg0: i32) {
                         .get(),
                 );
             Handle::copy_from(
-                (fns::lbDvd_GetPreloadCacheScene(ctx)).game_cache(),
+                (inl_lbDvd_GetPreloadCacheScene_unfused(ctx)).game_cache(),
                 statics::melee__lb__lbdvd::preload_cache_scene(ctx).game_cache(),
             );
             break 's3;
         }
         if __case <= 1 {
             fns::lbHeap_800158D0(ctx, 2_i32, 0_i32);
-            (fns::lbDvd_GetPreloadCacheScene(ctx))
+            (inl_lbDvd_GetPreloadCacheScene_unfused(ctx))
                 .is_heap_persistent()
                 .at(1_i32)
                 .set(
@@ -942,7 +942,7 @@ pub fn lbDvd_80018CF4<'a>(ctx: &'a Ctx, arg0: i32) {
                         .get(),
                 );
             Handle::copy_from(
-                (fns::lbDvd_GetPreloadCacheScene(ctx)).game_cache(),
+                (inl_lbDvd_GetPreloadCacheScene_unfused(ctx)).game_cache(),
                 statics::melee__lb__lbdvd::preload_cache_scene(ctx).game_cache(),
             );
             break 's3;
@@ -951,7 +951,7 @@ pub fn lbDvd_80018CF4<'a>(ctx: &'a Ctx, arg0: i32) {
             fns::lbHeap_800158D0(ctx, 2_i32, 0_i32);
             fns::lbHeap_800158D0(ctx, 3_i32, 0_i32);
             Handle::copy_from(
-                (fns::lbDvd_GetPreloadCacheScene(ctx)).game_cache(),
+                (inl_lbDvd_GetPreloadCacheScene_unfused(ctx)).game_cache(),
                 statics::melee__lb__lbdvd::preload_cache_scene(ctx).game_cache(),
             );
             break 's3;
@@ -993,7 +993,7 @@ pub fn lbDvd_80018F68<'a>(ctx: &'a Ctx) {
     let mut i: i32 = 0;
     statics::melee__lb__lbdvd::preloadCache(ctx).set_persistent_heaps(0_i32);
     Handle::copy_from(
-        (fns::lbDvd_GetPreloadCacheScene(ctx)),
+        (inl_lbDvd_GetPreloadCacheScene_unfused(ctx)),
         statics::melee__lb__lbdvd::preload_cache_scene(ctx),
     );
     Handle::copy_from(
@@ -1059,6 +1059,10 @@ fn inl_cleanupPreloadHeap_unfused<'a>(ctx: &'a Ctx, heap: i32) -> i32 {
     return fns::lbHeap_80015D6C(ctx, (heap as u32), fnptr(ctx, 0x80017a80), (heap as u32));
 }
 
+fn inl_lbDvd_GetPreloadCacheScene_unfused<'a>(ctx: &'a Ctx) -> PreloadedGameModeState<'a> {
+    return statics::melee__lb__lbdvd::preloadCache(ctx).scene();
+}
+
 fn inl_negateLoadScores_unfused<'a>(ctx: &'a Ctx) {
     let mut entry: PreloadEntry<'a> = null(ctx);
     let mut i: i32 = 0;
@@ -1080,23 +1084,6 @@ fn inl_negateLoadScores_unfused<'a>(ctx: &'a Ctx) {
             }
             i = i.wrapping_add(1);
         }
-    }
-}
-
-fn inl_preloadRumbleFile_unfused<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x18);
-    let file: PreloadFile<'a> = frame_at(ctx, &__frame, 0x0);
-    ctx.fill(Handle::addr(file), 0, 0xc);
-    file.set_type((2_i32 as u8));
-    file.set_name(cstr(ctx, 0x803ba6bc));
-    if (statics::melee__lb__lbdvd::preloadCache(ctx)
-        .new_scene()
-        .is_heap_persistent()
-        .at(0_i32)
-        .get()
-        != 0)
-    {
-        inl_preloadFile_unfused(ctx, file, 2_i32, 9_i32, (128_i32 as u8));
     }
 }
 
@@ -1127,6 +1114,23 @@ fn inl_preloadFile_unfused<'a>(
         flags,
         effect_index,
     );
+}
+
+fn inl_preloadRumbleFile_unfused<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x18);
+    let file: PreloadFile<'a> = frame_at(ctx, &__frame, 0x0);
+    ctx.fill(Handle::addr(file), 0, 0xc);
+    file.set_type((2_i32 as u8));
+    file.set_name(cstr(ctx, 0x803ba6bc));
+    if (statics::melee__lb__lbdvd::preloadCache(ctx)
+        .new_scene()
+        .is_heap_persistent()
+        .at(0_i32)
+        .get()
+        != 0)
+    {
+        inl_preloadFile_unfused(ctx, file, 2_i32, 9_i32, (128_i32 as u8));
+    }
 }
 
 fn inl_preloadCommonFiles_unfused<'a>(ctx: &'a Ctx) {

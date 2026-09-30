@@ -279,6 +279,12 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_Fighter_SetEffectHitlagCallbacks_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    (fp).set_pre_hitlag_cb(fnptr(ctx, 0x8005ba40));
+    (fp).set_post_hitlag_cb(fnptr(ctx, 0x8005bac4));
+}
+
 fn inl_fn_800F53AC_SpawnEffect_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
@@ -301,12 +307,6 @@ fn inl_fn_800F53AC_SpawnEffect_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     );
     (fp).set_x2219_b0((1_i32 as u8));
     inl_Fighter_SetEffectHitlagCallbacks_unfused(ctx, fp);
-}
-
-fn inl_Fighter_SetEffectHitlagCallbacks_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
-    let mut fp = fp;
-    (fp).set_pre_hitlag_cb(fnptr(ctx, 0x8005ba40));
-    (fp).set_post_hitlag_cb(fnptr(ctx, 0x8005bac4));
 }
 
 fn inl_fn_800F53AC_CleanupItem_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

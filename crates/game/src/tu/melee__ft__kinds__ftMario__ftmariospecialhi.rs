@@ -95,7 +95,7 @@ pub fn ftMr_SpecialAirHi_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
-    fns::ftMr_SpecialHi_Anim(ctx, gobj);
+    inl_ftMr_SpecialHi_Anim_unfused(ctx, gobj);
 }
 
 pub fn ftMr_SpecialHi_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -161,7 +161,7 @@ pub fn ftMr_SpecialAirHi_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
-    fns::ftMr_SpecialHi_IASA(ctx, gobj);
+    inl_ftMr_SpecialHi_IASA_unfused(ctx, gobj);
 }
 
 pub fn ftMr_SpecialHi_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -231,12 +231,31 @@ pub fn ftMr_SpecialHi_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftMr_SpecialAirHi_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
-    fns::ftMr_SpecialHi_Coll(ctx, gobj);
+    inl_ftMr_SpecialHi_Coll_unfused(ctx, gobj);
 }
 
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_ftMr_SpecialHi_Anim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = null(ctx);
+    let mut sa: ftMario_DatAttrs<'a> = null(ctx);
+    fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    sa = Handle::cast::<ftMario_DatAttrs<'a>>((fp).dat_attrs());
+    if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
+        fns::ftCo_80096900(
+            ctx,
+            gobj,
+            0_i32,
+            1_i32,
+            0_i32,
+            (sa).specialhi().freefall_mobility(),
+            (sa).specialhi().landing_lag(),
+        );
+    }
 }
 
 fn inl_ftCheckThrowB3_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
@@ -251,6 +270,64 @@ fn inl_ftCheckThrowB3_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     return 0;
 }
 
+fn inl_ftMr_SpecialHi_IASA_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut sa: ftMario_DatAttrs<'a> = Handle::cast::<ftMario_DatAttrs<'a>>((fp).dat_attrs());
+    let mut lstick_x: f64 = (if (fp).input().lstick().get(0_i32).x() < fp::frsp(0_i32 as f64) {
+        fp::fneg((fp).input().lstick().get(0_i32).x())
+    } else {
+        (fp).input().lstick().get(0_i32).x()
+    });
+    if ((fp).cmd_vars().at(0_i32).get() == (0_i32 as u32))
+        && (lstick_x > (sa).specialhi().momentum_stick_range())
+    {
+        let mut deg: f64 = fp::frsp(fp::fmul(
+            (sa).specialhi().angle_diff(),
+            (fp::fdiv(
+                (fp::fsubs(lstick_x, (sa).specialhi().momentum_stick_range())),
+                (fp::fsub(1.0, (sa).specialhi().momentum_stick_range())),
+            )),
+        ));
+        let mut rad: f64 = (if (fp).input().lstick().get(0_i32).x() > fp::frsp(0_i32 as f64) {
+            fp::fneg((fp::fmuls((deg), 0.01745329238474369)))
+        } else {
+            (fp::fmuls((deg), 0.01745329238474369))
+        });
+        if (if rad < fp::frsp(0_i32 as f64) {
+            fp::fneg(rad)
+        } else {
+            rad
+        }) > (if (fp).lstick_angle() < fp::frsp(0_i32 as f64) {
+            fp::fneg((fp).lstick_angle())
+        } else {
+            (fp).lstick_angle()
+        }) {
+            (fp).set_lstick_angle(rad);
+        }
+    }
+    if (inl_ftCheckThrowB3_unfused(ctx, fp) != 0) {
+        if (if (fp).input().lstick().get(0_i32).x() < fp::frsp(0_i32 as f64) {
+            fp::fneg((fp).input().lstick().get(0_i32).x())
+        } else {
+            (fp).input().lstick().get(0_i32).x()
+        }) > (sa).specialhi().reverse_stick_range()
+        {
+            fns::ftCommon_UpdateFacing(ctx, fp);
+            fns::ftPartSetRotY(
+                ctx,
+                fp,
+                0_i32,
+                fp::frsp(fp::fmul(
+                    (fp::fdiv(3.141592653589793, (2_i32 as f64))),
+                    (fp).facing_dir(),
+                )),
+            );
+        }
+    }
+}
+
 fn inl_getFighter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {
     let mut gobj = gobj;
     return Handle::cast::<Fighter<'a>>((gobj).user_data());
@@ -261,6 +338,23 @@ fn inl_GetMarioAttr_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> ftMario_DatAtt
     let mut mario_attr: ftMario_DatAttrs<'a> =
         Handle::cast::<ftMario_DatAttrs<'a>>((fp).dat_attrs());
     return mario_attr;
+}
+
+fn inl_ftMr_SpecialHi_Coll_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if ((fp).cmd_vars().at(0_i32).get() == (0_i32 as u32))
+            || ((fp).self_vel().y() >= fp::frsp(0_i32 as f64))
+        {
+            fns::ft_80083B68(ctx, gobj);
+        } else {
+            fns::ft_800831CC(ctx, gobj, fnptr(ctx, 0x80096cc8), fnptr(ctx, 0x800e1f40));
+        }
+    } else {
+        fns::ft_80084104(ctx, gobj);
+    }
 }
 
 /// Registers this unit's ports.

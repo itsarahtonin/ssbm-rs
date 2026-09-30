@@ -168,7 +168,7 @@ pub fn pl_8003D644<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32, arg2: i32, arg3: i32)
                     fns::pl_80038824(ctx, arg0, 133_i32);
                 }
                 if temp_r28 == 2_i32 {
-                    if (fns::pl_8003D60C(ctx, temp_r29) != 0) {
+                    if (inl_pl_8003D60C_unfused(ctx, temp_r29) != 0) {
                         fns::pl_80038788(ctx, arg0, 136_i32, 1_i32);
                     } else if temp_r23 == arg0 {
                         fns::pl_80038788(ctx, arg0, 156_i32, 1_i32);
@@ -355,7 +355,7 @@ pub fn pl_8003D644<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32, arg2: i32, arg3: i32)
                         if (inl_between_A1_D0_unfused(ctx, temp_r29) != 0) {
                             fns::pl_80038824(ctx, temp_r23, 203_i32);
                         }
-                        if (fns::pl_8003D60C(ctx, temp_r29) != 0) {
+                        if (inl_pl_8003D60C_unfused(ctx, temp_r29) != 0) {
                             fns::pl_80038824(ctx, temp_r23, 128_i32);
                         }
                         if temp_r29 == 234_i32 {
@@ -2466,9 +2466,11 @@ pub fn pl_80040DB8<'a>(ctx: &'a Ctx, slot: i32) -> i32 {
         .xCB0();
 }
 
-fn inl_between_A1_D0_unfused<'a>(ctx: &'a Ctx, x: i32) -> i32 {
-    let mut x = x;
-    if (x >= 161_i32) && (x < 208_i32) {
+fn inl_pl_8003D60C_unfused<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
+    let mut arg0 = arg0;
+    if (((arg0 >= 160_i32) && (arg0 < 161_i32)) || ((arg0 >= 234_i32) && (arg0 < 238_i32)))
+        || (arg0 == 225_i32)
+    {
         return 1_i32;
     } else {
         return 0_i32;
@@ -2477,12 +2479,9 @@ fn inl_between_A1_D0_unfused<'a>(ctx: &'a Ctx, x: i32) -> i32 {
     return 0;
 }
 
-fn inl_unk_cond_unfused<'a>(ctx: &'a Ctx, arg0: i32, temp_r23: i32) -> i32 {
-    let mut arg0 = arg0;
-    let mut temp_r23 = temp_r23;
-    if ((temp_r23 == 6_i32) || (temp_r23 == arg0))
-        || (inl_pl_CheckIfSameTeam_unfused(ctx, arg0, temp_r23) != 0)
-    {
+fn inl_between_A1_D0_unfused<'a>(ctx: &'a Ctx, x: i32) -> i32 {
+    let mut x = x;
+    if (x >= 161_i32) && (x < 208_i32) {
         return 1_i32;
     } else {
         return 0_i32;
@@ -2504,6 +2503,20 @@ fn inl_pl_CheckIfSameTeam_unfused<'a>(ctx: &'a Ctx, slotA: i32, slotB: i32) -> i
         }
     }
     return 0_i32;
+}
+
+fn inl_unk_cond_unfused<'a>(ctx: &'a Ctx, arg0: i32, temp_r23: i32) -> i32 {
+    let mut arg0 = arg0;
+    let mut temp_r23 = temp_r23;
+    if ((temp_r23 == 6_i32) || (temp_r23 == arg0))
+        || (inl_pl_CheckIfSameTeam_unfused(ctx, arg0, temp_r23) != 0)
+    {
+        return 1_i32;
+    } else {
+        return 0_i32;
+    }
+    #[allow(unreachable_code)]
+    return 0;
 }
 
 fn inl_match_item_kind_unfused<'a>(ctx: &'a Ctx, kind: i32) -> i32 {

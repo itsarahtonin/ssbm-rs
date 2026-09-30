@@ -112,7 +112,7 @@ pub fn ftGw_Attack11_ItemGreenhouseRemove<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if !Handle::is_null((fp).u().gw().x224C_greenhouseGObj()) {
         fns::itGamewatchGreenhouse_802C6328(ctx, (fp).u().gw().x224C_greenhouseGObj());
-        fns::ftGw_Attack11_ItemGreenhouseSetFlag(ctx, gobj);
+        inl_ftGw_Attack11_ItemGreenhouseSetFlag_unfused(ctx, gobj);
     }
 }
 
@@ -222,6 +222,16 @@ fn inl_getFighter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_ftGw_Attack11_ItemGreenhouseSetFlag_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    fns::ftGw_Attack11_ItemGreenhouseExitHitlag(ctx, gobj);
+    (fp).u()
+        .gw()
+        .set_x224C_greenhouseGObj(null::<HSD_GObj<'a>>(ctx));
 }
 
 /// Registers this unit's ports.

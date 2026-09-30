@@ -221,6 +221,11 @@ fn inl_Ground_InitTargetStage_unfused<'a>(ctx: &'a Ctx, create_gobj: FnPtr<'a>) 
     fns::Ground_801C42AC(ctx);
 }
 
+fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
 fn inl_Ground_SetupStageCallbacks_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -250,9 +255,9 @@ fn inl_Ground_SetupStageCallbacks_unfused<'a>(
     }
 }
 
-fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
-    return (gobj).user_data();
+    return (gobj).hsd_obj();
 }
 
 fn inl_Ground_InitMapCollAndAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -263,11 +268,6 @@ fn inl_Ground_InitMapCollAndAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
     let _ = fns::Ground_InitMapColl(ctx, jobj, (gp).map_id());
     fns::grAnime_801C8138(ctx, gobj, (gp).map_id(), 0_i32);
-}
-
-fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).hsd_obj();
 }
 
 fn inl_Ground_UpdateWindAndMapColl_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

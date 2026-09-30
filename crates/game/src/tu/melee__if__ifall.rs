@@ -260,7 +260,7 @@ pub fn fn_802F36B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
     let mut unused = unused;
-    if !(fns::ifAll_IsHUDHidden(ctx) != 0) {
+    if !(inl_ifAll_IsHUDHidden_unfused(ctx) != 0) {
         if (fns::HSD_CObjSetCurrent(
             ctx,
             (Handle::cast::<HSD_CObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj))),
@@ -295,7 +295,7 @@ pub fn ifAll_802F370C<'a>(ctx: &'a Ctx, scene: SceneDesc<'a>) {
         ctx,
         child.get(),
         null::<Vec<'a>>(ctx),
-        fns::ifAll_GetTimerPosition(ctx),
+        inl_ifAll_GetTimerPosition_unfused(ctx),
     );
     let _ = fns::lb_80011E24(
         ctx,
@@ -310,7 +310,7 @@ pub fn ifAll_802F370C<'a>(ctx: &'a Ctx, scene: SceneDesc<'a>) {
         ctx,
         child.get(),
         null::<Vec<'a>>(ctx),
-        fns::ifAll_GetPlayerHUDPosition(ctx, 0_i32),
+        inl_ifAll_GetPlayerHUDPosition_unfused(ctx, 0_i32),
     );
     let _ = fns::lb_80011E24(
         ctx,
@@ -325,7 +325,7 @@ pub fn ifAll_802F370C<'a>(ctx: &'a Ctx, scene: SceneDesc<'a>) {
         ctx,
         child.get(),
         null::<Vec<'a>>(ctx),
-        fns::ifAll_GetPlayerHUDPosition(ctx, 1_i32),
+        inl_ifAll_GetPlayerHUDPosition_unfused(ctx, 1_i32),
     );
     let _ = fns::lb_80011E24(
         ctx,
@@ -340,7 +340,7 @@ pub fn ifAll_802F370C<'a>(ctx: &'a Ctx, scene: SceneDesc<'a>) {
         ctx,
         child.get(),
         null::<Vec<'a>>(ctx),
-        fns::ifAll_GetPlayerHUDPosition(ctx, 2_i32),
+        inl_ifAll_GetPlayerHUDPosition_unfused(ctx, 2_i32),
     );
     let _ = fns::lb_80011E24(
         ctx,
@@ -355,7 +355,7 @@ pub fn ifAll_802F370C<'a>(ctx: &'a Ctx, scene: SceneDesc<'a>) {
         ctx,
         child.get(),
         null::<Vec<'a>>(ctx),
-        fns::ifAll_GetPlayerHUDPosition(ctx, 3_i32),
+        inl_ifAll_GetPlayerHUDPosition_unfused(ctx, 3_i32),
     );
     let _ = fns::lb_80011E24(
         ctx,
@@ -370,7 +370,7 @@ pub fn ifAll_802F370C<'a>(ctx: &'a Ctx, scene: SceneDesc<'a>) {
         ctx,
         child.get(),
         null::<Vec<'a>>(ctx),
-        fns::ifAll_GetPlayerHUDPosition(ctx, 4_i32),
+        inl_ifAll_GetPlayerHUDPosition_unfused(ctx, 4_i32),
     );
     let _ = fns::lb_80011E24(
         ctx,
@@ -385,7 +385,7 @@ pub fn ifAll_802F370C<'a>(ctx: &'a Ctx, scene: SceneDesc<'a>) {
         ctx,
         child.get(),
         null::<Vec<'a>>(ctx),
-        fns::ifAll_GetPlayerHUDPosition(ctx, 5_i32),
+        inl_ifAll_GetPlayerHUDPosition_unfused(ctx, 5_i32),
     );
     {
         i = 0_i32;
@@ -439,7 +439,7 @@ pub fn ifAll_802F370C<'a>(ctx: &'a Ctx, scene: SceneDesc<'a>) {
 pub fn ifAll_802F390C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
     let scene: Ptr<'a, SceneDesc<'a>> = frame_at(ctx, &__frame, 0x0);
-    fns::ifAll_ShowHUD(ctx);
+    inl_ifAll_ShowHUD_unfused(ctx);
     inl_loadScene_unfused(ctx, scene);
     statics::melee__if__ifall::ifAll_802F370C(ctx, scene.get());
     statics::melee__if__ifall::ifAll_804A0FD8(ctx).set_gobj(inl_createCamera_unfused(
@@ -500,9 +500,28 @@ fn inl_ifAll_802F343C_inline_unfused<'a>(ctx: &'a Ctx, i: i32) {
         ));
 }
 
+fn inl_ifAll_IsHUDHidden_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    return (statics::melee__if__ifall::hidden(ctx).get() as i32);
+}
+
 fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).hsd_obj();
+}
+
+fn inl_ifAll_GetTimerPosition_unfused<'a>(ctx: &'a Ctx) -> Vec<'a> {
+    return statics::melee__if__ifall::ifAll_804A0FD8(ctx).xC();
+}
+
+fn inl_ifAll_GetPlayerHUDPosition_unfused<'a>(ctx: &'a Ctx, idx: i32) -> Vec<'a> {
+    let mut idx = idx;
+    return statics::melee__if__ifall::ifAll_804A0FD8(ctx)
+        .x18()
+        .get(idx);
+}
+
+fn inl_ifAll_ShowHUD_unfused<'a>(ctx: &'a Ctx) {
+    statics::melee__if__ifall::hidden(ctx).set((0_i32 as u8));
 }
 
 fn inl_loadScene_unfused<'a>(ctx: &'a Ctx, scene: Ptr<'a, SceneDesc<'a>>) {

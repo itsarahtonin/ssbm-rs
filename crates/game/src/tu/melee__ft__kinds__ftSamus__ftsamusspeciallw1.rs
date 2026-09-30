@@ -348,24 +348,56 @@ fn inl_ftSamus_SpecialLw_StartAction_inner_unfused<'a>(ctx: &'a Ctx, gobj: HSD_G
     (fp).set_accessory4_cb(fnptr(ctx, 0x8012adf0));
 }
 
-fn inl_checkStateVar1_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+fn inl_ftSs_SpecialLw_8012AEBC_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x30);
+    let hurt: ftHurtboxInit<'a> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (((fp).cmd_vars().at(0_i32).get()) != 0) && (!((fp).mv().ss().unk6().x0() != 0)) {
-        fns::ftSs_SpecialLw_8012AEBC(ctx, gobj);
-        inl_setSamusBits_unfused(ctx, fp, 1_i32);
-    }
-    if (!((fp).cmd_vars().at(0_i32).get() != 0)) && (((fp).mv().ss().unk6().x0()) != 0) {
-        fns::ftColl_8007B0C0(ctx, gobj, (enums::HurtCapsule_Enabled as i32));
-        inl_setSamusBits_unfused(ctx, fp, 0_i32);
-    }
+    fns::ftColl_8007B0C0(ctx, gobj, (enums::HurtCapsule_Intangible as i32));
+    hurt.set_bone_idx((enums::FtPart_XRotN as i32));
+    hurt.set_height((enums::HurtHeight_Mid as i32));
+    hurt.set_is_grabbable((0_i32 as u32));
+    hurt.a_offset().set_x({
+        let __t2 = {
+            let __t1 = fp::frsp(0_i32 as f64);
+            hurt.a_offset().set_z(__t1);
+            __t1
+        };
+        hurt.a_offset().set_y(__t2);
+        __t2
+    });
+    hurt.b_offset().set_x({
+        let __t4 = {
+            let __t3 = fp::frsp(0_i32 as f64);
+            hurt.b_offset().set_z(__t3);
+            __t3
+        };
+        hurt.b_offset().set_y(__t4);
+        __t4
+    });
+    hurt.set_scale(fp::frsp(3_i32 as f64));
+    fns::ftColl_HurtboxInit(ctx, fp, (fp).hurt_capsules().get(0_i32), hurt);
 }
 
 fn inl_setSamusBits_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, val: i32) {
     let mut fp = fp;
     let mut val = val;
     (fp).mv().ss().unk6().set_x0(val);
+}
+
+fn inl_checkStateVar1_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if (((fp).cmd_vars().at(0_i32).get()) != 0) && (!((fp).mv().ss().unk6().x0() != 0)) {
+        inl_ftSs_SpecialLw_8012AEBC_unfused(ctx, gobj);
+        inl_setSamusBits_unfused(ctx, fp, 1_i32);
+    }
+    if (!((fp).cmd_vars().at(0_i32).get() != 0)) && (((fp).mv().ss().unk6().x0()) != 0) {
+        fns::ftColl_8007B0C0(ctx, gobj, (enums::HurtCapsule_Enabled as i32));
+        inl_setSamusBits_unfused(ctx, fp, 0_i32);
+    }
 }
 
 fn inl_getFtSpecialAttrs_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> {

@@ -133,7 +133,7 @@ pub fn lbFileGetSize<'a>(ctx: &'a Ctx, basename: Val<'a, i8>) -> u32 {
             )
         })
     });
-    return fns::lbFile_8001634C(ctx, entry_num);
+    return inl_lbFile_8001634C_unfused(ctx, entry_num);
 }
 
 pub fn lbFile_800164A4<'a>(
@@ -153,7 +153,7 @@ pub fn lbFile_800164A4<'a>(
     let mut callback = callback;
     let mut args = args;
     let mut r#type: i32 = 0;
-    (size).set(fns::lbFile_8001634C(ctx, file));
+    (size).set(inl_lbFile_8001634C_unfused(ctx, file));
     r#type = (if dst >= 0x80000000_u32 {
         33_i32
     } else {
@@ -218,7 +218,7 @@ pub fn lbFile_80016580<'a>(
             )
         })
     });
-    fns::lbFile_800164A4(
+    inl_lbFile_800164A4_unfused(
         ctx,
         entry_num,
         Handle::addr(dst),
@@ -235,7 +235,7 @@ pub fn lbFile_8001668C<'a>(ctx: &'a Ctx, basename: Val<'a, i8>, dst: Addr<'a>, s
     let mut dst = dst;
     let mut size = size;
     statics::melee__lb__lbfile::cancel(ctx).set(0_i32);
-    fns::lbFile_80016580(
+    inl_lbFile_80016580_unfused(
         ctx,
         basename,
         dst,
@@ -279,7 +279,7 @@ pub fn lbFile_800168A0<'a>(
             __t1
         }),
     ) {
-        (size).set(fns::lbFileGetSize(ctx, basename));
+        (size).set(inl_lbFileGetSize_unfused(ctx, basename));
         return 1_i32;
     } else {
         statics::melee__lb__lbfile::cancel(ctx).set(0_i32);
@@ -299,6 +299,189 @@ fn inl_waitForDisc_unfused<'a>(ctx: &'a Ctx) {
     }
 }
 
+fn inl_lbFile_8001634C_unfused<'a>(ctx: &'a Ctx, fileno: i32) -> u32 {
+    let __frame = ctx.stack_frame(0x48);
+    let info: DVDFileInfo<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut fileno = fileno;
+    let mut length: u32 = 0;
+    let mut intr: i32 = fns::OSDisableInterrupts(ctx);
+    if !(fns::DVDFastOpen(ctx, fileno, info) != 0) {
+        fns::OSReport(ctx, cstr(ctx, 0x803ba540), &[VarArg::Int(fileno as u32)]);
+        (if ((0_i32) != 0) {
+            ({ () })
+        } else {
+            fns::__assert(
+                ctx,
+                cstr(ctx, 0x803ba510),
+                (101_i32 as u32),
+                cstr(ctx, 0x803ba510),
+            )
+        });
+    }
+    length = info.length();
+    let _ = fns::DVDClose(ctx, info);
+    let _ = fns::OSRestoreInterrupts(ctx, intr);
+    return length;
+}
+
+fn inl_lbFile_800164A4_unfused<'a>(
+    ctx: &'a Ctx,
+    file: i32,
+    dst: u32,
+    size: Val<'a, u32>,
+    pri: i32,
+    callback: FnPtr<'a>,
+    args: u32,
+) {
+    let mut file = file;
+    let mut dst = dst;
+    let mut size = size;
+    let mut pri = pri;
+    let mut callback = callback;
+    let mut args = args;
+    let mut r#type: i32 = 0;
+    (size).set(inl_lbFile_8001634C_unfused(ctx, file));
+    r#type = (if dst >= 0x80000000_u32 {
+        33_i32
+    } else {
+        35_i32
+    });
+    let _ = fns::HSD_DevComRequest(
+        ctx,
+        file,
+        (0_i32 as u32),
+        dst,
+        ((((size).get())
+            .wrapping_add((32_i32 as u32))
+            .wrapping_sub((1_i32 as u32)))
+            & ((!(32_i32.wrapping_sub(1_i32))) as u32)),
+        r#type,
+        pri,
+        callback,
+        args,
+    );
+}
+
+fn inl_lbFile_800164A4_unfused_2<'a>(
+    ctx: &'a Ctx,
+    file: i32,
+    dst: u32,
+    size: Val<'a, u32>,
+    pri: i32,
+    callback: FnPtr<'a>,
+    args: u32,
+) {
+    let mut file = file;
+    let mut dst = dst;
+    let mut size = size;
+    let mut pri = pri;
+    let mut callback = callback;
+    let mut args = args;
+    let mut r#type: i32 = 0;
+    (size).set(fns::lbFile_8001634C(ctx, file));
+    r#type = (if dst >= 0x80000000_u32 {
+        33_i32
+    } else {
+        35_i32
+    });
+    let _ = fns::HSD_DevComRequest(
+        ctx,
+        file,
+        (0_i32 as u32),
+        dst,
+        ((((size).get())
+            .wrapping_add((32_i32 as u32))
+            .wrapping_sub((1_i32 as u32)))
+            & ((!(32_i32.wrapping_sub(1_i32))) as u32)),
+        r#type,
+        pri,
+        callback,
+        args,
+    );
+}
+
+fn inl_lbFile_80016580_unfused<'a>(
+    ctx: &'a Ctx,
+    basename: Val<'a, i8>,
+    dst: Addr<'a>,
+    size: Val<'a, u32>,
+    callback: FnPtr<'a>,
+    args: u32,
+) {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let mut basename = basename;
+    let mut dst = dst;
+    let mut size = size;
+    let mut callback = callback;
+    let mut args = args;
+    let mut filename: Val<'a, i8> = fns::lbFileGetFullName(ctx, basename);
+    let mut entry_num: i32 = fns::DVDConvertPathToEntrynum(ctx, filename);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    (if entry_num != 1_i32.wrapping_neg() {
+        { () }
+    } else {
+        ({
+            fns::OSReport(
+                ctx,
+                cstr(ctx, 0x803ba558),
+                &[
+                    VarArg::Int(Handle::addr(filename)),
+                    VarArg::Int(entry_num as u32),
+                ],
+            );
+            fns::__assert(
+                ctx,
+                cstr(ctx, 0x803ba510),
+                (138_i32 as u32),
+                cstr(ctx, 0x803ba510),
+            )
+        })
+    });
+    inl_lbFile_800164A4_unfused_2(
+        ctx,
+        entry_num,
+        Handle::addr(dst),
+        size,
+        1_i32,
+        callback,
+        args,
+    );
+}
+
+fn inl_lbFileGetSize_unfused<'a>(ctx: &'a Ctx, basename: Val<'a, i8>) -> u32 {
+    let mut basename = basename;
+    let mut entry_num: i32 = 0;
+    let mut filename: Val<'a, i8> = fns::lbFileGetFullName(ctx, basename);
+    entry_num = fns::DVDConvertPathToEntrynum(ctx, filename);
+    (if entry_num != 1_i32.wrapping_neg() {
+        { () }
+    } else {
+        ({
+            fns::OSReport(
+                ctx,
+                cstr(ctx, 0x803ba558),
+                &[
+                    VarArg::Int(Handle::addr(filename)),
+                    VarArg::Int(entry_num as u32),
+                ],
+            );
+            fns::__assert(
+                ctx,
+                cstr(ctx, 0x803ba510),
+                (116_i32 as u32),
+                cstr(ctx, 0x803ba510),
+            )
+        })
+    });
+    return fns::lbFile_8001634C(ctx, entry_num);
+}
+
 fn inl_loadFile_unfused<'a>(
     ctx: &'a Ctx,
     heap_id: i32,
@@ -310,7 +493,7 @@ fn inl_loadFile_unfused<'a>(
     let mut basename = basename;
     let mut dst = dst;
     let mut size = size;
-    (size).set(fns::lbFileGetSize(ctx, basename));
+    (size).set(inl_lbFileGetSize_unfused(ctx, basename));
     (dst).set(fns::lbHeap_80015BD0(
         ctx,
         heap_id,
@@ -319,7 +502,7 @@ fn inl_loadFile_unfused<'a>(
             .wrapping_sub((1_i32 as u32)))
             & ((!(32_i32.wrapping_sub(1_i32))) as u32)),
     ));
-    fns::lbFile_80016580(
+    inl_lbFile_80016580_unfused(
         ctx,
         basename,
         (dst).get(),

@@ -262,7 +262,7 @@ pub fn un_802FE918<'a>(ctx: &'a Ctx, a: i32, b: i32, c: i32) {
     fns::un_803F9D48(ctx).set_x4((inl_lookupX4_unfused(ctx, a) as u16));
     if a == 62_i32 {
         let mut v_x6: u16 = 0;
-        fns::un_802FE3F8(
+        inl_un_802FE3F8_unfused(
             ctx,
             a,
             2_i32,
@@ -281,7 +281,7 @@ pub fn un_802FE918<'a>(ctx: &'a Ctx, a: i32, b: i32, c: i32) {
         fns::HSD_SisLib_803A660C(ctx, 2_i32, 74_i32, r.get());
         fns::HSD_SisLib_803A6368(ctx, fns::un_803F9D48(ctx).x20(), 74_i32);
     } else {
-        fns::un_802FE3F8(
+        inl_un_802FE3F8_unfused(
             ctx,
             a,
             2_i32,
@@ -464,10 +464,32 @@ fn inl_lookupX4_unfused<'a>(ctx: &'a Ctx, a: i32) -> i32 {
     return 0_i32;
 }
 
-fn inl_setX4X6_unfused<'a>(ctx: &'a Ctx, a: i32) {
+fn inl_un_802FE3F8_unfused<'a>(ctx: &'a Ctx, a: i32, b: i32, c: Val<'a, u16>, d: Val<'a, u16>) {
     let mut a = a;
-    fns::un_803F9D48(ctx).set_x4((inl_lookupX4_unfused(ctx, a) as u16));
-    inl_setX6_unfused(ctx, a);
+    let mut b = b;
+    let mut c = c;
+    let mut d = d;
+    let mut x: un_803F9B30_t<'a> = null(ctx);
+    {
+        x = statics::melee__if__ifprize::un_803F9B30(ctx).get(0_i32);
+        'l1: while (x).x0() != 66_i32 {
+            'c2: {
+                if (x).x0() == a {
+                    if a == 62_i32 {
+                        if !Handle::is_null(c) {
+                            (c).set((b.wrapping_add(((x).x4() as i32)) as u16));
+                        }
+                        if !Handle::is_null(d) {
+                            (d).set((b.wrapping_add(((x).x4() as i32)).wrapping_add(1_i32) as u16));
+                        }
+                    } else if !Handle::is_null(c) {
+                        (c).set((b.wrapping_add(((x).x4() as i32)) as u16));
+                    }
+                }
+            }
+            x = Handle::add(x, 1);
+        }
+    }
 }
 
 fn inl_setX6_unfused<'a>(ctx: &'a Ctx, a: i32) {
@@ -479,6 +501,12 @@ fn inl_setX6_unfused<'a>(ctx: &'a Ctx, a: i32) {
         fns::un_803F9D48(ctx).x6_ref(),
         null::<Val<'a, u16>>(ctx),
     );
+}
+
+fn inl_setX4X6_unfused<'a>(ctx: &'a Ctx, a: i32) {
+    let mut a = a;
+    fns::un_803F9D48(ctx).set_x4((inl_lookupX4_unfused(ctx, a) as u16));
+    inl_setX6_unfused(ctx, a);
 }
 
 fn inl_setArchive_unfused<'a>(ctx: &'a Ctx) {

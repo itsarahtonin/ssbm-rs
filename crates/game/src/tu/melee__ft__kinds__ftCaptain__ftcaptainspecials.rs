@@ -661,6 +661,11 @@ fn inl_setupAirStart_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+fn inl_getFtSpecialAttrsD_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> {
+    let mut fp = fp;
+    return (fp).dat_attrs();
+}
+
 fn inl_onDetectGround_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
@@ -688,11 +693,6 @@ fn inl_onDetectGround_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         });
     }
     (fp).set_gr_vel(fp::fmuls((fp).gr_vel(), (sa).specials_gr_vel_x()));
-}
-
-fn inl_getFtSpecialAttrsD_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> {
-    let mut fp = fp;
-    return (fp).dat_attrs();
 }
 
 fn inl_onDetectAir_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

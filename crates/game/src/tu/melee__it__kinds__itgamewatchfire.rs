@@ -71,7 +71,7 @@ pub fn itGamewatchFire_802C6A2C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let mut item: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
     if !Handle::is_null(item) {
-        fns::itGamewatchFire_Destroyed(ctx, item_gobj);
+        inl_itGamewatchFire_Destroyed_unfused(ctx, item_gobj);
         fns::Item_8026A8EC(ctx, item_gobj);
     }
 }
@@ -113,7 +113,7 @@ pub fn itGamewatchFire_Motion0_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -
         fns::it_8026BB20(ctx, item_gobj);
     }
     if (inl_torchRemoveCheck_unfused(ctx, item_gobj) != 0) {
-        fns::itGamewatchFire_Destroyed(ctx, item_gobj);
+        inl_itGamewatchFire_Destroyed_unfused(ctx, item_gobj);
         return 1_i32;
     }
     if !Handle::is_null((item).owner()) {
@@ -186,6 +186,20 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_Item_AttachToParent_unfused<'a>(
+    ctx: &'a Ctx,
+    item_gobj: HSD_GObj<'a>,
+    parent: HSD_GObj<'a>,
+    part: i32,
+) -> HSD_GObj<'a> {
+    let mut item_gobj = item_gobj;
+    let mut parent = parent;
+    let mut part = part;
+    fns::Item_8026AB54(ctx, item_gobj, parent, part);
+    fns::db_80225DD8(ctx, item_gobj, parent);
+    return item_gobj;
+}
+
 fn inl_Item_AttachGameWatchArticle_unfused<'a>(
     ctx: &'a Ctx,
     parent: HSD_GObj<'a>,
@@ -206,18 +220,13 @@ fn inl_Item_AttachGameWatchArticle_unfused<'a>(
     );
 }
 
-fn inl_Item_AttachToParent_unfused<'a>(
-    ctx: &'a Ctx,
-    item_gobj: HSD_GObj<'a>,
-    parent: HSD_GObj<'a>,
-    part: i32,
-) -> HSD_GObj<'a> {
+fn inl_itGamewatchFire_Destroyed_unfused<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let mut item_gobj = item_gobj;
-    let mut parent = parent;
-    let mut part = part;
-    fns::Item_8026AB54(ctx, item_gobj, parent, part);
-    fns::db_80225DD8(ctx, item_gobj, parent);
-    return item_gobj;
+    let mut item: Item<'a> =
+        (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
+    if !Handle::is_null((item).owner()) {
+        fns::ftGw_AttackS4_ItemTorchSetFlag(ctx, (item).owner());
+    }
 }
 
 fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {

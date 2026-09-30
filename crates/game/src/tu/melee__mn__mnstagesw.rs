@@ -799,6 +799,28 @@ fn inl_HSD_JObjGetTranslationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     return (jobj).translate().x();
 }
 
+fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803ed488),
+            (228_i32 as u32),
+            cstr(ctx, 0x803ed488),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
     let mut jobj = jobj;
     let mut x = x;
@@ -820,28 +842,6 @@ fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803ed488),
-            (228_i32 as u32),
-            cstr(ctx, 0x803ed488),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
@@ -1017,6 +1017,40 @@ fn inl_mnStageSw_InitUserData<'a>(ctx: &'a Ctx, user_data: MnStageSwData<'a>, st
     }
 }
 
+fn inl_mnStageSw_SetCursorAnim<'a>(
+    ctx: &'a Ctx,
+    index: i32,
+    user_data: MnStageSwData<'a>,
+    cursor_jobj: HSD_JObj<'a>,
+    cursor_index: Val<'a, u32>,
+    cursor_anim_jobj: Ptr<'a, HSD_JObj<'a>>,
+) {
+    let mut index = index;
+    let mut user_data = user_data;
+    let mut cursor_jobj = cursor_jobj;
+    let mut cursor_index = cursor_index;
+    let mut cursor_anim_jobj = cursor_anim_jobj;
+    let mut enabled: u8 = 0;
+    (cursor_index).set(((index as u8) as u32));
+    enabled = (user_data).x2().at(((cursor_index).get() as i32)).get();
+    let _ = fns::lb_80011E24(
+        ctx,
+        cursor_jobj,
+        cursor_anim_jobj,
+        &[
+            VarArg::Int(2_i32 as u32),
+            VarArg::Int(1_i32.wrapping_neg() as u32),
+        ],
+    );
+    fns::HSD_JObjReqAnimAll(
+        ctx,
+        (cursor_anim_jobj).get(),
+        statics::melee__mn__mnstagesw::mnStageSw_804D4BB8(ctx)
+            .at((enabled as i32))
+            .get(),
+    );
+}
+
 fn inl_mnStageSw_CreateCursor<'a>(
     ctx: &'a Ctx,
     user_data: MnStageSwData<'a>,
@@ -1079,40 +1113,6 @@ fn inl_mnStageSw_CreateCursor<'a>(
         fns::HSD_JObjSetFlagsAll(ctx, cursor_jobj, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
     }
     return cursor_jobj;
-}
-
-fn inl_mnStageSw_SetCursorAnim<'a>(
-    ctx: &'a Ctx,
-    index: i32,
-    user_data: MnStageSwData<'a>,
-    cursor_jobj: HSD_JObj<'a>,
-    cursor_index: Val<'a, u32>,
-    cursor_anim_jobj: Ptr<'a, HSD_JObj<'a>>,
-) {
-    let mut index = index;
-    let mut user_data = user_data;
-    let mut cursor_jobj = cursor_jobj;
-    let mut cursor_index = cursor_index;
-    let mut cursor_anim_jobj = cursor_anim_jobj;
-    let mut enabled: u8 = 0;
-    (cursor_index).set(((index as u8) as u32));
-    enabled = (user_data).x2().at(((cursor_index).get() as i32)).get();
-    let _ = fns::lb_80011E24(
-        ctx,
-        cursor_jobj,
-        cursor_anim_jobj,
-        &[
-            VarArg::Int(2_i32 as u32),
-            VarArg::Int(1_i32.wrapping_neg() as u32),
-        ],
-    );
-    fns::HSD_JObjReqAnimAll(
-        ctx,
-        (cursor_anim_jobj).get(),
-        statics::melee__mn__mnstagesw::mnStageSw_804D4BB8(ctx)
-            .at((enabled as i32))
-            .get(),
-    );
 }
 
 fn inl_HSD_JObjAddTranslationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {

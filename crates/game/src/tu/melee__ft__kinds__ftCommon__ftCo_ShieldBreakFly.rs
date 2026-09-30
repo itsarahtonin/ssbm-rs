@@ -90,7 +90,7 @@ pub fn ftCo_80098C9C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     ctx.fill(Handle::addr(unused), 0, 0x8);
     unused.at(0).set((0_i32 as u8));
-    fns::ftCo_80098B20(ctx, gobj);
+    inl_ftCo_80098B20_unfused(ctx, gobj);
 }
 
 fn inl_ftCo_SpawnEf_unfused<'a>(
@@ -114,6 +114,39 @@ fn inl_ftCo_SpawnEf_unfused<'a>(
         }
     }
     fns::efAsync_Spawn(ctx, gobj, (fp).x60C_ref(), arg2, (arg3 as u32), joint, &[]);
+}
+
+fn inl_ftCo_80098B20_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
+    fns::ftCommon_8007D5D4(ctx, fp);
+    fns::Fighter_ChangeMotionState(
+        ctx,
+        gobj,
+        205_i32,
+        64_u32,
+        fp::frsp(0_i32 as f64),
+        fp::frsp(1_i32 as f64),
+        fp::frsp(0_i32 as f64),
+        null::<HSD_GObj<'a>>(ctx),
+    );
+    fns::ftAnim_8006EBA4(ctx, gobj);
+    (fp).self_vel().set_x(fp::frsp(0_i32 as f64));
+    (fp).self_vel()
+        .set_y((fp).co_attrs().shield_break_initial_velocity());
+    if ((fp).kind() as u32) == ((enums::Ft_Kind_Purin as i32) as u32) {
+        (fp).set_x2222_b3((1_i32 as u8));
+    }
+    inl_ftCo_SpawnEf_unfused(
+        ctx,
+        gobj,
+        (Handle::add((fp).parts(), ((((fp).ft_data()).x8()).x11() as i32))).joint(),
+        (0_i32 as u32),
+        0x41b_i32,
+    );
+    fns::ft_PlaySFX(ctx, fp, 130_i32, (127_i32 as u8), (64_i32 as u8));
+    fns::ftCommon_8007EBAC(ctx, fp, (24_i32 as u32), 0_u32);
+    fns::ftColl_8007B62C(ctx, gobj, 2_i32);
 }
 
 /// Registers this unit's ports.

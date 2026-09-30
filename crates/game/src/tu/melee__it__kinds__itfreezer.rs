@@ -232,14 +232,6 @@ fn inl_Item_EnterAirStateWithHitlagAndStateDesc_unfused<'a>(ctx: &'a Ctx, gobj: 
     fns::it_80273670(ctx, gobj, 0_i32, 0.0);
 }
 
-fn inl_itFreezer_UnkMotion0_Phys_inline1_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let mut gobj = gobj;
-    let mut item: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    fns::it_80273454(ctx, gobj);
-    inl_itFreezer_UnkMotion0_Phys_inline2_unfused(ctx, gobj);
-    (item).xDD1_flag().x0().set_b1((1_i32 as u8));
-}
-
 fn inl_itFreezer_UnkMotion0_Phys_inline2_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut item: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -250,6 +242,14 @@ fn inl_itFreezer_UnkMotion0_Phys_inline2_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GOb
     fns::Item_80268E5C(ctx, gobj, 1_i32, (enums::ITEM_ANIM_UPDATE as i32));
     inl_Item_SetEffectHitlagCallbacks_unfused(ctx, item);
     (item).set_on_accessory(fnptr(ctx, 0x802cd090));
+}
+
+fn inl_itFreezer_UnkMotion0_Phys_inline1_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut item: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    fns::it_80273454(ctx, gobj);
+    inl_itFreezer_UnkMotion0_Phys_inline2_unfused(ctx, gobj);
+    (item).xDD1_flag().x0().set_b1((1_i32 as u8));
 }
 
 /// Registers this unit's ports.

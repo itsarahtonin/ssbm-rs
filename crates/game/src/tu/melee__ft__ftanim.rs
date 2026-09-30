@@ -714,7 +714,7 @@ pub fn ftAnim_SetAnimRate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, anim_rate: f64) 
         (fp).set_x8A0_unk(anim_rate);
         return;
     }
-    fns::ftAnim_8006F0FC(ctx, gobj, anim_rate);
+    inl_ftAnim_8006F0FC_unfused(ctx, gobj, anim_rate);
 }
 
 pub fn ftAnim_IsFramesRemaining<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
@@ -1576,7 +1576,7 @@ pub fn ftAnim_80070308<'a>(ctx: &'a Ctx, fighter_gobj: HSD_GObj<'a>) {
         null::<HSD_ShapeAnimJoint<'a>>(ctx),
     );
     fns::HSD_JObjReqAnimAll(ctx, jobj, 0.0);
-    fns::ftAnim_80070200(
+    inl_ftAnim_80070200_unfused(
         ctx,
         fp,
         (((fp).ft_data()).x8()).x8(),
@@ -1634,7 +1634,7 @@ pub fn ftAnim_800704F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, tobj_idx: i32, fram
     let mut fp: Fighter<'a> = null(ctx);
     let mut temp_r30: Ptr<'a, HSD_TObj<'a>> = null(ctx);
     fp = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    fns::ftAnim_80070458(ctx, fp, (fp).tobj_list(), (tobj_idx as u32), frame);
+    inl_ftAnim_80070458_unfused(ctx, fp, (fp).tobj_list(), (tobj_idx as u32), frame);
     if !Handle::is_null(
         ptr::<Arr<'a, ftData_UnkCallbackPairs0_t<'a>, 33>>(ctx, 0x803c2258)
             .get((fp).kind())
@@ -1669,7 +1669,7 @@ pub fn ftAnim_80070654<'a>(ctx: &'a Ctx, fighter_gobj: HSD_GObj<'a>) {
     let mut fighter_gobj = fighter_gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, fighter_gobj)));
-    fns::ftAnim_800705E0(ctx, (fp).tobj_list());
+    inl_ftAnim_800705E0_unfused(ctx, (fp).tobj_list());
     if !Handle::is_null(
         ptr::<Arr<'a, ftData_UnkCallbackPairs0_t<'a>, 33>>(ctx, 0x803c2258)
             .get((fp).kind())
@@ -1953,7 +1953,7 @@ pub fn ftAnim_80070C48<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut r7: Fighter_x8B0_t<'a> = (fp).x8B0().get(arg1);
     if ((r7).x10() as i32) != 1_i32.wrapping_neg() {
-        fns::ftAnim_ApplyPartAnim(ctx, gobj, arg1, ((r7).x10() as i32), 0.0);
+        inl_ftAnim_ApplyPartAnim_unfused(ctx, gobj, arg1, ((r7).x10() as i32), 0.0);
     }
 }
 
@@ -1992,7 +1992,7 @@ pub fn ftAnim_80070CC4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
         ctx,
         fp,
         ((r28).x0() as i32),
-        fns::ftAnim_8006F994(
+        inl_ftAnim_8006F994_unfused(
             ctx,
             fp,
             (Handle::add((fp).parts(), ((r28).x0() as i32))).joint(),
@@ -2013,7 +2013,7 @@ pub fn ftAnim_80070E74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             'c2: {
                 let mut r7: Fighter_x8B0_t<'a> = (fp).x8B0().get(i);
                 if ((r7).x10() as i32) != 1_i32.wrapping_neg() {
-                    fns::ftAnim_ApplyPartAnim(ctx, gobj, i, ((r7).x10() as i32), 0.0);
+                    inl_ftAnim_ApplyPartAnim_unfused(ctx, gobj, i, ((r7).x10() as i32), 0.0);
                 }
             }
             i = i.wrapping_add(1);
@@ -2103,6 +2103,28 @@ fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, tran
     Handle::copy_from((translate), (jobj).translate());
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803c0660),
+            (228_i32 as u32),
+            cstr(ctx, 0x803c0660),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
     let mut jobj = jobj;
     let mut translate = translate;
@@ -2134,28 +2156,6 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803c0660),
-            (228_i32 as u32),
-            cstr(ctx, 0x803c0660),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
@@ -2224,6 +2224,18 @@ fn inl_ftAnim_8006F0FC_inline_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, anim
     );
 }
 
+fn inl_ftAnim_8006F0FC_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, anim_rate: f64) {
+    let mut gobj = gobj;
+    let mut anim_rate = anim_rate;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut jobj: HSD_JObj<'a> =
+        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
+    inl_ftAnim_8006F0FC_inline_unfused(ctx, jobj, anim_rate);
+    inl_ftAnim_8006F0FC_inline_unfused(ctx, (fp).x8AC_animSkeleton(), anim_rate);
+    (fp).set_frame_speed_mul(anim_rate);
+}
+
 fn inl_get_part_joint_unfused<'a>(
     ctx: &'a Ctx,
     fp: Fighter<'a>,
@@ -2242,11 +2254,170 @@ fn inl_get_part_joint_unfused<'a>(
     return result;
 }
 
+fn inl_ftAnim_80070200_unfused<'a>(
+    ctx: &'a Ctx,
+    fp: Fighter<'a>,
+    r4: ftData_x8_x8<'a>,
+    r5: CostumeTObjList<'a>,
+    r6: DObjList<'a>,
+) {
+    let mut fp = fp;
+    let mut r4 = r4;
+    let mut r5 = r5;
+    let mut r6 = r6;
+    let mut i: u32 = 0;
+    (r5).set_n_costume_tobjs((r4).x8());
+    if (r5).n_costume_tobjs() > (div_u32(20_u32, 4_u32)) {
+        (if ((0_i32) != 0) {
+            { () }
+        } else {
+            ({
+                fns::OSReport(ctx, cstr(ctx, 0x803c0690), &[]);
+                fns::__assert(
+                    ctx,
+                    cstr(ctx, 0x803c0660),
+                    (0x3f4_i32 as u32),
+                    cstr(ctx, 0x803c0660),
+                )
+            })
+        });
+    }
+    (r5).set_x5D0(
+        (if !Handle::is_null((Handle::add((r4).xC(), ((fp).costume_id() as i32))).get()) {
+            (Handle::add((r4).xC(), ((fp).costume_id() as i32))).get()
+        } else {
+            (Handle::add((r4).xC(), 0_i32)).get()
+        }),
+    );
+    {
+        i = (0_i32 as u32);
+        'l1: while i < (r5).n_costume_tobjs() {
+            'c2: {
+                (r5).costume_tobjs()
+                    .at((i as i32))
+                    .set(fns::ftParts_80075240(
+                        ctx,
+                        r6,
+                        ((Handle::add((r5).x5D0(), (i as i32))).get() as i32),
+                    ));
+                if Handle::is_null(((r5).costume_tobjs().at((i as i32)).get()).aobj()) {
+                    (if ((0_i32) != 0) {
+                        { () }
+                    } else {
+                        ({
+                            fns::OSReport(ctx, cstr(ctx, 0x803c06a8), &[]);
+                            fns::__assert(
+                                ctx,
+                                cstr(ctx, 0x803c0660),
+                                (0x3fb_i32 as u32),
+                                cstr(ctx, 0x803c0660),
+                            )
+                        })
+                    });
+                }
+                fns::HSD_AObjSetRate(ctx, ((r5).costume_tobjs().at((i as i32)).get()).aobj(), 0.0);
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+}
+
 fn inl_tobjAnim_unfused<'a>(ctx: &'a Ctx, temp_r30: Ptr<'a, HSD_TObj<'a>>, frame: f64) {
     let mut temp_r30 = temp_r30;
     let mut frame = frame;
     fns::HSD_AObjReqAnim(ctx, ((temp_r30).get()).aobj(), frame);
     fns::HSD_TObjAnim(ctx, (temp_r30).get());
+}
+
+fn inl_ftAnim_80070458_unfused<'a>(
+    ctx: &'a Ctx,
+    fp: Fighter<'a>,
+    tobj_list: CostumeTObjList<'a>,
+    tobj_idx: u32,
+    frame: f64,
+) {
+    let mut fp = fp;
+    let mut tobj_list = tobj_list;
+    let mut tobj_idx = tobj_idx;
+    let mut frame = frame;
+    if tobj_idx >= (tobj_list).n_costume_tobjs() {
+        (if ((0_i32) != 0) {
+            { () }
+        } else {
+            ({
+                fns::OSReport(
+                    ctx,
+                    cstr(ctx, 0x803c06cc),
+                    &[
+                        VarArg::Int(((fp).player_idx() as i32) as u32),
+                        VarArg::Int(tobj_idx as u32),
+                    ],
+                );
+                fns::__assert(
+                    ctx,
+                    cstr(ctx, 0x803c0660),
+                    (0x41e_i32 as u32),
+                    cstr(ctx, 0x803c0660),
+                )
+            })
+        });
+    }
+    inl_tobjAnim_unfused(
+        ctx,
+        (tobj_list).costume_tobjs().at((tobj_idx as i32)),
+        frame,
+    );
+}
+
+fn inl_ftAnim_800705E0_unfused<'a>(ctx: &'a Ctx, tobj_list: CostumeTObjList<'a>) {
+    let mut tobj_list = tobj_list;
+    let mut i: i32 = 0;
+    {
+        i = 0_i32;
+        'l1: while (i as u32) < (tobj_list).n_costume_tobjs() {
+            'c2: {
+                fns::HSD_AObjReqAnim(ctx, ((tobj_list).costume_tobjs().at(i).get()).aobj(), 0.0);
+                fns::HSD_TObjAnim(ctx, (tobj_list).costume_tobjs().at(i).get());
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+}
+
+fn inl_ftAnim_ApplyPartAnim_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    arg1: i32,
+    arg2: i32,
+    arg3: f64,
+) {
+    let mut gobj = gobj;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut arg3 = arg3;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut temp_r30: Fighter_x8B0_t<'a> = null(ctx);
+    let mut temp_r29: ftData_x1C<'a> = null(ctx);
+    temp_r30 = (fp).x8B0().get(arg1);
+    temp_r29 = (Handle::add(((fp).ft_data()).x1C(), arg1)).get();
+    (temp_r30).set_x11((arg2 as i8));
+    (temp_r30).set_x4(arg3);
+    (temp_r30).set_x8(0.0);
+    if (arg3 != 0.0) {
+        (temp_r30).set_xC(fp::fdivs(
+            fns::lb_8000BFF0(ctx, (Handle::add((temp_r29).x8(), arg2)).get()),
+            arg3,
+        ));
+    } else {
+        (temp_r30).set_xC(0.0);
+    }
+    fns::ftAnim_80070904(
+        ctx,
+        fp,
+        ((temp_r29).x0() as i32),
+        (Handle::add((temp_r29).x8(), arg2)).get(),
+    );
 }
 
 fn inl_some_inline_unfused<'a>(
@@ -2280,6 +2451,44 @@ fn inl_some_inline_unfused<'a>(
             fns::ftAnim_GetNextAnimJointInTree(ctx, animjoint__slot, depth);
         }
     }
+}
+
+fn inl_ftAnim_8006F994_unfused<'a>(
+    ctx: &'a Ctx,
+    fp: Fighter<'a>,
+    jobj: HSD_JObj<'a>,
+    joint: HSD_Joint<'a>,
+) -> HSD_Joint<'a> {
+    let __frame = ctx.stack_frame(0x10);
+    let joint__slot: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x0);
+    let depth: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let mut fp = fp;
+    let mut jobj = jobj;
+    joint__slot.set(joint);
+    let mut i: i32 = 0;
+    i = {
+        let __t1 = 0_i32;
+        depth.set(__t1);
+        __t1
+    };
+    'l1: while !Handle::is_null(joint__slot.get()) {
+        'c2: {
+            'l3: while fns::ftParts_8007506C(ctx, (fp).kind(), i) != (0_i32 as u32) {
+                'c4: {
+                    i = i.wrapping_add(1);
+                }
+            }
+            if (Handle::addr(jobj) == Handle::addr((Handle::add((fp).parts(), i)).joint()))
+                || (Handle::addr(jobj) == Handle::addr((Handle::add((fp).parts(), i)).x4_jobj2()))
+            {
+                return joint__slot.get();
+            }
+            i = i.wrapping_add(1_i32);
+            fns::ftAnim_GetNextJointInTree(ctx, joint__slot, depth);
+        }
+    }
+    #[allow(unreachable_code)]
+    return null(ctx);
 }
 
 /// Registers this unit's ports.

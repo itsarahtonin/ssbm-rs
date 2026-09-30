@@ -111,11 +111,6 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
-fn inl_ftCh_FingerGun2_Anim_inline2_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let mut gobj = gobj;
-    inl_ftCh_FingerGun2_Anim_inline_unfused(ctx, gobj);
-}
-
 fn inl_ftCh_FingerGun2_Anim_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
@@ -125,6 +120,11 @@ fn inl_ftCh_FingerGun2_Anim_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>)
     } else {
         fns::ftCh_Init_80158F34(ctx, gobj);
     }
+}
+
+fn inl_ftCh_FingerGun2_Anim_inline2_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    inl_ftCh_FingerGun2_Anim_inline_unfused(ctx, gobj);
 }
 
 fn inl_ftCh_UpdateBossMotion_unfused<'a>(

@@ -413,7 +413,8 @@ pub fn fn_80174A60<'a>(ctx: &'a Ctx, list: StatsList<'a>, slot: i32) -> i32 {
             i = 0_i32;
             'l1: while i < ((list).count() as i32) {
                 'c2: {
-                    if (fns::fn_801743C4(ctx, slot, (Handle::add((list).entries(), i))) != 0) {
+                    if (inl_fn_801743C4_unfused(ctx, slot, (Handle::add((list).entries(), i))) != 0)
+                    {
                         count = count.wrapping_add(1);
                     }
                 }
@@ -481,7 +482,7 @@ pub fn fn_80174B4C<'a>(ctx: &'a Ctx, data: ResultsData<'a>, slot: i32) {
     if ((pdata.get()).page() as i32) >= ((data).num_pages() as i32).wrapping_sub(1_i32) {
         (pdata.get()).set_x0_4((0_i32 as u8));
     }
-    visible_count = fns::fn_80174A60(ctx, list, 0_i32);
+    visible_count = inl_fn_80174A60(ctx, list, 0_i32);
     if (pdata.get()).scroll_offset() < fp::frsp((visible_count.wrapping_sub(10_i32)) as f64) {
         (pdata.get()).set_x0_2((1_i32 as u8));
     } else {
@@ -1113,7 +1114,7 @@ pub fn fn_80175880<'a>(ctx: &'a Ctx, slot: i32) {
                             .get((fns::lbl_8046DBE8(ctx).x6() as i32))
                             .stocks() as i32)
                             == 0_i32)))))
-            || ((fns::gm_WasMatchCanceled(ctx, (me).outcome()) != 0)
+            || ((inl_gm_WasMatchCanceled_unfused(ctx, (me).outcome()) != 0)
                 && ((((me).player_standings().get(slot).stocks() as i32) > 0_i32)
                     || ((me).player_standings().get(slot).score()
                         == (me)
@@ -2878,7 +2879,7 @@ pub fn fn_80176F60<'a>(ctx: &'a Ctx) {
             .player_standings()
             .get(((data).x6() as i32))
             .ckind() as u8),
-        fns::gm_WasMatchCanceled(ctx, (temp_r30).outcome()),
+        inl_gm_WasMatchCanceled_unfused(ctx, (temp_r30).outcome()),
     ));
     aobj = ((((data).x20()).u().dobj()).mobj()).aobj();
     tmp = (fns::gm_80160854(
@@ -3009,7 +3010,7 @@ pub fn gm_Scene_Results_OnEnter<'a>(ctx: &'a Ctx, arg0_: Addr<'a>) {
     fns::lbl_8046DBE8(ctx).set_x0_4((arg0).x0_0());
     fns::lbl_8046DBE8(ctx).set_x0_5((arg0).x0_1());
     match_end = fns::lbl_8046DBE8(ctx).x94();
-    if (fns::gm_WasMatchCanceled(ctx, (fns::lbl_8046DBE8(ctx).x94()).outcome()) != 0) {
+    if (inl_gm_WasMatchCanceled_unfused(ctx, (fns::lbl_8046DBE8(ctx).x94()).outcome()) != 0) {
         fns::lbl_8046DBE8(ctx).set_num_pages((2_i32 as u8));
     } else {
         fns::lbl_8046DBE8(ctx).set_num_pages((3_i32 as u8));
@@ -3070,7 +3071,7 @@ pub fn gm_Scene_Results_OnEnter<'a>(ctx: &'a Ctx, arg0_: Addr<'a>) {
         .pkind() as i32)
         == (enums::Gm_PKind_Human as i32)
     {
-        if (!(fns::gm_WasMatchCanceled(ctx, (match_end).outcome()) != 0))
+        if (!(inl_gm_WasMatchCanceled_unfused(ctx, (match_end).outcome()) != 0))
             && (((match_end)
                 .player_standings()
                 .get(((data).x6() as i32))
@@ -3115,7 +3116,7 @@ pub fn gm_Scene_Results_OnEnter<'a>(ctx: &'a Ctx, arg0_: Addr<'a>) {
     fns::fn_80176F60(ctx);
     fns::fn_8017AA78(ctx, (arg0).x1_ref());
     fns::fn_8017A004(ctx);
-    if !(fns::gm_WasMatchCanceled(ctx, (match_end).outcome()) != 0) {
+    if !(inl_gm_WasMatchCanceled_unfused(ctx, (match_end).outcome()) != 0) {
         let _ = fns::lbAudioAx_80023F28(
             ctx,
             (fns::fn_80160400(
@@ -3229,6 +3230,27 @@ fn inl_gmResultFormatLabel_unfused<'a>(
     );
 }
 
+fn inl_fn_801743C4_unfused<'a>(ctx: &'a Ctx, slot: i32, entry: StatsEntry<'a>) -> i32 {
+    let mut slot = slot;
+    let mut entry = entry;
+    if ((entry).value() as i32) >= 0_i32 {
+        return 1_i32;
+    }
+    if !Handle::is_null((entry).check()) {
+        if (entry).check().call::<_, i32>((slot,)) == 1_i32.wrapping_neg() {
+            return 0_i32;
+        }
+    }
+    if !Handle::is_null((entry).get()) {
+        if Handle::is_null((entry).get().call::<_, Val<'a, i8>>((slot,))) {
+            return 0_i32;
+        }
+    } else {
+        return 0_i32;
+    }
+    return 1_i32;
+}
+
 fn inl_fn_80174B4C_blk14829<'a>(
     ctx: &'a Ctx,
     data: ResultsData<'a>,
@@ -3294,6 +3316,30 @@ fn inl_fn_80174B4C_blk14829<'a>(
     }
 }
 
+fn inl_fn_80174A60<'a>(ctx: &'a Ctx, list: StatsList<'a>, slot: i32) -> i32 {
+    let mut list = list;
+    let mut slot = slot;
+    let mut i: i32 = 0;
+    let mut count: i32 = 0;
+    count = 0_i32;
+    if ((list).mode() as i32) != 2_i32 {
+        {
+            i = 0_i32;
+            'l1: while i < ((list).count() as i32) {
+                'c2: {
+                    if (fns::fn_801743C4(ctx, slot, (Handle::add((list).entries(), i))) != 0) {
+                        count = count.wrapping_add(1);
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    } else {
+        count = ((list).count() as i32);
+    }
+    return count;
+}
+
 fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).hsd_obj();
@@ -3303,6 +3349,16 @@ fn inl_matchWasSkipped_unfused<'a>(ctx: &'a Ctx, me: MatchEnd<'a>) -> i32 {
     let mut me = me;
     if (((me).outcome() as i32) == (enums::OUTCOME_NO_CONTEST as i32))
         || (((me).outcome() as i32) == (enums::OUTCOME_RETRY as i32))
+    {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
+fn inl_gm_WasMatchCanceled_unfused<'a>(ctx: &'a Ctx, outcome: u8) -> i32 {
+    let mut outcome = outcome;
+    if ((outcome as i32) == (enums::OUTCOME_NO_CONTEST as i32))
+        || ((outcome as i32) == (enums::OUTCOME_RETRY as i32))
     {
         return 1_i32;
     }
@@ -3362,6 +3418,28 @@ fn inl_HSD_JObjGetNext_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj
     return null(ctx);
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7b18),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b7b18),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
     let mut jobj = jobj;
     let mut translate = translate;
@@ -3393,28 +3471,6 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b7b18),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b7b18),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {

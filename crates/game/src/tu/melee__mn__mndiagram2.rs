@@ -762,7 +762,7 @@ pub fn mnDiagram2_CreateStatRow<'a>(
                             (text2).text_color(),
                             statics::melee__mn__mndiagram2::mnDiagram2_804D4FBC(ctx),
                         );
-                        if (fns::mnDiagram2_IsDistanceStat(ctx, stat_type) != 0)
+                        if (inl_mnDiagram2_IsDistanceStat(ctx, stat_type) != 0)
                             && (fns::mnDiagram_IsDistanceOverflow(
                                 ctx,
                                 (fns::mnDiagram2_GetStatValue(ctx, is_name_mode, stat_type, entity)
@@ -776,7 +776,7 @@ pub fn mnDiagram2_CreateStatRow<'a>(
                     }
                 }
                 {
-                    if (fns::mnDiagram2_IsIconOnlyStat(ctx, stat_type) != 0)
+                    if (inl_mnDiagram2_IsIconOnlyStat(ctx, stat_type) != 0)
                         && ((fns::mnDiagram2_GetStatValue(ctx, is_name_mode, stat_type, entity)
                             as u32)
                             < ((enums::SELKIND_COUNT as i32) as u32))
@@ -819,7 +819,7 @@ pub fn mnDiagram2_CreateStatRow<'a>(
                         statics::melee__mn__mndiagram2::mnDiagram2_804D4FBC(ctx),
                     );
                     (text2).set_default_alignment((2_i32 as u8));
-                    if (fns::mnDiagram2_IsTimeStat(ctx, stat_type) != 0) {
+                    if (inl_mnDiagram2_IsTimeStat(ctx, stat_type) != 0) {
                         let mut val: i32 =
                             fns::mnDiagram2_GetStatValue(ctx, is_name_mode, stat_type, entity);
                         {
@@ -830,7 +830,7 @@ pub fn mnDiagram2_CreateStatRow<'a>(
                         }
                         fns::mnDiagram_FormatTime(ctx, Handle::cast::<Val<'a, i8>>(str.at(0)), val);
                     } else {
-                        if (fns::mnDiagram2_IsDistanceStat(ctx, stat_type) != 0) {
+                        if (inl_mnDiagram2_IsDistanceStat(ctx, stat_type) != 0) {
                             let mut val_2: u32 =
                                 (fns::mnDiagram2_GetStatValue(ctx, is_name_mode, stat_type, entity)
                                     as u32);
@@ -844,7 +844,7 @@ pub fn mnDiagram2_CreateStatRow<'a>(
                                 val_2,
                             );
                         } else {
-                            if (fns::mnDiagram2_IsPercentageStat(ctx, stat_type) != 0) {
+                            if (inl_mnDiagram2_IsPercentageStat(ctx, stat_type) != 0) {
                                 let mut val_3: i32 = fns::mnDiagram2_GetStatValue(
                                     ctx,
                                     is_name_mode,
@@ -861,7 +861,7 @@ pub fn mnDiagram2_CreateStatRow<'a>(
                                     2_i32,
                                 );
                             } else {
-                                if (fns::mnDiagram2_IsIconOnlyStat(ctx, stat_type) != 0) {
+                                if (inl_mnDiagram2_IsIconOnlyStat(ctx, stat_type) != 0) {
                                     str.at(0_i32)
                                         .set(fns::mnDiagram2_804D4FD0(ctx).at(0_i32).get());
                                     str.at(1_i32)
@@ -1743,27 +1743,45 @@ fn inl_HSD_JObjGetTranslationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     return (jobj).translate().y();
 }
 
-fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
-    let mut jobj = jobj;
-    let mut x = x;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803eead8),
-            (0x201_i32 as u32),
-            cstr(ctx, 0x803eead8),
-        )
-    });
-    (jobj).translate().set_x(x);
-    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
-        {
-            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
-                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
-            }
+fn inl_mnDiagram2_IsDistanceStat<'a>(ctx: &'a Ctx, stat_type: u8) -> i32 {
+    let mut stat_type = stat_type;
+    's1: {
+        let __case = match (stat_type as i32) {
+            14_i32 => 0,
+            15_i32 => 0,
+            16_i32 => 0,
+            17_i32 => 0,
+            _ => 1,
+        };
+        if __case <= 0 {
+            return 1_i32;
+        }
+        if __case <= 1 {
+            return 0_i32;
         }
     }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
+fn inl_mnDiagram2_IsIconOnlyStat<'a>(ctx: &'a Ctx, stat_type: u8) -> i32 {
+    let mut stat_type = stat_type;
+    's1: {
+        let __case = match (stat_type as i32) {
+            21_i32 => 0,
+            22_i32 => 0,
+            23_i32 => 0,
+            _ => 1,
+        };
+        if __case <= 0 {
+            return 1_i32;
+        }
+        if __case <= 1 {
+            return 0_i32;
+        }
+    }
+    #[allow(unreachable_code)]
+    return 0;
 }
 
 fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
@@ -1786,6 +1804,29 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         result = 1_i32;
     }
     return result;
+}
+
+fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
+    let mut jobj = jobj;
+    let mut x = x;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803eead8),
+            (0x201_i32 as u32),
+            cstr(ctx, 0x803eead8),
+        )
+    });
+    (jobj).translate().set_x(x);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
 }
 
 fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
@@ -1832,6 +1873,44 @@ fn inl_HSD_JObjSetTranslateZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
             }
         }
     }
+}
+
+fn inl_mnDiagram2_IsTimeStat<'a>(ctx: &'a Ctx, stat_type: u8) -> i32 {
+    let mut stat_type = stat_type;
+    's1: {
+        let __case = match (stat_type as i32) {
+            11_i32 => 0,
+            _ => 1,
+        };
+        if __case <= 0 {
+            return 1_i32;
+        }
+        if __case <= 1 {
+            return 0_i32;
+        }
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
+fn inl_mnDiagram2_IsPercentageStat<'a>(ctx: &'a Ctx, stat_type: u8) -> i32 {
+    let mut stat_type = stat_type;
+    's1: {
+        let __case = match (stat_type as i32) {
+            3_i32 => 0,
+            12_i32 => 0,
+            13_i32 => 0,
+            _ => 1,
+        };
+        if __case <= 0 {
+            return 1_i32;
+        }
+        if __case <= 1 {
+            return 0_i32;
+        }
+    }
+    #[allow(unreachable_code)]
+    return 0;
 }
 
 /// Registers this unit's ports.

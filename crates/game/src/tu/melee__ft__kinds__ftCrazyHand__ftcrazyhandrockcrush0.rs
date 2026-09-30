@@ -170,20 +170,6 @@ fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     return (gobj).user_data();
 }
 
-fn inl_my_lbVector_Len<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
-    let mut vec = vec;
-    return inl_my_sqrtf(
-        ctx,
-        fp::fadds(
-            fp::fadds(
-                fp::fmuls((vec).x(), (vec).x()),
-                fp::fmuls((vec).y(), (vec).y()),
-            ),
-            fp::fmuls((vec).z(), (vec).z()),
-        ),
-    );
-}
-
 fn inl_my_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     let mut x = x;
     let mut y: f64 = 0.0;
@@ -205,6 +191,20 @@ fn inl_my_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         return y;
     }
     return x;
+}
+
+fn inl_my_lbVector_Len<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
+    let mut vec = vec;
+    return inl_my_sqrtf(
+        ctx,
+        fp::fadds(
+            fp::fadds(
+                fp::fmuls((vec).x(), (vec).x()),
+                fp::fmuls((vec).y(), (vec).y()),
+            ),
+            fp::fmuls((vec).z(), (vec).z()),
+        ),
+    );
 }
 
 /// Registers this unit's ports.

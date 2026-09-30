@@ -200,6 +200,21 @@ pub fn lbArchiveRelocate<'a>(
     return 0_i32;
 }
 
+fn inl_readArchive_unfused<'a>(
+    ctx: &'a Ctx,
+    filename: Val<'a, i8>,
+    data: Addr<'a>,
+    archive: HSD_Archive<'a>,
+) {
+    let __frame = ctx.stack_frame(0x10);
+    let length: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let mut filename = filename;
+    let mut data = data;
+    let mut archive = archive;
+    fns::lbFile_8001668C(ctx, filename, data, length);
+    fns::lbArchive_InitializeDAT(ctx, archive, data, length.get());
+}
+
 fn inl_loadArchive_unfused<'a>(ctx: &'a Ctx, filename: Val<'a, i8>) -> HSD_Archive<'a> {
     let mut filename = filename;
     let mut archive: HSD_Archive<'a> = null(ctx);
@@ -215,21 +230,6 @@ fn inl_loadArchive_unfused<'a>(ctx: &'a Ctx, filename: Val<'a, i8>) -> HSD_Archi
     archive = Handle::cast::<HSD_Archive<'a>>(fns::lbHeap_80015BD0(ctx, 0_i32, 68_u32));
     inl_readArchive_unfused(ctx, filename, data, archive);
     return archive;
-}
-
-fn inl_readArchive_unfused<'a>(
-    ctx: &'a Ctx,
-    filename: Val<'a, i8>,
-    data: Addr<'a>,
-    archive: HSD_Archive<'a>,
-) {
-    let __frame = ctx.stack_frame(0x10);
-    let length: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
-    let mut filename = filename;
-    let mut data = data;
-    let mut archive = archive;
-    fns::lbFile_8001668C(ctx, filename, data, length);
-    fns::lbArchive_InitializeDAT(ctx, archive, data, length.get());
 }
 
 fn inl_Locate_unfused<'a>(ctx: &'a Ctx, archive: HSD_Archive<'a>, base_addr: i32) {

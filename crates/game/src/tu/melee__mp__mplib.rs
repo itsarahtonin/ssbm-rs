@@ -705,7 +705,7 @@ pub fn mpLib_8004ED5C<'a>(
     y1_f3 = (Handle::add(statics::melee__mp__mplib::groundCollVtx(ctx).get(), i1))
         .pos()
         .y();
-    if fns::mpLineGetPrev(ctx, line_id) != 1_i32.wrapping_neg() {
+    if inl_mpLineGetPrev(ctx, line_id) != 1_i32.wrapping_neg() {
         distance = inl_sqrtf(
             ctx,
             fp::fadds(
@@ -719,7 +719,7 @@ pub fn mpLib_8004ED5C<'a>(
         }
         calculated_distance = 1_i32;
     }
-    if fns::mpLineGetNext(ctx, line_id) != 1_i32.wrapping_neg() {
+    if inl_mpLineGetNext(ctx, line_id) != 1_i32.wrapping_neg() {
         if !(calculated_distance != 0) {
             distance = inl_sqrtf(
                 ctx,
@@ -1746,8 +1746,8 @@ pub fn mpLineSetPos<'a>(ctx: &'a Ctx, line_id: i32, x0: f64, y0: f64, x1: f64, y
         statics::melee__mp__mplib::groundCollLine(ctx).get(),
         line_id,
     ));
-    fns::mpVtxSetPos(ctx, (((line).x0()).v0_idx() as i32), x0, y0);
-    fns::mpVtxSetPos(ctx, (((line).x0()).v1_idx() as i32), x1, y1);
+    inl_mpVtxSetPos_unfused(ctx, (((line).x0()).v0_idx() as i32), x0, y0);
+    inl_mpVtxSetPos_unfused(ctx, (((line).x0()).v1_idx() as i32), x1, y1);
 }
 
 pub fn mpLib_80056758<'a>(ctx: &'a Ctx, line_id: i32, x0: f64, y0: f64, x1: f64, y1: f64) {
@@ -1783,7 +1783,7 @@ pub fn mpGetSpeed<'a>(ctx: &'a Ctx, line_id: i32, pos: Vec<'a>, speed: Vec<'a>) 
     let mut speed = speed;
     let mut v0_r5: CollVtx<'a> = null(ctx);
     let mut v1_r6: CollVtx<'a> = null(ctx);
-    if !(fns::mpLib_80054ED8(ctx, line_id) != 0) {
+    if !(inl_mpLib_80054ED8_unfused(ctx, line_id) != 0) {
         return 0_i32;
     }
     v0_r5 = (Handle::add(
@@ -2180,7 +2180,7 @@ pub fn mpJointListAdd<'a>(ctx: &'a Ctx, joint_id: i32) {
             line_r6 = Handle::add(line_r6, 1);
         }
     }
-    fns::mpLib_80057424(ctx, joint_id);
+    inl_mpLib_80057424_unfused(ctx, joint_id);
     j_inner = (joint).inner();
     fns::mpIsland_8005B334(
         ctx,
@@ -5155,6 +5155,63 @@ fn inl_mpLineGetCollLine<'a>(ctx: &'a Ctx, line_id: i32) -> CollLine<'a> {
     ));
 }
 
+fn inl_mpLineGetPrev<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let mut line_id = line_id;
+    let mut result: i16 = ((Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .x0())
+    .prev_id1();
+    let mut ret: i32 = (result as i32);
+    if (result as i32) != 1_i32.wrapping_neg() {
+        let mut flags: u32 = (Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            (result as i32),
+        ))
+        .flags();
+        if ((flags & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0)
+            && (!((flags & ((shl_i32(1_i32, (18_i32 as u32))) as u32)) != 0))
+        {
+            let mut v0: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    line_id,
+                ))
+                .x0())
+                .v0_idx() as i32),
+            ));
+            let mut v1: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    (result as i32),
+                ))
+                .x0())
+                .v1_idx() as i32),
+            ));
+            if fp::fmadds(
+                (fp::fsubs((v0).pos().y(), (v1).pos().y())),
+                (fp::fsubs((v0).pos().y(), (v1).pos().y())),
+                (fp::fmuls(
+                    (fp::fsubs((v0).pos().x(), (v1).pos().x())),
+                    (fp::fsubs((v0).pos().x(), (v1).pos().x())),
+                )),
+            ) < 4.0
+            {
+                return ret;
+            }
+        }
+    }
+    return (((Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .x0())
+    .prev_id0() as i32);
+}
+
 fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     let mut x = x;
     let mut y: f64 = 0.0;
@@ -5176,6 +5233,63 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         return y;
     }
     return x;
+}
+
+fn inl_mpLineGetNext<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let mut line_id = line_id;
+    let mut result: i16 = ((Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .x0())
+    .next_id1();
+    let mut ret: i32 = (result as i32);
+    if (result as i32) != 1_i32.wrapping_neg() {
+        let mut flags: u32 = (Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            (result as i32),
+        ))
+        .flags();
+        if ((flags & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0)
+            && (!((flags & ((shl_i32(1_i32, (18_i32 as u32))) as u32)) != 0))
+        {
+            let mut v1: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    line_id,
+                ))
+                .x0())
+                .v1_idx() as i32),
+            ));
+            let mut v0: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    (result as i32),
+                ))
+                .x0())
+                .v0_idx() as i32),
+            ));
+            if fp::fmadds(
+                (fp::fsubs((v1).pos().y(), (v0).pos().y())),
+                (fp::fsubs((v1).pos().y(), (v0).pos().y())),
+                (fp::fmuls(
+                    (fp::fsubs((v1).pos().x(), (v0).pos().x())),
+                    (fp::fsubs((v1).pos().x(), (v0).pos().x())),
+                )),
+            ) < 4.0
+            {
+                return ret;
+            }
+        }
+    }
+    return (((Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .x0())
+    .next_id0() as i32);
 }
 
 fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
@@ -5209,6 +5323,89 @@ fn inl_HSD_JObjGetParent_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JO
     }
     #[allow(unreachable_code)]
     return null(ctx);
+}
+
+fn inl_mpVtxSetPos_unfused<'a>(ctx: &'a Ctx, vtx_id: i32, x: f64, y: f64) {
+    let mut vtx_id = vtx_id;
+    let mut x = x;
+    let mut y = y;
+    let mut vtx: CollVtx<'a> =
+        (Handle::add(statics::melee__mp__mplib::groundCollVtx(ctx).get(), vtx_id));
+    (vtx).pos().set_x(x);
+    (vtx).pos().set_y(y);
+}
+
+fn inl_mpLib_80054ED8_unfused<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let mut line_id = line_id;
+    if line_id == 1_i32.wrapping_neg() {
+        return 0_i32;
+    }
+    if (line_id < 0_i32)
+        || (line_id >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+    {
+        fns::OSReport(
+            ctx,
+            cstr(ctx, 0x803bf4b0),
+            &[
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803bd3ec))),
+                VarArg::Int(0x121c_i32 as u32),
+                VarArg::Int(line_id as u32),
+            ],
+        );
+        'l1: loop {
+            'c2: {}
+        }
+    }
+    if (!(((Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .flags()
+        & ((shl_i32(1_i32, (16_i32 as u32))) as u32))
+        != 0))
+        || (((Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            line_id,
+        ))
+        .flags()
+            & ((shl_i32(1_i32, (18_i32 as u32))) as u32))
+            != 0)
+    {
+        return 0_i32;
+    }
+    return 1_i32;
+}
+
+fn inl_mpLib_80057424_unfused<'a>(ctx: &'a Ctx, joint_id: i32) {
+    let mut joint_id = joint_id;
+    let mut joint: CollJoint<'a> = (Handle::add(
+        statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+        joint_id,
+    ));
+    let mut j_inner: MapJoint<'a> = (joint).inner();
+    let mut count: u32 = ((j_inner).vtx_count() as u32);
+    let mut new_var: i32 = 0;
+    let mut vtx: CollVtx<'a> = (Handle::add(
+        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+        ((j_inner).vtx_start() as i32),
+    ));
+    {
+        joint_id = 0_i32;
+        'l1: while joint_id
+            < ({
+                let __t1 = (count as i32);
+                new_var = __t1;
+                __t1
+            })
+        {
+            'c2: {
+                (vtx).set_x10((vtx).pos().x());
+                (vtx).set_x14((vtx).pos().y());
+                vtx = Handle::add(vtx, 1);
+            }
+            joint_id = joint_id.wrapping_add(1);
+        }
+    }
 }
 
 fn inl_mpLib_GetJointVtxRange_unfused<'a>(

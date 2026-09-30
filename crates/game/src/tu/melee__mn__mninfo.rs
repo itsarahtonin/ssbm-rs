@@ -646,6 +646,20 @@ fn inl_mnInfo_FreeEntries_unfused<'a>(ctx: &'a Ctx) {
     }
 }
 
+fn inl_mnInfo_CreateEntry_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, i: i32, id: u32) {
+    let mut gobj = gobj;
+    let mut i = i;
+    let mut id = id;
+    let _ = fns::mnInfo_80251D58(
+        ctx,
+        gobj,
+        i,
+        id,
+        (fns::gmMainLib_8015D804(ctx, (id as i32))).get(),
+    );
+    fns::mnInfo_80251F04(ctx, gobj, i, id);
+}
+
 fn inl_mnInfo_CreateEntries_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, start: i32) {
     let mut gobj = gobj;
     let mut start = start;
@@ -667,20 +681,6 @@ fn inl_mnInfo_CreateEntries_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, start:
             i = i.wrapping_add(1);
         }
     }
-}
-
-fn inl_mnInfo_CreateEntry_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, i: i32, id: u32) {
-    let mut gobj = gobj;
-    let mut i = i;
-    let mut id = id;
-    let _ = fns::mnInfo_80251D58(
-        ctx,
-        gobj,
-        i,
-        id,
-        (fns::gmMainLib_8015D804(ctx, (id as i32))).get(),
-    );
-    fns::mnInfo_80251F04(ctx, gobj, i, id);
 }
 
 fn inl_mnInfo_CountUnlocked_unfused<'a>(ctx: &'a Ctx) -> i32 {

@@ -385,13 +385,13 @@ pub fn lbMemory_800154D4<'a>(ctx: &'a Ctx, arenaLo: Addr<'a>, arenaHi: Addr<'a>)
     let __frame = ctx.stack_frame(0x30);
     let mut arenaLo = arenaLo;
     let mut arenaHi = arenaHi;
-    fns::lbMemory_804318B0(ctx).set_aram_heap(fns::lbMemory_80014E24(ctx, arenaLo, arenaHi));
+    fns::lbMemory_804318B0(ctx).set_aram_heap(inl_lbMemory_80014E24_unfused(ctx, arenaLo, arenaHi));
     return (fns::lbMemory_804318B0(ctx).aram_heap());
 }
 
 pub fn lbMemory_800155A4<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
-    fns::lbMemory_80014EEC(ctx, (fns::lbMemory_804318B0(ctx).aram_heap()));
+    inl_lbMemory_80014EEC_unfused(ctx, (fns::lbMemory_804318B0(ctx).aram_heap()));
     fns::lbMemory_804318B0(ctx).set_aram_heap(null::<Handle_<'a>>(ctx));
 }
 
@@ -446,7 +446,7 @@ pub fn lbMemory_8001564C<'a>(ctx: &'a Ctx) {
         .get(i)
         .set_next(null::<Handle_<'a>>(ctx));
     fns::lbMemory_804318B0(ctx).set_aram_heap(null::<Handle_<'a>>(ctx));
-    let _ = fns::lbMemory_800154D4(
+    let _ = inl_lbMemory_800154D4_unfused(
         ctx,
         ptr::<Addr<'a>>(ctx, (fns::lbMemory_804318B0(ctx).a_arenaLo()) as u32),
         ptr::<Addr<'a>>(ctx, (fns::lbMemory_804318B0(ctx).a_arenaHi()) as u32),
@@ -503,6 +503,89 @@ fn inl_start_ram_copy_unfused<'a>(
         )) as i64),
         fnptr(ctx, 0x80015184),
     );
+}
+
+fn inl_lbMemory_80014E24_unfused<'a>(
+    ctx: &'a Ctx,
+    arenaLo: Addr<'a>,
+    arenaHi: Addr<'a>,
+) -> Handle_<'a> {
+    let mut arenaLo = arenaLo;
+    let mut arenaHi = arenaHi;
+    let mut h: Handle_<'a> = null(ctx);
+    (if !Handle::is_null((fns::lbMemory_804318B0(ctx).free_heap())) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803ba324),
+            (48_i32 as u32),
+            cstr(ctx, 0x803ba324),
+        )
+    });
+    if (Handle::addr(arenaLo) < 0x80000000_u32) && (Handle::addr(arenaHi) < 0x80000000_u32) {
+        (if (Handle::addr(arenaLo) >= (fns::lbMemory_804318B0(ctx).a_arenaLo()))
+            && (Handle::addr(arenaHi) <= (fns::lbMemory_804318B0(ctx).a_arenaHi()))
+        {
+            ({ () })
+        } else {
+            fns::__assert(
+                ctx,
+                cstr(ctx, 0x803ba324),
+                (57_i32 as u32),
+                cstr(ctx, 0x803ba324),
+            )
+        });
+    }
+    h = (fns::lbMemory_804318B0(ctx).free_heap());
+    fns::lbMemory_804318B0(ctx).set_free_heap((h).next());
+    (h).set_next(null::<Handle_<'a>>(ctx));
+    (h).set_lo(arenaLo);
+    (h).set_hi(arenaHi);
+    (h).set_blocks(null::<HSD_AllocEntry<'a>>(ctx));
+    return h;
+}
+
+fn inl_lbMemory_80014EEC_unfused<'a>(ctx: &'a Ctx, handle: Handle_<'a>) {
+    let mut handle = handle;
+    let mut block: HSD_AllocEntry<'a> = null(ctx);
+    let mut next: HSD_AllocEntry<'a> = null(ctx);
+    (if !Handle::is_null((handle)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803ba324),
+            (74_i32 as u32),
+            cstr(ctx, 0x803ba324),
+        )
+    });
+    {
+        block = (handle).blocks();
+        'l1: while !Handle::is_null(block) {
+            'c2: {
+                next = (block).next();
+                (block).set_next((fns::lbMemory_804318B0(ctx).free_mem()));
+                fns::lbMemory_804318B0(ctx).set_free_mem(block);
+                fns::lbMemory_804318B0(ctx)
+                    .set_num_allocs(fns::lbMemory_804318B0(ctx).num_allocs().wrapping_sub(1_i32));
+            }
+            block = next;
+        }
+    }
+    (handle).set_next((fns::lbMemory_804318B0(ctx).free_heap()));
+    fns::lbMemory_804318B0(ctx).set_free_heap(handle);
+}
+
+fn inl_lbMemory_800154D4_unfused<'a>(
+    ctx: &'a Ctx,
+    arenaLo: Addr<'a>,
+    arenaHi: Addr<'a>,
+) -> Handle_<'a> {
+    let mut arenaLo = arenaLo;
+    let mut arenaHi = arenaHi;
+    fns::lbMemory_804318B0(ctx).set_aram_heap(fns::lbMemory_80014E24(ctx, arenaLo, arenaHi));
+    return (fns::lbMemory_804318B0(ctx).aram_heap());
 }
 
 /// Registers this unit's ports.

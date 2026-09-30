@@ -274,7 +274,7 @@ pub fn grDatFiles_801C6478<'a>(ctx: &'a Ctx, data: Addr<'a>, length: i32) -> Unk
     let mut archive: HSD_Archive<'a> =
         Handle::cast::<HSD_Archive<'a>>(fns::lbHeap_80015BD0(ctx, 0_i32, 68_u32));
     fns::lbArchive_InitializeDAT(ctx, archive, data, (length as u32));
-    arc = statics::melee__gr__grdatfiles::grDatFiles_801C62B4(ctx);
+    arc = inl_grDatFiles_801C62B4_unfused(ctx);
     (if !Handle::is_null((arc)) {
         ({ () })
     } else {
@@ -290,8 +290,60 @@ pub fn grDatFiles_801C6478<'a>(ctx: &'a Ctx, data: Addr<'a>, length: i32) -> Unk
         fns::HSD_ArchiveGetPublicAddress(ctx, archive, cstr(ctx, 0x803e0768)),
     ));
     (arc).set_unk8((1_i32 as u32));
-    statics::melee__gr__grdatfiles::grDatFiles_801C6228(ctx, (arc).unk4());
+    inl_grDatFiles_801C6228_unfused(ctx, (arc).unk4());
     return arc;
+}
+
+fn inl_grDatFiles_801C62B4_unfused<'a>(ctx: &'a Ctx) -> UnkArchiveStruct<'a> {
+    let mut i: i32 = 0;
+    {
+        i = 0_i32;
+        'l1: while i < 4_i32 {
+            'c2: {
+                if Handle::is_null(
+                    statics::melee__gr__grdatfiles::grDatFiles_8049EE10(ctx)
+                        .get(i)
+                        .unk0(),
+                ) {
+                    return statics::melee__gr__grdatfiles::grDatFiles_8049EE10(ctx).get(i);
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    (if ((0_i32) != 0) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803e0758),
+            (126_i32 as u32),
+            cstr(ctx, 0x803e0758),
+        )
+    });
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
+fn inl_grDatFiles_801C6228_unfused<'a>(ctx: &'a Ctx, arg0: UnkStageDat<'a>) {
+    let mut arg0 = arg0;
+    if ((!Handle::is_null(arg0)) && (!Handle::is_null((arg0).unk28()))) && ((arg0).unk2C() != 0_i32)
+    {
+        let mut i: i32 = 0;
+        {
+            i = 0_i32;
+            'l1: while i < (arg0).unk2C() {
+                'c2: {
+                    let mut temp_r4: UnkStageDatInternal<'a> =
+                        (Handle::add((arg0).unk28(), i)).get();
+                    if !Handle::is_null(temp_r4) {
+                        (temp_r4).set_unk4(((temp_r4).unk4() | (0x4000000_i32 as u32)));
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    }
 }
 
 /// Registers this unit's ports.

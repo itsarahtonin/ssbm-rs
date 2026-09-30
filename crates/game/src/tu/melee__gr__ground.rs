@@ -1114,7 +1114,7 @@ pub fn Ground_801C1A20<'a>(ctx: &'a Ctx, arg0: HSD_Joint<'a>, arg1: i32) -> HSD_
     fns::grMaterial_801C95C4(ctx, temp_r30);
     temp_r29 = fns::HSD_JObjLoadJoint(ctx, arg0);
     statics::melee__gr__ground::Ground_801C34AC(ctx, arg1, temp_r29, arg0);
-    temp_r3_4 = inl_get_jobj_inline_unfused(ctx, fns::Ground_801C0498(ctx));
+    temp_r3_4 = inl_get_jobj_inline_unfused(ctx, inl_Ground_801C0498_unfused(ctx));
     fns::HSD_JObjAddNext(ctx, temp_r29, temp_r3_4);
     if Handle::is_null(temp_r3_4) {
         fns::HSD_GObjFree(ctx, temp_r30);
@@ -1464,7 +1464,7 @@ pub fn Ground_801C2374<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>) {
     let mut lobj = lobj;
     let mut vec_mul: f64 = 0.0;
     let mut cur: HSD_LObj<'a> = lobj;
-    vec_mul = fns::Ground_801C0498(ctx);
+    vec_mul = inl_Ground_801C0498_unfused(ctx);
     'l1: while !Handle::is_null(cur) {
         'c2: {
             let mut vec_ptr: Vec<'a> = null(ctx);
@@ -3507,7 +3507,7 @@ pub fn Ground_801C55AC<'a>(ctx: &'a Ctx, gp: Ground<'a>) {
             i = 0_i32;
             'l1: while i < 8_i32 {
                 'c2: {
-                    fns::Ground_801C5544(ctx, gp, i);
+                    inl_Ground_801C5544_unfused(ctx, gp, i);
                 }
                 i = i.wrapping_add(1);
             }
@@ -3736,6 +3736,28 @@ fn inl_zeroBuffer_unfused<'a>(ctx: &'a Ctx) {
     }
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7d80),
+            (228_i32 as u32),
+            cstr(ctx, 0x803b7d80),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
     let mut jobj = jobj;
     let mut scale = scale;
@@ -3767,28 +3789,6 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b7d80),
-            (228_i32 as u32),
-            cstr(ctx, 0x803b7d80),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_alloc_user_data_ground_unfused<'a>(ctx: &'a Ctx) -> Ground<'a> {
@@ -3837,6 +3837,16 @@ fn inl_get_jobj_inline_unfused<'a>(ctx: &'a Ctx, phi_f0: f64) -> HSD_JObj<'a> {
         }
     }
     return jobj;
+}
+
+fn inl_Ground_801C0498_unfused<'a>(ctx: &'a Ctx) -> f64 {
+    if !Handle::is_null(fns::stage_info(ctx).param()) {
+        return (fns::stage_info(ctx).param()).y();
+    } else {
+        return 1.0;
+    }
+    #[allow(unreachable_code)]
+    return 0.0;
 }
 
 fn inl_foo_unfused<'a>(ctx: &'a Ctx) -> HSD_FogDesc<'a> {
@@ -4068,6 +4078,22 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
 fn inl_HSD_GObjGetHSDObj<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).hsd_obj();
+}
+
+fn inl_Ground_801C5544_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>, i: i32) {
+    let mut gp = gp;
+    let mut i = i;
+    if (i < 0_i32) || (i >= 8_i32) {
+        return;
+    }
+    if Handle::is_null(gp) {
+        return;
+    }
+    if (gp).x20().at(i).get() != 1_i32.wrapping_neg() {
+        let mut tmp_gp: Ground<'a> = gp;
+        let _ = fns::lbAudioAx_800236B8(ctx, (tmp_gp).x20().at(i).get());
+    }
+    (gp).x20().at(i).set(1_i32.wrapping_neg());
 }
 
 fn inl_initSinglePlayerDisplay_unfused<'a>(ctx: &'a Ctx, stageinfo: StageInfo<'a>) {

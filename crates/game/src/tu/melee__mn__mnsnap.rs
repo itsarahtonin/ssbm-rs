@@ -3987,6 +3987,28 @@ fn inl_sfxMove_unfused<'a>(ctx: &'a Ctx) {
     fns::lbAudioAx_80024030(ctx, 2_i32);
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f0170),
+            (228_i32 as u32),
+            cstr(ctx, 0x803f0170),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
     let mut jobj = jobj;
     let mut x = x;
@@ -4008,28 +4030,6 @@ fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f6
             }
         }
     }
-}
-
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f0170),
-            (228_i32 as u32),
-            cstr(ctx, 0x803f0170),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
 }
 
 fn inl_mnSnap_ShowSubmenu_unfused<'a>(ctx: &'a Ctx, snap: mnSnap_State<'a>) {
@@ -4476,29 +4476,6 @@ fn inl_mnSnap_GetMainShapeAnim<'a>(
     return (snap).main_shapeanim_ref();
 }
 
-fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
-    let mut jobj = jobj;
-    let mut x = x;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f0170),
-            (0x201_i32 as u32),
-            cstr(ctx, 0x803f0170),
-        )
-    });
-    (jobj).translate().set_x(x);
-    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
-        {
-            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
-                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
-            }
-        }
-    }
-}
-
 fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     let mut jobj = jobj;
     let mut result: i32 = 0;
@@ -4521,54 +4498,25 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     return result;
 }
 
-fn inl_mnSnap_CreateThumbnails<'a>(
-    ctx: &'a Ctx,
-    snap: mnSnap_State<'a>,
-    thumb_root_ptr: Ptr<'a, HSD_JObj<'a>>,
-    photo_joint: Ptr<'a, HSD_Joint<'a>>,
-    sub_animjoint: Ptr<'a, HSD_AnimJoint<'a>>,
-    sub_matanim: Ptr<'a, HSD_MatAnimJoint<'a>>,
-    sub_shapeanim: Ptr<'a, HSD_ShapeAnimJoint<'a>>,
-) {
-    let __frame = ctx.stack_frame(0x20);
-    let end_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let start_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let mut snap = snap;
-    let mut thumb_root_ptr = thumb_root_ptr;
-    let mut photo_joint = photo_joint;
-    let mut sub_animjoint = sub_animjoint;
-    let mut sub_matanim = sub_matanim;
-    let mut sub_shapeanim = sub_shapeanim;
-    let mut jobj2: HSD_JObj<'a> = null(ctx);
-    let mut step_z: f64 = 0.0;
-    let mut step_y: f64 = 0.0;
-    let mut step_x: f64 = 0.0;
-    let mut i: i32 = 0;
-    inl_HSD_JObjGetTranslation(ctx, (snap).thumb_start(), start_pos);
-    inl_HSD_JObjGetTranslation(ctx, (snap).thumb_end(), end_pos);
-    step_x = fp::fsubs(end_pos.x(), start_pos.x());
-    step_y = fp::fsubs(end_pos.y(), start_pos.y());
-    step_z = fp::fsubs(end_pos.z(), start_pos.z());
-    {
-        i = 0_i32;
-        'l1: while i < 5_i32 {
-            'c2: {
-                jobj2 = fns::HSD_JObjLoadJoint(ctx, ((photo_joint).get()));
-                fns::HSD_JObjAddAnimAll(
-                    ctx,
-                    jobj2,
-                    ((sub_animjoint).get()),
-                    ((sub_matanim).get()),
-                    ((sub_shapeanim).get()),
-                );
-                end_pos.set_x(fp::fmadds(step_x, fp::frsp(i as f64), start_pos.x()));
-                end_pos.set_y(fp::fmadds(step_y, fp::frsp(i as f64), start_pos.y()));
-                end_pos.set_z(fp::fmadds(step_z, fp::frsp(i as f64), start_pos.z()));
-                inl_HSD_JObjSetTranslate(ctx, jobj2, end_pos);
-                (snap).option_jobjs().at(i).set(jobj2);
-                fns::HSD_JObjAddChild(ctx, (thumb_root_ptr).get(), jobj2);
+fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
+    let mut jobj = jobj;
+    let mut x = x;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f0170),
+            (0x201_i32 as u32),
+            cstr(ctx, 0x803f0170),
+        )
+    });
+    (jobj).translate().set_x(x);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
             }
-            i = i.wrapping_add(1);
         }
     }
 }
@@ -4628,6 +4576,58 @@ fn inl_HSD_JObjSetTranslate<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec
             if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
                 fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
             }
+        }
+    }
+}
+
+fn inl_mnSnap_CreateThumbnails<'a>(
+    ctx: &'a Ctx,
+    snap: mnSnap_State<'a>,
+    thumb_root_ptr: Ptr<'a, HSD_JObj<'a>>,
+    photo_joint: Ptr<'a, HSD_Joint<'a>>,
+    sub_animjoint: Ptr<'a, HSD_AnimJoint<'a>>,
+    sub_matanim: Ptr<'a, HSD_MatAnimJoint<'a>>,
+    sub_shapeanim: Ptr<'a, HSD_ShapeAnimJoint<'a>>,
+) {
+    let __frame = ctx.stack_frame(0x20);
+    let end_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let start_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let mut snap = snap;
+    let mut thumb_root_ptr = thumb_root_ptr;
+    let mut photo_joint = photo_joint;
+    let mut sub_animjoint = sub_animjoint;
+    let mut sub_matanim = sub_matanim;
+    let mut sub_shapeanim = sub_shapeanim;
+    let mut jobj2: HSD_JObj<'a> = null(ctx);
+    let mut step_z: f64 = 0.0;
+    let mut step_y: f64 = 0.0;
+    let mut step_x: f64 = 0.0;
+    let mut i: i32 = 0;
+    inl_HSD_JObjGetTranslation(ctx, (snap).thumb_start(), start_pos);
+    inl_HSD_JObjGetTranslation(ctx, (snap).thumb_end(), end_pos);
+    step_x = fp::fsubs(end_pos.x(), start_pos.x());
+    step_y = fp::fsubs(end_pos.y(), start_pos.y());
+    step_z = fp::fsubs(end_pos.z(), start_pos.z());
+    {
+        i = 0_i32;
+        'l1: while i < 5_i32 {
+            'c2: {
+                jobj2 = fns::HSD_JObjLoadJoint(ctx, ((photo_joint).get()));
+                fns::HSD_JObjAddAnimAll(
+                    ctx,
+                    jobj2,
+                    ((sub_animjoint).get()),
+                    ((sub_matanim).get()),
+                    ((sub_shapeanim).get()),
+                );
+                end_pos.set_x(fp::fmadds(step_x, fp::frsp(i as f64), start_pos.x()));
+                end_pos.set_y(fp::fmadds(step_y, fp::frsp(i as f64), start_pos.y()));
+                end_pos.set_z(fp::fmadds(step_z, fp::frsp(i as f64), start_pos.z()));
+                inl_HSD_JObjSetTranslate(ctx, jobj2, end_pos);
+                (snap).option_jobjs().at(i).set(jobj2);
+                fns::HSD_JObjAddChild(ctx, (thumb_root_ptr).get(), jobj2);
+            }
+            i = i.wrapping_add(1);
         }
     }
 }

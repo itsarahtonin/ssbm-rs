@@ -130,11 +130,11 @@ pub fn __CARDGetFileNo<'a>(
         'l1: while fileNo < 127_i32 {
             'c2: {
                 let mut ent: CARDDir<'a> = (Handle::add(dir, fileNo));
-                let mut result: i32 = fns::__CARDAccess(ctx, card, ent);
+                let mut result: i32 = inl___CARDAccess_unfused(ctx, card, ent);
                 if result < 0_i32 {
                     break 'c2;
                 }
-                if (fns::__CARDCompareFileName(ctx, ent, fileName) != 0) {
+                if (inl___CARDCompareFileName_unfused(ctx, ent, fileName) != 0) {
                     (pfileNo).set(fileNo);
                     return 0_i32;
                 }
@@ -164,9 +164,9 @@ pub fn CARDFastOpen<'a>(ctx: &'a Ctx, chan: i32, fileNo: i32, fileInfo: CARDFile
     }
     dir = fns::__CARDGetDirBlock(ctx, card.get());
     ent = (Handle::add(dir, fileNo));
-    result = fns::__CARDAccess(ctx, card.get(), ent);
+    result = inl___CARDAccess_unfused(ctx, card.get(), ent);
     if result == (10_i32.wrapping_neg()) {
-        result = fns::__CARDIsPublic(ctx, ent);
+        result = inl___CARDIsPublic_unfused(ctx, ent);
     }
     if result >= 0_i32 {
         if !(((((ent).startBlock()) as i32) >= 5_i32)
@@ -203,7 +203,7 @@ pub fn CARDOpen<'a>(
     if result < 0_i32 {
         return result;
     }
-    result = fns::__CARDGetFileNo(ctx, card.get(), fileName, fileNo);
+    result = inl___CARDGetFileNo_unfused(ctx, card.get(), fileName, fileNo);
     if result >= 0_i32 {
         dir = fns::__CARDGetDirBlock(ctx, card.get());
         ent = (Handle::add(dir, fileNo.get()));
@@ -238,6 +238,127 @@ pub fn __CARDIsOpened<'a>(ctx: &'a Ctx, card: CARDControl<'a>, fileNo: i32) -> i
     let mut card = card;
     let mut fileNo = fileNo;
     return 0_i32;
+}
+
+fn inl___CARDAccess_unfused<'a>(ctx: &'a Ctx, card: CARDControl<'a>, ent: CARDDir<'a>) -> i32 {
+    let mut card = card;
+    let mut ent = ent;
+    if ((ent).gameName().at(0_i32).get() as i32) == 255_i32 {
+        return (4_i32.wrapping_neg());
+    }
+    if (Handle::addr((card).diskID()) == Handle::addr(fns::__CARDDiskNone(ctx)))
+        || ((fns::memcmp(
+            ctx,
+            Handle::cast::<Addr<'a>>((ent).gameName().at(0)),
+            Handle::cast::<Addr<'a>>(((card).diskID()).gameName().at(0)),
+            4_u32,
+        ) == 0_i32)
+            && (fns::memcmp(
+                ctx,
+                Handle::cast::<Addr<'a>>((ent).company().at(0)),
+                Handle::cast::<Addr<'a>>(((card).diskID()).company().at(0)),
+                2_u32,
+            ) == 0_i32))
+    {
+        return 0_i32;
+    }
+    return (10_i32.wrapping_neg());
+}
+
+fn inl___CARDCompareFileName_unfused<'a>(
+    ctx: &'a Ctx,
+    ent: CARDDir<'a>,
+    fileName: Val<'a, i8>,
+) -> i32 {
+    let mut ent = ent;
+    let mut fileName = fileName;
+    let mut entName: Val<'a, i8> = Handle::cast::<Val<'a, i8>>((ent).fileName().at(0));
+    let mut c1: i8 = 0;
+    let mut c2: i8 = 0;
+    let mut n: i32 = 32_i32;
+    'l1: while {
+        n = n.wrapping_sub(1);
+        n
+    } >= 0_i32
+    {
+        'c2: {
+            if (({
+                let __t2 = ({
+                    let __t1 = entName;
+                    entName = Handle::add(entName, 1);
+                    __t1
+                })
+                .get();
+                c1 = __t2;
+                __t2
+            }) as i32)
+                != (({
+                    let __t4 = ({
+                        let __t3 = fileName;
+                        fileName = Handle::add(fileName, 1);
+                        __t3
+                    })
+                    .get();
+                    c2 = __t4;
+                    __t4
+                }) as i32)
+            {
+                return 0_i32;
+            } else if (c2 as i32) == 0_i32 {
+                return 1_i32;
+            }
+        }
+    }
+    if ((fileName).get() as i32) == 0_i32 {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
+fn inl___CARDIsPublic_unfused<'a>(ctx: &'a Ctx, ent: CARDDir<'a>) -> i32 {
+    let mut ent = ent;
+    if ((ent).gameName().at(0_i32).get() as i32) == 255_i32 {
+        return (4_i32.wrapping_neg());
+    }
+    if ((((ent).permission() as u32) & 4_u32) != 0) {
+        return 0_i32;
+    }
+    return (10_i32.wrapping_neg());
+}
+
+fn inl___CARDGetFileNo_unfused<'a>(
+    ctx: &'a Ctx,
+    card: CARDControl<'a>,
+    fileName: Val<'a, i8>,
+    pfileNo: Val<'a, i32>,
+) -> i32 {
+    let mut card = card;
+    let mut fileName = fileName;
+    let mut pfileNo = pfileNo;
+    let mut dir: CARDDir<'a> = null(ctx);
+    let mut fileNo: i32 = 0;
+    if !((card).attached() != 0) {
+        return (3_i32.wrapping_neg());
+    }
+    dir = fns::__CARDGetDirBlock(ctx, card);
+    {
+        fileNo = 0_i32;
+        'l1: while fileNo < 127_i32 {
+            'c2: {
+                let mut ent: CARDDir<'a> = (Handle::add(dir, fileNo));
+                let mut result: i32 = inl___CARDAccess_unfused(ctx, card, ent);
+                if result < 0_i32 {
+                    break 'c2;
+                }
+                if (fns::__CARDCompareFileName(ctx, ent, fileName) != 0) {
+                    (pfileNo).set(fileNo);
+                    return 0_i32;
+                }
+            }
+            fileNo = fileNo.wrapping_add(1);
+        }
+    }
+    return (4_i32.wrapping_neg());
 }
 
 /// Registers this unit's ports.

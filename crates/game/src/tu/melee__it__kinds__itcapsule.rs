@@ -203,7 +203,7 @@ pub fn itCapsule_Logic0_Thrown<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn itCapsule_UnkMotion3_Phys<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut item_gobj = item_gobj;
-    fns::itCapsule_UnkMotion4_Phys(ctx, item_gobj);
+    inl_itCapsule_UnkMotion4_Phys_unfused(ctx, item_gobj);
     let _ = fns::it_80274658(ctx, item_gobj, (fns::it_804D6D28(ctx).get()).x68_float());
 }
 
@@ -247,7 +247,7 @@ pub fn itCapsule_Logic0_DmgDealt<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i
     let mut it: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
     if (it).msid() != 5_i32 {
-        fns::it_8027CF30(ctx, item_gobj);
+        inl_it_8027CF30_unfused(ctx, item_gobj);
     }
     return (it).xDD4_itemVar().capsule().x0();
 }
@@ -303,7 +303,7 @@ pub fn itCapsule_Logic0_HitShield<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> 
     let mut it: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
     if (it).msid() == 3_i32 {
-        fns::it_8027CF30(ctx, item_gobj);
+        inl_it_8027CF30_unfused(ctx, item_gobj);
         return (it).xDD4_itemVar().capsule().x0();
     }
     return 0_i32;
@@ -335,6 +335,63 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
 fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).hsd_obj();
+}
+
+fn inl_itCapsule_UnkMotion4_Phys_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut it: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    fns::it_80272860(
+        ctx,
+        gobj,
+        ((it).xCC_item_attr()).x10_fall_speed(),
+        ((it).xCC_item_attr()).x14_fall_speed_max(),
+    );
+}
+
+fn inl_it_8027D2DC_unfused<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
+    let mut item_gobj = item_gobj;
+    let mut it: Item<'a> =
+        (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
+    if !((it).xDD4_itemVar().capsule().x4() != 0) {
+        fns::it_8027CFE8(ctx, item_gobj);
+    }
+}
+
+fn inl_it_8027CF30_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let mut gobj = gobj;
+    let mut it: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut article: Article<'a> = (it).xC4_article_data();
+    let mut attr: ItCapsuleAttr<'a> =
+        Handle::cast::<ItCapsuleAttr<'a>>((article).x4_specialAttributes());
+    sp18.set_x({
+        let __t2 = {
+            let __t1 = 0.0;
+            sp18.set_z(__t1);
+            __t1
+        };
+        sp18.set_y(__t2);
+        __t2
+    });
+    if !(fns::it_8026F8B4(ctx, gobj, (it).pos(), sp18, 0_i32) != 0) {
+        if !(fns::HSD_Randi(ctx, (attr).x4()) != 0) {
+            inl_it_8027D2DC_unfused(ctx, gobj);
+            (it).xDD4_itemVar().capsule().set_x0(0_i32);
+        } else {
+            let _ = fns::it_8026F3D4(
+                ctx,
+                gobj,
+                null::<it_8026F3D4_arg1_t<'a>>(ctx),
+                (attr).x0(),
+                0_i32,
+            );
+            (it).xDD4_itemVar().capsule().set_x0(1_i32);
+        }
+    } else {
+        (it).xDD4_itemVar().capsule().set_x0(1_i32);
+    }
 }
 
 fn inl_itCapsule_Logic0_DmgDealt_autoinlined_unfused<'a>(

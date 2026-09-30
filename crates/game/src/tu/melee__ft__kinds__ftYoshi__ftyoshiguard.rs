@@ -310,7 +310,7 @@ pub fn ftYs_Shield_8012C49C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fp::frsp(0_i32 as f64),
         null::<HSD_GObj<'a>>(ctx),
     );
-    fns::ftYs_Init_8012BE3C(ctx, gobj);
+    inl_ftYs_Init_8012BE3C_unfused(ctx, gobj);
 }
 
 pub fn ftYs_GuardOff_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -558,38 +558,26 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
-fn inl_ftYs_Init_8012BECC_sub_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let s: ftYs_Init_8012BECC_sub_s<'a> = frame_at(ctx, &__frame, 0x0);
-    let mut gobj = gobj;
-    let mut fp: Fighter<'a> =
-        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    fns::ftColl_8007B0C0(ctx, gobj, (enums::HurtCapsule_Disabled as i32));
-    (fp).mv().ys().guard().set_xC(0_i32);
-    (fp).mv().ys().guard().set_x0(fp::frsp(0_i32 as f64));
-    (fp).mv()
-        .ys()
-        .guard()
-        .set_x10((fns::p_ftCommonData(ctx).get()).x268());
-    (fp).mv().ys().guard().set_x24(0_i32);
-    (fp).mv().ys().guard().set_x20(0_i32);
-    s.v().set_x({
-        let __t2 = {
-            let __t1 = fp::frsp(0_i32 as f64);
-            s.v().set_z(__t1);
-            __t1
-        };
-        s.v().set_y(__t2);
-        __t2
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804d3e64),
+            (228_i32 as u32),
+            cstr(ctx, 0x804d3e64),
+        )
     });
-    inl_HSD_JObjSetTranslate_unfused(
-        ctx,
-        (Handle::add((fp).parts(), ((((fp).ft_data()).x8()).x11() as i32))).joint(),
-        s.v(),
-    );
-    inl_ftYs_Init_8012B8A4_no_inline_unfused(ctx, gobj);
-    fns::ftCo_80091D58(ctx, fp);
-    fns::ft_PlaySFX(ctx, fp, 110_i32, (127_i32 as u8), (64_i32 as u8));
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
 }
 
 fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
@@ -625,26 +613,9 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
     }
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x804d3e64),
-            (228_i32 as u32),
-            cstr(ctx, 0x804d3e64),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
+fn inl_ftYs_Init_8012B8A4_no_inline_2_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    fns::ftYs_Init_8012B8A4(ctx, gobj);
 }
 
 fn inl_ftYs_Init_8012B8A4_no_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -652,9 +623,38 @@ fn inl_ftYs_Init_8012B8A4_no_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>
     inl_ftYs_Init_8012B8A4_no_inline_2_unfused(ctx, gobj);
 }
 
-fn inl_ftYs_Init_8012B8A4_no_inline_2_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+fn inl_ftYs_Init_8012BECC_sub_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let s: ftYs_Init_8012BECC_sub_s<'a> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
-    fns::ftYs_Init_8012B8A4(ctx, gobj);
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    fns::ftColl_8007B0C0(ctx, gobj, (enums::HurtCapsule_Disabled as i32));
+    (fp).mv().ys().guard().set_xC(0_i32);
+    (fp).mv().ys().guard().set_x0(fp::frsp(0_i32 as f64));
+    (fp).mv()
+        .ys()
+        .guard()
+        .set_x10((fns::p_ftCommonData(ctx).get()).x268());
+    (fp).mv().ys().guard().set_x24(0_i32);
+    (fp).mv().ys().guard().set_x20(0_i32);
+    s.v().set_x({
+        let __t2 = {
+            let __t1 = fp::frsp(0_i32 as f64);
+            s.v().set_z(__t1);
+            __t1
+        };
+        s.v().set_y(__t2);
+        __t2
+    });
+    inl_HSD_JObjSetTranslate_unfused(
+        ctx,
+        (Handle::add((fp).parts(), ((((fp).ft_data()).x8()).x11() as i32))).joint(),
+        s.v(),
+    );
+    inl_ftYs_Init_8012B8A4_no_inline_unfused(ctx, gobj);
+    fns::ftCo_80091D58(ctx, fp);
+    fns::ft_PlaySFX(ctx, fp, 110_i32, (127_i32 as u8), (64_i32 as u8));
 }
 
 fn inl_spawnEffect_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -709,6 +709,31 @@ fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         });
         hurt.set_scale(fp::frsp(1_i32 as f64));
         fns::ftColl_HurtboxInit(ctx, fp, (fp).hurt_capsules().get(0), hurt);
+    }
+}
+
+fn inl_ftYs_Init_8012BE3C_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut xBC: ftCo_DatAttrs_xBC_t<'a> = null(ctx);
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    fns::ftParts_80074B0C(ctx, gobj, 0_i32, 0_i32);
+    fns::ftColl_8007B0C0(ctx, gobj, (enums::HurtCapsule_Enabled as i32));
+    xBC = (fp).co_attrs().xBC();
+    {
+        let mut part: i32 = fns::ftParts_GetBoneIndex(ctx, fp, 4_i32);
+        let mut jobj: HSD_JObj<'a> = (Handle::add((fp).parts(), part)).joint();
+        let mut fp1: Fighter<'a> =
+            (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+        fns::efAsync_Spawn(
+            ctx,
+            gobj,
+            (fp1).x60C_ref(),
+            (4_i32 as u32),
+            (0x4cf_i32 as u32),
+            jobj,
+            &[VarArg::Int(Handle::addr(xBC))],
+        );
     }
 }
 

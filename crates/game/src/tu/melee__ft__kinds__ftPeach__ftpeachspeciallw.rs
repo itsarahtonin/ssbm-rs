@@ -98,7 +98,7 @@ pub fn ftPe_SpecialLw_8011CFA0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             && (fns::itGetKind(ctx, item_gobj) == (enums::It_Kind_Peach_Turnip as i32))
         {
             fns::it_802BD45C(ctx, (fp).u().pe().veg_gobj());
-            fns::ftPe_SpecialLw_UnsetVeg(ctx, gobj);
+            inl_ftPe_SpecialLw_UnsetVeg_unfused(ctx, gobj);
         }
     }
 }
@@ -221,6 +221,15 @@ pub fn ftPe_SpecialAirLw_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_ftPe_SpecialLw_UnsetVeg_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if !Handle::is_null((fp).u().pe().veg_gobj()) {
+        (fp).u().pe().set_veg_gobj(null::<HSD_GObj<'a>>(ctx));
+    }
 }
 
 fn inl_ftCheckThrowB0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
@@ -352,7 +361,7 @@ fn inl_doAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
     let mut cb = cb;
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
         cb.call::<_, ()>((gobj,));
-        fns::ftPe_SpecialLw_UnsetVeg(ctx, gobj);
+        inl_ftPe_SpecialLw_UnsetVeg_unfused(ctx, gobj);
     }
 }
 

@@ -139,7 +139,7 @@ pub fn gm_SetupHumanPlayer<'a>(
     (player).set_ckind((ckind as i8));
     (player).set_color(color);
     (player).set_stocks((stocks as i8));
-    fns::gm_801B05F4(ctx, player, (slot as i32));
+    inl_gm_801B05F4_unfused(ctx, player, (slot as i32));
 }
 
 pub fn gm_SetupCpuPlayer<'a>(
@@ -159,7 +159,7 @@ pub fn gm_SetupCpuPlayer<'a>(
     (arg0).set_ckind((ckind as i8));
     (arg0).set_color(color);
     (arg0).set_stocks((stocks as i8));
-    fns::gm_801B05F4(ctx, arg0, (slot as i32));
+    inl_gm_801B05F4_unfused(ctx, arg0, (slot as i32));
     (arg0).set_team((4_i32 as u8));
 }
 
@@ -406,6 +406,18 @@ fn inl_player_standings_inline_unfused<'a>(
             .get(i)
             .set_slot_type(((enums::Gm_PKind_NA as i32) as u8));
     }
+}
+
+fn inl_gm_801B05F4_unfused<'a>(ctx: &'a Ctx, player: PlayerInitData<'a>, slot: i32) {
+    let mut player = player;
+    let mut slot = slot;
+    (player).set_slot((slot.wrapping_add(1_i32) as u8));
+    if slot == 2_i32 {
+        slot = 3_i32;
+    } else if slot == 3_i32 {
+        slot = 2_i32;
+    }
+    (player).set_team((slot as u8));
 }
 
 /// Registers this unit's ports.

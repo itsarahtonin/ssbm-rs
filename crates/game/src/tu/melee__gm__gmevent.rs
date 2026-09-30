@@ -1020,7 +1020,7 @@ pub fn gm_Mode_Event_OnLoad<'a>(ctx: &'a Ctx) {
         }
     }
     temp_r30 = (fns::gmMainLib_804D3EE0(ctx).get()).vs().unk_530();
-    fns::gm_801BA8FC(ctx);
+    inl_gm_801BA8FC_unfused(ctx);
     temp_r29 = statics::melee__gm__gmevent::gm_804D6900(ctx)
         .at(0_i32)
         .get();
@@ -2670,7 +2670,7 @@ pub fn gm_801BEA10<'a>(ctx: &'a Ctx, arg0: i32) {
 pub fn gm_801BEA4C<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
-    statics::melee__gm__gmevent::gm_801BEA10(ctx, arg0);
+    inl_gm_801BEA10_unfused(ctx, arg0);
 }
 
 pub fn gm_801BEA88<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
@@ -2684,7 +2684,7 @@ pub fn gm_801BEA88<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
             break 'l1;
         }
     }
-    statics::melee__gm__gmevent::gm_801BEA10(ctx, arg0);
+    inl_gm_801BEA10_unfused(ctx, arg0);
     if arg1 == 0_i32 {
         fns::Player_SetModelScale(ctx, arg0, 2.0);
     }
@@ -2693,13 +2693,13 @@ pub fn gm_801BEA88<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
 pub fn gm_801BEAF0<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
-    statics::melee__gm__gmevent::gm_801BEA10(ctx, arg0);
+    inl_gm_801BEA10_unfused(ctx, arg0);
 }
 
 pub fn gm_801BEB2C<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
-    statics::melee__gm__gmevent::gm_801BEA10(ctx, arg0);
+    inl_gm_801BEA10_unfused(ctx, arg0);
 }
 
 pub fn gm_801BEB68<'a>(ctx: &'a Ctx, arg0: i32) {
@@ -2832,6 +2832,18 @@ fn inl_gm_801BBB64_inline_unfused<'a>(ctx: &'a Ctx, ev: EventData<'a>) {
     }
 }
 
+fn inl_gm_801BA8FC_unfused<'a>(ctx: &'a Ctx) {
+    let _ = fns::lbArchive_LoadSymbols(
+        ctx,
+        cstr(ctx, 0x803df660),
+        Handle::cast::<Addr<'a>>(statics::melee__gm__gmevent::gm_804D6900(ctx)),
+        &[
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803df66c))),
+            VarArg::Int(0_i32 as u32),
+        ],
+    );
+}
+
 fn inl_gm_801BC00C_GetCharacterKind_unfused<'a>(
     ctx: &'a Ctx,
     event_entry: gm_801BAB40_src<'a>,
@@ -2875,6 +2887,24 @@ fn inl_failEvent_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::gm_8016B378(ctx, (40_i32 as i8));
     fns::gm_8016B328(ctx);
     fns::HSD_GObjFree(ctx, gobj);
+}
+
+fn inl_gm_801BEA10_unfused<'a>(ctx: &'a Ctx, arg0: i32) {
+    let mut arg0 = arg0;
+    fns::Player_SetPlayerAndEntityCpuType(
+        ctx,
+        arg0,
+        ((((Handle::add(
+            ((statics::melee__gm__gmevent::gm_804D6900(ctx).at(0)).get()),
+            ((fns::gmMainLib_804D3EE0(ctx).get())
+                .vs()
+                .unk_530()
+                .unk_535() as i32),
+        ))
+        .get())
+        .evbonus())
+        .x16() as i32),
+    );
 }
 
 /// Registers this unit's ports.

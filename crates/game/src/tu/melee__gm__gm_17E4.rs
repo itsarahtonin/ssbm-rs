@@ -31,12 +31,12 @@ pub fn gm_GetAdventureData<'a>(ctx: &'a Ctx) -> UnkAdventureData<'a> {
 }
 
 pub fn gm_8017E430<'a>(ctx: &'a Ctx) -> u8 {
-    return (fns::gm_GetAdventureData(ctx)).x0().x0().slot();
+    return (inl_gm_GetAdventureData_unfused(ctx)).x0().x0().slot();
 }
 
 pub fn gm_8017E440<'a>(ctx: &'a Ctx) -> u8 {
     let __frame = ctx.stack_frame(0x10);
-    let mut r31: UnkAdventureData<'a> = fns::gm_GetAdventureData(ctx);
+    let mut r31: UnkAdventureData<'a> = inl_gm_GetAdventureData_unfused(ctx);
     if fns::gm_RumbleEnabledForPlayer(
         ctx,
         ((r31).x0().x0().slot() as i32),
@@ -230,13 +230,13 @@ pub fn gm_8017E7A0<'a>(ctx: &'a Ctx, matchResult: u8) {
 }
 
 pub fn gm_8017E7E0<'a>(ctx: &'a Ctx) -> i32 {
-    return (((fns::gm_GetAdventureData(ctx)).x7C() as i32) == 20_i32) as i32;
+    return (((inl_gm_GetAdventureData_unfused(ctx)).x7C() as i32) == 20_i32) as i32;
 }
 
 pub fn gm_8017E7FC<'a>(ctx: &'a Ctx, matchResult: u8) {
     let __frame = ctx.stack_frame(0x18);
     let mut matchResult = matchResult;
-    let mut r31: UnkAdventureData<'a> = fns::gm_GetAdventureData(ctx);
+    let mut r31: UnkAdventureData<'a> = inl_gm_GetAdventureData_unfused(ctx);
     let mut cond: i32 = 0;
     if (((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_ADVENTURE as i32))
         && (((r31).x0().x0().cpu_level() as i32) >= 2_i32))
@@ -361,6 +361,10 @@ pub fn fn_8017E8A4<'a>(ctx: &'a Ctx, arg0_int: i32) {
     if ((stage).x0() as i32) == 92_i32 {
         (Handle::cast::<u8_bits<'a>>((Handle::add(flags, 1_i32)))).set_b3((1_i32 as u8));
     }
+}
+
+fn inl_gm_GetAdventureData_unfused<'a>(ctx: &'a Ctx) -> UnkAdventureData<'a> {
+    return statics::melee__gm__gm_17E4::lbl_80472C30(ctx);
 }
 
 fn inl_getCurrentStage_unfused<'a>(ctx: &'a Ctx) -> gm_803DE650_t<'a> {

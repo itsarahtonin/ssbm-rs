@@ -298,16 +298,6 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
-fn inl_inlineB1_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>, offset: i32) {
-    let mut gobj = gobj;
-    let mut cb = cb;
-    let mut offset = offset;
-    let mut fp: Fighter<'a> =
-        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    cb.call::<_, ()>((fp,));
-    inl_inlineB0_unfused(ctx, gobj, (fp).motion_id().wrapping_add(offset));
-}
-
 fn inl_inlineB0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
     let mut gobj = gobj;
     let mut msid = msid;
@@ -330,6 +320,16 @@ fn inl_inlineB0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
     );
     (fp).set_facing_dir(facing_dir);
     fns::ftCommon_8007E2F4(ctx, fp, (0x1ff_i32 as i16));
+}
+
+fn inl_inlineB1_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>, offset: i32) {
+    let mut gobj = gobj;
+    let mut cb = cb;
+    let mut offset = offset;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    cb.call::<_, ()>((fp,));
+    inl_inlineB0_unfused(ctx, gobj, (fp).motion_id().wrapping_add(offset));
 }
 
 /// Registers this unit's ports.
