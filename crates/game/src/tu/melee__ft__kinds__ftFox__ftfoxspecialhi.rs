@@ -380,6 +380,251 @@ pub fn ftFx_SpecialHi_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn ftFx_SpecialAirHi_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x40);
+    let mut gobj = gobj;
+    let mut facingDir: f64 = 0.0;
+    let mut fp: Fighter<'a> = null(ctx);
+    let mut da: ftFox_DatAttrs<'a> = null(ctx);
+    let mut collData: CollData<'a> = null(ctx);
+    let mut envFlags: i32 = 0;
+    let mut var: f64 = 0.0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+                da = {
+                    let __t1 =
+                        Handle::cast::<ftFox_DatAttrs<'a>>(inl_getFtSpecialAttrs_unfused(ctx, fp));
+                    da = __t1;
+                    __t1
+                };
+                collData = {
+                    let __t2 = inl_getFtColl_unfused(ctx, fp);
+                    collData = __t2;
+                    __t2
+                };
+                __state = if (fns::ft_CheckGroundAndLedge(ctx, gobj, 0_i32) != 0) {
+                    1
+                } else {
+                    2
+                };
+            }
+            1 => {
+                __state = if (inl_ftFox_SpecialHi_IsBound_unfused(ctx, gobj) != 0) {
+                    4
+                } else {
+                    5
+                };
+            }
+            2 => {
+                __state = if fns::ftCliffCommon_80081298(ctx, gobj) == 0_i32 {
+                    14
+                } else {
+                    15
+                };
+            }
+            3 => {
+                unreachable!();
+            }
+            4 => {
+                __state = if (!(((collData).env_flags() & (0x8000_i32 | 0x10000_i32)) != 0))
+                    || (!(fns::lbVector_AngleXY(ctx, (collData).floor().normal(), (fp).self_vel())
+                        < (fp::fmuls(
+                            0.01745329238474369,
+                            (fp::fadds(90.0, (da).x94_FOX_FIREFOX_BOUND_ANGLE())),
+                        )))) {
+                    7
+                } else {
+                    9
+                };
+            }
+            5 => {
+                __state = 2;
+            }
+            6 => {
+                unreachable!();
+            }
+            7 => {
+                fns::ftFx_SpecialHiBound_Enter(ctx, gobj);
+                return;
+            }
+            8 => {
+                __state = 5;
+            }
+            9 => {
+                __state = 12;
+            }
+            10 => {
+                unreachable!();
+            }
+            11 => {
+                __state = 8;
+            }
+            12 => {
+                __state = if (fp).self_vel().x() >= 0.0 { 45 } else { 47 };
+            }
+            13 => {
+                __state = 8;
+            }
+            14 => {
+                __state = 18;
+            }
+            15 => {
+                return;
+            }
+            16 => {
+                unreachable!();
+            }
+            17 => {
+                unreachable!();
+            }
+            18 => {
+                envFlags = (collData).env_flags();
+                __state = if ((envFlags & (0x2000_i32 | 0x4000_i32)) != 0) {
+                    22
+                } else {
+                    24
+                };
+            }
+            19 => {
+                __state = if (0_i32 != 0) { 18 } else { 20 };
+            }
+            20 => {
+                return;
+            }
+            21 => {
+                unreachable!();
+            }
+            22 => {
+                var = fns::lbVector_AngleXY(ctx, (collData).ceiling().normal(), (fp).self_vel());
+                __state = 23;
+            }
+            23 => {
+                __state = if var
+                    < (fp::fmuls(
+                        0.01745329238474369,
+                        (fp::fadds(90.0, (da).x94_FOX_FIREFOX_BOUND_ANGLE())),
+                    )) {
+                    38
+                } else {
+                    40
+                };
+            }
+            24 => {
+                __state = if ((envFlags & 63_i32) != 0) { 26 } else { 28 };
+            }
+            25 => {
+                unreachable!();
+            }
+            26 => {
+                var = fns::lbVector_AngleXY(
+                    ctx,
+                    (collData).left_facing_wall().normal(),
+                    (fp).self_vel(),
+                );
+                __state = 27;
+            }
+            27 => {
+                __state = 23;
+            }
+            28 => {
+                __state = if ((envFlags & 0xfc0_i32) != 0) {
+                    30
+                } else {
+                    32
+                };
+            }
+            29 => {
+                unreachable!();
+            }
+            30 => {
+                var = fns::lbVector_AngleXY(
+                    ctx,
+                    (collData).right_facing_wall().normal(),
+                    (fp).self_vel(),
+                );
+                __state = 31;
+            }
+            31 => {
+                __state = 27;
+            }
+            32 => {
+                __state = if ((!((fp).self_vel().x() != 0.0)) && (!((fp).self_vel().x() != 0.0)))
+                    && (!((fp).self_vel().x() != 0.0))
+                {
+                    34
+                } else {
+                    35
+                };
+            }
+            33 => {
+                unreachable!();
+            }
+            34 => {
+                __state = 35;
+            }
+            35 => {
+                __state = 20;
+            }
+            36 => {
+                unreachable!();
+            }
+            37 => {
+                __state = 31;
+            }
+            38 => {
+                __state = 12;
+            }
+            39 => {
+                __state = 19;
+            }
+            40 => {
+                __state = 19;
+            }
+            41 => {
+                unreachable!();
+            }
+            42 => {
+                __state = 39;
+            }
+            43 => {
+                __state = 39;
+            }
+            44 => {
+                __state = 12;
+            }
+            45 => {
+                facingDir = 1.0;
+                __state = 46;
+            }
+            46 => {
+                (fp).set_facing_dir(facingDir);
+                (fp).mv().fx().SpecialHi().set_rotateModel(fns::atan2f(
+                    ctx,
+                    (fp).self_vel().y(),
+                    fp::fmuls((fp).self_vel().x(), (fp).facing_dir()),
+                ));
+                inl_ftFox_SpecialHi_RotateModel_unfused(ctx, gobj);
+                __state = 15;
+            }
+            47 => {
+                facingDir = fp::fneg(1.0);
+                __state = 46;
+            }
+            48 => {
+                unreachable!();
+            }
+            49 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn ftFx_SpecialHi_GroundToAir<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
@@ -871,6 +1116,22 @@ fn inl_getFtColl_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> CollData<'a> {
     return (fp).coll_data();
 }
 
+fn inl_ftFox_SpecialHi_IsBound_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut da: ftFox_DatAttrs<'a> = Handle::cast::<ftFox_DatAttrs<'a>>((fp).dat_attrs());
+    if (fp).mv().fx().SpecialHi().unk2() >= (da).x6C_FOX_FIREFOX_BOUNCE_VAR() {
+        return 1_i32;
+    } else if (fns::ftCo_8009A134(ctx, gobj) != 0) {
+        return 0_i32;
+    } else {
+        return 1_i32;
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 fn inl_stickGetDir_unfused<'a>(ctx: &'a Ctx, x1: f64, x2: f64) -> f64 {
     let mut x1 = x1;
     let mut x2 = x2;
@@ -1090,6 +1351,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(ftFx_SpecialHi_Coll(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x800e78b4,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftFx_SpecialAirHi_Coll(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

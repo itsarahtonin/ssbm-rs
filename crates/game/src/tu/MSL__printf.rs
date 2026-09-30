@@ -668,6 +668,202 @@ pub fn longlong2str<'a>(
     return p;
 }
 
+pub fn round_decimal<'a>(ctx: &'a Ctx, dec: decimal<'a>, new_length: i32) {
+    let mut dec = dec;
+    let mut new_length = new_length;
+    let mut c: i8 = 0;
+    let mut p: Val<'a, i8> = null(ctx);
+    let mut carry: i32 = 0;
+    let mut q: Val<'a, i8> = null(ctx);
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                __state = if new_length < 0_i32 { 1 } else { 2 };
+            }
+            1 => {
+                __state = 4;
+            }
+            2 => {
+                __state = if new_length >= ((dec).sig().length() as i32) {
+                    6
+                } else {
+                    7
+                };
+            }
+            3 => {
+                unreachable!();
+            }
+            4 => {
+                (dec).set_sign((0_i32 as i8));
+                (dec).set_exp((0_i32 as i16));
+                (dec).sig().set_length((1_i32 as u8));
+                ((dec).sig().text().at(0)).set((48_i32 as u8));
+                return;
+            }
+            5 => {
+                __state = 2;
+            }
+            6 => {
+                return;
+            }
+            7 => {
+                p = Handle::add(
+                    Handle::add(
+                        Handle::cast::<Val<'a, i8>>((dec).sig().text().at(0)),
+                        new_length,
+                    ),
+                    1_i32,
+                );
+                c = ((({
+                    p = Handle::add(p, -1);
+                    p
+                })
+                .get() as i32)
+                    .wrapping_sub(48_i32) as i8);
+                __state = if (c as i32) == 5_i32 { 10 } else { 12 };
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                __state = 7;
+            }
+            10 => {
+                q = (Handle::add(
+                    (Handle::cast::<Val<'a, i8>>((dec).sig().text().at(0))),
+                    ((dec).sig().length() as i32),
+                ));
+                __state = 14;
+            }
+            11 => {
+                __state = 19;
+            }
+            12 => {
+                carry = (((c as i32) > 5_i32) as i32);
+                __state = 11;
+            }
+            13 => {
+                unreachable!();
+            }
+            14 => {
+                __state = if (Handle::addr({
+                    q = Handle::add(q, -1);
+                    q
+                }) > Handle::addr(p))
+                    && (((q).get() as i32) == 48_i32)
+                {
+                    15
+                } else {
+                    17
+                };
+            }
+            15 => {
+                __state = 14;
+            }
+            16 => {
+                __state = 14;
+            }
+            17 => {
+                carry = (if Handle::addr(q) == Handle::addr(p) {
+                    (((Handle::add(p, 1_i32.wrapping_neg())).get() as i32) & 1_i32)
+                } else {
+                    1_i32
+                });
+                __state = 11;
+            }
+            18 => {
+                unreachable!();
+            }
+            19 => {
+                __state = if new_length != 0_i32 { 20 } else { 22 };
+            }
+            20 => {
+                c = ((({
+                    p = Handle::add(p, -1);
+                    p
+                })
+                .get() as i32)
+                    .wrapping_sub(48_i32)
+                    .wrapping_add(carry) as i8);
+                __state = if (({
+                    let __t1 = (((c as i32) > 9_i32) as i32);
+                    carry = __t1;
+                    __t1
+                }) != 0_i32)
+                    || ((c as i32) == 0_i32)
+                {
+                    24
+                } else {
+                    26
+                };
+            }
+            21 => {
+                __state = 19;
+            }
+            22 => {
+                __state = if carry != 0_i32 { 29 } else { 31 };
+            }
+            23 => {
+                unreachable!();
+            }
+            24 => {
+                new_length = new_length.wrapping_sub(1);
+                __state = 25;
+            }
+            25 => {
+                __state = 19;
+            }
+            26 => {
+                (p).set(((c as i32).wrapping_add(48_i32) as i8));
+                __state = 22;
+            }
+            27 => {
+                unreachable!();
+            }
+            28 => {
+                __state = 25;
+            }
+            29 => {
+                (dec).set_exp((((dec).exp() as i32).wrapping_add(1_i32) as i16));
+                (dec).sig().set_length((1_i32 as u8));
+                ((dec).sig().text().at(0)).set((49_i32 as u8));
+                return;
+            }
+            30 => {
+                (dec).sig().set_length((new_length as u8));
+                return;
+            }
+            31 => {
+                __state = if new_length == 0_i32 { 34 } else { 35 };
+            }
+            32 => {
+                unreachable!();
+            }
+            33 => {
+                __state = 30;
+            }
+            34 => {
+                __state = 4;
+            }
+            35 => {
+                __state = 30;
+            }
+            36 => {
+                unreachable!();
+            }
+            37 => {
+                __state = 35;
+            }
+            38 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn __FileWrite<'a>(
     ctx: &'a Ctx,
     pFile: Addr<'a>,
@@ -757,6 +953,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(longlong2str(ctx, a0, a1, a2), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x80324cac,
+        |ctx| {
+            let (a0, a1): (decimal<'_>, i32) = Args::take_all(ctx);
+            Ret::put(round_decimal(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x80323fec,

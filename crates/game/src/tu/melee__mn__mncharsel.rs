@@ -2786,6 +2786,3104 @@ pub fn mnCharSel_CostumeChange<'a>(ctx: &'a Ctx, door: i32, input: u32) {
     }
 }
 
+pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x128);
+    let sp98: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let unk94: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
+    let sp88: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let unk78: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
+    let sp74: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x24);
+    let unk58: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x28);
+    let sp54: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x44);
+    let sp50: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x48);
+    let state_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4c);
+    let color_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x50);
+    let dx_2: Val<'a, F32> = frame_at(ctx, &__frame, 0x54);
+    let dy_2: Val<'a, F32> = frame_at(ctx, &__frame, 0x58);
+    let mut gobj = gobj;
+    let mut cpu_door: i32 = 0;
+    let mut a_press: u32 = 0;
+    let mut scan_home: u32 = 0;
+    let mut current_tag: CSSTagData<'a> = null(ctx);
+    let mut next_port: u32 = 0;
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut cursor: CSSCursorData<'a> = null(ctx);
+    let mut trigger: u32 = 0;
+    let mut n_doors: i32 = 0;
+    let mut buttons: u32 = 0;
+    let mut door: i32 = 0;
+    let mut port: i32 = 0;
+    let mut new_timer: u16 = 0;
+    let mut port_2: i32 = 0;
+    let mut new_timer_2: u16 = 0;
+    let mut port_3: u8 = 0;
+    let mut tag: CSSTagData<'a> = null(ctx);
+    let mut player_idx: i32 = 0;
+    let mut m: CSSCharModel<'a> = null(ctx);
+    let mut icon_count: i32 = 0;
+    let mut m2: CSSCharModel<'a> = null(ctx);
+    let mut i: i32 = 0;
+    let mut player_idx_2: i32 = 0;
+    let mut sel: i32 = 0;
+    let mut td: CSSTagData<'a> = null(ctx);
+    let mut slider_door: i32 = 0;
+    let mut hc_door: i32 = 0;
+    let mut cy: f64 = 0.0;
+    let mut cx: f64 = 0.0;
+    let mut cy2: f64 = 0.0;
+    let mut cx2: f64 = 0.0;
+    let mut level: Val<'a, u8> = null(ctx);
+    let mut current_level: u8 = 0;
+    let mut level_2: Val<'a, u8> = null(ctx);
+    let mut current_level_2: u8 = 0;
+    let mut cx3: f64 = 0.0;
+    let mut loop_i: i32 = 0;
+    let mut is_teams: Val<'a, u8> = null(ctx);
+    let mut k: i32 = 0;
+    let mut cport2: u8 = 0;
+    let mut a_press2: u32 = 0;
+    let mut tag_data: CSSTagData<'a> = null(ctx);
+    let mut cx4: f64 = 0.0;
+    let mut cy4: f64 = 0.0;
+    let mut new_kind: u8 = 0;
+    let mut rules2: GameRules<'a> = null(ctx);
+    let mut dx: f64 = 0.0;
+    let mut dy: f64 = 0.0;
+    let mut rules3: GameRules<'a> = null(ctx);
+    let mut pk: u8 = 0;
+    let mut hdx: f64 = 0.0;
+    let mut hdy: f64 = 0.0;
+    let mut closest: i32 = 0;
+    let mut closest_dist: f64 = 0.0;
+    let mut ci: i32 = 0;
+    let mut cy7: f64 = 0.0;
+    let mut pk2: u8 = 0;
+    let mut mc: CSSCharModel<'a> = null(ctx);
+    let mut ddx: f64 = 0.0;
+    let mut ddy: f64 = 0.0;
+    let mut dist: f64 = 0.0;
+    let mut cport4: u8 = 0;
+    let mut closest_door: i32 = 0;
+    let mut cport5: u8 = 0;
+    let mut cy8: f64 = 0.0;
+    let mut cy9: f64 = 0.0;
+    let mut cport6: u8 = 0;
+    let mut cport7: u8 = 0;
+    let mut val_x: f64 = 0.0;
+    let mut val_y: f64 = 0.0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                jobj = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, gobj)));
+                cursor = Handle::cast::<CSSCursorData<'a>>((gobj).user_data());
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .match_type() as i32)
+                    == (enums::TRAINING_MODE as i32)
+                {
+                    1
+                } else {
+                    3
+                };
+            }
+            1 => {
+                n_doors = 2_i32;
+                __state = 2;
+            }
+            2 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF6(ctx).get() as i32)
+                    == 0_i32
+                {
+                    5
+                } else {
+                    6
+                };
+            }
+            3 => {
+                n_doors = (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32);
+                __state = 2;
+            }
+            4 => {
+                unreachable!();
+            }
+            5 => {
+                (cursor).set_x8((0_i32 as u16));
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    8
+                } else {
+                    10
+                };
+            }
+            6 => {
+                __state = 153;
+            }
+            7 => {
+                unreachable!();
+            }
+            8 => {
+                port =
+                    ((statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as u8) as i32);
+                trigger = fns::HSD_PadCopyStatus(ctx).get(port).trigger();
+                buttons = fns::HSD_PadCopyStatus(ctx).get(port).button();
+                inl_getStickDelta(ctx, port, dx_2, dy_2);
+                __state = if ((buttons & (0x200_i32 as u32)) != 0) {
+                    12
+                } else {
+                    14
+                };
+            }
+            9 => {
+                (cursor).set_xC((fp::fmadds(0.00019999999494757503, dx_2.get(), (cursor).xC())));
+                (cursor).set_x10((fp::fmadds(0.00019999999494757503, dy_2.get(), (cursor).x10())));
+                (statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                    .get(((cursor).x4() as i32))
+                    .data())
+                .set_scroll_amt(0.0);
+                current_tag = statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                    .get(((cursor).x4() as i32))
+                    .data();
+                __state = if ((current_tag).state() as i32) != 0_i32 {
+                    67
+                } else {
+                    69
+                };
+            }
+            10 => {
+                port_2 = ((cursor).x4() as i32);
+                trigger = fns::HSD_PadCopyStatus(ctx).get(port_2).trigger();
+                buttons = fns::HSD_PadCopyStatus(ctx).get(port_2).button();
+                inl_getStickDelta(ctx, port_2, dx_2, dy_2);
+                __state = if (fns::HSD_PadCopyStatus(ctx)
+                    .get(((cursor).x4() as i32))
+                    .err() as i32)
+                    != 0_i32
+                {
+                    23
+                } else {
+                    24
+                };
+            }
+            11 => {
+                unreachable!();
+            }
+            12 => {
+                __state = if (((statics::melee__mn__mncharsel::mnCharSel_804D6CF3(ctx).get()
+                    as i32)
+                    & (statics::melee__mn__mncharsel::mnCharSel_804D50C8(ctx)
+                        .at(((cursor).x4() as i32))
+                        .get() as i32))
+                    != 0)
+                {
+                    16
+                } else {
+                    18
+                };
+            }
+            13 => {
+                __state = 9;
+            }
+            14 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF3(ctx).set(
+                    (((statics::melee__mn__mncharsel::mnCharSel_804D6CF3(ctx).get() as i32)
+                        | (statics::melee__mn__mncharsel::mnCharSel_804D50C8(ctx)
+                            .at(((cursor).x4() as i32))
+                            .get() as i32)) as u8),
+                );
+                (cursor).set_xA((0_i32 as u16));
+                __state = 13;
+            }
+            15 => {
+                unreachable!();
+            }
+            16 => {
+                new_timer = (((cursor).xA() as i32).wrapping_add(1_i32) as u16);
+                (cursor).set_xA(new_timer);
+                __state = if (new_timer as i32) > 30_i32 { 20 } else { 21 };
+            }
+            17 => {
+                __state = 13;
+            }
+            18 => {
+                (cursor).set_xA((0_i32 as u16));
+                __state = 17;
+            }
+            19 => {
+                unreachable!();
+            }
+            20 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF6(ctx).set((2_i32 as u8));
+                __state = 21;
+            }
+            21 => {
+                __state = 17;
+            }
+            22 => {
+                unreachable!();
+            }
+            23 => {
+                __state = if ((cursor).x5() as i32) != 3_i32 {
+                    26
+                } else {
+                    27
+                };
+            }
+            24 => {
+                __state = if ((cursor).x5() as i32) == 3_i32 {
+                    53
+                } else {
+                    54
+                };
+            }
+            25 => {
+                unreachable!();
+            }
+            26 => {
+                (cursor).set_xC((fp::fmsubs(15.0, fp::frsp(((cursor).x4() as i32) as f64), 31.0)));
+                (cursor).set_x10(fp::fneg(21.5));
+                (cursor).set_xA((0_i32 as u16));
+                __state = if ((cursor).x5() as i32) == 1_i32 {
+                    29
+                } else {
+                    31
+                };
+            }
+            27 => {
+                (cursor).set_x5((3_i32 as u8));
+                fns::HSD_JObjSetFlagsAll(ctx, jobj, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
+                return;
+            }
+            28 => {
+                unreachable!();
+            }
+            29 => {
+                door = ((cursor).x6() as i32);
+                __state = if (door as u32) <= 3_u32 { 33 } else { 35 };
+            }
+            30 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(((cursor).x4() as i32))
+                    .p_kind() as i32)
+                    == 0_i32
+                {
+                    46
+                } else {
+                    47
+                };
+            }
+            31 => {
+                __state = if (((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(((cursor).x4() as i32))
+                    .sel_icon() as u32)
+                    >= 25_u32)
+                    && ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                        .doors()
+                        .get(((cursor).x4() as i32))
+                        .p_kind() as i32)
+                        != 3_i32))
+                    && (fns::mnCharSel_8025FDEC(ctx, (cursor).x4()) != 0_i32)
+                {
+                    43
+                } else {
+                    44
+                };
+            }
+            32 => {
+                unreachable!();
+            }
+            33 => {
+                (cursor).set_x5((2_i32 as u8));
+                __state = if fns::mnCharSel_8025FDEC(ctx, ((door & 255_i32) as u8)) != 0_i32 {
+                    37
+                } else {
+                    38
+                };
+            }
+            34 => {
+                __state = 30;
+            }
+            35 => {
+                __state = if (door as u32) <= 7_u32 { 40 } else { 41 };
+            }
+            36 => {
+                unreachable!();
+            }
+            37 => {
+                fns::mnCharSel_8025FB50(ctx, ((door & 255_i32) as u8), 1_i32);
+                __state = 38;
+            }
+            38 => {
+                __state = 34;
+            }
+            39 => {
+                unreachable!();
+            }
+            40 => {
+                cpu_door = door.wrapping_sub(4_i32);
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(cpu_door)
+                    .set_is_hold_cpu_slider((0_i32 as u8));
+                __state = 41;
+            }
+            41 => {
+                __state = 34;
+            }
+            42 => {
+                unreachable!();
+            }
+            43 => {
+                fns::mnCharSel_8025FB50(ctx, (cursor).x4(), 1_i32);
+                __state = 44;
+            }
+            44 => {
+                __state = 30;
+            }
+            45 => {
+                unreachable!();
+            }
+            46 => {
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(((cursor).x4() as i32))
+                    .set_p_kind((1_i32 as u8));
+                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get(((cursor).x4() as i32))
+                    .set_slot_type((1_i32 as u8));
+                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get(((cursor).x4() as i32))
+                    .set_nametag((120_i32 as u8));
+                (statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                    .get(((cursor).x4() as i32))
+                    .data())
+                .set_use_tag((0_i32 as u8));
+                __state = 47;
+            }
+            47 => {
+                fns::mnCharSel_8025DB34(ctx, (cursor).x4());
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                    .get(((cursor).x4() as i32))
+                    .data())
+                .state() as i32)
+                    != 0_i32
+                {
+                    49
+                } else {
+                    50
+                };
+            }
+            48 => {
+                unreachable!();
+            }
+            49 => {
+                (statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                    .get(((cursor).x4() as i32))
+                    .data())
+                .set_state((4_i32 as u8));
+                __state = 50;
+            }
+            50 => {
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(((cursor).x4() as i32))
+                    .set_is_hold_handicap_slider((0_i32 as u8));
+                __state = 27;
+            }
+            51 => {
+                unreachable!();
+            }
+            52 => {
+                __state = 24;
+            }
+            53 => {
+                (cursor).set_x5((2_i32 as u8));
+                fns::HSD_JObjClearFlagsAll(ctx, jobj, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
+                __state = 54;
+            }
+            54 => {
+                __state = if ((buttons & (0x200_i32 as u32)) != 0) {
+                    56
+                } else {
+                    58
+                };
+            }
+            55 => {
+                unreachable!();
+            }
+            56 => {
+                __state = if (((statics::melee__mn__mncharsel::mnCharSel_804D6CF3(ctx).get()
+                    as i32)
+                    & (statics::melee__mn__mncharsel::mnCharSel_804D50C8(ctx)
+                        .at(((cursor).x4() as i32))
+                        .get() as i32))
+                    != 0)
+                {
+                    60
+                } else {
+                    62
+                };
+            }
+            57 => {
+                __state = 9;
+            }
+            58 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF3(ctx).set(
+                    (((statics::melee__mn__mncharsel::mnCharSel_804D6CF3(ctx).get() as i32)
+                        | (statics::melee__mn__mncharsel::mnCharSel_804D50C8(ctx)
+                            .at(((cursor).x4() as i32))
+                            .get() as i32)) as u8),
+                );
+                (cursor).set_xA((0_i32 as u16));
+                __state = 57;
+            }
+            59 => {
+                unreachable!();
+            }
+            60 => {
+                new_timer_2 = (((cursor).xA() as i32).wrapping_add(1_i32) as u16);
+                (cursor).set_xA(new_timer_2);
+                __state = if (new_timer_2 as i32) > 30_i32 {
+                    64
+                } else {
+                    65
+                };
+            }
+            61 => {
+                __state = 57;
+            }
+            62 => {
+                (cursor).set_xA((0_i32 as u16));
+                __state = 61;
+            }
+            63 => {
+                unreachable!();
+            }
+            64 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF6(ctx).set((2_i32 as u8));
+                __state = 65;
+            }
+            65 => {
+                __state = 61;
+            }
+            66 => {
+                unreachable!();
+            }
+            67 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    71
+                } else {
+                    73
+                };
+            }
+            68 => {
+                port_3 = (cursor).x4();
+                tag = statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                    .get((port_3 as i32))
+                    .data();
+                __state = if ((tag).state() as i32) == 0_i32 {
+                    99
+                } else {
+                    100
+                };
+            }
+            69 => {
+                __state = if 25.0 < (cursor).x10() { 87 } else { 88 };
+            }
+            70 => {
+                unreachable!();
+            }
+            71 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp98,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx)
+                                .name_list_joint() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = 72;
+            }
+            72 => {
+                fns::lb_8000B1CC(ctx, sp98.get(), null::<Vec<'a>>(ctx), sp88);
+                __state = if (fp::fadds(0.800000011920929, sp88.y())) < (cursor).x10() {
+                    75
+                } else {
+                    76
+                };
+            }
+            73 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp98,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                                .get(((cursor).x4() as i32))
+                                .list_joint() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = 72;
+            }
+            74 => {
+                unreachable!();
+            }
+            75 => {
+                (statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                    .get(((cursor).x4() as i32))
+                    .data())
+                .set_scroll_amt(
+                    (fp::fsubs((cursor).x10(), (fp::fadds(0.800000011920929, sp88.y())))),
+                );
+                (cursor).set_x10((fp::fadds(0.800000011920929, sp88.y())));
+                __state = 76;
+            }
+            76 => {
+                __state = if (fp::fadds(fp::fneg(14.800000190734863), sp88.y())) > (cursor).x10() {
+                    78
+                } else {
+                    79
+                };
+            }
+            77 => {
+                unreachable!();
+            }
+            78 => {
+                (statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                    .get(((cursor).x4() as i32))
+                    .data())
+                .set_scroll_amt(
+                    (fp::fsubs(
+                        (cursor).x10(),
+                        (fp::fadds(fp::fneg(14.800000190734863), sp88.y())),
+                    )),
+                );
+                (cursor).set_x10((fp::fadds(fp::fneg(14.800000190734863), sp88.y())));
+                __state = 79;
+            }
+            79 => {
+                __state = if (fp::fadds(4.300000190734863, sp88.x())) < (cursor).xC() {
+                    81
+                } else {
+                    82
+                };
+            }
+            80 => {
+                unreachable!();
+            }
+            81 => {
+                (cursor).set_xC(fp::fadds(4.300000190734863, sp88.x()));
+                __state = 82;
+            }
+            82 => {
+                __state = if (fp::fadds(fp::fneg(5.300000190734863), sp88.x())) > (cursor).xC() {
+                    84
+                } else {
+                    85
+                };
+            }
+            83 => {
+                unreachable!();
+            }
+            84 => {
+                (cursor).set_xC(fp::fadds(fp::fneg(5.300000190734863), sp88.x()));
+                __state = 85;
+            }
+            85 => {
+                __state = 68;
+            }
+            86 => {
+                unreachable!();
+            }
+            87 => {
+                (cursor).set_x10(25.0);
+                __state = 88;
+            }
+            88 => {
+                __state = if fp::fneg(22.0) > (cursor).x10() {
+                    90
+                } else {
+                    91
+                };
+            }
+            89 => {
+                unreachable!();
+            }
+            90 => {
+                (cursor).set_x10(fp::fneg(22.0));
+                __state = 91;
+            }
+            91 => {
+                __state = if 26.0 < (cursor).xC() { 93 } else { 94 };
+            }
+            92 => {
+                unreachable!();
+            }
+            93 => {
+                (cursor).set_xC(26.0);
+                __state = 94;
+            }
+            94 => {
+                __state = if fp::fneg(35.0) > (cursor).xC() {
+                    96
+                } else {
+                    97
+                };
+            }
+            95 => {
+                unreachable!();
+            }
+            96 => {
+                (cursor).set_xC(fp::fneg(35.0));
+                __state = 97;
+            }
+            97 => {
+                __state = 68;
+            }
+            98 => {
+                unreachable!();
+            }
+            99 => {
+                __state = if ((cursor).x5() as i32) == 1_i32 {
+                    102
+                } else {
+                    103
+                };
+            }
+            100 => {
+                __state = 153;
+            }
+            101 => {
+                unreachable!();
+            }
+            102 => {
+                door = ((cursor).x6() as i32);
+                __state = match door {
+                    0_i32 => 105,
+                    1_i32 => 105,
+                    2_i32 => 105,
+                    3_i32 => 105,
+                    4_i32 => 106,
+                    5_i32 => 106,
+                    6_i32 => 106,
+                    7_i32 => 106,
+                    8_i32 => 107,
+                    9_i32 => 107,
+                    10_i32 => 107,
+                    11_i32 => 107,
+                    _ => 108,
+                };
+            }
+            103 => {
+                __state = if ((cursor).xC() > 17.299999237060547) && ((cursor).x10() > 22.0) {
+                    199
+                } else {
+                    200
+                };
+            }
+            104 => {
+                unreachable!();
+            }
+            105 => {
+                __state = if (cursor).x10() < 0.20000000298023224 {
+                    110
+                } else {
+                    112
+                };
+            }
+            106 => {
+                slider_door = door.wrapping_sub(4_i32);
+                inl_updateGrabbedSlider(
+                    ctx,
+                    cursor,
+                    statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                        .doors()
+                        .get(slider_door),
+                    slider_door,
+                    trigger,
+                    sp98,
+                    sp88,
+                    0_i32,
+                );
+                __state = 108;
+            }
+            107 => {
+                hc_door = door.wrapping_sub(8_i32);
+                inl_updateGrabbedSlider(
+                    ctx,
+                    cursor,
+                    statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                        .doors()
+                        .get(hc_door),
+                    hc_door,
+                    trigger,
+                    sp98,
+                    sp88,
+                    1_i32,
+                );
+                __state = 108;
+            }
+            108 => {
+                __state = 153;
+            }
+            109 => {
+                unreachable!();
+            }
+            110 => {
+                __state = if ((port_3 as i32) != door)
+                    || (((port_3 as i32) == door)
+                        && ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                            .doors()
+                            .get(door)
+                            .p_kind() as i32)
+                            == 3_i32))
+                {
+                    114
+                } else {
+                    116
+                };
+            }
+            111 => {
+                __state = 108;
+            }
+            112 => {
+                a_press = (trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32));
+                __state = if a_press != (0_i32 as u32) { 126 } else { 127 };
+            }
+            113 => {
+                unreachable!();
+            }
+            114 => {
+                let _ = fns::mnCharSel_8025FDEC(ctx, (door as u8));
+                let _ = fns::lbAudioAx_800237A8(ctx, 184_i32, 127_i32, 64_i32);
+                __state = 115;
+            }
+            115 => {
+                fns::mnCharSel_8025DB34(ctx, (door as u8));
+                (cursor).set_x5((2_i32 as u8));
+                __state = 111;
+            }
+            116 => {
+                (statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
+                    .at(door)
+                    .get())
+                .set_x5((0_i32 as u8));
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(door)
+                    .set_sel_icon((25_i32 as u8));
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    118
+                } else {
+                    120
+                };
+            }
+            117 => {
+                unreachable!();
+            }
+            118 => {
+                __state = if door != 0_i32 { 122 } else { 124 };
+            }
+            119 => {
+                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get(player_idx)
+                    .set_ckind(((enums::ChKind_None as i32) as i8));
+                __state = 115;
+            }
+            120 => {
+                player_idx = door;
+                __state = 119;
+            }
+            121 => {
+                unreachable!();
+            }
+            122 => {
+                player_idx = (statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).get() as i32);
+                __state = 123;
+            }
+            123 => {
+                __state = 119;
+            }
+            124 => {
+                player_idx = (statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32);
+                __state = 123;
+            }
+            125 => {
+                unreachable!();
+            }
+            126 => {
+                m = statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
+                    .at(door)
+                    .get();
+                __state = if (((m).xC() < 6.0) && ((m).xC() > fp::fneg(1.0)))
+                    && ((((m).x8() > fp::fneg(30.0)) && ((m).x8() < fp::fneg(24.399999618530273)))
+                        || (((m).x8() > 24.399999618530273) && ((m).x8() < 30.200000762939453)))
+                {
+                    129
+                } else {
+                    130
+                };
+            }
+            127 => {
+                m2 = statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
+                    .at(door)
+                    .get();
+                i = 0_i32;
+                __state = 155;
+            }
+            128 => {
+                unreachable!();
+            }
+            129 => {
+                icon_count = 0_i32;
+                __state = 132;
+            }
+            130 => {
+                __state = 127;
+            }
+            131 => {
+                unreachable!();
+            }
+            132 => {
+                __state = if icon_count < 25_i32 { 133 } else { 135 };
+            }
+            133 => {
+                __state = if (statics::melee__mn__mncharsel::icons(ctx)
+                    .get(icon_count)
+                    .state() as i32)
+                    < 2_i32
+                {
+                    137
+                } else {
+                    138
+                };
+            }
+            134 => {
+                icon_count = icon_count.wrapping_add(1);
+                __state = 132;
+            }
+            135 => {
+                __state = if icon_count == 25_i32 { 141 } else { 142 };
+            }
+            136 => {
+                unreachable!();
+            }
+            137 => {
+                __state = 135;
+            }
+            138 => {
+                __state = 134;
+            }
+            139 => {
+                unreachable!();
+            }
+            140 => {
+                __state = 138;
+            }
+            141 => {
+                fns::mnCharSel_8025FB50(ctx, (door as u8), 0_i32);
+                __state = 144;
+            }
+            142 => {
+                __state = 130;
+            }
+            143 => {
+                unreachable!();
+            }
+            144 => {
+                __state = if (1_i32 != 0) { 145 } else { 147 };
+            }
+            145 => {
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(door)
+                    .set_costume(
+                        (fns::HSD_Randi(
+                            ctx,
+                            (fns::gm_GetNumCostumesForCKind(
+                                ctx,
+                                statics::melee__mn__mncharsel::icons(ctx)
+                                    .get(
+                                        (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                                            .doors()
+                                            .get(door)
+                                            .sel_icon()
+                                            as i32),
+                                    )
+                                    .char_kind(),
+                            ) as i32),
+                        ) as u8),
+                    );
+                __state = if !(inl_isDuplicateCostume(ctx, door) != 0) {
+                    149
+                } else {
+                    150
+                };
+            }
+            146 => {
+                __state = 144;
+            }
+            147 => {
+                fns::mnCharSel_8025DB34(ctx, (door as u8));
+                (cursor).set_x5((2_i32 as u8));
+                let _ = fns::lbAudioAx_800237A8(ctx, 184_i32, 127_i32, 64_i32);
+                __state = 153;
+            }
+            148 => {
+                unreachable!();
+            }
+            149 => {
+                __state = 147;
+            }
+            150 => {
+                __state = 144;
+            }
+            151 => {
+                unreachable!();
+            }
+            152 => {
+                __state = 150;
+            }
+            153 => {
+                inl_updateCursorDisplay(ctx, jobj, cursor, state_jobj, color_jobj);
+                return;
+            }
+            154 => {
+                __state = 142;
+            }
+            155 => {
+                __state = if i < 25_i32 { 156 } else { 158 };
+            }
+            156 => {
+                __state = if (((((m2).x8()
+                    > statics::melee__mn__mncharsel::icons(ctx).get(i).bound_l())
+                    && ((m2).x8() < statics::melee__mn__mncharsel::icons(ctx).get(i).bound_r()))
+                    && ((m2).xC() < statics::melee__mn__mncharsel::icons(ctx).get(i).bound_u()))
+                    && ((m2).xC() > statics::melee__mn__mncharsel::icons(ctx).get(i).bound_d()))
+                    && ((statics::melee__mn__mncharsel::icons(ctx).get(i).state() as i32) >= 1_i32)
+                {
+                    160
+                } else {
+                    161
+                };
+            }
+            157 => {
+                i = i.wrapping_add(1);
+                __state = 155;
+            }
+            158 => {
+                fns::mnCharSel_8025D5AC(ctx, door, 0_i32, 1_i32);
+                td = statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                    .get(door)
+                    .data();
+                __state = if ((td).use_tag() as i32) == 0_i32 {
+                    181
+                } else {
+                    182
+                };
+            }
+            159 => {
+                unreachable!();
+            }
+            160 => {
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(door)
+                    .set_sel_icon((i as u8));
+                fns::mnCharSel_8025DB34(ctx, (door as u8));
+                __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
+                    163
+                } else {
+                    164
+                };
+            }
+            161 => {
+                __state = 157;
+            }
+            162 => {
+                unreachable!();
+            }
+            163 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    166
+                } else {
+                    168
+                };
+            }
+            164 => {
+                __state = 179;
+            }
+            165 => {
+                unreachable!();
+            }
+            166 => {
+                __state = if door != 0_i32 { 170 } else { 172 };
+            }
+            167 => {
+                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get(player_idx_2)
+                    .set_ckind(
+                        (statics::melee__mn__mncharsel::icons(ctx)
+                            .get(
+                                (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                                    .doors()
+                                    .get(door)
+                                    .sel_icon() as i32),
+                            )
+                            .char_kind() as i8),
+                    );
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    174
+                } else {
+                    176
+                };
+            }
+            168 => {
+                player_idx_2 = door;
+                __state = 167;
+            }
+            169 => {
+                unreachable!();
+            }
+            170 => {
+                player_idx_2 =
+                    (statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).get() as i32);
+                __state = 171;
+            }
+            171 => {
+                __state = 167;
+            }
+            172 => {
+                player_idx_2 =
+                    (statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32);
+                __state = 171;
+            }
+            173 => {
+                unreachable!();
+            }
+            174 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp98,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::icons(ctx)
+                                .get(i)
+                                .joint_id_1p() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = 175;
+            }
+            175 => {
+                fns::HSD_ForeachAnim(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(sp98.get()),
+                    (enums::JOBJ_TYPE as i32),
+                    (enums::TOBJ_MASK as i32),
+                    Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036410c)),
+                    (enums::AOBJ_ARG_AF as i32),
+                    &[VarArg::Float(10.0)],
+                );
+                statics::melee__mn__mncharsel::icons(ctx)
+                    .get(i)
+                    .set_anim_timer((12_i32 as u8));
+                (statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
+                    .at(door)
+                    .get())
+                .set_x5((0_i32 as u8));
+                fns::HSD_GObjGXLink_803909D8(
+                    ctx,
+                    (statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
+                        .at(door)
+                        .get())
+                    .gobj(),
+                    (statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)
+                        .at(
+                            (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                                .wrapping_sub(1_i32),
+                        )
+                        .get())
+                    .gobj(),
+                );
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(door)
+                    .set_selected_since_load((1_i32 as u8));
+                (cursor).set_x5((2_i32 as u8));
+                sel = (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(((door as u8) as i32))
+                    .sel_icon() as i32);
+                let _ = fns::lbAudioAx_80023870(
+                    ctx,
+                    statics::melee__mn__mncharsel::icons(ctx).get(sel).sfx(),
+                    127_i32,
+                    64_i32,
+                    sel.wrapping_add(138_i32),
+                );
+                fns::gm_80168C5C(
+                    ctx,
+                    (statics::melee__mn__mncharsel::icons(ctx)
+                        .get(sel)
+                        .char_kind() as u32),
+                );
+                let _ = fns::lbAudioAx_800237A8(ctx, 184_i32, 127_i32, 64_i32);
+                __state = 153;
+            }
+            176 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp98,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::icons(ctx)
+                                .get(i)
+                                .joint_id_vs() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = 175;
+            }
+            177 => {
+                unreachable!();
+            }
+            178 => {
+                __state = 164;
+            }
+            179 => {
+                __state = if ((trigger & ((shl_i32(1_i32, (9_i32 as u32))) as u32)) != 0) {
+                    188
+                } else {
+                    190
+                };
+            }
+            180 => {
+                __state = 161;
+            }
+            181 => {
+                ((td).text()).set_hidden((1_i32 as u8));
+                __state = 182;
+            }
+            182 => {
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(door)
+                    .set_sel_icon_prev((25_i32 as u8));
+                __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
+                    184
+                } else {
+                    186
+                };
+            }
+            183 => {
+                unreachable!();
+            }
+            184 => {
+                fns::lbAudioAx_80024030(ctx, 3_i32);
+                __state = 185;
+            }
+            185 => {
+                __state = 111;
+            }
+            186 => {
+                __state = 179;
+            }
+            187 => {
+                unreachable!();
+            }
+            188 => {
+                __state = if fns::mnCharSel_8025FDEC(ctx, (door as u8)) == 0_i32 {
+                    192
+                } else {
+                    193
+                };
+            }
+            189 => {
+                __state = 185;
+            }
+            190 => {
+                fns::mnCharSel_CostumeChange(ctx, door, trigger);
+                __state = 189;
+            }
+            191 => {
+                unreachable!();
+            }
+            192 => {
+                fns::mnCharSel_8025DB34(ctx, (door as u8));
+                (cursor).set_x5((2_i32 as u8));
+                __state = 193;
+            }
+            193 => {
+                __state = 189;
+            }
+            194 => {
+                unreachable!();
+            }
+            195 => {
+                __state = 106;
+            }
+            196 => {
+                __state = 107;
+            }
+            197 => {
+                __state = 108;
+            }
+            198 => {
+                __state = 103;
+            }
+            199 => {
+                (cursor).set_x8((1_i32 as u16));
+                __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
+                    202
+                } else {
+                    203
+                };
+            }
+            200 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    206
+                } else {
+                    207
+                };
+            }
+            201 => {
+                unreachable!();
+            }
+            202 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF6(ctx).set((2_i32 as u8));
+                __state = 153;
+            }
+            203 => {
+                __state = 200;
+            }
+            204 => {
+                unreachable!();
+            }
+            205 => {
+                __state = 203;
+            }
+            206 => {
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
+                    .at(((cursor).x4() as i32))
+                    .get())
+                .x5() as i32)
+                    == 0_i32
+                {
+                    209
+                } else {
+                    210
+                };
+            }
+            207 => {
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .match_type() as i32)
+                    != 2_i32
+                {
+                    282
+                } else {
+                    283
+                };
+            }
+            208 => {
+                unreachable!();
+            }
+            209 => {
+                fns::mnCharSel_CostumeChange(ctx, 0_i32, trigger);
+                __state = 210;
+            }
+            210 => {
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .match_type() as u32)
+                    < 13_u32
+                {
+                    212
+                } else {
+                    214
+                };
+            }
+            211 => {
+                unreachable!();
+            }
+            212 => {
+                cy = (cursor).x10();
+                __state = if (cy < statics::melee__mn__mncharsel::data2(ctx).x108())
+                    && (cy > statics::melee__mn__mncharsel::data2(ctx).x10c())
+                {
+                    216
+                } else {
+                    218
+                };
+            }
+            213 => {
+                __state = 153;
+            }
+            214 => {
+                __state = 228;
+            }
+            215 => {
+                unreachable!();
+            }
+            216 => {
+                cx = (cursor).xC();
+                __state = if (cx > statics::melee__mn__mncharsel::data2(ctx).xf8())
+                    && (cx < statics::melee__mn__mncharsel::data2(ctx).xfc())
+                {
+                    220
+                } else {
+                    222
+                };
+            }
+            217 => {
+                __state = 213;
+            }
+            218 => {
+                __state = 228;
+            }
+            219 => {
+                unreachable!();
+            }
+            220 => {
+                (cursor).set_x8((1_i32 as u16));
+                __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0)
+                    && ((statics::melee__mn__mncharsel::data2(ctx).stocks() as u32) > 1_u32)
+                {
+                    224
+                } else {
+                    226
+                };
+            }
+            221 => {
+                __state = 217;
+            }
+            222 => {
+                __state = if (cx > statics::melee__mn__mncharsel::data2(ctx).x100())
+                    && (cx < statics::melee__mn__mncharsel::data2(ctx).x104())
+                {
+                    230
+                } else {
+                    232
+                };
+            }
+            223 => {
+                unreachable!();
+            }
+            224 => {
+                statics::melee__mn__mncharsel::data2(ctx).set_stocks(
+                    (((statics::melee__mn__mncharsel::data2(ctx).stocks() as i32)
+                        .wrapping_sub(1_i32)) as u8),
+                );
+                inl_updateStockIcons(ctx, statics::melee__mn__mncharsel::data2(ctx), sp54, 1_i32);
+                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get((statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32))
+                    .set_stocks((statics::melee__mn__mncharsel::data2(ctx).stocks() as i8));
+                inl_sfxMove(ctx);
+                __state = 225;
+            }
+            225 => {
+                __state = 221;
+            }
+            226 => {
+                __state = 228;
+            }
+            227 => {
+                unreachable!();
+            }
+            228 => {
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .match_type() as u32)
+                    <= 13_u32
+                {
+                    241
+                } else {
+                    243
+                };
+            }
+            229 => {
+                __state = 225;
+            }
+            230 => {
+                (cursor).set_x8((1_i32 as u16));
+                __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0)
+                    && ((statics::melee__mn__mncharsel::data2(ctx).stocks() as u32) < 5_u32)
+                {
+                    234
+                } else {
+                    236
+                };
+            }
+            231 => {
+                __state = 221;
+            }
+            232 => {
+                __state = 228;
+            }
+            233 => {
+                unreachable!();
+            }
+            234 => {
+                statics::melee__mn__mncharsel::data2(ctx).set_stocks(
+                    (((statics::melee__mn__mncharsel::data2(ctx).stocks() as i32)
+                        .wrapping_add(1_i32)) as u8),
+                );
+                inl_updateStockIcons(ctx, statics::melee__mn__mncharsel::data2(ctx), sp50, 1_i32);
+                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get((statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32))
+                    .set_stocks((statics::melee__mn__mncharsel::data2(ctx).stocks() as i8));
+                inl_sfxMove(ctx);
+                __state = 235;
+            }
+            235 => {
+                __state = 231;
+            }
+            236 => {
+                __state = 228;
+            }
+            237 => {
+                unreachable!();
+            }
+            238 => {
+                __state = 235;
+            }
+            239 => {
+                __state = 231;
+            }
+            240 => {
+                __state = 217;
+            }
+            241 => {
+                cy2 = (cursor).x10();
+                __state = if (cy2
+                    < statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).cpubtn_top())
+                    && (cy2 > statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).cpubtn_btm())
+                {
+                    245
+                } else {
+                    247
+                };
+            }
+            242 => {
+                __state = 213;
+            }
+            243 => {
+                __state = 261;
+            }
+            244 => {
+                unreachable!();
+            }
+            245 => {
+                cx2 = (cursor).xC();
+                __state = if (cx2
+                    > statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).cpudown_left())
+                    && (cx2
+                        < statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).cpudown_right())
+                {
+                    249
+                } else {
+                    251
+                };
+            }
+            246 => {
+                __state = 242;
+            }
+            247 => {
+                __state = 261;
+            }
+            248 => {
+                unreachable!();
+            }
+            249 => {
+                (cursor).set_x8((1_i32 as u16));
+                __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
+                    253
+                } else {
+                    255
+                };
+            }
+            250 => {
+                __state = 246;
+            }
+            251 => {
+                __state = if (cx2
+                    > statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).cpuup_left())
+                    && (cx2 < statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).cpuup_right())
+                {
+                    264
+                } else {
+                    266
+                };
+            }
+            252 => {
+                unreachable!();
+            }
+            253 => {
+                __state = if (({
+                    let __t2 = ({
+                        let __t1 =
+                            statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).cpu_level_ref();
+                        level = __t1;
+                        __t1
+                    })
+                    .get();
+                    current_level = __t2;
+                    __t2
+                }) as i32)
+                    != 0_i32
+                {
+                    257
+                } else {
+                    259
+                };
+            }
+            254 => {
+                __state = 250;
+            }
+            255 => {
+                __state = 261;
+            }
+            256 => {
+                unreachable!();
+            }
+            257 => {
+                (level).set((((current_level as i32).wrapping_sub(1_i32)) as u8));
+                statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx)
+                    .set_scroll_flag((1_i32 as u8));
+                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get(
+                        (((statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as u8)
+                            as i8) as i32),
+                    )
+                    .set_cpu_level((level).get());
+                inl_sfxMove(ctx);
+                __state = 258;
+            }
+            258 => {
+                __state = 254;
+            }
+            259 => {
+                __state = 261;
+            }
+            260 => {
+                unreachable!();
+            }
+            261 => {
+                a_press2 = (trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32));
+                __state = if a_press2 != (0_i32 as u32) { 339 } else { 341 };
+            }
+            262 => {
+                __state = 258;
+            }
+            263 => {
+                __state = 254;
+            }
+            264 => {
+                (cursor).set_x8((1_i32 as u16));
+                __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
+                    268
+                } else {
+                    270
+                };
+            }
+            265 => {
+                __state = 250;
+            }
+            266 => {
+                __state = 261;
+            }
+            267 => {
+                unreachable!();
+            }
+            268 => {
+                __state = if (({
+                    let __t4 = ({
+                        let __t3 =
+                            statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).cpu_level_ref();
+                        level_2 = __t3;
+                        __t3
+                    })
+                    .get();
+                    current_level_2 = __t4;
+                    __t4
+                }) as u32)
+                    < 4_u32
+                {
+                    272
+                } else {
+                    274
+                };
+            }
+            269 => {
+                __state = 265;
+            }
+            270 => {
+                __state = 261;
+            }
+            271 => {
+                unreachable!();
+            }
+            272 => {
+                (level_2).set((((current_level_2 as i32).wrapping_add(1_i32)) as u8));
+                statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx)
+                    .set_scroll_flag((1_i32 as u8));
+                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get(
+                        (((statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as u8)
+                            as i8) as i32),
+                    )
+                    .set_cpu_level((level_2).get());
+                inl_sfxMove(ctx);
+                __state = 273;
+            }
+            273 => {
+                __state = 269;
+            }
+            274 => {
+                __state = 261;
+            }
+            275 => {
+                unreachable!();
+            }
+            276 => {
+                __state = 273;
+            }
+            277 => {
+                __state = 269;
+            }
+            278 => {
+                __state = 265;
+            }
+            279 => {
+                __state = 246;
+            }
+            280 => {
+                __state = 242;
+            }
+            281 => {
+                __state = 207;
+            }
+            282 => {
+                cx3 = (cursor).xC();
+                __state = if ((cx3 > fp::fneg(17.0)) && (cx3 < 15.0)) && ((cursor).x10() > 22.0) {
+                    285
+                } else {
+                    286
+                };
+            }
+            283 => {
+                __state = if ((cursor).xC() < fp::fneg(25.5)) && ((cursor).x10() > 22.0) {
+                    300
+                } else {
+                    302
+                };
+            }
+            284 => {
+                unreachable!();
+            }
+            285 => {
+                (cursor).set_x8((1_i32 as u16));
+                __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
+                    288
+                } else {
+                    289
+                };
+            }
+            286 => {
+                __state = 283;
+            }
+            287 => {
+                unreachable!();
+            }
+            288 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF6(ctx).set((3_i32 as u8));
+                loop_i = 0_i32;
+                __state = 291;
+            }
+            289 => {
+                __state = 286;
+            }
+            290 => {
+                unreachable!();
+            }
+            291 => {
+                __state = if loop_i
+                    < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                {
+                    292
+                } else {
+                    294
+                };
+            }
+            292 => {
+                __state = if (((statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)
+                    .at(loop_i)
+                    .get())
+                .x5() as i32)
+                    == 1_i32)
+                    && (fns::mnCharSel_8025FDEC(ctx, (loop_i as u8)) == 0_i32)
+                {
+                    296
+                } else {
+                    297
+                };
+            }
+            293 => {
+                loop_i = loop_i.wrapping_add(1);
+                __state = 291;
+            }
+            294 => {
+                return;
+            }
+            295 => {
+                unreachable!();
+            }
+            296 => {
+                fns::mnCharSel_8025DB34(ctx, (loop_i as u8));
+                (statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)
+                    .at(loop_i)
+                    .get())
+                .set_x5((2_i32 as u8));
+                __state = 297;
+            }
+            297 => {
+                __state = 293;
+            }
+            298 => {
+                unreachable!();
+            }
+            299 => {
+                __state = 289;
+            }
+            300 => {
+                __state = match ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .match_type() as i32)
+                {
+                    0_i32 => 304,
+                    1_i32 => 304,
+                    2_i32 => 304,
+                    3_i32 => 304,
+                    4_i32 => 304,
+                    5_i32 => 304,
+                    6_i32 => 304,
+                    7_i32 => 304,
+                    8_i32 => 304,
+                    9_i32 => 304,
+                    10_i32 => 304,
+                    _ => 305,
+                };
+            }
+            301 => {
+                __state = 100;
+            }
+            302 => {
+                __state = 332;
+            }
+            303 => {
+                unreachable!();
+            }
+            304 => {
+                (cursor).set_x8((1_i32 as u16));
+                __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
+                    308
+                } else {
+                    310
+                };
+            }
+            305 => {
+                __state = 332;
+            }
+            306 => {
+                __state = 301;
+            }
+            307 => {
+                unreachable!();
+            }
+            308 => {
+                inl_sfxMove(ctx);
+                is_teams = (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .rules()
+                    .is_teams_ref();
+                (is_teams).set((((((is_teams).get() as i32).wrapping_add(1_i32)) & 1_i32) as u8));
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .rules()
+                    .is_teams() as i32)
+                    == 0_i32
+                {
+                    312
+                } else {
+                    313
+                };
+            }
+            309 => {
+                __state = 306;
+            }
+            310 => {
+                __state = 332;
+            }
+            311 => {
+                unreachable!();
+            }
+            312 => {
+                k = 0_i32;
+                __state = 315;
+            }
+            313 => {
+                fns::mnCharSel_8025EE8C(
+                    ctx,
+                    (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type(),
+                );
+                __state = 309;
+            }
+            314 => {
+                unreachable!();
+            }
+            315 => {
+                __state =
+                    if k < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) {
+                        316
+                    } else {
+                        318
+                    };
+            }
+            316 => {
+                __state = if (inl_isDuplicateCostumeCached(ctx, k) != 0) {
+                    320
+                } else {
+                    321
+                };
+            }
+            317 => {
+                k = k.wrapping_add(1);
+                __state = 315;
+            }
+            318 => {
+                __state = 313;
+            }
+            319 => {
+                unreachable!();
+            }
+            320 => {
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(k)
+                    .set_costume((0_i32 as u8));
+                current_tag = Handle::cast::<CSSTagData<'a>>(inl_loadCSSValue(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx),
+                ));
+                __state = 323;
+            }
+            321 => {
+                __state = 317;
+            }
+            322 => {
+                unreachable!();
+            }
+            323 => {
+                __state = if true { 324 } else { 326 };
+            }
+            324 => {
+                __state = if !(inl_isDuplicateCostumeWith(
+                    ctx,
+                    k,
+                    Handle::cast::<CSSData<'a>>(current_tag),
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get(),
+                ) != 0)
+                {
+                    328
+                } else {
+                    329
+                };
+            }
+            325 => {
+                __state = 323;
+            }
+            326 => {
+                __state = 321;
+            }
+            327 => {
+                unreachable!();
+            }
+            328 => {
+                __state = 326;
+            }
+            329 => {
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(k)
+                    .set_costume(
+                        (((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                            .doors()
+                            .get(k)
+                            .costume() as i32)
+                            .wrapping_add(1_i32)) as u8),
+                    );
+                __state = 325;
+            }
+            330 => {
+                unreachable!();
+            }
+            331 => {
+                __state = 329;
+            }
+            332 => {
+                cport2 = (cursor).x4();
+                __state = if ((((statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
+                    .at((cport2 as i32))
+                    .get())
+                .x5() as i32)
+                    == 0_i32)
+                    && (((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                        .vs()
+                        .start()
+                        .rules()
+                        .is_teams() as i32)
+                        == 0_i32))
+                    && ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                        .doors()
+                        .get((cport2 as i32))
+                        .p_kind() as i32)
+                        != 3_i32)
+                {
+                    336
+                } else {
+                    337
+                };
+            }
+            333 => {
+                __state = 309;
+            }
+            334 => {
+                __state = 305;
+            }
+            335 => {
+                __state = 306;
+            }
+            336 => {
+                fns::mnCharSel_CostumeChange(ctx, (cport2 as i32), trigger);
+                __state = 337;
+            }
+            337 => {
+                __state = 261;
+            }
+            338 => {
+                unreachable!();
+            }
+            339 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    != 1_i32
+                {
+                    343
+                } else {
+                    344
+                };
+            }
+            340 => {
+                cy9 = (cursor).x10();
+                __state = if (cy9 > 0.20000000298023224) && (cy9 < 22.0) {
+                    464
+                } else {
+                    465
+                };
+            }
+            341 => {
+                __state = if ((trigger & ((shl_i32(1_i32, (9_i32 as u32))) as u32)) != 0) {
+                    452
+                } else {
+                    453
+                };
+            }
+            342 => {
+                unreachable!();
+            }
+            343 => {
+                door = 0_i32;
+                __state = 346;
+            }
+            344 => {
+                __state = if ((((cursor).x4() as i32) != 3_i32)
+                    || (((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type()
+                        as i32)
+                        != 1_i32))
+                    && ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                        .doors()
+                        .get(((cursor).x4() as i32))
+                        .p_kind() as i32)
+                        == 0_i32)
+                {
+                    415
+                } else {
+                    416
+                };
+            }
+            345 => {
+                unreachable!();
+            }
+            346 => {
+                __state = if door
+                    < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                {
+                    347
+                } else {
+                    349
+                };
+            }
+            347 => {
+                __state = if (door == 3_i32)
+                    && (((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type()
+                        as i32)
+                        == 1_i32)
+                {
+                    351
+                } else {
+                    352
+                };
+            }
+            348 => {
+                door = door.wrapping_add(1);
+                __state = 346;
+            }
+            349 => {
+                __state = 344;
+            }
+            350 => {
+                unreachable!();
+            }
+            351 => {
+                __state = 348;
+            }
+            352 => {
+                __state = if ((((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(door)
+                    .is_hold_cpu_slider() as i32)
+                    | (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                        .doors()
+                        .get(door)
+                        .is_hold_handicap_slider() as i32))
+                    == 0_i32)
+                    && (((statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
+                        .at(door)
+                        .get())
+                    .x5() as i32)
+                        == 0_i32))
+                    && (((statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)
+                        .at(door)
+                        .get())
+                    .x5() as i32)
+                        != 1_i32)
+                {
+                    355
+                } else {
+                    356
+                };
+            }
+            353 => {
+                unreachable!();
+            }
+            354 => {
+                __state = 352;
+            }
+            355 => {
+                tag_data = statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                    .get(door)
+                    .data();
+                __state = if ((tag_data).state() as i32) != 0_i32 {
+                    358
+                } else {
+                    359
+                };
+            }
+            356 => {
+                __state = if (((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .rules()
+                    .is_teams() as i32)
+                    == 1_i32)
+                    && ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                        .doors()
+                        .get(door)
+                        .p_kind() as i32)
+                        != 3_i32)
+                {
+                    387
+                } else {
+                    388
+                };
+            }
+            357 => {
+                unreachable!();
+            }
+            358 => {
+                __state = 348;
+            }
+            359 => {
+                cx4 = (cursor).xC();
+                __state = if (cx4
+                    > statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                        .doors()
+                        .get(door)
+                        .togglebtn_left())
+                    && (cx4
+                        < statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                            .doors()
+                            .get(door)
+                            .togglebtn_right())
+                {
+                    362
+                } else {
+                    363
+                };
+            }
+            360 => {
+                unreachable!();
+            }
+            361 => {
+                __state = 359;
+            }
+            362 => {
+                cy4 = (cursor).x10();
+                __state = if (cy4 < 0.20000009536743146) && (cy4 > fp::fneg(4.600000095367432)) {
+                    365
+                } else {
+                    366
+                };
+            }
+            363 => {
+                __state = 356;
+            }
+            364 => {
+                unreachable!();
+            }
+            365 => {
+                (cursor).set_x10(fp::fneg(2.200000047683716));
+                new_kind = ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(door)
+                    .p_kind() as i32)
+                    .wrapping_add(1_i32) as u8);
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(door)
+                    .set_p_kind(new_kind);
+                __state = match (new_kind as i32) {
+                    3_i32 => 368,
+                    2_i32 => 369,
+                    4_i32 => 370,
+                    _ => 371,
+                };
+            }
+            366 => {
+                __state = 363;
+            }
+            367 => {
+                unreachable!();
+            }
+            368 => {
+                __state = 371;
+            }
+            369 => {
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(door)
+                    .set_p_kind((3_i32 as u8));
+                __state = 371;
+            }
+            370 => {
+                __state = if (fns::HSD_PadCopyStatus(ctx).get(((door as u8) as i32)).err() as i32)
+                    != 0_i32
+                {
+                    375
+                } else {
+                    377
+                };
+            }
+            371 => {
+                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get(door)
+                    .set_slot_type(
+                        statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                            .doors()
+                            .get(door)
+                            .p_kind(),
+                    );
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(door)
+                    .p_kind() as i32)
+                    == 1_i32
+                {
+                    380
+                } else {
+                    381
+                };
+            }
+            372 => {
+                unreachable!();
+            }
+            373 => {
+                __state = 369;
+            }
+            374 => {
+                __state = 370;
+            }
+            375 => {
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(door)
+                    .set_p_kind((1_i32 as u8));
+                __state = 376;
+            }
+            376 => {
+                __state = 371;
+            }
+            377 => {
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(door)
+                    .set_p_kind((0_i32 as u8));
+                __state = 376;
+            }
+            378 => {
+                unreachable!();
+            }
+            379 => {
+                __state = 371;
+            }
+            380 => {
+                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get(door)
+                    .set_nametag((120_i32 as u8));
+                (statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                    .get(door)
+                    .data())
+                .set_use_tag((0_i32 as u8));
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(door)
+                    .selected_since_load() as i32)
+                    == 0_i32)
+                    && (((cursor).x4() as i32) != door)
+                {
+                    383
+                } else {
+                    384
+                };
+            }
+            381 => {
+                fns::mnCharSel_8025DB34(ctx, (door as u8));
+                inl_sfxMove(ctx);
+                __state = 349;
+            }
+            382 => {
+                unreachable!();
+            }
+            383 => {
+                fns::mnCharSel_8025FB50(ctx, (door as u8), 1_i32);
+                __state = 384;
+            }
+            384 => {
+                __state = 381;
+            }
+            385 => {
+                unreachable!();
+            }
+            386 => {
+                __state = 366;
+            }
+            387 => {
+                inl_cycleTeam(
+                    ctx,
+                    cursor,
+                    statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                        .doors()
+                        .get(door),
+                    door,
+                );
+                __state = 388;
+            }
+            388 => {
+                __state = if a_press2 != (0_i32 as u32) { 390 } else { 391 };
+            }
+            389 => {
+                unreachable!();
+            }
+            390 => {
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(door)
+                    .is_hold_cpu_slider() as i32)
+                    == 0_i32)
+                    && ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                        .doors()
+                        .get(door)
+                        .p_kind() as i32)
+                        == 1_i32)
+                {
+                    393
+                } else {
+                    394
+                };
+            }
+            391 => {
+                __state = 348;
+            }
+            392 => {
+                unreachable!();
+            }
+            393 => {
+                rules2 = fns::gmMainLib_GetGameRules(ctx);
+                __state = if ((rules2).handicap() as i32) != 0_i32 {
+                    396
+                } else {
+                    398
+                };
+            }
+            394 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(door)
+                    .is_hold_handicap_slider() as i32)
+                    == 0_i32
+                {
+                    403
+                } else {
+                    404
+                };
+            }
+            395 => {
+                unreachable!();
+            }
+            396 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp98,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                                .doors()
+                                .get(door)
+                                .cpuslider2_joint() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = 397;
+            }
+            397 => {
+                fns::lb_8000B1CC(ctx, sp98.get(), null::<Vec<'a>>(ctx), (sp88));
+                dx = fp::fsubs(
+                    (cursor).xC(),
+                    (fp::fadds(fp::fneg(2.9000000953674316), sp88.x())),
+                );
+                dy = fp::fsubs((cursor).x10(), (fp::fadds(1.7000000476837158, sp88.y())));
+                __state = if (fp::fmadds(dx, dx, fp::fmuls(dy, dy))) < 5.0 {
+                    400
+                } else {
+                    401
+                };
+            }
+            398 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp98,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                                .doors()
+                                .get(door)
+                                .cpuslider_joint() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = 397;
+            }
+            399 => {
+                unreachable!();
+            }
+            400 => {
+                (cursor).set_x5((1_i32 as u8));
+                (cursor).set_x6(((door.wrapping_add(4_i32)) as u8));
+                (cursor).set_xC((fp::fadds(fp::fneg(2.9000000953674316), sp88.x())));
+                (cursor).set_x10((fp::fadds(1.7000000476837158, sp88.y())));
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(door)
+                    .set_is_hold_cpu_slider((1_i32 as u8));
+                let _ = fns::lbAudioAx_800237A8(ctx, 183_i32, 127_i32, 64_i32);
+                __state = 401;
+            }
+            401 => {
+                __state = 394;
+            }
+            402 => {
+                unreachable!();
+            }
+            403 => {
+                rules3 = fns::gmMainLib_GetGameRules(ctx);
+                __state = if ((rules3).handicap() as i32) == 2_i32 {
+                    406
+                } else {
+                    407
+                };
+            }
+            404 => {
+                __state = 391;
+            }
+            405 => {
+                unreachable!();
+            }
+            406 => {
+                pk = statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(door)
+                    .p_kind();
+                __state = if ((pk as i32) != 3_i32)
+                    && (((pk as i32) == 1_i32) || (door == ((cursor).x4() as i32)))
+                {
+                    409
+                } else {
+                    410
+                };
+            }
+            407 => {
+                __state = 404;
+            }
+            408 => {
+                unreachable!();
+            }
+            409 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp98,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                                .doors()
+                                .get(door)
+                                .cpuslider_joint() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::lb_8000B1CC(ctx, sp98.get(), null::<Vec<'a>>(ctx), (sp88));
+                hdx = fp::fsubs(
+                    (cursor).xC(),
+                    (fp::fadds(fp::fneg(2.9000000953674316), sp88.x())),
+                );
+                hdy = fp::fsubs((cursor).x10(), (fp::fadds(1.7000000476837158, sp88.y())));
+                __state = if (fp::fmadds(hdx, hdx, fp::fmuls(hdy, hdy))) < 5.0 {
+                    412
+                } else {
+                    413
+                };
+            }
+            410 => {
+                __state = 407;
+            }
+            411 => {
+                unreachable!();
+            }
+            412 => {
+                (cursor).set_x5((1_i32 as u8));
+                (cursor).set_x6(((door.wrapping_add(8_i32)) as u8));
+                (cursor).set_xC((fp::fadds(fp::fneg(2.9000000953674316), sp88.x())));
+                (cursor).set_x10((fp::fadds(1.7000000476837158, sp88.y())));
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(door)
+                    .set_is_hold_handicap_slider((1_i32 as u8));
+                let _ = fns::lbAudioAx_800237A8(ctx, 183_i32, 127_i32, 64_i32);
+                __state = 413;
+            }
+            413 => {
+                __state = 410;
+            }
+            414 => {
+                unreachable!();
+            }
+            415 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    418
+                } else {
+                    420
+                };
+            }
+            416 => {
+                closest_dist = 9.0;
+                ci = 0_i32;
+                closest = 1_i32.wrapping_neg();
+                __state = 432;
+            }
+            417 => {
+                unreachable!();
+            }
+            418 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp98,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).tag_box_joint()
+                                as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = 419;
+            }
+            419 => {
+                fns::lb_8000B1CC(ctx, sp98.get(), null::<Vec<'a>>(ctx), (sp88));
+                __state = if ((cursor).xC() > (fp::fsubs(sp88.x(), 4.699999809265137)))
+                    && ((cursor).xC() < (fp::fadds(5.199999809265137, sp88.x())))
+                {
+                    422
+                } else {
+                    423
+                };
+            }
+            420 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp98,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                                .get((((cursor).x4_ref()).get() as i32))
+                                .name_jointl() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = 419;
+            }
+            421 => {
+                unreachable!();
+            }
+            422 => {
+                __state = if ((cursor).x10() < (fp::fadds(2.0, sp88.y())))
+                    && ((cursor).x10() > (fp::fsubs(sp88.y(), 1.0)))
+                {
+                    425
+                } else {
+                    426
+                };
+            }
+            423 => {
+                __state = 416;
+            }
+            424 => {
+                unreachable!();
+            }
+            425 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    428
+                } else {
+                    430
+                };
+            }
+            426 => {
+                __state = 423;
+            }
+            427 => {
+                unreachable!();
+            }
+            428 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp74,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx)
+                                .name_list_joint() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = 429;
+            }
+            429 => {
+                fns::lb_8000B1CC(ctx, sp74.get(), null::<Vec<'a>>(ctx), (sp88));
+                (cursor).set_xC(sp88.x());
+                (cursor).set_x10((fp::fsubs(sp88.y(), 5.0)));
+                (statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                    .get(((cursor).x4() as i32))
+                    .data())
+                .set_state((1_i32 as u8));
+                __state = 426;
+            }
+            430 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp74,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                                .get(((cursor).x4() as i32))
+                                .list_joint() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = 429;
+            }
+            431 => {
+                unreachable!();
+            }
+            432 => {
+                __state = if ci < n_doors { 433 } else { 435 };
+            }
+            433 => {
+                cy7 = (cursor).x10();
+                __state = if (!(cy7 < 0.20000000298023224)) && (!(cy7 > 22.0)) {
+                    437
+                } else {
+                    438
+                };
+            }
+            434 => {
+                ci = ci.wrapping_add(1);
+                __state = 432;
+            }
+            435 => {
+                __state = if closest >= 0_i32 { 449 } else { 450 };
+            }
+            436 => {
+                unreachable!();
+            }
+            437 => {
+                pk2 = statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(ci)
+                    .p_kind();
+                __state = if (((pk2 as i32) != 3_i32)
+                    && ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                        .doors()
+                        .get(ci)
+                        .sel_icon() as u32)
+                        < 25_u32))
+                    && (((pk2 as i32) != 0_i32) || (((cursor).x4() as i32) == ci))
+                {
+                    440
+                } else {
+                    441
+                };
+            }
+            438 => {
+                __state = 434;
+            }
+            439 => {
+                unreachable!();
+            }
+            440 => {
+                mc = statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
+                    .at(ci)
+                    .get();
+                __state = if ((mc).x5() as i32) == 0_i32 {
+                    443
+                } else {
+                    444
+                };
+            }
+            441 => {
+                __state = 438;
+            }
+            442 => {
+                unreachable!();
+            }
+            443 => {
+                ddx = fp::fadds(3.799999952316284, (fp::fsubs((cursor).xC(), (mc).x8())));
+                ddy = fp::fadds(fp::fneg(2.5999999046325684), (fp::fsubs(cy7, (mc).xC())));
+                dist = fp::fmadds(ddx, ddx, (fp::fmuls(ddy, ddy)));
+                __state = if dist < closest_dist { 446 } else { 447 };
+            }
+            444 => {
+                __state = 441;
+            }
+            445 => {
+                unreachable!();
+            }
+            446 => {
+                closest_dist = dist;
+                closest = ci;
+                __state = 447;
+            }
+            447 => {
+                __state = 444;
+            }
+            448 => {
+                unreachable!();
+            }
+            449 => {
+                cport4 = (cursor).x4();
+                closest_door = ((closest as u8) as i32);
+                (statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
+                    .at(((closest as u8) as i32))
+                    .get())
+                .set_x5(((((cport4 as i32).wrapping_add(1_i32)) as i8) as u8));
+                (statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)
+                    .at((cport4 as i32))
+                    .get())
+                .set_x5((1_i32 as u8));
+                (statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)
+                    .at((cport4 as i32))
+                    .get())
+                .set_x6((closest_door as u8));
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(closest_door)
+                    .set_sel_icon((13_i32 as u8));
+                fns::HSD_GObjGXLink_803909D8(
+                    ctx,
+                    (statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
+                        .at(((closest as u8) as i32))
+                        .get())
+                    .gobj(),
+                    (statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)
+                        .at((cport4 as i32))
+                        .get())
+                    .gobj(),
+                );
+                let _ = fns::lbAudioAx_800237A8(ctx, 183_i32, 127_i32, 64_i32);
+                (cursor).set_xC(
+                    (fp::fsubs(
+                        (statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
+                            .at(closest)
+                            .get())
+                        .x8(),
+                        2.700000047683716,
+                    )),
+                );
+                (cursor).set_x10(
+                    (fp::fsubs(
+                        (statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
+                            .at(closest)
+                            .get())
+                        .xC(),
+                        fp::fneg(2.0),
+                    )),
+                );
+                __state = 450;
+            }
+            450 => {
+                __state = 340;
+            }
+            451 => {
+                unreachable!();
+            }
+            452 => {
+                let _ = statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(
+                        ({
+                            let __t5 = (cursor).x4();
+                            cport5 = __t5;
+                            __t5
+                        } as i32),
+                    );
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(((cursor).x4() as i32))
+                    .p_kind() as i32)
+                    != 3_i32)
+                    && ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                        .doors()
+                        .get(((cursor).x4() as i32))
+                        .sel_icon() as u32)
+                        < 25_u32)
+                {
+                    455
+                } else {
+                    456
+                };
+            }
+            453 => {
+                __state = 340;
+            }
+            454 => {
+                unreachable!();
+            }
+            455 => {
+                cy8 = (cursor).x10();
+                __state = if (cy8 > 0.20000000298023224) && (cy8 < 22.0) {
+                    458
+                } else {
+                    459
+                };
+            }
+            456 => {
+                __state = 453;
+            }
+            457 => {
+                unreachable!();
+            }
+            458 => {
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
+                    .at(((cursor).x4() as i32))
+                    .get())
+                .x5() as i32)
+                    == 0_i32
+                {
+                    461
+                } else {
+                    462
+                };
+            }
+            459 => {
+                __state = 456;
+            }
+            460 => {
+                unreachable!();
+            }
+            461 => {
+                (statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
+                    .at((cport5 as i32))
+                    .get())
+                .set_x5((((cport5 as i32).wrapping_add(1_i32)) as u8));
+                (statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)
+                    .at((cport5 as i32))
+                    .get())
+                .set_x5((1_i32 as u8));
+                (statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)
+                    .at((cport5 as i32))
+                    .get())
+                .set_x6(cport5);
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get((cport5 as i32))
+                    .set_sel_icon((13_i32 as u8));
+                fns::HSD_GObjGXLink_803909D8(
+                    ctx,
+                    (statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
+                        .at((cport5 as i32))
+                        .get())
+                    .gobj(),
+                    (statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)
+                        .at((cport5 as i32))
+                        .get())
+                    .gobj(),
+                );
+                let _ = fns::lbAudioAx_800237A8(ctx, 183_i32, 127_i32, 64_i32);
+                __state = 462;
+            }
+            462 => {
+                __state = 459;
+            }
+            463 => {
+                unreachable!();
+            }
+            464 => {
+                cport6 = (cursor).x4();
+                __state = if ((cport6 as i32) != 3_i32)
+                    || (((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type()
+                        as i32)
+                        != 1_i32)
+                {
+                    467
+                } else {
+                    468
+                };
+            }
+            465 => {
+                __state = 301;
+            }
+            466 => {
+                unreachable!();
+            }
+            467 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get((cport6 as i32))
+                    .p_kind() as i32)
+                    == 3_i32
+                {
+                    470
+                } else {
+                    471
+                };
+            }
+            468 => {
+                __state = 465;
+            }
+            469 => {
+                unreachable!();
+            }
+            470 => {
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get((cport6 as i32))
+                    .set_p_kind((0_i32 as u8));
+                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get(((cursor).x4() as i32))
+                    .set_slot_type((0_i32 as u8));
+                fns::mnCharSel_8025DB34(ctx, (cursor).x4());
+                inl_sfxMove(ctx);
+                __state = 471;
+            }
+            471 => {
+                cport7 = (cursor).x4();
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get((cport7 as i32))
+                    .sel_icon() as u32)
+                    >= 25_u32
+                {
+                    473
+                } else {
+                    474
+                };
+            }
+            472 => {
+                unreachable!();
+            }
+            473 => {
+                (statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
+                    .at((cport7 as i32))
+                    .get())
+                .set_x5(
+                    (({
+                        let __t6 = ((cport7 as i32).wrapping_add(1_i32) as u32);
+                        next_port = __t6;
+                        __t6
+                    }) as u8),
+                );
+                (statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)
+                    .at((cport7 as i32))
+                    .get())
+                .set_x5((1_i32 as u8));
+                (statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)
+                    .at((cport7 as i32))
+                    .get())
+                .set_x6(cport7);
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get((cport7 as i32))
+                    .set_sel_icon((13_i32 as u8));
+                fns::HSD_GObjGXLink_803909D8(
+                    ctx,
+                    (statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
+                        .at((cport7 as i32))
+                        .get())
+                    .gobj(),
+                    (statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)
+                        .at((cport7 as i32))
+                        .get())
+                    .gobj(),
+                );
+                let _ = fns::lbAudioAx_800237A8(ctx, 183_i32, 127_i32, 64_i32);
+                val_x = fp::fadds(2.700000047683716, (cursor).xC());
+                (statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
+                    .at(((cursor).x4() as i32))
+                    .get())
+                .set_x10(val_x);
+                (statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
+                    .at(((cursor).x4() as i32))
+                    .get())
+                .set_x8(val_x);
+                val_y = fp::fadds(fp::fneg(2.0), (cursor).x10());
+                (statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
+                    .at(((cursor).x4() as i32))
+                    .get())
+                .set_x14(val_y);
+                (statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
+                    .at(((cursor).x4() as i32))
+                    .get())
+                .set_xC(val_y);
+                __state = 474;
+            }
+            474 => {
+                __state = 468;
+            }
+            475 => {
+                unreachable!();
+            }
+            476 => {
+                __state = 153;
+            }
+            477 => {
+                __state = 6;
+            }
+            478 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn fn_80262648<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xa8);
     let sp24: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
@@ -3232,6 +6330,665 @@ pub fn fn_80262648<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::HSD_JObjAnimAll(ctx, jobj);
 }
 
+pub fn fn_80262F44<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x30);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut i: i32 = 0;
+    let mut valid_count: i32 = 0;
+    let mut j: i32 = 0;
+    let mut tag: CSSTag<'a> = null(ctx);
+    let mut p: u32 = 0;
+    let mut trigger: u32 = 0;
+    let mut tmp: u8 = 0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                jobj = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
+                valid_count = 0_i32;
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = 3;
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .match_type() as i32)
+                    == (enums::VS_CAMERA as i32)
+                {
+                    6
+                } else {
+                    7
+                };
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                __state = if (fns::HSD_PadCopyStatus(ctx).get(3_i32).err() as i32) != 0_i32 {
+                    9
+                } else {
+                    10
+                };
+            }
+            7 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    14
+                } else {
+                    16
+                };
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                fns::HSD_JObjClearFlagsAll(
+                    ctx,
+                    (if Handle::is_null(
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CCC(ctx).get(),
+                    ) {
+                        null::<HSD_JObj<'a>>(ctx)
+                    } else {
+                        (statics::melee__mn__mncharsel::mnCharSel_804D6CCC(ctx).get()).child()
+                    }),
+                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                );
+                __state = 12;
+            }
+            10 => {
+                fns::HSD_JObjSetFlagsAll(
+                    ctx,
+                    (if Handle::is_null(
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CCC(ctx).get(),
+                    ) {
+                        null::<HSD_JObj<'a>>(ctx)
+                    } else {
+                        (statics::melee__mn__mncharsel::mnCharSel_804D6CCC(ctx).get()).child()
+                    }),
+                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                );
+                __state = 7;
+            }
+            11 => {
+                unreachable!();
+            }
+            12 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF7(ctx).set((0_i32 as u8));
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF2(ctx).set((10_i32 as u8));
+                fns::HSD_JObjSetFlagsAll(ctx, jobj, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
+                __state = 35;
+            }
+            13 => {
+                __state = 10;
+            }
+            14 => {
+                __state = if (((statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)
+                    .at(0_i32)
+                    .get())
+                .x5() as i32)
+                    == 1_i32)
+                    || ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                        .doors()
+                        .get(0_i32)
+                        .sel_icon() as i32)
+                        >= 25_i32)
+                {
+                    18
+                } else {
+                    20
+                };
+            }
+            15 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    77
+                } else {
+                    79
+                };
+            }
+            16 => {
+                valid_count = 0_i32;
+                i = 0_i32;
+                __state = 22;
+            }
+            17 => {
+                unreachable!();
+            }
+            18 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF7(ctx).set((0_i32 as u8));
+                __state = 19;
+            }
+            19 => {
+                fns::HSD_JObjSetFlagsAll(ctx, jobj, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
+                __state = 15;
+            }
+            20 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF7(ctx).set((1_i32 as u8));
+                __state = 19;
+            }
+            21 => {
+                unreachable!();
+            }
+            22 => {
+                __state =
+                    if i < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) {
+                        23
+                    } else {
+                        25
+                    };
+            }
+            23 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(i)
+                    .p_kind() as i32)
+                    != 3_i32
+                {
+                    27
+                } else {
+                    28
+                };
+            }
+            24 => {
+                i = i.wrapping_add(1);
+                __state = 22;
+            }
+            25 => {
+                __state = if valid_count >= 2_i32 { 34 } else { 36 };
+            }
+            26 => {
+                unreachable!();
+            }
+            27 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(i)
+                    .sel_icon() as i32)
+                    >= 25_i32
+                {
+                    30
+                } else {
+                    31
+                };
+            }
+            28 => {
+                __state = 24;
+            }
+            29 => {
+                unreachable!();
+            }
+            30 => {
+                __state = 12;
+            }
+            31 => {
+                valid_count = valid_count.wrapping_add(1);
+                __state = 28;
+            }
+            32 => {
+                unreachable!();
+            }
+            33 => {
+                __state = 31;
+            }
+            34 => {
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .rules()
+                    .is_teams() as i32)
+                    == 1_i32
+                {
+                    38
+                } else {
+                    39
+                };
+            }
+            35 => {
+                __state = 15;
+            }
+            36 => {
+                __state = 12;
+            }
+            37 => {
+                unreachable!();
+            }
+            38 => {
+                i = 0_i32;
+                __state = 41;
+            }
+            39 => {
+                __state = 58;
+            }
+            40 => {
+                unreachable!();
+            }
+            41 => {
+                __state = if i
+                    < ((statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                        .wrapping_sub(1_i32))
+                {
+                    42
+                } else {
+                    44
+                };
+            }
+            42 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(i)
+                    .p_kind() as i32)
+                    == 3_i32
+                {
+                    46
+                } else {
+                    47
+                };
+            }
+            43 => {
+                i = i.wrapping_add(1);
+                __state = 41;
+            }
+            44 => {
+                __state = 12;
+            }
+            45 => {
+                unreachable!();
+            }
+            46 => {
+                __state = 43;
+            }
+            47 => {
+                j = i;
+                __state = 50;
+            }
+            48 => {
+                unreachable!();
+            }
+            49 => {
+                __state = 47;
+            }
+            50 => {
+                __state =
+                    if j < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) {
+                        51
+                    } else {
+                        53
+                    };
+            }
+            51 => {
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(j)
+                    .p_kind() as i32)
+                    != 3_i32)
+                    && ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                        .doors()
+                        .get(i)
+                        .team() as i32)
+                        != (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                            .doors()
+                            .get(j)
+                            .team() as i32))
+                {
+                    55
+                } else {
+                    56
+                };
+            }
+            52 => {
+                j = j.wrapping_add(1);
+                __state = 50;
+            }
+            53 => {
+                __state = 43;
+            }
+            54 => {
+                unreachable!();
+            }
+            55 => {
+                __state = 58;
+            }
+            56 => {
+                __state = 52;
+            }
+            57 => {
+                unreachable!();
+            }
+            58 => {
+                tag = statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx).get(0);
+                i = 0_i32;
+                __state = 61;
+            }
+            59 => {
+                __state = 56;
+            }
+            60 => {
+                __state = 39;
+            }
+            61 => {
+                __state =
+                    if i < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) {
+                        62
+                    } else {
+                        64
+                    };
+            }
+            62 => {
+                __state = if (((statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)
+                    .at(i)
+                    .get())
+                .x5() as i32)
+                    == 1_i32)
+                    || ((((Handle::add(tag, i)).data()).state() as i32) != 0_i32)
+                {
+                    66
+                } else {
+                    67
+                };
+            }
+            63 => {
+                i = i.wrapping_add(1);
+                __state = 61;
+            }
+            64 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF7(ctx).get() as i32)
+                    == 0_i32
+                {
+                    70
+                } else {
+                    72
+                };
+            }
+            65 => {
+                unreachable!();
+            }
+            66 => {
+                __state = 12;
+            }
+            67 => {
+                __state = 63;
+            }
+            68 => {
+                unreachable!();
+            }
+            69 => {
+                __state = 67;
+            }
+            70 => {
+                fns::HSD_ForeachAnim(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(jobj),
+                    (enums::JOBJ_TYPE as i32),
+                    (enums::ALL_TYPE_MASK as i32),
+                    Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036410c)),
+                    (enums::AOBJ_ARG_AF as i32),
+                    &[VarArg::Float(0.0)],
+                );
+                __state = 71;
+            }
+            71 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF7(ctx).set(
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CF7(ctx)
+                        .get()
+                        .wrapping_add(1),
+                );
+                fns::HSD_JObjClearFlagsAll(ctx, jobj, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
+                fns::HSD_JObjAnimAll(ctx, jobj);
+                __state = 35;
+            }
+            72 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF7(ctx).get() as i32)
+                    > 100_i32
+                {
+                    74
+                } else {
+                    75
+                };
+            }
+            73 => {
+                unreachable!();
+            }
+            74 => {
+                fns::HSD_ForeachAnim(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(jobj),
+                    (enums::JOBJ_TYPE as i32),
+                    (enums::ALL_TYPE_MASK as i32),
+                    Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036410c)),
+                    (enums::AOBJ_ARG_AF as i32),
+                    &[VarArg::Float(10.0)],
+                );
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF7(ctx).set((10_i32 as u8));
+                __state = 75;
+            }
+            75 => {
+                __state = 71;
+            }
+            76 => {
+                unreachable!();
+            }
+            77 => {
+                trigger = fns::HSD_PadCopyStatus(ctx)
+                    .get(
+                        ((statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as u8)
+                            as i32),
+                    )
+                    .trigger();
+                __state = 78;
+            }
+            78 => {
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CF2(ctx).get() as i32)
+                    == 0_i32)
+                    && ((trigger & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0)
+                {
+                    89
+                } else {
+                    90
+                };
+            }
+            79 => {
+                trigger = ({
+                    let __t1 = (0_i32 as u32);
+                    p = __t1;
+                    __t1
+                });
+                i = 0_i32;
+                __state = 81;
+            }
+            80 => {
+                unreachable!();
+            }
+            81 => {
+                __state =
+                    if i < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) {
+                        82
+                    } else {
+                        84
+                    };
+            }
+            82 => {
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)
+                    .at(i)
+                    .get())
+                .x5() as i32)
+                    != 3_i32
+                {
+                    86
+                } else {
+                    87
+                };
+            }
+            83 => {
+                i = i.wrapping_add(1);
+                p = p.wrapping_add(1);
+                __state = 81;
+            }
+            84 => {
+                __state = 78;
+            }
+            85 => {
+                unreachable!();
+            }
+            86 => {
+                tmp = (p as u8);
+                trigger = (trigger | fns::HSD_PadCopyStatus(ctx).get((tmp as i32)).trigger());
+                __state = 87;
+            }
+            87 => {
+                __state = 83;
+            }
+            88 => {
+                unreachable!();
+            }
+            89 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF7(ctx).get() as i32)
+                    != 0_i32
+                {
+                    92
+                } else {
+                    94
+                };
+            }
+            90 => {
+                return;
+            }
+            91 => {
+                unreachable!();
+            }
+            92 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF6(ctx).set((1_i32 as u8));
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF2(ctx).set((255_i32 as u8));
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    96
+                } else {
+                    98
+                };
+            }
+            93 => {
+                __state = 90;
+            }
+            94 => {
+                fns::lbAudioAx_80024030(ctx, 3_i32);
+                __state = 93;
+            }
+            95 => {
+                unreachable!();
+            }
+            96 => {
+                __state = if (fns::gm_RumbleEnabledForPlayer(
+                    ctx,
+                    (statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32),
+                    ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                        .vs()
+                        .start()
+                        .players()
+                        .get((statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32))
+                        .nametag() as i32),
+                ) != 0)
+                {
+                    100
+                } else {
+                    101
+                };
+            }
+            97 => {
+                __state = 93;
+            }
+            98 => {
+                i = 0_i32;
+                __state = 103;
+            }
+            99 => {
+                unreachable!();
+            }
+            100 => {
+                fns::lb_80014574(
+                    ctx,
+                    (statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as u8),
+                    0_i32,
+                    11_i32,
+                    30_i32,
+                );
+                __state = 101;
+            }
+            101 => {
+                __state = 97;
+            }
+            102 => {
+                unreachable!();
+            }
+            103 => {
+                __state =
+                    if i < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) {
+                        104
+                    } else {
+                        106
+                    };
+            }
+            104 => {
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(i)
+                    .p_kind() as i32)
+                    == 0_i32)
+                    && (fns::gm_RumbleEnabledForPlayer(
+                        ctx,
+                        i,
+                        ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                            .vs()
+                            .start()
+                            .players()
+                            .get(i)
+                            .nametag() as i32),
+                    ) != 0)
+                {
+                    108
+                } else {
+                    109
+                };
+            }
+            105 => {
+                i = i.wrapping_add(1);
+                __state = 103;
+            }
+            106 => {
+                __state = 97;
+            }
+            107 => {
+                unreachable!();
+            }
+            108 => {
+                fns::lb_80014574(ctx, (i as u8), 0_i32, 11_i32, 30_i32);
+                __state = 109;
+            }
+            109 => {
+                __state = 105;
+            }
+            110 => {
+                unreachable!();
+            }
+            111 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn fn_80263354<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
@@ -3247,6 +7004,1373 @@ pub fn fn_80263354<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::HSD_JObjAnimAll(ctx, jobj);
 }
 
+pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0xd8);
+    let list_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let arrow_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
+    let unk7C: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
+    let white: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let gray: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let list_origin_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x14);
+    let list_origin: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let gray_copy: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
+    let row_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x28);
+    let used_row_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x2c);
+    let white_copy: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
+    let unk34: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x34);
+    let handicap_slider_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x54);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x58);
+    let mut gobj = gobj;
+    let mut tag: CSSTagData<'a> = null(ctx);
+    let mut port: i32 = 0;
+    let mut name_color: _GXColor<'a> = null(ctx);
+    let mut page: i32 = 0;
+    let mut new_page: i32 = 0;
+    let mut used_name_color: _GXColor<'a> = null(ctx);
+    let mut val: i32 = 0;
+    let mut row: i32 = 0;
+    let mut j: i32 = 0;
+    let mut page_off: i32 = 0;
+    let mut match_type: u8 = 0;
+    let mut trigger: u32 = 0;
+    let mut num_entries: i32 = 0;
+    let mut i: i32 = 0;
+    let mut cursor_row: f64 = 0.0;
+    let mut vel: f64 = 0.0;
+    let mut scroll_pos: f64 = 0.0;
+    let mut new_pos: f64 = 0.0;
+    let mut t: u32 = 0;
+    let mut row_idx: i32 = 0;
+    let mut p2: i32 = 0;
+    let mut k: i32 = 0;
+    let mut p: i32 = 0;
+    let mut hval: i32 = 0;
+    let mut hval_f: f64 = 0.0;
+    let mut anim_jobj: HSD_JObj<'a> = null(ctx);
+    let mut t2: u32 = 0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                tag = Handle::cast::<CSSTagData<'a>>((gobj).user_data());
+                port = ((tag).port() as i32);
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    1
+                } else {
+                    2
+                };
+            }
+            1 => {
+                __state = if port != 0_i32 { 4 } else { 6 };
+            }
+            2 => {
+                Handle::copy_from(
+                    white,
+                    statics::melee__mn__mncharsel::mnCharSel_804DC560(ctx),
+                );
+                Handle::copy_from(gray, statics::melee__mn__mncharsel::mnCharSel_804DC564(ctx));
+                num_entries = ((tag).next_tag() as i32);
+                __state = if (num_entries as u32) > 120_u32 {
+                    8
+                } else {
+                    10
+                };
+            }
+            3 => {
+                unreachable!();
+            }
+            4 => {
+                port = (statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).get() as i32);
+                __state = 5;
+            }
+            5 => {
+                __state = 2;
+            }
+            6 => {
+                port = (statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32);
+                __state = 5;
+            }
+            7 => {
+                unreachable!();
+            }
+            8 => {
+                num_entries = num_entries.wrapping_sub(8_i32);
+                __state = 9;
+            }
+            9 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    12
+                } else {
+                    14
+                };
+            }
+            10 => {
+                num_entries = num_entries.wrapping_sub(7_i32);
+                __state = 9;
+            }
+            11 => {
+                unreachable!();
+            }
+            12 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    list_jobj,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).xc4() as i32)
+                                as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                trigger = fns::HSD_PadCopyStatus(ctx)
+                    .get(
+                        ((statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as u8)
+                            as i32),
+                    )
+                    .trigger();
+                __state = 13;
+            }
+            13 => {
+                __state = match ((tag).state() as i32) {
+                    1_i32 => 16,
+                    2_i32 => 17,
+                    3_i32 => 18,
+                    4_i32 => 19,
+                    5_i32 => 20,
+                    _ => 21,
+                };
+            }
+            14 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    list_jobj,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                                .get(((tag).port() as i32))
+                                .x4() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                trigger = fns::HSD_PadCopyStatus(ctx)
+                    .get(((tag).port() as i32))
+                    .trigger();
+                __state = 13;
+            }
+            15 => {
+                unreachable!();
+            }
+            16 => {
+                fns::mnCharSel_8025D1C4(ctx, ((tag).port() as i32), 1_i32);
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(((tag).port() as i32))
+                    .sel_icon() as u32)
+                    < 25_u32
+                {
+                    23
+                } else {
+                    25
+                };
+            }
+            17 => {
+                t = ((tag).timer().wrapping_add(1_i32) as u32);
+                (tag).set_timer((t as i32));
+                __state = if t > 10_u32 { 32 } else { 33 };
+            }
+            18 => {
+                vel = (tag).scroll_amt();
+                __state = if (vel != 0.0) { 36 } else { 37 };
+            }
+            19 => {
+                fns::HSD_ForeachAnim(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(list_jobj.get()),
+                    (enums::JOBJ_TYPE as i32),
+                    (enums::ALL_TYPE_MASK as i32),
+                    Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036410c)),
+                    (enums::AOBJ_ARG_AF as i32),
+                    &[VarArg::Float(20.0)],
+                );
+                ((tag).name_ls()).set_hidden((1_i32 as u8));
+                __state = if (((fns::gmMainLib_GetGameRules(ctx)).handicap() as i32) != 0_i32)
+                    && ((statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                        == 4_i32)
+                {
+                    197
+                } else {
+                    198
+                };
+            }
+            20 => {
+                t2 = ((tag).timer().wrapping_add(1_i32) as u32);
+                (tag).set_timer((t2 as i32));
+                __state = if t2 > 10_u32 { 201 } else { 202 };
+            }
+            21 => {
+                __state = 206;
+            }
+            22 => {
+                unreachable!();
+            }
+            23 => {
+                __state = if (fns::lbLang_IsSavedLanguageUS(ctx) != 0_i32)
+                    && ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                        .doors()
+                        .get(((tag).port() as i32))
+                        .sel_icon() as i32)
+                        == 22_i32)
+                {
+                    27
+                } else {
+                    29
+                };
+            }
+            24 => {
+                Handle::copy_from(gray_copy, gray);
+                fns::HSD_SisLib_803A74F0(ctx, (tag).text(), 0_i32, gray_copy);
+                fns::HSD_ForeachAnim(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(list_jobj.get()),
+                    (enums::JOBJ_TYPE as i32),
+                    (enums::ALL_TYPE_MASK as i32),
+                    Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036410c)),
+                    (enums::AOBJ_ARG_AF as i32),
+                    &[VarArg::Float(0.0)],
+                );
+                (tag).set_state((2_i32 as u8));
+                (tag).set_timer(0_i32);
+                inl_sfxMove(ctx);
+                return;
+            }
+            25 => {
+                let _ = fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    (tag).name_ls(),
+                    0_i32,
+                    cstr(ctx, 0x803f1000),
+                    &[],
+                );
+                __state = 24;
+            }
+            26 => {
+                unreachable!();
+            }
+            27 => {
+                let _ = fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    (tag).name_ls(),
+                    0_i32,
+                    Handle::cast::<Val<'a, i8>>(
+                        statics::melee__mn__mncharsel::mnCharSel_803F0A48(ctx)
+                            .gnw_name()
+                            .at(0),
+                    ),
+                    &[],
+                );
+                __state = 28;
+            }
+            28 => {
+                __state = 24;
+            }
+            29 => {
+                let _ = fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    (tag).name_ls(),
+                    0_i32,
+                    fns::gm_80160980(
+                        ctx,
+                        statics::melee__mn__mncharsel::icons(ctx)
+                            .get(
+                                (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                                    .doors()
+                                    .get(((tag).port() as i32))
+                                    .sel_icon() as i32),
+                            )
+                            .char_kind(),
+                    ),
+                    &[],
+                );
+                __state = 28;
+            }
+            30 => {
+                unreachable!();
+            }
+            31 => {
+                __state = 17;
+            }
+            32 => {
+                fns::HSD_ForeachAnim(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(list_jobj.get()),
+                    (enums::JOBJ_TYPE as i32),
+                    (enums::ALL_TYPE_MASK as i32),
+                    Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036414c)),
+                    (enums::AOBJ_ARG_AOV as i32),
+                    &[VarArg::Int(0_i32 as u32), VarArg::Int(0_i32 as u32)],
+                );
+                ((tag).name_ls()).set_hidden((0_i32 as u8));
+                (tag).set_state((3_i32 as u8));
+                __state = 33;
+            }
+            33 => {
+                return;
+            }
+            34 => {
+                unreachable!();
+            }
+            35 => {
+                __state = 18;
+            }
+            36 => {
+                (tag).set_scroll_force(fp::fmadds(
+                    10.0,
+                    vel,
+                    (if vel < 0.0 { fp::fneg(1.0) } else { 1.0 }),
+                ));
+                __state = 37;
+            }
+            37 => {
+                __state = if ((tag).scroll_force() != 0.0) {
+                    39
+                } else {
+                    40
+                };
+            }
+            38 => {
+                unreachable!();
+            }
+            39 => {
+                scroll_pos = (tag).x8();
+                new_pos = fp::fadds(scroll_pos, (tag).scroll_force());
+                page = fp::fctiwz((fp::fdivs(scroll_pos, 32.0)));
+                (tag).set_x8(new_pos);
+                new_page = fp::fctiwz((fp::fdivs((tag).x8(), 32.0)));
+                __state = if (tag).x8() > 0.0 { 42 } else { 43 };
+            }
+            40 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    62
+                } else {
+                    64
+                };
+            }
+            41 => {
+                unreachable!();
+            }
+            42 => {
+                (tag).set_x8(0.0);
+                __state = 43;
+            }
+            43 => {
+                __state = if ((tag).next_tag() as u32) > 7_u32 {
+                    45
+                } else {
+                    47
+                };
+            }
+            44 => {
+                unreachable!();
+            }
+            45 => {
+                __state = if (tag).x8() < fp::fmuls(fp::fneg(32.0), fp::frsp(num_entries as f64)) {
+                    49
+                } else {
+                    50
+                };
+            }
+            46 => {
+                __state = if (tag).scroll_amt() == 0.0 { 52 } else { 53 };
+            }
+            47 => {
+                (tag).set_x8(0.0);
+                __state = 46;
+            }
+            48 => {
+                unreachable!();
+            }
+            49 => {
+                (tag).set_x8(fp::fmuls(fp::fneg(32.0), fp::frsp(num_entries as f64)));
+                __state = 50;
+            }
+            50 => {
+                __state = 46;
+            }
+            51 => {
+                unreachable!();
+            }
+            52 => {
+                __state = if page < new_page { 55 } else { 57 };
+            }
+            53 => {
+                __state = 40;
+            }
+            54 => {
+                unreachable!();
+            }
+            55 => {
+                (tag).set_x8(fp::fmuls(32.0, fp::frsp(page as f64)));
+                (tag).set_scroll_force(0.0);
+                __state = 56;
+            }
+            56 => {
+                __state = 53;
+            }
+            57 => {
+                __state = if page > new_page { 59 } else { 60 };
+            }
+            58 => {
+                unreachable!();
+            }
+            59 => {
+                (tag).set_x8(fp::fmuls(32.0, fp::frsp(new_page as f64)));
+                (tag).set_scroll_force(0.0);
+                __state = 60;
+            }
+            60 => {
+                __state = 56;
+            }
+            61 => {
+                unreachable!();
+            }
+            62 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    arrow_jobj,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).xc7() as i32)
+                                as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = 63;
+            }
+            63 => {
+                __state = if (tag).x8() == 0.0 { 66 } else { 68 };
+            }
+            64 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    arrow_jobj,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                                .get(((tag).port() as i32))
+                                .x7() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = 63;
+            }
+            65 => {
+                unreachable!();
+            }
+            66 => {
+                fns::HSD_JObjSetFlags(
+                    ctx,
+                    arrow_jobj.get(),
+                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                );
+                __state = 67;
+            }
+            67 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    70
+                } else {
+                    72
+                };
+            }
+            68 => {
+                fns::HSD_JObjClearFlags(
+                    ctx,
+                    arrow_jobj.get(),
+                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                );
+                __state = 67;
+            }
+            69 => {
+                unreachable!();
+            }
+            70 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    arrow_jobj,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).xc8() as i32)
+                                as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = 71;
+            }
+            71 => {
+                __state = if ((tag).next_tag() as u32) > 7_u32 {
+                    74
+                } else {
+                    76
+                };
+            }
+            72 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    arrow_jobj,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                                .get(((tag).port() as i32))
+                                .kostar_text_joint() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = 71;
+            }
+            73 => {
+                unreachable!();
+            }
+            74 => {
+                __state = if (tag).x8() == (fp::fmuls(fp::fneg(32.0), fp::frsp(num_entries as f64)))
+                {
+                    78
+                } else {
+                    80
+                };
+            }
+            75 => {
+                fns::HSD_SisLib_803A746C(ctx, (tag).name_ls(), 0_i32, 0.0, (tag).x8());
+                fns::HSD_SisLib_803A746C(
+                    ctx,
+                    (tag).name_ls(),
+                    1_i32,
+                    0.0,
+                    fp::fmadds(32.0, fp::frsp((tag).next_tag() as f64), (tag).x8()),
+                );
+                name_color = row_color;
+                used_name_color = used_row_color;
+                page_off = (div_i32(fp::fctiwz((tag).x8()), 32_i32)).wrapping_add(1_i32);
+                j = 0_i32;
+                __state = 82;
+            }
+            76 => {
+                fns::HSD_JObjSetFlags(
+                    ctx,
+                    arrow_jobj.get(),
+                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                );
+                __state = 75;
+            }
+            77 => {
+                unreachable!();
+            }
+            78 => {
+                fns::HSD_JObjSetFlags(
+                    ctx,
+                    arrow_jobj.get(),
+                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                );
+                __state = 79;
+            }
+            79 => {
+                __state = 75;
+            }
+            80 => {
+                fns::HSD_JObjClearFlags(
+                    ctx,
+                    arrow_jobj.get(),
+                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                );
+                __state = 79;
+            }
+            81 => {
+                unreachable!();
+            }
+            82 => {
+                __state = if j < 9_i32 { 83 } else { 85 };
+            }
+            83 => {
+                row_idx = j.wrapping_sub(page_off);
+                __state = if row_idx < 0_i32 { 87 } else { 89 };
+            }
+            84 => {
+                j = j.wrapping_add(1);
+                __state = 82;
+            }
+            85 => {
+                __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
+                    100
+                } else {
+                    101
+                };
+            }
+            86 => {
+                unreachable!();
+            }
+            87 => {
+                let _ = fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    (tag).name_ls(),
+                    j.wrapping_add(2_i32),
+                    null::<Val<'a, i8>>(ctx),
+                    &[],
+                );
+                __state = 88;
+            }
+            88 => {
+                fns::HSD_SisLib_803A746C(
+                    ctx,
+                    (tag).name_ls(),
+                    j.wrapping_add(2_i32),
+                    10.0,
+                    fp::fmadds(
+                        32.0,
+                        fp::frsp((j.wrapping_add(1_i32)) as f64),
+                        fp::frsp(
+                            ((rem_i32(fp::fctiwz((tag).x8()), 32_i32)).wrapping_sub(32_i32)) as f64,
+                        ),
+                    ),
+                );
+                __state = 84;
+            }
+            89 => {
+                let _ = fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    (tag).name_ls(),
+                    j.wrapping_add(2_i32),
+                    fns::GetNameText(ctx, ((row_idx as u8) as i32)),
+                    &[],
+                );
+                Handle::copy_from(row_color, white);
+                fns::HSD_SisLib_803A74F0(ctx, (tag).name_ls(), j.wrapping_add(2_i32), name_color);
+                p2 = 0_i32;
+                __state = 91;
+            }
+            90 => {
+                unreachable!();
+            }
+            91 => {
+                __state =
+                    if p2 < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) {
+                        92
+                    } else {
+                        94
+                    };
+            }
+            92 => {
+                __state = if (p2 != ((tag).port() as i32))
+                    && (((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                        .vs()
+                        .start()
+                        .players()
+                        .get(p2)
+                        .nametag() as i32)
+                        == row_idx)
+                {
+                    96
+                } else {
+                    97
+                };
+            }
+            93 => {
+                p2 = p2.wrapping_add(1);
+                __state = 91;
+            }
+            94 => {
+                __state = 88;
+            }
+            95 => {
+                unreachable!();
+            }
+            96 => {
+                Handle::copy_from(used_row_color, gray);
+                fns::HSD_SisLib_803A74F0(
+                    ctx,
+                    (tag).name_ls(),
+                    j.wrapping_add(2_i32),
+                    used_name_color,
+                );
+                __state = 94;
+            }
+            97 => {
+                __state = 93;
+            }
+            98 => {
+                unreachable!();
+            }
+            99 => {
+                __state = 97;
+            }
+            100 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    103
+                } else {
+                    105
+                };
+            }
+            101 => {
+                __state = 138;
+            }
+            102 => {
+                unreachable!();
+            }
+            103 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    list_origin_jobj,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx)
+                                .name_list_joint() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = 104;
+            }
+            104 => {
+                fns::lb_8000B1CC(
+                    ctx,
+                    list_origin_jobj.get(),
+                    null::<Vec<'a>>(ctx),
+                    list_origin,
+                );
+                cursor_row = fp::fmsubs(
+                    0.5,
+                    (fp::fadds(
+                        0.800000011920929,
+                        (fp::fsubs(
+                            list_origin.y(),
+                            (statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)
+                                .at(((tag).port() as i32))
+                                .get())
+                            .x10(),
+                        )),
+                    )),
+                    (fp::fdivs((tag).x8(), 32.0)),
+                );
+                row = fp::fctiwz(cursor_row);
+                __state = if fp::fctiwz(cursor_row) == 0_i32 {
+                    107
+                } else {
+                    108
+                };
+            }
+            105 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    list_origin_jobj,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                                .get(((tag).port() as i32))
+                                .list_joint() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = 104;
+            }
+            106 => {
+                unreachable!();
+            }
+            107 => {
+                __state = if (fns::lbLang_IsSavedLanguageUS(ctx) != 0_i32)
+                    && ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                        .doors()
+                        .get(((tag).port() as i32))
+                        .sel_icon() as i32)
+                        == 22_i32)
+                {
+                    110
+                } else {
+                    112
+                };
+            }
+            108 => {
+                __state = if ((tag).next_tag() as i32) == row {
+                    140
+                } else {
+                    141
+                };
+            }
+            109 => {
+                unreachable!();
+            }
+            110 => {
+                let _ = fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    (tag).text(),
+                    0_i32,
+                    Handle::cast::<Val<'a, i8>>(
+                        statics::melee__mn__mncharsel::mnCharSel_803F0A48(ctx)
+                            .gnw_name()
+                            .at(0),
+                    ),
+                    &[],
+                );
+                __state = 111;
+            }
+            111 => {
+                ((tag).text()).set_default_kerning((1_i32 as u8));
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(((tag).port() as i32))
+                    .sel_icon() as u32)
+                    < 25_u32
+                {
+                    114
+                } else {
+                    116
+                };
+            }
+            112 => {
+                let _ = fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    (tag).text(),
+                    0_i32,
+                    fns::gm_80160980(
+                        ctx,
+                        statics::melee__mn__mncharsel::icons(ctx)
+                            .get(
+                                (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                                    .doors()
+                                    .get(((tag).port() as i32))
+                                    .sel_icon() as i32),
+                            )
+                            .char_kind(),
+                    ),
+                    &[],
+                );
+                __state = 111;
+            }
+            113 => {
+                unreachable!();
+            }
+            114 => {
+                ((tag).text()).set_hidden((0_i32 as u8));
+                __state = 115;
+            }
+            115 => {
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get(port)
+                    .nametag() as i32)
+                    != 120_i32
+                {
+                    118
+                } else {
+                    119
+                };
+            }
+            116 => {
+                ((tag).text()).set_hidden((1_i32 as u8));
+                __state = 115;
+            }
+            117 => {
+                unreachable!();
+            }
+            118 => {
+                match_type =
+                    (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type();
+                __state = if (match_type as i32) < 3_i32 {
+                    121
+                } else {
+                    122
+                };
+            }
+            119 => {
+                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get(port)
+                    .set_nametag((120_i32 as u8));
+                (tag).set_use_tag((0_i32 as u8));
+                (tag).set_state((4_i32 as u8));
+                inl_sfxMove(ctx);
+                __state = 138;
+            }
+            120 => {
+                unreachable!();
+            }
+            121 => {
+                __state = if (match_type as i32) == 0_i32 {
+                    124
+                } else {
+                    125
+                };
+            }
+            122 => {
+                __state = if (match_type as i32) < 11_i32 {
+                    131
+                } else {
+                    133
+                };
+            }
+            123 => {
+                unreachable!();
+            }
+            124 => {
+                __state = 127;
+            }
+            125 => {
+                __state = 129;
+            }
+            126 => {
+                unreachable!();
+            }
+            127 => {
+                val = 1_i32;
+                __state = 132;
+            }
+            128 => {
+                __state = 125;
+            }
+            129 => {
+                val = 0_i32;
+                __state = 132;
+            }
+            130 => {
+                __state = 122;
+            }
+            131 => {
+                __state = 127;
+            }
+            132 => {
+                __state = if val != 0_i32 { 135 } else { 136 };
+            }
+            133 => {
+                __state = 129;
+            }
+            134 => {
+                unreachable!();
+            }
+            135 => {
+                (Handle::add(
+                    (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).ko_counts(),
+                    ((tag).port() as i32),
+                ))
+                .set((0_i32 as u8));
+                __state = 136;
+            }
+            136 => {
+                __state = 119;
+            }
+            137 => {
+                unreachable!();
+            }
+            138 => {
+                __state = if ((trigger & ((shl_i32(1_i32, (9_i32 as u32))) as u32)) != 0) {
+                    192
+                } else {
+                    193
+                };
+            }
+            139 => {
+                __state = 108;
+            }
+            140 => {
+                __state = if fns::IsNameListFull(ctx) == 0_i32 {
+                    143
+                } else {
+                    144
+                };
+            }
+            141 => {
+                __state = if ((tag).next_tag() as i32) > row {
+                    160
+                } else {
+                    161
+                };
+            }
+            142 => {
+                unreachable!();
+            }
+            143 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    146
+                } else {
+                    148
+                };
+            }
+            144 => {
+                __state = 138;
+            }
+            145 => {
+                unreachable!();
+            }
+            146 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF9(ctx)
+                    .set(statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get());
+                __state = 147;
+            }
+            147 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF6(ctx).set((4_i32 as u8));
+                k = 0_i32;
+                __state = 150;
+            }
+            148 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF9(ctx).set(((tag).port() as i8));
+                __state = 147;
+            }
+            149 => {
+                unreachable!();
+            }
+            150 => {
+                __state =
+                    if k < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) {
+                        151
+                    } else {
+                        153
+                    };
+            }
+            151 => {
+                __state = if (((statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)
+                    .at(k)
+                    .get())
+                .x5() as i32)
+                    == 1_i32)
+                    && (fns::mnCharSel_8025FDEC(ctx, (k as u8)) == 0_i32)
+                {
+                    155
+                } else {
+                    156
+                };
+            }
+            152 => {
+                k = k.wrapping_add(1);
+                __state = 150;
+            }
+            153 => {
+                return;
+            }
+            154 => {
+                unreachable!();
+            }
+            155 => {
+                fns::mnCharSel_8025DB34(ctx, (k as u8));
+                (statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)
+                    .at(k)
+                    .get())
+                .set_x5((2_i32 as u8));
+                __state = 156;
+            }
+            156 => {
+                __state = 152;
+            }
+            157 => {
+                unreachable!();
+            }
+            158 => {
+                __state = 144;
+            }
+            159 => {
+                __state = 141;
+            }
+            160 => {
+                p = 0_i32;
+                __state = 163;
+            }
+            161 => {
+                __state = 101;
+            }
+            162 => {
+                unreachable!();
+            }
+            163 => {
+                __state =
+                    if p < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) {
+                        164
+                    } else {
+                        166
+                    };
+            }
+            164 => {
+                __state = if (p != port)
+                    && (((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                        .vs()
+                        .start()
+                        .players()
+                        .get(p)
+                        .nametag() as i32)
+                        == (row.wrapping_sub(1_i32)))
+                {
+                    168
+                } else {
+                    169
+                };
+            }
+            165 => {
+                p = p.wrapping_add(1);
+                __state = 163;
+            }
+            166 => {
+                let _ = fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    (tag).text(),
+                    0_i32,
+                    fns::GetNameText(ctx, row.wrapping_sub(1_i32)),
+                    &[],
+                );
+                ((tag).text()).set_default_kerning((0_i32 as u8));
+                ((tag).text()).set_hidden((0_i32 as u8));
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get(port)
+                    .nametag() as i32)
+                    != (row.wrapping_sub(1_i32))
+                {
+                    172
+                } else {
+                    173
+                };
+            }
+            167 => {
+                unreachable!();
+            }
+            168 => {
+                __state = 138;
+            }
+            169 => {
+                __state = 165;
+            }
+            170 => {
+                unreachable!();
+            }
+            171 => {
+                __state = 169;
+            }
+            172 => {
+                match_type =
+                    (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type();
+                __state = if (match_type as i32) < 3_i32 {
+                    175
+                } else {
+                    176
+                };
+            }
+            173 => {
+                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get(port)
+                    .set_nametag((row.wrapping_sub(1_i32) as u8));
+                (tag).set_use_tag((1_i32 as u8));
+                (tag).set_state((4_i32 as u8));
+                inl_sfxMove(ctx);
+                __state = 161;
+            }
+            174 => {
+                unreachable!();
+            }
+            175 => {
+                __state = if (match_type as i32) == 0_i32 {
+                    178
+                } else {
+                    179
+                };
+            }
+            176 => {
+                __state = if (match_type as i32) < 11_i32 {
+                    185
+                } else {
+                    187
+                };
+            }
+            177 => {
+                unreachable!();
+            }
+            178 => {
+                __state = 181;
+            }
+            179 => {
+                __state = 183;
+            }
+            180 => {
+                unreachable!();
+            }
+            181 => {
+                val = 1_i32;
+                __state = 186;
+            }
+            182 => {
+                __state = 179;
+            }
+            183 => {
+                val = 0_i32;
+                __state = 186;
+            }
+            184 => {
+                __state = 176;
+            }
+            185 => {
+                __state = 181;
+            }
+            186 => {
+                __state = if val != 0_i32 { 189 } else { 190 };
+            }
+            187 => {
+                __state = 183;
+            }
+            188 => {
+                unreachable!();
+            }
+            189 => {
+                (Handle::add(
+                    (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).ko_counts(),
+                    ((tag).port() as i32),
+                ))
+                .set((0_i32 as u8));
+                __state = 190;
+            }
+            190 => {
+                __state = 173;
+            }
+            191 => {
+                unreachable!();
+            }
+            192 => {
+                (tag).set_state((4_i32 as u8));
+                inl_sfxBack(ctx);
+                return;
+            }
+            193 => {
+                __state = 21;
+            }
+            194 => {
+                unreachable!();
+            }
+            195 => {
+                __state = 193;
+            }
+            196 => {
+                __state = 19;
+            }
+            197 => {
+                hval = inl_getHandicapValue(ctx, ((tag).port() as i32));
+                hval_f = fp::frsp(hval as f64);
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    handicap_slider_jobj,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                                .doors()
+                                .get(port)
+                                .cpuslider_joint() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                anim_jobj = handicap_slider_jobj.get();
+                fns::HSD_ForeachAnim(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(anim_jobj),
+                    (enums::JOBJ_TYPE as i32),
+                    (enums::TOBJ_MASK as i32),
+                    Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036410c)),
+                    (enums::AOBJ_ARG_AF as i32),
+                    &[VarArg::Float(hval_f)],
+                );
+                fns::HSD_JObjAnimAll(ctx, handicap_slider_jobj.get());
+                fns::HSD_ForeachAnim(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(handicap_slider_jobj.get()),
+                    (enums::JOBJ_TYPE as i32),
+                    (enums::TOBJ_MASK as i32),
+                    Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036414c)),
+                    (enums::AOBJ_ARG_AOV as i32),
+                    &[VarArg::Int(0_i32 as u32), VarArg::Int(0_i32 as u32)],
+                );
+                list_jobj.set(handicap_slider_jobj.get());
+                hval = inl_getHandicapValue(ctx, ((tag).port() as i32));
+                hval_f = fp::fmuls(1.25, fp::frsp((hval.wrapping_sub(1_i32)) as f64));
+                inl_HSD_JObjSetTranslateX(ctx, list_jobj.get(), hval_f);
+                __state = 198;
+            }
+            198 => {
+                (tag).set_state((5_i32 as u8));
+                (tag).set_timer(0_i32);
+                return;
+            }
+            199 => {
+                unreachable!();
+            }
+            200 => {
+                __state = 20;
+            }
+            201 => {
+                fns::mnCharSel_8025D1C4(ctx, ((tag).port() as i32), 2_i32);
+                Handle::copy_from(white_copy, white);
+                fns::HSD_SisLib_803A74F0(ctx, (tag).text(), 0_i32, white_copy);
+                (tag).set_state((0_i32 as u8));
+                __state = 202;
+            }
+            202 => {
+                __state = 21;
+            }
+            203 => {
+                unreachable!();
+            }
+            204 => {
+                __state = 21;
+            }
+            205 => {
+                unreachable!();
+            }
+            206 => {
+                __state = 207;
+            }
+            207 => {
+                __state = if (0_i32 != 0) { 206 } else { 208 };
+            }
+            208 => {
+                return;
+            }
+            209 => {
+                unreachable!();
+            }
+            210 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn mnCharSel_80264070<'a>(ctx: &'a Ctx) {
     statics::melee__mn__mncharsel::mnCharSel_804D6CF4(ctx).set((1_i32 as i8));
 }
@@ -3258,6 +8382,3282 @@ pub fn fn_8026407C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         ctx,
         (Handle::cast::<HSD_Fog<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj))),
     );
+}
+
+pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
+    let __frame = ctx.stack_frame(0x1e8);
+    let sp108: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let unkF8: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x4);
+    let spEC: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let spE8: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
+    let spE4: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
+    let spE0: _GXColor<'a> = frame_at(ctx, &__frame, 0x28);
+    let spDC: _GXColor<'a> = frame_at(ctx, &__frame, 0x2c);
+    let hard_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
+    let spD4: _GXColor<'a> = frame_at(ctx, &__frame, 0x34);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x38);
+    let color2: _GXColor<'a> = frame_at(ctx, &__frame, 0x3c);
+    let color3: _GXColor<'a> = frame_at(ctx, &__frame, 0x40);
+    let color4: _GXColor<'a> = frame_at(ctx, &__frame, 0x44);
+    let color5: _GXColor<'a> = frame_at(ctx, &__frame, 0x48);
+    let color6: _GXColor<'a> = frame_at(ctx, &__frame, 0x4c);
+    let color7: _GXColor<'a> = frame_at(ctx, &__frame, 0x50);
+    let unkA8: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x54);
+    let spA4: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x64);
+    let unkA0: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x68);
+    let tag_name_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x6c);
+    let unk74: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x70);
+    let sp70: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x90);
+    let jobj43: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x94);
+    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x98);
+    let mut row_b: i32 = 0;
+    let mut gobj: HSD_GObj<'a> = null(ctx);
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut text: HSD_Text<'a> = null(ctx);
+    let mut v_ctx: i32 = 0;
+    let mut found: i32 = 0;
+    let mut num_players: i32 = 0;
+    let mut row_a: i32 = 0;
+    let mut color_ptr: _GXColor<'a> = null(ctx);
+    let mut color2_ptr: _GXColor<'a> = null(ctx);
+    let mut i: i32 = 0;
+    let mut slot: i32 = 0;
+    let mut icon: i32 = 0;
+    let mut match_type: u8 = 0;
+    let mut mt_p: Val<'a, u8> = null(ctx);
+    let mut cobj: HSD_CObj<'a> = null(ctx);
+    let mut lobj0: HSD_LObj<'a> = null(ctx);
+    let mut lobj1: HSD_LObj<'a> = null(ctx);
+    let mut fog: HSD_Fog<'a> = null(ctx);
+    let mut obj_kind: u8 = 0;
+    let mut anim_jobj: HSD_JObj<'a> = null(ctx);
+    let mut mt: u8 = 0;
+    let mut ck: u8 = 0;
+    let mut char_kinds: Val<'a, u8> = null(ctx);
+    let mut icon_off: i32 = 0;
+    let mut cursor_gobj: HSD_GObj<'a> = null(ctx);
+    let mut cursor: CSSCursorData<'a> = null(ctx);
+    let mut model_gobj: HSD_GObj<'a> = null(ctx);
+    let mut player: i32 = 0;
+    let mut model: CSSCharModel<'a> = null(ctx);
+    let mut anim_jobj_2: HSD_JObj<'a> = null(ctx);
+    let mut slot_type: Val<'a, u8> = null(ctx);
+    let mut td: CSSTagData<'a> = null(ctx);
+    let mut player_2: i32 = 0;
+    let mut found_2: i32 = 0;
+    let mut tag_box_joint: u8 = 0;
+    let mut anim_jobj_3: HSD_JObj<'a> = null(ctx);
+    let mut anim_jobj_4: HSD_JObj<'a> = null(ctx);
+    let mut name_joint: u8 = 0;
+    let mut anim_jobj_5: HSD_JObj<'a> = null(ctx);
+    let mut anim_jobj_6: HSD_JObj<'a> = null(ctx);
+    let mut sx: f64 = 0.0;
+    let mut sy: f64 = 0.0;
+    let mut sz: f64 = 0.0;
+    let mut sx_2: f64 = 0.0;
+    let mut sy_2: f64 = 0.0;
+    let mut sz_2: f64 = 0.0;
+    let mut mt_2: u8 = 0;
+    let mut clear: i32 = 0;
+    let mut cpu_level: u8 = 0;
+    let mut css: CSSData<'a> = null(ctx);
+    let mut hide_jobj: HSD_JObj<'a> = null(ctx);
+    let mut sx_3: f64 = 0.0;
+    let mut sy_3: f64 = 0.0;
+    let mut sz_3: f64 = 0.0;
+    let mut sx_4: f64 = 0.0;
+    let mut sy_4: f64 = 0.0;
+    let mut sz_4: f64 = 0.0;
+    let mut sx_5: f64 = 0.0;
+    let mut sy_5: f64 = 0.0;
+    let mut sz_5: f64 = 0.0;
+    let mut sx_6: f64 = 0.0;
+    let mut sy_6: f64 = 0.0;
+    let mut sz_6: f64 = 0.0;
+    let mut sx_7: f64 = 0.0;
+    let mut sy_7: f64 = 0.0;
+    let mut sz_7: f64 = 0.0;
+    let mut sx_8: f64 = 0.0;
+    let mut sy_8: f64 = 0.0;
+    let mut sz_8: f64 = 0.0;
+    let mut sx_9: f64 = 0.0;
+    let mut sy_9: f64 = 0.0;
+    let mut sz_9: f64 = 0.0;
+    let mut sx_10: f64 = 0.0;
+    let mut sy_10: f64 = 0.0;
+    let mut sz_10: f64 = 0.0;
+    let mut sx_11: f64 = 0.0;
+    let mut sy_11: f64 = 0.0;
+    let mut sz_11: f64 = 0.0;
+    let mut sx_12: f64 = 0.0;
+    let mut sy_12: f64 = 0.0;
+    let mut sz_12: f64 = 0.0;
+    let mut sx_13: f64 = 0.0;
+    let mut sy_13: f64 = 0.0;
+    let mut sz_13: f64 = 0.0;
+    let mut sx_14: f64 = 0.0;
+    let mut sy_14: f64 = 0.0;
+    let mut sz_14: f64 = 0.0;
+    let mut sx_15: f64 = 0.0;
+    let mut sy_15: f64 = 0.0;
+    let mut sz_15: f64 = 0.0;
+    let mut sx_16: f64 = 0.0;
+    let mut sy_16: f64 = 0.0;
+    let mut sz_16: f64 = 0.0;
+    let mut sx_17: f64 = 0.0;
+    let mut sy_17: f64 = 0.0;
+    let mut sz_17: f64 = 0.0;
+    let mut sx_18: f64 = 0.0;
+    let mut sy_18: f64 = 0.0;
+    let mut sz_18: f64 = 0.0;
+    let mut mt_3: u8 = 0;
+    let mut clear_2: i32 = 0;
+    let mut css_2: CSSData<'a> = null(ctx);
+    let mut rules: GameRules<'a> = null(ctx);
+    let mut hval: i32 = 0;
+    let mut slider_x: f64 = 0.0;
+    let mut cpu_level_2: Val<'a, u8> = null(ctx);
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                match_type =
+                    (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type();
+                __state = if (match_type as i32) != 0_i32 { 1 } else { 3 };
+            }
+            1 => {
+                let _ = fns::lbAudioAx_800237A8(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_803F0A48(ctx)
+                        .mode_info()
+                        .get((match_type as i32))
+                        .enter_sfx(),
+                    127_i32,
+                    64_i32,
+                );
+                __state = 2;
+            }
+            2 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CE0(ctx)
+                    .set(null::<HSD_Text<'a>>(ctx));
+                statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx)
+                    .set(null::<HSD_Text<'a>>(ctx));
+                statics::melee__mn__mncharsel::mnCharSel_804D6CE8(ctx)
+                    .set(null::<HSD_Text<'a>>(ctx));
+                statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx)
+                    .set(null::<HSD_Text<'a>>(ctx));
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF2(ctx).set((30_i32 as u8));
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF3(ctx).set((0_i32 as u8));
+                mt_p =
+                    (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type_ref();
+                __state = if ((mt_p).get() as u32) >= 11_u32 {
+                    15
+                } else {
+                    17
+                };
+            }
+            3 => {
+                __state = match ((fns::gmMainLib_GetGameRules(ctx)).mode() as i32) {
+                    0_i32 => 5,
+                    1_i32 => 6,
+                    2_i32 => 7,
+                    3_i32 => 8,
+                    _ => 9,
+                };
+            }
+            4 => {
+                unreachable!();
+            }
+            5 => {
+                let _ = fns::lbAudioAx_800237A8(ctx, 0x7535_i32, 127_i32, 64_i32);
+                __state = 9;
+            }
+            6 => {
+                let _ = fns::lbAudioAx_800237A8(ctx, 0x7538_i32, 127_i32, 64_i32);
+                __state = 9;
+            }
+            7 => {
+                let _ = fns::lbAudioAx_800237A8(ctx, 0x7537_i32, 127_i32, 64_i32);
+                __state = 9;
+            }
+            8 => {
+                let _ = fns::lbAudioAx_800237A8(ctx, 0x7536_i32, 127_i32, 64_i32);
+                __state = 9;
+            }
+            9 => {
+                __state = 2;
+            }
+            10 => {
+                unreachable!();
+            }
+            11 => {
+                __state = 6;
+            }
+            12 => {
+                __state = 7;
+            }
+            13 => {
+                __state = 8;
+            }
+            14 => {
+                __state = 9;
+            }
+            15 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).set((1_i32 as u8));
+                num_players = 1_i32;
+                __state = 16;
+            }
+            16 => {
+                __state = if ((mt_p).get() as i32) == (enums::TRAINING_MODE as i32) {
+                    19
+                } else {
+                    20
+                };
+            }
+            17 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).set((4_i32 as u8));
+                num_players = 4_i32;
+                __state = 16;
+            }
+            18 => {
+                unreachable!();
+            }
+            19 => {
+                num_players = 2_i32;
+                __state = 20;
+            }
+            20 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF6(ctx).set((0_i32 as u8));
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32)
+                    && ((statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32)
+                        < 0_i32)
+                {
+                    22
+                } else {
+                    23
+                };
+            }
+            21 => {
+                unreachable!();
+            }
+            22 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).set((0_i32 as i8));
+                __state = 23;
+            }
+            23 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32)
+                    == 0_i32
+                {
+                    25
+                } else {
+                    27
+                };
+            }
+            24 => {
+                unreachable!();
+            }
+            25 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).set((1_i32 as i8));
+                __state = 26;
+            }
+            26 => {
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CF4(ctx).get() as u8)
+                    as i32)
+                    != 0_i32
+                {
+                    29
+                } else {
+                    30
+                };
+            }
+            27 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).set((0_i32 as i8));
+                __state = 26;
+            }
+            28 => {
+                unreachable!();
+            }
+            29 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF4(ctx).set((0_i32 as i8));
+                i = 0_i32;
+                __state = 32;
+            }
+            30 => {
+                gobj = {
+                    let __t1 =
+                        fns::GObj_Create(ctx, (2_i32 as u16), (3_i32 as u8), (128_i32 as u8));
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CB8(ctx).set(__t1);
+                    __t1
+                };
+                cobj = fns::HSD_CObjLoadDesc(ctx, {
+                    let __t2 = (statics::melee__mn__mncharsel::css_data_table(ctx).get()).cam();
+                    fns::MenMain_cam(ctx).set(__t2);
+                    __t2
+                });
+                fns::HSD_GObjObject_80390A70(
+                    ctx,
+                    gobj,
+                    fns::HSD_GObj_CameraKind(ctx).get(),
+                    Handle::cast::<Addr<'a>>(cobj),
+                );
+                fns::GObj_SetupGXLinkMax(ctx, gobj, fnptr(ctx, 0x803910d8), (0_i32 as u32));
+                (gobj).set_gxlink_prios((31_i32 as u64));
+                let _ = fns::HSD_GObj_SetupProc(ctx, gobj, fnptr(ctx, 0x8022ba1c), (5_i32 as u8));
+                v_ctx = fns::HSD_SisLib_803A611C(
+                    ctx,
+                    0_i32,
+                    gobj,
+                    (7_i32 as u16),
+                    (8_i32 as u8),
+                    (128_i32 as u8),
+                    (1_i32 as u8),
+                    (128_i32 as u8),
+                    (0_i32 as u32),
+                );
+                gobj = fns::GObj_Create(ctx, (3_i32 as u16), (4_i32 as u8), (128_i32 as u8));
+                lobj0 = fns::HSD_LObjLoadDesc(
+                    ctx,
+                    (statics::melee__mn__mncharsel::css_data_table(ctx).get()).light0(),
+                );
+                lobj1 = fns::HSD_LObjLoadDesc(
+                    ctx,
+                    (statics::melee__mn__mncharsel::css_data_table(ctx).get()).light1(),
+                );
+                inl_HSD_LObjSetNext(ctx, lobj0, lobj1);
+                fns::HSD_GObjObject_80390A70(
+                    ctx,
+                    gobj,
+                    (fns::HSD_GObj_LightKind(ctx).get() as u8),
+                    Handle::cast::<Addr<'a>>(lobj0),
+                );
+                fns::GObj_SetupGXLink(
+                    ctx,
+                    gobj,
+                    fnptr(ctx, 0x80391044),
+                    (0_i32 as u8),
+                    (128_i32 as u32),
+                );
+                gobj = fns::GObj_Create(ctx, (14_i32 as u16), (2_i32 as u8), (0_i32 as u8));
+                fog = fns::HSD_FogLoadDesc(
+                    ctx,
+                    (statics::melee__mn__mncharsel::css_data_table(ctx).get()).fog(),
+                );
+                fns::HSD_GObjObject_80390A70(
+                    ctx,
+                    gobj,
+                    (fns::HSD_GObj_FogKind(ctx).get() as u8),
+                    Handle::cast::<Addr<'a>>(fog),
+                );
+                fns::GObj_SetupGXLink(
+                    ctx,
+                    gobj,
+                    fnptr(ctx, 0x8026407c),
+                    (0_i32 as u8),
+                    (128_i32 as u32),
+                );
+                gobj = fns::GObj_Create(ctx, (4_i32 as u16), (5_i32 as u8), (128_i32 as u8));
+                jobj = fns::HSD_JObjLoadJoint(
+                    ctx,
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .background()
+                        .joint(),
+                );
+                fns::HSD_JObjAddAnimAll(
+                    ctx,
+                    jobj,
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .background()
+                        .animjoint(),
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .background()
+                        .matanim_joint(),
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .background()
+                        .shapeanim_joint(),
+                );
+                fns::HSD_GObjObject_80390A70(
+                    ctx,
+                    gobj,
+                    fns::HSD_GObj_JObjKind(ctx).get(),
+                    Handle::cast::<Addr<'a>>(jobj),
+                );
+                fns::GObj_SetupGXLink(
+                    ctx,
+                    gobj,
+                    fnptr(ctx, 0x80391070),
+                    (1_i32 as u8),
+                    (128_i32 as u32),
+                );
+                let _ = fns::HSD_GObj_SetupProc(ctx, gobj, fnptr(ctx, 0x80263354), (4_i32 as u8));
+                fns::HSD_JObjReqAnimAll(ctx, jobj, 0.0);
+                fns::HSD_JObjAnimAll(ctx, jobj);
+                statics::melee__mn__mncharsel::mnCharSel_804D6CBC(ctx).set(fns::GObj_Create(
+                    ctx,
+                    (4_i32 as u16),
+                    (5_i32 as u8),
+                    (128_i32 as u8),
+                ));
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    37
+                } else {
+                    39
+                };
+            }
+            31 => {
+                unreachable!();
+            }
+            32 => {
+                __state = if i < num_players { 33 } else { 35 };
+            }
+            33 => {
+                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get(i)
+                    .set_handicap((9_i32 as i8));
+                __state = 34;
+            }
+            34 => {
+                i = i.wrapping_add(1);
+                __state = 32;
+            }
+            35 => {
+                __state = 30;
+            }
+            36 => {
+                unreachable!();
+            }
+            37 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).set(fns::HSD_JObjLoadJoint(
+                    ctx,
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .regend_menu()
+                        .joint(),
+                ));
+                fns::HSD_JObjAddAnimAll(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .regend_menu()
+                        .animjoint(),
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .regend_menu()
+                        .matanim_joint(),
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .regend_menu()
+                        .shapeanim_joint(),
+                );
+                __state = 38;
+            }
+            38 => {
+                obj_kind = fns::HSD_GObj_JObjKind(ctx).get();
+                fns::HSD_GObjObject_80390A70(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CBC(ctx).get(),
+                    obj_kind,
+                    Handle::cast::<Addr<'a>>(
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    ),
+                );
+                fns::GObj_SetupGXLink(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CBC(ctx).get(),
+                    fnptr(ctx, 0x80391070),
+                    (1_i32 as u8),
+                    (128_i32 as u32),
+                );
+                let _ = fns::HSD_GObj_SetupProc(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CBC(ctx).get(),
+                    fnptr(ctx, 0x8025f0e0),
+                    (4_i32 as u8),
+                );
+                fns::HSD_JObjReqAnimAll(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    0.0,
+                );
+                fns::HSD_JObjAnimAll(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                );
+                fns::HSD_ForeachAnim(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    ),
+                    (enums::JOBJ_TYPE as i32),
+                    (enums::ALL_TYPE_MASK as i32),
+                    Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036414c)),
+                    (enums::AOBJ_ARG_AOV as i32),
+                    &[VarArg::Int(0_i32 as u32), VarArg::Int(0_i32 as u32)],
+                );
+                __state =
+                    if fns::gm_IsCKindUnlocked(ctx, ((enums::CKind_Luigi as i32) as u8)) == 0_i32 {
+                        41
+                    } else {
+                        43
+                    };
+            }
+            39 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).set(fns::HSD_JObjLoadJoint(
+                    ctx,
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .menu()
+                        .joint(),
+                ));
+                fns::HSD_JObjAddAnimAll(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .menu()
+                        .animjoint(),
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .menu()
+                        .matanim_joint(),
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .menu()
+                        .shapeanim_joint(),
+                );
+                __state = 38;
+            }
+            40 => {
+                unreachable!();
+            }
+            41 => {
+                row_a = 2_i32;
+                row_b = 19_i32;
+                __state = 42;
+            }
+            42 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    45
+                } else {
+                    47
+                };
+            }
+            43 => {
+                row_a = 19_i32;
+                row_b = 2_i32;
+                __state = 42;
+            }
+            44 => {
+                unreachable!();
+            }
+            45 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::icons(ctx)
+                                .get(row_a)
+                                .joint_id_1p() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = 46;
+            }
+            46 => {
+                inl_HSD_JObjSetTranslateY(ctx, sp108.get(), 5.800000190734863);
+                statics::melee__mn__mncharsel::icons(ctx)
+                    .get(row_a)
+                    .set_bound_u(6.0);
+                statics::melee__mn__mncharsel::icons(ctx)
+                    .get(row_a)
+                    .set_bound_d((fp::fneg(1.0)));
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    49
+                } else {
+                    51
+                };
+            }
+            47 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::icons(ctx)
+                                .get(row_a)
+                                .joint_id_vs() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = 46;
+            }
+            48 => {
+                unreachable!();
+            }
+            49 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::icons(ctx)
+                                .get(row_b)
+                                .joint_id_1p() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = 50;
+            }
+            50 => {
+                inl_HSD_JObjSetTranslateY(ctx, sp108.get(), 20.200000762939453);
+                statics::melee__mn__mncharsel::icons(ctx)
+                    .get(row_b)
+                    .set_bound_u(20.0);
+                statics::melee__mn__mncharsel::icons(ctx)
+                    .get(row_b)
+                    .set_bound_d(13.0);
+                icon = 0_i32;
+                __state = 53;
+            }
+            51 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::icons(ctx)
+                                .get(row_b)
+                                .joint_id_vs() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = 50;
+            }
+            52 => {
+                unreachable!();
+            }
+            53 => {
+                __state = if icon < 25_i32 { 54 } else { 56 };
+            }
+            54 => {
+                statics::melee__mn__mncharsel::icons(ctx)
+                    .get(icon)
+                    .set_state(
+                        (fns::gm_IsCKindUnlocked(
+                            ctx,
+                            statics::melee__mn__mncharsel::icons(ctx)
+                                .get(icon)
+                                .char_kind(),
+                        ) as u8),
+                    );
+                statics::melee__mn__mncharsel::icons(ctx)
+                    .get(icon)
+                    .set_anim_timer((0_i32 as u8));
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    58
+                } else {
+                    60
+                };
+            }
+            55 => {
+                icon = icon.wrapping_add(1);
+                __state = 53;
+            }
+            56 => {
+                mt = (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type();
+                __state = if ((mt as u32) >= 15_u32) && ((mt as u32) <= 22_u32) {
+                    76
+                } else {
+                    77
+                };
+            }
+            57 => {
+                unreachable!();
+            }
+            58 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::icons(ctx)
+                                .get(icon)
+                                .joint_id_1p() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = 59;
+            }
+            59 => {
+                __state = match icon {
+                    0_i32 => 62,
+                    8_i32 => 62,
+                    9_i32 => 62,
+                    17_i32 => 62,
+                    18_i32 => 62,
+                    24_i32 => 62,
+                    _ => 63,
+                };
+            }
+            60 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::icons(ctx)
+                                .get(icon)
+                                .joint_id_vs() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = 59;
+            }
+            61 => {
+                unreachable!();
+            }
+            62 => {
+                __state = if (statics::melee__mn__mncharsel::icons(ctx).get(icon).state() as i32)
+                    == 0_i32
+                {
+                    66
+                } else {
+                    68
+                };
+            }
+            63 => {
+                __state = if (statics::melee__mn__mncharsel::icons(ctx).get(icon).state() as i32)
+                    == 0_i32
+                {
+                    71
+                } else {
+                    73
+                };
+            }
+            64 => {
+                __state = 55;
+            }
+            65 => {
+                unreachable!();
+            }
+            66 => {
+                fns::HSD_JObjSetFlags(ctx, sp108.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
+                __state = 67;
+            }
+            67 => {
+                __state = 64;
+            }
+            68 => {
+                sp108.set(inl_HSD_JObjGetParent(ctx, sp108.get()));
+                statics::melee__mn__mncharsel::icons(ctx)
+                    .get(icon)
+                    .set_state((2_i32 as u8));
+                anim_jobj = sp108.get();
+                fns::HSD_ForeachAnim(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(anim_jobj),
+                    (enums::JOBJ_TYPE as i32),
+                    (enums::ALL_TYPE_MASK as i32),
+                    Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036410c)),
+                    (enums::AOBJ_ARG_AF as i32),
+                    &[VarArg::Float(20.0)],
+                );
+                fns::HSD_JObjAnimAll(ctx, sp108.get());
+                __state = 67;
+            }
+            69 => {
+                unreachable!();
+            }
+            70 => {
+                __state = 63;
+            }
+            71 => {
+                fns::HSD_ForeachAnim(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(sp108.get()),
+                    (enums::JOBJ_TYPE as i32),
+                    (enums::ALL_TYPE_MASK as i32),
+                    Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036410c)),
+                    (enums::AOBJ_ARG_AF as i32),
+                    &[VarArg::Float(30.0)],
+                );
+                fns::HSD_JObjAnimAll(ctx, sp108.get());
+                __state = 72;
+            }
+            72 => {
+                __state = 64;
+            }
+            73 => {
+                statics::melee__mn__mncharsel::icons(ctx)
+                    .get(icon)
+                    .set_state((2_i32 as u8));
+                __state = 72;
+            }
+            74 => {
+                unreachable!();
+            }
+            75 => {
+                __state = 64;
+            }
+            76 => {
+                gobj = fns::GObj_Create(ctx, (4_i32 as u16), (5_i32 as u8), (128_i32 as u8));
+                statics::melee__mn__mncharsel::mnCharSel_804D6CC8(ctx).set(fns::HSD_JObjLoadJoint(
+                    ctx,
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .regend_options()
+                        .joint(),
+                ));
+                fns::HSD_GObjObject_80390A70(
+                    ctx,
+                    gobj,
+                    fns::HSD_GObj_JObjKind(ctx).get(),
+                    Handle::cast::<Addr<'a>>(
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CC8(ctx).get(),
+                    ),
+                );
+                fns::GObj_SetupGXLink(
+                    ctx,
+                    gobj,
+                    fnptr(ctx, 0x80391070),
+                    (1_i32 as u8),
+                    (128_i32 as u32),
+                );
+                let _ = fns::HSD_GObj_SetupProc(ctx, gobj, fnptr(ctx, 0x8025fb2c), (4_i32 as u8));
+                fns::HSD_JObjAddAnimAll(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC8(ctx).get(),
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .regend_options()
+                        .animjoint(),
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .regend_options()
+                        .matanim_joint(),
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .regend_options()
+                        .shapeanim_joint(),
+                );
+                fns::HSD_JObjReqAnimAll(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC8(ctx).get(),
+                    0.0,
+                );
+                fns::HSD_ForeachAnim(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CC8(ctx).get(),
+                    ),
+                    (enums::JOBJ_TYPE as i32),
+                    (enums::ALL_TYPE_MASK as i32),
+                    Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036414c)),
+                    (enums::AOBJ_ARG_AOV as i32),
+                    &[VarArg::Int(0_i32 as u32), VarArg::Int(0_i32 as u32)],
+                );
+                __state = 77;
+            }
+            77 => {
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .match_type() as i32)
+                    == 23_i32
+                {
+                    79
+                } else {
+                    80
+                };
+            }
+            78 => {
+                unreachable!();
+            }
+            79 => {
+                gobj = fns::GObj_Create(ctx, (4_i32 as u16), (5_i32 as u8), (128_i32 as u8));
+                statics::melee__mn__mncharsel::mnCharSel_804D6CC4(ctx).set(fns::HSD_JObjLoadJoint(
+                    ctx,
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .door()
+                        .joint(),
+                ));
+                fns::HSD_GObjObject_80390A70(
+                    ctx,
+                    gobj,
+                    fns::HSD_GObj_JObjKind(ctx).get(),
+                    Handle::cast::<Addr<'a>>(
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CC4(ctx).get(),
+                    ),
+                );
+                fns::GObj_SetupGXLink(
+                    ctx,
+                    gobj,
+                    fnptr(ctx, 0x80391070),
+                    (1_i32 as u8),
+                    (128_i32 as u32),
+                );
+                let _ = fns::HSD_GObj_SetupProc(ctx, gobj, fnptr(ctx, 0x8025fb2c), (4_i32 as u8));
+                fns::HSD_JObjAddAnimAll(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC4(ctx).get(),
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .door()
+                        .animjoint(),
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .door()
+                        .matanim_joint(),
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .door()
+                        .shapeanim_joint(),
+                );
+                fns::HSD_JObjReqAnimAll(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC4(ctx).get(),
+                    0.0,
+                );
+                fns::HSD_ForeachAnim(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CC4(ctx).get(),
+                    ),
+                    (enums::JOBJ_TYPE as i32),
+                    (enums::ALL_TYPE_MASK as i32),
+                    Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036414c)),
+                    (enums::AOBJ_ARG_AOV as i32),
+                    &[VarArg::Int(0_i32 as u32), VarArg::Int(0_i32 as u32)],
+                );
+                ck = ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get((statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).get() as i32))
+                    .ckind() as u8);
+                __state = if (((ck as i8) as i32) >= (enums::CKind_Playable_Count as i32))
+                    || (fns::gm_IsCKindUnlocked(ctx, ck) == 0_i32)
+                {
+                    82
+                } else {
+                    83
+                };
+            }
+            80 => {
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .match_type() as i32)
+                    == 1_i32
+                {
+                    90
+                } else {
+                    91
+                };
+            }
+            81 => {
+                unreachable!();
+            }
+            82 => {
+                __state = 86;
+            }
+            83 => {
+                __state = 80;
+            }
+            84 => {
+                unreachable!();
+            }
+            85 => {
+                unreachable!();
+            }
+            86 => {
+                i = fns::HSD_Randi(ctx, 25_i32);
+                __state = 87;
+            }
+            87 => {
+                __state =
+                    if (statics::melee__mn__mncharsel::icons(ctx).get(i).state() as i32) == 0_i32 {
+                        86
+                    } else {
+                        88
+                    };
+            }
+            88 => {
+                char_kinds = statics::melee__mn__mncharsel::icons(ctx)
+                    .get(0_i32)
+                    .char_kind_ref();
+                icon_off = inl_getIconOffset(ctx, (i as u32));
+                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get((statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).get() as i32))
+                    .set_ckind(((Handle::add(char_kinds, icon_off)).get() as i8));
+                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get((statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).get() as i32))
+                    .set_color(
+                        (fns::HSD_Randi(
+                            ctx,
+                            (fns::gm_GetNumCostumesForCKind(
+                                ctx,
+                                (Handle::add(char_kinds, icon_off)).get(),
+                            ) as i32),
+                        ) as u8),
+                    );
+                __state = 83;
+            }
+            89 => {
+                unreachable!();
+            }
+            90 => {
+                gobj = fns::GObj_Create(ctx, (4_i32 as u16), (5_i32 as u8), (128_i32 as u8));
+                statics::melee__mn__mncharsel::mnCharSel_804D6CCC(ctx).set(fns::HSD_JObjLoadJoint(
+                    ctx,
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .debug_camera()
+                        .joint(),
+                ));
+                fns::HSD_GObjObject_80390A70(
+                    ctx,
+                    gobj,
+                    fns::HSD_GObj_JObjKind(ctx).get(),
+                    Handle::cast::<Addr<'a>>(
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CCC(ctx).get(),
+                    ),
+                );
+                fns::GObj_SetupGXLink(
+                    ctx,
+                    gobj,
+                    fnptr(ctx, 0x80391070),
+                    (4_i32 as u8),
+                    (128_i32 as u32),
+                );
+                let _ = fns::HSD_GObj_SetupProc(ctx, gobj, fnptr(ctx, 0x8025fac0), (4_i32 as u8));
+                fns::HSD_JObjAddAnimAll(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CCC(ctx).get(),
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .debug_camera()
+                        .animjoint(),
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .debug_camera()
+                        .matanim_joint(),
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .debug_camera()
+                        .shapeanim_joint(),
+                );
+                fns::HSD_JObjReqAnimAll(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CCC(ctx).get(),
+                    0.0,
+                );
+                __state = 91;
+            }
+            91 => {
+                i = (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    .wrapping_sub(1_i32);
+                __state = 93;
+            }
+            92 => {
+                unreachable!();
+            }
+            93 => {
+                __state = if i >= 0_i32 { 94 } else { 96 };
+            }
+            94 => {
+                cursor_gobj = fns::GObj_Create(ctx, (4_i32 as u16), (5_i32 as u8), (128_i32 as u8));
+                jobj = fns::HSD_JObjLoadJoint(
+                    ctx,
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .hand()
+                        .joint(),
+                );
+                cursor = Handle::cast::<CSSCursorData<'a>>(fns::HSD_MemAlloc(ctx, (20_u32 as i32)));
+                fns::HSD_GObjObject_80390A70(
+                    ctx,
+                    cursor_gobj,
+                    fns::HSD_GObj_JObjKind(ctx).get(),
+                    Handle::cast::<Addr<'a>>(jobj),
+                );
+                fns::GObj_SetupGXLink(
+                    ctx,
+                    cursor_gobj,
+                    fnptr(ctx, 0x80391070),
+                    (3_i32 as u8),
+                    (128_i32 as u32),
+                );
+                let _ = fns::HSD_GObj_SetupProc(
+                    ctx,
+                    cursor_gobj,
+                    fnptr(ctx, 0x802602a0),
+                    (1_i32 as u8),
+                );
+                fns::GObj_InitUserData(
+                    ctx,
+                    cursor_gobj,
+                    (4_i32 as u8),
+                    fnptr(ctx, 0x8037f1b0),
+                    Handle::cast::<Addr<'a>>(cursor),
+                );
+                fns::HSD_JObjAddAnimAll(
+                    ctx,
+                    jobj,
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .hand()
+                        .animjoint(),
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .hand()
+                        .matanim_joint(),
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .hand()
+                        .shapeanim_joint(),
+                );
+                fns::HSD_JObjReqAnimAll(ctx, jobj, 0.0);
+                fns::HSD_JObjAnimAll(ctx, jobj);
+                fns::HSD_ForeachAnim(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(jobj),
+                    (enums::JOBJ_TYPE as i32),
+                    (enums::ALL_TYPE_MASK as i32),
+                    Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036414c)),
+                    (enums::AOBJ_ARG_AOV as i32),
+                    &[VarArg::Int(0_i32 as u32), VarArg::Int(0_i32 as u32)],
+                );
+                statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)
+                    .at(i)
+                    .set(cursor);
+                (cursor).set_gobj(cursor_gobj);
+                (cursor).set_x4((i as u8));
+                (cursor).set_x8((0_i32 as u16));
+                (cursor).set_xA((0_i32 as u16));
+                (cursor).set_x7((0_i32 as u8));
+                (cursor).set_x6((0_i32 as u8));
+                (cursor).set_x5((2_i32 as u8));
+                (cursor).set_xC((fp::fmsubs(15.0, fp::frsp(i as f64), 31.0)));
+                (cursor).set_x10(fp::fneg(21.5));
+                __state = 95;
+            }
+            95 => {
+                i = i.wrapping_sub(1);
+                __state = 93;
+            }
+            96 => {
+                i = 0_i32;
+                slot = 0_i32;
+                __state = 98;
+            }
+            97 => {
+                unreachable!();
+            }
+            98 => {
+                __state = if i < num_players { 99 } else { 101 };
+            }
+            99 => {
+                model_gobj = fns::GObj_Create(ctx, (4_i32 as u16), (5_i32 as u8), (128_i32 as u8));
+                jobj = fns::HSD_JObjLoadJoint(
+                    ctx,
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .token()
+                        .joint(),
+                );
+                model = Handle::cast::<CSSCharModel<'a>>(fns::HSD_MemAlloc(ctx, (24_u32 as i32)));
+                fns::HSD_GObjObject_80390A70(
+                    ctx,
+                    model_gobj,
+                    fns::HSD_GObj_JObjKind(ctx).get(),
+                    Handle::cast::<Addr<'a>>(jobj),
+                );
+                fns::GObj_InitUserData(
+                    ctx,
+                    model_gobj,
+                    (4_i32 as u8),
+                    fnptr(ctx, 0x8037f1b0),
+                    Handle::cast::<Addr<'a>>(model),
+                );
+                fns::GObj_SetupGXLink(
+                    ctx,
+                    model_gobj,
+                    fnptr(ctx, 0x80391070),
+                    (2_i32 as u8),
+                    (128_i32 as u32),
+                );
+                let _ =
+                    fns::HSD_GObj_SetupProc(ctx, model_gobj, fnptr(ctx, 0x80262648), (2_i32 as u8));
+                fns::HSD_JObjAddAnimAll(
+                    ctx,
+                    jobj,
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .token()
+                        .animjoint(),
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .token()
+                        .matanim_joint(),
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .token()
+                        .shapeanim_joint(),
+                );
+                fns::HSD_JObjReqAnimAll(ctx, jobj, 0.0);
+                anim_jobj_2 = jobj;
+                fns::HSD_ForeachAnim(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(anim_jobj_2),
+                    (enums::JOBJ_TYPE as i32),
+                    (enums::TOBJ_MASK as i32),
+                    Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036414c)),
+                    (enums::AOBJ_ARG_AOV as i32),
+                    &[VarArg::Int(0_i32 as u32), VarArg::Int(0_i32 as u32)],
+                );
+                statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
+                    .at(slot)
+                    .set(model);
+                (model).set_gobj(model_gobj);
+                (model).set_x4((i as u8));
+                (model).set_x5((0_i32 as u8));
+                (model).set_x6((255_i32 as u8));
+                (model).set_x7((0_i32 as u8));
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    103
+                } else {
+                    105
+                };
+            }
+            100 => {
+                i = i.wrapping_add(1);
+                slot = slot.wrapping_add(1);
+                __state = 98;
+            }
+            101 => {
+                Handle::copy_from(spE8, statics::melee__mn__mncharsel::mnCharSel_804DC580(ctx));
+                i = 0_i32;
+                __state = 126;
+            }
+            102 => {
+                unreachable!();
+            }
+            103 => {
+                __state = if i != 0_i32 { 107 } else { 109 };
+            }
+            104 => {
+                found = 0_i32;
+                __state = 111;
+            }
+            105 => {
+                player = i;
+                __state = 104;
+            }
+            106 => {
+                unreachable!();
+            }
+            107 => {
+                player = (statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).get() as i32);
+                __state = 108;
+            }
+            108 => {
+                __state = 104;
+            }
+            109 => {
+                player = (statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32);
+                __state = 108;
+            }
+            110 => {
+                unreachable!();
+            }
+            111 => {
+                __state = if found < 25_i32 { 112 } else { 114 };
+            }
+            112 => {
+                __state = if (((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get(player)
+                    .ckind() as i32)
+                    == (statics::melee__mn__mncharsel::icons(ctx)
+                        .get(found)
+                        .char_kind() as i32))
+                    && (fns::gm_IsCKindUnlocked(
+                        ctx,
+                        ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                            .vs()
+                            .start()
+                            .players()
+                            .get(player)
+                            .ckind() as u8),
+                    ) != 0_i32)
+                {
+                    116
+                } else {
+                    117
+                };
+            }
+            113 => {
+                found = found.wrapping_add(1);
+                __state = 111;
+            }
+            114 => {
+                __state = if found >= 25_i32 { 120 } else { 121 };
+            }
+            115 => {
+                unreachable!();
+            }
+            116 => {
+                __state = 114;
+            }
+            117 => {
+                __state = 113;
+            }
+            118 => {
+                unreachable!();
+            }
+            119 => {
+                __state = 117;
+            }
+            120 => {
+                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get(player)
+                    .set_ckind(((enums::CKind_Playable_Count as i32) as i8));
+                slot_type = (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get(player)
+                    .slot_type_ref();
+                __state = if ((slot_type).get() as i32) == 1_i32 {
+                    123
+                } else {
+                    124
+                };
+            }
+            121 => {
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(slot)
+                    .set_sel_icon((found as u8));
+                (model).set_x8({
+                    let __t3 = fp::fadds(
+                        3.4000000953674316,
+                        statics::melee__mn__mncharsel::icons(ctx)
+                            .get(found)
+                            .bound_l(),
+                    );
+                    (model).set_x10(__t3);
+                    __t3
+                });
+                (model).set_xC({
+                    let __t4 = fp::fadds(
+                        fp::fneg(3.0),
+                        statics::melee__mn__mncharsel::icons(ctx)
+                            .get(found)
+                            .bound_u(),
+                    );
+                    (model).set_x14(__t4);
+                    __t4
+                });
+                __state = 100;
+            }
+            122 => {
+                unreachable!();
+            }
+            123 => {
+                (slot_type).set((3_i32 as u8));
+                __state = 124;
+            }
+            124 => {
+                __state = 121;
+            }
+            125 => {
+                unreachable!();
+            }
+            126 => {
+                __state = if i < num_players { 127 } else { 129 };
+            }
+            127 => {
+                gobj = fns::GObj_Create(ctx, (4_i32 as u16), (5_i32 as u8), (128_i32 as u8));
+                td = Handle::cast::<CSSTagData<'a>>(fns::HSD_MemAlloc(ctx, (28_u32 as i32)));
+                statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                    .get(i)
+                    .set_data(td);
+                fns::GObj_InitUserData(
+                    ctx,
+                    gobj,
+                    (4_i32 as u8),
+                    fnptr(ctx, 0x8037f1b0),
+                    Handle::cast::<Addr<'a>>(td),
+                );
+                let _ = fns::HSD_GObj_SetupProc(ctx, gobj, fnptr(ctx, 0x802633b0), (4_i32 as u8));
+                (td).set_use_tag((0_i32 as u8));
+                (td).set_timer(0_i32);
+                (td).set_state((0_i32 as u8));
+                (td).set_x8(0.0);
+                (td).set_scroll_amt(0.0);
+                (td).set_scroll_force(0.0);
+                (td).set_port((i as u8));
+                (td).set_text(fns::HSD_SisLib_803A6754(ctx, 0_i32, v_ctx));
+                ((td).text()).set_x4C((1_i32 as u8));
+                ((td).text()).set_default_fitting((1_i32 as u8));
+                ((td).text()).set_default_alignment((1_i32 as u8));
+                text = (td).text();
+                (text).font_size().set_x(0.057999998331069946);
+                (text).font_size().set_y(0.054999999701976776);
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    131
+                } else {
+                    133
+                };
+            }
+            128 => {
+                i = i.wrapping_add(1);
+                __state = 126;
+            }
+            129 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    195
+                } else {
+                    197
+                };
+            }
+            130 => {
+                unreachable!();
+            }
+            131 => {
+                __state = if i != 0_i32 { 135 } else { 137 };
+            }
+            132 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    139
+                } else {
+                    141
+                };
+            }
+            133 => {
+                name_joint = statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                    .get(i)
+                    .name_jointl();
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    tag_name_jobj,
+                    &[
+                        VarArg::Int((name_joint as i32) as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                anim_jobj_5 = tag_name_jobj.get();
+                fns::HSD_ForeachAnim(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(anim_jobj_5),
+                    (enums::JOBJ_TYPE as i32),
+                    (enums::JOBJ_MASK as i32),
+                    Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036410c)),
+                    (enums::AOBJ_ARG_AF as i32),
+                    &[VarArg::Float(2.0)],
+                );
+                fns::HSD_JObjAnimAll(ctx, tag_name_jobj.get());
+                anim_jobj_6 = tag_name_jobj.get();
+                fns::HSD_ForeachAnim(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(anim_jobj_6),
+                    (enums::JOBJ_TYPE as i32),
+                    (enums::JOBJ_MASK as i32),
+                    Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036414c)),
+                    (enums::AOBJ_ARG_AOV as i32),
+                    &[VarArg::Int(0_i32 as u32), VarArg::Int(0_i32 as u32)],
+                );
+                sp108.set(tag_name_jobj.get());
+                fns::lb_8000B1CC(ctx, sp108.get(), null::<Vec<'a>>(ctx), spEC);
+                sx = fp::fadds(0.5, spEC.x());
+                sy = fp::fsubs(fp::fneg(0.4000000059604645), spEC.y());
+                sz = spEC.z();
+                text = (td).text();
+                (text).set_pos_x(sx);
+                (text).set_pos_y(sy);
+                (text).set_pos_z(sz);
+                text = (td).text();
+                (text).set_box_size_x(160.0);
+                (text).set_box_size_y(32.0);
+                let _ = fns::HSD_SisLib_803A6B98(
+                    ctx,
+                    (td).text(),
+                    80.0,
+                    0.0,
+                    cstr(ctx, 0x803f1018),
+                    &[],
+                );
+                __state = 132;
+            }
+            134 => {
+                unreachable!();
+            }
+            135 => {
+                text = (td).text();
+                (text).set_pos_x(15.600000381469727);
+                (text).set_pos_y(20.200000762939453);
+                (text).set_pos_z(0.0);
+                __state = 136;
+            }
+            136 => {
+                text = (td).text();
+                (text).set_box_size_x(200.0);
+                (text).set_box_size_y(32.0);
+                let _ = fns::HSD_SisLib_803A6B98(
+                    ctx,
+                    (td).text(),
+                    100.0,
+                    0.0,
+                    cstr(ctx, 0x803f1018),
+                    &[],
+                );
+                __state = 132;
+            }
+            137 => {
+                tag_box_joint =
+                    statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).tag_box_joint();
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    spA4,
+                    &[
+                        VarArg::Int((tag_box_joint as i32) as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                anim_jobj_3 = spA4.get();
+                fns::HSD_ForeachAnim(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(anim_jobj_3),
+                    (enums::JOBJ_TYPE as i32),
+                    (enums::JOBJ_MASK as i32),
+                    Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036410c)),
+                    (enums::AOBJ_ARG_AF as i32),
+                    &[VarArg::Float(2.0)],
+                );
+                fns::HSD_JObjAnimAll(ctx, spA4.get());
+                anim_jobj_4 = spA4.get();
+                fns::HSD_ForeachAnim(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(anim_jobj_4),
+                    (enums::JOBJ_TYPE as i32),
+                    (enums::JOBJ_MASK as i32),
+                    Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036414c)),
+                    (enums::AOBJ_ARG_AOV as i32),
+                    &[VarArg::Int(0_i32 as u32), VarArg::Int(0_i32 as u32)],
+                );
+                sp108.set(spA4.get());
+                fns::lb_8000B1CC(ctx, sp108.get(), null::<Vec<'a>>(ctx), spEC);
+                text = (td).text();
+                (text).set_pos_x(fp::fsubs(spEC.x(), 0.10000000149011612));
+                (text).set_pos_y(20.200000762939453);
+                (text).set_pos_z(0.0);
+                __state = 136;
+            }
+            138 => {
+                unreachable!();
+            }
+            139 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx)
+                                .name_list_joint() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = 140;
+            }
+            140 => {
+                fns::lb_8000B1CC(ctx, sp108.get(), null::<Vec<'a>>(ctx), spEC);
+                (td).set_name_ls(fns::HSD_SisLib_803A6754(ctx, 0_i32, v_ctx));
+                ((td).name_ls()).set_default_fitting((1_i32 as u8));
+                text = (td).name_ls();
+                (text).set_box_size_x(154.0);
+                (text).set_box_size_y(256.0);
+                sy_2 = fp::fsubs((fp::fsubs(0.800000011920929, spEC.y())), 1.0);
+                sx_2 = fp::fsubs(spEC.x(), 0.6000000238418579);
+                sz_2 = spEC.z();
+                text = (td).name_ls();
+                (text).set_pos_x(sx_2);
+                (text).set_pos_y(sy_2);
+                (text).set_pos_z(sz_2);
+                text = (td).name_ls();
+                (text).font_size().set_x(0.06499999761581421);
+                (text).font_size().set_y(0.06499999761581421);
+                ((td).name_ls()).set_x4E((1_i32 as u8));
+                ((td).name_ls()).set_hidden((1_i32 as u8));
+                let _ = fns::HSD_SisLib_803A6B98(
+                    ctx,
+                    (td).name_ls(),
+                    0.0,
+                    0.0,
+                    cstr(ctx, 0x803f1024),
+                    &[],
+                );
+                color_ptr = color;
+                Handle::copy_from((color_ptr), spE8);
+                fns::HSD_SisLib_803A74F0(ctx, (td).name_ls(), 0_i32, color_ptr);
+                let _ = fns::HSD_SisLib_803A6B98(
+                    ctx,
+                    (td).name_ls(),
+                    0.0,
+                    0.0,
+                    cstr(ctx, 0x803f103c),
+                    &[],
+                );
+                color2_ptr = color2;
+                Handle::copy_from((color2_ptr), spE8);
+                fns::HSD_SisLib_803A74F0(ctx, (td).name_ls(), 1_i32, color2_ptr);
+                found_2 = 0_i32;
+                __state = 146;
+            }
+            141 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                                .get(i)
+                                .list_joint() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = if i == 3_i32 { 143 } else { 144 };
+            }
+            142 => {
+                unreachable!();
+            }
+            143 => {
+                inl_HSD_JObjSetTranslateX(ctx, sp108.get(), 16.700000762939453);
+                __state = 144;
+            }
+            144 => {
+                __state = 140;
+            }
+            145 => {
+                unreachable!();
+            }
+            146 => {
+                __state = if found_2 < 9_i32 { 147 } else { 149 };
+            }
+            147 => {
+                let _ = fns::HSD_SisLib_803A6B98(
+                    ctx,
+                    (td).name_ls(),
+                    10.0,
+                    0.0,
+                    cstr(ctx, 0x803f1018),
+                    &[],
+                );
+                __state = 148;
+            }
+            148 => {
+                found_2 = found_2.wrapping_add(1);
+                __state = 146;
+            }
+            149 => {
+                found_2 = 0_i32;
+                __state = 151;
+            }
+            150 => {
+                unreachable!();
+            }
+            151 => {
+                __state = if found_2 < 120_i32 { 152 } else { 154 };
+            }
+            152 => {
+                __state = if Handle::is_null(fns::GetNameText(ctx, ((found_2 as u8) as i32))) {
+                    156
+                } else {
+                    157
+                };
+            }
+            153 => {
+                found_2 = found_2.wrapping_add(1);
+                __state = 151;
+            }
+            154 => {
+                (td).set_next_tag(((found_2.wrapping_add(1_i32)) as u8));
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                                .get(i)
+                                .x7() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::HSD_JObjSetFlags(ctx, sp108.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                                .get(i)
+                                .kostar_text_joint() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = if ((td).next_tag() as u32) > 7_u32 {
+                    160
+                } else {
+                    162
+                };
+            }
+            155 => {
+                unreachable!();
+            }
+            156 => {
+                __state = 154;
+            }
+            157 => {
+                __state = 153;
+            }
+            158 => {
+                unreachable!();
+            }
+            159 => {
+                __state = 157;
+            }
+            160 => {
+                fns::HSD_JObjClearFlags(
+                    ctx,
+                    sp108.get(),
+                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                );
+                __state = 161;
+            }
+            161 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    164
+                } else {
+                    166
+                };
+            }
+            162 => {
+                fns::HSD_JObjSetFlags(ctx, sp108.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
+                __state = 161;
+            }
+            163 => {
+                unreachable!();
+            }
+            164 => {
+                __state = if i != 0_i32 { 168 } else { 170 };
+            }
+            165 => {
+                __state = if (player_2
+                    == (statics::melee__mn__mncharsel::mnCharSel_804D6CF9(ctx).get() as i32))
+                    && ((statics::melee__mn__mncharsel::mnCharSel_804D6CF8(ctx).get() as i32)
+                        < ((td).next_tag() as i32))
+                {
+                    172
+                } else {
+                    173
+                };
+            }
+            166 => {
+                player_2 = i;
+                __state = 165;
+            }
+            167 => {
+                unreachable!();
+            }
+            168 => {
+                player_2 = (statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).get() as i32);
+                __state = 169;
+            }
+            169 => {
+                __state = 165;
+            }
+            170 => {
+                player_2 = (statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32);
+                __state = 169;
+            }
+            171 => {
+                unreachable!();
+            }
+            172 => {
+                mt_2 = (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type();
+                __state = if (mt_2 as i32) < 3_i32 { 175 } else { 176 };
+            }
+            173 => {
+                __state = if ((Handle::add(
+                    (Handle::cast::<Val<'a, u8>>(
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get(),
+                    )),
+                    ((122_i32 as u32).wrapping_add((player_2 as u32).wrapping_mul(36_u32)) as i32),
+                ))
+                .get() as i32)
+                    != 120_i32
+                {
+                    192
+                } else {
+                    193
+                };
+            }
+            174 => {
+                unreachable!();
+            }
+            175 => {
+                __state = if (mt_2 as i32) == 0_i32 { 178 } else { 179 };
+            }
+            176 => {
+                __state = if (mt_2 as i32) < 11_i32 { 185 } else { 187 };
+            }
+            177 => {
+                unreachable!();
+            }
+            178 => {
+                __state = 181;
+            }
+            179 => {
+                __state = 183;
+            }
+            180 => {
+                unreachable!();
+            }
+            181 => {
+                clear = 1_i32;
+                __state = 186;
+            }
+            182 => {
+                __state = 179;
+            }
+            183 => {
+                clear = 0_i32;
+                __state = 186;
+            }
+            184 => {
+                __state = 176;
+            }
+            185 => {
+                __state = 181;
+            }
+            186 => {
+                __state = if clear != 0_i32 { 189 } else { 190 };
+            }
+            187 => {
+                __state = 183;
+            }
+            188 => {
+                unreachable!();
+            }
+            189 => {
+                (Handle::add(
+                    (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).ko_counts(),
+                    player_2,
+                ))
+                .set((0_i32 as u8));
+                __state = 190;
+            }
+            190 => {
+                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get(player_2)
+                    .set_nametag(
+                        ((statics::melee__mn__mncharsel::mnCharSel_804D6CF8(ctx).get() as i32)
+                            .wrapping_sub(1_i32) as u8),
+                    );
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF8(ctx).set((td).next_tag());
+                __state = 173;
+            }
+            191 => {
+                unreachable!();
+            }
+            192 => {
+                (td).set_use_tag((1_i32 as u8));
+                let _ = fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    (td).text(),
+                    0_i32,
+                    fns::GetNameText(
+                        ctx,
+                        ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                            .vs()
+                            .start()
+                            .players()
+                            .get(player_2)
+                            .nametag() as i32),
+                    ),
+                    &[],
+                );
+                ((td).text()).set_default_kerning((0_i32 as u8));
+                __state = 193;
+            }
+            193 => {
+                __state = 128;
+            }
+            194 => {
+                unreachable!();
+            }
+            195 => {
+                __state = match ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .match_type() as i32)
+                {
+                    11_i32 => 199,
+                    12_i32 => 199,
+                    13_i32 => 199,
+                    15_i32 => 200,
+                    16_i32 => 201,
+                    17_i32 => 202,
+                    18_i32 => 202,
+                    19_i32 => 203,
+                    20_i32 => 203,
+                    21_i32 => 203,
+                    22_i32 => 203,
+                    23_i32 => 204,
+                    14_i32 => 205,
+                    _ => 206,
+                };
+            }
+            196 => {
+                gobj = fns::GObj_Create(ctx, (4_i32 as u16), (5_i32 as u8), (128_i32 as u8));
+                jobj = fns::HSD_JObjLoadJoint(
+                    ctx,
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .press_start()
+                        .joint(),
+                );
+                fns::HSD_GObjObject_80390A70(
+                    ctx,
+                    gobj,
+                    fns::HSD_GObj_JObjKind(ctx).get(),
+                    Handle::cast::<Addr<'a>>(jobj),
+                );
+                fns::GObj_SetupGXLink(
+                    ctx,
+                    gobj,
+                    fnptr(ctx, 0x80391070),
+                    (4_i32 as u8),
+                    (128_i32 as u32),
+                );
+                let _ = fns::HSD_GObj_SetupProc(ctx, gobj, fnptr(ctx, 0x80262f44), (3_i32 as u8));
+                fns::HSD_JObjAddAnimAll(
+                    ctx,
+                    jobj,
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .press_start()
+                        .animjoint(),
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .press_start()
+                        .matanim_joint(),
+                    (statics::melee__mn__mncharsel::css_models(ctx).get())
+                        .press_start()
+                        .shapeanim_joint(),
+                );
+                fns::HSD_JObjReqAnimAll(ctx, jobj, 0.0);
+                fns::HSD_ForeachAnim(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(jobj),
+                    (enums::JOBJ_TYPE as i32),
+                    (enums::ALL_TYPE_MASK as i32),
+                    Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036414c)),
+                    (enums::AOBJ_ARG_AOV as i32),
+                    &[VarArg::Int(0_i32 as u32), VarArg::Int(0_i32 as u32)],
+                );
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF7(ctx).set((0_i32 as u8));
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    251
+                } else {
+                    253
+                };
+            }
+            197 => {
+                statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx)
+                    .set_scroll_flag((0_i32 as u8));
+                text = fns::HSD_SisLib_803A5ACC(
+                    ctx,
+                    0_i32,
+                    v_ctx,
+                    fp::fneg(12.0),
+                    fp::fneg(23.299999237060547),
+                    0.0,
+                    450.0,
+                    32.0,
+                );
+                (text).set_default_alignment((1_i32 as u8));
+                (text).set_default_kerning((1_i32 as u8));
+                (text).set_default_fitting((1_i32 as u8));
+                (text).font_size().set_x(0.07000000029802322);
+                (text).font_size().set_y(0.07000000029802322);
+                fns::HSD_SisLib_803A6368(ctx, text, 74_i32);
+                fns::mnCharSel_8025BD30(ctx);
+                mt_3 = (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type();
+                __state = if (mt_3 as i32) < 3_i32 { 223 } else { 224 };
+            }
+            198 => {
+                unreachable!();
+            }
+            199 => {
+                Handle::copy_from(spE4, statics::melee__mn__mncharsel::mnCharSel_804DC584(ctx));
+                Handle::copy_from(spE0, statics::melee__mn__mncharsel::mnCharSel_804DC588(ctx));
+                Handle::copy_from(spDC, statics::melee__mn__mncharsel::mnCharSel_804DC58C(ctx));
+                Handle::copy_from(
+                    hard_color,
+                    statics::melee__mn__mncharsel::mnCharSel_804DC590(ctx),
+                );
+                Handle::copy_from(spD4, statics::melee__mn__mncharsel::mnCharSel_804DC594(ctx));
+                cpu_level = (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get((statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32))
+                    .cpu_level();
+                statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx)
+                    .set_cpu_level_shown(cpu_level);
+                statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).set_cpu_level(cpu_level);
+                statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).set_cpu_slider_x(124.0);
+                statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx)
+                    .set_xd3(fns::HSD_SisLib_803A6754(ctx, 0_i32, v_ctx));
+                statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx)
+                    .set_scroll_flag((1_i32 as u8));
+                text = statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).xd3();
+                (text).set_pos_x(fp::fneg(0.5));
+                (text).set_pos_y(9.0);
+                (text).set_pos_z(0.0);
+                text = statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).xd3();
+                (text).set_box_size_x(248.0);
+                (text).set_box_size_y(32.0);
+                text = statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).xd3();
+                (text).font_size().set_x(0.07999999821186066);
+                (text).font_size().set_y(0.09000000357627869);
+                (statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).xd3())
+                    .set_x4E((1_i32 as u8));
+                (statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).xd3())
+                    .set_default_kerning((1_i32 as u8));
+                (statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).xd3())
+                    .set_default_alignment((1_i32 as u8));
+                (statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).xd3())
+                    .set_x4C((1_i32 as u8));
+                let _ = fns::HSD_SisLib_803A6B98(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).xd3(),
+                    0.0,
+                    0.0,
+                    cstr(ctx, 0x803f1050),
+                    &[],
+                );
+                Handle::copy_from(color3, spE4);
+                fns::HSD_SisLib_803A74F0(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).xd3(),
+                    0_i32,
+                    color3,
+                );
+                let _ = fns::HSD_SisLib_803A6B98(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).xd3(),
+                    0.0,
+                    0.0,
+                    cstr(ctx, 0x803f1064),
+                    &[],
+                );
+                Handle::copy_from(color4, spE0);
+                fns::HSD_SisLib_803A74F0(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).xd3(),
+                    1_i32,
+                    color4,
+                );
+                let _ = fns::HSD_SisLib_803A6B98(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).xd3(),
+                    0.0,
+                    0.0,
+                    cstr(ctx, 0x803f1070),
+                    &[],
+                );
+                Handle::copy_from(color5, spDC);
+                fns::HSD_SisLib_803A74F0(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).xd3(),
+                    2_i32,
+                    color5,
+                );
+                let _ = fns::HSD_SisLib_803A6B98(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).xd3(),
+                    0.0,
+                    0.0,
+                    cstr(ctx, 0x803f1080),
+                    &[],
+                );
+                Handle::copy_from(color6, hard_color);
+                fns::HSD_SisLib_803A74F0(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).xd3(),
+                    3_i32,
+                    color6,
+                );
+                let _ = fns::HSD_SisLib_803A6B98(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).xd3(),
+                    0.0,
+                    0.0,
+                    cstr(ctx, 0x803f108c),
+                    &[],
+                );
+                Handle::copy_from(color7, spD4);
+                fns::HSD_SisLib_803A74F0(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).xd3(),
+                    4_i32,
+                    color7,
+                );
+                fns::HSD_GObjGXLink_803909D8(
+                    ctx,
+                    (statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).xd3()).entity(),
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CBC(ctx).get(),
+                );
+                css = statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get();
+                __state = if ((css).match_type() as i32) == 13_i32 {
+                    208
+                } else {
+                    210
+                };
+            }
+            200 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC8(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(4_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::lb_8000B1CC(ctx, sp108.get(), null::<Vec<'a>>(ctx), spEC);
+                text = fns::HSD_SisLib_803A6754(ctx, 0_i32, v_ctx);
+                statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).set(text);
+                sx_5 = fp::fadds(10.899999618530273, spEC.x());
+                sz_5 = spEC.z();
+                sy_5 = fp::fneg(spEC.y());
+                (text).set_pos_x(sx_5);
+                (text).set_pos_y(sy_5);
+                (text).set_pos_z(sz_5);
+                (text).set_default_alignment((2_i32 as u8));
+                (text).font_size().set_x(0.07000000029802322);
+                (text).font_size().set_y(0.054999999701976776);
+                let _ =
+                    fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 0.0, null::<Val<'a, i8>>(ctx), &[]);
+                text = fns::HSD_SisLib_803A6754(ctx, 0_i32, v_ctx);
+                statics::melee__mn__mncharsel::mnCharSel_804D6CE0(ctx).set(text);
+                sx_6 = fp::fadds(11.600000381469727, spEC.x());
+                sz_6 = spEC.z();
+                sy_6 = fp::fsubs(0.30000001192092896, spEC.y());
+                (text).set_pos_x(sx_6);
+                (text).set_pos_y(sy_6);
+                (text).set_pos_z(sz_6);
+                (text).font_size().set_x(0.05999999865889549);
+                (text).font_size().set_y(0.04500000178813934);
+                let _ =
+                    fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 0.0, null::<Val<'a, i8>>(ctx), &[]);
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC8(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(5_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::lb_8000B1CC(ctx, sp108.get(), null::<Vec<'a>>(ctx), spEC);
+                text = fns::HSD_SisLib_803A6754(ctx, 0_i32, v_ctx);
+                statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).set(text);
+                sx_7 = fp::fadds(10.899999618530273, spEC.x());
+                sz_7 = spEC.z();
+                sy_7 = fp::fneg(spEC.y());
+                (text).set_pos_x(sx_7);
+                (text).set_pos_y(sy_7);
+                (text).set_pos_z(sz_7);
+                (text).font_size().set_x(0.07000000029802322);
+                (text).font_size().set_y(0.054999999701976776);
+                (text).set_default_alignment((2_i32 as u8));
+                let _ =
+                    fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 0.0, null::<Val<'a, i8>>(ctx), &[]);
+                text = fns::HSD_SisLib_803A6754(ctx, 0_i32, v_ctx);
+                statics::melee__mn__mncharsel::mnCharSel_804D6CE8(ctx).set(text);
+                sx_8 = fp::fadds(11.600000381469727, spEC.x());
+                sz_8 = spEC.z();
+                sy_8 = fp::fsubs(0.30000001192092896, spEC.y());
+                (text).set_pos_x(sx_8);
+                (text).set_pos_y(sy_8);
+                (text).set_pos_z(sz_8);
+                (text).font_size().set_x(0.05999999865889549);
+                (text).font_size().set_y(0.04500000178813934);
+                let _ =
+                    fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 0.0, null::<Val<'a, i8>>(ctx), &[]);
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC8(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(3_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::HSD_JObjSetFlagsAll(
+                    ctx,
+                    sp108.get(),
+                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                );
+                __state = 213;
+            }
+            201 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC8(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(4_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::lb_8000B1CC(ctx, sp108.get(), null::<Vec<'a>>(ctx), spEC);
+                text = fns::HSD_SisLib_803A6754(ctx, 0_i32, v_ctx);
+                statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).set(text);
+                sx_9 = fp::fadds(11.0, spEC.x());
+                sz_9 = spEC.z();
+                sy_9 = fp::fneg(spEC.y());
+                (text).set_pos_x(sx_9);
+                (text).set_pos_y(sy_9);
+                (text).set_pos_z(sz_9);
+                (text).font_size().set_x(0.07000000029802322);
+                (text).font_size().set_y(0.054999999701976776);
+                (text).set_default_alignment((2_i32 as u8));
+                let _ =
+                    fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 0.0, null::<Val<'a, i8>>(ctx), &[]);
+                text = fns::HSD_SisLib_803A6754(ctx, 0_i32, v_ctx);
+                sx_10 = fp::fadds(12.0, spEC.x());
+                sz_10 = spEC.z();
+                sy_10 = fp::fneg(spEC.y());
+                (text).set_pos_x(sx_10);
+                (text).set_pos_y(sy_10);
+                (text).set_pos_z(sz_10);
+                (text).font_size().set_x(0.07000000029802322);
+                (text).font_size().set_y(0.054999999701976776);
+                (text).set_default_kerning((1_i32 as u8));
+                __state = if fns::lbLang_IsSavedLanguageJP(ctx) != 0_i32 {
+                    215
+                } else {
+                    217
+                };
+            }
+            202 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC8(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(4_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::lb_8000B1CC(ctx, sp108.get(), null::<Vec<'a>>(ctx), spEC);
+                text = fns::HSD_SisLib_803A6754(ctx, 0_i32, v_ctx);
+                statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).set(text);
+                sx_12 = fp::fadds(10.899999618530273, spEC.x());
+                sz_12 = spEC.z();
+                sy_12 = fp::fneg(spEC.y());
+                (text).set_pos_x(sx_12);
+                (text).set_pos_y(sy_12);
+                (text).set_pos_z(sz_12);
+                (text).font_size().set_x(0.07000000029802322);
+                (text).font_size().set_y(0.054999999701976776);
+                (text).set_default_alignment((2_i32 as u8));
+                let _ =
+                    fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 0.0, null::<Val<'a, i8>>(ctx), &[]);
+                text = fns::HSD_SisLib_803A6754(ctx, 0_i32, v_ctx);
+                statics::melee__mn__mncharsel::mnCharSel_804D6CE0(ctx).set(text);
+                sx_13 = fp::fadds(11.600000381469727, spEC.x());
+                sz_13 = spEC.z();
+                sy_13 = fp::fsubs(0.30000001192092896, spEC.y());
+                (text).set_pos_x(sx_13);
+                (text).set_pos_y(sy_13);
+                (text).set_pos_z(sz_13);
+                (text).font_size().set_x(0.05999999865889549);
+                (text).font_size().set_y(0.04500000178813934);
+                let _ =
+                    fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 0.0, null::<Val<'a, i8>>(ctx), &[]);
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC8(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(5_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::lb_8000B1CC(ctx, sp108.get(), null::<Vec<'a>>(ctx), spEC);
+                text = fns::HSD_SisLib_803A6754(ctx, 0_i32, v_ctx);
+                statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).set(text);
+                sx_14 = fp::fadds(10.899999618530273, spEC.x());
+                sz_14 = spEC.z();
+                sy_14 = fp::fneg(spEC.y());
+                (text).set_pos_x(sx_14);
+                (text).set_pos_y(sy_14);
+                (text).set_pos_z(sz_14);
+                (text).font_size().set_x(0.07000000029802322);
+                (text).font_size().set_y(0.054999999701976776);
+                (text).set_default_alignment((2_i32 as u8));
+                let _ =
+                    fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 0.0, null::<Val<'a, i8>>(ctx), &[]);
+                text = fns::HSD_SisLib_803A6754(ctx, 0_i32, v_ctx);
+                statics::melee__mn__mncharsel::mnCharSel_804D6CE8(ctx).set(text);
+                sx_15 = fp::fadds(11.600000381469727, spEC.x());
+                sz_15 = spEC.z();
+                sy_15 = fp::fsubs(0.30000001192092896, spEC.y());
+                (text).set_pos_x(sx_15);
+                (text).set_pos_y(sy_15);
+                (text).set_pos_z(sz_15);
+                (text).font_size().set_x(0.05999999865889549);
+                (text).font_size().set_y(0.04500000178813934);
+                let _ =
+                    fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 0.0, null::<Val<'a, i8>>(ctx), &[]);
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC8(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(3_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::HSD_JObjSetFlagsAll(
+                    ctx,
+                    sp108.get(),
+                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                );
+                __state = 213;
+            }
+            203 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC8(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(4_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::lb_8000B1CC(ctx, sp108.get(), null::<Vec<'a>>(ctx), spEC);
+                text = fns::HSD_SisLib_803A6754(ctx, 0_i32, v_ctx);
+                statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).set(text);
+                sx_16 = fp::fadds(16.0, spEC.x());
+                sz_16 = spEC.z();
+                sy_16 = fp::fneg(spEC.y());
+                (text).set_pos_x(sx_16);
+                (text).set_pos_y(sy_16);
+                (text).set_pos_z(sz_16);
+                (text).font_size().set_x(0.07000000029802322);
+                (text).font_size().set_y(0.054999999701976776);
+                (text).set_default_alignment((2_i32 as u8));
+                let _ =
+                    fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 0.0, null::<Val<'a, i8>>(ctx), &[]);
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC8(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(5_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::lb_8000B1CC(ctx, sp108.get(), null::<Vec<'a>>(ctx), spEC);
+                text = fns::HSD_SisLib_803A6754(ctx, 0_i32, v_ctx);
+                statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).set(text);
+                sx_17 = fp::fadds(16.0, spEC.x());
+                sz_17 = spEC.z();
+                sy_17 = fp::fneg(spEC.y());
+                (text).set_pos_x(sx_17);
+                (text).set_pos_y(sy_17);
+                (text).set_pos_z(sz_17);
+                (text).font_size().set_x(0.07000000029802322);
+                (text).font_size().set_y(0.054999999701976776);
+                (text).set_default_alignment((2_i32 as u8));
+                let _ =
+                    fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 0.0, null::<Val<'a, i8>>(ctx), &[]);
+                __state = 213;
+            }
+            204 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC4(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(9_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::lb_8000B1CC(ctx, sp108.get(), null::<Vec<'a>>(ctx), spEC);
+                text = fns::HSD_SisLib_803A6754(ctx, 0_i32, v_ctx);
+                statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).set(text);
+                sx_18 = fp::fadds(10.0, spEC.x());
+                sz_18 = spEC.z();
+                sy_18 = fp::fneg(spEC.y());
+                (text).set_pos_x(sx_18);
+                (text).set_pos_y(sy_18);
+                (text).set_pos_z(sz_18);
+                (text).font_size().set_x(0.12999999523162842);
+                (text).font_size().set_y(0.054999999701976776);
+                (text).set_default_alignment((2_i32 as u8));
+                let _ =
+                    fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 0.0, null::<Val<'a, i8>>(ctx), &[]);
+                __state = 205;
+            }
+            205 => {
+                __state = 213;
+            }
+            206 => {
+                __state = 196;
+            }
+            207 => {
+                unreachable!();
+            }
+            208 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(52_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::HSD_JObjSetFlagsAll(
+                    ctx,
+                    sp108.get(),
+                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                );
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(61_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::HSD_JObjSetFlagsAll(
+                    ctx,
+                    sp108.get(),
+                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                );
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(69_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::HSD_JObjSetFlagsAll(
+                    ctx,
+                    sp108.get(),
+                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                );
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(70_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                hide_jobj = sp108.get();
+                fns::HSD_JObjSetFlagsAll(ctx, hide_jobj, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
+                __state = 209;
+            }
+            209 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(64_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::lb_8000B1CC(ctx, sp108.get(), null::<Vec<'a>>(ctx), spEC);
+                text = fns::HSD_SisLib_803A6754(ctx, 0_i32, v_ctx);
+                statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).set(text);
+                sx_3 = fp::fadds(13.5, spEC.x());
+                sz_3 = spEC.z();
+                sy_3 = fp::fneg(spEC.y());
+                (text).set_pos_x(sx_3);
+                (text).set_pos_y(sy_3);
+                (text).set_pos_z(sz_3);
+                (text).font_size().set_x(0.07000000029802322);
+                (text).font_size().set_y(0.054999999701976776);
+                (text).set_default_alignment((2_i32 as u8));
+                let _ =
+                    fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 0.0, null::<Val<'a, i8>>(ctx), &[]);
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(66_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::HSD_JObjSetFlags(ctx, sp108.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(65_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::lb_8000B1CC(ctx, sp108.get(), null::<Vec<'a>>(ctx), spEC);
+                text = fns::HSD_SisLib_803A6754(ctx, 0_i32, v_ctx);
+                statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).set(text);
+                sx_4 = fp::fadds(13.5, spEC.x());
+                sz_4 = spEC.z();
+                sy_4 = fp::fneg(spEC.y());
+                (text).set_pos_x(sx_4);
+                (text).set_pos_y(sy_4);
+                (text).set_pos_z(sz_4);
+                (text).font_size().set_x(0.07000000029802322);
+                (text).font_size().set_y(0.054999999701976776);
+                (text).set_default_alignment((2_i32 as u8));
+                let _ =
+                    fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 0.0, null::<Val<'a, i8>>(ctx), &[]);
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    jobj43,
+                    &[
+                        VarArg::Int(67_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::HSD_ForeachAnim(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(jobj43.get()),
+                    (enums::JOBJ_TYPE as i32),
+                    (enums::TOBJ_MASK as i32),
+                    Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036410c)),
+                    (enums::AOBJ_ARG_AF as i32),
+                    &[VarArg::Float(0.0)],
+                );
+                fns::HSD_JObjAnimAll(ctx, jobj43.get());
+                fns::HSD_ForeachAnim(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(jobj43.get()),
+                    (enums::JOBJ_TYPE as i32),
+                    (enums::TOBJ_MASK as i32),
+                    Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036414c)),
+                    (enums::AOBJ_ARG_AOV as i32),
+                    &[VarArg::Int(0_i32 as u32), VarArg::Int(0_i32 as u32)],
+                );
+                sp108.set(jobj43.get());
+                fns::HSD_JObjSetFlags(ctx, sp108.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
+                __state = 206;
+            }
+            210 => {
+                statics::melee__mn__mncharsel::data2(ctx).set_stocks(
+                    ((css)
+                        .vs()
+                        .start()
+                        .players()
+                        .get((statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32))
+                        .stocks() as u8),
+                );
+                inl_updateStockIcons(ctx, statics::melee__mn__mncharsel::data2(ctx), sp70, 1_i32);
+                num_players = (statics::melee__mn__mncharsel::data2(ctx).stocks() as i32);
+                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get((statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32))
+                    .set_stocks((statics::melee__mn__mncharsel::data2(ctx).stocks() as i8));
+                __state = 209;
+            }
+            211 => {
+                unreachable!();
+            }
+            212 => {
+                __state = 200;
+            }
+            213 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(46_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::HSD_JObjSetFlagsAll(
+                    ctx,
+                    sp108.get(),
+                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                );
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(52_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::HSD_JObjSetFlagsAll(
+                    ctx,
+                    sp108.get(),
+                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                );
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(58_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::HSD_JObjSetFlagsAll(
+                    ctx,
+                    sp108.get(),
+                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                );
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(68_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::HSD_JObjSetFlagsAll(
+                    ctx,
+                    sp108.get(),
+                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                );
+                __state = 206;
+            }
+            214 => {
+                __state = 201;
+            }
+            215 => {
+                let _ = fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 0.0, cstr(ctx, 0x804d513c), &[]);
+                let _ = fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 35.0, cstr(ctx, 0x804d513c), &[]);
+                __state = 216;
+            }
+            216 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC8(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(5_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::lb_8000B1CC(ctx, sp108.get(), null::<Vec<'a>>(ctx), spEC);
+                text = fns::HSD_SisLib_803A6754(ctx, 0_i32, v_ctx);
+                statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).set(text);
+                sx_11 = fp::fadds(11.0, spEC.x());
+                sz_11 = spEC.z();
+                sy_11 = fp::fneg(spEC.y());
+                (text).set_pos_x(sx_11);
+                (text).set_pos_y(sy_11);
+                (text).set_pos_z(sz_11);
+                (text).font_size().set_x(0.07000000029802322);
+                (text).font_size().set_y(0.054999999701976776);
+                (text).set_default_alignment((2_i32 as u8));
+                let _ =
+                    fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 0.0, null::<Val<'a, i8>>(ctx), &[]);
+                __state = 213;
+            }
+            217 => {
+                let _ = fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 0.0, cstr(ctx, 0x804d5140), &[]);
+                let _ = fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 35.0, cstr(ctx, 0x804d5140), &[]);
+                __state = 216;
+            }
+            218 => {
+                unreachable!();
+            }
+            219 => {
+                __state = 202;
+            }
+            220 => {
+                __state = 203;
+            }
+            221 => {
+                __state = 204;
+            }
+            222 => {
+                __state = 206;
+            }
+            223 => {
+                __state = if (mt_3 as i32) == 0_i32 { 226 } else { 227 };
+            }
+            224 => {
+                __state = if (mt_3 as i32) < 11_i32 { 233 } else { 235 };
+            }
+            225 => {
+                unreachable!();
+            }
+            226 => {
+                __state = 229;
+            }
+            227 => {
+                __state = 231;
+            }
+            228 => {
+                unreachable!();
+            }
+            229 => {
+                clear_2 = 1_i32;
+                __state = 234;
+            }
+            230 => {
+                __state = 227;
+            }
+            231 => {
+                clear_2 = 0_i32;
+                __state = 234;
+            }
+            232 => {
+                __state = 224;
+            }
+            233 => {
+                __state = 229;
+            }
+            234 => {
+                __state = if clear_2 != 0_i32 { 237 } else { 239 };
+            }
+            235 => {
+                __state = 231;
+            }
+            236 => {
+                unreachable!();
+            }
+            237 => {
+                i = 0_i32;
+                __state = 241;
+            }
+            238 => {
+                __state = 196;
+            }
+            239 => {
+                i = 0_i32;
+                __state = 246;
+            }
+            240 => {
+                unreachable!();
+            }
+            241 => {
+                __state =
+                    if i < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) {
+                        242
+                    } else {
+                        244
+                    };
+            }
+            242 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(
+                            ((Handle::add(
+                                (Handle::cast::<CSSKOStar<'a>>(
+                                    statics::melee__mn__mncharsel::data2(ctx).ko_stars(),
+                                )),
+                                i,
+                            ))
+                            .joint() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::lb_8000B1CC(ctx, sp108.get(), null::<Vec<'a>>(ctx), spEC);
+                text = fns::HSD_SisLib_803A5ACC(
+                    ctx,
+                    0_i32,
+                    v_ctx,
+                    spEC.x(),
+                    fp::fsubs(fp::fneg(spEC.y()), 0.8999999761581421),
+                    spEC.z(),
+                    32.0,
+                    32.0,
+                );
+                (Handle::add(
+                    (Handle::cast::<CSSKOStar<'a>>(
+                        statics::melee__mn__mncharsel::data2(ctx).ko_stars(),
+                    )),
+                    i,
+                ))
+                .set_text(text);
+                (text).font_size().set_x(0.07000000029802322);
+                (text).font_size().set_y(0.07000000029802322);
+                fns::mnCharSel_8025D1C4(ctx, i, 0_i32);
+                __state = 243;
+            }
+            243 => {
+                i = i.wrapping_add(1);
+                __state = 241;
+            }
+            244 => {
+                __state = 238;
+            }
+            245 => {
+                unreachable!();
+            }
+            246 => {
+                __state =
+                    if i < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) {
+                        247
+                    } else {
+                        249
+                    };
+            }
+            247 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(
+                            ((Handle::add(
+                                (Handle::cast::<CSSKOStar<'a>>(
+                                    statics::melee__mn__mncharsel::data2(ctx).ko_stars(),
+                                )),
+                                i,
+                            ))
+                            .joint() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                fns::HSD_JObjSetFlagsAll(
+                    ctx,
+                    sp108.get(),
+                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                );
+                __state = 248;
+            }
+            248 => {
+                i = i.wrapping_add(1);
+                __state = 246;
+            }
+            249 => {
+                __state = 238;
+            }
+            250 => {
+                unreachable!();
+            }
+            251 => {
+                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get(3_i32)
+                    .set_slot_type((3_i32 as u8));
+                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get(2_i32)
+                    .set_slot_type((3_i32 as u8));
+                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get(1_i32)
+                    .set_slot_type((3_i32 as u8));
+                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get(0_i32)
+                    .set_slot_type((3_i32 as u8));
+                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get((statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32))
+                    .set_slot_type((0_i32 as u8));
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(0_i32)
+                    .set_p_kind((0_i32 as u8));
+                css_2 = statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get();
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(0_i32)
+                    .set_costume(
+                        (css_2)
+                            .vs()
+                            .start()
+                            .players()
+                            .get(
+                                (statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get()
+                                    as i32),
+                            )
+                            .color(),
+                    );
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(0_i32)
+                    .set_sel_icon_prev(
+                        statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                            .doors()
+                            .get(0_i32)
+                            .sel_icon(),
+                    );
+                __state = if ((css_2).match_type() as i32) != 23_i32 {
+                    255
+                } else {
+                    256
+                };
+            }
+            252 => {
+                fns::mnCharSel_8025EE8C(
+                    ctx,
+                    (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type(),
+                );
+                __state = 280;
+            }
+            253 => {
+                i = 0_i32;
+                __state = 260;
+            }
+            254 => {
+                unreachable!();
+            }
+            255 => {
+                __state = 258;
+            }
+            256 => {
+                (css_2)
+                    .vs()
+                    .start()
+                    .players()
+                    .get((statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).get() as i32))
+                    .set_slot_type((1_i32 as u8));
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(1_i32)
+                    .set_p_kind((1_i32 as u8));
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(1_i32)
+                    .set_costume(
+                        (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                            .vs()
+                            .start()
+                            .players()
+                            .get(
+                                (statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).get()
+                                    as i32),
+                            )
+                            .color(),
+                    );
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(1_i32)
+                    .set_sel_icon_prev(
+                        statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                            .doors()
+                            .get(1_i32)
+                            .sel_icon(),
+                    );
+                __state = 258;
+            }
+            257 => {
+                unreachable!();
+            }
+            258 => {
+                __state = 252;
+            }
+            259 => {
+                __state = 256;
+            }
+            260 => {
+                __state =
+                    if i < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) {
+                        261
+                    } else {
+                        263
+                    };
+            }
+            261 => {
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(i)
+                    .set_p_kind(
+                        (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                            .vs()
+                            .start()
+                            .players()
+                            .get(i)
+                            .slot_type(),
+                    );
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(i)
+                    .set_costume(
+                        (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                            .vs()
+                            .start()
+                            .players()
+                            .get(i)
+                            .color(),
+                    );
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(i)
+                    .set_p_kind_prev((3_i32 as u8));
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(i)
+                    .set_slideranim_timer((0_i32 as u8));
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(i)
+                    .set_dooranim_timer((0_i32 as u8));
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(i)
+                    .set_is_hold_handicap_slider((0_i32 as u8));
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(i)
+                    .set_is_hold_cpu_slider((0_i32 as u8));
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(i)
+                    .set_sel_icon_prev(
+                        statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                            .doors()
+                            .get(i)
+                            .sel_icon(),
+                    );
+                rules = fns::gmMainLib_GetGameRules(ctx);
+                __state = if ((rules).handicap() as i32) != 0_i32 {
+                    265
+                } else {
+                    267
+                };
+            }
+            262 => {
+                i = i.wrapping_add(1);
+                __state = 260;
+            }
+            263 => {
+                __state = 252;
+            }
+            264 => {
+                unreachable!();
+            }
+            265 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                                .doors()
+                                .get(i)
+                                .cpuslider_joint() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = if ((fns::gmMainLib_GetGameRules(ctx)).handicap() as i32) == 1_i32 {
+                    269
+                } else {
+                    271
+                };
+            }
+            266 => {
+                cpu_level_2 = (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get(i)
+                    .cpu_level_ref();
+                __state = if ((cpu_level_2).get() as i32) == 0_i32 {
+                    276
+                } else {
+                    277
+                };
+            }
+            267 => {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                                .doors()
+                                .get(i)
+                                .cpuslider_joint() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = 266;
+            }
+            268 => {
+                unreachable!();
+            }
+            269 => {
+                hval = ((fns::gm_801685D4(
+                    ctx,
+                    (i as u8),
+                    (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                        .vs()
+                        .start()
+                        .players()
+                        .get(i)
+                        .nametag(),
+                ) as u8) as i32);
+                __state = 270;
+            }
+            270 => {
+                __state = match hval {
+                    0_i32 => 273,
+                    _ => 274,
+                };
+            }
+            271 => {
+                hval = (((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get(i)
+                    .handicap() as u8) as i32);
+                __state = 270;
+            }
+            272 => {
+                unreachable!();
+            }
+            273 => {
+                hval = 1_i32;
+                __state = 274;
+            }
+            274 => {
+                slider_x = fp::fmuls(1.25, fp::frsp((hval.wrapping_sub(1_i32)) as f64));
+                inl_HSD_JObjSetTranslateX(ctx, sp108.get(), slider_x);
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    sp108,
+                    &[
+                        VarArg::Int(
+                            (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                                .doors()
+                                .get(i)
+                                .cpuslider2_joint() as i32) as u32,
+                        ),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = 266;
+            }
+            275 => {
+                unreachable!();
+            }
+            276 => {
+                (cpu_level_2).set((1_i32 as u8));
+                __state = 277;
+            }
+            277 => {
+                inl_HSD_JObjSetTranslateX_2(
+                    ctx,
+                    sp108.get(),
+                    1.25,
+                    fp::frsp(
+                        (((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                            .vs()
+                            .start()
+                            .players()
+                            .get(i)
+                            .cpu_level() as i32)
+                            .wrapping_sub(1_i32)) as f64,
+                    ),
+                );
+                __state = 262;
+            }
+            278 => {
+                unreachable!();
+            }
+            279 => {
+                unreachable!();
+            }
+            280 => {
+                __state = 281;
+            }
+            281 => {
+                __state = if (0_i32 != 0) { 280 } else { 282 };
+            }
+            282 => {
+                return fns::lbAudioAx_80023F28(ctx, fns::gmMainLib_8015ECB0(ctx));
+            }
+            283 => {
+                unreachable!();
+            }
+            284 => {
+                return 0;
+            }
+            285 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
 }
 
 pub fn mnCharSel_Scene_OnEnter<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
@@ -4266,6 +12666,603 @@ fn inl_isDuplicateCostume_unfused<'a>(ctx: &'a Ctx, door: i32) -> i32 {
     return 0_i32;
 }
 
+fn inl_loadStickValue<'a>(ctx: &'a Ctx, value: Val<'a, i8>) -> f64 {
+    let mut value = value;
+    return fp::frsp((value).get() as f64);
+}
+
+fn inl_getStickDelta<'a>(ctx: &'a Ctx, port: i32, dx: Val<'a, F32>, dy: Val<'a, F32>) {
+    let mut port = port;
+    let mut dx = dx;
+    let mut dy = dy;
+    let mut stick_x: f64 = inl_loadStickValue(
+        ctx,
+        fns::HSD_PadCopyStatus(ctx)
+            .get(((port as u8) as i32))
+            .stickX_ref(),
+    );
+    let mut stick_y: f64 = fp::frsp(
+        fns::HSD_PadCopyStatus(ctx)
+            .get(((port as u8) as i32))
+            .stickY() as f64,
+    );
+    let mut mag_sq: f64 = fp::fmadds(stick_x, stick_x, (fp::fmuls(stick_y, stick_y)));
+    if mag_sq < 200.0 {
+        (dy).set(0.0);
+        (dx).set(0.0);
+    } else {
+        let mut angle: f64 = 0.0;
+        let mut adj: f64 = 0.0;
+        adj = fp::fsubs(mag_sq, 200.0);
+        angle = fns::atan2f(ctx, stick_x, stick_y);
+        (dx).set(fp::fmuls(adj, fns::sinf(ctx, angle)));
+        (dy).set(fp::fmuls(adj, fns::cosf(ctx, angle)));
+    }
+}
+
+fn inl_isDuplicateCostume<'a>(ctx: &'a Ctx, door: i32) -> i32 {
+    let mut door = door;
+    let mut num_doors: i32 = 0;
+    let mut j: i32 = 0;
+    let mut base_door: CSSDoor<'a> = statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+        .doors()
+        .get(door);
+    if ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type() as i32)
+        == (enums::TRAINING_MODE as i32)
+    {
+        num_doors = 2_i32;
+    } else {
+        num_doors = (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32);
+    }
+    {
+        j = 0_i32;
+        'l1: while j < num_doors {
+            'c2: {
+                let mut other_door: CSSDoor<'a> =
+                    statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                        .doors()
+                        .get(j);
+                if ((((door != j) && (((other_door).p_kind() as i32) != 3_i32))
+                    && (((other_door).sel_icon() as i32) < 25_i32))
+                    && (((other_door).sel_icon() as i32) == ((base_door).sel_icon() as i32)))
+                    && (((base_door).costume() as i32) == ((other_door).costume() as i32))
+                {
+                    return 1_i32;
+                }
+            }
+            j = j.wrapping_add(1);
+        }
+    }
+    return 0_i32;
+}
+
+fn inl_HSD_JObjGetTranslationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f0a64),
+            (0x246_i32 as u32),
+            cstr(ctx, 0x803f0a64),
+        )
+    });
+    return (jobj).translate().x();
+}
+
+fn inl_updateGrabbedSlider<'a>(
+    ctx: &'a Ctx,
+    cursor: CSSCursorData<'a>,
+    door: CSSDoor<'a>,
+    door_idx: i32,
+    trigger: u32,
+    slider_jobj: Ptr<'a, HSD_JObj<'a>>,
+    pos: Vec<'a>,
+    is_handicap: i32,
+) {
+    let mut cursor = cursor;
+    let mut door = door;
+    let mut door_idx = door_idx;
+    let mut trigger = trigger;
+    let mut slider_jobj = slider_jobj;
+    let mut pos = pos;
+    let mut is_handicap = is_handicap;
+    let mut base_x: f64 = 0.0;
+    let mut anim_frame: f64 = 0.0;
+    if (is_handicap != 0) {
+        let _ = fns::lb_80011E24(
+            ctx,
+            statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+            slider_jobj,
+            &[
+                VarArg::Int(((door).cpuslider_joint() as i32) as u32),
+                VarArg::Int(1_i32.wrapping_neg() as u32),
+            ],
+        );
+    } else {
+        let mut rules: GameRules<'a> = fns::gmMainLib_GetGameRules(ctx);
+        if ((rules).handicap() as i32) != 0_i32 {
+            let _ = fns::lb_80011E24(
+                ctx,
+                statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                slider_jobj,
+                &[
+                    VarArg::Int(((door).cpuslider2_joint() as i32) as u32),
+                    VarArg::Int(1_i32.wrapping_neg() as u32),
+                ],
+            );
+        } else {
+            let _ = fns::lb_80011E24(
+                ctx,
+                statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                slider_jobj,
+                &[
+                    VarArg::Int(((door).cpuslider_joint() as i32) as u32),
+                    VarArg::Int(1_i32.wrapping_neg() as u32),
+                ],
+            );
+        }
+    }
+    fns::lb_8000B1CC(ctx, (slider_jobj).get(), null::<Vec<'a>>(ctx), pos);
+    base_x = fp::fsubs(
+        inl_HSD_JObjGetTranslationX(ctx, (slider_jobj).get()),
+        (pos).x(),
+    );
+    (pos).set_x(fp::fadds(
+        (fp::fsubs((cursor).xC(), fp::fneg(2.9000000953674316))),
+        base_x,
+    ));
+    if (pos).x() < 0.0 {
+        (pos).set_x(0.0);
+    }
+    if (pos).x() > 10.0 {
+        (pos).set_x(10.0);
+    }
+    if (is_handicap != 0) {
+        (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+            .vs()
+            .start()
+            .players()
+            .get(door_idx)
+            .set_handicap(
+                (fp::fctiwz((fp::fmadds(0.800000011920929, (pos).x(), 0.5))).wrapping_add(1_i32)
+                    as i8),
+            );
+        anim_frame = fp::frsp(
+            ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                .vs()
+                .start()
+                .players()
+                .get(door_idx)
+                .handicap() as u8) as f64,
+        );
+    } else {
+        (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+            .vs()
+            .start()
+            .players()
+            .get(door_idx)
+            .set_cpu_level(
+                (fp::fctiwz((fp::fmadds(0.800000011920929, (pos).x(), 0.5))).wrapping_add(1_i32)
+                    as u8),
+            );
+        anim_frame = fp::frsp(
+            (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                .vs()
+                .start()
+                .players()
+                .get(door_idx)
+                .cpu_level() as f64,
+        );
+    }
+    {
+        let mut anim_jobj: HSD_JObj<'a> = (slider_jobj).get();
+        fns::HSD_ForeachAnim(
+            ctx,
+            Handle::cast::<Addr<'a>>(anim_jobj),
+            (enums::JOBJ_TYPE as i32),
+            (enums::TOBJ_MASK as i32),
+            Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036410c)),
+            (enums::AOBJ_ARG_AF as i32),
+            &[VarArg::Float(anim_frame)],
+        );
+    }
+    fns::HSD_JObjAnimAll(ctx, (slider_jobj).get());
+    fns::HSD_ForeachAnim(
+        ctx,
+        Handle::cast::<Addr<'a>>((slider_jobj).get()),
+        (enums::JOBJ_TYPE as i32),
+        (enums::TOBJ_MASK as i32),
+        Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036414c)),
+        (enums::AOBJ_ARG_AOV as i32),
+        &[VarArg::Int(0_i32 as u32), VarArg::Int(0_i32 as u32)],
+    );
+    inl_HSD_JObjSetTranslateX(ctx, (slider_jobj).get(), (pos).x());
+    (cursor).set_xC((fp::fadds(fp::fneg(2.9000000953674316), (fp::fsubs((pos).x(), base_x)))));
+    (cursor).set_x10((fp::fadds(1.7000000476837158, (pos).y())));
+    if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
+        (cursor).set_x5((2_i32 as u8));
+        if (is_handicap != 0) {
+            (door).set_is_hold_handicap_slider((0_i32 as u8));
+        } else {
+            (door).set_is_hold_cpu_slider((0_i32 as u8));
+        }
+        let _ = fns::lbAudioAx_800237A8(ctx, 183_i32, 127_i32, 64_i32);
+    }
+}
+
+fn inl_updateStockIcons<'a>(
+    ctx: &'a Ctx,
+    stock_data: CSSDoorsData2<'a>,
+    stock_jobj: Ptr<'a, HSD_JObj<'a>>,
+    i: i32,
+) {
+    let mut stock_data = stock_data;
+    let mut stock_jobj = stock_jobj;
+    let mut i = i;
+    let _ = fns::lb_80011E24(
+        ctx,
+        statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+        stock_jobj,
+        &[
+            VarArg::Int(((stock_data).xf0().at(0_i32).get() as i32) as u32),
+            VarArg::Int(1_i32.wrapping_neg() as u32),
+        ],
+    );
+    inl_HSD_JObjSetTranslateX(ctx, (stock_jobj).get(), 7.5);
+    {
+        i = 1_i32;
+        'l1: while i < 5_i32 {
+            'c2: {
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                    stock_jobj,
+                    &[
+                        VarArg::Int(((stock_data).xf0().at(i).get() as i32) as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                if ((stock_data).stocks() as i32) <= i {
+                    fns::HSD_JObjSetFlags(
+                        ctx,
+                        (stock_jobj).get(),
+                        ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                    );
+                } else {
+                    fns::HSD_JObjClearFlags(
+                        ctx,
+                        (stock_jobj).get(),
+                        ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                    );
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+}
+
+fn inl_sfxMove<'a>(ctx: &'a Ctx) {
+    fns::lbAudioAx_80024030(ctx, 2_i32);
+}
+
+fn inl_equalU8<'a>(ctx: &'a Ctx, lhs: u8, rhs: u8) -> i32 {
+    let mut lhs = lhs;
+    let mut rhs = rhs;
+    return ((lhs as i32) == (rhs as i32)) as i32;
+}
+
+fn inl_isDuplicateCostumeCached<'a>(ctx: &'a Ctx, door: i32) -> i32 {
+    let mut door = door;
+    let mut base_door: CSSDoor<'a> = statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+        .doors()
+        .get(door);
+    let mut sel: u8 = 0;
+    let mut cost: u8 = 0;
+    let mut num_doors: i32 = 0;
+    let mut j: i32 = 0;
+    if ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type() as i32)
+        == (enums::TRAINING_MODE as i32)
+    {
+        num_doors = 2_i32;
+    } else {
+        num_doors = (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32);
+    }
+    sel = (base_door).sel_icon();
+    cost = (base_door).costume();
+    {
+        j = 0_i32;
+        'l1: while j < num_doors {
+            'c2: {
+                if ((((door != j)
+                    && ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                        .doors()
+                        .get(j)
+                        .p_kind() as i32)
+                        != 3_i32))
+                    && ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                        .doors()
+                        .get(j)
+                        .sel_icon() as i32)
+                        < 25_i32))
+                    && (inl_equalU8(
+                        ctx,
+                        statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                            .doors()
+                            .get(j)
+                            .sel_icon(),
+                        sel,
+                    ) != 0))
+                    && ((cost as i32)
+                        == (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                            .doors()
+                            .get(j)
+                            .costume() as i32))
+                {
+                    return 1_i32;
+                }
+            }
+            j = j.wrapping_add(1);
+        }
+    }
+    return 0_i32;
+}
+
+fn inl_loadCSSValue<'a>(ctx: &'a Ctx, css: Ptr<'a, CSSData<'a>>) -> CSSData<'a> {
+    let mut css = css;
+    return (css).get();
+}
+
+fn inl_isDuplicateCostumeWith<'a>(
+    ctx: &'a Ctx,
+    door: i32,
+    css: CSSData<'a>,
+    door_count: u8,
+) -> i32 {
+    let mut door = door;
+    let mut css = css;
+    let mut door_count = door_count;
+    let mut num_doors: i32 = 0;
+    let mut j: i32 = 0;
+    let mut base_door: CSSDoor<'a> = statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+        .doors()
+        .get(door);
+    if ((css).match_type() as i32) == (enums::TRAINING_MODE as i32) {
+        num_doors = 2_i32;
+    } else {
+        num_doors = (door_count as i32);
+    }
+    {
+        j = 0_i32;
+        'l1: while j < num_doors {
+            'c2: {
+                let mut other_door: CSSDoor<'a> =
+                    statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                        .doors()
+                        .get(j);
+                if ((((door != j) && (((other_door).p_kind() as i32) != 3_i32))
+                    && (((other_door).sel_icon() as i32) < 25_i32))
+                    && (((other_door).sel_icon() as i32) == ((base_door).sel_icon() as i32)))
+                    && (((base_door).costume() as i32) == ((other_door).costume() as i32))
+                {
+                    return 1_i32;
+                }
+            }
+            j = j.wrapping_add(1);
+        }
+    }
+    return 0_i32;
+}
+
+fn inl_cycleTeam<'a>(ctx: &'a Ctx, cursor: CSSCursorData<'a>, dp: CSSDoor<'a>, di: i32) {
+    let mut cursor = cursor;
+    let mut dp = dp;
+    let mut di = di;
+    let mut cx5: f64 = (cursor).xC();
+    if (cx5 > (dp).teambtn_left()) && (cx5 < (dp).teambtn_right()) {
+        let mut cy5: f64 = (cursor).x10();
+        if (cy5 < fp::fneg(0.9999999046325683)) && (cy5 > fp::fneg(5.800000095367432)) {
+            (cursor).set_x10(fp::fneg(3.4000000953674316));
+            (dp).set_team(((rem_i32((((dp).team() as i32).wrapping_add(1_i32)), 3_i32)) as u8));
+            (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                .vs()
+                .start()
+                .players()
+                .get(di)
+                .set_team((dp).team());
+            fns::mnCharSel_8025DB34(ctx, (di as u8));
+            inl_sfxMove(ctx);
+        }
+    }
+}
+
+fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
+    let mut jobj = jobj;
+    let mut y = y;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f0a64),
+            (0x213_i32 as u32),
+            cstr(ctx, 0x803f0a64),
+        )
+    });
+    (jobj).translate().set_y(y);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_HSD_JObjSetTranslateZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
+    let mut jobj = jobj;
+    let mut z = z;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f0a64),
+            (0x225_i32 as u32),
+            cstr(ctx, 0x803f0a64),
+        )
+    });
+    (jobj).translate().set_z(z);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_updateCursorDisplay<'a>(
+    ctx: &'a Ctx,
+    jobj: HSD_JObj<'a>,
+    cursor: CSSCursorData<'a>,
+    state_jobj: Ptr<'a, HSD_JObj<'a>>,
+    color_jobj: Ptr<'a, HSD_JObj<'a>>,
+) {
+    let mut jobj = jobj;
+    let mut cursor = cursor;
+    let mut state_jobj = state_jobj;
+    let mut color_jobj = color_jobj;
+    if ((cursor).x5() as i32) != 1_i32 {
+        let mut y: f64 = (cursor).x10();
+        if (y < 0.20000000298023224) || (y > 22.0) {
+            (cursor).set_x5((0_i32 as u8));
+        } else {
+            (cursor).set_x5((2_i32 as u8));
+        }
+    }
+    {
+        let mut state: f64 = fp::frsp((cursor).x5() as f64);
+        let mut cc0: HSD_JObj<'a> = null(ctx);
+        let _ = fns::lb_80011E24(
+            ctx,
+            jobj,
+            state_jobj,
+            &[
+                VarArg::Int(2_i32 as u32),
+                VarArg::Int(1_i32.wrapping_neg() as u32),
+            ],
+        );
+        cc0 = (state_jobj).get();
+        fns::HSD_ForeachAnim(
+            ctx,
+            Handle::cast::<Addr<'a>>(cc0),
+            (enums::JOBJ_TYPE as i32),
+            (enums::TOBJ_MASK as i32),
+            Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036410c)),
+            (enums::AOBJ_ARG_AF as i32),
+            &[VarArg::Float(state)],
+        );
+        fns::HSD_JObjAnimAll(ctx, (state_jobj).get());
+        fns::HSD_ForeachAnim(
+            ctx,
+            Handle::cast::<Addr<'a>>((state_jobj).get()),
+            (enums::JOBJ_TYPE as i32),
+            (enums::TOBJ_MASK as i32),
+            Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036414c)),
+            (enums::AOBJ_ARG_AOV as i32),
+            &[VarArg::Int(0_i32 as u32), VarArg::Int(0_i32 as u32)],
+        );
+    }
+    {
+        let mut color_idx: i32 = 0;
+        if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) == 1_i32 {
+            color_idx = (statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32);
+        } else if ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+            .vs()
+            .start()
+            .rules()
+            .is_teams() as i32)
+            == 0_i32
+        {
+            color_idx = ((cursor).x4() as i32);
+        } else {
+            color_idx = (statics::melee__mn__mncharsel::mnCharSel_804D50E0(ctx)
+                .at((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(((cursor).x4() as i32))
+                    .team() as i32))
+                .get() as i32);
+        }
+        {
+            if ((cursor).x8() as i32) != 0_i32 {
+                let mut port: i32 = ((cursor).x4() as i32);
+                if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) == 1_i32 {
+                    if port != 0_i32 {
+                        port =
+                            (statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).get() as i32);
+                    } else {
+                        port =
+                            (statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32);
+                    }
+                }
+                color_idx = ((statics::melee__mn__mncharsel::mnCharSel_804D6CEC(ctx).get()
+                    & (3_i32 as u32))
+                    .wrapping_add(((port.wrapping_mul(4_i32)) as u32))
+                    as i32);
+            } else {
+                let mut port_2: i32 = ((cursor).x4() as i32);
+                if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) == 1_i32 {
+                    if port_2 != 0_i32 {
+                        port_2 =
+                            (statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).get() as i32);
+                    } else {
+                        port_2 =
+                            (statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32);
+                    }
+                }
+                color_idx = color_idx.wrapping_add((port_2.wrapping_mul(4_i32)));
+            }
+            let _ = fns::lb_80011E24(
+                ctx,
+                jobj,
+                color_jobj,
+                &[
+                    VarArg::Int(3_i32 as u32),
+                    VarArg::Int(1_i32.wrapping_neg() as u32),
+                ],
+            );
+            {
+                let mut anim_jobj: HSD_JObj<'a> = (color_jobj).get();
+                fns::HSD_ForeachAnim(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(anim_jobj),
+                    (enums::JOBJ_TYPE as i32),
+                    (enums::TOBJ_MASK as i32),
+                    Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036410c)),
+                    (enums::AOBJ_ARG_AF as i32),
+                    &[VarArg::Float(fp::frsp(color_idx as f64))],
+                );
+            }
+            fns::HSD_JObjAnimAll(ctx, (color_jobj).get());
+            fns::HSD_ForeachAnim(
+                ctx,
+                Handle::cast::<Addr<'a>>((color_jobj).get()),
+                (enums::JOBJ_TYPE as i32),
+                (enums::TOBJ_MASK as i32),
+                Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036414c)),
+                (enums::AOBJ_ARG_AOV as i32),
+                &[VarArg::Int(0_i32 as u32), VarArg::Int(0_i32 as u32)],
+            );
+        }
+    }
+    inl_HSD_JObjSetTranslateX(ctx, jobj, (cursor).xC());
+    inl_HSD_JObjSetTranslateY(ctx, jobj, (cursor).x10());
+    inl_HSD_JObjSetTranslateZ(ctx, jobj, 0.0);
+    fns::HSD_JObjAnimAll(ctx, jobj);
+}
+
 fn inl_getDoorCount<'a>(ctx: &'a Ctx, css: CSSData<'a>) -> i32 {
     let mut css = css;
     if ((css).match_type() as i32) == (enums::TRAINING_MODE as i32) {
@@ -4312,43 +13309,80 @@ fn inl_animateCharModel<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, frame: f64) {
     );
 }
 
-fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
-    let mut jobj = jobj;
-    let mut y = y;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803f0a64),
-            (0x213_i32 as u32),
-            cstr(ctx, 0x803f0a64),
-        )
-    });
-    (jobj).translate().set_y(y);
-    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
-        {
-            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
-                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
-            }
-        }
-    }
+fn inl_sfxBack<'a>(ctx: &'a Ctx) {
+    fns::lbAudioAx_80024030(ctx, 0_i32);
 }
 
-fn inl_HSD_JObjSetTranslateZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
+fn inl_getHandicapValue<'a>(ctx: &'a Ctx, port: i32) -> i32 {
+    let mut port = port;
+    let mut hval: i32 = 0;
+    if ((fns::gmMainLib_GetGameRules(ctx)).handicap() as i32) == 1_i32 {
+        hval = ((fns::gm_801685D4(
+            ctx,
+            (port as u8),
+            (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                .vs()
+                .start()
+                .players()
+                .get(port)
+                .nametag(),
+        ) as u8) as i32);
+    } else {
+        hval = (((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+            .vs()
+            .start()
+            .players()
+            .get(port)
+            .handicap() as u8) as i32);
+    }
+    return (if hval != 0_i32 { hval } else { 1_i32 });
+}
+
+fn inl_HSD_LObjSetNext<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, next: HSD_LObj<'a>) {
+    let mut lobj = lobj;
+    let mut next = next;
+    (if !Handle::is_null((lobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f0a64),
+            (194_i32 as u32),
+            cstr(ctx, 0x803f0a64),
+        )
+    });
+    (lobj).set_next(next);
+}
+
+fn inl_HSD_JObjGetParent<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
     let mut jobj = jobj;
-    let mut z = z;
+    if Handle::is_null(jobj) {
+        return null::<HSD_JObj<'a>>(ctx);
+    } else {
+        return (jobj).parent();
+    }
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
+fn inl_getIconOffset<'a>(ctx: &'a Ctx, icon_idx: u32) -> i32 {
+    let mut icon_idx = icon_idx;
+    return (icon_idx.wrapping_mul(28_u32) as i32);
+}
+
+fn inl_HSD_JObjSetTranslateX_2<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x__a: f64, x__c: f64) {
+    let mut jobj = jobj;
     (if !Handle::is_null((jobj)) {
         ({ () })
     } else {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803f0a64),
-            (0x225_i32 as u32),
+            (0x201_i32 as u32),
             cstr(ctx, 0x803f0a64),
         )
     });
-    (jobj).translate().set_z(z);
+    (jobj).translate().set_x(fp::fmuls(x__a, x__c));
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         {
             if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
@@ -4472,6 +13506,14 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x802602a0,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(mnCharSel_CursorThink(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x80262648,
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
@@ -4480,10 +13522,26 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x80262f44,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(fn_80262F44(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x80263354,
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(fn_80263354(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x802633b0,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(fn_802633B0(ctx, a0), ctx);
         },
         Returns::Nothing,
     );
@@ -4501,6 +13559,13 @@ pub fn register(ctx: &Ctx) {
             Ret::put(fn_8026407C(ctx, a0), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x802640a0,
+        |ctx| {
+            Ret::put(mnCharSel_802640A0(ctx), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x8026688c,

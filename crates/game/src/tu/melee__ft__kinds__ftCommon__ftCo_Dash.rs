@@ -99,6 +99,425 @@ pub fn ftCo_Dash_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn ftCo_Dash_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x28);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = null(ctx);
+    let mut friction: f64 = 0.0;
+    let mut temp_f0: f64 = 0.0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+                __state = if ((fp).mv().co().dash().x4() != 0_i32)
+                    && ((fp).cur_anim_frame() <= (fns::p_ftCommonData(ctx).get()).x44())
+                {
+                    1
+                } else {
+                    3
+                };
+            }
+            1 => {
+                __state = if !(fns::ftCo_SpecialS_CheckInput(ctx, gobj) != 0) {
+                    5
+                } else {
+                    6
+                };
+            }
+            2 => {
+                friction = fns::ft_GetGroundFrictionMultiplier(ctx, fp);
+                temp_f0 = fp::fmuls((fp).gr_vel(), (fns::p_ftCommonData(ctx).get()).x54());
+                (fp).set_gr_vel(fp::fmadds(fp::fneg(temp_f0), friction, (fp).gr_vel()));
+                return;
+            }
+            3 => {
+                __state = if (fp).cur_anim_frame() <= (fns::p_ftCommonData(ctx).get()).x4C() {
+                    25
+                } else {
+                    27
+                };
+            }
+            4 => {
+                unreachable!();
+            }
+            5 => {
+                __state =
+                    if (!Handle::is_null((fp).item_gobj())) && (fns::ftCo_80094E54(ctx, fp) != 0) {
+                        8
+                    } else {
+                        10
+                    };
+            }
+            6 => {
+                __state = 2;
+            }
+            7 => {
+                unreachable!();
+            }
+            8 => {
+                fns::ftCo_800957F4(ctx, gobj, (enums::ftCo_MS_LightThrowF4 as i32));
+                __state = 9;
+            }
+            9 => {
+                __state = 6;
+            }
+            10 => {
+                __state = if (fns::ftCo_800D8A38(ctx, gobj) != 0) {
+                    12
+                } else {
+                    14
+                };
+            }
+            11 => {
+                unreachable!();
+            }
+            12 => {
+                return;
+            }
+            13 => {
+                __state = 9;
+            }
+            14 => {
+                __state = if !(fns::ftCo_AttackS4_8008C114(ctx, gobj) != 0) {
+                    17
+                } else {
+                    18
+                };
+            }
+            15 => {
+                unreachable!();
+            }
+            16 => {
+                __state = 13;
+            }
+            17 => {
+                __state = if !(((fp).cur_anim_frame() <= (fns::p_ftCommonData(ctx).get()).x48())
+                    && (fns::ftCo_80099264(ctx, gobj) != 0))
+                {
+                    20
+                } else {
+                    21
+                };
+            }
+            18 => {
+                __state = 13;
+            }
+            19 => {
+                unreachable!();
+            }
+            20 => {
+                __state = 23;
+            }
+            21 => {
+                __state = 18;
+            }
+            22 => {
+                unreachable!();
+            }
+            23 => {
+                __state = if !(fns::ftCo_800DE9D8(ctx, gobj) != 0) {
+                    69
+                } else {
+                    70
+                };
+            }
+            24 => {
+                __state = 21;
+            }
+            25 => {
+                __state = if !(fns::ftCo_SpecialS_CheckInput(ctx, gobj) != 0) {
+                    29
+                } else {
+                    30
+                };
+            }
+            26 => {
+                __state = 2;
+            }
+            27 => {
+                __state = 54;
+            }
+            28 => {
+                unreachable!();
+            }
+            29 => {
+                __state = 33;
+            }
+            30 => {
+                __state = 26;
+            }
+            31 => {
+                unreachable!();
+            }
+            32 => {
+                unreachable!();
+            }
+            33 => {
+                __state = if ((fns::ftCo_800D8A38(ctx, gobj)) != 0) {
+                    37
+                } else {
+                    38
+                };
+            }
+            34 => {
+                __state = if (0_i32 != 0) { 33 } else { 35 };
+            }
+            35 => {
+                __state = if (fns::ftCo_AttackDash_CheckInput(ctx, gobj) != 0) {
+                    41
+                } else {
+                    42
+                };
+            }
+            36 => {
+                unreachable!();
+            }
+            37 => {
+                return;
+            }
+            38 => {
+                __state = 34;
+            }
+            39 => {
+                unreachable!();
+            }
+            40 => {
+                __state = 38;
+            }
+            41 => {
+                fns::ftCo_AttackDash_SetMv0(ctx, gobj);
+                return;
+            }
+            42 => {
+                __state = if (!(fp::fmuls((fp).input().lstick().get(0_i32).x(), (fp).facing_dir())
+                    < 0.0))
+                    || (!(inl_ftCo_Dash_CheckInput(ctx, gobj) != 0))
+                {
+                    45
+                } else {
+                    46
+                };
+            }
+            43 => {
+                unreachable!();
+            }
+            44 => {
+                __state = 42;
+            }
+            45 => {
+                __state = if (fns::ftCo_80091AD8(
+                    ctx,
+                    gobj,
+                    fp::fctiwz(
+                        (fp::fsubs(
+                            (fns::p_ftCommonData(ctx).get()).x4C(),
+                            (fp).cur_anim_frame(),
+                        )),
+                    ),
+                ) != 0)
+                {
+                    48
+                } else {
+                    50
+                };
+            }
+            46 => {
+                __state = 30;
+            }
+            47 => {
+                unreachable!();
+            }
+            48 => {
+                __state = 49;
+            }
+            49 => {
+                __state = 46;
+            }
+            50 => {
+                __state = 23;
+            }
+            51 => {
+                unreachable!();
+            }
+            52 => {
+                __state = 49;
+            }
+            53 => {
+                unreachable!();
+            }
+            54 => {
+                __state = if ((fns::ftCo_800D8A38(ctx, gobj)) != 0) {
+                    58
+                } else {
+                    59
+                };
+            }
+            55 => {
+                __state = if (0_i32 != 0) { 54 } else { 56 };
+            }
+            56 => {
+                __state = if !(inl_ftCo_Dash_CheckInput(ctx, gobj) != 0) {
+                    62
+                } else {
+                    63
+                };
+            }
+            57 => {
+                unreachable!();
+            }
+            58 => {
+                return;
+            }
+            59 => {
+                __state = 55;
+            }
+            60 => {
+                unreachable!();
+            }
+            61 => {
+                __state = 59;
+            }
+            62 => {
+                __state = if (fns::ftCo_80091A4C(ctx, gobj) != 0) {
+                    65
+                } else {
+                    67
+                };
+            }
+            63 => {
+                __state = 26;
+            }
+            64 => {
+                unreachable!();
+            }
+            65 => {
+                fns::ftCo_80091B9C(ctx, gobj);
+                __state = 66;
+            }
+            66 => {
+                __state = 63;
+            }
+            67 => {
+                __state = 23;
+            }
+            68 => {
+                unreachable!();
+            }
+            69 => {
+                __state = 73;
+            }
+            70 => {
+                __state = 66;
+            }
+            71 => {
+                unreachable!();
+            }
+            72 => {
+                unreachable!();
+            }
+            73 => {
+                __state = if ((fns::fn_800CAF78(ctx, gobj)) != 0) {
+                    77
+                } else {
+                    78
+                };
+            }
+            74 => {
+                __state = if (0_i32 != 0) { 73 } else { 75 };
+            }
+            75 => {
+                __state = 82;
+            }
+            76 => {
+                unreachable!();
+            }
+            77 => {
+                return;
+            }
+            78 => {
+                __state = 74;
+            }
+            79 => {
+                unreachable!();
+            }
+            80 => {
+                __state = 78;
+            }
+            81 => {
+                unreachable!();
+            }
+            82 => {
+                __state = if !((fp).cmd_vars().at(0_i32).get() != 0) {
+                    86
+                } else {
+                    87
+                };
+            }
+            83 => {
+                __state = if (0_i32 != 0) { 82 } else { 84 };
+            }
+            84 => {
+                __state = 91;
+            }
+            85 => {
+                unreachable!();
+            }
+            86 => {
+                return;
+            }
+            87 => {
+                __state = 83;
+            }
+            88 => {
+                unreachable!();
+            }
+            89 => {
+                __state = 87;
+            }
+            90 => {
+                unreachable!();
+            }
+            91 => {
+                __state = if ((fns::fn_800CA5F0(ctx, gobj)) != 0) {
+                    95
+                } else {
+                    96
+                };
+            }
+            92 => {
+                __state = if (0_i32 != 0) { 91 } else { 93 };
+            }
+            93 => {
+                return;
+            }
+            94 => {
+                unreachable!();
+            }
+            95 => {
+                return;
+            }
+            96 => {
+                __state = 92;
+            }
+            97 => {
+                unreachable!();
+            }
+            98 => {
+                __state = 96;
+            }
+            99 => {
+                __state = 70;
+            }
+            100 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn ftCo_Dash_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let unused: ArrV<'a, u8, 1> = frame_at(ctx, &__frame, 0x0);
@@ -141,6 +560,32 @@ pub fn ftCo_Dash_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
+fn inl_ftCo_Dash_CheckInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
+    let mut lsx_abs: f64 = (fp).input().lstick().get(0_i32).x();
+    if lsx_abs < 0.0 {
+        lsx_abs = fp::fneg(lsx_abs);
+    }
+    if (lsx_abs >= (fns::p_ftCommonData(ctx).get()).dash_smash_stick_threshold())
+        && (((fp).active_timer().lstick().x() as i32)
+            < (fns::p_ftCommonData(ctx).get()).dash_smash_window())
+    {
+        if (fp::fmuls((fp).input().lstick().get(0_i32).x(), (fp).facing_dir())) < 0.0 {
+            fns::ftCo_Turn_Enter_Smash(ctx, gobj);
+        } else {
+            fns::ftCo_Dash_Enter(ctx, gobj, 1_i32);
+        }
+        return 1_i32;
+    }
+    return 0_i32;
 }
 
 fn inl_getAccelAndTarget_unfused<'a>(
@@ -194,6 +639,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(ftCo_Dash_Anim(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x800ca230,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftCo_Dash_IASA(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

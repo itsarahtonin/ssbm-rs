@@ -26,6 +26,114 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn CreateCallbackFat<'a>(ctx: &'a Ctx, chan: i32, result: i32) {
+    let __frame = ctx.stack_frame(0x28);
+    let mut chan = chan;
+    let mut result = result;
+    let mut card: CARDControl<'a> = null(ctx);
+    let mut dir: CARDDir<'a> = null(ctx);
+    let mut ent: CARDDir<'a> = null(ctx);
+    let mut callback: FnPtr<'a> = null(ctx);
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                card = fns::__CARDBlock(ctx).get(chan);
+                callback = (card).apiCallback();
+                (card).set_apiCallback(null::<FnPtr<'a>>(ctx));
+                __state = if result >= 0_i32 { 1 } else { 3 };
+            }
+            1 => {
+                dir = fns::__CARDGetDirBlock(ctx, card);
+                ent = (Handle::add(dir, ((card).freeNo() as i32)));
+                let _ = fns::memcpy(
+                    ctx,
+                    Handle::cast::<Addr<'a>>((ent).gameName().at(0)),
+                    Handle::cast::<Addr<'a>>(((card).diskID()).gameName().at(0)),
+                    4_u32,
+                );
+                let _ = fns::memcpy(
+                    ctx,
+                    Handle::cast::<Addr<'a>>((ent).company().at(0)),
+                    Handle::cast::<Addr<'a>>(((card).diskID()).company().at(0)),
+                    2_u32,
+                );
+                (ent).set_permission((4_i32 as u8));
+                (ent).set_copyTimes((0_i32 as u8));
+                (ent).set_startBlock((card).startBlock());
+                (ent).set_bannerFormat((0_i32 as u8));
+                (ent).set_iconAddr((1_i32.wrapping_neg() as u32));
+                (ent).set_iconFormat((0_i32 as u16));
+                (ent).set_iconSpeed((0_i32 as u16));
+                (ent).set_commentAddr((1_i32.wrapping_neg() as u32));
+                (ent).set_iconSpeed(
+                    (((((ent).iconSpeed() as i32)
+                        & (!(shl_i32(3_i32, ((2_i32.wrapping_mul((0_i32))) as u32)))))
+                        | (shl_i32((1_i32), ((2_i32.wrapping_mul((0_i32))) as u32))))
+                        as u16),
+                );
+                ((card).fileInfo()).set_offset(0_i32);
+                ((card).fileInfo()).set_iBlock((ent).startBlock());
+                (ent).set_time(
+                    ((div_i64(
+                        (fns::OSGetTime(ctx)),
+                        ((div_u32(
+                            ((ptr::<Val<'a, u32>>(
+                                ctx,
+                                ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                            ))
+                            .get()),
+                            (4_i32 as u32),
+                        )) as i64),
+                    )) as u32),
+                );
+                result = fns::__CARDUpdateDir(ctx, chan, callback);
+                __state = if result < 0_i32 { 5 } else { 6 };
+            }
+            2 => {
+                return;
+            }
+            3 => {
+                __state = 8;
+            }
+            4 => {
+                unreachable!();
+            }
+            5 => {
+                __state = 8;
+            }
+            6 => {
+                __state = 2;
+            }
+            7 => {
+                unreachable!();
+            }
+            8 => {
+                let _ = fns::__CARDPutControlBlock(ctx, card, result);
+                __state = if !Handle::is_null(callback) { 10 } else { 11 };
+            }
+            9 => {
+                __state = 6;
+            }
+            10 => {
+                callback.call::<_, ()>((chan, result));
+                __state = 11;
+            }
+            11 => {
+                __state = 2;
+            }
+            12 => {
+                unreachable!();
+            }
+            13 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn CARDCreateAsync<'a>(
     ctx: &'a Ctx,
     chan: i32,
@@ -134,6 +242,14 @@ pub fn CARDCreateAsync<'a>(
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x80357708,
+        |ctx| {
+            let (a0, a1): (i32, i32) = Args::take_all(ctx);
+            Ret::put(CreateCallbackFat(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
     ctx.register_port(
         0x80357838,
         |ctx| {

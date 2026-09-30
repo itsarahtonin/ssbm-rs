@@ -1866,6 +1866,211 @@ pub fn hsd_80396884<'a>(ctx: &'a Ctx) {
     statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).set_x50(saved);
 }
 
+pub fn hsd_80396A20<'a>(ctx: &'a Ctx, data: Addr<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x30);
+    let mut data = data;
+    let mut node: _ExcptNode<'a> = null(ctx);
+    let mut val: u32 = 0;
+    let mut shift: i32 = 0;
+    let mut bit: u32 = 0;
+    let mut mask: i32 = 0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                node = Handle::cast::<_ExcptNode<'a>>(data);
+                val = fns::lbl_8040BC3C(ctx).x10();
+                shift = 24_i32.wrapping_sub((fns::lbl_8040BC3C(ctx).x14().wrapping_mul(4_i32)));
+                bit = (1_i32 as u32);
+                mask = shl_i32(15_i32, (shift as u32));
+                __state = 1;
+            }
+            1 => {
+                __state = if bit
+                    <= statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).xBC()
+                {
+                    2
+                } else {
+                    4
+                };
+            }
+            2 => {
+                __state = match (statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
+                    .xBC()
+                    & bit)
+                {
+                    8_u32 => 6,
+                    4_u32 => 7,
+                    1_u32 => 8,
+                    2_u32 => 9,
+                    0x100_u32 => 10,
+                    0x400_u32 => 11,
+                    0x200_u32 => 12,
+                    0x1000_u32 => 13,
+                    _ => 14,
+                };
+            }
+            3 => {
+                __state = 1;
+            }
+            4 => {
+                return 0_i32;
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                fns::lbl_8040BC3C(ctx).set_x10(
+                    ((val & ((!mask) as u32))
+                        | (shl_u32(
+                            (((shr_u32(val, (shift as u32))).wrapping_sub((1_i32 as u32)))
+                                & (15_i32 as u32)),
+                            (shift as u32),
+                        ))),
+                );
+                return 1_i32;
+            }
+            7 => {
+                fns::lbl_8040BC3C(ctx).set_x10(
+                    ((val & ((!mask) as u32))
+                        | (shl_u32(
+                            (((shr_u32(val, (shift as u32))).wrapping_add((1_i32 as u32)))
+                                & (15_i32 as u32)),
+                            (shift as u32),
+                        ))),
+                );
+                return 1_i32;
+            }
+            8 => {
+                __state = if fns::lbl_8040BC3C(ctx).x14() > 0_i32 {
+                    19
+                } else {
+                    20
+                };
+            }
+            9 => {
+                __state = if fns::lbl_8040BC3C(ctx).x14() < 5_i32 {
+                    23
+                } else {
+                    24
+                };
+            }
+            10 => {
+                __state = if (fns::lbl_8040BC3C(ctx).x10() & (0xfffffff_i32 as u32))
+                    < fns::OSGetPhysicalMemSize(ctx)
+                {
+                    27
+                } else {
+                    28
+                };
+            }
+            11 => {
+                fns::lbl_8040BC3C(ctx).set_x10((val & ((!mask) as u32)));
+                return 1_i32;
+            }
+            12 => {
+                inl_ps_remove_node_unfused(
+                    ctx,
+                    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx),
+                    Handle::cast::<Addr<'a>>(node),
+                );
+                return 1_i32;
+            }
+            13 => {
+                inl_ps_push_node_unfused(
+                    ctx,
+                    Handle::cast::<_ExcptNode<'a>>(fns::lbl_8040BD74(ctx)),
+                );
+                return 1_i32;
+            }
+            14 => {
+                __state = 31;
+            }
+            15 => {
+                __state = 1;
+            }
+            16 => {
+                unreachable!();
+            }
+            17 => {
+                __state = 7;
+            }
+            18 => {
+                __state = 8;
+            }
+            19 => {
+                fns::lbl_8040BC3C(ctx).set_x14(fns::lbl_8040BC3C(ctx).x14().wrapping_sub(1));
+                __state = 20;
+            }
+            20 => {
+                return 1_i32;
+            }
+            21 => {
+                unreachable!();
+            }
+            22 => {
+                __state = 9;
+            }
+            23 => {
+                fns::lbl_8040BC3C(ctx).set_x14(fns::lbl_8040BC3C(ctx).x14().wrapping_add(1));
+                __state = 24;
+            }
+            24 => {
+                return 1_i32;
+            }
+            25 => {
+                unreachable!();
+            }
+            26 => {
+                __state = 10;
+            }
+            27 => {
+                statics::sysdolphin__baselib__debugconsole_main::hsd_80394E8C(
+                    ctx,
+                    Handle::cast::<lbl_8040B904_t<'a>>(fns::lbl_8040BC3C(ctx).x18()),
+                );
+                return 1_i32;
+            }
+            28 => {
+                __state = 31;
+            }
+            29 => {
+                unreachable!();
+            }
+            30 => {
+                __state = 28;
+            }
+            31 => {
+                bit = shl_u32(bit, (1_i32 as u32));
+                __state = 15;
+            }
+            32 => {
+                __state = 11;
+            }
+            33 => {
+                __state = 12;
+            }
+            34 => {
+                __state = 13;
+            }
+            35 => {
+                __state = 14;
+            }
+            36 => {
+                __state = 15;
+            }
+            37 => {
+                return 0;
+            }
+            38 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn hsd_80396C78<'a>(ctx: &'a Ctx, data: Addr<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut data = data;
@@ -3158,6 +3363,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(hsd_80396884(ctx), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80396a20,
+        |ctx| {
+            let (a0,): (Addr<'_>,) = Args::take_all(ctx);
+            Ret::put(hsd_80396A20(ctx, a0), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x80396c78,

@@ -959,6 +959,204 @@ pub fn ftSk_SpecialS_80111988<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn ftSk_SpecialSEnd_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x48);
+    let unused: ArrV<'a, u8, 36> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = null(ctx);
+    let mut specialAttributes: _ftSeakAttributes<'a> = null(ctx);
+    let mut temp_r3: i32 = 0;
+    let mut temp_f1: f64 = 0.0;
+    let mut item_gobj: HSD_GObj<'a> = null(ctx);
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+                specialAttributes = Handle::cast::<_ftSeakAttributes<'a>>((fp).dat_attrs());
+                (fp).mv()
+                    .sk()
+                    .specials()
+                    .set_x0((fp).mv().sk().specials().x0().wrapping_add(1_i32));
+                temp_r3 = (fp).mv().sk().specials().x0();
+                temp_f1 = (specialAttributes).x28();
+                __state = if fp::frsp(temp_r3 as f64) < temp_f1 {
+                    1
+                } else {
+                    2
+                };
+            }
+            1 => {
+                item_gobj = (fp).u().sk().x8();
+                __state = if fp::frsp(temp_r3 as f64) == (specialAttributes).x24() {
+                    4
+                } else {
+                    5
+                };
+            }
+            2 => {
+                __state = if fp::frsp(temp_r3 as f64) == temp_f1 {
+                    9
+                } else {
+                    11
+                };
+            }
+            3 => {
+                unreachable!();
+            }
+            4 => {
+                fns::it_802BCF84(ctx, item_gobj);
+                __state = 5;
+            }
+            5 => {
+                __state = 7;
+            }
+            6 => {
+                unreachable!();
+            }
+            7 => {
+                fns::ftSk_SpecialS_80110BCC(ctx, gobj);
+                __state = 10;
+            }
+            8 => {
+                __state = 2;
+            }
+            9 => {
+                item_gobj = (fp).u().sk().x8();
+                fns::it_802BB20C(ctx, item_gobj);
+                __state = 10;
+            }
+            10 => {
+                __state = if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
+                    13
+                } else {
+                    14
+                };
+            }
+            11 => {
+                __state = 7;
+            }
+            12 => {
+                unreachable!();
+            }
+            13 => {
+                fns::ft_8008A2BC(ctx, gobj);
+                __state = 14;
+            }
+            14 => {
+                return;
+            }
+            15 => {
+                unreachable!();
+            }
+            16 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
+pub fn ftSk_SpecialAirSEnd_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x40);
+    let unused: ArrV<'a, u8, 36> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = null(ctx);
+    let mut specialAttributes: _ftSeakAttributes<'a> = null(ctx);
+    let mut stateVar1: i32 = 0;
+    let mut temp_f1: f64 = 0.0;
+    let mut item_gobj: HSD_GObj<'a> = null(ctx);
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                fp = Handle::cast::<Fighter<'a>>((gobj).user_data());
+                specialAttributes = Handle::cast::<_ftSeakAttributes<'a>>((fp).dat_attrs());
+                (fp).mv()
+                    .sk()
+                    .specials()
+                    .set_x0((fp).mv().sk().specials().x0().wrapping_add(1_i32));
+                stateVar1 = (fp).mv().sk().specials().x0();
+                temp_f1 = (specialAttributes).x28();
+                __state = if fp::frsp(stateVar1 as f64) < temp_f1 {
+                    1
+                } else {
+                    2
+                };
+            }
+            1 => {
+                item_gobj = (fp).u().sk().x8();
+                __state = if fp::frsp(stateVar1 as f64) == (specialAttributes).x24() {
+                    4
+                } else {
+                    5
+                };
+            }
+            2 => {
+                __state = if fp::frsp(stateVar1 as f64) == temp_f1 {
+                    9
+                } else {
+                    11
+                };
+            }
+            3 => {
+                unreachable!();
+            }
+            4 => {
+                fns::it_802BCF84(ctx, item_gobj);
+                __state = 5;
+            }
+            5 => {
+                __state = 7;
+            }
+            6 => {
+                unreachable!();
+            }
+            7 => {
+                fns::ftSk_SpecialS_80110BCC(ctx, gobj);
+                __state = 10;
+            }
+            8 => {
+                __state = 2;
+            }
+            9 => {
+                item_gobj = (fp).u().sk().x8();
+                fns::it_802BB20C(ctx, item_gobj);
+                __state = 10;
+            }
+            10 => {
+                __state = if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
+                    13
+                } else {
+                    14
+                };
+            }
+            11 => {
+                __state = 7;
+            }
+            12 => {
+                unreachable!();
+            }
+            13 => {
+                fns::ftCo_Fall_Enter(ctx, gobj);
+                __state = 14;
+            }
+            14 => {
+                return;
+            }
+            15 => {
+                unreachable!();
+            }
+            16 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn ftSk_SpecialSEnd_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     return;
@@ -1576,6 +1774,22 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(ftSk_SpecialS_80111988(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80111a48,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftSk_SpecialSEnd_Anim(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80111b1c,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftSk_SpecialAirSEnd_Anim(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

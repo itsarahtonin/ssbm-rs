@@ -60,6 +60,464 @@ pub fn HSD_ChanGetAllocData<'a>(ctx: &'a Ctx) -> _HSD_ObjAllocData<'a> {
     return fns::chan_alloc_data(ctx);
 }
 
+pub fn HSD_SetupChannel<'a>(ctx: &'a Ctx, ch: HSD_Chan<'a>) {
+    let __frame = ctx.stack_frame(0x60);
+    let mut ch = ch;
+    let mut idx: i32 = 0;
+    let mut chan: i32 = 0;
+    let mut no: i32 = 0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                __state = if (Handle::is_null(ch))
+                    || (((ch).chan() as u32) == ((enums::GX_COLOR_NULL as i32) as u32))
+                {
+                    1
+                } else {
+                    2
+                };
+            }
+            1 => {
+                return;
+            }
+            2 => {
+                chan = (ch).chan();
+                idx = (((chan as u32) & (3_i32 as u32)) as i32);
+                no = (((chan as u32) & (1_i32 as u32)) as i32);
+                __state = if (((ch).enable() as i32) != ((0_i32 as u8) as i32))
+                    && (((ch).amb_src() as u32) == ((enums::GX_SRC_REG as i32) as u32))
+                {
+                    5
+                } else {
+                    6
+                };
+            }
+            3 => {
+                unreachable!();
+            }
+            4 => {
+                __state = 2;
+            }
+            5 => {
+                __state = if fns::prev_amb_invalid(ctx).at(no).get() != 0_i32 {
+                    8
+                } else {
+                    10
+                };
+            }
+            6 => {
+                __state = if ((ch).mat_src() as u32) == ((enums::GX_SRC_REG as i32) as u32) {
+                    32
+                } else {
+                    33
+                };
+            }
+            7 => {
+                unreachable!();
+            }
+            8 => {
+                fns::prev_amb_invalid(ctx).at(no).set(0_i32);
+                fns::GXSetChanAmbColor(ctx, no.wrapping_add(4_i32), (ch).amb_color());
+                Handle::copy_from(
+                    statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                        .get(no)
+                        .amb_color(),
+                    (ch).amb_color(),
+                );
+                __state = 9;
+            }
+            9 => {
+                __state = 6;
+            }
+            10 => {
+                __state = if ((chan as u32) == ((enums::GX_COLOR0A0 as i32) as u32))
+                    || ((chan as u32) == ((enums::GX_COLOR1A1 as i32) as u32))
+                {
+                    12
+                } else {
+                    14
+                };
+            }
+            11 => {
+                unreachable!();
+            }
+            12 => {
+                __state = if (inl_CompareRGBA_unfused(
+                    ctx,
+                    (ch).amb_color(),
+                    statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                        .get(no)
+                        .amb_color(),
+                ) != 0)
+                {
+                    16
+                } else {
+                    17
+                };
+            }
+            13 => {
+                __state = 9;
+            }
+            14 => {
+                __state = if ((chan as u32) == ((enums::GX_COLOR0 as i32) as u32))
+                    || ((chan as u32) == ((enums::GX_COLOR1 as i32) as u32))
+                {
+                    21
+                } else {
+                    23
+                };
+            }
+            15 => {
+                unreachable!();
+            }
+            16 => {
+                Handle::copy_from(
+                    statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                        .get(no)
+                        .amb_color(),
+                    (ch).amb_color(),
+                );
+                __state = 19;
+            }
+            17 => {
+                __state = 13;
+            }
+            18 => {
+                unreachable!();
+            }
+            19 => {
+                fns::GXSetChanAmbColor(ctx, chan, (ch).amb_color());
+                __state = 30;
+            }
+            20 => {
+                __state = 17;
+            }
+            21 => {
+                __state = if (inl_CompareRGB_unfused(
+                    ctx,
+                    (ch).amb_color(),
+                    statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                        .get(no)
+                        .amb_color(),
+                ) != 0)
+                {
+                    25
+                } else {
+                    26
+                };
+            }
+            22 => {
+                __state = 13;
+            }
+            23 => {
+                __state = if ((ch).amb_color().a() as i32)
+                    != (statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                        .get(no)
+                        .amb_color()
+                        .a() as i32)
+                {
+                    29
+                } else {
+                    30
+                };
+            }
+            24 => {
+                unreachable!();
+            }
+            25 => {
+                inl_CopyRGB_unfused(
+                    ctx,
+                    statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                        .get(no)
+                        .amb_color(),
+                    (ch).amb_color(),
+                );
+                __state = 19;
+            }
+            26 => {
+                __state = 22;
+            }
+            27 => {
+                unreachable!();
+            }
+            28 => {
+                __state = 26;
+            }
+            29 => {
+                statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                    .get(no)
+                    .amb_color()
+                    .set_a((ch).amb_color().a());
+                __state = 19;
+            }
+            30 => {
+                __state = 22;
+            }
+            31 => {
+                unreachable!();
+            }
+            32 => {
+                __state = if fns::prev_mat_invalid(ctx).at(no).get() != 0_i32 {
+                    35
+                } else {
+                    37
+                };
+            }
+            33 => {
+                __state = if (((((((ch).enable() as i32)
+                    != (statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                        .get(idx)
+                        .enable() as i32))
+                    || ((ch).amb_src()
+                        != statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                            .get(idx)
+                            .amb_src()))
+                    || ((ch).mat_src()
+                        != statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                            .get(idx)
+                            .mat_src()))
+                    || ((ch).light_mask()
+                        != statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                            .get(idx)
+                            .light_mask()))
+                    || ((ch).diff_fn()
+                        != statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                            .get(idx)
+                            .diff_fn()))
+                    || ((ch).attn_fn()
+                        != statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                            .get(idx)
+                            .attn_fn())
+                {
+                    59
+                } else {
+                    60
+                };
+            }
+            34 => {
+                unreachable!();
+            }
+            35 => {
+                fns::prev_mat_invalid(ctx).at(no).set(0_i32);
+                fns::GXSetChanMatColor(ctx, no.wrapping_add(4_i32), (ch).mat_color());
+                Handle::copy_from(
+                    statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                        .get(no)
+                        .mat_color(),
+                    (ch).mat_color(),
+                );
+                __state = 36;
+            }
+            36 => {
+                __state = 33;
+            }
+            37 => {
+                __state = if ((chan as u32) == ((enums::GX_COLOR0A0 as i32) as u32))
+                    || ((chan as u32) == ((enums::GX_COLOR1A1 as i32) as u32))
+                {
+                    39
+                } else {
+                    41
+                };
+            }
+            38 => {
+                unreachable!();
+            }
+            39 => {
+                __state = if (inl_CompareRGBA_unfused(
+                    ctx,
+                    (ch).mat_color(),
+                    statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                        .get(no)
+                        .mat_color(),
+                ) != 0)
+                {
+                    43
+                } else {
+                    44
+                };
+            }
+            40 => {
+                __state = 36;
+            }
+            41 => {
+                __state = if ((chan as u32) == ((enums::GX_COLOR0 as i32) as u32))
+                    || ((chan as u32) == ((enums::GX_COLOR1 as i32) as u32))
+                {
+                    48
+                } else {
+                    50
+                };
+            }
+            42 => {
+                unreachable!();
+            }
+            43 => {
+                Handle::copy_from(
+                    statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                        .get(no)
+                        .mat_color(),
+                    (ch).mat_color(),
+                );
+                __state = 46;
+            }
+            44 => {
+                __state = 40;
+            }
+            45 => {
+                unreachable!();
+            }
+            46 => {
+                fns::GXSetChanMatColor(ctx, chan, (ch).mat_color());
+                __state = 57;
+            }
+            47 => {
+                __state = 44;
+            }
+            48 => {
+                __state = if (inl_CompareRGB_unfused(
+                    ctx,
+                    (ch).mat_color(),
+                    statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                        .get(no)
+                        .mat_color(),
+                ) != 0)
+                {
+                    52
+                } else {
+                    53
+                };
+            }
+            49 => {
+                __state = 40;
+            }
+            50 => {
+                __state = if ((ch).mat_color().a() as i32)
+                    != (statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                        .get(no)
+                        .mat_color()
+                        .a() as i32)
+                {
+                    56
+                } else {
+                    57
+                };
+            }
+            51 => {
+                unreachable!();
+            }
+            52 => {
+                inl_CopyRGB_unfused(
+                    ctx,
+                    statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                        .get(no)
+                        .mat_color(),
+                    (ch).mat_color(),
+                );
+                __state = 46;
+            }
+            53 => {
+                __state = 49;
+            }
+            54 => {
+                unreachable!();
+            }
+            55 => {
+                __state = 53;
+            }
+            56 => {
+                statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                    .get(no)
+                    .mat_color()
+                    .set_a((ch).mat_color().a());
+                __state = 46;
+            }
+            57 => {
+                __state = 49;
+            }
+            58 => {
+                unreachable!();
+            }
+            59 => {
+                fns::GXSetChanCtrl(
+                    ctx,
+                    chan,
+                    (ch).enable(),
+                    (ch).amb_src(),
+                    (ch).mat_src(),
+                    ((ch).light_mask() as u32),
+                    (ch).diff_fn(),
+                    (ch).attn_fn(),
+                );
+                statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                    .get(idx)
+                    .set_enable((ch).enable());
+                statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                    .get(idx)
+                    .set_amb_src((ch).amb_src());
+                statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                    .get(idx)
+                    .set_mat_src((ch).mat_src());
+                statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                    .get(idx)
+                    .set_light_mask((ch).light_mask());
+                statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                    .get(idx)
+                    .set_diff_fn((ch).diff_fn());
+                statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                    .get(idx)
+                    .set_attn_fn((ch).attn_fn());
+                __state = if ((chan as u32) == ((enums::GX_COLOR0A0 as i32) as u32))
+                    || ((chan as u32) == ((enums::GX_COLOR1A1 as i32) as u32))
+                {
+                    62
+                } else {
+                    63
+                };
+            }
+            60 => {
+                return;
+            }
+            61 => {
+                unreachable!();
+            }
+            62 => {
+                statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                    .get(idx.wrapping_add(2_i32))
+                    .set_enable((ch).enable());
+                statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                    .get(idx.wrapping_add(2_i32))
+                    .set_amb_src((ch).amb_src());
+                statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                    .get(idx.wrapping_add(2_i32))
+                    .set_mat_src((ch).mat_src());
+                statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                    .get(idx.wrapping_add(2_i32))
+                    .set_light_mask((ch).light_mask());
+                statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                    .get(idx.wrapping_add(2_i32))
+                    .set_diff_fn((ch).diff_fn());
+                statics::sysdolphin__baselib__tev::prev_ch(ctx)
+                    .get(idx.wrapping_add(2_i32))
+                    .set_attn_fn((ch).attn_fn());
+                __state = 63;
+            }
+            63 => {
+                __state = 60;
+            }
+            64 => {
+                unreachable!();
+            }
+            65 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn HSD_StateSetNumChans<'a>(ctx: &'a Ctx, num: i32) {
     let __frame = ctx.stack_frame(0x8);
     let mut num = num;
@@ -753,6 +1211,30 @@ pub fn _HSD_StateInvalidateTexCoordGen<'a>(ctx: &'a Ctx) {
     statics::sysdolphin__baselib__tev::num_tex_gens(ctx).set(0_i32);
 }
 
+fn inl_CompareRGBA_unfused<'a>(ctx: &'a Ctx, c0: _GXColor<'a>, c1: _GXColor<'a>) -> i32 {
+    let mut c0 = c0;
+    let mut c1 = c1;
+    let mut d0: Val<'a, u32> = Handle::cast::<Val<'a, u32>>(c0);
+    let mut d1: Val<'a, u32> = Handle::cast::<Val<'a, u32>>(c1);
+    return ((d0).get() != (d1).get()) as i32;
+}
+
+fn inl_CompareRGB_unfused<'a>(ctx: &'a Ctx, c0: _GXColor<'a>, c1: _GXColor<'a>) -> i32 {
+    let mut c0 = c0;
+    let mut c1 = c1;
+    let mut d0: Val<'a, u32> = Handle::cast::<Val<'a, u32>>(c0);
+    let mut d1: Val<'a, u32> = Handle::cast::<Val<'a, u32>>(c1);
+    return ((((d0).get() ^ (d1).get()) & 0xffffff00_u32) != (0_i32 as u32)) as i32;
+}
+
+fn inl_CopyRGB_unfused<'a>(ctx: &'a Ctx, dst: _GXColor<'a>, src: _GXColor<'a>) {
+    let mut dst = dst;
+    let mut src = src;
+    let mut d: Val<'a, u32> = Handle::cast::<Val<'a, u32>>(dst);
+    let mut s: Val<'a, u32> = Handle::cast::<Val<'a, u32>>(src);
+    (d).set((((d).get() & (255_i32 as u32)) | ((s).get() & 0xffffff00_u32)));
+}
+
 fn inl_HSD_StateSetNumChans_unfused<'a>(ctx: &'a Ctx, num: i32) {
     let mut num = num;
     if statics::sysdolphin__baselib__tev::prev_num_chans(ctx).get() != num {
@@ -813,6 +1295,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(HSD_ChanGetAllocData(ctx), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x803620a4,
+        |ctx| {
+            let (a0,): (HSD_Chan<'_>,) = Args::take_all(ctx);
+            Ret::put(HSD_SetupChannel(ctx, a0), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x803623d0,

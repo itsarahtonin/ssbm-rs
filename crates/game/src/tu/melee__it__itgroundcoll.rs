@@ -337,6 +337,144 @@ pub fn it_8026DBC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     return 0_i32;
 }
 
+pub fn it_8026DC24<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x20);
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = null(ctx);
+    let mut attr: ItemAttr<'a> = null(ctx);
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                ip = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+                attr = (ip).xCC_item_attr();
+                __state = if (ip).xD50_landNum() <= (1_i32 as u32) {
+                    1
+                } else {
+                    2
+                };
+            }
+            1 => {
+                let _ = fns::it_80274658(ctx, gobj, (fns::it_804D6D28(ctx).get()).x74_float());
+                fns::it_80275DFC(ctx, gobj);
+                __state = 2;
+            }
+            2 => {
+                __state = if (if ((ip).x40_vel().x()) < fp::frsp(0_i32 as f64) {
+                    fp::fneg(((ip).x40_vel().x()))
+                } else {
+                    ((ip).x40_vel().x())
+                }) <= 9.999999747378752e-06_f64
+                {
+                    4
+                } else {
+                    5
+                };
+            }
+            3 => {
+                unreachable!();
+            }
+            4 => {
+                (ip).x40_vel().set_x(0.0);
+                __state = 5;
+            }
+            5 => {
+                __state = if (if ((ip).x40_vel().y()) < fp::frsp(0_i32 as f64) {
+                    fp::fneg(((ip).x40_vel().y()))
+                } else {
+                    ((ip).x40_vel().y())
+                }) <= 9.999999747378752e-06_f64
+                {
+                    7
+                } else {
+                    8
+                };
+            }
+            6 => {
+                unreachable!();
+            }
+            7 => {
+                (ip).x40_vel().set_y(0.0);
+                __state = 8;
+            }
+            8 => {
+                __state = if (if ((ip).x40_vel().x()) < fp::frsp(0_i32 as f64) {
+                    fp::fneg(((ip).x40_vel().x()))
+                } else {
+                    ((ip).x40_vel().x())
+                }) <= (attr).x5c()
+                {
+                    10
+                } else {
+                    11
+                };
+            }
+            9 => {
+                unreachable!();
+            }
+            10 => {
+                __state = if (if ((ip).x40_vel().y()) < fp::frsp(0_i32 as f64) {
+                    fp::fneg(((ip).x40_vel().y()))
+                } else {
+                    ((ip).x40_vel().y())
+                }) <= (attr).x5c()
+                {
+                    13
+                } else {
+                    14
+                };
+            }
+            11 => {
+                __state = if (((ip).xDCD_flag().x0().b4() as i32) != 0) || (!((attr).x58() != 0.0))
+                {
+                    18
+                } else {
+                    19
+                };
+            }
+            12 => {
+                unreachable!();
+            }
+            13 => {
+                __state = 16;
+            }
+            14 => {
+                __state = 11;
+            }
+            15 => {
+                unreachable!();
+            }
+            16 => {
+                inl_itResetVelocity_unfused(ctx, ip);
+                return 1_i32;
+            }
+            17 => {
+                __state = 14;
+            }
+            18 => {
+                __state = 16;
+            }
+            19 => {
+                return 0_i32;
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                __state = 19;
+            }
+            22 => {
+                return 0;
+            }
+            23 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn it_8026DD5C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
@@ -974,6 +1112,19 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_itResetVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
+    let mut ip = ip;
+    (ip).x40_vel().set_x({
+        let __t2 = {
+            let __t1 = 0.0;
+            (ip).x40_vel().set_z(__t1);
+            __t1
+        };
+        (ip).x40_vel().set_y(__t2);
+        __t2
+    });
+}
+
 fn inl_it_8026E_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
     let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
@@ -1149,6 +1300,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(it_8026DBC8(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8026dc24,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(it_8026DC24(ctx, a0), ctx);
         },
         Returns::Int,
     );

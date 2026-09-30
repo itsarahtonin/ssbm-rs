@@ -40,6 +40,129 @@ pub fn ftCo_800CECE8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     return 0_i32;
 }
 
+pub fn ftCo_800CED30<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = null(ctx);
+    let mut kind: i32 = 0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+                kind = (fp).kind();
+                __state = if (kind as u32) == ((enums::Ft_Kind_CLink as i32) as u32) {
+                    1
+                } else {
+                    3
+                };
+            }
+            1 => {
+                __state = 5;
+            }
+            2 => {
+                __state = 19;
+            }
+            3 => {
+                __state = if (kind as u32) < ((enums::Ft_Kind_CLink as i32) as u32) {
+                    7
+                } else {
+                    9
+                };
+            }
+            4 => {
+                unreachable!();
+            }
+            5 => {
+                __state = if (kind as u32) != ((enums::Ft_Kind_Link as i32) as u32) {
+                    16
+                } else {
+                    17
+                };
+            }
+            6 => {
+                __state = 2;
+            }
+            7 => {
+                __state = if (kind as u32) != ((enums::Ft_Kind_Link as i32) as u32) {
+                    11
+                } else {
+                    12
+                };
+            }
+            8 => {
+                __state = 2;
+            }
+            9 => {
+                __state = 14;
+            }
+            10 => {
+                unreachable!();
+            }
+            11 => {
+                __state = 14;
+            }
+            12 => {
+                __state = 8;
+            }
+            13 => {
+                unreachable!();
+            }
+            14 => {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(ctx, cstr(ctx, 0x803c6f40), &[]);
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x804d8f30),
+                            (39_i32 as u32),
+                            cstr(ctx, 0x804d8f30),
+                        )
+                    })
+                });
+                __state = 8;
+            }
+            15 => {
+                __state = 5;
+            }
+            16 => {
+                __state = 19;
+            }
+            17 => {
+                __state = 12;
+            }
+            18 => {
+                unreachable!();
+            }
+            19 => {
+                (fp).set_allow_interrupt((0_i32 as u8));
+                fns::Fighter_ChangeMotionState(
+                    ctx,
+                    gobj,
+                    (enums::ftLk_MS_AttackS42 as i32),
+                    0_u32,
+                    0.0,
+                    1.0,
+                    0.0,
+                    null::<HSD_GObj<'a>>(ctx),
+                );
+                fns::ftAnim_8006EBA4(ctx, gobj);
+                return;
+            }
+            20 => {
+                __state = 17;
+            }
+            21 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn ftCo_AttackS42_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
@@ -82,6 +205,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(ftCo_800CECE8(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x800ced30,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftCo_800CED30(ctx, a0), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x800cede0,

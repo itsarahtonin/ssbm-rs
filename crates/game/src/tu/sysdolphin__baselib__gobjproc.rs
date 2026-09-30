@@ -26,6 +26,253 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn HSD_GObjProc_QueueProc<'a>(ctx: &'a Ctx, gproc: HSD_GObjProc<'a>) {
+    let mut gproc = gproc;
+    let mut proc_gobj: HSD_GObj<'a> = null(ctx);
+    let mut dst_proc: HSD_GObjProc<'a> = null(ctx);
+    let mut s_link: u8 = 0;
+    let mut p_link: i32 = 0;
+    let mut cur_gobj: HSD_GObj<'a> = null(ctx);
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                proc_gobj = (gproc).gobj();
+                s_link = (gproc).s_link();
+                p_link = ((proc_gobj).p_link() as i32);
+                __state = if !Handle::is_null(
+                    (Handle::add(
+                        fns::HSD_GObj_ProcList(ctx).get(),
+                        p_link.wrapping_add(
+                            (s_link as i32).wrapping_mul(
+                                ((fns::HSD_GObjLibInitData(ctx).p_link_max() as i32)
+                                    .wrapping_add(1_i32)),
+                            ),
+                        ),
+                    ))
+                    .get(),
+                ) {
+                    1
+                } else {
+                    3
+                };
+            }
+            1 => {
+                cur_gobj = proc_gobj;
+                __state = 5;
+            }
+            2 => {
+                __state = 23;
+            }
+            3 => {
+                (Handle::add(
+                    fns::HSD_GObj_ProcList(ctx).get(),
+                    p_link.wrapping_add((s_link as i32).wrapping_mul(
+                        ((fns::HSD_GObjLibInitData(ctx).p_link_max() as i32).wrapping_add(1_i32)),
+                    )),
+                ))
+                .set(gproc);
+                __state = 2;
+            }
+            4 => {
+                unreachable!();
+            }
+            5 => {
+                __state = if !Handle::is_null(cur_gobj) { 6 } else { 8 };
+            }
+            6 => {
+                dst_proc = (cur_gobj).proc();
+                __state = 10;
+            }
+            7 => {
+                __state = 5;
+            }
+            8 => {
+                __state = 2;
+            }
+            9 => {
+                unreachable!();
+            }
+            10 => {
+                __state = if !Handle::is_null(dst_proc) { 11 } else { 13 };
+            }
+            11 => {
+                __state = if ((dst_proc).s_link() as i32) == (s_link as i32) {
+                    15
+                } else {
+                    16
+                };
+            }
+            12 => {
+                __state = 10;
+            }
+            13 => {
+                cur_gobj = (cur_gobj).prev();
+                __state = 5;
+            }
+            14 => {
+                unreachable!();
+            }
+            15 => {
+                __state = if Handle::addr(
+                    (Handle::add(
+                        fns::HSD_GObj_ProcList(ctx).get(),
+                        p_link.wrapping_add(
+                            (s_link as i32).wrapping_mul(
+                                ((fns::HSD_GObjLibInitData(ctx).p_link_max() as i32)
+                                    .wrapping_add(1_i32)),
+                            ),
+                        ),
+                    ))
+                    .get(),
+                ) == Handle::addr(dst_proc)
+                {
+                    18
+                } else {
+                    19
+                };
+            }
+            16 => {
+                dst_proc = (dst_proc).child();
+                __state = 10;
+            }
+            17 => {
+                unreachable!();
+            }
+            18 => {
+                (Handle::add(
+                    fns::HSD_GObj_ProcList(ctx).get(),
+                    p_link.wrapping_add((s_link as i32).wrapping_mul(
+                        ((fns::HSD_GObjLibInitData(ctx).p_link_max() as i32).wrapping_add(1_i32)),
+                    )),
+                ))
+                .set(gproc);
+                __state = 19;
+            }
+            19 => {
+                __state = 21;
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                (gproc).set_next((dst_proc).next());
+                (dst_proc).set_next(gproc);
+                (gproc).set_prev(dst_proc);
+                __state = 33;
+            }
+            22 => {
+                __state = 16;
+            }
+            23 => {
+                __state = if {
+                    let __t1 = p_link;
+                    p_link = p_link.wrapping_sub(1);
+                    __t1
+                } != 0_i32
+                {
+                    24
+                } else {
+                    26
+                };
+            }
+            24 => {
+                dst_proc = (Handle::add(
+                    fns::HSD_GObj_ProcList(ctx).get(),
+                    p_link.wrapping_add((s_link as i32).wrapping_mul(
+                        ((fns::HSD_GObjLibInitData(ctx).p_link_max() as i32).wrapping_add(1_i32)),
+                    )),
+                ))
+                .get();
+                __state = if !Handle::is_null(dst_proc) { 28 } else { 29 };
+            }
+            25 => {
+                __state = 23;
+            }
+            26 => {
+                __state = if (1_i32 != 0) { 32 } else { 34 };
+            }
+            27 => {
+                unreachable!();
+            }
+            28 => {
+                __state = 21;
+            }
+            29 => {
+                __state = 23;
+            }
+            30 => {
+                unreachable!();
+            }
+            31 => {
+                __state = 29;
+            }
+            32 => {
+                (gproc).set_next(
+                    (Handle::add(fns::HSD_GObj_GObjProcHead(ctx).get(), (s_link as i32))).get(),
+                );
+                (Handle::add(fns::HSD_GObj_GObjProcHead(ctx).get(), (s_link as i32))).set(gproc);
+                (gproc).set_prev(null::<HSD_GObjProc<'a>>(ctx));
+                __state = 33;
+            }
+            33 => {
+                __state = if !Handle::is_null((gproc).next()) {
+                    36
+                } else {
+                    37
+                };
+            }
+            34 => {
+                __state = 21;
+            }
+            35 => {
+                unreachable!();
+            }
+            36 => {
+                ((gproc).next()).set_prev(gproc);
+                __state = 37;
+            }
+            37 => {
+                (gproc).set_child((proc_gobj).proc());
+                (proc_gobj).set_proc(gproc);
+                __state = if ((((fns::HSD_GObj_DelayedProcInfo(ctx)
+                    .x0()
+                    .x0()
+                    .in_delayed_proc() as i32)
+                    != 0)
+                    && (Handle::addr((gproc).prev())
+                        == Handle::addr(fns::HSD_GObj_CurrentInvokedProc(ctx).get())))
+                    && (Handle::addr((gproc).next())
+                        == Handle::addr(fns::HSD_GObj_NextInvokedProc(ctx).get())))
+                    && ((s_link as i32) == fns::HSD_GObj_CurrentInvokedSLink(ctx).get())
+                {
+                    39
+                } else {
+                    40
+                };
+            }
+            38 => {
+                unreachable!();
+            }
+            39 => {
+                fns::HSD_GObj_NextInvokedProc(ctx).set(gproc);
+                __state = 40;
+            }
+            40 => {
+                return;
+            }
+            41 => {
+                unreachable!();
+            }
+            42 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn HSD_GObjProc_UnqueueProc<'a>(ctx: &'a Ctx, gproc: HSD_GObjProc<'a>) {
     let mut gproc = gproc;
     let mut p_link: i32 = (((gproc).gobj()).p_link() as i32);
@@ -228,6 +475,14 @@ fn inl_HSD_GObjProc_RemoveProc_unfused<'a>(ctx: &'a Ctx, gproc: HSD_GObjProc<'a>
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x8038faa8,
+        |ctx| {
+            let (a0,): (HSD_GObjProc<'_>,) = Args::take_all(ctx);
+            Ret::put(HSD_GObjProc_QueueProc(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
     ctx.register_port(
         0x8038fc18,
         |ctx| {

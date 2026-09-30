@@ -224,6 +224,347 @@ pub fn CreateNameAtIndex<'a>(ctx: &'a Ctx, slot: i32) {
     fns::InitializePersistentNameData(ctx, slot);
 }
 
+pub fn mnName_SortNames<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x48);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut arg0 = arg0;
+    let mut result: i32 = 0;
+    let mut idx2: u8 = 0;
+    let mut name2: Val<'a, i8> = null(ctx);
+    let mut i: i32 = 0;
+    let mut idx1: u8 = 0;
+    let mut j: i32 = 0;
+    let mut name1: Val<'a, i8> = null(ctx);
+    let mut index1: i32 = 0;
+    let mut e1: i32 = 0;
+    let mut e2: i32 = 0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = 3;
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                __state = if ((Handle::cast::<HSD_GObj<'a>>((arg0).user_data())).p_priority()
+                    as i32)
+                    == 0_i32
+                {
+                    6
+                } else {
+                    7
+                };
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                i = 0_i32;
+                __state = 9;
+            }
+            7 => {
+                i = 0_i32;
+                __state = 15;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                __state = if 120_i32 > i { 10 } else { 12 };
+            }
+            10 => {
+                statics::melee__mn__mnname::mnName_NameDisplayOrder(ctx)
+                    .at(i)
+                    .set((i as u8));
+                __state = 11;
+            }
+            11 => {
+                i = i.wrapping_add(1);
+                __state = 9;
+            }
+            12 => {
+                return;
+            }
+            13 => {
+                unreachable!();
+            }
+            14 => {
+                __state = 7;
+            }
+            15 => {
+                __state = if i < 120_i32 { 16 } else { 18 };
+            }
+            16 => {
+                j = i.wrapping_add(1_i32);
+                __state = 20;
+            }
+            17 => {
+                i = i.wrapping_add(1);
+                __state = 15;
+            }
+            18 => {
+                return;
+            }
+            19 => {
+                unreachable!();
+            }
+            20 => {
+                __state = if j < 120_i32 { 21 } else { 23 };
+            }
+            21 => {
+                idx1 = statics::melee__mn__mnname::mnName_NameDisplayOrder(ctx)
+                    .at(i)
+                    .get();
+                idx2 = statics::melee__mn__mnname::mnName_NameDisplayOrder(ctx)
+                    .at(j)
+                    .get();
+                index1 = (idx1 as i32);
+                name1 = (fns::GetPersistentNameData(ctx, index1)).namedata().at(0);
+                name2 = (fns::GetPersistentNameData(ctx, (idx2 as i32)))
+                    .namedata()
+                    .at(0);
+                __state = if ((fns::mnName_StringTerminator(ctx).at(0)).get() as i32)
+                    == ((fns::GetPersistentNameData(ctx, (idx1 as i32)))
+                        .namedata()
+                        .at(0_i32)
+                        .get() as i32)
+                {
+                    25
+                } else {
+                    27
+                };
+            }
+            22 => {
+                j = j.wrapping_add(1);
+                __state = 20;
+            }
+            23 => {
+                __state = 17;
+            }
+            24 => {
+                unreachable!();
+            }
+            25 => {
+                e1 = 0_i32;
+                __state = 26;
+            }
+            26 => {
+                __state = if e1 != 0_i32 { 29 } else { 31 };
+            }
+            27 => {
+                e1 = 1_i32;
+                __state = 26;
+            }
+            28 => {
+                unreachable!();
+            }
+            29 => {
+                __state = if ((fns::mnName_StringTerminator(ctx).at(0)).get() as i32)
+                    == ((fns::GetPersistentNameData(ctx, (idx2 as i32)))
+                        .namedata()
+                        .at(0_i32)
+                        .get() as i32)
+                {
+                    33
+                } else {
+                    35
+                };
+            }
+            30 => {
+                __state = if result == 1_i32 { 69 } else { 70 };
+            }
+            31 => {
+                __state = 41;
+            }
+            32 => {
+                unreachable!();
+            }
+            33 => {
+                e2 = 0_i32;
+                __state = 34;
+            }
+            34 => {
+                __state = if e2 != 0_i32 { 37 } else { 39 };
+            }
+            35 => {
+                e2 = 1_i32;
+                __state = 34;
+            }
+            36 => {
+                unreachable!();
+            }
+            37 => {
+                result = fns::CompareNameStrings(ctx, name1, name2);
+                __state = 38;
+            }
+            38 => {
+                __state = 30;
+            }
+            39 => {
+                __state = 41;
+            }
+            40 => {
+                unreachable!();
+            }
+            41 => {
+                __state = if ((fns::mnName_StringTerminator(ctx).at(0)).get() as i32)
+                    == ((fns::GetPersistentNameData(ctx, (idx1 as i32)))
+                        .namedata()
+                        .at(0_i32)
+                        .get() as i32)
+                {
+                    43
+                } else {
+                    45
+                };
+            }
+            42 => {
+                __state = 38;
+            }
+            43 => {
+                e1 = 0_i32;
+                __state = 44;
+            }
+            44 => {
+                __state = if e1 == 0_i32 { 47 } else { 49 };
+            }
+            45 => {
+                e1 = 1_i32;
+                __state = 44;
+            }
+            46 => {
+                unreachable!();
+            }
+            47 => {
+                __state = if ((fns::mnName_StringTerminator(ctx).at(0)).get() as i32)
+                    == ((fns::GetPersistentNameData(ctx, (idx2 as i32)))
+                        .namedata()
+                        .at(0_i32)
+                        .get() as i32)
+                {
+                    51
+                } else {
+                    53
+                };
+            }
+            48 => {
+                __state = 30;
+            }
+            49 => {
+                __state = 59;
+            }
+            50 => {
+                unreachable!();
+            }
+            51 => {
+                e2 = 0_i32;
+                __state = 52;
+            }
+            52 => {
+                __state = if e2 == 0_i32 { 55 } else { 57 };
+            }
+            53 => {
+                e2 = 1_i32;
+                __state = 52;
+            }
+            54 => {
+                unreachable!();
+            }
+            55 => {
+                result = 0_i32;
+                __state = 56;
+            }
+            56 => {
+                __state = 48;
+            }
+            57 => {
+                __state = 59;
+            }
+            58 => {
+                unreachable!();
+            }
+            59 => {
+                __state = if ((fns::mnName_StringTerminator(ctx).at(0)).get() as i32)
+                    == ((fns::GetPersistentNameData(ctx, (idx1 as i32)))
+                        .namedata()
+                        .at(0_i32)
+                        .get() as i32)
+                {
+                    61
+                } else {
+                    63
+                };
+            }
+            60 => {
+                __state = 56;
+            }
+            61 => {
+                e1 = 0_i32;
+                __state = 62;
+            }
+            62 => {
+                __state = if e1 == 0_i32 { 65 } else { 67 };
+            }
+            63 => {
+                e1 = 1_i32;
+                __state = 62;
+            }
+            64 => {
+                unreachable!();
+            }
+            65 => {
+                result = 1_i32;
+                __state = 66;
+            }
+            66 => {
+                __state = 48;
+            }
+            67 => {
+                result = 2_i32;
+                __state = 66;
+            }
+            68 => {
+                unreachable!();
+            }
+            69 => {
+                result = (statics::melee__mn__mnname::mnName_NameDisplayOrder(ctx)
+                    .at(i)
+                    .get() as i32);
+                statics::melee__mn__mnname::mnName_NameDisplayOrder(ctx)
+                    .at(i)
+                    .set(
+                        statics::melee__mn__mnname::mnName_NameDisplayOrder(ctx)
+                            .at(j)
+                            .get(),
+                    );
+                statics::melee__mn__mnname::mnName_NameDisplayOrder(ctx)
+                    .at(j)
+                    .set((result as u8));
+                __state = 70;
+            }
+            70 => {
+                __state = 22;
+            }
+            71 => {
+                unreachable!();
+            }
+            72 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn mnName_80237D94<'a>(ctx: &'a Ctx, arg0: i32, arg1: u8) -> u8 {
     let __frame = ctx.stack_frame(0x20);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
@@ -943,6 +1284,390 @@ pub fn mnName_80238C34<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: u8, arg2: u8)
     }
 }
 
+pub fn fn_80239574<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x40);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut arg0 = arg0;
+    let mut anim: AnimLoopSettings<'a> = null(ctx);
+    let mut new_var: HSD_JObj<'a> = null(ctx);
+    let mut base: AnimLoopSettings<'a> = null(ctx);
+    let mut doUpdate: i32 = 0;
+    let mut doSel: i32 = 0;
+    let mut doSelReset: u32 = 0;
+    let mut data: MnName_GObj<'a> = null(ctx);
+    let mut new_var2: i32 = 0;
+    let mut state: u8 = 0;
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut jobj_2: HSD_JObj<'a> = null(ctx);
+    let mut text: HSD_Text<'a> = null(ctx);
+    let mut idx: i32 = 0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                base = ({ fns::mnName_803ED538(ctx).get(0) });
+                doUpdate = 0_i32;
+                doSel = 0_i32;
+                doSelReset = (0_i32 as u32);
+                data = Handle::cast::<MnName_GObj<'a>>((arg0).user_data());
+                state = (data).gobj().p_link();
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = 3;
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                __state = if ((((state as i32) == 0_i32)
+                    || (((data).gobj().p_link() as i32) == 1_i32))
+                    || (((data).gobj().p_link() as i32) == 3_i32))
+                    && ((((Handle::cast::<Val<'a, u8>>(data)).get()) as i32)
+                        != ((fns::mn_804A04F0(ctx).cur_menu()) as i32))
+                {
+                    6
+                } else {
+                    7
+                };
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                __state = if ((fns::mn_804A04F0(ctx).buttons() & (16_i32 as u64)) != 0) {
+                    9
+                } else {
+                    11
+                };
+            }
+            7 => {
+                state = (data).gobj().p_link();
+                __state = if (state as i32) != 0_i32 { 29 } else { 31 };
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                (data).gobj().set_p_link((4_u32 as u8));
+                __state = 10;
+            }
+            10 => {
+                state = (data).gobj().p_link();
+                __state = match (state as i32) {
+                    1_i32 => 16,
+                    2_i32 => 17,
+                    3_i32 => 18,
+                    4_i32 => 19,
+                    _ => 20,
+                };
+            }
+            11 => {
+                __state = if ((fns::mn_804A04F0(ctx).buttons() & (32_i32 as u64)) != 0) {
+                    13
+                } else {
+                    14
+                };
+            }
+            12 => {
+                unreachable!();
+            }
+            13 => {
+                (data).gobj().set_p_link((2_u32 as u8));
+                __state = 14;
+            }
+            14 => {
+                __state = 10;
+            }
+            15 => {
+                unreachable!();
+            }
+            16 => {
+                anim = (Handle::add(base, 0_i32));
+                __state = 20;
+            }
+            17 => {
+                anim = (Handle::add(base, 2_i32));
+                __state = 20;
+            }
+            18 => {
+                anim = (Handle::add(base, 1_i32));
+                __state = 20;
+            }
+            19 => {
+                anim = (Handle::add(base, 3_i32));
+                __state = 20;
+            }
+            20 => {
+                jobj = Handle::cast::<HSD_JObj<'a>>((data).gobj().next_gx());
+                fns::HSD_JObjReqAnim(ctx, jobj, (anim).start_frame());
+                fns::HSD_JObjAnim(ctx, jobj);
+                state = (data).gobj().p_link();
+                __state = if (((state as i32) == 0_i32) || ((state as i32) == 1_i32))
+                    || ((state as i32) == 3_i32)
+                {
+                    26
+                } else {
+                    27
+                };
+            }
+            21 => {
+                unreachable!();
+            }
+            22 => {
+                __state = 17;
+            }
+            23 => {
+                __state = 18;
+            }
+            24 => {
+                __state = 19;
+            }
+            25 => {
+                __state = 20;
+            }
+            26 => {
+                doUpdate = 1_i32;
+                doSel = 1_i32;
+                doSelReset = (1_i32 as u32);
+                __state = 27;
+            }
+            27 => {
+                __state = 7;
+            }
+            28 => {
+                unreachable!();
+            }
+            29 => {
+                __state = match (state as i32) {
+                    1_i32 => 33,
+                    2_i32 => 34,
+                    3_i32 => 35,
+                    4_i32 => 36,
+                    _ => 37,
+                };
+            }
+            30 => {
+                return;
+            }
+            31 => {
+                __state = 56;
+            }
+            32 => {
+                unreachable!();
+            }
+            33 => {
+                anim = (Handle::add(base, 0_i32));
+                __state = 37;
+            }
+            34 => {
+                anim = (Handle::add(base, 2_i32));
+                __state = 37;
+            }
+            35 => {
+                anim = (Handle::add(base, 1_i32));
+                __state = 37;
+            }
+            36 => {
+                anim = (Handle::add(base, 3_i32));
+                __state = 37;
+            }
+            37 => {
+                jobj_2 = Handle::cast::<HSD_JObj<'a>>((data).gobj().next_gx());
+                new_var = jobj_2;
+                __state = if fns::mn_8022F298(ctx, new_var) >= (anim).end_frame() {
+                    43
+                } else {
+                    45
+                };
+            }
+            38 => {
+                unreachable!();
+            }
+            39 => {
+                __state = 34;
+            }
+            40 => {
+                __state = 35;
+            }
+            41 => {
+                __state = 36;
+            }
+            42 => {
+                __state = 37;
+            }
+            43 => {
+                state = (data).gobj().p_link();
+                __state = match (state as i32) {
+                    3_i32 => 47,
+                    1_i32 => 47,
+                    2_i32 => 48,
+                    4_i32 => 48,
+                    _ => 49,
+                };
+            }
+            44 => {
+                __state = 30;
+            }
+            45 => {
+                __state = 52;
+            }
+            46 => {
+                unreachable!();
+            }
+            47 => {
+                (data).gobj().set_p_link((0_u32 as u8));
+                __state = 52;
+            }
+            48 => {
+                fns::HSD_GObjFree(ctx, arg0);
+                return;
+            }
+            49 => {
+                __state = 52;
+            }
+            50 => {
+                __state = 44;
+            }
+            51 => {
+                unreachable!();
+            }
+            52 => {
+                fns::HSD_JObjAnim(ctx, new_var);
+                __state = 56;
+            }
+            53 => {
+                __state = 48;
+            }
+            54 => {
+                __state = 49;
+            }
+            55 => {
+                __state = 50;
+            }
+            56 => {
+                __state = if (fns::mn_804A04F0(ctx).x10() as i32) != 1_i32 {
+                    58
+                } else {
+                    59
+                };
+            }
+            57 => {
+                __state = 44;
+            }
+            58 => {
+                state = (data).gobj().p_link();
+                __state = if ((((state as i32) == 0_i32) || ((state as i32) == 1_i32))
+                    || ((state as i32) == 3_i32))
+                    && (((Handle::add(Handle::cast::<Val<'a, u8>>(data), 1_i32)).get() as i32)
+                        != (fns::mn_804A04F0(ctx).hovered_selection() as i32))
+                {
+                    61
+                } else {
+                    62
+                };
+            }
+            59 => {
+                fns::mnName_80238C34(ctx, arg0, (doSel as u8), (doSelReset as u8));
+                __state = if ((doSel != 0_i32)
+                    && ((fns::mn_804A04F0(ctx).hovered_selection() as u32) >= 24_u32))
+                    && ((((Handle::add(Handle::cast::<Val<'a, u8>>(data), 1_i32)).get()) as u32)
+                        >= 24_u32)
+                {
+                    64
+                } else {
+                    65
+                };
+            }
+            60 => {
+                unreachable!();
+            }
+            61 => {
+                doSel = 1_i32;
+                __state = 62;
+            }
+            62 => {
+                __state = 59;
+            }
+            63 => {
+                unreachable!();
+            }
+            64 => {
+                idx = (fns::mn_804A04F0(ctx).hovered_selection() as i32).wrapping_sub(24_i32);
+                new_var2 = idx;
+                __state = if !Handle::is_null((data).text2()) {
+                    67
+                } else {
+                    68
+                };
+            }
+            65 => {
+                __state = if doUpdate != 0_i32 { 70 } else { 71 };
+            }
+            66 => {
+                unreachable!();
+            }
+            67 => {
+                fns::HSD_SisLib_803A5CC4(ctx, (data).text2());
+                __state = 68;
+            }
+            68 => {
+                text = fns::HSD_SisLib_803A5ACC(
+                    ctx,
+                    0_i32,
+                    0_i32,
+                    fp::fneg(9.5),
+                    9.100000381469727,
+                    17.0,
+                    364.6833190917969,
+                    38.387718200683594,
+                );
+                (data).set_text2(text);
+                (text).font_size().set_x(0.05209999904036522);
+                (text).font_size().set_y(0.05209999904036522);
+                fns::HSD_SisLib_803A6368(
+                    ctx,
+                    text,
+                    (fns::mnName_804D4BE8(ctx).at(new_var2).get() as i32),
+                );
+                __state = 65;
+            }
+            69 => {
+                unreachable!();
+            }
+            70 => {
+                (Handle::cast::<Val<'a, u8>>(data)).set(fns::mn_804A04F0(ctx).cur_menu());
+                __state = 71;
+            }
+            71 => {
+                __state = if doSel != 0_i32 { 73 } else { 74 };
+            }
+            72 => {
+                unreachable!();
+            }
+            73 => {
+                (Handle::add(Handle::cast::<Val<'a, u8>>(data), 1_i32))
+                    .set((fns::mn_804A04F0(ctx).hovered_selection() as u8));
+                __state = 74;
+            }
+            74 => {
+                __state = 30;
+            }
+            75 => {
+                unreachable!();
+            }
+            76 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn mnName_80239878<'a>(ctx: &'a Ctx, arg0: u8, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let mut arg0 = arg0;
@@ -1284,6 +2009,219 @@ pub fn mnName_8023A058<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (mn).set_text(null::<HSD_Text<'a>>(ctx));
     }
     fns::mnName_80239A24(ctx, gobj);
+}
+
+pub fn fn_8023A0BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x48);
+    let sp2C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let sp28: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
+    let sp18: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
+    let sp14: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xc);
+    let mut gobj = gobj;
+    let mut end_frame: Val<'a, F32> = null(ctx);
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut pad1: u32 = 0;
+    let mut pad2: u32 = 0;
+    let mut pad3: u32 = 0;
+    let mut frame: f64 = 0.0;
+    let mut frame2: f64 = 0.0;
+    let mut new_var: Val<'a, F32> = null(ctx);
+    let mut sel: u8 = 0;
+    let mut base: Val<'a, u8> = null(ctx);
+    let mut pad4: u32 = 0;
+    let mut pad5: u32 = 0;
+    let mut text: HSD_Text<'a> = null(ctx);
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                jobj = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
+                base = Handle::cast::<Val<'a, u8>>(fns::mnName_803ED538(ctx).get(0));
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    jobj,
+                    sp2C,
+                    &[
+                        VarArg::Int(2_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = if (({
+                    let __t1 = fns::mn_804A04F0(ctx).x10();
+                    sel = __t1;
+                    __t1
+                }) as i32)
+                    != 2_i32
+                {
+                    1
+                } else {
+                    2
+                };
+            }
+            1 => {
+                fns::HSD_SisLib_803A5CC4(ctx, fns::mnName_804D6BFC(ctx).get());
+                fns::mnName_804D6BFC(ctx).set(null::<HSD_Text<'a>>(ctx));
+                fns::HSD_GObjFree(ctx, gobj);
+                return;
+            }
+            2 => {
+                frame = fns::mn_8022F298(ctx, sp2C.get());
+                __state = if (Handle::cast::<Val<'a, F32>>((Handle::add(base, 200_i32)))).get()
+                    <= frame
+                {
+                    5
+                } else {
+                    7
+                };
+            }
+            3 => {
+                unreachable!();
+            }
+            4 => {
+                __state = 2;
+            }
+            5 => {
+                end_frame = Handle::cast::<Val<'a, F32>>((Handle::add(base, 204_i32)));
+                __state = if frame
+                    < (({
+                        let __t2 = Handle::cast::<Val<'a, F32>>((Handle::add(base, 204_i32)));
+                        new_var = __t2;
+                        __t2
+                    })
+                    .get())
+                {
+                    9
+                } else {
+                    11
+                };
+            }
+            6 => {
+                return;
+            }
+            7 => {
+                __state = 19;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                frame2 = fns::mn_8022EFD8(
+                    ctx,
+                    sp2C.get(),
+                    Handle::cast::<AnimLoopSettings<'a>>((Handle::add(base, 200_i32))),
+                );
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    jobj,
+                    sp28,
+                    &[
+                        VarArg::Int(8_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                let _ = fns::mn_8022EFD8(
+                    ctx,
+                    sp28.get(),
+                    Handle::cast::<AnimLoopSettings<'a>>((Handle::add(base, 200_i32))),
+                );
+                __state = if frame2 >= (end_frame).get() { 13 } else { 14 };
+            }
+            10 => {
+                __state = 6;
+            }
+            11 => {
+                __state = 19;
+            }
+            12 => {
+                unreachable!();
+            }
+            13 => {
+                __state = if !Handle::is_null(fns::mnName_804D6BFC(ctx).get()) {
+                    16
+                } else {
+                    17
+                };
+            }
+            14 => {
+                __state = 10;
+            }
+            15 => {
+                unreachable!();
+            }
+            16 => {
+                fns::HSD_SisLib_803A5CC4(ctx, fns::mnName_804D6BFC(ctx).get());
+                __state = 17;
+            }
+            17 => {
+                text = fns::HSD_SisLib_803A5ACC(
+                    ctx,
+                    0_i32,
+                    1_i32,
+                    (Handle::cast::<Val<'a, F32>>((Handle::add(base, 236_i32)))).get(),
+                    (Handle::cast::<Val<'a, F32>>((Handle::add(base, 240_i32)))).get(),
+                    (Handle::cast::<Val<'a, F32>>((Handle::add(base, 244_i32)))).get(),
+                    416.66668701171875,
+                    33.333335876464844,
+                );
+                fns::mnName_804D6BFC(ctx).set(text);
+                (text).font_size().set_x(0.029999999329447746);
+                (text).font_size().set_y(0.029999999329447746);
+                fns::HSD_SisLib_803A6368(ctx, text, 73_i32);
+                __state = 14;
+            }
+            18 => {
+                unreachable!();
+            }
+            19 => {
+                sel = fns::mn_804A04F0(ctx).confirmed_selection();
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    jobj,
+                    sp14,
+                    &[
+                        VarArg::Int(6_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                let _ = fns::lb_80011E24(
+                    ctx,
+                    jobj,
+                    sp18,
+                    &[
+                        VarArg::Int(7_i32 as u32),
+                        VarArg::Int(1_i32.wrapping_neg() as u32),
+                    ],
+                );
+                __state = if (sel as i32) != 0_i32 { 21 } else { 23 };
+            }
+            20 => {
+                __state = 10;
+            }
+            21 => {
+                fns::HSD_JObjReqAnimAll(ctx, sp14.get(), 1.0);
+                fns::HSD_JObjReqAnimAll(ctx, sp18.get(), 0.0);
+                __state = 22;
+            }
+            22 => {
+                fns::HSD_JObjAnimAll(ctx, sp14.get());
+                fns::HSD_JObjAnimAll(ctx, sp18.get());
+                __state = 6;
+            }
+            23 => {
+                fns::HSD_JObjReqAnimAll(ctx, sp14.get(), 0.0);
+                fns::HSD_JObjReqAnimAll(ctx, sp18.get(), 1.0);
+                __state = 22;
+            }
+            24 => {
+                unreachable!();
+            }
+            25 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
 }
 
 pub fn mnName_8023A290<'a>(ctx: &'a Ctx) {
@@ -2342,6 +3280,14 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x80237a68,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(mnName_SortNames(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x80237d94,
         |ctx| {
             let (a0, a1): (i32, u8) = Args::take_all(ctx);
@@ -2444,6 +3390,14 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x80239574,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(fn_80239574(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x80239878,
         |ctx| {
             let (a0, a1): (u8, HSD_GObj<'_>) = Args::take_all(ctx);
@@ -2488,6 +3442,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(mnName_8023A058(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8023a0bc,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(fn_8023A0BC(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

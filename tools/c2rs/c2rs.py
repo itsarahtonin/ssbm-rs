@@ -227,6 +227,8 @@ class FnCtx:
         self.sret = False
         # Goto labels by name: (label statement offset, Rust block label, Rust loop label).
         self.goto_labels = {}
+        # Whether gotos jump into blocks, so the body becomes a state machine.
+        self.cfg = False
         self.hoisted = set()  # locals declared ahead of the blocks that stand in for gotos
 
     def fresh(self, base):
@@ -580,7 +582,7 @@ class Translator:
             else:
                 self.f.locals[key] = (rname, pt, "reg")
                 pre.append(f"let mut {ident(rname)} = {ident(rname)};")
-        stmts = self.stmts(children(body))
+        stmts = self.cfg_body(body) if self.f.cfg else self.stmts(children(body))
         ret = "" if self.f.ret["k"] == "void" or self.f.sret else " -> " + self.u.rust_value_ty(self.f.ret)
         lines = [f"pub fn {ident(name)}<'a>(ctx: &'a Ctx{''.join(', ' + p for p in params)}){ret} {{"]
         # The port takes the original's frame size, so functions it calls run at the same
@@ -658,7 +660,7 @@ class Translator:
             while up is not None and (around is None or up.hash != around.hash):
                 up = parent.get(up.hash)
             if up is None or around.kind != CK.COMPOUND_STMT:
-                raise Unsupported("goto into a block")
+                self.f.cfg = True
 
     # Stack slots.
 
@@ -679,6 +681,206 @@ class Translator:
         out = []
         for n in nodes:
             out += self.stmt(n)
+        return out
+
+    # A body whose gotos jump into blocks becomes a loop over a match of its basic blocks.
+
+    def cfg_body(self, body):
+        out = self.hoist_all(body)
+        self.cfg_blocks = []  # [lines, terminator]
+        self.cfg_labels = {}  # goto label -> block
+        self.cfg_loops = []  # (break block, continue block or None)
+        self.cfg_cur = self.cfg_block()
+        self.cfg_stmt(body)
+        if self.cfg_blocks[self.cfg_cur][1] is None:
+            ret = "return;" if self.f.ret["k"] == "void" or self.f.sret else f"return {self.zero(self.f.ret)};"
+            self.cfg_end([ret], ("done",))
+        arms = []
+        for i, (lines, term) in enumerate(self.cfg_blocks):
+            if term is None:
+                term = ("dead",)
+            kind = term[0]
+            if kind == "goto":
+                lines = lines + [f"__state = {term[1]};"]
+            elif kind == "branch":
+                lines = lines + [f"__state = if {term[1]} {{ {term[2]} }} else {{ {term[3]} }};"]
+            elif kind == "switch":
+                lines = lines + [f"__state = match {term[1]} {{"] + \
+                    [f"    {lit} => {b}," for lit, b in term[2]] + [f"    _ => {term[3]},", "};"]
+            elif kind == "dead":
+                lines = lines + ["unreachable!();"]
+            arms += [f"{i} => {{"] + self.indent(lines) + ["}"]
+        arms += ["_ => unreachable!(),"]
+        return out + ["let mut __state: u32 = 0;", "#[allow(unreachable_code)]", "loop {"] + \
+            self.indent(["match __state {"] + self.indent(arms) + ["}"]) + ["}"]
+
+    def cfg_block(self):
+        self.cfg_blocks.append([[], None])
+        return len(self.cfg_blocks) - 1
+
+    def cfg_end(self, lines, term):
+        """Ends the current block, and goes on in a fresh one, reached only by label."""
+        block = self.cfg_blocks[self.cfg_cur]
+        if block[1] is None:
+            block[0] += lines
+            block[1] = term
+        self.cfg_cur = self.cfg_block()
+
+    def cfg_goto(self, target):
+        block = self.cfg_blocks[self.cfg_cur]
+        if block[1] is None:
+            block[1] = ("goto", target)
+        self.cfg_cur = target
+
+    def cfg_label(self, name):
+        if name not in self.cfg_labels:
+            self.cfg_labels[name] = self.cfg_block()
+        return self.cfg_labels[name]
+
+    def cfg_stmt(self, n):
+        self.line = n.location.line
+        k = n.kind
+        lines = self.cfg_blocks[self.cfg_cur][0]
+        if k == CK.COMPOUND_STMT:
+            for c in children(n):
+                self.cfg_stmt(c)
+        elif k == CK.LABEL_STMT:
+            self.cfg_goto(self.cfg_label(n.spelling))
+            self.cfg_stmt(children(n)[0])
+        elif k == CK.GOTO_STMT:
+            ref = [r for r in n.get_children() if r.kind == CK.LABEL_REF]
+            self.cfg_end([], ("goto", self.cfg_label(ref[0].spelling)))
+        elif k == CK.RETURN_STMT:
+            self.cfg_end(self.stmt(n), ("done",))
+        elif k == CK.IF_STMT:
+            kids = children(n)
+            if self.setjmp_test(kids[0]) is not None:
+                raise Unsupported("setjmp in a goto state machine")
+            cond = self.cond(kids[0])
+            then_b, join = self.cfg_block(), self.cfg_block()
+            else_b = self.cfg_block() if len(kids) > 2 else join
+            self.cfg_end([], ("branch", cond, then_b, else_b))
+            self.cfg_cur = then_b
+            self.cfg_stmt(kids[1])
+            self.cfg_goto(join)
+            if len(kids) > 2:
+                self.cfg_cur = else_b
+                self.cfg_stmt(kids[2])
+                self.cfg_goto(join)
+            self.cfg_cur = join
+        elif k in (CK.WHILE_STMT, CK.DO_STMT, CK.FOR_STMT):
+            self.cfg_loop(n)
+        elif k == CK.BREAK_STMT:
+            if not self.cfg_loops:
+                raise Unsupported("break outside a loop")
+            self.cfg_end([], ("goto", self.cfg_loops[-1][0]))
+        elif k == CK.CONTINUE_STMT:
+            conts = [c for _, c in self.cfg_loops if c is not None]
+            if not conts:
+                raise Unsupported("continue outside a loop")
+            self.cfg_end([], ("goto", conts[-1]))
+        elif k == CK.SWITCH_STMT:
+            self.cfg_switch(n)
+        elif k in (CK.CASE_STMT, CK.DEFAULT_STMT):
+            raise Unsupported("case label outside a switch body")
+        elif k == CK.NULL_STMT:
+            pass
+        else:
+            lines += self.stmt(n)
+
+    def cfg_loop(self, n):
+        k = n.kind
+        if k == CK.WHILE_STMT:
+            cond_node, body = children(n)
+            init = incr = None
+        elif k == CK.DO_STMT:
+            body, cond_node = children(n)
+            init = incr = None
+        else:
+            init, cond_node, incr, body = self.for_parts(n)
+        if init is not None:
+            self.cfg_blocks[self.cfg_cur][0].extend(
+                self.stmt(init) if init.kind == CK.DECL_STMT else self.effect(init))
+        head, body_b, step, exit_b = self.cfg_block(), self.cfg_block(), self.cfg_block(), self.cfg_block()
+        self.cfg_goto(body_b if k == CK.DO_STMT else head)
+        # The test: at the head for while and for, after the body for do.
+        test_b = step if k == CK.DO_STMT else head
+        self.cfg_cur = test_b
+        cond = self.cond(cond_node) if cond_node is not None else "true"
+        self.cfg_end([], ("branch", cond, body_b, exit_b))
+        self.cfg_loops.append((exit_b, head if k == CK.WHILE_STMT else step))
+        self.cfg_cur = body_b
+        self.cfg_stmt(body)
+        self.cfg_loops.pop()
+        if k == CK.FOR_STMT:
+            self.cfg_goto(step)
+            self.cfg_blocks[step][0].extend(self.effect(incr) if incr is not None else [])
+            self.cfg_blocks[step][1] = ("goto", head)
+        elif k == CK.WHILE_STMT:
+            self.cfg_goto(head)
+            self.cfg_blocks[step][1] = ("goto", head)
+        else:
+            self.cfg_goto(step)
+        self.cfg_cur = exit_b
+
+    def cfg_switch(self, n):
+        cond_node, body = children(n)
+        v = self.convert(self.expr(cond_node), promote(self.u.ctype(cond_node.type)))
+        items = children(body) if body.kind == CK.COMPOUND_STMT else [body]
+        groups = []  # [labels, stmts]
+        for it in items:
+            if it.kind in (CK.CASE_STMT, CK.DEFAULT_STMT):
+                labels, node = [], it
+                while node.kind in (CK.CASE_STMT, CK.DEFAULT_STMT):
+                    kids = children(node)
+                    if node.kind == CK.CASE_STMT:
+                        val = evaluate(kids[0])
+                        if val is None:
+                            raise Unsupported("case value")
+                        labels.append(int(val))
+                        node = kids[1]
+                    else:
+                        labels.append("default")
+                        node = kids[0]
+                groups.append([labels, [node]])
+            else:
+                if not groups:
+                    groups.append([[], []])
+                groups[-1][1].append(it)
+        blocks = [self.cfg_block() for _ in groups]
+        exit_b = self.cfg_block()
+        arms, default = [], exit_b
+        for (labels, _), b in zip(groups, blocks):
+            for lab in labels:
+                if lab == "default":
+                    default = b
+                else:
+                    arms.append((self.int_literal(lab, v.ty), b))
+        self.cfg_end([], ("switch", v.code, arms, default))
+        self.cfg_loops.append((exit_b, None))
+        for i, ((_, nodes), b) in enumerate(zip(groups, blocks)):
+            self.cfg_cur = b
+            for node in nodes:
+                self.cfg_stmt(node)
+            self.cfg_goto(blocks[i + 1] if i + 1 < len(blocks) else exit_b)
+        self.cfg_loops.pop()
+        self.cfg_cur = exit_b
+
+    def hoist_all(self, body):
+        """Declares every register local of a body at its start, zeroed; their declarations
+        then assign."""
+        out = []
+        for d in body.walk_preorder():
+            if d.kind != CK.VAR_DECL or d.storage_class in (ci.StorageClass.STATIC, ci.StorageClass.EXTERN):
+                continue
+            t = self.u.ctype(d.type)
+            key = vkey(d)
+            if t["k"] in ("rec", "arr") or key in self.f.escaping or key in self.f.hoisted:
+                continue
+            rname = self.f.fresh(self.safe(d.spelling or "anon"))
+            self.f.locals[key] = (rname, t, "reg")
+            self.f.hoisted.add(key)
+            out.append(f"let mut {ident(rname)}: {self.u.rust_value_ty(t)} = {self.zero(t)};")
         return out
 
     def goto_region(self, nodes):
@@ -848,6 +1050,33 @@ class Translator:
             raise Unsupported("case label outside a switch body")
         # An expression statement.
         return self.effect(n)
+
+    def for_parts(self, n):
+        """A for statement's (init, condition, increment, body); absent parts are None."""
+        # libclang lists only the parts that are present; tell them apart by position.
+        toks = [t.spelling for t in n.get_tokens()]
+        kids = children(n)
+        depth, semis, i = 0, [], 0
+        for i, tok in enumerate(toks):
+            if tok == "(":
+                depth += 1
+            elif tok == ")":
+                depth -= 1
+                if depth == 0:
+                    break
+            elif tok == ";" and depth == 1:
+                semis.append(i)
+        if len(semis) != 2:
+            raise Unsupported("for header")
+        has_init, has_cond, has_incr = semis[0] > 2, semis[1] > semis[0] + 1, i > semis[1] + 1
+        idx = 0
+        init = kids[idx] if has_init else None
+        idx += has_init
+        cond_node = kids[idx] if has_cond else None
+        idx += has_cond
+        incr = kids[idx] if has_incr else None
+        idx += has_incr
+        return init, cond_node, incr, kids[idx]
 
     def for_stmt(self, n):
         # libclang lists only the parts that are present; tell them apart by position.

@@ -54,6 +54,230 @@ pub fn it_802CD4DC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ref_gobj: HSD_GObj<'a>)
     let _ = fns::it_8026B894(ctx, gobj, ref_gobj);
 }
 
+pub fn it_802CD4FC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x28);
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = null(ctx);
+    let mut attrs: itsonansAttributes<'a> = null(ctx);
+    let mut angle: f64 = 0.0;
+    let mut max_angle: f64 = 0.0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                ip = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+                attrs = Handle::cast::<itsonansAttributes<'a>>(
+                    ((ip).xC4_article_data()).x4_specialAttributes(),
+                );
+                __state = if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+                    1
+                } else {
+                    2
+                };
+            }
+            1 => {
+                fns::it_80272860(
+                    ctx,
+                    gobj,
+                    ((ip).xCC_item_attr()).x10_fall_speed(),
+                    ((ip).xCC_item_attr()).x14_fall_speed_max(),
+                );
+                __state = 2;
+            }
+            2 => {
+                __state = if ((ip).xDAC_itcmd_var0() != 0) { 4 } else { 5 };
+            }
+            3 => {
+                unreachable!();
+            }
+            4 => {
+                angle = (ip).xDD4_itemVar().sonans().x64();
+                __state = if (angle > 0.0) && ((ip).xDD4_itemVar().sonans().x60() > 0.0) {
+                    7
+                } else {
+                    9
+                };
+            }
+            5 => {
+                fns::it_80272460(
+                    ctx,
+                    (ip).x5D4_hitboxes().get(0_i32).hit(),
+                    cvt_fp2unsigned(ctx, (ip).xDD4_itemVar().sonans().x68()),
+                    gobj,
+                );
+                (ip).xDD4_itemVar()
+                    .sonans()
+                    .set_x68(fp::fsubs((ip).xDD4_itemVar().sonans().x68(), (attrs).x20()));
+                return;
+            }
+            6 => {
+                unreachable!();
+            }
+            7 => {
+                (ip).xDD4_itemVar()
+                    .sonans()
+                    .set_x60(fp::fadds((ip).xDD4_itemVar().sonans().x60(), (attrs).x14()));
+                __state = 8;
+            }
+            8 => {
+                angle = (if ((ip).xDD4_itemVar().sonans().x64()) < fp::frsp(0_i32 as f64) {
+                    fp::fneg(((ip).xDD4_itemVar().sonans().x64()))
+                } else {
+                    ((ip).xDD4_itemVar().sonans().x64())
+                });
+                __state = if angle < (attrs).x1C() { 22 } else { 24 };
+            }
+            9 => {
+                __state = if (angle <= 0.0) && ((ip).xDD4_itemVar().sonans().x60() <= 0.0) {
+                    11
+                } else {
+                    13
+                };
+            }
+            10 => {
+                unreachable!();
+            }
+            11 => {
+                (ip).xDD4_itemVar()
+                    .sonans()
+                    .set_x60(fp::fsubs((ip).xDD4_itemVar().sonans().x60(), (attrs).x14()));
+                __state = 12;
+            }
+            12 => {
+                __state = 8;
+            }
+            13 => {
+                __state = if (angle > 0.0) && ((ip).xDD4_itemVar().sonans().x60() <= 0.0) {
+                    15
+                } else {
+                    17
+                };
+            }
+            14 => {
+                unreachable!();
+            }
+            15 => {
+                (ip).xDD4_itemVar()
+                    .sonans()
+                    .set_x60(fp::fsubs((ip).xDD4_itemVar().sonans().x60(), (attrs).x10()));
+                __state = 16;
+            }
+            16 => {
+                __state = 12;
+            }
+            17 => {
+                __state = if (angle <= 0.0) && ((ip).xDD4_itemVar().sonans().x60() > 0.0) {
+                    19
+                } else {
+                    20
+                };
+            }
+            18 => {
+                unreachable!();
+            }
+            19 => {
+                (ip).xDD4_itemVar()
+                    .sonans()
+                    .set_x60(fp::fadds((ip).xDD4_itemVar().sonans().x60(), (attrs).x10()));
+                __state = 20;
+            }
+            20 => {
+                __state = 16;
+            }
+            21 => {
+                unreachable!();
+            }
+            22 => {
+                angle = (if ((ip).xDD4_itemVar().sonans().x60()) < fp::frsp(0_i32 as f64) {
+                    fp::fneg(((ip).xDD4_itemVar().sonans().x60()))
+                } else {
+                    ((ip).xDD4_itemVar().sonans().x60())
+                });
+                __state = if angle < (attrs).x1C() { 26 } else { 28 };
+            }
+            23 => {
+                angle = (ip).xDD4_itemVar().sonans().x64();
+                max_angle = (attrs).x18();
+                __state = if angle > max_angle { 32 } else { 34 };
+            }
+            24 => {
+                __state = 30;
+            }
+            25 => {
+                unreachable!();
+            }
+            26 => {
+                (ip).xDD4_itemVar().sonans().set_x64(0.0);
+                (ip).xDD4_itemVar().sonans().set_x60(0.0);
+                (ip).set_xDAC_itcmd_var0((0_i32 as u32));
+                __state = 27;
+            }
+            27 => {
+                __state = 23;
+            }
+            28 => {
+                __state = 30;
+            }
+            29 => {
+                unreachable!();
+            }
+            30 => {
+                (ip).xDD4_itemVar().sonans().set_x64(fp::fadds(
+                    (ip).xDD4_itemVar().sonans().x64(),
+                    (ip).xDD4_itemVar().sonans().x60(),
+                ));
+                __state = 23;
+            }
+            31 => {
+                __state = 27;
+            }
+            32 => {
+                (ip).xDD4_itemVar().sonans().set_x60(fp::frsp(fp::fmul(
+                    (ip).xDD4_itemVar().sonans().x60(),
+                    fp::fneg(0.9),
+                )));
+                (ip).xDD4_itemVar().sonans().set_x64((attrs).x18());
+                __state = 33;
+            }
+            33 => {
+                inl_HSD_JObjSetRotationZ_unfused(
+                    ctx,
+                    ((ip).xBBC_dynamicBoneTable()).bones().at(4_i32).get(),
+                    fp::fmuls(0.01745329238474369, (ip).xDD4_itemVar().sonans().x64()),
+                );
+                __state = 5;
+            }
+            34 => {
+                __state = if angle < fp::fneg(max_angle) { 36 } else { 37 };
+            }
+            35 => {
+                unreachable!();
+            }
+            36 => {
+                (ip).xDD4_itemVar().sonans().set_x60(fp::frsp(fp::fmul(
+                    (ip).xDD4_itemVar().sonans().x60(),
+                    fp::fneg(0.9),
+                )));
+                (ip).xDD4_itemVar()
+                    .sonans()
+                    .set_x64(fp::fneg((attrs).x18()));
+                __state = 37;
+            }
+            37 => {
+                __state = 33;
+            }
+            38 => {
+                unreachable!();
+            }
+            39 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn itSonans_Logic9_DmgDealt<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -244,6 +468,61 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f7ca0),
+            (228_i32 as u32),
+            cstr(ctx, 0x803f7ca0),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
+fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
+    let mut jobj = jobj;
+    let mut z = z;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f7ca0),
+            (0x151_i32 as u32),
+            cstr(ctx, 0x803f7ca0),
+        )
+    });
+    (if !(((jobj).flags() & ((shl_i32(1_i32, (17_i32 as u32))) as u32)) != 0) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f7ca0),
+            (0x152_i32 as u32),
+            cstr(ctx, 0x803f7ca0),
+        )
+    });
+    (jobj).rotate().set_z(z);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
 fn inl_Item_SetEffectHitlagCallbacks_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
     let mut ip = ip;
     (ip).set_entered_hitlag(fnptr(ctx, 0x8005ba40));
@@ -283,6 +562,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (HSD_GObj<'_>, HSD_GObj<'_>) = Args::take_all(ctx);
             Ret::put(it_802CD4DC(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x802cd4fc,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(it_802CD4FC(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

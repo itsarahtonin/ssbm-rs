@@ -868,6 +868,2176 @@ pub fn mpLib_8004ED5C<'a>(
     (y1_out).set(y1_f3);
 }
 
+pub fn mpCheckFloor<'a>(
+    ctx: &'a Ctx,
+    ax: f64,
+    ay: f64,
+    bx: f64,
+    by: f64,
+    y_offset: f64,
+    vec_out: Vec<'a>,
+    line_id_out: Val<'a, i32>,
+    flags_out: Val<'a, u32>,
+    normal_out: Vec<'a>,
+    line_id_skip: i32,
+    joint_id_skip: i32,
+    joint_id_only: i32,
+    cb: FnPtr<'a>,
+    gobj: HSD_GObj<'a>,
+) -> i32 {
+    let __frame = ctx.stack_frame(0xf0);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let px_sp54: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
+    let py_sp50: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
+    let pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x10);
+    let x0_sp48: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
+    let y0_sp44: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
+    let x1_sp40: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
+    let y1_sp3C: Val<'a, F32> = frame_at(ctx, &__frame, 0x20);
+    let mut ax = ax;
+    let mut ay = ay;
+    let mut bx = bx;
+    let mut by = by;
+    let mut y_offset = y_offset;
+    let mut vec_out = vec_out;
+    let mut line_id_out = line_id_out;
+    let mut flags_out = flags_out;
+    let mut normal_out = normal_out;
+    let mut line_id_skip = line_id_skip;
+    let mut joint_id_skip = joint_id_skip;
+    let mut joint_id_only = joint_id_only;
+    let mut cb = cb;
+    let mut gobj = gobj;
+    let mut min_dist2_f30: f64 = 0.0;
+    let mut joint: CollJoint<'a> = null(ctx);
+    let mut i_r28: i32 = 0;
+    let mut result_r27: i32 = 0;
+    let mut already_checked: i32 = 0;
+    let mut line_r26: CollLine<'a> = null(ctx);
+    let mut var_r25: i32 = 0;
+    let mut var_r24: i32 = 0;
+    let mut j_inner: MapJoint<'a> = null(ctx);
+    let mut dist2: f64 = 0.0;
+    let mut line_offset: i32 = 0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = 3;
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                result_r27 = 0_i32;
+                min_dist2_f30 = 3.4028234663852886e+38_f64;
+                already_checked = fns::mpCheckedBounding(ctx);
+                __state = if !(already_checked != 0) { 6 } else { 7 };
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                fns::mpBoundingCheck2(ctx, ax, ay, bx, by);
+                __state = 7;
+            }
+            7 => {
+                joint = statics::melee__mp__mplib::jointListStart(ctx).get();
+                __state = 9;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                __state = if !Handle::is_null(joint) { 10 } else { 12 };
+            }
+            10 => {
+                __state = if (((joint).flags() & ((enums::CollJoint_TooFar as i32) as u32)) != 0) {
+                    14
+                } else {
+                    15
+                };
+            }
+            11 => {
+                joint = (joint).next();
+                __state = 9;
+            }
+            12 => {
+                __state = if !(already_checked != 0) { 84 } else { 85 };
+            }
+            13 => {
+                unreachable!();
+            }
+            14 => {
+                __state = 11;
+            }
+            15 => {
+                __state = if (joint_id_skip
+                    == ((Handle::addr(joint).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                    )) as i32)
+                        / 52))
+                    || ((joint_id_only != 1_i32.wrapping_neg())
+                        && (joint_id_only
+                            != ((Handle::addr(joint).wrapping_sub(Handle::addr(
+                                statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                            )) as i32)
+                                / 52)))
+                {
+                    18
+                } else {
+                    19
+                };
+            }
+            16 => {
+                unreachable!();
+            }
+            17 => {
+                __state = 15;
+            }
+            18 => {
+                __state = 11;
+            }
+            19 => {
+                j_inner = (joint).inner();
+                i_r28 = 0_i32;
+                var_r25 = ((j_inner)
+                    .ranges()
+                    .get((enums::MapLineGroup_Floor as i32))
+                    .count() as i32);
+                var_r24 = ((j_inner)
+                    .ranges()
+                    .get((enums::MapLineGroup_Dynamic as i32))
+                    .count() as i32);
+                line_r26 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    ((j_inner)
+                        .ranges()
+                        .get((enums::MapLineGroup_Floor as i32))
+                        .start() as i32),
+                ));
+                __state = 22;
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                __state = 19;
+            }
+            22 => {
+                __state = if i_r28 < var_r25 { 23 } else { 25 };
+            }
+            23 => {
+                __state = 27;
+            }
+            24 => {
+                i_r28 = i_r28.wrapping_add(1_i32);
+                line_r26 = Handle::add(line_r26, 1_i32);
+                __state = 22;
+            }
+            25 => {
+                __state = if var_r24 != 0_i32 { 80 } else { 81 };
+            }
+            26 => {
+                unreachable!();
+            }
+            27 => {
+                __state = if (!Handle::is_null(cb))
+                    && (!(cb.call::<_, i32>((
+                        gobj,
+                        ((Handle::addr(line_r26).wrapping_sub(Handle::addr(
+                            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                        )) as i32)
+                            / 8),
+                    )) != 0))
+                {
+                    28
+                } else {
+                    29
+                };
+            }
+            28 => {
+                __state = 24;
+            }
+            29 => {
+                __state = if line_id_skip
+                    == div_i32(
+                        ({
+                            let __t1 = (Handle::addr(line_r26) as i32).wrapping_sub(
+                                (Handle::addr(statics::melee__mp__mplib::groundCollLine(ctx).get())
+                                    as i32),
+                            );
+                            line_offset = __t1;
+                            __t1
+                        }),
+                        (8_u32 as i32),
+                    ) {
+                    32
+                } else {
+                    33
+                };
+            }
+            30 => {
+                unreachable!();
+            }
+            31 => {
+                __state = 29;
+            }
+            32 => {
+                __state = 24;
+            }
+            33 => {
+                __state = if ((!(((line_r26).flags() & ((enums::CollLine_Floor as i32) as u32))
+                    != 0))
+                    || (!(((line_r26).flags() & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0)))
+                    || (((line_r26).flags() & ((shl_i32(1_i32, (7_i32 as u32))) as u32)) != 0)
+                {
+                    36
+                } else {
+                    37
+                };
+            }
+            34 => {
+                unreachable!();
+            }
+            35 => {
+                __state = 33;
+            }
+            36 => {
+                __state = 24;
+            }
+            37 => {
+                fns::mpLib_8004ED5C(
+                    ctx,
+                    div_i32(line_offset, (8_u32 as i32)),
+                    x0_sp48,
+                    y0_sp44,
+                    x1_sp40,
+                    y1_sp3C,
+                );
+                y0_sp44.set(fp::fadds(y0_sp44.get(), y_offset));
+                y1_sp3C.set(fp::fadds(y1_sp3C.get(), y_offset));
+                __state = if (if (fp::fsubs(y0_sp44.get(), y1_sp3C.get())) < fp::frsp(0_i32 as f64)
+                {
+                    fp::fneg((fp::fsubs(y0_sp44.get(), y1_sp3C.get())))
+                } else {
+                    (fp::fsubs(y0_sp44.get(), y1_sp3C.get()))
+                }) > 0.0001
+                {
+                    40
+                } else {
+                    42
+                };
+            }
+            38 => {
+                unreachable!();
+            }
+            39 => {
+                __state = 37;
+            }
+            40 => {
+                __state = if (statics::melee__mp__mplib::mpLineIntersection(
+                    ctx,
+                    x0_sp48.get(),
+                    y0_sp44.get(),
+                    x1_sp40.get(),
+                    y1_sp3C.get(),
+                    ax,
+                    ay,
+                    bx,
+                    by,
+                    px_sp54,
+                    py_sp50,
+                ) != 0)
+                {
+                    44
+                } else {
+                    45
+                };
+            }
+            41 => {
+                __state = 24;
+            }
+            42 => {
+                __state = if (ay >= by)
+                    && (fns::mpLineIntersectionH(
+                        ctx,
+                        px_sp54,
+                        py_sp50,
+                        x0_sp48.get(),
+                        y0_sp44.get(),
+                        x1_sp40.get(),
+                        ax,
+                        ay,
+                        bx,
+                        by,
+                    ) != 0)
+                {
+                    62
+                } else {
+                    63
+                };
+            }
+            43 => {
+                unreachable!();
+            }
+            44 => {
+                dist2 = fp::fadds(
+                    (fp::fmuls(
+                        (fp::fsubs(px_sp54.get(), ax)),
+                        (fp::fsubs(px_sp54.get(), ax)),
+                    )),
+                    (fp::fmuls(
+                        (fp::fsubs(py_sp50.get(), ay)),
+                        (fp::fsubs(py_sp50.get(), ay)),
+                    )),
+                );
+                __state = if min_dist2_f30 > dist2 { 47 } else { 48 };
+            }
+            45 => {
+                __state = 41;
+            }
+            46 => {
+                unreachable!();
+            }
+            47 => {
+                min_dist2_f30 = dist2;
+                __state = if !Handle::is_null(vec_out) { 50 } else { 51 };
+            }
+            48 => {
+                __state = 45;
+            }
+            49 => {
+                unreachable!();
+            }
+            50 => {
+                (vec_out).set_x(px_sp54.get());
+                (vec_out).set_y(py_sp50.get());
+                (vec_out).set_z(0.0);
+                __state = 51;
+            }
+            51 => {
+                __state = if !Handle::is_null(line_id_out) {
+                    53
+                } else {
+                    54
+                };
+            }
+            52 => {
+                unreachable!();
+            }
+            53 => {
+                (line_id_out).set(
+                    ((Handle::addr(line_r26).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    )) as i32)
+                        / 8),
+                );
+                __state = 54;
+            }
+            54 => {
+                __state = if !Handle::is_null(flags_out) { 56 } else { 57 };
+            }
+            55 => {
+                unreachable!();
+            }
+            56 => {
+                (flags_out).set((((line_r26).x0()).lo_flags() as u32));
+                __state = 57;
+            }
+            57 => {
+                __state = if !Handle::is_null(normal_out) { 59 } else { 60 };
+            }
+            58 => {
+                unreachable!();
+            }
+            59 => {
+                (normal_out).set_x(fp::fneg((fp::fsubs(y1_sp3C.get(), y0_sp44.get()))));
+                (normal_out).set_y(fp::fsubs(x1_sp40.get(), x0_sp48.get()));
+                (normal_out).set_z(0.0);
+                fns::PSVECNormalize(ctx, normal_out, normal_out);
+                __state = 60;
+            }
+            60 => {
+                result_r27 = 1_i32;
+                __state = 48;
+            }
+            61 => {
+                unreachable!();
+            }
+            62 => {
+                dist2 = fp::fadds(
+                    (fp::fmuls(
+                        (fp::fsubs(px_sp54.get(), ax)),
+                        (fp::fsubs(px_sp54.get(), ax)),
+                    )),
+                    (fp::fmuls(
+                        (fp::fsubs(py_sp50.get(), ay)),
+                        (fp::fsubs(py_sp50.get(), ay)),
+                    )),
+                );
+                __state = if min_dist2_f30 > dist2 { 65 } else { 66 };
+            }
+            63 => {
+                __state = 41;
+            }
+            64 => {
+                unreachable!();
+            }
+            65 => {
+                min_dist2_f30 = dist2;
+                __state = if !Handle::is_null(vec_out) { 68 } else { 69 };
+            }
+            66 => {
+                __state = 63;
+            }
+            67 => {
+                unreachable!();
+            }
+            68 => {
+                (vec_out).set_x(px_sp54.get());
+                (vec_out).set_y(py_sp50.get());
+                (vec_out).set_z(0.0);
+                __state = 69;
+            }
+            69 => {
+                __state = if !Handle::is_null(line_id_out) {
+                    71
+                } else {
+                    72
+                };
+            }
+            70 => {
+                unreachable!();
+            }
+            71 => {
+                (line_id_out).set(
+                    ((Handle::addr(line_r26).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    )) as i32)
+                        / 8),
+                );
+                __state = 72;
+            }
+            72 => {
+                __state = if !Handle::is_null(flags_out) { 74 } else { 75 };
+            }
+            73 => {
+                unreachable!();
+            }
+            74 => {
+                (flags_out).set((((line_r26).x0()).lo_flags() as u32));
+                __state = 75;
+            }
+            75 => {
+                __state = if !Handle::is_null(normal_out) { 77 } else { 78 };
+            }
+            76 => {
+                unreachable!();
+            }
+            77 => {
+                (normal_out).set_x(0.0);
+                (normal_out).set_y(1.0);
+                (normal_out).set_z(0.0);
+                __state = 78;
+            }
+            78 => {
+                result_r27 = 1_i32;
+                __state = 66;
+            }
+            79 => {
+                unreachable!();
+            }
+            80 => {
+                var_r25 = var_r24;
+                i_r28 = 0_i32;
+                var_r24 = 0_i32;
+                line_r26 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    (((joint).inner())
+                        .ranges()
+                        .get((enums::MapLineGroup_Dynamic as i32))
+                        .start() as i32),
+                ));
+                __state = 27;
+            }
+            81 => {
+                __state = 11;
+            }
+            82 => {
+                unreachable!();
+            }
+            83 => {
+                __state = 81;
+            }
+            84 => {
+                fns::mpUncheckBounding(ctx);
+                __state = 85;
+            }
+            85 => {
+                return result_r27;
+            }
+            86 => {
+                unreachable!();
+            }
+            87 => {
+                return 0;
+            }
+            88 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
+pub fn mpCheckFloorRemap<'a>(
+    ctx: &'a Ctx,
+    ax: f64,
+    ay: f64,
+    bx: f64,
+    by: f64,
+    y_offset: f64,
+    vec_out: Vec<'a>,
+    line_id_out: Val<'a, i32>,
+    flags_out: Val<'a, u32>,
+    normal_out: Vec<'a>,
+    line_id_skip: i32,
+    joint_id_skip: i32,
+    joint_id_only: i32,
+    cb: FnPtr<'a>,
+    gobj: HSD_GObj<'a>,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x120);
+    let ax__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    let ay__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
+    let int_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
+    let int_y: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x10);
+    ax__slot.set(ax);
+    ay__slot.set(ay);
+    let mut bx = bx;
+    let mut by = by;
+    let mut y_offset = y_offset;
+    let mut vec_out = vec_out;
+    let mut line_id_out = line_id_out;
+    let mut flags_out = flags_out;
+    let mut normal_out = normal_out;
+    let mut line_id_skip = line_id_skip;
+    let mut joint_id_skip = joint_id_skip;
+    let mut joint_id_only = joint_id_only;
+    let mut cb = cb;
+    let mut gobj = gobj;
+    let mut min_dist2: f64 = 0.0;
+    let mut old_x: f64 = 0.0;
+    let mut old_y: f64 = 0.0;
+    let mut joint: CollJoint<'a> = null(ctx);
+    let mut i: i32 = 0;
+    let mut result: i32 = 0;
+    let mut already_checked: i32 = 0;
+    let mut line: CollLine<'a> = null(ctx);
+    let mut count: i32 = 0;
+    let mut count2: i32 = 0;
+    let mut v0_r5: CollVtx<'a> = null(ctx);
+    let mut v1_r6: CollVtx<'a> = null(ctx);
+    let mut x0: f64 = 0.0;
+    let mut y0: f64 = 0.0;
+    let mut x1: f64 = 0.0;
+    let mut y1: f64 = 0.0;
+    let mut dx: f64 = 0.0;
+    let mut dy: f64 = 0.0;
+    let mut dx2: f64 = 0.0;
+    let mut dy2: f64 = 0.0;
+    let mut dist2: f64 = 0.0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                min_dist2 = 3.4028234663852886e+38_f64;
+                old_x = ax__slot.get();
+                old_y = ay__slot.get();
+                result = 0_i32;
+                already_checked = fns::mpCheckedBounding(ctx);
+                __state = if !(already_checked != 0) { 1 } else { 2 };
+            }
+            1 => {
+                fns::mpBoundingCheck2(ctx, ax__slot.get(), ay__slot.get(), bx, by);
+                __state = 2;
+            }
+            2 => {
+                joint = statics::melee__mp__mplib::jointListStart(ctx).get();
+                __state = 4;
+            }
+            3 => {
+                unreachable!();
+            }
+            4 => {
+                __state = if !Handle::is_null(joint) { 5 } else { 7 };
+            }
+            5 => {
+                __state = if (((joint).flags() & ((enums::CollJoint_TooFar as i32) as u32)) != 0) {
+                    9
+                } else {
+                    10
+                };
+            }
+            6 => {
+                joint = (joint).next();
+                __state = 4;
+            }
+            7 => {
+                __state = if !(already_checked != 0) { 94 } else { 95 };
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                __state = 6;
+            }
+            10 => {
+                __state = if (joint_id_skip
+                    == ((Handle::addr(joint).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                    )) as i32)
+                        / 52))
+                    || ((joint_id_only != 1_i32.wrapping_neg())
+                        && (joint_id_only
+                            != ((Handle::addr(joint).wrapping_sub(Handle::addr(
+                                statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                            )) as i32)
+                                / 52)))
+                {
+                    13
+                } else {
+                    14
+                };
+            }
+            11 => {
+                unreachable!();
+            }
+            12 => {
+                __state = 10;
+            }
+            13 => {
+                __state = 6;
+            }
+            14 => {
+                count = (((joint).inner())
+                    .ranges()
+                    .get((enums::MapLineGroup_Floor as i32))
+                    .count() as i32);
+                count2 = (((joint).inner())
+                    .ranges()
+                    .get((enums::MapLineGroup_Dynamic as i32))
+                    .count() as i32);
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    (((joint).inner())
+                        .ranges()
+                        .get((enums::MapLineGroup_Floor as i32))
+                        .start() as i32),
+                ));
+                i = 0_i32;
+                __state = 17;
+            }
+            15 => {
+                unreachable!();
+            }
+            16 => {
+                __state = 14;
+            }
+            17 => {
+                __state = if i < count { 18 } else { 20 };
+            }
+            18 => {
+                __state = 22;
+            }
+            19 => {
+                i = i.wrapping_add(1);
+                line = Handle::add(line, 1);
+                __state = 17;
+            }
+            20 => {
+                __state = if count2 != 0_i32 { 90 } else { 91 };
+            }
+            21 => {
+                unreachable!();
+            }
+            22 => {
+                __state = if (!Handle::is_null(cb))
+                    && (!(cb.call::<_, i32>((
+                        gobj,
+                        ((Handle::addr(line).wrapping_sub(Handle::addr(
+                            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                        )) as i32)
+                            / 8),
+                    )) != 0))
+                {
+                    23
+                } else {
+                    24
+                };
+            }
+            23 => {
+                __state = 19;
+            }
+            24 => {
+                __state = if line_id_skip
+                    == ((Handle::addr(line).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    )) as i32)
+                        / 8)
+                {
+                    27
+                } else {
+                    28
+                };
+            }
+            25 => {
+                unreachable!();
+            }
+            26 => {
+                __state = 24;
+            }
+            27 => {
+                __state = 19;
+            }
+            28 => {
+                __state = if ((!(((line).flags() & ((enums::CollLine_Floor as i32) as u32)) != 0))
+                    || (!(((line).flags() & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0)))
+                    || (((line).flags() & ((shl_i32(1_i32, (7_i32 as u32))) as u32)) != 0)
+                {
+                    31
+                } else {
+                    32
+                };
+            }
+            29 => {
+                unreachable!();
+            }
+            30 => {
+                __state = 28;
+            }
+            31 => {
+                __state = 19;
+            }
+            32 => {
+                v0_r5 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((line).x0()).v0_idx() as i32),
+                ));
+                v1_r6 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((line).x0()).v1_idx() as i32),
+                ));
+                x0 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((line).x0()).v0_idx() as i32),
+                ))
+                .pos()
+                .x();
+                y0 = fp::fadds(
+                    y_offset,
+                    (Handle::add(
+                        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                        (((line).x0()).v0_idx() as i32),
+                    ))
+                    .pos()
+                    .y(),
+                );
+                x1 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((line).x0()).v1_idx() as i32),
+                ))
+                .pos()
+                .x();
+                y1 = fp::fadds(
+                    y_offset,
+                    (Handle::add(
+                        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                        (((line).x0()).v1_idx() as i32),
+                    ))
+                    .pos()
+                    .y(),
+                );
+                __state = 36;
+            }
+            33 => {
+                unreachable!();
+            }
+            34 => {
+                __state = 32;
+            }
+            35 => {
+                unreachable!();
+            }
+            36 => {
+                __state = 37;
+            }
+            37 => {
+                __state = if (0_i32 != 0) { 36 } else { 38 };
+            }
+            38 => {
+                __state = if (((joint).flags()
+                    & ((((enums::CollJoint_B10 as i32) | (enums::CollJoint_B9 as i32))
+                        | (enums::CollJoint_B8 as i32)) as u32))
+                    != 0)
+                {
+                    40
+                } else {
+                    42
+                };
+            }
+            39 => {
+                unreachable!();
+            }
+            40 => {
+                statics::melee__mp__mplib::mpRemap2d(
+                    ctx,
+                    ax__slot,
+                    ay__slot,
+                    (Handle::add(
+                        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                        (((line).x0()).v0_idx() as i32),
+                    ))
+                    .x10(),
+                    (Handle::add(
+                        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                        (((line).x0()).v0_idx() as i32),
+                    ))
+                    .x14(),
+                    (Handle::add(
+                        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                        (((line).x0()).v1_idx() as i32),
+                    ))
+                    .x10(),
+                    (Handle::add(
+                        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                        (((line).x0()).v1_idx() as i32),
+                    ))
+                    .x14(),
+                    x0,
+                    y0,
+                    x1,
+                    y1,
+                    old_x,
+                    old_y,
+                );
+                __state = 41;
+            }
+            41 => {
+                dx = fp::fsubs(bx, ax__slot.get());
+                dy = fp::fsubs(by, ay__slot.get());
+                __state = if (if (fp::fsubs(y0, y1)) < fp::frsp(0_i32 as f64) {
+                    fp::fneg((fp::fsubs(y0, y1)))
+                } else {
+                    (fp::fsubs(y0, y1))
+                }) > 0.0001
+                {
+                    44
+                } else {
+                    46
+                };
+            }
+            42 => {
+                ax__slot.set(old_x);
+                ay__slot.set(old_y);
+                __state = 41;
+            }
+            43 => {
+                unreachable!();
+            }
+            44 => {
+                __state = if (statics::melee__mp__mplib::mpLineIntersection(
+                    ctx,
+                    x0,
+                    y0,
+                    x1,
+                    y1,
+                    ax__slot.get(),
+                    ay__slot.get(),
+                    bx,
+                    by,
+                    int_x,
+                    int_y,
+                ) != 0)
+                {
+                    48
+                } else {
+                    49
+                };
+            }
+            45 => {
+                __state = 19;
+            }
+            46 => {
+                __state = if (ay__slot.get() >= by)
+                    && (fns::mpLineIntersectionH(
+                        ctx,
+                        int_x,
+                        int_y,
+                        x0,
+                        y0,
+                        x1,
+                        ax__slot.get(),
+                        ay__slot.get(),
+                        bx,
+                        by,
+                    ) != 0)
+                {
+                    69
+                } else {
+                    70
+                };
+            }
+            47 => {
+                unreachable!();
+            }
+            48 => {
+                dx2 = (fp::fmuls(
+                    (fp::fsubs(int_x.get(), old_x)),
+                    (fp::fsubs(int_x.get(), old_x)),
+                ));
+                dy2 = (fp::fmuls(
+                    (fp::fsubs(int_y.get(), old_y)),
+                    (fp::fsubs(int_y.get(), old_y)),
+                ));
+                dist2 = fp::fadds(dx2, dy2);
+                __state = if fp::fmadds(
+                    dx,
+                    (fp::fsubs(int_x.get(), old_x)),
+                    fp::fmuls(dy, (fp::fsubs(int_y.get(), old_y))),
+                ) < 0.0
+                {
+                    51
+                } else {
+                    52
+                };
+            }
+            49 => {
+                __state = 45;
+            }
+            50 => {
+                unreachable!();
+            }
+            51 => {
+                dist2 = fp::fneg(dist2);
+                __state = 52;
+            }
+            52 => {
+                __state = if min_dist2 > dist2 { 54 } else { 55 };
+            }
+            53 => {
+                unreachable!();
+            }
+            54 => {
+                min_dist2 = dist2;
+                __state = if !Handle::is_null(vec_out) { 57 } else { 58 };
+            }
+            55 => {
+                __state = 49;
+            }
+            56 => {
+                unreachable!();
+            }
+            57 => {
+                (vec_out).set_x(int_x.get());
+                (vec_out).set_y(int_y.get());
+                (vec_out).set_z(0.0);
+                __state = 58;
+            }
+            58 => {
+                __state = if !Handle::is_null(line_id_out) {
+                    60
+                } else {
+                    61
+                };
+            }
+            59 => {
+                unreachable!();
+            }
+            60 => {
+                (line_id_out).set(
+                    ((Handle::addr(line).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    )) as i32)
+                        / 8),
+                );
+                __state = 61;
+            }
+            61 => {
+                __state = if !Handle::is_null(flags_out) { 63 } else { 64 };
+            }
+            62 => {
+                unreachable!();
+            }
+            63 => {
+                (flags_out).set((((line).x0()).lo_flags() as u32));
+                __state = 64;
+            }
+            64 => {
+                __state = if !Handle::is_null(normal_out) { 66 } else { 67 };
+            }
+            65 => {
+                unreachable!();
+            }
+            66 => {
+                (normal_out).set_x(fp::fneg((fp::fsubs(y1, y0))));
+                (normal_out).set_y(fp::fsubs(x1, x0));
+                (normal_out).set_z(0.0);
+                fns::PSVECNormalize(ctx, normal_out, normal_out);
+                __state = 67;
+            }
+            67 => {
+                result = 1_i32;
+                __state = 55;
+            }
+            68 => {
+                unreachable!();
+            }
+            69 => {
+                dx2 = (fp::fmuls(
+                    (fp::fsubs(int_x.get(), old_x)),
+                    (fp::fsubs(int_x.get(), old_x)),
+                ));
+                dy2 = (fp::fmuls(
+                    (fp::fsubs(int_y.get(), old_y)),
+                    (fp::fsubs(int_y.get(), old_y)),
+                ));
+                dist2 = fp::fadds(dx2, dy2);
+                __state = if fp::fmadds(
+                    dx,
+                    (fp::fsubs(int_x.get(), old_x)),
+                    fp::fmuls(dy, (fp::fsubs(int_y.get(), old_y))),
+                ) < 0.0
+                {
+                    72
+                } else {
+                    73
+                };
+            }
+            70 => {
+                __state = 45;
+            }
+            71 => {
+                unreachable!();
+            }
+            72 => {
+                dist2 = fp::fneg(dist2);
+                __state = 73;
+            }
+            73 => {
+                __state = if min_dist2 > dist2 { 75 } else { 76 };
+            }
+            74 => {
+                unreachable!();
+            }
+            75 => {
+                min_dist2 = dist2;
+                __state = if !Handle::is_null(vec_out) { 78 } else { 79 };
+            }
+            76 => {
+                __state = 70;
+            }
+            77 => {
+                unreachable!();
+            }
+            78 => {
+                (vec_out).set_x(int_x.get());
+                (vec_out).set_y(int_y.get());
+                (vec_out).set_z(0.0);
+                __state = 79;
+            }
+            79 => {
+                __state = if !Handle::is_null(line_id_out) {
+                    81
+                } else {
+                    82
+                };
+            }
+            80 => {
+                unreachable!();
+            }
+            81 => {
+                (line_id_out).set(
+                    ((Handle::addr(line).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    )) as i32)
+                        / 8),
+                );
+                __state = 82;
+            }
+            82 => {
+                __state = if !Handle::is_null(flags_out) { 84 } else { 85 };
+            }
+            83 => {
+                unreachable!();
+            }
+            84 => {
+                (flags_out).set((((line).x0()).lo_flags() as u32));
+                __state = 85;
+            }
+            85 => {
+                __state = if !Handle::is_null(normal_out) { 87 } else { 88 };
+            }
+            86 => {
+                unreachable!();
+            }
+            87 => {
+                (normal_out).set_x(0.0);
+                (normal_out).set_y(1.0);
+                (normal_out).set_z(0.0);
+                __state = 88;
+            }
+            88 => {
+                result = 1_i32;
+                __state = 76;
+            }
+            89 => {
+                unreachable!();
+            }
+            90 => {
+                count = count2;
+                i = 0_i32;
+                count2 = 0_i32;
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    (((joint).inner())
+                        .ranges()
+                        .get((enums::MapLineGroup_Dynamic as i32))
+                        .start() as i32),
+                ));
+                __state = 22;
+            }
+            91 => {
+                __state = 6;
+            }
+            92 => {
+                unreachable!();
+            }
+            93 => {
+                __state = 91;
+            }
+            94 => {
+                fns::mpUncheckBounding(ctx);
+                __state = 95;
+            }
+            95 => {
+                return result;
+            }
+            96 => {
+                unreachable!();
+            }
+            97 => {
+                return 0;
+            }
+            98 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
+pub fn mpCheckCeiling<'a>(
+    ctx: &'a Ctx,
+    ax: f64,
+    ay: f64,
+    bx: f64,
+    by: f64,
+    vec_out: Vec<'a>,
+    line_id_out: Val<'a, i32>,
+    flags_out: Val<'a, u32>,
+    normal_out: Vec<'a>,
+    joint_id_skip: i32,
+    joint_id_only: i32,
+) -> i32 {
+    let __frame = ctx.stack_frame(0xd0);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let int_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
+    let int_y: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
+    let pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x10);
+    let x0: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
+    let y0: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
+    let x1: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
+    let y1: Val<'a, F32> = frame_at(ctx, &__frame, 0x20);
+    let mut ax = ax;
+    let mut ay = ay;
+    let mut bx = bx;
+    let mut by = by;
+    let mut vec_out = vec_out;
+    let mut line_id_out = line_id_out;
+    let mut flags_out = flags_out;
+    let mut normal_out = normal_out;
+    let mut joint_id_skip = joint_id_skip;
+    let mut joint_id_only = joint_id_only;
+    let mut min_dist2: f64 = 0.0;
+    let mut joint: CollJoint<'a> = null(ctx);
+    let mut i_r28: i32 = 0;
+    let mut result: i32 = 0;
+    let mut already_checked: i32 = 0;
+    let mut line_r26: CollLine<'a> = null(ctx);
+    let mut var_r25: i32 = 0;
+    let mut var_r24: i32 = 0;
+    let mut j_inner: MapJoint<'a> = null(ctx);
+    let mut dist2: f64 = 0.0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                min_dist2 = 3.4028234663852886e+38_f64;
+                result = 0_i32;
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = 3;
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                already_checked = fns::mpCheckedBounding(ctx);
+                __state = if !(already_checked != 0) { 6 } else { 7 };
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                fns::mpBoundingCheck2(ctx, ax, ay, bx, by);
+                __state = 7;
+            }
+            7 => {
+                joint = statics::melee__mp__mplib::jointListStart(ctx).get();
+                __state = 9;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                __state = if !Handle::is_null(joint) { 10 } else { 12 };
+            }
+            10 => {
+                __state = if (((joint).flags() & ((enums::CollJoint_TooFar as i32) as u32)) != 0) {
+                    14
+                } else {
+                    15
+                };
+            }
+            11 => {
+                joint = (joint).next();
+                __state = 9;
+            }
+            12 => {
+                __state = if !(already_checked != 0) { 76 } else { 77 };
+            }
+            13 => {
+                unreachable!();
+            }
+            14 => {
+                __state = 11;
+            }
+            15 => {
+                __state = if (joint_id_skip
+                    == ((Handle::addr(joint).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                    )) as i32)
+                        / 52))
+                    || ((joint_id_only != 1_i32.wrapping_neg())
+                        && (joint_id_only
+                            != ((Handle::addr(joint).wrapping_sub(Handle::addr(
+                                statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                            )) as i32)
+                                / 52)))
+                {
+                    18
+                } else {
+                    19
+                };
+            }
+            16 => {
+                unreachable!();
+            }
+            17 => {
+                __state = 15;
+            }
+            18 => {
+                __state = 11;
+            }
+            19 => {
+                j_inner = (joint).inner();
+                i_r28 = 0_i32;
+                var_r25 = ((j_inner)
+                    .ranges()
+                    .get((enums::MapLineGroup_Ceiling as i32))
+                    .count() as i32);
+                var_r24 = ((j_inner)
+                    .ranges()
+                    .get((enums::MapLineGroup_Dynamic as i32))
+                    .count() as i32);
+                line_r26 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    ((j_inner)
+                        .ranges()
+                        .get((enums::MapLineGroup_Ceiling as i32))
+                        .start() as i32),
+                ));
+                __state = 22;
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                __state = 19;
+            }
+            22 => {
+                __state = if i_r28 < var_r25 { 23 } else { 25 };
+            }
+            23 => {
+                __state = 27;
+            }
+            24 => {
+                i_r28 = i_r28.wrapping_add(1_i32);
+                line_r26 = Handle::add(line_r26, 1_i32);
+                __state = 22;
+            }
+            25 => {
+                __state = if var_r24 != 0_i32 { 72 } else { 73 };
+            }
+            26 => {
+                unreachable!();
+            }
+            27 => {
+                __state = if ((!(((line_r26).flags() & ((enums::CollLine_Ceiling as i32) as u32))
+                    != 0))
+                    || (!(((line_r26).flags() & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0)))
+                    || (((line_r26).flags() & ((shl_i32(1_i32, (7_i32 as u32))) as u32)) != 0)
+                {
+                    28
+                } else {
+                    29
+                };
+            }
+            28 => {
+                __state = 24;
+            }
+            29 => {
+                fns::mpLib_8004ED5C(
+                    ctx,
+                    ((Handle::addr(line_r26).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    )) as i32)
+                        / 8),
+                    x0,
+                    y0,
+                    x1,
+                    y1,
+                );
+                __state = if (if (fp::fsubs(y0.get(), y1.get())) < fp::frsp(0_i32 as f64) {
+                    fp::fneg((fp::fsubs(y0.get(), y1.get())))
+                } else {
+                    (fp::fsubs(y0.get(), y1.get()))
+                }) > 0.0001
+                {
+                    32
+                } else {
+                    34
+                };
+            }
+            30 => {
+                unreachable!();
+            }
+            31 => {
+                __state = 29;
+            }
+            32 => {
+                __state = if (statics::melee__mp__mplib::mpLineIntersection(
+                    ctx,
+                    x0.get(),
+                    y0.get(),
+                    x1.get(),
+                    y1.get(),
+                    ax,
+                    ay,
+                    bx,
+                    by,
+                    int_x,
+                    int_y,
+                ) != 0)
+                {
+                    36
+                } else {
+                    37
+                };
+            }
+            33 => {
+                __state = 24;
+            }
+            34 => {
+                __state = if (ay <= by)
+                    && (fns::mpLineIntersectionH(
+                        ctx,
+                        int_x,
+                        int_y,
+                        x0.get(),
+                        y0.get(),
+                        x1.get(),
+                        ax,
+                        ay,
+                        bx,
+                        by,
+                    ) != 0)
+                {
+                    54
+                } else {
+                    55
+                };
+            }
+            35 => {
+                unreachable!();
+            }
+            36 => {
+                dist2 = fp::fadds(
+                    (fp::fmuls((fp::fsubs(int_x.get(), ax)), (fp::fsubs(int_x.get(), ax)))),
+                    (fp::fmuls((fp::fsubs(int_y.get(), ay)), (fp::fsubs(int_y.get(), ay)))),
+                );
+                __state = if min_dist2 > dist2 { 39 } else { 40 };
+            }
+            37 => {
+                __state = 33;
+            }
+            38 => {
+                unreachable!();
+            }
+            39 => {
+                min_dist2 = dist2;
+                __state = if !Handle::is_null(vec_out) { 42 } else { 43 };
+            }
+            40 => {
+                __state = 37;
+            }
+            41 => {
+                unreachable!();
+            }
+            42 => {
+                (vec_out).set_x(int_x.get());
+                (vec_out).set_y(int_y.get());
+                (vec_out).set_z(0.0);
+                __state = 43;
+            }
+            43 => {
+                __state = if !Handle::is_null(line_id_out) {
+                    45
+                } else {
+                    46
+                };
+            }
+            44 => {
+                unreachable!();
+            }
+            45 => {
+                (line_id_out).set(
+                    ((Handle::addr(line_r26).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    )) as i32)
+                        / 8),
+                );
+                __state = 46;
+            }
+            46 => {
+                __state = if !Handle::is_null(flags_out) { 48 } else { 49 };
+            }
+            47 => {
+                unreachable!();
+            }
+            48 => {
+                (flags_out).set((((line_r26).x0()).lo_flags() as u32));
+                __state = 49;
+            }
+            49 => {
+                __state = if !Handle::is_null(normal_out) { 51 } else { 52 };
+            }
+            50 => {
+                unreachable!();
+            }
+            51 => {
+                (normal_out).set_x(fp::fneg((fp::fsubs(y1.get(), y0.get()))));
+                (normal_out).set_y(fp::fsubs(x1.get(), x0.get()));
+                (normal_out).set_z(0.0);
+                fns::PSVECNormalize(ctx, normal_out, normal_out);
+                __state = 52;
+            }
+            52 => {
+                result = 1_i32;
+                __state = 40;
+            }
+            53 => {
+                unreachable!();
+            }
+            54 => {
+                dist2 = fp::fadds(
+                    (fp::fmuls((fp::fsubs(int_x.get(), ax)), (fp::fsubs(int_x.get(), ax)))),
+                    (fp::fmuls((fp::fsubs(int_y.get(), ay)), (fp::fsubs(int_y.get(), ay)))),
+                );
+                __state = if min_dist2 > dist2 { 57 } else { 58 };
+            }
+            55 => {
+                __state = 33;
+            }
+            56 => {
+                unreachable!();
+            }
+            57 => {
+                min_dist2 = dist2;
+                __state = if !Handle::is_null(vec_out) { 60 } else { 61 };
+            }
+            58 => {
+                __state = 55;
+            }
+            59 => {
+                unreachable!();
+            }
+            60 => {
+                (vec_out).set_x(int_x.get());
+                (vec_out).set_y(int_y.get());
+                (vec_out).set_z(0.0);
+                __state = 61;
+            }
+            61 => {
+                __state = if !Handle::is_null(line_id_out) {
+                    63
+                } else {
+                    64
+                };
+            }
+            62 => {
+                unreachable!();
+            }
+            63 => {
+                (line_id_out).set(
+                    ((Handle::addr(line_r26).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    )) as i32)
+                        / 8),
+                );
+                __state = 64;
+            }
+            64 => {
+                __state = if !Handle::is_null(flags_out) { 66 } else { 67 };
+            }
+            65 => {
+                unreachable!();
+            }
+            66 => {
+                (flags_out).set((((line_r26).x0()).lo_flags() as u32));
+                __state = 67;
+            }
+            67 => {
+                __state = if !Handle::is_null(normal_out) { 69 } else { 70 };
+            }
+            68 => {
+                unreachable!();
+            }
+            69 => {
+                (normal_out).set_x(0.0);
+                (normal_out).set_y(fp::fneg(1.0));
+                (normal_out).set_z(0.0);
+                __state = 70;
+            }
+            70 => {
+                result = 1_i32;
+                __state = 58;
+            }
+            71 => {
+                unreachable!();
+            }
+            72 => {
+                var_r25 = var_r24;
+                i_r28 = 0_i32;
+                var_r24 = 0_i32;
+                line_r26 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    (((joint).inner())
+                        .ranges()
+                        .get((enums::MapLineGroup_Dynamic as i32))
+                        .start() as i32),
+                ));
+                __state = 27;
+            }
+            73 => {
+                __state = 11;
+            }
+            74 => {
+                unreachable!();
+            }
+            75 => {
+                __state = 73;
+            }
+            76 => {
+                fns::mpUncheckBounding(ctx);
+                __state = 77;
+            }
+            77 => {
+                return result;
+            }
+            78 => {
+                unreachable!();
+            }
+            79 => {
+                return 0;
+            }
+            80 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
+pub fn mpCheckCeilingRemap<'a>(
+    ctx: &'a Ctx,
+    ax: f64,
+    ay: f64,
+    bx: f64,
+    by: f64,
+    vec_out: Vec<'a>,
+    line_id_out: Val<'a, i32>,
+    flags_out: Val<'a, u32>,
+    normal_out: Vec<'a>,
+    joint_id_skip: i32,
+    joint_id_only: i32,
+) -> i32 {
+    let __frame = ctx.stack_frame(0xf0);
+    let ax__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    let ay__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
+    let sp58: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
+    let sp54: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x10);
+    let sp44: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
+    let sp40: Val<'a, F32> = frame_at(ctx, &__frame, 0x20);
+    let sp3C: Val<'a, F32> = frame_at(ctx, &__frame, 0x24);
+    let sp38: Val<'a, F32> = frame_at(ctx, &__frame, 0x28);
+    ax__slot.set(ax);
+    ay__slot.set(ay);
+    let mut bx = bx;
+    let mut by = by;
+    let mut vec_out = vec_out;
+    let mut line_id_out = line_id_out;
+    let mut flags_out = flags_out;
+    let mut normal_out = normal_out;
+    let mut joint_id_skip = joint_id_skip;
+    let mut joint_id_only = joint_id_only;
+    let mut min_f30: f64 = 0.0;
+    let mut f29: f64 = 0.0;
+    let mut f28: f64 = 0.0;
+    let mut joint: CollJoint<'a> = null(ctx);
+    let mut r28: i32 = 0;
+    let mut r27: i32 = 0;
+    let mut already_checked: i32 = 0;
+    let mut r26: CollLine<'a> = null(ctx);
+    let mut r25: i32 = 0;
+    let mut r24: i32 = 0;
+    let mut dx2: f64 = 0.0;
+    let mut dy2: f64 = 0.0;
+    let mut dist2: f64 = 0.0;
+    let mut x_f23: f64 = 0.0;
+    let mut y_f22: f64 = 0.0;
+    let mut line_r3: MapLine<'a> = null(ctx);
+    let mut v1_r6: CollVtx<'a> = null(ctx);
+    let mut v0_r5: CollVtx<'a> = null(ctx);
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                min_f30 = 3.4028234663852886e+38_f64;
+                f29 = ax__slot.get();
+                f28 = ay__slot.get();
+                r27 = 0_i32;
+                already_checked = fns::mpCheckedBounding(ctx);
+                __state = if !(already_checked != 0) { 1 } else { 2 };
+            }
+            1 => {
+                fns::mpBoundingCheck2(ctx, ax__slot.get(), ay__slot.get(), bx, by);
+                __state = 2;
+            }
+            2 => {
+                joint = statics::melee__mp__mplib::jointListStart(ctx).get();
+                __state = 4;
+            }
+            3 => {
+                unreachable!();
+            }
+            4 => {
+                __state = if !Handle::is_null(joint) { 5 } else { 7 };
+            }
+            5 => {
+                __state = if (((joint).flags() & ((enums::CollJoint_TooFar as i32) as u32)) != 0) {
+                    9
+                } else {
+                    10
+                };
+            }
+            6 => {
+                joint = (joint).next();
+                __state = 4;
+            }
+            7 => {
+                __state = if !(already_checked != 0) { 80 } else { 81 };
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                __state = 6;
+            }
+            10 => {
+                __state = if (joint_id_skip
+                    == ((Handle::addr(joint).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                    )) as i32)
+                        / 52))
+                    || (!((joint_id_only == 1_i32.wrapping_neg())
+                        || (joint_id_only
+                            == ((Handle::addr(joint).wrapping_sub(Handle::addr(
+                                statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                            )) as i32)
+                                / 52))))
+                {
+                    13
+                } else {
+                    14
+                };
+            }
+            11 => {
+                unreachable!();
+            }
+            12 => {
+                __state = 10;
+            }
+            13 => {
+                __state = 6;
+            }
+            14 => {
+                r25 = (((joint).inner())
+                    .ranges()
+                    .get((enums::MapLineGroup_Ceiling as i32))
+                    .count() as i32);
+                r24 = (((joint).inner())
+                    .ranges()
+                    .get((enums::MapLineGroup_Dynamic as i32))
+                    .count() as i32);
+                r26 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    (((joint).inner())
+                        .ranges()
+                        .get((enums::MapLineGroup_Ceiling as i32))
+                        .start() as i32),
+                ));
+                r28 = 0_i32;
+                __state = 17;
+            }
+            15 => {
+                unreachable!();
+            }
+            16 => {
+                __state = 14;
+            }
+            17 => {
+                __state = if r28 < r25 { 18 } else { 20 };
+            }
+            18 => {
+                __state = 22;
+            }
+            19 => {
+                r28 = r28.wrapping_add(1);
+                r26 = Handle::add(r26, 1);
+                __state = 17;
+            }
+            20 => {
+                __state = if r24 != 0_i32 { 76 } else { 77 };
+            }
+            21 => {
+                unreachable!();
+            }
+            22 => {
+                __state = if ((((r26).flags() & ((enums::CollLine_Ceiling as i32) as u32)) != 0)
+                    && (((r26).flags() & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0))
+                    && (!(((r26).flags() & ((shl_i32(1_i32, (7_i32 as u32))) as u32)) != 0))
+                {
+                    23
+                } else {
+                    24
+                };
+            }
+            23 => {
+                fns::mpLib_8004ED5C(
+                    ctx,
+                    ((Handle::addr(r26).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    )) as i32)
+                        / 8),
+                    sp44,
+                    sp40,
+                    sp3C,
+                    sp38,
+                );
+                __state = if (((joint).flags()
+                    & ((((enums::CollJoint_B10 as i32) | (enums::CollJoint_B9 as i32))
+                        | (enums::CollJoint_B8 as i32)) as u32))
+                    != 0)
+                {
+                    26
+                } else {
+                    28
+                };
+            }
+            24 => {
+                __state = 19;
+            }
+            25 => {
+                unreachable!();
+            }
+            26 => {
+                line_r3 = (r26).x0();
+                v1_r6 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    ((line_r3).v1_idx() as i32),
+                ));
+                v0_r5 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    ((line_r3).v0_idx() as i32),
+                ));
+                statics::melee__mp__mplib::mpRemap2d(
+                    ctx,
+                    ax__slot,
+                    ay__slot,
+                    (v0_r5).x10(),
+                    (v0_r5).x14(),
+                    (v1_r6).x10(),
+                    (v1_r6).x14(),
+                    sp44.get(),
+                    sp40.get(),
+                    sp3C.get(),
+                    sp38.get(),
+                    f29,
+                    f28,
+                );
+                __state = 27;
+            }
+            27 => {
+                x_f23 = fp::fsubs(bx, ax__slot.get());
+                y_f22 = fp::fsubs(by, ay__slot.get());
+                __state = if (if (fp::fsubs(sp40.get(), sp38.get())) < fp::frsp(0_i32 as f64) {
+                    fp::fneg((fp::fsubs(sp40.get(), sp38.get())))
+                } else {
+                    (fp::fsubs(sp40.get(), sp38.get()))
+                }) > 0.0001
+                {
+                    30
+                } else {
+                    32
+                };
+            }
+            28 => {
+                ax__slot.set(f29);
+                ay__slot.set(f28);
+                __state = 27;
+            }
+            29 => {
+                unreachable!();
+            }
+            30 => {
+                __state = if (statics::melee__mp__mplib::mpLineIntersection(
+                    ctx,
+                    sp44.get(),
+                    sp40.get(),
+                    sp3C.get(),
+                    sp38.get(),
+                    ax__slot.get(),
+                    ay__slot.get(),
+                    bx,
+                    by,
+                    sp58,
+                    sp54,
+                ) != 0)
+                {
+                    34
+                } else {
+                    35
+                };
+            }
+            31 => {
+                __state = 24;
+            }
+            32 => {
+                __state = if (ay__slot.get() <= by)
+                    && (fns::mpLineIntersectionH(
+                        ctx,
+                        sp58,
+                        sp54,
+                        sp44.get(),
+                        sp40.get(),
+                        sp3C.get(),
+                        ax__slot.get(),
+                        ay__slot.get(),
+                        bx,
+                        by,
+                    ) != 0)
+                {
+                    55
+                } else {
+                    56
+                };
+            }
+            33 => {
+                unreachable!();
+            }
+            34 => {
+                dx2 = (fp::fmuls((fp::fsubs(sp58.get(), f29)), (fp::fsubs(sp58.get(), f29))));
+                dy2 = (fp::fmuls((fp::fsubs(sp54.get(), f28)), (fp::fsubs(sp54.get(), f28))));
+                dist2 = fp::fadds(dx2, dy2);
+                __state = if fp::fmadds(
+                    x_f23,
+                    (fp::fsubs(sp58.get(), f29)),
+                    (fp::fmuls(y_f22, (fp::fsubs(sp54.get(), f28)))),
+                ) < 0.0
+                {
+                    37
+                } else {
+                    38
+                };
+            }
+            35 => {
+                __state = 31;
+            }
+            36 => {
+                unreachable!();
+            }
+            37 => {
+                dist2 = fp::fneg(dist2);
+                __state = 38;
+            }
+            38 => {
+                __state = if min_f30 > dist2 { 40 } else { 41 };
+            }
+            39 => {
+                unreachable!();
+            }
+            40 => {
+                min_f30 = dist2;
+                __state = if !Handle::is_null(vec_out) { 43 } else { 44 };
+            }
+            41 => {
+                __state = 35;
+            }
+            42 => {
+                unreachable!();
+            }
+            43 => {
+                (vec_out).set_x(sp58.get());
+                (vec_out).set_y(sp54.get());
+                (vec_out).set_z(0.0);
+                __state = 44;
+            }
+            44 => {
+                __state = if !Handle::is_null(line_id_out) {
+                    46
+                } else {
+                    47
+                };
+            }
+            45 => {
+                unreachable!();
+            }
+            46 => {
+                (line_id_out).set(
+                    ((Handle::addr(r26).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    )) as i32)
+                        / 8),
+                );
+                __state = 47;
+            }
+            47 => {
+                __state = if !Handle::is_null(flags_out) { 49 } else { 50 };
+            }
+            48 => {
+                unreachable!();
+            }
+            49 => {
+                (flags_out).set((((r26).x0()).lo_flags() as u32));
+                __state = 50;
+            }
+            50 => {
+                __state = if !Handle::is_null(normal_out) { 52 } else { 53 };
+            }
+            51 => {
+                unreachable!();
+            }
+            52 => {
+                (normal_out).set_x(fp::fneg((fp::fsubs(sp38.get(), sp40.get()))));
+                (normal_out).set_y(fp::fsubs(sp3C.get(), sp44.get()));
+                (normal_out).set_z(0.0);
+                fns::PSVECNormalize(ctx, normal_out, normal_out);
+                __state = 53;
+            }
+            53 => {
+                r27 = 1_i32;
+                __state = 41;
+            }
+            54 => {
+                unreachable!();
+            }
+            55 => {
+                dx2 = (fp::fmuls((fp::fsubs(sp58.get(), f29)), (fp::fsubs(sp58.get(), f29))));
+                dy2 = (fp::fmuls((fp::fsubs(sp54.get(), f28)), (fp::fsubs(sp54.get(), f28))));
+                dist2 = fp::fadds(dx2, dy2);
+                __state = if fp::fmadds(
+                    x_f23,
+                    (fp::fsubs(sp58.get(), f29)),
+                    (fp::fmuls(y_f22, (fp::fsubs(sp54.get(), f28)))),
+                ) < 0.0
+                {
+                    58
+                } else {
+                    59
+                };
+            }
+            56 => {
+                __state = 31;
+            }
+            57 => {
+                unreachable!();
+            }
+            58 => {
+                dist2 = fp::fneg(dist2);
+                __state = 59;
+            }
+            59 => {
+                __state = if min_f30 > dist2 { 61 } else { 62 };
+            }
+            60 => {
+                unreachable!();
+            }
+            61 => {
+                min_f30 = dist2;
+                __state = if !Handle::is_null(vec_out) { 64 } else { 65 };
+            }
+            62 => {
+                __state = 56;
+            }
+            63 => {
+                unreachable!();
+            }
+            64 => {
+                (vec_out).set_x(sp58.get());
+                (vec_out).set_y(sp54.get());
+                (vec_out).set_z(0.0);
+                __state = 65;
+            }
+            65 => {
+                __state = if !Handle::is_null(line_id_out) {
+                    67
+                } else {
+                    68
+                };
+            }
+            66 => {
+                unreachable!();
+            }
+            67 => {
+                (line_id_out).set(
+                    ((Handle::addr(r26).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    )) as i32)
+                        / 8),
+                );
+                __state = 68;
+            }
+            68 => {
+                __state = if !Handle::is_null(flags_out) { 70 } else { 71 };
+            }
+            69 => {
+                unreachable!();
+            }
+            70 => {
+                (flags_out).set((((r26).x0()).lo_flags() as u32));
+                __state = 71;
+            }
+            71 => {
+                __state = if !Handle::is_null(normal_out) { 73 } else { 74 };
+            }
+            72 => {
+                unreachable!();
+            }
+            73 => {
+                (normal_out).set_x(0.0);
+                (normal_out).set_y(fp::fneg(1.0));
+                (normal_out).set_z(0.0);
+                __state = 74;
+            }
+            74 => {
+                r27 = 1_i32;
+                __state = 62;
+            }
+            75 => {
+                unreachable!();
+            }
+            76 => {
+                r25 = r24;
+                r28 = 0_i32;
+                r24 = 0_i32;
+                r26 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    (((joint).inner())
+                        .ranges()
+                        .get((enums::MapLineGroup_Dynamic as i32))
+                        .start() as i32),
+                ));
+                __state = 22;
+            }
+            77 => {
+                __state = 6;
+            }
+            78 => {
+                unreachable!();
+            }
+            79 => {
+                __state = 77;
+            }
+            80 => {
+                fns::mpUncheckBounding(ctx);
+                __state = 81;
+            }
+            81 => {
+                return r27;
+            }
+            82 => {
+                unreachable!();
+            }
+            83 => {
+                return 0;
+            }
+            84 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn mpLineIntersectionV<'a>(
     ctx: &'a Ctx,
     int_x: Val<'a, F32>,
@@ -942,6 +3112,3776 @@ pub fn mpLineIntersectionV<'a>(
     (int_x).set(a0x);
     (int_y).set(fp::frsp(new_y));
     return 1_i32;
+}
+
+pub fn mpCheckLeftWall<'a>(
+    ctx: &'a Ctx,
+    ax: f64,
+    ay: f64,
+    bx: f64,
+    by: f64,
+    vec_out: Vec<'a>,
+    line_id_out: Val<'a, i32>,
+    flags_out: Val<'a, u32>,
+    normal_out: Vec<'a>,
+    joint_id_skip: i32,
+    joint_id_only: i32,
+) -> i32 {
+    let __frame = ctx.stack_frame(0xe0);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let int_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
+    let int_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
+    let mut ax = ax;
+    let mut ay = ay;
+    let mut bx = bx;
+    let mut by = by;
+    let mut vec_out = vec_out;
+    let mut line_id_out = line_id_out;
+    let mut flags_out = flags_out;
+    let mut normal_out = normal_out;
+    let mut joint_id_skip = joint_id_skip;
+    let mut joint_id_only = joint_id_only;
+    let mut min_dist2: f64 = 0.0;
+    let mut joint: CollJoint<'a> = null(ctx);
+    let mut i: i32 = 0;
+    let mut result: i32 = 0;
+    let mut line: CollLine<'a> = null(ctx);
+    let mut count: i32 = 0;
+    let mut dynamic_count: i32 = 0;
+    let mut j_inner: MapJoint<'a> = null(ctx);
+    let mut already_checked: i32 = 0;
+    let mut inner: MapLine<'a> = null(ctx);
+    let mut v0: CollVtx<'a> = null(ctx);
+    let mut v1: CollVtx<'a> = null(ctx);
+    let mut x0: f64 = 0.0;
+    let mut y0: f64 = 0.0;
+    let mut x1: f64 = 0.0;
+    let mut y1: f64 = 0.0;
+    let mut dx2: f64 = 0.0;
+    let mut dy2: f64 = 0.0;
+    let mut dist2: f64 = 0.0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = 3;
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                result = 0_i32;
+                min_dist2 = 3.4028234663852886e+38_f64;
+                already_checked = fns::mpCheckedBounding(ctx);
+                __state = if !(already_checked != 0) { 6 } else { 7 };
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                fns::mpBoundingCheck2(ctx, ax, ay, bx, by);
+                __state = 7;
+            }
+            7 => {
+                joint = statics::melee__mp__mplib::jointListStart(ctx).get();
+                __state = 9;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                __state = if !Handle::is_null(joint) { 10 } else { 12 };
+            }
+            10 => {
+                __state = if (((joint).flags() & ((enums::CollJoint_TooFar as i32) as u32)) != 0) {
+                    14
+                } else {
+                    15
+                };
+            }
+            11 => {
+                joint = (joint).next();
+                __state = 9;
+            }
+            12 => {
+                __state = if !(already_checked != 0) { 75 } else { 76 };
+            }
+            13 => {
+                unreachable!();
+            }
+            14 => {
+                __state = 11;
+            }
+            15 => {
+                __state = if (joint_id_skip
+                    == ((Handle::addr(joint).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                    )) as i32)
+                        / 52))
+                    || (!((joint_id_only == 1_i32.wrapping_neg())
+                        || (joint_id_only
+                            == ((Handle::addr(joint).wrapping_sub(Handle::addr(
+                                statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                            )) as i32)
+                                / 52))))
+                {
+                    18
+                } else {
+                    19
+                };
+            }
+            16 => {
+                unreachable!();
+            }
+            17 => {
+                __state = 15;
+            }
+            18 => {
+                __state = 11;
+            }
+            19 => {
+                j_inner = (joint).inner();
+                count = ((j_inner)
+                    .ranges()
+                    .get((enums::MapLineGroup_LeftWall as i32))
+                    .count() as i32);
+                dynamic_count = ((j_inner)
+                    .ranges()
+                    .get((enums::MapLineGroup_Dynamic as i32))
+                    .count() as i32);
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    ((j_inner)
+                        .ranges()
+                        .get((enums::MapLineGroup_LeftWall as i32))
+                        .start() as i32),
+                ));
+                i = 0_i32;
+                __state = 22;
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                __state = 19;
+            }
+            22 => {
+                __state = if i < count { 23 } else { 25 };
+            }
+            23 => {
+                __state = 27;
+            }
+            24 => {
+                i = i.wrapping_add(1);
+                line = Handle::add(line, 1);
+                __state = 22;
+            }
+            25 => {
+                __state = if dynamic_count != 0_i32 { 71 } else { 72 };
+            }
+            26 => {
+                unreachable!();
+            }
+            27 => {
+                __state = if ((((line).flags() & ((enums::CollLine_LeftWall as i32) as u32)) != 0)
+                    && (((line).flags() & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0))
+                    && (!(((line).flags() & ((shl_i32(1_i32, (7_i32 as u32))) as u32)) != 0))
+                {
+                    28
+                } else {
+                    29
+                };
+            }
+            28 => {
+                inner = (line).x0();
+                v0 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    ((inner).v0_idx() as i32),
+                ));
+                v1 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    ((inner).v1_idx() as i32),
+                ));
+                x0 = (v0).pos().x();
+                y0 = (v0).pos().y();
+                x1 = (v1).pos().x();
+                y1 = (v1).pos().y();
+                __state = if (if (fp::fsubs(x0, x1)) < fp::frsp(0_i32 as f64) {
+                    fp::fneg((fp::fsubs(x0, x1)))
+                } else {
+                    (fp::fsubs(x0, x1))
+                }) > 0.0001
+                {
+                    31
+                } else {
+                    33
+                };
+            }
+            29 => {
+                __state = 24;
+            }
+            30 => {
+                unreachable!();
+            }
+            31 => {
+                __state = if (statics::melee__mp__mplib::mpLineIntersection(
+                    ctx, x0, y0, x1, y1, ax, ay, bx, by, int_x, int_y,
+                ) != 0)
+                {
+                    35
+                } else {
+                    36
+                };
+            }
+            32 => {
+                __state = 29;
+            }
+            33 => {
+                __state = if (ax <= bx)
+                    && (fns::mpLineIntersectionV(ctx, int_x, int_y, x0, y0, y1, ax, ay, bx, by)
+                        != 0)
+                {
+                    53
+                } else {
+                    54
+                };
+            }
+            34 => {
+                unreachable!();
+            }
+            35 => {
+                dx2 = (fp::fmuls((fp::fsubs(int_x.get(), ax)), (fp::fsubs(int_x.get(), ax))));
+                dy2 = (fp::fmuls((fp::fsubs(int_y.get(), ay)), (fp::fsubs(int_y.get(), ay))));
+                dist2 = fp::fadds(dx2, dy2);
+                __state = if min_dist2 > dist2 { 38 } else { 39 };
+            }
+            36 => {
+                __state = 32;
+            }
+            37 => {
+                unreachable!();
+            }
+            38 => {
+                min_dist2 = dist2;
+                __state = if !Handle::is_null(vec_out) { 41 } else { 42 };
+            }
+            39 => {
+                __state = 36;
+            }
+            40 => {
+                unreachable!();
+            }
+            41 => {
+                (vec_out).set_x(int_x.get());
+                (vec_out).set_y(int_y.get());
+                (vec_out).set_z(0.0);
+                __state = 42;
+            }
+            42 => {
+                __state = if !Handle::is_null(line_id_out) {
+                    44
+                } else {
+                    45
+                };
+            }
+            43 => {
+                unreachable!();
+            }
+            44 => {
+                (line_id_out).set(
+                    ((Handle::addr(line).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    )) as i32)
+                        / 8),
+                );
+                __state = 45;
+            }
+            45 => {
+                __state = if !Handle::is_null(flags_out) { 47 } else { 48 };
+            }
+            46 => {
+                unreachable!();
+            }
+            47 => {
+                (flags_out).set((((line).x0()).lo_flags() as u32));
+                __state = 48;
+            }
+            48 => {
+                __state = if !Handle::is_null(normal_out) { 50 } else { 51 };
+            }
+            49 => {
+                unreachable!();
+            }
+            50 => {
+                (normal_out).set_x(fp::fneg((fp::fsubs(y1, y0))));
+                (normal_out).set_y(fp::fsubs(x1, x0));
+                (normal_out).set_z(0.0);
+                fns::PSVECNormalize(ctx, normal_out, normal_out);
+                __state = 51;
+            }
+            51 => {
+                result = 1_i32;
+                __state = 39;
+            }
+            52 => {
+                unreachable!();
+            }
+            53 => {
+                dx2 = (fp::fmuls((fp::fsubs(int_x.get(), ax)), (fp::fsubs(int_x.get(), ax))));
+                dy2 = (fp::fmuls((fp::fsubs(int_y.get(), ay)), (fp::fsubs(int_y.get(), ay))));
+                dist2 = fp::fadds(dx2, dy2);
+                __state = if min_dist2 > dist2 { 56 } else { 57 };
+            }
+            54 => {
+                __state = 32;
+            }
+            55 => {
+                unreachable!();
+            }
+            56 => {
+                min_dist2 = dist2;
+                __state = if !Handle::is_null(vec_out) { 59 } else { 60 };
+            }
+            57 => {
+                __state = 54;
+            }
+            58 => {
+                unreachable!();
+            }
+            59 => {
+                (vec_out).set_x(int_x.get());
+                (vec_out).set_y(int_y.get());
+                (vec_out).set_z(0.0);
+                __state = 60;
+            }
+            60 => {
+                __state = if !Handle::is_null(line_id_out) {
+                    62
+                } else {
+                    63
+                };
+            }
+            61 => {
+                unreachable!();
+            }
+            62 => {
+                (line_id_out).set(
+                    ((Handle::addr(line).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    )) as i32)
+                        / 8),
+                );
+                __state = 63;
+            }
+            63 => {
+                __state = if !Handle::is_null(flags_out) { 65 } else { 66 };
+            }
+            64 => {
+                unreachable!();
+            }
+            65 => {
+                (flags_out).set((((line).x0()).lo_flags() as u32));
+                __state = 66;
+            }
+            66 => {
+                __state = if !Handle::is_null(normal_out) { 68 } else { 69 };
+            }
+            67 => {
+                unreachable!();
+            }
+            68 => {
+                (normal_out).set_x(fp::fneg(1.0));
+                (normal_out).set_y(0.0);
+                (normal_out).set_z(0.0);
+                __state = 69;
+            }
+            69 => {
+                result = 1_i32;
+                __state = 57;
+            }
+            70 => {
+                unreachable!();
+            }
+            71 => {
+                count = dynamic_count;
+                i = 0_i32;
+                dynamic_count = 0_i32;
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    (((joint).inner())
+                        .ranges()
+                        .get((enums::MapLineGroup_Dynamic as i32))
+                        .start() as i32),
+                ));
+                __state = 27;
+            }
+            72 => {
+                __state = 11;
+            }
+            73 => {
+                unreachable!();
+            }
+            74 => {
+                __state = 72;
+            }
+            75 => {
+                fns::mpUncheckBounding(ctx);
+                __state = 76;
+            }
+            76 => {
+                return result;
+            }
+            77 => {
+                unreachable!();
+            }
+            78 => {
+                return 0;
+            }
+            79 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
+pub fn mpCheckLeftWallRemap<'a>(
+    ctx: &'a Ctx,
+    ax: f64,
+    ay: f64,
+    bx: f64,
+    by: f64,
+    vec_out: Vec<'a>,
+    line_id_out: Val<'a, i32>,
+    flags_out: Val<'a, u32>,
+    normal_out: Vec<'a>,
+    joint_id_skip: i32,
+    joint_id_only: i32,
+) -> i32 {
+    let __frame = ctx.stack_frame(0xf8);
+    let ax__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    let ay__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
+    let int_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
+    let int_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
+    ax__slot.set(ax);
+    ay__slot.set(ay);
+    let mut bx = bx;
+    let mut by = by;
+    let mut vec_out = vec_out;
+    let mut line_id_out = line_id_out;
+    let mut flags_out = flags_out;
+    let mut normal_out = normal_out;
+    let mut joint_id_skip = joint_id_skip;
+    let mut joint_id_only = joint_id_only;
+    let mut min_dist2: f64 = 0.0;
+    let mut old_x: f64 = 0.0;
+    let mut old_y: f64 = 0.0;
+    let mut joint: CollJoint<'a> = null(ctx);
+    let mut i: i32 = 0;
+    let mut result: i32 = 0;
+    let mut line: CollLine<'a> = null(ctx);
+    let mut count: i32 = 0;
+    let mut dynamic_count: i32 = 0;
+    let mut j_inner: MapJoint<'a> = null(ctx);
+    let mut already_checked: i32 = 0;
+    let mut x0: f64 = 0.0;
+    let mut y0: f64 = 0.0;
+    let mut x1: f64 = 0.0;
+    let mut y1: f64 = 0.0;
+    let mut dx: f64 = 0.0;
+    let mut dy: f64 = 0.0;
+    let mut dx2: f64 = 0.0;
+    let mut dy2: f64 = 0.0;
+    let mut dist2: f64 = 0.0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                old_x = ax__slot.get();
+                old_y = ay__slot.get();
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = 3;
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                result = 0_i32;
+                min_dist2 = 3.4028234663852886e+38_f64;
+                already_checked = fns::mpCheckedBounding(ctx);
+                __state = if !(already_checked != 0) { 6 } else { 7 };
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                fns::mpBoundingCheck2(ctx, ax__slot.get(), ay__slot.get(), bx, by);
+                __state = 7;
+            }
+            7 => {
+                joint = statics::melee__mp__mplib::jointListStart(ctx).get();
+                __state = 9;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                __state = if !Handle::is_null(joint) { 10 } else { 12 };
+            }
+            10 => {
+                __state = if (((joint).flags() & ((enums::CollJoint_TooFar as i32) as u32)) != 0) {
+                    14
+                } else {
+                    15
+                };
+            }
+            11 => {
+                joint = (joint).next();
+                __state = 9;
+            }
+            12 => {
+                __state = if !(already_checked != 0) { 85 } else { 86 };
+            }
+            13 => {
+                unreachable!();
+            }
+            14 => {
+                __state = 11;
+            }
+            15 => {
+                __state = if (joint_id_skip
+                    == ((Handle::addr(joint).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                    )) as i32)
+                        / 52))
+                    || (!((joint_id_only == 1_i32.wrapping_neg())
+                        || (joint_id_only
+                            == ((Handle::addr(joint).wrapping_sub(Handle::addr(
+                                statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                            )) as i32)
+                                / 52))))
+                {
+                    18
+                } else {
+                    19
+                };
+            }
+            16 => {
+                unreachable!();
+            }
+            17 => {
+                __state = 15;
+            }
+            18 => {
+                __state = 11;
+            }
+            19 => {
+                j_inner = (joint).inner();
+                count = ((j_inner)
+                    .ranges()
+                    .get((enums::MapLineGroup_LeftWall as i32))
+                    .count() as i32);
+                dynamic_count = ((j_inner)
+                    .ranges()
+                    .get((enums::MapLineGroup_Dynamic as i32))
+                    .count() as i32);
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    ((j_inner)
+                        .ranges()
+                        .get((enums::MapLineGroup_LeftWall as i32))
+                        .start() as i32),
+                ));
+                i = 0_i32;
+                __state = 22;
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                __state = 19;
+            }
+            22 => {
+                __state = if i < count { 23 } else { 25 };
+            }
+            23 => {
+                __state = 27;
+            }
+            24 => {
+                i = i.wrapping_add(1);
+                line = Handle::add(line, 1);
+                __state = 22;
+            }
+            25 => {
+                __state = if dynamic_count != 0_i32 { 81 } else { 82 };
+            }
+            26 => {
+                unreachable!();
+            }
+            27 => {
+                __state = if ((((line).flags() & ((enums::CollLine_LeftWall as i32) as u32)) != 0)
+                    && (((line).flags() & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0))
+                    && (!(((line).flags() & ((shl_i32(1_i32, (7_i32 as u32))) as u32)) != 0))
+                {
+                    28
+                } else {
+                    29
+                };
+            }
+            28 => {
+                x0 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((line).x0()).v0_idx() as i32),
+                ))
+                .pos()
+                .x();
+                y0 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((line).x0()).v0_idx() as i32),
+                ))
+                .pos()
+                .y();
+                x1 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((line).x0()).v1_idx() as i32),
+                ))
+                .pos()
+                .x();
+                y1 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((line).x0()).v1_idx() as i32),
+                ))
+                .pos()
+                .y();
+                __state = if (((joint).flags()
+                    & ((((enums::CollJoint_B10 as i32) | (enums::CollJoint_B9 as i32))
+                        | (enums::CollJoint_B8 as i32)) as u32))
+                    != 0)
+                {
+                    31
+                } else {
+                    33
+                };
+            }
+            29 => {
+                __state = 24;
+            }
+            30 => {
+                unreachable!();
+            }
+            31 => {
+                statics::melee__mp__mplib::mpRemap2d(
+                    ctx,
+                    ax__slot,
+                    ay__slot,
+                    (Handle::add(
+                        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                        (((line).x0()).v0_idx() as i32),
+                    ))
+                    .x10(),
+                    (Handle::add(
+                        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                        (((line).x0()).v0_idx() as i32),
+                    ))
+                    .x14(),
+                    (Handle::add(
+                        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                        (((line).x0()).v1_idx() as i32),
+                    ))
+                    .x10(),
+                    (Handle::add(
+                        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                        (((line).x0()).v1_idx() as i32),
+                    ))
+                    .x14(),
+                    x0,
+                    y0,
+                    x1,
+                    y1,
+                    old_x,
+                    old_y,
+                );
+                __state = 32;
+            }
+            32 => {
+                dx = fp::fsubs(bx, ax__slot.get());
+                dy = fp::fsubs(by, ay__slot.get());
+                __state = if (if (fp::fsubs(x0, x1)) < fp::frsp(0_i32 as f64) {
+                    fp::fneg((fp::fsubs(x0, x1)))
+                } else {
+                    (fp::fsubs(x0, x1))
+                }) > 0.0001
+                {
+                    35
+                } else {
+                    37
+                };
+            }
+            33 => {
+                ax__slot.set(old_x);
+                ay__slot.set(old_y);
+                __state = 32;
+            }
+            34 => {
+                unreachable!();
+            }
+            35 => {
+                __state = if (statics::melee__mp__mplib::mpLineIntersection(
+                    ctx,
+                    x0,
+                    y0,
+                    x1,
+                    y1,
+                    ax__slot.get(),
+                    ay__slot.get(),
+                    bx,
+                    by,
+                    int_x,
+                    int_y,
+                ) != 0)
+                {
+                    39
+                } else {
+                    40
+                };
+            }
+            36 => {
+                __state = 29;
+            }
+            37 => {
+                __state = if (ax__slot.get() <= bx)
+                    && (fns::mpLineIntersectionV(
+                        ctx,
+                        int_x,
+                        int_y,
+                        x0,
+                        y0,
+                        y1,
+                        ax__slot.get(),
+                        ay__slot.get(),
+                        bx,
+                        by,
+                    ) != 0)
+                {
+                    60
+                } else {
+                    61
+                };
+            }
+            38 => {
+                unreachable!();
+            }
+            39 => {
+                dx2 = (fp::fmuls(
+                    (fp::fsubs(int_x.get(), old_x)),
+                    (fp::fsubs(int_x.get(), old_x)),
+                ));
+                dy2 = (fp::fmuls(
+                    (fp::fsubs(int_y.get(), old_y)),
+                    (fp::fsubs(int_y.get(), old_y)),
+                ));
+                dist2 = fp::fadds(dx2, dy2);
+                __state = if fp::fmadds(
+                    dx,
+                    (fp::fsubs(int_x.get(), old_x)),
+                    (fp::fmuls(dy, (fp::fsubs(int_y.get(), old_y)))),
+                ) < 0.0
+                {
+                    42
+                } else {
+                    43
+                };
+            }
+            40 => {
+                __state = 36;
+            }
+            41 => {
+                unreachable!();
+            }
+            42 => {
+                dist2 = fp::fneg(dist2);
+                __state = 43;
+            }
+            43 => {
+                __state = if min_dist2 > dist2 { 45 } else { 46 };
+            }
+            44 => {
+                unreachable!();
+            }
+            45 => {
+                min_dist2 = dist2;
+                __state = if !Handle::is_null(vec_out) { 48 } else { 49 };
+            }
+            46 => {
+                __state = 40;
+            }
+            47 => {
+                unreachable!();
+            }
+            48 => {
+                (vec_out).set_x(int_x.get());
+                (vec_out).set_y(int_y.get());
+                (vec_out).set_z(0.0);
+                __state = 49;
+            }
+            49 => {
+                __state = if !Handle::is_null(line_id_out) {
+                    51
+                } else {
+                    52
+                };
+            }
+            50 => {
+                unreachable!();
+            }
+            51 => {
+                (line_id_out).set(
+                    ((Handle::addr(line).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    )) as i32)
+                        / 8),
+                );
+                __state = 52;
+            }
+            52 => {
+                __state = if !Handle::is_null(flags_out) { 54 } else { 55 };
+            }
+            53 => {
+                unreachable!();
+            }
+            54 => {
+                (flags_out).set((((line).x0()).lo_flags() as u32));
+                __state = 55;
+            }
+            55 => {
+                __state = if !Handle::is_null(normal_out) { 57 } else { 58 };
+            }
+            56 => {
+                unreachable!();
+            }
+            57 => {
+                (normal_out).set_x(fp::fneg((fp::fsubs(y1, y0))));
+                (normal_out).set_y(fp::fsubs(x1, x0));
+                (normal_out).set_z(0.0);
+                fns::PSVECNormalize(ctx, normal_out, normal_out);
+                __state = 58;
+            }
+            58 => {
+                result = 1_i32;
+                __state = 46;
+            }
+            59 => {
+                unreachable!();
+            }
+            60 => {
+                dx2 = (fp::fmuls(
+                    (fp::fsubs(int_x.get(), old_x)),
+                    (fp::fsubs(int_x.get(), old_x)),
+                ));
+                dy2 = (fp::fmuls(
+                    (fp::fsubs(int_y.get(), old_y)),
+                    (fp::fsubs(int_y.get(), old_y)),
+                ));
+                dist2 = fp::fadds(dx2, dy2);
+                __state = if fp::fmadds(
+                    dx,
+                    (fp::fsubs(int_x.get(), old_x)),
+                    (fp::fmuls(dy, (fp::fsubs(int_y.get(), old_y)))),
+                ) < 0.0
+                {
+                    63
+                } else {
+                    64
+                };
+            }
+            61 => {
+                __state = 36;
+            }
+            62 => {
+                unreachable!();
+            }
+            63 => {
+                dist2 = fp::fneg(dist2);
+                __state = 64;
+            }
+            64 => {
+                __state = if min_dist2 > dist2 { 66 } else { 67 };
+            }
+            65 => {
+                unreachable!();
+            }
+            66 => {
+                min_dist2 = dist2;
+                __state = if !Handle::is_null(vec_out) { 69 } else { 70 };
+            }
+            67 => {
+                __state = 61;
+            }
+            68 => {
+                unreachable!();
+            }
+            69 => {
+                (vec_out).set_x(int_x.get());
+                (vec_out).set_y(int_y.get());
+                (vec_out).set_z(0.0);
+                __state = 70;
+            }
+            70 => {
+                __state = if !Handle::is_null(line_id_out) {
+                    72
+                } else {
+                    73
+                };
+            }
+            71 => {
+                unreachable!();
+            }
+            72 => {
+                (line_id_out).set(
+                    ((Handle::addr(line).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    )) as i32)
+                        / 8),
+                );
+                __state = 73;
+            }
+            73 => {
+                __state = if !Handle::is_null(flags_out) { 75 } else { 76 };
+            }
+            74 => {
+                unreachable!();
+            }
+            75 => {
+                (flags_out).set((((line).x0()).lo_flags() as u32));
+                __state = 76;
+            }
+            76 => {
+                __state = if !Handle::is_null(normal_out) { 78 } else { 79 };
+            }
+            77 => {
+                unreachable!();
+            }
+            78 => {
+                (normal_out).set_x(fp::fneg(1.0));
+                (normal_out).set_y(0.0);
+                (normal_out).set_z(0.0);
+                __state = 79;
+            }
+            79 => {
+                result = 1_i32;
+                __state = 67;
+            }
+            80 => {
+                unreachable!();
+            }
+            81 => {
+                count = dynamic_count;
+                i = 0_i32;
+                dynamic_count = 0_i32;
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    (((joint).inner())
+                        .ranges()
+                        .get((enums::MapLineGroup_Dynamic as i32))
+                        .start() as i32),
+                ));
+                __state = 27;
+            }
+            82 => {
+                __state = 11;
+            }
+            83 => {
+                unreachable!();
+            }
+            84 => {
+                __state = 82;
+            }
+            85 => {
+                fns::mpUncheckBounding(ctx);
+                __state = 86;
+            }
+            86 => {
+                return result;
+            }
+            87 => {
+                unreachable!();
+            }
+            88 => {
+                return 0;
+            }
+            89 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
+pub fn mpCheckRightWall<'a>(
+    ctx: &'a Ctx,
+    ax: f64,
+    ay: f64,
+    bx: f64,
+    by: f64,
+    vec_out: Vec<'a>,
+    line_id_out: Val<'a, i32>,
+    flags_out: Val<'a, u32>,
+    normal_out: Vec<'a>,
+    joint_id_skip: i32,
+    joint_id_only: i32,
+) -> i32 {
+    let __frame = ctx.stack_frame(0xe0);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let int_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
+    let int_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
+    let mut ax = ax;
+    let mut ay = ay;
+    let mut bx = bx;
+    let mut by = by;
+    let mut vec_out = vec_out;
+    let mut line_id_out = line_id_out;
+    let mut flags_out = flags_out;
+    let mut normal_out = normal_out;
+    let mut joint_id_skip = joint_id_skip;
+    let mut joint_id_only = joint_id_only;
+    let mut min_dist2: f64 = 0.0;
+    let mut joint: CollJoint<'a> = null(ctx);
+    let mut i: i32 = 0;
+    let mut result: i32 = 0;
+    let mut line: CollLine<'a> = null(ctx);
+    let mut count: i32 = 0;
+    let mut dynamic_count: i32 = 0;
+    let mut j_inner: MapJoint<'a> = null(ctx);
+    let mut already_checked: i32 = 0;
+    let mut inner: MapLine<'a> = null(ctx);
+    let mut v0: CollVtx<'a> = null(ctx);
+    let mut v1: CollVtx<'a> = null(ctx);
+    let mut x0: f64 = 0.0;
+    let mut y0: f64 = 0.0;
+    let mut x1: f64 = 0.0;
+    let mut y1: f64 = 0.0;
+    let mut dx2: f64 = 0.0;
+    let mut dy2: f64 = 0.0;
+    let mut dist2: f64 = 0.0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = 3;
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                result = 0_i32;
+                min_dist2 = 3.4028234663852886e+38_f64;
+                already_checked = fns::mpCheckedBounding(ctx);
+                __state = if !(already_checked != 0) { 6 } else { 7 };
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                fns::mpBoundingCheck2(ctx, ax, ay, bx, by);
+                __state = 7;
+            }
+            7 => {
+                joint = statics::melee__mp__mplib::jointListStart(ctx).get();
+                __state = 9;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                __state = if !Handle::is_null(joint) { 10 } else { 12 };
+            }
+            10 => {
+                __state = if (((joint).flags() & ((enums::CollJoint_TooFar as i32) as u32)) != 0) {
+                    14
+                } else {
+                    15
+                };
+            }
+            11 => {
+                joint = (joint).next();
+                __state = 9;
+            }
+            12 => {
+                __state = if !(already_checked != 0) { 75 } else { 76 };
+            }
+            13 => {
+                unreachable!();
+            }
+            14 => {
+                __state = 11;
+            }
+            15 => {
+                __state = if (joint_id_skip
+                    == ((Handle::addr(joint).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                    )) as i32)
+                        / 52))
+                    || (!((joint_id_only == 1_i32.wrapping_neg())
+                        || (joint_id_only
+                            == ((Handle::addr(joint).wrapping_sub(Handle::addr(
+                                statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                            )) as i32)
+                                / 52))))
+                {
+                    18
+                } else {
+                    19
+                };
+            }
+            16 => {
+                unreachable!();
+            }
+            17 => {
+                __state = 15;
+            }
+            18 => {
+                __state = 11;
+            }
+            19 => {
+                j_inner = (joint).inner();
+                count = ((j_inner)
+                    .ranges()
+                    .get((enums::MapLineGroup_RightWall as i32))
+                    .count() as i32);
+                dynamic_count = ((j_inner)
+                    .ranges()
+                    .get((enums::MapLineGroup_Dynamic as i32))
+                    .count() as i32);
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    ((j_inner)
+                        .ranges()
+                        .get((enums::MapLineGroup_RightWall as i32))
+                        .start() as i32),
+                ));
+                i = 0_i32;
+                __state = 22;
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                __state = 19;
+            }
+            22 => {
+                __state = if i < count { 23 } else { 25 };
+            }
+            23 => {
+                __state = 27;
+            }
+            24 => {
+                i = i.wrapping_add(1);
+                line = Handle::add(line, 1);
+                __state = 22;
+            }
+            25 => {
+                __state = if dynamic_count != 0_i32 { 71 } else { 72 };
+            }
+            26 => {
+                unreachable!();
+            }
+            27 => {
+                __state = if ((((line).flags() & ((enums::CollLine_RightWall as i32) as u32)) != 0)
+                    && (((line).flags() & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0))
+                    && (!(((line).flags() & ((shl_i32(1_i32, (7_i32 as u32))) as u32)) != 0))
+                {
+                    28
+                } else {
+                    29
+                };
+            }
+            28 => {
+                inner = (line).x0();
+                v0 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    ((inner).v0_idx() as i32),
+                ));
+                v1 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    ((inner).v1_idx() as i32),
+                ));
+                x0 = (v0).pos().x();
+                y0 = (v0).pos().y();
+                x1 = (v1).pos().x();
+                y1 = (v1).pos().y();
+                __state = if (if (fp::fsubs(x0, x1)) < fp::frsp(0_i32 as f64) {
+                    fp::fneg((fp::fsubs(x0, x1)))
+                } else {
+                    (fp::fsubs(x0, x1))
+                }) > 0.0001
+                {
+                    31
+                } else {
+                    33
+                };
+            }
+            29 => {
+                __state = 24;
+            }
+            30 => {
+                unreachable!();
+            }
+            31 => {
+                __state = if (statics::melee__mp__mplib::mpLineIntersection(
+                    ctx, x0, y0, x1, y1, ax, ay, bx, by, int_x, int_y,
+                ) != 0)
+                {
+                    35
+                } else {
+                    36
+                };
+            }
+            32 => {
+                __state = 29;
+            }
+            33 => {
+                __state = if (ax >= bx)
+                    && (fns::mpLineIntersectionV(ctx, int_x, int_y, x0, y0, y1, ax, ay, bx, by)
+                        != 0)
+                {
+                    53
+                } else {
+                    54
+                };
+            }
+            34 => {
+                unreachable!();
+            }
+            35 => {
+                dx2 = (fp::fmuls((fp::fsubs(int_x.get(), ax)), (fp::fsubs(int_x.get(), ax))));
+                dy2 = (fp::fmuls((fp::fsubs(int_y.get(), ay)), (fp::fsubs(int_y.get(), ay))));
+                dist2 = fp::fadds(dx2, dy2);
+                __state = if min_dist2 > dist2 { 38 } else { 39 };
+            }
+            36 => {
+                __state = 32;
+            }
+            37 => {
+                unreachable!();
+            }
+            38 => {
+                min_dist2 = dist2;
+                __state = if !Handle::is_null(vec_out) { 41 } else { 42 };
+            }
+            39 => {
+                __state = 36;
+            }
+            40 => {
+                unreachable!();
+            }
+            41 => {
+                (vec_out).set_x(int_x.get());
+                (vec_out).set_y(int_y.get());
+                (vec_out).set_z(0.0);
+                __state = 42;
+            }
+            42 => {
+                __state = if !Handle::is_null(line_id_out) {
+                    44
+                } else {
+                    45
+                };
+            }
+            43 => {
+                unreachable!();
+            }
+            44 => {
+                (line_id_out).set(
+                    ((Handle::addr(line).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    )) as i32)
+                        / 8),
+                );
+                __state = 45;
+            }
+            45 => {
+                __state = if !Handle::is_null(flags_out) { 47 } else { 48 };
+            }
+            46 => {
+                unreachable!();
+            }
+            47 => {
+                (flags_out).set((((line).x0()).lo_flags() as u32));
+                __state = 48;
+            }
+            48 => {
+                __state = if !Handle::is_null(normal_out) { 50 } else { 51 };
+            }
+            49 => {
+                unreachable!();
+            }
+            50 => {
+                (normal_out).set_x(fp::fneg((fp::fsubs(y1, y0))));
+                (normal_out).set_y(fp::fsubs(x1, x0));
+                (normal_out).set_z(0.0);
+                fns::PSVECNormalize(ctx, normal_out, normal_out);
+                __state = 51;
+            }
+            51 => {
+                result = 1_i32;
+                __state = 39;
+            }
+            52 => {
+                unreachable!();
+            }
+            53 => {
+                dx2 = (fp::fmuls((fp::fsubs(int_x.get(), ax)), (fp::fsubs(int_x.get(), ax))));
+                dy2 = (fp::fmuls((fp::fsubs(int_y.get(), ay)), (fp::fsubs(int_y.get(), ay))));
+                dist2 = fp::fadds(dx2, dy2);
+                __state = if min_dist2 > dist2 { 56 } else { 57 };
+            }
+            54 => {
+                __state = 32;
+            }
+            55 => {
+                unreachable!();
+            }
+            56 => {
+                min_dist2 = dist2;
+                __state = if !Handle::is_null(vec_out) { 59 } else { 60 };
+            }
+            57 => {
+                __state = 54;
+            }
+            58 => {
+                unreachable!();
+            }
+            59 => {
+                (vec_out).set_x(int_x.get());
+                (vec_out).set_y(int_y.get());
+                (vec_out).set_z(0.0);
+                __state = 60;
+            }
+            60 => {
+                __state = if !Handle::is_null(line_id_out) {
+                    62
+                } else {
+                    63
+                };
+            }
+            61 => {
+                unreachable!();
+            }
+            62 => {
+                (line_id_out).set(
+                    ((Handle::addr(line).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    )) as i32)
+                        / 8),
+                );
+                __state = 63;
+            }
+            63 => {
+                __state = if !Handle::is_null(flags_out) { 65 } else { 66 };
+            }
+            64 => {
+                unreachable!();
+            }
+            65 => {
+                (flags_out).set((((line).x0()).lo_flags() as u32));
+                __state = 66;
+            }
+            66 => {
+                __state = if !Handle::is_null(normal_out) { 68 } else { 69 };
+            }
+            67 => {
+                unreachable!();
+            }
+            68 => {
+                (normal_out).set_x(1.0);
+                (normal_out).set_y(0.0);
+                (normal_out).set_z(0.0);
+                __state = 69;
+            }
+            69 => {
+                result = 1_i32;
+                __state = 57;
+            }
+            70 => {
+                unreachable!();
+            }
+            71 => {
+                count = dynamic_count;
+                i = 0_i32;
+                dynamic_count = 0_i32;
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    (((joint).inner())
+                        .ranges()
+                        .get((enums::MapLineGroup_Dynamic as i32))
+                        .start() as i32),
+                ));
+                __state = 27;
+            }
+            72 => {
+                __state = 11;
+            }
+            73 => {
+                unreachable!();
+            }
+            74 => {
+                __state = 72;
+            }
+            75 => {
+                fns::mpUncheckBounding(ctx);
+                __state = 76;
+            }
+            76 => {
+                return result;
+            }
+            77 => {
+                unreachable!();
+            }
+            78 => {
+                return 0;
+            }
+            79 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
+pub fn mpCheckRightWallRemap<'a>(
+    ctx: &'a Ctx,
+    ax: f64,
+    ay: f64,
+    bx: f64,
+    by: f64,
+    vec_out: Vec<'a>,
+    line_id_out: Val<'a, i32>,
+    flags_out: Val<'a, u32>,
+    normal_out: Vec<'a>,
+    joint_id_skip: i32,
+    joint_id_only: i32,
+) -> i32 {
+    let __frame = ctx.stack_frame(0xf8);
+    let ax__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    let ay__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
+    let int_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
+    let int_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
+    ax__slot.set(ax);
+    ay__slot.set(ay);
+    let mut bx = bx;
+    let mut by = by;
+    let mut vec_out = vec_out;
+    let mut line_id_out = line_id_out;
+    let mut flags_out = flags_out;
+    let mut normal_out = normal_out;
+    let mut joint_id_skip = joint_id_skip;
+    let mut joint_id_only = joint_id_only;
+    let mut min_dist2: f64 = 0.0;
+    let mut old_x: f64 = 0.0;
+    let mut old_y: f64 = 0.0;
+    let mut joint: CollJoint<'a> = null(ctx);
+    let mut i: i32 = 0;
+    let mut result: i32 = 0;
+    let mut already_checked: i32 = 0;
+    let mut line: CollLine<'a> = null(ctx);
+    let mut count: i32 = 0;
+    let mut dynamic_count: i32 = 0;
+    let mut j_inner: MapJoint<'a> = null(ctx);
+    let mut x0: f64 = 0.0;
+    let mut y0: f64 = 0.0;
+    let mut x1: f64 = 0.0;
+    let mut y1: f64 = 0.0;
+    let mut dx: f64 = 0.0;
+    let mut dy: f64 = 0.0;
+    let mut dx2: f64 = 0.0;
+    let mut dy2: f64 = 0.0;
+    let mut dist2: f64 = 0.0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                old_x = ax__slot.get();
+                old_y = ay__slot.get();
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = 3;
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                result = 0_i32;
+                min_dist2 = 3.4028234663852886e+38_f64;
+                already_checked = fns::mpCheckedBounding(ctx);
+                __state = if !(already_checked != 0) { 6 } else { 7 };
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                fns::mpBoundingCheck2(ctx, ax__slot.get(), ay__slot.get(), bx, by);
+                __state = 7;
+            }
+            7 => {
+                joint = statics::melee__mp__mplib::jointListStart(ctx).get();
+                __state = 9;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                __state = if !Handle::is_null(joint) { 10 } else { 12 };
+            }
+            10 => {
+                __state = if (((joint).flags() & ((enums::CollJoint_TooFar as i32) as u32)) != 0) {
+                    14
+                } else {
+                    15
+                };
+            }
+            11 => {
+                joint = (joint).next();
+                __state = 9;
+            }
+            12 => {
+                __state = if !(already_checked != 0) { 85 } else { 86 };
+            }
+            13 => {
+                unreachable!();
+            }
+            14 => {
+                __state = 11;
+            }
+            15 => {
+                __state = if (joint_id_skip
+                    == ((Handle::addr(joint).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                    )) as i32)
+                        / 52))
+                    || (!((joint_id_only == 1_i32.wrapping_neg())
+                        || (joint_id_only
+                            == ((Handle::addr(joint).wrapping_sub(Handle::addr(
+                                statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                            )) as i32)
+                                / 52))))
+                {
+                    18
+                } else {
+                    19
+                };
+            }
+            16 => {
+                unreachable!();
+            }
+            17 => {
+                __state = 15;
+            }
+            18 => {
+                __state = 11;
+            }
+            19 => {
+                j_inner = (joint).inner();
+                count = ((j_inner)
+                    .ranges()
+                    .get((enums::MapLineGroup_RightWall as i32))
+                    .count() as i32);
+                dynamic_count = ((j_inner)
+                    .ranges()
+                    .get((enums::MapLineGroup_Dynamic as i32))
+                    .count() as i32);
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    ((j_inner)
+                        .ranges()
+                        .get((enums::MapLineGroup_RightWall as i32))
+                        .start() as i32),
+                ));
+                i = 0_i32;
+                __state = 22;
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                __state = 19;
+            }
+            22 => {
+                __state = if i < count { 23 } else { 25 };
+            }
+            23 => {
+                __state = 27;
+            }
+            24 => {
+                i = i.wrapping_add(1);
+                line = Handle::add(line, 1);
+                __state = 22;
+            }
+            25 => {
+                __state = if dynamic_count != 0_i32 { 81 } else { 82 };
+            }
+            26 => {
+                unreachable!();
+            }
+            27 => {
+                __state = if ((((line).flags() & ((enums::CollLine_RightWall as i32) as u32)) != 0)
+                    && (((line).flags() & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0))
+                    && (!(((line).flags() & ((shl_i32(1_i32, (7_i32 as u32))) as u32)) != 0))
+                {
+                    28
+                } else {
+                    29
+                };
+            }
+            28 => {
+                x0 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((line).x0()).v0_idx() as i32),
+                ))
+                .pos()
+                .x();
+                y0 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((line).x0()).v0_idx() as i32),
+                ))
+                .pos()
+                .y();
+                x1 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((line).x0()).v1_idx() as i32),
+                ))
+                .pos()
+                .x();
+                y1 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((line).x0()).v1_idx() as i32),
+                ))
+                .pos()
+                .y();
+                __state = if (((joint).flags()
+                    & ((((enums::CollJoint_B10 as i32) | (enums::CollJoint_B9 as i32))
+                        | (enums::CollJoint_B8 as i32)) as u32))
+                    != 0)
+                {
+                    31
+                } else {
+                    33
+                };
+            }
+            29 => {
+                __state = 24;
+            }
+            30 => {
+                unreachable!();
+            }
+            31 => {
+                statics::melee__mp__mplib::mpRemap2d(
+                    ctx,
+                    ax__slot,
+                    ay__slot,
+                    (Handle::add(
+                        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                        (((line).x0()).v0_idx() as i32),
+                    ))
+                    .x10(),
+                    (Handle::add(
+                        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                        (((line).x0()).v0_idx() as i32),
+                    ))
+                    .x14(),
+                    (Handle::add(
+                        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                        (((line).x0()).v1_idx() as i32),
+                    ))
+                    .x10(),
+                    (Handle::add(
+                        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                        (((line).x0()).v1_idx() as i32),
+                    ))
+                    .x14(),
+                    x0,
+                    y0,
+                    x1,
+                    y1,
+                    old_x,
+                    old_y,
+                );
+                __state = 32;
+            }
+            32 => {
+                dx = fp::fsubs(bx, ax__slot.get());
+                dy = fp::fsubs(by, ay__slot.get());
+                __state = if (if (fp::fsubs(x0, x1)) < fp::frsp(0_i32 as f64) {
+                    fp::fneg((fp::fsubs(x0, x1)))
+                } else {
+                    (fp::fsubs(x0, x1))
+                }) > 0.0001
+                {
+                    35
+                } else {
+                    37
+                };
+            }
+            33 => {
+                ax__slot.set(old_x);
+                ay__slot.set(old_y);
+                __state = 32;
+            }
+            34 => {
+                unreachable!();
+            }
+            35 => {
+                __state = if (statics::melee__mp__mplib::mpLineIntersection(
+                    ctx,
+                    x0,
+                    y0,
+                    x1,
+                    y1,
+                    ax__slot.get(),
+                    ay__slot.get(),
+                    bx,
+                    by,
+                    int_x,
+                    int_y,
+                ) != 0)
+                {
+                    39
+                } else {
+                    40
+                };
+            }
+            36 => {
+                __state = 29;
+            }
+            37 => {
+                __state = if (ax__slot.get() >= bx)
+                    && (fns::mpLineIntersectionV(
+                        ctx,
+                        int_x,
+                        int_y,
+                        x0,
+                        y0,
+                        y1,
+                        ax__slot.get(),
+                        ay__slot.get(),
+                        bx,
+                        by,
+                    ) != 0)
+                {
+                    60
+                } else {
+                    61
+                };
+            }
+            38 => {
+                unreachable!();
+            }
+            39 => {
+                dx2 = (fp::fmuls(
+                    (fp::fsubs(int_x.get(), old_x)),
+                    (fp::fsubs(int_x.get(), old_x)),
+                ));
+                dy2 = (fp::fmuls(
+                    (fp::fsubs(int_y.get(), old_y)),
+                    (fp::fsubs(int_y.get(), old_y)),
+                ));
+                dist2 = fp::fadds(dx2, dy2);
+                __state = if fp::fmadds(
+                    dx,
+                    (fp::fsubs(int_x.get(), old_x)),
+                    (fp::fmuls(dy, (fp::fsubs(int_y.get(), old_y)))),
+                ) < 0.0
+                {
+                    42
+                } else {
+                    43
+                };
+            }
+            40 => {
+                __state = 36;
+            }
+            41 => {
+                unreachable!();
+            }
+            42 => {
+                dist2 = fp::fneg(dist2);
+                __state = 43;
+            }
+            43 => {
+                __state = if min_dist2 > dist2 { 45 } else { 46 };
+            }
+            44 => {
+                unreachable!();
+            }
+            45 => {
+                min_dist2 = dist2;
+                __state = if !Handle::is_null(vec_out) { 48 } else { 49 };
+            }
+            46 => {
+                __state = 40;
+            }
+            47 => {
+                unreachable!();
+            }
+            48 => {
+                (vec_out).set_x(int_x.get());
+                (vec_out).set_y(int_y.get());
+                (vec_out).set_z(0.0);
+                __state = 49;
+            }
+            49 => {
+                __state = if !Handle::is_null(line_id_out) {
+                    51
+                } else {
+                    52
+                };
+            }
+            50 => {
+                unreachable!();
+            }
+            51 => {
+                (line_id_out).set(
+                    ((Handle::addr(line).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    )) as i32)
+                        / 8),
+                );
+                __state = 52;
+            }
+            52 => {
+                __state = if !Handle::is_null(flags_out) { 54 } else { 55 };
+            }
+            53 => {
+                unreachable!();
+            }
+            54 => {
+                (flags_out).set((((line).x0()).lo_flags() as u32));
+                __state = 55;
+            }
+            55 => {
+                __state = if !Handle::is_null(normal_out) { 57 } else { 58 };
+            }
+            56 => {
+                unreachable!();
+            }
+            57 => {
+                (normal_out).set_x(fp::fneg((fp::fsubs(y1, y0))));
+                (normal_out).set_y(fp::fsubs(x1, x0));
+                (normal_out).set_z(0.0);
+                fns::PSVECNormalize(ctx, normal_out, normal_out);
+                __state = 58;
+            }
+            58 => {
+                result = 1_i32;
+                __state = 46;
+            }
+            59 => {
+                unreachable!();
+            }
+            60 => {
+                dx2 = (fp::fmuls(
+                    (fp::fsubs(int_x.get(), old_x)),
+                    (fp::fsubs(int_x.get(), old_x)),
+                ));
+                dy2 = (fp::fmuls(
+                    (fp::fsubs(int_y.get(), old_y)),
+                    (fp::fsubs(int_y.get(), old_y)),
+                ));
+                dist2 = fp::fadds(dx2, dy2);
+                __state = if fp::fmadds(
+                    dx,
+                    (fp::fsubs(int_x.get(), old_x)),
+                    (fp::fmuls(dy, (fp::fsubs(int_y.get(), old_y)))),
+                ) < 0.0
+                {
+                    63
+                } else {
+                    64
+                };
+            }
+            61 => {
+                __state = 36;
+            }
+            62 => {
+                unreachable!();
+            }
+            63 => {
+                dist2 = fp::fneg(dist2);
+                __state = 64;
+            }
+            64 => {
+                __state = if min_dist2 > dist2 { 66 } else { 67 };
+            }
+            65 => {
+                unreachable!();
+            }
+            66 => {
+                min_dist2 = dist2;
+                __state = if !Handle::is_null(vec_out) { 69 } else { 70 };
+            }
+            67 => {
+                __state = 61;
+            }
+            68 => {
+                unreachable!();
+            }
+            69 => {
+                (vec_out).set_x(int_x.get());
+                (vec_out).set_y(int_y.get());
+                (vec_out).set_z(0.0);
+                __state = 70;
+            }
+            70 => {
+                __state = if !Handle::is_null(line_id_out) {
+                    72
+                } else {
+                    73
+                };
+            }
+            71 => {
+                unreachable!();
+            }
+            72 => {
+                (line_id_out).set(
+                    ((Handle::addr(line).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    )) as i32)
+                        / 8),
+                );
+                __state = 73;
+            }
+            73 => {
+                __state = if !Handle::is_null(flags_out) { 75 } else { 76 };
+            }
+            74 => {
+                unreachable!();
+            }
+            75 => {
+                (flags_out).set((((line).x0()).lo_flags() as u32));
+                __state = 76;
+            }
+            76 => {
+                __state = if !Handle::is_null(normal_out) { 78 } else { 79 };
+            }
+            77 => {
+                unreachable!();
+            }
+            78 => {
+                (normal_out).set_x(1.0);
+                (normal_out).set_y(0.0);
+                (normal_out).set_z(0.0);
+                __state = 79;
+            }
+            79 => {
+                result = 1_i32;
+                __state = 67;
+            }
+            80 => {
+                unreachable!();
+            }
+            81 => {
+                count = dynamic_count;
+                i = 0_i32;
+                dynamic_count = 0_i32;
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    (((joint).inner())
+                        .ranges()
+                        .get((enums::MapLineGroup_Dynamic as i32))
+                        .start() as i32),
+                ));
+                __state = 27;
+            }
+            82 => {
+                __state = 11;
+            }
+            83 => {
+                unreachable!();
+            }
+            84 => {
+                __state = 82;
+            }
+            85 => {
+                fns::mpUncheckBounding(ctx);
+                __state = 86;
+            }
+            86 => {
+                return result;
+            }
+            87 => {
+                unreachable!();
+            }
+            88 => {
+                return 0;
+            }
+            89 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
+pub fn mpLib_800511A4_RightWall<'a>(
+    ctx: &'a Ctx,
+    ax: f64,
+    ay: f64,
+    bx: f64,
+    by: f64,
+    cx: f64,
+    cy: f64,
+    dx: f64,
+    dy: f64,
+    line_id_out: Val<'a, i32>,
+    joint_id_skip: i32,
+    joint_id_only: i32,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x110);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let int_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
+    let int_y: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
+    let x: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
+    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
+    let mut ax = ax;
+    let mut ay = ay;
+    let mut bx = bx;
+    let mut by = by;
+    let mut cx = cx;
+    let mut cy = cy;
+    let mut dx = dx;
+    let mut dy = dy;
+    let mut line_id_out = line_id_out;
+    let mut joint_id_skip = joint_id_skip;
+    let mut joint_id_only = joint_id_only;
+    let mut min_dist2: f64 = 0.0;
+    let mut joint: CollJoint<'a> = null(ctx);
+    let mut i: i32 = 0;
+    let mut result: i32 = 0;
+    let mut already_checked: i32 = 0;
+    let mut line: CollLine<'a> = null(ctx);
+    let mut count: i32 = 0;
+    let mut dynamic_count: i32 = 0;
+    let mut j_inner: MapJoint<'a> = null(ctx);
+    let mut vtx: CollVtx<'a> = null(ctx);
+    let mut x0: f64 = 0.0;
+    let mut y0: f64 = 0.0;
+    let mut x1: f64 = 0.0;
+    let mut y1: f64 = 0.0;
+    let mut vdx: f64 = 0.0;
+    let mut vdy: f64 = 0.0;
+    let mut dist2: f64 = 0.0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = 3;
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                result = 0_i32;
+                min_dist2 = 3.4028234663852886e+38_f64;
+                already_checked = fns::mpCheckedBounding(ctx);
+                __state = if !(already_checked != 0) { 6 } else { 7 };
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                fns::mpBoundingCheck3(ctx, ax, ay, bx, by, cx, cy, dx, dy);
+                __state = 7;
+            }
+            7 => {
+                joint = statics::melee__mp__mplib::jointListStart(ctx).get();
+                __state = 9;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                __state = if !Handle::is_null(joint) { 10 } else { 12 };
+            }
+            10 => {
+                __state = if (((joint).flags() & ((enums::CollJoint_TooFar as i32) as u32)) != 0) {
+                    14
+                } else {
+                    15
+                };
+            }
+            11 => {
+                joint = (joint).next();
+                __state = 9;
+            }
+            12 => {
+                __state = if !(already_checked != 0) { 65 } else { 66 };
+            }
+            13 => {
+                unreachable!();
+            }
+            14 => {
+                __state = 11;
+            }
+            15 => {
+                __state = if (joint_id_skip
+                    == ((Handle::addr(joint).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                    )) as i32)
+                        / 52))
+                    || (!((joint_id_only == 1_i32.wrapping_neg())
+                        || (joint_id_only
+                            == ((Handle::addr(joint).wrapping_sub(Handle::addr(
+                                statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                            )) as i32)
+                                / 52))))
+                {
+                    18
+                } else {
+                    19
+                };
+            }
+            16 => {
+                unreachable!();
+            }
+            17 => {
+                __state = 15;
+            }
+            18 => {
+                __state = 11;
+            }
+            19 => {
+                j_inner = (joint).inner();
+                count = ((j_inner)
+                    .ranges()
+                    .get((enums::MapLineGroup_RightWall as i32))
+                    .count() as i32);
+                dynamic_count = ((j_inner)
+                    .ranges()
+                    .get((enums::MapLineGroup_Dynamic as i32))
+                    .count() as i32);
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    ((j_inner)
+                        .ranges()
+                        .get((enums::MapLineGroup_RightWall as i32))
+                        .start() as i32),
+                ));
+                i = 0_i32;
+                __state = 22;
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                __state = 19;
+            }
+            22 => {
+                __state = if i < count { 23 } else { 25 };
+            }
+            23 => {
+                __state = 27;
+            }
+            24 => {
+                i = i.wrapping_add(1);
+                line = Handle::add(line, 1);
+                __state = 22;
+            }
+            25 => {
+                __state = if dynamic_count != 0_i32 { 61 } else { 62 };
+            }
+            26 => {
+                unreachable!();
+            }
+            27 => {
+                __state = if ((((line).flags() & ((enums::CollLine_RightWall as i32) as u32)) != 0)
+                    && (((line).flags() & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0))
+                    && (!(((line).flags() & ((shl_i32(1_i32, (7_i32 as u32))) as u32)) != 0))
+                {
+                    28
+                } else {
+                    29
+                };
+            }
+            28 => {
+                vtx = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((line).x0()).v0_idx() as i32),
+                ));
+                x0 = (vtx).pos().x();
+                y0 = (vtx).pos().y();
+                x1 = (vtx).x10();
+                y1 = (vtx).x14();
+                statics::melee__mp__mplib::mpRemap2d(
+                    ctx, x, y, ax, ay, bx, by, cx, cy, dx, dy, x1, y1,
+                );
+                vdx = fp::fsubs(x0, x.get());
+                vdy = fp::fsubs(y0, y.get());
+                __state = if fp::fmadds((vdx), (vdx), (fp::fmuls((vdy), (vdy))))
+                    > 0.0010000000474974513
+                {
+                    31
+                } else {
+                    32
+                };
+            }
+            29 => {
+                __state = 24;
+            }
+            30 => {
+                unreachable!();
+            }
+            31 => {
+                __state = if (statics::melee__mp__mplib::mpLineIntersection(
+                    ctx,
+                    cx,
+                    cy,
+                    dx,
+                    dy,
+                    x.get(),
+                    y.get(),
+                    x0,
+                    y0,
+                    int_x,
+                    int_y,
+                ) != 0)
+                {
+                    34
+                } else {
+                    35
+                };
+            }
+            32 => {
+                vtx = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((line).x0()).v1_idx() as i32),
+                ));
+                x0 = (vtx).pos().x();
+                y0 = (vtx).pos().y();
+                x1 = (vtx).x10();
+                y1 = (vtx).x14();
+                statics::melee__mp__mplib::mpRemap2d(
+                    ctx, x, y, ax, ay, bx, by, cx, cy, dx, dy, x1, y1,
+                );
+                vdx = fp::fsubs(x0, x.get());
+                vdy = fp::fsubs(y0, y.get());
+                __state = if fp::fmadds((vdx), (vdx), (fp::fmuls((vdy), (vdy))))
+                    > 0.0010000000474974513
+                {
+                    46
+                } else {
+                    47
+                };
+            }
+            33 => {
+                unreachable!();
+            }
+            34 => {
+                dist2 = fp::fmadds(
+                    (fp::fsubs(int_x.get(), x1)),
+                    (fp::fsubs(int_x.get(), x1)),
+                    (fp::fmuls((fp::fsubs(int_y.get(), y1)), (fp::fsubs(int_y.get(), y1)))),
+                );
+                __state = if fp::fmadds(
+                    vdx,
+                    (fp::fsubs(int_x.get(), x1)),
+                    (fp::fmuls(vdy, (fp::fsubs(int_y.get(), y1)))),
+                ) < 0.0
+                {
+                    37
+                } else {
+                    38
+                };
+            }
+            35 => {
+                __state = 32;
+            }
+            36 => {
+                unreachable!();
+            }
+            37 => {
+                dist2 = fp::fneg(dist2);
+                __state = 38;
+            }
+            38 => {
+                __state = if min_dist2 > dist2 { 40 } else { 41 };
+            }
+            39 => {
+                unreachable!();
+            }
+            40 => {
+                min_dist2 = dist2;
+                __state = if !Handle::is_null(line_id_out) {
+                    43
+                } else {
+                    44
+                };
+            }
+            41 => {
+                __state = 35;
+            }
+            42 => {
+                unreachable!();
+            }
+            43 => {
+                (line_id_out).set(
+                    ((Handle::addr(line).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    )) as i32)
+                        / 8),
+                );
+                __state = 44;
+            }
+            44 => {
+                result = 1_i32;
+                __state = 41;
+            }
+            45 => {
+                unreachable!();
+            }
+            46 => {
+                __state = if (statics::melee__mp__mplib::mpLineIntersection(
+                    ctx,
+                    cx,
+                    cy,
+                    dx,
+                    dy,
+                    x.get(),
+                    y.get(),
+                    x0,
+                    y0,
+                    int_x,
+                    int_y,
+                ) != 0)
+                {
+                    49
+                } else {
+                    50
+                };
+            }
+            47 => {
+                __state = 29;
+            }
+            48 => {
+                unreachable!();
+            }
+            49 => {
+                dist2 = fp::fmadds(
+                    (fp::fsubs(int_x.get(), x1)),
+                    (fp::fsubs(int_x.get(), x1)),
+                    (fp::fmuls((fp::fsubs(int_y.get(), y1)), (fp::fsubs(int_y.get(), y1)))),
+                );
+                __state = if fp::fmadds(
+                    vdx,
+                    (fp::fsubs(int_x.get(), x1)),
+                    (fp::fmuls(vdy, (fp::fsubs(int_y.get(), y1)))),
+                ) < 0.0
+                {
+                    52
+                } else {
+                    53
+                };
+            }
+            50 => {
+                __state = 47;
+            }
+            51 => {
+                unreachable!();
+            }
+            52 => {
+                dist2 = fp::fneg(dist2);
+                __state = 53;
+            }
+            53 => {
+                __state = if min_dist2 > dist2 { 55 } else { 56 };
+            }
+            54 => {
+                unreachable!();
+            }
+            55 => {
+                min_dist2 = dist2;
+                __state = if !Handle::is_null(line_id_out) {
+                    58
+                } else {
+                    59
+                };
+            }
+            56 => {
+                __state = 50;
+            }
+            57 => {
+                unreachable!();
+            }
+            58 => {
+                (line_id_out).set(
+                    ((Handle::addr(line).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    )) as i32)
+                        / 8),
+                );
+                __state = 59;
+            }
+            59 => {
+                result = 1_i32;
+                __state = 56;
+            }
+            60 => {
+                unreachable!();
+            }
+            61 => {
+                count = dynamic_count;
+                i = 0_i32;
+                dynamic_count = 0_i32;
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    (((joint).inner())
+                        .ranges()
+                        .get((enums::MapLineGroup_Dynamic as i32))
+                        .start() as i32),
+                ));
+                __state = 27;
+            }
+            62 => {
+                __state = 11;
+            }
+            63 => {
+                unreachable!();
+            }
+            64 => {
+                __state = 62;
+            }
+            65 => {
+                fns::mpUncheckBounding(ctx);
+                __state = 66;
+            }
+            66 => {
+                return result;
+            }
+            67 => {
+                unreachable!();
+            }
+            68 => {
+                return 0;
+            }
+            69 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
+pub fn mpLib_800515A0_LeftWall<'a>(
+    ctx: &'a Ctx,
+    a0x: f64,
+    a0y: f64,
+    a1x: f64,
+    a1y: f64,
+    b0x: f64,
+    b0y: f64,
+    b1x: f64,
+    b1y: f64,
+    line_id_out: Val<'a, i32>,
+    joint_id_skip: i32,
+    joint_id_only: i32,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x110);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let int_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
+    let int_y: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
+    let x: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
+    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
+    let mut a0x = a0x;
+    let mut a0y = a0y;
+    let mut a1x = a1x;
+    let mut a1y = a1y;
+    let mut b0x = b0x;
+    let mut b0y = b0y;
+    let mut b1x = b1x;
+    let mut b1y = b1y;
+    let mut line_id_out = line_id_out;
+    let mut joint_id_skip = joint_id_skip;
+    let mut joint_id_only = joint_id_only;
+    let mut min_dist2: f64 = 0.0;
+    let mut joint: CollJoint<'a> = null(ctx);
+    let mut i: i32 = 0;
+    let mut result: i32 = 0;
+    let mut already_checked: i32 = 0;
+    let mut line: CollLine<'a> = null(ctx);
+    let mut count: i32 = 0;
+    let mut dynamic_count: i32 = 0;
+    let mut j_inner: MapJoint<'a> = null(ctx);
+    let mut vtx: CollVtx<'a> = null(ctx);
+    let mut x0: f64 = 0.0;
+    let mut y0: f64 = 0.0;
+    let mut x1: f64 = 0.0;
+    let mut y1: f64 = 0.0;
+    let mut vdx: f64 = 0.0;
+    let mut vdy: f64 = 0.0;
+    let mut dist2: f64 = 0.0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = 3;
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                result = 0_i32;
+                min_dist2 = 3.4028234663852886e+38_f64;
+                already_checked = fns::mpCheckedBounding(ctx);
+                __state = if !(already_checked != 0) { 6 } else { 7 };
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                fns::mpBoundingCheck3(ctx, a0x, a0y, a1x, a1y, b0x, b0y, b1x, b1y);
+                __state = 7;
+            }
+            7 => {
+                joint = statics::melee__mp__mplib::jointListStart(ctx).get();
+                __state = 9;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                __state = if !Handle::is_null(joint) { 10 } else { 12 };
+            }
+            10 => {
+                __state = if (((joint).flags() & ((enums::CollJoint_TooFar as i32) as u32)) != 0) {
+                    14
+                } else {
+                    15
+                };
+            }
+            11 => {
+                joint = (joint).next();
+                __state = 9;
+            }
+            12 => {
+                __state = if !(already_checked != 0) { 65 } else { 66 };
+            }
+            13 => {
+                unreachable!();
+            }
+            14 => {
+                __state = 11;
+            }
+            15 => {
+                __state = if (joint_id_skip
+                    == ((Handle::addr(joint).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                    )) as i32)
+                        / 52))
+                    || (!((joint_id_only == 1_i32.wrapping_neg())
+                        || (joint_id_only
+                            == ((Handle::addr(joint).wrapping_sub(Handle::addr(
+                                statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                            )) as i32)
+                                / 52))))
+                {
+                    18
+                } else {
+                    19
+                };
+            }
+            16 => {
+                unreachable!();
+            }
+            17 => {
+                __state = 15;
+            }
+            18 => {
+                __state = 11;
+            }
+            19 => {
+                j_inner = (joint).inner();
+                count = ((j_inner)
+                    .ranges()
+                    .get((enums::MapLineGroup_LeftWall as i32))
+                    .count() as i32);
+                dynamic_count = ((j_inner)
+                    .ranges()
+                    .get((enums::MapLineGroup_Dynamic as i32))
+                    .count() as i32);
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    ((j_inner)
+                        .ranges()
+                        .get((enums::MapLineGroup_LeftWall as i32))
+                        .start() as i32),
+                ));
+                i = 0_i32;
+                __state = 22;
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                __state = 19;
+            }
+            22 => {
+                __state = if i < count { 23 } else { 25 };
+            }
+            23 => {
+                __state = 27;
+            }
+            24 => {
+                i = i.wrapping_add(1);
+                line = Handle::add(line, 1);
+                __state = 22;
+            }
+            25 => {
+                __state = if dynamic_count != 0_i32 { 61 } else { 62 };
+            }
+            26 => {
+                unreachable!();
+            }
+            27 => {
+                __state = if ((((line).flags() & ((enums::CollLine_LeftWall as i32) as u32)) != 0)
+                    && (((line).flags() & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0))
+                    && (!(((line).flags() & ((shl_i32(1_i32, (7_i32 as u32))) as u32)) != 0))
+                {
+                    28
+                } else {
+                    29
+                };
+            }
+            28 => {
+                vtx = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((line).x0()).v0_idx() as i32),
+                ));
+                x0 = (vtx).pos().x();
+                y0 = (vtx).pos().y();
+                x1 = (vtx).x10();
+                y1 = (vtx).x14();
+                statics::melee__mp__mplib::mpRemap2d(
+                    ctx, x, y, a0x, a0y, a1x, a1y, b0x, b0y, b1x, b1y, x1, y1,
+                );
+                vdx = fp::fsubs(x0, x.get());
+                vdy = fp::fsubs(y0, y.get());
+                __state = if fp::fmadds((vdx), (vdx), (fp::fmuls((vdy), (vdy))))
+                    > 0.0010000000474974513
+                {
+                    31
+                } else {
+                    32
+                };
+            }
+            29 => {
+                __state = 24;
+            }
+            30 => {
+                unreachable!();
+            }
+            31 => {
+                __state = if (statics::melee__mp__mplib::mpLineIntersection(
+                    ctx,
+                    b0x,
+                    b0y,
+                    b1x,
+                    b1y,
+                    x.get(),
+                    y.get(),
+                    x0,
+                    y0,
+                    int_x,
+                    int_y,
+                ) != 0)
+                {
+                    34
+                } else {
+                    35
+                };
+            }
+            32 => {
+                vtx = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((line).x0()).v1_idx() as i32),
+                ));
+                x0 = (vtx).pos().x();
+                y0 = (vtx).pos().y();
+                x1 = (vtx).x10();
+                y1 = (vtx).x14();
+                statics::melee__mp__mplib::mpRemap2d(
+                    ctx, x, y, a0x, a0y, a1x, a1y, b0x, b0y, b1x, b1y, x1, y1,
+                );
+                vdx = fp::fsubs(x0, x.get());
+                vdy = fp::fsubs(y0, y.get());
+                __state = if fp::fmadds((vdx), (vdx), (fp::fmuls((vdy), (vdy))))
+                    > 0.0010000000474974513
+                {
+                    46
+                } else {
+                    47
+                };
+            }
+            33 => {
+                unreachable!();
+            }
+            34 => {
+                dist2 = fp::fmadds(
+                    (fp::fsubs(int_x.get(), x1)),
+                    (fp::fsubs(int_x.get(), x1)),
+                    (fp::fmuls((fp::fsubs(int_y.get(), y1)), (fp::fsubs(int_y.get(), y1)))),
+                );
+                __state = if fp::fmadds(
+                    vdx,
+                    (fp::fsubs(int_x.get(), x1)),
+                    (fp::fmuls(vdy, (fp::fsubs(int_y.get(), y1)))),
+                ) < 0.0
+                {
+                    37
+                } else {
+                    38
+                };
+            }
+            35 => {
+                __state = 32;
+            }
+            36 => {
+                unreachable!();
+            }
+            37 => {
+                dist2 = fp::fneg(dist2);
+                __state = 38;
+            }
+            38 => {
+                __state = if min_dist2 > dist2 { 40 } else { 41 };
+            }
+            39 => {
+                unreachable!();
+            }
+            40 => {
+                min_dist2 = dist2;
+                __state = if !Handle::is_null(line_id_out) {
+                    43
+                } else {
+                    44
+                };
+            }
+            41 => {
+                __state = 35;
+            }
+            42 => {
+                unreachable!();
+            }
+            43 => {
+                (line_id_out).set(
+                    ((Handle::addr(line).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    )) as i32)
+                        / 8),
+                );
+                __state = 44;
+            }
+            44 => {
+                result = 1_i32;
+                __state = 41;
+            }
+            45 => {
+                unreachable!();
+            }
+            46 => {
+                __state = if (statics::melee__mp__mplib::mpLineIntersection(
+                    ctx,
+                    b0x,
+                    b0y,
+                    b1x,
+                    b1y,
+                    x.get(),
+                    y.get(),
+                    x0,
+                    y0,
+                    int_x,
+                    int_y,
+                ) != 0)
+                {
+                    49
+                } else {
+                    50
+                };
+            }
+            47 => {
+                __state = 29;
+            }
+            48 => {
+                unreachable!();
+            }
+            49 => {
+                dist2 = fp::fmadds(
+                    (fp::fsubs(int_x.get(), x1)),
+                    (fp::fsubs(int_x.get(), x1)),
+                    (fp::fmuls((fp::fsubs(int_y.get(), y1)), (fp::fsubs(int_y.get(), y1)))),
+                );
+                __state = if fp::fmadds(
+                    vdx,
+                    (fp::fsubs(int_x.get(), x1)),
+                    (fp::fmuls(vdy, (fp::fsubs(int_y.get(), y1)))),
+                ) < 0.0
+                {
+                    52
+                } else {
+                    53
+                };
+            }
+            50 => {
+                __state = 47;
+            }
+            51 => {
+                unreachable!();
+            }
+            52 => {
+                dist2 = fp::fneg(dist2);
+                __state = 53;
+            }
+            53 => {
+                __state = if min_dist2 > dist2 { 55 } else { 56 };
+            }
+            54 => {
+                unreachable!();
+            }
+            55 => {
+                min_dist2 = dist2;
+                __state = if !Handle::is_null(line_id_out) {
+                    58
+                } else {
+                    59
+                };
+            }
+            56 => {
+                __state = 50;
+            }
+            57 => {
+                unreachable!();
+            }
+            58 => {
+                (line_id_out).set(
+                    ((Handle::addr(line).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    )) as i32)
+                        / 8),
+                );
+                __state = 59;
+            }
+            59 => {
+                result = 1_i32;
+                __state = 56;
+            }
+            60 => {
+                unreachable!();
+            }
+            61 => {
+                count = dynamic_count;
+                i = 0_i32;
+                dynamic_count = 0_i32;
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    (((joint).inner())
+                        .ranges()
+                        .get((enums::MapLineGroup_Dynamic as i32))
+                        .start() as i32),
+                ));
+                __state = 27;
+            }
+            62 => {
+                __state = 11;
+            }
+            63 => {
+                unreachable!();
+            }
+            64 => {
+                __state = 62;
+            }
+            65 => {
+                fns::mpUncheckBounding(ctx);
+                __state = 66;
+            }
+            66 => {
+                return result;
+            }
+            67 => {
+                unreachable!();
+            }
+            68 => {
+                return 0;
+            }
+            69 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
+pub fn mpLib_8005199C_Floor<'a>(
+    ctx: &'a Ctx,
+    vec: Vec<'a>,
+    joint_id_skip: i32,
+    joint_id_only: i32,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x50);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut vec = vec;
+    let mut joint_id_skip = joint_id_skip;
+    let mut joint_id_only = joint_id_only;
+    let mut line_id: i32 = 0;
+    let mut x: f64 = 0.0;
+    let mut y: f64 = 0.0;
+    let mut already_checked: i32 = 0;
+    let mut joint: CollJoint<'a> = null(ctx);
+    let mut j_inner: MapJoint<'a> = null(ctx);
+    let mut i: i32 = 0;
+    let mut line: CollLine<'a> = null(ctx);
+    let mut count: i32 = 0;
+    let mut dynamic_count: i32 = 0;
+    let mut x0: f64 = 0.0;
+    let mut y0: f64 = 0.0;
+    let mut x1: f64 = 0.0;
+    let mut y1: f64 = 0.0;
+    let mut dx: f64 = 0.0;
+    let mut dy: f64 = 0.0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                line_id = 1_i32.wrapping_neg();
+                x = (vec).x();
+                y = (vec).y();
+                already_checked = fns::mpCheckedBounding(ctx);
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = 3;
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                __state = if !(already_checked != 0) { 6 } else { 7 };
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                fns::mpBoundingCheck2(ctx, x, y, x, fp::fsubs(y, 30000.0));
+                __state = 7;
+            }
+            7 => {
+                joint = statics::melee__mp__mplib::jointListStart(ctx).get();
+                __state = 9;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                __state = if !Handle::is_null(joint) { 10 } else { 12 };
+            }
+            10 => {
+                __state = if (((joint).flags() & ((enums::CollJoint_TooFar as i32) as u32)) != 0)
+                    || (joint_id_skip
+                        == ((Handle::addr(joint).wrapping_sub(Handle::addr(
+                            statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                        )) as i32)
+                            / 52))
+                {
+                    14
+                } else {
+                    15
+                };
+            }
+            11 => {
+                joint = (joint).next();
+                __state = 9;
+            }
+            12 => {
+                __state = 37;
+            }
+            13 => {
+                unreachable!();
+            }
+            14 => {
+                __state = 11;
+            }
+            15 => {
+                __state = if (joint_id_only != 1_i32.wrapping_neg())
+                    && (joint_id_only
+                        != ((Handle::addr(joint).wrapping_sub(Handle::addr(
+                            statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                        )) as i32)
+                            / 52))
+                {
+                    18
+                } else {
+                    19
+                };
+            }
+            16 => {
+                unreachable!();
+            }
+            17 => {
+                __state = 15;
+            }
+            18 => {
+                __state = 11;
+            }
+            19 => {
+                j_inner = (joint).inner();
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    ((j_inner)
+                        .ranges()
+                        .get((enums::MapLineGroup_Floor as i32))
+                        .start() as i32),
+                ));
+                count = ((j_inner)
+                    .ranges()
+                    .get((enums::MapLineGroup_Floor as i32))
+                    .count() as i32);
+                dynamic_count = ((j_inner)
+                    .ranges()
+                    .get((enums::MapLineGroup_Dynamic as i32))
+                    .count() as i32);
+                i = 0_i32;
+                __state = 22;
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                __state = 19;
+            }
+            22 => {
+                __state = if i < count { 23 } else { 25 };
+            }
+            23 => {
+                __state = 27;
+            }
+            24 => {
+                i = i.wrapping_add(1);
+                line = Handle::add(line, 1);
+                __state = 22;
+            }
+            25 => {
+                __state = if dynamic_count != 0_i32 { 46 } else { 47 };
+            }
+            26 => {
+                unreachable!();
+            }
+            27 => {
+                __state = if ((((line).flags() & ((enums::CollLine_Floor as i32) as u32)) != 0)
+                    && (((line).flags() & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0))
+                    && (!(((line).flags() & ((shl_i32(1_i32, (7_i32 as u32))) as u32)) != 0))
+                {
+                    28
+                } else {
+                    29
+                };
+            }
+            28 => {
+                x0 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((line).x0()).v0_idx() as i32),
+                ))
+                .pos()
+                .x();
+                y0 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((line).x0()).v0_idx() as i32),
+                ))
+                .pos()
+                .y();
+                x1 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((line).x0()).v1_idx() as i32),
+                ))
+                .pos()
+                .x();
+                y1 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((line).x0()).v1_idx() as i32),
+                ))
+                .pos()
+                .y();
+                __state = if (x >= x0) && (x <= x1) { 31 } else { 32 };
+            }
+            29 => {
+                __state = 24;
+            }
+            30 => {
+                unreachable!();
+            }
+            31 => {
+                __state = if (y >= y0) && (y >= y1) { 34 } else { 35 };
+            }
+            32 => {
+                __state = 29;
+            }
+            33 => {
+                unreachable!();
+            }
+            34 => {
+                line_id = ((Handle::addr(line).wrapping_sub(Handle::addr(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                )) as i32)
+                    / 8);
+                __state = 37;
+            }
+            35 => {
+                __state = if (if (fp::fsubs(x1, x0)) < fp::frsp(0_i32 as f64) {
+                    fp::fneg((fp::fsubs(x1, x0)))
+                } else {
+                    (fp::fsubs(x1, x0))
+                }) > 0.0001
+                {
+                    39
+                } else {
+                    40
+                };
+            }
+            36 => {
+                unreachable!();
+            }
+            37 => {
+                __state = if !(already_checked != 0) { 50 } else { 51 };
+            }
+            38 => {
+                __state = 35;
+            }
+            39 => {
+                dx = fp::fsubs(x1, x0);
+                dy = fp::fsubs(y1, y0);
+                __state = if y >= fp::fmadds(fp::fdivs(dy, dx), (fp::fsubs(x, x0)), y0) {
+                    42
+                } else {
+                    43
+                };
+            }
+            40 => {
+                __state = 32;
+            }
+            41 => {
+                unreachable!();
+            }
+            42 => {
+                line_id = ((Handle::addr(line).wrapping_sub(Handle::addr(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                )) as i32)
+                    / 8);
+                __state = 37;
+            }
+            43 => {
+                __state = 40;
+            }
+            44 => {
+                unreachable!();
+            }
+            45 => {
+                __state = 43;
+            }
+            46 => {
+                count = dynamic_count;
+                i = 0_i32;
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    ((j_inner)
+                        .ranges()
+                        .get((enums::MapLineGroup_Dynamic as i32))
+                        .start() as i32),
+                ));
+                dynamic_count = 0_i32;
+                __state = 27;
+            }
+            47 => {
+                __state = 11;
+            }
+            48 => {
+                unreachable!();
+            }
+            49 => {
+                __state = 47;
+            }
+            50 => {
+                fns::mpUncheckBounding(ctx);
+                __state = 51;
+            }
+            51 => {
+                return line_id;
+            }
+            52 => {
+                unreachable!();
+            }
+            53 => {
+                return 0;
+            }
+            54 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
+pub fn mpLib_80051BA8_Floor<'a>(
+    ctx: &'a Ctx,
+    out_vec: Vec<'a>,
+    line_id_skip: i32,
+    joint_id_skip: i32,
+    joint_id_only: i32,
+    dir: i32,
+    left: f64,
+    bottom: f64,
+    right: f64,
+    top: f64,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x98);
+    let mut out_vec = out_vec;
+    let mut line_id_skip = line_id_skip;
+    let mut joint_id_skip = joint_id_skip;
+    let mut joint_id_only = joint_id_only;
+    let mut dir = dir;
+    let mut left = left;
+    let mut bottom = bottom;
+    let mut right = right;
+    let mut top = top;
+    let mut min: f64 = 0.0;
+    let mut out_x: f64 = 0.0;
+    let mut out_y: f64 = 0.0;
+    let mut ledge_id: i32 = 0;
+    let mut already_checked: i32 = 0;
+    let mut new_id: i32 = 0;
+    let mut joint: CollJoint<'a> = null(ctx);
+    let mut i: i32 = 0;
+    let mut line: CollLine<'a> = null(ctx);
+    let mut count: i32 = 0;
+    let mut dynamic_cout: i32 = 0;
+    let mut inner: MapLine<'a> = null(ctx);
+    let mut x0: f64 = 0.0;
+    let mut y0: f64 = 0.0;
+    let mut x1: f64 = 0.0;
+    let mut y1: f64 = 0.0;
+    let mut line_left: f64 = 0.0;
+    let mut line_bottom: f64 = 0.0;
+    let mut line_right: f64 = 0.0;
+    let mut line_top: f64 = 0.0;
+    let mut dist_h: f64 = 0.0;
+    let mut dist_v: f64 = 0.0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                ledge_id = 1_i32.wrapping_neg();
+                __state = if dir > 0_i32 { 1 } else { 3 };
+            }
+            1 => {
+                min = 3.4028234663852886e+38_f64;
+                __state = 2;
+            }
+            2 => {
+                already_checked = fns::mpCheckedBounding(ctx);
+                __state = if !(already_checked != 0) { 9 } else { 10 };
+            }
+            3 => {
+                __state = if dir < 0_i32 { 5 } else { 7 };
+            }
+            4 => {
+                unreachable!();
+            }
+            5 => {
+                min = fp::fneg(3.4028234663852886e+38_f64);
+                __state = 6;
+            }
+            6 => {
+                __state = 2;
+            }
+            7 => {
+                (if ((0_i32) != 0) {
+                    ({ () })
+                } else {
+                    fns::__assert(
+                        ctx,
+                        cstr(ctx, 0x803bd3ec),
+                        (0xcf1_i32 as u32),
+                        cstr(ctx, 0x803bd3ec),
+                    )
+                });
+                __state = 6;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                fns::mpBoundingCheck(ctx, left, bottom, right, top);
+                __state = 10;
+            }
+            10 => {
+                joint = statics::melee__mp__mplib::jointListStart(ctx).get();
+                __state = 12;
+            }
+            11 => {
+                unreachable!();
+            }
+            12 => {
+                __state = if !Handle::is_null(joint) { 13 } else { 15 };
+            }
+            13 => {
+                __state = if (((joint).flags() & ((enums::CollJoint_TooFar as i32) as u32)) != 0) {
+                    17
+                } else {
+                    18
+                };
+            }
+            14 => {
+                joint = (joint).next();
+                __state = 12;
+            }
+            15 => {
+                __state = if !(already_checked != 0) { 81 } else { 82 };
+            }
+            16 => {
+                unreachable!();
+            }
+            17 => {
+                __state = 14;
+            }
+            18 => {
+                __state = if joint_id_skip
+                    == ((Handle::addr(joint).wrapping_sub(Handle::addr(
+                        statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                    )) as i32)
+                        / 52)
+                {
+                    21
+                } else {
+                    22
+                };
+            }
+            19 => {
+                unreachable!();
+            }
+            20 => {
+                __state = 18;
+            }
+            21 => {
+                __state = 14;
+            }
+            22 => {
+                __state = if (joint_id_only == 1_i32.wrapping_neg())
+                    || (joint_id_only
+                        == ((Handle::addr(joint).wrapping_sub(Handle::addr(
+                            statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                        )) as i32)
+                            / 52))
+                {
+                    25
+                } else {
+                    26
+                };
+            }
+            23 => {
+                unreachable!();
+            }
+            24 => {
+                __state = 22;
+            }
+            25 => {
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    (((joint).inner())
+                        .ranges()
+                        .get((enums::MapLineGroup_Floor as i32))
+                        .start() as i32),
+                ));
+                count = (((joint).inner())
+                    .ranges()
+                    .get((enums::MapLineGroup_Floor as i32))
+                    .count() as i32);
+                dynamic_cout = (((joint).inner())
+                    .ranges()
+                    .get((enums::MapLineGroup_Dynamic as i32))
+                    .count() as i32);
+                i = 0_i32;
+                __state = 28;
+            }
+            26 => {
+                __state = 14;
+            }
+            27 => {
+                unreachable!();
+            }
+            28 => {
+                __state = if i < count { 29 } else { 31 };
+            }
+            29 => {
+                __state = 33;
+            }
+            30 => {
+                i = i.wrapping_add(1);
+                line = Handle::add(line, 1);
+                __state = 28;
+            }
+            31 => {
+                __state = if dynamic_cout != 0_i32 { 77 } else { 78 };
+            }
+            32 => {
+                unreachable!();
+            }
+            33 => {
+                new_id = ((Handle::addr(line).wrapping_sub(Handle::addr(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                )) as i32)
+                    / 8);
+                __state = if line_id_skip == new_id { 34 } else { 35 };
+            }
+            34 => {
+                __state = 30;
+            }
+            35 => {
+                __state = if ((((line).flags() & ((enums::CollLine_Floor as i32) as u32)) != 0)
+                    && (((line).flags() & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0))
+                    && (!(((line).flags() & ((shl_i32(1_i32, (7_i32 as u32))) as u32)) != 0))
+                {
+                    38
+                } else {
+                    39
+                };
+            }
+            36 => {
+                unreachable!();
+            }
+            37 => {
+                __state = 35;
+            }
+            38 => {
+                inner = (line).x0();
+                __state = if ((((inner).lo_flags() as i32) & (shl_i32(1_i32, (9_i32 as u32)))) != 0)
+                {
+                    41
+                } else {
+                    42
+                };
+            }
+            39 => {
+                __state = 30;
+            }
+            40 => {
+                unreachable!();
+            }
+            41 => {
+                x0 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    ((inner).v0_idx() as i32),
+                ))
+                .pos()
+                .x();
+                y0 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    ((inner).v0_idx() as i32),
+                ))
+                .pos()
+                .y();
+                x1 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    ((inner).v1_idx() as i32),
+                ))
+                .pos()
+                .x();
+                y1 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    ((inner).v1_idx() as i32),
+                ))
+                .pos()
+                .y();
+                __state = if x0 > x1 { 44 } else { 46 };
+            }
+            42 => {
+                __state = 39;
+            }
+            43 => {
+                unreachable!();
+            }
+            44 => {
+                line_right = x0;
+                line_left = x1;
+                __state = 45;
+            }
+            45 => {
+                __state = if y0 > y1 { 48 } else { 50 };
+            }
+            46 => {
+                line_left = x0;
+                line_right = x1;
+                __state = 45;
+            }
+            47 => {
+                unreachable!();
+            }
+            48 => {
+                line_top = y0;
+                line_bottom = y1;
+                __state = 49;
+            }
+            49 => {
+                dist_h =
+                    (if (fp::fsubs((fp::fadds(line_right, line_left)), (fp::fadds(right, left))))
+                        < fp::frsp(0_i32 as f64)
+                    {
+                        fp::fneg(
+                            (fp::fsubs(
+                                (fp::fadds(line_right, line_left)),
+                                (fp::fadds(right, left)),
+                            )),
+                        )
+                    } else {
+                        (fp::fsubs((fp::fadds(line_right, line_left)), (fp::fadds(right, left))))
+                    });
+                __state = if dist_h
+                    < fp::fadds((fp::fsubs(line_right, line_left)), (fp::fsubs(right, left)))
+                {
+                    52
+                } else {
+                    53
+                };
+            }
+            50 => {
+                line_bottom = y0;
+                line_top = y1;
+                __state = 49;
+            }
+            51 => {
+                unreachable!();
+            }
+            52 => {
+                dist_v =
+                    (if (fp::fsubs((fp::fadds(line_top, line_bottom)), (fp::fadds(top, bottom))))
+                        < fp::frsp(0_i32 as f64)
+                    {
+                        fp::fneg(
+                            (fp::fsubs(
+                                (fp::fadds(line_top, line_bottom)),
+                                (fp::fadds(top, bottom)),
+                            )),
+                        )
+                    } else {
+                        (fp::fsubs((fp::fadds(line_top, line_bottom)), (fp::fadds(top, bottom))))
+                    });
+                __state = if dist_v
+                    < fp::fadds((fp::fsubs(line_top, line_bottom)), (fp::fsubs(top, bottom)))
+                {
+                    55
+                } else {
+                    56
+                };
+            }
+            53 => {
+                __state = 42;
+            }
+            54 => {
+                unreachable!();
+            }
+            55 => {
+                __state = if dir > 0_i32 { 58 } else { 60 };
+            }
+            56 => {
+                __state = 53;
+            }
+            57 => {
+                unreachable!();
+            }
+            58 => {
+                __state = if min > x0 { 62 } else { 63 };
+            }
+            59 => {
+                __state = 56;
+            }
+            60 => {
+                __state = if dir < 0_i32 { 68 } else { 69 };
+            }
+            61 => {
+                unreachable!();
+            }
+            62 => {
+                min = x0;
+                ledge_id = new_id;
+                __state = if !Handle::is_null(out_vec) { 65 } else { 66 };
+            }
+            63 => {
+                __state = 59;
+            }
+            64 => {
+                unreachable!();
+            }
+            65 => {
+                out_x = x0;
+                out_y = y0;
+                __state = 66;
+            }
+            66 => {
+                __state = 63;
+            }
+            67 => {
+                unreachable!();
+            }
+            68 => {
+                __state = if min < x1 { 71 } else { 72 };
+            }
+            69 => {
+                __state = 59;
+            }
+            70 => {
+                unreachable!();
+            }
+            71 => {
+                min = x1;
+                ledge_id = new_id;
+                __state = if !Handle::is_null(out_vec) { 74 } else { 75 };
+            }
+            72 => {
+                __state = 69;
+            }
+            73 => {
+                unreachable!();
+            }
+            74 => {
+                out_x = x1;
+                out_y = y1;
+                __state = 75;
+            }
+            75 => {
+                __state = 72;
+            }
+            76 => {
+                unreachable!();
+            }
+            77 => {
+                count = dynamic_cout;
+                i = 0_i32;
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    (((joint).inner())
+                        .ranges()
+                        .get((enums::MapLineGroup_Dynamic as i32))
+                        .start() as i32),
+                ));
+                dynamic_cout = 0_i32;
+                __state = 33;
+            }
+            78 => {
+                __state = 26;
+            }
+            79 => {
+                unreachable!();
+            }
+            80 => {
+                __state = 78;
+            }
+            81 => {
+                fns::mpUncheckBounding(ctx);
+                __state = 82;
+            }
+            82 => {
+                __state = if (ledge_id != 1_i32.wrapping_neg()) && (!Handle::is_null(out_vec)) {
+                    84
+                } else {
+                    85
+                };
+            }
+            83 => {
+                unreachable!();
+            }
+            84 => {
+                __state = if out_x > right { 87 } else { 89 };
+            }
+            85 => {
+                return ledge_id;
+            }
+            86 => {
+                unreachable!();
+            }
+            87 => {
+                out_x = right;
+                __state = 88;
+            }
+            88 => {
+                (out_vec).set_x(out_x);
+                (out_vec).set_y(out_y);
+                (out_vec).set_z(0.0);
+                __state = 85;
+            }
+            89 => {
+                __state = if out_x < left { 91 } else { 92 };
+            }
+            90 => {
+                unreachable!();
+            }
+            91 => {
+                out_x = left;
+                __state = 92;
+            }
+            92 => {
+                __state = 88;
+            }
+            93 => {
+                unreachable!();
+            }
+            94 => {
+                return 0;
+            }
+            95 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
 }
 
 pub fn mpCheckMultiple<'a>(
@@ -2089,6 +8029,480 @@ pub fn mpLib_80056B34<'a>(ctx: &'a Ctx, arg0: i32, arg1: Val<'a, i32>) -> i32 {
     return (temp).x4C().at(1_i32).get();
 }
 
+pub fn mpLib_80056C54<'a>(
+    ctx: &'a Ctx,
+    line_id: i32,
+    pos: Vec<'a>,
+    line_id_out: Val<'a, i32>,
+    vec_out: Vec<'a>,
+    flags_out: Val<'a, u32>,
+    normal_out: Vec<'a>,
+    var_f25: f64,
+    arg7: f64,
+) -> i32 {
+    let __frame = ctx.stack_frame(0xd0);
+    let _padA: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let sp64: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
+    let sp58: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp4C: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let sqrt_tmp: ArrV<'a, F32, 2> = frame_at(ctx, &__frame, 0x24);
+    let mut line_id = line_id;
+    let mut pos = pos;
+    let mut line_id_out = line_id_out;
+    let mut vec_out = vec_out;
+    let mut flags_out = flags_out;
+    let mut normal_out = normal_out;
+    let mut var_f25 = var_f25;
+    let mut arg7 = arg7;
+    let mut dist_f28: f64 = 0.0;
+    let mut total_dist_f27: f64 = 0.0;
+    let mut x_f2: f64 = 0.0;
+    let mut y_f0: f64 = 0.0;
+    let mut result_r30: i32 = 0;
+    let mut new_id_r5: i32 = 0;
+    let mut flags_r0: u32 = 0;
+    let mut temp_f2_5: f64 = 0.0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                result_r30 = 1_i32;
+                __state = if !(inl_mpLib_80054ED8(ctx, line_id) != 0) {
+                    1
+                } else {
+                    2
+                };
+            }
+            1 => {
+                return 0_i32;
+            }
+            2 => {
+                __state = if fns::mpLib_8004DD90_Floor(
+                    ctx,
+                    line_id,
+                    pos,
+                    sp64,
+                    null::<Val<'a, u32>>(ctx),
+                    null::<Vec<'a>>(ctx),
+                ) == 1_i32.wrapping_neg()
+                {
+                    5
+                } else {
+                    6
+                };
+            }
+            3 => {
+                unreachable!();
+            }
+            4 => {
+                __state = 2;
+            }
+            5 => {
+                return 0_i32;
+            }
+            6 => {
+                Handle::copy_from(sp58, (pos));
+                sp58.set_y(fp::fadds(sp58.y(), sp64.get()));
+                __state = if var_f25 > 0.0 { 9 } else { 11 };
+            }
+            7 => {
+                unreachable!();
+            }
+            8 => {
+                __state = 6;
+            }
+            9 => {
+                __state = 13;
+            }
+            10 => {
+                __state = if line_id != 1_i32.wrapping_neg() {
+                    69
+                } else {
+                    70
+                };
+            }
+            11 => {
+                var_f25 = fp::fneg(var_f25);
+                __state = 41;
+            }
+            12 => {
+                unreachable!();
+            }
+            13 => {
+                __state = if (1_i32 != 0) { 14 } else { 16 };
+            }
+            14 => {
+                fns::mpLineGetV1Pos(ctx, line_id, sp4C);
+                x_f2 = (fp::fmuls(
+                    (fp::fsubs(sp58.x(), sp4C.x())),
+                    (fp::fsubs(sp58.x(), sp4C.x())),
+                ));
+                y_f0 = (fp::fmuls(
+                    (fp::fsubs(sp58.y(), sp4C.y())),
+                    (fp::fsubs(sp58.y(), sp4C.y())),
+                ));
+                dist_f28 = inl_sqrtf_store(
+                    ctx,
+                    fp::fadds(x_f2, y_f0),
+                    Handle::add(sqrt_tmp.at(0), 4_i32.wrapping_neg()),
+                );
+                flags_r0 = (fns::mpLineGetKind(ctx, line_id) as u32);
+                __state = if ((flags_r0 & (12_i32 as u32)) != 0) {
+                    18
+                } else {
+                    20
+                };
+            }
+            15 => {
+                __state = 13;
+            }
+            16 => {
+                __state = 10;
+            }
+            17 => {
+                unreachable!();
+            }
+            18 => {
+                total_dist_f27 = fp::fadds(total_dist_f27, dist_f28);
+                __state = if total_dist_f27 > arg7 { 22 } else { 24 };
+            }
+            19 => {
+                __state = 16;
+            }
+            20 => {
+                __state = if ((flags_r0 & (2_i32 as u32)) != 0) {
+                    28
+                } else {
+                    30
+                };
+            }
+            21 => {
+                unreachable!();
+            }
+            22 => {
+                result_r30 = 0_i32;
+                __state = 23;
+            }
+            23 => {
+                __state = 19;
+            }
+            24 => {
+                __state = 26;
+            }
+            25 => {
+                unreachable!();
+            }
+            26 => {
+                __state = if !(dist_f28 > var_f25) { 32 } else { 33 };
+            }
+            27 => {
+                __state = 23;
+            }
+            28 => {
+                result_r30 = 0_i32;
+                __state = 29;
+            }
+            29 => {
+                __state = 19;
+            }
+            30 => {
+                total_dist_f27 = 0.0;
+                __state = 26;
+            }
+            31 => {
+                unreachable!();
+            }
+            32 => {
+                new_id_r5 = inl_mpLineGetNext(ctx, line_id);
+                __state = if new_id_r5 == 1_i32.wrapping_neg() {
+                    35
+                } else {
+                    37
+                };
+            }
+            33 => {
+                __state = 29;
+            }
+            34 => {
+                unreachable!();
+            }
+            35 => {
+                result_r30 = 0_i32;
+                __state = 36;
+            }
+            36 => {
+                __state = 33;
+            }
+            37 => {
+                var_f25 = fp::fsubs(var_f25, dist_f28);
+                line_id = new_id_r5;
+                Handle::copy_from(sp58, sp4C);
+                __state = 13;
+            }
+            38 => {
+                unreachable!();
+            }
+            39 => {
+                __state = 36;
+            }
+            40 => {
+                __state = 13;
+            }
+            41 => {
+                __state = if (1_i32 != 0) { 42 } else { 44 };
+            }
+            42 => {
+                fns::mpLineGetV0Pos(ctx, line_id, sp4C);
+                x_f2 = (fp::fmuls(
+                    (fp::fsubs(sp58.x(), sp4C.x())),
+                    (fp::fsubs(sp58.x(), sp4C.x())),
+                ));
+                y_f0 = (fp::fmuls(
+                    (fp::fsubs(sp58.y(), sp4C.y())),
+                    (fp::fsubs(sp58.y(), sp4C.y())),
+                ));
+                dist_f28 = inl_sqrtf_store(
+                    ctx,
+                    fp::fadds(x_f2, y_f0),
+                    Handle::add(sqrt_tmp.at(0), 5_i32.wrapping_neg()),
+                );
+                flags_r0 = (fns::mpLineGetKind(ctx, line_id) as u32);
+                __state = if ((flags_r0 & (12_i32 as u32)) != 0) {
+                    46
+                } else {
+                    48
+                };
+            }
+            43 => {
+                __state = 41;
+            }
+            44 => {
+                __state = 10;
+            }
+            45 => {
+                unreachable!();
+            }
+            46 => {
+                total_dist_f27 = fp::fadds(total_dist_f27, dist_f28);
+                __state = if total_dist_f27 > arg7 { 50 } else { 52 };
+            }
+            47 => {
+                __state = 44;
+            }
+            48 => {
+                __state = if ((flags_r0 & (2_i32 as u32)) != 0) {
+                    56
+                } else {
+                    58
+                };
+            }
+            49 => {
+                unreachable!();
+            }
+            50 => {
+                result_r30 = 0_i32;
+                __state = 51;
+            }
+            51 => {
+                __state = 47;
+            }
+            52 => {
+                __state = 54;
+            }
+            53 => {
+                unreachable!();
+            }
+            54 => {
+                __state = if !(dist_f28 > var_f25) { 60 } else { 61 };
+            }
+            55 => {
+                __state = 51;
+            }
+            56 => {
+                result_r30 = 0_i32;
+                __state = 57;
+            }
+            57 => {
+                __state = 47;
+            }
+            58 => {
+                total_dist_f27 = 0.0;
+                __state = 54;
+            }
+            59 => {
+                unreachable!();
+            }
+            60 => {
+                new_id_r5 = inl_mpLineGetPrev(ctx, line_id);
+                __state = if new_id_r5 == 1_i32.wrapping_neg() {
+                    63
+                } else {
+                    65
+                };
+            }
+            61 => {
+                __state = 57;
+            }
+            62 => {
+                unreachable!();
+            }
+            63 => {
+                result_r30 = 0_i32;
+                __state = 64;
+            }
+            64 => {
+                __state = 61;
+            }
+            65 => {
+                var_f25 = fp::fsubs(var_f25, dist_f28);
+                line_id = new_id_r5;
+                Handle::copy_from(sp58, sp4C);
+                __state = 41;
+            }
+            66 => {
+                unreachable!();
+            }
+            67 => {
+                __state = 64;
+            }
+            68 => {
+                __state = 41;
+            }
+            69 => {
+                __state = if !((fns::mpLineGetKind(ctx, line_id) & (enums::CollLine_Floor as i32))
+                    != 0)
+                {
+                    72
+                } else {
+                    73
+                };
+            }
+            70 => {
+                __state = if !Handle::is_null(line_id_out) {
+                    75
+                } else {
+                    76
+                };
+            }
+            71 => {
+                unreachable!();
+            }
+            72 => {
+                line_id = 1_i32.wrapping_neg();
+                __state = 73;
+            }
+            73 => {
+                __state = 70;
+            }
+            74 => {
+                unreachable!();
+            }
+            75 => {
+                (line_id_out).set(line_id);
+                __state = 76;
+            }
+            76 => {
+                __state = if line_id != 1_i32.wrapping_neg() {
+                    78
+                } else {
+                    79
+                };
+            }
+            77 => {
+                unreachable!();
+            }
+            78 => {
+                __state = if !Handle::is_null(flags_out) { 81 } else { 82 };
+            }
+            79 => {
+                __state = if !Handle::is_null(vec_out) { 87 } else { 88 };
+            }
+            80 => {
+                unreachable!();
+            }
+            81 => {
+                (flags_out).set(fns::mpLineGetFlags(ctx, line_id));
+                __state = 82;
+            }
+            82 => {
+                __state = if !Handle::is_null(normal_out) { 84 } else { 85 };
+            }
+            83 => {
+                unreachable!();
+            }
+            84 => {
+                let _ = fns::mpLineGetNormal(ctx, line_id, normal_out);
+                __state = 85;
+            }
+            85 => {
+                __state = 79;
+            }
+            86 => {
+                unreachable!();
+            }
+            87 => {
+                __state = if (result_r30 != 0) { 90 } else { 92 };
+            }
+            88 => {
+                return result_r30;
+            }
+            89 => {
+                unreachable!();
+            }
+            90 => {
+                __state = if dist_f28 < 0.0001 { 94 } else { 96 };
+            }
+            91 => {
+                __state = 88;
+            }
+            92 => {
+                Handle::copy_from((vec_out), sp4C);
+                __state = 91;
+            }
+            93 => {
+                unreachable!();
+            }
+            94 => {
+                Handle::copy_from((vec_out), sp58);
+                __state = 95;
+            }
+            95 => {
+                __state = 91;
+            }
+            96 => {
+                temp_f2_5 = fp::fdivs(var_f25, dist_f28);
+                (vec_out).set_x(fp::fmadds(
+                    temp_f2_5,
+                    (fp::fsubs(sp4C.x(), sp58.x())),
+                    sp58.x(),
+                ));
+                (vec_out).set_y(fp::fmadds(
+                    temp_f2_5,
+                    (fp::fsubs(sp4C.y(), sp58.y())),
+                    sp58.y(),
+                ));
+                (vec_out).set_z(fp::fmadds(
+                    temp_f2_5,
+                    (fp::fsubs(sp4C.z(), sp58.z())),
+                    sp58.z(),
+                ));
+                __state = 95;
+            }
+            97 => {
+                unreachable!();
+            }
+            98 => {
+                return 0;
+            }
+            99 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn mpLib_80057424<'a>(ctx: &'a Ctx, joint_id: i32) {
     let mut joint_id = joint_id;
     let mut joint: CollJoint<'a> = (Handle::add(
@@ -2995,6 +9409,345 @@ pub fn mpLib_80058560<'a>(ctx: &'a Ctx) {
                 }
             }
             i = i.wrapping_add(1);
+        }
+    }
+}
+
+pub fn mpLib_80058614_Floor<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x20);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut jp: CollJoint<'a> = null(ctx);
+    let mut count_r8: i32 = 0;
+    let mut count_r5: i32 = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut linebase: CollLine<'a> = null(ctx);
+    let mut line_r31: CollLine<'a> = null(ctx);
+    let mut count_r30: i32 = 0;
+    let mut count_r29: i32 = 0;
+    let mut j_inner: MapJoint<'a> = null(ctx);
+    let mut v0: CollVtx<'a> = null(ctx);
+    let mut v1: CollVtx<'a> = null(ctx);
+    let mut top_p: Val<'a, F32> = null(ctx);
+    let mut bottom_p: Val<'a, F32> = null(ctx);
+    let mut right_p: Val<'a, F32> = null(ctx);
+    let mut left_p: Val<'a, F32> = null(ctx);
+    let mut joint_r7: CollJoint<'a> = null(ctx);
+    let mut x0: f64 = 0.0;
+    let mut y0: f64 = 0.0;
+    let mut x1: f64 = 0.0;
+    let mut y1: f64 = 0.0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = 3;
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                jp = ({
+                    let __t1 = statics::melee__mp__mplib::groundCollJoint(ctx).get();
+                    joint_r7 = __t1;
+                    __t1
+                });
+                count_r8 = (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).joint_count();
+                count_r5 = 0_i32;
+                __state = 6;
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                __state = if count_r5 < count_r8 { 7 } else { 9 };
+            }
+            7 => {
+                __state = if ((jp).xE() != 0) { 11 } else { 12 };
+            }
+            8 => {
+                count_r5 = count_r5.wrapping_add(1);
+                jp = Handle::add(jp, 1);
+                __state = 6;
+            }
+            9 => {
+                __state = if count_r5 == count_r8 { 15 } else { 16 };
+            }
+            10 => {
+                unreachable!();
+            }
+            11 => {
+                __state = 9;
+            }
+            12 => {
+                __state = 8;
+            }
+            13 => {
+                unreachable!();
+            }
+            14 => {
+                __state = 12;
+            }
+            15 => {
+                return;
+            }
+            16 => {
+                ({
+                    let __t2 = fns::mpLib_80458868(ctx).get(1_i32).right_ref();
+                    right_p = __t2;
+                    __t2
+                })
+                .set(fp::fneg(3.4028234663852886e+38_f64));
+                ({
+                    let __t3 = fns::mpLib_80458868(ctx).get(1_i32).top_ref();
+                    top_p = __t3;
+                    __t3
+                })
+                .set(fp::fneg(3.4028234663852886e+38_f64));
+                ({
+                    let __t4 = fns::mpLib_80458868(ctx).get(1_i32).left_ref();
+                    left_p = __t4;
+                    __t4
+                })
+                .set(3.4028234663852886e+38_f64);
+                ({
+                    let __t5 = fns::mpLib_80458868(ctx).get(1_i32).bottom_ref();
+                    bottom_p = __t5;
+                    __t5
+                })
+                .set(3.4028234663852886e+38_f64);
+                i = 0_i32;
+                __state = 19;
+            }
+            17 => {
+                unreachable!();
+            }
+            18 => {
+                __state = 16;
+            }
+            19 => {
+                __state = if i < count_r8 { 20 } else { 22 };
+            }
+            20 => {
+                (joint_r7).set_xE((0_i32 as u8));
+                __state = if (!(((joint_r7).flags() & ((enums::CollJoint_Enabled as i32) as u32))
+                    != 0))
+                    || (((joint_r7).flags() & ((enums::CollJoint_Hidden as i32) as u32)) != 0)
+                {
+                    24
+                } else {
+                    25
+                };
+            }
+            21 => {
+                i = i.wrapping_add(1);
+                joint_r7 = Handle::add(joint_r7, 1);
+                __state = 19;
+            }
+            22 => {
+                return;
+            }
+            23 => {
+                unreachable!();
+            }
+            24 => {
+                __state = 21;
+            }
+            25 => {
+                j_inner = (joint_r7).inner();
+                count_r29 = ((j_inner)
+                    .ranges()
+                    .get((enums::MapLineGroup_Dynamic as i32))
+                    .count() as i32);
+                let _ = (Handle::add(statics::melee__mp__mplib::groundCollVtx(ctx).get(), {
+                    let __t6 = ((j_inner)
+                        .ranges()
+                        .get((enums::MapLineGroup_Floor as i32))
+                        .count() as i32);
+                    count_r30 = __t6;
+                    __t6
+                }));
+                linebase = statics::melee__mp__mplib::groundCollLine(ctx).get();
+                line_r31 = (Handle::add(
+                    linebase,
+                    ((j_inner)
+                        .ranges()
+                        .get((enums::MapLineGroup_Floor as i32))
+                        .start() as i32),
+                ));
+                j = 0_i32;
+                __state = 28;
+            }
+            26 => {
+                unreachable!();
+            }
+            27 => {
+                __state = 25;
+            }
+            28 => {
+                __state = if j < count_r30 { 29 } else { 31 };
+            }
+            29 => {
+                __state = 33;
+            }
+            30 => {
+                j = j.wrapping_add(1);
+                line_r31 = Handle::add(line_r31, 1);
+                __state = 28;
+            }
+            31 => {
+                __state = if count_r29 != 0_i32 { 62 } else { 63 };
+            }
+            32 => {
+                unreachable!();
+            }
+            33 => {
+                __state = if (!(((line_r31).flags() & ((enums::CollLine_Floor as i32) as u32))
+                    != 0))
+                    || (!(((line_r31).flags() & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0))
+                {
+                    34
+                } else {
+                    35
+                };
+            }
+            34 => {
+                __state = 30;
+            }
+            35 => {
+                v0 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((line_r31).x0()).v0_idx() as i32),
+                ));
+                v1 = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((line_r31).x0()).v1_idx() as i32),
+                ));
+                x0 = (v0).pos().x();
+                y0 = (v0).pos().y();
+                x1 = (v1).pos().x();
+                y1 = (v1).pos().y();
+                __state = if (top_p).get() < y0 { 38 } else { 39 };
+            }
+            36 => {
+                unreachable!();
+            }
+            37 => {
+                __state = 35;
+            }
+            38 => {
+                (top_p).set(y0);
+                __state = 39;
+            }
+            39 => {
+                __state = if (bottom_p).get() > y0 { 41 } else { 42 };
+            }
+            40 => {
+                unreachable!();
+            }
+            41 => {
+                (bottom_p).set(y0);
+                __state = 42;
+            }
+            42 => {
+                __state = if (right_p).get() < x0 { 44 } else { 45 };
+            }
+            43 => {
+                unreachable!();
+            }
+            44 => {
+                (right_p).set(x0);
+                __state = 45;
+            }
+            45 => {
+                __state = if (left_p).get() > x0 { 47 } else { 48 };
+            }
+            46 => {
+                unreachable!();
+            }
+            47 => {
+                (left_p).set(x0);
+                __state = 48;
+            }
+            48 => {
+                __state = if (top_p).get() < y1 { 50 } else { 51 };
+            }
+            49 => {
+                unreachable!();
+            }
+            50 => {
+                (top_p).set(y1);
+                __state = 51;
+            }
+            51 => {
+                __state = if (bottom_p).get() > y1 { 53 } else { 54 };
+            }
+            52 => {
+                unreachable!();
+            }
+            53 => {
+                (bottom_p).set(y1);
+                __state = 54;
+            }
+            54 => {
+                __state = if (right_p).get() < x1 { 56 } else { 57 };
+            }
+            55 => {
+                unreachable!();
+            }
+            56 => {
+                (right_p).set(x1);
+                __state = 57;
+            }
+            57 => {
+                __state = if (left_p).get() > x1 { 59 } else { 60 };
+            }
+            58 => {
+                unreachable!();
+            }
+            59 => {
+                (left_p).set(x1);
+                __state = 60;
+            }
+            60 => {
+                __state = 30;
+            }
+            61 => {
+                unreachable!();
+            }
+            62 => {
+                count_r30 = count_r29;
+                j = 0_i32;
+                count_r29 = 0_i32;
+                line_r31 = (Handle::add(
+                    linebase,
+                    (((joint_r7).inner())
+                        .ranges()
+                        .get((enums::MapLineGroup_Dynamic as i32))
+                        .start() as i32),
+                ));
+                __state = 33;
+            }
+            63 => {
+                __state = 21;
+            }
+            64 => {
+                unreachable!();
+            }
+            65 => {
+                __state = 63;
+            }
+            66 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
         }
     }
 }
@@ -5504,6 +12257,70 @@ fn inl_mpLib_80054ED8_unfused<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
     return 1_i32;
 }
 
+fn inl_mpLib_80054ED8<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let mut line_id = line_id;
+    if line_id == 1_i32.wrapping_neg() {
+        return 0_i32;
+    }
+    if (line_id < 0_i32)
+        || (line_id >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+    {
+        fns::OSReport(
+            ctx,
+            cstr(ctx, 0x803bf4b0),
+            &[
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803bd3ec))),
+                VarArg::Int(0x121c_i32 as u32),
+                VarArg::Int(line_id as u32),
+            ],
+        );
+        'l1: loop {
+            'c2: {}
+        }
+    }
+    if (!(((Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .flags()
+        & ((shl_i32(1_i32, (16_i32 as u32))) as u32))
+        != 0))
+        || (((Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            line_id,
+        ))
+        .flags()
+            & ((shl_i32(1_i32, (18_i32 as u32))) as u32))
+            != 0)
+    {
+        return 0_i32;
+    }
+    return 1_i32;
+}
+
+fn inl_sqrtf_store<'a>(ctx: &'a Ctx, x: f64, y: Val<'a, F32>) -> f64 {
+    let mut x = x;
+    let mut y = y;
+    if x > 0.0 {
+        let mut guess: f64 = fp::frsqrte(x);
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        (y).set(fp::frsp((fp::fmul(x, guess))));
+        return (y).get();
+    }
+    return x;
+}
+
 fn inl_mpLib_80057424_unfused<'a>(ctx: &'a Ctx, joint_id: i32) {
     let mut joint_id = joint_id;
     let mut joint: CollJoint<'a> = (Handle::add(
@@ -5717,6 +12534,106 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x8004f008,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13): (
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+                Vec<'_>,
+                Val<'_, i32>,
+                Val<'_, u32>,
+                Vec<'_>,
+                i32,
+                i32,
+                i32,
+                FnPtr<'_>,
+                HSD_GObj<'_>,
+            ) = Args::take_all(ctx);
+            Ret::put(
+                mpCheckFloor(
+                    ctx, a0.0, a1.0, a2.0, a3.0, a4.0, a5, a6, a7, a8, a9, a10, a11, a12, a13,
+                ),
+                ctx,
+            );
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8004f400,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13): (
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+                Vec<'_>,
+                Val<'_, i32>,
+                Val<'_, u32>,
+                Vec<'_>,
+                i32,
+                i32,
+                i32,
+                FnPtr<'_>,
+                HSD_GObj<'_>,
+            ) = Args::take_all(ctx);
+            Ret::put(
+                mpCheckFloorRemap(
+                    ctx, a0.0, a1.0, a2.0, a3.0, a4.0, a5, a6, a7, a8, a9, a10, a11, a12, a13,
+                ),
+                ctx,
+            );
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8004f8a4,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9): (
+                Single,
+                Single,
+                Single,
+                Single,
+                Vec<'_>,
+                Val<'_, i32>,
+                Val<'_, u32>,
+                Vec<'_>,
+                i32,
+                i32,
+            ) = Args::take_all(ctx);
+            Ret::put(
+                mpCheckCeiling(ctx, a0.0, a1.0, a2.0, a3.0, a4, a5, a6, a7, a8, a9),
+                ctx,
+            );
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8004fc2c,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9): (
+                Single,
+                Single,
+                Single,
+                Single,
+                Vec<'_>,
+                Val<'_, i32>,
+                Val<'_, u32>,
+                Vec<'_>,
+                i32,
+                i32,
+            ) = Args::take_all(ctx);
+            Ret::put(
+                mpCheckCeilingRemap(ctx, a0.0, a1.0, a2.0, a3.0, a4, a5, a6, a7, a8, a9),
+                ctx,
+            );
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
         0x80050068,
         |ctx| {
             let (a0, a1, a2, a3, a4, a5, a6, a7, a8): (
@@ -5732,6 +12649,173 @@ pub fn register(ctx: &Ctx) {
             ) = Args::take_all(ctx);
             Ret::put(
                 mpLineIntersectionV(ctx, a0, a1, a2.0, a3.0, a4.0, a5.0, a6.0, a7.0, a8.0),
+                ctx,
+            );
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x800501cc,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9): (
+                Single,
+                Single,
+                Single,
+                Single,
+                Vec<'_>,
+                Val<'_, i32>,
+                Val<'_, u32>,
+                Vec<'_>,
+                i32,
+                i32,
+            ) = Args::take_all(ctx);
+            Ret::put(
+                mpCheckLeftWall(ctx, a0.0, a1.0, a2.0, a3.0, a4, a5, a6, a7, a8, a9),
+                ctx,
+            );
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8005057c,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9): (
+                Single,
+                Single,
+                Single,
+                Single,
+                Vec<'_>,
+                Val<'_, i32>,
+                Val<'_, u32>,
+                Vec<'_>,
+                i32,
+                i32,
+            ) = Args::take_all(ctx);
+            Ret::put(
+                mpCheckLeftWallRemap(ctx, a0.0, a1.0, a2.0, a3.0, a4, a5, a6, a7, a8, a9),
+                ctx,
+            );
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x800509b8,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9): (
+                Single,
+                Single,
+                Single,
+                Single,
+                Vec<'_>,
+                Val<'_, i32>,
+                Val<'_, u32>,
+                Vec<'_>,
+                i32,
+                i32,
+            ) = Args::take_all(ctx);
+            Ret::put(
+                mpCheckRightWall(ctx, a0.0, a1.0, a2.0, a3.0, a4, a5, a6, a7, a8, a9),
+                ctx,
+            );
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80050d68,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9): (
+                Single,
+                Single,
+                Single,
+                Single,
+                Vec<'_>,
+                Val<'_, i32>,
+                Val<'_, u32>,
+                Vec<'_>,
+                i32,
+                i32,
+            ) = Args::take_all(ctx);
+            Ret::put(
+                mpCheckRightWallRemap(ctx, a0.0, a1.0, a2.0, a3.0, a4, a5, a6, a7, a8, a9),
+                ctx,
+            );
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x800511a4,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10): (
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+                Val<'_, i32>,
+                i32,
+                i32,
+            ) = Args::take_all(ctx);
+            Ret::put(
+                mpLib_800511A4_RightWall(
+                    ctx, a0.0, a1.0, a2.0, a3.0, a4.0, a5.0, a6.0, a7.0, a8, a9, a10,
+                ),
+                ctx,
+            );
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x800515a0,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10): (
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+                Val<'_, i32>,
+                i32,
+                i32,
+            ) = Args::take_all(ctx);
+            Ret::put(
+                mpLib_800515A0_LeftWall(
+                    ctx, a0.0, a1.0, a2.0, a3.0, a4.0, a5.0, a6.0, a7.0, a8, a9, a10,
+                ),
+                ctx,
+            );
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8005199c,
+        |ctx| {
+            let (a0, a1, a2): (Vec<'_>, i32, i32) = Args::take_all(ctx);
+            Ret::put(mpLib_8005199C_Floor(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80051ba8,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5, a6, a7, a8): (
+                Vec<'_>,
+                i32,
+                i32,
+                i32,
+                i32,
+                Single,
+                Single,
+                Single,
+                Single,
+            ) = Args::take_all(ctx);
+            Ret::put(
+                mpLib_80051BA8_Floor(ctx, a0, a1, a2, a3, a4, a5.0, a6.0, a7.0, a8.0),
                 ctx,
             );
         },
@@ -5965,6 +13049,23 @@ pub fn register(ctx: &Ctx) {
         Returns::Int,
     );
     ctx.register_port(
+        0x80056c54,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5, a6, a7): (
+                i32,
+                Vec<'_>,
+                Val<'_, i32>,
+                Vec<'_>,
+                Val<'_, u32>,
+                Vec<'_>,
+                Single,
+                Single,
+            ) = Args::take_all(ctx);
+            Ret::put(mpLib_80056C54(ctx, a0, a1, a2, a3, a4, a5, a6.0, a7.0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
         0x80057424,
         |ctx| {
             let (a0,): (i32,) = Args::take_all(ctx);
@@ -6096,6 +13197,13 @@ pub fn register(ctx: &Ctx) {
         0x80058560,
         |ctx| {
             Ret::put(mpLib_80058560(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80058614,
+        |ctx| {
+            Ret::put(mpLib_80058614_Floor(ctx), ctx);
         },
         Returns::Nothing,
     );

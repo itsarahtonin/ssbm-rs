@@ -1055,6 +1055,157 @@ pub fn hsd_8039D0A0<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) {
     }
 }
 
+fn inl_psEnableTexture<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, textures: Ptr<'a, Val<'a, u8>>) {
+    let mut pp = pp;
+    let mut textures = textures;
+    if (!Handle::is_null(textures))
+        && (!Handle::is_null((Handle::add(textures, ((pp).poseNum() as i32))).get()))
+    {
+        (pp).set_kind(((pp).kind() | ((enums::DispTexture as i32) as u32)));
+    }
+}
+
+fn inl_psReadFloat<'a>(ctx: &'a Ctx, stream: Ptr<'a, Val<'a, u8>>) {
+    let mut stream = stream;
+    let mut p: Val<'a, u8> = (stream).get();
+    (Handle::cast::<ParticleFloatBytes<'a>>(statics::sysdolphin__baselib__particle::hsd_804D78D0(
+        ctx,
+    )))
+    .bytes()
+    .at(0_i32)
+    .set(
+        ({
+            let __t1 = p;
+            p = Handle::add(p, 1);
+            __t1
+        })
+        .get(),
+    );
+    (Handle::cast::<ParticleFloatBytes<'a>>(statics::sysdolphin__baselib__particle::hsd_804D78D0(
+        ctx,
+    )))
+    .bytes()
+    .at(1_i32)
+    .set(
+        ({
+            let __t2 = p;
+            p = Handle::add(p, 1);
+            __t2
+        })
+        .get(),
+    );
+    (Handle::cast::<ParticleFloatBytes<'a>>(statics::sysdolphin__baselib__particle::hsd_804D78D0(
+        ctx,
+    )))
+    .bytes()
+    .at(2_i32)
+    .set(
+        ({
+            let __t3 = p;
+            p = Handle::add(p, 1);
+            __t3
+        })
+        .get(),
+    );
+    (Handle::cast::<ParticleFloatBytes<'a>>(statics::sysdolphin__baselib__particle::hsd_804D78D0(
+        ctx,
+    )))
+    .bytes()
+    .at(3_i32)
+    .set(
+        ({
+            let __t4 = p;
+            p = Handle::add(p, 1);
+            __t4
+        })
+        .get(),
+    );
+    (stream).set(p);
+}
+
+fn inl_psSpawnChild<'a>(
+    ctx: &'a Ctx,
+    head: Ptr<'a, HSD_Particle<'a>>,
+    linkNo: i32,
+    bank: i32,
+    idx: i32,
+) -> HSD_Particle<'a> {
+    let mut head = head;
+    let mut linkNo = linkNo;
+    let mut bank = bank;
+    let mut idx = idx;
+    let mut child: HSD_Particle<'a> = null(ctx);
+    let mut cl: _HSD_PSCmdList<'a> = null(ctx);
+    let mut tg: _HSD_PSTexGroup<'a> = null(ctx);
+    let mut palflag: i32 = 0;
+    if linkNo >= 8_i32 {
+        child = null::<HSD_Particle<'a>>(ctx);
+    } else if bank >= 65_i32 {
+        child = null::<HSD_Particle<'a>>(ctx);
+    } else if idx >= fns::psCmdListArray(ctx).at(bank).get() {
+        child = null::<HSD_Particle<'a>>(ctx);
+    } else {
+        cl = (Handle::add(fns::ptclref_804D0E5C(ctx).at(bank).get(), idx)).get();
+        if Handle::is_null(cl) {
+            child = null::<HSD_Particle<'a>>(ctx);
+        } else {
+            tg = (Handle::add(
+                fns::psTexGroupArray(ctx).at(bank).get(),
+                ((cl).texGroup() as i32),
+            ))
+            .get();
+            if !Handle::is_null(tg) {
+                palflag = ((tg).palflag() as i32);
+            } else {
+                palflag = 0_i32;
+            }
+            child = fns::psGenerateParticle0(
+                ctx,
+                head,
+                linkNo,
+                bank,
+                (cl).kind(),
+                (cl).texGroup(),
+                (cl).cmdList().at(0),
+                ((cl).life() as i32),
+                palflag,
+                0.0,
+                0.0,
+                0.0,
+                (cl).vx(),
+                (cl).vy(),
+                (cl).vz(),
+                (cl).size(),
+                (cl).grav(),
+                (cl).fric(),
+                null::<HSD_Generator<'a>>(ctx),
+                0_i32,
+            );
+        }
+    }
+    return child;
+}
+
+fn inl_ref_INC<'a>(ctx: &'a Ctx, o: Addr<'a>) {
+    let mut o = o;
+    if !Handle::is_null(o) {
+        (Handle::cast::<HSD_Obj<'a>>(o))
+            .set_ref_count((Handle::cast::<HSD_Obj<'a>>(o)).ref_count().wrapping_add(1));
+        (if ((Handle::cast::<HSD_Obj<'a>>(o)).ref_count() as i32)
+            != ((1_i32.wrapping_neg() as u16) as i32)
+        {
+            ({ () })
+        } else {
+            fns::__assert(
+                ctx,
+                cstr(ctx, 0x80005524),
+                (87_i32 as u32),
+                cstr(ctx, 0x80005524),
+            )
+        });
+    }
+}
+
 fn inl_ref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
     let mut o = o;
     if !Handle::is_null(o) {

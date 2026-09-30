@@ -26,6 +26,341 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn it_802E5AC4<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg_check: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x78);
+    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp34: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let sqrt_0: Val<'a, F32> = frame_at(ctx, &__frame, 0x24);
+    let sqrt_1: Val<'a, F32> = frame_at(ctx, &__frame, 0x28);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x2c);
+    let mut item_gobj = item_gobj;
+    let mut arg_check = arg_check;
+    let mut item: Item<'a> = null(ctx);
+    let mut temp_f1_10: f64 = 0.0;
+    let mut comm_attr: ItemAttr<'a> = null(ctx);
+    let mut spec_attr: it_2E5A_Attrs<'a> = null(ctx);
+    let mut coll_data: CollData<'a> = null(ctx);
+    let mut check1: i32 = 0;
+    let mut check2: i32 = 0;
+    let mut var_f31: f64 = 0.0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = 3;
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                item = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, item_gobj)));
+                coll_data = (item).x378_itemColl();
+                comm_attr = (item).xCC_item_attr();
+                spec_attr = Handle::cast::<it_2E5A_Attrs<'a>>(
+                    ((item).xC4_article_data()).x4_specialAttributes(),
+                );
+                fns::it_80276214(ctx, item_gobj);
+                (coll_data)
+                    .cur_pos()
+                    .set_y(fp::fsubs((coll_data).cur_pos().y(), (item).xC1C().bottom()));
+                check1 = fns::mpColl_80048844(ctx, coll_data);
+                (coll_data)
+                    .cur_pos()
+                    .set_y(fp::fadds((coll_data).cur_pos().y(), (item).xC1C().bottom()));
+                Handle::copy_from((item).pos(), (coll_data).cur_pos());
+                __state = if (check1 != 0) && (arg_check != 0) {
+                    6
+                } else {
+                    7
+                };
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                __state = if (if ((item).x40_vel().x()) < fp::frsp(0_i32 as f64) {
+                    fp::fneg(((item).x40_vel().x()))
+                } else {
+                    ((item).x40_vel().x())
+                }) <= 9.999999747378752e-06_f64
+                {
+                    9
+                } else {
+                    10
+                };
+            }
+            7 => {
+                return check1;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                (item).x40_vel().set_x(0.0);
+                __state = 10;
+            }
+            10 => {
+                __state = if (if ((item).x40_vel().y()) < fp::frsp(0_i32 as f64) {
+                    fp::fneg(((item).x40_vel().y()))
+                } else {
+                    ((item).x40_vel().y())
+                }) <= 9.999999747378752e-06_f64
+                {
+                    12
+                } else {
+                    13
+                };
+            }
+            11 => {
+                unreachable!();
+            }
+            12 => {
+                (item).x40_vel().set_y(0.0);
+                __state = 13;
+            }
+            13 => {
+                __state = if (if ((item).x40_vel().x()) < fp::frsp(0_i32 as f64) {
+                    fp::fneg(((item).x40_vel().x()))
+                } else {
+                    ((item).x40_vel().x())
+                }) <= (comm_attr).x5c()
+                {
+                    15
+                } else {
+                    16
+                };
+            }
+            14 => {
+                unreachable!();
+            }
+            15 => {
+                __state = if !((if ((item).x40_vel().y()) < fp::frsp(0_i32 as f64) {
+                    fp::fneg(((item).x40_vel().y()))
+                } else {
+                    ((item).x40_vel().y())
+                }) <= (comm_attr).x5c())
+                {
+                    18
+                } else {
+                    19
+                };
+            }
+            16 => {
+                __state = 21;
+            }
+            17 => {
+                unreachable!();
+            }
+            18 => {
+                __state = 21;
+            }
+            19 => {
+                __state = 23;
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                __state = if (((item).xDCD_flag().x0().b4() as i32) != 0)
+                    || (!((comm_attr).x58() != 0.0))
+                {
+                    25
+                } else {
+                    27
+                };
+            }
+            22 => {
+                __state = 19;
+            }
+            23 => {
+                inl_itResetVelocity(ctx, item);
+                (item).set_xD50_landNum((0_i32 as u32));
+                __state = 26;
+            }
+            24 => {
+                __state = 16;
+            }
+            25 => {
+                __state = 23;
+            }
+            26 => {
+                __state = 7;
+            }
+            27 => {
+                check2 = 0_i32;
+                Handle::copy_from(sp34, fns::it_803B8718(ctx));
+                check1 = 0_i32;
+                Handle::copy_from(sp28, fns::it_803B8724(ctx));
+                var_f31 = inl_sqrtf_accurate_store(
+                    ctx,
+                    fp::fadds(
+                        (fp::fmuls(((item).x40_vel().x()), ((item).x40_vel().x()))),
+                        (fp::fmuls(((item).x40_vel().y()), ((item).x40_vel().y()))),
+                    ),
+                    sqrt_0,
+                );
+                __state = if (fp::fmadds(
+                    (item).x40_vel().x(),
+                    (coll_data).floor().normal().x(),
+                    (fp::fmuls((item).x40_vel().y(), (coll_data).floor().normal().y())),
+                )) < 0.0
+                {
+                    29
+                } else {
+                    30
+                };
+            }
+            28 => {
+                unreachable!();
+            }
+            29 => {
+                Handle::copy_from(sp40, (item).x40_vel());
+                fns::lbVector_Mirror(ctx, sp40, (coll_data).floor().normal());
+                let _ = fns::lbVector_Add_xy(ctx, sp28, sp40);
+                __state = if fns::mpCollGetSpeedFloor(ctx, coll_data, sp40) != 0_i32 {
+                    32
+                } else {
+                    33
+                };
+            }
+            30 => {
+                __state = if (check2 != 0) { 35 } else { 36 };
+            }
+            31 => {
+                unreachable!();
+            }
+            32 => {
+                let _ = fns::lbVector_Add_xy(ctx, sp34, sp40);
+                __state = 33;
+            }
+            33 => {
+                check2 = 1_i32;
+                __state = 30;
+            }
+            34 => {
+                unreachable!();
+            }
+            35 => {
+                let _ = fns::lbVector_NormalizeXY(ctx, sp28);
+                __state = if inl_sqrtf_store(
+                    ctx,
+                    fp::fadds(
+                        fp::fadds(
+                            (fp::fmuls((sp28.x()), (sp28.x()))),
+                            (fp::fmuls((sp28.y()), (sp28.y()))),
+                        ),
+                        (fp::fmuls((sp28.z()), (sp28.z()))),
+                    ),
+                    sqrt_1,
+                ) < 0.009999999776482582
+                {
+                    38
+                } else {
+                    39
+                };
+            }
+            36 => {
+                __state = if fns::it_80276D9C(ctx, item_gobj, 1_i32) != 0_i32 {
+                    41
+                } else {
+                    42
+                };
+            }
+            37 => {
+                unreachable!();
+            }
+            38 => {
+                sp28.set_x((item).x40_vel().x());
+                sp28.set_y(fp::fmuls(fp::fneg(1.0), (item).x40_vel().y()));
+                __state = 39;
+            }
+            39 => {
+                temp_f1_10 = fp::fmuls(var_f31, (comm_attr).x58());
+                sp28.set_x(fp::fmuls(sp28.x(), temp_f1_10));
+                sp28.set_y(fp::fmuls(sp28.y(), temp_f1_10));
+                Handle::copy_from((item).x64_vec_unk2(), sp34);
+                Handle::copy_from((item).x40_vel(), sp28);
+                __state = 36;
+            }
+            40 => {
+                unreachable!();
+            }
+            41 => {
+                fns::it_8027321C(ctx, item_gobj);
+                fns::it_80277C40(ctx, item_gobj, 0_i32);
+                fns::it_80275640(ctx, item_gobj, (comm_attr).x58());
+                __state = 42;
+            }
+            42 => {
+                __state = if (item).xD50_landNum() == (1_i32 as u32) {
+                    44
+                } else {
+                    45
+                };
+            }
+            43 => {
+                unreachable!();
+            }
+            44 => {
+                (item).set_xD84((spec_attr).tiers().get(0_i32).xD84_value());
+                __state = 45;
+            }
+            45 => {
+                (item)
+                    .x40_vel()
+                    .set_x(fp::fmuls((item).x40_vel().x(), (spec_attr).x14()));
+                (item).set_xD50_landNum((item).xD50_landNum().wrapping_add((1_i32 as u32)));
+                __state = if (item).xD50_landNum() >= 3_u32 {
+                    47
+                } else {
+                    48
+                };
+            }
+            46 => {
+                unreachable!();
+            }
+            47 => {
+                __state = if !(((item).xDCF_flag().x0().b0()) != 0) {
+                    50
+                } else {
+                    51
+                };
+            }
+            48 => {
+                __state = 26;
+            }
+            49 => {
+                unreachable!();
+            }
+            50 => {
+                (item).xDCF_flag().x0().set_b0((1_i32 as u8));
+                __state = 51;
+            }
+            51 => {
+                __state = 48;
+            }
+            52 => {
+                unreachable!();
+            }
+            53 => {
+                return 0;
+            }
+            54 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn it_802E5EF4<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let mut item_gobj = item_gobj;
     return (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)))
@@ -568,12 +903,75 @@ pub fn it_2E5A_Logic115_EvtUnk<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, ref_go
     let _ = fns::it_8026B894(ctx, item_gobj, ref_gobj);
 }
 
-fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
 }
 
-fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+fn inl_itResetVelocity<'a>(ctx: &'a Ctx, ip: Item<'a>) {
+    let mut ip = ip;
+    (ip).x40_vel().set_x({
+        let __t2 = {
+            let __t1 = 0.0;
+            (ip).x40_vel().set_z(__t1);
+            __t1
+        };
+        (ip).x40_vel().set_y(__t2);
+        __t2
+    });
+}
+
+fn inl_sqrtf_accurate_store<'a>(ctx: &'a Ctx, x: f64, y: Val<'a, F32>) -> f64 {
+    let mut x = x;
+    let mut y = y;
+    if x > 0.0 {
+        let mut guess: f64 = fp::frsqrte(x);
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        (y).set(fp::frsp((fp::fmul(x, guess))));
+        return (y).get();
+    }
+    return x;
+}
+
+fn inl_sqrtf_store<'a>(ctx: &'a Ctx, x: f64, y: Val<'a, F32>) -> f64 {
+    let mut x = x;
+    let mut y = y;
+    if x > 0.0 {
+        let mut guess: f64 = fp::frsqrte(x);
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        (y).set(fp::frsp((fp::fmul(x, guess))));
+        return (y).get();
+    }
+    return x;
+}
+
+fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
 }
@@ -662,6 +1060,14 @@ fn inl_itResetVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x802e5ac4,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
+            Ret::put(it_802E5AC4(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
     ctx.register_port(
         0x802e5ef4,
         |ctx| {

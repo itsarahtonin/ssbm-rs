@@ -1538,6 +1538,275 @@ pub fn fn_8016CF4C<'a>(ctx: &'a Ctx, slot: i32, matchResult: i32) {
     fns::gm_801A4B60(ctx);
 }
 
+pub fn fn_8016CFE0<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x38);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let mut tmp: VsSceneController<'a> = null(ctx);
+    let mut tmp_btns: i32 = 0;
+    let mut no_contest_buttons: i64 = 0;
+    let mut unpauser_slot: i32 = 0;
+    let mut buttons: u64 = 0;
+    let mut masked_buttons: u64 = 0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                tmp = statics::melee__gm__gmvs::controller(ctx);
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = 3;
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                inl_fn_8016CFE0_inline_unfused(ctx);
+                fns::fn_8016A4C8(ctx);
+                fns::fn_8016758C(ctx);
+                __state = if fns::gm_GetDbPauseFlag(ctx, 1_i32) != 0_i32 {
+                    6
+                } else {
+                    8
+                };
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                unpauser_slot = inl_gm_GetPlayerPressingUnpause_unfused(ctx);
+                __state = if (fns::DbLevel(ctx).get() as u32)
+                    >= ((enums::DbLKind_DebugRom as i32) as u32)
+                {
+                    10
+                } else {
+                    12
+                };
+            }
+            7 => {
+                __state = if ((tmp).state().match_result() as i32) != (enums::OUTCOME_NONE as i32) {
+                    45
+                } else {
+                    47
+                };
+            }
+            8 => {
+                (tmp)
+                    .state()
+                    .set_match_result((fns::gm_GetMatchOutcome(ctx) as u8));
+                __state = if ((tmp).state().match_result() as i32) == (enums::OUTCOME_NONE as i32) {
+                    36
+                } else {
+                    38
+                };
+            }
+            9 => {
+                unreachable!();
+            }
+            10 => {
+                tmp_btns = (((shl_i32(1_i32, (6_i32 as u32))) | (shl_i32(1_i32, (5_i32 as u32))))
+                    | (shl_i32(1_i32, (8_i32 as u32))));
+                __state = 11;
+            }
+            11 => {
+                no_contest_buttons = (tmp_btns as i64);
+                __state = if ((((tmp).start().x3_4() as i32) != 0)
+                    && (((tmp).state().pause_timer() as i32) == 0_i32))
+                    && (((tmp).state().unk_3() as i32) == 0_i32)
+                {
+                    14
+                } else {
+                    15
+                };
+            }
+            12 => {
+                tmp_btns = ((((shl_i32(1_i32, (6_i32 as u32)))
+                    | (shl_i32(1_i32, (5_i32 as u32))))
+                    | (shl_i32(1_i32, (8_i32 as u32))))
+                    | (shl_i32(1_i32, (12_i32 as u32))));
+                __state = 11;
+            }
+            13 => {
+                unreachable!();
+            }
+            14 => {
+                buttons = fns::gm_GetButtonsTriggered(ctx, ((tmp).state().pauser() as u8));
+                __state = if ((no_contest_buttons as u64) & buttons) != (0_i32 as u64) {
+                    17
+                } else {
+                    18
+                };
+            }
+            15 => {
+                __state = if ((((tmp).start().x3_2() as i32) != 0)
+                    && (((tmp).state().pause_timer() as i32) == 0_i32))
+                    && (((tmp).state().unk_3() as i32) == 0_i32)
+                {
+                    24
+                } else {
+                    25
+                };
+            }
+            16 => {
+                unreachable!();
+            }
+            17 => {
+                buttons = fns::gm_GetButtonsPressed(ctx, ((tmp).state().pauser() as u8));
+                masked_buttons = ((no_contest_buttons as u64) & buttons);
+                __state = if masked_buttons == (no_contest_buttons as u64) {
+                    20
+                } else {
+                    21
+                };
+            }
+            18 => {
+                __state = 15;
+            }
+            19 => {
+                unreachable!();
+            }
+            20 => {
+                inl_fn_8016CF4C_dontinline_unfused(
+                    ctx,
+                    unpauser_slot,
+                    (enums::OUTCOME_NO_CONTEST as i32),
+                );
+                return;
+            }
+            21 => {
+                __state = 18;
+            }
+            22 => {
+                unreachable!();
+            }
+            23 => {
+                __state = 21;
+            }
+            24 => {
+                __state = if (fns::gm_GetButtonsTriggered(ctx, ((tmp).state().pauser() as u8))
+                    & ((shl_i32(1_i32, (4_i32 as u32))) as u64))
+                    != (0_i32 as u64)
+                {
+                    27
+                } else {
+                    28
+                };
+            }
+            25 => {
+                fns::gm_DoUnpauseChecksAndRoutine(ctx, tmp, 1_i32);
+                __state = if ((tmp).state().pause_timer() as i32) != 0_i32 {
+                    31
+                } else {
+                    32
+                };
+            }
+            26 => {
+                unreachable!();
+            }
+            27 => {
+                inl_fn_8016CF4C_dontinline_unfused(
+                    ctx,
+                    unpauser_slot,
+                    (enums::OUTCOME_RETRY as i32),
+                );
+                return;
+            }
+            28 => {
+                __state = 25;
+            }
+            29 => {
+                unreachable!();
+            }
+            30 => {
+                __state = 28;
+            }
+            31 => {
+                (tmp)
+                    .state()
+                    .set_pause_timer((tmp).state().pause_timer().wrapping_sub(1));
+                __state = 32;
+            }
+            32 => {
+                __state = 34;
+            }
+            33 => {
+                unreachable!();
+            }
+            34 => {
+                fns::fn_8016B918(ctx);
+                (tmp)
+                    .state()
+                    .set_match_result((fns::gm_GetMatchOutcome(ctx) as u8));
+                __state = 7;
+            }
+            35 => {
+                __state = 7;
+            }
+            36 => {
+                fns::gm_DoPauseChecksAndRoutine(ctx, tmp, 1_i32);
+                __state = if ((tmp).state().unpause_timer() as i32) != 0_i32 {
+                    40
+                } else {
+                    41
+                };
+            }
+            37 => {
+                __state = 34;
+            }
+            38 => {
+                __state = 43;
+            }
+            39 => {
+                unreachable!();
+            }
+            40 => {
+                (tmp)
+                    .state()
+                    .set_unpause_timer((tmp).state().unpause_timer().wrapping_sub(1));
+                __state = 41;
+            }
+            41 => {
+                __state = 37;
+            }
+            42 => {
+                unreachable!();
+            }
+            43 => {
+                fns::fn_8016C7F0(ctx);
+                fns::ifStatus_802F7034(ctx, fnptr(ctx, 0x8016b88c));
+                fns::lbAudioAx_80024D50(ctx);
+                fns::gm_SetDbPauseFlag(ctx, 4_i32);
+                (tmp).state().set_unk_0((1_i32 as u8));
+                __state = 46;
+            }
+            44 => {
+                __state = 37;
+            }
+            45 => {
+                __state = 43;
+            }
+            46 => {
+                return;
+            }
+            47 => {
+                fns::fn_8016CD98(ctx, tmp);
+                __state = 46;
+            }
+            48 => {
+                unreachable!();
+            }
+            49 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn gm_Scene_Training_OnFrame<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x48);
     let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
@@ -2974,6 +3243,12 @@ fn inl_fn_8016CFE0_inline_unfused<'a>(ctx: &'a Ctx) {
     }
 }
 
+fn inl_fn_8016CF4C_dontinline_unfused<'a>(ctx: &'a Ctx, slot: i32, matchResult: i32) {
+    let mut slot = slot;
+    let mut matchResult = matchResult;
+    fns::fn_8016CF4C(ctx, slot, matchResult);
+}
+
 fn inl_fn_8016CBE8_inline_unfused<'a>(ctx: &'a Ctx) -> i32 {
     let mut pad: HSD_PadStatus<'a> = null(ctx);
     let mut var_r0: i32 = 0;
@@ -3690,6 +3965,13 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (i32, i32) = Args::take_all(ctx);
             Ret::put(fn_8016CF4C(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8016cfe0,
+        |ctx| {
+            Ret::put(fn_8016CFE0(ctx), ctx);
         },
         Returns::Nothing,
     );

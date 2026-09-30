@@ -40,6 +40,290 @@ pub fn ftCo_80094E54<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     return 0_i32;
 }
 
+pub fn ftCo_80094EA4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x58);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut stick_angle: f64 = 0.0;
+    let mut var_f28: f64 = 0.0;
+    let mut stick_x: f64 = 0.0;
+    let mut stick_y: f64 = 0.0;
+    let mut var_f31: f64 = 0.0;
+    let mut fp: Fighter<'a> = null(ctx);
+    let mut msid: i32 = 0;
+    let mut ret: i32 = 0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = 3;
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                fp = Handle::cast::<Fighter<'a>>((gobj).user_data());
+                msid = (fp).motion_id();
+                __state = if !Handle::is_null((fp).item_gobj()) {
+                    6
+                } else {
+                    8
+                };
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                __state = if (((fp).input().pressed_buttons()
+                    & (((shl_i32(1_i32, (8_i32 as u32))) | (shl_i32(1_i32, (9_i32 as u32))))
+                        as u32))
+                    != 0)
+                {
+                    10
+                } else {
+                    12
+                };
+            }
+            7 => {
+                __state = if ((if (stick_x) < fp::frsp(0_i32 as f64) {
+                    fp::fneg((stick_x))
+                } else {
+                    (stick_x)
+                }) >= (fns::p_ftCommonData(ctx).get()).dash_smash_stick_threshold())
+                    && (var_f28
+                        < fp::fadds(
+                            fp::frsp((fns::p_ftCommonData(ctx).get()).dash_smash_window() as f64),
+                            (fns::p_ftCommonData(ctx).get()).x44(),
+                        )) {
+                    15
+                } else {
+                    17
+                };
+            }
+            8 => {
+                return 0_i32;
+            }
+            9 => {
+                unreachable!();
+            }
+            10 => {
+                stick_x = (fp).input().lstick().get(0_i32).x();
+                stick_y = (fp).input().lstick().get(0_i32).y();
+                var_f28 = fp::frsp((fp).active_sticky().lstick().x() as f64);
+                var_f31 = fp::frsp((fp).active_sticky().lstick().y() as f64);
+                stick_angle = fns::ftCo_GetLStickAngle(ctx, fp);
+                ret = 1_i32;
+                __state = 11;
+            }
+            11 => {
+                __state = 7;
+            }
+            12 => {
+                var_f28 = 0.0;
+                stick_x = (fp).input().cstick().get(0_i32).x();
+                var_f31 = 0.0;
+                stick_y = (fp).input().cstick().get(0_i32).y();
+                stick_angle = fns::ftCo_GetCStickAngle(ctx, fp);
+                ret = 0_i32;
+                __state = 11;
+            }
+            13 => {
+                unreachable!();
+            }
+            14 => {
+                __state = 7;
+            }
+            15 => {
+                msid = (if fp::fmuls(stick_x, (fp).facing_dir()) >= 0.0 {
+                    (enums::ftCo_MS_HeavyThrowF4 as i32)
+                } else {
+                    (enums::ftCo_MS_HeavyThrowB4 as i32)
+                });
+                __state = 16;
+            }
+            16 => {
+                __state = if msid != (fp).motion_id() { 48 } else { 49 };
+            }
+            17 => {
+                __state = if (stick_y >= (fns::p_ftCommonData(ctx).get()).xCC())
+                    && (var_f31
+                        < fp::fadds(
+                            (fns::p_ftCommonData(ctx).get()).xD0(),
+                            (fp).co_attrs().jump_startup_time(),
+                        )) {
+                    19
+                } else {
+                    21
+                };
+            }
+            18 => {
+                unreachable!();
+            }
+            19 => {
+                msid = (enums::ftCo_MS_HeavyThrowHi4 as i32);
+                __state = 20;
+            }
+            20 => {
+                __state = 16;
+            }
+            21 => {
+                __state = if (stick_y <= (fns::p_ftCommonData(ctx).get()).xD4())
+                    && (var_f31 < (fns::p_ftCommonData(ctx).get()).xD8())
+                {
+                    23
+                } else {
+                    25
+                };
+            }
+            22 => {
+                unreachable!();
+            }
+            23 => {
+                msid = (enums::ftCo_MS_HeavyThrowLw4 as i32);
+                __state = 24;
+            }
+            24 => {
+                __state = 20;
+            }
+            25 => {
+                __state = if (if (stick_x) < fp::frsp(0_i32 as f64) {
+                    fp::fneg((stick_x))
+                } else {
+                    (stick_x)
+                }) >= (fns::p_ftCommonData(ctx).get()).x98()
+                {
+                    27
+                } else {
+                    29
+                };
+            }
+            26 => {
+                unreachable!();
+            }
+            27 => {
+                __state = if (if (stick_angle) < fp::frsp(0_i32 as f64) {
+                    fp::fneg((stick_angle))
+                } else {
+                    (stick_angle)
+                }) <= (fns::p_ftCommonData(ctx).get()).x20_radians()
+                {
+                    31
+                } else {
+                    33
+                };
+            }
+            28 => {
+                __state = 24;
+            }
+            29 => {
+                __state = 35;
+            }
+            30 => {
+                unreachable!();
+            }
+            31 => {
+                msid = (if fp::fmuls(stick_x, (fp).facing_dir()) >= fp::frsp(0_i32 as f64) {
+                    (enums::ftCo_MS_HeavyThrowF as i32)
+                } else {
+                    (enums::ftCo_MS_HeavyThrowB as i32)
+                });
+                __state = 32;
+            }
+            32 => {
+                __state = 28;
+            }
+            33 => {
+                __state = 35;
+            }
+            34 => {
+                unreachable!();
+            }
+            35 => {
+                __state = if (stick_y
+                    >= (fns::p_ftCommonData(ctx).get()).attackhi3_stick_threshold_y())
+                    && (stick_angle > (fns::p_ftCommonData(ctx).get()).x20_radians())
+                {
+                    37
+                } else {
+                    39
+                };
+            }
+            36 => {
+                __state = 32;
+            }
+            37 => {
+                msid = (enums::ftCo_MS_HeavyThrowHi as i32);
+                __state = 38;
+            }
+            38 => {
+                __state = 28;
+            }
+            39 => {
+                __state = if (stick_y <= (fns::p_ftCommonData(ctx).get()).xB0())
+                    && (stick_angle < fp::fneg((fns::p_ftCommonData(ctx).get()).x20_radians()))
+                {
+                    41
+                } else {
+                    43
+                };
+            }
+            40 => {
+                unreachable!();
+            }
+            41 => {
+                msid = (enums::ftCo_MS_HeavyThrowLw as i32);
+                __state = 42;
+            }
+            42 => {
+                __state = 38;
+            }
+            43 => {
+                __state = if ret != 0_i32 { 45 } else { 46 };
+            }
+            44 => {
+                unreachable!();
+            }
+            45 => {
+                msid = (enums::ftCo_MS_HeavyThrowF as i32);
+                __state = 46;
+            }
+            46 => {
+                __state = 42;
+            }
+            47 => {
+                unreachable!();
+            }
+            48 => {
+                statics::melee__ft__kinds__ftCommon__ftCo_ItemThrow::ftCo_800958FC(ctx, gobj, msid);
+                return 1_i32;
+            }
+            49 => {
+                return 0_i32;
+            }
+            50 => {
+                unreachable!();
+            }
+            51 => {
+                __state = 49;
+            }
+            52 => {
+                return 0;
+            }
+            53 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn ftCo_8009515C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
@@ -368,6 +652,295 @@ pub fn ftCo_800958FC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
         (fp).set_coll_cb(fnptr(ctx, 0x80096498));
     }
     statics::melee__ft__kinds__ftCommon__ftCo_ItemThrow::ftCo_80095EFC(ctx, gobj);
+}
+
+pub fn ftCo_80095A30<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x50);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = null(ctx);
+    let mut var_f1_2: f64 = 0.0;
+    let mut var_f1_3: f64 = 0.0;
+    let mut var_r0: i32 = 0;
+    let mut var_r0_2: i32 = 0;
+    let mut var_r0_3: i32 = 0;
+    let mut var_r29: i32 = 0;
+    let mut var_f1: f64 = 0.0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = 3;
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                var_f1 = (fp).input().lstick().get(0_i32).x();
+                __state = if var_f1 < 0.0 { 6 } else { 7 };
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                var_f1 = fp::fneg(var_f1);
+                __state = 7;
+            }
+            7 => {
+                __state = if (var_f1
+                    >= (fns::p_ftCommonData(ctx).get()).dash_smash_stick_threshold())
+                    && (fp::frsp(((fp).active_sticky().lstick().x() as i32) as f64)
+                        < fp::fadds(
+                            fp::frsp((fns::p_ftCommonData(ctx).get()).dash_smash_window() as f64),
+                            (fns::p_ftCommonData(ctx).get()).x44(),
+                        )) {
+                    9
+                } else {
+                    11
+                };
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                __state =
+                    if fp::fmuls((fp).input().lstick().get(0_i32).x(), (fp).facing_dir()) >= 0.0 {
+                        13
+                    } else {
+                        15
+                    };
+            }
+            10 => {
+                inl_ftCo_800957F4_unfused(ctx, gobj, var_r29);
+                return;
+            }
+            11 => {
+                __state = if ((fp).input().lstick().get(0_i32).y()
+                    >= (fns::p_ftCommonData(ctx).get()).xCC())
+                    && (fp::frsp(((fp).active_sticky().lstick().y() as i32) as f64)
+                        < fp::fadds(
+                            (fns::p_ftCommonData(ctx).get()).xD0(),
+                            (fp).co_attrs().jump_startup_time(),
+                        )) {
+                    17
+                } else {
+                    19
+                };
+            }
+            12 => {
+                unreachable!();
+            }
+            13 => {
+                var_r0 = 108_i32;
+                __state = 14;
+            }
+            14 => {
+                var_r29 = var_r0;
+                __state = 10;
+            }
+            15 => {
+                var_r0 = 109_i32;
+                __state = 14;
+            }
+            16 => {
+                unreachable!();
+            }
+            17 => {
+                var_r29 = 110_i32;
+                __state = 18;
+            }
+            18 => {
+                __state = 10;
+            }
+            19 => {
+                __state = if ((fp).input().lstick().get(0_i32).y()
+                    <= (fns::p_ftCommonData(ctx).get()).xD4())
+                    && (fp::frsp(((fp).active_sticky().lstick().y() as i32) as f64)
+                        < (fns::p_ftCommonData(ctx).get()).xD8())
+                {
+                    21
+                } else {
+                    23
+                };
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                var_r29 = 111_i32;
+                __state = 22;
+            }
+            22 => {
+                __state = 18;
+            }
+            23 => {
+                var_f1_2 = (fp).input().lstick().get(0_i32).x();
+                __state = if var_f1_2 < 0.0 { 25 } else { 26 };
+            }
+            24 => {
+                unreachable!();
+            }
+            25 => {
+                var_f1_2 = fp::fneg(var_f1_2);
+                __state = 26;
+            }
+            26 => {
+                __state = if var_f1_2 >= (fns::p_ftCommonData(ctx).get()).x98() {
+                    28
+                } else {
+                    30
+                };
+            }
+            27 => {
+                unreachable!();
+            }
+            28 => {
+                __state = if fns::ftCo_GetLStickAngle(ctx, fp) < 0.0 {
+                    32
+                } else {
+                    34
+                };
+            }
+            29 => {
+                __state = 22;
+            }
+            30 => {
+                __state = 44;
+            }
+            31 => {
+                unreachable!();
+            }
+            32 => {
+                var_f1_3 = fp::fneg(fns::ftCo_GetLStickAngle(ctx, fp));
+                __state = 33;
+            }
+            33 => {
+                __state = if var_f1_3 <= (fns::p_ftCommonData(ctx).get()).x20_radians() {
+                    36
+                } else {
+                    38
+                };
+            }
+            34 => {
+                var_f1_3 = fns::ftCo_GetLStickAngle(ctx, fp);
+                __state = 33;
+            }
+            35 => {
+                unreachable!();
+            }
+            36 => {
+                __state =
+                    if fp::fmuls((fp).input().lstick().get(0_i32).x(), (fp).facing_dir()) >= 0.0 {
+                        40
+                    } else {
+                        42
+                    };
+            }
+            37 => {
+                __state = 29;
+            }
+            38 => {
+                __state = 44;
+            }
+            39 => {
+                unreachable!();
+            }
+            40 => {
+                var_r0_2 = 94_i32;
+                __state = 41;
+            }
+            41 => {
+                var_r29 = var_r0_2;
+                __state = 37;
+            }
+            42 => {
+                var_r0_2 = 95_i32;
+                __state = 41;
+            }
+            43 => {
+                unreachable!();
+            }
+            44 => {
+                __state = if ((fp).input().lstick().get(0_i32).y()
+                    >= (fns::p_ftCommonData(ctx).get()).attackhi3_stick_threshold_y())
+                    && (fns::ftCo_GetLStickAngle(ctx, fp)
+                        > (fns::p_ftCommonData(ctx).get()).x20_radians())
+                {
+                    46
+                } else {
+                    48
+                };
+            }
+            45 => {
+                __state = 37;
+            }
+            46 => {
+                var_r29 = 96_i32;
+                __state = 47;
+            }
+            47 => {
+                __state = 29;
+            }
+            48 => {
+                __state = if ((fp).input().lstick().get(0_i32).y()
+                    <= (fns::p_ftCommonData(ctx).get()).xB0())
+                    && (fns::ftCo_GetLStickAngle(ctx, fp)
+                        < fp::fneg((fns::p_ftCommonData(ctx).get()).x20_radians()))
+                {
+                    50
+                } else {
+                    52
+                };
+            }
+            49 => {
+                unreachable!();
+            }
+            50 => {
+                var_r29 = 97_i32;
+                __state = 51;
+            }
+            51 => {
+                __state = 47;
+            }
+            52 => {
+                __state = if fns::it_8026B30C(ctx, (fp).item_gobj()) == 0_i32 {
+                    54
+                } else {
+                    56
+                };
+            }
+            53 => {
+                unreachable!();
+            }
+            54 => {
+                var_r0_3 = 94_i32;
+                __state = 55;
+            }
+            55 => {
+                var_r29 = var_r0_3;
+                __state = 51;
+            }
+            56 => {
+                var_r0_3 = 99_i32;
+                __state = 55;
+            }
+            57 => {
+                unreachable!();
+            }
+            58 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
 }
 
 pub fn ftCo_80095D5C<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>) {
@@ -744,6 +1317,36 @@ fn inl_ftCo_80095700_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     }
 }
 
+fn inl_ftCo_800957F4_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
+    let mut gobj = gobj;
+    let mut msid = msid;
+    let mut anim_spd: f64 = 0.0;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
+    (fp).cmd_vars().at(1_i32).set((0_i32 as u32));
+    (fp).x2210().set_throw_flags((0_i32 as u32));
+    (fp).mv().co().itemthrow4().set_anim_spd({
+        let __t1 = inl_getAnimSpeed_unfused(ctx, gobj, msid);
+        anim_spd = __t1;
+        __t1
+    });
+    statics::melee__ft__kinds__ftCommon__ftCo_ItemThrow::ftCo_80095700(ctx, gobj, msid);
+    fns::Fighter_ChangeMotionState(
+        ctx,
+        gobj,
+        msid,
+        0_u32,
+        fp::frsp(0_i32 as f64),
+        anim_spd,
+        fp::frsp(0_i32 as f64),
+        null::<HSD_GObj<'a>>(ctx),
+    );
+    fns::ftAnim_8006EBA4(ctx, gobj);
+    (fp).set_accessory4_cb(fnptr(ctx, 0x80095efc));
+    statics::melee__ft__kinds__ftCommon__ftCo_ItemThrow::ftCo_80095EFC(ctx, gobj);
+}
+
 fn inl_getFtAttrs_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> ftCo_DatAttrs<'a> {
     let mut fp = fp;
     return (fp).co_attrs();
@@ -811,6 +1414,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (Fighter<'_>,) = Args::take_all(ctx);
             Ret::put(ftCo_80094E54(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80094ea4,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftCo_80094EA4(ctx, a0), ctx);
         },
         Returns::Int,
     );
@@ -891,6 +1502,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
             Ret::put(ftCo_800958FC(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80095a30,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftCo_80095A30(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

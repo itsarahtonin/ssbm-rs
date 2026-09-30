@@ -221,6 +221,166 @@ pub fn fn_800DA004<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::ftCo_Fall_Enter(ctx, victim);
 }
 
+pub fn fn_800DA054<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x78);
+    let victimPos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let selfPos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x18);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = null(ctx);
+    let mut victim: Fighter<'a> = null(ctx);
+    let mut new_var2: Fighter<'a> = null(ctx);
+    let mut pad1: u32 = 0;
+    let mut pad2: u32 = 0;
+    let mut pad3: u32 = 0;
+    let mut tmp: f64 = 0.0;
+    let mut pad4: u32 = 0;
+    let mut pad5: u32 = 0;
+    let mut pad6: u32 = 0;
+    let mut facing: f64 = 0.0;
+    let mut dx: f64 = 0.0;
+    let mut new_var: HSD_JObj<'a> = null(ctx);
+    let mut dy: f64 = 0.0;
+    let mut new_var3: f64 = 0.0;
+    let mut v: f64 = 0.0;
+    let mut spd: f64 = 0.0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+                victim = Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(
+                    ctx,
+                    (fp).victim_gobj(),
+                ));
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = 3;
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                __state = if !((victim).x2226_b2() != 0) { 6 } else { 7 };
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                new_var = (fp).mv().co().capturedamage().x18();
+                fns::lb_8000B1CC(ctx, new_var, null::<Vec<'a>>(ctx), selfPos);
+                new_var2 = victim;
+                fns::lb_8000B1CC(
+                    ctx,
+                    (Handle::add(
+                        (victim).parts(),
+                        fns::ftParts_GetBoneIndex(ctx, new_var2, (enums::FtPart_XRotN as i32)),
+                    ))
+                    .joint(),
+                    null::<Vec<'a>>(ctx),
+                    victimPos,
+                );
+                facing = ({
+                    let __t1 = (fp).facing_dir();
+                    new_var3 = __t1;
+                    __t1
+                });
+                new_var3 = fp::fsubs(victimPos.y(), selfPos.y());
+                dx = fp::fsubs(victimPos.x(), selfPos.x());
+                dy = fp::fadds(new_var3, (fp).x2170());
+                __state = if fp::fmuls(dx, facing) > (fns::p_ftCommonData(ctx).get()).x34C() {
+                    9
+                } else {
+                    10
+                };
+            }
+            7 => {
+                return;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                __state = 12;
+            }
+            10 => {
+                __state = if dy < 0.0 { 14 } else { 15 };
+            }
+            11 => {
+                unreachable!();
+            }
+            12 => {
+                fns::ftCo_800DA698(ctx, gobj, 1_i32);
+                __state = 18;
+            }
+            13 => {
+                __state = 10;
+            }
+            14 => {
+                dy = fp::fneg(dy);
+                __state = 15;
+            }
+            15 => {
+                __state = if dy > (fns::p_ftCommonData(ctx).get()).x350() {
+                    17
+                } else {
+                    19
+                };
+            }
+            16 => {
+                unreachable!();
+            }
+            17 => {
+                __state = 12;
+            }
+            18 => {
+                __state = 7;
+            }
+            19 => {
+                __state = if fp::fmuls(dx, facing) < 0.0 { 21 } else { 22 };
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                v = (if dx < 0.0 { fp::fneg(dx) } else { dx });
+                spd = ({
+                    let __t2 = (fp).co_attrs().walk_max_vel();
+                    tmp = __t2;
+                    __t2
+                });
+                __state = if v > spd { 24 } else { 25 };
+            }
+            22 => {
+                __state = 18;
+            }
+            23 => {
+                unreachable!();
+            }
+            24 => {
+                v = spd;
+                __state = 25;
+            }
+            25 => {
+                (fp).set_gr_vel((if dx > 0.0 { v } else { (fp::fneg(v)) }));
+                __state = 22;
+            }
+            26 => {
+                unreachable!();
+            }
+            27 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn fn_800DA190<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
@@ -295,6 +455,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(fn_800DA004(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x800da054,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(fn_800DA054(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

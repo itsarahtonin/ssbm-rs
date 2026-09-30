@@ -98,6 +98,105 @@ pub fn grDynamicAttr_801CA0F8<'a>(
     return null::<grDynamicAttr_UnkStruct<'a>>(ctx);
 }
 
+pub fn grDynamicAttr_801CA1C0<'a>(ctx: &'a Ctx, arg: grDynamicAttr_UnkStruct<'a>) {
+    let mut arg = arg;
+    let mut cur: grDynamicAttr_UnkStruct<'a> = null(ctx);
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                __state = if Handle::is_null(arg) { 1 } else { 2 };
+            }
+            1 => {
+                return;
+            }
+            2 => {
+                __state = if Handle::addr(
+                    statics::melee__gr__grdynamicattr::grDynamicAttr_804D6960(ctx).get(),
+                ) == Handle::addr(arg)
+                {
+                    5
+                } else {
+                    6
+                };
+            }
+            3 => {
+                unreachable!();
+            }
+            4 => {
+                __state = 2;
+            }
+            5 => {
+                statics::melee__gr__grdynamicattr::grDynamicAttr_804D6960(ctx).set((arg).next());
+                __state = 8;
+            }
+            6 => {
+                cur = statics::melee__gr__grdynamicattr::grDynamicAttr_804D6960(ctx).get();
+                __state = 10;
+            }
+            7 => {
+                unreachable!();
+            }
+            8 => {
+                (arg)
+                    .set_next(statics::melee__gr__grdynamicattr::grDynamicAttr_804D6964(ctx).get());
+                statics::melee__gr__grdynamicattr::grDynamicAttr_804D6964(ctx).set(arg);
+                __state = 20;
+            }
+            9 => {
+                __state = 6;
+            }
+            10 => {
+                __state = if !Handle::is_null(cur) { 11 } else { 13 };
+            }
+            11 => {
+                __state = if Handle::addr((cur).next()) == Handle::addr(arg) {
+                    15
+                } else {
+                    16
+                };
+            }
+            12 => {
+                cur = (cur).next();
+                __state = 10;
+            }
+            13 => {
+                __state = if Handle::is_null(cur) { 19 } else { 20 };
+            }
+            14 => {
+                unreachable!();
+            }
+            15 => {
+                (cur).set_next((arg).next());
+                __state = 13;
+            }
+            16 => {
+                __state = 12;
+            }
+            17 => {
+                unreachable!();
+            }
+            18 => {
+                __state = 16;
+            }
+            19 => {
+                __state = 8;
+            }
+            20 => {
+                return;
+            }
+            21 => {
+                unreachable!();
+            }
+            22 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn grDynamicAttr_801CA224<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x10);
     let mut cur: grDynamicAttr_UnkStruct<'a> = null(ctx);
@@ -188,6 +287,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(grDynamicAttr_801CA0F8(ctx, a0, a1, a2, a3.0, a4), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x801ca1c0,
+        |ctx| {
+            let (a0,): (grDynamicAttr_UnkStruct<'_>,) = Args::take_all(ctx);
+            Ret::put(grDynamicAttr_801CA1C0(ctx, a0), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x801ca224,

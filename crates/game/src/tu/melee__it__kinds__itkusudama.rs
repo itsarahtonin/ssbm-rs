@@ -167,6 +167,353 @@ pub fn it_80289B50<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     }
 }
 
+pub fn it_80289BE8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, food_weight: i32, arg3: i32) {
+    let __frame = ctx.stack_frame(0x128);
+    let spawned: ArrV<'a, i32, 15> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x48);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x54);
+    let vel_2: Vec<'a> = frame_at(ctx, &__frame, 0x58);
+    let pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x64);
+    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x70);
+    let vel_3: Vec<'a> = frame_at(ctx, &__frame, 0x78);
+    let pos_3: Vec<'a> = frame_at(ctx, &__frame, 0x84);
+    let mut gobj = gobj;
+    let mut arg1 = arg1;
+    let mut food_weight = food_weight;
+    let mut arg3 = arg3;
+    let mut ip: Item<'a> = null(ctx);
+    let mut attr: itKusudamaAttributes<'a> = null(ctx);
+    let mut count: i32 = 0;
+    let mut i: i32 = 0;
+    let mut prev_kind: i32 = 0;
+    let mut kind: i32 = 0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                ip = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+                attr = Handle::cast::<itKusudamaAttributes<'a>>(
+                    ((ip).xC4_article_data()).x4_specialAttributes(),
+                );
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = 3;
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                Handle::copy_from(pos, (ip).pos());
+                pos.set_y(fp::fsubs(pos.y(), 5.0));
+                vel.set_x({
+                    let __t2 = {
+                        let __t1 = 0.0;
+                        vel.set_z(__t1);
+                        __t1
+                    };
+                    vel.set_y(__t2);
+                    __t2
+                });
+                __state = if (fns::it_8026F8B4(ctx, gobj, pos, vel, 0_i32) != 0) {
+                    6
+                } else {
+                    7
+                };
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                return;
+            }
+            7 => {
+                inl_it_80289BE8_inline(ctx, gobj, 0.10000000149011612, pos, vel);
+                pos.set_y(fp::fsubs(pos.y(), 5.0));
+                __state = if !Handle::is_null(fns::it_8026F6BC(ctx, gobj, pos, vel, 1_i32)) {
+                    10
+                } else {
+                    11
+                };
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                __state = 7;
+            }
+            10 => {
+                return;
+            }
+            11 => {
+                __state = if !(fns::it_8026D324(ctx, (enums::It_Kind_Foods as i32)) != 0) {
+                    14
+                } else {
+                    15
+                };
+            }
+            12 => {
+                unreachable!();
+            }
+            13 => {
+                __state = 11;
+            }
+            14 => {
+                food_weight = 0_i32;
+                __state = 15;
+            }
+            15 => {
+                i = 0_i32;
+                __state = 17;
+            }
+            16 => {
+                unreachable!();
+            }
+            17 => {
+                __state = if i < 15_i32 { 18 } else { 20 };
+            }
+            18 => {
+                spawned.at(i).set(1_i32.wrapping_neg());
+                __state = 19;
+            }
+            19 => {
+                i = i.wrapping_add(1);
+                __state = 17;
+            }
+            20 => {
+                i = fns::HSD_Randi(ctx, arg1.wrapping_add(food_weight).wrapping_add(arg3));
+                __state = if i < arg1 { 22 } else { 24 };
+            }
+            21 => {
+                unreachable!();
+            }
+            22 => {
+                kind = (attr).x10();
+                count = (attr).x14();
+                __state = if (kind == (enums::It_Kind_M_Ball as i32))
+                    && (fns::it_8026C704(ctx) == 1_i32)
+                {
+                    26
+                } else {
+                    28
+                };
+            }
+            23 => {
+                __state = if (fns::ftLib_IsFighter(ctx, (ip).owner()) != 0) {
+                    69
+                } else {
+                    70
+                };
+            }
+            24 => {
+                i = i.wrapping_sub(arg1);
+                __state = 30;
+            }
+            25 => {
+                unreachable!();
+            }
+            26 => {
+                i = fns::HSD_Randi(ctx, food_weight.wrapping_add(arg3));
+                __state = 30;
+            }
+            27 => {
+                i = 0_i32;
+                __state = 36;
+            }
+            28 => {
+                __state = if !(fns::it_8026D324(ctx, kind) != 0) {
+                    32
+                } else {
+                    33
+                };
+            }
+            29 => {
+                unreachable!();
+            }
+            30 => {
+                __state = if i < food_weight { 55 } else { 57 };
+            }
+            31 => {
+                __state = 27;
+            }
+            32 => {
+                i = fns::HSD_Randi(ctx, food_weight.wrapping_add(arg3));
+                __state = 30;
+            }
+            33 => {
+                __state = 27;
+            }
+            34 => {
+                unreachable!();
+            }
+            35 => {
+                __state = 33;
+            }
+            36 => {
+                __state = if i < count { 37 } else { 39 };
+            }
+            37 => {
+                __state = if (kind == (enums::It_Kind_M_Ball as i32))
+                    && (fns::it_8026C704(ctx) == 1_i32)
+                {
+                    41
+                } else {
+                    42
+                };
+            }
+            38 => {
+                i = i.wrapping_add(1);
+                __state = 36;
+            }
+            39 => {
+                __state = 45;
+            }
+            40 => {
+                unreachable!();
+            }
+            41 => {
+                __state = 39;
+            }
+            42 => {
+                inl_it_80289BE8_spawn(ctx, gobj, kind, 1.399999976158142, pos, vel, spawned.at(i));
+                __state = 38;
+            }
+            43 => {
+                unreachable!();
+            }
+            44 => {
+                __state = 42;
+            }
+            45 => {
+                __state = if i < count { 46 } else { 48 };
+            }
+            46 => {
+                __state = 51;
+            }
+            47 => {
+                i = i.wrapping_add(1);
+                __state = 45;
+            }
+            48 => {
+                __state = 23;
+            }
+            49 => {
+                unreachable!();
+            }
+            50 => {
+                unreachable!();
+            }
+            51 => {
+                __state = 52;
+            }
+            52 => {
+                __state = if (0_i32 != 0) { 51 } else { 53 };
+            }
+            53 => {
+                spawned.at(i).set(inl_it_80289BE8_spawn_random(
+                    ctx,
+                    gobj,
+                    1.2000000476837158,
+                    pos_2,
+                    vel_2,
+                ));
+                __state = 47;
+            }
+            54 => {
+                unreachable!();
+            }
+            55 => {
+                count = fns::HSD_Randi(ctx, 5_i32).wrapping_add(10_i32);
+                i = 0_i32;
+                __state = 59;
+            }
+            56 => {
+                __state = 23;
+            }
+            57 => {
+                count = fns::HSD_Randi(ctx, 2_i32).wrapping_add(3_i32);
+                i = 0_i32;
+                __state = 64;
+            }
+            58 => {
+                unreachable!();
+            }
+            59 => {
+                __state = if i < count { 60 } else { 62 };
+            }
+            60 => {
+                inl_it_80289BE8_spawn(
+                    ctx,
+                    gobj,
+                    (enums::It_Kind_Foods as i32),
+                    1.7999999523162842,
+                    pos,
+                    vel,
+                    spawned.at(i),
+                );
+                __state = 61;
+            }
+            61 => {
+                i = i.wrapping_add(1);
+                __state = 59;
+            }
+            62 => {
+                __state = 56;
+            }
+            63 => {
+                unreachable!();
+            }
+            64 => {
+                __state = if i < count { 65 } else { 67 };
+            }
+            65 => {
+                spawned.at(i).set(inl_it_80289BE8_spawn_random(
+                    ctx,
+                    gobj,
+                    1.2000000476837158,
+                    pos_3,
+                    vel_3,
+                ));
+                __state = 66;
+            }
+            66 => {
+                i = i.wrapping_add(1);
+                __state = 64;
+            }
+            67 => {
+                __state = 56;
+            }
+            68 => {
+                unreachable!();
+            }
+            69 => {
+                fns::ftLib_800874CC(
+                    ctx,
+                    (ip).owner(),
+                    Handle::cast::<Addr<'a>>(spawned.at(0)),
+                    i,
+                );
+                __state = 70;
+            }
+            70 => {
+                return;
+            }
+            71 => {
+                unreachable!();
+            }
+            72 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn it_8028A114<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -777,6 +1124,91 @@ fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64
     }
 }
 
+fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
+fn inl_it_80289BE8_inline<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    vel_scale: f64,
+    pos: Vec<'a>,
+    vel: Vec<'a>,
+) {
+    let mut gobj = gobj;
+    let mut vel_scale = vel_scale;
+    let mut pos = pos;
+    let mut vel = vel;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+    Handle::copy_from((pos), (ip).pos());
+    (pos).set_y(fp::fsubs((pos).y(), 5.0));
+    (vel).set_x(fp::fmsubs(
+        vel_scale,
+        fns::HSD_Randf(ctx),
+        (fp::fmuls(vel_scale, 0.5)),
+    ));
+    (vel).set_y(fp::fmsubs(
+        (fp::fmuls(vel_scale, 0.5)),
+        fns::HSD_Randf(ctx),
+        (fp::fmuls(vel_scale, 0.25)),
+    ));
+    (vel).set_z(0.0);
+}
+
+fn inl_it_80289BE8_spawn<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    kind: i32,
+    vel_scale: f64,
+    pos: Vec<'a>,
+    vel: Vec<'a>,
+    out_spawned: Val<'a, i32>,
+) {
+    let mut gobj = gobj;
+    let mut kind = kind;
+    let mut vel_scale = vel_scale;
+    let mut pos = pos;
+    let mut vel = vel;
+    let mut out_spawned = out_spawned;
+    let mut spawned_gobj: HSD_GObj<'a> = null(ctx);
+    inl_it_80289BE8_inline(ctx, gobj, vel_scale, pos, vel);
+    spawned_gobj = fns::it_8026F5C8(ctx, gobj, kind, pos);
+    if !Handle::is_null(spawned_gobj) {
+        fns::it_8026F53C(ctx, spawned_gobj, vel, 1_i32);
+        fns::it_80274ED8(ctx);
+        (out_spawned).set(kind);
+    }
+}
+
+fn inl_it_80289BE8_spawn_random<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    vel_scale: f64,
+    pos: Vec<'a>,
+    vel: Vec<'a>,
+) -> i32 {
+    let mut gobj = gobj;
+    let mut vel_scale = vel_scale;
+    let mut pos = pos;
+    let mut vel = vel;
+    let mut rand_kind: i32 = fns::it_8026F3AC(ctx);
+    if rand_kind != 1_i32.wrapping_neg() {
+        let mut spawned_gobj: HSD_GObj<'a> = null(ctx);
+        inl_it_80289BE8_inline(ctx, gobj, vel_scale, pos, vel);
+        spawned_gobj = fns::it_8026F5C8(ctx, gobj, rand_kind, pos);
+        if !Handle::is_null(spawned_gobj) {
+            fns::it_8026F53C(ctx, spawned_gobj, vel, 1_i32);
+            fns::it_80274ED8(ctx);
+            return rand_kind;
+        } else {
+            return 1_i32.wrapping_neg();
+        }
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 fn inl_itResetVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
     let mut ip = ip;
     (ip).x40_vel().set_x({
@@ -996,6 +1428,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
             Ret::put(it_80289B50(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80289be8,
+        |ctx| {
+            let (a0, a1, a2, a3): (HSD_GObj<'_>, i32, i32, i32) = Args::take_all(ctx);
+            Ret::put(it_80289BE8(ctx, a0, a1, a2, a3), ctx);
         },
         Returns::Nothing,
     );

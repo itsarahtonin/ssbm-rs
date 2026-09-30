@@ -161,6 +161,84 @@ pub fn it_80272828<'a>(ctx: &'a Ctx, kind: i32) -> HSD_GObj<'a> {
     return item_gobj_return;
 }
 
+pub fn it_80272860<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: f64, arg2: f64) {
+    let mut item_gobj = item_gobj;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut item: Item<'a> = null(ctx);
+    let mut var_f3: f64 = 0.0;
+    let mut var_r0: i32 = 0;
+    let mut var_r3: i32 = 0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                item = Handle::cast::<Item<'a>>((item_gobj).user_data());
+                var_r0 = (if arg1 < 0.0 {
+                    1_i32.wrapping_neg()
+                } else {
+                    1_i32
+                });
+                var_f3 = (item).x40_vel().y();
+                var_r3 = (if var_f3 < 0.0 {
+                    1_i32.wrapping_neg()
+                } else {
+                    1_i32
+                });
+                __state = if var_r3 != var_r0 { 1 } else { 2 };
+            }
+            1 => {
+                __state = if var_f3 < 0.0 { 4 } else { 5 };
+            }
+            2 => {
+                __state = 10;
+            }
+            3 => {
+                unreachable!();
+            }
+            4 => {
+                var_f3 = fp::fneg(var_f3);
+                __state = 5;
+            }
+            5 => {
+                __state = if var_f3 < arg2 { 7 } else { 8 };
+            }
+            6 => {
+                unreachable!();
+            }
+            7 => {
+                __state = 10;
+            }
+            8 => {
+                return;
+            }
+            9 => {
+                unreachable!();
+            }
+            10 => {
+                (item)
+                    .x40_vel()
+                    .set_y(fp::fsubs((item).x40_vel().y(), arg1));
+                return;
+            }
+            11 => {
+                __state = 8;
+            }
+            12 => {
+                __state = 2;
+            }
+            13 => {
+                return;
+            }
+            14 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn it_802728C8<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
     let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
@@ -2562,6 +2640,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(it_80272828(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x80272860,
+        |ctx| {
+            let (a0, a1, a2): (HSD_GObj<'_>, Single, Single) = Args::take_all(ctx);
+            Ret::put(it_80272860(ctx, a0, a1.0, a2.0), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x802728c8,

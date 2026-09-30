@@ -175,6 +175,140 @@ pub fn itPikachutjoltground_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>
     return fns::it_80273130(ctx, gobj);
 }
 
+pub fn itPikachutjoltground_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x20);
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = null(ctx);
+    let mut flag: i32 = 0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                ip = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+                __state = if Handle::is_null((ip).xDD4_itemVar().pikachujoltground().xDDC()) {
+                    1
+                } else {
+                    2
+                };
+            }
+            1 => {
+                return 1_i32;
+            }
+            2 => {
+                __state = if (!Handle::is_null(gobj)) && (!Handle::is_null(ip)) {
+                    5
+                } else {
+                    7
+                };
+            }
+            3 => {
+                unreachable!();
+            }
+            4 => {
+                __state = 2;
+            }
+            5 => {
+                __state = if Handle::is_null((ip).xDD4_itemVar().pikachujoltground().xDDC()) {
+                    9
+                } else {
+                    11
+                };
+            }
+            6 => {
+                __state = if flag == 1_i32 { 19 } else { 20 };
+            }
+            7 => {
+                __state = 17;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                flag = 1_i32;
+                __state = 10;
+            }
+            10 => {
+                __state = 6;
+            }
+            11 => {
+                __state = if Handle::addr(fns::it_802B3EFC(
+                    ctx,
+                    (ip).xDD4_itemVar().pikachujoltground().xDDC(),
+                )) != Handle::addr(gobj)
+                {
+                    13
+                } else {
+                    15
+                };
+            }
+            12 => {
+                unreachable!();
+            }
+            13 => {
+                flag = 1_i32;
+                __state = 14;
+            }
+            14 => {
+                __state = 10;
+            }
+            15 => {
+                __state = 17;
+            }
+            16 => {
+                unreachable!();
+            }
+            17 => {
+                flag = 0_i32;
+                __state = 6;
+            }
+            18 => {
+                __state = 14;
+            }
+            19 => {
+                return 1_i32;
+            }
+            20 => {
+                __state = if inl_itPikachutjoltground_UnkMotion0_Anim_unfused(ctx, gobj) == 1_i32 {
+                    23
+                } else {
+                    24
+                };
+            }
+            21 => {
+                unreachable!();
+            }
+            22 => {
+                __state = 20;
+            }
+            23 => {
+                return 1_i32;
+            }
+            24 => {
+                fns::it_802B3F20(
+                    ctx,
+                    (ip).xDD4_itemVar().pikachujoltground().xDDC(),
+                    (ip).pos(),
+                );
+                return 0_i32;
+            }
+            25 => {
+                unreachable!();
+            }
+            26 => {
+                __state = 24;
+            }
+            27 => {
+                return 0;
+            }
+            28 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn itPikachutjoltground_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
@@ -604,6 +738,13 @@ fn inl_Item_ClearFlagsAndEnterState_unfused<'a>(
     fns::Item_80268E5C(ctx, gobj, msid, (enums::ITEM_ANIM_UPDATE as i32));
 }
 
+fn inl_itPikachutjoltground_UnkMotion0_Anim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    Handle::copy_from((ip).xDD4_itemVar().pikachujoltground().xDE8(), (ip).pos());
+    return fns::it_80273130(ctx, gobj);
+}
+
 fn inl_itResetVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
     let mut ip = ip;
     (ip).x40_vel().set_x({
@@ -719,6 +860,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(itPikachutjoltground_UnkMotion0_Anim(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x802b36bc,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(itPikachutjoltground_UnkMotion1_Anim(ctx, a0), ctx);
         },
         Returns::Int,
     );

@@ -138,6 +138,12 @@ pub fn itChicorita_UnkMotion0_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) ->
     return 0_i32;
 }
 
+pub fn itChicorita_UnkMotion0_Phys<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut item_gobj = item_gobj;
+    inl_itChicorita_Phys_unfused(ctx, item_gobj);
+}
+
 pub fn itChicorita_UnkMotion0_Coll<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut item_gobj = item_gobj;
@@ -188,6 +194,12 @@ pub fn itChicorita_UnkMotion1_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) ->
         return 1_i32;
     }
     return 0_i32;
+}
+
+pub fn itChicorita_UnkMotion1_Phys<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut item_gobj = item_gobj;
+    inl_itChicorita_Phys_unfused(ctx, item_gobj);
 }
 
 pub fn itChicorita_UnkMotion1_Coll<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
@@ -352,6 +364,109 @@ fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'
     return (gobj).hsd_obj();
 }
 
+fn inl_itChicorita_Phys_unfused<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
+    let mut item_gobj = item_gobj;
+    let mut item: Item<'a> = null(ctx);
+    let mut chicorita_fall_speed: f64 = 0.0;
+    let mut fall_speed_dir: i32 = 0;
+    let mut item_vel_y_dir: i32 = 0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                item = Handle::cast::<Item<'a>>((item_gobj).user_data());
+                fns::it_8027A344(ctx, item_gobj);
+                __state = if ((item).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+                    1
+                } else {
+                    2
+                };
+            }
+            1 => {
+                fall_speed_dir = (if ((item).xCC_item_attr()).x10_fall_speed() < 0.0 {
+                    1_i32.wrapping_neg()
+                } else {
+                    1_i32
+                });
+                chicorita_fall_speed = (item).xDD4_itemVar().chicorita().x64();
+                item_vel_y_dir = (if chicorita_fall_speed < 0.0 {
+                    1_i32.wrapping_neg()
+                } else {
+                    1_i32
+                });
+                __state = if item_vel_y_dir != fall_speed_dir {
+                    4
+                } else {
+                    6
+                };
+            }
+            2 => {
+                (item).xDD4_itemVar().chicorita().set_x64(0.0);
+                return;
+            }
+            3 => {
+                unreachable!();
+            }
+            4 => {
+                __state = if chicorita_fall_speed < 0.0 { 8 } else { 9 };
+            }
+            5 => {
+                (item)
+                    .x40_vel()
+                    .set_y((item).xDD4_itemVar().chicorita().x64());
+                return;
+            }
+            6 => {
+                __state = 14;
+            }
+            7 => {
+                unreachable!();
+            }
+            8 => {
+                chicorita_fall_speed = fp::fneg(chicorita_fall_speed);
+                __state = 9;
+            }
+            9 => {
+                __state = if chicorita_fall_speed < ((item).xCC_item_attr()).x14_fall_speed_max() {
+                    11
+                } else {
+                    12
+                };
+            }
+            10 => {
+                unreachable!();
+            }
+            11 => {
+                __state = 14;
+            }
+            12 => {
+                __state = 5;
+            }
+            13 => {
+                unreachable!();
+            }
+            14 => {
+                (item).xDD4_itemVar().chicorita().set_x64(fp::fsubs(
+                    (item).xDD4_itemVar().chicorita().x64(),
+                    ((item).xCC_item_attr()).x10_fall_speed(),
+                ));
+                __state = 12;
+            }
+            15 => {
+                __state = 5;
+            }
+            16 => {
+                __state = 2;
+            }
+            17 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
@@ -408,6 +523,14 @@ pub fn register(ctx: &Ctx) {
         Returns::Int,
     );
     ctx.register_port(
+        0x802c9798,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(itChicorita_UnkMotion0_Phys(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x802c9850,
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
@@ -438,6 +561,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(itChicorita_UnkMotion1_Anim(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x802c9970,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(itChicorita_UnkMotion1_Phys(ctx, a0), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x802c9a28,

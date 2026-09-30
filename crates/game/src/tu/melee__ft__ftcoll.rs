@@ -1700,6 +1700,750 @@ pub fn ftColl_80078A2C<'a>(ctx: &'a Ctx, this_gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn ftColl_80078C70<'a>(ctx: &'a Ctx, this_gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x68);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let mut this_gobj = this_gobj;
+    let mut this_fp: Fighter<'a> = null(ctx);
+    let mut victim_gobj: HSD_GObj<'a> = null(ctx);
+    let mut is_same_gobj: i32 = 0;
+    let mut count: i32 = 0;
+    let mut victim_fp: Fighter<'a> = null(ctx);
+    let mut i: u32 = 0;
+    let mut hit0: HitCapsule<'a> = null(ctx);
+    let mut n: u32 = 0;
+    let mut m: u32 = 0;
+    let mut j: u32 = 0;
+    let mut var_r0_2: i32 = 0;
+    let mut var_r22: i32 = 0;
+    let mut flag0: i32 = 0;
+    let mut hit1: HitCapsule<'a> = null(ctx);
+    let mut this_hit: HitCapsule<'a> = null(ctx);
+    let mut flag1: i32 = 0;
+    let mut var_r3: i32 = 0;
+    let mut var_r0: u8 = 0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                this_fp = Handle::cast::<Fighter<'a>>((this_gobj).user_data());
+                __state = if fns::gm_8016B1C4(ctx) == 0_i32 { 1 } else { 2 };
+            }
+            1 => {
+                is_same_gobj = 0_i32;
+                victim_gobj = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 8_i32)).get();
+                __state = 4;
+            }
+            2 => {
+                return;
+            }
+            3 => {
+                unreachable!();
+            }
+            4 => {
+                __state = if !Handle::is_null(victim_gobj) { 5 } else { 7 };
+            }
+            5 => {
+                __state = if Handle::addr(this_gobj) == Handle::addr(victim_gobj) {
+                    9
+                } else {
+                    11
+                };
+            }
+            6 => {
+                victim_gobj = (victim_gobj).next();
+                __state = 4;
+            }
+            7 => {
+                __state = 2;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                is_same_gobj = 1_i32;
+                __state = 10;
+            }
+            10 => {
+                __state = 6;
+            }
+            11 => {
+                victim_fp = Handle::cast::<Fighter<'a>>((victim_gobj).user_data());
+                flag1 = 0_i32;
+                __state = if !Handle::is_null((victim_fp).x1064_thrownHitbox().x134().owner()) {
+                    13
+                } else {
+                    14
+                };
+            }
+            12 => {
+                unreachable!();
+            }
+            13 => {
+                __state = if ((this_fp).player_idx() as i32) != ((victim_fp).grabber_unk1() as i32)
+                {
+                    16
+                } else {
+                    18
+                };
+            }
+            14 => {
+                __state = if (flag1 != 0)
+                    || (((this_fp).player_idx() as i32) != ((victim_fp).player_idx() as i32))
+                {
+                    21
+                } else {
+                    22
+                };
+            }
+            15 => {
+                unreachable!();
+            }
+            16 => {
+                flag1 = 1_i32;
+                __state = 17;
+            }
+            17 => {
+                __state = 14;
+            }
+            18 => {
+                __state = 6;
+            }
+            19 => {
+                unreachable!();
+            }
+            20 => {
+                __state = 17;
+            }
+            21 => {
+                __state = if (((!(fns::gm_8016B168(ctx) != 0)) || (fns::gm_8016B0D4(ctx) != 0))
+                    || ((((victim_fp).x2225_b4()) as i32) != 0))
+                    || (((this_fp).team() as i32)
+                        != (if !Handle::is_null((victim_fp).x1064_thrownHitbox().x134().owner()) {
+                            ((victim_fp).x119C_teamUnk() as i32)
+                        } else {
+                            ((victim_fp).team() as i32)
+                        })) {
+                    24
+                } else {
+                    25
+                };
+            }
+            22 => {
+                __state = 10;
+            }
+            23 => {
+                unreachable!();
+            }
+            24 => {
+                __state = if Handle::addr((victim_fp).x1064_thrownHitbox().x134().owner())
+                    != Handle::addr(this_gobj)
+                {
+                    27
+                } else {
+                    28
+                };
+            }
+            25 => {
+                __state = 22;
+            }
+            26 => {
+                unreachable!();
+            }
+            27 => {
+                __state = if (is_same_gobj != 0) && (!((this_fp).x221B().x221B_b5() != 0)) {
+                    30
+                } else {
+                    31
+                };
+            }
+            28 => {
+                __state = 25;
+            }
+            29 => {
+                unreachable!();
+            }
+            30 => {
+                count = 0_i32;
+                i = (0_i32 as u32);
+                __state = 33;
+            }
+            31 => {
+                j = (0_i32 as u32);
+                __state = 47;
+            }
+            32 => {
+                unreachable!();
+            }
+            33 => {
+                __state = if i < (div_u32(0x4e0_u32, 0x138_u32)) {
+                    34
+                } else {
+                    36
+                };
+            }
+            34 => {
+                __state = 39;
+            }
+            35 => {
+                i = i.wrapping_add(1);
+                __state = 33;
+            }
+            36 => {
+                __state = 31;
+            }
+            37 => {
+                unreachable!();
+            }
+            38 => {
+                unreachable!();
+            }
+            39 => {
+                __state = 40;
+            }
+            40 => {
+                __state = if (0_i32 != 0) { 39 } else { 41 };
+            }
+            41 => {
+                this_hit = inl_HitCapsuleGetPtr_unfused(ctx, this_fp, i);
+                __state = if (((this_hit).state() as u32)
+                    != ((enums::HitCapsule_Disabled as i32) as u32))
+                    && (((((!(((this_hit).x43_b2()) != 0))
+                        && ((((this_hit).element()
+                            == (((enums::HitElement_Catch as i32) as u8) as u32))
+                            as i32)
+                            == 0_i32))
+                        && ((this_hit).element()
+                            != (((enums::HitElement_Inert as i32) as u8) as u32)))
+                        && ((((((this_hit).x40_b0()) as i32) == 1_i32) as i32) != 0_i32))
+                        && (((((((((this_hit).x42_b5()) as i32) == 1_i32) as i32) as u32) != 0)
+                            && ((((((this_hit).x40_b2()) as i32) != 0)
+                                && (((victim_fp).ground_or_air() as u32)
+                                    == ((enums::GA_Air as i32) as u32)))
+                                || (((((this_hit).x40_b3() as u8) as i32) != 0)
+                                    && (((victim_fp).ground_or_air() as u32)
+                                        == ((enums::GA_Ground as i32) as u32)))))
+                            && (fns::lbColl_8000ACFC(
+                                ctx,
+                                Handle::cast::<Addr<'a>>(victim_fp),
+                                this_hit,
+                            ) == 0_i32)))
+                {
+                    43
+                } else {
+                    45
+                };
+            }
+            42 => {
+                unreachable!();
+            }
+            43 => {
+                statics::melee__ft__ftcoll::ftColl_804D6560(ctx)
+                    .at((i as i32))
+                    .set((1_i32 as i8));
+                count = count.wrapping_add(1);
+                __state = 44;
+            }
+            44 => {
+                __state = 35;
+            }
+            45 => {
+                statics::melee__ft__ftcoll::ftColl_804D6560(ctx)
+                    .at((i as i32))
+                    .set((0_i32 as i8));
+                __state = 44;
+            }
+            46 => {
+                unreachable!();
+            }
+            47 => {
+                __state = if j < (div_u32(0x4e0_u32, 0x138_u32)) {
+                    48
+                } else {
+                    50
+                };
+            }
+            48 => {
+                hit0 = inl_HitCapsuleGetPtr_unfused(ctx, victim_fp, j);
+                __state = if (((((((hit0).state() as u32)
+                    != ((enums::HitCapsule_Disabled as i32) as u32))
+                    && ((hit0).element() != ((enums::HitElement_Catch as i32) as u32)))
+                    && ((((hit0).x42_b5()) as u32) == (1_i32 as u32)))
+                    && ((((((hit0).x40_b2() as u8) as i32) != 0)
+                        && (((this_fp).ground_or_air() as u32)
+                            == ((enums::GA_Air as i32) as u32)))
+                        || (((((hit0).x40_b3() as u8) as i32) != 0)
+                            && ((this_fp).ground_or_air() == 0_i32))))
+                    && ((((!(((hit0).x134().hit_grabbed_victim_only()) != 0))
+                        || (((Handle::is_null((victim_fp).victim_gobj())) as i32) != 0_i32))
+                        || (!(((victim_fp).x221B().x221B_b5()) != 0)))
+                        || (Handle::addr((victim_fp).victim_gobj()) == Handle::addr(this_gobj))))
+                    && (fns::lbColl_8000ACFC(ctx, Handle::cast::<Addr<'a>>(this_fp), hit0) == 0_i32)
+                {
+                    52
+                } else {
+                    53
+                };
+            }
+            49 => {
+                j = j.wrapping_add(1);
+                __state = 47;
+            }
+            50 => {
+                __state = 28;
+            }
+            51 => {
+                unreachable!();
+            }
+            52 => {
+                var_r22 = {
+                    let __t1 = (if ((hit0).x43_b2() as i32) != 0_i32 {
+                        1_i32
+                    } else {
+                        0_i32
+                    });
+                    var_r0_2 = __t1;
+                    __t1
+                };
+                __state = if ((((((((is_same_gobj != 0) && (var_r0_2 == 0_i32))
+                    && (Handle::addr(this_gobj) != Handle::addr((victim_fp).victim_gobj())))
+                    && ((this_fp).ground_or_air() == (enums::GA_Ground as i32)))
+                    && ((victim_fp).ground_or_air() == (enums::GA_Ground as i32)))
+                    && (!(((this_fp).x221B().x221B_b5()) != 0)))
+                    && ((hit0).element() != ((enums::HitElement_Inert as i32) as u32)))
+                    && ((((hit0).x40_b0() as u8) as u32) == (1_i32 as u32)))
+                    && (count != 0_i32)
+                {
+                    55
+                } else {
+                    57
+                };
+            }
+            53 => {
+                __state = 49;
+            }
+            54 => {
+                unreachable!();
+            }
+            55 => {
+                flag0 = 0_i32;
+                m = (0_i32 as u32);
+                __state = 59;
+            }
+            56 => {
+                __state = 53;
+            }
+            57 => {
+                __state = 76;
+            }
+            58 => {
+                unreachable!();
+            }
+            59 => {
+                __state = if m < (div_u32(0x4e0_u32, 0x138_u32)) {
+                    60
+                } else {
+                    62
+                };
+            }
+            60 => {
+                __state = if ((statics::melee__ft__ftcoll::ftColl_804D6560(ctx)
+                    .at((m as i32))
+                    .get() as u8) as i32)
+                    != 0_i32
+                {
+                    64
+                } else {
+                    65
+                };
+            }
+            61 => {
+                m = m.wrapping_add(1);
+                __state = 59;
+            }
+            62 => {
+                __state = if !(flag0 != 0) { 73 } else { 74 };
+            }
+            63 => {
+                unreachable!();
+            }
+            64 => {
+                hit1 = inl_HitCapsuleGetPtr_unfused(ctx, this_fp, m);
+                __state = if (fns::lbColl_80007AFC(
+                    ctx,
+                    hit0,
+                    hit1,
+                    (victim_fp).x34_scale().y(),
+                    (this_fp).x34_scale().y(),
+                ) != 0_i32)
+                    && (fns::ftColl_8007699C(ctx, victim_fp, hit0, this_fp, hit1) != 0_i32)
+                {
+                    67
+                } else {
+                    69
+                };
+            }
+            65 => {
+                __state = 61;
+            }
+            66 => {
+                unreachable!();
+            }
+            67 => {
+                flag0 = 1_i32;
+                __state = 62;
+            }
+            68 => {
+                __state = 65;
+            }
+            69 => {
+                __state = 61;
+            }
+            70 => {
+                unreachable!();
+            }
+            71 => {
+                __state = 68;
+            }
+            72 => {
+                __state = 68;
+            }
+            73 => {
+                __state = 76;
+            }
+            74 => {
+                __state = 56;
+            }
+            75 => {
+                unreachable!();
+            }
+            76 => {
+                __state = if ((this_fp).x221B().x221B_b0() != 0) {
+                    78
+                } else {
+                    80
+                };
+            }
+            77 => {
+                __state = 74;
+            }
+            78 => {
+                var_r3 = 1_i32;
+                __state = if ((this_fp).x221B().x221B_b3() != 0) {
+                    82
+                } else {
+                    83
+                };
+            }
+            79 => {
+                __state = 56;
+            }
+            80 => {
+                __state = 106;
+            }
+            81 => {
+                unreachable!();
+            }
+            82 => {
+                __state = if fp::fneg(1.0) == (this_fp).facing_dir() {
+                    85
+                } else {
+                    87
+                };
+            }
+            83 => {
+                __state = if ((((this_fp).x221B().x221B_b4()) as i32) != 0)
+                    && (!(((hit0).x42_b4()) != 0))
+                {
+                    95
+                } else {
+                    96
+                };
+            }
+            84 => {
+                unreachable!();
+            }
+            85 => {
+                __state = if (this_fp).cur_pos().x() < (victim_fp).cur_pos().x() {
+                    89
+                } else {
+                    90
+                };
+            }
+            86 => {
+                __state = 83;
+            }
+            87 => {
+                __state = if (this_fp).cur_pos().x() > (victim_fp).cur_pos().x() {
+                    92
+                } else {
+                    93
+                };
+            }
+            88 => {
+                unreachable!();
+            }
+            89 => {
+                var_r3 = 0_i32;
+                __state = 90;
+            }
+            90 => {
+                __state = 86;
+            }
+            91 => {
+                unreachable!();
+            }
+            92 => {
+                var_r3 = 0_i32;
+                __state = 93;
+            }
+            93 => {
+                __state = 86;
+            }
+            94 => {
+                unreachable!();
+            }
+            95 => {
+                var_r3 = 0_i32;
+                __state = 96;
+            }
+            96 => {
+                __state = if (var_r3 != 0_i32)
+                    && (fns::lbColl_80007BCC(
+                        ctx,
+                        hit0,
+                        (this_fp).shield_hit(),
+                        Handle::cast::<Addr<'a>>(fns::ftCommon_8007F804(ctx, this_fp)),
+                        var_r22,
+                        (victim_fp).x34_scale().y(),
+                        (this_fp).x34_scale().y(),
+                        (this_fp).cur_pos().z(),
+                    ) != 0_i32)
+                {
+                    98
+                } else {
+                    100
+                };
+            }
+            97 => {
+                unreachable!();
+            }
+            98 => {
+                __state = if (hit0).element() != ((enums::HitElement_Inert as i32) as u32) {
+                    102
+                } else {
+                    104
+                };
+            }
+            99 => {
+                __state = 79;
+            }
+            100 => {
+                __state = 106;
+            }
+            101 => {
+                unreachable!();
+            }
+            102 => {
+                fns::ftColl_80076CBC(ctx, victim_fp, hit0, this_fp);
+                __state = 103;
+            }
+            103 => {
+                __state = 99;
+            }
+            104 => {
+                (victim_fp).set_x221C_b5((1_i32 as u16));
+                (victim_fp).set_unk_gobj(this_gobj);
+                __state = 106;
+            }
+            105 => {
+                unreachable!();
+            }
+            106 => {
+                __state = if ((this_fp).x1988() != 2_i32) && ((this_fp).x198C() != 2_i32) {
+                    109
+                } else {
+                    110
+                };
+            }
+            107 => {
+                __state = 103;
+            }
+            108 => {
+                __state = 99;
+            }
+            109 => {
+                n = (0_i32 as u32);
+                __state = 112;
+            }
+            110 => {
+                __state = 79;
+            }
+            111 => {
+                unreachable!();
+            }
+            112 => {
+                __state = if n < ((this_fp).hurt_capsules_len() as u32) {
+                    113
+                } else {
+                    115
+                };
+            }
+            113 => {
+                __state = if fns::lbColl_8000805C(
+                    ctx,
+                    hit0,
+                    (this_fp).hurt_capsules().get((n as i32)).capsule(),
+                    fns::ftCommon_8007F804(ctx, this_fp),
+                    var_r22,
+                    (victim_fp).x34_scale().y(),
+                    (this_fp).x34_scale().y(),
+                    (this_fp).cur_pos().z(),
+                ) != 0_i32
+                {
+                    117
+                } else {
+                    118
+                };
+            }
+            114 => {
+                n = n.wrapping_add(1);
+                __state = 112;
+            }
+            115 => {
+                __state = 110;
+            }
+            116 => {
+                unreachable!();
+            }
+            117 => {
+                __state = if (hit0).element() != ((enums::HitElement_Inert as i32) as u32) {
+                    120
+                } else {
+                    122
+                };
+            }
+            118 => {
+                __state = 114;
+            }
+            119 => {
+                unreachable!();
+            }
+            120 => {
+                __state = if fns::ftColl_80076ED8(
+                    ctx,
+                    victim_fp,
+                    hit0,
+                    this_fp,
+                    Handle::cast::<HitCapsule<'a>>((this_fp).hurt_capsules().get((n as i32))),
+                ) != 0_i32
+                {
+                    124
+                } else {
+                    125
+                };
+            }
+            121 => {
+                __state = 115;
+            }
+            122 => {
+                (victim_fp).set_unk_gobj(this_gobj);
+                __state = 121;
+            }
+            123 => {
+                unreachable!();
+            }
+            124 => {
+                __state = if ((((this_fp).x1988() != 0_i32) || ((this_fp).x198C() != 0_i32))
+                    || (((this_fp).x221D_b6() as i32) != 0))
+                    || ((((this_fp).hurt_capsules().get((n as i32)).capsule()).state() as u32)
+                        != ((enums::HurtCapsule_Enabled as i32) as u32))
+                {
+                    127
+                } else {
+                    129
+                };
+            }
+            125 => {
+                __state = 121;
+            }
+            126 => {
+                unreachable!();
+            }
+            127 => {
+                fns::ft_PlaySFX(
+                    ctx,
+                    this_fp,
+                    fns::ftColl_803C0C40(ctx).at((hit0).sfx_severity()).get(),
+                    (127_u32 as u8),
+                    (64_u32 as u8),
+                );
+                var_r0_2 = 1_i32;
+                __state = 128;
+            }
+            128 => {
+                __state = if var_r0_2 == 0_i32 { 131 } else { 132 };
+            }
+            129 => {
+                var_r0_2 = 0_i32;
+                __state = 128;
+            }
+            130 => {
+                unreachable!();
+            }
+            131 => {
+                __state = if (((hit0).sfx_kind() as u32) == 13_u32)
+                    && (((hit0).sfx_severity() as u32) == (2_i32 as u32))
+                {
+                    134
+                } else {
+                    136
+                };
+            }
+            132 => {
+                __state = 125;
+            }
+            133 => {
+                unreachable!();
+            }
+            134 => {
+                (this_fp).set_x215C(fns::lbColl_80005BB0(
+                    ctx,
+                    hit0,
+                    (114_i32
+                        .wrapping_add((((this_fp).player_idx() as i32).wrapping_mul(2_i32)))
+                        .wrapping_add(((this_fp).is_sub_fighter() as i32))),
+                ));
+                __state = 135;
+            }
+            135 => {
+                __state = 132;
+            }
+            136 => {
+                (this_fp).set_x2160(fns::lbColl_80005BB0(
+                    ctx,
+                    hit0,
+                    (126_i32
+                        .wrapping_add((((this_fp).player_idx() as i32).wrapping_mul(2_i32)))
+                        .wrapping_add(((this_fp).is_sub_fighter() as i32))),
+                ));
+                __state = 135;
+            }
+            137 => {
+                unreachable!();
+            }
+            138 => {
+                __state = 118;
+            }
+            139 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn ftColl_8007925C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x90);
     let coll_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
@@ -4837,6 +5581,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(ftColl_80078A2C(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80078c70,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftColl_80078C70(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

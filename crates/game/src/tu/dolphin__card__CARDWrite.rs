@@ -26,6 +26,209 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn WriteCallback<'a>(ctx: &'a Ctx, chan: i32, result: i32) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut chan = chan;
+    let mut result = result;
+    let mut card: CARDControl<'a> = null(ctx);
+    let mut callback: FnPtr<'a> = null(ctx);
+    let mut fat: Val<'a, u16> = null(ctx);
+    let mut dir: CARDDir<'a> = null(ctx);
+    let mut ent: CARDDir<'a> = null(ctx);
+    let mut fileInfo: CARDFileInfo<'a> = null(ctx);
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                card = fns::__CARDBlock(ctx).get(chan);
+                __state = if result >= 0_i32 { 1 } else { 3 };
+            }
+            1 => {
+                fileInfo = (card).fileInfo();
+                __state = if (fileInfo).length() < 0_i32 { 5 } else { 6 };
+            }
+            2 => {
+                return;
+            }
+            3 => {
+                __state = 8;
+            }
+            4 => {
+                unreachable!();
+            }
+            5 => {
+                result = (14_i32.wrapping_neg());
+                __state = 8;
+            }
+            6 => {
+                (fileInfo).set_length((fileInfo).length().wrapping_sub((card).sectorSize()));
+                __state = if (fileInfo).length() <= 0_i32 { 10 } else { 12 };
+            }
+            7 => {
+                unreachable!();
+            }
+            8 => {
+                callback = (card).apiCallback();
+                (card).set_apiCallback(null::<FnPtr<'a>>(ctx));
+                let _ = fns::__CARDPutControlBlock(ctx, card, result);
+                callback.call::<_, ()>((chan, result));
+                __state = 2;
+            }
+            9 => {
+                __state = 6;
+            }
+            10 => {
+                dir = fns::__CARDGetDirBlock(ctx, card);
+                ent = Handle::add(dir, (fileInfo).fileNo());
+                (ent).set_time(
+                    (div_i64(
+                        fns::OSGetTime(ctx),
+                        ((div_u32(
+                            ((ptr::<Val<'a, u32>>(
+                                ctx,
+                                ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                            ))
+                            .get()),
+                            (4_i32 as u32),
+                        )) as i64),
+                    ) as u32),
+                );
+                callback = (card).apiCallback();
+                (card).set_apiCallback(null::<FnPtr<'a>>(ctx));
+                result = fns::__CARDUpdateDir(ctx, chan, callback);
+                __state = 14;
+            }
+            11 => {
+                __state = 2;
+            }
+            12 => {
+                fat = Handle::cast::<Val<'a, u16>>(fns::__CARDGetFatBlock(ctx, card));
+                (fileInfo).set_offset((fileInfo).offset().wrapping_add((card).sectorSize()));
+                (fileInfo).set_iBlock((Handle::add(fat, ((fileInfo).iBlock() as i32))).get());
+                __state = if (((fileInfo).iBlock() as i32) < 5_i32)
+                    || (((fileInfo).iBlock() as i32) >= ((card).cBlock() as i32))
+                {
+                    16
+                } else {
+                    17
+                };
+            }
+            13 => {
+                unreachable!();
+            }
+            14 => {
+                __state = if result < 0_i32 { 20 } else { 21 };
+            }
+            15 => {
+                __state = 11;
+            }
+            16 => {
+                result = (6_i32.wrapping_neg());
+                __state = 8;
+            }
+            17 => {
+                result = fns::__CARDEraseSector(
+                    ctx,
+                    chan,
+                    ((card)
+                        .sectorSize()
+                        .wrapping_mul(((fileInfo).iBlock() as i32)) as u32),
+                    fnptr(ctx, 0x80358040),
+                );
+                __state = 14;
+            }
+            18 => {
+                unreachable!();
+            }
+            19 => {
+                __state = 17;
+            }
+            20 => {
+                __state = 8;
+            }
+            21 => {
+                __state = 11;
+            }
+            22 => {
+                unreachable!();
+            }
+            23 => {
+                __state = 21;
+            }
+            24 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
+pub fn EraseCallback<'a>(ctx: &'a Ctx, chan: i32, result: i32) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut chan = chan;
+    let mut result = result;
+    let mut card: CARDControl<'a> = null(ctx);
+    let mut callback: FnPtr<'a> = null(ctx);
+    let mut fileInfo: CARDFileInfo<'a> = null(ctx);
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                card = fns::__CARDBlock(ctx).get(chan);
+                __state = if result >= 0_i32 { 1 } else { 3 };
+            }
+            1 => {
+                fileInfo = (card).fileInfo();
+                result = fns::__CARDWrite(
+                    ctx,
+                    chan,
+                    ((card)
+                        .sectorSize()
+                        .wrapping_mul(((fileInfo).iBlock() as i32)) as u32),
+                    (card).sectorSize(),
+                    (card).buffer(),
+                    fnptr(ctx, 0x80357ed0),
+                );
+                __state = if result < 0_i32 { 5 } else { 6 };
+            }
+            2 => {
+                return;
+            }
+            3 => {
+                __state = 8;
+            }
+            4 => {
+                unreachable!();
+            }
+            5 => {
+                __state = 8;
+            }
+            6 => {
+                __state = 2;
+            }
+            7 => {
+                unreachable!();
+            }
+            8 => {
+                callback = (card).apiCallback();
+                (card).set_apiCallback(null::<FnPtr<'a>>(ctx));
+                let _ = fns::__CARDPutControlBlock(ctx, card, result);
+                callback.call::<_, ()>((chan, result));
+                __state = 2;
+            }
+            9 => {
+                __state = 6;
+            }
+            10 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn CARDWriteAsync<'a>(
     ctx: &'a Ctx,
     fileInfo: CARDFileInfo<'a>,
@@ -104,6 +307,22 @@ pub fn CARDWrite<'a>(
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x80357ed0,
+        |ctx| {
+            let (a0, a1): (i32, i32) = Args::take_all(ctx);
+            Ret::put(WriteCallback(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80358040,
+        |ctx| {
+            let (a0, a1): (i32, i32) = Args::take_all(ctx);
+            Ret::put(EraseCallback(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
     ctx.register_port(
         0x803580f0,
         |ctx| {

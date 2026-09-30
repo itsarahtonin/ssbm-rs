@@ -30,6 +30,109 @@ pub fn hsd_80392474<'a>(ctx: &'a Ctx) {
     statics::sysdolphin__baselib__hsd_3924::hsd_804D7850(ctx).set(null::<_HSD_SList<'a>>(ctx));
 }
 
+pub fn fn_80392480<'a>(ctx: &'a Ctx, event: FnPtr<'a>, priority: i32) -> _HSD_SList<'a> {
+    let __frame = ctx.stack_frame(0x20);
+    let mut event = event;
+    let mut priority = priority;
+    let mut prev: _HSD_SList<'a> = null(ctx);
+    let mut cur: _HSD_SList<'a> = null(ctx);
+    let mut ret: _HSD_SList<'a> = null(ctx);
+    let mut data: EventPriority<'a> = null(ctx);
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                prev = null::<_HSD_SList<'a>>(ctx);
+                cur = statics::sysdolphin__baselib__hsd_3924::hsd_804D7850(ctx).get();
+                __state = 1;
+            }
+            1 => {
+                __state = if !Handle::is_null(cur) { 10 } else { 11 };
+            }
+            2 => {
+                __state = 3;
+            }
+            3 => {
+                ret = Handle::cast::<_HSD_SList<'a>>((cur).data());
+                __state = if Handle::addr(event)
+                    != Handle::addr(Handle::cast::<FnPtr<'a>>((ret).next()))
+                {
+                    4
+                } else {
+                    5
+                };
+            }
+            4 => {
+                __state = if (Handle::cast::<EventPriority<'a>>(ret)).priority() <= priority {
+                    7
+                } else {
+                    8
+                };
+            }
+            5 => {
+                return ret;
+            }
+            6 => {
+                unreachable!();
+            }
+            7 => {
+                prev = cur;
+                __state = 8;
+            }
+            8 => {
+                cur = (cur).next();
+                __state = 1;
+            }
+            9 => {
+                unreachable!();
+            }
+            10 => {
+                __state = 3;
+            }
+            11 => {
+                data = Handle::cast::<EventPriority<'a>>(fns::HSD_MemAlloc(ctx, (8_u32 as i32)));
+                (data).set_event(event);
+                (data).set_priority(priority);
+                __state = if !Handle::is_null(prev) { 14 } else { 15 };
+            }
+            12 => {
+                unreachable!();
+            }
+            13 => {
+                __state = 11;
+            }
+            14 => {
+                return fns::HSD_SListAllocAndAppend(ctx, prev, Handle::cast::<Addr<'a>>(data));
+            }
+            15 => {
+                ret = fns::HSD_SListAllocAndPrepend(
+                    ctx,
+                    statics::sysdolphin__baselib__hsd_3924::hsd_804D7850(ctx).get(),
+                    Handle::cast::<Addr<'a>>(data),
+                );
+                statics::sysdolphin__baselib__hsd_3924::hsd_804D7850(ctx).set(ret);
+                __state = 5;
+            }
+            16 => {
+                unreachable!();
+            }
+            17 => {
+                __state = 15;
+            }
+            18 => {
+                return null(ctx);
+            }
+            19 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
 pub fn hsd_80392528<'a>(ctx: &'a Ctx, event: FnPtr<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut event = event;
@@ -44,6 +147,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(hsd_80392474(ctx), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80392480,
+        |ctx| {
+            let (a0, a1): (FnPtr<'_>, i32) = Args::take_all(ctx);
+            Ret::put(fn_80392480(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x80392528,

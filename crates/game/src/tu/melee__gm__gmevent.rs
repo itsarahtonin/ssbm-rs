@@ -1563,6 +1563,200 @@ pub fn gm_801BC9E8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn gm_801BCAF0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x48);
+    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut temp_r3: HSD_GObj<'a> = null(ctx);
+    let mut temp_r3_2: VsSceneController<'a> = null(ctx);
+    let mut var_r0: i32 = 0;
+    let mut var_r0_2: i32 = 0;
+    let mut temp_r30: EventData<'a> = null(ctx);
+    let mut i: i32 = 0;
+    let mut count: i32 = 0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = 3;
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                count = 0_i32;
+                i = 1_i32;
+                __state = 6;
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                __state = if i < 3_i32 { 7 } else { 9 };
+            }
+            7 => {
+                __state = if (fns::Player_GetStocks(ctx, i) <= 0_i32)
+                    && (({
+                        temp_r3 = fns::Player_GetEntity(ctx, i);
+                        ((((Handle::is_null(temp_r3)) as i32) == 0_i32) as i32)
+                    }) != 0)
+                {
+                    11
+                } else {
+                    13
+                };
+            }
+            8 => {
+                i = i.wrapping_add(1_i32);
+                __state = 6;
+            }
+            9 => {
+                __state = if count == 2_i32 { 24 } else { 25 };
+            }
+            10 => {
+                unreachable!();
+            }
+            11 => {
+                __state = if (fns::ftLib_GetKind(ctx, temp_r3) as u32)
+                    == ((enums::Ft_Kind_Seak as i32) as u32)
+                {
+                    15
+                } else {
+                    17
+                };
+            }
+            12 => {
+                __state = if var_r0 != 0_i32 { 21 } else { 22 };
+            }
+            13 => {
+                __state = 19;
+            }
+            14 => {
+                unreachable!();
+            }
+            15 => {
+                var_r0 = 1_i32;
+                __state = 16;
+            }
+            16 => {
+                __state = 12;
+            }
+            17 => {
+                fns::Player_SetStocks(ctx, i, 1_i32);
+                fns::gm_8016F00C(ctx, i);
+                __state = 19;
+            }
+            18 => {
+                unreachable!();
+            }
+            19 => {
+                var_r0 = 0_i32;
+                __state = 12;
+            }
+            20 => {
+                __state = 16;
+            }
+            21 => {
+                count = count.wrapping_add(1_i32);
+                __state = 22;
+            }
+            22 => {
+                __state = 8;
+            }
+            23 => {
+                unreachable!();
+            }
+            24 => {
+                statics::melee__gm__gmevent::gm_801BC4F4(ctx, gobj);
+                return;
+            }
+            25 => {
+                __state = if fns::Player_GetP1Stock(ctx) <= 0_i32 {
+                    28
+                } else {
+                    29
+                };
+            }
+            26 => {
+                unreachable!();
+            }
+            27 => {
+                __state = 25;
+            }
+            28 => {
+                inl_failEvent_unfused(ctx, gobj);
+                return;
+            }
+            29 => {
+                temp_r30 = (fns::gmMainLib_804D3EE0(ctx).get()).vs().unk_530();
+                temp_r3_2 = fns::gmVs_GetSceneController(ctx);
+                __state = if ((temp_r30).xB_0() != 0) { 32 } else { 34 };
+            }
+            30 => {
+                unreachable!();
+            }
+            31 => {
+                __state = 29;
+            }
+            32 => {
+                var_r0_2 = 0_i32;
+                __state = 33;
+            }
+            33 => {
+                __state = if var_r0_2 != 0_i32 { 40 } else { 41 };
+            }
+            34 => {
+                __state = if ((((temp_r3_2).start().timer_enabled() as i32) != 0)
+                    && (fns::gm_8016AEEC(ctx) == (0_i32 as u32)))
+                    && ((fns::gm_8016AEFC(ctx) as i32) == 59_i32)
+                {
+                    36
+                } else {
+                    38
+                };
+            }
+            35 => {
+                unreachable!();
+            }
+            36 => {
+                var_r0_2 = 1_i32;
+                __state = 37;
+            }
+            37 => {
+                __state = 33;
+            }
+            38 => {
+                var_r0_2 = 0_i32;
+                __state = 37;
+            }
+            39 => {
+                unreachable!();
+            }
+            40 => {
+                inl_failEvent_unfused(ctx, gobj);
+                __state = 41;
+            }
+            41 => {
+                return;
+            }
+            42 => {
+                unreachable!();
+            }
+            43 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn gm_801BCC9C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
     let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x0);
@@ -3050,6 +3244,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(gm_801BC9E8(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801bcaf0,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(gm_801BCAF0(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

@@ -788,6 +788,250 @@ pub fn it_80276FC4<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: i32) {
     }
 }
 
+pub fn it_80277040<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x90);
+    let _top: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x4);
+    let down: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let cross: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let slope: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let _mid: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x34);
+    let up: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let mut item_gobj = item_gobj;
+    let mut coll: CollData<'a> = null(ctx);
+    let mut item1: Item<'a> = null(ctx);
+    let mut temp_f3: f64 = 0.0;
+    let mut temp_f31: f64 = 0.0;
+    let mut temp_f30: f64 = 0.0;
+    let mut angle1: f64 = 0.0;
+    let mut int_dir1: i32 = 0;
+    let mut int_dir3: i32 = 0;
+    let mut ret_val: i32 = 0;
+    let mut int_dir2: i32 = 0;
+    let mut int_dir4: i32 = 0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                ret_val = 1_i32;
+                item1 = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
+                coll = (item1).x378_itemColl();
+                __state = if (if (((item1).xCC_item_attr()).x50()) < fp::frsp(0_i32 as f64) {
+                    fp::fneg((((item1).xCC_item_attr()).x50()))
+                } else {
+                    (((item1).xCC_item_attr()).x50())
+                }) < 9.999999747378752e-06_f64
+                {
+                    1
+                } else {
+                    2
+                };
+            }
+            1 => {
+                (item1).x88().set_y(0.0);
+                (item1).x88().set_x(0.0);
+                return 0_i32;
+            }
+            2 => {
+                up.set_z(0.0);
+                up.set_x(0.0);
+                up.set_y(1.0);
+                inl_it_80276408_unfused(ctx, item_gobj, coll, normal);
+                Handle::copy_from((item1).x94(), (item1).x88());
+                angle1 = fns::lbVector_AngleXY(ctx, normal, up);
+                __state = if angle1 < 0.0 { 5 } else { 6 };
+            }
+            3 => {
+                unreachable!();
+            }
+            4 => {
+                __state = 2;
+            }
+            5 => {
+                angle1 = fp::fneg(angle1);
+                __state = 6;
+            }
+            6 => {
+                __state = if angle1 >= (fns::it_804D6D28(ctx).get()).xC0() {
+                    8
+                } else {
+                    10
+                };
+            }
+            7 => {
+                unreachable!();
+            }
+            8 => {
+                down.set_z(0.0);
+                down.set_x(0.0);
+                down.set_y(fp::fneg(1.0));
+                let _ = fns::lbVector_CrossprodNormalized(ctx, normal, down, cross);
+                let _ = fns::lbVector_CrossprodNormalized(ctx, cross, normal, slope);
+                temp_f3 = ((item1).xCC_item_attr()).x50();
+                temp_f31 = fp::fdivs((item1).x94().x(), temp_f3);
+                temp_f30 = fp::fdivs((item1).x94().y(), temp_f3);
+                (item1).x88().set_x(fp::fmuls(slope.x(), temp_f3));
+                (item1)
+                    .x88()
+                    .set_y(fp::fmuls(slope.y(), ((item1).xCC_item_attr()).x50()));
+                __state = if !(inl_checkNormalAngle_unfused(ctx, item_gobj) != 0) {
+                    12
+                } else {
+                    14
+                };
+            }
+            9 => {
+                return ret_val;
+            }
+            10 => {
+                ret_val = 0_i32;
+                (item1).x88().set_y(0.0);
+                (item1).x88().set_x(0.0);
+                __state = 9;
+            }
+            11 => {
+                unreachable!();
+            }
+            12 => {
+                temp_f3 = 0.0;
+                __state = if ((item1).x94().x() != temp_f3) || ((item1).x94().y() != temp_f3) {
+                    16
+                } else {
+                    17
+                };
+            }
+            13 => {
+                __state = 9;
+            }
+            14 => {
+                (item1).set_xD5C((2_i32 as u32));
+                __state = 13;
+            }
+            15 => {
+                unreachable!();
+            }
+            16 => {
+                __state = if slope.x() < 0.0 { 19 } else { 21 };
+            }
+            17 => {
+                __state = 13;
+            }
+            18 => {
+                unreachable!();
+            }
+            19 => {
+                int_dir1 = 1_i32.wrapping_neg();
+                __state = 20;
+            }
+            20 => {
+                __state = if temp_f31 < 0.0 { 23 } else { 25 };
+            }
+            21 => {
+                int_dir1 = 1_i32;
+                __state = 20;
+            }
+            22 => {
+                unreachable!();
+            }
+            23 => {
+                int_dir2 = 1_i32.wrapping_neg();
+                __state = 24;
+            }
+            24 => {
+                __state = if int_dir2 == int_dir1 { 27 } else { 29 };
+            }
+            25 => {
+                int_dir2 = 1_i32;
+                __state = 24;
+            }
+            26 => {
+                unreachable!();
+            }
+            27 => {
+                __state = if slope.y() < 0.0 { 31 } else { 33 };
+            }
+            28 => {
+                __state = 17;
+            }
+            29 => {
+                __state = 42;
+            }
+            30 => {
+                unreachable!();
+            }
+            31 => {
+                int_dir3 = 1_i32.wrapping_neg();
+                __state = 32;
+            }
+            32 => {
+                __state = if temp_f30 < 0.0 { 35 } else { 37 };
+            }
+            33 => {
+                int_dir3 = 1_i32;
+                __state = 32;
+            }
+            34 => {
+                unreachable!();
+            }
+            35 => {
+                int_dir4 = 1_i32.wrapping_neg();
+                __state = 36;
+            }
+            36 => {
+                __state = if int_dir4 != int_dir3 { 39 } else { 40 };
+            }
+            37 => {
+                int_dir4 = 1_i32;
+                __state = 36;
+            }
+            38 => {
+                unreachable!();
+            }
+            39 => {
+                __state = 42;
+            }
+            40 => {
+                __state = 28;
+            }
+            41 => {
+                unreachable!();
+            }
+            42 => {
+                (item1).set_xD58((item1).xD58().wrapping_add(1));
+                __state = if (item1).xD58() >= (fns::it_804D6D28(ctx).get()).x38_float() {
+                    44
+                } else {
+                    45
+                };
+            }
+            43 => {
+                __state = 40;
+            }
+            44 => {
+                (item1).set_xD58((0_i32 as u32));
+                ret_val = 0_i32;
+                (item1).x88().set_y(0.0);
+                (item1).x88().set_x(0.0);
+                __state = 45;
+            }
+            45 => {
+                __state = 28;
+            }
+            46 => {
+                unreachable!();
+            }
+            47 => {
+                return 0;
+            }
+            48 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn it_8027737C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, pos: Vec<'a>) {
     let __frame = ctx.stack_frame(0x38);
     let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
@@ -1280,6 +1524,23 @@ fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64
     }
 }
 
+fn inl_checkNormalAngle_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut angle: f64 = 0.0;
+    fns::it_80276408(ctx, gobj, (ip).x378_itemColl(), normal);
+    angle = fns::lbVector_Angle(ctx, normal, (ip).xAC_unk());
+    if angle < 0.0 {
+        angle = fp::fneg(angle);
+    }
+    if (angle >= (fns::it_804D6D28(ctx).get()).xC4()) && ((ip).xC30() == (ip).xC2C()) {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
 fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
@@ -1571,6 +1832,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(it_80276FC4(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80277040,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(it_80277040(ctx, a0), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x8027737c,

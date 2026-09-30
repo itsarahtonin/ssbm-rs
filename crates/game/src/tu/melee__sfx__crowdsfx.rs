@@ -216,6 +216,173 @@ pub fn un_80321D30<'a>(ctx: &'a Ctx, arg0: u32, arg1: f64) {
     }
 }
 
+pub fn un_80321EBC<'a>(ctx: &'a Ctx, arg0: u32, arg1: f64) -> i32 {
+    let __frame = ctx.stack_frame(0x28);
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut port: i32 = 0;
+    let mut data: CrowdSFX_UnkStruct<'a> = null(ctx);
+    let mut gobj: HSD_GObj<'a> = null(ctx);
+    let mut arg0_copy: u32 = 0;
+    let mut data2: CrowdSFX_UnkStruct<'a> = null(ctx);
+    let mut sfx: i32 = 0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                arg0_copy = arg0;
+                data = fns::crowdsfx_ptr(ctx).get();
+                gobj = fns::ftLib_FindBySpawnNum(ctx, arg0_copy);
+                __state = if Handle::is_null(gobj) { 1 } else { 2 };
+            }
+            1 => {
+                __state = 4;
+            }
+            2 => {
+                port = fns::ftLib_IsSubFighter(ctx, gobj);
+                __state = if (fns::Player_8003248C(
+                    ctx,
+                    (fns::ftLib_GetPlayerIndex(ctx, gobj) as i32),
+                    port,
+                ) as u32)
+                    == (1_i32 as u32)
+                {
+                    6
+                } else {
+                    7
+                };
+            }
+            3 => {
+                unreachable!();
+            }
+            4 => {
+                return 0_i32;
+            }
+            5 => {
+                __state = 2;
+            }
+            6 => {
+                __state = 4;
+            }
+            7 => {
+                __state = if fns::ftLib_GetPercent(ctx, gobj) < (fns::gCrowdConfig(ctx).get()).x1C()
+                {
+                    10
+                } else {
+                    11
+                };
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                __state = 7;
+            }
+            10 => {
+                __state = 4;
+            }
+            11 => {
+                __state = if (data).x10() < (fns::gCrowdConfig(ctx).get()).cheer_limit() {
+                    14
+                } else {
+                    15
+                };
+            }
+            12 => {
+                unreachable!();
+            }
+            13 => {
+                __state = 11;
+            }
+            14 => {
+                __state = 4;
+            }
+            15 => {
+                __state = if (data).xC() == arg0 { 18 } else { 19 };
+            }
+            16 => {
+                unreachable!();
+            }
+            17 => {
+                __state = 15;
+            }
+            18 => {
+                __state = 4;
+            }
+            19 => {
+                (data).set_x14(fns::ftLib_8008746C(ctx, gobj));
+                __state = if (data).x14() == 0x83d60_i32 { 22 } else { 23 };
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                __state = 19;
+            }
+            22 => {
+                return 0_i32;
+            }
+            23 => {
+                data2 = fns::crowdsfx_ptr(ctx).get();
+                __state = if fns::lbAudioAx_80023710(ctx, (data2).x2C()) != 0_i32 {
+                    26
+                } else {
+                    27
+                };
+            }
+            24 => {
+                unreachable!();
+            }
+            25 => {
+                __state = 23;
+            }
+            26 => {
+                let _ = fns::lbAudioAx_800236B8(ctx, (data2).x2C());
+                __state = 27;
+            }
+            27 => {
+                (data2).set_x2C(1_i32.wrapping_neg());
+                __state = if fns::un_80322298(ctx, arg1) == 3_i32 {
+                    29
+                } else {
+                    31
+                };
+            }
+            28 => {
+                unreachable!();
+            }
+            29 => {
+                sfx = 0x140_i32;
+                __state = 30;
+            }
+            30 => {
+                data2 = fns::crowdsfx_ptr(ctx).get();
+                (data2).set_x2C(fns::lbAudioAx_800240B4(ctx, sfx));
+                (data).set_xC(arg0);
+                (data).set_x18(0_i32);
+                port = fns::ftLib_IsSubFighter(ctx, gobj);
+                fns::pl_8003FDA0(ctx, (fns::ftLib_GetPlayerIndex(ctx, gobj) as i32), port);
+                return 1_i32;
+            }
+            31 => {
+                sfx = 0x141_i32;
+                __state = 30;
+            }
+            32 => {
+                unreachable!();
+            }
+            33 => {
+                return 0;
+            }
+            34 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn un_8032201C<'a>(ctx: &'a Ctx, arg0: u32, cat: i32) -> i32 {
     let __frame = ctx.stack_frame(0x28);
     let mut arg0 = arg0;
@@ -392,6 +559,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(un_80321D30(ctx, a0, a1.0), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80321ebc,
+        |ctx| {
+            let (a0, a1): (u32, Single) = Args::take_all(ctx);
+            Ret::put(un_80321EBC(ctx, a0, a1.0), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x8032201c,
