@@ -125,6 +125,8 @@ struct Interaction {
     cr: u32,
     /// The time base afterwards.
     tb: u64,
+    /// r1 when it happened: what a callee or interrupt handler wrote below it is dead stack.
+    sp: u32,
 }
 
 #[derive(Default)]
@@ -368,6 +370,7 @@ fn interact(ctx: &Ctx, kind: Kind, f: impl FnOnce() -> u32) -> u32 {
     match state.phase.get() {
         Phase::Original if state.depth.get() == 0 => {
             state.depth.set(1);
+            let sp = ctx.regs.r(1);
             ctx.mem.begin_log();
             let result = catch_unwind(AssertUnwindSafe(f));
             let writes = ctx.mem.end_log();
@@ -385,6 +388,7 @@ fn interact(ctx: &Ctx, kind: Kind, f: impl FnOnce() -> u32) -> u32 {
                 f1: regs.fpr[1].get(),
                 cr: regs.cr.get(),
                 tb: regs.tb.get(),
+                sp,
             });
             value
         }
@@ -394,7 +398,13 @@ fn interact(ctx: &Ctx, kind: Kind, f: impl FnOnce() -> u32) -> u32 {
             match log.get(at) {
                 Some(x) if x.kind == kind => {
                     state.cursor.set(at + 1);
+                    // Frames below the original's r1 are dead once the callee or handler
+                    // returns, and the side replaying may be using that stack.
+                    let dead = x.sp.wrapping_sub(STACK_SCRATCH)..x.sp;
                     for (at, bytes) in &x.writes {
+                        if dead.contains(at) {
+                            continue;
+                        }
                         // The original's writes were to mapped memory, so these succeed.
                         let _ = ctx.mem.write_bytes(*at, bytes);
                     }
