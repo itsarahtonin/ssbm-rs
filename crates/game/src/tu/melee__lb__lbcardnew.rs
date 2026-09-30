@@ -957,6 +957,127 @@ pub fn taskReadHeader<'a>(ctx: &'a Ctx) -> i32 {
     return (statics::melee__lb__lbcardnew::state(ctx).saved_error());
 }
 
+pub fn taskListSnapshots<'a>(ctx: &'a Ctx) -> i32 {
+    let __frame = ctx.stack_frame(0xb8);
+    let head: Ptr<'a, SnapshotNode<'a>> = frame_at(ctx, &__frame, 0x0);
+    let stat: Arr<'a, CARDStat<'a>, 1> = frame_at(ctx, &__frame, 0x4);
+    let mut node: SnapshotNode<'a> = null(ctx);
+    let mut company: Val<'a, i8> = null(ctx);
+    let mut game: Val<'a, i8> = null(ctx);
+    let mut nodes: SnapshotNode<'a> = null(ctx);
+    let mut disk_id: DVDDiskID<'a> = null(ctx);
+    let mut file_no: i32 = 0;
+    let mut count: i32 = 0;
+    let mut i: i32 = 0;
+    let mut scan: Ptr<'a, SnapshotNode<'a>> = null(ctx);
+    head.set(null::<SnapshotNode<'a>>(ctx));
+    disk_id = fns::DVDGetCurrentDiskID(ctx);
+    statics::melee__lb__lbcardnew::state(ctx).set_tasks_remaining(0_i32);
+    if !Handle::is_null((statics::melee__lb__lbcardnew::state(ctx).free_blocks())) {
+        (statics::melee__lb__lbcardnew::state(ctx).free_blocks()).set(div_i32(
+            (statics::melee__lb__lbcardnew::state(ctx).unused_bytes()),
+            0x2000_i32,
+        ));
+    }
+    if !Handle::is_null((statics::melee__lb__lbcardnew::state(ctx).free_files())) {
+        (statics::melee__lb__lbcardnew::state(ctx).free_files())
+            .set((statics::melee__lb__lbcardnew::state(ctx).unused_files()));
+    }
+    nodes = Handle::cast::<SnapshotNode<'a>>(fns::HSD_MemAlloc(
+        ctx,
+        (12_u32.wrapping_mul(127_u32) as i32),
+    ));
+    node = nodes;
+    company = Handle::cast::<Val<'a, i8>>(stat.get(0_i32).company().at(0));
+    game = Handle::cast::<Val<'a, i8>>(stat.get(0_i32).gameName().at(0));
+    count = 0_i32;
+    {
+        file_no = 0_i32;
+        'l1: while file_no < 127_i32 {
+            'c2: {
+                if (((fns::CARDGetStatus(
+                    ctx,
+                    (statics::melee__lb__lbcardnew::state(ctx).chan()),
+                    file_no,
+                    stat.get(0),
+                ) == 0_i32)
+                    && (fns::strncmp(ctx, company, (disk_id).company().at(0), (2_i32 as u32))
+                        == 0_i32))
+                    && (fns::strncmp(ctx, game, (disk_id).gameName().at(0), (4_i32 as u32))
+                        == 0_i32))
+                    && (inl_isdigit_unfused(
+                        ctx,
+                        (stat.get(0_i32).fileName().at(0_i32).get() as i32),
+                    ) != 0)
+                {
+                    (node).set_time(fns::strtoul(
+                        ctx,
+                        stat.get(0_i32).fileName().at(0),
+                        null::<Ptr<'a, Val<'a, i8>>>(ctx),
+                        10_i32,
+                    ));
+                    (node).set_file_no((file_no as i16));
+                    (node).set_blocks((shr_u32(stat.get(0_i32).length(), (13_i32 as u32)) as u16));
+                    scan = head;
+                    'l3: while (!Handle::is_null((scan).get()))
+                        && (((scan).get()).time() > (node).time())
+                    {
+                        'c4: {
+                            scan = ((scan).get()).next_ref();
+                        }
+                    }
+                    (node).set_next((scan).get());
+                    count = count.wrapping_add(1);
+                    (scan).set(node);
+                    node = Handle::add(node, 1);
+                }
+            }
+            file_no = file_no.wrapping_add(1);
+        }
+    }
+    scan = head;
+    {
+        file_no = 0_i32;
+        'l5: while file_no < count {
+            'c6: {
+                (Handle::add(
+                    (statics::melee__lb__lbcardnew::state(ctx).snapshot_entries()),
+                    file_no,
+                ))
+                .set_time(((scan).get()).time());
+                (Handle::add(
+                    (statics::melee__lb__lbcardnew::state(ctx).snapshot_entries()),
+                    file_no,
+                ))
+                .set_file_no(((scan).get()).file_no());
+                (Handle::add(
+                    (statics::melee__lb__lbcardnew::state(ctx).snapshot_entries()),
+                    file_no,
+                ))
+                .set_blocks(((scan).get()).blocks());
+                scan = ((scan).get()).next_ref();
+            }
+            file_no = file_no.wrapping_add(1);
+        }
+    }
+    {
+        i = count;
+        'l7: while i < 127_i32 {
+            'c8: {
+                (Handle::add(
+                    (statics::melee__lb__lbcardnew::state(ctx).snapshot_entries()),
+                    i,
+                ))
+                .set_file_no((1_i32.wrapping_neg() as i16));
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    fns::HSD_Free(ctx, Handle::cast::<Addr<'a>>(nodes));
+    statics::melee__lb__lbcardnew::state(ctx).set_saved_error(0_i32);
+    return (statics::melee__lb__lbcardnew::state(ctx).saved_error());
+}
+
 pub fn taskFindFile<'a>(ctx: &'a Ctx, filename: Val<'a, i8>) -> i32 {
     let __frame = ctx.stack_frame(0x98);
     let card_stat: CARDStat<'a> = frame_at(ctx, &__frame, 0x0);
@@ -1942,6 +2063,14 @@ fn inl_readCardFileSize_unfused<'a>(ctx: &'a Ctx, file_size: Val<'a, i32>) -> i3
     return (file_size).get();
 }
 
+fn inl_isdigit_unfused<'a>(ctx: &'a Ctx, c: i32) -> i32 {
+    let mut c = c;
+    return ((ptr::<ArrV<'a, u8, 0>>(ctx, 0x803b8c30)
+        .at(((c as u8) as i32))
+        .get() as i32)
+        & 16_i32);
+}
+
 fn inl_lbCardNew_CompleteNextTask_unfused<'a>(ctx: &'a Ctx) -> i32 {
     let mut enabled: i32 = 0;
     let mut result: i32 = 0;
@@ -2149,6 +2278,13 @@ pub fn register(ctx: &Ctx) {
         0x8001b068,
         |ctx| {
             Ret::put(taskReadHeader(ctx), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8001b14c,
+        |ctx| {
+            Ret::put(taskListSnapshots(ctx), ctx);
         },
         Returns::Int,
     );

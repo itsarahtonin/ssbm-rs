@@ -268,6 +268,96 @@ pub fn ftKb_PeSpecialAirLw_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn ftKb_SpecialNPe_8010C8D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x28);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    inl_ftCommon_GroundToAirStateChange_unfused(
+        ctx,
+        gobj,
+        fp,
+        (enums::ftKb_MS_PeSpecialAirLw as i32),
+        0xc4c508c_u32,
+    );
+    if (fp).cmd_vars().at(0_i32).get() == (1_i32 as u32) {
+        (fp).cmd_vars().at(0_i32).set((2_i32 as u32));
+    }
+    {
+        let mut da: ftKb_DatAttrs<'a> = null(ctx);
+        let mut fp_2: Fighter<'a> =
+            (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+        da = Handle::cast::<ftKb_DatAttrs<'a>>((fp_2).dat_attrs());
+        if !Handle::is_null((fp_2).u().kb().xD0()) {
+            (fp_2).set_death2_cb(fnptr(ctx, 0x800ee74c));
+            (fp_2).set_take_dmg_cb(fnptr(ctx, 0x800ee7b8));
+        }
+        (fp_2).set_accessory4_cb(fnptr(ctx, 0x8010c288));
+        (fp_2).set_pre_hitlag_cb(fnptr(ctx, 0x8010c44c));
+        (fp_2).set_post_hitlag_cb(fnptr(ctx, 0x8010c47c));
+        if (fp_2).cmd_vars().at(1_i32).get() == (2_i32 as u32) {
+            fns::ftColl_8007B1B8(
+                ctx,
+                gobj,
+                Handle::cast::<ShieldDesc<'a>>((da).specialn_pe_absorbdesc()),
+                fnptr(ctx, 0x8010cd88),
+            );
+            (fp_2).x221B().set_x221B_b3((1_i32 as u8));
+        }
+    }
+}
+
+pub fn ftKb_SpecialNPe_8010C9CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x28);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    (fp).u().kb().set_xCC(0_i32);
+    inl_ftCommon_AirToGroundStateChange_unfused(
+        ctx,
+        gobj,
+        fp,
+        (enums::ftKb_MS_PeSpecialLw as i32),
+        0xc4c508c_u32,
+    );
+    {
+        let mut da: ftKb_DatAttrs<'a> = null(ctx);
+        let mut fp_2: Fighter<'a> =
+            (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+        'l1: loop {
+            'c2: {}
+            if !(0_i32 != 0) {
+                break 'l1;
+            }
+        }
+        da = Handle::cast::<ftKb_DatAttrs<'a>>((fp_2).dat_attrs());
+        if !Handle::is_null((fp_2).u().kb().xD0()) {
+            (fp_2).set_death2_cb(fnptr(ctx, 0x800ee74c));
+            (fp_2).set_take_dmg_cb(fnptr(ctx, 0x800ee7b8));
+        }
+        (fp_2).set_accessory4_cb(fnptr(ctx, 0x8010c288));
+        (fp_2).set_pre_hitlag_cb(fnptr(ctx, 0x8010c44c));
+        (fp_2).set_post_hitlag_cb(fnptr(ctx, 0x8010c47c));
+        if (fp_2).cmd_vars().at(1_i32).get() == (2_i32 as u32) {
+            fns::ftColl_8007B1B8(
+                ctx,
+                gobj,
+                Handle::cast::<ShieldDesc<'a>>((da).specialn_pe_absorbdesc()),
+                fnptr(ctx, 0x8010cd88),
+            );
+            (fp_2).x221B().set_x221B_b3((1_i32 as u8));
+        }
+    }
+}
+
 pub fn ftKb_PeSpecialLwHit_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
@@ -334,6 +424,37 @@ pub fn ftKb_PeSpecialAirLwHit_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     if (fns::ft_80081D0C(ctx, gobj) != 0) {
         fns::ftKb_SpecialNGw_8010CCD4(ctx, gobj);
     }
+}
+
+pub fn ftKb_SpecialNGw_8010CC6C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    inl_ftCommon_GroundToAirStateChange_unfused(
+        ctx,
+        gobj,
+        fp,
+        (enums::ftKb_MS_PeSpecialAirLwHit as i32),
+        0xc4c508c_u32,
+    );
+    fns::ftKb_SpecialNGw_8010CD44(ctx, gobj);
+}
+
+pub fn ftKb_SpecialNGw_8010CCD4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    (fp).u().kb().set_xCC(0_i32);
+    inl_ftCommon_AirToGroundStateChange_unfused(
+        ctx,
+        gobj,
+        fp,
+        (enums::ftKb_MS_PeSpecialLwHit as i32),
+        0xc4c508c_u32,
+    );
+    fns::ftKb_SpecialNGw_8010CD44(ctx, gobj);
 }
 
 pub fn ftKb_SpecialNGw_8010CD44<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -464,6 +585,54 @@ fn inl_doPeAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
         cb.call::<_, ()>((gobj,));
     }
+}
+
+fn inl_ftCommon_GroundToAirStateChange_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    fp: Fighter<'a>,
+    msid: i32,
+    flags: u32,
+) {
+    let mut gobj = gobj;
+    let mut fp = fp;
+    let mut msid = msid;
+    let mut flags = flags;
+    fns::ftCommon_8007D5D4(ctx, fp);
+    fns::Fighter_ChangeMotionState(
+        ctx,
+        gobj,
+        msid,
+        flags,
+        (fp).cur_anim_frame(),
+        1.0,
+        0.0,
+        null::<HSD_GObj<'a>>(ctx),
+    );
+}
+
+fn inl_ftCommon_AirToGroundStateChange_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    fp: Fighter<'a>,
+    msid: i32,
+    flags: u32,
+) {
+    let mut gobj = gobj;
+    let mut fp = fp;
+    let mut msid = msid;
+    let mut flags = flags;
+    fns::ftCommon_8007D7FC(ctx, fp);
+    fns::Fighter_ChangeMotionState(
+        ctx,
+        gobj,
+        msid,
+        flags,
+        (fp).cur_anim_frame(),
+        1.0,
+        0.0,
+        null::<HSD_GObj<'a>>(ctx),
+    );
 }
 
 fn inl_doPeHitAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
@@ -631,6 +800,22 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x8010c8d8,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftKb_SpecialNPe_8010C8D8(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8010c9cc,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftKb_SpecialNPe_8010C9CC(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x8010cab4,
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
@@ -691,6 +876,22 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(ftKb_PeSpecialAirLwHit_Coll(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8010cc6c,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftKb_SpecialNGw_8010CC6C(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8010ccd4,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftKb_SpecialNGw_8010CCD4(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

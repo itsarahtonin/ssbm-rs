@@ -26,6 +26,18 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn lbAudioAx_8002305C<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) -> i32 {
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    if (arg0 >= 0_i32) && (arg0 < 33_i32) {
+        return (statics::melee__lb__lbaudio_ax::unk_arr_803BC4A0(ctx)
+            .get(arg0)
+            .at(arg1)
+            .get() as i32);
+    }
+    return 98_i32;
+}
+
 pub fn lbAudioAx_80023090<'a>(ctx: &'a Ctx, idx: i32) -> i32 {
     let mut idx = idx;
     if idx < 0_i32 {
@@ -4315,6 +4327,14 @@ fn inl_lbAudioAx_80024BD0_unfused<'a>(ctx: &'a Ctx) -> i32 {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x8002305c,
+        |ctx| {
+            let (a0, a1): (i32, i32) = Args::take_all(ctx);
+            Ret::put(lbAudioAx_8002305C(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
     ctx.register_port(
         0x80023090,
         |ctx| {

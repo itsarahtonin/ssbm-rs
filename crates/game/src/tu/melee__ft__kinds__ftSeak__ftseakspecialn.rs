@@ -441,6 +441,42 @@ pub fn ftSk_SpecialAirNEnd_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::ft_80084EEC(ctx, gobj);
 }
 
+pub fn ftSk_SpecialNStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
+        inl_ftCommon_GroundToAirStateChange_unfused(
+            ctx,
+            gobj,
+            fp,
+            (enums::ftSk_MS_SpecialAirNStart as i32),
+            0xc4c5080_u32,
+        );
+        {
+            inl_Fighter_SetDamageCallback_unfused(ctx, gobj, fnptr(ctx, 0x80110198));
+        }
+    }
+}
+
+pub fn ftSk_SpecialNLoop_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
+        inl_ftCommon_GroundToAirStateChange_unfused(
+            ctx,
+            gobj,
+            fp,
+            (enums::ftSk_MS_SpecialAirNLoop as i32),
+            0xc4c5080_u32,
+        );
+        inl_Fighter_SetDamageCallback_unfused(ctx, gobj, fnptr(ctx, 0x80110198));
+    }
+}
+
 pub fn ftSk_SpecialNCancel_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
@@ -496,6 +532,18 @@ pub fn ftSk_SpecialNEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             );
         }
     }
+}
+
+pub fn ftSk_SpecialAirNStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut gobj = gobj;
+    inl_doColl_unfused(ctx, gobj, (enums::ftSk_MS_SpecialNStart as i32));
+}
+
+pub fn ftSk_SpecialAirNLoop_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut gobj = gobj;
+    inl_doColl_unfused(ctx, gobj, (enums::ftSk_MS_SpecialNLoop as i32));
 }
 
 pub fn ftSk_SpecialAirNCancel_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -671,6 +719,65 @@ fn inl_doIasa_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, end_msid: i32, cance
             fp::frsp(0_i32 as f64),
             null::<HSD_GObj<'a>>(ctx),
         );
+        inl_Fighter_SetDamageCallback_unfused(ctx, gobj, fnptr(ctx, 0x80110198));
+    }
+}
+
+fn inl_ftCommon_GroundToAirStateChange_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    fp: Fighter<'a>,
+    msid: i32,
+    flags: u32,
+) {
+    let mut gobj = gobj;
+    let mut fp = fp;
+    let mut msid = msid;
+    let mut flags = flags;
+    fns::ftCommon_8007D5D4(ctx, fp);
+    fns::Fighter_ChangeMotionState(
+        ctx,
+        gobj,
+        msid,
+        flags,
+        (fp).cur_anim_frame(),
+        1.0,
+        0.0,
+        null::<HSD_GObj<'a>>(ctx),
+    );
+}
+
+fn inl_ftCommon_AirToGroundStateChange_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    fp: Fighter<'a>,
+    msid: i32,
+    flags: u32,
+) {
+    let mut gobj = gobj;
+    let mut fp = fp;
+    let mut msid = msid;
+    let mut flags = flags;
+    fns::ftCommon_8007D7FC(ctx, fp);
+    fns::Fighter_ChangeMotionState(
+        ctx,
+        gobj,
+        msid,
+        flags,
+        (fp).cur_anim_frame(),
+        1.0,
+        0.0,
+        null::<HSD_GObj<'a>>(ctx),
+    );
+}
+
+fn inl_doColl_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
+    let mut gobj = gobj;
+    let mut msid = msid;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if (fns::ft_80081D0C(ctx, gobj) as u32) != ((enums::GA_Ground as i32) as u32) {
+        inl_ftCommon_AirToGroundStateChange_unfused(ctx, gobj, fp, msid, 0xc4c5080_u32);
         inl_Fighter_SetDamageCallback_unfused(ctx, gobj, fnptr(ctx, 0x80110198));
     }
 }
@@ -907,6 +1014,22 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x80112978,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftSk_SpecialNStart_Coll(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801129f8,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftSk_SpecialNLoop_Coll(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x80112a78,
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
@@ -919,6 +1042,22 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(ftSk_SpecialNEnd_Coll(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80112b98,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftSk_SpecialAirNStart_Coll(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80112c18,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftSk_SpecialAirNLoop_Coll(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

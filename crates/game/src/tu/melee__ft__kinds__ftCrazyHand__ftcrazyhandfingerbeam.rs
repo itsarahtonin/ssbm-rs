@@ -86,6 +86,38 @@ pub fn ftCh_FingerBeamLoop_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn ftCh_FingerBeamLoop_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x50);
+    let sp28_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vel: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+    let mut da: _ftCrazyHandAttributes<'a> =
+        Handle::cast::<_ftCrazyHandAttributes<'a>>(((fp).ft_data()).ext_attr());
+    let mut len: f64 = 0.0;
+    let mut speed: f64 = 0.0;
+    let mut pad: u32 = 0;
+    fns::ft_80085134(ctx, gobj);
+    fns::ftBossLib_8015C208(ctx, gobj, sp28_pos);
+    sp28_pos.set_x(fp::fadds(sp28_pos.x(), (da).xBC_pos().y()));
+    sp28_pos.set_y(fp::fadds(sp28_pos.y(), (da).xC4_pos().x()));
+    sp28_pos.set_z(fp::frsp(0_i32 as f64));
+    let _ = fns::lbVector_Diff(ctx, sp28_pos, (fp).cur_pos(), vel);
+    len = inl_my_lbVector_Len(ctx, vel);
+    if len < (da).x14() {
+        (fp).self_vel().set_x(vel.x());
+        (fp).self_vel().set_y(vel.y());
+    } else {
+        let _ = fns::lbVector_Normalize(ctx, vel);
+        speed = fp::fmuls(len, (da).x10());
+        vel.set_x(fp::fmuls(vel.x(), speed));
+        vel.set_y(fp::fmuls(vel.y(), speed));
+        vel.set_z(fp::fmuls(vel.z(), speed));
+        (fp).self_vel().set_x(vel.x());
+        (fp).self_vel().set_y(vel.y());
+    }
+}
+
 pub fn ftCh_FingerBeamLoop_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
 }
@@ -328,6 +360,44 @@ fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     return (gobj).user_data();
 }
 
+fn inl_my_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+    let mut x = x;
+    let mut pad: u32 = 0;
+    let mut y: f64 = 0.0;
+    if x > fp::frsp(0_i32 as f64) {
+        let mut guess: f64 = fp::frsqrte(x);
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        y = fp::frsp((fp::fmul(x, guess)));
+        return y;
+    }
+    return x;
+}
+
+fn inl_my_lbVector_Len<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
+    let mut vec = vec;
+    return inl_my_sqrtf(
+        ctx,
+        fp::fadds(
+            fp::fadds(
+                fp::fmuls((vec).x(), (vec).x()),
+                fp::fmuls((vec).y(), (vec).y()),
+            ),
+            fp::fmuls((vec).z(), (vec).z()),
+        ),
+    );
+}
+
 fn inl_ftCh_UpdateBossMotion_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -371,6 +441,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(ftCh_FingerBeamLoop_IASA(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80158c88,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftCh_FingerBeamLoop_Phys(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

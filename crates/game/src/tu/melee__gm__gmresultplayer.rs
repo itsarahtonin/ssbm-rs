@@ -158,6 +158,53 @@ pub fn fn_80177920<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn fn_80177B7C<'a>(ctx: &'a Ctx, slot: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x38);
+    let abs_stick_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x4);
+    let mut slot = slot;
+    {
+        let mut stick_y: f64 = fns::HSD_PadCopyStatus(ctx)
+            .get(((slot as u8) as i32))
+            .nml_stickY();
+        abs_stick_y.set(stick_y);
+        let mut trigger: u32 = 0;
+        let mut result: i32 = 0_i32;
+        'l1: loop {
+            'c2: {}
+            if !(0_i32 != 0) {
+                break 'l1;
+            }
+        }
+        (Handle::cast::<Val<'a, u32>>(abs_stick_y))
+            .set(((Handle::cast::<Val<'a, u32>>(abs_stick_y)).get() & (!0x80000000_u32)));
+        if abs_stick_y.get() < 0.30000001192092896 {
+            stick_y = fp::frsp(0_i32 as f64);
+        }
+        trigger = fns::HSD_PadCopyStatus(ctx)
+            .get(((slot as u8) as i32))
+            .trigger();
+        if ((trigger
+            & (((shl_i32(1_i32, (9_i32 as u32))) | (shl_i32(1_i32, (18_i32 as u32)))) as u32))
+            != 0)
+        {
+            result = inl_pagePrev_unfused(ctx, slot);
+        } else if ((trigger
+            & (((shl_i32(1_i32, (8_i32 as u32))) | (shl_i32(1_i32, (19_i32 as u32)))) as u32))
+            != 0)
+        {
+            result = inl_pageNext_unfused(ctx, slot);
+        } else if stick_y < fp::frsp(0_i32 as f64) {
+            result = inl_scrollDown_unfused(ctx, slot, fp::fneg(stick_y));
+        } else if stick_y > fp::frsp(0_i32 as f64) {
+            result = inl_scrollUp_unfused(ctx, slot, stick_y);
+        }
+        return result;
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 pub fn fn_80177DD0<'a>(ctx: &'a Ctx, slot: i32) -> i32 {
     let __frame = ctx.stack_frame(0x30);
     let mut slot = slot;
@@ -1233,6 +1280,105 @@ fn inl_inline0_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, f: f64) {
     fns::HSD_JObjAnimAll(ctx, jobj);
 }
 
+fn inl_pagePrev_unfused<'a>(ctx: &'a Ctx, slot: i32) -> i32 {
+    let mut slot = slot;
+    let mut data: ResultsData<'a> = fns::lbl_8046DBE8(ctx);
+    if ((data).player_data().get(slot).page() as i32) != 0_i32 {
+        (data)
+            .player_data()
+            .get(slot)
+            .set_page((data).player_data().get(slot).page().wrapping_sub(1));
+        (data).player_data().get(slot).set_scroll_offset(0.0);
+        fns::fn_80174380(ctx);
+        return 1_i32;
+    } else {
+        return 0_i32;
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
+fn inl_pageNext_unfused<'a>(ctx: &'a Ctx, slot: i32) -> i32 {
+    let mut slot = slot;
+    let mut data: ResultsData<'a> = fns::lbl_8046DBE8(ctx);
+    if ((data).player_data().get(slot).page() as i32)
+        < ((data).num_pages() as i32).wrapping_sub(1_i32)
+    {
+        (data)
+            .player_data()
+            .get(slot)
+            .set_page((data).player_data().get(slot).page().wrapping_add(1));
+        (data).player_data().get(slot).set_scroll_offset(0.0);
+        fns::fn_80174380(ctx);
+        return 1_i32;
+    } else {
+        return 0_i32;
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
+fn inl_scrollDown_unfused<'a>(ctx: &'a Ctx, slot: i32, amount: f64) -> i32 {
+    let mut slot = slot;
+    let mut amount = amount;
+    let mut scroll_max: i32 = 0;
+    let mut arg: i32 = slot;
+    let mut data: ResultsData<'a> = fns::lbl_8046DBE8(ctx);
+    amount = fp::fmuls(amount, 0.20000000298023224);
+    scroll_max = fns::fn_80174A60(
+        ctx,
+        Handle::cast::<StatsList<'a>>(fns::fn_801748EC(
+            ctx,
+            Handle::cast::<Addr<'a>>(ptr::<ArrP<'a, Addr<'a>, 0>>(ctx, 0x803d6878)),
+            ((data).player_data().get(slot).page() as i32),
+            (slot | arg),
+        )),
+        slot,
+    )
+    .wrapping_sub(10_i32);
+    if (data).player_data().get(slot).scroll_offset() < fp::frsp(scroll_max as f64) {
+        (data).player_data().get(slot).set_scroll_offset(fp::fadds(
+            (data).player_data().get(slot).scroll_offset(),
+            amount,
+        ));
+        if (data).player_data().get(slot).scroll_offset() > fp::frsp(scroll_max as f64) {
+            (data)
+                .player_data()
+                .get(slot)
+                .set_scroll_offset(fp::frsp(scroll_max as f64));
+        }
+        return 1_i32;
+    } else {
+        return 0_i32;
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
+fn inl_scrollUp_unfused<'a>(ctx: &'a Ctx, slot: i32, amount: f64) -> i32 {
+    let mut slot = slot;
+    let mut amount = amount;
+    let mut data: ResultsData<'a> = fns::lbl_8046DBE8(ctx);
+    amount = fp::fmuls(amount, 0.20000000298023224);
+    if (data).player_data().get(slot).scroll_offset() > fp::frsp(0_i32 as f64) {
+        (data).player_data().get(slot).set_scroll_offset(fp::fsubs(
+            (data).player_data().get(slot).scroll_offset(),
+            amount,
+        ));
+        if (data).player_data().get(slot).scroll_offset() < fp::frsp(0_i32 as f64) {
+            (data)
+                .player_data()
+                .get(slot)
+                .set_scroll_offset(fp::frsp(0_i32 as f64));
+        }
+        return 1_i32;
+    } else {
+        return 0_i32;
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 fn inl_fn_80178BB4_init_players_unfused<'a>(
     ctx: &'a Ctx,
     data: ResultsData<'a>,
@@ -1716,6 +1862,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(fn_80177920(ctx, a0), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80177b7c,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(fn_80177B7C(ctx, a0), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x80177dd0,

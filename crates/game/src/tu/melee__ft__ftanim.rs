@@ -573,6 +573,107 @@ pub fn ftAnim_8006EBA4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::ftCo_800DB500(ctx, gobj);
 }
 
+pub fn ftAnim_8006EBE8<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    anim_start: f64,
+    anim_rate: f64,
+    anim_blend_frames: f64,
+) {
+    let __frame = ctx.stack_frame(0x50);
+    let mut gobj = gobj;
+    let mut anim_start = anim_start;
+    let mut anim_rate = anim_rate;
+    let mut anim_blend_frames = anim_blend_frames;
+    let mut root_jobj: HSD_JObj<'a> =
+        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut anim_jobj: HSD_JObj<'a> = (fp).x8AC_animSkeleton();
+    fns::ftAnim_80070758(ctx, root_jobj);
+    fns::ftAnim_80070758(ctx, anim_jobj);
+    if anim_blend_frames == fp::frsp(0_i32 as f64) {
+        fns::ftAnim_8006FA58(
+            ctx,
+            fp,
+            (enums::FtPart_TransN as i32),
+            ((fp).x108_costume_joint()).child(),
+        );
+        fns::ftAnim_8006FE08(ctx, fp, 0_i32);
+        fns::ftAnim_80070710(ctx, root_jobj, anim_start);
+        if ((fp).x594().x0().x594_b1_loop() != 0) {
+            fns::HSD_ForeachAnim(
+                ctx,
+                Handle::cast::<Addr<'a>>(root_jobj),
+                (enums::JOBJ_TYPE as i32),
+                (0xfb7f_u32 as i32),
+                Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036401c)),
+                (enums::AOBJ_ARG_AU as i32),
+                &[VarArg::Int((shl_i32(1_i32, (29_i32 as u32))) as u32)],
+            );
+        }
+        fns::HSD_ForeachAnim(
+            ctx,
+            Handle::cast::<Addr<'a>>(root_jobj),
+            (enums::JOBJ_TYPE as i32),
+            (0xfb7f_u32 as i32),
+            Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036530c)),
+            (enums::AOBJ_ARG_AF as i32),
+            &[VarArg::Float(anim_rate)],
+        );
+    } else {
+        fns::ftAnim_8006FB88(
+            ctx,
+            fp,
+            (enums::FtPart_TransN as i32),
+            ((fp).x108_costume_joint()).child(),
+        );
+        fns::ftAnim_8006FE08(ctx, fp, 1_i32);
+        fns::ftAnim_80070710(ctx, anim_jobj, anim_start);
+        fns::ftAnim_80070710(ctx, root_jobj, anim_start);
+        if ((fp).x594().x0().x594_b1_loop() != 0) {
+            fns::HSD_ForeachAnim(
+                ctx,
+                Handle::cast::<Addr<'a>>(anim_jobj),
+                (enums::JOBJ_TYPE as i32),
+                (0xfb7f_u32 as i32),
+                Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036401c)),
+                (enums::AOBJ_ARG_AU as i32),
+                &[VarArg::Int((shl_i32(1_i32, (29_i32 as u32))) as u32)],
+            );
+            fns::HSD_ForeachAnim(
+                ctx,
+                Handle::cast::<Addr<'a>>(root_jobj),
+                (enums::JOBJ_TYPE as i32),
+                (0xfb7f_u32 as i32),
+                Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036401c)),
+                (enums::AOBJ_ARG_AU as i32),
+                &[VarArg::Int((shl_i32(1_i32, (29_i32 as u32))) as u32)],
+            );
+        }
+        fns::HSD_ForeachAnim(
+            ctx,
+            Handle::cast::<Addr<'a>>(anim_jobj),
+            (enums::JOBJ_TYPE as i32),
+            (0xfb7f_u32 as i32),
+            Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036530c)),
+            (enums::AOBJ_ARG_AF as i32),
+            &[VarArg::Float(anim_rate)],
+        );
+        fns::HSD_ForeachAnim(
+            ctx,
+            Handle::cast::<Addr<'a>>(root_jobj),
+            (enums::JOBJ_TYPE as i32),
+            (0xfb7f_u32 as i32),
+            Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036530c)),
+            (enums::AOBJ_ARG_AF as i32),
+            &[VarArg::Float(anim_rate)],
+        );
+    }
+    (fp).set_x8A4_animBlendFrames(anim_blend_frames);
+    (fp).set_x8A8_anim_frame(fp::frsp(0_i32 as f64));
+}
+
 pub fn ftAnim_8006EDD0<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32, arg8: f64, arg9: f64) {
     let __frame = ctx.stack_frame(0x38);
     let mut fp = fp;
@@ -2609,6 +2710,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(ftAnim_8006EBA4(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8006ebe8,
+        |ctx| {
+            let (a0, a1, a2, a3): (HSD_GObj<'_>, Single, Single, Single) = Args::take_all(ctx);
+            Ret::put(ftAnim_8006EBE8(ctx, a0, a1.0, a2.0, a3.0), ctx);
         },
         Returns::Nothing,
     );

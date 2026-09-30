@@ -139,6 +139,28 @@ pub fn itSamusbomb_UnkMotion2_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
     return 0_i32;
 }
 
+pub fn itSamusbomb_UnkMotion2_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+    let mut attr: itSamusBombAttributes<'a> =
+        Handle::cast::<itSamusBombAttributes<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
+    let mut mult: f64 = 0.0;
+    if inl_my_sqrtf(
+        ctx,
+        (fp::fadds(
+            (fp::fmuls(((ip).x7C().x()), ((ip).x7C().x()))),
+            (fp::fmuls(((ip).x7C().y()), ((ip).x7C().y()))),
+        )),
+    ) > (attr).xC()
+    {
+        let _ = fns::lbVector_NormalizeXY(ctx, (ip).x7C());
+        mult = (attr).xC();
+        (ip).x7C().set_x(fp::fmuls((ip).x7C().x(), mult));
+        (ip).x7C().set_y(fp::fmuls((ip).x7C().y(), mult));
+    }
+}
+
 pub fn itSamusbomb_UnkMotion2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
@@ -404,6 +426,34 @@ fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     return (gobj).user_data();
 }
 
+fn inl_my_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+    let mut x = x;
+    let mut unused: u32 = (0_i32 as u32);
+    let mut y: f64 = 0.0;
+    if x > fp::frsp(0_i32 as f64) {
+        let mut guess: f64 = fp::frsqrte(x);
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        y = fp::frsp((fp::fmul(x, guess)));
+        return y;
+    }
+    return x;
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -501,6 +551,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(itSamusbomb_UnkMotion2_Anim(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x802b51a0,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(itSamusbomb_UnkMotion2_Phys(ctx, a0), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x802b5284,

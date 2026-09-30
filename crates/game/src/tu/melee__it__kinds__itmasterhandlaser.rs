@@ -164,6 +164,166 @@ pub fn it_802F05A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::it_80275820(ctx, gobj, sp28, sp1C, 0_i32);
 }
 
+pub fn it_802F063C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x90);
+    let pos_0: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos_1: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let translate: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let _padA: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x30);
+    let sqrt_0: Val<'a, F32> = frame_at(ctx, &__frame, 0x34);
+    let sqrt_1: Val<'a, F32> = frame_at(ctx, &__frame, 0x38);
+    let sqrt_2: Val<'a, F32> = frame_at(ctx, &__frame, 0x3c);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x40);
+    let mut gobj = gobj;
+    let mut arg1 = arg1;
+    let mut fp: Fighter<'a> = null(ctx);
+    let mut ip: Item<'a> = null(ctx);
+    let mut attrs: itMasterHandLaserAttributes<'a> = null(ctx);
+    let mut x0: f64 = 0.0;
+    let mut y0: f64 = 0.0;
+    let mut x1: f64 = 0.0;
+    let mut y1: f64 = 0.0;
+    let mut z_diff: f64 = 0.0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    ip = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+    fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, (ip).owner())));
+    attrs = Handle::cast::<itMasterHandLaserAttributes<'a>>(
+        ((ip).xC4_article_data()).x4_specialAttributes(),
+    );
+    fns::lb_8000B804(
+        ctx,
+        inl_HSD_JObjGetChild(ctx, Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj())),
+        ((ip).xC8_joint()).child(),
+    );
+    fns::lb_8000B1CC(
+        ctx,
+        (Handle::add((fp).parts(), (ip).xDD4_itemVar().masterhandlaser().x4())).joint(),
+        null::<Vec<'a>>(ctx),
+        pos_0,
+    );
+    y0 = pos_0.y();
+    x0 = pos_0.x();
+    translate.set_x(0.0);
+    translate.set_y(fp::fneg((attrs).x0()));
+    translate.set_z(0.0);
+    inl_HSD_JObjSetTranslate(
+        ctx,
+        ((ip).xBBC_dynamicBoneTable()).bones().at(2_i32).get(),
+        translate,
+    );
+    fns::lb_8000B1CC(
+        ctx,
+        ((ip).xBBC_dynamicBoneTable()).bones().at(2_i32).get(),
+        null::<Vec<'a>>(ctx),
+        pos_2,
+    );
+    x1 = pos_2.x();
+    y1 = pos_2.y();
+    if fns::mpCheckMultiple(
+        ctx,
+        x0,
+        y0,
+        x1,
+        y1,
+        pos_1,
+        null::<Val<'a, i32>>(ctx),
+        null::<Val<'a, u32>>(ctx),
+        null::<Vec<'a>>(ctx),
+        (1_i32 as u32),
+        1_i32.wrapping_neg(),
+        1_i32.wrapping_neg(),
+    ) != 0_i32
+    {
+        translate.set_x(0.0);
+        translate.set_z(0.0);
+        translate.set_y(fp::fmuls(
+            inl_sqrtf_store(
+                ctx,
+                fp::fmadds(
+                    ({
+                        let __t2 = fp::fsubs(pos_0.z(), pos_2.z());
+                        z_diff = __t2;
+                        __t2
+                    }),
+                    (fp::fsubs(pos_0.z(), pos_2.z())),
+                    fp::fmadds(
+                        (fp::fsubs(pos_0.x(), pos_2.x())),
+                        (fp::fsubs(pos_0.x(), pos_2.x())),
+                        (fp::fmuls(
+                            (fp::fsubs(pos_0.y(), pos_2.y())),
+                            (fp::fsubs(pos_0.y(), pos_2.y())),
+                        )),
+                    ),
+                ),
+                sqrt_0,
+            ),
+            fp::fneg(
+                (fp::fdivs(
+                    inl_sqrtf_store(
+                        ctx,
+                        fp::fmadds(
+                            (fp::fsubs(pos_0.x(), pos_1.x())),
+                            (fp::fsubs(pos_0.x(), pos_1.x())),
+                            (fp::fmuls(
+                                (fp::fsubs(pos_0.y(), pos_1.y())),
+                                (fp::fsubs(pos_0.y(), pos_1.y())),
+                            )),
+                        ),
+                        sqrt_1,
+                    ),
+                    inl_sqrtf_store(
+                        ctx,
+                        fp::fmadds(
+                            (fp::fsubs(pos_0.x(), pos_2.x())),
+                            (fp::fsubs(pos_0.x(), pos_2.x())),
+                            (fp::fmuls(
+                                (fp::fsubs(pos_0.y(), pos_2.y())),
+                                (fp::fsubs(pos_0.y(), pos_2.y())),
+                            )),
+                        ),
+                        sqrt_2,
+                    ),
+                )),
+            ),
+        ));
+        inl_HSD_JObjSetTranslate(
+            ctx,
+            ((ip).xBBC_dynamicBoneTable()).bones().at(2_i32).get(),
+            translate,
+        );
+        if {
+            (ip).xDD4_itemVar()
+                .masterhandlaser()
+                .set_x8((ip).xDD4_itemVar().masterhandlaser().x8().wrapping_sub(1));
+            (ip).xDD4_itemVar().masterhandlaser().x8()
+        } < 0_i32
+        {
+            fns::lb_8000B1CC(
+                ctx,
+                ((ip).xBBC_dynamicBoneTable()).bones().at(2_i32).get(),
+                null::<Vec<'a>>(ctx),
+                pos_2,
+            );
+            let _ = fns::efSync_Spawn(ctx, 0x405_i32, gobj, &[VarArg::Int(Handle::addr(pos_2))]);
+            (ip).xDD4_itemVar()
+                .masterhandlaser()
+                .set_x8(fp::fctiwz((attrs).x4()));
+        }
+    } else {
+        inl_HSD_JObjSetTranslate(
+            ctx,
+            ((ip).xBBC_dynamicBoneTable()).bones().at(2_i32).get(),
+            translate,
+        );
+    }
+}
+
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
@@ -282,6 +442,29 @@ fn inl_HSD_JObjSetTranslate<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec
     }
 }
 
+fn inl_sqrtf_store<'a>(ctx: &'a Ctx, x: f64, y: Val<'a, F32>) -> f64 {
+    let mut x = x;
+    let mut y = y;
+    if x > 0.0 {
+        let mut guess: f64 = fp::frsqrte(x);
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        (y).set(fp::frsp((fp::fmul(x, guess))));
+        return (y).get();
+    }
+    return x;
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -346,6 +529,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(it_802F05A8(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x802f063c,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, HSD_GObj<'_>) = Args::take_all(ctx);
+            Ret::put(it_802F063C(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );

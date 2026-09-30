@@ -114,9 +114,87 @@ pub fn ftMh_Poke1_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn ftMh_Poke1_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x48);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vel: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
+    fns::ft_80085134(ctx, gobj);
+    if ((fp).mv().mh().unk13().x4() != 0.0) {
+        let mut ftData_: ftData<'a> = (fp).ft_data();
+        let mut da: ftMasterHand_SpecialAttrs<'a> =
+            Handle::cast::<ftMasterHand_SpecialAttrs<'a>>((ftData_).ext_attr());
+        {
+            fns::ftBossLib_8015C208(ctx, gobj, pos);
+            pos.set_x(fp::fadds(pos.x(), (da).x98()));
+            pos.set_y(fp::fadds(pos.y(), (da).x9C()));
+            pos.set_z(fp::frsp(0_i32 as f64));
+            {
+                let _ = fns::lbVector_Diff(ctx, pos, (fp).cur_pos(), vel);
+                {
+                    let mut len: f64 = inl_my_lbVector_Len(ctx, vel);
+                    if len < (da).x2C() {
+                        (fp).self_vel().set_x(vel.x());
+                        (fp).self_vel().set_y(vel.y());
+                    } else {
+                        let _ = fns::lbVector_Normalize(ctx, vel);
+                        {
+                            let mut speed: f64 = fp::fmuls(len, (da).x28());
+                            vel.set_x(fp::fmuls(vel.x(), speed));
+                            vel.set_y(fp::fmuls(vel.y(), speed));
+                            vel.set_z(fp::fmuls(vel.z(), speed));
+                        }
+                        (fp).self_vel().set_x(vel.x());
+                        (fp).self_vel().set_y(vel.y());
+                    }
+                }
+            }
+        }
+    }
+}
+
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
+}
+
+fn inl_my_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+    let mut x = x;
+    let mut unused: u32 = (0_i32 as u32);
+    let mut y: f64 = 0.0;
+    if x > fp::frsp(0_i32 as f64) {
+        let mut guess: f64 = fp::frsqrte(x);
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        y = fp::frsp((fp::fmul(x, guess)));
+        return y;
+    }
+    return x;
+}
+
+fn inl_my_lbVector_Len<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
+    let mut vec = vec;
+    return inl_my_sqrtf(
+        ctx,
+        fp::fadds(
+            fp::fadds(
+                fp::fmuls((vec).x(), (vec).x()),
+                fp::fmuls((vec).y(), (vec).y()),
+            ),
+            fp::fmuls((vec).z(), (vec).z()),
+        ),
+    );
 }
 
 /// Registers this unit's ports.
@@ -158,6 +236,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(ftMh_Poke1_IASA(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80152a50,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftMh_Poke1_Phys(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

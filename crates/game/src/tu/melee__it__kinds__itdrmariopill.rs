@@ -238,6 +238,31 @@ pub fn itDrMarioPill_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let _ = fns::it_80274658(ctx, gobj, (fns::it_804D6D28(ctx).get()).x68_float());
 }
 
+pub fn itDrmariopill_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x20);
+    let mut gobj = gobj;
+    let _ = fns::it_8026D9A0(ctx, gobj);
+    fns::it_8026B3A8(ctx, gobj);
+    if fns::it_8027781C(ctx, gobj) != 0_i32 {
+        let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+        let mut attrs: itDrMarioPillAttributes<'a> = (Handle::cast::<itDrMarioPillAttributes<'a>>(
+            ((ip).xC4_article_data()).x4_specialAttributes(),
+        ));
+        if inl_my_sqrtf(
+            ctx,
+            (fp::fadds(
+                (fp::fmuls(((ip).x40_vel().x()), ((ip).x40_vel().x()))),
+                (fp::fmuls(((ip).x40_vel().y()), ((ip).x40_vel().y()))),
+            )),
+        ) < (attrs).x10()
+        {
+            return 1_i32;
+        }
+        fns::Item_8026AE84(ctx, ip, 0x15fae_i32, (127_i32 as u8), (64_i32 as u8));
+    }
+    return 0_i32;
+}
+
 pub fn itDrMarioPill_802C0DBC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
@@ -658,6 +683,34 @@ fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     return (gobj).user_data();
 }
 
+fn inl_my_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+    let mut x = x;
+    let mut unused: u32 = (0_i32 as u32);
+    let mut y: f64 = 0.0;
+    if x > fp::frsp(0_i32 as f64) {
+        let mut guess: f64 = fp::frsqrte(x);
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        y = fp::frsp((fp::fmul(x, guess)));
+        return y;
+    }
+    return x;
+}
+
 fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).hsd_obj();
@@ -858,6 +911,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(itDrMarioPill_UnkMotion0_Phys(ctx, a0), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x802c0cc4,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(itDrmariopill_UnkMotion0_Coll(ctx, a0), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x802c0dbc,

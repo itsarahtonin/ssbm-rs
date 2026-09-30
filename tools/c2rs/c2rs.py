@@ -1281,6 +1281,9 @@ class Translator:
         key = vkey(d)
         if d.storage_class == ci.StorageClass.STATIC:
             addr = self.u.static_addrs.get(key)
+            const = var_init(d)
+            if addr is None and d.type.is_const_qualified() and (is_int(t) or is_float(t)) and                     const is not None and evaluate(const) is not None:
+                return []  # a constant MWCC folded into its uses; references evaluate it
             if addr is None:
                 raise Unsupported("static local without an address")
             self.f.locals[key] = (f"At::new(ctx, {addr:#x}).field::<{self.u.storage_ty(t)}>(0)", t, "fixed")

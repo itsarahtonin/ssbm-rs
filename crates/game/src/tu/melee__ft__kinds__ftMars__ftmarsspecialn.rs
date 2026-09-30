@@ -156,6 +156,34 @@ pub fn ftMs_SpecialAirNStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn ftMs_SpecialN_80136A1C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    inl_ftCommon_GroundToAirStateChange_unfused(
+        ctx,
+        gobj,
+        fp,
+        (enums::ftMs_MS_SpecialAirNStart as i32),
+        0xc4c5084_u32,
+    );
+}
+
+pub fn ftMs_SpecialN_80136A7C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    inl_ftCommon_AirToGroundStateChange_unfused(
+        ctx,
+        gobj,
+        fp,
+        (enums::ftMs_MS_SpecialNStart as i32),
+        0xc4c5084_u32,
+    );
+}
+
 pub fn ftMs_SpecialNLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
     let mut gobj = gobj;
@@ -206,6 +234,34 @@ pub fn ftMs_SpecialAirNLoop_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     if (fns::ft_80081D0C(ctx, gobj) as u32) != ((enums::GA_Ground as i32) as u32) {
         fns::ftMs_SpecialN_80136E14(ctx, gobj);
     }
+}
+
+pub fn ftMs_SpecialN_80136DB4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    inl_ftCommon_GroundToAirStateChange_unfused(
+        ctx,
+        gobj,
+        fp,
+        (enums::ftMs_MS_SpecialAirNLoop as i32),
+        0xc4c5a86_u32,
+    );
+}
+
+pub fn ftMs_SpecialN_80136E14<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    inl_ftCommon_AirToGroundStateChange_unfused(
+        ctx,
+        gobj,
+        fp,
+        (enums::ftMs_MS_SpecialNLoop as i32),
+        0xc4c5a86_u32,
+    );
 }
 
 pub fn ftMs_SpecialN_80136E74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -286,6 +342,40 @@ pub fn ftMs_SpecialAirNEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn ftMs_SpecialN_801371FC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut msid: i32 = 0;
+    if !((fp).cmd_vars().at(0_i32).get() != 0) {
+        msid = (enums::ftMs_MS_SpecialAirNEnd0 as i32);
+    } else {
+        msid = (enums::ftMs_MS_SpecialAirNEnd1 as i32);
+    }
+    inl_ftCommon_GroundToAirStateChange_unfused(ctx, gobj, fp, msid, 0xc4c508e_u32);
+    if ((fp).x2219_b0() as i32) == 1_i32 {
+        inl_Fighter_SetEffectHitlagCallbacks_unfused(ctx, fp);
+    }
+}
+
+pub fn ftMs_SpecialN_801372A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut msid: i32 = 0;
+    if !((fp).cmd_vars().at(0_i32).get() != 0) {
+        msid = (enums::ftMs_MS_SpecialNEnd0 as i32);
+    } else {
+        msid = (enums::ftMs_MS_SpecialNEnd1 as i32);
+    }
+    inl_ftCommon_AirToGroundStateChange_unfused(ctx, gobj, fp, msid, 0xc4c508e_u32);
+    if ((fp).x2219_b0() as i32) == 1_i32 {
+        inl_Fighter_SetEffectHitlagCallbacks_unfused(ctx, fp);
+    }
+}
+
 pub fn ftMs_SpecialN_80137354<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
@@ -354,6 +444,54 @@ fn inl_doStartAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) 
             }
         }
     }
+}
+
+fn inl_ftCommon_GroundToAirStateChange_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    fp: Fighter<'a>,
+    msid: i32,
+    flags: u32,
+) {
+    let mut gobj = gobj;
+    let mut fp = fp;
+    let mut msid = msid;
+    let mut flags = flags;
+    fns::ftCommon_8007D5D4(ctx, fp);
+    fns::Fighter_ChangeMotionState(
+        ctx,
+        gobj,
+        msid,
+        flags,
+        (fp).cur_anim_frame(),
+        1.0,
+        0.0,
+        null::<HSD_GObj<'a>>(ctx),
+    );
+}
+
+fn inl_ftCommon_AirToGroundStateChange_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    fp: Fighter<'a>,
+    msid: i32,
+    flags: u32,
+) {
+    let mut gobj = gobj;
+    let mut fp = fp;
+    let mut msid = msid;
+    let mut flags = flags;
+    fns::ftCommon_8007D7FC(ctx, fp);
+    fns::Fighter_ChangeMotionState(
+        ctx,
+        gobj,
+        msid,
+        flags,
+        (fp).cur_anim_frame(),
+        1.0,
+        0.0,
+        null::<HSD_GObj<'a>>(ctx),
+    );
 }
 
 fn inl_doLoopAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
@@ -497,6 +635,12 @@ fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
     }
 }
 
+fn inl_Fighter_SetEffectHitlagCallbacks_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    (fp).set_pre_hitlag_cb(fnptr(ctx, 0x8005ba40));
+    (fp).set_post_hitlag_cb(fnptr(ctx, 0x8005bac4));
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -580,6 +724,22 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x80136a1c,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftMs_SpecialN_80136A1C(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80136a7c,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftMs_SpecialN_80136A7C(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x80136adc,
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
@@ -640,6 +800,22 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(ftMs_SpecialAirNLoop_Coll(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80136db4,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftMs_SpecialN_80136DB4(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80136e14,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftMs_SpecialN_80136E14(ctx, a0), ctx);
         },
         Returns::Nothing,
     );
@@ -720,6 +896,22 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(ftMs_SpecialAirNEnd_Coll(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801371fc,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftMs_SpecialN_801371FC(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801372a8,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftMs_SpecialN_801372A8(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

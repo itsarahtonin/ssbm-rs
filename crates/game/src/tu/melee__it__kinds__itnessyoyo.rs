@@ -940,6 +940,38 @@ pub fn it_802BFE5C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>, unused: f
     fns::Item_80268E5C(ctx, gobj, 2_i32, (enums::ITEM_ANIM_UPDATE as i32));
 }
 
+pub fn it_802BFEC4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x78);
+    let _pad: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x10);
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+    let mut link2: ItemLink<'a> = (ip).xDD4_itemVar().nessyoyo().xC();
+    let mut link1: ItemLink<'a> = (ip).xDD4_itemVar().nessyoyo().x8();
+    fns::PSMTXIdentity(ctx, m.get(0));
+    m.get(0_i32).at(3_i32).set(0.0);
+    m.get(1_i32).at(3_i32).set(0.0);
+    m.get(2_i32).at(3_i32).set(0.0);
+    inl_HSD_JObjSetupMatrix(ctx, (link2).jobj());
+    fns::PSMTXConcat(ctx, ((link2).jobj()).mtx().get(0), m.get(0), m.get(0));
+    (ip).xDD4_itemVar().nessyoyo().set_x4(inl_my_sqrtf(
+        ctx,
+        fp::fmadds(
+            (fp::fsubs((link1).pos().x(), m.get(0_i32).at(3_i32).get())),
+            (fp::fsubs((link1).pos().x(), m.get(0_i32).at(3_i32).get())),
+            fp::fmuls(
+                (fp::fsubs((link1).pos().y(), m.get(1_i32).at(3_i32).get())),
+                (fp::fsubs((link1).pos().y(), m.get(1_i32).at(3_i32).get())),
+            ),
+        ),
+    ));
+    (ip).xDD4_itemVar().nessyoyo().set_x4(fp::fmuls(
+        (ip).xDD4_itemVar().nessyoyo().x4(),
+        0.10000000149011612,
+    ));
+    fns::Item_80268E5C(ctx, gobj, 3_i32, (enums::ITEM_ANIM_UPDATE as i32));
+}
+
 pub fn it_802C0010<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, vel: Vec<'a>) {
     let __frame = ctx.stack_frame(0x78);
     let pad_top: ArrV<'a, F32, 2> = frame_at(ctx, &__frame, 0x0);
@@ -1333,6 +1365,32 @@ fn inl_HSD_JObjSetupMatrix<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
     fns::HSD_JObjSetupMatrixSub(ctx, jobj);
 }
 
+fn inl_my_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+    let mut x = x;
+    let mut _0: u32 = (0_i32 as u32);
+    let mut _1: u32 = (0_i32 as u32);
+    let mut _2: u32 = (0_i32 as u32);
+    let mut y: f64 = 0.0;
+    if x > fp::frsp(0_i32 as f64) {
+        let mut guess: f64 = fp::frsqrte(x);
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        y = fp::frsp((fp::fmul(x, guess)));
+        return y;
+    }
+    return x;
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -1501,6 +1559,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1, a2): (HSD_GObj<'_>, Vec<'_>, Single) = Args::take_all(ctx);
             Ret::put(it_802BFE5C(ctx, a0, a1, a2.0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x802bfec4,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(it_802BFEC4(ctx, a0), ctx);
         },
         Returns::Nothing,
     );
