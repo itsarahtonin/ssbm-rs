@@ -119,6 +119,329 @@ pub fn psInitDataBankLoad<'a>(
     }
 }
 
+pub fn psInitDataBankLocate<'a>(
+    ctx: &'a Ctx,
+    cmdBank: HSD_Archive<'a>,
+    texBank: HSD_Archive<'a>,
+    formBank: Val<'a, i32>,
+) {
+    let mut cmdBank = cmdBank;
+    let mut texBank = texBank;
+    let mut formBank = formBank;
+    let mut num: i32 = 0;
+    let mut ptr_: Val<'a, i32> = null(ctx);
+    let mut group: Val<'a, i32> = null(ctx);
+    let mut fg: _HSD_PSFormGroup<'a> = null(ctx);
+    let mut j: i32 = 0;
+    let mut i: i32 = 0;
+    let mut num2: i32 = 0;
+    let mut groups: Val<'a, i32> = null(ctx);
+    let mut base: Val<'a, i32> = null(ctx);
+    let mut version: i32 = 0;
+    'goto_done_cmd: {
+        'goto_version40: {
+            'goto_version0: {
+                version = ((Handle::cast::<Val<'a, u16>>(cmdBank)).get() as i32);
+                if version < 64_i32 {
+                    if version == 0_i32 {
+                        break 'goto_version0;
+                    }
+                    break 'goto_done_cmd;
+                }
+                if version >= 68_i32 {
+                    break 'goto_done_cmd;
+                }
+                break 'goto_version40;
+            }
+            num2 = (Handle::add((Handle::cast::<Val<'a, i32>>(cmdBank)), 1_i32)).get();
+            base = Handle::cast::<Val<'a, i32>>(
+                (Handle::add(Handle::cast::<Val<'a, u8>>(cmdBank), 8_i32)),
+            );
+            num = 0_i32;
+            {
+                i = 0_i32;
+                'l1: while i < num2 {
+                    'c2: {
+                        (Handle::add(
+                            (Handle::cast::<Val<'a, i32>>(cmdBank)),
+                            i.wrapping_add(2_i32),
+                        ))
+                        .set(
+                            (Handle::add(
+                                (Handle::cast::<Val<'a, i32>>(cmdBank)),
+                                i.wrapping_add(2_i32),
+                            ))
+                            .get()
+                            .wrapping_add((Handle::addr(cmdBank) as i32)),
+                        );
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+            break 'goto_done_cmd;
+        }
+        num = (Handle::add((Handle::cast::<Val<'a, i32>>(cmdBank)), 1_i32)).get();
+        num2 = (Handle::add((Handle::cast::<Val<'a, i32>>(cmdBank)), 2_i32))
+            .get()
+            .wrapping_add(num);
+        base = Handle::add(
+            Handle::add(Handle::cast::<Val<'a, i32>>(cmdBank), 3_i32),
+            num.wrapping_neg(),
+        );
+        ptr_ = Handle::cast::<Val<'a, i32>>(cmdBank);
+        j = 0_i32;
+        'l3: while j < ((cmdBank).header().nb_reloc() as i32) {
+            'c4: {
+                if (Handle::add(ptr_, 3_i32)).get() != 0_i32 {
+                    (Handle::add(ptr_, 3_i32)).set(
+                        (Handle::add(ptr_, 3_i32))
+                            .get()
+                            .wrapping_add((Handle::addr(cmdBank) as i32)),
+                    );
+                }
+                ptr_ = Handle::add(ptr_, 1);
+                j = j.wrapping_add(1);
+            }
+        }
+    }
+    ptr_ = Handle::add(base, num);
+    {
+        i = num;
+        'l5: while i < num2 {
+            'c6: {
+                let mut cmd: Val<'a, i32> =
+                    ptr::<Val<'a, i32>>(ctx, (Handle::add(ptr_, 0_i32)).get() as u32);
+                if !Handle::is_null(cmd) {
+                    (Handle::add(cmd, 2_i32))
+                        .set(((((Handle::add(cmd, 2_i32)).get() as u32) & 0xf1ffffff_u32) as i32));
+                    cmd = ptr::<Val<'a, i32>>(ctx, (Handle::add(ptr_, 0_i32)).get() as u32);
+                    (Handle::add(cmd, 2_i32))
+                        .set(((Handle::add(cmd, 2_i32)).get() | 0x8000000_i32));
+                }
+                ptr_ = Handle::add(ptr_, 1);
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    {
+        let mut num_groups: i32 =
+            (Handle::add((Handle::cast::<Val<'a, i32>>(texBank)), 0_i32)).get();
+        let mut k: i32 = 0;
+        group = {
+            let __t1 = Handle::add(Handle::cast::<Val<'a, i32>>(texBank), 1_i32);
+            groups = __t1;
+            __t1
+        };
+        {
+            k = 1_i32;
+            'l7: while k <= num_groups {
+                'c8: {
+                    if (Handle::add(group, 0_i32)).get() != 0_i32 {
+                        (Handle::add(group, 0_i32)).set(
+                            (Handle::add(group, 0_i32))
+                                .get()
+                                .wrapping_add((Handle::addr(texBank) as i32)),
+                        );
+                    }
+                    group = Handle::add(group, 1);
+                }
+                k = k.wrapping_add(1);
+            }
+        }
+        {
+            group = groups;
+            {
+                k = 0_i32;
+                'l9: while k < num_groups {
+                    'c10: {
+                        let mut tg: _HSD_PSTexGroup<'a> = null(ctx);
+                        'goto_next_group: {
+                            tg = ptr::<_HSD_PSTexGroup<'a>>(
+                                ctx,
+                                (Handle::add(group, 0_i32)).get() as u32,
+                            );
+                            if Handle::is_null(tg) {
+                                break 'goto_next_group;
+                            }
+                            {
+                                let mut ti: i32 = 0;
+                                {
+                                    ti = 0_i32;
+                                    'l11: while (ti as u32)
+                                        < (ptr::<_HSD_PSTexGroup<'a>>(
+                                            ctx,
+                                            (Handle::add(group, 0_i32)).get() as u32,
+                                        ))
+                                        .num()
+                                    {
+                                        'c12: {
+                                            if !Handle::is_null(
+                                                (ptr::<_HSD_PSTexGroup<'a>>(
+                                                    ctx,
+                                                    (Handle::add(group, 0_i32)).get() as u32,
+                                                ))
+                                                .texTable()
+                                                .at(ti)
+                                                .get(),
+                                            ) {
+                                                (ptr::<_HSD_PSTexGroup<'a>>(
+                                                    ctx,
+                                                    (Handle::add(group, 0_i32)).get() as u32,
+                                                ))
+                                                .texTable()
+                                                .at(ti)
+                                                .set(Handle::add(
+                                                    (ptr::<_HSD_PSTexGroup<'a>>(
+                                                        ctx,
+                                                        (Handle::add(group, 0_i32)).get() as u32,
+                                                    ))
+                                                    .texTable()
+                                                    .at(ti)
+                                                    .get(),
+                                                    (Handle::addr(texBank) as i32),
+                                                ));
+                                            }
+                                        }
+                                        ti = ti.wrapping_add(1);
+                                    }
+                                }
+                                tg = ptr::<_HSD_PSTexGroup<'a>>(
+                                    ctx,
+                                    (Handle::add(group, 0_i32)).get() as u32,
+                                );
+                            }
+                            {
+                                let mut fmt: u32 = (tg).fmt();
+                                if (fmt != (8_i32 as u32))
+                                    && ((fmt.wrapping_sub((9_i32 as u32))) > (1_i32 as u32))
+                                {
+                                    break 'goto_next_group;
+                                }
+                            }
+                            if ((((tg).palflag() as i32) & 1_i32) != 0) {
+                                i = ((tg).num() as i32);
+                                if Handle::is_null((tg).texTable().at(i).get()) {
+                                    break 'goto_next_group;
+                                }
+                                (tg).texTable().at(i).set(Handle::add(
+                                    (tg).texTable().at(i).get(),
+                                    (Handle::addr(texBank) as i32),
+                                ));
+                            } else if ((tg).palnum() as i32) != 0_i32 {
+                                i = ((tg).num() as i32);
+                                {
+                                    'l13: while (i as u32)
+                                        < (ptr::<_HSD_PSTexGroup<'a>>(
+                                            ctx,
+                                            (Handle::add(group, 0_i32)).get() as u32,
+                                        ))
+                                        .num()
+                                        .wrapping_add(
+                                            ((ptr::<_HSD_PSTexGroup<'a>>(
+                                                ctx,
+                                                (Handle::add(group, 0_i32)).get() as u32,
+                                            ))
+                                            .palnum()
+                                                as u32),
+                                        )
+                                    {
+                                        'c14: {
+                                            let mut tg2: _HSD_PSTexGroup<'a> =
+                                                ptr::<_HSD_PSTexGroup<'a>>(
+                                                    ctx,
+                                                    (Handle::add(group, 0_i32)).get() as u32,
+                                                );
+                                            let mut entry: Ptr<'a, Val<'a, u8>> =
+                                                (tg2).texTable().at(i);
+                                            if !Handle::is_null((entry).get()) {
+                                                (entry).set(Handle::add(
+                                                    (entry).get(),
+                                                    (Handle::addr(texBank) as i32),
+                                                ));
+                                            }
+                                        }
+                                        i = i.wrapping_add(1);
+                                    }
+                                }
+                            } else {
+                                i = ((tg).num() as i32);
+                                {
+                                    'l15: while (i as u32)
+                                        < (ptr::<_HSD_PSTexGroup<'a>>(
+                                            ctx,
+                                            (Handle::add(group, 0_i32)).get() as u32,
+                                        ))
+                                        .num()
+                                        .wrapping_mul((2_i32 as u32))
+                                    {
+                                        'c16: {
+                                            let mut tg2_2: _HSD_PSTexGroup<'a> =
+                                                ptr::<_HSD_PSTexGroup<'a>>(
+                                                    ctx,
+                                                    (Handle::add(group, 0_i32)).get() as u32,
+                                                );
+                                            let mut entry_2: Ptr<'a, Val<'a, u8>> =
+                                                (tg2_2).texTable().at(i);
+                                            if !Handle::is_null((entry_2).get()) {
+                                                (entry_2).set(Handle::add(
+                                                    (entry_2).get(),
+                                                    (Handle::addr(texBank) as i32),
+                                                ));
+                                            }
+                                        }
+                                        i = i.wrapping_add(1);
+                                    }
+                                }
+                            }
+                        }
+                        group = Handle::add(group, 1);
+                    }
+                    k = k.wrapping_add(1);
+                }
+            }
+        }
+        if Handle::is_null(formBank) {
+            return;
+        }
+        {
+            {
+                i = 1_i32;
+                'l17: while i <= num_groups {
+                    'c18: {
+                        if (Handle::add(formBank, i)).get() != 0_i32 {
+                            let mut fi: i32 = 0;
+                            (Handle::add(formBank, i)).set(
+                                (Handle::add(formBank, i))
+                                    .get()
+                                    .wrapping_add((Handle::addr(formBank) as i32)),
+                            );
+                            fg = ptr::<_HSD_PSFormGroup<'a>>(
+                                ctx,
+                                (Handle::add(formBank, i)).get() as u32,
+                            );
+                            {
+                                fi = 0_i32;
+                                'l19: while (fi as u32) < (fg).num() {
+                                    'c20: {
+                                        if !Handle::is_null((fg).formTable().at(fi).get()) {
+                                            (fg).formTable().at(fi).set(Handle::add(
+                                                (fg).formTable().at(fi).get(),
+                                                (Handle::addr(formBank) as i32),
+                                            ));
+                                        }
+                                    }
+                                    fi = fi.wrapping_add(1);
+                                }
+                            }
+                        }
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+        }
+    }
+}
+
 pub fn psInitDataBank<'a>(
     ctx: &'a Ctx,
     bank: i32,
@@ -765,6 +1088,15 @@ pub fn register(ctx: &Ctx) {
                 Val<'_, i32>,
             ) = Args::take_all(ctx);
             Ret::put(psInitDataBankLoad(ctx, a0, a1, a2, a3, a4), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80398614,
+        |ctx| {
+            let (a0, a1, a2): (HSD_Archive<'_>, HSD_Archive<'_>, Val<'_, i32>) =
+                Args::take_all(ctx);
+            Ret::put(psInitDataBankLocate(ctx, a0, a1, a2), ctx);
         },
         Returns::Nothing,
     );

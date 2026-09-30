@@ -1287,6 +1287,229 @@ pub fn ftCo_800A21FC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     return 0_i32;
 }
 
+pub fn ftCo_800A229C<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x60);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp1C: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
+    let sp18: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x20);
+    let mut fp = fp;
+    let mut arg1 = arg1;
+    let mut stage: i32 = 0;
+    let mut w: f64 = 0.0;
+    let mut h: f64 = 0.0;
+    let mut bottom: f64 = 0.0;
+    let mut frac: f64 = 0.0;
+    let mut mag: f64 = 0.0;
+    let mut var_r0: i32 = 0;
+    'goto_block_43: {
+        'l1: loop {
+            'c2: {}
+            if !(0_i32 != 0) {
+                break 'l1;
+            }
+        }
+        if (fns::grGreatBay_801F66A4(ctx) != 0_i32) && ((fp).cur_pos().x() > fp::fneg(5.0)) {
+            Handle::copy_from((arg1), (fp).cur_pos());
+            return 2_i32;
+        }
+        if fns::grCastle_801CDF54(ctx, arg1) != 0_i32 {
+            return 1_i32;
+        }
+        if (fns::stage_info(ctx).grkind() as u32) != ((enums::Gr_Kind_Zebes as i32) as u32) {
+            var_r0 = 0_i32;
+        } else {
+            fns::Ground_801C4368(ctx, sp18, sp1C);
+            bottom = fns::Stage_GetBlastZoneBottomOffset(ctx);
+            if sp18.get() > bottom {
+                (arg1).set_x(fp::fmuls(
+                    0.5,
+                    (fp::fadds(
+                        fns::Stage_GetBlastZoneLeftOffset(ctx),
+                        fns::Stage_GetBlastZoneRightOffset(ctx),
+                    )),
+                ));
+                (arg1).set_y(bottom);
+                (arg1).set_z(0.0);
+                var_r0 = 1_i32;
+            } else {
+                var_r0 = 0_i32;
+            }
+        }
+        if var_r0 != 0_i32 {
+            return 1_i32;
+        }
+        stage = fns::stage_info(ctx).grkind();
+        let _ = fns::grLib_801C9E60(ctx, sp2C);
+        if (stage as u32) == ((enums::Gr_Kind_RCruise as i32) as u32) {
+            'goto_block_23: {
+                'goto_block_18: {
+                    w = fp::fsubs(
+                        fns::Stage_GetBlastZoneRightOffset(ctx),
+                        fns::Stage_GetBlastZoneLeftOffset(ctx),
+                    );
+                    if sp2C.x() < 0.0 {
+                        if (fp).cur_pos().x()
+                            < fp::fmadds(
+                                0.4000000059604645,
+                                w,
+                                fns::Stage_GetBlastZoneLeftOffset(ctx),
+                            )
+                        {
+                            Handle::copy_from((arg1), (fp).cur_pos());
+                            return 2_i32;
+                        }
+                        break 'goto_block_18;
+                    }
+                    if (fp).cur_pos().x()
+                        > fp::fneg(
+                            (fp::fmsubs(
+                                0.4000000059604645,
+                                w,
+                                fns::Stage_GetBlastZoneRightOffset(ctx),
+                            )),
+                        )
+                    {
+                        Handle::copy_from((arg1), (fp).cur_pos());
+                        return 2_i32;
+                    }
+                }
+                h = fp::fsubs(
+                    fns::Stage_GetBlastZoneTopOffset(ctx),
+                    fns::Stage_GetBlastZoneBottomOffset(ctx),
+                );
+                if sp2C.y() > 0.0 {
+                    if (fp).cur_pos().y()
+                        > fp::fneg(
+                            (fp::fmsubs(
+                                0.4000000059604645,
+                                h,
+                                fns::Stage_GetBlastZoneTopOffset(ctx),
+                            )),
+                        )
+                    {
+                        Handle::copy_from((arg1), (fp).cur_pos());
+                        return 2_i32;
+                    }
+                    break 'goto_block_23;
+                }
+                if (fp).cur_pos().y()
+                    < fp::fmadds(
+                        0.4000000059604645,
+                        h,
+                        fns::Stage_GetBlastZoneBottomOffset(ctx),
+                    )
+                {
+                    Handle::copy_from((arg1), (fp).cur_pos());
+                    return 2_i32;
+                }
+            }
+            if ((((fp).cur_pos().x()
+                < fp::fmadds(
+                    0.20000000298023224,
+                    w,
+                    fns::Stage_GetBlastZoneLeftOffset(ctx),
+                ))
+                || ((fp).cur_pos().x()
+                    > fp::fnmsubs(
+                        0.20000000298023224,
+                        w,
+                        fns::Stage_GetBlastZoneRightOffset(ctx),
+                    )))
+                || ((fp).cur_pos().y()
+                    > fp::fnmsubs(
+                        0.20000000298023224,
+                        h,
+                        fns::Stage_GetBlastZoneTopOffset(ctx),
+                    )))
+                || ((fp).cur_pos().y()
+                    < fp::fmadds(
+                        0.20000000298023224,
+                        h,
+                        fns::Stage_GetBlastZoneBottomOffset(ctx),
+                    ))
+            {
+                Handle::copy_from((arg1), (fp).cur_pos());
+                return 2_i32;
+            }
+            break 'goto_block_43;
+        }
+        if (stage as u32) == ((enums::Gr_Kind_BigBlue as i32) as u32) {
+            w = fp::fsubs(
+                fns::Stage_GetBlastZoneRightOffset(ctx),
+                fns::Stage_GetBlastZoneLeftOffset(ctx),
+            );
+            h = fp::fsubs(
+                fns::Stage_GetBlastZoneTopOffset(ctx),
+                fns::Stage_GetBlastZoneBottomOffset(ctx),
+            );
+            if ((((fp).cur_pos().x()
+                < fp::fmadds(
+                    0.20000000298023224,
+                    w,
+                    fns::Stage_GetBlastZoneLeftOffset(ctx),
+                ))
+                || ((fp).cur_pos().x()
+                    > fp::fnmsubs(
+                        0.20000000298023224,
+                        w,
+                        fns::Stage_GetBlastZoneRightOffset(ctx),
+                    )))
+                || ((fp).cur_pos().y()
+                    > fp::fnmsubs(
+                        0.20000000298023224,
+                        h,
+                        fns::Stage_GetBlastZoneTopOffset(ctx),
+                    )))
+                || ((fp).cur_pos().y()
+                    < fp::fmadds(
+                        0.20000000298023224,
+                        h,
+                        fns::Stage_GetBlastZoneBottomOffset(ctx),
+                    ))
+            {
+                Handle::copy_from((arg1), (fp).cur_pos());
+                return 2_i32;
+            }
+            break 'goto_block_43;
+        }
+        if (stage as u32) == ((enums::Gr_Kind_Icemt as i32) as u32) {
+            h = fp::fsubs(
+                fns::Stage_GetBlastZoneTopOffset(ctx),
+                fns::Stage_GetBlastZoneBottomOffset(ctx),
+            );
+            let _ = fns::grLib_801C9E60(ctx, sp20);
+            mag = (if (sp20.y()) < fp::frsp(0_i32 as f64) {
+                fp::fneg((sp20.y()))
+            } else {
+                (sp20.y())
+            });
+            frac = fp::frsp(fp::fmadd(0.4, mag, 0.4));
+            if sp20.y() < 0.0 {
+                if (fp).cur_pos().y()
+                    < fp::fmadds(h, frac, fns::Stage_GetBlastZoneBottomOffset(ctx))
+                {
+                    Handle::copy_from((arg1), (fp).cur_pos());
+                    return 2_i32;
+                }
+                break 'goto_block_43;
+            }
+            if (fp).cur_pos().y()
+                > fp::fneg((fp::fmsubs(h, frac, fns::Stage_GetBlastZoneTopOffset(ctx))))
+            {
+                Handle::copy_from((arg1), (fp).cur_pos());
+                return 2_i32;
+            }
+        }
+    }
+    if fns::Camera_8003118C(ctx, (fp).cur_pos(), 0.0) == 0_i32 {
+        Handle::copy_from((arg1), (fp).cur_pos());
+        return 1_i32.wrapping_neg();
+    }
+    return 0_i32;
+}
+
 pub fn ftCo_800A2718<'a>(ctx: &'a Ctx, arg0: mp_UnkStruct0<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
     let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
@@ -7653,6 +7876,99 @@ pub fn ftCo_800AE7AC<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>, arg2: i32
     let _ = statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800ADE48(ctx, fp);
 }
 
+pub fn ftCo_800AEA8C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let __frame = ctx.stack_frame(0x68);
+    let flags: ArrV<'a, u32, 5> = frame_at(ctx, &__frame, 0x0);
+    let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x14);
+    let floor_normal: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let floor_pos: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x30);
+    let mut fp = fp;
+    let mut data: CpuFighter<'a> = (fp).cpu();
+    let mut data2: CpuFighter<'a> = null(ctx);
+    let mut is_food: i32 = 0;
+    let mut do_floor: i32 = 0;
+    let mut found: i32 = 0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    (data).set_xF8_b0((0_i32 as u8));
+    (data).set_xF9_b2(
+        (({
+            let __t1 = 1_i32;
+            is_food = __t1;
+            __t1
+        }) as u8),
+    );
+    (data).set_xF9_b4((1_i32 as u8));
+    (data).set_xF9_b3((0_i32 as u8));
+    (data).set_xF9_b5((1_i32 as u8));
+    (data).set_xF9_b6((1_i32 as u8));
+    (data).set_xF9_b7((1_i32 as u8));
+    (data).set_xF9_b1((0_i32 as u8));
+    (fp).cpu()
+        .set_x44(statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A4BEC(ctx, fp));
+    inl_ftCo_CpuUpdateCommonItemTarget_unfused(ctx, fp);
+    inl_ftCo_CpuUpdateSpecialItemTarget_unfused(ctx, fp);
+    data2 = (fp).cpu();
+    do_floor = inl_ftCo_CpuDataShouldAct_unfused(ctx, data2);
+    if do_floor != 0_i32 {
+        let mut result: i32 = 0;
+        let mut x: f64 = 0.0;
+        let mut x2: f64 = 0.0;
+        let mut y: f64 = 0.0;
+        let mut below: f64 = 0.0;
+        let mut above: f64 = 0.0;
+        'goto_after_assign: {
+            'goto_do_assign: {
+                x = (fp).cur_pos().x();
+                x2 = x;
+                y = (fp).cur_pos().y();
+                found = 0_i32;
+                line_id.set(1_i32.wrapping_neg());
+                below = fp::fsubs(y, 1000.0);
+                above = fp::fadds(10.0, y);
+                result = fns::mpCheckFloor(
+                    ctx,
+                    x2,
+                    above,
+                    x,
+                    below,
+                    0.0,
+                    floor_pos,
+                    line_id,
+                    flags.at(0),
+                    floor_normal,
+                    1_i32.wrapping_neg(),
+                    1_i32.wrapping_neg(),
+                    1_i32.wrapping_neg(),
+                    null::<FnPtr<'a>>(ctx),
+                    ptr::<HSD_GObj<'a>>(ctx, found as u32),
+                );
+                if result == 0_i32 {
+                    break 'goto_do_assign;
+                }
+                if inl_ftCo_800A1B38_noinline_unfused(ctx, line_id.get()) == 0_i32 {
+                    break 'goto_do_assign;
+                }
+                break 'goto_after_assign;
+            }
+            found = result;
+        }
+        if found != 0_i32 {
+            let mut floor_x: f64 = 0.0;
+            let mut floor_y: f64 = 0.0;
+            floor_y = floor_pos.y();
+            floor_x = floor_pos.x();
+            inl_ftCo_800A1F3C_unfused(ctx, fp, floor_x, floor_y, 5.0);
+        }
+    }
+    let _ = statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800ADE48(ctx, fp);
+}
+
 pub fn ftCo_800AECF0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x48);
     let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x0);
@@ -11059,6 +11375,11 @@ fn inl_ftCo_CpuDataShouldAct_unfused<'a>(ctx: &'a Ctx, data: CpuFighter<'a>) -> 
     return 0;
 }
 
+fn inl_ftCo_800A1B38_noinline_unfused<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
+    let mut arg0 = arg0;
+    return statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A1B38(ctx, arg0);
+}
+
 fn inl_ftCo_CpuSetTargetActive_unfused<'a>(ctx: &'a Ctx, data: CpuFighter<'a>) {
     let mut data = data;
     (data).set_xF8_b0((1_i32 as u8));
@@ -11845,6 +12166,14 @@ pub fn register(ctx: &Ctx) {
         Returns::Int,
     );
     ctx.register_port(
+        0x800a229c,
+        |ctx| {
+            let (a0, a1): (Fighter<'_>, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(ftCo_800A229C(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
         0x800a2718,
         |ctx| {
             let (a0,): (mp_UnkStruct0<'_>,) = Args::take_all(ctx);
@@ -12449,6 +12778,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1, a2): (Fighter<'_>, Vec<'_>, i32) = Args::take_all(ctx);
             Ret::put(ftCo_800AE7AC(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x800aea8c,
+        |ctx| {
+            let (a0,): (Fighter<'_>,) = Args::take_all(ctx);
+            Ret::put(ftCo_800AEA8C(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

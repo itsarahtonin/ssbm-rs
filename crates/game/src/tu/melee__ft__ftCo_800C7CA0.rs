@@ -83,6 +83,114 @@ pub fn ftCo_800C7CA0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     return 0_i32;
 }
 
+pub fn fn_800C7DC4<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    motion_state: i32,
+    normal: Vec<'a>,
+    offset: Vec<'a>,
+) {
+    let __frame = ctx.stack_frame(0x60);
+    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let angle: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x1c);
+    let mut gobj = gobj;
+    let mut motion_state = motion_state;
+    let mut normal = normal;
+    let mut offset = offset;
+    let mut fp: Fighter<'a> = null(ctx);
+    let mut coll: CollData<'a> = null(ctx);
+    let mut mag: f64 = 0.0;
+    'goto_end: {
+        'goto_t2: {
+            'goto_t1: {
+                fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+                coll = (fp).coll_data();
+                fns::ftCommon_8007D5D4(ctx, fp);
+                spawn_pos.set_x(fp::fadds((fp).cur_pos().x(), (offset).x()));
+                spawn_pos.set_y(fp::fadds((fp).cur_pos().y(), (offset).y()));
+                spawn_pos.set_z(fp::fadds((fp).cur_pos().z(), (offset).z()));
+                angle.set(fns::atan2f(ctx, fp::fneg((normal).x()), (normal).y()));
+                fns::efAsync_Spawn(
+                    ctx,
+                    gobj,
+                    (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj))).x60C_ref(),
+                    (5_i32 as u32),
+                    (0x406_i32 as u32),
+                    null::<HSD_JObj<'a>>(ctx),
+                    &[
+                        VarArg::Int(Handle::addr(spawn_pos)),
+                        VarArg::Int(Handle::addr(angle)),
+                    ],
+                );
+                fns::Camera_RequestQuake(ctx, (enums::QuakeKind_Small as i32), spawn_pos);
+                mag = (fp).xF0_ground_kb_vel();
+                Handle::copy_from(vel, (normal));
+                vel.set_x(fp::fmuls(vel.x(), mag));
+                vel.set_y(fp::fmuls(vel.y(), mag));
+                vel.set_z(fp::fmuls(vel.z(), mag));
+                {
+                    let mut mul: f64 = (fns::p_ftCommonData(ctx).get()).x1BC();
+                    vel.set_x(fp::fmuls(vel.x(), mul));
+                    vel.set_y(fp::fmuls(vel.y(), mul));
+                }
+                Handle::copy_from((fp).x8c_kb_vel(), vel);
+                (fp).self_vel().set_z(0.0);
+                (fp).self_vel().set_y(0.0);
+                (fp).self_vel().set_x(0.0);
+                {
+                    let mut fdir: f64 = 0.0;
+                    if (fp).x8c_kb_vel().x() < 0.0 {
+                        fdir = fp::fneg(1.0);
+                    } else {
+                        fdir = 1.0;
+                    }
+                    (fp).set_facing_dir(fdir);
+                }
+                fns::Fighter_ChangeMotionState(
+                    ctx,
+                    gobj,
+                    motion_state,
+                    (0x18040_i32 as u32),
+                    0.0,
+                    1.0,
+                    0.0,
+                    null::<HSD_GObj<'a>>(ctx),
+                );
+                if (((coll).env_flags() & 0x800_i32) != 0) {
+                    break 'goto_t1;
+                }
+                if !(((coll).env_flags() & 0x800_i32) != 0) {
+                    break 'goto_t2;
+                }
+            }
+            (fp).cur_pos().set_x(fp::fneg(
+                (fp::fmsubs(
+                    (fp).x68C_transNPos().z(),
+                    fp::fneg((fp).facing_dir()),
+                    (fp::fadds((fp).cur_pos().x(), (offset).x())),
+                )),
+            ));
+            break 'goto_end;
+        }
+        (fp).cur_pos().set_y(fp::fadds(
+            (fp).x68C_transNPos().y(),
+            (fp::fadds((fp).cur_pos().y(), (offset).y())),
+        ));
+    }
+    fns::ftCo_80090574(ctx, gobj);
+    (fp).dmg().set_x18A8(mag);
+    fns::ftCommon_8007EBAC(ctx, fp, (7_i32 as u32), (0_i32 as u32));
+    fns::ftColl_8007B760(ctx, gobj, (fns::p_ftCommonData(ctx).get()).x1B8());
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+}
+
 pub fn ftCo_DownReflect_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
@@ -181,6 +289,11 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
+fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -190,6 +303,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(ftCo_800C7CA0(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x800c7dc4,
+        |ctx| {
+            let (a0, a1, a2, a3): (HSD_GObj<'_>, i32, Vec<'_>, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(fn_800C7DC4(ctx, a0, a1, a2, a3), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x800c7fc8,

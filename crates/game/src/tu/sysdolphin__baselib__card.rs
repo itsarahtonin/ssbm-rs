@@ -1447,6 +1447,1083 @@ pub fn fn_803AA790<'a>(ctx: &'a Ctx) -> i32 {
     return 0;
 }
 
+pub fn hsd_803AAA48<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x258);
+    let map: ArrV<'a, i32, 64> = frame_at(ctx, &__frame, 0x0);
+    let stat: CARDStat<'a> = frame_at(ctx, &__frame, 0x100);
+    let mut result: i32 = 0;
+    let mut chan: i32 = 0;
+    'l1: loop {
+        'c2: {
+            let mut state_ptr: Ptr<'a, CardState<'a>> = null(ctx);
+            let mut cmd: CardCmd<'a> = null(ctx);
+            let mut r#type: i32 = 0;
+            let mut intr: i32 = 0;
+            let mut intr2: i32 = 0;
+            let mut busy: i32 = 0;
+            'goto_next: {
+                state_ptr = statics::sysdolphin__baselib__card::active_requests(ctx).state_ref();
+                intr = fns::OSDisableInterrupts(ctx);
+                if (statics::sysdolphin__baselib__card::hsd_804D799C(ctx).get() as u32)
+                    == (1_i32 as u32)
+                {
+                    busy = 1_i32;
+                } else {
+                    busy = 0_i32;
+                }
+                let _ = fns::OSRestoreInterrupts(ctx, intr);
+                if (busy != 0) {
+                    return;
+                }
+                if statics::sysdolphin__baselib__card::curr_result(ctx).get() < 0_i32 {
+                    'l3: while (statics::sysdolphin__baselib__card::commands(ctx)
+                        .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
+                        .r#type() as u32)
+                        != ((enums::CARD_CMD_NONE as i32) as u32)
+                    {
+                        'c4: {
+                            statics::sysdolphin__baselib__card::commands(ctx)
+                                .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
+                                .set_type((enums::CARD_CMD_NONE as i32));
+                            statics::sysdolphin__baselib__card::curr_head(ctx).set(rem_i32(
+                                (statics::sysdolphin__baselib__card::curr_head(ctx)
+                                    .get()
+                                    .wrapping_add(1_i32)),
+                                128_i32,
+                            ));
+                        }
+                    }
+                }
+                r#type = ({
+                    let __t1 = statics::sysdolphin__baselib__card::commands(ctx)
+                        .get(statics::sysdolphin__baselib__card::curr_head(ctx).get());
+                    cmd = __t1;
+                    __t1
+                })
+                .r#type();
+                's5: {
+                    let __case = match (r#type as u32) {
+                        0_u32 => 0,
+                        5_u32 => 1,
+                        11_u32 => 2,
+                        10_u32 => 3,
+                        6_u32 => 4,
+                        2_u32 => 5,
+                        15_u32 => 6,
+                        4_u32 => 7,
+                        1_u32 => 8,
+                        16_u32 => 9,
+                        7_u32 => 10,
+                        8_u32 => 11,
+                        9_u32 => 12,
+                        12_u32 => 13,
+                        13_u32 => 14,
+                        14_u32 => 15,
+                        17_u32 => 16,
+                        _ => 17,
+                    };
+                    if __case <= 0 {
+                        if (statics::sysdolphin__baselib__card::active_requests(ctx).r#type()
+                            as u32)
+                            != ((enums::CARD_ACTIVE_NONE as i32) as u32)
+                        {
+                            if (statics::sysdolphin__baselib__card::active_requests(ctx).r#type()
+                                as u32)
+                                == ((enums::CARD_ACTIVE_WRITE_FILE_1_2 as i32) as u32)
+                            {
+                                let mut file_idx: i32 =
+                                    statics::sysdolphin__baselib__card::active_requests(ctx)
+                                        .callback_arg();
+                                let mut blocks_before: i32 =
+                                    statics::sysdolphin__baselib__card::fn_803AC6B8(
+                                        ctx,
+                                        (state_ptr).get(),
+                                        file_idx,
+                                    );
+                                let mut file_blocks: i32 =
+                                    (statics::sysdolphin__baselib__card::fn_803AC634(
+                                        ctx,
+                                        (state_ptr).get(),
+                                        file_idx,
+                                    ) as i32);
+                                let mut total: i32 =
+                                    statics::sysdolphin__baselib__card::fn_803AC7DC(
+                                        ctx,
+                                        (state_ptr).get(),
+                                    );
+                                let mut j: i32 = 0;
+                                {
+                                    j = 0_i32;
+                                    'l6: while j < file_blocks {
+                                        'c7: {
+                                            map.at(j).set(1_i32.wrapping_neg());
+                                        }
+                                        j = j.wrapping_add(1);
+                                    }
+                                }
+                                {
+                                    j = 1_i32;
+                                    'l8: while j <= total {
+                                        'c9: {
+                                            let mut block_id: i32 =
+                                                ((state_ptr).get()).block_ids().at(j).get();
+                                            if block_id >= 0_i32 {
+                                                let mut logical: i32 =
+                                                    block_id.wrapping_sub(blocks_before);
+                                                if (logical >= 0_i32) && (logical < file_blocks) {
+                                                    if map.at(logical).get() < 0_i32 {
+                                                        map.at(logical).set(j);
+                                                    } else if statics::sysdolphin__baselib__card::fn_803ACB74(ctx, (((state_ptr).get())).block_seqs().at(map.at(logical).get()).get(), (((state_ptr).get())).block_seqs().at(j).get()) < 0_i32 {
+                                                        (((state_ptr).get())).block_ids().at(map.at(logical).get()).set((((state_ptr).get())).block_ids().at(map.at(logical).get()).get().wrapping_mul(1_i32.wrapping_neg()));
+                                                        map.at(logical).set(j);
+                                                    } else {
+                                                        (((state_ptr).get())).block_ids().at(j).set((((state_ptr).get())).block_ids().at(j).get().wrapping_mul(1_i32.wrapping_neg()));
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        j = j.wrapping_add(1);
+                                    }
+                                }
+                            }
+                            if !Handle::is_null(
+                                statics::sysdolphin__baselib__card::active_requests(ctx).callback(),
+                            ) {
+                                statics::sysdolphin__baselib__card::active_requests(ctx)
+                                    .callback()
+                                    .call::<_, ()>((
+                                        statics::sysdolphin__baselib__card::active_requests(ctx)
+                                            .callback_arg(),
+                                        statics::sysdolphin__baselib__card::curr_result(ctx).get(),
+                                    ));
+                            }
+                            statics::sysdolphin__baselib__card::active_requests(ctx)
+                                .set_type((enums::CARD_ACTIVE_NONE as i32));
+                        }
+                        statics::sysdolphin__baselib__card::curr_result(ctx).set(0_i32);
+                        statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(2_i32);
+                        if (statics::sysdolphin__baselib__card::hsd_804D7990(ctx).get()
+                            == statics::sysdolphin__baselib__card::hsd_804D7994(ctx).get())
+                            && ((statics::sysdolphin__baselib__card::requests(ctx)
+                                .get(statics::sysdolphin__baselib__card::hsd_804D7990(ctx).get())
+                                .r#type() as u32)
+                                == ((enums::CARD_REQ_NONE as i32) as u32))
+                        {
+                            return;
+                        }
+                        if statics::sysdolphin__baselib__card::fn_803AA790(ctx) < 0_i32 {
+                            return;
+                        }
+                        statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(0_i32);
+                        break 'c2;
+                    }
+                    if __case <= 1 {
+                        if statics::sysdolphin__baselib__card::curr_result(ctx).get() == 2_i32 {
+                            (cmd).set_type((enums::CARD_CMD_NONE as i32));
+                            statics::sysdolphin__baselib__card::curr_head(ctx).set(rem_i32(
+                                (statics::sysdolphin__baselib__card::curr_head(ctx)
+                                    .get()
+                                    .wrapping_add(1_i32)),
+                                128_i32,
+                            ));
+                            break 'c2;
+                        }
+                        result = inl_retryCardFastOpen_unfused(
+                            ctx,
+                            ((cmd).state()).chan(),
+                            ((cmd).state()).file_no(),
+                            ((cmd).state()).file_info(),
+                        );
+                        if result < 0_i32 {
+                            statics::sysdolphin__baselib__card::curr_result(ctx).set(result);
+                            break 'c2;
+                        }
+                        statics::sysdolphin__baselib__card::hsd_804D798C(ctx)
+                            .set(fns::CARDGetXferredBytes(ctx, ((cmd).state()).chan()));
+                        intr2 = fns::OSDisableInterrupts(ctx);
+                        result = inl_retryCardReadAsync_unfused(
+                            ctx,
+                            ((cmd).state()).file_info(),
+                            Handle::cast::<Addr<'a>>(((cmd).state()).sector_buf()),
+                            (((cmd).state()).sector_size() as i32),
+                            (cmd).x8().verify().offset(),
+                            fnptr(ctx, 0x803a949c),
+                        );
+                        statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(1_i32);
+                        let _ = fns::OSRestoreInterrupts(ctx, intr2);
+                        if result < 0_i32 {
+                            statics::sysdolphin__baselib__card::curr_result(ctx).set(result);
+                            statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(0_i32);
+                            let _ = inl_retryCardClose_unfused(ctx, ((cmd).state()).file_info());
+                            break 'c2;
+                        }
+                        return;
+                    }
+                    if __case <= 2 {
+                        result = inl_retryCardFastOpen_unfused(
+                            ctx,
+                            ((cmd).state()).chan(),
+                            ((cmd).state()).file_no(),
+                            ((cmd).state()).file_info(),
+                        );
+                        if result < 0_i32 {
+                            statics::sysdolphin__baselib__card::curr_result(ctx).set(result);
+                            break 'c2;
+                        }
+                        statics::sysdolphin__baselib__card::hsd_804D798C(ctx)
+                            .set(fns::CARDGetXferredBytes(ctx, ((cmd).state()).chan()));
+                        if (cmd).x8().read_header().index() == 0_i32 {
+                            let _ = fns::memset(
+                                ctx,
+                                Handle::cast::<Addr<'a>>(((cmd).state()).digest().at(0)),
+                                0_i32,
+                                (48_i32 as u32),
+                            );
+                        }
+                        intr2 = fns::OSDisableInterrupts(ctx);
+                        result = inl_retryCardReadAsync_unfused(
+                            ctx,
+                            ((cmd).state()).file_info(),
+                            Handle::cast::<Addr<'a>>(((cmd).state()).sector_buf()),
+                            (((cmd).state()).sector_size() as i32),
+                            (((cmd).x8().read_header().index() as u32)
+                                .wrapping_mul(((cmd).state()).sector_size())
+                                as i32),
+                            fnptr(ctx, 0x803a949c),
+                        );
+                        statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(1_i32);
+                        let _ = fns::OSRestoreInterrupts(ctx, intr2);
+                        if result < 0_i32 {
+                            statics::sysdolphin__baselib__card::curr_result(ctx).set(result);
+                            statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(0_i32);
+                            let _ = inl_retryCardClose_unfused(ctx, ((cmd).state()).file_info());
+                            break 'c2;
+                        }
+                        return;
+                    }
+                    if __case <= 3 {
+                        if statics::sysdolphin__baselib__card::curr_result(ctx).get() == 2_i32 {
+                            (cmd).set_type((enums::CARD_CMD_NONE as i32));
+                            statics::sysdolphin__baselib__card::curr_head(ctx).set(rem_i32(
+                                (statics::sysdolphin__baselib__card::curr_head(ctx)
+                                    .get()
+                                    .wrapping_add(1_i32)),
+                                128_i32,
+                            ));
+                            break 'c2;
+                        }
+                        result = inl_retryCardFastOpen_unfused(
+                            ctx,
+                            ((cmd).state()).chan(),
+                            ((cmd).state()).file_no(),
+                            ((cmd).state()).file_info(),
+                        );
+                        if result < 0_i32 {
+                            statics::sysdolphin__baselib__card::curr_result(ctx).set(result);
+                            break 'c2;
+                        }
+                        statics::sysdolphin__baselib__card::hsd_804D798C(ctx)
+                            .set(fns::CARDGetXferredBytes(ctx, ((cmd).state()).chan()));
+                        if (cmd).x8().header().index() == 0_i32 {
+                            let _ = fns::memset(
+                                ctx,
+                                Handle::cast::<Addr<'a>>(((cmd).state()).digest().at(0)),
+                                0_i32,
+                                (48_i32 as u32),
+                            );
+                        }
+                        intr2 = fns::OSDisableInterrupts(ctx);
+                        result = inl_retryCardReadAsync_unfused(
+                            ctx,
+                            ((cmd).state()).file_info(),
+                            Handle::cast::<Addr<'a>>(((cmd).state()).sector_buf()),
+                            (((cmd).state()).sector_size() as i32),
+                            (((cmd).x8().header().index() as u32)
+                                .wrapping_mul(((cmd).state()).sector_size())
+                                as i32),
+                            fnptr(ctx, 0x803a949c),
+                        );
+                        statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(1_i32);
+                        let _ = fns::OSRestoreInterrupts(ctx, intr2);
+                        if result < 0_i32 {
+                            statics::sysdolphin__baselib__card::curr_result(ctx).set(result);
+                            statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(0_i32);
+                            let _ = inl_retryCardClose_unfused(ctx, ((cmd).state()).file_info());
+                            break 'c2;
+                        }
+                        return;
+                    }
+                    if __case <= 4 {
+                        if statics::sysdolphin__baselib__card::curr_result(ctx).get() == 2_i32 {
+                            statics::sysdolphin__baselib__card::curr_result(ctx).set(0_i32);
+                            (cmd).set_type((enums::CARD_CMD_NONE as i32));
+                            statics::sysdolphin__baselib__card::curr_head(ctx).set(rem_i32(
+                                (statics::sysdolphin__baselib__card::curr_head(ctx)
+                                    .get()
+                                    .wrapping_add(1_i32)),
+                                128_i32,
+                            ));
+                            break 'c2;
+                        } else {
+                            statics::sysdolphin__baselib__card::curr_result(ctx).set(1_i32);
+                            (cmd).set_type((enums::CARD_CMD_NONE as i32));
+                            statics::sysdolphin__baselib__card::curr_head(ctx).set(rem_i32(
+                                (statics::sysdolphin__baselib__card::curr_head(ctx)
+                                    .get()
+                                    .wrapping_add(1_i32)),
+                                128_i32,
+                            ));
+                            break 'c2;
+                        }
+                    }
+                    if __case <= 5 {
+                        if statics::sysdolphin__baselib__card::curr_result(ctx).get() != 1_i32 {
+                            result = inl_retryCardFastOpen_unfused(
+                                ctx,
+                                ((cmd).state()).chan(),
+                                ((cmd).state()).file_no(),
+                                ((cmd).state()).file_info(),
+                            );
+                            if result < 0_i32 {
+                                statics::sysdolphin__baselib__card::curr_result(ctx).set(result);
+                                break 'c2;
+                            }
+                            statics::sysdolphin__baselib__card::hsd_804D798C(ctx)
+                                .set(fns::CARDGetXferredBytes(ctx, ((cmd).state()).chan()));
+                            intr2 = fns::OSDisableInterrupts(ctx);
+                            result = inl_retryCardReadAsync_unfused(
+                                ctx,
+                                ((cmd).state()).file_info(),
+                                Handle::cast::<Addr<'a>>(((cmd).state()).sector_buf()),
+                                (((cmd).state()).sector_size() as i32),
+                                (cmd).x8().read().offset(),
+                                fnptr(ctx, 0x803a949c),
+                            );
+                            statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(1_i32);
+                            let _ = fns::OSRestoreInterrupts(ctx, intr2);
+                            if result < 0_i32 {
+                                statics::sysdolphin__baselib__card::curr_result(ctx).set(result);
+                                statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(0_i32);
+                                let _ =
+                                    inl_retryCardClose_unfused(ctx, ((cmd).state()).file_info());
+                                break 'c2;
+                            }
+                            return;
+                        }
+                        (cmd).set_type((enums::CARD_CMD_NONE as i32));
+                        statics::sysdolphin__baselib__card::curr_head(ctx).set(rem_i32(
+                            (statics::sysdolphin__baselib__card::curr_head(ctx)
+                                .get()
+                                .wrapping_add(1_i32)),
+                            128_i32,
+                        ));
+                        break 'c2;
+                    }
+                    if __case <= 6 {
+                        if statics::sysdolphin__baselib__card::curr_result(ctx).get() != 1_i32 {
+                            result = inl_retryCardFastOpen_unfused(
+                                ctx,
+                                ((cmd).state()).chan(),
+                                ((cmd).state()).file_no(),
+                                ((cmd).state()).file_info(),
+                            );
+                            if result < 0_i32 {
+                                statics::sysdolphin__baselib__card::curr_result(ctx).set(result);
+                                break 'c2;
+                            }
+                            statics::sysdolphin__baselib__card::hsd_804D798C(ctx)
+                                .set(fns::CARDGetXferredBytes(ctx, ((cmd).state()).chan()));
+                            intr2 = fns::OSDisableInterrupts(ctx);
+                            result = inl_retryCardReadAsync_unfused(
+                                ctx,
+                                ((cmd).state()).file_info(),
+                                Handle::cast::<Addr<'a>>(((cmd).state()).sector_buf()),
+                                (((cmd).state()).sector_size() as i32),
+                                (cmd).x8().sector().offset(),
+                                fnptr(ctx, 0x803a949c),
+                            );
+                            statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(1_i32);
+                            let _ = fns::OSRestoreInterrupts(ctx, intr2);
+                            if result < 0_i32 {
+                                statics::sysdolphin__baselib__card::curr_result(ctx).set(result);
+                                statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(0_i32);
+                                let _ =
+                                    inl_retryCardClose_unfused(ctx, ((cmd).state()).file_info());
+                                break 'c2;
+                            }
+                            return;
+                        }
+                        (cmd).set_type((enums::CARD_CMD_NONE as i32));
+                        statics::sysdolphin__baselib__card::curr_head(ctx).set(rem_i32(
+                            (statics::sysdolphin__baselib__card::curr_head(ctx)
+                                .get()
+                                .wrapping_add(1_i32)),
+                            128_i32,
+                        ));
+                        break 'c2;
+                    }
+                    if __case <= 7 {
+                        if statics::sysdolphin__baselib__card::curr_result(ctx).get() != 1_i32 {
+                            let _ = fns::memset(
+                                ctx,
+                                (cmd).x8().clear().data(),
+                                0_i32,
+                                ((cmd).x8().clear().size() as u32),
+                            );
+                        }
+                        (cmd).set_type((enums::CARD_CMD_NONE as i32));
+                        statics::sysdolphin__baselib__card::curr_head(ctx).set(rem_i32(
+                            (statics::sysdolphin__baselib__card::curr_head(ctx)
+                                .get()
+                                .wrapping_add(1_i32)),
+                            128_i32,
+                        ));
+                        break 'c2;
+                    }
+                    if __case <= 8 {
+                        if statics::sysdolphin__baselib__card::curr_result(ctx).get() != 1_i32 {
+                            let mut hdr_offset: i32 = 0;
+                            let mut rem: i32 = 0;
+                            let mut size: i32 = 0;
+                            result = inl_retryCardFastOpen_unfused(
+                                ctx,
+                                ((cmd).state()).chan(),
+                                ((cmd).state()).file_no(),
+                                ((cmd).state()).file_info(),
+                            );
+                            if result < 0_i32 {
+                                statics::sysdolphin__baselib__card::curr_result(ctx).set(result);
+                                break 'c2;
+                            }
+                            if (cmd).x8().write().block_id() > 0_i32 {
+                                hdr_offset = 0_i32;
+                            } else {
+                                hdr_offset = (rem_u32(
+                                    (((cmd).state()).header_size().wrapping_add((48_i32 as u32))),
+                                    ((cmd).state()).sector_size(),
+                                ) as i32);
+                            }
+                            size = (cmd).x8().write().size();
+                            if (size > 0_i32) && (!Handle::is_null((cmd).x8().write().data())) {
+                                let _ = fns::memcpy(
+                                    ctx,
+                                    Handle::cast::<Addr<'a>>(
+                                        (Handle::add(
+                                            ((cmd).state()).sector_buf(),
+                                            hdr_offset.wrapping_add(32_i32),
+                                        )),
+                                    ),
+                                    (cmd).x8().write().data(),
+                                    (size as u32),
+                                );
+                            }
+                            rem = ((((cmd).state())
+                                .sector_size()
+                                .wrapping_sub((hdr_offset as u32)))
+                            .wrapping_sub((size as u32))
+                            .wrapping_sub((32_i32 as u32))
+                                as i32);
+                            if rem != 0_i32 {
+                                let _ = fns::memset(
+                                    ctx,
+                                    Handle::cast::<Addr<'a>>(
+                                        (Handle::add(
+                                            ((cmd).state()).sector_buf(),
+                                            hdr_offset.wrapping_add(size).wrapping_add(32_i32),
+                                        )),
+                                    ),
+                                    0_i32,
+                                    (rem as u32),
+                                );
+                            }
+                            let _ = fns::memset(
+                                ctx,
+                                Handle::cast::<Addr<'a>>(Handle::add(
+                                    ((cmd).state()).sector_buf(),
+                                    hdr_offset,
+                                )),
+                                0_i32,
+                                (32_i32 as u32),
+                            );
+                            (Handle::add(
+                                ((cmd).state()).sector_buf(),
+                                hdr_offset.wrapping_add(16_i32),
+                            ))
+                            .set(((sar_i32((cmd).x8().write().block_id(), (8_i32 as u32))) as u8));
+                            (Handle::add(
+                                ((cmd).state()).sector_buf(),
+                                hdr_offset.wrapping_add(17_i32),
+                            ))
+                            .set(((cmd).x8().write().block_id() as u8));
+                            (Handle::add(
+                                ((cmd).state()).sector_buf(),
+                                hdr_offset.wrapping_add(18_i32),
+                            ))
+                            .set(((cmd).x8().write().seq() as u8));
+                            statics::sysdolphin__baselib__card::fn_803AC3F8(
+                                ctx,
+                                (cmd).state(),
+                                (Handle::add(
+                                    ((cmd).state()).sector_buf(),
+                                    hdr_offset.wrapping_add(19_i32),
+                                )),
+                                (cmd).x8().write().file_idx(),
+                            );
+                            let _ = fns::HSD_Encrypt(
+                                ctx,
+                                Handle::add(((cmd).state()).sector_buf(), hdr_offset),
+                                (((cmd).state())
+                                    .sector_size()
+                                    .wrapping_sub((hdr_offset as u32))
+                                    as i32),
+                            );
+                            statics::sysdolphin__baselib__card::hsd_804D798C(ctx)
+                                .set(fns::CARDGetXferredBytes(ctx, ((cmd).state()).chan()));
+                            intr2 = fns::OSDisableInterrupts(ctx);
+                            result = inl_retryCardWriteAsync_unfused(
+                                ctx,
+                                ((cmd).state()).file_info(),
+                                Handle::cast::<Addr<'a>>(((cmd).state()).sector_buf()),
+                                (((cmd).state()).sector_size() as i32),
+                                (cmd).x8().write().offset(),
+                                fnptr(ctx, 0x803a949c),
+                            );
+                            statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(1_i32);
+                            let _ = fns::OSRestoreInterrupts(ctx, intr2);
+                            if result < 0_i32 {
+                                statics::sysdolphin__baselib__card::curr_result(ctx).set(result);
+                                statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(0_i32);
+                                let _ =
+                                    inl_retryCardClose_unfused(ctx, ((cmd).state()).file_info());
+                                break 'c2;
+                            }
+                            return;
+                        }
+                        (cmd).set_type((enums::CARD_CMD_NONE as i32));
+                        statics::sysdolphin__baselib__card::curr_head(ctx).set(rem_i32(
+                            (statics::sysdolphin__baselib__card::curr_head(ctx)
+                                .get()
+                                .wrapping_add(1_i32)),
+                            128_i32,
+                        ));
+                        break 'c2;
+                    }
+                    if __case <= 9 {
+                        if statics::sysdolphin__baselib__card::curr_result(ctx).get() != 1_i32 {
+                            result = inl_retryCardFastOpen_unfused(
+                                ctx,
+                                ((cmd).state()).chan(),
+                                ((cmd).state()).file_no(),
+                                ((cmd).state()).file_info(),
+                            );
+                            if result < 0_i32 {
+                                statics::sysdolphin__baselib__card::curr_result(ctx).set(result);
+                                break 'c2;
+                            }
+                            let _ = fns::HSD_Encrypt(
+                                ctx,
+                                ((cmd).state()).sector_buf(),
+                                (((cmd).state()).sector_size() as i32),
+                            );
+                            statics::sysdolphin__baselib__card::hsd_804D798C(ctx)
+                                .set(fns::CARDGetXferredBytes(ctx, ((cmd).state()).chan()));
+                            intr2 = fns::OSDisableInterrupts(ctx);
+                            result = inl_retryCardWriteAsync_unfused(
+                                ctx,
+                                ((cmd).state()).file_info(),
+                                Handle::cast::<Addr<'a>>(((cmd).state()).sector_buf()),
+                                (((cmd).state()).sector_size() as i32),
+                                (cmd).x8().sector().offset(),
+                                fnptr(ctx, 0x803a949c),
+                            );
+                            statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(1_i32);
+                            let _ = fns::OSRestoreInterrupts(ctx, intr2);
+                            if result < 0_i32 {
+                                statics::sysdolphin__baselib__card::curr_result(ctx).set(result);
+                                statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(0_i32);
+                                let _ =
+                                    inl_retryCardClose_unfused(ctx, ((cmd).state()).file_info());
+                                break 'c2;
+                            }
+                            return;
+                        }
+                        (cmd).set_type((enums::CARD_CMD_NONE as i32));
+                        statics::sysdolphin__baselib__card::curr_head(ctx).set(rem_i32(
+                            (statics::sysdolphin__baselib__card::curr_head(ctx)
+                                .get()
+                                .wrapping_add(1_i32)),
+                            128_i32,
+                        ));
+                        break 'c2;
+                    }
+                    if __case <= 10 {
+                        intr2 = fns::OSDisableInterrupts(ctx);
+                        result = inl_retryCardCreateAsync_unfused(
+                            ctx,
+                            ((cmd).state()).chan(),
+                            (cmd).x8().create().filename(),
+                            (cmd).x8().create().size(),
+                            ((cmd).state()).file_info(),
+                            fnptr(ctx, 0x803a949c),
+                        );
+                        statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(1_i32);
+                        let _ = fns::OSRestoreInterrupts(ctx, intr2);
+                        if result < 0_i32 {
+                            statics::sysdolphin__baselib__card::curr_result(ctx).set(result);
+                            statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(0_i32);
+                            break 'c2;
+                        }
+                        return;
+                    }
+                    if __case <= 11 {
+                        if statics::sysdolphin__baselib__card::curr_result(ctx).get() != 1_i32 {
+                            let mut k: i32 = 0;
+                            result = inl_retryCardGetStatus_unfused(
+                                ctx,
+                                ((cmd).state()).chan(),
+                                ((cmd).state()).file_no(),
+                                ((cmd).state()).stat(),
+                            );
+                            if result < 0_i32 {
+                                statics::sysdolphin__baselib__card::curr_result(ctx).set(result);
+                                break 'c2;
+                            }
+                            ((cmd).state()).stat().set_commentAddr((0_i32 as u32));
+                            ((cmd).state()).stat().set_iconAddr((64_i32 as u32));
+                            ((cmd).state()).stat().set_bannerFormat(
+                                ((((((cmd).state()).stat().bannerFormat() as i32) & (!3_i32))
+                                    | (((cmd).state()).icon_info().banner_format() as i32))
+                                    as u8),
+                            );
+                            k = inl_setupCardIcons_unfused(ctx, cmd);
+                            {
+                                'l10: while k < 8_i32 {
+                                    'c11: {
+                                        ((cmd).state()).stat().set_iconFormat(
+                                            (((((cmd).state()).stat().iconFormat() as i32)
+                                                & (!(shl_i32(
+                                                    3_i32,
+                                                    ((2_i32.wrapping_mul(k)) as u32),
+                                                ))))
+                                                as u16),
+                                        );
+                                        ((cmd).state()).stat().set_iconSpeed(
+                                            (((((cmd).state()).stat().iconSpeed() as i32)
+                                                & (!(shl_i32(
+                                                    3_i32,
+                                                    ((2_i32.wrapping_mul(k)) as u32),
+                                                ))))
+                                                as u16),
+                                        );
+                                    }
+                                    k = k.wrapping_add(1);
+                                }
+                            }
+                            intr2 = fns::OSDisableInterrupts(ctx);
+                            result = inl_retryCardSetStatusAsync_unfused(
+                                ctx,
+                                ((cmd).state()).chan(),
+                                ((cmd).state()).file_no(),
+                                ((cmd).state()).stat(),
+                                fnptr(ctx, 0x803a949c),
+                            );
+                            statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(1_i32);
+                            let _ = fns::OSRestoreInterrupts(ctx, intr2);
+                            if result < 0_i32 {
+                                statics::sysdolphin__baselib__card::curr_result(ctx).set(result);
+                                statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(0_i32);
+                                break 'c2;
+                            }
+                            return;
+                        }
+                        (cmd).set_type((enums::CARD_CMD_NONE as i32));
+                        statics::sysdolphin__baselib__card::curr_head(ctx).set(rem_i32(
+                            (statics::sysdolphin__baselib__card::curr_head(ctx)
+                                .get()
+                                .wrapping_add(1_i32)),
+                            128_i32,
+                        ));
+                        break 'c2;
+                    }
+                    if __case <= 12 {
+                        if statics::sysdolphin__baselib__card::curr_result(ctx).get() != 1_i32 {
+                            let mut banner_size: i32 = 0;
+                            let mut pos: i32 = 0;
+                            result = inl_retryCardFastOpen_unfused(
+                                ctx,
+                                ((cmd).state()).chan(),
+                                ((cmd).state()).file_no(),
+                                ((cmd).state()).file_info(),
+                            );
+                            if result < 0_i32 {
+                                statics::sysdolphin__baselib__card::curr_result(ctx).set(result);
+                                break 'c2;
+                            }
+                            's12: {
+                                let __case =
+                                    match (((cmd).state()).icon_info().banner_format() as i32) {
+                                        2_i32 => 0,
+                                        1_i32 => 1,
+                                        _ => 2,
+                                    };
+                                if __case <= 0 {
+                                    banner_size = 0x1800_i32;
+                                    break 's12;
+                                }
+                                if __case <= 1 {
+                                    banner_size = 0xe00_i32;
+                                    break 's12;
+                                }
+                                if __case <= 2 {
+                                    banner_size = 0_i32;
+                                    break 's12;
+                                }
+                            }
+                            if (cmd).x8().header().index() == 0_i32 {
+                                let _ = fns::memcpy(
+                                    ctx,
+                                    Handle::cast::<Addr<'a>>(((cmd).state()).sector_buf()),
+                                    Handle::cast::<Addr<'a>>(((cmd).state()).comment().at(0)),
+                                    (64_i32 as u32),
+                                );
+                                pos = 64_i32;
+                                if banner_size > 0_i32 {
+                                    let _ = fns::memcpy(
+                                        ctx,
+                                        Handle::cast::<Addr<'a>>(Handle::add(
+                                            ((cmd).state()).sector_buf(),
+                                            64_i32,
+                                        )),
+                                        (cmd).x8().header().banner(),
+                                        (banner_size as u32),
+                                    );
+                                    pos = banner_size.wrapping_add(64_i32);
+                                }
+                                let _ = fns::memset(
+                                    ctx,
+                                    Handle::cast::<Addr<'a>>(((cmd).state()).digest().at(0)),
+                                    0_i32,
+                                    (48_i32 as u32),
+                                );
+                                if ((cmd).state()).header_size() > ((cmd).state()).sector_size() {
+                                    let _ = fns::memcpy(
+                                        ctx,
+                                        Handle::cast::<Addr<'a>>(
+                                            (Handle::add(((cmd).state()).sector_buf(), pos)),
+                                        ),
+                                        (cmd).x8().header().icons(),
+                                        ((cmd).state()).sector_size().wrapping_sub((pos as u32)),
+                                    );
+                                    fns::HSD_Checksum(
+                                        ctx,
+                                        ((cmd).state()).sector_buf(),
+                                        (((cmd).state()).sector_size() as i32),
+                                        Handle::cast::<Addr<'a>>(
+                                            ((cmd).state()).digest().at((cmd)
+                                                .x8()
+                                                .header()
+                                                .index()
+                                                .wrapping_mul(16_i32)),
+                                        ),
+                                    );
+                                } else {
+                                    let _ = fns::memcpy(
+                                        ctx,
+                                        Handle::cast::<Addr<'a>>(
+                                            (Handle::add(((cmd).state()).sector_buf(), pos)),
+                                        ),
+                                        (cmd).x8().header().icons(),
+                                        ((cmd).state()).header_size().wrapping_sub((pos as u32)),
+                                    );
+                                    fns::HSD_Checksum(
+                                        ctx,
+                                        ((cmd).state()).sector_buf(),
+                                        (((cmd).state()).header_size() as i32),
+                                        Handle::cast::<Addr<'a>>(
+                                            ((cmd).state()).digest().at((cmd)
+                                                .x8()
+                                                .header()
+                                                .index()
+                                                .wrapping_mul(16_i32)),
+                                        ),
+                                    );
+                                    let _ = fns::memcpy(
+                                        ctx,
+                                        Handle::cast::<Addr<'a>>(
+                                            (Handle::add(
+                                                ((cmd).state()).sector_buf(),
+                                                (((cmd).state()).header_size() as i32),
+                                            )),
+                                        ),
+                                        Handle::cast::<Addr<'a>>(((cmd).state()).digest().at(0)),
+                                        (48_i32 as u32),
+                                    );
+                                }
+                            } else {
+                                let mut remaining: u32 =
+                                    ((cmd).state()).header_size().wrapping_sub(
+                                        ((cmd).state())
+                                            .sector_size()
+                                            .wrapping_mul(((cmd).x8().header().index() as u32)),
+                                    );
+                                let mut icons_offset: i32 = ((((cmd).state())
+                                    .sector_size()
+                                    .wrapping_mul(((cmd).x8().header().index() as u32))
+                                    .wrapping_sub((64_i32 as u32)))
+                                .wrapping_sub((banner_size as u32))
+                                    as i32);
+                                if remaining > ((cmd).state()).sector_size() {
+                                    let _ = fns::memcpy(
+                                        ctx,
+                                        Handle::cast::<Addr<'a>>(((cmd).state()).sector_buf()),
+                                        Handle::cast::<Addr<'a>>(Handle::add(
+                                            Handle::cast::<Val<'a, u8>>(
+                                                (cmd).x8().header().icons(),
+                                            ),
+                                            icons_offset,
+                                        )),
+                                        ((cmd).state()).sector_size(),
+                                    );
+                                    fns::HSD_Checksum(
+                                        ctx,
+                                        ((cmd).state()).sector_buf(),
+                                        (((cmd).state()).sector_size() as i32),
+                                        Handle::cast::<Addr<'a>>(
+                                            ((cmd).state()).digest().at((cmd)
+                                                .x8()
+                                                .header()
+                                                .index()
+                                                .wrapping_mul(16_i32)),
+                                        ),
+                                    );
+                                } else {
+                                    let _ = fns::memcpy(
+                                        ctx,
+                                        Handle::cast::<Addr<'a>>(((cmd).state()).sector_buf()),
+                                        Handle::cast::<Addr<'a>>(Handle::add(
+                                            Handle::cast::<Val<'a, u8>>(
+                                                (cmd).x8().header().icons(),
+                                            ),
+                                            icons_offset,
+                                        )),
+                                        remaining,
+                                    );
+                                    fns::HSD_Checksum(
+                                        ctx,
+                                        ((cmd).state()).sector_buf(),
+                                        (remaining as i32),
+                                        Handle::cast::<Addr<'a>>(
+                                            ((cmd).state()).digest().at((cmd)
+                                                .x8()
+                                                .header()
+                                                .index()
+                                                .wrapping_mul(16_i32)),
+                                        ),
+                                    );
+                                    let _ = fns::memcpy(
+                                        ctx,
+                                        Handle::cast::<Addr<'a>>(
+                                            (Handle::add(
+                                                ((cmd).state()).sector_buf(),
+                                                (remaining as i32),
+                                            )),
+                                        ),
+                                        Handle::cast::<Addr<'a>>(((cmd).state()).digest().at(0)),
+                                        (48_i32 as u32),
+                                    );
+                                }
+                            }
+                            intr2 = fns::OSDisableInterrupts(ctx);
+                            result = inl_retryCardWriteAsync_unfused(
+                                ctx,
+                                ((cmd).state()).file_info(),
+                                Handle::cast::<Addr<'a>>(((cmd).state()).sector_buf()),
+                                (((cmd).state()).sector_size() as i32),
+                                (((cmd).state())
+                                    .sector_size()
+                                    .wrapping_mul(((cmd).x8().header().index() as u32))
+                                    as i32),
+                                fnptr(ctx, 0x803a949c),
+                            );
+                            statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(1_i32);
+                            let _ = fns::OSRestoreInterrupts(ctx, intr2);
+                            if result < 0_i32 {
+                                statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(0_i32);
+                                let _ =
+                                    inl_retryCardClose_unfused(ctx, ((cmd).state()).file_info());
+                                statics::sysdolphin__baselib__card::curr_result(ctx).set(result);
+                                break 'c2;
+                            }
+                            return;
+                        }
+                        (cmd).set_type((enums::CARD_CMD_NONE as i32));
+                        statics::sysdolphin__baselib__card::curr_head(ctx).set(rem_i32(
+                            (statics::sysdolphin__baselib__card::curr_head(ctx)
+                                .get()
+                                .wrapping_add(1_i32)),
+                            128_i32,
+                        ));
+                        break 'c2;
+                    }
+                    if __case <= 13 {
+                        {
+                            let mut retries: i32 = 0;
+                            let mut i: i32 = 0;
+                            let mut file_no: i32 = 0;
+                            ((cmd).state()).set_file_no((cmd).x8().get_status().file_no());
+                            file_no = ((cmd).state()).file_no();
+                            chan = ((cmd).state()).chan();
+                            {
+                                i = 0_i32;
+                                'l13: while i < 10_i32 {
+                                    'c14: {
+                                        result = fns::CARDGetStatus(ctx, chan, file_no, stat);
+                                        if result != 1_i32.wrapping_neg() {
+                                            break 'l13;
+                                        }
+                                    }
+                                    i = i.wrapping_add(1);
+                                }
+                            }
+                            if result < 0_i32 {
+                                statics::sysdolphin__baselib__card::curr_result(ctx).set(result);
+                                statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(0_i32);
+                            } else {
+                                inl_unpackCardStat_unfused(ctx, cmd, stat);
+                                if stat.iconAddr() != (64_i32 as u32) {
+                                    statics::sysdolphin__baselib__card::curr_result(ctx)
+                                        .set(0x106_i32.wrapping_neg());
+                                    statics::sysdolphin__baselib__card::hsd_804D799C(ctx)
+                                        .set(0_i32);
+                                } else {
+                                    (cmd).set_type((enums::CARD_CMD_NONE as i32));
+                                    statics::sysdolphin__baselib__card::curr_head(ctx).set(
+                                        rem_i32(
+                                            (statics::sysdolphin__baselib__card::curr_head(ctx)
+                                                .get()
+                                                .wrapping_add(1_i32)),
+                                            128_i32,
+                                        ),
+                                    );
+                                }
+                            }
+                            break 'c2;
+                        }
+                    }
+                    if __case <= 14 {
+                        result = inl_retryCardFastOpen_unfused(
+                            ctx,
+                            ((cmd).state()).chan(),
+                            ((cmd).state()).file_no(),
+                            ((cmd).state()).file_info(),
+                        );
+                        if result < 0_i32 {
+                            statics::sysdolphin__baselib__card::curr_result(ctx).set(result);
+                            break 'c2;
+                        }
+                        intr2 = fns::OSDisableInterrupts(ctx);
+                        result = inl_retryCardReadAsync_unfused(
+                            ctx,
+                            ((cmd).state()).file_info(),
+                            Handle::cast::<Addr<'a>>(((cmd).state()).sector_buf()),
+                            (((cmd).state()).sector_size() as i32),
+                            (cmd).x8().read().offset(),
+                            fnptr(ctx, 0x803a949c),
+                        );
+                        statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(1_i32);
+                        let _ = fns::OSRestoreInterrupts(ctx, intr2);
+                        if result < 0_i32 {
+                            statics::sysdolphin__baselib__card::curr_result(ctx).set(result);
+                            statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(0_i32);
+                            let _ = inl_retryCardClose_unfused(ctx, ((cmd).state()).file_info());
+                            break 'c2;
+                        }
+                        return;
+                    }
+                    if __case <= 15 {
+                        result =
+                            statics::sysdolphin__baselib__card::fn_803AD16C(ctx, (cmd).state());
+                        if result < 0_i32 {
+                            statics::sysdolphin__baselib__card::curr_result(ctx).set(result);
+                            statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(0_i32);
+                        } else {
+                            (cmd).set_type((enums::CARD_CMD_NONE as i32));
+                            statics::sysdolphin__baselib__card::curr_head(ctx).set(rem_i32(
+                                (statics::sysdolphin__baselib__card::curr_head(ctx)
+                                    .get()
+                                    .wrapping_add(1_i32)),
+                                128_i32,
+                            ));
+                        }
+                        break 'c2;
+                    }
+                    if __case <= 16 {
+                        {
+                            let mut blk: i32 = 0;
+                            statics::sysdolphin__baselib__card::fn_803AC2D4(ctx);
+                            result = statics::sysdolphin__baselib__card::fn_803ACF30(
+                                ctx,
+                                (cmd).state(),
+                                null::<Addr<'a>>(ctx),
+                                null::<Addr<'a>>(ctx),
+                                null::<Addr<'a>>(ctx),
+                            );
+                            if result < 0_i32 {
+                                statics::sysdolphin__baselib__card::fn_803AC2E0(ctx);
+                                statics::sysdolphin__baselib__card::curr_result(ctx).set(result);
+                                statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(0_i32);
+                                break 'c2;
+                            }
+                            {
+                                blk = 0_i32;
+                                'l15: while blk <= ((cmd).state()).num_blocks() {
+                                    'c16: {
+                                        result = statics::sysdolphin__baselib__card::fn_803AC258(
+                                            ctx,
+                                            (cmd).state(),
+                                            blk,
+                                        );
+                                        if result < 0_i32 {
+                                            statics::sysdolphin__baselib__card::fn_803AC2E0(ctx);
+                                            statics::sysdolphin__baselib__card::curr_result(ctx)
+                                                .set(result);
+                                            statics::sysdolphin__baselib__card::hsd_804D799C(ctx)
+                                                .set(0_i32);
+                                            break 'goto_next;
+                                        }
+                                    }
+                                    blk = blk.wrapping_add(1);
+                                }
+                            }
+                            result =
+                                statics::sysdolphin__baselib__card::fn_803AC2A4(ctx, (cmd).state());
+                            if result < 0_i32 {
+                                statics::sysdolphin__baselib__card::fn_803AC2E0(ctx);
+                                statics::sysdolphin__baselib__card::curr_result(ctx).set(result);
+                                statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(0_i32);
+                                break 'c2;
+                            }
+                            statics::sysdolphin__baselib__card::fn_803AC334(ctx);
+                            (cmd).set_type((enums::CARD_CMD_NONE as i32));
+                            statics::sysdolphin__baselib__card::curr_head(ctx).set(rem_i32(
+                                (statics::sysdolphin__baselib__card::curr_head(ctx)
+                                    .get()
+                                    .wrapping_add(1_i32)),
+                                128_i32,
+                            ));
+                            break 'c2;
+                        }
+                    }
+                    if __case <= 17 {
+                        return;
+                    }
+                }
+            }
+            break 'c2;
+        }
+    }
+}
+
 pub fn fn_803AC168<'a>(ctx: &'a Ctx, cmd: CardCmd<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
     let mut cmd = cmd;
@@ -3105,6 +4182,1662 @@ pub fn fn_803ADF90<'a>(
     return status;
 }
 
+pub fn fn_803AE7F8<'a>(
+    ctx: &'a Ctx,
+    state: CardState<'a>,
+    file_idx: i32,
+    buf: Val<'a, u8>,
+    r#async: i32,
+    callback: FnPtr<'a>,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x4f8);
+    let block_map: Arr<'a, ArrV<'a, i32, 64>, 3> = frame_at(ctx, &__frame, 0x0);
+    let pad_block_map: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x300);
+    let cmd_done: CardCmd<'a> = frame_at(ctx, &__frame, 0x320);
+    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x344);
+    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x35c);
+    let cmd_2: CardCmd<'a> = frame_at(ctx, &__frame, 0x380);
+    let init_cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x3a4);
+    let cmd_3: CardCmd<'a> = frame_at(ctx, &__frame, 0x3c8);
+    let init_cmd_2: CardCmd<'a> = frame_at(ctx, &__frame, 0x3ec);
+    let cmd_4: CardCmd<'a> = frame_at(ctx, &__frame, 0x410);
+    let mut state = state;
+    let mut file_idx = file_idx;
+    let mut buf = buf;
+    let mut r#async = r#async;
+    let mut callback = callback;
+    let mut st: CardState<'a> = null(ctx);
+    let mut block_map_ptr: ArrV<'a, i32, 64> = null(ctx);
+    let mut blocks_before: i32 = 0;
+    let mut current_seq: i32 = 0;
+    let mut file_blocks: i32 = 0;
+    let mut file_size: i32 = 0;
+    let mut free_count: i32 = 0;
+    let mut i: i32 = 0;
+    let mut logical: i32 = 0;
+    let mut repair_result: i32 = 0;
+    let mut result: i32 = 0;
+    let mut total_blocks: i32 = 0;
+    let mut verify_failed: i32 = 0;
+    let mut data: Val<'a, u8> = null(ctx);
+    'goto_after_verify: {
+        st = state;
+        'l1: loop {
+            'c2: {}
+            if !(0_i32 != 0) {
+                break 'l1;
+            }
+        }
+        repair_result = 0_i32;
+        verify_failed = 0_i32;
+        if r#async == 0_i32 {
+            let mut intr: i32 = fns::OSDisableInterrupts(ctx);
+            let mut busy: i32 = 0;
+            if (statics::sysdolphin__baselib__card::hsd_804D799C(ctx).get() as u32)
+                == (1_i32 as u32)
+            {
+                busy = 1_i32;
+            } else {
+                busy = 0_i32;
+            }
+            let _ = fns::OSRestoreInterrupts(ctx, intr);
+            if (busy != 0) {
+                return 0x108_i32.wrapping_neg();
+            }
+        }
+        blocks_before = inl_fn_803AC6B8_blocks_before_unfused(ctx, state, file_idx);
+        file_size = (st).file_sizes().at(file_idx).get();
+        file_blocks = (inl_fn_803AC634_unfused(ctx, state, file_idx) as i32);
+        total_blocks = statics::sysdolphin__baselib__card::fn_803AC7DC(ctx, state);
+        {
+            i = 0_i32;
+            'l3: while i < file_blocks {
+                'c4: {
+                    block_map.get(0_i32).at(i).set(1_i32.wrapping_neg());
+                    block_map.get(1_i32).at(i).set(1_i32.wrapping_neg());
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+        free_count = 0_i32;
+        current_seq = 1_i32.wrapping_neg();
+        {
+            i = 1_i32;
+            'l5: while i <= total_blocks {
+                'c6: {
+                    let mut block_id: i32 = (st).block_ids().at(i).get();
+                    if block_id < 0_i32 {
+                        block_map
+                            .get(2_i32)
+                            .at({
+                                let __t1 = free_count;
+                                free_count = free_count.wrapping_add(1);
+                                __t1
+                            })
+                            .set(i);
+                        break 'c6;
+                    }
+                    logical = block_id.wrapping_sub(blocks_before);
+                    if (0_i32 <= logical) && (logical < file_blocks) {
+                        if (current_seq == 1_i32.wrapping_neg())
+                            || (inl_fn_803ACB74_unfused(
+                                ctx,
+                                current_seq,
+                                (st).block_seqs().at(i).get(),
+                            ) < 0_i32)
+                        {
+                            current_seq = (st).block_seqs().at(i).get();
+                        }
+                        if block_map.get(0_i32).at(logical).get() < 0_i32 {
+                            block_map.get(0_i32).at(logical).set(i);
+                        } else {
+                            block_map.get(1_i32).at(logical).set(i);
+                        }
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+        block_map_ptr = block_map.get(0);
+        {
+            i = 0_i32;
+            'l7: while i < file_blocks {
+                'c8: {
+                    if ((Handle::add(block_map_ptr, 0_i32)).at(i).get() < 0_i32)
+                        || ((st)
+                            .block_seqs()
+                            .at((Handle::add(block_map_ptr, 0_i32)).at(i).get())
+                            .get()
+                            != current_seq)
+                    {
+                        verify_failed = 1_i32;
+                        break 'l7;
+                    }
+                    if ((Handle::add(block_map_ptr, 1_i32)).at(i).get() < 0_i32)
+                        || ((st)
+                            .block_seqs()
+                            .at((Handle::add(block_map_ptr, 1_i32)).at(i).get())
+                            .get()
+                            != current_seq)
+                    {
+                        verify_failed = 1_i32;
+                        break 'l7;
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+        {
+            i = 0_i32;
+            'l9: while i < file_blocks {
+                'c10: {
+                    if (Handle::add(block_map_ptr, 0_i32)).at(i).get() < 0_i32 {
+                        if free_count > 0_i32 {
+                            (Handle::add(block_map_ptr, 0_i32)).at(i).set(
+                                block_map
+                                    .get(2_i32)
+                                    .at({
+                                        free_count = free_count.wrapping_sub(1);
+                                        free_count
+                                    })
+                                    .get(),
+                            );
+                        } else {
+                            return 0x101_i32.wrapping_neg();
+                        }
+                    }
+                    if (Handle::add(block_map_ptr, 1_i32)).at(i).get() < 0_i32 {
+                        if free_count > 0_i32 {
+                            (Handle::add(block_map_ptr, 1_i32)).at(i).set(
+                                block_map
+                                    .get(2_i32)
+                                    .at({
+                                        free_count = free_count.wrapping_sub(1);
+                                        free_count
+                                    })
+                                    .get(),
+                            );
+                        } else {
+                            repair_result = 0x102_i32.wrapping_neg();
+                        }
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+        if r#async != 0_i32 {
+            statics::sysdolphin__baselib__card::hsd_804D7998(ctx)
+                .set(statics::sysdolphin__baselib__card::curr_tail(ctx).get());
+        } else {
+            let mut chan: i32 = 0;
+            let mut file_no: i32 = 0;
+            let mut open_result: i32 = 0;
+            let mut retries: i32 = 0;
+            file_no = (st).file_no();
+            chan = (st).chan();
+            {
+                retries = 0_i32;
+                'l11: while retries < 10_i32 {
+                    'c12: {
+                        open_result = fns::CARDFastOpen(ctx, chan, file_no, (st).file_info());
+                        if open_result != 1_i32.wrapping_neg() {
+                            break 'l11;
+                        }
+                    }
+                    retries = retries.wrapping_add(1);
+                }
+            }
+            if open_result < 0_i32 {
+                return open_result;
+            }
+        }
+        if verify_failed == 0_i32 {
+            let mut map: ArrV<'a, i32, 64> = null(ctx);
+            let mut pass: i32 = 0;
+            pass = 0_i32;
+            map = block_map_ptr;
+            {
+                'l13: while pass < 2_i32 {
+                    'c14: {
+                        let mut remaining: i32 = file_size;
+                        data = buf;
+                        {
+                            i = 0_i32;
+                            'l15: while (i < file_blocks) && (remaining > 0_i32) {
+                                'c16: {
+                                    let mut phys: i32 = 0;
+                                    let mut chunk: i32 = ((st).sector_size() as i32);
+                                    chunk = chunk.wrapping_sub(32_i32);
+                                    if (remaining as u32) > (chunk as u32) {
+                                        phys = (map).at(i).get();
+                                        if phys >= 0_i32 {
+                                            if r#async != 0_i32 {
+                                                let mut cmd_result: i32 = 0;
+                                                if chunk == 0_i32 {
+                                                    cmd_result = 0_i32;
+                                                } else {
+                                                    let mut ofs: i32 =
+                                                        inl_fn_803ACBE8_unfused(ctx, state, phys);
+                                                    cmd.set_type(
+                                                        (enums::CARD_CMD_VERIFY_BLOCK as i32),
+                                                    );
+                                                    cmd.set_state(state);
+                                                    cmd.x8().verify().set_block_id(
+                                                        blocks_before.wrapping_add(i),
+                                                    );
+                                                    cmd.x8().verify().set_seq(current_seq);
+                                                    cmd.x8().verify().set_data(Handle::cast::<
+                                                        Addr<'a>,
+                                                    >(
+                                                        data
+                                                    ));
+                                                    cmd.x8().verify().set_size(chunk);
+                                                    cmd.x8().verify().set_offset(ofs);
+                                                    cmd_result = statics::sysdolphin__baselib__card::fn_803AC168(ctx, cmd);
+                                                }
+                                                if cmd_result < 0_i32 {
+                                                    inl_fn_803AE7F8_rewind_unfused(ctx);
+                                                    return cmd_result;
+                                                }
+                                            } else {
+                                                let mut verify_result: i32 =
+                                                    statics::sysdolphin__baselib__card::fn_803ACC0C(
+                                                        ctx,
+                                                        state,
+                                                        phys,
+                                                        blocks_before.wrapping_add(i),
+                                                        current_seq,
+                                                        Handle::cast::<Addr<'a>>(data),
+                                                        chunk,
+                                                    );
+                                                result = verify_result;
+                                                if result < 0_i32 {
+                                                    inl_fn_803AE7F8_close_unfused(ctx, st);
+                                                    return result;
+                                                }
+                                                if result > 0_i32 {
+                                                    break 'goto_after_verify;
+                                                }
+                                            }
+                                        }
+                                        remaining = ((remaining as u32).wrapping_sub(
+                                            (st).sector_size().wrapping_sub((32_i32 as u32)),
+                                        )
+                                            as i32);
+                                        data = Handle::add(
+                                            data,
+                                            ((st).sector_size().wrapping_sub((32_i32 as u32))
+                                                as i32),
+                                        );
+                                    } else {
+                                        phys = (map).at(i).get();
+                                        if phys >= 0_i32 {
+                                            if r#async != 0_i32 {
+                                                let mut cmd_result_2: i32 = 0;
+                                                if remaining == 0_i32 {
+                                                    cmd_result_2 = 0_i32;
+                                                } else {
+                                                    let mut ofs_2: i32 =
+                                                        inl_fn_803ACBE8_unfused(ctx, state, phys);
+                                                    cmd_2.set_type(
+                                                        (enums::CARD_CMD_VERIFY_BLOCK as i32),
+                                                    );
+                                                    cmd_2.set_state(state);
+                                                    cmd_2.x8().verify().set_block_id(
+                                                        blocks_before.wrapping_add(i),
+                                                    );
+                                                    cmd_2.x8().verify().set_seq(current_seq);
+                                                    cmd_2.x8().verify().set_data(Handle::cast::<
+                                                        Addr<'a>,
+                                                    >(
+                                                        data
+                                                    ));
+                                                    cmd_2.x8().verify().set_size(remaining);
+                                                    cmd_2.x8().verify().set_offset(ofs_2);
+                                                    cmd_result_2 = statics::sysdolphin__baselib__card::fn_803AC168(ctx, cmd_2);
+                                                }
+                                                if cmd_result_2 < 0_i32 {
+                                                    inl_fn_803AE7F8_rewind_unfused(ctx);
+                                                    return cmd_result_2;
+                                                }
+                                            } else {
+                                                result =
+                                                    statics::sysdolphin__baselib__card::fn_803ACC0C(
+                                                        ctx,
+                                                        state,
+                                                        phys,
+                                                        blocks_before.wrapping_add(i),
+                                                        current_seq,
+                                                        Handle::cast::<Addr<'a>>(data),
+                                                        remaining,
+                                                    );
+                                                if result < 0_i32 {
+                                                    inl_fn_803AE7F8_close_unfused(ctx, st);
+                                                    return result;
+                                                }
+                                                if result > 0_i32 {
+                                                    break 'goto_after_verify;
+                                                }
+                                            }
+                                        }
+                                        remaining = 0_i32;
+                                    }
+                                }
+                                i = i.wrapping_add(1);
+                            }
+                        }
+                    }
+                    pass = pass.wrapping_add(1);
+                    map = Handle::add(map, 1);
+                }
+            }
+            if r#async != 0_i32 {
+                let mut cmd_result_3: i32 = 0;
+                cmd_done.set_type((enums::CARD_CMD_CHECK_VERIFIED as i32));
+                cmd_done.set_state(state);
+                cmd_result_3 = statics::sysdolphin__baselib__card::fn_803AC168(ctx, cmd_done);
+                if cmd_result_3 < 0_i32 {
+                    inl_fn_803AE7F8_rewind_unfused(ctx);
+                    return cmd_result_3;
+                }
+            } else {
+                let mut retries_2: i32 = 0;
+                {
+                    retries_2 = 0_i32;
+                    'l17: while retries_2 < 10_i32 {
+                        'c18: {
+                            result = fns::CARDClose(ctx, (st).file_info());
+                            if result != 1_i32.wrapping_neg() {
+                                break 'l17;
+                            }
+                        }
+                        retries_2 = retries_2.wrapping_add(1);
+                    }
+                }
+                if result < 0_i32 {
+                    return 0x10b_i32.wrapping_neg();
+                }
+                return 1_i32;
+            }
+        }
+    }
+    current_seq = ((current_seq.wrapping_add(1_i32)) & 255_i32);
+    {
+        let mut pass_2: i32 = 0;
+        let mut map_2: ArrV<'a, i32, 64> = block_map_ptr;
+        {
+            pass_2 = 0_i32;
+            'l19: while pass_2 < 2_i32 {
+                'c20: {
+                    let mut remaining_2: i32 = file_size;
+                    data = buf;
+                    {
+                        i = 0_i32;
+                        'l21: while (i < file_blocks) && (remaining_2 > 0_i32) {
+                            'c22: {
+                                let mut phys_2: i32 = 0;
+                                let mut chunk_2: i32 = 0;
+                                if (remaining_2 as u32)
+                                    > (({
+                                        let __t2 = ((st).sector_size().wrapping_sub((32_i32 as u32))
+                                            as i32);
+                                        chunk_2 = __t2;
+                                        __t2
+                                    }) as u32)
+                                {
+                                    phys_2 = (map_2).at(i).get();
+                                    if phys_2 >= 0_i32 {
+                                        if r#async != 0_i32 {
+                                            let mut zero: i32 = 0;
+                                            let mut cmd_result_4: i32 = 0;
+                                            let mut ofs_3: i32 = 0;
+                                            'goto_repair_full_queued: {
+                                                ofs_3 = inl_fn_803ACBE8_unfused(ctx, state, phys_2);
+                                                if phys_2 == 0_i32 {
+                                                    zero = 0_i32;
+                                                    if blocks_before.wrapping_add(i) != 0_i32 {
+                                                        cmd_result_4 = 0x101_i32.wrapping_neg();
+                                                        break 'goto_repair_full_queued;
+                                                    }
+                                                    init_cmd.set_type(
+                                                        (enums::CARD_CMD_READ_BLOCK as i32),
+                                                    );
+                                                    init_cmd.set_state(state);
+                                                    init_cmd.x8().read().set_phys(zero);
+                                                    init_cmd.x8().read().set_xC(zero);
+                                                    init_cmd.x8().read().set_data(ptr::<Addr<'a>>(
+                                                        ctx,
+                                                        zero as u32,
+                                                    ));
+                                                    init_cmd.x8().read().set_size(zero);
+                                                    init_cmd.x8().read().set_offset(ofs_3);
+                                                    let _ = statics::sysdolphin__baselib__card::fn_803AC168(ctx, init_cmd);
+                                                }
+                                                cmd_3
+                                                    .set_type((enums::CARD_CMD_WRITE_BLOCK as i32));
+                                                cmd_3.set_state(state);
+                                                cmd_3.x8().write().set_phys(phys_2);
+                                                cmd_3
+                                                    .x8()
+                                                    .write()
+                                                    .set_block_id(blocks_before.wrapping_add(i));
+                                                cmd_3.x8().write().set_seq(current_seq);
+                                                cmd_3
+                                                    .x8()
+                                                    .write()
+                                                    .set_data(Handle::cast::<Addr<'a>>(data));
+                                                cmd_3.x8().write().set_size(chunk_2);
+                                                cmd_3.x8().write().set_offset(ofs_3);
+                                                cmd_3.x8().write().set_file_idx(file_idx);
+                                                cmd_result_4 =
+                                                    statics::sysdolphin__baselib__card::fn_803AC168(
+                                                        ctx, cmd_3,
+                                                    );
+                                            }
+                                            if cmd_result_4 < 0_i32 {
+                                                inl_fn_803AE7F8_rewind_unfused(ctx);
+                                                return cmd_result_4;
+                                            }
+                                        } else {
+                                            result =
+                                                statics::sysdolphin__baselib__card::fn_803ACFC0(
+                                                    ctx,
+                                                    state,
+                                                    phys_2,
+                                                    blocks_before.wrapping_add(i),
+                                                    current_seq,
+                                                    Handle::cast::<Addr<'a>>(data),
+                                                    chunk_2,
+                                                    file_idx,
+                                                );
+                                            if result < 0_i32 {
+                                                (st).block_ids()
+                                                    .at(block_map.get(pass_2).at(i).get())
+                                                    .set(0x7fff_i32.wrapping_neg());
+                                                (st).block_seqs()
+                                                    .at(block_map.get(pass_2).at(i).get())
+                                                    .set(0_i32);
+                                                inl_fn_803AE7F8_close_unfused(ctx, st);
+                                                return (if pass_2 == 0_i32 {
+                                                    0x104_i32.wrapping_neg()
+                                                } else {
+                                                    0x102_i32.wrapping_neg()
+                                                });
+                                            }
+                                            (st).block_ids()
+                                                .at((map_2).at(i).get())
+                                                .set(blocks_before.wrapping_add(i));
+                                            (st).block_seqs()
+                                                .at((map_2).at(i).get())
+                                                .set(current_seq);
+                                        }
+                                    }
+                                    remaining_2 = ((remaining_2 as u32).wrapping_sub(
+                                        (st).sector_size().wrapping_sub((32_i32 as u32)),
+                                    ) as i32);
+                                    data = Handle::add(
+                                        data,
+                                        ((st).sector_size().wrapping_sub((32_i32 as u32)) as i32),
+                                    );
+                                } else {
+                                    phys_2 = (map_2).at(i).get();
+                                    if phys_2 >= 0_i32 {
+                                        if r#async != 0_i32 {
+                                            let mut zero_2: i32 = 0;
+                                            let mut cmd_result_5: i32 = 0;
+                                            let mut ofs_4: i32 = 0;
+                                            'goto_repair_tail_queued: {
+                                                ofs_4 = inl_fn_803ACBE8_unfused(ctx, state, phys_2);
+                                                if phys_2 == 0_i32 {
+                                                    zero_2 = 0_i32;
+                                                    if blocks_before.wrapping_add(i) != 0_i32 {
+                                                        cmd_result_5 = 0x101_i32.wrapping_neg();
+                                                        break 'goto_repair_tail_queued;
+                                                    }
+                                                    init_cmd_2.set_type(
+                                                        (enums::CARD_CMD_READ_BLOCK as i32),
+                                                    );
+                                                    init_cmd_2.set_state(state);
+                                                    init_cmd_2.x8().read().set_phys(zero_2);
+                                                    init_cmd_2.x8().read().set_xC(zero_2);
+                                                    init_cmd_2.x8().read().set_data(
+                                                        ptr::<Addr<'a>>(ctx, zero_2 as u32),
+                                                    );
+                                                    init_cmd_2.x8().read().set_size(zero_2);
+                                                    init_cmd_2.x8().read().set_offset(ofs_4);
+                                                    let _ = statics::sysdolphin__baselib__card::fn_803AC168(ctx, init_cmd_2);
+                                                }
+                                                cmd_4
+                                                    .set_type((enums::CARD_CMD_WRITE_BLOCK as i32));
+                                                cmd_4.set_state(state);
+                                                cmd_4.x8().write().set_phys(phys_2);
+                                                cmd_4
+                                                    .x8()
+                                                    .write()
+                                                    .set_block_id(blocks_before.wrapping_add(i));
+                                                cmd_4.x8().write().set_seq(current_seq);
+                                                cmd_4
+                                                    .x8()
+                                                    .write()
+                                                    .set_data(Handle::cast::<Addr<'a>>(data));
+                                                cmd_4.x8().write().set_size(remaining_2);
+                                                cmd_4.x8().write().set_offset(ofs_4);
+                                                cmd_4.x8().write().set_file_idx(file_idx);
+                                                cmd_result_5 =
+                                                    statics::sysdolphin__baselib__card::fn_803AC168(
+                                                        ctx, cmd_4,
+                                                    );
+                                            }
+                                            if cmd_result_5 < 0_i32 {
+                                                inl_fn_803AE7F8_rewind_unfused(ctx);
+                                                return cmd_result_5;
+                                            }
+                                        } else {
+                                            result =
+                                                statics::sysdolphin__baselib__card::fn_803ACFC0(
+                                                    ctx,
+                                                    state,
+                                                    phys_2,
+                                                    blocks_before.wrapping_add(i),
+                                                    current_seq,
+                                                    Handle::cast::<Addr<'a>>(data),
+                                                    remaining_2,
+                                                    file_idx,
+                                                );
+                                            if result < 0_i32 {
+                                                (st).block_ids()
+                                                    .at(block_map.get(pass_2).at(i).get())
+                                                    .set(0x7fff_i32.wrapping_neg());
+                                                (st).block_seqs()
+                                                    .at(block_map.get(pass_2).at(i).get())
+                                                    .set(0_i32);
+                                                inl_fn_803AE7F8_close_unfused(ctx, st);
+                                                return (if pass_2 == 0_i32 {
+                                                    0x104_i32.wrapping_neg()
+                                                } else {
+                                                    0x102_i32.wrapping_neg()
+                                                });
+                                            }
+                                            (st).block_ids()
+                                                .at((map_2).at(i).get())
+                                                .set(blocks_before.wrapping_add(i));
+                                            (st).block_seqs()
+                                                .at((map_2).at(i).get())
+                                                .set(current_seq);
+                                        }
+                                    }
+                                    remaining_2 = 0_i32;
+                                }
+                            }
+                            i = i.wrapping_add(1);
+                        }
+                    }
+                }
+                pass_2 = pass_2.wrapping_add(1);
+                map_2 = Handle::add(map_2, 1);
+            }
+        }
+    }
+    if r#async == 0_i32 {
+        let mut retries_3: i32 = 0;
+        {
+            retries_3 = 0_i32;
+            'l23: while retries_3 < 10_i32 {
+                'c24: {
+                    result = fns::CARDClose(ctx, (st).file_info());
+                    if result != 1_i32.wrapping_neg() {
+                        break 'l23;
+                    }
+                }
+                retries_3 = retries_3.wrapping_add(1);
+            }
+        }
+        if result < 0_i32 {
+            return (if repair_result == 0_i32 {
+                0x10b_i32.wrapping_neg()
+            } else {
+                repair_result
+            });
+        }
+    } else {
+        let mut active: CardActiveRequest<'a> =
+            statics::sysdolphin__baselib__card::active_requests(ctx);
+        (active).set_type((enums::CARD_ACTIVE_WRITE_FILE as i32));
+        (active).set_state(state);
+        (active).set_callback(callback);
+        (active).set_callback_arg(file_idx);
+        statics::sysdolphin__baselib__card::hsd_804D7998(ctx).set(1_i32.wrapping_neg());
+    }
+    return repair_result;
+}
+
+pub fn fn_803AF3F0<'a>(
+    ctx: &'a Ctx,
+    state: CardState<'a>,
+    file_idx: i32,
+    buf: Val<'a, u8>,
+    r#async: i32,
+    callback: FnPtr<'a>,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x548);
+    let block_map: Arr<'a, ArrV<'a, i32, 64>, 3> = frame_at(ctx, &__frame, 0x0);
+    let needs_rewrite: Val<'a, i32> = frame_at(ctx, &__frame, 0x300);
+    let file_blocks: Val<'a, i32> = frame_at(ctx, &__frame, 0x304);
+    let total_blocks: Val<'a, i32> = frame_at(ctx, &__frame, 0x308);
+    let free_blk: fn_803AF3F0_free_blk<'a> = frame_at(ctx, &__frame, 0x30c);
+    let write_blk: fn_803AF3F0_write_blk<'a> = frame_at(ctx, &__frame, 0x310);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x314);
+    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x324);
+    let mut state = state;
+    let mut file_idx = file_idx;
+    let mut buf = buf;
+    let mut r#async = r#async;
+    let mut callback = callback;
+    let mut blocks_before: i32 = 0;
+    let mut file_size: i32 = 0;
+    let mut result: i32 = 0;
+    let mut current_seq: i32 = 0;
+    let mut secondary_count: i32 = 0;
+    let mut free_count: i32 = 0;
+    let mut i: i32 = 0;
+    let mut remaining: i32 = 0;
+    let mut data: Val<'a, u8> = null(ctx);
+    'goto_after_verify: {
+        'l1: loop {
+            'c2: {}
+            if !(0_i32 != 0) {
+                break 'l1;
+            }
+        }
+        needs_rewrite.set(0_i32);
+        if r#async == 0_i32 {
+            let mut intr: i32 = fns::OSDisableInterrupts(ctx);
+            let mut busy: i32 = 0;
+            if (statics::sysdolphin__baselib__card::hsd_804D799C(ctx).get() as u32)
+                == (1_i32 as u32)
+            {
+                busy = 1_i32;
+            } else {
+                busy = 0_i32;
+            }
+            let _ = fns::OSRestoreInterrupts(ctx, intr);
+            if (busy != 0) {
+                return 0x108_i32.wrapping_neg();
+            }
+        }
+        blocks_before = inl_fn_803AC6B8_blocks_before_unfused(ctx, state, file_idx);
+        file_size = (state).file_sizes().at(file_idx).get();
+        inl_fn_803AF3F0_calc_file_blocks_unfused(ctx, file_idx, state, file_blocks, total_blocks);
+        if r#async != 0_i32 {
+            statics::sysdolphin__baselib__card::hsd_804D7998(ctx)
+                .set(statics::sysdolphin__baselib__card::curr_tail(ctx).get());
+        } else {
+            let mut open_result: i32 = inl_fn_803AF3F0_open_unfused(
+                ctx,
+                (state).chan(),
+                (state).file_no(),
+                (state).file_info(),
+            );
+            if open_result < 0_i32 {
+                return open_result;
+            }
+        }
+        {
+            i = 0_i32;
+            'l3: while i < file_blocks.get() {
+                'c4: {
+                    block_map.get(0_i32).at(i).set(1_i32.wrapping_neg());
+                    block_map.get(1_i32).at(i).set(1_i32.wrapping_neg());
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+        current_seq = 1_i32.wrapping_neg();
+        {
+            secondary_count = 0_i32;
+            free_count = 0_i32;
+            {
+                i = 1_i32;
+                'l5: while i <= total_blocks.get() {
+                    'c6: {
+                        let mut block_id: i32 = (state).block_ids().at(i).get();
+                        if block_id >= 0_i32 {
+                            let mut logical: i32 = block_id.wrapping_sub(blocks_before);
+                            if (0_i32 <= logical) && (logical < file_blocks.get()) {
+                                if inl_fn_803ACB74_unfused(
+                                    ctx,
+                                    current_seq,
+                                    (state).block_seqs().at(i).get(),
+                                ) < 0_i32
+                                {
+                                    current_seq = (state).block_seqs().at(i).get();
+                                }
+                                block_map.get(0_i32).at(logical).set(i);
+                            }
+                        } else {
+                            let mut logical_2: i32 =
+                                (block_id.wrapping_add(blocks_before)).wrapping_neg();
+                            if (0_i32 <= logical_2) && (logical_2 < file_blocks.get()) {
+                                block_map.get(1_i32).at(secondary_count).set(i);
+                                secondary_count = secondary_count.wrapping_add(1);
+                            } else {
+                                block_map.get(2_i32).at(free_count).set(i);
+                                free_count = free_count.wrapping_add(1);
+                            }
+                        }
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+        }
+        inl_fn_803AF3F0_check_seq_unfused(
+            ctx,
+            state,
+            block_map.get(0_i32).at(0),
+            file_blocks.get(),
+            current_seq,
+            needs_rewrite,
+        );
+        if needs_rewrite.get() == 0_i32 {
+            remaining = file_size;
+            data = buf;
+            {
+                i = 0_i32;
+                'l7: while (i < file_blocks.get()) && (remaining > 0_i32) {
+                    'c8: {
+                        if (remaining as u32)
+                            > (inl_fn_803AF3F0_chunk_size_unfused(ctx, state) as u32)
+                        {
+                            if r#async != 0_i32 {
+                                let mut block: i32 = block_map.get(0_i32).at(i).get();
+                                let mut cmd_result: i32 =
+                                    inl_fn_803AF3F0_queue_verify_first_unfused(
+                                        ctx,
+                                        state,
+                                        block,
+                                        blocks_before.wrapping_add(i),
+                                        current_seq,
+                                        Handle::cast::<Addr<'a>>(data),
+                                        inl_fn_803AF3F0_chunk_size_unfused(ctx, state),
+                                    );
+                                if cmd_result < 0_i32 {
+                                    inl_fn_803AF3F0_rewind_unfused(ctx);
+                                    return cmd_result;
+                                }
+                            } else {
+                                let mut verify_result: i32 =
+                                    statics::sysdolphin__baselib__card::fn_803ACC0C(
+                                        ctx,
+                                        state,
+                                        block_map.get(0_i32).at(i).get(),
+                                        blocks_before.wrapping_add(i),
+                                        current_seq,
+                                        Handle::cast::<Addr<'a>>(data),
+                                        inl_fn_803AF3F0_chunk_size_unfused(ctx, state),
+                                    );
+                                if verify_result < 0_i32 {
+                                    inl_fn_803AF3F0_close_unfused(ctx, state);
+                                    return verify_result;
+                                }
+                                if verify_result > 0_i32 {
+                                    break 'goto_after_verify;
+                                }
+                            }
+                            remaining = remaining
+                                .wrapping_sub(inl_fn_803AF3F0_chunk_size_unfused(ctx, state));
+                            data =
+                                Handle::add(data, inl_fn_803AF3F0_chunk_size_unfused(ctx, state));
+                        } else {
+                            if r#async != 0_i32 {
+                                let mut cmd_result_2: i32 =
+                                    inl_fn_803AF3F0_queue_verify_final_unfused(
+                                        ctx,
+                                        state,
+                                        block_map.get(0_i32).at(i).get(),
+                                        blocks_before.wrapping_add(i),
+                                        current_seq,
+                                        Handle::cast::<Addr<'a>>(data),
+                                        remaining,
+                                    );
+                                if cmd_result_2 < 0_i32 {
+                                    inl_fn_803AF3F0_rewind_unfused(ctx);
+                                    return cmd_result_2;
+                                }
+                            } else {
+                                let mut verify_result_2: i32 =
+                                    statics::sysdolphin__baselib__card::fn_803ACC0C(
+                                        ctx,
+                                        state,
+                                        block_map.get(0_i32).at(i).get(),
+                                        blocks_before.wrapping_add(i),
+                                        current_seq,
+                                        Handle::cast::<Addr<'a>>(data),
+                                        remaining,
+                                    );
+                                if verify_result_2 < 0_i32 {
+                                    inl_fn_803AF3F0_close_unfused(ctx, state);
+                                    return verify_result_2;
+                                }
+                                if verify_result_2 > 0_i32 {
+                                    break 'goto_after_verify;
+                                }
+                            }
+                            remaining = 0_i32;
+                        }
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+            if r#async != 0_i32 {
+                let mut cmd_result_3: i32 = 0;
+                cmd.set_type((enums::CARD_CMD_CHECK_VERIFIED as i32));
+                cmd.set_state(state);
+                cmd_result_3 = inl_fn_803AC168_unfused(ctx, cmd);
+                if cmd_result_3 < 0_i32 {
+                    inl_fn_803AF3F0_rewind_unfused(ctx);
+                    return cmd_result_3;
+                }
+            } else {
+                let mut retries: i32 = 0;
+                {
+                    retries = 0_i32;
+                    'l9: while retries < 10_i32 {
+                        'c10: {
+                            result = fns::CARDClose(ctx, (state).file_info());
+                            if result != 1_i32.wrapping_neg() {
+                                break 'l9;
+                            }
+                        }
+                        retries = retries.wrapping_add(1);
+                    }
+                }
+                if result < 0_i32 {
+                    return 0x10b_i32.wrapping_neg();
+                }
+                return 1_i32;
+            }
+        }
+    }
+    if secondary_count > file_blocks.get() {
+        {
+            i = file_blocks.get();
+            'l11: while i < secondary_count {
+                'c12: {
+                    if r#async != 0_i32 {
+                        let mut cmd_result_4: i32 = 0;
+                        free_blk.set_v(block_map.get(1_i32).at(i).get());
+                        cmd_result_4 = inl_fn_803AF3F0_queue_write_final_unfused(
+                            ctx,
+                            state,
+                            free_blk.v(),
+                            0xffff_i32,
+                            0_i32,
+                            null::<Addr<'a>>(ctx),
+                            0_i32,
+                            file_idx,
+                        );
+                        if cmd_result_4 < 0_i32 {
+                            inl_fn_803AF3F0_rewind_unfused(ctx);
+                            return cmd_result_4;
+                        }
+                    } else {
+                        result = statics::sysdolphin__baselib__card::fn_803ACFC0(
+                            ctx,
+                            state,
+                            block_map.get(1_i32).at(i).get(),
+                            0xffff_i32,
+                            0_i32,
+                            null::<Addr<'a>>(ctx),
+                            0_i32,
+                            file_idx,
+                        );
+                        (state)
+                            .block_ids()
+                            .at(block_map.get(1_i32).at(i).get())
+                            .set(0x7fff_i32.wrapping_neg());
+                        (state)
+                            .block_seqs()
+                            .at(block_map.get(1_i32).at(i).get())
+                            .set(0_i32);
+                        if result < 0_i32 {
+                            inl_fn_803AF3F0_close_unfused(ctx, state);
+                            return result;
+                        }
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    } else if secondary_count < file_blocks.get() {
+        'l13: while (secondary_count < file_blocks.get()) && (free_count > 0_i32) {
+            'c14: {
+                block_map
+                    .get(1_i32)
+                    .at({
+                        let __t1 = secondary_count;
+                        secondary_count = secondary_count.wrapping_add(1);
+                        __t1
+                    })
+                    .set(
+                        block_map
+                            .get(2_i32)
+                            .at({
+                                free_count = free_count.wrapping_sub(1);
+                                free_count
+                            })
+                            .get(),
+                    );
+            }
+        }
+        if secondary_count < file_blocks.get() {
+            {
+                i = 0_i32;
+                'l15: while (i < file_blocks.get()) && (secondary_count < file_blocks.get()) {
+                    'c16: {
+                        let mut primary: i32 = block_map.get(0_i32).at(i).get();
+                        if 0_i32 <= primary {
+                            block_map
+                                .get(1_i32)
+                                .at({
+                                    let __t2 = secondary_count;
+                                    secondary_count = secondary_count.wrapping_add(1);
+                                    __t2
+                                })
+                                .set(primary);
+                            block_map.get(0_i32).at(i).set(1_i32.wrapping_neg());
+                        }
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+            if secondary_count < file_blocks.get() {
+                if r#async == 0_i32 {
+                    inl_fn_803AF3F0_close_unfused(ctx, state);
+                }
+                return 0x101_i32.wrapping_neg();
+            }
+        }
+    }
+    {
+        let mut next: i32 = current_seq.wrapping_add(1_i32);
+        remaining = file_size;
+        data = buf;
+        current_seq = (next & 255_i32);
+    }
+    {
+        i = 0_i32;
+        'l17: while (i < file_blocks.get()) && (remaining > 0_i32) {
+            'c18: {
+                let mut chunk: i32 = 0;
+                if (remaining as u32)
+                    > (({
+                        let __t3 = inl_fn_803AF3F0_chunk_size_unfused(ctx, state);
+                        chunk = __t3;
+                        __t3
+                    }) as u32)
+                {
+                    if r#async != 0_i32 {
+                        let mut cmd_result_5: i32 = 0;
+                        write_blk.set_v(block_map.get(1_i32).at(i).get());
+                        cmd_result_5 = inl_fn_803AF3F0_queue_write_first_unfused(
+                            ctx,
+                            state,
+                            write_blk.v(),
+                            blocks_before.wrapping_add(i),
+                            current_seq,
+                            Handle::cast::<Addr<'a>>(data),
+                            chunk,
+                            file_idx,
+                        );
+                        if cmd_result_5 < 0_i32 {
+                            inl_fn_803AF3F0_rewind_unfused(ctx);
+                            return cmd_result_5;
+                        }
+                    } else {
+                        let mut write_result: i32 = statics::sysdolphin__baselib__card::fn_803ACFC0(
+                            ctx,
+                            state,
+                            block_map.get(1_i32).at(i).get(),
+                            blocks_before.wrapping_add(i),
+                            current_seq,
+                            Handle::cast::<Addr<'a>>(data),
+                            inl_fn_803AF3F0_chunk_size_unfused(ctx, state),
+                            file_idx,
+                        );
+                        if write_result < 0_i32 {
+                            (state)
+                                .block_ids()
+                                .at(block_map.get(1_i32).at(i).get())
+                                .set(0x7fff_i32.wrapping_neg());
+                            (state)
+                                .block_seqs()
+                                .at(block_map.get(1_i32).at(i).get())
+                                .set(0_i32);
+                            inl_fn_803AF3F0_close_unfused(ctx, state);
+                            return write_result;
+                        }
+                        (state)
+                            .block_ids()
+                            .at(block_map.get(1_i32).at(i).get())
+                            .set(blocks_before.wrapping_add(i));
+                        (state)
+                            .block_seqs()
+                            .at(block_map.get(1_i32).at(i).get())
+                            .set(current_seq);
+                    }
+                    remaining = ((remaining as u32)
+                        .wrapping_sub((state).sector_size().wrapping_sub((32_i32 as u32)))
+                        as i32);
+                    data = Handle::add(data, inl_fn_803AF3F0_chunk_size_unfused(ctx, state));
+                } else {
+                    if r#async != 0_i32 {
+                        let mut block_2: i32 = block_map.get(1_i32).at(i).get();
+                        let mut cmd_result_6: i32 = inl_fn_803AF3F0_queue_write_final_unfused(
+                            ctx,
+                            state,
+                            block_2,
+                            blocks_before.wrapping_add(i),
+                            current_seq,
+                            Handle::cast::<Addr<'a>>(data),
+                            remaining,
+                            file_idx,
+                        );
+                        if cmd_result_6 < 0_i32 {
+                            inl_fn_803AF3F0_rewind_unfused(ctx);
+                            return cmd_result_6;
+                        }
+                    } else {
+                        let mut write_result_2: i32 =
+                            statics::sysdolphin__baselib__card::fn_803ACFC0(
+                                ctx,
+                                state,
+                                block_map.get(1_i32).at(i).get(),
+                                blocks_before.wrapping_add(i),
+                                current_seq,
+                                Handle::cast::<Addr<'a>>(data),
+                                remaining,
+                                file_idx,
+                            );
+                        if write_result_2 < 0_i32 {
+                            (state)
+                                .block_ids()
+                                .at(block_map.get(1_i32).at(i).get())
+                                .set(0x7fff_i32.wrapping_neg());
+                            (state)
+                                .block_seqs()
+                                .at(block_map.get(1_i32).at(i).get())
+                                .set(0_i32);
+                            inl_fn_803AF3F0_close_unfused(ctx, state);
+                            return write_result_2;
+                        }
+                        (state)
+                            .block_ids()
+                            .at(block_map.get(1_i32).at(i).get())
+                            .set(blocks_before.wrapping_add(i));
+                        (state)
+                            .block_seqs()
+                            .at(block_map.get(1_i32).at(i).get())
+                            .set(current_seq);
+                    }
+                    remaining = 0_i32;
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    if r#async == 0_i32 {
+        {
+            i = 0_i32;
+            'l19: while i < file_blocks.get() {
+                'c20: {
+                    if block_map.get(0_i32).at(i).get() >= 0_i32 {
+                        (state)
+                            .block_ids()
+                            .at(block_map.get(0_i32).at(i).get())
+                            .set(
+                                (state)
+                                    .block_ids()
+                                    .at(block_map.get(0_i32).at(i).get())
+                                    .get()
+                                    .wrapping_neg(),
+                            );
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+        {
+            let mut retries_2: i32 = 0;
+            let mut close_result: i32 = 0;
+            {
+                retries_2 = 0_i32;
+                'l21: while retries_2 < 10_i32 {
+                    'c22: {
+                        close_result = fns::CARDClose(ctx, (state).file_info());
+                        if close_result != 1_i32.wrapping_neg() {
+                            break 'l21;
+                        }
+                    }
+                    retries_2 = retries_2.wrapping_add(1);
+                }
+            }
+            if close_result < 0_i32 {
+                return 0x10b_i32.wrapping_neg();
+            }
+        }
+    } else {
+        let mut active: CardActiveRequest<'a> =
+            statics::sysdolphin__baselib__card::active_requests(ctx);
+        (active).set_type((enums::CARD_ACTIVE_WRITE_FILE_1_2 as i32));
+        (active).set_state(state);
+        (active).set_callback(callback);
+        (active).set_callback_arg(file_idx);
+        statics::sysdolphin__baselib__card::hsd_804D7998(ctx).set(1_i32.wrapping_neg());
+    }
+    return 0_i32;
+}
+
+pub fn fn_803B0120<'a>(
+    ctx: &'a Ctx,
+    state: CardState<'a>,
+    file_idx: i32,
+    buf: Val<'a, u8>,
+    r#async: i32,
+    callback: FnPtr<'a>,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x548);
+    let block_map: Arr<'a, ArrV<'a, i32, 64>, 3> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x300);
+    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x310);
+    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x334);
+    let mut state = state;
+    let mut file_idx = file_idx;
+    let mut buf = buf;
+    let mut r#async = r#async;
+    let mut callback = callback;
+    let mut needs_rewrite: i32 = 0;
+    let mut blocks_before: i32 = 0;
+    let mut file_blocks: i32 = 0;
+    let mut file_size: i32 = 0;
+    let mut total_blocks: i32 = 0;
+    let mut current_seq: i32 = 0;
+    let mut block_id: i32 = 0;
+    let mut seq: i32 = 0;
+    let mut i: i32 = 0;
+    let mut secondary_count: i32 = 0;
+    let mut free_count: i32 = 0;
+    let mut logical: i32 = 0;
+    let mut remaining: i32 = 0;
+    let mut result: i32 = 0;
+    let mut data: Val<'a, u8> = null(ctx);
+    let mut j: i32 = 0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    needs_rewrite = 0_i32;
+    if r#async == 0_i32 {
+        let mut intr: i32 = fns::OSDisableInterrupts(ctx);
+        let mut busy: i32 = 0;
+        if (statics::sysdolphin__baselib__card::hsd_804D799C(ctx).get() as u32) == (1_i32 as u32) {
+            busy = 1_i32;
+        } else {
+            busy = 0_i32;
+        }
+        let _ = fns::OSRestoreInterrupts(ctx, intr);
+        if (busy != 0) {
+            return 0x108_i32.wrapping_neg();
+        }
+    }
+    blocks_before = inl_fn_803AC6B8_blocks_before_unfused(ctx, state, file_idx);
+    {
+        let mut size: i32 = (state).file_sizes().at(file_idx).get();
+        file_size = size;
+    }
+    file_blocks = inl_calculateFileBlockCount_unfused(ctx, state, file_idx);
+    total_blocks = statics::sysdolphin__baselib__card::fn_803AC7DC(ctx, state);
+    if r#async != 0_i32 {
+        statics::sysdolphin__baselib__card::hsd_804D7998(ctx)
+            .set(statics::sysdolphin__baselib__card::curr_tail(ctx).get());
+    } else {
+        let mut open_result: i32 = inl_fn_803AF3F0_open_unfused(
+            ctx,
+            (state).chan(),
+            (state).file_no(),
+            (state).file_info(),
+        );
+        if open_result < 0_i32 {
+            return open_result;
+        }
+    }
+    {
+        j = 0_i32;
+        'l3: while j < file_blocks {
+            'c4: {
+                block_map.get(0_i32).at(j).set(1_i32.wrapping_neg());
+                block_map.get(1_i32).at(j).set(1_i32.wrapping_neg());
+            }
+            j = j.wrapping_add(1);
+        }
+    }
+    current_seq = 1_i32.wrapping_neg();
+    if file_idx == 0_i32 {
+        if (state).block_ids().at(0_i32).get() == 0_i32 {
+            current_seq = (state).block_seqs().at(0_i32).get();
+        } else {
+            needs_rewrite = 1_i32;
+        }
+        block_map.get(0_i32).at(0_i32).set(0_i32);
+    }
+    {
+        secondary_count = 0_i32;
+        free_count = 0_i32;
+        {
+            i = 1_i32;
+            'l5: while i <= total_blocks {
+                'c6: {
+                    block_id = (state).block_ids().at(i).get();
+                    if block_id >= 0_i32 {
+                        logical = block_id.wrapping_sub(blocks_before);
+                        if (file_idx == 0_i32) && (logical == 0_i32) {
+                            block_map.get(1_i32).at(secondary_count).set(i);
+                            secondary_count = secondary_count.wrapping_add(1);
+                        } else if (logical >= 0_i32) && (logical < file_blocks) {
+                            seq = (state).block_seqs().at(i).get();
+                            if inl_fn_803ACB74_unfused(ctx, current_seq, seq) < 0_i32 {
+                                current_seq = seq;
+                            }
+                            block_map.get(0_i32).at(logical).set(i);
+                        }
+                    } else {
+                        logical = (block_id.wrapping_add(blocks_before)).wrapping_neg();
+                        if (logical >= 0_i32) && (logical < file_blocks) {
+                            block_map.get(1_i32).at(secondary_count).set(i);
+                            secondary_count = secondary_count.wrapping_add(1);
+                        } else {
+                            block_map.get(2_i32).at(free_count).set(i);
+                            free_count = free_count.wrapping_add(1);
+                        }
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    }
+    {
+        {
+            i = 0_i32;
+            'l7: while i < file_blocks {
+                'c8: {
+                    if block_map.get(0_i32).at(i).get() < 0_i32 {
+                        needs_rewrite = 1_i32;
+                        if secondary_count > 0_i32 {
+                            secondary_count = secondary_count.wrapping_sub(1);
+                            block_map
+                                .get(0_i32)
+                                .at(i)
+                                .set(block_map.get(1_i32).at(secondary_count).get());
+                            block_map
+                                .get(1_i32)
+                                .at(secondary_count)
+                                .set(1_i32.wrapping_neg());
+                        } else if free_count > 0_i32 {
+                            free_count = free_count.wrapping_sub(1);
+                            block_map
+                                .get(0_i32)
+                                .at(i)
+                                .set(block_map.get(2_i32).at(free_count).get());
+                            block_map
+                                .get(2_i32)
+                                .at(free_count)
+                                .set(1_i32.wrapping_neg());
+                        } else {
+                            if r#async == 0_i32 {
+                                inl_fn_803B0120_close_unfused(ctx, state);
+                            }
+                            return 0x101_i32.wrapping_neg();
+                        }
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    }
+    if needs_rewrite == 0_i32 {
+        {
+            i = 0_i32;
+            'l9: while i < file_blocks {
+                'c10: {
+                    if (block_map.get(0_i32).at(i).get() < 0_i32)
+                        || ((state)
+                            .block_seqs()
+                            .at(block_map.get(0_i32).at(i).get())
+                            .get()
+                            != current_seq)
+                    {
+                        needs_rewrite = 1_i32;
+                        break 'l9;
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    }
+    if needs_rewrite == 0_i32 {
+        'goto_verify_done: {
+            remaining = file_size;
+            data = buf;
+            {
+                i = 0_i32;
+                'l11: while (i < file_blocks) && (remaining > 0_i32) {
+                    'c12: {
+                        let mut block_id_2: i32 = blocks_before.wrapping_add(i);
+                        let mut chunk: i32 = 0;
+                        if block_id_2 == 0_i32 {
+                            chunk = inl_fn_803B0120_first_chunk_unfused(ctx, state);
+                        } else {
+                            chunk = ((state).sector_size().wrapping_sub((32_i32 as u32)) as i32);
+                        }
+                        if remaining > chunk {
+                            if r#async != 0_i32 {
+                                let mut cmd_result: i32 = inl_fn_803B0120_queue_verify_unfused(
+                                    ctx,
+                                    state,
+                                    block_map.get(0_i32).at(i).get(),
+                                    blocks_before.wrapping_add(i),
+                                    current_seq,
+                                    Handle::cast::<Addr<'a>>(data),
+                                    chunk,
+                                );
+                                if cmd_result < 0_i32 {
+                                    inl_fn_803B0120_rewind_unfused(ctx);
+                                    return cmd_result;
+                                }
+                            } else {
+                                let mut verify_result: i32 =
+                                    statics::sysdolphin__baselib__card::fn_803ACC0C(
+                                        ctx,
+                                        state,
+                                        block_map.get(0_i32).at(i).get(),
+                                        blocks_before.wrapping_add(i),
+                                        current_seq,
+                                        Handle::cast::<Addr<'a>>(data),
+                                        chunk,
+                                    );
+                                result = verify_result;
+                                if result < 0_i32 {
+                                    inl_fn_803B0120_close_unfused(ctx, state);
+                                    return result;
+                                }
+                                if result > 0_i32 {
+                                    break 'goto_verify_done;
+                                }
+                            }
+                            remaining = remaining.wrapping_sub(chunk);
+                            data = Handle::add(data, chunk);
+                        } else {
+                            if r#async != 0_i32 {
+                                let mut cmd_result_2: i32 = inl_fn_803B0120_queue_verify_unfused(
+                                    ctx,
+                                    state,
+                                    block_map.get(0_i32).at(i).get(),
+                                    blocks_before.wrapping_add(i),
+                                    current_seq,
+                                    Handle::cast::<Addr<'a>>(data),
+                                    remaining,
+                                );
+                                if cmd_result_2 < 0_i32 {
+                                    inl_fn_803B0120_rewind_unfused(ctx);
+                                    return cmd_result_2;
+                                }
+                            } else {
+                                result = statics::sysdolphin__baselib__card::fn_803ACC0C(
+                                    ctx,
+                                    state,
+                                    block_map.get(0_i32).at(i).get(),
+                                    blocks_before.wrapping_add(i),
+                                    current_seq,
+                                    Handle::cast::<Addr<'a>>(data),
+                                    remaining,
+                                );
+                                if result < 0_i32 {
+                                    inl_fn_803B0120_close_unfused(ctx, state);
+                                    return result;
+                                }
+                                if result > 0_i32 {
+                                    break 'goto_verify_done;
+                                }
+                            }
+                            remaining = 0_i32;
+                        }
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+            if r#async != 0_i32 {
+                let mut cmd_result_3: i32 = 0;
+                cmd.set_type((enums::CARD_CMD_CHECK_VERIFIED as i32));
+                cmd.set_state(state);
+                cmd_result_3 = inl_fn_803AC168_unfused(ctx, cmd);
+                if cmd_result_3 < 0_i32 {
+                    inl_fn_803B0120_rewind_unfused(ctx);
+                    return cmd_result_3;
+                }
+            } else {
+                let mut retries: i32 = 0;
+                {
+                    retries = 0_i32;
+                    'l13: while retries < 10_i32 {
+                        'c14: {
+                            result = fns::CARDClose(ctx, (state).file_info());
+                            if result != 1_i32.wrapping_neg() {
+                                break 'l13;
+                            }
+                        }
+                        retries = retries.wrapping_add(1);
+                    }
+                }
+                if result < 0_i32 {
+                    return 0x10b_i32.wrapping_neg();
+                }
+                return 1_i32;
+            }
+        }
+    }
+    'l15: while secondary_count > 0_i32 {
+        'c16: {
+            secondary_count = secondary_count.wrapping_sub(1);
+            if r#async != 0_i32 {
+                let mut block: i32 = block_map.get(1_i32).at(secondary_count).get();
+                let mut cmd_result_4: i32 = inl_fn_803B0120_queue_write_unfused(
+                    ctx,
+                    state,
+                    block,
+                    0xffff_i32,
+                    0_i32,
+                    null::<Addr<'a>>(ctx),
+                    0_i32,
+                    file_idx,
+                );
+                if cmd_result_4 < 0_i32 {
+                    inl_fn_803B0120_rewind_unfused(ctx);
+                    return cmd_result_4;
+                }
+            } else {
+                let mut secondary: Val<'a, i32> = block_map.get(1_i32).at(0);
+                let mut block_2: Val<'a, i32> = (Handle::add(secondary, secondary_count));
+                result = statics::sysdolphin__baselib__card::fn_803ACFC0(
+                    ctx,
+                    state,
+                    (block_2).get(),
+                    0xffff_i32,
+                    0_i32,
+                    null::<Addr<'a>>(ctx),
+                    0_i32,
+                    file_idx,
+                );
+                (state)
+                    .block_ids()
+                    .at((block_2).get())
+                    .set(0x7fff_i32.wrapping_neg());
+                (state).block_seqs().at((block_2).get()).set(0_i32);
+                if result < 0_i32 {
+                    inl_fn_803B0120_close_unfused(ctx, state);
+                }
+                return result;
+            }
+        }
+    }
+    {
+        let mut next: i32 = current_seq.wrapping_add(1_i32);
+        remaining = file_size;
+        data = buf;
+        seq = (next & 255_i32);
+    }
+    {
+        i = 0_i32;
+        'l17: while (i < file_blocks) && (remaining > 0_i32) {
+            'c18: {
+                let mut block_id_3: i32 = blocks_before.wrapping_add(i);
+                let mut chunk_2: i32 = 0;
+                if block_id_3 == 0_i32 {
+                    chunk_2 = inl_fn_803B0120_first_chunk_unfused(ctx, state);
+                } else {
+                    chunk_2 = ((state).sector_size().wrapping_sub((32_i32 as u32)) as i32);
+                }
+                if remaining > chunk_2 {
+                    if r#async != 0_i32 {
+                        let mut block_3: i32 = block_map.get(0_i32).at(i).get();
+                        let mut cmd_result_5: i32 = inl_fn_803B0120_queue_write_unfused(
+                            ctx,
+                            state,
+                            block_3,
+                            block_id_3,
+                            seq,
+                            Handle::cast::<Addr<'a>>(data),
+                            chunk_2,
+                            file_idx,
+                        );
+                        if cmd_result_5 < 0_i32 {
+                            inl_fn_803B0120_rewind_unfused(ctx);
+                            return cmd_result_5;
+                        }
+                    } else {
+                        let mut write_result: i32 = statics::sysdolphin__baselib__card::fn_803ACFC0(
+                            ctx,
+                            state,
+                            block_map.get(0_i32).at(i).get(),
+                            blocks_before.wrapping_add(i),
+                            seq,
+                            Handle::cast::<Addr<'a>>(data),
+                            chunk_2,
+                            file_idx,
+                        );
+                        result = write_result;
+                        if result < 0_i32 {
+                            (state)
+                                .block_ids()
+                                .at(block_map.get(0_i32).at(i).get())
+                                .set(0x7fff_i32.wrapping_neg());
+                            (state)
+                                .block_seqs()
+                                .at(block_map.get(0_i32).at(i).get())
+                                .set(0_i32);
+                            inl_fn_803B0120_close_unfused(ctx, state);
+                            return result;
+                        }
+                        (state)
+                            .block_ids()
+                            .at(block_map.get(0_i32).at(i).get())
+                            .set(blocks_before.wrapping_add(i));
+                        (state)
+                            .block_seqs()
+                            .at(block_map.get(0_i32).at(i).get())
+                            .set(seq);
+                    }
+                    remaining = remaining.wrapping_sub(chunk_2);
+                    data = Handle::add(data, chunk_2);
+                } else {
+                    if r#async != 0_i32 {
+                        let mut block_4: i32 = block_map.get(0_i32).at(i).get();
+                        let mut cmd_result_6: i32 = inl_fn_803B0120_queue_write_unfused(
+                            ctx,
+                            state,
+                            block_4,
+                            block_id_3,
+                            seq,
+                            Handle::cast::<Addr<'a>>(data),
+                            remaining,
+                            file_idx,
+                        );
+                        if cmd_result_6 < 0_i32 {
+                            inl_fn_803B0120_rewind_unfused(ctx);
+                            return cmd_result_6;
+                        }
+                    } else {
+                        let mut write_result_2: i32 =
+                            statics::sysdolphin__baselib__card::fn_803ACFC0(
+                                ctx,
+                                state,
+                                block_map.get(0_i32).at(i).get(),
+                                blocks_before.wrapping_add(i),
+                                seq,
+                                Handle::cast::<Addr<'a>>(data),
+                                remaining,
+                                file_idx,
+                            );
+                        result = write_result_2;
+                        if result < 0_i32 {
+                            (state)
+                                .block_ids()
+                                .at(block_map.get(0_i32).at(i).get())
+                                .set(0x7fff_i32.wrapping_neg());
+                            (state)
+                                .block_seqs()
+                                .at(block_map.get(0_i32).at(i).get())
+                                .set(0_i32);
+                            inl_fn_803B0120_close_unfused(ctx, state);
+                            return result;
+                        }
+                        (state)
+                            .block_ids()
+                            .at(block_map.get(0_i32).at(i).get())
+                            .set(blocks_before.wrapping_add(i));
+                        (state)
+                            .block_seqs()
+                            .at(block_map.get(0_i32).at(i).get())
+                            .set(seq);
+                    }
+                    remaining = 0_i32;
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    if r#async == 0_i32 {
+        result = inl_fn_803B0120_close_result_unfused(ctx, state);
+        if result < 0_i32 {
+            return 0x10b_i32.wrapping_neg();
+        }
+    } else {
+        statics::sysdolphin__baselib__card::active_requests(ctx)
+            .set_type((enums::CARD_ACTIVE_WRITE_FILE_3 as i32));
+        statics::sysdolphin__baselib__card::active_requests(ctx).set_state(state);
+        statics::sysdolphin__baselib__card::active_requests(ctx).set_callback(callback);
+        statics::sysdolphin__baselib__card::active_requests(ctx).set_callback_arg(file_idx);
+        statics::sysdolphin__baselib__card::hsd_804D7998(ctx).set(1_i32.wrapping_neg());
+    }
+    'l19: loop {
+        'c20: {}
+        if !(0_i32 != 0) {
+            break 'l19;
+        }
+    }
+    return 0_i32;
+}
+
 pub fn fn_803B0E9C<'a>(
     ctx: &'a Ctx,
     state: CardState<'a>,
@@ -4698,6 +7431,277 @@ fn inl_checkOpen_unfused<'a>(ctx: &'a Ctx, state: CardState<'a>) -> i32 {
     return result;
 }
 
+fn inl_retryCardFastOpen_unfused<'a>(
+    ctx: &'a Ctx,
+    chan: i32,
+    file_no: i32,
+    file_info: CARDFileInfo<'a>,
+) -> i32 {
+    let mut chan = chan;
+    let mut file_no = file_no;
+    let mut file_info = file_info;
+    let mut i: i32 = 0;
+    let mut result: i32 = 0;
+    {
+        i = 0_i32;
+        'l1: while i < 10_i32 {
+            'c2: {
+                result = fns::CARDFastOpen(ctx, chan, file_no, file_info);
+                if result != 1_i32.wrapping_neg() {
+                    break 'l1;
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return result;
+}
+
+fn inl_retryCardReadAsync_unfused<'a>(
+    ctx: &'a Ctx,
+    file_info: CARDFileInfo<'a>,
+    buffer: Addr<'a>,
+    length: i32,
+    offset: i32,
+    callback: FnPtr<'a>,
+) -> i32 {
+    let mut file_info = file_info;
+    let mut buffer = buffer;
+    let mut length = length;
+    let mut offset = offset;
+    let mut callback = callback;
+    let mut i: i32 = 0;
+    let mut result: i32 = 0;
+    {
+        i = 0_i32;
+        'l1: while i < 10_i32 {
+            'c2: {
+                result = fns::CARDReadAsync(ctx, file_info, buffer, length, offset, callback);
+                if result != 1_i32.wrapping_neg() {
+                    break 'l1;
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return result;
+}
+
+fn inl_retryCardClose_unfused<'a>(ctx: &'a Ctx, file_info: CARDFileInfo<'a>) -> i32 {
+    let mut file_info = file_info;
+    let mut i: i32 = 0;
+    let mut result: i32 = 0;
+    {
+        i = 0_i32;
+        'l1: while i < 10_i32 {
+            'c2: {
+                result = fns::CARDClose(ctx, file_info);
+                if result != 1_i32.wrapping_neg() {
+                    break 'l1;
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return result;
+}
+
+fn inl_retryCardWriteAsync_unfused<'a>(
+    ctx: &'a Ctx,
+    file_info: CARDFileInfo<'a>,
+    buffer: Addr<'a>,
+    length: i32,
+    offset: i32,
+    callback: FnPtr<'a>,
+) -> i32 {
+    let mut file_info = file_info;
+    let mut buffer = buffer;
+    let mut length = length;
+    let mut offset = offset;
+    let mut callback = callback;
+    let mut i: i32 = 0;
+    let mut result: i32 = 0;
+    {
+        i = 0_i32;
+        'l1: while i < 10_i32 {
+            'c2: {
+                result = fns::CARDWriteAsync(ctx, file_info, buffer, length, offset, callback);
+                if result != 1_i32.wrapping_neg() {
+                    break 'l1;
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return result;
+}
+
+fn inl_retryCardCreateAsync_unfused<'a>(
+    ctx: &'a Ctx,
+    chan: i32,
+    filename: Val<'a, i8>,
+    size: i32,
+    file_info: CARDFileInfo<'a>,
+    callback: FnPtr<'a>,
+) -> i32 {
+    let mut chan = chan;
+    let mut filename = filename;
+    let mut size = size;
+    let mut file_info = file_info;
+    let mut callback = callback;
+    let mut i: i32 = 0;
+    let mut result: i32 = 0;
+    {
+        i = 0_i32;
+        'l1: while i < 10_i32 {
+            'c2: {
+                result =
+                    fns::CARDCreateAsync(ctx, chan, filename, (size as u32), file_info, callback);
+                if result != 1_i32.wrapping_neg() {
+                    break 'l1;
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return result;
+}
+
+fn inl_retryCardGetStatus_unfused<'a>(
+    ctx: &'a Ctx,
+    chan: i32,
+    file_no: i32,
+    stat: CARDStat<'a>,
+) -> i32 {
+    let mut chan = chan;
+    let mut file_no = file_no;
+    let mut stat = stat;
+    let mut i: i32 = 0;
+    let mut result: i32 = 0;
+    {
+        i = 0_i32;
+        'l1: while i < 10_i32 {
+            'c2: {
+                result = fns::CARDGetStatus(ctx, chan, file_no, stat);
+                if result != 1_i32.wrapping_neg() {
+                    break 'l1;
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return result;
+}
+
+fn inl_setupCardIcons_unfused<'a>(ctx: &'a Ctx, cmd: CardCmd<'a>) -> i32 {
+    let mut cmd = cmd;
+    let mut bit: u32 = 0;
+    let mut k: i32 = 0;
+    k = (({
+        let __t1 = (0_i32 as u32);
+        bit = __t1;
+        __t1
+    }) as i32);
+    'l1: while (k < 8_i32)
+        && ((((cmd).state()).icon_info().icon_speed().at(k).get() as i32) != 0_i32)
+    {
+        'c2: {
+            ((cmd).state()).stat().set_iconFormat(
+                ((((((cmd).state()).stat().iconFormat() as i32) & (!(shl_i32(3_i32, bit))))
+                    | (shl_i32(
+                        (((cmd).state()).icon_info().icon_format().at(k).get() as i32),
+                        bit,
+                    ))) as u16),
+            );
+            ((cmd).state()).stat().set_iconSpeed(
+                ((((((cmd).state()).stat().iconSpeed() as i32) & (!(shl_i32(3_i32, bit))))
+                    | (shl_i32(
+                        (((cmd).state())
+                            .icon_info()
+                            .icon_speed()
+                            .at({
+                                let __t2 = k;
+                                k = k.wrapping_add(1);
+                                __t2
+                            })
+                            .get() as i32),
+                        bit,
+                    ))) as u16),
+            );
+            bit = bit.wrapping_add((2_i32 as u32));
+        }
+    }
+    return k;
+}
+
+fn inl_retryCardSetStatusAsync_unfused<'a>(
+    ctx: &'a Ctx,
+    chan: i32,
+    file_no: i32,
+    stat: CARDStat<'a>,
+    callback: FnPtr<'a>,
+) -> i32 {
+    let mut chan = chan;
+    let mut file_no = file_no;
+    let mut stat = stat;
+    let mut callback = callback;
+    let mut i: i32 = 0;
+    let mut result: i32 = 0;
+    {
+        i = 0_i32;
+        'l1: while i < 10_i32 {
+            'c2: {
+                result = fns::CARDSetStatusAsync(ctx, chan, file_no, stat, callback);
+                if result != 1_i32.wrapping_neg() {
+                    break 'l1;
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return result;
+}
+
+fn inl_unpackCardStat_unfused<'a>(ctx: &'a Ctx, cmd: CardCmd<'a>, stat: CARDStat<'a>) {
+    let mut cmd = cmd;
+    let mut stat = stat;
+    let mut k: i32 = 0;
+    ((cmd).state())
+        .icon_info()
+        .set_banner_format(((((stat).bannerFormat() as i32) & 3_i32) as u8));
+    {
+        k = 0_i32;
+        'l1: while k < 8_i32 {
+            'c2: {
+                ((cmd).state()).icon_info().icon_format().at(k).set(
+                    (((sar_i32(
+                        ((stat).iconFormat() as i32),
+                        ((2_i32.wrapping_mul(k)) as u32),
+                    )) & 3_i32) as u8),
+                );
+                ((cmd).state()).icon_info().icon_speed().at(k).set(
+                    (((sar_i32(
+                        ((stat).iconSpeed() as i32),
+                        ((2_i32.wrapping_mul(k)) as u32),
+                    )) & 3_i32) as u8),
+                );
+            }
+            k = k.wrapping_add(1);
+        }
+    }
+    ((cmd).state()).set_header_size((fns::hsd_803AC340(ctx, ((cmd).state()).icon_info()) as u32));
+    {
+        let mut used: u32 = ((cmd).state())
+            .header_size()
+            .wrapping_add(((cmd).state()).sector_size());
+        used = used.wrapping_add((47_i32 as u32));
+        ((cmd).state()).set_num_blocks(
+            (div_u32((stat).length(), ((cmd).state()).sector_size())
+                .wrapping_sub(div_u32(used, ((cmd).state()).sector_size())) as i32),
+        );
+    }
+}
+
 fn inl_fn_803AC6B8_first_block_count_unfused<'a>(ctx: &'a Ctx, state: CardState<'a>) -> u32 {
     let mut state = state;
     if (state).file_sizes().at(0_i32).get() <= 0_i32 {
@@ -5110,32 +8114,6 @@ fn inl_calculateFileBlockCount_unfused<'a>(
     return 0;
 }
 
-fn inl_retryCardFastOpen_unfused<'a>(
-    ctx: &'a Ctx,
-    chan: i32,
-    file_no: i32,
-    file_info: CARDFileInfo<'a>,
-) -> i32 {
-    let mut chan = chan;
-    let mut file_no = file_no;
-    let mut file_info = file_info;
-    let mut i: i32 = 0;
-    let mut result: i32 = 0;
-    {
-        i = 0_i32;
-        'l1: while i < 10_i32 {
-            'c2: {
-                result = fns::CARDFastOpen(ctx, chan, file_no, file_info);
-                if result != 1_i32.wrapping_neg() {
-                    break 'l1;
-                }
-            }
-            i = i.wrapping_add(1);
-        }
-    }
-    return result;
-}
-
 fn inl_calculateDataBlockSize_unfused<'a>(
     ctx: &'a Ctx,
     state: CardState<'a>,
@@ -5449,23 +8427,582 @@ fn inl_readCardDataBlockFinal_unfused<'a>(
     return 0_i32;
 }
 
-fn inl_retryCardClose_unfused<'a>(ctx: &'a Ctx, file_info: CARDFileInfo<'a>) -> i32 {
-    let mut file_info = file_info;
+fn inl_fn_803AE7F8_rewind_unfused<'a>(ctx: &'a Ctx) {
+    let mut snap: i32 = statics::sysdolphin__baselib__card::hsd_804D7998(ctx).get();
+    if snap >= 0_i32 {
+        let mut saved: i32 = snap;
+        let mut zero: i32 = 0;
+        'l1: while saved != statics::sysdolphin__baselib__card::curr_tail(ctx).get() {
+            'c2: {
+                let mut queued: CardCmd<'a> =
+                    statics::sysdolphin__baselib__card::commands(ctx).get(saved);
+                saved = rem_i32((saved.wrapping_add(1_i32)), 128_i32);
+                (queued).set_type({
+                    let __t1 = 0_i32;
+                    zero = __t1;
+                    __t1
+                });
+            }
+        }
+        statics::sysdolphin__baselib__card::curr_tail(ctx).set(snap);
+    }
+}
+
+fn inl_fn_803AE7F8_close_unfused<'a>(ctx: &'a Ctx, state: CardState<'a>) {
+    let mut state = state;
+    let mut retries: i32 = 0;
+    {
+        retries = 0_i32;
+        'l1: while retries < 10_i32 {
+            'c2: {
+                if fns::CARDClose(ctx, (state).file_info()) != 1_i32.wrapping_neg() {
+                    break 'l1;
+                }
+            }
+            retries = retries.wrapping_add(1);
+        }
+    }
+}
+
+fn inl_fn_803AF3F0_calc_file_blocks_unfused<'a>(
+    ctx: &'a Ctx,
+    file_idx: i32,
+    state: CardState<'a>,
+    file_blocks: Val<'a, i32>,
+    total_blocks: Val<'a, i32>,
+) {
+    let mut file_idx = file_idx;
+    let mut state = state;
+    let mut file_blocks = file_blocks;
+    let mut total_blocks = total_blocks;
+    if (state).file_sizes().at(file_idx).get() <= 0_i32 {
+        (file_blocks).set(0_i32);
+    } else if file_idx == 0_i32 {
+        let mut sector_size: u32 = (state).sector_size();
+        let mut usable: u32 = 0;
+        let mut rem: i32 = 0;
+        rem = (state).file_sizes().at(0_i32).get();
+        usable = sector_size.wrapping_sub((32_i32 as u32));
+        rem = rem.wrapping_sub(
+            ((usable.wrapping_sub(rem_u32(
+                ((state).header_size().wrapping_add((48_i32 as u32))),
+                sector_size,
+            ))) as i32),
+        );
+        if rem <= 0_i32 {
+            (file_blocks).set(1_i32);
+        } else {
+            (file_blocks).set(
+                (div_u32(
+                    ((rem as u32)
+                        .wrapping_add(sector_size)
+                        .wrapping_sub((33_i32 as u32))),
+                    (sector_size.wrapping_sub((32_i32 as u32))),
+                )
+                .wrapping_add((1_i32 as u32)) as i32),
+            );
+        }
+    } else {
+        let mut sector_size_2: u32 = (state).sector_size();
+        (file_blocks).set(
+            (div_u32(
+                (((state).file_sizes().at(file_idx).get() as u32)
+                    .wrapping_add(sector_size_2)
+                    .wrapping_sub((33_i32 as u32))),
+                (sector_size_2.wrapping_sub((32_i32 as u32))),
+            ) as i32),
+        );
+    }
+    (total_blocks).set(statics::sysdolphin__baselib__card::fn_803AC7DC(ctx, state));
+}
+
+fn inl_fn_803AF3F0_open_unfused<'a>(
+    ctx: &'a Ctx,
+    chan: i32,
+    file_no: i32,
+    info: CARDFileInfo<'a>,
+) -> i32 {
+    let mut chan = chan;
+    let mut file_no = file_no;
+    let mut info = info;
+    let mut retries: i32 = 0;
+    let mut open_result: i32 = 0;
+    {
+        retries = 0_i32;
+        'l1: while retries < 10_i32 {
+            'c2: {
+                open_result = fns::CARDFastOpen(ctx, chan, file_no, info);
+                if open_result != 1_i32.wrapping_neg() {
+                    break 'l1;
+                }
+            }
+            retries = retries.wrapping_add(1);
+        }
+    }
+    return open_result;
+}
+
+fn inl_fn_803AF3F0_check_seq_unfused<'a>(
+    ctx: &'a Ctx,
+    state: CardState<'a>,
+    primary: Val<'a, i32>,
+    count: i32,
+    current_seq: i32,
+    needs_rewrite: Val<'a, i32>,
+) {
+    let mut state = state;
+    let mut primary = primary;
+    let mut count = count;
+    let mut current_seq = current_seq;
+    let mut needs_rewrite = needs_rewrite;
     let mut i: i32 = 0;
-    let mut result: i32 = 0;
     {
         i = 0_i32;
-        'l1: while i < 10_i32 {
+        'l1: while i < count {
             'c2: {
-                result = fns::CARDClose(ctx, file_info);
-                if result != 1_i32.wrapping_neg() {
+                if ((Handle::add(primary, i)).get() < 0_i32)
+                    || ((state)
+                        .block_seqs()
+                        .at((Handle::add(primary, i)).get())
+                        .get()
+                        != current_seq)
+                {
+                    (needs_rewrite).set(1_i32);
                     break 'l1;
                 }
             }
             i = i.wrapping_add(1);
         }
     }
+}
+
+fn inl_fn_803AF3F0_chunk_size_unfused<'a>(ctx: &'a Ctx, state: CardState<'a>) -> i32 {
+    let mut state = state;
+    return ((state).sector_size().wrapping_sub((32_i32 as u32)) as i32);
+}
+
+fn inl_fn_803AF3F0_queue_verify_first_unfused<'a>(
+    ctx: &'a Ctx,
+    state: CardState<'a>,
+    phys: i32,
+    block_id: i32,
+    seq: i32,
+    data: Addr<'a>,
+    size: i32,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x30);
+    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut state = state;
+    let mut phys = phys;
+    let mut block_id = block_id;
+    let mut seq = seq;
+    let mut data = data;
+    let mut size = size;
+    if size == 0_i32 {
+        return 0_i32;
+    }
+    {
+        let mut ofs: i32 = inl_fn_803ACBE8_unfused(ctx, state, phys);
+        cmd.set_type((enums::CARD_CMD_VERIFY_BLOCK as i32));
+        cmd.set_state(state);
+        cmd.x8().verify().set_block_id(block_id);
+        cmd.x8().verify().set_seq(seq);
+        cmd.x8().verify().set_data(data);
+        cmd.x8().verify().set_size(size);
+        cmd.x8().verify().set_offset(ofs);
+        return statics::sysdolphin__baselib__card::fn_803AC168(ctx, cmd);
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
+fn inl_fn_803AF3F0_rewind_unfused<'a>(ctx: &'a Ctx) {
+    let mut snap: i32 = statics::sysdolphin__baselib__card::hsd_804D7998(ctx).get();
+    if snap >= 0_i32 {
+        let mut saved: i32 = snap;
+        let mut zero: i32 = 0;
+        'l1: while saved != statics::sysdolphin__baselib__card::curr_tail(ctx).get() {
+            'c2: {
+                let mut queued: CardCmd<'a> =
+                    statics::sysdolphin__baselib__card::commands(ctx).get(saved);
+                saved = rem_i32((saved.wrapping_add(1_i32)), 128_i32);
+                (queued).set_type({
+                    let __t1 = 0_i32;
+                    zero = __t1;
+                    __t1
+                });
+            }
+        }
+        statics::sysdolphin__baselib__card::curr_tail(ctx).set(snap);
+    }
+}
+
+fn inl_fn_803AF3F0_close_unfused<'a>(ctx: &'a Ctx, state: CardState<'a>) {
+    let mut state = state;
+    let mut retries: i32 = 0;
+    {
+        retries = 0_i32;
+        'l1: while retries < 10_i32 {
+            'c2: {
+                if fns::CARDClose(ctx, (state).file_info()) != 1_i32.wrapping_neg() {
+                    break 'l1;
+                }
+            }
+            retries = retries.wrapping_add(1);
+        }
+    }
+}
+
+fn inl_fn_803AF3F0_queue_verify_final_unfused<'a>(
+    ctx: &'a Ctx,
+    state: CardState<'a>,
+    phys: i32,
+    block_id: i32,
+    seq: i32,
+    data: Addr<'a>,
+    size: i32,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x30);
+    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut state = state;
+    let mut phys = phys;
+    let mut block_id = block_id;
+    let mut seq = seq;
+    let mut data = data;
+    let mut size = size;
+    let mut result: i32 = 0;
+    if size == 0_i32 {
+        return 0_i32;
+    }
+    {
+        let mut ofs: i32 = inl_fn_803ACBE8_unfused(ctx, state, phys);
+        cmd.set_type((enums::CARD_CMD_VERIFY_BLOCK as i32));
+        cmd.set_state(state);
+        cmd.x8().verify().set_block_id(block_id);
+        cmd.x8().verify().set_seq(seq);
+        cmd.x8().verify().set_data(data);
+        cmd.x8().verify().set_size(size);
+        cmd.x8().verify().set_offset(ofs);
+        result = statics::sysdolphin__baselib__card::fn_803AC168(ctx, cmd);
+    }
     return result;
+}
+
+fn inl_fn_803AC168_unfused<'a>(ctx: &'a Ctx, cmd: CardCmd<'a>) -> i32 {
+    let mut cmd = cmd;
+    let mut intr: i32 = 0;
+    let mut mode: i32 = 0;
+    let mut read_idx: i32 = 0;
+    let mut head_type: i32 = 0;
+    intr = fns::OSDisableInterrupts(ctx);
+    read_idx = statics::sysdolphin__baselib__card::curr_head(ctx).get();
+    mode = statics::sysdolphin__baselib__card::hsd_804D799C(ctx).get();
+    head_type = statics::sysdolphin__baselib__card::commands(ctx)
+        .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
+        .r#type();
+    let _ = fns::OSRestoreInterrupts(ctx, intr);
+    if mode != 2_i32 {
+        if statics::sysdolphin__baselib__card::curr_tail(ctx).get() == read_idx {
+            if ((mode != 0_i32)
+                || (statics::sysdolphin__baselib__card::curr_tail(ctx).get() != read_idx))
+                || (head_type != 0_i32)
+            {
+                return 0x109_i32.wrapping_neg();
+            }
+        }
+    }
+    {
+        let mut idx: i32 = statics::sysdolphin__baselib__card::curr_tail(ctx).get();
+        statics::sysdolphin__baselib__card::curr_tail(ctx).set(rem_i32(
+            (statics::sysdolphin__baselib__card::curr_tail(ctx)
+                .get()
+                .wrapping_add(1_i32)),
+            128_i32,
+        ));
+        let _ = fns::memcpy(
+            ctx,
+            Handle::cast::<Addr<'a>>(statics::sysdolphin__baselib__card::commands(ctx).get(idx)),
+            Handle::cast::<Addr<'a>>(cmd),
+            36_u32,
+        );
+    }
+    if mode == 2_i32 {
+        statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(0_i32);
+    }
+    return 0_i32;
+}
+
+fn inl_fn_803AF3F0_queue_write_final_unfused<'a>(
+    ctx: &'a Ctx,
+    state: CardState<'a>,
+    phys: i32,
+    block_id: i32,
+    seq: i32,
+    data: Addr<'a>,
+    size: i32,
+    file_idx: i32,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x50);
+    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
+    let init_cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x24);
+    let mut state = state;
+    let mut phys = phys;
+    let mut block_id = block_id;
+    let mut seq = seq;
+    let mut data = data;
+    let mut size = size;
+    let mut file_idx = file_idx;
+    let mut ofs: i32 = inl_fn_803ACBE8_unfused(ctx, state, phys);
+    let mut result: i32 = 0;
+    if phys == 0_i32 {
+        let mut zero: i32 = 0_i32;
+        if block_id != 0_i32 {
+            return 0x101_i32.wrapping_neg();
+        }
+        init_cmd.set_type((enums::CARD_CMD_READ_BLOCK as i32));
+        init_cmd.set_state(state);
+        init_cmd.x8().read().set_phys(zero);
+        init_cmd.x8().read().set_xC(zero);
+        init_cmd
+            .x8()
+            .read()
+            .set_data(ptr::<Addr<'a>>(ctx, zero as u32));
+        init_cmd.x8().read().set_size(zero);
+        init_cmd.x8().read().set_offset(ofs);
+        let _ = statics::sysdolphin__baselib__card::fn_803AC168(ctx, init_cmd);
+    }
+    cmd.set_type((enums::CARD_CMD_WRITE_BLOCK as i32));
+    cmd.set_state(state);
+    cmd.x8().write().set_phys(phys);
+    cmd.x8().write().set_block_id(block_id);
+    cmd.x8().write().set_seq(seq);
+    cmd.x8().write().set_data(data);
+    cmd.x8().write().set_size(size);
+    cmd.x8().write().set_offset(ofs);
+    cmd.x8().write().set_file_idx(file_idx);
+    result = statics::sysdolphin__baselib__card::fn_803AC168(ctx, cmd);
+    return result;
+}
+
+fn inl_fn_803AF3F0_queue_write_first_unfused<'a>(
+    ctx: &'a Ctx,
+    state: CardState<'a>,
+    phys: i32,
+    block_id: i32,
+    seq: i32,
+    data: Addr<'a>,
+    size: i32,
+    file_idx: i32,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x50);
+    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
+    let init_cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x24);
+    let mut state = state;
+    let mut phys = phys;
+    let mut block_id = block_id;
+    let mut seq = seq;
+    let mut data = data;
+    let mut size = size;
+    let mut file_idx = file_idx;
+    let mut ofs: i32 = inl_fn_803ACBE8_unfused(ctx, state, phys);
+    if phys == 0_i32 {
+        let mut zero: i32 = 0_i32;
+        if block_id != 0_i32 {
+            return 0x101_i32.wrapping_neg();
+        }
+        init_cmd.set_type((enums::CARD_CMD_READ_BLOCK as i32));
+        init_cmd.set_state(state);
+        init_cmd.x8().read().set_phys(zero);
+        init_cmd.x8().read().set_xC(zero);
+        init_cmd
+            .x8()
+            .read()
+            .set_data(ptr::<Addr<'a>>(ctx, zero as u32));
+        init_cmd.x8().read().set_size(zero);
+        init_cmd.x8().read().set_offset(ofs);
+        let _ = statics::sysdolphin__baselib__card::fn_803AC168(ctx, init_cmd);
+    }
+    cmd.set_type((enums::CARD_CMD_WRITE_BLOCK as i32));
+    cmd.set_state(state);
+    cmd.x8().write().set_phys(phys);
+    cmd.x8().write().set_block_id(block_id);
+    cmd.x8().write().set_seq(seq);
+    cmd.x8().write().set_data(data);
+    cmd.x8().write().set_size(size);
+    cmd.x8().write().set_offset(ofs);
+    cmd.x8().write().set_file_idx(file_idx);
+    return statics::sysdolphin__baselib__card::fn_803AC168(ctx, cmd);
+}
+
+fn inl_fn_803B0120_close_unfused<'a>(ctx: &'a Ctx, state: CardState<'a>) {
+    let mut state = state;
+    let mut retries: i32 = 0;
+    {
+        retries = 0_i32;
+        'l1: while retries < 10_i32 {
+            'c2: {
+                if fns::CARDClose(ctx, (state).file_info()) != 1_i32.wrapping_neg() {
+                    break 'l1;
+                }
+            }
+            retries = retries.wrapping_add(1);
+        }
+    }
+}
+
+fn inl_fn_803B0120_first_chunk_unfused<'a>(ctx: &'a Ctx, state: CardState<'a>) -> i32 {
+    let mut state = state;
+    let mut sector_size: u32 = (state).sector_size();
+    return ((sector_size.wrapping_sub((32_i32 as u32))) as i32).wrapping_sub(
+        ((rem_u32(
+            ((state).header_size().wrapping_add((48_i32 as u32))),
+            sector_size,
+        )) as i32),
+    );
+}
+
+fn inl_fn_803B0120_block_offset_unfused<'a>(
+    ctx: &'a Ctx,
+    state: CardState<'a>,
+    block_idx: i32,
+) -> i32 {
+    let mut state = state;
+    let mut block_idx = block_idx;
+    let mut size: u32 = (state).sector_size();
+    let mut temp: u32 = (state).header_size().wrapping_add(size);
+    let mut num: u32 = temp.wrapping_add((47_i32 as u32));
+    let mut idx: u32 = div_u32(num, size).wrapping_sub((1_i32 as u32));
+    let mut pos: u32 = (block_idx as u32).wrapping_add(idx);
+    return (size.wrapping_mul(pos) as i32);
+}
+
+fn inl_fn_803B0120_queue_verify_unfused<'a>(
+    ctx: &'a Ctx,
+    state: CardState<'a>,
+    phys: i32,
+    block_id: i32,
+    seq: i32,
+    data: Addr<'a>,
+    size: i32,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x30);
+    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut state = state;
+    let mut phys = phys;
+    let mut block_id = block_id;
+    let mut seq = seq;
+    let mut data = data;
+    let mut size = size;
+    let mut result: i32 = 0;
+    if size == 0_i32 {
+        return 0_i32;
+    }
+    {
+        let mut ofs: i32 = inl_fn_803B0120_block_offset_unfused(ctx, state, phys);
+        cmd.set_type((enums::CARD_CMD_VERIFY_BLOCK as i32));
+        cmd.set_state(state);
+        cmd.x8().verify().set_block_id(block_id);
+        cmd.x8().verify().set_seq(seq);
+        cmd.x8().verify().set_data(data);
+        cmd.x8().verify().set_size(size);
+        cmd.x8().verify().set_offset(ofs);
+        result = statics::sysdolphin__baselib__card::fn_803AC168(ctx, cmd);
+    }
+    return result;
+}
+
+fn inl_fn_803B0120_rewind_unfused<'a>(ctx: &'a Ctx) {
+    let mut snap: i32 = statics::sysdolphin__baselib__card::hsd_804D7998(ctx).get();
+    if snap >= 0_i32 {
+        let mut saved: i32 = snap;
+        let mut zero: i32 = 0;
+        'l1: while saved != statics::sysdolphin__baselib__card::curr_tail(ctx).get() {
+            'c2: {
+                let mut queued: CardCmd<'a> =
+                    statics::sysdolphin__baselib__card::commands(ctx).get(saved);
+                saved = rem_i32((saved.wrapping_add(1_i32)), 128_i32);
+                (queued).set_type({
+                    let __t1 = 0_i32;
+                    zero = __t1;
+                    __t1
+                });
+            }
+        }
+        statics::sysdolphin__baselib__card::curr_tail(ctx).set(snap);
+    }
+}
+
+fn inl_fn_803B0120_queue_write_unfused<'a>(
+    ctx: &'a Ctx,
+    state: CardState<'a>,
+    phys: i32,
+    block_id: i32,
+    seq: i32,
+    data: Addr<'a>,
+    size: i32,
+    file_idx: i32,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x50);
+    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
+    let init_cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x24);
+    let mut state = state;
+    let mut phys = phys;
+    let mut block_id = block_id;
+    let mut seq = seq;
+    let mut data = data;
+    let mut size = size;
+    let mut file_idx = file_idx;
+    let mut ofs: i32 = inl_fn_803ACBE8_unfused(ctx, state, phys);
+    let mut result: i32 = 0;
+    if phys == 0_i32 {
+        let mut zero: i32 = 0_i32;
+        if block_id != 0_i32 {
+            return 0x101_i32.wrapping_neg();
+        }
+        init_cmd.set_type((enums::CARD_CMD_READ_BLOCK as i32));
+        init_cmd.set_state(state);
+        init_cmd.x8().read().set_phys(zero);
+        init_cmd.x8().read().set_xC(zero);
+        init_cmd
+            .x8()
+            .read()
+            .set_data(ptr::<Addr<'a>>(ctx, zero as u32));
+        init_cmd.x8().read().set_size(zero);
+        init_cmd.x8().read().set_offset(ofs);
+        let _ = statics::sysdolphin__baselib__card::fn_803AC168(ctx, init_cmd);
+    }
+    cmd.set_type((enums::CARD_CMD_WRITE_BLOCK as i32));
+    cmd.set_state(state);
+    cmd.x8().write().set_phys(phys);
+    cmd.x8().write().set_block_id(block_id);
+    cmd.x8().write().set_seq(seq);
+    cmd.x8().write().set_data(data);
+    cmd.x8().write().set_size(size);
+    cmd.x8().write().set_offset(ofs);
+    cmd.x8().write().set_file_idx(file_idx);
+    result = statics::sysdolphin__baselib__card::fn_803AC168(ctx, cmd);
+    return result;
+}
+
+fn inl_fn_803B0120_close_result_unfused<'a>(ctx: &'a Ctx, state: CardState<'a>) -> i32 {
+    let mut state = state;
+    let mut result: i32 = 0;
+    let mut retries: i32 = 0;
+    let mut ret: i32 = 0;
+    {
+        retries = 0_i32;
+        'l1: while retries < 10_i32 {
+            'c2: {
+                result = fns::CARDClose(ctx, (state).file_info());
+                if result != 1_i32.wrapping_neg() {
+                    break 'l1;
+                }
+            }
+            retries = retries.wrapping_add(1);
+        }
+    }
+    ret = result;
+    return ret;
 }
 
 fn inl_queueVerifyCardHeader_unfused<'a>(
@@ -5858,6 +9395,13 @@ pub fn register(ctx: &Ctx) {
         Returns::Int,
     );
     ctx.register_port(
+        0x803aaa48,
+        |ctx| {
+            Ret::put(hsd_803AAA48(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x803ac168,
         |ctx| {
             let (a0,): (CardCmd<'_>,) = Args::take_all(ctx);
@@ -6032,6 +9576,33 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1, a2, a3, a4): (CardState<'_>, i32, Val<'_, u8>, i32, FnPtr<'_>) =
                 Args::take_all(ctx);
             Ret::put(fn_803ADF90(ctx, a0, a1, a2, a3, a4), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x803ae7f8,
+        |ctx| {
+            let (a0, a1, a2, a3, a4): (CardState<'_>, i32, Val<'_, u8>, i32, FnPtr<'_>) =
+                Args::take_all(ctx);
+            Ret::put(fn_803AE7F8(ctx, a0, a1, a2, a3, a4), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x803af3f0,
+        |ctx| {
+            let (a0, a1, a2, a3, a4): (CardState<'_>, i32, Val<'_, u8>, i32, FnPtr<'_>) =
+                Args::take_all(ctx);
+            Ret::put(fn_803AF3F0(ctx, a0, a1, a2, a3, a4), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x803b0120,
+        |ctx| {
+            let (a0, a1, a2, a3, a4): (CardState<'_>, i32, Val<'_, u8>, i32, FnPtr<'_>) =
+                Args::take_all(ctx);
+            Ret::put(fn_803B0120(ctx, a0, a1, a2, a3, a4), ctx);
         },
         Returns::Int,
     );

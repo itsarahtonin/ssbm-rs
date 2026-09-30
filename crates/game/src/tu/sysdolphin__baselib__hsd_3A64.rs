@@ -357,6 +357,90 @@ pub fn HSD_SisLib_803A67EC<'a>(ctx: &'a Ctx, data: Val<'a, u8>, string: Val<'a, 
     return out_idx.get();
 }
 
+pub fn fn_803A6FEC<'a>(
+    ctx: &'a Ctx,
+    sis_data: Val<'a, u8>,
+    entry_idx: i32,
+    out_size: Val<'a, i32>,
+) -> Val<'a, u8> {
+    let mut sis_data = sis_data;
+    let mut entry_idx = entry_idx;
+    let mut out_size = out_size;
+    let mut unused_r4: i32 = 0;
+    let mut char_size: u8 = 0;
+    let mut unused_r3: Val<'a, u8> = null(ctx);
+    let mut scan_ptr: Val<'a, u8> = null(ctx);
+    let mut unused_r0: u8 = 0;
+    let mut unused_r0_2: u8 = 0;
+    'goto_end: {
+        {
+            'l1: loop {
+                'c2: {
+                    's3: {
+                        let __case = match ((sis_data).get() as i32) {
+                            0_i32 => 0,
+                            12_i32 => 1,
+                            11_i32 => 2,
+                            13_i32 => 2,
+                            15_i32 => 2,
+                            7_i32 => 3,
+                            10_i32 => 4,
+                            14_i32 => 4,
+                            _ => 5,
+                        };
+                        if __case <= 0 {
+                            return null::<Val<'a, u8>>(ctx);
+                        }
+                        if __case <= 1 {
+                            sis_data = Handle::add(sis_data, 3_i32);
+                        }
+                        if __case <= 2 {
+                            break 's3;
+                        }
+                        if __case <= 3 {
+                            entry_idx = entry_idx.wrapping_sub(1_i32);
+                            if entry_idx < 0_i32 {
+                                break 'goto_end;
+                            }
+                        }
+                        if __case <= 4 {
+                            sis_data = Handle::add(sis_data, 4_i32);
+                            break 's3;
+                        }
+                        if __case <= 5 {
+                            sis_data = Handle::add(sis_data, 1_i32);
+                            break 's3;
+                        }
+                    }
+                    sis_data = Handle::add(sis_data, 1_i32);
+                }
+            }
+        }
+    }
+    if !Handle::is_null(out_size) {
+        (out_size).set(0_i32);
+        scan_ptr = Handle::add(sis_data, 14_i32);
+        'l4: loop {
+            'c5: {
+                char_size = (0_i32 as u8);
+                if ((scan_ptr).get() as i32) >= 32_i32 {
+                    char_size = (2_i32 as u8);
+                } else if ((scan_ptr).get() as i32) == 10_i32 {
+                    char_size = (5_i32 as u8);
+                } else if ((scan_ptr).get() as i32) == 11_i32 {
+                    char_size = (1_i32 as u8);
+                }
+                (out_size).set((out_size).get().wrapping_add((char_size as i32)));
+                scan_ptr = Handle::add(scan_ptr, (char_size as i32));
+            }
+            if !((char_size as i32) != 0_i32) {
+                break 'l4;
+            }
+        }
+    }
+    return sis_data;
+}
+
 pub fn HSD_SisLib_803A746C<'a>(
     ctx: &'a Ctx,
     text: HSD_Text<'a>,
@@ -718,6 +802,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (Val<'_, u8>, Val<'_, u8>) = Args::take_all(ctx);
             Ret::put(HSD_SisLib_803A67EC(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x803a6fec,
+        |ctx| {
+            let (a0, a1, a2): (Val<'_, u8>, i32, Val<'_, i32>) = Args::take_all(ctx);
+            Ret::put(fn_803A6FEC(ctx, a0, a1, a2), ctx);
         },
         Returns::Int,
     );

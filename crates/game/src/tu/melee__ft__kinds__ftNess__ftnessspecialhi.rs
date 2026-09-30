@@ -439,6 +439,160 @@ pub fn ftNs_SpecialAirHiStart_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::ftAnim_8006EBA4(ctx, gobj);
 }
 
+pub fn ftNs_SpecialHi_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x60);
+    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x14);
+    let mut gobj = gobj;
+    let mut ness_attr2: ftNessAttributes<'a> = null(ctx);
+    let mut fighter_data2: Fighter<'a> = null(ctx);
+    let mut fighter_data3: Fighter<'a> = null(ctx);
+    let mut fp: Fighter<'a> = null(ctx);
+    let mut ness_attr: ftNessAttributes<'a> = null(ctx);
+    'goto_block_stuff: {
+        fp = inl_getFighter(ctx, gobj);
+        ness_attr = Handle::cast::<ftNessAttributes<'a>>((fp).dat_attrs());
+        if ((fp).coll_data().floor().flags() & ((shl_i32(1_i32, (8_i32 as u32))) as u32))
+            == (0_i32 as u32)
+        {
+            let mut temp_f3: f64 = 5.0;
+            let mut temp_f1: f64 = 0.0;
+            let mut temp_f2: f64 = 0.0;
+            sp40.set_x(fp::fsubs(
+                (fp).cur_pos().x(),
+                (fp).mv().ns().specialhi().collPos1().x(),
+            ));
+            temp_f2 = (fp).x34_scale().y();
+            temp_f1 = fp::fmadds(temp_f3, temp_f2, (fp).cur_pos().y());
+            sp40.set_y(fp::fsubs(
+                temp_f1,
+                (fp).mv().ns().specialhi().collPos1().y(),
+            ));
+            sp40.set_z(0.0);
+            {
+                let mut temp_f1_2: f64 =
+                    fns::lbVector_Angle(ctx, (fp).coll_data().floor().normal(), sp40);
+                if !(temp_f1_2 < fp::frsp((fp::fdiv(3.141592653589793, (2_i32 as f64))))) {
+                    if !(temp_f1_2
+                        > (fp::fmuls(
+                            (fp::fadds(90.0, (ness_attr).x60_PK_THUNDER_2_KNOCKDOWN_ANGLE())),
+                            0.01745329238474369,
+                        )))
+                    {
+                        {
+                            let mut facing_dir: f64 = 0.0;
+                            if sp40.x() >= fp::frsp(0_i32 as f64) {
+                                facing_dir = fp::frsp(1_i32 as f64);
+                            } else {
+                                facing_dir = fp::frsp(1_i32.wrapping_neg() as f64);
+                            }
+                            (fp).set_facing_dir(facing_dir);
+                        }
+                        {
+                            let mut facing_dir_2: f64 = 0.0;
+                            if sp40.y() >= fp::frsp(0_i32 as f64) {
+                                facing_dir_2 = fp::frsp(1_i32 as f64);
+                            } else {
+                                facing_dir_2 = fp::frsp(1_i32.wrapping_neg() as f64);
+                            }
+                            (fp).mv().ns().specialhi().set_facingDir(facing_dir_2);
+                        }
+                        (fp).mv().ns().specialhi().set_aerialVel(fns::atan2f(
+                            ctx,
+                            sp40.y(),
+                            sp40.x(),
+                        ));
+                        {
+                            fns::Fighter_ChangeMotionState(
+                                ctx,
+                                gobj,
+                                (enums::ftNs_MS_SpecialHi as i32),
+                                0_u32,
+                                0.0,
+                                1.0,
+                                0.0,
+                                null::<HSD_GObj<'a>>(ctx),
+                            );
+                            (fp).set_gr_vel(
+                                (fp::fmuls(
+                                    (ness_attr).x54_PK_THUNDER_2_MOMENTUM(),
+                                    (fp).facing_dir(),
+                                )),
+                            );
+                            fp = inl_getFighter(ctx, gobj);
+                            ness_attr2 = Handle::cast::<ftNessAttributes<'a>>(
+                                inl_getFtSpecialAttrs(ctx, fp),
+                            );
+                            (fp).mv()
+                                .ns()
+                                .specialhi()
+                                .set_unkVar((ness_attr2).x58_PK_THUNDER_2_UNK1());
+                            fighter_data2 =
+                                (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+                            fns::ftPartSetRotX(
+                                ctx,
+                                fighter_data2,
+                                0_i32,
+                                fp::fmsubs(
+                                    (fighter_data2).facing_dir(),
+                                    fns::atan2f(
+                                        ctx,
+                                        (fighter_data2).self_vel().x(),
+                                        (fighter_data2).self_vel().y(),
+                                    ),
+                                    fp::frsp((fp::fdiv(3.141592653589793, (2_i32 as f64)))),
+                                ),
+                            );
+                            fighter_data2 = fp;
+                            (fighter_data2).set_death2_cb(null::<FnPtr<'a>>(ctx));
+                            (fighter_data2).set_take_dmg_cb(null::<FnPtr<'a>>(ctx));
+                            (fighter_data2).set_x1968_jumpsUsed(
+                                ((fighter_data2).co_attrs().max_jumps() as u8),
+                            );
+                            return;
+                        }
+                    }
+                    break 'goto_block_stuff;
+                }
+            }
+        }
+        (fp).set_x1968_jumpsUsed(((fp).co_attrs().max_jumps() as u8));
+        fns::ftCommon_8007D60C(ctx, fp);
+        fns::ftNs_SpecialAirHi_Enter(ctx, gobj);
+        return;
+    }
+    {
+        fighter_data3 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+        {
+            let mut msid: i32 = (fighter_data3).motion_id();
+            's1: {
+                let __case = match msid {
+                    0x166_i32 => 0,
+                    0x167_i32 => 0,
+                    0x168_i32 => 0,
+                    0x169_i32 => 0,
+                    0x16a_i32 => 0,
+                    0x16b_i32 => 0,
+                    0x16c_i32 => 0,
+                    0x16d_i32 => 0,
+                    0x16e_i32 => 0,
+                    _ => 1,
+                };
+                if __case <= 0 {
+                    fns::efLib_DestroyAll(ctx, gobj);
+                    (fighter_data3).u().ns().set_pkthunder_gfx((0_i32 as u32));
+                }
+                if __case <= 1 {
+                    fns::ftPartSetRotX(ctx, fp, 0_i32, 0.0);
+                    fns::ftCo_80097D40(ctx, gobj);
+                    return;
+                }
+            }
+        }
+    }
+}
+
 pub fn ftNs_SpecialAirHi_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
     let mut gobj = gobj;
@@ -1926,6 +2080,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(ftNs_SpecialAirHiStart_Enter(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80118384,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftNs_SpecialHi_Enter(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

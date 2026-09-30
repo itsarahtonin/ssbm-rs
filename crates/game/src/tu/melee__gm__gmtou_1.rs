@@ -2279,6 +2279,489 @@ pub fn fn_80198EBC<'a>(ctx: &'a Ctx) {
     );
 }
 
+pub fn fn_80199AF0<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x40);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let local1: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let local2: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
+    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let mut td1: TmData<'a> = null(ctx);
+    let mut td2: TmData<'a> = null(ctx);
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut gobj: HSD_GObj<'a> = null(ctx);
+    let mut slot: i32 = 0;
+    let mut j: i32 = 0;
+    let mut mode: i32 = 0;
+    let mut bracket_idx: i32 = 0;
+    let mut result: i32 = 0;
+    let mut i: i32 = 0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    td1 = fns::gm_GetTournamentData(ctx);
+    td2 = fns::gm_GetTournamentData(ctx);
+    result = fns::fn_8018F508(ctx, local1);
+    if result == 1_i32 {
+        result = 1_i32;
+    } else if ((td2).x33() as i32) == 5_i32 {
+        result = 2_i32;
+    } else {
+        result = 0_i32;
+    }
+    mode = result;
+    result = fns::fn_8018F508(ctx, local2);
+    if result == 1_i32 {
+        slot = local2.get();
+    } else {
+        let mut p: Val<'a, u8> = null(ctx);
+        'goto_found: {
+            p = Handle::cast::<Val<'a, u8>>(fns::gm_80477738(ctx));
+            {
+                i = 0_i32;
+                'l3: while i < 4_i32 {
+                    'c4: {
+                        if (((Handle::add(p, 88_i32)).get() as i32) != 3_i32)
+                            && (((Handle::add(p, 94_i32)).get() as i32) == 0_i32)
+                        {
+                            slot = i;
+                            break 'goto_found;
+                        }
+                        p = Handle::add(p, 168_i32);
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+            slot = 1_i32.wrapping_neg();
+        }
+    }
+    bracket_idx = fns::fn_8018F74C(ctx);
+    inl_fn_80198D18_unfused(ctx);
+    if ((td1).x33() as i32) == 5_i32 {
+        mode = 2_i32;
+    }
+    if mode != 2_i32 {
+        if fns::lbl_80473AB8(ctx).get(bracket_idx).x18() == 0_i32 {
+            return;
+        }
+    }
+    let _ = fns::fn_8019035C(
+        ctx,
+        0_i32,
+        (Handle::add(
+            (statics::melee__gm__gmtou_1::lbl_804D6670(ctx).get()).models(),
+            0_i32,
+        ))
+        .get(),
+        mode,
+        26_i32,
+        3_i32,
+        1_i32,
+        fnptr(ctx, 0x801985d4),
+        0.0,
+    );
+    gobj = fns::fn_8019035C(
+        ctx,
+        0_i32,
+        (Handle::add(
+            (statics::melee__gm__gmtou_1::lbl_804D6670(ctx).get()).models(),
+            2_i32,
+        ))
+        .get(),
+        0_i32,
+        26_i32,
+        3_i32,
+        1_i32,
+        fnptr(ctx, 0x80198824),
+        0.0,
+    );
+    jobj = inl_HSD_JObjGetChild_unfused(
+        ctx,
+        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj))),
+    );
+    statics::melee__gm__gmtou_1::lbl_804799D8(ctx).set_x8(mode.wrapping_mul(20_i32));
+    statics::melee__gm__gmtou_1::lbl_804799D8(ctx).set_xC(
+        (if mode == 2_i32 {
+            150_i32
+        } else {
+            mode.wrapping_mul(20_i32).wrapping_add(19_i32)
+        }),
+    );
+    inl_HSD_JObjSetTranslateZ_unfused(ctx, jobj, 10000.0);
+    if (fns::lbl_803DA0D0(ctx)
+        .icon_model_map()
+        .at(((td1).x4B8().get(slot).x1() as i32))
+        .get() as i32)
+        == 0_i32
+    {
+        inl_HSD_JObjSetTranslateZ_unfused(ctx, jobj, 0.0);
+        {
+            i = 1_i32;
+            'l5: while i <= 12_i32 {
+                'c6: {
+                    jobj = inl_HSD_JObjGetNext_unfused(ctx, jobj);
+                    inl_HSD_JObjSetTranslateZ_unfused(ctx, jobj, 10000.0);
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    } else {
+        {
+            j = 1_i32;
+            'l7: while j <= 12_i32 {
+                'c8: {
+                    jobj = inl_HSD_JObjGetNext_unfused(ctx, jobj);
+                    inl_HSD_JObjSetTranslateZ_unfused(ctx, jobj, 10000.0);
+                    if (fns::lbl_803DA0D0(ctx)
+                        .icon_model_map()
+                        .at(((td1).x4B8().get(slot).x1() as i32))
+                        .get() as i32)
+                        == j
+                    {
+                        inl_HSD_JObjSetTranslateZ_unfused(ctx, jobj, 0.0);
+                        {
+                            slot = j.wrapping_add(1_i32);
+                            'l9: while slot <= 12_i32 {
+                                'c10: {
+                                    jobj = inl_HSD_JObjGetNext_unfused(ctx, jobj);
+                                    inl_HSD_JObjSetTranslateZ_unfused(ctx, jobj, 10000.0);
+                                }
+                                slot = slot.wrapping_add(1);
+                            }
+                        }
+                        break 'l7;
+                    }
+                }
+                j = j.wrapping_add(1);
+            }
+        }
+    }
+}
+
+pub fn fn_8019A158<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x50);
+    let state: fn_8019A158_state<'a> = frame_at(ctx, &__frame, 0x0);
+    let local1: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let local2: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let mut base_ptr: Lbl804799D8Text<'a> = null(ctx);
+    let mut x48_ptr: Ptr<'a, MatchEnd<'a>> = null(ctx);
+    let mut td1: TmData<'a> = null(ctx);
+    let mut td2: TmData<'a> = null(ctx);
+    let mut bracket: BracketEntry<'a> = null(ctx);
+    let mut mode: i32 = 0;
+    let mut sel: i32 = 0;
+    let mut bracket_idx: i32 = 0;
+    let mut result: i32 = 0;
+    let mut counter: i32 = 0;
+    let mut i: i32 = 0;
+    let mut k: i32 = 0;
+    let mut me: MatchEnd<'a> = null(ctx);
+    let mut cursor: Val<'a, u8> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    base_ptr = Handle::cast::<Lbl804799D8Text<'a>>(statics::melee__gm__gmtou_1::lbl_804799D8(ctx));
+    td1 = fns::gm_GetTournamentData(ctx);
+    (Handle::cast::<Lbl804799D8_t<'a>>(base_ptr)).set_x48(fns::gm_80477738(ctx));
+    x48_ptr = (Handle::cast::<Lbl804799D8_t<'a>>(base_ptr)).x48_ref();
+    (Handle::cast::<Lbl804799D8_t<'a>>(base_ptr)).set_x0(
+        ({
+            let __t1 = 0_i32;
+            mode = __t1;
+            __t1
+        } as u32),
+    );
+    td2 = fns::gm_GetTournamentData(ctx);
+    result = fns::fn_8018F508(ctx, local1);
+    if result == 1_i32 {
+        mode = 1_i32;
+    } else if ((td2).x33() as i32) == 5_i32 {
+        mode = 2_i32;
+    }
+    me = (x48_ptr).get();
+    result = fns::fn_8018F508(ctx, local2);
+    if result == 1_i32 {
+        state.set_slot(local2.get());
+    } else {
+        'goto_found: {
+            {
+                i = 0_i32;
+                'l3: while i < 4_i32 {
+                    'c4: {
+                        if (((me).player_standings().get(i).pkind() as i32) != 3_i32)
+                            && (((me).player_standings().get(i).is_small_loser() as i32) == 0_i32)
+                        {
+                            state.set_slot(i);
+                            break 'goto_found;
+                        }
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+            state.set_slot(1_i32.wrapping_neg());
+        }
+    }
+    sel = state.slot();
+    bracket_idx = fns::fn_8018F74C(ctx);
+    {
+        k = 0_i32;
+        'l5: while k < 20_i32 {
+            'c6: {
+                (Handle::cast::<Lbl804799D8_t<'a>>(base_ptr))
+                    .x4E()
+                    .at(k)
+                    .set((0_i32 as u8));
+            }
+            k = k.wrapping_add(1);
+        }
+    }
+    if mode == 1_i32 {
+        bracket = inl_fn_8019A158_GetBracketEntry_unfused(ctx, bracket_idx);
+        cursor = Handle::cast::<Val<'a, u8>>(bracket);
+        {
+            i = 0_i32;
+            'l7: while i < 4_i32 {
+                'c8: {
+                    if i == state.slot() {
+                        (bracket).slots().get(state.slot()).set_x4C((0_i32 as u8));
+                    } else {
+                        (Handle::add(cursor, 76_i32)).set((3_i32 as u8));
+                    }
+                    cursor = Handle::add(cursor, 44_i32);
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    } else if ((td1).x2D() as i32) == 1_i32 {
+        bracket = inl_fn_8019A158_GetBracketEntry_unfused(ctx, bracket_idx);
+        cursor = Handle::cast::<Val<'a, u8>>(bracket);
+        {
+            i = 0_i32;
+            'l9: while i < 4_i32 {
+                'c10: {
+                    if ((Handle::add(cursor, 78_i32)).get() as i32) == 3_i32 {
+                        (Handle::add(cursor, 76_i32)).set((3_i32 as u8));
+                    } else {
+                        let mut standing: MatchEndStanding<'a> = null(ctx);
+                        let mut v: u8 = 0;
+                        standing = (Handle::add(
+                            (Handle::cast::<MatchEndStanding<'a>>((x48_ptr).get())),
+                            i,
+                        ));
+                        v = (standing).is_small_loser();
+                        (standing).set_is_big_loser(v);
+                        (Handle::add(cursor, 76_i32)).set(v);
+                        if (((x48_ptr).get()).player_standings().get(i).is_small_loser() as i32)
+                            == 0_i32
+                        {
+                            sel = i;
+                        }
+                    }
+                    cursor = Handle::add(cursor, 44_i32);
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    } else {
+        counter = 0_i32;
+        {
+            i = 0_i32;
+            'l11: while i < 4_i32 {
+                'c12: {
+                    if (fns::lbl_80473AB8(ctx).get(bracket_idx).slots().get(i).x4E() as i32)
+                        == 3_i32
+                    {
+                        fns::lbl_80473AB8(ctx)
+                            .get(bracket_idx)
+                            .slots()
+                            .get(i)
+                            .set_x4C((4_i32 as u8));
+                    } else {
+                        fns::lbl_80473AB8(ctx)
+                            .get(bracket_idx)
+                            .slots()
+                            .get(i)
+                            .set_x4C((counter as u8));
+                        counter = counter.wrapping_add(1);
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+        's13: {
+            let __case = match counter {
+                2_i32 => 0,
+                3_i32 => 1,
+                4_i32 => 2,
+                _ => 3,
+            };
+            if __case <= 0 {
+                {
+                    let mut rand_val: i32 = fns::HSD_Randi(
+                        ctx,
+                        (fns::lbl_80473AB8(ctx)
+                            .get(bracket_idx)
+                            .slots()
+                            .get(0_i32)
+                            .x51() as i32)
+                            .wrapping_add(
+                                (fns::lbl_80473AB8(ctx)
+                                    .get(bracket_idx)
+                                    .slots()
+                                    .get(1_i32)
+                                    .x51() as i32),
+                            ),
+                    );
+                    if rand_val
+                        < (fns::lbl_80473AB8(ctx)
+                            .get(bracket_idx)
+                            .slots()
+                            .get(0_i32)
+                            .x51() as i32)
+                    {
+                        fns::lbl_80473AB8(ctx)
+                            .get(bracket_idx)
+                            .slots()
+                            .get(0_i32)
+                            .set_x4C((0_i32 as u8));
+                        fns::lbl_80473AB8(ctx)
+                            .get(bracket_idx)
+                            .slots()
+                            .get(1_i32)
+                            .set_x4C((1_i32 as u8));
+                    } else {
+                        fns::lbl_80473AB8(ctx)
+                            .get(bracket_idx)
+                            .slots()
+                            .get(0_i32)
+                            .set_x4C((1_i32 as u8));
+                        fns::lbl_80473AB8(ctx)
+                            .get(bracket_idx)
+                            .slots()
+                            .get(1_i32)
+                            .set_x4C((0_i32 as u8));
+                    }
+                    break 's13;
+                }
+            }
+            if __case <= 1 {
+                fns::fn_80196684(ctx, bracket_idx);
+                break 's13;
+            }
+            if __case <= 2 {
+                fns::fn_801967E0(ctx, bracket_idx);
+                break 's13;
+            }
+        }
+        {
+            let mut v_2: u8 = fns::lbl_80473AB8(ctx)
+                .get(bracket_idx)
+                .slots()
+                .get(0_i32)
+                .x4C();
+            ((x48_ptr).get())
+                .player_standings()
+                .get(0_i32)
+                .set_is_big_loser(v_2);
+            ((x48_ptr).get())
+                .player_standings()
+                .get(0_i32)
+                .set_is_small_loser(v_2);
+            v_2 = fns::lbl_80473AB8(ctx)
+                .get(bracket_idx)
+                .slots()
+                .get(1_i32)
+                .x4C();
+            ((x48_ptr).get())
+                .player_standings()
+                .get(1_i32)
+                .set_is_big_loser(v_2);
+            ((x48_ptr).get())
+                .player_standings()
+                .get(1_i32)
+                .set_is_small_loser(v_2);
+            v_2 = fns::lbl_80473AB8(ctx)
+                .get(bracket_idx)
+                .slots()
+                .get(2_i32)
+                .x4C();
+            ((x48_ptr).get())
+                .player_standings()
+                .get(2_i32)
+                .set_is_big_loser(v_2);
+            ((x48_ptr).get())
+                .player_standings()
+                .get(2_i32)
+                .set_is_small_loser(v_2);
+            v_2 = fns::lbl_80473AB8(ctx)
+                .get(bracket_idx)
+                .slots()
+                .get(3_i32)
+                .x4C();
+            ((x48_ptr).get())
+                .player_standings()
+                .get(3_i32)
+                .set_is_big_loser(v_2);
+            ((x48_ptr).get())
+                .player_standings()
+                .get(3_i32)
+                .set_is_small_loser(v_2);
+        }
+        {
+            i = 0_i32;
+            'l14: while i < 4_i32 {
+                'c15: {
+                    if (fns::lbl_80473AB8(ctx).get(bracket_idx).slots().get(i).x4C() as i32)
+                        == 0_i32
+                    {
+                        sel = i;
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    }
+    {
+        (Handle::cast::<Lbl804799D8_t<'a>>(base_ptr)).set_x4C((sel as u8));
+        (Handle::cast::<Lbl804799D8_t<'a>>(base_ptr)).set_x4D(
+            fns::lbl_80473AB8(ctx)
+                .get(bracket_idx)
+                .slots()
+                .get(sel)
+                .x4E(),
+        );
+        if (((Handle::cast::<Lbl804799D8_t<'a>>(base_ptr)).x4D() as i32) == 0_i32)
+            && (fns::lbl_80473AB8(ctx).get(bracket_idx).x18() != 0_i32)
+        {
+            let mut s: u8 = (Handle::cast::<Lbl804799D8_t<'a>>(base_ptr)).x4C();
+            let mut val: u16 = (td1).x4B8().get((s as i32)).x6();
+            if (val as i32) <= 120_i32 {
+                fns::gm_80167858(ctx, (s as i32), (val as i32), 31_i32, 120_i32);
+            } else {
+                fns::gm_80167858(ctx, (s as i32), 120_i32, 31_i32, 120_i32);
+            }
+        }
+        cursor = Handle::add(
+            Handle::cast::<Val<'a, u8>>(fns::lbl_80473AB8(ctx).get(bracket_idx)),
+            sel.wrapping_mul(44_i32),
+        );
+        {
+            let mut model_idx: u8 = (Handle::add(cursor, 80_i32)).get();
+            fns::fn_8018F00C(
+                ctx,
+                (base_ptr).x4E().at(0),
+                ((td1).x37().get((model_idx as i32)).x9() as i32),
+            );
+        }
+    }
+}
+
 pub fn fn_8019A71C<'a>(ctx: &'a Ctx, state: Val<'a, i32>, unused1: u32, unused2: u32) {
     let __frame = ctx.stack_frame(0x20);
     let mut state = state;
@@ -3772,6 +4255,110 @@ fn inl_HSD_JObjGetTranslationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     return (jobj).translate().y();
 }
 
+fn inl_fn_80198D18_unfused<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x20);
+    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj: HSD_GObj<'a> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    let _ = fns::gm_GetTournamentData(ctx);
+    gobj = fns::fn_80190174(
+        ctx,
+        ((statics::melee__gm__gmtou_1::lbl_804D666C(ctx).get()).cameras()).desc(),
+    );
+    let _ = fns::fn_801901F8(
+        ctx,
+        ((statics::melee__gm__gmtou_1::lbl_804D666C(ctx).get()).cameras()).desc(),
+    );
+    fns::fn_801902F0(ctx, (Handle::addr(gobj) as i32));
+    fns::fn_8019027C(
+        ctx,
+        Handle::cast::<Addr<'a>>((statics::melee__gm__gmtou_1::lbl_804D666C(ctx).get()).lights()),
+    );
+    let _ = fns::fn_8019035C(
+        ctx,
+        0_i32,
+        (Handle::add(
+            (statics::melee__gm__gmtou_1::lbl_804D666C(ctx).get()).models(),
+            5_i32,
+        ))
+        .get(),
+        0_i32,
+        26_i32,
+        2_i32,
+        1_i32,
+        fnptr(ctx, 0x80196dbc),
+        0.0,
+    );
+    let _ = fns::fn_8019035C(
+        ctx,
+        0_i32,
+        (Handle::add(
+            (statics::melee__gm__gmtou_1::lbl_804D666C(ctx).get()).models(),
+            4_i32,
+        ))
+        .get(),
+        0_i32,
+        26_i32,
+        2_i32,
+        1_i32,
+        fnptr(ctx, 0x80196e30),
+        80.0,
+    );
+    fns::fn_80198C60(ctx);
+    gobj = fns::GObj_Create(ctx, (14_i32 as u16), (26_i32 as u8), (0_i32 as u8));
+    fns::HSD_GObjObject_80390A70(
+        ctx,
+        gobj,
+        (fns::HSD_GObj_FogKind(ctx).get() as u8),
+        Handle::cast::<Addr<'a>>(
+            ({
+                fns::HSD_FogLoadDesc(
+                    ctx,
+                    (Handle::add(
+                        (statics::melee__gm__gmtou_1::lbl_804D666C(ctx).get()).fogs(),
+                        0_i32,
+                    ))
+                    .desc(),
+                )
+            }),
+        ),
+    );
+    fns::GObj_SetupGXLink(
+        ctx,
+        gobj,
+        fnptr(ctx, 0x803910b4),
+        (0_i32 as u8),
+        (0_i32 as u32),
+    );
+    fns::fn_80198BA0(ctx);
+}
+
+fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).hsd_obj();
+}
+
+fn inl_HSD_JObjGetNext_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
+    let mut jobj = jobj;
+    if Handle::is_null(jobj) {
+        return null::<HSD_JObj<'a>>(ctx);
+    } else {
+        return (jobj).next();
+    }
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
+fn inl_fn_8019A158_GetBracketEntry_unfused<'a>(ctx: &'a Ctx, bracket_idx: i32) -> BracketEntry<'a> {
+    let mut bracket_idx = bracket_idx;
+    return fns::lbl_80473AB8(ctx).get(bracket_idx);
+}
+
 fn inl_sfxBack_unfused<'a>(ctx: &'a Ctx) {
     fns::lbAudioAx_80024030(ctx, 0_i32);
 }
@@ -4112,6 +4699,20 @@ pub fn register(ctx: &Ctx) {
         0x80198ebc,
         |ctx| {
             Ret::put(fn_80198EBC(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80199af0,
+        |ctx| {
+            Ret::put(fn_80199AF0(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8019a158,
+        |ctx| {
+            Ret::put(fn_8019A158(ctx), ctx);
         },
         Returns::Nothing,
     );

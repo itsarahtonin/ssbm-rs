@@ -823,6 +823,85 @@ pub fn ftCo_8009E1D4<'a>(
     return null::<HSD_JObj<'a>>(ctx);
 }
 
+pub fn ftCo_8009E318<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: f64) -> i32 {
+    let __frame = ctx.stack_frame(0x30);
+    let mut gobj = gobj;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut fp: Fighter<'a> = null(ctx);
+    let mut part_jobj: HSD_JObj<'a> = null(ctx);
+    let mut i: i32 = 0;
+    'goto_exit_false: {
+        'goto_exit_true: {
+            fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+            part_jobj = (Handle::add((fp).parts(), arg1)).joint();
+            {
+                i = 0_i32;
+                'l1: while i < (fp).dynamics_num() {
+                    'c2: {
+                        let mut j: i32 = 0;
+                        let mut cur: DynamicsData<'a> = null(ctx);
+                        {
+                            cur = (fp).dynamic_bone_sets().get(i).dyn_desc().data();
+                            j = 0_i32;
+                            'l3: while !Handle::is_null(cur) {
+                                'c4: {
+                                    if Handle::addr((cur).desc().lb_unk0().jobj())
+                                        == Handle::addr(part_jobj)
+                                    {
+                                        if ((Handle::add((fp).parts(), arg1)).x8().x0().flags_b0()
+                                            != 0)
+                                        {
+                                            (Handle::add((fp).parts(), arg1))
+                                                .x8()
+                                                .x0()
+                                                .set_flags_b0((0_i32 as u8));
+                                            (fp).dynamic_bone_sets()
+                                                .get(i)
+                                                .set_bone_id(j.wrapping_add(1_i32));
+                                            break 'goto_exit_true;
+                                        } else {
+                                            (Handle::add((fp).parts(), arg1))
+                                                .x8()
+                                                .x0()
+                                                .set_flags_b0((1_i32 as u8));
+                                            (fp).dynamic_bone_sets().get(i).set_bone_id(j);
+                                            break 'goto_exit_false;
+                                        }
+                                    }
+                                }
+                                cur = (cur).next();
+                                j = j.wrapping_add(1);
+                            }
+                        }
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+            return 1_i32.wrapping_neg();
+        }
+        {
+            if !Handle::is_null((fp).x590()) {
+                fns::ftAnim_8006EED4(ctx, fp, arg1, (fp).x590(), arg2, (fp).frame_speed_mul());
+            }
+            return 0_i32;
+        }
+    }
+    {
+        let mut walk_jobj: HSD_JObj<'a> = statics::melee__ft__ftdynamics::ftCo_8009E1D4(
+            ctx,
+            (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj))),
+            (fp).x8AC_animSkeleton(),
+            part_jobj,
+        );
+        fns::ftAnim_80070758(ctx, part_jobj);
+        fns::ftAnim_80070758(ctx, walk_jobj);
+        return 0_i32;
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 pub fn ftCo_8009E4A8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x30);
     let mut fp = fp;
@@ -1571,6 +1650,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1, a2): (HSD_JObj<'_>, HSD_JObj<'_>, HSD_JObj<'_>) = Args::take_all(ctx);
             Ret::put(ftCo_8009E1D4(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8009e318,
+        |ctx| {
+            let (a0, a1, a2): (HSD_GObj<'_>, i32, Single) = Args::take_all(ctx);
+            Ret::put(ftCo_8009E318(ctx, a0, a1, a2.0), ctx);
         },
         Returns::Int,
     );

@@ -26,6 +26,544 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn ftCo_8009F834<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    arg1: i32,
+    part: i32,
+    arg3: i32,
+    arg4: i32,
+    arg5: Vec<'a>,
+    arg6: Vec<'a>,
+    arg7: f64,
+) {
+    let __frame = ctx.stack_frame(0xd0);
+    let spA8: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp9C: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp98: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
+    let sp94: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
+    let sp90: Val<'a, F32> = frame_at(ctx, &__frame, 0x20);
+    let sp84: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let sp80: Val<'a, F32> = frame_at(ctx, &__frame, 0x30);
+    let sp7C: Val<'a, F32> = frame_at(ctx, &__frame, 0x34);
+    let unused: ArrV<'a, u8, 68> = frame_at(ctx, &__frame, 0x38);
+    let mut gobj = gobj;
+    let mut arg1 = arg1;
+    let mut part = part;
+    let mut arg3 = arg3;
+    let mut arg4 = arg4;
+    let mut arg5 = arg5;
+    let mut arg6 = arg6;
+    let mut arg7 = arg7;
+    let mut gfx_id: i32 = 0;
+    let mut fp: Fighter<'a> = null(ctx);
+    let mut rand_val: f64 = 0.0;
+    let mut scale_y: f64 = 0.0;
+    let mut z_spread: f64 = 0.0;
+    let mut z_range: f64 = 0.0;
+    let mut floor_angle: f64 = 0.0;
+    let mut random_or_angle: f64 = 0.0;
+    let mut temp_r3: u8 = 0;
+    'goto_block_70: {
+        'goto_block_67: {
+            'goto_block_66: {
+                'goto_block_65: {
+                    'goto_block_64: {
+                        'goto_block_12: {
+                            'goto_block_11: {
+                                'goto_block_9: {
+                                    'goto_block_7: {
+                                        'goto_block_5: {
+                                            'goto_block_2: {
+                                                'l1: loop {
+                                                    'c2: {}
+                                                    if !(0_i32 != 0) {
+                                                        break 'l1;
+                                                    }
+                                                }
+                                                gfx_id = arg1;
+                                                fp =
+                                                    Handle::cast::<Fighter<'a>>((gobj).user_data());
+                                                if arg4 == 0_i32 {
+                                                    break 'goto_block_2;
+                                                }
+                                                (fp).set_x2219_b0((1_i32 as u8));
+                                            }
+                                            if (part as u32) != (141_i32 as u32) {
+                                                break 'goto_block_5;
+                                            }
+                                            part = (Handle::add(
+                                                ((fp).ft_data()).x54(),
+                                                ((fp).x2220_b0() as i32),
+                                            ))
+                                            .get();
+                                            (fp).set_x2220_b0((fp).x2220_b0().wrapping_add(1));
+                                            if ((fp).x2220_b0() as i32) < 5_i32 {
+                                                break 'goto_block_9;
+                                            }
+                                            (fp).set_x2220_b0((0_i32 as u8));
+                                            break 'goto_block_9;
+                                        }
+                                        if (part as u32) != (142_i32 as u32) {
+                                            break 'goto_block_7;
+                                        }
+                                        part = ((((fp).ft_data()).x8()).x10() as i32);
+                                        break 'goto_block_9;
+                                    }
+                                    if arg3 == 0_i32 {
+                                        break 'goto_block_9;
+                                    }
+                                    part = fns::ftParts_GetBoneIndex(ctx, fp, part);
+                                }
+                                if gfx_id < 0x250_i32 {
+                                    break 'goto_block_11;
+                                }
+                                if (div_i32(gfx_id, 0x3e8_i32)) != 30_i32 {
+                                    break 'goto_block_12;
+                                }
+                            }
+                            Handle::copy_from(spA8, (arg5));
+                            rand_val = fns::HSD_Randf(ctx);
+                            spA8.set_x(fp::fmadds(
+                                fp::fmuls(2.0, (arg6).x()),
+                                (fp::fsubs(rand_val, 0.5)),
+                                spA8.x(),
+                            ));
+                            rand_val = fns::HSD_Randf(ctx);
+                            spA8.set_y(fp::fmadds(
+                                fp::fmuls(2.0, (arg6).y()),
+                                (fp::fsubs(rand_val, 0.5)),
+                                spA8.y(),
+                            ));
+                            rand_val = fns::HSD_Randf(ctx);
+                            z_spread = fp::fmuls(2.0, (arg6).z());
+                            spA8.set_z(fp::fmadds(z_spread, (fp::fsubs(rand_val, 0.5)), spA8.z()));
+                            fns::efAsync_Spawn(
+                                ctx,
+                                gobj,
+                                (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)))
+                                    .x60C_ref(),
+                                (2_i32 as u32),
+                                (gfx_id as u32),
+                                (Handle::add((fp).parts(), part)).joint(),
+                                &[VarArg::Int(Handle::addr(spA8))],
+                            );
+                            return;
+                        }
+                        's3: {
+                            let __case = match gfx_id {
+                                0x402_i32 => 0,
+                                0x403_i32 => 0,
+                                0x409_i32 => 0,
+                                0x412_i32 => 0,
+                                0x413_i32 => 0,
+                                0x414_i32 => 0,
+                                0x422_i32 => 0,
+                                0x487_i32 => 0,
+                                0x4d1_i32 => 0,
+                                0x4e5_i32 => 0,
+                                0x4e6_i32 => 0,
+                                0x4fe_i32 => 0,
+                                0x500_i32 => 0,
+                                0x501_i32 => 0,
+                                0x502_i32 => 0,
+                                0x446_i32 => 1,
+                                0x448_i32 => 1,
+                                0x4e1_i32 => 1,
+                                0x415_i32 => 2,
+                                0x41e_i32 => 2,
+                                0x428_i32 => 2,
+                                0x429_i32 => 2,
+                                0x42a_i32 => 2,
+                                0x495_i32 => 3,
+                                0x49d_i32 => 4,
+                                0x438_i32 => 5,
+                                0x439_i32 => 5,
+                                0x423_i32 => 6,
+                                0x424_i32 => 6,
+                                0x4c1_i32 => 6,
+                                0x4c2_i32 => 6,
+                                0x4c4_i32 => 6,
+                                0x4c5_i32 => 6,
+                                _ => 7,
+                            };
+                            if __case <= 0 {
+                                {
+                                    let mut joint: HSD_JObj<'a> =
+                                        (Handle::add((fp).parts(), part)).joint();
+                                    fns::efAsync_Spawn(
+                                        ctx,
+                                        gobj,
+                                        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(
+                                            ctx, gobj,
+                                        )))
+                                        .x60C_ref(),
+                                        (0_i32 as u32),
+                                        (gfx_id as u32),
+                                        joint,
+                                        &[],
+                                    );
+                                    return;
+                                }
+                            }
+                            if __case <= 1 {
+                                {
+                                    let mut joint_2: HSD_JObj<'a> =
+                                        (Handle::add((fp).parts(), part)).joint();
+                                    fns::efAsync_Spawn(
+                                        ctx,
+                                        gobj,
+                                        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(
+                                            ctx, gobj,
+                                        )))
+                                        .x60C_ref(),
+                                        (7_i32 as u32),
+                                        (gfx_id as u32),
+                                        joint_2,
+                                        &[VarArg::Int(Handle::addr(arg5))],
+                                    );
+                                    return;
+                                }
+                            }
+                            if __case <= 2 {
+                                {
+                                    let mut attrs: Val<'a, F32> =
+                                        (((fp).ft_data()).x0()).x168_ref();
+                                    let mut joint_3: HSD_JObj<'a> =
+                                        (Handle::add((fp).parts(), part)).joint();
+                                    fns::efAsync_Spawn(
+                                        ctx,
+                                        gobj,
+                                        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(
+                                            ctx, gobj,
+                                        )))
+                                        .x60C_ref(),
+                                        (3_i32 as u32),
+                                        (gfx_id as u32),
+                                        joint_3,
+                                        &[VarArg::Int(Handle::addr(attrs))],
+                                    );
+                                    return;
+                                }
+                            }
+                            if __case <= 3 {
+                                break 'goto_block_64;
+                            }
+                            if __case <= 4 {
+                                break 'goto_block_65;
+                            }
+                            if __case <= 5 {
+                                break 'goto_block_66;
+                            }
+                            if __case <= 6 {
+                                break 'goto_block_67;
+                            }
+                            if __case <= 7 {
+                                break 'goto_block_70;
+                            }
+                        }
+                    }
+                    {
+                        let mut joint_4: HSD_JObj<'a> = (Handle::add((fp).parts(), part)).joint();
+                        fns::efAsync_Spawn(
+                            ctx,
+                            gobj,
+                            (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)))
+                                .x60C_ref(),
+                            (3_i32 as u32),
+                            (gfx_id as u32),
+                            joint_4,
+                            &[VarArg::Int(Handle::addr((fp).facing_dir_ref()))],
+                        );
+                    }
+                    return;
+                }
+                Handle::copy_from(sp9C, (arg5));
+                sp98.set(fp::fmuls(
+                    0.01745329238474369,
+                    (fp::fmuls(256.0, (arg6).x())),
+                ));
+                fns::efAsync_Spawn(
+                    ctx,
+                    gobj,
+                    (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj))).x60C_ref(),
+                    (6_i32 as u32),
+                    (gfx_id as u32),
+                    (Handle::add((fp).parts(), part)).joint(),
+                    &[
+                        VarArg::Int(Handle::addr(sp9C)),
+                        VarArg::Int(Handle::addr((fp).facing_dir_ref())),
+                        VarArg::Int(Handle::addr(sp98)),
+                    ],
+                );
+                return;
+            }
+            scale_y = (fp).x34_scale().y();
+            sp94.set(fp::fmuls(scale_y, (fp).co_attrs().x144()));
+            fns::efAsync_Spawn(
+                ctx,
+                gobj,
+                (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj))).x60C_ref(),
+                (3_i32 as u32),
+                (0x438_i32 as u32),
+                (Handle::add((fp).parts(), part)).joint(),
+                &[VarArg::Int(Handle::addr(sp94))],
+            );
+            return;
+        }
+        sp90.set(0.0);
+        if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+            floor_angle = fns::atan2f(
+                ctx,
+                fp::fneg((fp).coll_data().floor().normal().x()),
+                (fp).coll_data().floor().normal().y(),
+            );
+            sp90.set(floor_angle);
+        }
+        {
+            let mut joint_5: HSD_JObj<'a> = (Handle::add((fp).parts(), part)).joint();
+            fns::efAsync_Spawn(
+                ctx,
+                gobj,
+                (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj))).x60C_ref(),
+                (3_i32 as u32),
+                (gfx_id as u32),
+                joint_5,
+                &[VarArg::Int(Handle::addr(sp90))],
+            );
+        }
+        return;
+    }
+    Handle::copy_from(sp84, (arg5));
+    random_or_angle = fns::HSD_Randf(ctx);
+    sp84.set_x(fp::fmadds(
+        fp::fmuls(2.0, (arg6).x()),
+        (fp::fsubs(random_or_angle, 0.5)),
+        sp84.x(),
+    ));
+    random_or_angle = fns::HSD_Randf(ctx);
+    sp84.set_y(fp::fmadds(
+        fp::fmuls(2.0, (arg6).y()),
+        (fp::fsubs(random_or_angle, 0.5)),
+        sp84.y(),
+    ));
+    random_or_angle = fns::HSD_Randf(ctx);
+    z_range = fp::fmuls(2.0, (arg6).z());
+    sp84.set_z(fp::fmadds(
+        z_range,
+        (fp::fsubs(random_or_angle, 0.5)),
+        sp84.z(),
+    ));
+    's4: {
+        let __case = match gfx_id {
+            0x3e8_i32 => 0,
+            0x3e9_i32 => 1,
+            0x3ea_i32 => 1,
+            0x3eb_i32 => 1,
+            0x3ec_i32 => 1,
+            0x3f3_i32 => 1,
+            0x3f4_i32 => 1,
+            0x3f6_i32 => 1,
+            0x3fa_i32 => 1,
+            0x3fb_i32 => 1,
+            0x3fc_i32 => 1,
+            0x405_i32 => 1,
+            0x407_i32 => 1,
+            0x40c_i32 => 1,
+            0x40d_i32 => 1,
+            0x40e_i32 => 1,
+            0x40f_i32 => 1,
+            0x410_i32 => 1,
+            0x411_i32 => 1,
+            0x416_i32 => 1,
+            0x41c_i32 => 1,
+            0x41d_i32 => 1,
+            0x41f_i32 => 1,
+            0x421_i32 => 1,
+            0x425_i32 => 1,
+            0x426_i32 => 1,
+            0x44b_i32 => 1,
+            0x4e2_i32 => 1,
+            0x4e3_i32 => 1,
+            0x4e4_i32 => 1,
+            0x404_i32 => 2,
+            0x406_i32 => 2,
+            0x513_i32 => 3,
+            0x514_i32 => 4,
+            0x515_i32 => 5,
+            0x3ed_i32 => 6,
+            0x3ef_i32 => 6,
+            0x3f0_i32 => 6,
+            0x3f1_i32 => 6,
+            0x3f2_i32 => 6,
+            0x3f5_i32 => 6,
+            0x3fe_i32 => 6,
+            0x400_i32 => 6,
+            0x401_i32 => 6,
+            0x4d9_i32 => 6,
+            0x3f7_i32 => 7,
+            0x3f8_i32 => 7,
+            0x3f9_i32 => 7,
+            0x3fd_i32 => 7,
+            0x3ff_i32 => 7,
+            _ => 8,
+        };
+        if __case <= 0 {
+            {
+                let mut joint_6: HSD_JObj<'a> = (Handle::add((fp).parts(), part)).joint();
+                let mut data: ftCommonData<'a> = fns::p_ftCommonData(ctx).get();
+                fns::efAsync_Spawn(
+                    ctx,
+                    gobj,
+                    (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj))).x60C_ref(),
+                    (5_i32 as u32),
+                    (gfx_id as u32),
+                    joint_6,
+                    &[
+                        VarArg::Int(Handle::addr(sp84)),
+                        VarArg::Int(Handle::addr((data).fall_common().x564_ref())),
+                    ],
+                );
+                return;
+            }
+        }
+        if __case <= 1 {
+            {
+                let mut joint_7: HSD_JObj<'a> = (Handle::add((fp).parts(), part)).joint();
+                fns::efAsync_Spawn(
+                    ctx,
+                    gobj,
+                    (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj))).x60C_ref(),
+                    (2_i32 as u32),
+                    (gfx_id as u32),
+                    joint_7,
+                    &[VarArg::Int(Handle::addr(sp84))],
+                );
+                return;
+            }
+        }
+        if __case <= 2 {
+            {
+                sp80.set(0.0);
+                if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+                    random_or_angle = fns::atan2f(
+                        ctx,
+                        fp::fneg((fp).coll_data().floor().normal().x()),
+                        (fp).coll_data().floor().normal().y(),
+                    );
+                    sp80.set(random_or_angle);
+                }
+                {
+                    let mut joint_8: HSD_JObj<'a> = (Handle::add((fp).parts(), part)).joint();
+                    fns::efAsync_Spawn(
+                        ctx,
+                        gobj,
+                        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)))
+                            .x60C_ref(),
+                        (5_i32 as u32),
+                        (gfx_id as u32),
+                        joint_8,
+                        &[
+                            VarArg::Int(Handle::addr(sp84)),
+                            VarArg::Int(Handle::addr(sp80)),
+                        ],
+                    );
+                }
+                return;
+            }
+        }
+        if __case <= 3 {
+            fns::efAsync_Spawn(
+                ctx,
+                gobj,
+                (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj))).x60C_ref(),
+                (8_i32 as u32),
+                (2_i32 as u32),
+                (Handle::add((fp).parts(), part)).joint(),
+                &[VarArg::Int(Handle::addr(sp84))],
+            );
+            return;
+        }
+        if __case <= 4 {
+            fns::efAsync_Spawn(
+                ctx,
+                gobj,
+                (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj))).x60C_ref(),
+                (8_i32 as u32),
+                (3_i32 as u32),
+                (Handle::add((fp).parts(), part)).joint(),
+                &[VarArg::Int(Handle::addr(sp84))],
+            );
+            return;
+        }
+        if __case <= 5 {
+            fns::efAsync_Spawn(
+                ctx,
+                gobj,
+                (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj))).x60C_ref(),
+                (8_i32 as u32),
+                (4_i32 as u32),
+                (Handle::add((fp).parts(), part)).joint(),
+                &[VarArg::Int(Handle::addr(sp84))],
+            );
+            return;
+        }
+        if __case <= 6 {
+            {
+                let mut joint_9: HSD_JObj<'a> = (Handle::add((fp).parts(), part)).joint();
+                fns::efAsync_Spawn(
+                    ctx,
+                    gobj,
+                    (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj))).x60C_ref(),
+                    (5_i32 as u32),
+                    (gfx_id as u32),
+                    joint_9,
+                    &[
+                        VarArg::Int(Handle::addr(sp84)),
+                        VarArg::Int(Handle::addr((fp).facing_dir_ref())),
+                    ],
+                );
+                return;
+            }
+        }
+        if __case <= 7 {
+            {
+                sp7C.set(0.0);
+                if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+                    random_or_angle = fns::atan2f(
+                        ctx,
+                        fp::fneg((fp).coll_data().floor().normal().x()),
+                        (fp).coll_data().floor().normal().y(),
+                    );
+                    sp7C.set(random_or_angle);
+                }
+                {
+                    let mut joint_10: HSD_JObj<'a> = (Handle::add((fp).parts(), part)).joint();
+                    fns::efAsync_Spawn(
+                        ctx,
+                        gobj,
+                        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)))
+                            .x60C_ref(),
+                        (6_i32 as u32),
+                        (gfx_id as u32),
+                        joint_10,
+                        &[
+                            VarArg::Int(Handle::addr(sp84)),
+                            VarArg::Int(Handle::addr((fp).facing_dir_ref())),
+                            VarArg::Int(Handle::addr(sp7C)),
+                        ],
+                    );
+                }
+                return;
+            }
+        }
+        if __case <= 8 {
+            fns::OSReport(ctx, cstr(ctx, 0x803c57b0), &[VarArg::Int(gfx_id as u32)]);
+            return;
+        }
+    }
+}
+
 pub fn ftCo_800A0098<'a>(ctx: &'a Ctx, arg0: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
@@ -40,8 +578,30 @@ pub fn ftCo_800A0098<'a>(ctx: &'a Ctx, arg0: Fighter<'a>) {
     fns::ftCo_800B463C(ctx, arg0, (127_i32 as u8));
 }
 
+fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x8009f834,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5, a6, a7): (
+                HSD_GObj<'_>,
+                i32,
+                i32,
+                i32,
+                i32,
+                Vec<'_>,
+                Vec<'_>,
+                Single,
+            ) = Args::take_all(ctx);
+            Ret::put(ftCo_8009F834(ctx, a0, a1, a2, a3, a4, a5, a6, a7.0), ctx);
+        },
+        Returns::Nothing,
+    );
     ctx.register_port(
         0x800a0098,
         |ctx| {

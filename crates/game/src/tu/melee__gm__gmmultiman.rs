@@ -174,6 +174,122 @@ pub fn gm_801B6428<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     fns::gm_LoadRumbleEnabled(ctx, temp_r3);
 }
 
+pub fn gm_801B65D4<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
+    let __frame = ctx.stack_frame(0x40);
+    let sp14: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let sp10: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
+    let mut arg0 = arg0;
+    let mut temp_r25: i32 = 0;
+    let mut temp_r25_2: u8 = 0;
+    let mut var_r29: i32 = 0;
+    let mut temp_r26: Val<'a, i32> = null(ctx);
+    let mut temp_r31: Val<'a, u32> = null(ctx);
+    let mut temp_r3_5: gmm_retval_ED98<'a> = null(ctx);
+    let mut temp_r3_6: gmm_retval_EDB0<'a> = null(ctx);
+    let mut temp_r3_3: gmm_retval_EDBC<'a> = null(ctx);
+    let mut temp_r28: gmm_x0_584_t<'a> = null(ctx);
+    let mut temp_r3_8: u16 = 0;
+    let mut temp_r0: u32 = 0;
+    let mut temp_r3_2: u8 = 0;
+    let mut temp_r3: MatchExitInfo<'a> = null(ctx);
+    'goto_block_22: {
+        'l1: loop {
+            'c2: {}
+            if !(0_i32 != 0) {
+                break 'l1;
+            }
+        }
+        var_r29 = 0_i32;
+        temp_r3 = Handle::cast::<MatchExitInfo<'a>>(fns::gm_GetGameModeStateExitData(ctx, arg0));
+        temp_r28 = (fns::gmMainLib_804D3EE0(ctx).get())
+            .vs()
+            .unk_530()
+            .unk_584();
+        let _ = fns::gm_80162968(
+            ctx,
+            div_u32((temp_r3).match_end().frame_count(), (60_i32 as u32)),
+        );
+        let _ = fns::gm_8016247C(
+            ctx,
+            ((temp_r3).match_end().player_standings().get(0_i32).xE() as i32),
+        );
+        if ((temp_r3).match_end().outcome() as i32) == (enums::OUTCOME_RETRY as i32) {
+            fns::gm_SetNextGameModeStateId(ctx, (1_u32 as u8));
+            return;
+        }
+        temp_r3_2 = fns::gm_CKindToSelKind(ctx, ((temp_r28).unk_584() as u8));
+        temp_r31 = fns::gmMainLib_8015D438(ctx, temp_r3_2);
+        temp_r26 = fns::gmMainLib_8015D450(ctx, temp_r3_2);
+        fns::Ground_801C1DE4(ctx, sp14, sp10);
+        if sp14.get() == 0_i32 {
+            temp_r25 = shl_i32(1_i32, ((temp_r3_2 as i32) as u32));
+            if !((temp_r25 & (fns::gmMainLib_8015EDBC(ctx)).x8()) != 0) {
+                (temp_r26).set(((temp_r3).match_end().frame_count() as i32));
+                temp_r3_3 = fns::gmMainLib_8015EDBC(ctx);
+                (temp_r3_3).set_x8(((temp_r3_3).x8() | temp_r25));
+            } else {
+                if ((temp_r26).get() as u32) > (temp_r3).match_end().frame_count() {
+                    (temp_r26).set(((temp_r3).match_end().frame_count() as i32));
+                }
+            }
+            temp_r3_5 = fns::gmMainLib_8015ED98(ctx);
+            (temp_r3_5).set_x1C(((temp_r3_5).x1C() | temp_r25));
+            temp_r3_6 = fns::gmMainLib_8015EDB0(ctx);
+            (temp_r3_6).set_x4(((temp_r3_6).x4() | temp_r25));
+        }
+        if fns::gmMainLib_8015D48C(ctx, temp_r3_2) == 0_i32 {
+            if sp14.get() == 0_i32 {
+                fns::gmMainLib_8015D4E8(ctx, temp_r3_2, 1_i32);
+                var_r29 = 1_i32;
+                (temp_r31).set((temp_r3).match_end().frame_count());
+            } else {
+                if (temp_r31).get() < (sp10.get().wrapping_sub(sp14.get()) as u32) {
+                    (temp_r31).set((sp10.get().wrapping_sub(sp14.get()) as u32));
+                }
+            }
+        } else if sp14.get() == 0_i32 {
+            if (temp_r31).get() > (temp_r3).match_end().frame_count() {
+                (temp_r31).set((temp_r3).match_end().frame_count());
+            }
+            var_r29 = 1_i32;
+        }
+        if var_r29 != 0_i32 {
+            temp_r25_2 = fns::gm_801733D8(ctx);
+            temp_r3_8 = fns::gm_8017341C(ctx);
+            if (temp_r3_8 as i32) != 0x148_i32 {
+                fns::gm_80164504(ctx, temp_r3_8);
+            }
+            fns::gm_80173AA4(ctx);
+            fns::gm_80173EEC(ctx);
+            let _ = fns::gm_80172898(ctx, (128_i32 as u16));
+            if (temp_r25_2 as i32) != (enums::ChKind_None as i32) {
+                fns::gm_InitChallengerData(
+                    ctx,
+                    ((temp_r28).unk_584() as u8),
+                    (temp_r28).unk_585(),
+                    statics::melee__gm__gmmultiman::gm_804D68E8(ctx).get(),
+                    (temp_r28).unk_586(),
+                    temp_r25_2,
+                    (15_i32 as u8),
+                );
+                fns::gm_SetPendingGameMode(ctx, ((enums::GM_CHALLENGER_APPROACH as i32) as u8));
+                fns::gm_SetNewGameModePending(ctx);
+                return;
+            }
+            break 'goto_block_22;
+        }
+    }
+    if fns::gm_80173754(
+        ctx,
+        (15_i32 as u8),
+        statics::melee__gm__gmmultiman::gm_804D68E8(ctx).get(),
+    ) == 0_i32
+    {
+        fns::gm_SetNextGameModeStateId(ctx, (0_u32 as u8));
+    }
+}
+
 pub fn gm_Mode_TargetTest_OnInit<'a>(ctx: &'a Ctx) {
     let mut temp_r4: gmm_x0_584_t<'a> = (fns::gmMainLib_804D3EE0(ctx).get())
         .vs()
@@ -1366,6 +1482,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (GameModeState<'_>,) = Args::take_all(ctx);
             Ret::put(gm_801B6428(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801b65d4,
+        |ctx| {
+            let (a0,): (GameModeState<'_>,) = Args::take_all(ctx);
+            Ret::put(gm_801B65D4(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

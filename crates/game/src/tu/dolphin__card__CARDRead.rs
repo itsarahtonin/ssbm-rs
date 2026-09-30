@@ -92,6 +92,64 @@ pub fn __CARDSeek<'a>(
     return 0_i32;
 }
 
+pub fn ReadCallback<'a>(ctx: &'a Ctx, chan: i32, result: i32) {
+    let __frame = ctx.stack_frame(0x28);
+    let mut chan = chan;
+    let mut result = result;
+    let mut card: CARDControl<'a> = null(ctx);
+    let mut callback: FnPtr<'a> = null(ctx);
+    let mut fat: Val<'a, u16> = null(ctx);
+    let mut fileInfo: CARDFileInfo<'a> = null(ctx);
+    let mut length: i32 = 0;
+    'goto_error: {
+        card = fns::__CARDBlock(ctx).get(chan);
+        if result < 0_i32 {
+            break 'goto_error;
+        }
+        fileInfo = (card).fileInfo();
+        if (fileInfo).length() < 0_i32 {
+            result = (14_i32.wrapping_neg());
+            break 'goto_error;
+        }
+        length = (((((fileInfo).offset().wrapping_add((card).sectorSize())) as u32)
+            & ((!(((card).sectorSize()).wrapping_sub(1_i32))) as u32))
+            .wrapping_sub(((fileInfo).offset() as u32)) as i32);
+        (fileInfo).set_length((fileInfo).length().wrapping_sub(length));
+        if (fileInfo).length() <= 0_i32 {
+            break 'goto_error;
+        }
+        fat = Handle::cast::<Val<'a, u16>>(fns::__CARDGetFatBlock(ctx, card));
+        (fileInfo).set_offset((fileInfo).offset().wrapping_add(length));
+        (fileInfo).set_iBlock((Handle::add(fat, ((fileInfo).iBlock() as i32))).get());
+        if !(((((fileInfo).iBlock()) as i32) >= 5_i32)
+            && ((((fileInfo).iBlock()) as i32) < ((card).cBlock() as i32)))
+        {
+            result = (6_i32.wrapping_neg());
+            break 'goto_error;
+        }
+        result = fns::__CARDRead(
+            ctx,
+            chan,
+            ((card).sectorSize() as u32).wrapping_mul(((fileInfo).iBlock() as u32)),
+            (if (fileInfo).length() < (card).sectorSize() {
+                (fileInfo).length()
+            } else {
+                (card).sectorSize()
+            }),
+            (card).buffer(),
+            fnptr(ctx, 0x80357c10),
+        );
+        if result < 0_i32 {
+            break 'goto_error;
+        }
+        return;
+    }
+    callback = (card).apiCallback();
+    (card).set_apiCallback(null::<FnPtr<'a>>(ctx));
+    let _ = fns::__CARDPutControlBlock(ctx, card, result);
+    callback.call::<_, ()>((chan, result));
+}
+
 pub fn CARDReadAsync<'a>(
     ctx: &'a Ctx,
     fileInfo: CARDFileInfo<'a>,
@@ -189,6 +247,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(__CARDSeek(ctx, a0, a1, a2, a3), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x80357c10,
+        |ctx| {
+            let (a0, a1): (i32, i32) = Args::take_all(ctx);
+            Ret::put(ReadCallback(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x80357d40,

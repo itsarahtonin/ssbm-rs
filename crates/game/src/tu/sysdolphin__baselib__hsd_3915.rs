@@ -319,6 +319,93 @@ pub fn hsd_80391A04<'a>(ctx: &'a Ctx, scale_x: f64, scale_y: f64, line_width: i3
     fns::HSD_StateSetCullMode(ctx, 0_i32);
 }
 
+pub fn hsd_80391AC8<'a>(
+    ctx: &'a Ctx,
+    str: Val<'a, i8>,
+    color: _GXColor<'a>,
+    x: f64,
+    y: f64,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x48);
+    let col: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut str = str;
+    let mut color = color;
+    let mut x = x;
+    let mut y = y;
+    let mut col_ptr: _GXColor<'a> = null(ctx);
+    let mut i: i32 = 0;
+    let mut p: Val<'a, u8> = null(ctx);
+    if Handle::is_null(str) {
+        return fp::fctiwz(x);
+    }
+    col_ptr = col;
+    {
+        i = 0_i32;
+        'l1: while ((Handle::add(str, i)).get() as i32) != 0_i32 {
+            'c2: {
+                if ((Handle::add(str, i)).get() as i32) != 92_i32 {
+                    Handle::copy_from((col_ptr), (color));
+                    x = fp::fadds(
+                        x,
+                        fns::DrawASCII(ctx, ((Handle::add(str, i)).get() as i32), x, y, col_ptr),
+                    );
+                } else {
+                    's3: {
+                        let __case = match ((Handle::add(str, {
+                            i = i.wrapping_add(1);
+                            i
+                        }))
+                        .get() as i32)
+                        {
+                            99_i32 => 0,
+                            67_i32 => 0,
+                            _ => 1,
+                        };
+                        if __case <= 0 {
+                            p = Handle::cast::<Val<'a, u8>>((Handle::add(str, i)));
+                            (color).set_r(
+                                ((inl_hexval_unfused(ctx, ((Handle::add(p, 2_i32)).get() as i32))
+                                    .wrapping_add(
+                                        inl_hexval_unfused(
+                                            ctx,
+                                            ((Handle::add(p, 1_i32)).get() as i32),
+                                        )
+                                        .wrapping_mul(16_i32),
+                                    )) as u8),
+                            );
+                            (color).set_g(
+                                ((inl_hexval_unfused(ctx, ((Handle::add(p, 4_i32)).get() as i32))
+                                    .wrapping_add(
+                                        inl_hexval_unfused(
+                                            ctx,
+                                            ((Handle::add(p, 3_i32)).get() as i32),
+                                        )
+                                        .wrapping_mul(16_i32),
+                                    )) as u8),
+                            );
+                            (color).set_b(
+                                ((inl_hexval_unfused(ctx, ((Handle::add(p, 6_i32)).get() as i32))
+                                    .wrapping_add(
+                                        inl_hexval_unfused(
+                                            ctx,
+                                            ((Handle::add(p, 5_i32)).get() as i32),
+                                        )
+                                        .wrapping_mul(16_i32),
+                                    )) as u8),
+                            );
+                            i = i.wrapping_add(6_i32);
+                            (color).set_a((255_i32 as u8));
+                            break 's3;
+                        }
+                    }
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return fp::fctiwz(x);
+}
+
 pub fn hsd_80391E18<'a>(ctx: &'a Ctx, list: Val<'a, u8>, x1: f64, y1: f64, x2: f64, y2: f64) {
     let __frame = ctx.stack_frame(0x70);
     let color: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
@@ -724,6 +811,43 @@ fn inl_GXColor4u8<'a>(ctx: &'a Ctx, x: u8, y: u8, z: u8, w: u8) {
     (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(w);
 }
 
+fn inl_hexval_unfused<'a>(ctx: &'a Ctx, ch: i32) -> i32 {
+    let mut ch = ch;
+    'goto_ret_zero: {
+        'goto_sub_37: {
+            'goto_sub_57: {
+                'goto_sub_30: {
+                    if ch < 71_i32 {
+                        if ch < 10_i32 {
+                            if ch >= 0_i32 {
+                                break 'goto_sub_30;
+                            }
+                            break 'goto_ret_zero;
+                        }
+                        if ch >= 65_i32 {
+                            break 'goto_sub_37;
+                        }
+                        break 'goto_ret_zero;
+                    }
+                    if ch < 103_i32 {
+                        if ch >= 97_i32 {
+                            break 'goto_sub_57;
+                        }
+                        break 'goto_ret_zero;
+                    }
+                    break 'goto_ret_zero;
+                }
+                return ch.wrapping_sub(48_i32);
+            }
+            return ch.wrapping_sub(87_i32);
+        }
+        return ch.wrapping_sub(55_i32);
+    }
+    return 0_i32;
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 fn inl_hsd_80391F28_len<'a>(ctx: &'a Ctx, dy: f64, dx: f64) -> f64 {
     let mut dy = dy;
     let mut dx = dx;
@@ -778,6 +902,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(hsd_80391A04(ctx, a0.0, a1.0, a2), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80391ac8,
+        |ctx| {
+            let (a0, a1, a2, a3): (Val<'_, i8>, _GXColor<'_>, Single, Single) = Args::take_all(ctx);
+            Ret::put(hsd_80391AC8(ctx, a0, a1, a2.0, a3.0), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x80391e18,

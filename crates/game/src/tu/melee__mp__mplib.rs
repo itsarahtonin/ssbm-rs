@@ -593,6 +593,132 @@ pub fn mpRemap2d<'a>(
     }
 }
 
+pub fn mpLineIntersection<'a>(
+    ctx: &'a Ctx,
+    a0x: f64,
+    a0y: f64,
+    a1x: f64,
+    a1y: f64,
+    b0x: f64,
+    b0y: f64,
+    b1x: f64,
+    b1y: f64,
+    int_x: Val<'a, F32>,
+    int_y: Val<'a, F32>,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x48);
+    let mut a0x = a0x;
+    let mut a0y = a0y;
+    let mut a1x = a1x;
+    let mut a1y = a1y;
+    let mut b0x = b0x;
+    let mut b0y = b0y;
+    let mut b1x = b1x;
+    let mut b1y = b1y;
+    let mut int_x = int_x;
+    let mut int_y = int_y;
+    let mut b1_below_a: i32 = 0_i32;
+    let mut b2_above_a: i32 = 0_i32;
+    if a0x <= a1x {
+        if ((b0x < a0x) && (b1x < a0x)) || ((a1x < b0x) && (a1x < b1x)) {
+            return 0_i32;
+        }
+    } else {
+        if ((b0x < a1x) && (b1x < a1x)) || ((a0x < b0x) && (a0x < b1x)) {
+            return 0_i32;
+        }
+    }
+    if a0y <= a1y {
+        if ((b0y < a0y) && (b1y < a0y)) || ((a1y < b0y) && (a1y < b1y)) {
+            return 0_i32;
+        }
+    } else {
+        if ((b0y < a1y) && (b1y < a1y)) || ((a0y < b0y) && (a0y < b1y)) {
+            return 0_i32;
+        }
+    }
+    {
+        let mut ah: f64 = 0.0;
+        let mut d0x: f64 = 0.0;
+        let mut aw: f64 = 0.0;
+        let mut d0y: f64 = 0.0;
+        let mut hs_b0_a: f64 = 0.0;
+        let mut d1y: f64 = 0.0;
+        let mut d1x: f64 = 0.0;
+        let mut det: f64 = 0.0;
+        let mut hs_b1_a: f64 = 0.0;
+        let mut bh: f64 = 0.0;
+        let mut bw: f64 = 0.0;
+        'goto_tlabel: {
+            ah = fp::fsubs(a1y, a0y);
+            d0x = fp::fsubs(b0x, a0x);
+            aw = fp::fsubs(a1x, a0x);
+            d0y = fp::fsubs(b0y, a0y);
+            hs_b0_a = fp::fmsub(aw, d0y, (fp::fmul(ah, d0x)));
+            if hs_b0_a < 0.0 {
+                if hs_b0_a < fp::fneg(0.1) {
+                    return 0_i32;
+                }
+                b1_below_a = 1_i32;
+            }
+            d1x = fp::fsubs(b1x, a1x);
+            d1y = fp::fsubs(b1y, a1y);
+            hs_b1_a = fp::fmsub(aw, d1y, (fp::fmul(ah, d1x)));
+            if hs_b1_a > 0.0 {
+                if hs_b1_a > 0.1 {
+                    return 0_i32;
+                }
+                b2_above_a = 1_i32;
+            }
+            if (hs_b0_a == 0.0) && (hs_b1_a == 0.0) {
+                return 0_i32;
+            }
+            det = fp::fmsub(d0x, d1y, (fp::fmul(d0y, d1x)));
+            if det < hs_b0_a {
+                if det < hs_b1_a {
+                    return 0_i32;
+                }
+            } else if det > hs_b0_a {
+                if det > hs_b1_a {
+                    return 0_i32;
+                }
+            }
+            bw = fp::fsubs(b1x, b0x);
+            bh = fp::fsubs(b1y, b0y);
+            if !((((bw == 0.0) && (bh == 0.0)) || ((b1_below_a != 0) && (b2_above_a != 0)))
+                || ((hs_b0_a >= 0.0) && (b2_above_a != 0)))
+            {
+                let mut area: f64 = fp::fmsub(bw, ah, (fp::fmul(bh, aw)));
+                if (if (area) < (0_i32 as f64) {
+                    fp::fneg((area))
+                } else {
+                    (area)
+                }) > 9.999999747378752e-05_f64
+                {
+                    let mut t: f64 = fp::fdiv((fp::fmsub(bw, d0y, (fp::fmul(bh, d0x)))), area);
+                    if t > 0.0 {
+                        if t < 1.0 {
+                            (int_x).set(fp::frsp(fp::fmadd(aw, t, a0x)));
+                            (int_y).set(fp::frsp(fp::fmadd(ah, t, a0y)));
+                        } else {
+                            (int_x).set(a1x);
+                            (int_y).set(a1y);
+                        }
+                    } else {
+                        (int_x).set(a0x);
+                        (int_y).set(a0y);
+                    }
+                    break 'goto_tlabel;
+                }
+            }
+            return 0_i32;
+        }
+        return 1_i32;
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 pub fn mpLineIntersectionH<'a>(
     ctx: &'a Ctx,
     int_x: Val<'a, F32>,
@@ -5532,6 +5658,28 @@ pub fn register(ctx: &Ctx) {
             );
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8004e97c,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9): (
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+                Val<'_, F32>,
+                Val<'_, F32>,
+            ) = Args::take_all(ctx);
+            Ret::put(
+                mpLineIntersection(ctx, a0.0, a1.0, a2.0, a3.0, a4.0, a5.0, a6.0, a7.0, a8, a9),
+                ctx,
+            );
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x8004ebf8,

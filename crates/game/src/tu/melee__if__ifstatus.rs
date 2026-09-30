@@ -171,6 +171,216 @@ pub fn ifStatus_802F4B84<'a>(ctx: &'a Ctx, state: IfDamageState<'a>, is_stamina:
     }
 }
 
+pub fn ifStatus_802F4EDC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0xf8);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let pad_a: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x4);
+    let stamina_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
+    let pad_b: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x24);
+    let normal_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x28);
+    let pad_c: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x2c);
+    let digit_offset: ifStatus_802F4EDC_digit_offset<'a> = frame_at(ctx, &__frame, 0x34);
+    let mut gobj = gobj;
+    let mut hud: HudIndex<'a> = null(ctx);
+    let mut state: IfDamageState<'a> = null(ctx);
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut digit_jobj: HSD_JObj<'a> = null(ctx);
+    let mut is_stamina: i32 = 0;
+    let mut anim_base: Ptr<'a, Ptr<'a, HSD_MatAnimJoint<'a>>> = null(ctx);
+    let mut i: i32 = 0;
+    let mut digit: u8 = 0;
+    let mut ones_offset: f64 = 0.0;
+    let mut tens_offset: f64 = 0.0;
+    let mut hundreds_offset: f64 = 0.0;
+    let mut pos: f64 = 0.0;
+    let mut ptr_: IfDamageState<'a> = null(ctx);
+    'goto_found_player: {
+        hud = inl_ifStatus_GetHUDInfo(ctx);
+        jobj = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
+        {
+            i = 0_i32;
+            ptr_ = (hud).players().get(0);
+            'l1: while i < 6_i32 {
+                'c2: {
+                    if Handle::addr((ptr_).HUD_parent_entity()) == Handle::addr(gobj) {
+                        state = (hud).players().get(i);
+                        break 'goto_found_player;
+                    }
+                }
+                ptr_ = Handle::add(ptr_, 1);
+                i = i.wrapping_add(1);
+            }
+        }
+        state = null::<IfDamageState<'a>>(ctx);
+    }
+    if ((state).flags().explode_animation() != 0) {
+        statics::melee__if__ifstatus::ifStatus_PercentOnDeathAnimationThink(ctx, state, i, ptr_);
+        return;
+    }
+    is_stamina = fns::lb_8000B09C(ctx, jobj);
+    if (((state).flags().unk10() as i32) != 0)
+        && ((((state).flags().animation_status_id() as i32) != 1_i32) || (is_stamina == 0_i32))
+    {
+        (state).flags().set_animation_status_id((1_i32 as u8));
+        fns::HSD_JObjRemoveAnim(ctx, jobj);
+        anim_base = (hud).damage_num_matanims_ref();
+        fns::lb_8000C07C(
+            ctx,
+            jobj,
+            1_i32,
+            (hud).damage_num_anims(),
+            (anim_base).get(),
+            (hud).damage_num_shapeanims(),
+        );
+        fns::HSD_JObjReqAnimAll(ctx, jobj, 0.0);
+        digit_jobj = (state).jobjs().at((enums::Percent as i32)).get();
+        inl_ifStatus_InitPercentSign(ctx, digit_jobj, state, anim_base);
+        fns::mn_8022F3D8(ctx, jobj, (1_i32 as u8), 0x400_i32);
+        inl_ifStatus_InitDamageDigits(ctx, state, anim_base);
+    }
+    fns::HSD_JObjAnimAll(ctx, jobj);
+    {
+        let mut anim_joints: Ptr<'a, Ptr<'a, HSD_MatAnimJoint<'a>>> =
+            (hud).damage_num_matanims_ref();
+        let mut post_digit_jobj: HSD_JObj<'a> = null(ctx);
+        post_digit_jobj = (state).jobjs().at((enums::Ones as i32)).get();
+        digit = (rem_i32(((state).damage_percent() as i32), 10_i32) as u8);
+        fns::HSD_TObjAddAnimAll(
+            ctx,
+            (((post_digit_jobj).u().dobj()).mobj()).tobj(),
+            ((((Handle::add(((anim_joints).get()), 0_i32)).get()).child()).matanim()).texanim(),
+        );
+        fns::HSD_TObjReqAnimAll(
+            ctx,
+            (((post_digit_jobj).u().dobj()).mobj()).tobj(),
+            fp::fmuls(2.0, fp::frsp((digit as i32) as f64)),
+        );
+        fns::HSD_AObjSetRate(
+            ctx,
+            ((((post_digit_jobj).u().dobj()).mobj()).tobj()).aobj(),
+            0.0,
+        );
+        post_digit_jobj = (state).jobjs().at((enums::Tens as i32)).get();
+        digit = (div_i32(
+            (rem_i32(((state).damage_percent() as i32), 100_i32)),
+            10_i32,
+        ) as u8);
+        fns::HSD_TObjAddAnimAll(
+            ctx,
+            (((post_digit_jobj).u().dobj()).mobj()).tobj(),
+            ((((Handle::add(((anim_joints).get()), 0_i32)).get()).child()).matanim()).texanim(),
+        );
+        fns::HSD_TObjReqAnimAll(
+            ctx,
+            (((post_digit_jobj).u().dobj()).mobj()).tobj(),
+            fp::fmuls(2.0, fp::frsp((digit as i32) as f64)),
+        );
+        fns::HSD_AObjSetRate(
+            ctx,
+            ((((post_digit_jobj).u().dobj()).mobj()).tobj()).aobj(),
+            0.0,
+        );
+        if (div_i32(
+            (rem_i32(((state).damage_percent() as i32), 0x3e8_i32)),
+            100_i32,
+        ) == 0_i32)
+            && (div_i32(
+                (rem_i32(((state).damage_percent() as i32), 100_i32)),
+                10_i32,
+            ) == 0_i32)
+        {
+            fns::HSD_JObjSetFlagsAll(
+                ctx,
+                (state).jobjs().at((enums::Tens as i32)).get(),
+                ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+            );
+        } else {
+            fns::HSD_JObjClearFlagsAll(
+                ctx,
+                (state).jobjs().at((enums::Tens as i32)).get(),
+                ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+            );
+        }
+        post_digit_jobj = (state).jobjs().at((enums::Hundreds as i32)).get();
+        digit = (div_i32(
+            (rem_i32(((state).damage_percent() as i32), 0x3e8_i32)),
+            100_i32,
+        ) as u8);
+        fns::HSD_TObjAddAnimAll(
+            ctx,
+            (((post_digit_jobj).u().dobj()).mobj()).tobj(),
+            ((((Handle::add(((anim_joints).get()), 0_i32)).get()).child()).matanim()).texanim(),
+        );
+        fns::HSD_TObjReqAnimAll(
+            ctx,
+            (((post_digit_jobj).u().dobj()).mobj()).tobj(),
+            fp::fmuls(2.0, fp::frsp((digit as i32) as f64)),
+        );
+        fns::HSD_AObjSetRate(
+            ctx,
+            ((((post_digit_jobj).u().dobj()).mobj()).tobj()).aobj(),
+            0.0,
+        );
+    }
+    inl_ifStatus_UpdateDamageDisplay(ctx, state, jobj, color, stamina_color, normal_color);
+    {
+        ones_offset = (if rem_i32(((state).damage_percent() as i32), 10_i32) == 1_i32 {
+            0.5069000124931335
+        } else {
+            0.0
+        });
+        tens_offset = (if div_i32(
+            (rem_i32(((state).damage_percent() as i32), 100_i32)),
+            10_i32,
+        ) == 1_i32
+        {
+            0.5069000124931335
+        } else {
+            0.0
+        });
+        digit_jobj = (state).jobjs().at((enums::Percent as i32)).get();
+        pos = fp::fsubs(
+            (state).translation_x().at((enums::Percent as i32)).get(),
+            ones_offset,
+        );
+        inl_HSD_JObjSetTranslateX(ctx, digit_jobj, pos);
+        digit_offset.set_value(ones_offset);
+        digit_offset.set_value(fp::fadds(digit_offset.value(), tens_offset));
+        digit_jobj = (state).jobjs().at((enums::Tens as i32)).get();
+        pos = fp::fadds(
+            (state).translation_x().at((enums::Tens as i32)).get(),
+            digit_offset.value(),
+        );
+        inl_HSD_JObjSetTranslateX(ctx, digit_jobj, pos);
+        hundreds_offset = (if div_i32(
+            (rem_i32(((state).damage_percent() as i32), 0x3e8_i32)),
+            100_i32,
+        ) == 1_i32
+        {
+            0.5069000124931335
+        } else {
+            0.0
+        });
+        digit_jobj = (state).jobjs().at((enums::Hundreds as i32)).get();
+        digit_offset.set_value(fp::fadds(
+            digit_offset.value(),
+            fp::fadds(tens_offset, hundreds_offset),
+        ));
+        pos = fp::fsubs(
+            inl_ifStatus_GetStoredTranslationX(ctx, state, (enums::Hundreds as i32)),
+            fp::fneg(digit_offset.value()),
+        );
+        inl_HSD_JObjSetTranslateX(ctx, digit_jobj, pos);
+    }
+    if ((state).flags().force_digit_shake() != 0) {
+        (state).set_frames_of_shake_remaining((10_i32 as u8));
+    }
+    fns::ifStatus_802F4B84(ctx, state, is_stamina);
+    if (statics::melee__if__ifstatus::ifStatus_804D6D60(ctx).get() as i32) >= 5_i32 {
+        (jobj).scale().set_x(0.6499999761581421);
+    }
+}
+
 pub fn ifStatus_802F5B48<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
@@ -967,6 +1177,378 @@ fn inl_offset_rand_unfused<'a>(ctx: &'a Ctx) -> f64 {
     return fp::fsubs(fns::HSD_Randf(ctx), 0.5);
 }
 
+fn inl_ifStatus_GetHUDInfo<'a>(ctx: &'a Ctx) -> HudIndex<'a> {
+    return fns::ifStatus_HudInfo(ctx);
+}
+
+fn inl_ifStatus_InitPercentSign<'a>(
+    ctx: &'a Ctx,
+    jobj: HSD_JObj<'a>,
+    state: IfDamageState<'a>,
+    anim_base: Ptr<'a, Ptr<'a, HSD_MatAnimJoint<'a>>>,
+) {
+    let mut jobj = jobj;
+    let mut state = state;
+    let mut anim_base = anim_base;
+    let mut tobj: HSD_TObj<'a> = null(ctx);
+    if !Handle::is_null(jobj) {
+        tobj = (((jobj).u().dobj()).mobj()).tobj();
+        fns::HSD_TObjAddAnimAll(
+            ctx,
+            tobj,
+            (((((((Handle::add(((anim_base).get()), 0_i32)).get()).child()).next()).next())
+                .next())
+            .matanim())
+            .texanim(),
+        );
+        if (fns::Player_GetMoreFlagsBit2(ctx, (((state).player_slot() as i8) as i32)) != 0) {
+            fns::HSD_TObjReqAnimAll(ctx, tobj, 1.0);
+        } else {
+            fns::HSD_TObjReqAnimAll(ctx, tobj, 0.0);
+        }
+        fns::HSD_AObjSetRate(ctx, (tobj).aobj(), 0.0);
+        fns::HSD_TObjAnim(ctx, tobj);
+    }
+}
+
+fn inl_ifStatus_InitDamageDigits<'a>(
+    ctx: &'a Ctx,
+    state: IfDamageState<'a>,
+    anim_base: Ptr<'a, Ptr<'a, HSD_MatAnimJoint<'a>>>,
+) {
+    let mut state = state;
+    let mut anim_base = anim_base;
+    let mut hundreds_jobj: HSD_JObj<'a> = null(ctx);
+    let mut tens_jobj: HSD_JObj<'a> = null(ctx);
+    let mut ones_jobj: HSD_JObj<'a> = null(ctx);
+    let mut digit: u8 = 0;
+    ones_jobj = (state).jobjs().at((enums::Ones as i32)).get();
+    digit = (rem_i32(((state).damage_percent() as i32), 10_i32) as u8);
+    fns::HSD_TObjAddAnimAll(
+        ctx,
+        (((ones_jobj).u().dobj()).mobj()).tobj(),
+        ((((Handle::add(((anim_base).get()), 0_i32)).get()).child()).matanim()).texanim(),
+    );
+    fns::HSD_TObjReqAnimAll(
+        ctx,
+        (((ones_jobj).u().dobj()).mobj()).tobj(),
+        fp::fmuls(2.0, fp::frsp((digit as i32) as f64)),
+    );
+    fns::HSD_AObjSetRate(ctx, ((((ones_jobj).u().dobj()).mobj()).tobj()).aobj(), 0.0);
+    tens_jobj = (state).jobjs().at((enums::Tens as i32)).get();
+    digit = (div_i32(
+        (rem_i32(((state).damage_percent() as i32), 100_i32)),
+        10_i32,
+    ) as u8);
+    fns::HSD_TObjAddAnimAll(
+        ctx,
+        (((tens_jobj).u().dobj()).mobj()).tobj(),
+        ((((Handle::add(((anim_base).get()), 0_i32)).get()).child()).matanim()).texanim(),
+    );
+    fns::HSD_TObjReqAnimAll(
+        ctx,
+        (((tens_jobj).u().dobj()).mobj()).tobj(),
+        fp::fmuls(2.0, fp::frsp((digit as i32) as f64)),
+    );
+    fns::HSD_AObjSetRate(ctx, ((((tens_jobj).u().dobj()).mobj()).tobj()).aobj(), 0.0);
+    hundreds_jobj = (state).jobjs().at((enums::Hundreds as i32)).get();
+    digit = (div_i32(
+        (rem_i32(((state).damage_percent() as i32), 0x3e8_i32)),
+        100_i32,
+    ) as u8);
+    fns::HSD_TObjAddAnimAll(
+        ctx,
+        (((hundreds_jobj).u().dobj()).mobj()).tobj(),
+        ((((Handle::add(((anim_base).get()), 0_i32)).get()).child()).matanim()).texanim(),
+    );
+    fns::HSD_TObjReqAnimAll(
+        ctx,
+        (((hundreds_jobj).u().dobj()).mobj()).tobj(),
+        fp::fmuls(2.0, fp::frsp((digit as i32) as f64)),
+    );
+    fns::HSD_AObjSetRate(
+        ctx,
+        ((((hundreds_jobj).u().dobj()).mobj()).tobj()).aobj(),
+        0.0,
+    );
+}
+
+fn inl_ifStatus_UpdateDamageDisplay<'a>(
+    ctx: &'a Ctx,
+    state: IfDamageState<'a>,
+    jobj: HSD_JObj<'a>,
+    color: _GXColor<'a>,
+    stamina_color: _GXColor<'a>,
+    normal_color: _GXColor<'a>,
+) {
+    let mut state = state;
+    let mut jobj = jobj;
+    let mut color = color;
+    let mut stamina_color = stamina_color;
+    let mut normal_color = normal_color;
+    let mut mobj: HSD_MObj<'a> = null(ctx);
+    let mut digit_jobj: HSD_JObj<'a> = null(ctx);
+    let mut clamped_damage: i16 = 0;
+    let mut factor: f64 = 0.0;
+    let mut i: i32 = 0;
+    if div_i32(
+        (rem_i32(((state).damage_percent() as i32), 0x3e8_i32)),
+        100_i32,
+    ) == 0_i32
+    {
+        fns::HSD_JObjSetFlagsAll(
+            ctx,
+            (state).jobjs().at((enums::Hundreds as i32)).get(),
+            ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+        );
+    } else {
+        fns::HSD_JObjClearFlagsAll(
+            ctx,
+            (state).jobjs().at((enums::Hundreds as i32)).get(),
+            ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+        );
+    }
+    if ((state).old_damage() as i32) != ((state).damage_percent() as i32) {
+        if (fns::Player_GetMoreFlagsBit2(ctx, (((state).player_slot() as i8) as i32)) != 0) {
+            if (({
+                let __t1 = (state).damage_percent();
+                clamped_damage = __t1;
+                __t1
+            }) as i32)
+                > 100_i32
+            {
+                clamped_damage = (100_i32 as i16);
+            } else if (clamped_damage as i32) < 0_i32 {
+                clamped_damage = (0_i32 as i16);
+            }
+            factor = fp::fsubs(1.0, (fp::fdivs(fp::frsp(clamped_damage as f64), 100.0)));
+            (stamina_color).set_r(
+                ((fp::fctiwz(
+                    (fp::fmadds(
+                        factor,
+                        fp::frsp(
+                            ((statics::melee__if__ifstatus::ifStatus_804D57AC(ctx)
+                                .at(0_i32)
+                                .get() as i32)
+                                .wrapping_sub(
+                                    (statics::melee__if__ifstatus::ifStatus_804D57A8(ctx)
+                                        .at(0_i32)
+                                        .get() as i32),
+                                )) as f64,
+                        ),
+                        fp::frsp(
+                            statics::melee__if__ifstatus::ifStatus_804D57A8(ctx)
+                                .at(0_i32)
+                                .get() as f64,
+                        ),
+                    )),
+                ) as i8) as u8),
+            );
+            (stamina_color).set_g(
+                ((fp::fctiwz(
+                    (fp::fmadds(
+                        factor,
+                        fp::frsp(
+                            ((statics::melee__if__ifstatus::ifStatus_804D57AC(ctx)
+                                .at(1_i32)
+                                .get() as i32)
+                                .wrapping_sub(
+                                    (statics::melee__if__ifstatus::ifStatus_804D57A8(ctx)
+                                        .at(1_i32)
+                                        .get() as i32),
+                                )) as f64,
+                        ),
+                        fp::frsp(
+                            statics::melee__if__ifstatus::ifStatus_804D57A8(ctx)
+                                .at(1_i32)
+                                .get() as f64,
+                        ),
+                    )),
+                ) as i8) as u8),
+            );
+            (stamina_color).set_b(
+                ((fp::fctiwz(
+                    (fp::fmadds(
+                        factor,
+                        fp::frsp(
+                            ((statics::melee__if__ifstatus::ifStatus_804D57AC(ctx)
+                                .at(2_i32)
+                                .get() as i32)
+                                .wrapping_sub(
+                                    (statics::melee__if__ifstatus::ifStatus_804D57A8(ctx)
+                                        .at(2_i32)
+                                        .get() as i32),
+                                )) as f64,
+                        ),
+                        fp::frsp(
+                            statics::melee__if__ifstatus::ifStatus_804D57A8(ctx)
+                                .at(2_i32)
+                                .get() as f64,
+                        ),
+                    )),
+                ) as i8) as u8),
+            );
+            (stamina_color).set_a((255_i32 as u8));
+            Handle::copy_from((color), (stamina_color));
+        } else {
+            clamped_damage = (state).damage_percent();
+            if (clamped_damage as i32) > 0x12c_i32 {
+                clamped_damage = (0x12c_i32 as i16);
+            } else if (clamped_damage as i32) < 0_i32 {
+                clamped_damage = (0_i32 as i16);
+            }
+            factor = fp::fdivs(fp::frsp(clamped_damage as f64), 300.0);
+            (normal_color).set_r(
+                ((fp::fctiwz(
+                    (fp::fmadds(
+                        factor,
+                        fp::frsp(
+                            ((statics::melee__if__ifstatus::ifStatus_804D57AC(ctx)
+                                .at(0_i32)
+                                .get() as i32)
+                                .wrapping_sub(
+                                    (statics::melee__if__ifstatus::ifStatus_804D57A8(ctx)
+                                        .at(0_i32)
+                                        .get() as i32),
+                                )) as f64,
+                        ),
+                        fp::frsp(
+                            statics::melee__if__ifstatus::ifStatus_804D57A8(ctx)
+                                .at(0_i32)
+                                .get() as f64,
+                        ),
+                    )),
+                ) as i8) as u8),
+            );
+            (normal_color).set_g(
+                ((fp::fctiwz(
+                    (fp::fmadds(
+                        factor,
+                        fp::frsp(
+                            ((statics::melee__if__ifstatus::ifStatus_804D57AC(ctx)
+                                .at(1_i32)
+                                .get() as i32)
+                                .wrapping_sub(
+                                    (statics::melee__if__ifstatus::ifStatus_804D57A8(ctx)
+                                        .at(1_i32)
+                                        .get() as i32),
+                                )) as f64,
+                        ),
+                        fp::frsp(
+                            statics::melee__if__ifstatus::ifStatus_804D57A8(ctx)
+                                .at(1_i32)
+                                .get() as f64,
+                        ),
+                    )),
+                ) as i8) as u8),
+            );
+            (normal_color).set_b(
+                ((fp::fctiwz(
+                    (fp::fmadds(
+                        factor,
+                        fp::frsp(
+                            ((statics::melee__if__ifstatus::ifStatus_804D57AC(ctx)
+                                .at(2_i32)
+                                .get() as i32)
+                                .wrapping_sub(
+                                    (statics::melee__if__ifstatus::ifStatus_804D57A8(ctx)
+                                        .at(2_i32)
+                                        .get() as i32),
+                                )) as f64,
+                        ),
+                        fp::frsp(
+                            statics::melee__if__ifstatus::ifStatus_804D57A8(ctx)
+                                .at(2_i32)
+                                .get() as f64,
+                        ),
+                    )),
+                ) as i8) as u8),
+            );
+            (normal_color).set_a((255_i32 as u8));
+            Handle::copy_from((color), (normal_color));
+        }
+        mobj = (((state).jobjs().at((enums::Hundreds as i32)).get())
+            .u()
+            .dobj())
+        .mobj();
+        ((mobj).mat()).diffuse().set_r((color).r());
+        ((mobj).mat()).diffuse().set_g((color).g());
+        ((mobj).mat()).diffuse().set_b((color).b());
+        mobj = (((state).jobjs().at((enums::Tens as i32)).get()).u().dobj()).mobj();
+        ((mobj).mat()).diffuse().set_r((color).r());
+        ((mobj).mat()).diffuse().set_g((color).g());
+        ((mobj).mat()).diffuse().set_b((color).b());
+        mobj = (((state).jobjs().at((enums::Ones as i32)).get()).u().dobj()).mobj();
+        ((mobj).mat()).diffuse().set_r((color).r());
+        ((mobj).mat()).diffuse().set_g((color).g());
+        ((mobj).mat()).diffuse().set_b((color).b());
+        mobj = (((state).jobjs().at((enums::Percent as i32)).get())
+            .u()
+            .dobj())
+        .mobj();
+        ((mobj).mat()).diffuse().set_r((color).r());
+        ((mobj).mat()).diffuse().set_g((color).g());
+        ((mobj).mat()).diffuse().set_b((color).b());
+    }
+    if (fns::lb_8000B09C(ctx, jobj) != 0) {
+        {
+            i = 0_i32;
+            'l1: while i < 4_i32 {
+                'c2: {
+                    (state)
+                        .translation_x()
+                        .at(i)
+                        .set(inl_HSD_JObjGetTranslationX(
+                            ctx,
+                            (state).jobjs().at(i).get(),
+                        ));
+                    (state)
+                        .translation_y()
+                        .at(i)
+                        .set(inl_HSD_JObjGetTranslationY(
+                            ctx,
+                            (state).jobjs().at(i).get(),
+                        ));
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    }
+}
+
+fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
+    let mut jobj = jobj;
+    let mut x = x;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f95f0),
+            (0x201_i32 as u32),
+            cstr(ctx, 0x803f95f0),
+        )
+    });
+    (jobj).translate().set_x(x);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_ifStatus_GetStoredTranslationX<'a>(
+    ctx: &'a Ctx,
+    state: IfDamageState<'a>,
+    index: i32,
+) -> f64 {
+    let mut state = state;
+    let mut index = index;
+    return (state).translation_x().at(index).get();
+}
+
 fn inl_ifStatus_GetHUDInfo_unfused<'a>(ctx: &'a Ctx) -> HudIndex<'a> {
     return fns::ifStatus_HudInfo(ctx);
 }
@@ -1281,6 +1863,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (IfDamageState<'_>, i32) = Args::take_all(ctx);
             Ret::put(ifStatus_802F4B84(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x802f4edc,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ifStatus_802F4EDC(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

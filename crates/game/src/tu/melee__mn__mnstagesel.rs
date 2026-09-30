@@ -166,6 +166,106 @@ pub fn mnStageSel_802599EC<'a>(ctx: &'a Ctx) -> i32 {
     return i;
 }
 
+pub fn mnStageSel_80259C28<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x20);
+    let unused: ArrV<'a, u64, 2> = frame_at(ctx, &__frame, 0x0);
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut gobj: HSD_GObj<'a> = null(ctx);
+    'goto_skip_randomize: {
+        if statics::melee__mn__mnstagesel::mnStageSel_804D6CA4(ctx).get() != (0_i32 as u32) {
+            return;
+        }
+        's1: {
+            let __case =
+                match (statics::melee__mn__mnstagesel::mnStageSel_804D6CAE(ctx).get() as i32) {
+                    30_i32 => 0,
+                    29_i32 => 1,
+                    _ => 2,
+                };
+            if __case <= 0 {
+                if !((statics::melee__mn__mnstagesel::mnStageSel_804D6CA0(ctx).get()
+                    & (0x1000_i32 as u32))
+                    != 0)
+                {
+                    return;
+                }
+                break 's1;
+            }
+            if __case <= 1 {
+                if !((statics::melee__mn__mnstagesel::mnStageSel_804D6CA0(ctx).get()
+                    & (0x1100_i32 as u32))
+                    != 0)
+                {
+                    return;
+                }
+                break 's1;
+            }
+            if __case <= 2 {
+                if !((statics::melee__mn__mnstagesel::mnStageSel_804D6CA0(ctx).get()
+                    & (0x1100_i32 as u32))
+                    != 0)
+                {
+                    return;
+                }
+                if ((statics::melee__mn__mnstagesel::mnStageSel_804D6CAE(ctx).get() as i32)
+                    < 30_i32)
+                    && ((statics::melee__mn__mnstagesel::mnStageSel_803F06D0(ctx)
+                        .get(
+                            (statics::melee__mn__mnstagesel::mnStageSel_804D6CAE(ctx).get() as i32),
+                        )
+                        .x8() as i32)
+                        >= 2_i32)
+                {
+                    break 'goto_skip_randomize;
+                }
+                fns::lbAudioAx_80024030(ctx, 3_i32);
+                return;
+            }
+        }
+        statics::melee__mn__mnstagesel::mnStageSel_804D6CAE(ctx)
+            .set((fns::mnStageSel_802599EC(ctx) as u8));
+    }
+    gobj = fns::GObj_Create(ctx, (4_i32 as u16), (5_i32 as u8), (128_i32 as u8));
+    jobj = fns::HSD_JObjLoadJoint(
+        ctx,
+        (statics::melee__mn__mnstagesel::sss_models(ctx).get())
+            .now_loading()
+            .joint(),
+    );
+    fns::HSD_GObjObject_80390A70(
+        ctx,
+        gobj,
+        fns::HSD_GObj_JObjKind(ctx).get(),
+        Handle::cast::<Addr<'a>>(jobj),
+    );
+    fns::GObj_SetupGXLink(
+        ctx,
+        gobj,
+        fnptr(ctx, 0x80391070),
+        (4_i32 as u8),
+        (135_i32 as u32),
+    );
+    let _ = fns::HSD_GObj_SetupProc(ctx, gobj, fnptr(ctx, 0x8022eae0), (0_i32 as u8));
+    fns::HSD_JObjAddAnimAll(
+        ctx,
+        jobj,
+        (statics::melee__mn__mnstagesel::sss_models(ctx).get())
+            .now_loading()
+            .animjoint(),
+        (statics::melee__mn__mnstagesel::sss_models(ctx).get())
+            .now_loading()
+            .matanim_joint(),
+        (statics::melee__mn__mnstagesel::sss_models(ctx).get())
+            .now_loading()
+            .shapeanim_joint(),
+    );
+    fns::HSD_JObjReqAnimAll(ctx, Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()), 0.0);
+    fns::HSD_JObjAnimAll(ctx, Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()));
+    statics::melee__mn__mnstagesel::mnStageSel_804D6CAF(ctx).set((1_i32 as u8));
+    statics::melee__mn__mnstagesel::mnStageSel_804D6CA4(ctx).set((30_i32 as u32));
+    inl_sfxForward_unfused(ctx);
+}
+
 pub fn fn_80259D84<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let mut gobj = gobj;
@@ -1503,6 +1603,10 @@ pub fn mnStageSel_8025BC08<'a>(ctx: &'a Ctx, idx: i32) -> i32 {
         .stkind() as i32);
 }
 
+fn inl_sfxForward_unfused<'a>(ctx: &'a Ctx) {
+    fns::lbAudioAx_80024030(ctx, 1_i32);
+}
+
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
@@ -1966,6 +2070,13 @@ pub fn register(ctx: &Ctx) {
             Ret::put(mnStageSel_802599EC(ctx), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x80259c28,
+        |ctx| {
+            Ret::put(mnStageSel_80259C28(ctx), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x80259d84,

@@ -84,6 +84,36 @@ pub fn fioMccChannelEvent<'a>(ctx: &'a Ctx, chID: i32, event: u32, value: u32) {
     }
 }
 
+pub fn FIOInit<'a>(ctx: &'a Ctx, exiChannel: i32, chID: i32, blockSize: u8) -> i32 {
+    let __frame = ctx.stack_frame(0x20);
+    let mut exiChannel = exiChannel;
+    let mut chID = chID;
+    let mut blockSize = blockSize;
+    'goto_exit: {
+        if fns::MCCInit(ctx, exiChannel, (10_i32 as u8), null::<FnPtr<'a>>(ctx)) == 0_i32 {
+            statics::dolphin__mcc__fio::gLastErr(ctx).set((135_i32 as u8));
+            break 'goto_exit;
+        }
+        if fns::MCCOpen(ctx, chID, blockSize, fnptr(ctx, 0x8032ea84)) == 0_i32 {
+            statics::dolphin__mcc__fio::gLastErr(ctx).set((135_i32 as u8));
+            break 'goto_exit;
+        }
+        statics::dolphin__mcc__fio::gChID(ctx).set(chID);
+        statics::dolphin__mcc__fio::gmChID(ctx).set(chID);
+        statics::dolphin__mcc__fio::gSizeOfBlocks(ctx).set(blockSize);
+        statics::dolphin__mcc__fio::gmSizeOfBlocks(ctx).set(blockSize);
+        statics::dolphin__mcc__fio::gQuery(ctx).set(0_i32);
+        statics::dolphin__mcc__fio::gProcDone(ctx).set(1_i32);
+        statics::dolphin__mcc__fio::gProcBusy(ctx).set(0_i32);
+        statics::dolphin__mcc__fio::gLastErr(ctx).set((0_i32 as u8));
+        statics::dolphin__mcc__fio::bAsyncBusy(ctx).set(0_i32);
+        statics::dolphin__mcc__fio::bAsyncBuffer(ctx).set(null::<Addr<'a>>(ctx));
+        statics::dolphin__mcc__fio::bAsyncIsRead(ctx).set(0_i32);
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
 pub fn FIOExit<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
     if fns::MCCClose(ctx, statics::dolphin__mcc__fio::gChID(ctx).get()) == 0_i32 {
@@ -107,6 +137,99 @@ pub fn FIOExit<'a>(ctx: &'a Ctx) {
     statics::dolphin__mcc__fio::bAsyncBusy(ctx).set(0_i32);
     statics::dolphin__mcc__fio::bAsyncBuffer(ctx).set(null::<Addr<'a>>(ctx));
     statics::dolphin__mcc__fio::bAsyncIsRead(ctx).set(0_i32);
+}
+
+pub fn FIOQuery<'a>(ctx: &'a Ctx) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let mut tick: u32 = 0;
+    'goto_exit: {
+        if (inl_fioIsInitialized_unfused(ctx) != 0) {
+            statics::dolphin__mcc__fio::gQuery(ctx).set(0_i32);
+            if fns::MCCNotify(
+                ctx,
+                statics::dolphin__mcc__fio::gChID(ctx).get(),
+                (0x100120_i32 as u32),
+            ) == 0_i32
+            {
+                statics::dolphin__mcc__fio::gLastErr(ctx).set((135_i32 as u8));
+                break 'goto_exit;
+            }
+            if inl_MPDWaiting_unfused(
+                ctx,
+                (10_u32 as i32),
+                statics::dolphin__mcc__fio::gQuery(ctx),
+                1_i32,
+            ) == 0_i32
+            {
+                statics::dolphin__mcc__fio::gLastErr(ctx).set((136_i32 as u8));
+                break 'goto_exit;
+            }
+            statics::dolphin__mcc__fio::gLastErr(ctx).set((0_i32 as u8));
+            return 1_i32;
+        }
+    }
+    tick = fns::OSGetTick(ctx);
+    'l1: loop {
+        'c2: {}
+        if !((div_u32(
+            (fns::OSGetTick(ctx).wrapping_sub(tick)),
+            (div_u32(
+                ((ptr::<Val<'a, u32>>(
+                    ctx,
+                    ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                ))
+                .get()),
+                (4_i32 as u32),
+            )),
+        )) < (5_i32 as u32))
+        {
+            break 'l1;
+        }
+    }
+    return 0_i32;
+}
+
+pub fn FIOFwrite<'a>(ctx: &'a Ctx, handle: i32, data: Addr<'a>, size: u32) -> u32 {
+    let __frame = ctx.stack_frame(0x28);
+    let mut handle = handle;
+    let mut data = data;
+    let mut size = size;
+    let mut nSizeRemain: i32 = 0;
+    let mut nResult: i32 = 0;
+    let mut nWriteSize: i32 = 0;
+    'goto_exit: {
+        nSizeRemain = (size as i32);
+        nResult = 0_i32;
+        if handle == 0_i32 {
+            statics::dolphin__mcc__fio::gLastErr(ctx).set((176_i32 as u8));
+            break 'goto_exit;
+        }
+        if handle == 1_i32.wrapping_neg() {
+            statics::dolphin__mcc__fio::gLastErr(ctx).set((176_i32 as u8));
+            break 'goto_exit;
+        }
+        if Handle::is_null(data) {
+            statics::dolphin__mcc__fio::gLastErr(ctx).set((176_i32 as u8));
+            break 'goto_exit;
+        }
+        if size == (0_i32 as u32) {
+            return (0_i32 as u32);
+        }
+        if (statics::dolphin__mcc__fio::bAsyncBusy(ctx).get() as u32) != (0_i32 as u32) {
+            statics::dolphin__mcc__fio::gLastErr(ctx).set((161_i32 as u8));
+            break 'goto_exit;
+        }
+        nWriteSize =
+            statics::dolphin__mcc__fio::fioPacketWrite(ctx, handle, data, nSizeRemain, 0_i32);
+        nSizeRemain = nSizeRemain.wrapping_sub(nWriteSize);
+        if nWriteSize < 0_i32 {
+            statics::dolphin__mcc__fio::gLastErr(ctx).set((131_i32 as u8));
+            return (1_i32.wrapping_neg() as u32);
+        }
+        statics::dolphin__mcc__fio::gLastErr(ctx).set((0_i32 as u8));
+        return size.wrapping_sub((nSizeRemain as u32));
+    }
+    return (1_i32.wrapping_neg() as u32);
 }
 
 pub fn fioPacketMakeHeader<'a>(
@@ -235,8 +358,120 @@ pub fn fioPacketSendPacket<'a>(
     return 1_i32;
 }
 
+pub fn fioPacketReceiveResult<'a>(ctx: &'a Ctx, fioCode: u32, bDone: i32) -> Addr<'a> {
+    let __frame = ctx.stack_frame(0x30);
+    let mut fioCode = fioCode;
+    let mut bDone = bDone;
+    let mut oldMaskRead: u32 = 0;
+    let mut hdrDpci: MCC_Hdr<'a> = null(ctx);
+    let mut hdrFio: MCC_HdrFio<'a> = null(ctx);
+    let mut data: Val<'a, i8> = null(ctx);
+    'goto_exit: {
+        if inl_MPDWaiting_unfused(
+            ctx,
+            (10_u32 as i32),
+            statics::dolphin__mcc__fio::gProcDone(ctx),
+            1_i32,
+        ) == 0_i32
+        {
+            statics::dolphin__mcc__fio::gLastErr(ctx).set((136_i32 as u8));
+            break 'goto_exit;
+        }
+        oldMaskRead = fns::MCCSetChannelEventMask(
+            ctx,
+            statics::dolphin__mcc__fio::gChID(ctx).get(),
+            (80_i32 as u32),
+        );
+        if fns::MCCRead(
+            ctx,
+            statics::dolphin__mcc__fio::gChID(ctx).get(),
+            (0_i32 as u32),
+            Handle::cast::<Addr<'a>>(statics::dolphin__mcc__fio::gBuf(ctx)),
+            (0x2000_u32 as i32),
+            0_i32,
+        ) == 0_i32
+        {
+            statics::dolphin__mcc__fio::gLastErr(ctx).set((132_i32 as u8));
+            let _ = fns::MCCSetChannelEventMask(
+                ctx,
+                statics::dolphin__mcc__fio::gChID(ctx).get(),
+                oldMaskRead,
+            );
+            break 'goto_exit;
+        }
+        hdrDpci = Handle::cast::<MCC_Hdr<'a>>(Handle::cast::<Addr<'a>>(
+            (Handle::cast::<Val<'a, i8>>(statics::dolphin__mcc__fio::gBuf(ctx).at(0_i32))),
+        ));
+        hdrFio = Handle::cast::<MCC_HdrFio<'a>>(Handle::cast::<Addr<'a>>(
+            (Handle::add(Handle::cast::<Val<'a, i8>>(hdrDpci), 8_i32)),
+        ));
+        data = Handle::cast::<Val<'a, i8>>(Handle::cast::<Addr<'a>>(
+            (Handle::add(Handle::cast::<Val<'a, i8>>(hdrFio), 8_i32)),
+        ));
+        let _ = fns::MCCSetChannelEventMask(
+            ctx,
+            statics::dolphin__mcc__fio::gChID(ctx).get(),
+            oldMaskRead,
+        );
+        if (hdrFio).code() != fioCode {
+            statics::dolphin__mcc__fio::gLastErr(ctx).set((129_i32 as u8));
+            break 'goto_exit;
+        }
+        if (hdrFio).number() != statics::dolphin__mcc__fio::gRequestSequenceNumber(ctx).get() {
+            statics::dolphin__mcc__fio::gLastErr(ctx).set((130_i32 as u8));
+            break 'goto_exit;
+        }
+        if bDone != 0_i32 {
+            statics::dolphin__mcc__fio::fioPacketReceiveDone(ctx);
+        }
+        statics::dolphin__mcc__fio::gLastErr(ctx).set((0_i32 as u8));
+        return Handle::cast::<Addr<'a>>(data);
+    }
+    statics::dolphin__mcc__fio::fioPacketReceiveDone(ctx);
+    return null::<Addr<'a>>(ctx);
+}
+
 pub fn fioPacketReceiveDone<'a>(ctx: &'a Ctx) {
     statics::dolphin__mcc__fio::gProcBusy(ctx).set(0_i32);
+}
+
+fn inl_fioIsInitialized_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    return (!(!(statics::dolphin__mcc__fio::gChID(ctx).get() != 0)) as i32);
+}
+
+fn inl_MPDWaiting_unfused<'a>(ctx: &'a Ctx, timeout: i32, flag: Val<'a, i32>, value: i32) -> i32 {
+    let mut timeout = timeout;
+    let mut flag = flag;
+    let mut value = value;
+    let mut tickStart: u32 = 0;
+    let mut tickDist: u32 = 0;
+    tickStart = fns::OSGetTick(ctx);
+    'l1: while (flag).get() != value {
+        'c2: {
+            tickDist = fns::OSGetTick(ctx).wrapping_sub(tickStart);
+            tickDist = (if ((tickDist & 0x80000000_u32) != 0) {
+                (0x80000000_u32.wrapping_sub(tickStart)).wrapping_add(fns::OSGetTick(ctx))
+            } else {
+                tickDist
+            });
+            if (div_u32(
+                (tickDist),
+                (div_u32(
+                    ((ptr::<Val<'a, u32>>(
+                        ctx,
+                        ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                    ))
+                    .get()),
+                    (4_i32 as u32),
+                )),
+            )) >= (timeout as u32)
+            {
+                fns::OSReport(ctx, cstr(ctx, 0x80400918), &[]);
+                return 0_i32;
+            }
+        }
+    }
+    return 1_i32;
 }
 
 fn inl_EndianConvert16_unfused<'a>(ctx: &'a Ctx, n: u16) -> u16 {
@@ -277,11 +512,34 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x8032eb44,
+        |ctx| {
+            let (a0, a1, a2): (i32, i32, u8) = Args::take_all(ctx);
+            Ret::put(FIOInit(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
         0x8032ec00,
         |ctx| {
             Ret::put(FIOExit(ctx), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8032ec6c,
+        |ctx| {
+            Ret::put(FIOQuery(ctx), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8032ef48,
+        |ctx| {
+            let (a0, a1, a2): (i32, Addr<'_>, u32) = Args::take_all(ctx);
+            Ret::put(FIOFwrite(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x8032f020,
@@ -296,6 +554,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (u8, Addr<'_>) = Args::take_all(ctx);
             Ret::put(fioPacketSendPacket(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8032f228,
+        |ctx| {
+            let (a0, a1): (u32, i32) = Args::take_all(ctx);
+            Ret::put(fioPacketReceiveResult(ctx, a0, a1), ctx);
         },
         Returns::Int,
     );

@@ -75,6 +75,48 @@ pub fn WriteCallback<'a>(ctx: &'a Ctx, chan: i32, result: i32) {
     }
 }
 
+pub fn EraseCallback<'a>(ctx: &'a Ctx, chan: i32, result: i32) {
+    let __frame = ctx.stack_frame(0x28);
+    let mut chan = chan;
+    let mut result = result;
+    let mut card: CARDControl<'a> = null(ctx);
+    let mut callback: FnPtr<'a> = null(ctx);
+    let mut fat: Val<'a, u16> = null(ctx);
+    let mut addr: u32 = 0;
+    'goto_error: {
+        card = fns::__CARDBlock(ctx).get(chan);
+        if result < 0_i32 {
+            break 'goto_error;
+        }
+        fat = Handle::cast::<Val<'a, u16>>(inl___CARDGetFatBlock_unfused(ctx, card));
+        addr = div_u32(
+            (Handle::addr(fat).wrapping_sub(Handle::addr((card).workArea()))),
+            ((8_i32 as u32).wrapping_mul(0x400_u32)),
+        )
+        .wrapping_mul(((card).sectorSize() as u32));
+        result = fns::__CARDWrite(
+            ctx,
+            chan,
+            addr,
+            (((8_i32 as u32).wrapping_mul(0x400_u32)) as i32),
+            Handle::cast::<Addr<'a>>(fat),
+            fnptr(ctx, 0x803549c0),
+        );
+        if result < 0_i32 {
+            break 'goto_error;
+        }
+        return;
+    }
+    if !(!Handle::is_null((card).apiCallback())) {
+        let _ = fns::__CARDPutControlBlock(ctx, card, result);
+    }
+    callback = (card).eraseCallback();
+    if !Handle::is_null(callback) {
+        (card).set_eraseCallback(null::<FnPtr<'a>>(ctx));
+        callback.call::<_, ()>((chan, result));
+    }
+}
+
 pub fn __CARDAllocBlock<'a>(ctx: &'a Ctx, chan: i32, cBlock: u32, callback: FnPtr<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
     let mut chan = chan;
@@ -211,6 +253,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (i32, i32) = Args::take_all(ctx);
             Ret::put(WriteCallback(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80354a94,
+        |ctx| {
+            let (a0, a1): (i32, i32) = Args::take_all(ctx);
+            Ret::put(EraseCallback(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );

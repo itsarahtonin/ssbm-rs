@@ -724,6 +724,76 @@ pub fn grIzumi_801CCB90<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, renderpass: i32) {
     fns::grDisplay_801C5DB0(ctx, gobj, renderpass);
 }
 
+pub fn grIzumi_801CCBDC<'a>(
+    ctx: &'a Ctx,
+    height: f64,
+    a: Vec<'a>,
+    b: i32,
+    jobj: HSD_JObj<'a>,
+) -> HSD_GObj<'a> {
+    let __frame = ctx.stack_frame(0x58);
+    let aa: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
+    let mut height = height;
+    let mut a = a;
+    let mut b = b;
+    let mut jobj = jobj;
+    let mut gobj: HSD_GObj<'a> = null(ctx);
+    'goto_ret: {
+        gobj = fns::grIzumi_801CBCE8(ctx, 4_i32);
+        if !Handle::is_null(gobj) {
+            let mut gp: Ground<'a> =
+                (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+            if (!Handle::is_null(gobj)) && (!Handle::is_null(gobj)) {}
+            if !Handle::is_null(gp) {
+                let mut jobj2: HSD_JObj<'a> = null(ctx);
+                jobj2 = Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj));
+                if !Handle::is_null(jobj2) {
+                    Handle::copy_from(aa, (a));
+                    inl_HSD_JObjSetTranslate_unfused(ctx, jobj2, aa);
+                    (gp).u().izumi3().set_xD4(height);
+                    (gp).u().izumi3().set_xD0(height);
+                    (gp).u().izumi3().set_xC8((b as i16));
+                    (gp).u().izumi3().set_xCC(jobj);
+                    if height < 0.0 {
+                        (gp).u().izumi3().set_xC4((3_i32 as i16));
+                    } else {
+                        (gp).u().izumi3().set_xC4((0_i32 as i16));
+                        fns::grAnime_801C7FF8(ctx, gobj, 0_i32, 7_i32, 0_i32, 0.0, 1.0);
+                    }
+                    jobj2 = fns::Ground_801C3FA4(ctx, gobj, 2_i32);
+                    if !Handle::is_null(jobj2) {
+                        fns::lb_8000B1CC(ctx, jobj2, null::<Vec<'a>>(ctx), vec);
+                        (gp).u().izumi3().set_xD8(fp::fdivs(
+                            (fp::fsubs(vec.y(), aa.y())),
+                            fns::Ground_801C0498(ctx),
+                        ));
+                    } else {
+                        (gp).u().izumi3().set_xD8(45.0);
+                    }
+                    fns::grIzumi_801CC358(ctx, gobj);
+                    break 'goto_ret;
+                }
+            }
+        }
+        fns::OSReport(
+            ctx,
+            cstr(ctx, 0x803e0efc),
+            &[
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803b7e78))),
+                VarArg::Int(0x37c_i32 as u32),
+            ],
+        );
+        'l1: loop {
+            'c2: {}
+        }
+    }
+    return gobj;
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
 pub fn grIzumi_801CCD98<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj: HSD_GObj<'a> =
@@ -1557,6 +1627,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(grIzumi_801CCB90(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801ccbdc,
+        |ctx| {
+            let (a0, a1, a2, a3): (Single, Vec<'_>, i32, HSD_JObj<'_>) = Args::take_all(ctx);
+            Ret::put(grIzumi_801CCBDC(ctx, a0.0, a1, a2, a3), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x801ccd98,

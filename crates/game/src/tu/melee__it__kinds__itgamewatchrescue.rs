@@ -114,6 +114,90 @@ pub fn it_802C8208<'a>(ctx: &'a Ctx, hsd_gobj: HSD_GObj<'a>, msid: i32) {
     fns::Item_802694CC(ctx, hsd_gobj);
 }
 
+pub fn itGamewatchrescue_UnkMotion1_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x38);
+    let mut item_gobj = item_gobj;
+    let mut item1: Item<'a> = null(ctx);
+    let mut item2: Item<'a> = null(ctx);
+    let mut item3: Item<'a> = null(ctx);
+    let mut item4: Item<'a> = null(ctx);
+    let mut item5: Item<'a> = null(ctx);
+    let mut item6: Item<'a> = null(ctx);
+    let mut item7: Item<'a> = null(ctx);
+    let mut temp_r3_3: Item<'a> = null(ctx);
+    let mut temp_r3_4: Item<'a> = null(ctx);
+    let mut temp_r3: HSD_GObj<'a> = null(ctx);
+    let mut temp_r3_2: HSD_GObj<'a> = null(ctx);
+    'goto_end: {
+        item1 = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
+        if !Handle::is_null(
+            ({
+                let __t1 = (item1).xDD4_itemVar().gamewatchrescue().xDD8();
+                temp_r3 = __t1;
+                __t1
+            }),
+        ) {
+            if fns::ftGw_SpecialHi_ItemCheckRescueRemove(ctx, temp_r3) == 1_i32 {
+                item2 = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
+                if (!Handle::is_null(item_gobj)) && (!Handle::is_null(item2)) {
+                    if (!Handle::is_null(
+                        ({
+                            let __t2 = (item2).xDD4_itemVar().gamewatchrescue().xDD8();
+                            temp_r3_2 = __t2;
+                            __t2
+                        }),
+                    )) && (Handle::addr((item2).owner()) == Handle::addr(temp_r3_2))
+                    {
+                        fns::ftGw_SpecialHi_ItemRescueSetNULL(ctx, temp_r3_2);
+                    }
+                    (item2)
+                        .xDD4_itemVar()
+                        .gamewatchrescue()
+                        .set_xDD8(null::<HSD_GObj<'a>>(ctx));
+                    (item2).set_owner(null::<HSD_GObj<'a>>(ctx));
+                    fns::Item_8026A8EC(ctx, item_gobj);
+                }
+                if !Handle::is_null(item_gobj) {
+                    temp_r3_3 =
+                        (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
+                    (temp_r3_3)
+                        .xDD4_itemVar()
+                        .gamewatchrescue()
+                        .set_xDD8(null::<HSD_GObj<'a>>(ctx));
+                    (temp_r3_3).set_owner(null::<HSD_GObj<'a>>(ctx));
+                }
+                return 1_i32;
+            }
+            break 'goto_end;
+        }
+        if (!Handle::is_null(item_gobj)) && (!Handle::is_null(item1)) {
+            if (!Handle::is_null(temp_r3))
+                && (Handle::addr((item1).owner()) == Handle::addr(temp_r3))
+            {
+                fns::ftGw_SpecialHi_ItemRescueSetNULL(ctx, temp_r3);
+            }
+            (item1)
+                .xDD4_itemVar()
+                .gamewatchrescue()
+                .set_xDD8(null::<HSD_GObj<'a>>(ctx));
+            (item1).set_owner(null::<HSD_GObj<'a>>(ctx));
+            fns::Item_8026A8EC(ctx, item_gobj);
+        }
+        if !Handle::is_null(item_gobj) {
+            temp_r3_4 = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
+            (temp_r3_4)
+                .xDD4_itemVar()
+                .gamewatchrescue()
+                .set_xDD8(null::<HSD_GObj<'a>>(ctx));
+            (temp_r3_4).set_owner(null::<HSD_GObj<'a>>(ctx));
+        }
+        return 1_i32;
+    }
+    return 0_i32;
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 pub fn itGamewatchrescue_UnkMotion1_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
 }
@@ -233,6 +317,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(it_802C8208(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x802c8240,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(itGamewatchrescue_UnkMotion1_Anim(ctx, a0), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x802c8350,

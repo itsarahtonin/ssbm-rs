@@ -1223,6 +1223,87 @@ pub fn grGreatBay_801F60C4<'a>(
     }
 }
 
+pub fn grGreatBay_801F62F8<'a>(ctx: &'a Ctx, current: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x20);
+    let mut current = current;
+    let mut result: i32 = 0;
+    let mut attr: grGb_StageAttr<'a> = null(ctx);
+    let mut total: i32 = 0;
+    let mut rand: i32 = 0;
+    let mut i: i32 = 0;
+    'goto_done: {
+        i = 0_i32;
+        'l1: loop {
+            'c2: {
+                current = current.wrapping_add(0_i32);
+                attr = fns::grGb_804D69E0(ctx).x0();
+                total = ((attr).kame_dir_prob().at(0_i32).get() as i32)
+                    .wrapping_add(((attr).kame_dir_prob().at(1_i32).get() as i32))
+                    .wrapping_add(((attr).kame_dir_prob().at(3_i32).get() as i32))
+                    .wrapping_add(((attr).kame_dir_prob().at(2_i32).get() as i32));
+                rand = (if (total) != 0_i32 {
+                    fns::HSD_Randi(ctx, total)
+                } else {
+                    0_i32
+                });
+                attr = fns::grGb_804D69E0(ctx).x0();
+                if ({
+                    rand = rand.wrapping_sub(((attr).kame_dir_prob().at(2_i32).get() as i32));
+                    rand
+                }) < 0_i32
+                {
+                    result = 1_i32;
+                } else if 0_i32
+                    > ({
+                        rand = rand.wrapping_sub(((attr).kame_dir_prob().at(1_i32).get() as i32));
+                        rand
+                    })
+                {
+                    result = 2_i32;
+                } else if ({
+                    rand = rand.wrapping_sub(((attr).kame_dir_prob().at(0_i32).get() as i32));
+                    rand
+                }) < 0_i32
+                {
+                    result = 0_i32;
+                } else if ({
+                    rand = rand.wrapping_sub(((attr).kame_dir_prob().at(3_i32).get() as i32));
+                    rand
+                }) < 0_i32
+                {
+                    result = 3_i32;
+                } else {
+                    (if ((0_i32) != 0) {
+                        ({ () })
+                    } else {
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803b81d0),
+                            (0x400_i32 as u32),
+                            cstr(ctx, 0x803b81d0),
+                        )
+                    });
+                }
+                if current != result {
+                    break 'goto_done;
+                }
+            }
+            if !({
+                let __t1 = i;
+                i = i.wrapping_add(1);
+                __t1
+            } <= 0x3e8_i32)
+            {
+                break 'l1;
+            }
+        }
+        result = 0_i32;
+    }
+    return result;
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 pub fn grGreatBay_801F63F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x88);
     let rot: Vec<'a> = frame_at(ctx, &__frame, 0x0);
@@ -2186,6 +2267,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(grGreatBay_801F60C4(ctx, a0, a1, a2, a3, a4, a5.0), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801f62f8,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(grGreatBay_801F62F8(ctx, a0), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x801f63f4,

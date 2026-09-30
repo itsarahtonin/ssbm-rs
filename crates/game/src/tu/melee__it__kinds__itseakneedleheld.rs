@@ -132,6 +132,84 @@ pub fn itSeakNeedleHeld_Logic110_PickedUp<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
     fns::Item_80268E5C(ctx, gobj, 0_i32, (enums::ITEM_ANIM_UPDATE as i32));
 }
 
+pub fn itSeakneedleheld_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x40);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0xc);
+    let mut gobj = gobj;
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut ip: Item<'a> = null(ctx);
+    let mut needle: HSD_JObj<'a> = null(ctx);
+    'goto_ret_false: {
+        'goto_ret_true: {
+            jobj = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
+            ip = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+            needle = inl_HSD_JObjGetChild_unfused(ctx, jobj);
+            'l1: loop {
+                'c2: {}
+                if !(0_i32 != 0) {
+                    break 'l1;
+                }
+            }
+            if Handle::is_null((ip).xDD4_itemVar().seakneedleheld().owner()) {
+                break 'goto_ret_true;
+            }
+            if Handle::addr((ip).owner())
+                != Handle::addr((ip).xDD4_itemVar().seakneedleheld().owner())
+            {
+                break 'goto_ret_false;
+            }
+            's3: {
+                let __case = match (ip).kind() {
+                    80_i32 => 0,
+                    153_i32 => 1,
+                    _ => 2,
+                };
+                if __case <= 0 {
+                    if fns::ftSk_SpecialS_80111F70(
+                        ctx,
+                        (ip).xDD4_itemVar().seakneedleheld().owner(),
+                    ) == 1_i32
+                    {
+                        return 1_i32;
+                    }
+                    break 's3;
+                }
+                if __case <= 1 {
+                    if fns::ftKb_SpecialNSk_80105FF0(
+                        ctx,
+                        (ip).xDD4_itemVar().seakneedleheld().owner(),
+                    ) == 1_i32
+                    {
+                        return 1_i32;
+                    }
+                    break 's3;
+                }
+                if __case <= 2 {
+                    break 's3;
+                }
+            }
+            fns::it_802B18B0(ctx, gobj);
+            scale.set_x({
+                let __t2 = {
+                    let __t1 =
+                        fns::ftLib_GetModelScale(ctx, (ip).xDD4_itemVar().seakneedleheld().owner());
+                    scale.set_z(__t1);
+                    __t1
+                };
+                scale.set_y(__t2);
+                __t2
+            });
+            inl_HSD_JObjSetScale_unfused(ctx, needle, scale);
+            break 'goto_ret_false;
+        }
+        return 1_i32;
+    }
+    return 0_i32;
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 pub fn itSeakneedleheld_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
 }
@@ -236,6 +314,61 @@ fn inl_Item_ClearCmdVars_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
     (ip).set_xDAC_itcmd_var0((0_i32 as u32));
 }
 
+fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
+    let mut jobj = jobj;
+    let mut result: i32 = 0;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804d5474),
+            (228_i32 as u32),
+            cstr(ctx, 0x804d5474),
+        )
+    });
+    result = 0_i32;
+    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
+        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
+    {
+        result = 1_i32;
+    }
+    return result;
+}
+
+fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
+    let mut jobj = jobj;
+    let mut scale = scale;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804d5474),
+            (0x17e_i32 as u32),
+            cstr(ctx, 0x804d5474),
+        )
+    });
+    (if !Handle::is_null((scale)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x804d5474),
+            (0x17f_i32 as u32),
+            cstr(ctx, 0x804d5474),
+        )
+    });
+    Handle::copy_from((jobj).scale(), (scale));
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -262,6 +395,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(itSeakNeedleHeld_Logic110_PickedUp(ctx, a0), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x802b1ad4,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(itSeakneedleheld_UnkMotion0_Anim(ctx, a0), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x802b1c34,

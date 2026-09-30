@@ -89,6 +89,129 @@ pub fn MCCStreamClose<'a>(ctx: &'a Ctx, chID: i32) -> i32 {
     return 0;
 }
 
+pub fn MCCStreamWrite<'a>(ctx: &'a Ctx, chID: i32, data: Addr<'a>, dataBlockSize: u32) -> i32 {
+    let __frame = ctx.stack_frame(0x30);
+    let chanInfo: MCC_Info<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut chID = chID;
+    let mut data = data;
+    let mut dataBlockSize = dataBlockSize;
+    let mut dataAddress: Val<'a, i8> = null(ctx);
+    let mut lastBlocks: u32 = 0;
+    if statics::dolphin__mcc__mcc::gMccInitialized(ctx).get() == 0_i32 {
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((1_i32 as u8));
+    } else if ((chID as u32) < (1_i32 as u32)) || ((chID as u32) >= (16_i32 as u32)) {
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((14_i32 as u8));
+    } else if statics::dolphin__mcc__mcc::LoadChannelInfo(
+        ctx,
+        statics::dolphin__mcc__mcc::gChannelInfo(ctx).get(0),
+    ) == 0_i32
+    {
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((11_i32 as u8));
+    } else {
+        if statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+            .get(chID)
+            .unk()
+            != 1_i32
+        {
+            statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                .get(chID)
+                .set_unk(1_i32);
+        } else {
+            let _ = fns::MCCNotify(ctx, chID, (0_i32 as u32));
+        }
+        if statics::dolphin__mcc__mcc::WaitAMinute(
+            ctx,
+            5_i32,
+            statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                .get(chID)
+                .isStreamConnection_ref(),
+            1_i32,
+        ) == 0_i32
+        {
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((2_i32 as u8));
+        } else {
+            statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                .get(chID)
+                .set_isStreamConnection(0_i32);
+            if fns::MCCGetChannelInfo(ctx, chID, chanInfo) != 0_i32 {
+                (Handle::cast::<Val<'a, u32>>(statics::dolphin__mcc__mcc::gStreamWork(ctx)))
+                    .set(dataBlockSize);
+                if fns::MCCWrite(
+                    ctx,
+                    chID,
+                    (0_i32 as u32),
+                    Handle::cast::<Addr<'a>>(statics::dolphin__mcc__mcc::gStreamWork(ctx).at(0)),
+                    32_i32,
+                    0_i32,
+                ) != 0_i32
+                {
+                    if statics::dolphin__mcc__mcc::WaitAMinute(
+                        ctx,
+                        5_i32,
+                        statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                            .get(chID)
+                            .isStreamDone_ref(),
+                        1_i32,
+                    ) == 0_i32
+                    {
+                        statics::dolphin__mcc__mcc::gLastError(ctx).set((2_i32 as u8));
+                    } else {
+                        dataAddress = Handle::cast::<Val<'a, i8>>(data);
+                        lastBlocks = dataBlockSize;
+                        statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                            .get(chID)
+                            .set_isStreamDone(0_i32);
+                        'l1: while (lastBlocks != 0) {
+                            'c2: {
+                                if !(fns::MCCWrite(
+                                    ctx,
+                                    chID,
+                                    (0_i32 as u32),
+                                    Handle::cast::<Addr<'a>>(dataAddress),
+                                    shl_i32((chanInfo.blockLength() as i32), (13_i32 as u32)),
+                                    0_i32,
+                                ) != 0)
+                                {
+                                    break 'l1;
+                                }
+                                if statics::dolphin__mcc__mcc::WaitAMinute(
+                                    ctx,
+                                    5_i32,
+                                    statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                                        .get(chID)
+                                        .isStreamDone_ref(),
+                                    1_i32,
+                                ) == 0_i32
+                                {
+                                    statics::dolphin__mcc__mcc::gLastError(ctx).set((2_i32 as u8));
+                                    break 'l1;
+                                } else {
+                                    statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                                        .get(chID)
+                                        .set_isStreamDone(0_i32);
+                                    dataAddress = Handle::add(
+                                        dataAddress,
+                                        shl_i32((chanInfo.blockLength() as i32), (13_i32 as u32)),
+                                    );
+                                    if lastBlocks > (chanInfo.blockLength() as u32) {
+                                        lastBlocks = lastBlocks
+                                            .wrapping_sub((chanInfo.blockLength() as u32));
+                                    } else {
+                                        lastBlocks = (0_i32 as u32);
+                                        break 'l1;
+                                    }
+                                }
+                            }
+                        }
+                        return (lastBlocks == (0_i32 as u32)) as i32;
+                    }
+                }
+            }
+        }
+    }
+    return 0_i32;
+}
+
 pub fn FlushChannelInfo<'a>(ctx: &'a Ctx, info: MCC_ChannelInfo<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
     let mut info = info;
@@ -397,6 +520,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (i32,) = Args::take_all(ctx);
             Ret::put(MCCStreamClose(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8032c880,
+        |ctx| {
+            let (a0, a1, a2): (i32, Addr<'_>, u32) = Args::take_all(ctx);
+            Ret::put(MCCStreamWrite(ctx, a0, a1, a2), ctx);
         },
         Returns::Int,
     );

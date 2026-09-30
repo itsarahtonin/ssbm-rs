@@ -2190,6 +2190,303 @@ pub fn ftCo_800B89CC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     return 1_i32;
 }
 
+pub fn ftCo_800B8A9C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x90);
+    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x0);
+    let sp38: Val<'a, u32> = frame_at(ctx, &__frame, 0x38);
+    let sp34: Val<'a, i32> = frame_at(ctx, &__frame, 0x3c);
+    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x58);
+    let mut fp = fp;
+    let mut target_pp: Ptr<'a, Fighter<'a>> = null(ctx);
+    let mut target3: Fighter<'a> = null(ctx);
+    let mut cpu: CpuFighter<'a> = null(ctx);
+    let mut target: Fighter<'a> = null(ctx);
+    let mut item: Item<'a> = null(ctx);
+    let mut weapon_reach: f64 = 0.0;
+    let mut result: i32 = 0;
+    let mut var_r0: i32 = 0;
+    'goto_done: {
+        cpu = (fp).cpu();
+        'l1: loop {
+            'c2: {}
+            if !(0_i32 != 0) {
+                break 'l1;
+            }
+        }
+        if !((cpu).xF9_b2() != 0) {
+            return 0_i32;
+        }
+        target = (cpu).x44();
+        (cpu).set_xEC((0_i32 as u8));
+        (cpu).set_xC8((0_i32 as u8));
+        if ((((Handle::is_null(target)) || ((fp).motion_id() == (enums::ftCo_MS_Pass as i32)))
+            || (fns::ftCo_800A1C44(ctx, target) != 0))
+            || (fns::ftCo_800B885C(ctx, fp) != 0))
+            || (fns::ftCo_800A1CA8(ctx, fp) != 0)
+        {
+            (cpu).set_xA4(0_i32);
+            return 0_i32;
+        }
+        {
+            let mut target2: Fighter<'a> = ({
+                let __t1 = (fp).cpu().x44_ref();
+                target_pp = __t1;
+                __t1
+            })
+            .get();
+            if ((target2).motion_id() >= (enums::ftCo_MS_Catch as i32))
+                && ((target2).motion_id() <= (enums::ftCo_MS_EscapeAir as i32))
+            {
+                let mut xec: Val<'a, u8> = null(ctx);
+                if (({
+                    let __t2 = (fp).cpu().xEC_ref();
+                    xec = __t2;
+                    __t2
+                })
+                .get() as u32)
+                    < 8_u32
+                {
+                    (cpu).xCC_array().at(((cpu).xEC() as i32)).set(40_i32);
+                    (cpu).set_xEC((cpu).xEC().wrapping_add(1));
+                }
+                {
+                    let mut tmp: CpuFighter<'a> = (fp).cpu();
+                    if ((xec).get() as u32) < 8_u32 {
+                        (tmp).xCC_array().at(((tmp).xEC() as i32)).set(41_i32);
+                        (tmp).set_xEC((tmp).xEC().wrapping_add(1));
+                    }
+                }
+            } else if (target2).x34_scale().y() > (fp).x34_scale().y() {
+                let mut tmp_2: CpuFighter<'a> = (fp).cpu();
+                let mut xec_2: Val<'a, u8> = null(ctx);
+                if (({
+                    let __t3 = (fp).cpu().xEC_ref();
+                    xec_2 = __t3;
+                    __t3
+                })
+                .get() as u32)
+                    < 8_u32
+                {
+                    (tmp_2).xCC_array().at(((tmp_2).xEC() as i32)).set(40_i32);
+                    (tmp_2).set_xEC((tmp_2).xEC().wrapping_add(1));
+                }
+                {
+                    let mut tmp_3: CpuFighter<'a> = (fp).cpu();
+                    if ((xec_2).get() as u32) < 8_u32 {
+                        (tmp_3).xCC_array().at(((tmp_3).xEC() as i32)).set(41_i32);
+                        (tmp_3).set_xEC((tmp_3).xEC().wrapping_add(1));
+                    }
+                }
+                if ((fp).kind() as u32) == ((enums::Ft_Kind_Kirby as i32) as u32) {
+                    let mut tmp_4: CpuFighter<'a> = (fp).cpu();
+                    if ((xec_2).get() as u32) < 8_u32 {
+                        (tmp_4).xCC_array().at(((tmp_4).xEC() as i32)).set(17_i32);
+                        (tmp_4).set_xEC((tmp_4).xEC().wrapping_add(1));
+                    }
+                }
+            }
+        }
+        fns::ftCo_800B77E8(ctx, fp);
+        if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+            if (fns::ftCo_800B89CC(ctx, fp) != 0) {
+                result = fns::ftCo_800B4AB0(
+                    ctx,
+                    fp,
+                    target,
+                    (Handle::add(((fns::Fighter_804D64FC(ctx).get()).x8()), (fp).kind())).get(),
+                );
+                if result != 0_i32 {
+                    (cpu).set_xA4(result);
+                    return 1_i32;
+                }
+            }
+            break 'goto_done;
+        }
+        if (fns::ftCo_800A3134(ctx, target) != 0_i32) || (fns::ftCo_800A3200(ctx, target) != 0) {
+            let mut tmp_5: CpuFighter<'a> = (fp).cpu();
+            let mut xc8: Val<'a, u8> = null(ctx);
+            if (({
+                let __t4 = (fp).cpu().xC8_ref();
+                xc8 = __t4;
+                __t4
+            })
+            .get() as u32)
+                < 8_u32
+            {
+                (tmp_5).xA8_array().at(((tmp_5).xC8() as i32)).set(10_i32);
+                (tmp_5).set_xC8((tmp_5).xC8().wrapping_add(1));
+            }
+            {
+                let mut tmp_6: CpuFighter<'a> = (fp).cpu();
+                if ((xc8).get() as u32) < 8_u32 {
+                    (tmp_6).xA8_array().at(((tmp_6).xC8() as i32)).set(14_i32);
+                    (tmp_6).set_xC8((tmp_6).xC8().wrapping_add(1));
+                }
+            }
+            result = fns::ftCo_800B4AB0(
+                ctx,
+                fp,
+                target,
+                (Handle::add(((fns::Fighter_804D64FC(ctx).get()).x4()), (fp).kind())).get(),
+            );
+            if result != 0_i32 {
+                (cpu).set_xA4(result);
+                return 1_i32;
+            }
+            break 'goto_done;
+        }
+        if (!Handle::is_null((fp).item_gobj()))
+            && (fns::ftCo_800A59E4(
+                ctx,
+                Handle::cast::<Item<'a>>(((fp).item_gobj()).user_data()),
+            ) != 0)
+        {
+            item =
+                (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, (fp).item_gobj())));
+            if !(fns::ftCo_800A59E4(ctx, item) != 0) {
+                weapon_reach = 0.0;
+            } else {
+                's3: {
+                    let __case = match (item).kind() {
+                        24_i32 => 0,
+                        23_i32 => 1,
+                        22_i32 => 2,
+                        12_i32 => 3,
+                        11_i32 => 4,
+                        13_i32 => 5,
+                        _ => 6,
+                    };
+                    if __case <= 0 {
+                        weapon_reach =
+                            (Handle::add((fns::Fighter_804D64FC(ctx).get()).x24(), 0_i32)).get();
+                        break 's3;
+                    }
+                    if __case <= 1 {
+                        weapon_reach =
+                            (Handle::add((fns::Fighter_804D64FC(ctx).get()).x24(), 1_i32)).get();
+                        break 's3;
+                    }
+                    if __case <= 2 {
+                        weapon_reach =
+                            (Handle::add((fns::Fighter_804D64FC(ctx).get()).x24(), 2_i32)).get();
+                        break 's3;
+                    }
+                    if __case <= 3 {
+                        weapon_reach =
+                            (Handle::add((fns::Fighter_804D64FC(ctx).get()).x24(), 3_i32)).get();
+                        break 's3;
+                    }
+                    if __case <= 4 {
+                        weapon_reach =
+                            (Handle::add((fns::Fighter_804D64FC(ctx).get()).x24(), 4_i32)).get();
+                        break 's3;
+                    }
+                    if __case <= 5 {
+                        weapon_reach =
+                            (Handle::add((fns::Fighter_804D64FC(ctx).get()).x24(), 5_i32)).get();
+                        break 's3;
+                    }
+                    if __case <= 6 {
+                        weapon_reach = 0.0;
+                        break 's3;
+                    }
+                }
+            }
+            result = fns::ftCo_800B52AC(
+                ctx,
+                fp,
+                target,
+                (Handle::add(((fns::Fighter_804D64FC(ctx).get()).x18()), (fp).kind())).get(),
+                weapon_reach,
+            );
+            if result != 0_i32 {
+                (cpu).set_xA4(result);
+                return 1_i32;
+            }
+        }
+        if ((cpu).level() > 5_i32) && (fns::ftCo_800B9F6C(ctx, target) != 0) {
+            result = fns::ftCo_800B4AB0(
+                ctx,
+                fp,
+                target,
+                (Handle::add(((fns::Fighter_804D64FC(ctx).get()).x10()), (fp).kind())).get(),
+            );
+            if result != 0_i32 {
+                (cpu).set_xA4(result);
+                return 1_i32;
+            }
+        }
+        {
+            target3 = (target_pp).get();
+            if !Handle::is_null((fp).item_gobj()) {
+                var_r0 = 0_i32;
+            } else if (fns::ftCo_800A3200(ctx, target3) != 0) {
+                var_r0 = 0_i32;
+            } else {
+                if fns::ftCo_800A0FB0(
+                    ctx,
+                    sp1C,
+                    sp34,
+                    sp38,
+                    sp28,
+                    1_i32.wrapping_neg(),
+                    1_i32.wrapping_neg(),
+                    1_i32.wrapping_neg(),
+                    (target3).cur_pos().x(),
+                    fp::frsp(fp::fadd(5.0, (target3).cur_pos().y())),
+                    (target3).cur_pos().x(),
+                    fp::frsp(fp::fsub((target3).cur_pos().y(), 1000.0)),
+                    0.0,
+                ) != 0_i32
+                {
+                    var_r0 = 0_i32;
+                } else {
+                    var_r0 = 1_i32;
+                }
+            }
+        }
+        if var_r0 != 0_i32 {
+            result = fns::ftCo_800B4AB0(
+                ctx,
+                fp,
+                target,
+                (Handle::add(((fns::Fighter_804D64FC(ctx).get()).x1C()), (fp).kind())).get(),
+            );
+            if result != 0_i32 {
+                (cpu).set_xA4(result);
+                (cpu).set_xF8_b7((1_i32 as u8));
+                return 1_i32;
+            }
+        }
+        result = fns::ftCo_800B4AB0(
+            ctx,
+            fp,
+            target,
+            (Handle::add(((fns::Fighter_804D64FC(ctx).get()).x4()), (fp).kind())).get(),
+        );
+        if result != 0_i32 {
+            (cpu).set_xA4(result);
+            return 1_i32;
+        }
+        if !Handle::is_null((cpu).x50()) {
+            result = fns::ftCo_800B5AB0(
+                ctx,
+                fp,
+                Handle::cast::<Addr<'a>>((cpu).x50()),
+                (Handle::add(((fns::Fighter_804D64FC(ctx).get()).x14()), (fp).kind())).get(),
+            );
+            if result != 0_i32 {
+                (cpu).set_xA4(result);
+                return 1_i32;
+            }
+        }
+    }
+    (cpu).set_xA4(0_i32);
+    return 0_i32;
+}
+
 pub fn ftCo_800B9020<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
@@ -4294,6 +4591,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (Fighter<'_>,) = Args::take_all(ctx);
             Ret::put(ftCo_800B89CC(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x800b8a9c,
+        |ctx| {
+            let (a0,): (Fighter<'_>,) = Args::take_all(ctx);
+            Ret::put(ftCo_800B8A9C(ctx, a0), ctx);
         },
         Returns::Int,
     );

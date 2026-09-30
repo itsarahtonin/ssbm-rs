@@ -27,6 +27,129 @@ use ssbm_types::tu as statics;
 use crate::manual::MSL__string as manual;
 use crate::support::*;
 
+pub fn strcpy<'a>(ctx: &'a Ctx, dst: Val<'a, i8>, src: Val<'a, i8>) -> Val<'a, i8> {
+    let mut dst = dst;
+    let mut src = src;
+    let mut destb: Val<'a, u8> = null(ctx);
+    let mut fromb: Val<'a, u8> = null(ctx);
+    let mut w: u32 = 0;
+    let mut t: u32 = 0;
+    let mut align: u32 = 0;
+    let mut k1: u32 = 0;
+    let mut k2: u32 = 0;
+    'goto_bytecopy: {
+        'goto_adjust: {
+            fromb = Handle::cast::<Val<'a, u8>>(src);
+            destb = Handle::cast::<Val<'a, u8>>(dst);
+            if ({
+                let __t1 = (Handle::addr(fromb) & 3_u32);
+                align = __t1;
+                __t1
+            }) != (Handle::addr(destb) & 3_u32)
+            {
+                break 'goto_bytecopy;
+            }
+            if (align != 0) {
+                if (({
+                    let __t2 = (fromb).get();
+                    (destb).set(__t2);
+                    __t2
+                }) as i32)
+                    == 0_i32
+                {
+                    return dst;
+                }
+                {
+                    align = 3_u32.wrapping_sub(align);
+                    'l1: while (align != 0) {
+                        'c2: {
+                            if (({
+                                let __t3 = ({
+                                    fromb = Handle::add(fromb, 1);
+                                    fromb
+                                })
+                                .get();
+                                ({
+                                    destb = Handle::add(destb, 1);
+                                    destb
+                                })
+                                .set(__t3);
+                                __t3
+                            }) as i32)
+                                == 0_i32
+                            {
+                                return dst;
+                            }
+                        }
+                        align = align.wrapping_sub(1);
+                    }
+                }
+                destb = Handle::add(destb, 1);
+                fromb = Handle::add(fromb, 1);
+            }
+            k1 = statics::MSL__string::K1(ctx).get();
+            k2 = statics::MSL__string::K2(ctx).get();
+            w = (Handle::cast::<Val<'a, u32>>(fromb)).get();
+            t = w.wrapping_add(k2);
+            t = (t & k1);
+            if (t != 0) {
+                break 'goto_bytecopy;
+            }
+            destb = Handle::add(destb, (4_u32 as i32).wrapping_neg());
+            {
+                'l3: loop {
+                    'c4: {
+                        destb = Handle::add(destb, (4_u32 as i32));
+                        (Handle::cast::<Val<'a, u32>>(destb)).set(w);
+                        fromb = Handle::add(fromb, (4_u32 as i32));
+                        w = (Handle::cast::<Val<'a, u32>>(fromb)).get();
+                        t = w.wrapping_add(k2);
+                        t = (t & k1);
+                        if (t != 0) {
+                            break 'goto_adjust;
+                        }
+                    }
+                }
+            }
+        }
+        destb = Handle::add(destb, (4_u32 as i32));
+    }
+    if (({
+        let __t4 = (fromb).get();
+        (destb).set(__t4);
+        __t4
+    }) as i32)
+        == 0_i32
+    {
+        return dst;
+    }
+    {
+        'l5: loop {
+            'c6: {
+                if (({
+                    let __t5 = ({
+                        fromb = Handle::add(fromb, 1);
+                        fromb
+                    })
+                    .get();
+                    ({
+                        destb = Handle::add(destb, 1);
+                        destb
+                    })
+                    .set(__t5);
+                    __t5
+                }) as i32)
+                    == 0_i32
+                {
+                    return dst;
+                }
+            }
+        }
+    }
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
 pub fn strncpy<'a>(ctx: &'a Ctx, dst: Val<'a, i8>, src: Val<'a, i8>, n: u32) -> Val<'a, i8> {
     let mut dst = dst;
     let mut src = src;
@@ -72,6 +195,131 @@ pub fn strncpy<'a>(ctx: &'a Ctx, dst: Val<'a, i8>, src: Val<'a, i8>, n: u32) -> 
         }
     }
     return dst;
+}
+
+pub fn strcmp<'a>(ctx: &'a Ctx, str1: Val<'a, i8>, str2: Val<'a, i8>) -> i32 {
+    let mut str1 = str1;
+    let mut str2 = str2;
+    let mut left: Val<'a, u8> = null(ctx);
+    let mut right: Val<'a, u8> = null(ctx);
+    let mut k1: u32 = 0;
+    let mut k2: u32 = 0;
+    let mut align: u32 = 0;
+    let mut l1: u32 = 0;
+    let mut r1: u32 = 0;
+    let mut x: u32 = 0;
+    let mut result: i32 = 0;
+    'goto_bytecopy: {
+        'goto_adjust: {
+            left = Handle::cast::<Val<'a, u8>>(str1);
+            right = Handle::cast::<Val<'a, u8>>(str2);
+            l1 = ((left).get() as u32);
+            r1 = ((right).get() as u32);
+            result = (l1 as i32).wrapping_sub((r1 as i32));
+            if (result != 0) {
+                return (l1.wrapping_sub(r1) as i32);
+            }
+            if ({
+                let __t1 = (Handle::addr(left) & 3_u32);
+                align = __t1;
+                __t1
+            }) != (Handle::addr(right) & 3_u32)
+            {
+                break 'goto_bytecopy;
+            }
+            if (align != 0) {
+                if l1 == 0_u32 {
+                    return 0_i32;
+                }
+                {
+                    align = 3_u32.wrapping_sub(align);
+                    'l1: while (align != 0) {
+                        'c2: {
+                            l1 = (({
+                                left = Handle::add(left, 1);
+                                left
+                            })
+                            .get() as u32);
+                            r1 = (({
+                                right = Handle::add(right, 1);
+                                right
+                            })
+                            .get() as u32);
+                            result = (l1 as i32).wrapping_sub((r1 as i32));
+                            if (result != 0) {
+                                return result;
+                            }
+                            if l1 == 0_u32 {
+                                return 0_i32;
+                            }
+                        }
+                        align = align.wrapping_sub(1);
+                    }
+                }
+                left = Handle::add(left, 1);
+                right = Handle::add(right, 1);
+            }
+            k1 = statics::MSL__string::K1(ctx).get();
+            k2 = statics::MSL__string::K2(ctx).get();
+            l1 = (Handle::cast::<Val<'a, u32>>(left)).get();
+            r1 = (Handle::cast::<Val<'a, u32>>(right)).get();
+            x = l1.wrapping_add(k2);
+            if ((x & k1) != 0) {
+                break 'goto_adjust;
+            }
+            'l3: while l1 == r1 {
+                'c4: {
+                    left = Handle::add(left, (4_u32 as i32));
+                    l1 = (Handle::cast::<Val<'a, u32>>(left)).get();
+                    right = Handle::add(right, (4_u32 as i32));
+                    r1 = (Handle::cast::<Val<'a, u32>>(right)).get();
+                    x = l1.wrapping_add(k2);
+                    if ((x & k1) != 0) {
+                        break 'goto_adjust;
+                    }
+                }
+            }
+            if l1 > r1 {
+                return 1_i32;
+            } else {
+                return 1_i32.wrapping_neg();
+            }
+        }
+        l1 = ((left).get() as u32);
+        r1 = ((right).get() as u32);
+        result = (l1 as i32).wrapping_sub((r1 as i32));
+        if (result != 0) {
+            return (l1 as i32).wrapping_sub((r1 as i32));
+        }
+    }
+    if l1 == 0_u32 {
+        return 0_i32;
+    }
+    {
+        'l5: loop {
+            'c6: {
+                r1 = (({
+                    left = Handle::add(left, 1);
+                    left
+                })
+                .get() as u32);
+                l1 = (({
+                    right = Handle::add(right, 1);
+                    right
+                })
+                .get() as u32);
+                result = (r1 as i32).wrapping_sub((l1 as i32));
+                if (result != 0) {
+                    return result;
+                }
+                if r1 == 0_u32 {
+                    return 0_i32;
+                }
+            }
+        }
+    }
+    #[allow(unreachable_code)]
+    return 0;
 }
 
 pub fn strncmp<'a>(ctx: &'a Ctx, str1: Val<'a, i8>, str2: Val<'a, i8>, n: u32) -> i32 {
@@ -199,10 +447,26 @@ pub fn register(ctx: &Ctx) {
         Returns::Int,
     );
     ctx.register_port(
+        0x80325a50,
+        |ctx| {
+            let (a0, a1): (Val<'_, i8>, Val<'_, i8>) = Args::take_all(ctx);
+            Ret::put(strcpy(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
         0x80325a0c,
         |ctx| {
             let (a0, a1, a2): (Val<'_, i8>, Val<'_, i8>, u32) = Args::take_all(ctx);
             Ret::put(strncpy(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x803258e8,
+        |ctx| {
+            let (a0, a1): (Val<'_, i8>, Val<'_, i8>) = Args::take_all(ctx);
+            Ret::put(strcmp(ctx, a0, a1), ctx);
         },
         Returns::Int,
     );

@@ -1055,6 +1055,7 @@ pub mod sysdolphin__baselib__hsd_3B5C;
 pub mod sysdolphin__baselib__id;
 pub mod sysdolphin__baselib__initialize;
 pub mod sysdolphin__baselib__jobj;
+pub mod sysdolphin__baselib__leak;
 pub mod sysdolphin__baselib__list;
 pub mod sysdolphin__baselib__lobj;
 pub mod sysdolphin__baselib__memory;
@@ -3909,6 +3910,10 @@ pub static UNITS: &[(&str, Register)] = &[
     (
         "sysdolphin/baselib/jobj",
         sysdolphin__baselib__jobj::register,
+    ),
+    (
+        "sysdolphin/baselib/leak",
+        sysdolphin__baselib__leak::register,
     ),
     (
         "sysdolphin/baselib/list",

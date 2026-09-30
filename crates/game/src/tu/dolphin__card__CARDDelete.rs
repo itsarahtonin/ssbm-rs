@@ -26,6 +26,31 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn DeleteCallback<'a>(ctx: &'a Ctx, chan: i32, result: i32) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut chan = chan;
+    let mut result = result;
+    let mut card: CARDControl<'a> = null(ctx);
+    let mut callback: FnPtr<'a> = null(ctx);
+    'goto_error: {
+        card = fns::__CARDBlock(ctx).get(chan);
+        callback = (card).apiCallback();
+        (card).set_apiCallback(null::<FnPtr<'a>>(ctx));
+        if result < 0_i32 {
+            break 'goto_error;
+        }
+        result = fns::__CARDFreeBlock(ctx, chan, (card).startBlock(), callback);
+        if result < 0_i32 {
+            break 'goto_error;
+        }
+        return;
+    }
+    let _ = fns::__CARDPutControlBlock(ctx, card, result);
+    if !Handle::is_null(callback) {
+        callback.call::<_, ()>((chan, result));
+    }
+}
+
 pub fn CARDDeleteAsync<'a>(
     ctx: &'a Ctx,
     chan: i32,
@@ -72,6 +97,14 @@ pub fn CARDDeleteAsync<'a>(
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x8035824c,
+        |ctx| {
+            let (a0, a1): (i32, i32) = Args::take_all(ctx);
+            Ret::put(DeleteCallback(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
     ctx.register_port(
         0x803582f0,
         |ctx| {

@@ -1860,6 +1860,146 @@ pub fn mnDiagram_RefreshGrid<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: i32, ar
     );
 }
 
+pub fn mnDiagram_UpdateScrollArrows<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x40);
+    let mut gobj = gobj;
+    let mut result2: u8 = 0;
+    let mut data: Diagram<'a> = Handle::cast::<Diagram<'a>>((gobj).user_data());
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut ptr2: Val<'a, u8> = null(ctx);
+    let mut ptr_: Val<'a, u8> = null(ctx);
+    let mut count: i32 = 0;
+    let mut i: i32 = 0;
+    let mut sorted: Val<'a, u8> = fns::mnDiagram_FighterDisplayOrder(ctx).at(0);
+    let mut result: i32 = 0;
+    let mut name_count: i32 = 0;
+    let mut jobj2: HSD_JObj<'a> = null(ctx);
+    let mut jobj3: HSD_JObj<'a> = null(ctx);
+    jobj = (data).jobjs().at(3_i32).get();
+    let _ = fns::mn_8022ED6C(
+        ctx,
+        jobj,
+        statics::melee__mn__mndiagram::mnDiagram_ArrowAnim(ctx),
+    );
+    if ((data).is_name_mode() as i32) != 0_i32 {
+        result = (inl_mnDiagram_GetVisibleNameFrom_unfused(
+            ctx,
+            (((data).name_cursor_pos() as u8) as i32),
+            10_i32,
+        ) as i32);
+        inl_setArrowVisible_unfused(ctx, jobj, (((result as u8) as i32) != 120_i32) as i32);
+    } else {
+        result = (inl_mnDiagram_GetVisibleFighterCursorFrom_unfused(
+            ctx,
+            sorted,
+            (((data).fighter_cursor_pos() as u8) as i32),
+            10_i32,
+        ) as i32);
+        inl_setArrowVisible_unfused(
+            ctx,
+            jobj,
+            (((result as u8) as i32) != (enums::SELKIND_COUNT as i32)) as i32,
+        );
+    }
+    jobj2 = (data).jobjs().at(4_i32).get();
+    let _ = fns::mn_8022ED6C(
+        ctx,
+        jobj2,
+        statics::melee__mn__mndiagram::mnDiagram_ArrowAnim(ctx),
+    );
+    if ((data).is_name_mode() as i32) != 0_i32 {
+        result = (((data).name_cursor_pos() as u8) as i32);
+    } else {
+        result = (((data).fighter_cursor_pos() as u8) as i32);
+    }
+    inl_setArrowVisible_unfused(ctx, jobj2, (result != 0_i32) as i32);
+    jobj2 = (data).jobjs().at(5_i32).get();
+    let _ = fns::mn_8022ED6C(
+        ctx,
+        jobj2,
+        statics::melee__mn__mndiagram::mnDiagram_ArrowAnim(ctx),
+    );
+    if ((data).is_name_mode() as i32) != 0_i32 {
+        i = sar_i32(((data).name_cursor_pos() as i32), (8_i32 as u32));
+    } else {
+        i = sar_i32(((data).fighter_cursor_pos() as i32), (8_i32 as u32));
+    }
+    inl_setArrowVisible_unfused(ctx, jobj2, (i != 0_i32) as i32);
+    jobj3 = (data).jobjs().at(6_i32).get();
+    let _ = fns::mn_8022ED6C(
+        ctx,
+        jobj3,
+        statics::melee__mn__mndiagram::mnDiagram_ArrowAnim(ctx),
+    );
+    if ((data).is_name_mode() as i32) != 0_i32 {
+        'goto_dn_name_done: {
+            name_count = 7_i32;
+            i = sar_i32(((data).name_cursor_pos() as i32), (8_i32 as u32));
+            ptr_ = Handle::add(fns::mnDiagram_NameDisplayOrder(ctx).at(0), i);
+            'l1: while name_count > 0_i32 {
+                'c2: {
+                    ptr2 = ptr_;
+                    'l3: loop {
+                        'c4: {
+                            i = i.wrapping_add(1);
+                            ptr2 = Handle::add(ptr2, 1);
+                            ptr_ = Handle::add(ptr_, 1);
+                            if i >= 120_i32 {
+                                result = 120_i32;
+                                break 'goto_dn_name_done;
+                            }
+                        }
+                        if !(Handle::is_null(fns::GetNameText(ctx, ((ptr2).get() as i32)))) {
+                            break 'l3;
+                        }
+                    }
+                    name_count = name_count.wrapping_sub(1);
+                }
+            }
+            result = (inl_mnDiagram_GetNameByIndex_unfused(ctx, i) as i32);
+        }
+        inl_setArrowVisible_unfused(ctx, jobj3, (((result as u8) as i32) != 120_i32) as i32);
+    } else {
+        'goto_dn_fc_done: {
+            count = 7_i32;
+            i = sar_i32(((data).fighter_cursor_pos() as i32), (8_i32 as u32));
+            ptr2 = Handle::add(sorted, i);
+            'l5: loop {
+                'c6: {
+                    if count == 0_i32 {
+                        result2 = (Handle::add(sorted, i)).get();
+                        break 'l5;
+                    }
+                    ptr_ = ptr2;
+                    'l7: loop {
+                        'c8: {
+                            i = i.wrapping_add(1);
+                            ptr_ = Handle::add(ptr_, 1);
+                            ptr2 = Handle::add(ptr2, 1);
+                            if i >= (enums::SELKIND_COUNT as i32) {
+                                result2 = ((enums::SELKIND_COUNT as i32) as u8);
+                                break 'goto_dn_fc_done;
+                            }
+                        }
+                        if !(fns::mn_IsFighterUnlocked(ctx, ((ptr_).get() as i32)) == 0_i32) {
+                            break 'l7;
+                        }
+                    }
+                    count = count.wrapping_sub(1);
+                }
+                if !(count >= 0_i32) {
+                    break 'l5;
+                }
+            }
+        }
+        inl_setArrowVisible_unfused(
+            ctx,
+            jobj3,
+            ((result2 as i32) != (enums::SELKIND_COUNT as i32)) as i32,
+        );
+    }
+}
+
 pub fn mnDiagram_ExitAnimProc<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
@@ -3494,6 +3634,91 @@ fn inl_refreshGrid_unfused<'a>(
     }
 }
 
+fn inl_mnDiagram_GetVisibleNameFrom_unfused<'a>(ctx: &'a Ctx, start: i32, rank: i32) -> u8 {
+    let mut start = start;
+    let mut rank = rank;
+    let mut p: Val<'a, u8> = null(ctx);
+    let mut p2: Val<'a, u8> = null(ctx);
+    let mut remaining: i32 = 0;
+    let mut idx: i32 = 0;
+    p = Handle::add(fns::mnDiagram_NameDisplayOrder(ctx).at(0), start);
+    remaining = rank;
+    idx = start;
+    'l1: while remaining > 0_i32 {
+        'c2: {
+            p2 = p;
+            'l3: loop {
+                'c4: {
+                    idx = idx.wrapping_add(1);
+                    p2 = Handle::add(p2, 1);
+                    p = Handle::add(p, 1);
+                    if idx >= 120_i32 {
+                        return (120_i32 as u8);
+                    }
+                }
+                if !(Handle::is_null(fns::GetNameText(ctx, ((p2).get() as i32)))) {
+                    break 'l3;
+                }
+            }
+            remaining = remaining.wrapping_sub(1);
+        }
+    }
+    return inl_mnDiagram_GetNameByIndex_unfused(ctx, idx);
+}
+
+fn inl_setArrowVisible_unfused<'a>(ctx: &'a Ctx, arrow: HSD_JObj<'a>, visible: i32) {
+    let mut arrow = arrow;
+    let mut visible = visible;
+    if (visible != 0) {
+        fns::HSD_JObjClearFlagsAll(ctx, arrow, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
+    } else {
+        fns::HSD_JObjSetFlagsAll(ctx, arrow, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
+    }
+}
+
+fn inl_mnDiagram_GetVisibleFighterCursorFrom_unfused<'a>(
+    ctx: &'a Ctx,
+    sorted: Val<'a, u8>,
+    start: i32,
+    rank: i32,
+) -> u8 {
+    let mut sorted = sorted;
+    let mut start = start;
+    let mut rank = rank;
+    let mut result: u8 = 0;
+    let mut remaining: i32 = 0;
+    let mut p2: Val<'a, u8> = null(ctx);
+    let mut p: Val<'a, u8> = null(ctx);
+    let mut idx: i32 = 0;
+    remaining = rank;
+    idx = start;
+    p = Handle::add(sorted, start);
+    'l1: while remaining >= 0_i32 {
+        'c2: {
+            if remaining == 0_i32 {
+                result = (Handle::add(sorted, idx)).get();
+                break 'l1;
+            }
+            p2 = p;
+            'l3: loop {
+                'c4: {
+                    idx = idx.wrapping_add(1);
+                    p2 = Handle::add(p2, 1);
+                    p = Handle::add(p, 1);
+                    if idx >= (enums::SELKIND_COUNT as i32) {
+                        return ((enums::SELKIND_COUNT as i32) as u8);
+                    }
+                }
+                if !(fns::mn_IsFighterUnlocked(ctx, ((p2).get() as i32)) == 0_i32) {
+                    break 'l3;
+                }
+            }
+            remaining = remaining.wrapping_sub(1);
+        }
+    }
+    return result;
+}
+
 fn inl_updateScrollArrowVisibility_unfused<'a>(ctx: &'a Ctx, data: Diagram<'a>, count: i32) {
     let mut data = data;
     let mut count = count;
@@ -4199,6 +4424,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1, a2): (HSD_GObj<'_>, i32, i32) = Args::take_all(ctx);
             Ret::put(mnDiagram_RefreshGrid(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x802417d0,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(mnDiagram_UpdateScrollArrows(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

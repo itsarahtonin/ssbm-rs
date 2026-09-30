@@ -84,6 +84,54 @@ pub fn if_802F73C4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn if_802F74D0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut gobj = gobj;
+    let mut entries: Element_803F9628<'a> = null(ctx);
+    let mut entry: Element_803F9628<'a> = null(ctx);
+    let mut i: i32 = 0;
+    let mut curr: Element_803F9628<'a> = null(ctx);
+    let mut idx: i32 = 0;
+    'goto_found: {
+        entries = fns::ifStatus_803F9628(ctx).get(0);
+        curr = entries;
+        {
+            i = 0_i32;
+            'l1: while i < 8_i32 {
+                'c2: {
+                    if Handle::addr((curr).x0()) == Handle::addr(gobj) {
+                        entry = (Handle::add(entries, i));
+                        break 'goto_found;
+                    }
+                }
+                curr = Handle::add(curr, 1);
+                i = i.wrapping_add(1);
+            }
+        }
+        entry = null::<Element_803F9628<'a>>(ctx);
+    }
+    idx = (div_u32(
+        (((Handle::addr(Handle::cast::<Val<'a, u8>>(entry))
+            .wrapping_sub(Handle::addr(Handle::cast::<Val<'a, u8>>(entries))) as i32)
+            / 1) as u32),
+        40_u32,
+    ) as i32);
+    if (!Handle::is_null(entry)) && (!((entry).x12().x2() != 0)) {
+        if !Handle::is_null((entry).x18()) {
+            (entry).x18().call::<_, ()>((idx,));
+        }
+        (entry).x12().set_x2((1_i32 as u8));
+    }
+    if !Handle::is_null(entry) {
+        if fns::fn_802F7288(ctx, gobj, entry) == 0_i32 {
+            if !Handle::is_null((entry).x1C()) {
+                (entry).x1C().call::<_, ()>((idx,));
+            }
+            (entry).set_x1C(null::<FnPtr<'a>>(ctx));
+        }
+    }
+}
+
 pub fn fn_802F75D4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
@@ -577,6 +625,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(if_802F73C4(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x802f74d0,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(if_802F74D0(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

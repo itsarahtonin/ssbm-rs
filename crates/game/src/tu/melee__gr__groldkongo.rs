@@ -663,6 +663,79 @@ pub fn stageGObj2_Callback3<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
     let mut arg = arg;
 }
 
+pub fn grOldKongo_80210454<'a>(ctx: &'a Ctx, ground_gobj: HSD_GObj<'a>, keep: HSD_GObj<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x50);
+    let pos_gnd: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos_ft: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unk_: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
+    let mut ground_gobj = ground_gobj;
+    let mut keep = keep;
+    let mut gp: Ground<'a> = null(ctx);
+    let mut rand_val: f64 = 0.0;
+    let mut diff: f64 = 0.0;
+    'goto_done: {
+        gp = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData(ctx, ground_gobj)));
+        if ((gp).u().taru().xC6() as i32) != 0_i32 {
+            break 'goto_done;
+        }
+        let _ = fns::Ground_801C4DA0(ctx, pos_gnd, unk_);
+        fns::ftLib_GetPos(ctx, keep, pos_ft);
+        if !(fp::fmadds(
+            (fp::fsubs(pos_gnd.z(), pos_ft.z())),
+            (fp::fsubs(pos_gnd.z(), pos_ft.z())),
+            fp::fmadds(
+                (fp::fsubs(pos_gnd.x(), pos_ft.x())),
+                (fp::fsubs(pos_gnd.x(), pos_ft.x())),
+                fp::fmuls(
+                    (fp::fsubs(pos_gnd.y(), pos_ft.y())),
+                    (fp::fsubs(pos_gnd.y(), pos_ft.y())),
+                ),
+            ),
+        ) < fp::fmuls(
+            (statics::melee__gr__groldkongo::yakumono_param(ctx).get()).rframe_barrel_in(),
+            (statics::melee__gr__groldkongo::yakumono_param(ctx).get()).rframe_barrel_in(),
+        )) {
+            break 'goto_done;
+        }
+        rand_val = fns::HSD_Randf(ctx);
+        diff = fp::fsubs(
+            (statics::melee__gr__groldkongo::yakumono_param(ctx).get()).rframe_barrel_shoot_b(),
+            (statics::melee__gr__groldkongo::yakumono_param(ctx).get()).rframe_barrel_shoot_a(),
+        );
+        (gp).u().taru().set_xCA(
+            (fp::fctiwz(
+                (fp::fmadds(
+                    diff,
+                    rand_val,
+                    (statics::melee__gr__groldkongo::yakumono_param(ctx).get())
+                        .rframe_barrel_shoot_a(),
+                )),
+            ) as i16),
+        );
+        (gp).u().taru().set_keep(keep);
+        (gp).u().taru().set_xC6((1_i32 as i16));
+        fns::Ground_801C5440(ctx, gp, 0_i32, 0x129_u32);
+        fns::grAnime_801C7FF8(ctx, ground_gobj, 2_i32, 7_i32, 1_i32, 0.0, 1.0);
+        fns::grMaterial_801C9604(
+            ctx,
+            ground_gobj,
+            (statics::melee__gr__groldkongo::yakumono_param(ctx).get()).x6C(),
+            0_i32,
+        );
+        let _ = fns::efSync_Spawn(
+            ctx,
+            0x405_i32,
+            ground_gobj,
+            &[VarArg::Int(Handle::addr(pos_ft))],
+        );
+        fns::ftLib_StartRumble(ctx, keep, 13_i32, 30_i32);
+        return 1_i32;
+    }
+    return 0_i32;
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 pub fn grOldKongo_802105AC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
@@ -1312,6 +1385,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(stageGObj2_Callback3(ctx, a0), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80210454,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, HSD_GObj<'_>) = Args::take_all(ctx);
+            Ret::put(grOldKongo_80210454(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x802105ac,

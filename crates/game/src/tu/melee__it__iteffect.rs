@@ -87,6 +87,613 @@ pub fn it_802787B4<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: i32) {
     fns::it_80278800(ctx, item_gobj, arg1, 0_i32, sp1C, sp10, 1_i32, 0.0);
 }
 
+pub fn it_80278800<'a>(
+    ctx: &'a Ctx,
+    item_gobj: HSD_GObj<'a>,
+    ef_id: i32,
+    arg2: i32,
+    arg3: Vec<'a>,
+    arg4: Vec<'a>,
+    arg5: i32,
+    arg6: f64,
+) {
+    let __frame = ctx.stack_frame(0xb0);
+    let sp88: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    let sp84: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
+    let sp80: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
+    let sp74: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp68: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let sp64: Val<'a, F32> = frame_at(ctx, &__frame, 0x24);
+    let sp60: Val<'a, F32> = frame_at(ctx, &__frame, 0x28);
+    let sp5C: Val<'a, F32> = frame_at(ctx, &__frame, 0x2c);
+    let unused: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x30);
+    let mut item_gobj = item_gobj;
+    let mut ef_id = ef_id;
+    let mut arg2 = arg2;
+    let mut arg3 = arg3;
+    let mut arg4 = arg4;
+    let mut arg5 = arg5;
+    let mut arg6 = arg6;
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut item: Item<'a> = null(ctx);
+    let mut temp_f1: f64 = 0.0;
+    let mut temp_f2: f64 = 0.0;
+    let mut var_f0: f64 = 0.0;
+    'goto_done: {
+        'goto_block_6E8: {
+            'goto_block_6B4: {
+                'goto_block_680: {
+                    'goto_block_61C: {
+                        'goto_block_59C: {
+                            'goto_block_558: {
+                                'goto_block_4FC: {
+                                    'goto_block_4A8: {
+                                        'l1: loop {
+                                            'c2: {}
+                                            if !(0_i32 != 0) {
+                                                break 'l1;
+                                            }
+                                        }
+                                        item = Handle::cast::<Item<'a>>((item_gobj).user_data());
+                                        's3: {
+                                            let __case = match ef_id {
+                                                0x402_i32 => 0,
+                                                0x403_i32 => 0,
+                                                0x409_i32 => 0,
+                                                0x412_i32 => 0,
+                                                0x413_i32 => 0,
+                                                0x414_i32 => 0,
+                                                0x41b_i32 => 0,
+                                                0x422_i32 => 0,
+                                                0x433_i32 => 0,
+                                                0x449_i32 => 0,
+                                                0x473_i32 => 0,
+                                                0x446_i32 => 1,
+                                                0x448_i32 => 1,
+                                                0x417_i32 => 2,
+                                                0x418_i32 => 2,
+                                                0x419_i32 => 2,
+                                                0x41a_i32 => 2,
+                                                0x415_i32 => 3,
+                                                0x41e_i32 => 3,
+                                                0x428_i32 => 3,
+                                                0x429_i32 => 3,
+                                                0x42a_i32 => 3,
+                                                0x438_i32 => 3,
+                                                0x439_i32 => 3,
+                                                0x43e_i32 => 3,
+                                                0x44d_i32 => 3,
+                                                0x45b_i32 => 3,
+                                                0x45c_i32 => 3,
+                                                0x45f_i32 => 3,
+                                                0x460_i32 => 3,
+                                                0x461_i32 => 3,
+                                                0x462_i32 => 3,
+                                                0x463_i32 => 3,
+                                                0x464_i32 => 3,
+                                                0x465_i32 => 3,
+                                                0x466_i32 => 3,
+                                                0x467_i32 => 3,
+                                                0x468_i32 => 3,
+                                                0x469_i32 => 3,
+                                                0x46a_i32 => 3,
+                                                0x46b_i32 => 3,
+                                                0x46c_i32 => 3,
+                                                0x46d_i32 => 3,
+                                                0x46e_i32 => 3,
+                                                0x46f_i32 => 3,
+                                                0x470_i32 => 3,
+                                                0x471_i32 => 3,
+                                                0x472_i32 => 3,
+                                                0x44e_i32 => 4,
+                                                0x44f_i32 => 4,
+                                                0x450_i32 => 4,
+                                                0x451_i32 => 4,
+                                                0x452_i32 => 4,
+                                                0x457_i32 => 4,
+                                                0x458_i32 => 4,
+                                                0x459_i32 => 4,
+                                                0x45a_i32 => 4,
+                                                0x423_i32 => 5,
+                                                0x424_i32 => 5,
+                                                _ => 6,
+                                            };
+                                            if __case <= 0 {
+                                                if arg5 == 1_i32 {
+                                                    jobj = fns::it_80272CC0(ctx, item_gobj, arg2);
+                                                    let _ = fns::efSync_Spawn(
+                                                        ctx,
+                                                        ef_id,
+                                                        item_gobj,
+                                                        &[VarArg::Int(Handle::addr(jobj))],
+                                                    );
+                                                    return;
+                                                }
+                                                jobj = fns::it_80272CC0(ctx, item_gobj, arg2);
+                                                fns::efAsync_Spawn(
+                                                    ctx,
+                                                    item_gobj,
+                                                    (Handle::cast::<Item<'a>>(
+                                                        (item_gobj).user_data(),
+                                                    ))
+                                                    .xBC0_ref(),
+                                                    0_u32,
+                                                    (ef_id as u32),
+                                                    jobj,
+                                                    &[],
+                                                );
+                                                return;
+                                            }
+                                            if __case <= 1 {
+                                                if arg5 == 1_i32 {
+                                                    jobj = fns::it_80272CC0(ctx, item_gobj, arg2);
+                                                    let _ = fns::efSync_Spawn(
+                                                        ctx,
+                                                        ef_id,
+                                                        item_gobj,
+                                                        &[
+                                                            VarArg::Int(Handle::addr(jobj)),
+                                                            VarArg::Int(Handle::addr(arg3)),
+                                                        ],
+                                                    );
+                                                    return;
+                                                }
+                                                jobj = fns::it_80272CC0(ctx, item_gobj, arg2);
+                                                fns::efAsync_Spawn(
+                                                    ctx,
+                                                    item_gobj,
+                                                    (Handle::cast::<Item<'a>>(
+                                                        (item_gobj).user_data(),
+                                                    ))
+                                                    .xBC0_ref(),
+                                                    7_u32,
+                                                    (ef_id as u32),
+                                                    jobj,
+                                                    &[VarArg::Int(Handle::addr(arg3))],
+                                                );
+                                                return;
+                                            }
+                                            if __case <= 2 {
+                                                jobj = fns::it_80272CC0(ctx, item_gobj, arg2);
+                                                let _ = fns::efSync_Spawn(
+                                                    ctx,
+                                                    ef_id,
+                                                    item_gobj,
+                                                    &[
+                                                        VarArg::Int(Handle::addr(jobj)),
+                                                        VarArg::Int(0xf25959_i32 as u32),
+                                                    ],
+                                                );
+                                                return;
+                                            }
+                                            if __case <= 3 {
+                                                sp88.set(1.0);
+                                                if arg5 == 1_i32 {
+                                                    jobj = fns::it_80272CC0(ctx, item_gobj, arg2);
+                                                    let _ = fns::efSync_Spawn(
+                                                        ctx,
+                                                        ef_id,
+                                                        item_gobj,
+                                                        &[
+                                                            VarArg::Int(Handle::addr(jobj)),
+                                                            VarArg::Int(Handle::addr(sp88)),
+                                                        ],
+                                                    );
+                                                    return;
+                                                }
+                                                jobj = fns::it_80272CC0(ctx, item_gobj, arg2);
+                                                fns::efAsync_Spawn(
+                                                    ctx,
+                                                    item_gobj,
+                                                    (Handle::cast::<Item<'a>>(
+                                                        (item_gobj).user_data(),
+                                                    ))
+                                                    .xBC0_ref(),
+                                                    3_u32,
+                                                    (ef_id as u32),
+                                                    jobj,
+                                                    &[VarArg::Int(Handle::addr(sp88))],
+                                                );
+                                                return;
+                                            }
+                                            if __case <= 4 {
+                                                sp84.set(1.0);
+                                                jobj = fns::it_80272CC0(ctx, item_gobj, arg2);
+                                                let _ = fns::efSync_Spawn(
+                                                    ctx,
+                                                    ef_id,
+                                                    item_gobj,
+                                                    &[
+                                                        VarArg::Int(Handle::addr(jobj)),
+                                                        VarArg::Int(Handle::addr(
+                                                            (item).facing_dir_ref(),
+                                                        )),
+                                                        VarArg::Int(Handle::addr(sp84)),
+                                                    ],
+                                                );
+                                                return;
+                                            }
+                                            if __case <= 5 {
+                                                sp80.set(0.0);
+                                                jobj = fns::it_80272CC0(ctx, item_gobj, arg2);
+                                                fns::efAsync_Spawn(
+                                                    ctx,
+                                                    item_gobj,
+                                                    (Handle::cast::<Item<'a>>(
+                                                        (item_gobj).user_data(),
+                                                    ))
+                                                    .xBC0_ref(),
+                                                    3_u32,
+                                                    (ef_id as u32),
+                                                    jobj,
+                                                    &[VarArg::Int(Handle::addr(sp80))],
+                                                );
+                                                return;
+                                            }
+                                        }
+                                        Handle::copy_from(sp74, (arg3));
+                                        inl_it_80278800_rand_vec(ctx, sp74, arg4);
+                                        fns::lb_8000B1CC(
+                                            ctx,
+                                            fns::it_80272CC0(ctx, item_gobj, arg2),
+                                            sp74,
+                                            sp68,
+                                        );
+                                        if ef_id < 0x250_i32 {
+                                            if arg5 == 1_i32 {
+                                                let _ = fns::efSync_Spawn(
+                                                    ctx,
+                                                    ef_id,
+                                                    item_gobj,
+                                                    &[VarArg::Int(Handle::addr(sp68))],
+                                                );
+                                                return;
+                                            }
+                                            jobj = fns::it_80272CC0(ctx, item_gobj, arg2);
+                                            fns::efAsync_Spawn(
+                                                ctx,
+                                                item_gobj,
+                                                (Handle::cast::<Item<'a>>((item_gobj).user_data()))
+                                                    .xBC0_ref(),
+                                                2_u32,
+                                                (ef_id as u32),
+                                                jobj,
+                                                &[VarArg::Int(Handle::addr(sp74))],
+                                            );
+                                            return;
+                                        } else if ef_id == 0x41e_i32 {
+                                            return;
+                                        } else if ef_id < 0x41e_i32 {
+                                            if ef_id == 0x3ff_i32 {
+                                                break 'goto_block_558;
+                                            } else if ef_id < 0x3ff_i32 {
+                                                if ef_id == 0x3f5_i32 {
+                                                    break 'goto_block_4FC;
+                                                } else if ef_id < 0x3f5_i32 {
+                                                    if ef_id == 0x3ee_i32 {
+                                                        break 'goto_block_4A8;
+                                                    } else if ef_id < 0x3ee_i32 {
+                                                        if ef_id >= 0x3ed_i32 {
+                                                            break 'goto_block_4FC;
+                                                        } else if ef_id >= 0x3e9_i32 {
+                                                            break 'goto_block_4A8;
+                                                        } else {
+                                                            return;
+                                                        }
+                                                    }
+                                                    if ef_id >= 0x3f3_i32 {
+                                                        break 'goto_block_4A8;
+                                                    } else {
+                                                        break 'goto_block_4FC;
+                                                    }
+                                                } else {
+                                                    if ef_id == 0x3fd_i32 {
+                                                        break 'goto_block_558;
+                                                    } else if ef_id >= 0x3fd_i32 {
+                                                        break 'goto_block_4FC;
+                                                    }
+                                                    if ef_id >= 0x3fa_i32 {
+                                                        break 'goto_block_4A8;
+                                                    } else if ef_id >= 0x3f7_i32 {
+                                                        break 'goto_block_558;
+                                                    } else {
+                                                        break 'goto_block_4A8;
+                                                    }
+                                                }
+                                            }
+                                            if ef_id == 0x408_i32 {
+                                                break 'goto_block_61C;
+                                            } else if ef_id < 0x408_i32 {
+                                                if ef_id == 0x405_i32 {
+                                                    break 'goto_block_4A8;
+                                                } else if ef_id < 0x405_i32 {
+                                                    if ef_id >= 0x404_i32 {
+                                                        break 'goto_block_61C;
+                                                    }
+                                                    if ef_id >= 0x402_i32 {
+                                                        break 'goto_done;
+                                                    }
+                                                    break 'goto_block_4FC;
+                                                }
+                                                if ef_id >= 0x407_i32 {
+                                                    break 'goto_block_4A8;
+                                                } else {
+                                                    break 'goto_block_61C;
+                                                }
+                                            }
+                                            if ef_id == 0x416_i32 {
+                                                break 'goto_block_4A8;
+                                            } else if ef_id < 0x416_i32 {
+                                                if ef_id >= 0x412_i32 {
+                                                    return;
+                                                }
+                                                if ef_id >= 0x40c_i32 {
+                                                    break 'goto_block_4A8;
+                                                } else {
+                                                    return;
+                                                }
+                                            } else if ef_id >= 0x41c_i32 {
+                                                break 'goto_block_4A8;
+                                            } else {
+                                                return;
+                                            }
+                                        } else if ef_id == 0x440_i32 {
+                                            break 'goto_block_59C;
+                                        } else if ef_id < 0x440_i32 {
+                                            if ef_id < 0x432_i32 {
+                                                if ef_id < 0x428_i32 {
+                                                    if ef_id >= 0x425_i32 {
+                                                        break 'goto_block_4A8;
+                                                    }
+                                                    if ef_id >= 0x422_i32 {
+                                                        break 'goto_done;
+                                                    }
+                                                    break 'goto_block_4A8;
+                                                }
+                                                if ef_id == 0x42d_i32 {
+                                                    break 'goto_block_4A8;
+                                                } else if ef_id >= 0x42d_i32 {
+                                                    break 'goto_block_4FC;
+                                                } else {
+                                                    return;
+                                                }
+                                            }
+                                            if ef_id < 0x438_i32 {
+                                                if ef_id == 0x434_i32 {
+                                                    break 'goto_block_4A8;
+                                                } else if ef_id >= 0x434_i32 {
+                                                    break 'goto_block_59C;
+                                                } else {
+                                                    return;
+                                                }
+                                            }
+                                            if ef_id >= 0x43d_i32 {
+                                                return;
+                                            } else if ef_id >= 0x43a_i32 {
+                                                break 'goto_block_4FC;
+                                            } else {
+                                                return;
+                                            }
+                                        } else if ef_id == 0x4d0_i32 {
+                                            break 'goto_block_4A8;
+                                        } else if ef_id < 0x4d0_i32 {
+                                            if ef_id < 0x446_i32 {
+                                                if ef_id == 0x443_i32 {
+                                                    break 'goto_block_4FC;
+                                                } else {
+                                                    break 'goto_block_4A8;
+                                                }
+                                            } else if ef_id >= 0x44d_i32 {
+                                                return;
+                                            } else if ef_id >= 0x44a_i32 {
+                                                break 'goto_block_4A8;
+                                            } else {
+                                                return;
+                                            }
+                                        } else if ef_id == 0x514_i32 {
+                                            break 'goto_block_6B4;
+                                        } else if ef_id < 0x514_i32 {
+                                            if ef_id >= 0x513_i32 {
+                                                break 'goto_block_680;
+                                            } else {
+                                                return;
+                                            }
+                                        } else {
+                                            if ef_id >= 0x516_i32 {
+                                                break 'goto_done;
+                                            }
+                                            break 'goto_block_6E8;
+                                        }
+                                    }
+                                    if arg5 == 1_i32 {
+                                        let _ = fns::efSync_Spawn(
+                                            ctx,
+                                            ef_id,
+                                            item_gobj,
+                                            &[VarArg::Int(Handle::addr(sp68))],
+                                        );
+                                        return;
+                                    }
+                                    jobj = fns::it_80272CC0(ctx, item_gobj, arg2);
+                                    fns::efAsync_Spawn(
+                                        ctx,
+                                        item_gobj,
+                                        (Handle::cast::<Item<'a>>((item_gobj).user_data()))
+                                            .xBC0_ref(),
+                                        2_u32,
+                                        (ef_id as u32),
+                                        jobj,
+                                        &[VarArg::Int(Handle::addr(sp74))],
+                                    );
+                                    return;
+                                }
+                                if arg5 == 1_i32 {
+                                    let _ = fns::efSync_Spawn(
+                                        ctx,
+                                        ef_id,
+                                        item_gobj,
+                                        &[
+                                            VarArg::Int(Handle::addr(sp68)),
+                                            VarArg::Int(Handle::addr((item).facing_dir_ref())),
+                                        ],
+                                    );
+                                    return;
+                                }
+                                jobj = fns::it_80272CC0(ctx, item_gobj, arg2);
+                                fns::efAsync_Spawn(
+                                    ctx,
+                                    item_gobj,
+                                    (Handle::cast::<Item<'a>>((item_gobj).user_data())).xBC0_ref(),
+                                    5_u32,
+                                    (ef_id as u32),
+                                    jobj,
+                                    &[
+                                        VarArg::Int(Handle::addr(sp74)),
+                                        VarArg::Int(Handle::addr((item).facing_dir_ref())),
+                                    ],
+                                );
+                                return;
+                            }
+                            sp64.set(0.0);
+                            jobj = fns::it_80272CC0(ctx, item_gobj, arg2);
+                            fns::efAsync_Spawn(
+                                ctx,
+                                item_gobj,
+                                (Handle::cast::<Item<'a>>((item_gobj).user_data())).xBC0_ref(),
+                                6_u32,
+                                (ef_id as u32),
+                                jobj,
+                                &[
+                                    VarArg::Int(Handle::addr(sp74)),
+                                    VarArg::Int(Handle::addr((item).facing_dir_ref())),
+                                    VarArg::Int(Handle::addr(sp64)),
+                                ],
+                            );
+                            return;
+                        }
+                        temp_f1 = (item).facing_dir();
+                        if (item).facing_dir() < 0.0 {
+                            var_f0 = 3.141592653589793;
+                        } else {
+                            var_f0 = 0.0;
+                        }
+                        sp60.set(fp::frsp(var_f0));
+                        if arg5 == 1_i32 {
+                            let _ = fns::efSync_Spawn(
+                                ctx,
+                                ef_id,
+                                item_gobj,
+                                &[
+                                    VarArg::Int(Handle::addr(sp68)),
+                                    VarArg::Int(Handle::addr(sp60)),
+                                ],
+                            );
+                            return;
+                        }
+                        jobj = fns::it_80272CC0(ctx, item_gobj, arg2);
+                        fns::efAsync_Spawn(
+                            ctx,
+                            item_gobj,
+                            (Handle::cast::<Item<'a>>((item_gobj).user_data())).xBC0_ref(),
+                            5_u32,
+                            (ef_id as u32),
+                            jobj,
+                            &[
+                                VarArg::Int(Handle::addr(sp74)),
+                                VarArg::Int(Handle::addr(sp60)),
+                            ],
+                        );
+                        return;
+                    }
+                    sp5C.set(0.0);
+                    if arg5 == 1_i32 {
+                        let _ = fns::efSync_Spawn(
+                            ctx,
+                            ef_id,
+                            item_gobj,
+                            &[
+                                VarArg::Int(Handle::addr(sp68)),
+                                VarArg::Int(Handle::addr(sp5C)),
+                            ],
+                        );
+                        return;
+                    }
+                    jobj = fns::it_80272CC0(ctx, item_gobj, arg2);
+                    fns::efAsync_Spawn(
+                        ctx,
+                        item_gobj,
+                        (Handle::cast::<Item<'a>>((item_gobj).user_data())).xBC0_ref(),
+                        5_u32,
+                        (ef_id as u32),
+                        jobj,
+                        &[
+                            VarArg::Int(Handle::addr(sp74)),
+                            VarArg::Int(Handle::addr(sp5C)),
+                        ],
+                    );
+                    return;
+                }
+                jobj = fns::it_80272CC0(ctx, item_gobj, arg2);
+                fns::efAsync_Spawn(
+                    ctx,
+                    item_gobj,
+                    (Handle::cast::<Item<'a>>((item_gobj).user_data())).xBC0_ref(),
+                    8_u32,
+                    2_u32,
+                    jobj,
+                    &[VarArg::Int(Handle::addr(sp74))],
+                );
+                return;
+            }
+            jobj = fns::it_80272CC0(ctx, item_gobj, arg2);
+            fns::efAsync_Spawn(
+                ctx,
+                item_gobj,
+                (Handle::cast::<Item<'a>>((item_gobj).user_data())).xBC0_ref(),
+                8_u32,
+                3_u32,
+                jobj,
+                &[VarArg::Int(Handle::addr(sp74))],
+            );
+            return;
+        }
+        jobj = fns::it_80272CC0(ctx, item_gobj, arg2);
+        fns::efAsync_Spawn(
+            ctx,
+            item_gobj,
+            (Handle::cast::<Item<'a>>((item_gobj).user_data())).xBC0_ref(),
+            8_u32,
+            4_u32,
+            jobj,
+            &[VarArg::Int(Handle::addr(sp74))],
+        );
+    }
+    return;
+}
+
+fn inl_it_80278800_rand_vec<'a>(ctx: &'a Ctx, out: Vec<'a>, v: Vec<'a>) {
+    let mut out = out;
+    let mut v = v;
+    let mut f: f64 = fns::HSD_Randf(ctx);
+    (out).set_x(fp::fmadds(
+        fp::fmuls(2.0, (v).x()),
+        (fp::fsubs(f, 0.5)),
+        (out).x(),
+    ));
+    f = fns::HSD_Randf(ctx);
+    (out).set_y(fp::fmadds(
+        fp::fmuls(2.0, (v).y()),
+        (fp::fsubs(f, 0.5)),
+        (out).y(),
+    ));
+    f = fns::HSD_Randf(ctx);
+    (out).set_z(fp::fmadds(
+        fp::fmuls(2.0, (v).z()),
+        (fp::fsubs(f, 0.5)),
+        (out).z(),
+    ));
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -102,6 +709,22 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
             Ret::put(it_802787B4(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80278800,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5, a6): (
+                HSD_GObj<'_>,
+                i32,
+                i32,
+                Vec<'_>,
+                Vec<'_>,
+                i32,
+                Single,
+            ) = Args::take_all(ctx);
+            Ret::put(it_80278800(ctx, a0, a1, a2, a3, a4, a5, a6.0), ctx);
         },
         Returns::Nothing,
     );

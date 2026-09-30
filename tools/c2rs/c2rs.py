@@ -225,6 +225,9 @@ class FnCtx:
         self.temps = 0
         self.ret = None
         self.sret = False
+        # Goto labels by name: (label statement offset, Rust block label, Rust loop label).
+        self.goto_labels = {}
+        self.hoisted = set()  # locals declared ahead of the blocks that stand in for gotos
 
     def fresh(self, base):
         name = base
@@ -617,9 +620,10 @@ class Translator:
         for start, end in self.u.regions(str(ext.start.file)):
             if start <= ext.end.line and ext.start.line <= end:
                 raise Unsupported("MWCC-only code")
+        self.check_gotos(node)
         for n in node.walk_preorder():
-            if n.kind == CK.GOTO_STMT or n.kind == CK.INDIRECT_GOTO_STMT:
-                raise Unsupported("goto")
+            if n.kind == CK.INDIRECT_GOTO_STMT:
+                raise Unsupported("computed goto")
             if n.kind == CK.ASM_STMT or n.kind == CK.MS_ASM_STMT:
                 raise Unsupported("inline asm")
             if n.kind == CK.UNARY_OPERATOR and _lib.clang_getCursorUnaryOperatorKind(n) == 5:
@@ -630,6 +634,31 @@ class Translator:
                     self.f.escaping.add(vkey(r))
             if n.kind == CK.VAR_DECL and n.storage_class == ci.StorageClass.STATIC:
                 raise Unsupported("static local")
+
+    def check_gotos(self, body):
+        """Gotos become breaks out of blocks and continues of loops, which only reach labels
+        in a statement list around the goto."""
+        parent = {}
+
+        def walk(n, up):
+            for k in n.get_children():
+                parent[k.hash] = n
+                walk(k, n)
+        walk(body, None)
+        labels = {n.spelling: n for n in body.walk_preorder() if n.kind == CK.LABEL_STMT}
+        for g in body.walk_preorder():
+            if g.kind != CK.GOTO_STMT:
+                continue
+            ref = [k for k in g.get_children() if k.kind == CK.LABEL_REF]
+            lab = labels.get(ref[0].spelling) if ref else None
+            if lab is None:
+                raise Unsupported("goto without its label")
+            around = parent.get(lab.hash)
+            up = parent.get(g.hash)
+            while up is not None and (around is None or up.hash != around.hash):
+                up = parent.get(up.hash)
+            if up is None or around.kind != CK.COMPOUND_STMT:
+                raise Unsupported("goto into a block")
 
     # Stack slots.
 
@@ -645,9 +674,89 @@ class Translator:
     # Statements.
 
     def stmts(self, nodes):
+        if any(n.kind == CK.LABEL_STMT for n in nodes):
+            return self.goto_region(list(nodes))
         out = []
         for n in nodes:
             out += self.stmt(n)
+        return out
+
+    def goto_region(self, nodes):
+        """A statement list with goto labels: each label's forward gotos break out of a block
+        that ends at it, and its backward gotos continue a loop that starts at it. Locals it
+        declares are declared first, since those blocks would scope them."""
+        out = self.hoist(nodes)
+        spans = []  # (start, end, kind, label): blocks [start, end) and loops [start, end)
+        for k, n in enumerate(nodes):
+            if n.kind != CK.LABEL_STMT:
+                continue
+            at = n.extent.start.offset
+            fwd = back = None
+            for i, m in enumerate(nodes):
+                for g in m.walk_preorder():
+                    if g.kind == CK.GOTO_STMT and any(r.spelling == n.spelling for r in g.get_children()
+                                                      if r.kind == CK.LABEL_REF):
+                        if g.extent.start.offset < at:
+                            fwd = i if fwd is None else min(fwd, i)
+                        else:
+                            back = i if back is None else max(back, i)
+            name = re.sub(r"\W", "_", n.spelling)
+            blk = f"'goto_{name}" if fwd is not None else None
+            lp = f"'back_{name}" if back is not None else None
+            self.f.goto_labels[n.spelling] = (at, blk, lp)
+            if fwd is not None:
+                spans.append((0, k, "block", blk))
+            if back is not None:
+                spans.append((k, len(nodes), "loop", lp))
+        for a in spans:
+            for b in spans:
+                if a is not b and a[0] < b[0] < a[1] < b[1]:
+                    raise Unsupported("gotos across each other")
+        # Outer spans first where they start together: longer ones enclose shorter ones.
+        spans.sort(key=lambda x: (x[0], -x[1]))
+        return out + self.emit_spans(nodes, 0, len(nodes), spans)
+
+    def emit_spans(self, nodes, lo, hi, spans):
+        out, i = [], lo
+        while i < hi:
+            inner = [sp for sp in spans if sp[0] == i and sp[1] <= hi]
+            if inner:
+                sp = inner[0]
+                rest = [x for x in spans if x is not sp]
+                body = self.emit_spans(nodes, sp[0], sp[1], rest)
+                if sp[2] == "block":
+                    out += [f"{sp[3]}: {{"] + self.indent(body) + ["}"]
+                else:
+                    out += [f"{sp[3]}: loop {{"] + self.indent(body + ["break;"]) + ["}"]
+                i = sp[1]
+                continue
+            n = nodes[i]
+            while n.kind == CK.LABEL_STMT:
+                n = children(n)[0]
+            out += self.stmt(n)
+            i += 1
+        return out
+
+    def hoist(self, nodes):
+        """Declares a statement list's register locals ahead of it, zeroed; their declarations
+        then assign."""
+        out = []
+        for n in nodes:
+            while n.kind == CK.LABEL_STMT:
+                n = children(n)[0]
+            if n.kind != CK.DECL_STMT:
+                continue
+            for d in children(n):
+                if d.kind != CK.VAR_DECL or d.storage_class in (ci.StorageClass.STATIC, ci.StorageClass.EXTERN):
+                    continue
+                t = self.u.ctype(d.type)
+                key = vkey(d)
+                if t["k"] in ("rec", "arr") or key in self.f.escaping:
+                    continue
+                rname = self.f.fresh(self.safe(d.spelling or "anon"))
+                self.f.locals[key] = (rname, t, "reg")
+                self.f.hoisted.add(key)
+                out.append(f"let mut {ident(rname)}: {self.u.rust_value_ty(t)} = {self.zero(t)};")
         return out
 
     def block(self, node):
@@ -725,8 +834,16 @@ class Translator:
             return self.switch(n)
         if k == CK.NULL_STMT:
             return []
-        if k in (CK.LABEL_STMT, CK.GOTO_STMT):
-            raise Unsupported("goto")
+        if k == CK.GOTO_STMT:
+            ref = [r for r in n.get_children() if r.kind == CK.LABEL_REF]
+            at, blk, lp = self.f.goto_labels.get(ref[0].spelling if ref else "", (None, None, None))
+            if at is None:
+                raise Unsupported("goto without its label")
+            if n.extent.start.offset < at:
+                return [f"break {blk};"]
+            return [f"continue {lp};"]
+        if k == CK.LABEL_STMT:
+            raise Unsupported("label outside a statement list")
         if k in (CK.CASE_STMT, CK.DEFAULT_STMT):
             raise Unsupported("case label outside a switch body")
         # An expression statement.
@@ -849,6 +966,16 @@ class Translator:
         key = vkey(d)
         base = self.safe(d.spelling or "anon")
         init = var_init(d)
+        if key in self.f.hoisted:
+            if init is None:
+                return []
+            if init.kind == CK.INIT_LIST_EXPR:
+                kids = children(init)
+                if len(kids) != 1:
+                    raise Unsupported("scalar init list")
+                init = kids[0]
+            rname = self.f.locals[key][0]
+            return [f"{ident(rname)} = {self.convert(self.expr(init), t).code};"]
         on_stack = t["k"] in ("rec", "arr") or key in self.f.escaping
         if on_stack:
             slot = self.stack_slot(base, t)

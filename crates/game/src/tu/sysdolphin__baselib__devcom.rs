@@ -35,6 +35,75 @@ pub fn HSD_DevComIsBusy<'a>(ctx: &'a Ctx, idx: i32) -> i32 {
     ) as i32);
 }
 
+pub fn HSD_DevComUnlink<'a>(ctx: &'a Ctx, dc: HSD_DevCom<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut dc = dc;
+    let mut curr: HSD_DevCom<'a> = null(ctx);
+    let mut enabled: i32 = 0;
+    let mut i: i32 = 0;
+    'goto_cleanup: {
+        enabled = fns::OSDisableInterrupts(ctx);
+        i = ((dc).dcReq() & 3_i32);
+        if Handle::addr(
+            statics::sysdolphin__baselib__devcom::devComStatus(ctx)
+                .at(i)
+                .get(),
+        ) == Handle::addr(dc)
+        {
+            statics::sysdolphin__baselib__devcom::devComStatus(ctx)
+                .at(i)
+                .set((dc).next());
+            if Handle::addr(
+                statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330(ctx)
+                    .at(i)
+                    .get(),
+            ) == Handle::addr(dc)
+            {
+                statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330(ctx)
+                    .at(i)
+                    .set(null::<HSD_DevCom<'a>>(ctx));
+            }
+            break 'goto_cleanup;
+        }
+        {
+            curr = statics::sysdolphin__baselib__devcom::devComStatus(ctx)
+                .at(i)
+                .get();
+            'l1: while !Handle::is_null((curr).next()) {
+                'c2: {
+                    if Handle::addr((curr).next()) == Handle::addr(dc) {
+                        (curr).set_next((dc).next());
+                        if Handle::addr(
+                            statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330(ctx)
+                                .at(i)
+                                .get(),
+                        ) == Handle::addr(dc)
+                        {
+                            statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330(ctx)
+                                .at(i)
+                                .set(curr);
+                        }
+                        let _ = fns::OSRestoreInterrupts(ctx, enabled);
+                        return;
+                    }
+                }
+                curr = (curr).next();
+            }
+        }
+        (if ((0_i32) != 0) {
+            ({ () })
+        } else {
+            fns::__assert(
+                ctx,
+                cstr(ctx, 0x804083c0),
+                (73_i32 as u32),
+                cstr(ctx, 0x804083c0),
+            )
+        });
+    }
+    let _ = fns::OSRestoreInterrupts(ctx, enabled);
+}
+
 pub fn HSD_DevComStdCallback<'a>(ctx: &'a Ctx, request: ARQRequest<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut request = request;
@@ -1188,6 +1257,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(HSD_DevComIsBusy(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x8038ea68,
+        |ctx| {
+            let (a0,): (HSD_DevCom<'_>,) = Args::take_all(ctx);
+            Ret::put(HSD_DevComUnlink(ctx, a0), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x8038eb50,

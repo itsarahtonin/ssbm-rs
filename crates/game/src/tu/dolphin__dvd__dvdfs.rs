@@ -48,6 +48,192 @@ pub fn __DVDFSInit<'a>(ctx: &'a Ctx) {
     }
 }
 
+pub fn DVDConvertPathToEntrynum<'a>(ctx: &'a Ctx, pathPtr: Val<'a, i8>) -> i32 {
+    let __frame = ctx.stack_frame(0x48);
+    let mut pathPtr = pathPtr;
+    let mut ptr_: Val<'a, i8> = null(ctx);
+    let mut stringPtr: Val<'a, i8> = null(ctx);
+    let mut isDir: i32 = 0;
+    let mut length: u32 = 0;
+    let mut dirLookAt: u32 = 0;
+    let mut i: u32 = 0;
+    let mut origPathPtr: Val<'a, i8> = pathPtr;
+    let mut extentionStart: Val<'a, i8> = null(ctx);
+    let mut illegal: i32 = 0;
+    let mut extention: i32 = 0;
+    dirLookAt = statics::dolphin__dvd__dvdfs::currentDirectory(ctx).get();
+    'l1: loop {
+        'c2: {
+            'goto_next_hier: {
+                if ((pathPtr).get() as i32) == 0_i32 {
+                    return (dirLookAt as i32);
+                } else if ((pathPtr).get() as i32) == 47_i32 {
+                    dirLookAt = (0_i32 as u32);
+                    pathPtr = Handle::add(pathPtr, 1);
+                    break 'c2;
+                } else if ((pathPtr).get() as i32) == 46_i32 {
+                    if ((Handle::add(pathPtr, 1_i32)).get() as i32) == 46_i32 {
+                        if ((Handle::add(pathPtr, 2_i32)).get() as i32) == 47_i32 {
+                            dirLookAt = ((Handle::add(
+                                statics::dolphin__dvd__dvdfs::FstStart(ctx).get(),
+                                (dirLookAt as i32),
+                            ))
+                            .parentOrPosition());
+                            pathPtr = Handle::add(pathPtr, 3_i32);
+                            break 'c2;
+                        } else if ((Handle::add(pathPtr, 2_i32)).get() as i32) == 0_i32 {
+                            return (((Handle::add(
+                                statics::dolphin__dvd__dvdfs::FstStart(ctx).get(),
+                                (dirLookAt as i32),
+                            ))
+                            .parentOrPosition()) as i32);
+                        }
+                    } else if ((Handle::add(pathPtr, 1_i32)).get() as i32) == 47_i32 {
+                        pathPtr = Handle::add(pathPtr, 2_i32);
+                        break 'c2;
+                    } else if ((Handle::add(pathPtr, 1_i32)).get() as i32) == 0_i32 {
+                        return (dirLookAt as i32);
+                    }
+                }
+                if fns::__DVDLongFileNameFlag(ctx).get() == (0_i32 as u32) {
+                    extention = 0_i32;
+                    illegal = 0_i32;
+                    {
+                        ptr_ = pathPtr;
+                        'l3: while (((ptr_).get() as i32) != 0_i32)
+                            && (((ptr_).get() as i32) != 47_i32)
+                        {
+                            'c4: {
+                                if ((ptr_).get() as i32) == 46_i32 {
+                                    if (((Handle::addr(ptr_).wrapping_sub(Handle::addr(pathPtr))
+                                        as i32)
+                                        / 1)
+                                        > 8_i32)
+                                        || (extention == 1_i32)
+                                    {
+                                        illegal = 1_i32;
+                                        break 'l3;
+                                    }
+                                    extention = 1_i32;
+                                    extentionStart = Handle::add(ptr_, 1_i32);
+                                } else if ((ptr_).get() as i32) == 32_i32 {
+                                    illegal = 1_i32;
+                                }
+                            }
+                            ptr_ = Handle::add(ptr_, 1);
+                        }
+                    }
+                    if (extention == 1_i32)
+                        && (((Handle::addr(ptr_).wrapping_sub(Handle::addr(extentionStart))
+                            as i32)
+                            / 1)
+                            > 3_i32)
+                    {
+                        illegal = 1_i32;
+                    }
+                    if (illegal != 0) {
+                        fns::OSPanic(
+                            ctx,
+                            cstr(ctx, 0x80337937),
+                            0x178_i32,
+                            cstr(ctx, 0x80400d80),
+                            &[VarArg::Int(Handle::addr(origPathPtr))],
+                        );
+                    }
+                } else {
+                    {
+                        ptr_ = pathPtr;
+                        'l5: while (((ptr_).get() as i32) != 0_i32)
+                            && (((ptr_).get() as i32) != 47_i32)
+                        {
+                            'c6: {}
+                            ptr_ = Handle::add(ptr_, 1);
+                        }
+                    }
+                }
+                isDir = (if ((ptr_).get() as i32) == 0_i32 {
+                    0_i32
+                } else {
+                    1_i32
+                });
+                length =
+                    (((Handle::addr(ptr_).wrapping_sub(Handle::addr(pathPtr)) as i32) / 1) as u32);
+                ptr_ = pathPtr;
+                {
+                    i = dirLookAt.wrapping_add((1_i32 as u32));
+                    'l7: while i
+                        < ((Handle::add(
+                            statics::dolphin__dvd__dvdfs::FstStart(ctx).get(),
+                            (dirLookAt as i32),
+                        ))
+                        .nextEntryOrLength())
+                    {
+                        'c8: {
+                            if ((if ((Handle::add(
+                                statics::dolphin__dvd__dvdfs::FstStart(ctx).get(),
+                                (i as i32),
+                            ))
+                            .isDirAndStringOff()
+                                & 0xff000000_u32)
+                                == (0_i32 as u32)
+                            {
+                                0_i32
+                            } else {
+                                1_i32
+                            }) == 0_i32)
+                                && (isDir == 1_i32)
+                            {
+                                break 'c8;
+                            }
+                            stringPtr = Handle::add(
+                                statics::dolphin__dvd__dvdfs::FstStringStart(ctx).get(),
+                                (((Handle::add(
+                                    statics::dolphin__dvd__dvdfs::FstStart(ctx).get(),
+                                    (i as i32),
+                                ))
+                                .isDirAndStringOff()
+                                    & (!0xff000000_u32)) as i32),
+                            );
+                            if inl_isSame_unfused(ctx, ptr_, stringPtr) == 1_i32 {
+                                break 'goto_next_hier;
+                            }
+                        }
+                        i = (if ((if ((Handle::add(
+                            statics::dolphin__dvd__dvdfs::FstStart(ctx).get(),
+                            (i as i32),
+                        ))
+                        .isDirAndStringOff()
+                            & 0xff000000_u32)
+                            == (0_i32 as u32)
+                        {
+                            0_i32
+                        } else {
+                            1_i32
+                        }) != 0)
+                        {
+                            ((Handle::add(
+                                statics::dolphin__dvd__dvdfs::FstStart(ctx).get(),
+                                (i as i32),
+                            ))
+                            .nextEntryOrLength())
+                        } else {
+                            (i.wrapping_add((1_i32 as u32)))
+                        });
+                    }
+                }
+                return 1_i32.wrapping_neg();
+            }
+            if !(isDir != 0) {
+                return (i as i32);
+            }
+            dirLookAt = i;
+            pathPtr = Handle::add(pathPtr, (length.wrapping_add((1_i32 as u32)) as i32));
+        }
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 pub fn DVDFastOpen<'a>(ctx: &'a Ctx, entrynum: i32, fileInfo: DVDFileInfo<'a>) -> i32 {
     let mut entrynum = entrynum;
     let mut fileInfo = fileInfo;
@@ -151,6 +337,38 @@ pub fn cbForReadAsync<'a>(ctx: &'a Ctx, result: i32, block: DVDCommandBlock<'a>)
     }
 }
 
+fn inl_isSame_unfused<'a>(ctx: &'a Ctx, path: Val<'a, i8>, string: Val<'a, i8>) -> i32 {
+    let mut path = path;
+    let mut string = string;
+    'l1: while ((string).get() as i32) != 0_i32 {
+        'c2: {
+            if fns::tolower(
+                ctx,
+                (({
+                    let __t1 = path;
+                    path = Handle::add(path, 1);
+                    __t1
+                })
+                .get() as i32),
+            ) != fns::tolower(
+                ctx,
+                (({
+                    let __t2 = string;
+                    string = Handle::add(string, 1);
+                    __t2
+                })
+                .get() as i32),
+            ) {
+                return 0_i32;
+            }
+        }
+    }
+    if (((path).get() as i32) == 47_i32) || (((path).get() as i32) == 0_i32) {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -159,6 +377,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(__DVDFSInit(ctx), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8033796c,
+        |ctx| {
+            let (a0,): (Val<'_, i8>,) = Args::take_all(ctx);
+            Ret::put(DVDConvertPathToEntrynum(ctx, a0), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x80337c60,

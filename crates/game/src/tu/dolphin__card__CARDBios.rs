@@ -67,6 +67,68 @@ pub fn __CARDExtHandler<'a>(ctx: &'a Ctx, chan: i32, context: OSContext<'a>) {
     }
 }
 
+pub fn __CARDExiHandler<'a>(ctx: &'a Ctx, chan: i32, context: OSContext<'a>) {
+    let __frame = ctx.stack_frame(0x28);
+    let status: Val<'a, u8> = frame_at(ctx, &__frame, 0x0);
+    let mut chan = chan;
+    let mut context = context;
+    let mut card: CARDControl<'a> = null(ctx);
+    let mut callback: FnPtr<'a> = null(ctx);
+    let mut result: i32 = 0;
+    'goto_fatal: {
+        'goto_error: {
+            card = fns::__CARDBlock(ctx).get(chan);
+            fns::OSCancelAlarm(ctx, (card).alarm());
+            if !((card).attached() != 0) {
+                return;
+            }
+            if !(fns::EXILock(ctx, chan, (0_i32 as u32), null::<FnPtr<'a>>(ctx)) != 0) {
+                result = (128_i32.wrapping_neg());
+                break 'goto_fatal;
+            }
+            if (({
+                let __t1 = fns::__CARDReadStatus(ctx, chan, status);
+                result = __t1;
+                __t1
+            }) < 0_i32)
+                || (({
+                    let __t2 = fns::__CARDClearStatus(ctx, chan);
+                    result = __t2;
+                    __t2
+                }) < 0_i32)
+            {
+                break 'goto_error;
+            }
+            if (({
+                let __t3 = (if (((status.get() as i32) & 24_i32) != 0) {
+                    (5_i32.wrapping_neg())
+                } else {
+                    0_i32
+                });
+                result = __t3;
+                __t3
+            }) == (5_i32.wrapping_neg()))
+                && ({
+                    (card).set_retry((card).retry().wrapping_sub(1));
+                    (card).retry()
+                } > 0_i32)
+            {
+                result = statics::dolphin__card__CARDBios::Retry(ctx, chan);
+                if result >= 0_i32 {
+                    return;
+                }
+                break 'goto_fatal;
+            }
+        }
+        let _ = fns::EXIUnlock(ctx, chan);
+    }
+    callback = (card).exiCallback();
+    if !Handle::is_null(callback) {
+        (card).set_exiCallback(null::<FnPtr<'a>>(ctx));
+        callback.call::<_, ()>((chan, result));
+    }
+}
+
 pub fn __CARDTxHandler<'a>(ctx: &'a Ctx, chan: i32, context: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x28);
     let mut chan = chan;
@@ -854,6 +916,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (i32, OSContext<'_>) = Args::take_all(ctx);
             Ret::put(__CARDExtHandler(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80352380,
+        |ctx| {
+            let (a0, a1): (i32, OSContext<'_>) = Args::take_all(ctx);
+            Ret::put(__CARDExiHandler(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );

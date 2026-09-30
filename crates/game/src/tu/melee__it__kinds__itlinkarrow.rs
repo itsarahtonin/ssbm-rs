@@ -921,6 +921,74 @@ pub fn itLinkArrow_Logic98_DmgDealt<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32
     return 1_i32;
 }
 
+pub fn itLinkArrow_Logic98_HitShield<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x60);
+    let pad: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x1c);
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = null(ctx);
+    'goto_end: {
+        ip = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+        'l1: loop {
+            'c2: {}
+            if !(0_i32 != 0) {
+                break 'l1;
+            }
+        }
+        if !Handle::is_null((ip).xCF4_fighterGObjUnk()) {
+            if fns::it_80272D40(ctx, (ip).xCF4_fighterGObjUnk()) == 0_i32 {
+                let mut temp_f31: f64 = 0.0;
+                inl_itLinkArrow_Logic98_HitShield_inline(ctx, gobj, scale);
+                (ip).xDD4_itemVar()
+                    .linkarrow()
+                    .set_xC4((ip).xCF4_fighterGObjUnk());
+                temp_f31 = fns::ftLib_GetModelScale(ctx, (ip).xDD4_itemVar().linkarrow().xC4());
+                (ip).xDD4_itemVar().linkarrow().set_xD4(fp::fmuls(
+                    temp_f31,
+                    fns::ftCo_80094098(
+                        ctx,
+                        (ip).xDD4_itemVar().linkarrow().xC4(),
+                        (ip).xDD4_itemVar().linkarrow().xC8_ref(),
+                    ),
+                ));
+                {
+                    let mut half_x: f64 = fp::fmuls(
+                        0.5,
+                        (fp::fadds((ip).pos().x(), (ip).xDD4_itemVar().linkarrow().x18().x())),
+                    );
+                    let mut half_y: f64 = fp::fmuls(
+                        0.5,
+                        (fp::fadds((ip).pos().y(), (ip).xDD4_itemVar().linkarrow().x18().y())),
+                    );
+                    (ip).xDD4_itemVar().linkarrow().set_xD8(fns::atan2f(
+                        ctx,
+                        fp::fsubs(half_y, (ip).xDD4_itemVar().linkarrow().xCC()),
+                        fp::fsubs(half_x, (ip).xDD4_itemVar().linkarrow().xC8()),
+                    ));
+                }
+                (ip).pos().set_x(fp::fmadds(
+                    (ip).xDD4_itemVar().linkarrow().xD4(),
+                    fns::cosf(ctx, (ip).xDD4_itemVar().linkarrow().xD8()),
+                    (ip).xDD4_itemVar().linkarrow().xC8(),
+                ));
+                (ip).pos().set_y(fp::fmadds(
+                    (ip).xDD4_itemVar().linkarrow().xD4(),
+                    fns::sinf(ctx, (ip).xDD4_itemVar().linkarrow().xD8()),
+                    (ip).xDD4_itemVar().linkarrow().xCC(),
+                ));
+                (ip).pos().set_z(0.0);
+                break 'goto_end;
+            }
+            return 1_i32;
+        }
+        return 1_i32;
+    }
+    return 0_i32;
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 pub fn itLinkArrow_Logic98_Clanked<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
     let mut gobj = gobj;
@@ -1721,6 +1789,75 @@ fn inl_itLinkarrow_UnkMotion4_Coll_inline_unfused<'a>(
     return 0_i32;
 }
 
+fn inl_HSD_JObjSetScale<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
+    let mut jobj = jobj;
+    let mut scale = scale;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f6a38),
+            (0x17e_i32 as u32),
+            cstr(ctx, 0x803f6a38),
+        )
+    });
+    (if !Handle::is_null((scale)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f6a38),
+            (0x17f_i32 as u32),
+            cstr(ctx, 0x803f6a38),
+        )
+    });
+    Handle::copy_from((jobj).scale(), (scale));
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_itResetVelocity<'a>(ctx: &'a Ctx, ip: Item<'a>) {
+    let mut ip = ip;
+    (ip).x40_vel().set_x({
+        let __t2 = {
+            let __t1 = 0.0;
+            (ip).x40_vel().set_z(__t1);
+            __t1
+        };
+        (ip).x40_vel().set_y(__t2);
+        __t2
+    });
+}
+
+fn inl_itLinkArrow_Logic98_HitShield_inline<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, scale: Vec<'a>) {
+    let mut gobj = gobj;
+    let mut scale = scale;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+    let mut attr: itLinkArrowAttributes<'a> =
+        Handle::cast::<itLinkArrowAttributes<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
+    let mut jobj: HSD_JObj<'a> = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, gobj)));
+    (scale).set_x({
+        let __t2 = {
+            let __t1 = (ip).xDD4_itemVar().linkarrow().xC0();
+            (scale).set_z(__t1);
+            __t1
+        };
+        (scale).set_y(__t2);
+        __t2
+    });
+    inl_HSD_JObjSetScale(ctx, jobj, scale);
+    fns::it_80275158(ctx, gobj, (attr).x18());
+    inl_itResetVelocity(ctx, ip);
+    fns::Item_80268E5C(ctx, gobj, 2_i32, (enums::ITEM_ANIM_UPDATE as i32));
+    fns::it_802A8330(ctx, gobj);
+}
+
 fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     let mut jobj = jobj;
     let mut y = y;
@@ -1971,6 +2108,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(itLinkArrow_Logic98_DmgDealt(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x802a9b08,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(itLinkArrow_Logic98_HitShield(ctx, a0), ctx);
         },
         Returns::Int,
     );

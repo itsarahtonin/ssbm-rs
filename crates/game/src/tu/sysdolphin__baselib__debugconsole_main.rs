@@ -2957,6 +2957,23 @@ fn inl_hsd_80396E40_get_x50_unfused<'a>(ctx: &'a Ctx) -> Addr<'a> {
     return statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x50();
 }
 
+fn inl_ps_set_initial_node_unfused<'a>(ctx: &'a Ctx, node: _ExcptNode<'a>) {
+    let mut node = node;
+    if !Handle::is_null(node) {
+        (node).set_next(null::<_ExcptNode<'a>>(ctx));
+        statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
+            .set_xD0(Handle::cast::<Addr<'a>>(node));
+        if !Handle::is_null((node).callback()) {
+            (node).callback().call::<_, ()>((node,));
+        }
+    }
+}
+
+fn inl_ps_node_child_unfused<'a>(ctx: &'a Ctx, node: PSNode<'a>) -> PSNode<'a> {
+    let mut node = node;
+    return (node).child();
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(

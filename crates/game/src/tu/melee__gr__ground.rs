@@ -3180,6 +3180,196 @@ pub fn Ground_801C4640<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) {
     fns::HSD_LObjSetupInit(ctx, fns::HSD_CObjGetCurrent(ctx));
 }
 
+pub fn Ground_801C466C<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x40);
+    let r28_carrier: Ground_801C466C_r28_carrier<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x4);
+    let mut i: i32 = 0;
+    let mut count: i32 = 0;
+    let mut temp_r3: HSD_GObj<'a> = null(ctx);
+    let mut temp_r3_2: HSD_LObj<'a> = null(ctx);
+    let mut var_r27_2: Ptr<'a, LightList<'a>> = null(ctx);
+    let mut var_r27: HSD_LObj<'a> = null(ctx);
+    let mut var_r26_2: HSD_LObj<'a> = null(ctx);
+    let mut var_r3: Ptr<'a, LightList<'a>> = null(ctx);
+    let mut var_f31: f64 = 0.0;
+    let mut temp_r28: i32 = 0;
+    let mut sp10p: Vec<'a> = null(ctx);
+    let mut callbacks: StageCallbacks<'a> = null(ctx);
+    let mut archive: UnkArchiveStruct<'a> = null(ctx);
+    let mut selected: Ptr<'a, LightList<'a>> = null(ctx);
+    'goto_light_selected: {
+        archive = fns::grDatFiles_GetArchive(ctx);
+        callbacks = (statics::melee__gr__ground::stage_datas(ctx)
+            .at(fns::stage_info(ctx).grkind())
+            .get())
+        .callbacks();
+        count = ((archive).unk4()).unkC();
+        archive = fns::grDatFiles_GetArchive(ctx);
+        {
+            i = 0_i32;
+            'l1: while i < count {
+                'c2: {
+                    if ((callbacks).x10().x0().flags_b0() as i32) == 1_i32 {
+                        archive = fns::grDatFiles_801C6330(ctx, i);
+                        selected = statics::melee__gr__ground::Ground_801C20E0(
+                            ctx,
+                            archive,
+                            (Handle::add(((archive).unk4()).unk8(), i)).x18(),
+                        );
+                        break 'goto_light_selected;
+                    }
+                    callbacks = Handle::add(callbacks, 1);
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+        selected = null::<Ptr<'a, LightList<'a>>>(ctx);
+    }
+    if Handle::is_null(
+        ({
+            let __t1 = selected;
+            r28_carrier.set_lights(__t1);
+            __t1
+        }),
+    ) {
+        r28_carrier.set_lights(statics::melee__gr__ground::Ground_803E06C8(ctx).at(0));
+    }
+    temp_r3 = fns::GObj_Create(ctx, (13_i32 as u16), (3_i32 as u8), (0_i32 as u8));
+    if Handle::is_null(temp_r3) {
+        fns::OSReport(
+            ctx,
+            cstr(ctx, 0x803e06d4),
+            &[
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803b7d80))),
+                VarArg::Int(0xeaf_i32 as u32),
+            ],
+        );
+        'l3: loop {
+            'c4: {}
+        }
+    }
+    temp_r3_2 = fns::lb_80011AC4(ctx, r28_carrier.lights());
+    if Handle::is_null(temp_r3_2) {
+        fns::OSReport(
+            ctx,
+            cstr(ctx, 0x803e06f0),
+            &[
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803b7d80))),
+                VarArg::Int(0xeb1_i32 as u32),
+            ],
+        );
+        'l5: loop {
+            'c6: {}
+        }
+    }
+    fns::HSD_GObjObject_80390A70(
+        ctx,
+        temp_r3,
+        (fns::HSD_GObj_LightKind(ctx).get() as u8),
+        Handle::cast::<Addr<'a>>(temp_r3_2),
+    );
+    fns::GObj_SetupGXLink(
+        ctx,
+        temp_r3,
+        fnptr(ctx, 0x801c4640),
+        (0_i32 as u8),
+        (0_i32 as u32),
+    );
+    var_r27 = temp_r3_2;
+    if !Handle::is_null(fns::stage_info(ctx).param()) {
+        var_f31 = (fns::stage_info(ctx).param()).y();
+    } else {
+        var_f31 = 1.0;
+    }
+    sp10p = sp10;
+    'l7: while !Handle::is_null(var_r27) {
+        'c8: {
+            if fns::HSD_LObjGetPosition(ctx, var_r27, sp10) != 0_i32 {
+                sp10.set_x(fp::fmuls(sp10.x(), var_f31));
+                sp10.set_y(fp::fmuls(sp10.y(), var_f31));
+                sp10.set_z(fp::fmuls(sp10.z(), var_f31));
+                fns::HSD_LObjSetPosition(ctx, var_r27, sp10p);
+            }
+            if fns::HSD_LObjGetInterest(ctx, var_r27, sp10) != 0_i32 {
+                sp10.set_x(fp::fmuls(sp10.x(), var_f31));
+                sp10.set_y(fp::fmuls(sp10.y(), var_f31));
+                sp10.set_z(fp::fmuls(sp10.z(), var_f31));
+                fns::HSD_LObjSetInterest(ctx, var_r27, sp10p);
+            }
+            if Handle::is_null(var_r27) {
+                var_r27 = null::<HSD_LObj<'a>>(ctx);
+            } else {
+                var_r27 = (var_r27).next();
+            }
+        }
+    }
+    fns::HSD_LObjReqAnimAll(ctx, temp_r3_2, 0.0);
+    fns::HSD_ForeachAnim(
+        ctx,
+        Handle::cast::<Addr<'a>>(temp_r3_2),
+        (enums::LOBJ_TYPE as i32),
+        (enums::ALL_TYPE_MASK as i32),
+        Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036530c)),
+        (enums::AOBJ_ARG_AF as i32),
+        &[VarArg::Float(1.0)],
+    );
+    var_r27_2 = r28_carrier.lights();
+    var_r26_2 = temp_r3_2;
+    if !Handle::is_null(((r28_carrier.lights()).get()).anims()) {
+        r28_carrier.set_callback(Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036401c)));
+        'l9: while !Handle::is_null(var_r26_2) {
+            'c10: {
+                if fns::Ground_801C43C4(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(
+                        (Handle::add(((var_r27_2).get()).anims(), 0_i32)).get(),
+                    ),
+                ) != 0_i32
+                {
+                    if !Handle::is_null((var_r26_2).aobj()) {
+                        fns::HSD_AObjSetFlags(
+                            ctx,
+                            (var_r26_2).aobj(),
+                            ((shl_i32(1_i32, (29_i32 as u32))) as u32),
+                        );
+                    }
+                    if !Handle::is_null((var_r26_2).position()) {
+                        fns::HSD_ForeachAnim(
+                            ctx,
+                            Handle::cast::<Addr<'a>>((var_r26_2).position()),
+                            (enums::WOBJ_TYPE as i32),
+                            (enums::ALL_TYPE_MASK as i32),
+                            r28_carrier.callback(),
+                            (enums::AOBJ_ARG_AU as i32),
+                            &[VarArg::Int((shl_i32(1_i32, (29_i32 as u32))) as u32)],
+                        );
+                    }
+                    if !Handle::is_null((var_r26_2).interest()) {
+                        fns::HSD_ForeachAnim(
+                            ctx,
+                            Handle::cast::<Addr<'a>>((var_r26_2).interest()),
+                            (enums::WOBJ_TYPE as i32),
+                            (enums::ALL_TYPE_MASK as i32),
+                            r28_carrier.callback(),
+                            (enums::AOBJ_ARG_AU as i32),
+                            &[VarArg::Int((shl_i32(1_i32, (29_i32 as u32))) as u32)],
+                        );
+                    }
+                }
+                if Handle::is_null(var_r26_2) {
+                    var_r26_2 = null::<HSD_LObj<'a>>(ctx);
+                } else {
+                    var_r26_2 = (var_r26_2).next();
+                }
+                var_r27_2 = Handle::add(var_r27_2, 1_i32);
+            }
+        }
+    }
+    fns::HSD_LObjAnimAll(ctx, temp_r3_2);
+    let _ = fns::HSD_GObj_SetupProc(ctx, temp_r3, fnptr(ctx, 0x801c461c), (0_i32 as u8));
+}
+
 pub fn Ground_801C498C<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
     let mut gobj: HSD_GObj<'a> = null(ctx);
     {
@@ -5039,6 +5229,13 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
             Ret::put(Ground_801C4640(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801c466c,
+        |ctx| {
+            Ret::put(Ground_801C466C(ctx), ctx);
         },
         Returns::Nothing,
     );

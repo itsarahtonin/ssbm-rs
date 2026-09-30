@@ -156,6 +156,60 @@ pub fn HSD_VIGetDrawDoneWaitingFlag<'a>(ctx: &'a Ctx) -> i32 {
     return (fns::HSD_VIData(ctx)).drawdone().waiting();
 }
 
+pub fn HSD_VIGetXFBDrawEnable<'a>(ctx: &'a Ctx) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let mut intr: i32 = 0;
+    let mut idx: i32 = 0;
+    'goto_ret: {
+        idx = 1_i32.wrapping_neg();
+        if inl_HSD_VIGetNbXFB_unfused(ctx) < 2_i32 {
+            break 'goto_ret;
+        }
+        intr = fns::OSDisableInterrupts(ctx);
+        if ({
+            let __t1 = inl_HSD_VISearchXFBByStatus_unfused(ctx, (enums::HSD_VI_XFB_DRAWING as i32));
+            idx = __t1;
+            __t1
+        }) == 1_i32.wrapping_neg()
+        {
+            if ({
+                let __t2 =
+                    inl_HSD_VISearchXFBByStatus_unfused(ctx, (enums::HSD_VI_XFB_FREE as i32));
+                idx = __t2;
+                __t2
+            }) != 1_i32.wrapping_neg()
+            {
+                (fns::HSD_VIData(ctx))
+                    .xfb()
+                    .get(idx)
+                    .set_status((enums::HSD_VI_XFB_DRAWING as i32));
+            }
+        }
+        let _ = fns::OSRestoreInterrupts(ctx, intr);
+    }
+    return idx;
+    #[allow(unreachable_code)]
+    return 0;
+}
+
+pub fn HSD_VICopyXFBAsync<'a>(ctx: &'a Ctx, rpass: i32) {
+    let __frame = ctx.stack_frame(0x38);
+    let mut rpass = rpass;
+    let mut idx: i32 = 0;
+    if inl_HSD_VIGetNbXFB_unfused(ctx) < 2_i32 {
+        return;
+    }
+    idx = inl_HSD_VIWaitXFBDrawEnable_unfused(ctx);
+    fns::HSD_VICopyEFB2XFBPtr(
+        ctx,
+        inl_HSD_VIGetVIStatus_unfused(ctx),
+        inl_HSD_VIGetXFBPtr_unfused(ctx, idx),
+        rpass,
+    );
+    inl_HSD_VISetXFBWaitDone_unfused(ctx, idx);
+    inl_HSD_VIGXSetDrawDone_unfused(ctx, idx);
+}
+
 pub fn HSD_VIDrawDoneXFB<'a>(ctx: &'a Ctx, idx: i32) {
     let __frame = ctx.stack_frame(0x18);
     let mut idx = idx;
@@ -357,6 +411,78 @@ fn inl_HSD_VIGetNbXFB_unfused<'a>(ctx: &'a Ctx) -> i32 {
     return fns::HSD_VIData(ctx).nb_xfb();
 }
 
+fn inl_HSD_VIWaitXFBDrawEnable_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    let mut idx: i32 = 0;
+    'goto_ret: {
+        idx = 1_i32.wrapping_neg();
+        if inl_HSD_VIGetNbXFB_unfused(ctx) < 2_i32 {
+            break 'goto_ret;
+        }
+        'l1: while ({
+            let __t1 = fns::HSD_VIGetXFBDrawEnable(ctx);
+            idx = __t1;
+            __t1
+        }) == 1_i32.wrapping_neg()
+        {
+            'c2: {
+                fns::VIWaitForRetrace(ctx);
+            }
+        }
+    }
+    return idx;
+    #[allow(unreachable_code)]
+    return 0;
+}
+
+fn inl_HSD_VIGetVIStatus_unfused<'a>(ctx: &'a Ctx) -> _HSD_VIStatus<'a> {
+    return fns::HSD_VIData(ctx).current().vi();
+}
+
+fn inl_HSD_VIGetXFBPtr_unfused<'a>(ctx: &'a Ctx, idx: i32) -> Addr<'a> {
+    let mut idx = idx;
+    return fns::HSD_VIData(ctx).xfb().get(idx).buffer();
+}
+
+fn inl_HSD_VISetXFBWaitDone_unfused<'a>(ctx: &'a Ctx, idx: i32) {
+    let mut idx = idx;
+    let mut intr: i32 = 0;
+    intr = fns::OSDisableInterrupts(ctx);
+    (if ((fns::HSD_VIData(ctx)).xfb().get(idx).status() as u32)
+        == ((enums::HSD_VI_XFB_DRAWING as i32) as u32)
+    {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80406d0c),
+            (0x11b_i32 as u32),
+            cstr(ctx, 0x80406d0c),
+        )
+    });
+    (fns::HSD_VIData(ctx))
+        .xfb()
+        .get(idx)
+        .set_status((enums::HSD_VI_XFB_WAITDONE as i32));
+    Handle::copy_from(
+        (fns::HSD_VIData(ctx)).xfb().get(idx).vi_all(),
+        (fns::HSD_VIData(ctx)).current(),
+    );
+    (fns::HSD_VIData(ctx)).current().set_chg_flag((0_i32 as u8));
+    let _ = fns::OSRestoreInterrupts(ctx, intr);
+}
+
+fn inl_HSD_VIGXSetDrawDone_unfused<'a>(ctx: &'a Ctx, arg: i32) {
+    let mut arg = arg;
+    'l1: while (statics::sysdolphin__baselib__video::HSD_VIGetDrawDoneWaitingFlag(ctx) != 0) {
+        'c2: {
+            fns::GXWaitDrawDone(ctx);
+        }
+    }
+    (fns::HSD_VIData(ctx)).drawdone().set_waiting(1_i32);
+    (fns::HSD_VIData(ctx)).drawdone().set_arg(arg);
+    fns::GXSetDrawDone(ctx);
+}
+
 fn inl_HSD_VIWaitXFBFlush_sub_unfused<'a>(ctx: &'a Ctx) -> i32 {
     let mut intr: i32 = 0;
     let mut val: i32 = 0;
@@ -380,15 +506,6 @@ fn inl_HSD_VIWaitXFBFlush_sub_unfused<'a>(ctx: &'a Ctx) -> i32 {
     });
     let _ = fns::OSRestoreInterrupts(ctx, intr);
     return val;
-}
-
-fn inl_HSD_VIGetVIStatus_unfused<'a>(ctx: &'a Ctx) -> _HSD_VIStatus<'a> {
-    return fns::HSD_VIData(ctx).current().vi();
-}
-
-fn inl_HSD_VIGetXFBPtr_unfused<'a>(ctx: &'a Ctx, idx: i32) -> Addr<'a> {
-    let mut idx = idx;
-    return fns::HSD_VIData(ctx).xfb().get(idx).buffer();
 }
 
 /// Registers this unit's ports.
@@ -446,6 +563,21 @@ pub fn register(ctx: &Ctx) {
             Ret::put(HSD_VIGetDrawDoneWaitingFlag(ctx), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x80375e70,
+        |ctx| {
+            Ret::put(HSD_VIGetXFBDrawEnable(ctx), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x803761c0,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(HSD_VICopyXFBAsync(ctx, a0), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x803762c4,

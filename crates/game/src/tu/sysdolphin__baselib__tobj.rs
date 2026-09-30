@@ -290,6 +290,37 @@ pub fn HSD_TObjTevLoadDesc<'a>(ctx: &'a Ctx, tevdesc: _HSD_TObjTevDesc<'a>) -> _
     return null::<_HSD_TObjTev<'a>>(ctx);
 }
 
+pub fn _HSD_TObjGetCurrentByType<'a>(
+    ctx: &'a Ctx,
+    from: HSD_TObj<'a>,
+    mapping: u32,
+) -> HSD_TObj<'a> {
+    let mut from = from;
+    let mut mapping = mapping;
+    let mut tp: HSD_TObj<'a> = null(ctx);
+    'goto_END: {
+        if Handle::is_null(from) {
+            tp = fns::tobj_head(ctx).get();
+        } else {
+            tp = (from).next();
+        }
+        {
+            'l1: while !Handle::is_null(tp) {
+                'c2: {
+                    if ((tp).flags() & ((15_i32) as u32)) == mapping {
+                        break 'goto_END;
+                    }
+                }
+                tp = (tp).next();
+            }
+        }
+        tp = null::<HSD_TObj<'a>>(ctx);
+    }
+    return tp;
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
 pub fn HSD_TexMapID2PTTexMtx<'a>(ctx: &'a Ctx, id: i32) -> u32 {
     let __frame = ctx.stack_frame(0x8);
     let mut id = id;
@@ -2599,6 +2630,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (_HSD_TObjTevDesc<'_>,) = Args::take_all(ctx);
             Ret::put(HSD_TObjTevLoadDesc(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8035ee68,
+        |ctx| {
+            let (a0, a1): (HSD_TObj<'_>, u32) = Args::take_all(ctx);
+            Ret::put(_HSD_TObjGetCurrentByType(ctx, a0, a1), ctx);
         },
         Returns::Int,
     );

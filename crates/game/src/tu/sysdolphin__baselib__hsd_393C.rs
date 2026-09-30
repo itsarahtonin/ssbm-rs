@@ -394,6 +394,89 @@ pub fn hsd_80394128<'a>(ctx: &'a Ctx, col: i32, row: i32) -> u8 {
     return result;
 }
 
+pub fn hsd_803941E8<'a>(ctx: &'a Ctx, xfb_out_ptr: Addr<'a>, xfb_cur_ptr: Addr<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x28);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut xfb_out_ptr = xfb_out_ptr;
+    let mut xfb_cur_ptr = xfb_cur_ptr;
+    let mut xfb_out: Val<'a, i32> = Handle::cast::<Val<'a, i32>>(xfb_out_ptr);
+    let mut xfb_cur: Val<'a, u32> = Handle::cast::<Val<'a, u32>>(xfb_cur_ptr);
+    let mut last_draw: i32 = 0;
+    let mut vi_base: Val<'a, u8> = null(ctx);
+    let mut nb_xfb: i32 = 0;
+    let mut i: i32 = 0;
+    let mut buf: u32 = 0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    fns::HSD_VIWaitXFBFlushNoYield(ctx);
+    last_draw = fns::HSD_VIGetXFBLastDrawDone(ctx);
+    if last_draw != 1_i32.wrapping_neg() {
+        (xfb_cur).set(Handle::addr(
+            fns::HSD_VIData(ctx).xfb().get(last_draw).buffer(),
+        ));
+    }
+    vi_base = Handle::cast::<Val<'a, u8>>(fns::HSD_VIData(ctx));
+    nb_xfb = fns::HSD_VIData(ctx).nb_xfb();
+    {
+        i = 0_i32;
+        'l3: while i < nb_xfb {
+            'c4: {
+                'goto_next1: {
+                    if i == last_draw {
+                        break 'goto_next1;
+                    }
+                    buf = (Handle::cast::<Val<'a, u32>>((Handle::add(vi_base, 88_i32)))).get();
+                    (Handle::add(xfb_out, 0_i32)).set((buf as i32));
+                    if buf != (0_i32 as u32) {
+                        break 'l3;
+                    }
+                }
+                vi_base = Handle::add(vi_base, 96_i32);
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    i = i.wrapping_add(1);
+    vi_base = Handle::add(
+        Handle::cast::<Val<'a, u8>>(fns::HSD_VIData(ctx)),
+        i.wrapping_mul(96_i32),
+    );
+    {
+        'l5: while i < nb_xfb {
+            'c6: {
+                'goto_next2: {
+                    if i == last_draw {
+                        break 'goto_next2;
+                    }
+                    buf = (Handle::cast::<Val<'a, u32>>((Handle::add(vi_base, 88_i32)))).get();
+                    (Handle::add(xfb_out, 1_i32)).set((buf as i32));
+                    if buf != (0_i32 as u32) {
+                        break 'l5;
+                    }
+                }
+                vi_base = Handle::add(vi_base, 96_i32);
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    if ((Handle::add(xfb_out, 0_i32)).get() as u32) == (0_i32 as u32) {
+        if !Handle::is_null(xfb_cur) {
+            (Handle::add(xfb_out, 0_i32)).set(((xfb_cur).get() as i32));
+            (xfb_cur).set((0_i32 as u32));
+        } else {
+            return 0_i32;
+        }
+    }
+    if ((Handle::add(xfb_out, 1_i32)).get() as u32) != (0_i32 as u32) {
+        return 2_i32;
+    }
+    return 1_i32;
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -456,6 +539,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (i32, i32) = Args::take_all(ctx);
             Ret::put(hsd_80394128(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x803941e8,
+        |ctx| {
+            let (a0, a1): (Addr<'_>, Addr<'_>) = Args::take_all(ctx);
+            Ret::put(hsd_803941E8(ctx, a0, a1), ctx);
         },
         Returns::Int,
     );

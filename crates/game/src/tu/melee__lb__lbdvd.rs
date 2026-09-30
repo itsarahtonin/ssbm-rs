@@ -123,6 +123,118 @@ pub fn lbDvd_80017700<'a>(ctx: &'a Ctx, arg0: i32) {
     }
 }
 
+pub fn lbDvd_80017740<'a>(
+    ctx: &'a Ctx,
+    r#type: i32,
+    entry_num: i32,
+    transient_heap: i32,
+    heap: i32,
+    size: u32,
+    load_state: i32,
+    load_score: i32,
+    arg7: u8,
+    effect_index: i32,
+) -> Addr<'a> {
+    let __frame = ctx.stack_frame(0x50);
+    let mut r#type = r#type;
+    let mut entry_num = entry_num;
+    let mut transient_heap = transient_heap;
+    let mut heap = heap;
+    let mut size = size;
+    let mut load_state = load_state;
+    let mut load_score = load_score;
+    let mut arg7 = arg7;
+    let mut effect_index = effect_index;
+    let mut entry: PreloadEntry<'a> = null(ctx);
+    let mut free_index: i32 = 0;
+    let mut i: i32 = 0;
+    'goto_done: {
+        free_index = 1_i32.wrapping_neg();
+        {
+            i = 0_i32;
+            'l1: while i < ((div_u32(0x8c0_u32, 28_u32)) as i32) {
+                'c2: {
+                    entry = statics::melee__lb__lbdvd::preloadCache(ctx)
+                        .entries()
+                        .get(i);
+                    if ((entry).state() as i32) == 0_i32 {
+                        if free_index == 1_i32.wrapping_neg() {
+                            free_index = i;
+                        }
+                    } else if (((entry).entry_num() as i32) == entry_num)
+                        && (inl_same_unfused(ctx, ((entry).heap() as i32), transient_heap) != 0)
+                    {
+                        if ((entry).state() as i32) == 1_i32 {
+                            if ((entry).load_score() as i32) < 0_i32 {
+                                (entry).set_load_score(
+                                    (((entry).load_score() as i32)
+                                        .wrapping_mul(1_i32.wrapping_neg())
+                                        as i16),
+                                );
+                                if ((entry).load_score() as i32) <= 0x2314_i32 {
+                                    (entry).set_load_score(
+                                        (((entry).load_score() as i32).wrapping_add(10_i32) as i16),
+                                    );
+                                }
+                            }
+                        } else {
+                            (entry).set_load_score((0x270f_i32 as i16));
+                        }
+                        break 'goto_done;
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+        (if free_index != 1_i32.wrapping_neg() {
+            ({ () })
+        } else {
+            fns::__assert(
+                ctx,
+                cstr(ctx, 0x803b72c8),
+                (180_i32 as u32),
+                cstr(ctx, 0x803b72c8),
+            )
+        });
+        entry = statics::melee__lb__lbdvd::preloadCache(ctx)
+            .entries()
+            .get(free_index);
+        (entry).set_state((1_i32 as i8));
+        (entry).set_type((r#type as i8));
+        (entry).set_entry_num((entry_num as i16));
+        if (fns::lbHeap_80015BB8(ctx, heap) != 0) {
+            (if ((0_i32) != 0) {
+                { () }
+            } else {
+                ({
+                    fns::OSReport(
+                        ctx,
+                        cstr(ctx, 0x804d37d8),
+                        &[VarArg::Int(heap as u32), VarArg::Int(entry_num as u32)],
+                    );
+                    fns::__assert(
+                        ctx,
+                        cstr(ctx, 0x803b72c8),
+                        (186_i32 as u32),
+                        cstr(ctx, 0x803b72c8),
+                    )
+                })
+            });
+        }
+        (entry).set_heap((heap as i8));
+        (entry).set_size(size);
+        (entry).set_archive(null::<HSD_AllocEntry<'a>>(ctx));
+        (entry).set_raw_data(null::<HSD_AllocEntry<'a>>(ctx));
+        (entry).set_load_state((load_state as i8));
+        (entry).set_load_score((load_score as i16));
+        (entry).set_unknown004(arg7);
+        (entry).set_effect_index(effect_index);
+    }
+    return Handle::cast::<Addr<'a>>(entry);
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
 pub fn lbDvd_800178E8<'a>(
     ctx: &'a Ctx,
     arg0: i32,
@@ -1029,6 +1141,16 @@ fn inl_releaseEntry_unfused<'a>(ctx: &'a Ctx, entry: PreloadEntry<'a>) {
     Handle::copy_from((entry), statics::melee__lb__lbdvd::lbDvd_803BA68C(ctx));
 }
 
+fn inl_same_unfused<'a>(ctx: &'a Ctx, a: i32, b: i32) -> i32 {
+    let mut a = a;
+    let mut b = b;
+    let mut result: i32 = 0_i32;
+    if a == b {
+        result = 1_i32;
+    }
+    return result;
+}
+
 fn inl_cleanupPreloadHeap_unfused<'a>(ctx: &'a Ctx, heap: i32) -> i32 {
     let mut heap = heap;
     let mut entry: PreloadEntry<'a> = null(ctx);
@@ -1291,6 +1413,15 @@ pub fn register(ctx: &Ctx) {
             Ret::put(lbDvd_80017700(ctx, a0), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80017740,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5, a6, a7, a8): (i32, i32, i32, i32, u32, i32, i32, u8, i32) =
+                Args::take_all(ctx);
+            Ret::put(lbDvd_80017740(ctx, a0, a1, a2, a3, a4, a5, a6, a7, a8), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x800178e8,

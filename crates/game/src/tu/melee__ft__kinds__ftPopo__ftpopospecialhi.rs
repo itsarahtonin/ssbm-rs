@@ -80,6 +80,66 @@ pub fn ftPp_SpecialS_80120E68<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn ftPp_SpecialS_80120FE0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x30);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = null(ctx);
+    let mut cmd: i32 = 0;
+    'goto_end: {
+        fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+        cmd = (fp).mv().pp().speciallw().x0();
+        'l1: loop {
+            'c2: {}
+            if !(0_i32 != 0) {
+                break 'l1;
+            }
+        }
+        if (cmd > 8_i32) && (cmd <= 83_i32) {
+            let mut item_gobj: HSD_GObj<'a> = null(ctx);
+            if !Handle::is_null(
+                ({
+                    let __t1 = (fp).u().pp().x2238();
+                    item_gobj = __t1;
+                    __t1
+                }),
+            ) {
+                let mut gobj_2: HSD_GObj<'a> = item_gobj;
+                let mut ip: Item<'a> = Handle::cast::<Item<'a>>((item_gobj).user_data());
+                let mut sa: itClimbersStringAttributes<'a> =
+                    Handle::cast::<itClimbersStringAttributes<'a>>(
+                        ((ip).xC4_article_data()).x4_specialAttributes(),
+                    );
+                let mut ev0: i32 = (sa).x18();
+                let mut ev1: i32 = (sa).x1C();
+                let mut ev2: i32 = (sa).x20();
+                if cmd == ev0 {
+                    fns::it_802C3950(ctx, gobj_2);
+                } else if cmd == ev1 {
+                    fns::it_802C3810(ctx, gobj_2);
+                } else if cmd == ev2 {
+                    fns::it_802C3864(ctx, gobj_2);
+                }
+                if (fp).mv().pp().speciallw().x0() == 83_i32 {
+                    fns::it_802C2750(ctx, (fp).u().pp().x2238());
+                }
+            } else {
+                break 'goto_end;
+            }
+        } else if (fp).mv().pp().speciallw().x0() == 8_i32 {
+            fns::ftPp_SpecialS_801210C8(ctx, gobj);
+            if Handle::is_null((fp).u().pp().x2238()) {
+                fns::ft_8008A2BC(ctx, gobj);
+                return 1_i32;
+            }
+        }
+        return 0_i32;
+    }
+    {}
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 pub fn ftPp_SpecialS_801210C8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
     let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x0);
@@ -1359,6 +1419,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(ftPp_SpecialS_80120E68(ctx, a0), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80120fe0,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftPp_SpecialS_80120FE0(ctx, a0), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x801210c8,

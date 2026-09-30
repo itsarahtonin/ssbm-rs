@@ -996,6 +996,199 @@ pub fn fn_8016A488<'a>(ctx: &'a Ctx, arg0: i32) {
     }
 }
 
+pub fn fn_8016A4C8<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x118);
+    let spawn_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 196> = frame_at(ctx, &__frame, 0xc);
+    let mut gp: lbl_8046B488_t<'a> = null(ctx);
+    let mut has_active_spawn: i32 = 0;
+    let mut spawn_enabled: i32 = 0;
+    let mut facing_dir: f64 = 0.0;
+    let mut spawn_slot: i32 = 0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    gp = statics::melee__gm__gm_16A2::lbl_8046B488(ctx);
+    has_active_spawn = 0_i32;
+    if (statics::melee__gm__gm_16A2::lbl_8046B488(ctx).unk_10_b1() != 0) {
+        spawn_enabled = 1_i32;
+    } else {
+        spawn_enabled = 0_i32;
+    }
+    if spawn_enabled == 0_i32 {
+        return;
+    }
+    {
+        spawn_slot = 0_i32;
+        'l3: while spawn_slot < 6_i32 {
+            'c4: {
+                if (fns::Player_GetFlagsBit1(ctx, spawn_slot) != 0_i32)
+                    && (fns::Player_GetPlayerState(ctx, spawn_slot) == 0_i32)
+                {
+                    if inl_gm_80169384_unfused(ctx) > 0_i32 {
+                        if (statics::melee__gm__gm_16A2::lbl_8046B488(ctx).x7() as i32) != 0_i32 {
+                            (gp).set_x7((((gp).x7() as i32).wrapping_sub(1_i32) as u8));
+                        }
+                        fns::fn_8016B738(ctx, 1_i32);
+                        fns::Player_80036D24(ctx, spawn_slot);
+                        statics::melee__gm__gm_16A2::lbl_8046B488(ctx)
+                            .x1A6()
+                            .at(spawn_slot)
+                            .set((inl_gm_80169384_unfused(ctx) as i8));
+                        fns::Player_SetFlagsBit1(ctx, spawn_slot);
+                        fns::Player_SetTeam(ctx, spawn_slot, (4_i32 as i8));
+                        let _ = fns::Ground_801C2D24(
+                            ctx,
+                            inl_getSpawnPointIndex_unfused(ctx, spawn_slot),
+                            spawn_pos,
+                        );
+                        spawn_pos.set_y(fns::Stage_GetCamBoundsTopOffset(ctx));
+                        fns::Player_80032768(ctx, spawn_slot, spawn_pos);
+                        fns::Player_SetSlottype(ctx, spawn_slot, (enums::Gm_PKind_Cpu as i32));
+                        fns::Player_SetPlayerCharacter(
+                            ctx,
+                            spawn_slot,
+                            ((gp).xA2().at(inl_gm_80169384_unfused(ctx)).get() as i32),
+                        );
+                        fns::Player_SetStocks(ctx, spawn_slot, 1_i32);
+                        {
+                            let mut costume_id: i32 =
+                                ((gp).x20().at(inl_gm_80169384_unfused(ctx)).get() as i32);
+                            fns::Player_SetCostumeId(ctx, spawn_slot, costume_id);
+                            fns::Player_SetSubColor(
+                                ctx,
+                                spawn_slot,
+                                inl_hasDuplicateCostume_unfused(ctx, spawn_slot, costume_id),
+                            );
+                        }
+                        {
+                            let mut more_flags: u8 = (gp).xF();
+                            fns::Player_SetMoreFlagsBit6(ctx, spawn_slot, more_flags);
+                        }
+                        fns::Player_SetMoreFlagsBit1(ctx, spawn_slot, (0_u32 as u8));
+                        if spawn_pos.x() >= 0.0 {
+                            facing_dir = fp::fneg(1.0);
+                        } else {
+                            facing_dir = 1.0;
+                        }
+                        fns::Player_SetFacingDirection(ctx, spawn_slot, facing_dir);
+                        fns::Player_SetHUDDamage(ctx, spawn_slot, 0_i32);
+                        fns::Player_SetPadPort(ctx, spawn_slot, spawn_slot);
+                        fns::Player_SetFlagsBit0(ctx, spawn_slot, 0_i32);
+                        fns::Player_SetNametagSlotID(ctx, spawn_slot, 120_i32);
+                        {
+                            let mut cpu_level: u8 = (gp).x6();
+                            fns::Player_SetPlayerAndEntityCpuLevel(
+                                ctx,
+                                spawn_slot,
+                                (cpu_level as i32),
+                            );
+                        }
+                        fns::Player_SetPlayerAndEntityCpuType(
+                            ctx,
+                            spawn_slot,
+                            inl_roll_cpu_type_unfused(ctx),
+                        );
+                        if (statics::melee__gm__gm_16A2::lbl_8046B488(ctx).unk_10_b4() != 0) {
+                            fns::Player_SetFlagsBit5(ctx, spawn_slot, (1_u32 as u8));
+                            fns::Player_SetPlayerAndEntityCpuType(ctx, spawn_slot, 27_i32);
+                        }
+                        if (statics::melee__gm__gm_16A2::lbl_8046B488(ctx).unk_10_b6() != 0) {
+                            fns::Player_SetFlagsAEBit0(ctx, spawn_slot, (1_u32 as u8));
+                        } else {
+                            fns::Player_SetFlagsAEBit0(ctx, spawn_slot, (0_u32 as u8));
+                        }
+                        fns::Player_SetFlagsBit6(
+                            ctx,
+                            spawn_slot,
+                            statics::melee__gm__gm_16A2::lbl_8046B488(ctx).unk_10_b5(),
+                        );
+                        {
+                            let mut model_scale: f64 = (gp).x1C();
+                            fns::Player_SetModelScale(ctx, spawn_slot, model_scale);
+                        }
+                        fns::Player_SetAttackRatio(
+                            ctx,
+                            spawn_slot,
+                            inl_fn_8016A4C8_attack_ratio_unfused(ctx),
+                        );
+                        {
+                            let mut defense_ratio: f64 =
+                                statics::melee__gm__gm_16A2::lbl_8046B488(ctx).x18();
+                            fns::Player_SetDefenseRatio(ctx, spawn_slot, defense_ratio);
+                        }
+                        if ((gp).x8() as i32) > 1_i32 {
+                            fns::Player_SetMoreFlagsBit5(ctx, spawn_slot, (1_i32 as u8));
+                        } else {
+                            fns::Player_SetMoreFlagsBit5(ctx, spawn_slot, (0_i32 as u8));
+                        }
+                        if ((fns::Player_GetPlayerCharacter(ctx, spawn_slot) as u32)
+                            == ((enums::CKind_Kirby as i32) as u32))
+                            && (((gp).xE() as i32) != 0_i32)
+                        {
+                            let mut tmp: i32 =
+                                ((gp).x124().at(inl_gm_80169384_unfused(ctx)).get() as i32);
+                            fns::Player_SetUnk4D(ctx, spawn_slot, (tmp as i8));
+                            let _ = fns::Player_SetFlagsAEBit1(ctx, spawn_slot, (1_i32 as u8));
+                        }
+                        if !Handle::is_null(
+                            (Handle::cast::<lbl_8046B488_event_player_init_cb_t<'a>>(gp))
+                                .event_player_init_cb(),
+                        ) {
+                            (Handle::cast::<lbl_8046B488_event_player_init_cb_t<'a>>(gp))
+                                .event_player_init_cb()
+                                .call::<_, ()>((
+                                    spawn_slot,
+                                    statics::melee__gm__gm_16A2::lbl_8046B488(ctx).x7(),
+                                ));
+                        }
+                        fns::Player_SetStructFunc(
+                            ctx,
+                            spawn_slot,
+                            Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8016a488)),
+                        );
+                        fns::Player_80031AD0(ctx, spawn_slot);
+                        fns::ifStatus_802F6508(ctx, spawn_slot);
+                        fns::un_802FD28C(ctx, spawn_slot);
+                    }
+                }
+            }
+            spawn_slot = spawn_slot.wrapping_add(1);
+        }
+    }
+    if ((gp).x7() as i32) == 0_i32 {
+        let mut active_slot: i32 = 0;
+        active_slot = 0_i32;
+        'back_scan_active_spawn: loop {
+            if (((fns::Player_GetPlayerSlotType(ctx, active_slot) as u32)
+                != ((enums::Gm_PKind_NA as i32) as u32))
+                && (fns::Player_GetFlagsBit1(ctx, active_slot) != 0_i32))
+                && (fns::Player_GetStocks(ctx, active_slot) != 0_i32)
+            {
+                has_active_spawn = 1_i32;
+            } else {
+                active_slot = active_slot.wrapping_add(1_i32);
+                if active_slot < 6_i32 {
+                    continue 'back_scan_active_spawn;
+                }
+            }
+            if has_active_spawn == 0_i32 {
+                statics::melee__gm__gm_16A2::lbl_8046B488(ctx).set_unk_10_b0((1_i32 as u8));
+                statics::melee__gm__gm_16A2::lbl_8046B488(ctx).set_unk_10_b1((0_i32 as u8));
+                if (!Handle::is_null((gp).x1B8()))
+                    && ((gp).x1B8().call::<_, i32>((1_i32,)) == 1_i32)
+                {
+                    (gp).set_x1B8(null::<FnPtr<'a>>(ctx));
+                }
+            }
+            break;
+        }
+    }
+}
+
 pub fn gm_8016A92C<'a>(ctx: &'a Ctx, arg0: StartMeleeRules<'a>) {
     let mut arg0 = arg0;
     statics::melee__gm__gm_16A2::lbl_8046B668(ctx)
@@ -1230,6 +1423,73 @@ fn inl_gm_8016A404_event_player_init_cb_unfused<'a>(
     let mut state: lbl_8046B488_event_player_init_cb_t<'a> =
         Handle::cast::<lbl_8046B488_event_player_init_cb_t<'a>>(gp);
     return (state).event_player_init_cb_ref();
+}
+
+fn inl_gm_80169384_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    return ((inl_gm_1601_GetUnkData_unfused(ctx)).x7() as i32);
+}
+
+fn inl_getSpawnPointIndex_unfused<'a>(ctx: &'a Ctx, spawn_slot: i32) -> i32 {
+    let mut spawn_slot = spawn_slot;
+    return spawn_slot
+        .wrapping_add((statics::melee__gm__gm_16A2::lbl_8046B488(ctx).xA() as i32))
+        .wrapping_sub(1_i32);
+}
+
+fn inl_hasDuplicateCostume_unfused<'a>(ctx: &'a Ctx, spawn_slot: i32, costume_id: i32) -> i8 {
+    let mut spawn_slot = spawn_slot;
+    let mut costume_id = costume_id;
+    let mut chr: i8 = (fns::Player_GetPlayerCharacter(ctx, spawn_slot) as i8);
+    let mut matching_slot: i32 = 0;
+    {
+        matching_slot = 0_i32;
+        'l1: while matching_slot < 6_i32 {
+            'c2: {
+                if ((((fns::Player_GetPlayerSlotType(ctx, matching_slot) as u32)
+                    != ((enums::Gm_PKind_NA as i32) as u32))
+                    && (fns::Player_GetFlagsBit1(ctx, matching_slot) == 0_i32))
+                    && ((chr as u32)
+                        == (fns::Player_GetPlayerCharacter(ctx, matching_slot) as u32)))
+                    && (costume_id == (fns::Player_GetCostumeId(ctx, matching_slot) as i32))
+                {
+                    return (1_i32 as i8);
+                }
+            }
+            matching_slot = matching_slot.wrapping_add(1);
+        }
+    }
+    return (0_i32 as i8);
+}
+
+fn inl_roll_cpu_type_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    let mut cpu_type: i32 = 23_i32;
+    if (statics::melee__gm__gm_16A2::lbl_8046B488(ctx).x7() as i32) != 1_i32 {
+        's1: {
+            let __case = match fns::HSD_Randi(ctx, 4_i32) {
+                0_i32 => 0,
+                1_i32 => 0,
+                2_i32 => 0,
+                3_i32 => 1,
+                _ => 2,
+            };
+            if __case <= 0 {
+                return 23_i32;
+            }
+            if __case <= 1 {
+                cpu_type = 24_i32;
+                break 's1;
+            }
+            if __case <= 2 {
+                cpu_type = 23_i32;
+                break 's1;
+            }
+        }
+    }
+    return cpu_type;
+}
+
+fn inl_fn_8016A4C8_attack_ratio_unfused<'a>(ctx: &'a Ctx) -> f64 {
+    return statics::melee__gm__gm_16A2::lbl_8046B488(ctx).x14();
 }
 
 fn inl_gm_8016A98C_unfused<'a>(ctx: &'a Ctx) -> lbl_8046B668_t<'a> {
@@ -1541,6 +1801,13 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (i32,) = Args::take_all(ctx);
             Ret::put(fn_8016A488(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8016a4c8,
+        |ctx| {
+            Ret::put(fn_8016A4C8(ctx), ctx);
         },
         Returns::Nothing,
     );

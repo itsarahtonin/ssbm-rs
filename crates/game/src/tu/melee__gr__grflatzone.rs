@@ -800,6 +800,110 @@ pub fn grFlatzone_8021805C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
 }
 
+pub fn grFlatzone_80218060<'a>(ctx: &'a Ctx, arg0: i32) {
+    let __frame = ctx.stack_frame(0x38);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut arg0 = arg0;
+    let mut gobj: HSD_GObj<'a> = null(ctx);
+    let mut gp: Ground<'a> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if !Handle::is_null(
+        ({
+            let __t1 = fns::Ground_GetMapGObj(ctx, 5_i32);
+            gobj = __t1;
+            __t1
+        }),
+    ) {
+        {
+            let mut tmp: Ground<'a> =
+                (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+            gp = tmp;
+        }
+        if !Handle::is_null(gp) {
+            if arg0 != 0_i32 {
+                (gp).u().flatzone().set_xC7((2_i32 as u8));
+                (gp).u().flatzone3().set_xC9((1_i32 as u8));
+            } else {
+                let mut v: u8 = 0;
+                'l3: loop {
+                    'c4: {
+                        'back_loop_4: loop {
+                            (gp).u()
+                                .flatzone()
+                                .set_xC7((fns::HSD_Randi(ctx, 8_i32) as u8));
+                            v = (gp).u().flatzone().xC7();
+                            if (v as i32) == ((gp).u().flatzone3().xC8() as i32) {
+                                continue 'back_loop_4;
+                            }
+                            break;
+                        }
+                    }
+                    if !(((Handle::add(
+                        (Handle::cast::<ArrV<'a, i16, 5>>(
+                            statics::melee__gr__grflatzone::grFz_803E7A68(ctx).at(0),
+                        )),
+                        (v as i32),
+                    ))
+                    .at(1_i32)
+                    .get() as i32)
+                        == 1_i32.wrapping_neg())
+                    {
+                        break 'l3;
+                    }
+                }
+                'l5: loop {
+                    'c6: {
+                        {
+                            let mut randi: i32 = fns::HSD_Randi(ctx, 4_i32);
+                            v = (randi.wrapping_add(1_i32) as u8);
+                        }
+                    }
+                    if !(((Handle::add(
+                        (Handle::cast::<ArrV<'a, i16, 5>>(
+                            statics::melee__gr__grflatzone::grFz_803E7A68(ctx).at(0),
+                        )),
+                        ((gp).u().flatzone().xC7() as i32),
+                    ))
+                    .at((({
+                        let __t2 = v;
+                        (gp).u().flatzone3().set_xC9(__t2);
+                        __t2
+                    }) as i32))
+                    .get() as i32)
+                        == 1_i32.wrapping_neg())
+                    {
+                        break 'l5;
+                    }
+                }
+            }
+            (gp).u().flatzone3().set_xCA((0_i32 as u8));
+            (gp).u().flatzone().set_xCC(
+                (inl_rand_int_unfused(
+                    ctx,
+                    (statics::melee__gr__grflatzone::yakumono_param(ctx).get()).unkC(),
+                    (statics::melee__gr__grflatzone::yakumono_param(ctx).get()).unk8(),
+                ) as i16),
+            );
+            (gp).u().flatzone().set_xC5(
+                ((Handle::add(
+                    (Handle::cast::<ArrV<'a, i16, 5>>(
+                        statics::melee__gr__grflatzone::grFz_803E7A68(ctx).at(0),
+                    )),
+                    ((gp).u().flatzone().xC7() as i32),
+                ))
+                .at(((gp).u().flatzone3().xC9() as i32))
+                .get() as u8),
+            );
+            fns::grAnime_801C8138(ctx, gobj, (gp).map_id(), ((gp).u().flatzone().xC5() as i32));
+        }
+    }
+}
+
 pub fn grFlatzone_802181B4<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
     let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
@@ -1480,6 +1584,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(grFlatzone_8021805C(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80218060,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(grFlatzone_80218060(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

@@ -194,6 +194,166 @@ pub fn THPDec_8032FD40<'a>(ctx: &'a Ctx, data: THPDec_8032FD40_Data<'a>, num: u1
     return base;
 }
 
+pub fn THPVideoDecode<'a>(
+    ctx: &'a Ctx,
+    hdr: Addr<'a>,
+    status_out: Addr<'a>,
+    work: _THPFileInfo<'a>,
+    data: Addr<'a>,
+    desc: THPDec_8032FD40_Data<'a>,
+) -> _THPFileInfo<'a> {
+    let __frame = ctx.stack_frame(0x38);
+    let mut hdr = hdr;
+    let mut status_out = status_out;
+    let mut work = work;
+    let mut data = data;
+    let mut desc = desc;
+    let mut done: u8 = 0;
+    let mut info: _THPFileInfo<'a> = null(ctx);
+    let mut header: THPVideoDecodeHeader<'a> = null(ctx);
+    let mut statusOut: Val<'a, u8> = null(ctx);
+    let mut status: u8 = 0;
+    let mut length: i32 = 0;
+    let mut i: u32 = 0;
+    'goto__err_exit: {
+        'goto__err_bad_status: {
+            'goto__err_bad_syntax: {
+                info = work;
+                header = Handle::cast::<THPVideoDecodeHeader<'a>>(hdr);
+                statusOut = Handle::cast::<Val<'a, u8>>(status_out);
+                fns::DCZeroRange(ctx, Handle::cast::<Addr<'a>>(info), (0x920_i32 as u32));
+                (info).set_scratch(Handle::cast::<Val<'a, u8>>(info));
+                (info).set_scratch(Handle::add((info).scratch(), 0x920_i32));
+                (info).set_xSize((header).xSize());
+                (info).set_ySize((header).ySize());
+                (info).set_file((info).scanStart());
+                (info).set_cnt((33_i32 as u32));
+                (info).set_x8EC((0_i32 as u16));
+                (info).set_x8EE((0_i32 as u16));
+                (info).set_x8D2((0_i32 as u16));
+                (info).set_x8E8((0_i32 as u16));
+                (info).set_x8EA((0_i32 as u16));
+                (info).set_x7D((0_i32 as u8));
+                (info).set_dataStart(Handle::cast::<Val<'a, u8>>(data));
+                fns::THPDec_803300E0(ctx, info);
+                done = (0_i32 as u8);
+                (info).set_file((info).dataStart());
+                {
+                    'l1: loop {
+                        'c2: {
+                            if ((({
+                                let __t1 = (info).file();
+                                (info).set_file(Handle::add((info).file(), 1));
+                                __t1
+                            })
+                            .get()) as i32)
+                                != 255_i32
+                            {
+                                break 'goto__err_bad_syntax;
+                            }
+                            'l3: while (((info).file()).get() as i32) == 255_i32 {
+                                'c4: {
+                                    (info).set_file(Handle::add((info).file(), 1));
+                                }
+                            }
+                            status = (({
+                                let __t2 = (info).file();
+                                (info).set_file(Handle::add((info).file(), 1));
+                                __t2
+                            })
+                            .get());
+                            if (status as i32) <= 215_i32 {
+                                if (status as i32) == 196_i32 {
+                                    status = statics::dolphin__thp__THPDec::__THPReadHuffmanTableSpecification(ctx, info);
+                                    if (status as i32) != 0_i32 {
+                                        break 'goto__err_bad_status;
+                                    }
+                                } else if (status as i32) == 192_i32 {
+                                    status = statics::dolphin__thp__THPDec::__THPReadFrameHeader(
+                                        ctx, info,
+                                    );
+                                    if (status as i32) != 0_i32 {
+                                        break 'goto__err_bad_status;
+                                    }
+                                } else {
+                                    (statusOut).set((11_i32 as u8));
+                                    return null::<_THPFileInfo<'a>>(ctx);
+                                }
+                            } else if (216_i32 <= (status as i32)) && ((status as i32) <= 223_i32) {
+                                if (status as i32) == 221_i32 {
+                                    let _ = statics::dolphin__thp__THPDec::__THPRestartDefinition(
+                                        ctx, info,
+                                    );
+                                } else if (status as i32) == 219_i32 {
+                                    status =
+                                        statics::dolphin__thp__THPDec::__THPReadQuantizationTable(
+                                            ctx, info,
+                                        );
+                                    if (status as i32) != 0_i32 {
+                                        break 'goto__err_bad_status;
+                                    }
+                                } else if (status as i32) == 218_i32 {
+                                    status = statics::dolphin__thp__THPDec::__THPReadScaneHeader(
+                                        ctx, info,
+                                    );
+                                    if (status as i32) != 0_i32 {
+                                        break 'goto__err_bad_status;
+                                    }
+                                    done = (1_i32 as u8);
+                                    (info).set_scanStart((info).file());
+                                } else if (status as i32) != 216_i32 {
+                                    (statusOut).set((11_i32 as u8));
+                                    return null::<_THPFileInfo<'a>>(ctx);
+                                }
+                            } else if 224_i32 <= (status as i32) {
+                                if (status as i32) == 224_i32 {
+                                    status = fns::THPDec_80330158(ctx, info);
+                                    if (status as i32) != 0_i32 {
+                                        break 'goto__err_bad_status;
+                                    }
+                                } else if (225_i32 <= (status as i32))
+                                    && ((status as i32) <= 239_i32)
+                                {
+                                    let _ = fns::THPDec_803302EC(ctx, (info).file_ref());
+                                } else if (status as i32) == 254_i32 {
+                                    length = ((shl_i32(
+                                        ((Handle::add((info).file(), 0_i32)).get() as i32),
+                                        (8_i32 as u32),
+                                    )) | ((Handle::add((info).file(), 1_i32)).get()
+                                        as i32));
+                                    (info).set_file(Handle::add((info).file(), 2_i32));
+                                    {
+                                        i = (0_i32 as u32);
+                                        'l5: while i < (length.wrapping_sub(2_i32) as u32) {
+                                            'c6: {
+                                                (info).set_file(Handle::add((info).file(), 1));
+                                            }
+                                            i = i.wrapping_add(1);
+                                        }
+                                    }
+                                } else {
+                                    (statusOut).set((11_i32 as u8));
+                                    return null::<_THPFileInfo<'a>>(ctx);
+                                }
+                            }
+                            if (done != 0) {
+                                (statusOut).set((0_i32 as u8));
+                                return work;
+                            }
+                        }
+                    }
+                }
+            }
+            (statusOut).set((3_i32 as u8));
+            break 'goto__err_exit;
+        }
+        (statusOut).set(status);
+    }
+    return null::<_THPFileInfo<'a>>(ctx);
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
 pub fn THPDec_803300E0<'a>(ctx: &'a Ctx, info: _THPFileInfo<'a>) {
     let mut info = info;
     let mut p: Val<'a, u8> = null(ctx);
@@ -958,6 +1118,20 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (THPDec_8032FD40_Data<'_>, u16) = Args::take_all(ctx);
             Ret::put(THPDec_8032FD40(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8032fdb8,
+        |ctx| {
+            let (a0, a1, a2, a3, a4): (
+                Addr<'_>,
+                Addr<'_>,
+                _THPFileInfo<'_>,
+                Addr<'_>,
+                THPDec_8032FD40_Data<'_>,
+            ) = Args::take_all(ctx);
+            Ret::put(THPVideoDecode(ctx, a0, a1, a2, a3, a4), ctx);
         },
         Returns::Int,
     );

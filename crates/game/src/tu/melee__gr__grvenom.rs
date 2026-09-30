@@ -1130,6 +1130,111 @@ pub fn grVenom_80204F1C<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
     let mut arg = arg;
 }
 
+pub fn grVenom_80204F20<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x38);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let mut arg0 = arg0;
+    let mut base: Val<'a, i32> = null(ctx);
+    let mut gp: Ground<'a> = null(ctx);
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut other: HSD_GObj<'a> = null(ctx);
+    let mut scale: f64 = 0.0;
+    let mut state: i32 = 0;
+    'goto_done_scale: {
+        'goto_scale_uniform: {
+            'goto_scale_nonuniform: {
+                'goto_check_scale_uniform: {
+                    base = Handle::cast::<Val<'a, i32>>(
+                        statics::melee__gr__grvenom::grVe_803E5348(ctx),
+                    );
+                    gp = Handle::cast::<Ground<'a>>((arg0).user_data());
+                    jobj = Handle::cast::<HSD_JObj<'a>>((arg0).hsd_obj());
+                    'l1: loop {
+                        'c2: {}
+                        if !(0_i32 != 0) {
+                            break 'l1;
+                        }
+                    }
+                    statics::melee__gr__grvenom::grVe_803E5348(ctx)
+                        .arwing()
+                        .arwing_gobj()
+                        .at(({
+                            let __t1 = statics::melee__gr__grvenom::grVe_804D6A34(ctx).get();
+                            (gp).u().venom().set_xC8(__t1);
+                            __t1
+                        } as i32))
+                        .set(arg0);
+                    other = fns::grVenom_80203EAC(
+                        ctx,
+                        (Handle::add(
+                            base,
+                            (Handle::add(
+                                base,
+                                ((gp).u().venom().xC8().wrapping_add((14_i32 as u32)) as i32),
+                            ))
+                            .get()
+                            .wrapping_add(170_i32),
+                        ))
+                        .get(),
+                    );
+                    if !Handle::is_null(other) {
+                        let mut other_gp: Ground<'a> =
+                            Handle::cast::<Ground<'a>>((other).user_data());
+                        (other_gp).x10_flags().set_b2((0_i32 as u8));
+                        other_gp = Handle::cast::<Ground<'a>>((other).user_data());
+                        if !Handle::is_null(other_gp) {
+                            (other_gp).u().venom().set_xC8((gp).u().venom().xC8());
+                        } else {
+                            fns::OSReport(ctx, cstr(ctx, 0x803e5604), &[]);
+                        }
+                    }
+                    scale = fns::Ground_801C0498(ctx);
+                    state = (Handle::add(
+                        base,
+                        ((gp).u().venom().xC8().wrapping_add((11_i32 as u32)) as i32),
+                    ))
+                    .get();
+                    if state >= 8_i32 {
+                        break 'goto_check_scale_uniform;
+                    }
+                    if state >= 1_i32 {
+                        break 'goto_scale_nonuniform;
+                    }
+                    break 'goto_done_scale;
+                }
+                if state >= 12_i32 {
+                    break 'goto_done_scale;
+                }
+                break 'goto_scale_uniform;
+            }
+            inl_HSD_JObjSetScaleX_unfused(ctx, jobj, scale);
+            inl_HSD_JObjSetScaleY_unfused(ctx, jobj, scale);
+            inl_HSD_JObjSetScaleZ_unfused(
+                ctx,
+                jobj,
+                fp::fmuls(
+                    scale,
+                    (Handle::cast::<Val<'a, F32>>(
+                        (Handle::add(
+                            Handle::cast::<Val<'a, u8>>(
+                                statics::melee__gr__grvenom::yakumono_param(ctx).get(),
+                            ),
+                            52_i32,
+                        )),
+                    ))
+                    .get(),
+                ),
+            );
+            break 'goto_done_scale;
+        }
+        inl_HSD_JObjSetScaleX_unfused(ctx, jobj, scale);
+        inl_HSD_JObjSetScaleY_unfused(ctx, jobj, scale);
+        inl_HSD_JObjSetScaleZ_unfused(ctx, jobj, scale);
+    }
+    (gp).u().venom().set_xD4(1_i32);
+    (gp).u().venom().set_xD8(0_i32);
+}
+
 pub fn grVenom_802052D8<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 {
     let mut arg = arg;
     return 0_i32;
@@ -1178,6 +1283,145 @@ pub fn grVenom_802052E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>) {
             (pos).set_y(__t2);
             __t2
         });
+    }
+}
+
+pub fn grVenom_802053B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x48);
+    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x18);
+    let mut gobj = gobj;
+    let mut ptr_: Val<'a, i32> = null(ctx);
+    let mut gp2: Ground<'a> = null(ctx);
+    let mut state: i32 = 0;
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut base: Val<'a, i32> = null(ctx);
+    let mut gp: Ground<'a> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    gp = Handle::cast::<Ground<'a>>((gobj).user_data());
+    base = Handle::cast::<Val<'a, i32>>(statics::melee__gr__grvenom::grVe_803E5348(ctx));
+    jobj = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
+    ptr_ = Handle::add(base, ((gp).u().venom().xC8() as i32));
+    if ((Handle::add(ptr_, 8_i32)).get() as u32) == Handle::addr(gobj) {
+        'goto_type_done: {
+            'goto_far_type: {
+                'goto_near_type: {
+                    'goto_check_far: {
+                        if (gp).u().venom().xD4() == 1_i32 {
+                            (gp).u().venom().set_xD4(0_i32);
+                            fns::grAnime_801C8138(
+                                ctx,
+                                gobj,
+                                (gp).map_id(),
+                                (Handle::add(
+                                    base,
+                                    (Handle::add(
+                                        base,
+                                        ((gp).u().venom().xC8().wrapping_add((11_i32 as u32))
+                                            as i32),
+                                    ))
+                                    .get()
+                                    .wrapping_add(122_i32),
+                                ))
+                                .get(),
+                            );
+                            return;
+                        }
+                        state = (Handle::add(ptr_, 11_i32)).get();
+                        if state >= 8_i32 {
+                            break 'goto_check_far;
+                        }
+                        if state >= 1_i32 {
+                            break 'goto_near_type;
+                        }
+                        break 'goto_type_done;
+                    }
+                    if state >= 12_i32 {
+                        break 'goto_type_done;
+                    }
+                    break 'goto_far_type;
+                }
+                fns::grVenom_802052E0(ctx, gobj, sp28);
+                state = (gp).u().venom().xD8();
+                's3: {
+                    let __case = match state {
+                        0_i32 => 0,
+                        1_i32 => 1,
+                        2_i32 => 2,
+                        _ => 3,
+                    };
+                    if __case <= 0 {
+                        if !(fns::grVenom_80205DF8(ctx, sp28) != 0) {
+                            let _ = fns::lbAudioAx_800237A8(ctx, 0x6b6c0_i32, 127_i32, 64_i32);
+                            (gp).u().venom().set_xD8(1_i32);
+                        }
+                        break 's3;
+                    }
+                    if __case <= 1 {
+                        if !(fns::grVenom_80205E84(ctx, sp28) != 0) {
+                            (gp).u().venom().set_xD8(2_i32);
+                        }
+                        break 's3;
+                    }
+                    if __case <= 2 {
+                        if fns::grVenom_80205E84(ctx, sp28) == 1_i32 {
+                            let _ = fns::lbAudioAx_800237A8(ctx, 0x6b6c2_i32, 127_i32, 64_i32);
+                            (gp).u().venom().set_xD8(3_i32);
+                        }
+                        break 's3;
+                    }
+                }
+                break 'goto_type_done;
+            }
+            inl_HSD_JObjSetRotationY_unfused(ctx, jobj, 0.0);
+            gp2 = Handle::cast::<Ground<'a>>((gobj).user_data());
+            fns::grVenom_802052E0(ctx, gobj, sp1C);
+            state = (gp2).u().venom().xD8();
+            's4: {
+                let __case = match state {
+                    0_i32 => 0,
+                    1_i32 => 1,
+                    2_i32 => 2,
+                    _ => 3,
+                };
+                if __case <= 0 {
+                    if !(fns::grVenom_80205DF8(ctx, sp1C) != 0) {
+                        let _ = fns::lbAudioAx_800237A8(ctx, 0x6b6c0_i32, 127_i32, 64_i32);
+                        (gp2).u().venom().set_xD8(1_i32);
+                    }
+                    break 's4;
+                }
+                if __case <= 1 {
+                    if !(fns::grVenom_80205E84(ctx, sp1C) != 0) {
+                        (gp2).u().venom().set_xD8(2_i32);
+                    }
+                    break 's4;
+                }
+                if __case <= 2 {
+                    if fns::grVenom_80205E84(ctx, sp1C) == 1_i32 {
+                        let _ = fns::lbAudioAx_800237A8(ctx, 0x6b6c2_i32, 127_i32, 64_i32);
+                        (gp2).u().venom().set_xD8(3_i32);
+                    }
+                    break 's4;
+                }
+            }
+        }
+        if (fns::grAnime_801C83D0(ctx, gobj, 0_i32, 7_i32) != 0) {
+            (Handle::add(
+                base,
+                ((gp).u().venom().xC8().wrapping_add((8_i32 as u32)) as i32),
+            ))
+            .set(0_i32);
+            fns::Ground_801C4A08(ctx, gobj);
+        }
+    } else {
+        fns::Ground_801C4A08(ctx, gobj);
     }
 }
 
@@ -1386,6 +1630,521 @@ pub fn grVenom_80205E84<'a>(ctx: &'a Ctx, pos: Vec<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut pos = pos;
     return inl_Stage_IsOutsideBlastZoneWithMargin_unfused(ctx, pos, 20.0);
+}
+
+pub fn grVenom_80205F30<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0xc8);
+    let sp94: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp88: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let pad70: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x18);
+    let sp64: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let pad5C: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x3c);
+    let sp50: Vec<'a> = frame_at(ctx, &__frame, 0x44);
+    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x50);
+    let mut gobj = gobj;
+    let mut padA8: u64 = 0;
+    let mut gp: Ground<'a> = null(ctx);
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut other_gp: Ground<'a> = null(ctx);
+    let mut other: HSD_GObj<'a> = null(ctx);
+    let mut tmp_jobj: HSD_JObj<'a> = null(ctx);
+    let mut base: Val<'a, i32> = null(ctx);
+    let mut entry: Val<'a, i32> = null(ctx);
+    let mut state: i32 = 0;
+    let mut fire_kind: i32 = 0;
+    let mut slot: i32 = 0;
+    let mut retries: i32 = 0;
+    let mut type_idx: i32 = 0;
+    let mut helper: HSD_JObj<'a> = null(ctx);
+    base = Handle::cast::<Val<'a, i32>>(statics::melee__gr__grvenom::grVe_803E5348(ctx));
+    gp = Handle::cast::<Ground<'a>>((gobj).user_data());
+    jobj = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
+    Handle::copy_from(sp94, statics::melee__gr__grvenom::grVe_803B82D0(ctx));
+    Handle::copy_from(sp88, statics::melee__gr__grvenom::grVe_803B82DC(ctx));
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if (statics::melee__gr__grvenom::grVe_804D6A3C(ctx).get() != 0) {
+        return;
+    }
+    entry = Handle::add(base, ((gp).u().venom().xC8() as i32));
+    if ((Handle::add(entry, 8_i32)).get() as u32) != 0_u32 {
+        if (Handle::add(entry, 14_i32)).get() == 4_i32 {
+            tmp_jobj = fns::Ground_801C3FA4(ctx, gobj, 1_i32);
+            inl_HSD_JObjSetRotationZ_unfused(ctx, tmp_jobj, 0.0);
+        }
+        state = (Handle::add(
+            base,
+            ((gp).u().venom().xC8().wrapping_add((11_i32 as u32)) as i32),
+        ))
+        .get();
+        's3: {
+            let __case = match state {
+                1_i32 => 0,
+                2_i32 => 0,
+                3_i32 => 0,
+                4_i32 => 0,
+                5_i32 => 0,
+                6_i32 => 0,
+                7_i32 => 0,
+                8_i32 => 1,
+                9_i32 => 1,
+                10_i32 => 1,
+                11_i32 => 1,
+                _ => 2,
+            };
+            if __case <= 0 {
+                inl_HSD_JObjSetRotationY_unfused(ctx, jobj, 0.0);
+                {
+                    let mut anim_state_: i32 = 0;
+                    'goto_venom_80205F30_anim_done: {
+                        'goto_venom_80205F30_check_anim: {
+                            'goto_venom_80205F30_anim_zero: {
+                                anim_state_ = (gp).u().venom().xF4();
+                                if anim_state_ == 0_i32 {
+                                    break 'goto_venom_80205F30_anim_zero;
+                                }
+                                if anim_state_ < 0_i32 {
+                                    break 'goto_venom_80205F30_anim_done;
+                                }
+                                if anim_state_ >= 5_i32 {
+                                    break 'goto_venom_80205F30_anim_done;
+                                }
+                                break 'goto_venom_80205F30_check_anim;
+                            }
+                            {
+                                if (gp).u().venom().xF8() <= 0_i32 {
+                                    (gp).u()
+                                        .venom()
+                                        .set_xF4(fns::HSD_Randi(ctx, 4_i32).wrapping_add(1_i32));
+                                    fire_kind = 1_i32.wrapping_neg();
+                                    's4: {
+                                        let __case = match (Handle::add(
+                                            base,
+                                            ((Handle::cast::<Ground<'a>>(
+                                                inl_HSD_GObjGetUserData_unfused(ctx, gobj),
+                                            ))
+                                            .u()
+                                            .venom()
+                                            .xC8()
+                                            .wrapping_add((14_i32 as u32))
+                                                as i32),
+                                        ))
+                                        .get()
+                                        {
+                                            0_i32 => 0,
+                                            1_i32 => 1,
+                                            2_i32 => 1,
+                                            3_i32 => 1,
+                                            4_i32 => 2,
+                                            _ => 3,
+                                        };
+                                        if __case <= 0 {
+                                            break 's4;
+                                        }
+                                        if __case <= 1 {
+                                            fire_kind = 0_i32;
+                                            break 's4;
+                                        }
+                                        if __case <= 2 {
+                                            fire_kind = 1_i32;
+                                            break 's4;
+                                        }
+                                    }
+                                    {
+                                        let mut anim_data: grVe_AnimData<'a> =
+                                            Handle::cast::<grVe_AnimData<'a>>(base);
+                                        let mut idx0: i32 = (Handle::add(
+                                            base,
+                                            ((gp).u().venom().xC8().wrapping_add((14_i32 as u32))
+                                                as i32),
+                                        ))
+                                        .get();
+                                        let mut anim_arg: i32 = inl_grVe_GetAnimArg_unfused(
+                                            ctx, fire_kind, gp, anim_data,
+                                        );
+                                        let mut anim_id: i32 =
+                                            (anim_data).anim_ids().at(idx0).get();
+                                        fns::grAnime_801C8098(
+                                            ctx, gobj, anim_id, 7_i32, anim_arg, 0.0, 1.0,
+                                        );
+                                    }
+                                } else {
+                                    let mut idx0_2: i32 = (Handle::add(
+                                        base,
+                                        ((gp).u().venom().xC8().wrapping_add((14_i32 as u32))
+                                            as i32),
+                                    ))
+                                    .get();
+                                    let mut anim_id_2: i32 =
+                                        (Handle::add(base, idx0_2.wrapping_add(214_i32))).get();
+                                    tmp_jobj = fns::Ground_801C3FA4(ctx, gobj, anim_id_2);
+                                    inl_HSD_JObjSetRotationZ_unfused(ctx, tmp_jobj, 0.0);
+                                }
+                                (gp).u()
+                                    .venom()
+                                    .set_xF8((gp).u().venom().xF8().wrapping_sub(1_i32));
+                            }
+                            break 'goto_venom_80205F30_anim_done;
+                        }
+                        if (fns::grAnime_801C83D0(ctx, gobj, 0_i32, 7_i32) != 0) {
+                            (gp).u().venom().set_xF4(0_i32);
+                            (gp).u().venom().set_xF8(fp::fctiwz(
+                                (statics::melee__gr__grvenom::yakumono_param(ctx).get()).x2C(),
+                            ));
+                        }
+                    }
+                }
+                if !Handle::is_null(
+                    ({
+                        let __t1 = ptr::<HSD_GObj<'a>>(
+                            ctx,
+                            (Handle::add(
+                                base,
+                                ((gp).u().venom().xC8().wrapping_add((8_i32 as u32)) as i32),
+                            ))
+                            .get() as u32,
+                        );
+                        other = __t1;
+                        __t1
+                    }),
+                ) {
+                    other_gp = Handle::cast::<Ground<'a>>((other).user_data());
+                    let _ = fns::Ground_GetMapGObj(ctx, 5_i32);
+                    fns::lb_8000B1CC(
+                        ctx,
+                        fns::Ground_801C3FA4(ctx, other, 5_i32),
+                        null::<Vec<'a>>(ctx),
+                        sp64,
+                    );
+                    {
+                        let mut spawn_data: VenomSpawnData<'a> = Handle::cast::<VenomSpawnData<'a>>(
+                            (Handle::add(
+                                base,
+                                (Handle::add(
+                                    base,
+                                    ((other_gp).u().venom().xC8().wrapping_add((11_i32 as u32))
+                                        as i32),
+                                ))
+                                .get()
+                                .wrapping_mul(3_i32),
+                            )),
+                        );
+                        sp94.set_x(fp::fadds(sp64.x(), (spawn_data).x()));
+                        sp94.set_y(fp::fadds(sp64.y(), (spawn_data).y()));
+                        sp94.set_z(fp::fadds(sp64.z(), (spawn_data).z()));
+                    }
+                } else {
+                    sp94.set_x({
+                        let __t3 = {
+                            let __t2 = 0.0;
+                            sp94.set_z(__t2);
+                            __t2
+                        };
+                        sp94.set_y(__t3);
+                        __t3
+                    });
+                }
+                inl_HSD_JObjSetTranslate_unfused(ctx, jobj, sp94);
+                {
+                    let mut idx0_3: i32 = (Handle::add(
+                        base,
+                        ((gp).u().venom().xC8().wrapping_add((14_i32 as u32)) as i32),
+                    ))
+                    .get();
+                    let mut anim_id_3: i32 =
+                        (Handle::add(base, idx0_3.wrapping_add(214_i32))).get();
+                    fns::lb_8000B1CC(
+                        ctx,
+                        fns::Ground_801C3FA4(ctx, gobj, anim_id_3),
+                        null::<Vec<'a>>(ctx),
+                        sp94,
+                    );
+                }
+                if !Handle::is_null((gp).u().venom().x18().linked_gobj()) {
+                    let mut sub: Ground<'a> = Handle::cast::<Ground<'a>>(
+                        ((gp).u().venom().x18().linked_gobj()).user_data(),
+                    );
+                    if !Handle::is_null(sub) {
+                        Handle::copy_from(
+                            (Handle::cast::<Vec<'a>>((sub).u().venom().x1C().xE0_ref())),
+                            sp94,
+                        );
+                    }
+                }
+                {
+                    let mut rot_z: f64 = 0.0;
+                    let mut idx0_4: i32 = (Handle::add(
+                        base,
+                        ((gp).u().venom().xC8().wrapping_add((14_i32 as u32)) as i32),
+                    ))
+                    .get();
+                    let mut anim_id_4: i32 =
+                        (Handle::add(base, idx0_4.wrapping_add(214_i32))).get();
+                    helper = fns::Ground_801C3FA4(ctx, gobj, anim_id_4);
+                    rot_z = inl_HSD_JObjGetRotationZ_unfused(ctx, helper);
+                    if !Handle::is_null((gp).u().venom().x18().linked_gobj()) {
+                        let mut sub_2: Ground<'a> = Handle::cast::<Ground<'a>>(
+                            ((gp).u().venom().x18().linked_gobj()).user_data(),
+                        );
+                        if !Handle::is_null(sub_2) {
+                            (sub_2).u().venom().x18().set_xDC(rot_z);
+                        }
+                    }
+                }
+                break 's3;
+            }
+            if __case <= 1 {
+                if (!(((gp).u().venom().xF0() & 7_i32) != 0))
+                    && (fns::HSD_Randi(ctx, 8_i32) == 0_i32)
+                {
+                    (gp).u().venom().set_xFC(0_i32);
+                    type_idx = (Handle::add(
+                        base,
+                        ((gp).u().venom().xC8().wrapping_add((11_i32 as u32)) as i32),
+                    ))
+                    .get();
+                    's5: {
+                        let __case = match type_idx {
+                            8_i32 => 0,
+                            9_i32 => 1,
+                            10_i32 => 2,
+                            11_i32 => 3,
+                            _ => 4,
+                        };
+                        if __case <= 0 {
+                            if ((gp).u().venom().xF0() > 60_i32)
+                                && ((gp).u().venom().xF0() < 230_i32)
+                            {
+                                (gp).u().venom().set_xFC(1_i32);
+                            }
+                            break 's5;
+                        }
+                        if __case <= 1 {
+                            if ((gp).u().venom().xF0() > 50_i32)
+                                && ((gp).u().venom().xF0() < 230_i32)
+                            {
+                                (gp).u().venom().set_xFC(1_i32);
+                            }
+                            break 's5;
+                        }
+                        if __case <= 2 {
+                            if ((gp).u().venom().xF0() > 90_i32)
+                                && ((gp).u().venom().xF0() < 0x104_i32)
+                            {
+                                (gp).u().venom().set_xFC(1_i32);
+                            }
+                            break 's5;
+                        }
+                        if __case <= 3 {
+                            if ((gp).u().venom().xF0() > 70_i32)
+                                && ((gp).u().venom().xF0() < 240_i32)
+                            {
+                                (gp).u().venom().set_xFC(1_i32);
+                            }
+                            break 's5;
+                        }
+                    }
+                } else {
+                    (gp).u().venom().set_xFC(0_i32);
+                }
+                {
+                    let mut far_other: HSD_GObj<'a> = null(ctx);
+                    let mut far_other_gp: Ground<'a> = null(ctx);
+                    if !Handle::is_null(
+                        ({
+                            let __t4 = ptr::<HSD_GObj<'a>>(
+                                ctx,
+                                (Handle::add(
+                                    base,
+                                    ((gp).u().venom().xC8().wrapping_add((8_i32 as u32)) as i32),
+                                ))
+                                .get() as u32,
+                            );
+                            far_other = __t4;
+                            __t4
+                        }),
+                    ) {
+                        far_other_gp = Handle::cast::<Ground<'a>>((far_other).user_data());
+                        let _ = fns::Ground_GetMapGObj(ctx, 5_i32);
+                        fns::lb_8000B1CC(
+                            ctx,
+                            fns::Ground_801C3FA4(ctx, far_other, 5_i32),
+                            null::<Vec<'a>>(ctx),
+                            sp50,
+                        );
+                        {
+                            let mut spawn_data_2: VenomSpawnData<'a> =
+                                Handle::cast::<VenomSpawnData<'a>>(
+                                    (Handle::add(
+                                        base,
+                                        (Handle::add(
+                                            base,
+                                            ((far_other_gp)
+                                                .u()
+                                                .venom()
+                                                .xC8()
+                                                .wrapping_add((11_i32 as u32))
+                                                as i32),
+                                        ))
+                                        .get()
+                                        .wrapping_mul(3_i32),
+                                    )),
+                                );
+                            sp94.set_x(fp::fadds(sp50.x(), (spawn_data_2).x()));
+                            sp94.set_y(fp::fadds(sp50.y(), (spawn_data_2).y()));
+                            sp94.set_z(fp::fadds(sp50.z(), (spawn_data_2).z()));
+                        }
+                    } else {
+                        sp94.set_x({
+                            let __t6 = {
+                                let __t5 = 0.0;
+                                sp94.set_z(__t5);
+                                __t5
+                            };
+                            sp94.set_y(__t6);
+                            __t6
+                        });
+                    }
+                }
+                if ((fp::fneg(100.0) > sp94.z()) && (sp94.z() > fp::fneg(2000.0)))
+                    && ((gp).u().venom().xFC() != 0_i32)
+                {
+                    (gp).u().venom().set_xFC(0_i32);
+                    slot = fns::HSD_Randi(ctx, 4_i32);
+                    retries = 0_i32;
+                    'l6: loop {
+                        'c7: {
+                            slot = ((slot.wrapping_add(retries)) & 3_i32);
+                            if (fns::Player_GetPlayerSlotType(ctx, slot) as u32) != (3_i32 as u32) {
+                                break 'l6;
+                            }
+                            retries = retries.wrapping_add(1);
+                        }
+                        if !(retries < 4_i32) {
+                            break 'l6;
+                        }
+                    }
+                    fns::Player_LoadPlayerCoords(ctx, slot, sp88);
+                    if ((sp88.x() > 0.0) && (sp94.x() > 0.0))
+                        || ((sp88.x() < 0.0) && (sp94.x() < 0.0))
+                    {
+                        sp88.set_y(fp::fadds(sp88.y(), 5.0));
+                        let _ = fns::lbAudioAx_800237A8(ctx, 0x6b6c9_i32, 127_i32, 64_i32);
+                        fire_kind = 1_i32.wrapping_neg();
+                        's8: {
+                            let __case = match (Handle::add(
+                                base,
+                                ((Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(
+                                    ctx, gobj,
+                                )))
+                                .u()
+                                .venom()
+                                .xC8()
+                                .wrapping_add((14_i32 as u32))
+                                    as i32),
+                            ))
+                            .get()
+                            {
+                                0_i32 => 0,
+                                1_i32 => 1,
+                                2_i32 => 1,
+                                3_i32 => 1,
+                                4_i32 => 2,
+                                _ => 3,
+                            };
+                            if __case <= 0 {
+                                break 's8;
+                            }
+                            if __case <= 1 {
+                                fire_kind = 0_i32;
+                                break 's8;
+                            }
+                            if __case <= 2 {
+                                fire_kind = 1_i32;
+                                break 's8;
+                            }
+                        }
+                        if fire_kind == 1_i32 {
+                            let _ = fns::it_802E7654(
+                                ctx,
+                                gobj,
+                                fns::Ground_801C3FA4(ctx, gobj, 7_i32),
+                                sp88,
+                                3_i32,
+                                0_i32,
+                                (statics::melee__gr__grvenom::yakumono_param(ctx).get()).x34(),
+                            );
+                        } else {
+                            if (gp).u().venom().x100() != 0_i32 {
+                                let _ = fns::it_802E7654(
+                                    ctx,
+                                    gobj,
+                                    fns::Ground_801C3FA4(ctx, gobj, 5_i32),
+                                    sp88,
+                                    1_i32,
+                                    0_i32,
+                                    (statics::melee__gr__grvenom::yakumono_param(ctx).get()).x34(),
+                                );
+                            } else {
+                                let _ = fns::it_802E7654(
+                                    ctx,
+                                    gobj,
+                                    fns::Ground_801C3FA4(ctx, gobj, 6_i32),
+                                    sp88,
+                                    1_i32,
+                                    0_i32,
+                                    (statics::melee__gr__grvenom::yakumono_param(ctx).get()).x34(),
+                                );
+                            }
+                            (gp).u()
+                                .venom()
+                                .set_x100((((gp).u().venom().x100().wrapping_add(1_i32)) & 1_i32));
+                        }
+                        fns::grMaterial_801C9604(
+                            ctx,
+                            gobj,
+                            (statics::melee__gr__grvenom::yakumono_param(ctx).get()).x38(),
+                            0_i32,
+                        );
+                    }
+                }
+                break 's3;
+            }
+        }
+        (gp).u()
+            .venom()
+            .set_xF0((gp).u().venom().xF0().wrapping_add(1_i32));
+    } else {
+        if (Handle::cast::<Val<'a, u32>>((gp).u().venom().x1C().xE0_ref())).get() != 0_u32 {
+            fns::Ground_801C4A08(
+                ctx,
+                (Handle::cast::<Ptr<'a, HSD_GObj<'a>>>((gp).u().venom().x1C().xE0_ref())).get(),
+            );
+        }
+        if (Handle::cast::<Val<'a, u32>>((gp).u().venom().x20().xE4_ref())).get() != 0_u32 {
+            fns::Ground_801C4A08(
+                ctx,
+                (Handle::cast::<Ptr<'a, HSD_GObj<'a>>>((gp).u().venom().x20().xE4_ref())).get(),
+            );
+        }
+        if (Handle::cast::<Val<'a, u32>>((gp).u().venom().x24().xE8_ref())).get() != 0_u32 {
+            fns::Ground_801C4A08(
+                ctx,
+                (Handle::cast::<Ptr<'a, HSD_GObj<'a>>>((gp).u().venom().x24().xE8_ref())).get(),
+            );
+        }
+        if (Handle::cast::<Val<'a, u32>>((gp).u().venom().x28().xEC_ref())).get() != 0_u32 {
+            fns::Ground_801C4A08(
+                ctx,
+                (Handle::cast::<Ptr<'a, HSD_GObj<'a>>>((gp).u().venom().x28().xEC_ref())).get(),
+            );
+        }
+        fns::Ground_801C4A08(ctx, gobj);
+    }
 }
 
 pub fn grVenom_80206870<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
@@ -1942,6 +2701,62 @@ fn inl_HSD_JObjSetScaleY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     }
 }
 
+fn inl_HSD_JObjSetScaleZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
+    let mut jobj = jobj;
+    let mut z = z;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b82d0),
+            (0x1b6_i32 as u32),
+            cstr(ctx, 0x803b82d0),
+        )
+    });
+    (jobj).scale().set_z(z);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
+    let mut jobj = jobj;
+    let mut y = y;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b82d0),
+            (0x13d_i32 as u32),
+            cstr(ctx, 0x803b82d0),
+        )
+    });
+    (if !(((jobj).flags() & ((shl_i32(1_i32, (17_i32 as u32))) as u32)) != 0) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b82d0),
+            (0x13e_i32 as u32),
+            cstr(ctx, 0x803b82d0),
+        )
+    });
+    (jobj).rotate().set_y(y);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
 fn inl_Ground_UpdateStarFoxArwingVisibility_unfused<'a>(
     ctx: &'a Ctx,
     gp: Ground<'a>,
@@ -1988,29 +2803,6 @@ fn inl_Ground_UpdateStarFoxArwingVisibility_unfused<'a>(
         fns::HSD_JObjSetFlagsAll(ctx, jobj, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
     }
     inl_HSD_JObjSetTranslate_unfused(ctx, jobj, (gp).u().arwing().xE0());
-}
-
-fn inl_HSD_JObjSetScaleZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
-    let mut jobj = jobj;
-    let mut z = z;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b82d0),
-            (0x1b6_i32 as u32),
-            cstr(ctx, 0x803b82d0),
-        )
-    });
-    (jobj).scale().set_z(z);
-    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
-        {
-            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
-                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
-            }
-        }
-    }
 }
 
 fn inl_Ground_ClearStarFoxArwingGObjs_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>) {
@@ -2145,6 +2937,75 @@ fn inl_Stage_IsOutsideBlastZoneWithMargin_unfused<'a>(
         return 1_i32;
     }
     return 0_i32;
+}
+
+fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
+    let mut jobj = jobj;
+    let mut z = z;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b82d0),
+            (0x151_i32 as u32),
+            cstr(ctx, 0x803b82d0),
+        )
+    });
+    (if !(((jobj).flags() & ((shl_i32(1_i32, (17_i32 as u32))) as u32)) != 0) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b82d0),
+            (0x152_i32 as u32),
+            cstr(ctx, 0x803b82d0),
+        )
+    });
+    (jobj).rotate().set_z(z);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_grVe_GetAnimArg_unfused<'a>(
+    ctx: &'a Ctx,
+    fire_kind: i32,
+    gp: Ground<'a>,
+    anim_data: grVe_AnimData<'a>,
+) -> i32 {
+    let mut fire_kind = fire_kind;
+    let mut gp = gp;
+    let mut anim_data = anim_data;
+    anim_data = Handle::cast::<grVe_AnimData<'a>>(
+        (Handle::add(
+            Handle::cast::<Val<'a, i32>>(anim_data),
+            (gp).u().venom().xF4().wrapping_mul(2_i32),
+        )),
+    );
+    anim_data = Handle::cast::<grVe_AnimData<'a>>(
+        (Handle::add(Handle::cast::<Val<'a, i32>>(anim_data), fire_kind)),
+    );
+    return (Handle::cast::<grVe_AnimArg<'a>>(anim_data)).value();
+}
+
+fn inl_HSD_JObjGetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b82d0),
+            (0x178_i32 as u32),
+            cstr(ctx, 0x803b82d0),
+        )
+    });
+    return (jobj).rotate().z();
 }
 
 fn inl_Ground_AnimateStarFoxArwing_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -2415,6 +3276,14 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x80204f20,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(grVenom_80204F20(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x802052d8,
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
@@ -2427,6 +3296,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (HSD_GObj<'_>, Vec<'_>) = Args::take_all(ctx);
             Ret::put(grVenom_802052E0(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x802053b0,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(grVenom_802053B0(ctx, a0), ctx);
         },
         Returns::Nothing,
     );
@@ -2501,6 +3378,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(grVenom_80205E84(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x80205f30,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(grVenom_80205F30(ctx, a0), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x80206870,

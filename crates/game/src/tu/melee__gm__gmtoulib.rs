@@ -2672,6 +2672,179 @@ pub fn fn_8018E618<'a>(ctx: &'a Ctx, arg0: i32, farg0: f64, arg1: i32) {
     inl_gmTournament_InitBracket_unfused(ctx, arg0, farg0, arg1);
 }
 
+pub fn fn_8018E85C<'a>(ctx: &'a Ctx, model: DynamicModelDesc<'a>, flag: i32) {
+    let __frame = ctx.stack_frame(0x80);
+    let mut model = model;
+    let mut flag = flag;
+    let mut sub: Val<'a, u8> = null(ctx);
+    let mut td: TmData<'a> = null(ctx);
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut outer_idx: i32 = 0;
+    let mut inner_idx: i32 = 0;
+    let mut bracket_idx: i32 = 0;
+    let mut j: i32 = 0;
+    let mut ptr_: Val<'a, u8> = null(ctx);
+    let mut gobj: HSD_GObj<'a> = null(ctx);
+    let mut anim_frame: i32 = 0;
+    let mut final_pos: f64 = 0.0;
+    let mut pos: f64 = 0.0;
+    let mut pos_multiplier: f64 = 0.0;
+    td = fns::gm_GetTournamentData(ctx);
+    bracket_idx = 0_i32;
+    {
+        outer_idx = 0_i32;
+        'l1: while outer_idx < 64_i32 {
+            'c2: {
+                'goto_next_entry: {
+                    if (fns::lbl_80473AB8(ctx).get(outer_idx).x0() as i32) == 0_i32 {
+                        break 'goto_next_entry;
+                    }
+                    inner_idx = 0_i32;
+                    {
+                        'l3: while inner_idx < 4_i32 {
+                            'c4: {
+                                'goto_next_sub: {
+                                    sub = Handle::add(
+                                        fns::lbl_80473AB8(ctx).get(outer_idx).x0_ref(),
+                                        inner_idx.wrapping_mul(44_i32),
+                                    );
+                                    if ((Handle::add(sub, 48_i32)).get() as i32) == 0_i32 {
+                                        break 'goto_next_sub;
+                                    }
+                                    if flag != 0_i32 {
+                                        ptr_ = Handle::cast::<Val<'a, u8>>(td);
+                                        {
+                                            j = 0_i32;
+                                            'l5: while j < 64_i32 {
+                                                'c6: {
+                                                    if ((Handle::add(
+                                                        ptr_,
+                                                        68_i32.wrapping_add(j.wrapping_mul(18_i32)),
+                                                    ))
+                                                    .get()
+                                                        as i32)
+                                                        == bracket_idx
+                                                    {
+                                                        break 'l5;
+                                                    }
+                                                }
+                                                j = j.wrapping_add(1);
+                                            }
+                                        }
+                                        (Handle::add(sub, 80_i32)).set((j as u8));
+                                        ptr_ = Handle::add(
+                                            Handle::cast::<Val<'a, u8>>(td),
+                                            j.wrapping_mul(18_i32),
+                                        );
+                                        (Handle::add(sub, 77_i32))
+                                            .set((Handle::add(ptr_, 58_i32)).get());
+                                        (Handle::add(sub, 78_i32))
+                                            .set((Handle::add(ptr_, 55_i32)).get());
+                                        (Handle::add(sub, 79_i32))
+                                            .set((Handle::add(ptr_, 62_i32)).get());
+                                        (Handle::add(sub, 81_i32))
+                                            .set((Handle::add(ptr_, 56_i32)).get());
+                                        (Handle::add(sub, 82_i32))
+                                            .set((Handle::add(ptr_, 57_i32)).get());
+                                        (Handle::cast::<Val<'a, u16>>((Handle::add(sub, 84_i32))))
+                                            .set(
+                                                (Handle::cast::<Val<'a, u16>>(
+                                                    (Handle::add(ptr_, 64_i32)),
+                                                ))
+                                                .get(),
+                                            );
+                                        bracket_idx = bracket_idx.wrapping_add(1);
+                                    }
+                                    gobj = fns::GObj_Create(
+                                        ctx,
+                                        (14_i32 as u16),
+                                        (27_i32 as u8),
+                                        (0_i32 as u8),
+                                    );
+                                    (Handle::cast::<Ptr<'a, HSD_GObj<'a>>>(
+                                        (Handle::add(sub, 44_i32)),
+                                    ))
+                                    .set(gobj);
+                                    gobj = (Handle::cast::<Ptr<'a, HSD_GObj<'a>>>(
+                                        (Handle::add(sub, 44_i32)),
+                                    ))
+                                    .get();
+                                    jobj = fns::HSD_JObjLoadJoint(ctx, (model).joint());
+                                    fns::HSD_GObjObject_80390A70(
+                                        ctx,
+                                        gobj,
+                                        fns::HSD_GObj_JObjKind(ctx).get(),
+                                        Handle::cast::<Addr<'a>>(jobj),
+                                    );
+                                    fns::GObj_SetupGXLink(
+                                        ctx,
+                                        gobj,
+                                        fnptr(ctx, 0x80391070),
+                                        (4_i32 as u8),
+                                        (2_i32 as u32),
+                                    );
+                                    fns::gm_8016895C(ctx, jobj, model, 0_i32);
+                                    anim_frame = ((Handle::add(sub, 77_i32)).get() as i32)
+                                        .wrapping_add(
+                                            ((Handle::add(sub, 79_i32)).get() as i32)
+                                                .wrapping_mul(30_i32),
+                                        );
+                                    fns::HSD_JObjReqAnimAll(ctx, jobj, fp::frsp(anim_frame as f64));
+                                    fns::HSD_JObjAnimAll(ctx, jobj);
+                                    if outer_idx == fns::fn_8018F74C(ctx) {
+                                        pos_multiplier = 10.0;
+                                    } else {
+                                        pos_multiplier = 7.0;
+                                    }
+                                    pos = fp::fmadds(
+                                        0.008299999870359898,
+                                        fp::frsp((64_i32.wrapping_sub(((td).x2E() as i32))) as f64),
+                                        1.0,
+                                    );
+                                    final_pos = fp::fmuls(pos_multiplier, pos);
+                                    inl_HSD_JObjSetScaleX(ctx, jobj, final_pos);
+                                    pos = fp::fmadds(
+                                        0.008299999870359898,
+                                        fp::frsp((64_i32.wrapping_sub(((td).x2E() as i32))) as f64),
+                                        1.0,
+                                    );
+                                    final_pos = fp::fmuls(pos_multiplier, pos);
+                                    inl_HSD_JObjSetScaleY(ctx, jobj, final_pos);
+                                    if (td).cur_option() < 31_i32 {
+                                        fns::fn_8018AA74(ctx, jobj, outer_idx, inner_idx);
+                                    } else {
+                                        fns::fn_8018FDC4(
+                                            ctx,
+                                            jobj,
+                                            fp::frsp(
+                                                (Handle::cast::<Val<'a, i32>>(
+                                                    (Handle::add(sub, 68_i32)),
+                                                ))
+                                                .get()
+                                                    as f64,
+                                            ),
+                                            fp::fneg(fp::frsp(
+                                                (Handle::cast::<Val<'a, i32>>(
+                                                    (Handle::add(sub, 72_i32)),
+                                                ))
+                                                .get()
+                                                    as f64,
+                                            )),
+                                            666.0,
+                                        );
+                                    }
+                                }
+                            }
+                            inner_idx = inner_idx.wrapping_add(1);
+                        }
+                    }
+                }
+            }
+            outer_idx = outer_idx.wrapping_add(1);
+        }
+    }
+}
+
 pub fn fn_8018EC48<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
     fns::mn_8022F138(ctx, (25_i32 as u16), (28_i32 as u16));
@@ -4271,6 +4444,52 @@ fn inl_gmTournament_InitBracket_unfused<'a>(
     fns::fn_8018A970(ctx, entrant_count);
 }
 
+fn inl_HSD_JObjSetScaleX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
+    let mut jobj = jobj;
+    let mut x = x;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7c80),
+            (0x192_i32 as u32),
+            cstr(ctx, 0x803b7c80),
+        )
+    });
+    (jobj).scale().set_x(x);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_HSD_JObjSetScaleY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
+    let mut jobj = jobj;
+    let mut y = y;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7c80),
+            (0x1a4_i32 as u32),
+            cstr(ctx, 0x803b7c80),
+        )
+    });
+    (jobj).scale().set_y(y);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
 fn inl_fn_8018F888_inline0_unfused<'a>(ctx: &'a Ctx) -> i32 {
     let mut i: i32 = 0;
     {
@@ -4504,6 +4723,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1, a2): (i32, Single, i32) = Args::take_all(ctx);
             Ret::put(fn_8018E618(ctx, a0, a1.0, a2), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8018e85c,
+        |ctx| {
+            let (a0, a1): (DynamicModelDesc<'_>, i32) = Args::take_all(ctx);
+            Ret::put(fn_8018E85C(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );

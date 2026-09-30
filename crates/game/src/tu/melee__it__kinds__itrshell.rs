@@ -77,6 +77,148 @@ pub fn it_8028D090<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::it_80272980(ctx, gobj);
 }
 
+pub fn it_8028D100<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x28);
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = null(ctx);
+    let mut attrs: itRShell_Attrs<'a> = null(ctx);
+    let mut kind: i32 = 0;
+    let mut did_hit: i32 = 0;
+    let mut vel: f64 = 0.0;
+    'goto_check_speed: {
+        'goto_add_vel: {
+            'goto_set_vel: {
+                ip = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+                attrs = Handle::cast::<itRShell_Attrs<'a>>(
+                    ((ip).xC4_article_data()).x4_specialAttributes(),
+                );
+                kind = (ip).msid();
+                did_hit = 0_i32;
+                if kind < 5_i32 {
+                    if kind == 2_i32 {
+                        break 'goto_check_speed;
+                    }
+                    if kind >= 2_i32 {
+                        break 'goto_set_vel;
+                    }
+                    if kind >= 0_i32 {
+                        break 'goto_set_vel;
+                    }
+                    break 'goto_check_speed;
+                } else {
+                    if kind == 7_i32 {
+                        break 'goto_set_vel;
+                    }
+                    if kind >= 7_i32 {
+                        break 'goto_check_speed;
+                    }
+                    break 'goto_add_vel;
+                }
+            }
+            did_hit = 1_i32;
+            (ip).x40_vel().set_x(fp::fmuls(
+                fp::fneg((ip).xCCC_incDamageDirection()),
+                (fp::fmuls(fp::frsp((ip).xCA0() as f64), (attrs).x20())),
+            ));
+            break 'goto_check_speed;
+        }
+        fns::it_8028D390(ctx, gobj);
+        (ip).x40_vel().set_x(fp::fmadds(
+            fp::fneg((ip).xCCC_incDamageDirection()),
+            (fp::fmuls(fp::frsp((ip).xCA0() as f64), (attrs).x24())),
+            (ip).x40_vel().x(),
+        ));
+        break 'goto_check_speed;
+    }
+    vel = (ip).x40_vel().x();
+    if vel < 0.0 {
+        vel = fp::fneg(vel);
+    }
+    if vel > (attrs).x10() {
+        let _ = fns::it_8027236C(ctx, gobj);
+        if did_hit != 0_i32 {
+            fns::it_802756D0(ctx, gobj);
+        }
+        if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+            fns::it_8028E170(ctx, gobj);
+            return;
+        }
+        fns::it_8028DAE4(ctx, gobj);
+        return;
+    }
+    fns::it_802725D4(ctx, gobj);
+}
+
+pub fn it_8028D26C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = null(ctx);
+    let mut attrs: itRShell_Attrs<'a> = null(ctx);
+    let mut kind: i32 = 0;
+    let mut did_hit: i32 = 0;
+    let mut vel: f64 = 0.0;
+    'goto_check_speed: {
+        'goto_add_vel: {
+            'goto_set_vel: {
+                ip = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+                attrs = Handle::cast::<itRShell_Attrs<'a>>(
+                    ((ip).xC4_article_data()).x4_specialAttributes(),
+                );
+                kind = (ip).msid();
+                did_hit = 0_i32;
+                if kind < 5_i32 {
+                    if kind == 2_i32 {
+                        break 'goto_check_speed;
+                    }
+                    if kind >= 2_i32 {
+                        break 'goto_set_vel;
+                    }
+                    if kind >= 0_i32 {
+                        break 'goto_set_vel;
+                    }
+                    break 'goto_check_speed;
+                } else {
+                    if kind == 7_i32 {
+                        break 'goto_set_vel;
+                    }
+                    if kind >= 7_i32 {
+                        break 'goto_check_speed;
+                    }
+                    break 'goto_add_vel;
+                }
+            }
+            did_hit = 1_i32;
+            (ip).x40_vel()
+                .set_x(fp::fmuls((attrs).x28(), fp::fneg((ip).xCD0())));
+            break 'goto_check_speed;
+        }
+        fns::it_8028D390(ctx, gobj);
+        (ip).x40_vel().set_x(fp::fmadds(
+            (attrs).x2C(),
+            fp::fneg((ip).xCD0()),
+            (ip).x40_vel().x(),
+        ));
+        break 'goto_check_speed;
+    }
+    vel = (ip).x40_vel().x();
+    if vel < 0.0 {
+        vel = fp::fneg(vel);
+    }
+    if vel > (attrs).x10() {
+        let _ = fns::it_802723FC(ctx, gobj);
+        if did_hit != 0_i32 {
+            fns::it_802756D0(ctx, gobj);
+        }
+        if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+            fns::it_8028E170(ctx, gobj);
+            return;
+        }
+        fns::it_8028DAE4(ctx, gobj);
+        return;
+    }
+    fns::it_802725D4(ctx, gobj);
+}
+
 pub fn it_8028D390<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -994,6 +1136,22 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(it_8028D090(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8028d100,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(it_8028D100(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8028d26c,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(it_8028D26C(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

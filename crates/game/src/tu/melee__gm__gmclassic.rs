@@ -26,6 +26,118 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn gmClassic_801B2BA4<'a>(
+    ctx: &'a Ctx,
+    arg0: gmClassicMatchup<'a>,
+    arg1: Val<'a, u8>,
+    arg2: gm_803DDEC8Struct<'a>,
+) -> gmClassicMatchup<'a> {
+    let __frame = ctx.stack_frame(0x40);
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut outer: i32 = 0;
+    let mut j: i32 = 0;
+    let mut entry: gmClassicMatchup<'a> = null(ctx);
+    let mut result: gmClassicMatchup<'a> = null(ctx);
+    let mut target_char: i32 = 0;
+    let mut k: i32 = 0;
+    let mut temp_idx: i32 = 0;
+    result = null::<gmClassicMatchup<'a>>(ctx);
+    target_char = ((fns::gmMainLib_8015CDC8(ctx)).c_kind() as i32);
+    {
+        outer = 0_i32;
+        'l1: while outer < inl_gmClassic_GetMatchupCount_unfused(ctx, arg0) {
+            'c2: {
+                'goto_next: {
+                    entry = (Handle::add(arg0, ((Handle::add(arg1, outer)).get() as i32)));
+                    {
+                        j = 0_i32;
+                        'l3: while j < 3_i32 {
+                            'c4: {
+                                let mut cur_char: i32 = ((entry).x2().x02().at(j).get() as i32);
+                                if cur_char == (enums::ChKind_None as i32) {
+                                    break 'c4;
+                                }
+                                if fns::gm_80164430(ctx, (entry).x00()) == 0_i32 {
+                                    break 'goto_next;
+                                }
+                                if fns::gm_IsCKindUnlocked(ctx, (cur_char as u8)) == 0_i32 {
+                                    break 'goto_next;
+                                }
+                                if cur_char == target_char {
+                                    break 'goto_next;
+                                }
+                                {
+                                    temp_idx = 0_i32;
+                                    'l5: while ((Handle::add(arg2, temp_idx)).x0() as i32) != 13_i32
+                                    {
+                                        'c6: {
+                                            {
+                                                k = 0_i32;
+                                                'l7: while k < 3_i32 {
+                                                    'c8: {
+                                                        if (!Handle::is_null(
+                                                            (Handle::add(arg2, temp_idx)).xC(),
+                                                        )) && (cur_char
+                                                            == (((Handle::add(arg2, temp_idx)).xC())
+                                                                .x2()
+                                                                .x02()
+                                                                .at(k)
+                                                                .get()
+                                                                as i32))
+                                                        {
+                                                            break 'goto_next;
+                                                        }
+                                                    }
+                                                    k = k.wrapping_add(1);
+                                                }
+                                            }
+                                        }
+                                        temp_idx = temp_idx.wrapping_add(1);
+                                    }
+                                }
+                                {
+                                    temp_idx = 0_i32;
+                                    'l9: while ((Handle::add(arg2, temp_idx)).x0() as i32) != 13_i32
+                                    {
+                                        'c10: {
+                                            if !Handle::is_null((Handle::add(arg2, temp_idx)).xC())
+                                            {
+                                                if fns::Stage_8022519C(
+                                                    ctx,
+                                                    (((Handle::add(arg2, temp_idx)).xC()).x00()
+                                                        as i32),
+                                                ) == fns::Stage_8022519C(
+                                                    ctx,
+                                                    ((entry).x00() as i32),
+                                                ) {
+                                                    result = entry;
+                                                    break 'goto_next;
+                                                }
+                                            }
+                                        }
+                                        temp_idx = temp_idx.wrapping_add(1);
+                                    }
+                                }
+                            }
+                            j = j.wrapping_add(1);
+                        }
+                    }
+                    if !Handle::is_null(entry) {
+                        return entry;
+                    }
+                }
+            }
+            outer = outer.wrapping_add(1);
+        }
+    }
+    if !Handle::is_null(result) {
+        return result;
+    }
+    return null::<gmClassicMatchup<'a>>(ctx);
+}
+
 pub fn gmClassic_801B2D54<'a>(ctx: &'a Ctx, arg0: gm_803DDEC8Struct<'a>) -> gm_803DDEC8Struct<'a> {
     let __frame = ctx.stack_frame(0x20);
     let mut arg0 = arg0;
@@ -666,6 +778,19 @@ pub fn gmClassic_801B3F18<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     fns::gm_SetNewGameModePending(ctx);
 }
 
+fn inl_gmClassic_GetMatchupCount_unfused<'a>(ctx: &'a Ctx, matchups: gmClassicMatchup<'a>) -> i32 {
+    let mut matchups = matchups;
+    let mut count: i32 = 0;
+    {
+        count = 0_i32;
+        'l1: while ((Handle::add(matchups, count)).x00() as i32) != 0x148_i32 {
+            'c2: {}
+            count = count.wrapping_add(1);
+        }
+    }
+    return count;
+}
+
 fn inl_gmClassic_InitMatchupOrder_unfused<'a>(
     ctx: &'a Ctx,
     matchups: gmClassicMatchup<'a>,
@@ -727,6 +852,15 @@ fn inl_gmClassic_GetStKind_unfused<'a>(
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x801b2ba4,
+        |ctx| {
+            let (a0, a1, a2): (gmClassicMatchup<'_>, Val<'_, u8>, gm_803DDEC8Struct<'_>) =
+                Args::take_all(ctx);
+            Ret::put(gmClassic_801B2BA4(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Int,
+    );
     ctx.register_port(
         0x801b2d54,
         |ctx| {

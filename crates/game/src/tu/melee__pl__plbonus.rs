@@ -511,6 +511,456 @@ pub fn pl_80039450<'a>(ctx: &'a Ctx, player: i32) {
     }
 }
 
+pub fn fn_80039618<'a>(ctx: &'a Ctx, player: i32) {
+    let __frame = ctx.stack_frame(0xc8);
+    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
+    let mut player = player;
+    let mut table: pl_StaleMoveTableExt_t<'a> = fns::Player_GetStaleMoveTableIndexPtr2(ctx, player);
+    let mut stats: plActionStats<'a> = fns::Player_GetActionStats(ctx, player);
+    let mut gobj: HSD_GObj<'a> = fns::Player_GetEntity(ctx, player);
+    let mut aerials: u32 = (stats).hits().aerials_count();
+    let mut atk_thrown: u32 = (stats).attacks().thrown_item_count();
+    let mut atk_counts: Val<'a, u32> = (stats).attacks().by_attack_counts().at(0);
+    let mut atk_x1A8: u32 = (stats).attacks().x1A8();
+    let mut hit_counts: Val<'a, u32> = (stats).hits().by_attack_counts().at(0);
+    let mut hit_thrown: u32 = (stats).hits().thrown_item_count();
+    let mut x358_counts: Val<'a, u32> = (stats).x358().x358_hits().by_attack_counts().at(0);
+    let mut hit_specials: u32 = (stats).hits().specials_count();
+    let mut hit_x1A0: u32 = (stats).hits().x1A0_count();
+    let mut hit_x1A8: u32 = (stats).hits().x1A8();
+    let mut x358_x1A8: u32 = (stats).x358().x358_hits().x1A8();
+    let mut attacks_total: u32 = (stats).attacks().total();
+    let mut hits_total: u32 = (stats).hits().total();
+    let mut x358_total: u32 = (stats).x358().x358_hits().total();
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut k: i32 = 0;
+    if (aerials != (0_i32 as u32)) && (aerials == hits_total) {
+        inl_setFlag_unfused(ctx, player, 0_i32);
+    }
+    if (hit_specials != (0_i32 as u32)) && (hit_specials == hits_total) {
+        inl_setFlag_unfused(ctx, player, 33_i32);
+    }
+    if (hit_x1A0 != (0_i32 as u32)) && (hit_x1A0 == hits_total) {
+        inl_setFlag_unfused(ctx, player, 34_i32);
+    }
+    if hits_total != (0_i32 as u32) {
+        'goto_skip_only_low_moves: {
+            {
+                i = 1_i32;
+                'l1: while i < 100_i32 {
+                    'c2: {
+                        if !(((i >= 51_i32) && (i <= 61_i32))
+                            || ((Handle::add(hit_counts, i)).get() == (0_i32 as u32)))
+                        {
+                            break 'goto_skip_only_low_moves;
+                        }
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+            inl_setFlag_unfused(ctx, player, 36_i32);
+        }
+    }
+    {
+        let mut sum: u32 = (0_i32 as u32);
+        let mut sub_sum: u32 = (0_i32 as u32);
+        {
+            i = 64_i32;
+            'l3: while i <= 98_i32 {
+                'c4: {
+                    let mut count: u32 = (Handle::add(hit_counts, i)).get();
+                    sum = sum.wrapping_add(count);
+                    's5: {
+                        let __case = match i {
+                            66_i32 => 0,
+                            70_i32 => 0,
+                            74_i32 => 0,
+                            78_i32 => 0,
+                            86_i32 => 0,
+                            _ => 1,
+                        };
+                        if __case <= 0 {
+                            sub_sum = sub_sum.wrapping_add(count);
+                            break 's5;
+                        }
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+        if sum != (0_i32 as u32) {
+            if hits_total == (Handle::add(hit_counts, 98_i32)).get() {
+                inl_setFlag_unfused(ctx, player, 149_i32);
+            } else if hits_total == sub_sum {
+                inl_setFlag_unfused(ctx, player, 150_i32);
+            } else if hits_total == sum {
+                inl_setFlag_unfused(ctx, player, 148_i32);
+            }
+        }
+    }
+    {
+        j = 0_i32;
+        'l6: while j < 6_i32 {
+            'c7: {
+                {
+                    k = 1_i32;
+                    'l8: while k <= 16_i32 {
+                        'c9: {
+                            if !((fns::pl_80037B2C(ctx, stats, j, k) != 0_i32)
+                                || (fns::pl_80038628(ctx, gobj, k) == 0_i32))
+                            {
+                                break 'l8;
+                            }
+                        }
+                        k = k.wrapping_add(1);
+                    }
+                }
+                if k == 17_i32 {
+                    inl_setFlag_unfused(ctx, player, 17_i32);
+                    break 'l6;
+                }
+            }
+            j = j.wrapping_add(1);
+        }
+    }
+    if (fns::Player_GetStaleMoveTableIndexPtr2(ctx, player))
+        .x0_staleMoveTable()
+        .x904()
+        .at(17_i32)
+        .get()
+        == (0_i32 as u32)
+    {
+        let mut found_low: i32 = 0_i32;
+        let mut found_high: i32 = 0_i32;
+        {
+            k = 1_i32;
+            'l10: while k <= 11_i32 {
+                'c11: {
+                    if !(((Handle::add(hit_counts, k)).get() != (0_i32 as u32))
+                        || (fns::pl_80038628(ctx, gobj, k) == 0_i32))
+                    {
+                        break 'l10;
+                    }
+                }
+                k = k.wrapping_add(1);
+            }
+        }
+        if k == 12_i32 {
+            found_low = 1_i32;
+        }
+        {
+            k = 12_i32;
+            'l12: while k <= 16_i32 {
+                'c13: {
+                    if !(((Handle::add(hit_counts, k)).get() != (0_i32 as u32))
+                        || (fns::pl_80038628(ctx, gobj, k) == 0_i32))
+                    {
+                        break 'l12;
+                    }
+                }
+                k = k.wrapping_add(1);
+            }
+        }
+        if k == 17_i32 {
+            found_high = 1_i32;
+        }
+        if (found_low != 0_i32) && (found_high != 0_i32) {
+            inl_setFlag_unfused(ctx, player, 16_i32);
+        } else if found_low != 0_i32 {
+            inl_setFlag_unfused(ctx, player, 14_i32);
+        } else if found_high != 0_i32 {
+            inl_setFlag_unfused(ctx, player, 15_i32);
+        }
+    }
+    {
+        let mut p: Val<'a, u32> = null(ctx);
+        let mut max: i32 = 0;
+        let mut min: i32 = 0;
+        let mut count_2: i32 = 0;
+        'goto_skip_combo_count: {
+            p = (Handle::add(x358_counts, 1_i32));
+            count_2 = 0_i32;
+            min = 0_i32;
+            max = 0_i32;
+            {
+                i = 99_i32;
+                'l14: while i != 0_i32 {
+                    'c15: {
+                        let mut c: u32 = (p).get();
+                        if c != (0_i32 as u32) {
+                            count_2 = count_2.wrapping_add(1);
+                            if c > (max as u32) {
+                                max = (c as i32);
+                            }
+                            if (min == 0_i32) || (c < (min as u32)) {
+                                min = (c as i32);
+                            }
+                        }
+                        if ((max != 0_i32) && (min != 0_i32))
+                            && (fp::frsp((max.wrapping_sub(min)) as f64)
+                                >= fp::fmuls(
+                                    fp::frsp(max as f64),
+                                    (fns::pl_804D6470(ctx).get()).x28(),
+                                ))
+                        {
+                            break 'goto_skip_combo_count;
+                        }
+                        p = Handle::add(p, 1);
+                    }
+                    i = i.wrapping_sub(1);
+                }
+            }
+            if count_2 >= (fns::pl_804D6470(ctx).get()).x24() {
+                inl_setFlag_unfused(ctx, player, 18_i32);
+            }
+        }
+    }
+    if hits_total != (0_i32 as u32) {
+        if hit_thrown == hits_total {
+            inl_setFlag_unfused(ctx, player, 21_i32);
+        } else if inl_pl_CalculateAverage_unfused(
+            ctx,
+            fp::frsp(hit_thrown as f64),
+            fp::frsp(hits_total as f64),
+        ) >= (fns::pl_804D6470(ctx).get()).x34()
+        {
+            inl_setFlag_unfused(ctx, player, 20_i32);
+        }
+    }
+    if atk_thrown == (0_i32 as u32) {
+        inl_setFlag_unfused(ctx, player, 22_i32);
+    }
+    {
+        let mut hit_count: i32 = 0;
+        'goto_skip_hit_count: {
+            hit_count = 0_i32;
+            {
+                i = 1_i32;
+                'l16: while i < 100_i32 {
+                    'c17: {
+                        if (Handle::add(hit_counts, i)).get() != (0_i32 as u32) {
+                            if (i < 17_i32) || (i > 48_i32) {
+                                break 'goto_skip_hit_count;
+                            }
+                            hit_count = hit_count.wrapping_add(1);
+                        }
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+            if hit_count != 0_i32 {
+                if hit_count == 1_i32 {
+                    inl_setFlag_unfused(ctx, player, 24_i32);
+                } else {
+                    inl_setFlag_unfused(ctx, player, 23_i32);
+                }
+            }
+        }
+    }
+    if hits_total != (0_i32 as u32) {
+        if inl_pl_CalculateAverage_unfused(
+            ctx,
+            fp::frsp((stats).x56C() as f64),
+            fp::frsp(hits_total as f64),
+        ) >= (fns::pl_804D6470(ctx).get()).x8()
+        {
+            inl_setFlag_unfused(ctx, player, 3_i32);
+        }
+    }
+    if (hits_total != (0_i32 as u32)) && ((stats).x574() == hits_total) {
+        inl_setFlag_unfused(ctx, player, 5_i32);
+    } else if hits_total >= (fns::pl_804D6470(ctx).get()).xC() {
+        if inl_pl_CalculateAverage_unfused(
+            ctx,
+            fp::frsp((stats).x574() as f64),
+            fp::frsp(hits_total as f64),
+        ) >= (fns::pl_804D6470(ctx).get()).x10()
+        {
+            inl_setFlag_unfused(ctx, player, 4_i32);
+        }
+    }
+    if (attacks_total == (0_i32 as u32)) && ((table).x0_staleMoveTable().xC60() == 0.0) {
+        inl_setFlag_unfused(ctx, player, 100_i32);
+    } else {
+        if attacks_total == (0_i32 as u32) {
+            inl_setFlag_unfused(ctx, player, 96_i32);
+        } else if (table).xD04() >= (fns::pl_804D6470(ctx).get()).x54() {
+            inl_setFlag_unfused(ctx, player, 47_i32);
+        } else if (table).xD04() >= (fns::pl_804D6470(ctx).get()).x50() {
+            inl_setFlag_unfused(ctx, player, 46_i32);
+        }
+        if (table).x0_staleMoveTable().xC60() == 0.0 {
+            inl_setFlag_unfused(ctx, player, 98_i32);
+        } else if (table).xD0C() >= (fns::pl_804D6470(ctx).get()).xF0() {
+            inl_setFlag_unfused(ctx, player, 97_i32);
+        }
+    }
+    {
+        let mut falls: u32 =
+            (fns::Player_GetFalls(ctx, player).wrapping_add(fns::gm_80172140(ctx)) as u32);
+        if falls == (0_i32 as u32) {
+            inl_setFlag_unfused(ctx, player, 99_i32);
+        } else if falls == ((table).x0_staleMoveTable().xC94() as u32) {
+            inl_setFlag_unfused(ctx, player, 102_i32);
+        }
+    }
+    if (((((table).xDD1().x0().bit0() as i32) != 0) && (((table).xDD1().x0().bit1() as i32) != 0))
+        && (((table).xDD1().x0().bit2() as i32) != 0))
+        && (((table).xDD1().x0().bit3() as i32) != 0)
+    {
+        inl_setFlag_unfused(ctx, player, 134_i32);
+    }
+    if ((atk_x1A8 != (0_i32 as u32)) && (atk_x1A8 == x358_x1A8))
+        && (hit_x1A8
+            == (fns::Player_GetStaleMoveTableIndexPtr2(ctx, player))
+                .x0_staleMoveTable()
+                .x904()
+                .at(6_i32)
+                .get())
+    {
+        inl_setFlag_unfused(ctx, player, 8_i32);
+    }
+    if fns::gm_801720B4(ctx) == 0_i32 {
+        let mut dmg_: i32 = fp::fctiwz((table).x0_staleMoveTable().xC64());
+        if fp::frsp(dmg_ as f64) >= 400.0 {
+            inl_setFlag_unfused(ctx, player, 32_i32);
+        } else if fp::frsp(dmg_ as f64) >= 350.0 {
+            inl_setFlag_unfused(ctx, player, 31_i32);
+        } else if fp::frsp(dmg_ as f64) >= 300.0 {
+            if fns::gm_8016B3A0(ctx) == 0_i32 {
+                inl_setFlag_unfused(ctx, player, 30_i32);
+            }
+        } else if fp::frsp(dmg_ as f64) >= 250.0 {
+            inl_setFlag_unfused(ctx, player, 29_i32);
+        } else if fp::frsp(dmg_ as f64) >= 200.0 {
+            inl_setFlag_unfused(ctx, player, 28_i32);
+        } else if fp::frsp(dmg_ as f64) >= 150.0 {
+            inl_setFlag_unfused(ctx, player, 27_i32);
+        }
+    }
+    if ((table).xDC8() as u32) != (0_i32 as u32) {
+        if x358_total == attacks_total {
+            inl_setFlag_unfused(ctx, player, 13_i32);
+        } else if inl_pl_CalculateAverage_unfused(
+            ctx,
+            fp::frsp(x358_total as f64),
+            fp::frsp(attacks_total as f64),
+        ) >= (fns::pl_804D6470(ctx).get()).x20()
+        {
+            inl_setFlag_unfused(ctx, player, 12_i32);
+        }
+    }
+    {
+        let mut sum_attacks: u32 =
+            (fns::fn_80038700(ctx, Handle::cast::<Val<'a, i32>>(stats), 1_i32, 16_i32) as u32);
+        let mut sum_x358: u32 = (fns::fn_80038700(
+            ctx,
+            Handle::cast::<Val<'a, i32>>((stats).x358().x358_hits()),
+            1_i32,
+            16_i32,
+        ) as u32);
+        if ((sum_x358 != (0_i32 as u32)) && (sum_attacks == sum_x358))
+            && (!((table).xDD1().x0().bit4() != 0))
+        {
+            inl_setFlag_unfused(ctx, player, 35_i32);
+        }
+    }
+    if (table).x0_staleMoveTable().xC74() >= (fns::pl_804D6470(ctx).get()).x160() {
+        inl_setFlag_unfused(ctx, player, 170_i32);
+    }
+    if fns::pl_800414C0(ctx, player) >= (fns::pl_804D6470(ctx).get()).x0() {
+        inl_setFlag_unfused(ctx, player, 1_i32);
+    }
+    if fns::pl_80038628(ctx, gobj, 2_i32) != 0_i32 {
+        let mut atk1: u32 = (Handle::add(atk_counts, 1_i32)).get();
+        if (atk1 != (0_i32 as u32)) && (atk1 == (Handle::add(atk_counts, 2_i32)).get()) {
+            let mut hit1: u32 = (Handle::add(x358_counts, 1_i32)).get();
+            if (hit1 == (Handle::add(x358_counts, 2_i32)).get()) && (atk1 == hit1) {
+                if fns::pl_80038628(ctx, gobj, 3_i32) != 0_i32 {
+                    let mut atk1b: u32 = (Handle::add(atk_counts, 1_i32)).get();
+                    if (atk1b == (Handle::add(atk_counts, 3_i32)).get())
+                        && (atk1b == (Handle::add(x358_counts, 3_i32)).get())
+                    {
+                        inl_setFlag_unfused(ctx, player, 25_i32);
+                    }
+                } else {
+                    inl_setFlag_unfused(ctx, player, 25_i32);
+                }
+            }
+        }
+    }
+    {
+        let mut max_ratio: f64 = 0.0;
+        let mut sum_ratio: f64 = 0.0;
+        {
+            i = 0_i32;
+            'l18: while i < 6_i32 {
+                'c19: {
+                    if i != player {
+                        let mut val: f64 = (fns::Player_GetStaleMoveTableIndexPtr2(ctx, i))
+                            .x0_staleMoveTable()
+                            .xC78()
+                            .at(player)
+                            .get();
+                        if max_ratio < val {
+                            max_ratio = val;
+                        }
+                        sum_ratio = fp::fadds(sum_ratio, val);
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+        if sum_ratio != 0.0 {
+            if (fns::gm_8016B558(ctx) == 3_i32)
+                && (inl_pl_CalculateAverage_unfused(ctx, max_ratio, sum_ratio)
+                    >= (fns::pl_804D6470(ctx).get()).xF8())
+            {
+                inl_setFlag_unfused(ctx, player, 103_i32);
+            } else if (fns::gm_8016B558(ctx) >= 4_i32)
+                && (inl_pl_CalculateAverage_unfused(ctx, max_ratio, sum_ratio)
+                    >= (fns::pl_804D6470(ctx).get()).xFC())
+            {
+                inl_setFlag_unfused(ctx, player, 103_i32);
+            }
+        }
+    }
+    if fns::gm_8016B558(ctx) >= 3_i32 {
+        let mut streak: i32 = 0_i32;
+        {
+            i = 0_i32;
+            'l20: while i < 6_i32 {
+                'c21: {
+                    if i != player {
+                        let mut kos: i32 = fns::Player_GetKOsByPlayerIndex(ctx, player, i);
+                        if kos != 0_i32 {
+                            if (fp::frsp(kos as f64) >= (fns::pl_804D6470(ctx).get()).x100())
+                                && (streak == 0_i32)
+                            {
+                                streak = 1_i32;
+                            } else {
+                                streak = 0_i32;
+                                break 'l20;
+                            }
+                        }
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+        if streak != 0_i32 {
+            inl_setFlag_unfused(ctx, player, 104_i32);
+        }
+    }
+    'l22: loop {
+        'c23: {}
+        if !(0_i32 != 0) {
+            break 'l22;
+        }
+    }
+}
+
 pub fn fn_8003B044<'a>(ctx: &'a Ctx, player: i32) {
     let __frame = ctx.stack_frame(0x70);
     let mut player = player;
@@ -792,6 +1242,261 @@ pub fn fn_8003BD60<'a>(ctx: &'a Ctx, player: i32) {
     }
     if (temp_r31).xD3C() >= (fns::pl_804D6470(ctx).get()).x16C() {
         inl_setFlag_unfused(ctx, player, 180_i32);
+    }
+}
+
+pub fn fn_8003C340<'a>(ctx: &'a Ctx, player: i32) {
+    let __frame = ctx.stack_frame(0x40);
+    let mut player = player;
+    let mut i: i32 = 0;
+    let mut var_r30: u32 = 0;
+    let mut var_r29: u32 = 0;
+    let mut var_r28: u32 = 0;
+    let mut var_r27: u32 = 0;
+    let mut var_r26: u32 = 0;
+    let mut var_r25: u32 = 0;
+    let mut var_r24: u32 = 0;
+    let mut count: u32 = 0;
+    let mut temp_r3: i32 = 0;
+    let mut temp_r3_2: i32 = 0;
+    let mut temp_r3_3: u32 = 0;
+    'goto_skip: {
+        temp_r3 = fns::pl_8003E39C(ctx, player);
+        if temp_r3 == 0_i32 {
+            inl_setFlag_unfused(ctx, player, 147_i32);
+            return;
+        }
+        if (temp_r3 as u32) == fns::pl_8003E2CC(ctx, player, (enums::Pl_ItemLog_Unk07 as i32)) {
+            inl_setFlag_unfused(ctx, player, 179_i32);
+        }
+        if fns::pl_8003E420(ctx, player) == (fns::it_8026B7D8(ctx) as u32) {
+            inl_setFlag_unfused(ctx, player, 159_i32);
+        }
+        temp_r3_2 = fns::it_8026B7E0(ctx);
+        if (temp_r3_2 != 0_i32)
+            && ((temp_r3_2 as u32)
+                == fns::pl_8003E334(ctx, player, (enums::Pl_ItemLog_Unk18 as i32)))
+        {
+            inl_setFlag_unfused(ctx, player, 160_i32);
+        }
+        count = (0_i32 as u32);
+        {
+            i = 0_i32;
+            'l1: while i < (enums::Pl_ItemLog_Terminate as i32) {
+                'c2: {
+                    if ((i >= (enums::Pl_ItemLog_Unk06 as i32))
+                        && (i != (enums::Pl_ItemLog_Unk18 as i32)))
+                        && (fns::pl_8003E2CC(ctx, player, i) != (0_i32 as u32))
+                    {
+                        count = count.wrapping_add(1);
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+        if count >= (fns::pl_804D6470(ctx).get()).x144() {
+            inl_setFlag_unfused(ctx, player, 158_i32);
+        }
+        var_r24 = (0_i32 as u32);
+        var_r25 = (0_i32 as u32);
+        var_r26 = (0_i32 as u32);
+        var_r27 = (0_i32 as u32);
+        var_r28 = (0_i32 as u32);
+        var_r29 = (0_i32 as u32);
+        var_r30 = (0_i32 as u32);
+        {
+            i = 0_i32;
+            'l3: while i < (enums::Pl_ItemLog_Terminate as i32) {
+                'c4: {
+                    temp_r3_3 = fns::pl_8003E2CC(ctx, player, i);
+                    's5: {
+                        let __case = match i {
+                            11_i32 => 0,
+                            12_i32 => 0,
+                            13_i32 => 0,
+                            22_i32 => 0,
+                            23_i32 => 0,
+                            24_i32 => 0,
+                            28_i32 => 0,
+                            16_i32 => 1,
+                            21_i32 => 1,
+                            25_i32 => 1,
+                            8_i32 => 2,
+                            9_i32 => 2,
+                            35_i32 => 2,
+                            37_i32 => 2,
+                            18_i32 => 3,
+                            26_i32 => 4,
+                            27_i32 => 4,
+                            31_i32 => 4,
+                            32_i32 => 4,
+                            33_i32 => 4,
+                            0_i32 => 5,
+                            1_i32 => 5,
+                            2_i32 => 5,
+                            3_i32 => 5,
+                            4_i32 => 5,
+                            5_i32 => 5,
+                            6_i32 => 5,
+                            7_i32 => 5,
+                            14_i32 => 5,
+                            15_i32 => 5,
+                            17_i32 => 5,
+                            19_i32 => 5,
+                            20_i32 => 5,
+                            30_i32 => 5,
+                            34_i32 => 5,
+                            36_i32 => 5,
+                            38_i32 => 5,
+                            10_i32 => 6,
+                            29_i32 => 6,
+                            _ => 7,
+                        };
+                        if __case <= 0 {
+                            var_r30 = var_r30.wrapping_add(temp_r3_3);
+                            break 's5;
+                        }
+                        if __case <= 1 {
+                            var_r29 = var_r29.wrapping_add(temp_r3_3);
+                            break 's5;
+                        }
+                        if __case <= 2 {
+                            var_r28 = var_r28.wrapping_add(temp_r3_3);
+                            break 's5;
+                        }
+                        if __case <= 3 {
+                            var_r27 = var_r27.wrapping_add(temp_r3_3);
+                            break 's5;
+                        }
+                        if __case <= 4 {
+                            var_r26 = var_r26.wrapping_add(temp_r3_3);
+                            break 's5;
+                        }
+                        if __case <= 5 {
+                            var_r25 = var_r25.wrapping_add(temp_r3_3);
+                            break 's5;
+                        }
+                        if __case <= 6 {
+                            var_r24 = var_r24.wrapping_add(temp_r3_3);
+                            break 's5;
+                        }
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+        if ((((((var_r30 >= (fns::pl_804D6470(ctx).get()).x148())
+            && (var_r29 == (0_i32 as u32)))
+            && (var_r28 == (0_i32 as u32)))
+            && (var_r27 == (0_i32 as u32)))
+            && (var_r26 == (0_i32 as u32)))
+            && (var_r25 == (0_i32 as u32)))
+            && (var_r24 == (0_i32 as u32))
+        {
+            inl_setFlag_unfused(ctx, player, 162_i32);
+        }
+        if ((((((var_r30 == (0_i32 as u32))
+            && (var_r29 >= (fns::pl_804D6470(ctx).get()).x14C()))
+            && (var_r28 == (0_i32 as u32)))
+            && (var_r27 == (0_i32 as u32)))
+            && (var_r26 == (0_i32 as u32)))
+            && (var_r25 == (0_i32 as u32)))
+            && (var_r24 == (0_i32 as u32))
+        {
+            inl_setFlag_unfused(ctx, player, 163_i32);
+        }
+        if ((((((var_r30 == (0_i32 as u32)) && (var_r29 == (0_i32 as u32)))
+            && (var_r28 >= (fns::pl_804D6470(ctx).get()).x150()))
+            && (var_r27 == (0_i32 as u32)))
+            && (var_r26 == (0_i32 as u32)))
+            && (var_r25 == (0_i32 as u32)))
+            && (var_r24 == (0_i32 as u32))
+        {
+            inl_setFlag_unfused(ctx, player, 164_i32);
+        }
+        if ((((((var_r30 == (0_i32 as u32)) && (var_r29 == (0_i32 as u32)))
+            && (var_r28 == (0_i32 as u32)))
+            && (var_r27 >= (fns::pl_804D6470(ctx).get()).x154()))
+            && (var_r26 == (0_i32 as u32)))
+            && (var_r25 == (0_i32 as u32)))
+            && (var_r24 == (0_i32 as u32))
+        {
+            inl_setFlag_unfused(ctx, player, 161_i32);
+        }
+        if ((((((var_r30 == (0_i32 as u32)) && (var_r29 == (0_i32 as u32)))
+            && (var_r28 == (0_i32 as u32)))
+            && (var_r27 == (0_i32 as u32)))
+            && (var_r26 >= (fns::pl_804D6470(ctx).get()).x158()))
+            && (var_r25 == (0_i32 as u32)))
+            && (var_r24 == (0_i32 as u32))
+        {
+            inl_setFlag_unfused(ctx, player, 165_i32);
+        }
+        if ((((((var_r30 == (0_i32 as u32)) && (var_r29 == (0_i32 as u32)))
+            && (var_r28 == (0_i32 as u32)))
+            && (var_r27 == (0_i32 as u32)))
+            && (var_r26 == (0_i32 as u32)))
+            && (var_r25 >= (fns::pl_804D6470(ctx).get()).x15C()))
+            && (var_r24 == (0_i32 as u32))
+        {
+            inl_setFlag_unfused(ctx, player, 166_i32);
+        }
+        if fns::pl_8003E2CC(ctx, player, (enums::Pl_ItemLog_Unk26 as i32)).wrapping_add(
+            fns::pl_8003E2CC(ctx, player, (enums::Pl_ItemLog_Unk27 as i32)),
+        ) >= (fns::pl_804D6470(ctx).get()).x168()
+        {
+            inl_setFlag_unfused(ctx, player, 174_i32);
+        }
+        {
+            i = 0_i32;
+            'l6: while i < (enums::Pl_ItemLog_Terminate as i32) {
+                'c7: {
+                    's8: {
+                        let __case = match i {
+                            10_i32 => 0,
+                            25_i32 => 0,
+                            26_i32 => 0,
+                            _ => 1,
+                        };
+                        if __case <= 0 {
+                            if fns::pl_8003E2CC(ctx, player, i) == (0_i32 as u32) {
+                                break 'goto_skip;
+                            }
+                            break 's8;
+                        }
+                        if __case <= 1 {
+                            if fns::pl_8003E2CC(ctx, player, i) != (0_i32 as u32) {
+                                break 'goto_skip;
+                            }
+                            break 's8;
+                        }
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+        inl_setFlag_unfused(ctx, player, 175_i32);
+    }
+    if fns::pl_8003E2CC(ctx, player, (enums::Pl_ItemLog_Unk07 as i32))
+        >= (fns::pl_804D6470(ctx).get()).x170()
+    {
+        inl_setFlag_unfused(ctx, player, 181_i32);
+    }
+    if fns::pl_8003E2CC(ctx, player, (enums::Pl_ItemLog_Unk09 as i32))
+        >= (fns::pl_804D6470(ctx).get()).x174()
+    {
+        inl_setFlag_unfused(ctx, player, 188_i32);
+    }
+    if fns::pl_8003E2CC(ctx, player, (enums::Pl_ItemLog_Unk08 as i32))
+        >= (fns::pl_804D6470(ctx).get()).x178()
+    {
+        inl_setFlag_unfused(ctx, player, 189_i32);
+    }
+    if fns::pl_8003E7D4(ctx, player, 183_i32) != (0_i32 as u32) {
+        inl_setFlag_unfused(ctx, player, 204_i32);
+    }
+    if fns::pl_8003E7D4(ctx, player, 184_i32) != (0_i32 as u32) {
+        inl_setFlag_unfused(ctx, player, 205_i32);
     }
 }
 
@@ -1229,6 +1934,14 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x80039618,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(fn_80039618(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x8003b044,
         |ctx| {
             let (a0,): (i32,) = Args::take_all(ctx);
@@ -1249,6 +1962,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (i32,) = Args::take_all(ctx);
             Ret::put(fn_8003BD60(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8003c340,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(fn_8003C340(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

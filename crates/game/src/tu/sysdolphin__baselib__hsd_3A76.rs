@@ -468,6 +468,169 @@ pub fn HSD_SisLib_803A7684<'a>(ctx: &'a Ctx, text: HSD_Text<'a>, cursor: Val<'a,
     }
 }
 
+pub fn HSD_SisLib_803A7F0C<'a>(ctx: &'a Ctx, text: HSD_Text<'a>, flags: i32) -> Val<'a, u8> {
+    let __frame = ctx.stack_frame(0x20);
+    let mut text = text;
+    let mut flags = flags;
+    let mut entry: i8 = 0;
+    let mut flag_hi: i32 = 0;
+    let mut entry_flags: i32 = 0;
+    let mut target_type: i32 = 0;
+    let mut result: Val<'a, u8> = null(ctx);
+    let mut remove_size: i32 = 0;
+    let mut pos: i32 = 0;
+    'goto_done: {
+        flag_hi = (flags & 128_i32);
+        target_type = (flags & 127_i32);
+        pos = ((text).state_stack_used() as i32);
+        result = null::<Val<'a, u8>>(ctx);
+        remove_size = 0_i32;
+        'l1: while pos >= 0_i32 {
+            'c2: {
+                entry = ((Handle::add((text).state_stack(), pos)).get() as i8);
+                entry_flags = ((entry as i32) & 128_i32);
+                's3: {
+                    let __case = match (((entry as u8) as i32) & 127_i32) {
+                        1_i32 => 0,
+                        2_i32 => 1,
+                        3_i32 => 2,
+                        4_i32 => 3,
+                        5_i32 => 4,
+                        _ => 5,
+                    };
+                    if __case <= 0 {
+                        pos = pos.wrapping_sub(4_i32);
+                        if target_type == 1_i32 {
+                            (text).x78().set_x(fp::fdivs(
+                                fp::frsp(
+                                    ((Handle::cast::<Val<'a, i16>>(
+                                        (Handle::add((text).state_stack(), pos)),
+                                    ))
+                                    .get()) as f64,
+                                ),
+                                256.0,
+                            ));
+                            (text).x78().set_y(fp::fdivs(
+                                fp::frsp(
+                                    ((Handle::cast::<Val<'a, i16>>(
+                                        (Handle::add(
+                                            Handle::add((text).state_stack(), pos),
+                                            2_i32,
+                                        )),
+                                    ))
+                                    .get()) as f64,
+                                ),
+                                256.0,
+                            ));
+                            if flag_hi == entry_flags {
+                                remove_size = 5_i32;
+                            }
+                            break 'goto_done;
+                        }
+                        break 's3;
+                    }
+                    if __case <= 1 {
+                        pos = pos.wrapping_sub(3_i32);
+                        if target_type == 2_i32 {
+                            (text)
+                                .active_color()
+                                .set_r((Handle::add((text).state_stack(), pos)).get());
+                            (text).active_color().set_g(
+                                (Handle::add((text).state_stack(), pos.wrapping_add(1_i32))).get(),
+                            );
+                            (text).active_color().set_b(
+                                (Handle::add((text).state_stack(), pos.wrapping_add(2_i32))).get(),
+                            );
+                            if flag_hi == entry_flags {
+                                remove_size = 4_i32;
+                            }
+                            break 'goto_done;
+                        }
+                        break 's3;
+                    }
+                    if __case <= 2 {
+                        pos = pos.wrapping_sub(4_i32);
+                        if target_type == 3_i32 {
+                            (text).x80().set_x(fp::fdivs(
+                                fp::frsp(
+                                    ((Handle::cast::<Val<'a, u16>>(
+                                        (Handle::add((text).state_stack(), pos)),
+                                    ))
+                                    .get()) as f64,
+                                ),
+                                256.0,
+                            ));
+                            (text).x80().set_y(fp::fdivs(
+                                fp::frsp(
+                                    ((Handle::cast::<Val<'a, u16>>(
+                                        (Handle::add(
+                                            Handle::add((text).state_stack(), pos),
+                                            2_i32,
+                                        )),
+                                    ))
+                                    .get()) as f64,
+                                ),
+                                256.0,
+                            ));
+                            if flag_hi == entry_flags {
+                                remove_size = 5_i32;
+                            }
+                            break 'goto_done;
+                        }
+                        break 's3;
+                    }
+                    if __case <= 3 {
+                        pos = pos.wrapping_sub(1_i32);
+                        if target_type == 4_i32 {
+                            (text).set_alignment((Handle::add((text).state_stack(), pos)).get());
+                            if flag_hi == entry_flags {
+                                remove_size = 2_i32;
+                            }
+                            break 'goto_done;
+                        }
+                        break 's3;
+                    }
+                    if __case <= 4 {
+                        pos = pos.wrapping_sub((enums::SIS_SAVED_CURSOR_SIZE as i32));
+                        if target_type == 5_i32 {
+                            result = ((Handle::cast::<Ptr<'a, Val<'a, u8>>>(
+                                (Handle::add((text).state_stack(), pos)),
+                            ))
+                            .get());
+                            if flag_hi == entry_flags {
+                                remove_size =
+                                    (enums::SIS_SAVED_CURSOR_SIZE as i32).wrapping_add(1_i32);
+                            }
+                            break 'goto_done;
+                        }
+                        break 's3;
+                    }
+                }
+                pos = pos.wrapping_sub(1_i32);
+            }
+        }
+    }
+    if remove_size != 0_i32 {
+        'l4: while (pos.wrapping_add(remove_size)) < ((text).state_stack_used() as i32) {
+            'c5: {
+                (Handle::add((text).state_stack(), pos))
+                    .set((Handle::add((text).state_stack(), pos.wrapping_add(remove_size))).get());
+                pos = pos.wrapping_add(1_i32);
+            }
+        }
+        'l6: while pos < ((text).state_stack_used() as i32) {
+            'c7: {
+                (Handle::add((text).state_stack(), pos)).set((0_i32 as u8));
+                pos = pos.wrapping_add(1_i32);
+            }
+        }
+        (text).set_state_stack_used(
+            (((text).state_stack_used() as i32).wrapping_sub(remove_size) as u16),
+        );
+    }
+    return result;
+}
+
 pub fn HSD_SisLib_803A8134<'a>(
     ctx: &'a Ctx,
     cursor: Val<'a, u8>,
@@ -712,6 +875,29 @@ pub fn HSD_SisLib_803A947C<'a>(ctx: &'a Ctx, archive: HSD_Archive<'a>) {
     fns::lbArchive_80016EFC(ctx, archive);
 }
 
+fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
+fn inl_GXPosition3f32<'a>(ctx: &'a Ctx, x: f64, y: f64, z: f64) {
+    let mut x = x;
+    let mut y = y;
+    let mut z = z;
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(x);
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(y);
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(z);
+}
+
+fn inl_GXTexCoord2f32<'a>(ctx: &'a Ctx, x: f64, y: f64) {
+    let mut x = x;
+    let mut y = y;
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(x);
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(y);
+}
+
+fn inl_GXEnd<'a>(ctx: &'a Ctx) {}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -721,6 +907,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(HSD_SisLib_803A7684(ctx, a0, a1, a2), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x803a7f0c,
+        |ctx| {
+            let (a0, a1): (HSD_Text<'_>, i32) = Args::take_all(ctx);
+            Ret::put(HSD_SisLib_803A7F0C(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x803a8134,

@@ -1826,6 +1826,88 @@ pub fn efLib_SetTevKonstColor<'a>(
         .set_b(((tev0 & (255_i32 as u32)) as u8));
 }
 
+pub fn efLib_SetParamAlpha<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, alpha: u8) {
+    let mut gobj = gobj;
+    let mut alpha = alpha;
+    let mut idx: i32 = 0;
+    let mut base: EF_ParamEntry<'a> = null(ctx);
+    'goto_found: {
+        base = Handle::add(fns::efLib_AnimQueue(ctx).get(0), 16_i32);
+        {
+            idx = 0_i32;
+            'l1: while idx < 8_i32 {
+                'c2: {
+                    if Handle::addr((Handle::add(base, idx)).gobj())
+                        == Handle::addr(Handle::cast::<Addr<'a>>(gobj))
+                    {
+                        break 'goto_found;
+                    }
+                }
+                idx = idx.wrapping_add(1);
+            }
+        }
+        {
+            idx = 0_i32;
+            'l3: while idx < 8_i32 {
+                'c4: {
+                    if Handle::is_null((Handle::add(base, idx)).gobj()) {
+                        break 'goto_found;
+                    }
+                }
+                idx = idx.wrapping_add(1);
+            }
+        }
+        return;
+    }
+    fns::efLib_AnimQueue(ctx)
+        .get(idx.wrapping_add(16_i32))
+        .set_gobj(Handle::cast::<Addr<'a>>(gobj));
+    fns::efLib_AnimQueue(ctx)
+        .get(idx.wrapping_add(16_i32))
+        .set_alpha((alpha as u16));
+}
+
+pub fn efLib_SetParamGfxId<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, gfx_id: i32) {
+    let mut gobj = gobj;
+    let mut gfx_id = gfx_id;
+    let mut idx: i32 = 0;
+    let mut base: EF_ParamEntry<'a> = null(ctx);
+    'goto_found: {
+        base = Handle::add(fns::efLib_AnimQueue(ctx).get(0), 16_i32);
+        {
+            idx = 0_i32;
+            'l1: while idx < 8_i32 {
+                'c2: {
+                    if Handle::addr((Handle::add(base, idx)).gobj())
+                        == Handle::addr(Handle::cast::<Addr<'a>>(gobj))
+                    {
+                        break 'goto_found;
+                    }
+                }
+                idx = idx.wrapping_add(1);
+            }
+        }
+        {
+            idx = 0_i32;
+            'l3: while idx < 8_i32 {
+                'c4: {
+                    if Handle::is_null((Handle::add(base, idx)).gobj()) {
+                        break 'goto_found;
+                    }
+                }
+                idx = idx.wrapping_add(1);
+            }
+        }
+        return;
+    }
+    fns::efLib_AnimQueue(ctx)
+        .get(idx.wrapping_add(16_i32))
+        .set_gobj(Handle::cast::<Addr<'a>>(gobj));
+    fns::efLib_AnimQueue(ctx)
+        .get(idx.wrapping_add(16_i32))
+        .set_gfx_id((gfx_id as u16));
+}
+
 pub fn efLib_Cb_ApplyStoredAlpha<'a>(ctx: &'a Ctx, effect: EF_Effect<'a>) {
     let __frame = ctx.stack_frame(0x30);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
@@ -2935,6 +3017,22 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1, a2, a3): (HSD_JObj<'_>, i32, u32, u32) = Args::take_all(ctx);
             Ret::put(efLib_SetTevKonstColor(ctx, a0, a1, a2, a3), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8005f864,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, u8) = Args::take_all(ctx);
+            Ret::put(efLib_SetParamAlpha(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8005f990,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
+            Ret::put(efLib_SetParamGfxId(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );

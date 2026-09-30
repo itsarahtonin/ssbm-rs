@@ -467,6 +467,36 @@ pub fn fn_8001EF5C<'a>(ctx: &'a Ctx, data: THPDecComp<'a>) -> i32 {
     return (data).unk_94();
 }
 
+pub fn fn_8001F06C<'a>(ctx: &'a Ctx, data: THPDecComp<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let mut data = data;
+    let mut intr: i32 = 0;
+    'goto_end: {
+        intr = fns::OSDisableInterrupts(ctx);
+        if ((data).unk_108() > 0_i32) || ((data).unk_6C() == 0_i32) {
+            (data).set_unk_78((data).unk_78().wrapping_add(1));
+            if (data).unk_78() == (data).unk_40() {
+                if (data).unk_68() != 0_i32 {
+                    (data).set_unk_78((0_i32 as u32));
+                } else {
+                    (data).set_unk_78((data).unk_78().wrapping_sub(1));
+                    break 'goto_end;
+                }
+            }
+            (data).set_unk_88((data).unk_88().wrapping_add(1));
+            (data).set_unk_108((data).unk_108().wrapping_sub(1));
+            if (data).unk_88() >= (data).unk_104() {
+                (data).set_unk_88((0_i32 as u32));
+            }
+        }
+        if (data).unk_108() < (data).unk_10C() {
+            (data).set_unk_10C((data).unk_108());
+        }
+    }
+    let _ = fns::OSRestoreInterrupts(ctx, intr);
+    return 1_i32;
+}
+
 pub fn fn_8001F13C<'a>(ctx: &'a Ctx, streamPlayer: THPDecComp<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
     let mut streamPlayer = streamPlayer;
@@ -843,6 +873,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (THPDecComp<'_>,) = Args::take_all(ctx);
             Ret::put(fn_8001EF5C(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8001f06c,
+        |ctx| {
+            let (a0,): (THPDecComp<'_>,) = Args::take_all(ctx);
+            Ret::put(fn_8001F06C(ctx, a0), ctx);
         },
         Returns::Int,
     );

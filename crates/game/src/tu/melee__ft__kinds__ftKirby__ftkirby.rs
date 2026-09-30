@@ -341,6 +341,33 @@ pub fn ftKb_Init_OnKnockbackExit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::ftAnim_800704F0(ctx, gobj, 0_i32, 0.0);
 }
 
+pub fn ftKb_Init_UnkDemoCallbacks0<'a>(
+    ctx: &'a Ctx,
+    kind: i32,
+    out1: Val<'a, i32>,
+    out2: Val<'a, i32>,
+) {
+    let mut kind = kind;
+    let mut out1 = out1;
+    let mut out2 = out2;
+    'goto_case14: {
+        if kind == 14_i32 {
+            break 'goto_case14;
+        }
+        if kind >= 14_i32 {
+            return;
+        }
+        if kind < 11_i32 {
+            return;
+        }
+        (out1).set(14_i32);
+        (out2).set(16_i32);
+        return;
+    }
+    (out2).set(17_i32);
+    (out1).set(17_i32);
+}
+
 pub fn ftKb_Init_GetMotionFileString<'a>(ctx: &'a Ctx, arg0: i32) -> Val<'a, i8> {
     let mut arg0 = arg0;
     let mut offset: i32 = 0;
@@ -2991,6 +3018,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(ftKb_Init_OnKnockbackExit(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x800eebc0,
+        |ctx| {
+            let (a0, a1, a2): (i32, Val<'_, i32>, Val<'_, i32>) = Args::take_all(ctx);
+            Ret::put(ftKb_Init_UnkDemoCallbacks0(ctx, a0, a1, a2), ctx);
         },
         Returns::Nothing,
     );

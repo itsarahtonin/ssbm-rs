@@ -2866,6 +2866,47 @@ pub fn gm_IsCKindUnlocked<'a>(ctx: &'a Ctx, ckind: u8) -> i32 {
     return 0_i32;
 }
 
+pub fn gm_UnlockCKind<'a>(ctx: &'a Ctx, ckind: i32) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut ckind = ckind;
+    let mut char_unlock_mask: Val<'a, u16> = null(ctx);
+    let mut selkind: u8 = 0;
+    let mut i: i32 = 0;
+    let mut unlock_idx: u8 = 0;
+    let mut notify_val: u8 = 0;
+    char_unlock_mask = fns::gmMainLib_GetUnlockedCharactersBitmaskPtr(ctx);
+    selkind = statics::melee__gm__gm_1601::ckind_to_selkind_map(ctx)
+        .at(((ckind as u8) as i32))
+        .get();
+    unlock_idx = inl_gm_SelKindToUnlockIndex_unfused(ctx, (selkind as i32));
+    if (unlock_idx as i32) != 11_i32 {
+        'goto_found_notify: {
+            {
+                i = 0_i32;
+                'l1: while i < 11_i32 {
+                    'c2: {
+                        if (unlock_idx as i32)
+                            == (statics::melee__gm__gm_1601::lbl_803B78C8(ctx).get(i).idx() as i32)
+                        {
+                            notify_val = statics::melee__gm__gm_1601::lbl_803B78C8(ctx)
+                                .get(i)
+                                .notification_id();
+                            break 'goto_found_notify;
+                        }
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+            notify_val = (66_i32 as u8);
+        }
+        let _ = fns::gmMainLib_8015D818(ctx, (notify_val as u32));
+        (char_unlock_mask).set(
+            ((((char_unlock_mask).get() as i64) | (shl_i64(1_i64, ((unlock_idx as i32) as u32))))
+                as u16),
+        );
+    }
+}
+
 pub fn gm_80164A0C<'a>(ctx: &'a Ctx, ckind: u8) {
     let __frame = ctx.stack_frame(0x18);
     let mut ckind = ckind;
@@ -6940,6 +6981,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(gm_IsCKindUnlocked(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x80164910,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(gm_UnlockCKind(ctx, a0), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x80164a0c,

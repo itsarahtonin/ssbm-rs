@@ -26,6 +26,91 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn FormatCallback<'a>(ctx: &'a Ctx, chan: i32, result: i32) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut chan = chan;
+    let mut result = result;
+    let mut card: CARDControl<'a> = null(ctx);
+    let mut callback: FnPtr<'a> = null(ctx);
+    'goto_error: {
+        card = fns::__CARDBlock(ctx).get(chan);
+        if result < 0_i32 {
+            break 'goto_error;
+        }
+        (card).set_mountStep((card).mountStep().wrapping_add(1));
+        if (card).mountStep() < 5_i32 {
+            result = fns::__CARDEraseSector(
+                ctx,
+                chan,
+                ((card).sectorSize() as u32).wrapping_mul(((card).mountStep() as u32)),
+                fnptr(ctx, 0x80356970),
+            );
+            if result >= 0_i32 {
+                return;
+            }
+        } else if (card).mountStep() < 2_i32.wrapping_mul(5_i32) {
+            let mut step: i32 = (card).mountStep().wrapping_sub(5_i32);
+            result = fns::__CARDWrite(
+                ctx,
+                chan,
+                ((card).sectorSize() as u32).wrapping_mul((step as u32)),
+                (((8_i32 as u32).wrapping_mul(0x400_u32)) as i32),
+                Handle::cast::<Addr<'a>>(Handle::add(
+                    Handle::cast::<Val<'a, u8>>((card).workArea()),
+                    ((((8_i32 as u32).wrapping_mul(0x400_u32)).wrapping_mul((step as u32))) as i32),
+                )),
+                fnptr(ctx, 0x80356970),
+            );
+            if result >= 0_i32 {
+                return;
+            }
+        } else {
+            (card).set_currentDir(Handle::cast::<CARDDir<'a>>(
+                (Handle::add(
+                    Handle::cast::<Val<'a, u8>>((card).workArea()),
+                    (((1_i32.wrapping_add(0_i32)) as u32)
+                        .wrapping_mul(((8_i32 as u32).wrapping_mul(0x400_u32)))
+                        as i32),
+                )),
+            ));
+            let _ = fns::memcpy(
+                ctx,
+                Handle::cast::<Addr<'a>>((card).currentDir()),
+                Handle::cast::<Addr<'a>>(Handle::add(
+                    Handle::cast::<Val<'a, u8>>((card).workArea()),
+                    (((1_i32.wrapping_add(1_i32)) as u32)
+                        .wrapping_mul(((8_i32 as u32).wrapping_mul(0x400_u32)))
+                        as i32),
+                )),
+                ((8_i32 as u32).wrapping_mul(0x400_u32)),
+            );
+            (card).set_currentFat(Handle::cast::<Val<'a, u16>>(
+                (Handle::add(
+                    Handle::cast::<Val<'a, u8>>((card).workArea()),
+                    (((3_i32.wrapping_add(0_i32)) as u32)
+                        .wrapping_mul(((8_i32 as u32).wrapping_mul(0x400_u32)))
+                        as i32),
+                )),
+            ));
+            let _ = fns::memcpy(
+                ctx,
+                Handle::cast::<Addr<'a>>((card).currentFat()),
+                Handle::cast::<Addr<'a>>(Handle::add(
+                    Handle::cast::<Val<'a, u8>>((card).workArea()),
+                    (((3_i32.wrapping_add(1_i32)) as u32)
+                        .wrapping_mul(((8_i32 as u32).wrapping_mul(0x400_u32)))
+                        as i32),
+                )),
+                ((8_i32 as u32).wrapping_mul(0x400_u32)),
+            );
+        }
+    }
+    callback = (card).apiCallback();
+    (card).set_apiCallback(null::<FnPtr<'a>>(ctx));
+    let _ = fns::__CARDPutControlBlock(ctx, card, result);
+    callback.call::<_, ()>((chan, result));
+}
+
 pub fn __CARDFormatRegionAsync<'a>(
     ctx: &'a Ctx,
     chan: i32,
@@ -205,6 +290,14 @@ pub fn CARDFormatAsync<'a>(ctx: &'a Ctx, chan: i32, callback: FnPtr<'a>) -> i32 
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x80356970,
+        |ctx| {
+            let (a0, a1): (i32, i32) = Args::take_all(ctx);
+            Ret::put(FormatCallback(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
     ctx.register_port(
         0x80356ab4,
         |ctx| {

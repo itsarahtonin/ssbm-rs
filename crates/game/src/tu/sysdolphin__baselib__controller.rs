@@ -47,6 +47,100 @@ pub fn HSD_PadGetResetSwitch<'a>(ctx: &'a Ctx) -> i32 {
     });
 }
 
+pub fn HSD_PadRenewRawStatus<'a>(ctx: &'a Ctx, err_check: i32) {
+    let __frame = ctx.stack_frame(0x68);
+    let now: HSD_PadData<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut err_check = err_check;
+    let mut i: i32 = 0;
+    let mut mask: u32 = 0;
+    let mut p: PadLibData<'a> = null(ctx);
+    let mut qwrite: HSD_PadData<'a> = null(ctx);
+    let mut qread: PADStatus<'a> = null(ctx);
+    'goto_skip: {
+        p = fns::HSD_PadLibData(ctx);
+        fns::HSD_PadRumbleInterpret(ctx);
+        let _ = fns::PADRead(ctx, now.stat().get(0));
+        if (err_check != 0) {
+            {
+                i = 0_i32;
+                'l1: while i < 4_i32 {
+                    'c2: {
+                        if !(now.stat().get(i).err() != 0) {
+                            break 'l1;
+                        }
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+            if i == 4_i32 {
+                return;
+            }
+        }
+        qwrite = (Handle::add((p).queue(), ((p).qwrite() as i32)));
+        if ((p).qcount() as i32) == ((p).qnum() as i32) {
+            's3: {
+                let __case = match ((p).qtype() as i32) {
+                    0_i32 => 0,
+                    1_i32 => 1,
+                    2_i32 => 2,
+                    _ => 3,
+                };
+                if __case <= 0 {
+                    inl_HSD_PadRawQueueShift_unfused(ctx, (p).qnum(), (p).qread_ref());
+                    qread = (Handle::add((p).queue(), ((p).qread() as i32)))
+                        .stat()
+                        .get(0);
+                    if ((p).qnum() as i32) != 1_i32 {
+                        inl_HSD_PadRawMerge_unfused(ctx, (qwrite).stat().get(0), qread, qread);
+                    } else {
+                        inl_HSD_PadRawMerge_unfused(
+                            ctx,
+                            now.stat().get(0),
+                            qread,
+                            now.stat().get(0),
+                        );
+                    }
+                    break 's3;
+                }
+                if __case <= 1 {
+                    inl_HSD_PadRawQueueShift_unfused(ctx, (p).qnum(), (p).qread_ref());
+                    break 's3;
+                }
+                if __case <= 2 {
+                    break 'goto_skip;
+                }
+            }
+        } else {
+            (p).set_qcount((((p).qcount() as i32).wrapping_add(1_i32) as u8));
+        }
+        Handle::copy_from((qwrite), now);
+        inl_HSD_PadRawQueueShift_unfused(ctx, (p).qnum(), (p).qwrite_ref());
+    }
+    mask = (0_i32 as u32);
+    {
+        i = 0_i32;
+        'l4: while i < 4_i32 {
+            'c5: {
+                if (now.stat().get(i).err() as i32) == 1_i32.wrapping_neg() {
+                    mask = (mask | fns::pad_bit(ctx).at(i).get());
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    if mask != (0_i32 as u32) {
+        let _ = fns::PADReset(ctx, mask);
+    }
+    if (fns::OSGetResetSwitchState(ctx) != 0) {
+        (p).set_reset_switch_status((1_i32 as u8));
+    } else {
+        if ((p).reset_switch_status() as i32) != 0_i32 {
+            (p).set_reset_switch((1_i32 as u8));
+            (p).set_reset_switch_status((0_i32 as u8));
+        }
+    }
+}
+
 pub fn HSD_PadFlushQueue<'a>(ctx: &'a Ctx, ftype: i32) {
     let __frame = ctx.stack_frame(0x28);
     let mut ftype = ftype;
@@ -809,6 +903,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(HSD_PadGetResetSwitch(ctx), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x803769fc,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(HSD_PadRenewRawStatus(ctx, a0), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x80376d04,

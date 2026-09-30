@@ -1587,6 +1587,119 @@ pub fn ftColl_80078998<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<'a>,
     }
 }
 
+pub fn ftColl_80078A2C<'a>(ctx: &'a Ctx, this_gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x50);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let mut this_gobj = this_gobj;
+    let mut this_fp: Fighter<'a> = null(ctx);
+    let mut victim_gobj: HSD_GObj<'a> = null(ctx);
+    let mut victim_fp: Fighter<'a> = null(ctx);
+    let mut i: u32 = 0;
+    let mut this_hit: HitCapsule<'a> = null(ctx);
+    let mut j: u32 = 0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    this_fp = Handle::cast::<Fighter<'a>>((this_gobj).user_data());
+    (this_fp).set_victim_gobj(null::<HSD_GObj<'a>>(ctx));
+    (this_fp).set_unk_grab_val(3.4028234663852886e+38_f64);
+    victim_gobj = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 8_i32)).get();
+    'l3: while !Handle::is_null(victim_gobj) {
+        'c4: {
+            'goto_next_gobj: {
+                if !(fns::ftLib_IsSamePlayer(ctx, this_gobj, victim_gobj) != 0) {
+                    victim_fp = Handle::cast::<Fighter<'a>>((victim_gobj).user_data());
+                    if (!((victim_fp).x2219_b1() != 0))
+                        && (((((((!((victim_fp).x222A_b0() != 0))
+                            && (((!(fns::gm_8016B168(ctx) != 0))
+                                || (fns::gm_8016B0D4(ctx) != 0))
+                                || (((victim_fp).team() as i32) != ((this_fp).team() as i32))))
+                            && ((victim_fp).x1988() == 0_i32))
+                            && ((victim_fp).x198C() == 0_i32))
+                            && (!((victim_fp).x221D_b6() != 0)))
+                            && (!((((victim_fp).x1A6A() as i32) & ((this_fp).x1A68() as i32))
+                                != 0)))
+                            && (!((victim_fp).stamina_dead() != 0)))
+                    {
+                        {
+                            i = (0_i32 as u32);
+                            'l5: while i < (4_i32 as u32) {
+                                'c6: {
+                                    this_hit = inl_HitCapsuleGetPtr_unfused(ctx, this_fp, i);
+                                    if ((((this_hit).state() as u32)
+                                        != ((enums::HitCapsule_Disabled as i32) as u32))
+                                        && ((this_hit).element()
+                                            == ((enums::HitElement_Catch as i32) as u32)))
+                                        && (((((this_hit).x40_b2() as i32) != 0)
+                                            && (((victim_fp).ground_or_air() as u32)
+                                                == ((enums::GA_Air as i32) as u32)))
+                                            || ((((this_hit).x40_b3() as i32) != 0)
+                                                && (((victim_fp).ground_or_air() as u32)
+                                                    == ((enums::GA_Ground as i32) as u32))))
+                                    {
+                                        if !(fns::lbColl_8000ACFC(
+                                            ctx,
+                                            Handle::cast::<Addr<'a>>(victim_fp),
+                                            this_hit,
+                                        ) != 0)
+                                        {
+                                            {
+                                                j = (0_i32 as u32);
+                                                'l7: while j
+                                                    < ((victim_fp).hurt_capsules_len() as u32)
+                                                {
+                                                    'c8: {
+                                                        if ((victim_fp)
+                                                            .hurt_capsules()
+                                                            .get((j as i32))
+                                                            .is_grabbable()
+                                                            != 0)
+                                                        {
+                                                            if fns::lbColl_80007ECC(
+                                                                ctx,
+                                                                this_hit,
+                                                                (victim_fp)
+                                                                    .hurt_capsules()
+                                                                    .get((j as i32))
+                                                                    .capsule(),
+                                                                fns::ftCommon_8007F804(
+                                                                    ctx, victim_fp,
+                                                                ),
+                                                                (this_fp).x34_scale().y(),
+                                                                (victim_fp).x34_scale().y(),
+                                                                (victim_fp).cur_pos().z(),
+                                                            ) != 0_i32
+                                                            {
+                                                                if fns::ft_80084CE4(
+                                                                    ctx, this_fp, victim_fp,
+                                                                ) == 0_i32
+                                                                {
+                                                                    inl_updateFighterGrabTarget_unfused(ctx, this_fp, this_hit, victim_fp);
+                                                                }
+                                                                break 'goto_next_gobj;
+                                                            }
+                                                        }
+                                                    }
+                                                    j = j.wrapping_add(1);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                i = i.wrapping_add(1);
+                            }
+                        }
+                    }
+                }
+            }
+            victim_gobj = (victim_gobj).next();
+        }
+    }
+}
+
 pub fn ftColl_8007925C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x90);
     let coll_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
@@ -4040,6 +4153,43 @@ fn inl_getUnkVal_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, i: i32) -> i32 {
         .wrapping_add(((fp).is_sub_fighter() as i32));
 }
 
+fn inl_HitCapsuleGetPtr_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, i: u32) -> HitCapsule<'a> {
+    let mut fp = fp;
+    let mut i = i;
+    return (fp).x914().get((i as i32));
+}
+
+fn inl_updateFighterGrabTarget_unfused<'a>(
+    ctx: &'a Ctx,
+    this_fp: Fighter<'a>,
+    hit: HitCapsule<'a>,
+    victim_fp: Fighter<'a>,
+) {
+    let mut this_fp = this_fp;
+    let mut hit = hit;
+    let mut victim_fp = victim_fp;
+    let mut grab_dist: f64 = 0.0;
+    fns::ftColl_80076808(
+        ctx,
+        this_fp,
+        hit,
+        0_i32,
+        Handle::cast::<Addr<'a>>(victim_fp),
+        0_i32,
+    );
+    grab_dist = fp::fsubs((victim_fp).cur_pos().x(), (this_fp).cur_pos().x());
+    if grab_dist < fp::frsp(0_i32 as f64) {
+        grab_dist = fp::fneg(grab_dist);
+    }
+    if grab_dist < (this_fp).unk_grab_val() {
+        let mut grabbed_fighter: HSD_GObj<'a> = (victim_fp).gobj();
+        (this_fp).set_x1A5C(grabbed_fighter);
+        (this_fp).set_victim_gobj(grabbed_fighter);
+        (this_fp).x221B().set_x221B_b5((1_i32 as u8));
+        (this_fp).set_unk_grab_val(grab_dist);
+    }
+}
+
 fn inl_ftColl_80077970_dontinline_unfused<'a>(
     ctx: &'a Ctx,
     item: Item<'a>,
@@ -4679,6 +4829,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1, a2): (HSD_GObj<'_>, HSD_GObj<'_>, Single) = Args::take_all(ctx);
             Ret::put(ftColl_80078998(ctx, a0, a1, a2.0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80078a2c,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftColl_80078A2C(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

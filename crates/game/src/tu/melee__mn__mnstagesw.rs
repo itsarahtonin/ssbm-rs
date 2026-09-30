@@ -165,6 +165,128 @@ pub fn mnStageSw_802359C8<'a>(ctx: &'a Ctx, data: MnStageSwData<'a>) {
     }
 }
 
+pub fn mnStageSw_80235C58<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
+    let __frame = ctx.stack_frame(0x30);
+    let mut arg0 = arg0;
+    let mut next: i32 = 0;
+    let mut found: i32 = 0;
+    let mut temp: i32 = 0;
+    let mut curr: i32 = 0;
+    let mut low_bound: i32 = 0;
+    let mut high_bound: i32 = 0;
+    let mut idx: i32 = 0;
+    let mut low: u8 = 0;
+    let mut end: u8 = 0;
+    let mut start: u8 = 0;
+    let mut high: u8 = 0;
+    let mut prev: i32 = 0;
+    let mut i: i32 = 0;
+    'goto_loop_done: {
+        if (arg0 as i32) < 15_i32 {
+            low = (0_i32 as u8);
+            high = (14_i32 as u8);
+        } else {
+            low = (15_i32 as u8);
+            high = (28_i32 as u8);
+        }
+        if (arg0 as i32) < 15_i32 {
+            start = (0_i32 as u8);
+            end = (14_i32 as u8);
+        } else {
+            start = (15_i32 as u8);
+            end = (28_i32 as u8);
+        }
+        curr = (start as i32);
+        next = (end as i32);
+        'l1: while curr <= next {
+            'c2: {
+                if fns::gm_80164430(
+                    ctx,
+                    fns::gm_801641CC(
+                        ctx,
+                        statics::melee__mn__mnstagesw::mnStageSw_803ED4C4(ctx)
+                            .at(((curr as u8) as i32))
+                            .get(),
+                    ),
+                ) != 0_i32
+                {
+                    found = 0_i32;
+                    break 'goto_loop_done;
+                }
+                curr = curr.wrapping_add(1);
+            }
+        }
+        found = 1_i32;
+    }
+    if found != 0_i32 {
+        return 1_i32.wrapping_neg();
+    }
+    if ((arg0 as i32) < 29_i32)
+        && (fns::gm_80164430(
+            ctx,
+            fns::gm_801641CC(
+                ctx,
+                statics::melee__mn__mnstagesw::mnStageSw_803ED4C4(ctx)
+                    .at((arg0 as i32))
+                    .get(),
+            ),
+        ) != 0_i32)
+    {
+        return (arg0 as i32);
+    }
+    idx = (arg0 as i32);
+    next = idx.wrapping_add(1_i32);
+    curr = idx.wrapping_add(
+        ({
+            let __t1 = 1_i32;
+            found = __t1;
+            __t1
+        }),
+    );
+    low_bound = (low as i32);
+    high_bound = (high as i32);
+    {
+        i = 1_i32;
+        'l3: while (found != 0) {
+            'c4: {
+                temp = idx.wrapping_sub(i);
+                prev = temp;
+                if (low_bound <= prev)
+                    && (fns::gm_80164430(
+                        ctx,
+                        fns::gm_801641CC(
+                            ctx,
+                            statics::melee__mn__mnstagesw::mnStageSw_803ED4C4(ctx)
+                                .at(((prev as u8) as i32))
+                                .get(),
+                        ),
+                    ) != 0_i32)
+                {
+                    return prev;
+                }
+                if (next <= high_bound)
+                    && (fns::gm_80164430(
+                        ctx,
+                        fns::gm_801641CC(
+                            ctx,
+                            statics::melee__mn__mnstagesw::mnStageSw_803ED4C4(ctx)
+                                .at(((curr as u8) as i32))
+                                .get(),
+                        ),
+                    ) != 0_i32)
+                {
+                    return idx.wrapping_add(i);
+                }
+                next = next.wrapping_add(1);
+                curr = curr.wrapping_add(1);
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 pub fn mnStageSw_80235DC8<'a>(ctx: &'a Ctx, user_data: Val<'a, u8>, buttons: i32) {
     let __frame = ctx.stack_frame(0x28);
     let mut user_data = user_data;
@@ -281,6 +403,107 @@ pub fn mnStageSw_80235DC8<'a>(ctx: &'a Ctx, user_data: Val<'a, u8>, buttons: i32
             fns::mn_804A04F0(ctx).set_confirmed_selection(
                 (Handle::add(user_data, ((selection as u8) as i32).wrapping_add(2_i32))).get(),
             );
+        }
+    }
+}
+
+pub fn fn_80235F80<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x50);
+    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut enabled: i32 = 0;
+    let mut result: i32 = 0;
+    let mut buttons: u32 = 0;
+    let mut count: i32 = 0;
+    let mut user_data: Val<'a, u8> = null(ctx);
+    let mut confirmed: Val<'a, u8> = null(ctx);
+    user_data = Handle::cast::<Val<'a, u8>>(
+        (statics::melee__mn__mnstagesw::mnStageSw_804D6BF0(ctx).get()).user_data(),
+    );
+    buttons = ({
+        let __t1 = (fns::mn_80229624(ctx, 4_u32) as u64);
+        fns::mn_804A04F0(ctx).set_buttons(__t1);
+        __t1
+    } as u32);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if ((buttons & (32_i32 as u32)) != 0) {
+        inl_sfxBack_unfused(ctx);
+        fns::mn_804A04F0(ctx).set_entering_menu((0_i32 as u8));
+        inl_saveSettings_unfused(ctx);
+        fns::mn_804D6BC8(ctx).set_cooldown((5_i32 as u16));
+        fns::mn_802339FC(ctx);
+        fns::HSD_GObjFree(ctx, gobj);
+        return;
+    }
+    if ((statics::melee__mn__mnstagesw::mnStageSw_804D6BF4(ctx).get() as u8) as i32) == 0_i32 {
+        'goto_check_dpad: {
+            if ((buttons & (0x200_i32 as u32)) != 0) {
+                if (fns::mn_804A04F0(ctx).hovered_selection() as i32) < 29_i32 {
+                    if (({
+                        let __t2 = fns::mn_804A04F0(ctx).confirmed_selection_ref();
+                        confirmed = __t2;
+                        __t2
+                    })
+                    .get() as i32)
+                        != 0_i32
+                    {
+                        user_data = Handle::cast::<Val<'a, u8>>(
+                            (statics::melee__mn__mnstagesw::mnStageSw_804D6BF0(ctx).get())
+                                .user_data(),
+                        );
+                        count = inl_mnStageSw_CountEnabled_unfused(ctx, user_data);
+                        if count > 1_i32 {
+                            enabled = 0_i32;
+                        } else {
+                            enabled = 1_i32;
+                        }
+                        if enabled != 0_i32 {
+                            fns::lbAudioAx_80024030(ctx, 3_i32);
+                        } else {
+                            inl_sfxMove_unfused(ctx);
+                            (confirmed).set((0_i32 as u8));
+                        }
+                    } else {
+                        inl_sfxMove_unfused(ctx);
+                        (confirmed).set((1_i32 as u8));
+                    }
+                    inl_mnStageSw_8023593C_unfused(
+                        ctx,
+                        statics::melee__mn__mnstagesw::mnStageSw_804D6BF0(ctx).get(),
+                    );
+                    return;
+                }
+                break 'goto_check_dpad;
+            }
+            if ((buttons & (0x100_i32 as u32)) != 0) {
+                inl_sfxForward_unfused(ctx);
+                result = (fns::gm_GetCurrentGameMode(ctx) as i32);
+                's3: {
+                    let __case = match result {
+                        1_i32 => 0,
+                        _ => 1,
+                    };
+                    if __case <= 0 {
+                        inl_saveSettings_unfused(ctx);
+                        fns::mn_80229860(ctx, ((enums::GM_VS as i32) as i8));
+                        return;
+                    }
+                    if __case <= 1 {
+                        inl_saveSettings_unfused(ctx);
+                        fns::mn_8022F4CC(ctx);
+                        return;
+                    }
+                }
+            }
+        }
+        if ((buttons & (15_i32 as u32)) != 0) {
+            inl_sfxMove_unfused(ctx);
+            statics::melee__mn__mnstagesw::mnStageSw_80235DC8(ctx, user_data, (buttons as i32));
         }
     }
 }
@@ -797,6 +1020,74 @@ fn inl_HSD_JObjGetTranslationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     return (jobj).translate().x();
 }
 
+fn inl_sfxBack_unfused<'a>(ctx: &'a Ctx) {
+    fns::lbAudioAx_80024030(ctx, 0_i32);
+}
+
+fn inl_saveSettings_unfused<'a>(ctx: &'a Ctx) {
+    statics::melee__mn__mnstagesw::mnStageSw_8023593C(
+        ctx,
+        statics::melee__mn__mnstagesw::mnStageSw_804D6BF0(ctx).get(),
+    );
+    fns::lbCardGame_SaveChanges(ctx);
+}
+
+fn inl_mnStageSw_CountEnabled_unfused<'a>(ctx: &'a Ctx, user_data: Val<'a, u8>) -> i32 {
+    let mut user_data = user_data;
+    let mut i: i32 = 0;
+    let mut count: i32 = 0_i32;
+    {
+        i = 0_i32;
+        'l1: while i < 29_i32 {
+            'c2: {
+                if ((Handle::add(user_data, i.wrapping_add(2_i32))).get() as i32) != 0_i32 {
+                    count = count.wrapping_add(1_i32);
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return count;
+}
+
+fn inl_sfxMove_unfused<'a>(ctx: &'a Ctx) {
+    fns::lbAudioAx_80024030(ctx, 2_i32);
+}
+
+fn inl_mnStageSw_8023593C_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x10);
+    let pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut i: i32 = 0;
+    let mut user_data: Val<'a, u8> = Handle::cast::<Val<'a, u8>>((gobj).user_data());
+    let mut p: Val<'a, u8> = null(ctx);
+    {
+        i = 0_i32;
+        'l1: while i < 29_i32 {
+            'c2: {
+                p = Handle::add(
+                    statics::melee__mn__mnstagesw::mnStageSw_803ED4C4(ctx).at(0),
+                    ((i as u8) as i32),
+                );
+                if fns::gm_80164430(ctx, fns::gm_801641CC(ctx, (p).get())) != 0_i32 {
+                    fns::gm_801641E4(
+                        ctx,
+                        statics::melee__mn__mnstagesw::mnStageSw_803ED4C4(ctx)
+                            .at(i)
+                            .get(),
+                        (Handle::add(user_data, i.wrapping_add(2_i32))).get(),
+                    );
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+}
+
+fn inl_sfxForward_unfused<'a>(ctx: &'a Ctx) {
+    fns::lbAudioAx_80024030(ctx, 1_i32);
+}
+
 fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     let mut jobj = jobj;
     let mut result: i32 = 0;
@@ -1211,10 +1502,26 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x80235c58,
+        |ctx| {
+            let (a0,): (u8,) = Args::take_all(ctx);
+            Ret::put(mnStageSw_80235C58(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
         0x80235dc8,
         |ctx| {
             let (a0, a1): (Val<'_, u8>, i32) = Args::take_all(ctx);
             Ret::put(mnStageSw_80235DC8(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80235f80,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(fn_80235F80(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

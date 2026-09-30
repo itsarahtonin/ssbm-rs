@@ -530,6 +530,144 @@ pub fn _Toy_80304D30<'a>(ctx: &'a Ctx) -> i32 {
     return count2.wrapping_sub(count);
 }
 
+pub fn _Toy_803053C4<'a>(ctx: &'a Ctx, targetValue: i32, count: i32, flag: i32) {
+    let __frame = ctx.stack_frame(0x48);
+    let mut targetValue = targetValue;
+    let mut count = count;
+    let mut flag = flag;
+    let mut list: Val<'a, i16> = null(ctx);
+    let mut ptr_: Val<'a, u16> = null(ctx);
+    let mut i: i32 = 0;
+    let mut default_flags: Val<'a, u16> = null(ctx);
+    let mut trophyId: i32 = 0;
+    let mut found: i32 = 0;
+    'goto_done: {
+        if flag != 0_i32 {
+            default_flags = fns::Toy_804A284C(ctx).at(5_i32);
+            'l1: while count != 0_i32 {
+                'c2: {
+                    trophyId = 0_i32;
+                    i = 0_i32;
+                    'l3: while trophyId < 0x125_i32 {
+                        'c4: {
+                            'goto_check_found: {
+                                list = fns::_Toy_sbss_804D6EB4(ctx).get();
+                                if (fns::lbLang_IsSettingUS(ctx) != 0) {
+                                    'l5: while ((list).get() as i32) != 1_i32.wrapping_neg() {
+                                        'c6: {
+                                            if ((list).get() as i32) == trophyId {
+                                                found = 0_i32;
+                                                break 'goto_check_found;
+                                            }
+                                            list = Handle::add(list, 1);
+                                        }
+                                    }
+                                }
+                                found = 1_i32;
+                            }
+                            if found != 0_i32 {
+                                if fp::frsp(targetValue as f64)
+                                    == fns::Toy_803060BC(ctx, trophyId, 6_i32)
+                                {
+                                    if fns::HSD_Randi(ctx, 2_i32) == 0_i32 {
+                                        if (fns::gm_IsCurrently1PMode(ctx) != 0)
+                                            || ((fns::gm_GetCurrentGameMode(ctx) as i32)
+                                                == (enums::GM_TOY_LOTTERY as i32))
+                                        {
+                                            ptr_ = default_flags;
+                                        } else {
+                                            ptr_ = Handle::cast::<Val<'a, u16>>(
+                                                fns::gmMainLib_GetTrophyFlags(ctx),
+                                            );
+                                        }
+                                        if (((Handle::add(ptr_, trophyId)).get() as u8) as i32)
+                                            == 0_i32
+                                        {
+                                            fns::Toy_SetUnlockState(
+                                                ctx,
+                                                ((trophyId as i16) as i32),
+                                                fns::HSD_Randi(ctx, 254_i32).wrapping_add(1_i32),
+                                            );
+                                            if (fns::gm_IsCurrently1PMode(ctx) != 0)
+                                                || ((fns::gm_GetCurrentGameMode(ctx) as i32)
+                                                    == (enums::GM_TOY_LOTTERY as i32))
+                                            {
+                                                ptr_ = default_flags;
+                                            } else {
+                                                ptr_ = Handle::cast::<Val<'a, u16>>(
+                                                    fns::gmMainLib_GetTrophyFlags(ctx),
+                                                );
+                                            }
+                                            ptr_ = Handle::add(ptr_, trophyId);
+                                            count = count.wrapping_sub(1_i32);
+                                            (ptr_)
+                                                .set(((((ptr_).get() as i32) ^ 0x8000_i32) as u16));
+                                        }
+                                    }
+                                }
+                                if count == 0_i32 {
+                                    break 'l3;
+                                }
+                            }
+                            trophyId = trophyId.wrapping_add(1);
+                            i = i.wrapping_add(2_i32);
+                        }
+                    }
+                }
+            }
+        } else {
+            i = 0_i32;
+            default_flags = fns::Toy_804A284C(ctx).at(5_i32);
+            'l7: while i < 0x125_i32 {
+                'c8: {
+                    'goto_check_found2: {
+                        list = fns::_Toy_sbss_804D6EB4(ctx).get();
+                        if (fns::lbLang_IsSettingUS(ctx) != 0) {
+                            'l9: while ((list).get() as i32) != 1_i32.wrapping_neg() {
+                                'c10: {
+                                    if ((list).get() as i32) == i {
+                                        found = 0_i32;
+                                        break 'goto_check_found2;
+                                    }
+                                    list = Handle::add(list, 1);
+                                }
+                            }
+                        }
+                        found = 1_i32;
+                    }
+                    if found != 0_i32 {
+                        if fp::frsp(targetValue as f64) == fns::Toy_803060BC(ctx, i, 6_i32) {
+                            fns::Toy_SetUnlockState(
+                                ctx,
+                                ((i as i16) as i32),
+                                fns::HSD_Randi(ctx, 254_i32).wrapping_add(1_i32),
+                            );
+                            if (fns::gm_IsCurrently1PMode(ctx) != 0)
+                                || ((fns::gm_GetCurrentGameMode(ctx) as i32)
+                                    == (enums::GM_TOY_LOTTERY as i32))
+                            {
+                                ptr_ = default_flags;
+                            } else {
+                                ptr_ = Handle::cast::<Val<'a, u16>>(fns::gmMainLib_GetTrophyFlags(
+                                    ctx,
+                                ));
+                            }
+                            ptr_ = Handle::add(ptr_, i);
+                            count = count.wrapping_sub(1_i32);
+                            (ptr_).set(((((ptr_).get() as i32) ^ 0x8000_i32) as u16));
+                            if count == 0_i32 {
+                                break 'goto_done;
+                            }
+                        }
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+        }
+    }
+    return;
+}
+
 pub fn Toy_SetUnlockState<'a>(ctx: &'a Ctx, trophyId: i32, addValue: i32) {
     let __frame = ctx.stack_frame(0x40);
     let state_pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
@@ -678,6 +816,146 @@ pub fn Toy_SetUnlockState<'a>(ctx: &'a Ctx, trophyId: i32, addValue: i32) {
     }
     if fp::fctiwz(fns::Toy_803060BC(ctx, (idx as i32), 6_i32)) == 1_i32 {
         fns::gm_80172C44(ctx, (idx as u32));
+    }
+}
+
+pub fn Toy_80305918<'a>(ctx: &'a Ctx, arg0: i8, arg1: i32, arg2: i32) {
+    let __frame = ctx.stack_frame(0x50);
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut var_r22: Val<'a, i16> = null(ctx);
+    let mut temp_r26: Val<'a, u16> = null(ctx);
+    let mut var_r25: i32 = 0;
+    let mut base: Val<'a, u16> = null(ctx);
+    let mut mask: i32 = 0;
+    let mut ptr_: Val<'a, u16> = null(ctx);
+    let mut var_r22_2: Val<'a, u16> = null(ctx);
+    let mut var_r3: Val<'a, u16> = null(ctx);
+    let mut temp_val: u16 = 0;
+    base = Handle::cast::<Val<'a, u16>>(statics::melee__ty__toy::_Toy_804A26B8(ctx).x0_ref());
+    if (arg0 as i32) == 8_i32 {
+        return;
+    }
+    temp_r26 = (Handle::cast::<Toy26B8<'a>>(base)).trophy_flags().at(0);
+    {
+        var_r25 = 0_i32;
+        'l1: while var_r25 < 0x125_i32 {
+            'c2: {
+                let mut skip: i32 = 0;
+                let mut temp_r0: i16 = 0;
+                'goto_check_skip: {
+                    var_r22 = fns::_Toy_sbss_804D6EB4(ctx).get();
+                    if fns::lbLang_IsSettingUS(ctx) != 0_i32 {
+                        'l3: while (({
+                            let __t1 = (var_r22).get();
+                            temp_r0 = __t1;
+                            __t1
+                        }) as i32)
+                            != 1_i32.wrapping_neg()
+                        {
+                            'c4: {
+                                if (temp_r0 as i32) == var_r25 {
+                                    skip = 0_i32;
+                                    break 'goto_check_skip;
+                                }
+                                var_r22 = Handle::add(var_r22, 1);
+                            }
+                        }
+                    }
+                    skip = 1_i32;
+                }
+                if skip == 0_i32 {
+                    break 'c2;
+                }
+                if fp::frsp(arg0 as f64) != fns::Toy_803060BC(ctx, var_r25, 6_i32) {
+                    break 'c2;
+                }
+                if arg1 != 0_i32 {
+                    if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
+                        || ((fns::gm_GetCurrentGameMode(ctx) as i32)
+                            == (enums::GM_TOY_LOTTERY as i32))
+                    {
+                        var_r22_2 = temp_r26;
+                    } else {
+                        var_r22_2 =
+                            Handle::cast::<Val<'a, u16>>(fns::gmMainLib_GetTrophyFlags(ctx));
+                    }
+                    if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
+                        || ((fns::gm_GetCurrentGameMode(ctx) as i32)
+                            == (enums::GM_TOY_LOTTERY as i32))
+                    {
+                        var_r3 = temp_r26;
+                    } else {
+                        var_r3 = Handle::cast::<Val<'a, u16>>(fns::gmMainLib_GetTrophyFlags(ctx));
+                    }
+                    if ((((Handle::add(var_r3, var_r25)).get() as i32) & 0x4000_i32) != 0) {
+                        let mut temp_ptr: Val<'a, u16> = null(ctx);
+                        let mut val: u16 = 0;
+                        temp_ptr = (Handle::add(var_r22_2, var_r25));
+                        val = (temp_ptr).get();
+                        (temp_ptr).set((((val as i32) ^ 0x4000_i32) as u16));
+                    }
+                } else {
+                    if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
+                        || ((fns::gm_GetCurrentGameMode(ctx) as i32)
+                            == (enums::GM_TOY_LOTTERY as i32))
+                    {
+                        var_r3 = temp_r26;
+                    } else {
+                        var_r3 = Handle::cast::<Val<'a, u16>>(fns::gmMainLib_GetTrophyFlags(ctx));
+                    }
+                    (Handle::add(var_r3, var_r25))
+                        .set(((((Handle::add(var_r3, var_r25)).get() as i32) | 0x4000_i32) as u16));
+                }
+            }
+            var_r25 = var_r25.wrapping_add(1);
+        }
+    }
+    if arg1 != 0_i32 {
+        if arg2 != 0_i32 {
+            let mut val4: u16 = 0;
+            let mut mask2: i32 = 0;
+            val4 = (Handle::cast::<Toy26B8<'a>>(base)).x19C();
+            mask2 = shl_i32(1_i32, ((arg0 as i32) as u32));
+            if (((val4 as i32) & mask2) != 0) {
+                (Handle::cast::<Toy26B8<'a>>(base)).set_x19C((((val4 as i32) ^ mask2) as u16));
+            }
+        } else {
+            if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
+                || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
+            {
+                ptr_ = Handle::cast::<Val<'a, u16>>(
+                    (Handle::add(Handle::cast::<Val<'a, u8>>(base), 0x19a_i32)),
+                );
+            } else {
+                ptr_ = Handle::cast::<Val<'a, u16>>(fns::gmMainLib_GetTrophyCategoryFlags(ctx));
+            }
+            temp_val = (ptr_).get();
+            mask = shl_i32(1_i32, ((arg0 as i32) as u32));
+            if (((temp_val as i32) & mask) != 0) {
+                (ptr_).set((((temp_val as i32) ^ mask) as u16));
+            }
+        }
+    } else {
+        if arg2 != 0_i32 {
+            let mut ptr19c: Val<'a, u16> = Handle::cast::<Val<'a, u16>>(
+                (Handle::add(Handle::cast::<Val<'a, u8>>(base), 0x19c_i32)),
+            );
+            (ptr19c)
+                .set(((((ptr19c).get() as i32) | (shl_i32(1_i32, ((arg0 as i32) as u32)))) as u16));
+        } else {
+            if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
+                || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
+            {
+                ptr_ = Handle::cast::<Val<'a, u16>>(
+                    (Handle::add(Handle::cast::<Val<'a, u8>>(base), 0x19a_i32)),
+                );
+            } else {
+                ptr_ = Handle::cast::<Val<'a, u16>>(fns::gmMainLib_GetTrophyCategoryFlags(ctx));
+            }
+            (ptr_).set(((((ptr_).get() as i32) | shl_i32(1_i32, ((arg0 as i32) as u32))) as u16));
+        }
     }
 }
 
@@ -2939,6 +3217,152 @@ pub fn _Toy_803084A0<'a>(ctx: &'a Ctx, arg0: i32) {
     );
 }
 
+pub fn Toy_803087F4<'a>(ctx: &'a Ctx, arg0: Addr<'a>) -> HSD_GObj<'a> {
+    let __frame = ctx.stack_frame(0xa8);
+    let pad: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let buf: ArrV<'a, i8, 72> = frame_at(ctx, &__frame, 0x10);
+    let spC: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x58);
+    let mut arg0 = arg0;
+    let mut entry: ToyEntryData<'a> = null(ctx);
+    let mut anim: ToyAnimState<'a> = null(ctx);
+    let mut parent_jobj: HSD_JObj<'a> = null(ctx);
+    let mut trophy_jobj: HSD_JObj<'a> = null(ctx);
+    let mut joint: HSD_Joint<'a> = null(ctx);
+    let mut trophy_id: i16 = 0;
+    let mut model_name: ToyModelFile<'a> = null(ctx);
+    let mut scale: f64 = 0.0;
+    let mut rot: f64 = 0.0;
+    let mut kind: u8 = 0;
+    'goto_done: {
+        'goto_assert_fail: {
+            entry = Handle::cast::<ToyEntryData<'a>>(arg0);
+            anim = fns::Toy_804A2AA8(ctx);
+            if Handle::is_null((entry).x14()) {
+                trophy_id = (entry).x10();
+                model_name = fns::Toy_8030813C(ctx, (trophy_id as i32));
+                if !Handle::is_null((entry).x14()) {
+                    fns::lbArchive_80016EFC(ctx, (entry).x14());
+                    (entry).set_x14(null::<HSD_Archive<'a>>(ctx));
+                }
+                (entry).set_x8((model_name).archive_name().at(0));
+                (entry).set_xC((model_name).symbol_name().at(0));
+                (entry).set_x10(trophy_id);
+                (entry).set_x14(fns::lbArchive_LoadSymbols(
+                    ctx,
+                    (entry).x8(),
+                    Handle::cast::<Addr<'a>>(spC),
+                    &[
+                        VarArg::Int(Handle::addr((entry).xC())),
+                        VarArg::Int(0_i32 as u32),
+                    ],
+                ));
+            }
+            joint = Handle::cast::<HSD_Joint<'a>>(fns::HSD_ArchiveGetPublicAddress(
+                ctx,
+                (entry).x14(),
+                (entry).xC(),
+            ));
+            if Handle::is_null(joint) {
+                break 'goto_assert_fail;
+            }
+            if !Handle::is_null((anim).gobj()) {
+                fns::HSD_GObjFree(ctx, (anim).gobj());
+                (anim).set_gobj(null::<HSD_GObj<'a>>(ctx));
+                (anim).jobj().at(1_i32).set(null::<HSD_JObj<'a>>(ctx));
+                (anim).jobj().at(0_i32).set(null::<HSD_JObj<'a>>(ctx));
+            }
+            (anim).set_gobj(fns::GObj_Create(
+                ctx,
+                (6_i32 as u16),
+                (7_i32 as u8),
+                (0_i32 as u8),
+            ));
+            (anim).set_xC((entry).x10());
+            parent_jobj = fns::HSD_JObjAlloc(ctx);
+            let _ = statics::melee__ty__toy::_Toy_80307BA0(ctx, parent_jobj, (anim).xC());
+            trophy_jobj = fns::HSD_JObjLoadJoint(ctx, joint);
+            fns::HSD_JObjAddChild(ctx, parent_jobj, trophy_jobj);
+            kind = fns::HSD_GObj_JObjKind(ctx).get();
+            fns::HSD_GObjObject_80390A70(
+                ctx,
+                (anim).gobj(),
+                kind,
+                Handle::cast::<Addr<'a>>(parent_jobj),
+            );
+            fns::GObj_SetupGXLink(
+                ctx,
+                (anim).gobj(),
+                fnptr(ctx, 0x80391070),
+                (57_i32 as u8),
+                (0_i32 as u32),
+            );
+            inl_HSD_JObjSetTranslateX_unfused(
+                ctx,
+                trophy_jobj,
+                fns::Toy_803060BC(ctx, ((anim).xC() as i32), 0_i32),
+            );
+            inl_HSD_JObjSetTranslateY_unfused(
+                ctx,
+                trophy_jobj,
+                fns::Toy_803060BC(ctx, ((anim).xC() as i32), 1_i32),
+            );
+            inl_HSD_JObjSetTranslateZ_unfused(
+                ctx,
+                trophy_jobj,
+                fns::Toy_803060BC(ctx, ((anim).xC() as i32), 2_i32),
+            );
+            scale = fns::Toy_803060BC(ctx, ((anim).xC() as i32), 3_i32);
+            inl_HSD_JObjSetScaleX_unfused(ctx, trophy_jobj, scale);
+            inl_HSD_JObjSetScaleY_unfused(ctx, trophy_jobj, scale);
+            inl_HSD_JObjSetScaleZ_unfused(ctx, trophy_jobj, scale);
+            rot = (fp::fmuls(
+                (fns::Toy_803060BC(ctx, ((anim).xC() as i32), 5_i32)),
+                0.01745329238474369,
+            ));
+            inl_HSD_JObjSetRotationY_unfused(ctx, trophy_jobj, rot);
+            if !Handle::is_null(fns::_Toy_sbss_804D6E9C(ctx).get()) {
+                fns::DevText_Erase(ctx, fns::_Toy_sbss_804D6E9C(ctx).get());
+                fns::DevText_SetCursorXY(ctx, fns::_Toy_sbss_804D6E9C(ctx).get(), 0_i32, 0_i32);
+                let _ = fns::sprintf(
+                    ctx,
+                    buf.at(0),
+                    cstr(ctx, 0x803fe2a4),
+                    &[
+                        VarArg::Float(fns::Toy_803060BC(ctx, ((anim).xC() as i32), 0_i32)),
+                        VarArg::Float(fns::Toy_803060BC(ctx, ((anim).xC() as i32), 1_i32)),
+                        VarArg::Float(fns::Toy_803060BC(ctx, ((anim).xC() as i32), 2_i32)),
+                        VarArg::Float(fns::Toy_803060BC(ctx, ((anim).xC() as i32), 3_i32)),
+                        VarArg::Float(fns::Toy_803060BC(ctx, ((anim).xC() as i32), 4_i32)),
+                        VarArg::Float(fns::Toy_803060BC(ctx, ((anim).xC() as i32), 5_i32)),
+                    ],
+                );
+                fns::DevText_Print(ctx, fns::_Toy_sbss_804D6E9C(ctx).get(), buf.at(0));
+            }
+            {
+                let mut child: HSD_JObj<'a> =
+                    statics::melee__ty__toy::_Toy_80307BA0(ctx, parent_jobj, (anim).xC());
+                fns::HSD_JObjSetFlagsAll(ctx, child, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
+                (anim).set_x0E((0_i32 as i8));
+            }
+            break 'goto_done;
+        }
+        fns::OSReport(ctx, cstr(ctx, 0x803fe4cc), &[]);
+        (if ((0_i32) != 0) {
+            ({ () })
+        } else {
+            fns::__assert(
+                ctx,
+                cstr(ctx, 0x803b87a8),
+                (0xb44_i32 as u32),
+                cstr(ctx, 0x803b87a8),
+            )
+        });
+    }
+    return (anim).gobj();
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
 pub fn _Toy_80308DC8<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
     let interest: Vec<'a> = frame_at(ctx, &__frame, 0x0);
@@ -4384,6 +4808,67 @@ pub fn _Toy_803114E8<'a>(ctx: &'a Ctx) {
     }
 }
 
+pub fn Toy_80311680<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut temp_r31: Val<'a, i16> = null(ctx);
+    let mut var_r30: Val<'a, i16> = null(ctx);
+    let mut var_r29: Val<'a, u16> = null(ctx);
+    let mut var_r28: i32 = 0;
+    let mut temp_r0: i16 = 0;
+    let mut var_r0: i32 = 0;
+    let mut temp_r3: Val<'a, i16> = null(ctx);
+    let mut temp_r5: i16 = 0;
+    let mut temp_r0_2: i32 = 0;
+    var_r29 = Handle::cast::<Val<'a, u16>>(fns::gmMainLib_GetTrophyFlags(ctx));
+    temp_r31 = Handle::cast::<Val<'a, i16>>(fns::gmMainLib_GetTrophyCategoryFlags(ctx));
+    fns::Toy_80311960(ctx);
+    {
+        var_r28 = 0_i32;
+        'l1: while var_r28 < 0x125_i32 {
+            'c2: {
+                'goto_check_var: {
+                    var_r30 = fns::_Toy_sbss_804D6EB4(ctx).get();
+                    if fns::lbLang_IsSettingUS(ctx) != 0_i32 {
+                        'l3: while (({
+                            let __t1 = (var_r30).get();
+                            temp_r0 = __t1;
+                            __t1
+                        }) as i32)
+                            != 1_i32.wrapping_neg()
+                        {
+                            'c4: {
+                                if (temp_r0 as i32) == var_r28 {
+                                    var_r0 = 0_i32;
+                                    break 'goto_check_var;
+                                }
+                                var_r30 = Handle::add(var_r30, 1);
+                            }
+                        }
+                    }
+                    var_r0 = 1_i32;
+                }
+                if var_r0 != 0_i32 {
+                    temp_r3 = fns::gmMainLib_GetTrophyCount(ctx);
+                    temp_r5 = (temp_r3).get();
+                    temp_r5 = ((temp_r5 as i32).wrapping_add(1_i32) as i16);
+                    (temp_r3).set(temp_r5);
+                    (var_r29).set((1_i32 as u16));
+                    temp_r0_2 = fp::fctiwz(fns::Toy_803060BC(ctx, var_r28, 6_i32));
+                    if (((temp_r0_2 as u32) > 1_u32) && (temp_r0_2 != 8_i32))
+                        && (temp_r0_2 != 3_i32)
+                    {
+                        (var_r29).set(((((var_r29).get() as i32) | 0x4000_i32) as u16));
+                    }
+                }
+            }
+            var_r28 = var_r28.wrapping_add(1);
+            var_r29 = Handle::add(var_r29, 1);
+        }
+    }
+    (temp_r31).set((244_i32 as i16));
+    fns::_Toy_sbss_804D6EA1(ctx).set((1_i32 as u8));
+}
+
 pub fn _Toy_80311788<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x80);
     let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
@@ -4726,6 +5211,56 @@ pub fn Toy_8031234C<'a>(ctx: &'a Ctx, arg0: i32) {
     }
 }
 
+pub fn Toy_803124BC<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x40);
+    let mut table1: Val<'a, u16> = null(ctx);
+    let mut list: Val<'a, i16> = null(ctx);
+    let mut table2: Val<'a, u16> = null(ctx);
+    let mut i: i32 = 0;
+    table1 = Handle::cast::<Val<'a, u16>>(fns::gmMainLib_GetTrophyFlags(ctx));
+    table2 = Handle::cast::<Val<'a, u16>>(fns::gmMainLib_GetTrophyCategoryFlags(ctx));
+    inl_loadTrophyMetadata_unfused(ctx);
+    {
+        i = 0_i32;
+        'l1: while i < 0x125_i32 {
+            'c2: {
+                let mut skip: i32 = 0;
+                let mut val: i16 = 0;
+                'goto_check: {
+                    list = fns::_Toy_sbss_804D6EB4(ctx).get();
+                    if (fns::lbLang_IsSettingUS(ctx) != 0) {
+                        'l3: while (({
+                            let __t1 = (list).get();
+                            val = __t1;
+                            __t1
+                        }) as i32)
+                            != 1_i32.wrapping_neg()
+                        {
+                            'c4: {
+                                if (val as i32) == i {
+                                    skip = 0_i32;
+                                    break 'goto_check;
+                                }
+                                list = Handle::add(list, 1);
+                            }
+                        }
+                    }
+                    skip = 1_i32;
+                }
+                if (skip != 0_i32) && (fp::fctiwz(fns::Toy_803060BC(ctx, i, 6_i32)) == 2_i32) {
+                    (table1).set(((((table1).get() as i32) | 0x4000_i32) as u16));
+                }
+            }
+            i = i.wrapping_add(1);
+            table1 = Handle::add(table1, 1);
+        }
+    }
+    (table2).set(((((table2).get() as i32) | 4_i32) as u16));
+    fns::Toy_804A284C(ctx)
+        .at(3_i32)
+        .set((((fns::Toy_804A284C(ctx).at(3_i32).get() as i32) | 4_i32) as u16));
+}
+
 pub fn Toy_8031263C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x40);
     let mut i: i32 = 0;
@@ -5040,6 +5575,108 @@ fn inl_setupTrophyEntry_unfused<'a>(ctx: &'a Ctx, entry: ToyListEntry<'a>, troph
     (entry).set_archive_name((result).archive_name().at(0));
     (entry).set_symbol_name((result).symbol_name().at(0));
     (entry).set_trophy_id(trophy_idx);
+}
+
+fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
+    let mut jobj = jobj;
+    let mut x = x;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b87a8),
+            (0x201_i32 as u32),
+            cstr(ctx, 0x803b87a8),
+        )
+    });
+    (jobj).translate().set_x(x);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_HSD_JObjSetTranslateY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
+    let mut jobj = jobj;
+    let mut y = y;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b87a8),
+            (0x213_i32 as u32),
+            cstr(ctx, 0x803b87a8),
+        )
+    });
+    (jobj).translate().set_y(y);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_HSD_JObjSetTranslateZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
+    let mut jobj = jobj;
+    let mut z = z;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b87a8),
+            (0x225_i32 as u32),
+            cstr(ctx, 0x803b87a8),
+        )
+    });
+    (jobj).translate().set_z(z);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
+    let mut jobj = jobj;
+    let mut y = y;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b87a8),
+            (0x13d_i32 as u32),
+            cstr(ctx, 0x803b87a8),
+        )
+    });
+    (if !(((jobj).flags() & ((shl_i32(1_i32, (17_i32 as u32))) as u32)) != 0) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b87a8),
+            (0x13e_i32 as u32),
+            cstr(ctx, 0x803b87a8),
+        )
+    });
+    (jobj).rotate().set_y(y);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
 }
 
 fn inl_HSD_JObjGetScaleY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
@@ -5474,10 +6111,26 @@ pub fn register(ctx: &Ctx) {
         Returns::Int,
     );
     ctx.register_port(
+        0x803053c4,
+        |ctx| {
+            let (a0, a1, a2): (i32, i32, i32) = Args::take_all(ctx);
+            Ret::put(_Toy_803053C4(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x8030562c,
         |ctx| {
             let (a0, a1): (i32, i32) = Args::take_all(ctx);
             Ret::put(Toy_SetUnlockState(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80305918,
+        |ctx| {
+            let (a0, a1, a2): (i8, i32, i32) = Args::take_all(ctx);
+            Ret::put(Toy_80305918(ctx, a0, a1, a2), ctx);
         },
         Returns::Nothing,
     );
@@ -5807,6 +6460,14 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x803087f4,
+        |ctx| {
+            let (a0,): (Addr<'_>,) = Args::take_all(ctx);
+            Ret::put(Toy_803087F4(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
         0x80308dc8,
         |ctx| {
             let (a0,): (HSD_CObj<'_>,) = Args::take_all(ctx);
@@ -5899,6 +6560,13 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x80311680,
+        |ctx| {
+            Ret::put(Toy_80311680(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x80311788,
         |ctx| {
             Ret::put(_Toy_80311788(ctx), ctx);
@@ -5946,6 +6614,13 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (i32,) = Args::take_all(ctx);
             Ret::put(Toy_8031234C(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x803124bc,
+        |ctx| {
+            Ret::put(Toy_803124BC(ctx), ctx);
         },
         Returns::Nothing,
     );

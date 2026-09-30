@@ -399,6 +399,126 @@ pub fn it_80278108<'a>(ctx: &'a Ctx, item: Item<'a>, mobj: HSD_MObj<'a>, texp: H
     }
 }
 
+pub fn it_80278574<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: _GXColor<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut arg1 = arg1;
+    let mut var_r3: HSD_DObj<'a> = null(ctx);
+    let mut var_r0: HSD_JObj<'a> = null(ctx);
+    let mut var_r0_2: HSD_JObj<'a> = null(ctx);
+    let mut var_r0_3: HSD_JObj<'a> = null(ctx);
+    let mut var_r0_4: HSD_JObj<'a> = null(ctx);
+    let mut var_r0_5: HSD_JObj<'a> = null(ctx);
+    let mut var_r0_6: HSD_JObj<'a> = null(ctx);
+    let mut var_r0_7: HSD_JObj<'a> = null(ctx);
+    let mut var_r0_8: HSD_JObj<'a> = null(ctx);
+    let mut var_r31: HSD_JObj<'a> = null(ctx);
+    let mut var_r3_2: HSD_JObj<'a> = null(ctx);
+    let mut var_r3_3: HSD_JObj<'a> = null(ctx);
+    let mut temp_r4: HSD_MObj<'a> = null(ctx);
+    let mut temp_r4_2: HSD_Material<'a> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    var_r31 = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
+    'l3: while !Handle::is_null(var_r31) {
+        'c4: {
+            var_r3 = fns::HSD_JObjGetDObj(ctx, var_r31);
+            'l5: while !Handle::is_null(var_r3) {
+                'c6: {
+                    temp_r4 = (var_r3).mobj();
+                    if !Handle::is_null(temp_r4) {
+                        temp_r4_2 = (temp_r4).mat();
+                        if !Handle::is_null(temp_r4_2) {
+                            Handle::copy_from((temp_r4_2).diffuse(), (arg1));
+                        }
+                    }
+                    if !Handle::is_null(var_r3) {
+                        var_r3 = (var_r3).next();
+                    } else {
+                        var_r3 = null::<HSD_DObj<'a>>(ctx);
+                    }
+                }
+            }
+            if Handle::is_null(var_r31) {
+                var_r0 = null::<HSD_JObj<'a>>(ctx);
+            } else {
+                var_r0 = (var_r31).child();
+            }
+            if !Handle::is_null(var_r0) {
+                if Handle::is_null(var_r31) {
+                    var_r0_2 = null::<HSD_JObj<'a>>(ctx);
+                } else {
+                    var_r0_2 = (var_r31).child();
+                }
+                var_r31 = var_r0_2;
+            } else {
+                if Handle::is_null(var_r31) {
+                    var_r0_3 = null::<HSD_JObj<'a>>(ctx);
+                } else {
+                    var_r0_3 = (var_r31).next();
+                }
+                if !Handle::is_null(var_r0_3) {
+                    if Handle::is_null(var_r31) {
+                        var_r0_4 = null::<HSD_JObj<'a>>(ctx);
+                    } else {
+                        var_r0_4 = (var_r31).next();
+                    }
+                    var_r31 = var_r0_4;
+                } else {
+                    'back_loop_25: loop {
+                        if Handle::is_null(var_r31) {
+                            var_r0_5 = null::<HSD_JObj<'a>>(ctx);
+                        } else {
+                            var_r0_5 = (var_r31).parent();
+                        }
+                        if Handle::is_null(var_r0_5) {
+                            var_r31 = null::<HSD_JObj<'a>>(ctx);
+                        } else {
+                            if Handle::is_null(var_r31) {
+                                var_r3_2 = null::<HSD_JObj<'a>>(ctx);
+                            } else {
+                                var_r3_2 = (var_r31).parent();
+                            }
+                            if Handle::is_null(var_r3_2) {
+                                var_r0_6 = null::<HSD_JObj<'a>>(ctx);
+                            } else {
+                                var_r0_6 = (var_r3_2).next();
+                            }
+                            if !Handle::is_null(var_r0_6) {
+                                if Handle::is_null(var_r31) {
+                                    var_r3_3 = null::<HSD_JObj<'a>>(ctx);
+                                } else {
+                                    var_r3_3 = (var_r31).parent();
+                                }
+                                if Handle::is_null(var_r3_3) {
+                                    var_r0_7 = null::<HSD_JObj<'a>>(ctx);
+                                } else {
+                                    var_r0_7 = (var_r3_3).next();
+                                }
+                                var_r31 = var_r0_7;
+                            } else {
+                                if Handle::is_null(var_r31) {
+                                    var_r0_8 = null::<HSD_JObj<'a>>(ctx);
+                                } else {
+                                    var_r0_8 = (var_r31).parent();
+                                }
+                                var_r31 = var_r0_8;
+                                continue 'back_loop_25;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
@@ -434,6 +554,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1, a2): (Item<'_>, HSD_MObj<'_>, HSD_TExp<'_>) = Args::take_all(ctx);
             Ret::put(it_80278108(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80278574,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, _GXColor<'_>) = Args::take_all(ctx);
+            Ret::put(it_80278574(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );
