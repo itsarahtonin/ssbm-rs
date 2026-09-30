@@ -14,7 +14,7 @@
 //! `--port UNITS` runs the Rust ports of those decomp units (comma-separated unit names or
 //! prefixes such as `melee/ft`, or `all`) instead of their original code. With `--lockstep`,
 //! every call to a ported function runs the original too and compares, and the run fails on
-//! any mismatch.
+//! any mismatch; `--lockstep-from FIELD` starts checking at that video field.
 
 use std::cell::Cell;
 use std::collections::HashMap;
@@ -64,6 +64,7 @@ fn run() -> ExitCode {
     let mut write_known = None;
     let mut ports: Vec<String> = Vec::new();
     let mut lockstep = false;
+    let mut lockstep_from = 0u64;
     let mut args = std::env::args().skip(1);
     while let Some(a) = args.next() {
         match a.as_str() {
@@ -82,6 +83,13 @@ fn run() -> ExitCode {
                     .map(|s| s.trim().to_owned()),
             ),
             "--lockstep" => lockstep = true,
+            "--lockstep-from" => {
+                lockstep = true;
+                lockstep_from = args
+                    .next()
+                    .and_then(|v| v.parse().ok())
+                    .expect("--lockstep-from FIELD");
+            }
             "--write-known" => write_known = Some(args.next().expect("--write-known FILE")),
             "--fp" => {
                 fp_mode = match args.next().as_deref() {
@@ -152,21 +160,9 @@ fn run() -> ExitCode {
     if !ports.is_empty() {
         eprintln!("ported: {units} units, {} functions", ported.len());
     }
-    if lockstep {
-        for &addr in &ported {
-            ctx.set_mode(addr, ssbm_rt::Mode::Lockstep);
-        }
-        // The game's outer loops never return, so they run as ports while everything they
-        // call is checked. ARInit DMAs through a stack buffer whose address the port's frame
-        // does not reproduce yet.
-        for name in LOCKSTEP_EXEMPT {
-            ctx.set_mode(ssbm_sdk::sym(name), ssbm_rt::Mode::Native);
-        }
-        ctx.lockstep.keep_per_function.set(2);
-    }
     // Playback's Gecko codes patch some functions; those keep running their patched code.
+    let mut kept = Vec::new();
     if let Some(dev) = &slippi {
-        let mut kept = Vec::new();
         for (at, len) in ssbm_slippi::patched(dev) {
             for f in ssbm_types::functions_overlapping(at, len) {
                 if ported.contains(&f) && !kept.contains(&f) {
@@ -182,6 +178,28 @@ fn run() -> ExitCode {
                 names.join(", ")
             );
         }
+    }
+    if lockstep {
+        // The game's outer loops never return, so they run as ports while everything they
+        // call is checked. ARInit DMAs through a stack buffer whose address the port's frame
+        // does not reproduce yet.
+        let exempt: Vec<u32> = LOCKSTEP_EXEMPT.iter().map(|n| ssbm_sdk::sym(n)).collect();
+        let checked: Vec<u32> = ported
+            .iter()
+            .copied()
+            .filter(|a| !kept.contains(a) && !exempt.contains(a))
+            .collect();
+        let enable = move |ctx: &Ctx| {
+            for &addr in &checked {
+                ctx.set_mode(addr, ssbm_rt::Mode::Lockstep);
+            }
+        };
+        if lockstep_from == 0 {
+            enable(&ctx);
+        } else {
+            sdk.schedule(hw::field_start(lockstep_from), enable);
+        }
+        ctx.lockstep.keep_per_function.set(2);
     }
 
     // CALLS=name,... logs each call to these functions (symbols or hex addresses) with its
