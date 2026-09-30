@@ -1,0 +1,12 @@
+[package]
+name = "ssbm-mem"
+description = "GameCube main memory: 24 MB, big-endian, 32-bit addresses"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+gekko-fp.workspace = true
+thiserror.workspace = true
