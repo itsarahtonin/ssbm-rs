@@ -27,6 +27,98 @@ FLAGS = [
     "-isystembuild/GALE01/include", "-isystemlibs/dolphin/src/dolphin", "-fdeclspec",
 ]
 
+SDK_SRC = "libs/dolphin/src"
+
+# MWCC assembly functions: `asm void f(...) {`, with `static` before or after `asm`.
+ASM_FN = re.compile(r"^(?:static\s+)?asm\s+(?:static\s+)?[^;{()]*?\b(\w+)\s*\([^;{]*?\)\s*\{", re.M | re.S)
+
+
+def flags_for(source):
+    """Clang flags for a unit. The SDK's sources include their private headers from any of its
+    folders, as MWCC's -ir allows, and call its intrinsics undeclared."""
+    if not source.replace("\\", "/").startswith(SDK_SRC + "/"):
+        return list(FLAGS)
+    dirs = sorted({d for d, _, files in os.walk(SDK_SRC) if any(f.endswith(".h") for f in files)})
+    prelude = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sdk_prelude.h")
+    return FLAGS + [f"-I{d}" for d in dirs] + [
+        "-include", "src/MetroTRK/intrinsics.h", "-include", prelude,
+        "-Wno-error=incompatible-function-pointer-types", "-Wno-error=incompatible-pointer-types",
+        "-Wno-error=implicit-function-declaration", "-Wno-error=int-conversion",
+    ]
+
+
+# MWCC's lvalue casts, `((u8*) buf) += n;`, which clang refuses.
+LVALUE_CAST = re.compile(r"\(\((\w[\w\s]*\*)\)\s*(\w+)\)\s*([+-])=\s*([^;]+);")
+
+INLINE_ASM = re.compile(r"\basm\s*(?:volatile\s*)?\{")
+
+
+def without_asm_bodies(text):
+    """The source with MWCC assembly functions reduced to declarations, and inline `asm { }`
+    blocks to a marker call, line numbers kept, since clang cannot read them. Returns (text,
+    names of the assembly functions)."""
+    text = without_inline_asm(text)
+    text = LVALUE_CAST.sub(lambda m: f"{m[2]} = ({m[1]}) {m[2]} {m[3]} ({m[4]});", text)
+    out, names, at = [], [], 0
+    for m in ASM_FN.finditer(text):
+        if m.start() < at:
+            continue
+        depth, i = 0, m.end() - 1
+        while i < len(text):
+            depth += {"{": 1, "}": -1}.get(text[i], 0)
+            if depth == 0:
+                break
+            i += 1
+        head = text[m.start():m.end() - 1]
+        decl = re.sub(r"\basm\b", "", head).rstrip() + ";"
+        body = text[m.end() - 1:i + 1]
+        out.append(text[at:m.start()] + decl + "\n" * body.count("\n"))
+        names.append(m.group(1))
+        at = i + 1
+    out.append(text[at:])
+    return "".join(out), names
+
+
+def without_inline_asm(text):
+    out, at = [], 0
+    for m in INLINE_ASM.finditer(text):
+        if m.start() < at:
+            continue
+        # A whole assembly function starts its line: without_asm_bodies takes those.
+        line_start = text.rfind("\n", 0, m.start()) + 1
+        if re.match(r"(?:static\s+)?asm\s", text[line_start:m.end()]):
+            continue
+        depth, i = 0, m.end() - 1
+        while i < len(text):
+            depth += {"{": 1, "}": -1}.get(text[i], 0)
+            if depth == 0:
+                break
+            i += 1
+        block = text[m.start():i + 1]
+        out.append(text[at:m.start()] + "__c2rs_inline_asm();" + "\n" * block.count("\n"))
+        at = i + 1
+    out.append(text[at:])
+    return "".join(out)
+
+
+def sdk_headers():
+    """Headers the SDK's sources see as MWCC does: its 32-bit integers are longs there."""
+    path = "libs/dolphin/include/dolphin/types.h"
+    text = open(path, encoding="utf-8").read()
+    return [(path, text.replace("#ifdef __MWERKS__\ntypedef signed long s32;", "#if 1\ntypedef signed long s32;", 1))]
+
+
+def parse(index, source, extra=()):
+    """Parses a unit as its compiler would see it, as far as clang can. Returns (translation
+    unit, names of assembly functions left out)."""
+    text = open(source, encoding="utf-8", errors="replace").read()
+    fixed, asm = without_asm_bodies(text)
+    unsaved = [(source, fixed)] if fixed != text else []
+    if source.replace("\\", "/").startswith(SDK_SRC + "/"):
+        unsaved += sdk_headers()
+    return index.parse(source, args=flags_for(source) + list(extra), unsaved_files=unsaved or None), asm
+
+
 SIGNED = {TK.SCHAR, TK.CHAR_S, TK.SHORT, TK.INT, TK.LONG, TK.LONGLONG, TK.WCHAR}
 UNSIGNED = {TK.UCHAR, TK.CHAR_U, TK.USHORT, TK.UINT, TK.ULONG, TK.ULONGLONG, TK.BOOL, TK.CHAR16, TK.CHAR32}
 FLOATS = {TK.FLOAT, TK.DOUBLE, TK.LONGDOUBLE}
@@ -154,7 +246,7 @@ def parse_unit(args):
     root, unit_name, source = args
     os.chdir(root)
     index = ci.Index.create()
-    tu = index.parse(source, args=FLAGS)
+    tu, _ = parse(index, source)
     errors = [f"{d.location}: {d.spelling}" for d in tu.diagnostics if d.severity >= ci.Diagnostic.Error]
     col = Collector(unit_name)
     col.visit(tu.cursor, source)

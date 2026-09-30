@@ -2469,9 +2469,10 @@ use crate::records::*;
 #[inline] pub fn TRK_memcpy<'a>(ctx: &'a Ctx, dst: Addr<'a>, src: Addr<'a>, n: u32) -> Addr<'a> { ctx.call(0x80003244, (dst, src, n, )) }
 #[inline] pub fn TRK_memset<'a>(ctx: &'a Ctx, dest: Addr<'a>, val: i32, count: u32) -> Addr<'a> { ctx.call(0x80003268, (dest, val, count, )) }
 #[inline] pub fn __TRK_reset<'a>(ctx: &'a Ctx) -> () { ctx.call(0x800051cc, ()) }
-#[inline] pub fn __start<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x8000522c, ()) }
-#[inline] pub fn __init_hardware<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x8000541c, ()) }
-#[inline] pub fn __flush_cache<'a>(ctx: &'a Ctx, address: Addr<'a>, size: u32) -> i32 { ctx.call(0x8000543c, (address, size, )) }
+#[inline] pub fn __start<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8000522c, ()) }
+#[inline] pub fn __init_registers<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80005340, ()) }
+#[inline] pub fn __init_hardware<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8000541c, ()) }
+#[inline] pub fn __flush_cache<'a>(ctx: &'a Ctx, address: Addr<'a>, size: u32) -> () { ctx.call(0x8000543c, (address, size, )) }
 #[inline] pub fn Command_00<'a>(ctx: &'a Ctx, info: CommandInfo<'a>) -> () { ctx.call(0x80005940, (info, )) }
 #[inline] pub fn Command_01<'a>(ctx: &'a Ctx, info: CommandInfo<'a>) -> () { ctx.call(0x8000594c, (info, )) }
 #[inline] pub fn Command_02<'a>(ctx: &'a Ctx, info: CommandInfo<'a>) -> () { ctx.call(0x80005994, (info, )) }
@@ -18032,25 +18033,25 @@ use crate::records::*;
 #[inline] pub fn THPInit<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80335c58, ()) }
 /// `PPCMfmsr` has no prototype; arguments must already be in registers.
 #[inline] pub fn PPCMfmsr(ctx: &Ctx) { ctx.invoke(0x80335e5c) }
-#[inline] pub fn PPCMtmsr<'a>(ctx: &'a Ctx, newMSR: u32) -> i32 { ctx.call(0x80335e64, (newMSR, )) }
+#[inline] pub fn PPCMtmsr<'a>(ctx: &'a Ctx, newMSR: u32) -> () { ctx.call(0x80335e64, (newMSR, )) }
 /// `PPCMfhid0` has no prototype; arguments must already be in registers.
 #[inline] pub fn PPCMfhid0(ctx: &Ctx) { ctx.invoke(0x80335e6c) }
 /// `PPCMfl2cr` has no prototype; arguments must already be in registers.
 #[inline] pub fn PPCMfl2cr(ctx: &Ctx) { ctx.invoke(0x80335e74) }
-#[inline] pub fn PPCMtl2cr<'a>(ctx: &'a Ctx, newL2cr: u32) -> i32 { ctx.call(0x80335e7c, (newL2cr, )) }
-#[inline] pub fn PPCMtdec<'a>(ctx: &'a Ctx, newDec: u32) -> i32 { ctx.call(0x80335e84, (newDec, )) }
+#[inline] pub fn PPCMtl2cr<'a>(ctx: &'a Ctx, newL2cr: u32) -> () { ctx.call(0x80335e7c, (newL2cr, )) }
+#[inline] pub fn PPCMtdec<'a>(ctx: &'a Ctx, newDec: u32) -> () { ctx.call(0x80335e84, (newDec, )) }
 /// `PPCSync` has no prototype; arguments must already be in registers.
 #[inline] pub fn PPCSync(ctx: &Ctx) { ctx.invoke(0x80335e8c) }
 /// `PPCHalt` has no prototype; arguments must already be in registers.
 #[inline] pub fn PPCHalt(ctx: &Ctx) { ctx.invoke(0x80335e94) }
 /// `PPCMfhid2` has no prototype; arguments must already be in registers.
 #[inline] pub fn PPCMfhid2(ctx: &Ctx) { ctx.invoke(0x80335ea8) }
-#[inline] pub fn PPCMthid2<'a>(ctx: &'a Ctx, newhid2: u32) -> i32 { ctx.call(0x80335eb0, (newhid2, )) }
-#[inline] pub fn PPCMtwpar<'a>(ctx: &'a Ctx, newwpar: u32) -> i32 { ctx.call(0x80335eb8, (newwpar, )) }
+#[inline] pub fn PPCMthid2<'a>(ctx: &'a Ctx, newhid2: u32) -> () { ctx.call(0x80335eb0, (newhid2, )) }
+#[inline] pub fn PPCMtwpar<'a>(ctx: &'a Ctx, newwpar: u32) -> () { ctx.call(0x80335eb8, (newwpar, )) }
 #[inline] pub fn DBInit<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80335ec0, ()) }
 #[inline] pub fn DBIsDebuggerPresent<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x80335ee8, ()) }
 #[inline] pub fn __DBExceptionDestinationAux<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80335f04, ()) }
-#[inline] pub fn __DBExceptionDestination<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x80335f4c, ()) }
+#[inline] pub fn __DBExceptionDestination<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80335f4c, ()) }
 #[inline] pub fn __DBIsExceptionMarked<'a>(ctx: &'a Ctx, exception: u8) -> i32 { ctx.call(0x80335f5c, (exception, )) }
 #[inline] pub fn DBPrintf<'a>(ctx: &'a Ctx, str: Val<'a, i8>, varargs: &[VarArg]) -> () { ctx.call_variadic(0x80335f78, (str, ), varargs) }
 #[inline] pub fn DSPCheckMailToDSP<'a>(ctx: &'a Ctx) -> u32 { ctx.call(0x80335fc8, ()) }
@@ -18252,37 +18253,36 @@ use crate::records::*;
 #[inline] pub fn GXSetGPMetric<'a>(ctx: &'a Ctx, perf0: i32, perf1: i32) -> () { ctx.call(0x803418fc, (perf0, perf1, )) }
 #[inline] pub fn GXClearGPMetric<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80342194, ()) }
 #[inline] pub fn PSMTXIdentity<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>) -> () { ctx.call(0x803421a4, (m, )) }
-#[inline] pub fn PSMTXCopy<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dst: ArrV<'a, F32, 4>) -> i32 { ctx.call(0x803421d0, (src, dst, )) }
-#[inline] pub fn PSMTXConcat<'a>(ctx: &'a Ctx, mA: ArrV<'a, F32, 4>, mB: ArrV<'a, F32, 4>, mAB: ArrV<'a, F32, 4>) -> i32 { ctx.call(0x80342204, (mA, mB, mAB, )) }
+#[inline] pub fn PSMTXCopy<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dst: ArrV<'a, F32, 4>) -> () { ctx.call(0x803421d0, (src, dst, )) }
+#[inline] pub fn PSMTXConcat<'a>(ctx: &'a Ctx, mA: ArrV<'a, F32, 4>, mB: ArrV<'a, F32, 4>, mAB: ArrV<'a, F32, 4>) -> () { ctx.call(0x80342204, (mA, mB, mAB, )) }
 #[inline] pub fn PSMTXTranspose<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, xPose: ArrV<'a, F32, 4>) -> () { ctx.call(0x803422d0, (src, xPose, )) }
 #[inline] pub fn PSMTXInverse<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, inv: ArrV<'a, F32, 4>) -> u32 { ctx.call(0x80342320, (src, inv, )) }
 #[inline] pub fn MTXRotRad<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, axis: i8, rad: f64) -> () { ctx.call(0x80342418, (m, axis, Single(gekko_fp::frsp(rad)), )) }
 #[inline] pub fn PSMTXRotTrig<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, axis: i8, sinA: f64, cosA: f64) -> () { ctx.call(0x80342488, (m, axis, Single(gekko_fp::frsp(sinA)), Single(gekko_fp::frsp(cosA)), )) }
 #[inline] pub fn PSMTXRotAxisRad<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, axis: Vec<'a>, rad: f64) -> () { ctx.call(0x80342530, (m, axis, Single(gekko_fp::frsp(rad)), )) }
 #[inline] pub fn PSMTXTrans<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, xT: f64, yT: f64, zT: f64) -> () { ctx.call(0x80342634, (m, Single(gekko_fp::frsp(xT)), Single(gekko_fp::frsp(yT)), Single(gekko_fp::frsp(zT)), )) }
-#[inline] pub fn PSMTXScale<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, xS: f64, yS: f64, zS: f64) -> i32 { ctx.call(0x80342668, (m, Single(gekko_fp::frsp(xS)), Single(gekko_fp::frsp(yS)), Single(gekko_fp::frsp(zS)), )) }
+#[inline] pub fn PSMTXScale<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, xS: f64, yS: f64, zS: f64) -> () { ctx.call(0x80342668, (m, Single(gekko_fp::frsp(xS)), Single(gekko_fp::frsp(yS)), Single(gekko_fp::frsp(zS)), )) }
 #[inline] pub fn PSMTXQuat<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, q: Quaternion<'a>) -> () { ctx.call(0x80342690, (m, q, )) }
 #[inline] pub fn C_MTXLookAt<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, camPos: Vec<'a>, camUp: Vec<'a>, target: Vec<'a>) -> () { ctx.call(0x80342734, (m, camPos, camUp, target, )) }
 #[inline] pub fn MTXLightFrustum<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, t: f64, b: f64, l: f64, r: f64, n: f64, scaleS: f64, scaleT: f64, transS: f64, transT: f64) -> () { ctx.call(0x803428c0, (m, Single(gekko_fp::frsp(t)), Single(gekko_fp::frsp(b)), Single(gekko_fp::frsp(l)), Single(gekko_fp::frsp(r)), Single(gekko_fp::frsp(n)), Single(gekko_fp::frsp(scaleS)), Single(gekko_fp::frsp(scaleT)), Single(gekko_fp::frsp(transS)), Single(gekko_fp::frsp(transT)), )) }
 #[inline] pub fn MTXLightPerspective<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, fovY: f64, aspect: f64, scaleS: f64, scaleT: f64, transS: f64, transT: f64) -> () { ctx.call(0x80342954, (m, Single(gekko_fp::frsp(fovY)), Single(gekko_fp::frsp(aspect)), Single(gekko_fp::frsp(scaleS)), Single(gekko_fp::frsp(scaleT)), Single(gekko_fp::frsp(transS)), Single(gekko_fp::frsp(transT)), )) }
 #[inline] pub fn MTXLightOrtho<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, t: f64, b: f64, l: f64, r: f64, scaleS: f64, scaleT: f64, transS: f64, transT: f64) -> () { ctx.call(0x80342a20, (m, Single(gekko_fp::frsp(t)), Single(gekko_fp::frsp(b)), Single(gekko_fp::frsp(l)), Single(gekko_fp::frsp(r)), Single(gekko_fp::frsp(scaleS)), Single(gekko_fp::frsp(scaleT)), Single(gekko_fp::frsp(transS)), Single(gekko_fp::frsp(transT)), )) }
-#[inline] pub fn PSMTXMultVec<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, src: Vec<'a>, dst: Vec<'a>) -> i32 { ctx.call(0x80342aa8, (m, src, dst, )) }
-#[inline] pub fn PSMTXMultVecSR<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, src: Vec<'a>, dst: Vec<'a>) -> i32 { ctx.call(0x80342afc, (m, src, dst, )) }
+#[inline] pub fn PSMTXMultVec<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, src: Vec<'a>, dst: Vec<'a>) -> () { ctx.call(0x80342aa8, (m, src, dst, )) }
+#[inline] pub fn PSMTXMultVecSR<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, src: Vec<'a>, dst: Vec<'a>) -> () { ctx.call(0x80342afc, (m, src, dst, )) }
 #[inline] pub fn MTXFrustum<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, t: f64, b: f64, l: f64, r: f64, n: f64, f: f64) -> () { ctx.call(0x80342b50, (m, Single(gekko_fp::frsp(t)), Single(gekko_fp::frsp(b)), Single(gekko_fp::frsp(l)), Single(gekko_fp::frsp(r)), Single(gekko_fp::frsp(n)), Single(gekko_fp::frsp(f)), )) }
 #[inline] pub fn MTXPerspective<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, fovY: f64, aspect: f64, n: f64, f: f64) -> () { ctx.call(0x80342bec, (m, Single(gekko_fp::frsp(fovY)), Single(gekko_fp::frsp(aspect)), Single(gekko_fp::frsp(n)), Single(gekko_fp::frsp(f)), )) }
 #[inline] pub fn MTXOrtho<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, t: f64, b: f64, l: f64, r: f64, n: f64, f: f64) -> () { ctx.call(0x80342cbc, (m, Single(gekko_fp::frsp(t)), Single(gekko_fp::frsp(b)), Single(gekko_fp::frsp(l)), Single(gekko_fp::frsp(r)), Single(gekko_fp::frsp(n)), Single(gekko_fp::frsp(f)), )) }
-#[inline] pub fn PSVECAdd<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>, c: Vec<'a>) -> i32 { ctx.call(0x80342d54, (a, b, c, )) }
-#[inline] pub fn PSVECSubtract<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>, c: Vec<'a>) -> i32 { ctx.call(0x80342d78, (a, b, c, )) }
-#[inline] pub fn PSVECScale<'a>(ctx: &'a Ctx, src: Vec<'a>, dst: Vec<'a>, mult: f64) -> i32 { ctx.call(0x80342d9c, (src, dst, Single(gekko_fp::frsp(mult)), )) }
+#[inline] pub fn PSVECAdd<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>, c: Vec<'a>) -> () { ctx.call(0x80342d54, (a, b, c, )) }
+#[inline] pub fn PSVECSubtract<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>, c: Vec<'a>) -> () { ctx.call(0x80342d78, (a, b, c, )) }
+#[inline] pub fn PSVECScale<'a>(ctx: &'a Ctx, src: Vec<'a>, dst: Vec<'a>, scale: f64) -> () { ctx.call(0x80342d9c, (src, dst, Single(gekko_fp::frsp(scale)), )) }
 #[inline] pub fn PSVECNormalize<'a>(ctx: &'a Ctx, vec1: Vec<'a>, dst: Vec<'a>) -> () { ctx.call(0x80342db8, (vec1, dst, )) }
-#[inline] pub fn PSVECMag<'a>(ctx: &'a Ctx, v: Vec<'a>) -> i32 { ctx.call(0x80342dfc, (v, )) }
+#[inline] pub fn PSVECMag<'a>(ctx: &'a Ctx, v: Vec<'a>) -> f64 { ctx.call(0x80342dfc, (v, )) }
 #[inline] pub fn PSVECDotProduct<'a>(ctx: &'a Ctx, vec1: Vec<'a>, vec2: Vec<'a>) -> f64 { ctx.call(0x80342e38, (vec1, vec2, )) }
-#[inline] pub fn PSVECCrossProduct<'a>(ctx: &'a Ctx, vec1: Vec<'a>, vec2: Vec<'a>, dst: Vec<'a>) -> i32 { ctx.call(0x80342e58, (vec1, vec2, dst, )) }
+#[inline] pub fn PSVECCrossProduct<'a>(ctx: &'a Ctx, vec1: Vec<'a>, vec2: Vec<'a>, dst: Vec<'a>) -> () { ctx.call(0x80342e58, (vec1, vec2, dst, )) }
 #[inline] pub fn OSGetConsoleType<'a>(ctx: &'a Ctx) -> u32 { ctx.call(0x80342e94, ()) }
 #[inline] pub fn OSInit<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80342fc8, ()) }
 #[inline] pub fn __OSSetExceptionHandler<'a>(ctx: &'a Ctx, exception: u8, handler: FnPtr<'a>) -> FnPtr<'a> { ctx.call(0x803435b4, (exception, handler, )) }
 #[inline] pub fn __OSGetExceptionHandler<'a>(ctx: &'a Ctx, exception: u8) -> FnPtr<'a> { ctx.call(0x803435d0, (exception, )) }
-#[inline] pub fn OSDefaultExceptionHandler<'a>(ctx: &'a Ctx, exception: u8, context: OSContext<'a>) -> i32 { ctx.call(0x80343680, (exception, context, )) }
 #[inline] pub fn __OSPSInit<'a>(ctx: &'a Ctx) -> () { ctx.call(0x803436d4, ()) }
 #[inline] pub fn __OSGetDIConfig<'a>(ctx: &'a Ctx) -> u32 { ctx.call(0x8034370c, ()) }
 #[inline] pub fn OSInitAlarm<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80343720, ()) }
@@ -18305,32 +18305,32 @@ use crate::records::*;
 #[inline] pub fn OSAllocFromArenaHi<'a>(ctx: &'a Ctx, size: u32, align: u32) -> Addr<'a> { ctx.call(0x80344514, (size, align, )) }
 #[inline] pub fn __OSInitAudioSystem<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80344534, ()) }
 #[inline] pub fn __OSStopAudioSystem<'a>(ctx: &'a Ctx) -> () { ctx.call(0x803446f0, ()) }
-#[inline] pub fn DCEnable<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x803447c8, ()) }
-#[inline] pub fn DCInvalidateRange<'a>(ctx: &'a Ctx, addr: Addr<'a>, nBytes: u32) -> i32 { ctx.call(0x803447dc, (addr, nBytes, )) }
-#[inline] pub fn DCFlushRange<'a>(ctx: &'a Ctx, addr: Addr<'a>, nBytes: u32) -> i32 { ctx.call(0x8034480c, (addr, nBytes, )) }
-#[inline] pub fn DCStoreRange<'a>(ctx: &'a Ctx, addr: Addr<'a>, nBytes: u32) -> i32 { ctx.call(0x80344840, (addr, nBytes, )) }
-#[inline] pub fn DCFlushRangeNoSync<'a>(ctx: &'a Ctx, addr: Addr<'a>, nBytes: u32) -> i32 { ctx.call(0x80344874, (addr, nBytes, )) }
-#[inline] pub fn DCZeroRange<'a>(ctx: &'a Ctx, addr: Addr<'a>, nBytes: u32) -> i32 { ctx.call(0x803448a4, (addr, nBytes, )) }
-#[inline] pub fn ICInvalidateRange<'a>(ctx: &'a Ctx, addr: Addr<'a>, nBytes: u32) -> i32 { ctx.call(0x803448d4, (addr, nBytes, )) }
-#[inline] pub fn ICFlashInvalidate<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x8034490c, ()) }
-#[inline] pub fn ICEnable<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x8034491c, ()) }
+#[inline] pub fn DCEnable<'a>(ctx: &'a Ctx) -> () { ctx.call(0x803447c8, ()) }
+#[inline] pub fn DCInvalidateRange<'a>(ctx: &'a Ctx, addr: Addr<'a>, nBytes: u32) -> () { ctx.call(0x803447dc, (addr, nBytes, )) }
+#[inline] pub fn DCFlushRange<'a>(ctx: &'a Ctx, addr: Addr<'a>, nBytes: u32) -> () { ctx.call(0x8034480c, (addr, nBytes, )) }
+#[inline] pub fn DCStoreRange<'a>(ctx: &'a Ctx, addr: Addr<'a>, nBytes: u32) -> () { ctx.call(0x80344840, (addr, nBytes, )) }
+#[inline] pub fn DCFlushRangeNoSync<'a>(ctx: &'a Ctx, addr: Addr<'a>, nBytes: u32) -> () { ctx.call(0x80344874, (addr, nBytes, )) }
+#[inline] pub fn DCZeroRange<'a>(ctx: &'a Ctx, addr: Addr<'a>, nBytes: u32) -> () { ctx.call(0x803448a4, (addr, nBytes, )) }
+#[inline] pub fn ICInvalidateRange<'a>(ctx: &'a Ctx, addr: Addr<'a>, nBytes: u32) -> () { ctx.call(0x803448d4, (addr, nBytes, )) }
+#[inline] pub fn ICFlashInvalidate<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8034490c, ()) }
+#[inline] pub fn ICEnable<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8034491c, ()) }
 #[inline] pub fn LCEnable<'a>(ctx: &'a Ctx) -> () { ctx.call(0x803449fc, ()) }
-#[inline] pub fn LCDisable<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x80344a34, ()) }
-#[inline] pub fn LCStoreBlocks<'a>(ctx: &'a Ctx, destAddr: Addr<'a>, srcTag: Addr<'a>, numBlocks: u32) -> i32 { ctx.call(0x80344a5c, (destAddr, srcTag, numBlocks, )) }
+#[inline] pub fn LCDisable<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80344a34, ()) }
+#[inline] pub fn LCStoreBlocks<'a>(ctx: &'a Ctx, destAddr: Addr<'a>, srcTag: Addr<'a>, numBlocks: u32) -> () { ctx.call(0x80344a5c, (destAddr, srcTag, numBlocks, )) }
 #[inline] pub fn LCStoreData<'a>(ctx: &'a Ctx, destAddr: Addr<'a>, srcAddr: Addr<'a>, nBytes: u32) -> u32 { ctx.call(0x80344a80, (destAddr, srcAddr, nBytes, )) }
-#[inline] pub fn LCQueueWait<'a>(ctx: &'a Ctx, len: u32) -> i32 { ctx.call(0x80344b2c, (len, )) }
+#[inline] pub fn LCQueueWait<'a>(ctx: &'a Ctx, len: u32) -> () { ctx.call(0x80344b2c, (len, )) }
 #[inline] pub fn L2GlobalInvalidate<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80344b44, ()) }
 #[inline] pub fn DMAErrorHandler<'a>(ctx: &'a Ctx, error: u16, context: OSContext<'a>, varargs: &[VarArg]) -> () { ctx.call_variadic(0x80344bdc, (error, context, ), varargs) }
 #[inline] pub fn __OSCacheInit<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80344d3c, ()) }
-#[inline] pub fn OSLoadFPUContext<'a>(ctx: &'a Ctx, fpuContext: OSContext<'a>) -> i32 { ctx.call(0x8034507c, (fpuContext, )) }
-#[inline] pub fn OSSaveFPUContext<'a>(ctx: &'a Ctx, fpuContext: OSContext<'a>) -> i32 { ctx.call(0x80345084, (fpuContext, )) }
-#[inline] pub fn OSSetCurrentContext<'a>(ctx: &'a Ctx, context: OSContext<'a>) -> i32 { ctx.call(0x8034508c, (context, )) }
+#[inline] pub fn OSLoadFPUContext<'a>(ctx: &'a Ctx, fpuContext: OSContext<'a>) -> () { ctx.call(0x8034507c, (fpuContext, )) }
+#[inline] pub fn OSSaveFPUContext<'a>(ctx: &'a Ctx, fpuContext: OSContext<'a>) -> () { ctx.call(0x80345084, (fpuContext, )) }
+#[inline] pub fn OSSetCurrentContext<'a>(ctx: &'a Ctx, context: OSContext<'a>) -> () { ctx.call(0x8034508c, (context, )) }
 #[inline] pub fn OSGetCurrentContext<'a>(ctx: &'a Ctx) -> OSContext<'a> { ctx.call(0x803450e8, ()) }
 #[inline] pub fn OSSaveContext<'a>(ctx: &'a Ctx, context: OSContext<'a>) -> u32 { ctx.call(0x803450f4, (context, )) }
-#[inline] pub fn OSLoadContext<'a>(ctx: &'a Ctx, context: OSContext<'a>) -> i32 { ctx.call(0x80345174, (context, )) }
+#[inline] pub fn OSLoadContext<'a>(ctx: &'a Ctx, context: OSContext<'a>) -> () { ctx.call(0x80345174, (context, )) }
 #[inline] pub fn OSGetStackPointer<'a>(ctx: &'a Ctx) -> u32 { ctx.call(0x8034524c, ()) }
 #[inline] pub fn OSClearContext<'a>(ctx: &'a Ctx, context: OSContext<'a>) -> () { ctx.call(0x80345254, (context, )) }
-#[inline] pub fn OSInitContext<'a>(ctx: &'a Ctx, context: OSContext<'a>, pc: u32, newsp: u32) -> i32 { ctx.call(0x80345278, (context, pc, newsp, )) }
+#[inline] pub fn OSInitContext<'a>(ctx: &'a Ctx, context: OSContext<'a>, pc: u32, newsp: u32) -> () { ctx.call(0x80345278, (context, pc, newsp, )) }
 #[inline] pub fn OSDumpContext<'a>(ctx: &'a Ctx, context: OSContext<'a>) -> () { ctx.call(0x80345334, (context, )) }
 #[inline] pub fn __OSContextInit<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80345660, ()) }
 #[inline] pub fn OSReport<'a>(ctx: &'a Ctx, msg: Val<'a, i8>, varargs: &[VarArg]) -> () { ctx.call_variadic(0x803456a8, (msg, ), varargs) }
@@ -18373,6 +18373,7 @@ use crate::records::*;
 #[inline] pub fn __OSCheckMutex<'a>(ctx: &'a Ctx, mutex: OSMutex<'a>) -> i32 { ctx.call(0x80347f4c, (mutex, )) }
 #[inline] pub fn __OSCheckDeadLock<'a>(ctx: &'a Ctx, thread: OSThread<'a>) -> i32 { ctx.call(0x8034804c, (thread, )) }
 #[inline] pub fn __OSCheckMutexes<'a>(ctx: &'a Ctx, thread: OSThread<'a>) -> i32 { ctx.call(0x80348084, (thread, )) }
+#[inline] pub fn Run<'a>(ctx: &'a Ctx, arg0: FnPtr<'a>) -> () { ctx.call(0x803480f8, (arg0, )) }
 #[inline] pub fn __OSReboot<'a>(ctx: &'a Ctx, resetCode: u32, bootDol: u32) -> () { ctx.call(0x80348144, (resetCode, bootDol, )) }
 #[inline] pub fn OSRegisterResetFunction<'a>(ctx: &'a Ctx, info: OSResetFunctionInfo<'a>) -> () { ctx.call(0x80348310, (info, )) }
 #[inline] pub fn __OSDoHotReset<'a>(ctx: &'a Ctx, arg0: i32) -> () { ctx.call(0x80348404, (arg0, )) }
@@ -18427,8 +18428,8 @@ use crate::records::*;
 #[inline] pub fn OSSleepThread<'a>(ctx: &'a Ctx, queue: OSThreadQueue<'a>) -> () { ctx.call(0x8034ba14, (queue, )) }
 #[inline] pub fn OSWakeupThread<'a>(ctx: &'a Ctx, queue: OSThreadQueue<'a>) -> () { ctx.call(0x8034bb00, (queue, )) }
 #[inline] pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x8034bca0, ()) }
-#[inline] pub fn OSGetTime<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x8034c3f0, ()) }
-#[inline] pub fn OSGetTick<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x8034c408, ()) }
+#[inline] pub fn OSGetTime<'a>(ctx: &'a Ctx) -> i64 { ctx.call(0x8034c3f0, ()) }
+#[inline] pub fn OSGetTick<'a>(ctx: &'a Ctx) -> u32 { ctx.call(0x8034c408, ()) }
 /// `__OSGetSystemTime` has no prototype; arguments must already be in registers.
 #[inline] pub fn __OSGetSystemTime(ctx: &Ctx) { ctx.invoke(0x8034c410) }
 #[inline] pub fn __OSTimeToSystemTime<'a>(ctx: &'a Ctx, time: i64) -> i64 { ctx.call(0x8034c474, (time, )) }
@@ -18601,6 +18602,7 @@ use crate::records::*;
 #[inline] pub fn AXSetVoiceSrcRatio<'a>(ctx: &'a Ctx, p: _AXVPB<'a>, ratio: f64) -> () { ctx.call(0x8035b574, (p, Single(gekko_fp::frsp(ratio)), )) }
 #[inline] pub fn AXSetVoiceAdpcmLoop<'a>(ctx: &'a Ctx, p: _AXVPB<'a>, adpcmloop: _AXPBADPCMLOOP<'a>) -> () { ctx.call(0x8035b60c, (p, adpcmloop, )) }
 #[inline] pub fn __AXGetCurrentProfile<'a>(ctx: &'a Ctx) -> _AXPROFILE<'a> { ctx.call(0x8035b678, ()) }
+#[inline] pub fn DoCrossTalk<'a>(ctx: &'a Ctx, l: Val<'a, i32>, r: Val<'a, i32>, cross: f64, invcross: f64) -> () { ctx.call(0x8035bbac, (l, r, Single(gekko_fp::frsp(cross)), Single(gekko_fp::frsp(invcross)), )) }
 #[inline] pub fn AXFXReverbHiInit<'a>(ctx: &'a Ctx, rev: AXFX_REVERBHI<'a>) -> i32 { ctx.call(0x8035c344, (rev, )) }
 #[inline] pub fn AXFXReverbHiShutdown<'a>(ctx: &'a Ctx, rev: AXFX_REVERBHI<'a>) -> i32 { ctx.call(0x8035c3b4, (rev, )) }
 #[inline] pub fn AXFXReverbHiCallback<'a>(ctx: &'a Ctx, bufferUpdate: AXFX_BUFFERUPDATE<'a>, reverb: AXFX_REVERBHI<'a>) -> () { ctx.call(0x8035c400, (bufferUpdate, reverb, )) }
@@ -19536,6 +19538,7 @@ pub mod addr {
     pub const TRK_memset: u32 = 0x80003268;
     pub const __TRK_reset: u32 = 0x800051cc;
     pub const __start: u32 = 0x8000522c;
+    pub const __init_registers: u32 = 0x80005340;
     pub const __init_hardware: u32 = 0x8000541c;
     pub const __flush_cache: u32 = 0x8000543c;
     pub const Command_00: u32 = 0x80005940;
@@ -35333,7 +35336,6 @@ pub mod addr {
     pub const OSInit: u32 = 0x80342fc8;
     pub const __OSSetExceptionHandler: u32 = 0x803435b4;
     pub const __OSGetExceptionHandler: u32 = 0x803435d0;
-    pub const OSDefaultExceptionHandler: u32 = 0x80343680;
     pub const __OSPSInit: u32 = 0x803436d4;
     pub const __OSGetDIConfig: u32 = 0x8034370c;
     pub const OSInitAlarm: u32 = 0x80343720;
@@ -35423,6 +35425,7 @@ pub mod addr {
     pub const __OSCheckMutex: u32 = 0x80347f4c;
     pub const __OSCheckDeadLock: u32 = 0x8034804c;
     pub const __OSCheckMutexes: u32 = 0x80348084;
+    pub const Run: u32 = 0x803480f8;
     pub const __OSReboot: u32 = 0x80348144;
     pub const OSRegisterResetFunction: u32 = 0x80348310;
     pub const __OSDoHotReset: u32 = 0x80348404;
@@ -35644,6 +35647,7 @@ pub mod addr {
     pub const AXSetVoiceSrcRatio: u32 = 0x8035b574;
     pub const AXSetVoiceAdpcmLoop: u32 = 0x8035b60c;
     pub const __AXGetCurrentProfile: u32 = 0x8035b678;
+    pub const DoCrossTalk: u32 = 0x8035bbac;
     pub const AXFXReverbHiInit: u32 = 0x8035c344;
     pub const AXFXReverbHiShutdown: u32 = 0x8035c3b4;
     pub const AXFXReverbHiCallback: u32 = 0x8035c400;
@@ -36580,9 +36584,10 @@ pub mod abi {
     #[inline] pub fn TRK_memcpy(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, Addr<'a>, u32) -> Addr<'a>) { let (dst, src, n, ): (Addr<'_>, Addr<'_>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, dst, src, n), ctx); }
     #[inline] pub fn TRK_memset(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, u32) -> Addr<'a>) { let (dest, val, count, ): (Addr<'_>, i32, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, dest, val, count), ctx); }
     #[inline] pub fn __TRK_reset(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-    #[inline] pub fn __start(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-    #[inline] pub fn __init_hardware(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-    #[inline] pub fn __flush_cache(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, u32) -> i32) { let (address, size, ): (Addr<'_>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, address, size), ctx); }
+    #[inline] pub fn __start(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+    #[inline] pub fn __init_registers(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+    #[inline] pub fn __init_hardware(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+    #[inline] pub fn __flush_cache(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, u32) -> ()) { let (address, size, ): (Addr<'_>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, address, size), ctx); }
     #[inline] pub fn Command_00(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CommandInfo<'a>) -> ()) { let (info, ): (CommandInfo<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, info), ctx); }
     #[inline] pub fn Command_01(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CommandInfo<'a>) -> ()) { let (info, ): (CommandInfo<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, info), ctx); }
     #[inline] pub fn Command_02(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CommandInfo<'a>) -> ()) { let (info, ): (CommandInfo<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, info), ctx); }
@@ -52137,15 +52142,15 @@ pub mod abi {
     #[inline] pub fn THPDec_80331340(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, _THPFileInfo<'a>, Addr<'a>, Addr<'a>, Addr<'a>) -> ()) { let (info, tileY, tileU, tileV, ): (_THPFileInfo<'_>, Addr<'_>, Addr<'_>, Addr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, info, tileY, tileU, tileV), ctx); }
     #[inline] pub fn THPDec_803313D0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, _THPFileInfo<'a>, Addr<'a>, Addr<'a>, Addr<'a>, u32) -> ()) { let (info, tileY, tileU, tileV, x, ): (_THPFileInfo<'_>, Addr<'_>, Addr<'_>, Addr<'_>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, info, tileY, tileU, tileV, x), ctx); }
     #[inline] pub fn THPInit(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-    #[inline] pub fn PPCMtmsr(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u32) -> i32) { let (newMSR, ): (u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, newMSR), ctx); }
-    #[inline] pub fn PPCMtl2cr(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u32) -> i32) { let (newL2cr, ): (u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, newL2cr), ctx); }
-    #[inline] pub fn PPCMtdec(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u32) -> i32) { let (newDec, ): (u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, newDec), ctx); }
-    #[inline] pub fn PPCMthid2(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u32) -> i32) { let (newhid2, ): (u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, newhid2), ctx); }
-    #[inline] pub fn PPCMtwpar(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u32) -> i32) { let (newwpar, ): (u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, newwpar), ctx); }
+    #[inline] pub fn PPCMtmsr(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u32) -> ()) { let (newMSR, ): (u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, newMSR), ctx); }
+    #[inline] pub fn PPCMtl2cr(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u32) -> ()) { let (newL2cr, ): (u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, newL2cr), ctx); }
+    #[inline] pub fn PPCMtdec(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u32) -> ()) { let (newDec, ): (u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, newDec), ctx); }
+    #[inline] pub fn PPCMthid2(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u32) -> ()) { let (newhid2, ): (u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, newhid2), ctx); }
+    #[inline] pub fn PPCMtwpar(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u32) -> ()) { let (newwpar, ): (u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, newwpar), ctx); }
     #[inline] pub fn DBInit(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     #[inline] pub fn DBIsDebuggerPresent(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     #[inline] pub fn __DBExceptionDestinationAux(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-    #[inline] pub fn __DBExceptionDestination(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+    #[inline] pub fn __DBExceptionDestination(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     #[inline] pub fn __DBIsExceptionMarked(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u8) -> i32) { let (exception, ): (u8, ) = Args::take_all(ctx); Ret::put(__f(ctx, exception), ctx); }
     #[inline] pub fn DBPrintf(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Val<'a, i8>) -> ()) { let (str, ): (Val<'_, i8>, ) = Args::take_all(ctx); Ret::put(__f(ctx, str), ctx); }
     #[inline] pub fn DSPCheckMailToDSP(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> u32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
@@ -52333,37 +52338,36 @@ pub mod abi {
     #[inline] pub fn GXSetGPMetric(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, i32) -> ()) { let (perf0, perf1, ): (i32, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, perf0, perf1), ctx); }
     #[inline] pub fn GXClearGPMetric(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     #[inline] pub fn PSMTXIdentity(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>) -> ()) { let (m, ): (ArrV<'_, F32, 4>, ) = Args::take_all(ctx); Ret::put(__f(ctx, m), ctx); }
-    #[inline] pub fn PSMTXCopy(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, ArrV<'a, F32, 4>) -> i32) { let (src, dst, ): (ArrV<'_, F32, 4>, ArrV<'_, F32, 4>, ) = Args::take_all(ctx); Ret::put(__f(ctx, src, dst), ctx); }
-    #[inline] pub fn PSMTXConcat(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, ArrV<'a, F32, 4>, ArrV<'a, F32, 4>) -> i32) { let (mA, mB, mAB, ): (ArrV<'_, F32, 4>, ArrV<'_, F32, 4>, ArrV<'_, F32, 4>, ) = Args::take_all(ctx); Ret::put(__f(ctx, mA, mB, mAB), ctx); }
+    #[inline] pub fn PSMTXCopy(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, ArrV<'a, F32, 4>) -> ()) { let (src, dst, ): (ArrV<'_, F32, 4>, ArrV<'_, F32, 4>, ) = Args::take_all(ctx); Ret::put(__f(ctx, src, dst), ctx); }
+    #[inline] pub fn PSMTXConcat(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, ArrV<'a, F32, 4>, ArrV<'a, F32, 4>) -> ()) { let (mA, mB, mAB, ): (ArrV<'_, F32, 4>, ArrV<'_, F32, 4>, ArrV<'_, F32, 4>, ) = Args::take_all(ctx); Ret::put(__f(ctx, mA, mB, mAB), ctx); }
     #[inline] pub fn PSMTXTranspose(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, ArrV<'a, F32, 4>) -> ()) { let (src, xPose, ): (ArrV<'_, F32, 4>, ArrV<'_, F32, 4>, ) = Args::take_all(ctx); Ret::put(__f(ctx, src, xPose), ctx); }
     #[inline] pub fn PSMTXInverse(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, ArrV<'a, F32, 4>) -> u32) { let (src, inv, ): (ArrV<'_, F32, 4>, ArrV<'_, F32, 4>, ) = Args::take_all(ctx); Ret::put(__f(ctx, src, inv), ctx); }
     #[inline] pub fn MTXRotRad(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, i8, f64) -> ()) { let (m, axis, rad, ): (ArrV<'_, F32, 4>, i8, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, m, axis, rad.0), ctx); }
     #[inline] pub fn PSMTXRotTrig(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, i8, f64, f64) -> ()) { let (m, axis, sinA, cosA, ): (ArrV<'_, F32, 4>, i8, Single, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, m, axis, sinA.0, cosA.0), ctx); }
     #[inline] pub fn PSMTXRotAxisRad(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, Vec<'a>, f64) -> ()) { let (m, axis, rad, ): (ArrV<'_, F32, 4>, Vec<'_>, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, m, axis, rad.0), ctx); }
     #[inline] pub fn PSMTXTrans(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, f64, f64, f64) -> ()) { let (m, xT, yT, zT, ): (ArrV<'_, F32, 4>, Single, Single, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, m, xT.0, yT.0, zT.0), ctx); }
-    #[inline] pub fn PSMTXScale(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, f64, f64, f64) -> i32) { let (m, xS, yS, zS, ): (ArrV<'_, F32, 4>, Single, Single, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, m, xS.0, yS.0, zS.0), ctx); }
+    #[inline] pub fn PSMTXScale(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, f64, f64, f64) -> ()) { let (m, xS, yS, zS, ): (ArrV<'_, F32, 4>, Single, Single, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, m, xS.0, yS.0, zS.0), ctx); }
     #[inline] pub fn PSMTXQuat(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, Quaternion<'a>) -> ()) { let (m, q, ): (ArrV<'_, F32, 4>, Quaternion<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, m, q), ctx); }
     #[inline] pub fn C_MTXLookAt(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, Vec<'a>, Vec<'a>, Vec<'a>) -> ()) { let (m, camPos, camUp, target, ): (ArrV<'_, F32, 4>, Vec<'_>, Vec<'_>, Vec<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, m, camPos, camUp, target), ctx); }
     #[inline] pub fn MTXLightFrustum(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, f64, f64, f64, f64, f64, f64, f64, f64, f64) -> ()) { let (m, t, b, l, r, n, scaleS, scaleT, transS, transT, ): (ArrV<'_, F32, 4>, Single, Single, Single, Single, Single, Single, Single, Single, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, m, t.0, b.0, l.0, r.0, n.0, scaleS.0, scaleT.0, transS.0, transT.0), ctx); }
     #[inline] pub fn MTXLightPerspective(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, f64, f64, f64, f64, f64, f64) -> ()) { let (m, fovY, aspect, scaleS, scaleT, transS, transT, ): (ArrV<'_, F32, 4>, Single, Single, Single, Single, Single, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, m, fovY.0, aspect.0, scaleS.0, scaleT.0, transS.0, transT.0), ctx); }
     #[inline] pub fn MTXLightOrtho(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, f64, f64, f64, f64, f64, f64, f64, f64) -> ()) { let (m, t, b, l, r, scaleS, scaleT, transS, transT, ): (ArrV<'_, F32, 4>, Single, Single, Single, Single, Single, Single, Single, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, m, t.0, b.0, l.0, r.0, scaleS.0, scaleT.0, transS.0, transT.0), ctx); }
-    #[inline] pub fn PSMTXMultVec(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, Vec<'a>, Vec<'a>) -> i32) { let (m, src, dst, ): (ArrV<'_, F32, 4>, Vec<'_>, Vec<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, m, src, dst), ctx); }
-    #[inline] pub fn PSMTXMultVecSR(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, Vec<'a>, Vec<'a>) -> i32) { let (m, src, dst, ): (ArrV<'_, F32, 4>, Vec<'_>, Vec<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, m, src, dst), ctx); }
+    #[inline] pub fn PSMTXMultVec(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, Vec<'a>, Vec<'a>) -> ()) { let (m, src, dst, ): (ArrV<'_, F32, 4>, Vec<'_>, Vec<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, m, src, dst), ctx); }
+    #[inline] pub fn PSMTXMultVecSR(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, Vec<'a>, Vec<'a>) -> ()) { let (m, src, dst, ): (ArrV<'_, F32, 4>, Vec<'_>, Vec<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, m, src, dst), ctx); }
     #[inline] pub fn MTXFrustum(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, f64, f64, f64, f64, f64, f64) -> ()) { let (m, t, b, l, r, n, f, ): (ArrV<'_, F32, 4>, Single, Single, Single, Single, Single, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, m, t.0, b.0, l.0, r.0, n.0, f.0), ctx); }
     #[inline] pub fn MTXPerspective(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, f64, f64, f64, f64) -> ()) { let (m, fovY, aspect, n, f, ): (ArrV<'_, F32, 4>, Single, Single, Single, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, m, fovY.0, aspect.0, n.0, f.0), ctx); }
     #[inline] pub fn MTXOrtho(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, f64, f64, f64, f64, f64, f64) -> ()) { let (m, t, b, l, r, n, f, ): (ArrV<'_, F32, 4>, Single, Single, Single, Single, Single, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, m, t.0, b.0, l.0, r.0, n.0, f.0), ctx); }
-    #[inline] pub fn PSVECAdd(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>, Vec<'a>, Vec<'a>) -> i32) { let (a, b, c, ): (Vec<'_>, Vec<'_>, Vec<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, a, b, c), ctx); }
-    #[inline] pub fn PSVECSubtract(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>, Vec<'a>, Vec<'a>) -> i32) { let (a, b, c, ): (Vec<'_>, Vec<'_>, Vec<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, a, b, c), ctx); }
-    #[inline] pub fn PSVECScale(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>, Vec<'a>, f64) -> i32) { let (src, dst, mult, ): (Vec<'_>, Vec<'_>, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, src, dst, mult.0), ctx); }
+    #[inline] pub fn PSVECAdd(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>, Vec<'a>, Vec<'a>) -> ()) { let (a, b, c, ): (Vec<'_>, Vec<'_>, Vec<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, a, b, c), ctx); }
+    #[inline] pub fn PSVECSubtract(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>, Vec<'a>, Vec<'a>) -> ()) { let (a, b, c, ): (Vec<'_>, Vec<'_>, Vec<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, a, b, c), ctx); }
+    #[inline] pub fn PSVECScale(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>, Vec<'a>, f64) -> ()) { let (src, dst, scale, ): (Vec<'_>, Vec<'_>, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, src, dst, scale.0), ctx); }
     #[inline] pub fn PSVECNormalize(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>, Vec<'a>) -> ()) { let (vec1, dst, ): (Vec<'_>, Vec<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, vec1, dst), ctx); }
-    #[inline] pub fn PSVECMag(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>) -> i32) { let (v, ): (Vec<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, v), ctx); }
+    #[inline] pub fn PSVECMag(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>) -> f64) { let (v, ): (Vec<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, v), ctx); }
     #[inline] pub fn PSVECDotProduct(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>, Vec<'a>) -> f64) { let (vec1, vec2, ): (Vec<'_>, Vec<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, vec1, vec2), ctx); }
-    #[inline] pub fn PSVECCrossProduct(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>, Vec<'a>, Vec<'a>) -> i32) { let (vec1, vec2, dst, ): (Vec<'_>, Vec<'_>, Vec<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, vec1, vec2, dst), ctx); }
+    #[inline] pub fn PSVECCrossProduct(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>, Vec<'a>, Vec<'a>) -> ()) { let (vec1, vec2, dst, ): (Vec<'_>, Vec<'_>, Vec<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, vec1, vec2, dst), ctx); }
     #[inline] pub fn OSGetConsoleType(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> u32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     #[inline] pub fn OSInit(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     #[inline] pub fn __OSSetExceptionHandler(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u8, FnPtr<'a>) -> FnPtr<'a>) { let (exception, handler, ): (u8, FnPtr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, exception, handler), ctx); }
     #[inline] pub fn __OSGetExceptionHandler(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u8) -> FnPtr<'a>) { let (exception, ): (u8, ) = Args::take_all(ctx); Ret::put(__f(ctx, exception), ctx); }
-    #[inline] pub fn OSDefaultExceptionHandler(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u8, OSContext<'a>) -> i32) { let (exception, context, ): (u8, OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, exception, context), ctx); }
     #[inline] pub fn __OSPSInit(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     #[inline] pub fn __OSGetDIConfig(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> u32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     #[inline] pub fn OSInitAlarm(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
@@ -52386,32 +52390,32 @@ pub mod abi {
     #[inline] pub fn OSAllocFromArenaHi(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u32, u32) -> Addr<'a>) { let (size, align, ): (u32, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, size, align), ctx); }
     #[inline] pub fn __OSInitAudioSystem(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     #[inline] pub fn __OSStopAudioSystem(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-    #[inline] pub fn DCEnable(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-    #[inline] pub fn DCInvalidateRange(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, u32) -> i32) { let (addr, nBytes, ): (Addr<'_>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, addr, nBytes), ctx); }
-    #[inline] pub fn DCFlushRange(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, u32) -> i32) { let (addr, nBytes, ): (Addr<'_>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, addr, nBytes), ctx); }
-    #[inline] pub fn DCStoreRange(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, u32) -> i32) { let (addr, nBytes, ): (Addr<'_>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, addr, nBytes), ctx); }
-    #[inline] pub fn DCFlushRangeNoSync(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, u32) -> i32) { let (addr, nBytes, ): (Addr<'_>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, addr, nBytes), ctx); }
-    #[inline] pub fn DCZeroRange(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, u32) -> i32) { let (addr, nBytes, ): (Addr<'_>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, addr, nBytes), ctx); }
-    #[inline] pub fn ICInvalidateRange(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, u32) -> i32) { let (addr, nBytes, ): (Addr<'_>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, addr, nBytes), ctx); }
-    #[inline] pub fn ICFlashInvalidate(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-    #[inline] pub fn ICEnable(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+    #[inline] pub fn DCEnable(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+    #[inline] pub fn DCInvalidateRange(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, u32) -> ()) { let (addr, nBytes, ): (Addr<'_>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, addr, nBytes), ctx); }
+    #[inline] pub fn DCFlushRange(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, u32) -> ()) { let (addr, nBytes, ): (Addr<'_>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, addr, nBytes), ctx); }
+    #[inline] pub fn DCStoreRange(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, u32) -> ()) { let (addr, nBytes, ): (Addr<'_>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, addr, nBytes), ctx); }
+    #[inline] pub fn DCFlushRangeNoSync(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, u32) -> ()) { let (addr, nBytes, ): (Addr<'_>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, addr, nBytes), ctx); }
+    #[inline] pub fn DCZeroRange(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, u32) -> ()) { let (addr, nBytes, ): (Addr<'_>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, addr, nBytes), ctx); }
+    #[inline] pub fn ICInvalidateRange(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, u32) -> ()) { let (addr, nBytes, ): (Addr<'_>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, addr, nBytes), ctx); }
+    #[inline] pub fn ICFlashInvalidate(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+    #[inline] pub fn ICEnable(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     #[inline] pub fn LCEnable(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-    #[inline] pub fn LCDisable(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-    #[inline] pub fn LCStoreBlocks(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, Addr<'a>, u32) -> i32) { let (destAddr, srcTag, numBlocks, ): (Addr<'_>, Addr<'_>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, destAddr, srcTag, numBlocks), ctx); }
+    #[inline] pub fn LCDisable(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+    #[inline] pub fn LCStoreBlocks(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, Addr<'a>, u32) -> ()) { let (destAddr, srcTag, numBlocks, ): (Addr<'_>, Addr<'_>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, destAddr, srcTag, numBlocks), ctx); }
     #[inline] pub fn LCStoreData(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, Addr<'a>, u32) -> u32) { let (destAddr, srcAddr, nBytes, ): (Addr<'_>, Addr<'_>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, destAddr, srcAddr, nBytes), ctx); }
-    #[inline] pub fn LCQueueWait(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u32) -> i32) { let (len, ): (u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, len), ctx); }
+    #[inline] pub fn LCQueueWait(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u32) -> ()) { let (len, ): (u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, len), ctx); }
     #[inline] pub fn L2GlobalInvalidate(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     #[inline] pub fn DMAErrorHandler(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u16, OSContext<'a>) -> ()) { let (error, context, ): (u16, OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, error, context), ctx); }
     #[inline] pub fn __OSCacheInit(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-    #[inline] pub fn OSLoadFPUContext(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, OSContext<'a>) -> i32) { let (fpuContext, ): (OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, fpuContext), ctx); }
-    #[inline] pub fn OSSaveFPUContext(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, OSContext<'a>) -> i32) { let (fpuContext, ): (OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, fpuContext), ctx); }
-    #[inline] pub fn OSSetCurrentContext(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, OSContext<'a>) -> i32) { let (context, ): (OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, context), ctx); }
+    #[inline] pub fn OSLoadFPUContext(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, OSContext<'a>) -> ()) { let (fpuContext, ): (OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, fpuContext), ctx); }
+    #[inline] pub fn OSSaveFPUContext(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, OSContext<'a>) -> ()) { let (fpuContext, ): (OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, fpuContext), ctx); }
+    #[inline] pub fn OSSetCurrentContext(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, OSContext<'a>) -> ()) { let (context, ): (OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, context), ctx); }
     #[inline] pub fn OSGetCurrentContext(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> OSContext<'a>) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     #[inline] pub fn OSSaveContext(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, OSContext<'a>) -> u32) { let (context, ): (OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, context), ctx); }
-    #[inline] pub fn OSLoadContext(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, OSContext<'a>) -> i32) { let (context, ): (OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, context), ctx); }
+    #[inline] pub fn OSLoadContext(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, OSContext<'a>) -> ()) { let (context, ): (OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, context), ctx); }
     #[inline] pub fn OSGetStackPointer(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> u32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     #[inline] pub fn OSClearContext(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, OSContext<'a>) -> ()) { let (context, ): (OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, context), ctx); }
-    #[inline] pub fn OSInitContext(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, OSContext<'a>, u32, u32) -> i32) { let (context, pc, newsp, ): (OSContext<'_>, u32, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, context, pc, newsp), ctx); }
+    #[inline] pub fn OSInitContext(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, OSContext<'a>, u32, u32) -> ()) { let (context, pc, newsp, ): (OSContext<'_>, u32, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, context, pc, newsp), ctx); }
     #[inline] pub fn OSDumpContext(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, OSContext<'a>) -> ()) { let (context, ): (OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, context), ctx); }
     #[inline] pub fn __OSContextInit(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     #[inline] pub fn OSReport(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Val<'a, i8>) -> ()) { let (msg, ): (Val<'_, i8>, ) = Args::take_all(ctx); Ret::put(__f(ctx, msg), ctx); }
@@ -52452,6 +52456,7 @@ pub mod abi {
     #[inline] pub fn __OSCheckMutex(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, OSMutex<'a>) -> i32) { let (mutex, ): (OSMutex<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, mutex), ctx); }
     #[inline] pub fn __OSCheckDeadLock(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, OSThread<'a>) -> i32) { let (thread, ): (OSThread<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, thread), ctx); }
     #[inline] pub fn __OSCheckMutexes(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, OSThread<'a>) -> i32) { let (thread, ): (OSThread<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, thread), ctx); }
+    #[inline] pub fn Run(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, FnPtr<'a>) -> ()) { let (arg0, ): (FnPtr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
     #[inline] pub fn __OSReboot(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u32, u32) -> ()) { let (resetCode, bootDol, ): (u32, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, resetCode, bootDol), ctx); }
     #[inline] pub fn OSRegisterResetFunction(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, OSResetFunctionInfo<'a>) -> ()) { let (info, ): (OSResetFunctionInfo<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, info), ctx); }
     #[inline] pub fn __OSDoHotReset(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> ()) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
@@ -52500,8 +52505,8 @@ pub mod abi {
     #[inline] pub fn OSSleepThread(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, OSThreadQueue<'a>) -> ()) { let (queue, ): (OSThreadQueue<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, queue), ctx); }
     #[inline] pub fn OSWakeupThread(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, OSThreadQueue<'a>) -> ()) { let (queue, ): (OSThreadQueue<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, queue), ctx); }
     #[inline] pub fn OSCheckActiveThreads(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-    #[inline] pub fn OSGetTime(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-    #[inline] pub fn OSGetTick(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+    #[inline] pub fn OSGetTime(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i64) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+    #[inline] pub fn OSGetTick(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> u32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     #[inline] pub fn __OSTimeToSystemTime(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i64) -> i64) { let (time, ): (i64, ) = Args::take_all(ctx); Ret::put(__f(ctx, time), ctx); }
     #[inline] pub fn OSTicksToCalendarTime(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i64, OSCalendarTime<'a>) -> ()) { let (ticks, td, ): (i64, OSCalendarTime<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, ticks, td), ctx); }
     #[inline] pub fn WriteUARTN(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, u32) -> i32) { let (buf, len, ): (Addr<'_>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, buf, len), ctx); }
@@ -52666,6 +52671,7 @@ pub mod abi {
     #[inline] pub fn AXSetVoiceSrcRatio(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, _AXVPB<'a>, f64) -> ()) { let (p, ratio, ): (_AXVPB<'_>, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, p, ratio.0), ctx); }
     #[inline] pub fn AXSetVoiceAdpcmLoop(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, _AXVPB<'a>, _AXPBADPCMLOOP<'a>) -> ()) { let (p, adpcmloop, ): (_AXVPB<'_>, _AXPBADPCMLOOP<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, p, adpcmloop), ctx); }
     #[inline] pub fn __AXGetCurrentProfile(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> _AXPROFILE<'a>) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+    #[inline] pub fn DoCrossTalk(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Val<'a, i32>, Val<'a, i32>, f64, f64) -> ()) { let (l, r, cross, invcross, ): (Val<'_, i32>, Val<'_, i32>, Single, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, l, r, cross.0, invcross.0), ctx); }
     #[inline] pub fn AXFXReverbHiInit(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, AXFX_REVERBHI<'a>) -> i32) { let (rev, ): (AXFX_REVERBHI<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, rev), ctx); }
     #[inline] pub fn AXFXReverbHiShutdown(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, AXFX_REVERBHI<'a>) -> i32) { let (rev, ): (AXFX_REVERBHI<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, rev), ctx); }
     #[inline] pub fn AXFXReverbHiCallback(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, AXFX_BUFFERUPDATE<'a>, AXFX_REVERBHI<'a>) -> ()) { let (bufferUpdate, reverb, ): (AXFX_BUFFERUPDATE<'_>, AXFX_REVERBHI<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, bufferUpdate, reverb), ctx); }

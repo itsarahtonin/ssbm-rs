@@ -5888,7 +5888,7 @@ impl<'a> EXIControl<'a> {
     #[inline] pub fn items(self) -> i32 { self.0.get::<i32>(0x24) }
     #[inline] pub fn set_items(self, v: i32) { self.0.set::<i32>(0x24, v) }
     #[inline] pub fn items_ref(self) -> Val<'a, i32> { self.0.field(0x24) }
-    #[inline] pub fn queue(self) -> Arr<'a, anon_6539d904<'a>, 3> { self.0.field(0x28) }
+    #[inline] pub fn queue(self) -> Arr<'a, anon_dfa8751f<'a>, 3> { self.0.field(0x28) }
 }
 /// C struct `Element_803F9628`, 0x28 bytes.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
@@ -18513,6 +18513,14 @@ impl<'a> OSContext<'a> {
     #[inline] pub fn state_ref(self) -> Val<'a, u16> { self.0.field(0x1a2) }
     #[inline] pub fn gqr(self) -> ArrV<'a, u32, 8> { self.0.field(0x1a4) }
     #[inline] pub fn psf(self) -> ArrV<'a, F64, 32> { self.0.field(0x1c8) }
+}
+/// C struct `OSContext`, 0x0 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct OSContext_2<'a>(pub At<'a>);
+impl<'a> Handle<'a> for OSContext_2<'a> {
+    const SIZE: u32 = 0x0;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
 }
 /// C struct `OSFontHeader`, 0x30 bytes.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
@@ -33778,22 +33786,6 @@ impl<'a> animateJointPadded_state<'a> {
     #[inline] pub fn jobj_ref(self) -> Ptr<'a, HSD_JObj<'a>> { self.0.field(0x0) }
     #[inline] pub fn pad(self) -> ArrV<'a, u8, 8> { self.0.field(0x4) }
 }
-/// C struct `struct (unnamed at libs/dolphin/src/dolphin/os/OSExi.c:20:5)`, 0x8 bytes.
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
-pub struct anon_6539d904<'a>(pub At<'a>);
-impl<'a> Handle<'a> for anon_6539d904<'a> {
-    const SIZE: u32 = 0x8;
-    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
-    #[inline] fn at(self) -> At<'a> { self.0 }
-}
-impl<'a> anon_6539d904<'a> {
-    #[inline] pub fn dev(self) -> u32 { self.0.get::<u32>(0x0) }
-    #[inline] pub fn set_dev(self, v: u32) { self.0.set::<u32>(0x0, v) }
-    #[inline] pub fn dev_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
-    #[inline] pub fn callback(self) -> FnPtr<'a> { self.0.ptr(0x4) }
-    #[inline] pub fn set_callback(self, v: FnPtr<'a>) { self.0.set_ptr(0x4, v) }
-    #[inline] pub fn callback_ref(self) -> Ptr<'a, FnPtr<'a>> { self.0.field(0x4) }
-}
 /// C struct `struct (unnamed at libs/dolphin/src/dolphin/dvd/dvdlow.c:23:8)`, 0xc bytes.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct anon_6cb805d9<'a>(pub At<'a>);
@@ -33812,6 +33804,22 @@ impl<'a> anon_6cb805d9<'a> {
     #[inline] pub fn FSTLength(self) -> u32 { self.0.get::<u32>(0x8) }
     #[inline] pub fn set_FSTLength(self, v: u32) { self.0.set::<u32>(0x8, v) }
     #[inline] pub fn FSTLength_ref(self) -> Val<'a, u32> { self.0.field(0x8) }
+}
+/// C struct `struct (unnamed at libs/dolphin/src/dolphin/os/OSExi.c:20:5)`, 0x8 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct anon_dfa8751f<'a>(pub At<'a>);
+impl<'a> Handle<'a> for anon_dfa8751f<'a> {
+    const SIZE: u32 = 0x8;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> anon_dfa8751f<'a> {
+    #[inline] pub fn dev(self) -> u32 { self.0.get::<u32>(0x0) }
+    #[inline] pub fn set_dev(self, v: u32) { self.0.set::<u32>(0x0, v) }
+    #[inline] pub fn dev_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
+    #[inline] pub fn callback(self) -> FnPtr<'a> { self.0.ptr(0x4) }
+    #[inline] pub fn set_callback(self, v: FnPtr<'a>) { self.0.set_ptr(0x4, v) }
+    #[inline] pub fn callback_ref(self) -> Ptr<'a, FnPtr<'a>> { self.0.field(0x4) }
 }
 /// C struct `struct (unnamed at libs/dolphin/src/dolphin/dvd/dvdqueue.c:6:8)`, 0x8 bytes.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]

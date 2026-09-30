@@ -307,14 +307,12 @@ pub mod dolphin__ai__ai {
     #[inline] pub fn __AI_set_stream_sample_rate<'a>(ctx: &'a Ctx, rate: u32) -> () { ctx.call(0x803506a4, (rate, )) }
     #[inline] pub fn __AISHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'a>) -> () { ctx.call(0x80350944, (interrupt, context, )) }
     #[inline] pub fn __AIDHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'a>) -> () { ctx.call(0x803509c0, (interrupt, context, )) }
-    #[inline] pub fn __AICallbackStackSwitch<'a>(ctx: &'a Ctx, cb: Addr<'a>) -> i32 { ctx.call(0x80350a50, (cb, )) }
     #[inline] pub fn __AI_SRC_INIT<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80350aa8, ()) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const __AI_set_stream_sample_rate: u32 = 0x803506a4;
         pub const __AISHandler: u32 = 0x80350944;
         pub const __AIDHandler: u32 = 0x803509c0;
-        pub const __AICallbackStackSwitch: u32 = 0x80350a50;
         pub const __AI_SRC_INIT: u32 = 0x80350aa8;
     }
     /// Adapters that register a Rust port under C calling conventions.
@@ -323,7 +321,6 @@ pub mod dolphin__ai__ai {
         #[inline] pub fn __AI_set_stream_sample_rate(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u32) -> ()) { let (rate, ): (u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, rate), ctx); }
         #[inline] pub fn __AISHandler(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i16, OSContext<'a>) -> ()) { let (interrupt, context, ): (i16, OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, interrupt, context), ctx); }
         #[inline] pub fn __AIDHandler(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i16, OSContext<'a>) -> ()) { let (interrupt, context, ): (i16, OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, interrupt, context), ctx); }
-        #[inline] pub fn __AICallbackStackSwitch(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>) -> i32) { let (cb, ): (Addr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, cb), ctx); }
         #[inline] pub fn __AI_SRC_INIT(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     }
 }
@@ -537,18 +534,14 @@ pub mod dolphin__axfx__chorus {
     use crate::fns::*;
     #[inline] pub fn rsmpTab12khz(ctx: &Ctx) -> ArrV<'_, F32, 512> { At::new(ctx, 0x80404c50).field(0) }
     #[inline] pub fn i2fMagic(ctx: &Ctx) -> Val<'_, F64> { At::new(ctx, 0x804de3d8).field(0) }
-    #[inline] pub fn do_src1<'a>(ctx: &'a Ctx, src: AXFX_CHORUS_SRCINFO<'a>) -> i32 { ctx.call(0x8035cea8, (src, )) }
-    #[inline] pub fn do_src2<'a>(ctx: &'a Ctx, src: AXFX_CHORUS_SRCINFO<'a>) -> i32 { ctx.call(0x8035d040, (src, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
-        pub const do_src1: u32 = 0x8035cea8;
-        pub const do_src2: u32 = 0x8035d040;
+
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
-        #[inline] pub fn do_src1(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, AXFX_CHORUS_SRCINFO<'a>) -> i32) { let (src, ): (AXFX_CHORUS_SRCINFO<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, src), ctx); }
-        #[inline] pub fn do_src2(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, AXFX_CHORUS_SRCINFO<'a>) -> i32) { let (src, ): (AXFX_CHORUS_SRCINFO<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, src), ctx); }
+
     }
 }
 /// Statics of `dolphin/axfx/reverb_hi`.
@@ -559,22 +552,16 @@ pub mod dolphin__axfx__reverb_hi {
     #[inline] pub fn value0_6(ctx: &Ctx) -> Val<'_, F32> { At::new(ctx, 0x804de390).field(0) }
     #[inline] pub fn value0_3(ctx: &Ctx) -> Val<'_, F32> { At::new(ctx, 0x804de394).field(0) }
     #[inline] pub fn ReverbHICreate<'a>(ctx: &'a Ctx, rv: AXFX_REVHI_WORK<'a>, coloration: f64, time: f64, mix: f64, damping: f64, preDelay: f64, crosstalk: f64) -> i32 { ctx.call(0x8035b6c0, (rv, Single(gekko_fp::frsp(coloration)), Single(gekko_fp::frsp(time)), Single(gekko_fp::frsp(mix)), Single(gekko_fp::frsp(damping)), Single(gekko_fp::frsp(preDelay)), Single(gekko_fp::frsp(crosstalk)), )) }
-    #[inline] pub fn DoCrossTalk<'a>(ctx: &'a Ctx, l: Val<'a, i32>, r: Val<'a, i32>, cross: f64, invcross: f64) -> i32 { ctx.call(0x8035bbac, (l, r, Single(gekko_fp::frsp(cross)), Single(gekko_fp::frsp(invcross)), )) }
-    #[inline] pub fn HandleReverb<'a>(ctx: &'a Ctx, sptr: Val<'a, i32>, rv: AXFX_REVHI_WORK<'a>, k: i32) -> i32 { ctx.call(0x8035bd3c, (sptr, rv, k, )) }
     #[inline] pub fn ReverbHIFree<'a>(ctx: &'a Ctx, rv: AXFX_REVHI_WORK<'a>) -> () { ctx.call(0x8035c248, (rv, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const ReverbHICreate: u32 = 0x8035b6c0;
-        pub const DoCrossTalk: u32 = 0x8035bbac;
-        pub const HandleReverb: u32 = 0x8035bd3c;
         pub const ReverbHIFree: u32 = 0x8035c248;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
         #[inline] pub fn ReverbHICreate(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, AXFX_REVHI_WORK<'a>, f64, f64, f64, f64, f64, f64) -> i32) { let (rv, coloration, time, mix, damping, preDelay, crosstalk, ): (AXFX_REVHI_WORK<'_>, Single, Single, Single, Single, Single, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, rv, coloration.0, time.0, mix.0, damping.0, preDelay.0, crosstalk.0), ctx); }
-        #[inline] pub fn DoCrossTalk(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Val<'a, i32>, Val<'a, i32>, f64, f64) -> i32) { let (l, r, cross, invcross, ): (Val<'_, i32>, Val<'_, i32>, Single, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, l, r, cross.0, invcross.0), ctx); }
-        #[inline] pub fn HandleReverb(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Val<'a, i32>, AXFX_REVHI_WORK<'a>, i32) -> i32) { let (sptr, rv, k, ): (Val<'_, i32>, AXFX_REVHI_WORK<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, sptr, rv, k), ctx); }
         #[inline] pub fn ReverbHIFree(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, AXFX_REVHI_WORK<'a>) -> ()) { let (rv, ): (AXFX_REVHI_WORK<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, rv), ctx); }
     }
 }
@@ -586,19 +573,16 @@ pub mod dolphin__axfx__reverb_std {
     #[inline] pub fn value0_6(ctx: &Ctx) -> Val<'_, F32> { At::new(ctx, 0x804de3cc).field(0) }
     #[inline] pub fn i2fMagic(ctx: &Ctx) -> Val<'_, F64> { At::new(ctx, 0x804de3d0).field(0) }
     #[inline] pub fn ReverbSTDCreate<'a>(ctx: &'a Ctx, rv: AXFX_REVSTD_WORK<'a>, coloration: f64, time: f64, mix: f64, damping: f64, predelay: f64) -> i32 { ctx.call(0x8035c504, (rv, Single(gekko_fp::frsp(coloration)), Single(gekko_fp::frsp(time)), Single(gekko_fp::frsp(mix)), Single(gekko_fp::frsp(damping)), Single(gekko_fp::frsp(predelay)), )) }
-    #[inline] pub fn HandleReverb<'a>(ctx: &'a Ctx, sptr: Val<'a, i32>, rv: AXFX_REVSTD_WORK<'a>) -> i32 { ctx.call(0x8035c910, (sptr, rv, )) }
     #[inline] pub fn ReverbSTDFree<'a>(ctx: &'a Ctx, rv: AXFX_REVSTD_WORK<'a>) -> () { ctx.call(0x8035ccc4, (rv, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const ReverbSTDCreate: u32 = 0x8035c504;
-        pub const HandleReverb: u32 = 0x8035c910;
         pub const ReverbSTDFree: u32 = 0x8035ccc4;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
         #[inline] pub fn ReverbSTDCreate(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, AXFX_REVSTD_WORK<'a>, f64, f64, f64, f64, f64) -> i32) { let (rv, coloration, time, mix, damping, predelay, ): (AXFX_REVSTD_WORK<'_>, Single, Single, Single, Single, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, rv, coloration.0, time.0, mix.0, damping.0, predelay.0), ctx); }
-        #[inline] pub fn HandleReverb(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Val<'a, i32>, AXFX_REVSTD_WORK<'a>) -> i32) { let (sptr, rv, ): (Val<'_, i32>, AXFX_REVSTD_WORK<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, sptr, rv), ctx); }
         #[inline] pub fn ReverbSTDFree(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, AXFX_REVSTD_WORK<'a>) -> ()) { let (rv, ): (AXFX_REVSTD_WORK<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, rv), ctx); }
     }
 }
@@ -1189,27 +1173,6 @@ pub mod dolphin__gx__GXTexture {
         #[inline] pub fn __SetSURegs(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u32, u32) -> ()) { let (tmap, tcoord, ): (u32, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, tmap, tcoord), ctx); }
     }
 }
-/// Statics of `dolphin/gx/GXTransform`.
-pub mod dolphin__gx__GXTransform {
-    use super::*;
-    use crate::fns::*;
-    #[inline] pub fn WriteMTXPS4x3<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, dest: Val<'a, F32>) -> i32 { ctx.call(0x80341408, (mtx, dest, )) }
-    #[inline] pub fn WriteMTXPS3x3from3x4<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, dest: Val<'a, F32>) -> i32 { ctx.call(0x8034143c, (mtx, dest, )) }
-    #[inline] pub fn WriteMTXPS4x2<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, dest: Val<'a, F32>) -> i32 { ctx.call(0x80341470, (mtx, dest, )) }
-    /// Addresses of this scope's functions.
-    pub mod addr {
-        pub const WriteMTXPS4x3: u32 = 0x80341408;
-        pub const WriteMTXPS3x3from3x4: u32 = 0x8034143c;
-        pub const WriteMTXPS4x2: u32 = 0x80341470;
-    }
-    /// Adapters that register a Rust port under C calling conventions.
-    pub mod abi {
-        use super::*;
-        #[inline] pub fn WriteMTXPS4x3(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, Val<'a, F32>) -> i32) { let (mtx, dest, ): (ArrV<'_, F32, 4>, Val<'_, F32>, ) = Args::take_all(ctx); Ret::put(__f(ctx, mtx, dest), ctx); }
-        #[inline] pub fn WriteMTXPS3x3from3x4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, Val<'a, F32>) -> i32) { let (mtx, dest, ): (ArrV<'_, F32, 4>, Val<'_, F32>, ) = Args::take_all(ctx); Ret::put(__f(ctx, mtx, dest), ctx); }
-        #[inline] pub fn WriteMTXPS4x2(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, ArrV<'a, F32, 4>, Val<'a, F32>) -> i32) { let (mtx, dest, ): (ArrV<'_, F32, 4>, Val<'_, F32>, ) = Args::take_all(ctx); Ret::put(__f(ctx, mtx, dest), ctx); }
-    }
-}
 /// Statics of `dolphin/hio/hio`.
 pub mod dolphin__hio__hio {
     use super::*;
@@ -1421,25 +1384,16 @@ pub mod dolphin__os__OS {
     #[inline] pub fn OSExceptionTable(ctx: &Ctx) -> Ptr<'_, Ptr<'_, FnPtr<'_>>> { At::new(ctx, 0x804d7348).field(0) }
     #[inline] pub fn ClearArena<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80342ebc, ()) }
     #[inline] pub fn OSExceptionInit<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8034330c, ()) }
-    #[inline] pub fn __OSDBIntegrator<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x8034358c, ()) }
-    #[inline] pub fn __OSDBJump<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x803435b0, ()) }
-    #[inline] pub fn OSExceptionVector<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x803435e4, ()) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const ClearArena: u32 = 0x80342ebc;
         pub const OSExceptionInit: u32 = 0x8034330c;
-        pub const __OSDBIntegrator: u32 = 0x8034358c;
-        pub const __OSDBJump: u32 = 0x803435b0;
-        pub const OSExceptionVector: u32 = 0x803435e4;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
         #[inline] pub fn ClearArena(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
         #[inline] pub fn OSExceptionInit(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-        #[inline] pub fn __OSDBIntegrator(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-        #[inline] pub fn __OSDBJump(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-        #[inline] pub fn OSExceptionVector(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     }
 }
 /// Statics of `dolphin/os/OSAlarm`.
@@ -1449,19 +1403,16 @@ pub mod dolphin__os__OSAlarm {
     #[inline] pub fn AlarmQueue(ctx: &Ctx) -> OSAlarmQueue<'_> { At::new(ctx, 0x804d7358).field(0) }
     #[inline] pub fn InsertAlarm<'a>(ctx: &'a Ctx, alarm: OSAlarm<'a>, fire: i64, handler: FnPtr<'a>) -> () { ctx.call(0x80343778, (alarm, fire, handler, )) }
     #[inline] pub fn DecrementerExceptionCallback<'a>(ctx: &'a Ctx, exception: u8, context: OSContext<'a>) -> () { ctx.call(0x80343bc8, (exception, context, )) }
-    #[inline] pub fn DecrementerExceptionHandler<'a>(ctx: &'a Ctx, exception: u8, context: OSContext<'a>) -> i32 { ctx.call(0x80343df8, (exception, context, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const InsertAlarm: u32 = 0x80343778;
         pub const DecrementerExceptionCallback: u32 = 0x80343bc8;
-        pub const DecrementerExceptionHandler: u32 = 0x80343df8;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
         #[inline] pub fn InsertAlarm(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, OSAlarm<'a>, i64, FnPtr<'a>) -> ()) { let (alarm, fire, handler, ): (OSAlarm<'_>, i64, FnPtr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, alarm, fire, handler), ctx); }
         #[inline] pub fn DecrementerExceptionCallback(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u8, OSContext<'a>) -> ()) { let (exception, context, ): (u8, OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, exception, context), ctx); }
-        #[inline] pub fn DecrementerExceptionHandler(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u8, OSContext<'a>) -> i32) { let (exception, context, ): (u8, OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, exception, context), ctx); }
     }
 }
 /// Statics of `dolphin/os/OSAlloc`.
@@ -1514,42 +1465,6 @@ pub mod dolphin__os__OSAudioSystem {
 
     }
 }
-/// Statics of `dolphin/os/OSCache`.
-pub mod dolphin__os__OSCache {
-    use super::*;
-    use crate::fns::*;
-    #[inline] pub fn __LCEnable<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x80344930, ()) }
-    /// Addresses of this scope's functions.
-    pub mod addr {
-        pub const __LCEnable: u32 = 0x80344930;
-    }
-    /// Adapters that register a Rust port under C calling conventions.
-    pub mod abi {
-        use super::*;
-        #[inline] pub fn __LCEnable(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-    }
-}
-/// Statics of `dolphin/os/OSContext`.
-pub mod dolphin__os__OSContext {
-    use super::*;
-    use crate::fns::*;
-    #[inline] pub fn __OSLoadFPUContext<'a>(ctx: &'a Ctx, arg0: u32, fpuContext: OSContext<'a>) -> i32 { ctx.call(0x80344e30, (arg0, fpuContext, )) }
-    #[inline] pub fn __OSSaveFPUContext<'a>(ctx: &'a Ctx, arg0: u32, arg1: u32, fpuContext: OSContext<'a>) -> i32 { ctx.call(0x80344f54, (arg0, arg1, fpuContext, )) }
-    #[inline] pub fn OSSwitchFPUContext<'a>(ctx: &'a Ctx, exception: u8, context: OSContext<'a>) -> i32 { ctx.call(0x803455dc, (exception, context, )) }
-    /// Addresses of this scope's functions.
-    pub mod addr {
-        pub const __OSLoadFPUContext: u32 = 0x80344e30;
-        pub const __OSSaveFPUContext: u32 = 0x80344f54;
-        pub const OSSwitchFPUContext: u32 = 0x803455dc;
-    }
-    /// Adapters that register a Rust port under C calling conventions.
-    pub mod abi {
-        use super::*;
-        #[inline] pub fn __OSLoadFPUContext(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u32, OSContext<'a>) -> i32) { let (arg0, fpuContext, ): (u32, OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0, fpuContext), ctx); }
-        #[inline] pub fn __OSSaveFPUContext(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u32, u32, OSContext<'a>) -> i32) { let (arg0, arg1, fpuContext, ): (u32, u32, OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0, arg1, fpuContext), ctx); }
-        #[inline] pub fn OSSwitchFPUContext(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u8, OSContext<'a>) -> i32) { let (exception, context, ): (u8, OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, exception, context), ctx); }
-    }
-}
 /// Statics of `dolphin/os/OSExi`.
 pub mod dolphin__os__OSExi {
     use super::*;
@@ -1588,17 +1503,14 @@ pub mod dolphin__os__OSInterrupt {
     #[inline] pub fn InterruptPrioTable(ctx: &Ctx) -> ArrV<'_, u32, 11> { At::new(ctx, 0x80402318).field(0) }
     #[inline] pub fn InterruptHandlerTable(ctx: &Ctx) -> Ptr<'_, Ptr<'_, FnPtr<'_>>> { At::new(ctx, 0x804d7378).field(0) }
     #[inline] pub fn SetInterruptMask<'a>(ctx: &'a Ctx, mask: u32, current: u32) -> u32 { ctx.call(0x80347454, (mask, current, )) }
-    #[inline] pub fn ExternalInterruptHandler<'a>(ctx: &'a Ctx, exception: u8, context: OSContext<'a>) -> i32 { ctx.call(0x80347b80, (exception, context, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const SetInterruptMask: u32 = 0x80347454;
-        pub const ExternalInterruptHandler: u32 = 0x80347b80;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
         #[inline] pub fn SetInterruptMask(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u32, u32) -> u32) { let (mask, current, ): (u32, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, mask, current), ctx); }
-        #[inline] pub fn ExternalInterruptHandler(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u8, OSContext<'a>) -> i32) { let (exception, context, ): (u8, OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, exception, context), ctx); }
     }
 }
 /// Statics of `dolphin/os/OSMemory`.
@@ -1628,17 +1540,14 @@ pub mod dolphin__os__OSReboot {
     #[inline] pub fn SaveStart(ctx: &Ctx) -> Ptr<'_, Addr<'_>> { At::new(ctx, 0x804d7390).field(0) }
     #[inline] pub fn SaveEnd(ctx: &Ctx) -> Ptr<'_, Addr<'_>> { At::new(ctx, 0x804d7394).field(0) }
     #[inline] pub fn Prepared(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d7398).field(0) }
-    #[inline] pub fn Run<'a>(ctx: &'a Ctx, addr: FnPtr<'a>) -> i32 { ctx.call(0x803480f8, (addr, )) }
     #[inline] pub fn Callback<'a>(ctx: &'a Ctx, result: i32, block: DVDCommandBlock<'a>) -> () { ctx.call(0x80348138, (result, block, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
-        pub const Run: u32 = 0x803480f8;
         pub const Callback: u32 = 0x80348138;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
-        #[inline] pub fn Run(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, FnPtr<'a>) -> i32) { let (addr, ): (FnPtr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, addr), ctx); }
         #[inline] pub fn Callback(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, DVDCommandBlock<'a>) -> ()) { let (result, block, ): (i32, DVDCommandBlock<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, result, block), ctx); }
     }
 }
@@ -1647,15 +1556,14 @@ pub mod dolphin__os__OSReset {
     use super::*;
     use crate::fns::*;
     #[inline] pub fn ResetFunctionQueue(ctx: &Ctx) -> OSResetFunctionQueue<'_> { At::new(ctx, 0x804d73a0).field(0) }
-    #[inline] pub fn Reset<'a>(ctx: &'a Ctx, resetCode: u32) -> i32 { ctx.call(0x80348394, (resetCode, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
-        pub const Reset: u32 = 0x80348394;
+
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
-        #[inline] pub fn Reset(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u32) -> i32) { let (resetCode, ): (u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, resetCode), ctx); }
+
     }
 }
 /// Statics of `dolphin/os/OSResetSW`.
@@ -1744,21 +1652,6 @@ pub mod dolphin__os__OSSerial {
         #[inline] pub fn GetTypeCallback(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, u32, OSContext<'a>) -> ()) { let (chan, error, context, ): (i32, u32, OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, chan, error, context), ctx); }
     }
 }
-/// Statics of `dolphin/os/OSSync`.
-pub mod dolphin__os__OSSync {
-    use super::*;
-    use crate::fns::*;
-    #[inline] pub fn SystemCallVector<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x8034ab80, ()) }
-    /// Addresses of this scope's functions.
-    pub mod addr {
-        pub const SystemCallVector: u32 = 0x8034ab80;
-    }
-    /// Adapters that register a Rust port under C calling conventions.
-    pub mod abi {
-        use super::*;
-        #[inline] pub fn SystemCallVector(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-    }
-}
 /// Statics of `dolphin/os/OSThread`.
 pub mod dolphin__os__OSThread {
     use super::*;
@@ -1827,19 +1720,16 @@ pub mod dolphin__os__init____start {
     use super::*;
     use crate::fns::*;
     #[inline] pub fn __check_pad3<'a>(ctx: &'a Ctx) -> () { ctx.call(0x800051ec, ()) }
-    #[inline] pub fn __init_registers<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x80005340, ()) }
     #[inline] pub fn __init_data<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8000535c, ()) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const __check_pad3: u32 = 0x800051ec;
-        pub const __init_registers: u32 = 0x80005340;
         pub const __init_data: u32 = 0x8000535c;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
         #[inline] pub fn __check_pad3(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-        #[inline] pub fn __init_registers(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
         #[inline] pub fn __init_data(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     }
 }
