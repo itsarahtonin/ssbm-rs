@@ -6392,15 +6392,7 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 unreachable!();
             }
             474 => {
-                let _ = statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
-                    .doors()
-                    .get(
-                        ({
-                            let __t5 = (cursor).x4();
-                            cport5 = __t5;
-                            __t5
-                        } as i32),
-                    );
+                cport5 = (cursor).x4();
                 __state = if ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
                     .doors()
                     .get(((cursor).x4() as i32))
@@ -6565,9 +6557,9 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     .get())
                 .set_x5(
                     (({
-                        let __t6 = ((cport7 as i32).wrapping_add(1_i32) as u32);
-                        next_port = __t6;
-                        __t6
+                        let __t5 = ((cport7 as i32).wrapping_add(1_i32) as u32);
+                        next_port = __t5;
+                        __t5
                     }) as u8),
                 );
                 (statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)

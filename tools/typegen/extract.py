@@ -28,8 +28,9 @@ FLAGS = [
     "-Isrc", "-isystemsrc/MSL", "-isystemlibs/dolphin/include", "-isystemlibs/dolphin/src",
     "-isystembuild/GALE01/include", "-isystemlibs/dolphin/src/dolphin", "-fdeclspec",
     # MWCC takes `return;` in a function returning a value, which the decomp's matching code
-    # uses where the original returns whatever r3 holds.
-    "-Wno-return-type",
+    # uses where the original returns whatever r3 holds. c2rs reads these warnings, and those
+    # about variables used before they are set, to port such functions from machine code.
+    "-Wreturn-type", "-Wno-error=return-type", "-Wuninitialized", "-Wsometimes-uninitialized",
     "-include", os.path.join(os.path.dirname(os.path.abspath(__file__)), "prelude.h"),
 ]
 

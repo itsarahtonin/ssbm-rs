@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn mnDiagram2_IsTimeStat<'a>(ctx: &'a Ctx, stat_type: u8) -> i32 {
     let mut stat_type = stat_type;
@@ -423,265 +424,1222 @@ pub fn mnDiagram2_HandleInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
-pub fn mnDiagram2_GetStatValue<'a>(
-    ctx: &'a Ctx,
-    is_name_mode: u8,
-    stat_type: u8,
-    entity_idx: u8,
-) -> i32 {
-    let __frame = ctx.stack_frame(0x8);
-    let mut is_name_mode = is_name_mode;
-    let mut stat_type = stat_type;
-    let mut entity_idx = entity_idx;
-    let mut typeVal: u8 = 0;
-    let mut idxVal: u8 = 0;
-    let mut val16: u16 = 0;
-    typeVal = stat_type;
-    idxVal = entity_idx;
-    's1: {
-        let __case = match (typeVal as i32) {
-            0_i32 => 0,
-            1_i32 => 1,
-            2_i32 => 2,
-            3_i32 => 3,
-            4_i32 => 4,
-            5_i32 => 5,
-            6_i32 => 6,
-            7_i32 => 7,
-            8_i32 => 8,
-            9_i32 => 9,
-            10_i32 => 10,
-            11_i32 => 11,
-            12_i32 => 12,
-            13_i32 => 13,
-            14_i32 => 14,
-            15_i32 => 15,
-            16_i32 => 16,
-            17_i32 => 17,
-            18_i32 => 18,
-            19_i32 => 19,
-            20_i32 => 20,
-            21_i32 => 21,
-            22_i32 => 22,
-            23_i32 => 23,
-            _ => 24,
-        };
-        if __case <= 0 {
-            if (is_name_mode != 0) {
-                return fns::mnDiagram_GetNameTotalKOs(ctx, idxVal);
+pub fn mnDiagram2_GetStatValue<'a>(ctx: &'a Ctx, a0: u8, a1: u8, a2: u8) -> i32 {
+    // Transliterated from its machine code: returns or uses a value its C never sets.
+    (a0, a1, a2).put_regs(ctx);
+    asm_mnDiagram2_GetStatValue(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_mnDiagram2_GetStatValue(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80244330_u32;
+    loop {
+        match pc {
+            0x80244330_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // clrlwi r0, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[0].set(v);
+                }
+                // cmplwi r0, 0x17
+                {
+                    let (x, y) = (g[0].get(), 0x17_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // stwu r1, -0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // addi r4, r5, 0x0
+                g[4].set(g[5].get());
+                // bgt .L_8024468C
+                if (c::cr_bit(ctx, 1) == true) {
+                    pc = 0x8024468c_u32;
+                    continue;
+                }
+                pc = 0x8024434c_u32;
             }
-            return fns::mnDiagram_GetFighterTotalKOs(ctx, idxVal);
-        }
-        if __case <= 1 {
-            if (is_name_mode != 0) {
-                return fns::mnDiagram_GetNameTotalFalls(ctx, idxVal);
+            0x8024434c_u32 => {
+                // lis r5, "@485"@ha
+                g[5].set(0x803f0000_u32);
+                // addi r5, r5, "@485"@l
+                g[5].set(g[5].get().wrapping_add(0xffffeb78_u32));
+                // slwi r0, r0, 2
+                {
+                    let v = g[0].get().rotate_left(2) & 0xfffffffc_u32;
+                    g[0].set(v);
+                }
+                // lwzx r0, r5, r0
+                g[0].set(ctx.read_u32(g[5].get().wrapping_add(g[0].get())));
+                // mtctr r0
+                ctx.regs.set_spr(9, g[0].get());
+                // bctr
+                let to = ctx.regs.ctr.get() & !3;
+                if (0x80244330_u32..0x8024469c_u32).contains(&to) {
+                    pc = to;
+                    continue;
+                }
+                c::tail_call(ctx, to);
+                return;
+                pc = 0x80244364_u32;
             }
-            return fns::mnDiagram_GetFighterTotalFalls(ctx, idxVal);
-        }
-        if __case <= 2 {
-            if (is_name_mode != 0) {
-                val16 = (fns::GetPersistentNameData(ctx, (idxVal as i32)))
-                    .stats()
-                    .sd_count();
-            } else {
-                val16 = (fns::GetPersistentFighterData(ctx, (idxVal as i32)))
-                    .stats()
-                    .sd_count();
+            0x80244364_u32 => {
+                // clrlwi. r0, r3, 24
+                {
+                    let v = g[3].get().rotate_left(0) & 0xff_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_80244378
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80244378_u32;
+                    continue;
+                }
+                pc = 0x8024436c_u32;
             }
-            return (val16 as i32);
-        }
-        if __case <= 3 {
-            return fns::mnDiagram_GetHitPercentage(ctx, is_name_mode, idxVal);
-        }
-        if __case <= 4 {
-            if (is_name_mode != 0) {
-                return (fns::GetPersistentNameData(ctx, (idxVal as i32)))
-                    .stats()
-                    .damage_dealt();
+            0x8024436c_u32 => {
+                // mr r3, r4
+                {
+                    let v = g[4].get() | g[4].get();
+                    g[3].set(v);
+                }
+                // bl mnDiagram_GetNameTotalKOs
+                c::call(ctx, 0x8023ef70_u32, 0x80244374_u32);
+                pc = 0x80244374_u32;
             }
-            return (fns::GetPersistentFighterData(ctx, (idxVal as i32)))
-                .stats()
-                .damage_dealt();
-        }
-        if __case <= 5 {
-            if (is_name_mode != 0) {
-                return (fns::GetPersistentNameData(ctx, (idxVal as i32)))
-                    .stats()
-                    .damage_taken();
+            0x80244374_u32 => {
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x80244378_u32;
             }
-            return (fns::GetPersistentFighterData(ctx, (idxVal as i32)))
-                .stats()
-                .damage_taken();
-        }
-        if __case <= 6 {
-            if (is_name_mode != 0) {
-                return (fns::GetPersistentNameData(ctx, (idxVal as i32)))
-                    .stats()
-                    .damage_recovered();
+            0x80244378_u32 => {
+                // mr r3, r4
+                {
+                    let v = g[4].get() | g[4].get();
+                    g[3].set(v);
+                }
+                // bl mnDiagram_GetFighterTotalKOs
+                c::call(ctx, 0x8023f068_u32, 0x80244380_u32);
+                pc = 0x80244380_u32;
             }
-            return (fns::GetPersistentFighterData(ctx, (idxVal as i32)))
-                .stats()
-                .damage_recovered();
-        }
-        if __case <= 7 {
-            if (is_name_mode != 0) {
-                val16 = (fns::GetPersistentNameData(ctx, (idxVal as i32)))
-                    .stats()
-                    .peak_damage();
-            } else {
-                val16 = (fns::GetPersistentFighterData(ctx, (idxVal as i32)))
-                    .stats()
-                    .peak_damage();
+            0x80244380_u32 => {
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x80244384_u32;
             }
-            return (val16 as i32);
-        }
-        if __case <= 8 {
-            if (is_name_mode != 0) {
-                val16 = (fns::GetPersistentNameData(ctx, (idxVal as i32)))
-                    .stats()
-                    .match_count();
-            } else {
-                val16 = (fns::GetPersistentFighterData(ctx, (idxVal as i32)))
-                    .stats()
-                    .match_count();
+            0x80244384_u32 => {
+                // clrlwi. r0, r3, 24
+                {
+                    let v = g[3].get().rotate_left(0) & 0xff_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_80244398
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80244398_u32;
+                    continue;
+                }
+                pc = 0x8024438c_u32;
             }
-            return (val16 as i32);
-        }
-        if __case <= 9 {
-            if (is_name_mode != 0) {
-                val16 = (fns::GetPersistentNameData(ctx, (idxVal as i32)))
-                    .stats()
-                    .victories();
-            } else {
-                val16 = (fns::GetPersistentFighterData(ctx, (idxVal as i32)))
-                    .stats()
-                    .victories();
+            0x8024438c_u32 => {
+                // mr r3, r4
+                {
+                    let v = g[4].get() | g[4].get();
+                    g[3].set(v);
+                }
+                // bl mnDiagram_GetNameTotalFalls
+                c::call(ctx, 0x8023efe4_u32, 0x80244394_u32);
+                pc = 0x80244394_u32;
             }
-            return (val16 as i32);
-        }
-        if __case <= 10 {
-            if (is_name_mode != 0) {
-                val16 = (fns::GetPersistentNameData(ctx, (idxVal as i32)))
-                    .stats()
-                    .losses();
-            } else {
-                val16 = (fns::GetPersistentFighterData(ctx, (idxVal as i32)))
-                    .stats()
-                    .losses();
+            0x80244394_u32 => {
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x80244398_u32;
             }
-            return (val16 as i32);
-        }
-        if __case <= 11 {
-            if (is_name_mode != 0) {
-                return ((fns::GetPersistentNameData(ctx, (idxVal as i32)))
-                    .stats()
-                    .play_time() as i32);
+            0x80244398_u32 => {
+                // mr r3, r4
+                {
+                    let v = g[4].get() | g[4].get();
+                    g[3].set(v);
+                }
+                // bl mnDiagram_GetFighterTotalFalls
+                c::call(ctx, 0x8023f0dc_u32, 0x802443a0_u32);
+                pc = 0x802443a0_u32;
             }
-            return ((fns::GetPersistentFighterData(ctx, (idxVal as i32)))
-                .stats()
-                .play_time() as i32);
-        }
-        if __case <= 12 {
-            return fns::mnDiagram_GetPlayPercentage(ctx, is_name_mode, idxVal);
-        }
-        if __case <= 13 {
-            return fns::mnDiagram_GetAveragePlayerCount(ctx, is_name_mode, idxVal);
-        }
-        if __case <= 14 {
-            if (is_name_mode != 0) {
-                return (fns::GetPersistentNameData(ctx, (idxVal as i32)))
-                    .stats()
-                    .walk_distance();
+            0x802443a0_u32 => {
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x802443a4_u32;
             }
-            return (fns::GetPersistentFighterData(ctx, (idxVal as i32)))
-                .stats()
-                .walk_distance();
-        }
-        if __case <= 15 {
-            if (is_name_mode != 0) {
-                return (fns::GetPersistentNameData(ctx, (idxVal as i32)))
-                    .stats()
-                    .run_distance();
+            0x802443a4_u32 => {
+                // clrlwi. r0, r3, 24
+                {
+                    let v = g[3].get().rotate_left(0) & 0xff_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_802443BC
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x802443bc_u32;
+                    continue;
+                }
+                pc = 0x802443ac_u32;
             }
-            return (fns::GetPersistentFighterData(ctx, (idxVal as i32)))
-                .stats()
-                .run_distance();
-        }
-        if __case <= 16 {
-            if (is_name_mode != 0) {
-                return (fns::GetPersistentNameData(ctx, (idxVal as i32)))
-                    .stats()
-                    .fall_distance();
+            0x802443ac_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentNameData
+                c::call(ctx, 0x8015cc9c_u32, 0x802443b4_u32);
+                pc = 0x802443b4_u32;
             }
-            return (fns::GetPersistentFighterData(ctx, (idxVal as i32)))
-                .stats()
-                .fall_distance();
-        }
-        if __case <= 17 {
-            if (is_name_mode != 0) {
-                return (fns::GetPersistentNameData(ctx, (idxVal as i32)))
-                    .stats()
-                    .peak_height();
+            0x802443b4_u32 => {
+                // lhz r0, 0xf0(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0xf0_u32);
+                    g[0].set(u32::from(ctx.read_u16(ea)));
+                }
+                // b .L_802443C8
+                pc = 0x802443c8_u32;
+                continue;
+                pc = 0x802443bc_u32;
             }
-            return (fns::GetPersistentFighterData(ctx, (idxVal as i32)))
-                .stats()
-                .peak_height();
-        }
-        if __case <= 18 {
-            if (is_name_mode != 0) {
-                return (fns::GetPersistentNameData(ctx, (idxVal as i32)))
-                    .stats()
-                    .coins_collected();
+            0x802443bc_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentFighterData
+                c::call(ctx, 0x8015cc64_u32, 0x802443c4_u32);
+                pc = 0x802443c4_u32;
             }
-            return (fns::GetPersistentFighterData(ctx, (idxVal as i32)))
-                .stats()
-                .coins_collected();
-        }
-        if __case <= 19 {
-            if (is_name_mode != 0) {
-                return (fns::GetPersistentNameData(ctx, (idxVal as i32)))
-                    .stats()
-                    .coins_swiped();
+            0x802443c4_u32 => {
+                // lhz r0, 0x34(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x34_u32);
+                    g[0].set(u32::from(ctx.read_u16(ea)));
+                }
+                pc = 0x802443c8_u32;
             }
-            return (fns::GetPersistentFighterData(ctx, (idxVal as i32)))
-                .stats()
-                .coins_swiped();
-        }
-        if __case <= 20 {
-            if (is_name_mode != 0) {
-                return (fns::GetPersistentNameData(ctx, (idxVal as i32)))
-                    .stats()
-                    .coins_lost();
+            0x802443c8_u32 => {
+                // clrlwi r3, r0, 16
+                {
+                    let v = g[0].get().rotate_left(0) & 0xffff_u32;
+                    g[3].set(v);
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x802443d0_u32;
             }
-            return (fns::GetPersistentFighterData(ctx, (idxVal as i32)))
-                .stats()
-                .coins_lost();
-        }
-        if __case <= 21 {
-            return fns::mnDiagram_GetRankedFighterForName(
-                ctx,
-                0_i32,
-                (idxVal as i32),
-                Handle::cast::<FnPtr<'a>>(Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8023f540))),
-            );
-        }
-        if __case <= 22 {
-            return fns::mnDiagram_GetRankedFighterForName(
-                ctx,
-                1_i32,
-                (idxVal as i32),
-                Handle::cast::<FnPtr<'a>>(Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8023f540))),
-            );
-        }
-        if __case <= 23 {
-            return (fns::mnDiagram_GetLeastPlayedFighter(ctx, idxVal) as i32);
-        }
-        if __case <= 24 {
-            break 's1;
+            0x802443d0_u32 => {
+                // bl mnDiagram_GetHitPercentage
+                c::call(ctx, 0x8023eb84_u32, 0x802443d4_u32);
+                pc = 0x802443d4_u32;
+            }
+            0x802443d4_u32 => {
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x802443d8_u32;
+            }
+            0x802443d8_u32 => {
+                // clrlwi. r0, r3, 24
+                {
+                    let v = g[3].get().rotate_left(0) & 0xff_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_802443F0
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x802443f0_u32;
+                    continue;
+                }
+                pc = 0x802443e0_u32;
+            }
+            0x802443e0_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentNameData
+                c::call(ctx, 0x8015cc9c_u32, 0x802443e8_u32);
+                pc = 0x802443e8_u32;
+            }
+            0x802443e8_u32 => {
+                // lwz r3, 0xfc(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0xfc_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x802443f0_u32;
+            }
+            0x802443f0_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentFighterData
+                c::call(ctx, 0x8015cc64_u32, 0x802443f8_u32);
+                pc = 0x802443f8_u32;
+            }
+            0x802443f8_u32 => {
+                // lwz r3, 0x40(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x40_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x80244400_u32;
+            }
+            0x80244400_u32 => {
+                // clrlwi. r0, r3, 24
+                {
+                    let v = g[3].get().rotate_left(0) & 0xff_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_80244418
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80244418_u32;
+                    continue;
+                }
+                pc = 0x80244408_u32;
+            }
+            0x80244408_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentNameData
+                c::call(ctx, 0x8015cc9c_u32, 0x80244410_u32);
+                pc = 0x80244410_u32;
+            }
+            0x80244410_u32 => {
+                // lwz r3, 0x100(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x100_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x80244418_u32;
+            }
+            0x80244418_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentFighterData
+                c::call(ctx, 0x8015cc64_u32, 0x80244420_u32);
+                pc = 0x80244420_u32;
+            }
+            0x80244420_u32 => {
+                // lwz r3, 0x44(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x44_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x80244428_u32;
+            }
+            0x80244428_u32 => {
+                // clrlwi. r0, r3, 24
+                {
+                    let v = g[3].get().rotate_left(0) & 0xff_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_80244440
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80244440_u32;
+                    continue;
+                }
+                pc = 0x80244430_u32;
+            }
+            0x80244430_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentNameData
+                c::call(ctx, 0x8015cc9c_u32, 0x80244438_u32);
+                pc = 0x80244438_u32;
+            }
+            0x80244438_u32 => {
+                // lwz r3, 0x104(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x104_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x80244440_u32;
+            }
+            0x80244440_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentFighterData
+                c::call(ctx, 0x8015cc64_u32, 0x80244448_u32);
+                pc = 0x80244448_u32;
+            }
+            0x80244448_u32 => {
+                // lwz r3, 0x48(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x48_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x80244450_u32;
+            }
+            0x80244450_u32 => {
+                // clrlwi. r0, r3, 24
+                {
+                    let v = g[3].get().rotate_left(0) & 0xff_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_80244468
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80244468_u32;
+                    continue;
+                }
+                pc = 0x80244458_u32;
+            }
+            0x80244458_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentNameData
+                c::call(ctx, 0x8015cc9c_u32, 0x80244460_u32);
+                pc = 0x80244460_u32;
+            }
+            0x80244460_u32 => {
+                // lhz r0, 0x108(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x108_u32);
+                    g[0].set(u32::from(ctx.read_u16(ea)));
+                }
+                // b .L_80244474
+                pc = 0x80244474_u32;
+                continue;
+                pc = 0x80244468_u32;
+            }
+            0x80244468_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentFighterData
+                c::call(ctx, 0x8015cc64_u32, 0x80244470_u32);
+                pc = 0x80244470_u32;
+            }
+            0x80244470_u32 => {
+                // lhz r0, 0x4c(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x4c_u32);
+                    g[0].set(u32::from(ctx.read_u16(ea)));
+                }
+                pc = 0x80244474_u32;
+            }
+            0x80244474_u32 => {
+                // clrlwi r3, r0, 16
+                {
+                    let v = g[0].get().rotate_left(0) & 0xffff_u32;
+                    g[3].set(v);
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x8024447c_u32;
+            }
+            0x8024447c_u32 => {
+                // clrlwi. r0, r3, 24
+                {
+                    let v = g[3].get().rotate_left(0) & 0xff_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_80244494
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80244494_u32;
+                    continue;
+                }
+                pc = 0x80244484_u32;
+            }
+            0x80244484_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentNameData
+                c::call(ctx, 0x8015cc9c_u32, 0x8024448c_u32);
+                pc = 0x8024448c_u32;
+            }
+            0x8024448c_u32 => {
+                // lhz r0, 0x10a(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x10a_u32);
+                    g[0].set(u32::from(ctx.read_u16(ea)));
+                }
+                // b .L_802444A0
+                pc = 0x802444a0_u32;
+                continue;
+                pc = 0x80244494_u32;
+            }
+            0x80244494_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentFighterData
+                c::call(ctx, 0x8015cc64_u32, 0x8024449c_u32);
+                pc = 0x8024449c_u32;
+            }
+            0x8024449c_u32 => {
+                // lhz r0, 0x4e(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x4e_u32);
+                    g[0].set(u32::from(ctx.read_u16(ea)));
+                }
+                pc = 0x802444a0_u32;
+            }
+            0x802444a0_u32 => {
+                // clrlwi r3, r0, 16
+                {
+                    let v = g[0].get().rotate_left(0) & 0xffff_u32;
+                    g[3].set(v);
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x802444a8_u32;
+            }
+            0x802444a8_u32 => {
+                // clrlwi. r0, r3, 24
+                {
+                    let v = g[3].get().rotate_left(0) & 0xff_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_802444C0
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x802444c0_u32;
+                    continue;
+                }
+                pc = 0x802444b0_u32;
+            }
+            0x802444b0_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentNameData
+                c::call(ctx, 0x8015cc9c_u32, 0x802444b8_u32);
+                pc = 0x802444b8_u32;
+            }
+            0x802444b8_u32 => {
+                // lhz r0, 0x10c(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x10c_u32);
+                    g[0].set(u32::from(ctx.read_u16(ea)));
+                }
+                // b .L_802444CC
+                pc = 0x802444cc_u32;
+                continue;
+                pc = 0x802444c0_u32;
+            }
+            0x802444c0_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentFighterData
+                c::call(ctx, 0x8015cc64_u32, 0x802444c8_u32);
+                pc = 0x802444c8_u32;
+            }
+            0x802444c8_u32 => {
+                // lhz r0, 0x50(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x50_u32);
+                    g[0].set(u32::from(ctx.read_u16(ea)));
+                }
+                pc = 0x802444cc_u32;
+            }
+            0x802444cc_u32 => {
+                // clrlwi r3, r0, 16
+                {
+                    let v = g[0].get().rotate_left(0) & 0xffff_u32;
+                    g[3].set(v);
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x802444d4_u32;
+            }
+            0x802444d4_u32 => {
+                // clrlwi. r0, r3, 24
+                {
+                    let v = g[3].get().rotate_left(0) & 0xff_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_802444EC
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x802444ec_u32;
+                    continue;
+                }
+                pc = 0x802444dc_u32;
+            }
+            0x802444dc_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentNameData
+                c::call(ctx, 0x8015cc9c_u32, 0x802444e4_u32);
+                pc = 0x802444e4_u32;
+            }
+            0x802444e4_u32 => {
+                // lhz r0, 0x10e(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x10e_u32);
+                    g[0].set(u32::from(ctx.read_u16(ea)));
+                }
+                // b .L_802444F8
+                pc = 0x802444f8_u32;
+                continue;
+                pc = 0x802444ec_u32;
+            }
+            0x802444ec_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentFighterData
+                c::call(ctx, 0x8015cc64_u32, 0x802444f4_u32);
+                pc = 0x802444f4_u32;
+            }
+            0x802444f4_u32 => {
+                // lhz r0, 0x52(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x52_u32);
+                    g[0].set(u32::from(ctx.read_u16(ea)));
+                }
+                pc = 0x802444f8_u32;
+            }
+            0x802444f8_u32 => {
+                // clrlwi r3, r0, 16
+                {
+                    let v = g[0].get().rotate_left(0) & 0xffff_u32;
+                    g[3].set(v);
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x80244500_u32;
+            }
+            0x80244500_u32 => {
+                // clrlwi. r0, r3, 24
+                {
+                    let v = g[3].get().rotate_left(0) & 0xff_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_80244518
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80244518_u32;
+                    continue;
+                }
+                pc = 0x80244508_u32;
+            }
+            0x80244508_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentNameData
+                c::call(ctx, 0x8015cc9c_u32, 0x80244510_u32);
+                pc = 0x80244510_u32;
+            }
+            0x80244510_u32 => {
+                // lwz r3, 0x110(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x110_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x80244518_u32;
+            }
+            0x80244518_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentFighterData
+                c::call(ctx, 0x8015cc64_u32, 0x80244520_u32);
+                pc = 0x80244520_u32;
+            }
+            0x80244520_u32 => {
+                // lwz r3, 0x54(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x54_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x80244528_u32;
+            }
+            0x80244528_u32 => {
+                // bl mnDiagram_GetPlayPercentage
+                c::call(ctx, 0x8023ecc4_u32, 0x8024452c_u32);
+                pc = 0x8024452c_u32;
+            }
+            0x8024452c_u32 => {
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x80244530_u32;
+            }
+            0x80244530_u32 => {
+                // bl mnDiagram_GetAveragePlayerCount
+                c::call(ctx, 0x8023ee38_u32, 0x80244534_u32);
+                pc = 0x80244534_u32;
+            }
+            0x80244534_u32 => {
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x80244538_u32;
+            }
+            0x80244538_u32 => {
+                // clrlwi. r0, r3, 24
+                {
+                    let v = g[3].get().rotate_left(0) & 0xff_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_80244550
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80244550_u32;
+                    continue;
+                }
+                pc = 0x80244540_u32;
+            }
+            0x80244540_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentNameData
+                c::call(ctx, 0x8015cc9c_u32, 0x80244548_u32);
+                pc = 0x80244548_u32;
+            }
+            0x80244548_u32 => {
+                // lwz r3, 0x118(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x118_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x80244550_u32;
+            }
+            0x80244550_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentFighterData
+                c::call(ctx, 0x8015cc64_u32, 0x80244558_u32);
+                pc = 0x80244558_u32;
+            }
+            0x80244558_u32 => {
+                // lwz r3, 0x5c(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x5c_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x80244560_u32;
+            }
+            0x80244560_u32 => {
+                // clrlwi. r0, r3, 24
+                {
+                    let v = g[3].get().rotate_left(0) & 0xff_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_80244578
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80244578_u32;
+                    continue;
+                }
+                pc = 0x80244568_u32;
+            }
+            0x80244568_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentNameData
+                c::call(ctx, 0x8015cc9c_u32, 0x80244570_u32);
+                pc = 0x80244570_u32;
+            }
+            0x80244570_u32 => {
+                // lwz r3, 0x11c(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x11c_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x80244578_u32;
+            }
+            0x80244578_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentFighterData
+                c::call(ctx, 0x8015cc64_u32, 0x80244580_u32);
+                pc = 0x80244580_u32;
+            }
+            0x80244580_u32 => {
+                // lwz r3, 0x60(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x60_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x80244588_u32;
+            }
+            0x80244588_u32 => {
+                // clrlwi. r0, r3, 24
+                {
+                    let v = g[3].get().rotate_left(0) & 0xff_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_802445A0
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x802445a0_u32;
+                    continue;
+                }
+                pc = 0x80244590_u32;
+            }
+            0x80244590_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentNameData
+                c::call(ctx, 0x8015cc9c_u32, 0x80244598_u32);
+                pc = 0x80244598_u32;
+            }
+            0x80244598_u32 => {
+                // lwz r3, 0x120(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x120_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x802445a0_u32;
+            }
+            0x802445a0_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentFighterData
+                c::call(ctx, 0x8015cc64_u32, 0x802445a8_u32);
+                pc = 0x802445a8_u32;
+            }
+            0x802445a8_u32 => {
+                // lwz r3, 0x64(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x64_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x802445b0_u32;
+            }
+            0x802445b0_u32 => {
+                // clrlwi. r0, r3, 24
+                {
+                    let v = g[3].get().rotate_left(0) & 0xff_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_802445C8
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x802445c8_u32;
+                    continue;
+                }
+                pc = 0x802445b8_u32;
+            }
+            0x802445b8_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentNameData
+                c::call(ctx, 0x8015cc9c_u32, 0x802445c0_u32);
+                pc = 0x802445c0_u32;
+            }
+            0x802445c0_u32 => {
+                // lwz r3, 0x124(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x124_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x802445c8_u32;
+            }
+            0x802445c8_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentFighterData
+                c::call(ctx, 0x8015cc64_u32, 0x802445d0_u32);
+                pc = 0x802445d0_u32;
+            }
+            0x802445d0_u32 => {
+                // lwz r3, 0x68(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x68_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x802445d8_u32;
+            }
+            0x802445d8_u32 => {
+                // clrlwi. r0, r3, 24
+                {
+                    let v = g[3].get().rotate_left(0) & 0xff_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_802445F0
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x802445f0_u32;
+                    continue;
+                }
+                pc = 0x802445e0_u32;
+            }
+            0x802445e0_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentNameData
+                c::call(ctx, 0x8015cc9c_u32, 0x802445e8_u32);
+                pc = 0x802445e8_u32;
+            }
+            0x802445e8_u32 => {
+                // lwz r3, 0x128(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x128_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x802445f0_u32;
+            }
+            0x802445f0_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentFighterData
+                c::call(ctx, 0x8015cc64_u32, 0x802445f8_u32);
+                pc = 0x802445f8_u32;
+            }
+            0x802445f8_u32 => {
+                // lwz r3, 0x6c(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x6c_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x80244600_u32;
+            }
+            0x80244600_u32 => {
+                // clrlwi. r0, r3, 24
+                {
+                    let v = g[3].get().rotate_left(0) & 0xff_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_80244618
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80244618_u32;
+                    continue;
+                }
+                pc = 0x80244608_u32;
+            }
+            0x80244608_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentNameData
+                c::call(ctx, 0x8015cc9c_u32, 0x80244610_u32);
+                pc = 0x80244610_u32;
+            }
+            0x80244610_u32 => {
+                // lwz r3, 0x12c(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x12c_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x80244618_u32;
+            }
+            0x80244618_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentFighterData
+                c::call(ctx, 0x8015cc64_u32, 0x80244620_u32);
+                pc = 0x80244620_u32;
+            }
+            0x80244620_u32 => {
+                // lwz r3, 0x70(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x70_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x80244628_u32;
+            }
+            0x80244628_u32 => {
+                // clrlwi. r0, r3, 24
+                {
+                    let v = g[3].get().rotate_left(0) & 0xff_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_80244640
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80244640_u32;
+                    continue;
+                }
+                pc = 0x80244630_u32;
+            }
+            0x80244630_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentNameData
+                c::call(ctx, 0x8015cc9c_u32, 0x80244638_u32);
+                pc = 0x80244638_u32;
+            }
+            0x80244638_u32 => {
+                // lwz r3, 0x130(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x130_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x80244640_u32;
+            }
+            0x80244640_u32 => {
+                // clrlwi r3, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // bl GetPersistentFighterData
+                c::call(ctx, 0x8015cc64_u32, 0x80244648_u32);
+                pc = 0x80244648_u32;
+            }
+            0x80244648_u32 => {
+                // lwz r3, 0x74(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x74_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x80244650_u32;
+            }
+            0x80244650_u32 => {
+                // lis r3, mnDiagram_GetNamePlayTimeByFighter@ha
+                g[3].set(0x80240000_u32);
+                // addi r5, r3, mnDiagram_GetNamePlayTimeByFighter@l
+                g[5].set(g[3].get().wrapping_add(0xfffff540_u32));
+                // clrlwi r4, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[4].set(v);
+                }
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // bl mnDiagram_GetRankedFighterForName
+                c::call(ctx, 0x8023f578_u32, 0x80244664_u32);
+                pc = 0x80244664_u32;
+            }
+            0x80244664_u32 => {
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x80244668_u32;
+            }
+            0x80244668_u32 => {
+                // lis r3, mnDiagram_GetNamePlayTimeByFighter@ha
+                g[3].set(0x80240000_u32);
+                // addi r5, r3, mnDiagram_GetNamePlayTimeByFighter@l
+                g[5].set(g[3].get().wrapping_add(0xfffff540_u32));
+                // clrlwi r4, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[4].set(v);
+                }
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // bl mnDiagram_GetRankedFighterForName
+                c::call(ctx, 0x8023f578_u32, 0x8024467c_u32);
+                pc = 0x8024467c_u32;
+            }
+            0x8024467c_u32 => {
+                // b .L_8024468C
+                pc = 0x8024468c_u32;
+                continue;
+                pc = 0x80244680_u32;
+            }
+            0x80244680_u32 => {
+                // mr r3, r4
+                {
+                    let v = g[4].get() | g[4].get();
+                    g[3].set(v);
+                }
+                // bl mnDiagram_GetLeastPlayedFighter
+                c::call(ctx, 0x8023f8cc_u32, 0x80244688_u32);
+                pc = 0x80244688_u32;
+            }
+            0x80244688_u32 => {
+                // clrlwi r3, r3, 24
+                {
+                    let v = g[3].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                pc = 0x8024468c_u32;
+            }
+            0x8024468c_u32 => {
+                // lwz r0, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x8
+                g[1].set(g[1].get().wrapping_add(0x8_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of mnDiagram2_GetStatValue");
+            }
+            _ => unreachable!("mnDiagram2_GetStatValue: no block at {pc:#010x}"),
         }
     }
-    #[allow(unreachable_code)]
-    return 0;
 }
 
 pub fn mnDiagram2_CreateStatRow<'a>(

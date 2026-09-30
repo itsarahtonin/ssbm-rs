@@ -418,17 +418,13 @@ pub fn it_8026CF04<'a>(ctx: &'a Ctx) {
                         .set(((enums::It_Kind_Kuriboh as i32).wrapping_add(i) as u8));
                     (Handle::add(fns::it_804A0E60(ctx).xC(), (idx as i32)))
                         .set((cumulative as u16));
-                    let _ = (Handle::add(
-                        fns::it_804A0E60(ctx).xC(),
-                        (Handle::addr(
-                            ({
-                                let __t2 = (item_common).x128().at((idx as i32));
-                                p = __t2;
-                                __t2
-                            }),
-                        ) as i32),
-                    ))
-                    .get();
+                    let _ = Handle::addr(
+                        ({
+                            let __t2 = (item_common).x128().at((idx as i32));
+                            p = __t2;
+                            __t2
+                        }),
+                    );
                     cumulative = cumulative.wrapping_add(((p).get() as u32));
                 }
                 i = i.wrapping_add(1);

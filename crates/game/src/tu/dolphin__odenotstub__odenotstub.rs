@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn DBGEXIImm<'a>(ctx: &'a Ctx, data: Addr<'a>, byte_size: i32, write: u32) -> i32 {
     let __frame = ctx.stack_frame(0x48);
@@ -282,26 +283,303 @@ pub fn DBInitComm<'a>(ctx: &'a Ctx, inputFlagPtr: Val<'a, i32>, mtrCallback: Val
 }
 
 pub fn DBInitInterrupts<'a>(ctx: &'a Ctx) -> i32 {
-    let __frame = ctx.stack_frame(0x8);
-    let _ = fns::__OSMaskInterrupts(ctx, (0x18000_i32 as u32));
-    let _ = fns::__OSMaskInterrupts(ctx, (64_i32 as u32));
-    statics::dolphin__odenotstub__odenotstub::DBGCallback(ctx).set(fnptr(ctx, 0x8032b58c));
-    let _ = fns::__OSSetInterruptHandler(ctx, (25_i32 as i16), fnptr(ctx, 0x8032b5c8));
-    return (fns::__OSUnmaskInterrupts(ctx, (64_i32 as u32)) as i32);
-    #[allow(unreachable_code)]
-    return 0;
+    // Transliterated from its machine code: returns or uses a value its C never sets.
+    ().put_regs(ctx);
+    asm_DBInitInterrupts(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_DBInitInterrupts(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8032b680_u32;
+    loop {
+        match pc {
+            0x8032b680_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // lis r3, 0x2
+                g[3].set(0x20000_u32);
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // addi r3, r3, -0x8000
+                g[3].set(g[3].get().wrapping_add(0xffff8000_u32));
+                // stwu r1, -0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // bl __OSMaskInterrupts
+                c::call(ctx, 0x8034772c_u32, 0x8032b698_u32);
+                pc = 0x8032b698_u32;
+            }
+            0x8032b698_u32 => {
+                // li r3, 0x40
+                g[3].set(0x40_u32);
+                // bl __OSMaskInterrupts
+                c::call(ctx, 0x8034772c_u32, 0x8032b6a0_u32);
+                pc = 0x8032b6a0_u32;
+            }
+            0x8032b6a0_u32 => {
+                // lis r3, MWCallback@ha
+                g[3].set(0x80330000_u32);
+                // addi r0, r3, MWCallback@l
+                g[0].set(g[3].get().wrapping_add(0xffffb58c_u32));
+                // lis r3, DBGHandler@ha
+                g[3].set(0x80330000_u32);
+                // stw r0, DBGCallback@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffb9ec_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // addi r4, r3, DBGHandler@l
+                g[4].set(g[3].get().wrapping_add(0xffffb5c8_u32));
+                // li r3, 0x19
+                g[3].set(0x19_u32);
+                // bl __OSSetInterruptHandler
+                c::call(ctx, 0x803473b0_u32, 0x8032b6bc_u32);
+                pc = 0x8032b6bc_u32;
+            }
+            0x8032b6bc_u32 => {
+                // li r3, 0x40
+                g[3].set(0x40_u32);
+                // bl __OSUnmaskInterrupts
+                c::call(ctx, 0x803477b4_u32, 0x8032b6c4_u32);
+                pc = 0x8032b6c4_u32;
+            }
+            0x8032b6c4_u32 => {
+                // lwz r0, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x8
+                g[1].set(g[1].get().wrapping_add(0x8_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of DBInitInterrupts");
+            }
+            _ => unreachable!("DBInitInterrupts: no block at {pc:#010x}"),
+        }
+    }
 }
 
 pub fn DBQueryData<'a>(ctx: &'a Ctx) -> i32 {
-    let __frame = ctx.stack_frame(0x18);
-    let mut enable: i32 = 0;
-    statics::dolphin__odenotstub__odenotstub::EXIInputFlag(ctx).set((0_i32 as u8));
-    if statics::dolphin__odenotstub__odenotstub::RecvDataLeng(ctx).get() == 0_i32 {
-        enable = fns::OSDisableInterrupts(ctx);
-        inl_CheckMailBox_unfused(ctx);
+    // Transliterated from its machine code: returns or uses a value its C never sets.
+    ().put_regs(ctx);
+    asm_DBQueryData(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_DBQueryData(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8032b6d4_u32;
+    loop {
+        match pc {
+            0x8032b6d4_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // lwz r0, RecvDataLeng@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffb9f4_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // stb r3, EXIInputFlag@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffb9fc_u32);
+                    ctx.write_u8(ea, g[3].get() as u8);
+                }
+                // cmpwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_8032B750
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x8032b750_u32;
+                    continue;
+                }
+                pc = 0x8032b6f8_u32;
+            }
+            0x8032b6f8_u32 => {
+                // bl OSDisableInterrupts
+                c::call(ctx, 0x80347364_u32, 0x8032b6fc_u32);
+                pc = 0x8032b6fc_u32;
+            }
+            0x8032b6fc_u32 => {
+                // addi r31, r3, 0x0
+                g[31].set(g[3].get());
+                // addi r3, r1, 0x8
+                g[3].set(g[1].get().wrapping_add(0x8_u32));
+                // bl DBGReadStatus
+                c::call(ctx, 0x8032b4e0_u32, 0x8032b708_u32);
+                pc = 0x8032b708_u32;
+            }
+            0x8032b708_u32 => {
+                // lwz r0, 0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x8_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // clrlwi. r0, r0, 31
+                {
+                    let v = g[0].get().rotate_left(0) & 0x1_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_8032B750
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x8032b750_u32;
+                    continue;
+                }
+                pc = 0x8032b714_u32;
+            }
+            0x8032b714_u32 => {
+                // addi r3, r1, 0x8
+                g[3].set(g[1].get().wrapping_add(0x8_u32));
+                // bl DBGReadMailbox
+                c::call(ctx, 0x8032b27c_u32, 0x8032b71c_u32);
+                pc = 0x8032b71c_u32;
+            }
+            0x8032b71c_u32 => {
+                // lwz r0, 0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x8_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // clrlwi r0, r0, 3
+                {
+                    let v = g[0].get().rotate_left(0) & 0x1fffffff_u32;
+                    g[0].set(v);
+                }
+                // stw r0, 0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x8_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lwz r4, 0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x8_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // rlwinm r3, r4, 0, 3, 7
+                {
+                    let v = g[4].get().rotate_left(0) & 0x1f000000_u32;
+                    g[3].set(v);
+                }
+                // subis r0, r3, 0x1f00
+                g[0].set(g[3].get().wrapping_add(0xe1000000_u32));
+                // cmplwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_8032B750
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x8032b750_u32;
+                    continue;
+                }
+                pc = 0x8032b73c_u32;
+            }
+            0x8032b73c_u32 => {
+                // clrlwi r3, r4, 17
+                {
+                    let v = g[4].get().rotate_left(0) & 0x7fff_u32;
+                    g[3].set(v);
+                }
+                // stw r4, SendMailData@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffb9f0_u32);
+                    ctx.write_u32(ea, g[4].get());
+                }
+                // li r0, 0x1
+                g[0].set(0x1_u32);
+                // stw r3, RecvDataLeng@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffb9f4_u32);
+                    ctx.write_u32(ea, g[3].get());
+                }
+                // stb r0, EXIInputFlag@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffb9fc_u32);
+                    ctx.write_u8(ea, g[0].get() as u8);
+                }
+                pc = 0x8032b750_u32;
+            }
+            0x8032b750_u32 => {
+                // mr r3, r31
+                {
+                    let v = g[31].get() | g[31].get();
+                    g[3].set(v);
+                }
+                // bl OSRestoreInterrupts
+                c::call(ctx, 0x8034738c_u32, 0x8032b758_u32);
+                pc = 0x8032b758_u32;
+            }
+            0x8032b758_u32 => {
+                // lwz r0, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x18
+                g[1].set(g[1].get().wrapping_add(0x18_u32));
+                // lwz r3, RecvDataLeng@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffb9f4_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of DBQueryData");
+            }
+            _ => unreachable!("DBQueryData: no block at {pc:#010x}"),
+        }
     }
-    let _ = fns::OSRestoreInterrupts(ctx, enable);
-    return statics::dolphin__odenotstub__odenotstub::RecvDataLeng(ctx).get();
 }
 
 pub fn DBRead<'a>(ctx: &'a Ctx, param1: Addr<'a>, param2: u32) -> i32 {
@@ -439,31 +717,6 @@ fn inl_DBGEXIDeselect_unfused<'a>(ctx: &'a Ctx) -> i32 {
 fn inl_DBGEXIInit_unfused<'a>(ctx: &'a Ctx) {
     let _ = fns::__OSMaskInterrupts(ctx, (0x18000_i32 as u32));
     (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006800_u32 as u32)), 10_i32)).set((0_i32 as u32));
-}
-
-fn inl_CheckMailBox_unfused<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x10);
-    let local_8: ArrV<'a, u32, 2> = frame_at(ctx, &__frame, 0x0);
-    let _ = statics::dolphin__odenotstub__odenotstub::DBGReadStatus(
-        ctx,
-        Handle::cast::<Addr<'a>>(local_8.at(0)),
-    );
-    if ((local_8.at(0_i32).get() & (1_i32 as u32)) != 0) {
-        let _ = statics::dolphin__odenotstub__odenotstub::DBGReadMailbox(
-            ctx,
-            Handle::cast::<Addr<'a>>(local_8.at(0)),
-        );
-        local_8
-            .at(0_i32)
-            .set((local_8.at(0_i32).get() & (!0xe0000000_u32)));
-        if (local_8.at(0_i32).get() & (0x1f000000_i32 as u32)) == (0x1f000000_i32 as u32) {
-            statics::dolphin__odenotstub__odenotstub::SendMailData(ctx)
-                .set(local_8.at(0_i32).get());
-            statics::dolphin__odenotstub__odenotstub::RecvDataLeng(ctx)
-                .set(((local_8.at(0_i32).get() & (0x7fff_i32 as u32)) as i32));
-            statics::dolphin__odenotstub__odenotstub::EXIInputFlag(ctx).set((1_i32 as u8));
-        }
-    }
 }
 
 fn inl_DBGReadStatus_unfused<'a>(ctx: &'a Ctx, param_1: Addr<'a>) -> i32 {

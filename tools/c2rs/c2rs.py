@@ -1721,6 +1721,15 @@ class Translator:
                 return self.incdec(c, op)
         if k == CK.CSTYLE_CAST_EXPR and self.u.ctype(c.type)["k"] == "void":
             return self.effect(children(c)[-1])
+        read = c
+        while read.kind == CK.UNEXPOSED_EXPR and children(read):
+            read = strip(children(read)[-1])
+        if (read.kind in (CK.ARRAY_SUBSCRIPT_EXPR, CK.MEMBER_REF_EXPR) or (
+                read.kind == CK.UNARY_OPERATOR and UNOPS.get(_lib.clang_getCursorUnaryOperatorKind(read)) == "*")) \
+                and not read.type.is_volatile_qualified():
+            # A discarded read of memory that is not volatile: MWCC drops the load and keeps
+            # what computes its address, such as the decomp's `(void) a[(u32) (p = q)];`.
+            return [s for x in children(read) for s in self.effect(x)]
         if not has_effects(c):
             # MWCC drops what has no effect, such as the dead loads of the decomp's
             # stack-padding GET_FIGHTER(0), which would fault.
@@ -3342,6 +3351,27 @@ def returns_of(unit, cursor):
     return "Int"
 
 
+# Clang's warnings about a value a function's C never sets: what the original returns or uses
+# there is whatever a register or the stack held, which only its machine code reproduces.
+UNSET_WARNINGS = {"-Wreturn-type", "-Wuninitialized", "-Wsometimes-uninitialized"}
+UNSET_REASON = "returns or uses a value its C never sets"
+
+
+def unset_values(tu, source):
+    """The functions defined in `source` that clang finds returning or using a value their C
+    never sets."""
+    src = os.path.normpath(source)
+    spans = [(c.extent.start.line, c.extent.end.line, c.spelling) for c in tu.cursor.get_children()
+             if c.kind == CK.FUNCTION_DECL and c.is_definition() and c.location.file
+             and os.path.normpath(str(c.location.file)) == src]
+    out = set()
+    for d in tu.diagnostics:
+        if d.severity == ci.Diagnostic.Warning and d.option in UNSET_WARNINGS and d.location.file \
+                and os.path.normpath(str(d.location.file)) == src:
+            out.update(name for a, b, name in spans if a <= d.location.line <= b)
+    return out
+
+
 def rlw_mask(mb, me):
     """The mask of rlwinm and rlwimi: bits mb through me, bit 0 the highest, wrapping around."""
     ones = 0xFFFF_FFFF
@@ -3455,6 +3485,7 @@ def translate_unit(args):
     unit = Unit(prog, unit_name, source)
     unit.gekko = gekko
     manual = manual_ports(out_dir, unit_name)
+    unset = unset_values(tu, source)
     unit.col.visit(tu.cursor, source)
     unit.map_static_locals(tu.cursor, source)
     out_fns, regs = [], []
@@ -3494,8 +3525,8 @@ def translate_unit(args):
                         f"Returns::{returns_of(unit, c)});")
             unit.ported.append(name)
             continue
-        if name in FROM_MACHINE_CODE:
-            code = asm_port(unit, c, f, FROM_MACHINE_CODE[name])
+        if name in FROM_MACHINE_CODE or name in unset:
+            code = asm_port(unit, c, f, FROM_MACHINE_CODE.get(name) or UNSET_REASON)
             out_fns.append(code)
             unit.transliterated.append(name)
             regs.append(f"    ctx.register_port({f['addr']:#x}, {unit.adapter(c, ident(name))}, "

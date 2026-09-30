@@ -65,11 +65,13 @@ def add(base, off):
 class Emitter:
     """Rust for one function's instructions."""
 
-    def __init__(self, name, words):
+    def __init__(self, name, words, jump_targets=()):
         self.name = name
         self.words = words
         self.start = words[0][0]
         self.end = words[-1][0] + 4
+        # Where the function's jump tables send its `bctr`s.
+        self.jump_targets = {t for t in jump_targets if self.start <= t < self.end}
         # Block starts: the entry, branch targets inside the function, and what follows a branch.
         self.leaders = {self.start}
         for pc, w, _ in words:
@@ -78,6 +80,7 @@ class Emitter:
                 self.leaders.add(t)
             if self.ends_block(w):
                 self.leaders.add(pc + 4)
+        self.leaders |= self.jump_targets
         self.leaders = {x for x in self.leaders if self.start <= x < self.end}
 
     def inside(self, t):
@@ -237,8 +240,14 @@ class Emitter:
                     body = ["let to = ctx.regs.lr.get() & !3;",
                             "if to != lr0 & !3 { c::tail_call(ctx, to); }",
                             "return;"]
+                elif self.jump_targets:
+                    # Through a jump table to a block of the function, or out of it.
+                    body = ["let to = ctx.regs.ctr.get() & !3;",
+                            f"if ({hexu(self.start)}..{hexu(self.end)}).contains(&to) {{ pc = to; continue; }}",
+                            "c::tail_call(ctx, to);",
+                            "return;"]
                 else:
-                    # Only a jump out, since jump tables' targets inside are not known here.
+                    # Only a jump out: the function has no jump tables.
                     body = ["let to = ctx.regs.ctr.get() & !3;",
                             f"assert!(!({hexu(self.start)}..{hexu(self.end)}).contains(&to), \"{self.name}: bctr within the function\");",
                             "c::tail_call(ctx, to);",
@@ -612,9 +621,14 @@ class Emitter:
         return out
 
 
+def jump_targets(listing):
+    """The code addresses the listing's jump tables hold, as `.rel <function>, .L_<address>`."""
+    return {int(t, 16) for t in re.findall(r"\.rel \w+, \.L_([0-9A-F]{8})", listing)}
+
+
 def translate(listing, name):
     """Rust statements for the body of `name`'s port, from its instructions in `listing`."""
     words = function_words(listing, name)
     if not words:
         raise AsmUnsupported(f"{name} not in the listing")
-    return Emitter(name, words).body()
+    return Emitter(name, words, jump_targets(listing)).body()

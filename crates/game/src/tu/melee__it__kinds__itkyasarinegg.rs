@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn it_802EFA44<'a>(ctx: &'a Ctx, catherine: HSD_GObj<'a>, pos: Vec<'a>, dir: f64) {
     let __frame = ctx.stack_frame(0x78);
@@ -170,12 +171,60 @@ pub fn it_802EFD84<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::Item_80268E5C(ctx, gobj, 4_i32, 2_i32);
 }
 
-pub fn itKyasarinegg_UnkMotion4_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
-    let __frame = ctx.stack_frame(0x8);
-    let mut gobj = gobj;
-    return fns::it_802751D8(ctx, gobj);
-    #[allow(unreachable_code)]
-    return 0;
+pub fn itKyasarinegg_UnkMotion4_Anim<'a>(ctx: &'a Ctx, a0: HSD_GObj<'a>) -> i32 {
+    // Transliterated from its machine code: returns or uses a value its C never sets.
+    (a0,).put_regs(ctx);
+    asm_itKyasarinegg_UnkMotion4_Anim(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_itKyasarinegg_UnkMotion4_Anim(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x802efe08_u32;
+    loop {
+        match pc {
+            0x802efe08_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // bl it_802751D8
+                c::call(ctx, 0x802751d8_u32, 0x802efe18_u32);
+                pc = 0x802efe18_u32;
+            }
+            0x802efe18_u32 => {
+                // lwz r0, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x8
+                g[1].set(g[1].get().wrapping_add(0x8_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of itKyasarinegg_UnkMotion4_Anim");
+            }
+            _ => unreachable!("itKyasarinegg_UnkMotion4_Anim: no block at {pc:#010x}"),
+        }
+    }
 }
 
 pub fn it_2725_Logic28_DmgDealt<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {

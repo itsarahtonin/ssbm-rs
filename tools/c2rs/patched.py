@@ -633,7 +633,7 @@ def main():
         elif fname in index:
             listing = open(index[fname], encoding="utf-8").read()
             words = asm2rs.function_words(listing, fname)
-            jump_targets = {int(t, 16) for t in re.findall(r"\.rel \w+, \.L_([0-9A-F]{8})", listing)}
+            jump_targets = asm2rs.jump_targets(listing)
         else:
             words = None
         if not words:

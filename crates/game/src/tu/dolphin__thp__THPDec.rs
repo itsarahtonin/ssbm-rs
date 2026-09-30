@@ -18448,7 +18448,7 @@ fn asm___THPDecompressiMCURowNxN(ctx: &Ctx) {
 }
 
 pub fn __THPHuffDecodeDCTCompY<'a>(ctx: &'a Ctx, a0: _THPFileInfo<'a>, a1: Val<'a, i16>) {
-    // Transliterated from its machine code: MWCC-only code.
+    // Transliterated from its machine code: returns or uses a value its C never sets.
     (a0, a1).put_regs(ctx);
     asm___THPHuffDecodeDCTCompY(ctx);
 }

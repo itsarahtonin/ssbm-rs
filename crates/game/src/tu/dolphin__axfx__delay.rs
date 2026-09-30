@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn AXFXDelayCallback<'a>(
     ctx: &'a Ctx,
@@ -307,18 +308,107 @@ pub fn AXFXDelaySettings<'a>(ctx: &'a Ctx, delay: AXFX_DELAY<'a>) -> i32 {
     return 1_i32;
 }
 
-pub fn AXFXDelayInit<'a>(ctx: &'a Ctx, delay: AXFX_DELAY<'a>) -> i32 {
-    let __frame = ctx.stack_frame(0x18);
-    let mut delay = delay;
-    let mut old: i32 = 0;
-    old = fns::OSDisableInterrupts(ctx);
-    (delay).set_left(null::<Val<'a, i32>>(ctx));
-    (delay).set_right(null::<Val<'a, i32>>(ctx));
-    (delay).set_sur(null::<Val<'a, i32>>(ctx));
-    let _ = fns::OSRestoreInterrupts(ctx, old);
-    return fns::AXFXDelaySettings(ctx, delay);
-    #[allow(unreachable_code)]
-    return 0;
+pub fn AXFXDelayInit<'a>(ctx: &'a Ctx, a0: AXFX_DELAY<'a>) -> i32 {
+    // Transliterated from its machine code: returns or uses a value its C never sets.
+    (a0,).put_regs(ctx);
+    asm_AXFXDelayInit(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_AXFXDelayInit(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8035dc64_u32;
+    loop {
+        match pc {
+            0x8035dc64_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // mr r31, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[31].set(v);
+                }
+                // bl OSDisableInterrupts
+                c::call(ctx, 0x80347364_u32, 0x8035dc7c_u32);
+                pc = 0x8035dc7c_u32;
+            }
+            0x8035dc7c_u32 => {
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // stw r0, 0x30(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x30_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stw r0, 0x34(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x34_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stw r0, 0x38(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x38_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // bl OSRestoreInterrupts
+                c::call(ctx, 0x8034738c_u32, 0x8035dc90_u32);
+                pc = 0x8035dc90_u32;
+            }
+            0x8035dc90_u32 => {
+                // mr r3, r31
+                {
+                    let v = g[31].get() | g[31].get();
+                    g[3].set(v);
+                }
+                // bl AXFXDelaySettings
+                c::call(ctx, 0x8035da60_u32, 0x8035dc98_u32);
+                pc = 0x8035dc98_u32;
+            }
+            0x8035dc98_u32 => {
+                // lwz r0, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x18
+                g[1].set(g[1].get().wrapping_add(0x18_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of AXFXDelayInit");
+            }
+            _ => unreachable!("AXFXDelayInit: no block at {pc:#010x}"),
+        }
+    }
 }
 
 pub fn AXFXDelayShutdown<'a>(ctx: &'a Ctx, delay: AXFX_DELAY<'a>) -> i32 {

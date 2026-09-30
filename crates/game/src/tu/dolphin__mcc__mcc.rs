@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn callbackEventStream<'a>(ctx: &'a Ctx, chID: i32, event: u32, value: u32) {
     let mut chID = chID;
@@ -78,15 +79,79 @@ pub fn MCCStreamOpen<'a>(ctx: &'a Ctx, chID: i32, blockSize: u8) -> i32 {
     return bResult;
 }
 
-pub fn MCCStreamClose<'a>(ctx: &'a Ctx, chID: i32) -> i32 {
-    let __frame = ctx.stack_frame(0x8);
-    let mut chID = chID;
-    statics::dolphin__mcc__mcc::gChannelInfo(ctx)
-        .get(chID)
-        .set_unk(0_i32);
-    return fns::MCCClose(ctx, chID);
-    #[allow(unreachable_code)]
-    return 0;
+pub fn MCCStreamClose<'a>(ctx: &'a Ctx, a0: i32) -> i32 {
+    // Transliterated from its machine code: returns or uses a value its C never sets.
+    (a0,).put_regs(ctx);
+    asm_MCCStreamClose(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_MCCStreamClose(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8032c848_u32;
+    loop {
+        match pc {
+            0x8032c848_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // lis r4, gChannelInfo@ha
+                g[4].set(0x804a0000_u32);
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // mulli r0, r3, 0x18
+                g[0].set((g[3].get() as i32).wrapping_mul(24_i32) as u32);
+                // stwu r1, -0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // addi r4, r4, gChannelInfo@l
+                g[4].set(g[4].get().wrapping_add(0x50e0_u32));
+                // add r4, r4, r0
+                {
+                    let (v, ca, ov) = c::add3(g[4].get(), g[0].get(), 0);
+                    g[4].set(v);
+                    let _ = (ca, ov);
+                }
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // stw r0, 0x14(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // bl MCCClose
+                c::call(ctx, 0x8032dfdc_u32, 0x8032c870_u32);
+                pc = 0x8032c870_u32;
+            }
+            0x8032c870_u32 => {
+                // lwz r0, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x8
+                g[1].set(g[1].get().wrapping_add(0x8_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of MCCStreamClose");
+            }
+            _ => unreachable!("MCCStreamClose: no block at {pc:#010x}"),
+        }
+    }
 }
 
 pub fn MCCStreamWrite<'a>(ctx: &'a Ctx, chID: i32, data: Addr<'a>, dataBlockSize: u32) -> i32 {
