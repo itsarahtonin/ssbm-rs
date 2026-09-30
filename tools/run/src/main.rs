@@ -12,9 +12,13 @@
 //! `--write-known FILE` writes this run's divergences in that form.
 //!
 //! `--port UNITS` runs the Rust ports of those decomp units (comma-separated unit names or
-//! prefixes such as `melee/ft`, or `all`) instead of their original code. With `--lockstep`,
-//! every call to a ported function runs the original too and compares, and the run fails on
-//! any mismatch; `--lockstep-from FIELD` starts checking at that video field.
+//! prefixes such as `melee/ft`, or `all`, and `-UNIT` to leave one out) instead of their
+//! original code. With `--lockstep`, every call to a ported function runs the original too and
+//! compares, and the run fails on any mismatch; `--lockstep-from FIELD` starts checking at that
+//! video field.
+//!
+//! For debugging, `LOCKSTEP_TRACE` shows the jumps original code made before a panic inside a
+//! lockstep check, and `STUCK_TRACE` the ports running at each heartbeat of a stall.
 
 use std::cell::Cell;
 use std::collections::HashMap;
@@ -42,6 +46,11 @@ const LOCKSTEP_EXEMPT: &[&str] = &[
     "__setjmp",
     "__longjmp",
 ];
+
+thread_local! {
+    /// The interpreter, for the jumps LOCKSTEP_TRACE shows.
+    static INTERP: std::cell::RefCell<Option<Rc<Interpreter>>> = const { std::cell::RefCell::new(None) };
+}
 
 /// Addresses of the `bl` instructions in the executable's code that call `target`.
 fn calls_to(dol: &ssbm_disc::Dol, target: u32) -> Vec<u32> {
@@ -136,15 +145,30 @@ fn run() -> ExitCode {
     };
 
     let default_hook = panic::take_hook();
+    let trace = std::env::var_os("LOCKSTEP_TRACE").is_some();
     panic::set_hook(Box::new(move |info| {
-        // Lockstep catches and reports the panics of the checks it runs.
-        if !info.payload().is::<Stop>() && !ssbm_rt::lockstep::checking() {
+        // Lockstep catches and reports the panics of the checks it runs. LOCKSTEP_TRACE shows
+        // where original code was jumping before one.
+        if ssbm_rt::lockstep::checking() {
+            if trace {
+                eprintln!("lockstep panic: {info}");
+                INTERP.with(|i| {
+                    if let Some(i) = &*i.borrow() {
+                        for (from, to) in i.recent_jumps().iter().rev().take(24).rev() {
+                            let name = |a: u32| ssbm_types::describe(a).unwrap_or(format!("{a:#010X}"));
+                            eprintln!("  jump {} -> {}", name(*from), name(*to));
+                        }
+                    }
+                });
+            }
+        } else if !info.payload().is::<Stop>() {
             default_hook(info);
         }
     }));
 
     let ctx = Ctx::new();
     let interp = Rc::new(Interpreter::default());
+    INTERP.with(|i| *i.borrow_mut() = Some(interp.clone()));
     ctx.set_backend(Box::new(RcBackend(interp.clone())));
     ctx.set_names(Box::new(ssbm_types::describe));
     let dol = disc.main_dol().ok();
@@ -168,10 +192,13 @@ fn run() -> ExitCode {
 
     // Ported units replace their original code.
     let before: std::collections::BTreeSet<u32> = ctx.registered().into_iter().collect();
+    // `-unit` in the list leaves that unit (or prefix) out.
+    let covers = |p: &str, unit: &str| {
+        p == "all" || unit == p || unit.starts_with(&format!("{}/", p.trim_end_matches('/')))
+    };
     let units = ssbm_game::register(&ctx, |unit| {
-        ports.iter().any(|p| {
-            p == "all" || unit == p || unit.starts_with(&format!("{}/", p.trim_end_matches('/')))
-        })
+        ports.iter().any(|p| !p.starts_with('-') && covers(p, unit))
+            && !ports.iter().any(|p| p.strip_prefix('-').is_some_and(|p| covers(p, unit)))
     });
     let ported: Vec<u32> = ctx
         .registered()
@@ -391,6 +418,15 @@ fn run() -> ExitCode {
         if progress == last_fields.get() {
             stuck.set(stuck.get() + 1);
             *pcs.borrow_mut().entry(pc).or_default() += 1;
+            // STUCK_TRACE samples the Rust stack at each stalled heartbeat.
+            if std::env::var_os("STUCK_TRACE").is_some() {
+                let trace = std::backtrace::Backtrace::force_capture().to_string();
+                let ports: Vec<&str> = trace
+                    .lines()
+                    .filter_map(|l| l.trim().split_once(": ssbm_game::tu::").map(|x| x.1))
+                    .collect();
+                eprintln!("stalled at {}: {}", ctx.name_of(pc), ports.join(" < "));
+            }
             if stuck.get() >= 8 {
                 let mut hot: Vec<_> = pcs.borrow().iter().map(|(&pc, &n)| (n, pc)).collect();
                 hot.sort_unstable_by(|a, b| b.cmp(a));
