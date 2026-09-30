@@ -34,12 +34,13 @@ FLOATS = {TK.FLOAT, TK.DOUBLE, TK.LONGDOUBLE}
 
 def load_symbols(path):
     syms = []
-    pat = re.compile(r"^(\S+) = (\.?\w+):0x([0-9A-Fa-f]+); // type:(\w+)(?: size:0x([0-9A-Fa-f]+))?.*?scope:(\w+)")
+    # dtk leaves out `scope:` for global symbols.
+    pat = re.compile(r"^(\S+) = (\.?\w+):0x([0-9A-Fa-f]+); // type:(\w+)(?: size:0x([0-9A-Fa-f]+))?(?:.*?scope:(\w+))?")
     for line in open(path):
         m = pat.match(line)
         if m:
             syms.append({"name": m.group(1), "section": m.group(2), "addr": int(m.group(3), 16),
-                         "type": m.group(4), "size": int(m.group(5) or "0", 16), "scope": m.group(6)})
+                         "type": m.group(4), "size": int(m.group(5) or "0", 16), "scope": m.group(6) or "global"})
     return syms
 
 

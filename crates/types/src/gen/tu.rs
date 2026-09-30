@@ -2060,14 +2060,17 @@ pub mod melee__cm__camera {
     #[inline] pub fn lbl_803BCC88(ctx: &Ctx) -> ArrV<'_, i8, 20> { At::new(ctx, 0x803bcc88).field(0) }
     #[inline] pub fn game_camera(ctx: &Ctx) -> Camera<'_> { At::new(ctx, 0x80452c68).field(0) }
     #[inline] pub fn Camera_80029AAC<'a>(ctx: &'a Ctx, bounds: CameraBounds<'a>, transform: CameraTransformState<'a>, speed: f64) -> () { ctx.call(0x80029aac, (bounds, transform, Single(gekko_fp::frsp(speed)), )) }
+    #[inline] pub fn fn_800301D0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) -> () { ctx.call(0x800301d0, (gobj, arg1, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const Camera_80029AAC: u32 = 0x80029aac;
+        pub const fn_800301D0: u32 = 0x800301d0;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
         #[inline] pub fn Camera_80029AAC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CameraBounds<'a>, CameraTransformState<'a>, f64) -> ()) { let (bounds, transform, speed, ): (CameraBounds<'_>, CameraTransformState<'_>, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, bounds, transform, speed.0), ctx); }
+        #[inline] pub fn fn_800301D0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, i32) -> ()) { let (gobj, arg1, ): (HSD_GObj<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj, arg1), ctx); }
     }
 }
 /// Statics of `melee/cm/cmsnap`.
@@ -2085,11 +2088,27 @@ pub mod melee__cm__cmsnap {
 
     }
 }
+/// Statics of `melee/db/dballoc`.
+pub mod melee__db__dballoc {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn db_804D6BA0(ctx: &Ctx) -> UnkFlagStruct<'_> { At::new(ctx, 0x804d6ba0).field(0) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+
+    }
+}
 /// Statics of `melee/db/dbanim`.
 pub mod melee__db__dbanim {
     use super::*;
     use crate::fns::*;
     #[inline] pub fn db_AnimationInfo(ctx: &Ctx) -> db_AnimationInfo_t<'_> { At::new(ctx, 0x8049fe18).field(0) }
+    #[inline] pub fn db_804D6B48(ctx: &Ctx) -> db_804D6B48_t<'_> { At::new(ctx, 0x804d6b48).field(0) }
     /// Addresses of this scope's functions.
     pub mod addr {
 
@@ -2105,14 +2124,26 @@ pub mod melee__db__dbbonus {
     use super::*;
     use crate::fns::*;
     #[inline] pub fn db_TextColors(ctx: &Ctx) -> Arr<'_, db_TextColors_t<'_>, 2> { At::new(ctx, 0x803eae08).field(0) }
+    #[inline] pub fn db_804D6B98(ctx: &Ctx) -> db_804D6B98_t<'_> { At::new(ctx, 0x804d6b98).field(0) }
+    #[inline] pub fn db_804D6B9C(ctx: &Ctx) -> Ptr<'_, db_804D6B9C_t<'_>> { At::new(ctx, 0x804d6b9c).field(0) }
+    #[inline] pub fn fn_80228D18<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80228d18, ()) }
+    #[inline] pub fn fn_80228D38<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80228d38, ()) }
+    #[inline] pub fn fn_80228E54<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32, arg2: i32) -> () { ctx.call(0x80228e54, (arg0, arg1, arg2, )) }
+    #[inline] pub fn fn_8022900C<'a>(ctx: &'a Ctx, arg0: i32) -> () { ctx.call(0x8022900c, (arg0, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
-
+        pub const fn_80228D18: u32 = 0x80228d18;
+        pub const fn_80228D38: u32 = 0x80228d38;
+        pub const fn_80228E54: u32 = 0x80228e54;
+        pub const fn_8022900C: u32 = 0x8022900c;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
-
+        #[inline] pub fn fn_80228D18(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+        #[inline] pub fn fn_80228D38(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+        #[inline] pub fn fn_80228E54(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, i32, i32) -> ()) { let (arg0, arg1, arg2, ): (i32, i32, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0, arg1, arg2), ctx); }
+        #[inline] pub fn fn_8022900C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> ()) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
     }
 }
 /// Statics of `melee/db/dbcamera`.
@@ -2124,14 +2155,51 @@ pub mod melee__db__dbcamera {
     #[inline] pub fn db_CameraInfoDisplay(ctx: &Ctx) -> Ptr<'_, DevText<'_>> { At::new(ctx, 0x804d6b58).field(0) }
     #[inline] pub fn db_CameraInfoDisplayTimer(ctx: &Ctx) -> Val<'_, u8> { At::new(ctx, 0x804d6b5c).field(0) }
     #[inline] pub fn db_ShowCameraInfo(ctx: &Ctx) -> Val<'_, u8> { At::new(ctx, 0x804d6b5d).field(0) }
+    #[inline] pub fn fn_802270C4<'a>(ctx: &'a Ctx, arg0: i32) -> () { ctx.call(0x802270c4, (arg0, )) }
+    #[inline] pub fn fn_8022713C<'a>(ctx: &'a Ctx, arg0: i32) -> () { ctx.call(0x8022713c, (arg0, )) }
+    #[inline] pub fn fn_80227188<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80227188, ()) }
+    #[inline] pub fn fn_802277E8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, port: i32) -> () { ctx.call(0x802277e8, (arg0, port, )) }
+    #[inline] pub fn fn_80227904<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, port: i32) -> () { ctx.call(0x80227904, (camera, port, )) }
+    #[inline] pub fn fn_802279E8<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, camera_pos: Vec<'a>, camera_interest: Vec<'a>, cstick_x: f64, cstick_y: f64) -> () { ctx.call(0x802279e8, (camera, camera_pos, camera_interest, Single(gekko_fp::frsp(cstick_x)), Single(gekko_fp::frsp(cstick_y)), )) }
+    #[inline] pub fn fn_80227B64<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, cstick_x: f64, cstick_y: f64) -> () { ctx.call(0x80227b64, (camera, Single(gekko_fp::frsp(cstick_x)), Single(gekko_fp::frsp(cstick_y)), )) }
+    #[inline] pub fn fn_80227BA8<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, arg1: Vec<'a>, arg2: f64, arg3: f64) -> () { ctx.call(0x80227ba8, (camera, arg1, Single(gekko_fp::frsp(arg2)), Single(gekko_fp::frsp(arg3)), )) }
+    #[inline] pub fn fn_80227CAC<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, cstick_y: f64) -> () { ctx.call(0x80227cac, (camera, Single(gekko_fp::frsp(cstick_y)), )) }
+    #[inline] pub fn fn_80227D38<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, arg1: Vec<'a>, arg2: f64) -> () { ctx.call(0x80227d38, (camera, arg1, Single(gekko_fp::frsp(arg2)), )) }
+    #[inline] pub fn fn_80227EB0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: Vec<'a>, arg2: Vec<'a>, arg8: f64, arg9: f64) -> () { ctx.call(0x80227eb0, (arg0, arg1, arg2, Single(gekko_fp::frsp(arg8)), Single(gekko_fp::frsp(arg9)), )) }
+    #[inline] pub fn fn_80227FE0<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, cstick_x: f64, cstick_y: f64) -> () { ctx.call(0x80227fe0, (camera, Single(gekko_fp::frsp(cstick_x)), Single(gekko_fp::frsp(cstick_y)), )) }
+    #[inline] pub fn fn_80228124<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, arg1: Vec<'a>, arg2: f64, arg3: f64) -> () { ctx.call(0x80228124, (camera, arg1, Single(gekko_fp::frsp(arg2)), Single(gekko_fp::frsp(arg3)), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
-
+        pub const fn_802270C4: u32 = 0x802270c4;
+        pub const fn_8022713C: u32 = 0x8022713c;
+        pub const fn_80227188: u32 = 0x80227188;
+        pub const fn_802277E8: u32 = 0x802277e8;
+        pub const fn_80227904: u32 = 0x80227904;
+        pub const fn_802279E8: u32 = 0x802279e8;
+        pub const fn_80227B64: u32 = 0x80227b64;
+        pub const fn_80227BA8: u32 = 0x80227ba8;
+        pub const fn_80227CAC: u32 = 0x80227cac;
+        pub const fn_80227D38: u32 = 0x80227d38;
+        pub const fn_80227EB0: u32 = 0x80227eb0;
+        pub const fn_80227FE0: u32 = 0x80227fe0;
+        pub const fn_80228124: u32 = 0x80228124;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
-
+        #[inline] pub fn fn_802270C4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> ()) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
+        #[inline] pub fn fn_8022713C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> ()) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
+        #[inline] pub fn fn_80227188(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+        #[inline] pub fn fn_802277E8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, i32) -> ()) { let (arg0, port, ): (HSD_GObj<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0, port), ctx); }
+        #[inline] pub fn fn_80227904(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, i32) -> ()) { let (camera, port, ): (HSD_GObj<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, camera, port), ctx); }
+        #[inline] pub fn fn_802279E8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, Vec<'a>, Vec<'a>, f64, f64) -> ()) { let (camera, camera_pos, camera_interest, cstick_x, cstick_y, ): (HSD_GObj<'_>, Vec<'_>, Vec<'_>, Single, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, camera, camera_pos, camera_interest, cstick_x.0, cstick_y.0), ctx); }
+        #[inline] pub fn fn_80227B64(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, f64, f64) -> ()) { let (camera, cstick_x, cstick_y, ): (HSD_GObj<'_>, Single, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, camera, cstick_x.0, cstick_y.0), ctx); }
+        #[inline] pub fn fn_80227BA8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, Vec<'a>, f64, f64) -> ()) { let (camera, arg1, arg2, arg3, ): (HSD_GObj<'_>, Vec<'_>, Single, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, camera, arg1, arg2.0, arg3.0), ctx); }
+        #[inline] pub fn fn_80227CAC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, f64) -> ()) { let (camera, cstick_y, ): (HSD_GObj<'_>, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, camera, cstick_y.0), ctx); }
+        #[inline] pub fn fn_80227D38(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, Vec<'a>, f64) -> ()) { let (camera, arg1, arg2, ): (HSD_GObj<'_>, Vec<'_>, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, camera, arg1, arg2.0), ctx); }
+        #[inline] pub fn fn_80227EB0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, Vec<'a>, Vec<'a>, f64, f64) -> ()) { let (arg0, arg1, arg2, arg8, arg9, ): (HSD_GObj<'_>, Vec<'_>, Vec<'_>, Single, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0, arg1, arg2, arg8.0, arg9.0), ctx); }
+        #[inline] pub fn fn_80227FE0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, f64, f64) -> ()) { let (camera, cstick_x, cstick_y, ): (HSD_GObj<'_>, Single, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, camera, cstick_x.0, cstick_y.0), ctx); }
+        #[inline] pub fn fn_80228124(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, Vec<'a>, f64, f64) -> ()) { let (camera, arg1, arg2, arg3, ): (HSD_GObj<'_>, Vec<'_>, Single, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, camera, arg1, arg2.0, arg3.0), ctx); }
     }
 }
 /// Statics of `melee/db/dbcpu`.
@@ -2205,6 +2273,21 @@ pub mod melee__db__dbitem {
 
     }
 }
+/// Statics of `melee/db/dbscreenshot`.
+pub mod melee__db__dbscreenshot {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_802289F8<'a>(ctx: &'a Ctx, arg0: Val<'a, i8>, arg1: Addr<'a>, arg2: i32) -> i32 { ctx.call(0x802289f8, (arg0, arg1, arg2, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_802289F8: u32 = 0x802289f8;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_802289F8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Val<'a, i8>, Addr<'a>, i32) -> i32) { let (arg0, arg1, arg2, ): (Val<'_, i8>, Addr<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0, arg1, arg2), ctx); }
+    }
+}
 /// Statics of `melee/db/dbsound`.
 pub mod melee__db__dbsound {
     use super::*;
@@ -2218,6 +2301,7 @@ pub mod melee__db__dbsound {
     #[inline] pub fn db_SoundRelated_6B70(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d6b70).field(0) }
     #[inline] pub fn db_SoundRelated_6B74(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d6b74).field(0) }
     #[inline] pub fn db_SoundInfoText(ctx: &Ctx) -> Ptr<'_, DevText<'_>> { At::new(ctx, 0x804d6b78).field(0) }
+    #[inline] pub fn db_804D6B7C(ctx: &Ctx) -> Ptr<'_, HSD_GObj<'_>> { At::new(ctx, 0x804d6b7c).field(0) }
     /// Addresses of this scope's functions.
     pub mod addr {
 
@@ -2340,6 +2424,39 @@ pub mod melee__ft__ft_0881 {
     pub mod abi {
         use super::*;
         #[inline] pub fn ft_80089118(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, StaleMoveTable<'a>, i32, i32) -> f64) { let (table, move_id, arg2, ): (StaleMoveTable<'_>, i32, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, table, move_id, arg2), ctx); }
+    }
+}
+/// Statics of `melee/ft/ft_0899`.
+pub mod melee__ft__ft_0899 {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_8008998C<'a>(ctx: &'a Ctx, fp: Fighter<'a>, ik: IKState<'a>, normal: Vec<'a>) -> i32 { ctx.call(0x8008998c, (fp, ik, normal, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_8008998C: u32 = 0x8008998c;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_8008998C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Fighter<'a>, IKState<'a>, Vec<'a>) -> i32) { let (fp, ik, normal, ): (Fighter<'_>, IKState<'_>, Vec<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, fp, ik, normal), ctx); }
+    }
+}
+/// Statics of `melee/ft/ft_0C31`.
+pub mod melee__ft__ft_0C31 {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_800C63BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800c63bc, (gobj, )) }
+    #[inline] pub fn fn_800C63E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800c63e0, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_800C63BC: u32 = 0x800c63bc;
+        pub const fn_800C63E0: u32 = 0x800c63e0;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_800C63BC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_800C63E0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
     }
 }
 /// Statics of `melee/ft/ftaction`.
@@ -2719,6 +2836,7 @@ pub mod melee__ft__ftdynamics {
 pub mod melee__ft__ftmaterial {
     use super::*;
     use crate::fns::*;
+    #[inline] pub fn ftMaterial_803C69D0(ctx: &Ctx) -> _HSD_TevDesc<'_> { At::new(ctx, 0x803c69d0).field(0) }
     #[inline] pub fn ftMaterial_803C6A44(ctx: &Ctx) -> _HSD_TECnst<'_> { At::new(ctx, 0x803c6a44).field(0) }
     /// Addresses of this scope's functions.
     pub mod addr {
@@ -3148,6 +3266,21 @@ pub mod melee__ft__kinds__ftCommon__ftCo_0A01 {
         #[inline] pub fn ftCo_800B33B0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Fighter<'a>) -> ()) { let (fp, ): (Fighter<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, fp), ctx); }
     }
 }
+/// Statics of `melee/ft/kinds/ftCommon/ftCo_0D95`.
+pub mod melee__ft__kinds__ftCommon__ftCo_0D95 {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn lbl_803B7510(ctx: &Ctx) -> Vec<'_> { At::new(ctx, 0x803b7510).field(0) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+
+    }
+}
 /// Statics of `melee/ft/kinds/ftCommon/ftCo_Attack1`.
 pub mod melee__ft__kinds__ftCommon__ftCo_Attack1 {
     use super::*;
@@ -3301,6 +3434,21 @@ pub mod melee__ft__kinds__ftCommon__ftCo_AttackS4 {
         #[inline] pub fn doEnter(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, f64) -> ()) { let (gobj, stick_angle, ): (HSD_GObj<'_>, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj, stick_angle.0), ctx); }
     }
 }
+/// Statics of `melee/ft/kinds/ftCommon/ftCo_Barrel`.
+pub mod melee__ft__kinds__ftCommon__ftCo_Barrel {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_800C9290<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800c9290, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_800C9290: u32 = 0x800c9290;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_800C9290(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+    }
+}
 /// Statics of `melee/ft/kinds/ftCommon/ftCo_BarrelWait`.
 pub mod melee__ft__kinds__ftCommon__ftCo_BarrelWait {
     use super::*;
@@ -3314,6 +3462,42 @@ pub mod melee__ft__kinds__ftCommon__ftCo_BarrelWait {
     pub mod abi {
         use super::*;
         #[inline] pub fn ftCo_8009EC44(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+    }
+}
+/// Statics of `melee/ft/kinds/ftCommon/ftCo_CapturePulled`.
+pub mod melee__ft__kinds__ftCommon__ftCo_CapturePulled {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_800DAECC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800daecc, (gobj, )) }
+    #[inline] pub fn fn_800DAEEC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800daeec, (gobj, )) }
+    #[inline] pub fn fn_800DB230<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800db230, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_800DAECC: u32 = 0x800daecc;
+        pub const fn_800DAEEC: u32 = 0x800daeec;
+        pub const fn_800DB230: u32 = 0x800db230;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_800DAECC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_800DAEEC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_800DB230(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+    }
+}
+/// Statics of `melee/ft/kinds/ftCommon/ftCo_CaptureWait`.
+pub mod melee__ft__kinds__ftCommon__ftCo_CaptureWait {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_800DBBF8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800dbbf8, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_800DBBF8: u32 = 0x800dbbf8;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_800DBBF8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
     }
 }
 /// Statics of `melee/ft/kinds/ftCommon/ftCo_CargoThrow`.
@@ -3350,6 +3534,21 @@ pub mod melee__ft__kinds__ftCommon__ftCo_CargoWalk {
     pub mod abi {
         use super::*;
         #[inline] pub fn ftCo_8009B6C8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, f64) -> ()) { let (gobj, anim_start, ): (HSD_GObj<'_>, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj, anim_start.0), ctx); }
+    }
+}
+/// Statics of `melee/ft/kinds/ftCommon/ftCo_Catch`.
+pub mod melee__ft__kinds__ftCommon__ftCo_Catch {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_800D8BFC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800d8bfc, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_800D8BFC: u32 = 0x800d8bfc;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_800D8BFC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
     }
 }
 /// Statics of `melee/ft/kinds/ftCommon/ftCo_CliffAttack`.
@@ -3753,6 +3952,66 @@ pub mod melee__ft__kinds__ftCommon__ftCo_JumpAerial {
         #[inline] pub fn ftNs_JumpAerial_Phys_Cb(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
     }
 }
+/// Statics of `melee/ft/kinds/ftCommon/ftCo_KinokoGiantEnd`.
+pub mod melee__ft__kinds__ftCommon__ftCo_KinokoGiantEnd {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_800D1C40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800d1c40, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_800D1C40: u32 = 0x800d1c40;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_800D1C40(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+    }
+}
+/// Statics of `melee/ft/kinds/ftCommon/ftCo_KinokoGiantStart`.
+pub mod melee__ft__kinds__ftCommon__ftCo_KinokoGiantStart {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_800D17FC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800d17fc, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_800D17FC: u32 = 0x800d17fc;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_800D17FC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+    }
+}
+/// Statics of `melee/ft/kinds/ftCommon/ftCo_KinokoSmallEnd`.
+pub mod melee__ft__kinds__ftCommon__ftCo_KinokoSmallEnd {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_800D2530<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800d2530, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_800D2530: u32 = 0x800d2530;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_800D2530(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+    }
+}
+/// Statics of `melee/ft/kinds/ftCommon/ftCo_KinokoSmallStart`.
+pub mod melee__ft__kinds__ftCommon__ftCo_KinokoSmallStart {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_800D20EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800d20ec, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_800D20EC: u32 = 0x800d20ec;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_800D20EC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+    }
+}
 /// Statics of `melee/ft/kinds/ftCommon/ftCo_Ottotto`.
 pub mod melee__ft__kinds__ftCommon__ftCo_Ottotto {
     use super::*;
@@ -3861,6 +4120,21 @@ pub mod melee__ft__kinds__ftCommon__ftCo_SquatRv {
         #[inline] pub fn ftCo_SquatRv_Enter(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
     }
 }
+/// Statics of `melee/ft/kinds/ftCommon/ftCo_SquatWait`.
+pub mod melee__ft__kinds__ftCommon__ftCo_SquatWait {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_800D62C4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800d62c4, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_800D62C4: u32 = 0x800d62c4;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_800D62C4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+    }
+}
 /// Statics of `melee/ft/kinds/ftCommon/ftCo_StopCeil`.
 pub mod melee__ft__kinds__ftCommon__ftCo_StopCeil {
     use super::*;
@@ -3958,6 +4232,36 @@ pub mod melee__ft__kinds__ftCommon__ftpickupitem {
     pub mod abi {
         use super::*;
         #[inline] pub fn ftpickupitem_80094B6C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, HSD_GObj<'a>) -> ()) { let (gobj, item_gobj, ): (HSD_GObj<'_>, HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj, item_gobj), ctx); }
+    }
+}
+/// Statics of `melee/ft/kinds/ftCrazyHand/ftcrazyhandfingerbeam0`.
+pub mod melee__ft__kinds__ftCrazyHand__ftcrazyhandfingerbeam0 {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_801588B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801588b8, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_801588B8: u32 = 0x801588b8;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_801588B8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+    }
+}
+/// Statics of `melee/ft/kinds/ftCrazyHand/ftcrazyhandsweepwait`.
+pub mod melee__ft__kinds__ftCrazyHand__ftcrazyhandsweepwait {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_801577B4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801577b4, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_801577B4: u32 = 0x801577b4;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_801577B4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
     }
 }
 /// Statics of `melee/ft/kinds/ftCrazyHand/ftcrazyhandwait10`.
@@ -4210,6 +4514,24 @@ pub mod melee__ft__kinds__ftGameWatch__ftgamewatchspecials {
         #[inline] pub fn ftGw_SpecialAirS_AirToGround(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
     }
 }
+/// Statics of `melee/ft/kinds/ftKirby/ftkirbyattackdash`.
+pub mod melee__ft__kinds__ftKirby__ftkirbyattackdash {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_800F1FDC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800f1fdc, (gobj, )) }
+    #[inline] pub fn fn_800F20C4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800f20c4, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_800F1FDC: u32 = 0x800f1fdc;
+        pub const fn_800F20C4: u32 = 0x800f20c4;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_800F1FDC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_800F20C4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+    }
+}
 /// Statics of `melee/ft/kinds/ftKirby/ftkirbyspecialfox`.
 pub mod melee__ft__kinds__ftKirby__ftkirbyspecialfox {
     use super::*;
@@ -4224,6 +4546,84 @@ pub mod melee__ft__kinds__ftKirby__ftkirbyspecialfox {
     pub mod abi {
         use super::*;
 
+    }
+}
+/// Statics of `melee/ft/kinds/ftKirby/ftkirbyspecialgamewatch`.
+pub mod melee__ft__kinds__ftKirby__ftkirbyspecialgamewatch {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_8010CE5C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8010ce5c, (gobj, )) }
+    #[inline] pub fn fn_8010CFB0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8010cfb0, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_8010CE5C: u32 = 0x8010ce5c;
+        pub const fn_8010CFB0: u32 = 0x8010cfb0;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_8010CE5C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_8010CFB0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+    }
+}
+/// Statics of `melee/ft/kinds/ftKirby/ftkirbyspecialhi`.
+pub mod melee__ft__kinds__ftKirby__ftkirbyspecialhi {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_800F21E8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800f21e8, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_800F21E8: u32 = 0x800f21e8;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_800F21E8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+    }
+}
+/// Statics of `melee/ft/kinds/ftKirby/ftkirbyspecialiceclimber`.
+pub mod melee__ft__kinds__ftKirby__ftkirbyspecialiceclimber {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_801090D4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801090d4, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_801090D4: u32 = 0x801090d4;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_801090D4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+    }
+}
+/// Statics of `melee/ft/kinds/ftKirby/ftkirbyspecialluigi`.
+pub mod melee__ft__kinds__ftKirby__ftkirbyspecialluigi {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_800F98F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800f98f4, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_800F98F4: u32 = 0x800f98f4;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_800F98F4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+    }
+}
+/// Statics of `melee/ft/kinds/ftKirby/ftkirbyspecialmars`.
+pub mod melee__ft__kinds__ftKirby__ftkirbyspecialmars {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_8010B2E8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8010b2e8, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_8010B2E8: u32 = 0x8010b2e8;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_8010B2E8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
     }
 }
 /// Statics of `melee/ft/kinds/ftKirby/ftkirbyspecialmewtwo`.
@@ -4242,20 +4642,81 @@ pub mod melee__ft__kinds__ftKirby__ftkirbyspecialmewtwo {
 
     }
 }
+/// Statics of `melee/ft/kinds/ftKirby/ftkirbyspecialn`.
+pub mod melee__ft__kinds__ftKirby__ftkirbyspecialn {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_800F6178<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800f6178, (gobj, )) }
+    #[inline] pub fn fn_800F6210<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800f6210, (gobj, )) }
+    #[inline] pub fn fn_800F6280<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800f6280, (gobj, )) }
+    #[inline] pub fn fn_800F6318<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800f6318, (gobj, )) }
+    #[inline] pub fn fn_800F64C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, anim_start: f64) -> () { ctx.call(0x800f64c8, (gobj, Single(gekko_fp::frsp(anim_start)), )) }
+    #[inline] pub fn fn_800F6AC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800f6ac8, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_800F6178: u32 = 0x800f6178;
+        pub const fn_800F6210: u32 = 0x800f6210;
+        pub const fn_800F6280: u32 = 0x800f6280;
+        pub const fn_800F6318: u32 = 0x800f6318;
+        pub const fn_800F64C8: u32 = 0x800f64c8;
+        pub const fn_800F6AC8: u32 = 0x800f6ac8;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_800F6178(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_800F6210(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_800F6280(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_800F6318(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_800F64C8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, f64) -> ()) { let (gobj, anim_start, ): (HSD_GObj<'_>, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj, anim_start.0), ctx); }
+        #[inline] pub fn fn_800F6AC8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+    }
+}
+/// Statics of `melee/ft/kinds/ftKirby/ftkirbyspecialpeach`.
+pub mod melee__ft__kinds__ftKirby__ftkirbyspecialpeach {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_8010C288<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8010c288, (gobj, )) }
+    #[inline] pub fn fn_8010C344<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> () { ctx.call(0x8010c344, (arg0, )) }
+    #[inline] pub fn fn_8010C44C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8010c44c, (gobj, )) }
+    #[inline] pub fn fn_8010CD88<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8010cd88, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_8010C288: u32 = 0x8010c288;
+        pub const fn_8010C344: u32 = 0x8010c344;
+        pub const fn_8010C44C: u32 = 0x8010c44c;
+        pub const fn_8010CD88: u32 = 0x8010cd88;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_8010C288(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_8010C344(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (arg0, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
+        #[inline] pub fn fn_8010C44C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_8010CD88(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+    }
+}
 /// Statics of `melee/ft/kinds/ftKirby/ftkirbyspecialpurin`.
 pub mod melee__ft__kinds__ftKirby__ftkirbyspecialpurin {
     use super::*;
     use crate::fns::*;
     #[inline] pub fn ftKb_Init_803CB710(ctx: &Ctx) -> ArrV<'_, F32, 4> { At::new(ctx, 0x803cb710).field(0) }
     #[inline] pub fn ftKb_Init_803CB720(ctx: &Ctx) -> ArrV<'_, F32, 4> { At::new(ctx, 0x803cb720).field(0) }
+    #[inline] pub fn fn_80100E0C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80100e0c, (gobj, )) }
+    #[inline] pub fn fn_80100F60<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80100f60, (gobj, )) }
+    #[inline] pub fn fn_80105978<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80105978, (gobj, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
-
+        pub const fn_80100E0C: u32 = 0x80100e0c;
+        pub const fn_80100F60: u32 = 0x80100f60;
+        pub const fn_80105978: u32 = 0x80105978;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
-
+        #[inline] pub fn fn_80100E0C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_80100F60(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_80105978(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
     }
 }
 /// Statics of `melee/ft/kinds/ftKirby/ftkirbyspecialseak`.
@@ -4263,14 +4724,90 @@ pub mod melee__ft__kinds__ftKirby__ftkirbyspecialseak {
     use super::*;
     use crate::fns::*;
     #[inline] pub fn ftKb_Init_803CB770(ctx: &Ctx) -> ArrV<'_, F32, 9> { At::new(ctx, 0x803cb770).field(0) }
+    #[inline] pub fn fn_80106DB0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80106db0, (gobj, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
-
+        pub const fn_80106DB0: u32 = 0x80106db0;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
-
+        #[inline] pub fn fn_80106DB0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+    }
+}
+/// Statics of `melee/ft/kinds/ftKirby/ftkirbyspecialyoshi`.
+pub mod melee__ft__kinds__ftKirby__ftkirbyspecialyoshi {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_801095DC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801095dc, (gobj, )) }
+    #[inline] pub fn fn_80109680<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80109680, (gobj, )) }
+    #[inline] pub fn fn_80109714<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80109714, (gobj, )) }
+    #[inline] pub fn fn_801097B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801097b8, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_801095DC: u32 = 0x801095dc;
+        pub const fn_80109680: u32 = 0x80109680;
+        pub const fn_80109714: u32 = 0x80109714;
+        pub const fn_801097B8: u32 = 0x801097b8;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_801095DC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_80109680(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_80109714(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_801097B8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+    }
+}
+/// Statics of `melee/ft/kinds/ftKirby/ftkirbyspecialzelda`.
+pub mod melee__ft__kinds__ftKirby__ftkirbyspecialzelda {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_80105A34<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80105a34, (gobj, )) }
+    #[inline] pub fn fn_80105AB0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80105ab0, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_80105A34: u32 = 0x80105a34;
+        pub const fn_80105AB0: u32 = 0x80105ab0;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_80105A34(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_80105AB0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+    }
+}
+/// Statics of `melee/ft/kinds/ftKirby/ftkirbyyoshiegg`.
+pub mod melee__ft__kinds__ftKirby__ftkirbyyoshiegg {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_8010AA64<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8010aa64, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_8010AA64: u32 = 0x8010aa64;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_8010AA64(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+    }
+}
+/// Statics of `melee/ft/kinds/ftKoopa/ftkoopaspeciallw`.
+pub mod melee__ft__kinds__ftKoopa__ftkoopaspeciallw {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_80134518<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80134518, (gobj, )) }
+    #[inline] pub fn fn_80134590<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80134590, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_80134518: u32 = 0x80134518;
+        pub const fn_80134590: u32 = 0x80134590;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_80134518(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_80134590(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
     }
 }
 /// Statics of `melee/ft/kinds/ftLink/ftlinkattackair`.
@@ -4524,6 +5061,7 @@ pub mod melee__ft__kinds__ftNana__ftnanaspecialhi {
     use super::*;
     use crate::fns::*;
     #[inline] pub fn ftNn_Init_801230D0<'a>(ctx: &'a Ctx, nana_gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x801230d0, (nana_gobj, )) }
+    #[inline] pub fn fn_80123218<'a>(ctx: &'a Ctx, nana_gobj: HSD_GObj<'a>) -> () { ctx.call(0x80123218, (nana_gobj, )) }
     #[inline] pub fn ftNn_Init_801233F8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801233f8, (gobj, )) }
     #[inline] pub fn ftNn_Init_80123720<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80123720, (gobj, )) }
     #[inline] pub fn ftNn_Init_8012378C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8012378c, (gobj, )) }
@@ -4531,6 +5069,7 @@ pub mod melee__ft__kinds__ftNana__ftnanaspecialhi {
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const ftNn_Init_801230D0: u32 = 0x801230d0;
+        pub const fn_80123218: u32 = 0x80123218;
         pub const ftNn_Init_801233F8: u32 = 0x801233f8;
         pub const ftNn_Init_80123720: u32 = 0x80123720;
         pub const ftNn_Init_8012378C: u32 = 0x8012378c;
@@ -4540,6 +5079,7 @@ pub mod melee__ft__kinds__ftNana__ftnanaspecialhi {
     pub mod abi {
         use super::*;
         #[inline] pub fn ftNn_Init_801230D0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (nana_gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, nana_gobj), ctx); }
+        #[inline] pub fn fn_80123218(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (nana_gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, nana_gobj), ctx); }
         #[inline] pub fn ftNn_Init_801233F8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn ftNn_Init_80123720(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn ftNn_Init_8012378C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
@@ -4829,8 +5369,10 @@ pub mod melee__ft__kinds__ftSamus__ftsamusspecialn {
 pub mod melee__ft__kinds__ftSeak__ftseakspecialhi {
     use super::*;
     use crate::fns::*;
+    #[inline] pub fn fn_80112ED8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80112ed8, (gobj, )) }
     #[inline] pub fn ftSk_SpecialHi_80112F48<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80112f48, (gobj, )) }
     #[inline] pub fn ftSk_SpecialHi_80112FA8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80112fa8, (gobj, )) }
+    #[inline] pub fn fn_80113038<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80113038, (gobj, )) }
     #[inline] pub fn ftSk_SpecialHi_80113324<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> () { ctx.call(0x80113324, (arg0, )) }
     #[inline] pub fn ftSk_SpecialHi_80113390<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> () { ctx.call(0x80113390, (arg0, )) }
     #[inline] pub fn ftSk_SpecialHi_8011374C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8011374c, (gobj, )) }
@@ -4842,8 +5384,10 @@ pub mod melee__ft__kinds__ftSeak__ftseakspecialhi {
     #[inline] pub fn ftSk_SpecialHi_80113F68<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80113f68, (gobj, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
+        pub const fn_80112ED8: u32 = 0x80112ed8;
         pub const ftSk_SpecialHi_80112F48: u32 = 0x80112f48;
         pub const ftSk_SpecialHi_80112FA8: u32 = 0x80112fa8;
+        pub const fn_80113038: u32 = 0x80113038;
         pub const ftSk_SpecialHi_80113324: u32 = 0x80113324;
         pub const ftSk_SpecialHi_80113390: u32 = 0x80113390;
         pub const ftSk_SpecialHi_8011374C: u32 = 0x8011374c;
@@ -4857,8 +5401,10 @@ pub mod melee__ft__kinds__ftSeak__ftseakspecialhi {
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
+        #[inline] pub fn fn_80112ED8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn ftSk_SpecialHi_80112F48(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn ftSk_SpecialHi_80112FA8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_80113038(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn ftSk_SpecialHi_80113324(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (arg0, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn ftSk_SpecialHi_80113390(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (arg0, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn ftSk_SpecialHi_8011374C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
@@ -4868,6 +5414,27 @@ pub mod melee__ft__kinds__ftSeak__ftseakspecialhi {
         #[inline] pub fn ftSk_SpecialHi_80113E40(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn ftSk_SpecialHi_80113EAC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn ftSk_SpecialHi_80113F68(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+    }
+}
+/// Statics of `melee/ft/kinds/ftSeak/ftseakspeciallw`.
+pub mod melee__ft__kinds__ftSeak__ftseakspeciallw {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_80114034<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80114034, (gobj, )) }
+    #[inline] pub fn fn_801140B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801140b0, (gobj, )) }
+    #[inline] pub fn fn_8011412C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8011412c, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_80114034: u32 = 0x80114034;
+        pub const fn_801140B0: u32 = 0x801140b0;
+        pub const fn_8011412C: u32 = 0x8011412c;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_80114034(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_801140B0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_8011412C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
     }
 }
 /// Statics of `melee/ft/kinds/ftSeak/ftseakspecialn`.
@@ -4893,14 +5460,17 @@ pub mod melee__ft__kinds__ftSeak__ftseakspecialn {
 pub mod melee__ft__kinds__ftYoshi__ftyoshispeciallw {
     use super::*;
     use crate::fns::*;
+    #[inline] pub fn fn_8012E644<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8012e644, (gobj, )) }
     #[inline] pub fn ftYs_SpecialS_8012EAD8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8012ead8, (gobj, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
+        pub const fn_8012E644: u32 = 0x8012e644;
         pub const ftYs_SpecialS_8012EAD8: u32 = 0x8012ead8;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
+        #[inline] pub fn fn_8012E644(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn ftYs_SpecialS_8012EAD8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
     }
 }
@@ -4908,14 +5478,20 @@ pub mod melee__ft__kinds__ftYoshi__ftyoshispeciallw {
 pub mod melee__ft__kinds__ftYoshi__ftyoshispecialn {
     use super::*;
     use crate::fns::*;
+    #[inline] pub fn fn_8012CEE0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8012cee0, (gobj, )) }
+    #[inline] pub fn fn_8012CF7C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8012cf7c, (gobj, )) }
     #[inline] pub fn ftYs_SpecialS_8012DF00<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8012df00, (gobj, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
+        pub const fn_8012CEE0: u32 = 0x8012cee0;
+        pub const fn_8012CF7C: u32 = 0x8012cf7c;
         pub const ftYs_SpecialS_8012DF00: u32 = 0x8012df00;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
+        #[inline] pub fn fn_8012CEE0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_8012CF7C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn ftYs_SpecialS_8012DF00(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
     }
 }
@@ -4941,9 +5517,67 @@ pub mod melee__ft__kinds__ftYoshi__ftyoshispecials {
 pub mod melee__gm__gm_1601 {
     use super::*;
     use crate::fns::*;
+    #[inline] pub fn lbl_803B75F8(ctx: &Ctx) -> ArrV<'_, F32, 33> { At::new(ctx, 0x803b75f8).field(0) }
+    #[inline] pub fn lbl_803B767C(ctx: &Ctx) -> ArrV<'_, F32, 33> { At::new(ctx, 0x803b767c).field(0) }
+    #[inline] pub fn lbl_803B7700(ctx: &Ctx) -> ArrV<'_, F32, 33> { At::new(ctx, 0x803b7700).field(0) }
+    #[inline] pub fn lbl_803B7784(ctx: &Ctx) -> ArrV<'_, F32, 33> { At::new(ctx, 0x803b7784).field(0) }
+    #[inline] pub fn lbl_803B7808(ctx: &Ctx) -> ArrV<'_, i16, 30> { At::new(ctx, 0x803b7808).field(0) }
+    #[inline] pub fn lbl_803B7844(ctx: &Ctx) -> ArrV<'_, u8, 32> { At::new(ctx, 0x803b7844).field(0) }
+    #[inline] pub fn lbl_803B7864(ctx: &Ctx) -> Arr<'_, _GXColor<'_>, 9> { At::new(ctx, 0x803b7864).field(0) }
     #[inline] pub fn selkind_to_ckind_map(ctx: &Ctx) -> ArrV<'_, u8, 28> { At::new(ctx, 0x803b7888).field(0) }
     #[inline] pub fn ckind_to_selkind_map(ctx: &Ctx) -> ArrV<'_, u8, 33> { At::new(ctx, 0x803b78a4).field(0) }
+    #[inline] pub fn lbl_803B78C8(ctx: &Ctx) -> Arr<'_, UnlockableCharacterData<'_>, 11> { At::new(ctx, 0x803b78c8).field(0) }
+    #[inline] pub fn lbl_803B790C(ctx: &Ctx) -> Arr<'_, ArrV<'_, u8, 3>, 11> { At::new(ctx, 0x803b790c).field(0) }
+    #[inline] pub fn lbl_803B7930(ctx: &Ctx) -> Arr<'_, Vec2<'_>, 9> { At::new(ctx, 0x803b7930).field(0) }
+    #[inline] pub fn lbl_803B7978(ctx: &Ctx) -> ArrV<'_, i16, 34> { At::new(ctx, 0x803b7978).field(0) }
+    #[inline] pub fn lbl_803B79BC(ctx: &Ctx) -> ArrV<'_, i16, 34> { At::new(ctx, 0x803b79bc).field(0) }
+    #[inline] pub fn lbl_803B7A00(ctx: &Ctx) -> ArrV<'_, i16, 34> { At::new(ctx, 0x803b7a00).field(0) }
+    #[inline] pub fn lbl_803D5168(ctx: &Ctx) -> Arr<'_, lbl_803D5168_t<'_>, 28> { At::new(ctx, 0x803d5168).field(0) }
+    #[inline] pub fn lbl_803D51A0(ctx: &Ctx) -> Arr<'_, lbl_803D51A0_t<'_>, 26> { At::new(ctx, 0x803d51a0).field(0) }
+    #[inline] pub fn lbl_803D53A8(ctx: &Ctx) -> Arr<'_, ResultAnimEntry<'_>, 27> { At::new(ctx, 0x803d53a8).field(0) }
     #[inline] pub fn ckind_victory_themes(ctx: &Ctx) -> Arr<'_, VictoryTheme<'_>, 27> { At::new(ctx, 0x803d5480).field(0) }
+    #[inline] pub fn lbl_8046B378(ctx: &Ctx) -> lbl_8046B378_t<'_> { At::new(ctx, 0x8046b378).field(0) }
+    #[inline] pub fn lbl_804D6598(ctx: &Ctx) -> Val<'_, i8> { At::new(ctx, 0x804d6598).field(0) }
+    #[inline] pub fn lbl_804D659A(ctx: &Ctx) -> Val<'_, u16> { At::new(ctx, 0x804d659a).field(0) }
+    #[inline] pub fn fn_80166A8C<'a>(ctx: &'a Ctx, src: Vec<'a>, dst: Vec<'a>) -> f64 { ctx.call(0x80166a8c, (src, dst, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_80166A8C: u32 = 0x80166a8c;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_80166A8C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>, Vec<'a>) -> f64) { let (src, dst, ): (Vec<'_>, Vec<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, src, dst), ctx); }
+    }
+}
+/// Statics of `melee/gm/gm_16A2`.
+pub mod melee__gm__gm_16A2 {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn lbl_8046B488(ctx: &Ctx) -> lbl_8046B488_t<'_> { At::new(ctx, 0x8046b488).field(0) }
+    #[inline] pub fn lbl_8046B668(ctx: &Ctx) -> lbl_8046B668_t<'_> { At::new(ctx, 0x8046b668).field(0) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+
+    }
+}
+/// Statics of `melee/gm/gm_16F1`.
+pub mod melee__gm__gm_16F1 {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn lbl_803B7A60(ctx: &Ctx) -> lbl_803B7A60_t<'_> { At::new(ctx, 0x803b7a60).field(0) }
+    #[inline] pub fn lbl_803B7AD0(ctx: &Ctx) -> Arr<'_, lbl_803B7AD0_t<'_>, 11> { At::new(ctx, 0x803b7ad0).field(0) }
+    #[inline] pub fn lbl_803D5648(ctx: &Ctx) -> ArrV<'_, i32, 257> { At::new(ctx, 0x803d5648).field(0) }
+    #[inline] pub fn lbl_803D5A4C(ctx: &Ctx) -> gm_16F1_lbl_803D5A4C_t<'_> { At::new(ctx, 0x803d5a4c).field(0) }
+    #[inline] pub fn lbl_8046DBC8(ctx: &Ctx) -> lbl_8046DBC8_t<'_> { At::new(ctx, 0x8046dbc8).field(0) }
+    #[inline] pub fn lbl_804D65A0(ctx: &Ctx) -> lbl_804D65A0_t<'_> { At::new(ctx, 0x804d65a0).field(0) }
+    #[inline] pub fn lbl_804D65A8(ctx: &Ctx) -> ArrV<'_, u8, 6> { At::new(ctx, 0x804d65a8).field(0) }
+    #[inline] pub fn lbl_804D65B0(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d65b0).field(0) }
     /// Addresses of this scope's functions.
     pub mod addr {
 
@@ -4958,6 +5592,8 @@ pub mod melee__gm__gm_1601 {
 pub mod melee__gm__gm_1736 {
     use super::*;
     use crate::fns::*;
+    #[inline] pub fn lbl_803D6450(ctx: &Ctx) -> Arr<'_, lbl_803D6450_t<'_>, 7> { At::new(ctx, 0x803d6450).field(0) }
+    #[inline] pub fn lbl_803D646C(ctx: &Ctx) -> Arr<'_, lbl_803D646C_t<'_>, 7> { At::new(ctx, 0x803d646c).field(0) }
     #[inline] pub fn challenger_data(ctx: &Ctx) -> ChallengerData<'_> { At::new(ctx, 0x8046dbd8).field(0) }
     /// Addresses of this scope's functions.
     pub mod addr {
@@ -4989,13 +5625,160 @@ pub mod melee__gm__gm_1798 {
 
     }
 }
+/// Statics of `melee/gm/gm_17BA`.
+pub mod melee__gm__gm_17BA {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn lbl_803D79D0(ctx: &Ctx) -> ArrP<'_, Val<'_, i8>, 4> { At::new(ctx, 0x803d79d0).field(0) }
+    #[inline] pub fn lbl_803D79E0(ctx: &Ctx) -> ArrP<'_, Val<'_, i8>, 4> { At::new(ctx, 0x803d79e0).field(0) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+
+    }
+}
+/// Statics of `melee/gm/gm_17C0`.
+pub mod melee__gm__gm_17C0 {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn lbl_803B7C08(ctx: &Ctx) -> Arr<'_, ArrV<'_, u8, 5>, 3> { At::new(ctx, 0x803b7c08).field(0) }
+    #[inline] pub fn lbl_804706C0(ctx: &Ctx) -> lbl_804706C0_t<'_> { At::new(ctx, 0x804706c0).field(0) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+
+    }
+}
+/// Statics of `melee/gm/gm_17DB`.
+pub mod melee__gm__gm_17DB {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn lbl_804706D8(ctx: &Ctx) -> Arr<'_, lbl_804706D8_t<'_>, 12> { At::new(ctx, 0x804706d8).field(0) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+
+    }
+}
+/// Statics of `melee/gm/gm_17E4`.
+pub mod melee__gm__gm_17E4 {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn lbl_80472C30(ctx: &Ctx) -> UnkAdventureData<'_> { At::new(ctx, 0x80472c30).field(0) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+
+    }
+}
+/// Statics of `melee/gm/gm_17EB`.
+pub mod melee__gm__gm_17EB {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn lbl_80472CB0(ctx: &Ctx) -> ArrV<'_, u8, 120> { At::new(ctx, 0x80472cb0).field(0) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+
+    }
+}
+/// Statics of `melee/gm/gm_180A`.
+pub mod melee__gm__gm_180A {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn lbl_80472E48(ctx: &Ctx) -> lbl_80472E48_t<'_> { At::new(ctx, 0x80472e48).field(0) }
+    #[inline] pub fn lbl_80472EC8(ctx: &Ctx) -> ArrV<'_, i32, 4> { At::new(ctx, 0x80472ec8).field(0) }
+    #[inline] pub fn lbl_804D65C8(ctx: &Ctx) -> Ptr<'_, HSD_Archive<'_>> { At::new(ctx, 0x804d65c8).field(0) }
+    #[inline] pub fn lbl_804D65CC(ctx: &Ctx) -> Ptr<'_, Ptr<'_, DynamicModelDesc<'_>>> { At::new(ctx, 0x804d65cc).field(0) }
+    #[inline] pub fn lbl_804D65D0(ctx: &Ctx) -> Ptr<'_, Ptr<'_, DynamicModelDesc<'_>>> { At::new(ctx, 0x804d65d0).field(0) }
+    #[inline] pub fn lbl_804D65D4(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d65d4).field(0) }
+    #[inline] pub fn lbl_804D65D8(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d65d8).field(0) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+
+    }
+}
+/// Statics of `melee/gm/gm_181A`.
+pub mod melee__gm__gm_181A {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn lbl_803D8D08(ctx: &Ctx) -> Arr<'_, RecordBlock<'_>, 6> { At::new(ctx, 0x803d8d08).field(0) }
+    #[inline] pub fn lbl_804D65E0(ctx: &Ctx) -> UnkMultimanData<'_> { At::new(ctx, 0x804d65e0).field(0) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+
+    }
+}
 /// Statics of `melee/gm/gm_1832`.
 pub mod melee__gm__gm_1832 {
     use super::*;
     use crate::fns::*;
+    #[inline] pub fn lbl_803B7C58(ctx: &Ctx) -> ArrP<'_, Val<'_, i8>, 4> { At::new(ctx, 0x803b7c58).field(0) }
     #[inline] pub fn gm_1832_CharScale(ctx: &Ctx) -> ArrV<'_, F32, 28> { At::new(ctx, 0x803d9248).field(0) }
     #[inline] pub fn gm_1832_CharOffset(ctx: &Ctx) -> Arr<'_, Vec<'_>, 28> { At::new(ctx, 0x803d92b8).field(0) }
     #[inline] pub fn gm_1832_SamusOffset(ctx: &Ctx) -> Vec<'_> { At::new(ctx, 0x803d9408).field(0) }
+    #[inline] pub fn lbl_803D9414(ctx: &Ctx) -> ArrV<'_, i8, 12> { At::new(ctx, 0x803d9414).field(0) }
+    #[inline] pub fn lbl_803D9444(ctx: &Ctx) -> ArrV<'_, i8, 24> { At::new(ctx, 0x803d9444).field(0) }
+    #[inline] pub fn lbl_804735A8(ctx: &Ctx) -> lbl_804735A8_t<'_> { At::new(ctx, 0x804735a8).field(0) }
+    #[inline] pub fn lbl_804735E8(ctx: &Ctx) -> lbl_804735E8_t<'_> { At::new(ctx, 0x804735e8).field(0) }
+    #[inline] pub fn lbl_8047368C(ctx: &Ctx) -> gm_1832_8047368C_t<'_> { At::new(ctx, 0x8047368c).field(0) }
+    #[inline] pub fn lbl_804D40A0(ctx: &Ctx) -> ArrV<'_, i8, 5> { At::new(ctx, 0x804d40a0).field(0) }
+    #[inline] pub fn lbl_804D40B0(ctx: &Ctx) -> ArrV<'_, i8, 8> { At::new(ctx, 0x804d40b0).field(0) }
+    #[inline] pub fn lbl_804D65F0(ctx: &Ctx) -> Ptr<'_, HSD_GObj<'_>> { At::new(ctx, 0x804d65f0).field(0) }
+    #[inline] pub fn lbl_804D65F4(ctx: &Ctx) -> Ptr<'_, HSD_Archive<'_>> { At::new(ctx, 0x804d65f4).field(0) }
+    #[inline] pub fn lbl_804D65F8(ctx: &Ctx) -> Ptr<'_, HSD_Archive<'_>> { At::new(ctx, 0x804d65f8).field(0) }
+    #[inline] pub fn lbl_804D65FC(ctx: &Ctx) -> Ptr<'_, SceneDesc<'_>> { At::new(ctx, 0x804d65fc).field(0) }
+    #[inline] pub fn lbl_804D6600(ctx: &Ctx) -> Ptr<'_, SceneDesc<'_>> { At::new(ctx, 0x804d6600).field(0) }
+    #[inline] pub fn lbl_804D6604(ctx: &Ctx) -> Ptr<'_, lbl_804D6604_t<'_>> { At::new(ctx, 0x804d6604).field(0) }
+    #[inline] pub fn lbl_804D6608(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d6608).field(0) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+
+    }
+}
+/// Statics of `melee/gm/gm_186E`.
+pub mod melee__gm__gm_186E {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn lbl_803D9498(ctx: &Ctx) -> Arr<'_, gm_80186F6C_Entry<'_>, 28> { At::new(ctx, 0x803d9498).field(0) }
+    #[inline] pub fn lbl_804D6610(ctx: &Ctx) -> Ptr<'_, HSD_Archive<'_>> { At::new(ctx, 0x804d6610).field(0) }
+    #[inline] pub fn lbl_804D6614(ctx: &Ctx) -> Ptr<'_, SceneDesc<'_>> { At::new(ctx, 0x804d6614).field(0) }
+    #[inline] pub fn lbl_804D6618(ctx: &Ctx) -> enterdata<'_> { At::new(ctx, 0x804d6618).field(0) }
     /// Addresses of this scope's functions.
     pub mod addr {
 
@@ -5014,6 +5797,8 @@ pub mod melee__gm__gm_1879 {
     #[inline] pub fn gm_1832_NormalBgmIds(ctx: &Ctx) -> ArrV<'_, i32, 12> { At::new(ctx, 0x803d9780).field(0) }
     #[inline] pub fn gm_1832_NormalAudioMasks(ctx: &Ctx) -> ArrV<'_, u64, 12> { At::new(ctx, 0x803d97b0).field(0) }
     #[inline] pub fn gm_1832_NormalSceneDataName(ctx: &Ctx) -> ArrV<'_, i8, 23> { At::new(ctx, 0x803d9810).field(0) }
+    #[inline] pub fn lbl_804736C0(ctx: &Ctx) -> gm_1832_804736C0_t<'_> { At::new(ctx, 0x804736c0).field(0) }
+    #[inline] pub fn lbl_804D6620(ctx: &Ctx) -> Ptr<'_, HSD_Archive<'_>> { At::new(ctx, 0x804d6620).field(0) }
     /// Addresses of this scope's functions.
     pub mod addr {
 
@@ -5029,6 +5814,7 @@ pub mod melee__gm__gm_1884 {
     use super::*;
     use crate::fns::*;
     #[inline] pub fn gmTraining_ItemTable(ctx: &Ctx) -> Arr<'_, TrainingItemEntry<'_>, 31> { At::new(ctx, 0x803d9828).field(0) }
+    #[inline] pub fn lbl_80473700(ctx: &Ctx) -> TrainingModeState<'_> { At::new(ctx, 0x80473700).field(0) }
     /// Addresses of this scope's functions.
     pub mod addr {
 
@@ -5054,6 +5840,54 @@ pub mod melee__gm__gm_18A1 {
 
     }
 }
+/// Statics of `melee/gm/gm_19EF`.
+pub mod melee__gm__gm_19EF {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn lbl_80479A98(ctx: &Ctx) -> lbl_80479A98_t<'_> { At::new(ctx, 0x80479a98).field(0) }
+    #[inline] pub fn lbl_804D6698(ctx: &Ctx) -> Ptr<'_, HSD_Archive<'_>> { At::new(ctx, 0x804d6698).field(0) }
+    #[inline] pub fn lbl_804D669C(ctx: &Ctx) -> Ptr<'_, SceneDesc<'_>> { At::new(ctx, 0x804d669c).field(0) }
+    #[inline] pub fn lbl_804D66A0(ctx: &Ctx) -> Ptr<'_, SceneDesc<'_>> { At::new(ctx, 0x804d66a0).field(0) }
+    #[inline] pub fn lbl_804D66A4(ctx: &Ctx) -> Ptr<'_, SceneDesc<'_>> { At::new(ctx, 0x804d66a4).field(0) }
+    #[inline] pub fn lbl_804D66A8(ctx: &Ctx) -> Ptr<'_, SceneDesc<'_>> { At::new(ctx, 0x804d66a8).field(0) }
+    #[inline] pub fn lbl_804D66AC(ctx: &Ctx) -> Ptr<'_, HSD_Joint<'_>> { At::new(ctx, 0x804d66ac).field(0) }
+    #[inline] pub fn lbl_804D66B0(ctx: &Ctx) -> unk_jobj_node<'_> { At::new(ctx, 0x804d66b0).field(0) }
+    #[inline] pub fn lbl_804D66B8(ctx: &Ctx) -> unk_jobj_node<'_> { At::new(ctx, 0x804d66b8).field(0) }
+    #[inline] pub fn lbl_804D66C0(ctx: &Ctx) -> unk_jobj_node<'_> { At::new(ctx, 0x804d66c0).field(0) }
+    #[inline] pub fn lbl_804D66C8(ctx: &Ctx) -> unk_jobj_node<'_> { At::new(ctx, 0x804d66c8).field(0) }
+    #[inline] pub fn lbl_804D66D0(ctx: &Ctx) -> unk_jobj_node<'_> { At::new(ctx, 0x804d66d0).field(0) }
+    #[inline] pub fn lbl_804D66D8(ctx: &Ctx) -> unk_jobj_node<'_> { At::new(ctx, 0x804d66d8).field(0) }
+    #[inline] pub fn lbl_804D66E0(ctx: &Ctx) -> unk_jobj_node<'_> { At::new(ctx, 0x804d66e0).field(0) }
+    #[inline] pub fn lbl_804D66E8(ctx: &Ctx) -> unk_jobj_node<'_> { At::new(ctx, 0x804d66e8).field(0) }
+    #[inline] pub fn lbl_804D66F0(ctx: &Ctx) -> Ptr<'_, HSD_Archive<'_>> { At::new(ctx, 0x804d66f0).field(0) }
+    #[inline] pub fn lbl_804D66F4(ctx: &Ctx) -> Ptr<'_, HSD_JObj<'_>> { At::new(ctx, 0x804d66f4).field(0) }
+    #[inline] pub fn lbl_804D66F8(ctx: &Ctx) -> Val<'_, u32> { At::new(ctx, 0x804d66f8).field(0) }
+    #[inline] pub fn fn_8019EFC4<'a>(ctx: &'a Ctx, pad: HSD_PadStatus<'a>) -> () { ctx.call(0x8019efc4, (pad, )) }
+    #[inline] pub fn fn_8019F1D0<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8019f1d0, ()) }
+    #[inline] pub fn fn_8019F2D4<'a>(ctx: &'a Ctx, arg0: u32) -> () { ctx.call(0x8019f2d4, (arg0, )) }
+    #[inline] pub fn fn_8019F6EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8019f6ec, (gobj, )) }
+    #[inline] pub fn fn_8019F810<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8019f810, ()) }
+    #[inline] pub fn fn_801A0B60<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801a0b60, (gobj, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_8019EFC4: u32 = 0x8019efc4;
+        pub const fn_8019F1D0: u32 = 0x8019f1d0;
+        pub const fn_8019F2D4: u32 = 0x8019f2d4;
+        pub const fn_8019F6EC: u32 = 0x8019f6ec;
+        pub const fn_8019F810: u32 = 0x8019f810;
+        pub const fn_801A0B60: u32 = 0x801a0b60;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_8019EFC4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_PadStatus<'a>) -> ()) { let (pad, ): (HSD_PadStatus<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, pad), ctx); }
+        #[inline] pub fn fn_8019F1D0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+        #[inline] pub fn fn_8019F2D4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u32) -> ()) { let (arg0, ): (u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
+        #[inline] pub fn fn_8019F6EC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_8019F810(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+        #[inline] pub fn fn_801A0B60(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+    }
+}
 /// Statics of `melee/gm/gm_1A33`.
 pub mod melee__gm__gm_1A33 {
     use super::*;
@@ -5076,14 +5910,17 @@ pub mod melee__gm__gm_1A36 {
     use crate::fns::*;
     #[inline] pub fn controller_map(ctx: &Ctx) -> controller_map_t<'_> { At::new(ctx, 0x80479c30).field(0) }
     #[inline] pub fn gm_801A3820<'a>(ctx: &'a Ctx, idx: i32, arg1: u64, arg2: u64) -> () { ctx.call(0x801a3820, (idx, arg1, arg2, )) }
+    #[inline] pub fn fn_801A396C<'a>(ctx: &'a Ctx, idx: i32) -> () { ctx.call(0x801a396c, (idx, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const gm_801A3820: u32 = 0x801a3820;
+        pub const fn_801A396C: u32 = 0x801a396c;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
         #[inline] pub fn gm_801A3820(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, u64, u64) -> ()) { let (idx, arg1, arg2, ): (i32, u64, u64, ) = Args::take_all(ctx); Ret::put(__f(ctx, idx, arg1, arg2), ctx); }
+        #[inline] pub fn fn_801A396C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> ()) { let (idx, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, idx), ctx); }
     }
 }
 /// Statics of `melee/gm/gm_1A3F`.
@@ -5204,6 +6041,7 @@ pub mod melee__gm__gmallstar {
     use super::*;
     use crate::fns::*;
     #[inline] pub fn gm_803DEBE8(ctx: &Ctx) -> Arr<'_, AllStarOpponent<'_>, 25> { At::new(ctx, 0x803debe8).field(0) }
+    #[inline] pub fn gm_803DEC4C(ctx: &Ctx) -> Arr<'_, AllstarRoundInfo<'_>, 13> { At::new(ctx, 0x803dec4c).field(0) }
     #[inline] pub fn gm_80490940(ctx: &Ctx) -> ArrV<'_, u8, 25> { At::new(ctx, 0x80490940).field(0) }
     /// Addresses of this scope's functions.
     pub mod addr {
@@ -5220,14 +6058,17 @@ pub mod melee__gm__gmapproach {
     use super::*;
     use crate::fns::*;
     #[inline] pub fn gm_80480D98(ctx: &Ctx) -> gm_80480D98_t<'_> { At::new(ctx, 0x80480d98).field(0) }
+    #[inline] pub fn fn_801AD920<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801ad920, (gobj, )) }
     #[inline] pub fn gm_801ADB04<'a>(ctx: &'a Ctx) -> () { ctx.call(0x801adb04, ()) }
     /// Addresses of this scope's functions.
     pub mod addr {
+        pub const fn_801AD920: u32 = 0x801ad920;
         pub const gm_801ADB04: u32 = 0x801adb04;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
+        #[inline] pub fn fn_801AD920(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn gm_801ADB04(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     }
 }
@@ -5479,6 +6320,7 @@ pub mod melee__gm__gmevent {
     #[inline] pub fn onEnterVs<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) -> () { ctx.call(0x801bad70, (arg0, )) }
     #[inline] pub fn onExitVs<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) -> () { ctx.call(0x801bb758, (arg0, )) }
     #[inline] pub fn gm_801BBB64<'a>(ctx: &'a Ctx) -> () { ctx.call(0x801bbb64, ()) }
+    #[inline] pub fn fn_801BBFE8<'a>(ctx: &'a Ctx) -> () { ctx.call(0x801bbfe8, ()) }
     #[inline] pub fn gm_801BC00C<'a>(ctx: &'a Ctx) -> () { ctx.call(0x801bc00c, ()) }
     #[inline] pub fn gm_801BC488<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x801bc488, ()) }
     #[inline] pub fn gm_801BC4F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801bc4f4, (gobj, )) }
@@ -5521,6 +6363,7 @@ pub mod melee__gm__gmevent {
         pub const onEnterVs: u32 = 0x801bad70;
         pub const onExitVs: u32 = 0x801bb758;
         pub const gm_801BBB64: u32 = 0x801bbb64;
+        pub const fn_801BBFE8: u32 = 0x801bbfe8;
         pub const gm_801BC00C: u32 = 0x801bc00c;
         pub const gm_801BC488: u32 = 0x801bc488;
         pub const gm_801BC4F4: u32 = 0x801bc4f4;
@@ -5565,6 +6408,7 @@ pub mod melee__gm__gmevent {
         #[inline] pub fn onEnterVs(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, GameModeState<'a>) -> ()) { let (arg0, ): (GameModeState<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn onExitVs(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, GameModeState<'a>) -> ()) { let (arg0, ): (GameModeState<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn gm_801BBB64(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+        #[inline] pub fn fn_801BBFE8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
         #[inline] pub fn gm_801BC00C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
         #[inline] pub fn gm_801BC488(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
         #[inline] pub fn gm_801BC4F4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
@@ -5735,6 +6579,21 @@ pub mod melee__gm__gminvisible {
         #[inline] pub fn onExitSuddenDeath(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, GameModeState<'a>) -> ()) { let (state, ): (GameModeState<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, state), ctx); }
         #[inline] pub fn onEnterResults(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, GameModeState<'a>) -> ()) { let (state, ): (GameModeState<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, state), ctx); }
         #[inline] pub fn onExitResults(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, GameModeState<'a>) -> ()) { let (state, ): (GameModeState<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, state), ctx); }
+    }
+}
+/// Statics of `melee/gm/gmlightning`.
+pub mod melee__gm__gmlightning {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_801BA7AC<'a>(ctx: &'a Ctx, start: StartMeleeData<'a>, vs: StartMeleeData<'a>) -> () { ctx.call(0x801ba7ac, (start, vs, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_801BA7AC: u32 = 0x801ba7ac;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_801BA7AC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, StartMeleeData<'a>, StartMeleeData<'a>) -> ()) { let (start, vs, ): (StartMeleeData<'_>, StartMeleeData<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, start, vs), ctx); }
     }
 }
 /// Statics of `melee/gm/gmmain`.
@@ -5960,6 +6819,23 @@ pub mod melee__gm__gmopeningmode {
         #[inline] pub fn onExitOmake15(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, GameModeState<'a>) -> ()) { let (arg, ): (GameModeState<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg), ctx); }
     }
 }
+/// Statics of `melee/gm/gmpause`.
+pub mod melee__gm__gmpause {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn lbl_80479B10(ctx: &Ctx) -> PauseData<'_> { At::new(ctx, 0x80479b10).field(0) }
+    #[inline] pub fn lbl_804D6700(ctx: &Ctx) -> Ptr<'_, HSD_Archive<'_>> { At::new(ctx, 0x804d6700).field(0) }
+    #[inline] pub fn lbl_804D6704(ctx: &Ctx) -> Ptr<'_, HSD_GObj<'_>> { At::new(ctx, 0x804d6704).field(0) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+
+    }
+}
 /// Statics of `melee/gm/gmprogressive`.
 pub mod melee__gm__gmprogressive {
     use super::*;
@@ -5999,6 +6875,22 @@ pub mod melee__gm__gmprogressivemode {
         #[inline] pub fn gm_801BF920(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, GameModeState<'a>) -> ()) { let (arg0, ): (GameModeState<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
     }
 }
+/// Statics of `melee/gm/gmregclear`.
+pub mod melee__gm__gmregclear {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn lbl_803B7C18(ctx: &Ctx) -> Vec<'_> { At::new(ctx, 0x803b7c18).field(0) }
+    #[inline] pub fn lbl_80472D28(ctx: &Ctx) -> lbl_80472D28_t<'_> { At::new(ctx, 0x80472d28).field(0) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+
+    }
+}
 /// Statics of `melee/gm/gmregenddisp`.
 pub mod melee__gm__gmregenddisp {
     use super::*;
@@ -6027,6 +6919,41 @@ pub mod melee__gm__gmregtyfall {
     #[inline] pub fn gm_804808F8(ctx: &Ctx) -> ImageDesc_Array<'_> { At::new(ctx, 0x804808f8).field(0) }
     #[inline] pub fn gm_80480964(ctx: &Ctx) -> ImageDesc_Array<'_> { At::new(ctx, 0x80480964).field(0) }
     #[inline] pub fn gm_804D4278(ctx: &Ctx) -> gm_804D4278_t<'_> { At::new(ctx, 0x804d4278).field(0) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+
+    }
+}
+/// Statics of `melee/gm/gmresult`.
+pub mod melee__gm__gmresult {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn lbl_803B7B18(ctx: &Ctx) -> lbl_803B7B18_t<'_> { At::new(ctx, 0x803b7b18).field(0) }
+    #[inline] pub fn lbl_803D6488(ctx: &Ctx) -> Arr<'_, StatsEntry<'_>, 13> { At::new(ctx, 0x803d6488).field(0) }
+    #[inline] pub fn lbl_803D6558(ctx: &Ctx) -> Arr<'_, StatsEntry<'_>, 48> { At::new(ctx, 0x803d6558).field(0) }
+    #[inline] pub fn lbl_803D6858(ctx: &Ctx) -> Arr<'_, StatsEntry<'_>, 2> { At::new(ctx, 0x803d6858).field(0) }
+    #[inline] pub fn lbl_8046E190(ctx: &Ctx) -> Arr<'_, ResultsStatsInfo<'_>, 4> { At::new(ctx, 0x8046e190).field(0) }
+    #[inline] pub fn lbl_804D3F8C(ctx: &Ctx) -> ArrV<'_, u32, 2> { At::new(ctx, 0x804d3f8c).field(0) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+
+    }
+}
+/// Statics of `melee/gm/gmresultplayer`.
+pub mod melee__gm__gmresultplayer {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn lbl_804D3FC8(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d3fc8).field(0) }
     /// Addresses of this scope's functions.
     pub mod addr {
 
@@ -6104,6 +7031,7 @@ pub mod melee__gm__gmstaffroll {
     #[inline] pub fn gm_803DBFD8_extra(ctx: &Ctx) -> StaffRollExtraData<'_> { At::new(ctx, 0x803dcf50).field(0) }
     #[inline] pub fn gm_803DD0C8(ctx: &Ctx) -> HSD_WObjDesc<'_> { At::new(ctx, 0x803dd0c8).field(0) }
     #[inline] pub fn gm_803DD0DC(ctx: &Ctx) -> HSD_WObjDesc<'_> { At::new(ctx, 0x803dd0dc).field(0) }
+    #[inline] pub fn gm_803DD0F0(ctx: &Ctx) -> HSD_CameraDescPerspective<'_> { At::new(ctx, 0x803dd0f0).field(0) }
     #[inline] pub fn gm_803DD1C8(ctx: &Ctx) -> ArrV<'_, i32, 7> { At::new(ctx, 0x803dd1c8).field(0) }
     #[inline] pub fn gm_803DD1E4(ctx: &Ctx) -> Arr<'_, Vec<'_>, 4> { At::new(ctx, 0x803dd1e4).field(0) }
     #[inline] pub fn gm_80480D58(ctx: &Ctx) -> ArrP<'_, HSD_Text<'_>, 6> { At::new(ctx, 0x80480d58).field(0) }
@@ -6149,14 +7077,15 @@ pub mod melee__gm__gmstamina {
     use super::*;
     use crate::fns::*;
     #[inline] pub fn gm_804975F8(ctx: &Ctx) -> gm_804975F8_t<'_> { At::new(ctx, 0x804975f8).field(0) }
+    #[inline] pub fn fn_801B96E8<'a>(ctx: &'a Ctx, unused: HSD_GObj<'a>) -> () { ctx.call(0x801b96e8, (unused, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
-
+        pub const fn_801B96E8: u32 = 0x801b96e8;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
-
+        #[inline] pub fn fn_801B96E8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (unused, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, unused), ctx); }
     }
 }
 /// Statics of `melee/gm/gmtitle`.
@@ -6176,16 +7105,31 @@ pub mod melee__gm__gmtitle {
     #[inline] pub fn frame_count(ctx: &Ctx) -> Val<'_, u32> { At::new(ctx, 0x804d6718).field(0) }
     #[inline] pub fn bg_initialized(ctx: &Ctx) -> Val<'_, u8> { At::new(ctx, 0x804d671c).field(0) }
     #[inline] pub fn gmTitle_801A146C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801a146c, (gobj, )) }
+    #[inline] pub fn fn_801A1498<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801a1498, (gobj, )) }
+    #[inline] pub fn gmTitle_801A1630<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801a1630, (gobj, )) }
+    #[inline] pub fn gmTitle_801A1814<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) -> () { ctx.call(0x801a1814, (gobj, unused, )) }
+    #[inline] pub fn gmTitle_801A18D4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) -> () { ctx.call(0x801a18d4, (gobj, unused, )) }
+    #[inline] pub fn gmTitle_801A1A18<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801a1a18, (gobj, )) }
     #[inline] pub fn gmTitle_801A1D38<'a>(ctx: &'a Ctx, src: Val<'a, i8>, dst: Val<'a, i8>) -> Val<'a, i8> { ctx.call(0x801a1d38, (src, dst, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const gmTitle_801A146C: u32 = 0x801a146c;
+        pub const fn_801A1498: u32 = 0x801a1498;
+        pub const gmTitle_801A1630: u32 = 0x801a1630;
+        pub const gmTitle_801A1814: u32 = 0x801a1814;
+        pub const gmTitle_801A18D4: u32 = 0x801a18d4;
+        pub const gmTitle_801A1A18: u32 = 0x801a1a18;
         pub const gmTitle_801A1D38: u32 = 0x801a1d38;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
         #[inline] pub fn gmTitle_801A146C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_801A1498(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn gmTitle_801A1630(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn gmTitle_801A1814(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, i32) -> ()) { let (gobj, unused, ): (HSD_GObj<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj, unused), ctx); }
+        #[inline] pub fn gmTitle_801A18D4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, i32) -> ()) { let (gobj, unused, ): (HSD_GObj<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj, unused), ctx); }
+        #[inline] pub fn gmTitle_801A1A18(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn gmTitle_801A1D38(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Val<'a, i8>, Val<'a, i8>) -> Val<'a, i8>) { let (src, dst, ): (Val<'_, i8>, Val<'_, i8>, ) = Args::take_all(ctx); Ret::put(__f(ctx, src, dst), ctx); }
     }
 }
@@ -6210,6 +7154,60 @@ pub mod melee__gm__gmtou_0 {
     use super::*;
     use crate::fns::*;
     #[inline] pub fn lbl_803D9F80(ctx: &Ctx) -> TmSettingTable<'_> { At::new(ctx, 0x803d9f80).field(0) }
+    #[inline] pub fn lbl_804799B8(ctx: &Ctx) -> Lbl804799B8_t<'_> { At::new(ctx, 0x804799b8).field(0) }
+    #[inline] pub fn lbl_804D6640(ctx: &Ctx) -> Ptr<'_, HSD_Archive<'_>> { At::new(ctx, 0x804d6640).field(0) }
+    #[inline] pub fn lbl_804D6644(ctx: &Ctx) -> Ptr<'_, HSD_Archive<'_>> { At::new(ctx, 0x804d6644).field(0) }
+    #[inline] pub fn lbl_804D6648(ctx: &Ctx) -> Ptr<'_, HSD_Archive<'_>> { At::new(ctx, 0x804d6648).field(0) }
+    #[inline] pub fn lbl_804D664C(ctx: &Ctx) -> Ptr<'_, SceneDesc<'_>> { At::new(ctx, 0x804d664c).field(0) }
+    #[inline] pub fn lbl_804D6650(ctx: &Ctx) -> Ptr<'_, SceneDesc<'_>> { At::new(ctx, 0x804d6650).field(0) }
+    #[inline] pub fn lbl_804D6654(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d6654).field(0) }
+    #[inline] pub fn lbl_804D6658(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d6658).field(0) }
+    #[inline] pub fn lbl_804D665C(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d665c).field(0) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+
+    }
+}
+/// Statics of `melee/gm/gmtou_1`.
+pub mod melee__gm__gmtou_1 {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn lbl_804799D8(ctx: &Ctx) -> Lbl804799D8_t<'_> { At::new(ctx, 0x804799d8).field(0) }
+    #[inline] pub fn lbl_804D4190(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d4190).field(0) }
+    #[inline] pub fn lbl_804D4194(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d4194).field(0) }
+    #[inline] pub fn lbl_804D6660(ctx: &Ctx) -> Ptr<'_, HSD_Archive<'_>> { At::new(ctx, 0x804d6660).field(0) }
+    #[inline] pub fn lbl_804D6664(ctx: &Ctx) -> Ptr<'_, HSD_Archive<'_>> { At::new(ctx, 0x804d6664).field(0) }
+    #[inline] pub fn lbl_804D6668(ctx: &Ctx) -> Ptr<'_, HSD_Archive<'_>> { At::new(ctx, 0x804d6668).field(0) }
+    #[inline] pub fn lbl_804D666C(ctx: &Ctx) -> Ptr<'_, SceneDesc<'_>> { At::new(ctx, 0x804d666c).field(0) }
+    #[inline] pub fn lbl_804D6670(ctx: &Ctx) -> Ptr<'_, SceneDesc<'_>> { At::new(ctx, 0x804d6670).field(0) }
+    #[inline] pub fn lbl_804D6674(ctx: &Ctx) -> Ptr<'_, SceneDesc<'_>> { At::new(ctx, 0x804d6674).field(0) }
+    #[inline] pub fn lbl_804D6678(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d6678).field(0) }
+    #[inline] pub fn lbl_804D667C(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d667c).field(0) }
+    #[inline] pub fn lbl_804D6680(ctx: &Ctx) -> ArrV<'_, u8, 3> { At::new(ctx, 0x804d6680).field(0) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+
+    }
+}
+/// Statics of `melee/gm/gmtou_2`.
+pub mod melee__gm__gmtou_2 {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn lbl_80479A58(ctx: &Ctx) -> TmAnimTimers<'_> { At::new(ctx, 0x80479a58).field(0) }
+    #[inline] pub fn lbl_804D6688(ctx: &Ctx) -> Ptr<'_, HSD_Archive<'_>> { At::new(ctx, 0x804d6688).field(0) }
+    #[inline] pub fn lbl_804D668C(ctx: &Ctx) -> Ptr<'_, HSD_Archive<'_>> { At::new(ctx, 0x804d668c).field(0) }
+    #[inline] pub fn lbl_804D6690(ctx: &Ctx) -> Ptr<'_, SceneDesc<'_>> { At::new(ctx, 0x804d6690).field(0) }
+    #[inline] pub fn lbl_804D6694(ctx: &Ctx) -> Ptr<'_, SceneDesc<'_>> { At::new(ctx, 0x804d6694).field(0) }
     /// Addresses of this scope's functions.
     pub mod addr {
 
@@ -6227,10 +7225,16 @@ pub mod melee__gm__gmtoulib {
     #[inline] pub fn cobj_desc(ctx: &Ctx) -> HSD_CameraDescPerspective<'_> { At::new(ctx, 0x803b7ca8).field(0) }
     #[inline] pub fn lbl_803D9DF4(ctx: &Ctx) -> HSD_WObjDesc<'_> { At::new(ctx, 0x803d9df4).field(0) }
     #[inline] pub fn lbl_803D9E08(ctx: &Ctx) -> HSD_WObjDesc<'_> { At::new(ctx, 0x803d9e08).field(0) }
+    #[inline] pub fn lbl_803D9E1C(ctx: &Ctx) -> Arr<'_, ArrV<'_, i16, 2>, 32> { At::new(ctx, 0x803d9e1c).field(0) }
     #[inline] pub fn lbl_803D9EE8(ctx: &Ctx) -> ArrV<'_, i8, 9> { At::new(ctx, 0x803d9ee8).field(0) }
     #[inline] pub fn lbl_803D9EF4(ctx: &Ctx) -> ArrV<'_, i8, 9> { At::new(ctx, 0x803d9ef4).field(0) }
     #[inline] pub fn lbl_803D9F00(ctx: &Ctx) -> ArrV<'_, i8, 9> { At::new(ctx, 0x803d9f00).field(0) }
+    #[inline] pub fn lbl_804D6630(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d6630).field(0) }
+    #[inline] pub fn lbl_804D6634(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d6634).field(0) }
+    #[inline] pub fn lbl_804DA67C(ctx: &Ctx) -> _GXColor<'_> { At::new(ctx, 0x804da67c).field(0) }
+    #[inline] pub fn lbl_804DA684(ctx: &Ctx) -> _GXColor<'_> { At::new(ctx, 0x804da684).field(0) }
     #[inline] pub fn col(ctx: &Ctx) -> _GXColor<'_> { At::new(ctx, 0x804da698).field(0) }
+    #[inline] pub fn lbl_804DA69C(ctx: &Ctx) -> _GXColor<'_> { At::new(ctx, 0x804da69c).field(0) }
     /// Addresses of this scope's functions.
     pub mod addr {
 
@@ -6377,6 +7381,8 @@ pub mod melee__gm__gmtrainingmode {
 pub mod melee__gm__gmvs {
     use super::*;
     use crate::fns::*;
+    #[inline] pub fn lbl_803D5620(ctx: &Ctx) -> ArrV<'_, u32, 4> { At::new(ctx, 0x803d5620).field(0) }
+    #[inline] pub fn lbl_803D5630(ctx: &Ctx) -> ArrV<'_, u32, 6> { At::new(ctx, 0x803d5630).field(0) }
     #[inline] pub fn controller(ctx: &Ctx) -> VsSceneController<'_> { At::new(ctx, 0x8046b6a0).field(0) }
     /// Addresses of this scope's functions.
     pub mod addr {
@@ -6463,10 +7469,13 @@ pub mod melee__gr__granime {
     #[inline] pub fn grAnime_801C6960<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>, arg1: HSD_RObjAnimJoint<'a>) -> () { ctx.call(0x801c6960, (robj, arg1, )) }
     #[inline] pub fn grAnime_801C69FC<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>) -> HSD_AObj<'a> { ctx.call(0x801c69fc, (aobj, )) }
     #[inline] pub fn grAnime_801C6A54<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, animjoint: HSD_AnimJoint<'a>, matanimjoint: HSD_MatAnimJoint<'a>, shapeanimjoint: HSD_ShapeAnimJoint<'a>) -> () { ctx.call(0x801c6a54, (jobj, animjoint, matanimjoint, shapeanimjoint, )) }
+    #[inline] pub fn fn_801C6EE4<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>) -> () { ctx.call(0x801c6ee4, (aobj, )) }
+    #[inline] pub fn fn_801C6F2C<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>) -> () { ctx.call(0x801c6f2c, (aobj, )) }
     #[inline] pub fn grAnime_801C6F50<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>, obj: Addr<'a>, flags: u32, func: Addr<'a>, r#type: u32, param: Addr<'a>) -> () { ctx.call(0x801c6f50, (aobj, obj, flags, func, r#type, param, )) }
     #[inline] pub fn grAnime_801C706C<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>, flags: i32, func: Addr<'a>, r#type: u32, param: Addr<'a>) -> () { ctx.call(0x801c706c, (tobj, flags, func, r#type, param, )) }
     #[inline] pub fn grAnime_801C70E0<'a>(ctx: &'a Ctx, dobj: HSD_DObj<'a>, flags: i32, func: Addr<'a>, r#type: u32, param: Addr<'a>) -> () { ctx.call(0x801c70e0, (dobj, flags, func, r#type, param, )) }
     #[inline] pub fn grAnime_801C7228<'a>(ctx: &'a Ctx, obj: HSD_JObj<'a>, flags: i32, func: Addr<'a>, r#type: u32, param: Addr<'a>, arg5: i32) -> () { ctx.call(0x801c7228, (obj, flags, func, r#type, param, arg5, )) }
+    #[inline] pub fn fn_801C82E8<'a>(ctx: &'a Ctx, arg0: i32, arg1: Val<'a, i32>) -> () { ctx.call(0x801c82e8, (arg0, arg1, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const grAnime_801C6620: u32 = 0x801c6620;
@@ -6477,10 +7486,13 @@ pub mod melee__gr__granime {
         pub const grAnime_801C6960: u32 = 0x801c6960;
         pub const grAnime_801C69FC: u32 = 0x801c69fc;
         pub const grAnime_801C6A54: u32 = 0x801c6a54;
+        pub const fn_801C6EE4: u32 = 0x801c6ee4;
+        pub const fn_801C6F2C: u32 = 0x801c6f2c;
         pub const grAnime_801C6F50: u32 = 0x801c6f50;
         pub const grAnime_801C706C: u32 = 0x801c706c;
         pub const grAnime_801C70E0: u32 = 0x801c70e0;
         pub const grAnime_801C7228: u32 = 0x801c7228;
+        pub const fn_801C82E8: u32 = 0x801c82e8;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
@@ -6493,10 +7505,13 @@ pub mod melee__gr__granime {
         #[inline] pub fn grAnime_801C6960(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_RObj<'a>, HSD_RObjAnimJoint<'a>) -> ()) { let (robj, arg1, ): (HSD_RObj<'_>, HSD_RObjAnimJoint<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, robj, arg1), ctx); }
         #[inline] pub fn grAnime_801C69FC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_AObj<'a>) -> HSD_AObj<'a>) { let (aobj, ): (HSD_AObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, aobj), ctx); }
         #[inline] pub fn grAnime_801C6A54(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_JObj<'a>, HSD_AnimJoint<'a>, HSD_MatAnimJoint<'a>, HSD_ShapeAnimJoint<'a>) -> ()) { let (jobj, animjoint, matanimjoint, shapeanimjoint, ): (HSD_JObj<'_>, HSD_AnimJoint<'_>, HSD_MatAnimJoint<'_>, HSD_ShapeAnimJoint<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, jobj, animjoint, matanimjoint, shapeanimjoint), ctx); }
+        #[inline] pub fn fn_801C6EE4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_AObj<'a>) -> ()) { let (aobj, ): (HSD_AObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, aobj), ctx); }
+        #[inline] pub fn fn_801C6F2C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_AObj<'a>) -> ()) { let (aobj, ): (HSD_AObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, aobj), ctx); }
         #[inline] pub fn grAnime_801C6F50(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_AObj<'a>, Addr<'a>, u32, Addr<'a>, u32, Addr<'a>) -> ()) { let (aobj, obj, flags, func, r#type, param, ): (HSD_AObj<'_>, Addr<'_>, u32, Addr<'_>, u32, Addr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, aobj, obj, flags, func, r#type, param), ctx); }
         #[inline] pub fn grAnime_801C706C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_TObj<'a>, i32, Addr<'a>, u32, Addr<'a>) -> ()) { let (tobj, flags, func, r#type, param, ): (HSD_TObj<'_>, i32, Addr<'_>, u32, Addr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, tobj, flags, func, r#type, param), ctx); }
         #[inline] pub fn grAnime_801C70E0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_DObj<'a>, i32, Addr<'a>, u32, Addr<'a>) -> ()) { let (dobj, flags, func, r#type, param, ): (HSD_DObj<'_>, i32, Addr<'_>, u32, Addr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, dobj, flags, func, r#type, param), ctx); }
         #[inline] pub fn grAnime_801C7228(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_JObj<'a>, i32, Addr<'a>, u32, Addr<'a>, i32) -> ()) { let (obj, flags, func, r#type, param, arg5, ): (HSD_JObj<'_>, i32, Addr<'_>, u32, Addr<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, obj, flags, func, r#type, param, arg5), ctx); }
+        #[inline] pub fn fn_801C82E8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, Val<'a, i32>) -> ()) { let (arg0, arg1, ): (i32, Val<'_, i32>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0, arg1), ctx); }
     }
 }
 /// Statics of `melee/gr/grbattle`.
@@ -6629,16 +7644,23 @@ pub mod melee__gr__grbigblue {
     #[inline] pub fn grBb_803B8108(ctx: &Ctx) -> Vec<'_> { At::new(ctx, 0x803b8108).field(0) }
     #[inline] pub fn grBb_803B8114(ctx: &Ctx) -> Vec<'_> { At::new(ctx, 0x803b8114).field(0) }
     #[inline] pub fn grBb_803B8120(ctx: &Ctx) -> grBb_ItemKindList<'_> { At::new(ctx, 0x803b8120).field(0) }
+    #[inline] pub fn grBb_803E2D84(ctx: &Ctx) -> ArrV<'_, i16, 30> { At::new(ctx, 0x803e2d84).field(0) }
+    #[inline] pub fn grBb_803E2DC0(ctx: &Ctx) -> ArrV<'_, i16, 30> { At::new(ctx, 0x803e2dc0).field(0) }
+    #[inline] pub fn lbl_803E2DFC(ctx: &Ctx) -> ArrV<'_, i16, 30> { At::new(ctx, 0x803e2dfc).field(0) }
     #[inline] pub fn grBb_TrackEntries(ctx: &Ctx) -> Arr<'_, grBb_TrackEntry<'_>, 12> { At::new(ctx, 0x803e2ed8).field(0) }
     #[inline] pub fn yakumono_param(ctx: &Ctx) -> Ptr<'_, grBb_YakumonoParam<'_>> { At::new(ctx, 0x804d69c8).field(0) }
+    #[inline] pub fn fn_801E8560<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801e8560, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn fn_801EF60C<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801ef60c, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
-
+        pub const fn_801E8560: u32 = 0x801e8560;
+        pub const fn_801EF60C: u32 = 0x801ef60c;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
-
+        #[inline] pub fn fn_801E8560(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
+        #[inline] pub fn fn_801EF60C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
     }
 }
 /// Statics of `melee/gr/grbigblueroute`.
@@ -6676,14 +7698,15 @@ pub mod melee__gr__grcastle {
     #[inline] pub fn grCs_804D45E4(ctx: &Ctx) -> Val<'_, u8> { At::new(ctx, 0x804d45e4).field(0) }
     #[inline] pub fn yakumono_param(ctx: &Ctx) -> Ptr<'_, grCastle_YakumonoParam<'_>> { At::new(ctx, 0x804d6970).field(0) }
     #[inline] pub fn grCs_804D6974(ctx: &Ctx) -> Ptr<'_, lb_80011A50_t<'_>> { At::new(ctx, 0x804d6974).field(0) }
+    #[inline] pub fn grCastle_801CF750<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801cf750, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
-
+        pub const grCastle_801CF750: u32 = 0x801cf750;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
-
+        #[inline] pub fn grCastle_801CF750(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
     }
 }
 /// Statics of `melee/gr/grcorneria`.
@@ -6699,6 +7722,8 @@ pub mod melee__gr__grcorneria {
     #[inline] pub fn grCn_803E1FE8(ctx: &Ctx) -> Arr<'_, grZakoGenerator_Spawn<'_>, 1> { At::new(ctx, 0x803e1fe8).field(0) }
     #[inline] pub fn grCn_803E2000(ctx: &Ctx) -> Arr<'_, grZakoGenerator_Spawn<'_>, 2> { At::new(ctx, 0x803e2000).field(0) }
     #[inline] pub fn grCn_803E2030(ctx: &Ctx) -> ArrV<'_, i32, 14> { At::new(ctx, 0x803e2030).field(0) }
+    #[inline] pub fn lbl_803E2068(ctx: &Ctx) -> Arr<'_, Vec<'_>, 14> { At::new(ctx, 0x803e2068).field(0) }
+    #[inline] pub fn grCn_803E2110(ctx: &Ctx) -> ArrV<'_, i32, 5> { At::new(ctx, 0x803e2110).field(0) }
     #[inline] pub fn grCn_803E214C(ctx: &Ctx) -> Arr<'_, ArrV<'_, i32, 2>, 6> { At::new(ctx, 0x803e214c).field(0) }
     #[inline] pub fn grCn_803E217C(ctx: &Ctx) -> ArrV<'_, i32, 5> { At::new(ctx, 0x803e217c).field(0) }
     #[inline] pub fn grCn_803E2190(ctx: &Ctx) -> ArrV<'_, i32, 5> { At::new(ctx, 0x803e2190).field(0) }
@@ -7066,6 +8091,7 @@ pub mod melee__gr__grfigureget {
     #[inline] pub fn grFigureGet_80219890<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x80219890, (gobj, )) }
     #[inline] pub fn grFigureGet_80219898<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80219898, (gobj, )) }
     #[inline] pub fn grFigureGet_80219B0C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80219b0c, (gobj, )) }
+    #[inline] pub fn grFigureGet_80219B10<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x80219b10, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
     #[inline] pub fn grFigureGet_OnTouchLine<'a>(ctx: &'a Ctx, arg0: i32) -> DynamicsDesc<'a> { ctx.call(0x80219c88, (arg0, )) }
     #[inline] pub fn grFigureGet_OnCheckShadowRender<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: i32, arg2: HSD_JObj<'a>) -> i32 { ctx.call(0x80219c90, (arg0, arg1, arg2, )) }
     /// Addresses of this scope's functions.
@@ -7084,6 +8110,7 @@ pub mod melee__gr__grfigureget {
         pub const grFigureGet_80219890: u32 = 0x80219890;
         pub const grFigureGet_80219898: u32 = 0x80219898;
         pub const grFigureGet_80219B0C: u32 = 0x80219b0c;
+        pub const grFigureGet_80219B10: u32 = 0x80219b10;
         pub const grFigureGet_OnTouchLine: u32 = 0x80219c88;
         pub const grFigureGet_OnCheckShadowRender: u32 = 0x80219c90;
     }
@@ -7104,6 +8131,7 @@ pub mod melee__gr__grfigureget {
         #[inline] pub fn grFigureGet_80219890(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn grFigureGet_80219898(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn grFigureGet_80219B0C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn grFigureGet_80219B10(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
         #[inline] pub fn grFigureGet_OnTouchLine(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> DynamicsDesc<'a>) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn grFigureGet_OnCheckShadowRender(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>, i32, HSD_JObj<'a>) -> i32) { let (arg0, arg1, arg2, ): (Vec<'_>, i32, HSD_JObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0, arg1, arg2), ctx); }
     }
@@ -7134,16 +8162,19 @@ pub mod melee__gr__grfourside {
     #[inline] pub fn yakumono_param(ctx: &Ctx) -> Ptr<'_, grFourside_YakumonoParam<'_>> { At::new(ctx, 0x804d69d8).field(0) }
     #[inline] pub fn stageGObj0_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801f2ebc, (gobj, )) }
     #[inline] pub fn stageGObj2_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801f2ef8, (gobj, )) }
+    #[inline] pub fn grFourside_801F30A0<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801f30a0, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const stageGObj0_OnInit: u32 = 0x801f2ebc;
         pub const stageGObj2_OnInit: u32 = 0x801f2ef8;
+        pub const grFourside_801F30A0: u32 = 0x801f30a0;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
         #[inline] pub fn stageGObj0_OnInit(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn stageGObj2_OnInit(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn grFourside_801F30A0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
     }
 }
 /// Statics of `melee/gr/grfzerocar`.
@@ -7182,14 +8213,20 @@ pub mod melee__gr__grgreatbay {
     use super::*;
     use crate::fns::*;
     #[inline] pub fn stageGObj0_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801f4404, (gobj, )) }
+    #[inline] pub fn grGreatBay_801F5914<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801f5914, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn grGreatBay_801F60C4<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801f60c4, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const stageGObj0_OnInit: u32 = 0x801f4404;
+        pub const grGreatBay_801F5914: u32 = 0x801f5914;
+        pub const grGreatBay_801F60C4: u32 = 0x801f60c4;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
         #[inline] pub fn stageGObj0_OnInit(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn grGreatBay_801F5914(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
+        #[inline] pub fn grGreatBay_801F60C4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
     }
 }
 /// Statics of `melee/gr/grgreens`.
@@ -7211,16 +8248,19 @@ pub mod melee__gr__grgreens {
     #[inline] pub fn grGr_804D6AAD(ctx: &Ctx) -> Val<'_, u8> { At::new(ctx, 0x804d6aad).field(0) }
     #[inline] pub fn stageGObj1_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80213910, (gobj, )) }
     #[inline] pub fn stageGObj3_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8021394c, (gobj, )) }
+    #[inline] pub fn fn_80216DE4<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x80216de4, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const stageGObj1_OnInit: u32 = 0x80213910;
         pub const stageGObj3_OnInit: u32 = 0x8021394c;
+        pub const fn_80216DE4: u32 = 0x80216de4;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
         #[inline] pub fn stageGObj1_OnInit(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn stageGObj3_OnInit(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_80216DE4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
     }
 }
 /// Statics of `melee/gr/grheal`.
@@ -7244,6 +8284,7 @@ pub mod melee__gr__grheal {
     #[inline] pub fn stageGObj0_Callback3<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8021f17c, (gobj, )) }
     #[inline] pub fn stageGObj1_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8021f180, (gobj, )) }
     #[inline] pub fn stageGObj1_Callback1<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x8021f41c, (gobj, )) }
+    #[inline] pub fn fn_8021F424<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x8021f424, ()) }
     #[inline] pub fn stageGObj1_GObjProc<'a>(ctx: &'a Ctx, ground: HSD_GObj<'a>) -> () { ctx.call(0x8021f474, (ground, )) }
     #[inline] pub fn stageGObj1_Callback3<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8021f4bc, (gobj, )) }
     #[inline] pub fn onJointCollision<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x8021f4c0, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
@@ -7279,6 +8320,7 @@ pub mod melee__gr__grheal {
         pub const stageGObj0_Callback3: u32 = 0x8021f17c;
         pub const stageGObj1_OnInit: u32 = 0x8021f180;
         pub const stageGObj1_Callback1: u32 = 0x8021f41c;
+        pub const fn_8021F424: u32 = 0x8021f424;
         pub const stageGObj1_GObjProc: u32 = 0x8021f474;
         pub const stageGObj1_Callback3: u32 = 0x8021f4bc;
         pub const onJointCollision: u32 = 0x8021f4c0;
@@ -7316,6 +8358,7 @@ pub mod melee__gr__grheal {
         #[inline] pub fn stageGObj0_Callback3(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn stageGObj1_OnInit(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn stageGObj1_Callback1(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_8021F424(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
         #[inline] pub fn stageGObj1_GObjProc(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (ground, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, ground), ctx); }
         #[inline] pub fn stageGObj1_Callback3(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn onJointCollision(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
@@ -7350,14 +8393,15 @@ pub mod melee__gr__grhomerun {
     #[inline] pub fn grHr_804D6AE0(ctx: &Ctx) -> Val<'_, F32> { At::new(ctx, 0x804d6ae0).field(0) }
     #[inline] pub fn grHr_804D6AE4(ctx: &Ctx) -> Val<'_, F32> { At::new(ctx, 0x804d6ae4).field(0) }
     #[inline] pub fn yakumono_param(ctx: &Ctx) -> Ptr<'_, Addr<'_>> { At::new(ctx, 0x804d6ae8).field(0) }
+    #[inline] pub fn fn_8021E994<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x8021e994, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
-
+        pub const fn_8021E994: u32 = 0x8021e994;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
-
+        #[inline] pub fn fn_8021E994(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
     }
 }
 /// Statics of `melee/gr/gricemt`.
@@ -7388,6 +8432,7 @@ pub mod melee__gr__gricemt {
     #[inline] pub fn stageGObj0_Callback1<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 { ctx.call(0x801f75dc, (arg0, )) }
     #[inline] pub fn stageGObj0_GObjProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> () { ctx.call(0x801f75e4, (arg0, )) }
     #[inline] pub fn stageGObj0_Callback3<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> () { ctx.call(0x801f75e8, (arg0, )) }
+    #[inline] pub fn fn_801F75EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801f75ec, (gobj, )) }
     #[inline] pub fn stageGObj9_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801f75fc, (gobj, )) }
     #[inline] pub fn stageGObj9_Callback1<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 { ctx.call(0x801f7720, (arg0, )) }
     #[inline] pub fn stageGObj9_GObjProc<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801f7728, (gobj, )) }
@@ -7425,9 +8470,17 @@ pub mod melee__gr__gricemt {
     #[inline] pub fn stageGObj8_Callback1<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 { ctx.call(0x801f8b08, (arg0, )) }
     #[inline] pub fn stageGObj8_GObjProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> () { ctx.call(0x801f8b10, (arg0, )) }
     #[inline] pub fn stageGObj8_Callback3<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> () { ctx.call(0x801f8c60, (arg0, )) }
+    #[inline] pub fn fn_801F8C64<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, u1: Ground<'a>, u2: Vec<'a>, u3: HSD_GObj<'a>, u4: f64) -> () { ctx.call(0x801f8c64, (gobj, u1, u2, u3, Single(gekko_fp::frsp(u4)), )) }
     #[inline] pub fn grIceMt_801F8CDC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, joint_indices: Val<'a, i16>, block_num: i32, output_array: Ptr<'a, HSD_GObj<'a>>) -> () { ctx.call(0x801f8cdc, (gobj, joint_indices, block_num, output_array, )) }
+    #[inline] pub fn fn_801F8E58<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, out: Val<'a, i32>) -> i32 { ctx.call(0x801f8e58, (arg0, out, )) }
+    #[inline] pub fn fn_801F9038<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x801f9038, (gobj, )) }
+    #[inline] pub fn fn_801F9150<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, out: Val<'a, i32>) -> i32 { ctx.call(0x801f9150, (arg0, out, )) }
+    #[inline] pub fn fn_801F91A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x801f91a8, (gobj, )) }
     #[inline] pub fn grIceMt_801F91EC<'a>(ctx: &'a Ctx, param_1: HSD_GObj<'a>, param_2: Val<'a, i16>, param_3: i32, param_4: i32, param_5: i32, param_6: i32, param_7: i32, param_8: FnPtr<'a>) -> () { ctx.call(0x801f91ec, (param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, )) }
     #[inline] pub fn grIceMt_801F929C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: Addr<'a>) -> () { ctx.call(0x801f929c, (arg0, arg1, )) }
+    #[inline] pub fn fn_801F9338<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801f9338, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn fn_801F9448<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801f9448, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn fn_801F9558<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801f9558, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
     #[inline] pub fn grIceMt_801F9668<'a>(ctx: &'a Ctx, arg0: f64) -> () { ctx.call(0x801f9668, (Single(gekko_fp::frsp(arg0)), )) }
     #[inline] pub fn grIceMt_801F96E0<'a>(ctx: &'a Ctx, arg0: grIceMt_GObj9_GObj10_UnderUpperIdPair<'a>, y: f64) -> f64 { ctx.call(0x801f96e0, (arg0, Single(gekko_fp::frsp(y)), )) }
     #[inline] pub fn grIceMt_801F98A8<'a>(ctx: &'a Ctx, param1: HSD_GObj<'a>) -> () { ctx.call(0x801f98a8, (param1, )) }
@@ -7435,6 +8488,7 @@ pub mod melee__gr__gricemt {
     #[inline] pub fn grIceMt_801F9ACC<'a>(ctx: &'a Ctx, ids_: grIceMt_GObj9_GObj10_UnderUpperIdPair<'a>, y: f64, ev: FnPtr<'a>, arg3: HSD_GObj<'a>) -> i32 { ctx.call(0x801f9acc, (ids_, Single(gekko_fp::frsp(y)), ev, arg3, )) }
     #[inline] pub fn grIceMt_801FA0BC<'a>(ctx: &'a Ctx, ids: grIceMt_GObj9_GObj10_UnderUpperIdPair<'a>) -> () { ctx.call(0x801fa0bc, (ids, )) }
     #[inline] pub fn grIceMt_801FA364<'a>(ctx: &'a Ctx, state: grIceMt_FA364_State<'a>, out: Val<'a, F32>, cb: FnPtr<'a>, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x801fa364, (state, out, cb, gobj, )) }
+    #[inline] pub fn fn_801FA4CC<'a>(ctx: &'a Ctx, num: i32) -> i32 { ctx.call(0x801fa4cc, (num, )) }
     #[inline] pub fn grIceMt_801FA500<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_JObj<'a>) -> i32 { ctx.call(0x801fa500, (arg0, arg1, )) }
     #[inline] pub fn onJointCollision<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801fa7f0, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
     #[inline] pub fn grIceMt_801FA854<'a>(ctx: &'a Ctx) -> () { ctx.call(0x801fa854, ()) }
@@ -7452,6 +8506,7 @@ pub mod melee__gr__gricemt {
         pub const stageGObj0_Callback1: u32 = 0x801f75dc;
         pub const stageGObj0_GObjProc: u32 = 0x801f75e4;
         pub const stageGObj0_Callback3: u32 = 0x801f75e8;
+        pub const fn_801F75EC: u32 = 0x801f75ec;
         pub const stageGObj9_OnInit: u32 = 0x801f75fc;
         pub const stageGObj9_Callback1: u32 = 0x801f7720;
         pub const stageGObj9_GObjProc: u32 = 0x801f7728;
@@ -7489,9 +8544,17 @@ pub mod melee__gr__gricemt {
         pub const stageGObj8_Callback1: u32 = 0x801f8b08;
         pub const stageGObj8_GObjProc: u32 = 0x801f8b10;
         pub const stageGObj8_Callback3: u32 = 0x801f8c60;
+        pub const fn_801F8C64: u32 = 0x801f8c64;
         pub const grIceMt_801F8CDC: u32 = 0x801f8cdc;
+        pub const fn_801F8E58: u32 = 0x801f8e58;
+        pub const fn_801F9038: u32 = 0x801f9038;
+        pub const fn_801F9150: u32 = 0x801f9150;
+        pub const fn_801F91A8: u32 = 0x801f91a8;
         pub const grIceMt_801F91EC: u32 = 0x801f91ec;
         pub const grIceMt_801F929C: u32 = 0x801f929c;
+        pub const fn_801F9338: u32 = 0x801f9338;
+        pub const fn_801F9448: u32 = 0x801f9448;
+        pub const fn_801F9558: u32 = 0x801f9558;
         pub const grIceMt_801F9668: u32 = 0x801f9668;
         pub const grIceMt_801F96E0: u32 = 0x801f96e0;
         pub const grIceMt_801F98A8: u32 = 0x801f98a8;
@@ -7499,6 +8562,7 @@ pub mod melee__gr__gricemt {
         pub const grIceMt_801F9ACC: u32 = 0x801f9acc;
         pub const grIceMt_801FA0BC: u32 = 0x801fa0bc;
         pub const grIceMt_801FA364: u32 = 0x801fa364;
+        pub const fn_801FA4CC: u32 = 0x801fa4cc;
         pub const grIceMt_801FA500: u32 = 0x801fa500;
         pub const onJointCollision: u32 = 0x801fa7f0;
         pub const grIceMt_801FA854: u32 = 0x801fa854;
@@ -7518,6 +8582,7 @@ pub mod melee__gr__gricemt {
         #[inline] pub fn stageGObj0_Callback1(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (arg0, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn stageGObj0_GObjProc(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (arg0, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn stageGObj0_Callback3(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (arg0, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
+        #[inline] pub fn fn_801F75EC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn stageGObj9_OnInit(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn stageGObj9_Callback1(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (arg0, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn stageGObj9_GObjProc(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
@@ -7555,9 +8620,17 @@ pub mod melee__gr__gricemt {
         #[inline] pub fn stageGObj8_Callback1(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (arg0, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn stageGObj8_GObjProc(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (arg0, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn stageGObj8_Callback3(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (arg0, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
+        #[inline] pub fn fn_801F8C64(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, Ground<'a>, Vec<'a>, HSD_GObj<'a>, f64) -> ()) { let (gobj, u1, u2, u3, u4, ): (HSD_GObj<'_>, Ground<'_>, Vec<'_>, HSD_GObj<'_>, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj, u1, u2, u3, u4.0), ctx); }
         #[inline] pub fn grIceMt_801F8CDC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, Val<'a, i16>, i32, Ptr<'a, HSD_GObj<'a>>) -> ()) { let (gobj, joint_indices, block_num, output_array, ): (HSD_GObj<'_>, Val<'_, i16>, i32, Ptr<'_, HSD_GObj<'_>>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj, joint_indices, block_num, output_array), ctx); }
+        #[inline] pub fn fn_801F8E58(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, Val<'a, i32>) -> i32) { let (arg0, out, ): (HSD_GObj<'_>, Val<'_, i32>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0, out), ctx); }
+        #[inline] pub fn fn_801F9038(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_801F9150(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, Val<'a, i32>) -> i32) { let (arg0, out, ): (HSD_GObj<'_>, Val<'_, i32>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0, out), ctx); }
+        #[inline] pub fn fn_801F91A8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn grIceMt_801F91EC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, Val<'a, i16>, i32, i32, i32, i32, i32, FnPtr<'a>) -> ()) { let (param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, ): (HSD_GObj<'_>, Val<'_, i16>, i32, i32, i32, i32, i32, FnPtr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8), ctx); }
         #[inline] pub fn grIceMt_801F929C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, Addr<'a>) -> ()) { let (arg0, arg1, ): (HSD_GObj<'_>, Addr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0, arg1), ctx); }
+        #[inline] pub fn fn_801F9338(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
+        #[inline] pub fn fn_801F9448(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
+        #[inline] pub fn fn_801F9558(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
         #[inline] pub fn grIceMt_801F9668(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, f64) -> ()) { let (arg0, ): (Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0.0), ctx); }
         #[inline] pub fn grIceMt_801F96E0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, grIceMt_GObj9_GObj10_UnderUpperIdPair<'a>, f64) -> f64) { let (arg0, y, ): (grIceMt_GObj9_GObj10_UnderUpperIdPair<'_>, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0, y.0), ctx); }
         #[inline] pub fn grIceMt_801F98A8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (param1, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, param1), ctx); }
@@ -7565,6 +8638,7 @@ pub mod melee__gr__gricemt {
         #[inline] pub fn grIceMt_801F9ACC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, grIceMt_GObj9_GObj10_UnderUpperIdPair<'a>, f64, FnPtr<'a>, HSD_GObj<'a>) -> i32) { let (ids_, y, ev, arg3, ): (grIceMt_GObj9_GObj10_UnderUpperIdPair<'_>, Single, FnPtr<'_>, HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, ids_, y.0, ev, arg3), ctx); }
         #[inline] pub fn grIceMt_801FA0BC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, grIceMt_GObj9_GObj10_UnderUpperIdPair<'a>) -> ()) { let (ids, ): (grIceMt_GObj9_GObj10_UnderUpperIdPair<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, ids), ctx); }
         #[inline] pub fn grIceMt_801FA364(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, grIceMt_FA364_State<'a>, Val<'a, F32>, FnPtr<'a>, HSD_GObj<'a>) -> i32) { let (state, out, cb, gobj, ): (grIceMt_FA364_State<'_>, Val<'_, F32>, FnPtr<'_>, HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, state, out, cb, gobj), ctx); }
+        #[inline] pub fn fn_801FA4CC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (num, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, num), ctx); }
         #[inline] pub fn grIceMt_801FA500(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, HSD_JObj<'a>) -> i32) { let (arg0, arg1, ): (HSD_GObj<'_>, HSD_JObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0, arg1), ctx); }
         #[inline] pub fn onJointCollision(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
         #[inline] pub fn grIceMt_801FA854(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
@@ -7606,10 +8680,13 @@ pub mod melee__gr__grinishie1 {
     #[inline] pub fn grInishie1_801FBAA0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ix: i32) -> () { ctx.call(0x801fbaa0, (gobj, ix, )) }
     #[inline] pub fn grInishie1_801FBC4C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, index: u32) -> () { ctx.call(0x801fbc4c, (gobj, index, )) }
     #[inline] pub fn grInishie1_801FBCEC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, index: u32) -> () { ctx.call(0x801fbcec, (gobj, index, )) }
+    #[inline] pub fn fn_801FBEB8<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801fbeb8, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn fn_801FBF6C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, gp: Ground<'a>, pos: Vec<'a>, arg3: HSD_GObj<'a>, arg4: f64) -> () { ctx.call(0x801fbf6c, (item_gobj, gp, pos, arg3, Single(gekko_fp::frsp(arg4)), )) }
     #[inline] pub fn grInishie1_801FC018<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801fc018, (gobj, )) }
     #[inline] pub fn grInishie1_801FC110<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801fc110, (gobj, )) }
     #[inline] pub fn grInishie1_801FC4A0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801fc4a0, (gobj, )) }
     #[inline] pub fn grInishie1_801FC664<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801fc664, (gobj, )) }
+    #[inline] pub fn fn_801FC9AC<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801fc9ac, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
     #[inline] pub fn grInishie1_801FCB10<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801fcb10, (gobj, )) }
     #[inline] pub fn grInishie1_801FCBB0<'a>(ctx: &'a Ctx, arg: i32) -> DynamicsDesc<'a> { ctx.call(0x801fcbb0, (arg, )) }
     #[inline] pub fn grInishie1_801FCBB8<'a>(ctx: &'a Ctx, arg: Vec<'a>, arg0: i32, jobj: HSD_JObj<'a>) -> i32 { ctx.call(0x801fcbb8, (arg, arg0, jobj, )) }
@@ -7644,10 +8721,13 @@ pub mod melee__gr__grinishie1 {
         pub const grInishie1_801FBAA0: u32 = 0x801fbaa0;
         pub const grInishie1_801FBC4C: u32 = 0x801fbc4c;
         pub const grInishie1_801FBCEC: u32 = 0x801fbcec;
+        pub const fn_801FBEB8: u32 = 0x801fbeb8;
+        pub const fn_801FBF6C: u32 = 0x801fbf6c;
         pub const grInishie1_801FC018: u32 = 0x801fc018;
         pub const grInishie1_801FC110: u32 = 0x801fc110;
         pub const grInishie1_801FC4A0: u32 = 0x801fc4a0;
         pub const grInishie1_801FC664: u32 = 0x801fc664;
+        pub const fn_801FC9AC: u32 = 0x801fc9ac;
         pub const grInishie1_801FCB10: u32 = 0x801fcb10;
         pub const grInishie1_801FCBB0: u32 = 0x801fcbb0;
         pub const grInishie1_801FCBB8: u32 = 0x801fcbb8;
@@ -7684,10 +8764,13 @@ pub mod melee__gr__grinishie1 {
         #[inline] pub fn grInishie1_801FBAA0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, i32) -> ()) { let (gobj, ix, ): (HSD_GObj<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj, ix), ctx); }
         #[inline] pub fn grInishie1_801FBC4C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, u32) -> ()) { let (gobj, index, ): (HSD_GObj<'_>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj, index), ctx); }
         #[inline] pub fn grInishie1_801FBCEC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, u32) -> ()) { let (gobj, index, ): (HSD_GObj<'_>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj, index), ctx); }
+        #[inline] pub fn fn_801FBEB8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
+        #[inline] pub fn fn_801FBF6C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, Ground<'a>, Vec<'a>, HSD_GObj<'a>, f64) -> ()) { let (item_gobj, gp, pos, arg3, arg4, ): (HSD_GObj<'_>, Ground<'_>, Vec<'_>, HSD_GObj<'_>, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, item_gobj, gp, pos, arg3, arg4.0), ctx); }
         #[inline] pub fn grInishie1_801FC018(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn grInishie1_801FC110(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn grInishie1_801FC4A0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn grInishie1_801FC664(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_801FC9AC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
         #[inline] pub fn grInishie1_801FCB10(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn grInishie1_801FCBB0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> DynamicsDesc<'a>) { let (arg, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg), ctx); }
         #[inline] pub fn grInishie1_801FCBB8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>, i32, HSD_JObj<'a>) -> i32) { let (arg, arg0, jobj, ): (Vec<'_>, i32, HSD_JObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg, arg0, jobj), ctx); }
@@ -7748,14 +8831,23 @@ pub mod melee__gr__grkongo {
     #[inline] pub fn grKg_803B7FB0(ctx: &Ctx) -> lbColl_80008D30_arg1<'_> { At::new(ctx, 0x803b7fb0).field(0) }
     #[inline] pub fn grKg_803E188C(ctx: &Ctx) -> Arr<'_, _struct_grKg_803E188C_0x18<'_>, 15> { At::new(ctx, 0x803e188c).field(0) }
     #[inline] pub fn yakumono_param(ctx: &Ctx) -> Ptr<'_, grKongo_YakumonoParam<'_>> { At::new(ctx, 0x804d6980).field(0) }
+    #[inline] pub fn fn_801D7700<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801d7700, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn fn_801D7E60<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801d7e60, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn fn_801D8134<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<'a>) -> i32 { ctx.call(0x801d8134, (arg0, arg1, )) }
     #[inline] pub fn grKongo_801D8444<'a>(ctx: &'a Ctx, arg: i32) -> DynamicsDesc<'a> { ctx.call(0x801d8444, (arg, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
+        pub const fn_801D7700: u32 = 0x801d7700;
+        pub const fn_801D7E60: u32 = 0x801d7e60;
+        pub const fn_801D8134: u32 = 0x801d8134;
         pub const grKongo_801D8444: u32 = 0x801d8444;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
+        #[inline] pub fn fn_801D7700(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
+        #[inline] pub fn fn_801D7E60(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
+        #[inline] pub fn fn_801D8134(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, HSD_GObj<'a>) -> i32) { let (arg0, arg1, ): (HSD_GObj<'_>, HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0, arg1), ctx); }
         #[inline] pub fn grKongo_801D8444(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> DynamicsDesc<'a>) { let (arg, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg), ctx); }
     }
 }
@@ -7805,6 +8897,7 @@ pub mod melee__gr__grlast {
     #[inline] pub fn grLast_8021A99C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x8021a99c, (gobj, )) }
     #[inline] pub fn grLast_8021A9A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8021a9a4, (gobj, )) }
     #[inline] pub fn grLast_8021A9A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8021a9a8, (gobj, )) }
+    #[inline] pub fn grLast_8021A9AC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8021a9ac, (gobj, )) }
     #[inline] pub fn grLast_8021A9C4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8021a9c4, (gobj, )) }
     #[inline] pub fn grLast_8021AAA8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x8021aaa8, (gobj, )) }
     #[inline] pub fn grLast_8021AAB0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8021aab0, (gobj, )) }
@@ -7862,6 +8955,7 @@ pub mod melee__gr__grlast {
         pub const grLast_8021A99C: u32 = 0x8021a99c;
         pub const grLast_8021A9A4: u32 = 0x8021a9a4;
         pub const grLast_8021A9A8: u32 = 0x8021a9a8;
+        pub const grLast_8021A9AC: u32 = 0x8021a9ac;
         pub const grLast_8021A9C4: u32 = 0x8021a9c4;
         pub const grLast_8021AAA8: u32 = 0x8021aaa8;
         pub const grLast_8021AAB0: u32 = 0x8021aab0;
@@ -7921,6 +9015,7 @@ pub mod melee__gr__grlast {
         #[inline] pub fn grLast_8021A99C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn grLast_8021A9A4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn grLast_8021A9A8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn grLast_8021A9AC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn grLast_8021A9C4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn grLast_8021AAA8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn grLast_8021AAB0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
@@ -7989,16 +9084,19 @@ pub mod melee__gr__grmaterial {
     #[inline] pub fn grMaterial_804D456C(ctx: &Ctx) -> ArrP<'_, FnPtr<'_>, 1> { At::new(ctx, 0x804d456c).field(0) }
     #[inline] pub fn grMaterial_801C897C<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, flags: u32) -> () { ctx.call(0x801c897c, (jobj, flags, )) }
     #[inline] pub fn grMaterial_801C8E74<'a>(ctx: &'a Ctx) -> () { ctx.call(0x801c8e74, ()) }
+    #[inline] pub fn fn_801C8EF8<'a>(ctx: &'a Ctx, mobj: HSD_MObj<'a>, rendermode: u32) -> () { ctx.call(0x801c8ef8, (mobj, rendermode, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const grMaterial_801C897C: u32 = 0x801c897c;
         pub const grMaterial_801C8E74: u32 = 0x801c8e74;
+        pub const fn_801C8EF8: u32 = 0x801c8ef8;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
         #[inline] pub fn grMaterial_801C897C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_JObj<'a>, u32) -> ()) { let (jobj, flags, ): (HSD_JObj<'_>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, jobj, flags), ctx); }
         #[inline] pub fn grMaterial_801C8E74(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+        #[inline] pub fn fn_801C8EF8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_MObj<'a>, u32) -> ()) { let (mobj, rendermode, ): (HSD_MObj<'_>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, mobj, rendermode), ctx); }
     }
 }
 /// Statics of `melee/gr/grmutecity`.
@@ -8013,14 +9111,17 @@ pub mod melee__gr__grmutecity {
     #[inline] pub fn yakumono_param(ctx: &Ctx) -> Ptr<'_, grMc_YakumonoParam<'_>> { At::new(ctx, 0x804d69d0).field(0) }
     #[inline] pub fn grMc_804D69D4(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d69d4).field(0) }
     #[inline] pub fn stageGObj36_37_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801f0410, (gobj, )) }
+    #[inline] pub fn fn_801F2B58<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801f2b58, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const stageGObj36_37_OnInit: u32 = 0x801f0410;
+        pub const fn_801F2B58: u32 = 0x801f2b58;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
         #[inline] pub fn stageGObj36_37_OnInit(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_801F2B58(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
     }
 }
 /// Statics of `melee/gr/groldkongo`.
@@ -8051,6 +9152,7 @@ pub mod melee__gr__groldkongo {
     #[inline] pub fn stageGObj2_Callback1<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x802100f4, (gobj, )) }
     #[inline] pub fn stageGObj2_GObjProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> () { ctx.call(0x802100fc, (arg0, )) }
     #[inline] pub fn stageGObj2_Callback3<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> () { ctx.call(0x80210450, (arg, )) }
+    #[inline] pub fn grOldKongo_80210454<'a>(ctx: &'a Ctx, ground_gobj: HSD_GObj<'a>, keep: HSD_GObj<'a>) -> i32 { ctx.call(0x80210454, (ground_gobj, keep, )) }
     #[inline] pub fn grOldKongo_80210650<'a>(ctx: &'a Ctx) -> f64 { ctx.call(0x80210650, ()) }
     #[inline] pub fn grOldKongo_80210780<'a>(ctx: &'a Ctx, gobj: i32) -> DynamicsDesc<'a> { ctx.call(0x80210780, (gobj, )) }
     #[inline] pub fn grOldKongo_80210788<'a>(ctx: &'a Ctx, a: Vec<'a>, arg: i32, joint: HSD_JObj<'a>) -> i32 { ctx.call(0x80210788, (a, arg, joint, )) }
@@ -8078,6 +9180,7 @@ pub mod melee__gr__groldkongo {
         pub const stageGObj2_Callback1: u32 = 0x802100f4;
         pub const stageGObj2_GObjProc: u32 = 0x802100fc;
         pub const stageGObj2_Callback3: u32 = 0x80210450;
+        pub const grOldKongo_80210454: u32 = 0x80210454;
         pub const grOldKongo_80210650: u32 = 0x80210650;
         pub const grOldKongo_80210780: u32 = 0x80210780;
         pub const grOldKongo_80210788: u32 = 0x80210788;
@@ -8107,6 +9210,7 @@ pub mod melee__gr__groldkongo {
         #[inline] pub fn stageGObj2_Callback1(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn stageGObj2_GObjProc(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (arg0, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn stageGObj2_Callback3(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (arg, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg), ctx); }
+        #[inline] pub fn grOldKongo_80210454(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, HSD_GObj<'a>) -> i32) { let (ground_gobj, keep, ): (HSD_GObj<'_>, HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, ground_gobj, keep), ctx); }
         #[inline] pub fn grOldKongo_80210650(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> f64) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
         #[inline] pub fn grOldKongo_80210780(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> DynamicsDesc<'a>) { let (gobj, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn grOldKongo_80210788(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>, i32, HSD_JObj<'a>) -> i32) { let (a, arg, joint, ): (Vec<'_>, i32, HSD_JObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, a, arg, joint), ctx); }
@@ -8145,14 +9249,17 @@ pub mod melee__gr__groldyoshi {
     use crate::fns::*;
     #[inline] pub fn yakumono_param(ctx: &Ctx) -> Ptr<'_, groldyoshi_yakumono_param_t<'_>> { At::new(ctx, 0x804d6a88).field(0) }
     #[inline] pub fn stageGObj0_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8020e93c, (gobj, )) }
+    #[inline] pub fn fn_8020F2A8<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x8020f2a8, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const stageGObj0_OnInit: u32 = 0x8020e93c;
+        pub const fn_8020F2A8: u32 = 0x8020f2a8;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
         #[inline] pub fn stageGObj0_OnInit(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_8020F2A8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
     }
 }
 /// Statics of `melee/gr/gronett`.
@@ -8162,14 +9269,18 @@ pub mod melee__gr__gronett {
     #[inline] pub fn grOt_803E27E0(ctx: &Ctx) -> Arr<'_, StageCallbacks<'_>, 6> { At::new(ctx, 0x803e27e0).field(0) }
     #[inline] pub fn yakumono_param(ctx: &Ctx) -> Ptr<'_, grOnett_StageParam<'_>> { At::new(ctx, 0x804d69c0).field(0) }
     #[inline] pub fn grOt_804D69C4(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d69c4).field(0) }
+    #[inline] pub fn grOnett_801E40E4<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801e40e4, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn grOnett_801E54B4<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801e54b4, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
-
+        pub const grOnett_801E40E4: u32 = 0x801e40e4;
+        pub const grOnett_801E54B4: u32 = 0x801e54b4;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
-
+        #[inline] pub fn grOnett_801E40E4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
+        #[inline] pub fn grOnett_801E54B4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
     }
 }
 /// Statics of `melee/gr/ground`.
@@ -8288,6 +9399,7 @@ pub mod melee__gr__grpstadium {
     #[inline] pub fn stageGObj6_GObjProc<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801d17e8, (gobj, )) }
     #[inline] pub fn stageGObj3_GObjProc<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801d19d8, (gobj, )) }
     #[inline] pub fn stageGObj7_8_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801d1de4, (gobj, )) }
+    #[inline] pub fn fn_801D4220<'a>(ctx: &'a Ctx, dcreq: i32, args: u32, buf: Addr<'a>, cancelflag: i32) -> () { ctx.call(0x801d4220, (dcreq, args, buf, cancelflag, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const stageGObj5_GObjProc: u32 = 0x801d1604;
@@ -8295,6 +9407,7 @@ pub mod melee__gr__grpstadium {
         pub const stageGObj6_GObjProc: u32 = 0x801d17e8;
         pub const stageGObj3_GObjProc: u32 = 0x801d19d8;
         pub const stageGObj7_8_OnInit: u32 = 0x801d1de4;
+        pub const fn_801D4220: u32 = 0x801d4220;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
@@ -8304,6 +9417,7 @@ pub mod melee__gr__grpstadium {
         #[inline] pub fn stageGObj6_GObjProc(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn stageGObj3_GObjProc(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn stageGObj7_8_OnInit(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_801D4220(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, u32, Addr<'a>, i32) -> ()) { let (dcreq, args, buf, cancelflag, ): (i32, u32, Addr<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, dcreq, args, buf, cancelflag), ctx); }
     }
 }
 /// Statics of `melee/gr/grpura`.
@@ -8347,6 +9461,7 @@ pub mod melee__gr__grpura {
     #[inline] pub fn grPura_80213030<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> () { ctx.call(0x80213030, (arg0, )) }
     #[inline] pub fn grPura_802130C0<'a>(ctx: &'a Ctx, arg0: i32) -> DynamicsDesc<'a> { ctx.call(0x802130c0, (arg0, )) }
     #[inline] pub fn grPura_802130C8<'a>(ctx: &'a Ctx, a: Vec<'a>, num: i32, joint: HSD_JObj<'a>) -> i32 { ctx.call(0x802130c8, (a, num, joint, )) }
+    #[inline] pub fn fn_802130D0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: i32) -> () { ctx.call(0x802130d0, (arg0, arg1, )) }
     #[inline] pub fn grPura_80213128<'a>(ctx: &'a Ctx, dobj: HSD_DObj<'a>) -> () { ctx.call(0x80213128, (dobj, )) }
     #[inline] pub fn grPura_80213224<'a>(ctx: &'a Ctx, dobj: HSD_DObj<'a>) -> () { ctx.call(0x80213224, (dobj, )) }
     #[inline] pub fn grPura_80213250<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> () { ctx.call(0x80213250, (jobj, )) }
@@ -8385,6 +9500,7 @@ pub mod melee__gr__grpura {
         pub const grPura_80213030: u32 = 0x80213030;
         pub const grPura_802130C0: u32 = 0x802130c0;
         pub const grPura_802130C8: u32 = 0x802130c8;
+        pub const fn_802130D0: u32 = 0x802130d0;
         pub const grPura_80213128: u32 = 0x80213128;
         pub const grPura_80213224: u32 = 0x80213224;
         pub const grPura_80213250: u32 = 0x80213250;
@@ -8425,6 +9541,7 @@ pub mod melee__gr__grpura {
         #[inline] pub fn grPura_80213030(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (arg0, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn grPura_802130C0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> DynamicsDesc<'a>) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn grPura_802130C8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>, i32, HSD_JObj<'a>) -> i32) { let (a, num, joint, ): (Vec<'_>, i32, HSD_JObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, a, num, joint), ctx); }
+        #[inline] pub fn fn_802130D0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, i32) -> ()) { let (arg0, arg1, ): (HSD_GObj<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0, arg1), ctx); }
         #[inline] pub fn grPura_80213128(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_DObj<'a>) -> ()) { let (dobj, ): (HSD_DObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, dobj), ctx); }
         #[inline] pub fn grPura_80213224(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_DObj<'a>) -> ()) { let (dobj, ): (HSD_DObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, dobj), ctx); }
         #[inline] pub fn grPura_80213250(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_JObj<'a>) -> ()) { let (jobj, ): (HSD_JObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, jobj), ctx); }
@@ -8436,14 +9553,15 @@ pub mod melee__gr__grpushon {
     use crate::fns::*;
     #[inline] pub fn light_configs(ctx: &Ctx) -> Arr<'_, grPushOn_LightConfig<'_>, 9> { At::new(ctx, 0x803e7bac).field(0) }
     #[inline] pub fn yakumono_param(ctx: &Ctx) -> Ptr<'_, grPushon_YakumonoParam<'_>> { At::new(ctx, 0x804d6ab8).field(0) }
+    #[inline] pub fn fn_802190A0<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x802190a0, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
-
+        pub const fn_802190A0: u32 = 0x802190a0;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
-
+        #[inline] pub fn fn_802190A0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
     }
 }
 /// Statics of `melee/gr/grrcruise`.
@@ -8452,14 +9570,21 @@ pub mod melee__gr__grrcruise {
     use crate::fns::*;
     #[inline] pub fn grRc_804D4790(ctx: &Ctx) -> ArrV<'_, i16, 3> { At::new(ctx, 0x804d4790).field(0) }
     #[inline] pub fn yakumono_param(ctx: &Ctx) -> Ptr<'_, grRCruise_YakumonoParam<'_>> { At::new(ctx, 0x804d6a10).field(0) }
+    #[inline] pub fn fn_80200460<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x80200460, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn grRCruise_80200578<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x80200578, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn grRCruise_802010A4<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x802010a4, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
-
+        pub const fn_80200460: u32 = 0x80200460;
+        pub const grRCruise_80200578: u32 = 0x80200578;
+        pub const grRCruise_802010A4: u32 = 0x802010a4;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
-
+        #[inline] pub fn fn_80200460(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
+        #[inline] pub fn grRCruise_80200578(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
+        #[inline] pub fn grRCruise_802010A4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
     }
 }
 /// Statics of `melee/gr/grshrine`.
@@ -8565,8 +9690,10 @@ pub mod melee__gr__grshrineroute {
     #[inline] pub fn grShrineRoute_80208A28<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 { ctx.call(0x80208a28, (arg, )) }
     #[inline] pub fn grShrineRoute_80208A30<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> () { ctx.call(0x80208a30, (arg, )) }
     #[inline] pub fn grShrineRoute_80208A34<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> () { ctx.call(0x80208a34, (arg, )) }
+    #[inline] pub fn fn_80208A38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80208a38, (gobj, )) }
     #[inline] pub fn grShrineRoute_80208D14<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80208d14, (gobj, )) }
     #[inline] pub fn grShrineRoute_80208F0C<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 { ctx.call(0x80208f0c, (arg, )) }
+    #[inline] pub fn grShrineRoute_80208F14<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x80208f14, ()) }
     #[inline] pub fn grShrineRoute_80208F70<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80208f70, (gobj, )) }
     #[inline] pub fn grShrineRoute_80209AEC<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> () { ctx.call(0x80209aec, (arg, )) }
     #[inline] pub fn grShrineRoute_80209AF0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80209af0, (gobj, )) }
@@ -8585,7 +9712,9 @@ pub mod melee__gr__grshrineroute {
     #[inline] pub fn grShrineRoute_8020AA40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8020aa40, (gobj, )) }
     #[inline] pub fn grShrineRoute_8020AB58<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_LObj<'a> { ctx.call(0x8020ab58, (gobj, )) }
     #[inline] pub fn grShrineRoute_8020AC44<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_LObj<'a> { ctx.call(0x8020ac44, (gobj, )) }
+    #[inline] pub fn grShrineRoute_8020AD24<'a>(ctx: &'a Ctx, arg: i32) -> i32 { ctx.call(0x8020ad24, (arg, )) }
     #[inline] pub fn onJointCollision<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x8020ad58, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn grShrineRoute_8020AE08<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, player_gobj: HSD_GObj<'a>, out: Val<'a, i32>) -> i32 { ctx.call(0x8020ae08, (gobj, player_gobj, out, )) }
     #[inline] pub fn grShrineRoute_8020AF38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) -> () { ctx.call(0x8020af38, (gobj, arg1, )) }
     #[inline] pub fn grShrineRoute_8020B020<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, r4: i32, r5: i32) -> () { ctx.call(0x8020b020, (gobj, r4, r5, )) }
     #[inline] pub fn grShrineRoute_8020B0AC<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8020b0ac, ()) }
@@ -8607,8 +9736,10 @@ pub mod melee__gr__grshrineroute {
         pub const grShrineRoute_80208A28: u32 = 0x80208a28;
         pub const grShrineRoute_80208A30: u32 = 0x80208a30;
         pub const grShrineRoute_80208A34: u32 = 0x80208a34;
+        pub const fn_80208A38: u32 = 0x80208a38;
         pub const grShrineRoute_80208D14: u32 = 0x80208d14;
         pub const grShrineRoute_80208F0C: u32 = 0x80208f0c;
+        pub const grShrineRoute_80208F14: u32 = 0x80208f14;
         pub const grShrineRoute_80208F70: u32 = 0x80208f70;
         pub const grShrineRoute_80209AEC: u32 = 0x80209aec;
         pub const grShrineRoute_80209AF0: u32 = 0x80209af0;
@@ -8627,7 +9758,9 @@ pub mod melee__gr__grshrineroute {
         pub const grShrineRoute_8020AA40: u32 = 0x8020aa40;
         pub const grShrineRoute_8020AB58: u32 = 0x8020ab58;
         pub const grShrineRoute_8020AC44: u32 = 0x8020ac44;
+        pub const grShrineRoute_8020AD24: u32 = 0x8020ad24;
         pub const onJointCollision: u32 = 0x8020ad58;
+        pub const grShrineRoute_8020AE08: u32 = 0x8020ae08;
         pub const grShrineRoute_8020AF38: u32 = 0x8020af38;
         pub const grShrineRoute_8020B020: u32 = 0x8020b020;
         pub const grShrineRoute_8020B0AC: u32 = 0x8020b0ac;
@@ -8651,8 +9784,10 @@ pub mod melee__gr__grshrineroute {
         #[inline] pub fn grShrineRoute_80208A28(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (arg, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg), ctx); }
         #[inline] pub fn grShrineRoute_80208A30(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (arg, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg), ctx); }
         #[inline] pub fn grShrineRoute_80208A34(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (arg, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg), ctx); }
+        #[inline] pub fn fn_80208A38(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn grShrineRoute_80208D14(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn grShrineRoute_80208F0C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (arg, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg), ctx); }
+        #[inline] pub fn grShrineRoute_80208F14(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
         #[inline] pub fn grShrineRoute_80208F70(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn grShrineRoute_80209AEC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (arg, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg), ctx); }
         #[inline] pub fn grShrineRoute_80209AF0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
@@ -8671,7 +9806,9 @@ pub mod melee__gr__grshrineroute {
         #[inline] pub fn grShrineRoute_8020AA40(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn grShrineRoute_8020AB58(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> HSD_LObj<'a>) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn grShrineRoute_8020AC44(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> HSD_LObj<'a>) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn grShrineRoute_8020AD24(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (arg, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg), ctx); }
         #[inline] pub fn onJointCollision(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
+        #[inline] pub fn grShrineRoute_8020AE08(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, HSD_GObj<'a>, Val<'a, i32>) -> i32) { let (gobj, player_gobj, out, ): (HSD_GObj<'_>, HSD_GObj<'_>, Val<'_, i32>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj, player_gobj, out), ctx); }
         #[inline] pub fn grShrineRoute_8020AF38(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, i32) -> ()) { let (gobj, arg1, ): (HSD_GObj<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj, arg1), ctx); }
         #[inline] pub fn grShrineRoute_8020B020(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, i32, i32) -> ()) { let (gobj, r4, r5, ): (HSD_GObj<'_>, i32, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj, r4, r5), ctx); }
         #[inline] pub fn grShrineRoute_8020B0AC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
@@ -10310,14 +11447,32 @@ pub mod melee__gr__gryorster {
     use super::*;
     use crate::fns::*;
     #[inline] pub fn stageGObj0_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80202124, (gobj, )) }
+    #[inline] pub fn grYorster_802024F0<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x802024f0, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const stageGObj0_OnInit: u32 = 0x80202124;
+        pub const grYorster_802024F0: u32 = 0x802024f0;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
         #[inline] pub fn stageGObj0_OnInit(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn grYorster_802024F0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
+    }
+}
+/// Statics of `melee/gr/grzakogenerator`.
+pub mod melee__gr__grzakogenerator {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn lbl_8049F030(ctx: &Ctx) -> lbl_8049F030_t<'_> { At::new(ctx, 0x8049f030).field(0) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+
     }
 }
 /// Statics of `melee/gr/grzebes`.
@@ -10344,6 +11499,7 @@ pub mod melee__gr__grzebes {
     #[inline] pub fn grZebes_801D9408<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 { ctx.call(0x801d9408, (arg, )) }
     #[inline] pub fn grZebes_801D9410<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801d9410, (gobj, )) }
     #[inline] pub fn grZebes_801D94EC<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> () { ctx.call(0x801d94ec, (arg, )) }
+    #[inline] pub fn fn_801D94F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801d94f0, (gobj, )) }
     #[inline] pub fn grZebes_801D95B0<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 { ctx.call(0x801d95b0, (arg, )) }
     #[inline] pub fn grZebes_801D95B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801d95b8, (gobj, )) }
     #[inline] pub fn grZebes_801D9754<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> () { ctx.call(0x801d9754, (arg, )) }
@@ -10355,7 +11511,10 @@ pub mod melee__gr__grzebes {
     #[inline] pub fn grZebes_801DA254<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, level: f64) -> () { ctx.call(0x801da254, (gobj, Single(gekko_fp::frsp(level)), )) }
     #[inline] pub fn grZebes_801DA3E8<'a>(ctx: &'a Ctx) -> () { ctx.call(0x801da3e8, ()) }
     #[inline] pub fn grZebes_801DA528<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: Addr<'a>, arg2: i32, arg3: i32) -> i32 { ctx.call(0x801da528, (arg0, arg1, arg2, arg3, )) }
+    #[inline] pub fn fn_801DA9D8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, gp: Ground<'a>, pos: Vec<'a>, fobj: HSD_GObj<'a>, slope: f64) -> () { ctx.call(0x801da9d8, (arg0, gp, pos, fobj, Single(gekko_fp::frsp(slope)), )) }
+    #[inline] pub fn fn_801DA9F0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, gp: Ground<'a>, pos: Vec<'a>, fobj: HSD_GObj<'a>, slope: f64) -> () { ctx.call(0x801da9f0, (arg0, gp, pos, fobj, Single(gekko_fp::frsp(slope)), )) }
     #[inline] pub fn grZebes_801DAA08<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x801daa08, ()) }
+    #[inline] pub fn fn_801DAC90<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: Ground<'a>, arg2: Vec<'a>, arg3: HSD_GObj<'a>, arg4: f64) -> () { ctx.call(0x801dac90, (arg0, arg1, arg2, arg3, Single(gekko_fp::frsp(arg4)), )) }
     #[inline] pub fn grZebes_801DAE70<'a>(ctx: &'a Ctx, arg0: i32, arg1: u8, x: f64, y: f64, scale: f64) -> () { ctx.call(0x801dae70, (arg0, arg1, Single(gekko_fp::frsp(x)), Single(gekko_fp::frsp(y)), Single(gekko_fp::frsp(scale)), )) }
     #[inline] pub fn grZebes_801DB3CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x801db3cc, (gobj, )) }
     #[inline] pub fn grZebes_801DBB60<'a>(ctx: &'a Ctx, yaku: HSD_GObj<'a>) -> i32 { ctx.call(0x801dbb60, (yaku, )) }
@@ -10379,6 +11538,7 @@ pub mod melee__gr__grzebes {
         pub const grZebes_801D9408: u32 = 0x801d9408;
         pub const grZebes_801D9410: u32 = 0x801d9410;
         pub const grZebes_801D94EC: u32 = 0x801d94ec;
+        pub const fn_801D94F0: u32 = 0x801d94f0;
         pub const grZebes_801D95B0: u32 = 0x801d95b0;
         pub const grZebes_801D95B8: u32 = 0x801d95b8;
         pub const grZebes_801D9754: u32 = 0x801d9754;
@@ -10390,7 +11550,10 @@ pub mod melee__gr__grzebes {
         pub const grZebes_801DA254: u32 = 0x801da254;
         pub const grZebes_801DA3E8: u32 = 0x801da3e8;
         pub const grZebes_801DA528: u32 = 0x801da528;
+        pub const fn_801DA9D8: u32 = 0x801da9d8;
+        pub const fn_801DA9F0: u32 = 0x801da9f0;
         pub const grZebes_801DAA08: u32 = 0x801daa08;
+        pub const fn_801DAC90: u32 = 0x801dac90;
         pub const grZebes_801DAE70: u32 = 0x801dae70;
         pub const grZebes_801DB3CC: u32 = 0x801db3cc;
         pub const grZebes_801DBB60: u32 = 0x801dbb60;
@@ -10416,6 +11579,7 @@ pub mod melee__gr__grzebes {
         #[inline] pub fn grZebes_801D9408(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (arg, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg), ctx); }
         #[inline] pub fn grZebes_801D9410(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn grZebes_801D94EC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (arg, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg), ctx); }
+        #[inline] pub fn fn_801D94F0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn grZebes_801D95B0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (arg, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg), ctx); }
         #[inline] pub fn grZebes_801D95B8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn grZebes_801D9754(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (arg, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg), ctx); }
@@ -10427,7 +11591,10 @@ pub mod melee__gr__grzebes {
         #[inline] pub fn grZebes_801DA254(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, f64) -> ()) { let (gobj, level, ): (HSD_GObj<'_>, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj, level.0), ctx); }
         #[inline] pub fn grZebes_801DA3E8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
         #[inline] pub fn grZebes_801DA528(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, Addr<'a>, i32, i32) -> i32) { let (arg0, arg1, arg2, arg3, ): (HSD_GObj<'_>, Addr<'_>, i32, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0, arg1, arg2, arg3), ctx); }
+        #[inline] pub fn fn_801DA9D8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, Ground<'a>, Vec<'a>, HSD_GObj<'a>, f64) -> ()) { let (arg0, gp, pos, fobj, slope, ): (HSD_GObj<'_>, Ground<'_>, Vec<'_>, HSD_GObj<'_>, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0, gp, pos, fobj, slope.0), ctx); }
+        #[inline] pub fn fn_801DA9F0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, Ground<'a>, Vec<'a>, HSD_GObj<'a>, f64) -> ()) { let (arg0, gp, pos, fobj, slope, ): (HSD_GObj<'_>, Ground<'_>, Vec<'_>, HSD_GObj<'_>, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0, gp, pos, fobj, slope.0), ctx); }
         #[inline] pub fn grZebes_801DAA08(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+        #[inline] pub fn fn_801DAC90(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, Ground<'a>, Vec<'a>, HSD_GObj<'a>, f64) -> ()) { let (arg0, arg1, arg2, arg3, arg4, ): (HSD_GObj<'_>, Ground<'_>, Vec<'_>, HSD_GObj<'_>, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0, arg1, arg2, arg3, arg4.0), ctx); }
         #[inline] pub fn grZebes_801DAE70(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, u8, f64, f64, f64) -> ()) { let (arg0, arg1, x, y, scale, ): (i32, u8, Single, Single, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0, arg1, x.0, y.0, scale.0), ctx); }
         #[inline] pub fn grZebes_801DB3CC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn grZebes_801DBB60(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (yaku, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, yaku), ctx); }
@@ -10448,11 +11615,13 @@ pub mod melee__gr__grzebesroute {
     #[inline] pub fn grZebesRoute_8020B260<'a>(ctx: &'a Ctx, gobj_id: i32) -> HSD_GObj<'a> { ctx.call(0x8020b260, (gobj_id, )) }
     #[inline] pub fn stageGObj0_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8020b348, (gobj, )) }
     #[inline] pub fn stageGObj2_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8020b384, (gobj, )) }
+    #[inline] pub fn fn_8020B4D8<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x8020b4d8, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const grZebesRoute_8020B260: u32 = 0x8020b260;
         pub const stageGObj0_OnInit: u32 = 0x8020b348;
         pub const stageGObj2_OnInit: u32 = 0x8020b384;
+        pub const fn_8020B4D8: u32 = 0x8020b4d8;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
@@ -10460,12 +11629,14 @@ pub mod melee__gr__grzebesroute {
         #[inline] pub fn grZebesRoute_8020B260(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> HSD_GObj<'a>) { let (gobj_id, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj_id), ctx); }
         #[inline] pub fn stageGObj0_OnInit(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn stageGObj2_OnInit(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_8020B4D8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>, i32, CollData<'a>, i32, i32, f64) -> ()) { let (user_data, joint_id, coll, coll_x50, ground_kind, delta_y, ): (Addr<'_>, i32, CollData<'_>, i32, i32, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, joint_id, coll, coll_x50, ground_kind, delta_y.0), ctx); }
     }
 }
 /// Statics of `melee/if/if_2F72`.
 pub mod melee__if__if_2F72 {
     use super::*;
     use crate::fns::*;
+    #[inline] pub fn lbl_803F9780(ctx: &Ctx) -> ArrV<'_, i8, 22> { At::new(ctx, 0x803f9780).field(0) }
     #[inline] pub fn scinfstc_models(ctx: &Ctx) -> ScInfStcModels<'_> { At::new(ctx, 0x804a1340).field(0) }
     /// Addresses of this scope's functions.
     pub mod addr {
@@ -10667,14 +11838,19 @@ pub mod melee__if__if_3004 {
     #[inline] pub fn un_80300BF8<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 { ctx.call(0x80300bf8, (update_scene, )) }
     #[inline] pub fn un_80300C3C<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 { ctx.call(0x80300c3c, (update_scene, )) }
     #[inline] pub fn un_80300C80<'a>(ctx: &'a Ctx, arg0: i32) -> i32 { ctx.call(0x80300c80, (arg0, )) }
+    #[inline] pub fn fn_80300CC8<'a>(ctx: &'a Ctx, arg0: i32) -> i32 { ctx.call(0x80300cc8, (arg0, )) }
     #[inline] pub fn un_80300D78<'a>(ctx: &'a Ctx, arg0: i32) -> i32 { ctx.call(0x80300d78, (arg0, )) }
+    #[inline] pub fn fn_80300DE0<'a>(ctx: &'a Ctx, arg0: i32) -> i32 { ctx.call(0x80300de0, (arg0, )) }
     #[inline] pub fn un_80300E74<'a>(ctx: &'a Ctx, arg0: i32) -> i32 { ctx.call(0x80300e74, (arg0, )) }
+    #[inline] pub fn fn_80300ED0<'a>(ctx: &'a Ctx, arg0: i32) -> i32 { ctx.call(0x80300ed0, (arg0, )) }
     #[inline] pub fn un_80300F3C<'a>(ctx: &'a Ctx, arg0: i32) -> i32 { ctx.call(0x80300f3c, (arg0, )) }
     #[inline] pub fn un_80300F98<'a>(ctx: &'a Ctx, arg0: i32) -> i32 { ctx.call(0x80300f98, (arg0, )) }
     #[inline] pub fn un_80300FEC<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 { ctx.call(0x80300fec, (update_scene, )) }
     #[inline] pub fn un_80301028<'a>(ctx: &'a Ctx, arg0: i32) -> i32 { ctx.call(0x80301028, (arg0, )) }
     #[inline] pub fn un_80301074<'a>(ctx: &'a Ctx, arg0: i32) -> i32 { ctx.call(0x80301074, (arg0, )) }
     #[inline] pub fn un_803010C0<'a>(ctx: &'a Ctx, arg0: i32) -> i32 { ctx.call(0x803010c0, (arg0, )) }
+    #[inline] pub fn fn_8030110C<'a>(ctx: &'a Ctx, arg0: i32) -> i32 { ctx.call(0x8030110c, (arg0, )) }
+    #[inline] pub fn fn_803011EC<'a>(ctx: &'a Ctx, arg0: i32) -> i32 { ctx.call(0x803011ec, (arg0, )) }
     #[inline] pub fn un_80301280<'a>(ctx: &'a Ctx, arg0: i32) -> i32 { ctx.call(0x80301280, (arg0, )) }
     #[inline] pub fn un_803012D4<'a>(ctx: &'a Ctx, arg0: i32) -> i32 { ctx.call(0x803012d4, (arg0, )) }
     #[inline] pub fn un_80301328<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 { ctx.call(0x80301328, (update_scene, )) }
@@ -10744,14 +11920,19 @@ pub mod melee__if__if_3004 {
         pub const un_80300BF8: u32 = 0x80300bf8;
         pub const un_80300C3C: u32 = 0x80300c3c;
         pub const un_80300C80: u32 = 0x80300c80;
+        pub const fn_80300CC8: u32 = 0x80300cc8;
         pub const un_80300D78: u32 = 0x80300d78;
+        pub const fn_80300DE0: u32 = 0x80300de0;
         pub const un_80300E74: u32 = 0x80300e74;
+        pub const fn_80300ED0: u32 = 0x80300ed0;
         pub const un_80300F3C: u32 = 0x80300f3c;
         pub const un_80300F98: u32 = 0x80300f98;
         pub const un_80300FEC: u32 = 0x80300fec;
         pub const un_80301028: u32 = 0x80301028;
         pub const un_80301074: u32 = 0x80301074;
         pub const un_803010C0: u32 = 0x803010c0;
+        pub const fn_8030110C: u32 = 0x8030110c;
+        pub const fn_803011EC: u32 = 0x803011ec;
         pub const un_80301280: u32 = 0x80301280;
         pub const un_803012D4: u32 = 0x803012d4;
         pub const un_80301328: u32 = 0x80301328;
@@ -10823,14 +12004,19 @@ pub mod melee__if__if_3004 {
         #[inline] pub fn un_80300BF8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (update_scene, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, update_scene), ctx); }
         #[inline] pub fn un_80300C3C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (update_scene, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, update_scene), ctx); }
         #[inline] pub fn un_80300C80(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
+        #[inline] pub fn fn_80300CC8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn un_80300D78(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
+        #[inline] pub fn fn_80300DE0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn un_80300E74(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
+        #[inline] pub fn fn_80300ED0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn un_80300F3C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn un_80300F98(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn un_80300FEC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (update_scene, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, update_scene), ctx); }
         #[inline] pub fn un_80301028(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn un_80301074(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn un_803010C0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
+        #[inline] pub fn fn_8030110C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
+        #[inline] pub fn fn_803011EC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn un_80301280(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn un_803012D4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn un_80301328(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (update_scene, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, update_scene), ctx); }
@@ -10871,14 +12057,17 @@ pub mod melee__if__ifall {
     use crate::fns::*;
     #[inline] pub fn ifAll_804A0FD8(ctx: &Ctx) -> ifAll_804A0FD8_t<'_> { At::new(ctx, 0x804a0fd8).field(0) }
     #[inline] pub fn hidden(ctx: &Ctx) -> Val<'_, u8> { At::new(ctx, 0x804d6d58).field(0) }
+    #[inline] pub fn fn_802F36B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) -> () { ctx.call(0x802f36b8, (gobj, unused, )) }
     #[inline] pub fn ifAll_802F370C<'a>(ctx: &'a Ctx, scene: SceneDesc<'a>) -> () { ctx.call(0x802f370c, (scene, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
+        pub const fn_802F36B8: u32 = 0x802f36b8;
         pub const ifAll_802F370C: u32 = 0x802f370c;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
+        #[inline] pub fn fn_802F36B8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, i32) -> ()) { let (gobj, unused, ): (HSD_GObj<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj, unused), ctx); }
         #[inline] pub fn ifAll_802F370C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, SceneDesc<'a>) -> ()) { let (scene, ): (SceneDesc<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, scene), ctx); }
     }
 }
@@ -11065,6 +12254,7 @@ pub mod melee__if__soundtest {
     #[inline] pub fn un_802FFBAC<'a>(ctx: &'a Ctx, arg0: i32) -> i32 { ctx.call(0x802ffbac, (arg0, )) }
     #[inline] pub fn un_802FFC30<'a>(ctx: &'a Ctx, arg0: i32) -> i32 { ctx.call(0x802ffc30, (arg0, )) }
     #[inline] pub fn un_802FFC6C<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 { ctx.call(0x802ffc6c, (update_scene, )) }
+    #[inline] pub fn fn_802FFCC8<'a>(ctx: &'a Ctx, arg0: i32) -> i32 { ctx.call(0x802ffcc8, (arg0, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const un_802FF88C: u32 = 0x802ff88c;
@@ -11076,6 +12266,7 @@ pub mod melee__if__soundtest {
         pub const un_802FFBAC: u32 = 0x802ffbac;
         pub const un_802FFC30: u32 = 0x802ffc30;
         pub const un_802FFC6C: u32 = 0x802ffc6c;
+        pub const fn_802FFCC8: u32 = 0x802ffcc8;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
@@ -11089,6 +12280,7 @@ pub mod melee__if__soundtest {
         #[inline] pub fn un_802FFBAC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn un_802FFC30(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn un_802FFC6C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (update_scene, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, update_scene), ctx); }
+        #[inline] pub fn fn_802FFCC8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
     }
 }
 /// Statics of `melee/if/textdraw`.
@@ -11459,16 +12651,25 @@ pub mod melee__it__kinds__itclimbersstring {
     use super::*;
     use crate::fns::*;
     #[inline] pub fn it_802C248C<'a>(ctx: &'a Ctx, ip: Item<'a>, jobj: HSD_JObj<'a>) -> HSD_GObj<'a> { ctx.call(0x802c248c, (ip, jobj, )) }
+    #[inline] pub fn fn_802C28DC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x802c28dc, (gobj, )) }
+    #[inline] pub fn fn_802C29E8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x802c29e8, (gobj, )) }
+    #[inline] pub fn fn_802C2AF4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x802c2af4, (gobj, )) }
     #[inline] pub fn it_802C33B8<'a>(ctx: &'a Ctx, ip: Item<'a>) -> () { ctx.call(0x802c33b8, (ip, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const it_802C248C: u32 = 0x802c248c;
+        pub const fn_802C28DC: u32 = 0x802c28dc;
+        pub const fn_802C29E8: u32 = 0x802c29e8;
+        pub const fn_802C2AF4: u32 = 0x802c2af4;
         pub const it_802C33B8: u32 = 0x802c33b8;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
         #[inline] pub fn it_802C248C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Item<'a>, HSD_JObj<'a>) -> HSD_GObj<'a>) { let (ip, jobj, ): (Item<'_>, HSD_JObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, ip, jobj), ctx); }
+        #[inline] pub fn fn_802C28DC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_802C29E8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_802C2AF4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn it_802C33B8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Item<'a>) -> ()) { let (ip, ): (Item<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, ip), ctx); }
     }
 }
@@ -12315,6 +13516,24 @@ pub mod melee__it__kinds__itlinkbow {
         #[inline] pub fn itLinkbow_UnkMotion6_Anim(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (arg0, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn itLinkbow_UnkMotion6_Phys(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (arg0, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn itLinkbow_UnkMotion6_Coll(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (arg0, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
+    }
+}
+/// Statics of `melee/it/kinds/itlinkhookshot`.
+pub mod melee__it__kinds__itlinkhookshot {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_802A2E4C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> () { ctx.call(0x802a2e4c, (arg0, )) }
+    #[inline] pub fn fn_802A3110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> () { ctx.call(0x802a3110, (arg0, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_802A2E4C: u32 = 0x802a2e4c;
+        pub const fn_802A3110: u32 = 0x802a3110;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_802A2E4C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (arg0, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
+        #[inline] pub fn fn_802A3110(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (arg0, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
     }
 }
 /// Statics of `melee/it/kinds/itlipstickspore`.
@@ -13200,6 +14419,36 @@ pub mod melee__lb__lb_0195 {
 
     }
 }
+/// Statics of `melee/lb/lb_01F8`.
+pub mod melee__lb__lb_01F8 {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn lbl_804335B8(ctx: &Ctx) -> lbl_804335B8_t<'_> { At::new(ctx, 0x804335b8).field(0) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+
+    }
+}
+/// Statics of `melee/lb/lb_0219`.
+pub mod melee__lb__lb_0219 {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_80021C18<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>, arg2: i32) -> () { ctx.call(0x80021c18, (gobj, cmd, arg2, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_80021C18: u32 = 0x80021c18;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_80021C18(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, CommandInfo<'a>, i32) -> ()) { let (gobj, cmd, arg2, ): (HSD_GObj<'_>, CommandInfo<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj, cmd, arg2), ctx); }
+    }
+}
 /// Statics of `melee/lb/lbanim`.
 pub mod melee__lb__lbanim {
     use super::*;
@@ -13320,18 +14569,107 @@ pub mod melee__lb__lbaudio_ax {
     #[inline] pub fn lbl_804D644C(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d644c).field(0) }
     #[inline] pub fn lbl_804D6450(ctx: &Ctx) -> Val<'_, u32> { At::new(ctx, 0x804d6450).field(0) }
     #[inline] pub fn lbl_804D6454(ctx: &Ctx) -> Ptr<'_, lbl_804D6454_t<'_>> { At::new(ctx, 0x804d6454).field(0) }
+    #[inline] pub fn fn_80023254<'a>(ctx: &'a Ctx, arg0: i32) -> () { ctx.call(0x80023254, (arg0, )) }
+    #[inline] pub fn fn_80023750<'a>(ctx: &'a Ctx, id: i32, vol: i32, pan: i32, track: i32, channel: i32) -> i32 { ctx.call(0x80023750, (id, vol, pan, track, channel, )) }
+    #[inline] pub fn fn_80023ED4<'a>(ctx: &'a Ctx, path: Val<'a, i8>, vol: i32, arg2: i32) -> i32 { ctx.call(0x80023ed4, (path, vol, arg2, )) }
+    #[inline] pub fn fn_800244F4<'a>(ctx: &'a Ctx) -> () { ctx.call(0x800244f4, ()) }
+    #[inline] pub fn fn_80024654<'a>(ctx: &'a Ctx, arg0: i32) -> () { ctx.call(0x80024654, (arg0, )) }
     #[inline] pub fn calcPan<'a>(ctx: &'a Ctx, current: i32, end: i32, left: i32, right: i32) -> i32 { ctx.call(0x800250a0, (current, end, left, right, )) }
+    #[inline] pub fn fn_800251EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x800251ec, (gobj, )) }
+    #[inline] pub fn fn_800253D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x800253d8, (gobj, )) }
+    #[inline] pub fn fn_800256BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x800256bc, (gobj, )) }
+    #[inline] pub fn fn_800259A0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x800259a0, (gobj, )) }
+    #[inline] pub fn fn_800259EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x800259ec, (gobj, )) }
+    #[inline] pub fn fn_80025A98<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x80025a98, (gobj, )) }
+    #[inline] pub fn fn_80025B44<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x80025b44, (gobj, )) }
+    #[inline] pub fn fn_80025CBC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x80025cbc, (gobj, )) }
+    #[inline] pub fn fn_80025E38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x80025e38, (gobj, )) }
+    #[inline] pub fn fn_80025FAC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ud: lbAudioAx_UserData<'a>, sp: SoundParams<'a>) -> () { ctx.call(0x80025fac, (gobj, ud, sp, )) }
+    #[inline] pub fn fn_800262A0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800262a0, (gobj, )) }
     #[inline] pub fn lbAudioAx_ObjFree<'a>(ctx: &'a Ctx, obj: Addr<'a>) -> () { ctx.call(0x800263b4, (obj, )) }
+    #[inline] pub fn fn_80026650<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x80026650, ()) }
+    #[inline] pub fn fn_800267B0<'a>(ctx: &'a Ctx) -> () { ctx.call(0x800267b0, ()) }
+    #[inline] pub fn fn_800268B4<'a>(ctx: &'a Ctx) -> () { ctx.call(0x800268b4, ()) }
+    #[inline] pub fn fn_800269AC<'a>(ctx: &'a Ctx) -> () { ctx.call(0x800269ac, ()) }
+    #[inline] pub fn fn_80026C04<'a>(ctx: &'a Ctx, arg0: i32, unused: i32) -> () { ctx.call(0x80026c04, (arg0, unused, )) }
+    #[inline] pub fn fn_80026E58<'a>(ctx: &'a Ctx, arg0: i32) -> i32 { ctx.call(0x80026e58, (arg0, )) }
+    #[inline] pub fn fn_80027488<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x80027488, ()) }
     /// Addresses of this scope's functions.
     pub mod addr {
+        pub const fn_80023254: u32 = 0x80023254;
+        pub const fn_80023750: u32 = 0x80023750;
+        pub const fn_80023ED4: u32 = 0x80023ed4;
+        pub const fn_800244F4: u32 = 0x800244f4;
+        pub const fn_80024654: u32 = 0x80024654;
         pub const calcPan: u32 = 0x800250a0;
+        pub const fn_800251EC: u32 = 0x800251ec;
+        pub const fn_800253D8: u32 = 0x800253d8;
+        pub const fn_800256BC: u32 = 0x800256bc;
+        pub const fn_800259A0: u32 = 0x800259a0;
+        pub const fn_800259EC: u32 = 0x800259ec;
+        pub const fn_80025A98: u32 = 0x80025a98;
+        pub const fn_80025B44: u32 = 0x80025b44;
+        pub const fn_80025CBC: u32 = 0x80025cbc;
+        pub const fn_80025E38: u32 = 0x80025e38;
+        pub const fn_80025FAC: u32 = 0x80025fac;
+        pub const fn_800262A0: u32 = 0x800262a0;
         pub const lbAudioAx_ObjFree: u32 = 0x800263b4;
+        pub const fn_80026650: u32 = 0x80026650;
+        pub const fn_800267B0: u32 = 0x800267b0;
+        pub const fn_800268B4: u32 = 0x800268b4;
+        pub const fn_800269AC: u32 = 0x800269ac;
+        pub const fn_80026C04: u32 = 0x80026c04;
+        pub const fn_80026E58: u32 = 0x80026e58;
+        pub const fn_80027488: u32 = 0x80027488;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
+        #[inline] pub fn fn_80023254(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> ()) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
+        #[inline] pub fn fn_80023750(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, i32, i32, i32, i32) -> i32) { let (id, vol, pan, track, channel, ): (i32, i32, i32, i32, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, id, vol, pan, track, channel), ctx); }
+        #[inline] pub fn fn_80023ED4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Val<'a, i8>, i32, i32) -> i32) { let (path, vol, arg2, ): (Val<'_, i8>, i32, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, path, vol, arg2), ctx); }
+        #[inline] pub fn fn_800244F4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+        #[inline] pub fn fn_80024654(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> ()) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn calcPan(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, i32, i32, i32) -> i32) { let (current, end, left, right, ): (i32, i32, i32, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, current, end, left, right), ctx); }
+        #[inline] pub fn fn_800251EC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_800253D8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_800256BC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_800259A0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_800259EC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_80025A98(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_80025B44(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_80025CBC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_80025E38(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn fn_80025FAC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, lbAudioAx_UserData<'a>, SoundParams<'a>) -> ()) { let (gobj, ud, sp, ): (HSD_GObj<'_>, lbAudioAx_UserData<'_>, SoundParams<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj, ud, sp), ctx); }
+        #[inline] pub fn fn_800262A0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn lbAudioAx_ObjFree(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Addr<'a>) -> ()) { let (obj, ): (Addr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, obj), ctx); }
+        #[inline] pub fn fn_80026650(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+        #[inline] pub fn fn_800267B0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+        #[inline] pub fn fn_800268B4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+        #[inline] pub fn fn_800269AC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+        #[inline] pub fn fn_80026C04(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, i32) -> ()) { let (arg0, unused, ): (i32, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0, unused), ctx); }
+        #[inline] pub fn fn_80026E58(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
+        #[inline] pub fn fn_80027488(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+    }
+}
+/// Statics of `melee/lb/lbbgflash`.
+pub mod melee__lb__lbbgflash {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn lbl_803BB000(ctx: &Ctx) -> HSD_WObjDesc<'_> { At::new(ctx, 0x803bb000).field(0) }
+    #[inline] pub fn lbl_803BB014(ctx: &Ctx) -> HSD_WObjDesc<'_> { At::new(ctx, 0x803bb014).field(0) }
+    #[inline] pub fn lbl_804D3840(ctx: &Ctx) -> _GXColor<'_> { At::new(ctx, 0x804d3840).field(0) }
+    #[inline] pub fn lbl_804D3844(ctx: &Ctx) -> _GXColor<'_> { At::new(ctx, 0x804d3844).field(0) }
+    #[inline] pub fn lbl_804D3848(ctx: &Ctx) -> _GXColor<'_> { At::new(ctx, 0x804d3848).field(0) }
+    #[inline] pub fn lbl_804D384C(ctx: &Ctx) -> _GXColor<'_> { At::new(ctx, 0x804d384c).field(0) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+
     }
 }
 /// Statics of `melee/lb/lbcardgame`.
@@ -13375,6 +14713,7 @@ pub mod melee__lb__lbcardnew {
     #[inline] pub fn executeNextTask<'a>(ctx: &'a Ctx, result: i32) -> i32 { ctx.call(0x80019cb0, (result, )) }
     #[inline] pub fn resetState<'a>(ctx: &'a Ctx, chan: i32, save_data: Addr<'a>, status_out: Val<'a, i32>, callback: FnPtr<'a>) -> () { ctx.call(0x80019ef0, (chan, save_data, status_out, callback, )) }
     #[inline] pub fn onCardComplete<'a>(ctx: &'a Ctx, chan: i32, result: i32) -> () { ctx.call(0x8001a008, (chan, result, )) }
+    #[inline] pub fn fn_8001A0B0<'a>(ctx: &'a Ctx, file_idx: i32, hsd_error: i32) -> () { ctx.call(0x8001a0b0, (file_idx, hsd_error, )) }
     #[inline] pub fn taskMount<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x8001a184, ()) }
     #[inline] pub fn taskCheck<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x8001a3a4, ()) }
     #[inline] pub fn setTaskFilename<'a>(ctx: &'a Ctx, filename: Val<'a, i8>, file_entries: Addr<'a>) -> () { ctx.call(0x8001a4cc, (filename, file_entries, )) }
@@ -13397,6 +14736,7 @@ pub mod melee__lb__lbcardnew {
         pub const executeNextTask: u32 = 0x80019cb0;
         pub const resetState: u32 = 0x80019ef0;
         pub const onCardComplete: u32 = 0x8001a008;
+        pub const fn_8001A0B0: u32 = 0x8001a0b0;
         pub const taskMount: u32 = 0x8001a184;
         pub const taskCheck: u32 = 0x8001a3a4;
         pub const setTaskFilename: u32 = 0x8001a4cc;
@@ -13421,6 +14761,7 @@ pub mod melee__lb__lbcardnew {
         #[inline] pub fn executeNextTask(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (result, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, result), ctx); }
         #[inline] pub fn resetState(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, Addr<'a>, Val<'a, i32>, FnPtr<'a>) -> ()) { let (chan, save_data, status_out, callback, ): (i32, Addr<'_>, Val<'_, i32>, FnPtr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, chan, save_data, status_out, callback), ctx); }
         #[inline] pub fn onCardComplete(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, i32) -> ()) { let (chan, result, ): (i32, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, chan, result), ctx); }
+        #[inline] pub fn fn_8001A0B0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, i32) -> ()) { let (file_idx, hsd_error, ): (i32, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, file_idx, hsd_error), ctx); }
         #[inline] pub fn taskMount(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
         #[inline] pub fn taskCheck(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
         #[inline] pub fn setTaskFilename(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Val<'a, i8>, Addr<'a>) -> ()) { let (filename, file_entries, ): (Val<'_, i8>, Addr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, filename, file_entries), ctx); }
@@ -13486,16 +14827,19 @@ pub mod melee__lb__lbdvd {
     #[inline] pub fn preloadCache(ctx: &Ctx) -> PreloadCache<'_> { At::new(ctx, 0x80432078).field(0) }
     #[inline] pub fn lbDvd_804D37F4(ctx: &Ctx) -> ArrV<'_, i32, 2> { At::new(ctx, 0x804d37f4).field(0) }
     #[inline] pub fn lbDvd_80017644<'a>(ctx: &'a Ctx, heap: i32) -> i32 { ctx.call(0x80017644, (heap, )) }
+    #[inline] pub fn lbDvd_80017A80<'a>(ctx: &'a Ctx, unused: u32) -> () { ctx.call(0x80017a80, (unused, )) }
     #[inline] pub fn lbDvd_800189EC<'a>(ctx: &'a Ctx, entry_num: i32) -> () { ctx.call(0x800189ec, (entry_num, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const lbDvd_80017644: u32 = 0x80017644;
+        pub const lbDvd_80017A80: u32 = 0x80017a80;
         pub const lbDvd_800189EC: u32 = 0x800189ec;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
         #[inline] pub fn lbDvd_80017644(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (heap, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, heap), ctx); }
+        #[inline] pub fn lbDvd_80017A80(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u32) -> ()) { let (unused, ): (u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, unused), ctx); }
         #[inline] pub fn lbDvd_800189EC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> ()) { let (entry_num, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, entry_num), ctx); }
     }
 }
@@ -13537,14 +14881,17 @@ pub mod melee__lb__lbheap {
 pub mod melee__lb__lbmemory {
     use super::*;
     use crate::fns::*;
+    #[inline] pub fn fn_80015184<'a>(ctx: &'a Ctx, alarm: OSAlarm<'a>, context: OSContext<'a>) -> () { ctx.call(0x80015184, (alarm, context, )) }
     #[inline] pub fn lbMemory_80015320<'a>(ctx: &'a Ctx, arg0: i32, arg1: u32, arg2: Addr<'a>, cancelflag: i32) -> () { ctx.call(0x80015320, (arg0, arg1, arg2, cancelflag, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
+        pub const fn_80015184: u32 = 0x80015184;
         pub const lbMemory_80015320: u32 = 0x80015320;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
+        #[inline] pub fn fn_80015184(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, OSAlarm<'a>, OSContext<'a>) -> ()) { let (alarm, context, ): (OSAlarm<'_>, OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, alarm, context), ctx); }
         #[inline] pub fn lbMemory_80015320(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, u32, Addr<'a>, i32) -> ()) { let (arg0, arg1, arg2, cancelflag, ): (i32, u32, Addr<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0, arg1, arg2, cancelflag), ctx); }
     }
 }
@@ -13552,15 +14899,35 @@ pub mod melee__lb__lbmemory {
 pub mod melee__lb__lbmthp {
     use super::*;
     use crate::fns::*;
+    #[inline] pub fn lbl_803BAFE8(ctx: &Ctx) -> HSD_ImageDesc<'_> { At::new(ctx, 0x803bafe8).field(0) }
     #[inline] pub fn MoviePlayer(ctx: &Ctx) -> THPDecComp<'_> { At::new(ctx, 0x804333e0).field(0) }
+    #[inline] pub fn fn_8001E910<'a>(ctx: &'a Ctx, arg0: i32, arg1: u32, arg2: Addr<'a>, cancelflag: i32) -> () { ctx.call(0x8001e910, (arg0, arg1, arg2, cancelflag, )) }
+    #[inline] pub fn fn_8001EB14<'a>(ctx: &'a Ctx, data: THPDecComp<'a>, path: Val<'a, i8>) -> i32 { ctx.call(0x8001eb14, (data, path, )) }
+    #[inline] pub fn fn_8001ECF4<'a>(ctx: &'a Ctx, data: THPDecComp<'a>, buf: Addr<'a>) -> () { ctx.call(0x8001ecf4, (data, buf, )) }
+    #[inline] pub fn fn_8001EF5C<'a>(ctx: &'a Ctx, data: THPDecComp<'a>) -> i32 { ctx.call(0x8001ef5c, (data, )) }
+    #[inline] pub fn fn_8001F06C<'a>(ctx: &'a Ctx, data: THPDecComp<'a>) -> i32 { ctx.call(0x8001f06c, (data, )) }
+    #[inline] pub fn fn_8001F13C<'a>(ctx: &'a Ctx, streamPlayer: THPDecComp<'a>) -> i32 { ctx.call(0x8001f13c, (streamPlayer, )) }
+    #[inline] pub fn fn_8001F294<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x8001f294, ()) }
     /// Addresses of this scope's functions.
     pub mod addr {
-
+        pub const fn_8001E910: u32 = 0x8001e910;
+        pub const fn_8001EB14: u32 = 0x8001eb14;
+        pub const fn_8001ECF4: u32 = 0x8001ecf4;
+        pub const fn_8001EF5C: u32 = 0x8001ef5c;
+        pub const fn_8001F06C: u32 = 0x8001f06c;
+        pub const fn_8001F13C: u32 = 0x8001f13c;
+        pub const fn_8001F294: u32 = 0x8001f294;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
-
+        #[inline] pub fn fn_8001E910(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, u32, Addr<'a>, i32) -> ()) { let (arg0, arg1, arg2, cancelflag, ): (i32, u32, Addr<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0, arg1, arg2, cancelflag), ctx); }
+        #[inline] pub fn fn_8001EB14(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, THPDecComp<'a>, Val<'a, i8>) -> i32) { let (data, path, ): (THPDecComp<'_>, Val<'_, i8>, ) = Args::take_all(ctx); Ret::put(__f(ctx, data, path), ctx); }
+        #[inline] pub fn fn_8001ECF4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, THPDecComp<'a>, Addr<'a>) -> ()) { let (data, buf, ): (THPDecComp<'_>, Addr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, data, buf), ctx); }
+        #[inline] pub fn fn_8001EF5C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, THPDecComp<'a>) -> i32) { let (data, ): (THPDecComp<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, data), ctx); }
+        #[inline] pub fn fn_8001F06C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, THPDecComp<'a>) -> i32) { let (data, ): (THPDecComp<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, data), ctx); }
+        #[inline] pub fn fn_8001F13C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, THPDecComp<'a>) -> i32) { let (streamPlayer, ): (THPDecComp<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, streamPlayer), ctx); }
+        #[inline] pub fn fn_8001F294(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     }
 }
 /// Statics of `melee/lb/lbrefract`.
@@ -13569,28 +14936,47 @@ pub mod melee__lb__lbrefract {
     use crate::fns::*;
     #[inline] pub fn dobj_info(ctx: &Ctx) -> HSD_DObjInfo<'_> { At::new(ctx, 0x803bb218).field(0) }
     #[inline] pub fn pobj_info(ctx: &Ctx) -> HSD_PObjInfo<'_> { At::new(ctx, 0x803bb25c).field(0) }
+    #[inline] pub fn lbl_804336D0(ctx: &Ctx) -> lbl_804336D0_t<'_> { At::new(ctx, 0x804336d0).field(0) }
     #[inline] pub fn refract_data(ctx: &Ctx) -> Ptr<'_, refract_data_t<'_>> { At::new(ctx, 0x804d63e8).field(0) }
     #[inline] pub fn lbRefract_80021CE8<'a>(ctx: &'a Ctx, cb: lbRefract_CallbackData<'a>, arg1: i32) -> () { ctx.call(0x80021ce8, (cb, arg1, )) }
     #[inline] pub fn lbRefract_WriteTexCoordIA4<'a>(ctx: &'a Ctx, data: lbRefract_CallbackData<'a>, row: u32, col: u32, arg3: u32, arg4: u8, intensity: u8, alpha: u8) -> () { ctx.call(0x80021f34, (data, row, col, arg3, arg4, intensity, alpha, )) }
+    #[inline] pub fn fn_80021F70<'a>(ctx: &'a Ctx, data: lbRefract_CallbackData<'a>, row: u32, col: u32, r: u8, g: u8, b: u32) -> () { ctx.call(0x80021f70, (data, row, col, r, g, b, )) }
+    #[inline] pub fn fn_80021FB4<'a>(ctx: &'a Ctx, data: lbRefract_CallbackData<'a>, row: u32, col: u32, arg6: u8, arg7: u8, arg8: u8, arg9: u8) -> () { ctx.call(0x80021fb4, (data, row, col, arg6, arg7, arg8, arg9, )) }
+    #[inline] pub fn fn_80021FF8<'a>(ctx: &'a Ctx, data: lbRefract_CallbackData<'a>, row: u32, col: u32, arg3: Val<'a, i32>, arg4: Val<'a, i32>, arg5: Val<'a, i32>, arg6: Val<'a, i32>) -> () { ctx.call(0x80021ff8, (data, row, col, arg3, arg4, arg5, arg6, )) }
+    #[inline] pub fn fn_8002206C<'a>(ctx: &'a Ctx, data: lbRefract_CallbackData<'a>, row: i32, col: u32, arg3: Val<'a, i32>, arg4: Val<'a, i32>, arg5: Val<'a, i32>, arg6: Val<'a, i32>) -> () { ctx.call(0x8002206c, (data, row, col, arg3, arg4, arg5, arg6, )) }
     #[inline] pub fn lbRefract_ReadTexCoordRGBA8<'a>(ctx: &'a Ctx, data: lbRefract_CallbackData<'a>, row: u32, col: u32, out_r: Val<'a, u32>, out_g: Val<'a, u32>, out_b: Val<'a, u32>, out_a: Val<'a, u32>) -> () { ctx.call(0x80022120, (data, row, col, out_r, out_g, out_b, out_a, )) }
     #[inline] pub fn lbRefract_8002219C<'a>(ctx: &'a Ctx, data: lbRefract_CallbackData<'a>, buffer: Addr<'a>, format: i32, width: u32, height: u32) -> i32 { ctx.call(0x8002219c, (data, buffer, format, width, height, )) }
     #[inline] pub fn lbRefract_DObjDispReset<'a>(ctx: &'a Ctx, dobj: HSD_DObj<'a>, vmtx: ArrV<'a, F32, 4>, pmtx: ArrV<'a, F32, 4>, rendermode: u32) -> () { ctx.call(0x80022608, (dobj, vmtx, pmtx, rendermode, )) }
+    #[inline] pub fn fn_80022650<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80022650, ()) }
+    #[inline] pub fn fn_80022940<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80022940, ()) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const lbRefract_80021CE8: u32 = 0x80021ce8;
         pub const lbRefract_WriteTexCoordIA4: u32 = 0x80021f34;
+        pub const fn_80021F70: u32 = 0x80021f70;
+        pub const fn_80021FB4: u32 = 0x80021fb4;
+        pub const fn_80021FF8: u32 = 0x80021ff8;
+        pub const fn_8002206C: u32 = 0x8002206c;
         pub const lbRefract_ReadTexCoordRGBA8: u32 = 0x80022120;
         pub const lbRefract_8002219C: u32 = 0x8002219c;
         pub const lbRefract_DObjDispReset: u32 = 0x80022608;
+        pub const fn_80022650: u32 = 0x80022650;
+        pub const fn_80022940: u32 = 0x80022940;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
         #[inline] pub fn lbRefract_80021CE8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, lbRefract_CallbackData<'a>, i32) -> ()) { let (cb, arg1, ): (lbRefract_CallbackData<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, cb, arg1), ctx); }
         #[inline] pub fn lbRefract_WriteTexCoordIA4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, lbRefract_CallbackData<'a>, u32, u32, u32, u8, u8, u8) -> ()) { let (data, row, col, arg3, arg4, intensity, alpha, ): (lbRefract_CallbackData<'_>, u32, u32, u32, u8, u8, u8, ) = Args::take_all(ctx); Ret::put(__f(ctx, data, row, col, arg3, arg4, intensity, alpha), ctx); }
+        #[inline] pub fn fn_80021F70(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, lbRefract_CallbackData<'a>, u32, u32, u8, u8, u32) -> ()) { let (data, row, col, r, g, b, ): (lbRefract_CallbackData<'_>, u32, u32, u8, u8, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, data, row, col, r, g, b), ctx); }
+        #[inline] pub fn fn_80021FB4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, lbRefract_CallbackData<'a>, u32, u32, u8, u8, u8, u8) -> ()) { let (data, row, col, arg6, arg7, arg8, arg9, ): (lbRefract_CallbackData<'_>, u32, u32, u8, u8, u8, u8, ) = Args::take_all(ctx); Ret::put(__f(ctx, data, row, col, arg6, arg7, arg8, arg9), ctx); }
+        #[inline] pub fn fn_80021FF8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, lbRefract_CallbackData<'a>, u32, u32, Val<'a, i32>, Val<'a, i32>, Val<'a, i32>, Val<'a, i32>) -> ()) { let (data, row, col, arg3, arg4, arg5, arg6, ): (lbRefract_CallbackData<'_>, u32, u32, Val<'_, i32>, Val<'_, i32>, Val<'_, i32>, Val<'_, i32>, ) = Args::take_all(ctx); Ret::put(__f(ctx, data, row, col, arg3, arg4, arg5, arg6), ctx); }
+        #[inline] pub fn fn_8002206C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, lbRefract_CallbackData<'a>, i32, u32, Val<'a, i32>, Val<'a, i32>, Val<'a, i32>, Val<'a, i32>) -> ()) { let (data, row, col, arg3, arg4, arg5, arg6, ): (lbRefract_CallbackData<'_>, i32, u32, Val<'_, i32>, Val<'_, i32>, Val<'_, i32>, Val<'_, i32>, ) = Args::take_all(ctx); Ret::put(__f(ctx, data, row, col, arg3, arg4, arg5, arg6), ctx); }
         #[inline] pub fn lbRefract_ReadTexCoordRGBA8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, lbRefract_CallbackData<'a>, u32, u32, Val<'a, u32>, Val<'a, u32>, Val<'a, u32>, Val<'a, u32>) -> ()) { let (data, row, col, out_r, out_g, out_b, out_a, ): (lbRefract_CallbackData<'_>, u32, u32, Val<'_, u32>, Val<'_, u32>, Val<'_, u32>, Val<'_, u32>, ) = Args::take_all(ctx); Ret::put(__f(ctx, data, row, col, out_r, out_g, out_b, out_a), ctx); }
         #[inline] pub fn lbRefract_8002219C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, lbRefract_CallbackData<'a>, Addr<'a>, i32, u32, u32) -> i32) { let (data, buffer, format, width, height, ): (lbRefract_CallbackData<'_>, Addr<'_>, i32, u32, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, data, buffer, format, width, height), ctx); }
         #[inline] pub fn lbRefract_DObjDispReset(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_DObj<'a>, ArrV<'a, F32, 4>, ArrV<'a, F32, 4>, u32) -> ()) { let (dobj, vmtx, pmtx, rendermode, ): (HSD_DObj<'_>, ArrV<'_, F32, 4>, ArrV<'_, F32, 4>, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, dobj, vmtx, pmtx, rendermode), ctx); }
+        #[inline] pub fn fn_80022650(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+        #[inline] pub fn fn_80022940(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     }
 }
 /// Statics of `melee/lb/lbshadow`.
@@ -13747,6 +15133,7 @@ pub mod melee__mn__mndatadel {
     #[inline] pub fn mnDataDel_803EF8A0(ctx: &Ctx) -> AnimLoopSettings<'_> { At::new(ctx, 0x803ef8a0).field(0) }
     #[inline] pub fn mnDataDel_803EF8AC(ctx: &Ctx) -> ArrV<'_, u32, 7> { At::new(ctx, 0x803ef8ac).field(0) }
     #[inline] pub fn mnDataDel_803EF8C8(ctx: &Ctx) -> ArrV<'_, u16, 6> { At::new(ctx, 0x803ef8c8).field(0) }
+    #[inline] pub fn lbl_803EF8D4(ctx: &Ctx) -> Vec<'_> { At::new(ctx, 0x803ef8d4).field(0) }
     #[inline] pub fn mnDataDel_804A0918(ctx: &Ctx) -> StaticModelDesc<'_> { At::new(ctx, 0x804a0918).field(0) }
     #[inline] pub fn mnDataDel_804A0928(ctx: &Ctx) -> StaticModelDesc<'_> { At::new(ctx, 0x804a0928).field(0) }
     #[inline] pub fn mnDataDel_804A0938(ctx: &Ctx) -> StaticModelDesc<'_> { At::new(ctx, 0x804a0938).field(0) }
@@ -14177,9 +15564,11 @@ pub mod melee__mn__mnstagesw {
     #[inline] pub fn mnStageSw_802359C8<'a>(ctx: &'a Ctx, data: MnStageSwData<'a>) -> () { ctx.call(0x802359c8, (data, )) }
     #[inline] pub fn mnStageSw_80235C58<'a>(ctx: &'a Ctx, arg0: u8) -> i32 { ctx.call(0x80235c58, (arg0, )) }
     #[inline] pub fn mnStageSw_80235DC8<'a>(ctx: &'a Ctx, user_data: Val<'a, u8>, buttons: i32) -> () { ctx.call(0x80235dc8, (user_data, buttons, )) }
+    #[inline] pub fn fn_80235F80<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80235f80, (gobj, )) }
     #[inline] pub fn mnStageSw_80236178<'a>(ctx: &'a Ctx, data: MnStageSwData<'a>, idx: u8) -> () { ctx.call(0x80236178, (data, idx, )) }
     #[inline] pub fn mnStageSw_802364A0<'a>(ctx: &'a Ctx, data: MnStageSwData<'a>, idx: u8) -> HSD_JObj<'a> { ctx.call(0x802364a0, (data, idx, )) }
     #[inline] pub fn mnStageSw_80236548<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: u8, arg2: u8) -> () { ctx.call(0x80236548, (gobj, arg1, arg2, )) }
+    #[inline] pub fn fn_80236998<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80236998, (gobj, )) }
     #[inline] pub fn mnStageSw_80236CBC<'a>(ctx: &'a Ctx, arg0: i8) -> HSD_GObj<'a> { ctx.call(0x80236cbc, (arg0, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
@@ -14187,9 +15576,11 @@ pub mod melee__mn__mnstagesw {
         pub const mnStageSw_802359C8: u32 = 0x802359c8;
         pub const mnStageSw_80235C58: u32 = 0x80235c58;
         pub const mnStageSw_80235DC8: u32 = 0x80235dc8;
+        pub const fn_80235F80: u32 = 0x80235f80;
         pub const mnStageSw_80236178: u32 = 0x80236178;
         pub const mnStageSw_802364A0: u32 = 0x802364a0;
         pub const mnStageSw_80236548: u32 = 0x80236548;
+        pub const fn_80236998: u32 = 0x80236998;
         pub const mnStageSw_80236CBC: u32 = 0x80236cbc;
     }
     /// Adapters that register a Rust port under C calling conventions.
@@ -14199,9 +15590,11 @@ pub mod melee__mn__mnstagesw {
         #[inline] pub fn mnStageSw_802359C8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, MnStageSwData<'a>) -> ()) { let (data, ): (MnStageSwData<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, data), ctx); }
         #[inline] pub fn mnStageSw_80235C58(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u8) -> i32) { let (arg0, ): (u8, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn mnStageSw_80235DC8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Val<'a, u8>, i32) -> ()) { let (user_data, buttons, ): (Val<'_, u8>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, user_data, buttons), ctx); }
+        #[inline] pub fn fn_80235F80(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn mnStageSw_80236178(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, MnStageSwData<'a>, u8) -> ()) { let (data, idx, ): (MnStageSwData<'_>, u8, ) = Args::take_all(ctx); Ret::put(__f(ctx, data, idx), ctx); }
         #[inline] pub fn mnStageSw_802364A0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, MnStageSwData<'a>, u8) -> HSD_JObj<'a>) { let (data, idx, ): (MnStageSwData<'_>, u8, ) = Args::take_all(ctx); Ret::put(__f(ctx, data, idx), ctx); }
         #[inline] pub fn mnStageSw_80236548(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, u8, u8) -> ()) { let (gobj, arg1, arg2, ): (HSD_GObj<'_>, u8, u8, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj, arg1, arg2), ctx); }
+        #[inline] pub fn fn_80236998(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn mnStageSw_80236CBC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i8) -> HSD_GObj<'a>) { let (arg0, ): (i8, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
     }
 }
@@ -14348,6 +15741,7 @@ pub mod melee__mp__mplib {
     #[inline] pub fn mpLib_803BF1F8(ctx: &Ctx) -> ArrP<'_, mpLib_803BF248_t_x4<'_>, 20> { At::new(ctx, 0x803bf1f8).field(0) }
     #[inline] pub fn mpLib_803BF248(ctx: &Ctx) -> Arr<'_, mpLib_803BF248_t<'_>, 71> { At::new(ctx, 0x803bf248).field(0) }
     #[inline] pub fn mpLib_803BF540(ctx: &Ctx) -> HSD_Chan<'_> { At::new(ctx, 0x803bf540).field(0) }
+    #[inline] pub fn lbl_803BF570(ctx: &Ctx) -> ArrV<'_, i8, 18> { At::new(ctx, 0x803bf570).field(0) }
     #[inline] pub fn mpLib_ItemSpawnVtxIds(ctx: &Ctx) -> ArrV<'_, i16, 174> { At::new(ctx, 0x803bf584).field(0) }
     #[inline] pub fn mpLib_SpawnVtxIds(ctx: &Ctx) -> ArrV<'_, i16, 4> { At::new(ctx, 0x804d397c).field(0) }
     #[inline] pub fn didCheckBounding(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d64b0).field(0) }
@@ -14405,6 +15799,36 @@ pub mod melee__mp__mplib {
         #[inline] pub fn mpRemap2d(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Val<'a, F32>, Val<'a, F32>, f64, f64, f64, f64, f64, f64, f64, f64, f64, f64) -> ()) { let (x_out, y_out, ax0, ay0, ax1, ay1, bx0, by0, bx1, by1, px, py, ): (Val<'_, F32>, Val<'_, F32>, Single, Single, Single, Single, Single, Single, Single, Single, Single, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, x_out, y_out, ax0.0, ay0.0, ax1.0, ay1.0, bx0.0, by0.0, bx1.0, by1.0, px.0, py.0), ctx); }
         #[inline] pub fn mpLineIntersection(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, f64, f64, f64, f64, f64, f64, f64, f64, Val<'a, F32>, Val<'a, F32>) -> i32) { let (a0x, a0y, a1x, a1y, b0x, b0y, b1x, b1y, int_x, int_y, ): (Single, Single, Single, Single, Single, Single, Single, Single, Val<'_, F32>, Val<'_, F32>, ) = Args::take_all(ctx); Ret::put(__f(ctx, a0x.0, a0y.0, a1x.0, a1y.0, b0x.0, b0y.0, b1x.0, b1y.0, int_x, int_y), ctx); }
         #[inline] pub fn mpLib_DrawMatchingLines(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, i32, _GXColor<'a>) -> ()) { let (value, flag, color, ): (i32, i32, _GXColor<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, value, flag, color), ctx); }
+    }
+}
+/// Statics of `melee/pl/plbonuslib`.
+pub mod melee__pl__plbonuslib {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn plBonusLib_8003D514<'a>(ctx: &'a Ctx, arg0: i32) -> () { ctx.call(0x8003d514, (arg0, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const plBonusLib_8003D514: u32 = 0x8003d514;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn plBonusLib_8003D514(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> ()) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
+    }
+}
+/// Statics of `melee/pl/pltrick`.
+pub mod melee__pl__pltrick {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_80037F00<'a>(ctx: &'a Ctx, gp: Ptr<'a, HSD_GObj<'a>>, fp: Fighter<'a>, ev: ft_800898B4_t<'a>, arg3: i32, arg4: i32) -> () { ctx.call(0x80037f00, (gp, fp, ev, arg3, arg4, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_80037F00: u32 = 0x80037f00;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_80037F00(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Ptr<'a, HSD_GObj<'a>>, Fighter<'a>, ft_800898B4_t<'a>, i32, i32) -> ()) { let (gp, fp, ev, arg3, arg4, ): (Ptr<'_, HSD_GObj<'_>>, Fighter<'_>, ft_800898B4_t<'_>, i32, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, gp, fp, ev, arg3, arg4), ctx); }
     }
 }
 /// Statics of `melee/ty/toy`.
@@ -14790,14 +16214,24 @@ pub mod melee__vi__vi0401 {
     #[inline] pub fn un_804D6F54(ctx: &Ctx) -> Ptr<'_, HSD_Archive<'_>> { At::new(ctx, 0x804d6f54).field(0) }
     #[inline] pub fn un_804D6F58(ctx: &Ctx) -> Ptr<'_, HSD_JObj<'_>> { At::new(ctx, 0x804d6f58).field(0) }
     #[inline] pub fn erase_colors_vi0401(ctx: &Ctx) -> _GXColor<'_> { At::new(ctx, 0x804d6f5c).field(0) }
+    #[inline] pub fn fn_8031D168<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8031d168, (gobj, )) }
+    #[inline] pub fn vi0401_8031D18C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8031d18c, (gobj, )) }
+    #[inline] pub fn vi0401_8031D1B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) -> () { ctx.call(0x8031d1b0, (gobj, unused, )) }
+    #[inline] pub fn vi0401_8031D23C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8031d23c, (gobj, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
-
+        pub const fn_8031D168: u32 = 0x8031d168;
+        pub const vi0401_8031D18C: u32 = 0x8031d18c;
+        pub const vi0401_8031D1B0: u32 = 0x8031d1b0;
+        pub const vi0401_8031D23C: u32 = 0x8031d23c;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
-
+        #[inline] pub fn fn_8031D168(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn vi0401_8031D18C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
+        #[inline] pub fn vi0401_8031D1B0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, i32) -> ()) { let (gobj, unused, ): (HSD_GObj<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj, unused), ctx); }
+        #[inline] pub fn vi0401_8031D23C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
     }
 }
 /// Statics of `melee/vi/vi0402`.
@@ -14901,14 +16335,15 @@ pub mod melee__vi__vi1101 {
     #[inline] pub fn un_804D6FC8(ctx: &Ctx) -> Ptr<'_, HSD_Archive<'_>> { At::new(ctx, 0x804d6fc8).field(0) }
     #[inline] pub fn un_804D6FCC(ctx: &Ctx) -> Ptr<'_, HSD_Archive<'_>> { At::new(ctx, 0x804d6fcc).field(0) }
     #[inline] pub fn un_804D6FD0(ctx: &Ctx) -> un_804D6FD0_t<'_> { At::new(ctx, 0x804d6fd0).field(0) }
+    #[inline] pub fn fn_8031F56C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) -> () { ctx.call(0x8031f56c, (gobj, unused, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
-
+        pub const fn_8031F56C: u32 = 0x8031f56c;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
-
+        #[inline] pub fn fn_8031F56C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>, i32) -> ()) { let (gobj, unused, ): (HSD_GObj<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj, unused), ctx); }
     }
 }
 /// Statics of `melee/vi/vi1201v1`.
@@ -15049,6 +16484,7 @@ pub mod sysdolphin__baselib__axdriver {
     #[inline] pub fn AXDriverCallback<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8038cc1c, ()) }
     #[inline] pub fn AXDriverKillCallback<'a>(ctx: &'a Ctx, vID: i32) -> () { ctx.call(0x8038cea4, (vID, )) }
     #[inline] pub fn AXDriverPauseCallback<'a>(ctx: &'a Ctx, vID: i32) -> () { ctx.call(0x8038cf48, (vID, )) }
+    #[inline] pub fn fn_8038DA5C<'a>(ctx: &'a Ctx, result: i32, fileInfo: DVDFileInfo<'a>) -> () { ctx.call(0x8038da5c, (result, fileInfo, )) }
     #[inline] pub fn PStreamPauseCh<'a>(ctx: &'a Ctx, vid: i32) -> i32 { ctx.call(0x8038e5e4, (vid, )) }
     #[inline] pub fn PStreamResumeCh<'a>(ctx: &'a Ctx, vid: i32) -> i32 { ctx.call(0x8038e768, (vid, )) }
     /// Addresses of this scope's functions.
@@ -15056,6 +16492,7 @@ pub mod sysdolphin__baselib__axdriver {
         pub const AXDriverCallback: u32 = 0x8038cc1c;
         pub const AXDriverKillCallback: u32 = 0x8038cea4;
         pub const AXDriverPauseCallback: u32 = 0x8038cf48;
+        pub const fn_8038DA5C: u32 = 0x8038da5c;
         pub const PStreamPauseCh: u32 = 0x8038e5e4;
         pub const PStreamResumeCh: u32 = 0x8038e768;
     }
@@ -15065,6 +16502,7 @@ pub mod sysdolphin__baselib__axdriver {
         #[inline] pub fn AXDriverCallback(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
         #[inline] pub fn AXDriverKillCallback(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> ()) { let (vID, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, vID), ctx); }
         #[inline] pub fn AXDriverPauseCallback(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> ()) { let (vID, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, vID), ctx); }
+        #[inline] pub fn fn_8038DA5C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, DVDFileInfo<'a>) -> ()) { let (result, fileInfo, ): (i32, DVDFileInfo<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, result, fileInfo), ctx); }
         #[inline] pub fn PStreamPauseCh(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (vid, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, vid), ctx); }
         #[inline] pub fn PStreamResumeCh(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (vid, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, vid), ctx); }
     }
@@ -15085,17 +16523,101 @@ pub mod sysdolphin__baselib__card {
     #[inline] pub fn hsd_804D7998(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d7998).field(0) }
     #[inline] pub fn hsd_804D799C(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d799c).field(0) }
     #[inline] pub fn hsd_803A949C<'a>(ctx: &'a Ctx, chan: i32, card_result: i32) -> () { ctx.call(0x803a949c, (chan, card_result, )) }
+    #[inline] pub fn fn_803AA790<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x803aa790, ()) }
+    #[inline] pub fn fn_803AC168<'a>(ctx: &'a Ctx, cmd: CardCmd<'a>) -> i32 { ctx.call(0x803ac168, (cmd, )) }
+    #[inline] pub fn fn_803AC258<'a>(ctx: &'a Ctx, state: CardState<'a>, block_idx: i32) -> i32 { ctx.call(0x803ac258, (state, block_idx, )) }
+    #[inline] pub fn fn_803AC2A4<'a>(ctx: &'a Ctx, state: CardState<'a>) -> i32 { ctx.call(0x803ac2a4, (state, )) }
+    #[inline] pub fn fn_803AC2D4<'a>(ctx: &'a Ctx) -> () { ctx.call(0x803ac2d4, ()) }
+    #[inline] pub fn fn_803AC2E0<'a>(ctx: &'a Ctx) -> () { ctx.call(0x803ac2e0, ()) }
+    #[inline] pub fn fn_803AC334<'a>(ctx: &'a Ctx) -> () { ctx.call(0x803ac334, ()) }
+    #[inline] pub fn fn_803AC3F8<'a>(ctx: &'a Ctx, state: CardState<'a>, data: Val<'a, u8>, file_idx: i32) -> () { ctx.call(0x803ac3f8, (state, data, file_idx, )) }
     #[inline] pub fn hsd_803AC558<'a>(ctx: &'a Ctx, state: CardState<'a>, data: Val<'a, u8>) -> () { ctx.call(0x803ac558, (state, data, )) }
+    #[inline] pub fn fn_803AC634<'a>(ctx: &'a Ctx, state: CardState<'a>, file_idx: i32) -> u32 { ctx.call(0x803ac634, (state, file_idx, )) }
+    #[inline] pub fn fn_803AC6B8<'a>(ctx: &'a Ctx, state: CardState<'a>, file_idx: i32) -> i32 { ctx.call(0x803ac6b8, (state, file_idx, )) }
+    #[inline] pub fn fn_803AC7DC<'a>(ctx: &'a Ctx, state: CardState<'a>) -> i32 { ctx.call(0x803ac7dc, (state, )) }
+    #[inline] pub fn fn_803ACB74<'a>(ctx: &'a Ctx, seq_a: i32, seq_b: i32) -> i32 { ctx.call(0x803acb74, (seq_a, seq_b, )) }
+    #[inline] pub fn fn_803ACBE8<'a>(ctx: &'a Ctx, state: CardState<'a>, block_idx: i32) -> i32 { ctx.call(0x803acbe8, (state, block_idx, )) }
+    #[inline] pub fn fn_803ACC0C<'a>(ctx: &'a Ctx, state: CardState<'a>, block_idx: i32, block_id: i32, seq_num: i32, expected_data: Addr<'a>, data_size: i32) -> i32 { ctx.call(0x803acc0c, (state, block_idx, block_id, seq_num, expected_data, data_size, )) }
+    #[inline] pub fn fn_803ACD58<'a>(ctx: &'a Ctx, state: CardState<'a>, banner: Addr<'a>, icons: Addr<'a>) -> i32 { ctx.call(0x803acd58, (state, banner, icons, )) }
+    #[inline] pub fn fn_803ACF30<'a>(ctx: &'a Ctx, state: CardState<'a>, comment: Addr<'a>, banner: Addr<'a>, icons: Addr<'a>) -> i32 { ctx.call(0x803acf30, (state, comment, banner, icons, )) }
+    #[inline] pub fn fn_803ACFC0<'a>(ctx: &'a Ctx, state: CardState<'a>, block_idx: i32, block_id: i32, seq_num: i32, payload: Addr<'a>, payload_size: i32, file_idx: i32) -> i32 { ctx.call(0x803acfc0, (state, block_idx, block_id, seq_num, payload, payload_size, file_idx, )) }
+    #[inline] pub fn fn_803AD16C<'a>(ctx: &'a Ctx, state: CardState<'a>) -> i32 { ctx.call(0x803ad16c, (state, )) }
+    #[inline] pub fn fn_803ADE4C<'a>(ctx: &'a Ctx, state: CardState<'a>, file_no: i32, callback: FnPtr<'a>) -> i32 { ctx.call(0x803ade4c, (state, file_no, callback, )) }
+    #[inline] pub fn fn_803ADF90<'a>(ctx: &'a Ctx, state: CardState<'a>, file_idx: i32, buf: Val<'a, u8>, r#async: i32, callback: FnPtr<'a>) -> i32 { ctx.call(0x803adf90, (state, file_idx, buf, r#async, callback, )) }
+    #[inline] pub fn fn_803AE7F8<'a>(ctx: &'a Ctx, state: CardState<'a>, file_idx: i32, buf: Val<'a, u8>, r#async: i32, callback: FnPtr<'a>) -> i32 { ctx.call(0x803ae7f8, (state, file_idx, buf, r#async, callback, )) }
+    #[inline] pub fn fn_803AF3F0<'a>(ctx: &'a Ctx, state: CardState<'a>, file_idx: i32, buf: Val<'a, u8>, r#async: i32, callback: FnPtr<'a>) -> i32 { ctx.call(0x803af3f0, (state, file_idx, buf, r#async, callback, )) }
+    #[inline] pub fn fn_803B0120<'a>(ctx: &'a Ctx, state: CardState<'a>, file_idx: i32, buf: Val<'a, u8>, r#async: i32, callback: FnPtr<'a>) -> i32 { ctx.call(0x803b0120, (state, file_idx, buf, r#async, callback, )) }
+    #[inline] pub fn fn_803B0E9C<'a>(ctx: &'a Ctx, state: CardState<'a>, banner: Addr<'a>, icons: Val<'a, u8>, is_new: i32, r#async: i32) -> i32 { ctx.call(0x803b0e9c, (state, banner, icons, is_new, r#async, )) }
+    #[inline] pub fn fn_803B1338<'a>(ctx: &'a Ctx, state: CardState<'a>, r#async: i32) -> i32 { ctx.call(0x803b1338, (state, r#async, )) }
+    #[inline] pub fn fn_803B1F78<'a>(ctx: &'a Ctx, state: CardState<'a>, filename: Val<'a, i8>, banner: Addr<'a>, icons: Addr<'a>, callback: FnPtr<'a>) -> i32 { ctx.call(0x803b1f78, (state, filename, banner, icons, callback, )) }
+    #[inline] pub fn fn_803B21E8<'a>(ctx: &'a Ctx, state: CardState<'a>, banner: Addr<'a>, icons: Addr<'a>, callback: FnPtr<'a>) -> i32 { ctx.call(0x803b21e8, (state, banner, icons, callback, )) }
+    #[inline] pub fn fn_803B26CC<'a>(ctx: &'a Ctx, state: CardState<'a>, comment: Addr<'a>, banner: Addr<'a>, icons: Addr<'a>, callback: FnPtr<'a>) -> i32 { ctx.call(0x803b26cc, (state, comment, banner, icons, callback, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const hsd_803A949C: u32 = 0x803a949c;
+        pub const fn_803AA790: u32 = 0x803aa790;
+        pub const fn_803AC168: u32 = 0x803ac168;
+        pub const fn_803AC258: u32 = 0x803ac258;
+        pub const fn_803AC2A4: u32 = 0x803ac2a4;
+        pub const fn_803AC2D4: u32 = 0x803ac2d4;
+        pub const fn_803AC2E0: u32 = 0x803ac2e0;
+        pub const fn_803AC334: u32 = 0x803ac334;
+        pub const fn_803AC3F8: u32 = 0x803ac3f8;
         pub const hsd_803AC558: u32 = 0x803ac558;
+        pub const fn_803AC634: u32 = 0x803ac634;
+        pub const fn_803AC6B8: u32 = 0x803ac6b8;
+        pub const fn_803AC7DC: u32 = 0x803ac7dc;
+        pub const fn_803ACB74: u32 = 0x803acb74;
+        pub const fn_803ACBE8: u32 = 0x803acbe8;
+        pub const fn_803ACC0C: u32 = 0x803acc0c;
+        pub const fn_803ACD58: u32 = 0x803acd58;
+        pub const fn_803ACF30: u32 = 0x803acf30;
+        pub const fn_803ACFC0: u32 = 0x803acfc0;
+        pub const fn_803AD16C: u32 = 0x803ad16c;
+        pub const fn_803ADE4C: u32 = 0x803ade4c;
+        pub const fn_803ADF90: u32 = 0x803adf90;
+        pub const fn_803AE7F8: u32 = 0x803ae7f8;
+        pub const fn_803AF3F0: u32 = 0x803af3f0;
+        pub const fn_803B0120: u32 = 0x803b0120;
+        pub const fn_803B0E9C: u32 = 0x803b0e9c;
+        pub const fn_803B1338: u32 = 0x803b1338;
+        pub const fn_803B1F78: u32 = 0x803b1f78;
+        pub const fn_803B21E8: u32 = 0x803b21e8;
+        pub const fn_803B26CC: u32 = 0x803b26cc;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
         #[inline] pub fn hsd_803A949C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, i32) -> ()) { let (chan, card_result, ): (i32, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, chan, card_result), ctx); }
+        #[inline] pub fn fn_803AA790(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> i32) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+        #[inline] pub fn fn_803AC168(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CardCmd<'a>) -> i32) { let (cmd, ): (CardCmd<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, cmd), ctx); }
+        #[inline] pub fn fn_803AC258(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CardState<'a>, i32) -> i32) { let (state, block_idx, ): (CardState<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, state, block_idx), ctx); }
+        #[inline] pub fn fn_803AC2A4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CardState<'a>) -> i32) { let (state, ): (CardState<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, state), ctx); }
+        #[inline] pub fn fn_803AC2D4(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+        #[inline] pub fn fn_803AC2E0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+        #[inline] pub fn fn_803AC334(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+        #[inline] pub fn fn_803AC3F8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CardState<'a>, Val<'a, u8>, i32) -> ()) { let (state, data, file_idx, ): (CardState<'_>, Val<'_, u8>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, state, data, file_idx), ctx); }
         #[inline] pub fn hsd_803AC558(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CardState<'a>, Val<'a, u8>) -> ()) { let (state, data, ): (CardState<'_>, Val<'_, u8>, ) = Args::take_all(ctx); Ret::put(__f(ctx, state, data), ctx); }
+        #[inline] pub fn fn_803AC634(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CardState<'a>, i32) -> u32) { let (state, file_idx, ): (CardState<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, state, file_idx), ctx); }
+        #[inline] pub fn fn_803AC6B8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CardState<'a>, i32) -> i32) { let (state, file_idx, ): (CardState<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, state, file_idx), ctx); }
+        #[inline] pub fn fn_803AC7DC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CardState<'a>) -> i32) { let (state, ): (CardState<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, state), ctx); }
+        #[inline] pub fn fn_803ACB74(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, i32) -> i32) { let (seq_a, seq_b, ): (i32, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, seq_a, seq_b), ctx); }
+        #[inline] pub fn fn_803ACBE8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CardState<'a>, i32) -> i32) { let (state, block_idx, ): (CardState<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, state, block_idx), ctx); }
+        #[inline] pub fn fn_803ACC0C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CardState<'a>, i32, i32, i32, Addr<'a>, i32) -> i32) { let (state, block_idx, block_id, seq_num, expected_data, data_size, ): (CardState<'_>, i32, i32, i32, Addr<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, state, block_idx, block_id, seq_num, expected_data, data_size), ctx); }
+        #[inline] pub fn fn_803ACD58(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CardState<'a>, Addr<'a>, Addr<'a>) -> i32) { let (state, banner, icons, ): (CardState<'_>, Addr<'_>, Addr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, state, banner, icons), ctx); }
+        #[inline] pub fn fn_803ACF30(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CardState<'a>, Addr<'a>, Addr<'a>, Addr<'a>) -> i32) { let (state, comment, banner, icons, ): (CardState<'_>, Addr<'_>, Addr<'_>, Addr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, state, comment, banner, icons), ctx); }
+        #[inline] pub fn fn_803ACFC0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CardState<'a>, i32, i32, i32, Addr<'a>, i32, i32) -> i32) { let (state, block_idx, block_id, seq_num, payload, payload_size, file_idx, ): (CardState<'_>, i32, i32, i32, Addr<'_>, i32, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, state, block_idx, block_id, seq_num, payload, payload_size, file_idx), ctx); }
+        #[inline] pub fn fn_803AD16C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CardState<'a>) -> i32) { let (state, ): (CardState<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, state), ctx); }
+        #[inline] pub fn fn_803ADE4C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CardState<'a>, i32, FnPtr<'a>) -> i32) { let (state, file_no, callback, ): (CardState<'_>, i32, FnPtr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, state, file_no, callback), ctx); }
+        #[inline] pub fn fn_803ADF90(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CardState<'a>, i32, Val<'a, u8>, i32, FnPtr<'a>) -> i32) { let (state, file_idx, buf, r#async, callback, ): (CardState<'_>, i32, Val<'_, u8>, i32, FnPtr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, state, file_idx, buf, r#async, callback), ctx); }
+        #[inline] pub fn fn_803AE7F8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CardState<'a>, i32, Val<'a, u8>, i32, FnPtr<'a>) -> i32) { let (state, file_idx, buf, r#async, callback, ): (CardState<'_>, i32, Val<'_, u8>, i32, FnPtr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, state, file_idx, buf, r#async, callback), ctx); }
+        #[inline] pub fn fn_803AF3F0(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CardState<'a>, i32, Val<'a, u8>, i32, FnPtr<'a>) -> i32) { let (state, file_idx, buf, r#async, callback, ): (CardState<'_>, i32, Val<'_, u8>, i32, FnPtr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, state, file_idx, buf, r#async, callback), ctx); }
+        #[inline] pub fn fn_803B0120(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CardState<'a>, i32, Val<'a, u8>, i32, FnPtr<'a>) -> i32) { let (state, file_idx, buf, r#async, callback, ): (CardState<'_>, i32, Val<'_, u8>, i32, FnPtr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, state, file_idx, buf, r#async, callback), ctx); }
+        #[inline] pub fn fn_803B0E9C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CardState<'a>, Addr<'a>, Val<'a, u8>, i32, i32) -> i32) { let (state, banner, icons, is_new, r#async, ): (CardState<'_>, Addr<'_>, Val<'_, u8>, i32, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, state, banner, icons, is_new, r#async), ctx); }
+        #[inline] pub fn fn_803B1338(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CardState<'a>, i32) -> i32) { let (state, r#async, ): (CardState<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, state, r#async), ctx); }
+        #[inline] pub fn fn_803B1F78(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CardState<'a>, Val<'a, i8>, Addr<'a>, Addr<'a>, FnPtr<'a>) -> i32) { let (state, filename, banner, icons, callback, ): (CardState<'_>, Val<'_, i8>, Addr<'_>, Addr<'_>, FnPtr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, state, filename, banner, icons, callback), ctx); }
+        #[inline] pub fn fn_803B21E8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CardState<'a>, Addr<'a>, Addr<'a>, FnPtr<'a>) -> i32) { let (state, banner, icons, callback, ): (CardState<'_>, Addr<'_>, Addr<'_>, FnPtr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, state, banner, icons, callback), ctx); }
+        #[inline] pub fn fn_803B26CC(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, CardState<'a>, Addr<'a>, Addr<'a>, Addr<'a>, FnPtr<'a>) -> i32) { let (state, comment, banner, icons, callback, ): (CardState<'_>, Addr<'_>, Addr<'_>, Addr<'_>, FnPtr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, state, comment, banner, icons, callback), ctx); }
     }
 }
 /// Statics of `sysdolphin/baselib/class`.
@@ -15230,6 +16752,7 @@ pub mod sysdolphin__baselib__debugconsole_main {
     #[inline] pub fn lbl_8040AB00(ctx: &Ctx) -> lbl_8040AB00_t<'_> { At::new(ctx, 0x8040ab00).field(0) }
     #[inline] pub fn lbl_8040AB20(ctx: &Ctx) -> lbl_8040AB00_t<'_> { At::new(ctx, 0x8040ab20).field(0) }
     #[inline] pub fn lbl_8040AB40(ctx: &Ctx) -> lbl_8040AB00_t<'_> { At::new(ctx, 0x8040ab40).field(0) }
+    #[inline] pub fn lbl_8040B8C4(ctx: &Ctx) -> lbl_8040B8C4_t<'_> { At::new(ctx, 0x8040b8c4).field(0) }
     #[inline] pub fn lbl_8040BA34(ctx: &Ctx) -> ArrP<'_, Val<'_, i8>, 10> { At::new(ctx, 0x8040ba34).field(0) }
     #[inline] pub fn lbl_8040BBC8(ctx: &Ctx) -> ArrP<'_, Val<'_, i8>, 8> { At::new(ctx, 0x8040bbc8).field(0) }
     #[inline] pub fn lbl_8040BD54(ctx: &Ctx) -> ArrP<'_, Val<'_, i8>, 8> { At::new(ctx, 0x8040bd54).field(0) }
@@ -15262,14 +16785,17 @@ pub mod sysdolphin__baselib__debugconsole_main {
     #[inline] pub fn lbl_804D634C(ctx: &Ctx) -> ArrV<'_, i8, 2> { At::new(ctx, 0x804d634c).field(0) }
     #[inline] pub fn lbl_804D6350(ctx: &Ctx) -> ArrV<'_, i8, 8> { At::new(ctx, 0x804d6350).field(0) }
     #[inline] pub fn hsd_80394E8C<'a>(ctx: &'a Ctx, node_ptr: lbl_8040B904_t<'a>) -> () { ctx.call(0x80394e8c, (node_ptr, )) }
+    #[inline] pub fn fn_8039710C<'a>(ctx: &'a Ctx, unused: lbl_8040BEC4_t<'a>) -> () { ctx.call(0x8039710c, (unused, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const hsd_80394E8C: u32 = 0x80394e8c;
+        pub const fn_8039710C: u32 = 0x8039710c;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
         #[inline] pub fn hsd_80394E8C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, lbl_8040B904_t<'a>) -> ()) { let (node_ptr, ): (lbl_8040B904_t<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, node_ptr), ctx); }
+        #[inline] pub fn fn_8039710C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, lbl_8040BEC4_t<'a>) -> ()) { let (unused, ): (lbl_8040BEC4_t<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, unused), ctx); }
     }
 }
 /// Statics of `sysdolphin/baselib/devcom`.
@@ -15390,11 +16916,13 @@ pub mod sysdolphin__baselib__fobj {
     #[inline] pub fn parseFloat<'a>(ctx: &'a Ctx, pos: Ptr<'a, Val<'a, u8>>, frac: u8) -> f64 { ctx.call(0x8036ac10, (pos, frac, )) }
     #[inline] pub fn parsePackInfo<'a>(ctx: &'a Ctx, adp: Ptr<'a, Val<'a, u8>>) -> u32 { ctx.call(0x8036addc, (adp, )) }
     #[inline] pub fn FObjLaunchKeyData<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) -> () { ctx.call(0x8036ae38, (fobj, )) }
+    #[inline] pub fn parseWait<'a>(ctx: &'a Ctx, adp: Ptr<'a, Val<'a, u8>>) -> i32 { ctx.call(0x8038c678, (adp, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const parseFloat: u32 = 0x8036ac10;
         pub const parsePackInfo: u32 = 0x8036addc;
         pub const FObjLaunchKeyData: u32 = 0x8036ae38;
+        pub const parseWait: u32 = 0x8038c678;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
@@ -15402,6 +16930,7 @@ pub mod sysdolphin__baselib__fobj {
         #[inline] pub fn parseFloat(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Ptr<'a, Val<'a, u8>>, u8) -> f64) { let (pos, frac, ): (Ptr<'_, Val<'_, u8>>, u8, ) = Args::take_all(ctx); Ret::put(__f(ctx, pos, frac), ctx); }
         #[inline] pub fn parsePackInfo(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Ptr<'a, Val<'a, u8>>) -> u32) { let (adp, ): (Ptr<'_, Val<'_, u8>>, ) = Args::take_all(ctx); Ret::put(__f(ctx, adp), ctx); }
         #[inline] pub fn FObjLaunchKeyData(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_FObj<'a>) -> ()) { let (fobj, ): (HSD_FObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, fobj), ctx); }
+        #[inline] pub fn parseWait(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Ptr<'a, Val<'a, u8>>) -> i32) { let (adp, ): (Ptr<'_, Val<'_, u8>>, ) = Args::take_all(ctx); Ret::put(__f(ctx, adp), ctx); }
     }
 }
 /// Statics of `sysdolphin/baselib/fog`.
@@ -15607,6 +17136,40 @@ pub mod sysdolphin__baselib__hsd_3982 {
     pub mod abi {
         use super::*;
 
+    }
+}
+/// Statics of `sysdolphin/baselib/hsd_3B34`.
+pub mod sysdolphin__baselib__hsd_3B34 {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn lbl_803B9670(ctx: &Ctx) -> JpegMetadata<'_> { At::new(ctx, 0x803b9670).field(0) }
+    #[inline] pub fn lbl_80430C40(ctx: &Ctx) -> ArrV<'_, u8, 64> { At::new(ctx, 0x80430c40).field(0) }
+    #[inline] pub fn lbl_80430C80(ctx: &Ctx) -> ArrV<'_, u8, 1040> { At::new(ctx, 0x80430c80).field(0) }
+    #[inline] pub fn lbl_804D6398(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d6398).field(0) }
+    #[inline] pub fn fn_803B376C<'a>(ctx: &'a Ctx, arg0: Val<'a, u8>) -> () { ctx.call(0x803b376c, (arg0, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_803B376C: u32 = 0x803b376c;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_803B376C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Val<'a, u8>) -> ()) { let (arg0, ): (Val<'_, u8>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
+    }
+}
+/// Statics of `sysdolphin/baselib/hsd_3B5C`.
+pub mod sysdolphin__baselib__hsd_3B5C {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn fn_803B6820<'a>(ctx: &'a Ctx, dst: Val<'a, u8>, x: i32, y: i32, width: i32, unused_height: i32) -> () { ctx.call(0x803b6820, (dst, x, y, width, unused_height, )) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+        pub const fn_803B6820: u32 = 0x803b6820;
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+        #[inline] pub fn fn_803B6820(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Val<'a, u8>, i32, i32, i32, i32) -> ()) { let (dst, x, y, width, unused_height, ): (Val<'_, u8>, i32, i32, i32, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, dst, x, y, width, unused_height), ctx); }
     }
 }
 /// Statics of `sysdolphin/baselib/initialize`.
@@ -16028,6 +17591,22 @@ pub mod sysdolphin__baselib__sislib {
     #[inline] pub fn HSD_SisLib_804D1110(ctx: &Ctx) -> ArrP<'_, HSD_Archive<'_>, 5> { At::new(ctx, 0x804d1110).field(0) }
     #[inline] pub fn HSD_SisLib_804D7968(ctx: &Ctx) -> Val<'_, u32> { At::new(ctx, 0x804d7968).field(0) }
     #[inline] pub fn HSD_SisLib_804D796C(ctx: &Ctx) -> Ptr<'_, SisBlock<'_>> { At::new(ctx, 0x804d796c).field(0) }
+    /// Addresses of this scope's functions.
+    pub mod addr {
+
+    }
+    /// Adapters that register a Rust port under C calling conventions.
+    pub mod abi {
+        use super::*;
+
+    }
+}
+/// Statics of `sysdolphin/baselib/sobjlib`.
+pub mod sysdolphin__baselib__sobjlib {
+    use super::*;
+    use crate::fns::*;
+    #[inline] pub fn lbl_8040C418(ctx: &Ctx) -> HSD_Chan<'_> { At::new(ctx, 0x8040c418).field(0) }
+    #[inline] pub fn lbl_8040C448(ctx: &Ctx) -> HSD_Chan<'_> { At::new(ctx, 0x8040c448).field(0) }
     /// Addresses of this scope's functions.
     pub mod addr {
 
