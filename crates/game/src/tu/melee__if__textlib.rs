@@ -26,6 +26,87 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn DevText_Create<'a>(
+    ctx: &'a Ctx,
+    id: i8,
+    x: i32,
+    y: i32,
+    w: i32,
+    h: i32,
+    buf: Addr<'a>,
+) -> DevText<'a> {
+    let __frame = ctx.stack_frame(0x60);
+    let bg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut id = id;
+    let mut x = x;
+    let mut y = y;
+    let mut w = w;
+    let mut h = h;
+    let mut buf = buf;
+    let mut text: DevText<'a> = null(ctx);
+    Handle::copy_from(bg, At::new(ctx, 0x804ddc88).field::<_GXColor<'a>>(0));
+    if !Handle::is_null(inl_find_by_id_unfused(ctx, id)) {
+        return null::<DevText<'a>>(ctx);
+    }
+    text = inl_alloc_text_unfused(ctx);
+    if Handle::is_null(text) {
+        (if ((0_i32) != 0) {
+            { () }
+        } else {
+            ({
+                fns::OSReport(ctx, cstr(ctx, 0x803fdc80), &[]);
+                fns::__assert(
+                    ctx,
+                    cstr(ctx, 0x803fdca4),
+                    (51_i32 as u32),
+                    cstr(ctx, 0x803fdca4),
+                )
+            })
+        });
+    }
+    if !Handle::is_null(text) {
+        (text).set_x((x as i16));
+        (text).set_y((y as i16));
+        (text).set_w((w as u8));
+        (text).set_h((h as u8));
+        (text).set_cursor_x((0_i32 as u8));
+        (text).set_cursor_y((0_i32 as u8));
+        (text).set_scale_x(10.0);
+        (text).set_scale_y(16.0);
+        inl_set_color_unfused(ctx, (text).bg_color(), bg);
+        inl_set_color_unfused(
+            ctx,
+            (text).text_colors().get(0_i32),
+            At::new(ctx, 0x804ddc8c).field::<_GXColor<'a>>(0),
+        );
+        inl_set_color_unfused(
+            ctx,
+            (text).text_colors().get(1_i32),
+            At::new(ctx, 0x804ddc90).field::<_GXColor<'a>>(0),
+        );
+        inl_set_color_unfused(
+            ctx,
+            (text).text_colors().get(2_i32),
+            At::new(ctx, 0x804ddc94).field::<_GXColor<'a>>(0),
+        );
+        inl_set_color_unfused(
+            ctx,
+            (text).text_colors().get(3_i32),
+            At::new(ctx, 0x804ddc98).field::<_GXColor<'a>>(0),
+        );
+        (text).set_id(((id as i32) as i8));
+        (text).set_line_width((10_i32 as u8));
+        (text).set_flags(((16_i32) as u8));
+        (text).set_unk((0_i32 as u8));
+        (text).set_current_color((0_i32 as u8));
+        (text).set_prev(null::<DevText<'a>>(ctx));
+        (text).set_next(null::<DevText<'a>>(ctx));
+        (text).set_buf(Handle::cast::<DevTextGlyph<'a>>(buf));
+        fns::memzero(ctx, buf, h.wrapping_mul((w.wrapping_mul(2_i32))));
+    }
+    return text;
+}
+
 pub fn DevText_EraseFirstLine<'a>(ctx: &'a Ctx, text: DevText<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let mut text = text;
@@ -219,6 +300,37 @@ pub fn un_80302DF8<'a>(ctx: &'a Ctx, arg0: un_80304138_objalloc_t<'a>, arg1: FnP
     (arg0).set_xC(arg1);
 }
 
+fn inl_find_by_id_unfused<'a>(ctx: &'a Ctx, id: i8) -> DevText<'a> {
+    let mut id = id;
+    let mut text: DevText<'a> = null(ctx);
+    {
+        text = fns::devtext_drawlist(ctx).get();
+        'l1: while !Handle::is_null(text) {
+            'c2: {
+                if ((text).id() as i32) == (id as i32) {
+                    return text;
+                }
+            }
+            text = (text).next();
+        }
+    }
+    return null::<DevText<'a>>(ctx);
+}
+
+fn inl_alloc_text_unfused<'a>(ctx: &'a Ctx) -> DevText<'a> {
+    let mut text: DevText<'a> = fns::devtext_poolhead(ctx).get();
+    if !Handle::is_null(text) {
+        fns::devtext_poolhead(ctx).set((text).next());
+        return text;
+    }
+    return null::<DevText<'a>>(ctx);
+}
+
+fn inl_set_color_unfused<'a>(ctx: &'a Ctx, dst: _GXColor<'a>, color: _GXColor<'a>) {
+    let mut dst = dst;
+    Handle::copy_from((dst), color);
+}
+
 fn inl_DevText_Clamp_unfused<'a>(ctx: &'a Ctx, val: i32, max: i32) -> i32 {
     let mut val = val;
     let mut max = max;
@@ -245,6 +357,14 @@ fn inl_DevText_AdvanceLine_unfused<'a>(ctx: &'a Ctx, text: DevText<'a>) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x80302834,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5): (i8, i32, i32, i32, i32, Addr<'_>) = Args::take_all(ctx);
+            Ret::put(DevText_Create(ctx, a0, a1, a2, a3, a4, a5), ctx);
+        },
+        Returns::Int,
+    );
     ctx.register_port(
         0x803029b4,
         |ctx| {

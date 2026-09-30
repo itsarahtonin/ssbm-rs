@@ -618,6 +618,281 @@ pub fn setVerticalRegs<'a>(
     );
 }
 
+pub fn VIConfigure<'a>(ctx: &'a Ctx, rm: _GXRenderModeObj<'a>) {
+    let __frame = ctx.stack_frame(0x78);
+    let mut rm = rm;
+    let mut tm: VITiming<'a> = null(ctx);
+    let mut reg1: u32 = 0;
+    let mut reg54: u32 = 0;
+    let mut enabled: i32 = 0;
+    let mut nonInter: u32 = 0;
+    let mut tvInBootrom: u32 = 0;
+    let mut tvInGame: u32 = 0;
+    enabled = fns::OSDisableInterrupts(ctx);
+    nonInter = (((rm).viTVmode() as u32) & (3_i32 as u32));
+    if statics::dolphin__vi__vi::HorVer(ctx).nonInter() != nonInter {
+        statics::dolphin__vi__vi::shdwChangeMode(ctx).set((1_i32 as u32));
+        statics::dolphin__vi__vi::HorVer(ctx).set_nonInter(nonInter);
+    }
+    tvInBootrom = (((ptr::<Val<'a, i32>>(ctx, 0x800000cc_u32 as u32)).get()) as u32);
+    tvInGame = shr_u32(((rm).viTVmode() as u32), (2_i32 as u32));
+    if (tvInGame == (4_i32 as u32))
+        && (At::new(ctx, 0x804d746c).field::<Val<'a, u32>>(0).get() == (0_i32 as u32))
+    {
+        At::new(ctx, 0x804d746c)
+            .field::<Val<'a, u32>>(0)
+            .set((1_i32 as u32));
+        fns::OSReport(ctx, cstr(ctx, 0x80402ee4), &[]);
+        fns::OSReport(ctx, cstr(ctx, 0x80402f10), &[]);
+        fns::OSReport(ctx, cstr(ctx, 0x80402f3c), &[]);
+        fns::OSReport(ctx, cstr(ctx, 0x80402f68), &[]);
+        fns::OSReport(ctx, cstr(ctx, 0x80402f94), &[]);
+        fns::OSReport(ctx, cstr(ctx, 0x80402fc0), &[]);
+        fns::OSReport(ctx, cstr(ctx, 0x80402ee4), &[]);
+    }
+    if (tvInGame == (0_i32 as u32)) || (tvInGame == (2_i32 as u32)) {
+        statics::dolphin__vi__vi::HorVer(ctx).set_tv(tvInBootrom);
+    } else {
+        statics::dolphin__vi__vi::HorVer(ctx).set_tv(tvInGame);
+    }
+    statics::dolphin__vi__vi::HorVer(ctx).set_DispPosX((rm).viXOrigin());
+    statics::dolphin__vi__vi::HorVer(ctx).set_DispPosY(
+        ((if statics::dolphin__vi__vi::HorVer(ctx).nonInter() == (1_i32 as u32) {
+            (((((rm).viYOrigin() as i32).wrapping_mul(2_i32)) as u16) as i32)
+        } else {
+            ((rm).viYOrigin() as i32)
+        }) as u16),
+    );
+    statics::dolphin__vi__vi::HorVer(ctx).set_DispSizeX((rm).viWidth());
+    statics::dolphin__vi__vi::HorVer(ctx).set_FBSizeX((rm).fbWidth());
+    statics::dolphin__vi__vi::HorVer(ctx).set_FBSizeY((rm).xfbHeight());
+    statics::dolphin__vi__vi::HorVer(ctx).set_FBMode((rm).xFBmode());
+    statics::dolphin__vi__vi::HorVer(ctx)
+        .set_PanSizeX(statics::dolphin__vi__vi::HorVer(ctx).FBSizeX());
+    statics::dolphin__vi__vi::HorVer(ctx)
+        .set_PanSizeY(statics::dolphin__vi__vi::HorVer(ctx).FBSizeY());
+    statics::dolphin__vi__vi::HorVer(ctx).set_PanPosX((0_i32 as u16));
+    statics::dolphin__vi__vi::HorVer(ctx).set_PanPosY((0_i32 as u16));
+    statics::dolphin__vi__vi::HorVer(ctx).set_DispSizeY(
+        ((if statics::dolphin__vi__vi::HorVer(ctx).nonInter() == (2_i32 as u32) {
+            (statics::dolphin__vi__vi::HorVer(ctx).PanSizeY() as i32)
+        } else {
+            (if statics::dolphin__vi__vi::HorVer(ctx).nonInter() == (3_i32 as u32) {
+                (statics::dolphin__vi__vi::HorVer(ctx).PanSizeY() as i32)
+            } else {
+                (if (statics::dolphin__vi__vi::HorVer(ctx).FBMode() as u32)
+                    == ((enums::VI_XFBMODE_SF as i32) as u32)
+                {
+                    ((((statics::dolphin__vi__vi::HorVer(ctx).PanSizeY() as i32)
+                        .wrapping_mul(2_i32)) as u16) as i32)
+                } else {
+                    (statics::dolphin__vi__vi::HorVer(ctx).PanSizeY() as i32)
+                })
+            })
+        }) as u16),
+    );
+    statics::dolphin__vi__vi::HorVer(ctx).set_threeD(
+        (if statics::dolphin__vi__vi::HorVer(ctx).nonInter() == (3_i32 as u32) {
+            1_i32
+        } else {
+            0_i32
+        }),
+    );
+    tm = statics::dolphin__vi__vi::getTiming(
+        ctx,
+        (((shl_u32((statics::dolphin__vi__vi::HorVer(ctx).tv()), (2_i32 as u32)))
+            .wrapping_add((statics::dolphin__vi__vi::HorVer(ctx).nonInter()))) as i32),
+    );
+    statics::dolphin__vi__vi::HorVer(ctx).set_timing(tm);
+    inl_AdjustPosition_unfused(ctx, (tm).acv());
+    if statics::dolphin__vi__vi::encoderType(ctx).get() == (0_i32 as u32) {
+        statics::dolphin__vi__vi::HorVer(ctx).set_tv((3_i32 as u32));
+    }
+    inl_setInterruptRegs_unfused(ctx, tm);
+    {
+        reg1 = (statics::dolphin__vi__vi::regs(ctx).at(1_i32).get() as u32);
+        if (statics::dolphin__vi__vi::HorVer(ctx).nonInter() == (2_i32 as u32))
+            || (statics::dolphin__vi__vi::HorVer(ctx).nonInter() == (3_i32 as u32))
+        {
+            'l1: loop {
+                'c2: {
+                    reg1 = (((reg1)
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)),
+                            ((2_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(((1_i32) as u32), ((2_i32) as u32))));
+                }
+                if !(0_i32 != 0) {
+                    break 'l1;
+                }
+            }
+        } else {
+            'l3: loop {
+                'c4: {
+                    reg1 = (((reg1)
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)),
+                            ((2_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (statics::dolphin__vi__vi::HorVer(ctx).nonInter() & (1_i32 as u32)),
+                            ((2_i32) as u32),
+                        )));
+                }
+                if !(0_i32 != 0) {
+                    break 'l3;
+                }
+            }
+        }
+        'l5: loop {
+            'c6: {
+                reg1 = (((reg1)
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)),
+                        ((3_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(
+                        ((statics::dolphin__vi__vi::HorVer(ctx).threeD()) as u32),
+                        ((3_i32) as u32),
+                    )));
+            }
+            if !(0_i32 != 0) {
+                break 'l5;
+            }
+        }
+        if (statics::dolphin__vi__vi::HorVer(ctx).tv()
+            == ((enums::VI_TVMODE_PAL_INT as i32) as u32))
+            || (statics::dolphin__vi__vi::HorVer(ctx).tv()
+                == ((enums::VI_TVMODE_PAL_DS as i32) as u32))
+        {
+            'l7: loop {
+                'c8: {
+                    reg1 = (((reg1)
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((2_i32) as u32))).wrapping_sub(1_i32)),
+                            ((8_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(((0_i32) as u32), ((8_i32) as u32))));
+                }
+                if !(0_i32 != 0) {
+                    break 'l7;
+                }
+            }
+        } else {
+            'l9: loop {
+                'c10: {
+                    reg1 = (((reg1)
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((2_i32) as u32))).wrapping_sub(1_i32)),
+                            ((8_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (statics::dolphin__vi__vi::HorVer(ctx).tv()),
+                            ((8_i32) as u32),
+                        )));
+                }
+                if !(0_i32 != 0) {
+                    break 'l9;
+                }
+            }
+        }
+        statics::dolphin__vi__vi::regs(ctx)
+            .at(1_i32)
+            .set((reg1 as u16));
+        statics::dolphin__vi__vi::changed(ctx).set(
+            (statics::dolphin__vi__vi::changed(ctx).get()
+                | (shl_i64(1_i64, ((63_i32.wrapping_sub((1_i32))) as u32)) as u64)),
+        );
+        reg54 = (statics::dolphin__vi__vi::regs(ctx).at(54_i32).get() as u32);
+        if ((rm).viTVmode() == (enums::VI_TVMODE_NTSC_PROG as i32))
+            || ((rm).viTVmode() == (enums::VI_TVMODE_3 as i32))
+        {
+            'l11: loop {
+                'c12: {
+                    reg54 = (((reg54)
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)),
+                            ((0_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(((1_i32) as u32), ((0_i32) as u32))));
+                }
+                if !(0_i32 != 0) {
+                    break 'l11;
+                }
+            }
+        } else {
+            'l13: loop {
+                'c14: {
+                    reg54 = (((reg54)
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)),
+                            ((0_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(((0_i32) as u32), ((0_i32) as u32))));
+                }
+                if !(0_i32 != 0) {
+                    break 'l13;
+                }
+            }
+        }
+        statics::dolphin__vi__vi::regs(ctx)
+            .at(54_i32)
+            .set((reg54 as u16));
+        statics::dolphin__vi__vi::changed(ctx).set(
+            (statics::dolphin__vi__vi::changed(ctx).get()
+                | (shl_i64(1_i64, ((63_i32.wrapping_sub((54_i32))) as u32)) as u64)),
+        );
+    }
+    inl_setScalingRegs_unfused(
+        ctx,
+        statics::dolphin__vi__vi::HorVer(ctx).PanSizeX(),
+        statics::dolphin__vi__vi::HorVer(ctx).DispSizeX(),
+        statics::dolphin__vi__vi::HorVer(ctx).threeD(),
+    );
+    inl_setHorizontalRegs_unfused(
+        ctx,
+        tm,
+        statics::dolphin__vi__vi::HorVer(ctx).AdjustedDispPosX(),
+        statics::dolphin__vi__vi::HorVer(ctx).DispSizeX(),
+    );
+    inl_setBBIntervalRegs_unfused(ctx, tm);
+    inl_setPicConfig_unfused(
+        ctx,
+        statics::dolphin__vi__vi::HorVer(ctx).FBSizeX(),
+        statics::dolphin__vi__vi::HorVer(ctx).FBMode(),
+        statics::dolphin__vi__vi::HorVer(ctx).PanPosX(),
+        statics::dolphin__vi__vi::HorVer(ctx).PanSizeX(),
+        statics::dolphin__vi__vi::HorVer(ctx).wordPerLine_ref(),
+        statics::dolphin__vi__vi::HorVer(ctx).std_ref(),
+        statics::dolphin__vi__vi::HorVer(ctx).wpl_ref(),
+        statics::dolphin__vi__vi::HorVer(ctx).xof_ref(),
+    );
+    if statics::dolphin__vi__vi::FBSet(ctx).get() != (0_i32 as u32) {
+        statics::dolphin__vi__vi::setFbbRegs(
+            ctx,
+            statics::dolphin__vi__vi::HorVer(ctx),
+            statics::dolphin__vi__vi::HorVer(ctx).tfbb_ref(),
+            statics::dolphin__vi__vi::HorVer(ctx).bfbb_ref(),
+            statics::dolphin__vi__vi::HorVer(ctx).rtfbb_ref(),
+            statics::dolphin__vi__vi::HorVer(ctx).rbfbb_ref(),
+        );
+    }
+    statics::dolphin__vi__vi::setVerticalRegs(
+        ctx,
+        statics::dolphin__vi__vi::HorVer(ctx).AdjustedDispPosY(),
+        statics::dolphin__vi__vi::HorVer(ctx).AdjustedDispSizeY(),
+        (tm).equ(),
+        (tm).acv(),
+        (tm).prbOdd(),
+        (tm).prbEven(),
+        (tm).psbOdd(),
+        (tm).psbEven(),
+        statics::dolphin__vi__vi::HorVer(ctx).black(),
+    );
+    let _ = fns::OSRestoreInterrupts(ctx, enabled);
+}
+
 pub fn VIFlush<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
     let mut enabled: i32 = 0;
@@ -1023,6 +1298,190 @@ fn inl_calcFbbs_unfused<'a>(
     (bfbb).set(((bfbb).get() & (0x3fffffff_i32 as u32)));
 }
 
+fn inl_setInterruptRegs_unfused<'a>(ctx: &'a Ctx, tm: VITiming<'a>) {
+    let mut tm = tm;
+    let mut hct: u16 = 0;
+    let mut vct: u16 = 0;
+    let mut borrow: u16 = 0;
+    vct = (div_i32(((tm).nhlines() as i32), 2_i32) as u16);
+    borrow = (rem_i32(((tm).nhlines() as i32), 2_i32) as u16);
+    if (borrow as i32) != 0_i32 {
+        hct = (tm).hlw();
+    } else {
+        hct = (0_i32 as u16);
+    }
+    vct = vct.wrapping_add(1);
+    hct = hct.wrapping_add(1);
+    statics::dolphin__vi__vi::regs(ctx)
+        .at(25_i32)
+        .set(((hct as u32) as u16));
+    statics::dolphin__vi__vi::changed(ctx).set(
+        (statics::dolphin__vi__vi::changed(ctx).get()
+            | (shl_i64(1_i64, ((63_i32.wrapping_sub((25_i32))) as u32)) as u64)),
+    );
+    statics::dolphin__vi__vi::regs(ctx)
+        .at(24_i32)
+        .set((((vct as i32) | 0x1000_i32) as u16));
+    statics::dolphin__vi__vi::changed(ctx).set(
+        (statics::dolphin__vi__vi::changed(ctx).get()
+            | (shl_i64(1_i64, ((63_i32.wrapping_sub((24_i32))) as u32)) as u64)),
+    );
+}
+
+fn inl_setScalingRegs_unfused<'a>(ctx: &'a Ctx, panSizeX: u16, dispSizeX: u16, threeD: i32) {
+    let mut panSizeX = panSizeX;
+    let mut dispSizeX = dispSizeX;
+    let mut threeD = threeD;
+    let mut scale: u32 = 0;
+    panSizeX = ((if (threeD != 0) {
+        (shl_i32((panSizeX as i32), (1_i32 as u32)))
+    } else {
+        (panSizeX as i32)
+    }) as u16);
+    if (panSizeX as i32) < (dispSizeX as i32) {
+        scale = div_u32(
+            (((dispSizeX as i32)
+                .wrapping_add((shl_i32((panSizeX as i32), (8_i32 as u32))))
+                .wrapping_sub(1_i32)) as u32),
+            (dispSizeX as u32),
+        );
+        statics::dolphin__vi__vi::regs(ctx)
+            .at(37_i32)
+            .set(((scale | (0x1000_i32 as u32)) as u16));
+        statics::dolphin__vi__vi::changed(ctx)
+            .set((statics::dolphin__vi__vi::changed(ctx).get() | (0x4000000_i32 as u64)));
+        statics::dolphin__vi__vi::regs(ctx)
+            .at(56_i32)
+            .set(((panSizeX as u32) as u16));
+        statics::dolphin__vi__vi::changed(ctx)
+            .set((statics::dolphin__vi__vi::changed(ctx).get() | (128_i32 as u64)));
+    } else {
+        statics::dolphin__vi__vi::regs(ctx)
+            .at(37_i32)
+            .set((0x100_i32 as u16));
+        statics::dolphin__vi__vi::changed(ctx)
+            .set((statics::dolphin__vi__vi::changed(ctx).get() | (0x4000000_i32 as u64)));
+    }
+}
+
+fn inl_setHorizontalRegs_unfused<'a>(
+    ctx: &'a Ctx,
+    tm: VITiming<'a>,
+    dispPosX: u16,
+    dispSizeX: u16,
+) {
+    let mut tm = tm;
+    let mut dispPosX = dispPosX;
+    let mut dispSizeX = dispSizeX;
+    let mut hbe: u32 = 0;
+    let mut hbs: u32 = 0;
+    let mut hbeLo: u32 = 0;
+    let mut hbeHi: u32 = 0;
+    statics::dolphin__vi__vi::regs(ctx)
+        .at(3_i32)
+        .set((((tm).hlw() as u32) as u16));
+    statics::dolphin__vi__vi::changed(ctx).set(
+        (statics::dolphin__vi__vi::changed(ctx).get()
+            | (shl_i64(1_i64, ((63_i32.wrapping_sub((3_i32))) as u32)) as u64)),
+    );
+    statics::dolphin__vi__vi::regs(ctx)
+        .at(2_i32)
+        .set(((((tm).hce() as i32) | (shl_i32(((tm).hcs() as i32), (8_i32 as u32)))) as u16));
+    statics::dolphin__vi__vi::changed(ctx).set(
+        (statics::dolphin__vi__vi::changed(ctx).get()
+            | (shl_i64(1_i64, ((63_i32.wrapping_sub((2_i32))) as u32)) as u64)),
+    );
+    hbe = (((tm).hbe640() as i32)
+        .wrapping_sub(40_i32)
+        .wrapping_add((dispPosX as i32)) as u32);
+    hbs = (((tm).hbs640() as i32)
+        .wrapping_add(40_i32)
+        .wrapping_add((dispPosX as i32))
+        .wrapping_sub((0x2d0_i32.wrapping_sub((dispSizeX as i32)))) as u32);
+    hbeLo = (hbe & (0x1ff_i32 as u32));
+    hbeHi = shr_u32(hbe, (9_i32 as u32));
+    statics::dolphin__vi__vi::regs(ctx)
+        .at(5_i32)
+        .set(((((tm).hsy() as u32) | (shl_u32(hbeLo, (7_i32 as u32)))) as u16));
+    statics::dolphin__vi__vi::changed(ctx).set(
+        (statics::dolphin__vi__vi::changed(ctx).get()
+            | (shl_i64(1_i64, ((63_i32.wrapping_sub((5_i32))) as u32)) as u64)),
+    );
+    statics::dolphin__vi__vi::regs(ctx)
+        .at(4_i32)
+        .set(((hbeHi | (hbs.wrapping_mul((2_i32 as u32)))) as u16));
+    statics::dolphin__vi__vi::changed(ctx).set(
+        (statics::dolphin__vi__vi::changed(ctx).get()
+            | (shl_i64(1_i64, ((63_i32.wrapping_sub((4_i32))) as u32)) as u64)),
+    );
+}
+
+fn inl_setBBIntervalRegs_unfused<'a>(ctx: &'a Ctx, tm: VITiming<'a>) {
+    let mut tm = tm;
+    let mut val: u16 = 0;
+    val = ((((tm).bs1() as i32) | (shl_i32(((tm).be1() as i32), (5_i32 as u32)))) as u16);
+    statics::dolphin__vi__vi::regs(ctx).at(11_i32).set(val);
+    statics::dolphin__vi__vi::changed(ctx)
+        .set((statics::dolphin__vi__vi::changed(ctx).get() | (0x10000000000000_i64 as u64)));
+    val = ((((tm).bs3() as i32) | (shl_i32(((tm).be3() as i32), (5_i32 as u32)))) as u16);
+    statics::dolphin__vi__vi::regs(ctx).at(10_i32).set(val);
+    statics::dolphin__vi__vi::changed(ctx)
+        .set((statics::dolphin__vi__vi::changed(ctx).get() | (0x20000000000000_i64 as u64)));
+    val = ((((tm).bs2() as i32) | (shl_i32(((tm).be2() as i32), (5_i32 as u32)))) as u16);
+    statics::dolphin__vi__vi::regs(ctx).at(13_i32).set(val);
+    statics::dolphin__vi__vi::changed(ctx)
+        .set((statics::dolphin__vi__vi::changed(ctx).get() | (0x4000000000000_i64 as u64)));
+    val = ((((tm).bs4() as i32) | (shl_i32(((tm).be4() as i32), (5_i32 as u32)))) as u16);
+    statics::dolphin__vi__vi::regs(ctx).at(12_i32).set(val);
+    statics::dolphin__vi__vi::changed(ctx).set(
+        (statics::dolphin__vi__vi::changed(ctx).get()
+            | ((shl_i64(1_i64, ((63_i32.wrapping_sub(12_i32)) as u32))) as u64)),
+    );
+}
+
+fn inl_setPicConfig_unfused<'a>(
+    ctx: &'a Ctx,
+    fbSizeX: u16,
+    xfbMode: i32,
+    panPosX: u16,
+    panSizeX: u16,
+    wordPerLine: Val<'a, u8>,
+    std: Val<'a, u8>,
+    wpl: Val<'a, u8>,
+    xof: Val<'a, u8>,
+) {
+    let mut fbSizeX = fbSizeX;
+    let mut xfbMode = xfbMode;
+    let mut panPosX = panPosX;
+    let mut panSizeX = panSizeX;
+    let mut wordPerLine = wordPerLine;
+    let mut std = std;
+    let mut wpl = wpl;
+    let mut xof = xof;
+    (wordPerLine).set((div_i32(((fbSizeX as i32).wrapping_add(15_i32)), 16_i32) as u8));
+    (std).set(
+        ((if (xfbMode as u32) == ((enums::VI_XFBMODE_SF as i32) as u32) {
+            ((wordPerLine).get() as i32)
+        } else {
+            (((((wordPerLine).get() as i32).wrapping_mul(2_i32)) as u8) as i32)
+        }) as u8),
+    );
+    (xof).set((rem_i32((panPosX as i32), 16_i32) as u8));
+    (wpl).set(
+        (div_i32(
+            (((xof).get() as i32)
+                .wrapping_add((panSizeX as i32))
+                .wrapping_add(15_i32)),
+            16_i32,
+        ) as u8),
+    );
+    statics::dolphin__vi__vi::regs(ctx)
+        .at(36_i32)
+        .set(((((std).get() as i32) | (shl_i32(((wpl).get() as i32), (8_i32 as u32)))) as u16));
+    statics::dolphin__vi__vi::changed(ctx)
+        .set((statics::dolphin__vi__vi::changed(ctx).get() | (0x8000000_i32 as u64)));
+}
+
 fn inl_getCurrentHalfLine_unfused<'a>(ctx: &'a Ctx) -> u32 {
     let mut hcount: u32 = 0;
     let mut vcount0: u32 = 0;
@@ -1138,6 +1597,14 @@ pub fn register(ctx: &Ctx) {
                 setVerticalRegs(ctx, a0, a1, a2, a3, a4, a5, a6, a7, a8),
                 ctx,
             );
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8034f7dc,
+        |ctx| {
+            let (a0,): (_GXRenderModeObj<'_>,) = Args::take_all(ctx);
+            Ret::put(VIConfigure(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

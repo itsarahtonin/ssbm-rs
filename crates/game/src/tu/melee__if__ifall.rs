@@ -244,6 +244,10 @@ pub fn ifAll_802F343C<'a>(ctx: &'a Ctx, count: i32) {
     }
 }
 
+pub fn ifAll_GetArchive<'a>(ctx: &'a Ctx) -> Ptr<'a, HSD_Archive<'a>> {
+    return At::new(ctx, 0x804d6d5c).field::<Ptr<'a, HSD_Archive<'a>>>(0);
+}
+
 pub fn ifAll_HideHUD<'a>(ctx: &'a Ctx) {
     statics::melee__if__ifall::hidden(ctx).set((1_i32 as u8));
 }
@@ -524,9 +528,13 @@ fn inl_ifAll_ShowHUD_unfused<'a>(ctx: &'a Ctx) {
     statics::melee__if__ifall::hidden(ctx).set((0_i32 as u8));
 }
 
+fn inl_ifAll_GetArchive_unfused<'a>(ctx: &'a Ctx) -> Ptr<'a, HSD_Archive<'a>> {
+    return At::new(ctx, 0x804d6d5c).field::<Ptr<'a, HSD_Archive<'a>>>(0);
+}
+
 fn inl_loadScene_unfused<'a>(ctx: &'a Ctx, scene: Ptr<'a, SceneDesc<'a>>) {
     let mut scene = scene;
-    let mut archive: Ptr<'a, HSD_Archive<'a>> = fns::ifAll_GetArchive(ctx);
+    let mut archive: Ptr<'a, HSD_Archive<'a>> = inl_ifAll_GetArchive_unfused(ctx);
     let _ = fns::lbArchive_80016F80(ctx, archive, cstr(ctx, 0x804d5780));
     fns::lbArchive_LoadSections(
         ctx,
@@ -622,6 +630,13 @@ pub fn register(ctx: &Ctx) {
             Ret::put(ifAll_802F343C(ctx, a0), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x802f3690,
+        |ctx| {
+            Ret::put(ifAll_GetArchive(ctx), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x802f3698,

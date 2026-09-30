@@ -409,6 +409,167 @@ pub fn fn_8017A078<'a>(ctx: &'a Ctx, arg0: i32) {
     fns::GObj_SetupGXLinkMax(ctx, gobj, callbacks.funcs().at(arg0).get(), (5_i32 as u32));
 }
 
+pub fn fn_8017A318<'a>(ctx: &'a Ctx, arg0: i32) -> HSD_GObj<'a> {
+    let __frame = ctx.stack_frame(0x90);
+    let _pad: ArrV<'a, i32, 2> = frame_at(ctx, &__frame, 0x0);
+    let scissor: _Scissor<'a> = frame_at(ctx, &__frame, 0x8);
+    let eye: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let callbacks: ResultsRenderFuncs<'a> = frame_at(ctx, &__frame, 0x28);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x38);
+    let mut arg0 = arg0;
+    let mut config: Val<'a, u32> = Handle::cast::<Val<'a, u32>>(fns::lbl_803B7B68(ctx));
+    let mut data: CameraKindData<'a> =
+        Handle::cast::<CameraKindData<'a>>(fns::gmResultPlayerColors(ctx).at(0));
+    let mut disp: ResultsDisplayLayout<'a> =
+        Handle::cast::<ResultsDisplayLayout<'a>>(fns::lbl_8046E1B0(ctx));
+    let mut match_end: MatchEnd<'a> = (disp).state().match_end();
+    let mut slot: i32 = 0;
+    let mut gobj: HSD_GObj<'a> = null(ctx);
+    let mut cobj: HSD_CObj<'a> = null(ctx);
+    let mut variant: u8 = 0;
+    let mut kind_data: i32 = 0;
+    let mut vi: i32 = 0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    let _ = fns::fn_801795D4(ctx);
+    let _ = fns::fn_801796F0(ctx, arg0);
+    Handle::copy_from(scissor, At::new(ctx, 0x804da3f0).field::<_Scissor<'a>>(0));
+    Handle::copy_from(eye, (Handle::cast::<ResultsPlayerConfig<'a>>(config)).x4C());
+    Handle::copy_from(
+        interest,
+        (Handle::cast::<ResultsPlayerConfig<'a>>(config)).x58(),
+    );
+    Handle::copy_from(
+        callbacks,
+        (Handle::cast::<ResultsPlayerConfig<'a>>(config)).x64(),
+    );
+    if ((match_end).is_teams() as i32) == 0_i32 {
+        slot = ((match_end).player_standings().get(arg0).is_big_loser() as i32);
+    } else {
+        let mut team_idx: u8 = (match_end).player_standings().get(arg0).team();
+        slot = ((match_end)
+            .team_standings()
+            .get((team_idx as i32))
+            .is_big_loser() as i32);
+    }
+    gobj = fns::GObj_Create(ctx, (19_i32 as u16), (20_i32 as u8), (0_i32 as u8));
+    cobj = fns::HSD_CObjLoadDesc(ctx, (data).cobj_desc());
+    fns::HSD_GObjObject_80390A70(
+        ctx,
+        gobj,
+        fns::HSD_GObj_CameraKind(ctx).get(),
+        Handle::cast::<Addr<'a>>(cobj),
+    );
+    {
+        let mut n: i32 = arg0.wrapping_add(1_i32);
+        eye.set_y(fp::fmuls(eye.y(), fp::frsp(n as f64)));
+        interest.set_y(fp::fmuls(interest.y(), fp::frsp(n as f64)));
+    }
+    variant = (disp).state().variant().at(arg0).get();
+    vi = (if (variant as i32) <= 2_i32 {
+        (variant as i32)
+    } else {
+        3_i32
+    });
+    kind_data = (disp).state().char_kind().at(arg0).get();
+    eye.set_y(fp::fadds(
+        eye.y(),
+        (data).kind().get(kind_data).y_off().at(vi).get(),
+    ));
+    vi = (if (variant as i32) <= 2_i32 {
+        (variant as i32)
+    } else {
+        3_i32
+    });
+    interest.set_y(fp::fadds(
+        interest.y(),
+        (data).kind().get(kind_data).y_off().at(vi).get(),
+    ));
+    vi = (if (variant as i32) <= 2_i32 {
+        (variant as i32)
+    } else {
+        3_i32
+    });
+    eye.set_x(fp::fadds(
+        eye.x(),
+        (data).kind().get(kind_data).x_off().at(vi).get(),
+    ));
+    {
+        let mut interest_x: f64 = 0.0;
+        vi = (if (variant as i32) <= 2_i32 {
+            (variant as i32)
+        } else {
+            3_i32
+        });
+        interest_x = fp::fadds(
+            interest.x(),
+            (data).kind().get(kind_data).x_off().at(vi).get(),
+        );
+        {
+            let mut x_off: f64 = 0.0;
+            let mut y_off: f64 = 0.0;
+            interest.set_x(interest_x);
+            x_off = (data).slot_off().get(kind_data).get(0_i32).at(slot).get();
+            eye.set_x(fp::fadds(eye.x(), x_off));
+            interest.set_x(fp::fadds(interest.x(), x_off));
+            eye.set_y(fp::fadds(
+                eye.y(),
+                ({
+                    let __t1 = (data).slot_off().get(kind_data).get(1_i32).at(slot).get();
+                    y_off = __t1;
+                    __t1
+                }),
+            ));
+            interest.set_y(fp::fadds(interest.y(), y_off));
+        }
+    }
+    if slot == 0_i32 {
+        eye.set_z(fp::fadds(eye.z(), 320.0));
+    }
+    vi = (if (variant as i32) <= 2_i32 {
+        (variant as i32)
+    } else {
+        3_i32
+    });
+    if (fp::fsubs(1.0, (data).kind().get(kind_data).z_scale().at(vi).get())) < 0.0 {
+        vi = (if (variant as i32) <= 2_i32 {
+            (variant as i32)
+        } else {
+            3_i32
+        });
+        eye.set_z(fp::fmadds(
+            100.0,
+            (fp::fsubs(1.0, (data).kind().get(kind_data).z_scale().at(vi).get())),
+            eye.z(),
+        ));
+    } else {
+        vi = (if (variant as i32) <= 2_i32 {
+            (variant as i32)
+        } else {
+            3_i32
+        });
+        eye.set_z(fp::fmadds(
+            300.0,
+            (fp::fsubs(1.0, (data).kind().get(kind_data).z_scale().at(vi).get())),
+            eye.z(),
+        ));
+    }
+    fns::HSD_CObjSetEyePosition(ctx, cobj, eye);
+    fns::HSD_CObjSetInterest(ctx, cobj, interest);
+    fns::HSD_CObjSetScissor(ctx, cobj, scissor);
+    fns::GObj_SetupGXLinkMax(ctx, gobj, callbacks.funcs().at(arg0).get(), (0_i32 as u32));
+    if slot == 0_i32 {
+        fns::fn_8017A078(ctx, arg0);
+    }
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
 pub fn fn_8017A67C<'a>(ctx: &'a Ctx, kind: i32, arg1: i32, arg2: i32) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x78);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
@@ -986,6 +1147,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(fn_8017A078(ctx, a0), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8017a318,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(fn_8017A318(ctx, a0), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x8017a67c,

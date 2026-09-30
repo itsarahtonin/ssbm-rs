@@ -1646,6 +1646,82 @@ pub fn HSD_CObjAlloc<'a>(ctx: &'a Ctx) -> HSD_CObj<'a> {
     return cobj;
 }
 
+pub fn CObjLoad<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, desc: HSD_CObjDesc<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x48);
+    let mut cobj = cobj;
+    let mut desc = desc;
+    (cobj).set_flags(((desc).common().flags() as u32));
+    inl_CObjResetFlags_unfused(ctx, cobj, ((desc).common().flags() as u32));
+    inl_HSD_CObjSetViewport_unfused(ctx, cobj, (desc).common().viewport());
+    inl_HSD_CObjSetScissor_unfused(ctx, cobj, (desc).common().scissor());
+    fns::HSD_WObjInit(ctx, (cobj).eyepos(), (desc).common().eyepos());
+    fns::HSD_WObjInit(ctx, (cobj).interest(), (desc).common().interest());
+    inl_HSD_CObjSetNear_unfused(ctx, cobj, (desc).common().nnear());
+    inl_HSD_CObjSetFar_unfused(ctx, cobj, (desc).common().ffar());
+    if ((((desc).common().flags() as i32) & 1_i32) != 0) {
+        if !Handle::is_null((desc).common().up_vector()) {
+            fns::HSD_CObjSetUpVector(ctx, cobj, (desc).common().up_vector());
+        } else {
+            fns::HSD_CObjSetUpVector(ctx, cobj, At::new(ctx, 0x8040631c).field::<Vec<'a>>(0));
+        }
+    } else {
+        inl_HSD_CObjSetRoll_unfused(ctx, cobj, (desc).common().roll());
+    }
+    's1: {
+        let __case = match ((desc).common().projection_type() as i32) {
+            1_i32 => 0,
+            3_i32 => 1,
+            2_i32 => 2,
+            _ => 3,
+        };
+        if __case <= 0 {
+            inl_HSD_CObjSetPerspective_unfused(
+                ctx,
+                cobj,
+                (desc).perspective().fov(),
+                (desc).perspective().aspect(),
+            );
+            break 's1;
+        }
+        if __case <= 1 {
+            inl_HSD_CObjSetOrtho_unfused(
+                ctx,
+                cobj,
+                (desc).ortho().top(),
+                (desc).ortho().bottom(),
+                (desc).ortho().left(),
+                (desc).ortho().right(),
+            );
+            break 's1;
+        }
+        if __case <= 2 {
+            inl_HSD_CObjSetFrustum_unfused(
+                ctx,
+                cobj,
+                (desc).frustum().top(),
+                (desc).frustum().bottom(),
+                (desc).frustum().left(),
+                (desc).frustum().right(),
+            );
+            break 's1;
+        }
+        if __case <= 3 {
+            (if ((0_i32) != 0) {
+                ({ () })
+            } else {
+                fns::__assert(
+                    ctx,
+                    cstr(ctx, 0x80406224),
+                    (0x512_i32 as u32),
+                    cstr(ctx, 0x80406224),
+                )
+            });
+            break 's1;
+        }
+    }
+    return 0_i32;
+}
+
 pub fn HSD_CObjInit<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, desc: HSD_CObjDesc<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut cobj = cobj;
@@ -2149,6 +2225,141 @@ fn inl_HSD_CObjGetInvViewingMtxPtrDirect_unfused<'a>(
         fns::HSD_CObjClearFlags(ctx, cobj, ((shl_i32(1_i32, (31_i32 as u32))) as u32));
     }
     return ((cobj).proj_mtx()).get(0);
+}
+
+fn inl_CObjResetFlags_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, flags: u32) {
+    let mut cobj = cobj;
+    let mut flags = flags;
+    if Handle::is_null(cobj) {
+        return;
+    }
+    (cobj).set_flags((((cobj).flags() & 0xc0000000_u32) | flags));
+}
+
+fn inl_HSD_CObjSetViewport_unfused<'a>(
+    ctx: &'a Ctx,
+    cobj: HSD_CObj<'a>,
+    viewport: _HSD_RectS16<'a>,
+) {
+    let mut cobj = cobj;
+    let mut viewport = viewport;
+    if Handle::is_null(cobj) {
+        return;
+    }
+    (cobj)
+        .viewport()
+        .set_xmin(fp::frsp((viewport).xmin() as f64));
+    (cobj)
+        .viewport()
+        .set_xmax(fp::frsp((viewport).xmax() as f64));
+    (cobj)
+        .viewport()
+        .set_ymin(fp::frsp((viewport).ymin() as f64));
+    (cobj)
+        .viewport()
+        .set_ymax(fp::frsp((viewport).ymax() as f64));
+}
+
+fn inl_HSD_CObjSetScissor_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, scissor: _Scissor<'a>) {
+    let mut cobj = cobj;
+    let mut scissor = scissor;
+    if Handle::is_null(cobj) {
+        return;
+    }
+    Handle::copy_from((cobj).scissor(), (scissor));
+}
+
+fn inl_HSD_CObjSetNear_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, near: f64) {
+    let mut cobj = cobj;
+    let mut near = near;
+    if !Handle::is_null(cobj) {
+        (cobj).set_near(near);
+    }
+}
+
+fn inl_HSD_CObjSetFar_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, far: f64) {
+    let mut cobj = cobj;
+    let mut far = far;
+    if !Handle::is_null(cobj) {
+        (cobj).set_far(far);
+    }
+}
+
+fn inl_HSD_CObjSetRoll_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, roll: f64) {
+    let __frame = ctx.stack_frame(0x18);
+    let up: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut cobj = cobj;
+    let mut roll = roll;
+    if !(!Handle::is_null(cobj)) {
+        return;
+    }
+    if ((cobj).flags() & (1_i32 as u32)) != (0_i32 as u32) {
+        let _ = statics::sysdolphin__baselib__cobj::roll2upvec(ctx, cobj, up, roll);
+        fns::HSD_CObjSetUpVector(ctx, cobj, up);
+    } else {
+        if (cobj).u().roll() != roll {
+            (cobj).set_flags(((cobj).flags() | 0xc0000000_u32));
+        }
+        (cobj).u().set_roll(roll);
+    }
+}
+
+fn inl_HSD_CObjSetPerspective_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, fov: f64, aspect: f64) {
+    let mut cobj = cobj;
+    let mut fov = fov;
+    let mut aspect = aspect;
+    if Handle::is_null(cobj) {
+        return;
+    }
+    (cobj).set_projection_type((1_i32 as u8));
+    (cobj).projection_param().perspective().set_fov(fov);
+    (cobj).projection_param().perspective().set_aspect(aspect);
+}
+
+fn inl_HSD_CObjSetOrtho_unfused<'a>(
+    ctx: &'a Ctx,
+    cobj: HSD_CObj<'a>,
+    top: f64,
+    bottom: f64,
+    left: f64,
+    right: f64,
+) {
+    let mut cobj = cobj;
+    let mut top = top;
+    let mut bottom = bottom;
+    let mut left = left;
+    let mut right = right;
+    if Handle::is_null(cobj) {
+        return;
+    }
+    (cobj).set_projection_type((3_i32 as u8));
+    (cobj).projection_param().ortho().set_top(top);
+    (cobj).projection_param().ortho().set_bottom(bottom);
+    (cobj).projection_param().ortho().set_left(left);
+    (cobj).projection_param().ortho().set_right(right);
+}
+
+fn inl_HSD_CObjSetFrustum_unfused<'a>(
+    ctx: &'a Ctx,
+    cobj: HSD_CObj<'a>,
+    top: f64,
+    bottom: f64,
+    left: f64,
+    right: f64,
+) {
+    let mut cobj = cobj;
+    let mut top = top;
+    let mut bottom = bottom;
+    let mut left = left;
+    let mut right = right;
+    if Handle::is_null(cobj) {
+        return;
+    }
+    (cobj).set_projection_type((2_i32 as u8));
+    (cobj).projection_param().frustum().set_top(top);
+    (cobj).projection_param().frustum().set_bottom(bottom);
+    (cobj).projection_param().frustum().set_left(left);
+    (cobj).projection_param().frustum().set_right(right);
 }
 
 fn inl_HSD_CObjAlloc_unfused<'a>(ctx: &'a Ctx) -> HSD_CObj<'a> {
@@ -2730,6 +2941,14 @@ pub fn register(ctx: &Ctx) {
         0x8036a290,
         |ctx| {
             Ret::put(HSD_CObjAlloc(ctx), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8036a2ec,
+        |ctx| {
+            let (a0, a1): (HSD_CObj<'_>, HSD_CObjDesc<'_>) = Args::take_all(ctx);
+            Ret::put(CObjLoad(ctx, a0, a1), ctx);
         },
         Returns::Int,
     );

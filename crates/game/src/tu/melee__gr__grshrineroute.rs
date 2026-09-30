@@ -1269,6 +1269,264 @@ pub fn grShrineRoute_8020A214<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 {
     return 0_i32;
 }
 
+pub fn grShrineRoute_8020A21C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x190);
+    let player_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let light_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sorted: ArrV<'a, i32, 20> = frame_at(ctx, &__frame, 0x18);
+    let distances: ArrV<'a, F32, 20> = frame_at(ctx, &__frame, 0x68);
+    let pos1: Vec<'a> = frame_at(ctx, &__frame, 0xb8);
+    let pos2: Vec<'a> = frame_at(ctx, &__frame, 0xc4);
+    let dir: Vec<'a> = frame_at(ctx, &__frame, 0xd0);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0xdc);
+    let temp_pos: Vec<'a> = frame_at(ctx, &__frame, 0xe0);
+    let mut gobj = gobj;
+    let mut player: HSD_GObj<'a> = null(ctx);
+    let mut gp: Ground<'a> = null(ctx);
+    let mut count: i32 = 0;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut best: i32 = 0;
+    let mut min_dist: f64 = 0.0;
+    let mut ref_dist: f64 = 0.0;
+    let mut weight: f64 = 0.0;
+    let mut dx: f64 = 0.0;
+    let mut dy: f64 = 0.0;
+    let mut dist_sq: f64 = 0.0;
+    gp = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+    player = fns::Ground_GetP1Fighter(ctx);
+    if !Handle::is_null(player) {
+        fns::ftLib_GetPos(ctx, player, player_pos);
+    } else {
+        player_pos.set_z(0.0);
+        player_pos.set_y(0.0);
+        player_pos.set_x(0.0);
+    }
+    if !Handle::is_null((gp).u().shrineroute2().xC4()) {
+        i = 0_i32;
+        'l1: while i < ((gp).u().shrineroute2().x168() as i32) {
+            'c2: {
+                let mut lobj: HSD_LObj<'a> = (gp).u().shrineroute2().xC8().at(i).get();
+                let mut r#type: i32 = (((lobj).flags() as i32) & 3_i32);
+                if r#type == 0_i32 {
+                    distances.at(i).set(fp::fneg(100.0));
+                } else if (r#type == 1_i32) || (r#type == 2_i32) {
+                    let _ = fns::HSD_LObjGetPosition(ctx, lobj, pos1);
+                    dx = fp::fsubs(player_pos.x(), pos1.x());
+                    dy = fp::fsubs(player_pos.y(), pos1.y());
+                    {
+                        let mut dx2: f64 = fp::fmuls(dx, dx);
+                        let mut dy2: f64 = fp::fmuls(dy, dy);
+                        distances.at(i).set(inl_sqrtf(ctx, fp::fadds(dx2, dy2)));
+                    }
+                } else if r#type == 3_i32 {
+                    let _ = fns::HSD_LObjGetPosition(ctx, lobj, pos2);
+                    distances.at(i).set(
+                        (if (fp::fsubs(player_pos.x(), pos2.x())) < fp::frsp(0_i32 as f64) {
+                            fp::fneg((fp::fsubs(player_pos.x(), pos2.x())))
+                        } else {
+                            (fp::fsubs(player_pos.x(), pos2.x()))
+                        }),
+                    );
+                } else {
+                    (if ((0_i32) != 0) {
+                        ({ () })
+                    } else {
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803b8360),
+                            (0x3dd_i32 as u32),
+                            cstr(ctx, 0x803b8360),
+                        )
+                    });
+                }
+                if distances.at(i).get() < 10.0 {
+                    distances.at(i).set(10.0);
+                }
+                sorted.at(i).set(i);
+                i = i.wrapping_add(1_i32);
+            }
+        }
+        {
+            i = 0_i32;
+            'l3: while i < ((gp).u().shrineroute2().x168() as i32) {
+                'c4: {
+                    count = ((gp).u().shrineroute2().x168() as i32);
+                    min_dist = 3.4028234663852886e+38_f64;
+                    best = 0_i32;
+                    {
+                        j = i;
+                        'l5: while j < count {
+                            'c6: {
+                                if min_dist > distances.at(sorted.at(j).get()).get() {
+                                    best = j;
+                                    min_dist = distances.at(sorted.at(j).get()).get();
+                                }
+                            }
+                            j = j.wrapping_add(1);
+                        }
+                    }
+                    {
+                        let mut tmp: i32 = sorted.at(i).get();
+                        sorted.at(i).set(sorted.at(best).get());
+                        sorted.at(best).set(tmp);
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+        {
+            i = 0_i32;
+            'l7: while i < ((gp).u().shrineroute2().x168() as i32) {
+                'c8: {
+                    if i < 6_i32 {
+                        fns::HSD_LObjClearFlags(
+                            ctx,
+                            (gp).u().shrineroute2().xC8().at(sorted.at(i).get()).get(),
+                            (32_i32 as u32),
+                        );
+                    } else {
+                        fns::HSD_LObjSetFlags(
+                            ctx,
+                            (gp).u().shrineroute2().xC8().at(sorted.at(i).get()).get(),
+                            (32_i32 as u32),
+                        );
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+        {
+            Handle::copy_from(dir, At::new(ctx, 0x803b8360).field::<Vec<'a>>(0));
+            ref_dist = distances.at(sorted.at(1_i32).get()).get();
+            {
+                i = 1_i32;
+                'l9: while i < ((gp).u().shrineroute2().x168() as i32) {
+                    'c10: {
+                        if fns::HSD_LObjGetPosition(
+                            ctx,
+                            (gp).u().shrineroute2().xC8().at(sorted.at(i).get()).get(),
+                            light_pos,
+                        ) != 0_i32
+                        {
+                            weight = fp::fdivs(ref_dist, distances.at(sorted.at(i).get()).get());
+                            let _ = fns::lbVector_Sub(ctx, light_pos, player_pos);
+                            if light_pos.y() < 15.0 {
+                                if light_pos.y() < 0.0 {
+                                    weight = 0.0;
+                                } else {
+                                    weight = fp::fmuls(weight, fp::fdivs(light_pos.y(), 15.0));
+                                }
+                            }
+                            let _ = fns::lbVector_Normalize(ctx, light_pos);
+                            light_pos.set_x(fp::fmuls(light_pos.x(), weight));
+                            light_pos.set_y(fp::fmuls(light_pos.y(), weight));
+                            light_pos.set_z(fp::fmuls(light_pos.z(), weight));
+                            let _ = fns::lbVector_Add(ctx, dir, light_pos);
+                        }
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+        }
+        dist_sq = inl_sqrtf(
+            ctx,
+            fp::fadds(
+                fp::fmuls(dir.z(), dir.z()),
+                (fp::fadds(fp::fmuls(dir.x(), dir.x()), fp::fmuls(dir.y(), dir.y()))),
+            ),
+        );
+        if dist_sq < 0.009999999776482582 {
+            dir.set_y(100.0);
+        }
+        let _ = fns::lbVector_Normalize(ctx, dir);
+        dir.set_x(fp::fmuls(dir.x(), 20.0));
+        dir.set_y(fp::fmuls(dir.y(), 20.0));
+        dir.set_z(fp::fmuls(dir.z(), 20.0));
+        let _ = fns::lbVector_Add(ctx, dir, player_pos);
+        fns::HSD_LObjSetPosition(ctx, (gp).u().shrineroute2().x16C(), dir);
+        fns::HSD_LObjSetInterest(ctx, (gp).u().shrineroute2().x16C(), player_pos);
+        fns::HSD_LObjSetFlags(ctx, (gp).u().shrineroute2().x16C(), (0x400_i32 as u32));
+        {
+            let mut dist_diff: f64 = 0.0;
+            dist_diff = fp::fsubs(
+                distances.at(sorted.at(2_i32).get()).get(),
+                distances.at(sorted.at(1_i32).get()).get(),
+            );
+            fns::HSD_LObjGetColor(
+                ctx,
+                (gp).u()
+                    .shrineroute2()
+                    .xC8()
+                    .at(sorted.at(1_i32).get())
+                    .get(),
+                color,
+            );
+            if fp::fsubs(
+                distances.at(sorted.at(2_i32).get()).get(),
+                distances.at(sorted.at(1_i32).get()).get(),
+            ) < 50.0
+            {
+                let mut ratio: f64 = fp::fdivs(dist_diff, 50.0);
+                color.set_r(
+                    (fp::fctiwz(fp::fmuls(fp::frsp((color.r() as i32) as f64), ratio)) as u8),
+                );
+                color.set_g(
+                    (fp::fctiwz(fp::fmuls(fp::frsp((color.g() as i32) as f64), ratio)) as u8),
+                );
+                color.set_b(
+                    (fp::fctiwz(fp::fmuls(fp::frsp((color.b() as i32) as f64), ratio)) as u8),
+                );
+            }
+        }
+        fns::HSD_LObjSetColor(ctx, (gp).u().shrineroute2().x170(), color);
+        inl_grShrineRoute_StackPad(ctx, color);
+        if fns::HSD_LObjGetPosition(
+            ctx,
+            (gp).u()
+                .shrineroute2()
+                .xC8()
+                .at(sorted.at(1_i32).get())
+                .get(),
+            temp_pos,
+        ) == 0_i32
+        {
+            temp_pos.set_z(0.0);
+            temp_pos.set_y(0.0);
+            temp_pos.set_x(0.0);
+        }
+        fns::HSD_LObjSetPosition(ctx, (gp).u().shrineroute2().x170(), temp_pos);
+        if fns::HSD_LObjGetInterest(
+            ctx,
+            (gp).u()
+                .shrineroute2()
+                .xC8()
+                .at(sorted.at(1_i32).get())
+                .get(),
+            temp_pos,
+        ) == 0_i32
+        {
+            temp_pos.set_z(0.0);
+            temp_pos.set_y(0.0);
+            temp_pos.set_x(0.0);
+        }
+        fns::HSD_LObjSetInterest(ctx, (gp).u().shrineroute2().x170(), temp_pos);
+        ((gp).u().shrineroute2().x170()).set_flags(
+            ((gp)
+                .u()
+                .shrineroute2()
+                .xC8()
+                .at(sorted.at(1_i32).get())
+                .get())
+            .flags(),
+        );
+        ((gp).u().shrineroute2().x170())
+            .set_flags((((((gp).u().shrineroute2().x170()).flags() as i32) & (!4_i32)) as u16));
+        ((gp).u().shrineroute2().x170())
+            .set_flags((((((gp).u().shrineroute2().x170()).flags() as i32) | 8_i32) as u16));
+    }
+}
+
 pub fn grShrineRoute_8020A864<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
     let mut arg = arg;
 }
@@ -1382,6 +1640,105 @@ pub fn grShrineRoute_8020AA40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn grShrineRoute_8020AB58<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_LObj<'a> {
+    let __frame = ctx.stack_frame(0x28);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let mut gobj = gobj;
+    let mut new_lobj: HSD_LObj<'a> = null(ctx);
+    let mut lobj: HSD_LObj<'a> = null(ctx);
+    if (Handle::is_null(gobj))
+        || (Handle::is_null(
+            ({
+                let __t1 = Handle::cast::<HSD_LObj<'a>>((gobj).hsd_obj());
+                lobj = __t1;
+                __t1
+            }),
+        ))
+    {
+        return null::<HSD_LObj<'a>>(ctx);
+    }
+    'l1: while !Handle::is_null(
+        (if Handle::is_null(lobj) {
+            null::<HSD_LObj<'a>>(ctx)
+        } else {
+            (lobj).next()
+        }),
+    ) {
+        'c2: {
+            lobj = (if Handle::is_null(lobj) {
+                null::<HSD_LObj<'a>>(ctx)
+            } else {
+                (lobj).next()
+            });
+        }
+    }
+    new_lobj = fns::HSD_LObjLoadDesc(ctx, statics::melee__gr__grshrineroute::lobj0(ctx));
+    if !Handle::is_null(new_lobj) {
+        Handle::copy_from(pos, At::new(ctx, 0x803b836c).field::<Vec<'a>>(0));
+        inl_HSD_LObjSetNext_unfused(ctx, lobj, new_lobj);
+        fns::HSD_LObjSetPosition(ctx, new_lobj, pos);
+        fns::HSD_LObjSetFlags(ctx, new_lobj, (32_i32 as u32));
+    }
+    return new_lobj;
+    'l3: loop {
+        'c4: {}
+        if !(0_i32 != 0) {
+            break 'l3;
+        }
+    }
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
+pub fn grShrineRoute_8020AC44<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_LObj<'a> {
+    let __frame = ctx.stack_frame(0x28);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let mut gobj = gobj;
+    let mut new_lobj: HSD_LObj<'a> = null(ctx);
+    let mut lobj: HSD_LObj<'a> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if (Handle::is_null(gobj))
+        || (Handle::is_null(
+            ({
+                let __t1 = Handle::cast::<HSD_LObj<'a>>((gobj).hsd_obj());
+                lobj = __t1;
+                __t1
+            }),
+        ))
+    {
+        return null::<HSD_LObj<'a>>(ctx);
+    }
+    'l3: while !Handle::is_null(
+        (if Handle::is_null(lobj) {
+            null::<HSD_LObj<'a>>(ctx)
+        } else {
+            (lobj).next()
+        }),
+    ) {
+        'c4: {
+            lobj = (if Handle::is_null(lobj) {
+                null::<HSD_LObj<'a>>(ctx)
+            } else {
+                (lobj).next()
+            });
+        }
+    }
+    new_lobj = fns::HSD_LObjLoadDesc(ctx, statics::melee__gr__grshrineroute::lobj1(ctx));
+    if !Handle::is_null(new_lobj) {
+        Handle::copy_from(pos, At::new(ctx, 0x803b8378).field::<Vec<'a>>(0));
+        inl_HSD_LObjSetNext_unfused(ctx, lobj, new_lobj);
+        fns::HSD_LObjSetPosition(ctx, new_lobj, pos);
+    }
+    return new_lobj;
+}
+
 pub fn grShrineRoute_8020AD24<'a>(ctx: &'a Ctx, arg: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut arg = arg;
@@ -1434,6 +1791,49 @@ pub fn onJointCollision<'a>(
         }
         (gp).u().shrineroute().set_xCC((1_i32 as u16));
     }
+}
+
+pub fn grShrineRoute_8020AE08<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    player_gobj: HSD_GObj<'a>,
+    out: Val<'a, i32>,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x50);
+    let lo: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let hi: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let mut gobj = gobj;
+    let mut player_gobj = player_gobj;
+    let mut out = out;
+    let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
+    let mut scale: f64 = 0.0;
+    let mut unused1: f64 = 0.0;
+    let mut unused2: f64 = 0.0;
+    let mut unused3: f64 = 0.0;
+    let mut unused4: f64 = 0.0;
+    if (((gp).u().shrineroute().xC4() as i32) == 1_i32)
+        || (((gp).u().shrineroute().xC4() as i32) == 3_i32)
+    {
+        return 0_i32;
+    }
+    Handle::copy_from(lo, At::new(ctx, 0x803b8384).field::<Vec<'a>>(0));
+    Handle::copy_from(hi, At::new(ctx, 0x803b8390).field::<Vec<'a>>(0));
+    scale = fns::Ground_801C0498(ctx);
+    lo.set_x(fp::fmuls(lo.x(), scale));
+    lo.set_y(fp::fmuls(lo.y(), scale));
+    lo.set_z(fp::fmuls(lo.z(), scale));
+    hi.set_x(fp::fmuls(hi.x(), scale));
+    hi.set_y(fp::fmuls(hi.y(), scale));
+    hi.set_z(fp::fmuls(hi.z(), scale));
+    fns::ftLib_GetPos(ctx, player_gobj, pos);
+    if pos.y() < lo.y() {
+        if (lo.x() < pos.x()) && (pos.x() < hi.x()) {
+            (out).set((statics::melee__gr__grshrineroute::yakumono_param(ctx).get()).x10());
+            return 1_i32;
+        }
+    }
+    return 0_i32;
 }
 
 pub fn grShrineRoute_8020AF38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
@@ -1943,6 +2343,31 @@ fn inl_HSD_LObjGetNext_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>) -> HSD_LObj
     return null(ctx);
 }
 
+fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+    let mut x = x;
+    let mut y: f64 = 0.0;
+    if x > 0.0 {
+        let mut guess: f64 = fp::frsqrte(x);
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        y = fp::frsp((fp::fmul(x, guess)));
+        return y;
+    }
+    return x;
+}
+
+fn inl_grShrineRoute_StackPad<'a>(ctx: &'a Ctx, color: _GXColor<'a>) {}
+
 fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x__a: f64, x__c: f64) {
     let mut jobj = jobj;
     (if !Handle::is_null((jobj)) {
@@ -1989,6 +2414,22 @@ fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a: f64, y_
 
 fn inl_grShrineRoute_8020A8A4_rand<'a>(ctx: &'a Ctx) -> f64 {
     return fns::HSD_Randf(ctx);
+}
+
+fn inl_HSD_LObjSetNext_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, next: HSD_LObj<'a>) {
+    let mut lobj = lobj;
+    let mut next = next;
+    (if !Handle::is_null((lobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8360),
+            (194_i32 as u32),
+            cstr(ctx, 0x803b8360),
+        )
+    });
+    (lobj).set_next(next);
 }
 
 fn inl_getGp_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Ground<'a> {
@@ -2202,6 +2643,14 @@ pub fn register(ctx: &Ctx) {
         Returns::Int,
     );
     ctx.register_port(
+        0x8020a21c,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(grShrineRoute_8020A21C(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x8020a864,
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
@@ -2258,6 +2707,22 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x8020ab58,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(grShrineRoute_8020AB58(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8020ac44,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(grShrineRoute_8020AC44(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
         0x8020ad24,
         |ctx| {
             let (a0,): (i32,) = Args::take_all(ctx);
@@ -2273,6 +2738,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(onJointCollision(ctx, a0, a1, a2, a3, a4, a5.0), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8020ae08,
+        |ctx| {
+            let (a0, a1, a2): (HSD_GObj<'_>, HSD_GObj<'_>, Val<'_, i32>) = Args::take_all(ctx);
+            Ret::put(grShrineRoute_8020AE08(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x8020af38,

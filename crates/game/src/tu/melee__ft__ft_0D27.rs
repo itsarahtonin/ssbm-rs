@@ -141,6 +141,33 @@ pub fn fn_800D290C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn fn_800D299C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, idx: i32, arg8: f64, arg9: f64) {
+    let __frame = ctx.stack_frame(0x38);
+    let mut gobj = gobj;
+    let mut idx = idx;
+    let mut arg8 = arg8;
+    let mut arg9 = arg9;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if Handle::is_null((fp).x2184()) {
+        (fp).set_x2184(fns::HSD_JObjLoadJoint(
+            ctx,
+            At::new(ctx, 0x803c6ff0).field::<HSD_Joint<'a>>(0),
+        ));
+    }
+    (fp).mv().co().walk().set_middle_anim_frame(arg8);
+    (fp).mv().co().walk().set_fast_anim_frame(arg9);
+    fns::HSD_JObjAddAnim(
+        ctx,
+        (fp).x2184(),
+        fns::it_80293660(ctx, idx),
+        null::<HSD_MatAnimJoint<'a>>(ctx),
+        null::<HSD_ShapeAnimJoint<'a>>(ctx),
+    );
+    fns::ftAnim_80070734(ctx, (fp).x2184(), 0.0);
+    fns::HSD_JObjAnim(ctx, (fp).x2184());
+}
+
 pub fn fn_800D2A3C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
     let mut gobj = gobj;
@@ -322,6 +349,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(fn_800D290C(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x800d299c,
+        |ctx| {
+            let (a0, a1, a2, a3): (HSD_GObj<'_>, i32, Single, Single) = Args::take_all(ctx);
+            Ret::put(fn_800D299C(ctx, a0, a1, a2.0, a3.0), ctx);
         },
         Returns::Nothing,
     );

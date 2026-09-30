@@ -716,6 +716,169 @@ pub fn make_full_dependancy_mtx<'a>(ctx: &'a Ctx, num: i32, dep: Val<'a, u32>, f
     }
 }
 
+pub fn HSD_TExpSchedule<'a>(
+    ctx: &'a Ctx,
+    num: i32,
+    list: HSD_TExpDag<'a>,
+    result: Ptr<'a, HSD_TExp<'a>>,
+    resource: HSD_TExpRes<'a>,
+) {
+    let __frame = ctx.stack_frame(0x258);
+    let dep_mtx: ArrV<'a, u32, 32> = frame_at(ctx, &__frame, 0x0);
+    let full_dep_matrix: ArrV<'a, u32, 32> = frame_at(ctx, &__frame, 0x80);
+    let order: ArrV<'a, u32, 32> = frame_at(ctx, &__frame, 0x100);
+    let min_order: ArrV<'a, u32, 32> = frame_at(ctx, &__frame, 0x180);
+    let min: Val<'a, i32> = frame_at(ctx, &__frame, 0x200);
+    let mut num = num;
+    let mut list = list;
+    let mut result = result;
+    let mut resource = resource;
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    min.set(5_i32);
+    let _ = fns::memset(
+        ctx,
+        Handle::cast::<Addr<'a>>(min_order.at(0)),
+        0_i32,
+        128_u32,
+    );
+    inl_make_dependancy_mtx_unfused(ctx, num, list, dep_mtx.at(0));
+    fns::make_full_dependancy_mtx(ctx, num, dep_mtx.at(0), full_dep_matrix.at(0));
+    fns::order_dag(
+        ctx,
+        num,
+        dep_mtx.at(0),
+        full_dep_matrix.at(0),
+        list,
+        0_i32,
+        0_i32,
+        (0_i32 as u32),
+        (0_i32 as u32),
+        Handle::cast::<Val<'a, i32>>(order.at(0)),
+        min,
+        Handle::cast::<Val<'a, i32>>(min_order.at(0)),
+    );
+    {
+        i = 0_i32;
+        'l1: while i < num {
+            'c2: {
+                (Handle::add(result, i)).set(Handle::cast::<HSD_TExp<'a>>(
+                    (Handle::add(list, (min_order.at(i).get() as i32))).tev(),
+                ));
+                if (((Handle::add(result, i)).get()).tev().c_dst() as i32) != 255_i32 {
+                    (resource)
+                        .reg()
+                        .get(
+                            (((Handle::add(result, i)).get()).tev().c_dst() as i32)
+                                .wrapping_add(4_i32),
+                        )
+                        .set_color((3_i32 as u8));
+                    {
+                        j = 0_i32;
+                        'l3: while j < 4_i32 {
+                            'c4: {
+                                if (fns::HSD_TExpGetType(
+                                    ctx,
+                                    ((Handle::add(result, i)).get()).tev().c_in().get(j).exp(),
+                                ) as u32)
+                                    == ((enums::HSD_TE_TEV as i32) as u32)
+                                {
+                                    if (((Handle::add(result, i)).get()).tev().c_in().get(j).sel()
+                                        as i32)
+                                        == 1_i32
+                                    {
+                                        ((Handle::add(result, i)).get())
+                                            .tev()
+                                            .c_in()
+                                            .get(j)
+                                            .set_arg(
+                                                (At::new(ctx, 0x80407ae4)
+                                                    .field::<ArrV<'a, i32, 4>>(0)
+                                                    .at(((((Handle::add(result, i)).get())
+                                                        .tev()
+                                                        .c_in()
+                                                        .get(j)
+                                                        .exp())
+                                                    .tev()
+                                                    .c_dst()
+                                                        as i32))
+                                                    .get()
+                                                    as u8),
+                                            );
+                                    } else {
+                                        ((Handle::add(result, i)).get())
+                                            .tev()
+                                            .c_in()
+                                            .get(j)
+                                            .set_arg(
+                                                (At::new(ctx, 0x80407af4)
+                                                    .field::<ArrV<'a, i32, 4>>(0)
+                                                    .at(((((Handle::add(result, i)).get())
+                                                        .tev()
+                                                        .c_in()
+                                                        .get(j)
+                                                        .exp())
+                                                    .tev()
+                                                    .c_dst()
+                                                        as i32))
+                                                    .get()
+                                                    as u8),
+                                            );
+                                    }
+                                }
+                            }
+                            j = j.wrapping_add(1);
+                        }
+                    }
+                }
+                if (((Handle::add(result, i)).get()).tev().a_dst() as i32) != 255_i32 {
+                    (resource)
+                        .reg()
+                        .get(
+                            (((Handle::add(result, i)).get()).tev().a_dst() as i32)
+                                .wrapping_add(4_i32),
+                        )
+                        .set_alpha((1_i32 as u8));
+                    {
+                        j = 0_i32;
+                        'l5: while j < 4_i32 {
+                            'c6: {
+                                if (fns::HSD_TExpGetType(
+                                    ctx,
+                                    ((Handle::add(result, i)).get()).tev().a_in().get(j).exp(),
+                                ) as u32)
+                                    == ((enums::HSD_TE_TEV as i32) as u32)
+                                {
+                                    ((Handle::add(result, i)).get())
+                                        .tev()
+                                        .a_in()
+                                        .get(j)
+                                        .set_arg(
+                                            (At::new(ctx, 0x80407b04)
+                                                .field::<ArrV<'a, i32, 5>>(0)
+                                                .at(((((Handle::add(result, i)).get())
+                                                    .tev()
+                                                    .a_in()
+                                                    .get(j)
+                                                    .exp())
+                                                .tev()
+                                                .a_dst()
+                                                    as i32))
+                                                .get()
+                                                as u8),
+                                        );
+                                }
+                            }
+                            j = j.wrapping_add(1);
+                        }
+                    }
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+}
+
 pub fn SimplifySrc<'a>(ctx: &'a Ctx, arg0: HSD_TExp<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
     let mut arg0 = arg0;
@@ -2471,6 +2634,45 @@ pub fn HSD_TExpSimplify2<'a>(ctx: &'a Ctx, texp_: HSD_TExp<'a>) -> i32 {
     return 0_i32;
 }
 
+fn inl_make_dependancy_mtx_unfused<'a>(
+    ctx: &'a Ctx,
+    num: i32,
+    list: HSD_TExpDag<'a>,
+    dep_mtx: Val<'a, u32>,
+) {
+    let mut num = num;
+    let mut list = list;
+    let mut dep_mtx = dep_mtx;
+    let mut dag: HSD_TExpDag<'a> = null(ctx);
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    {
+        i = 0_i32;
+        'l1: while i < num {
+            'c2: {
+                (Handle::add(dep_mtx, i)).set((0_i32 as u32));
+                dag = (Handle::add(list, i));
+                {
+                    j = 0_i32;
+                    'l3: while j < ((dag).nb_dep() as i32) {
+                        'c4: {
+                            (Handle::add(dep_mtx, i)).set(
+                                ((Handle::add(dep_mtx, i)).get()
+                                    | (shl_i32(
+                                        1_i32,
+                                        ((((dag).depend().at(j).get()).idx() as i32) as u32),
+                                    ) as u32)),
+                            );
+                        }
+                        j = j.wrapping_add(1);
+                    }
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+}
+
 fn inl_IsThroughColor_unfused<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>) -> i32 {
     let mut texp = texp;
     return (((((((texp).tev().c_op() as i32) == (enums::GX_TEV_ADD as i32))
@@ -2550,6 +2752,15 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1, a2): (i32, Val<'_, u32>, Val<'_, u32>) = Args::take_all(ctx);
             Ret::put(make_full_dependancy_mtx(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80386234,
+        |ctx| {
+            let (a0, a1, a2, a3): (i32, HSD_TExpDag<'_>, Ptr<'_, HSD_TExp<'_>>, HSD_TExpRes<'_>) =
+                Args::take_all(ctx);
+            Ret::put(HSD_TExpSchedule(ctx, a0, a1, a2, a3), ctx);
         },
         Returns::Nothing,
     );

@@ -173,7 +173,7 @@ pub fn it_802EFD84<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn itKyasarinegg_UnkMotion4_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
-    let _ = fns::it_802751D8(ctx, gobj);
+    return fns::it_802751D8(ctx, gobj);
     #[allow(unreachable_code)]
     return 0;
 }

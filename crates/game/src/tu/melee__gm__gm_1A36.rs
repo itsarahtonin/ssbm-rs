@@ -350,6 +350,29 @@ pub fn gm_EvaluateAllControllerInputs<'a>(ctx: &'a Ctx) {
     }
 }
 
+pub fn gm_801A3E88<'a>(ctx: &'a Ctx) {
+    let mut i: i32 = 0;
+    Handle::copy_from(
+        statics::melee__gm__gm_1A36::controller_map(ctx),
+        At::new(ctx, 0x803da788).field::<controller_map_t<'a>>(0),
+    );
+    {
+        i = 0_i32;
+        'l1: while i <= 4_i32 {
+            'c2: {
+                statics::melee__gm__gm_1A36::controller_map(ctx)
+                    .x0()
+                    .get(i)
+                    .set_repeat_timer(
+                        (statics::melee__gm__gm_1A36::controller_map(ctx).xF4() as i32),
+                    );
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    statics::melee__gm__gm_1A36::controller_map(ctx).set_xF0(fnptr(ctx, 0x801a396c));
+}
+
 pub fn gm_801A3EF4<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x10);
     let mut scene: GameMode<'a> = null(ctx);
@@ -502,6 +525,13 @@ pub fn register(ctx: &Ctx) {
         0x801a3a74,
         |ctx| {
             Ret::put(gm_EvaluateAllControllerInputs(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801a3e88,
+        |ctx| {
+            Ret::put(gm_801A3E88(ctx), ctx);
         },
         Returns::Nothing,
     );

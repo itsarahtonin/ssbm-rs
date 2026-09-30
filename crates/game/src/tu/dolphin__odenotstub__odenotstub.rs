@@ -262,7 +262,7 @@ pub fn DBInitInterrupts<'a>(ctx: &'a Ctx) -> i32 {
     let _ = fns::__OSMaskInterrupts(ctx, (64_i32 as u32));
     statics::dolphin__odenotstub__odenotstub::DBGCallback(ctx).set(fnptr(ctx, 0x8032b58c));
     let _ = fns::__OSSetInterruptHandler(ctx, (25_i32 as i16), fnptr(ctx, 0x8032b5c8));
-    let _ = fns::__OSUnmaskInterrupts(ctx, (64_i32 as u32));
+    return (fns::__OSUnmaskInterrupts(ctx, (64_i32 as u32)) as i32);
     #[allow(unreachable_code)]
     return 0;
 }

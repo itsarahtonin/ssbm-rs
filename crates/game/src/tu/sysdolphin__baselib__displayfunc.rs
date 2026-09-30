@@ -503,6 +503,210 @@ pub fn HSD_SetEraseColor<'a>(ctx: &'a Ctx, r: u8, g: u8, b: u8, a: u8) {
     statics::sysdolphin__baselib__displayfunc::erase_color(ctx).set_a(a);
 }
 
+pub fn HSD_EraseRect<'a>(
+    ctx: &'a Ctx,
+    top: f64,
+    bottom: f64,
+    left: f64,
+    right: f64,
+    z: f64,
+    enable_color: i32,
+    enable_alpha: i32,
+    enable_depth: i32,
+) {
+    let __frame = ctx.stack_frame(0x98);
+    let texobj: _GXTexObj<'a> = frame_at(ctx, &__frame, 0x0);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x24);
+    let mut top = top;
+    let mut bottom = bottom;
+    let mut left = left;
+    let mut right = right;
+    let mut z = z;
+    let mut enable_color = enable_color;
+    let mut enable_alpha = enable_alpha;
+    let mut enable_depth = enable_depth;
+    if ((!(enable_color != 0)) && (!(enable_alpha != 0))) && (!(enable_depth != 0)) {
+        return;
+    }
+    if (enable_depth != 0) {
+        fns::GXInitTexObj(
+            ctx,
+            texobj,
+            Handle::cast::<Addr<'a>>(At::new(ctx, 0x80406b40).field::<ArrV<'a, u8, 128>>(0).at(0)),
+            (4_i32 as u16),
+            (4_i32 as u16),
+            (enums::GX_TF_Z8 as i32),
+            (enums::GX_REPEAT as i32),
+            (enums::GX_REPEAT as i32),
+            (0_i32 as u8),
+        );
+        fns::GXLoadTexObj(ctx, texobj, (enums::GX_TEXMAP0 as i32));
+        fns::GXSetNumTexGens(ctx, (1_i32 as u8));
+        fns::GXSetTexCoordGen2(
+            ctx,
+            (enums::GX_TEXCOORD0 as i32),
+            (enums::GX_TG_MTX2x4 as i32),
+            (enums::GX_TG_TEX0 as i32),
+            ((enums::GX_IDENTITY as i32) as u32),
+            ((enums::GX_NONE as i32) as u8),
+            ((enums::GX_PTIDENTITY as i32) as u32),
+        );
+        fns::GXSetNumTevStages(ctx, (1_i32 as u8));
+        fns::GXSetTevOrder(
+            ctx,
+            (enums::GX_TEVSTAGE0 as i32),
+            (enums::GX_TEXCOORD0 as i32),
+            (enums::GX_TEXMAP0 as i32),
+            (enums::GX_COLOR0A0 as i32),
+        );
+        fns::GXSetTevOp(
+            ctx,
+            (enums::GX_TEVSTAGE0 as i32),
+            (enums::GX_PASSCLR as i32),
+        );
+        fns::GXSetZTexture(
+            ctx,
+            (enums::GX_ZT_REPLACE as i32),
+            (enums::GX_TF_Z8 as i32),
+            (0_i32 as u32),
+        );
+    } else {
+        fns::GXSetNumTexGens(ctx, (0_i32 as u8));
+        fns::GXSetNumTevStages(ctx, (1_i32 as u8));
+        fns::GXSetTevOrder(
+            ctx,
+            (enums::GX_TEVSTAGE0 as i32),
+            (enums::GX_TEXCOORD_NULL as i32),
+            (enums::GX_TEXMAP_NULL as i32),
+            (enums::GX_COLOR0A0 as i32),
+        );
+        fns::GXSetTevOp(
+            ctx,
+            (enums::GX_TEVSTAGE0 as i32),
+            (enums::GX_PASSCLR as i32),
+        );
+    }
+    fns::GXSetCullMode(ctx, (enums::GX_CULL_NONE as i32));
+    fns::GXSetAlphaCompare(
+        ctx,
+        (enums::GX_ALWAYS as i32),
+        (0_i32 as u8),
+        (enums::GX_AOP_OR as i32),
+        (enums::GX_ALWAYS as i32),
+        (0_i32 as u8),
+    );
+    fns::GXSetZCompLoc(ctx, (1_i32 as u8));
+    fns::GXSetZMode(
+        ctx,
+        (1_i32 as u8),
+        (enums::GX_ALWAYS as i32),
+        ((if (enable_depth != 0) {
+            ((1_i32 as u8) as i32)
+        } else {
+            ((0_i32 as u8) as i32)
+        }) as u8),
+    );
+    fns::GXSetBlendMode(
+        ctx,
+        (enums::GX_BM_LOGIC as i32),
+        (enums::GX_BL_ONE as i32),
+        (enums::GX_BL_ZERO as i32),
+        (enums::GX_LO_COPY as i32),
+    );
+    fns::GXSetColorUpdate(
+        ctx,
+        ((if (enable_color != 0) {
+            ((1_i32 as u8) as i32)
+        } else {
+            ((0_i32 as u8) as i32)
+        }) as u8),
+    );
+    fns::GXSetAlphaUpdate(
+        ctx,
+        ((if (enable_alpha != 0) {
+            ((1_i32 as u8) as i32)
+        } else {
+            ((0_i32 as u8) as i32)
+        }) as u8),
+    );
+    fns::GXSetNumChans(ctx, (1_i32 as u8));
+    fns::GXSetChanCtrl(
+        ctx,
+        (enums::GX_COLOR0A0 as i32),
+        (0_i32 as u8),
+        (enums::GX_SRC_REG as i32),
+        (enums::GX_SRC_VTX as i32),
+        ((enums::GX_LIGHT_NULL as i32) as u32),
+        (enums::GX_DF_NONE as i32),
+        (enums::GX_AF_NONE as i32),
+    );
+    fns::GXClearVtxDesc(ctx);
+    fns::GXSetVtxAttrFmt(
+        ctx,
+        (enums::GX_VTXFMT0 as i32),
+        (enums::GX_VA_POS as i32),
+        (enums::GX_POS_XYZ as i32),
+        (enums::GX_F32 as i32),
+        (0_i32 as u8),
+    );
+    fns::GXSetVtxAttrFmt(
+        ctx,
+        (enums::GX_VTXFMT0 as i32),
+        (enums::GX_VA_CLR0 as i32),
+        (enums::GX_CLR_RGBA as i32),
+        (enums::GX_RGBA8 as i32),
+        (0_i32 as u8),
+    );
+    fns::GXSetVtxAttrFmt(
+        ctx,
+        (enums::GX_VTXFMT0 as i32),
+        (enums::GX_VA_TEX0 as i32),
+        (enums::GX_TEX_ST as i32),
+        (enums::GX_U8 as i32),
+        (0_i32 as u8),
+    );
+    fns::GXLoadPosMtxImm(
+        ctx,
+        fns::HSD_identityMtx(ctx).get(0),
+        ((enums::GX_PNMTX0 as i32) as u32),
+    );
+    fns::GXSetCurrentMtx(ctx, ((enums::GX_PNMTX0 as i32) as u32));
+    fns::GXSetVtxDesc(ctx, (enums::GX_VA_POS as i32), (enums::GX_DIRECT as i32));
+    fns::GXSetVtxDesc(ctx, (enums::GX_VA_CLR0 as i32), (enums::GX_DIRECT as i32));
+    fns::GXSetVtxDesc(ctx, (enums::GX_VA_TEX0 as i32), (enums::GX_DIRECT as i32));
+    Handle::copy_from(
+        color,
+        statics::sysdolphin__baselib__displayfunc::erase_color(ctx),
+    );
+    fns::GXBegin(
+        ctx,
+        (enums::GX_QUADS as i32),
+        (enums::GX_VTXFMT0 as i32),
+        (4_i32 as u16),
+    );
+    inl_GXPosition3f32_unfused(ctx, left, top, z);
+    inl_GXColor4u8_unfused(ctx, color.r(), color.g(), color.b(), color.a());
+    inl_GXTexCoord2u8_unfused(ctx, (0_i32 as u8), (0_i32 as u8));
+    inl_GXPosition3f32_unfused(ctx, right, top, z);
+    inl_GXColor4u8_unfused(ctx, color.r(), color.g(), color.b(), color.a());
+    inl_GXTexCoord2u8_unfused(ctx, (1_i32 as u8), (0_i32 as u8));
+    inl_GXPosition3f32_unfused(ctx, right, bottom, z);
+    inl_GXColor4u8_unfused(ctx, color.r(), color.g(), color.b(), color.a());
+    inl_GXTexCoord2u8_unfused(ctx, (1_i32 as u8), (1_i32 as u8));
+    inl_GXPosition3f32_unfused(ctx, left, bottom, z);
+    inl_GXColor4u8_unfused(ctx, color.r(), color.g(), color.b(), color.a());
+    inl_GXTexCoord2u8_unfused(ctx, (0_i32 as u8), (1_i32 as u8));
+    inl_GXEnd_unfused(ctx);
+    fns::GXSetZTexture(
+        ctx,
+        (enums::GX_ZT_DISABLE as i32),
+        (enums::GX_TF_Z8 as i32),
+        (0_i32 as u32),
+    );
+    fns::HSD_StateInvalidate(ctx, 1_i32.wrapping_neg());
+}
+
 pub fn _HSD_DispForgetMemory<'a>(ctx: &'a Ctx, lo: Addr<'a>, hi: Addr<'a>) {
     let mut lo = lo;
     let mut hi = hi;
@@ -632,6 +836,35 @@ fn inl_HSD_ZListFree_unfused<'a>(ctx: &'a Ctx, ptr_: _HSD_ZList<'a>) {
     );
 }
 
+fn inl_GXPosition3f32_unfused<'a>(ctx: &'a Ctx, x: f64, y: f64, z: f64) {
+    let mut x = x;
+    let mut y = y;
+    let mut z = z;
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(x);
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(y);
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_f32(z);
+}
+
+fn inl_GXColor4u8_unfused<'a>(ctx: &'a Ctx, x: u8, y: u8, z: u8, w: u8) {
+    let mut x = x;
+    let mut y = y;
+    let mut z = z;
+    let mut w = w;
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(x);
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(y);
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(z);
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(w);
+}
+
+fn inl_GXTexCoord2u8_unfused<'a>(ctx: &'a Ctx, x: u8, y: u8) {
+    let mut x = x;
+    let mut y = y;
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(x);
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(y);
+}
+
+fn inl_GXEnd_unfused<'a>(ctx: &'a Ctx) {}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -735,6 +968,26 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1, a2, a3): (u8, u8, u8, u8) = Args::take_all(ctx);
             Ret::put(HSD_SetEraseColor(ctx, a0, a1, a2, a3), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80374aa0,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5, a6, a7): (
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+                i32,
+                i32,
+                i32,
+            ) = Args::take_all(ctx);
+            Ret::put(
+                HSD_EraseRect(ctx, a0.0, a1.0, a2.0, a3.0, a4.0, a5, a6, a7),
+                ctx,
+            );
         },
         Returns::Nothing,
     );

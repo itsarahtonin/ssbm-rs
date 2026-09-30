@@ -148,6 +148,51 @@ pub fn ftDemo_ObjAllocInit<'a>(ctx: &'a Ctx) {
     );
 }
 
+pub fn ftDemo_SetArchiveData<'a>(
+    ctx: &'a Ctx,
+    pairs_idx: i32,
+    archive: HSD_Archive<'a>,
+    arr_idx: i32,
+) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut pairs_idx = pairs_idx;
+    let mut archive = archive;
+    let mut arr_idx = arr_idx;
+    let mut pair: ftData_UnkCountStruct<'a> = fns::ftData_UnkIntPairs(ctx).get(pairs_idx);
+    if Handle::is_null((pair).data()) {
+        if arr_idx >= 4_i32 {
+            (pair).set_data(fns::HSD_ArchiveGetPublicAddress(
+                ctx,
+                archive,
+                fns::ftDemo_GetMotionFileString(
+                    ctx,
+                    pairs_idx,
+                    At::new(ctx, 0x803c6948)
+                        .field::<ArrV<'a, i32, 5>>(0)
+                        .at(arr_idx.wrapping_sub(4_i32))
+                        .get(),
+                ),
+            ));
+        } else {
+            (pair).set_data(fns::HSD_ArchiveGetPublicAddress(
+                ctx,
+                archive,
+                (Handle::add(
+                    (Handle::add(
+                        (Handle::cast::<Ptr<'a, Ptr<'a, Val<'a, i8>>>>(
+                            fns::ftData_803C2468(ctx).at(0),
+                        )),
+                        pairs_idx,
+                    ))
+                    .get(),
+                    arr_idx,
+                ))
+                .get(),
+            ));
+        }
+    }
+}
+
 pub fn ftDemo_GetMotionFileString<'a>(ctx: &'a Ctx, cb_idx: i32, cb_arg: i32) -> Val<'a, i8> {
     let __frame = ctx.stack_frame(0x8);
     let mut cb_idx = cb_idx;
@@ -224,6 +269,14 @@ pub fn register(ctx: &Ctx) {
         0x800beb28,
         |ctx| {
             Ret::put(ftDemo_ObjAllocInit(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x800beb60,
+        |ctx| {
+            let (a0, a1, a2): (i32, HSD_Archive<'_>, i32) = Args::take_all(ctx);
+            Ret::put(ftDemo_SetArchiveData(ctx, a0, a1, a2), ctx);
         },
         Returns::Nothing,
     );

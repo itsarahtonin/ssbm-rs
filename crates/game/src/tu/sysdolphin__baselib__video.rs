@@ -76,6 +76,101 @@ pub fn HSD_VISetUserGXDrawDoneCallback<'a>(ctx: &'a Ctx, cb: FnPtr<'a>) -> FnPtr
     return old;
 }
 
+pub fn HSD_VIPreRetraceCB<'a>(ctx: &'a Ctx, retraceCount: u32) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut retraceCount = retraceCount;
+    let mut idx: i32 = 0;
+    let mut flush: i32 = 0_i32;
+    let mut renew: i32 = 0_i32;
+    idx = inl_HSD_VISearchXFBByStatus_unfused(ctx, (enums::HSD_VI_XFB_NEXT as i32));
+    if idx != 1_i32.wrapping_neg() {
+        fns::VISetNextFrameBuffer(ctx, (fns::HSD_VIData(ctx)).xfb().get(idx).buffer());
+        if ((fns::HSD_VIData(ctx)).xfb().get(idx).vi_all().chg_flag() != 0) {
+            fns::VIConfigure(
+                ctx,
+                (fns::HSD_VIData(ctx)).xfb().get(idx).vi_all().vi().rmode(),
+            );
+            fns::VISetBlack(
+                ctx,
+                (fns::HSD_VIData(ctx)).xfb().get(idx).vi_all().vi().black(),
+            );
+        }
+        flush = 1_i32;
+        renew = 1_i32;
+    } else if (inl_HSD_VIGetNbXFB_unfused(ctx) == 1_i32)
+        && (((fns::HSD_VIData(ctx)).efb().status() as u32)
+            == ((enums::HSD_VI_EFB_DRAWDONE as i32) as u32))
+    {
+        if ({
+            let __t1 = inl_HSD_VISearchXFBByStatus_unfused(ctx, (enums::HSD_VI_XFB_DISPLAY as i32));
+            idx = __t1;
+            __t1
+        }) == 1_i32.wrapping_neg()
+        {
+            idx = inl_HSD_VISearchXFBByStatus_unfused(ctx, (enums::HSD_VI_XFB_FREE as i32));
+            (if idx != 1_i32.wrapping_neg() {
+                ({ () })
+            } else {
+                fns::__assert(
+                    ctx,
+                    cstr(ctx, 0x80406d0c),
+                    (82_i32 as u32),
+                    cstr(ctx, 0x80406d0c),
+                )
+            });
+            fns::VISetNextFrameBuffer(ctx, (fns::HSD_VIData(ctx)).xfb().get(idx).buffer());
+            flush = 1_i32;
+        }
+        (fns::HSD_VIData(ctx))
+            .xfb()
+            .get(idx)
+            .set_status((enums::HSD_VI_XFB_COPYEFB as i32));
+        if ((fns::HSD_VIData(ctx)).efb().vi_all().chg_flag() != 0) {
+            fns::VIConfigure(ctx, (fns::HSD_VIData(ctx)).efb().vi_all().vi().rmode());
+            fns::VISetBlack(ctx, (fns::HSD_VIData(ctx)).efb().vi_all().vi().black());
+            flush = 1_i32;
+        }
+        renew = 1_i32;
+    }
+    if (flush != 0) {
+        fns::VIFlush(ctx);
+    }
+    {
+        if (renew != 0) {
+            At::new(ctx, 0x804d76dc).field::<Val<'a, i32>>(0).set(
+                At::new(ctx, 0x804d76dc)
+                    .field::<Val<'a, i32>>(0)
+                    .get()
+                    .wrapping_add(1),
+            );
+        }
+        if {
+            At::new(ctx, 0x804d76d8).field::<Val<'a, i32>>(0).set(
+                At::new(ctx, 0x804d76d8)
+                    .field::<Val<'a, i32>>(0)
+                    .get()
+                    .wrapping_add(1),
+            );
+            At::new(ctx, 0x804d76d8).field::<Val<'a, i32>>(0).get()
+        } >= (fns::HSD_VIData(ctx)).perf().frame_period()
+        {
+            (fns::HSD_VIData(ctx))
+                .perf()
+                .set_frame_renew(At::new(ctx, 0x804d76dc).field::<Val<'a, i32>>(0).get());
+            At::new(ctx, 0x804d76d8).field::<Val<'a, i32>>(0).set({
+                let __t2 = 0_i32;
+                At::new(ctx, 0x804d76dc).field::<Val<'a, i32>>(0).set(__t2);
+                __t2
+            });
+        }
+    }
+    if !Handle::is_null((fns::HSD_VIData(ctx)).pre_cb()) {
+        (fns::HSD_VIData(ctx))
+            .pre_cb()
+            .call::<_, ()>((retraceCount,));
+    }
+}
+
 pub fn HSD_VIPostRetraceCB<'a>(ctx: &'a Ctx, retraceCount: u32) {
     let __frame = ctx.stack_frame(0x20);
     let mut retraceCount = retraceCount;
@@ -541,6 +636,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(HSD_VISetUserGXDrawDoneCallback(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x803759e4,
+        |ctx| {
+            let (a0,): (u32,) = Args::take_all(ctx);
+            Ret::put(HSD_VIPreRetraceCB(ctx, a0), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x80375c34,

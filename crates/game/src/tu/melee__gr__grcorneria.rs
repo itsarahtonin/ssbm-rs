@@ -384,6 +384,74 @@ pub fn grCorneria_801DD2C0<'a>(ctx: &'a Ctx, unused: i32) {
     statics::melee__gr__grcorneria::grCn_804D69AC(ctx).set(1_i32);
 }
 
+pub fn grCorneria_801DD350<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x30);
+    let _pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let light_pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let _pad2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x14);
+    let mut gp: Ground<'a> = null(ctx);
+    statics::melee__gr__grcorneria::yakumono_param(ctx).set(Handle::cast::<
+        grCorneria_YakumonoParam<'a>,
+    >(fns::Ground_GetYakumonoParam(
+        ctx,
+    )));
+    fns::stage_info(ctx).unk8C().set_b4((0_i32 as u8));
+    fns::stage_info(ctx).unk8C().set_b5((1_i32 as u8));
+    let _ = fns::grCorneria_801DD534(ctx, 7_i32);
+    let _ = fns::grCorneria_801DD534(ctx, 3_i32);
+    fns::grCorneria_801DCCFC(ctx);
+    ({
+        let __t1 = Handle::cast::<Ground<'a>>(((fns::grCorneria_801DD534(ctx, 8_i32)).user_data()));
+        gp = __t1;
+        __t1
+    })
+    .u()
+    .corneria()
+    .xC4()
+    .set_value((1_i32 as u8));
+    ({
+        let __t2 = Handle::cast::<Ground<'a>>(((fns::grCorneria_801DD534(ctx, 9_i32)).user_data()));
+        gp = __t2;
+        __t2
+    })
+    .u()
+    .corneria()
+    .xC4()
+    .set_value((1_i32 as u8));
+    ({
+        let __t3 = Handle::cast::<Ground<'a>>(((fns::grCorneria_801DD534(ctx, 4_i32)).user_data()));
+        gp = __t3;
+        __t3
+    })
+    .u()
+    .corneria()
+    .xC4()
+    .set_value((1_i32 as u8));
+    let _ = fns::grCorneria_801DD534(ctx, 11_i32);
+    fns::Ground_801C39C0(ctx);
+    fns::Ground_801C3BB4(ctx);
+    Handle::copy_from(light_pos, At::new(ctx, 0x803b8090).field::<Vec<'a>>(0));
+    let _ = fns::lb_80011A50(
+        ctx,
+        light_pos,
+        1_i32.wrapping_neg(),
+        1.0,
+        0.0,
+        1.0471975803375244,
+        fp::fneg(100000.0),
+        100000.0,
+        100000.0,
+        fp::fneg(100000.0),
+    );
+    statics::melee__gr__grcorneria::grCn_804D69AC(ctx).set(1_i32);
+    fns::mpLib_80057BC0(ctx, 0_i32);
+    fns::mpLib_80057BC0(ctx, 1_i32);
+    fns::mpLib_80057BC0(ctx, 2_i32);
+    fns::mpLib_80057BC0(ctx, 5_i32);
+    fns::mpLib_80057BC0(ctx, 6_i32);
+    fns::mpLib_80057BC0(ctx, 7_i32);
+}
+
 pub fn grCorneria_801DD478<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj: HSD_GObj<'a> = null(ctx);
@@ -856,6 +924,197 @@ pub fn grCorneria_801DDDA8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, vec: Vec<'a>) {
     }
 }
 
+pub fn grCorneria_801DDE88<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x50);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let mut gobj = gobj;
+    let mut gp: Ground<'a> =
+        (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    Handle::copy_from(sp2C, At::new(ctx, 0x803b809c).field::<Vec<'a>>(0));
+    if !Handle::is_null(gobj) {
+        let mut gp2: Ground<'a> =
+            Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj));
+        let mut ship: Ground<'a> = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(
+            ctx,
+            fns::Ground_GetMapGObj(ctx, 3_i32),
+        )));
+        let mut idx: i32 = 0;
+        fns::lb_8000B1CC(
+            ctx,
+            fns::Ground_801C3FA4(ctx, gobj, 4_i32),
+            null::<Vec<'a>>(ctx),
+            sp20,
+        );
+        idx = statics::melee__gr__grcorneria::arwing_types(ctx)
+            .at(((gp2).u().arwing().xC8() as i32))
+            .get();
+        sp2C.set_x(fp::fadds(
+            (ship).u().corneria().offset_x(),
+            (fp::fadds(
+                fp::fneg(sp20.z()),
+                statics::melee__gr__grcorneria::lbl_803E2068(ctx)
+                    .get(idx)
+                    .x(),
+            )),
+        ));
+        sp2C.set_y(fp::fadds(
+            sp20.y(),
+            statics::melee__gr__grcorneria::lbl_803E2068(ctx)
+                .get(idx)
+                .y(),
+        ));
+        sp2C.set_z(fp::fadds(
+            sp20.x(),
+            statics::melee__gr__grcorneria::lbl_803E2068(ctx)
+                .get(idx)
+                .z(),
+        ));
+    } else {
+        sp2C.set_z(0.0);
+        sp2C.set_y(0.0);
+        sp2C.set_x(0.0);
+    }
+    if sp2C.y() <= 100.0 {
+        sp2C.set_y(100.0);
+    }
+    's1: {
+        let __case = match (gp).u().arwing().xD8() {
+            0_i32 => 0,
+            1_i32 => 1,
+            2_i32 => 2,
+            _ => 3,
+        };
+        if __case <= 0 {
+            if !(fns::grCorneria_801DEC08(ctx, sp2C) != 0) {
+                let _ = fns::lbAudioAx_800237A8(ctx, 0x55730_i32, 127_i32, 64_i32);
+                (gp).u().arwing().set_xD8(1_i32);
+            }
+            break 's1;
+        }
+        if __case <= 1 {
+            if !(fns::grCorneria_801DEC94(ctx, sp2C) != 0) {
+                (gp).u().arwing().set_xD8(2_i32);
+                return;
+            }
+            break 's1;
+        }
+        if __case <= 2 {
+            if fns::grCorneria_801DEC94(ctx, sp2C) == 1_i32 {
+                let _ = fns::lbAudioAx_800237A8(ctx, 0x55732_i32, 127_i32, 64_i32);
+                (gp).u().arwing().set_xD8(3_i32);
+            }
+            break 's1;
+        }
+    }
+}
+
+pub fn grCorneria_801DE024<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x68);
+    let translate: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut gp: Ground<'a> =
+        (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut jobj: HSD_JObj<'a> =
+        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
+    let mut ship_gobj: HSD_GObj<'a> = fns::Ground_GetMapGObj(ctx, 3_i32);
+    let mut ship_jobj: HSD_JObj<'a> =
+        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, ship_gobj)));
+    if !Handle::is_null(ship_jobj) {
+        let mut y: f64 = inl_HSD_JObjGetTranslationY_unfused(ctx, ship_jobj);
+        inl_HSD_JObjSetTranslateY_unfused(ctx, jobj, y);
+        {
+            let mut j1: HSD_JObj<'a> = fns::Ground_801C3FA4(ctx, gobj, 1_i32);
+            let mut y1: f64 = fp::fsubs(inl_HSD_JObjGetTranslationY_unfused(ctx, j1), 349.0);
+            inl_HSD_JObjSetTranslateY_unfused(ctx, j1, y1);
+        }
+    }
+    {
+        if Handle::addr(
+            statics::melee__gr__grcorneria::arwing_gobjs(ctx)
+                .at(((gp).u().arwing().xC8() as i32))
+                .get(),
+        ) == Handle::addr(gobj)
+        {
+            if (gp).u().arwing().xD4() == 1_i32 {
+                (gp).u().arwing().set_xD4(0_i32);
+                {
+                    let mut idx: i32 = statics::melee__gr__grcorneria::arwing_types(ctx)
+                        .at(((gp).u().arwing().xC8() as i32))
+                        .get();
+                    fns::grAnime_801C8138(
+                        ctx,
+                        gobj,
+                        (gp).map_id(),
+                        statics::melee__gr__grcorneria::grCn_803E2030(ctx)
+                            .at(idx)
+                            .get(),
+                    );
+                }
+                return;
+            }
+            's1: {
+                let __case = match statics::melee__gr__grcorneria::arwing_types(ctx)
+                    .at(((gp).u().arwing().xC8() as i32))
+                    .get()
+                {
+                    1_i32 => 0,
+                    2_i32 => 0,
+                    3_i32 => 0,
+                    4_i32 => 0,
+                    5_i32 => 0,
+                    6_i32 => 0,
+                    7_i32 => 0,
+                    8_i32 => 0,
+                    9_i32 => 0,
+                    10_i32 => 1,
+                    11_i32 => 1,
+                    12_i32 => 1,
+                    13_i32 => 1,
+                    _ => 2,
+                };
+                if __case <= 0 {
+                    fns::grCorneria_801DDE88(ctx, gobj);
+                    break 's1;
+                }
+                if __case <= 1 {
+                    inl_HSD_JObjSetRotationY_unfused(ctx, jobj, fp::fneg(1.5707963705062866));
+                    inl_grCorneria_801DE024_inline_unfused(ctx, gobj);
+                    {
+                        let mut vf: f64 = fns::grCorneria_801E2EA0(ctx);
+                        let mut j0: HSD_JObj<'a> = null(ctx);
+                        if vf > 0.0 {
+                            vf = 0.0;
+                        }
+                        if vf < fp::fneg(150.0) {
+                            vf = fp::fneg(150.0);
+                        }
+                        j0 = fns::Ground_801C3FA4(ctx, gobj, 0_i32);
+                        inl_HSD_JObjGetTranslation_unfused(ctx, j0, translate);
+                        translate.set_y(
+                            (if (vf) < fp::frsp(0_i32 as f64) {
+                                fp::fneg((vf))
+                            } else {
+                                (vf)
+                            }),
+                        );
+                        inl_HSD_JObjSetTranslate_unfused(ctx, j0, translate);
+                    }
+                    break 's1;
+                }
+            }
+            if (fns::grAnime_801C83D0(ctx, gobj, 0_i32, 7_i32) != 0) {
+                statics::melee__gr__grcorneria::arwing_gobjs(ctx)
+                    .at(((gp).u().arwing().xC8() as i32))
+                    .set(null::<HSD_GObj<'a>>(ctx));
+                fns::Ground_801C4A08(ctx, gobj);
+            }
+        } else {
+            fns::Ground_801C4A08(ctx, gobj);
+        }
+    }
+}
+
 pub fn grCorneria_801DE4BC<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
     let mut arg = arg;
 }
@@ -1087,6 +1346,581 @@ pub fn grCorneria_801DEC94<'a>(ctx: &'a Ctx, pos: Vec<'a>) -> i32 {
         }
     }
     return 0_i32;
+}
+
+pub fn grCorneria_801DED50<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0xc0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 6> = frame_at(ctx, &__frame, 0xc);
+    let arwing_pos: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let arwing_pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let mut gobj = gobj;
+    let mut gp: Ground<'a> =
+        (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
+    let mut arwing: HSD_JObj<'a> = null(ctx);
+    let mut far_arwing: HSD_GObj<'a> = null(ctx);
+    let mut ship_gp: Ground<'a> = null(ctx);
+    let mut arwing_gp: Ground<'a> = null(ctx);
+    Handle::copy_from(pos, At::new(ctx, 0x803b80b4).field::<Vec<'a>>(0));
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if (statics::melee__gr__grcorneria::grCn_804D69AC(ctx).get() != 0) {
+        return;
+    }
+    if !Handle::is_null(
+        statics::melee__gr__grcorneria::arwing_gobjs(ctx)
+            .at((gp).u().corneria2().xC8())
+            .get(),
+    ) {
+        if statics::melee__gr__grcorneria::arwing_groups(ctx)
+            .at((gp).u().corneria2().xC8())
+            .get()
+            == 4_i32
+        {
+            arwing = fns::Ground_801C3FA4(ctx, gobj, 1_i32);
+            inl_HSD_JObjSetRotationZ_unfused(ctx, arwing, 0.0);
+        }
+        's3: {
+            let __case = match statics::melee__gr__grcorneria::arwing_types(ctx)
+                .at((gp).u().corneria2().xC8())
+                .get()
+            {
+                1_i32 => 0,
+                2_i32 => 0,
+                3_i32 => 0,
+                4_i32 => 0,
+                5_i32 => 0,
+                6_i32 => 0,
+                7_i32 => 0,
+                8_i32 => 0,
+                9_i32 => 0,
+                10_i32 => 1,
+                11_i32 => 1,
+                12_i32 => 1,
+                13_i32 => 1,
+                _ => 2,
+            };
+            if __case <= 0 {
+                {
+                    inl_HSD_JObjSetRotationY_unfused(ctx, jobj, fp::fneg(1.5707963705062866));
+                    's4: {
+                        let __case = match (gp).u().corneria2().xF4() {
+                            0_i32 => 0,
+                            1_i32 => 1,
+                            2_i32 => 1,
+                            3_i32 => 1,
+                            4_i32 => 1,
+                            _ => 2,
+                        };
+                        if __case <= 0 {
+                            if (gp).u().corneria2().xF8() <= 0_i32 {
+                                let mut new_state: i32 =
+                                    fns::HSD_Randi(ctx, 5_i32).wrapping_add(1_i32);
+                                let mut group_offset: i32 = 1_i32.wrapping_neg();
+                                (gp).u().corneria2().set_xF4(new_state);
+                                {
+                                    let mut group: i32 =
+                                        statics::melee__gr__grcorneria::arwing_groups(ctx)
+                                            .at((Handle::cast::<Ground<'a>>(
+                                                inl_HSD_GObjGetUserData_unfused(ctx, gobj),
+                                            ))
+                                            .u()
+                                            .corneria2()
+                                            .xC8())
+                                            .get();
+                                    's5: {
+                                        let __case = match group {
+                                            0_i32 => 0,
+                                            1_i32 => 1,
+                                            2_i32 => 1,
+                                            3_i32 => 1,
+                                            4_i32 => 2,
+                                            _ => 3,
+                                        };
+                                        if __case <= 0 {
+                                            break 's5;
+                                        }
+                                        if __case <= 1 {
+                                            group_offset = 0_i32;
+                                            break 's5;
+                                        }
+                                        if __case <= 2 {
+                                            group_offset = 1_i32;
+                                            break 's5;
+                                        }
+                                    }
+                                }
+                                {
+                                    let mut anim_arg: i32 =
+                                        statics::melee__gr__grcorneria::grCn_803E214C(ctx)
+                                            .get((gp).u().corneria2().xF4())
+                                            .at(group_offset)
+                                            .get();
+                                    fns::grAnime_801C8098(
+                                        ctx,
+                                        gobj,
+                                        statics::melee__gr__grcorneria::grCn_803E21B0(ctx)
+                                            .at(statics::melee__gr__grcorneria::arwing_groups(ctx)
+                                                .at((gp).u().corneria2().xC8())
+                                                .get())
+                                            .get(),
+                                        7_i32,
+                                        anim_arg,
+                                        0.0,
+                                        1.0,
+                                    );
+                                }
+                            } else {
+                                inl_HSD_JObjSetRotationZ_unfused(
+                                    ctx,
+                                    fns::Ground_801C3FA4(
+                                        ctx,
+                                        gobj,
+                                        statics::melee__gr__grcorneria::grCn_803E21B0(ctx)
+                                            .at(statics::melee__gr__grcorneria::arwing_groups(ctx)
+                                                .at((gp).u().corneria2().xC8())
+                                                .get())
+                                            .get(),
+                                    ),
+                                    0.0,
+                                );
+                            }
+                            (gp).u()
+                                .corneria2()
+                                .set_xF8((gp).u().corneria2().xF8().wrapping_sub(1_i32));
+                            break 's4;
+                        }
+                        if __case <= 1 {
+                            if (fns::grAnime_801C83D0(ctx, gobj, 0_i32, 7_i32) != 0) {
+                                (gp).u().corneria2().set_xF4(0_i32);
+                                (gp).u().corneria2().set_xF8(fp::fctiwz(
+                                    (statics::melee__gr__grcorneria::yakumono_param(ctx).get())
+                                        .x68(),
+                                ));
+                            }
+                            break 's4;
+                        }
+                    }
+                    {
+                        if !Handle::is_null(
+                            ({
+                                let __t1 = Handle::cast::<HSD_JObj<'a>>(
+                                    statics::melee__gr__grcorneria::arwing_gobjs(ctx)
+                                        .at((gp).u().corneria2().xC8())
+                                        .get(),
+                                );
+                                arwing = __t1;
+                                __t1
+                            }),
+                        ) {
+                            arwing_gp = inl_get_arwing_ground_unfused(
+                                ctx,
+                                Handle::cast::<HSD_GObj<'a>>(arwing),
+                            );
+                            ship_gp =
+                                (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(
+                                    ctx,
+                                    fns::Ground_GetMapGObj(ctx, 3_i32),
+                                )));
+                            fns::lb_8000B1CC(
+                                ctx,
+                                fns::Ground_801C3FA4(
+                                    ctx,
+                                    Handle::cast::<HSD_GObj<'a>>(arwing),
+                                    4_i32,
+                                ),
+                                null::<Vec<'a>>(ctx),
+                                arwing_pos,
+                            );
+                            {
+                                let mut types: Val<'a, i32> =
+                                    statics::melee__gr__grcorneria::arwing_types(ctx).at(0);
+                                let mut atype: i32 =
+                                    (Handle::add(types, (arwing_gp).u().corneria2().xC8())).get();
+                                pos.set_x(fp::fadds(
+                                    (ship_gp).u().corneria().offset_x(),
+                                    (fp::fadds(
+                                        fp::fneg(arwing_pos.z()),
+                                        statics::melee__gr__grcorneria::lbl_803E2068(ctx)
+                                            .get(atype)
+                                            .x(),
+                                    )),
+                                ));
+                                pos.set_y(fp::fadds(
+                                    arwing_pos.y(),
+                                    statics::melee__gr__grcorneria::lbl_803E2068(ctx)
+                                        .get(atype)
+                                        .y(),
+                                ));
+                                pos.set_z(fp::fadds(
+                                    arwing_pos.x(),
+                                    statics::melee__gr__grcorneria::lbl_803E2068(ctx)
+                                        .get(atype)
+                                        .z(),
+                                ));
+                            }
+                        } else {
+                            pos.set_z(0.0);
+                            pos.set_y(0.0);
+                            pos.set_x(0.0);
+                        }
+                    }
+                    if pos.y() <= 100.0 {
+                        pos.set_y(100.0);
+                    }
+                    inl_HSD_JObjSetTranslate_unfused(ctx, jobj, pos);
+                    fns::lb_8000B1CC(
+                        ctx,
+                        fns::Ground_801C3FA4(
+                            ctx,
+                            gobj,
+                            statics::melee__gr__grcorneria::grCn_803E21B0(ctx)
+                                .at(statics::melee__gr__grcorneria::arwing_groups(ctx)
+                                    .at((gp).u().corneria2().xC8())
+                                    .get())
+                                .get(),
+                        ),
+                        null::<Vec<'a>>(ctx),
+                        pos,
+                    );
+                    {
+                        let mut rot_z: f64 = 0.0;
+                        let mut angle: f64 = 0.0;
+                        {
+                            let mut item: HSD_GObj<'a> = (gp).u().corneria2().xDC();
+                            if !Handle::is_null(item) {
+                                let mut gr: Ground<'a> =
+                                    Handle::cast::<Ground<'a>>((item).user_data());
+                                if !Handle::is_null(gr) {
+                                    Handle::copy_from((gr).u().arwing().xE0(), pos);
+                                }
+                            }
+                        }
+                        rot_z = inl_HSD_JObjGetRotationZ_unfused(
+                            ctx,
+                            fns::Ground_801C3FA4(
+                                ctx,
+                                gobj,
+                                statics::melee__gr__grcorneria::grCn_803E21B0(ctx)
+                                    .at(statics::melee__gr__grcorneria::arwing_groups(ctx)
+                                        .at((gp).u().corneria2().xC8())
+                                        .get())
+                                    .get(),
+                            ),
+                        );
+                        angle = rot_z;
+                        {
+                            let mut item_2: HSD_GObj<'a> = (gp).u().corneria2().xDC();
+                            if !Handle::is_null(item_2) {
+                                let mut gr_2: Ground<'a> =
+                                    Handle::cast::<Ground<'a>>((item_2).user_data());
+                                if !Handle::is_null(gr_2) {
+                                    (gr_2).u().arwing().set_xDC(rot_z);
+                                }
+                            }
+                        }
+                        if !(statics::melee__gr__grcorneria::grCn_804D69B0(ctx).get() != 0) {
+                            if (rem_i32(
+                                (gp).u().corneria2().xF0(),
+                                (statics::melee__gr__grcorneria::yakumono_param(ctx).get()).x74(),
+                            ) == 0_i32)
+                                && (inl_randi_unfused(
+                                    ctx,
+                                    (statics::melee__gr__grcorneria::yakumono_param(ctx).get())
+                                        .x78(),
+                                ) == 0_i32)
+                            {
+                                (gp).u().corneria2().set_xFC(1_i32);
+                            } else {
+                                (gp).u().corneria2().set_xFC(0_i32);
+                            }
+                        } else {
+                            if (rem_i32(
+                                (gp).u().corneria2().xF0(),
+                                (statics::melee__gr__grcorneria::yakumono_param(ctx).get()).x7C(),
+                            ) == 0_i32)
+                                && (inl_randi_unfused(
+                                    ctx,
+                                    (statics::melee__gr__grcorneria::yakumono_param(ctx).get())
+                                        .x80(),
+                                ) == 0_i32)
+                            {
+                                (gp).u().corneria2().set_xFC(1_i32);
+                            } else {
+                                (gp).u().corneria2().set_xFC(0_i32);
+                            }
+                        }
+                        if (gp).u().corneria2().xFC() != 0_i32 {
+                            (gp).u().corneria2().set_xFC(0_i32);
+                            if !(inl_grCorneria_801DEC08_unfused(ctx, pos) != 0) {
+                                'l6: while angle < fp::fneg(3.141592653589793) {
+                                    'c7: {
+                                        angle = fp::frsp(fp::fadd(angle, 6.283185307179586));
+                                    }
+                                }
+                                'l8: while angle > 3.141592653589793 {
+                                    'c9: {
+                                        angle = fp::frsp(fp::fsub(angle, 6.283185307179586));
+                                    }
+                                }
+                                {
+                                    let mut abs_a: f64 = (if (angle) < fp::frsp(0_i32 as f64) {
+                                        fp::fneg((angle))
+                                    } else {
+                                        (angle)
+                                    });
+                                    if (abs_a < 0.05235987901687622)
+                                        || ((if (angle) < fp::frsp(0_i32 as f64) {
+                                            fp::fneg((angle))
+                                        } else {
+                                            (angle)
+                                        }) > 3.0892326831817627)
+                                    {
+                                        let _ = fns::lbAudioAx_800237A8(
+                                            ctx,
+                                            0x55733_i32,
+                                            127_i32,
+                                            64_i32,
+                                        );
+                                        if inl_get_grp_off_unfused(ctx, gobj) == 1_i32 {
+                                            let _ = fns::it_802E72E0(
+                                                ctx,
+                                                gobj,
+                                                fns::Ground_801C3FA4(ctx, gobj, 7_i32),
+                                                2_i32,
+                                                fp::fneg(1.0),
+                                                (statics::melee__gr__grcorneria::yakumono_param(
+                                                    ctx,
+                                                )
+                                                .get())
+                                                .x70(),
+                                            );
+                                        } else {
+                                            let _ = fns::it_802E72E0(
+                                                ctx,
+                                                gobj,
+                                                fns::Ground_801C3FA4(ctx, gobj, 5_i32),
+                                                0_i32,
+                                                fp::fneg(1.0),
+                                                (statics::melee__gr__grcorneria::yakumono_param(
+                                                    ctx,
+                                                )
+                                                .get())
+                                                .x70(),
+                                            );
+                                        }
+                                        fns::grMaterial_801C9604(
+                                            ctx,
+                                            gobj,
+                                            (statics::melee__gr__grcorneria::yakumono_param(ctx)
+                                                .get())
+                                            .x84(),
+                                            0_i32,
+                                        );
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                break 's3;
+            }
+            if __case <= 1 {
+                {
+                    if !(statics::melee__gr__grcorneria::grCn_804D69B0(ctx).get() != 0) {
+                        if (rem_i32(
+                            (gp).u().corneria2().xF0(),
+                            (statics::melee__gr__grcorneria::yakumono_param(ctx).get()).x74(),
+                        ) == 0_i32)
+                            && (inl_randi_unfused(
+                                ctx,
+                                (statics::melee__gr__grcorneria::yakumono_param(ctx).get()).x78(),
+                            ) == 0_i32)
+                        {
+                            (gp).u().corneria2().set_xFC(1_i32);
+                        } else {
+                            (gp).u().corneria2().set_xFC(0_i32);
+                        }
+                    } else {
+                        if (rem_i32(
+                            (gp).u().corneria2().xF0(),
+                            (statics::melee__gr__grcorneria::yakumono_param(ctx).get()).x7C(),
+                        ) == 0_i32)
+                            && (inl_randi_unfused(
+                                ctx,
+                                (statics::melee__gr__grcorneria::yakumono_param(ctx).get()).x80(),
+                            ) == 0_i32)
+                        {
+                            (gp).u().corneria2().set_xFC(1_i32);
+                        } else {
+                            (gp).u().corneria2().set_xFC(0_i32);
+                        }
+                    }
+                    {
+                        if !Handle::is_null(
+                            ({
+                                let __t2 = statics::melee__gr__grcorneria::arwing_gobjs(ctx)
+                                    .at((gp).u().corneria2().xC8())
+                                    .get();
+                                far_arwing = __t2;
+                                __t2
+                            }),
+                        ) {
+                            arwing_gp = Handle::cast::<Ground<'a>>((far_arwing).user_data());
+                            ship_gp =
+                                (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(
+                                    ctx,
+                                    fns::Ground_GetMapGObj(ctx, 3_i32),
+                                )));
+                            fns::lb_8000B1CC(
+                                ctx,
+                                fns::Ground_801C3FA4(ctx, far_arwing, 4_i32),
+                                null::<Vec<'a>>(ctx),
+                                arwing_pos_2,
+                            );
+                            {
+                                let mut atype_2: i32 =
+                                    statics::melee__gr__grcorneria::arwing_types(ctx)
+                                        .at((arwing_gp).u().corneria2().xC8())
+                                        .get();
+                                pos.set_x(fp::fadds(
+                                    (ship_gp).u().corneria().offset_x(),
+                                    (fp::fadds(
+                                        fp::fneg(arwing_pos_2.z()),
+                                        statics::melee__gr__grcorneria::lbl_803E2068(ctx)
+                                            .get(atype_2)
+                                            .x(),
+                                    )),
+                                ));
+                                pos.set_y(fp::fadds(
+                                    arwing_pos_2.y(),
+                                    statics::melee__gr__grcorneria::lbl_803E2068(ctx)
+                                        .get(atype_2)
+                                        .y(),
+                                ));
+                                pos.set_z(fp::fadds(
+                                    arwing_pos_2.x(),
+                                    statics::melee__gr__grcorneria::lbl_803E2068(ctx)
+                                        .get(atype_2)
+                                        .z(),
+                                ));
+                            }
+                        } else {
+                            pos.set_z(0.0);
+                            pos.set_y(0.0);
+                            pos.set_x(0.0);
+                        }
+                    }
+                    if pos.y() <= 100.0 {
+                        pos.set_y(100.0);
+                    }
+                    if ((500.0 < pos.x())
+                        && (pos.x() < (statics::melee__gr__grcorneria::grCn_ArwingMaxX(ctx)).get()))
+                        && ((gp).u().corneria2().xFC() != 0_i32)
+                    {
+                        (gp).u().corneria2().set_xFC(0_i32);
+                        {
+                            let mut player: i32 = fns::HSD_Randi(ctx, 4_i32);
+                            let mut tries: i32 = 0;
+                            {
+                                tries = 0_i32;
+                                'l10: while tries < 4_i32 {
+                                    'c11: {
+                                        player = ((player.wrapping_add(tries)) & 3_i32);
+                                        if (fns::Player_GetPlayerSlotType(ctx, player) as u32)
+                                            != ((enums::Gm_PKind_NA as i32) as u32)
+                                        {
+                                            break 'l10;
+                                        }
+                                    }
+                                    tries = tries.wrapping_add(1);
+                                }
+                            }
+                            fns::Player_LoadPlayerCoords(ctx, player, pos);
+                        }
+                        pos.set_y(fp::fadds(pos.y(), 5.0));
+                        let _ = fns::lbAudioAx_800237A8(ctx, 0x55734_i32, 127_i32, 64_i32);
+                        {
+                            if inl_get_grp_off_unfused(ctx, gobj) == 1_i32 {
+                                let _ = fns::it_802E7654(
+                                    ctx,
+                                    gobj,
+                                    fns::Ground_801C3FA4(ctx, gobj, 7_i32),
+                                    pos,
+                                    3_i32,
+                                    3_i32,
+                                    (statics::melee__gr__grcorneria::yakumono_param(ctx).get())
+                                        .x70(),
+                                );
+                            } else {
+                                if (gp).u().corneria2().x100() != 0_i32 {
+                                    let _ = fns::it_802E7654(
+                                        ctx,
+                                        gobj,
+                                        fns::Ground_801C3FA4(ctx, gobj, 5_i32),
+                                        pos,
+                                        1_i32,
+                                        3_i32,
+                                        (statics::melee__gr__grcorneria::yakumono_param(ctx).get())
+                                            .x70(),
+                                    );
+                                } else {
+                                    let _ = fns::it_802E7654(
+                                        ctx,
+                                        gobj,
+                                        fns::Ground_801C3FA4(ctx, gobj, 6_i32),
+                                        pos,
+                                        1_i32,
+                                        3_i32,
+                                        (statics::melee__gr__grcorneria::yakumono_param(ctx).get())
+                                            .x70(),
+                                    );
+                                }
+                                (gp).u().corneria2().set_x100(
+                                    (((gp).u().corneria2().x100().wrapping_add(1_i32)) & 1_i32),
+                                );
+                            }
+                        }
+                        fns::grMaterial_801C9604(
+                            ctx,
+                            gobj,
+                            (statics::melee__gr__grcorneria::yakumono_param(ctx).get()).x84(),
+                            0_i32,
+                        );
+                    }
+                }
+            }
+        }
+        (gp).u()
+            .corneria2()
+            .set_xF0((gp).u().corneria2().xF0().wrapping_add(1_i32));
+        return;
+    }
+    {
+        let mut item_3: HSD_GObj<'a> = null(ctx);
+        item_3 = (gp).u().corneria2().xE0();
+        if !Handle::is_null(item_3) {
+            fns::Ground_801C4A08(ctx, item_3);
+        }
+        item_3 = (gp).u().corneria2().xE4();
+        if !Handle::is_null(item_3) {
+            fns::Ground_801C4A08(ctx, item_3);
+        }
+        item_3 = (gp).u().corneria2().xE8();
+        if !Handle::is_null(item_3) {
+            fns::Ground_801C4A08(ctx, item_3);
+        }
+        item_3 = (gp).u().corneria2().xEC();
+        if !Handle::is_null(item_3) {
+            fns::Ground_801C4A08(ctx, item_3);
+        }
+        fns::Ground_801C4A08(ctx, gobj);
+    }
 }
 
 pub fn grCorneria_801DF8CC<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
@@ -3519,6 +4353,67 @@ fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64
     }
 }
 
+fn inl_grCorneria_801DE024_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut gp: Ground<'a> =
+        (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    Handle::copy_from(pos, At::new(ctx, 0x803b80a8).field::<Vec<'a>>(0));
+    fns::grCorneria_801DDDA8(ctx, gobj, pos);
+    's1: {
+        let __case = match (gp).u().arwing().xD8() {
+            0_i32 => 0,
+            1_i32 => 1,
+            _ => 2,
+        };
+        if __case <= 0 {
+            if ((statics::melee__gr__grcorneria::grCn_ArwingMinX(ctx)).get() < pos.x())
+                && (pos.x() < (statics::melee__gr__grcorneria::grCn_ArwingMaxX(ctx)).get())
+            {
+                let _ = fns::lbAudioAx_800237A8(ctx, 0x55731_i32, 127_i32, 64_i32);
+                (gp).u().arwing().set_xD8(1_i32);
+            }
+            break 's1;
+        }
+        if __case <= 1 {
+            if (pos.x() < (statics::melee__gr__grcorneria::grCn_ArwingMinX(ctx)).get())
+                || ((statics::melee__gr__grcorneria::grCn_ArwingMaxX(ctx)).get() < pos.x())
+            {
+                let _ = fns::lbAudioAx_800237A8(ctx, 0x55732_i32, 127_i32, 64_i32);
+                (gp).u().arwing().set_xD8(2_i32);
+            }
+            break 's1;
+        }
+    }
+}
+
+fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
+    let mut jobj = jobj;
+    let mut translate = translate;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8094),
+            (0x237_i32 as u32),
+            cstr(ctx, 0x803b8094),
+        )
+    });
+    (if !Handle::is_null((translate)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8094),
+            (0x238_i32 as u32),
+            cstr(ctx, 0x803b8094),
+        )
+    });
+    Handle::copy_from((translate), (jobj).translate());
+}
+
 fn inl_Ground_UpdateStarFoxArwingVisibility_unfused<'a>(
     ctx: &'a Ctx,
     gp: Ground<'a>,
@@ -3660,6 +4555,122 @@ fn inl_Ground_ResetStarFoxArwingState_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>) 
     (gp).u().starfox().set_xD4(0_i32);
     (gp).u().starfox().set_xF0(0_i32);
     (gp).u().starfox().set_xF4(0_i32);
+}
+
+fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
+    let mut jobj = jobj;
+    let mut z = z;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8094),
+            (0x151_i32 as u32),
+            cstr(ctx, 0x803b8094),
+        )
+    });
+    (if !(((jobj).flags() & ((shl_i32(1_i32, (17_i32 as u32))) as u32)) != 0) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8094),
+            (0x152_i32 as u32),
+            cstr(ctx, 0x803b8094),
+        )
+    });
+    (jobj).rotate().set_z(z);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_get_arwing_ground_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Ground<'a> {
+    let mut gobj = gobj;
+    return (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+}
+
+fn inl_HSD_JObjGetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b8094),
+            (0x178_i32 as u32),
+            cstr(ctx, 0x803b8094),
+        )
+    });
+    return (jobj).rotate().z();
+}
+
+fn inl_randi_unfused<'a>(ctx: &'a Ctx, max_val: i32) -> i32 {
+    let mut max_val = max_val;
+    if max_val != 0_i32 {
+        return fns::HSD_Randi(ctx, max_val);
+    }
+    return 0_i32;
+}
+
+fn inl_grCorneria_801DEC08_unfused<'a>(ctx: &'a Ctx, pos: Vec<'a>) -> i32 {
+    let mut pos = pos;
+    if (pos).x() > fns::Stage_GetBlastZoneRightOffset(ctx) {
+        return 1_i32;
+    }
+    if (pos).x() < fns::Stage_GetBlastZoneLeftOffset(ctx) {
+        return 1_i32;
+    }
+    if (pos).y() > fns::Stage_GetBlastZoneTopOffset(ctx) {
+        return 1_i32;
+    }
+    if (pos).y() < fns::Stage_GetBlastZoneBottomOffset(ctx) {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
+fn inl_get_grp_off_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut grp_off: i32 = 1_i32.wrapping_neg();
+    {
+        let mut groups: Val<'a, i32> = statics::melee__gr__grcorneria::arwing_groups(ctx).at(0);
+        let mut g: i32 = (Handle::add(
+            groups,
+            (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
+                .u()
+                .corneria2()
+                .xC8(),
+        ))
+        .get();
+        's1: {
+            let __case = match g {
+                0_i32 => 0,
+                1_i32 => 1,
+                2_i32 => 1,
+                3_i32 => 1,
+                4_i32 => 2,
+                _ => 3,
+            };
+            if __case <= 0 {
+                break 's1;
+            }
+            if __case <= 1 {
+                grp_off = 0_i32;
+                break 's1;
+            }
+            if __case <= 2 {
+                grp_off = 1_i32;
+                break 's1;
+            }
+        }
+    }
+    return grp_off;
 }
 
 fn inl_Ground_AnimateStarFoxArwing_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -3884,32 +4895,6 @@ fn inl_grCn_GetX1C_unfused<'a>(ctx: &'a Ctx) -> f64 {
     return (statics::melee__gr__grcorneria::yakumono_param(ctx).get()).x1C();
 }
 
-fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
-    let mut jobj = jobj;
-    let mut translate = translate;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b8094),
-            (0x237_i32 as u32),
-            cstr(ctx, 0x803b8094),
-        )
-    });
-    (if !Handle::is_null((translate)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b8094),
-            (0x238_i32 as u32),
-            cstr(ctx, 0x803b8094),
-        )
-    });
-    Handle::copy_from((translate), (jobj).translate());
-}
-
 fn inl_HSD_JObjSetTranslate<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
     let mut jobj = jobj;
     let mut translate = translate;
@@ -4022,39 +5007,6 @@ fn inl_HSD_JObjSetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64
     }
 }
 
-fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
-    let mut jobj = jobj;
-    let mut z = z;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b8094),
-            (0x151_i32 as u32),
-            cstr(ctx, 0x803b8094),
-        )
-    });
-    (if !(((jobj).flags() & ((shl_i32(1_i32, (17_i32 as u32))) as u32)) != 0) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b8094),
-            (0x152_i32 as u32),
-            cstr(ctx, 0x803b8094),
-        )
-    });
-    (jobj).rotate().set_z(z);
-    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
-        {
-            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
-                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
-            }
-        }
-    }
-}
-
 fn inl_grCn_HideJointPair_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, joints: Val<'a, i16>) {
     let mut gobj = gobj;
     let mut joints = joints;
@@ -4122,6 +5074,13 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (i32,) = Args::take_all(ctx);
             Ret::put(grCorneria_801DD2C0(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801dd350,
+        |ctx| {
+            Ret::put(grCorneria_801DD350(ctx), ctx);
         },
         Returns::Nothing,
     );
@@ -4267,6 +5226,22 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x801dde88,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(grCorneria_801DDE88(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801de024,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(grCorneria_801DE024(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x801de4bc,
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
@@ -4337,6 +5312,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(grCorneria_801DEC94(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x801ded50,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(grCorneria_801DED50(ctx, a0), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x801df8cc,

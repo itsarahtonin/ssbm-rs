@@ -272,6 +272,12 @@ class Program:
         self.globals_by_name = defaultdict(list)
         for g in self.data["globals"]:
             self.globals_by_name[g["name"]].append(g)
+        # Static locals, which MWCC names `name$n`, n growing in declaration order.
+        self.static_locals = defaultdict(list)
+        for sym in self.data["symbols"]:
+            m = re.match(r"^(.+)\$(\d+)$", sym["name"])
+            if m and sym["type"] == "object":
+                self.static_locals[m.group(1)].append((int(m.group(2)), sym["addr"]))
         self.enum_first = {}
         for e in self.data["enums"].values():
             for cname, v in e["values"].items():
@@ -335,11 +341,31 @@ class Unit:
         self.inline_variants = {}  # base Rust name -> [(Rust name, inlining decisions)]
         self.inline_active = {}  # base Rust name -> Rust name, while translating it
         self.data_ranges = self.read_data_ranges()
+        self.static_addrs = {}
         self.skipped = []
         self.ported = []
         self.fuse_check = []
         self.inline_fallbacks = []  # (caller, callee, why) for inlined calls kept as calls
         self.inline_partial = set()  # (caller, callee, calls in the asm, calls in the source)
+
+    def map_static_locals(self, tu_cursor, source):
+        """Addresses of the static locals in this unit's functions, by declaration key."""
+        src = os.path.normpath(source)
+        decls = defaultdict(list)
+        for fn in tu_cursor.get_children():
+            if fn.kind != CK.FUNCTION_DECL or not fn.is_definition() or \
+                    os.path.normpath(str(fn.location.file)) != src:
+                continue
+            for d in fn.walk_preorder():
+                if d.kind == CK.VAR_DECL and d.storage_class == ci.StorageClass.STATIC:
+                    decls[d.spelling].append(d)
+        self.static_addrs = {}
+        for name, ds in decls.items():
+            syms = sorted((n, a) for n, a in self.prog.static_locals.get(name, [])
+                          if any(lo <= a < hi for lo, hi in self.data_ranges))
+            if len(syms) == len(ds):
+                for d, (_, addr) in zip(ds, syms):
+                    self.static_addrs[vkey(d)] = addr
 
     def read_data_ranges(self):
         """The unit's data sections, and how many fused multiply-adds each function's asm has."""
@@ -582,7 +608,14 @@ class Translator:
             else:
                 self.f.locals[key] = (rname, pt, "reg")
                 pre.append(f"let mut {ident(rname)} = {ident(rname)};")
-        stmts = self.cfg_body(body) if self.f.cfg else self.stmts(children(body))
+        kids = children(body)
+        if not self.f.cfg and self.f.ret["k"] not in ("void", "rec") and kids and \
+                self.falls_off_after_call(kids[-1]):
+            # MWCC returns what is in r3 then: the call's result.
+            v = self.convert(self.expr(kids[-1]), self.f.ret)
+            stmts = self.stmts(kids[:-1]) + [f"return {v.code};"]
+        else:
+            stmts = self.cfg_body(body) if self.f.cfg else self.stmts(kids)
         ret = "" if self.f.ret["k"] == "void" or self.f.sret else " -> " + self.u.rust_value_ty(self.f.ret)
         lines = [f"pub fn {ident(name)}<'a>(ctx: &'a Ctx{''.join(', ' + p for p in params)}){ret} {{"]
         # The port takes the original's frame size, so functions it calls run at the same
@@ -602,6 +635,16 @@ class Translator:
             lines.append(f"    return {self.zero(self.f.ret)};")
         lines.append("}")
         return "\n".join(lines)
+
+    def falls_off_after_call(self, last):
+        """Whether a body's last statement is a call whose value it drops, of the function's
+        own return type's kind, so the original returns that value."""
+        n = strip(last)
+        if n.kind != CK.CALL_EXPR:
+            return False
+        rt = self.u.ctype(n.type)
+        return (is_int(rt) or is_ptr(rt)) == (is_int(self.f.ret) or is_ptr(self.f.ret)) and \
+            is_float(rt) == is_float(self.f.ret) and rt["k"] != "void"
 
     def ends_in_return(self, body):
         kids = children(body)
@@ -634,8 +677,6 @@ class Translator:
                         target.referenced.kind in (CK.VAR_DECL, CK.PARM_DECL):
                     r = target.referenced
                     self.f.escaping.add(vkey(r))
-            if n.kind == CK.VAR_DECL and n.storage_class == ci.StorageClass.STATIC:
-                raise Unsupported("static local")
 
     def check_gotos(self, body):
         """Gotos become breaks out of blocks and continues of loops, which only reach labels
@@ -1187,12 +1228,16 @@ class Translator:
             if d.kind in (CK.STRUCT_DECL, CK.UNION_DECL, CK.ENUM_DECL, CK.TYPEDEF_DECL):
                 return []
             raise Unsupported(f"declaration {d.kind}")
-        if d.storage_class == ci.StorageClass.STATIC:
-            raise Unsupported("static local")
         if d.storage_class == ci.StorageClass.EXTERN:
             return []
         t = self.u.ctype(d.type)
         key = vkey(d)
+        if d.storage_class == ci.StorageClass.STATIC:
+            addr = self.u.static_addrs.get(key)
+            if addr is None:
+                raise Unsupported("static local without an address")
+            self.f.locals[key] = (f"At::new(ctx, {addr:#x}).field::<{self.u.storage_ty(t)}>(0)", t, "fixed")
+            return []
         base = self.safe(d.spelling or "anon")
         init = var_init(d)
         if key in self.f.hoisted:
@@ -1360,6 +1405,8 @@ class Translator:
                         return lv
                     if where == "handle":
                         return self.handle_lvalue(ident(rname), t)
+                    if where == "fixed":
+                        return self.handle_lvalue(rname, t)
                     return self.stack_lvalue(rname, t)
                 g = self.u.prog.global_(r.spelling, self.u.name)
                 if g is None:
@@ -2086,6 +2133,8 @@ class Translator:
             r = n.referenced
             if r.semantic_parent is not None and r.semantic_parent.kind == CK.TRANSLATION_UNIT:
                 return True
+            if r.kind == CK.VAR_DECL and r.storage_class == ci.StorageClass.STATIC:
+                return True
             return vkey(r) in self.stack_resident()
         return False
 
@@ -2585,6 +2634,7 @@ def translate_unit(args):
     unit.gekko = gekko
     manual = manual_ports(out_dir, unit_name)
     unit.col.visit(tu.cursor, source)
+    unit.map_static_locals(tu.cursor, source)
     out_fns, regs = [], []
     src_norm = os.path.normpath(source)
     seen_asm = set()

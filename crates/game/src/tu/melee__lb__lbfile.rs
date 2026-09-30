@@ -82,6 +82,111 @@ pub fn lbFile_800161C4<'a>(
     inl_waitForDisc_unfused(ctx);
 }
 
+pub fn lbFileGetFullName<'a>(ctx: &'a Ctx, basename: Val<'a, i8>) -> Val<'a, i8> {
+    let __frame = ctx.stack_frame(0x28);
+    let mut basename = basename;
+    let mut cur: Val<'a, i8> = basename;
+    let mut pos: i32 = 0_i32;
+    'l1: while (((cur).get() as i32) != 0_i32) && (((cur).get() as i32) != 46_i32) {
+        'c2: {
+            if pos > 28_i32 {
+                fns::OSReport(
+                    ctx,
+                    cstr(ctx, 0x803ba520),
+                    &[VarArg::Int(Handle::addr(basename))],
+                );
+                (if ((0_i32) != 0) {
+                    ({ () })
+                } else {
+                    fns::__assert(
+                        ctx,
+                        cstr(ctx, 0x803ba510),
+                        (67_i32 as u32),
+                        cstr(ctx, 0x803ba510),
+                    )
+                });
+            }
+            At::new(ctx, 0x80432058)
+                .field::<ArrV<'a, i8, 32>>(0)
+                .at({
+                    let __t1 = pos;
+                    pos = pos.wrapping_add(1);
+                    __t1
+                })
+                .set(
+                    ({
+                        let __t2 = cur;
+                        cur = Handle::add(cur, 1);
+                        __t2
+                    })
+                    .get(),
+                );
+        }
+    }
+    if (((Handle::add(cur, 0_i32)).get() as i32) != 0_i32)
+        && (((Handle::add(cur, 1_i32)).get() as i32) != 0_i32)
+    {
+        let _ = fns::strcpy(
+            ctx,
+            At::new(ctx, 0x80432058).field::<ArrV<'a, i8, 32>>(0).at(0),
+            basename,
+        );
+    } else if ((cur).get() as i32) == 46_i32 {
+        At::new(ctx, 0x80432058)
+            .field::<ArrV<'a, i8, 32>>(0)
+            .at({
+                let __t3 = pos;
+                pos = pos.wrapping_add(1);
+                __t3
+            })
+            .set((46_i32 as i8));
+        if (fns::lbLang_IsSettingUS(ctx) != 0) {
+            let _ = fns::strcpy(
+                ctx,
+                At::new(ctx, 0x80432058)
+                    .field::<ArrV<'a, i8, 32>>(0)
+                    .at(pos),
+                cstr(ctx, 0x804d37b0),
+            );
+        } else {
+            let _ = fns::strcpy(
+                ctx,
+                At::new(ctx, 0x80432058)
+                    .field::<ArrV<'a, i8, 32>>(0)
+                    .at(pos),
+                cstr(ctx, 0x804d37b4),
+            );
+        }
+    } else {
+        At::new(ctx, 0x80432058)
+            .field::<ArrV<'a, i8, 32>>(0)
+            .at({
+                let __t4 = pos;
+                pos = pos.wrapping_add(1);
+                __t4
+            })
+            .set((46_i32 as i8));
+        if (fns::lbLang_IsSavedLanguageUS(ctx) != 0) {
+            let _ = fns::strcpy(
+                ctx,
+                At::new(ctx, 0x80432058)
+                    .field::<ArrV<'a, i8, 32>>(0)
+                    .at(pos),
+                cstr(ctx, 0x804d37b0),
+            );
+        } else {
+            let _ = fns::strcpy(
+                ctx,
+                At::new(ctx, 0x80432058)
+                    .field::<ArrV<'a, i8, 32>>(0)
+                    .at(pos),
+                cstr(ctx, 0x804d37b4),
+            );
+        }
+    }
+    return At::new(ctx, 0x80432058).field::<ArrV<'a, i8, 32>>(0).at(0);
+}
+
 pub fn lbFile_8001634C<'a>(ctx: &'a Ctx, fileno: i32) -> u32 {
     let __frame = ctx.stack_frame(0x50);
     let info: DVDFileInfo<'a> = frame_at(ctx, &__frame, 0x0);
@@ -537,6 +642,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(lbFile_800161C4(ctx, a0, a1, a2, a3, a4, a5), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80016204,
+        |ctx| {
+            let (a0,): (Val<'_, i8>,) = Args::take_all(ctx);
+            Ret::put(lbFileGetFullName(ctx, a0), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x8001634c,

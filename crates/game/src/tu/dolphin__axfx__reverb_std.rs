@@ -26,6 +26,179 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn ReverbSTDCreate<'a>(
+    ctx: &'a Ctx,
+    rv: AXFX_REVSTD_WORK<'a>,
+    coloration: f64,
+    time: f64,
+    mix: f64,
+    damping: f64,
+    predelay: f64,
+) -> i32 {
+    let __frame = ctx.stack_frame(0xa8);
+    let mut rv = rv;
+    let mut coloration = coloration;
+    let mut time = time;
+    let mut mix = mix;
+    let mut damping = damping;
+    let mut predelay = predelay;
+    let mut i: u8 = 0;
+    let mut k: u8 = 0;
+    if (((((((((coloration < 0.0) || (coloration > 1.0)) || (time < 0.009999999776482582))
+        || (time > 10.0))
+        || (mix < 0.0))
+        || (mix > 1.0))
+        || (damping < 0.0))
+        || (damping > 1.0))
+        || (predelay < 0.0))
+        || (predelay > 0.10000000149011612)
+    {
+        return 0_i32;
+    }
+    let _ = fns::memset(ctx, Handle::cast::<Addr<'a>>(rv), 0_i32, 0x13c_u32);
+    {
+        k = (0_i32 as u8);
+        'l1: while (k as i32) < 3_i32 {
+            'c2: {
+                {
+                    i = (0_i32 as u8);
+                    'l3: while (i as i32) < 2_i32 {
+                        'c4: {
+                            inl_DLcreate_unfused(
+                                ctx,
+                                (rv).C()
+                                    .get((i as i32).wrapping_add(((k as i32).wrapping_mul(2_i32)))),
+                                At::new(ctx, 0x80404c40)
+                                    .field::<ArrV<'a, i32, 4>>(0)
+                                    .at((i as i32))
+                                    .get()
+                                    .wrapping_add(2_i32),
+                            );
+                            inl_DLsetdelay_unfused(
+                                ctx,
+                                (rv).C()
+                                    .get((i as i32).wrapping_add(((k as i32).wrapping_mul(2_i32)))),
+                                At::new(ctx, 0x80404c40)
+                                    .field::<ArrV<'a, i32, 4>>(0)
+                                    .at((i as i32))
+                                    .get(),
+                            );
+                            (rv).combCoef()
+                                .at((i as i32).wrapping_add(((k as i32).wrapping_mul(2_i32))))
+                                .set(fns::powf(
+                                    ctx,
+                                    10.0,
+                                    fp::fdivs(
+                                        fp::frsp(
+                                            (At::new(ctx, 0x80404c40)
+                                                .field::<ArrV<'a, i32, 4>>(0)
+                                                .at((i as i32))
+                                                .get()
+                                                .wrapping_mul(3_i32.wrapping_neg()))
+                                                as f64,
+                                        ),
+                                        (fp::fmuls(32000.0, time)),
+                                    ),
+                                ));
+                        }
+                        i = i.wrapping_add(1);
+                    }
+                }
+                {
+                    i = (0_i32 as u8);
+                    'l5: while (i as i32) < 2_i32 {
+                        'c6: {
+                            inl_DLcreate_unfused(
+                                ctx,
+                                (rv).AP()
+                                    .get((i as i32).wrapping_add(((k as i32).wrapping_mul(2_i32)))),
+                                At::new(ctx, 0x80404c40)
+                                    .field::<ArrV<'a, i32, 4>>(0)
+                                    .at((i as i32).wrapping_add(2_i32))
+                                    .get()
+                                    .wrapping_add(2_i32),
+                            );
+                            inl_DLsetdelay_unfused(
+                                ctx,
+                                (rv).AP()
+                                    .get((i as i32).wrapping_add(((k as i32).wrapping_mul(2_i32)))),
+                                At::new(ctx, 0x80404c40)
+                                    .field::<ArrV<'a, i32, 4>>(0)
+                                    .at((i as i32).wrapping_add(2_i32))
+                                    .get(),
+                            );
+                        }
+                        i = i.wrapping_add(1);
+                    }
+                }
+                (rv).lpLastout().at((k as i32)).set(0.0);
+            }
+            k = k.wrapping_add(1);
+        }
+    }
+    (rv).set_allPassCoeff(coloration);
+    (rv).set_level(mix);
+    (rv).set_damping(damping);
+    if (rv).damping() < 0.05000000074505806 {
+        (rv).set_damping(0.05000000074505806);
+    }
+    (rv).set_damping(
+        (fp::fsubs(
+            1.0,
+            (fp::fadds(
+                0.05000000074505806,
+                (fp::fmuls(0.800000011920929, (rv).damping())),
+            )),
+        )),
+    );
+    if 0.0 != predelay {
+        (rv).set_preDelayTime(fp::fctiwz((fp::fmuls(32000.0, predelay))));
+        {
+            i = (0_i32 as u8);
+            'l7: while (i as i32) < 3_i32 {
+                'c8: {
+                    (rv).preDelayLine()
+                        .at((i as i32))
+                        .set(Handle::cast::<Val<'a, F32>>(
+                            fns::__AXFXAlloc(ctx)
+                                .get()
+                                .call::<_, Addr<'a>>((
+                                    ((rv).preDelayTime().wrapping_mul(4_i32) as u32),
+                                )),
+                        ));
+                    let _ = fns::memset(
+                        ctx,
+                        Handle::cast::<Addr<'a>>((rv).preDelayLine().at((i as i32)).get()),
+                        0_i32,
+                        ((rv).preDelayTime().wrapping_mul(4_i32) as u32),
+                    );
+                    (rv).preDelayPtr()
+                        .at((i as i32))
+                        .set((rv).preDelayLine().at((i as i32)).get());
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    } else {
+        (rv).set_preDelayTime(0_i32);
+        {
+            i = (0_i32 as u8);
+            'l9: while (i as i32) < 3_i32 {
+                'c10: {
+                    (rv).preDelayPtr()
+                        .at((i as i32))
+                        .set(null::<Val<'a, F32>>(ctx));
+                    (rv).preDelayLine()
+                        .at((i as i32))
+                        .set(null::<Val<'a, F32>>(ctx));
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    }
+    return 1_i32;
+}
+
 pub fn ReverbSTDFree<'a>(ctx: &'a Ctx, rv: AXFX_REVSTD_WORK<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let mut rv = rv;
@@ -95,6 +268,38 @@ pub fn AXFXReverbStdShutdown<'a>(ctx: &'a Ctx, rev: AXFX_REVERBSTD<'a>) -> i32 {
     return 1_i32;
 }
 
+fn inl_DLsetdelay_unfused<'a>(ctx: &'a Ctx, dl: AXFX_REVSTD_DELAYLINE<'a>, lag: i32) {
+    let mut dl = dl;
+    let mut lag = lag;
+    (dl).set_outPoint((dl).inPoint().wrapping_sub((lag.wrapping_mul(4_i32))));
+    'l1: while (dl).outPoint() < 0_i32 {
+        'c2: {
+            (dl).set_outPoint((dl).outPoint().wrapping_add((dl).length()));
+        }
+    }
+}
+
+fn inl_DLcreate_unfused<'a>(ctx: &'a Ctx, dl: AXFX_REVSTD_DELAYLINE<'a>, max_length: i32) {
+    let mut dl = dl;
+    let mut max_length = max_length;
+    (dl).set_length((max_length.wrapping_mul(4_i32)));
+    (dl).set_inputs(Handle::cast::<Val<'a, F32>>(
+        fns::__AXFXAlloc(ctx)
+            .get()
+            .call::<_, Addr<'a>>(((max_length.wrapping_mul(4_i32) as u32),)),
+    ));
+    let _ = fns::memset(
+        ctx,
+        Handle::cast::<Addr<'a>>((dl).inputs()),
+        0_i32,
+        (max_length.wrapping_mul(4_i32) as u32),
+    );
+    (dl).set_lastOutput(0.0);
+    inl_DLsetdelay_unfused(ctx, dl, sar_i32(max_length, (1_i32 as u32)));
+    (dl).set_inPoint(0_i32);
+    (dl).set_outPoint(0_i32);
+}
+
 fn inl_DLdelete_unfused<'a>(ctx: &'a Ctx, dl: AXFX_REVSTD_DELAYLINE<'a>) {
     let mut dl = dl;
     fns::__AXFXFree(ctx)
@@ -104,6 +309,21 @@ fn inl_DLdelete_unfused<'a>(ctx: &'a Ctx, dl: AXFX_REVSTD_DELAYLINE<'a>) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x8035c504,
+        |ctx| {
+            let (a0, a1, a2, a3, a4, a5): (
+                AXFX_REVSTD_WORK<'_>,
+                Single,
+                Single,
+                Single,
+                Single,
+                Single,
+            ) = Args::take_all(ctx);
+            Ret::put(ReverbSTDCreate(ctx, a0, a1.0, a2.0, a3.0, a4.0, a5.0), ctx);
+        },
+        Returns::Int,
+    );
     ctx.register_port(
         0x8035ccc4,
         |ctx| {

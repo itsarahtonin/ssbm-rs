@@ -139,6 +139,298 @@ pub fn hsd_80392528<'a>(ctx: &'a Ctx, event: FnPtr<'a>) {
     let _ = fns::fn_80392480(ctx, event, 128_i32);
 }
 
+pub fn hsd_8039254C<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0xd0);
+    let default_col: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
+    let bg_col0: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let bg_col1: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let txt_col: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let bg_col2: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
+    let bg_col3: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
+    let bar_col: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
+    let mut line: f64 = 0.0;
+    let mut bar_y: f64 = 0.0;
+    let mut bar_x: f64 = 0.0;
+    let mut t2: f64 = 0.0;
+    let mut bar_draw_ptr: _DispItem<'a> = null(ctx);
+    let mut char_count: i32 = 0;
+    let mut count: i32 = 0;
+    let mut p_bg_col0: _GXColor<'a> = null(ctx);
+    let mut p_bg_col1: _GXColor<'a> = null(ctx);
+    let mut p_txt_col: _GXColor<'a> = null(ctx);
+    let mut p_bg_col2: _GXColor<'a> = null(ctx);
+    let mut p_bg_col3: _GXColor<'a> = null(ctx);
+    let mut p_bar_col: _GXColor<'a> = null(ctx);
+    let mut col_pos: i32 = 0;
+    let mut first: i32 = 0;
+    let mut event_node: _HSD_SList<'a> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    col_pos = 60_i32;
+    first = 1_i32;
+    line = 1.0;
+    event_node = statics::sysdolphin__baselib__hsd_3924::hsd_804D7850(ctx).get();
+    Handle::copy_from(
+        default_col,
+        statics::sysdolphin__baselib__hsd_3924::hsd_3915_default_color(ctx),
+    );
+    'l3: while !Handle::is_null(event_node) {
+        'c4: {
+            let mut item: _DispItem<'a> = null(ctx);
+            let mut cb: FnPtr<'a> = null(ctx);
+            cb = Handle::cast::<FnPtr<'a>>(
+                (Handle::add(
+                    (Handle::cast::<Ptr<'a, Addr<'a>>>((event_node).data())),
+                    0_i32,
+                ))
+                .get(),
+            );
+            item = cb.call::<_, _DispItem<'a>>(((event_node).data(),));
+            'l5: while !Handle::is_null(item) {
+                'c6: {
+                    if (first != 0) {
+                        p_bg_col0 = bg_col0;
+                        if (At::new(ctx, 0x804d6080).field::<_GXColor<'a>>(0).a() as i32) != 0_i32 {
+                            fns::hsd_80391A04(ctx, 10.0, 10.0, 6_i32);
+                            Handle::copy_from(
+                                bg_col0,
+                                At::new(ctx, 0x804d6080).field::<_GXColor<'a>>(0),
+                            );
+                            fns::DrawRectangle(ctx, fp::fneg(10.0), 5.0, 620.0, 10.0, p_bg_col0);
+                        }
+                        first = 0_i32;
+                    }
+                    's7: {
+                        let __case = match (item).r#type() {
+                            0_i32 => 0,
+                            2_i32 => 1,
+                            1_i32 => 2,
+                            _ => 3,
+                        };
+                        if __case <= 0 {
+                            {
+                                p_bg_col1 = bg_col1;
+                                p_txt_col = txt_col;
+                                char_count =
+                                    inl_count_text_chars(ctx, (item).content().text().at(0));
+                                if col_pos.wrapping_add(char_count) > 60_i32 {
+                                    line = fp::fsubs(line, 1.0);
+                                    col_pos = 0_i32;
+                                    if (At::new(ctx, 0x804d6080).field::<_GXColor<'a>>(0).a()
+                                        as i32)
+                                        != 0_i32
+                                    {
+                                        Handle::copy_from(
+                                            bg_col1,
+                                            At::new(ctx, 0x804d6080).field::<_GXColor<'a>>(0),
+                                        );
+                                        fns::DrawRectangle(
+                                            ctx,
+                                            fp::fneg(10.0),
+                                            fp::fmsubs(10.0, line, 5.0),
+                                            620.0,
+                                            10.0,
+                                            p_bg_col1,
+                                        );
+                                    }
+                                }
+                                fns::hsd_80391A04(ctx, 10.0, 10.0, 6_i32);
+                                Handle::copy_from(txt_col, default_col);
+                                let _ = fns::hsd_80391AC8(
+                                    ctx,
+                                    (item).content().text().at(0),
+                                    p_txt_col,
+                                    fp::frsp((col_pos.wrapping_mul(10_i32)) as f64),
+                                    fp::fmuls(10.0, line),
+                                );
+                                col_pos = col_pos.wrapping_add(char_count.wrapping_add(2_i32));
+                                break 's7;
+                            }
+                        }
+                        if __case <= 1 {
+                            {
+                                p_bg_col2 = bg_col2;
+                                if col_pos != 0_i32 {
+                                    line = fp::frsp(fp::fsub(line, 0.5));
+                                    if (At::new(ctx, 0x804d6080).field::<_GXColor<'a>>(0).a()
+                                        as i32)
+                                        != 0_i32
+                                    {
+                                        Handle::copy_from(
+                                            bg_col2,
+                                            At::new(ctx, 0x804d6080).field::<_GXColor<'a>>(0),
+                                        );
+                                        fns::DrawRectangle(
+                                            ctx,
+                                            fp::fneg(10.0),
+                                            fp::fmsubs(10.0, line, 5.0),
+                                            620.0,
+                                            5.0,
+                                            p_bg_col2,
+                                        );
+                                    }
+                                }
+                                fns::hsd_80391A04(ctx, 10.0, 10.0, 24_i32);
+                                t2 = fp::fmadds(10.0, line, 2.0);
+                                fns::hsd_80391E18(
+                                    ctx,
+                                    (item).content().gradient().at(0),
+                                    0.0,
+                                    t2,
+                                    600.0,
+                                    t2,
+                                );
+                                col_pos = 60_i32;
+                                break 's7;
+                            }
+                        }
+                        if __case <= 2 {
+                            {
+                                p_bar_col = bar_col;
+                                p_bg_col3 = bg_col3;
+                                char_count = inl_count_bar_units(ctx, item);
+                                if char_count > 0_i32 {
+                                    if col_pos != 0_i32 {
+                                        line = fp::frsp(fp::fsub(line, 0.5));
+                                        if (At::new(ctx, 0x804d6080).field::<_GXColor<'a>>(0).a()
+                                            as i32)
+                                            != 0_i32
+                                        {
+                                            Handle::copy_from(
+                                                bg_col3,
+                                                At::new(ctx, 0x804d6080).field::<_GXColor<'a>>(0),
+                                            );
+                                            fns::DrawRectangle(
+                                                ctx,
+                                                fp::fneg(10.0),
+                                                fp::fmsubs(10.0, line, 5.0),
+                                                620.0,
+                                                5.0,
+                                                p_bg_col3,
+                                            );
+                                        }
+                                    }
+                                    fns::hsd_80391A04(ctx, 10.0, 10.0, 12_i32);
+                                    bar_y = fp::fmadds(10.0, line, 2.0);
+                                    bar_x = 0.0;
+                                    bar_draw_ptr = item;
+                                    'l8: while ({
+                                        let __t1 =
+                                            (bar_draw_ptr).content().bars().get(0_i32).count();
+                                        count = __t1;
+                                        __t1
+                                    }) > 0_i32
+                                    {
+                                        'c9: {
+                                            let mut prev_x: f64 = 0.0;
+                                            prev_x = bar_x;
+                                            bar_x = fp::fmadds(
+                                                (fp::fdivs(600.0, fp::frsp(char_count as f64))),
+                                                fp::frsp(count as f64),
+                                                bar_x,
+                                            );
+                                            Handle::copy_from(
+                                                bar_col,
+                                                (bar_draw_ptr).content().bars().get(0_i32).color(),
+                                            );
+                                            fns::hsd_80391F28(
+                                                ctx,
+                                                p_bar_col,
+                                                prev_x,
+                                                bar_y,
+                                                bar_x,
+                                                bar_y,
+                                                fp::frsp(
+                                                    (bar_draw_ptr)
+                                                        .content()
+                                                        .bars()
+                                                        .get(0_i32)
+                                                        .count()
+                                                        as f64,
+                                                ),
+                                            );
+                                            bar_draw_ptr = Handle::cast::<_DispItem<'a>>(
+                                                (Handle::add(
+                                                    Handle::cast::<DispBar<'a>>(bar_draw_ptr),
+                                                    1_i32,
+                                                )),
+                                            );
+                                        }
+                                    }
+                                    col_pos = 60_i32;
+                                }
+                                break 's7;
+                            }
+                        }
+                    }
+                    item = (item).next();
+                }
+            }
+            event_node = (event_node).next();
+        }
+    }
+}
+
+fn inl_count_text_chars<'a>(ctx: &'a Ctx, text: Val<'a, i8>) -> i32 {
+    let mut text = text;
+    let mut count: i32 = 0;
+    let mut i: i32 = 0;
+    let mut len: i32 = 0;
+    if Handle::is_null(text) {
+        return 0_i32;
+    }
+    count = 0_i32;
+    len = (fns::strlen(ctx, text) as i32);
+    i = count;
+    'l1: while i < len {
+        'c2: {
+            if ((Handle::add(text, i)).get() as i32) != 92_i32 {
+                count = count.wrapping_add(1);
+            } else {
+                i = i.wrapping_add(1);
+                's3: {
+                    let __case = match ((Handle::add(text, i)).get() as i32) {
+                        99_i32 => 0,
+                        67_i32 => 0,
+                        _ => 1,
+                    };
+                    if __case <= 0 {
+                        i = i.wrapping_add(6_i32);
+                        break 's3;
+                    }
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return count;
+}
+
+fn inl_count_bar_units<'a>(ctx: &'a Ctx, item: _DispItem<'a>) -> i32 {
+    let mut item = item;
+    let mut total: i32 = 0_i32;
+    let mut count: i32 = 0;
+    'l1: while ({
+        let __t1 = (item).content().bars().get(0_i32).count();
+        count = __t1;
+        __t1
+    }) > 0_i32
+    {
+        'c2: {
+            total = total.wrapping_add(count);
+            item = Handle::cast::<_DispItem<'a>>(
+                (Handle::add(Handle::cast::<DispBar<'a>>(item), 1_i32)),
+            );
+        }
+    }
+    return total;
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -161,6 +453,13 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (FnPtr<'_>,) = Args::take_all(ctx);
             Ret::put(hsd_80392528(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8039254c,
+        |ctx| {
+            Ret::put(hsd_8039254C(ctx), ctx);
         },
         Returns::Nothing,
     );

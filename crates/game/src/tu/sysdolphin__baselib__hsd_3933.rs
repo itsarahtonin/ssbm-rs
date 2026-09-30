@@ -330,6 +330,141 @@ pub fn hsd_80393840<'a>(ctx: &'a Ctx, request: _MCCPacket<'a>, response: _MCCPac
     let mut response = response;
 }
 
+pub fn hsd_80393844<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x28);
+    let mut base: ParticleLogEntry<'a> =
+        statics::sysdolphin__baselib__hsd_3933::hsd_804CEB40(ctx).get(0);
+    let mut r#type: i32 = 0;
+    let mut flags: u32 = 0;
+    let mut value: i32 = 0;
+    let mut irq: i32 = 0;
+    let mut err: u8 = 0;
+    {
+        'l1: loop {
+            'c2: {
+                irq = fns::OSDisableInterrupts(ctx);
+                if fns::hsd_804D78BC(ctx).get() == 0_i32 {
+                    let _ = fns::OSRestoreInterrupts(ctx, irq);
+                    return;
+                }
+                r#type = (Handle::add(base, fns::hsd_804D78B8(ctx).get())).x0();
+                flags = (Handle::add(base, fns::hsd_804D78B8(ctx).get())).x4();
+                value = (Handle::add(base, fns::hsd_804D78B8(ctx).get())).x8();
+                fns::hsd_804D78BC(ctx).set(fns::hsd_804D78BC(ctx).get().wrapping_sub(1_i32));
+                fns::hsd_804D78B8(ctx).set(rem_i32(
+                    (fns::hsd_804D78B8(ctx).get().wrapping_add(1_i32)),
+                    0x100_i32,
+                ));
+                let _ = fns::OSRestoreInterrupts(ctx, irq);
+                if (flags != (0x100_i32 as u32)) || (r#type != 15_i32) {
+                    break 'c2;
+                }
+                if ((value as u32) & 0xffffff00_u32) == (0x100_i32 as u32) {
+                    if fns::MCCNotify(ctx, 15_i32, ((((value as u8) as i32) | 0x200_i32) as u32))
+                        == 0_i32
+                    {
+                        err = fns::MCCGetLastError(ctx);
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x8040a920),
+                            &[VarArg::Int((err as i32) as u32)],
+                        );
+                    }
+                } else if ((value as u32) & 0xffffff00_u32) == (0x200_i32 as u32) {
+                    if (fns::hsd_804D78B0(ctx).get() as u32) == ((value as u8) as u32) {
+                        fns::hsd_804D78B0(ctx).set(0_i32);
+                    }
+                } else if ((value as u32) & 0xffffff80_u32) == (128_i32 as u32) {
+                    let _ = fns::memset(
+                        ctx,
+                        Handle::cast::<Addr<'a>>(
+                            At::new(ctx, 0x804cf7c0)
+                                .field::<MccPacketBuffer<'a>>(0)
+                                .packet(),
+                        ),
+                        0_i32,
+                        32_u32,
+                    );
+                    fns::hsd_804D78A8(ctx).set((value & 127_i32));
+                    if (fns::MCCRead(
+                        ctx,
+                        15_i32,
+                        (shl_i32(fns::hsd_804D78A8(ctx).get(), (5_i32 as u32)) as u32),
+                        Handle::cast::<Addr<'a>>(
+                            At::new(ctx, 0x804cf7c0)
+                                .field::<MccPacketBuffer<'a>>(0)
+                                .packet(),
+                        ),
+                        (32_u32 as i32),
+                        0_i32,
+                    ) != 0_i32)
+                        && (!(At::new(ctx, 0x804cf7c0)
+                            .field::<MccPacketBuffer<'a>>(0)
+                            .packet()
+                            .x4_b7()
+                            != 0))
+                    {
+                        let mut cmd: u8 = 0;
+                        let _ = fns::memset(
+                            ctx,
+                            Handle::cast::<Addr<'a>>(
+                                At::new(ctx, 0x804cf780)
+                                    .field::<MccPacketBuffer<'a>>(0)
+                                    .packet(),
+                            ),
+                            0_i32,
+                            32_u32,
+                        );
+                        At::new(ctx, 0x804cf780)
+                            .field::<MccPacketBuffer<'a>>(0)
+                            .packet()
+                            .set_x4_b7((1_i32 as u8));
+                        At::new(ctx, 0x804cf780)
+                            .field::<MccPacketBuffer<'a>>(0)
+                            .packet()
+                            .set_x0(
+                                At::new(ctx, 0x804cf7c0)
+                                    .field::<MccPacketBuffer<'a>>(0)
+                                    .packet()
+                                    .x0(),
+                            );
+                        cmd = At::new(ctx, 0x804cf7c0)
+                            .field::<MccPacketBuffer<'a>>(0)
+                            .packet()
+                            .command();
+                        if ({
+                            At::new(ctx, 0x804cf780)
+                                .field::<MccPacketBuffer<'a>>(0)
+                                .packet()
+                                .set_command(cmd);
+                            ((cmd as u32) < 32_u32) as i32
+                        } != 0)
+                        {
+                            if !Handle::is_null(
+                                statics::sysdolphin__baselib__hsd_3933::lbl_8040A93C(ctx)
+                                    .at((cmd as i32))
+                                    .get(),
+                            ) {
+                                statics::sysdolphin__baselib__hsd_3933::lbl_8040A93C(ctx)
+                                    .at((cmd as i32))
+                                    .get()
+                                    .call::<_, ()>((
+                                        At::new(ctx, 0x804cf7c0)
+                                            .field::<MccPacketBuffer<'a>>(0)
+                                            .packet(),
+                                        At::new(ctx, 0x804cf780)
+                                            .field::<MccPacketBuffer<'a>>(0)
+                                            .packet(),
+                                    ));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 pub fn hsd_80393A04<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     if fns::hsd_804D78A0(ctx).get() == 0_i32 {
@@ -462,6 +597,13 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (_MCCPacket<'_>, _MCCPacket<'_>) = Args::take_all(ctx);
             Ret::put(hsd_80393840(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80393844,
+        |ctx| {
+            Ret::put(hsd_80393844(ctx), ctx);
         },
         Returns::Nothing,
     );

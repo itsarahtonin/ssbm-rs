@@ -196,6 +196,187 @@ pub fn GXSetVtxDesc<'a>(ctx: &'a Ctx, attr: i32, r#type: i32) {
     (fns::gx(ctx).get()).set_dirtyState(((fns::gx(ctx).get()).dirtyState() | (8_i32 as u32)));
 }
 
+pub fn __GXSetVCD<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut vlm: u32 = 0;
+    let mut b: u32 = 0;
+    let mut vl: u32 = 0;
+    let mut vh: u32 = 0;
+    'l1: loop {
+        'c2: {
+            let mut regAddr: i32 = 0;
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((8_i32) as u8));
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((80_i32) as u8));
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32))
+                .set_u32(((fns::gx(ctx).get()).vcdLo()));
+            regAddr = 12_i32.wrapping_neg();
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    'l3: loop {
+        'c4: {
+            let mut regAddr_2: i32 = 0;
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((8_i32) as u8));
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((96_i32) as u8));
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32))
+                .set_u32(((fns::gx(ctx).get()).vcdHi()));
+            regAddr_2 = 12_i32.wrapping_neg();
+        }
+        if !(0_i32 != 0) {
+            break 'l3;
+        }
+    }
+    statics::dolphin__gx__GXAttr::__GXXfVtxSpecs(ctx);
+    if ((fns::gx(ctx).get()).vNum() as i32) != 0_i32 {
+        vl = (fns::gx(ctx).get()).vcdLo();
+        vh = (fns::gx(ctx).get()).vcdHi();
+        vlm = ((((shr_u32((vl), ((0_i32) as u32))) as i32)
+            & ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32))) as u32);
+        vlm = vlm.wrapping_add(
+            (((((shr_u32((vl), ((1_i32) as u32))) as i32)
+                & ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32))) as u8)
+                as u32),
+        );
+        vlm = vlm.wrapping_add(
+            (((((shr_u32((vl), ((2_i32) as u32))) as i32)
+                & ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32))) as u8)
+                as u32),
+        );
+        vlm = vlm.wrapping_add(
+            (((((shr_u32((vl), ((3_i32) as u32))) as i32)
+                & ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32))) as u8)
+                as u32),
+        );
+        vlm = vlm.wrapping_add(
+            (((((shr_u32((vl), ((4_i32) as u32))) as i32)
+                & ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32))) as u8)
+                as u32),
+        );
+        vlm = vlm.wrapping_add(
+            (((((shr_u32((vl), ((5_i32) as u32))) as i32)
+                & ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32))) as u8)
+                as u32),
+        );
+        vlm = vlm.wrapping_add(
+            (((((shr_u32((vl), ((6_i32) as u32))) as i32)
+                & ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32))) as u8)
+                as u32),
+        );
+        vlm = vlm.wrapping_add(
+            (((((shr_u32((vl), ((7_i32) as u32))) as i32)
+                & ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32))) as u8)
+                as u32),
+        );
+        vlm = vlm.wrapping_add(
+            (((((shr_u32((vl), ((8_i32) as u32))) as i32)
+                & ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32))) as u8)
+                as u32),
+        );
+        vlm = vlm.wrapping_add(
+            (At::new(ctx, 0x804d5bb8)
+                .field::<ArrV<'a, u8, 4>>(0)
+                .at((((((shr_u32((vl), ((9_i32) as u32))) as i32)
+                    & ((shl_i32(1_i32, ((2_i32) as u32))).wrapping_sub(1_i32)))
+                    as u8) as i32))
+                .get() as u32),
+        );
+        b = ((shl_i32(((fns::gx(ctx).get()).hasBiNrms() as i32), (1_i32 as u32)))
+            .wrapping_add(1_i32) as u32);
+        vlm = vlm.wrapping_add(
+            (At::new(ctx, 0x804d5bb8)
+                .field::<ArrV<'a, u8, 4>>(0)
+                .at((((((shr_u32((vl), ((11_i32) as u32))) as i32)
+                    & ((shl_i32(1_i32, ((2_i32) as u32))).wrapping_sub(1_i32)))
+                    as u8) as i32))
+                .get() as u32)
+                .wrapping_mul(b),
+        );
+        vlm = vlm.wrapping_add(
+            (At::new(ctx, 0x804d5bb0)
+                .field::<ArrV<'a, u8, 4>>(0)
+                .at((((((shr_u32((vl), ((13_i32) as u32))) as i32)
+                    & ((shl_i32(1_i32, ((2_i32) as u32))).wrapping_sub(1_i32)))
+                    as u8) as i32))
+                .get() as u32),
+        );
+        vlm = vlm.wrapping_add(
+            (At::new(ctx, 0x804d5bb0)
+                .field::<ArrV<'a, u8, 4>>(0)
+                .at((((((shr_u32((vl), ((15_i32) as u32))) as i32)
+                    & ((shl_i32(1_i32, ((2_i32) as u32))).wrapping_sub(1_i32)))
+                    as u8) as i32))
+                .get() as u32),
+        );
+        vlm = vlm.wrapping_add(
+            (At::new(ctx, 0x804d5bb4)
+                .field::<ArrV<'a, u8, 4>>(0)
+                .at((((((shr_u32((vh), ((0_i32) as u32))) as i32)
+                    & ((shl_i32(1_i32, ((2_i32) as u32))).wrapping_sub(1_i32)))
+                    as u8) as i32))
+                .get() as u32),
+        );
+        vlm = vlm.wrapping_add(
+            (At::new(ctx, 0x804d5bb4)
+                .field::<ArrV<'a, u8, 4>>(0)
+                .at((((((shr_u32((vh), ((2_i32) as u32))) as i32)
+                    & ((shl_i32(1_i32, ((2_i32) as u32))).wrapping_sub(1_i32)))
+                    as u8) as i32))
+                .get() as u32),
+        );
+        vlm = vlm.wrapping_add(
+            (At::new(ctx, 0x804d5bb4)
+                .field::<ArrV<'a, u8, 4>>(0)
+                .at((((((shr_u32((vh), ((4_i32) as u32))) as i32)
+                    & ((shl_i32(1_i32, ((2_i32) as u32))).wrapping_sub(1_i32)))
+                    as u8) as i32))
+                .get() as u32),
+        );
+        vlm = vlm.wrapping_add(
+            (At::new(ctx, 0x804d5bb4)
+                .field::<ArrV<'a, u8, 4>>(0)
+                .at((((((shr_u32((vh), ((6_i32) as u32))) as i32)
+                    & ((shl_i32(1_i32, ((2_i32) as u32))).wrapping_sub(1_i32)))
+                    as u8) as i32))
+                .get() as u32),
+        );
+        vlm = vlm.wrapping_add(
+            (At::new(ctx, 0x804d5bb4)
+                .field::<ArrV<'a, u8, 4>>(0)
+                .at((((((shr_u32((vh), ((8_i32) as u32))) as i32)
+                    & ((shl_i32(1_i32, ((2_i32) as u32))).wrapping_sub(1_i32)))
+                    as u8) as i32))
+                .get() as u32),
+        );
+        vlm = vlm.wrapping_add(
+            (At::new(ctx, 0x804d5bb4)
+                .field::<ArrV<'a, u8, 4>>(0)
+                .at((((((shr_u32((vh), ((10_i32) as u32))) as i32)
+                    & ((shl_i32(1_i32, ((2_i32) as u32))).wrapping_sub(1_i32)))
+                    as u8) as i32))
+                .get() as u32),
+        );
+        vlm = vlm.wrapping_add(
+            (At::new(ctx, 0x804d5bb4)
+                .field::<ArrV<'a, u8, 4>>(0)
+                .at((((((shr_u32((vh), ((12_i32) as u32))) as i32)
+                    & ((shl_i32(1_i32, ((2_i32) as u32))).wrapping_sub(1_i32)))
+                    as u8) as i32))
+                .get() as u32),
+        );
+        vlm = vlm.wrapping_add(
+            (At::new(ctx, 0x804d5bb4)
+                .field::<ArrV<'a, u8, 4>>(0)
+                .at((((((shr_u32((vh), ((14_i32) as u32))) as i32)
+                    & ((shl_i32(1_i32, ((2_i32) as u32))).wrapping_sub(1_i32)))
+                    as u8) as i32))
+                .get() as u32),
+        );
+        (fns::gx(ctx).get()).set_vLim((vlm as u16));
+    }
+}
+
 pub fn GXClearVtxDesc<'a>(ctx: &'a Ctx) {
     (fns::gx(ctx).get()).set_vcdLo((0_i32 as u32));
     'l1: loop {
@@ -2060,6 +2241,13 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (i32, i32) = Args::take_all(ctx);
             Ret::put(GXSetVtxDesc(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8033c260,
+        |ctx| {
+            Ret::put(__GXSetVCD(ctx), ctx);
         },
         Returns::Nothing,
     );

@@ -26,6 +26,15 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn it_802BDA40<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, i: i32) -> i32 {
+    let mut item_gobj = item_gobj;
+    let mut i = i;
+    return At::new(ctx, 0x804d5518)
+        .field::<ArrV<'a, i32, 2>>(0)
+        .at(fns::it_803F74F8(ctx).get(i).anim_id())
+        .get();
+}
+
 pub fn it_802BDA64<'a>(
     ctx: &'a Ctx,
     parent: HSD_GObj<'a>,
@@ -236,6 +245,14 @@ fn inl_itPeachParasol_Logic60_Destroyed_unfused<'a>(ctx: &'a Ctx, item_gobj: HSD
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x802bda40,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
+            Ret::put(it_802BDA40(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
     ctx.register_port(
         0x802bda64,
         |ctx| {

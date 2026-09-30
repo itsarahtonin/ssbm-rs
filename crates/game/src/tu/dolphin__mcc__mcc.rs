@@ -84,7 +84,7 @@ pub fn MCCStreamClose<'a>(ctx: &'a Ctx, chID: i32) -> i32 {
     statics::dolphin__mcc__mcc::gChannelInfo(ctx)
         .get(chID)
         .set_unk(0_i32);
-    let _ = fns::MCCClose(ctx, chID);
+    return fns::MCCClose(ctx, chID);
     #[allow(unreachable_code)]
     return 0;
 }

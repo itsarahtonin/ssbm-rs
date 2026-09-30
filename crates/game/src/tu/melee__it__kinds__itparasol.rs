@@ -26,6 +26,15 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn it_8028B08C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, statenum: i32) -> i32 {
+    let mut item_gobj = item_gobj;
+    let mut statenum = statenum;
+    return At::new(ctx, 0x803f5b60)
+        .field::<ArrV<'a, i32, 8>>(0)
+        .at(fns::it_803F5AB0(ctx).get(statenum).anim_id())
+        .get();
+}
+
 pub fn itParasol_Logic13_Spawned<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut item_gobj = item_gobj;
@@ -438,6 +447,14 @@ fn inl_animSpeed_unfused<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, speed: f64, 
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x8028b08c,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
+            Ret::put(it_8028B08C(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
     ctx.register_port(
         0x8028b0b8,
         |ctx| {

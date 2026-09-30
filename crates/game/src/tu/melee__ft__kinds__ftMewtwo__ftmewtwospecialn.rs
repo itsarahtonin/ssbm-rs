@@ -251,6 +251,98 @@ pub fn ftMt_SpecialN_ReleaseShadowBall<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn ftMt_SpecialN_PlayChargeSFX<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
+    let mut mewtwoAttrs: _ftMewtwoAttributes<'a> =
+        Handle::cast::<_ftMewtwoAttributes<'a>>((fp).dat_attrs());
+    let mut chargeLevel: f64 = 0.0;
+    if (fp).cmd_vars().at(2_i32).get() != 0_u32 {
+        if (fp).u().mt().x2234_shadowBallCharge() != 0_i32 {
+            chargeLevel = fp::fdivs(
+                fp::frsp((fp).u().mt().x2234_shadowBallCharge() as f64),
+                (mewtwoAttrs).x0_MEWTWO_SHADOWBALL_CHARGE_CYCLES(),
+            );
+        } else {
+            chargeLevel = 0.0;
+        }
+        if (fp).mv().mt().SpecialN().chargeLevel() > 0.0 {
+            if (chargeLevel > 0.75) && ((fp).mv().mt().SpecialN().chargeLevel() <= 0.75) {
+                (fp).mv().mt().SpecialN().set_chargeLevel(chargeLevel);
+                fns::ft_80088510(
+                    ctx,
+                    fp,
+                    (At::new(ctx, 0x803d0f90)
+                        .field::<ArrV<'a, u32, 4>>(0)
+                        .at(3_i32)
+                        .get() as i32),
+                    (127_i32 as u8),
+                    (64_i32 as u8),
+                );
+                return;
+            }
+            if (chargeLevel > 0.5) && ((fp).mv().mt().SpecialN().chargeLevel() <= 0.5) {
+                (fp).mv().mt().SpecialN().set_chargeLevel(chargeLevel);
+                fns::ft_80088510(
+                    ctx,
+                    fp,
+                    (At::new(ctx, 0x803d0f90)
+                        .field::<ArrV<'a, u32, 4>>(0)
+                        .at(2_i32)
+                        .get() as i32),
+                    (127_i32 as u8),
+                    (64_i32 as u8),
+                );
+                return;
+            }
+            if (chargeLevel > 0.25) && ((fp).mv().mt().SpecialN().chargeLevel() <= 0.25) {
+                (fp).mv().mt().SpecialN().set_chargeLevel(chargeLevel);
+                fns::ft_80088510(
+                    ctx,
+                    fp,
+                    (At::new(ctx, 0x803d0f90)
+                        .field::<ArrV<'a, u32, 4>>(0)
+                        .at(1_i32)
+                        .get() as i32),
+                    (127_i32 as u8),
+                    (64_i32 as u8),
+                );
+                return;
+            }
+            if (chargeLevel > 0.0) && ((fp).mv().mt().SpecialN().chargeLevel() <= 0.0) {
+                (fp).mv().mt().SpecialN().set_chargeLevel(chargeLevel);
+                fns::ft_80088510(
+                    ctx,
+                    fp,
+                    (At::new(ctx, 0x803d0f90)
+                        .field::<ArrV<'a, u32, 4>>(0)
+                        .at(0_i32)
+                        .get() as i32),
+                    (127_i32 as u8),
+                    (64_i32 as u8),
+                );
+            }
+        } else {
+            (fp).mv()
+                .mt()
+                .SpecialN()
+                .set_chargeLevel(9.999999747378752e-05_f64);
+            fns::ft_80088510(
+                ctx,
+                fp,
+                (At::new(ctx, 0x803d0f90)
+                    .field::<ArrV<'a, u32, 4>>(0)
+                    .at(0_i32)
+                    .get() as i32),
+                (127_i32 as u8),
+                (64_i32 as u8),
+            );
+        }
+    }
+}
+
 pub fn ftMt_SpecialN_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
     let mut gobj = gobj;
@@ -1501,6 +1593,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(ftMt_SpecialN_ReleaseShadowBall(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801471c8,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftMt_SpecialN_PlayChargeSFX(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

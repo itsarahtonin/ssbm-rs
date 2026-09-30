@@ -672,6 +672,132 @@ pub fn mnCount_GetRowValue_Number<'a>(ctx: &'a Ctx, row: i32) -> u32 {
     return ret;
 }
 
+pub fn mnCount_CreateRow<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, visible_row: i32, data_row: i32) {
+    let __frame = ctx.stack_frame(0x50);
+    let buf: ArrV<'a, i8, 4> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut visible_row = visible_row;
+    let mut data_row = data_row;
+    let mut userdata: MnCountData<'a> =
+        (Handle::cast::<MnCountData<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+    let mut label_base: Ptr<'a, HSD_Text<'a>> = null(ctx);
+    let mut label_slot: Ptr<'a, HSD_Text<'a>> = null(ctx);
+    let mut label_text: Ptr<'a, HSD_Text<'a>> = null(ctx);
+    let mut text: HSD_Text<'a> = null(ctx);
+    let mut selkind: i32 = 0;
+    let mut value_base: Ptr<'a, HSD_Text<'a>> = null(ctx);
+    let mut value_text: Ptr<'a, HSD_Text<'a>> = null(ctx);
+    let mut y: f64 = 0.0;
+    label_base = (userdata).labels().at(0);
+    label_slot = Handle::add(label_base, visible_row);
+    label_text = label_slot;
+    if !Handle::is_null((label_text).get()) {
+        fns::HSD_SisLib_803A5CC4(ctx, (userdata).labels().at(visible_row).get());
+        (label_text).set(null::<HSD_Text<'a>>(ctx));
+    }
+    text = fns::HSD_SisLib_803A5ACC(
+        ctx,
+        0_i32,
+        1_i32,
+        fp::fneg(13.0),
+        {
+            let __t1 = fp::fmadds(
+                1.399999976158142,
+                fp::frsp(visible_row as f64),
+                fp::fneg(6.400000095367432),
+            );
+            y = __t1;
+            __t1
+        },
+        17.0,
+        500.0,
+        38.387718200683594,
+    );
+    (label_text).set(text);
+    (text).font_size().set_x(0.029999999329447746);
+    (text).font_size().set_y(0.029999999329447746);
+    Handle::copy_from(
+        (text).text_color(),
+        At::new(ctx, 0x804d5058).field::<_GXColor<'a>>(0),
+    );
+    fns::HSD_SisLib_803A6368(
+        ctx,
+        text,
+        (statics::melee__mn__mncount::mnCount_sis_idx(ctx)
+            .at(data_row)
+            .get() as i32),
+    );
+    value_base = (userdata).values().at(0);
+    value_text = Handle::add(value_base, visible_row);
+    if !Handle::is_null((value_text).get()) {
+        fns::HSD_SisLib_803A5CC4(ctx, (userdata).values().at(visible_row).get());
+        (value_text).set(null::<HSD_Text<'a>>(ctx));
+    }
+    text = fns::HSD_SisLib_803A6754(ctx, 0_i32, 1_i32);
+    (value_text).set(text);
+    (text).set_pos_x(13.0);
+    (text).set_pos_y(y);
+    (text).set_pos_z(17.0);
+    Handle::copy_from((text).text_color(), fns::mn_804D4B64(ctx));
+    (text).set_default_alignment((2_i32 as u8));
+    if (inl_inline_is_row_time(ctx, data_row) != 0) {
+        let mut row_value: u32 = 0;
+        (text).font_size().set_x(0.029999999329447746);
+        (text).font_size().set_y(0.029999999329447746);
+        row_value = fns::mnCount_GetRowValue_Number(ctx, data_row);
+        fns::mn_8022EA78(
+            ctx,
+            buf.at(0),
+            2_i32,
+            div_u32(div_u32(row_value, (60_i32 as u32)), (60_i32 as u32)),
+        );
+        fns::mn_8022EA78(
+            ctx,
+            Handle::add(buf.at(0), 4_i32.wrapping_neg()),
+            2_i32,
+            rem_u32(div_u32(row_value, (60_i32 as u32)), (60_i32 as u32)),
+        );
+        let _ = fns::HSD_SisLib_803A6B98(
+            ctx,
+            text,
+            0.0,
+            0.0,
+            cstr(ctx, 0x804d505c),
+            &[
+                VarArg::Int(div_u32(div_u32(row_value, (60_i32 as u32)), (60_i32 as u32)) as u32),
+                VarArg::Int(Handle::addr(Handle::add(buf.at(0), 4_i32.wrapping_neg()))),
+            ],
+        );
+    } else if (inl_inline_is_row_char(ctx, data_row) != 0) {
+        (text).font_size().set_x(0.029999999329447746);
+        (text).font_size().set_y(0.029999999329447746);
+        selkind = fns::mnCount_GetRowValue_Character(ctx, data_row);
+        if (selkind as u32) == ((enums::SELKIND_COUNT as i32) as u32) {
+            let _ = fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 0.0, cstr(ctx, 0x804d5064), &[]);
+        } else {
+            fns::gm_80160B40(
+                ctx,
+                text,
+                fns::gm_SelKindToCKind(ctx, (selkind as u8)),
+                (0_i32 as u8),
+            );
+        }
+    } else {
+        (text).font_size().set_x(0.029999999329447746);
+        (text).font_size().set_y(0.029999999329447746);
+        let _ = fns::HSD_SisLib_803A6B98(
+            ctx,
+            text,
+            0.0,
+            0.0,
+            cstr(ctx, 0x804d5068),
+            &[VarArg::Int(
+                fns::mnCount_GetRowValue_Number(ctx, data_row) as u32
+            )],
+        );
+    }
+}
+
 pub fn mnCount_HandleUserInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
     let mut gobj = gobj;
@@ -1007,6 +1133,60 @@ fn inl_inline_is_row_time_unfused<'a>(ctx: &'a Ctx, row: i32) -> i32 {
             3_i32 => 0,
             4_i32 => 0,
             5_i32 => 0,
+            _ => 1,
+        };
+        if __case <= 0 {
+            return 1_i32;
+        }
+        if __case <= 1 {
+            return 0_i32;
+        }
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
+fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
+    let mut gobj = gobj;
+    return (gobj).user_data();
+}
+
+fn inl_inline_is_row_time<'a>(ctx: &'a Ctx, row: i32) -> i32 {
+    let mut row = row;
+    's1: {
+        let __case = match row {
+            1_i32 => 0,
+            2_i32 => 0,
+            3_i32 => 0,
+            4_i32 => 0,
+            5_i32 => 0,
+            _ => 1,
+        };
+        if __case <= 0 {
+            return 1_i32;
+        }
+        if __case <= 1 {
+            return 0_i32;
+        }
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
+fn inl_inline_is_row_char<'a>(ctx: &'a Ctx, row: i32) -> i32 {
+    let mut row = row;
+    's1: {
+        let __case = match row {
+            20_i32 => 0,
+            21_i32 => 0,
+            22_i32 => 0,
+            23_i32 => 0,
+            24_i32 => 0,
+            25_i32 => 0,
+            26_i32 => 0,
+            27_i32 => 0,
+            28_i32 => 0,
+            29_i32 => 0,
             _ => 1,
         };
         if __case <= 0 {
@@ -1356,6 +1536,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(mnCount_GetRowValue_Number(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x80250ff8,
+        |ctx| {
+            let (a0, a1, a2): (HSD_GObj<'_>, i32, i32) = Args::take_all(ctx);
+            Ret::put(mnCount_CreateRow(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x80251278,

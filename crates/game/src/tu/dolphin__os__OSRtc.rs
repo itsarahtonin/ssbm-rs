@@ -174,7 +174,7 @@ pub fn UnlockSram<'a>(ctx: &'a Ctx, commit: i32, offset: u32) -> i32 {
 pub fn __OSUnlockSram<'a>(ctx: &'a Ctx, commit: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut commit = commit;
-    let _ = statics::dolphin__os__OSRtc::UnlockSram(ctx, commit, (0_i32 as u32));
+    return statics::dolphin__os__OSRtc::UnlockSram(ctx, commit, (0_i32 as u32));
     #[allow(unreachable_code)]
     return 0;
 }
@@ -182,7 +182,7 @@ pub fn __OSUnlockSram<'a>(ctx: &'a Ctx, commit: i32) -> i32 {
 pub fn __OSUnlockSramEx<'a>(ctx: &'a Ctx, commit: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut commit = commit;
-    let _ = statics::dolphin__os__OSRtc::UnlockSram(ctx, commit, (20_i32 as u32));
+    return statics::dolphin__os__OSRtc::UnlockSram(ctx, commit, (20_i32 as u32));
     #[allow(unreachable_code)]
     return 0;
 }
@@ -374,7 +374,7 @@ fn inl___OSLockSram_unfused<'a>(ctx: &'a Ctx) -> OSSram<'a> {
 
 fn inl___OSUnlockSram_unfused<'a>(ctx: &'a Ctx, commit: i32) -> i32 {
     let mut commit = commit;
-    let _ = statics::dolphin__os__OSRtc::UnlockSram(ctx, commit, (0_i32 as u32));
+    return statics::dolphin__os__OSRtc::UnlockSram(ctx, commit, (0_i32 as u32));
     #[allow(unreachable_code)]
     return 0;
 }
@@ -385,7 +385,7 @@ fn inl___OSLockSramEx_unfused<'a>(ctx: &'a Ctx) -> OSSramEx<'a> {
 
 fn inl___OSUnlockSramEx_unfused<'a>(ctx: &'a Ctx, commit: i32) -> i32 {
     let mut commit = commit;
-    let _ = statics::dolphin__os__OSRtc::UnlockSram(ctx, commit, (20_i32 as u32));
+    return statics::dolphin__os__OSRtc::UnlockSram(ctx, commit, (20_i32 as u32));
     #[allow(unreachable_code)]
     return 0;
 }

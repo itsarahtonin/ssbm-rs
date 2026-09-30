@@ -812,6 +812,134 @@ pub fn GXSetZCompLoc<'a>(ctx: &'a Ctx, before_tex: u8) {
     (fns::gx(ctx).get()).set_bpSent((0_i32 as u16));
 }
 
+pub fn GXSetPixelFmt<'a>(ctx: &'a Ctx, pix_fmt: i32, z_fmt: i32) {
+    let mut pix_fmt = pix_fmt;
+    let mut z_fmt = z_fmt;
+    let mut oldPeCtrl: u32 = 0;
+    let mut aa: u8 = 0;
+    oldPeCtrl = (fns::gx(ctx).get()).peCtrl();
+    'l1: loop {
+        'c2: {
+            (fns::gx(ctx).get()).set_peCtrl(
+                ((((fns::gx(ctx).get()).peCtrl())
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((3_i32) as u32))).wrapping_sub(1_i32)),
+                        ((0_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(
+                        (At::new(ctx, 0x80401508)
+                            .field::<ArrV<'a, u32, 8>>(0)
+                            .at(pix_fmt)
+                            .get()),
+                        ((0_i32) as u32),
+                    ))),
+            );
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    'l3: loop {
+        'c4: {
+            (fns::gx(ctx).get()).set_peCtrl(
+                ((((fns::gx(ctx).get()).peCtrl())
+                    & ((!(shl_i32(
+                        ((shl_i32(1_i32, ((3_i32) as u32))).wrapping_sub(1_i32)),
+                        ((3_i32) as u32),
+                    ))) as u32))
+                    | (shl_u32(((z_fmt) as u32), ((3_i32) as u32)))),
+            );
+        }
+        if !(0_i32 != 0) {
+            break 'l3;
+        }
+    }
+    if oldPeCtrl != (fns::gx(ctx).get()).peCtrl() {
+        'l5: loop {
+            'c6: {
+                (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((97_i32) as u8));
+                (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32))
+                    .set_u32(((fns::gx(ctx).get()).peCtrl()));
+            }
+            if !(0_i32 != 0) {
+                break 'l5;
+            }
+        }
+        if (pix_fmt as u32) == ((enums::GX_PF_RGB565_Z16 as i32) as u32) {
+            aa = (1_i32 as u8);
+        } else {
+            aa = (0_i32 as u8);
+        }
+        'l7: loop {
+            'c8: {
+                (fns::gx(ctx).get()).set_genMode(
+                    ((((fns::gx(ctx).get()).genMode())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)),
+                            ((9_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(((aa) as u32), ((9_i32) as u32)))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l7;
+            }
+        }
+        (fns::gx(ctx).get()).set_dirtyState(((fns::gx(ctx).get()).dirtyState() | (4_i32 as u32)));
+    }
+    if At::new(ctx, 0x80401508)
+        .field::<ArrV<'a, u32, 8>>(0)
+        .at(pix_fmt)
+        .get()
+        == (4_i32 as u32)
+    {
+        'l9: loop {
+            'c10: {
+                (fns::gx(ctx).get()).set_cmode1(
+                    ((((fns::gx(ctx).get()).cmode1())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((2_i32) as u32))).wrapping_sub(1_i32)),
+                            ((9_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((pix_fmt as u32).wrapping_sub((4_i32 as u32))) & (3_i32 as u32)),
+                            ((9_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l9;
+            }
+        }
+        'l11: loop {
+            'c12: {
+                (fns::gx(ctx).get()).set_cmode1(
+                    ((((fns::gx(ctx).get()).cmode1())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
+                            ((24_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(((66_i32) as u32), ((24_i32) as u32)))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l11;
+            }
+        }
+        'l13: loop {
+            'c14: {
+                (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((97_i32) as u8));
+                (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32))
+                    .set_u32(((fns::gx(ctx).get()).cmode1()));
+            }
+            if !(0_i32 != 0) {
+                break 'l13;
+            }
+        }
+    }
+    (fns::gx(ctx).get()).set_bpSent((0_i32 as u16));
+}
+
 pub fn GXSetDither<'a>(ctx: &'a Ctx, dither: u8) {
     let mut dither = dither;
     'l1: loop {
@@ -1044,6 +1172,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (u8,) = Args::take_all(ctx);
             Ret::put(GXSetZCompLoc(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80340e78,
+        |ctx| {
+            let (a0, a1): (i32, i32) = Args::take_all(ctx);
+            Ret::put(GXSetPixelFmt(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );

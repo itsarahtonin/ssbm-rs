@@ -1363,6 +1363,404 @@ pub fn HSD_TExpOrder<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, tex: HSD_TObj<'a>, ch
     (texp).tev().set_chan((chan as u8));
 }
 
+pub fn AssignColorReg<'a>(
+    ctx: &'a Ctx,
+    tev: _HSD_TETev<'a>,
+    idx: i32,
+    res: HSD_TExpRes<'a>,
+) -> i32 {
+    let mut tev = tev;
+    let mut idx = idx;
+    let mut res = res;
+    let mut cnst: _HSD_TECnst<'a> = null(ctx);
+    let mut j: i32 = 0;
+    cnst = ((tev).c_in().get(idx).exp()).cnst();
+    if ((cnst).reg() as i32) != (enums::HSD_TE_UNDEF as i32) {
+        if ((cnst).reg() as i32) < 4_i32 {
+            return 1_i32.wrapping_neg();
+        }
+        (tev)
+            .c_in()
+            .get(idx)
+            .set_type(((enums::HSD_TE_IMM as i32) as u8));
+        if ((cnst).comp() as u32) == ((enums::HSD_TE_X as i32) as u32) {
+            (tev).c_in().get(idx).set_arg(
+                (At::new(ctx, 0x80407954)
+                    .field::<ArrV<'a, i32, 4>>(0)
+                    .at(((cnst).reg() as i32).wrapping_sub(4_i32))
+                    .get() as u8),
+            );
+        } else {
+            (tev).c_in().get(idx).set_arg(
+                (At::new(ctx, 0x80407964)
+                    .field::<ArrV<'a, i32, 4>>(0)
+                    .at(((cnst).reg() as i32).wrapping_sub(4_i32))
+                    .get() as u8),
+            );
+        }
+        return 0_i32;
+    } else {
+        if ((cnst).comp() as u32) == ((enums::HSD_TE_X as i32) as u32) {
+            {
+                j = 4_i32;
+                'l1: while j < 8_i32 {
+                    'c2: {
+                        if ((res).reg().get(j).alpha() as i32) == 0_i32 {
+                            (res).reg().get(j).set_alpha((1_i32 as u8));
+                            (cnst).set_reg((j as u8));
+                            (cnst).set_idx((3_i32 as u8));
+                            (tev)
+                                .c_in()
+                                .get(idx)
+                                .set_type(((enums::HSD_TE_IMM as i32) as u8));
+                            (tev).c_in().get(idx).set_arg(
+                                (At::new(ctx, 0x80407954)
+                                    .field::<ArrV<'a, i32, 4>>(0)
+                                    .at(j.wrapping_sub(4_i32))
+                                    .get() as u8),
+                            );
+                            return 0_i32;
+                        }
+                    }
+                    j = j.wrapping_add(1);
+                }
+            }
+        } else {
+            {
+                j = 4_i32;
+                'l3: while j < 8_i32 {
+                    'c4: {
+                        if ((res).reg().get(j).color() as i32) == 0_i32 {
+                            (res).reg().get(j).set_color((3_i32 as u8));
+                            (cnst).set_reg((j as u8));
+                            (cnst).set_idx((0_i32 as u8));
+                            (tev)
+                                .c_in()
+                                .get(idx)
+                                .set_type(((enums::HSD_TE_IMM as i32) as u8));
+                            (tev).c_in().get(idx).set_arg(
+                                (At::new(ctx, 0x80407964)
+                                    .field::<ArrV<'a, i32, 4>>(0)
+                                    .at(j.wrapping_sub(4_i32))
+                                    .get() as u8),
+                            );
+                            return 0_i32;
+                        }
+                    }
+                    j = j.wrapping_add(1);
+                }
+            }
+        }
+    }
+    return 1_i32.wrapping_neg();
+}
+
+pub fn AssignAlphaReg<'a>(
+    ctx: &'a Ctx,
+    tev: _HSD_TETev<'a>,
+    idx: i32,
+    res: HSD_TExpRes<'a>,
+) -> i32 {
+    let mut tev = tev;
+    let mut idx = idx;
+    let mut res = res;
+    let mut cnst: _HSD_TECnst<'a> = null(ctx);
+    let mut j: i32 = 0;
+    cnst = ((tev).a_in().get(idx).exp()).cnst();
+    if ((cnst).reg() as i32) != (enums::HSD_TE_UNDEF as i32) {
+        if ((cnst).reg() as i32) < 4_i32 {
+            return 1_i32.wrapping_neg();
+        }
+        (tev)
+            .a_in()
+            .get(idx)
+            .set_type(((enums::HSD_TE_IMM as i32) as u8));
+        (tev).a_in().get(idx).set_arg(
+            (At::new(ctx, 0x80407974)
+                .field::<ArrV<'a, i32, 4>>(0)
+                .at(((cnst).reg() as i32).wrapping_sub(4_i32))
+                .get() as u8),
+        );
+        return 0_i32;
+    } else {
+        {
+            j = 4_i32;
+            'l1: while j < 8_i32 {
+                'c2: {
+                    if ((res).reg().get(j).alpha() as i32) == 0_i32 {
+                        (res).reg().get(j).set_alpha((1_i32 as u8));
+                        (cnst).set_reg((j as u8));
+                        (cnst).set_idx((3_i32 as u8));
+                        (tev)
+                            .a_in()
+                            .get(idx)
+                            .set_type(((enums::HSD_TE_IMM as i32) as u8));
+                        (tev).a_in().get(idx).set_arg(
+                            (At::new(ctx, 0x80407974)
+                                .field::<ArrV<'a, i32, 4>>(0)
+                                .at(j.wrapping_sub(4_i32))
+                                .get() as u8),
+                        );
+                        return 0_i32;
+                    }
+                }
+                j = j.wrapping_add(1);
+            }
+        }
+    }
+    return 1_i32.wrapping_neg();
+}
+
+pub fn AssignColorKonst<'a>(
+    ctx: &'a Ctx,
+    tev: _HSD_TETev<'a>,
+    idx: i32,
+    res: HSD_TExpRes<'a>,
+) -> i32 {
+    let mut tev = tev;
+    let mut idx = idx;
+    let mut res = res;
+    let mut cnst: _HSD_TECnst<'a> = null(ctx);
+    let mut j: i32 = 0;
+    cnst = ((tev).c_in().get(idx).exp()).cnst();
+    if ((cnst).reg() as i32) != (enums::HSD_TE_UNDEF as i32) {
+        if ((cnst).reg() as i32) >= 4_i32 {
+            return 1_i32.wrapping_neg();
+        }
+        if ((cnst).comp() as u32) == ((enums::HSD_TE_X as i32) as u32) {
+            (tev).set_kcsel(
+                (At::new(ctx, 0x80407984)
+                    .field::<Arr<'a, ArrV<'a, i32, 4>, 4>>(0)
+                    .get(((cnst).reg() as i32))
+                    .at(((cnst).idx() as i32))
+                    .get() as u8),
+            );
+            (tev)
+                .c_in()
+                .get(idx)
+                .set_type(((enums::HSD_TE_KONST as i32) as u8));
+            (tev)
+                .c_in()
+                .get(idx)
+                .set_arg(((enums::GX_CC_KONST as i32) as u8));
+        } else {
+            (tev).set_kcsel(
+                (At::new(ctx, 0x804079c4)
+                    .field::<ArrV<'a, i32, 4>>(0)
+                    .at(((cnst).reg() as i32))
+                    .get() as u8),
+            );
+            (tev)
+                .c_in()
+                .get(idx)
+                .set_type(((enums::HSD_TE_KONST as i32) as u8));
+            (tev)
+                .c_in()
+                .get(idx)
+                .set_arg(((enums::GX_CC_KONST as i32) as u8));
+        }
+        return 0_i32;
+    } else {
+        if ((cnst).comp() as u32) == ((enums::HSD_TE_X as i32) as u32) {
+            {
+                j = 1_i32;
+                'l1: while j < 4_i32 {
+                    'c2: {
+                        if ((res).reg().get(j).alpha() as i32) == 0_i32 {
+                            (res).reg().get(j).set_alpha((1_i32 as u8));
+                            (cnst).set_reg((j as u8));
+                            (cnst).set_idx((3_i32 as u8));
+                            (tev).set_kcsel(
+                                (At::new(ctx, 0x80407984)
+                                    .field::<Arr<'a, ArrV<'a, i32, 4>, 4>>(0)
+                                    .get(((cnst).reg() as i32))
+                                    .at(((cnst).idx() as i32))
+                                    .get() as u8),
+                            );
+                            (tev)
+                                .c_in()
+                                .get(idx)
+                                .set_type(((enums::HSD_TE_KONST as i32) as u8));
+                            (tev)
+                                .c_in()
+                                .get(idx)
+                                .set_arg(((enums::GX_CC_KONST as i32) as u8));
+                            return 0_i32;
+                        }
+                    }
+                    j = j.wrapping_add(1);
+                }
+            }
+            {
+                j = 0_i32;
+                'l3: while j < 4_i32 {
+                    'c4: {
+                        if ((res).reg().get(j).color() as i32) < 3_i32 {
+                            (cnst).set_reg((j as u8));
+                            (cnst).set_idx({
+                                let __t1 = (res).reg().get(j).color();
+                                (res)
+                                    .reg()
+                                    .get(j)
+                                    .set_color((res).reg().get(j).color().wrapping_add(1));
+                                __t1
+                            });
+                            (tev).set_kcsel(
+                                (At::new(ctx, 0x80407984)
+                                    .field::<Arr<'a, ArrV<'a, i32, 4>, 4>>(0)
+                                    .get(((cnst).reg() as i32))
+                                    .at(((cnst).idx() as i32))
+                                    .get() as u8),
+                            );
+                            (tev)
+                                .c_in()
+                                .get(idx)
+                                .set_type(((enums::HSD_TE_KONST as i32) as u8));
+                            (tev)
+                                .c_in()
+                                .get(idx)
+                                .set_arg(((enums::GX_CC_KONST as i32) as u8));
+                            return 0_i32;
+                        }
+                    }
+                    j = j.wrapping_add(1);
+                }
+            }
+        } else {
+            {
+                j = 0_i32;
+                'l5: while j < 4_i32 {
+                    'c6: {
+                        if ((res).reg().get(j).color() as i32) == 0_i32 {
+                            (res).reg().get(j).set_color((3_i32 as u8));
+                            (cnst).set_reg((j as u8));
+                            (cnst).set_idx((0_i32 as u8));
+                            (tev).set_kcsel(
+                                (At::new(ctx, 0x804079c4)
+                                    .field::<ArrV<'a, i32, 4>>(0)
+                                    .at(((cnst).reg() as i32))
+                                    .get() as u8),
+                            );
+                            (tev)
+                                .c_in()
+                                .get(idx)
+                                .set_type(((enums::HSD_TE_KONST as i32) as u8));
+                            (tev)
+                                .c_in()
+                                .get(idx)
+                                .set_arg(((enums::GX_CC_KONST as i32) as u8));
+                            return 0_i32;
+                        }
+                    }
+                    j = j.wrapping_add(1);
+                }
+            }
+        }
+    }
+    return 1_i32.wrapping_neg();
+}
+
+pub fn AssignAlphaKonst<'a>(
+    ctx: &'a Ctx,
+    tev: _HSD_TETev<'a>,
+    idx: i32,
+    res: HSD_TExpRes<'a>,
+) -> i32 {
+    let mut tev = tev;
+    let mut idx = idx;
+    let mut res = res;
+    let mut cnst: _HSD_TECnst<'a> = null(ctx);
+    let mut j: i32 = 0;
+    cnst = ((tev).a_in().get(idx).exp()).cnst();
+    if ((cnst).reg() as i32) != (enums::HSD_TE_UNDEF as i32) {
+        if ((cnst).reg() as i32) >= 4_i32 {
+            return 1_i32.wrapping_neg();
+        }
+        (tev).set_kasel(
+            (At::new(ctx, 0x804079d4)
+                .field::<Arr<'a, ArrV<'a, i32, 4>, 4>>(0)
+                .get(((cnst).reg() as i32))
+                .at(((cnst).idx() as i32))
+                .get() as u8),
+        );
+        (tev)
+            .a_in()
+            .get(idx)
+            .set_type(((enums::HSD_TE_KONST as i32) as u8));
+        (tev)
+            .a_in()
+            .get(idx)
+            .set_arg(((enums::GX_CA_KONST as i32) as u8));
+        return 0_i32;
+    } else {
+        {
+            j = 1_i32;
+            'l1: while j < 4_i32 {
+                'c2: {
+                    if ((res).reg().get(j).alpha() as i32) == 0_i32 {
+                        (res).reg().get(j).set_alpha((1_i32 as u8));
+                        (cnst).set_reg((j as u8));
+                        (cnst).set_idx((3_i32 as u8));
+                        (tev).set_kasel(
+                            (At::new(ctx, 0x804079d4)
+                                .field::<Arr<'a, ArrV<'a, i32, 4>, 4>>(0)
+                                .get(((cnst).reg() as i32))
+                                .at(((cnst).idx() as i32))
+                                .get() as u8),
+                        );
+                        (tev)
+                            .a_in()
+                            .get(idx)
+                            .set_type(((enums::HSD_TE_KONST as i32) as u8));
+                        (tev)
+                            .a_in()
+                            .get(idx)
+                            .set_arg(((enums::GX_CA_KONST as i32) as u8));
+                        return 0_i32;
+                    }
+                }
+                j = j.wrapping_add(1);
+            }
+        }
+        {
+            j = 0_i32;
+            'l3: while j < 4_i32 {
+                'c4: {
+                    if ((res).reg().get(j).color() as i32) < 3_i32 {
+                        (cnst).set_reg((j as u8));
+                        (cnst).set_idx({
+                            let __t1 = (res).reg().get(j).color();
+                            (res)
+                                .reg()
+                                .get(j)
+                                .set_color((res).reg().get(j).color().wrapping_add(1));
+                            __t1
+                        });
+                        (tev).set_kasel(
+                            (At::new(ctx, 0x804079d4)
+                                .field::<Arr<'a, ArrV<'a, i32, 4>, 4>>(0)
+                                .get(((cnst).reg() as i32))
+                                .at(((cnst).idx() as i32))
+                                .get() as u8),
+                        );
+                        (tev)
+                            .a_in()
+                            .get(idx)
+                            .set_type(((enums::HSD_TE_KONST as i32) as u8));
+                        (tev)
+                            .a_in()
+                            .get(idx)
+                            .set_arg(((enums::GX_CA_KONST as i32) as u8));
+                        return 0_i32;
+                    }
+                }
+                j = j.wrapping_add(1);
+            }
+        }
+    }
+    return 1_i32.wrapping_neg();
+}
+
 pub fn TExpAssignReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, res: HSD_TExpRes<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
     let mut texp = texp;
@@ -1589,6 +1987,315 @@ pub fn TExpAssignReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, res: HSD_TExpRes<'a>)
         }
     }
     return 0_i32;
+}
+
+pub fn TExp2TevDesc<'a>(
+    ctx: &'a Ctx,
+    texp: HSD_TExp<'a>,
+    desc: _HSD_TExpTevDesc<'a>,
+    init_cprev: Val<'a, i32>,
+    init_aprev: Val<'a, i32>,
+) {
+    let __frame = ctx.stack_frame(0x38);
+    let mut texp = texp;
+    let mut desc = desc;
+    let mut init_cprev = init_cprev;
+    let mut init_aprev = init_aprev;
+    let mut tev: _HSD_TETev<'a> = null(ctx);
+    let mut tevdesc: _HSD_TevDesc<'a> = null(ctx);
+    (if !Handle::is_null((texp)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x8040775c),
+            (0x3a0_i32 as u32),
+            cstr(ctx, 0x8040775c),
+        )
+    });
+    (if !Handle::is_null((desc)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x8040775c),
+            (0x3a1_i32 as u32),
+            cstr(ctx, 0x8040775c),
+        )
+    });
+    (if (inl_HSD_TExpGetType_unfused(ctx, texp) as u32) == ((enums::HSD_TE_TEV as i32) as u32) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x8040775c),
+            (0x3a2_i32 as u32),
+            cstr(ctx, 0x8040775c),
+        )
+    });
+    tev = (texp).tev();
+    tevdesc = (desc).desc();
+    (tevdesc).set_next(null::<_HSD_TevDesc<'a>>(ctx));
+    (tevdesc).set_flags((1_i32 as u32));
+    (desc).set_tobj((tev).tex());
+    if Handle::is_null((tev).tex()) {
+        (tevdesc).set_coord(((enums::HSD_TE_UNDEF as i32) as u32));
+        (tevdesc).set_map(((enums::HSD_TE_UNDEF as i32) as u32));
+    }
+    (tevdesc).set_color(
+        ((if ((tev).chan() as i32) == (enums::HSD_TE_UNDEF as i32) {
+            (enums::HSD_TE_UNDEF as i32)
+        } else {
+            ((tev).chan() as i32)
+        }) as u32),
+    );
+    (tevdesc).u().tevconf().set_ras_swap(
+        (if ((tev).ras_swap() as i32) == (enums::HSD_TE_UNDEF as i32) {
+            0_i32
+        } else {
+            ((tev).ras_swap() as i32)
+        }),
+    );
+    (tevdesc).u().tevconf().set_tex_swap(
+        (if ((tev).tex_swap() as i32) == (enums::HSD_TE_UNDEF as i32) {
+            0_i32
+        } else {
+            ((tev).tex_swap() as i32)
+        }),
+    );
+    (tevdesc).u().tevconf().set_kcsel(
+        (if ((tev).kcsel() as i32) == (enums::HSD_TE_UNDEF as i32) {
+            0_i32
+        } else {
+            ((tev).kcsel() as i32)
+        }),
+    );
+    (tevdesc).u().tevconf().set_kasel(
+        (if ((tev).kasel() as i32) == (enums::HSD_TE_UNDEF as i32) {
+            0_i32
+        } else {
+            ((tev).kasel() as i32)
+        }),
+    );
+    if (((tev).c_op() as i32) == (enums::HSD_TE_UNDEF as i32))
+        || ((((((((tev).c_ref() == 0_i32) && (((tev).a_op() as i32) != 8_i32))
+            && (((tev).a_op() as i32) != 9_i32))
+            && (((tev).a_op() as i32) != 10_i32))
+            && (((tev).a_op() as i32) != 11_i32))
+            && (((tev).a_op() as i32) != 12_i32))
+            && (((tev).a_op() as i32) != 13_i32))
+    {
+        (tevdesc)
+            .u()
+            .tevconf()
+            .set_clr_op((enums::GX_TEV_ADD as i32));
+        (tevdesc)
+            .u()
+            .tevconf()
+            .set_clr_a((enums::GX_CC_ZERO as i32));
+        (tevdesc)
+            .u()
+            .tevconf()
+            .set_clr_b((enums::GX_CC_ZERO as i32));
+        (tevdesc)
+            .u()
+            .tevconf()
+            .set_clr_c((enums::GX_CC_ZERO as i32));
+        if (init_cprev).get() != 0_i32 {
+            (init_cprev).set(0_i32);
+            (tevdesc)
+                .u()
+                .tevconf()
+                .set_clr_d((enums::GX_CC_ZERO as i32));
+        } else {
+            (tevdesc)
+                .u()
+                .tevconf()
+                .set_clr_d((enums::GX_CC_CPREV as i32));
+        }
+        (tevdesc).u().tevconf().set_clr_scale(0_i32);
+        (tevdesc).u().tevconf().set_clr_bias(0_i32);
+        (tevdesc).u().tevconf().set_clr_clamp((0_i32 as u8));
+        (tevdesc).u().tevconf().set_clr_out_reg(0_i32);
+    } else {
+        (tevdesc).u().tevconf().set_clr_op(((tev).c_op() as i32));
+        (tevdesc).u().tevconf().set_clr_a(
+            (if ((tev).c_in().get(0_i32).arg() as i32) == (enums::HSD_TE_UNDEF as i32) {
+                (enums::GX_CC_ZERO as i32)
+            } else {
+                ((tev).c_in().get(0_i32).arg() as i32)
+            }),
+        );
+        (tevdesc).u().tevconf().set_clr_b(
+            (if ((tev).c_in().get(1_i32).arg() as i32) == (enums::HSD_TE_UNDEF as i32) {
+                (enums::GX_CC_ZERO as i32)
+            } else {
+                ((tev).c_in().get(1_i32).arg() as i32)
+            }),
+        );
+        (tevdesc).u().tevconf().set_clr_c(
+            (if ((tev).c_in().get(2_i32).arg() as i32) == (enums::HSD_TE_UNDEF as i32) {
+                (enums::GX_CC_ZERO as i32)
+            } else {
+                ((tev).c_in().get(2_i32).arg() as i32)
+            }),
+        );
+        (tevdesc).u().tevconf().set_clr_d(
+            (if ((tev).c_in().get(3_i32).arg() as i32) == (enums::HSD_TE_UNDEF as i32) {
+                (enums::GX_CC_ZERO as i32)
+            } else {
+                ((tev).c_in().get(3_i32).arg() as i32)
+            }),
+        );
+        (tevdesc).u().tevconf().set_clr_scale(
+            (if ((tev).c_scale() as i32) == (enums::HSD_TE_UNDEF as i32) {
+                0_i32
+            } else {
+                ((tev).c_scale() as i32)
+            }),
+        );
+        (tevdesc).u().tevconf().set_clr_bias(
+            (if ((tev).c_bias() as i32) == (enums::HSD_TE_UNDEF as i32) {
+                0_i32
+            } else {
+                ((tev).c_bias() as i32)
+            }),
+        );
+        (tevdesc).u().tevconf().set_clr_clamp(
+            ((if ((tev).c_clamp() as i32) != 0_i32 {
+                ((1_i32 as u8) as i32)
+            } else {
+                ((0_i32 as u8) as i32)
+            }) as u8),
+        );
+        (if ((tev).c_dst() as i32) != (enums::HSD_TE_UNDEF as i32) {
+            ({ () })
+        } else {
+            fns::__assert(
+                ctx,
+                cstr(ctx, 0x8040775c),
+                (0x3d9_i32 as u32),
+                cstr(ctx, 0x8040775c),
+            )
+        });
+        (tevdesc).u().tevconf().set_clr_out_reg(
+            At::new(ctx, 0x80407a20)
+                .field::<ArrV<'a, i32, 4>>(0)
+                .at(((tev).c_dst() as i32))
+                .get(),
+        );
+        if ((tevdesc).u().tevconf().clr_out_reg() as u32) == (0_i32 as u32) {
+            (init_cprev).set(0_i32);
+        }
+    }
+    if (((tev).a_op() as i32) == (enums::HSD_TE_UNDEF as i32)) || ((tev).a_ref() == 0_i32) {
+        (tevdesc)
+            .u()
+            .tevconf()
+            .set_alpha_op((enums::GX_TEV_ADD as i32));
+        (tevdesc)
+            .u()
+            .tevconf()
+            .set_alpha_a((enums::GX_CA_ZERO as i32));
+        (tevdesc)
+            .u()
+            .tevconf()
+            .set_alpha_b((enums::GX_CA_ZERO as i32));
+        (tevdesc)
+            .u()
+            .tevconf()
+            .set_alpha_c((enums::GX_CA_ZERO as i32));
+        if (init_aprev).get() != 0_i32 {
+            (init_aprev).set(0_i32);
+            (tevdesc)
+                .u()
+                .tevconf()
+                .set_alpha_d((enums::GX_CA_ZERO as i32));
+        } else {
+            (tevdesc)
+                .u()
+                .tevconf()
+                .set_alpha_d((enums::GX_CA_APREV as i32));
+        }
+        (tevdesc).u().tevconf().set_alpha_scale(0_i32);
+        (tevdesc).u().tevconf().set_alpha_bias(0_i32);
+        (tevdesc).u().tevconf().set_alpha_clamp((0_i32 as u8));
+        (tevdesc).u().tevconf().set_alpha_out_reg(0_i32);
+    } else {
+        (tevdesc).u().tevconf().set_alpha_op(((tev).a_op() as i32));
+        (tevdesc).u().tevconf().set_alpha_a(
+            (if ((tev).a_in().get(0_i32).arg() as i32) == (enums::HSD_TE_UNDEF as i32) {
+                (enums::GX_CA_ZERO as i32)
+            } else {
+                ((tev).a_in().get(0_i32).arg() as i32)
+            }),
+        );
+        (tevdesc).u().tevconf().set_alpha_b(
+            (if ((tev).a_in().get(1_i32).arg() as i32) == (enums::HSD_TE_UNDEF as i32) {
+                (enums::GX_CA_ZERO as i32)
+            } else {
+                ((tev).a_in().get(1_i32).arg() as i32)
+            }),
+        );
+        (tevdesc).u().tevconf().set_alpha_c(
+            (if ((tev).a_in().get(2_i32).arg() as i32) == (enums::HSD_TE_UNDEF as i32) {
+                (enums::GX_CA_ZERO as i32)
+            } else {
+                ((tev).a_in().get(2_i32).arg() as i32)
+            }),
+        );
+        (tevdesc).u().tevconf().set_alpha_d(
+            (if ((tev).a_in().get(3_i32).arg() as i32) == (enums::HSD_TE_UNDEF as i32) {
+                (enums::GX_CA_ZERO as i32)
+            } else {
+                ((tev).a_in().get(3_i32).arg() as i32)
+            }),
+        );
+        (tevdesc).u().tevconf().set_alpha_scale(
+            (if ((tev).a_scale() as i32) == (enums::HSD_TE_UNDEF as i32) {
+                0_i32
+            } else {
+                ((tev).a_scale() as i32)
+            }),
+        );
+        (tevdesc).u().tevconf().set_alpha_bias(
+            (if ((tev).a_bias() as i32) == (enums::HSD_TE_UNDEF as i32) {
+                0_i32
+            } else {
+                ((tev).a_bias() as i32)
+            }),
+        );
+        (tevdesc).u().tevconf().set_alpha_clamp(
+            ((if ((tev).a_clamp() as i32) != 0_i32 {
+                ((1_i32 as u8) as i32)
+            } else {
+                ((0_i32 as u8) as i32)
+            }) as u8),
+        );
+        (if ((tev).a_dst() as i32) != (enums::HSD_TE_UNDEF as i32) {
+            ({ () })
+        } else {
+            fns::__assert(
+                ctx,
+                cstr(ctx, 0x8040775c),
+                (0x400_i32 as u32),
+                cstr(ctx, 0x8040775c),
+            )
+        });
+        (tevdesc).u().tevconf().set_alpha_out_reg(
+            At::new(ctx, 0x80407a20)
+                .field::<ArrV<'a, i32, 4>>(0)
+                .at(((tev).a_dst() as i32))
+                .get(),
+        );
+        if ((tevdesc).u().tevconf().alpha_out_reg() as u32) == (0_i32 as u32) {
+            (init_aprev).set(0_i32);
+        }
+    }
+    (tevdesc)
+        .u()
+        .tevconf()
+        .set_mode((enums::GX_TC_LINEAR as i32));
 }
 
 pub fn HSD_TExpSetReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>) {
@@ -2289,12 +2996,57 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x80384114,
+        |ctx| {
+            let (a0, a1, a2): (_HSD_TETev<'_>, i32, HSD_TExpRes<'_>) = Args::take_all(ctx);
+            Ret::put(AssignColorReg(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80384274,
+        |ctx| {
+            let (a0, a1, a2): (_HSD_TETev<'_>, i32, HSD_TExpRes<'_>) = Args::take_all(ctx);
+            Ret::put(AssignAlphaReg(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80384340,
+        |ctx| {
+            let (a0, a1, a2): (_HSD_TETev<'_>, i32, HSD_TExpRes<'_>) = Args::take_all(ctx);
+            Ret::put(AssignColorKonst(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80384560,
+        |ctx| {
+            let (a0, a1, a2): (_HSD_TETev<'_>, i32, HSD_TExpRes<'_>) = Args::take_all(ctx);
+            Ret::put(AssignAlphaKonst(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
         0x803846c0,
         |ctx| {
             let (a0, a1): (HSD_TExp<'_>, HSD_TExpRes<'_>) = Args::take_all(ctx);
             Ret::put(TExpAssignReg(ctx, a0, a1), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x80384b20,
+        |ctx| {
+            let (a0, a1, a2, a3): (
+                HSD_TExp<'_>,
+                _HSD_TExpTevDesc<'_>,
+                Val<'_, i32>,
+                Val<'_, i32>,
+            ) = Args::take_all(ctx);
+            Ret::put(TExp2TevDesc(ctx, a0, a1, a2, a3), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x80384f28,

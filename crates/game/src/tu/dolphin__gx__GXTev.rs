@@ -1469,6 +1469,195 @@ pub fn GXSetZTexture<'a>(ctx: &'a Ctx, op: i32, fmt: i32, bias: u32) {
     (fns::gx(ctx).get()).set_bpSent((0_i32 as u16));
 }
 
+pub fn GXSetTevOrder<'a>(ctx: &'a Ctx, stage: i32, coord: i32, map: i32, color: i32) {
+    let mut stage = stage;
+    let mut coord = coord;
+    let mut map = map;
+    let mut color = color;
+    let mut ptref: Val<'a, u32> = null(ctx);
+    let mut tmap: u32 = 0;
+    let mut tcoord: u32 = 0;
+    ptref = (fns::gx(ctx).get())
+        .tref()
+        .at((div_u32((stage as u32), (2_i32 as u32)) as i32));
+    (fns::gx(ctx).get()).texmapId().at(stage).set((map as u32));
+    tmap = ((map as u32) & ((!0x100_i32) as u32));
+    tmap = (if tmap >= ((enums::GX_MAX_TEXMAP as i32) as u32) {
+        ((enums::GX_TEXMAP0 as i32) as u32)
+    } else {
+        tmap
+    });
+    tcoord = (if (coord as u32) >= ((enums::GX_MAX_TEXCOORD as i32) as u32) {
+        ((enums::GX_TEXCOORD0 as i32) as u32)
+    } else {
+        (coord as u32)
+    });
+    if (((stage as u32) & (1_i32 as u32)) != 0) {
+        'l1: loop {
+            'c2: {
+                (ptref).set(
+                    ((((ptref).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((3_i32) as u32))).wrapping_sub(1_i32)),
+                            ((12_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32((tmap), ((12_i32) as u32)))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l1;
+            }
+        }
+        'l3: loop {
+            'c4: {
+                (ptref).set(
+                    ((((ptref).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((3_i32) as u32))).wrapping_sub(1_i32)),
+                            ((15_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32((tcoord), ((15_i32) as u32)))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l3;
+            }
+        }
+        'l5: loop {
+            'c6: {
+                (ptref).set(
+                    ((((ptref).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((3_i32) as u32))).wrapping_sub(1_i32)),
+                            ((19_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            ((if (color as u32) == ((enums::GX_COLOR_NULL as i32) as u32) {
+                                7_i32
+                            } else {
+                                At::new(ctx, 0x804014e0)
+                                    .field::<ArrV<'a, i32, 9>>(0)
+                                    .at(color)
+                                    .get()
+                            }) as u32),
+                            ((19_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l5;
+            }
+        }
+        'l7: loop {
+            'c8: {
+                (ptref).set(
+                    ((((ptref).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)),
+                            ((18_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((((map as u32) != ((enums::GX_TEXMAP_NULL as i32) as u32))
+                                && (!(((map as u32) & (0x100_i32 as u32)) != 0)))
+                                as i32) as u32),
+                            ((18_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l7;
+            }
+        }
+    } else {
+        'l9: loop {
+            'c10: {
+                (ptref).set(
+                    ((((ptref).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((3_i32) as u32))).wrapping_sub(1_i32)),
+                            ((0_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32((tmap), ((0_i32) as u32)))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l9;
+            }
+        }
+        'l11: loop {
+            'c12: {
+                (ptref).set(
+                    ((((ptref).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((3_i32) as u32))).wrapping_sub(1_i32)),
+                            ((3_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32((tcoord), ((3_i32) as u32)))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l11;
+            }
+        }
+        'l13: loop {
+            'c14: {
+                (ptref).set(
+                    ((((ptref).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((3_i32) as u32))).wrapping_sub(1_i32)),
+                            ((7_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            ((if (color as u32) == ((enums::GX_COLOR_NULL as i32) as u32) {
+                                7_i32
+                            } else {
+                                At::new(ctx, 0x804014e0)
+                                    .field::<ArrV<'a, i32, 9>>(0)
+                                    .at(color)
+                                    .get()
+                            }) as u32),
+                            ((7_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l13;
+            }
+        }
+        'l15: loop {
+            'c16: {
+                (ptref).set(
+                    ((((ptref).get())
+                        & ((!(shl_i32(
+                            ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)),
+                            ((6_i32) as u32),
+                        ))) as u32))
+                        | (shl_u32(
+                            (((((map as u32) != ((enums::GX_TEXMAP_NULL as i32) as u32))
+                                && (!(((map as u32) & (0x100_i32 as u32)) != 0)))
+                                as i32) as u32),
+                            ((6_i32) as u32),
+                        ))),
+                );
+            }
+            if !(0_i32 != 0) {
+                break 'l15;
+            }
+        }
+    }
+    'l17: loop {
+        'c18: {
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((97_i32) as u8));
+            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32(((ptref).get()));
+        }
+        if !(0_i32 != 0) {
+            break 'l17;
+        }
+    }
+    (fns::gx(ctx).get()).set_bpSent((0_i32 as u16));
+    (fns::gx(ctx).get()).set_dirtyState(((fns::gx(ctx).get()).dirtyState() | (1_i32 as u32)));
+}
+
 pub fn GXSetNumTevStages<'a>(ctx: &'a Ctx, nStages: u8) {
     let mut nStages = nStages;
     'l1: loop {
@@ -1611,6 +1800,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1, a2): (i32, i32, u32) = Args::take_all(ctx);
             Ret::put(GXSetZTexture(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x803405f0,
+        |ctx| {
+            let (a0, a1, a2, a3): (i32, i32, i32, i32) = Args::take_all(ctx);
+            Ret::put(GXSetTevOrder(ctx, a0, a1, a2, a3), ctx);
         },
         Returns::Nothing,
     );

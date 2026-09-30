@@ -316,7 +316,7 @@ pub fn AXFXDelayInit<'a>(ctx: &'a Ctx, delay: AXFX_DELAY<'a>) -> i32 {
     (delay).set_right(null::<Val<'a, i32>>(ctx));
     (delay).set_sur(null::<Val<'a, i32>>(ctx));
     let _ = fns::OSRestoreInterrupts(ctx, old);
-    let _ = fns::AXFXDelaySettings(ctx, delay);
+    return fns::AXFXDelaySettings(ctx, delay);
     #[allow(unreachable_code)]
     return 0;
 }

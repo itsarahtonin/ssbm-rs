@@ -372,6 +372,248 @@ pub fn HSD_TexMapID2PTTexMtx<'a>(ctx: &'a Ctx, id: i32) -> u32 {
     return (0_i32 as u32);
 }
 
+pub fn TObjSetupMtx<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
+    let __frame = ctx.stack_frame(0xc8);
+    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let ldir: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let half: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let mtx_2: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x48);
+    let mtx_3: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x78);
+    let mut tobj = tobj;
+    let mut i: i32 = 0;
+    if ((tobj).flags() & ((15_i32) as u32)) == (4_i32 as u32) {
+        return;
+    }
+    if (((tobj).flags() & (shl_u32(1_u32, (31_i32 as u32)))) != 0) {
+        (Handle::cast::<_HSD_TObjInfo<'a>>(((tobj).parent().parent().class_info())))
+            .make_mtx()
+            .call::<_, ()>((tobj,));
+        (tobj).set_flags(((tobj).flags() & (!(shl_u32(1_u32, (31_i32 as u32))))));
+    }
+    's1: {
+        let __case = match ((tobj).flags() & ((15_i32) as u32)) {
+            1_u32 => 0,
+            2_u32 => 1,
+            3_u32 => 2,
+            _ => 3,
+        };
+        if __case <= 0 {
+            {
+                {
+                    i = 0_i32;
+                    'l2: while i < 3_i32 {
+                        'c3: {
+                            mtx.get(i)
+                                .at(0_i32)
+                                .set(fp::fmuls(0.5, (tobj).mtx().get(i).at(0_i32).get()));
+                            mtx.get(i).at(1_i32).set(fp::fmuls(
+                                fp::fneg(0.5),
+                                (tobj).mtx().get(i).at(1_i32).get(),
+                            ));
+                            mtx.get(i).at(2_i32).set(0.0);
+                            mtx.get(i).at(3_i32).set(fp::fadds(
+                                fp::fadds(
+                                    fp::fmadds(
+                                        0.5,
+                                        (tobj).mtx().get(i).at(0_i32).get(),
+                                        fp::fmuls(0.5, (tobj).mtx().get(i).at(1_i32).get()),
+                                    ),
+                                    (tobj).mtx().get(i).at(2_i32).get(),
+                                ),
+                                (tobj).mtx().get(i).at(3_i32).get(),
+                            ));
+                        }
+                        i = i.wrapping_add(1);
+                    }
+                }
+                fns::GXLoadTexMtxImm(ctx, mtx.get(0), (tobj).mtxid(), (enums::GX_MTX3x4 as i32));
+            }
+            break 's1;
+        }
+        if __case <= 1 {
+            {
+                let mut lobj: HSD_LObj<'a> = null(ctx);
+                if !Handle::is_null(
+                    ({
+                        let __t1 = fns::HSD_LObjGetCurrentByType(
+                            ctx,
+                            ((shl_i32(1_i32, (0_i32 as u32))) as u16),
+                        );
+                        lobj = __t1;
+                        __t1
+                    }),
+                ) {
+                    let mut cobj: HSD_CObj<'a> = null(ctx);
+                    let mut vmtx: ArrV<'a, F32, 4> = null(ctx);
+                    cobj = fns::HSD_CObjGetCurrent(ctx);
+                    (if !Handle::is_null((cobj)) {
+                        ({ () })
+                    } else {
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x80405574),
+                            (0x1b4_i32 as u32),
+                            cstr(ctx, 0x80405574),
+                        )
+                    });
+                    vmtx = inl_HSD_CObjGetViewingMtxPtrDirect(ctx, cobj);
+                    fns::HSD_LObjGetLightVector(ctx, lobj, ldir);
+                    fns::PSMTXMultVecSR(ctx, vmtx, ldir, ldir);
+                    ldir.set_z(fp::fadds(ldir.z(), fp::fneg(1.0)));
+                    fns::PSVECNormalize(ctx, ldir, half);
+                    half.set_x(fp::frsp(fp::fmul(half.x(), fp::fneg(0.5))));
+                    half.set_y(fp::frsp(fp::fmul(half.y(), fp::fneg(0.5))));
+                    half.set_z(fp::frsp(fp::fmul(half.z(), fp::fneg(0.5))));
+                    mtx_2
+                        .get(0_i32)
+                        .at(0_i32)
+                        .set(fp::fmuls((tobj).mtx().get(0_i32).at(0_i32).get(), half.x()));
+                    mtx_2
+                        .get(0_i32)
+                        .at(1_i32)
+                        .set(fp::fmuls((tobj).mtx().get(0_i32).at(0_i32).get(), half.y()));
+                    mtx_2
+                        .get(0_i32)
+                        .at(2_i32)
+                        .set(fp::fmuls((tobj).mtx().get(0_i32).at(0_i32).get(), half.z()));
+                    mtx_2.get(0_i32).at(3_i32).set(fp::fmadds(
+                        (tobj).mtx().get(0_i32).at(0_i32).get(),
+                        0.5,
+                        (tobj).mtx().get(0_i32).at(3_i32).get(),
+                    ));
+                    mtx_2
+                        .get(1_i32)
+                        .at(0_i32)
+                        .set(fp::fmuls((tobj).mtx().get(1_i32).at(0_i32).get(), half.x()));
+                    mtx_2
+                        .get(1_i32)
+                        .at(1_i32)
+                        .set(fp::fmuls((tobj).mtx().get(1_i32).at(0_i32).get(), half.y()));
+                    mtx_2
+                        .get(1_i32)
+                        .at(2_i32)
+                        .set(fp::fmuls((tobj).mtx().get(1_i32).at(0_i32).get(), half.z()));
+                    mtx_2.get(1_i32).at(3_i32).set(fp::fmadds(
+                        (tobj).mtx().get(1_i32).at(0_i32).get(),
+                        0.5,
+                        (tobj).mtx().get(1_i32).at(3_i32).get(),
+                    ));
+                    mtx_2.get(2_i32).at(0_i32).set({
+                        let __t3 = {
+                            let __t2 = 0.0;
+                            mtx_2.get(2_i32).at(2_i32).set(__t2);
+                            __t2
+                        };
+                        mtx_2.get(2_i32).at(1_i32).set(__t3);
+                        __t3
+                    });
+                    mtx_2.get(2_i32).at(3_i32).set(1.0);
+                    fns::GXLoadTexMtxImm(
+                        ctx,
+                        mtx_2.get(0),
+                        (tobj).mtxid(),
+                        (enums::GX_MTX3x4 as i32),
+                    );
+                } else {
+                    fns::GXLoadTexMtxImm(
+                        ctx,
+                        At::new(ctx, 0x80405688)
+                            .field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0)
+                            .get(0),
+                        (tobj).mtxid(),
+                        (enums::GX_MTX3x4 as i32),
+                    );
+                }
+            }
+            break 's1;
+        }
+        if __case <= 2 {
+            {
+                let mut cobj_2: HSD_CObj<'a> = fns::HSD_CObjGetCurrent(ctx);
+                fns::PSMTXConcat(
+                    ctx,
+                    (tobj).mtx().get(0),
+                    fns::HSD_CObjGetInvViewingMtxPtrDirect(ctx, cobj_2),
+                    mtx_3.get(0),
+                );
+                fns::GXLoadTexMtxImm(ctx, mtx_3.get(0), (tobj).mtxid(), (enums::GX_MTX3x4 as i32));
+            }
+            break 's1;
+        }
+        if __case <= 3 {
+            if (((tobj).flags() & ((shl_i32(1_i32, (24_i32 as u32))) as u32)) != 0) {
+                fns::GXLoadTexMtxImm(
+                    ctx,
+                    (tobj).mtx().get(0),
+                    (tobj).mtxid(),
+                    (enums::GX_MTX2x4 as i32),
+                );
+            } else {
+                fns::GXLoadTexMtxImm(
+                    ctx,
+                    (tobj).mtx().get(0),
+                    (tobj).mtxid(),
+                    (enums::GX_MTX3x4 as i32),
+                );
+            }
+            break 's1;
+        }
+    }
+}
+
+pub fn HSD_TObjSetupTextureCoordGen<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut tobj = tobj;
+    {
+        'l1: while !Handle::is_null(tobj) {
+            'c2: {
+                if ((tobj).id() as u32) == ((enums::GX_TEXMAP_NULL as i32) as u32) {
+                    break 'c2;
+                }
+                if (((tobj).flags() & ((shl_i32(1_i32, (24_i32 as u32))) as u32)) != 0) {
+                    inl_setupTextureCoordGen_unfused(ctx, tobj);
+                    inl_setupTextureCoordGenBump_unfused(ctx, tobj);
+                } else if ((tobj).flags() & ((15_i32) as u32)) == (4_i32 as u32) {
+                    inl_setupTextureCoordGenToon_unfused(ctx, tobj);
+                } else {
+                    inl_setupTextureCoordGen_unfused(ctx, tobj);
+                }
+            }
+            tobj = (tobj).next();
+        }
+    }
+}
+
+pub fn HSD_TObjSetupVolatileTev<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>, rendermode: u32) {
+    let __frame = ctx.stack_frame(0x30);
+    let mut tobj = tobj;
+    let mut rendermode = rendermode;
+    {
+        'l1: while !Handle::is_null(tobj) {
+            'c2: {
+                if ((tobj).id() as u32) == ((enums::GX_TEXMAP_NULL as i32) as u32) {
+                    break 'c2;
+                }
+                if (((tobj).flags() & ((shl_i32(1_i32, (24_i32 as u32))) as u32)) != 0) {
+                    inl_SetupEmbossBumpTev_unfused(ctx, tobj);
+                }
+                if ((((tobj).flags()
+                    & ((((((shl_i32(1_i32, (4_i32 as u32))) | (shl_i32(1_i32, (5_i32 as u32))))
+                        | (shl_i32(1_i32, (6_i32 as u32))))
+                        | (shl_i32(1_i32, (7_i32 as u32))))
+                        | (shl_i32(1_i32, (8_i32 as u32)))) as u32))
+                    & ((shl_i32(1_i32, (8_i32 as u32))) as u32))
+                    != 0)
+                {
+                    inl_TObjSetupTevModulateShadow_unfused(ctx, tobj);
+                    break 'l1;
+                }
+            }
+            tobj = (tobj).next();
+        }
+    }
+}
+
 pub fn MakeColorGenTExp<'a>(
     ctx: &'a Ctx,
     lightmap: u32,
@@ -1598,6 +1840,223 @@ pub fn HSD_TObjAssignResources<'a>(ctx: &'a Ctx, tobj_top: HSD_TObj<'a>) -> i32 
     return (texcoord_no as i32);
 }
 
+pub fn HSD_TObjSetup<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
+    let __frame = ctx.stack_frame(0x90);
+    let tlutobj: _GXTlutObj<'a> = frame_at(ctx, &__frame, 0x0);
+    let texobj: _GXTexObj<'a> = frame_at(ctx, &__frame, 0xc);
+    let tluts: ArrP<'a, _HSD_Tlut<'a>, 8> = frame_at(ctx, &__frame, 0x2c);
+    let mut tobj = tobj;
+    let mut num: i32 = 0;
+    let mut nb_tluts: i32 = 0_i32;
+    let mut tlut_name: u32 = ((enums::GX_TLUT0 as i32) as u32);
+    let mut big_tlut_name: u32 = ((enums::GX_BIGTLUT0 as i32) as u32);
+    let mut i: i32 = 0;
+    fns::tobj_head(ctx).set(tobj);
+    if Handle::is_null(tobj) {
+        return;
+    }
+    num = fns::HSD_TObjAssignResources(ctx, tobj);
+    if num > 0_i32 {
+        fns::HSD_StateRegisterTexGen(
+            ctx,
+            fns::HSD_Index2TexCoord(ctx, (num.wrapping_sub(1_i32) as u32)),
+        );
+    }
+    {
+        'l1: while !Handle::is_null(tobj) {
+            'c2: {
+                let mut lod: _HSD_TexLODDesc<'a> = null(ctx);
+                let mut imagedesc: HSD_ImageDesc<'a> = (tobj).imagedesc();
+                let mut min_filter: i32 = 0;
+                if ((tobj).id() as u32) == ((enums::GX_TEXMAP_NULL as i32) as u32) {
+                    break 'c2;
+                }
+                statics::sysdolphin__baselib__tobj::TObjSetupMtx(ctx, tobj);
+                (if !Handle::is_null((imagedesc)) {
+                    ({ () })
+                } else {
+                    fns::__assert(
+                        ctx,
+                        cstr(ctx, 0x80405574),
+                        (0x494_i32 as u32),
+                        cstr(ctx, 0x80405574),
+                    )
+                });
+                (if !Handle::is_null(((imagedesc).image_ptr())) {
+                    ({ () })
+                } else {
+                    fns::__assert(
+                        ctx,
+                        cstr(ctx, 0x80405574),
+                        (0x495_i32 as u32),
+                        cstr(ctx, 0x80405574),
+                    )
+                });
+                lod = (if !Handle::is_null((tobj).lod()) {
+                    (tobj).lod()
+                } else {
+                    At::new(ctx, 0x80405804).field::<_HSD_TexLODDesc<'a>>(0)
+                });
+                min_filter = (lod).minFilt();
+                's3: {
+                    let __case = match ((imagedesc).format() as u32) {
+                        8_u32 => 0,
+                        9_u32 => 0,
+                        10_u32 => 0,
+                        0_u32 => 1,
+                        1_u32 => 1,
+                        2_u32 => 1,
+                        3_u32 => 1,
+                        4_u32 => 1,
+                        5_u32 => 1,
+                        6_u32 => 1,
+                        14_u32 => 1,
+                        _ => 2,
+                    };
+                    if __case <= 0 {
+                        {
+                            let mut tlut: _HSD_Tlut<'a> = null(ctx);
+                            if ((tobj).tlut_no() as i32) != ((1_i32.wrapping_neg() as u8) as i32) {
+                                tlut = (Handle::add((tobj).tluttbl(), ((tobj).tlut_no() as i32)))
+                                    .get();
+                            } else {
+                                tlut = (tobj).tlut();
+                            }
+                            (if !Handle::is_null((tlut)) {
+                                ({ () })
+                            } else {
+                                fns::__assert(
+                                    ctx,
+                                    cstr(ctx, 0x80405574),
+                                    (0x4a6_i32 as u32),
+                                    cstr(ctx, 0x80405574),
+                                )
+                            });
+                            {
+                                i = 0_i32;
+                                'l4: while i < nb_tluts {
+                                    'c5: {
+                                        if !(inl_DifferentTluts_unfused(
+                                            ctx,
+                                            tluts.at(i).get(),
+                                            tlut,
+                                        ) != 0)
+                                        {
+                                            break 'l4;
+                                        }
+                                    }
+                                    i = i.wrapping_add(1);
+                                }
+                            }
+                            if i < nb_tluts {
+                                (tlut).set_tlut_name((tluts.at(i).get()).tlut_name());
+                            } else if nb_tluts < 8_i32 {
+                                if ((tlut).n_entries() as i32) >= 0x100_i32 {
+                                    (tlut).set_tlut_name({
+                                        let __t1 = big_tlut_name;
+                                        big_tlut_name = big_tlut_name.wrapping_add(1);
+                                        __t1
+                                    });
+                                } else {
+                                    (tlut).set_tlut_name({
+                                        let __t2 = tlut_name;
+                                        tlut_name = tlut_name.wrapping_add(1);
+                                        __t2
+                                    });
+                                }
+                                fns::GXInitTlutObj(
+                                    ctx,
+                                    tlutobj,
+                                    (tlut).lut(),
+                                    (tlut).fmt(),
+                                    (tlut).n_entries(),
+                                );
+                                fns::GXLoadTlut(ctx, tlutobj, (tlut).tlut_name());
+                                tluts
+                                    .at({
+                                        let __t3 = nb_tluts;
+                                        nb_tluts = nb_tluts.wrapping_add(1);
+                                        __t3
+                                    })
+                                    .set(tlut);
+                            } else {
+                                (tlut).set_tlut_name(((enums::GX_TLUT0 as i32) as u32));
+                            }
+                            fns::GXInitTexObjCI(
+                                ctx,
+                                texobj,
+                                (imagedesc).image_ptr(),
+                                (imagedesc).width(),
+                                (imagedesc).height(),
+                                (imagedesc).format(),
+                                (tobj).wrap_s(),
+                                (tobj).wrap_t(),
+                                ((if ((imagedesc).mipmap() != 0) {
+                                    ((1_i32 as u8) as i32)
+                                } else {
+                                    ((0_i32 as u8) as i32)
+                                }) as u8),
+                                (tlut).tlut_name(),
+                            );
+                            if (min_filter as u32) == ((enums::GX_LIN_MIP_LIN as i32) as u32) {
+                                min_filter = (enums::GX_LIN_MIP_NEAR as i32);
+                            }
+                        }
+                        break 's3;
+                    }
+                    if __case <= 1 {
+                        fns::GXInitTexObj(
+                            ctx,
+                            texobj,
+                            (imagedesc).image_ptr(),
+                            (imagedesc).width(),
+                            (imagedesc).height(),
+                            (imagedesc).format(),
+                            (tobj).wrap_s(),
+                            (tobj).wrap_t(),
+                            ((if ((imagedesc).mipmap() != 0) {
+                                ((1_i32 as u8) as i32)
+                            } else {
+                                ((0_i32 as u8) as i32)
+                            }) as u8),
+                        );
+                        break 's3;
+                    }
+                    if __case <= 2 {
+                        (if ((0_i32) != 0) {
+                            ({ () })
+                        } else {
+                            fns::__assert(
+                                ctx,
+                                cstr(ctx, 0x80405574),
+                                (0x4d4_i32 as u32),
+                                cstr(ctx, 0x80405574),
+                            )
+                        });
+                    }
+                }
+                if !((imagedesc).mipmap() != 0) {
+                    min_filter = (((min_filter as u32) & (1_i32 as u32)) as i32);
+                }
+                fns::GXInitTexObjLOD(
+                    ctx,
+                    texobj,
+                    min_filter,
+                    (tobj).magFilt(),
+                    (imagedesc).minLOD(),
+                    (imagedesc).maxLOD(),
+                    (lod).LODBias(),
+                    (lod).bias_clamp(),
+                    (lod).edgeLODEnable(),
+                    (lod).max_anisotropy(),
+                );
+                fns::GXLoadTexObj(ctx, texobj, (tobj).id());
+            }
+            tobj = (tobj).next();
+        }
+    }
+}
+
 pub fn HSD_TGTex2Index<'a>(ctx: &'a Ctx, tgtex: i32) -> u32 {
     let __frame = ctx.stack_frame(0x8);
     let mut tgtex = tgtex;
@@ -2359,6 +2818,11 @@ fn inl_HSD_TObjAnim_unfused<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
     );
 }
 
+fn inl_HSD_CObjGetViewingMtxPtrDirect<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> ArrV<'a, F32, 4> {
+    let mut cobj = cobj;
+    return (cobj).view_mtx().get(0);
+}
+
 fn inl_GXSetTexCoordGen_unfused<'a>(
     ctx: &'a Ctx,
     dst_coord: i32,
@@ -2440,6 +2904,123 @@ fn inl_setupTextureCoordGen_unfused<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
     }
 }
 
+fn inl_setupTextureCoordGenBump_unfused<'a>(ctx: &'a Ctx, bump: HSD_TObj<'a>) {
+    let mut bump = bump;
+    let mut mask: u32 = 0;
+    let mut i: i32 = 0;
+    mask = (fns::HSD_LObjGetLightMaskDiffuse(ctx) as u32);
+    {
+        i = 0_i32;
+        'l1: while i < 8_i32 {
+            'c2: {
+                if ((mask & ((shl_i32(1_i32, (i as u32))) as u32)) != 0) {
+                    break 'l1;
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    if i >= 8_i32 {
+        i = 0_i32;
+    }
+    inl_GXSetTexCoordGen_unfused(
+        ctx,
+        ((((bump).coord() as u32).wrapping_add((1_i32 as u32))) as i32),
+        At::new(ctx, 0x804056b8)
+            .field::<ArrV<'a, i32, 8>>(0)
+            .at(i)
+            .get(),
+        fns::HSD_TexCoordID2TexGenSrc(ctx, (bump).coord()),
+        ((enums::GX_IDENTITY as i32) as u32),
+    );
+}
+
+fn inl_setupTextureCoordGenToon_unfused<'a>(ctx: &'a Ctx, toon: HSD_TObj<'a>) {
+    let mut toon = toon;
+    let mut src: i32 = (toon).src();
+    inl_GXSetTexCoordGen_unfused(
+        ctx,
+        (toon).coord(),
+        (enums::GX_TG_SRTG as i32),
+        src,
+        ((enums::GX_IDENTITY as i32) as u32),
+    );
+}
+
+fn inl_SetupEmbossBumpTev_unfused<'a>(ctx: &'a Ctx, bump: HSD_TObj<'a>) {
+    let mut bump = bump;
+    At::new(ctx, 0x8040574c)
+        .field::<_HSD_TevDesc<'a>>(0)
+        .set_stage((fns::HSD_StateAssignTev(ctx) as u32));
+    At::new(ctx, 0x8040574c)
+        .field::<_HSD_TevDesc<'a>>(0)
+        .set_coord(((bump).coord() as u32));
+    At::new(ctx, 0x8040574c)
+        .field::<_HSD_TevDesc<'a>>(0)
+        .set_map(((bump).id() as u32));
+    At::new(ctx, 0x8040574c)
+        .field::<_HSD_TevDesc<'a>>(0)
+        .u()
+        .tevconf()
+        .set_clr_op((enums::GX_TEV_ADD as i32));
+    At::new(ctx, 0x8040574c)
+        .field::<_HSD_TevDesc<'a>>(0)
+        .u()
+        .tevconf()
+        .set_alpha_op((enums::GX_TEV_ADD as i32));
+    At::new(ctx, 0x8040574c)
+        .field::<_HSD_TevDesc<'a>>(0)
+        .u()
+        .tevconf()
+        .set_clr_clamp((0_i32 as u8));
+    fns::HSD_SetupTevStage(ctx, At::new(ctx, 0x8040574c).field::<_HSD_TevDesc<'a>>(0));
+    At::new(ctx, 0x8040574c)
+        .field::<_HSD_TevDesc<'a>>(0)
+        .set_stage((fns::HSD_StateAssignTev(ctx) as u32));
+    At::new(ctx, 0x8040574c)
+        .field::<_HSD_TevDesc<'a>>(0)
+        .set_coord((((((bump).coord() as u32).wrapping_add((1_i32 as u32))) as i32) as u32));
+    At::new(ctx, 0x8040574c)
+        .field::<_HSD_TevDesc<'a>>(0)
+        .u()
+        .tevconf()
+        .set_clr_op((enums::GX_TEV_SUB as i32));
+    At::new(ctx, 0x8040574c)
+        .field::<_HSD_TevDesc<'a>>(0)
+        .u()
+        .tevconf()
+        .set_alpha_op((enums::GX_TEV_SUB as i32));
+    At::new(ctx, 0x8040574c)
+        .field::<_HSD_TevDesc<'a>>(0)
+        .u()
+        .tevconf()
+        .set_clr_clamp((1_i32 as u8));
+    fns::HSD_SetupTevStage(ctx, At::new(ctx, 0x8040574c).field::<_HSD_TevDesc<'a>>(0));
+}
+
+fn inl_TObjSetupTevModulateShadow_unfused<'a>(ctx: &'a Ctx, shadow: HSD_TObj<'a>) {
+    let mut shadow = shadow;
+    {
+        'l1: while (!Handle::is_null(shadow))
+            && (((shadow).flags() & ((15_i32) as u32)) == (3_i32 as u32))
+        {
+            'c2: {
+                At::new(ctx, 0x804056d8)
+                    .field::<_HSD_TevDesc<'a>>(0)
+                    .set_stage((fns::HSD_StateAssignTev(ctx) as u32));
+                At::new(ctx, 0x804056d8)
+                    .field::<_HSD_TevDesc<'a>>(0)
+                    .set_coord(((shadow).coord() as u32));
+                At::new(ctx, 0x804056d8)
+                    .field::<_HSD_TevDesc<'a>>(0)
+                    .set_map(((shadow).id() as u32));
+                fns::HSD_SetupTevStage(ctx, At::new(ctx, 0x804056d8).field::<_HSD_TevDesc<'a>>(0));
+            }
+            shadow = (shadow).next();
+        }
+    }
+}
+
 fn inl_HSD_TexMapID2PTTexMtx_unfused<'a>(ctx: &'a Ctx, id: i32) -> u32 {
     let mut id = id;
     's1: {
@@ -2488,6 +3069,12 @@ fn inl_HSD_TexMapID2PTTexMtx_unfused<'a>(ctx: &'a Ctx, id: i32) -> u32 {
         }
     }
     return (0_i32 as u32);
+}
+
+fn inl_DifferentTluts_unfused<'a>(ctx: &'a Ctx, t0: _HSD_Tlut<'a>, t1: _HSD_Tlut<'a>) -> i32 {
+    let mut t0 = t0;
+    let mut t1 = t1;
+    return ((((t0).n_entries() as i32) != ((t1).n_entries() as i32)) as i32);
 }
 
 fn inl_hsdDelete_unfused<'a>(ctx: &'a Ctx, object: Addr<'a>) {
@@ -2650,6 +3237,30 @@ pub fn register(ctx: &Ctx) {
         Returns::Int,
     );
     ctx.register_port(
+        0x8035f0ec,
+        |ctx| {
+            let (a0,): (HSD_TObj<'_>,) = Args::take_all(ctx);
+            Ret::put(TObjSetupMtx(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8035f418,
+        |ctx| {
+            let (a0,): (HSD_TObj<'_>,) = Args::take_all(ctx);
+            Ret::put(HSD_TObjSetupTextureCoordGen(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8035f6b4,
+        |ctx| {
+            let (a0, a1): (HSD_TObj<'_>, u32) = Args::take_all(ctx);
+            Ret::put(HSD_TObjSetupVolatileTev(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x8035f7d0,
         |ctx| {
             let (a0, a1, a2, a3, a4, a5): (
@@ -2686,6 +3297,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(HSD_TObjAssignResources(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x80360950,
+        |ctx| {
+            let (a0,): (HSD_TObj<'_>,) = Args::take_all(ctx);
+            Ret::put(HSD_TObjSetup(ctx, a0), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x80360c38,
