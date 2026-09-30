@@ -21,6 +21,7 @@ mod regs;
 
 pub use call::{Arg, ArgRegs, Args, Ret, Single, VarArg, VarArgs};
 pub use handle::{Addr, Arr, ArrP, ArrV, At, F32, F64, FnPtr, Handle, Ptr, Scalar, Val, null};
+pub use lockstep::Returns;
 pub use regs::{Regs, RegsSnapshot, spr};
 
 /// Code run when execution reaches an address.
@@ -47,6 +48,11 @@ pub enum Mode {
 pub struct Entry {
     pub native: Native,
     pub mode: Mode,
+    /// A stand-in for something outside game memory, such as an SDK device or service.
+    /// Lockstep runs it for the original only and replays its effects for the port.
+    pub external: bool,
+    /// Where the result is, for lockstep to compare.
+    pub returns: Returns,
 }
 
 /// Runs original PowerPC code. Only dev builds provide one.
@@ -184,7 +190,11 @@ impl Ctx {
     fn check_interrupts(&self) {
         let f = self.interrupt_check.borrow().clone();
         if let Some(f) = f {
-            f(self);
+            if self.lockstep.is_active() {
+                lockstep::interrupts(self, &f);
+            } else {
+                f(self);
+            }
         }
     }
 
@@ -300,7 +310,7 @@ impl Ctx {
         if (MMIO_BASE..MMIO_END).contains(&addr)
             && let Some(mmio) = self.mmio.get()
         {
-            return u64::from(mmio.read(self, addr, len));
+            return u64::from(lockstep::mmio_read(self, mmio.as_ref(), addr, len));
         }
         match self.locked(addr, len) {
             Some(cells) => cells
@@ -314,7 +324,7 @@ impl Ctx {
         if (MMIO_BASE..MMIO_END).contains(&addr)
             && let Some(mmio) = self.mmio.get()
         {
-            return mmio.write(self, addr, len, value as u32);
+            return lockstep::mmio_write(self, mmio.as_ref(), addr, len, value as u32);
         }
         match self.locked(addr, len) {
             Some(cells) => {
@@ -432,8 +442,25 @@ impl Ctx {
             Entry {
                 native,
                 mode: Mode::Native,
+                external: false,
+                returns: Returns::Unknown,
             },
         );
+    }
+
+    /// Registers a port of the game function at `addr`, whose result is where `returns` says.
+    pub fn register_port(&self, addr: u32, native: Native, returns: Returns) {
+        self.register(addr, native);
+        if let Some(e) = self.dispatch.borrow_mut().get_mut(&addr) {
+            e.returns = returns;
+        }
+    }
+
+    /// Marks the native implementation at `addr` as external (see [`Entry::external`]).
+    pub fn mark_external(&self, addr: u32) {
+        if let Some(e) = self.dispatch.borrow_mut().get_mut(&addr) {
+            e.external = true;
+        }
     }
 
     /// Removes the native implementation at `addr`.
@@ -471,12 +498,18 @@ impl Ctx {
             return self.run_original(addr);
         };
         match e.mode {
+            Mode::Native if e.external && self.lockstep.is_active() => {
+                lockstep::external(self, addr, e.native)
+            }
             Mode::Native => (e.native)(self),
             Mode::Original if self.has_backend() => self.run_original(addr),
             Mode::Lockstep if self.has_backend() && !self.lockstep.is_active() => {
-                lockstep::run(self, addr, e.native)
+                lockstep::run(self, addr, e.native, e.returns)
             }
-            // Nested inside a lockstep run, or no original available.
+            // Nested inside a lockstep run: the original side runs originals throughout.
+            Mode::Lockstep if self.has_backend() && self.lockstep.in_original() => {
+                self.run_original(addr)
+            }
             _ => (e.native)(self),
         }
     }

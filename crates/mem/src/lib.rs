@@ -4,7 +4,8 @@
 //!
 //! Writes take `&self` so typed handles can share one `Mem`. Floats go through `gekko-fp`'s
 //! `lfs`/`stfs`, so loads and stores match the CPU bit for bit. A page journal records the
-//! original contents of written pages, which is how lockstep checks snapshot and roll back.
+//! original contents of written pages, which is how lockstep checks snapshot and roll back, and
+//! a write log records the writes themselves, so they can be replayed.
 
 use std::cell::{Cell, RefCell};
 use std::collections::BTreeMap;
@@ -29,9 +30,14 @@ pub type Pages = BTreeMap<u32, Box<[u8]>>;
 /// Main memory, mapped at `0x8000_0000` (cached) and mirrored at `0xC000_0000` (uncached).
 pub struct Mem {
     mem1: Box<[Cell<u8>]>,
-    journaling: Cell<bool>,
+    /// `JOURNAL` and `LOG` bits: what writes must also record.
+    recording: Cell<u8>,
     journal: RefCell<Pages>,
+    log: RefCell<Vec<(u32, Vec<u8>)>>,
 }
+
+const JOURNAL: u8 = 1;
+const LOG: u8 = 2;
 
 impl Default for Mem {
     fn default() -> Self {
@@ -74,8 +80,9 @@ impl Mem {
     pub fn new() -> Self {
         Self {
             mem1: vec![Cell::new(0); MEM1_SIZE as usize].into_boxed_slice(),
-            journaling: Cell::new(false),
+            recording: Cell::new(0),
             journal: RefCell::new(Pages::new()),
+            log: RefCell::default(),
         }
     }
 
@@ -104,8 +111,8 @@ impl Mem {
     #[inline]
     pub fn write_bytes(&self, addr: u32, data: &[u8]) -> Result<()> {
         let cells = self.cells(addr, data.len() as u32)?;
-        if self.journaling.get() {
-            self.note_write(addr & 0x3FFF_FFFF, data.len() as u32);
+        if self.recording.get() != 0 {
+            self.note_write(addr, data);
         }
         for (cell, byte) in cells.iter().zip(data) {
             cell.set(*byte);
@@ -114,12 +121,20 @@ impl Mem {
     }
 
     #[cold]
-    fn note_write(&self, phys: u32, len: u32) {
-        let mut journal = self.journal.borrow_mut();
-        for page in phys / PAGE_SIZE..=(phys + len.max(1) - 1) / PAGE_SIZE {
-            journal
-                .entry(page)
-                .or_insert_with(|| self.page_contents(page));
+    fn note_write(&self, addr: u32, data: &[u8]) {
+        let recording = self.recording.get();
+        if recording & JOURNAL != 0 {
+            let phys = addr & 0x3FFF_FFFF;
+            let len = data.len() as u32;
+            let mut journal = self.journal.borrow_mut();
+            for page in phys / PAGE_SIZE..=(phys + len.max(1) - 1) / PAGE_SIZE {
+                journal
+                    .entry(page)
+                    .or_insert_with(|| self.page_contents(page));
+            }
+        }
+        if recording & LOG != 0 {
+            self.log.borrow_mut().push((addr, data.to_vec()));
         }
     }
 
@@ -158,19 +173,32 @@ impl Mem {
 
     /// Starts recording the original contents of every page written from now on.
     pub fn begin_journal(&self) {
-        assert!(!self.journaling.get(), "journals do not nest");
+        assert!(!self.is_journaling(), "journals do not nest");
         self.journal.borrow_mut().clear();
-        self.journaling.set(true);
+        self.recording.set(self.recording.get() | JOURNAL);
     }
 
     /// Stops recording and returns the original contents of the pages written.
     pub fn end_journal(&self) -> Pages {
-        self.journaling.set(false);
+        self.recording.set(self.recording.get() & !JOURNAL);
         std::mem::take(&mut *self.journal.borrow_mut())
     }
 
     pub fn is_journaling(&self) -> bool {
-        self.journaling.get()
+        self.recording.get() & JOURNAL != 0
+    }
+
+    /// Starts logging every write, in order.
+    pub fn begin_log(&self) {
+        assert!(self.recording.get() & LOG == 0, "write logs do not nest");
+        self.log.borrow_mut().clear();
+        self.recording.set(self.recording.get() | LOG);
+    }
+
+    /// Stops logging and returns the writes, as (address, bytes).
+    pub fn end_log(&self) -> Vec<(u32, Vec<u8>)> {
+        self.recording.set(self.recording.get() & !LOG);
+        std::mem::take(&mut *self.log.borrow_mut())
     }
 
     /// The current contents of the given pages.

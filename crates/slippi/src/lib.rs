@@ -34,6 +34,7 @@ pub fn install(ctx: &Ctx, replay: Replay) -> Rc<Device> {
     let gct = gecko::gct(&gecko::parse_ini(PLAYBACK_INI));
     let device = ctx.set_ext(Device::new(replay, gct));
     ctx.register(EXI_TRANSFER_BUFFER, exi_transfer_buffer);
+    ctx.mark_external(EXI_TRANSFER_BUFFER);
     device
 }
 

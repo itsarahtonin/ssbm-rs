@@ -300,6 +300,10 @@ pub fn install(ctx: &Ctx, disc: Disc) -> Rc<Sdk> {
         Rc::new(|ctx| Sdk::wait(ctx, GAME_WAIT_STEP)),
     );
     ctx.set_interrupt_check(Rc::new(Sdk::take_interrupts));
+    // Everything the SDK layer stands in for lives outside game memory.
+    for addr in ctx.registered() {
+        ctx.mark_external(addr);
+    }
     sdk
 }
 
