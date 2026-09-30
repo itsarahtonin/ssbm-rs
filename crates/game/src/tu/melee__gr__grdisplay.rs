@@ -143,7 +143,10 @@ pub fn grDisplay_801C5DB0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
     let mut i: i32 = 0;
     let mut fighter: HSD_GObj<'a> = null(ctx);
     gp = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((gp).x11_flags().b012() as i32) == fns::Camera_8003108C(ctx) {
+    if {
+        let __t1 = fns::Camera_8003108C(ctx);
+        ((gp).x11_flags().b012() as i32) == __t1
+    } {
         if !Handle::is_null((gp).x18()) {
             if ((Handle::addr((gp).x18()) as i32) & (!0x7fffffff_i32)) == 0_i32 {
                 fns::OSReport(
@@ -165,11 +168,11 @@ pub fn grDisplay_801C5DB0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
                 }
                 if Handle::is_null(
                     ({
-                        let __t1 = (Handle::cast::<HSD_CObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(
+                        let __t2 = (Handle::cast::<HSD_CObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(
                             ctx, camgobj,
                         )));
-                        cobj = __t1;
-                        __t1
+                        cobj = __t2;
+                        __t2
                     }),
                 ) {
                     return;

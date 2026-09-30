@@ -36,13 +36,16 @@ pub fn it_802F2D98<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, owner_gobj: HSD_GObj<'a
     fns::it_8026C220(ctx, gobj, owner_gobj);
     (item).xDD0_flag().x0().set_b1((0_i32 as u8));
     (item).set_xBC_itemStateContainer(fns::it_803F9490(ctx).get(0));
-    fns::it_80274F48(
-        ctx,
-        gobj,
-        (((item).xC4_article_data()).x10_modelDesc()).x8_bone_attach_id(),
-        owner_gobj,
-        fns::ftKb_SpecialNYs_80109238(ctx, owner_gobj),
-    );
+    {
+        let __t1 = fns::ftKb_SpecialNYs_80109238(ctx, owner_gobj);
+        fns::it_80274F48(
+            ctx,
+            gobj,
+            (((item).xC4_article_data()).x10_modelDesc()).x8_bone_attach_id(),
+            owner_gobj,
+            __t1,
+        )
+    };
     fns::Item_80268E5C(ctx, gobj, 0_i32, 0_i32);
     fns::it_802762BC(ctx, item);
     fns::it_802756D0(ctx, gobj);
@@ -78,11 +81,10 @@ pub fn it_802F2E7C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, has_destroy_type: i32) 
     );
     fns::lb_8000B1CC(
         ctx,
-        fns::ftLib_GetPartJObj(
-            ctx,
-            (item).grab_victim(),
-            fns::ftKb_SpecialNYs_80109238(ctx, (item).grab_victim()),
-        ),
+        {
+            let __t1 = fns::ftKb_SpecialNYs_80109238(ctx, (item).grab_victim());
+            fns::ftLib_GetPartJObj(ctx, (item).grab_victim(), __t1)
+        },
         null::<Vec<'a>>(ctx),
         (item).pos(),
     );

@@ -392,14 +392,14 @@ pub fn HSD_SisLib_803A6B98<'a>(
         encoded_len = fns::HSD_SisLib_803A67EC(ctx, encoded.at(0), buffer.at(0));
     }
     old_size = (alloc).size();
-    required_size = (((Handle::addr((alloc).end()).wrapping_sub(Handle::addr(
-        ({
+    required_size = (({
+        let __t2 = ({
             let __t1 = (alloc).data();
             old_buf = __t1;
             __t1
-        }),
-    )) as i32)
-        / 1)
+        });
+        ((Handle::addr((alloc).end()).wrapping_sub(Handle::addr(__t2)) as i32) / 1)
+    })
     .wrapping_add(17_i32) as u32);
     required_size = (encoded_len as u32).wrapping_add(required_size);
     if old_size < required_size {
@@ -429,99 +429,99 @@ pub fn HSD_SisLib_803A6B98<'a>(
         fns::HSD_SisLib_Free(ctx, Handle::cast::<Addr<'a>>(old_buf));
     }
     ({
-        let __t2 = (alloc).end();
+        let __t3 = (alloc).end();
         (alloc).set_end(Handle::add((alloc).end(), 1));
-        __t2
+        __t3
     })
     .set((7_i32 as u8));
     copied_bytes = 0_i32;
     x_coord = ((fp::fctiwz(x) as i16) as i32);
     ({
-        let __t3 = (alloc).end();
-        (alloc).set_end(Handle::add((alloc).end(), 1));
-        __t3
-    })
-    .set(((sar_i32(x_coord, (8_i32 as u32))) as u8));
-    ({
         let __t4 = (alloc).end();
         (alloc).set_end(Handle::add((alloc).end(), 1));
         __t4
     })
-    .set((x_coord as u8));
-    y_coord = ((fp::fctiwz(y) as i16) as i32);
+    .set(((sar_i32(x_coord, (8_i32 as u32))) as u8));
     ({
         let __t5 = (alloc).end();
         (alloc).set_end(Handle::add((alloc).end(), 1));
         __t5
     })
-    .set(((sar_i32(y_coord, (8_i32 as u32))) as u8));
+    .set((x_coord as u8));
+    y_coord = ((fp::fctiwz(y) as i16) as i32);
     ({
         let __t6 = (alloc).end();
         (alloc).set_end(Handle::add((alloc).end(), 1));
         __t6
     })
-    .set((y_coord as u8));
+    .set(((sar_i32(y_coord, (8_i32 as u32))) as u8));
     ({
         let __t7 = (alloc).end();
         (alloc).set_end(Handle::add((alloc).end(), 1));
         __t7
     })
-    .set((12_i32 as u8));
+    .set((y_coord as u8));
     ({
         let __t8 = (alloc).end();
         (alloc).set_end(Handle::add((alloc).end(), 1));
         __t8
     })
-    .set((text).text_color().r());
+    .set((12_i32 as u8));
     ({
         let __t9 = (alloc).end();
         (alloc).set_end(Handle::add((alloc).end(), 1));
         __t9
     })
-    .set((text).text_color().g());
+    .set((text).text_color().r());
     ({
         let __t10 = (alloc).end();
         (alloc).set_end(Handle::add((alloc).end(), 1));
         __t10
     })
-    .set((text).text_color().b());
+    .set((text).text_color().g());
     ({
         let __t11 = (alloc).end();
         (alloc).set_end(Handle::add((alloc).end(), 1));
         __t11
     })
-    .set((14_i32 as u8));
+    .set((text).text_color().b());
     ({
         let __t12 = (alloc).end();
         (alloc).set_end(Handle::add((alloc).end(), 1));
         __t12
     })
-    .set((fp::fctiwz((text).x34().x()) as u8));
+    .set((14_i32 as u8));
     ({
         let __t13 = (alloc).end();
         (alloc).set_end(Handle::add((alloc).end(), 1));
         __t13
     })
-    .set((fp::fctiwz((fp::fmuls(256.0, (text).x34().x()))) as u8));
+    .set((fp::fctiwz((text).x34().x()) as u8));
     ({
         let __t14 = (alloc).end();
         (alloc).set_end(Handle::add((alloc).end(), 1));
         __t14
     })
-    .set((fp::fctiwz((text).x34().y()) as u8));
+    .set((fp::fctiwz((fp::fmuls(256.0, (text).x34().x()))) as u8));
     ({
         let __t15 = (alloc).end();
         (alloc).set_end(Handle::add((alloc).end(), 1));
         __t15
+    })
+    .set((fp::fctiwz((text).x34().y()) as u8));
+    ({
+        let __t16 = (alloc).end();
+        (alloc).set_end(Handle::add((alloc).end(), 1));
+        __t16
     })
     .set((fp::fctiwz((fp::fmuls(256.0, (text).x34().y()))) as u8));
     {
         'l3: while copied_bytes < encoded_len {
             'c4: {
                 ({
-                    let __t16 = (alloc).end();
+                    let __t17 = (alloc).end();
                     (alloc).set_end(Handle::add((alloc).end(), 1));
-                    __t16
+                    __t17
                 })
                 .set(encoded.at(copied_bytes).get());
             }
@@ -529,22 +529,22 @@ pub fn HSD_SisLib_803A6B98<'a>(
         }
     }
     ({
-        let __t17 = (alloc).end();
-        (alloc).set_end(Handle::add((alloc).end(), 1));
-        __t17
-    })
-    .set((15_i32 as u8));
-    ({
         let __t18 = (alloc).end();
         (alloc).set_end(Handle::add((alloc).end(), 1));
         __t18
     })
+    .set((15_i32 as u8));
+    ({
+        let __t19 = (alloc).end();
+        (alloc).set_end(Handle::add((alloc).end(), 1));
+        __t19
+    })
     .set((13_i32 as u8));
     ((alloc).end()).set((0_i32 as u8));
     return ({
-        let __t19 = (alloc).count();
+        let __t20 = (alloc).count();
         (alloc).set_count((alloc).count().wrapping_add(1));
-        __t19
+        __t20
     } as i32);
 }
 
@@ -682,14 +682,14 @@ pub fn HSD_SisLib_803A70A0<'a>(
                 ((Handle::addr((alloc).end()).wrapping_sub(Handle::addr(playhead)) as i32) / 1);
             required_size = (new_size
                 .wrapping_add(
-                    ((Handle::addr((alloc).end()).wrapping_sub(Handle::addr(
-                        ({
+                    ({
+                        let __t2 = ({
                             let __t1 = (alloc).data();
                             old_buf = __t1;
                             __t1
-                        }),
-                    )) as i32)
-                        / 1),
+                        });
+                        ((Handle::addr((alloc).end()).wrapping_sub(Handle::addr(__t2)) as i32) / 1)
+                    }),
                 )
                 .wrapping_add(1_i32) as u32);
             if (alloc).size() < required_size {
@@ -755,9 +755,9 @@ pub fn HSD_SisLib_803A70A0<'a>(
             'l7: while i < new_size {
                 'c8: {
                     ({
-                        let __t2 = playhead;
+                        let __t3 = playhead;
                         playhead = Handle::add(playhead, 1);
-                        __t2
+                        __t3
                     })
                     .set(encoded.at(i).get());
                 }

@@ -144,15 +144,15 @@ pub fn grInishie2_801FCE04<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::grInishie2_801FD018(ctx, gobj);
     fns::grInishie2_801FD368(ctx, gobj);
     fns::grInishie2_801FD744(ctx, gobj);
-    fns::Ground_801C4E70(
-        ctx,
-        fns::Ground_801C3FA4(ctx, gobj, 9_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 12_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 8_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 11_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 10_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 13_i32),
-    );
+    {
+        let __t1 = fns::Ground_801C3FA4(ctx, gobj, 13_i32);
+        let __t2 = fns::Ground_801C3FA4(ctx, gobj, 10_i32);
+        let __t3 = fns::Ground_801C3FA4(ctx, gobj, 11_i32);
+        let __t4 = fns::Ground_801C3FA4(ctx, gobj, 8_i32);
+        let __t5 = fns::Ground_801C3FA4(ctx, gobj, 12_i32);
+        let __t6 = fns::Ground_801C3FA4(ctx, gobj, 9_i32);
+        fns::Ground_801C4E70(ctx, __t6, __t5, __t4, __t3, __t2, __t1)
+    };
     (gp).u().inishie2().xC4_flags().set_b0((0_i32 as u8));
 }
 
@@ -210,8 +210,10 @@ pub fn grInishie2_801FD018<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (gp).u().inishie2().xC4_flags().set_b1((1_i32 as u8));
     (gp).u().inishie2().xC4_flags().set_b2((1_i32 as u8));
     (gp).u().inishie2().set_xC6(
-        (((statics::melee__gr__grinishie2::yakumono_param(ctx).get()).unk0() as i32).wrapping_add(
-            (if ((statics::melee__gr__grinishie2::yakumono_param(ctx).get()).unk2() as i32) != 0_i32
+        ({
+            let __t1 = (if ((statics::melee__gr__grinishie2::yakumono_param(ctx).get()).unk2()
+                as i32)
+                != 0_i32
             {
                 fns::HSD_Randi(
                     ctx,
@@ -219,12 +221,16 @@ pub fn grInishie2_801FD018<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 )
             } else {
                 0_i32
-            }),
-        ) as i16),
+            });
+            ((statics::melee__gr__grinishie2::yakumono_param(ctx).get()).unk0() as i32)
+                .wrapping_add(__t1)
+        } as i16),
     );
     (gp).u().inishie2().set_xC8(
-        (((statics::melee__gr__grinishie2::yakumono_param(ctx).get()).unk4() as i32).wrapping_add(
-            (if ((statics::melee__gr__grinishie2::yakumono_param(ctx).get()).unk6() as i32) != 0_i32
+        ({
+            let __t2 = (if ((statics::melee__gr__grinishie2::yakumono_param(ctx).get()).unk6()
+                as i32)
+                != 0_i32
             {
                 fns::HSD_Randi(
                     ctx,
@@ -232,8 +238,10 @@ pub fn grInishie2_801FD018<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 )
             } else {
                 0_i32
-            }),
-        ) as i16),
+            });
+            ((statics::melee__gr__grinishie2::yakumono_param(ctx).get()).unk4() as i32)
+                .wrapping_add(__t2)
+        } as i16),
     );
 }
 
@@ -334,40 +342,42 @@ pub fn grInishie2_801FD224<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         if ((gp).u().inishie2().xC8() as i32) == 0_i32 {
             (gp_2).u().inishie2().xC4_flags().set_b1((1_i32 as u8));
             (gp_2).u().inishie2().set_xC6(
-                (((statics::melee__gr__grinishie2::yakumono_param(ctx).get()).unk0() as i32)
-                    .wrapping_add(
-                        (if ((statics::melee__gr__grinishie2::yakumono_param(ctx).get()).unk2()
-                            as i32)
-                            != 0_i32
-                        {
-                            fns::HSD_Randi(
-                                ctx,
-                                ((statics::melee__gr__grinishie2::yakumono_param(ctx).get()).unk2()
-                                    as i32),
-                            )
-                        } else {
-                            0_i32
-                        }),
-                    ) as i16),
+                ({
+                    let __t1 = (if ((statics::melee__gr__grinishie2::yakumono_param(ctx).get())
+                        .unk2() as i32)
+                        != 0_i32
+                    {
+                        fns::HSD_Randi(
+                            ctx,
+                            ((statics::melee__gr__grinishie2::yakumono_param(ctx).get()).unk2()
+                                as i32),
+                        )
+                    } else {
+                        0_i32
+                    });
+                    ((statics::melee__gr__grinishie2::yakumono_param(ctx).get()).unk0() as i32)
+                        .wrapping_add(__t1)
+                } as i16),
             );
         } else {
             (gp_2).u().inishie2().xC4_flags().set_b2((1_i32 as u8));
             (gp_2).u().inishie2().set_xC8(
-                (((statics::melee__gr__grinishie2::yakumono_param(ctx).get()).unk4() as i32)
-                    .wrapping_add(
-                        (if ((statics::melee__gr__grinishie2::yakumono_param(ctx).get()).unk6()
-                            as i32)
-                            != 0_i32
-                        {
-                            fns::HSD_Randi(
-                                ctx,
-                                ((statics::melee__gr__grinishie2::yakumono_param(ctx).get()).unk6()
-                                    as i32),
-                            )
-                        } else {
-                            0_i32
-                        }),
-                    ) as i16),
+                ({
+                    let __t2 = (if ((statics::melee__gr__grinishie2::yakumono_param(ctx).get())
+                        .unk6() as i32)
+                        != 0_i32
+                    {
+                        fns::HSD_Randi(
+                            ctx,
+                            ((statics::melee__gr__grinishie2::yakumono_param(ctx).get()).unk6()
+                                as i32),
+                        )
+                    } else {
+                        0_i32
+                    });
+                    ((statics::melee__gr__grinishie2::yakumono_param(ctx).get()).unk4() as i32)
+                        .wrapping_add(__t2)
+                } as i16),
             );
         }
         fns::Ground_801C4A08(ctx, gobj);
@@ -475,21 +485,27 @@ pub fn grInishie2_801FD4F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     spawn_side = fns::HSD_Randi(ctx, 2_i32);
     fns::mpJointListAdd(ctx, 14_i32);
     if spawn_side == 0_i32 {
-        vec.set_x(fp::fadds(
-            (statics::melee__gr__grinishie2::yakumono_param(ctx).get())
-                .unk14()
-                .get(spawn_side)
-                .x(),
-            fns::Stage_GetBlastZoneRightOffset(ctx),
-        ));
+        vec.set_x({
+            let __t1 = fns::Stage_GetBlastZoneRightOffset(ctx);
+            fp::fadds(
+                (statics::melee__gr__grinishie2::yakumono_param(ctx).get())
+                    .unk14()
+                    .get(spawn_side)
+                    .x(),
+                __t1,
+            )
+        });
     } else {
-        vec.set_x(fp::fadds(
-            (statics::melee__gr__grinishie2::yakumono_param(ctx).get())
-                .unk14()
-                .get(spawn_side)
-                .x(),
-            fns::Stage_GetBlastZoneLeftOffset(ctx),
-        ));
+        vec.set_x({
+            let __t2 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+            fp::fadds(
+                (statics::melee__gr__grinishie2::yakumono_param(ctx).get())
+                    .unk14()
+                    .get(spawn_side)
+                    .x(),
+                __t2,
+            )
+        });
     }
     vec.set_y(
         (statics::melee__gr__grinishie2::yakumono_param(ctx).get())
@@ -559,8 +575,10 @@ pub fn grInishie2_801FD744<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     (gp).u().inishie2().xC4_flags().set_b4((1_i32 as u8));
     (gp).u().inishie2().set_xCC(
-        (((statics::melee__gr__grinishie2::yakumono_param(ctx).get()).unkC() as i32).wrapping_add(
-            (if ((statics::melee__gr__grinishie2::yakumono_param(ctx).get()).unkE() as i32) != 0_i32
+        ({
+            let __t1 = (if ((statics::melee__gr__grinishie2::yakumono_param(ctx).get()).unkE()
+                as i32)
+                != 0_i32
             {
                 fns::HSD_Randi(
                     ctx,
@@ -568,8 +586,10 @@ pub fn grInishie2_801FD744<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 )
             } else {
                 0_i32
-            }),
-        ) as i16),
+            });
+            ((statics::melee__gr__grinishie2::yakumono_param(ctx).get()).unkC() as i32)
+                .wrapping_add(__t1)
+        } as i16),
     );
 }
 
@@ -615,21 +635,27 @@ pub fn grInishie2_801FD824<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     spawn_side = fns::HSD_Randi(ctx, 2_i32);
     fns::mpJointListAdd(ctx, 0_i32);
     if spawn_side == 0_i32 {
-        spawn_pos.set_x(fp::fadds(
-            (statics::melee__gr__grinishie2::yakumono_param(ctx).get())
-                .unk30()
-                .get(spawn_side)
-                .x(),
-            fns::Stage_GetBlastZoneRightOffset(ctx),
-        ));
+        spawn_pos.set_x({
+            let __t1 = fns::Stage_GetBlastZoneRightOffset(ctx);
+            fp::fadds(
+                (statics::melee__gr__grinishie2::yakumono_param(ctx).get())
+                    .unk30()
+                    .get(spawn_side)
+                    .x(),
+                __t1,
+            )
+        });
     } else {
-        spawn_pos.set_x(fp::fadds(
-            (statics::melee__gr__grinishie2::yakumono_param(ctx).get())
-                .unk30()
-                .get(spawn_side)
-                .x(),
-            fns::Stage_GetBlastZoneLeftOffset(ctx),
-        ));
+        spawn_pos.set_x({
+            let __t2 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+            fp::fadds(
+                (statics::melee__gr__grinishie2::yakumono_param(ctx).get())
+                    .unk30()
+                    .get(spawn_side)
+                    .x(),
+                __t2,
+            )
+        });
     }
     spawn_pos.set_y(
         (statics::melee__gr__grinishie2::yakumono_param(ctx).get())
@@ -683,18 +709,21 @@ pub fn grInishie2_801FD9EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     gp = Handle::cast::<Ground<'a>>((gobj).user_data());
     if fns::grAnime_801C83D0(ctx, gobj, 1_i32, 1_i32) != 0_i32 {
         if ((gp).u().inishie23().xC8_flags().b1() != 0) {
-            let mut temp_f: f64 = fp::fadds(
-                (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
-                    .u()
-                    .inishie23()
-                    .xD8()
-                    .x(),
-                (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
+            let mut temp_f: f64 = {
+                let __t1 = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
                     .u()
                     .inishie23()
                     .xCC()
-                    .x(),
-            );
+                    .x();
+                fp::fadds(
+                    (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
+                        .u()
+                        .inishie23()
+                        .xD8()
+                        .x(),
+                    __t1,
+                )
+            };
             if temp_f > fns::Stage_GetCamBoundsRightOffset(ctx) {
                 var_r0 = 2_i32;
             } else if temp_f < fns::Stage_GetCamBoundsLeftOffset(ctx) {
@@ -713,18 +742,25 @@ pub fn grInishie2_801FD9EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         .xC8_flags()
                         .set_b3(((((gp).u().inishie23().xC8_flags().b3() as i32) ^ 1_i32) as u8));
                 } else {
-                    let mut temp_f_2: f64 = fp::fadds(
-                        (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
+                    let mut temp_f_2: f64 = {
+                        let __t2 = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(
+                            ctx, gobj,
+                        )))
+                        .u()
+                        .inishie23()
+                        .xCC()
+                        .x();
+                        fp::fadds(
+                            (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(
+                                ctx, gobj,
+                            )))
                             .u()
                             .inishie23()
                             .xD8()
                             .x(),
-                        (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
-                            .u()
-                            .inishie23()
-                            .xCC()
-                            .x(),
-                    );
+                            __t2,
+                        )
+                    };
                     if temp_f_2 > fns::Stage_GetCamBoundsRightOffset(ctx) {
                         var_r3 = 2_i32;
                     } else if temp_f_2 < fns::Stage_GetCamBoundsLeftOffset(ctx) {
@@ -1020,9 +1056,15 @@ fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, tran
 
 fn inl_checkBlastZone_unfused<'a>(ctx: &'a Ctx, pos: Vec<'a>) -> i32 {
     let mut pos = pos;
-    if (pos).x() > fns::Stage_GetBlastZoneRightOffset(ctx) {
+    if {
+        let __t1 = fns::Stage_GetBlastZoneRightOffset(ctx);
+        (pos).x() > __t1
+    } {
         return 1_i32;
-    } else if (pos).x() < fns::Stage_GetBlastZoneLeftOffset(ctx) {
+    } else if {
+        let __t2 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+        (pos).x() < __t2
+    } {
         return 1_i32;
     } else {
         return 0_i32;
@@ -1051,11 +1093,14 @@ fn inl_grInishie2_801FDED8_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
             (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj_2)));
         (gp_2).u().inishie2().xC4_flags().set_b4((1_i32 as u8));
         (gp_2).u().inishie2().set_xCC(
-            ((((statics::melee__gr__grinishie2::yakumono_param(ctx).get()).unkC() as i32)
-                .wrapping_add(fns::grInishie2_801FDFB4(
+            (({
+                let __t1 = fns::grInishie2_801FDFB4(
                     ctx,
                     ((statics::melee__gr__grinishie2::yakumono_param(ctx).get()).unkE() as i32),
-                ))) as i16),
+                );
+                ((statics::melee__gr__grinishie2::yakumono_param(ctx).get()).unkC() as i32)
+                    .wrapping_add(__t1)
+            }) as i16),
         );
         fns::Ground_801C4A08(ctx, gobj);
     }

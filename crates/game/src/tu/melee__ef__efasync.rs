@@ -244,7 +244,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     12_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t7 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t7)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -252,7 +256,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     20_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t8 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t8)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -261,7 +269,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (7_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t9 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t9)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 164 } else { 165 };
             }
@@ -270,13 +282,20 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (8_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t10 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t10)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 168 } else { 169 };
             }
             6 => {
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t11 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t11)
+                }))
+                .get());
                 f32_1 = (va_vec3).x();
                 Handle::copy_from(translate, (va_vec3));
                 ret_obj =
@@ -288,7 +307,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (39_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t13 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t13)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 183 } else { 184 };
             }
@@ -296,8 +319,11 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 9;
             }
             9 => {
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t14 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t14)
+                }))
+                .get());
                 Handle::copy_from(translate, (va_vec3));
                 __state = if gfx_id == 0x3f0_i32 { 187 } else { 189 };
             }
@@ -305,8 +331,11 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 11;
             }
             11 => {
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t17 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t17)
+                }))
+                .get());
                 Handle::copy_from(translate, (va_vec3));
                 __state = if gfx_id == 0x3f2_i32 { 192 } else { 194 };
             }
@@ -314,7 +343,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     11_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t20 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t20)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -322,7 +355,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     72_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t21 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t21)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -331,7 +368,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (16_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t22 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t22)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 199 } else { 200 };
             }
@@ -340,7 +381,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (17_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t24 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t24)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 203 } else { 204 };
             }
@@ -349,7 +394,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (18_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t25 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t25)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 207 } else { 208 };
             }
@@ -358,7 +407,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (19_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t28 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t28)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 211 } else { 212 };
             }
@@ -367,7 +420,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (20_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t31 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t31)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 215 } else { 216 };
             }
@@ -376,7 +433,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (21_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t34 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t34)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 219 } else { 220 };
             }
@@ -385,7 +446,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (22_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t35 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t35)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 223 } else { 224 };
             }
@@ -394,7 +459,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (23_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t36 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t36)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 227 } else { 228 };
             }
@@ -403,16 +472,26 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (3_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t37 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t37)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 231 } else { 232 };
             }
             23 => {
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t40 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t40)
+                }))
+                .get());
                 Handle::copy_from(translate, (va_vec3));
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t41 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t41)
+                }))
+                .get())
                 .get();
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_Translate_FacingDir(
                     ctx, 0x107_i32, translate, f32_1,
@@ -424,7 +503,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (5_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t42 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t42)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 236 } else { 237 };
             }
@@ -432,8 +515,11 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 26;
             }
             26 => {
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t45 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t45)
+                }))
+                .get());
                 Handle::copy_from(translate, (va_vec3));
                 __state = if gfx_id == 0x401_i32 { 240 } else { 242 };
             }
@@ -443,8 +529,11 @@ pub fn efAsync_Dispatch<'a>(
                     0_i32,
                     0_i32,
                     89_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t48 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t48)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -454,8 +543,11 @@ pub fn efAsync_Dispatch<'a>(
                     0_i32,
                     0_i32,
                     94_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t49 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t49)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -464,7 +556,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (24_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t50 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t50)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 247 } else { 248 };
             }
@@ -472,7 +568,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     44_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t52 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t52)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -481,7 +581,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (4_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t53 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t53)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 252 } else { 253 };
             }
@@ -489,7 +593,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     60_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t55 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t55)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -503,8 +611,11 @@ pub fn efAsync_Dispatch<'a>(
                     0_i32,
                     0_i32,
                     226_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t58 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t58)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -520,7 +631,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     25_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t63 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t63)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -536,7 +651,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     67_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t68 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t68)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -544,7 +663,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     227_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t69 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t69)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -552,7 +675,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     0x22a_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t70 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t70)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -560,7 +687,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     75_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t71 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t71)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -570,8 +701,11 @@ pub fn efAsync_Dispatch<'a>(
                     0_i32,
                     0_i32,
                     19_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t72 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t72)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -581,8 +715,11 @@ pub fn efAsync_Dispatch<'a>(
                     0_i32,
                     0_i32,
                     55_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t73 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t73)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -592,8 +729,11 @@ pub fn efAsync_Dispatch<'a>(
                     0_i32,
                     0_i32,
                     225_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t74 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t74)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -602,8 +742,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (37_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t75 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t75)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 282 } else { 283 };
             }
@@ -611,7 +754,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     0x196_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t79 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t79)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -621,8 +768,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (11_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t80 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t80)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 287 } else { 288 };
             }
@@ -632,8 +782,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (12_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t82 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t82)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 299 } else { 300 };
             }
@@ -643,8 +796,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (13_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t84 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t84)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 311 } else { 312 };
             }
@@ -654,8 +810,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (14_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t86 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t86)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 319 } else { 320 };
             }
@@ -668,7 +827,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     93_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t92 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t92)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -677,7 +840,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (15_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t93 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t93)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 336 } else { 337 };
             }
@@ -691,7 +858,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     92_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t94 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t94)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -699,7 +870,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     0x159_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t95 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t95)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -707,7 +882,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     63_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t96 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t96)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -717,8 +896,11 @@ pub fn efAsync_Dispatch<'a>(
                     0_i32,
                     0_i32,
                     91_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t97 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t97)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -727,8 +909,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (1_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t98 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t98)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 345 } else { 346 };
             }
@@ -737,8 +922,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (2_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t100 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t100)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 349 } else { 350 };
             }
@@ -746,7 +934,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     126_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t102 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t102)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -754,13 +946,20 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     127_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t103 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t103)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
             64 => {
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t104 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t104)
+                }))
+                .get());
                 Handle::copy_from(translate, (va_vec3));
                 i = 0_i32;
                 __state = 355;
@@ -789,7 +988,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (25_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t106 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t106)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 372 } else { 373 };
             }
@@ -799,7 +1002,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (26_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t115 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t115)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 380 } else { 381 };
             }
@@ -808,16 +1015,26 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     0x121_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t117 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t117)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
             71 => {
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t118 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t118)
+                }))
+                .get());
                 Handle::copy_from(translate, (va_vec3));
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t119 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t119)
+                }))
+                .get())
                 .get();
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_Translate_FacingDir(
                     ctx, 0x13c_i32, translate, f32_1,
@@ -829,16 +1046,26 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (32_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t120 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t120)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 386 } else { 387 };
             }
             73 => {
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t122 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t122)
+                }))
+                .get());
                 Handle::copy_from(translate, (va_vec3));
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t123 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t123)
+                }))
+                .get())
                 .get();
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_Translate_FacingDir(
                     ctx, 0x140_i32, translate, f32_1,
@@ -850,7 +1077,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (33_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t124 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t124)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 395 } else { 396 };
             }
@@ -864,8 +1095,11 @@ pub fn efAsync_Dispatch<'a>(
                     0_i32,
                     0_i32,
                     0x115_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t131 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t131)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -873,7 +1107,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     0x14d_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t132 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t132)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -897,8 +1135,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (35_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t137 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t137)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 425 } else { 426 };
             }
@@ -906,7 +1147,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     0x193_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t139 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t139)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -914,7 +1159,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     0x192_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t140 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t140)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -922,7 +1171,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     0x1a0_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t141 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t141)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -932,8 +1185,11 @@ pub fn efAsync_Dispatch<'a>(
                     0_i32,
                     0_i32,
                     0x1af_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t142 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t142)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -943,8 +1199,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (36_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t143 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t143)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 433 } else { 434 };
             }
@@ -954,11 +1213,17 @@ pub fn efAsync_Dispatch<'a>(
                 __state = if !Handle::is_null(result_7) { 437 } else { 438 };
             }
             89 => {
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t150 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t150)
+                }))
+                .get());
                 Handle::copy_from(translate, (va_vec3));
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t151 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t151)
+                }))
+                .get())
                 .get();
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_Translate_FacingDir(
                     ctx, 0x1d8_i32, translate, f32_1,
@@ -969,7 +1234,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     0x1fb_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t152 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t152)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -977,7 +1246,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     0x1dc_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t153 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t153)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -989,7 +1262,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     0x1ff_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t159 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t159)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -997,16 +1274,25 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     0x209_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t160 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t160)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
             95 => {
-                source_jobj =
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get());
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                source_jobj = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                    let __t161 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t161)
+                }))
+                .get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t162 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t162)
+                }))
+                .get());
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_AppSRT_SetPos(
                     ctx,
                     27_i32,
@@ -1022,15 +1308,25 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (40_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t163 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t163)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 454 } else { 455 };
             }
             97 => {
-                va_jobj =
-                    ((Handle::cast::<Ptr<'a, Addr<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
-                va_pos =
-                    ((Handle::cast::<Ptr<'a, Addr<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                va_jobj = ((Handle::cast::<Ptr<'a, Addr<'a>>>({
+                    let __t167 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t167)
+                }))
+                .get());
+                va_pos = ((Handle::cast::<Ptr<'a, Addr<'a>>>({
+                    let __t168 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t168)
+                }))
+                .get());
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_AppSRT_SetPos(
                     ctx,
                     146_i32,
@@ -1045,8 +1341,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (38_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t169 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t169)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -1107,8 +1406,11 @@ pub fn efAsync_Dispatch<'a>(
             111 => {
                 fns::lb_8000B1CC(
                     ctx,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t174 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t174)
+                    }))
+                    .get()),
                     null::<Vec<'a>>(ctx),
                     translate,
                 );
@@ -1116,8 +1418,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     0x234_i32,
                     translate,
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get())
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t175 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t175)
+                    }))
+                    .get())
                     .get(),
                 );
                 __state = if !Handle::is_null(result_10) {
@@ -1129,8 +1434,11 @@ pub fn efAsync_Dispatch<'a>(
             112 => {
                 fns::lb_8000B1CC(
                     ctx,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t180 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t180)
+                    }))
+                    .get()),
                     null::<Vec<'a>>(ctx),
                     translate,
                 );
@@ -1138,8 +1446,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     0x235_i32,
                     translate,
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get())
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t181 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t181)
+                    }))
+                    .get())
                     .get(),
                 );
                 __state = if !Handle::is_null(result_11) {
@@ -1151,8 +1462,11 @@ pub fn efAsync_Dispatch<'a>(
             113 => {
                 fns::lb_8000B1CC(
                     ctx,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t186 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t186)
+                    }))
+                    .get()),
                     null::<Vec<'a>>(ctx),
                     translate,
                 );
@@ -1160,8 +1474,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     0x236_i32,
                     translate,
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get())
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t187 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t187)
+                    }))
+                    .get())
                     .get(),
                 );
                 __state = if !Handle::is_null(result_12) {
@@ -1173,8 +1490,11 @@ pub fn efAsync_Dispatch<'a>(
             114 => {
                 fns::lb_8000B1CC(
                     ctx,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t192 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t192)
+                    }))
+                    .get()),
                     null::<Vec<'a>>(ctx),
                     translate,
                 );
@@ -1182,8 +1502,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     0x23d_i32,
                     translate,
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get())
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t193 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t193)
+                    }))
+                    .get())
                     .get(),
                 );
                 __state = if !Handle::is_null(result_13) {
@@ -1257,8 +1580,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (41_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t213 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t213)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 512 } else { 513 };
             }
@@ -1267,8 +1593,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (42_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t217 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t217)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 516 } else { 517 };
             }
@@ -1295,8 +1624,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (44_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t221 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t221)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 523 } else { 524 };
             }
@@ -1305,8 +1637,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (46_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t225 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t225)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 527 } else { 528 };
             }
@@ -1323,8 +1658,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (43_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t234 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t234)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 535 } else { 536 };
             }
@@ -1341,8 +1679,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (45_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t243 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t243)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 543 } else { 544 };
             }
@@ -1382,8 +1723,11 @@ pub fn efAsync_Dispatch<'a>(
                     0_i32,
                     0_i32,
                     130_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t247 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t247)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -1391,7 +1735,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     0x7918_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t248 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t248)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -1399,7 +1747,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     247_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t249 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t249)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -1407,7 +1759,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     252_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t250 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t250)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -1415,7 +1771,11 @@ pub fn efAsync_Dispatch<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     255_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t251 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t251)
+                    }))
+                    .get()),
                 ));
                 __state = 145;
             }
@@ -1433,7 +1793,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (9_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t1 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t1)
+                    }))
+                    .get()),
                 ));
                 __state = 149;
             }
@@ -1445,7 +1809,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (10_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t2 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t2)
+                    }))
+                    .get()),
                 ));
                 __state = 149;
             }
@@ -1459,8 +1827,11 @@ pub fn efAsync_Dispatch<'a>(
                 );
                 f32_1 = fp::fmadds(
                     0.03999999910593033,
-                    (((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get())
+                    (((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t4 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t4)
+                    }))
+                    .get())
                     .get()),
                     0.30000001192092896,
                 );
@@ -1492,13 +1863,13 @@ pub fn efAsync_Dispatch<'a>(
             }
             159 => {
                 scale.set_x({
-                    let __t2 = {
-                        let __t1 = f32_1;
-                        scale.set_z(__t1);
-                        __t1
+                    let __t6 = {
+                        let __t5 = f32_1;
+                        scale.set_z(__t5);
+                        __t5
                     };
-                    scale.set_y(__t2);
-                    __t2
+                    scale.set_y(__t6);
+                    __t6
                 });
                 inl_HSD_JObjSetScale(
                     ctx,
@@ -1572,16 +1943,18 @@ pub fn efAsync_Dispatch<'a>(
             175 => {
                 psAppSRT = (generator).appsrt();
                 Handle::copy_from((psAppSRT).translate(), translate);
-                __state =
-                    if ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get())
-                    .get()
-                        < 0.0
-                    {
-                        178
-                    } else {
-                        180
-                    };
+                __state = if ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t12 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t12)
+                }))
+                .get())
+                .get()
+                    < 0.0
+                {
+                    178
+                } else {
+                    180
+                };
             }
             176 => {
                 __state = 173;
@@ -1622,8 +1995,11 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 8;
             }
             187 => {
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t15 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t15)
+                }))
+                .get())
                 .get();
                 __state = 188;
             }
@@ -1635,8 +2011,11 @@ pub fn efAsync_Dispatch<'a>(
             }
             189 => {
                 f32_1 = fp::fneg(
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get())
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t16 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t16)
+                    }))
+                    .get())
                     .get(),
                 );
                 __state = 188;
@@ -1648,8 +2027,11 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 10;
             }
             192 => {
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t18 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t18)
+                }))
+                .get())
                 .get();
                 __state = 193;
             }
@@ -1661,8 +2043,11 @@ pub fn efAsync_Dispatch<'a>(
             }
             194 => {
                 f32_1 = fp::fneg(
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get())
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t19 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t19)
+                    }))
+                    .get())
                     .get(),
                 );
                 __state = 193;
@@ -1687,8 +2072,11 @@ pub fn efAsync_Dispatch<'a>(
                 inl_efAsync_SetEffectFacingDir(
                     ctx,
                     Handle::cast::<EF_Effect<'a>>(ret_obj),
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get())
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t23 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t23)
+                    }))
+                    .get())
                     .get(),
                 );
                 __state = 200;
@@ -1726,15 +2114,21 @@ pub fn efAsync_Dispatch<'a>(
                 inl_efAsync_SetEffectFacingDir(
                     ctx,
                     Handle::cast::<EF_Effect<'a>>(ret_obj),
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get())
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t26 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t26)
+                    }))
+                    .get())
                     .get(),
                 );
                 inl_efAsync_SetEffectRotationZFromPtr(
                     ctx,
                     Handle::cast::<EF_Effect<'a>>(ret_obj),
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t27 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t27)
+                    }))
+                    .get()),
                 );
                 __state = 208;
             }
@@ -1755,15 +2149,21 @@ pub fn efAsync_Dispatch<'a>(
                 inl_efAsync_SetEffectFacingDir(
                     ctx,
                     Handle::cast::<EF_Effect<'a>>(ret_obj),
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get())
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t29 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t29)
+                    }))
+                    .get())
                     .get(),
                 );
                 inl_efAsync_SetEffectRotationZFromPtr(
                     ctx,
                     Handle::cast::<EF_Effect<'a>>(ret_obj),
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t30 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t30)
+                    }))
+                    .get()),
                 );
                 __state = 212;
             }
@@ -1784,15 +2184,21 @@ pub fn efAsync_Dispatch<'a>(
                 inl_efAsync_SetEffectFacingDir(
                     ctx,
                     Handle::cast::<EF_Effect<'a>>(ret_obj),
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get())
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t32 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t32)
+                    }))
+                    .get())
                     .get(),
                 );
                 inl_efAsync_SetEffectRotationZFromPtr(
                     ctx,
                     Handle::cast::<EF_Effect<'a>>(ret_obj),
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t33 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t33)
+                    }))
+                    .get()),
                 );
                 __state = 216;
             }
@@ -1861,15 +2267,21 @@ pub fn efAsync_Dispatch<'a>(
                 inl_efAsync_SetEffectFacingDir(
                     ctx,
                     Handle::cast::<EF_Effect<'a>>(ret_obj),
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get())
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t38 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t38)
+                    }))
+                    .get())
                     .get(),
                 );
                 inl_efAsync_SetEffectRotationZFromPtr(
                     ctx,
                     Handle::cast::<EF_Effect<'a>>(ret_obj),
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t39 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t39)
+                    }))
+                    .get()),
                 );
                 __state = 232;
             }
@@ -1893,15 +2305,21 @@ pub fn efAsync_Dispatch<'a>(
                 inl_efAsync_SetEffectFacingDir(
                     ctx,
                     Handle::cast::<EF_Effect<'a>>(ret_obj),
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get())
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t43 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t43)
+                    }))
+                    .get())
                     .get(),
                 );
                 inl_efAsync_SetEffectRotationZFromPtr(
                     ctx,
                     Handle::cast::<EF_Effect<'a>>(ret_obj),
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t44 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t44)
+                    }))
+                    .get()),
                 );
                 __state = 237;
             }
@@ -1915,8 +2333,11 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 25;
             }
             240 => {
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t46 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t46)
+                }))
+                .get())
                 .get();
                 __state = 241;
             }
@@ -1928,8 +2349,11 @@ pub fn efAsync_Dispatch<'a>(
             }
             242 => {
                 f32_1 = fp::fneg(
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get())
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t47 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t47)
+                    }))
+                    .get())
                     .get(),
                 );
                 __state = 241;
@@ -1954,8 +2378,11 @@ pub fn efAsync_Dispatch<'a>(
                 inl_efAsync_SetEffectRotationZFromPtr(
                     ctx,
                     Handle::cast::<EF_Effect<'a>>(ret_obj),
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t51 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t51)
+                    }))
+                    .get()),
                 );
                 __state = 248;
             }
@@ -1979,8 +2406,11 @@ pub fn efAsync_Dispatch<'a>(
                 inl_efAsync_SetEffectRotationZFromPtr(
                     ctx,
                     Handle::cast::<EF_Effect<'a>>(ret_obj),
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t54 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t54)
+                    }))
+                    .get()),
                 );
                 __state = 253;
             }
@@ -1997,12 +2427,18 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 33;
             }
             257 => {
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t56 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t56)
+                }))
+                .get());
                 psAppSRT = (result).appsrt();
                 Handle::copy_from((psAppSRT).translate(), (va_vec3));
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t57 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t57)
+                }))
+                .get())
                 .get();
                 ret_obj = Handle::cast::<Addr<'a>>(result);
                 ((result).appsrt()).rot().set_z(f32_1);
@@ -2021,12 +2457,18 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 35;
             }
             262 => {
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t59 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t59)
+                }))
+                .get());
                 psAppSRT = (result_2).appsrt();
                 Handle::copy_from((psAppSRT).translate(), (va_vec3));
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t60 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t60)
+                }))
+                .get())
                 .get();
                 ret_obj = Handle::cast::<Addr<'a>>(result_2);
                 ((result_2).appsrt()).rot().set_z(f32_1);
@@ -2042,12 +2484,18 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 36;
             }
             266 => {
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t61 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t61)
+                }))
+                .get());
                 psAppSRT = (result_3).appsrt();
                 Handle::copy_from((psAppSRT).translate(), (va_vec3));
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t62 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t62)
+                }))
+                .get())
                 .get();
                 ret_obj = Handle::cast::<Addr<'a>>(result_3);
                 ((result_3).appsrt()).rot().set_z(f32_1);
@@ -2066,22 +2514,26 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 38;
             }
             271 => {
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t64 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t64)
+                }))
+                .get());
                 psAppSRT = (state.generator()).appsrt();
                 Handle::copy_from((psAppSRT).translate(), (va_vec3));
                 jobj_1 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, gobj)));
                 inl_HSD_JObjGetScale(ctx, jobj_1, scale);
                 ret_obj = Handle::cast::<Addr<'a>>(state.generator());
-                ((state.generator()).appsrt()).scale().set_x({
-                    let __t4 = {
-                        let __t3 = scale.y();
-                        ((state.generator()).appsrt()).scale().set_z(__t3);
-                        __t3
+                let __t67 = {
+                    let __t66 = {
+                        let __t65 = scale.y();
+                        ((state.generator()).appsrt()).scale().set_z(__t65);
+                        __t65
                     };
-                    ((state.generator()).appsrt()).scale().set_y(__t4);
-                    __t4
-                });
+                    ((state.generator()).appsrt()).scale().set_y(__t66);
+                    __t66
+                };
+                ((state.generator()).appsrt()).scale().set_x(__t67);
                 __state = 272;
             }
             272 => {
@@ -2119,17 +2571,20 @@ pub fn efAsync_Dispatch<'a>(
                     ((((Handle::cast::<EF_Effect<'a>>(ret_obj)).state_flags() as i32) | 128_i32)
                         as u8),
                 );
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t76 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t76)
+                }))
+                .get())
                 .get();
                 scale.set_x({
-                    let __t6 = {
-                        let __t5 = f32_1;
-                        scale.set_z(__t5);
-                        __t5
+                    let __t78 = {
+                        let __t77 = f32_1;
+                        scale.set_z(__t77);
+                        __t77
                     };
-                    scale.set_y(__t6);
-                    __t6
+                    scale.set_y(__t78);
+                    __t78
                 });
                 inl_efAsync_SetEffectScale(ctx, Handle::cast::<EF_Effect<'a>>(ret_obj), scale);
                 __state = 283;
@@ -2151,8 +2606,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (Handle::cast::<EF_Effect<'a>>(ret_obj)).gobj(),
                 )));
-                u32_1 = (((Handle::cast::<Val<'a, u32>>(fns::__va_arg(ctx, vlist, 1_u8))).get())
-                    as i32);
+                u32_1 = (((Handle::cast::<Val<'a, u32>>({
+                    let __t81 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t81)
+                }))
+                .get()) as i32);
                 __state = if Handle::is_null(jobj_1) { 290 } else { 292 };
             }
             288 => {
@@ -2208,8 +2666,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (Handle::cast::<EF_Effect<'a>>(ret_obj)).gobj(),
                 )));
-                u32_1 = (((Handle::cast::<Val<'a, u32>>(fns::__va_arg(ctx, vlist, 1_u8))).get())
-                    as i32);
+                u32_1 = (((Handle::cast::<Val<'a, u32>>({
+                    let __t83 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t83)
+                }))
+                .get()) as i32);
                 __state = if Handle::is_null(jobj_1) { 302 } else { 304 };
             }
             300 => {
@@ -2262,8 +2723,11 @@ pub fn efAsync_Dispatch<'a>(
             }
             311 => {
                 jobj_1 = inl_efAsync_GetEffectJObj(ctx, Handle::cast::<EF_Effect<'a>>(ret_obj));
-                u32_1 = (((Handle::cast::<Val<'a, u32>>(fns::__va_arg(ctx, vlist, 1_u8))).get())
-                    as i32);
+                u32_1 = (((Handle::cast::<Val<'a, u32>>({
+                    let __t85 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t85)
+                }))
+                .get()) as i32);
                 __state = if ((u32_1 as u32).wrapping_add(0xffa00000_u32)) == 0x6060_u32 {
                     314
                 } else {
@@ -2319,8 +2783,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (Handle::cast::<EF_Effect<'a>>(ret_obj)).gobj(),
                 )));
-                u32_1 = (((Handle::cast::<Val<'a, u32>>(fns::__va_arg(ctx, vlist, 1_u8))).get())
-                    as i32);
+                u32_1 = (((Handle::cast::<Val<'a, u32>>({
+                    let __t87 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t87)
+                }))
+                .get()) as i32);
                 __state = if Handle::is_null(jobj_1) { 322 } else { 324 };
             }
             320 => {
@@ -2372,8 +2839,11 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 52;
             }
             331 => {
-                jobj = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get());
+                jobj = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                    let __t88 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t88)
+                }))
+                .get());
                 fns::lb_8000B1CC(
                     ctx,
                     jobj,
@@ -2381,15 +2851,16 @@ pub fn efAsync_Dispatch<'a>(
                     ((result_4).appsrt()).translate(),
                 );
                 inl_HSD_JObjGetScale(ctx, jobj, scale);
-                ((result_4).appsrt()).scale().set_x({
-                    let __t8 = {
-                        let __t7 = scale.y();
-                        ((result_4).appsrt()).scale().set_z(__t7);
-                        __t7
+                let __t91 = {
+                    let __t90 = {
+                        let __t89 = scale.y();
+                        ((result_4).appsrt()).scale().set_z(__t89);
+                        __t89
                     };
-                    ((result_4).appsrt()).scale().set_y(__t8);
-                    __t8
-                });
+                    ((result_4).appsrt()).scale().set_y(__t90);
+                    __t90
+                };
+                ((result_4).appsrt()).scale().set_x(__t91);
                 __state = 332;
             }
             332 => {
@@ -2439,8 +2910,11 @@ pub fn efAsync_Dispatch<'a>(
                 inl_efAsync_SetEffectRotationZFromPtr(
                     ctx,
                     Handle::cast::<EF_Effect<'a>>(ret_obj),
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t99 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t99)
+                    }))
+                    .get()),
                 );
                 __state = 346;
             }
@@ -2457,8 +2931,11 @@ pub fn efAsync_Dispatch<'a>(
                 inl_efAsync_SetEffectRotationZFromPtr(
                     ctx,
                     Handle::cast::<EF_Effect<'a>>(ret_obj),
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t101 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t101)
+                    }))
+                    .get()),
                 );
                 __state = 350;
             }
@@ -2526,9 +3003,9 @@ pub fn efAsync_Dispatch<'a>(
             }
             366 => {
                 ret_obj = Handle::cast::<Addr<'a>>({
-                    let __t9 = node;
-                    effect = __t9;
-                    __t9
+                    let __t105 = node;
+                    effect = __t105;
+                    __t105
                 });
                 __state = 365;
             }
@@ -2553,21 +3030,27 @@ pub fn efAsync_Dispatch<'a>(
                     (Handle::cast::<EF_Effect<'a>>(ret_obj)).gobj(),
                 )));
                 setter_jobj = jobj_1;
-                f32_2 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_2 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t107 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t107)
+                }))
+                .get())
                 .get();
                 inl_HSD_JObjSetRotationZ(ctx, setter_jobj, f32_2);
-                f32_2 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_2 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t108 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t108)
+                }))
+                .get())
                 .get();
                 scale.set_x({
-                    let __t11 = {
-                        let __t10 = f32_2;
-                        scale.set_z(__t10);
-                        __t10
+                    let __t110 = {
+                        let __t109 = f32_2;
+                        scale.set_z(__t109);
+                        __t109
                     };
-                    scale.set_y(__t11);
-                    __t11
+                    scale.set_y(__t110);
+                    __t110
                 });
                 inl_HSD_JObjSetScale(ctx, setter_jobj, scale);
                 __state = if Handle::is_null(jobj_1) { 375 } else { 377 };
@@ -2583,13 +3066,19 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 376;
             }
             376 => {
-                fns::efLib_SetTevKonstColor(
-                    ctx,
-                    jobj_2,
-                    0_i32,
-                    ((Handle::cast::<Val<'a, u32>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
-                    ((Handle::cast::<Val<'a, u32>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
-                );
+                {
+                    let __t113 = ((Handle::cast::<Val<'a, u32>>({
+                        let __t112 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t112)
+                    }))
+                    .get());
+                    let __t114 = ((Handle::cast::<Val<'a, u32>>({
+                        let __t111 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t111)
+                    }))
+                    .get());
+                    fns::efLib_SetTevKonstColor(ctx, jobj_2, 0_i32, __t114, __t113)
+                };
                 __state = 373;
             }
             377 => {
@@ -2607,8 +3096,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (Handle::cast::<EF_Effect<'a>>(ret_obj)).gobj(),
                 )));
-                f32_2 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_2 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t116 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t116)
+                }))
+                .get())
                 .get();
                 inl_HSD_JObjSetRotationZ(ctx, jobj_2, f32_2);
                 __state = 381;
@@ -2629,16 +3121,18 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 72;
             }
             386 => {
-                __state =
-                    if ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get())
-                    .get()
-                        < 0.0
-                    {
-                        389
-                    } else {
-                        391
-                    };
+                __state = if ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t121 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t121)
+                }))
+                .get())
+                .get()
+                    < 0.0
+                {
+                    389
+                } else {
+                    391
+                };
             }
             387 => {
                 __state = 145;
@@ -2673,16 +3167,18 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 74;
             }
             395 => {
-                __state =
-                    if ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get())
-                    .get()
-                        < 0.0
-                    {
-                        398
-                    } else {
-                        400
-                    };
+                __state = if ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t125 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t125)
+                }))
+                .get())
+                .get()
+                    < 0.0
+                {
+                    398
+                } else {
+                    400
+                };
             }
             396 => {
                 __state = 145;
@@ -2714,22 +3210,29 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 75;
             }
             403 => {
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t126 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t126)
+                }))
+                .get());
                 psAppSRT = (result_5).appsrt();
                 Handle::copy_from((psAppSRT).translate(), (va_vec3));
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t127 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t127)
+                }))
+                .get())
                 .get();
-                ((result_5).appsrt()).scale().set_x({
-                    let __t13 = {
-                        let __t12 = f32_1;
-                        ((result_5).appsrt()).scale().set_z(__t12);
-                        __t12
+                let __t130 = {
+                    let __t129 = {
+                        let __t128 = f32_1;
+                        ((result_5).appsrt()).scale().set_z(__t128);
+                        __t128
                     };
-                    ((result_5).appsrt()).scale().set_y(__t13);
-                    __t13
-                });
+                    ((result_5).appsrt()).scale().set_y(__t129);
+                    __t129
+                };
+                ((result_5).appsrt()).scale().set_x(__t130);
                 __state = 404;
             }
             404 => {
@@ -2758,15 +3261,21 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 80;
             }
             412 => {
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t133 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t133)
+                }))
+                .get());
                 psAppSRT = (result_6).appsrt();
                 Handle::copy_from((psAppSRT).translate(), (va_vec3));
                 ((result_6).appsrt())
                     .rot()
                     .set_y(fp::frsp((fp::fdiv(3.141592653589793, (2_i32 as f64)))));
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t134 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t134)
+                }))
+                .get())
                 .get();
                 ret_obj = Handle::cast::<Addr<'a>>(result_6);
                 ((result_6).appsrt()).rot().set_z(f32_1);
@@ -2795,8 +3304,11 @@ pub fn efAsync_Dispatch<'a>(
                     ctx,
                     (34_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t135 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t135)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 421 } else { 422 };
             }
@@ -2814,8 +3326,11 @@ pub fn efAsync_Dispatch<'a>(
                 inl_HSD_JObjSetRotationY(ctx, jobj_2, f32_2);
                 (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_update(fnptr(ctx, 0x8005de94));
                 (Handle::cast::<EF_Effect<'a>>(ret_obj)).params().set_x(
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get())
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t136 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t136)
+                    }))
+                    .get())
                     .get(),
                 );
                 __state = 422;
@@ -2830,8 +3345,11 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 82;
             }
             425 => {
-                f32_2 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_2 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t138 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t138)
+                }))
+                .get())
                 .get();
                 inl_efAsync_SetEffectScaleXYZ(ctx, Handle::cast::<EF_Effect<'a>>(ret_obj), f32_2);
                 __state = 426;
@@ -2858,8 +3376,11 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 87;
             }
             433 => {
-                f32_2 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_2 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t144 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t144)
+                }))
+                .get())
                 .get();
                 inl_efAsync_SetEffectScaleXYZ(ctx, Handle::cast::<EF_Effect<'a>>(ret_obj), f32_2);
                 __state = 434;
@@ -2874,22 +3395,29 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 88;
             }
             437 => {
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t145 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t145)
+                }))
+                .get());
                 psAppSRT = (result_7).appsrt();
                 Handle::copy_from((psAppSRT).translate(), (va_vec3));
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t146 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t146)
+                }))
+                .get())
                 .get();
-                ((result_7).appsrt()).scale().set_x({
-                    let __t15 = {
-                        let __t14 = f32_1;
-                        ((result_7).appsrt()).scale().set_z(__t14);
-                        __t14
+                let __t149 = {
+                    let __t148 = {
+                        let __t147 = f32_1;
+                        ((result_7).appsrt()).scale().set_z(__t147);
+                        __t147
                     };
-                    ((result_7).appsrt()).scale().set_y(__t15);
-                    __t15
-                });
+                    ((result_7).appsrt()).scale().set_y(__t148);
+                    __t148
+                };
+                ((result_7).appsrt()).scale().set_x(__t149);
                 __state = 438;
             }
             438 => {
@@ -2911,22 +3439,29 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 92;
             }
             444 => {
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t154 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t154)
+                }))
+                .get());
                 psAppSRT = (result_8).appsrt();
                 Handle::copy_from((psAppSRT).translate(), (va_vec3));
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t155 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t155)
+                }))
+                .get())
                 .get();
-                ((result_8).appsrt()).scale().set_x({
-                    let __t17 = {
-                        let __t16 = f32_1;
-                        ((result_8).appsrt()).scale().set_z(__t16);
-                        __t16
+                let __t158 = {
+                    let __t157 = {
+                        let __t156 = f32_1;
+                        ((result_8).appsrt()).scale().set_z(__t156);
+                        __t156
                     };
-                    ((result_8).appsrt()).scale().set_y(__t17);
-                    __t17
-                });
+                    ((result_8).appsrt()).scale().set_y(__t157);
+                    __t157
+                };
+                ((result_8).appsrt()).scale().set_x(__t158);
                 __state = 445;
             }
             445 => {
@@ -2968,17 +3503,20 @@ pub fn efAsync_Dispatch<'a>(
                 unreachable!();
             }
             457 => {
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t164 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t164)
+                }))
+                .get())
                 .get();
                 scale.set_x({
-                    let __t19 = {
-                        let __t18 = f32_1;
-                        scale.set_z(__t18);
-                        __t18
+                    let __t166 = {
+                        let __t165 = f32_1;
+                        scale.set_z(__t165);
+                        __t165
                     };
-                    scale.set_y(__t19);
-                    __t19
+                    scale.set_y(__t166);
+                    __t166
                 });
                 jobj_2 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
                     ctx,
@@ -3023,19 +3561,23 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 101;
             }
             469 => {
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t170 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t170)
+                }))
+                .get());
                 psAppSRT = (result_9).appsrt();
                 Handle::copy_from((psAppSRT).translate(), (va_vec3));
-                ((result_9).appsrt()).scale().set_x({
-                    let __t21 = {
-                        let __t20 = f32_2;
-                        ((result_9).appsrt()).scale().set_z(__t20);
-                        __t20
+                let __t173 = {
+                    let __t172 = {
+                        let __t171 = f32_2;
+                        ((result_9).appsrt()).scale().set_z(__t171);
+                        __t171
                     };
-                    ((result_9).appsrt()).scale().set_y(__t21);
-                    __t21
-                });
+                    ((result_9).appsrt()).scale().set_y(__t172);
+                    __t172
+                };
+                ((result_9).appsrt()).scale().set_x(__t173);
                 __state = 470;
             }
             470 => {
@@ -3063,19 +3605,23 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 111;
             }
             478 => {
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t176 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t176)
+                }))
+                .get())
                 .get();
                 ret_obj = Handle::cast::<Addr<'a>>(result_10);
-                ((result_10).appsrt()).scale().set_x({
-                    let __t23 = {
-                        let __t22 = f32_1;
-                        ((result_10).appsrt()).scale().set_z(__t22);
-                        __t22
+                let __t179 = {
+                    let __t178 = {
+                        let __t177 = f32_1;
+                        ((result_10).appsrt()).scale().set_z(__t177);
+                        __t177
                     };
-                    ((result_10).appsrt()).scale().set_y(__t23);
-                    __t23
-                });
+                    ((result_10).appsrt()).scale().set_y(__t178);
+                    __t178
+                };
+                ((result_10).appsrt()).scale().set_x(__t179);
                 __state = 479;
             }
             479 => {
@@ -3088,19 +3634,23 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 112;
             }
             482 => {
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t182 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t182)
+                }))
+                .get())
                 .get();
                 ret_obj = Handle::cast::<Addr<'a>>(result_11);
-                ((result_11).appsrt()).scale().set_x({
-                    let __t25 = {
-                        let __t24 = f32_1;
-                        ((result_11).appsrt()).scale().set_z(__t24);
-                        __t24
+                let __t185 = {
+                    let __t184 = {
+                        let __t183 = f32_1;
+                        ((result_11).appsrt()).scale().set_z(__t183);
+                        __t183
                     };
-                    ((result_11).appsrt()).scale().set_y(__t25);
-                    __t25
-                });
+                    ((result_11).appsrt()).scale().set_y(__t184);
+                    __t184
+                };
+                ((result_11).appsrt()).scale().set_x(__t185);
                 __state = 483;
             }
             483 => {
@@ -3113,19 +3663,23 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 113;
             }
             486 => {
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t188 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t188)
+                }))
+                .get())
                 .get();
                 ret_obj = Handle::cast::<Addr<'a>>(result_12);
-                ((result_12).appsrt()).scale().set_x({
-                    let __t27 = {
-                        let __t26 = f32_1;
-                        ((result_12).appsrt()).scale().set_z(__t26);
-                        __t26
+                let __t191 = {
+                    let __t190 = {
+                        let __t189 = f32_1;
+                        ((result_12).appsrt()).scale().set_z(__t189);
+                        __t189
                     };
-                    ((result_12).appsrt()).scale().set_y(__t27);
-                    __t27
-                });
+                    ((result_12).appsrt()).scale().set_y(__t190);
+                    __t190
+                };
+                ((result_12).appsrt()).scale().set_x(__t191);
                 __state = 487;
             }
             487 => {
@@ -3138,19 +3692,23 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 114;
             }
             490 => {
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t194 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t194)
+                }))
+                .get())
                 .get();
                 ret_obj = Handle::cast::<Addr<'a>>(result_13);
-                ((result_13).appsrt()).scale().set_x({
-                    let __t29 = {
-                        let __t28 = f32_1;
-                        ((result_13).appsrt()).scale().set_z(__t28);
-                        __t28
+                let __t197 = {
+                    let __t196 = {
+                        let __t195 = f32_1;
+                        ((result_13).appsrt()).scale().set_z(__t195);
+                        __t195
                     };
-                    ((result_13).appsrt()).scale().set_y(__t29);
-                    __t29
-                });
+                    ((result_13).appsrt()).scale().set_y(__t196);
+                    __t196
+                };
+                ((result_13).appsrt()).scale().set_x(__t197);
                 __state = 491;
             }
             491 => {
@@ -3165,24 +3723,31 @@ pub fn efAsync_Dispatch<'a>(
             494 => {
                 fns::lb_8000B1CC(
                     ctx,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t198 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t198)
+                    }))
+                    .get()),
                     null::<Vec<'a>>(ctx),
                     ((result_14).appsrt()).translate(),
                 );
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t199 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t199)
+                }))
+                .get())
                 .get();
                 ret_obj = Handle::cast::<Addr<'a>>(result_14);
-                ((result_14).appsrt()).scale().set_x({
-                    let __t31 = {
-                        let __t30 = f32_1;
-                        ((result_14).appsrt()).scale().set_z(__t30);
-                        __t30
+                let __t202 = {
+                    let __t201 = {
+                        let __t200 = f32_1;
+                        ((result_14).appsrt()).scale().set_z(__t200);
+                        __t200
                     };
-                    ((result_14).appsrt()).scale().set_y(__t31);
-                    __t31
-                });
+                    ((result_14).appsrt()).scale().set_y(__t201);
+                    __t201
+                };
+                ((result_14).appsrt()).scale().set_x(__t202);
                 __state = 495;
             }
             495 => {
@@ -3203,24 +3768,31 @@ pub fn efAsync_Dispatch<'a>(
             500 => {
                 fns::lb_8000B1CC(
                     ctx,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t203 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t203)
+                    }))
+                    .get()),
                     null::<Vec<'a>>(ctx),
                     ((result_15).appsrt()).translate(),
                 );
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t204 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t204)
+                }))
+                .get())
                 .get();
                 ret_obj = Handle::cast::<Addr<'a>>(result_15);
-                ((result_15).appsrt()).scale().set_x({
-                    let __t33 = {
-                        let __t32 = f32_1;
-                        ((result_15).appsrt()).scale().set_z(__t32);
-                        __t32
+                let __t207 = {
+                    let __t206 = {
+                        let __t205 = f32_1;
+                        ((result_15).appsrt()).scale().set_z(__t205);
+                        __t205
                     };
-                    ((result_15).appsrt()).scale().set_y(__t33);
-                    __t33
-                });
+                    ((result_15).appsrt()).scale().set_y(__t206);
+                    __t206
+                };
+                ((result_15).appsrt()).scale().set_x(__t207);
                 __state = 501;
             }
             501 => {
@@ -3235,24 +3807,31 @@ pub fn efAsync_Dispatch<'a>(
             504 => {
                 fns::lb_8000B1CC(
                     ctx,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t208 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t208)
+                    }))
+                    .get()),
                     null::<Vec<'a>>(ctx),
                     ((result_16).appsrt()).translate(),
                 );
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t209 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t209)
+                }))
+                .get())
                 .get();
                 ret_obj = Handle::cast::<Addr<'a>>(result_16);
-                ((result_16).appsrt()).scale().set_x({
-                    let __t35 = {
-                        let __t34 = f32_1;
-                        ((result_16).appsrt()).scale().set_z(__t34);
-                        __t34
+                let __t212 = {
+                    let __t211 = {
+                        let __t210 = f32_1;
+                        ((result_16).appsrt()).scale().set_z(__t210);
+                        __t210
                     };
-                    ((result_16).appsrt()).scale().set_y(__t35);
-                    __t35
-                });
+                    ((result_16).appsrt()).scale().set_y(__t211);
+                    __t211
+                };
+                ((result_16).appsrt()).scale().set_x(__t212);
                 __state = 505;
             }
             505 => {
@@ -3277,17 +3856,20 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 124;
             }
             512 => {
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t214 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t214)
+                }))
+                .get())
                 .get();
                 scale.set_x({
-                    let __t37 = {
-                        let __t36 = f32_1;
-                        scale.set_z(__t36);
-                        __t36
+                    let __t216 = {
+                        let __t215 = f32_1;
+                        scale.set_z(__t215);
+                        __t215
                     };
-                    scale.set_y(__t37);
-                    __t37
+                    scale.set_y(__t216);
+                    __t216
                 });
                 jobj_2 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
                     ctx,
@@ -3306,17 +3888,20 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 125;
             }
             516 => {
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t218 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t218)
+                }))
+                .get())
                 .get();
                 scale.set_x({
-                    let __t39 = {
-                        let __t38 = f32_1;
-                        scale.set_z(__t38);
-                        __t38
+                    let __t220 = {
+                        let __t219 = f32_1;
+                        scale.set_z(__t219);
+                        __t219
                     };
-                    scale.set_y(__t39);
-                    __t39
+                    scale.set_y(__t220);
+                    __t220
                 });
                 jobj_2 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
                     ctx,
@@ -3344,17 +3929,20 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 129;
             }
             523 => {
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t222 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t222)
+                }))
+                .get())
                 .get();
                 scale.set_x({
-                    let __t41 = {
-                        let __t40 = f32_1;
-                        scale.set_z(__t40);
-                        __t40
+                    let __t224 = {
+                        let __t223 = f32_1;
+                        scale.set_z(__t223);
+                        __t223
                     };
-                    scale.set_y(__t41);
-                    __t41
+                    scale.set_y(__t224);
+                    __t224
                 });
                 jobj_2 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
                     ctx,
@@ -3373,17 +3961,20 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 130;
             }
             527 => {
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t226 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t226)
+                }))
+                .get())
                 .get();
                 scale.set_x({
-                    let __t43 = {
-                        let __t42 = f32_1;
-                        scale.set_z(__t42);
-                        __t42
+                    let __t228 = {
+                        let __t227 = f32_1;
+                        scale.set_z(__t227);
+                        __t227
                     };
-                    scale.set_y(__t43);
-                    __t43
+                    scale.set_y(__t228);
+                    __t228
                 });
                 jobj_2 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
                     ctx,
@@ -3404,23 +3995,30 @@ pub fn efAsync_Dispatch<'a>(
             531 => {
                 fns::lb_8000B1CC(
                     ctx,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t229 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t229)
+                    }))
+                    .get()),
                     null::<Vec<'a>>(ctx),
                     ((generator).appsrt()).translate(),
                 );
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t230 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t230)
+                }))
+                .get())
                 .get();
-                ((generator).appsrt()).scale().set_x({
-                    let __t45 = {
-                        let __t44 = f32_1;
-                        ((generator).appsrt()).scale().set_z(__t44);
-                        __t44
+                let __t233 = {
+                    let __t232 = {
+                        let __t231 = f32_1;
+                        ((generator).appsrt()).scale().set_z(__t231);
+                        __t231
                     };
-                    ((generator).appsrt()).scale().set_y(__t45);
-                    __t45
-                });
+                    ((generator).appsrt()).scale().set_y(__t232);
+                    __t232
+                };
+                ((generator).appsrt()).scale().set_x(__t233);
                 jobj_3 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, gobj)));
                 f32_2 = inl_HSD_JObjGetRotationY(ctx, jobj_3);
                 ret_obj = Handle::cast::<Addr<'a>>(generator);
@@ -3437,17 +4035,20 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 132;
             }
             535 => {
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t235 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t235)
+                }))
+                .get())
                 .get();
                 scale.set_x({
-                    let __t47 = {
-                        let __t46 = f32_1;
-                        scale.set_z(__t46);
-                        __t46
+                    let __t237 = {
+                        let __t236 = f32_1;
+                        scale.set_z(__t236);
+                        __t236
                     };
-                    scale.set_y(__t47);
-                    __t47
+                    scale.set_y(__t237);
+                    __t237
                 });
                 jobj_2 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
                     ctx,
@@ -3468,23 +4069,30 @@ pub fn efAsync_Dispatch<'a>(
             539 => {
                 fns::lb_8000B1CC(
                     ctx,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t238 = 1_u8;
+                        fns::__va_arg(ctx, vlist, __t238)
+                    }))
+                    .get()),
                     null::<Vec<'a>>(ctx),
                     ((generator).appsrt()).translate(),
                 );
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t239 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t239)
+                }))
+                .get())
                 .get();
-                ((generator).appsrt()).scale().set_x({
-                    let __t49 = {
-                        let __t48 = f32_1;
-                        ((generator).appsrt()).scale().set_z(__t48);
-                        __t48
+                let __t242 = {
+                    let __t241 = {
+                        let __t240 = f32_1;
+                        ((generator).appsrt()).scale().set_z(__t240);
+                        __t240
                     };
-                    ((generator).appsrt()).scale().set_y(__t49);
-                    __t49
-                });
+                    ((generator).appsrt()).scale().set_y(__t241);
+                    __t241
+                };
+                ((generator).appsrt()).scale().set_x(__t242);
                 jobj_3 = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
                 f32_2 = inl_HSD_JObjGetRotationY(ctx, jobj_3);
                 ret_obj = Handle::cast::<Addr<'a>>(generator);
@@ -3501,17 +4109,20 @@ pub fn efAsync_Dispatch<'a>(
                 __state = 134;
             }
             543 => {
-                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
-                    .get())
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t244 = 1_u8;
+                    fns::__va_arg(ctx, vlist, __t244)
+                }))
+                .get())
                 .get();
                 scale.set_x({
-                    let __t51 = {
-                        let __t50 = f32_1;
-                        scale.set_z(__t50);
-                        __t50
+                    let __t246 = {
+                        let __t245 = f32_1;
+                        scale.set_z(__t245);
+                        __t245
                     };
-                    scale.set_y(__t51);
-                    __t51
+                    scale.set_y(__t246);
+                    __t246
                 });
                 jobj_2 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
                     ctx,
@@ -3964,45 +4575,67 @@ pub fn efAsync_Spawn<'a>(
         if __case <= 1 {
             Handle::copy_from(
                 (queued).params(),
-                ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8))).get()),
+                ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t1 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t1)
+                }))
+                .get()),
             );
             break 's3;
         }
         if __case <= 2 {
             (queued).params().set_x(
-                ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
-                    .get())
+                ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t2 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t2)
+                }))
+                .get())
                 .get(),
             );
             break 's3;
         }
         if __case <= 3 {
             (queued).params().set_x(
-                ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
-                    .get())
+                ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t3 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t3)
+                }))
+                .get())
                 .get(),
             );
             break 's3;
         }
         if __case <= 4 {
-            va_vec3 =
-                ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8))).get());
-            extra2 =
-                ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
-                    .get());
+            va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                let __t4 = 1_u8;
+                fns::__va_arg(ctx, vlist.get(0), __t4)
+            }))
+            .get());
+            extra2 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                let __t5 = 1_u8;
+                fns::__va_arg(ctx, vlist.get(0), __t5)
+            }))
+            .get());
             Handle::copy_from((queued).params(), (va_vec3));
             (queued).set_extra1((extra2).get());
             break 's3;
         }
         if __case <= 5 {
-            va_vec3 =
-                ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8))).get());
-            extra1 =
-                ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
-                    .get());
-            extra2 =
-                ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
-                    .get());
+            va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                let __t6 = 1_u8;
+                fns::__va_arg(ctx, vlist.get(0), __t6)
+            }))
+            .get());
+            extra1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                let __t7 = 1_u8;
+                fns::__va_arg(ctx, vlist.get(0), __t7)
+            }))
+            .get());
+            extra2 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                let __t8 = 1_u8;
+                fns::__va_arg(ctx, vlist.get(0), __t8)
+            }))
+            .get());
             Handle::copy_from((queued).params(), (va_vec3));
             (queued).set_extra1((extra1).get());
             (queued).set_extra2((extra2).get());
@@ -4011,14 +4644,22 @@ pub fn efAsync_Spawn<'a>(
         if __case <= 6 {
             Handle::copy_from(
                 (queued).params(),
-                ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8))).get()),
+                ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t9 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t9)
+                }))
+                .get()),
             );
             break 's3;
         }
         if __case <= 7 {
             Handle::copy_from(
                 (queued).params(),
-                ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8))).get()),
+                ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t10 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t10)
+                }))
+                .get()),
             );
             break 's3;
         }
@@ -4148,11 +4789,11 @@ fn inl_HSD_JObjSetRotationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
 
 fn inl_efAsync_SetEffectRandomRotationZ<'a>(ctx: &'a Ctx, effect: EF_Effect<'a>) {
     let mut effect = effect;
-    inl_HSD_JObjSetRotationZ(
-        ctx,
-        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, (effect).gobj()))),
-        fp::frsp(fp::fmul(6.283185307179586, fns::HSD_Randf(ctx))),
-    );
+    {
+        let __t1 = fp::frsp(fp::fmul(6.283185307179586, fns::HSD_Randf(ctx)));
+        let __t2 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, (effect).gobj())));
+        inl_HSD_JObjSetRotationZ(ctx, __t2, __t1)
+    };
 }
 
 fn inl_HSD_JObjSetRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {

@@ -199,14 +199,17 @@ pub fn it_802E5AC4<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg_check: i32) ->
                 Handle::copy_from(sp34, fns::it_803B8718(ctx));
                 check1 = 0_i32;
                 Handle::copy_from(sp28, fns::it_803B8724(ctx));
-                var_f31 = inl_sqrtf_accurate_store(
-                    ctx,
-                    fp::fadds(
-                        (fp::fmuls(((item).x40_vel().x()), ((item).x40_vel().x()))),
-                        (fp::fmuls(((item).x40_vel().y()), ((item).x40_vel().y()))),
-                    ),
-                    sqrt_0,
-                );
+                var_f31 = {
+                    let __t1 = sqrt_0;
+                    inl_sqrtf_accurate_store(
+                        ctx,
+                        fp::fadds(
+                            (fp::fmuls(((item).x40_vel().x()), ((item).x40_vel().x()))),
+                            (fp::fmuls(((item).x40_vel().y()), ((item).x40_vel().y()))),
+                        ),
+                        __t1,
+                    )
+                };
                 __state = if (fp::fmadds(
                     (item).x40_vel().x(),
                     (coll_data).floor().normal().x(),
@@ -250,17 +253,20 @@ pub fn it_802E5AC4<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg_check: i32) ->
             }
             35 => {
                 let _ = fns::lbVector_NormalizeXY(ctx, sp28);
-                __state = if inl_sqrtf_store(
-                    ctx,
-                    fp::fadds(
+                __state = if {
+                    let __t2 = sqrt_1;
+                    inl_sqrtf_store(
+                        ctx,
                         fp::fadds(
-                            (fp::fmuls((sp28.x()), (sp28.x()))),
-                            (fp::fmuls((sp28.y()), (sp28.y()))),
+                            fp::fadds(
+                                (fp::fmuls((sp28.x()), (sp28.x()))),
+                                (fp::fmuls((sp28.y()), (sp28.y()))),
+                            ),
+                            (fp::fmuls((sp28.z()), (sp28.z()))),
                         ),
-                        (fp::fmuls((sp28.z()), (sp28.z()))),
-                    ),
-                    sqrt_1,
-                ) < 0.009999999776482582
+                        __t2,
+                    )
+                } < 0.009999999776482582
                 {
                     38
                 } else {

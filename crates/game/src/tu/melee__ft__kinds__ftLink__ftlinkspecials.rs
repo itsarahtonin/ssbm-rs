@@ -176,14 +176,14 @@ pub fn calcAnglePos<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>, dist: f6
             }
         }
     }
-    (pos).set_x(fp::fmuls(
-        (fp).facing_dir(),
-        (fp::fmuls(dist, fns::cosf(ctx, angle))),
-    ));
-    (pos).set_y(fp::fmuls(
-        (fp).facing_dir(),
-        (fp::fmuls(dist, fns::sinf(ctx, angle))),
-    ));
+    (pos).set_x({
+        let __t1 = (fp::fmuls(dist, fns::cosf(ctx, angle)));
+        fp::fmuls((fp).facing_dir(), __t1)
+    });
+    (pos).set_y({
+        let __t2 = (fp::fmuls(dist, fns::sinf(ctx, angle)));
+        fp::fmuls((fp).facing_dir(), __t2)
+    });
     (pos).set_z(fp::frsp(0_i32 as f64));
     if (fp).facing_dir() == fp::frsp(1_i32.wrapping_neg() as f64) {
         if angle < fp::frsp(0_i32 as f64) {
@@ -220,14 +220,10 @@ pub fn onAccessory4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             pos,
         );
         {
-            let mut boomerang_gobj: HSD_GObj<'a> = fns::it_802A013C(
-                ctx,
-                (fp).facing_dir(),
-                gobj,
-                pos,
-                fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_LThumbNb as i32)),
-                (da).x2C(),
-            );
+            let mut boomerang_gobj: HSD_GObj<'a> = {
+                let __t1 = fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_LThumbNb as i32));
+                fns::it_802A013C(ctx, (fp).facing_dir(), gobj, pos, __t1, (da).x2C())
+            };
             (fp).set_x1984_heldItemSpec(boomerang_gobj);
             (fp).u().lk().set_boomerang_gobj(boomerang_gobj);
             if !Handle::is_null(boomerang_gobj) {

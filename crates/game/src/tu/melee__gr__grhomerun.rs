@@ -295,7 +295,8 @@ pub fn grHomeRun_8021CB20<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             ))
         {
             'c2: {
-                (Handle::add((gp).u().homerun().parts(), i)).set(fns::grHomeRun_8021E500(ctx, i));
+                let __t4 = fns::grHomeRun_8021E500(ctx, i);
+                (Handle::add((gp).u().homerun().parts(), i)).set(__t4);
             }
             i = i.wrapping_add(1);
         }
@@ -313,8 +314,8 @@ pub fn grHomeRun_8021CB20<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         'l5: while i < (enums::Gr_Homerun_Parts_Back as i32) {
             'c6: {
                 let mut child: HSD_JObj<'a> = null(ctx);
-                (Handle::add((gp).u().homerun().back(), i))
-                    .set(fns::grHomeRun_8021C82C(ctx, 4_i32));
+                let __t5 = fns::grHomeRun_8021C82C(ctx, 4_i32);
+                (Handle::add((gp).u().homerun().back(), i)).set(__t5);
                 (if !Handle::is_null(((Handle::add((gp).u().homerun().back(), i)).get())) {
                     ({ () })
                 } else {
@@ -620,10 +621,10 @@ pub fn grHomeRun_8021D680<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::Camera_GetTransformInterest(ctx, cam_interest);
     x0 = fp::fctiwz(
         (fp::fsubs(
-            (fp::fdivs(
-                (fp::fsubs(cam_interest.x(), 2400.0)),
-                (fp::fmuls(160.0, fns::Ground_801C0498(ctx))),
-            )),
+            ({
+                let __t1 = (fp::fmuls(160.0, fns::Ground_801C0498(ctx)));
+                fp::fdivs((fp::fsubs(cam_interest.x(), 2400.0)), __t1)
+            }),
             1.0,
         )),
     );
@@ -633,10 +634,10 @@ pub fn grHomeRun_8021D680<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     x1 = fp::fctiwz(
         (fp::fadds(
             1.0,
-            (fp::fdivs(
-                (fp::fadds(2400.0, cam_interest.x())),
-                (fp::fmuls(160.0, fns::Ground_801C0498(ctx))),
-            )),
+            ({
+                let __t2 = (fp::fmuls(160.0, fns::Ground_801C0498(ctx)));
+                fp::fdivs((fp::fadds(2400.0, cam_interest.x())), __t2)
+            }),
         )),
     );
     gobj2 = (Handle::add((gp).u().homerun().parts(), 0_i32)).get();
@@ -656,9 +657,9 @@ pub fn grHomeRun_8021D680<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
         (Handle::add((gp).u().homerun().parts(), 63_i32)).set(null::<HSD_GObj<'a>>(ctx));
     } else if (({
-        let __t1 = Handle::cast::<Ground<'a>>((gobj2).user_data());
-        gp2 = __t1;
-        __t1
+        let __t3 = Handle::cast::<Ground<'a>>((gobj2).user_data());
+        gp2 = __t3;
+        __t3
     })
     .u()
     .homerun2()
@@ -686,9 +687,9 @@ pub fn grHomeRun_8021D680<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             'c6: {
                 if !Handle::is_null(
                     ({
-                        let __t2 = (Handle::add((gp).u().homerun().parts(), i)).get();
-                        gobj2 = __t2;
-                        __t2
+                        let __t4 = (Handle::add((gp).u().homerun().parts(), i)).get();
+                        gobj2 = __t4;
+                        __t4
                     }),
                 ) {
                     break 'l5;
@@ -712,9 +713,9 @@ pub fn grHomeRun_8021D680<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::add((gp).u().homerun().parts(), i)).set(null::<HSD_GObj<'a>>(ctx));
         fns::Ground_801C4A08(ctx, gobj2);
     } else if ((gp2).u().homerun2().xC4() as i32) < x1 {
-        (Handle::add((gp).u().homerun().parts(), i.wrapping_add(1_i32))).set(
-            fns::grHomeRun_8021E500(ctx, ((gp2).u().homerun2().xC4() as i32).wrapping_add(1_i32)),
-        );
+        let __t5 =
+            fns::grHomeRun_8021E500(ctx, ((gp2).u().homerun2().xC4() as i32).wrapping_add(1_i32));
+        (Handle::add((gp).u().homerun().parts(), i.wrapping_add(1_i32))).set(__t5);
     }
     x = fp::fmuls(0.8500000238418579, cam_interest.x());
     'l7: loop {
@@ -1418,19 +1419,25 @@ pub fn grHomeRun_8021E500<'a>(ctx: &'a Ctx, arg0: i32) -> HSD_GObj<'a> {
     );
     child = inl_HSD_JObjGetChild(ctx, jobj);
     inl_HSD_JObjSetTranslateX(ctx, child, 0.0);
-    offset = fp::fmuls(
-        statics::melee__gr__grhomerun::grHr_804D6AE4(ctx).get(),
-        (fp::fmuls(
+    offset = {
+        let __t4 = (fp::fmuls(
             fp::frsp(arg0 as f64),
             (fp::fmuls(160.0, fns::Ground_801C0498(ctx))),
-        )),
-    );
+        ));
+        fp::fmuls(
+            statics::melee__gr__grhomerun::grHr_804D6AE4(ctx).get(),
+            __t4,
+        )
+    };
     (gp).u().homerun2().set_xD0(fp::fmadds(
         160.0,
-        (fp::fmuls(
-            statics::melee__gr__grhomerun::grHr_804D6AE4(ctx).get(),
-            fns::Ground_801C0498(ctx),
-        )),
+        ({
+            let __t6 = fns::Ground_801C0498(ctx);
+            fp::fmuls(
+                statics::melee__gr__grhomerun::grHr_804D6AE4(ctx).get(),
+                __t6,
+            )
+        }),
         offset,
     ));
     inl_HSD_JObjSetTranslateX(ctx, jobj, (gp).u().homerun2().xD0());
@@ -1614,33 +1621,45 @@ pub fn grHomeRun_8021EC58<'a>(ctx: &'a Ctx, arg: i32) -> HSD_Text<'a> {
     text = fns::HSD_SisLib_803A6754(ctx, 1_i32, 0_i32);
     (text).set_pos_z(0.0);
     temp = fp::fmuls(
-        fp::fmuls(
-            statics::melee__gr__grhomerun::grHr_804D6AE4(ctx).get(),
-            fns::Ground_801C0498(ctx),
-        ),
+        {
+            let __t1 = fns::Ground_801C0498(ctx);
+            fp::fmuls(
+                statics::melee__gr__grhomerun::grHr_804D6AE4(ctx).get(),
+                __t1,
+            )
+        },
         8.0,
     );
     (text).set_box_size_x(fp::fmuls(
-        fp::fmuls(
-            statics::melee__gr__grhomerun::grHr_804D6AE4(ctx).get(),
-            fns::Ground_801C0498(ctx),
-        ),
+        {
+            let __t2 = fns::Ground_801C0498(ctx);
+            fp::fmuls(
+                statics::melee__gr__grhomerun::grHr_804D6AE4(ctx).get(),
+                __t2,
+            )
+        },
         13.0,
     ));
     (text).set_box_size_y(temp);
     (text).set_default_kerning((0_i32 as u8));
     temp = fp::fmuls(
-        fp::fmuls(
-            statics::melee__gr__grhomerun::grHr_804D6AE4(ctx).get(),
-            fns::Ground_801C0498(ctx),
-        ),
+        {
+            let __t3 = fns::Ground_801C0498(ctx);
+            fp::fmuls(
+                statics::melee__gr__grhomerun::grHr_804D6AE4(ctx).get(),
+                __t3,
+            )
+        },
         0.20000000298023224,
     );
     (text).x34().set_x(fp::fmuls(
-        fp::fmuls(
-            statics::melee__gr__grhomerun::grHr_804D6AE4(ctx).get(),
-            fns::Ground_801C0498(ctx),
-        ),
+        {
+            let __t4 = fns::Ground_801C0498(ctx);
+            fp::fmuls(
+                statics::melee__gr__grhomerun::grHr_804D6AE4(ctx).get(),
+                __t4,
+            )
+        },
         0.20000000298023224,
     ));
     (text).x34().set_y(temp);

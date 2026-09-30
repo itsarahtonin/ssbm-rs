@@ -369,15 +369,18 @@ pub fn gm_Scene_MemCard_OnFrame<'a>(ctx: &'a Ctx) {
                     ((statics::melee__gm__gmscmemcard::gm_804D6872(ctx).get() as i32)
                         .wrapping_sub(1_i32) as u16),
                 );
-                statics::melee__gm__gmscmemcard::gm_801AEE6C(
-                    ctx,
-                    0_i32,
-                    (statics::melee__gm__gmscmemcard::gm_804D6872(ctx).get() as i32),
-                    inl_get_lang_val_unfused(
+                {
+                    let __t1 = inl_get_lang_val_unfused(
                         ctx,
                         (statics::melee__gm__gmscmemcard::gm_804D6872(ctx).get() as i32),
-                    ),
-                );
+                    );
+                    statics::melee__gm__gmscmemcard::gm_801AEE6C(
+                        ctx,
+                        0_i32,
+                        (statics::melee__gm__gmscmemcard::gm_804D6872(ctx).get() as i32),
+                        __t1,
+                    )
+                };
             }
         } else if (((fns::HSD_PadCopyStatus(ctx).get(0)).trigger()
             & ((shl_i32(1_i32, (5_i32 as u32))) as u32))
@@ -388,15 +391,18 @@ pub fn gm_Scene_MemCard_OnFrame<'a>(ctx: &'a Ctx) {
                     ((statics::melee__gm__gmscmemcard::gm_804D6872(ctx).get() as i32)
                         .wrapping_add(1_i32) as u16),
                 );
-                statics::melee__gm__gmscmemcard::gm_801AEE6C(
-                    ctx,
-                    0_i32,
-                    (statics::melee__gm__gmscmemcard::gm_804D6872(ctx).get() as i32),
-                    inl_get_lang_val_unfused(
+                {
+                    let __t2 = inl_get_lang_val_unfused(
                         ctx,
                         (statics::melee__gm__gmscmemcard::gm_804D6872(ctx).get() as i32),
-                    ),
-                );
+                    );
+                    statics::melee__gm__gmscmemcard::gm_801AEE6C(
+                        ctx,
+                        0_i32,
+                        (statics::melee__gm__gmscmemcard::gm_804D6872(ctx).get() as i32),
+                        __t2,
+                    )
+                };
             }
         }
         if ((((fns::HSD_PadCopyStatus(ctx).get(0)).button()

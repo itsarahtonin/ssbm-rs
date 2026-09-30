@@ -53,10 +53,10 @@ pub fn HSD_CObjEraseScreen<'a>(
     z_val = fp::frsp(
         (fp::fmul(
             0.5,
-            (fp::fadds(
-                fns::HSD_CObjGetNear(ctx, cobj),
-                fns::HSD_CObjGetFar(ctx, cobj),
-            )),
+            ({
+                let __t1 = fns::HSD_CObjGetFar(ctx, cobj);
+                fp::fadds(fns::HSD_CObjGetNear(ctx, cobj), __t1)
+            }),
         )),
     );
     's1: {
@@ -442,9 +442,8 @@ pub fn setupTopHalfCamera<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> i32 {
             };
             if __case <= 0 {
                 projection_type = (enums::GX_PERSPECTIVE as i32);
-                t = fp::fmuls(
-                    (cobj).near(),
-                    fns::tanf(
+                t = {
+                    let __t2 = fns::tanf(
                         ctx,
                         fp::frsp(
                             (fp::fmul(
@@ -452,8 +451,9 @@ pub fn setupTopHalfCamera<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> i32 {
                                 0.01745329238474369,
                             )),
                         ),
-                    ),
-                );
+                    );
+                    fp::fmuls((cobj).near(), __t2)
+                };
                 w = fp::fmuls(t, (cobj).projection_param().perspective().aspect());
                 b = fp::fmuls(t, fp::fnmsubs(2.0, h_scale, 1.0));
                 fns::MTXFrustum(
@@ -587,9 +587,8 @@ pub fn setupBottomHalfCamera<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> i32 {
             };
             if __case <= 0 {
                 projection_type = (enums::GX_PERSPECTIVE as i32);
-                b = fp::fmuls(
-                    (cobj).near(),
-                    fns::tanf(
+                b = {
+                    let __t1 = fns::tanf(
                         ctx,
                         fp::frsp(
                             (fp::fmul(
@@ -597,8 +596,9 @@ pub fn setupBottomHalfCamera<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> i32 {
                                 0.01745329238474369,
                             )),
                         ),
-                    ),
-                );
+                    );
+                    fp::fmuls((cobj).near(), __t1)
+                };
                 w = fp::fmuls(b, (cobj).projection_param().perspective().aspect());
                 t = fp::fmuls(b, (fp::fmadds(2.0, hscale, fp::fneg(1.0))));
                 fns::MTXFrustum(
@@ -936,10 +936,10 @@ pub fn roll2upvec<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, up: Vec<'a>, roll: f64) 
             ctx,
             fp::fadds(fp::fmuls(eye.y(), eye.y()), fp::fmuls(eye.z(), eye.z())),
         ));
-        v0.set_y(fp::fmuls(
-            eye.y(),
-            (fp::fdivs(fp::fneg(inl_vec_get_x(ctx, eye)), v0.x())),
-        ));
+        v0.set_y({
+            let __t1 = (fp::fdivs(fp::fneg(inl_vec_get_x(ctx, eye)), v0.x()));
+            fp::fmuls(eye.y(), __t1)
+        });
         v0.set_z(fp::fmuls(eye.z(), (fp::fdivs(fp::fneg(eye.x()), v0.x()))));
     } else {
         v0.set_y(inl_sqrtf(
@@ -990,8 +990,10 @@ pub fn HSD_CObjSetUpVector<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, up: Vec<'a>) {
         } else {
             up = v;
         }
-        if (((cobj).u().up().x() != inl_cobj_get_up_x_unfused(ctx, up))
-            || ((cobj).u().up().y() != (up).y()))
+        if (({
+            let __t1 = inl_cobj_get_up_x_unfused(ctx, up);
+            (cobj).u().up().x() != __t1
+        }) || ((cobj).u().up().y() != (up).y()))
             || ((cobj).u().up().z() != (up).z())
         {
             fns::HSD_CObjSetMtxDirty(ctx, cobj);
@@ -1192,9 +1194,8 @@ pub fn HSD_CObjGetTop<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> f64 {
             _ => 3,
         };
         if __case <= 0 {
-            result = fp::fmuls(
-                (cobj).near(),
-                fns::tanf(
+            result = {
+                let __t1 = fns::tanf(
                     ctx,
                     fp::fmuls(
                         0.5,
@@ -1203,8 +1204,9 @@ pub fn HSD_CObjGetTop<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> f64 {
                             0.01745329238474369,
                         )),
                     ),
-                ),
-            );
+                );
+                fp::fmuls((cobj).near(), __t1)
+            };
             break 's1;
         }
         if __case <= 1 {
@@ -1264,9 +1266,8 @@ pub fn HSD_CObjGetBottom<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> f64 {
             _ => 3,
         };
         if __case <= 0 {
-            return fp::fmuls(
-                fp::fneg((cobj).near()),
-                fns::tanf(
+            return {
+                let __t1 = fns::tanf(
                     ctx,
                     fp::fmuls(
                         0.5,
@@ -1275,8 +1276,9 @@ pub fn HSD_CObjGetBottom<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> f64 {
                             0.01745329238474369,
                         )),
                     ),
-                ),
-            );
+                );
+                fp::fmuls(fp::fneg((cobj).near()), __t1)
+            };
         }
         if __case <= 1 {
             return (cobj).projection_param().frustum().bottom();
@@ -1333,11 +1335,9 @@ pub fn HSD_CObjGetLeft<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> f64 {
             _ => 3,
         };
         if __case <= 0 {
-            return fp::fmuls(
-                (cobj).projection_param().perspective().aspect(),
-                (fp::fmuls(
-                    fp::fneg((cobj).near()),
-                    fns::tanf(
+            return {
+                let __t2 = ({
+                    let __t1 = fns::tanf(
                         ctx,
                         fp::fmuls(
                             0.5,
@@ -1346,9 +1346,11 @@ pub fn HSD_CObjGetLeft<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> f64 {
                                 0.01745329238474369,
                             )),
                         ),
-                    ),
-                )),
-            );
+                    );
+                    fp::fmuls(fp::fneg((cobj).near()), __t1)
+                });
+                fp::fmuls((cobj).projection_param().perspective().aspect(), __t2)
+            };
         }
         if __case <= 1 {
             return (cobj).projection_param().frustum().left();
@@ -1405,11 +1407,9 @@ pub fn HSD_CObjGetRight<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> f64 {
             _ => 3,
         };
         if __case <= 0 {
-            return fp::fmuls(
-                (cobj).projection_param().perspective().aspect(),
-                (fp::fmuls(
-                    (cobj).near(),
-                    fns::tanf(
+            return {
+                let __t2 = ({
+                    let __t1 = fns::tanf(
                         ctx,
                         fp::fmuls(
                             0.5,
@@ -1418,9 +1418,11 @@ pub fn HSD_CObjGetRight<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> f64 {
                                 0.01745329238474369,
                             )),
                         ),
-                    ),
-                )),
-            );
+                    );
+                    fp::fmuls((cobj).near(), __t1)
+                });
+                fp::fmuls((cobj).projection_param().perspective().aspect(), __t2)
+            };
         }
         if __case <= 1 {
             return (cobj).projection_param().frustum().right();
@@ -2313,11 +2315,10 @@ fn inl_setupOffscreenCamera_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> i32
         (((cobj).scissor().right() as i32).wrapping_sub(((cobj).scissor().left() as i32)) as u32),
         (((cobj).scissor().bottom() as i32).wrapping_sub(((cobj).scissor().top() as i32)) as u32),
     );
-    fns::GXSetProjection(
-        ctx,
-        mtx.get(0),
-        fns::makeProjectionMtx(ctx, cobj, mtx.get(0)),
-    );
+    {
+        let __t1 = fns::makeProjectionMtx(ctx, cobj, mtx.get(0));
+        fns::GXSetProjection(ctx, mtx.get(0), __t1)
+    };
     return 1_i32;
 }
 
@@ -2598,10 +2599,10 @@ fn inl_roll2upvec<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, up: Vec<'a>, roll: f64) 
             ctx,
             fp::fadds(fp::fmuls(eye.y(), eye.y()), fp::fmuls(eye.z(), eye.z())),
         ));
-        v0.set_y(fp::fmuls(
-            eye.y(),
-            (fp::fdivs(fp::fneg(inl_vec_get_x(ctx, eye)), v0.x())),
-        ));
+        v0.set_y({
+            let __t1 = (fp::fdivs(fp::fneg(inl_vec_get_x(ctx, eye)), v0.x()));
+            fp::fmuls(eye.y(), __t1)
+        });
         v0.set_z(fp::fmuls(eye.z(), (fp::fdivs(fp::fneg(eye.x()), v0.x()))));
     } else {
         v0.set_y(inl_sqrtf(

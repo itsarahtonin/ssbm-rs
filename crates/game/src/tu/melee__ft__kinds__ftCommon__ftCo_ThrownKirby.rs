@@ -117,12 +117,10 @@ pub fn ftCo_800BDB58<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, thrower_gobj: HSD_GOb
         fnptr(ctx, 0x800f5a88),
         0_i32,
     );
-    fns::ftColl_8007ABD0(
-        ctx,
-        (fp).x914().get(0),
-        fns::__cvt_fp2unsigned(ctx, inl_inlineB1_unfused(ctx, gobj)),
-        gobj,
-    );
+    {
+        let __t1 = fns::__cvt_fp2unsigned(ctx, inl_inlineB1_unfused(ctx, gobj));
+        fns::ftColl_8007ABD0(ctx, (fp).x914().get(0), __t1, gobj)
+    };
     fns::ftKb_SpecialN_800F5820(
         ctx,
         thrower_gobj,
@@ -354,10 +352,8 @@ pub fn ftCo_ThrownKirby_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    (fp).set_grab_timer(fp::fsubs(
-        (fp).grab_timer(),
-        fns::ftKb_SpecialN_800F5AC0(ctx),
-    ));
+    let __t1 = fns::ftKb_SpecialN_800F5AC0(ctx);
+    (fp).set_grab_timer(fp::fsubs((fp).grab_timer(), __t1));
     if !((fp).mv().co().thrownkirby().x18_u().x0().x18_b0() != 0) {
         if (fp).grab_timer() <= fp::frsp(0_i32 as f64) {
             inl_inlineC0_unfused(ctx, gobj);
@@ -589,15 +585,14 @@ fn inl_inlineB2_unfused<'a>(
         __t2
     });
     inl_HSD_JObjSetScale_unfused(ctx, (fp).x20A0_accessory(), scale);
-    fns::lb_8000C2F8(
-        ctx,
-        (fp).x20A0_accessory(),
-        (Handle::add(
+    {
+        let __t3 = (Handle::add(
             (fp).parts(),
             fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_YRotN as i32)),
         ))
-        .joint(),
-    );
+        .joint();
+        fns::lb_8000C2F8(ctx, (fp).x20A0_accessory(), __t3)
+    };
 }
 
 fn inl_inlineB1_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> f64 {
@@ -668,10 +663,8 @@ fn inl_inlineA0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     } else {
         (fp).self_vel().set_x(fp::frsp(0_i32 as f64));
     }
-    (fp).set_grab_timer(fp::fsubs(
-        (fp).grab_timer(),
-        fns::ftKb_SpecialN_800F5AC0(ctx),
-    ));
+    let __t1 = fns::ftKb_SpecialN_800F5AC0(ctx);
+    (fp).set_grab_timer(fp::fsubs((fp).grab_timer(), __t1));
 }
 
 fn inl_inlineB2_unfused_2<'a>(
@@ -750,15 +743,14 @@ fn inl_inlineB2_unfused_2<'a>(
         __t2
     });
     inl_HSD_JObjSetScale_unfused(ctx, (fp).x20A0_accessory(), scale);
-    fns::lb_8000C2F8(
-        ctx,
-        (fp).x20A0_accessory(),
-        (Handle::add(
+    {
+        let __t3 = (Handle::add(
             (fp).parts(),
             fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_YRotN as i32)),
         ))
-        .joint(),
-    );
+        .joint();
+        fns::lb_8000C2F8(ctx, (fp).x20A0_accessory(), __t3)
+    };
 }
 
 fn inl_inlineC0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

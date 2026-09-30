@@ -242,47 +242,58 @@ pub fn it_802F063C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: HSD_GObj<'a>) {
     {
         translate.set_x(0.0);
         translate.set_z(0.0);
-        translate.set_y(fp::fmuls(
-            inl_sqrtf_store(
-                ctx,
-                fp::fmadds(
-                    ({
-                        let __t2 = fp::fsubs(pos_0.z(), pos_2.z());
-                        z_diff = __t2;
-                        __t2
-                    }),
-                    (fp::fsubs(pos_0.z(), pos_2.z())),
-                    fp::fadds(
-                        (fp::fmuls(
-                            (fp::fsubs(pos_0.x(), pos_2.x())),
-                            (fp::fsubs(pos_0.x(), pos_2.x())),
-                        )),
-                        (fp::fmuls(
-                            (fp::fsubs(pos_0.y(), pos_2.y())),
-                            (fp::fsubs(pos_0.y(), pos_2.y())),
-                        )),
-                    ),
-                ),
-                sqrt_0,
-            ),
-            fp::fneg(
-                (fp::fdivs(
-                    inl_sqrtf_store(
-                        ctx,
-                        fp::fadds(
-                            (fp::fmuls(
-                                (fp::fsubs(pos_0.x(), pos_1.x())),
-                                (fp::fsubs(pos_0.x(), pos_1.x())),
-                            )),
-                            (fp::fmuls(
-                                (fp::fsubs(pos_0.y(), pos_1.y())),
-                                (fp::fsubs(pos_0.y(), pos_1.y())),
-                            )),
-                        ),
-                        sqrt_1,
-                    ),
-                    inl_sqrtf_store(
-                        ctx,
+        translate.set_y({
+            let __t9 = fp::fneg(
+                ({
+                    let __t8 = {
+                        let __t7 = sqrt_2;
+                        inl_sqrtf_store(
+                            ctx,
+                            fp::fadds(
+                                (fp::fmuls(
+                                    (fp::fsubs(pos_0.x(), pos_2.x())),
+                                    (fp::fsubs(pos_0.x(), pos_2.x())),
+                                )),
+                                (fp::fmuls(
+                                    (fp::fsubs(pos_0.y(), pos_2.y())),
+                                    (fp::fsubs(pos_0.y(), pos_2.y())),
+                                )),
+                            ),
+                            __t7,
+                        )
+                    };
+                    fp::fdivs(
+                        {
+                            let __t6 = sqrt_1;
+                            inl_sqrtf_store(
+                                ctx,
+                                fp::fadds(
+                                    (fp::fmuls(
+                                        (fp::fsubs(pos_0.x(), pos_1.x())),
+                                        (fp::fsubs(pos_0.x(), pos_1.x())),
+                                    )),
+                                    (fp::fmuls(
+                                        (fp::fsubs(pos_0.y(), pos_1.y())),
+                                        (fp::fsubs(pos_0.y(), pos_1.y())),
+                                    )),
+                                ),
+                                __t6,
+                            )
+                        },
+                        __t8,
+                    )
+                }),
+            );
+            fp::fmuls(
+                {
+                    let __t4 = sqrt_0;
+                    let __t5 = fp::fmadds(
+                        ({
+                            let __t3 = fp::fsubs(pos_0.z(), pos_2.z());
+                            z_diff = __t3;
+                            __t3
+                        }),
+                        (fp::fsubs(pos_0.z(), pos_2.z())),
                         fp::fadds(
                             (fp::fmuls(
                                 (fp::fsubs(pos_0.x(), pos_2.x())),
@@ -293,11 +304,12 @@ pub fn it_802F063C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: HSD_GObj<'a>) {
                                 (fp::fsubs(pos_0.y(), pos_2.y())),
                             )),
                         ),
-                        sqrt_2,
-                    ),
-                )),
-            ),
-        ));
+                    );
+                    inl_sqrtf_store(ctx, __t5, __t4)
+                },
+                __t9,
+            )
+        });
         inl_HSD_JObjSetTranslate(
             ctx,
             ((ip).xBBC_dynamicBoneTable()).bones().at(2_i32).get(),

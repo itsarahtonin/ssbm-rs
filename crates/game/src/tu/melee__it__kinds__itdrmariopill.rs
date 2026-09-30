@@ -189,10 +189,10 @@ pub fn itDrMarioPill_802C0B5C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     ));
     let mut temp_f31: f64 = (attrs).x0();
     let mut temp_f30: f64 = (attrs).x4();
-    (ip).x40_vel().set_x(fp::fmuls(
-        (ip).facing_dir(),
-        (fp::fmuls(temp_f31, fns::cosf(ctx, temp_f30))),
-    ));
+    (ip).x40_vel().set_x({
+        let __t1 = (fp::fmuls(temp_f31, fns::cosf(ctx, temp_f30)));
+        fp::fmuls((ip).facing_dir(), __t1)
+    });
     (ip).x40_vel()
         .set_y(fp::fmuls(temp_f31, fns::sinf(ctx, temp_f30)));
     (ip).x40_vel().set_z(0.0);
@@ -408,15 +408,14 @@ pub fn itDrMarioPill_Motion6_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     fns::it_8026B3A8(ctx, gobj);
     gobj = (ip).xDD4_itemVar().drmariopill().x4();
     if (!Handle::is_null(gobj)) && (fns::ftCo_800BF228(ctx, gobj) == 1_i32) {
-        inl_Item_CopyJObjScale_unfused(
-            ctx,
-            (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, orig))),
-            (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(
+        {
+            let __t1 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(
                 ctx,
                 (ip).xDD4_itemVar().drmariopill().x4(),
-            ))),
-            scale,
-        );
+            )));
+            let __t2 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, orig)));
+            inl_Item_CopyJObjScale_unfused(ctx, __t2, __t1, scale)
+        };
     }
     return 0_i32;
 }

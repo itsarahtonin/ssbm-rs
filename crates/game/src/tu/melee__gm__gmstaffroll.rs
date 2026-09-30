@@ -426,13 +426,7 @@ pub fn fn_801AAB74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     || (entry_idx == 197_i32)))
                 && ((entry_idx != 94_i32) || (fns::lbLang_IsSavedLanguageJP(ctx) != 0_i32))
             {
-                (Handle::add(
-                    statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
-                    staff_idx,
-                ))
-                .win()
-                .at(0_i32)
-                .set(fns::HSD_SisLib_803A5ACC(
+                let __t2 = fns::HSD_SisLib_803A5ACC(
                     ctx,
                     0_i32,
                     0_i32,
@@ -441,7 +435,14 @@ pub fn fn_801AAB74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     0.0,
                     0.0,
                     100.0,
-                ));
+                );
+                (Handle::add(
+                    statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                    staff_idx,
+                ))
+                .win()
+                .at(0_i32)
+                .set(__t2);
                 ((Handle::add(
                     statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
                     staff_idx,
@@ -562,13 +563,7 @@ pub fn fn_801AAB74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         name_page_en,
                     );
                 }
-                (Handle::add(
-                    statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
-                    staff_idx,
-                ))
-                .win()
-                .at(1_i32)
-                .set(fns::HSD_SisLib_803A5ACC(
+                let __t3 = fns::HSD_SisLib_803A5ACC(
                     ctx,
                     0_i32,
                     0_i32,
@@ -577,7 +572,14 @@ pub fn fn_801AAB74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     0.0,
                     0.0,
                     100.0,
-                ));
+                );
+                (Handle::add(
+                    statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                    staff_idx,
+                ))
+                .win()
+                .at(1_i32)
+                .set(__t3);
                 ((Handle::add(
                     statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
                     staff_idx,
@@ -741,26 +743,29 @@ pub fn fn_801AAB74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         i = 0_i32;
         'l7: while i < statics::melee__gm__gmstaffroll::gm_804D6800(ctx).get() {
             'c8: {
-                fns::PSMTXConcat(
-                    ctx,
-                    (statics::melee__gm__gmstaffroll::gm_804D6830(ctx).get())
-                        .view_mtx()
-                        .get(0),
-                    inl_HSD_JObjGetMtxPtr_unfused(
+                {
+                    let __t4 = inl_HSD_JObjGetMtxPtr_unfused(
                         ctx,
                         (Handle::add(
                             statics::melee__gm__gmstaffroll::staffInfoSortBuf(ctx).get(),
                             i,
                         ))
                         .jobj(),
-                    ),
-                    (Handle::add(
-                        statics::melee__gm__gmstaffroll::staffInfoSortBuf(ctx).get(),
-                        i,
-                    ))
-                    .mtx()
-                    .get(0),
-                );
+                    );
+                    fns::PSMTXConcat(
+                        ctx,
+                        (statics::melee__gm__gmstaffroll::gm_804D6830(ctx).get())
+                            .view_mtx()
+                            .get(0),
+                        __t4,
+                        (Handle::add(
+                            statics::melee__gm__gmstaffroll::staffInfoSortBuf(ctx).get(),
+                            i,
+                        ))
+                        .mtx()
+                        .get(0),
+                    )
+                };
             }
             i = i.wrapping_add(1);
         }
@@ -1394,22 +1399,22 @@ pub fn fn_801AB200<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                             ((text_arr).get()).text_color().set_g((180_i32 as u8));
                             ((text_arr).get()).text_color().set_b((0_i32 as u8));
                             if (sel == 75_i32) && (text_idx == 2_i32) {
-                                fns::HSD_SisLib_803A6368(
-                                    ctx,
-                                    (text_arr).get(),
-                                    0xbec_i32
-                                        .wrapping_add(fns::gm_IsCKindUnlocked(
+                                {
+                                    let __t2 = {
+                                        let __t1 = fns::gm_IsCKindUnlocked(
                                             ctx,
-                                            ((enums::CKind_Luigi as i32) as u8),
-                                        ))
-                                        .wrapping_add(
-                                            fns::gm_IsCKindUnlocked(
+                                            ((enums::CKind_DrMario as i32) as u8),
+                                        )
+                                        .wrapping_mul(2_i32);
+                                        0xbec_i32
+                                            .wrapping_add(fns::gm_IsCKindUnlocked(
                                                 ctx,
-                                                ((enums::CKind_DrMario as i32) as u8),
-                                            )
-                                            .wrapping_mul(2_i32),
-                                        ),
-                                );
+                                                ((enums::CKind_Luigi as i32) as u8),
+                                            ))
+                                            .wrapping_add(__t1)
+                                    };
+                                    fns::HSD_SisLib_803A6368(ctx, (text_arr).get(), __t2)
+                                };
                             } else if (text_idx == 2_i32) && (check_failed == 1_i32) {
                                 if fns::lbLang_IsSavedLanguageJP(ctx) != 0_i32 {
                                     fns::HSD_SisLib_803A6368(
@@ -1443,9 +1448,9 @@ pub fn fn_801AB200<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 r#gen = fns::hsd_8039F05C(ctx, 0_i32, 0_i32, 39_i32);
                 if Handle::is_null(
                     ({
-                        let __t1 = (r#gen).appsrt();
-                        appsrt = __t1;
-                        __t1
+                        let __t3 = (r#gen).appsrt();
+                        appsrt = __t3;
+                        __t3
                     }),
                 ) {
                     appsrt = fns::psAddGeneratorAppSRT_begin(ctx, r#gen, 1_i32);

@@ -520,18 +520,34 @@ pub fn it_802D9714<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     if ((((ip).xDD4_itemVar().heiho().x22() as u8) as i8) as i32) == 0_i32 {
-        if ((ip).pos().x() > (fp::fadds(20.0, fns::Stage_GetBlastZoneLeftOffset(ctx))))
-            && ((ip).pos().x() < (fp::fsubs(fns::Stage_GetBlastZoneRightOffset(ctx), 20.0)))
-        {
+        if ({
+            let __t1 = (fp::fadds(20.0, fns::Stage_GetBlastZoneLeftOffset(ctx)));
+            (ip).pos().x() > __t1
+        }) && ({
+            let __t2 = (fp::fsubs(fns::Stage_GetBlastZoneRightOffset(ctx), 20.0));
+            (ip).pos().x() < __t2
+        }) {
             (ip).xDD4_itemVar().heiho().set_x22((1_i32 as i8));
         }
-    } else if (ip).pos().x() > (fp::fadds(20.0, fns::Stage_GetBlastZoneRightOffset(ctx))) {
+    } else if {
+        let __t3 = (fp::fadds(20.0, fns::Stage_GetBlastZoneRightOffset(ctx)));
+        (ip).pos().x() > __t3
+    } {
         inl_it_802D9714_inline_unfused(ctx, gobj);
-    } else if (ip).pos().x() < (fp::fsubs(fns::Stage_GetBlastZoneLeftOffset(ctx), 20.0)) {
+    } else if {
+        let __t4 = (fp::fsubs(fns::Stage_GetBlastZoneLeftOffset(ctx), 20.0));
+        (ip).pos().x() < __t4
+    } {
         inl_it_802D9714_inline_unfused(ctx, gobj);
-    } else if (ip).pos().y() > (fp::fadds(20.0, fns::Stage_GetBlastZoneTopOffset(ctx))) {
+    } else if {
+        let __t5 = (fp::fadds(20.0, fns::Stage_GetBlastZoneTopOffset(ctx)));
+        (ip).pos().y() > __t5
+    } {
         inl_it_802D9714_inline_unfused(ctx, gobj);
-    } else if (ip).pos().y() < (fp::fsubs(fns::Stage_GetBlastZoneBottomOffset(ctx), 20.0)) {
+    } else if {
+        let __t6 = (fp::fsubs(fns::Stage_GetBlastZoneBottomOffset(ctx), 20.0));
+        (ip).pos().y() < __t6
+    } {
         inl_it_802D9714_inline_unfused(ctx, gobj);
     }
 }

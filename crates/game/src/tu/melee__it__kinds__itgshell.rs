@@ -197,10 +197,10 @@ pub fn it_8028BC2C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         if __case <= 0 {
             fns::it_802756D0(ctx, gobj);
             fns::it_80275444(ctx, gobj);
-            (ip).x40_vel().set_x(fp::fmuls(
-                fp::fmuls(fp::fneg((ip).x40_vel().x()), (attrs).xC()),
-                fns::HSD_Randf(ctx),
-            ));
+            (ip).x40_vel().set_x({
+                let __t1 = fns::HSD_Randf(ctx);
+                fp::fmuls(fp::fmuls(fp::fneg((ip).x40_vel().x()), (attrs).xC()), __t1)
+            });
             (ip).x40_vel().set_y((attrs).x10());
             if ((ip).xDD4_itemVar().gshell().xDEC_b0() != 0) {
                 let mut rand_max: u8 = (fns::it_804D6D28(ctx).get()).x48_byte();
@@ -991,10 +991,10 @@ fn inl_shellHit_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         Handle::cast::<itGShell_Attrs<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
     fns::it_802756D0(ctx, gobj);
     fns::it_80275444(ctx, gobj);
-    (ip).x40_vel().set_x(fp::fmuls(
-        fp::fmuls(fp::fneg((ip).x40_vel().x()), (attrs).xC()),
-        fns::HSD_Randf(ctx),
-    ));
+    (ip).x40_vel().set_x({
+        let __t1 = fns::HSD_Randf(ctx);
+        fp::fmuls(fp::fmuls(fp::fneg((ip).x40_vel().x()), (attrs).xC()), __t1)
+    });
     (ip).x40_vel().set_y((attrs).x10());
     if ((ip).xDD4_itemVar().gshell().xDEC_b0() != 0) {
         let mut rand_max: u8 = (fns::it_804D6D28(ctx).get()).x48_byte();

@@ -160,14 +160,14 @@ fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     }
     {
         let mut angle: f64 = fns::ftCommon_8007D9D4(ctx, fp);
-        (fp).self_vel().set_x(fp::fmuls(
-            (fns::p_ftCommonData(ctx).get()).escapeair_force(),
-            fns::cosf(ctx, angle),
-        ));
-        (fp).self_vel().set_y(fp::fmuls(
-            (fns::p_ftCommonData(ctx).get()).escapeair_force(),
-            fns::sinf(ctx, angle),
-        ));
+        (fp).self_vel().set_x({
+            let __t1 = fns::cosf(ctx, angle);
+            fp::fmuls((fns::p_ftCommonData(ctx).get()).escapeair_force(), __t1)
+        });
+        (fp).self_vel().set_y({
+            let __t2 = fns::sinf(ctx, angle);
+            fp::fmuls((fns::p_ftCommonData(ctx).get()).escapeair_force(), __t2)
+        });
     }
 }
 

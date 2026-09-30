@@ -348,18 +348,21 @@ pub fn Retry<'a>(ctx: &'a Ctx, chan: i32) -> i32 {
         let _ = fns::EXIUnlock(ctx, chan);
         return 0_i32;
     }
-    if !(fns::EXIDma(
-        ctx,
-        chan,
-        (card).buffer(),
-        (if ((card).cmd().at(0_i32).get() as i32) == 82_i32 {
-            0x200_i32
-        } else {
-            128_i32
-        }),
-        (card).mode(),
-        fnptr(ctx, 0x80352498),
-    ) != 0)
+    if !({
+        let __t1 = (card).mode();
+        fns::EXIDma(
+            ctx,
+            chan,
+            (card).buffer(),
+            (if ((card).cmd().at(0_i32).get() as i32) == 82_i32 {
+                0x200_i32
+            } else {
+                128_i32
+            }),
+            __t1,
+            fnptr(ctx, 0x80352498),
+        )
+    } != 0)
     {
         let _ = fns::EXIDeselect(ctx, chan);
         let _ = fns::EXIUnlock(ctx, chan);
@@ -504,14 +507,17 @@ pub fn __CARDReadSegment<'a>(ctx: &'a Ctx, chan: i32, callback: FnPtr<'a>) -> i3
                 (card).latency(),
                 (1_i32 as u32),
             ) != 0)))
-            || (!(fns::EXIDma(
-                ctx,
-                chan,
-                (card).buffer(),
-                0x200_i32,
-                (card).mode(),
-                fnptr(ctx, 0x80352498),
-            ) != 0))
+            || (!({
+                let __t1 = (card).mode();
+                fns::EXIDma(
+                    ctx,
+                    chan,
+                    (card).buffer(),
+                    0x200_i32,
+                    __t1,
+                    fnptr(ctx, 0x80352498),
+                )
+            } != 0))
         {
             (card).set_txCallback(null::<FnPtr<'a>>(ctx));
             let _ = fns::EXIDeselect(ctx, chan);
@@ -563,14 +569,17 @@ pub fn __CARDWritePage<'a>(ctx: &'a Ctx, chan: i32, callback: FnPtr<'a>) -> i32 
             (card).cmdlen(),
             (1_i32 as u32),
         ) != 0))
-            || (!(fns::EXIDma(
-                ctx,
-                chan,
-                (card).buffer(),
-                128_i32,
-                (card).mode(),
-                fnptr(ctx, 0x80352498),
-            ) != 0))
+            || (!({
+                let __t1 = (card).mode();
+                fns::EXIDma(
+                    ctx,
+                    chan,
+                    (card).buffer(),
+                    128_i32,
+                    __t1,
+                    fnptr(ctx, 0x80352498),
+                )
+            } != 0))
         {
             (card).set_exiCallback(null::<FnPtr<'a>>(ctx));
             let _ = fns::EXIDeselect(ctx, chan);

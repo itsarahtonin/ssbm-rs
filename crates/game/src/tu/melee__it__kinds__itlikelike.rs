@@ -115,11 +115,10 @@ pub fn it_802D9BA8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         .likelike()
         .set_x38(fns::HSD_Randi(ctx, 2_i32));
     (ip).pos().set_y(fp::fsubs((ip).pos().y(), 40.0));
-    (ip).xDD4_itemVar().likelike().set_x4C(
-        (attr)
-            .x8()
-            .wrapping_add(fns::HSD_Randi(ctx, (attr).xC().wrapping_sub((attr).x8()))),
-    );
+    (ip).xDD4_itemVar().likelike().set_x4C({
+        let __t1 = fns::HSD_Randi(ctx, (attr).xC().wrapping_sub((attr).x8()));
+        (attr).x8().wrapping_add(__t1)
+    });
     if (ip).xDD4_itemVar().likelike().x38() == 0_i32 {
         fns::it_802DA960(ctx, gobj);
         return;
@@ -143,10 +142,10 @@ pub fn it_2725_Logic5_DmgReceived<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     }
     fns::it_802DBAF0(ctx, gobj, 0_i32, 1_i32);
     (ip).set_init_facing_dir((ip).facing_dir());
-    (ip).set_xC9C(fp::fctiwz(fp::fadds(
-        fp::frsp((ip).xC9C() as f64),
-        fns::it_8027CBFC(ctx, gobj),
-    )));
+    (ip).set_xC9C(fp::fctiwz({
+        let __t1 = fns::it_8027CBFC(ctx, gobj);
+        fp::fadds(fp::frsp((ip).xC9C() as f64), __t1)
+    }));
     if ((ip).xC9C() > ((attr).x0().x0_s32()).x()) || ((ip).msid() == 19_i32) {
         inl_Item_ZakoDefeat_unfused(ctx, gobj, ip);
         if fns::HSD_Randf(ctx) < (fns::it_804D6D40(ctx).get()).x8() {

@@ -284,12 +284,14 @@ pub fn gmMainLib_8015CEB4<'a>(ctx: &'a Ctx, arg0: i32) {
 pub fn gmMainLib_8015CEFC<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
-    if (((fns::gmMainLib_804D3EE0(ctx).get())
-        .thing()
-        .save_data()
-        .x1A68()
-        & inl_bitset64_mask_unfused(ctx, (arg0 as u32)))
-        != 0)
+    if ({
+        let __t1 = inl_bitset64_mask_unfused(ctx, (arg0 as u32));
+        ((fns::gmMainLib_804D3EE0(ctx).get())
+            .thing()
+            .save_data()
+            .x1A68()
+            & __t1)
+    } != 0)
     {
         return 1_i32;
     } else {
@@ -339,7 +341,10 @@ pub fn gmMainLib_8015CFB4<'a>(ctx: &'a Ctx, arg0: u8) -> Val<'a, i8> {
 pub fn gmMainLib_8015CFCC<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
-    return (inl_selkind_mask_unfused(ctx, arg0) & (fns::gmMainLib_8015ED98(ctx)).xC());
+    return {
+        let __t1 = (fns::gmMainLib_8015ED98(ctx)).xC();
+        (inl_selkind_mask_unfused(ctx, arg0) & __t1)
+    };
 }
 
 pub fn gmMainLib_8015D00C<'a>(ctx: &'a Ctx, arg0: u8) {
@@ -1430,29 +1435,29 @@ pub fn gmMainLib_8015F260<'a>(ctx: &'a Ctx) {
 
 pub fn gmMainLib_8015F464<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
-    fns::memzero(
-        ctx,
-        Handle::cast::<Addr<'a>>(inl_gmMainLib_8015ED98_unfused(ctx)),
-        (32_u32 as i32),
-    );
+    {
+        let __t1 = (32_u32 as i32);
+        let __t2 = Handle::cast::<Addr<'a>>(inl_gmMainLib_8015ED98_unfused(ctx));
+        fns::memzero(ctx, __t2, __t1)
+    };
 }
 
 pub fn gmMainLib_8015F490<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
-    fns::memzero(
-        ctx,
-        Handle::cast::<Addr<'a>>(inl_gmMainLib_8015EDB0_unfused(ctx)),
-        (8_u32 as i32),
-    );
+    {
+        let __t1 = (8_u32 as i32);
+        let __t2 = Handle::cast::<Addr<'a>>(inl_gmMainLib_8015EDB0_unfused(ctx));
+        fns::memzero(ctx, __t2, __t1)
+    };
 }
 
 pub fn gmMainLib_8015F4BC<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
-    fns::memzero(
-        ctx,
-        Handle::cast::<Addr<'a>>(inl_gmMainLib_8015EDBC_unfused(ctx)),
-        (0x178_u32 as i32),
-    );
+    {
+        let __t1 = (0x178_u32 as i32);
+        let __t2 = Handle::cast::<Addr<'a>>(inl_gmMainLib_8015EDBC_unfused(ctx));
+        fns::memzero(ctx, __t2, __t1)
+    };
 }
 
 pub fn gmMainLib_8015F4E8<'a>(ctx: &'a Ctx) -> u32 {
@@ -1606,15 +1611,17 @@ pub fn gmMainLib_8015F600<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
                         if !Handle::is_null(src) {
                             let mut k: i32 = 0_i32;
                             let mut c: i8 = 0;
-                            'l6: while (statics::melee__gm__gmmain_lib::gmMainLib_804D3EE4(ctx)
-                                .at(0_i32)
-                                .get() as i32)
-                                != (({
+                            'l6: while {
+                                let __t2 = (({
                                     let __t1 = (src).get();
                                     c = __t1;
                                     __t1
-                                }) as i32)
-                            {
+                                }) as i32);
+                                (statics::melee__gm__gmmain_lib::gmMainLib_804D3EE4(ctx)
+                                    .at(0_i32)
+                                    .get() as i32)
+                                    != __t2
+                            } {
                                 'c7: {
                                     (data).namedata().at(k).set(c);
                                     k = k.wrapping_add(1);
@@ -1802,19 +1809,17 @@ fn inl_bitset_mask_unfused<'a>(ctx: &'a Ctx, bit: u32) -> u32 {
 fn inl_bitset_set_unfused<'a>(ctx: &'a Ctx, words: Val<'a, u32>, bit: u32) {
     let mut words = words;
     let mut bit = bit;
-    (Handle::add(words, (div_u32(bit, (32_i32 as u32)) as i32))).set(
-        ((Handle::add(words, (div_u32(bit, (32_i32 as u32)) as i32))).get()
-            | inl_bitset_mask_unfused(ctx, bit)),
-    );
+    let __t1 = inl_bitset_mask_unfused(ctx, bit);
+    (Handle::add(words, (div_u32(bit, (32_i32 as u32)) as i32)))
+        .set(((Handle::add(words, (div_u32(bit, (32_i32 as u32)) as i32))).get() | __t1));
 }
 
 fn inl_bitset_clear_unfused<'a>(ctx: &'a Ctx, words: Val<'a, u32>, bit: u32) {
     let mut words = words;
     let mut bit = bit;
-    (Handle::add(words, (div_u32(bit, (32_i32 as u32)) as i32))).set(
-        ((Handle::add(words, (div_u32(bit, (32_i32 as u32)) as i32))).get()
-            & (!inl_bitset_mask_unfused(ctx, bit))),
-    );
+    let __t1 = (!inl_bitset_mask_unfused(ctx, bit));
+    (Handle::add(words, (div_u32(bit, (32_i32 as u32)) as i32)))
+        .set(((Handle::add(words, (div_u32(bit, (32_i32 as u32)) as i32))).get() & __t1));
 }
 
 fn inl_bitset_test_unfused<'a>(ctx: &'a Ctx, words: Val<'a, u32>, bit: u32) -> u32 {

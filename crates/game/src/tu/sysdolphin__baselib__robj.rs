@@ -463,12 +463,11 @@ pub fn resolveCnsOrientation<'a>(
             }
         }
     } else {
-        fns::HSD_MtxInverseConcat(
-            ctx,
-            inl_HSD_JObjGetMtxPtr(ctx, inl_jobj_parent(ctx, (robj).u().jobj())),
-            inl_HSD_JObjGetMtxPtr(ctx, (robj).u().jobj()),
-            mtx1.get(0),
-        );
+        {
+            let __t1 = inl_HSD_JObjGetMtxPtr(ctx, (robj).u().jobj());
+            let __t2 = inl_HSD_JObjGetMtxPtr(ctx, inl_jobj_parent(ctx, (robj).u().jobj()));
+            fns::HSD_MtxInverseConcat(ctx, __t2, __t1, mtx1.get(0))
+        };
         jobj = Handle::cast::<HSD_JObj<'a>>(obj);
         {
             i = 0_i32;
@@ -496,12 +495,11 @@ pub fn resolveCnsOrientation<'a>(
         'l5: while !Handle::is_null(jobj) {
             'c6: {
                 if !Handle::is_null(inl_jobj_parent(ctx, jobj)) {
-                    fns::HSD_MtxInverseConcat(
-                        ctx,
-                        inl_HSD_JObjGetMtxPtr(ctx, inl_jobj_parent(ctx, jobj)),
-                        inl_HSD_JObjGetMtxPtr(ctx, jobj),
-                        mtx0.get(0),
-                    );
+                    {
+                        let __t3 = inl_HSD_JObjGetMtxPtr(ctx, jobj);
+                        let __t4 = inl_HSD_JObjGetMtxPtr(ctx, inl_jobj_parent(ctx, jobj));
+                        fns::HSD_MtxInverseConcat(ctx, __t4, __t3, mtx0.get(0))
+                    };
                 } else {
                     fns::PSMTXCopy(ctx, inl_HSD_JObjGetMtxPtr(ctx, jobj), mtx0.get(0));
                 }

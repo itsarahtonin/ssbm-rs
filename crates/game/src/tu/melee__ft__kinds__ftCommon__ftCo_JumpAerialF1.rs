@@ -113,8 +113,8 @@ pub fn ftCo_800D74A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     p = inl_ftCo_800D74A4_inline_unfused(ctx, fp);
     (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
     tmp = (fp).x2D0();
-    msid = ((fp).x1968_jumpsUsed() as i32).wrapping_add(
-        ({
+    msid = {
+        let __t2 = ({
             let __t1 = Handle::cast::<Fighter_x2D0_t<'a>>(
                 (Handle::add(
                     Handle::cast::<Val<'a, i32>>(tmp),
@@ -124,8 +124,9 @@ pub fn ftCo_800D74A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             tmp = __t1;
             __t1
         })
-        .x2C(),
-    );
+        .x2C();
+        ((fp).x1968_jumpsUsed() as i32).wrapping_add(__t2)
+    };
     msid2 = {
         msid = msid.wrapping_sub(1);
         msid

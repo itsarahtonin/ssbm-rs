@@ -96,7 +96,10 @@ pub fn itKabigon_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             (ip).set_xDB4_itcmd_var2((0_i32 as u32));
         }
     }
-    if (ip).pos().y() > fns::Stage_GetBlastZoneTopOffset(ctx) {
+    if {
+        let __t1 = fns::Stage_GetBlastZoneTopOffset(ctx);
+        (ip).pos().y() > __t1
+    } {
         fns::it_802CA074(ctx, gobj);
     }
     return 0_i32;
@@ -191,7 +194,10 @@ pub fn itKabigon_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                 .kabigon()
                 .set_x6C((ip).xDD4_itemVar().kabigon().x6C().wrapping_sub(1));
         }
-    } else if (ip).pos().y() < fns::Stage_GetBlastZoneBottomOffset(ctx) {
+    } else if {
+        let __t1 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+        (ip).pos().y() < __t1
+    } {
         return 1_i32;
     }
     inl_itKabigon_UnkMotion1_Anim_inline_unfused(ctx, gobj, ip);

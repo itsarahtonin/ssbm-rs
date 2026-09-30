@@ -133,14 +133,14 @@ pub fn it_802AFF08<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, owner: HSD_GObj<'a>) {
         angle_factor,
         1.5707963705062866,
     ));
-    (ip).x40_vel().set_x(fp::fmuls(
-        fp::fneg((attr).x8()),
-        fns::cosf(ctx, (ip).xDD4_itemVar().seakneedlethrown().xDF0()),
-    ));
-    (ip).x40_vel().set_y(fp::fmuls(
-        (attr).x8(),
-        fns::sinf(ctx, (ip).xDD4_itemVar().seakneedlethrown().xDF0()),
-    ));
+    (ip).x40_vel().set_x({
+        let __t1 = fns::cosf(ctx, (ip).xDD4_itemVar().seakneedlethrown().xDF0());
+        fp::fmuls(fp::fneg((attr).x8()), __t1)
+    });
+    (ip).x40_vel().set_y({
+        let __t2 = fns::sinf(ctx, (ip).xDD4_itemVar().seakneedlethrown().xDF0());
+        fp::fmuls((attr).x8(), __t2)
+    });
     (ip).x40_vel().set_z(0.0);
     (ip).xDD4_itemVar()
         .seakneedlethrown()
@@ -309,9 +309,8 @@ pub fn itSeakneedlethrown_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
     );
     let mut child: HSD_JObj<'a> =
         inl_HSD_JObjGetChild_unfused(ctx, Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()));
-    let mut rot: f64 = fp::fmuls(
-        fp::fneg((ip).facing_dir()),
-        fns::atan2f(
+    let mut rot: f64 = {
+        let __t1 = fns::atan2f(
             ctx,
             fp::fsubs(
                 (ip).pos().y(),
@@ -321,8 +320,9 @@ pub fn itSeakneedlethrown_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
                 (ip).pos().x(),
                 (ip).xDD4_itemVar().seakneedlethrown().xDE4().x(),
             ),
-        ),
-    );
+        );
+        fp::fmuls(fp::fneg((ip).facing_dir()), __t1)
+    };
     inl_HSD_JObjSetRotationX_unfused(ctx, child, rot);
     if (inl_itSeakNeedleThrown_CheckGroundHit_unfused(ctx, gobj) != 0) {
         's1: {
@@ -615,9 +615,8 @@ pub fn it_2725_Logic109_Reflected<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         .set_y(fp::fadds((ip).pos().y(), dy));
     (ip).xDD4_itemVar().seakneedlethrown().xDE4().set_z(0.0);
     {
-        let mut rot: f64 = fp::fmuls(
-            fp::fneg((ip).facing_dir()),
-            fns::atan2f(
+        let mut rot: f64 = {
+            let __t1 = fns::atan2f(
                 ctx,
                 fp::fsubs(
                     (ip).pos().y(),
@@ -627,8 +626,9 @@ pub fn it_2725_Logic109_Reflected<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                     (ip).pos().x(),
                     (ip).xDD4_itemVar().seakneedlethrown().xDE4().x(),
                 ),
-            ),
-        );
+            );
+            fp::fmuls(fp::fneg((ip).facing_dir()), __t1)
+        };
         inl_HSD_JObjSetRotationX_unfused(ctx, inl_HSD_JObjGetChild_unfused(ctx, jobj), rot);
     }
     angle = fns::atan2f(
@@ -642,10 +642,14 @@ pub fn it_2725_Logic109_Reflected<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             (ip).xDD4_itemVar().seakneedlethrown().xDE4().x(),
         ),
     );
-    (ip).x40_vel()
-        .set_x(fp::fmuls((attr).x8(), fns::cosf(ctx, angle)));
-    (ip).x40_vel()
-        .set_y(fp::fmuls((attr).x8(), fns::sinf(ctx, angle)));
+    (ip).x40_vel().set_x({
+        let __t2 = fns::cosf(ctx, angle);
+        fp::fmuls((attr).x8(), __t2)
+    });
+    (ip).x40_vel().set_y({
+        let __t3 = fns::sinf(ctx, angle);
+        fp::fmuls((attr).x8(), __t3)
+    });
     (ip).set_xD44_lifeTimer((ip).xD48_halfLifeTimer());
     return 0_i32;
 }
@@ -861,16 +865,19 @@ fn inl_itResetVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
 fn inl_itSeakNeedleThrown_SetupDrop_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    (ip).xDD4_itemVar().seakneedlethrown().set_xDD4(fp::fmuls(
-        statics::melee__it__kinds__itseakneedlethrown::it_803F6FE0(ctx)
-            .at(fns::HSD_Randi(ctx, 8_i32))
-            .get(),
-        (if fns::HSD_Randi(ctx, 2_i32) == 0_i32 {
+    (ip).xDD4_itemVar().seakneedlethrown().set_xDD4({
+        let __t1 = (if fns::HSD_Randi(ctx, 2_i32) == 0_i32 {
             1.0
         } else {
             fp::fneg(1.0)
-        }),
-    ));
+        });
+        fp::fmuls(
+            statics::melee__it__kinds__itseakneedlethrown::it_803F6FE0(ctx)
+                .at(fns::HSD_Randi(ctx, 8_i32))
+                .get(),
+            __t1,
+        )
+    });
     (ip).xDD4_itemVar().seakneedlethrown().set_xDD8(0.0);
     (ip).xDD4_itemVar().seakneedlethrown().set_xDDC(
         statics::melee__it__kinds__itseakneedlethrown::it_803F6FA0(ctx)

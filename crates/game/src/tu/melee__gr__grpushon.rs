@@ -69,7 +69,11 @@ pub fn grPushOn_80218378<'a>(ctx: &'a Ctx) {
         val = 0_i32;
     }
     if !(val != 0) {
-        fns::grZakoGenerator_801CAEB0(ctx, fns::Ground_801C5840(ctx), fns::Ground_801C5940(ctx));
+        {
+            let __t1 = fns::Ground_801C5940(ctx);
+            let __t2 = fns::Ground_801C5840(ctx);
+            fns::grZakoGenerator_801CAEB0(ctx, __t2, __t1)
+        };
     }
 }
 
@@ -112,10 +116,10 @@ pub fn grPushOn_802184CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         ctx,
         fp::fmsubs(
             0.5,
-            (fp::fadds(
-                fns::Stage_GetCamBoundsTopOffset(ctx),
-                fns::Stage_GetBlastZoneTopOffset(ctx),
-            )),
+            ({
+                let __t2 = fns::Stage_GetBlastZoneTopOffset(ctx);
+                fp::fadds(fns::Stage_GetCamBoundsTopOffset(ctx), __t2)
+            }),
             cam_offset.y(),
         ),
     );
@@ -123,10 +127,10 @@ pub fn grPushOn_802184CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         ctx,
         fp::fmsubs(
             0.5,
-            (fp::fadds(
-                fns::Stage_GetCamBoundsBottomOffset(ctx),
-                fns::Stage_GetBlastZoneBottomOffset(ctx),
-            )),
+            ({
+                let __t4 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+                fp::fadds(fns::Stage_GetCamBoundsBottomOffset(ctx), __t4)
+            }),
             cam_offset.y(),
         ),
     );
@@ -134,10 +138,10 @@ pub fn grPushOn_802184CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         ctx,
         fp::fmsubs(
             0.5,
-            (fp::fadds(
-                fns::Stage_GetCamBoundsLeftOffset(ctx),
-                fns::Stage_GetBlastZoneLeftOffset(ctx),
-            )),
+            ({
+                let __t6 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+                fp::fadds(fns::Stage_GetCamBoundsLeftOffset(ctx), __t6)
+            }),
             cam_offset.x(),
         ),
     );
@@ -145,10 +149,10 @@ pub fn grPushOn_802184CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         ctx,
         fp::fmsubs(
             0.5,
-            (fp::fadds(
-                fns::Stage_GetCamBoundsRightOffset(ctx),
-                fns::Stage_GetBlastZoneRightOffset(ctx),
-            )),
+            ({
+                let __t8 = fns::Stage_GetBlastZoneRightOffset(ctx);
+                fp::fadds(fns::Stage_GetCamBoundsRightOffset(ctx), __t8)
+            }),
             cam_offset.x(),
         ),
     );
@@ -262,7 +266,10 @@ pub fn grPushOn_802186C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             if vec.y() < 0.0 {
                 let _ = fns::Ground_801C0498(ctx);
                 vec.set_y(0.0);
-            } else if vec.y() > fp::fmuls(800.0, fns::Ground_801C0498(ctx)) {
+            } else if {
+                let __t1 = fp::fmuls(800.0, fns::Ground_801C0498(ctx));
+                vec.y() > __t1
+            } {
                 vec.set_y(fp::fmuls(800.0, fns::Ground_801C0498(ctx)));
             }
             fns::Ground_801C38BC(ctx, vec.x(), vec.y());
@@ -304,11 +311,12 @@ pub fn grPushOn_802187A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 .lobjs()
                 .at((gp).u().pushon().count())
                 .set(lobj);
+            let __t1 = fns::HSD_LObjGetFlags(ctx, lobj);
             (gp).u()
                 .pushon()
                 .lobj_flags()
                 .at((gp).u().pushon().count())
-                .set(fns::HSD_LObjGetFlags(ctx, lobj));
+                .set(__t1);
             lobj = (if Handle::is_null(lobj) {
                 null::<HSD_LObj<'a>>(ctx)
             } else {

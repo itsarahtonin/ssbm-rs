@@ -161,12 +161,16 @@ pub fn it_802A2568<'a>(
                         arg8,
                         arg8,
                     );
-                    fns::HSD_GObjObject_80390A70(
-                        ctx,
-                        link_gobj,
-                        fns::HSD_GObj_JObjKind(ctx).get(),
-                        Handle::cast::<Addr<'a>>(inl_it_link_get_joint(ctx, arg0, link_idx)),
-                    );
+                    {
+                        let __t1 =
+                            Handle::cast::<Addr<'a>>(inl_it_link_get_joint(ctx, arg0, link_idx));
+                        fns::HSD_GObjObject_80390A70(
+                            ctx,
+                            link_gobj,
+                            fns::HSD_GObj_JObjKind(ctx).get(),
+                            __t1,
+                        )
+                    };
                     fns::GObj_SetupGXLink(
                         ctx,
                         link_gobj,
@@ -192,12 +196,15 @@ pub fn it_802A2568<'a>(
                         arg8,
                         arg8,
                     );
-                    fns::HSD_GObjObject_80390A70(
-                        ctx,
-                        link_gobj,
-                        fns::HSD_GObj_JObjKind(ctx).get(),
-                        Handle::cast::<Addr<'a>>(inl_it_link_get_joint_c(ctx, arg0)),
-                    );
+                    {
+                        let __t2 = Handle::cast::<Addr<'a>>(inl_it_link_get_joint_c(ctx, arg0));
+                        fns::HSD_GObjObject_80390A70(
+                            ctx,
+                            link_gobj,
+                            fns::HSD_GObj_JObjKind(ctx).get(),
+                            __t2,
+                        )
+                    };
                     fns::GObj_SetupGXLink(
                         ctx,
                         link_gobj,
@@ -222,12 +229,16 @@ pub fn it_802A2568<'a>(
                         arg8,
                         arg8,
                     );
-                    fns::HSD_GObjObject_80390A70(
-                        ctx,
-                        link_gobj,
-                        fns::HSD_GObj_JObjKind(ctx).get(),
-                        Handle::cast::<Addr<'a>>(inl_it_link_get_joint(ctx, arg0, link_idx)),
-                    );
+                    {
+                        let __t3 =
+                            Handle::cast::<Addr<'a>>(inl_it_link_get_joint(ctx, arg0, link_idx));
+                        fns::HSD_GObjObject_80390A70(
+                            ctx,
+                            link_gobj,
+                            fns::HSD_GObj_JObjKind(ctx).get(),
+                            __t3,
+                        )
+                    };
                     fns::GObj_SetupGXLink(
                         ctx,
                         link_gobj,

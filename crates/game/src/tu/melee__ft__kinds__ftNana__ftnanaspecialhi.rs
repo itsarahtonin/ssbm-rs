@@ -413,13 +413,17 @@ pub fn ftNn_Init_801237F8<'a>(ctx: &'a Ctx, nana_gobj: HSD_GObj<'a>) {
             (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, popo_gobj)));
         fns::ft_800849EC(ctx, popo_fp, nana_fp);
     }
-    (nana_fp).self_vel().set_x(fp::fmuls(
-        (nana_fp).facing_dir(),
-        (fp::fmuls((attrs).x13C(), fns::cosf(ctx, (attrs).x140()))),
-    ));
-    (nana_fp)
-        .self_vel()
-        .set_y(fp::fmuls((attrs).x13C(), fns::sinf(ctx, (attrs).x140())));
+    (nana_fp).self_vel().set_x({
+        let __t2 = ({
+            let __t1 = fns::cosf(ctx, (attrs).x140());
+            fp::fmuls((attrs).x13C(), __t1)
+        });
+        fp::fmuls((nana_fp).facing_dir(), __t2)
+    });
+    (nana_fp).self_vel().set_y({
+        let __t3 = fns::sinf(ctx, (attrs).x140());
+        fp::fmuls((attrs).x13C(), __t3)
+    });
     (nana_fp).cur_pos().set_x(fp::fmadds(
         fp::fmuls(4.0, (nana_fp).facing_dir()),
         (nana_fp).x34_scale().y(),

@@ -120,10 +120,10 @@ pub fn it_8026F53C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, vel: Vec<'a>, chk:
     let mut item: Item<'a> = null(ctx);
     item = Handle::cast::<Item<'a>>((item_gobj).user_data());
     if chk == 0_i32 {
-        (vel).set_x(fp::fmuls(
-            (fns::it_804D6D28(ctx).get()).x54_float(),
-            (fp::fmuls(2.0, (fp::fsubs(fns::HSD_Randf(ctx), 0.5)))),
-        ));
+        (vel).set_x({
+            let __t1 = (fp::fmuls(2.0, (fp::fsubs(fns::HSD_Randf(ctx), 0.5))));
+            fp::fmuls((fns::it_804D6D28(ctx).get()).x54_float(), __t1)
+        });
         (vel).set_y(((item).xCC_item_attr()).x18());
         (vel).set_z(statics::melee__it__itdrop::zero_init(ctx).at(0_i32).get());
     }
@@ -220,10 +220,10 @@ pub fn it_8026F6BC<'a>(
         spawned_item =
             (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, spawned_item_gobj)));
         if chk == 0_i32 {
-            (vel).set_x(fp::fmuls(
-                (fns::it_804D6D28(ctx).get()).x54_float(),
-                (fp::fmuls(2.0, (fp::fsubs(fns::HSD_Randf(ctx), 0.5)))),
-            ));
+            (vel).set_x({
+                let __t1 = (fp::fmuls(2.0, (fp::fsubs(fns::HSD_Randf(ctx), 0.5))));
+                fp::fmuls((fns::it_804D6D28(ctx).get()).x54_float(), __t1)
+            });
             (vel).set_y(((spawned_item).xCC_item_attr()).x18());
             (vel).set_z(statics::melee__it__itdrop::zero_init(ctx).at(0_i32).get());
         }
@@ -259,10 +259,10 @@ pub fn it_8026F7C8<'a>(ctx: &'a Ctx, arg0: Vec<'a>, vel: Vec<'a>, chk: i32) -> H
         spawned_item =
             (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, spawned_item_gobj)));
         if chk == 0_i32 {
-            (vel).set_x(fp::fmuls(
-                (fns::it_804D6D28(ctx).get()).x54_float(),
-                (fp::fmuls(2.0, (fp::fsubs(fns::HSD_Randf(ctx), 0.5)))),
-            ));
+            (vel).set_x({
+                let __t1 = (fp::fmuls(2.0, (fp::fsubs(fns::HSD_Randf(ctx), 0.5))));
+                fp::fmuls((fns::it_804D6D28(ctx).get()).x54_float(), __t1)
+            });
             (vel).set_y(((spawned_item).xCC_item_attr()).x18());
             (vel).set_z(statics::melee__it__itdrop::zero_init(ctx).at(0_i32).get());
         }
@@ -301,10 +301,10 @@ pub fn it_8026F8B4<'a>(
     rand_int = fns::HSD_Randi(ctx, (fns::it_804D6D28(ctx).get()).x13C());
     rand_int = rand_int.wrapping_add((fns::it_804D6D28(ctx).get()).x140());
     if chk == 0_i32 {
-        (arg2).set_x(fp::fmuls(
-            (fns::it_804D6D28(ctx).get()).x54_float(),
-            (fp::fmuls(2.0, (fp::fsubs(fns::HSD_Randf(ctx), 0.5)))),
-        ));
+        (arg2).set_x({
+            let __t1 = (fp::fmuls(2.0, (fp::fsubs(fns::HSD_Randf(ctx), 0.5))));
+            fp::fmuls((fns::it_804D6D28(ctx).get()).x54_float(), __t1)
+        });
         (arg2).set_y((fns::it_804D6D28(ctx).get()).x144());
         (arg2).set_z(statics::melee__it__itdrop::zero_init(ctx).at(0_i32).get());
     }

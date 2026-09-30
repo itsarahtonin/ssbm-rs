@@ -63,15 +63,18 @@ pub fn __AXOutNewFrame<'a>(ctx: &'a Ctx, lessDspCycles: u32) {
             .call::<_, ()>(());
     }
     fns::__AXLocalProfile(ctx).set_userCallbackEnd((fns::OSGetTime(ctx) as u64));
-    fns::__AXNextFrame(
-        ctx,
-        Handle::cast::<Addr<'a>>(statics::dolphin__ax__AXOut::__AXOutSBuffer(ctx).at(0)),
-        Handle::cast::<Addr<'a>>(
+    {
+        let __t1 = Handle::cast::<Addr<'a>>(
             statics::dolphin__ax__AXOut::__AXOutBuffer(ctx)
                 .get((statics::dolphin__ax__AXOut::__AXOutFrame(ctx).get() as i32))
                 .at(0_i32),
-        ),
-    );
+        );
+        fns::__AXNextFrame(
+            ctx,
+            Handle::cast::<Addr<'a>>(statics::dolphin__ax__AXOut::__AXOutSBuffer(ctx).at(0)),
+            __t1,
+        )
+    };
     statics::dolphin__ax__AXOut::__AXOutFrame(ctx).set(
         statics::dolphin__ax__AXOut::__AXOutFrame(ctx)
             .get()
@@ -134,9 +137,10 @@ pub fn __AXDSPResumeCallback<'a>(ctx: &'a Ctx, task: Addr<'a>) {
         fns::__AXOutNewFrame(
             ctx,
             div_u32(
-                ((fns::OSGetTime(ctx)
-                    .wrapping_sub(statics::dolphin__ax__AXOut::__AXOsTime(ctx).get()))
-                    as u32),
+                (({
+                    let __t1 = statics::dolphin__ax__AXOut::__AXOsTime(ctx).get();
+                    fns::OSGetTime(ctx).wrapping_sub(__t1)
+                }) as u32),
                 (4_i32 as u32),
             ),
         );

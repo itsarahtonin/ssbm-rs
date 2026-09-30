@@ -37,12 +37,11 @@ pub fn fn_80020AEC<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, out: ArrV<'a, F32, 4>) 
     let mut cur: HSD_JObj<'a> = null(ctx);
     let mut i: i32 = 0;
     let mut scale_mag: f64 = 0.0;
-    fns::HSD_MtxInverseConcat(
-        ctx,
-        inl_HSD_JObjGetMtxPtr(ctx, inl_HSD_JObjGetParent(ctx, jobj)),
-        inl_HSD_JObjGetMtxPtr(ctx, jobj),
-        out,
-    );
+    {
+        let __t1 = inl_HSD_JObjGetMtxPtr(ctx, jobj);
+        let __t2 = inl_HSD_JObjGetMtxPtr(ctx, inl_HSD_JObjGetParent(ctx, jobj));
+        fns::HSD_MtxInverseConcat(ctx, __t2, __t1, out)
+    };
     {
         i = 0_i32;
         'l1: while i < 3_i32 {
@@ -102,12 +101,11 @@ pub fn fn_80020AEC<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, out: ArrV<'a, F32, 4>) 
     'l3: while !Handle::is_null(cur) {
         'c4: {
             if !Handle::is_null(inl_HSD_JObjGetParent(ctx, cur)) {
-                fns::HSD_MtxInverseConcat(
-                    ctx,
-                    inl_HSD_JObjGetMtxPtr(ctx, inl_HSD_JObjGetParent(ctx, cur)),
-                    inl_HSD_JObjGetMtxPtr(ctx, cur),
-                    tmp.get(0),
-                );
+                {
+                    let __t3 = inl_HSD_JObjGetMtxPtr(ctx, cur);
+                    let __t4 = inl_HSD_JObjGetMtxPtr(ctx, inl_HSD_JObjGetParent(ctx, cur));
+                    fns::HSD_MtxInverseConcat(ctx, __t4, __t3, tmp.get(0))
+                };
             } else {
                 fns::PSMTXCopy(ctx, inl_HSD_JObjGetMtxPtr(ctx, cur), tmp.get(0));
             }
@@ -1190,14 +1188,17 @@ pub fn lbBgFlash_80021410<'a>(ctx: &'a Ctx, data: IKState<'a>) {
     angle1 = fns::lbVector_Angle(ctx, temp_delta, pos1_from_pos0);
     let _ = fns::lbVector_Diff(ctx, (data).pos2(), (data).pos1(), temp_delta);
     angle2 = fp::frsp(
-        (fp::fsub(
-            ({
-                let __t1 = 3.141592653589793;
-                pi = __t1;
-                __t1
-            }),
-            fns::lbVector_Angle(ctx, temp_delta, pos1_from_pos0),
-        )),
+        ({
+            let __t2 = fns::lbVector_Angle(ctx, temp_delta, pos1_from_pos0);
+            fp::fsub(
+                ({
+                    let __t1 = 3.141592653589793;
+                    pi = __t1;
+                    __t1
+                }),
+                __t2,
+            )
+        }),
     );
     dx = fp::fsubs((data).pos0().x(), (data).pos4().x());
     dz = (data).pos0().z();
@@ -1228,31 +1229,37 @@ pub fn lbBgFlash_80021410<'a>(ctx: &'a Ctx, data: IKState<'a>) {
     dz = fp::fmuls(dz, dz);
     len_ac = inl_sqrtf_store(ctx, fp::fadds(dz, (fp::fadds(dx, dy))), len_ac_mag);
     (data).set_len1(len_ac);
-    sum_len = fp::fmuls(
-        ({
-            let __t2 = 10.0;
-            ten = __t2;
-            __t2
-        }),
-        (fp::fadds(
+    sum_len = {
+        let __t7 = ({
+            let __t6 = ({
+                let __t5 = (data).len1();
+                len_ac = __t5;
+                __t5
+            });
+            fp::fadds(
+                ({
+                    let __t4 = (data).len0();
+                    len_bc = __t4;
+                    __t4
+                }),
+                __t6,
+            )
+        });
+        fp::fmuls(
             ({
-                let __t3 = (data).len0();
-                len_bc = __t3;
+                let __t3 = 10.0;
+                ten = __t3;
                 __t3
             }),
-            ({
-                let __t4 = (data).len1();
-                len_ac = __t4;
-                __t4
-            }),
-        )),
-    );
+            __t7,
+        )
+    };
     sum_len = fp::fdivs(
         sum_len,
         ({
-            let __t5 = 11.0;
-            eleven = __t5;
-            __t5
+            let __t8 = 11.0;
+            eleven = __t8;
+            __t8
         }),
     );
     sum_pow = fp::fmuls(sum_len, (fp::fmuls(sum_len, sum_len)));
@@ -1272,9 +1279,9 @@ pub fn lbBgFlash_80021410<'a>(ctx: &'a Ctx, data: IKState<'a>) {
     last = fp::fmuls(
         len_ab,
         ({
-            let __t6 = fp::fmuls(len_ab, len_pow);
-            len_pow = __t6;
-            __t6
+            let __t9 = fp::fmuls(len_ab, len_pow);
+            len_pow = __t9;
+            __t9
         }),
     );
     if len_ab > sum_len {

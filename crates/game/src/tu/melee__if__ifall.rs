@@ -295,12 +295,10 @@ pub fn ifAll_802F370C<'a>(ctx: &'a Ctx, scene: SceneDesc<'a>) {
             VarArg::Int(1_i32.wrapping_neg() as u32),
         ],
     );
-    fns::lb_8000B1CC(
-        ctx,
-        child.get(),
-        null::<Vec<'a>>(ctx),
-        inl_ifAll_GetTimerPosition_unfused(ctx),
-    );
+    {
+        let __t1 = inl_ifAll_GetTimerPosition_unfused(ctx);
+        fns::lb_8000B1CC(ctx, child.get(), null::<Vec<'a>>(ctx), __t1)
+    };
     let _ = fns::lb_80011E24(
         ctx,
         jobj,
@@ -310,12 +308,10 @@ pub fn ifAll_802F370C<'a>(ctx: &'a Ctx, scene: SceneDesc<'a>) {
             VarArg::Int(1_i32.wrapping_neg() as u32),
         ],
     );
-    fns::lb_8000B1CC(
-        ctx,
-        child.get(),
-        null::<Vec<'a>>(ctx),
-        inl_ifAll_GetPlayerHUDPosition_unfused(ctx, 0_i32),
-    );
+    {
+        let __t2 = inl_ifAll_GetPlayerHUDPosition_unfused(ctx, 0_i32);
+        fns::lb_8000B1CC(ctx, child.get(), null::<Vec<'a>>(ctx), __t2)
+    };
     let _ = fns::lb_80011E24(
         ctx,
         jobj,
@@ -325,12 +321,10 @@ pub fn ifAll_802F370C<'a>(ctx: &'a Ctx, scene: SceneDesc<'a>) {
             VarArg::Int(1_i32.wrapping_neg() as u32),
         ],
     );
-    fns::lb_8000B1CC(
-        ctx,
-        child.get(),
-        null::<Vec<'a>>(ctx),
-        inl_ifAll_GetPlayerHUDPosition_unfused(ctx, 1_i32),
-    );
+    {
+        let __t3 = inl_ifAll_GetPlayerHUDPosition_unfused(ctx, 1_i32);
+        fns::lb_8000B1CC(ctx, child.get(), null::<Vec<'a>>(ctx), __t3)
+    };
     let _ = fns::lb_80011E24(
         ctx,
         jobj,
@@ -340,12 +334,10 @@ pub fn ifAll_802F370C<'a>(ctx: &'a Ctx, scene: SceneDesc<'a>) {
             VarArg::Int(1_i32.wrapping_neg() as u32),
         ],
     );
-    fns::lb_8000B1CC(
-        ctx,
-        child.get(),
-        null::<Vec<'a>>(ctx),
-        inl_ifAll_GetPlayerHUDPosition_unfused(ctx, 2_i32),
-    );
+    {
+        let __t4 = inl_ifAll_GetPlayerHUDPosition_unfused(ctx, 2_i32);
+        fns::lb_8000B1CC(ctx, child.get(), null::<Vec<'a>>(ctx), __t4)
+    };
     let _ = fns::lb_80011E24(
         ctx,
         jobj,
@@ -355,12 +347,10 @@ pub fn ifAll_802F370C<'a>(ctx: &'a Ctx, scene: SceneDesc<'a>) {
             VarArg::Int(1_i32.wrapping_neg() as u32),
         ],
     );
-    fns::lb_8000B1CC(
-        ctx,
-        child.get(),
-        null::<Vec<'a>>(ctx),
-        inl_ifAll_GetPlayerHUDPosition_unfused(ctx, 3_i32),
-    );
+    {
+        let __t5 = inl_ifAll_GetPlayerHUDPosition_unfused(ctx, 3_i32);
+        fns::lb_8000B1CC(ctx, child.get(), null::<Vec<'a>>(ctx), __t5)
+    };
     let _ = fns::lb_80011E24(
         ctx,
         jobj,
@@ -370,12 +360,10 @@ pub fn ifAll_802F370C<'a>(ctx: &'a Ctx, scene: SceneDesc<'a>) {
             VarArg::Int(1_i32.wrapping_neg() as u32),
         ],
     );
-    fns::lb_8000B1CC(
-        ctx,
-        child.get(),
-        null::<Vec<'a>>(ctx),
-        inl_ifAll_GetPlayerHUDPosition_unfused(ctx, 4_i32),
-    );
+    {
+        let __t6 = inl_ifAll_GetPlayerHUDPosition_unfused(ctx, 4_i32);
+        fns::lb_8000B1CC(ctx, child.get(), null::<Vec<'a>>(ctx), __t6)
+    };
     let _ = fns::lb_80011E24(
         ctx,
         jobj,
@@ -385,12 +373,10 @@ pub fn ifAll_802F370C<'a>(ctx: &'a Ctx, scene: SceneDesc<'a>) {
             VarArg::Int(1_i32.wrapping_neg() as u32),
         ],
     );
-    fns::lb_8000B1CC(
-        ctx,
-        child.get(),
-        null::<Vec<'a>>(ctx),
-        inl_ifAll_GetPlayerHUDPosition_unfused(ctx, 5_i32),
-    );
+    {
+        let __t7 = inl_ifAll_GetPlayerHUDPosition_unfused(ctx, 5_i32);
+        fns::lb_8000B1CC(ctx, child.get(), null::<Vec<'a>>(ctx), __t7)
+    };
     {
         i = 0_i32;
         'l1: while i < 3_i32 {

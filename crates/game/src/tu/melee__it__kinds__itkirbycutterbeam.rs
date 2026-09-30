@@ -67,25 +67,28 @@ pub fn it_8029BB90<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, owner: HSD_GObj<'a>) {
     (ip).xDD4_itemVar()
         .kirbycutterbeam()
         .set_speed((attr).x0_speed());
-    (ip).x40_vel().set_x(fp::fmuls(
-        (ip).facing_dir(),
-        (fp::fmuls(
-            (ip).xDD4_itemVar().kirbycutterbeam().speed(),
-            fns::cosf(ctx, (ip).xDD4_itemVar().kirbycutterbeam().angle()),
-        )),
-    ));
-    (ip).x40_vel().set_y(fp::fmuls(
-        fp::fneg((ip).xDD4_itemVar().kirbycutterbeam().speed()),
-        fns::sinf(ctx, (ip).xDD4_itemVar().kirbycutterbeam().angle()),
-    ));
+    (ip).x40_vel().set_x({
+        let __t2 = ({
+            let __t1 = fns::cosf(ctx, (ip).xDD4_itemVar().kirbycutterbeam().angle());
+            fp::fmuls((ip).xDD4_itemVar().kirbycutterbeam().speed(), __t1)
+        });
+        fp::fmuls((ip).facing_dir(), __t2)
+    });
+    (ip).x40_vel().set_y({
+        let __t3 = fns::sinf(ctx, (ip).xDD4_itemVar().kirbycutterbeam().angle());
+        fp::fmuls(
+            fp::fneg((ip).xDD4_itemVar().kirbycutterbeam().speed()),
+            __t3,
+        )
+    });
     (ip).x40_vel().set_z(0.0);
     fns::it_80275158(ctx, gobj, (attr).x8_lifetime());
     fns::Item_80268E5C(ctx, gobj, 0_i32, 2_i32);
     fns::it_802762B0(ctx, ip);
-    (ip).xDD4_itemVar().kirbycutterbeam().dir().set_x(fp::fmuls(
-        (ip).facing_dir(),
-        fns::sinf(ctx, (ip).xDD4_itemVar().kirbycutterbeam().angle()),
-    ));
+    (ip).xDD4_itemVar().kirbycutterbeam().dir().set_x({
+        let __t4 = fns::sinf(ctx, (ip).xDD4_itemVar().kirbycutterbeam().angle());
+        fp::fmuls((ip).facing_dir(), __t4)
+    });
     (ip).xDD4_itemVar().kirbycutterbeam().dir().set_y(fns::cosf(
         ctx,
         (ip).xDD4_itemVar().kirbycutterbeam().angle(),
@@ -120,17 +123,20 @@ pub fn itKirbycutterbeam_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         ((ip).xC4_article_data()).x4_specialAttributes(),
     );
     Handle::copy_from((ip).xDD4_itemVar().kirbycutterbeam().init_pos(), (ip).pos());
-    (ip).x40_vel().set_x(fp::fmuls(
-        (ip).facing_dir(),
-        (fp::fmuls(
-            (ip).xDD4_itemVar().kirbycutterbeam().speed(),
-            fns::cosf(ctx, (ip).xDD4_itemVar().kirbycutterbeam().angle()),
-        )),
-    ));
-    (ip).x40_vel().set_y(fp::fmuls(
-        fp::fneg((ip).xDD4_itemVar().kirbycutterbeam().speed()),
-        fns::sinf(ctx, (ip).xDD4_itemVar().kirbycutterbeam().angle()),
-    ));
+    (ip).x40_vel().set_x({
+        let __t2 = ({
+            let __t1 = fns::cosf(ctx, (ip).xDD4_itemVar().kirbycutterbeam().angle());
+            fp::fmuls((ip).xDD4_itemVar().kirbycutterbeam().speed(), __t1)
+        });
+        fp::fmuls((ip).facing_dir(), __t2)
+    });
+    (ip).x40_vel().set_y({
+        let __t3 = fns::sinf(ctx, (ip).xDD4_itemVar().kirbycutterbeam().angle());
+        fp::fmuls(
+            fp::fneg((ip).xDD4_itemVar().kirbycutterbeam().speed()),
+            __t3,
+        )
+    });
     if ((ip).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
         if (ip).x40_vel().y() < 0.0 {
             (ip).x40_vel().set_y(fp::fmadds(
@@ -174,14 +180,14 @@ pub fn itKirbycutterbeam_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -
         Handle::copy_from(normal, (ip).x378_itemColl().floor().normal());
         if (fns::it_8026D564(ctx, gobj) != 0) {
             let _ = fns::atan2f(ctx, normal.x(), normal.y());
-            (ip).xDD4_itemVar().kirbycutterbeam().set_angle(fp::fmuls(
-                (ip).facing_dir(),
-                fns::atan2f(
+            (ip).xDD4_itemVar().kirbycutterbeam().set_angle({
+                let __t1 = fns::atan2f(
                     ctx,
                     (ip).x378_itemColl().floor().normal().x(),
                     (ip).x378_itemColl().floor().normal().y(),
-                ),
-            ));
+                );
+                fp::fmuls((ip).facing_dir(), __t1)
+            });
         } else {
             fns::it_802762BC(ctx, ip);
             (ip).pos()
@@ -193,14 +199,14 @@ pub fn itKirbycutterbeam_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -
         }
     } else if (fns::it_8026DA08(ctx, gobj) != 0) {
         fns::it_802762B0(ctx, ip);
-        (ip).xDD4_itemVar().kirbycutterbeam().set_angle(fp::fmuls(
-            (ip).facing_dir(),
-            fns::atan2f(
+        (ip).xDD4_itemVar().kirbycutterbeam().set_angle({
+            let __t2 = fns::atan2f(
                 ctx,
                 (ip).x378_itemColl().floor().normal().x(),
                 (ip).x378_itemColl().floor().normal().y(),
-            ),
-        ));
+            );
+            fp::fmuls((ip).facing_dir(), __t2)
+        });
     }
     inl_HSD_JObjSetRotationX_unfused(ctx, jobj, (ip).xDD4_itemVar().kirbycutterbeam().angle());
     if (ip).x40_vel().x() == 0.0 {
@@ -244,25 +250,26 @@ pub fn it_2725_Logic7_Reflected<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     (ip).x40_vel().set_x(fp::fneg((ip).x40_vel().x()));
     (ip).x40_vel().set_y(fp::fneg((ip).x40_vel().y()));
     if ((ip).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
-        (ip).xDD4_itemVar().kirbycutterbeam().set_angle(fp::fmuls(
-            (ip).facing_dir(),
-            fns::atan2f(
+        (ip).xDD4_itemVar().kirbycutterbeam().set_angle({
+            let __t1 = fns::atan2f(
                 ctx,
                 (ip).x378_itemColl().floor().normal().x(),
                 (ip).x378_itemColl().floor().normal().y(),
-            ),
-        ));
+            );
+            fp::fmuls((ip).facing_dir(), __t1)
+        });
     } else {
-        (ip).xDD4_itemVar()
-            .kirbycutterbeam()
-            .set_angle(fp::frsp(fp::fadd(
+        (ip).xDD4_itemVar().kirbycutterbeam().set_angle(fp::frsp({
+            let __t2 = fns::atan2f(ctx, (ip).x40_vel().y(), (ip).x40_vel().x());
+            fp::fadd(
                 (if (ip).facing_dir() == 1.0 {
                     0.0
                 } else {
                     3.141592653589793
                 }),
-                fns::atan2f(ctx, (ip).x40_vel().y(), (ip).x40_vel().x()),
-            )));
+                __t2,
+            )
+        }));
     }
     'l1: while (ip).xDD4_itemVar().kirbycutterbeam().angle() < 0.0 {
         'c2: {
@@ -335,24 +342,27 @@ pub fn it_2725_Logic7_ShieldBounced<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32
         }),
     );
     if ((ip).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
-        (ip).xDD4_itemVar().kirbycutterbeam().set_angle(fp::fmuls(
-            (ip).facing_dir(),
-            fns::atan2f(
+        (ip).xDD4_itemVar().kirbycutterbeam().set_angle({
+            let __t1 = fns::atan2f(
                 ctx,
                 (ip).x378_itemColl().floor().normal().x(),
                 (ip).x378_itemColl().floor().normal().y(),
-            ),
-        ));
+            );
+            fp::fmuls((ip).facing_dir(), __t1)
+        });
     } else {
         (ip).xDD4_itemVar().kirbycutterbeam().set_angle(fp::frsp(
-            (fp::fadd(
-                (if (ip).facing_dir() == 1.0 {
-                    0.0
-                } else {
-                    3.141592653589793
-                }),
-                fns::atan2f(ctx, (ip).x40_vel().y(), (ip).x40_vel().x()),
-            )),
+            ({
+                let __t2 = fns::atan2f(ctx, (ip).x40_vel().y(), (ip).x40_vel().x());
+                fp::fadd(
+                    (if (ip).facing_dir() == 1.0 {
+                        0.0
+                    } else {
+                        3.141592653589793
+                    }),
+                    __t2,
+                )
+            }),
         ));
     }
     'l5: while (ip).xDD4_itemVar().kirbycutterbeam().angle() < 0.0 {

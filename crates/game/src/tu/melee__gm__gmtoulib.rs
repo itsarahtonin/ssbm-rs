@@ -2907,14 +2907,17 @@ pub fn fn_8018ECA8<'a>(
     hmn_texts.at(1_i32).set(fns::lbl_804DA6B8(ctx).get());
     cpu_texts.at(1_i32).set(fns::lbl_804DA6C0(ctx).get());
     if name_type == 255_i32 {
-        let _ = fns::HSD_SisLib_803A6B98(
-            ctx,
-            (tm).x518().at(jobj_idx1).get(),
-            pos_x,
-            pos_y,
-            fns::GetNameText(ctx, ((char_id as u8) as i32)),
-            &[],
-        );
+        let _ = {
+            let __t1 = fns::GetNameText(ctx, ((char_id as u8) as i32));
+            fns::HSD_SisLib_803A6B98(
+                ctx,
+                (tm).x518().at(jobj_idx1).get(),
+                pos_x,
+                pos_y,
+                __t1,
+                &[],
+            )
+        };
         return;
     }
     if char_id >= 0x320_i32 {
@@ -2958,16 +2961,19 @@ pub fn fn_8018ECA8<'a>(
                 ))
                 .set((0_i32 as i8));
             }
-            let _ = fns::HSD_SisLib_803A6B98(
-                ctx,
-                (tm).x518().at(jobj_idx1).get(),
-                pos_x,
-                pos_y,
-                hmn_texts
+            let _ = {
+                let __t2 = hmn_texts
                     .at((!(!(fns::lbLang_IsSavedLanguageUS(ctx) != 0)) as i32))
-                    .get(),
-                &[],
-            );
+                    .get();
+                fns::HSD_SisLib_803A6B98(
+                    ctx,
+                    (tm).x518().at(jobj_idx1).get(),
+                    pos_x,
+                    pos_y,
+                    __t2,
+                    &[],
+                )
+            };
             return;
         }
         if char_id >= 0x3e7_i32 {
@@ -3012,36 +3018,45 @@ pub fn fn_8018ECA8<'a>(
             ))
             .set((0_i32 as i8));
         }
-        let _ = fns::HSD_SisLib_803A6B98(
-            ctx,
-            (tm).x518().at(jobj_idx2).get(),
-            pos_x,
-            pos_y,
-            cpu_texts
+        let _ = {
+            let __t3 = cpu_texts
                 .at((!(!(fns::lbLang_IsSavedLanguageUS(ctx) != 0)) as i32))
-                .get(),
-            &[],
-        );
+                .get();
+            fns::HSD_SisLib_803A6B98(
+                ctx,
+                (tm).x518().at(jobj_idx2).get(),
+                pos_x,
+                pos_y,
+                __t3,
+                &[],
+            )
+        };
         return;
     }
     if name_type == 0_i32 {
-        let _ = fns::HSD_SisLib_803A6B98(
-            ctx,
-            (tm).x518().at(jobj_idx1).get(),
-            pos_x,
-            pos_y,
-            fns::GetNameText(ctx, ((char_id as u8) as i32)),
-            &[],
-        );
+        let _ = {
+            let __t4 = fns::GetNameText(ctx, ((char_id as u8) as i32));
+            fns::HSD_SisLib_803A6B98(
+                ctx,
+                (tm).x518().at(jobj_idx1).get(),
+                pos_x,
+                pos_y,
+                __t4,
+                &[],
+            )
+        };
     } else if name_type == 1_i32 {
-        let _ = fns::HSD_SisLib_803A6B98(
-            ctx,
-            (tm).x518().at(jobj_idx2).get(),
-            pos_x,
-            pos_y,
-            fns::GetNameText(ctx, ((char_id as u8) as i32)),
-            &[],
-        );
+        let _ = {
+            let __t5 = fns::GetNameText(ctx, ((char_id as u8) as i32));
+            fns::HSD_SisLib_803A6B98(
+                ctx,
+                (tm).x518().at(jobj_idx2).get(),
+                pos_x,
+                pos_y,
+                __t5,
+                &[],
+            )
+        };
     }
 }
 

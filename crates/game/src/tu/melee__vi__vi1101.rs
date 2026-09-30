@@ -225,15 +225,18 @@ pub fn vi1101_Scene_OnEnter<'a>(ctx: &'a Ctx, arg: Addr<'a>) {
         &[],
     ));
     light_gobj = fns::GObj_Create(ctx, (11_i32 as u16), (3_i32 as u8), (0_i32 as u8));
-    fns::HSD_GObjObject_80390A70(
-        ctx,
-        light_gobj,
-        (((fns::HSD_GObj_LightKind(ctx).get() as i32) & 0xffff_i32) as u8),
-        Handle::cast::<Addr<'a>>(fns::lb_80011AC4(
+    {
+        let __t1 = Handle::cast::<Addr<'a>>(fns::lb_80011AC4(
             ctx,
             (statics::melee__vi__vi1101::un_804D6FC0(ctx).get()).lights(),
-        )),
-    );
+        ));
+        fns::HSD_GObjObject_80390A70(
+            ctx,
+            light_gobj,
+            (((fns::HSD_GObj_LightKind(ctx).get() as i32) & 0xffff_i32) as u8),
+            __t1,
+        )
+    };
     fns::GObj_SetupGXLink(
         ctx,
         light_gobj,
@@ -278,14 +281,14 @@ pub fn vi1101_Scene_OnEnter<'a>(ctx: &'a Ctx, arg: Addr<'a>) {
                 let mut jobj_copy: HSD_JObj<'a> = null(ctx);
                 model_gobj = fns::GObj_Create(ctx, (14_i32 as u16), (15_i32 as u8), (0_i32 as u8));
                 jobj = fns::HSD_JObjLoadJoint(ctx, {
-                    let __t1 = ((Handle::add(
+                    let __t2 = ((Handle::add(
                         (statics::melee__vi__vi1101::un_804D6FC0(ctx).get()).models(),
                         i,
                     ))
                     .get())
                     .joint();
-                    joint = __t1;
-                    __t1
+                    joint = __t2;
+                    __t2
                 });
                 jobj_kind = fns::HSD_GObj_JObjKind(ctx).get();
                 fns::HSD_GObjObject_80390A70(

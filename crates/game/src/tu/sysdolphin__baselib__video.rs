@@ -416,12 +416,11 @@ pub fn HSD_VICopyXFBAsync<'a>(ctx: &'a Ctx, rpass: i32) {
         return;
     }
     idx = inl_HSD_VIWaitXFBDrawEnable_unfused(ctx);
-    fns::HSD_VICopyEFB2XFBPtr(
-        ctx,
-        inl_HSD_VIGetVIStatus_unfused(ctx),
-        inl_HSD_VIGetXFBPtr_unfused(ctx, idx),
-        rpass,
-    );
+    {
+        let __t1 = inl_HSD_VIGetXFBPtr_unfused(ctx, idx);
+        let __t2 = inl_HSD_VIGetVIStatus_unfused(ctx);
+        fns::HSD_VICopyEFB2XFBPtr(ctx, __t2, __t1, rpass)
+    };
     inl_HSD_VISetXFBWaitDone_unfused(ctx, idx);
     inl_HSD_VIGXSetDrawDone_unfused(ctx, idx);
 }
@@ -598,12 +597,11 @@ pub fn HSD_VIInit<'a>(
     fns::VISetBlack(ctx, (fns::HSD_VIData(ctx)).current().vi().black());
     fns::VIFlush(ctx);
     idx = inl_HSD_VISearchXFBByStatus_unfused(ctx, (enums::HSD_VI_XFB_FREE as i32));
-    fns::HSD_VICopyEFB2XFBPtr(
-        ctx,
-        inl_HSD_VIGetVIStatus_unfused(ctx),
-        inl_HSD_VIGetXFBPtr_unfused(ctx, idx),
-        (enums::HSD_RP_SCREEN as i32),
-    );
+    {
+        let __t1 = inl_HSD_VIGetXFBPtr_unfused(ctx, idx);
+        let __t2 = inl_HSD_VIGetVIStatus_unfused(ctx);
+        fns::HSD_VICopyEFB2XFBPtr(ctx, __t2, __t1, (enums::HSD_RP_SCREEN as i32))
+    };
 }
 
 fn inl_HSD_VISearchXFBByStatus_unfused<'a>(ctx: &'a Ctx, status: i32) -> i32 {

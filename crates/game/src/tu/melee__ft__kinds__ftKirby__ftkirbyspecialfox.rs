@@ -1219,20 +1219,24 @@ pub fn ftKb_FxSpecialNLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
         if (fp).mv().fx().SpecialN().isBlasterLoop() == 1_i32 {
             (fp).set_x21EC(fnptr(ctx, 0x800fdce0));
-            fns::Fighter_ChangeMotionState(
-                ctx,
-                {
+            {
+                let __t2 = inl_ftKbGetLoopMotionId_unfused(ctx, gobj);
+                let __t3 = {
                     let __t1 = gobj;
                     temp = __t1;
                     __t1
-                },
-                inl_ftKbGetLoopMotionId_unfused(ctx, gobj),
-                ((0x2000000_u32 | 16_u32) | 2_u32),
-                fp::frsp(0_i32 as f64),
-                fp::frsp(1_i32 as f64),
-                fp::frsp(0_i32 as f64),
-                null::<HSD_GObj<'a>>(ctx),
-            );
+                };
+                fns::Fighter_ChangeMotionState(
+                    ctx,
+                    __t3,
+                    __t2,
+                    ((0x2000000_u32 | 16_u32) | 2_u32),
+                    fp::frsp(0_i32 as f64),
+                    fp::frsp(1_i32 as f64),
+                    fp::frsp(0_i32 as f64),
+                    null::<HSD_GObj<'a>>(ctx),
+                )
+            };
             (fp).set_accessory4_cb(fnptr(ctx, 0x800fe0e0));
             (fp).mv().fx().SpecialN().set_isBlasterLoop(0_i32);
             fns::it_802ADDD0(ctx, (fp).u().kb().xB0(), 1_i32);
@@ -1334,20 +1338,24 @@ pub fn ftKb_FxSpecialAirNLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
         if (fp).mv().fx().SpecialN().isBlasterLoop() == 1_i32 {
             (fp).set_x21EC(fnptr(ctx, 0x800fdce0));
-            fns::Fighter_ChangeMotionState(
-                ctx,
-                {
+            {
+                let __t2 = inl_ftKbGetAirLoopMotionId_unfused(ctx, gobj);
+                let __t3 = {
                     let __t1 = gobj;
                     temp = __t1;
                     __t1
-                },
-                inl_ftKbGetAirLoopMotionId_unfused(ctx, gobj),
-                ((0x2000000_u32 | 16_u32) | 2_u32),
-                fp::frsp(0_i32 as f64),
-                fp::frsp(1_i32 as f64),
-                fp::frsp(0_i32 as f64),
-                null::<HSD_GObj<'a>>(ctx),
-            );
+                };
+                fns::Fighter_ChangeMotionState(
+                    ctx,
+                    __t3,
+                    __t2,
+                    ((0x2000000_u32 | 16_u32) | 2_u32),
+                    fp::frsp(0_i32 as f64),
+                    fp::frsp(1_i32 as f64),
+                    fp::frsp(0_i32 as f64),
+                    null::<HSD_GObj<'a>>(ctx),
+                )
+            };
             inl_ftKb_SpecialN_set_cbs_unfused(ctx, gobj);
             (fp).set_accessory4_cb(fnptr(ctx, 0x800fe0e0));
             (fp).mv().fx().SpecialN().set_isBlasterLoop(0_i32);

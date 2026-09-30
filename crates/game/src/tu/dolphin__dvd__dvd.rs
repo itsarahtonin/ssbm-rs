@@ -846,17 +846,17 @@ pub fn cbForStateBusy<'a>(ctx: &'a Ctx, intType: u32) {
         || (statics::dolphin__dvd__dvd::CurrCommand(ctx).get() == (5_i32 as u32)))
         || (statics::dolphin__dvd__dvd::CurrCommand(ctx).get() == (14_i32 as u32))
     {
+        let __t2 = {
+            let __t1 =
+                (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 6_i32)).get();
+            (statics::dolphin__dvd__dvd::executing(ctx).get())
+                .currTransferSize()
+                .wrapping_sub(__t1)
+        };
         (statics::dolphin__dvd__dvd::executing(ctx).get()).set_transferredSize(
             (statics::dolphin__dvd__dvd::executing(ctx).get())
                 .transferredSize()
-                .wrapping_add(
-                    (statics::dolphin__dvd__dvd::executing(ctx).get())
-                        .currTransferSize()
-                        .wrapping_sub(
-                            (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 6_i32))
-                                .get(),
-                        ),
-                ),
+                .wrapping_add(__t2),
         );
     }
     if ((intType & (8_i32 as u32)) != 0) {

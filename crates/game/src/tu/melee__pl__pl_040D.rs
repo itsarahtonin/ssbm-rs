@@ -131,7 +131,10 @@ pub fn pl_80040FBC<'a>(ctx: &'a Ctx, slot: i32, unused: i32, arg2: i32, arg3: i3
         }
         if ((temp_r29).x10().get(slot).x10() as i32) >= (fns::pl_804D6470(ctx).get()).x4() {
             if (fns::gm_8016B168(ctx) != 0)
-                && (fns::Player_GetTeam(ctx, slot) == fns::Player_GetTeam(ctx, arg2))
+                && ({
+                    let __t1 = fns::Player_GetTeam(ctx, arg2);
+                    fns::Player_GetTeam(ctx, slot) == __t1
+                })
             {
                 var_r0_2 = 1_i32;
             } else {

@@ -193,11 +193,10 @@ pub fn fn_8017EE40<'a>(ctx: &'a Ctx, arg0_int: i32) {
     }
     if ((rules).x4_5() != 0) {
         main_data = fns::gmMainLib_8015CDC8(ctx);
-        total_time = (allstar)
-            .x0()
-            .xC()
-            .x20()
-            .wrapping_add(fns::gm_GetFrameCount(ctx));
+        total_time = {
+            let __t1 = fns::gm_GetFrameCount(ctx);
+            (allstar).x0().xC().x20().wrapping_add(__t1)
+        };
         (Handle::cast::<u8_bits<'a>>((arg0)._x448().at(0_i32))).set_b7((1_i32 as u8));
         if ((allstar).x0().x0().cpu_level() as i32) == 4_i32 {
             (Handle::cast::<u8_bits<'a>>((arg0)._x448().at(0_i32))).set_b4((1_i32 as u8));

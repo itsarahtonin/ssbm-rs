@@ -151,26 +151,26 @@ pub fn it_802C3D74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (ip).xDD4_itemVar().zeldadinfire().set_xDF0((attrs).x14());
     let _ = fns::efSync_Spawn(ctx, 0x4f8_i32, gobj, &[VarArg::Int(Handle::addr(jobj))]);
     (ip).xDD4_itemVar().zeldadinfire().set_xDF4((1_i32 as u32));
-    (ip).x40_vel().set_x(fp::fmuls(
-        (ip).xDD4_itemVar().zeldadinfire().xDF0(),
-        fns::cosf(
+    (ip).x40_vel().set_x({
+        let __t1 = fns::cosf(
             ctx,
             fp::fadds(
                 (ip).xDD4_itemVar().zeldadinfire().xDEC(),
                 (ip).xDD4_itemVar().zeldadinfire().xDE8(),
             ),
-        ),
-    ));
-    (ip).x40_vel().set_y(fp::fmuls(
-        (ip).xDD4_itemVar().zeldadinfire().xDF0(),
-        fns::sinf(
+        );
+        fp::fmuls((ip).xDD4_itemVar().zeldadinfire().xDF0(), __t1)
+    });
+    (ip).x40_vel().set_y({
+        let __t2 = fns::sinf(
             ctx,
             fp::fadds(
                 (ip).xDD4_itemVar().zeldadinfire().xDEC(),
                 (ip).xDD4_itemVar().zeldadinfire().xDE8(),
             ),
-        ),
-    ));
+        );
+        fp::fmuls((ip).xDD4_itemVar().zeldadinfire().xDF0(), __t2)
+    });
     (ip).x40_vel().set_z(0.0);
     fns::db_80225DD8(ctx, gobj, (ip).owner());
 }
@@ -322,26 +322,26 @@ pub fn itZeldadinfire_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             if (ip).xDD4_itemVar().zeldadinfire().xDF0() > (attrs).x1C() {
                 (ip).xDD4_itemVar().zeldadinfire().set_xDF0((attrs).x1C());
             }
-            (ip).x40_vel().set_x(fp::fmuls(
-                (ip).xDD4_itemVar().zeldadinfire().xDF0(),
-                fns::cosf(
+            (ip).x40_vel().set_x({
+                let __t1 = fns::cosf(
                     ctx,
                     fp::fadds(
                         (ip).xDD4_itemVar().zeldadinfire().xDEC(),
                         (ip).xDD4_itemVar().zeldadinfire().xDE8(),
                     ),
-                ),
-            ));
-            (ip).x40_vel().set_y(fp::fmuls(
-                (ip).xDD4_itemVar().zeldadinfire().xDF0(),
-                fns::sinf(
+                );
+                fp::fmuls((ip).xDD4_itemVar().zeldadinfire().xDF0(), __t1)
+            });
+            (ip).x40_vel().set_y({
+                let __t2 = fns::sinf(
                     ctx,
                     fp::fadds(
                         (ip).xDD4_itemVar().zeldadinfire().xDEC(),
                         (ip).xDD4_itemVar().zeldadinfire().xDE8(),
                     ),
-                ),
-            ));
+                );
+                fp::fmuls((ip).xDD4_itemVar().zeldadinfire().xDF0(), __t2)
+            });
             (ip).x40_vel().set_z(0.0);
         }
     }

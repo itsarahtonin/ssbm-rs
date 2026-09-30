@@ -672,18 +672,32 @@ pub fn grAnime_801C752C<'a>(
         }
         if __case <= 1 {
             arg.set_f(fp::frsp(
-                ((Handle::cast::<Val<'a, F64>>(fns::__va_arg(ctx, ap.get(0), 3_u8))).get()),
+                ((Handle::cast::<Val<'a, F64>>({
+                    let __t1 = 3_u8;
+                    fns::__va_arg(ctx, ap.get(0), __t1)
+                }))
+                .get()),
             ));
             break 's1;
         }
         if __case <= 2 {
             arg.set_v(
-                ((Handle::cast::<Ptr<'a, Addr<'a>>>(fns::__va_arg(ctx, ap.get(0), 1_u8))).get()),
+                ((Handle::cast::<Ptr<'a, Addr<'a>>>({
+                    let __t2 = 1_u8;
+                    fns::__va_arg(ctx, ap.get(0), __t2)
+                }))
+                .get()),
             );
             break 's1;
         }
         if __case <= 3 {
-            arg.set_d(((Handle::cast::<Val<'a, u32>>(fns::__va_arg(ctx, ap.get(0), 1_u8))).get()));
+            arg.set_d(
+                ((Handle::cast::<Val<'a, u32>>({
+                    let __t3 = 1_u8;
+                    fns::__va_arg(ctx, ap.get(0), __t3)
+                }))
+                .get()),
+            );
             break 's1;
         }
         if __case <= 4 {

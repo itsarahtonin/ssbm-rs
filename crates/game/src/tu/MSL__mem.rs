@@ -141,17 +141,19 @@ pub fn memcmp<'a>(ctx: &'a Ctx, str1: Addr<'a>, str2: Addr<'a>, len: u32) -> i32
     } > (0_i32 as u32)
     {
         'c2: {
-            if (({
-                s1 = Handle::add(s1, 1);
-                s1
-            })
-            .get() as i32)
-                != (({
+            if {
+                let __t1 = (({
                     s2 = Handle::add(s2, 1);
                     s2
                 })
+                .get() as i32);
+                (({
+                    s1 = Handle::add(s1, 1);
+                    s1
+                })
                 .get() as i32)
-            {
+                    != __t1
+            } {
                 if ((s1).get() as i32) < ((s2).get() as i32) {
                     return 1_i32.wrapping_neg();
                 } else {

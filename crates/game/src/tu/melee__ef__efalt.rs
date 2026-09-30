@@ -170,14 +170,20 @@ pub fn efAlt_Spawn<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     0x3f2_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t1 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t1)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
             7 => {
-                jobj =
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get());
+                jobj = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                    let __t2 = 1_u8;
+                    fns::__va_arg(ctx, vlist_arg, __t2)
+                }))
+                .get());
                 ret_obj =
                     Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(ctx, 0x3e8_u32, gobj, jobj));
                 __state = if !Handle::is_null(ret_obj) { 75 } else { 76 };
@@ -186,7 +192,11 @@ pub fn efAlt_Spawn<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     0x3eb_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t4 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t4)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -195,8 +205,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0x3e9_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t5 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t5)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 84 } else { 85 };
             }
@@ -206,8 +219,11 @@ pub fn efAlt_Spawn<'a>(
                     0_i32,
                     1_i32,
                     0x3f0_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t6 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t6)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -217,8 +233,11 @@ pub fn efAlt_Spawn<'a>(
                     0_i32,
                     1_i32,
                     0x3f1_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t7 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t7)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -228,8 +247,11 @@ pub fn efAlt_Spawn<'a>(
                     0_i32,
                     2_i32,
                     0x7d4_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t8 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t8)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -239,8 +261,11 @@ pub fn efAlt_Spawn<'a>(
                     0_i32,
                     2_i32,
                     0x7d2_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t9 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t9)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -250,8 +275,11 @@ pub fn efAlt_Spawn<'a>(
                     0_i32,
                     2_i32,
                     0x7d3_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t10 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t10)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -260,8 +288,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0x7d0_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t11 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t11)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 93 } else { 94 };
             }
@@ -269,7 +300,11 @@ pub fn efAlt_Spawn<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     0x7d7_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t12 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t12)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -279,8 +314,11 @@ pub fn efAlt_Spawn<'a>(
                     0_i32,
                     2_i32,
                     0x7db_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t13 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t13)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -290,8 +328,11 @@ pub fn efAlt_Spawn<'a>(
                     0_i32,
                     2_i32,
                     0x7de_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t14 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t14)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -300,7 +341,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0x7d1_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t15 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t15)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 100 } else { 101 };
             }
@@ -309,8 +354,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0x7d2_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t17 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t17)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -319,8 +367,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0xbb8_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t18 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t18)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -329,8 +380,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0xbb9_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t19 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t19)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -339,8 +393,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0xbba_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t20 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t20)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -349,8 +406,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0xbbb_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t21 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t21)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -359,8 +419,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0xbbc_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t22 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t22)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 113 } else { 114 };
             }
@@ -375,7 +438,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0xbbd_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t23 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t23)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 118 } else { 119 };
             }
@@ -384,8 +451,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0xfa0_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t27 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t27)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 122 } else { 123 };
             }
@@ -394,8 +464,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0xfa2_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t29 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t29)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 126 } else { 127 };
             }
@@ -404,8 +477,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0xfa4_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t31 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t31)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -414,8 +490,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0xfa3_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t32 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t32)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 131 } else { 132 };
             }
@@ -424,8 +503,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0xfa5_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t34 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t34)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 139 } else { 140 };
             }
@@ -444,8 +526,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0x138b_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t36 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t36)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 157 } else { 158 };
             }
@@ -454,8 +539,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0x138c_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t38 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t38)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -464,8 +552,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0x138d_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t39 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t39)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 166 } else { 167 };
             }
@@ -474,8 +565,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0x138e_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t40 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t40)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -484,8 +578,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0x138f_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t41 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t41)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -501,8 +598,11 @@ pub fn efAlt_Spawn<'a>(
                     0_i32,
                     5_i32,
                     0x138f_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t42 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t42)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -512,8 +612,11 @@ pub fn efAlt_Spawn<'a>(
                     0_i32,
                     5_i32,
                     0x1395_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t43 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t43)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -522,7 +625,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0x1390_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t44 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t44)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 175 } else { 176 };
             }
@@ -530,14 +637,20 @@ pub fn efAlt_Spawn<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     0x206_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t50 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t50)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
             44 => {
-                jobj_2_3 =
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get());
+                jobj_2_3 = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                    let __t51 = 1_u8;
+                    fns::__va_arg(ctx, vlist_arg, __t51)
+                }))
+                .get());
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(
                     ctx, 0x7d00_u32, gobj, jobj_2_3,
                 ));
@@ -547,7 +660,11 @@ pub fn efAlt_Spawn<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     0x7d02_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t53 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t53)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -576,27 +693,33 @@ pub fn efAlt_Spawn<'a>(
                 __state = 71;
             }
             50 => {
-                jobj =
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get());
+                jobj = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                    let __t54 = 1_u8;
+                    fns::__va_arg(ctx, vlist_arg, __t54)
+                }))
+                .get());
                 ret_obj = Handle::cast::<Addr<'a>>(fns::hsd_8039EFAC(
                     ctx, 0_i32, 34_i32, 0x84d4_i32, jobj,
                 ));
                 __state = 71;
             }
             51 => {
-                jobj =
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get());
+                jobj = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                    let __t55 = 1_u8;
+                    fns::__va_arg(ctx, vlist_arg, __t55)
+                }))
+                .get());
                 ret_obj = Handle::cast::<Addr<'a>>(fns::hsd_8039EFAC(
                     ctx, 0_i32, 34_i32, 0x84d2_i32, jobj,
                 ));
                 __state = 71;
             }
             52 => {
-                jobj =
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get());
+                jobj = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                    let __t56 = 1_u8;
+                    fns::__va_arg(ctx, vlist_arg, __t56)
+                }))
+                .get());
                 ret_obj = Handle::cast::<Addr<'a>>(fns::hsd_8039EFAC(
                     ctx, 0_i32, 34_i32, 0x84d3_i32, jobj,
                 ));
@@ -607,7 +730,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0x84d0_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t57 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t57)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 200 } else { 201 };
             }
@@ -616,8 +743,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0x9858_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t59 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t59)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 208 } else { 209 };
             }
@@ -626,8 +756,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0x9859_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t61 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t61)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 216 } else { 217 };
             }
@@ -636,8 +769,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0x9471_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t63 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t63)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 224 } else { 225 };
             }
@@ -646,32 +782,42 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0x80e8_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t65 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t65)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 228 } else { 229 };
             }
             58 => {
-                jobj =
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get());
+                jobj = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                    let __t69 = 1_u8;
+                    fns::__va_arg(ctx, vlist_arg, __t69)
+                }))
+                .get());
                 ret_obj = Handle::cast::<Addr<'a>>(fns::hsd_8039EFAC(
                     ctx, 0_i32, 36_i32, 0x8ca0_i32, jobj,
                 ));
                 __state = 71;
             }
             59 => {
-                jobj =
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get());
+                jobj = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                    let __t70 = 1_u8;
+                    fns::__va_arg(ctx, vlist_arg, __t70)
+                }))
+                .get());
                 ret_obj = Handle::cast::<Addr<'a>>(fns::hsd_8039EFAC(
                     ctx, 0_i32, 46_i32, 0xb3b0_i32, jobj,
                 ));
                 __state = 71;
             }
             60 => {
-                jobj =
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get());
+                jobj = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                    let __t71 = 1_u8;
+                    fns::__va_arg(ctx, vlist_arg, __t71)
+                }))
+                .get());
                 ret_obj = Handle::cast::<Addr<'a>>(fns::hsd_8039EFAC(
                     ctx, 0_i32, 46_i32, 0xb3b1_i32, jobj,
                 ));
@@ -684,9 +830,11 @@ pub fn efAlt_Spawn<'a>(
                 __state = 71;
             }
             62 => {
-                input_jobj =
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get());
+                input_jobj = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                    let __t72 = 1_u8;
+                    fns::__va_arg(ctx, vlist_arg, __t72)
+                }))
+                .get());
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(
                     ctx, 0x9088_u32, gobj, input_jobj,
                 ));
@@ -696,7 +844,11 @@ pub fn efAlt_Spawn<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     0x908a_i32,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8))).get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t74 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t74)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -705,8 +857,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0xb799_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t75 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t75)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 245 } else { 246 };
             }
@@ -715,8 +870,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0x4e20_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t77 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t77)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -725,8 +883,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0x4e21_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t78 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t78)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -735,8 +896,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0x5208_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t79 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t79)
+                    }))
+                    .get()),
                 ));
                 __state = 251;
             }
@@ -745,8 +909,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0x5209_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t80 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t80)
+                    }))
+                    .get()),
                 ));
                 __state = 251;
             }
@@ -755,8 +922,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0xbb80_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t81 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t81)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -765,8 +935,11 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     0xbb81_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t82 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t82)
+                    }))
+                    .get()),
                 ));
                 __state = 71;
             }
@@ -783,9 +956,11 @@ pub fn efAlt_Spawn<'a>(
                 __state = 7;
             }
             75 => {
-                value_ptr =
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get());
+                value_ptr = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t3 = 1_u8;
+                    fns::__va_arg(ctx, vlist_arg, __t3)
+                }))
+                .get());
                 __state = if (value_ptr).get() < 0.0 { 78 } else { 80 };
             }
             76 => {
@@ -875,9 +1050,11 @@ pub fn efAlt_Spawn<'a>(
                 __state = 19;
             }
             100 => {
-                value_ptr =
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get());
+                value_ptr = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t16 = 1_u8;
+                    fns::__va_arg(ctx, vlist_arg, __t16)
+                }))
+                .get());
                 __state = if (value_ptr).get() < 0.0 { 103 } else { 105 };
             }
             101 => {
@@ -953,16 +1130,19 @@ pub fn efAlt_Spawn<'a>(
                     ))),
                     fp::frsp((fp::fdiv(3.141592653589793, (2_i32 as f64)))),
                 );
-                inl_HSD_JObjSetRotationZ_unfused(
-                    ctx,
-                    (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(
+                {
+                    let __t25 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t24 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t24)
+                    }))
+                    .get())
+                    .get();
+                    let __t26 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(
                         ctx,
                         (effect).gobj(),
-                    ))),
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get())
-                    .get(),
-                );
+                    )));
+                    inl_HSD_JObjSetRotationZ_unfused(ctx, __t26, __t25)
+                };
                 __state = 119;
             }
             119 => {
@@ -980,9 +1160,10 @@ pub fn efAlt_Spawn<'a>(
                         ctx,
                         0xfa1_u32,
                         gobj,
-                        ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                            ctx, vlist_arg, 1_u8,
-                        )))
+                        ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                            let __t28 = 1_u8;
+                            fns::__va_arg(ctx, vlist_arg, __t28)
+                        }))
                         .get()),
                     )),
                 ));
@@ -999,8 +1180,11 @@ pub fn efAlt_Spawn<'a>(
             }
             126 => {
                 (Handle::cast::<EF_Effect<'a>>(ret_obj)).params().set_z(
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get())
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t30 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t30)
+                    }))
+                    .get())
                     .get(),
                 );
                 (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_update(fnptr(ctx, 0x8005eddc));
@@ -1019,9 +1203,11 @@ pub fn efAlt_Spawn<'a>(
                 __state = 31;
             }
             131 => {
-                value_ptr =
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get());
+                value_ptr = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t33 = 1_u8;
+                    fns::__va_arg(ctx, vlist_arg, __t33)
+                }))
+                .get());
                 __state = if (value_ptr).get() < 0.0 { 134 } else { 136 };
             }
             132 => {
@@ -1057,9 +1243,11 @@ pub fn efAlt_Spawn<'a>(
                 __state = 32;
             }
             139 => {
-                value_ptr =
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get());
+                value_ptr = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t35 = 1_u8;
+                    fns::__va_arg(ctx, vlist_arg, __t35)
+                }))
+                .get());
                 __state = if (value_ptr).get() < 0.0 { 142 } else { 144 };
             }
             140 => {
@@ -1147,9 +1335,11 @@ pub fn efAlt_Spawn<'a>(
                 __state = 34;
             }
             157 => {
-                value_ptr =
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get());
+                value_ptr = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t37 = 1_u8;
+                    fns::__va_arg(ctx, vlist_arg, __t37)
+                }))
+                .get());
                 __state = if (value_ptr).get() < 0.0 { 160 } else { 162 };
             }
             158 => {
@@ -1237,14 +1427,15 @@ pub fn efAlt_Spawn<'a>(
                     jobj_3,
                     inl_HSD_JObjGetScaleY_unfused(ctx, gobj_jobj),
                 );
-                inl_HSD_JObjSetTranslateZ_unfused(
-                    ctx,
-                    inl_HSD_JObjGetChild_unfused(ctx, jobj_3),
-                    fp::fsubs(inl_HSD_JObjGetTranslationZ_unfused(ctx, jobj_3), 6.0),
-                );
-                __state = if ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(
-                    ctx, vlist_arg, 1_u8,
-                )))
+                {
+                    let __t45 = fp::fsubs(inl_HSD_JObjGetTranslationZ_unfused(ctx, jobj_3), 6.0);
+                    let __t46 = inl_HSD_JObjGetChild_unfused(ctx, jobj_3);
+                    inl_HSD_JObjSetTranslateZ_unfused(ctx, __t46, __t45)
+                };
+                __state = if ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t47 = 1_u8;
+                    fns::__va_arg(ctx, vlist_arg, __t47)
+                }))
                 .get())
                 .get()
                     < 0.0
@@ -1270,9 +1461,10 @@ pub fn efAlt_Spawn<'a>(
                     ctx,
                     jobj_3,
                     fp::fneg(
-                        ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(
-                            ctx, vlist_arg, 1_u8,
-                        )))
+                        ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                            let __t48 = 1_u8;
+                            fns::__va_arg(ctx, vlist_arg, __t48)
+                        }))
                         .get())
                         .get(),
                     ),
@@ -1292,8 +1484,11 @@ pub fn efAlt_Spawn<'a>(
                 inl_HSD_JObjSetRotationZ_unfused(
                     ctx,
                     jobj_3,
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get())
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t49 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t49)
+                    }))
+                    .get())
                     .get(),
                 );
                 __state = 179;
@@ -1309,9 +1504,11 @@ pub fn efAlt_Spawn<'a>(
             }
             184 => {
                 effect = Handle::cast::<EF_Effect<'a>>(ret_obj);
-                value_ptr =
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get());
+                value_ptr = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t52 = 1_u8;
+                    fns::__va_arg(ctx, vlist_arg, __t52)
+                }))
+                .get());
                 __state = if (value_ptr).get() < 0.0 { 187 } else { 189 };
             }
             185 => {
@@ -1372,9 +1569,11 @@ pub fn efAlt_Spawn<'a>(
                 __state = 53;
             }
             200 => {
-                value_ptr =
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get());
+                value_ptr = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t58 = 1_u8;
+                    fns::__va_arg(ctx, vlist_arg, __t58)
+                }))
+                .get());
                 __state = if (value_ptr).get() < 0.0 { 203 } else { 205 };
             }
             201 => {
@@ -1411,9 +1610,11 @@ pub fn efAlt_Spawn<'a>(
             }
             208 => {
                 effect = Handle::cast::<EF_Effect<'a>>(ret_obj);
-                value_ptr =
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get());
+                value_ptr = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t60 = 1_u8;
+                    fns::__va_arg(ctx, vlist_arg, __t60)
+                }))
+                .get());
                 __state = if (value_ptr).get() < 0.0 { 211 } else { 213 };
             }
             209 => {
@@ -1457,9 +1658,11 @@ pub fn efAlt_Spawn<'a>(
             }
             216 => {
                 effect = Handle::cast::<EF_Effect<'a>>(ret_obj);
-                value_ptr =
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get());
+                value_ptr = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t62 = 1_u8;
+                    fns::__va_arg(ctx, vlist_arg, __t62)
+                }))
+                .get());
                 __state = if (value_ptr).get() < 0.0 { 219 } else { 221 };
             }
             217 => {
@@ -1507,9 +1710,10 @@ pub fn efAlt_Spawn<'a>(
                         ctx,
                         0x9470_u32,
                         gobj,
-                        ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                            ctx, vlist_arg, 1_u8,
-                        )))
+                        ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                            let __t64 = 1_u8;
+                            fns::__va_arg(ctx, vlist_arg, __t64)
+                        }))
                         .get()),
                     )),
                 ));
@@ -1534,16 +1738,19 @@ pub fn efAlt_Spawn<'a>(
                     ))),
                     fp::frsp((fp::fdiv(3.141592653589793, (2_i32 as f64)))),
                 );
-                inl_HSD_JObjSetRotationZ_unfused(
-                    ctx,
-                    (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(
+                {
+                    let __t67 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t66 = 1_u8;
+                        fns::__va_arg(ctx, vlist_arg, __t66)
+                    }))
+                    .get())
+                    .get();
+                    let __t68 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(
                         ctx,
                         (effect).gobj(),
-                    ))),
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get())
-                    .get(),
-                );
+                    )));
+                    inl_HSD_JObjSetRotationZ_unfused(ctx, __t68, __t67)
+                };
                 __state = 229;
             }
             229 => {
@@ -1568,9 +1775,11 @@ pub fn efAlt_Spawn<'a>(
                 __state = 62;
             }
             236 => {
-                value_ptr =
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
-                        .get());
+                value_ptr = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t73 = 1_u8;
+                    fns::__va_arg(ctx, vlist_arg, __t73)
+                }))
+                .get());
                 __state = if (value_ptr).get() < 0.0 { 239 } else { 241 };
             }
             237 => {
@@ -1616,9 +1825,10 @@ pub fn efAlt_Spawn<'a>(
                         ctx,
                         0xb798_u32,
                         gobj,
-                        ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                            ctx, vlist_arg, 1_u8,
-                        )))
+                        ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                            let __t76 = 1_u8;
+                            fns::__va_arg(ctx, vlist_arg, __t76)
+                        }))
                         .get()),
                     )),
                 ));

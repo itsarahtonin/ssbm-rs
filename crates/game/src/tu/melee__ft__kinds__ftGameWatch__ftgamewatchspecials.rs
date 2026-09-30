@@ -51,14 +51,17 @@ pub fn ftGw_SpecialS_ItemJudgementSetup<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             null::<Vec<'a>>(ctx),
             sp20,
         );
-        (fp).u().gw().set_x2264_judgementGObj(fns::it_802C7774(
-            ctx,
-            (fp).facing_dir(),
-            gobj,
-            sp20,
-            fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_RThumbNb as i32)),
-            ((fp).u().gw().x222C_judgeVar1() as u32),
-        ));
+        (fp).u().gw().set_x2264_judgementGObj({
+            let __t1 = fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_RThumbNb as i32));
+            fns::it_802C7774(
+                ctx,
+                (fp).facing_dir(),
+                gobj,
+                sp20,
+                __t1,
+                ((fp).u().gw().x222C_judgeVar1() as u32),
+            )
+        });
         if (fp).u().gw().x222C_judgeVar1() == 6_i32 {
             sp14.set_z(0.0);
             sp14.set_x(0.0);

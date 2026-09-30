@@ -565,11 +565,12 @@ pub fn lbRefract_800222A4<'a>(ctx: &'a Ctx) {
                         (i as i32),
                     )),
                 );
+                let __t1 = fns::HSD_TObjLoadDesc(ctx, fns::tobjdesc1(ctx));
                 (Handle::add(
                     statics::melee__lb__lbrefract::lbl_804336D0(ctx).tobj_list(),
                     (i as i32),
                 ))
-                .set(fns::HSD_TObjLoadDesc(ctx, fns::tobjdesc1(ctx)));
+                .set(__t1);
                 fns::imagedesc0(ctx)
                     .set_image_ptr(statics::melee__lb__lbrefract::lbl_804336D0(ctx).image_ptr());
                 fns::imagedesc0(ctx).set_format((enums::GX_TF_RGB565 as i32));

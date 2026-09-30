@@ -122,25 +122,30 @@ pub fn CompareNameStrings<'a>(ctx: &'a Ctx, str1: Val<'a, i8>, str2: Val<'a, i8>
             }
             {
                 let mut ch2: i8 = (Handle::add(str2, i)).get();
-                if (inl_signedCharactersEqual_unfused(
-                    ctx,
-                    (fns::mnName_StringTerminator(ctx).at(0)).get(),
-                    inl_unsignedCharacter_unfused(ctx, (ch2 as i32)),
-                ) != 0)
+                if ({
+                    let __t1 = inl_unsignedCharacter_unfused(ctx, (ch2 as i32));
+                    inl_signedCharactersEqual_unfused(
+                        ctx,
+                        (fns::mnName_StringTerminator(ctx).at(0)).get(),
+                        __t1,
+                    )
+                } != 0)
                 {
                     if (inl_checkStringRest_unfused(ctx, (Handle::add(str1, i)), terminator) != 0) {
                         return 0_i32;
                     }
                     return 1_i32;
                 }
-                if ((Handle::add(unsigned_str1, i)).get() as i32)
-                    > (inl_unsignedCharacter_unfused(ctx, (ch2 as i32)) as i32)
-                {
+                if {
+                    let __t2 = (inl_unsignedCharacter_unfused(ctx, (ch2 as i32)) as i32);
+                    ((Handle::add(unsigned_str1, i)).get() as i32) > __t2
+                } {
                     return 1_i32;
                 }
-                if ((Handle::add(unsigned_str1, i)).get() as i32)
-                    < (inl_unsignedCharacter_unfused(ctx, (ch2 as i32)) as i32)
-                {
+                if {
+                    let __t3 = (inl_unsignedCharacter_unfused(ctx, (ch2 as i32)) as i32);
+                    ((Handle::add(unsigned_str1, i)).get() as i32) < __t3
+                } {
                     return 2_i32;
                 }
             }
@@ -258,12 +263,13 @@ pub fn DeleteName<'a>(ctx: &'a Ctx, arg0: u8) {
 pub fn IsNameValid<'a>(ctx: &'a Ctx, slot: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut slot = slot;
-    if ((fns::mnName_StringTerminator(ctx).at(0)).get() as i32)
-        == ((fns::GetPersistentNameData(ctx, ((slot as u8) as i32)))
+    if {
+        let __t1 = ((fns::GetPersistentNameData(ctx, ((slot as u8) as i32)))
             .namedata()
             .at(0_i32)
-            .get() as i32)
-    {
+            .get() as i32);
+        ((fns::mnName_StringTerminator(ctx).at(0)).get() as i32) == __t1
+    } {
         return 0_i32;
     }
     return 1_i32;
@@ -389,12 +395,13 @@ pub fn mnName_SortNames<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 name2 = (fns::GetPersistentNameData(ctx, (idx2 as i32)))
                     .namedata()
                     .at(0);
-                __state = if ((fns::mnName_StringTerminator(ctx).at(0)).get() as i32)
-                    == ((fns::GetPersistentNameData(ctx, (idx1 as i32)))
+                __state = if {
+                    let __t1 = ((fns::GetPersistentNameData(ctx, (idx1 as i32)))
                         .namedata()
                         .at(0_i32)
-                        .get() as i32)
-                {
+                        .get() as i32);
+                    ((fns::mnName_StringTerminator(ctx).at(0)).get() as i32) == __t1
+                } {
                     25
                 } else {
                     27
@@ -425,12 +432,13 @@ pub fn mnName_SortNames<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 unreachable!();
             }
             29 => {
-                __state = if ((fns::mnName_StringTerminator(ctx).at(0)).get() as i32)
-                    == ((fns::GetPersistentNameData(ctx, (idx2 as i32)))
+                __state = if {
+                    let __t2 = ((fns::GetPersistentNameData(ctx, (idx2 as i32)))
                         .namedata()
                         .at(0_i32)
-                        .get() as i32)
-                {
+                        .get() as i32);
+                    ((fns::mnName_StringTerminator(ctx).at(0)).get() as i32) == __t2
+                } {
                     33
                 } else {
                     35
@@ -473,12 +481,13 @@ pub fn mnName_SortNames<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 unreachable!();
             }
             41 => {
-                __state = if ((fns::mnName_StringTerminator(ctx).at(0)).get() as i32)
-                    == ((fns::GetPersistentNameData(ctx, (idx1 as i32)))
+                __state = if {
+                    let __t3 = ((fns::GetPersistentNameData(ctx, (idx1 as i32)))
                         .namedata()
                         .at(0_i32)
-                        .get() as i32)
-                {
+                        .get() as i32);
+                    ((fns::mnName_StringTerminator(ctx).at(0)).get() as i32) == __t3
+                } {
                     43
                 } else {
                     45
@@ -502,12 +511,13 @@ pub fn mnName_SortNames<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 unreachable!();
             }
             47 => {
-                __state = if ((fns::mnName_StringTerminator(ctx).at(0)).get() as i32)
-                    == ((fns::GetPersistentNameData(ctx, (idx2 as i32)))
+                __state = if {
+                    let __t4 = ((fns::GetPersistentNameData(ctx, (idx2 as i32)))
                         .namedata()
                         .at(0_i32)
-                        .get() as i32)
-                {
+                        .get() as i32);
+                    ((fns::mnName_StringTerminator(ctx).at(0)).get() as i32) == __t4
+                } {
                     51
                 } else {
                     53
@@ -550,12 +560,13 @@ pub fn mnName_SortNames<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 unreachable!();
             }
             59 => {
-                __state = if ((fns::mnName_StringTerminator(ctx).at(0)).get() as i32)
-                    == ((fns::GetPersistentNameData(ctx, (idx1 as i32)))
+                __state = if {
+                    let __t5 = ((fns::GetPersistentNameData(ctx, (idx1 as i32)))
                         .namedata()
                         .at(0_i32)
-                        .get() as i32)
-                {
+                        .get() as i32);
+                    ((fns::mnName_StringTerminator(ctx).at(0)).get() as i32) == __t5
+                } {
                     61
                 } else {
                     63
@@ -760,7 +771,10 @@ pub fn mnName_ConfirmNameDeleteInput<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             }
             (fns::GetPersistentNameData(ctx, nameIdxInt)).set_rumble_enabled((1_i32 as u8));
             fns::InitializePersistentNameData(ctx, nameIdx);
-            if ((gobj2).gx_link() as i32) > (fns::mnName_GetColumnCount(ctx).wrapping_sub(1_i32)) {
+            if {
+                let __t1 = (fns::mnName_GetColumnCount(ctx).wrapping_sub(1_i32));
+                ((gobj2).gx_link() as i32) > __t1
+            } {
                 (gobj2).set_gx_link((0_i32 as u8));
             }
             fns::DeleteName(ctx, (nameIdx as u8));
@@ -894,12 +908,13 @@ pub fn mnName_MainInput<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 if (fns::mn_804A04F0(ctx).hovered_selection() as u32) < 24_u32 {
                     let mut isValid: i32 = 0;
                     let mut nameIdx: u8 = inl_mnName_GetHoveredName_unfused(ctx);
-                    if ((fns::mnName_StringTerminator(ctx).at(0)).get() as i32)
-                        == ((fns::GetPersistentNameData(ctx, (nameIdx as i32)))
+                    if {
+                        let __t1 = ((fns::GetPersistentNameData(ctx, (nameIdx as i32)))
                             .namedata()
                             .at(0_i32)
-                            .get() as i32)
-                    {
+                            .get() as i32);
+                        ((fns::mnName_StringTerminator(ctx).at(0)).get() as i32) == __t1
+                    } {
                         isValid = 0_i32;
                     } else {
                         isValid = 1_i32;
@@ -1503,56 +1518,52 @@ pub fn mnName_80238C34<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: u8, arg2: u8)
             Handle::cast::<HSD_GObj<'a>>(data),
             (24_u32 as u8),
         );
-        let _ = fns::mn_8022ED6C(
-            ctx,
-            jobj,
+        let _ = fns::mn_8022ED6C(ctx, jobj, {
+            let __t1 = fns::mn_8022F298(ctx, jobj);
             inl_mnName_FindAnimLoop_unfused(
                 ctx,
                 statics::melee__mn__mnname::mnName_803B8510(ctx).at(0),
-                fns::mn_8022F298(ctx, jobj),
-            ),
-        );
+                __t1,
+            )
+        });
     }
     jobj2 = inl_mnName_802388D4_noinline_unfused(
         ctx,
         Handle::cast::<HSD_GObj<'a>>(data),
         (25_u32 as u8),
     );
-    let _ = fns::mn_8022ED6C(
-        ctx,
-        jobj2,
+    let _ = fns::mn_8022ED6C(ctx, jobj2, {
+        let __t2 = fns::mn_8022F298(ctx, jobj2);
         inl_mnName_FindAnimLoop_unfused(
             ctx,
             statics::melee__mn__mnname::mnName_803B8510(ctx).at(0),
-            fns::mn_8022F298(ctx, jobj2),
-        ),
-    );
+            __t2,
+        )
+    });
     jobj3 = inl_mnName_802388D4_noinline_unfused(
         ctx,
         Handle::cast::<HSD_GObj<'a>>(data),
         (26_u32 as u8),
     );
-    let _ = fns::mn_8022ED6C(
-        ctx,
-        jobj3,
+    let _ = fns::mn_8022ED6C(ctx, jobj3, {
+        let __t3 = fns::mn_8022F298(ctx, jobj3);
         inl_mnName_FindAnimLoop_unfused(
             ctx,
             statics::melee__mn__mnname::mnName_803B8510(ctx).at(0),
-            fns::mn_8022F298(ctx, jobj3),
-        ),
-    );
+            __t3,
+        )
+    });
     {
         let mut jobj_2: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((data).gobj().prev_gx());
         let mut result: f64 = 0.0;
-        result = fns::mn_8022ED6C(
-            ctx,
-            jobj_2,
+        result = fns::mn_8022ED6C(ctx, jobj_2, {
+            let __t4 = fns::mn_8022F298(ctx, jobj_2);
             inl_mnName_FindAnimLoop_unfused(
                 ctx,
                 statics::melee__mn__mnname::mnName_803B8510(ctx).at(0),
-                fns::mn_8022F298(ctx, jobj_2),
-            ),
-        );
+                __t4,
+            )
+        });
         if Handle::addr(inl_mnName_FindAnimLoop_unfused(ctx, tableBase, result))
             == Handle::addr(Handle::add(base, 5_i32))
         {
@@ -2175,23 +2186,27 @@ pub fn mnName_80239A24<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     (rem_i32(((j as u8) as i32), 6_i32)).wrapping_add((row.wrapping_mul(6_i32))),
                 );
                 {
-                    if ((((fns::mnName_StringTerminator(ctx).at(0)).get() as u8) as i8) as i32)
-                        == ((fns::GetPersistentNameData(ctx, name_idx))
+                    if {
+                        let __t1 = ((fns::GetPersistentNameData(ctx, name_idx))
                             .namedata()
                             .at(0_i32)
-                            .get() as i32)
-                    {
+                            .get() as i32);
+                        ((((fns::mnName_StringTerminator(ctx).at(0)).get() as u8) as i8) as i32)
+                            == __t1
+                    } {
                         is_valid = 0_i32;
                     } else {
                         is_valid = 1_i32;
                     }
                     if is_valid != 0_i32 {
-                        if ((((fns::mnName_StringTerminator(ctx).at(0)).get() as u8) as i8) as i32)
-                            == ((fns::GetPersistentNameData(ctx, name_idx))
+                        if {
+                            let __t2 = ((fns::GetPersistentNameData(ctx, name_idx))
                                 .namedata()
                                 .at(0_i32)
-                                .get() as i32)
-                        {
+                                .get() as i32);
+                            ((((fns::mnName_StringTerminator(ctx).at(0)).get() as u8) as i8) as i32)
+                                == __t2
+                        } {
                             is_valid2 = 0_i32;
                         } else {
                             is_valid2 = 1_i32;
@@ -2591,11 +2606,10 @@ pub fn mnName_8023A290<'a>(ctx: &'a Ctx) {
         );
         {
             let mut x1: f64 = inl_HSD_JObjGetTranslationX_unfused(ctx, sp24.get());
-            inl_HSD_JObjSetTranslateX_unfused(
-                ctx,
-                sp24.get(),
-                inl_HSD_JObjGetTranslationX_unfused(ctx, sp20.get()),
-            );
+            {
+                let __t1 = inl_HSD_JObjGetTranslationX_unfused(ctx, sp20.get());
+                inl_HSD_JObjSetTranslateX_unfused(ctx, sp24.get(), __t1)
+            };
             inl_HSD_JObjSetTranslateX_unfused(ctx, sp20.get(), x1);
         }
     }
@@ -3086,12 +3100,13 @@ fn inl_mnName_CountValid_unfused<'a>(ctx: &'a Ctx) -> u8 {
         i = 0_i32;
         'l1: while i < 120_i32 {
             'c2: {
-                if ((fns::mnName_StringTerminator(ctx).at(0)).get() as i32)
-                    == ((fns::GetPersistentNameData(ctx, ((i as u8) as i32)))
+                if {
+                    let __t1 = ((fns::GetPersistentNameData(ctx, ((i as u8) as i32)))
                         .namedata()
                         .at(0_i32)
-                        .get() as i32)
-                {
+                        .get() as i32);
+                    ((fns::mnName_StringTerminator(ctx).at(0)).get() as i32) == __t1
+                } {
                     isValid = 0_i32;
                 } else {
                     isValid = 1_i32;
@@ -3126,12 +3141,13 @@ fn inl_mnName_GetHoveredName_unfused<'a>(ctx: &'a Ctx) -> u8 {
 
 fn inl_IsNameValid_unfused<'a>(ctx: &'a Ctx, slot: i32) -> i32 {
     let mut slot = slot;
-    if ((fns::mnName_StringTerminator(ctx).at(0)).get() as i32)
-        == ((fns::GetPersistentNameData(ctx, ((slot as u8) as i32)))
+    if {
+        let __t1 = ((fns::GetPersistentNameData(ctx, ((slot as u8) as i32)))
             .namedata()
             .at(0_i32)
-            .get() as i32)
-    {
+            .get() as i32);
+        ((fns::mnName_StringTerminator(ctx).at(0)).get() as i32) == __t1
+    } {
         return 0_i32;
     }
     return 1_i32;

@@ -797,8 +797,10 @@ pub fn fn_80039618<'a>(ctx: &'a Ctx, player: i32) {
         }
     }
     {
-        let mut falls: u32 =
-            (fns::Player_GetFalls(ctx, player).wrapping_add(fns::gm_80172140(ctx)) as u32);
+        let mut falls: u32 = ({
+            let __t1 = fns::gm_80172140(ctx);
+            fns::Player_GetFalls(ctx, player).wrapping_add(__t1)
+        } as u32);
         if falls == (0_i32 as u32) {
             inl_setFlag_unfused(ctx, player, 99_i32);
         } else if falls == ((table).x0_staleMoveTable().xC94() as u32) {
@@ -1179,27 +1181,24 @@ pub fn fn_8003BD60<'a>(ctx: &'a Ctx, player: i32) {
     let mut temp_r31: pl_StaleMoveTableExt_t<'a> =
         fns::Player_GetStaleMoveTableIndexPtr2(ctx, player);
     if fns::gm_GetFrameCount(ctx) != (0_i32 as u32) {
-        if inl_pl_CalculateAverage_unfused(
-            ctx,
-            fp::frsp((temp_r31).xD14() as f64),
-            fp::frsp(fns::gm_GetFrameCount(ctx) as f64),
-        ) >= (fns::pl_804D6470(ctx).get()).x60()
+        if {
+            let __t1 = fp::frsp(fns::gm_GetFrameCount(ctx) as f64);
+            inl_pl_CalculateAverage_unfused(ctx, fp::frsp((temp_r31).xD14() as f64), __t1)
+        } >= (fns::pl_804D6470(ctx).get()).x60()
         {
             inl_setFlag_unfused(ctx, player, 52_i32);
         }
-        if inl_pl_CalculateAverage_unfused(
-            ctx,
-            fp::frsp((temp_r31).xD1C() as f64),
-            fp::frsp(fns::gm_GetFrameCount(ctx) as f64),
-        ) >= (fns::pl_804D6470(ctx).get()).x68()
+        if {
+            let __t2 = fp::frsp(fns::gm_GetFrameCount(ctx) as f64);
+            inl_pl_CalculateAverage_unfused(ctx, fp::frsp((temp_r31).xD1C() as f64), __t2)
+        } >= (fns::pl_804D6470(ctx).get()).x68()
         {
             inl_setFlag_unfused(ctx, player, 54_i32);
         }
-        if inl_pl_CalculateAverage_unfused(
-            ctx,
-            fp::frsp((temp_r31).xD20() as f64),
-            fp::frsp(fns::gm_GetFrameCount(ctx) as f64),
-        ) >= (fns::pl_804D6470(ctx).get()).x6C()
+        if {
+            let __t3 = fp::frsp(fns::gm_GetFrameCount(ctx) as f64);
+            inl_pl_CalculateAverage_unfused(ctx, fp::frsp((temp_r31).xD20() as f64), __t3)
+        } >= (fns::pl_804D6470(ctx).get()).x6C()
         {
             inl_setFlag_unfused(ctx, player, 55_i32);
         }
@@ -1213,19 +1212,17 @@ pub fn fn_8003BD60<'a>(ctx: &'a Ctx, player: i32) {
             inl_setFlag_unfused(ctx, player, 48_i32);
         }
         if (fns::gm_801720B4(ctx) == 0_i32)
-            && (inl_pl_CalculateAverage_unfused(
-                ctx,
-                fp::frsp((temp_r31).xD2C() as f64),
-                fp::frsp(fns::gm_GetFrameCount(ctx) as f64),
-            ) >= (fns::pl_804D6470(ctx).get()).x78())
+            && ({
+                let __t4 = fp::frsp(fns::gm_GetFrameCount(ctx) as f64);
+                inl_pl_CalculateAverage_unfused(ctx, fp::frsp((temp_r31).xD2C() as f64), __t4)
+            } >= (fns::pl_804D6470(ctx).get()).x78())
         {
             inl_setFlag_unfused(ctx, player, 60_i32);
         }
-        if inl_pl_CalculateAverage_unfused(
-            ctx,
-            fp::frsp((temp_r31).xD30() as f64),
-            fp::frsp(fns::gm_GetFrameCount(ctx) as f64),
-        ) >= (fns::pl_804D6470(ctx).get()).xE8()
+        if {
+            let __t5 = fp::frsp(fns::gm_GetFrameCount(ctx) as f64);
+            inl_pl_CalculateAverage_unfused(ctx, fp::frsp((temp_r31).xD30() as f64), __t5)
+        } >= (fns::pl_804D6470(ctx).get()).xE8()
         {
             inl_setFlag_unfused(ctx, player, 93_i32);
         }
@@ -1269,7 +1266,10 @@ pub fn fn_8003C340<'a>(ctx: &'a Ctx, player: i32) {
         if (temp_r3 as u32) == fns::pl_8003E2CC(ctx, player, (enums::Pl_ItemLog_Unk07 as i32)) {
             inl_setFlag_unfused(ctx, player, 179_i32);
         }
-        if fns::pl_8003E420(ctx, player) == (fns::it_8026B7D8(ctx) as u32) {
+        if {
+            let __t1 = (fns::it_8026B7D8(ctx) as u32);
+            fns::pl_8003E420(ctx, player) == __t1
+        } {
             inl_setFlag_unfused(ctx, player, 159_i32);
         }
         temp_r3_2 = fns::it_8026B7E0(ctx);
@@ -1441,9 +1441,10 @@ pub fn fn_8003C340<'a>(ctx: &'a Ctx, player: i32) {
         {
             inl_setFlag_unfused(ctx, player, 166_i32);
         }
-        if fns::pl_8003E2CC(ctx, player, (enums::Pl_ItemLog_Unk26 as i32)).wrapping_add(
-            fns::pl_8003E2CC(ctx, player, (enums::Pl_ItemLog_Unk27 as i32)),
-        ) >= (fns::pl_804D6470(ctx).get()).x168()
+        if {
+            let __t2 = fns::pl_8003E2CC(ctx, player, (enums::Pl_ItemLog_Unk27 as i32));
+            fns::pl_8003E2CC(ctx, player, (enums::Pl_ItemLog_Unk26 as i32)).wrapping_add(__t2)
+        } >= (fns::pl_804D6470(ctx).get()).x168()
         {
             inl_setFlag_unfused(ctx, player, 174_i32);
         }

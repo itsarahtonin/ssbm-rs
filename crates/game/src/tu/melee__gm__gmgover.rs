@@ -46,15 +46,21 @@ pub fn gm_801BEE9C<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
             fns::gm_SetPendingGameMode(ctx, ((game_mode).get() as u8));
         }
     } else {
-        fns::gm_InitChallengerData(
-            ctx,
-            (fns::gm_801BEFB0(ctx) as u8),
-            (fns::gm_801BEFD0(ctx) as u8),
-            (fns::gm_801BF010(ctx) as u8),
-            (statics::melee__gm__gmgover::gm_801BEFF0(ctx) as u8),
-            ckind,
-            ((game_mode).get() as u8),
-        );
+        {
+            let __t1 = (statics::melee__gm__gmgover::gm_801BEFF0(ctx) as u8);
+            let __t2 = (fns::gm_801BF010(ctx) as u8);
+            let __t3 = (fns::gm_801BEFD0(ctx) as u8);
+            let __t4 = (fns::gm_801BEFB0(ctx) as u8);
+            fns::gm_InitChallengerData(
+                ctx,
+                __t4,
+                __t3,
+                __t2,
+                __t1,
+                ckind,
+                ((game_mode).get() as u8),
+            )
+        };
         fns::gm_SetPendingGameMode(ctx, ((enums::GM_CHALLENGER_APPROACH as i32) as u8));
     }
     fns::gm_SetNewGameModePending(ctx);

@@ -760,18 +760,7 @@ pub fn fn_80106DB0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     )),
                     pos.x(),
                 ));
-                pos.set_y(fp::fmadds(
-                    (fp).x34_scale().y(),
-                    (fp::fadds(
-                        (da).specialn_sk_graphic_y_offset_ground(),
-                        statics::melee__ft__kinds__ftKirby__ftkirbyspecialseak::ftKb_Init_803CB770(
-                            ctx,
-                        )
-                        .at(inl_perm_randi(ctx, 9_i32))
-                        .get(),
-                    )),
-                    pos.y(),
-                ));
+                pos.set_y(fp::fmadds((fp).x34_scale().y(), ({ let __t4 = statics::melee__ft__kinds__ftKirby__ftkirbyspecialseak::ftKb_Init_803CB770(ctx).at(inl_perm_randi(ctx, 9_i32)).get(); fp::fadds((da).specialn_sk_graphic_y_offset_ground(), __t4) }), pos.y()));
             } else {
                 pos.set_x(fp::fmadds(
                     (fp).x34_scale().y(),

@@ -139,21 +139,25 @@ pub fn lb_8001C8BC<'a>(ctx: &'a Ctx) -> i32 {
             cstr(ctx, 0x803bab64),
         )
     });
-    return fns::lb_8001BC18(
-        ctx,
-        0_i32,
-        fns::filename(ctx).at(0),
-        Handle::cast::<Ptr<'a, Addr<'a>>>(statics::melee__lb__lbcardgame::manifest(ctx).get(0)),
-        Handle::cast::<Addr<'a>>(statics::melee__lb__lbcardgame::lb_803BAB60(ctx)),
-        inl_lb_8001C658_unfused(ctx),
-        inl_getCurrentIcon_unfused(ctx),
-        (Handle::add(
-            (statics::melee__lb__lbcardgame::state(ctx).icon_data()),
-            3_i32,
-        ))
-        .get(),
-        statics::melee__lb__lbcardgame::state(ctx).unk_status_ref(),
-    );
+    return {
+        let __t1 = inl_getCurrentIcon_unfused(ctx);
+        let __t2 = inl_lb_8001C658_unfused(ctx);
+        fns::lb_8001BC18(
+            ctx,
+            0_i32,
+            fns::filename(ctx).at(0),
+            Handle::cast::<Ptr<'a, Addr<'a>>>(statics::melee__lb__lbcardgame::manifest(ctx).get(0)),
+            Handle::cast::<Addr<'a>>(statics::melee__lb__lbcardgame::lb_803BAB60(ctx)),
+            __t2,
+            __t1,
+            (Handle::add(
+                (statics::melee__lb__lbcardgame::state(ctx).icon_data()),
+                3_i32,
+            ))
+            .get(),
+            statics::melee__lb__lbcardgame::state(ctx).unk_status_ref(),
+        )
+    };
 }
 
 pub fn updateCardStatus<'a>(ctx: &'a Ctx) -> i32 {
@@ -598,21 +602,24 @@ fn inl_dont_inline_helper_unfused<'a>(ctx: &'a Ctx) -> i32 {
         return (enums::LbCardResult_Invalid as i32);
     }
     icon = statics::melee__lb__lbcardgame::getCurrentIcon(ctx);
-    return fns::lb_8001BE30(
-        ctx,
-        0_i32,
-        fns::filename(ctx).at(0),
-        Handle::cast::<Addr<'a>>(statics::melee__lb__lbcardgame::manifest(ctx).get(0)),
-        statics::melee__lb__lbcardgame::lb_8001C658(ctx),
-        icon,
-        (Handle::add(
-            (statics::melee__lb__lbcardgame::state(ctx).icon_data()),
-            3_i32,
-        ))
-        .get(),
-        Handle::cast::<Addr<'a>>(statics::melee__lb__lbcardgame::state(ctx).unk_status_ref()),
-        Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8001cc30)),
-    );
+    return {
+        let __t1 = statics::melee__lb__lbcardgame::lb_8001C658(ctx);
+        fns::lb_8001BE30(
+            ctx,
+            0_i32,
+            fns::filename(ctx).at(0),
+            Handle::cast::<Addr<'a>>(statics::melee__lb__lbcardgame::manifest(ctx).get(0)),
+            __t1,
+            icon,
+            (Handle::add(
+                (statics::melee__lb__lbcardgame::state(ctx).icon_data()),
+                3_i32,
+            ))
+            .get(),
+            Handle::cast::<Addr<'a>>(statics::melee__lb__lbcardgame::state(ctx).unk_status_ref()),
+            Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8001cc30)),
+        )
+    };
 }
 
 fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {

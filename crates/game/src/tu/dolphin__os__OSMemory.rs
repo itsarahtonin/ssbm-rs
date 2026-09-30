@@ -52,14 +52,16 @@ pub fn MEMIntrruptHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'
     let mut context = context;
     let mut cause: u32 =
         ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc004000_u32 as u32)), 15_i32)).get() as u32);
-    let mut addr: u32 =
-        (((shl_i32(
+    let mut addr: u32 = ({
+        let __t1 =
+            ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc004000_u32 as u32)), 17_i32)).get() as i32);
+        ((shl_i32(
             (((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc004000_u32 as u32)), 18_i32)).get()
                 as i32)
                 & 0x3ff_i32),
             (16_i32 as u32),
-        )) | ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc004000_u32 as u32)), 17_i32)).get()
-            as i32)) as u32);
+        )) | __t1)
+    } as u32);
     (Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc004000_u32 as u32)), 16_i32)).set((0_i32 as u16));
     if !Handle::is_null(fns::OSErrorTable(ctx).at(15_i32).get()) {
         ctx.call_variadic::<_, ()>(

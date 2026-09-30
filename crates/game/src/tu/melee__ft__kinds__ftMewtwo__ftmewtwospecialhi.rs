@@ -437,17 +437,20 @@ pub fn ftMt_SpecialHi_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             );
             (fp).mv().mt().SpecialHi().set_stickX(stickVec.x());
             (fp).mv().mt().SpecialHi().set_stickY(stickVec.y());
-            (fp).set_gr_vel(fp::fmuls(
-                (fp).facing_dir(),
-                (fp::fmuls(
-                    (fp::fmadds(
-                        (mewtwoAttrs).x5C_MEWTWO_TELEPORT_MOMENTUM(),
-                        sqrt_stick,
-                        (mewtwoAttrs).x60_MEWTWO_TELEPORT_MOMENTUM_ADD(),
-                    )),
-                    fns::cosf(ctx, vel),
-                )),
-            ));
+            (fp).set_gr_vel({
+                let __t3 = ({
+                    let __t2 = fns::cosf(ctx, vel);
+                    fp::fmuls(
+                        (fp::fmadds(
+                            (mewtwoAttrs).x5C_MEWTWO_TELEPORT_MOMENTUM(),
+                            sqrt_stick,
+                            (mewtwoAttrs).x60_MEWTWO_TELEPORT_MOMENTUM_ADD(),
+                        )),
+                        __t2,
+                    )
+                });
+                fp::fmuls((fp).facing_dir(), __t3)
+            });
             fns::Fighter_ChangeMotionState(
                 ctx,
                 gobj,
@@ -529,25 +532,31 @@ pub fn ftMt_SpecialAirHi_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             __t2
         };
     }
-    (fp).self_vel().set_x(fp::fmuls(
-        (fp).facing_dir(),
-        (fp::fmuls(
+    (fp).self_vel().set_x({
+        let __t4 = ({
+            let __t3 = fns::cosf(ctx, floatVar);
+            fp::fmuls(
+                (fp::fmadds(
+                    (mewtwoAttrs).x5C_MEWTWO_TELEPORT_MOMENTUM(),
+                    sqrt_stick,
+                    (mewtwoAttrs).x60_MEWTWO_TELEPORT_MOMENTUM_ADD(),
+                )),
+                __t3,
+            )
+        });
+        fp::fmuls((fp).facing_dir(), __t4)
+    });
+    (fp).self_vel().set_y({
+        let __t5 = fns::sinf(ctx, floatVar);
+        fp::fmuls(
             (fp::fmadds(
                 (mewtwoAttrs).x5C_MEWTWO_TELEPORT_MOMENTUM(),
                 sqrt_stick,
                 (mewtwoAttrs).x60_MEWTWO_TELEPORT_MOMENTUM_ADD(),
             )),
-            fns::cosf(ctx, floatVar),
-        )),
-    ));
-    (fp).self_vel().set_y(fp::fmuls(
-        (fp::fmadds(
-            (mewtwoAttrs).x5C_MEWTWO_TELEPORT_MOMENTUM(),
-            sqrt_stick,
-            (mewtwoAttrs).x60_MEWTWO_TELEPORT_MOMENTUM_ADD(),
-        )),
-        fns::sinf(ctx, floatVar),
-    ));
+            __t5,
+        )
+    });
     fns::Fighter_ChangeMotionState(
         ctx,
         gobj,

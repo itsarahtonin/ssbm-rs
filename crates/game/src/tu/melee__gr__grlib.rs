@@ -298,11 +298,11 @@ pub fn grLib_801C9BC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
     fns::HSD_JObjAnimAll(ctx, jobj);
-    fns::Camera_SetQuakeOffset(
-        ctx,
-        inl_HSD_JObjGetTranslationX_unfused(ctx, jobj),
-        inl_HSD_JObjGetTranslationY_unfused(ctx, jobj),
-    );
+    {
+        let __t1 = inl_HSD_JObjGetTranslationY_unfused(ctx, jobj);
+        let __t2 = inl_HSD_JObjGetTranslationX_unfused(ctx, jobj);
+        fns::Camera_SetQuakeOffset(ctx, __t2, __t1)
+    };
 }
 
 pub fn grLib_801C9C40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -311,11 +311,11 @@ pub fn grLib_801C9C40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
     let mut aobj: HSD_AObj<'a> = (jobj).aobj();
     fns::HSD_JObjAnimAll(ctx, jobj);
-    fns::Camera_SetQuakeOffset(
-        ctx,
-        inl_HSD_JObjGetTranslationX_unfused(ctx, jobj),
-        inl_HSD_JObjGetTranslationY_unfused(ctx, jobj),
-    );
+    {
+        let __t1 = inl_HSD_JObjGetTranslationY_unfused(ctx, jobj);
+        let __t2 = inl_HSD_JObjGetTranslationX_unfused(ctx, jobj);
+        fns::Camera_SetQuakeOffset(ctx, __t2, __t1)
+    };
     if (Handle::is_null(aobj)) || (((aobj).flags() & (0x40000000_i32 as u32)) != 0) {
         fns::HSD_GObjFree(ctx, gobj);
     }

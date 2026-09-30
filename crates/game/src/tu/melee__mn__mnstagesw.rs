@@ -76,16 +76,19 @@ pub fn mnStageSw_802359C8<'a>(ctx: &'a Ctx, data: MnStageSwData<'a>) {
         i = 0_i32;
         'l1: while i < 15_i32 {
             'c2: {
-                text = fns::HSD_SisLib_803A5ACC(
-                    ctx,
-                    0_i32,
-                    (fns::mn_804D6BB5(ctx).get() as i32),
-                    fp::fadds(1.0, inl_HSD_JObjGetTranslationX(ctx, (data).x2C())),
-                    fp::fnmadds(delta_y, fp::frsp(i as f64), start_y),
-                    17.5,
-                    160.0,
-                    300.0,
-                );
+                text = {
+                    let __t1 = fp::fadds(1.0, inl_HSD_JObjGetTranslationX(ctx, (data).x2C()));
+                    fns::HSD_SisLib_803A5ACC(
+                        ctx,
+                        0_i32,
+                        (fns::mn_804D6BB5(ctx).get() as i32),
+                        __t1,
+                        fp::fnmadds(delta_y, fp::frsp(i as f64), start_y),
+                        17.5,
+                        160.0,
+                        300.0,
+                    )
+                };
                 (data).x40().at(i).set(text);
                 (text).font_size().set_x(0.05209999904036522);
                 (text).font_size().set_y(0.05209999904036522);
@@ -121,16 +124,19 @@ pub fn mnStageSw_802359C8<'a>(ctx: &'a Ctx, data: MnStageSwData<'a>) {
         i = 15_i32;
         'l3: while i < 29_i32 {
             'c4: {
-                text = fns::HSD_SisLib_803A5ACC(
-                    ctx,
-                    0_i32,
-                    (fns::mn_804D6BB5(ctx).get() as i32),
-                    fp::fadds(1.0, inl_HSD_JObjGetTranslationX(ctx, (data).x34())),
-                    fp::fnmadds(delta_y, fp::frsp((i.wrapping_sub(15_i32)) as f64), start_y),
-                    17.5,
-                    160.0,
-                    300.0,
-                );
+                text = {
+                    let __t2 = fp::fadds(1.0, inl_HSD_JObjGetTranslationX(ctx, (data).x34()));
+                    fns::HSD_SisLib_803A5ACC(
+                        ctx,
+                        0_i32,
+                        (fns::mn_804D6BB5(ctx).get() as i32),
+                        __t2,
+                        fp::fnmadds(delta_y, fp::frsp((i.wrapping_sub(15_i32)) as f64), start_y),
+                        17.5,
+                        160.0,
+                        300.0,
+                    )
+                };
                 (data).x40().at(i).set(text);
                 (text).font_size().set_x(0.05209999904036522);
                 (text).font_size().set_y(0.05209999904036522);
@@ -875,10 +881,10 @@ pub fn mnStageSw_80236178<'a>(ctx: &'a Ctx, data: MnStageSwData<'a>, idx: u8) {
     let mut delta: f64 = 0.0;
     jobj = (data).x28();
     fns::HSD_JObjClearFlagsAll(ctx, jobj, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
-    delta = fp::fsubs(
-        inl_HSD_JObjGetTranslationY(ctx, (data).x30()),
-        inl_HSD_JObjGetTranslationY(ctx, (data).x2C()),
-    );
+    delta = {
+        let __t1 = inl_HSD_JObjGetTranslationY(ctx, (data).x2C());
+        fp::fsubs(inl_HSD_JObjGetTranslationY(ctx, (data).x30()), __t1)
+    };
     if (idx as i32) < 15_i32 {
         ref_jobj = (data).x2C();
         inl_HSD_JObjSetTranslateX(ctx, jobj, inl_HSD_JObjGetTranslationX(ctx, ref_jobj));
@@ -990,10 +996,10 @@ pub fn mnStageSw_80236548<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: u8, arg2: 
         fns::HSD_JObjAnimAll(ctx, hover_anim_jobj.get());
         cursor_jobj = (data).x28();
         fns::HSD_JObjClearFlagsAll(ctx, cursor_jobj, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
-        delta_y = fp::fsubs(
-            inl_HSD_JObjGetTranslationY(ctx, (data).x30()),
-            inl_HSD_JObjGetTranslationY(ctx, (data).x2C()),
-        );
+        delta_y = {
+            let __t1 = inl_HSD_JObjGetTranslationY(ctx, (data).x2C());
+            fp::fsubs(inl_HSD_JObjGetTranslationY(ctx, (data).x30()), __t1)
+        };
         if (sel as i32) < 15_i32 {
             x = inl_HSD_JObjGetTranslationX(ctx, (data).x2C());
             inl_HSD_JObjSetTranslateX(ctx, cursor_jobj, x);
@@ -1295,10 +1301,10 @@ pub fn mnStageSw_80236CBC<'a>(ctx: &'a Ctx, arg0: i8) -> HSD_GObj<'a> {
     }
     fns::mn_804A04F0(ctx)
         .set_confirmed_selection((user_data).x2().at(((user_data).x1() as i32)).get());
-    y_spacing = fp::fsubs(
-        inl_HSD_JObjGetTranslationY(ctx, (user_data).x30()),
-        inl_HSD_JObjGetTranslationY(ctx, (user_data).x2C()),
-    );
+    y_spacing = {
+        let __t1 = inl_HSD_JObjGetTranslationY(ctx, (user_data).x2C());
+        fp::fsubs(inl_HSD_JObjGetTranslationY(ctx, (user_data).x30()), __t1)
+    };
     {
         i = 0_i32;
         'l3: while i < 29_i32 {
@@ -1799,10 +1805,10 @@ fn inl_mnStageSw_SetCursorPosition<'a>(ctx: &'a Ctx, user_data: MnStageSwData<'a
     cursor = (user_data).x28();
     hovered = (user_data).x1();
     fns::HSD_JObjClearFlagsAll(ctx, cursor, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
-    y_spacing = fp::fsubs(
-        inl_HSD_JObjGetTranslationY(ctx, (user_data).x30()),
-        inl_HSD_JObjGetTranslationY(ctx, (user_data).x2C()),
-    );
+    y_spacing = {
+        let __t1 = inl_HSD_JObjGetTranslationY(ctx, (user_data).x2C());
+        fp::fsubs(inl_HSD_JObjGetTranslationY(ctx, (user_data).x30()), __t1)
+    };
     if (hovered as i32) < 15_i32 {
         inl_HSD_JObjSetTranslateX(
             ctx,

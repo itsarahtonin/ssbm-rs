@@ -115,12 +115,17 @@ pub fn ftPr_SpecialAirS_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         {
             let mut angle: f64 =
                 inl_calcAngleRadians_unfused(ctx, gobj, (fp).input().lstick().get(0_i32).y());
-            (fp).self_vel()
-                .set_y(fp::fmuls((da).xF0(), fns::sinf(ctx, angle)));
-            (fp).self_vel().set_x(fp::fmuls(
-                (da).xF0(),
-                (fp::fmuls((fp).facing_dir(), fns::cosf(ctx, angle))),
-            ));
+            (fp).self_vel().set_y({
+                let __t1 = fns::sinf(ctx, angle);
+                fp::fmuls((da).xF0(), __t1)
+            });
+            (fp).self_vel().set_x({
+                let __t3 = ({
+                    let __t2 = fns::cosf(ctx, angle);
+                    fp::fmuls((fp).facing_dir(), __t2)
+                });
+                fp::fmuls((da).xF0(), __t3)
+            });
         }
     }
     's3: {

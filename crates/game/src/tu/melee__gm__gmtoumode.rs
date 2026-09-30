@@ -84,11 +84,14 @@ pub fn gm_801B1834<'a>(ctx: &'a Ctx, state: GameModeState<'a>) {
             (mei).match_end().match_kind(),
             (mei).match_end().outcome(),
         );
-        fns::gm_SetupResultsScreenPlayTime(
-            ctx,
-            div_u32((mei).match_end().frame_count(), (60_i32 as u32)),
-            fns::gm_80162800(ctx, (mei).match_end()),
-        );
+        {
+            let __t1 = fns::gm_80162800(ctx, (mei).match_end());
+            fns::gm_SetupResultsScreenPlayTime(
+                ctx,
+                div_u32((mei).match_end().frame_count(), (60_i32 as u32)),
+                __t1,
+            )
+        };
     }
     if (fns::gm_MatchHasMultipleWinners(ctx, (mei).match_end()) != 0)
         && (fns::gm_8018F1B0(ctx, (mei).match_end()) != 0)

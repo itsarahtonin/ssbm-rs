@@ -157,13 +157,16 @@ pub fn fn_800D299C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, idx: i32, arg8: f64, ar
     }
     (fp).mv().co().walk().set_middle_anim_frame(arg8);
     (fp).mv().co().walk().set_fast_anim_frame(arg9);
-    fns::HSD_JObjAddAnim(
-        ctx,
-        (fp).x2184(),
-        fns::it_80293660(ctx, idx),
-        null::<HSD_MatAnimJoint<'a>>(ctx),
-        null::<HSD_ShapeAnimJoint<'a>>(ctx),
-    );
+    {
+        let __t1 = fns::it_80293660(ctx, idx);
+        fns::HSD_JObjAddAnim(
+            ctx,
+            (fp).x2184(),
+            __t1,
+            null::<HSD_MatAnimJoint<'a>>(ctx),
+            null::<HSD_ShapeAnimJoint<'a>>(ctx),
+        )
+    };
     fns::ftAnim_80070734(ctx, (fp).x2184(), 0.0);
     fns::HSD_JObjAnim(ctx, (fp).x2184());
 }

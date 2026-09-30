@@ -37,10 +37,8 @@ pub fn ftCo_800BC458<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    (fp).set_grab_timer(fp::fsubs(
-        (fp).grab_timer(),
-        fns::ftKp_SpecialS_80132DD0(ctx, (fp).victim_gobj()),
-    ));
+    let __t1 = fns::ftKp_SpecialS_80132DD0(ctx, (fp).victim_gobj());
+    (fp).set_grab_timer(fp::fsubs((fp).grab_timer(), __t1));
     (fp).mv().co().capturekoopa().set_x0(fns::ftCommon_GrabMash(
         ctx,
         fp,

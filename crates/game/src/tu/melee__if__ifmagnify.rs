@@ -156,11 +156,10 @@ pub fn ifMagnify_802FB8C0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
             dir.set_y(fp::fneg(
                 (fp::fsubs(fp::frsp(screen_pos.y() as f64), 240.0)),
             ));
-            inl_HSD_JObjSetRotationZ_unfused(
-                ctx,
-                (player).jobj(),
-                fns::atan2f(ctx, dir.y(), dir.x()),
-            );
+            {
+                let __t1 = fns::atan2f(ctx, dir.y(), dir.x());
+                inl_HSD_JObjSetRotationZ_unfused(ctx, (player).jobj(), __t1)
+            };
             let _ = fns::ifMagnify_802FB73C(ctx, player, dir, edge_pos);
             translate.set_x(fp::fmuls(0.09125000238418579, edge_pos.x()));
             translate.set_y(fp::fmuls(0.10000000149011612, edge_pos.y()));
@@ -274,27 +273,38 @@ pub fn ifMagnify_802FBBDC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
                     }
                     fns::Player_80036978(ctx, i, world_pos);
                     is_outside = 1_i32;
-                    if (!(world_pos.x() < fns::Stage_GetCamBoundsLeftOffset(ctx)))
-                        && (!(world_pos.x() > fns::Stage_GetCamBoundsRightOffset(ctx)))
-                    {
+                    if (!({
+                        let __t1 = fns::Stage_GetCamBoundsLeftOffset(ctx);
+                        world_pos.x() < __t1
+                    })) && (!({
+                        let __t2 = fns::Stage_GetCamBoundsRightOffset(ctx);
+                        world_pos.x() > __t2
+                    })) {
                         is_outside = 0_i32;
                     }
                     if (is_outside != 0) {
                         x_blend = 0.0;
                     } else {
-                        if world_pos.x() < fns::Stage_GetCamBoundsLeftOffset(ctx) {
+                        if {
+                            let __t3 = fns::Stage_GetCamBoundsLeftOffset(ctx);
+                            world_pos.x() < __t3
+                        } {
                             x_class = 0.0;
-                        } else if world_pos.x() > fns::Stage_GetCamBoundsRightOffset(ctx) {
+                        } else if {
+                            let __t4 = fns::Stage_GetCamBoundsRightOffset(ctx);
+                            world_pos.x() > __t4
+                        } {
                             x_class = 3.0;
-                        } else if world_pos.x()
-                            < (fp::fmuls(
+                        } else if {
+                            let __t6 = (fp::fmuls(
                                 0.5,
-                                (fp::fadds(
-                                    fns::Stage_GetCamBoundsLeftOffset(ctx),
-                                    fns::Stage_GetCamBoundsRightOffset(ctx),
-                                )),
-                            ))
-                        {
+                                ({
+                                    let __t5 = fns::Stage_GetCamBoundsRightOffset(ctx);
+                                    fp::fadds(fns::Stage_GetCamBoundsLeftOffset(ctx), __t5)
+                                }),
+                            ));
+                            world_pos.x() < __t6
+                        } {
                             x_class = 1.0;
                         } else {
                             x_class = 2.0;
@@ -302,68 +312,88 @@ pub fn ifMagnify_802FBBDC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
                         if (fp::fctiwz(x_class).wrapping_sub(1_i32)) == 0_i32 {
                             x_blend = fp::fsubs(
                                 1.0,
-                                (fp::fdivs(
-                                    (fp::fsubs(
-                                        world_pos.x(),
-                                        fns::Stage_GetCamBoundsLeftOffset(ctx),
-                                    )),
-                                    (fp::fmsubs(
+                                ({
+                                    let __t11 = (fp::fmsubs(
                                         0.5,
-                                        (fp::fadds(
-                                            fns::Stage_GetCamBoundsLeftOffset(ctx),
-                                            fns::Stage_GetCamBoundsRightOffset(ctx),
-                                        )),
+                                        ({
+                                            let __t10 = fns::Stage_GetCamBoundsRightOffset(ctx);
+                                            fp::fadds(fns::Stage_GetCamBoundsLeftOffset(ctx), __t10)
+                                        }),
                                         fns::Stage_GetCamBoundsLeftOffset(ctx),
-                                    )),
-                                )),
+                                    ));
+                                    fp::fdivs(
+                                        ({
+                                            let __t7 = fns::Stage_GetCamBoundsLeftOffset(ctx);
+                                            fp::fsubs(world_pos.x(), __t7)
+                                        }),
+                                        __t11,
+                                    )
+                                }),
                             );
                         } else {
                             x_blend = fp::fsubs(
                                 1.0,
-                                (fp::fdivs(
-                                    (fp::fnmsubs(
+                                ({
+                                    let __t18 = (fp::fnmsubs(
                                         0.5,
-                                        (fp::fadds(
-                                            fns::Stage_GetCamBoundsLeftOffset(ctx),
-                                            fns::Stage_GetCamBoundsRightOffset(ctx),
-                                        )),
-                                        world_pos.x(),
-                                    )),
-                                    (fp::fnmsubs(
-                                        0.5,
-                                        (fp::fadds(
-                                            fns::Stage_GetCamBoundsLeftOffset(ctx),
-                                            fns::Stage_GetCamBoundsRightOffset(ctx),
-                                        )),
+                                        ({
+                                            let __t17 = fns::Stage_GetCamBoundsRightOffset(ctx);
+                                            fp::fadds(fns::Stage_GetCamBoundsLeftOffset(ctx), __t17)
+                                        }),
                                         fns::Stage_GetCamBoundsRightOffset(ctx),
-                                    )),
-                                )),
+                                    ));
+                                    fp::fdivs(
+                                        (fp::fnmsubs(
+                                            0.5,
+                                            ({
+                                                let __t14 = fns::Stage_GetCamBoundsRightOffset(ctx);
+                                                fp::fadds(
+                                                    fns::Stage_GetCamBoundsLeftOffset(ctx),
+                                                    __t14,
+                                                )
+                                            }),
+                                            world_pos.x(),
+                                        )),
+                                        __t18,
+                                    )
+                                }),
                             );
                         }
                     }
                     x_inv = fp::fsubs(1.0, x_blend);
                     is_outside = 1_i32;
-                    if (!(world_pos.y() > fns::Stage_GetCamBoundsTopOffset(ctx)))
-                        && (!(world_pos.y() < fns::Stage_GetCamBoundsBottomOffset(ctx)))
-                    {
+                    if (!({
+                        let __t19 = fns::Stage_GetCamBoundsTopOffset(ctx);
+                        world_pos.y() > __t19
+                    })) && (!({
+                        let __t20 = fns::Stage_GetCamBoundsBottomOffset(ctx);
+                        world_pos.y() < __t20
+                    })) {
                         is_outside = 0_i32;
                     }
                     if (is_outside != 0) {
                         y_blend = 0.0;
                     } else {
-                        if world_pos.y() > fns::Stage_GetCamBoundsTopOffset(ctx) {
+                        if {
+                            let __t21 = fns::Stage_GetCamBoundsTopOffset(ctx);
+                            world_pos.y() > __t21
+                        } {
                             y_class = 0.0;
-                        } else if world_pos.y() < fns::Stage_GetCamBoundsBottomOffset(ctx) {
+                        } else if {
+                            let __t22 = fns::Stage_GetCamBoundsBottomOffset(ctx);
+                            world_pos.y() < __t22
+                        } {
                             y_class = 3.0;
-                        } else if world_pos.y()
-                            > (fp::fmuls(
+                        } else if {
+                            let __t24 = (fp::fmuls(
                                 0.5,
-                                (fp::fadds(
-                                    fns::Stage_GetCamBoundsTopOffset(ctx),
-                                    fns::Stage_GetCamBoundsBottomOffset(ctx),
-                                )),
-                            ))
-                        {
+                                ({
+                                    let __t23 = fns::Stage_GetCamBoundsBottomOffset(ctx);
+                                    fp::fadds(fns::Stage_GetCamBoundsTopOffset(ctx), __t23)
+                                }),
+                            ));
+                            world_pos.y() > __t24
+                        } {
                             y_class = 1.0;
                         } else {
                             y_class = 2.0;
@@ -371,42 +401,52 @@ pub fn ifMagnify_802FBBDC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
                         if (fp::fctiwz(y_class).wrapping_sub(1_i32)) == 0_i32 {
                             y_blend = fp::fsubs(
                                 1.0,
-                                (fp::fdivs(
-                                    (fp::fsubs(
-                                        fns::Stage_GetCamBoundsTopOffset(ctx),
-                                        world_pos.y(),
-                                    )),
-                                    fp::fnmsubs(
+                                ({
+                                    let __t28 = fp::fnmsubs(
                                         0.5,
-                                        (fp::fadds(
-                                            fns::Stage_GetCamBoundsTopOffset(ctx),
-                                            fns::Stage_GetCamBoundsBottomOffset(ctx),
-                                        )),
+                                        ({
+                                            let __t27 = fns::Stage_GetCamBoundsBottomOffset(ctx);
+                                            fp::fadds(fns::Stage_GetCamBoundsTopOffset(ctx), __t27)
+                                        }),
                                         fns::Stage_GetCamBoundsTopOffset(ctx),
-                                    ),
-                                )),
+                                    );
+                                    fp::fdivs(
+                                        (fp::fsubs(
+                                            fns::Stage_GetCamBoundsTopOffset(ctx),
+                                            world_pos.y(),
+                                        )),
+                                        __t28,
+                                    )
+                                }),
                             );
                         } else {
                             y_blend = fp::fsubs(
                                 1.0,
-                                (fp::fdivs(
-                                    (fp::fmsubs(
+                                ({
+                                    let __t34 = (fp::fmsubs(
                                         0.5,
-                                        (fp::fadds(
-                                            fns::Stage_GetCamBoundsTopOffset(ctx),
-                                            fns::Stage_GetCamBoundsBottomOffset(ctx),
-                                        )),
-                                        world_pos.y(),
-                                    )),
-                                    (fp::fmsubs(
-                                        0.5,
-                                        (fp::fadds(
-                                            fns::Stage_GetCamBoundsTopOffset(ctx),
-                                            fns::Stage_GetCamBoundsBottomOffset(ctx),
-                                        )),
+                                        ({
+                                            let __t33 = fns::Stage_GetCamBoundsBottomOffset(ctx);
+                                            fp::fadds(fns::Stage_GetCamBoundsTopOffset(ctx), __t33)
+                                        }),
                                         fns::Stage_GetCamBoundsBottomOffset(ctx),
-                                    )),
-                                )),
+                                    ));
+                                    fp::fdivs(
+                                        (fp::fmsubs(
+                                            0.5,
+                                            ({
+                                                let __t30 =
+                                                    fns::Stage_GetCamBoundsBottomOffset(ctx);
+                                                fp::fadds(
+                                                    fns::Stage_GetCamBoundsTopOffset(ctx),
+                                                    __t30,
+                                                )
+                                            }),
+                                            world_pos.y(),
+                                        )),
+                                        __t34,
+                                    )
+                                }),
                             );
                         }
                     }
@@ -579,7 +619,7 @@ pub fn ifMagnify_802FC3C0<'a>(ctx: &'a Ctx, slot: i32) {
         );
         images = fns::ifMagnify_804A1DE0(ctx).image_descs().get(0);
         (player).set_idesc((Handle::add(images, slot.wrapping_sub(1_i32))));
-        ((player).idesc()).set_image_ptr(fns::HSD_MemAlloc(
+        let __t1 = fns::HSD_MemAlloc(
             ctx,
             (((fns::GXGetTexBufferSize(
                 ctx,
@@ -591,7 +631,8 @@ pub fn ifMagnify_802FC3C0<'a>(ctx: &'a Ctx, slot: i32) {
             )
             .wrapping_add((31_i32 as u32)))
                 & ((!31_i32) as u32)) as i32),
-        ));
+        );
+        ((player).idesc()).set_image_ptr(__t1);
         (((((child.get()).u().dobj()).next()).mobj()).tobj()).set_imagedesc((player).idesc());
     }
     let _ = fns::lb_80011E24(
@@ -925,17 +966,12 @@ fn inl_ifMagnify_GetPlayerColor_unfused<'a>(ctx: &'a Ctx, color: _GXColor<'a>, s
     let mut color = color;
     let mut slot = slot;
     Handle::copy_from((color), {
-        fns::gm_80160968(
-            ctx,
-            __ret_tmp,
-            fns::gm_80160854(
-                ctx,
-                (slot as u8),
-                (fns::Player_GetTeam(ctx, slot) as u8),
-                (fns::gm_8016B168(ctx) as u8),
-                (fns::Player_GetPlayerSlotType(ctx, slot) as u8),
-            ),
-        );
+        fns::gm_80160968(ctx, __ret_tmp, {
+            let __t1 = (fns::Player_GetPlayerSlotType(ctx, slot) as u8);
+            let __t2 = (fns::gm_8016B168(ctx) as u8);
+            let __t3 = (fns::Player_GetTeam(ctx, slot) as u8);
+            fns::gm_80160854(ctx, (slot as u8), __t3, __t2, __t1)
+        });
         __ret_tmp
     });
 }
@@ -961,36 +997,50 @@ fn inl_ifMagnify_GetCornerColors<'a>(ctx: &'a Ctx, colors: _GXColor<'a>, world_p
         j = 0_i32;
         'l1: while j < 4_i32 {
             'c2: {
-                if (world_pos).y() > fns::Stage_GetCamBoundsTopOffset(ctx) {
+                if {
+                    let __t1 = fns::Stage_GetCamBoundsTopOffset(ctx);
+                    (world_pos).y() > __t1
+                } {
                     y_class = 0.0;
-                } else if (world_pos).y() < fns::Stage_GetCamBoundsBottomOffset(ctx) {
+                } else if {
+                    let __t2 = fns::Stage_GetCamBoundsBottomOffset(ctx);
+                    (world_pos).y() < __t2
+                } {
                     y_class = 3.0;
-                } else if (world_pos).y()
-                    > (fp::fmuls(
+                } else if {
+                    let __t4 = (fp::fmuls(
                         0.5,
-                        (fp::fadds(
-                            fns::Stage_GetCamBoundsTopOffset(ctx),
-                            fns::Stage_GetCamBoundsBottomOffset(ctx),
-                        )),
-                    ))
-                {
+                        ({
+                            let __t3 = fns::Stage_GetCamBoundsBottomOffset(ctx);
+                            fp::fadds(fns::Stage_GetCamBoundsTopOffset(ctx), __t3)
+                        }),
+                    ));
+                    (world_pos).y() > __t4
+                } {
                     y_class = 1.0;
                 } else {
                     y_class = 2.0;
                 }
-                if (world_pos).x() < fns::Stage_GetCamBoundsLeftOffset(ctx) {
+                if {
+                    let __t5 = fns::Stage_GetCamBoundsLeftOffset(ctx);
+                    (world_pos).x() < __t5
+                } {
                     x_class = 0.0;
-                } else if (world_pos).x() > fns::Stage_GetCamBoundsRightOffset(ctx) {
+                } else if {
+                    let __t6 = fns::Stage_GetCamBoundsRightOffset(ctx);
+                    (world_pos).x() > __t6
+                } {
                     x_class = 3.0;
-                } else if (world_pos).x()
-                    < (fp::fmuls(
+                } else if {
+                    let __t8 = (fp::fmuls(
                         0.5,
-                        (fp::fadds(
-                            fns::Stage_GetCamBoundsLeftOffset(ctx),
-                            fns::Stage_GetCamBoundsRightOffset(ctx),
-                        )),
-                    ))
-                {
+                        ({
+                            let __t7 = fns::Stage_GetCamBoundsRightOffset(ctx);
+                            fp::fadds(fns::Stage_GetCamBoundsLeftOffset(ctx), __t7)
+                        }),
+                    ));
+                    (world_pos).x() < __t8
+                } {
                     x_class = 1.0;
                 } else {
                     x_class = 2.0;

@@ -1582,16 +1582,18 @@ pub fn gm_Scene_TouAlt_OnFrame<'a>(ctx: &'a Ctx) {
                             if ((color_status as i32) != 2_i32) && ((color_status as i32) != 1_i32)
                             {
                                 if ((buttons & ((shl_i32(1_i32, (10_i32 as u32))) as u32)) != 0) {
-                                    if ((tmd).x4B8().get(i).x3() as i32)
-                                        < ((fns::gm_GetNumCostumesForCKind(
+                                    if {
+                                        let __t1 = ((fns::gm_GetNumCostumesForCKind(
                                             ctx,
                                             (fns::fn_8018F6FC(
                                                 ctx,
                                                 ((tmd).x4B8().get(i).x1() as i32),
                                             ) as u8),
-                                        ) as i32)
-                                            .wrapping_sub(1_i32))
-                                    {
+                                        )
+                                            as i32)
+                                            .wrapping_sub(1_i32));
+                                        ((tmd).x4B8().get(i).x3() as i32) < __t1
+                                    } {
                                         (tmd).x4B8().get(i).set_x3(
                                             (((tmd).x4B8().get(i).x3() as i32).wrapping_add(1_i32)
                                                 as u8),

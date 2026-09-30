@@ -465,12 +465,16 @@ pub fn mnDiagram3_HandleInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             inl_sfxMove(ctx);
             (data).set_cursor_row((((data).cursor_row() as i32).wrapping_sub(1_i32) as u8));
             popup = Handle::cast::<HSD_JObj<'a>>(((data).popup_gobj()).hsd_obj());
-            inl_mnDiagram3_PositionPopup(ctx, popup, (data).cursor_row(), {
-                let __t1 =
-                    Handle::cast::<Diagram3<'a>>((fns::mnDiagram3_804D6C20(ctx).get()).user_data());
-                cur = __t1;
-                __t1
-            });
+            {
+                let __t2 = {
+                    let __t1 = Handle::cast::<Diagram3<'a>>(
+                        (fns::mnDiagram3_804D6C20(ctx).get()).user_data(),
+                    );
+                    cur = __t1;
+                    __t1
+                };
+                inl_mnDiagram3_PositionPopup(ctx, popup, (data).cursor_row(), __t2)
+            };
             inl_mnDiagram3_RefreshRankings(ctx, fns::mnDiagram3_804D6C20(ctx).get());
             return;
         }
@@ -497,12 +501,16 @@ pub fn mnDiagram3_HandleInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             inl_sfxMove(ctx);
             (data).set_cursor_row((((data).cursor_row() as i32).wrapping_add(1_i32) as u8));
             popup_2 = Handle::cast::<HSD_JObj<'a>>(((data).popup_gobj()).hsd_obj());
-            inl_mnDiagram3_PositionPopup(ctx, popup_2, (data).cursor_row(), {
-                let __t2 =
-                    Handle::cast::<Diagram3<'a>>((fns::mnDiagram3_804D6C20(ctx).get()).user_data());
-                cur_2 = __t2;
-                __t2
-            });
+            {
+                let __t4 = {
+                    let __t3 = Handle::cast::<Diagram3<'a>>(
+                        (fns::mnDiagram3_804D6C20(ctx).get()).user_data(),
+                    );
+                    cur_2 = __t3;
+                    __t3
+                };
+                inl_mnDiagram3_PositionPopup(ctx, popup_2, (data).cursor_row(), __t4)
+            };
             inl_mnDiagram3_RefreshRankings(ctx, fns::mnDiagram3_804D6C20(ctx).get());
             return;
         }
@@ -911,10 +919,13 @@ fn inl_mnDiagram3_RebuildRowLabels<'a>(
     let mut base_idx: i32 = 0;
     let mut text: HSD_Text<'a> = null(ctx);
     base_idx = ((data).scroll_offset() as i32);
-    spacing = fp::fsubs(
-        inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(9_i32).get()),
-        inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(8_i32).get()),
-    );
+    spacing = {
+        let __t1 = inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(8_i32).get());
+        fp::fsubs(
+            inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(9_i32).get()),
+            __t1,
+        )
+    };
     fns::lb_8000B1CC(
         ctx,
         (data).jobjs().at(8_i32).get(),
@@ -963,10 +974,13 @@ fn inl_sfxMove<'a>(ctx: &'a Ctx) {
 
 fn inl_mnDiagram3_GetRowSpacing<'a>(ctx: &'a Ctx, data: Diagram3<'a>) -> f64 {
     let mut data = data;
-    return fp::fsubs(
-        inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(9_i32).get()),
-        inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(8_i32).get()),
-    );
+    return {
+        let __t1 = inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(8_i32).get());
+        fp::fsubs(
+            inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(9_i32).get()),
+            __t1,
+        )
+    };
 }
 
 fn inl_HSD_JObjGetTranslationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
@@ -1152,10 +1166,13 @@ fn inl_mnDiagram3_GetPopupSpacing<'a>(
 ) -> f64 {
     let mut popup_row = popup_row;
     let mut data = data;
-    return fp::fsubs(
-        inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(9_i32).get()),
-        inl_HSD_JObjGetTranslationY(ctx, popup_row),
-    );
+    return {
+        let __t1 = inl_HSD_JObjGetTranslationY(ctx, popup_row);
+        fp::fsubs(
+            inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(9_i32).get()),
+            __t1,
+        )
+    };
 }
 
 fn inl_HSD_JObjSetTranslateXWithMtxDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
@@ -1255,10 +1272,13 @@ fn inl_mnDiagram3_SetupRows<'a>(
     );
     data = Handle::cast::<Diagram3<'a>>((fns::mnDiagram3_804D6C20(ctx).get()).user_data());
     scroll = ((data).scroll_offset() as i32);
-    spacing = fp::fsubs(
-        inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(9_i32).get()),
-        inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(8_i32).get()),
-    );
+    spacing = {
+        let __t1 = inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(8_i32).get());
+        fp::fsubs(
+            inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(9_i32).get()),
+            __t1,
+        )
+    };
     fns::lb_8000B1CC(
         ctx,
         (data).jobjs().at(8_i32).get(),
@@ -1292,18 +1312,19 @@ fn inl_mnDiagram3_SetupRows<'a>(
                         limit = 21_i32;
                     }
                     limit = ((limit as u8) as i32);
-                    val = (({
-                        let __t1 = (scroll as u8);
-                        stat_idx = __t1;
-                        __t1
-                    }) as i32)
-                        .wrapping_add(
-                            (({
-                                let __t2 = type_idx;
-                                type_idx = __t2;
-                                __t2
-                            }) as i32),
-                        );
+                    val = {
+                        let __t4 = (({
+                            let __t3 = type_idx;
+                            type_idx = __t3;
+                            __t3
+                        }) as i32);
+                        (({
+                            let __t2 = (scroll as u8);
+                            stat_idx = __t2;
+                            __t2
+                        }) as i32)
+                            .wrapping_add(__t4)
+                    };
                     if val >= limit {
                         limit = val.wrapping_sub(limit);
                     } else {

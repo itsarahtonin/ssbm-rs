@@ -433,55 +433,62 @@ pub fn gm_80182174<'a>(ctx: &'a Ctx) {
     let mut spawn_table_26: Ptr<'a, RegClearSpawnEntry<'a>> = null(ctx);
     let mut mode: i32 = 0;
     mode = (fns::gm_GetCurrentGameMode(ctx) as i32);
-    let _ = fns::lbArchive_80016DBC(
-        ctx,
-        cstr(ctx, 0x803d9188),
-        Handle::cast::<Addr<'a>>(fns::lbl_80472ED8(ctx).x6A4_ref()),
-        &[
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803d9198))),
-            VarArg::Int(Handle::addr(
-                ({
-                    let __t1 = fns::lbl_80472ED8(ctx).x6A8_ref();
-                    spawn_table_22 = __t1;
-                    __t1
-                }),
-            )),
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803d91b4))),
-            VarArg::Int(Handle::addr(
-                ({
-                    let __t2 = fns::lbl_80472ED8(ctx).x6AC_ref();
-                    spawn_table_23 = __t2;
-                    __t2
-                }),
-            )),
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803d91d0))),
-            VarArg::Int(Handle::addr(
-                ({
-                    let __t3 = fns::lbl_80472ED8(ctx).x6B0_ref();
-                    spawn_table_24 = __t3;
-                    __t3
-                }),
-            )),
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803d91ec))),
-            VarArg::Int(Handle::addr(
-                ({
-                    let __t4 = fns::lbl_80472ED8(ctx).x6B4_ref();
-                    spawn_table_25 = __t4;
-                    __t4
-                }),
-            )),
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803d9208))),
-            VarArg::Int(Handle::addr(
-                ({
-                    let __t5 = fns::lbl_80472ED8(ctx).x6B8_ref();
-                    spawn_table_26 = __t5;
-                    __t5
-                }),
-            )),
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803d9224))),
-            VarArg::Int(0_i32 as u32),
-        ],
-    );
+    let _ = {
+        let __t6 = VarArg::Int(Handle::addr(
+            ({
+                let __t5 = fns::lbl_80472ED8(ctx).x6B8_ref();
+                spawn_table_26 = __t5;
+                __t5
+            }),
+        ));
+        let __t7 = VarArg::Int(Handle::addr(
+            ({
+                let __t4 = fns::lbl_80472ED8(ctx).x6B4_ref();
+                spawn_table_25 = __t4;
+                __t4
+            }),
+        ));
+        let __t8 = VarArg::Int(Handle::addr(
+            ({
+                let __t3 = fns::lbl_80472ED8(ctx).x6B0_ref();
+                spawn_table_24 = __t3;
+                __t3
+            }),
+        ));
+        let __t9 = VarArg::Int(Handle::addr(
+            ({
+                let __t2 = fns::lbl_80472ED8(ctx).x6AC_ref();
+                spawn_table_23 = __t2;
+                __t2
+            }),
+        ));
+        let __t10 = VarArg::Int(Handle::addr(
+            ({
+                let __t1 = fns::lbl_80472ED8(ctx).x6A8_ref();
+                spawn_table_22 = __t1;
+                __t1
+            }),
+        ));
+        fns::lbArchive_80016DBC(
+            ctx,
+            cstr(ctx, 0x803d9188),
+            Handle::cast::<Addr<'a>>(fns::lbl_80472ED8(ctx).x6A4_ref()),
+            &[
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803d9198))),
+                __t10,
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803d91b4))),
+                __t9,
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803d91d0))),
+                __t8,
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803d91ec))),
+                __t7,
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803d9208))),
+                __t6,
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803d9224))),
+                VarArg::Int(0_i32 as u32),
+            ],
+        )
+    };
     fns::lbl_80472ED8(ctx).set_x0(0_i32);
     fns::lbl_80472ED8(ctx).set_x4(0_i32);
     fns::lbl_80472ED8(ctx).set_x8(0_i32);

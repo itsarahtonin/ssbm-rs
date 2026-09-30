@@ -149,12 +149,11 @@ pub fn itMetalB_Logic32_DmgReceived<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32
     if !Handle::is_null(go) {
         if (((go).classifier() as i32) == 4_i32) && (((it).xDCF_flag().x0().b6() as i32) != 0) {
             fns::ftLib_ApplyMetalBox(ctx, go, gobj);
-            fns::pl_8003E17C(
-                ctx,
-                ((fns::ftLib_GetPlayerIndex(ctx, go) as i32) & 255_i32),
-                fns::ftLib_IsSubFighter(ctx, go),
-                gobj,
-            );
+            {
+                let __t1 = fns::ftLib_IsSubFighter(ctx, go);
+                let __t2 = ((fns::ftLib_GetPlayerIndex(ctx, go) as i32) & 255_i32);
+                fns::pl_8003E17C(ctx, __t2, __t1, gobj)
+            };
             return 1_i32;
         } else {
             (it).set_xCEC_fighterGObj(null::<HSD_GObj<'a>>(ctx));

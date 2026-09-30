@@ -81,22 +81,29 @@ pub fn ftCo_8009F5AC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         {
             let mut angle_yz: f64 = (fp::fmuls(((data).x78_light_rot_yz()), 0.01745329238474369));
             let mut angle_x: f64 = fp::frsp(fp::fdiv(
-                fp::fmuls(
-                    (fp::fmuls(((data).x74_light_rot_x()), 0.01745329238474369)),
-                    inl_HSD_JObjGetRotationY_unfused(
+                {
+                    let __t1 = inl_HSD_JObjGetRotationY_unfused(
                         ctx,
                         (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(
                             ctx,
                             (fp).gobj(),
                         ))),
-                    ),
-                ),
+                    );
+                    fp::fmuls(
+                        (fp::fmuls(((data).x74_light_rot_x()), 0.01745329238474369)),
+                        __t1,
+                    )
+                },
                 (fp::fdiv(3.141592653589793, (2_i32 as f64))),
             ));
             position.set_y(fp::fneg(fns::sinf(ctx, fp::fneg(angle_yz))));
             position.set_z(fns::cosf(ctx, fp::fneg(angle_yz)));
-            position.set_x(fp::fmuls(position.z(), fns::sinf(ctx, angle_x)));
-            position.set_z(fp::fmuls(position.z(), fns::cosf(ctx, angle_x)));
+            position.set_x({
+                let __t2 = fns::sinf(ctx, angle_x);
+                fp::fmuls(position.z(), __t2)
+            });
+            let __t3 = fns::cosf(ctx, angle_x);
+            position.set_z(fp::fmuls(position.z(), __t3));
             fns::HSD_LObjSetPosition(ctx, (fp).x588(), position);
         }
         if ((data).x7C_light_enable() != 0) {

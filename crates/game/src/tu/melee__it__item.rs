@@ -1453,14 +1453,20 @@ pub fn Item_802696CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut item_data: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if ((((item_data).xDCC_flag().b4567() as i32) & 8_i32) != 0)
-        && ((item_data).pos().x() > fns::Stage_GetBlastZoneRightOffset(ctx))
+        && ({
+            let __t1 = fns::Stage_GetBlastZoneRightOffset(ctx);
+            (item_data).pos().x() > __t1
+        })
     {
         (item_data).set_destroy_type(3_i32);
         fns::Item_8026A8EC(ctx, gobj);
         return 1_i32;
     }
     if ((((item_data).xDCC_flag().b4567() as i32) & 4_i32) != 0)
-        && ((item_data).pos().x() < fns::Stage_GetBlastZoneLeftOffset(ctx))
+        && ({
+            let __t2 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+            (item_data).pos().x() < __t2
+        })
     {
         (item_data).set_destroy_type(3_i32);
         fns::Item_8026A8EC(ctx, gobj);
@@ -1474,7 +1480,10 @@ pub fn Item_802696CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         return 1_i32;
     }
     if ((((item_data).xDCC_flag().b4567() as i32) & 2_i32) != 0)
-        && ((item_data).pos().y() < fns::Stage_GetBlastZoneBottomOffset(ctx))
+        && ({
+            let __t3 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+            (item_data).pos().y() < __t3
+        })
     {
         (item_data).set_destroy_type(3_i32);
         fns::Item_8026A8EC(ctx, gobj);

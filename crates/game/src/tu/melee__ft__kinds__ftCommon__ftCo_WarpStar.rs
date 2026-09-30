@@ -33,24 +33,23 @@ pub fn ftCo_800C4724<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut jobj: HSD_JObj<'a> =
         (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
-    fns::it_80294430(
-        ctx,
-        (fp).item_gobj(),
-        (inl_fpGet2C4_unfused(ctx, fp)).y(),
-        (inl_fpGetAttrs_unfused(ctx, fp)).warp_star_hitbox_scale(),
-    );
+    {
+        let __t1 = (inl_fpGetAttrs_unfused(ctx, fp)).warp_star_hitbox_scale();
+        let __t2 = (inl_fpGet2C4_unfused(ctx, fp)).y();
+        fns::it_80294430(ctx, (fp).item_gobj(), __t2, __t1)
+    };
     (fp).mv().co().warpstar().set_facing_dir((fp).facing_dir());
     (fp).set_facing_dir(fp::frsp(0_i32 as f64));
     (fp).mv().co().warpstar().set_x1C(120_i32);
     Handle::copy_from((fp).mv().co().warpstar().cur_pos(), (fp).cur_pos());
     (fp).mv().co().warpstar().self_vel().set_x({
-        let __t2 = {
-            let __t1 = fp::frsp(0_i32 as f64);
-            (fp).mv().co().warpstar().self_vel().set_z(__t1);
-            __t1
+        let __t4 = {
+            let __t3 = fp::frsp(0_i32 as f64);
+            (fp).mv().co().warpstar().self_vel().set_z(__t3);
+            __t3
         };
-        (fp).mv().co().warpstar().self_vel().set_y(__t2);
-        __t2
+        (fp).mv().co().warpstar().self_vel().set_y(__t4);
+        __t4
     });
     fns::ftCommon_8007D5D4(ctx, fp);
     fns::Fighter_ChangeMotionState(
@@ -101,8 +100,10 @@ pub fn ftCo_WarpStarJump_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         .co()
         .warpstar()
         .set_x1C((fp).mv().co().warpstar().x1C().wrapping_sub(1));
-    if ((fp).cur_pos().y() > fns::Stage_GetBlastZoneTopOffset(ctx))
-        || ((fp).mv().co().warpstar().x1C() == 0_i32)
+    if ({
+        let __t1 = fns::Stage_GetBlastZoneTopOffset(ctx);
+        (fp).cur_pos().y() > __t1
+    }) || ((fp).mv().co().warpstar().x1C() == 0_i32)
     {
         statics::melee__ft__kinds__ftCommon__ftCo_WarpStar::ftCo_800C4A38(ctx, gobj);
     }

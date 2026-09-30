@@ -2789,12 +2789,14 @@ pub fn grCastle_801D0BBC<'a>(ctx: &'a Ctx) {
     if angle < fp::fneg(1.0471975430846214) {
         angle = fp::fneg(1.0471975803375244);
     }
+    let __t1 = fns::cosf(ctx, angle);
     (statics::melee__gr__grcastle::grCs_804D6974(ctx).get())
         .x4()
-        .set_x(fns::cosf(ctx, angle));
+        .set_x(__t1);
+    let __t2 = fns::sinf(ctx, angle);
     (statics::melee__gr__grcastle::grCs_804D6974(ctx).get())
         .x4()
-        .set_z(fns::sinf(ctx, angle));
+        .set_z(__t2);
     if ((rem_i32(
         (statics::melee__gr__grcastle::grCs_804D6974(ctx).get()).unk_angle_int(),
         30_i32,
@@ -2817,23 +2819,23 @@ pub fn grCastle_801D0BBC<'a>(ctx: &'a Ctx) {
         }
     }
     if (statics::melee__gr__grcastle::grCs_804D45E4(ctx).get() as i32) != 0_i32 {
-        (statics::melee__gr__grcastle::grCs_804D6974(ctx).get())
-            .set_unk_scale(fp::frsp(fp::fmadd(0.3, fns::HSD_Randf(ctx), 0.2)));
+        let __t3 = fp::frsp(fp::fmadd(0.3, fns::HSD_Randf(ctx), 0.2));
+        (statics::melee__gr__grcastle::grCs_804D6974(ctx).get()).set_unk_scale(__t3);
         return;
     }
-    (statics::melee__gr__grcastle::grCs_804D6974(ctx).get())
-        .set_unk_scale(fp::frsp(fp::fmul(0.05, fns::HSD_Randf(ctx))));
+    let __t4 = fp::frsp(fp::fmul(0.05, fns::HSD_Randf(ctx)));
+    (statics::melee__gr__grcastle::grCs_804D6974(ctx).get()).set_unk_scale(__t4);
     return;
 }
 
 pub fn grCastle_801D0D24<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
     if (statics::melee__gr__grcastle::grCs_804D45E4(ctx).get() as i32) != 0_i32 {
-        (statics::melee__gr__grcastle::grCs_804D6974(ctx).get())
-            .set_unk_scale(fp::frsp(fp::fmadd(0.3, fns::HSD_Randf(ctx), 0.2)));
+        let __t1 = fp::frsp(fp::fmadd(0.3, fns::HSD_Randf(ctx), 0.2));
+        (statics::melee__gr__grcastle::grCs_804D6974(ctx).get()).set_unk_scale(__t1);
     } else {
-        (statics::melee__gr__grcastle::grCs_804D6974(ctx).get())
-            .set_unk_scale(fp::frsp(fp::fmul(0.05, fns::HSD_Randf(ctx))));
+        let __t2 = fp::frsp(fp::fmul(0.05, fns::HSD_Randf(ctx)));
+        (statics::melee__gr__grcastle::grCs_804D6974(ctx).get()).set_unk_scale(__t2);
     }
 }
 

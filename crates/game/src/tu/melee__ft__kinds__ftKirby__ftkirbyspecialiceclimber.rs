@@ -98,15 +98,14 @@ pub fn ftKb_SpecialNIc_80108D64<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 .get(),
             ),
         );
-        fns::lb_8000C2F8(
-            ctx,
-            (fp2).x20A0_accessory(),
-            (Handle::add(
+        {
+            let __t1 = (Handle::add(
                 (fp2).parts(),
                 fns::ftParts_GetBoneIndex(ctx, fp2, (enums::FtPart_LThumbNb as i32)),
             ))
-            .joint(),
-        );
+            .joint();
+            fns::lb_8000C2F8(ctx, (fp2).x20A0_accessory(), __t1)
+        };
     }
 }
 
@@ -155,15 +154,14 @@ pub fn ftKb_SpecialNIc_80108E14<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 .get(),
             ),
         );
-        fns::lb_8000C2F8(
-            ctx,
-            (fp2).x20A0_accessory(),
-            (Handle::add(
+        {
+            let __t1 = (Handle::add(
                 (fp2).parts(),
                 fns::ftParts_GetBoneIndex(ctx, fp2, (enums::FtPart_LThumbNb as i32)),
             ))
-            .joint(),
-        );
+            .joint();
+            fns::lb_8000C2F8(ctx, (fp2).x20A0_accessory(), __t1)
+        };
     }
 }
 

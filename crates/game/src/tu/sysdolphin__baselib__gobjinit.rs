@@ -56,11 +56,12 @@ pub fn HSD_GObjInit<'a>(ctx: &'a Ctx, arg0: _HSD_GObjLibInitDataType<'a>) {
         i = 0_i32;
         'l1: while i < ((arg0).p_link_max() as i32).wrapping_add(1_i32) {
             'c2: {
-                (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), i)).set({
+                let __t2 = {
                     let __t1 = null::<HSD_GObj<'a>>(ctx);
                     (Handle::add(fns::plinklow_gobjs(ctx).get(), i)).set(__t1);
                     __t1
-                });
+                };
+                (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), i)).set(__t2);
             }
             i = i.wrapping_add(1);
         }
@@ -77,11 +78,12 @@ pub fn HSD_GObjInit<'a>(ctx: &'a Ctx, arg0: _HSD_GObjLibInitDataType<'a>) {
         i = 0_i32;
         'l3: while i < ((arg0).gx_link_max() as i32).wrapping_add(2_i32) {
             'c4: {
-                (Handle::add(fns::HSD_GObjGXLinkHead(ctx).get(), i)).set({
-                    let __t2 = null::<HSD_GObj<'a>>(ctx);
-                    (Handle::add(fns::HSD_GObj_804D7820(ctx).get(), i)).set(__t2);
-                    __t2
-                });
+                let __t4 = {
+                    let __t3 = null::<HSD_GObj<'a>>(ctx);
+                    (Handle::add(fns::HSD_GObj_804D7820(ctx).get(), i)).set(__t3);
+                    __t3
+                };
+                (Handle::add(fns::HSD_GObjGXLinkHead(ctx).get(), i)).set(__t4);
             }
             i = i.wrapping_add(1);
         }

@@ -715,14 +715,17 @@ fn inl_EndianConvert16_unfused<'a>(ctx: &'a Ctx, n: u16) -> u16 {
 
 fn inl_EndianConvert32_unfused<'a>(ctx: &'a Ctx, n: u32) -> u32 {
     let mut n = n;
-    return (((inl_EndianConvert16_unfused(
-        ctx,
-        (((shr_u32(n, (16_i32 as u32))) & (0xffff_i32 as u32)) as u16),
-    ) as i32)
-        | (shl_i32(
+    return ({
+        let __t1 = (shl_i32(
             (inl_EndianConvert16_unfused(ctx, ((n & (0xffff_i32 as u32)) as u16)) as i32),
             (16_i32 as u32),
-        ))) as u32);
+        ));
+        ((inl_EndianConvert16_unfused(
+            ctx,
+            (((shr_u32(n, (16_i32 as u32))) & (0xffff_i32 as u32)) as u16),
+        ) as i32)
+            | __t1)
+    } as u32);
 }
 
 fn inl_fioErrorReport_unfused<'a>(ctx: &'a Ctx, msg: Val<'a, i8>) {

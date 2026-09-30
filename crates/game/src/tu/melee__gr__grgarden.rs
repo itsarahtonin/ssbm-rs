@@ -154,15 +154,15 @@ pub fn grGarden_80202E6C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (gp).set_x8_callback(null::<FnPtr<'a>>(ctx));
     (gp).set_xC_callback(null::<FnPtr<'a>>(ctx));
     (gp).x11_flags().set_b012((1_i32 as u8));
-    fns::Ground_801C4E70(
-        ctx,
-        fns::Ground_801C3FA4(ctx, gobj, 4_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 3_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 7_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 6_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 10_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 9_i32),
-    );
+    {
+        let __t1 = fns::Ground_801C3FA4(ctx, gobj, 9_i32);
+        let __t2 = fns::Ground_801C3FA4(ctx, gobj, 10_i32);
+        let __t3 = fns::Ground_801C3FA4(ctx, gobj, 6_i32);
+        let __t4 = fns::Ground_801C3FA4(ctx, gobj, 7_i32);
+        let __t5 = fns::Ground_801C3FA4(ctx, gobj, 3_i32);
+        let __t6 = fns::Ground_801C3FA4(ctx, gobj, 4_i32);
+        fns::Ground_801C4E70(ctx, __t6, __t5, __t4, __t3, __t2, __t1)
+    };
 }
 
 pub fn grGarden_80202F34<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 {

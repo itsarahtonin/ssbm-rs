@@ -110,7 +110,10 @@ pub fn mnEvent_8024D014<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             VarArg::Int(1_i32.wrapping_neg() as u32),
         ],
     );
-    if (data).first_event() == fns::mnEvent_8024CE74(ctx) {
+    if {
+        let __t1 = fns::mnEvent_8024CE74(ctx);
+        (data).first_event() == __t1
+    } {
         fns::HSD_JObjSetFlagsAll(ctx, jobj.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
     } else {
         fns::HSD_JObjClearFlagsAll(ctx, jobj.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
@@ -595,7 +598,10 @@ pub fn mnEvent_8024D864<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 inl_mnEvent_ShowSelected_unfused(ctx, data, jobj_09_5);
                 return;
             }
-            if (data).first_event() < fns::mnEvent_8024CE74(ctx) {
+            if {
+                let __t2 = fns::mnEvent_8024CE74(ctx);
+                (data).first_event() < __t2
+            } {
                 inl_sfxMove_unfused(ctx);
                 (data).set_first_event((data).first_event().wrapping_add(1_i32));
                 inl_mnEvent_RefreshRows_unfused(ctx, (data).first_event());
@@ -1151,16 +1157,15 @@ fn inl_mnEvent_ShowSelected_unfused<'a>(
             VarArg::Int(1_i32.wrapping_neg() as u32),
         ],
     );
-    fns::HSD_JObjReqAnimAll(
-        ctx,
-        (jobj_09).get(),
-        fp::frsp(
+    {
+        let __t1 = fp::frsp(
             (fns::gm_801BEB8C(
                 ctx,
                 (((fns::gm_801BEBC0(ctx, (event_id as u8)) as i32) & 255_i32) as u8),
             ) as u8) as f64,
-        ),
-    );
+        );
+        fns::HSD_JObjReqAnimAll(ctx, (jobj_09).get(), __t1)
+    };
     fns::HSD_JObjAnimAll(ctx, (jobj_09).get());
     fns::mnEvent_8024D014(ctx, event_gobj);
 }

@@ -882,22 +882,16 @@ pub fn grMuteCity_801F0D20<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         );
         angle_back = fp::fsubs((fp::fadds(3.1415927410125732, angle)), 0.2617993950843811);
         angle_fwd = fp::fadds(0.2617993950843811, angle);
-        fns::mpLineSetPos(
-            ctx,
-            49_i32,
-            fp::fmadds(10.0, fns::cosf(ctx, angle_back), sp28.x()),
-            fp::fmadds(10.0, fns::sinf(ctx, angle_back), sp28.y()),
-            sp28.x(),
-            sp28.y(),
-        );
-        fns::mpLineSetPos(
-            ctx,
-            53_i32,
-            sp1C.x(),
-            sp1C.y(),
-            fp::fmadds(10.0, fns::cosf(ctx, angle_fwd), sp1C.x()),
-            fp::fmadds(10.0, fns::sinf(ctx, angle_fwd), sp1C.y()),
-        );
+        {
+            let __t1 = fp::fmadds(10.0, fns::sinf(ctx, angle_back), sp28.y());
+            let __t2 = fp::fmadds(10.0, fns::cosf(ctx, angle_back), sp28.x());
+            fns::mpLineSetPos(ctx, 49_i32, __t2, __t1, sp28.x(), sp28.y())
+        };
+        {
+            let __t3 = fp::fmadds(10.0, fns::sinf(ctx, angle_fwd), sp1C.y());
+            let __t4 = fp::fmadds(10.0, fns::cosf(ctx, angle_fwd), sp1C.x());
+            fns::mpLineSetPos(ctx, 53_i32, sp1C.x(), sp1C.y(), __t4, __t3)
+        };
     } else {
         fns::mpLineSetPos(
             ctx,

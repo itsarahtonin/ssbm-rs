@@ -93,11 +93,16 @@ pub fn gm_SetupTitleDemo<'a>(ctx: &'a Ctx) {
                     j = i.wrapping_add(1_i32);
                     'l5: while j < count {
                         'c6: {
-                            if inl_gm_GetCharacterUsageDirect_unfused(
-                                ctx,
-                                character_pool.at(i).get(),
-                            ) > inl_gm_GetCharacterUsage_unfused(ctx, character_pool.at(j).get())
-                            {
+                            if {
+                                let __t1 = inl_gm_GetCharacterUsage_unfused(
+                                    ctx,
+                                    character_pool.at(j).get(),
+                                );
+                                inl_gm_GetCharacterUsageDirect_unfused(
+                                    ctx,
+                                    character_pool.at(i).get(),
+                                ) > __t1
+                            } {
                                 a = character_pool.at(i).get();
                                 character_pool.at(i).set(character_pool.at(j).get());
                                 character_pool.at(j).set(a);
@@ -147,10 +152,10 @@ pub fn gm_SetupTitleDemo<'a>(ctx: &'a Ctx) {
             statics::melee__gm__gmopeningmode::gm_801BF634(ctx, c, j);
             statics::melee__gm__gmopeningmode::gm_801BF65C(ctx, c, (0_i32 as i8));
             c = c.wrapping_add(1_i32);
-            let __t1 = (inl_gm_GetRandomHistory_unfused(ctx))
+            let __t2 = (inl_gm_GetRandomHistory_unfused(ctx))
                 .character_usage()
                 .at(j);
-            __t1.set(((__t1.get() as i32).wrapping_add(1_i32) as u8));
+            __t2.set(((__t2.get() as i32).wrapping_add(1_i32) as u8));
         }
         if !(c < 4_i32) {
             break 'l7;
@@ -168,9 +173,9 @@ pub fn gm_SetupTitleDemo<'a>(ctx: &'a Ctx) {
         }
     }
     c = ({
-        let __t2 = 0_i32;
-        count = __t2;
-        __t2
+        let __t3 = 0_i32;
+        count = __t3;
+        __t3
     });
     'l15: loop {
         'c16: {
@@ -193,9 +198,11 @@ pub fn gm_SetupTitleDemo<'a>(ctx: &'a Ctx) {
                     j = i.wrapping_add(1_i32);
                     'l19: while j < count {
                         'c20: {
-                            if inl_gm_GetStageUsage_unfused(ctx, stage_pool.at(i).get())
-                                > inl_gm_GetStageUsage_unfused(ctx, stage_pool.at(j).get())
-                            {
+                            if {
+                                let __t4 =
+                                    inl_gm_GetStageUsage_unfused(ctx, stage_pool.at(j).get());
+                                inl_gm_GetStageUsage_unfused(ctx, stage_pool.at(i).get()) > __t4
+                            } {
                                 a = stage_pool.at(i).get();
                                 stage_pool.at(i).set(stage_pool.at(j).get());
                                 stage_pool.at(j).set(a);
@@ -223,10 +230,10 @@ pub fn gm_SetupTitleDemo<'a>(ctx: &'a Ctx) {
         ctx,
         (fns::gm_801641CC(ctx, (count as u8)) as i32),
     );
-    let __t3 = (inl_gm_GetRandomHistory_unfused(ctx))
+    let __t5 = (inl_gm_GetRandomHistory_unfused(ctx))
         .stage_usage()
         .at(count);
-    __t3.set(((__t3.get() as i32).wrapping_add(1_i32) as u8));
+    __t5.set(((__t5.get() as i32).wrapping_add(1_i32) as u8));
     statics::melee__gm__gmopeningmode::gm_801BF6A8(ctx, fns::HSD_Randi(ctx, 4_i32));
 }
 

@@ -31,22 +31,28 @@ pub fn ftCo_8009AA0C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     if (inl_inlineA0_unfused(ctx, fp) != 0) {
-        return statics::melee__ft__kinds__ftCommon__ftCo_CliffClimb::ftCo_8009AAFC(
-            ctx,
-            gobj,
-            1_i32,
-            (fp).input().lstick().get(0_i32).x(),
-            fns::ftCo_GetLStickAngle(ctx, fp),
-        );
+        return {
+            let __t1 = fns::ftCo_GetLStickAngle(ctx, fp);
+            statics::melee__ft__kinds__ftCommon__ftCo_CliffClimb::ftCo_8009AAFC(
+                ctx,
+                gobj,
+                1_i32,
+                (fp).input().lstick().get(0_i32).x(),
+                __t1,
+            )
+        };
     }
     if (fns::ftCo_800DF79C(ctx, fp) != 0) {
-        return statics::melee__ft__kinds__ftCommon__ftCo_CliffClimb::ftCo_8009AAFC(
-            ctx,
-            gobj,
-            0_i32,
-            (fp).input().cstick().get(0_i32).x(),
-            fns::ftCo_GetCStickAngle(ctx, fp),
-        );
+        return {
+            let __t2 = fns::ftCo_GetCStickAngle(ctx, fp);
+            statics::melee__ft__kinds__ftCommon__ftCo_CliffClimb::ftCo_8009AAFC(
+                ctx,
+                gobj,
+                0_i32,
+                (fp).input().cstick().get(0_i32).x(),
+                __t2,
+            )
+        };
     }
     (fp).mv().co().cliff().set_x8(1_i32);
     return 0_i32;

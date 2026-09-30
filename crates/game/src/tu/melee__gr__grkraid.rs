@@ -469,22 +469,23 @@ pub fn grKraid_801FE818<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     (gp).u().kraid2().set_x0((0_i32 as i8));
     (gp).u().kraid2().set_xC(
-        ((statics::melee__gr__grkraid::yakumono_param(ctx).get())
-            .kraid_wait_time()
-            .wrapping_add(
-                ((if ((statics::melee__gr__grkraid::yakumono_param(ctx).get()).kraid_wait_time_add()
-                    as i32)
-                    != 0_i32
-                {
-                    fns::HSD_Randi(
-                        ctx,
-                        ((statics::melee__gr__grkraid::yakumono_param(ctx).get())
-                            .kraid_wait_time_add() as i32),
-                    )
-                } else {
-                    0_i32
-                }) as u32),
-            ) as i32),
+        ({
+            let __t2 = ((if ((statics::melee__gr__grkraid::yakumono_param(ctx).get())
+                .kraid_wait_time_add() as i32)
+                != 0_i32
+            {
+                fns::HSD_Randi(
+                    ctx,
+                    ((statics::melee__gr__grkraid::yakumono_param(ctx).get()).kraid_wait_time_add()
+                        as i32),
+                )
+            } else {
+                0_i32
+            }) as u32);
+            (statics::melee__gr__grkraid::yakumono_param(ctx).get())
+                .kraid_wait_time()
+                .wrapping_add(__t2)
+        } as i32),
     );
     (gp).u().kraid2().set_x8(0.0);
     fVar2 = fp::frsp(0_i32 as f64);
@@ -656,23 +657,23 @@ pub fn grKraid_801FEA00<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     ((shl_i32(1_i32, (4_i32 as u32))) as u32),
                 );
                 (gp).u().kraid2().set_xC(
-                    ((statics::melee__gr__grkraid::yakumono_param(ctx).get())
-                        .kraid_wait_time()
-                        .wrapping_add(
-                            ((if ((statics::melee__gr__grkraid::yakumono_param(ctx).get())
-                                .kraid_wait_time_add() as i32)
-                                != 0_i32
-                            {
-                                fns::HSD_Randi(
-                                    ctx,
-                                    ((statics::melee__gr__grkraid::yakumono_param(ctx).get())
-                                        .kraid_wait_time_add()
-                                        as i32),
-                                )
-                            } else {
-                                0_i32
-                            }) as u32),
-                        ) as i32),
+                    ({
+                        let __t1 = ((if ((statics::melee__gr__grkraid::yakumono_param(ctx).get())
+                            .kraid_wait_time_add() as i32)
+                            != 0_i32
+                        {
+                            fns::HSD_Randi(
+                                ctx,
+                                ((statics::melee__gr__grkraid::yakumono_param(ctx).get())
+                                    .kraid_wait_time_add() as i32),
+                            )
+                        } else {
+                            0_i32
+                        }) as u32);
+                        (statics::melee__gr__grkraid::yakumono_param(ctx).get())
+                            .kraid_wait_time()
+                            .wrapping_add(__t1)
+                    } as i32),
                 );
                 (gp).u().kraid2().set_x0((0_i32 as i8));
             }

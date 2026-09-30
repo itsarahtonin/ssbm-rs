@@ -53,11 +53,14 @@ pub fn fn_80177748<'a>(ctx: &'a Ctx) {
                         (data).player_data().get(i).jobjs().at(0_i32).get(),
                         ((shl_i32(1_i32, (4_i32 as u32))) as u32),
                     );
-                    inl_inline0_unfused(
-                        ctx,
-                        (data).player_data().get(i).jobjs().at(0_i32).get(),
-                        fns::gm_80168B34(ctx, ckind, 0_i32, 0_i32),
-                    );
+                    {
+                        let __t1 = fns::gm_80168B34(ctx, ckind, 0_i32, 0_i32);
+                        inl_inline0_unfused(
+                            ctx,
+                            (data).player_data().get(i).jobjs().at(0_i32).get(),
+                            __t1,
+                        )
+                    };
                     fns::HSD_JObjClearFlagsAll(
                         ctx,
                         (data).player_data().get(i).jobjs().at(4_i32).get(),
@@ -1522,16 +1525,19 @@ fn inl_fn_80178BB4_init_players_unfused<'a>(
                                 (enums::TOBJ_MASK as i32),
                             );
                         }
-                        fns::fn_80174FD0(
-                            ctx,
-                            (data)
-                                .player_data()
-                                .get(((i).get()))
-                                .jobjs()
-                                .at(5_i32)
-                                .get(),
-                            fp::fctiwz(fns::gm_80168B34(ctx, ckind, cid, 0_i32)),
-                        );
+                        {
+                            let __t1 = fp::fctiwz(fns::gm_80168B34(ctx, ckind, cid, 0_i32));
+                            fns::fn_80174FD0(
+                                ctx,
+                                (data)
+                                    .player_data()
+                                    .get(((i).get()))
+                                    .jobjs()
+                                    .at(5_i32)
+                                    .get(),
+                                __t1,
+                            )
+                        };
                         {
                             let mut rank_val: u32 = 0;
                             let mut rank_aobj: HSD_AObj<'a> = null(ctx);

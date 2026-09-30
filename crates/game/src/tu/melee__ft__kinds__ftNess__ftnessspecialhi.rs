@@ -564,9 +564,9 @@ pub fn ftNs_SpecialHi_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     {
         fighter_data3 = {
-            let __t1 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
-            fighter_data3 = __t1;
-            __t1
+            let __t2 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+            fighter_data3 = __t2;
+            __t2
         };
         {
             let mut msid: i32 = (fighter_data3).motion_id();
@@ -1827,14 +1827,14 @@ fn inl_NessFloatMath_PKThunder2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         .ns()
         .specialhi()
         .set_aerialVel(fns::atan2f(ctx, dy, dx));
-    (fp).self_vel().set_x(fp::fmuls(
-        (ness_attr).x54_PK_THUNDER_2_MOMENTUM(),
-        fns::cosf(ctx, (fp).mv().ns().specialhi().aerialVel()),
-    ));
-    (fp).self_vel().set_y(fp::fmuls(
-        (ness_attr).x54_PK_THUNDER_2_MOMENTUM(),
-        fns::sinf(ctx, (fp).mv().ns().specialhi().aerialVel()),
-    ));
+    (fp).self_vel().set_x({
+        let __t1 = fns::cosf(ctx, (fp).mv().ns().specialhi().aerialVel());
+        fp::fmuls((ness_attr).x54_PK_THUNDER_2_MOMENTUM(), __t1)
+    });
+    (fp).self_vel().set_y({
+        let __t2 = fns::sinf(ctx, (fp).mv().ns().specialhi().aerialVel());
+        fp::fmuls((ness_attr).x54_PK_THUNDER_2_MOMENTUM(), __t2)
+    });
 }
 
 fn inl_startGFX_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, id: i32) {

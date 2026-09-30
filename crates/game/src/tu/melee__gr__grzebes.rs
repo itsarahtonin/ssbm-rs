@@ -541,12 +541,15 @@ pub fn grZebes_801D881C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     {
         fns::Ground_801C4368(ctx, slope, intercept);
-        let _ = fns::grZakoGenerator_801CA43C(
-            ctx,
-            ptr::<grZakoGenerator_Config<'a>>(ctx, (gp).u().zebes5().xFC() as u32),
-            fns::Ground_801C3FA4(ctx, gobj, 14_i32),
-            slope.get(),
-        );
+        let _ = {
+            let __t1 = fns::Ground_801C3FA4(ctx, gobj, 14_i32);
+            fns::grZakoGenerator_801CA43C(
+                ctx,
+                ptr::<grZakoGenerator_Config<'a>>(ctx, (gp).u().zebes5().xFC() as u32),
+                __t1,
+                slope.get(),
+            )
+        };
     }
     let _ = fns::Ground_UpdateMapColl(ctx, gobj);
     fns::lb_800115F4(ctx);
@@ -674,15 +677,18 @@ pub fn grZebes_801D925C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     {
         fns::Ground_801C4368(ctx, slope, intercept);
-        let _ = fns::grZakoGenerator_801CA43C(
-            ctx,
-            Handle::cast::<grZakoGenerator_Config<'a>>(ptr::<Addr<'a>>(
+        let _ = {
+            let __t1 = fns::Ground_801C3FA4(ctx, gobj, 1_i32);
+            fns::grZakoGenerator_801CA43C(
                 ctx,
-                (gp).u().zebes4().xEC() as u32,
-            )),
-            fns::Ground_801C3FA4(ctx, gobj, 1_i32),
-            slope.get(),
-        );
+                Handle::cast::<grZakoGenerator_Config<'a>>(ptr::<Addr<'a>>(
+                    ctx,
+                    (gp).u().zebes4().xEC() as u32,
+                )),
+                __t1,
+                slope.get(),
+            )
+        };
         let _ = fns::Ground_UpdateMapColl(ctx, gobj);
     }
 }
@@ -838,21 +844,24 @@ pub fn grZebes_801D9798<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut jobj: HSD_JObj<'a> = null(ctx);
     fns::grAnime_801C8138(ctx, gobj, (gp).map_id(), 0_i32);
     (gp).u().zebes5().set_xC4((0_i32 as i16));
-    if ({
-        let __t1 = ((statics::melee__gr__grzebes::yakumono_param(ctx).get())
-            .xA0_entries()
-            .get(((gp).u().zebes5().xC4() as i32))
-            .x4_delay_max() as i32);
-        delay_max = __t1;
-        __t1
-    }) > ({
-        let __t2 = ((statics::melee__gr__grzebes::yakumono_param(ctx).get())
-            .xA0_entries()
-            .get(((gp).u().zebes5().xC4() as i32))
-            .x2_delay_min() as i32);
-        delay_min = __t2;
-        __t2
-    }) {
+    if {
+        let __t3 = ({
+            let __t2 = ((statics::melee__gr__grzebes::yakumono_param(ctx).get())
+                .xA0_entries()
+                .get(((gp).u().zebes5().xC4() as i32))
+                .x2_delay_min() as i32);
+            delay_min = __t2;
+            __t2
+        });
+        ({
+            let __t1 = ((statics::melee__gr__grzebes::yakumono_param(ctx).get())
+                .xA0_entries()
+                .get(((gp).u().zebes5().xC4() as i32))
+                .x4_delay_max() as i32);
+            delay_max = __t1;
+            __t1
+        }) > __t3
+    } {
         let mut diff: i32 = delay_max.wrapping_sub(delay_min);
         delay_max = delay_min.wrapping_add(
             (if diff != 0_i32 {

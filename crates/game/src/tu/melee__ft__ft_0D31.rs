@@ -43,18 +43,26 @@ pub fn ftCo_800D3158<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     if ((fp).x2219_b1() != 0) {
         return 0_i32;
     }
-    if (fp).cur_pos().x() > fns::Stage_GetBlastZoneRightOffset(ctx) {
+    if {
+        let __t1 = fns::Stage_GetBlastZoneRightOffset(ctx);
+        (fp).cur_pos().x() > __t1
+    } {
         fns::ftCo_800D3950(ctx, gobj);
         return 1_i32;
     }
-    if (fp).cur_pos().x() < fns::Stage_GetBlastZoneLeftOffset(ctx) {
+    if {
+        let __t2 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+        (fp).cur_pos().x() < __t2
+    } {
         fns::ftCo_800D3680(ctx, gobj);
         return 1_i32;
     }
-    if ((fp).cur_pos().y() > fns::Stage_GetBlastZoneTopOffset(ctx))
-        && (((((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32))
-            || (((fp).x2222_b3() as i32) != 0))
-            || ((fp).x8c_kb_vel().y() > (fns::p_ftCommonData(ctx).get()).x4F0()))
+    if ({
+        let __t3 = fns::Stage_GetBlastZoneTopOffset(ctx);
+        (fp).cur_pos().y() > __t3
+    }) && (((((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32))
+        || (((fp).x2222_b3() as i32) != 0))
+        || ((fp).x8c_kb_vel().y() > (fns::p_ftCommonData(ctx).get()).x4F0()))
     {
         if (fns::Player_GetMoreFlagsBit5(ctx, ((fp).player_idx() as i32)) != 0) {
             fns::ftCo_800D3E40(ctx, gobj);
@@ -74,7 +82,10 @@ pub fn ftCo_800D3158<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         }
         return 1_i32;
     }
-    if (fp).cur_pos().y() < fns::Stage_GetBlastZoneBottomOffset(ctx) {
+    if {
+        let __t4 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+        (fp).cur_pos().y() < __t4
+    } {
         fns::ftCo_800D3BC8(ctx, gobj);
         return 1_i32;
     }
@@ -95,11 +106,11 @@ pub fn ftCo_800D331C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 (temp_r3_2).set_x2180(((fp).player_idx() as i32));
             }
         } else if !((fp).is_sub_fighter() != 0) {
-            fns::pl_8004065C(
-                ctx,
-                (fns::ftLib_GetPlayerIndex(ctx, (fp).victim_gobj()) as i32),
-                fns::ftLib_IsSubFighter(ctx, (fp).victim_gobj()),
-            );
+            {
+                let __t1 = fns::ftLib_IsSubFighter(ctx, (fp).victim_gobj());
+                let __t2 = (fns::ftLib_GetPlayerIndex(ctx, (fp).victim_gobj()) as i32);
+                fns::pl_8004065C(ctx, __t2, __t1)
+            };
         }
     }
     if (fp).x2180() != 6_i32 {
@@ -159,17 +170,20 @@ pub fn ftCo_800D34E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    fns::Player_SetFallsByIndex(
-        ctx,
-        ((fp).player_idx() as i32),
-        ((fp).is_sub_fighter() as i32),
-        fns::Player_GetFallsByIndex(
+    {
+        let __t1 = fns::Player_GetFallsByIndex(
             ctx,
             ((fp).player_idx() as i32),
             ((fp).is_sub_fighter() as i32),
         )
-        .wrapping_add(1_i32),
-    );
+        .wrapping_add(1_i32);
+        fns::Player_SetFallsByIndex(
+            ctx,
+            ((fp).player_idx() as i32),
+            ((fp).is_sub_fighter() as i32),
+            __t1,
+        )
+    };
     fns::plStale_ResetStaleMoveTableForPlayer(ctx, ((fp).player_idx() as i32));
     if ((fns::gm_8016B094(ctx) != 0) || (fns::gm_8016B0E8(ctx) != 0))
         && (Handle::addr(fns::Player_GetEntity(ctx, ((fp).player_idx() as i32)))
@@ -255,12 +269,11 @@ pub fn ftCo_800D3680<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::ft_PlaySFX(ctx, fp, 136_i32, (127_i32 as u8), (64_i32 as u8));
     fns::ft_8008805C(ctx, fp, 136_i32);
     Handle::copy_from(pos, (fp).cur_pos());
-    inl_clampDeadPos_unfused(
-        ctx,
-        pos.y_ref(),
-        fns::Stage_GetBlastZoneBottomOffset(ctx),
-        fns::Stage_GetBlastZoneTopOffset(ctx),
-    );
+    {
+        let __t1 = fns::Stage_GetBlastZoneTopOffset(ctx);
+        let __t2 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+        inl_clampDeadPos_unfused(ctx, pos.y_ref(), __t2, __t1)
+    };
     inl_spawnDeadEffect_unfused(ctx, gobj, pos, angle);
     pos.set_x(fns::Stage_GetBlastZoneLeftOffset(ctx));
     fns::ftCo_800D4E50(ctx, fp, pos, 1_i32, 0.0);
@@ -305,12 +318,11 @@ pub fn ftCo_800D3950<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::ft_PlaySFX(ctx, fp, 137_i32, (127_i32 as u8), (64_i32 as u8));
     fns::ft_8008805C(ctx, fp, 137_i32);
     Handle::copy_from(pos, (fp).cur_pos());
-    inl_clampDeadPos_unfused(
-        ctx,
-        pos.y_ref(),
-        fns::Stage_GetBlastZoneBottomOffset(ctx),
-        fns::Stage_GetBlastZoneTopOffset(ctx),
-    );
+    {
+        let __t1 = fns::Stage_GetBlastZoneTopOffset(ctx);
+        let __t2 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+        inl_clampDeadPos_unfused(ctx, pos.y_ref(), __t2, __t1)
+    };
     inl_spawnDeadEffect_unfused(ctx, gobj, pos, angle);
     pos.set_x(fns::Stage_GetBlastZoneRightOffset(ctx));
     fns::ftCo_800D4E50(ctx, fp, pos, 1_i32, 3.1415927410125732);
@@ -352,12 +364,11 @@ pub fn ftCo_800D3BC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::ft_PlaySFX(ctx, fp, 97_i32, (127_i32 as u8), (64_i32 as u8));
     fns::ft_8008805C(ctx, fp, 97_i32);
     Handle::copy_from(pos, (fp).cur_pos());
-    inl_clampDeadPos_unfused(
-        ctx,
-        pos.x_ref(),
-        fns::Stage_GetBlastZoneLeftOffset(ctx),
-        fns::Stage_GetBlastZoneRightOffset(ctx),
-    );
+    {
+        let __t1 = fns::Stage_GetBlastZoneRightOffset(ctx);
+        let __t2 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+        inl_clampDeadPos_unfused(ctx, pos.x_ref(), __t2, __t1)
+    };
     inl_spawnDeadEffect_unfused(ctx, gobj, pos, angle);
     pos.set_y(fns::Stage_GetBlastZoneBottomOffset(ctx));
     fns::ftCo_800D4E50(ctx, fp, pos, 1_i32, (fp::fdivs(3.1415927410125732, 2.0)));
@@ -399,12 +410,11 @@ pub fn ftCo_800D3E40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::ft_PlaySFX(ctx, fp, 97_i32, (127_i32 as u8), (64_i32 as u8));
     fns::ft_8008805C(ctx, fp, 97_i32);
     Handle::copy_from(pos, (fp).cur_pos());
-    inl_clampDeadPos_unfused(
-        ctx,
-        pos.x_ref(),
-        fns::Stage_GetBlastZoneLeftOffset(ctx),
-        fns::Stage_GetBlastZoneRightOffset(ctx),
-    );
+    {
+        let __t1 = fns::Stage_GetBlastZoneRightOffset(ctx);
+        let __t2 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+        inl_clampDeadPos_unfused(ctx, pos.x_ref(), __t2, __t1)
+    };
     inl_spawnDeadEffect_unfused(ctx, gobj, pos, angle);
     pos.set_y(fns::Stage_GetBlastZoneTopOffset(ctx));
     fns::ftCo_800D4E50(

@@ -85,20 +85,23 @@ pub fn ftCh_Init_80157170<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         .xC()
         .set_x(fp::fsubs((fp).cur_pos().x(), (attrs).x28()));
     (fp).mv().ch().unk0().xC().set_y((attrs).x24());
-    fns::Fighter_ChangeMotionState(
-        ctx,
-        gobj,
-        (enums::ftMh_MS_Damage2 as i32),
-        0_u32,
-        {
+    {
+        let __t2 = {
             let __t1 = 0.0;
             (fp).mv().ch().unk0().xC().set_z(__t1);
             __t1
-        },
-        1.0,
-        0.0,
-        null::<HSD_GObj<'a>>(ctx),
-    );
+        };
+        fns::Fighter_ChangeMotionState(
+            ctx,
+            gobj,
+            (enums::ftMh_MS_Damage2 as i32),
+            0_u32,
+            __t2,
+            1.0,
+            0.0,
+            null::<HSD_GObj<'a>>(ctx),
+        )
+    };
     fns::ftAnim_8006EBA4(ctx, gobj);
     fns::ft_PlaySFX(ctx, fp, 0x4e207_i32, (127_i32 as u8), (64_i32 as u8));
 }
@@ -123,20 +126,23 @@ pub fn ftCh_Damage2_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 .xC()
                 .set_x(fp::fsubs((fp).cur_pos().x(), (attrs).x28()));
             (fp).mv().ch().unk0().xC().set_y((attrs).x24());
-            fns::Fighter_ChangeMotionState(
-                ctx,
-                gobj,
-                (enums::ftMh_MS_Damage2 as i32),
-                0_u32,
-                {
+            {
+                let __t2 = {
                     let __t1 = 0.0;
                     (fp).mv().ch().unk0().xC().set_z(__t1);
                     __t1
-                },
-                1.0,
-                0.0,
-                null::<HSD_GObj<'a>>(ctx),
-            );
+                };
+                fns::Fighter_ChangeMotionState(
+                    ctx,
+                    gobj,
+                    (enums::ftMh_MS_Damage2 as i32),
+                    0_u32,
+                    __t2,
+                    1.0,
+                    0.0,
+                    null::<HSD_GObj<'a>>(ctx),
+                )
+            };
             fns::ftAnim_8006EBA4(ctx, gobj);
             fns::ft_PlaySFX(ctx, fp, 0x4e207_i32, (127_i32 as u8), (64_i32 as u8));
         }

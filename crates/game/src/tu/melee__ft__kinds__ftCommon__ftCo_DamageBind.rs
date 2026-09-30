@@ -135,19 +135,22 @@ fn inl_commonCall<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             (fns::p_ftCommonData(ctx).get()).released_inputs(),
             (fp::fmadds(
                 (fns::p_ftCommonData(ctx).get()).x664(),
-                (fp::fsubs(
-                    (fns::p_ftCommonData(ctx).get()).pressed_inputs(),
-                    fp::frsp(
+                ({
+                    let __t17 = fp::frsp(
                         (fns::Player_80033BB8(ctx, ((fp).player_idx() as i32)).wrapping_add(1_i32))
                             as f64,
-                    ),
-                )),
+                    );
+                    fp::fsubs((fns::p_ftCommonData(ctx).get()).pressed_inputs(), __t17)
+                }),
                 fp::fmadds(
                     (fns::p_ftCommonData(ctx).get()).x65C(),
-                    (fp::fsubs(
-                        (fns::p_ftCommonData(ctx).get()).x660(),
-                        fp::frsp(fns::Player_GetHandicap(ctx, ((fp).player_idx() as i32)) as f64),
-                    )),
+                    ({
+                        let __t20 = fp::frsp(fns::Player_GetHandicap(
+                            ctx,
+                            ((fp).player_idx() as i32),
+                        ) as f64);
+                        fp::fsubs((fns::p_ftCommonData(ctx).get()).x660(), __t20)
+                    }),
                     (fns::p_ftCommonData(ctx).get()).x658(),
                 ),
             )),

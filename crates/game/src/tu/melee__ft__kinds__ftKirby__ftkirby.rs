@@ -622,13 +622,10 @@ pub fn ftKb_UnkMtxFunc0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, mtx: Ar
                 fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
             }
         }
-        fns::HSD_JObjDispAll(
-            ctx,
-            (fp).u().kb().hat().jobj(),
-            mtx,
-            fns::HSD_GObj_80390EB8(ctx, arg1),
-            (0_i32 as u32),
-        );
+        {
+            let __t1 = fns::HSD_GObj_80390EB8(ctx, arg1);
+            fns::HSD_JObjDispAll(ctx, (fp).u().kb().hat().jobj(), mtx, __t1, (0_i32 as u32))
+        };
     }
     'l1: loop {
         'c2: {}
@@ -1099,11 +1096,12 @@ pub fn ftKb_SpecialN_800EF69C<'a>(
                             fns::HSD_DObjRemoveAll(ctx, fns::HSD_JObjGetDObj(ctx, jobj));
                             fns::lb_8000CE40(ctx, jobj, null::<HSD_DObj<'a>>(ctx));
                         }
-                        (Handle::add((fp).parts(), i)).x8().x0().set_flags_b6({
+                        let __t2 = {
                             let __t1 = (0_i32 as u8);
                             (Handle::add((fp).parts(), i)).x8().x0().set_flags2_b7(__t1);
                             __t1
-                        });
+                        };
+                        (Handle::add((fp).parts(), i)).x8().x0().set_flags_b6(__t2);
                     }
                 }
                 i = i.wrapping_add(1);

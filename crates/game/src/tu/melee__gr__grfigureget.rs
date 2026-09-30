@@ -269,10 +269,13 @@ pub fn grFigureGet_80219898<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             if fns::HSD_Randi(ctx, var_r30) == 0_i32 {
                 pos.set_x(fp::fmuls(pos.x(), fp::fneg(1.0)));
             }
-            pos.set_y(fp::fadds(
-                (statics::melee__gr__grfigureget::yakumono_param(ctx).get()).x14(),
-                fns::Stage_GetCamBoundsTopOffset(ctx),
-            ));
+            pos.set_y({
+                let __t1 = fns::Stage_GetCamBoundsTopOffset(ctx);
+                fp::fadds(
+                    (statics::melee__gr__grfigureget::yakumono_param(ctx).get()).x14(),
+                    __t1,
+                )
+            });
             temp_r6 = (gp).u().figureget().x4();
             temp_r3_2 = fns::it_802F2094(
                 ctx,

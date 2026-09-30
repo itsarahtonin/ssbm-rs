@@ -67,8 +67,16 @@ pub fn fn_OSErrorHandler<'a>(ctx: &'a Ctx, error: u16, v_ctx: OSContext<'a>) {
     let mut dsisr: i32 = 0;
     let mut dar: i32 = 0;
     __frame.va_info(Handle::addr(Handle::cast::<Addr<'a>>(va)), 2, 0);
-    dsisr = ((Handle::cast::<Val<'a, i32>>(fns::__va_arg(ctx, va.get(0), 1_u8))).get());
-    dar = ((Handle::cast::<Val<'a, i32>>(fns::__va_arg(ctx, va.get(0), 1_u8))).get());
+    dsisr = ((Handle::cast::<Val<'a, i32>>({
+        let __t1 = 1_u8;
+        fns::__va_arg(ctx, va.get(0), __t1)
+    }))
+    .get());
+    dar = ((Handle::cast::<Val<'a, i32>>({
+        let __t2 = 1_u8;
+        fns::__va_arg(ctx, va.get(0), __t2)
+    }))
+    .get());
     let _ = fns::HSD_VISetUserPreRetraceCallback(ctx, null::<FnPtr<'a>>(ctx));
     let _ = fns::HSD_VISetUserPostRetraceCallback(ctx, null::<FnPtr<'a>>(ctx));
     fns::lb_80019A48(ctx);

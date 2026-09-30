@@ -295,33 +295,33 @@ pub fn Fighter_UnkInitReset_80067C98<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     (fp).set_unk_gobj(null::<HSD_GObj<'a>>(ctx));
     (fp).set_x221C_b5((0_i32 as u16));
     (fp).set_x2150({
-        let __t7 = {
-            let __t6 = {
-                let __t5 = {
-                    let __t4 = {
-                        let __t3 = {
-                            let __t2 = {
-                                let __t1 = 1_i32.wrapping_neg();
-                                (fp).set_x214C(__t1);
-                                __t1
+        let __t8 = {
+            let __t7 = {
+                let __t6 = {
+                    let __t5 = {
+                        let __t4 = {
+                            let __t3 = {
+                                let __t2 = 1_i32.wrapping_neg();
+                                (fp).set_x214C(__t2);
+                                __t2
                             };
-                            (fp).set_x2148(__t2);
-                            __t2
+                            (fp).set_x2148(__t3);
+                            __t3
                         };
-                        (fp).set_x2144(__t3);
-                        __t3
+                        (fp).set_x2144(__t4);
+                        __t4
                     };
-                    (fp).set_x2160(__t4);
-                    __t4
+                    (fp).set_x2160(__t5);
+                    __t5
                 };
-                (fp).set_x215C(__t5);
-                __t5
+                (fp).set_x215C(__t6);
+                __t6
             };
-            (fp).set_x2158(__t6);
-            __t6
+            (fp).set_x2158(__t7);
+            __t7
         };
-        (fp).set_x2154(__t7);
-        __t7
+        (fp).set_x2154(__t8);
+        __t8
     });
     (fp).set_x2168(0_i32);
     (fp).set_x2164(0_i32);
@@ -359,41 +359,41 @@ pub fn Fighter_UnkInitReset_80067C98<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     (fp).AbsorbAttr().set_x1A44_damageTaken(0_i32);
     (fp).AbsorbAttr().set_x1A48_hitsTaken(0_i32);
     (fp).x68C_transNPos().set_x({
-        let __t9 = {
-            let __t8 = fp::frsp(0_i32 as f64);
-            (fp).x68C_transNPos().set_z(__t8);
-            __t8
+        let __t10 = {
+            let __t9 = fp::frsp(0_i32 as f64);
+            (fp).x68C_transNPos().set_z(__t9);
+            __t9
         };
-        (fp).x68C_transNPos().set_y(__t9);
-        __t9
+        (fp).x68C_transNPos().set_y(__t10);
+        __t10
     });
     (fp).x6A4_transNOffset().set_x({
-        let __t11 = {
-            let __t10 = fp::frsp(0_i32 as f64);
-            (fp).x6A4_transNOffset().set_z(__t10);
-            __t10
+        let __t12 = {
+            let __t11 = fp::frsp(0_i32 as f64);
+            (fp).x6A4_transNOffset().set_z(__t11);
+            __t11
         };
-        (fp).x6A4_transNOffset().set_y(__t11);
-        __t11
+        (fp).x6A4_transNOffset().set_y(__t12);
+        __t12
     });
     (fp).set_lstick_angle(fp::frsp(0_i32 as f64));
     (fp).x6C0().set_x({
-        let __t13 = {
-            let __t12 = fp::frsp(0_i32 as f64);
-            (fp).x6C0().set_z(__t12);
-            __t12
+        let __t14 = {
+            let __t13 = fp::frsp(0_i32 as f64);
+            (fp).x6C0().set_z(__t13);
+            __t13
         };
-        (fp).x6C0().set_y(__t13);
-        __t13
+        (fp).x6C0().set_y(__t14);
+        __t14
     });
     (fp).x6D8().set_x({
-        let __t15 = {
-            let __t14 = fp::frsp(0_i32 as f64);
-            (fp).x6D8().set_z(__t14);
-            __t14
+        let __t16 = {
+            let __t15 = fp::frsp(0_i32 as f64);
+            (fp).x6D8().set_z(__t15);
+            __t15
         };
-        (fp).x6D8().set_y(__t15);
-        __t15
+        (fp).x6D8().set_y(__t16);
+        __t16
     });
     (fp).set_x209C((0_i32 as u16));
     (fp).set_x2224_b1((0_i32 as u8));
@@ -415,9 +415,9 @@ pub fn Fighter_UnkInitReset_80067C98<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     (fp).set_x2038(0_i32);
     (fp).set_x1980(null::<HSD_GObj<'a>>(ctx));
     (fp).set_stamina_dead({
-        let __t16 = (0_i32 as u8);
-        (fp).set_x2224_b3(__t16);
-        __t16
+        let __t17 = (0_i32 as u8);
+        (fp).set_x2224_b3(__t17);
+        __t17
     });
     (fp).set_x2224_b4((0_i32 as u8));
     (fp).set_capture_timer(0_i32);
@@ -498,13 +498,11 @@ pub fn Fighter_Spawn<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             .get()
             .call::<_, ()>((gobj,));
     }
-    fns::ftCo_800A101C(
-        ctx,
-        fp,
-        fns::Player_GetCpuType(ctx, ((fp).player_idx() as i32)),
-        fns::Player_GetCpuLevel(ctx, ((fp).player_idx() as i32)),
-        0_i32,
-    );
+    {
+        let __t1 = fns::Player_GetCpuLevel(ctx, ((fp).player_idx() as i32));
+        let __t2 = fns::Player_GetCpuType(ctx, ((fp).player_idx() as i32));
+        fns::ftCo_800A101C(ctx, fp, __t2, __t1, 0_i32)
+    };
     fns::efAsync_QueueClear(ctx, (fp).x60C_ref());
     fns::ft_8007C17C(ctx, gobj);
     fns::ft_8007C630(ctx, gobj);
@@ -1511,7 +1509,10 @@ pub fn Fighter_procAnim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     if fns::ftCo_800C0694(ctx, fp) == 107_i32 {
                         fns::ftCo_800C0200(ctx, fp, 107_i32);
                     }
-                } else if (fp).x2004() == fns::it_8026B588(ctx) {
+                } else if {
+                    let __t1 = fns::it_8026B588(ctx);
+                    (fp).x2004() == __t1
+                } {
                     fns::ft_800880D8(ctx, fp);
                 }
             }
@@ -2374,16 +2375,14 @@ pub fn Fighter_procUpdate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 kb_vel_x = (p_kb_vel).x();
                 kb_vel_y = (p_kb_vel).y();
                 if ((fp).is_sandbag() != 0) {
-                    (p_kb_vel).set_x(fns::ftCommon_SandbagKnockbackDeaccel(
-                        ctx,
-                        (p_kb_vel).x(),
-                        fns::ftCommon_SandbagGetKnockbackDeaccelX(ctx, fp),
-                    ));
-                    (p_kb_vel).set_y(fns::ftCommon_SandbagKnockbackDeaccel(
-                        ctx,
-                        (p_kb_vel).y(),
-                        fns::ftCommon_SandbagGetKnockbackDeaccelY(ctx, fp),
-                    ));
+                    (p_kb_vel).set_x({
+                        let __t2 = fns::ftCommon_SandbagGetKnockbackDeaccelX(ctx, fp);
+                        fns::ftCommon_SandbagKnockbackDeaccel(ctx, (p_kb_vel).x(), __t2)
+                    });
+                    (p_kb_vel).set_y({
+                        let __t3 = fns::ftCommon_SandbagGetKnockbackDeaccelY(ctx, fp);
+                        fns::ftCommon_SandbagKnockbackDeaccel(ctx, (p_kb_vel).y(), __t3)
+                    });
                 } else {
                     let mut kb_angle: f64 = fns::atan2f(ctx, kb_vel_y, kb_vel_x);
                     if inl_sqrtf(
@@ -2392,9 +2391,9 @@ pub fn Fighter_procUpdate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     ) < (fns::p_ftCommonData(ctx).get()).x204_knockbackFrameDecay()
                     {
                         (p_kb_vel).set_x({
-                            let __t2 = fp::frsp(0_i32 as f64);
-                            (p_kb_vel).set_y(__t2);
-                            __t2
+                            let __t4 = fp::frsp(0_i32 as f64);
+                            (p_kb_vel).set_y(__t4);
+                            __t4
                         });
                     } else {
                         (p_kb_vel).set_x(fp::fnmsubs(
@@ -2434,9 +2433,9 @@ pub fn Fighter_procUpdate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
         pAtkShieldKB = (fp).x98_atk_shield_kb();
         if (({
-            let __t3 = (pAtkShieldKB).x();
-            atkShieldKB_X = __t3;
-            __t3
+            let __t7 = (pAtkShieldKB).x();
+            atkShieldKB_X = __t7;
+            __t7
         }) != fp::frsp(0_i32 as f64))
             || ((pAtkShieldKB).y() != fp::frsp(0_i32 as f64))
         {
@@ -2448,9 +2447,9 @@ pub fn Fighter_procUpdate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     < (fns::p_ftCommonData(ctx).get()).x3E8_shieldKnockbackFrameDecay()
                 {
                     (pAtkShieldKB).set_x({
-                        let __t4 = fp::frsp(0_i32 as f64);
-                        (p_kb_vel).set_y(__t4);
-                        __t4
+                        let __t8 = fp::frsp(0_i32 as f64);
+                        (p_kb_vel).set_y(__t8);
+                        __t8
                     });
                 } else {
                     (pAtkShieldKB).set_x(fp::fnmsubs(
@@ -2498,9 +2497,9 @@ pub fn Fighter_procUpdate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             fp::fadds((fp).xE4_ground_accel_1(), (fp).xE8_ground_accel_2()),
         ));
         (fp).set_xE4_ground_accel_1({
-            let __t5 = fp::frsp(0_i32 as f64);
-            (fp).set_xE8_ground_accel_2(__t5);
-            __t5
+            let __t11 = fp::frsp(0_i32 as f64);
+            (fp).set_xE8_ground_accel_2(__t11);
+            __t11
         });
         fns::PSVECAdd(ctx, (fp).self_vel(), (fp).x74_self_accel(), (fp).self_vel());
         'l1: loop {
@@ -2509,13 +2508,13 @@ pub fn Fighter_procUpdate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     Handle::cast::<Vec<'a>>(Handle::cast::<Addr<'a>>((fp).x74_self_accel()));
                 let mut c: f64 = fp::frsp(0_i32 as f64);
                 (vecLocal).set_x({
-                    let __t7 = {
-                        let __t6 = c;
-                        (vecLocal).set_z(__t6);
-                        __t6
+                    let __t13 = {
+                        let __t12 = c;
+                        (vecLocal).set_z(__t12);
+                        __t12
                     };
-                    (vecLocal).set_y(__t7);
-                    __t7
+                    (vecLocal).set_y(__t13);
+                    __t13
                 });
             }
             if !(0_i32 != 0) {
@@ -2578,13 +2577,13 @@ pub fn Fighter_procUpdate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                             Handle::cast::<Vec<'a>>(Handle::cast::<Addr<'a>>((fp).xD4_unk_vel()));
                         let mut c_2: f64 = fp::frsp(0_i32 as f64);
                         (vecLocal_2).set_x({
-                            let __t9 = {
-                                let __t8 = c_2;
-                                (vecLocal_2).set_z(__t8);
-                                __t8
+                            let __t15 = {
+                                let __t14 = c_2;
+                                (vecLocal_2).set_z(__t14);
+                                __t14
                             };
-                            (vecLocal_2).set_y(__t9);
-                            __t9
+                            (vecLocal_2).set_y(__t15);
+                            __t15
                         });
                     }
                     if !(0_i32 != 0) {
@@ -2611,13 +2610,13 @@ pub fn Fighter_procUpdate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     Handle::cast::<Vec<'a>>(Handle::cast::<Addr<'a>>(windOffset));
                 let mut c_3: f64 = fp::frsp(0_i32 as f64);
                 (vecLocal_3).set_x({
-                    let __t11 = {
-                        let __t10 = c_3;
-                        (vecLocal_3).set_z(__t10);
-                        __t10
+                    let __t17 = {
+                        let __t16 = c_3;
+                        (vecLocal_3).set_z(__t16);
+                        __t16
                     };
-                    (vecLocal_3).set_y(__t11);
-                    __t11
+                    (vecLocal_3).set_y(__t17);
+                    __t17
                 });
             }
             if !(0_i32 != 0) {
@@ -2648,16 +2647,24 @@ pub fn Fighter_procUpdate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         .set_z(fp::fadds((fp).cur_pos().z(), windOffset.z()));
     let _ = fns::ftCo_800D3158(ctx, gobj);
     if ((fp).x2225_b0() != 0) {
-        if ((fp).prev_pos().y() <= fns::Stage_CalcUnkCamYBounds(ctx))
-            && ((fp).cur_pos().y() > fns::Stage_CalcUnkCamYBounds(ctx))
-        {
+        if ({
+            let __t18 = fns::Stage_CalcUnkCamYBounds(ctx);
+            (fp).prev_pos().y() <= __t18
+        }) && ({
+            let __t19 = fns::Stage_CalcUnkCamYBounds(ctx);
+            (fp).cur_pos().y() > __t19
+        }) {
             (fp).set_x2225_b0((0_i32 as u8));
         }
     } else {
         if (!((fp).x222A_b1() != 0)) && (!((fp).x2228_b5() != 0)) {
-            if ((fp).prev_pos().y() >= fns::Stage_CalcUnkCamY(ctx))
-                && ((fp).cur_pos().y() < fns::Stage_CalcUnkCamY(ctx))
-            {
+            if ({
+                let __t20 = fns::Stage_CalcUnkCamY(ctx);
+                (fp).prev_pos().y() >= __t20
+            }) && ({
+                let __t21 = fns::Stage_CalcUnkCamY(ctx);
+                (fp).cur_pos().y() < __t21
+            }) {
                 fns::ft_PlaySFX(ctx, fp, 96_i32, (127_i32 as u8), (64_i32 as u8));
                 (fp).set_x2225_b0((1_i32 as u8));
             }
@@ -2878,7 +2885,10 @@ pub fn Fighter_procCollPos<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             fns::HSD_JObjAnimAll(ctx, (fp).x20A0_accessory());
         }
         if (((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32))
-            && ((fp).cur_pos().y() < fns::Stage_GetCamBoundsBottomOffset(ctx))
+            && ({
+                let __t1 = fns::Stage_GetCamBoundsBottomOffset(ctx);
+                (fp).cur_pos().y() < __t1
+            })
         {
             if fns::ifMagnify_802FB6E8(ctx, ((fp).player_idx() as i32)) == 3_i32 {
                 fns::Stage_UnkSetVec3TCam_Offset(ctx, cam_offset);

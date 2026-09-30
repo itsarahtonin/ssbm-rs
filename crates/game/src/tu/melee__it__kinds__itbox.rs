@@ -692,12 +692,13 @@ pub fn itBox_UnkMotion8_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut jobj: HSD_JObj<'a> = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, gobj)));
     let mut vel: f64 = 0.0;
+    let __t1 = fp::fmul(
+        0.01745329238474369,
+        (fp::fsubs(fns::HSD_Randf(ctx), 0.20000000298023224)),
+    );
     (ip).xDD4_itemVar().r#box().set_rot_vel_x(fp::frsp(fp::fadd(
         (ip).xDD4_itemVar().r#box().rot_vel_x(),
-        fp::fmul(
-            0.01745329238474369,
-            (fp::fsubs(fns::HSD_Randf(ctx), 0.20000000298023224)),
-        ),
+        __t1,
     )));
     vel = (ip).xDD4_itemVar().r#box().rot_vel_x();
     if vel > 0.05235987715423107 {
@@ -709,12 +710,13 @@ pub fn itBox_UnkMotion8_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             .r#box()
             .set_rot_vel_x(fp::frsp(fp::fneg(0.05235987715423107)));
     }
+    let __t2 = fp::fmul(
+        0.01745329238474369,
+        (fp::fsubs(fns::HSD_Randf(ctx), 0.20000000298023224)),
+    );
     (ip).xDD4_itemVar().r#box().set_rot_vel_y(fp::frsp(fp::fadd(
         (ip).xDD4_itemVar().r#box().rot_vel_y(),
-        fp::fmul(
-            0.01745329238474369,
-            (fp::fsubs(fns::HSD_Randf(ctx), 0.20000000298023224)),
-        ),
+        __t2,
     )));
     vel = (ip).xDD4_itemVar().r#box().rot_vel_y();
     if vel > 0.05235987715423107 {

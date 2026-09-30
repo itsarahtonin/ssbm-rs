@@ -125,20 +125,24 @@ pub fn hsd_803A949C<'a>(ctx: &'a Ctx, chan: i32, card_result: i32) {
                             ((hdr_offset as u32).wrapping_add(Handle::addr((state).sector_buf())))
                                 as u32,
                         );
-                        let _ = fns::memcpy(
-                            ctx,
-                            statics::sysdolphin__baselib__card::commands(ctx)
+                        let _ = {
+                            let __t1 = (statics::sysdolphin__baselib__card::commands(ctx)
                                 .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                                 .x8()
                                 .read()
-                                .data(),
-                            Handle::cast::<Addr<'a>>((src).data().at(0)),
-                            (statics::sysdolphin__baselib__card::commands(ctx)
+                                .size() as u32);
+                            let __t2 = statics::sysdolphin__baselib__card::commands(ctx)
                                 .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                                 .x8()
                                 .read()
-                                .size() as u32),
-                        );
+                                .data();
+                            fns::memcpy(
+                                ctx,
+                                __t2,
+                                Handle::cast::<Addr<'a>>((src).data().at(0)),
+                                __t1,
+                            )
+                        };
                     }
                 }
                 result = inl_checkOpen_unfused(ctx, state);
@@ -165,24 +169,28 @@ pub fn hsd_803A949C<'a>(ctx: &'a Ctx, chan: i32, card_result: i32) {
                             .data(),
                     ))
                 {
-                    let _ = fns::memcpy(
-                        ctx,
-                        statics::sysdolphin__baselib__card::commands(ctx)
+                    let _ = {
+                        let __t3 = (statics::sysdolphin__baselib__card::commands(ctx)
                             .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                             .x8()
                             .read()
-                            .data(),
-                        Handle::cast::<Addr<'a>>(
-                            (Handle::cast::<CardBlockHeader<'a>>((state).sector_buf()))
-                                .data()
-                                .at(0),
-                        ),
-                        (statics::sysdolphin__baselib__card::commands(ctx)
+                            .size() as u32);
+                        let __t4 = statics::sysdolphin__baselib__card::commands(ctx)
                             .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                             .x8()
                             .read()
-                            .size() as u32),
-                    );
+                            .data();
+                        fns::memcpy(
+                            ctx,
+                            __t4,
+                            Handle::cast::<Addr<'a>>(
+                                (Handle::cast::<CardBlockHeader<'a>>((state).sector_buf()))
+                                    .data()
+                                    .at(0),
+                            ),
+                            __t3,
+                        )
+                    };
                 }
                 result = inl_checkOpen_unfused(ctx, state);
             }
@@ -265,13 +273,14 @@ pub fn hsd_803A949C<'a>(ctx: &'a Ctx, chan: i32, card_result: i32) {
                     != result
                 {
                     statics::sysdolphin__baselib__card::curr_result(ctx).set(2_i32);
-                } else if ((Handle::add(block, 18_i32)).get() as i32)
-                    != statics::sysdolphin__baselib__card::commands(ctx)
+                } else if {
+                    let __t5 = statics::sysdolphin__baselib__card::commands(ctx)
                         .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                         .x8()
                         .verify()
-                        .seq()
-                {
+                        .seq();
+                    ((Handle::add(block, 18_i32)).get() as i32) != __t5
+                } {
                     statics::sysdolphin__baselib__card::curr_result(ctx).set(2_i32);
                 } else if (statics::sysdolphin__baselib__card::commands(ctx)
                     .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
@@ -279,25 +288,25 @@ pub fn hsd_803A949C<'a>(ctx: &'a Ctx, chan: i32, card_result: i32) {
                     .verify()
                     .size()
                     > 0_i32)
-                    && (fns::memcmp(
-                        ctx,
-                        statics::sysdolphin__baselib__card::commands(ctx)
+                    && ({
+                        let __t6 = (statics::sysdolphin__baselib__card::commands(ctx)
                             .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                             .x8()
                             .verify()
-                            .data(),
-                        Handle::cast::<Addr<'a>>(
+                            .size() as u32);
+                        let __t7 = Handle::cast::<Addr<'a>>(
                             ({
                                 block = Handle::add(block, 32_i32);
                                 block
                             }),
-                        ),
-                        (statics::sysdolphin__baselib__card::commands(ctx)
+                        );
+                        let __t8 = statics::sysdolphin__baselib__card::commands(ctx)
                             .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                             .x8()
                             .verify()
-                            .size() as u32),
-                    ) != 0_i32)
+                            .data();
+                        fns::memcmp(ctx, __t8, __t7, __t6)
+                    } != 0_i32)
                 {
                     statics::sysdolphin__baselib__card::curr_result(ctx).set(2_i32);
                 }
@@ -329,13 +338,14 @@ pub fn hsd_803A949C<'a>(ctx: &'a Ctx, chan: i32, card_result: i32) {
                         .block_id()
                 {
                     statics::sysdolphin__baselib__card::curr_result(ctx).set(2_i32);
-                } else if ((header).seq() as i32)
-                    != statics::sysdolphin__baselib__card::commands(ctx)
+                } else if {
+                    let __t9 = statics::sysdolphin__baselib__card::commands(ctx)
                         .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                         .x8()
                         .verify()
-                        .seq()
-                {
+                        .seq();
+                    ((header).seq() as i32) != __t9
+                } {
                     statics::sysdolphin__baselib__card::curr_result(ctx).set(2_i32);
                 } else if (statics::sysdolphin__baselib__card::commands(ctx)
                     .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
@@ -343,20 +353,24 @@ pub fn hsd_803A949C<'a>(ctx: &'a Ctx, chan: i32, card_result: i32) {
                     .verify()
                     .size()
                     > 0_i32)
-                    && (fns::memcmp(
-                        ctx,
-                        statics::sysdolphin__baselib__card::commands(ctx)
+                    && ({
+                        let __t10 = (statics::sysdolphin__baselib__card::commands(ctx)
                             .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                             .x8()
                             .verify()
-                            .data(),
-                        Handle::cast::<Addr<'a>>((header).data().at(0)),
-                        (statics::sysdolphin__baselib__card::commands(ctx)
+                            .size() as u32);
+                        let __t11 = statics::sysdolphin__baselib__card::commands(ctx)
                             .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                             .x8()
                             .verify()
-                            .size() as u32),
-                    ) != 0_i32)
+                            .data();
+                        fns::memcmp(
+                            ctx,
+                            __t11,
+                            Handle::cast::<Addr<'a>>((header).data().at(0)),
+                            __t10,
+                        )
+                    } != 0_i32)
                 {
                     statics::sysdolphin__baselib__card::curr_result(ctx).set(2_i32);
                 }
@@ -411,47 +425,47 @@ pub fn hsd_803A949C<'a>(ctx: &'a Ctx, chan: i32, card_result: i32) {
                     break 's1;
                 }
                 if (banner_size > 0_i32)
-                    && (fns::memcmp(
-                        ctx,
-                        Handle::cast::<Addr<'a>>(Handle::add((state).sector_buf(), 64_i32)),
-                        statics::sysdolphin__baselib__card::commands(ctx)
+                    && ({
+                        let __t12 = statics::sysdolphin__baselib__card::commands(ctx)
                             .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                             .x8()
                             .header()
-                            .banner(),
-                        (banner_size as u32),
-                    ) != 0_i32)
+                            .banner();
+                        fns::memcmp(
+                            ctx,
+                            Handle::cast::<Addr<'a>>(Handle::add((state).sector_buf(), 64_i32)),
+                            __t12,
+                            (banner_size as u32),
+                        )
+                    } != 0_i32)
                 {
                     statics::sysdolphin__baselib__card::curr_result(ctx).set(2_i32);
                     break 's1;
                 }
                 icons_start = banner_size.wrapping_add(64_i32);
                 if (state).header_size() > (state).sector_size() {
-                    if fns::memcmp(
-                        ctx,
-                        Handle::cast::<Addr<'a>>(Handle::add((state).sector_buf(), icons_start)),
-                        statics::sysdolphin__baselib__card::commands(ctx)
+                    if {
+                        let __t13 = statics::sysdolphin__baselib__card::commands(ctx)
                             .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                             .x8()
                             .header()
-                            .icons(),
-                        (state).sector_size().wrapping_sub((icons_start as u32)),
-                    ) != 0_i32
+                            .icons();
+                        fns::memcmp(
+                            ctx,
+                            Handle::cast::<Addr<'a>>(Handle::add(
+                                (state).sector_buf(),
+                                icons_start,
+                            )),
+                            __t13,
+                            (state).sector_size().wrapping_sub((icons_start as u32)),
+                        )
+                    } != 0_i32
                     {
                         statics::sysdolphin__baselib__card::curr_result(ctx).set(2_i32);
                         break 's1;
                     }
-                    fns::HSD_Checksum(
-                        ctx,
-                        (statics::sysdolphin__baselib__card::commands(ctx)
-                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
-                            .state())
-                        .sector_buf(),
-                        ((statics::sysdolphin__baselib__card::commands(ctx)
-                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
-                            .state())
-                        .sector_size() as i32),
-                        Handle::cast::<Addr<'a>>(
+                    {
+                        let __t14 = Handle::cast::<Addr<'a>>(
                             (statics::sysdolphin__baselib__card::commands(ctx)
                                 .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                                 .state())
@@ -462,32 +476,35 @@ pub fn hsd_803A949C<'a>(ctx: &'a Ctx, chan: i32, card_result: i32) {
                                 .header()
                                 .index()
                                 .wrapping_mul(16_i32)),
-                        ),
-                    );
-                } else if fns::memcmp(
-                    ctx,
-                    Handle::cast::<Addr<'a>>(Handle::add((state).sector_buf(), icons_start)),
-                    statics::sysdolphin__baselib__card::commands(ctx)
+                        );
+                        let __t15 = ((statics::sysdolphin__baselib__card::commands(ctx)
+                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
+                            .state())
+                        .sector_size() as i32);
+                        let __t16 = (statics::sysdolphin__baselib__card::commands(ctx)
+                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
+                            .state())
+                        .sector_buf();
+                        fns::HSD_Checksum(ctx, __t16, __t15, __t14)
+                    };
+                } else if {
+                    let __t17 = statics::sysdolphin__baselib__card::commands(ctx)
                         .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                         .x8()
                         .header()
-                        .icons(),
-                    (state).header_size().wrapping_sub((icons_start as u32)),
-                ) != 0_i32
+                        .icons();
+                    fns::memcmp(
+                        ctx,
+                        Handle::cast::<Addr<'a>>(Handle::add((state).sector_buf(), icons_start)),
+                        __t17,
+                        (state).header_size().wrapping_sub((icons_start as u32)),
+                    )
+                } != 0_i32
                 {
                     statics::sysdolphin__baselib__card::curr_result(ctx).set(2_i32);
                 } else {
-                    fns::HSD_Checksum(
-                        ctx,
-                        (statics::sysdolphin__baselib__card::commands(ctx)
-                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
-                            .state())
-                        .sector_buf(),
-                        ((statics::sysdolphin__baselib__card::commands(ctx)
-                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
-                            .state())
-                        .header_size() as i32),
-                        Handle::cast::<Addr<'a>>(
+                    {
+                        let __t18 = Handle::cast::<Addr<'a>>(
                             (statics::sysdolphin__baselib__card::commands(ctx)
                                 .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                                 .state())
@@ -498,51 +515,64 @@ pub fn hsd_803A949C<'a>(ctx: &'a Ctx, chan: i32, card_result: i32) {
                                 .header()
                                 .index()
                                 .wrapping_mul(16_i32)),
-                        ),
-                    );
-                    if fns::memcmp(
-                        ctx,
-                        Handle::cast::<Addr<'a>>(Handle::add(
-                            (state).sector_buf(),
-                            ((state).header_size() as i32),
-                        )),
-                        Handle::cast::<Addr<'a>>(
+                        );
+                        let __t19 = ((statics::sysdolphin__baselib__card::commands(ctx)
+                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
+                            .state())
+                        .header_size() as i32);
+                        let __t20 = (statics::sysdolphin__baselib__card::commands(ctx)
+                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
+                            .state())
+                        .sector_buf();
+                        fns::HSD_Checksum(ctx, __t20, __t19, __t18)
+                    };
+                    if {
+                        let __t21 = Handle::cast::<Addr<'a>>(
                             (statics::sysdolphin__baselib__card::commands(ctx)
                                 .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                                 .state())
                             .digest()
                             .at(0),
-                        ),
-                        (48_i32 as u32),
-                    ) != 0_i32
+                        );
+                        fns::memcmp(
+                            ctx,
+                            Handle::cast::<Addr<'a>>(Handle::add(
+                                (state).sector_buf(),
+                                ((state).header_size() as i32),
+                            )),
+                            __t21,
+                            (48_i32 as u32),
+                        )
+                    } != 0_i32
                     {
                         statics::sysdolphin__baselib__card::curr_result(ctx).set(2_i32);
                     }
                 }
             } else {
-                icons_offset = (((state).sector_size().wrapping_mul(
-                    (statics::sysdolphin__baselib__card::commands(ctx)
+                icons_offset = (({
+                    let __t22 = (statics::sysdolphin__baselib__card::commands(ctx)
                         .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                         .x8()
                         .header()
-                        .index() as u32),
-                ))
+                        .index() as u32);
+                    (state).sector_size().wrapping_mul(__t22)
+                })
                 .wrapping_sub((64_i32 as u32))
                 .wrapping_sub((banner_size as u32)) as i32);
-                remaining = ((state).header_size().wrapping_sub(
-                    (state).sector_size().wrapping_mul(
-                        (statics::sysdolphin__baselib__card::commands(ctx)
+                remaining = ({
+                    let __t24 = {
+                        let __t23 = (statics::sysdolphin__baselib__card::commands(ctx)
                             .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                             .x8()
                             .header()
-                            .index() as u32),
-                    ),
-                ) as i32);
+                            .index() as u32);
+                        (state).sector_size().wrapping_mul(__t23)
+                    };
+                    (state).header_size().wrapping_sub(__t24)
+                } as i32);
                 if (remaining as u32) > (state).sector_size() {
-                    if fns::memcmp(
-                        ctx,
-                        Handle::cast::<Addr<'a>>((state).sector_buf()),
-                        Handle::cast::<Addr<'a>>(Handle::add(
+                    if {
+                        let __t25 = Handle::cast::<Addr<'a>>(Handle::add(
                             Handle::cast::<Val<'a, u8>>(
                                 statics::sysdolphin__baselib__card::commands(ctx)
                                     .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
@@ -551,24 +581,20 @@ pub fn hsd_803A949C<'a>(ctx: &'a Ctx, chan: i32, card_result: i32) {
                                     .icons(),
                             ),
                             icons_offset,
-                        )),
-                        (state).sector_size(),
-                    ) != 0_i32
+                        ));
+                        fns::memcmp(
+                            ctx,
+                            Handle::cast::<Addr<'a>>((state).sector_buf()),
+                            __t25,
+                            (state).sector_size(),
+                        )
+                    } != 0_i32
                     {
                         statics::sysdolphin__baselib__card::curr_result(ctx).set(2_i32);
                         break 's1;
                     }
-                    fns::HSD_Checksum(
-                        ctx,
-                        (statics::sysdolphin__baselib__card::commands(ctx)
-                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
-                            .state())
-                        .sector_buf(),
-                        ((statics::sysdolphin__baselib__card::commands(ctx)
-                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
-                            .state())
-                        .sector_size() as i32),
-                        Handle::cast::<Addr<'a>>(
+                    {
+                        let __t26 = Handle::cast::<Addr<'a>>(
                             (statics::sysdolphin__baselib__card::commands(ctx)
                                 .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                                 .state())
@@ -579,12 +605,19 @@ pub fn hsd_803A949C<'a>(ctx: &'a Ctx, chan: i32, card_result: i32) {
                                 .header()
                                 .index()
                                 .wrapping_mul(16_i32)),
-                        ),
-                    );
-                } else if fns::memcmp(
-                    ctx,
-                    Handle::cast::<Addr<'a>>((state).sector_buf()),
-                    Handle::cast::<Addr<'a>>(Handle::add(
+                        );
+                        let __t27 = ((statics::sysdolphin__baselib__card::commands(ctx)
+                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
+                            .state())
+                        .sector_size() as i32);
+                        let __t28 = (statics::sysdolphin__baselib__card::commands(ctx)
+                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
+                            .state())
+                        .sector_buf();
+                        fns::HSD_Checksum(ctx, __t28, __t27, __t26)
+                    };
+                } else if {
+                    let __t29 = Handle::cast::<Addr<'a>>(Handle::add(
                         Handle::cast::<Val<'a, u8>>(
                             statics::sysdolphin__baselib__card::commands(ctx)
                                 .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
@@ -593,20 +626,19 @@ pub fn hsd_803A949C<'a>(ctx: &'a Ctx, chan: i32, card_result: i32) {
                                 .icons(),
                         ),
                         icons_offset,
-                    )),
-                    (remaining as u32),
-                ) != 0_i32
+                    ));
+                    fns::memcmp(
+                        ctx,
+                        Handle::cast::<Addr<'a>>((state).sector_buf()),
+                        __t29,
+                        (remaining as u32),
+                    )
+                } != 0_i32
                 {
                     statics::sysdolphin__baselib__card::curr_result(ctx).set(2_i32);
                 } else {
-                    fns::HSD_Checksum(
-                        ctx,
-                        (statics::sysdolphin__baselib__card::commands(ctx)
-                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
-                            .state())
-                        .sector_buf(),
-                        remaining,
-                        Handle::cast::<Addr<'a>>(
+                    {
+                        let __t30 = Handle::cast::<Addr<'a>>(
                             (statics::sysdolphin__baselib__card::commands(ctx)
                                 .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                                 .state())
@@ -617,20 +649,28 @@ pub fn hsd_803A949C<'a>(ctx: &'a Ctx, chan: i32, card_result: i32) {
                                 .header()
                                 .index()
                                 .wrapping_mul(16_i32)),
-                        ),
-                    );
-                    if fns::memcmp(
-                        ctx,
-                        Handle::cast::<Addr<'a>>(Handle::add((state).sector_buf(), remaining)),
-                        Handle::cast::<Addr<'a>>(
+                        );
+                        let __t31 = (statics::sysdolphin__baselib__card::commands(ctx)
+                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
+                            .state())
+                        .sector_buf();
+                        fns::HSD_Checksum(ctx, __t31, remaining, __t30)
+                    };
+                    if {
+                        let __t32 = Handle::cast::<Addr<'a>>(
                             (statics::sysdolphin__baselib__card::commands(ctx)
                                 .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                                 .state())
                             .digest()
                             .at(0),
-                        ),
-                        (48_i32 as u32),
-                    ) != 0_i32
+                        );
+                        fns::memcmp(
+                            ctx,
+                            Handle::cast::<Addr<'a>>(Handle::add((state).sector_buf(), remaining)),
+                            __t32,
+                            (48_i32 as u32),
+                        )
+                    } != 0_i32
                     {
                         statics::sysdolphin__baselib__card::curr_result(ctx).set(2_i32);
                     }
@@ -736,17 +776,8 @@ pub fn hsd_803A949C<'a>(ctx: &'a Ctx, chan: i32, card_result: i32) {
                             (state).sector_size().wrapping_sub((icons_start as u32)),
                         );
                     }
-                    fns::HSD_Checksum(
-                        ctx,
-                        (statics::sysdolphin__baselib__card::commands(ctx)
-                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
-                            .state())
-                        .sector_buf(),
-                        ((statics::sysdolphin__baselib__card::commands(ctx)
-                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
-                            .state())
-                        .sector_size() as i32),
-                        Handle::cast::<Addr<'a>>(
+                    {
+                        let __t33 = Handle::cast::<Addr<'a>>(
                             (statics::sysdolphin__baselib__card::commands(ctx)
                                 .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                                 .state())
@@ -757,8 +788,17 @@ pub fn hsd_803A949C<'a>(ctx: &'a Ctx, chan: i32, card_result: i32) {
                                 .read_header()
                                 .index()
                                 .wrapping_mul(16_i32)),
-                        ),
-                    );
+                        );
+                        let __t34 = ((statics::sysdolphin__baselib__card::commands(ctx)
+                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
+                            .state())
+                        .sector_size() as i32);
+                        let __t35 = (statics::sysdolphin__baselib__card::commands(ctx)
+                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
+                            .state())
+                        .sector_buf();
+                        fns::HSD_Checksum(ctx, __t35, __t34, __t33)
+                    };
                 } else {
                     if !Handle::is_null(
                         statics::sysdolphin__baselib__card::commands(ctx)
@@ -781,17 +821,8 @@ pub fn hsd_803A949C<'a>(ctx: &'a Ctx, chan: i32, card_result: i32) {
                             (state).header_size().wrapping_sub((icons_start as u32)),
                         );
                     }
-                    fns::HSD_Checksum(
-                        ctx,
-                        (statics::sysdolphin__baselib__card::commands(ctx)
-                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
-                            .state())
-                        .sector_buf(),
-                        ((statics::sysdolphin__baselib__card::commands(ctx)
-                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
-                            .state())
-                        .header_size() as i32),
-                        Handle::cast::<Addr<'a>>(
+                    {
+                        let __t36 = Handle::cast::<Addr<'a>>(
                             (statics::sysdolphin__baselib__card::commands(ctx)
                                 .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                                 .state())
@@ -802,47 +833,62 @@ pub fn hsd_803A949C<'a>(ctx: &'a Ctx, chan: i32, card_result: i32) {
                                 .read_header()
                                 .index()
                                 .wrapping_mul(16_i32)),
-                        ),
-                    );
-                    if fns::memcmp(
-                        ctx,
-                        Handle::cast::<Addr<'a>>(Handle::add(
-                            (state).sector_buf(),
-                            ((state).header_size() as i32),
-                        )),
-                        Handle::cast::<Addr<'a>>(
+                        );
+                        let __t37 = ((statics::sysdolphin__baselib__card::commands(ctx)
+                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
+                            .state())
+                        .header_size() as i32);
+                        let __t38 = (statics::sysdolphin__baselib__card::commands(ctx)
+                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
+                            .state())
+                        .sector_buf();
+                        fns::HSD_Checksum(ctx, __t38, __t37, __t36)
+                    };
+                    if {
+                        let __t39 = Handle::cast::<Addr<'a>>(
                             (statics::sysdolphin__baselib__card::commands(ctx)
                                 .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                                 .state())
                             .digest()
                             .at(0),
-                        ),
-                        (48_i32 as u32),
-                    ) != 0_i32
+                        );
+                        fns::memcmp(
+                            ctx,
+                            Handle::cast::<Addr<'a>>(Handle::add(
+                                (state).sector_buf(),
+                                ((state).header_size() as i32),
+                            )),
+                            __t39,
+                            (48_i32 as u32),
+                        )
+                    } != 0_i32
                     {
                         statics::sysdolphin__baselib__card::curr_result(ctx)
                             .set(0x107_i32.wrapping_neg());
                     }
                 }
             } else {
-                icons_offset = (((state).sector_size().wrapping_mul(
-                    (statics::sysdolphin__baselib__card::commands(ctx)
+                icons_offset = (({
+                    let __t40 = (statics::sysdolphin__baselib__card::commands(ctx)
                         .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                         .x8()
                         .read_header()
-                        .index() as u32),
-                ))
+                        .index() as u32);
+                    (state).sector_size().wrapping_mul(__t40)
+                })
                 .wrapping_sub((64_i32 as u32))
                 .wrapping_sub((banner_size11 as u32)) as i32);
-                chan = ((state).header_size().wrapping_sub(
-                    (state).sector_size().wrapping_mul(
-                        (statics::sysdolphin__baselib__card::commands(ctx)
+                chan = ({
+                    let __t42 = {
+                        let __t41 = (statics::sysdolphin__baselib__card::commands(ctx)
                             .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                             .x8()
                             .read_header()
-                            .index() as u32),
-                    ),
-                ) as i32);
+                            .index() as u32);
+                        (state).sector_size().wrapping_mul(__t41)
+                    };
+                    (state).header_size().wrapping_sub(__t42)
+                } as i32);
                 if (chan as u32) > (state).sector_size() {
                     if !Handle::is_null(
                         statics::sysdolphin__baselib__card::commands(ctx)
@@ -870,17 +916,8 @@ pub fn hsd_803A949C<'a>(ctx: &'a Ctx, chan: i32, card_result: i32) {
                             (state).sector_size(),
                         );
                     }
-                    fns::HSD_Checksum(
-                        ctx,
-                        (statics::sysdolphin__baselib__card::commands(ctx)
-                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
-                            .state())
-                        .sector_buf(),
-                        ((statics::sysdolphin__baselib__card::commands(ctx)
-                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
-                            .state())
-                        .sector_size() as i32),
-                        Handle::cast::<Addr<'a>>(
+                    {
+                        let __t43 = Handle::cast::<Addr<'a>>(
                             (statics::sysdolphin__baselib__card::commands(ctx)
                                 .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                                 .state())
@@ -891,8 +928,17 @@ pub fn hsd_803A949C<'a>(ctx: &'a Ctx, chan: i32, card_result: i32) {
                                 .read_header()
                                 .index()
                                 .wrapping_mul(16_i32)),
-                        ),
-                    );
+                        );
+                        let __t44 = ((statics::sysdolphin__baselib__card::commands(ctx)
+                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
+                            .state())
+                        .sector_size() as i32);
+                        let __t45 = (statics::sysdolphin__baselib__card::commands(ctx)
+                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
+                            .state())
+                        .sector_buf();
+                        fns::HSD_Checksum(ctx, __t45, __t44, __t43)
+                    };
                 } else {
                     if !Handle::is_null(
                         statics::sysdolphin__baselib__card::commands(ctx)
@@ -920,14 +966,8 @@ pub fn hsd_803A949C<'a>(ctx: &'a Ctx, chan: i32, card_result: i32) {
                             (chan as u32),
                         );
                     }
-                    fns::HSD_Checksum(
-                        ctx,
-                        (statics::sysdolphin__baselib__card::commands(ctx)
-                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
-                            .state())
-                        .sector_buf(),
-                        chan,
-                        Handle::cast::<Addr<'a>>(
+                    {
+                        let __t46 = Handle::cast::<Addr<'a>>(
                             (statics::sysdolphin__baselib__card::commands(ctx)
                                 .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                                 .state())
@@ -938,20 +978,28 @@ pub fn hsd_803A949C<'a>(ctx: &'a Ctx, chan: i32, card_result: i32) {
                                 .read_header()
                                 .index()
                                 .wrapping_mul(16_i32)),
-                        ),
-                    );
-                    if fns::memcmp(
-                        ctx,
-                        Handle::cast::<Addr<'a>>(Handle::add((state).sector_buf(), chan)),
-                        Handle::cast::<Addr<'a>>(
+                        );
+                        let __t47 = (statics::sysdolphin__baselib__card::commands(ctx)
+                            .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
+                            .state())
+                        .sector_buf();
+                        fns::HSD_Checksum(ctx, __t47, chan, __t46)
+                    };
+                    if {
+                        let __t48 = Handle::cast::<Addr<'a>>(
                             (statics::sysdolphin__baselib__card::commands(ctx)
                                 .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
                                 .state())
                             .digest()
                             .at(0),
-                        ),
-                        (48_i32 as u32),
-                    ) != 0_i32
+                        );
+                        fns::memcmp(
+                            ctx,
+                            Handle::cast::<Addr<'a>>(Handle::add((state).sector_buf(), chan)),
+                            __t48,
+                            (48_i32 as u32),
+                        )
+                    } != 0_i32
                     {
                         statics::sysdolphin__baselib__card::curr_result(ctx)
                             .set(0x107_i32.wrapping_neg());
@@ -1589,13 +1637,19 @@ pub fn hsd_803AAA48<'a>(ctx: &'a Ctx) {
                             if !Handle::is_null(
                                 statics::sysdolphin__baselib__card::active_requests(ctx).callback(),
                             ) {
-                                statics::sysdolphin__baselib__card::active_requests(ctx)
-                                    .callback()
-                                    .call::<_, ()>((
-                                        statics::sysdolphin__baselib__card::active_requests(ctx)
+                                {
+                                    let __t2 =
+                                        statics::sysdolphin__baselib__card::curr_result(ctx).get();
+                                    statics::sysdolphin__baselib__card::active_requests(ctx)
+                                        .callback()
+                                        .call::<_, ()>((
+                                            statics::sysdolphin__baselib__card::active_requests(
+                                                ctx,
+                                            )
                                             .callback_arg(),
-                                        statics::sysdolphin__baselib__card::curr_result(ctx).get(),
-                                    ));
+                                            __t2,
+                                        ))
+                                };
                             }
                             statics::sysdolphin__baselib__card::active_requests(ctx)
                                 .set_type((enums::CARD_ACTIVE_NONE as i32));
@@ -2873,8 +2927,8 @@ pub fn fn_803AC6B8<'a>(ctx: &'a Ctx, state: CardState<'a>, file_idx: i32) -> i32
                     blocks = 0_i32;
                 } else if i == 0_i32 {
                     sector_size = (state).sector_size();
-                    remaining = (state).file_sizes().at(0_i32).get().wrapping_sub(
-                        ((({
+                    remaining = {
+                        let __t2 = ((({
                             let __t1 = sector_size.wrapping_sub((32_i32 as u32));
                             usable = __t1;
                             __t1
@@ -2882,8 +2936,9 @@ pub fn fn_803AC6B8<'a>(ctx: &'a Ctx, state: CardState<'a>, file_idx: i32) -> i32
                         .wrapping_sub(rem_u32(
                             ((state).header_size().wrapping_add((48_i32 as u32))),
                             sector_size,
-                        ))) as i32),
-                    );
+                        ))) as i32);
+                        (state).file_sizes().at(0_i32).get().wrapping_sub(__t2)
+                    };
                     if remaining <= 0_i32 {
                         blocks = 1_i32;
                     } else {
@@ -3531,7 +3586,10 @@ pub fn fn_803AD16C<'a>(ctx: &'a Ctx, state: CardState<'a>) -> i32 {
             i = i.wrapping_add(1);
         }
     }
-    if (state).num_blocks() != statics::sysdolphin__baselib__card::fn_803AC7DC(ctx, state) {
+    if {
+        let __t1 = statics::sysdolphin__baselib__card::fn_803AC7DC(ctx, state);
+        (state).num_blocks() != __t1
+    } {
         return 0x101_i32.wrapping_neg();
     }
     {
@@ -4965,7 +5023,8 @@ pub fn fn_803AF3F0<'a>(
                                     return cmd_result;
                                 }
                             } else {
-                                let mut verify_result: i32 =
+                                let mut verify_result: i32 = {
+                                    let __t1 = inl_fn_803AF3F0_chunk_size_unfused(ctx, state);
                                     statics::sysdolphin__baselib__card::fn_803ACC0C(
                                         ctx,
                                         state,
@@ -4973,8 +5032,9 @@ pub fn fn_803AF3F0<'a>(
                                         blocks_before.wrapping_add(i),
                                         current_seq,
                                         Handle::cast::<Addr<'a>>(data),
-                                        inl_fn_803AF3F0_chunk_size_unfused(ctx, state),
-                                    );
+                                        __t1,
+                                    )
+                                };
                                 if verify_result < 0_i32 {
                                     inl_fn_803AF3F0_close_unfused(ctx, state);
                                     return verify_result;
@@ -5111,7 +5171,7 @@ pub fn fn_803AF3F0<'a>(
     } else if secondary_count < file_blocks.get() {
         'l13: while (secondary_count < file_blocks.get()) && (free_count > 0_i32) {
             'c14: {
-                let __t2 = block_map
+                let __t3 = block_map
                     .get(2_i32)
                     .at({
                         free_count = free_count.wrapping_sub(1);
@@ -5121,11 +5181,11 @@ pub fn fn_803AF3F0<'a>(
                 block_map
                     .get(1_i32)
                     .at({
-                        let __t1 = secondary_count;
+                        let __t2 = secondary_count;
                         secondary_count = secondary_count.wrapping_add(1);
-                        __t1
+                        __t2
                     })
-                    .set(__t2);
+                    .set(__t3);
             }
         }
         if secondary_count < file_blocks.get() {
@@ -5138,9 +5198,9 @@ pub fn fn_803AF3F0<'a>(
                             block_map
                                 .get(1_i32)
                                 .at({
-                                    let __t3 = secondary_count;
+                                    let __t4 = secondary_count;
                                     secondary_count = secondary_count.wrapping_add(1);
-                                    __t3
+                                    __t4
                                 })
                                 .set(primary);
                             block_map.get(0_i32).at(i).set(1_i32.wrapping_neg());
@@ -5170,9 +5230,9 @@ pub fn fn_803AF3F0<'a>(
                 let mut chunk: i32 = 0;
                 if (remaining as u32)
                     > (({
-                        let __t4 = inl_fn_803AF3F0_chunk_size_unfused(ctx, state);
-                        chunk = __t4;
-                        __t4
+                        let __t5 = inl_fn_803AF3F0_chunk_size_unfused(ctx, state);
+                        chunk = __t5;
+                        __t5
                     }) as u32)
                 {
                     if r#async != 0_i32 {
@@ -5193,16 +5253,19 @@ pub fn fn_803AF3F0<'a>(
                             return cmd_result_5;
                         }
                     } else {
-                        let mut write_result: i32 = statics::sysdolphin__baselib__card::fn_803ACFC0(
-                            ctx,
-                            state,
-                            block_map.get(1_i32).at(i).get(),
-                            blocks_before.wrapping_add(i),
-                            current_seq,
-                            Handle::cast::<Addr<'a>>(data),
-                            inl_fn_803AF3F0_chunk_size_unfused(ctx, state),
-                            file_idx,
-                        );
+                        let mut write_result: i32 = {
+                            let __t6 = inl_fn_803AF3F0_chunk_size_unfused(ctx, state);
+                            statics::sysdolphin__baselib__card::fn_803ACFC0(
+                                ctx,
+                                state,
+                                block_map.get(1_i32).at(i).get(),
+                                blocks_before.wrapping_add(i),
+                                current_seq,
+                                Handle::cast::<Addr<'a>>(data),
+                                __t6,
+                                file_idx,
+                            )
+                        };
                         if write_result < 0_i32 {
                             (state)
                                 .block_ids()
@@ -6697,9 +6760,10 @@ pub fn fn_803B1F78<'a>(
     }
     statics::sysdolphin__baselib__card::hsd_804D7998(ctx)
         .set(statics::sysdolphin__baselib__card::curr_tail(ctx).get());
-    file_size = ((state)
-        .sector_size()
-        .wrapping_mul((fns::hsd_803B2674(ctx, state) as u32)) as i32);
+    file_size = ({
+        let __t1 = (fns::hsd_803B2674(ctx, state) as u32);
+        (state).sector_size().wrapping_mul(__t1)
+    } as i32);
     cmd_create.set_type((enums::CARD_CMD_CREATE_FILE as i32));
     cmd_create.set_state(state);
     cmd_create.x8().create().set_filename(filename);
@@ -7632,21 +7696,22 @@ fn inl_setupCardIcons_unfused<'a>(ctx: &'a Ctx, cmd: CardCmd<'a>) -> i32 {
                         bit,
                     ))) as u16),
             );
-            ((cmd).state()).stat().set_iconSpeed(
-                ((((((cmd).state()).stat().iconSpeed() as i32) & (!(shl_i32(3_i32, bit))))
-                    | (shl_i32(
-                        (((cmd).state())
-                            .icon_info()
-                            .icon_speed()
-                            .at({
-                                let __t2 = k;
-                                k = k.wrapping_add(1);
-                                __t2
-                            })
-                            .get() as i32),
-                        bit,
-                    ))) as u16),
-            );
+            let __t4 = ({
+                let __t3 = (shl_i32(
+                    (((cmd).state())
+                        .icon_info()
+                        .icon_speed()
+                        .at({
+                            let __t2 = k;
+                            k = k.wrapping_add(1);
+                            __t2
+                        })
+                        .get() as i32),
+                    bit,
+                ));
+                (((((cmd).state()).stat().iconSpeed() as i32) & (!(shl_i32(3_i32, bit)))) | __t3)
+            } as u16);
+            ((cmd).state()).stat().set_iconSpeed(__t4);
             bit = bit.wrapping_add((2_i32 as u32));
         }
     }
@@ -7708,7 +7773,8 @@ fn inl_unpackCardStat_unfused<'a>(ctx: &'a Ctx, cmd: CardCmd<'a>, stat: CARDStat
             k = k.wrapping_add(1);
         }
     }
-    ((cmd).state()).set_header_size((fns::hsd_803AC340(ctx, ((cmd).state()).icon_info()) as u32));
+    let __t1 = (fns::hsd_803AC340(ctx, ((cmd).state()).icon_info()) as u32);
+    ((cmd).state()).set_header_size(__t1);
     {
         let mut used: u32 = ((cmd).state())
             .header_size()

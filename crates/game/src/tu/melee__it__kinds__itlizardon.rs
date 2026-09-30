@@ -458,18 +458,23 @@ pub fn it_802CC1CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, kind: i32) {
     if (ip).xDD4_itemVar().lizardon().x64() != 0_i32 {
         spawn.vel().set_x(fp::fmuls(
             fp::fneg(1.0),
-            (fp::fmuls((attrs).x10(), fns::cosf(ctx, angle))),
+            ({
+                let __t1 = fns::cosf(ctx, angle);
+                fp::fmuls((attrs).x10(), __t1)
+            }),
         ));
         spawn.set_facing_dir(fp::fneg(1.0));
     } else {
-        spawn
-            .vel()
-            .set_x(fp::fmuls((attrs).x10(), fns::cosf(ctx, angle)));
+        spawn.vel().set_x({
+            let __t2 = fns::cosf(ctx, angle);
+            fp::fmuls((attrs).x10(), __t2)
+        });
         spawn.set_facing_dir(1.0);
     }
-    spawn
-        .vel()
-        .set_y(fp::fmuls((attrs).x10(), fns::sinf(ctx, angle)));
+    spawn.vel().set_y({
+        let __t3 = fns::sinf(ctx, angle);
+        fp::fmuls((attrs).x10(), __t3)
+    });
     spawn.vel().set_z(0.0);
     spawn.set_kind(kind);
     spawn.set_x0_parent_gobj((ip).owner());
@@ -698,12 +703,10 @@ fn inl_it_802CBAA8_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itLizardonAttributes<'a> =
         Handle::cast::<itLizardonAttributes<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
-    (ip).xDD4_itemVar()
-        .lizardon()
-        .set_x70((attrs).x28().wrapping_add(fns::HSD_Randi(
-            ctx,
-            (attrs).x2C().wrapping_sub((attrs).x28()),
-        )));
+    (ip).xDD4_itemVar().lizardon().set_x70({
+        let __t1 = fns::HSD_Randi(ctx, (attrs).x2C().wrapping_sub((attrs).x28()));
+        (attrs).x28().wrapping_add(__t1)
+    });
 }
 
 fn inl_it_802CBAA8_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -774,12 +777,10 @@ fn inl_it_802CBD24_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut attrs: itLizardonAttributes<'a> = null(ctx);
     attrs =
         Handle::cast::<itLizardonAttributes<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
-    (ip).xDD4_itemVar()
-        .lizardon()
-        .set_x70((attrs).x28().wrapping_add(fns::HSD_Randi(
-            ctx,
-            (attrs).x2C().wrapping_sub((attrs).x28()),
-        )));
+    (ip).xDD4_itemVar().lizardon().set_x70({
+        let __t1 = fns::HSD_Randi(ctx, (attrs).x2C().wrapping_sub((attrs).x28()));
+        (attrs).x28().wrapping_add(__t1)
+    });
 }
 
 fn inl_Item_EnterAirStateWithHitlagAndStateDesc_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

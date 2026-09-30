@@ -878,18 +878,19 @@ pub fn __THPReadQuantizationTable<'a>(ctx: &'a Ctx, info: _THPFileInfo<'a>) -> u
                     i = (0_i32 as u16);
                     'l3: while (i as i32) < 64_i32 {
                         'c4: {
+                            let __t3 = fp::frsp(
+                                (({
+                                    let __t2 = (info).file();
+                                    (info).set_file(Handle::add((info).file(), 1));
+                                    __t2
+                                })
+                                .get()) as f64,
+                            );
                             q_temp
                                 .at((statics::dolphin__thp__THPDec::__THPJpegNaturalOrder(ctx)
                                     .at((i as i32))
                                     .get() as i32))
-                                .set(fp::frsp(
-                                    (({
-                                        let __t2 = (info).file();
-                                        (info).set_file(Handle::add((info).file(), 1));
-                                        __t2
-                                    })
-                                    .get()) as f64,
-                                ));
+                                .set(__t3);
                         }
                         i = i.wrapping_add(1);
                     }

@@ -238,13 +238,11 @@ pub fn fn_8017C1A4<'a>(ctx: &'a Ctx, unused: HSD_GObj<'a>) {
                 fns::lbAudioAx_80028B6C(ctx);
             }
             if ((tmp).x8() <= temp_r28) && (rem_i32((tmp).x8(), 30_i32) == 0_i32) {
-                fns::gm_80167858(
-                    ctx,
-                    fns::Player_GetPadPort(ctx, 0_i32),
-                    (fns::Player_GetNametagSlotID(ctx, 0_i32) as i32),
-                    2_i32,
-                    30_i32,
-                );
+                {
+                    let __t1 = (fns::Player_GetNametagSlotID(ctx, 0_i32) as i32);
+                    let __t2 = fns::Player_GetPadPort(ctx, 0_i32);
+                    fns::gm_80167858(ctx, __t2, __t1, 2_i32, 30_i32)
+                };
                 fns::Camera_RequestQuake(
                     ctx,
                     (enums::QuakeKind_Medium as i32),

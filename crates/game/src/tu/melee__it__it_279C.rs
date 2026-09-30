@@ -157,12 +157,13 @@ pub fn it_80279FF8<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     }
     if (item).xDD4_itemVar().pokemon_spawn().x5C() == 0_i32 {
         item_jobj = Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, item_gobj));
-        if ((item).xCC_item_attr()).x60_scale()
-            > (fp::fadds(
-                (item).xDD4_itemVar().pokemon_spawn().x48(),
-                inl_HSD_JObjGetScaleX_unfused(ctx, item_jobj),
-            ))
-        {
+        if {
+            let __t2 = ({
+                let __t1 = inl_HSD_JObjGetScaleX_unfused(ctx, item_jobj);
+                fp::fadds((item).xDD4_itemVar().pokemon_spawn().x48(), __t1)
+            });
+            ((item).xCC_item_attr()).x60_scale() > __t2
+        } {
             fns::it_80272DE4(ctx, item_jobj, (item).xDD4_itemVar().pokemon_spawn().x48());
             return;
         }

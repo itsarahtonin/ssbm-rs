@@ -66,11 +66,10 @@ pub fn __fini_cpp_exceptions<'a>(ctx: &'a Ctx) {
 pub fn __init_cpp_exceptions<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
     if statics::Runtime____init_cpp_exceptions::fragmentID(ctx).get() == 2_i32.wrapping_neg() {
-        statics::Runtime____init_cpp_exceptions::fragmentID(ctx).set(fns::__register_fragment(
-            ctx,
-            fns::_eti_init_info(ctx).get(0),
-            statics::Runtime____init_cpp_exceptions::GetR2(ctx),
-        ));
+        statics::Runtime____init_cpp_exceptions::fragmentID(ctx).set({
+            let __t1 = statics::Runtime____init_cpp_exceptions::GetR2(ctx);
+            fns::__register_fragment(ctx, fns::_eti_init_info(ctx).get(0), __t1)
+        });
     }
 }
 

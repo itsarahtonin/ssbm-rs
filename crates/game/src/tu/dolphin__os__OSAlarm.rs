@@ -216,9 +216,10 @@ pub fn DecrementerExceptionCallback<'a>(ctx: &'a Ctx, exception: u8, context: OS
 
 fn inl_SetTimer_unfused<'a>(ctx: &'a Ctx, alarm: OSAlarm<'a>) {
     let mut alarm = alarm;
-    let mut delta: i64 = (alarm)
-        .fire()
-        .wrapping_sub(ctx.call::<_, i64>(0x8034c410, ()));
+    let mut delta: i64 = {
+        let __t1 = ctx.call::<_, i64>(0x8034c410, ());
+        (alarm).fire().wrapping_sub(__t1)
+    };
     if delta < (0_i32 as i64) {
         fns::PPCMtdec(ctx, (0_i32 as u32));
     } else if delta < (0x80000000_u32 as i64) {

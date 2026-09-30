@@ -54,15 +54,14 @@ pub fn HSD_Checksum<'a>(ctx: &'a Ctx, src: Val<'a, u8>, len: i32, dest: Addr<'a>
         i = 0_i32;
         'l1: while i < len {
             'c2: {
+                let __t2 = (({
+                    let __t1 = src;
+                    src = Handle::add(src, 1);
+                    __t1
+                })
+                .get() as i32);
                 md5_init.at(rem_i32(i, md5_bytes)).set(
-                    ((md5_init.at(rem_i32(i, md5_bytes)).get() as i32).wrapping_add(
-                        (({
-                            let __t1 = src;
-                            src = Handle::add(src, 1);
-                            __t1
-                        })
-                        .get() as i32),
-                    ) as u8),
+                    ((md5_init.at(rem_i32(i, md5_bytes)).get() as i32).wrapping_add(__t2) as u8),
                 );
             }
             i = i.wrapping_add(1);

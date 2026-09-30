@@ -48,15 +48,19 @@ pub fn HSD_FogSet<'a>(ctx: &'a Ctx, fog: HSD_Fog<'a>) {
             cstr(ctx, 0x804070f0),
         );
     }
-    fns::GXSetFog(
-        ctx,
-        ((fog).r#type() as i32),
-        (fog).start(),
-        (fog).end(),
-        fns::HSD_CObjGetNear(ctx, cobj),
-        fns::HSD_CObjGetFar(ctx, cobj),
-        (fog).color(),
-    );
+    {
+        let __t1 = fns::HSD_CObjGetFar(ctx, cobj);
+        let __t2 = fns::HSD_CObjGetNear(ctx, cobj);
+        fns::GXSetFog(
+            ctx,
+            ((fog).r#type() as i32),
+            (fog).start(),
+            (fog).end(),
+            __t2,
+            __t1,
+            (fog).color(),
+        )
+    };
     if !Handle::is_null((fog).fog_adj()) {
         fns::GXGetViewportv(ctx, v.at(0));
         range = fp::fctiwz(fp::fadds(

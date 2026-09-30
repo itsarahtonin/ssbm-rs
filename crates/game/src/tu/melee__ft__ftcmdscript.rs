@@ -612,11 +612,12 @@ pub fn ftCo_800B3E04<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                             fp::fsubs((data).x54().y(), (fp).cur_pos().y()),
                             fp::fsubs((data).x54().x(), (fp).cur_pos().x()),
                         );
-                        var_r24 = ((data).lstick().x() as i32).wrapping_add(
-                            ((fp::fctiwz(
+                        var_r24 = {
+                            let __t20 = ((fp::fctiwz(
                                 (fp::fmuls(fp::frsp(temp_r25 as f64), fns::cosf(ctx, angle))),
-                            ) as i8) as i32),
-                        );
+                            ) as i8) as i32);
+                            ((data).lstick().x() as i32).wrapping_add(__t20)
+                        };
                         clamp_x = ((fp::fctiwz(
                             (fp::fmuls(fp::frsp(temp_r27_3 as f64), fns::cosf(ctx, angle))),
                         ) as i8) as i32);
@@ -626,11 +627,12 @@ pub fn ftCo_800B3E04<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                             var_r24 = clamp_x.wrapping_neg();
                         }
                         (data).lstick().set_x((var_r24 as i8));
-                        var_r24_2 = ((data).lstick().y() as i32).wrapping_add(
-                            ((fp::fctiwz(
+                        var_r24_2 = {
+                            let __t21 = ((fp::fctiwz(
                                 (fp::fmuls(fp::frsp(temp_r25 as f64), fns::sinf(ctx, angle))),
-                            ) as i8) as i32),
-                        );
+                            ) as i8) as i32);
+                            ((data).lstick().y() as i32).wrapping_add(__t21)
+                        };
                         clamp_y = ((fp::fctiwz(
                             (fp::fmuls(fp::frsp(temp_r27_3 as f64), fns::sinf(ctx, angle))),
                         ) as i8) as i32);

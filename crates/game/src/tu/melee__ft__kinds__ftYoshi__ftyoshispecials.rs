@@ -1475,10 +1475,8 @@ pub fn ftYs_SpecialAirSLoop_0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     if (wall_hit != 0) {
         fns::ftCommon_8007D5D4(ctx, fp);
         fns::ftYs_SpecialS_8012F0DC(ctx, gobj, 1_i32, 0x4c4092_i32, 0.0);
-        (fp).self_vel().set_x(fp::fmuls(
-            (fp).self_vel().x(),
-            inl_perm_neg_inline(ctx, (attributes).xAC()),
-        ));
+        let __t3 = inl_perm_neg_inline(ctx, (attributes).xAC());
+        (fp).self_vel().set_x(fp::fmuls((fp).self_vel().x(), __t3));
         (fp).self_vel().set_y((attributes).xB0());
     } else if coll_result == 0_i32 {
         fns::ftCommon_8007D5D4(ctx, fp);

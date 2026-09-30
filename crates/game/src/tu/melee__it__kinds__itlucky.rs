@@ -41,9 +41,10 @@ pub fn it_802D5050<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     (ip).set_facing_dir(0.0);
     (ip).xDD4_itemVar().lucky().set_x60(2_i32);
-    (ip).xDD4_itemVar()
-        .lucky()
-        .set_x64((attr).x10().wrapping_add(fns::HSD_Randi(ctx, (attr).x14())));
+    (ip).xDD4_itemVar().lucky().set_x64({
+        let __t1 = fns::HSD_Randi(ctx, (attr).x14());
+        (attr).x10().wrapping_add(__t1)
+    });
     fns::it_80279CDC(ctx, gobj, (attr).x0());
     (ip).xDD4_itemVar().lucky().set_x68(fns::it_8026D3CC(ctx));
     fns::Item_8026AE84(ctx, ip, 0x273b_i32, (127_i32 as u8), (64_i32 as u8));
@@ -114,10 +115,10 @@ pub fn it_802D51C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    vel.set_x(fp::fmuls(
-        (attr).x4(),
-        (fp::fmuls(2.0, (fp::fsubs(fns::HSD_Randf(ctx), 0.5)))),
-    ));
+    vel.set_x({
+        let __t1 = (fp::fmuls(2.0, (fp::fsubs(fns::HSD_Randf(ctx), 0.5))));
+        fp::fmuls((attr).x4(), __t1)
+    });
     vel.set_y((attr).x8());
     vel.set_z(0.0);
     facing = (if vel.x() >= 0.0 { 1.0 } else { fp::fneg(1.0) });

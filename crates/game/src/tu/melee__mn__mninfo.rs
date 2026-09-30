@@ -130,16 +130,19 @@ pub fn mnInfo_80251AFC<'a>(ctx: &'a Ctx) {
                         'c12: {
                             if (!(inl_mnInfo_80251AFC_inline_unfused(ctx, j) != 0))
                                 && ((inl_mnInfo_80251AFC_inline_unfused(ctx, i) != 0)
-                                    || ((fns::gmMainLib_8015D804(
-                                        ctx,
-                                        inl_mnInfo_80251AFC_inline_3_unfused(
+                                    || ({
+                                        let __t1 = inl_mnInfo_80251AFC_inline_2_unfused(ctx, j);
+                                        (fns::gmMainLib_8015D804(
                                             ctx,
-                                            fns::mnInfo_804A0968(ctx).at(0),
-                                            i,
-                                        ),
-                                    ))
-                                    .get()
-                                        > inl_mnInfo_80251AFC_inline_2_unfused(ctx, j)))
+                                            inl_mnInfo_80251AFC_inline_3_unfused(
+                                                ctx,
+                                                fns::mnInfo_804A0968(ctx).at(0),
+                                                i,
+                                            ),
+                                        ))
+                                        .get()
+                                            > __t1
+                                    }))
                             {
                                 let mut tmp_2: u8 = fns::mnInfo_804A0968(ctx).at(i).get();
                                 fns::mnInfo_804A0968(ctx)
@@ -773,7 +776,10 @@ fn inl_fn_802523D8_inline_unfused<'a>(ctx: &'a Ctx, data: MnInfoData<'a>, gobj: 
                 VarArg::Int(1_i32.wrapping_neg() as u32),
             ],
         );
-        if (((data).scroll_idx() as i32).wrapping_add(4_i32)) < fns::mnInfo_80251AA4(ctx) {
+        if {
+            let __t1 = fns::mnInfo_80251AA4(ctx);
+            (((data).scroll_idx() as i32).wrapping_add(4_i32)) < __t1
+        } {
             fns::HSD_JObjClearFlagsAll(ctx, child.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
         } else {
             fns::HSD_JObjSetFlagsAll(ctx, child.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));

@@ -83,22 +83,28 @@ pub fn ftYs_SpecialS_8012DF8C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: Vec<'a
                 mag,
             ));
         }
-        (arg1).set_x(fp::fmuls(
-            (fp::fmadds(
-                fp::frsp((fp).mv().ys().specialhi().x4() as f64),
-                (da).x100(),
-                (da).xFC(),
-            )),
-            fns::cosf(ctx, angle),
-        ));
-        (arg1).set_y(fp::fmuls(
-            (fp::fmadds(
-                fp::frsp((fp).mv().ys().specialhi().x4() as f64),
-                (da).x100(),
-                (da).xFC(),
-            )),
-            fns::sinf(ctx, angle),
-        ));
+        (arg1).set_x({
+            let __t1 = fns::cosf(ctx, angle);
+            fp::fmuls(
+                (fp::fmadds(
+                    fp::frsp((fp).mv().ys().specialhi().x4() as f64),
+                    (da).x100(),
+                    (da).xFC(),
+                )),
+                __t1,
+            )
+        });
+        (arg1).set_y({
+            let __t2 = fns::sinf(ctx, angle);
+            fp::fmuls(
+                (fp::fmadds(
+                    fp::frsp((fp).mv().ys().specialhi().x4() as f64),
+                    (da).x100(),
+                    (da).xFC(),
+                )),
+                __t2,
+            )
+        });
         (arg1).set_z(0.0);
     }
 }

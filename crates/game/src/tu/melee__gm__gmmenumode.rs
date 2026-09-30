@@ -46,11 +46,12 @@ pub fn onEnter<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     data = Handle::cast::<MenuEnterData<'a>>((scene).info().enter_data());
     fns::lbCardNew_AllocWorkArea(ctx);
     fns::lbCardGame_LoadArchive(ctx, 0_i32);
-    fns::lbSnap_8001E218(
-        ctx,
-        fns::HSD_MemAlloc(ctx, fns::lbSnap_8001E204(ctx)),
-        Handle::cast::<Unk80433380_48<'a>>(fns::HSD_MemAlloc(ctx, fns::lbSnap_8001E210(ctx))),
-    );
+    {
+        let __t1 =
+            Handle::cast::<Unk80433380_48<'a>>(fns::HSD_MemAlloc(ctx, fns::lbSnap_8001E210(ctx)));
+        let __t2 = fns::HSD_MemAlloc(ctx, fns::lbSnap_8001E204(ctx));
+        fns::lbSnap_8001E218(ctx, __t2, __t1)
+    };
     {
         let mut i: i32 = 0;
         {

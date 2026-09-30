@@ -69,7 +69,11 @@ pub fn grShrineRoute_OnStart<'a>(ctx: &'a Ctx) {
         val = 0_i32;
     }
     if val == 0_i32 {
-        fns::grZakoGenerator_801CAEB0(ctx, fns::Ground_801C5840(ctx), fns::Ground_801C5940(ctx));
+        {
+            let __t1 = fns::Ground_801C5940(ctx);
+            let __t2 = fns::Ground_801C5840(ctx);
+            fns::grZakoGenerator_801CAEB0(ctx, __t2, __t1)
+        };
     }
 }
 
@@ -450,17 +454,23 @@ pub fn grShrineRoute_80208F70<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 let mut result: i32 = 0;
                 let mut ix: i32 = 0;
                 track_plat = 0_i32;
-                radius = fp::fmuls(
-                    (statics::melee__gr__grshrineroute::yakumono_param(ctx).get()).x20(),
-                    fns::Ground_801C0498(ctx),
-                );
+                radius = {
+                    let __t3 = fns::Ground_801C0498(ctx);
+                    fp::fmuls(
+                        (statics::melee__gr__grshrineroute::yakumono_param(ctx).get()).x20(),
+                        __t3,
+                    )
+                };
                 result = fns::Ground_801C3DB4(
                     ctx,
                     Handle::cast::<Addr<'a>>(fnptr(ctx, 0x80208f14)),
-                    fp::fmuls(
-                        (statics::melee__gr__grshrineroute::yakumono_param(ctx).get()).x1C(),
-                        fns::Ground_801C0498(ctx),
-                    ),
+                    {
+                        let __t4 = fns::Ground_801C0498(ctx);
+                        fp::fmuls(
+                            (statics::melee__gr__grshrineroute::yakumono_param(ctx).get()).x1C(),
+                            __t4,
+                        )
+                    },
                     radius,
                 );
                 if result != 1_i32.wrapping_neg() {
@@ -976,9 +986,9 @@ pub fn grShrineRoute_80208F70<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 'c5: {
                     if !Handle::is_null(
                         ({
-                            let __t3 = (gp).u().shrineroute().platforms().get(k).jobj();
-                            jobj = __t3;
-                            __t3
+                            let __t5 = (gp).u().shrineroute().platforms().get(k).jobj();
+                            jobj = __t5;
+                            __t5
                         }),
                     ) {
                         let mut tx: f64 = fp::fadds(
@@ -1168,20 +1178,20 @@ pub fn grShrineRoute_80209BEC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         inl_HSD_JObjSetRotationY(ctx, jobj, rot_2);
     }
     if !Handle::is_null((gp).u().shrineroute3().xC4()) {
-        rot = fp::fadds(
-            (gp).u().shrineroute3().xD8(),
-            inl_HSD_JObjGetRotationX(ctx, (gp).u().shrineroute3().xC4()),
-        );
+        rot = {
+            let __t1 = inl_HSD_JObjGetRotationX(ctx, (gp).u().shrineroute3().xC4());
+            fp::fadds((gp).u().shrineroute3().xD8(), __t1)
+        };
         if rot > 6.283185307179586 {
             rot = fp::frsp((fp::fsub(rot, 6.283185307179586)));
         } else if rot < fp::fneg(6.283185307179586) {
             rot = fp::frsp(fp::fadd(rot, 6.283185307179586));
         }
         inl_HSD_JObjSetRotationX(ctx, (gp).u().shrineroute3().xC4(), rot);
-        rot = fp::fadds(
-            (gp).u().shrineroute3().xDC(),
-            inl_HSD_JObjGetRotationY(ctx, (gp).u().shrineroute3().xC4()),
-        );
+        rot = {
+            let __t2 = inl_HSD_JObjGetRotationY(ctx, (gp).u().shrineroute3().xC4());
+            fp::fadds((gp).u().shrineroute3().xDC(), __t2)
+        };
         if rot > 6.283185307179586 {
             rot = fp::frsp((fp::fsub(rot, 6.283185307179586)));
         } else if rot < fp::fneg(6.283185307179586) {
@@ -1238,11 +1248,12 @@ pub fn grShrineRoute_8020A104<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 .xC8()
                 .at(((gp).u().shrineroute2().x168() as i32))
                 .set(lobj);
+            let __t1 = fns::HSD_LObjGetFlags(ctx, lobj);
             (gp).u()
                 .shrineroute2()
                 .x118()
                 .at(((gp).u().shrineroute2().x168() as i32))
-                .set(fns::HSD_LObjGetFlags(ctx, lobj));
+                .set(__t1);
             lobj = inl_HSD_LObjGetNext_unfused(ctx, lobj);
             (gp).u()
                 .shrineroute2()
@@ -1557,18 +1568,14 @@ pub fn grShrineRoute_8020A8A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut angle: f64 = 0.0;
     if !Handle::is_null((gp).u().shrineroute3().xC4()) {
         angle = fp::frsp((fp::fmul(6.283185307179586, fns::HSD_Randf(ctx))));
-        inl_HSD_JObjSetTranslateX(
-            ctx,
-            (gp).u().shrineroute3().xC4(),
-            300.0,
-            fns::cosf(ctx, angle),
-        );
-        inl_HSD_JObjSetTranslateY(
-            ctx,
-            (gp).u().shrineroute3().xC4(),
-            300.0,
-            fns::sinf(ctx, angle),
-        );
+        {
+            let __t1 = fns::cosf(ctx, angle);
+            inl_HSD_JObjSetTranslateX(ctx, (gp).u().shrineroute3().xC4(), 300.0, __t1)
+        };
+        {
+            let __t2 = fns::sinf(ctx, angle);
+            inl_HSD_JObjSetTranslateY(ctx, (gp).u().shrineroute3().xC4(), 300.0, __t2)
+        };
         (gp).u().shrineroute3().set_xD8(fp::fmuls(
             0.04363323003053665,
             (fp::fmsubs(2.0, inl_grShrineRoute_8020A8A4_rand(ctx), 1.0)),
@@ -1777,8 +1784,10 @@ pub fn onJointCollision<'a>(
     }
     if (((coll).x34_flags().b1234() as i32) == 1_i32) && ((ground_kind as u32) == (2_i32 as u32)) {
         slot = (fns::ftLib_GetPlayerIndex(ctx, (coll).x0_gobj()) as u32);
-        if Handle::addr((coll).x0_gobj()) == Handle::addr(fns::Player_GetEntity(ctx, (slot as i32)))
-        {
+        if {
+            let __t1 = fns::Player_GetEntity(ctx, (slot as i32));
+            Handle::addr((coll).x0_gobj()) == Handle::addr(__t1)
+        } {
             (gp).u().shrineroute().set_xCA((1_i32 as u16));
             pgobj = fns::Player_GetEntityAtIndex(ctx, (slot as i32), 1_i32);
             if !Handle::is_null(pgobj) {

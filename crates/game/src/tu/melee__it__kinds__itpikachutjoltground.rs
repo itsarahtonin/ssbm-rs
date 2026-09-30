@@ -317,14 +317,14 @@ pub fn itPikachutjoltground_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>
         Handle::cast::<itPikachutJoltGroundAttributes<'a>>(
             ((ip).xC4_article_data()).x4_specialAttributes(),
         );
-    (ip).x40_vel().set_x(fp::fmuls(
-        (attr).x8(),
-        fns::cosf(ctx, (ip).xDD4_itemVar().pikachujoltground().xDD4()),
-    ));
-    (ip).x40_vel().set_y(fp::fmuls(
-        (attr).x8(),
-        fns::sinf(ctx, (ip).xDD4_itemVar().pikachujoltground().xDD4()),
-    ));
+    (ip).x40_vel().set_x({
+        let __t1 = fns::cosf(ctx, (ip).xDD4_itemVar().pikachujoltground().xDD4());
+        fp::fmuls((attr).x8(), __t1)
+    });
+    (ip).x40_vel().set_y({
+        let __t2 = fns::sinf(ctx, (ip).xDD4_itemVar().pikachujoltground().xDD4());
+        fp::fmuls((attr).x8(), __t2)
+    });
 }
 
 pub fn itPikachutjoltground_UnkMotion1_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

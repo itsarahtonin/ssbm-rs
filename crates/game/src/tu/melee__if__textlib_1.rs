@@ -133,34 +133,46 @@ pub fn un_80302FFC<'a>(ctx: &'a Ctx, arg0: un_80304138_objalloc_t<'a>) {
     if ((((arg0).x1() as i32) & 16_i32) != 0) {
         let _ = fns::DevText_StoreColorIndex(ctx, (arg0).x4(), (0_i32 as u8));
         let _ = {
-            fns::DevText_SetTextColor(ctx, __ret_tmp_2, (arg0).x4(), {
+            let __t1 = {
                 inl_adjust_unfused(ctx, __ret_tmp, fns::un_804D5A0C(ctx));
                 __ret_tmp
-            });
-            __ret_tmp_2
+            };
+            {
+                fns::DevText_SetTextColor(ctx, __ret_tmp_2, (arg0).x4(), __t1);
+                __ret_tmp_2
+            }
         };
         let _ = fns::DevText_StoreColorIndex(ctx, (arg0).x4(), (1_i32 as u8));
         let _ = {
-            fns::DevText_SetTextColor(ctx, __ret_tmp_4, (arg0).x4(), {
+            let __t2 = {
                 inl_adjust_unfused(ctx, __ret_tmp_3, fns::un_804D5A10(ctx));
                 __ret_tmp_3
-            });
-            __ret_tmp_4
+            };
+            {
+                fns::DevText_SetTextColor(ctx, __ret_tmp_4, (arg0).x4(), __t2);
+                __ret_tmp_4
+            }
         };
         let _ = fns::DevText_StoreColorIndex(ctx, (arg0).x4(), (2_i32 as u8));
         let _ = {
-            fns::DevText_SetTextColor(ctx, __ret_tmp_6, (arg0).x4(), {
+            let __t3 = {
                 inl_adjust_unfused(ctx, __ret_tmp_5, fns::un_804D5A14(ctx));
                 __ret_tmp_5
-            });
-            __ret_tmp_6
+            };
+            {
+                fns::DevText_SetTextColor(ctx, __ret_tmp_6, (arg0).x4(), __t3);
+                __ret_tmp_6
+            }
         };
         let _ = {
-            fns::DevText_SetBGColor(ctx, __ret_tmp_8, (arg0).x4(), {
+            let __t4 = {
                 inl_adjust_unfused(ctx, __ret_tmp_7, fns::un_804D5A08(ctx));
                 __ret_tmp_7
-            });
-            __ret_tmp_8
+            };
+            {
+                fns::DevText_SetBGColor(ctx, __ret_tmp_8, (arg0).x4(), __t4);
+                __ret_tmp_8
+            }
         };
     } else {
         let _ = fns::DevText_StoreColorIndex(ctx, (arg0).x4(), (0_i32 as u8));

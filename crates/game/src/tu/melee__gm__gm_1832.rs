@@ -902,22 +902,25 @@ pub fn fn_80184AB8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                                         .get(),
                                 );
                             } else {
-                                let _ = fns::HSD_SisLib_803A70A0(
-                                    ctx,
-                                    Handle::cast::<HSD_Text<'a>>(
-                                        statics::melee__gm__gm_1832::lbl_804735A8(ctx)
-                                            .x4()
-                                            .at(7_i32.wrapping_add(i))
-                                            .get(),
-                                    ),
-                                    0_i32,
-                                    fns::GetNameText(
+                                let _ = {
+                                    let __t1 = fns::GetNameText(
                                         ctx,
                                         (statics::melee__gm__gm_1832::lbl_8047368C(ctx).xED()
                                             as i32),
-                                    ),
-                                    &[],
-                                );
+                                    );
+                                    fns::HSD_SisLib_803A70A0(
+                                        ctx,
+                                        Handle::cast::<HSD_Text<'a>>(
+                                            statics::melee__gm__gm_1832::lbl_804735A8(ctx)
+                                                .x4()
+                                                .at(7_i32.wrapping_add(i))
+                                                .get(),
+                                        ),
+                                        0_i32,
+                                        __t1,
+                                        &[],
+                                    )
+                                };
                                 fns::HSD_SisLib_803A7548(
                                     ctx,
                                     Handle::cast::<HSD_Text<'a>>(
@@ -953,18 +956,18 @@ pub fn fn_80184AB8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                                 statics::melee__gm__gm_1832::lbl_803D9414(ctx).at(0);
                             'l6: while ((src).get() as i32) != 0_i32 {
                                 'c7: {
-                                    let __t3 = ({
-                                        let __t2 = src;
+                                    let __t4 = ({
+                                        let __t3 = src;
                                         src = Handle::add(src, 1);
-                                        __t2
+                                        __t3
                                     })
                                     .get();
                                     sp10.at({
-                                        let __t1 = i;
+                                        let __t2 = i;
                                         i = i.wrapping_add(1);
-                                        __t1
+                                        __t2
                                     })
-                                    .set(__t3);
+                                    .set(__t4);
                                 }
                             }
                         }
@@ -972,18 +975,18 @@ pub fn fn_80184AB8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                         i = i.wrapping_add(1);
                         'l8: while ((name).get() as i32) != 0_i32 {
                             'c9: {
-                                let __t6 = ({
-                                    let __t5 = name;
+                                let __t7 = ({
+                                    let __t6 = name;
                                     name = Handle::add(name, 1);
-                                    __t5
+                                    __t6
                                 })
                                 .get();
                                 sp10.at({
-                                    let __t4 = i;
+                                    let __t5 = i;
                                     i = i.wrapping_add(1);
-                                    __t4
+                                    __t5
                                 })
-                                .set(__t6);
+                                .set(__t7);
                             }
                         }
                         sp10.at(i).set((0_i32 as i8));
@@ -993,36 +996,36 @@ pub fn fn_80184AB8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                                 statics::melee__gm__gm_1832::lbl_804D40A0(ctx).at(0);
                             'l10: while ((name).get() as i32) != 0_i32 {
                                 'c11: {
-                                    let __t9 = ({
-                                        let __t8 = name;
+                                    let __t10 = ({
+                                        let __t9 = name;
                                         name = Handle::add(name, 1);
-                                        __t8
+                                        __t9
                                     })
                                     .get();
                                     sp10.at({
-                                        let __t7 = i;
+                                        let __t8 = i;
                                         i = i.wrapping_add(1);
-                                        __t7
+                                        __t8
                                     })
-                                    .set(__t9);
+                                    .set(__t10);
                                 }
                             }
                             sp10.at(i).set((32_i32 as i8));
                             i = i.wrapping_add(1);
                             'l12: while ((src2).get() as i32) != 0_i32 {
                                 'c13: {
-                                    let __t12 = ({
-                                        let __t11 = src2;
+                                    let __t13 = ({
+                                        let __t12 = src2;
                                         src2 = Handle::add(src2, 1);
-                                        __t11
+                                        __t12
                                     })
                                     .get();
                                     sp10.at({
-                                        let __t10 = i;
+                                        let __t11 = i;
                                         i = i.wrapping_add(1);
-                                        __t10
+                                        __t11
                                     })
-                                    .set(__t12);
+                                    .set(__t13);
                                 }
                             }
                             sp10.at(i).set((0_i32 as i8));
@@ -1040,40 +1043,46 @@ pub fn fn_80184AB8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                         sp10.at(0),
                         &[],
                     );
-                    fns::HSD_SisLib_803A7548(
-                        ctx,
-                        Handle::cast::<HSD_Text<'a>>(
-                            statics::melee__gm__gm_1832::lbl_804735A8(ctx)
-                                .x4()
-                                .at(10_i32)
-                                .get(),
-                        ),
-                        0_i32,
-                        fp::fmuls(
+                    {
+                        let __t15 = fp::fmuls(
                             0.800000011920929,
-                            (fp::fmuls(
-                                (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
-                                    .x57C()
-                                    .get(1_i32)
-                                    .x18()
-                                    .at(0_i32)
-                                    .get(),
-                                fns::fn_80160F58(
+                            ({
+                                let __t14 = fns::fn_80160F58(
                                     ctx,
                                     statics::melee__gm__gm_1832::lbl_8047368C(ctx)
                                         .xF4()
                                         .at(0_i32)
                                         .get(),
-                                ),
-                            )),
-                        ),
-                        (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
-                            .x57C()
-                            .get(1_i32)
-                            .x24()
-                            .at(0_i32)
-                            .get(),
-                    );
+                                );
+                                fp::fmuls(
+                                    (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
+                                        .x57C()
+                                        .get(1_i32)
+                                        .x18()
+                                        .at(0_i32)
+                                        .get(),
+                                    __t14,
+                                )
+                            }),
+                        );
+                        fns::HSD_SisLib_803A7548(
+                            ctx,
+                            Handle::cast::<HSD_Text<'a>>(
+                                statics::melee__gm__gm_1832::lbl_804735A8(ctx)
+                                    .x4()
+                                    .at(10_i32)
+                                    .get(),
+                            ),
+                            0_i32,
+                            __t15,
+                            (statics::melee__gm__gm_1832::lbl_804D6604(ctx).get())
+                                .x57C()
+                                .get(1_i32)
+                                .x24()
+                                .at(0_i32)
+                                .get(),
+                        )
+                    };
                     return;
                 }
                 {
@@ -2979,12 +2988,10 @@ fn inl_gm_80186634_LoadLightList_unfused<'a>(ctx: &'a Ctx) -> Addr<'a> {
 fn inl_gm_80186634_SetupLight_unfused<'a>(ctx: &'a Ctx) {
     let mut gobj: HSD_GObj<'a> = null(ctx);
     gobj = fns::GObj_Create(ctx, (11_i32 as u16), (3_i32 as u8), (0_i32 as u8));
-    fns::HSD_GObjObject_80390A70(
-        ctx,
-        gobj,
-        (fns::HSD_GObj_LightKind(ctx).get() as u8),
-        inl_gm_80186634_LoadLightList_unfused(ctx),
-    );
+    {
+        let __t1 = inl_gm_80186634_LoadLightList_unfused(ctx);
+        fns::HSD_GObjObject_80390A70(ctx, gobj, (fns::HSD_GObj_LightKind(ctx).get() as u8), __t1)
+    };
     fns::GObj_SetupGXLink(
         ctx,
         gobj,

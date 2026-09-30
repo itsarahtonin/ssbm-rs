@@ -518,10 +518,19 @@ pub fn NotifyCompulsorily<'a>(ctx: &'a Ctx, chID: i32, notify: u32, timeout: u32
                     break 'l1;
                 }
                 tickCur = fns::OSGetTick(ctx);
-                tickSec = (if tickStart < tickCur {
-                    tickCur.wrapping_sub(tickStart)
+                tickSec = (if {
+                    let __t3 = tickCur;
+                    tickStart < __t3
+                } {
+                    {
+                        let __t1 = tickStart;
+                        tickCur.wrapping_sub(__t1)
+                    }
                 } else {
-                    ((1_i32.wrapping_neg() as u32).wrapping_sub(tickStart)).wrapping_add(tickCur)
+                    {
+                        let __t2 = tickCur;
+                        ((1_i32.wrapping_neg() as u32).wrapping_sub(tickStart)).wrapping_add(__t2)
+                    }
                 });
                 tickSec = (div_u32(
                     (tickSec),

@@ -65,11 +65,14 @@ pub fn __OSInitAudioSystem<'a>(ctx: &'a Ctx) {
         'c2: {}
     }
     (Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 0_i32)).set((0_i32 as u16));
-    'l3: while (((((shl_i32(
-        ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 2_i32)).get() as i32),
-        (16_i32 as u32),
-    )) | ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 3_i32))
-        .get() as i32)) as u32)
+    'l3: while (((({
+        let __t1 =
+            ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 3_i32)).get() as i32);
+        ((shl_i32(
+            ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 2_i32)).get() as i32),
+            (16_i32 as u32),
+        )) | __t1)
+    }) as u32)
         & 0x80000000_u32)
         != 0)
     {
@@ -194,11 +197,14 @@ pub fn __OSStopAudioSystem<'a>(ctx: &'a Ctx) {
     }
     (Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 5_i32)).set((0x8ac_i32 as u16));
     (Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 0_i32)).set((0_i32 as u16));
-    'l5: while (((((shl_i32(
-        ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 2_i32)).get() as i32),
-        (16_i32 as u32),
-    )) | ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 3_i32))
-        .get() as i32)) as u32)
+    'l5: while (((({
+        let __t1 =
+            ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 3_i32)).get() as i32);
+        ((shl_i32(
+            ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 2_i32)).get() as i32),
+            (16_i32 as u32),
+        )) | __t1)
+    }) as u32)
         & 0x80000000_u32)
         != 0)
     {

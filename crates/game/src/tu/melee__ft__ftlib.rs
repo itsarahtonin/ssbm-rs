@@ -943,12 +943,11 @@ pub fn ftLib_ApplyMetalBox<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, item_gobj: HSD_
             cstr(ctx, 0x804d83d4),
         )
     });
-    fns::ftCo_800C8348(
-        ctx,
-        gobj,
-        fp::fctiwz(fns::it_8026B560(ctx, item_gobj)),
-        fp::fctiwz(fns::it_8026B574(ctx, item_gobj)),
-    );
+    {
+        let __t1 = fp::fctiwz(fns::it_8026B574(ctx, item_gobj));
+        let __t2 = fp::fctiwz(fns::it_8026B560(ctx, item_gobj));
+        fns::ftCo_800C8348(ctx, gobj, __t2, __t1)
+    };
     fns::ftCo_800D105C(ctx, gobj);
     fns::ft_80081C88(ctx, gobj, (fp).x34_scale().y());
     fns::ftCommon_8007EBAC(ctx, fp, (12_i32 as u32), (0_i32 as u32));

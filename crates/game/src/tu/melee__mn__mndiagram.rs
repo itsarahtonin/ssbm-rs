@@ -623,13 +623,16 @@ pub fn mnDiagram_GetRankedFighterForName<'a>(
                             j = i.wrapping_add(1_i32);
                             'l11: while j < (enums::SELKIND_COUNT as i32) {
                                 'c12: {
-                                    if func.call::<_, u32>((
-                                        name_idx,
-                                        (entries.get(i).selkind() as i32),
-                                    )) == func.call::<_, u32>((
-                                        name_idx,
-                                        (entries.get(j).selkind() as i32),
-                                    )) {
+                                    if {
+                                        let __t1 = func.call::<_, u32>((
+                                            name_idx,
+                                            (entries.get(j).selkind() as i32),
+                                        ));
+                                        func.call::<_, u32>((
+                                            name_idx,
+                                            (entries.get(i).selkind() as i32),
+                                        )) == __t1
+                                    } {
                                         i = i.wrapping_add(1);
                                         if rank != 0_i32 {
                                             rank = rank.wrapping_sub(1);
@@ -646,13 +649,16 @@ pub fn mnDiagram_GetRankedFighterForName<'a>(
                             != 0_u32
                         {
                             if i.wrapping_add(1_i32) < (enums::SELKIND_COUNT as i32) {
-                                if func
-                                    .call::<_, u32>((name_idx, (entries.get(i).selkind() as i32)))
-                                    == func.call::<_, u32>((
+                                if {
+                                    let __t2 = func.call::<_, u32>((
                                         name_idx,
                                         (entries.get(i.wrapping_add(1_i32)).selkind() as i32),
-                                    ))
-                                {
+                                    ));
+                                    func.call::<_, u32>((
+                                        name_idx,
+                                        (entries.get(i).selkind() as i32),
+                                    )) == __t2
+                                } {
                                     return (enums::SELKIND_COUNT as i32);
                                 }
                             }
@@ -683,15 +689,17 @@ pub fn mnDiagram_GetLeastPlayedFighter<'a>(ctx: &'a Ctx, name_idx: u8) -> u8 {
         'l1: while i < (enums::SELKIND_COUNT as i32) {
             'c2: {
                 if fns::mn_IsFighterUnlocked(ctx, i) != 0_i32 {
-                    if (fns::GetPersistentNameData(ctx, (name_idx as i32)))
-                        .play_time_by_fighter()
-                        .at(min_fighter)
-                        .get()
-                        > (fns::GetPersistentNameData(ctx, (name_idx as i32)))
+                    if {
+                        let __t1 = (fns::GetPersistentNameData(ctx, (name_idx as i32)))
                             .play_time_by_fighter()
                             .at(i)
+                            .get();
+                        (fns::GetPersistentNameData(ctx, (name_idx as i32)))
+                            .play_time_by_fighter()
+                            .at(min_fighter)
                             .get()
-                    {
+                            > __t1
+                    } {
                         min_fighter = i;
                     }
                 }
@@ -726,15 +734,17 @@ pub fn mnDiagram_GetLeastPlayedFighter<'a>(ctx: &'a Ctx, name_idx: u8) -> u8 {
         'l5: while i < (enums::SELKIND_COUNT as i32) {
             'c6: {
                 if (fns::mn_IsFighterUnlocked(ctx, i) != 0_i32) && (i != min_fighter) {
-                    if (fns::GetPersistentNameData(ctx, (name_idx as i32)))
-                        .play_time_by_fighter()
-                        .at(i)
-                        .get()
-                        == (fns::GetPersistentNameData(ctx, (name_idx as i32)))
+                    if {
+                        let __t2 = (fns::GetPersistentNameData(ctx, (name_idx as i32)))
                             .play_time_by_fighter()
                             .at(min_fighter)
+                            .get();
+                        (fns::GetPersistentNameData(ctx, (name_idx as i32)))
+                            .play_time_by_fighter()
+                            .at(i)
                             .get()
-                    {
+                            == __t2
+                    } {
                         count = count.wrapping_add(1);
                     }
                 }
@@ -771,13 +781,14 @@ pub fn mnDiagram_SortFightersByKOs<'a>(ctx: &'a Ctx) {
                 fighter = statics::melee__mn__mndiagram::mnDiagram_DefaultFighterOrder(ctx)
                     .at(i)
                     .get();
+                let __t1 = (inl_mnDiagram_GetFighterTotalKOs_unfused(ctx, fighter) as u32);
                 totals
                     .at(
                         (statics::melee__mn__mndiagram::mnDiagram_DefaultFighterOrder(ctx)
                             .at(i)
                             .get() as i32),
                     )
-                    .set((inl_mnDiagram_GetFighterTotalKOs_unfused(ctx, fighter) as u32));
+                    .set(__t1);
             }
             i = i.wrapping_add(1);
             dst_iter = Handle::add(dst_iter, 1);
@@ -1382,12 +1393,10 @@ pub fn mnDiagram_PopupAnimProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let mut anim_frame: f64 = 0.0;
     fns::HSD_JObjAnimAll(ctx, (data).jobjs().at(5_i32).get());
     text = (data).text().at(0_i32).get();
-    fns::lb_8000B1CC(
-        ctx,
-        (data).jobjs().at(8_i32).get(),
-        inl_mnDiagram_PopupAnimProc_Inline_unfused(ctx, tbl, 0_i32),
-        pos,
-    );
+    {
+        let __t1 = inl_mnDiagram_PopupAnimProc_Inline_unfused(ctx, tbl, 0_i32);
+        fns::lb_8000B1CC(ctx, (data).jobjs().at(8_i32).get(), __t1, pos)
+    };
     {
         let mut y: f64 = fp::fneg(pos.y());
         let mut z: f64 = pos.z();
@@ -1399,12 +1408,10 @@ pub fn mnDiagram_PopupAnimProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
         let mut t: HSD_Text<'a> = null(ctx);
         let mut y_2: f64 = 0.0;
         let mut z_2: f64 = 0.0;
-        fns::lb_8000B1CC(
-            ctx,
-            (data).jobjs().at(11_i32).get(),
-            inl_mnDiagram_PopupAnimProc_Inline_unfused(ctx, tbl, 1_i32),
-            pos,
-        );
+        {
+            let __t2 = inl_mnDiagram_PopupAnimProc_Inline_unfused(ctx, tbl, 1_i32);
+            fns::lb_8000B1CC(ctx, (data).jobjs().at(11_i32).get(), __t2, pos)
+        };
         y_2 = fp::fneg(pos.y());
         z_2 = pos.z();
         t = (data).text().at(1_i32).get();
@@ -1415,12 +1422,10 @@ pub fn mnDiagram_PopupAnimProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
         let mut t_2: HSD_Text<'a> = null(ctx);
         let mut y_3: f64 = 0.0;
         let mut z_3: f64 = 0.0;
-        fns::lb_8000B1CC(
-            ctx,
-            (data).jobjs().at(10_i32).get(),
-            inl_mnDiagram_PopupAnimProc_Inline_unfused(ctx, tbl, 2_i32),
-            pos,
-        );
+        {
+            let __t3 = inl_mnDiagram_PopupAnimProc_Inline_unfused(ctx, tbl, 2_i32);
+            fns::lb_8000B1CC(ctx, (data).jobjs().at(10_i32).get(), __t3, pos)
+        };
         y_3 = fp::fneg(pos.y());
         z_3 = pos.z();
         t_2 = (data).text().at(2_i32).get();
@@ -1432,12 +1437,10 @@ pub fn mnDiagram_PopupAnimProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
         let mut t_3: HSD_Text<'a> = null(ctx);
         let mut y_4: f64 = 0.0;
         let mut z_4: f64 = 0.0;
-        fns::lb_8000B1CC(
-            ctx,
-            (data).jobjs().at(3_i32).get(),
-            inl_mnDiagram_PopupAnimProc_Inline_unfused(ctx, tbl, 1_i32),
-            pos,
-        );
+        {
+            let __t4 = inl_mnDiagram_PopupAnimProc_Inline_unfused(ctx, tbl, 1_i32);
+            fns::lb_8000B1CC(ctx, (data).jobjs().at(3_i32).get(), __t4, pos)
+        };
         y_4 = fp::fneg(pos.y());
         z_4 = pos.z();
         t_3 = (data).text().at(3_i32).get();
@@ -1448,12 +1451,10 @@ pub fn mnDiagram_PopupAnimProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
         let mut t_4: HSD_Text<'a> = null(ctx);
         let mut y_5: f64 = 0.0;
         let mut z_5: f64 = 0.0;
-        fns::lb_8000B1CC(
-            ctx,
-            (data).jobjs().at(2_i32).get(),
-            inl_mnDiagram_PopupAnimProc_Inline_unfused(ctx, tbl, 2_i32),
-            pos,
-        );
+        {
+            let __t5 = inl_mnDiagram_PopupAnimProc_Inline_unfused(ctx, tbl, 2_i32);
+            fns::lb_8000B1CC(ctx, (data).jobjs().at(2_i32).get(), __t5, pos)
+        };
         y_5 = fp::fneg(pos.y());
         z_5 = pos.z();
         t_4 = (data).text().at(4_i32).get();
@@ -1465,12 +1466,10 @@ pub fn mnDiagram_PopupAnimProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
         let mut t_5: HSD_Text<'a> = null(ctx);
         let mut y_6: f64 = 0.0;
         let mut z_6: f64 = 0.0;
-        fns::lb_8000B1CC(
-            ctx,
-            (data).jobjs().at(13_i32).get(),
-            inl_mnDiagram_PopupAnimProc_Inline_unfused(ctx, tbl, 1_i32),
-            pos,
-        );
+        {
+            let __t6 = inl_mnDiagram_PopupAnimProc_Inline_unfused(ctx, tbl, 1_i32);
+            fns::lb_8000B1CC(ctx, (data).jobjs().at(13_i32).get(), __t6, pos)
+        };
         y_6 = fp::fneg(pos.y());
         z_6 = pos.z();
         t_5 = (data).text().at(3_i32).get();
@@ -3258,16 +3257,15 @@ pub fn mnDiagram_DrawNameHeaders<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: i32
         (text).font_size().set_y(0.029999999329447746);
         {
             let mut j: HSD_JObj<'a> = (data).jobjs().at(7_i32).get();
-            inl_mnDiagram_TextSetPos_unfused(
-                ctx,
-                text,
-                fp::fadds(
+            {
+                let __t1 = inl_HSD_JObjGetTranslationZ_unfused(ctx, j);
+                let __t2 = fp::fsubs(fp::fneg(0.5), inl_HSD_JObjGetTranslationY_unfused(ctx, j));
+                let __t3 = fp::fadds(
                     fp::fneg(1.2999999523162842),
                     inl_HSD_JObjGetTranslationX_unfused(ctx, j),
-                ),
-                fp::fsubs(fp::fneg(0.5), inl_HSD_JObjGetTranslationY_unfused(ctx, j)),
-                inl_HSD_JObjGetTranslationZ_unfused(ctx, j),
-            );
+                );
+                inl_mnDiagram_TextSetPos_unfused(ctx, text, __t3, __t2, __t1)
+            };
         }
         {
             let mut i: i32 = 0;

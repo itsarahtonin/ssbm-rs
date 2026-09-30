@@ -355,13 +355,11 @@ pub fn ftDrawCommon_800805C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, ar
         (fighter).set_x2228_b0((0_i32 as u8));
         mtx =
             inl_ftDrawCommon_8008051C_inline_unfused(ctx, gobj, sp54, v, sp18.get(0), sp78.get(0));
-        fns::HSD_JObjDispAll(
-            ctx,
-            (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj))),
-            mtx,
-            fns::HSD_GObj_80390EB8(ctx, arg1),
-            (0_i32 as u32),
-        );
+        {
+            let __t1 = fns::HSD_GObj_80390EB8(ctx, arg1);
+            let __t2 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
+            fns::HSD_JObjDispAll(ctx, __t2, mtx, __t1, (0_i32 as u32))
+        };
         if !Handle::is_null(fns::ftData_UnkMtxFunc0(ctx).at((fighter).kind()).get()) {
             fns::ftData_UnkMtxFunc0(ctx)
                 .at((fighter).kind())
@@ -372,15 +370,18 @@ pub fn ftDrawCommon_800805C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, ar
         fns::ftCo_8009F7F8(ctx, fighter);
     }
     if !Handle::is_null((fighter).x20A0_accessory()) {
-        fns::HSD_JObjDispAll(
-            ctx,
-            (fighter).x20A0_accessory(),
-            At::new(ctx, 0_i32 as u32)
-                .field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0)
-                .get(0),
-            fns::HSD_GObj_80390EB8(ctx, arg1),
-            (0_i32 as u32),
-        );
+        {
+            let __t3 = fns::HSD_GObj_80390EB8(ctx, arg1);
+            fns::HSD_JObjDispAll(
+                ctx,
+                (fighter).x20A0_accessory(),
+                At::new(ctx, 0_i32 as u32)
+                    .field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0)
+                    .get(0),
+                __t3,
+                (0_i32 as u32),
+            )
+        };
     }
     fns::ftCo_800C2600(ctx, gobj, (arg1 as u32));
 }
@@ -448,15 +449,18 @@ pub fn ftDrawCommon_80080C28<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, flag_index: i
             fns::ftCo_8009F7F8(ctx, fighter);
         }
         if !Handle::is_null((fighter).x20A0_accessory()) {
-            fns::HSD_JObjDispAll(
-                ctx,
-                (fighter).x20A0_accessory(),
-                At::new(ctx, 0_i32 as u32)
-                    .field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0)
-                    .get(0),
-                fns::HSD_GObj_80390EB8(ctx, flag_index),
-                (0_i32 as u32),
-            );
+            {
+                let __t1 = fns::HSD_GObj_80390EB8(ctx, flag_index);
+                fns::HSD_JObjDispAll(
+                    ctx,
+                    (fighter).x20A0_accessory(),
+                    At::new(ctx, 0_i32 as u32)
+                        .field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0)
+                        .get(0),
+                    __t1,
+                    (0_i32 as u32),
+                )
+            };
         }
     }
 }

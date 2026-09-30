@@ -138,26 +138,33 @@ pub fn gm_801B1C24<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
                     (vs).start().players().get(1_i32),
                 );
                 (vs).start().players().get(i).set_color(
-                    (rem_i32(
-                        (((vs).start().players().get(i.wrapping_sub(1_i32)).color() as i32)
-                            .wrapping_add(1_i32)),
-                        (fns::gm_GetNumCostumesForCKind(
+                    ({
+                        let __t2 = (fns::gm_GetNumCostumesForCKind(
                             ctx,
                             ((vs).start().players().get(j).ckind() as u8),
-                        ) as i32),
-                    ) as u8),
+                        ) as i32);
+                        rem_i32(
+                            (((vs).start().players().get(i.wrapping_sub(1_i32)).color() as i32)
+                                .wrapping_add(1_i32)),
+                            __t2,
+                        )
+                    } as u8),
                 );
                 if ((vs).start().players().get(i).color() as i32)
                     == ((vs).start().players().get(0_i32).color() as i32)
                 {
                     (vs).start().players().get(i).set_color(
-                        (rem_i32(
-                            (((vs).start().players().get(i).color() as i32).wrapping_add(1_i32)),
-                            (fns::gm_GetNumCostumesForCKind(
+                        ({
+                            let __t3 = (fns::gm_GetNumCostumesForCKind(
                                 ctx,
                                 ((vs).start().players().get(j).ckind() as u8),
-                            ) as i32),
-                        ) as u8),
+                            ) as i32);
+                            rem_i32(
+                                (((vs).start().players().get(i).color() as i32)
+                                    .wrapping_add(1_i32)),
+                                __t3,
+                            )
+                        } as u8),
                     );
                 }
                 (vs).start().players().get(i).set_slot_type((3_i32 as u8));
@@ -347,14 +354,17 @@ pub fn gm_801B2204<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
         ctx,
         ((temp_r3).match_end().player_standings().get(0_i32).xE() as i32),
     );
-    let _ = fns::gm_80163298(
-        ctx,
-        (temp_r3).match_end().player_standings().get(0_i32).ckind(),
-        (fns::gm_80188454(
+    let _ = {
+        let __t1 = (fns::gm_80188454(
             ctx,
             ((temp_r3).match_end().player_standings().get(0_i32).ckind() as i32),
-        ) as u16),
-    );
+        ) as u16);
+        fns::gm_80163298(
+            ctx,
+            (temp_r3).match_end().player_standings().get(0_i32).ckind(),
+            __t1,
+        )
+    };
     fns::gm_80173BC4(
         ctx,
         (temp_r3).match_end().player_standings().get(0_i32).ckind(),

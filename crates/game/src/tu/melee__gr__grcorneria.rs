@@ -184,9 +184,10 @@ pub fn grCorneria_801DCE1C<'a>(ctx: &'a Ctx) {
                         statics::melee__gr__grcorneria::grCn_804D69A4(ctx).set((0_i32 as u32));
                         (types).set(type_id);
                         (groups).set(group);
+                        let __t3 = fns::grCorneria_801DD534(ctx, 1_i32);
                         statics::melee__gr__grcorneria::arwing_gobjs(ctx)
                             .at((statics::melee__gr__grcorneria::grCn_804D69A4(ctx).get() as i32))
-                            .set(fns::grCorneria_801DD534(ctx, 1_i32));
+                            .set(__t3);
                     }
                 }
             } else {
@@ -285,10 +286,11 @@ pub fn grCorneria_801DCE1C<'a>(ctx: &'a Ctx) {
                             statics::melee__gr__grcorneria::arwing_groups(ctx)
                                 .at(count)
                                 .set(count.wrapping_add(1_i32));
+                            let __t4 = fns::grCorneria_801DD534(ctx, 1_i32);
                             statics::melee__gr__grcorneria::arwing_gobjs(ctx)
                                 .at((statics::melee__gr__grcorneria::grCn_804D69A4(ctx).get()
                                     as i32))
-                                .set(fns::grCorneria_801DD534(ctx, 1_i32));
+                                .set(__t4);
                         } else {
                             fns::grCorneria_801DDD4C(ctx, pos2);
                             if !(inl_grCn_CheckFar_unfused(ctx, pos2) != 0) {
@@ -321,10 +323,11 @@ pub fn grCorneria_801DCE1C<'a>(ctx: &'a Ctx) {
                                 statics::melee__gr__grcorneria::arwing_groups(ctx)
                                     .at(count)
                                     .set(count.wrapping_add(1_i32));
+                                let __t5 = fns::grCorneria_801DD534(ctx, 1_i32);
                                 statics::melee__gr__grcorneria::arwing_gobjs(ctx)
                                     .at((statics::melee__gr__grcorneria::grCn_804D69A4(ctx).get()
                                         as i32))
-                                    .set(fns::grCorneria_801DD534(ctx, 1_i32));
+                                    .set(__t5);
                             }
                         }
                     }
@@ -715,23 +718,19 @@ pub fn grCorneria_801DD9A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             fns::Ground_801C0498(ctx),
             (gp).u().corneria().xD0(),
         );
-        let _ = fns::grZakoGenerator_801CA43C(
-            ctx,
-            (gp).u().corneria().xC8(),
-            fns::Ground_801C3FA4(ctx, gobj, 0_i32),
-            speed,
-        );
+        let _ = {
+            let __t1 = fns::Ground_801C3FA4(ctx, gobj, 0_i32);
+            fns::grZakoGenerator_801CA43C(ctx, (gp).u().corneria().xC8(), __t1, speed)
+        };
         speed = fp::fmsubs(
             fp::fneg(35.0),
             fns::Ground_801C0498(ctx),
             (gp).u().corneria().xD0(),
         );
-        let _ = fns::grZakoGenerator_801CA43C(
-            ctx,
-            (gp).u().corneria().xCC(),
-            fns::Ground_801C3FA4(ctx, gobj, 0_i32),
-            speed,
-        );
+        let _ = {
+            let __t2 = fns::Ground_801C3FA4(ctx, gobj, 0_i32);
+            fns::grZakoGenerator_801CA43C(ctx, (gp).u().corneria().xCC(), __t2, speed)
+        };
         fns::grCorneria_801E1348(ctx, gobj);
         fns::grCorneria_801E0E40(ctx);
         fns::grCorneria_801DCE1C(ctx);
@@ -1306,16 +1305,28 @@ pub fn grCorneria_801DEC00<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 {
 pub fn grCorneria_801DEC08<'a>(ctx: &'a Ctx, pos: Vec<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut pos = pos;
-    if (pos).x() > fns::Stage_GetBlastZoneRightOffset(ctx) {
+    if {
+        let __t1 = fns::Stage_GetBlastZoneRightOffset(ctx);
+        (pos).x() > __t1
+    } {
         return 1_i32;
     }
-    if (pos).x() < fns::Stage_GetBlastZoneLeftOffset(ctx) {
+    if {
+        let __t2 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+        (pos).x() < __t2
+    } {
         return 1_i32;
     }
-    if (pos).y() > fns::Stage_GetBlastZoneTopOffset(ctx) {
+    if {
+        let __t3 = fns::Stage_GetBlastZoneTopOffset(ctx);
+        (pos).y() > __t3
+    } {
         return 1_i32;
     }
-    if (pos).y() < fns::Stage_GetBlastZoneBottomOffset(ctx) {
+    if {
+        let __t4 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+        (pos).y() < __t4
+    } {
         return 1_i32;
     }
     return 0_i32;
@@ -1325,16 +1336,28 @@ pub fn grCorneria_801DEC94<'a>(ctx: &'a Ctx, pos: Vec<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut pos = pos;
     if (pos).z() > fp::fneg(30.0) {
-        if (pos).x() > fp::fsubs(fns::Stage_GetBlastZoneRightOffset(ctx), 30.0) {
+        if {
+            let __t1 = fp::fsubs(fns::Stage_GetBlastZoneRightOffset(ctx), 30.0);
+            (pos).x() > __t1
+        } {
             return 1_i32;
         }
-        if (pos).x() < fp::fadds(fns::Stage_GetBlastZoneLeftOffset(ctx), 30.0) {
+        if {
+            let __t2 = fp::fadds(fns::Stage_GetBlastZoneLeftOffset(ctx), 30.0);
+            (pos).x() < __t2
+        } {
             return 1_i32;
         }
-        if (pos).y() > fp::fsubs(fns::Stage_GetBlastZoneTopOffset(ctx), 30.0) {
+        if {
+            let __t3 = fp::fsubs(fns::Stage_GetBlastZoneTopOffset(ctx), 30.0);
+            (pos).y() > __t3
+        } {
             return 1_i32;
         }
-        if (pos).y() < fp::fadds(fns::Stage_GetBlastZoneBottomOffset(ctx), 30.0) {
+        if {
+            let __t4 = fp::fadds(fns::Stage_GetBlastZoneBottomOffset(ctx), 30.0);
+            (pos).y() < __t4
+        } {
             return 1_i32;
         }
     }
@@ -1813,7 +1836,10 @@ pub fn grCorneria_801DED50<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         pos.set_y(100.0);
                     }
                     if ((500.0 < pos.x())
-                        && (pos.x() < (statics::melee__gr__grcorneria::grCn_ArwingMaxX(ctx)).get()))
+                        && ({
+                            let __t3 = (statics::melee__gr__grcorneria::grCn_ArwingMaxX(ctx)).get();
+                            pos.x() < __t3
+                        }))
                         && ((gp).u().corneria2().xFC() != 0_i32)
                     {
                         (gp).u().corneria2().set_xFC(0_i32);
@@ -2087,15 +2113,16 @@ pub fn grCorneria_801DFC98<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 _ => 2,
             };
             if __case <= 0 {
-                if inl_HSD_JObjGetTranslationX(ctx, jobj)
-                    >= fp::fadds(
+                if {
+                    let __t1 = fp::fadds(
                         fp::fdivs(
                             fp::fmuls(3200.0, fns::Ground_801C0498(ctx)),
                             fp::frsp(2_i32 as f64),
                         ),
                         fp::fneg(1400.0),
-                    )
-                {
+                    );
+                    inl_HSD_JObjGetTranslationX(ctx, jobj) >= __t1
+                } {
                     let _ = fns::grCorneria_801E03C8(ctx, gobj, 9_i32);
                     (gp).u().corneria().set_xC5((1_i32 as u8));
                     return;
@@ -2103,15 +2130,16 @@ pub fn grCorneria_801DFC98<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 break 's1;
             }
             if __case <= 1 {
-                if inl_HSD_JObjGetTranslationX(ctx, jobj)
-                    >= fp::fadds(
+                if {
+                    let __t2 = fp::fadds(
                         fp::fdivs(
                             fp::fmuls(3200.0, fns::Ground_801C0498(ctx)),
                             fp::frsp(2_i32 as f64),
                         ),
                         1400.0,
-                    )
-                {
+                    );
+                    inl_HSD_JObjGetTranslationX(ctx, jobj) >= __t2
+                } {
                     fns::Ground_801C4A08(ctx, gobj);
                 }
                 break 's1;
@@ -2160,15 +2188,16 @@ pub fn grCorneria_801DFF20<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 _ => 2,
             };
             if __case <= 0 {
-                if inl_HSD_JObjGetTranslationX(ctx, jobj)
-                    >= fp::fadds(
+                if {
+                    let __t1 = fp::fadds(
                         fp::fdivs(
                             fp::fmuls(3200.0, fns::Ground_801C0498(ctx)),
                             fp::frsp(2_i32 as f64),
                         ),
                         fp::fneg(1400.0),
-                    )
-                {
+                    );
+                    inl_HSD_JObjGetTranslationX(ctx, jobj) >= __t1
+                } {
                     let _ = fns::grCorneria_801E03C8(ctx, gobj, 4_i32);
                     (gp).u().corneria().set_xC5((1_i32 as u8));
                     return;
@@ -2176,15 +2205,16 @@ pub fn grCorneria_801DFF20<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 break 's1;
             }
             if __case <= 1 {
-                if inl_HSD_JObjGetTranslationX(ctx, jobj)
-                    >= fp::fadds(
+                if {
+                    let __t2 = fp::fadds(
                         fp::fdivs(
                             fp::fmuls(3200.0, fns::Ground_801C0498(ctx)),
                             fp::frsp(2_i32 as f64),
                         ),
                         1400.0,
-                    )
-                {
+                    );
+                    inl_HSD_JObjGetTranslationX(ctx, jobj) >= __t2
+                } {
                     fns::Ground_801C4A08(ctx, gobj);
                 }
                 break 's1;
@@ -2233,15 +2263,16 @@ pub fn grCorneria_801E01A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 _ => 2,
             };
             if __case <= 0 {
-                if inl_HSD_JObjGetTranslationX(ctx, jobj)
-                    >= fp::fadds(
+                if {
+                    let __t1 = fp::fadds(
                         fp::fdivs(
                             fp::fmuls(4800.0, fns::Ground_801C0498(ctx)),
                             fp::frsp(2_i32 as f64),
                         ),
                         fp::fneg(1400.0),
-                    )
-                {
+                    );
+                    inl_HSD_JObjGetTranslationX(ctx, jobj) >= __t1
+                } {
                     let _ = fns::grCorneria_801E03C8(ctx, gobj, 8_i32);
                     (gp).u().corneria().set_xC5((1_i32 as u8));
                     return;
@@ -2249,15 +2280,16 @@ pub fn grCorneria_801E01A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 break 's1;
             }
             if __case <= 1 {
-                if inl_HSD_JObjGetTranslationX(ctx, jobj)
-                    >= fp::fadds(
+                if {
+                    let __t2 = fp::fadds(
                         fp::fdivs(
                             fp::fmuls(4800.0, fns::Ground_801C0498(ctx)),
                             fp::frsp(2_i32 as f64),
                         ),
                         1400.0,
-                    )
-                {
+                    );
+                    inl_HSD_JObjGetTranslationX(ctx, jobj) >= __t2
+                } {
                     fns::Ground_801C4A08(ctx, gobj);
                 }
                 break 's1;
@@ -3163,10 +3195,8 @@ pub fn grCorneria_801E0678<'a>(ctx: &'a Ctx) {
             fp::fmuls(3200.0, fns::Ground_801C0498(ctx)),
             fp::frsp(2_i32 as f64),
         );
-        inl_HSD_JObjSetTranslateX(
-            ctx,
-            Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()),
-            fp::fneg(
+        {
+            let __t1 = fp::fneg(
                 (fp::fadds(
                     fp::fdivs(
                         fp::fmuls(3200.0, fns::Ground_801C0498(ctx)),
@@ -3174,8 +3204,9 @@ pub fn grCorneria_801E0678<'a>(ctx: &'a Ctx) {
                     ),
                     half,
                 )),
-            ),
-        );
+            );
+            inl_HSD_JObjSetTranslateX(ctx, Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()), __t1)
+        };
     }
     gobj = fns::Ground_GetMapGObj(ctx, 4_i32);
     gp = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
@@ -3185,17 +3216,16 @@ pub fn grCorneria_801E0678<'a>(ctx: &'a Ctx) {
             fp::fmuls(4800.0, fns::Ground_801C0498(ctx)),
             fp::frsp(2_i32 as f64),
         );
-        inl_HSD_JObjSetTranslateX(
-            ctx,
-            Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()),
-            fp::fadds(
+        {
+            let __t2 = fp::fadds(
                 fp::fdivs(
                     fp::fmuls(3200.0, fns::Ground_801C0498(ctx)),
                     fp::frsp(2_i32 as f64),
                 ),
                 half_2,
-            ),
-        );
+            );
+            inl_HSD_JObjSetTranslateX(ctx, Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()), __t2)
+        };
     }
 }
 
@@ -3307,23 +3337,25 @@ pub fn grCorneria_801E0A74<'a>(ctx: &'a Ctx, arg0: Val<'a, F32>) -> i32 {
     if !Handle::is_null(gobj) {
         let mut x: f64 =
             inl_HSD_JObjGetTranslationX(ctx, Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()));
-        if ((arg0).get()
-            > fp::fsubs(
+        if ({
+            let __t1 = fp::fsubs(
                 x,
                 fp::fdivs(
                     fp::fmuls(3200.0, fns::Ground_801C0498(ctx)),
                     fp::frsp(2_i32 as f64),
                 ),
-            ))
-            && ((arg0).get()
-                < fp::fadds(
-                    x,
-                    fp::fdivs(
-                        fp::fmuls(3200.0, fns::Ground_801C0498(ctx)),
-                        fp::frsp(2_i32 as f64),
-                    ),
-                ))
-        {
+            );
+            (arg0).get() > __t1
+        }) && ({
+            let __t2 = fp::fadds(
+                x,
+                fp::fdivs(
+                    fp::fmuls(3200.0, fns::Ground_801C0498(ctx)),
+                    fp::frsp(2_i32 as f64),
+                ),
+            );
+            (arg0).get() < __t2
+        }) {
             return 8_i32;
         }
     }
@@ -3331,23 +3363,25 @@ pub fn grCorneria_801E0A74<'a>(ctx: &'a Ctx, arg0: Val<'a, F32>) -> i32 {
     if !Handle::is_null(gobj) {
         let mut x_2: f64 =
             inl_HSD_JObjGetTranslationX(ctx, Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()));
-        if ((arg0).get()
-            > fp::fsubs(
+        if ({
+            let __t3 = fp::fsubs(
                 x_2,
                 fp::fdivs(
                     fp::fmuls(3200.0, fns::Ground_801C0498(ctx)),
                     fp::frsp(2_i32 as f64),
                 ),
-            ))
-            && ((arg0).get()
-                < fp::fadds(
-                    x_2,
-                    fp::fdivs(
-                        fp::fmuls(3200.0, fns::Ground_801C0498(ctx)),
-                        fp::frsp(2_i32 as f64),
-                    ),
-                ))
-        {
+            );
+            (arg0).get() > __t3
+        }) && ({
+            let __t4 = fp::fadds(
+                x_2,
+                fp::fdivs(
+                    fp::fmuls(3200.0, fns::Ground_801C0498(ctx)),
+                    fp::frsp(2_i32 as f64),
+                ),
+            );
+            (arg0).get() < __t4
+        }) {
             return 9_i32;
         }
     }
@@ -3355,23 +3389,25 @@ pub fn grCorneria_801E0A74<'a>(ctx: &'a Ctx, arg0: Val<'a, F32>) -> i32 {
     if !Handle::is_null(gobj) {
         let mut x_3: f64 =
             inl_HSD_JObjGetTranslationX(ctx, Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()));
-        if ((arg0).get()
-            > fp::fsubs(
+        if ({
+            let __t5 = fp::fsubs(
                 x_3,
                 fp::fdivs(
                     fp::fmuls(4800.0, fns::Ground_801C0498(ctx)),
                     fp::frsp(2_i32 as f64),
                 ),
-            ))
-            && ((arg0).get()
-                < fp::fadds(
-                    x_3,
-                    fp::fdivs(
-                        fp::fmuls(4800.0, fns::Ground_801C0498(ctx)),
-                        fp::frsp(2_i32 as f64),
-                    ),
-                ))
-        {
+            );
+            (arg0).get() > __t5
+        }) && ({
+            let __t6 = fp::fadds(
+                x_3,
+                fp::fdivs(
+                    fp::fmuls(4800.0, fns::Ground_801C0498(ctx)),
+                    fp::frsp(2_i32 as f64),
+                ),
+            );
+            (arg0).get() < __t6
+        }) {
             return 4_i32;
         }
     }
@@ -3400,15 +3436,15 @@ pub fn grCorneria_801E0C3C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
     fns::grAnime_801C8138(ctx, gobj, (gp).map_id(), 0_i32);
     inl_clearX10_b2_unfused(ctx, gobj);
-    fns::Ground_801C4E70(
-        ctx,
-        fns::Ground_801C3FA4(ctx, gobj, 5_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 2_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 4_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 3_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 7_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 6_i32),
-    );
+    {
+        let __t1 = fns::Ground_801C3FA4(ctx, gobj, 6_i32);
+        let __t2 = fns::Ground_801C3FA4(ctx, gobj, 7_i32);
+        let __t3 = fns::Ground_801C3FA4(ctx, gobj, 3_i32);
+        let __t4 = fns::Ground_801C3FA4(ctx, gobj, 4_i32);
+        let __t5 = fns::Ground_801C3FA4(ctx, gobj, 2_i32);
+        let __t6 = fns::Ground_801C3FA4(ctx, gobj, 5_i32);
+        fns::Ground_801C4E70(ctx, __t6, __t5, __t4, __t3, __t2, __t1)
+    };
     fns::grMaterial_801C8A04(ctx, jobj, ((shl_i32(1_i32, (27_i32 as u32))) as u32));
     fns::grMaterial_801C8858(ctx, jobj, ((shl_i32(1_i32, (29_i32 as u32))) as u32));
     (gp).x11_flags().set_b012((2_i32 as u8));
@@ -3578,19 +3614,22 @@ pub fn grCorneria_801E1060<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     pos = fp::fmuls(
         pos,
         (fp::fdivs(
-            (fp::fadds(
-                fp::fdivs(
-                    fp::fmuls(4800.0, fns::Ground_801C0498(ctx)),
-                    fp::frsp(2_i32 as f64),
-                ),
-                (fp::fadds(
+            ({
+                let __t1 = (fp::fadds(
                     total,
                     fp::fdivs(
                         fp::fmuls(3200.0, fns::Ground_801C0498(ctx)),
                         fp::frsp(2_i32 as f64),
                     ),
-                )),
-            )),
+                ));
+                fp::fadds(
+                    fp::fdivs(
+                        fp::fmuls(4800.0, fns::Ground_801C0498(ctx)),
+                        fp::frsp(2_i32 as f64),
+                    ),
+                    __t1,
+                )
+            }),
             2400.0,
         )),
     );
@@ -3600,16 +3639,19 @@ pub fn grCorneria_801E1060<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     pos = fp::fsubs(
         pos,
-        (fp::fadds(
-            fp::fdivs(
+        ({
+            let __t2 = fp::fdivs(
                 fp::fmuls(3200.0, fns::Ground_801C0498(ctx)),
                 fp::frsp(2_i32 as f64),
-            ),
-            fp::fdivs(
-                fp::fmuls(3200.0, fns::Ground_801C0498(ctx)),
-                fp::frsp(2_i32 as f64),
-            ),
-        )),
+            );
+            fp::fadds(
+                fp::fdivs(
+                    fp::fmuls(3200.0, fns::Ground_801C0498(ctx)),
+                    fp::frsp(2_i32 as f64),
+                ),
+                __t2,
+            )
+        }),
     );
     bg = fns::Ground_GetMapGObj(ctx, 9_i32);
     if !Handle::is_null(bg) {
@@ -3617,16 +3659,19 @@ pub fn grCorneria_801E1060<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     pos = fp::fsubs(
         pos,
-        (fp::fadds(
-            fp::fdivs(
-                fp::fmuls(3200.0, fns::Ground_801C0498(ctx)),
-                fp::frsp(2_i32 as f64),
-            ),
-            fp::fdivs(
+        ({
+            let __t3 = fp::fdivs(
                 fp::fmuls(4800.0, fns::Ground_801C0498(ctx)),
                 fp::frsp(2_i32 as f64),
-            ),
-        )),
+            );
+            fp::fadds(
+                fp::fdivs(
+                    fp::fmuls(3200.0, fns::Ground_801C0498(ctx)),
+                    fp::frsp(2_i32 as f64),
+                ),
+                __t3,
+            )
+        }),
     );
     bg = fns::Ground_GetMapGObj(ctx, 4_i32);
     if !Handle::is_null(bg) {
@@ -3914,16 +3959,16 @@ pub fn grCorneria_801E1348<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 let mut range_3: i32 =
                     fp::fctiwz((statics::melee__gr__grcorneria::yakumono_param(ctx).get()).x18());
                 (gp).u().corneria().set_x110(fp::fctiwz(
-                    (fp::fadds(
-                        inl_grCn_GetX1C_unfused(ctx),
-                        fp::frsp(
+                    ({
+                        let __t1 = fp::frsp(
                             (if range_3 != 0_i32 {
                                 fns::HSD_Randi(ctx, rand_range)
                             } else {
                                 0_i32
                             }) as f64,
-                        ),
-                    )),
+                        );
+                        fp::fadds(inl_grCn_GetX1C_unfused(ctx), __t1)
+                    }),
                 ));
             }
             (gp).u().corneria().set_x10C(0_i32);
@@ -4242,10 +4287,10 @@ pub fn grCorneria_801E2228<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         if timer < 0x384_i32 {
             let mut speed: f64 = (gp).u().corneria().xFC();
             let mut t: f64 = fp::fdivs(speed, 0.004999999888241291);
-            if (fp::fsubs(
-                (gp).u().corneria().xD0(),
-                (fp::fmsubs(50.0, fns::Ground_801C0498(ctx), 250.0)),
-            )) > (fp::fmadds(
+            if ({
+                let __t1 = (fp::fmsubs(50.0, fns::Ground_801C0498(ctx), 250.0));
+                fp::fsubs((gp).u().corneria().xD0(), __t1)
+            }) > (fp::fmadds(
                 speed,
                 t,
                 fp::fmuls(fp::fmuls(fp::fneg(0.0024999999441206455), t), t),
@@ -4268,7 +4313,10 @@ pub fn grCorneria_801E2228<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 (gp).u().corneria().xD0(),
                 (gp).u().corneria().xFC(),
             ));
-            if (gp).u().corneria().xD0() < fp::fmsubs(50.0, fns::Ground_801C0498(ctx), 250.0) {
+            if {
+                let __t2 = fp::fmsubs(50.0, fns::Ground_801C0498(ctx), 250.0);
+                (gp).u().corneria().xD0() < __t2
+            } {
                 (gp).u()
                     .corneria()
                     .set_xD0(fp::fmsubs(50.0, fns::Ground_801C0498(ctx), 250.0));
@@ -4837,7 +4885,10 @@ pub fn grCorneria_801E2EEC<'a>(ctx: &'a Ctx, v: Vec<'a>, arg1: i32, jobj: HSD_JO
                 (fp::fdivs((fp::fmuls(107.0, fns::Ground_801C0498(ctx))), temp_f31)),
                 sp14.x(),
             );
-            if (v).x() > fp::fnmsubs(107.0, fns::Ground_801C0498(ctx), temp_f31_2) {
+            if {
+                let __t2 = fp::fnmsubs(107.0, fns::Ground_801C0498(ctx), temp_f31_2);
+                (v).x() > __t2
+            } {
                 return 0_i32;
             }
         }
@@ -5151,7 +5202,10 @@ fn inl_grCorneria_801DE024_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
         };
         if __case <= 0 {
             if ((statics::melee__gr__grcorneria::grCn_ArwingMinX(ctx)).get() < pos.x())
-                && (pos.x() < (statics::melee__gr__grcorneria::grCn_ArwingMaxX(ctx)).get())
+                && ({
+                    let __t1 = (statics::melee__gr__grcorneria::grCn_ArwingMaxX(ctx)).get();
+                    pos.x() < __t1
+                })
             {
                 let _ = fns::lbAudioAx_800237A8(ctx, 0x55731_i32, 127_i32, 64_i32);
                 (gp).u().arwing().set_xD8(1_i32);
@@ -5159,8 +5213,10 @@ fn inl_grCorneria_801DE024_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
             break 's1;
         }
         if __case <= 1 {
-            if (pos.x() < (statics::melee__gr__grcorneria::grCn_ArwingMinX(ctx)).get())
-                || ((statics::melee__gr__grcorneria::grCn_ArwingMaxX(ctx)).get() < pos.x())
+            if ({
+                let __t2 = (statics::melee__gr__grcorneria::grCn_ArwingMinX(ctx)).get();
+                pos.x() < __t2
+            }) || ((statics::melee__gr__grcorneria::grCn_ArwingMaxX(ctx)).get() < pos.x())
             {
                 let _ = fns::lbAudioAx_800237A8(ctx, 0x55732_i32, 127_i32, 64_i32);
                 (gp).u().arwing().set_xD8(2_i32);
@@ -5330,11 +5386,11 @@ fn inl_Ground_AttachStarFoxArwingModel_unfused<'a>(
     let mut gp = gp;
     let mut arwing_gobj = arwing_gobj;
     let mut joint_id = joint_id;
-    fns::lb_8000C2F8(
-        ctx,
-        fns::Ground_801C3FA4(ctx, gobj, 0_i32),
-        fns::Ground_801C3FA4(ctx, arwing_gobj, joint_id),
-    );
+    {
+        let __t1 = fns::Ground_801C3FA4(ctx, arwing_gobj, joint_id);
+        let __t2 = fns::Ground_801C3FA4(ctx, gobj, 0_i32);
+        fns::lb_8000C2F8(ctx, __t2, __t1)
+    };
     (gp).u()
         .starfox()
         .set_linked_gobj(null::<HSD_GObj<'a>>(ctx));
@@ -5469,16 +5525,28 @@ fn inl_randi_unfused<'a>(ctx: &'a Ctx, max_val: i32) -> i32 {
 
 fn inl_grCorneria_801DEC08_unfused<'a>(ctx: &'a Ctx, pos: Vec<'a>) -> i32 {
     let mut pos = pos;
-    if (pos).x() > fns::Stage_GetBlastZoneRightOffset(ctx) {
+    if {
+        let __t1 = fns::Stage_GetBlastZoneRightOffset(ctx);
+        (pos).x() > __t1
+    } {
         return 1_i32;
     }
-    if (pos).x() < fns::Stage_GetBlastZoneLeftOffset(ctx) {
+    if {
+        let __t2 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+        (pos).x() < __t2
+    } {
         return 1_i32;
     }
-    if (pos).y() > fns::Stage_GetBlastZoneTopOffset(ctx) {
+    if {
+        let __t3 = fns::Stage_GetBlastZoneTopOffset(ctx);
+        (pos).y() > __t3
+    } {
         return 1_i32;
     }
-    if (pos).y() < fns::Stage_GetBlastZoneBottomOffset(ctx) {
+    if {
+        let __t4 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+        (pos).y() < __t4
+    } {
         return 1_i32;
     }
     return 0_i32;

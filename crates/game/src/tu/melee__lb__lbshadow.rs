@@ -407,17 +407,17 @@ pub fn lbShadow_8000F38C<'a>(ctx: &'a Ctx, arg0: i32) {
             lightDir.set_x(fns::lbShadow_804D7B70(ctx).get());
         }
         let _ = fns::lbVector_Diff(ctx, lightPos, lightDir, lightVec);
-        dist = fp::fadds(
-            (fp::fmuls(lightVec.z(), lightVec.z())),
-            ({
+        dist = {
+            let __t3 = ({
                 let __t2 = fp::fadds(
                     (fp::fmuls(lightVec.x(), lightVec.x())),
                     (fp::fmuls(lightVec.y(), lightVec.y())),
                 );
                 dist = __t2;
                 __t2
-            }),
-        );
+            });
+            fp::fadds((fp::fmuls(lightVec.z(), lightVec.z())), __t3)
+        };
         dist = inl_my_sqrtf(ctx, dist);
         if dist < 0.0010000000474974513 {
             noLight = 1_i32;
@@ -427,9 +427,9 @@ pub fn lbShadow_8000F38C<'a>(ctx: &'a Ctx, arg0: i32) {
             lightPos.set_y(fns::lbShadow_804D7B70(ctx).get());
             lightDir.set_y(fns::lbShadow_804D7B70(ctx).get());
             lightPos.set_z({
-                let __t3 = fns::lbShadow_804D7B88(ctx).get();
-                upVec.set_y(__t3);
-                __t3
+                let __t4 = fns::lbShadow_804D7B88(ctx).get();
+                upVec.set_y(__t4);
+                __t4
             });
             lightDir.set_z(fns::lbShadow_804D7B70(ctx).get());
             upVec.set_z(fns::lbShadow_804D7B70(ctx).get());

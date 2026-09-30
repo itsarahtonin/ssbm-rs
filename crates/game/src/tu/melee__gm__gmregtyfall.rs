@@ -572,19 +572,20 @@ pub fn gm_801A6EE4<'a>(ctx: &'a Ctx) {
             break 's3;
         }
     }
-    let _ = fns::lbArchive_LoadSymbols(
-        ctx,
-        fns::gm_801604DC(ctx, fns::gm_801BEFB0(ctx), var_r29),
-        Handle::cast::<Addr<'a>>(fns::gm_804D6798(ctx)),
-        &[
-            VarArg::Int(Handle::addr(fns::gm_80160564(
-                ctx,
-                fns::gm_801BEFB0(ctx),
-                var_r29,
-            ))),
-            VarArg::Int(0_i32 as u32),
-        ],
-    );
+    let _ = {
+        let __t1 = VarArg::Int(Handle::addr(fns::gm_80160564(
+            ctx,
+            fns::gm_801BEFB0(ctx),
+            var_r29,
+        )));
+        let __t2 = fns::gm_801604DC(ctx, fns::gm_801BEFB0(ctx), var_r29);
+        fns::lbArchive_LoadSymbols(
+            ctx,
+            __t2,
+            Handle::cast::<Addr<'a>>(fns::gm_804D6798(ctx)),
+            &[__t1, VarArg::Int(0_i32 as u32)],
+        )
+    };
     fns::gm_804D6744(ctx).set(fns::lbArchive_LoadSymbols(
         ctx,
         cstr(ctx, 0x803db398),

@@ -359,9 +359,8 @@ pub fn lb_800101C8<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: Vec<'a>) -> f64 {
     {
         'l1: while !Handle::is_null(var_r30) {
             'c2: {
-                let mut scale0: f64 = fp::frsp(fp::fmul(
-                    fp::fmul(0.5, (var_r30).unk_scale()),
-                    (fp::fadd(
+                let mut scale0: f64 = fp::frsp({
+                    let __t1 = (fp::fadd(
                         1.0,
                         fns::cosf(
                             ctx,
@@ -370,8 +369,9 @@ pub fn lb_800101C8<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: Vec<'a>) -> f64 {
                                 (var_r30).unk_angle_float(),
                             ),
                         ),
-                    )),
-                ));
+                    ));
+                    fp::fmul(fp::fmul(0.5, (var_r30).unk_scale()), __t1)
+                });
                 if ((var_r30).x0() as i32) == 1_i32 {
                     if ((arg0).x() > (var_r30).x10()) && ((arg0).x() < (var_r30).x18()) {
                         if ((arg0).y() < (var_r30).x14()) && ((arg0).y() > (var_r30).x1C()) {

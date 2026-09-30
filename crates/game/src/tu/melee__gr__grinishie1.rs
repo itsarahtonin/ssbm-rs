@@ -317,8 +317,8 @@ pub fn grInishie1_801FAD84<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             (Handle::add((gp).u().inishie1().block(), i)).set_jobj2(jobj);
             (Handle::add((gp).u().inishie1().block(), i))
                 .set_hatena_gobj(null::<HSD_GObj<'a>>(ctx));
-            (Handle::add((gp).u().inishie1().block(), i))
-                .set_x8(inl_HSD_JObjGetTranslationY_unfused(ctx, jobj));
+            let __t1 = inl_HSD_JObjGetTranslationY_unfused(ctx, jobj);
+            (Handle::add((gp).u().inishie1().block(), i)).set_x8(__t1);
             (Handle::add((gp).u().inishie1().block(), i)).set_xC(0.0);
             (Handle::add((gp).u().inishie1().block(), i)).set_x10(0.0);
             fns::mpJointSetCb2(
@@ -389,9 +389,9 @@ pub fn grInishie1_801FAD84<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 }
                 if !(index1
                     == ({
-                        let __t1 = index2;
-                        index2_copy = __t1;
-                        __t1
+                        let __t2 = index2;
+                        index2_copy = __t2;
+                        __t2
                     }))
                 {
                     break 'l17;

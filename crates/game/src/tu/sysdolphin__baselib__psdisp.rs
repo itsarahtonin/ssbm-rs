@@ -1566,20 +1566,24 @@ fn inl_setupChanCtrl<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>) {
                 break 's1;
             }
             if __case <= 1 {
-                fns::GXSetChanCtrl(
-                    ctx,
-                    (enums::GX_COLOR0 as i32),
-                    (1_i32 as u8),
-                    (enums::GX_SRC_REG as i32),
-                    (enums::GX_SRC_REG as i32),
-                    (fns::HSD_LObjGetLightMaskDiffuse(ctx) as u32),
-                    (enums::GX_DF_NONE as i32),
-                    (if (fns::HSD_LObjGetLightMaskAttnFunc(ctx) != 0) {
+                {
+                    let __t1 = (if (fns::HSD_LObjGetLightMaskAttnFunc(ctx) != 0) {
                         (enums::GX_AF_SPOT as i32)
                     } else {
                         (enums::GX_AF_NONE as i32)
-                    }),
-                );
+                    });
+                    let __t2 = (fns::HSD_LObjGetLightMaskDiffuse(ctx) as u32);
+                    fns::GXSetChanCtrl(
+                        ctx,
+                        (enums::GX_COLOR0 as i32),
+                        (1_i32 as u8),
+                        (enums::GX_SRC_REG as i32),
+                        (enums::GX_SRC_REG as i32),
+                        __t2,
+                        (enums::GX_DF_NONE as i32),
+                        __t1,
+                    )
+                };
                 fns::GXSetChanCtrl(
                     ctx,
                     (enums::GX_ALPHA0 as i32),
@@ -1593,20 +1597,24 @@ fn inl_setupChanCtrl<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>) {
                 break 's1;
             }
             if __case <= 2 {
-                fns::GXSetChanCtrl(
-                    ctx,
-                    (enums::GX_COLOR0 as i32),
-                    (1_i32 as u8),
-                    (enums::GX_SRC_REG as i32),
-                    (enums::GX_SRC_REG as i32),
-                    (fns::HSD_LObjGetLightMaskDiffuse(ctx) as u32),
-                    (enums::GX_DF_NONE as i32),
-                    (if (fns::HSD_LObjGetLightMaskAttnFunc(ctx) != 0) {
+                {
+                    let __t3 = (if (fns::HSD_LObjGetLightMaskAttnFunc(ctx) != 0) {
                         (enums::GX_AF_SPOT as i32)
                     } else {
                         (enums::GX_AF_NONE as i32)
-                    }),
-                );
+                    });
+                    let __t4 = (fns::HSD_LObjGetLightMaskDiffuse(ctx) as u32);
+                    fns::GXSetChanCtrl(
+                        ctx,
+                        (enums::GX_COLOR0 as i32),
+                        (1_i32 as u8),
+                        (enums::GX_SRC_REG as i32),
+                        (enums::GX_SRC_REG as i32),
+                        __t4,
+                        (enums::GX_DF_NONE as i32),
+                        __t3,
+                    )
+                };
                 fns::GXSetChanCtrl(
                     ctx,
                     (enums::GX_ALPHA0 as i32),
@@ -2807,29 +2815,29 @@ fn inl_psDispSubAppSRT<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, texform: Val<'a, 
             Handle::cast::<ArrV<'a, F32, 4>>(((pp).appsrt()).ssx_ref()),
             draw_mtx.get(0),
         );
-        cur_x = fp::fadds(
-            draw_mtx.get(0_i32).at(3_i32).get(),
-            (fp::fmadds(
+        cur_x = {
+            let __t17 = (fp::fmadds(
                 draw_mtx.get(0_i32).at(2_i32).get(),
                 (pp).pos().z(),
                 (fp::fmadds(
                     draw_mtx.get(0_i32).at(0_i32).get(),
                     ({
-                        let __t7 = (pp).pos().x();
-                        pos_x = __t7;
-                        __t7
+                        let __t14 = (pp).pos().x();
+                        pos_x = __t14;
+                        __t14
                     }),
-                    fp::fmuls(
-                        draw_mtx.get(0_i32).at(1_i32).get(),
-                        ({
-                            let __t8 = (pp).pos().y();
-                            pos_y = __t8;
-                            __t8
-                        }),
-                    ),
+                    {
+                        let __t16 = ({
+                            let __t15 = (pp).pos().y();
+                            pos_y = __t15;
+                            __t15
+                        });
+                        fp::fmuls(draw_mtx.get(0_i32).at(1_i32).get(), __t16)
+                    },
                 )),
-            )),
-        );
+            ));
+            fp::fadds(draw_mtx.get(0_i32).at(3_i32).get(), __t17)
+        };
         cur_y = fp::fadds(
             draw_mtx.get(1_i32).at(3_i32).get(),
             (fp::fmadds(
@@ -2941,9 +2949,9 @@ fn inl_psDispSubAppSRT<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, texform: Val<'a, 
         ay = y_extent;
         by = fp::fneg(ay);
         ax = {
-            let __t9 = x_extent;
-            bx = __t9;
-            __t9
+            let __t18 = x_extent;
+            bx = __t18;
+            __t18
         };
     } else {
         ay = 0.0;

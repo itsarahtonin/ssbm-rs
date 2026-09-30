@@ -105,7 +105,10 @@ pub fn itFire_UnkMotion2_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     if !(fns::it_80272C6C(ctx, gobj) != 0) {
         inl_itFire_UnkMotion2_Anim_inline_unfused(ctx, gobj);
     }
-    if (ip).pos().y() > fns::Stage_GetBlastZoneTopOffset(ctx) {
+    if {
+        let __t1 = fns::Stage_GetBlastZoneTopOffset(ctx);
+        (ip).pos().y() > __t1
+    } {
         return 1_i32;
     } else {
         return 0_i32;

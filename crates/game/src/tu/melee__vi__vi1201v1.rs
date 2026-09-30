@@ -777,10 +777,10 @@ fn inl_setupStandChild_unfused<'a>(ctx: &'a Ctx, child: HSD_JObj<'a>) {
     );
     scale = fp::fmuls(
         0.550000011920929,
-        (fp::fmuls(
-            fns::Toy_803060BC(ctx, 30_i32, 4_i32),
-            (fp::fdivs(1.0, fns::Toy_803060BC(ctx, 30_i32, 3_i32))),
-        )),
+        ({
+            let __t1 = (fp::fdivs(1.0, fns::Toy_803060BC(ctx, 30_i32, 3_i32)));
+            fp::fmuls(fns::Toy_803060BC(ctx, 30_i32, 4_i32), __t1)
+        }),
     );
     inl_HSD_JObjSetScaleXWithMtxDirty_unfused(ctx, child, scale);
     inl_HSD_JObjSetScaleYWithMtxDirty_unfused(ctx, child, scale);

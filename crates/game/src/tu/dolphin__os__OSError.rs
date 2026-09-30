@@ -192,34 +192,28 @@ pub fn __OSUnhandledException<'a>(
         }
         if __case <= 4 {
             fns::OSReport(ctx, cstr(ctx, 0x8040200c), &[]);
-            fns::OSReport(
-                ctx,
-                cstr(ctx, 0x80402240),
-                &[
-                    VarArg::Int(
-                        ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), (24_i32)))
-                            .get() as i32) as u32,
-                    ),
-                    VarArg::Int(
-                        ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), (25_i32)))
-                            .get() as i32) as u32,
-                    ),
-                ],
-            );
-            fns::OSReport(
-                ctx,
-                cstr(ctx, 0x80402260),
-                &[
-                    VarArg::Int(
-                        ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), (16_i32)))
-                            .get() as i32) as u32,
-                    ),
-                    VarArg::Int(
-                        ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), (17_i32)))
-                            .get() as i32) as u32,
-                    ),
-                ],
-            );
+            {
+                let __t1 = VarArg::Int(
+                    ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), (25_i32)))
+                        .get() as i32) as u32,
+                );
+                let __t2 = VarArg::Int(
+                    ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), (24_i32)))
+                        .get() as i32) as u32,
+                );
+                fns::OSReport(ctx, cstr(ctx, 0x80402240), &[__t2, __t1])
+            };
+            {
+                let __t3 = VarArg::Int(
+                    ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), (17_i32)))
+                        .get() as i32) as u32,
+                );
+                let __t4 = VarArg::Int(
+                    ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), (16_i32)))
+                        .get() as i32) as u32,
+                );
+                fns::OSReport(ctx, cstr(ctx, 0x80402260), &[__t4, __t3])
+            };
             fns::OSReport(
                 ctx,
                 cstr(ctx, 0x80402280),
@@ -231,15 +225,12 @@ pub fn __OSUnhandledException<'a>(
             break 's1;
         }
     }
-    fns::OSReport(
-        ctx,
-        cstr(ctx, 0x8040229c),
-        &[
-            VarArg::Int((fns::__OSLastInterrupt(ctx).get() as i32) as u32),
-            VarArg::Int(fns::__OSLastInterruptSrr0(ctx).get() as u32),
-            VarArg::Wide(fns::__OSLastInterruptTime(ctx).get() as u64),
-        ],
-    );
+    {
+        let __t5 = VarArg::Wide(fns::__OSLastInterruptTime(ctx).get() as u64);
+        let __t6 = VarArg::Int(fns::__OSLastInterruptSrr0(ctx).get() as u32);
+        let __t7 = VarArg::Int((fns::__OSLastInterrupt(ctx).get() as i32) as u32);
+        fns::OSReport(ctx, cstr(ctx, 0x8040229c), &[__t7, __t6, __t5])
+    };
     ctx.call::<_, ()>(0x80335e94, ());
 }
 

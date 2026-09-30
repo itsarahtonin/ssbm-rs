@@ -510,13 +510,14 @@ pub fn WriteCharactersForNameAtIndex<'a>(ctx: &'a Ctx, slot: u8, port: i32) -> i
                 ptr_ = Handle::cast::<Val<'a, u8>>(
                     fns::mnNameNew_CurrentNameText(ctx).at(i.wrapping_mul(3_i32)),
                 );
-                'l3: while ((fns::mnNameNew_NullCharacter(ctx).at(0)).get() as i32)
-                    != ((({
+                'l3: while {
+                    let __t2 = ((({
                         let __t1 = (ptr_).get();
                         ch = __t1;
                         __t1
-                    }) as i8) as i32)
-                {
+                    }) as i8) as i32);
+                    ((fns::mnNameNew_NullCharacter(ctx).at(0)).get() as i32) != __t2
+                } {
                     'c4: {
                         (nametag).namedata().at(len).set((ch as i8));
                         len = len.wrapping_add(1);
@@ -597,13 +598,8 @@ pub fn AddCharacterToName<'a>(
                 dest = arg0;
                 {
                     idx = 0_i32;
-                    'l2: while (({
-                        let __t1 = ((((fns::mnNameNew_NullCharacter(ctx).at(0)).get() as i32)
-                            & 0xffff_i32) as i8);
-                        null_ = __t1;
-                        __t1
-                    }) as i32)
-                        != (({
+                    'l2: while {
+                        let __t3 = (({
                             let __t2 = ((((Handle::add(
                                 (Handle::add(table, div_i32((arg2 as i32), 2_i32))).get(),
                                 idx,
@@ -612,8 +608,15 @@ pub fn AddCharacterToName<'a>(
                                 & 255_u32) as i8);
                             ch = __t2;
                             __t2
+                        }) as i32);
+                        (({
+                            let __t1 = ((((fns::mnNameNew_NullCharacter(ctx).at(0)).get() as i32)
+                                & 0xffff_i32) as i8);
+                            null_ = __t1;
+                            __t1
                         }) as i32)
-                    {
+                            != __t3
+                    } {
                         'c3: {
                             (Handle::add(dest, idx)).set(ch);
                         }
@@ -1369,15 +1372,15 @@ pub fn mnNameNew_8023D130<'a>(
         (text).text_color(),
         statics::melee__mn__mnnamenew::mnNameNew_804D4F6C(ctx),
     );
-    x_range = fp::fsubs(
-        inl_HSD_JObjGetTranslationX_unfused(ctx, jobj18),
-        inl_HSD_JObjGetTranslationX_unfused(ctx, jobj14),
-    );
+    x_range = {
+        let __t1 = inl_HSD_JObjGetTranslationX_unfused(ctx, jobj14);
+        fp::fsubs(inl_HSD_JObjGetTranslationX_unfused(ctx, jobj18), __t1)
+    };
     y_range = fp::fneg(
-        (fp::fsubs(
-            inl_HSD_JObjGetTranslationY_unfused(ctx, jobj1C),
-            inl_HSD_JObjGetTranslationY_unfused(ctx, jobj14),
-        )),
+        ({
+            let __t2 = inl_HSD_JObjGetTranslationY_unfused(ctx, jobj14);
+            fp::fsubs(inl_HSD_JObjGetTranslationY_unfused(ctx, jobj1C), __t2)
+        }),
     );
     table_upper =
         inl_AddCharacterToName_getGlyphs_unfused(ctx, (layout).upper_glyphs().get(0), (arg3 as u8));
@@ -1552,14 +1555,14 @@ pub fn mnNameNew_GlyphVariantSetup<'a>(
         ref_jobj = (user_data).jobjs().at(4_i32).get();
         ref2 = (user_data).jobjs().at(5_i32).get();
         ref3 = (user_data).jobjs().at(6_i32).get();
-        dx = fp::fsubs(
-            inl_HSD_JObjGetTranslationX_unfused(ctx, ref2),
-            inl_HSD_JObjGetTranslationX_unfused(ctx, ref_jobj),
-        );
-        dy = fp::fsubs(
-            inl_HSD_JObjGetTranslationY_unfused(ctx, ref3),
-            inl_HSD_JObjGetTranslationY_unfused(ctx, ref_jobj),
-        );
+        dx = {
+            let __t1 = inl_HSD_JObjGetTranslationX_unfused(ctx, ref_jobj);
+            fp::fsubs(inl_HSD_JObjGetTranslationX_unfused(ctx, ref2), __t1)
+        };
+        dy = {
+            let __t2 = inl_HSD_JObjGetTranslationY_unfused(ctx, ref_jobj);
+            fp::fsubs(inl_HSD_JObjGetTranslationY_unfused(ctx, ref3), __t2)
+        };
         variant_desc = fns::mnNameNew_804A0720(ctx).get(0);
         inl_GlyphVariantCount_unfused(ctx, arg1, variant_count);
         i = 0_i32;
@@ -1675,17 +1678,19 @@ pub fn fn_8023DAEC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
         (data).set_desc_text(null::<HSD_Text<'a>>(ctx));
     }
     all_anims_done = 1_i32;
-    if fns::mn_8022EFD8(
-        ctx,
-        (data).jobjs().at(4_i32).get(),
-        (layout).anim().get(1_i32),
-    ) < ({
-        let __t2 = (layout).anim().get(1_i32).end_frame_ref();
-        end_frame = __t2;
-        __t2
-    })
-    .get()
-    {
+    if {
+        let __t3 = ({
+            let __t2 = (layout).anim().get(1_i32).end_frame_ref();
+            end_frame = __t2;
+            __t2
+        })
+        .get();
+        fns::mn_8022EFD8(
+            ctx,
+            (data).jobjs().at(4_i32).get(),
+            (layout).anim().get(1_i32),
+        ) < __t3
+    } {
         all_anims_done = 0_i32;
     }
     if fns::mn_8022EFD8(
@@ -1868,11 +1873,13 @@ pub fn fn_8023DBE8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
         (data).set_x1(((hovered).get() as u8));
         fns::mnNameNew_8023B0F8(ctx, gobj, (data).x1());
     }
-    if (fp::fadds(
-        statics::melee__mn__mnnamenew::mnNameNew_804D4C10(ctx).get(),
-        fp::frsp((data).cursor_pos() as f64),
-    )) != fns::mn_8022F298(ctx, (data).jobjs().at(13_i32).get())
-    {
+    if {
+        let __t2 = fns::mn_8022F298(ctx, (data).jobjs().at(13_i32).get());
+        (fp::fadds(
+            statics::melee__mn__mnnamenew::mnNameNew_804D4C10(ctx).get(),
+            fp::frsp((data).cursor_pos() as f64),
+        )) != __t2
+    } {
         cursor = (data).cursor_pos();
         jobj = (Handle::cast::<NameNewEntry<'a>>((gobj).user_data()))
             .jobjs()
@@ -2405,17 +2412,19 @@ fn inl_PickAutoNameInline_unfused<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 {
     (Handle::add(cur_text, 6_i32)).set((fns::mnNameNew_NullCharacter(ctx).at(0)).get());
     (Handle::add(cur_text, 9_i32)).set((fns::mnNameNew_NullCharacter(ctx).at(0)).get());
     name_ptr = (Handle::add(fns::AutoNamesList(ctx).get(), pick));
-    'l7: while (({
-        let __t2 = (fns::mnNameNew_NullCharacter(ctx).at(0)).get();
-        null_ch = __t2;
-        __t2
-    }) as i32)
-        != (({
+    'l7: while {
+        let __t4 = (({
             let __t3 = (inl_GetAutoNameCharacter_unfused(ctx, name_ptr, char_idx) as i8);
             ch = __t3;
             __t3
+        }) as i32);
+        (({
+            let __t2 = (fns::mnNameNew_NullCharacter(ctx).at(0)).get();
+            null_ch = __t2;
+            __t2
         }) as i32)
-    {
+            != __t4
+    } {
         'c8: {
             (Handle::add(text, 0_i32)).set(ch);
             (Handle::add(text, 1_i32)).set(
@@ -2506,17 +2515,19 @@ fn inl_copyName_unfused<'a>(ctx: &'a Ctx, name_text: Val<'a, i8>, name_buffer: V
             'c2: {
                 src_iter = src;
                 dest_iter = dest;
-                'l3: while (({
-                    let __t2 = (fns::mnNameNew_NullCharacter(ctx).at(0)).get();
-                    null_char = __t2;
-                    __t2
-                }) as i32)
-                    != (({
+                'l3: while {
+                    let __t4 = (({
                         let __t3 = (src_iter).get();
                         ch = __t3;
                         __t3
+                    }) as i32);
+                    (({
+                        let __t2 = (fns::mnNameNew_NullCharacter(ctx).at(0)).get();
+                        null_char = __t2;
+                        __t2
                     }) as i32)
-                {
+                        != __t4
+                } {
                     'c4: {
                         ({
                             let __t1 = dest_iter;
@@ -2563,11 +2574,10 @@ fn inl_SubmitName_unfused<'a>(ctx: &'a Ctx, data: NameNewEntry<'a>, name: Val<'a
     if (inl_CanConfirmName_unfused(ctx, name) != 0) {
         fns::lbAudioAx_80024030(ctx, 1_i32);
         fns::CreateNameAtIndex(ctx, ((data).name_index() as i32));
-        let _ = fns::WriteCharactersForNameAtIndex(
-            ctx,
-            (data).name_index(),
-            (fns::mn_802295AC(ctx) as i32),
-        );
+        let _ = {
+            let __t1 = (fns::mn_802295AC(ctx) as i32);
+            fns::WriteCharactersForNameAtIndex(ctx, (data).name_index(), __t1)
+        };
         fns::mnNameNew_8023B224(ctx, (1_u32 as u8));
         return;
     }
@@ -2765,14 +2775,32 @@ fn inl_mnNameNew_InitKeyJobjs_unfused<'a>(
                     fp::frsp(((((k as u8) as i32) == ((user_data).x1() as i32)) as i32) as f64),
                 );
                 fns::HSD_JObjAnimAll(ctx, key_jobj);
-                x_range = fp::fsubs(
-                    inl_HSD_JObjGetTranslationX_unfused(ctx, (user_data).jobjs().at(17_i32).get()),
-                    inl_HSD_JObjGetTranslationX_unfused(ctx, (user_data).jobjs().at(16_i32).get()),
-                );
-                y_range = fp::fsubs(
-                    inl_HSD_JObjGetTranslationY_unfused(ctx, (user_data).jobjs().at(18_i32).get()),
-                    inl_HSD_JObjGetTranslationY_unfused(ctx, (user_data).jobjs().at(16_i32).get()),
-                );
+                x_range = {
+                    let __t1 = inl_HSD_JObjGetTranslationX_unfused(
+                        ctx,
+                        (user_data).jobjs().at(16_i32).get(),
+                    );
+                    fp::fsubs(
+                        inl_HSD_JObjGetTranslationX_unfused(
+                            ctx,
+                            (user_data).jobjs().at(17_i32).get(),
+                        ),
+                        __t1,
+                    )
+                };
+                y_range = {
+                    let __t2 = inl_HSD_JObjGetTranslationY_unfused(
+                        ctx,
+                        (user_data).jobjs().at(16_i32).get(),
+                    );
+                    fp::fsubs(
+                        inl_HSD_JObjGetTranslationY_unfused(
+                            ctx,
+                            (user_data).jobjs().at(18_i32).get(),
+                        ),
+                        __t2,
+                    )
+                };
                 fns::mnName_80239F5C(
                     ctx,
                     key_jobj,

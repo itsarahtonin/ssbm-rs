@@ -31,7 +31,10 @@ pub fn ftCo_800A0148<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut fp = fp;
     let mut x1A88: CpuFighter<'a> = (fp).cpu();
-    if fp::fadds((fp).cur_pos().y(), (x1A88).x558()) > fns::Stage_GetBlastZoneTopOffset(ctx) {
+    if {
+        let __t1 = fns::Stage_GetBlastZoneTopOffset(ctx);
+        fp::fadds((fp).cur_pos().y(), (x1A88).x558()) > __t1
+    } {
         inl_ftCo_CpuFinishWithNeutralStick_unfused(ctx, fp);
     } else if (fns::ftCo_800A1CA8(ctx, fp) != 0) {
         inl_ftCo_CpuSetNeutralStick_unfused(ctx, fp);
@@ -100,7 +103,10 @@ pub fn ftCo_800A0148<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 pub fn ftCo_800A0384<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut fp = fp;
-    if fp::fadds((fp).cur_pos().y(), (fp).cpu().x558()) > fns::Stage_GetBlastZoneTopOffset(ctx) {
+    if {
+        let __t1 = fns::Stage_GetBlastZoneTopOffset(ctx);
+        fp::fadds((fp).cur_pos().y(), (fp).cpu().x558()) > __t1
+    } {
         inl_ftCo_CpuFinishWithNeutralStick_unfused(ctx, fp);
     } else if (fns::ftCo_800A1CA8(ctx, fp) != 0) {
         inl_ftCo_CpuSetNeutralStick_unfused(ctx, fp);
@@ -175,7 +181,10 @@ pub fn ftCo_800A0508<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 pub fn ftCo_800A05F4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut fp = fp;
-    if fp::fadds((fp).cur_pos().y(), (fp).cpu().x558()) > fns::Stage_GetBlastZoneTopOffset(ctx) {
+    if {
+        let __t1 = fns::Stage_GetBlastZoneTopOffset(ctx);
+        fp::fadds((fp).cur_pos().y(), (fp).cpu().x558()) > __t1
+    } {
         inl_ftCo_CpuFinishWithNeutralStick_unfused(ctx, fp);
     } else if (fns::ftCo_800A1CA8(ctx, fp) != 0) {
         inl_ftCo_CpuSetNeutralStick_unfused(ctx, fp);
@@ -1326,10 +1335,10 @@ pub fn ftCo_800A229C<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>) -> i32 {
             if sp18.get() > bottom {
                 (arg1).set_x(fp::fmuls(
                     0.5,
-                    (fp::fadds(
-                        fns::Stage_GetBlastZoneLeftOffset(ctx),
-                        fns::Stage_GetBlastZoneRightOffset(ctx),
-                    )),
+                    ({
+                        let __t1 = fns::Stage_GetBlastZoneRightOffset(ctx);
+                        fp::fadds(fns::Stage_GetBlastZoneLeftOffset(ctx), __t1)
+                    }),
                 ));
                 (arg1).set_y(bottom);
                 (arg1).set_z(0.0);
@@ -1346,132 +1355,148 @@ pub fn ftCo_800A229C<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>) -> i32 {
         if (stage as u32) == ((enums::Gr_Kind_RCruise as i32) as u32) {
             'goto_block_23: {
                 'goto_block_18: {
-                    w = fp::fsubs(
-                        fns::Stage_GetBlastZoneRightOffset(ctx),
-                        fns::Stage_GetBlastZoneLeftOffset(ctx),
-                    );
+                    w = {
+                        let __t2 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+                        fp::fsubs(fns::Stage_GetBlastZoneRightOffset(ctx), __t2)
+                    };
                     if sp2C.x() < 0.0 {
-                        if (fp).cur_pos().x()
-                            < fp::fmadds(
+                        if {
+                            let __t3 = fp::fmadds(
                                 0.4000000059604645,
                                 w,
                                 fns::Stage_GetBlastZoneLeftOffset(ctx),
-                            )
-                        {
+                            );
+                            (fp).cur_pos().x() < __t3
+                        } {
                             Handle::copy_from((arg1), (fp).cur_pos());
                             return 2_i32;
                         }
                         break 'goto_block_18;
                     }
-                    if (fp).cur_pos().x()
-                        > fp::fnmsubs(
+                    if {
+                        let __t4 = fp::fnmsubs(
                             0.4000000059604645,
                             w,
                             fns::Stage_GetBlastZoneRightOffset(ctx),
-                        )
-                    {
+                        );
+                        (fp).cur_pos().x() > __t4
+                    } {
                         Handle::copy_from((arg1), (fp).cur_pos());
                         return 2_i32;
                     }
                 }
-                h = fp::fsubs(
-                    fns::Stage_GetBlastZoneTopOffset(ctx),
-                    fns::Stage_GetBlastZoneBottomOffset(ctx),
-                );
+                h = {
+                    let __t5 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+                    fp::fsubs(fns::Stage_GetBlastZoneTopOffset(ctx), __t5)
+                };
                 if sp2C.y() > 0.0 {
-                    if (fp).cur_pos().y()
-                        > fp::fnmsubs(0.4000000059604645, h, fns::Stage_GetBlastZoneTopOffset(ctx))
-                    {
+                    if {
+                        let __t6 = fp::fnmsubs(
+                            0.4000000059604645,
+                            h,
+                            fns::Stage_GetBlastZoneTopOffset(ctx),
+                        );
+                        (fp).cur_pos().y() > __t6
+                    } {
                         Handle::copy_from((arg1), (fp).cur_pos());
                         return 2_i32;
                     }
                     break 'goto_block_23;
                 }
-                if (fp).cur_pos().y()
-                    < fp::fmadds(
+                if {
+                    let __t7 = fp::fmadds(
                         0.4000000059604645,
                         h,
                         fns::Stage_GetBlastZoneBottomOffset(ctx),
-                    )
-                {
+                    );
+                    (fp).cur_pos().y() < __t7
+                } {
                     Handle::copy_from((arg1), (fp).cur_pos());
                     return 2_i32;
                 }
             }
-            if ((((fp).cur_pos().x()
-                < fp::fmadds(
+            if ((({
+                let __t8 = fp::fmadds(
                     0.20000000298023224,
                     w,
                     fns::Stage_GetBlastZoneLeftOffset(ctx),
-                ))
-                || ((fp).cur_pos().x()
-                    > fp::fnmsubs(
-                        0.20000000298023224,
-                        w,
-                        fns::Stage_GetBlastZoneRightOffset(ctx),
-                    )))
-                || ((fp).cur_pos().y()
-                    > fp::fnmsubs(
-                        0.20000000298023224,
-                        h,
-                        fns::Stage_GetBlastZoneTopOffset(ctx),
-                    )))
-                || ((fp).cur_pos().y()
-                    < fp::fmadds(
-                        0.20000000298023224,
-                        h,
-                        fns::Stage_GetBlastZoneBottomOffset(ctx),
-                    ))
-            {
+                );
+                (fp).cur_pos().x() < __t8
+            }) || ({
+                let __t9 = fp::fnmsubs(
+                    0.20000000298023224,
+                    w,
+                    fns::Stage_GetBlastZoneRightOffset(ctx),
+                );
+                (fp).cur_pos().x() > __t9
+            })) || ({
+                let __t10 = fp::fnmsubs(
+                    0.20000000298023224,
+                    h,
+                    fns::Stage_GetBlastZoneTopOffset(ctx),
+                );
+                (fp).cur_pos().y() > __t10
+            })) || ({
+                let __t11 = fp::fmadds(
+                    0.20000000298023224,
+                    h,
+                    fns::Stage_GetBlastZoneBottomOffset(ctx),
+                );
+                (fp).cur_pos().y() < __t11
+            }) {
                 Handle::copy_from((arg1), (fp).cur_pos());
                 return 2_i32;
             }
             break 'goto_block_43;
         }
         if (stage as u32) == ((enums::Gr_Kind_BigBlue as i32) as u32) {
-            w = fp::fsubs(
-                fns::Stage_GetBlastZoneRightOffset(ctx),
-                fns::Stage_GetBlastZoneLeftOffset(ctx),
-            );
-            h = fp::fsubs(
-                fns::Stage_GetBlastZoneTopOffset(ctx),
-                fns::Stage_GetBlastZoneBottomOffset(ctx),
-            );
-            if ((((fp).cur_pos().x()
-                < fp::fmadds(
+            w = {
+                let __t12 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+                fp::fsubs(fns::Stage_GetBlastZoneRightOffset(ctx), __t12)
+            };
+            h = {
+                let __t13 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+                fp::fsubs(fns::Stage_GetBlastZoneTopOffset(ctx), __t13)
+            };
+            if ((({
+                let __t14 = fp::fmadds(
                     0.20000000298023224,
                     w,
                     fns::Stage_GetBlastZoneLeftOffset(ctx),
-                ))
-                || ((fp).cur_pos().x()
-                    > fp::fnmsubs(
-                        0.20000000298023224,
-                        w,
-                        fns::Stage_GetBlastZoneRightOffset(ctx),
-                    )))
-                || ((fp).cur_pos().y()
-                    > fp::fnmsubs(
-                        0.20000000298023224,
-                        h,
-                        fns::Stage_GetBlastZoneTopOffset(ctx),
-                    )))
-                || ((fp).cur_pos().y()
-                    < fp::fmadds(
-                        0.20000000298023224,
-                        h,
-                        fns::Stage_GetBlastZoneBottomOffset(ctx),
-                    ))
-            {
+                );
+                (fp).cur_pos().x() < __t14
+            }) || ({
+                let __t15 = fp::fnmsubs(
+                    0.20000000298023224,
+                    w,
+                    fns::Stage_GetBlastZoneRightOffset(ctx),
+                );
+                (fp).cur_pos().x() > __t15
+            })) || ({
+                let __t16 = fp::fnmsubs(
+                    0.20000000298023224,
+                    h,
+                    fns::Stage_GetBlastZoneTopOffset(ctx),
+                );
+                (fp).cur_pos().y() > __t16
+            })) || ({
+                let __t17 = fp::fmadds(
+                    0.20000000298023224,
+                    h,
+                    fns::Stage_GetBlastZoneBottomOffset(ctx),
+                );
+                (fp).cur_pos().y() < __t17
+            }) {
                 Handle::copy_from((arg1), (fp).cur_pos());
                 return 2_i32;
             }
             break 'goto_block_43;
         }
         if (stage as u32) == ((enums::Gr_Kind_Icemt as i32) as u32) {
-            h = fp::fsubs(
-                fns::Stage_GetBlastZoneTopOffset(ctx),
-                fns::Stage_GetBlastZoneBottomOffset(ctx),
-            );
+            h = {
+                let __t18 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+                fp::fsubs(fns::Stage_GetBlastZoneTopOffset(ctx), __t18)
+            };
             let _ = fns::grLib_801C9E60(ctx, sp20);
             mag = (if (sp20.y()) < fp::frsp(0_i32 as f64) {
                 fp::fneg((sp20.y()))
@@ -1480,15 +1505,19 @@ pub fn ftCo_800A229C<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>) -> i32 {
             });
             frac = fp::frsp(fp::fmadd(0.4, mag, 0.4));
             if sp20.y() < 0.0 {
-                if (fp).cur_pos().y()
-                    < fp::fmadds(h, frac, fns::Stage_GetBlastZoneBottomOffset(ctx))
-                {
+                if {
+                    let __t19 = fp::fmadds(h, frac, fns::Stage_GetBlastZoneBottomOffset(ctx));
+                    (fp).cur_pos().y() < __t19
+                } {
                     Handle::copy_from((arg1), (fp).cur_pos());
                     return 2_i32;
                 }
                 break 'goto_block_43;
             }
-            if (fp).cur_pos().y() > fp::fnmsubs(h, frac, fns::Stage_GetBlastZoneTopOffset(ctx)) {
+            if {
+                let __t20 = fp::fnmsubs(h, frac, fns::Stage_GetBlastZoneTopOffset(ctx));
+                (fp).cur_pos().y() > __t20
+            } {
                 Handle::copy_from((arg1), (fp).cur_pos());
                 return 2_i32;
             }
@@ -1850,21 +1879,18 @@ pub fn ftCo_800A2C80<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
             floor_y = floor_pos.y();
             temp_data = (fp).cpu();
             floor_x = floor_pos.x();
-            if (((floor_x
-                < fp::fadds(
-                    (fp).cpu().half_width(),
-                    fns::Stage_GetBlastZoneLeftOffset(ctx),
-                ))
-                || (floor_x
-                    > fp::fsubs(
-                        fns::Stage_GetBlastZoneRightOffset(ctx),
-                        (temp_data).half_width(),
-                    )))
-                || (floor_y
-                    < fp::fadds(
-                        (temp_data).half_height(),
-                        fns::Stage_GetBlastZoneBottomOffset(ctx),
-                    )))
+            if (((floor_x < {
+                let __t1 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+                fp::fadds((fp).cpu().half_width(), __t1)
+            }) || (floor_x
+                > fp::fsubs(
+                    fns::Stage_GetBlastZoneRightOffset(ctx),
+                    (temp_data).half_width(),
+                )))
+                || (floor_y < {
+                    let __t2 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+                    fp::fadds((temp_data).half_height(), __t2)
+                }))
                 || (floor_y
                     > fp::fsubs(
                         fns::Stage_GetBlastZoneTopOffset(ctx),
@@ -1900,21 +1926,18 @@ pub fn ftCo_800A2C80<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
             floor_y_2 = floor_pos.y();
             temp_data = (fp).cpu();
             floor_x_2 = floor_pos.x();
-            if (((floor_x_2
-                < fp::fadds(
-                    (fp).cpu().half_width(),
-                    fns::Stage_GetBlastZoneLeftOffset(ctx),
-                ))
-                || (floor_x_2
-                    > fp::fsubs(
-                        fns::Stage_GetBlastZoneRightOffset(ctx),
-                        (temp_data).half_width(),
-                    )))
-                || (floor_y_2
-                    < fp::fadds(
-                        (temp_data).half_height(),
-                        fns::Stage_GetBlastZoneBottomOffset(ctx),
-                    )))
+            if (((floor_x_2 < {
+                let __t3 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+                fp::fadds((fp).cpu().half_width(), __t3)
+            }) || (floor_x_2
+                > fp::fsubs(
+                    fns::Stage_GetBlastZoneRightOffset(ctx),
+                    (temp_data).half_width(),
+                )))
+                || (floor_y_2 < {
+                    let __t4 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+                    fp::fadds((temp_data).half_height(), __t4)
+                }))
                 || (floor_y_2
                     > fp::fsubs(
                         fns::Stage_GetBlastZoneTopOffset(ctx),
@@ -1950,21 +1973,18 @@ pub fn ftCo_800A2C80<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
             floor_y_3 = floor_pos.y();
             temp_data = (fp).cpu();
             floor_x_3 = floor_pos.x();
-            if (((floor_x_3
-                < fp::fadds(
-                    (fp).cpu().half_width(),
-                    fns::Stage_GetBlastZoneLeftOffset(ctx),
-                ))
-                || (floor_x_3
-                    > fp::fsubs(
-                        fns::Stage_GetBlastZoneRightOffset(ctx),
-                        (temp_data).half_width(),
-                    )))
-                || (floor_y_3
-                    < fp::fadds(
-                        (temp_data).half_height(),
-                        fns::Stage_GetBlastZoneBottomOffset(ctx),
-                    )))
+            if (((floor_x_3 < {
+                let __t5 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+                fp::fadds((fp).cpu().half_width(), __t5)
+            }) || (floor_x_3
+                > fp::fsubs(
+                    fns::Stage_GetBlastZoneRightOffset(ctx),
+                    (temp_data).half_width(),
+                )))
+                || (floor_y_3 < {
+                    let __t6 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+                    fp::fadds((temp_data).half_height(), __t6)
+                }))
                 || (floor_y_3
                     > fp::fsubs(
                         fns::Stage_GetBlastZoneTopOffset(ctx),
@@ -2345,21 +2365,18 @@ pub fn ftCo_800A3908<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> i32 {
                     ey = y;
                 }
                 ez = island_pos.z();
-                if (((ex
-                    < fp::fadds(
-                        (fp).cpu().half_width(),
-                        fns::Stage_GetBlastZoneLeftOffset(ctx),
-                    ))
-                    || (ex
-                        > fp::fsubs(
-                            fns::Stage_GetBlastZoneRightOffset(ctx),
-                            (data2).half_width(),
-                        )))
-                    || (ey
-                        < fp::fadds(
-                            (data2).half_height(),
-                            fns::Stage_GetBlastZoneBottomOffset(ctx),
-                        )))
+                if (((ex < {
+                    let __t1 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+                    fp::fadds((fp).cpu().half_width(), __t1)
+                }) || (ex
+                    > fp::fsubs(
+                        fns::Stage_GetBlastZoneRightOffset(ctx),
+                        (data2).half_width(),
+                    )))
+                    || (ey < {
+                        let __t2 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+                        fp::fadds((data2).half_height(), __t2)
+                    }))
                     || (ey
                         > fp::fsubs(fns::Stage_GetBlastZoneTopOffset(ctx), (data2).half_height()))
                 {
@@ -2389,39 +2406,43 @@ pub fn ftCo_800A3908<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> i32 {
                             (fp).cur_pos().y(),
                         );
                     } else if t < frames {
-                        dist = fp::frsp(fp::fadd(
-                            (fp).cur_pos().y(),
-                            (fp::fnmsub(
+                        dist = fp::frsp({
+                            let __t6 = (fp::fnmsub(
                                 0.5,
-                                (fp::fmuls(
-                                    (fp).co_attrs().gravity(),
-                                    inl_sqrtf_store(ctx, fp::frsp(t as f64), sqrt_time_store),
-                                )),
+                                ({
+                                    let __t5 =
+                                        inl_sqrtf_store(ctx, fp::frsp(t as f64), sqrt_time_store);
+                                    fp::fmuls((fp).co_attrs().gravity(), __t5)
+                                }),
                                 fp::fmuls((fp).pos_delta().y(), fp::frsp(t as f64)),
-                            )),
-                        ));
+                            ));
+                            fp::fadd((fp).cur_pos().y(), __t6)
+                        });
                     } else {
-                        dist = fp::frsp(fp::fadd(
-                            (fp).cur_pos().y(),
-                            (fp::fsub(
-                                (fp::fnmsub(
-                                    0.5,
-                                    (fp::fmuls(
-                                        (fp).co_attrs().gravity(),
-                                        inl_sqrtf_store(
-                                            ctx,
-                                            fp::frsp(frames as f64),
-                                            sqrt_terminal_store,
-                                        ),
-                                    )),
-                                    fp::fmuls((fp).pos_delta().y(), fp::frsp(frames as f64)),
-                                )),
-                                fp::fmuls(
+                        dist = fp::frsp({
+                            let __t11 = ({
+                                let __t10 = fp::fmuls(
                                     fp::frsp((t.wrapping_sub(frames)) as f64),
                                     inl_ftCo_GetTerminalVelocity(ctx, fp),
-                                ),
-                            )),
-                        ));
+                                );
+                                fp::fsub(
+                                    (fp::fnmsub(
+                                        0.5,
+                                        ({
+                                            let __t9 = inl_sqrtf_store(
+                                                ctx,
+                                                fp::frsp(frames as f64),
+                                                sqrt_terminal_store,
+                                            );
+                                            fp::fmuls((fp).co_attrs().gravity(), __t9)
+                                        }),
+                                        fp::fmuls((fp).pos_delta().y(), fp::frsp(frames as f64)),
+                                    )),
+                                    __t10,
+                                )
+                            });
+                            fp::fadd((fp).cur_pos().y(), __t11)
+                        });
                     }
                     if arg1 != 0_i32 {
                         if !(fp::fadds(dist, (data).x558()) < ey) {
@@ -2574,21 +2595,18 @@ pub fn ftCo_800A4038<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> i32 {
                     ey = y;
                 }
                 ez = island_pos.z();
-                if (((ex
-                    < fp::fadds(
-                        (fp).cpu().half_width(),
-                        fns::Stage_GetBlastZoneLeftOffset(ctx),
-                    ))
-                    || (ex
-                        > fp::fsubs(
-                            fns::Stage_GetBlastZoneRightOffset(ctx),
-                            (data2).half_width(),
-                        )))
-                    || (ey
-                        < fp::fadds(
-                            (data2).half_height(),
-                            fns::Stage_GetBlastZoneBottomOffset(ctx),
-                        )))
+                if (((ex < {
+                    let __t1 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+                    fp::fadds((fp).cpu().half_width(), __t1)
+                }) || (ex
+                    > fp::fsubs(
+                        fns::Stage_GetBlastZoneRightOffset(ctx),
+                        (data2).half_width(),
+                    )))
+                    || (ey < {
+                        let __t2 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+                        fp::fadds((data2).half_height(), __t2)
+                    }))
                     || (ey
                         > fp::fsubs(fns::Stage_GetBlastZoneTopOffset(ctx), (data2).half_height()))
                 {
@@ -2612,39 +2630,43 @@ pub fn ftCo_800A4038<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> i32 {
                             (fp).cur_pos().y(),
                         );
                     } else if t < frames {
-                        dist = fp::frsp(fp::fadd(
-                            (fp).cur_pos().y(),
-                            (fp::fnmsub(
+                        dist = fp::frsp({
+                            let __t6 = (fp::fnmsub(
                                 0.5,
-                                (fp::fmuls(
-                                    (fp).co_attrs().gravity(),
-                                    inl_sqrtf_store(ctx, fp::frsp(t as f64), sqrt_time_store),
-                                )),
+                                ({
+                                    let __t5 =
+                                        inl_sqrtf_store(ctx, fp::frsp(t as f64), sqrt_time_store);
+                                    fp::fmuls((fp).co_attrs().gravity(), __t5)
+                                }),
                                 fp::fmuls((fp).pos_delta().y(), fp::frsp(t as f64)),
-                            )),
-                        ));
+                            ));
+                            fp::fadd((fp).cur_pos().y(), __t6)
+                        });
                     } else {
-                        dist = fp::frsp(fp::fadd(
-                            (fp).cur_pos().y(),
-                            (fp::fsub(
-                                (fp::fnmsub(
-                                    0.5,
-                                    (fp::fmuls(
-                                        (fp).co_attrs().gravity(),
-                                        inl_sqrtf_store(
-                                            ctx,
-                                            fp::frsp(frames as f64),
-                                            sqrt_terminal_store,
-                                        ),
-                                    )),
-                                    fp::fmuls((fp).pos_delta().y(), fp::frsp(frames as f64)),
-                                )),
-                                fp::fmuls(
+                        dist = fp::frsp({
+                            let __t11 = ({
+                                let __t10 = fp::fmuls(
                                     fp::frsp((t.wrapping_sub(frames)) as f64),
                                     inl_ftCo_GetTerminalVelocity(ctx, fp),
-                                ),
-                            )),
-                        ));
+                                );
+                                fp::fsub(
+                                    (fp::fnmsub(
+                                        0.5,
+                                        ({
+                                            let __t9 = inl_sqrtf_store(
+                                                ctx,
+                                                fp::frsp(frames as f64),
+                                                sqrt_terminal_store,
+                                            );
+                                            fp::fmuls((fp).co_attrs().gravity(), __t9)
+                                        }),
+                                        fp::fmuls((fp).pos_delta().y(), fp::frsp(frames as f64)),
+                                    )),
+                                    __t10,
+                                )
+                            });
+                            fp::fadd((fp).cur_pos().y(), __t11)
+                        });
                     }
                     if arg1 != 0_i32 {
                         if !(fp::fadds(dist, (data).x558()) < ey) {
@@ -6920,20 +6942,23 @@ pub fn ftCo_800A9904<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                     break 'l3;
                 }
             }
-            predicted_y = fp::frsp(fp::fadd(
-                (fp).cur_pos().y(),
-                (fp::fsub(
-                    fp::fnmsub(
-                        0.5,
-                        (fp::fmuls((grav_p).get(), sqrt_terminal)),
-                        fp::fmuls((fp).pos_delta().y(), terminal_time),
-                    ),
-                    (fp::fmuls(
+            predicted_y = fp::frsp({
+                let __t3 = ({
+                    let __t2 = (fp::fmuls(
                         (fp::fsubs(x_time, terminal_time)),
                         inl_ftCo_GetTerminalVelocity(ctx, fp),
-                    )),
-                )),
-            ));
+                    ));
+                    fp::fsub(
+                        fp::fnmsub(
+                            0.5,
+                            (fp::fmuls((grav_p).get(), sqrt_terminal)),
+                            fp::fmuls((fp).pos_delta().y(), terminal_time),
+                        ),
+                        __t2,
+                    )
+                });
+                fp::fadd((fp).cur_pos().y(), __t3)
+            });
         }
         {
             let mut stick: i32 = fp::fctiwz(fp::fmadds(
@@ -8626,17 +8651,20 @@ pub fn ftCo_800ABBA8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         ));
     } else {
         tmp = inl_sqrtf_store(ctx, vf5, sqrt_tmp.at(0_i32));
-        land_y = fp::frsp(fp::fadd(
-            (fp).cur_pos().y(),
-            (fp::fsub(
-                fp::fnmsub(
-                    0.5,
-                    (fp::fmuls((grav_ptr).get(), tmp)),
-                    fp::fmuls((fp).pos_delta().y(), vf5),
-                ),
-                fp::fmuls((fp::fsubs(vf0, vf5)), inl_ftCo_GetTerminalVelocity(ctx, fp)),
-            )),
-        ));
+        land_y = fp::frsp({
+            let __t2 = ({
+                let __t1 = fp::fmuls((fp::fsubs(vf0, vf5)), inl_ftCo_GetTerminalVelocity(ctx, fp));
+                fp::fsub(
+                    fp::fnmsub(
+                        0.5,
+                        (fp::fmuls((grav_ptr).get(), tmp)),
+                        fp::fmuls((fp).pos_delta().y(), vf5),
+                    ),
+                    __t1,
+                )
+            });
+            fp::fadd((fp).cur_pos().y(), __t2)
+        });
     }
     if (vf0 < 0.0) || (land_y < (data).x54().y()) {
         fns::ftCo_800B46B8(
@@ -8672,8 +8700,10 @@ pub fn ftCo_800AC30C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         return;
     }
     if (rem_i32((data).x7C(), 3_i32) == 0_i32)
-        && (!(fp::fmuls(fp::frsp((data).level() as f64), 0.10000000149011612)
-            < fns::HSD_Randf(ctx)))
+        && (!({
+            let __t1 = fns::HSD_Randf(ctx);
+            fp::fmuls(fp::frsp((data).level() as f64), 0.10000000149011612) < __t1
+        }))
     {
         if ((fp).cpu().lstick().x() as i32) < 0_i32 {
             fns::ftCo_800B46B8(
@@ -9545,7 +9575,10 @@ pub fn ftCo_800ACB44<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     }
     temp_f1_2 = inl_ftCo_800A1AB4(ctx, fp, temp_r3);
     if (((data).xF9_b2() as i32) != 0) && (temp_f1_2 < 30.0) {
-        if fp::fmuls(0.10000000149011612, fp::frsp((data).level() as f64)) > fns::HSD_Randf(ctx) {
+        if {
+            let __t1 = fns::HSD_Randf(ctx);
+            fp::fmuls(0.10000000149011612, fp::frsp((data).level() as f64)) > __t1
+        } {
             inl_ftCo_CpuRetapR(ctx, fp);
         } else {
             inl_ftCo_CpuRetapA(ctx, fp);
@@ -13893,18 +13926,14 @@ pub fn ftCo_800B0918<'a>(ctx: &'a Ctx, fp0: Fighter<'a>, fp1: Fighter<'a>) {
     {
         (data).set_x448((data).xFC().get(0));
     }
-    ((data).x444())
-        .lstick()
-        .set_x((inl_inlineM0_unfused(ctx, (fp0).input().lstick().get(0_i32).x()) as i8));
-    ((data).x444())
-        .lstick()
-        .set_y((inl_inlineM0_unfused(ctx, (fp0).input().lstick().get(0_i32).y()) as i8));
-    ((data).x444())
-        .cstick()
-        .set_x((inl_inlineM0_unfused(ctx, (fp0).input().cstick().get(0_i32).x()) as i8));
-    ((data).x444())
-        .cstick()
-        .set_y((inl_inlineM0_unfused(ctx, (fp0).input().cstick().get(0_i32).y()) as i8));
+    let __t1 = (inl_inlineM0_unfused(ctx, (fp0).input().lstick().get(0_i32).x()) as i8);
+    ((data).x444()).lstick().set_x(__t1);
+    let __t2 = (inl_inlineM0_unfused(ctx, (fp0).input().lstick().get(0_i32).y()) as i8);
+    ((data).x444()).lstick().set_y(__t2);
+    let __t3 = (inl_inlineM0_unfused(ctx, (fp0).input().cstick().get(0_i32).x()) as i8);
+    ((data).x444()).cstick().set_x(__t3);
+    let __t4 = (inl_inlineM0_unfused(ctx, (fp0).input().cstick().get(0_i32).y()) as i8);
+    ((data).x444()).cstick().set_y(__t4);
     ((data).x444()).set_x4((fp::fctiwz((fp0).input().triggers().at(0_i32).get()) as u8));
     ((data).x444()).set_x5((fp::fctiwz((fp0).input().triggers().at(0_i32).get()) as u8));
     ((data).x444()).set_x0((fp0).input().held_buttons().at(0_i32).get());
@@ -15974,21 +16003,18 @@ pub fn ftCo_800B33B0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                 floor_y = floor_pos.y();
                 temp_data_2 = (fp).cpu();
                 floor_x = floor_pos.x();
-                __state = if (((floor_x
-                    < fp::fadds(
-                        (fp).cpu().half_width(),
-                        fns::Stage_GetBlastZoneLeftOffset(ctx),
-                    ))
-                    || (floor_x
-                        > fp::fsubs(
-                            fns::Stage_GetBlastZoneRightOffset(ctx),
-                            (temp_data_2).half_width(),
-                        )))
-                    || (floor_y
-                        < fp::fadds(
-                            (temp_data_2).half_height(),
-                            fns::Stage_GetBlastZoneBottomOffset(ctx),
-                        )))
+                __state = if (((floor_x < {
+                    let __t1 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+                    fp::fadds((fp).cpu().half_width(), __t1)
+                }) || (floor_x
+                    > fp::fsubs(
+                        fns::Stage_GetBlastZoneRightOffset(ctx),
+                        (temp_data_2).half_width(),
+                    )))
+                    || (floor_y < {
+                        let __t2 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+                        fp::fadds((temp_data_2).half_height(), __t2)
+                    }))
                     || (floor_y
                         > fp::fsubs(
                             fns::Stage_GetBlastZoneTopOffset(ctx),
@@ -17037,14 +17063,14 @@ fn inl_ftCo_800A3908_inline0<'a>(
     let mut data = data;
     let mut x = x;
     let mut y = y;
-    if (((x < fp::fadds(
-        (fp).cpu().half_width(),
-        fns::Stage_GetBlastZoneLeftOffset(ctx),
-    )) || (x > fp::fsubs(fns::Stage_GetBlastZoneRightOffset(ctx), (data).half_width())))
-        || (y < fp::fadds(
-            (data).half_height(),
-            fns::Stage_GetBlastZoneBottomOffset(ctx),
-        )))
+    if (((x < {
+        let __t1 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+        fp::fadds((fp).cpu().half_width(), __t1)
+    }) || (x > fp::fsubs(fns::Stage_GetBlastZoneRightOffset(ctx), (data).half_width())))
+        || (y < {
+            let __t2 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+            fp::fadds((data).half_height(), __t2)
+        }))
         || (y > fp::fsubs(fns::Stage_GetBlastZoneTopOffset(ctx), (data).half_height()))
     {
         return 1_i32;
@@ -17138,14 +17164,14 @@ fn inl_ftCo_800A4038_inline0<'a>(
     let mut data = data;
     let mut x = x;
     let mut y = y;
-    if (((x < fp::fadds(
-        (fp).cpu().half_width(),
-        fns::Stage_GetBlastZoneLeftOffset(ctx),
-    )) || (x > fp::fsubs(fns::Stage_GetBlastZoneRightOffset(ctx), (data).half_width())))
-        || (y < fp::fadds(
-            (data).half_height(),
-            fns::Stage_GetBlastZoneBottomOffset(ctx),
-        )))
+    if (((x < {
+        let __t1 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+        fp::fadds((fp).cpu().half_width(), __t1)
+    }) || (x > fp::fsubs(fns::Stage_GetBlastZoneRightOffset(ctx), (data).half_width())))
+        || (y < {
+            let __t2 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+            fp::fadds((data).half_height(), __t2)
+        }))
         || (y > fp::fsubs(fns::Stage_GetBlastZoneTopOffset(ctx), (data).half_height()))
     {
         return 1_i32;
@@ -17157,15 +17183,25 @@ fn inl_ftCo_800A4768_inline0<'a>(ctx: &'a Ctx, fp: Fighter<'a>, p: Vec<'a>) -> i
     let mut fp = fp;
     let mut p = p;
     let mut data: CpuFighter<'a> = (fp).cpu();
-    if ((((p).x() < fp::fadds((data).half_width(), fns::Stage_GetBlastZoneLeftOffset(ctx)))
-        || ((p).x() > fp::fsubs(fns::Stage_GetBlastZoneRightOffset(ctx), (data).half_width())))
-        || ((p).y()
-            < fp::fadds(
-                (data).half_height(),
-                fns::Stage_GetBlastZoneBottomOffset(ctx),
-            )))
-        || ((p).y() > fp::fsubs(fns::Stage_GetBlastZoneTopOffset(ctx), (data).half_height()))
-    {
+    if ((({
+        let __t2 = {
+            let __t1 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+            fp::fadds((data).half_width(), __t1)
+        };
+        (p).x() < __t2
+    }) || ({
+        let __t3 = fp::fsubs(fns::Stage_GetBlastZoneRightOffset(ctx), (data).half_width());
+        (p).x() > __t3
+    })) || ({
+        let __t5 = {
+            let __t4 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+            fp::fadds((data).half_height(), __t4)
+        };
+        (p).y() < __t5
+    })) || ({
+        let __t6 = fp::fsubs(fns::Stage_GetBlastZoneTopOffset(ctx), (data).half_height());
+        (p).y() > __t6
+    }) {
         return 1_i32;
     }
     return 0_i32;
@@ -17438,12 +17474,14 @@ fn inl_ftCo_800A6700_inline0<'a>(ctx: &'a Ctx, fp: Fighter<'a>, x: f64, y: f64) 
     let mut x = x;
     let mut y = y;
     let mut data: CpuFighter<'a> = (fp).cpu();
-    if (((x < fp::fadds((data).half_width(), fns::Stage_GetBlastZoneLeftOffset(ctx)))
-        || (x > fp::fsubs(fns::Stage_GetBlastZoneRightOffset(ctx), (data).half_width())))
-        || (y < fp::fadds(
-            (data).half_height(),
-            fns::Stage_GetBlastZoneBottomOffset(ctx),
-        )))
+    if (((x < {
+        let __t1 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+        fp::fadds((data).half_width(), __t1)
+    }) || (x > fp::fsubs(fns::Stage_GetBlastZoneRightOffset(ctx), (data).half_width())))
+        || (y < {
+            let __t2 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+            fp::fadds((data).half_height(), __t2)
+        }))
         || (y > fp::fsubs(fns::Stage_GetBlastZoneTopOffset(ctx), (data).half_height()))
     {
         return 1_i32;
@@ -17456,12 +17494,14 @@ fn inl_ftCo_800A6700_inline0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, x: f64, 
     let mut x = x;
     let mut y = y;
     let mut data: CpuFighter<'a> = (fp).cpu();
-    if (((x < fp::fadds((data).half_width(), fns::Stage_GetBlastZoneLeftOffset(ctx)))
-        || (x > fp::fsubs(fns::Stage_GetBlastZoneRightOffset(ctx), (data).half_width())))
-        || (y < fp::fadds(
-            (data).half_height(),
-            fns::Stage_GetBlastZoneBottomOffset(ctx),
-        )))
+    if (((x < {
+        let __t1 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+        fp::fadds((data).half_width(), __t1)
+    }) || (x > fp::fsubs(fns::Stage_GetBlastZoneRightOffset(ctx), (data).half_width())))
+        || (y < {
+            let __t2 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+            fp::fadds((data).half_height(), __t2)
+        }))
         || (y > fp::fsubs(fns::Stage_GetBlastZoneTopOffset(ctx), (data).half_height()))
     {
         return 1_i32;

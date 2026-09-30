@@ -270,15 +270,19 @@ pub fn ftCo_DamageIce_Init<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     ));
     {
         let mut effect_param: Val<'a, F32> = param;
-        fns::efAsync_Spawn(
-            ctx,
-            (fp).gobj(),
-            (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, (fp).gobj()))).x60C_ref(),
-            (3_i32 as u32),
-            (0x415_i32 as u32),
-            effect_joint,
-            &[VarArg::Int(Handle::addr(effect_param))],
-        );
+        {
+            let __t3 =
+                (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, (fp).gobj()))).x60C_ref();
+            fns::efAsync_Spawn(
+                ctx,
+                (fp).gobj(),
+                __t3,
+                (3_i32 as u32),
+                (0x415_i32 as u32),
+                effect_joint,
+                &[VarArg::Int(Handle::addr(effect_param))],
+            )
+        };
     }
     (fp).set_x2219_b0((1_i32 as u8));
     fns::ftColl_8007B0C0(ctx, (fp).gobj(), (enums::HurtCapsule_Intangible as i32));
@@ -373,15 +377,19 @@ pub fn ftCo_DamageIce_HitWhileFrozen<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     ));
     {
         let mut effect_param: Val<'a, F32> = param;
-        fns::efAsync_Spawn(
-            ctx,
-            (fp).gobj(),
-            (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, (fp).gobj()))).x60C_ref(),
-            (3_i32 as u32),
-            (0x415_i32 as u32),
-            effect_joint,
-            &[VarArg::Int(Handle::addr(effect_param))],
-        );
+        {
+            let __t3 =
+                (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, (fp).gobj()))).x60C_ref();
+            fns::efAsync_Spawn(
+                ctx,
+                (fp).gobj(),
+                __t3,
+                (3_i32 as u32),
+                (0x415_i32 as u32),
+                effect_joint,
+                &[VarArg::Int(Handle::addr(effect_param))],
+            )
+        };
     }
     (fp).set_x2219_b0((1_i32 as u8));
     fns::ftColl_8007B0C0(ctx, (fp).gobj(), (enums::HurtCapsule_Intangible as i32));

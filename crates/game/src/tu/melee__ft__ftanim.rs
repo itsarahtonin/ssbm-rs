@@ -504,17 +504,16 @@ pub fn ftAnim_8006E9B4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     if (fp).x8A4_animBlendFrames() == 0.0 {
         fns::HSD_JObjClearFlagsAll(ctx, jobj, ((shl_i32(1_i32, (17_i32 as u32))) as u32));
         if ((fp).x594().x0().x594_b0() != 0) {
-            fns::ftAnim_8006E054(
-                ctx,
-                fp,
-                jobj,
-                (Handle::add(
+            {
+                let __t1 =
+                    (Handle::add((fp).parts(), fns::ftParts_GetBoneIndex(ctx, fp, 53_i32))).joint();
+                let __t2 = (Handle::add(
                     (fp).parts(),
                     fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_TransN as i32)),
                 ))
-                .joint(),
-                (Handle::add((fp).parts(), fns::ftParts_GetBoneIndex(ctx, fp, 53_i32))).joint(),
-            );
+                .joint();
+                fns::ftAnim_8006E054(ctx, fp, jobj, __t2, __t1)
+            };
         } else {
             fns::ftAnim_8006E7B8(ctx, fp, (enums::FtPart_TopN as i32));
         }
@@ -534,17 +533,16 @@ pub fn ftAnim_8006E9B4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
         fns::ftAnim_8006E7B8(ctx, fp, (enums::FtPart_TopN as i32));
         if ((fp).x594().x0().x594_b0() != 0) {
-            fns::ftAnim_8006E054(
-                ctx,
-                fp,
-                anim_jobj,
-                (Handle::add(
+            {
+                let __t3 =
+                    (Handle::add((fp).parts(), fns::ftParts_GetBoneIndex(ctx, fp, 53_i32))).joint();
+                let __t4 = (Handle::add(
                     (fp).parts(),
                     fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_TransN as i32)),
                 ))
-                .x4_jobj2(),
-                (Handle::add((fp).parts(), fns::ftParts_GetBoneIndex(ctx, fp, 53_i32))).joint(),
-            );
+                .x4_jobj2();
+                fns::ftAnim_8006E054(ctx, fp, anim_jobj, __t4, __t3)
+            };
         } else {
             fns::HSD_JObjAnimAll(ctx, anim_jobj);
         }
@@ -2540,17 +2538,15 @@ pub fn ftAnim_80070CC4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
         );
         return;
     }
-    fns::ftAnim_8006FA58(
-        ctx,
-        fp,
-        ((r28).x0() as i32),
-        inl_ftAnim_8006F994_unfused(
+    {
+        let __t1 = inl_ftAnim_8006F994_unfused(
             ctx,
             fp,
             (Handle::add((fp).parts(), ((r28).x0() as i32))).joint(),
             (fp).x108_costume_joint(),
-        ),
-    );
+        );
+        fns::ftAnim_8006FA58(ctx, fp, ((r28).x0() as i32), __t1)
+    };
 }
 
 pub fn ftAnim_80070E74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

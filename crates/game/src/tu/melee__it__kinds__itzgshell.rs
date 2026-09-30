@@ -191,10 +191,13 @@ pub fn it_802DDEB4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 let mut attrs_2: itZGShell_Attrs<'a> = inl_get_attrs_unfused(ctx, ip_2);
                 fns::it_802756D0(ctx, gobj);
                 fns::it_80275444(ctx, gobj);
-                (ip_2).x40_vel().set_x(fp::fmuls(
-                    fp::fmuls(fp::fneg((ip_2).x40_vel().x()), (attrs_2).xC()),
-                    fns::HSD_Randf(ctx),
-                ));
+                (ip_2).x40_vel().set_x({
+                    let __t1 = fns::HSD_Randf(ctx);
+                    fp::fmuls(
+                        fp::fmuls(fp::fneg((ip_2).x40_vel().x()), (attrs_2).xC()),
+                        __t1,
+                    )
+                });
                 (ip_2).x40_vel().set_y((attrs_2).x10());
                 fns::it_802762BC(ctx, ip_2);
                 (ip_2).xDD4_itemVar().zgshell().set_xE1C_b0((1_i32 as u8));
@@ -1155,10 +1158,10 @@ pub fn it_2725_Logic11_Clanked<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     attrs = Handle::cast::<itZGShell_Attrs<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
     fns::it_802756D0(ctx, gobj);
     fns::it_80275444(ctx, gobj);
-    (ip).x40_vel().set_x(fp::fmuls(
-        fp::fmuls(fp::fneg((ip).x40_vel().x()), (attrs).xC()),
-        fns::HSD_Randf(ctx),
-    ));
+    (ip).x40_vel().set_x({
+        let __t1 = fns::HSD_Randf(ctx);
+        fp::fmuls(fp::fmuls(fp::fneg((ip).x40_vel().x()), (attrs).xC()), __t1)
+    });
     (ip).x40_vel().set_y((attrs).x10());
     fns::it_802762BC(ctx, ip);
     (ip).xDD4_itemVar().zgshell().set_xE1C_b0((1_i32 as u8));
@@ -1670,10 +1673,10 @@ fn inl_it_2725_Logic11_Clanked_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> 
     attrs = Handle::cast::<itZGShell_Attrs<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
     fns::it_802756D0(ctx, gobj);
     fns::it_80275444(ctx, gobj);
-    (ip).x40_vel().set_x(fp::fmuls(
-        fp::fmuls(fp::fneg((ip).x40_vel().x()), (attrs).xC()),
-        fns::HSD_Randf(ctx),
-    ));
+    (ip).x40_vel().set_x({
+        let __t1 = fns::HSD_Randf(ctx);
+        fp::fmuls(fp::fmuls(fp::fneg((ip).x40_vel().x()), (attrs).xC()), __t1)
+    });
     (ip).x40_vel().set_y((attrs).x10());
     fns::it_802762BC(ctx, ip);
     (ip).xDD4_itemVar().zgshell().set_xE1C_b0((1_i32 as u8));

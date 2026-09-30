@@ -2001,18 +2001,21 @@ pub fn grStadium_801D3460<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         return;
     }
     temp_r29_2 = (fns::gm_8016AEEC(ctx) as i32);
-    let _ = fns::HSD_SisLib_803A6B98(
-        ctx,
-        (gp2).win_dynamic_p(),
-        125.0,
-        120.0,
-        cstr(ctx, 0x803e1588),
-        &[
-            VarArg::Int(div_i32(temp_r29_2, 60_i32) as u32),
-            VarArg::Int(rem_i32(temp_r29_2, 60_i32) as u32),
-            VarArg::Int((fns::gm_8016AF0C(ctx) as i32) as u32),
-        ],
-    );
+    let _ = {
+        let __t1 = VarArg::Int((fns::gm_8016AF0C(ctx) as i32) as u32);
+        fns::HSD_SisLib_803A6B98(
+            ctx,
+            (gp2).win_dynamic_p(),
+            125.0,
+            120.0,
+            cstr(ctx, 0x803e1588),
+            &[
+                VarArg::Int(div_i32(temp_r29_2, 60_i32) as u32),
+                VarArg::Int(rem_i32(temp_r29_2, 60_i32) as u32),
+                __t1,
+            ],
+        )
+    };
 }
 
 pub fn grStadium_801D384C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -2313,17 +2316,12 @@ pub fn grStadium_801D3BBC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                         && (fns::gm_8016C6C0(ctx, current_player_gobj) == 0_i32)
                     {
                         Handle::copy_from(colors.entries().get(0_i32).color(), {
-                            fns::gm_80160968(
-                                ctx,
-                                __ret_tmp,
-                                fns::gm_80160854(
-                                    ctx,
-                                    (player_num as u8),
-                                    (fns::Player_GetTeam(ctx, player_num) as u8),
-                                    (fns::gm_8016B168(ctx) as u8),
-                                    (fns::Player_GetPlayerSlotType(ctx, player_num) as u8),
-                                ),
-                            );
+                            fns::gm_80160968(ctx, __ret_tmp, {
+                                let __t1 = (fns::Player_GetPlayerSlotType(ctx, player_num) as u8);
+                                let __t2 = (fns::gm_8016B168(ctx) as u8);
+                                let __t3 = (fns::Player_GetTeam(ctx, player_num) as u8);
+                                fns::gm_80160854(ctx, (player_num as u8), __t3, __t2, __t1)
+                            });
                             __ret_tmp
                         });
                         colors.entries().get(0_i32).color().set_r(
@@ -2671,7 +2669,10 @@ pub fn grStadium_801D435C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
         'l3: while var_r28 < 5_i32 {
             'c4: {
                 let mut var_r4: u32 = (0_i32 as u32);
-                var_f31 = fp::fmuls((gp).u().stadium().xD4(), fns::HSD_Randf(ctx));
+                var_f31 = {
+                    let __t4 = fns::HSD_Randf(ctx);
+                    fp::fmuls((gp).u().stadium().xD4(), __t4)
+                };
                 {
                     var_r4 = (0_i32 as u32);
                     'l5: while (var_f31
@@ -2802,13 +2803,14 @@ pub fn grStadium_801D4548<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         'c3: {
                             r = fns::HSD_Randi(ctx, ((div_u32(16_u32, 4_u32)) as i32));
                         }
-                        if !(((gp).u().stadium().xE2() as i32)
-                            == ({
+                        if !({
+                            let __t3 = ({
                                 let __t2 = kinds.at(r).get();
                                 kind = __t2;
                                 __t2
-                            }))
-                        {
+                            });
+                            ((gp).u().stadium().xE2() as i32) == __t3
+                        }) {
                             break 'l2;
                         }
                     }
@@ -2889,11 +2891,11 @@ pub fn grStadium_801D4548<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
         if __case <= 3 {
             if {
-                let __t3 = (gp).u().stadium().xD8();
+                let __t4 = (gp).u().stadium().xD8();
                 (gp).u()
                     .stadium()
                     .set_xD8((gp).u().stadium().xD8().wrapping_add(1));
-                __t3
+                __t4
             } > (statics::melee__gr__grpstadium::yakumono_param(ctx).get()).x10()
             {
                 let mut cur_gp: Ground<'a> = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData(
@@ -2932,11 +2934,11 @@ pub fn grStadium_801D4548<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             } else {
                 inl_HSD_JObjSetScaleY(ctx, jobj, 0.05000000074505806);
                 if {
-                    let __t4 = (gp).u().stadium().xD8();
+                    let __t5 = (gp).u().stadium().xD8();
                     (gp).u()
                         .stadium()
                         .set_xD8((gp).u().stadium().xD8().wrapping_add(1));
-                    __t4
+                    __t5
                 } > (statics::melee__gr__grpstadium::yakumono_param(ctx).get()).x18()
                 {
                     fns::grAnime_801C7A04(
@@ -2947,9 +2949,9 @@ pub fn grStadium_801D4548<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         0.0,
                     );
                     new_jobj = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, {
-                        let __t5 = fns::grStadium_801D10F8(ctx, ((gp).u().stadium().xDE() as i32));
-                        new_gobj = __t5;
-                        __t5
+                        let __t6 = fns::grStadium_801D10F8(ctx, ((gp).u().stadium().xDE() as i32));
+                        new_gobj = __t6;
+                        __t6
                     })));
                     inl_HSD_JObjSetScaleY(ctx, new_jobj, min_scale);
                     inl_HSD_JObjSetTranslateY(ctx, new_jobj, fp::fneg(10.0));

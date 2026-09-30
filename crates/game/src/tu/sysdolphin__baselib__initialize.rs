@@ -258,12 +258,18 @@ pub fn HSD_OSInit<'a>(ctx: &'a Ctx) {
     statics::sysdolphin__baselib__initialize::memReport(ctx)
         .set_total(fns::OSGetPhysicalMemSize(ctx));
     statics::sysdolphin__baselib__initialize::memReport(ctx).set_system(
-        statics::sysdolphin__baselib__initialize::memReport(ctx)
-            .total()
-            .wrapping_sub(Handle::addr(fns::OSGetArenaHi(ctx)))
-            .wrapping_add(Handle::addr(fns::OSGetArenaLo(ctx)))
-            .wrapping_sub(statics::sysdolphin__baselib__initialize::memReport(ctx).xfb())
-            .wrapping_sub(statics::sysdolphin__baselib__initialize::memReport(ctx).gxfifo()),
+        {
+            let __t2 = Handle::addr(fns::OSGetArenaLo(ctx));
+            {
+                let __t1 = Handle::addr(fns::OSGetArenaHi(ctx));
+                statics::sysdolphin__baselib__initialize::memReport(ctx)
+                    .total()
+                    .wrapping_sub(__t1)
+            }
+            .wrapping_add(__t2)
+        }
+        .wrapping_sub(statics::sysdolphin__baselib__initialize::memReport(ctx).xfb())
+        .wrapping_sub(statics::sysdolphin__baselib__initialize::memReport(ctx).gxfifo()),
     );
     old_arena_lo = Handle::addr(fns::OSInitAlloc(
         ctx,
@@ -470,25 +476,30 @@ pub fn HSD_ObjDumpStat<'a>(ctx: &'a Ctx) {
         i = 0_i32;
         'l1: while !Handle::is_null(types.get(i).label()) {
             'c2: {
-                fns::OSReport(
-                    ctx,
-                    cstr(ctx, 0x80406c7c),
-                    &[
-                        VarArg::Int(Handle::addr(types.get(i).label())),
-                        VarArg::Int(inl_HSD_ObjAllocGetUsing_unfused(
-                            ctx,
-                            types.get(i).func().call::<_, _HSD_ObjAllocData<'a>>(()),
-                        ) as u32),
-                        VarArg::Int(inl_HSD_ObjAllocGetFreed_unfused(
-                            ctx,
-                            types.get(i).func().call::<_, _HSD_ObjAllocData<'a>>(()),
-                        ) as u32),
-                        VarArg::Int(inl_HSD_ObjAllocGetPeak_unfused(
-                            ctx,
-                            types.get(i).func().call::<_, _HSD_ObjAllocData<'a>>(()),
-                        ) as u32),
-                    ],
-                );
+                {
+                    let __t1 = VarArg::Int(inl_HSD_ObjAllocGetPeak_unfused(
+                        ctx,
+                        types.get(i).func().call::<_, _HSD_ObjAllocData<'a>>(()),
+                    ) as u32);
+                    let __t2 = VarArg::Int(inl_HSD_ObjAllocGetFreed_unfused(
+                        ctx,
+                        types.get(i).func().call::<_, _HSD_ObjAllocData<'a>>(()),
+                    ) as u32);
+                    let __t3 = VarArg::Int(inl_HSD_ObjAllocGetUsing_unfused(
+                        ctx,
+                        types.get(i).func().call::<_, _HSD_ObjAllocData<'a>>(()),
+                    ) as u32);
+                    fns::OSReport(
+                        ctx,
+                        cstr(ctx, 0x80406c7c),
+                        &[
+                            VarArg::Int(Handle::addr(types.get(i).label())),
+                            __t3,
+                            __t2,
+                            __t1,
+                        ],
+                    )
+                };
             }
             i = i.wrapping_add(1);
         }
@@ -520,8 +531,11 @@ pub fn HSD_SetInitParameter<'a>(ctx: &'a Ctx, param: i32) -> i32 {
         };
         if __case <= 0 {
             {
-                let mut fifo_size: u32 =
-                    ((Handle::cast::<Val<'a, u32>>(fns::__va_arg(ctx, ap.get(0), 1_u8))).get());
+                let mut fifo_size: u32 = ((Handle::cast::<Val<'a, u32>>({
+                    let __t1 = 1_u8;
+                    fns::__va_arg(ctx, ap.get(0), __t1)
+                }))
+                .get());
                 if fifo_size > (0_i32 as u32) {
                     statics::sysdolphin__baselib__initialize::iparam_fifo_size(ctx).set(fifo_size);
                     ok = 1_i32;
@@ -531,8 +545,11 @@ pub fn HSD_SetInitParameter<'a>(ctx: &'a Ctx, param: i32) -> i32 {
         }
         if __case <= 1 {
             {
-                let mut xfb_max_num: u32 =
-                    ((Handle::cast::<Val<'a, u32>>(fns::__va_arg(ctx, ap.get(0), 1_u8))).get());
+                let mut xfb_max_num: u32 = ((Handle::cast::<Val<'a, u32>>({
+                    let __t2 = 1_u8;
+                    fns::__va_arg(ctx, ap.get(0), __t2)
+                }))
+                .get());
                 if xfb_max_num > (0_i32 as u32) {
                     statics::sysdolphin__baselib__initialize::iparam_xfb_max_num(ctx)
                         .set((xfb_max_num as i32));
@@ -543,8 +560,11 @@ pub fn HSD_SetInitParameter<'a>(ctx: &'a Ctx, param: i32) -> i32 {
         }
         if __case <= 2 {
             {
-                let mut heap_size: u32 =
-                    ((Handle::cast::<Val<'a, u32>>(fns::__va_arg(ctx, ap.get(0), 1_u8))).get());
+                let mut heap_size: u32 = ((Handle::cast::<Val<'a, u32>>({
+                    let __t3 = 1_u8;
+                    fns::__va_arg(ctx, ap.get(0), __t3)
+                }))
+                .get());
                 if heap_size > (0_i32 as u32) {
                     statics::sysdolphin__baselib__initialize::iparam_heap_max_num(ctx)
                         .set((heap_size as i32));
@@ -555,8 +575,11 @@ pub fn HSD_SetInitParameter<'a>(ctx: &'a Ctx, param: i32) -> i32 {
         }
         if __case <= 3 {
             {
-                let mut heap_size_2: u32 =
-                    ((Handle::cast::<Val<'a, u32>>(fns::__va_arg(ctx, ap.get(0), 1_u8))).get());
+                let mut heap_size_2: u32 = ((Handle::cast::<Val<'a, u32>>({
+                    let __t4 = 1_u8;
+                    fns::__va_arg(ctx, ap.get(0), __t4)
+                }))
+                .get());
                 if heap_size_2 > (0_i32 as u32) {
                     statics::sysdolphin__baselib__initialize::iparam_audio_heap_size(ctx)
                         .set(heap_size_2);
@@ -567,11 +590,10 @@ pub fn HSD_SetInitParameter<'a>(ctx: &'a Ctx, param: i32) -> i32 {
         }
         if __case <= 4 {
             statics::sysdolphin__baselib__initialize::rmode(ctx).set(
-                ((Handle::cast::<Ptr<'a, _GXRenderModeObj<'a>>>(fns::__va_arg(
-                    ctx,
-                    ap.get(0),
-                    1_u8,
-                )))
+                ((Handle::cast::<Ptr<'a, _GXRenderModeObj<'a>>>({
+                    let __t5 = 1_u8;
+                    fns::__va_arg(ctx, ap.get(0), __t5)
+                }))
                 .get()),
             );
             break 's1;

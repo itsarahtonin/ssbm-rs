@@ -105,12 +105,17 @@ pub fn ftCa_SpecialAirN_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
         {
             let mut vel: f64 = inl_ftCaptain_SpecialN_GetAngleVel_unfused(ctx, fp);
-            (fp).self_vel()
-                .set_y(fp::fmuls((da).specialn_vel_x(), fns::sinf(ctx, vel)));
-            (fp).self_vel().set_x(fp::fmuls(
-                (da).specialn_vel_x(),
-                (fp::fmuls((fp).facing_dir(), fns::cosf(ctx, vel))),
-            ));
+            (fp).self_vel().set_y({
+                let __t1 = fns::sinf(ctx, vel);
+                fp::fmuls((da).specialn_vel_x(), __t1)
+            });
+            (fp).self_vel().set_x({
+                let __t3 = ({
+                    let __t2 = fns::cosf(ctx, vel);
+                    fp::fmuls((fp).facing_dir(), __t2)
+                });
+                fp::fmuls((da).specialn_vel_x(), __t3)
+            });
         }
     }
 }

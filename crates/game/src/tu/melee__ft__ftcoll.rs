@@ -3064,16 +3064,21 @@ pub fn ftColl_80079C70<'a>(
     let mut hit = hit;
     let mut unk_count = unk_count;
     let mut co: ftCo_DatAttrs<'a> = (fp).co_attrs();
-    return inl_ftColl_80079AB0(
-        ctx,
-        fp,
-        hit,
-        (unk_count as u32),
-        fns::gm_8016B248(ctx),
-        fns::Player_GetAttackRatio(ctx, ((attacker).player_idx() as i32)),
-        fns::Player_GetDefenseRatio(ctx, ((fp).player_idx() as i32)),
-        (co).weight(),
-    );
+    return {
+        let __t1 = fns::Player_GetDefenseRatio(ctx, ((fp).player_idx() as i32));
+        let __t2 = fns::Player_GetAttackRatio(ctx, ((attacker).player_idx() as i32));
+        let __t3 = fns::gm_8016B248(ctx);
+        inl_ftColl_80079AB0(
+            ctx,
+            fp,
+            hit,
+            (unk_count as u32),
+            __t3,
+            __t2,
+            __t1,
+            (co).weight(),
+        )
+    };
 }
 
 pub fn ftColl_80079EA8<'a>(

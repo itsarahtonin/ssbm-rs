@@ -565,13 +565,14 @@ pub fn onEnterVs<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
             x5_flag = 1_i32;
             if (((ev).x0() as i8) as i32) == ((bonus).c_kind() as i32) {
                 let mut c_8: u8 = 0;
-                if ((ev).x1() as i32)
-                    == (({
+                if {
+                    let __t2 = (({
                         let __t1 = (bonus).color();
                         c_8 = __t1;
                         __t1
-                    }) as i32)
-                {
+                    }) as i32);
+                    ((ev).x1() as i32) == __t2
+                } {
                     (ev).x50()
                         .at(1_i32)
                         .set(inl_gm_GetNextColor_unfused(ctx, c_8));
@@ -738,14 +739,13 @@ pub fn onExitVs<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
         fns::gm_ChangeGameModeAfterCurrentScene(ctx, (enums::GM_MENU as i32));
         return;
     }
-    (ev).set_x3C(
-        (ev).x3C().wrapping_add(fns::gm_80168940(
-            ctx,
-            statics::melee__gm__gmevent::vs_exit_data(ctx)
-                .get(0_i32)
-                .match_end(),
-        )),
+    let __t1 = fns::gm_80168940(
+        ctx,
+        statics::melee__gm__gmevent::vs_exit_data(ctx)
+            .get(0_i32)
+            .match_end(),
     );
+    (ev).set_x3C((ev).x3C().wrapping_add(__t1));
     (ev).set_x40(
         (ev).x40()
             .wrapping_add(((exit).match_end().frame_count() as i32)),
@@ -800,8 +800,10 @@ pub fn onExitVs<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     } else {
         kind = ((enums::ChKind_Max as i32) as u8);
     }
-    if (((ev).unk_535() as i32) == (fns::gm_801BEBC0(ctx, (50_i32 as u8)) as i32))
-        && (((exit).match_end().player_standings().get(0_i32).stocks() as i32) == 3_i32)
+    if ({
+        let __t2 = (fns::gm_801BEBC0(ctx, (50_i32 as u8)) as i32);
+        ((ev).unk_535() as i32) == __t2
+    }) && (((exit).match_end().player_standings().get(0_i32).stocks() as i32) == 3_i32)
     {
         fns::gmMainLib_8015CF84(ctx);
     }
@@ -1355,8 +1357,10 @@ pub fn gm_801BC4F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             }
         }
         if temp_r30 == (31_i32 as u32) {
-            var_r27 = (fns::Player_GetKOsByPlayerIndex(ctx, 0_i32, 1_i32)
-                .wrapping_sub(fns::pl_8003FBFC(ctx, 0_i32)) as u32);
+            var_r27 = ({
+                let __t1 = fns::pl_8003FBFC(ctx, 0_i32);
+                fns::Player_GetKOsByPlayerIndex(ctx, 0_i32, 1_i32).wrapping_sub(__t1)
+            } as u32);
         }
         if var_r27 > (1_i32.wrapping_neg() as u32) {
             var_r27 = (1_i32.wrapping_neg() as u32);
@@ -1413,7 +1417,8 @@ pub fn gm_801BC670<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     } else {
         (temp_r31).set_x38((33_i32 as u8));
     }
-    (temp_r31).set_x34((((temp_r31).x34() as u32).wrapping_add(fns::gm_GetFrameCount(ctx)) as i32));
+    let __t1 = fns::gm_GetFrameCount(ctx);
+    (temp_r31).set_x34((((temp_r31).x34() as u32).wrapping_add(__t1) as i32));
     fns::Player_80036844(ctx, 0_i32, 1_i32);
     fns::lbAudioAx_80028B90(ctx);
     fns::gm_SetGameSpeed(ctx, 1.0);
@@ -1508,7 +1513,10 @@ pub fn gm_801BC754<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 var_r0_2 = 0_i32;
             }
             if (var_r0_2 != 0) {
-                if ((temp_r29).x7() as i32) == statics::melee__gm__gmevent::gm_801BC488(ctx) {
+                if {
+                    let __t1 = statics::melee__gm__gmevent::gm_801BC488(ctx);
+                    ((temp_r29).x7() as i32) == __t1
+                } {
                     statics::melee__gm__gmevent::gm_801BC4F4(ctx, gobj);
                     return;
                 }
@@ -2781,13 +2789,10 @@ pub fn gm_801BE638<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             fns::lbAudioAx_80028B6C(ctx);
         }
         if (rem_i32((temp_r30).x10(), 30_i32)) == 0_i32 {
-            fns::gm_80167858(
-                ctx,
-                ((temp_r30).x6() as i32),
-                (fns::Player_GetNametagSlotID(ctx, 0_i32) as i32),
-                2_i32,
-                30_i32,
-            );
+            {
+                let __t1 = (fns::Player_GetNametagSlotID(ctx, 0_i32) as i32);
+                fns::gm_80167858(ctx, ((temp_r30).x6() as i32), __t1, 2_i32, 30_i32)
+            };
             fns::Camera_RequestQuake(ctx, (enums::QuakeKind_Medium as i32), null::<Vec<'a>>(ctx));
         }
         temp_r3_2 = (temp_r30).x10();

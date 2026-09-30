@@ -54,21 +54,21 @@ pub fn fn_80228D38<'a>(ctx: &'a Ctx) {
         i = 0_i32;
         'l1: while i < 2_i32 {
             'c2: {
-                (Handle::add(statics::melee__db__dbbonus::db_804D6B9C(ctx).get(), i)).set_text(
-                    fns::DevText_Create(
-                        ctx,
-                        (i.wrapping_add(10_i32) as i8),
-                        i.wrapping_mul(0x12c_i32),
-                        0_i32,
-                        25_i32,
-                        30_i32,
-                        Handle::cast::<Addr<'a>>(
-                            (Handle::add(statics::melee__db__dbbonus::db_804D6B9C(ctx).get(), i))
-                                .buffer()
-                                .at(0),
-                        ),
+                let __t1 = fns::DevText_Create(
+                    ctx,
+                    (i.wrapping_add(10_i32) as i8),
+                    i.wrapping_mul(0x12c_i32),
+                    0_i32,
+                    25_i32,
+                    30_i32,
+                    Handle::cast::<Addr<'a>>(
+                        (Handle::add(statics::melee__db__dbbonus::db_804D6B9C(ctx).get(), i))
+                            .buffer()
+                            .at(0),
                     ),
                 );
+                (Handle::add(statics::melee__db__dbbonus::db_804D6B9C(ctx).get(), i))
+                    .set_text(__t1);
                 if !Handle::is_null(
                     (Handle::add(statics::melee__db__dbbonus::db_804D6B9C(ctx).get(), i)).text(),
                 ) {
@@ -141,24 +141,16 @@ pub fn fn_80228E54<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32, arg2: i32) {
     fns::DevText_Erase(ctx, text);
     fns::DevText_SetCursorXY(ctx, text, 0_i32, 0_i32);
     if arg1 == 0_i32 {
-        fns::DevText_Printf(
-            ctx,
-            text,
-            cstr(ctx, 0x803eae18),
-            &[
-                VarArg::Int(fns::gm_GetMatchEndPlayerScore(ctx, 0_i32) as u32),
-                VarArg::Int(fns::gm_GetMatchEndPlayerScore(ctx, 1_i32) as u32),
-            ],
-        );
-        fns::DevText_Printf(
-            ctx,
-            text,
-            cstr(ctx, 0x803eae28),
-            &[
-                VarArg::Int(fns::gm_GetMatchEndPlayerScore(ctx, 2_i32) as u32),
-                VarArg::Int(fns::gm_GetMatchEndPlayerScore(ctx, 3_i32) as u32),
-            ],
-        );
+        {
+            let __t1 = VarArg::Int(fns::gm_GetMatchEndPlayerScore(ctx, 1_i32) as u32);
+            let __t2 = VarArg::Int(fns::gm_GetMatchEndPlayerScore(ctx, 0_i32) as u32);
+            fns::DevText_Printf(ctx, text, cstr(ctx, 0x803eae18), &[__t2, __t1])
+        };
+        {
+            let __t3 = VarArg::Int(fns::gm_GetMatchEndPlayerScore(ctx, 3_i32) as u32);
+            let __t4 = VarArg::Int(fns::gm_GetMatchEndPlayerScore(ctx, 2_i32) as u32);
+            fns::DevText_Printf(ctx, text, cstr(ctx, 0x803eae28), &[__t4, __t3])
+        };
         fns::DevText_Printf(
             ctx,
             text,
@@ -195,17 +187,20 @@ pub fn fn_80228E54<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32, arg2: i32) {
                             ))],
                         );
                     } else {
-                        fns::DevText_Printf(
-                            ctx,
-                            text,
-                            cstr(ctx, 0x804d4b1c),
-                            &[
-                                VarArg::Int(Handle::addr(
-                                    (Handle::add(fns::db_bonus_names(ctx).get(), bonus)).get(),
-                                )),
-                                VarArg::Int(fns::pl_80039418(ctx, arg0, bonus) as u32),
-                            ],
-                        );
+                        {
+                            let __t5 = VarArg::Int(fns::pl_80039418(ctx, arg0, bonus) as u32);
+                            fns::DevText_Printf(
+                                ctx,
+                                text,
+                                cstr(ctx, 0x804d4b1c),
+                                &[
+                                    VarArg::Int(Handle::addr(
+                                        (Handle::add(fns::db_bonus_names(ctx).get(), bonus)).get(),
+                                    )),
+                                    __t5,
+                                ],
+                            )
+                        };
                     }
                     y_pos = y_pos.wrapping_add(1_i32);
                     fns::DevText_SetCursorXY(ctx, text, 0_i32, y_pos);
@@ -385,24 +380,16 @@ fn inl_fn_80228E54_unfused<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32, arg2: i32) {
     fns::DevText_Erase(ctx, text);
     fns::DevText_SetCursorXY(ctx, text, 0_i32, 0_i32);
     if arg1 == 0_i32 {
-        fns::DevText_Printf(
-            ctx,
-            text,
-            cstr(ctx, 0x803eae18),
-            &[
-                VarArg::Int(fns::gm_GetMatchEndPlayerScore(ctx, 0_i32) as u32),
-                VarArg::Int(fns::gm_GetMatchEndPlayerScore(ctx, 1_i32) as u32),
-            ],
-        );
-        fns::DevText_Printf(
-            ctx,
-            text,
-            cstr(ctx, 0x803eae28),
-            &[
-                VarArg::Int(fns::gm_GetMatchEndPlayerScore(ctx, 2_i32) as u32),
-                VarArg::Int(fns::gm_GetMatchEndPlayerScore(ctx, 3_i32) as u32),
-            ],
-        );
+        {
+            let __t1 = VarArg::Int(fns::gm_GetMatchEndPlayerScore(ctx, 1_i32) as u32);
+            let __t2 = VarArg::Int(fns::gm_GetMatchEndPlayerScore(ctx, 0_i32) as u32);
+            fns::DevText_Printf(ctx, text, cstr(ctx, 0x803eae18), &[__t2, __t1])
+        };
+        {
+            let __t3 = VarArg::Int(fns::gm_GetMatchEndPlayerScore(ctx, 3_i32) as u32);
+            let __t4 = VarArg::Int(fns::gm_GetMatchEndPlayerScore(ctx, 2_i32) as u32);
+            fns::DevText_Printf(ctx, text, cstr(ctx, 0x803eae28), &[__t4, __t3])
+        };
         fns::DevText_Printf(
             ctx,
             text,
@@ -439,17 +426,20 @@ fn inl_fn_80228E54_unfused<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32, arg2: i32) {
                             ))],
                         );
                     } else {
-                        fns::DevText_Printf(
-                            ctx,
-                            text,
-                            cstr(ctx, 0x804d4b1c),
-                            &[
-                                VarArg::Int(Handle::addr(
-                                    (Handle::add(fns::db_bonus_names(ctx).get(), bonus)).get(),
-                                )),
-                                VarArg::Int(fns::pl_80039418(ctx, arg0, bonus) as u32),
-                            ],
-                        );
+                        {
+                            let __t5 = VarArg::Int(fns::pl_80039418(ctx, arg0, bonus) as u32);
+                            fns::DevText_Printf(
+                                ctx,
+                                text,
+                                cstr(ctx, 0x804d4b1c),
+                                &[
+                                    VarArg::Int(Handle::addr(
+                                        (Handle::add(fns::db_bonus_names(ctx).get(), bonus)).get(),
+                                    )),
+                                    __t5,
+                                ],
+                            )
+                        };
                     }
                     y_pos = y_pos.wrapping_add(1_i32);
                     fns::DevText_SetCursorXY(ctx, text, 0_i32, y_pos);

@@ -79,13 +79,13 @@ pub fn mnSoundTest_8024A790<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     }
     if (temp_f31 < 0.8999999761581421) || ((temp_r31).unk8() < 1.0) {
         temp_r30 = fp::fctiwz(
-            (fp::fmuls(
-                (temp_r31).unk8(),
-                (fp::fmuls(
+            ({
+                let __t1 = (fp::fmuls(
                     temp_f31,
                     fp::frsp(fns::gm_801601C4(ctx, (fns::gmMainLib_8015ED74(ctx) as i8)) as f64),
-                )),
-            )),
+                ));
+                fp::fmuls((temp_r31).unk8(), __t1)
+            }),
         );
         fns::lbAudioAx_80024614(ctx, temp_r30);
         statics::melee__mn__mnsoundtest::mnSoundTest_804D6C48(ctx).set(temp_r30);
@@ -98,13 +98,13 @@ pub fn mnSoundTest_8024A790<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     }
     if (temp_f30 < 0.8999999761581421) || ((temp_r31).unkC() < 1.0) {
         temp_r30_2 = fp::fctiwz(
-            (fp::fmuls(
-                (temp_r31).unkC(),
-                (fp::fmuls(
+            ({
+                let __t2 = (fp::fmuls(
                     temp_f30,
                     fp::frsp(fns::gm_80160244(ctx, (fns::gmMainLib_8015ED74(ctx) as i8)) as f64),
-                )),
-            )),
+                ));
+                fp::fmuls((temp_r31).unkC(), __t2)
+            }),
         );
         let _ = fns::lbAudioAx_800245F4(ctx, temp_r30_2);
         statics::melee__mn__mnsoundtest::mnSoundTest_804D6C4C(ctx).set(temp_r30_2);
@@ -592,13 +592,14 @@ pub fn fn_8024B2B0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     }
     if ((user_data).unk0() as i32) == 0_i32 {
         if ((inputs & ((enums::MenuInput_AButton as i32) as u64)) != 0) {
-            if ((user_data).unk2() as u32)
-                == (({
+            if {
+                let __t3 = (({
                     let __t2 = ((user_data).unk1() as i32);
                     sound_id = __t2;
                     __t2
-                }) as u32)
-            {
+                }) as u32);
+                ((user_data).unk2() as u32) == __t3
+            } {
                 md2 = Handle::cast::<soundtest_user_data<'a>>(
                     (statics::melee__mn__mnsoundtest::mnSoundTest_804D6C40(ctx).get()).user_data(),
                 );
@@ -1225,7 +1226,10 @@ fn inl_mnSoundTest_PlaySampleAnim_unfused<'a>(
             VarArg::Int(1_i32.wrapping_neg() as u32),
         ],
     );
-    fns::HSD_JObjReqAnimAll(ctx, (pj).get(), fns::mn_8022F298(ctx, (pj).get()));
+    {
+        let __t1 = fns::mn_8022F298(ctx, (pj).get());
+        fns::HSD_JObjReqAnimAll(ctx, (pj).get(), __t1)
+    };
     fns::mn_8022F3D8(ctx, (pj).get(), (255_u32 as u8), (enums::MOBJ_MASK as i32));
     fns::HSD_JObjAnimAll(ctx, (pj).get());
     sound_kind = (fns::data_2(ctx).get(((p).get() as i32)).idx() as i32);

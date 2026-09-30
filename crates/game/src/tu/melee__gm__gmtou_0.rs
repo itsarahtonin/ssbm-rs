@@ -1047,20 +1047,21 @@ pub fn fn_80191FD4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         child2 = (jobj).child();
     }
     hud = fns::fn_8018F6DC(ctx, fns::fn_8018F3BC(ctx, (idx as i32)));
-    slot = (({
-        let __t1 = (state).x2_ref();
-        x2b = __t1;
-        __t1
-    })
-    .get() as i32)
-        .wrapping_add(
-            (({
-                let __t2 = (state).x3_ref();
-                x3b = __t2;
-                __t2
-            })
-            .get() as i32),
-        );
+    slot = {
+        let __t3 = (({
+            let __t2 = (state).x3_ref();
+            x3b = __t2;
+            __t2
+        })
+        .get() as i32);
+        (({
+            let __t1 = (state).x2_ref();
+            x2b = __t1;
+            __t1
+        })
+        .get() as i32)
+            .wrapping_add(__t3)
+    };
     if (inl_fn_80191FD4_is_selected_unfused(ctx, hud, slot, tm) != 0) {
         fns::fn_8019044C(
             ctx,
@@ -1094,23 +1095,27 @@ pub fn fn_80191FD4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::HSD_JObjClearFlagsAll(ctx, sibling2, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
     hud = fns::fn_8018F6DC(ctx, fns::fn_8018F3BC(ctx, (idx as i32)));
     if (fns::lbl_803D9D20(ctx).x72().at(hud).get() as i32) != 0_i32 {
-        if ((tm)
-            .x37()
-            .get(((x2b).get() as i32).wrapping_add(((x3b).get() as i32)))
-            .x3() as i32)
-            == fns::fn_8018F6DC(ctx, fns::fn_8018F3BC(ctx, (idx as i32)))
-        {
+        if {
+            let __t4 = fns::fn_8018F6DC(ctx, fns::fn_8018F3BC(ctx, (idx as i32)));
+            ((tm)
+                .x37()
+                .get(((x2b).get() as i32).wrapping_add(((x3b).get() as i32)))
+                .x3() as i32)
+                == __t4
+        } {
             fns::fn_8019044C(
                 ctx,
                 sibling2,
                 fp::frsp(
-                    ((((tm)
-                        .x37()
-                        .get(((x2b).get() as i32).wrapping_add(((x3b).get() as i32)))
-                        .x7() as i32)
-                        .wrapping_mul(30_i32))
-                    .wrapping_add(fns::fn_8018F6DC(ctx, fns::fn_8018F3BC(ctx, (idx as i32)))))
-                        as f64,
+                    ({
+                        let __t5 = fns::fn_8018F6DC(ctx, fns::fn_8018F3BC(ctx, (idx as i32)));
+                        (((tm)
+                            .x37()
+                            .get(((x2b).get() as i32).wrapping_add(((x3b).get() as i32)))
+                            .x7() as i32)
+                            .wrapping_mul(30_i32))
+                        .wrapping_add(__t5)
+                    }) as f64,
                 ),
             );
             return;
@@ -2292,12 +2297,8 @@ pub fn fn_80193B58<'a>(ctx: &'a Ctx, arg0: Val<'a, i32>, arg1: u32, arg2: u32) {
         if (mt).get() == 0_i32 {
             idx = (Handle::add(arg0, 0_i32)).get();
             ptr_ = Handle::add(arg0, idx);
-            if ({
-                ptr_ = Handle::add(ptr_, 1);
-                ptr_
-            })
-            .get()
-                > ((Handle::add(
+            if {
+                let __t2 = ((Handle::add(
                     ({
                         let __t1 = (table).min().get(0);
                         entry = __t1;
@@ -2306,8 +2307,14 @@ pub fn fn_80193B58<'a>(ctx: &'a Ctx, arg0: Val<'a, i32>, arg1: u32, arg2: u32) {
                     idx,
                 ))
                 .at((!(!((mt).get() != 0)) as i32))
-                .get() as i32)
-            {
+                .get() as i32);
+                ({
+                    ptr_ = Handle::add(ptr_, 1);
+                    ptr_
+                })
+                .get()
+                    > __t2
+            } {
                 (ptr_).set((ptr_).get().wrapping_sub(1_i32));
                 inl_sfxMove_unfused(ctx);
                 (state).set_x7((5_i32 as u8));
@@ -2340,22 +2347,24 @@ pub fn fn_80193B58<'a>(ctx: &'a Ctx, arg0: Val<'a, i32>, arg1: u32, arg2: u32) {
         if (mt).get() == 0_i32 {
             idx = (Handle::add(arg0, 0_i32)).get();
             ptr_ = Handle::add(arg0, idx);
-            if ({
-                ptr_ = Handle::add(ptr_, 1);
-                ptr_
-            })
-            .get()
-                < ((Handle::add(
+            if {
+                let __t4 = ((Handle::add(
                     ({
-                        let __t2 = (table).max().get(0);
-                        entry = __t2;
-                        __t2
+                        let __t3 = (table).max().get(0);
+                        entry = __t3;
+                        __t3
                     }),
                     idx,
                 ))
                 .at((!(!((mt).get() != 0)) as i32))
-                .get() as i32)
-            {
+                .get() as i32);
+                ({
+                    ptr_ = Handle::add(ptr_, 1);
+                    ptr_
+                })
+                .get()
+                    < __t4
+            } {
                 if (ptr_).get().wrapping_add(1_i32) <= clamp_val {
                     (ptr_).set((ptr_).get().wrapping_add(1_i32));
                     inl_sfxMove_unfused(ctx);
@@ -2476,12 +2485,8 @@ pub fn fn_80193FCC<'a>(ctx: &'a Ctx, arg0: Val<'a, i32>, arg1: u32, arg2: u32) {
         if (mt).get() != 0_i32 {
             idx = (Handle::add(arg0, 0_i32)).get();
             ptr_ = Handle::add(arg0, idx);
-            if ({
-                ptr_ = Handle::add(ptr_, 1);
-                ptr_
-            })
-            .get()
-                > ((Handle::add(
+            if {
+                let __t2 = ((Handle::add(
                     ({
                         let __t1 = (table).min().get(0);
                         entry = __t1;
@@ -2490,8 +2495,14 @@ pub fn fn_80193FCC<'a>(ctx: &'a Ctx, arg0: Val<'a, i32>, arg1: u32, arg2: u32) {
                     idx,
                 ))
                 .at((!(!((mt).get() != 0)) as i32))
-                .get() as i32)
-            {
+                .get() as i32);
+                ({
+                    ptr_ = Handle::add(ptr_, 1);
+                    ptr_
+                })
+                .get()
+                    > __t2
+            } {
                 (ptr_).set((ptr_).get().wrapping_sub(1_i32));
                 inl_sfxMove_unfused(ctx);
                 (state).set_x7((5_i32 as u8));
@@ -2558,19 +2569,20 @@ pub fn fn_80193FCC<'a>(ctx: &'a Ctx, arg0: Val<'a, i32>, arg1: u32, arg2: u32) {
     } else if ((arg1 & (0x80002_i32 as u32)) != 0) {
         if (mt).get() != 0_i32 {
             idx = (Handle::add(arg0, 0_i32)).get();
-            if (Handle::add(arg0, idx.wrapping_add(1_i32))).get()
-                < ((Handle::add(
+            if {
+                let __t4 = ((Handle::add(
                     ({
-                        let __t2 = (table).max().get(0);
-                        entry = __t2;
-                        __t2
+                        let __t3 = (table).max().get(0);
+                        entry = __t3;
+                        __t3
                     }),
                     idx,
                 ))
                 .at((!(!((mt).get() != 0)) as i32))
                 .get() as i32)
-                    .wrapping_add(1_i32)
-            {
+                    .wrapping_add(1_i32);
+                (Handle::add(arg0, idx.wrapping_add(1_i32))).get() < __t4
+            } {
                 if ((Handle::add(arg0, idx.wrapping_add(1_i32)))
                     .get()
                     .wrapping_add(1_i32)
@@ -3153,20 +3165,21 @@ pub fn fn_80194F30<'a>(ctx: &'a Ctx, state_ptr: Val<'a, i32>, buttons: u32, trig
         } else {
             let mut pos_ptr_2: Val<'a, u8> = null(ctx);
             let mut scroll_ptr: Val<'a, u8> = null(ctx);
-            idx = (({
-                let __t3 = (state).x2_ref();
-                scroll_ptr = __t3;
-                __t3
-            })
-            .get() as i32)
-                .wrapping_add(
-                    (({
-                        let __t4 = (state).x3_ref();
-                        pos_ptr_2 = __t4;
-                        __t4
-                    })
-                    .get() as i32),
-                );
+            idx = {
+                let __t5 = (({
+                    let __t4 = (state).x3_ref();
+                    pos_ptr_2 = __t4;
+                    __t4
+                })
+                .get() as i32);
+                (({
+                    let __t3 = (state).x2_ref();
+                    scroll_ptr = __t3;
+                    __t3
+                })
+                .get() as i32)
+                    .wrapping_add(__t5)
+            };
             if ((tm).x37().get(idx).x2() as i32) > 1_i32 {
                 inl_sfxMove_unfused(ctx);
                 idx = ((scroll_ptr).get() as i32).wrapping_add(((pos_ptr_2).get() as i32));
@@ -3183,9 +3196,9 @@ pub fn fn_80194F30<'a>(ctx: &'a Ctx, state_ptr: Val<'a, i32>, buttons: u32, trig
             let mut pos_ptr_3: Val<'a, u8> = null(ctx);
             let mut scroll_ptr_2: Val<'a, u8> = null(ctx);
             let mut pos: u8 = ({
-                let __t5 = (state).x2_ref();
-                scroll_ptr_2 = __t5;
-                __t5
+                let __t6 = (state).x2_ref();
+                scroll_ptr_2 = __t6;
+                __t6
             })
             .get();
             if (pos as i32) < 11_i32 {
@@ -3199,9 +3212,9 @@ pub fn fn_80194F30<'a>(ctx: &'a Ctx, state_ptr: Val<'a, i32>, buttons: u32, trig
             } else {
                 if (pos as i32).wrapping_add(
                     (({
-                        let __t6 = (state).x3_ref();
-                        pos_ptr_3 = __t6;
-                        __t6
+                        let __t7 = (state).x3_ref();
+                        pos_ptr_3 = __t7;
+                        __t7
                     })
                     .get() as i32),
                 ) < ((tm).x2E() as i32).wrapping_sub(1_i32)
@@ -3216,20 +3229,21 @@ pub fn fn_80194F30<'a>(ctx: &'a Ctx, state_ptr: Val<'a, i32>, buttons: u32, trig
         } else {
             let mut pos_ptr_4: Val<'a, u8> = null(ctx);
             let mut scroll_ptr_3: Val<'a, u8> = null(ctx);
-            idx = (({
-                let __t7 = (state).x2_ref();
-                scroll_ptr_3 = __t7;
-                __t7
-            })
-            .get() as i32)
-                .wrapping_add(
-                    (({
-                        let __t8 = (state).x3_ref();
-                        pos_ptr_4 = __t8;
-                        __t8
-                    })
-                    .get() as i32),
-                );
+            idx = {
+                let __t10 = (({
+                    let __t9 = (state).x3_ref();
+                    pos_ptr_4 = __t9;
+                    __t9
+                })
+                .get() as i32);
+                (({
+                    let __t8 = (state).x2_ref();
+                    scroll_ptr_3 = __t8;
+                    __t8
+                })
+                .get() as i32)
+                    .wrapping_add(__t10)
+            };
             if ((tm).x37().get(idx).x2() as i32) < 9_i32 {
                 inl_sfxMove_unfused(ctx);
                 idx = ((scroll_ptr_3).get() as i32).wrapping_add(((pos_ptr_4).get() as i32));
@@ -3264,9 +3278,9 @@ pub fn fn_80194F30<'a>(ctx: &'a Ctx, state_ptr: Val<'a, i32>, buttons: u32, trig
                 if ((state).x0() as i32) != 1_i32 {
                     let mut flag_ptr: Val<'a, u8> = null(ctx);
                     if (({
-                        let __t9 = (state).x1_ref();
-                        flag_ptr = __t9;
-                        __t9
+                        let __t11 = (state).x1_ref();
+                        flag_ptr = __t11;
+                        __t11
                     })
                     .get() as i32)
                         != 1_i32
@@ -3284,9 +3298,9 @@ pub fn fn_80194F30<'a>(ctx: &'a Ctx, state_ptr: Val<'a, i32>, buttons: u32, trig
         inl_sfxBack_unfused(ctx);
         if ((state_ptr).get() != 16_i32)
             || ((({
-                let __t10 = (state).x1_ref();
-                flag_ptr_2 = __t10;
-                __t10
+                let __t12 = (state).x1_ref();
+                flag_ptr_2 = __t12;
+                __t12
             })
             .get() as i32)
                 == 0_i32)
@@ -3589,14 +3603,8 @@ pub fn fn_801953C8<'a>(ctx: &'a Ctx, state_ptr: Val<'a, i32>, buttons: u32, trig
         (tm).x37().get(idx).set_x5((tm).x37().get(idx).x6());
         (state_ptr).set((state_ptr).get().wrapping_sub(1_i32));
     } else if ((trigger & ((shl_i32(1_i32, (10_i32 as u32))) as u32)) != 0) {
-        if ((tm)
-            .x37()
-            .get(
-                (statics::melee__gm__gmtou_0::lbl_804799B8(ctx).x2() as i32)
-                    .wrapping_add((statics::melee__gm__gmtou_0::lbl_804799B8(ctx).x3() as i32)),
-            )
-            .x7() as i32)
-            < (fns::gm_GetNumCostumesForCKind(
+        if {
+            let __t1 = (fns::gm_GetNumCostumesForCKind(
                 ctx,
                 (fns::fn_8018F6FC(
                     ctx,
@@ -3611,8 +3619,16 @@ pub fn fn_801953C8<'a>(ctx: &'a Ctx, state_ptr: Val<'a, i32>, buttons: u32, trig
                         .x3() as i32),
                 ) as u8),
             ) as i32)
-                .wrapping_sub(1_i32)
-        {
+                .wrapping_sub(1_i32);
+            ((tm)
+                .x37()
+                .get(
+                    (statics::melee__gm__gmtou_0::lbl_804799B8(ctx).x2() as i32)
+                        .wrapping_add((statics::melee__gm__gmtou_0::lbl_804799B8(ctx).x3() as i32)),
+                )
+                .x7() as i32)
+                < __t1
+        } {
             inl_sfxMove_unfused(ctx);
             idx = (statics::melee__gm__gmtou_0::lbl_804799B8(ctx).x2() as i32)
                 .wrapping_add((statics::melee__gm__gmtou_0::lbl_804799B8(ctx).x3() as i32));
@@ -3669,20 +3685,21 @@ pub fn fn_80195AF0<'a>(ctx: &'a Ctx, state_ptr: Val<'a, i32>, buttons: u32, trig
     if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
         inl_sfxForward_unfused(ctx);
         tm_alt = Handle::cast::<TmData_80194F30<'a>>(state_ptr);
-        idx = (({
-            let __t1 = (menu).x2_ref();
-            x2 = __t1;
-            __t1
-        })
-        .get() as i32)
-            .wrapping_add(
-                (({
-                    let __t2 = (menu).x3_ref();
-                    x3 = __t2;
-                    __t2
-                })
-                .get() as i32),
-            );
+        idx = {
+            let __t3 = (({
+                let __t2 = (menu).x3_ref();
+                x3 = __t2;
+                __t2
+            })
+            .get() as i32);
+            (({
+                let __t1 = (menu).x2_ref();
+                x2 = __t1;
+                __t1
+            })
+            .get() as i32)
+                .wrapping_add(__t3)
+        };
         (tm_alt).x37().get(idx).set_xB((tm_alt).x37().get(idx).x9());
         's1: {
             let __case = match (state_ptr).get() {
@@ -3794,20 +3811,24 @@ pub fn fn_80195CCC<'a>(ctx: &'a Ctx, arg: Val<'a, i32>, buttons: u32, trigger: u
             .get() as i32),
             4_i32,
         )) < 3_i32)
-            && ((((right_x5).get() as i32).wrapping_add(
+            && ({
+                let __t6 = fns::GetNameCount(ctx);
                 ({
-                    let __t4 = ((({
-                        let __t3 = Handle::add(menu, 6_i32);
-                        x6_tmp = __t3;
-                        __t3
-                    })
-                    .get() as i32)
-                        .wrapping_mul(4_i32))
-                    .wrapping_add(1_i32);
-                    i = __t4;
-                    __t4
-                }),
-            )) < fns::GetNameCount(ctx))
+                    let __t5 = ({
+                        let __t4 = ((({
+                            let __t3 = Handle::add(menu, 6_i32);
+                            x6_tmp = __t3;
+                            __t3
+                        })
+                        .get() as i32)
+                            .wrapping_mul(4_i32))
+                        .wrapping_add(1_i32);
+                        i = __t4;
+                        __t4
+                    });
+                    ((right_x5).get() as i32).wrapping_add(__t5)
+                }) < __t6
+            })
         {
             (right_x5).set((((right_x5).get() as i32).wrapping_add(1_i32) as u8));
             slot = (statics::melee__gm__gmtou_0::lbl_804799B8(ctx).x2() as i32)
@@ -3867,29 +3888,32 @@ pub fn fn_80195CCC<'a>(ctx: &'a Ctx, arg: Val<'a, i32>, buttons: u32, trigger: u
         inl_sfxMove_unfused(ctx);
         if (div_i32(
             (({
-                let __t5 = Handle::add(menu, 5_i32);
-                ptr_ = __t5;
-                __t5
+                let __t7 = Handle::add(menu, 5_i32);
+                ptr_ = __t7;
+                __t7
             })
             .get() as i32),
             4_i32,
         )) < 8_i32
         {
-            if (((ptr_).get() as i32).wrapping_add(
+            if {
+                let __t11 = fns::GetNameCount(ctx);
                 ({
-                    let __t7 = ((({
-                        let __t6 = Handle::add(menu, 6_i32);
-                        x6_tmp = __t6;
-                        __t6
-                    })
-                    .get() as i32)
-                        .wrapping_mul(4_i32))
-                    .wrapping_add(4_i32);
-                    i = __t7;
-                    __t7
-                }),
-            )) < fns::GetNameCount(ctx)
-            {
+                    let __t10 = ({
+                        let __t9 = ((({
+                            let __t8 = Handle::add(menu, 6_i32);
+                            x6_tmp = __t8;
+                            __t8
+                        })
+                        .get() as i32)
+                            .wrapping_mul(4_i32))
+                        .wrapping_add(4_i32);
+                        i = __t9;
+                        __t9
+                    });
+                    ((ptr_).get() as i32).wrapping_add(__t10)
+                }) < __t11
+            } {
                 (ptr_).set((((ptr_).get() as i32).wrapping_add(4_i32) as u8));
                 slot = (statics::melee__gm__gmtou_0::lbl_804799B8(ctx).x2() as i32)
                     .wrapping_add((statics::melee__gm__gmtou_0::lbl_804799B8(ctx).x3() as i32));
@@ -3904,27 +3928,29 @@ pub fn fn_80195CCC<'a>(ctx: &'a Ctx, arg: Val<'a, i32>, buttons: u32, trigger: u
         } else {
             let mut base: u8 = 0;
             let mut page_ptr: Val<'a, u8> = null(ctx);
-            if ((({
-                let __t8 = (ptr_).get();
-                base = __t8;
-                __t8
-            }) as i32)
-                .wrapping_add(
-                    ({
-                        let __t10 = ((({
-                            let __t9 = Handle::add(menu, 6_i32);
-                            page_ptr = __t9;
-                            __t9
+            if {
+                let __t16 = fns::GetNameCount(ctx);
+                ({
+                    let __t15 = ({
+                        let __t14 = ((({
+                            let __t13 = Handle::add(menu, 6_i32);
+                            page_ptr = __t13;
+                            __t13
                         })
                         .get() as i32)
                             .wrapping_mul(4_i32))
                         .wrapping_add(4_i32);
-                        i = __t10;
-                        __t10
-                    }),
-                ))
-                < fns::GetNameCount(ctx)
-            {
+                        i = __t14;
+                        __t14
+                    });
+                    (({
+                        let __t12 = (ptr_).get();
+                        base = __t12;
+                        __t12
+                    }) as i32)
+                        .wrapping_add(__t15)
+                }) < __t16
+            } {
                 (page_ptr).set((((page_ptr).get() as i32).wrapping_add(1_i32) as u8));
                 slot = (statics::melee__gm__gmtou_0::lbl_804799B8(ctx).x2() as i32)
                     .wrapping_add((statics::melee__gm__gmtou_0::lbl_804799B8(ctx).x3() as i32));
@@ -3948,13 +3974,14 @@ pub fn fn_80195CCC<'a>(ctx: &'a Ctx, arg: Val<'a, i32>, buttons: u32, trigger: u
             selected =
                 ((x5).get() as i32).wrapping_add((((x6_ptr).get() as i32).wrapping_mul(4_i32)));
             x2_ptr = Handle::add(menu, 2_i32);
-            slot = ((x2_ptr).get() as i32).wrapping_add(
-                (({
+            slot = {
+                let __t17 = (({
                     menu = Handle::add(menu, 3_i32);
                     menu
                 })
-                .get() as i32),
-            );
+                .get() as i32);
+                ((x2_ptr).get() as i32).wrapping_add(__t17)
+            };
             tm = fns::gm_GetTournamentData(ctx);
             count = (tm).x2E();
             unique = inl_fn_80195CCC_IsUniqueEntry_unfused(ctx, tm, (count as i32), slot, selected);

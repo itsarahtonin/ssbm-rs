@@ -198,16 +198,28 @@ pub fn it_802E35CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             break 'l1;
         }
     }
-    if (ip).pos().x() > fns::Stage_GetBlastZoneRightOffset(ctx) {
+    if {
+        let __t1 = fns::Stage_GetBlastZoneRightOffset(ctx);
+        (ip).pos().x() > __t1
+    } {
         (ip).xDCC_flag().set_b3((1_i32 as u8));
     }
-    if (ip).pos().x() < fns::Stage_GetBlastZoneLeftOffset(ctx) {
+    if {
+        let __t2 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+        (ip).pos().x() < __t2
+    } {
         (ip).xDCC_flag().set_b3((1_i32 as u8));
     }
-    if (ip).pos().y() > fns::Stage_GetBlastZoneTopOffset(ctx) {
+    if {
+        let __t3 = fns::Stage_GetBlastZoneTopOffset(ctx);
+        (ip).pos().y() > __t3
+    } {
         (ip).xDCC_flag().set_b3((1_i32 as u8));
     }
-    if (ip).pos().y() < fns::Stage_GetBlastZoneBottomOffset(ctx) {
+    if {
+        let __t4 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+        (ip).pos().y() < __t4
+    } {
         (ip).xDCC_flag().set_b3((1_i32 as u8));
     }
     if ((ip).xDCC_flag().b3() as i32) == 1_i32 {
@@ -308,10 +320,8 @@ pub fn it_802E3884<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         }
     }
     (ip).set_init_facing_dir((ip).facing_dir());
-    (ip).set_xC9C(fp::fctiwz(fp::fadds(
-        fp::frsp((ip).xC9C() as f64),
-        fns::it_8027CBFC(ctx, gobj),
-    )));
+    let __t1 = fns::it_8027CBFC(ctx, gobj);
+    (ip).set_xC9C(fp::fctiwz(fp::fadds(fp::frsp((ip).xC9C() as f64), __t1)));
     if ((ip).xC9C() > ((attr).x0()).x0()) || ((ip).msid() == 9_i32) {
         inl_Item_ZakoDefeat_unfused(ctx, gobj, ip);
         if fns::HSD_Randf(ctx) < (fns::it_804D6D40(ctx).get()).x8() {
@@ -422,9 +432,10 @@ pub fn it_802E3AC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         } else {
             (((attrs).xE() as i32).wrapping_sub(((attrs).xC() as i32)))
         });
-        (ip).xDD4_itemVar()
-            .whitebea()
-            .set_x3C(((attrs).xC() as i32).wrapping_add(fns::HSD_Randi(ctx, range)));
+        (ip).xDD4_itemVar().whitebea().set_x3C({
+            let __t1 = fns::HSD_Randi(ctx, range);
+            ((attrs).xC() as i32).wrapping_add(__t1)
+        });
     }
     (ip).xDD4_itemVar().whitebea().set_x44(4_i32);
     fns::Item_80268E5C(ctx, gobj, 1_i32, (enums::ITEM_ANIM_UPDATE as i32));
@@ -486,9 +497,10 @@ pub fn itWhitebea_UnkMotion1_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         } else {
             (((attrs).xA() as i32).wrapping_sub(((attrs).x8() as i32)))
         });
-        (ip).xDD4_itemVar()
-            .whitebea()
-            .set_x40(((attrs).x8() as i32).wrapping_add(fns::HSD_Randi(ctx, range)));
+        (ip).xDD4_itemVar().whitebea().set_x40({
+            let __t1 = fns::HSD_Randi(ctx, range);
+            ((attrs).x8() as i32).wrapping_add(__t1)
+        });
         fns::it_8027CAD8(ctx, gobj);
         fns::Item_80268E5C(ctx, gobj, 0_i32, (enums::ITEM_ANIM_UPDATE as i32));
     } else {
@@ -699,16 +711,17 @@ pub fn it_802E40A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     if (2_i32 > (ip).xDD4_itemVar().whitebea().x3C())
         || ((ip).xDD4_itemVar().whitebea().x3C() > ((attrs).xE() as i32))
     {
-        (ip).xDD4_itemVar()
-            .whitebea()
-            .set_x3C(((attrs).xC() as i32).wrapping_add(fns::HSD_Randi(
+        (ip).xDD4_itemVar().whitebea().set_x3C({
+            let __t1 = fns::HSD_Randi(
                 ctx,
                 (if (((attrs).xE() as i32).wrapping_sub(((attrs).xC() as i32))) < 0_i32 {
                     (((attrs).xE() as i32).wrapping_sub(((attrs).xC() as i32))).wrapping_neg()
                 } else {
                     (((attrs).xE() as i32).wrapping_sub(((attrs).xC() as i32)))
                 }),
-            )));
+            );
+            ((attrs).xC() as i32).wrapping_add(__t1)
+        });
     }
     (ip).xDD4_itemVar().whitebea().set_x44(4_i32);
     fns::Item_80268E5C(ctx, gobj, 1_i32, (enums::ITEM_ANIM_UPDATE as i32));
@@ -769,16 +782,17 @@ pub fn itWhitebea_UnkMotion2_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         if (2_i32 > (ip).xDD4_itemVar().whitebea().x3C())
             || ((ip).xDD4_itemVar().whitebea().x3C() > ((attrs).xE() as i32))
         {
-            (ip).xDD4_itemVar()
-                .whitebea()
-                .set_x3C(((attrs).xC() as i32).wrapping_add(fns::HSD_Randi(
+            (ip).xDD4_itemVar().whitebea().set_x3C({
+                let __t1 = fns::HSD_Randi(
                     ctx,
                     (if (((attrs).xE() as i32).wrapping_sub(((attrs).xC() as i32))) < 0_i32 {
                         (((attrs).xE() as i32).wrapping_sub(((attrs).xC() as i32))).wrapping_neg()
                     } else {
                         (((attrs).xE() as i32).wrapping_sub(((attrs).xC() as i32)))
                     }),
-                )));
+                );
+                ((attrs).xC() as i32).wrapping_add(__t1)
+            });
         }
         (ip).xDD4_itemVar().whitebea().set_x44(4_i32);
         fns::Item_80268E5C(ctx, gobj, 1_i32, (enums::ITEM_ANIM_UPDATE as i32));

@@ -140,15 +140,15 @@ pub fn grFourside_801F2F34<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (gp).map_id(),
     );
     fns::grAnime_801C8138(ctx, gobj, (gp).map_id(), 0_i32);
-    fns::Ground_801C4E70(
-        ctx,
-        fns::Ground_801C3FA4(ctx, gobj, 7_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 4_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 6_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 5_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 9_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 8_i32),
-    );
+    {
+        let __t1 = fns::Ground_801C3FA4(ctx, gobj, 8_i32);
+        let __t2 = fns::Ground_801C3FA4(ctx, gobj, 9_i32);
+        let __t3 = fns::Ground_801C3FA4(ctx, gobj, 5_i32);
+        let __t4 = fns::Ground_801C3FA4(ctx, gobj, 6_i32);
+        let __t5 = fns::Ground_801C3FA4(ctx, gobj, 4_i32);
+        let __t6 = fns::Ground_801C3FA4(ctx, gobj, 7_i32);
+        fns::Ground_801C4E70(ctx, __t6, __t5, __t4, __t3, __t2, __t1)
+    };
     (gobj).set_render_cb(fnptr(ctx, 0x801f3f74));
     (gp).u()
         .fourside()
@@ -275,23 +275,21 @@ pub fn grFourside_801F3154<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let _ = fns::Ground_InitMapColl(ctx, jobj, (gp).map_id());
     fns::grAnime_801C7FF8(ctx, gobj, 0_i32, 7_i32, 0_i32, 0.0, 0.0);
     (gp).u().foursideCrane().x1().set_b0((0_i32 as u8));
-    (gp).u().foursideCrane().set_x4(
+    (gp).u().foursideCrane().set_x4({
+        let __t1 = (if (statics::melee__gr__grfourside::yakumono_param(ctx).get()).crane_wait_add()
+            != 0_i32
+        {
+            fns::HSD_Randi(
+                ctx,
+                (statics::melee__gr__grfourside::yakumono_param(ctx).get()).crane_wait_add(),
+            )
+        } else {
+            0_i32
+        });
         (statics::melee__gr__grfourside::yakumono_param(ctx).get())
             .crane_wait()
-            .wrapping_add(
-                (if (statics::melee__gr__grfourside::yakumono_param(ctx).get()).crane_wait_add()
-                    != 0_i32
-                {
-                    fns::HSD_Randi(
-                        ctx,
-                        (statics::melee__gr__grfourside::yakumono_param(ctx).get())
-                            .crane_wait_add(),
-                    )
-                } else {
-                    0_i32
-                }),
-            ),
-    );
+            .wrapping_add(__t1)
+    });
     (gp).u()
         .foursideCrane()
         .set_x8(inl_HSD_JObjGetTranslationY_unfused(ctx, crane_iron));
@@ -299,9 +297,9 @@ pub fn grFourside_801F3154<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         .foursideCrane()
         .set_x8(fp::fsubs((gp).u().foursideCrane().x8(), 10.0));
     (gp).u().foursideCrane().set_xC({
-        let __t1 = (gp).u().foursideCrane().x8();
-        (gp).u().foursideCrane().set_x10(__t1);
-        __t1
+        let __t2 = (gp).u().foursideCrane().x8();
+        (gp).u().foursideCrane().set_x10(__t2);
+        __t2
     });
     (gp).u().foursideCrane().set_x0((0_i32 as u8));
     (gp).x10_flags().set_b5((1_i32 as u8));
@@ -390,12 +388,13 @@ pub fn grFourside_801F3B70<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut cam: CmSubject<'a> = null(ctx);
     fns::lb_8000B1CC(ctx, jobj, null::<Vec<'a>>(ctx), local18);
     if !Handle::is_null((gp).u().foursideUfo().xC()) {
-        if local18.y()
-            <= fp::fadds(
+        if {
+            let __t1 = fp::fadds(
                 fns::Stage_GetCamBoundsTopOffset(ctx),
                 (statics::melee__gr__grfourside::yakumono_param(ctx).get()).ufo_cs_offs(),
-            )
-        {
+            );
+            local18.y() <= __t1
+        } {
             if ((gp).u().foursideUfo().x3() as i32) == 0_i32 {
                 (gp).u().foursideUfo().set_x3((1_i32 as u8));
             }
@@ -420,22 +419,21 @@ pub fn grFourside_801F3C40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (gp).x11_flags().set_b012((1_i32 as u8));
     fns::HSD_JObjSetFlagsAll(ctx, jobj, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
     (gp).u().fourside2().set_x0((0_i32 as u8));
-    (gp).u().fourside2().set_x4(
+    (gp).u().fourside2().set_x4({
+        let __t1 = (if (statics::melee__gr__grfourside::yakumono_param(ctx).get()).heli_wait_add()
+            != 0_i32
+        {
+            fns::HSD_Randi(
+                ctx,
+                (statics::melee__gr__grfourside::yakumono_param(ctx).get()).heli_wait_add(),
+            )
+        } else {
+            0_i32
+        });
         (statics::melee__gr__grfourside::yakumono_param(ctx).get())
             .heli_wait()
-            .wrapping_add(
-                (if (statics::melee__gr__grfourside::yakumono_param(ctx).get()).heli_wait_add()
-                    != 0_i32
-                {
-                    fns::HSD_Randi(
-                        ctx,
-                        (statics::melee__gr__grfourside::yakumono_param(ctx).get()).heli_wait_add(),
-                    )
-                } else {
-                    0_i32
-                }),
-            ),
-    );
+            .wrapping_add(__t1)
+    });
     (gp).u().fourside2().set_x1((0_i32 as u8));
 }
 
@@ -501,7 +499,10 @@ pub fn grFourside_801F3CC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         if __case <= 1 {
             if ((gp).u().fourside2().x1() as i32) == 0_i32 {
                 fns::lb_8000B1CC(ctx, heli_jobj, null::<Vec<'a>>(ctx), pos);
-                if pos.y() <= fp::fadds(50.0, fns::Stage_GetCamBoundsTopOffset(ctx)) {
+                if {
+                    let __t1 = fp::fadds(50.0, fns::Stage_GetCamBoundsTopOffset(ctx));
+                    pos.y() <= __t1
+                } {
                     (gp).u().fourside2().set_x1((1_i32 as u8));
                     fns::Ground_801C53EC(ctx, (0x704e1_i32 as u32));
                 }
@@ -539,24 +540,23 @@ pub fn grFourside_801F3CC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             if (fns::grAnime_801C83D0(ctx, gobj, 0_i32, 7_i32) != 0) {
                 fns::HSD_JObjSetFlagsAll(ctx, jobj, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
                 (gp).u().fourside2().set_x0((0_i32 as u8));
-                (gp).u().fourside2().set_x4(
+                (gp).u().fourside2().set_x4({
+                    let __t2 = (if (statics::melee__gr__grfourside::yakumono_param(ctx).get())
+                        .heli_wait_add()
+                        != 0_i32
+                    {
+                        fns::HSD_Randi(
+                            ctx,
+                            (statics::melee__gr__grfourside::yakumono_param(ctx).get())
+                                .heli_wait_add(),
+                        )
+                    } else {
+                        0_i32
+                    });
                     (statics::melee__gr__grfourside::yakumono_param(ctx).get())
                         .heli_wait()
-                        .wrapping_add(
-                            (if (statics::melee__gr__grfourside::yakumono_param(ctx).get())
-                                .heli_wait_add()
-                                != 0_i32
-                            {
-                                fns::HSD_Randi(
-                                    ctx,
-                                    (statics::melee__gr__grfourside::yakumono_param(ctx).get())
-                                        .heli_wait_add(),
-                                )
-                            } else {
-                                0_i32
-                            }),
-                        ),
-                );
+                        .wrapping_add(__t2)
+                });
             }
             (gp).u()
                 .fourside2()
@@ -793,24 +793,23 @@ fn inl_grFourside_UpdateCrane_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>, hsd_gobj
             break 's3;
         }
         if __case <= 3 {
-            (gp).u().foursideCrane().set_x4(
+            (gp).u().foursideCrane().set_x4({
+                let __t1 = (if (statics::melee__gr__grfourside::yakumono_param(ctx).get())
+                    .crane_iron_wait_add()
+                    != 0_i32
+                {
+                    fns::HSD_Randi(
+                        ctx,
+                        (statics::melee__gr__grfourside::yakumono_param(ctx).get())
+                            .crane_iron_wait_add(),
+                    )
+                } else {
+                    0_i32
+                });
                 (statics::melee__gr__grfourside::yakumono_param(ctx).get())
                     .crane_iron_wait()
-                    .wrapping_add(
-                        (if (statics::melee__gr__grfourside::yakumono_param(ctx).get())
-                            .crane_iron_wait_add()
-                            != 0_i32
-                        {
-                            fns::HSD_Randi(
-                                ctx,
-                                (statics::melee__gr__grfourside::yakumono_param(ctx).get())
-                                    .crane_iron_wait_add(),
-                            )
-                        } else {
-                            0_i32
-                        }),
-                    ),
-            );
+                    .wrapping_add(__t1)
+            });
             (gp).u().foursideCrane().set_x0((4_i32 as u8));
             break 's3;
         }
@@ -913,10 +912,10 @@ fn inl_grFourside_UpdateCrane_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>, hsd_gobj
                     .foursideCrane()
                     .set_xC((gp).u().foursideCrane().x10());
                 (gp).u().foursideCrane().set_x14({
-                    let __t1 = (statics::melee__gr__grfourside::yakumono_param(ctx).get())
+                    let __t2 = (statics::melee__gr__grfourside::yakumono_param(ctx).get())
                         .crane_iron_spd();
-                    (gp).u().foursideCrane().set_x18(__t1);
-                    __t1
+                    (gp).u().foursideCrane().set_x18(__t2);
+                    __t2
                 });
                 (gp).u().foursideCrane().set_x1C(
                     (statics::melee__gr__grfourside::yakumono_param(ctx).get())
@@ -933,10 +932,10 @@ fn inl_grFourside_UpdateCrane_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>, hsd_gobj
             ));
             if (gp).u().foursideCrane().xC() >= (gp).u().foursideCrane().x10() {
                 (gp).u().foursideCrane().set_x14({
-                    let __t2 = (statics::melee__gr__grfourside::yakumono_param(ctx).get())
+                    let __t3 = (statics::melee__gr__grfourside::yakumono_param(ctx).get())
                         .crane_iron_spd();
-                    (gp).u().foursideCrane().set_x18(__t2);
-                    __t2
+                    (gp).u().foursideCrane().set_x18(__t3);
+                    __t3
                 });
                 (gp).u().foursideCrane().set_x1C(
                     (statics::melee__gr__grfourside::yakumono_param(ctx).get())
@@ -957,24 +956,23 @@ fn inl_grFourside_UpdateCrane_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>, hsd_gobj
                 (gp).u()
                     .foursideCrane()
                     .set_xC((gp).u().foursideCrane().x10());
-                (gp).u().foursideCrane().set_x4(
+                (gp).u().foursideCrane().set_x4({
+                    let __t4 = (if (statics::melee__gr__grfourside::yakumono_param(ctx).get())
+                        .crane_wait_add()
+                        != 0_i32
+                    {
+                        fns::HSD_Randi(
+                            ctx,
+                            (statics::melee__gr__grfourside::yakumono_param(ctx).get())
+                                .crane_wait_add(),
+                        )
+                    } else {
+                        0_i32
+                    });
                     (statics::melee__gr__grfourside::yakumono_param(ctx).get())
                         .crane_wait()
-                        .wrapping_add(
-                            (if (statics::melee__gr__grfourside::yakumono_param(ctx).get())
-                                .crane_wait_add()
-                                != 0_i32
-                            {
-                                fns::HSD_Randi(
-                                    ctx,
-                                    (statics::melee__gr__grfourside::yakumono_param(ctx).get())
-                                        .crane_wait_add(),
-                                )
-                            } else {
-                                0_i32
-                            }),
-                        ),
-                );
+                        .wrapping_add(__t4)
+                });
                 (gp).u().foursideCrane().set_x0((0_i32 as u8));
             } else {
                 (gp).u()

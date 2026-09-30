@@ -304,29 +304,25 @@ pub fn AXDriverExec<'a>(ctx: &'a Ctx, v: HSD_SM<'a>) {
                             break 's3;
                         }
                         if __case <= 5 {
-                            fns::HSD_SynthSFXSetPitchRatio(
-                                ctx,
-                                (v).vID(),
-                                0_i32,
-                                fns::powf(
+                            {
+                                let __t1 = fns::powf(
                                     ctx,
                                     2.0,
                                     fp::fdivs(fp::frsp(((v).x20() as i32) as f64), 1200.0),
-                                ),
-                            );
+                                );
+                                fns::HSD_SynthSFXSetPitchRatio(ctx, (v).vID(), 0_i32, __t1)
+                            };
                             break 's3;
                         }
                         if __case <= 6 {
-                            fns::HSD_SynthSFXSetPitchRatio(
-                                ctx,
-                                (v).vID(),
-                                1_i32,
-                                fns::powf(
+                            {
+                                let __t2 = fns::powf(
                                     ctx,
                                     2.0,
                                     fp::fdivs(fp::frsp(((v).fadetime() as i32) as f64), 1200.0),
-                                ),
-                            );
+                                );
+                                fns::HSD_SynthSFXSetPitchRatio(ctx, (v).vID(), 1_i32, __t2)
+                            };
                             break 's3;
                         }
                         if __case <= 7 {

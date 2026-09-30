@@ -75,15 +75,14 @@ pub fn ftPr_Init_8013C360<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             let mut costume_list: UnkCostumeStruct<'a> = fns::CostumeListsForeachCharacter(ctx)
                 .get((fp).kind())
                 .costume_list();
-            (Handle::add(joints, ((fp).costume_id() as i32))).set(Handle::cast::<HSD_Joint<'a>>(
-                fns::HSD_ArchiveGetPublicAddress(
-                    ctx,
-                    (Handle::add(costume_list, ((fp).costume_id() as i32))).x14_archive(),
-                    fns::ftPr_Init_803D05B4(ctx)
-                        .at(((fp).costume_id() as i32))
-                        .get(),
-                ),
+            let __t1 = Handle::cast::<HSD_Joint<'a>>(fns::HSD_ArchiveGetPublicAddress(
+                ctx,
+                (Handle::add(costume_list, ((fp).costume_id() as i32))).x14_archive(),
+                fns::ftPr_Init_803D05B4(ctx)
+                    .at(((fp).costume_id() as i32))
+                    .get(),
             ));
+            (Handle::add(joints, ((fp).costume_id() as i32))).set(__t1);
         }
         (fp).u()
             .pr()
@@ -163,13 +162,10 @@ pub fn ftPr_Init_UnkMtxFunc0<'a>(
                 fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
             }
         }
-        fns::HSD_JObjDispAll(
-            ctx,
-            (fp).u().pr().x223C(),
-            vmtx,
-            fns::HSD_GObj_80390EB8(ctx, arg1),
-            (0_i32 as u32),
-        );
+        {
+            let __t1 = fns::HSD_GObj_80390EB8(ctx, arg1);
+            fns::HSD_JObjDispAll(ctx, (fp).u().pr().x223C(), vmtx, __t1, (0_i32 as u32))
+        };
     }
 }
 

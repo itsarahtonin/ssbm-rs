@@ -991,10 +991,10 @@ pub fn ftCo_80095D5C<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>) {
             (Handle::cast::<Val<'a, F32>>((Handle::add(array_element, 0x464_i32.wrapping_neg()))))
                 .get();
     }
-    (arg1).set_x(fp::fmuls(
-        (fp).mv().co().itemthrow().facing_dir(),
-        (fp::fmuls(vel, fns::cosf(ctx, angle))),
-    ));
+    (arg1).set_x({
+        let __t1 = (fp::fmuls(vel, fns::cosf(ctx, angle)));
+        fp::fmuls((fp).mv().co().itemthrow().facing_dir(), __t1)
+    });
     (arg1).set_y(fp::fmuls(vel, fns::sinf(ctx, angle)));
     (arg1).set_z(fp::frsp(0_i32 as f64));
 }
@@ -1138,14 +1138,15 @@ pub fn ftCo_LightThrowDash_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut cd: ftCommonData<'a> = null(ctx);
-    if (fp).cur_anim_frame()
-        <= ({
+    if {
+        let __t2 = ({
             let __t1 = fns::p_ftCommonData(ctx).get();
             cd = __t1;
             __t1
         })
-        .x408()
-    {
+        .x408();
+        (fp).cur_anim_frame() <= __t2
+    } {
         if !Handle::is_null(cd) {}
         fns::ft_80085030(
             ctx,

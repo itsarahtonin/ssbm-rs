@@ -49,10 +49,10 @@ pub fn ftMh_MS_358_80152880<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         null::<HSD_GObj<'a>>(ctx),
     );
     fns::ftAnim_8006EBA4(ctx, gobj);
-    (fp).mv().mh().unk13().set_x0(fp::frsp(
-        (da).x94()
-            .wrapping_add(fns::HSD_Randi(ctx, (da).x90().wrapping_sub((da).x94()))) as f64,
-    ));
+    (fp).mv().mh().unk13().set_x0(fp::frsp({
+        let __t1 = fns::HSD_Randi(ctx, (da).x90().wrapping_sub((da).x94()));
+        (da).x94().wrapping_add(__t1)
+    } as f64));
     (fp).mv().mh().unk13().set_x4(fp::frsp(0_i32 as f64));
 }
 

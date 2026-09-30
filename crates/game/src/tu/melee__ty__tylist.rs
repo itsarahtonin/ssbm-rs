@@ -131,13 +131,13 @@ pub fn _tyList_80312904<'a>(ctx: &'a Ctx, arg0: Addr<'a>, arg1: i8) {
     }
     f30 = fp::fsubs(inl_HSD_JObjGetTranslationX_unfused(ctx, (row).jobj()), 6.5);
     f29 = fp::fsubs(
-        (fp::fsubs(
-            fp::fneg((row).x30()),
-            inl_HSD_JObjGetTranslationY_unfused(
+        ({
+            let __t1 = inl_HSD_JObjGetTranslationY_unfused(
                 ctx,
                 Handle::cast::<HSD_JObj<'a>>(((state).gobj()).hsd_obj()),
-            ),
-        )),
+            );
+            fp::fsubs(fp::fneg((row).x30()), __t1)
+        }),
         0.4099999964237213,
     );
     f31 = inl_HSD_JObjGetTranslationZ_unfused(
@@ -163,7 +163,10 @@ pub fn _tyList_80312904<'a>(ctx: &'a Ctx, arg0: Addr<'a>, arg1: i8) {
     (text).font_size().set_x(0.02800000086426735);
     (text).font_size().set_y(0.028999999165534973);
     ((row).text0()).set_default_kerning((1_i32 as u8));
-    fns::HSD_SisLib_803A6368(ctx, (row).text0(), fns::Toy_803082F8(ctx, (row).idx()));
+    {
+        let __t2 = fns::Toy_803082F8(ctx, (row).idx());
+        fns::HSD_SisLib_803A6368(ctx, (row).text0(), __t2)
+    };
     text = (row).text1();
     (text).set_pos_x(fp::fadds(14.699999809265137, f30));
     (text).set_pos_y(f29);
@@ -260,7 +263,10 @@ pub fn _tyList_80312BAC<'a>(ctx: &'a Ctx, state: TyListState<'a>, arg1: i8) {
                 statics::melee__ty__tylist::_tyList_80313464(ctx, row);
                 if ((((row).x24() as i32) >= 0_i32)
                     && (((row).x24() as i32) < ((state).entryCount() as i32).wrapping_sub(2_i32)))
-                    && (((row).idx() as i32) == fns::Toy_GetTrophyTotal(ctx).wrapping_sub(1_i32))
+                    && ({
+                        let __t1 = fns::Toy_GetTrophyTotal(ctx).wrapping_sub(1_i32);
+                        ((row).idx() as i32) == __t1
+                    })
                 {
                     if !Handle::is_null((state).jobj()) {
                         inl_HSD_JObjSetTranslateY_unfused(ctx, (state).jobj(), (row).x30());
@@ -329,7 +335,10 @@ pub fn _tyList_80312E88<'a>(ctx: &'a Ctx, arg: TyListArg<'a>, delta: f64) {
                     break 'c4;
                 }
                 inl_HSD_JObjSetTranslateY_unfused(ctx, (arg).jobjs().at(i).get(), (arg).x30());
-                if ((arg).idx() as i32) == fns::Toy_GetTrophyTotal(ctx).wrapping_sub(1_i32) {
+                if {
+                    let __t1 = fns::Toy_GetTrophyTotal(ctx).wrapping_sub(1_i32);
+                    ((arg).idx() as i32) == __t1
+                } {
                     inl_HSD_JObjSetTranslateY_unfused(
                         ctx,
                         statics::melee__ty__tylist::_tyList_804A2AC0(ctx).jobj(),
@@ -419,7 +428,10 @@ pub fn _tyList_8031305C<'a>(
             if ((state).x2A1() as i32) == 0_i32 {
                 ((state).x270())
                     .set_idx(((((state).x274()).idx() as i32).wrapping_add(1_i32) as i16));
-                if (((state).x270()).idx() as i32) >= fns::Toy_GetTrophyTotal(ctx) {
+                if {
+                    let __t1 = fns::Toy_GetTrophyTotal(ctx);
+                    (((state).x270()).idx() as i32) >= __t1
+                } {
                     ((state).x270()).set_idx((0_i32 as i16));
                 }
                 statics::melee__ty__tylist::_tyList_80312904(
@@ -435,8 +447,8 @@ pub fn _tyList_8031305C<'a>(
                 ((state).x274())
                     .set_idx(((((state).x270()).idx() as i32).wrapping_sub(1_i32) as i16));
                 if (((state).x274()).idx() as i32) < 0_i32 {
-                    ((state).x274())
-                        .set_idx((fns::Toy_GetTrophyTotal(ctx).wrapping_sub(1_i32) as i16));
+                    let __t2 = (fns::Toy_GetTrophyTotal(ctx).wrapping_sub(1_i32) as i16);
+                    ((state).x274()).set_idx(__t2);
                 }
                 statics::melee__ty__tylist::_tyList_80312904(
                     ctx,
@@ -1058,8 +1070,11 @@ pub fn _tyList_80313BD8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 ((shl_i32(1_i32, (4_i32 as u32))) as u32),
             );
             if ((((state).x274()).idx() as i32) == 0_i32)
-                || (((((state).x274()).links().at(0_i32).get()).idx() as i32).wrapping_add(9_i32)
-                    < fns::Toy_GetTrophyTotal(ctx))
+                || ({
+                    let __t1 = fns::Toy_GetTrophyTotal(ctx);
+                    ((((state).x274()).links().at(0_i32).get()).idx() as i32).wrapping_add(9_i32)
+                        < __t1
+                })
             {
                 statics::melee__ty__tylist::_tyList_80313358(
                     ctx,
@@ -1087,9 +1102,11 @@ pub fn _tyList_80313BD8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 (state).x288(),
                 ((shl_i32(1_i32, (4_i32 as u32))) as u32),
             );
-            if ((((state).x270()).idx() as i32) == fns::Toy_GetTrophyTotal(ctx).wrapping_sub(1_i32))
-                || (((((state).x270()).links().at(1_i32).get()).idx() as i32).wrapping_sub(9_i32)
-                    > 0_i32)
+            if ({
+                let __t2 = fns::Toy_GetTrophyTotal(ctx).wrapping_sub(1_i32);
+                (((state).x270()).idx() as i32) == __t2
+            }) || (((((state).x270()).links().at(1_i32).get()).idx() as i32).wrapping_sub(9_i32)
+                > 0_i32)
             {
                 statics::melee__ty__tylist::_tyList_80313358(
                     ctx,
@@ -1248,14 +1265,17 @@ pub fn _tyList_8031438C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             (new_var).font_size().set_y(0.028999999165534973);
             ((state).x290()).set_default_kerning((1_i32 as u8));
             ((state).x290()).set_default_alignment((fp::fctiwz((2_i32 as f64)) as u8));
-            let _ = fns::HSD_SisLib_803A6B98(
-                ctx,
-                (state).x290(),
-                290.0,
-                320.0,
-                cstr(ctx, 0x804d5a88),
-                &[VarArg::Int(fns::Toy_GetTrophyTotal(ctx) as u32)],
-            );
+            let _ = {
+                let __t1 = VarArg::Int(fns::Toy_GetTrophyTotal(ctx) as u32);
+                fns::HSD_SisLib_803A6B98(
+                    ctx,
+                    (state).x290(),
+                    290.0,
+                    320.0,
+                    cstr(ctx, 0x804d5a88),
+                    &[__t1],
+                )
+            };
         }
         (entry).set_x16((entry).x16().wrapping_sub(1));
         return;
@@ -1437,16 +1457,19 @@ pub fn tyList_803147C4<'a>(ctx: &'a Ctx) {
             (3_i32 as u8),
             (0_i32 as u8),
         ));
-        fns::HSD_GObjObject_80390A70(
-            ctx,
-            (gobj).get(),
-            {
+        {
+            let __t2 = Handle::cast::<Addr<'a>>(fns::Toy_LoadLObjList(
+                ctx,
+                jobj,
+                null::<Val<'a, i32>>(ctx),
+            ));
+            let __t3 = {
                 let __t1 = (fns::HSD_GObj_LightKind(ctx).get() as u8);
                 new_var = __t1;
                 __t1
-            },
-            Handle::cast::<Addr<'a>>(fns::Toy_LoadLObjList(ctx, jobj, null::<Val<'a, i32>>(ctx))),
-        );
+            };
+            fns::HSD_GObjObject_80390A70(ctx, (gobj).get(), __t3, __t2)
+        };
         fns::GObj_SetupGXLink(
             ctx,
             (gobj).get(),

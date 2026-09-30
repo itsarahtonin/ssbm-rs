@@ -133,7 +133,10 @@ pub fn itLugia_UnkMotion2_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (ip).x40_vel().y(),
         (ip).xDD4_itemVar().lugia().xE50().x(),
     ));
-    if (ip).pos().y() > fns::Stage_GetBlastZoneTopOffset(ctx) {
+    if {
+        let __t1 = fns::Stage_GetBlastZoneTopOffset(ctx);
+        (ip).pos().y() > __t1
+    } {
         (ip).x40_vel().set_y(0.0);
         fns::it_802D16D4(ctx, gobj);
     }
@@ -576,16 +579,16 @@ pub fn it_802D208C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             target.set_x(fp::fmadds((attrs).x3C(), fns::cosf(ctx, angle), target.x()));
             target.set_y(fp::fmadds((attrs).x3C(), fns::sinf(ctx, angle), target.y()));
             dx = {
-                let __t1 = fp::fsubs((ip).xDD4_itemVar().lugia().x64().x(), target.x());
-                dz = __t1;
-                __t1
+                let __t3 = fp::fsubs((ip).xDD4_itemVar().lugia().x64().x(), target.x());
+                dz = __t3;
+                __t3
             };
             dy = fp::fsubs((ip).xDD4_itemVar().lugia().x64().y(), target.y());
             dz = fp::fsubs(
                 ({
-                    let __t2 = (ip).xDD4_itemVar().lugia().x64().z();
-                    dz = __t2;
-                    __t2
+                    let __t4 = (ip).xDD4_itemVar().lugia().x64().z();
+                    dz = __t4;
+                    __t4
                 }),
                 target.z(),
             );

@@ -977,25 +977,28 @@ pub fn fn_8024FD40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         i = 0_i32;
         'l3: while i < 6_i32 {
             'c4: {
-                let _ = fns::mn_8022EE84(
-                    ctx,
-                    (Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(
-                        (Handle::add(
-                            Handle::add(
-                                user_data,
-                                (statics::melee__mn__mndatadel::mnDataDel_803EF8AC(ctx)
-                                    .at(i)
-                                    .get()
-                                    .wrapping_mul((4_i32 as u32))
-                                    as i32),
-                            ),
-                            16_i32,
-                        )),
-                    ))
-                    .get(),
-                    inl_mnDataDel_GetAnimSettings_unfused(ctx, data),
-                    0x480_i32,
-                );
+                let _ = {
+                    let __t1 = inl_mnDataDel_GetAnimSettings_unfused(ctx, data);
+                    fns::mn_8022EE84(
+                        ctx,
+                        (Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(
+                            (Handle::add(
+                                Handle::add(
+                                    user_data,
+                                    (statics::melee__mn__mndatadel::mnDataDel_803EF8AC(ctx)
+                                        .at(i)
+                                        .get()
+                                        .wrapping_mul((4_i32 as u32))
+                                        as i32),
+                                ),
+                                16_i32,
+                            )),
+                        ))
+                        .get(),
+                        __t1,
+                        0x480_i32,
+                    )
+                };
             }
             i = i.wrapping_add(1);
         }

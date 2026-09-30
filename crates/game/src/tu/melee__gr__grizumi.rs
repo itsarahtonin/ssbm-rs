@@ -237,9 +237,12 @@ pub fn grIzumi_801CBE64<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         y.set_x(fp::frsp(0_i32 as f64));
         y.set_y(fp::frsp(1_i32 as f64));
         y.set_z(fp::frsp(27_i32.wrapping_neg() as f64));
-        y.set_x(fp::fmuls(y.x(), fns::Ground_801C0498(ctx)));
-        y.set_y(fp::fmuls(y.y(), fns::Ground_801C0498(ctx)));
-        y.set_z(fp::fmuls(y.z(), fns::Ground_801C0498(ctx)));
+        let __t1 = fns::Ground_801C0498(ctx);
+        y.set_x(fp::fmuls(y.x(), __t1));
+        let __t2 = fns::Ground_801C0498(ctx);
+        y.set_y(fp::fmuls(y.y(), __t2));
+        let __t3 = fns::Ground_801C0498(ctx);
+        y.set_z(fp::fmuls(y.z(), __t3));
         let _ = fns::grLib_801C96F8(ctx, 0x7536_i32, 30_i32, y);
     }
     (gp).u().izumi().set_xCC(fns::grIzumi_801CBCE8(ctx, 2_i32));
@@ -765,10 +768,10 @@ pub fn grIzumi_801CCBDC<'a>(
                     jobj2 = fns::Ground_801C3FA4(ctx, gobj, 2_i32);
                     if !Handle::is_null(jobj2) {
                         fns::lb_8000B1CC(ctx, jobj2, null::<Vec<'a>>(ctx), vec);
-                        (gp).u().izumi3().set_xD8(fp::fdivs(
-                            (fp::fsubs(vec.y(), aa.y())),
-                            fns::Ground_801C0498(ctx),
-                        ));
+                        (gp).u().izumi3().set_xD8({
+                            let __t1 = fns::Ground_801C0498(ctx);
+                            fp::fdivs((fp::fsubs(vec.y(), aa.y())), __t1)
+                        });
                     } else {
                         (gp).u().izumi3().set_xD8(45.0);
                     }
@@ -924,12 +927,10 @@ pub fn grIzumi_801CCEA0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, renderpass: i32) {
             0.5,
             0.5,
         );
-        fns::PSMTXConcat(
-            ctx,
-            mtx.get(0),
-            fns::HSD_CObjGetViewingMtxPtr(ctx, cobj),
-            (refl).texture_matrix().get(0),
-        );
+        {
+            let __t2 = fns::HSD_CObjGetViewingMtxPtr(ctx, cobj);
+            fns::PSMTXConcat(ctx, mtx.get(0), __t2, (refl).texture_matrix().get(0))
+        };
         fns::ftDrawCommon_80081118(ctx);
     }
 }

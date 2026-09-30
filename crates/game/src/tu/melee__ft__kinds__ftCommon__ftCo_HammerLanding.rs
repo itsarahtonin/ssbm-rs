@@ -37,15 +37,18 @@ pub fn ftCo_HammerLanding_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         .hammerlanding()
         .set_x4(fp::frsp((fns::p_ftCommonData(ctx).get()).x6B4() as f64));
     flags = fns::ftCo_800C54C4(ctx, fp);
-    fns::ftCo_Landing_Enter(
-        ctx,
-        gobj,
-        (enums::ftCo_MS_HammerLanding as i32),
-        (1_u32 as i32),
-        flags,
-        fns::ftCo_800C548C(ctx, fp),
-        1.0,
-    );
+    {
+        let __t1 = fns::ftCo_800C548C(ctx, fp);
+        fns::ftCo_Landing_Enter(
+            ctx,
+            gobj,
+            (enums::ftCo_MS_HammerLanding as i32),
+            (1_u32 as i32),
+            flags,
+            __t1,
+            1.0,
+        )
+    };
     fns::ftCo_800C4E94(ctx, fp);
 }
 

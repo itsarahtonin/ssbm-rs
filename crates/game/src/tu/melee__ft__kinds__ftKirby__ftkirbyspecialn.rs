@@ -63,10 +63,10 @@ pub fn ftKb_SpecialN_800F58D8<'a>(
     let mut cos_val: f64 = fns::cosf(ctx, (da).specialn_spit_out_release_angle());
     let mut temp: f64 = fp::fmuls((da).specialn_swallow_star_vertical_velocity(), cos_val);
     (victim_self_vel).set_x(fp::fmuls(victim_facing_dir, temp));
-    (victim_self_vel).set_y(fp::fmuls(
-        (da).specialn_swallow_star_vertical_velocity(),
-        fns::sinf(ctx, (da).specialn_spit_out_release_angle()),
-    ));
+    (victim_self_vel).set_y({
+        let __t1 = fns::sinf(ctx, (da).specialn_spit_out_release_angle());
+        fp::fmuls((da).specialn_swallow_star_vertical_velocity(), __t1)
+    });
     (victim_self_vel).set_z(0.0);
     return (da).specialn_swallow_star_gravity();
 }

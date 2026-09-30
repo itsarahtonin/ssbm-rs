@@ -477,7 +477,10 @@ pub fn _Toy_80304D30<'a>(ctx: &'a Ctx) -> i32 {
     'l5: while idk != 0_i32 {
         'c6: {
             if (((idk as u32) > (2_i32 as u32)) && ((qwe).get() != 0_i32))
-                && ((qwe).get() == fns::Toy_80304B94(ctx, idk))
+                && ({
+                    let __t1 = fns::Toy_80304B94(ctx, idk);
+                    (qwe).get() == __t1
+                })
             {
                 {
                     i = 0_i32;
@@ -2653,13 +2656,14 @@ pub fn _Toy_8030663C<'a>(ctx: &'a Ctx) {
                         k = 0_i32;
                         'l5: while k < count {
                             'c6: {
-                                if ((src_2).key().at(0_i32).get() as i32)
-                                    == (statics::melee__ty__toy::_Toy_803064B8(
+                                if {
+                                    let __t1 = (statics::melee__ty__toy::_Toy_803064B8(
                                         ctx,
                                         (j as i16),
                                         (1_i32 as i8),
-                                    ) as i32)
-                                {
+                                    ) as i32);
+                                    ((src_2).key().at(0_i32).get() as i32) == __t1
+                                } {
                                     (dst_2).key().at(1_i32).set((src_2).key().at(0_i32).get());
                                     dst_2 = Handle::add(dst_2, 1);
                                     break 'l5;
@@ -2691,26 +2695,30 @@ pub fn _Toy_8030663C<'a>(ctx: &'a Ctx) {
                         'l9: while k_2 < count {
                             'c10: {
                                 if fns::lbLang_IsSavedLanguageJP(ctx) != 0_i32 {
-                                    if ((src_3).key().at(0_i32).get() as i32)
-                                        == (statics::melee__ty__toy::_Toy_803064B8(
+                                    if {
+                                        let __t2 = (statics::melee__ty__toy::_Toy_803064B8(
                                             ctx,
                                             (j_2 as i16),
                                             (2_i32 as i8),
-                                        ) as i32)
-                                    {
+                                        )
+                                            as i32);
+                                        ((src_3).key().at(0_i32).get() as i32) == __t2
+                                    } {
                                         (dst_3).key().at(2_i32).set((src_3).key().at(0_i32).get());
                                         dst_3 = Handle::add(dst_3, 1);
                                         break 'l9;
                                     }
                                 } else {
                                     tmp = src_3;
-                                    if ((tmp).key().at(0_i32).get() as i32)
-                                        == (statics::melee__ty__toy::_Toy_803064B8(
+                                    if {
+                                        let __t3 = (statics::melee__ty__toy::_Toy_803064B8(
                                             ctx,
                                             (j_2 as i16),
                                             (3_i32 as i8),
-                                        ) as i32)
-                                    {
+                                        )
+                                            as i32);
+                                        ((tmp).key().at(0_i32).get() as i32) == __t3
+                                    } {
                                         (dst_3).key().at(2_i32).set((tmp).key().at(0_i32).get());
                                         dst_3 = Handle::add(dst_3, 1);
                                         break 'l9;
@@ -2762,26 +2770,29 @@ pub fn Toy_803067BC<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
         (((shl_i32(arg0, (1_i32 as u32))) as u32).wrapping_add(keys)) as u32,
     );
     dest = Handle::cast::<Val<'a, i16>>(
-        (Handle::add(
-            Handle::cast::<Val<'a, u8>>(fns::Toy_sbss_804D6EDC(ctx).get()),
-            ({
+        ({
+            let __t2 = ({
                 let __t1 = shl_i32(count, (1_i32 as u32));
                 offset = __t1;
                 __t1
-            }),
-        )),
+            });
+            Handle::add(
+                Handle::cast::<Val<'a, u8>>(fns::Toy_sbss_804D6EDC(ctx).get()),
+                __t2,
+            )
+        }),
     );
     'l3: while {
-        let __t3 = count;
+        let __t4 = count;
         count = count.wrapping_sub(1);
-        __t3
+        __t4
     } != 0_i32
     {
         'c4: {
             ({
-                let __t2 = dest;
+                let __t3 = dest;
                 dest = Handle::add(dest, -1);
-                __t2
+                __t3
             })
             .set((src).get());
             src = Handle::add(src, 3_i32);
@@ -3456,16 +3467,19 @@ pub fn Toy_80307470<'a>(ctx: &'a Ctx, arg0: i32) {
             anim.at(0_i32).get(),
         );
         fns::HSD_JObjReqAnimAll(ctx, loaded_jobj, 0.0);
-        fns::HSD_GObjObject_80390A70(
-            ctx,
-            (tg).x0(),
-            ({
+        {
+            let __t2 = ({
                 let __t1 = fns::HSD_GObj_JObjKind(ctx).get();
                 kind = __t1;
                 __t1
-            }),
-            Handle::cast::<Addr<'a>>(loaded_jobj),
-        );
+            });
+            fns::HSD_GObjObject_80390A70(
+                ctx,
+                (tg).x0(),
+                __t2,
+                Handle::cast::<Addr<'a>>(loaded_jobj),
+            )
+        };
         fns::GObj_SetupGXLink(
             ctx,
             (tg).x0(),
@@ -4247,11 +4261,10 @@ pub fn _Toy_803084A0<'a>(ctx: &'a Ctx, arg0: i32) {
             (text).x34().set_y(1.0);
         }
     }
-    fns::HSD_SisLib_803A6368(
-        ctx,
-        (display).x144(),
-        fns::Toy_803063D4(ctx, id, 2_i32, 0x128_i32),
-    );
+    {
+        let __t1 = fns::Toy_803063D4(ctx, id, 2_i32, 0x128_i32);
+        fns::HSD_SisLib_803A6368(ctx, (display).x144(), __t1)
+    };
     if Handle::is_null((display).x148()) {
         if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
             (display).set_x148(fns::HSD_SisLib_803A5ACC(
@@ -4290,11 +4303,10 @@ pub fn _Toy_803084A0<'a>(ctx: &'a Ctx, arg0: i32) {
         text = (display).x148();
         (text).set_default_kerning((1_i32 as u8));
     }
-    fns::HSD_SisLib_803A6368(
-        ctx,
-        (display).x148(),
-        fns::Toy_803063D4(ctx, id, 2_i32, 0x374_i32),
-    );
+    {
+        let __t2 = fns::Toy_803063D4(ctx, id, 2_i32, 0x374_i32);
+        fns::HSD_SisLib_803A6368(ctx, (display).x148(), __t2)
+    };
     if Handle::is_null((display).x14C()) {
         if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
             (display).set_x14C(fns::HSD_SisLib_803A5ACC(
@@ -4364,16 +4376,14 @@ pub fn _Toy_803084A0<'a>(ctx: &'a Ctx, arg0: i32) {
         ((display).x14C()).set_default_alignment((0_i32 as u8));
         ((display).x150()).set_default_alignment((0_i32 as u8));
     }
-    fns::HSD_SisLib_803A6368(
-        ctx,
-        (display).x14C(),
-        fns::Toy_803063D4(ctx, id, 0x128_i32, 0x37a_i32),
-    );
-    fns::HSD_SisLib_803A6368(
-        ctx,
-        (display).x150(),
-        fns::Toy_803063D4(ctx, id, 0x24e_i32, 0x380_i32),
-    );
+    {
+        let __t3 = fns::Toy_803063D4(ctx, id, 0x128_i32, 0x37a_i32);
+        fns::HSD_SisLib_803A6368(ctx, (display).x14C(), __t3)
+    };
+    {
+        let __t4 = fns::Toy_803063D4(ctx, id, 0x24e_i32, 0x380_i32);
+        fns::HSD_SisLib_803A6368(ctx, (display).x150(), __t4)
+    };
 }
 
 pub fn Toy_803087F4<'a>(ctx: &'a Ctx, arg0: Addr<'a>) -> HSD_GObj<'a> {
@@ -4482,19 +4492,20 @@ pub fn Toy_803087F4<'a>(ctx: &'a Ctx, arg0: Addr<'a>) -> HSD_GObj<'a> {
             if !Handle::is_null(fns::_Toy_sbss_804D6E9C(ctx).get()) {
                 fns::DevText_Erase(ctx, fns::_Toy_sbss_804D6E9C(ctx).get());
                 fns::DevText_SetCursorXY(ctx, fns::_Toy_sbss_804D6E9C(ctx).get(), 0_i32, 0_i32);
-                let _ = fns::sprintf(
-                    ctx,
-                    buf.at(0),
-                    cstr(ctx, 0x803fe2a4),
-                    &[
-                        VarArg::Float(fns::Toy_803060BC(ctx, ((anim).xC() as i32), 0_i32)),
-                        VarArg::Float(fns::Toy_803060BC(ctx, ((anim).xC() as i32), 1_i32)),
-                        VarArg::Float(fns::Toy_803060BC(ctx, ((anim).xC() as i32), 2_i32)),
-                        VarArg::Float(fns::Toy_803060BC(ctx, ((anim).xC() as i32), 3_i32)),
-                        VarArg::Float(fns::Toy_803060BC(ctx, ((anim).xC() as i32), 4_i32)),
-                        VarArg::Float(fns::Toy_803060BC(ctx, ((anim).xC() as i32), 5_i32)),
-                    ],
-                );
+                let _ = {
+                    let __t1 = VarArg::Float(fns::Toy_803060BC(ctx, ((anim).xC() as i32), 5_i32));
+                    let __t2 = VarArg::Float(fns::Toy_803060BC(ctx, ((anim).xC() as i32), 4_i32));
+                    let __t3 = VarArg::Float(fns::Toy_803060BC(ctx, ((anim).xC() as i32), 3_i32));
+                    let __t4 = VarArg::Float(fns::Toy_803060BC(ctx, ((anim).xC() as i32), 2_i32));
+                    let __t5 = VarArg::Float(fns::Toy_803060BC(ctx, ((anim).xC() as i32), 1_i32));
+                    let __t6 = VarArg::Float(fns::Toy_803060BC(ctx, ((anim).xC() as i32), 0_i32));
+                    fns::sprintf(
+                        ctx,
+                        buf.at(0),
+                        cstr(ctx, 0x803fe2a4),
+                        &[__t6, __t5, __t4, __t3, __t2, __t1],
+                    )
+                };
                 fns::DevText_Print(ctx, fns::_Toy_sbss_804D6E9C(ctx).get(), buf.at(0));
             }
             {
@@ -6348,9 +6359,10 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 unreachable!();
             }
             298 => {
-                __state = if (((display).selectedIdx() as i32).wrapping_add(1_i32))
-                    >= inl__Toy_GetTrophyTotal(ctx, base)
-                {
+                __state = if {
+                    let __t2 = inl__Toy_GetTrophyTotal(ctx, base);
+                    (((display).selectedIdx() as i32).wrapping_add(1_i32)) >= __t2
+                } {
                     302
                 } else {
                     304
@@ -6378,9 +6390,9 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             303 => {
                 __state = if !Handle::is_null(
                     ({
-                        let __t2 = ((display).first_entry()).archive();
-                        ma_2 = __t2;
-                        __t2
+                        let __t3 = ((display).first_entry()).archive();
+                        ma_2 = __t3;
+                        __t3
                     }),
                 ) {
                     310
@@ -7127,12 +7139,11 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             }
             94 => {
                 inl_HSD_JObjAddRotationY(ctx, jobj_next, 0.01745329238474369, adj_x);
-                statics::melee__ty__toy::_Toy_803062EC(
-                    ctx,
-                    ((anim).xC() as i32),
-                    5_u32,
-                    fp::fmuls(57.295780181884766, inl_HSD_JObjGetRotationY(ctx, jobj_next)),
-                );
+                {
+                    let __t2 =
+                        fp::fmuls(57.295780181884766, inl_HSD_JObjGetRotationY(ctx, jobj_next));
+                    statics::melee__ty__toy::_Toy_803062EC(ctx, ((anim).xC() as i32), 5_u32, __t2)
+                };
                 abs_y = (if (adj_y) < fp::frsp(0_i32 as f64) {
                     fp::fneg((adj_y))
                 } else {
@@ -7291,12 +7302,10 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             125 => {
                 dx = fp::fmuls(0.009999999776482582, fns::cosf(ctx, angle));
                 inl_HSD_JObjAddTranslationX(ctx, jobj_next, dx);
-                statics::melee__ty__toy::_Toy_803062EC(
-                    ctx,
-                    ((anim).xC() as i32),
-                    0_u32,
-                    inl_HSD_JObjGetTranslationX(ctx, jobj_next),
-                );
+                {
+                    let __t3 = inl_HSD_JObjGetTranslationX(ctx, jobj_next);
+                    statics::melee__ty__toy::_Toy_803062EC(ctx, ((anim).xC() as i32), 0_u32, __t3)
+                };
                 __state = 126;
             }
             126 => {
@@ -7315,12 +7324,10 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 sin = fns::sinf(ctx, angle);
                 dz = fp::fmuls(0.009999999776482582, fp::fneg(sin));
                 inl_HSD_JObjAddTranslationZ(ctx, jobj_next, dz);
-                statics::melee__ty__toy::_Toy_803062EC(
-                    ctx,
-                    ((anim).xC() as i32),
-                    2_u32,
-                    inl_HSD_JObjGetTranslationZ(ctx, jobj_next),
-                );
+                {
+                    let __t4 = inl_HSD_JObjGetTranslationZ(ctx, jobj_next);
+                    statics::melee__ty__toy::_Toy_803062EC(ctx, ((anim).xC() as i32), 2_u32, __t4)
+                };
                 __state = 129;
             }
             129 => {
@@ -7332,12 +7339,10 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             131 => {
                 dx_2 = fp::fmuls(0.009999999776482582, fns::cosf(ctx, angle));
                 inl_HSD_JObjAddTranslationX(ctx, jobj_next, dx_2);
-                statics::melee__ty__toy::_Toy_803062EC(
-                    ctx,
-                    ((anim).xC() as i32),
-                    0_u32,
-                    inl_HSD_JObjGetTranslationX(ctx, jobj_next),
-                );
+                {
+                    let __t5 = inl_HSD_JObjGetTranslationX(ctx, jobj_next);
+                    statics::melee__ty__toy::_Toy_803062EC(ctx, ((anim).xC() as i32), 0_u32, __t5)
+                };
                 __state = 132;
             }
             132 => {
@@ -7355,12 +7360,10 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             134 => {
                 dy = fp::fmuls(0.009999999776482582, fns::sinf(ctx, angle));
                 inl_HSD_JObjAddTranslationY(ctx, jobj_next, dy);
-                statics::melee__ty__toy::_Toy_803062EC(
-                    ctx,
-                    ((anim).xC() as i32),
-                    1_u32,
-                    inl_HSD_JObjGetTranslationY(ctx, jobj_next),
-                );
+                {
+                    let __t6 = inl_HSD_JObjGetTranslationY(ctx, jobj_next);
+                    statics::melee__ty__toy::_Toy_803062EC(ctx, ((anim).xC() as i32), 1_u32, __t6)
+                };
                 __state = 135;
             }
             135 => {
@@ -7393,12 +7396,10 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 inl_HSD_JObjAddScaleX(ctx, jobj_next, 0.009999999776482582);
                 inl_HSD_JObjAddScaleY(ctx, jobj_next, 0.009999999776482582);
                 inl_HSD_JObjAddScaleZ(ctx, jobj_next, 0.009999999776482582);
-                statics::melee__ty__toy::_Toy_803062EC(
-                    ctx,
-                    ((anim).xC() as i32),
-                    3_u32,
-                    inl_HSD_JObjGetScaleX(ctx, jobj_next),
-                );
+                {
+                    let __t7 = inl_HSD_JObjGetScaleX(ctx, jobj_next);
+                    statics::melee__ty__toy::_Toy_803062EC(ctx, ((anim).xC() as i32), 3_u32, __t7)
+                };
                 __state = if ((inl_Toy_80305C44(ctx) & 8_i32) != 0) {
                     145
                 } else {
@@ -7434,12 +7435,10 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 inl_HSD_JObjAddScaleX(ctx, jobj_next, fp::fneg(0.009999999776482582));
                 inl_HSD_JObjAddScaleY(ctx, jobj_next, fp::fneg(0.009999999776482582));
                 inl_HSD_JObjAddScaleZ(ctx, jobj_next, fp::fneg(0.009999999776482582));
-                statics::melee__ty__toy::_Toy_803062EC(
-                    ctx,
-                    ((anim).xC() as i32),
-                    3_u32,
-                    inl_HSD_JObjGetScaleX(ctx, jobj_next),
-                );
+                {
+                    let __t8 = inl_HSD_JObjGetScaleX(ctx, jobj_next);
+                    statics::melee__ty__toy::_Toy_803062EC(ctx, ((anim).xC() as i32), 3_u32, __t8)
+                };
                 __state = if ((inl_Toy_80305C44(ctx) & 4_i32) != 0) {
                     152
                 } else {
@@ -7475,12 +7474,10 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 n2 = (jobj_next).next();
                 inl_HSD_JObjAddScaleX(ctx, n2, 0.009999999776482582);
                 inl_HSD_JObjAddScaleZ(ctx, n2, 0.009999999776482582);
-                statics::melee__ty__toy::_Toy_803062EC(
-                    ctx,
-                    ((anim).xC() as i32),
-                    4_u32,
-                    inl_HSD_JObjGetScaleX(ctx, n2),
-                );
+                {
+                    let __t9 = inl_HSD_JObjGetScaleX(ctx, n2);
+                    statics::melee__ty__toy::_Toy_803062EC(ctx, ((anim).xC() as i32), 4_u32, __t9)
+                };
                 __state = if ((inl_Toy_80305C44(ctx) & 2_i32) != 0) {
                     159
                 } else {
@@ -7518,12 +7515,10 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 n2 = (jobj_next).next();
                 inl_HSD_JObjAddScaleX(ctx, n2, fp::fneg(0.009999999776482582));
                 inl_HSD_JObjAddScaleZ(ctx, n2, fp::fneg(0.009999999776482582));
-                statics::melee__ty__toy::_Toy_803062EC(
-                    ctx,
-                    ((anim).xC() as i32),
-                    4_u32,
-                    inl_HSD_JObjGetScaleX(ctx, n2),
-                );
+                {
+                    let __t10 = inl_HSD_JObjGetScaleX(ctx, n2);
+                    statics::melee__ty__toy::_Toy_803062EC(ctx, ((anim).xC() as i32), 4_u32, __t10)
+                };
                 __state = if ((inl_Toy_80305C44(ctx) & 1_i32) != 0) {
                     165
                 } else {
@@ -9401,9 +9396,10 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 unreachable!();
             }
             214 => {
-                __state = if (((display).selectedIdx() as i32).wrapping_add(1_i32))
-                    >= inl__Toy_GetTrophyTotal(ctx, base)
-                {
+                __state = if {
+                    let __t2 = inl__Toy_GetTrophyTotal(ctx, base);
+                    (((display).selectedIdx() as i32).wrapping_add(1_i32)) >= __t2
+                } {
                     218
                 } else {
                     220
@@ -9431,9 +9427,9 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             219 => {
                 __state = if !Handle::is_null(
                     ({
-                        let __t2 = ((display).first_entry()).archive();
-                        old_archive_2 = __t2;
-                        __t2
+                        let __t3 = ((display).first_entry()).archive();
+                        old_archive_2 = __t3;
+                        __t3
                     }),
                 ) {
                     226
@@ -10588,17 +10584,20 @@ pub fn _Toy_80310B48<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     .get() as i32)
                     .wrapping_add(1_i32)) as i16),
             );
-        if ((editor)
-            .values()
-            .at((((editor).selected_slot() as i8) as i32))
-            .get() as i32)
-            > fns::Toy_80304B94(ctx, (((editor).selected_slot() as i8) as i32))
-        {
+        if {
+            let __t3 = fns::Toy_80304B94(ctx, (((editor).selected_slot() as i8) as i32));
+            ((editor)
+                .values()
+                .at((((editor).selected_slot() as i8) as i32))
+                .get() as i32)
+                > __t3
+        } {
             let mut selected_slot: u8 = (editor).selected_slot();
+            let __t4 = (fns::Toy_80304B94(ctx, ((selected_slot as i8) as i32)) as i16);
             (editor)
                 .values()
                 .at((((editor).selected_slot() as i8) as i32))
-                .set((fns::Toy_80304B94(ctx, ((selected_slot as i8) as i32)) as i16));
+                .set(__t4);
         }
         (editor).set_repeat_delay((4_i32 as u8));
         changed = 1_i32;
@@ -10894,27 +10893,30 @@ pub fn _Toy_80311788<'a>(ctx: &'a Ctx) {
             .get() as i32),
             1_i32,
         );
-        let _ = fns::sprintf(
-            ctx,
-            buf.at(0),
-            cstr(ctx, 0x803fe2a4),
-            &[
-                VarArg::Float(fns::Toy_803060BC(
-                    ctx,
-                    ((Handle::add(
-                        fns::Toy_sbss_804D6EDC(ctx).get(),
-                        ((fns::Toy_sbss_804D6EE0(ctx).get()).selectedIdx() as i32),
-                    ))
-                    .get() as i32),
-                    0_i32,
-                )),
-                VarArg::Float(f31),
-                VarArg::Float(f30),
-                VarArg::Float(f29),
-                VarArg::Float(f28),
-                VarArg::Float(f27),
-            ],
-        );
+        let _ = {
+            let __t1 = VarArg::Float(fns::Toy_803060BC(
+                ctx,
+                ((Handle::add(
+                    fns::Toy_sbss_804D6EDC(ctx).get(),
+                    ((fns::Toy_sbss_804D6EE0(ctx).get()).selectedIdx() as i32),
+                ))
+                .get() as i32),
+                0_i32,
+            ));
+            fns::sprintf(
+                ctx,
+                buf.at(0),
+                cstr(ctx, 0x803fe2a4),
+                &[
+                    __t1,
+                    VarArg::Float(f31),
+                    VarArg::Float(f30),
+                    VarArg::Float(f29),
+                    VarArg::Float(f28),
+                    VarArg::Float(f27),
+                ],
+            )
+        };
         fns::DevText_Print(ctx, fns::_Toy_sbss_804D6E9C(ctx).get(), buf.at(0));
     } else {
         fns::OSReport(ctx, cstr(ctx, 0x803fe7e4), &[]);

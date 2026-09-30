@@ -118,7 +118,10 @@ pub fn itFreezer_UnkMotion2_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     if fns::it_80272C6C(ctx, gobj) == 0_i32 {
         inl_itFreezer_UnkMotion2_Anim_Inline_unfused(ctx, gobj);
     }
-    if (item_temp).pos().y() > fns::Stage_GetBlastZoneTopOffset(ctx) {
+    if {
+        let __t1 = fns::Stage_GetBlastZoneTopOffset(ctx);
+        (item_temp).pos().y() > __t1
+    } {
         return 1_i32;
     }
     return 0_i32;

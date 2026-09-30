@@ -386,13 +386,16 @@ fn inl_gm_80187F48_OnEnter_inline_unfused<'a>(ctx: &'a Ctx, arg0: gm_80187F48_En
                 .at((si as i32))
                 .get() as u32),
         );
-        fns::lbAudioAx_8002702C(
-            ctx,
-            (statics::melee__gm__gm_1879::gm_1832_NormalBgmIds(ctx)
-                .at((si as i32))
-                .get() as u32),
-            inl_gm_80187F48_GetAudioConfig_unfused(ctx, si),
-        );
+        {
+            let __t1 = inl_gm_80187F48_GetAudioConfig_unfused(ctx, si);
+            fns::lbAudioAx_8002702C(
+                ctx,
+                (statics::melee__gm__gm_1879::gm_1832_NormalBgmIds(ctx)
+                    .at((si as i32))
+                    .get() as u32),
+                __t1,
+            )
+        };
     }
     fns::lbAudioAx_80027168(ctx);
     fns::lbAudioAx_80027648(ctx);

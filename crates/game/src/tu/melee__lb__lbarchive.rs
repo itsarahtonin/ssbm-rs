@@ -340,9 +340,11 @@ fn inl_vLoadSections_unfused<'a>(
     {
         'l1: while !Handle::is_null(symbol) {
             'c2: {
-                symbol_name =
-                    ((Handle::cast::<Ptr<'a, Val<'a, i8>>>(fns::__va_arg(ctx, symbols, 1_u8)))
-                        .get());
+                symbol_name = ((Handle::cast::<Ptr<'a, Val<'a, i8>>>({
+                    let __t1 = 1_u8;
+                    fns::__va_arg(ctx, symbols, __t1)
+                }))
+                .get());
                 (symbol).set(null::<Addr<'a>>(ctx));
                 (symbol).set(fns::HSD_ArchiveGetPublicAddress(ctx, archive, symbol_name));
                 if Handle::is_null((symbol).get()) {
@@ -353,9 +355,11 @@ fn inl_vLoadSections_unfused<'a>(
                     );
                 }
             }
-            symbol =
-                ((Handle::cast::<Ptr<'a, Ptr<'a, Addr<'a>>>>(fns::__va_arg(ctx, symbols, 1_u8)))
-                    .get());
+            symbol = ((Handle::cast::<Ptr<'a, Ptr<'a, Addr<'a>>>>({
+                let __t2 = 1_u8;
+                fns::__va_arg(ctx, symbols, __t2)
+            }))
+            .get());
         }
     }
 }
@@ -405,9 +409,11 @@ fn inl_vLoadSectionsFatal_unfused<'a>(
     {
         'l1: while !Handle::is_null(symbol) {
             'c2: {
-                symbol_name =
-                    ((Handle::cast::<Ptr<'a, Val<'a, i8>>>(fns::__va_arg(ctx, symbols, 1_u8)))
-                        .get());
+                symbol_name = ((Handle::cast::<Ptr<'a, Val<'a, i8>>>({
+                    let __t1 = 1_u8;
+                    fns::__va_arg(ctx, symbols, __t1)
+                }))
+                .get());
                 (symbol).set(null::<Addr<'a>>(ctx));
                 (symbol).set(fns::HSD_ArchiveGetPublicAddress(ctx, archive, symbol_name));
                 if Handle::is_null((symbol).get()) {
@@ -428,9 +434,11 @@ fn inl_vLoadSectionsFatal_unfused<'a>(
                     });
                 }
             }
-            symbol =
-                ((Handle::cast::<Ptr<'a, Ptr<'a, Addr<'a>>>>(fns::__va_arg(ctx, symbols, 1_u8)))
-                    .get());
+            symbol = ((Handle::cast::<Ptr<'a, Ptr<'a, Addr<'a>>>>({
+                let __t2 = 1_u8;
+                fns::__va_arg(ctx, symbols, __t2)
+            }))
+            .get());
         }
     }
 }

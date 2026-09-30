@@ -68,7 +68,10 @@ pub fn ftYs_Init_8012B6E8<'a>(ctx: &'a Ctx, fp: Fighter<'a>, unk_struct_arg: S_U
                 if zero_float == (attr_r26).xC() {
                     (attr_r26).set_xC(inl_HSD_AObjGetEndFrame_unfused(ctx, aobj_r24));
                 } else {
-                    if (attr_r26).xC() != inl_HSD_AObjGetEndFrame_unfused(ctx, aobj_r24) {
+                    if {
+                        let __t2 = inl_HSD_AObjGetEndFrame_unfused(ctx, aobj_r24);
+                        (attr_r26).xC() != __t2
+                    } {
                         (if ((0_i32) != 0) {
                             { () }
                         } else {

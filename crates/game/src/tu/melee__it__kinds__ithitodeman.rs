@@ -143,12 +143,10 @@ pub fn it_802D4510<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    (ip).xDD4_itemVar()
-        .hitodeman()
-        .set_x88((attrs).x44().wrapping_add(fns::HSD_Randi(
-            ctx,
-            (attrs).x40().wrapping_sub((attrs).x44()),
-        )));
+    (ip).xDD4_itemVar().hitodeman().set_x88({
+        let __t1 = fns::HSD_Randi(ctx, (attrs).x40().wrapping_sub((attrs).x44()));
+        (attrs).x44().wrapping_add(__t1)
+    });
 }
 
 pub fn it_802D4564<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {

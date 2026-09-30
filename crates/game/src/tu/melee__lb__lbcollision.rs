@@ -366,13 +366,14 @@ pub fn lbColl_80006094<'a>(
                     }
                 }
                 {
-                    if arg4_offset.y()
-                        > ({
+                    if {
+                        let __t2 = ({
                             let __t1 = (arg1).y();
                             arg1_y = __t1;
                             __t1
-                        })
-                    {
+                        });
+                        arg4_offset.y() > __t2
+                    } {
                         {
                             let mut upper_bound: f64 = fp::fadds(arg4_offset.y(), unk_sum);
                             if (upper_bound < arg5_offset.y()) && (upper_bound < (arg3).y()) {
@@ -402,13 +403,14 @@ pub fn lbColl_80006094<'a>(
                 }
                 {
                     let mut arg1_z: f64 = 0.0;
-                    if arg4_offset.z()
-                        > ({
-                            let __t2 = (arg1).z();
-                            arg1_z = __t2;
-                            __t2
-                        })
-                    {
+                    if {
+                        let __t4 = ({
+                            let __t3 = (arg1).z();
+                            arg1_z = __t3;
+                            __t3
+                        });
+                        arg4_offset.z() > __t4
+                    } {
                         {
                             let mut upper_bound_2: f64 = fp::fadds(arg4_offset.z(), unk_sum);
                             if (upper_bound_2 < arg5_offset.z()) && (upper_bound_2 < (arg3).z()) {
@@ -1804,12 +1806,10 @@ pub fn lbColl_80007DD8<'a>(
     if Handle::addr(hit_transform)
         != Handle::addr(At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0))
     {
-        fns::PSMTXConcat(
-            ctx,
-            hit_transform,
-            inl_HSD_JObjGetMtxPtr_unfused(ctx, (hit).bone()),
-            transformed_hit.get(0),
-        );
+        {
+            let __t1 = inl_HSD_JObjGetMtxPtr_unfused(ctx, (hit).bone());
+            fns::PSMTXConcat(ctx, hit_transform, __t1, transformed_hit.get(0))
+        };
     }
     if ((capsule).x43_b1() != 0) {
         dist_offset = (capsule).scale();
@@ -1872,12 +1872,10 @@ pub fn lbColl_80007ECC<'a>(
         if Handle::addr(arg2)
             != Handle::addr(At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0))
         {
-            fns::PSMTXConcat(
-                ctx,
-                arg2,
-                inl_HSD_JObjGetMtxPtr_unfused(ctx, (arg1).bone()),
-                sp34.get(0),
-            );
+            {
+                let __t1 = inl_HSD_JObjGetMtxPtr_unfused(ctx, (arg1).bone());
+                fns::PSMTXConcat(ctx, arg2, __t1, sp34.get(0))
+            };
         }
         if Handle::addr(arg2)
             != Handle::addr(At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0))
@@ -1964,12 +1962,10 @@ pub fn lbColl_8000805C<'a>(
         if Handle::addr(arg2)
             != Handle::addr(At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0))
         {
-            fns::PSMTXConcat(
-                ctx,
-                arg2,
-                inl_HSD_JObjGetMtxPtr_unfused(ctx, (arg1).bone()),
-                sp38.get(0),
-            );
+            {
+                let __t1 = inl_HSD_JObjGetMtxPtr_unfused(ctx, (arg1).bone());
+                fns::PSMTXConcat(ctx, arg2, __t1, sp38.get(0))
+            };
         }
         if Handle::addr(arg2)
             != Handle::addr(At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0))
@@ -2037,12 +2033,10 @@ pub fn lbColl_80008248<'a>(
     if Handle::addr(arg2)
         != Handle::addr(At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0))
     {
-        fns::PSMTXConcat(
-            ctx,
-            arg2,
-            inl_HSD_JObjGetMtxPtr_unfused(ctx, (arg1).bone()),
-            sp34.get(0),
-        );
+        {
+            let __t1 = inl_HSD_JObjGetMtxPtr_unfused(ctx, (arg1).bone());
+            fns::PSMTXConcat(ctx, arg2, __t1, sp34.get(0))
+        };
     }
     if Handle::addr(arg2)
         != Handle::addr(At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0))
@@ -3264,12 +3258,10 @@ pub fn lbColl_8000A244<'a>(
         if Handle::addr(arg2)
             != Handle::addr(At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0))
         {
-            fns::PSMTXConcat(
-                ctx,
-                arg2,
-                inl_HSD_JObjGetMtxPtr_unfused(ctx, (hurt).bone()),
-                sp9C.get(0),
-            );
+            {
+                let __t1 = inl_HSD_JObjGetMtxPtr_unfused(ctx, (hurt).bone());
+                fns::PSMTXConcat(ctx, arg2, __t1, sp9C.get(0))
+            };
         }
         temp_f31 = (hurt).scale();
         temp_r31_2 = fns::lbColl_803B9928(ctx).get((hurt).state()).pad_x();
@@ -3373,12 +3365,10 @@ pub fn lbColl_8000A584<'a>(
             if Handle::addr(arg3)
                 != Handle::addr(At::new(ctx, 0_i32 as u32).field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0))
             {
-                fns::PSMTXConcat(
-                    ctx,
-                    arg3,
-                    inl_HSD_JObjGetMtxPtr_unfused(ctx, (hurt).bone()),
-                    spA0.get(0),
-                );
+                {
+                    let __t1 = inl_HSD_JObjGetMtxPtr_unfused(ctx, (hurt).bone());
+                    fns::PSMTXConcat(ctx, arg3, __t1, spA0.get(0))
+                };
             }
             temp_f31 = (hurt).scale();
             temp_r31_2 = fns::lbColl_803B9928(ctx).get((var_r4 as i32)).pad_x();

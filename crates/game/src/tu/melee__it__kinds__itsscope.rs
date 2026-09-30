@@ -828,10 +828,8 @@ pub fn it_80291F14<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, charge_level: i32) {
             break 'l1;
         }
     }
-    (ip).set_xD4C(
-        (ip).xD4C()
-            .wrapping_sub(inl_it_80291D38_unfused(ctx, gobj, charge_level)),
-    );
+    let __t1 = inl_it_80291D38_unfused(ctx, gobj, charge_level);
+    (ip).set_xD4C((ip).xD4C().wrapping_sub(__t1));
     if (ip).xD4C() < 0_i32 {
         (ip).set_xD4C(0_i32);
     }
@@ -1108,10 +1106,8 @@ fn inl_it_80291F14_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, charge_level: i
             break 'l1;
         }
     }
-    (ip).set_xD4C(
-        (ip).xD4C()
-            .wrapping_sub(fns::it_80291D38(ctx, gobj, charge_level)),
-    );
+    let __t1 = fns::it_80291D38(ctx, gobj, charge_level);
+    (ip).set_xD4C((ip).xD4C().wrapping_sub(__t1));
     if (ip).xD4C() < 0_i32 {
         (ip).set_xD4C(0_i32);
     }

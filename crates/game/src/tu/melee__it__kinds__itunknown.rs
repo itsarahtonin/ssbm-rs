@@ -65,11 +65,19 @@ pub fn itUnknown_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((((ip).pos().x() > fns::Stage_GetBlastZoneRightOffset(ctx))
-        || ((ip).pos().x() < fns::Stage_GetBlastZoneLeftOffset(ctx)))
-        || ((ip).pos().y() > fns::Stage_GetBlastZoneTopOffset(ctx)))
-        || ((ip).pos().y() < fns::Stage_GetBlastZoneBottomOffset(ctx))
-    {
+    if ((({
+        let __t1 = fns::Stage_GetBlastZoneRightOffset(ctx);
+        (ip).pos().x() > __t1
+    }) || ({
+        let __t2 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+        (ip).pos().x() < __t2
+    })) || ({
+        let __t3 = fns::Stage_GetBlastZoneTopOffset(ctx);
+        (ip).pos().y() > __t3
+    })) || ({
+        let __t4 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+        (ip).pos().y() < __t4
+    }) {
         fns::it_802CE8D0(ctx, gobj);
     }
     return 0_i32;
@@ -124,16 +132,16 @@ pub fn it_802CE8D0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 .unknown()
                 .x6C()
                 .set_x(fns::Stage_GetBlastZoneRightOffset(ctx));
-            (ip).xDD4_itemVar().unknown().x6C().set_y(fp::fadds(
-                fp::frsp(inl_randi_perm_unfused(
-                    ctx,
-                    fp::fsubs(
-                        fns::Stage_GetBlastZoneTopOffset(ctx),
-                        fns::Stage_GetBlastZoneBottomOffset(ctx),
-                    ),
-                ) as f64),
-                fns::Stage_GetBlastZoneBottomOffset(ctx),
-            ));
+            (ip).xDD4_itemVar().unknown().x6C().set_y({
+                let __t2 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+                fp::fadds(
+                    fp::frsp(inl_randi_perm_unfused(ctx, {
+                        let __t1 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+                        fp::fsubs(fns::Stage_GetBlastZoneTopOffset(ctx), __t1)
+                    }) as f64),
+                    __t2,
+                )
+            });
             break 's1;
         }
         if __case <= 1 {
@@ -142,30 +150,30 @@ pub fn it_802CE8D0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 .unknown()
                 .x6C()
                 .set_x(fns::Stage_GetBlastZoneLeftOffset(ctx));
-            (ip).xDD4_itemVar().unknown().x6C().set_y(fp::fadds(
-                fp::frsp(inl_randi_perm_unfused(
-                    ctx,
-                    fp::fsubs(
-                        fns::Stage_GetBlastZoneTopOffset(ctx),
-                        fns::Stage_GetBlastZoneBottomOffset(ctx),
-                    ),
-                ) as f64),
-                fns::Stage_GetBlastZoneBottomOffset(ctx),
-            ));
+            (ip).xDD4_itemVar().unknown().x6C().set_y({
+                let __t4 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+                fp::fadds(
+                    fp::frsp(inl_randi_perm_unfused(ctx, {
+                        let __t3 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+                        fp::fsubs(fns::Stage_GetBlastZoneTopOffset(ctx), __t3)
+                    }) as f64),
+                    __t4,
+                )
+            });
             break 's1;
         }
         if __case <= 2 {
             (ip).xDD4_itemVar().unknown().set_x84(2_i32);
-            (ip).xDD4_itemVar().unknown().x6C().set_x(fp::fadds(
-                fp::frsp(inl_randi_perm_unfused(
-                    ctx,
-                    fp::fsubs(
-                        fns::Stage_GetBlastZoneRightOffset(ctx),
-                        fns::Stage_GetBlastZoneLeftOffset(ctx),
-                    ),
-                ) as f64),
-                fns::Stage_GetBlastZoneLeftOffset(ctx),
-            ));
+            (ip).xDD4_itemVar().unknown().x6C().set_x({
+                let __t6 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+                fp::fadds(
+                    fp::frsp(inl_randi_perm_unfused(ctx, {
+                        let __t5 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+                        fp::fsubs(fns::Stage_GetBlastZoneRightOffset(ctx), __t5)
+                    }) as f64),
+                    __t6,
+                )
+            });
             (ip).xDD4_itemVar()
                 .unknown()
                 .x6C()
@@ -174,16 +182,16 @@ pub fn it_802CE8D0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
         if __case <= 3 {
             (ip).xDD4_itemVar().unknown().set_x84(3_i32);
-            (ip).xDD4_itemVar().unknown().x6C().set_x(fp::fadds(
-                fp::frsp(inl_randi_perm_unfused(
-                    ctx,
-                    fp::fsubs(
-                        fns::Stage_GetBlastZoneRightOffset(ctx),
-                        fns::Stage_GetBlastZoneLeftOffset(ctx),
-                    ),
-                ) as f64),
-                fns::Stage_GetBlastZoneLeftOffset(ctx),
-            ));
+            (ip).xDD4_itemVar().unknown().x6C().set_x({
+                let __t8 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+                fp::fadds(
+                    fp::frsp(inl_randi_perm_unfused(ctx, {
+                        let __t7 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+                        fp::fsubs(fns::Stage_GetBlastZoneRightOffset(ctx), __t7)
+                    }) as f64),
+                    __t8,
+                )
+            });
             (ip).xDD4_itemVar()
                 .unknown()
                 .x6C()
@@ -254,12 +262,10 @@ pub fn itUnknown_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         attr = Handle::cast::<itUnknownAttributes<'a>>(
             ((ip).xC4_article_data()).x4_specialAttributes(),
         );
-        (ip).xDD4_itemVar().unknown().x64().set_i(
-            (attr)
-                .x20()
-                .i()
-                .wrapping_add(fns::HSD_Randi(ctx, (attr).x1C().i())),
-        );
+        (ip).xDD4_itemVar().unknown().x64().set_i({
+            let __t1 = fns::HSD_Randi(ctx, (attr).x1C().i());
+            (attr).x20().i().wrapping_add(__t1)
+        });
     }
     return 0_i32;
 }
@@ -333,23 +339,23 @@ pub fn it_802CED54<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             spawn
                 .prev_pos()
                 .set_x((ip).xDD4_itemVar().unknown().x6C().x());
-            spawn.prev_pos().set_y(fp::fadds(
-                (ip).xDD4_itemVar().unknown().x6C().y(),
-                (fp::fsubs(
+            spawn.prev_pos().set_y({
+                let __t1 = (fp::fsubs(
                     fp::frsp(inl_randi_perm(ctx, range) as f64),
                     fp::fdivs(range, fp::frsp(2_i32 as f64)),
-                )),
-            ));
+                ));
+                fp::fadds((ip).xDD4_itemVar().unknown().x6C().y(), __t1)
+            });
             break 's1;
         }
         if __case <= 1 {
-            spawn.prev_pos().set_x(fp::fadds(
-                (ip).xDD4_itemVar().unknown().x6C().x(),
-                (fp::fsubs(
+            spawn.prev_pos().set_x({
+                let __t2 = (fp::fsubs(
                     fp::frsp(inl_randi_perm(ctx, range) as f64),
                     fp::fdivs(range, fp::frsp(2_i32 as f64)),
-                )),
-            ));
+                ));
+                fp::fadds((ip).xDD4_itemVar().unknown().x6C().x(), __t2)
+            });
             spawn
                 .prev_pos()
                 .set_y((ip).xDD4_itemVar().unknown().x6C().y());

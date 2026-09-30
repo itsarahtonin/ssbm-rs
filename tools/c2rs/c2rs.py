@@ -610,6 +610,9 @@ class Translator:
         self.forwarded = {}  # parameter name -> (factor a, factor c, negated)
         self.in_args = 0
         self._call_sites = None
+        # Statements the call being translated runs before it: its arguments with effects, in
+        # MWCC's order.
+        self.call_pre = []
 
     # Entry point.
 
@@ -1753,7 +1756,7 @@ class Translator:
             return [f"Handle::copy_from({lv.addr_code}, {v.code});"]
         v = self.convert(self.expr(b), t)
         pre = []
-        if not lv.pure and not v.pure:
+        if not v.pure and (not lv.pure or (calls_or_effects(b) and self.address_reads_memory(a))):
             # MWCC evaluates the right side first, then where it goes.
             tmp = self.f.temp()
             pre.append(f"let {tmp} = {v.code};")
@@ -1772,14 +1775,17 @@ class Translator:
         lv = self.lvalue(a)
         pre = []
         rhs = self.expr(b)
-        if not lv.pure:
-            if not rhs.pure:
-                if op in ("+", "-") and is_float(lv.ty) and self.product(b, lv.ty, True) is not None:
-                    raise Unsupported("fused compound assignment with effects on both sides")
-                # MWCC evaluates the right side first, then where it goes.
+        if not rhs.pure:
+            fused = op in ("+", "-") and is_float(lv.ty) and self.product(b, lv.ty, True) is not None
+            if not lv.pure and fused:
+                raise Unsupported("fused compound assignment with effects on both sides")
+            if not fused and (not lv.pure or (calls_or_effects(b) and self.reads_memory(a))):
+                # MWCC evaluates the right side first, then the value it changes. (A fused
+                # multiply-add reads that value last as it is.)
                 tmp = self.f.temp()
                 pre.append(f"let {tmp} = {rhs.code};")
                 rhs = Expr(tmp, rhs.ty, True)
+        if not lv.pure:
             lv = self.pinned(lv, pre)
         cur = Expr(lv.read(), lv.ty, True)
         if is_ptr(lv.ty):
@@ -2122,6 +2128,16 @@ class Translator:
         if op in ("<", ">", "<=", ">=", "==", "!="):
             return Expr(f"({self.compare(op, a, b)}) as i32", INT, True)
         va, vb = self.expr(a), self.expr(b)
+        if calls_or_effects(b) and (calls_or_effects(a) or self.reads_memory(a)) and \
+                not (op in ("+", "-") and is_float(t) and (self.product(a, t) or self.product(b, t, True))):
+            # MWCC evaluates the right side first.
+            pre = []
+            vb = Expr(self.first(vb.code, pre), vb.ty, True)
+            res = self.binary_values(op, a, b, va, vb, t)
+            return Expr("{ " + " ".join(pre) + f" {res.code} }}", res.ty, False)
+        return self.binary_values(op, a, b, va, vb, t)
+
+    def binary_values(self, op, a, b, va, vb, t):
         if op in ("+", "-") and (is_ptr(va.ty) or is_ptr(vb.ty)):
             return self.ptr_arith(op, va, vb)
         if op in ("<<", ">>"):
@@ -2406,6 +2422,14 @@ class Translator:
 
     def compare(self, op, a, b):
         va, vb = self.expr(a), self.expr(b)
+        if calls_or_effects(b) and (calls_or_effects(a) or self.reads_memory(a)):
+            # MWCC evaluates the right side first.
+            pre = []
+            vb = Expr(self.first(vb.code, pre), vb.ty, True)
+            return "{ " + " ".join(pre) + f" {self.compare_values(op, va, vb)} }}"
+        return self.compare_values(op, va, vb)
+
+    def compare_values(self, op, va, vb):
         if is_ptr(va.ty) or is_ptr(vb.ty) or va.ty["k"] == "fn" or vb.ty["k"] == "fn":
             def addr(v):
                 if is_null_code(v.code):
@@ -2419,9 +2443,108 @@ class Translator:
         t = arith(va.ty, vb.ty)
         return f"{self.convert(va, t).code} {op} {self.convert(vb, t).code}"
 
+    # Evaluation order. MWCC evaluates the operands that call something (or have other side
+    # effects) first, right to left, and loads the rest after them; Rust goes left to right.
+
+    def reads_memory(self, node):
+        """Whether evaluating a C expression may read memory, which a call evaluated before it
+        could change: anything but constants, register locals and addresses computed from
+        them."""
+        n = strip(node)
+        k = n.kind
+        if k in (CK.INTEGER_LITERAL, CK.FLOATING_LITERAL, CK.CHARACTER_LITERAL, CK.STRING_LITERAL):
+            return False
+        if k == CK.DECL_REF_EXPR:
+            r = n.referenced
+            if r is None:
+                return True
+            if r.kind in (CK.FUNCTION_DECL, CK.ENUM_CONSTANT_DECL):
+                return False
+            if r.kind == CK.PARM_DECL or (r.kind == CK.VAR_DECL and not is_static(r)
+                                          and r.semantic_parent is not None
+                                          and r.semantic_parent.kind == CK.FUNCTION_DECL):
+                t = self.u.ctype(r.type)
+                return t["k"] in ("rec", "arr") or vkey(r) in self.f.escaping
+            return True
+        if k == CK.UNARY_OPERATOR:
+            op = UNOPS.get(_lib.clang_getCursorUnaryOperatorKind(n))
+            if op == "&":
+                return self.address_reads_memory(children(n)[0])
+            if op == "*":
+                return True
+            return any(self.reads_memory(x) for x in children(n))
+        if k in (CK.CSTYLE_CAST_EXPR, CK.UNEXPOSED_EXPR, CK.CONDITIONAL_OPERATOR) or \
+                (k == CK.BINARY_OPERATOR and BINOPS.get(_lib.clang_getCursorBinaryOperatorKind(n)) != "="):
+            return any(self.reads_memory(x) for x in children(n) if x.kind.is_expression())
+        return True
+
+    def address_reads_memory(self, node):
+        """Whether computing where a C lvalue lies may read memory."""
+        n = strip(node)
+        k = n.kind
+        if k == CK.DECL_REF_EXPR:
+            return False
+        if k == CK.MEMBER_REF_EXPR:
+            base = children(n)[0]
+            if is_ptr(self.u.ctype(base.type)):
+                return self.reads_memory(base)
+            return self.address_reads_memory(base)
+        if k == CK.ARRAY_SUBSCRIPT_EXPR:
+            base, index = children(n)
+            array = self.u.ctype(strip(base).type)["k"] == "arr"
+            return self.reads_memory(index) or (
+                self.address_reads_memory(base) if array else self.reads_memory(base))
+        if k == CK.UNARY_OPERATOR and UNOPS.get(_lib.clang_getCursorUnaryOperatorKind(n)) == "*":
+            return self.reads_memory(children(n)[0])
+        if k == CK.CSTYLE_CAST_EXPR:
+            return self.address_reads_memory(children(n)[-1])
+        return True
+
+    def first(self, code, pre):
+        """`code` as a temporary that `pre` computes first."""
+        tmp = self.f.temp()
+        pre.append(f"let {tmp} = {code};")
+        return tmp
+
+    def mwcc_order(self, args, out, fwd):
+        """A call's arguments in MWCC's order: where Rust's left to right would differ, those
+        that call something go into temporaries first, right to left, which `call_pre` computes
+        before the call. The factors of a product an inline copy takes in place of an argument
+        (`fwd`) go in them the same way."""
+        variadic = isinstance(out, tuple)
+        codes = list(out[0]) + list(out[1]) if variadic else list(out)
+        nodes = list(args[:len(codes)])
+        calls = [i for i, n in enumerate(nodes) if calls_or_effects(n)]
+        if not calls or (len(calls) == 1 and not any(self.reads_memory(n) for n in nodes[:calls[0]])):
+            return out
+        for i in reversed(calls):
+            if fwd is not None and i in fwd:
+                pname, (fa, fc, neg) = fwd[i]
+                na, nc = product_factors(nodes[i])
+                if nc is None or calls_or_effects(nc):
+                    fc = self.first(fc, self.call_pre)
+                if na is None or calls_or_effects(na):
+                    fa = self.first(fa, self.call_pre)
+                fwd[i] = (pname, (fa, fc, neg))
+            else:
+                codes[i] = self.first(codes[i], self.call_pre)
+        if variadic:
+            return codes[:len(out[0])], codes[len(out[0]):]
+        return codes
+
     # Calls.
 
     def call(self, c):
+        saved, self.call_pre = self.call_pre, []
+        try:
+            e = self.call_expr(c)
+            if self.call_pre:
+                e = Expr("{ " + " ".join(self.call_pre) + f" {e.code} }}", e.ty, False)
+            return e
+        finally:
+            self.call_pre = saved
+
+    def call_expr(self, c):
         kids = children(c)
         callee = strip(kids[0])
         args = kids[1:]
@@ -2477,7 +2600,8 @@ class Translator:
                     self.u.inline_fallbacks.append((self.f.cursor.spelling, name, str(e)))
                 else:
                     argv = self.forwarding(self.call_args(ft, args, inlined=True,
-                                                          unread=unread_params(defn) | self.fn_arg_slots(defn, fnargs)),
+                                                          unread=unread_params(defn) | self.fn_arg_slots(defn, fnargs),
+                                                          fwd=fwd),
                                            fwd)
                     if t["k"] == "rec":
                         return self.sret_call(rname, argv, t)
@@ -2509,7 +2633,8 @@ class Translator:
             fwd = self.forward_args(defn, args)
             fnargs = self.fn_args(defn, args)
             argv = self.forwarding(self.call_args(ft, args, inlined=True,
-                                                  unread=unread_params(defn) | self.fn_arg_slots(defn, fnargs)),
+                                                  unread=unread_params(defn) | self.fn_arg_slots(defn, fnargs),
+                                                  fwd=fwd),
                                    fwd)
             rname = self.u.request_inline(defn, self.fuse, self, self.reg_ptr_args(defn, args),
                                           {pn: neg for pn, (_, _, neg) in fwd.values()},
@@ -2964,14 +3089,15 @@ class Translator:
         return Expr("{ " + f"{path}(ctx, {ident(slot)}{''.join(', ' + a for a in argv)}); {ident(slot)}" + " }",
                     t, False)
 
-    def call_args(self, ft, args, marshal=False, inlined=False, unread=()):
+    def call_args(self, ft, args, marshal=False, inlined=False, unread=(), fwd=None):
         if not inlined:
             self.reserve_outgoing(ft, args)
         self.in_args += inlined
         try:
-            return self._call_args(ft, args, marshal, unread)
+            out = self._call_args(ft, args, marshal, unread)
         finally:
             self.in_args -= inlined
+        return self.mwcc_order(args, out, fwd)
 
     def _call_args(self, ft, args, marshal=False, unread=()):
         params = ft["params"]
@@ -3170,6 +3296,22 @@ def unread_params(defn):
     used = {n.referenced.spelling for n in (body[0].walk_preorder() if body else ())
             if n.kind == CK.DECL_REF_EXPR and n.referenced is not None and n.referenced.kind == CK.PARM_DECL}
     return {i for i, a in enumerate(params) if a.spelling not in used}
+
+
+def calls_or_effects(node):
+    """Whether a C expression calls a function, as MWCC evaluates first, or has other effects."""
+    return any(n.kind == CK.CALL_EXPR for n in node.walk_preorder()) or has_effects(node)
+
+
+def product_factors(node):
+    """The factors of a product, or of a negated one, as C expressions: (None, None) otherwise."""
+    n = strip(node)
+    if n.kind == CK.UNARY_OPERATOR and UNOPS.get(_lib.clang_getCursorUnaryOperatorKind(n)) == "-":
+        n = strip(children(n)[0])
+    if n.kind == CK.BINARY_OPERATOR and BINOPS.get(_lib.clang_getCursorBinaryOperatorKind(n)) == "*":
+        a, c = children(n)
+        return a, c
+    return None, None
 
 
 def has_effects(node, depth=0):

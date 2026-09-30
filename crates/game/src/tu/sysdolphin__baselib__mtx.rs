@@ -1079,18 +1079,18 @@ pub fn HSD_MtxScaledAdd<'a>(
     let mut arr0: Val<'a, F32> = ((Handle::add(arg0, 0_i32)).at(0_i32));
     let mut arr1: Val<'a, F32> = ((Handle::add(arg1, 0_i32)).at(0_i32));
     let mut arr2: Val<'a, F32> = ((Handle::add(arg2, 0_i32)).at(0_i32));
-    let __t6 = fp::fmadds(
+    let __t7 = fp::fmadds(
         arg3,
         ({
-            let __t4 = arr0;
+            let __t5 = arr0;
             arr0 = Handle::add(arr0, 1);
-            __t4
+            __t5
         })
         .get(),
         ({
-            let __t5 = arr1;
+            let __t6 = arr1;
             arr1 = Handle::add(arr1, 1);
-            __t5
+            __t6
         })
         .get(),
     );
@@ -1099,112 +1099,91 @@ pub fn HSD_MtxScaledAdd<'a>(
         arr2 = Handle::add(arr2, 1);
         __t1
     })
-    .set(__t6);
-    let __t12 = fp::fmadds(
+    .set(__t7);
+    let __t14 = fp::fmadds(
         arg3,
         ({
-            let __t10 = arr0;
+            let __t12 = arr0;
             arr0 = Handle::add(arr0, 1);
-            __t10
+            __t12
         })
         .get(),
         ({
-            let __t11 = arr1;
+            let __t13 = arr1;
             arr1 = Handle::add(arr1, 1);
-            __t11
+            __t13
         })
         .get(),
     );
     ({
-        let __t7 = arr2;
+        let __t8 = arr2;
         arr2 = Handle::add(arr2, 1);
-        __t7
+        __t8
     })
-    .set(__t12);
-    let __t18 = fp::fmadds(
+    .set(__t14);
+    let __t21 = fp::fmadds(
         arg3,
         ({
-            let __t16 = arr0;
+            let __t19 = arr0;
             arr0 = Handle::add(arr0, 1);
-            __t16
+            __t19
         })
         .get(),
         ({
-            let __t17 = arr1;
+            let __t20 = arr1;
             arr1 = Handle::add(arr1, 1);
-            __t17
+            __t20
         })
         .get(),
     );
     ({
-        let __t13 = arr2;
+        let __t15 = arr2;
         arr2 = Handle::add(arr2, 1);
-        __t13
+        __t15
     })
-    .set(__t18);
-    let __t24 = fp::fmadds(
+    .set(__t21);
+    let __t28 = fp::fmadds(
         arg3,
         ({
-            let __t22 = arr0;
+            let __t26 = arr0;
             arr0 = Handle::add(arr0, 1);
-            __t22
+            __t26
         })
         .get(),
         ({
-            let __t23 = arr1;
+            let __t27 = arr1;
             arr1 = Handle::add(arr1, 1);
-            __t23
+            __t27
         })
         .get(),
     );
     ({
-        let __t19 = arr2;
+        let __t22 = arr2;
         arr2 = Handle::add(arr2, 1);
-        __t19
+        __t22
     })
-    .set(__t24);
-    let __t30 = fp::fmadds(
+    .set(__t28);
+    let __t35 = fp::fmadds(
         arg3,
         ({
-            let __t28 = arr0;
+            let __t33 = arr0;
             arr0 = Handle::add(arr0, 1);
-            __t28
+            __t33
         })
         .get(),
         ({
-            let __t29 = arr1;
+            let __t34 = arr1;
             arr1 = Handle::add(arr1, 1);
-            __t29
-        })
-        .get(),
-    );
-    ({
-        let __t25 = arr2;
-        arr2 = Handle::add(arr2, 1);
-        __t25
-    })
-    .set(__t30);
-    let __t36 = fp::fmadds(
-        arg3,
-        ({
-            let __t34 = arr0;
-            arr0 = Handle::add(arr0, 1);
             __t34
         })
         .get(),
-        ({
-            let __t35 = arr1;
-            arr1 = Handle::add(arr1, 1);
-            __t35
-        })
-        .get(),
     );
     ({
-        let __t31 = arr2;
+        let __t29 = arr2;
         arr2 = Handle::add(arr2, 1);
-        __t31
+        __t29
     })
-    .set(__t36);
+    .set(__t35);
     let __t42 = fp::fmadds(
         arg3,
         ({
@@ -1221,23 +1200,23 @@ pub fn HSD_MtxScaledAdd<'a>(
         .get(),
     );
     ({
-        let __t37 = arr2;
+        let __t36 = arr2;
         arr2 = Handle::add(arr2, 1);
-        __t37
+        __t36
     })
     .set(__t42);
-    let __t48 = fp::fmadds(
+    let __t49 = fp::fmadds(
         arg3,
         ({
-            let __t46 = arr0;
+            let __t47 = arr0;
             arr0 = Handle::add(arr0, 1);
-            __t46
+            __t47
         })
         .get(),
         ({
-            let __t47 = arr1;
+            let __t48 = arr1;
             arr1 = Handle::add(arr1, 1);
-            __t47
+            __t48
         })
         .get(),
     );
@@ -1246,91 +1225,112 @@ pub fn HSD_MtxScaledAdd<'a>(
         arr2 = Handle::add(arr2, 1);
         __t43
     })
-    .set(__t48);
-    let __t54 = fp::fmadds(
+    .set(__t49);
+    let __t56 = fp::fmadds(
         arg3,
         ({
-            let __t52 = arr0;
+            let __t54 = arr0;
             arr0 = Handle::add(arr0, 1);
-            __t52
+            __t54
         })
         .get(),
         ({
-            let __t53 = arr1;
+            let __t55 = arr1;
             arr1 = Handle::add(arr1, 1);
-            __t53
+            __t55
         })
         .get(),
     );
     ({
-        let __t49 = arr2;
+        let __t50 = arr2;
         arr2 = Handle::add(arr2, 1);
-        __t49
+        __t50
     })
-    .set(__t54);
-    let __t60 = fp::fmadds(
+    .set(__t56);
+    let __t63 = fp::fmadds(
         arg3,
         ({
-            let __t58 = arr0;
+            let __t61 = arr0;
             arr0 = Handle::add(arr0, 1);
-            __t58
+            __t61
         })
         .get(),
         ({
-            let __t59 = arr1;
+            let __t62 = arr1;
             arr1 = Handle::add(arr1, 1);
-            __t59
+            __t62
         })
         .get(),
     );
     ({
-        let __t55 = arr2;
+        let __t57 = arr2;
         arr2 = Handle::add(arr2, 1);
-        __t55
+        __t57
     })
-    .set(__t60);
-    let __t66 = fp::fmadds(
+    .set(__t63);
+    let __t70 = fp::fmadds(
         arg3,
         ({
-            let __t64 = arr0;
+            let __t68 = arr0;
             arr0 = Handle::add(arr0, 1);
-            __t64
+            __t68
         })
         .get(),
         ({
-            let __t65 = arr1;
+            let __t69 = arr1;
             arr1 = Handle::add(arr1, 1);
-            __t65
+            __t69
         })
         .get(),
     );
     ({
-        let __t61 = arr2;
+        let __t64 = arr2;
         arr2 = Handle::add(arr2, 1);
-        __t61
+        __t64
     })
-    .set(__t66);
-    let __t72 = fp::fmadds(
+    .set(__t70);
+    let __t77 = fp::fmadds(
         arg3,
         ({
-            let __t70 = arr0;
+            let __t75 = arr0;
             arr0 = Handle::add(arr0, 1);
-            __t70
+            __t75
         })
         .get(),
         ({
-            let __t71 = arr1;
+            let __t76 = arr1;
             arr1 = Handle::add(arr1, 1);
-            __t71
+            __t76
         })
         .get(),
     );
     ({
-        let __t67 = arr2;
+        let __t71 = arr2;
         arr2 = Handle::add(arr2, 1);
-        __t67
+        __t71
     })
-    .set(__t72);
+    .set(__t77);
+    let __t84 = fp::fmadds(
+        arg3,
+        ({
+            let __t82 = arr0;
+            arr0 = Handle::add(arr0, 1);
+            __t82
+        })
+        .get(),
+        ({
+            let __t83 = arr1;
+            arr1 = Handle::add(arr1, 1);
+            __t83
+        })
+        .get(),
+    );
+    ({
+        let __t78 = arr2;
+        arr2 = Handle::add(arr2, 1);
+        __t78
+    })
+    .set(__t84);
 }
 
 pub fn HSD_VecAlloc<'a>(ctx: &'a Ctx) -> Addr<'a> {

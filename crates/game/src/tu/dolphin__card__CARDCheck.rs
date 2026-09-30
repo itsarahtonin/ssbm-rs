@@ -91,7 +91,10 @@ pub fn VerifyID<'a>(ctx: &'a Ctx, card: CARDControl<'a>) -> i32 {
     {
         return (6_i32.wrapping_neg());
     }
-    if ((id).encode() as i32) != (fns::OSGetFontEncode(ctx) as i32) {
+    if {
+        let __t1 = (fns::OSGetFontEncode(ctx) as i32);
+        ((id).encode() as i32) != __t1
+    } {
         return (13_i32.wrapping_neg());
     }
     rand = (Handle::cast::<Val<'a, i64>>((id).serial().at(12_i32))).get();

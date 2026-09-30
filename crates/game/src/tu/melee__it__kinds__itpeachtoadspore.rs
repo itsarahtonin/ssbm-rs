@@ -80,10 +80,10 @@ pub fn it_802BE2E8<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: HSD_GObj<'a>
     double_angle = fp::fsubs((fp::frsp(3.141592653589793)), (attr).xc_angle());
     angle_offset = fp::fmuls((attr).xc_angle(), rand);
     angle = fp::fmadds(0.5, double_angle, angle_offset);
-    (item_1).x40_vel().set_x(fp::fmuls(
-        (item_1).facing_dir(),
-        (fp::fmuls(speed, fns::sinf(ctx, angle))),
-    ));
+    (item_1).x40_vel().set_x({
+        let __t1 = (fp::fmuls(speed, fns::sinf(ctx, angle)));
+        fp::fmuls((item_1).facing_dir(), __t1)
+    });
     (item_1)
         .x40_vel()
         .set_y(fp::fmuls(speed, fns::cosf(ctx, angle)));

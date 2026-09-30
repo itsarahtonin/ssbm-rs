@@ -608,7 +608,10 @@ pub fn it_802A13EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> f64 {
                 pos,
             );
             dy = fp::fsubs(pos.y(), (ip).pos().y());
-            dx = fp::fsubs(pos.x(), inl_it_802A13EC_inline(ctx, ip));
+            dx = {
+                let __t1 = inl_it_802A13EC_inline(ctx, ip);
+                fp::fsubs(pos.x(), __t1)
+            };
             ret = inl_sqrtf(ctx, fp::fmadds((dx), (dx), fp::fmuls((dy), (dy))));
             if (ip).xDD4_itemVar().linkboomerang().xF80() > 0.0 {
                 (ip).xDD4_itemVar().linkboomerang().set_xF80(fp::fsubs(
@@ -926,20 +929,20 @@ pub fn it_802A20E8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                 fp::fmuls((((ip).x40_vel()).y()), (((ip).x40_vel()).y())),
             ),
         );
-        (ip).x40_vel().set_x(fp::fmuls(
-            (ip).xC70(),
-            (fp::fmuls(
+        (ip).x40_vel().set_x({
+            let __t1 = (fp::fmuls(
                 length,
                 fns::cosf(ctx, (ip).xDD4_itemVar().linkboomerang().xF74()),
-            )),
-        ));
-        (ip).x40_vel().set_y(fp::fmuls(
-            (ip).xC70(),
-            (fp::fmuls(
+            ));
+            fp::fmuls((ip).xC70(), __t1)
+        });
+        (ip).x40_vel().set_y({
+            let __t2 = (fp::fmuls(
                 length,
                 fns::sinf(ctx, (ip).xDD4_itemVar().linkboomerang().xF74()),
-            )),
-        ));
+            ));
+            fp::fmuls((ip).xC70(), __t2)
+        });
         if !Handle::is_null((ip).xDD4_itemVar().linkboomerang().xF98()) {
             let _ = fns::ftLk_SpecialS_RemoveBoomerang0(
                 ctx,
@@ -1670,15 +1673,13 @@ fn inl_itLinkboomerang_UnkMotion3_Phys_sub<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>,
                     == 0_i32)
             {
                 fns::ftLk_SpecialS2_Enter(ctx, (ip).xDD4_itemVar().linkboomerang().xF98());
-                fns::Item_8026AB54(
-                    ctx,
-                    gobj,
-                    (ip).xDD4_itemVar().linkboomerang().xF98(),
-                    fns::ftLk_SpecialHi_ProcessPartLThumbNb(
+                {
+                    let __t1 = fns::ftLk_SpecialHi_ProcessPartLThumbNb(
                         ctx,
                         (ip).xDD4_itemVar().linkboomerang().xF98(),
-                    ),
-                );
+                    );
+                    fns::Item_8026AB54(ctx, gobj, (ip).xDD4_itemVar().linkboomerang().xF98(), __t1)
+                };
             } else {
                 inl_remove_boomerang(ctx, gobj);
                 fns::Item_8026A8EC(ctx, gobj);

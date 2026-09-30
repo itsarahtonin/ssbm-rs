@@ -2723,63 +2723,57 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 q_2.set(pc.get());
                 inl_psReadFloat(ctx, q_2);
                 pc.set(q_2.get());
-                (pp).pos().set_x(fp::fadds(
-                    (pp).pos().x(),
-                    fp::fmsubs(
-                        fp::fmuls(
-                            2.0,
-                            ((Handle::cast::<Val<'a, F32>>(
-                                statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
-                            ))
-                            .get()),
-                        ),
-                        fns::HSD_Randf(ctx),
+                let __t15 = fp::fmsubs(
+                    fp::fmuls(
+                        2.0,
                         ((Handle::cast::<Val<'a, F32>>(
                             statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
                         ))
                         .get()),
                     ),
-                ));
+                    fns::HSD_Randf(ctx),
+                    ((Handle::cast::<Val<'a, F32>>(
+                        statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                    ))
+                    .get()),
+                );
+                (pp).pos().set_x(fp::fadds((pp).pos().x(), __t15));
                 q_3.set(pc.get());
                 inl_psReadFloat(ctx, q_3);
                 pc.set(q_3.get());
-                (pp).pos().set_y(fp::fadds(
-                    (pp).pos().y(),
-                    fp::fmsubs(
-                        fp::fmuls(
-                            2.0,
-                            ((Handle::cast::<Val<'a, F32>>(
-                                statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
-                            ))
-                            .get()),
-                        ),
-                        fns::HSD_Randf(ctx),
+                let __t17 = fp::fmsubs(
+                    fp::fmuls(
+                        2.0,
                         ((Handle::cast::<Val<'a, F32>>(
                             statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
                         ))
                         .get()),
                     ),
-                ));
+                    fns::HSD_Randf(ctx),
+                    ((Handle::cast::<Val<'a, F32>>(
+                        statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                    ))
+                    .get()),
+                );
+                (pp).pos().set_y(fp::fadds((pp).pos().y(), __t17));
                 q_4.set(pc.get());
                 inl_psReadFloat(ctx, q_4);
                 pc.set(q_4.get());
-                (pp).pos().set_z(fp::fadds(
-                    (pp).pos().z(),
-                    fp::fmsubs(
-                        fp::fmuls(
-                            2.0,
-                            ((Handle::cast::<Val<'a, F32>>(
-                                statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
-                            ))
-                            .get()),
-                        ),
-                        fns::HSD_Randf(ctx),
+                let __t19 = fp::fmsubs(
+                    fp::fmuls(
+                        2.0,
                         ((Handle::cast::<Val<'a, F32>>(
                             statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
                         ))
                         .get()),
                     ),
-                ));
+                    fns::HSD_Randf(ctx),
+                    ((Handle::cast::<Val<'a, F32>>(
+                        statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                    ))
+                    .get()),
+                );
+                (pp).pos().set_z(fp::fadds((pp).pos().z(), __t19));
                 __state = 141;
             }
             94 => {
@@ -2799,35 +2793,35 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             95 => {
                 idx_6 = shl_i32(
                     (({
-                        let __t14 = pc.get();
+                        let __t20 = pc.get();
                         pc.set(Handle::add(pc.get(), 1));
-                        __t14
+                        __t20
                     })
                     .get() as i32),
                     (8_i32 as u32),
                 );
                 idx_6 = idx_6.wrapping_add(
                     (({
-                        let __t15 = pc.get();
+                        let __t21 = pc.get();
                         pc.set(Handle::add(pc.get(), 1));
-                        __t15
+                        __t21
                     })
                     .get() as i32),
                 );
                 randomRange_2 = shl_i32(
                     (({
-                        let __t16 = pc.get();
+                        let __t22 = pc.get();
                         pc.set(Handle::add(pc.get(), 1));
-                        __t16
+                        __t22
                     })
                     .get() as i32),
                     (8_i32 as u32),
                 );
                 randomRange_2 = randomRange_2.wrapping_add(
                     (({
-                        let __t17 = pc.get();
+                        let __t23 = pc.get();
                         pc.set(Handle::add(pc.get(), 1));
-                        __t17
+                        __t23
                     })
                     .get() as i32),
                 );
@@ -2859,9 +2853,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 p_26.set(pc.get());
                 (pp).set_sizeCount(
                     (({
-                        let __t19 = p_26.get();
+                        let __t25 = p_26.get();
                         p_26.set(Handle::add(p_26.get(), 1));
-                        __t19
+                        __t25
                     })
                     .get() as u16),
                 );
@@ -2921,9 +2915,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 p_3 = pc.get();
                 (pp).set_rotateCount(
                     (({
-                        let __t24 = p_3;
+                        let __t30 = p_3;
                         p_3 = Handle::add(p_3, 1);
-                        __t24
+                        __t30
                     })
                     .get() as u16),
                 );
@@ -2937,9 +2931,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             108 => {
                 jobj_4 = statics::sysdolphin__baselib__particle::hsd_804D08E8(ctx)
                     .at((({
-                        let __t26 = pc.get();
+                        let __t32 = pc.get();
                         pc.set(Handle::add(pc.get(), 1));
-                        __t26
+                        __t32
                     })
                     .get() as i32)
                         .wrapping_add(((pp).pJObjOfs() as i32)))
@@ -2948,9 +2942,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             }
             109 => {
                 idx_7 = (({
-                    let __t28 = pc.get();
+                    let __t34 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t28
+                    __t34
                 })
                 .get() as i32);
                 idx_7 = idx_7.wrapping_add(((pp).pJObjOfs() as i32));
@@ -3023,17 +3017,17 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             114 => {
                 (pp).set_poseNum(
                     ({
-                        let __t39 = pc.get();
+                        let __t45 = pc.get();
                         pc.set(Handle::add(pc.get(), 1));
-                        __t39
+                        __t45
                     })
                     .get(),
                 );
                 randRange = fp::frsp(
                     ({
-                        let __t40 = pc.get();
+                        let __t46 = pc.get();
                         pc.set(Handle::add(pc.get(), 1));
-                        __t40
+                        __t46
                     })
                     .get() as f64,
                 );
@@ -3114,9 +3108,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             }
             117 => {
                 idx_10 = ({
-                    let __t41 = pc.get();
+                    let __t47 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t41
+                    __t47
                 })
                 .get();
                 (pp).set_kind(
@@ -3158,18 +3152,18 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             }
             122 => {
                 idx_11 = (({
-                    let __t64 = pc.get();
+                    let __t70 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t64
+                    __t70
                 })
                 .get() as i32);
                 __state = if idx_11 == 0_i32 { 810 } else { 812 };
             }
             123 => {
                 idx_12 = (({
-                    let __t65 = pc.get();
+                    let __t71 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t65
+                    __t71
                 })
                 .get() as i32);
                 p_27.set(pc.get());
@@ -3194,9 +3188,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             125 => {
                 (pp).set_palNum(
                     ({
-                        let __t66 = pc.get();
+                        let __t72 = pc.get();
                         pc.set(Handle::add(pc.get(), 1));
-                        __t66
+                        __t72
                     })
                     .get(),
                 );
@@ -3204,9 +3198,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             }
             126 => {
                 mode = (((({
-                    let __t67 = pc.get();
+                    let __t73 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t67
+                    __t73
                 })
                 .get() as i32)
                     & 3_i32) as u8);
@@ -3220,9 +3214,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             }
             127 => {
                 mode_2 = (((({
-                    let __t68 = pc.get();
+                    let __t74 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t68
+                    __t74
                 })
                 .get() as i32)
                     & 3_i32) as u8);
@@ -3284,9 +3278,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 .get());
                 pc.set(p_9);
                 timing_2 = (({
-                    let __t79 = pc.get();
+                    let __t85 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t79
+                    __t85
                 })
                 .get() as i32);
                 __state = if timing_2 != 0_i32 { 898 } else { 900 };
@@ -3294,9 +3288,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             134 => {
                 (pp).set_loopCount(
                     ({
-                        let __t80 = pc.get();
+                        let __t86 = pc.get();
                         pc.set(Handle::add(pc.get(), 1));
-                        __t80
+                        __t86
                     })
                     .get(),
                 );
@@ -4619,9 +4613,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             394 => {
                 __state = if !Handle::is_null(
                     ({
-                        let __t18 = (pp).appsrt();
-                        srt_4 = __t18;
-                        __t18
+                        let __t24 = (pp).appsrt();
+                        srt_4 = __t24;
+                        __t24
                     }),
                 ) {
                     396
@@ -4652,9 +4646,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             401 => {
                 cnt_2 = ((shl_i32(((cnt_2 as i32) & 127_i32), (8_i32 as u32))).wrapping_add(
                     (({
-                        let __t20 = p_26.get();
+                        let __t26 = p_26.get();
                         p_26.set(Handle::add(p_26.get(), 1));
-                        __t20
+                        __t26
                     })
                     .get() as i32),
                 ) as u16);
@@ -4832,9 +4826,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 p_2 = pc.get();
                 (pp).set_aCmpCount(
                     (({
-                        let __t21 = p_2;
+                        let __t27 = p_2;
                         p_2 = Handle::add(p_2, 1);
-                        __t21
+                        __t27
                     })
                     .get() as u16),
                 );
@@ -4851,9 +4845,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             425 => {
                 cnt_3 = ((shl_i32(((cnt_3 as i32) & 127_i32), (8_i32 as u32))).wrapping_add(
                     (({
-                        let __t22 = p_2;
+                        let __t28 = p_2;
                         p_2 = Handle::add(p_2, 1);
-                        __t22
+                        __t28
                     })
                     .get() as i32),
                 ) as u16);
@@ -4864,9 +4858,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 pc.set(p_2);
                 (pp).set_aCmpMode(
                     ({
-                        let __t23 = pc.get();
+                        let __t29 = pc.get();
                         pc.set(Handle::add(pc.get(), 1));
-                        __t23
+                        __t29
                     })
                     .get(),
                 );
@@ -4911,9 +4905,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             435 => {
                 cnt_4 = ((shl_i32(((cnt_4 as i32) & 127_i32), (8_i32 as u32))).wrapping_add(
                     (({
-                        let __t25 = p_3;
+                        let __t31 = p_3;
                         p_3 = Handle::add(p_3, 1);
-                        __t25
+                        __t31
                     })
                     .get() as i32),
                 ) as u16);
@@ -4999,9 +4993,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             447 => {
                 val = fp::fmadds(dx, dx, fp::fmuls(dy, dy));
                 __state = if ({
-                    let __t27 = fp::fmadds(dz, dz, val);
-                    dist_sq = __t27;
-                    __t27
+                    let __t33 = fp::fmadds(dz, dz, val);
+                    dist_sq = __t33;
+                    __t33
                 }) == 0.0
                 {
                     449
@@ -5198,9 +5192,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             486 => {
                 __state = if !Handle::is_null(
                     ({
-                        let __t29 = (pp).appsrt();
-                        srt_6 = __t29;
-                        __t29
+                        let __t35 = (pp).appsrt();
+                        srt_6 = __t35;
+                        __t35
                     }),
                 ) {
                     488
@@ -5364,9 +5358,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             519 => {
                 __state = if !Handle::is_null(
                     ({
-                        let __t30 = (pp).appsrt();
-                        srt_7 = __t30;
-                        __t30
+                        let __t36 = (pp).appsrt();
+                        srt_7 = __t36;
+                        __t36
                     }),
                 ) {
                     521
@@ -5449,9 +5443,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             526 => {
                 rand_val = fns::HSD_Randf(ctx);
                 delta = (({
-                    let __t31 = pc.get();
+                    let __t37 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t31
+                    __t37
                 })
                 .get() as i8);
                 rand_val = fp::fmuls(
@@ -5482,9 +5476,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 (pp).primColTarget().set_r((fp::fctiwz(val) as u8));
                 rand_val = fns::HSD_Randf(ctx);
                 delta = (({
-                    let __t32 = pc.get();
+                    let __t38 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t32
+                    __t38
                 })
                 .get() as i8);
                 rand_val = fp::fmuls(
@@ -5515,9 +5509,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 (pp).primColTarget().set_g((fp::fctiwz(val) as u8));
                 rand_val = fns::HSD_Randf(ctx);
                 delta = (({
-                    let __t33 = pc.get();
+                    let __t39 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t33
+                    __t39
                 })
                 .get() as i8);
                 rand_val = fp::fmuls(
@@ -5548,9 +5542,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 (pp).primColTarget().set_b((fp::fctiwz(val) as u8));
                 rand_val = fns::HSD_Randf(ctx);
                 delta = (({
-                    let __t34 = pc.get();
+                    let __t40 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t34
+                    __t40
                 })
                 .get() as i8);
                 rand_val = fp::fmuls(
@@ -5663,9 +5657,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             558 => {
                 rand_val_2 = fns::HSD_Randf(ctx);
                 delta_2 = (({
-                    let __t35 = pc.get();
+                    let __t41 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t35
+                    __t41
                 })
                 .get() as i8);
                 rand_val_2 = fp::fmuls(
@@ -5696,9 +5690,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 (pp).envColTarget().set_r((fp::fctiwz(val) as u8));
                 rand_val_2 = fns::HSD_Randf(ctx);
                 delta_2 = (({
-                    let __t36 = pc.get();
+                    let __t42 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t36
+                    __t42
                 })
                 .get() as i8);
                 rand_val_2 = fp::fmuls(
@@ -5729,9 +5723,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 (pp).envColTarget().set_g((fp::fctiwz(val) as u8));
                 rand_val_2 = fns::HSD_Randf(ctx);
                 delta_2 = (({
-                    let __t37 = pc.get();
+                    let __t43 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t37
+                    __t43
                 })
                 .get() as i8);
                 rand_val_2 = fp::fmuls(
@@ -5762,9 +5756,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 (pp).envColTarget().set_b((fp::fctiwz(val) as u8));
                 rand_val_2 = fns::HSD_Randf(ctx);
                 delta_2 = (({
-                    let __t38 = pc.get();
+                    let __t44 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t38
+                    __t44
                 })
                 .get() as i8);
                 rand_val_2 = fp::fmuls(
@@ -5941,9 +5935,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 p_5 = pc.get();
                 (pp).set_primColCount(
                     (({
-                        let __t42 = p_5;
+                        let __t48 = p_5;
                         p_5 = Handle::add(p_5, 1);
-                        __t42
+                        __t48
                     })
                     .get() as u16),
                 );
@@ -5960,9 +5954,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             605 => {
                 cnt_5 = ((shl_i32(((cnt_5 as i32) & 127_i32), (8_i32 as u32))).wrapping_add(
                     (({
-                        let __t43 = p_5;
+                        let __t49 = p_5;
                         p_5 = Handle::add(p_5, 1);
-                        __t43
+                        __t49
                     })
                     .get() as i32),
                 ) as u16);
@@ -5984,9 +5978,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             608 => {
                 (pp).primColTarget().set_r(
                     ({
-                        let __t44 = pc.get();
+                        let __t50 = pc.get();
                         pc.set(Handle::add(pc.get(), 1));
-                        __t44
+                        __t50
                     })
                     .get(),
                 );
@@ -6005,9 +5999,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             611 => {
                 (pp).primColTarget().set_g(
                     ({
-                        let __t45 = pc.get();
+                        let __t51 = pc.get();
                         pc.set(Handle::add(pc.get(), 1));
-                        __t45
+                        __t51
                     })
                     .get(),
                 );
@@ -6026,9 +6020,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             614 => {
                 (pp).primColTarget().set_b(
                     ({
-                        let __t46 = pc.get();
+                        let __t52 = pc.get();
                         pc.set(Handle::add(pc.get(), 1));
-                        __t46
+                        __t52
                     })
                     .get(),
                 );
@@ -6047,9 +6041,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             617 => {
                 (pp).primColTarget().set_a(
                     ({
-                        let __t47 = pc.get();
+                        let __t53 = pc.get();
                         pc.set(Handle::add(pc.get(), 1));
-                        __t47
+                        __t53
                     })
                     .get(),
                 );
@@ -6142,9 +6136,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 p_6 = pc.get();
                 (pp).set_envColCount(
                     (({
-                        let __t48 = p_6;
+                        let __t54 = p_6;
                         p_6 = Handle::add(p_6, 1);
-                        __t48
+                        __t54
                     })
                     .get() as u16),
                 );
@@ -6161,9 +6155,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             628 => {
                 cnt_6 = ((shl_i32(((cnt_6 as i32) & 127_i32), (8_i32 as u32))).wrapping_add(
                     (({
-                        let __t49 = p_6;
+                        let __t55 = p_6;
                         p_6 = Handle::add(p_6, 1);
-                        __t49
+                        __t55
                     })
                     .get() as i32),
                 ) as u16);
@@ -6185,9 +6179,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             631 => {
                 (pp).envColTarget().set_r(
                     ({
-                        let __t50 = pc.get();
+                        let __t56 = pc.get();
                         pc.set(Handle::add(pc.get(), 1));
-                        __t50
+                        __t56
                     })
                     .get(),
                 );
@@ -6206,9 +6200,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             634 => {
                 (pp).envColTarget().set_g(
                     ({
-                        let __t51 = pc.get();
+                        let __t57 = pc.get();
                         pc.set(Handle::add(pc.get(), 1));
-                        __t51
+                        __t57
                     })
                     .get(),
                 );
@@ -6227,9 +6221,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             637 => {
                 (pp).envColTarget().set_b(
                     ({
-                        let __t52 = pc.get();
+                        let __t58 = pc.get();
                         pc.set(Handle::add(pc.get(), 1));
-                        __t52
+                        __t58
                     })
                     .get(),
                 );
@@ -6248,9 +6242,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             640 => {
                 (pp).envColTarget().set_a(
                     ({
-                        let __t53 = pc.get();
+                        let __t59 = pc.get();
                         pc.set(Handle::add(pc.get(), 1));
-                        __t53
+                        __t59
                     })
                     .get(),
                 );
@@ -6407,9 +6401,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             652 => {
                 rand_r = fns::HSD_Randf(ctx);
                 delta_3 = (({
-                    let __t54 = pc.get();
+                    let __t60 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t54
+                    __t60
                 })
                 .get() as i8);
                 rand_r = fp::fmuls(
@@ -6462,9 +6456,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 (pp).envColTarget().set_r((fp::fctiwz(val) as u8));
                 rand_g = fns::HSD_Randf(ctx);
                 delta_3 = (({
-                    let __t55 = pc.get();
+                    let __t61 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t55
+                    __t61
                 })
                 .get() as i8);
                 rand_g = fp::fmuls(
@@ -6517,9 +6511,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 (pp).envColTarget().set_g((fp::fctiwz(val) as u8));
                 rand_b = fns::HSD_Randf(ctx);
                 delta_3 = (({
-                    let __t56 = pc.get();
+                    let __t62 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t56
+                    __t62
                 })
                 .get() as i8);
                 rand_b = fp::fmuls(
@@ -6572,9 +6566,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 (pp).envColTarget().set_b((fp::fctiwz(val) as u8));
                 rand_a = fns::HSD_Randf(ctx);
                 delta_3 = (({
-                    let __t57 = pc.get();
+                    let __t63 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t57
+                    __t63
                 })
                 .get() as i8);
                 rand_a = fp::fmuls(
@@ -6785,15 +6779,15 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             }
             713 => {
                 flags_3 = (({
-                    let __t58 = pc.get();
+                    let __t64 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t58
+                    __t64
                 })
                 .get() as i32);
                 timing = (({
-                    let __t59 = pc.get();
+                    let __t65 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t59
+                    __t65
                 })
                 .get() as i32);
                 __state = if timing != 0_i32 { 715 } else { 717 };
@@ -6825,9 +6819,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             }
             719 => {
                 delta_4 = (({
-                    let __t60 = pc.get();
+                    let __t66 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t60
+                    __t66
                 })
                 .get() as i8);
                 delta_float = fp::fmuls(
@@ -6906,9 +6900,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             }
             740 => {
                 delta_4 = (({
-                    let __t61 = pc.get();
+                    let __t67 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t61
+                    __t67
                 })
                 .get() as i8);
                 delta_float = fp::fmuls(
@@ -6987,9 +6981,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             }
             761 => {
                 delta_4 = (({
-                    let __t62 = pc.get();
+                    let __t68 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t62
+                    __t68
                 })
                 .get() as i8);
                 delta_float = fp::fmuls(
@@ -7069,9 +7063,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             782 => {
                 a_rand = fns::HSD_Randf(ctx);
                 delta_4 = (Handle::cast::<Val<'a, i8>>({
-                    let __t63 = pc.get();
+                    let __t69 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t63
+                    __t69
                 }))
                 .get();
                 a_rand = fp::frsp(fp::fctiwz(
@@ -7411,9 +7405,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 p_7 = pc.get();
                 (pp).set_matColCount(
                     (({
-                        let __t69 = p_7;
+                        let __t75 = p_7;
                         p_7 = Handle::add(p_7, 1);
-                        __t69
+                        __t75
                     })
                     .get() as u16),
                 );
@@ -7430,9 +7424,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             867 => {
                 cnt_7 = ((shl_i32(((cnt_7 as i32) & 127_i32), (8_i32 as u32))).wrapping_add(
                     (({
-                        let __t70 = p_7;
+                        let __t76 = p_7;
                         p_7 = Handle::add(p_7, 1);
-                        __t70
+                        __t76
                     })
                     .get() as i32),
                 ) as u16);
@@ -7442,9 +7436,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             868 => {
                 pc.set(p_7);
                 flags_4 = ({
-                    let __t71 = pc.get();
+                    let __t77 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t71
+                    __t77
                 })
                 .get();
                 (pp).set_matRGBTarget((pp).matRGB());
@@ -7460,9 +7454,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             870 => {
                 (pp).set_matRGBTarget(
                     ({
-                        let __t72 = pc.get();
+                        let __t78 = pc.get();
                         pc.set(Handle::add(pc.get(), 1));
-                        __t72
+                        __t78
                     })
                     .get(),
                 );
@@ -7481,9 +7475,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             873 => {
                 (pp).set_matATarget(
                     ({
-                        let __t73 = pc.get();
+                        let __t79 = pc.get();
                         pc.set(Handle::add(pc.get(), 1));
-                        __t73
+                        __t79
                     })
                     .get(),
                 );
@@ -7548,9 +7542,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 p_8 = pc.get();
                 (pp).set_ambColCount(
                     (({
-                        let __t74 = p_8;
+                        let __t80 = p_8;
                         p_8 = Handle::add(p_8, 1);
-                        __t74
+                        __t80
                     })
                     .get() as u16),
                 );
@@ -7567,9 +7561,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             884 => {
                 cnt_8 = ((shl_i32(((cnt_8 as i32) & 127_i32), (8_i32 as u32))).wrapping_add(
                     (({
-                        let __t75 = p_8;
+                        let __t81 = p_8;
                         p_8 = Handle::add(p_8, 1);
-                        __t75
+                        __t81
                     })
                     .get() as i32),
                 ) as u16);
@@ -7579,9 +7573,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             885 => {
                 pc.set(p_8);
                 flags_5 = ({
-                    let __t76 = pc.get();
+                    let __t82 = pc.get();
                     pc.set(Handle::add(pc.get(), 1));
-                    __t76
+                    __t82
                 })
                 .get();
                 (pp).set_ambRGBTarget((pp).ambRGB());
@@ -7597,9 +7591,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             887 => {
                 (pp).set_ambRGBTarget(
                     ({
-                        let __t77 = pc.get();
+                        let __t83 = pc.get();
                         pc.set(Handle::add(pc.get(), 1));
-                        __t77
+                        __t83
                     })
                     .get(),
                 );
@@ -7618,9 +7612,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             890 => {
                 (pp).set_ambATarget(
                     ({
-                        let __t78 = pc.get();
+                        let __t84 = pc.get();
                         pc.set(Handle::add(pc.get(), 1));
-                        __t78
+                        __t84
                     })
                     .get(),
                 );
@@ -7855,17 +7849,22 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 cosB = fns::cosf(ctx, (pp).fric());
                 (pp).vel()
                     .set_z(fp::fadds((pp).vel().z(), (gp).aux().tornado().vel()));
-                R = (if (gp).radius() < 0.0 {
+                R = (if {
+                    let __t87 = 0.0;
+                    (gp).radius() < __t87
+                } {
                     fp::fneg((gp).radius())
                 } else {
                     (gp).radius()
                 });
-                __state = if ({
-                    let __t81 = (gp).angle();
-                    ang = __t81;
-                    __t81
-                }) < 0.0
-                {
+                __state = if {
+                    let __t89 = 0.0;
+                    ({
+                        let __t88 = (gp).angle();
+                        ang = __t88;
+                        __t88
+                    }) < __t89
+                } {
                     944
                 } else {
                     945
@@ -7983,11 +7982,11 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
             957 => {
                 __state = if !Handle::is_null(
                     ({
-                        let __t82 = statics::sysdolphin__baselib__particle::hsd_804D08E8(ctx)
+                        let __t91 = statics::sysdolphin__baselib__particle::hsd_804D08E8(ctx)
                             .at(jobj_idx)
                             .get();
-                        jobj_6 = __t82;
-                        __t82
+                        jobj_6 = __t91;
+                        __t91
                     }),
                 ) {
                     962

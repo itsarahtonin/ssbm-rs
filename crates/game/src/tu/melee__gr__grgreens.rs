@@ -700,8 +700,10 @@ pub fn grGreens_80213C10<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                             > (statics::melee__gr__grgreens::yakumono_param(ctx).get()).x54())
                             || ((fp::frsp((gp).u().greens2().xC() as f64)
                                 > (statics::melee__gr__grgreens::yakumono_param(ctx).get()).x58())
-                                && ((gp).u().greens2().x14()
-                                    != inl_get_whispy_dir(ctx, gobj, pos2)))
+                                && ({
+                                    let __t1 = inl_get_whispy_dir(ctx, gobj, pos2);
+                                    (gp).u().greens2().x14() != __t1
+                                }))
                         {
                             (gp).u()
                                 .greens2()

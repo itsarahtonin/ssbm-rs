@@ -58,11 +58,10 @@ pub fn itDosei_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     Handle::copy_from((ip).xDD4_itemVar().dosei().xDE4(), (ip).pos());
     inl_HSD_JObjSetRotationZero(ctx, gobj);
-    inl_HSD_JObjSetRotationY(
-        ctx,
-        Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()),
-        inl_itDosei_FacingAngle(ctx, gobj, 0.0),
-    );
+    {
+        let __t1 = inl_itDosei_FacingAngle(ctx, gobj, 0.0);
+        inl_HSD_JObjSetRotationY(ctx, Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()), __t1)
+    };
     (ip).xDD4_itemVar()
         .dosei()
         .set_xDF0((ip).xDD4_itemVar().dosei().xDF0().wrapping_sub(1));
@@ -127,11 +126,10 @@ pub fn itDosei_802817A0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (ip).set_x5D0_animFrameSpeed(1.0);
     fns::lb_8000BA0C(ctx, jobj, 1.0);
     inl_HSD_JObjSetRotationZero(ctx, gobj);
-    inl_HSD_JObjSetRotationY(
-        ctx,
-        Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()),
-        inl_itDosei_FacingAngle(ctx, gobj, 0.0),
-    );
+    {
+        let __t1 = inl_itDosei_FacingAngle(ctx, gobj, 0.0);
+        inl_HSD_JObjSetRotationY(ctx, Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()), __t1)
+    };
     (ip).x40_vel()
         .set_x(fp::fmuls((ip).facing_dir(), (attr).unk8()));
     (ip).x40_vel().set_z(0.0);
@@ -246,11 +244,10 @@ pub fn itDosei_UnkMotion2_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     if fns::it_80272C6C(ctx, gobj) == 0_i32 {
         fns::Item_80268E5C(ctx, gobj, 1_i32, (enums::ITEM_ANIM_UPDATE as i32));
         (ip).set_facing_dir(fp::fneg((ip).facing_dir()));
-        inl_HSD_JObjSetRotationY(
-            ctx,
-            Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()),
-            inl_itDosei_FacingAngle(ctx, gobj, 0.0),
-        );
+        {
+            let __t1 = inl_itDosei_FacingAngle(ctx, gobj, 0.0);
+            inl_HSD_JObjSetRotationY(ctx, Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()), __t1)
+        };
     }
     return 0_i32;
 }
@@ -337,11 +334,11 @@ pub fn itDosei_Logic7_PickedUp<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     if (ip).msid() != 4_i32 {
         inl_HSD_JObjSetRotationZero(ctx, gobj);
-        inl_HSD_JObjSetRotationY(
-            ctx,
-            (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, gobj))),
-            inl_itDosei_FacingAngle(ctx, gobj, 0.0),
-        );
+        {
+            let __t2 = inl_itDosei_FacingAngle(ctx, gobj, 0.0);
+            let __t3 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, gobj)));
+            inl_HSD_JObjSetRotationY(ctx, __t3, __t2)
+        };
     }
 }
 
@@ -412,11 +409,10 @@ pub fn itDosei_Logic7_Dropped<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         __t1
     });
     inl_HSD_JObjSetRotationZero(ctx, gobj);
-    inl_HSD_JObjSetRotationY(
-        ctx,
-        Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()),
-        inl_itDosei_FacingAngle(ctx, gobj, 0.0),
-    );
+    {
+        let __t2 = inl_itDosei_FacingAngle(ctx, gobj, 0.0);
+        inl_HSD_JObjSetRotationY(ctx, Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()), __t2)
+    };
 }
 
 pub fn itDosei_Logic7_Thrown<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -603,11 +599,10 @@ pub fn itDosei_80282DE4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (ip).set_x5D0_animFrameSpeed(1.0);
     fns::lb_8000BA0C(ctx, jobj, 1.0);
     inl_HSD_JObjSetRotationZero(ctx, gobj);
-    inl_HSD_JObjSetRotationY(
-        ctx,
-        Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()),
-        inl_itDosei_FacingAngle(ctx, gobj, fp::fneg((ip).xDD4_itemVar().dosei().xDDC())),
-    );
+    {
+        let __t1 = inl_itDosei_FacingAngle(ctx, gobj, fp::fneg((ip).xDD4_itemVar().dosei().xDDC()));
+        inl_HSD_JObjSetRotationY(ctx, Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()), __t1)
+    };
 }
 
 pub fn itDosei_UnkMotion9_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
@@ -624,11 +619,11 @@ pub fn itDosei_UnkMotion9_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         )),
     ));
     if (ip).xDD4_itemVar().dosei().xDD8() == 1_i32 {
-        inl_HSD_JObjSetRotationY(
-            ctx,
-            Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()),
-            inl_itDosei_FacingAngle(ctx, gobj, fp::fneg((ip).xDD4_itemVar().dosei().xDDC())),
-        );
+        {
+            let __t1 =
+                inl_itDosei_FacingAngle(ctx, gobj, fp::fneg((ip).xDD4_itemVar().dosei().xDDC()));
+            inl_HSD_JObjSetRotationY(ctx, Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()), __t1)
+        };
         if (ip).xDD4_itemVar().dosei().xDDC() <= 0.0 {
             (ip).xDD4_itemVar().dosei().set_xDD8(2_i32);
             (ip).x40_vel()
@@ -712,11 +707,10 @@ pub fn itDosei_Logic7_DmgReceived<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     (ip).xDC8_word().flags().set_x19((1_i32 as u32));
     (ip).xDD4_itemVar().dosei().set_xDF0(20_i32);
     inl_HSD_JObjSetRotationZero(ctx, gobj);
-    inl_HSD_JObjSetRotationY(
-        ctx,
-        Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()),
-        inl_itDosei_FacingAngle(ctx, gobj, 0.0),
-    );
+    {
+        let __t1 = inl_itDosei_FacingAngle(ctx, gobj, 0.0);
+        inl_HSD_JObjSetRotationY(ctx, Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()), __t1)
+    };
     (ip).set_owner(null::<HSD_GObj<'a>>(ctx));
     (ip).set_xD44_lifeTimer(fp::fsubs((ip).xD44_lifeTimer(), 60.0));
     return fns::it_80273130(ctx, gobj);
@@ -1217,11 +1211,14 @@ fn inl_itDosei_SetupWalk_FC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (ip).set_x5D0_animFrameSpeed(1.0);
     fns::lb_8000BA0C(ctx, jobj, 1.0);
     inl_HSD_JObjSetRotationZeroWithMtxDirty(ctx, gobj);
-    inl_HSD_JObjSetRotationYWithMtxDirty(
-        ctx,
-        Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()),
-        inl_itDosei_FacingAngle(ctx, gobj, 0.0),
-    );
+    {
+        let __t1 = inl_itDosei_FacingAngle(ctx, gobj, 0.0);
+        inl_HSD_JObjSetRotationYWithMtxDirty(
+            ctx,
+            Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()),
+            __t1,
+        )
+    };
     (ip).x40_vel()
         .set_x(fp::fmuls((ip).facing_dir(), (attr).unk8()));
     (ip).x40_vel().set_z(0.0);

@@ -184,10 +184,8 @@ pub fn fn_802FCC44<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         return;
     }
     fns::Player_LoadPlayerCoords(ctx, ((slot).get() as i32), vec);
-    vec.set_y(fp::fadds(
-        vec.y(),
-        fns::Player_800360D8(ctx, ((slot).get() as i32)),
-    ));
+    let __t1 = fns::Player_800360D8(ctx, ((slot).get() as i32));
+    vec.set_y(fp::fadds(vec.y(), __t1));
     vec.set_y(fp::fsubs(vec.y(), 2.5));
     let _ = fns::lbVector_WorldToScreen(
         ctx,
@@ -387,20 +385,23 @@ pub fn un_802FD4C8<'a>(ctx: &'a Ctx) {
     }
     statics::melee__if__ifnametag::un_804D6D68(ctx).set(null::<HSD_GObj<'a>>(ctx));
     statics::melee__if__ifnametag::un_804D6D6C(ctx).set((0_i32 as u8));
-    fns::memzero(
-        ctx,
-        Handle::cast::<Addr<'a>>(statics::melee__if__ifnametag::un_804D6D70(ctx).at(0)),
-        {
+    {
+        let __t2 = {
             let __t1 = (6_u32 as i32);
             i = __t1;
             __t1
-        },
-    );
+        };
+        fns::memzero(
+            ctx,
+            Handle::cast::<Addr<'a>>(statics::melee__if__ifnametag::un_804D6D70(ctx).at(0)),
+            __t2,
+        )
+    };
     statics::melee__if__ifnametag::un_804D6D68(ctx).set(
         ({
-            let __t2 = inl_un_802FD4C8_inline_unfused(ctx, 15_i32);
-            gobj = __t2;
-            __t2
+            let __t3 = inl_un_802FD4C8_inline_unfused(ctx, 15_i32);
+            gobj = __t3;
+            __t3
         }),
     );
     cobj = fns::lb_80013B14(
@@ -598,13 +599,12 @@ fn inl_HSD_JObjSetScaleZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
 
 fn inl_getNameTagFrame_unfused<'a>(ctx: &'a Ctx, slot: i32) -> f64 {
     let mut slot = slot;
-    return fns::un_802FC9B4(
-        ctx,
-        (slot as u8),
-        (fns::Player_GetTeam(ctx, slot) as u8),
-        (fns::gm_8016B168(ctx) as u8),
-        (fns::Player_GetPlayerSlotType(ctx, slot) as u8),
-    );
+    return {
+        let __t1 = (fns::Player_GetPlayerSlotType(ctx, slot) as u8);
+        let __t2 = (fns::gm_8016B168(ctx) as u8);
+        let __t3 = (fns::Player_GetTeam(ctx, slot) as u8);
+        fns::un_802FC9B4(ctx, (slot as u8), __t3, __t2, __t1)
+    };
 }
 
 fn inl_getNametagColorFrame_unfused<'a>(ctx: &'a Ctx, frame: f64) -> f64 {
@@ -623,14 +623,17 @@ fn inl_createNameText_unfused<'a>(ctx: &'a Ctx, slot: i32) {
     let mut slot = slot;
     statics::melee__if__ifnametag::un_804A1EF8(ctx)
         .at(slot)
-        .set(fns::HSD_SisLib_803A6B98(
-            ctx,
-            statics::melee__if__ifnametag::un_804D6D78(ctx).get(),
-            fp::fneg(5000.0),
-            0.0,
-            fns::GetNameText(ctx, (fns::Player_GetNametagSlotID(ctx, slot) as i32)),
-            &[],
-        ));
+        .set({
+            let __t1 = fns::GetNameText(ctx, (fns::Player_GetNametagSlotID(ctx, slot) as i32));
+            fns::HSD_SisLib_803A6B98(
+                ctx,
+                statics::melee__if__ifnametag::un_804D6D78(ctx).get(),
+                fp::fneg(5000.0),
+                0.0,
+                __t1,
+                &[],
+            )
+        });
     fns::HSD_SisLib_803A7548(
         ctx,
         statics::melee__if__ifnametag::un_804D6D78(ctx).get(),

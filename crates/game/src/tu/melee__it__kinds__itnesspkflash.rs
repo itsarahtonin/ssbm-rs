@@ -185,14 +185,14 @@ pub fn it_802AAA80<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (ip).facing_dir(),
         fp::frsp((fp::fdiv(3.141592653589793, (2_i32 as f64)))),
     );
-    (ip).x40_vel().set_x(fp::fmuls(
-        fp::fneg((attr).x14_FLASH_PEAK_RISE_HEIGHT()),
-        fns::cosf(ctx, angle),
-    ));
-    (ip).x40_vel().set_y(fp::fmuls(
-        (attr).x14_FLASH_PEAK_RISE_HEIGHT(),
-        fns::sinf(ctx, angle),
-    ));
+    (ip).x40_vel().set_x({
+        let __t1 = fns::cosf(ctx, angle);
+        fp::fmuls(fp::fneg((attr).x14_FLASH_PEAK_RISE_HEIGHT()), __t1)
+    });
+    (ip).x40_vel().set_y({
+        let __t2 = fns::sinf(ctx, angle);
+        fp::fmuls((attr).x14_FLASH_PEAK_RISE_HEIGHT(), __t2)
+    });
     (ip).x40_vel().set_z(0.0);
     fns::db_80225DD8(ctx, gobj, (ip).owner());
 }

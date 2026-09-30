@@ -800,15 +800,18 @@ pub fn lbBgFlash_800209F4<'a>(ctx: &'a Ctx) {
         (0_i32 as u8),
     ));
     gobj1_slot = (flash).x44_ref();
-    fns::HSD_GObjObject_80390A70(
-        ctx,
-        (gobj1_slot).get(),
-        (((fns::HSD_GObj_CameraKind(ctx).get() as u64) & 0xffffffffffffffff_u64) as u8),
-        Handle::cast::<Addr<'a>>(fns::HSD_CObjLoadDesc(
+    {
+        let __t1 = Handle::cast::<Addr<'a>>(fns::HSD_CObjLoadDesc(
             ctx,
             Handle::cast::<HSD_CObjDesc<'a>>(fns::lbl_803BB028(ctx)),
-        )),
-    );
+        ));
+        fns::HSD_GObjObject_80390A70(
+            ctx,
+            (gobj1_slot).get(),
+            (((fns::HSD_GObj_CameraKind(ctx).get() as u64) & 0xffffffffffffffff_u64) as u8),
+            __t1,
+        )
+    };
     fns::GObj_SetupGXLinkMax(
         ctx,
         (gobj1_slot).get(),

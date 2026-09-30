@@ -145,22 +145,20 @@ pub fn ft_8007C77C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                             ) != 0)
                             {
                                 temp_r29 = fns::it_802E5EF4(ctx, (ip).entity());
-                                fns::Player_SetCoins(
-                                    ctx,
-                                    ((fp).player_idx() as i32),
-                                    temp_r29.wrapping_add(fns::Player_GetCoins(
+                                {
+                                    let __t1 = temp_r29.wrapping_add(fns::Player_GetCoins(
                                         ctx,
                                         ((fp).player_idx() as i32),
-                                    )),
-                                );
-                                fns::Player_SetTotalCoins(
-                                    ctx,
-                                    ((fp).player_idx() as i32),
-                                    temp_r29.wrapping_add(fns::Player_GetTotalCoins(
+                                    ));
+                                    fns::Player_SetCoins(ctx, ((fp).player_idx() as i32), __t1)
+                                };
+                                {
+                                    let __t2 = temp_r29.wrapping_add(fns::Player_GetTotalCoins(
                                         ctx,
                                         ((fp).player_idx() as i32),
-                                    )),
-                                );
+                                    ));
+                                    fns::Player_SetTotalCoins(ctx, ((fp).player_idx() as i32), __t2)
+                                };
                                 let _ =
                                     fns::lbAudioAx_80023870(ctx, 147_i32, 127_i32, 64_i32, 26_i32);
                                 sp18.set(1.0);

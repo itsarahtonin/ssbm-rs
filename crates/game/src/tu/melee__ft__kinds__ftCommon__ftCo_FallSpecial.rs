@@ -266,7 +266,10 @@ pub fn ftCo_80096D28<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if ((fp).mv().co().fallspecial().x10() != 0)
-        || ((fp).self_vel().y() < fns::ftCo_800D0EC8(ctx, fp))
+        || ({
+            let __t1 = fns::ftCo_800D0EC8(ctx, fp);
+            (fp).self_vel().y() < __t1
+        })
     {
         fns::ftCo_LandingFallSpecial_Enter(
             ctx,

@@ -1154,10 +1154,8 @@ pub fn it_802B900C<'a>(
     (link).pos().set_z(fp::fmadds(dir.z(), dist, (pos).z()));
     'l1: while !Handle::is_null(prev) {
         'c2: {
-            (prev).vel().set_y(fp::fsubs(
-                (prev).vel().y(),
-                inl_samus_grapple_calc_grav(ctx, (prev).vel().y()),
-            ));
+            let __t1 = inl_samus_grapple_calc_grav(ctx, (prev).vel().y());
+            (prev).vel().set_y(fp::fsubs((prev).vel().y(), __t1));
             fns::it_802A4420(ctx, prev);
             fns::it_802A43EC(ctx, prev);
             d = fns::it_802A3C98(ctx, (prev).pos(), (link).pos(), dir);
@@ -1343,10 +1341,8 @@ pub fn it_802B9328<'a>(
     'l1: while !Handle::is_null(next) {
         'c2: {
             if ((next).x2C_b0() != 0) {
-                (next).vel().set_y(fp::fsubs(
-                    (next).vel().y(),
-                    inl_it_802B9328_grav(ctx, (next).vel().y()),
-                ));
+                let __t1 = inl_it_802B9328_grav(ctx, (next).vel().y());
+                (next).vel().set_y(fp::fsubs((next).vel().y(), __t1));
                 (next)
                     .pos()
                     .set_y(fp::fadds((next).pos().y(), (next).vel().y()));
@@ -1445,10 +1441,8 @@ pub fn it_802B99A0<'a>(
     }
     next = (link).next();
     cur = link;
-    (link).vel().set_y(fp::fsubs(
-        (link).vel().y(),
-        inl_samus_grapple_calc_grav(ctx, (link).vel().y()),
-    ));
+    let __t1 = inl_samus_grapple_calc_grav(ctx, (link).vel().y());
+    (link).vel().set_y(fp::fsubs((link).vel().y(), __t1));
     if (link).vel().x() > (attrs).x58() {
         (link)
             .vel()
@@ -1472,10 +1466,8 @@ pub fn it_802B99A0<'a>(
     'l3: while !Handle::is_null(next) {
         'c4: {
             if ((next).x2C_b0() != 0) {
-                (next).vel().set_y(fp::fsubs(
-                    (next).vel().y(),
-                    inl_samus_grapple_calc_grav(ctx, (next).vel().y()),
-                ));
+                let __t2 = inl_samus_grapple_calc_grav(ctx, (next).vel().y());
+                (next).vel().set_y(fp::fsubs((next).vel().y(), __t2));
                 fns::it_802A4420(ctx, next);
                 d = fns::it_802A3C98(ctx, (next).pos(), (cur).pos(), dir);
                 if d > (attrs).x38() {
@@ -1579,10 +1571,8 @@ pub fn it_802B9CE8<'a>(
             prev = (prev).prev();
         }
     }
-    (link).vel().set_y(fp::fsubs(
-        (link).vel().y(),
-        inl_samus_grapple_calc_grav(ctx, (link).vel().y()),
-    ));
+    let __t1 = inl_samus_grapple_calc_grav(ctx, (link).vel().y());
+    (link).vel().set_y(fp::fsubs((link).vel().y(), __t1));
     fns::it_802A4420(ctx, link);
     d = fns::it_802A3C98(ctx, (link).pos(), pos, dir);
     if d > (attrs).x38() {
@@ -1598,10 +1588,8 @@ pub fn it_802B9CE8<'a>(
     }
     'l5: while !Handle::is_null(prev) {
         'c6: {
-            (prev).vel().set_y(fp::fsubs(
-                (prev).vel().y(),
-                inl_samus_grapple_calc_grav(ctx, (prev).vel().y()),
-            ));
+            let __t2 = inl_samus_grapple_calc_grav(ctx, (prev).vel().y());
+            (prev).vel().set_y(fp::fsubs((prev).vel().y(), __t2));
             fns::it_802A4420(ctx, prev);
             d = fns::it_802A3C98(ctx, (prev).pos(), (link).pos(), dir);
             dir_ptr = dir;
@@ -1663,10 +1651,8 @@ pub fn it_802B9FD4<'a>(
     'l1: while !Handle::is_null(next) {
         'c2: {
             if ((next).x2C_b0() != 0) {
-                (next).vel().set_y(fp::fsubs(
-                    (next).vel().y(),
-                    inl_samus_grapple_calc_grav(ctx, (next).vel().y()),
-                ));
+                let __t1 = inl_samus_grapple_calc_grav(ctx, (next).vel().y());
+                (next).vel().set_y(fp::fsubs((next).vel().y(), __t1));
                 fns::it_802A4420(ctx, next);
                 if fns::it_802A3C98(ctx, (next).pos(), (cur).pos(), dir) > (attrs).x38() {
                     dir_ptr = dir;

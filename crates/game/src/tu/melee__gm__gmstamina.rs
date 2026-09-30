@@ -202,8 +202,10 @@ pub fn gm_801B9600<'a>(ctx: &'a Ctx) -> i32 {
                                         .at(j)
                                         .get()
                                         != 0))
-                                        && (fns::Player_GetTeam(ctx, i)
-                                            == fns::Player_GetTeam(ctx, j))
+                                        && ({
+                                            let __t1 = fns::Player_GetTeam(ctx, j);
+                                            fns::Player_GetTeam(ctx, i) == __t1
+                                        })
                                     {
                                         break 'l5;
                                     }

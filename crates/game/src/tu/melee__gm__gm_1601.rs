@@ -1082,14 +1082,11 @@ pub fn fn_80161C90<'a>(ctx: &'a Ctx, arg0: MatchEnd<'a>, arg1: i32, s: GmStats<'
         }) as u16),
     );
     {
-        if arg1
-            == fns::fn_80165548(
-                ctx,
-                arg0,
-                fns::fn_80165418(ctx, arg0),
-                fns::fn_801654A0(ctx, arg0),
-            )
-        {
+        if arg1 == {
+            let __t1 = fns::fn_801654A0(ctx, arg0);
+            let __t2 = fns::fn_80165418(ctx, arg0);
+            fns::fn_80165548(ctx, arg0, __t2, __t1)
+        } {
             flag = 1_i32;
         } else {
             flag = 0_i32;
@@ -1142,14 +1139,19 @@ pub fn fn_80161C90<'a>(ctx: &'a Ctx, arg0: MatchEnd<'a>, arg1: i32, s: GmStats<'
             (((s).walk_distance()) as u32).wrapping_add(((p).x50()))
         }) as i32),
     );
-    let __t1 = ((if ((p).x50()).wrapping_add((((fns::gmMainLib_8015EDBC(ctx)).x10()) as u32))
-        > (0xffffffff_u32)
+    let __t5 = ((if {
+        let __t4 = (((fns::gmMainLib_8015EDBC(ctx)).x10()) as u32);
+        ((p).x50()).wrapping_add(__t4)
+    } > (0xffffffff_u32)
     {
         (0xffffffff_u32)
     } else {
-        ((p).x50()).wrapping_add((((fns::gmMainLib_8015EDBC(ctx)).x10()) as u32))
+        {
+            let __t3 = (((fns::gmMainLib_8015EDBC(ctx)).x10()) as u32);
+            ((p).x50()).wrapping_add(__t3)
+        }
     }) as i32);
-    (fns::gmMainLib_8015EDBC(ctx)).set_x10(__t1);
+    (fns::gmMainLib_8015EDBC(ctx)).set_x10(__t5);
     (s).set_run_distance(
         ((if (((s).run_distance()) as u32).wrapping_add(((p).x54())) > (0xffffffff_u32) {
             (0xffffffff_u32)
@@ -1227,23 +1229,26 @@ pub fn fn_80162068<'a>(ctx: &'a Ctx, match_end: MatchEnd<'a>) {
                             {
                                 break 'c4;
                             }
-                            if ((pdata_i).kills().at(j).get() as i32).wrapping_add(
-                                ((fd)
+                            if {
+                                let __t1 = ((fd)
                                     .fighter_kos()
                                     .at((fns::gm_CKindToSelKind(ctx, ((pdata_j).ckind() as u8))
                                         as i32))
-                                    .get() as i32),
-                            ) > 0xffff_i32
+                                    .get() as i32);
+                                ((pdata_i).kills().at(j).get() as i32).wrapping_add(__t1)
+                            } > 0xffff_i32
                             {
                                 sum = 0xffff_i32;
                             } else {
-                                sum = ((pdata_i).kills().at(j).get() as i32).wrapping_add(
-                                    ((fd)
+                                sum = {
+                                    let __t2 = ((fd)
                                         .fighter_kos()
                                         .at((fns::gm_CKindToSelKind(ctx, ((pdata_j).ckind() as u8))
                                             as i32))
-                                        .get() as i32),
-                                );
+                                        .get()
+                                        as i32);
+                                    ((pdata_i).kills().at(j).get() as i32).wrapping_add(__t2)
+                                };
                             }
                             (fd).fighter_kos()
                                 .at((fns::gm_CKindToSelKind(ctx, ((pdata_j).ckind() as u8)) as i32))
@@ -1621,12 +1626,24 @@ pub fn gm_SetupHumanResultsScreen<'a>(ctx: &'a Ctx, arg0: u8, arg1: u8) {
 
 pub fn gm_GetVsPlayMatchTotal<'a>(ctx: &'a Ctx) -> u32 {
     let __frame = ctx.stack_frame(0x10);
-    let mut total: u32 = (fns::gmMainLib_GetTimeMatchTotal(ctx))
-        .get()
-        .wrapping_add((fns::gmMainLib_GetStockMatchTotal(ctx)).get())
-        .wrapping_add((fns::gmMainLib_GetCoinMatchTotal(ctx)).get())
-        .wrapping_add((fns::gmMainLib_GetBonusMatchTotal(ctx)).get())
-        .wrapping_add((fns::gmMainLib_GetStaminaMatchTotal(ctx)).get());
+    let mut total: u32 = {
+        let __t4 = (fns::gmMainLib_GetStaminaMatchTotal(ctx)).get();
+        {
+            let __t3 = (fns::gmMainLib_GetBonusMatchTotal(ctx)).get();
+            {
+                let __t2 = (fns::gmMainLib_GetCoinMatchTotal(ctx)).get();
+                {
+                    let __t1 = (fns::gmMainLib_GetStockMatchTotal(ctx)).get();
+                    (fns::gmMainLib_GetTimeMatchTotal(ctx))
+                        .get()
+                        .wrapping_add(__t1)
+                }
+                .wrapping_add(__t2)
+            }
+            .wrapping_add(__t3)
+        }
+        .wrapping_add(__t4)
+    };
     return total;
 }
 
@@ -3574,18 +3591,17 @@ pub fn fn_801652D8<'a>(ctx: &'a Ctx) -> Addr<'a> {
         &[VarArg::Int((vi).perf().frame_renew() as u32)],
     );
     (Handle::add(lines, 0_i32)).set_next((Handle::add(lines, 1_i32)));
-    let _ = fns::sprintf(
-        ctx,
-        (Handle::add(lines, {
+    let _ = {
+        let __t2 = VarArg::Int((fns::gm_801A4BB8(ctx) as i32) as u32);
+        let __t3 = (Handle::add(lines, {
             let __t1 = 1_i32;
             idx = __t1;
             __t1
         }))
         .text()
-        .at(0),
-        cstr(ctx, 0x803d559c),
-        &[VarArg::Int((fns::gm_801A4BB8(ctx) as i32) as u32)],
-    );
+        .at(0);
+        fns::sprintf(ctx, __t3, cstr(ctx, 0x803d559c), &[__t2])
+    };
     (Handle::add(lines, 1_i32)).set_next((Handle::add(lines, 2_i32)));
     (Handle::add(lines, 1_i32)).set_next(null::<PerfLabelLine<'a>>(ctx));
     return Handle::cast::<Addr<'a>>(statics::melee__gm__gm_1601::lbl_8046B378(ctx));
@@ -4226,14 +4242,17 @@ pub fn gm_80166378<'a>(ctx: &'a Ctx, arg0_raw: MatchEnd<'a>) {
                         .get(i)
                         .set_x9(((fns::Player_GetRemainingHP(ctx, i) as i8) as u8));
                     cnt = (fns::Player_GetJoystickCountByIndex(ctx, i, 0_i32) as u32);
-                    sp48_y.set(fp::fmuls(
-                        ({
-                            let __t1 = 0.03099999949336052;
-                            a = __t1;
-                            __t1
-                        }),
-                        (fp::fmuls(fp::frsp(cnt as f64), fns::fn_8016B5B0(ctx))),
-                    ));
+                    sp48_y.set({
+                        let __t2 = (fp::fmuls(fp::frsp(cnt as f64), fns::fn_8016B5B0(ctx)));
+                        fp::fmuls(
+                            ({
+                                let __t1 = 0.03099999949336052;
+                                a = __t1;
+                                __t1
+                            }),
+                            __t2,
+                        )
+                    });
                     let _ = statics::melee__gm__gm_1601::fn_80166A8C(
                         ctx,
                         Handle::cast::<Vec<'a>>(sp48_y),
@@ -4245,14 +4264,17 @@ pub fn gm_80166378<'a>(ctx: &'a Ctx, arg0_raw: MatchEnd<'a>) {
                         .set_xE((Handle::cast::<Val<'a, u16>>(sp48_x)).get());
                     (arg0).player_standings().get(i).set_x34(
                         ((fp::fctiwz(
-                            (fp::fmuls(
-                                ({
-                                    let __t2 = 100.0;
-                                    b = __t2;
-                                    __t2
-                                }),
-                                fns::pl_80040948(ctx, i),
-                            )),
+                            ({
+                                let __t4 = fns::pl_80040948(ctx, i);
+                                fp::fmuls(
+                                    ({
+                                        let __t3 = 100.0;
+                                        b = __t3;
+                                        __t3
+                                    }),
+                                    __t4,
+                                )
+                            }),
                         ) as i8) as u8),
                     );
                     (arg0)
@@ -4356,14 +4378,17 @@ pub fn gm_80166378<'a>(ctx: &'a Ctx, arg0_raw: MatchEnd<'a>) {
                                 c = 60.0;
                                 (fp::fmuls(
                                     c,
-                                    (fp::fmuls(
-                                        ({
-                                            let __t3 = 10.0;
-                                            d = __t3;
-                                            __t3
-                                        }),
-                                        fns::pl_80040D44(ctx, i),
-                                    )),
+                                    ({
+                                        let __t6 = fns::pl_80040D44(ctx, i);
+                                        fp::fmuls(
+                                            ({
+                                                let __t5 = 10.0;
+                                                d = __t5;
+                                                __t5
+                                            }),
+                                            __t6,
+                                        )
+                                    }),
                                 ))
                             }),
                         ));
@@ -5007,11 +5032,11 @@ pub fn gm_80167320<'a>(ctx: &'a Ctx, slot: i32, arg1: i32) {
         if ((fns::gm_8016B094(ctx) != 0) || (fns::gm_8016B0E8(ctx) != 0))
             && (fns::Player_GetStocks(ctx, slot) == 0_i32)
         {
-            let _ = fns::gm_8016AC44(
-                ctx,
-                (fns::Player_GetPlayerCharacter(ctx, slot) as i8),
-                (fns::Player_GetCostumeId(ctx, slot) as i8),
-            );
+            let _ = {
+                let __t1 = (fns::Player_GetCostumeId(ctx, slot) as i8);
+                let __t2 = (fns::Player_GetPlayerCharacter(ctx, slot) as i8);
+                fns::gm_8016AC44(ctx, __t2, __t1)
+            };
         } else if (fns::Stage_80224DC8(ctx, (fns::gm_GetStKind(ctx) as i32)) != 0) {
             fns::fn_8016719C(ctx, slot, arg1);
         } else {

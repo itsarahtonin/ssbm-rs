@@ -302,13 +302,17 @@ pub fn ftCo_800DD724<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         let mut victim: HSD_GObj<'a> = (fp).victim_gobj();
         fns::ftCommon_8007E2F4(ctx, fp, (0_i32 as i16));
         if !Handle::is_null(victim) {
-            fns::pl_80040614(
-                ctx,
-                ((fp).player_idx() as i32),
-                ((fp).is_sub_fighter() as i32),
-                (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, victim)))
-                    .grab_timer(),
-            );
+            {
+                let __t1 =
+                    (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, victim)))
+                        .grab_timer();
+                fns::pl_80040614(
+                    ctx,
+                    ((fp).player_idx() as i32),
+                    ((fp).is_sub_fighter() as i32),
+                    __t1,
+                )
+            };
             fns::ftCo_800DE2A8(ctx, gobj, victim);
             fns::ftCo_800DE7C0(ctx, victim, gobj, ((fp).motion_id() == 222_i32) as i32);
         }
@@ -633,16 +637,21 @@ pub fn ftCo_800DDDE4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, gobj2: HSD_GObj<'a>, 
         damage.set(0.0);
     }
     let _ = fns::ftColl_80076640(ctx, fp2, damage);
-    (fp2).dmg().set_kb_applied(fns::ftColl_80079AB0(
-        ctx,
-        fp2,
-        (Handle::add(hit, 0_i32)),
-        (Handle::add(hit, 0_i32)).unk_count(),
-        fns::gm_8016B248(ctx),
-        fns::Player_GetAttackRatio(ctx, ((fp).player_idx() as i32)),
-        fns::Player_GetDefenseRatio(ctx, ((fp2).player_idx() as i32)),
-        (fns::p_ftCommonData(ctx).get()).x10C(),
-    ));
+    (fp2).dmg().set_kb_applied({
+        let __t1 = fns::Player_GetDefenseRatio(ctx, ((fp2).player_idx() as i32));
+        let __t2 = fns::Player_GetAttackRatio(ctx, ((fp).player_idx() as i32));
+        let __t3 = fns::gm_8016B248(ctx);
+        fns::ftColl_80079AB0(
+            ctx,
+            fp2,
+            (Handle::add(hit, 0_i32)),
+            (Handle::add(hit, 0_i32)).unk_count(),
+            __t3,
+            __t2,
+            __t1,
+            (fns::p_ftCommonData(ctx).get()).x10C(),
+        )
+    });
     (fp2)
         .dmg()
         .set_x1848_kb_angle((Handle::add(hit, 0_i32)).kb_angle());
@@ -685,18 +694,18 @@ pub fn ftCo_800DDDE4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, gobj2: HSD_GObj<'a>, 
         }
         cd = (fp4).coll_data();
         jobj = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, (fp4).gobj())));
-        vec2.set_x(fp::fadds(
-            (fp3).cur_pos().x(),
-            inl_ftCo_800DDDE4_inline3(ctx, null(ctx)),
-        ));
-        vec2.set_y(fp::fadds(
-            (fp3).cur_pos().y(),
-            inl_ftCo_800DDDE4_inline2(ctx, fp3),
-        ));
-        vec2.set_z(fp::fadds(
-            (fp3).cur_pos().z(),
-            inl_ftCo_800DDDE4_inline3(ctx, null(ctx)),
-        ));
+        vec2.set_x({
+            let __t4 = inl_ftCo_800DDDE4_inline3(ctx, null(ctx));
+            fp::fadds((fp3).cur_pos().x(), __t4)
+        });
+        vec2.set_y({
+            let __t5 = inl_ftCo_800DDDE4_inline2(ctx, fp3);
+            fp::fadds((fp3).cur_pos().y(), __t5)
+        });
+        vec2.set_z({
+            let __t6 = inl_ftCo_800DDDE4_inline3(ctx, null(ctx));
+            fp::fadds((fp3).cur_pos().z(), __t6)
+        });
         Handle::copy_from((fp4).coll_data().last_pos(), vec2);
         fns::mpColl_80043670(ctx, cd);
         Handle::copy_from((cd).cur_pos(), vec);
@@ -752,16 +761,20 @@ pub fn ftCo_800DE2F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         null::<Vec<'a>>(ctx),
         vec,
     );
-    (fp).dmg().set_kb_applied(fns::ftColl_80079AB0(
-        ctx,
-        fp,
-        hit,
-        hit.unk_count(),
-        fns::gm_8016B248(ctx),
-        1.0,
-        fns::Player_GetDefenseRatio(ctx, ((fp).player_idx() as i32)),
-        (attrs).weight(),
-    ));
+    (fp).dmg().set_kb_applied({
+        let __t1 = fns::Player_GetDefenseRatio(ctx, ((fp).player_idx() as i32));
+        let __t2 = fns::gm_8016B248(ctx);
+        fns::ftColl_80079AB0(
+            ctx,
+            fp,
+            hit,
+            hit.unk_count(),
+            __t2,
+            1.0,
+            __t1,
+            (attrs).weight(),
+        )
+    });
     (fp).dmg().set_x1848_kb_angle(hit.kb_angle());
     (fp).dmg().set_facing_dir_1((fp).facing_dir());
     (fp).dmg().set_x184c_damaged_hurtbox(1_i32);

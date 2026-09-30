@@ -357,14 +357,14 @@ fn inl_Item_UpdateRayAnimation_unfused<'a>(
     let mut scale_divisor = scale_divisor;
     let mut dir: f64 = 0.0;
     let mut vel_x: f64 = 0.0;
-    (ip).x40_vel().set_x(fp::fmuls(
-        (ip).xDD4_itemVar().ray().speed(),
-        fns::cosf(ctx, (ip).xDD4_itemVar().ray().angle()),
-    ));
-    (ip).x40_vel().set_y(fp::fmuls(
-        (ip).xDD4_itemVar().ray().speed(),
-        fns::sinf(ctx, (ip).xDD4_itemVar().ray().angle()),
-    ));
+    (ip).x40_vel().set_x({
+        let __t1 = fns::cosf(ctx, (ip).xDD4_itemVar().ray().angle());
+        fp::fmuls((ip).xDD4_itemVar().ray().speed(), __t1)
+    });
+    (ip).x40_vel().set_y({
+        let __t2 = fns::sinf(ctx, (ip).xDD4_itemVar().ray().angle());
+        fp::fmuls((ip).xDD4_itemVar().ray().speed(), __t2)
+    });
     (ip).x40_vel().set_z(0.0);
     if (ip).x40_vel().x() > 0.0 {
         dir = 1.0;

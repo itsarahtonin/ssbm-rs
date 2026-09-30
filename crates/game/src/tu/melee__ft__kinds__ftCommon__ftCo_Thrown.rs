@@ -233,12 +233,11 @@ pub fn ftCo_800DE7C0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, victim: HSD_GObj<'a>,
         (fp).set_x21EC(fnptr(ctx, 0x800de798));
         (fp).mv().co().fighterthrow().set_victim(victim);
     }
-    fns::ftCo_8008DCE0(
-        ctx,
-        gobj,
-        inl_calcKnockbackAngle_unfused(ctx, is_upward),
-        inl_calcFacingDir_unfused(ctx, fp),
-    );
+    {
+        let __t1 = inl_calcFacingDir_unfused(ctx, fp);
+        let __t2 = inl_calcKnockbackAngle_unfused(ctx, is_upward);
+        fns::ftCo_8008DCE0(ctx, gobj, __t2, __t1)
+    };
     fns::ftCo_8008E5A4(ctx, fp);
 }
 

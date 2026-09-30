@@ -412,9 +412,9 @@ pub fn it_802D64B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>, arg2: u32
                 let mut a: f64 = fp::fmadds(
                     (fp::fsubs((attr).x14(), (attr).x10())),
                     ({
-                        let __t4 = rand;
-                        new_var = __t4;
-                        __t4
+                        let __t5 = rand;
+                        new_var = __t5;
+                        __t5
                     }),
                     (attr).x10(),
                 );
@@ -444,9 +444,9 @@ pub fn it_802D64B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>, arg2: u32
                 speed = fp::fmadds(
                     (fp::fsubs((attr).x8(), (attr).x4())),
                     ({
-                        let __t6 = rand_2;
-                        new_var_2 = __t6;
-                        __t6
+                        let __t8 = rand_2;
+                        new_var_2 = __t8;
+                        __t8
                     }),
                     (attr).x4(),
                 );

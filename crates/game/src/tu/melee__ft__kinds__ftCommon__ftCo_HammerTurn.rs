@@ -43,15 +43,18 @@ pub fn ftCo_800C57B4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     flags = fns::ftCo_800C54C4(ctx, fp);
-    fns::ftCo_Turn_Enter(
-        ctx,
-        gobj,
-        (enums::ftCo_MS_HammerTurn as i32),
-        flags,
-        fp::frsp(0_i32 as f64),
-        fp::frsp((fns::p_ftCommonData(ctx).get()).x6B0() as f64),
-        fns::ftCo_800C548C(ctx, fp),
-    );
+    {
+        let __t1 = fns::ftCo_800C548C(ctx, fp);
+        fns::ftCo_Turn_Enter(
+            ctx,
+            gobj,
+            (enums::ftCo_MS_HammerTurn as i32),
+            flags,
+            fp::frsp(0_i32 as f64),
+            fp::frsp((fns::p_ftCommonData(ctx).get()).x6B0() as f64),
+            __t1,
+        )
+    };
     fns::ftCo_800C4E94(ctx, fp);
 }
 

@@ -756,16 +756,22 @@ pub fn ftPk_SpecialHi_80126E1C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         .specialhi()
         .set_x4((Handle::cast::<_ftPikachuAttributes<'a>>((fighter2).dat_attrs())).x60());
     (fighter2).set_x1968_jumpsUsed(((fighter2).co_attrs().max_jumps() as u8));
-    temp_f2_2 = fp::fmuls(
-        (fp::fmadds((pika_attr).x90(), final_stick_mag, (pika_attr).x94())),
-        fns::cosf(ctx, some_angle),
-    );
+    temp_f2_2 = {
+        let __t1 = fns::cosf(ctx, some_angle);
+        fp::fmuls(
+            (fp::fmadds((pika_attr).x90(), final_stick_mag, (pika_attr).x94())),
+            __t1,
+        )
+    };
     (fp).self_vel()
         .set_x(fp::fmuls((fp).facing_dir(), temp_f2_2));
-    (fp).self_vel().set_y(fp::fmuls(
-        (fp::fmadds((pika_attr).x90(), final_stick_mag, (pika_attr).x94())),
-        fns::sinf(ctx, some_angle),
-    ));
+    (fp).self_vel().set_y({
+        let __t2 = fns::sinf(ctx, some_angle);
+        fp::fmuls(
+            (fp::fmadds((pika_attr).x90(), final_stick_mag, (pika_attr).x94())),
+            __t2,
+        )
+    });
     if ((fp).mv().pk().specialhi().x8() != 0) {
         (fp).self_vel()
             .set_x(fp::fmuls((fp).self_vel().x(), (pika_attr).x98()));

@@ -85,18 +85,21 @@ pub fn itKoopaFlame_Update_Angle<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, flags: i3
     let mut flags = flags;
     let mut it: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if flags != 0_i32 {
-        f31.set(fp::fsubs(
-            fns::atan2f(
-                ctx,
-                (it).xDD4_itemVar().koopaflame().x18_vel().x(),
-                (it).xDD4_itemVar().koopaflame().x18_vel().y(),
-            ),
-            fns::atan2f(
+        f31.set({
+            let __t1 = fns::atan2f(
                 ctx,
                 (it).xDD4_itemVar().koopaflame().xC_direction().x(),
                 (it).xDD4_itemVar().koopaflame().xC_direction().y(),
-            ),
-        ));
+            );
+            fp::fsubs(
+                fns::atan2f(
+                    ctx,
+                    (it).xDD4_itemVar().koopaflame().x18_vel().x(),
+                    (it).xDD4_itemVar().koopaflame().x18_vel().y(),
+                ),
+                __t1,
+            )
+        });
         let mut f0: f64 = 0.0;
         let mut f1: f64 = 0.0;
         let mut f2: f64 = 0.0;
@@ -412,25 +415,25 @@ pub fn itKoopaFlame_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     Handle::copy_from((it).xDD4_itemVar().koopaflame().x0_pos(), (it).pos());
     (it).xDD4_itemVar().koopaflame().x18_vel().set_x({
-        let __t1 = fp::fmuls(
-            (it).xDD4_itemVar().koopaflame().x28_speed(),
-            fns::sinf(ctx, (it).xDD4_itemVar().koopaflame().x24_angle()),
-        );
-        (it).x40_vel().set_x(__t1);
-        __t1
-    });
-    (it).xDD4_itemVar().koopaflame().x18_vel().set_y({
-        let __t2 = fp::fmuls(
-            (it).xDD4_itemVar().koopaflame().x28_speed(),
-            fns::cosf(ctx, (it).xDD4_itemVar().koopaflame().x24_angle()),
-        );
-        (it).x40_vel().set_y(__t2);
+        let __t2 = {
+            let __t1 = fns::sinf(ctx, (it).xDD4_itemVar().koopaflame().x24_angle());
+            fp::fmuls((it).xDD4_itemVar().koopaflame().x28_speed(), __t1)
+        };
+        (it).x40_vel().set_x(__t2);
         __t2
     });
+    (it).xDD4_itemVar().koopaflame().x18_vel().set_y({
+        let __t4 = {
+            let __t3 = fns::cosf(ctx, (it).xDD4_itemVar().koopaflame().x24_angle());
+            fp::fmuls((it).xDD4_itemVar().koopaflame().x28_speed(), __t3)
+        };
+        (it).x40_vel().set_y(__t4);
+        __t4
+    });
     (it).xDD4_itemVar().koopaflame().x18_vel().set_z({
-        let __t3 = 0.0;
-        (it).x40_vel().set_z(__t3);
-        __t3
+        let __t5 = 0.0;
+        (it).x40_vel().set_z(__t5);
+        __t5
     });
     let _ = fns::lbVector_Normalize(ctx, (it).xDD4_itemVar().koopaflame().x18_vel());
 }

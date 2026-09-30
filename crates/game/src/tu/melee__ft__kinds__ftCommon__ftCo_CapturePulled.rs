@@ -65,20 +65,20 @@ pub fn fn_800DA8E4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, victim_gobj: HSD_GObj<'
     (fp).set_facing_dir(fp::fneg((victim).facing_dir()));
     cd = fns::p_ftCommonData(ctx).get();
     cd2 = (cd).x360_ref();
-    v = fp::fmuls(
-        ((cd2).get()),
-        (fp::fsubs(
-            (cd).x364(),
-            (fp::frsp(
+    v = {
+        let __t2 = ({
+            let __t1 = (fp::frsp(
                 (fns::Player_80033BB8(ctx, ((fp).player_idx() as i32)).wrapping_add(1_i32)) as f64,
-            )),
-        )),
-    );
+            ));
+            fp::fsubs((cd).x364(), __t1)
+        });
+        fp::fmuls(((cd2).get()), __t2)
+    };
     {
-        let mut s3: f64 = (fp::fsubs(
-            (cd).x35C(),
-            fp::frsp(fns::Player_GetHandicap(ctx, ((fp).player_idx() as i32)) as f64),
-        ));
+        let mut s3: f64 = ({
+            let __t3 = fp::frsp(fns::Player_GetHandicap(ctx, ((fp).player_idx() as i32)) as f64);
+            fp::fsubs((cd).x35C(), __t3)
+        });
         s3 = fp::fmadds((cd).x358(), s3, (cd).x354());
         s3 = fp::fadds(s3, v);
         fns::ftCommon_InitGrab(

@@ -363,13 +363,16 @@ pub fn gm_801B688C<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     }
     temp_r30 = fns::gm_80181A14(ctx);
     temp_r31 = fns::gm_80181A34(ctx);
-    fns::gm_80173C70(
-        ctx,
-        (temp_r29).start().players().get(0_i32).ckind(),
-        fns::gm_80181A24(ctx),
-        (temp_r31 as u32),
-        temp_r30,
-    );
+    {
+        let __t2 = fns::gm_80181A24(ctx);
+        fns::gm_80173C70(
+            ctx,
+            (temp_r29).start().players().get(0_i32).ckind(),
+            __t2,
+            (temp_r31 as u32),
+            temp_r30,
+        )
+    };
     fns::gm_80173EEC(ctx);
     let _ = fns::gm_80172898(ctx, (32_i32 as u16));
     if (fns::gm_80181A14(ctx) != 0_i32)
@@ -377,15 +380,18 @@ pub fn gm_801B688C<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     {
         temp_r3 = fns::gm_80173460(ctx, (temp_r29).start().players().get(0_i32).ckind());
         if (temp_r3 as i32) != 33_i32 {
-            fns::gm_InitChallengerData(
-                ctx,
-                ((temp_r29).start().players().get(0_i32).ckind() as u8),
-                (temp_r29).start().players().get(0_i32).color(),
-                statics::melee__gm__gmmultiman::gm_804D68F0(ctx).get(),
-                (temp_r29).start().players().get(0_i32).nametag(),
-                temp_r3,
-                fns::gm_GetCurrentGameMode(ctx),
-            );
+            {
+                let __t3 = fns::gm_GetCurrentGameMode(ctx);
+                fns::gm_InitChallengerData(
+                    ctx,
+                    ((temp_r29).start().players().get(0_i32).ckind() as u8),
+                    (temp_r29).start().players().get(0_i32).color(),
+                    statics::melee__gm__gmmultiman::gm_804D68F0(ctx).get(),
+                    (temp_r29).start().players().get(0_i32).nametag(),
+                    temp_r3,
+                    __t3,
+                )
+            };
             fns::gm_ChangeGameModeAfterCurrentScene(ctx, (enums::GM_CHALLENGER_APPROACH as i32));
             return 1_i32;
         }

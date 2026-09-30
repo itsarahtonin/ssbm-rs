@@ -249,15 +249,15 @@ pub fn grOnett_801E3A34<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fp::fctiwz((statics::melee__gr__gronett::yakumono_param(ctx).get()).x24()),
     ));
     (gp).u().onett().set_gen(null::<HSD_Generator<'a>>(ctx));
-    fns::Ground_801C4E70(
-        ctx,
-        fns::Ground_801C3FA4(ctx, gobj, 16_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 17_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 19_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 20_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 18_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 21_i32),
-    );
+    {
+        let __t1 = fns::Ground_801C3FA4(ctx, gobj, 21_i32);
+        let __t2 = fns::Ground_801C3FA4(ctx, gobj, 18_i32);
+        let __t3 = fns::Ground_801C3FA4(ctx, gobj, 20_i32);
+        let __t4 = fns::Ground_801C3FA4(ctx, gobj, 19_i32);
+        let __t5 = fns::Ground_801C3FA4(ctx, gobj, 17_i32);
+        let __t6 = fns::Ground_801C3FA4(ctx, gobj, 16_i32);
+        fns::Ground_801C4E70(ctx, __t6, __t5, __t4, __t3, __t2, __t1)
+    };
     fns::Ground_801C10B8(ctx, gobj, fnptr(ctx, 0x801e3930));
     let _ = fns::Ground_UpdateMapColl(ctx, gobj);
 }

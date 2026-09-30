@@ -1349,10 +1349,8 @@ pub fn it_80274594<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    (item).set_scl(fp::fmuls(
-        (item).scl(),
-        fns::ftLib_GetScale(ctx, (item).owner()),
-    ));
+    let __t1 = fns::ftLib_GetScale(ctx, (item).owner());
+    (item).set_scl(fp::fmuls((item).scl(), __t1));
     sp18.set_z((item).scl());
     sp18.set_y((item).scl());
     sp18.set_x((item).scl());

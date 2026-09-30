@@ -1733,7 +1733,10 @@ fn inl_fmodf<'a>(ctx: &'a Ctx, a: f64, b: f64) -> f64 {
     let mut a = a;
     let mut b = b;
     let mut quotient: i64 = 0;
-    if fp::fabs(b) > fp::fabs(a) {
+    if {
+        let __t1 = fp::fabs(a);
+        fp::fabs(b) > __t1
+    } {
         return a;
     }
     quotient = (fns::__cvt_dbl_usll(ctx, fp::fdivs(a, b)) as i64);

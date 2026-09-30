@@ -121,20 +121,21 @@ pub fn grVenom_8020362C<'a>(ctx: &'a Ctx) {
                     statics::melee__gr__grvenom::grVe_804D6A34(ctx).set((0_i32 as u32));
                     (x2c_ptr).set(idx);
                     (x38_ptr).set(mode);
+                    let __t2 = fns::grVenom_80203EAC(ctx, 2_i32);
                     (data)
                         .arwing()
                         .arwing_gobj()
                         .at((statics::melee__gr__grvenom::grVe_804D6A34(ctx).get() as i32))
-                        .set(fns::grVenom_80203EAC(ctx, 2_i32));
+                        .set(__t2);
                     return;
                 }
                 {
                     let mut far_x2c_ptr: Val<'a, i32> = null(ctx);
                     let mut far_x38_ptr: Val<'a, i32> = null(ctx);
                     idx = ({
-                        let __t2 = (data).arwing().arwing_type().at(0_i32);
-                        far_x2c_ptr = __t2;
-                        __t2
+                        let __t3 = (data).arwing().arwing_type().at(0_i32);
+                        far_x2c_ptr = __t3;
+                        __t3
                     })
                     .get();
                     'l7: while idx == (far_x2c_ptr).get() {
@@ -143,9 +144,9 @@ pub fn grVenom_8020362C<'a>(ctx: &'a Ctx) {
                         }
                     }
                     if ({
-                        let __t3 = statics::melee__gr__grvenom::grVe_803E5380(ctx).at(0_i32);
-                        far_x38_ptr = __t3;
-                        __t3
+                        let __t4 = statics::melee__gr__grvenom::grVe_803E5380(ctx).at(0_i32);
+                        far_x38_ptr = __t4;
+                        __t4
                     })
                     .get()
                         == 4_i32
@@ -161,11 +162,12 @@ pub fn grVenom_8020362C<'a>(ctx: &'a Ctx) {
                     statics::melee__gr__grvenom::grVe_804D6A34(ctx).set((0_i32 as u32));
                     (far_x2c_ptr).set(idx);
                     (far_x38_ptr).set(mode);
+                    let __t5 = fns::grVenom_80203EAC(ctx, 2_i32);
                     (data)
                         .arwing()
                         .arwing_gobj()
                         .at((statics::melee__gr__grvenom::grVe_804D6A34(ctx).get() as i32))
-                        .set(fns::grVenom_80203EAC(ctx, 2_i32));
+                        .set(__t5);
                     return;
                 }
             }
@@ -183,9 +185,9 @@ pub fn grVenom_8020362C<'a>(ctx: &'a Ctx) {
             i = 1_i32;
             if !Handle::is_null(
                 ({
-                    let __t4 = Handle::add(x20_ptr, 1_i32);
-                    x20_next = __t4;
-                    __t4
+                    let __t6 = Handle::add(x20_ptr, 1_i32);
+                    x20_next = __t6;
+                    __t6
                 })
                 .get(),
             ) {
@@ -246,11 +248,12 @@ pub fn grVenom_8020362C<'a>(ctx: &'a Ctx) {
                     statics::melee__gr__grvenom::grVe_803E5380(ctx)
                         .at(i)
                         .set(i.wrapping_add(1_i32));
+                    let __t7 = fns::grVenom_80203EAC(ctx, 2_i32);
                     (data)
                         .arwing()
                         .arwing_gobj()
                         .at((statics::melee__gr__grvenom::grVe_804D6A34(ctx).get() as i32))
-                        .set(fns::grVenom_80203EAC(ctx, 2_i32));
+                        .set(__t7);
                 } else {
                     let mut gp_2: Ground<'a> = Handle::cast::<Ground<'a>>(
                         (fns::Ground_GetMapGObj(ctx, 7_i32)).user_data(),
@@ -286,11 +289,12 @@ pub fn grVenom_8020362C<'a>(ctx: &'a Ctx) {
                         statics::melee__gr__grvenom::grVe_803E5380(ctx)
                             .at(i)
                             .set(i.wrapping_add(1_i32));
+                        let __t8 = fns::grVenom_80203EAC(ctx, 2_i32);
                         (data)
                             .arwing()
                             .arwing_gobj()
                             .at((statics::melee__gr__grvenom::grVe_804D6A34(ctx).get() as i32))
-                            .set(fns::grVenom_80203EAC(ctx, 2_i32));
+                            .set(__t8);
                     }
                 }
             }
@@ -2875,11 +2879,11 @@ fn inl_Ground_AttachStarFoxArwingModel_unfused<'a>(
     let mut gp = gp;
     let mut arwing_gobj = arwing_gobj;
     let mut joint_id = joint_id;
-    fns::lb_8000C2F8(
-        ctx,
-        fns::Ground_801C3FA4(ctx, gobj, 0_i32),
-        fns::Ground_801C3FA4(ctx, arwing_gobj, joint_id),
-    );
+    {
+        let __t1 = fns::Ground_801C3FA4(ctx, arwing_gobj, joint_id);
+        let __t2 = fns::Ground_801C3FA4(ctx, gobj, 0_i32);
+        fns::lb_8000C2F8(ctx, __t2, __t1)
+    };
     (gp).u()
         .starfox()
         .set_linked_gobj(null::<HSD_GObj<'a>>(ctx));
@@ -2953,16 +2957,28 @@ fn inl_Ground_ResetStarFoxArwingState_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>) 
 
 fn inl_Stage_IsOutsideBlastZone_unfused<'a>(ctx: &'a Ctx, pos: Vec<'a>) -> i32 {
     let mut pos = pos;
-    if (pos).x() > fns::Stage_GetBlastZoneRightOffset(ctx) {
+    if {
+        let __t1 = fns::Stage_GetBlastZoneRightOffset(ctx);
+        (pos).x() > __t1
+    } {
         return 1_i32;
     }
-    if (pos).x() < fns::Stage_GetBlastZoneLeftOffset(ctx) {
+    if {
+        let __t2 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+        (pos).x() < __t2
+    } {
         return 1_i32;
     }
-    if (pos).y() > fns::Stage_GetBlastZoneTopOffset(ctx) {
+    if {
+        let __t3 = fns::Stage_GetBlastZoneTopOffset(ctx);
+        (pos).y() > __t3
+    } {
         return 1_i32;
     }
-    if (pos).y() < fns::Stage_GetBlastZoneBottomOffset(ctx) {
+    if {
+        let __t4 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+        (pos).y() < __t4
+    } {
         return 1_i32;
     }
     return 0_i32;
@@ -2975,16 +2991,28 @@ fn inl_Stage_IsOutsideBlastZoneWithMargin_unfused<'a>(
 ) -> i32 {
     let mut pos = pos;
     let mut margin = margin;
-    if (pos).x() > fp::fsubs(fns::Stage_GetBlastZoneRightOffset(ctx), margin) {
+    if {
+        let __t1 = fp::fsubs(fns::Stage_GetBlastZoneRightOffset(ctx), margin);
+        (pos).x() > __t1
+    } {
         return 1_i32;
     }
-    if (pos).x() < fp::fadds(fns::Stage_GetBlastZoneLeftOffset(ctx), margin) {
+    if {
+        let __t2 = fp::fadds(fns::Stage_GetBlastZoneLeftOffset(ctx), margin);
+        (pos).x() < __t2
+    } {
         return 1_i32;
     }
-    if (pos).y() > fp::fsubs(fns::Stage_GetBlastZoneTopOffset(ctx), margin) {
+    if {
+        let __t3 = fp::fsubs(fns::Stage_GetBlastZoneTopOffset(ctx), margin);
+        (pos).y() > __t3
+    } {
         return 1_i32;
     }
-    if (pos).y() < fp::fadds(fns::Stage_GetBlastZoneBottomOffset(ctx), margin) {
+    if {
+        let __t4 = fp::fadds(fns::Stage_GetBlastZoneBottomOffset(ctx), margin);
+        (pos).y() < __t4
+    } {
         return 1_i32;
     }
     return 0_i32;

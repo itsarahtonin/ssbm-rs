@@ -38,18 +38,21 @@ pub fn it_3F14_Logic2_Spawned<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (ip).set_xDAC_itcmd_var0((0_i32 as u32));
     (ip).set_xDB0_itcmd_var1((0_i32 as u32));
     (ip).xDD4_itemVar().taru().set_xDD4(0_i32);
-    (ip).xDD4_itemVar().taru().set_xDDC(fp::fadds(
-        ({
-            let __t1 = 1.3089969158172607;
-            new_var = __t1;
-            __t1
-        }),
-        ({
+    (ip).xDD4_itemVar().taru().set_xDDC({
+        let __t3 = ({
             let __t2 = fp::fmuls(0.3490658402442932, fns::HSD_Randf(ctx));
             temp = __t2;
             __t2
-        }),
-    ));
+        });
+        fp::fadds(
+            ({
+                let __t1 = 1.3089969158172607;
+                new_var = __t1;
+                __t1
+            }),
+            __t3,
+        )
+    });
     (ip).xDD4_itemVar().taru().set_xDE0(0.0);
     (ip).xDD4_itemVar().taru().set_xDE4(0.0);
     (ip).xDD4_itemVar().taru().xDE8().set_x(0.0);

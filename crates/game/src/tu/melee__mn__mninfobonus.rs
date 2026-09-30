@@ -81,24 +81,21 @@ pub fn mnInfoBonus_802529B4<'a>(ctx: &'a Ctx) {
                     }
                 } else if var_r28 != 0_i32 {
                     if inl_mnInfoBonus_802529B4_inline0_unfused(ctx, temp_1) != 0_i32 {
-                        fns::HSD_SisLib_803A6368(
-                            ctx,
-                            (o).x4().at(text_idx).get(),
-                            inl_mnInfoBonus_802529B4_inline1_unfused(ctx, temp_1)
-                                .wrapping_add(0x1ba_i32),
-                        );
-                        fns::HSD_SisLib_803A6368(
-                            ctx,
-                            (o).x18().at(text_idx).get(),
-                            inl_mnInfoBonus_802529B4_inline1_unfused(ctx, temp_1)
-                                .wrapping_add(0x1bb_i32),
-                        );
-                        fns::HSD_SisLib_803A6368(
-                            ctx,
-                            (o).x2C().at(text_idx).get(),
-                            inl_mnInfoBonus_802529B4_inline1_unfused(ctx, temp_1)
-                                .wrapping_add(0x1bc_i32),
-                        );
+                        {
+                            let __t1 = inl_mnInfoBonus_802529B4_inline1_unfused(ctx, temp_1)
+                                .wrapping_add(0x1ba_i32);
+                            fns::HSD_SisLib_803A6368(ctx, (o).x4().at(text_idx).get(), __t1)
+                        };
+                        {
+                            let __t2 = inl_mnInfoBonus_802529B4_inline1_unfused(ctx, temp_1)
+                                .wrapping_add(0x1bb_i32);
+                            fns::HSD_SisLib_803A6368(ctx, (o).x18().at(text_idx).get(), __t2)
+                        };
+                        {
+                            let __t3 = inl_mnInfoBonus_802529B4_inline1_unfused(ctx, temp_1)
+                                .wrapping_add(0x1bc_i32);
+                            fns::HSD_SisLib_803A6368(ctx, (o).x2C().at(text_idx).get(), __t3)
+                        };
                         text_idx = text_idx.wrapping_add(1);
                         var_r28 = var_r28.wrapping_sub(1);
                     }

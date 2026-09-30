@@ -216,13 +216,14 @@ pub fn stageGObj1_OnInit<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
         'c4: {
             uVar1 = (fns::HSD_Randi(ctx, 4_i32) as u32);
         }
-        if !(((gp).u().pura().xC4() as i32)
-            == (({
+        if !({
+            let __t2 = (({
                 let __t1 = (uVar1 as i16);
                 (gp).u().pura().set_xC6(__t1);
                 __t1
-            }) as i32))
-        {
+            }) as i32);
+            ((gp).u().pura().xC4() as i32) == __t2
+        }) {
             break 'l3;
         }
     }
@@ -317,13 +318,14 @@ pub fn stageGObj1_GObjProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
         'c4: {
             uVar1 = (fns::HSD_Randi(ctx, 4_i32) as u32);
         }
-        if !(((gp).u().pura().xC4() as i32)
-            == (({
+        if !({
+            let __t2 = (({
                 let __t1 = (uVar1 as i16);
                 (gp).u().pura().set_xC6(__t1);
                 __t1
-            }) as i32))
-        {
+            }) as i32);
+            ((gp).u().pura().xC4() as i32) == __t2
+        }) {
             break 'l3;
         }
     }

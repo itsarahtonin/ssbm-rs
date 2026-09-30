@@ -162,14 +162,17 @@ pub fn ftKb_CaSpecialAirN_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             )),
             0.01745329238474369,
         ));
-        (fp).self_vel().set_y(fp::fmuls(
-            (da).specialn_ca_forward_momentum(),
-            fns::sinf(ctx, angle),
-        ));
-        (fp).self_vel().set_x(fp::fmuls(
-            (da).specialn_ca_forward_momentum(),
-            (fp::fmuls((fp).facing_dir(), fns::cosf(ctx, angle))),
-        ));
+        (fp).self_vel().set_y({
+            let __t1 = fns::sinf(ctx, angle);
+            fp::fmuls((da).specialn_ca_forward_momentum(), __t1)
+        });
+        (fp).self_vel().set_x({
+            let __t3 = ({
+                let __t2 = fns::cosf(ctx, angle);
+                fp::fmuls((fp).facing_dir(), __t2)
+            });
+            fp::fmuls((da).specialn_ca_forward_momentum(), __t3)
+        });
     }
 }
 

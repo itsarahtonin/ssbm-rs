@@ -958,10 +958,10 @@ pub fn ftNs_AbsorbThink_DecideAction<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut sa: ftNessAttributes<'a> = Handle::cast::<ftNessAttributes<'a>>((fp).dat_attrs());
     {
         let mut heal_amount: f64 = fp::frsp(fp::fctiwz(
-            (fp::fmuls(
-                fp::frsp((fp).AbsorbAttr().x1A44_damageTaken() as f64),
-                fns::ftNs_Init_GetAbsorbHeal(ctx, fp),
-            )),
+            ({
+                let __t1 = fns::ftNs_Init_GetAbsorbHeal(ctx, fp);
+                fp::fmuls(fp::frsp((fp).AbsorbAttr().x1A44_damageTaken() as f64), __t1)
+            }),
         ) as f64);
         (fp).dmg()
             .set_x1830_percent(fp::fsubs((fp).dmg().x1830_percent(), heal_amount));

@@ -104,14 +104,17 @@ pub fn gmClassic_801B2BA4<'a>(
                                         'c10: {
                                             if !Handle::is_null((Handle::add(arg2, temp_idx)).xC())
                                             {
-                                                if fns::Stage_8022519C(
-                                                    ctx,
-                                                    (((Handle::add(arg2, temp_idx)).xC()).x00()
-                                                        as i32),
-                                                ) == fns::Stage_8022519C(
-                                                    ctx,
-                                                    ((entry).x00() as i32),
-                                                ) {
+                                                if {
+                                                    let __t1 = fns::Stage_8022519C(
+                                                        ctx,
+                                                        ((entry).x00() as i32),
+                                                    );
+                                                    fns::Stage_8022519C(
+                                                        ctx,
+                                                        (((Handle::add(arg2, temp_idx)).xC()).x00()
+                                                            as i32),
+                                                    ) == __t1
+                                                } {
                                                     result = entry;
                                                     break 'goto_next;
                                                 }
@@ -502,20 +505,23 @@ pub fn gmClassic_801B3500<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
         (sd).x0D().at(0_i32).set((ckind as u8));
     }
     (sd).x13().at(0_i32).set((ad).x0().x0().color());
-    let _ = fns::gm_8017DB88(
-        ctx,
-        Handle::cast::<Addr<'a>>((ad).x0().xC().x24().get(0)),
-        (entry).x1(),
-        ((ad).x0().x0().cpu_level() as i32),
-        ((fns::gm_8017BE84(ctx, ((arg0).id() as u32)) as u8) as i32),
-        ((entry).xC()).x2().x02_u8().at(0),
-        (sd).x0D().at(0_i32).get(),
-        (ad).x0().x58(),
-        (ad).x0().x5C(),
-        (ad).x0().x60(),
-        (ad).x0().x6C(),
-        (ad).x0().x70(),
-    );
+    let _ = {
+        let __t1 = ((fns::gm_8017BE84(ctx, ((arg0).id() as u32)) as u8) as i32);
+        fns::gm_8017DB88(
+            ctx,
+            Handle::cast::<Addr<'a>>((ad).x0().xC().x24().get(0)),
+            (entry).x1(),
+            ((ad).x0().x0().cpu_level() as i32),
+            __t1,
+            ((entry).xC()).x2().x02_u8().at(0),
+            (sd).x0D().at(0_i32).get(),
+            (ad).x0().x58(),
+            (ad).x0().x5C(),
+            (ad).x0().x60(),
+            (ad).x0().x6C(),
+            (ad).x0().x70(),
+        )
+    };
     {
         i = 1_i32;
         'l4: while i < 3_i32 {
@@ -795,13 +801,11 @@ pub fn gmClassic_801B3D84<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     let mut scene = scene;
     let mut temp_r30: DebugGameOverData<'a> =
         Handle::cast::<DebugGameOverData<'a>>(fns::gm_GetGameModeStateExitData(ctx, scene));
-    fns::gm_8017CA38(
-        ctx,
-        temp_r30,
-        (fns::gm_GetAllStarData(ctx)).x0(),
-        fns::gmMainLib_8015CDC8(ctx),
-        (1_i32 as u8),
-    );
+    {
+        let __t1 = fns::gmMainLib_8015CDC8(ctx);
+        let __t2 = (fns::gm_GetAllStarData(ctx)).x0();
+        fns::gm_8017CA38(ctx, temp_r30, __t2, __t1, (1_i32 as u8))
+    };
 }
 
 pub fn gmClassic_801B3DD8<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
@@ -810,17 +814,20 @@ pub fn gmClassic_801B3DD8<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     let mut css: CSSData<'a> =
         Handle::cast::<CSSData<'a>>(fns::gm_GetGameModeStateEnterData(ctx, scene));
     let mut temp_r31: gmm_x0_528_t<'a> = fns::gmMainLib_8015CDC8(ctx);
-    fns::gm_801B06B0(
-        ctx,
-        css,
-        (11_i32 as u8),
-        (temp_r31).c_kind(),
-        ((temp_r31).stocks() as i8),
-        ((temp_r31).color() as i8),
-        (temp_r31).nametag(),
-        (temp_r31).cpu_level(),
-        (fns::gm_GetAllStarData(ctx)).x0().x0().slot(),
-    );
+    {
+        let __t1 = (fns::gm_GetAllStarData(ctx)).x0().x0().slot();
+        fns::gm_801B06B0(
+            ctx,
+            css,
+            (11_i32 as u8),
+            (temp_r31).c_kind(),
+            ((temp_r31).stocks() as i8),
+            ((temp_r31).color() as i8),
+            (temp_r31).nametag(),
+            (temp_r31).cpu_level(),
+            __t1,
+        )
+    };
     fns::lbDvd_SetupVsPreloadCache(ctx);
 }
 

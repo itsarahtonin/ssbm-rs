@@ -39,17 +39,8 @@ pub fn __CARDCompareFileName<'a>(ctx: &'a Ctx, ent: CARDDir<'a>, fileName: Val<'
     } >= 0_i32
     {
         'c2: {
-            if (({
-                let __t2 = ({
-                    let __t1 = entName;
-                    entName = Handle::add(entName, 1);
-                    __t1
-                })
-                .get();
-                c1 = __t2;
-                __t2
-            }) as i32)
-                != (({
+            if {
+                let __t5 = (({
                     let __t4 = ({
                         let __t3 = fileName;
                         fileName = Handle::add(fileName, 1);
@@ -58,8 +49,19 @@ pub fn __CARDCompareFileName<'a>(ctx: &'a Ctx, ent: CARDDir<'a>, fileName: Val<'
                     .get();
                     c2 = __t4;
                     __t4
+                }) as i32);
+                (({
+                    let __t2 = ({
+                        let __t1 = entName;
+                        entName = Handle::add(entName, 1);
+                        __t1
+                    })
+                    .get();
+                    c1 = __t2;
+                    __t2
                 }) as i32)
-            {
+                    != __t5
+            } {
                 return 0_i32;
             } else if (c2 as i32) == 0_i32 {
                 return 1_i32;
@@ -282,17 +284,8 @@ fn inl___CARDCompareFileName_unfused<'a>(
     } >= 0_i32
     {
         'c2: {
-            if (({
-                let __t2 = ({
-                    let __t1 = entName;
-                    entName = Handle::add(entName, 1);
-                    __t1
-                })
-                .get();
-                c1 = __t2;
-                __t2
-            }) as i32)
-                != (({
+            if {
+                let __t5 = (({
                     let __t4 = ({
                         let __t3 = fileName;
                         fileName = Handle::add(fileName, 1);
@@ -301,8 +294,19 @@ fn inl___CARDCompareFileName_unfused<'a>(
                     .get();
                     c2 = __t4;
                     __t4
+                }) as i32);
+                (({
+                    let __t2 = ({
+                        let __t1 = entName;
+                        entName = Handle::add(entName, 1);
+                        __t1
+                    })
+                    .get();
+                    c1 = __t2;
+                    __t2
                 }) as i32)
-            {
+                    != __t5
+            } {
                 return 0_i32;
             } else if (c2 as i32) == 0_i32 {
                 return 1_i32;

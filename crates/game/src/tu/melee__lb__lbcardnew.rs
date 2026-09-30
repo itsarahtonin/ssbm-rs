@@ -557,15 +557,16 @@ pub fn taskOpen<'a>(ctx: &'a Ctx, filename: Val<'a, i8>, entries: LbCardEntry<'a
                         (statics::melee__lb__lbcardnew::state(ctx).save_data()),
                         entries,
                     );
-                    if (statics::melee__lb__lbcardnew::state(ctx).unused_bytes())
-                        < (shl_i32(
+                    if {
+                        let __t1 = (shl_i32(
                             fns::hsd_803B2674(
                                 ctx,
                                 statics::melee__lb__lbcardnew::state(ctx).card_state(),
                             ),
                             (13_i32 as u32),
-                        ))
-                    {
+                        ));
+                        (statics::melee__lb__lbcardnew::state(ctx).unused_bytes()) < __t1
+                    } {
                         statics::melee__lb__lbcardnew::state(ctx).set_saved_error(5_i32);
                     } else {
                         statics::melee__lb__lbcardnew::state(ctx).set_saved_error(4_i32);

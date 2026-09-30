@@ -51,10 +51,10 @@ pub fn ftCh_Init_80157DF8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         null::<HSD_GObj<'a>>(ctx),
     );
     fns::ftAnim_8006EBA4(ctx, gobj);
-    (fp).mv().ch().unk13().set_x0(fp::frsp(
-        (da).x58()
-            .wrapping_add(fns::HSD_Randi(ctx, (da).x54().wrapping_sub((da).x58()))) as f64,
-    ));
+    (fp).mv().ch().unk13().set_x0(fp::frsp({
+        let __t1 = fns::HSD_Randi(ctx, (da).x54().wrapping_sub((da).x58()));
+        (da).x58().wrapping_add(__t1)
+    } as f64));
     (fp).mv().ch().unk13().set_x4(fp::frsp(0_i32 as f64));
 }
 

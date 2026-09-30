@@ -517,15 +517,14 @@ pub fn mnItemSw_8023453C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: u8, arg2: u
                     VarArg::Int(1_i32.wrapping_neg() as u32),
                 ],
             );
-            fns::HSD_JObjReqAnimAll(
-                ctx,
-                sp44.get(),
-                fp::frsp(inl_mnItemSw_GetItemAnim(
+            {
+                let __t4 = fp::frsp(inl_mnItemSw_GetItemAnim(
                     ctx,
                     (tbl).item_order().at(0),
                     (old_cursor as i32),
-                ) as f64),
-            );
+                ) as f64);
+                fns::HSD_JObjReqAnimAll(ctx, sp44.get(), __t4)
+            };
             fns::HSD_JObjAnimAll(ctx, sp44.get());
             fns::HSD_JObjReqAnimAll(ctx, sp44.get(), (tbl).x30().at(0_i32).get());
             fns::mn_8022F3D8(ctx, sp44.get(), (1_i32 as u8), (enums::TOBJ_MASK as i32));
@@ -567,13 +566,14 @@ pub fn mnItemSw_8023453C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: u8, arg2: u
                     VarArg::Int(1_i32.wrapping_neg() as u32),
                 ],
             );
-            fns::HSD_JObjReqAnimAll(
-                ctx,
-                sp44.get(),
-                fp::frsp(
-                    inl_mnItemSw_GetItemAnim(ctx, (tbl).item_order().at(0), (cursor as i32)) as f64,
-                ),
-            );
+            {
+                let __t5 = fp::frsp(inl_mnItemSw_GetItemAnim(
+                    ctx,
+                    (tbl).item_order().at(0),
+                    (cursor as i32),
+                ) as f64);
+                fns::HSD_JObjReqAnimAll(ctx, sp44.get(), __t5)
+            };
             fns::HSD_JObjAnimAll(ctx, sp44.get());
             fns::HSD_JObjReqAnimAll(ctx, sp44.get(), (tbl).x30().at(0_i32).get());
             fns::mn_8022F3D8(ctx, sp44.get(), (1_i32 as u8), (enums::TOBJ_MASK as i32));
@@ -584,10 +584,13 @@ pub fn mnItemSw_8023453C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: u8, arg2: u
             fns::HSD_JObjSetFlagsAll(ctx, cjobj, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
         } else {
             fns::HSD_JObjClearFlagsAll(ctx, cjobj, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
-            y_spacing = fp::fsubs(
-                inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(5_i32).get()),
-                inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(4_i32).get()),
-            );
+            y_spacing = {
+                let __t6 = inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(4_i32).get());
+                fp::fsubs(
+                    inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(5_i32).get()),
+                    __t6,
+                )
+            };
             if (cursor as i32) < 16_i32 {
                 x = inl_HSD_JObjGetTranslationX(ctx, (data).jobjs().at(4_i32).get());
                 inl_HSD_JObjSetTranslateX(ctx, cjobj, x);
@@ -602,9 +605,9 @@ pub fn mnItemSw_8023453C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: u8, arg2: u
                 );
             } else {
                 x = ({
-                    let __t4 = inl_HSD_JObjGetTranslationX(ctx, (data).jobjs().at(6_i32).get());
-                    column_x = __t4;
-                    __t4
+                    let __t7 = inl_HSD_JObjGetTranslationX(ctx, (data).jobjs().at(6_i32).get());
+                    column_x = __t7;
+                    __t7
                 });
                 inl_HSD_JObjSetTranslateX(ctx, cjobj, x);
                 inl_HSD_JObjSetTranslateY(
@@ -931,14 +934,14 @@ pub fn mnItemSw_80235020<'a>(ctx: &'a Ctx, arg0: u8, arg1: MnItemSwData<'a>) -> 
         ],
     );
     item_val = arg0;
-    fns::HSD_JObjReqAnimAll(
-        ctx,
-        sp14.get(),
-        fp::frsp(
-            inl_mnItemSw_GetItemAnim_unfused(ctx, (tbl).item_order().at(0), (item_val as i32))
-                as f64,
-        ),
-    );
+    {
+        let __t1 = fp::frsp(inl_mnItemSw_GetItemAnim_unfused(
+            ctx,
+            (tbl).item_order().at(0),
+            (item_val as i32),
+        ) as f64);
+        fns::HSD_JObjReqAnimAll(ctx, sp14.get(), __t1)
+    };
     fns::HSD_JObjAnimAll(ctx, sp14.get());
     if (arg0 as i32) == (hovered as i32) {
         fns::HSD_JObjReqAnimAll(ctx, sp14.get(), (tbl).x30().at(1_i32).get());
@@ -1067,10 +1070,13 @@ pub fn mnItemSw_802351A0<'a>(ctx: &'a Ctx, arg0: i32) -> HSD_GObj<'a> {
         fns::mn_804A04F0(ctx)
             .set_confirmed_selection((user_data).items().at(((user_data).cursor() as i32)).get());
     }
-    y_spacing = fp::fsubs(
-        inl_HSD_JObjGetTranslationY(ctx, (user_data).jobjs().at(5_i32).get()),
-        inl_HSD_JObjGetTranslationY(ctx, (user_data).jobjs().at(4_i32).get()),
-    );
+    y_spacing = {
+        let __t1 = inl_HSD_JObjGetTranslationY(ctx, (user_data).jobjs().at(4_i32).get());
+        fp::fsubs(
+            inl_HSD_JObjGetTranslationY(ctx, (user_data).jobjs().at(5_i32).get()),
+            __t1,
+        )
+    };
     {
         i = 0_i32;
         'l3: while i < 31_i32 {
@@ -1320,10 +1326,13 @@ fn inl_mnItemSw_SetCursorPosition<'a>(ctx: &'a Ctx, data: MnItemSwData<'a>) {
         fns::HSD_JObjSetFlagsAll(ctx, cjobj, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
     } else {
         fns::HSD_JObjClearFlagsAll(ctx, cjobj, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
-        y_spacing = fp::fsubs(
-            inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(5_i32).get()),
-            inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(4_i32).get()),
-        );
+        y_spacing = {
+            let __t1 = inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(4_i32).get());
+            fp::fsubs(
+                inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(5_i32).get()),
+                __t1,
+            )
+        };
         if (cursor as i32) < 16_i32 {
             inl_HSD_JObjSetTranslateX(
                 ctx,
@@ -1574,10 +1583,13 @@ fn inl_setInitialCursorPosition<'a>(
         fns::HSD_JObjSetFlagsAll(ctx, cjobj, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
     } else {
         fns::HSD_JObjClearFlagsAll(ctx, cjobj, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
-        y_spacing = fp::fsubs(
-            inl_HSD_JObjGetTranslationY(ctx, (user_data).jobjs().at(5_i32).get()),
-            inl_HSD_JObjGetTranslationY(ctx, (user_data).jobjs().at(4_i32).get()),
-        );
+        y_spacing = {
+            let __t1 = inl_HSD_JObjGetTranslationY(ctx, (user_data).jobjs().at(4_i32).get());
+            fp::fsubs(
+                inl_HSD_JObjGetTranslationY(ctx, (user_data).jobjs().at(5_i32).get()),
+                __t1,
+            )
+        };
         if (cursor as i32) < 16_i32 {
             inl_HSD_JObjSetTranslateX(
                 ctx,

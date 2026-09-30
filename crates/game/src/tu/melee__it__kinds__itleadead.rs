@@ -83,10 +83,8 @@ pub fn it_802E8CD8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     if ((ip).msid() == 7_i32) || ((ip).msid() == 12_i32) {
         return 0_i32;
     }
-    (ip).set_xC9C(fp::fctiwz(fp::fadds(
-        fp::frsp((ip).xC9C() as f64),
-        fns::it_8027CBFC(ctx, gobj),
-    )));
+    let __t1 = fns::it_8027CBFC(ctx, gobj);
+    (ip).set_xC9C(fp::fctiwz(fp::fadds(fp::frsp((ip).xC9C() as f64), __t1)));
     if ((ip).xC9C() > ((attr).x0()).x0()) || ((ip).msid() == 14_i32) {
         fns::it_8027C9D8(ctx, ip);
         fns::it_802756D0(ctx, gobj);

@@ -176,13 +176,16 @@ pub fn fn_80180C60<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         if statics::melee__gm__gm_180A::lbl_804D65D4(ctx).get() == 0_i32 {
             let _ = fns::lbAudioAx_800237A8(ctx, 0x9c40_i32, 127_i32, 64_i32);
             let _ = fns::lbAudioAx_800237A8(ctx, 0x144_i32, 127_i32, 64_i32);
-            fns::gm_80167858(
-                ctx,
-                (((state).x0().x10() as i8) as i32),
-                (fns::Player_GetNametagSlotID(ctx, 0_i32) as i32),
-                13_i32,
-                90_i32,
-            );
+            {
+                let __t1 = (fns::Player_GetNametagSlotID(ctx, 0_i32) as i32);
+                fns::gm_80167858(
+                    ctx,
+                    (((state).x0().x10() as i8) as i32),
+                    __t1,
+                    13_i32,
+                    90_i32,
+                )
+            };
             statics::melee__gm__gm_180A::lbl_804D65D4(ctx).set(1_i32);
         }
         fns::HSD_JObjClearFlagsAll(

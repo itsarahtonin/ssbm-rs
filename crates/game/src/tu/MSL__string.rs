@@ -337,23 +337,26 @@ pub fn strncmp<'a>(ctx: &'a Ctx, str1: Val<'a, i8>, str2: Val<'a, i8>, n: u32) -
     } != 0)
     {
         'c2: {
-            if ({
-                let __t1 = (({
-                    p1 = Handle::add(p1, 1);
-                    p1
-                })
-                .get() as u32);
-                c1 = __t1;
-                __t1
-            }) != ({
-                let __t2 = (({
-                    p2 = Handle::add(p2, 1);
-                    p2
-                })
-                .get() as u32);
-                c2 = __t2;
-                __t2
-            }) {
+            if {
+                let __t3 = ({
+                    let __t2 = (({
+                        p2 = Handle::add(p2, 1);
+                        p2
+                    })
+                    .get() as u32);
+                    c2 = __t2;
+                    __t2
+                });
+                ({
+                    let __t1 = (({
+                        p1 = Handle::add(p1, 1);
+                        p1
+                    })
+                    .get() as u32);
+                    c1 = __t1;
+                    __t1
+                }) != __t3
+            } {
                 return ((c1 as i32).wrapping_sub((c2 as i32)));
             } else {
                 if !(c1 != 0) {

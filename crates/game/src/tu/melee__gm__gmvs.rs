@@ -1066,7 +1066,10 @@ pub fn gm_GetTeamBattleOutcome<'a>(ctx: &'a Ctx) -> i32 {
                                 != ((enums::Gm_PKind_NA as i32) as u32)))
                             && (!Handle::is_null(fns::Player_GetEntity(ctx, slot)))
                         {
-                            if fns::Player_GetTeam(ctx, slot) != fns::Player_GetTeam(ctx, 0_i32) {
+                            if {
+                                let __t1 = fns::Player_GetTeam(ctx, 0_i32);
+                                fns::Player_GetTeam(ctx, slot) != __t1
+                            } {
                                 enemyStocksCount =
                                     enemyStocksCount.wrapping_add(fns::Player_GetStocks(ctx, slot));
                                 enemyCharacterCount = enemyCharacterCount.wrapping_add(1_i32);
@@ -1114,13 +1117,13 @@ pub fn gm_GetTeamBattleOutcome<'a>(ctx: &'a Ctx) -> i32 {
                         if (teamStocks.at(fns::Player_GetTeam(ctx, slot_2)).get() as i32)
                             == 1_i32.wrapping_neg()
                         {
-                            let __t1 = (fns::Player_GetStocks(ctx, slot_2) as i16);
-                            teamStocks.at(fns::Player_GetTeam(ctx, slot_2)).set(__t1);
+                            let __t2 = (fns::Player_GetStocks(ctx, slot_2) as i16);
+                            teamStocks.at(fns::Player_GetTeam(ctx, slot_2)).set(__t2);
                             teamCount = teamCount.wrapping_add(1);
                         } else {
-                            let __t2 = fns::Player_GetStocks(ctx, slot_2);
-                            let __t3 = teamStocks.at(fns::Player_GetTeam(ctx, slot_2));
-                            __t3.set(((__t3.get() as i32).wrapping_add(__t2) as i16));
+                            let __t3 = fns::Player_GetStocks(ctx, slot_2);
+                            let __t4 = teamStocks.at(fns::Player_GetTeam(ctx, slot_2));
+                            __t4.set(((__t4.get() as i32).wrapping_add(__t3) as i16));
                         }
                     }
                 }
@@ -1302,7 +1305,10 @@ pub fn gm_8016C5C0<'a>(ctx: &'a Ctx, pl_slot: i32) -> i32 {
             break 'l1;
         }
     }
-    if (tmp).x0() != fns::gm_801A4BA8(ctx) {
+    if {
+        let __t1 = fns::gm_801A4BA8(ctx);
+        (tmp).x0() != __t1
+    } {
         (tmp).set_x0(fns::gm_801A4BA8(ctx));
         fns::gm_80166378(ctx, tmp);
     }
@@ -1327,7 +1333,10 @@ pub fn gm_GetMatchEndPlayerScore<'a>(ctx: &'a Ctx, pl_slot: i32) -> i32 {
         }
     }
     match_end = inl_gm_8016B774_unfused(ctx);
-    if (match_end).x0() != fns::gm_801A4BA8(ctx) {
+    if {
+        let __t1 = fns::gm_801A4BA8(ctx);
+        (match_end).x0() != __t1
+    } {
         (match_end).set_x0(fns::gm_801A4BA8(ctx));
         fns::gm_80166378(ctx, match_end);
     }
@@ -1359,7 +1368,10 @@ pub fn gm_8016C75C<'a>(ctx: &'a Ctx, player: HSD_GObj<'a>) -> i32 {
         }
     }
     match_end = inl_gm_8016B774_unfused(ctx);
-    if (match_end).x0() != fns::gm_801A4BA8(ctx) {
+    if {
+        let __t1 = fns::gm_801A4BA8(ctx);
+        (match_end).x0() != __t1
+    } {
         (match_end).set_x0(fns::gm_801A4BA8(ctx));
         fns::gm_80166378(ctx, match_end);
     }
@@ -1420,13 +1432,11 @@ pub fn fn_8016C7F0<'a>(ctx: &'a Ctx) {
         == (enums::OUTCOME_1P_GAME_OVER as i32))
         && ((statics::melee__gm__gmvs::controller(ctx).start().x4_3() as i32) != 0)
     {
-        fns::gm_80167858(
-            ctx,
-            fns::Player_GetPadPort(ctx, 0_i32),
-            (fns::Player_GetNametagSlotID(ctx, 0_i32) as i32),
-            13_i32,
-            0_i32,
-        );
+        {
+            let __t1 = (fns::Player_GetNametagSlotID(ctx, 0_i32) as i32);
+            let __t2 = fns::Player_GetPadPort(ctx, 0_i32);
+            fns::gm_80167858(ctx, __t2, __t1, 13_i32, 0_i32)
+        };
         fns::Camera_RequestQuake(ctx, (enums::QuakeKind_Large as i32), null::<Vec<'a>>(ctx));
     }
     if ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TARGET_TEST as i32))
@@ -1464,13 +1474,11 @@ pub fn fn_8016C7F0<'a>(ctx: &'a Ctx) {
             statics::melee__gm__gmvs::controller(ctx)
                 .state()
                 .set_unk_14(0x145_i32);
-            fns::gm_80167858(
-                ctx,
-                fns::Player_GetPadPort(ctx, 0_i32),
-                (fns::Player_GetNametagSlotID(ctx, 0_i32) as i32),
-                13_i32,
-                90_i32,
-            );
+            {
+                let __t3 = (fns::Player_GetNametagSlotID(ctx, 0_i32) as i32);
+                let __t4 = fns::Player_GetPadPort(ctx, 0_i32);
+                fns::gm_80167858(ctx, __t4, __t3, 13_i32, 90_i32)
+            };
         } else if sp24.get() > 0_i32 {
             statics::melee__gm__gmvs::controller(ctx)
                 .state()
@@ -1483,13 +1491,11 @@ pub fn fn_8016C7F0<'a>(ctx: &'a Ctx) {
     if ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_EVENT as i32))
         && (statics::melee__gm__gmvs::controller(ctx).state().unk_10() == 0x9c41_i32)
     {
-        fns::gm_80167858(
-            ctx,
-            fns::Player_GetPadPort(ctx, 0_i32),
-            (fns::Player_GetNametagSlotID(ctx, 0_i32) as i32),
-            13_i32,
-            90_i32,
-        );
+        {
+            let __t5 = (fns::Player_GetNametagSlotID(ctx, 0_i32) as i32);
+            let __t6 = fns::Player_GetPadPort(ctx, 0_i32);
+            fns::gm_80167858(ctx, __t6, __t5, 13_i32, 90_i32)
+        };
     }
     's3: {
         let __case = match (fns::gm_GetCurrentGameMode(ctx) as i32) {
@@ -2104,12 +2110,15 @@ pub fn fn_8016D634<'a>(ctx: &'a Ctx) {
         return;
     }
     if (inl_gm_8016B3D8_unfused(ctx) != 0) {
-        fns::pl_80040688(
-            ctx,
-            0_i32,
-            (statics::melee__gm__gmvs::controller(ctx).state().unk_D() as i32),
-            fns::fn_8016D538(ctx),
-        );
+        {
+            let __t2 = fns::fn_8016D538(ctx);
+            fns::pl_80040688(
+                ctx,
+                0_i32,
+                (statics::melee__gm__gmvs::controller(ctx).state().unk_D() as i32),
+                __t2,
+            )
+        };
     }
     fns::gm_801A4B1C(ctx);
     if (((statics::melee__gm__gmvs::controller(ctx).start().x4_4() as i32) != 0)
@@ -2578,13 +2587,15 @@ pub fn fn_8016DEEC<'a>(ctx: &'a Ctx) {
                                     && ((fns::Player_GetPlayerSlotType(ctx, j) as u32)
                                         != ((enums::Gm_PKind_NA as i32) as u32)))
                                     && ((((tmp).start().is_teams() as i32) != 1_i32)
-                                        || (fns::Player_GetTeam(ctx, i)
-                                            != fns::Player_GetTeam(ctx, j)))
+                                        || ({
+                                            let __t1 = fns::Player_GetTeam(ctx, j);
+                                            fns::Player_GetTeam(ctx, i) != __t1
+                                        }))
                                 {
                                     if (var_r23 == 1_i32.wrapping_neg())
                                         || (var_f25
                                             < ({
-                                                let __t1 = (if (fp::fsubs(
+                                                let __t2 = (if (fp::fsubs(
                                                     sp18.at(i).get(),
                                                     sp18.at(j).get(),
                                                 )) < fp::frsp(0_i32 as f64)
@@ -2598,8 +2609,8 @@ pub fn fn_8016DEEC<'a>(ctx: &'a Ctx) {
                                                 } else {
                                                     (fp::fsubs(sp18.at(i).get(), sp18.at(j).get()))
                                                 });
-                                                var_f26 = __t1;
-                                                __t1
+                                                var_f26 = __t2;
+                                                __t2
                                             }))
                                     {
                                         var_r23 = j;
@@ -2770,13 +2781,12 @@ pub fn fn_8016E2BC<'a>(ctx: &'a Ctx) {
             0_i32,
             (fns::fn_80160840(
                 ctx,
-                (fns::gm_80160854(
-                    ctx,
-                    (fns::Player_GetPadPort(ctx, 0_i32) as u8),
-                    (fns::Player_GetTeam(ctx, 0_i32) as u8),
-                    (single_is_teams as u8),
-                    (fns::Player_GetPlayerSlotType(ctx, 0_i32) as u8),
-                ) as u8),
+                ({
+                    let __t1 = (fns::Player_GetPlayerSlotType(ctx, 0_i32) as u8);
+                    let __t2 = (fns::Player_GetTeam(ctx, 0_i32) as u8);
+                    let __t3 = (fns::Player_GetPadPort(ctx, 0_i32) as u8);
+                    fns::gm_80160854(ctx, __t3, __t2, (single_is_teams as u8), __t1)
+                } as u8),
             ) as i32),
         );
         fns::Player_80031AD0(ctx, 0_i32);
@@ -2791,16 +2801,16 @@ pub fn fn_8016E2BC<'a>(ctx: &'a Ctx) {
         {
             let _ = fns::lbAudioAx_800237A8(ctx, 0x41f4e_i32, 127_i32, 64_i32);
         }
-        fns::fn_80169C54(
-            ctx,
-            (fns::Player_GetPlayerCharacter(ctx, 0_i32) as i8),
-            (fns::Player_GetCostumeId(ctx, 0_i32) as i8),
-        );
-        fns::fn_80169F50(
-            ctx,
-            (fns::Player_GetPlayerCharacter(ctx, 0_i32) as i8),
-            (fns::Player_GetCostumeId(ctx, 0_i32) as i8),
-        );
+        {
+            let __t4 = (fns::Player_GetCostumeId(ctx, 0_i32) as i8);
+            let __t5 = (fns::Player_GetPlayerCharacter(ctx, 0_i32) as i8);
+            fns::fn_80169C54(ctx, __t5, __t4)
+        };
+        {
+            let __t6 = (fns::Player_GetCostumeId(ctx, 0_i32) as i8);
+            let __t7 = (fns::Player_GetPlayerCharacter(ctx, 0_i32) as i8);
+            fns::fn_80169F50(ctx, __t7, __t6)
+        };
     } else {
         fns::fn_8016DEEC(ctx);
         {
@@ -2837,13 +2847,12 @@ pub fn fn_8016E2BC<'a>(ctx: &'a Ctx) {
                             i,
                             (fns::fn_80160840(
                                 ctx,
-                                (fns::gm_80160854(
-                                    ctx,
-                                    (fns::Player_GetPadPort(ctx, i) as u8),
-                                    (fns::Player_GetTeam(ctx, i) as u8),
-                                    (is_teams as u8),
-                                    (fns::Player_GetPlayerSlotType(ctx, i) as u8),
-                                ) as u8),
+                                ({
+                                    let __t8 = (fns::Player_GetPlayerSlotType(ctx, i) as u8);
+                                    let __t9 = (fns::Player_GetTeam(ctx, i) as u8);
+                                    let __t10 = (fns::Player_GetPadPort(ctx, i) as u8);
+                                    fns::gm_80160854(ctx, __t10, __t9, (is_teams as u8), __t8)
+                                } as u8),
                             ) as i32),
                         );
                         fns::Player_80031AD0(ctx, i);
@@ -3172,13 +3181,10 @@ pub fn gm_8016ECE8<'a>(ctx: &'a Ctx) -> f64 {
                 if ((kind as u32) == ((enums::CKind_MasterH as i32) as u32))
                     || ((kind as u32) == ((enums::CKind_CrezyH as i32) as u32))
                 {
-                    var_f29 = fp::fadds(
-                        var_f29,
-                        fp::fdivs(
-                            fp::frsp(fns::Player_GetRemainingHP(ctx, i) as f64),
-                            fp::frsp(fns::Player_GetOtherStamina(ctx, i) as f64),
-                        ),
-                    );
+                    var_f29 = fp::fadds(var_f29, {
+                        let __t1 = fp::frsp(fns::Player_GetOtherStamina(ctx, i) as f64);
+                        fp::fdivs(fp::frsp(fns::Player_GetRemainingHP(ctx, i) as f64), __t1)
+                    });
                     count = count.wrapping_add(1);
                 }
             }
@@ -3418,7 +3424,10 @@ fn inl_gm_8016C5C0_unfused<'a>(ctx: &'a Ctx, pl_slot: i32) -> i32 {
             break 'l1;
         }
     }
-    if (tmp).x0() != fns::gm_801A4BA8(ctx) {
+    if {
+        let __t1 = fns::gm_801A4BA8(ctx);
+        (tmp).x0() != __t1
+    } {
         (tmp).set_x0(fns::gm_801A4BA8(ctx));
         fns::gm_80166378(ctx, tmp);
     }
@@ -3693,13 +3702,12 @@ fn inl_setPlayerUnk45_unfused<'a>(ctx: &'a Ctx, i: i32) {
         i,
         (fns::fn_80160840(
             ctx,
-            (fns::gm_80160854(
-                ctx,
-                (fns::Player_GetPadPort(ctx, i) as u8),
-                (fns::Player_GetTeam(ctx, i) as u8),
-                (is_teams as u8),
-                (fns::Player_GetPlayerSlotType(ctx, i) as u8),
-            ) as u8),
+            ({
+                let __t1 = (fns::Player_GetPlayerSlotType(ctx, i) as u8);
+                let __t2 = (fns::Player_GetTeam(ctx, i) as u8);
+                let __t3 = (fns::Player_GetPadPort(ctx, i) as u8);
+                fns::gm_80160854(ctx, __t3, __t2, (is_teams as u8), __t1)
+            } as u8),
         ) as i32),
     );
 }

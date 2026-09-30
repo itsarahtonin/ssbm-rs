@@ -220,10 +220,10 @@ pub fn itCoin_Logic116_DmgReceived<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
     ip = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     attr = Handle::cast::<itCoinAttributes<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
     fns::it_802762BC(ctx, ip);
-    (ip).set_xC9C(fp::fctiwz(fp::fadds(
-        fp::frsp((ip).xC9C() as f64),
-        fns::it_8027CBFC(ctx, gobj),
-    )));
+    (ip).set_xC9C(fp::fctiwz({
+        let __t1 = fns::it_8027CBFC(ctx, gobj);
+        fp::fadds(fp::frsp((ip).xC9C() as f64), __t1)
+    }));
     let _ = fns::it_8027B798(ctx, gobj, (ip).x40_vel());
     if ((ip).x40_vel().x() == zero) && ((ip).x40_vel().y() == zero) {
         (ip).x40_vel().set_x(fp::fmuls(

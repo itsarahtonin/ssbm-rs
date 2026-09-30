@@ -547,19 +547,22 @@ pub fn hsd_80393A5C<'a>(ctx: &'a Ctx, filename: Val<'a, i8>, data: Addr<'a>, siz
             ),
         )),
     );
-    fns::OSReport(
-        ctx,
-        (messages).done().at(0),
-        &[
-            VarArg::Int(Handle::addr(filename)),
-            VarArg::Int(size as u32),
-            VarArg::Float(elapsed),
-            VarArg::Float(fp::fmuls(
-                fp::fdivs(fp::fmuls(8.0, fp::frsp(size as f64)), elapsed),
-                inl_kbps_scale_unfused(ctx),
-            )),
-        ],
-    );
+    {
+        let __t2 = VarArg::Float(fp::fmuls(
+            fp::fdivs(fp::fmuls(8.0, fp::frsp(size as f64)), elapsed),
+            inl_kbps_scale_unfused(ctx),
+        ));
+        fns::OSReport(
+            ctx,
+            (messages).done().at(0),
+            &[
+                VarArg::Int(Handle::addr(filename)),
+                VarArg::Int(size as u32),
+                VarArg::Float(elapsed),
+                __t2,
+            ],
+        )
+    };
     return size;
 }
 

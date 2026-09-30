@@ -211,14 +211,12 @@ pub fn ftCo_PassiveWall_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 (fp).self_vel()
                     .set_y((fp).co_attrs().wall_jump_vertical_velocity());
                 if ((fp).x1969_walljumpUsed() as i32) != 0_i32 {
-                    (fp).self_vel().set_y(fp::fmuls(
-                        (fp).self_vel().y(),
-                        fns::powf(
-                            ctx,
-                            (fns::p_ftCommonData(ctx).get()).passive_wall_vel_y_base(),
-                            fp::frsp((fp).mv().co().passivewall().vel_y_exponent() as f64),
-                        ),
-                    ));
+                    let __t1 = fns::powf(
+                        ctx,
+                        (fns::p_ftCommonData(ctx).get()).passive_wall_vel_y_base(),
+                        fp::frsp((fp).mv().co().passivewall().vel_y_exponent() as f64),
+                    );
+                    (fp).self_vel().set_y(fp::fmuls((fp).self_vel().y(), __t1));
                 }
             }
         }

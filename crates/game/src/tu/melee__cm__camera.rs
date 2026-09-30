@@ -744,23 +744,23 @@ pub fn Camera_80029BC4<'a>(
     let __frame = ctx.stack_frame(0x20);
     let mut bounds = bounds;
     let mut transform = transform;
-    let mut cam_dist: f64 = fp::fdivs(
-        (fp::fsubs((bounds).y_max(), (bounds).y_min())),
-        fns::tanf(
+    let mut cam_dist: f64 = {
+        let __t1 = fns::tanf(
             ctx,
             (fp::fmuls(((transform).target_fov()), 0.01745329238474369)),
-        ),
-    );
-    let mut x_dist: f64 = fp::fdivs(
-        (fp::fsubs((bounds).x_max(), (bounds).x_min())),
-        (fp::fmuls(
-            statics::melee__cm__camera::cm_803BCB64(ctx).aspect(),
-            fns::tanf(
+        );
+        fp::fdivs((fp::fsubs((bounds).y_max(), (bounds).y_min())), __t1)
+    };
+    let mut x_dist: f64 = {
+        let __t3 = ({
+            let __t2 = fns::tanf(
                 ctx,
                 (fp::fmuls(((transform).target_fov()), 0.01745329238474369)),
-            ),
-        )),
-    );
+            );
+            fp::fmuls(statics::melee__cm__camera::cm_803BCB64(ctx).aspect(), __t2)
+        });
+        fp::fdivs((fp::fsubs((bounds).x_max(), (bounds).x_min())), __t3)
+    };
     if x_dist > cam_dist {
         cam_dist = x_dist;
     }
@@ -863,10 +863,10 @@ pub fn Camera_80029CF8<'a>(
     base = fp::fmadds(y_sum, (fp::fsubs(0.5, t)), sp24.y());
     angle = fp::fneg(
         (fp::fmuls(
-            (fp::fmuls(
-                (fp::fadds(base, fns::cm_803BCCA0(ctx).x8())),
-                fns::Stage_GetCamInfoX24(ctx),
-            )),
+            ({
+                let __t1 = fns::Stage_GetCamInfoX24(ctx);
+                fp::fmuls((fp::fadds(base, fns::cm_803BCCA0(ctx).x8())), __t1)
+            }),
             0.01745329238474369,
         )),
     );
@@ -925,10 +925,10 @@ pub fn Camera_80029CF8<'a>(
     x_center = fp::fmuls(0.5, (fp::fadds((bounds).x_min(), (bounds).x_max())));
     angle = fp::fneg(
         (fp::fmuls(
-            (fp::fmuls(
-                (fp::fsubs(x_center, sp14.x())),
-                fns::Stage_GetCamInfoX20(ctx),
-            )),
+            ({
+                let __t2 = fns::Stage_GetCamInfoX20(ctx);
+                fp::fmuls((fp::fsubs(x_center, sp14.x())), __t2)
+            }),
             0.01745329238474369,
         )),
     );
@@ -968,25 +968,25 @@ pub fn Camera_80029CF8<'a>(
             cstr(ctx, 0x803b73b8),
         )
     });
-    scaled_tan = fp::fmuls(
-        statics::melee__cm__camera::cm_803BCB64(ctx).aspect(),
-        fns::tanf(ctx, fov_r),
-    );
+    scaled_tan = {
+        let __t3 = fns::tanf(ctx, fov_r);
+        fp::fmuls(statics::melee__cm__camera::cm_803BCB64(ctx).aspect(), __t3)
+    };
     tan_r = scaled_tan;
-    tan_l = fp::fmuls(
-        statics::melee__cm__camera::cm_803BCB64(ctx).aspect(),
-        fns::tanf(ctx, fov_l),
-    );
+    tan_l = {
+        let __t4 = fns::tanf(ctx, fov_l);
+        fp::fmuls(statics::melee__cm__camera::cm_803BCB64(ctx).aspect(), __t4)
+    };
     dist_x = fp::fdivs(
         (fp::fsubs((bounds).x_max(), (bounds).x_min())),
         (fp::fadds(tan_r, tan_l)),
     );
     let _ = fns::Stage_GetCamBoundsLeftOffset(ctx);
     let _ = fns::Stage_GetCamBoundsRightOffset(ctx);
-    x_off = fp::fmuls(
-        statics::melee__cm__camera::cm_803BCB64(ctx).aspect(),
-        (fp::fmuls(dist_x, fns::tanf(ctx, angle))),
-    );
+    x_off = {
+        let __t5 = (fp::fmuls(dist_x, fns::tanf(ctx, angle)));
+        fp::fmuls(statics::melee__cm__camera::cm_803BCB64(ctx).aspect(), __t5)
+    };
     (transform).target_interest().set_x(fp::fsubs(
         (fp::fnmsubs(dist_x, tan_r, (bounds).x_max())),
         x_off,
@@ -1049,13 +1049,13 @@ pub fn Camera_ApplyQuake<'a>(
     }
     input_x = fp::fmuls(input_x, statics::melee__cm__camera::game_camera(ctx).x2BC());
     input_y = fp::fmuls(input_y, statics::melee__cm__camera::game_camera(ctx).x2BC());
-    half_view_height = fp::fmuls(
-        (bounds).z_pos(),
-        fns::tanf(
+    half_view_height = {
+        let __t1 = fns::tanf(
             ctx,
             fp::fmuls(0.5, (fp::fmuls(0.01745329238474369, (state).fov()))),
-        ),
-    );
+        );
+        fp::fmuls((bounds).z_pos(), __t1)
+    };
     viewport_x_scale = fp::fmuls(
         (data).desc().aspect(),
         (fp::fdivs(
@@ -1086,7 +1086,10 @@ pub fn Camera_ApplyQuake<'a>(
         depth_ratio = 0.5;
     } else {
         depth_ratio = fp::fdivs(
-            (fp::fsubs((bounds).z_pos(), fns::Stage_GetCamZoomRate(ctx))),
+            ({
+                let __t2 = fns::Stage_GetCamZoomRate(ctx);
+                fp::fsubs((bounds).z_pos(), __t2)
+            }),
             depth_factor_x,
         );
     }
@@ -1428,14 +1431,20 @@ pub fn Camera_8002A768<'a>(ctx: &'a Ctx, transform: CameraTransformState<'a>, ar
     };
     if arg1 != 0_i32 {
         if !((var_r30 & 1_i32) != 0) {
-            if top_left.x() < fns::Stage_GetBlastZoneLeftOffset(ctx) {
+            if {
+                let __t5 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+                top_left.x() < __t5
+            } {
                 temp_f0 = fp::fsubs(fns::Stage_GetBlastZoneLeftOffset(ctx), top_left.x());
                 if temp_f0 > left_overlap {
                     left_overlap = temp_f0;
                     var_r31 = (var_r31 | 4_i32);
                 }
             }
-            if top_left.y() > fns::Stage_GetBlastZoneTopOffset(ctx) {
+            if {
+                let __t6 = fns::Stage_GetBlastZoneTopOffset(ctx);
+                top_left.y() > __t6
+            } {
                 temp_f1 = fp::fsubs(fns::Stage_GetBlastZoneTopOffset(ctx), top_left.y());
                 if temp_f1 < top_overlap {
                     top_overlap = temp_f1;
@@ -1444,14 +1453,20 @@ pub fn Camera_8002A768<'a>(ctx: &'a Ctx, transform: CameraTransformState<'a>, ar
             }
         }
         if !((var_r30 & 2_i32) != 0) {
-            if top_right.x() > fns::Stage_GetBlastZoneRightOffset(ctx) {
+            if {
+                let __t7 = fns::Stage_GetBlastZoneRightOffset(ctx);
+                top_right.x() > __t7
+            } {
                 temp_f0 = fp::fsubs(fns::Stage_GetBlastZoneRightOffset(ctx), top_right.x());
                 if temp_f0 < right_overlap {
                     right_overlap = temp_f0;
                     var_r31 = (var_r31 | 8_i32);
                 }
             }
-            if top_right.y() > fns::Stage_GetBlastZoneTopOffset(ctx) {
+            if {
+                let __t8 = fns::Stage_GetBlastZoneTopOffset(ctx);
+                top_right.y() > __t8
+            } {
                 temp_f0 = fp::fsubs(fns::Stage_GetBlastZoneTopOffset(ctx), top_right.y());
                 if temp_f0 < top_overlap {
                     top_overlap = temp_f0;
@@ -1460,14 +1475,20 @@ pub fn Camera_8002A768<'a>(ctx: &'a Ctx, transform: CameraTransformState<'a>, ar
             }
         }
         if !((var_r30 & 4_i32) != 0) {
-            if bottom_right.x() < fns::Stage_GetBlastZoneLeftOffset(ctx) {
+            if {
+                let __t9 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+                bottom_right.x() < __t9
+            } {
                 temp_f0 = fp::fsubs(fns::Stage_GetBlastZoneLeftOffset(ctx), bottom_right.x());
                 if temp_f0 > left_overlap {
                     left_overlap = temp_f0;
                     var_r31 = (var_r31 | 4_i32);
                 }
             }
-            if bottom_right.y() < fns::Stage_GetBlastZoneBottomOffset(ctx) {
+            if {
+                let __t10 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+                bottom_right.y() < __t10
+            } {
                 temp_f0 = fp::fsubs(fns::Stage_GetBlastZoneBottomOffset(ctx), bottom_right.y());
                 if temp_f0 > bottom_overlap {
                     bottom_overlap = temp_f0;
@@ -1476,14 +1497,20 @@ pub fn Camera_8002A768<'a>(ctx: &'a Ctx, transform: CameraTransformState<'a>, ar
             }
         }
         if !((var_r30 & 8_i32) != 0) {
-            if bottom_left.x() > fns::Stage_GetBlastZoneRightOffset(ctx) {
+            if {
+                let __t11 = fns::Stage_GetBlastZoneRightOffset(ctx);
+                bottom_left.x() > __t11
+            } {
                 temp_f0 = fp::fsubs(fns::Stage_GetBlastZoneRightOffset(ctx), bottom_left.x());
                 if temp_f0 < right_overlap {
                     right_overlap = temp_f0;
                     var_r31 = (var_r31 | 8_i32);
                 }
             }
-            if bottom_left.y() < fns::Stage_GetBlastZoneBottomOffset(ctx) {
+            if {
+                let __t12 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+                bottom_left.y() < __t12
+            } {
                 temp_f0 = fp::fsubs(fns::Stage_GetBlastZoneBottomOffset(ctx), bottom_left.y());
                 if temp_f0 > bottom_overlap {
                     bottom_overlap = temp_f0;
@@ -1493,14 +1520,20 @@ pub fn Camera_8002A768<'a>(ctx: &'a Ctx, transform: CameraTransformState<'a>, ar
         }
     } else {
         if !((var_r30 & 1_i32) != 0) {
-            if top_left.x() < fns::Stage_GetCamBoundsLeftOffset(ctx) {
+            if {
+                let __t13 = fns::Stage_GetCamBoundsLeftOffset(ctx);
+                top_left.x() < __t13
+            } {
                 temp_f0 = fp::fsubs(fns::Stage_GetCamBoundsLeftOffset(ctx), top_left.x());
                 if temp_f0 > left_overlap {
                     left_overlap = temp_f0;
                     var_r31 = (var_r31 | 4_i32);
                 }
             }
-            if top_left.y() > fns::Stage_GetCamBoundsTopOffset(ctx) {
+            if {
+                let __t14 = fns::Stage_GetCamBoundsTopOffset(ctx);
+                top_left.y() > __t14
+            } {
                 temp_f1 = fp::fsubs(fns::Stage_GetCamBoundsTopOffset(ctx), top_left.y());
                 if temp_f1 < top_overlap {
                     top_overlap = temp_f1;
@@ -1509,14 +1542,20 @@ pub fn Camera_8002A768<'a>(ctx: &'a Ctx, transform: CameraTransformState<'a>, ar
             }
         }
         if !((var_r30 & 2_i32) != 0) {
-            if top_right.x() > fns::Stage_GetCamBoundsRightOffset(ctx) {
+            if {
+                let __t15 = fns::Stage_GetCamBoundsRightOffset(ctx);
+                top_right.x() > __t15
+            } {
                 temp_f0 = fp::fsubs(fns::Stage_GetCamBoundsRightOffset(ctx), top_right.x());
                 if temp_f0 < right_overlap {
                     right_overlap = temp_f0;
                     var_r31 = (var_r31 | 8_i32);
                 }
             }
-            if top_right.y() > fns::Stage_GetCamBoundsTopOffset(ctx) {
+            if {
+                let __t16 = fns::Stage_GetCamBoundsTopOffset(ctx);
+                top_right.y() > __t16
+            } {
                 temp_f0 = fp::fsubs(fns::Stage_GetCamBoundsTopOffset(ctx), top_right.y());
                 if temp_f0 < top_overlap {
                     top_overlap = temp_f0;
@@ -1525,14 +1564,20 @@ pub fn Camera_8002A768<'a>(ctx: &'a Ctx, transform: CameraTransformState<'a>, ar
             }
         }
         if !((var_r30 & 4_i32) != 0) {
-            if bottom_right.x() < fns::Stage_GetCamBoundsLeftOffset(ctx) {
+            if {
+                let __t17 = fns::Stage_GetCamBoundsLeftOffset(ctx);
+                bottom_right.x() < __t17
+            } {
                 temp_f0 = fp::fsubs(fns::Stage_GetCamBoundsLeftOffset(ctx), bottom_right.x());
                 if temp_f0 > left_overlap {
                     left_overlap = temp_f0;
                     var_r31 = (var_r31 | 4_i32);
                 }
             }
-            if bottom_right.y() < fns::Stage_GetCamBoundsBottomOffset(ctx) {
+            if {
+                let __t18 = fns::Stage_GetCamBoundsBottomOffset(ctx);
+                bottom_right.y() < __t18
+            } {
                 temp_f0 = fp::fsubs(fns::Stage_GetCamBoundsBottomOffset(ctx), bottom_right.y());
                 if temp_f0 > bottom_overlap {
                     bottom_overlap = temp_f0;
@@ -1541,14 +1586,20 @@ pub fn Camera_8002A768<'a>(ctx: &'a Ctx, transform: CameraTransformState<'a>, ar
             }
         }
         if !((var_r30 & 8_i32) != 0) {
-            if bottom_left.x() > fns::Stage_GetCamBoundsRightOffset(ctx) {
+            if {
+                let __t19 = fns::Stage_GetCamBoundsRightOffset(ctx);
+                bottom_left.x() > __t19
+            } {
                 temp_f0 = fp::fsubs(fns::Stage_GetCamBoundsRightOffset(ctx), bottom_left.x());
                 if temp_f0 < right_overlap {
                     right_overlap = temp_f0;
                     var_r31 = (var_r31 | 8_i32);
                 }
             }
-            if bottom_left.y() < fns::Stage_GetCamBoundsBottomOffset(ctx) {
+            if {
+                let __t20 = fns::Stage_GetCamBoundsBottomOffset(ctx);
+                bottom_left.y() < __t20
+            } {
                 temp_f0 = fp::fsubs(fns::Stage_GetCamBoundsBottomOffset(ctx), bottom_left.y());
                 if temp_f0 > bottom_overlap {
                     bottom_overlap = temp_f0;
@@ -2996,9 +3047,8 @@ pub fn Camera_8002D318<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
                     }),
                 ))
             {
-                distance = fp::fdivs(
-                    (fp::fmuls(2.0, (subject).ext().v().z())),
-                    fns::tanf(
+                distance = {
+                    let __t6 = fns::tanf(
                         ctx,
                         (fp::fmuls(
                             (statics::melee__cm__camera::game_camera(ctx)
@@ -3006,8 +3056,9 @@ pub fn Camera_8002D318<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
                                 .target_fov()),
                             0.01745329238474369,
                         )),
-                    ),
-                );
+                    );
+                    fp::fdivs((fp::fmuls(2.0, (subject).ext().v().z())), __t6)
+                };
             } else {
                 distance = 1000.0;
             }
@@ -3314,9 +3365,8 @@ pub fn Camera_8002D85C<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
                     }),
                 ))
             {
-                distance = fp::fdivs(
-                    (fp::fmuls(2.0, (subject).ext().v().z())),
-                    fns::tanf(
+                distance = {
+                    let __t5 = fns::tanf(
                         ctx,
                         (fp::fmuls(
                             (statics::melee__cm__camera::game_camera(ctx)
@@ -3324,31 +3374,36 @@ pub fn Camera_8002D85C<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
                                 .target_fov()),
                             0.01745329238474369,
                         )),
-                    ),
-                );
+                    );
+                    fp::fdivs((fp::fmuls(2.0, (subject).ext().v().z())), __t5)
+                };
             } else {
                 distance = 1000.0;
             }
         }
-        if statics::melee__cm__camera::game_camera(ctx).pitch_offset()
-            > fns::Stage_GetCamAngleRadiansUp(ctx)
-        {
+        if {
+            let __t6 = fns::Stage_GetCamAngleRadiansUp(ctx);
+            statics::melee__cm__camera::game_camera(ctx).pitch_offset() > __t6
+        } {
             statics::melee__cm__camera::game_camera(ctx)
                 .set_pitch_offset(fns::Stage_GetCamAngleRadiansUp(ctx));
-        } else if statics::melee__cm__camera::game_camera(ctx).pitch_offset()
-            < fp::fneg(fns::Stage_GetCamAngleRadiansDown(ctx))
-        {
+        } else if {
+            let __t7 = fp::fneg(fns::Stage_GetCamAngleRadiansDown(ctx));
+            statics::melee__cm__camera::game_camera(ctx).pitch_offset() < __t7
+        } {
             statics::melee__cm__camera::game_camera(ctx)
                 .set_pitch_offset(fp::fneg(fns::Stage_GetCamAngleRadiansDown(ctx)));
         }
-        if statics::melee__cm__camera::game_camera(ctx).yaw_offset()
-            > fns::Stage_GetCamAngleRadiansLeft(ctx)
-        {
+        if {
+            let __t8 = fns::Stage_GetCamAngleRadiansLeft(ctx);
+            statics::melee__cm__camera::game_camera(ctx).yaw_offset() > __t8
+        } {
             statics::melee__cm__camera::game_camera(ctx)
                 .set_yaw_offset(fns::Stage_GetCamAngleRadiansLeft(ctx));
-        } else if statics::melee__cm__camera::game_camera(ctx).yaw_offset()
-            < fp::fneg(fns::Stage_GetCamAngleRadiansRight(ctx))
-        {
+        } else if {
+            let __t9 = fp::fneg(fns::Stage_GetCamAngleRadiansRight(ctx));
+            statics::melee__cm__camera::game_camera(ctx).yaw_offset() < __t9
+        } {
             statics::melee__cm__camera::game_camera(ctx)
                 .set_yaw_offset(fp::fneg(fns::Stage_GetCamAngleRadiansRight(ctx)));
         }
@@ -5342,14 +5397,13 @@ pub fn Camera_8002F0E4<'a>(ctx: &'a Ctx, arg0: i32) {
                         .interest(),
                     spC,
                 );
-                temp_f30 = fns::atan2f(
-                    ctx,
-                    spC.y(),
-                    fns::sqrtf__Ff(
+                temp_f30 = {
+                    let __t1 = fns::sqrtf__Ff(
                         ctx,
                         fp::fadds(fp::fmuls(spC.x(), spC.x()), fp::fmuls(spC.z(), spC.z())),
-                    ),
-                );
+                    );
+                    fns::atan2f(ctx, spC.y(), __t1)
+                };
                 temp_f31 = fns::atan2f(ctx, spC.x(), spC.z());
                 statics::melee__cm__camera::game_camera(ctx)
                     .x368()
@@ -5789,41 +5843,41 @@ pub fn fn_8002F908<'a>(ctx: &'a Ctx, arg0: _HSD_RectF32<'a>) -> i32 {
     let mut center_h: f64 = 0.0;
     let mut center_v: f64 = 0.0;
     center_h = fp::fmuls(
-        (fp::fadds(
-            fns::Stage_GetCamBoundsRightOffset(ctx),
-            fns::Stage_GetCamBoundsLeftOffset(ctx),
-        )),
+        ({
+            let __t1 = fns::Stage_GetCamBoundsLeftOffset(ctx);
+            fp::fadds(fns::Stage_GetCamBoundsRightOffset(ctx), __t1)
+        }),
         0.5,
     );
-    half_width = fp::fmuls(
-        fns::cm_803BCCA0(ctx).xAC(),
-        (fp::fmuls(
+    half_width = {
+        let __t3 = (fp::fmuls(
             0.5,
-            (fp::fsubs(
-                fns::Stage_GetCamBoundsRightOffset(ctx),
-                fns::Stage_GetCamBoundsLeftOffset(ctx),
-            )),
-        )),
-    );
+            ({
+                let __t2 = fns::Stage_GetCamBoundsLeftOffset(ctx);
+                fp::fsubs(fns::Stage_GetCamBoundsRightOffset(ctx), __t2)
+            }),
+        ));
+        fp::fmuls(fns::cm_803BCCA0(ctx).xAC(), __t3)
+    };
     (arg0).set_ymax(fp::fadds(center_h, half_width));
     (arg0).set_ymin(fp::fsubs(center_h, half_width));
     center_v = fp::fmuls(
         0.5,
-        (fp::fadds(
-            fns::Stage_GetCamBoundsTopOffset(ctx),
-            fns::Stage_GetCamBoundsBottomOffset(ctx),
-        )),
+        ({
+            let __t4 = fns::Stage_GetCamBoundsBottomOffset(ctx);
+            fp::fadds(fns::Stage_GetCamBoundsTopOffset(ctx), __t4)
+        }),
     );
-    half_height = fp::fmuls(
-        fns::cm_803BCCA0(ctx).xB0(),
-        (fp::fmuls(
+    half_height = {
+        let __t6 = (fp::fmuls(
             0.5,
-            (fp::fsubs(
-                fns::Stage_GetCamBoundsTopOffset(ctx),
-                fns::Stage_GetCamBoundsBottomOffset(ctx),
-            )),
-        )),
-    );
+            ({
+                let __t5 = fns::Stage_GetCamBoundsBottomOffset(ctx);
+                fp::fsubs(fns::Stage_GetCamBoundsTopOffset(ctx), __t5)
+            }),
+        ));
+        fp::fmuls(fns::cm_803BCCA0(ctx).xB0(), __t6)
+    };
     (arg0).set_xmin(fp::fadds(center_v, half_height));
     (arg0).set_xmax(fp::fsubs(center_v, half_height));
     return 1_i32;
@@ -5958,41 +6012,41 @@ pub fn fn_8002FBA0<'a>(ctx: &'a Ctx, arg0: _HSD_RectF32<'a>) -> i32 {
     let mut center_h: f64 = 0.0;
     let mut center_v: f64 = 0.0;
     center_h = fp::fmuls(
-        (fp::fadds(
-            fns::Stage_GetCamBoundsRightOffset(ctx),
-            fns::Stage_GetCamBoundsLeftOffset(ctx),
-        )),
+        ({
+            let __t1 = fns::Stage_GetCamBoundsLeftOffset(ctx);
+            fp::fadds(fns::Stage_GetCamBoundsRightOffset(ctx), __t1)
+        }),
         0.5,
     );
-    half_width = fp::fmuls(
-        fns::cm_803BCCA0(ctx).xAC(),
-        (fp::fmuls(
+    half_width = {
+        let __t3 = (fp::fmuls(
             0.5,
-            (fp::fsubs(
-                fns::Stage_GetCamBoundsRightOffset(ctx),
-                fns::Stage_GetCamBoundsLeftOffset(ctx),
-            )),
-        )),
-    );
+            ({
+                let __t2 = fns::Stage_GetCamBoundsLeftOffset(ctx);
+                fp::fsubs(fns::Stage_GetCamBoundsRightOffset(ctx), __t2)
+            }),
+        ));
+        fp::fmuls(fns::cm_803BCCA0(ctx).xAC(), __t3)
+    };
     (arg0).set_ymax(fp::fadds(center_h, half_width));
     (arg0).set_ymin(fp::fsubs(center_h, half_width));
     center_v = fp::fmuls(
         0.5,
-        (fp::fadds(
-            fns::Stage_GetCamBoundsTopOffset(ctx),
-            fns::Stage_GetCamBoundsBottomOffset(ctx),
-        )),
+        ({
+            let __t4 = fns::Stage_GetCamBoundsBottomOffset(ctx);
+            fp::fadds(fns::Stage_GetCamBoundsTopOffset(ctx), __t4)
+        }),
     );
-    half_height = fp::fmuls(
-        fns::cm_803BCCA0(ctx).xB0(),
-        (fp::fmuls(
+    half_height = {
+        let __t6 = (fp::fmuls(
             0.5,
-            (fp::fsubs(
-                fns::Stage_GetCamBoundsTopOffset(ctx),
-                fns::Stage_GetCamBoundsBottomOffset(ctx),
-            )),
-        )),
-    );
+            ({
+                let __t5 = fns::Stage_GetCamBoundsBottomOffset(ctx);
+                fp::fsubs(fns::Stage_GetCamBoundsTopOffset(ctx), __t5)
+            }),
+        ));
+        fp::fmuls(fns::cm_803BCCA0(ctx).xB0(), __t6)
+    };
     (arg0).set_xmin(fp::fadds(center_v, half_height));
     (arg0).set_xmax(fp::fsubs(center_v, half_height));
     return 1_i32;
@@ -6548,10 +6602,13 @@ pub fn Camera_800307D0<'a>(
     )));
     half_fov = fp::frsp(fp::fmul(
         0.5,
-        (fp::fmuls(
-            (fp::fmuls((fns::HSD_CObjGetFov(ctx, cobj)), 0.01745329238474369)),
-            fns::HSD_CObjGetAspect(ctx, cobj),
-        )),
+        ({
+            let __t1 = fns::HSD_CObjGetAspect(ctx, cobj);
+            fp::fmuls(
+                (fp::fmuls((fns::HSD_CObjGetFov(ctx, cobj)), 0.01745329238474369)),
+                __t1,
+            )
+        }),
     ));
     result = 1_i32;
     fns::HSD_CObjGetEyePosition(ctx, cobj, eye_pos);
@@ -7889,9 +7946,10 @@ fn inl_update_avg_bounds_width<'a>(ctx: &'a Ctx) {
         statics::melee__cm__camera::game_camera(ctx).set_x2B8((1_i32 as i16));
     }
     left_off = fns::Stage_GetCamBoundsLeftOffset(ctx);
+    let __t1 = fp::fsubs(fns::Stage_GetCamBoundsRightOffset(ctx), left_off);
     statics::melee__cm__camera::game_camera(ctx).set_x2B4(fp::fadds(
         statics::melee__cm__camera::game_camera(ctx).x2B4(),
-        fp::fsubs(fns::Stage_GetCamBoundsRightOffset(ctx), left_off),
+        __t1,
     ));
     statics::melee__cm__camera::game_camera(ctx).set_x2B8(
         ((statics::melee__cm__camera::game_camera(ctx).x2B8() as i32).wrapping_add(1_i32) as i16),
@@ -8338,9 +8396,8 @@ fn inl_compute_orbit_distance_unfused<'a>(ctx: &'a Ctx, slot: i32) -> f64 {
             }),
         ))
     {
-        distance = fp::fdivs(
-            (fp::fmuls(2.0, (subject).ext().v().z())),
-            fns::tanf(
+        distance = {
+            let __t3 = fns::tanf(
                 ctx,
                 (fp::fmuls(
                     (statics::melee__cm__camera::game_camera(ctx)
@@ -8348,8 +8405,9 @@ fn inl_compute_orbit_distance_unfused<'a>(ctx: &'a Ctx, slot: i32) -> f64 {
                         .target_fov()),
                     0.01745329238474369,
                 )),
-            ),
-        );
+            );
+            fp::fdivs((fp::fmuls(2.0, (subject).ext().v().z())), __t3)
+        };
     } else {
         distance = 1000.0;
     }

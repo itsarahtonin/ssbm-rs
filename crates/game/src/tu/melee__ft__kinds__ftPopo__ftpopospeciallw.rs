@@ -332,19 +332,14 @@ fn inl_ftPp_SpecialLw_Coll_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if ((fp).cmd_vars().at(3_i32).get() != 0) {
-        fns::ftPartSetRotX(
-            ctx,
-            fp,
-            0_i32,
-            fp::fmuls(
-                (fp).facing_dir(),
-                fns::atan2f(
-                    ctx,
-                    (fp).coll_data().floor().normal().x(),
-                    (fp).coll_data().floor().normal().y(),
-                ),
-            ),
-        );
+        fns::ftPartSetRotX(ctx, fp, 0_i32, {
+            let __t1 = fns::atan2f(
+                ctx,
+                (fp).coll_data().floor().normal().x(),
+                (fp).coll_data().floor().normal().y(),
+            );
+            fp::fmuls((fp).facing_dir(), __t1)
+        });
     } else {
         fns::ftPartSetRotX(ctx, fp, 0_i32, 0.0);
     }

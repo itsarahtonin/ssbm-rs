@@ -513,10 +513,10 @@ pub fn ft_80087D0C<'a>(ctx: &'a Ctx, fighter: Fighter<'a>, sfx_id: i32) -> i32 {
         if __case <= 2 {
             {
                 if (fns::lbAudioAx_800230C8(ctx, ssm_id, sfx_offset, unused_output) == 0_i32)
-                    && (sfx
-                        >= sfx_offset
-                            .get()
-                            .wrapping_add(fns::lbAudioAx_80023220(ctx, ssm_id)))
+                    && (sfx >= {
+                        let __t1 = fns::lbAudioAx_80023220(ctx, ssm_id);
+                        sfx_offset.get().wrapping_add(__t1)
+                    })
                 {
                     sfx = fns::ft_80087C70(ctx, fighter, sfx);
                 }

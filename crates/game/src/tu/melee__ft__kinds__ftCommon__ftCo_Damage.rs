@@ -581,8 +581,14 @@ pub fn ftCo_8008DCE0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, facing_dir
         {
             kb_angle = inl_calcAngle(ctx, kb_angle);
         }
-        x = fp::fmuls(scaled_kb.v(), fns::cosf(ctx, kb_angle));
-        y = fp::fmuls(scaled_kb.v(), fns::sinf(ctx, kb_angle));
+        x = {
+            let __t1 = fns::cosf(ctx, kb_angle);
+            fp::fmuls(scaled_kb.v(), __t1)
+        };
+        y = {
+            let __t2 = fns::sinf(ctx, kb_angle);
+            fp::fmuls(scaled_kb.v(), __t2)
+        };
         (fp).set_facing_dir((fp).dmg().facing_dir_1());
         if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
             msid = fns::ftCo_803C5520(ctx)
@@ -595,8 +601,14 @@ pub fn ftCo_8008DCE0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, facing_dir
                     scaled_kb.v(),
                     (fns::p_ftCommonData(ctx).get()).x190(),
                 ));
-                x = fp::fmuls(scaled_kb.v(), fns::cosf(ctx, kb_angle));
-                y = fp::fmuls(scaled_kb.v(), fns::sinf(ctx, kb_angle));
+                x = {
+                    let __t3 = fns::cosf(ctx, kb_angle);
+                    fp::fmuls(scaled_kb.v(), __t3)
+                };
+                y = {
+                    let __t4 = fns::sinf(ctx, kb_angle);
+                    fp::fmuls(scaled_kb.v(), __t4)
+                };
             }
             fns::ftCo_Damage_CalcVel(ctx, fp, fp::fmuls(fp::fneg(x), (fp).facing_dir()), y);
             (fp).set_xF0_ground_kb_vel(fp::frsp(0_i32 as f64));
@@ -662,13 +674,13 @@ pub fn ftCo_8008DCE0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, facing_dir
             }
         }
         (fp).self_vel().set_x({
-            let __t2 = {
-                let __t1 = fp::frsp(0_i32 as f64);
-                (fp).self_vel().set_z(__t1);
-                __t1
+            let __t6 = {
+                let __t5 = fp::frsp(0_i32 as f64);
+                (fp).self_vel().set_z(__t5);
+                __t5
             };
-            (fp).self_vel().set_y(__t2);
-            __t2
+            (fp).self_vel().set_y(__t6);
+            __t6
         });
         (fp).set_gr_vel(fp::frsp(0_i32 as f64));
         if kb_level == 3_i32 {
@@ -1038,12 +1050,10 @@ pub fn ftCo_8008E9D0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::ftCo_800DC3A4(ctx, gobj);
     }
     scaled_kb = inl_ftCo_ScaleBy154_unfused(ctx, (fp).dmg().kb_applied());
-    if (inl_ftCo_8008DA4C_unfused(
-        ctx,
-        gobj,
-        ((fp).dmg().x1860_element() as i32),
-        inl_ftCo_8008D8E8_unfused(ctx, scaled_kb),
-    ) != 0)
+    if ({
+        let __t1 = inl_ftCo_8008D8E8_unfused(ctx, scaled_kb);
+        inl_ftCo_8008DA4C_unfused(ctx, gobj, ((fp).dmg().x1860_element() as i32), __t1)
+    } != 0)
     {
         fns::ftCo_800C0408(ctx, gobj);
     }
@@ -1711,7 +1721,10 @@ fn inl_calcAngle<'a>(ctx: &'a Ctx, angle: f64) -> f64 {
     let mut ca: f64 = fns::cosf(ctx, angle);
     let mut sm: f64 = (fp::fdivs(3.1415927410125732, 2.0));
     let mut x: f64 = fp::fadds(ca, cm);
-    let mut y: f64 = fp::fadds(fns::sinf(ctx, angle), fns::sinf(ctx, sm));
+    let mut y: f64 = {
+        let __t1 = fns::sinf(ctx, sm);
+        fp::fadds(fns::sinf(ctx, angle), __t1)
+    };
     if fp::fmadds(x, x, fp::fmuls(y, y)) <= 9.999999747378752e-05_f64 {
         return fp::frsp(0_i32 as f64);
     }
@@ -1781,19 +1794,18 @@ fn inl_ftCo_8008DA4C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: i32)
 fn inl_inlineA1<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    fns::ftPartSetRotX(
-        ctx,
-        fp,
-        fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_XRotN as i32)),
-        fp::fmuls(
-            (fp).facing_dir(),
-            fns::atan2f(
+    {
+        let __t2 = {
+            let __t1 = fns::atan2f(
                 ctx,
                 fp::fadds((fp).self_vel().x(), (fp).x8c_kb_vel().x()),
                 fp::fadds((fp).self_vel().y(), (fp).x8c_kb_vel().y()),
-            ),
-        ),
-    );
+            );
+            fp::fmuls((fp).facing_dir(), __t1)
+        };
+        let __t3 = fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_XRotN as i32));
+        fns::ftPartSetRotX(ctx, fp, __t3, __t2)
+    };
 }
 
 fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
@@ -1908,12 +1920,15 @@ fn inl_ftCo_8008E9D0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::ftCo_800DC3A4(ctx, gobj);
     }
     scaled_kb = inl_ftCo_ScaleBy154_unfused(ctx, (fp).dmg().kb_applied());
-    if (statics::melee__ft__kinds__ftCommon__ftCo_Damage::ftCo_8008DA4C(
-        ctx,
-        gobj,
-        ((fp).dmg().x1860_element() as i32),
-        inl_ftCo_8008D8E8_unfused(ctx, scaled_kb),
-    ) != 0)
+    if ({
+        let __t1 = inl_ftCo_8008D8E8_unfused(ctx, scaled_kb);
+        statics::melee__ft__kinds__ftCommon__ftCo_Damage::ftCo_8008DA4C(
+            ctx,
+            gobj,
+            ((fp).dmg().x1860_element() as i32),
+            __t1,
+        )
+    } != 0)
     {
         fns::ftCo_800C0408(ctx, gobj);
     }
@@ -1930,18 +1945,21 @@ fn inl_inlineB2_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     if ((fp).motion_id() == 227_i32) || ((fp).motion_id() == 228_i32) {
         fns::ftCo_800DC3A4(ctx, gobj);
     }
-    if (statics::melee__ft__kinds__ftCommon__ftCo_Damage::ftCo_8008DA4C(
-        ctx,
-        gobj,
-        ((fp).dmg().x1860_element() as i32),
-        inl_ftCo_8008D8E8_unfused(
+    if ({
+        let __t1 = inl_ftCo_8008D8E8_unfused(
             ctx,
             fp::fmuls(
                 (fp).dmg().kb_applied(),
                 (fns::p_ftCommonData(ctx).get()).x154(),
             ),
-        ),
-    ) != 0)
+        );
+        statics::melee__ft__kinds__ftCommon__ftCo_Damage::ftCo_8008DA4C(
+            ctx,
+            gobj,
+            ((fp).dmg().x1860_element() as i32),
+            __t1,
+        )
+    } != 0)
     {
         fns::ftCo_800C0408(ctx, gobj);
     }
@@ -2145,14 +2163,14 @@ fn inl_inlineE0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 fn inl_doFlyRoll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
-    let mut trajectory: f64 = fp::fmuls(
-        (fp).facing_dir(),
-        fns::atan2f(
+    let mut trajectory: f64 = {
+        let __t1 = fns::atan2f(
             ctx,
             fp::fadds((fp).self_vel().x(), (fp).x8c_kb_vel().x()),
             fp::fadds((fp).self_vel().y(), (fp).x8c_kb_vel().y()),
-        ),
-    );
+        );
+        fp::fmuls((fp).facing_dir(), __t1)
+    };
     fns::ftPartSetRotX(
         ctx,
         fp,
@@ -2176,14 +2194,14 @@ fn inl_doFlyRoll_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    let mut trajectory: f64 = fp::fmuls(
-        (fp).facing_dir(),
-        fns::atan2f(
+    let mut trajectory: f64 = {
+        let __t1 = fns::atan2f(
             ctx,
             fp::fadds((fp).self_vel().x(), (fp).x8c_kb_vel().x()),
             fp::fadds((fp).self_vel().y(), (fp).x8c_kb_vel().y()),
-        ),
-    );
+        );
+        fp::fmuls((fp).facing_dir(), __t1)
+    };
     fns::ftPartSetRotX(
         ctx,
         fp,

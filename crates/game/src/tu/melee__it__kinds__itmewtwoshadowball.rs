@@ -924,14 +924,14 @@ pub fn it_802C519C<'a>(
                     )),
                 ));
         }
-        (ip).x40_vel().set_x(fp::fmuls(
-            (ip).xDD4_itemVar().mewtwoshadowball().x4().y(),
-            fns::cosf(ctx, (ip).xDD4_itemVar().mewtwoshadowball().x4().x()),
-        ));
-        (ip).x40_vel().set_y(fp::fmuls(
-            (ip).xDD4_itemVar().mewtwoshadowball().x4().y(),
-            fns::sinf(ctx, (ip).xDD4_itemVar().mewtwoshadowball().x4().x()),
-        ));
+        (ip).x40_vel().set_x({
+            let __t1 = fns::cosf(ctx, (ip).xDD4_itemVar().mewtwoshadowball().x4().x());
+            fp::fmuls((ip).xDD4_itemVar().mewtwoshadowball().x4().y(), __t1)
+        });
+        (ip).x40_vel().set_y({
+            let __t2 = fns::sinf(ctx, (ip).xDD4_itemVar().mewtwoshadowball().x4().x());
+            fp::fmuls((ip).xDD4_itemVar().mewtwoshadowball().x4().y(), __t2)
+        });
         (ip).x40_vel().set_z(0.0);
         fns::it_8026B3A8(ctx, item_gobj);
     }
@@ -1055,33 +1055,39 @@ pub fn it_802C53F0<'a>(
         ));
         Handle::copy_from((ip).pos(), (pos));
         (ip).xDD4_itemVar().mewtwoshadowball().set_x28(0_i32);
-        (ip).x40_vel().set_x(fp::fmuls(
+        (ip).x40_vel().set_x({
+            let __t3 = fns::cosf(ctx, (ip).xDD4_itemVar().mewtwoshadowball().x4().x());
             fp::fmuls(
-                (ip).xDD4_itemVar().mewtwoshadowball().x4().y(),
-                (ip).xDD4_itemVar().mewtwoshadowball().x50(),
-            ),
-            fns::cosf(ctx, (ip).xDD4_itemVar().mewtwoshadowball().x4().x()),
-        ));
-        (ip).x40_vel().set_y(fp::fmuls(
+                fp::fmuls(
+                    (ip).xDD4_itemVar().mewtwoshadowball().x4().y(),
+                    (ip).xDD4_itemVar().mewtwoshadowball().x50(),
+                ),
+                __t3,
+            )
+        });
+        (ip).x40_vel().set_y({
+            let __t4 = fns::sinf(ctx, (ip).xDD4_itemVar().mewtwoshadowball().x4().x());
             fp::fmuls(
-                (ip).xDD4_itemVar().mewtwoshadowball().x4().y(),
-                (ip).xDD4_itemVar().mewtwoshadowball().x50(),
-            ),
-            fns::sinf(ctx, (ip).xDD4_itemVar().mewtwoshadowball().x4().x()),
-        ));
+                fp::fmuls(
+                    (ip).xDD4_itemVar().mewtwoshadowball().x4().y(),
+                    (ip).xDD4_itemVar().mewtwoshadowball().x50(),
+                ),
+                __t4,
+            )
+        });
         (ip).x40_vel().set_z(0.0);
         (ip).xDD4_itemVar().mewtwoshadowball().set_x14(1_i32);
         (ip).xDD4_itemVar().mewtwoshadowball().set_x4C(0_i32);
         jobj = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
         jobj = inl_HSD_JObjGetChild(ctx, jobj);
         tr.set_x({
-            let __t4 = {
-                let __t3 = 1.0;
-                tr.set_z(__t3);
-                __t3
+            let __t6 = {
+                let __t5 = 1.0;
+                tr.set_z(__t5);
+                __t5
             };
-            tr.set_y(__t4);
-            __t4
+            tr.set_y(__t6);
+            __t6
         });
         inl_HSD_JObjSetScale(ctx, jobj, tr);
     }
@@ -1365,14 +1371,14 @@ pub fn itMewtwoshadowball_UnkMotion8_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     if (ip).xDD4_itemVar().mewtwoshadowball().x4C() > 0_i32 {
-        (ip).x40_vel().set_x(fp::fmuls(
-            (ip).xDD4_itemVar().mewtwoshadowball().x4().y(),
-            fns::cosf(ctx, (ip).xDD4_itemVar().mewtwoshadowball().x4().x()),
-        ));
-        (ip).x40_vel().set_y(fp::fmuls(
-            (ip).xDD4_itemVar().mewtwoshadowball().x4().y(),
-            fns::sinf(ctx, (ip).xDD4_itemVar().mewtwoshadowball().x4().x()),
-        ));
+        (ip).x40_vel().set_x({
+            let __t1 = fns::cosf(ctx, (ip).xDD4_itemVar().mewtwoshadowball().x4().x());
+            fp::fmuls((ip).xDD4_itemVar().mewtwoshadowball().x4().y(), __t1)
+        });
+        (ip).x40_vel().set_y({
+            let __t2 = fns::sinf(ctx, (ip).xDD4_itemVar().mewtwoshadowball().x4().x());
+            fp::fmuls((ip).xDD4_itemVar().mewtwoshadowball().x4().y(), __t2)
+        });
     }
     let _ = fns::it_802C4D10(ctx, gobj);
 }

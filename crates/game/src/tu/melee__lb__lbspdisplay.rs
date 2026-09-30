@@ -110,8 +110,11 @@ pub fn lb_80011E24<'a>(ctx: &'a Ctx, root: HSD_JObj<'a>, result: Ptr<'a, HSD_JOb
     {
         'l3: loop {
             'c4: {
-                target =
-                    ((Handle::cast::<Val<'a, i32>>(fns::__va_arg(ctx, ap.get(0), 1_u8))).get());
+                target = ((Handle::cast::<Val<'a, i32>>({
+                    let __t1 = 1_u8;
+                    fns::__va_arg(ctx, ap.get(0), __t1)
+                }))
+                .get());
                 if target == 1_i32.wrapping_neg() {
                     break 'l3;
                 }
@@ -145,12 +148,12 @@ pub fn lb_80011E24<'a>(ctx: &'a Ctx, root: HSD_JObj<'a>, result: Ptr<'a, HSD_JOb
                                         inl_HSD_JObjGetParent_unfused(ctx, saved),
                                     )) {
                                         next_node = {
-                                            let __t1 = inl_HSD_JObjGetNext_unfused(
+                                            let __t2 = inl_HSD_JObjGetNext_unfused(
                                                 ctx,
                                                 inl_HSD_JObjGetParent_unfused(ctx, saved),
                                             );
-                                            saved = __t1;
-                                            __t1
+                                            saved = __t2;
+                                            __t2
                                         };
                                         break 'l7;
                                     }

@@ -67,11 +67,10 @@ pub fn ftCo_800D4E50<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>, arg2: i32
         let mut coins: i32 = fns::Player_GetCoins(ctx, ((fp).player_idx() as i32));
         let mut var_r31: i32 = div_i32(coins, 2_i32);
         fns::Player_SetCoins(ctx, ((fp).player_idx() as i32), coins.wrapping_sub(var_r31));
-        fns::Player_SetUnk9C(
-            ctx,
-            ((fp).player_idx() as i32),
-            var_r31.wrapping_add(fns::Player_GetUnk9C(ctx, ((fp).player_idx() as i32))),
-        );
+        {
+            let __t1 = var_r31.wrapping_add(fns::Player_GetUnk9C(ctx, ((fp).player_idx() as i32)));
+            fns::Player_SetUnk9C(ctx, ((fp).player_idx() as i32), __t1)
+        };
         if var_r31 > (fns::p_ftCommonData(ctx).get()).x5C8() {
             var_r31 = (fns::p_ftCommonData(ctx).get()).x5C8();
         }

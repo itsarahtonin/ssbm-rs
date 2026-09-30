@@ -80,22 +80,22 @@ pub fn __DVDInterruptHandler<'a>(ctx: &'a Ctx, unused: i16, context: OSContext<'
     }
     (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 0_i32)).set((intr | mask));
     if (statics::dolphin__dvd__dvdlow::ResetOccurred(ctx).get() != (0_i32 as u32))
-        && ((ctx
-            .call::<_, i64>(0x8034c410, ())
-            .wrapping_sub(statics::dolphin__dvd__dvdlow::LastResetEnd(ctx).get()))
-            < ((((200_i32) as u32).wrapping_mul(
+        && (({
+            let __t1 = statics::dolphin__dvd__dvdlow::LastResetEnd(ctx).get();
+            ctx.call::<_, i64>(0x8034c410, ()).wrapping_sub(__t1)
+        }) < ((((200_i32) as u32).wrapping_mul(
+            (div_u32(
                 (div_u32(
-                    (div_u32(
-                        ((ptr::<Val<'a, u32>>(
-                            ctx,
-                            ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
-                        ))
-                        .get()),
-                        (4_i32 as u32),
-                    )),
-                    (0x3e8_i32 as u32),
+                    ((ptr::<Val<'a, u32>>(
+                        ctx,
+                        ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                    ))
+                    .get()),
+                    (4_i32 as u32),
                 )),
-            )) as i64))
+                (0x3e8_i32 as u32),
+            )),
+        )) as i64))
     {
         reg = (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 1_i32)).get();
         mask = (reg & (2_i32 as u32));
@@ -319,9 +319,10 @@ pub fn DVDLowRead<'a>(
                         (15_i32 as u32),
                     ))
             {
-                diff = ctx
-                    .call::<_, i64>(0x8034c410, ())
-                    .wrapping_sub(statics::dolphin__dvd__dvdlow::LastReadFinished(ctx).get());
+                diff = {
+                    let __t1 = statics::dolphin__dvd__dvdlow::LastReadFinished(ctx).get();
+                    ctx.call::<_, i64>(0x8034c410, ()).wrapping_sub(__t1)
+                };
                 if ((((5_i32) as u32).wrapping_mul(
                     (div_u32(
                         (div_u32(

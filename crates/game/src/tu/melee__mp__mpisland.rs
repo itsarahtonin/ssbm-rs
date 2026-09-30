@@ -141,7 +141,8 @@ pub fn mpIsland_8005A728<'a>(ctx: &'a Ctx) {
                     .x14()
                     .set_y((Handle::add(vtx, ((seg.p()).x6() as i32))).pos().y());
                 (seg.p()).x14().set_z(z_val);
-                (seg.p()).set_x28((fns::mpJointFromLine(ctx, line_idx) as i16));
+                let __t2 = (fns::mpJointFromLine(ctx, line_idx) as i16);
+                (seg.p()).set_x28(__t2);
                 count = count.wrapping_sub(1);
                 line_idx = line_idx.wrapping_add(1);
                 {
@@ -235,7 +236,8 @@ pub fn mpIsland_8005A728<'a>(ctx: &'a Ctx) {
                     .x14()
                     .set_y((Handle::add(vtx, ((seg.p()).x6() as i32))).pos().y());
                 (seg.p()).x14().set_z(z_val);
-                (seg.p()).set_x28((fns::mpJointFromLine(ctx, line_idx) as i16));
+                let __t3 = (fns::mpJointFromLine(ctx, line_idx) as i16);
+                (seg.p()).set_x28(__t3);
                 count = count.wrapping_sub(1);
                 line_idx = line_idx.wrapping_add(1);
                 {

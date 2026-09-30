@@ -89,10 +89,10 @@ pub fn gm_801A8114<'a>(ctx: &'a Ctx, arg0: HSD_JObj<'a>, arg1: i32) {
         0.01745329238474369,
         fns::Toy_803060BC(ctx, arg1, 5_i32),
     );
-    scale = fp::fmuls(
-        fns::Toy_803060BC(ctx, arg1, 3_i32),
-        (fp::fdivs(1.0, fns::Toy_803060BC(ctx, arg1, 4_i32))),
-    );
+    scale = {
+        let __t1 = (fp::fdivs(1.0, fns::Toy_803060BC(ctx, arg1, 4_i32)));
+        fp::fmuls(fns::Toy_803060BC(ctx, arg1, 3_i32), __t1)
+    };
     (if !Handle::is_null((transJobj)) {
         ({ () })
     } else {
@@ -365,27 +365,26 @@ pub fn gm_801A9094<'a>(ctx: &'a Ctx) {
                     ctx,
                     fns::gm_801A659C(ctx, inl_gm_801A9094_get_entry_unfused(ctx, sp8C.at(0), i)),
                 );
-                joint = Handle::cast::<HSD_Joint<'a>>(fns::HSD_ArchiveGetPublicAddress(
-                    ctx,
-                    fns::gm_804D679C(ctx).get(),
-                    ptr::<Val<'a, i8>>(
+                joint = Handle::cast::<HSD_Joint<'a>>({
+                    let __t1 = ptr::<Val<'a, i8>>(
                         ctx,
                         fns::tyDisplay_8031BB34(ctx, ((dsp).x04() as i8)) as u32,
-                    ),
-                ));
-                matanim = Handle::cast::<HSD_MatAnimJoint<'a>>(fns::HSD_ArchiveGetPublicAddress(
-                    ctx,
-                    fns::gm_804D679C(ctx).get(),
-                    fns::tyDisplay_8031BB94(ctx, ((dsp).x04() as i8)),
-                ));
+                    );
+                    fns::HSD_ArchiveGetPublicAddress(ctx, fns::gm_804D679C(ctx).get(), __t1)
+                });
+                matanim = Handle::cast::<HSD_MatAnimJoint<'a>>({
+                    let __t2 = fns::tyDisplay_8031BB94(ctx, ((dsp).x04() as i8));
+                    fns::HSD_ArchiveGetPublicAddress(ctx, fns::gm_804D679C(ctx).get(), __t2)
+                });
                 bg_joint = inl_gm_801A9094_get_bg_unfused(ctx);
+                let __t4 = {
+                    let __t3 = inl_gm_801A9094_create_gobj_unfused(ctx);
+                    gobj = __t3;
+                    __t3
+                };
                 statics::melee__gm__gmregenddisp::gm_80480A00(ctx)
                     .at(sp8C.at(i).get())
-                    .set({
-                        let __t1 = inl_gm_801A9094_create_gobj_unfused(ctx);
-                        gobj = __t1;
-                        __t1
-                    });
+                    .set(__t4);
                 root = fns::HSD_JObjAlloc(ctx);
                 fns::HSD_GObjObject_80390A70(
                     ctx,
@@ -1030,7 +1029,8 @@ fn inl_gm_801A9630_init_unfused<'a>(ctx: &'a Ctx, randoms: Ptr<'a, Val<'a, i32>>
                     0_i32
                 }) != 0)
                 {
-                    ((randoms).get()).set(fns::HSD_Randi(ctx, 0x2710_i32));
+                    let __t1 = fns::HSD_Randi(ctx, 0x2710_i32);
+                    ((randoms).get()).set(__t1);
                 } else {
                     ((randoms).get()).set(0_i32);
                 }

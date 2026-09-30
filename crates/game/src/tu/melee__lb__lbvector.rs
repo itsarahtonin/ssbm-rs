@@ -114,7 +114,10 @@ pub fn lbVector_Angle<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>) -> f64 {
     let __frame = ctx.stack_frame(0x20);
     let mut a = a;
     let mut b = b;
-    let mut lena_lenb: f64 = fp::fmuls(inl_lbVector_Len(ctx, a), inl_lbVector_Len(ctx, b));
+    let mut lena_lenb: f64 = {
+        let __t1 = inl_lbVector_Len(ctx, b);
+        fp::fmuls(inl_lbVector_Len(ctx, a), __t1)
+    };
     if lena_lenb > 1.000000013351432e-10_f64 {
         let mut cosine: f64 = fp::fdivs(
             (fp::fmadds(
@@ -139,10 +142,10 @@ pub fn lbVector_AngleXY<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>) -> f64 {
     let __frame = ctx.stack_frame(0x20);
     let mut a = a;
     let mut b = b;
-    let mut lena_lenb: f64 = fp::fmuls(
-        inl_lbVector_Len_xy_accurate(ctx, a),
-        inl_lbVector_Len_xy_accurate(ctx, b),
-    );
+    let mut lena_lenb: f64 = {
+        let __t1 = inl_lbVector_Len_xy_accurate(ctx, b);
+        fp::fmuls(inl_lbVector_Len_xy_accurate(ctx, a), __t1)
+    };
     if (lena_lenb != 0.0) {
         let mut cosine: f64 = fp::fdivs(
             (fp::fmadds((a).x(), (b).x(), fp::fmuls((a).y(), (b).y()))),
@@ -274,19 +277,25 @@ pub fn lbVector_CosAngle<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>) -> f64 {
     let __frame = ctx.stack_frame(0x18);
     let mut a = a;
     let mut b = b;
-    return fp::fdivs(
-        (fp::fmadds((a).x(), (b).x(), fp::fmuls((a).y(), (b).y()))),
-        (fp::fmuls(
-            inl_sqrtf(
-                ctx,
-                fp::fadds(fp::fmuls((a).x(), (a).x()), fp::fmuls((a).y(), (a).y())),
-            ),
-            inl_sqrtf(
+    return {
+        let __t2 = ({
+            let __t1 = inl_sqrtf(
                 ctx,
                 fp::fadds(fp::fmuls((b).x(), (b).x()), fp::fmuls((b).y(), (b).y())),
-            ),
-        )),
-    );
+            );
+            fp::fmuls(
+                inl_sqrtf(
+                    ctx,
+                    fp::fadds(fp::fmuls((a).x(), (a).x()), fp::fmuls((a).y(), (a).y())),
+                ),
+                __t1,
+            )
+        });
+        fp::fdivs(
+            (fp::fmadds((a).x(), (b).x(), fp::fmuls((a).y(), (b).y()))),
+            __t2,
+        )
+    };
 }
 
 pub fn lbVector_Lerp<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>, result: Vec<'a>, f: f64) -> Vec<'a> {

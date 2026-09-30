@@ -1484,9 +1484,8 @@ pub fn ftCommon_8007E83C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, div: f
     if div == fp::frsp(0_i32 as f64) {
         val = (fp).frame_speed_mul();
     } else if fns::itGetKind(ctx, (fp).item_gobj()) == (enums::It_Kind_Parasol as i32) {
-        val = fp::fmuls(
-            (fp).frame_speed_mul(),
-            (fp::fdivs(
+        val = {
+            let __t1 = (fp::fdivs(
                 fp::frsp(fns::it_8028B08C(
                     ctx,
                     Handle::cast::<HSD_GObj<'a>>(Handle::cast::<Addr<'a>>((fp).item_gobj())),
@@ -1495,12 +1494,12 @@ pub fn ftCommon_8007E83C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, div: f
                         .get(),
                 ) as f64),
                 div,
-            )),
-        );
+            ));
+            fp::fmuls((fp).frame_speed_mul(), __t1)
+        };
     } else {
-        val = fp::fmuls(
-            (fp).frame_speed_mul(),
-            (fp::fdivs(
+        val = {
+            let __t2 = (fp::fdivs(
                 fp::frsp(fns::it_802BDA40(
                     ctx,
                     (fp).item_gobj(),
@@ -1509,8 +1508,9 @@ pub fn ftCommon_8007E83C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, div: f
                         .get(),
                 ) as f64),
                 div,
-            )),
-        );
+            ));
+            fp::fmuls((fp).frame_speed_mul(), __t2)
+        };
     }
     if fns::itGetKind(ctx, (fp).item_gobj()) == (enums::It_Kind_Parasol as i32) {
         statics::melee__ft__ftcommon::parasol_table_1(ctx)
@@ -1621,11 +1621,11 @@ pub fn ftCommon_8007EA90<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) {
     }
     temp_r31 = fns::it_802E5F8C(ctx, (fp).gobj(), sp10, arg1, 1_i32, phi_f31, phi_f30);
     if (fp).dmg().x18c4_source_ply() != 6_i32 {
-        fns::Player_SetUnk98(
-            ctx,
-            (fp).dmg().x18c4_source_ply(),
-            temp_r31.wrapping_add(fns::Player_GetUnk98(ctx, (fp).dmg().x18c4_source_ply())),
-        );
+        {
+            let __t1 =
+                temp_r31.wrapping_add(fns::Player_GetUnk98(ctx, (fp).dmg().x18c4_source_ply()));
+            fns::Player_SetUnk98(ctx, (fp).dmg().x18c4_source_ply(), __t1)
+        };
     }
 }
 
@@ -2375,19 +2375,22 @@ pub fn ftCommon_80080174<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     }
     if !Handle::is_null((fp).x1980()) {
         v = (fp).co_attrs().x130();
-        if ({
-            let __t1 = fp::fmadds(
-                (fns::p_ftCommonData(ctx).get()).x710(),
-                fp::frsp((fp).x2024() as f64),
-                (fns::p_ftCommonData(ctx).get()).x708(),
-            );
-            phi_f2 = __t1;
-            __t1
-        }) > ({
-            let __t2 = (fns::p_ftCommonData(ctx).get()).x70C();
-            phi_f3 = __t2;
-            __t2
-        }) {
+        if {
+            let __t3 = ({
+                let __t2 = (fns::p_ftCommonData(ctx).get()).x70C();
+                phi_f3 = __t2;
+                __t2
+            });
+            ({
+                let __t1 = fp::fmadds(
+                    (fns::p_ftCommonData(ctx).get()).x710(),
+                    fp::frsp((fp).x2024() as f64),
+                    (fns::p_ftCommonData(ctx).get()).x708(),
+                );
+                phi_f2 = __t1;
+                __t1
+            }) > __t3
+        } {
             phi_f2 = phi_f3;
         }
         fns::it_8029A89C(

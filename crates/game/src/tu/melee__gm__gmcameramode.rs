@@ -256,11 +256,12 @@ pub fn gm_PrepCameraModeVSScene<'a>(ctx: &'a Ctx, state: GameModeState<'a>) {
     fns::gm_LoadRumbleEnabled(ctx, start);
     fns::gm_LoadAnnouncer(ctx);
     fns::lbCardNew_AllocWorkArea(ctx);
-    fns::lbSnap_8001E218(
-        ctx,
-        fns::lbDvd_GetPreloadedArchive(ctx, 0x7d7_i32),
-        Handle::cast::<Unk80433380_48<'a>>(fns::lbDvd_GetPreloadedArchive(ctx, 0x7d8_i32)),
-    );
+    {
+        let __t2 =
+            Handle::cast::<Unk80433380_48<'a>>(fns::lbDvd_GetPreloadedArchive(ctx, 0x7d8_i32));
+        let __t3 = fns::lbDvd_GetPreloadedArchive(ctx, 0x7d7_i32);
+        fns::lbSnap_8001E218(ctx, __t3, __t2)
+    };
 }
 
 pub fn gm_801B2AF8<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {

@@ -639,14 +639,10 @@ fn inl_isDrawback_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             pos,
         );
         {
-            let mut fv_x14: HSD_GObj<'a> = fns::it_802AF1A4(
-                ctx,
-                (fp).facing_dir(),
-                gobj,
-                pos,
-                fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_RThumbNb as i32)),
-                (da).x10(),
-            );
+            let mut fv_x14: HSD_GObj<'a> = {
+                let __t1 = fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_RThumbNb as i32));
+                fns::it_802AF1A4(ctx, (fp).facing_dir(), gobj, pos, __t1, (da).x10())
+            };
             (fp).u().lk().set_x14(fv_x14);
             if !Handle::is_null(fv_x14) {
                 inl_Fighter_SetDamageCallback_unfused(ctx, gobj, fnptr(ctx, 0x800eaf58));
@@ -713,14 +709,10 @@ fn inl_isDrawn_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                 null::<Vec<'a>>(ctx),
                 pos,
             );
-            fv_x10 = fns::it_802A83E0(
-                ctx,
-                (fp).facing_dir(),
-                gobj,
-                pos,
-                fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_LThumbNb as i32)),
-                (da).xC(),
-            );
+            fv_x10 = {
+                let __t1 = fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_LThumbNb as i32));
+                fns::it_802A83E0(ctx, (fp).facing_dir(), gobj, pos, __t1, (da).xC())
+            };
             (fp).u().lk().set_arrow_gobj(fv_x10);
             if !Handle::is_null(fv_x10) {
                 inl_Fighter_SetDamageCallback_unfused(ctx, gobj, fnptr(ctx, 0x800eaf58));

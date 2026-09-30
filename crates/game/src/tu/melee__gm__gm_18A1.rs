@@ -138,11 +138,10 @@ pub fn fn_8018A364<'a>(ctx: &'a Ctx, arg0_int: i32) {
     }
     if ((rules).x4_5() != 0) {
         main_data = fns::gmMainLib_8015CDE0(ctx);
-        total_time = (data)
-            .x0()
-            .xC()
-            .x20()
-            .wrapping_add(fns::gm_GetFrameCount(ctx));
+        total_time = {
+            let __t1 = fns::gm_GetFrameCount(ctx);
+            (data).x0().xC().x20().wrapping_add(__t1)
+        };
         (Handle::cast::<u8_bits<'a>>((arg0)._x448().at(0_i32))).set_b5((1_i32 as u8));
         if ((data).x0().x0().cpu_level() as i32) == 4_i32 {
             (Handle::cast::<u8_bits<'a>>((arg0)._x448().at(0_i32))).set_b2((1_i32 as u8));
@@ -163,10 +162,12 @@ pub fn fn_8018A364<'a>(ctx: &'a Ctx, arg0_int: i32) {
         if ((data).x0().xC().xF() as i32) != 0_i32 {
             (Handle::cast::<u8_bits<'a>>((arg0)._x448().at(2_i32))).set_b4((1_i32 as u8));
         }
-        if (((data).x0().xC().x1C() as u32)
-            .wrapping_add((arg0).player_standings().get(0_i32).x44()))
-            == (fns::Player_GetDamage(ctx, 0_i32) as u32)
-        {
+        if {
+            let __t2 = (fns::Player_GetDamage(ctx, 0_i32) as u32);
+            (((data).x0().xC().x1C() as u32)
+                .wrapping_add((arg0).player_standings().get(0_i32).x44()))
+                == __t2
+        } {
             (Handle::cast::<u8_bits<'a>>((arg0)._x448().at(0_i32))).set_b1((1_i32 as u8));
         }
         if ((data).x0().xC().xD() as i32) != 0_i32 {

@@ -1536,19 +1536,22 @@ fn inl_ftMewtwo_SpecialN_LaunchShadowBall_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GO
             );
             sp2C.set_z(0.0);
             sp20.set_z(0.0);
-            let _ = fns::it_802C519C(
-                ctx,
-                gobj,
-                sp20,
-                (enums::It_Kind_Mewtwo_ShadowBall as i32),
-                fp::fctiwz((mewtwoAttrs).x0_MEWTWO_SHADOWBALL_CHARGE_CYCLES()),
-                fns::atan2f(
+            let _ = {
+                let __t1 = fns::atan2f(
                     ctx,
                     fp::fsubs(sp20.y(), sp2C.y()),
                     fp::fsubs(sp20.x(), sp2C.x()),
-                ),
-                (fp).facing_dir(),
-            );
+                );
+                fns::it_802C519C(
+                    ctx,
+                    gobj,
+                    sp20,
+                    (enums::It_Kind_Mewtwo_ShadowBall as i32),
+                    fp::fctiwz((mewtwoAttrs).x0_MEWTWO_SHADOWBALL_CHARGE_CYCLES()),
+                    __t1,
+                    (fp).facing_dir(),
+                )
+            };
             fns::ft_PlaySFX(ctx, fp, 0x30db3_i32, (127_i32 as u8), (64_i32 as u8));
         }
     }

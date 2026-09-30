@@ -1568,8 +1568,10 @@ pub fn Ground_801C24F8<'a>(ctx: &'a Ctx, stkind: i32, arg1: u32, arg2: Val<'a, i
                                 break 's3;
                             }
                             if __case <= 3 {
-                                if (((phi_r30).x16() as i32) > fns::HSD_Randi(ctx, (100_i32)))
-                                    || (temp_r25 != 0)
+                                if ({
+                                    let __t1 = fns::HSD_Randi(ctx, (100_i32));
+                                    ((phi_r30).x16() as i32) > __t1
+                                }) || (temp_r25 != 0)
                                 {
                                     arg1 = (arg1 | (2_i32 as u32));
                                 } else {
@@ -1582,8 +1584,10 @@ pub fn Ground_801C24F8<'a>(ctx: &'a Ctx, stkind: i32, arg1: u32, arg2: Val<'a, i
                                     ctx,
                                     ((enums::CKind_Mars as i32) as u8),
                                 ) != 0)
-                                    && ((((phi_r30).x16() as i32) > fns::HSD_Randi(ctx, (100_i32)))
-                                        || (temp_r25 != 0))
+                                    && (({
+                                        let __t2 = fns::HSD_Randi(ctx, (100_i32));
+                                        ((phi_r30).x16() as i32) > __t2
+                                    }) || (temp_r25 != 0))
                                 {
                                     arg1 = (arg1 | (2_i32 as u32));
                                 } else {
@@ -1596,8 +1600,10 @@ pub fn Ground_801C24F8<'a>(ctx: &'a Ctx, stkind: i32, arg1: u32, arg2: Val<'a, i
                                     ctx,
                                     ((enums::CKind_CLink as i32) as u8),
                                 ) != 0)
-                                    && ((((phi_r30).x16() as i32) > fns::HSD_Randi(ctx, (100_i32)))
-                                        || (temp_r25 != 0))
+                                    && (({
+                                        let __t3 = fns::HSD_Randi(ctx, (100_i32));
+                                        ((phi_r30).x16() as i32) > __t3
+                                    }) || (temp_r25 != 0))
                                 {
                                     arg1 = (arg1 | (2_i32 as u32));
                                 } else {
@@ -1607,8 +1613,10 @@ pub fn Ground_801C24F8<'a>(ctx: &'a Ctx, stkind: i32, arg1: u32, arg2: Val<'a, i
                             }
                             if __case <= 6 {
                                 if (fns::Toy_803048C0(ctx, 0x11a_i32) != 0)
-                                    && ((((phi_r30).x16() as i32) > fns::HSD_Randi(ctx, (100_i32)))
-                                        || (temp_r25 != 0))
+                                    && (({
+                                        let __t4 = fns::HSD_Randi(ctx, (100_i32));
+                                        ((phi_r30).x16() as i32) > __t4
+                                    }) || (temp_r25 != 0))
                                 {
                                     arg1 = (arg1 | (2_i32 as u32));
                                 } else {
@@ -1618,8 +1626,10 @@ pub fn Ground_801C24F8<'a>(ctx: &'a Ctx, stkind: i32, arg1: u32, arg2: Val<'a, i
                             }
                             if __case <= 7 {
                                 if (fns::gm_80164ABC(ctx) != 0)
-                                    && ((((phi_r30).x16() as i32) > fns::HSD_Randi(ctx, (100_i32)))
-                                        || (temp_r25 != 0))
+                                    && (({
+                                        let __t5 = fns::HSD_Randi(ctx, (100_i32));
+                                        ((phi_r30).x16() as i32) > __t5
+                                    }) || (temp_r25 != 0))
                                 {
                                     arg1 = (arg1 | (2_i32 as u32));
                                 } else {
@@ -1629,8 +1639,10 @@ pub fn Ground_801C24F8<'a>(ctx: &'a Ctx, stkind: i32, arg1: u32, arg2: Val<'a, i
                             }
                             if __case <= 8 {
                                 if (fns::gm_80164600(ctx) != 0)
-                                    && ((((phi_r30).x16() as i32) > fns::HSD_Randi(ctx, (100_i32)))
-                                        || (temp_r25 != 0))
+                                    && (({
+                                        let __t6 = fns::HSD_Randi(ctx, (100_i32));
+                                        ((phi_r30).x16() as i32) > __t6
+                                    }) || (temp_r25 != 0))
                                 {
                                     arg1 = (arg1 | (2_i32 as u32));
                                 } else {
@@ -1696,11 +1708,11 @@ pub fn Ground_801C24F8<'a>(ctx: &'a Ctx, stkind: i32, arg1: u32, arg2: Val<'a, i
         )
     });
     if bgm == 2_i32.wrapping_neg() {
-        (arg2).set(fns::lbAudioAx_8002305C(
-            ctx,
-            fns::Player_GetPlayerCharacter(ctx, 0_i32),
-            fns::HSD_Randi(ctx, 2_i32),
-        ));
+        (arg2).set({
+            let __t7 = fns::HSD_Randi(ctx, 2_i32);
+            let __t8 = fns::Player_GetPlayerCharacter(ctx, 0_i32);
+            fns::lbAudioAx_8002305C(ctx, __t8, __t7)
+        });
     } else {
         (arg2).set(bgm);
     }
@@ -3512,29 +3524,53 @@ pub fn Ground_801C4B50<'a>(
     }
     if z1 >= 0.9999899864196777 {
         phi_f31 = fns::asinf(ctx, fp::fneg(vec0.y()));
-        if fp::fmuls(
-            fp::fmuls(vec0.x(), fns::cosf(ctx, phi_f31)),
-            fns::sinf(ctx, result_y),
-        ) < 0.0
+        if {
+            let __t4 = fns::sinf(ctx, result_y);
+            fp::fmuls(
+                {
+                    let __t3 = fns::cosf(ctx, phi_f31);
+                    fp::fmuls(vec0.x(), __t3)
+                },
+                __t4,
+            )
+        } < 0.0
         {
             phi_f31 = fp::frsp(fp::fsub(3.141592653589793, phi_f31));
         }
         result_x = phi_f31;
         result_z = 0.0;
     } else {
-        result_x = fns::asinf(ctx, fp::fdivs(vec2.z(), fns::cosf(ctx, result_y)));
-        if fp::fmuls(
-            fp::fmuls(vec0.z(), fns::cosf(ctx, result_x)),
-            fns::cosf(ctx, result_y),
-        ) < fp::frsp(0_i32 as f64)
+        result_x = fns::asinf(ctx, {
+            let __t5 = fns::cosf(ctx, result_y);
+            fp::fdivs(vec2.z(), __t5)
+        });
+        if {
+            let __t7 = fns::cosf(ctx, result_y);
+            fp::fmuls(
+                {
+                    let __t6 = fns::cosf(ctx, result_x);
+                    fp::fmuls(vec0.z(), __t6)
+                },
+                __t7,
+            )
+        } < fp::frsp(0_i32 as f64)
         {
             result_x = fp::frsp(fp::fsub(3.141592653589793, result_x));
         }
-        result_z = fns::asinf(ctx, fp::fdivs(fp::fneg(vec1.y()), fns::cosf(ctx, result_y)));
-        if fp::fmuls(
-            fp::fmuls(fp::fneg(vec1.x()), fns::cosf(ctx, result_y)),
-            fns::cosf(ctx, result_z),
-        ) < fp::frsp(0_i32 as f64)
+        result_z = fns::asinf(ctx, {
+            let __t8 = fns::cosf(ctx, result_y);
+            fp::fdivs(fp::fneg(vec1.y()), __t8)
+        });
+        if {
+            let __t10 = fns::cosf(ctx, result_z);
+            fp::fmuls(
+                {
+                    let __t9 = fns::cosf(ctx, result_y);
+                    fp::fmuls(fp::fneg(vec1.x()), __t9)
+                },
+                __t10,
+            )
+        } < fp::frsp(0_i32 as f64)
         {
             result_z = fp::frsp(fp::fsub(3.141592653589793, result_z));
         }

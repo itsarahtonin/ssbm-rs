@@ -93,12 +93,14 @@ pub fn gm_801A4014<'a>(ctx: &'a Ctx, mode: GameMode<'a>) {
     kind = (info).scene_kind();
     scene = ptr::<GameScene<'a>>(
         ctx,
-        (Handle::addr(fns::gm_FindGameSceneHandler(ctx, kind))
-            | ({
+        ({
+            let __t2 = ({
                 let __t1 = (0_i32 as u32);
                 zero = __t1;
                 __t1
-            })) as u32,
+            });
+            (Handle::addr(fns::gm_FindGameSceneHandler(ctx, kind)) | __t2)
+        }) as u32,
     );
     fns::gm_801A4BD4(ctx);
     fns::gm_801A4B88(ctx, info);

@@ -779,14 +779,14 @@ pub fn ftCo_800B5AB0<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Addr<'a>, arg2: Ad
                 dirx = fp::fmuls(dirx, scale);
                 diry = fp::fmuls((list).x0C(), scale);
             } else {
-                dirx = fp::fmuls(
-                    fp::fneg((list).x0C()),
-                    ({
+                dirx = {
+                    let __t2 = ({
                         let __t1 = inl_get_scale(ctx, fp);
                         scale = __t1;
                         __t1
-                    }),
-                );
+                    });
+                    fp::fmuls(fp::fneg((list).x0C()), __t2)
+                };
                 diry = fp::fmuls(fp::fneg((list).x08()), scale);
             }
             scale = inl_get_scale(ctx, fp);

@@ -685,20 +685,17 @@ pub fn fn_80174B4C<'a>(ctx: &'a Ctx, data: ResultsData<'a>, slot: i32) {
                     break 'c6;
                 }
             }
-            (pdata.get())
-                .stats_text()
-                .get(0_i32)
-                .at(count)
-                .set(fns::HSD_SisLib_803A5ACC(
-                    ctx,
-                    0_i32,
-                    0_i32,
-                    pos.x(),
-                    fp::fneg(pos.y()),
-                    pos.z(),
-                    11.0,
-                    10.0,
-                ));
+            let __t1 = fns::HSD_SisLib_803A5ACC(
+                ctx,
+                0_i32,
+                0_i32,
+                pos.x(),
+                fp::fneg(pos.y()),
+                pos.z(),
+                11.0,
+                10.0,
+            );
+            (pdata.get()).stats_text().get(0_i32).at(count).set(__t1);
             text = (pdata.get()).stats_text().get(0_i32).at(count).get();
             (text).set_default_fitting((1_i32 as u8));
             text = (pdata.get()).stats_text().get(0_i32).at(count).get();
@@ -706,22 +703,16 @@ pub fn fn_80174B4C<'a>(ctx: &'a Ctx, data: ResultsData<'a>, slot: i32) {
             (text).x34().set_y(0.0546875);
             text = (pdata.get()).stats_text().get(0_i32).at(count).get();
             (text).set_render_callback(render_callback);
-            (pdata.get())
-                .stats_text()
-                .get(1_i32)
-                .at(count)
-                .set(fns::HSD_SisLib_803A6754(ctx, 0_i32, 0_i32));
+            let __t2 = fns::HSD_SisLib_803A6754(ctx, 0_i32, 0_i32);
+            (pdata.get()).stats_text().get(1_i32).at(count).set(__t2);
             text = (pdata.get()).stats_text().get(1_i32).at(count).get();
             (text).set_pos_x(pos.x());
             (text).set_pos_y(fp::fneg(pos.y()));
             (text).set_pos_z(pos.z());
             text = (pdata.get()).stats_text().get(1_i32).at(count).get();
             (text).set_render_callback(render_callback);
-            (pdata.get())
-                .stats_text()
-                .get(2_i32)
-                .at(count)
-                .set(fns::HSD_SisLib_803A6754(ctx, 0_i32, 0_i32));
+            let __t3 = fns::HSD_SisLib_803A6754(ctx, 0_i32, 0_i32);
+            (pdata.get()).stats_text().get(2_i32).at(count).set(__t3);
             text = (pdata.get()).stats_text().get(2_i32).at(count).get();
             (text).set_pos_x(fp::fadds(11.0, pos.x()));
             (text).set_pos_y(fp::fneg(pos.y()));
@@ -761,15 +752,19 @@ pub fn fn_80175038<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, flag: i32) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
     let mut flag = flag;
-    fns::HSD_JObjDispAll(
-        ctx,
-        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj))),
-        At::new(ctx, 0_i32 as u32)
-            .field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0)
-            .get(0),
-        fns::HSD_GObj_80390EB8(ctx, flag),
-        0_u32,
-    );
+    {
+        let __t1 = fns::HSD_GObj_80390EB8(ctx, flag);
+        let __t2 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
+        fns::HSD_JObjDispAll(
+            ctx,
+            __t2,
+            At::new(ctx, 0_i32 as u32)
+                .field::<Arr<'a, ArrV<'a, F32, 4>, 3>>(0)
+                .get(0),
+            __t1,
+            0_u32,
+        )
+    };
 }
 
 pub fn fn_8017507C<'a>(ctx: &'a Ctx, __ret: _GXColor<'a>, slot: i32) {
@@ -1439,16 +1434,19 @@ pub fn fn_80175A94<'a>(ctx: &'a Ctx, slot: i32, position: Vec<'a>) {
             __ret_tmp
         });
         if ((me).player_standings().get((player as i32)).pkind() as i32) != 3_i32 {
-            slot = fns::HSD_SisLib_803A6B98(
-                ctx,
-                (new_var).player_data().get((player as i32)).ko_time(),
-                0.0,
-                fp::fneg(30.0),
-                cstr(ctx, 0x804d3f94),
-                &[VarArg::Int(
+            slot = {
+                let __t1 = VarArg::Int(
                     fns::fn_8017AD78(ctx, fns::fn_8017ADA8(ctx, (player as i32))) as u32,
-                )],
-            );
+                );
+                fns::HSD_SisLib_803A6B98(
+                    ctx,
+                    (new_var).player_data().get((player as i32)).ko_time(),
+                    0.0,
+                    fp::fneg(30.0),
+                    cstr(ctx, 0x804d3f94),
+                    &[__t1],
+                )
+            };
         } else {
             sp14.set_r((160_i32 as u8));
             sp14.set_g((160_i32 as u8));
@@ -3064,26 +3062,32 @@ pub fn fn_80176F60<'a>(ctx: &'a Ctx) {
     );
     fns::lb_8000C0E8(ctx, jobj, 0_i32, temp_r27);
     fns::HSD_JObjReqAnimAll(ctx, jobj, 0.0);
-    (data).set_x20(fns::fn_80176BF0(
-        ctx,
-        jobj,
-        ((temp_r30)
-            .player_standings()
-            .get(((data).x6() as i32))
-            .ckind() as u8),
-        inl_gm_WasMatchCanceled_unfused(ctx, (temp_r30).outcome()),
-    ));
+    (data).set_x20({
+        let __t1 = inl_gm_WasMatchCanceled_unfused(ctx, (temp_r30).outcome());
+        fns::fn_80176BF0(
+            ctx,
+            jobj,
+            ((temp_r30)
+                .player_standings()
+                .get(((data).x6() as i32))
+                .ckind() as u8),
+            __t1,
+        )
+    });
     aobj = ((((data).x20()).u().dobj()).mobj()).aobj();
-    tmp = (fns::gm_80160854(
-        ctx,
-        (data).x6(),
-        (fns::Player_GetTeam(ctx, ((data).x6() as i32)) as u8),
-        ((((temp_r30).is_teams() as i32) == 1_i32) as i32 as u8),
-        (temp_r30)
-            .player_standings()
-            .get(((data).x4() as i32))
-            .pkind(),
-    ) as u8);
+    tmp = ({
+        let __t2 = (fns::Player_GetTeam(ctx, ((data).x6() as i32)) as u8);
+        fns::gm_80160854(
+            ctx,
+            (data).x6(),
+            __t2,
+            ((((temp_r30).is_teams() as i32) == 1_i32) as i32 as u8),
+            (temp_r30)
+                .player_standings()
+                .get(((data).x4() as i32))
+                .pkind(),
+        )
+    } as u8);
     new_var = aobj;
     fns::HSD_AObjSetCurrentFrame(ctx, new_var, fp::fadds(1.0, fp::frsp((tmp as i32) as f64)));
     fns::HSD_AObjSetRate(ctx, aobj, 0.0);

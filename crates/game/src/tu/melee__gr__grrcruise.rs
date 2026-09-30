@@ -1359,9 +1359,10 @@ pub fn grRCruise_80200C04<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                             ));
                         }
                         inl_HSD_JObjAddTranslationY_unfused(ctx, (entry).x14(), (entry).x10());
-                        if inl_HSD_JObjGetTranslationY_unfused(ctx, (entry).x14())
-                            <= fns::Stage_GetCamBoundsBottomOffset(ctx)
-                        {
+                        if {
+                            let __t1 = fns::Stage_GetCamBoundsBottomOffset(ctx);
+                            inl_HSD_JObjGetTranslationY_unfused(ctx, (entry).x14()) <= __t1
+                        } {
                             (entry).set_x10(0.0);
                             fns::grRCruise_80201B60(ctx, (entry).x14(), 0_i32);
                             fns::mpLib_80057BC0(ctx, ((entry).x2() as i32));
@@ -1486,8 +1487,10 @@ pub fn grRCruise_80201110<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     if angle < fp::fneg(1.0471975430846214) {
         angle = fp::fneg(1.0471975803375244);
     }
-    ((gp).u().rcruise().x4()).x4().set_x(fns::cosf(ctx, angle));
-    ((gp).u().rcruise().x4()).x4().set_z(fns::sinf(ctx, angle));
+    let __t1 = fns::cosf(ctx, angle);
+    ((gp).u().rcruise().x4()).x4().set_x(__t1);
+    let __t2 = fns::sinf(ctx, angle);
+    ((gp).u().rcruise().x4()).x4().set_z(__t2);
     if (rem_i32(((gp).u().rcruise().x4()).unk_angle_int(), 30_i32) == 0_i32)
         && (fns::HSD_Randf(ctx) > 0.5)
     {
@@ -1501,9 +1504,11 @@ pub fn grRCruise_80201110<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
     }
     if (gp).u().rcruise().xC() != 0_i32 {
-        ((gp).u().rcruise().x4()).set_unk_scale(fp::frsp(fp::fmadd(0.3, fns::HSD_Randf(ctx), 0.2)));
+        let __t3 = fp::frsp(fp::fmadd(0.3, fns::HSD_Randf(ctx), 0.2));
+        ((gp).u().rcruise().x4()).set_unk_scale(__t3);
     } else {
-        ((gp).u().rcruise().x4()).set_unk_scale(fp::frsp(fp::fmadd(0.2, fns::HSD_Randf(ctx), 0.1)));
+        let __t4 = fp::frsp(fp::fmadd(0.2, fns::HSD_Randf(ctx), 0.1));
+        ((gp).u().rcruise().x4()).set_unk_scale(__t4);
     }
 }
 
@@ -1622,11 +1627,9 @@ pub fn grRCruise_80201410<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         i = 0_i32;
         'l1: while (i as u32) < (div_u32(160_u32, 8_u32)) {
             'c2: {
-                (Handle::add((gp).u().map().vanish(), i)).set_jobj(fns::Ground_801C3FA4(
-                    ctx,
-                    gobj,
-                    (fns::lbl_803E5014(ctx).get(i).x0() as i32),
-                ));
+                let __t1 =
+                    fns::Ground_801C3FA4(ctx, gobj, (fns::lbl_803E5014(ctx).get(i).x0() as i32));
+                (Handle::add((gp).u().map().vanish(), i)).set_jobj(__t1);
                 (if !Handle::is_null(((Handle::add((gp).u().map().vanish(), i)).jobj())) {
                     ({ () })
                 } else {

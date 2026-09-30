@@ -101,14 +101,14 @@ pub fn it_802C4B38<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
         ((item).xC4_article_data()).x4_specialAttributes(),
     );
     let mut fighter_gobj: HSD_GObj<'a> = (item).xDD4_itemVar().mdisable().owner();
-    (item).x40_vel().set_x(fp::fmuls(
-        fp::fmuls((attrs).x_vel(), (item).facing_dir()),
-        fns::ftLib_GetScale(ctx, fighter_gobj),
-    ));
+    (item).x40_vel().set_x({
+        let __t1 = fns::ftLib_GetScale(ctx, fighter_gobj);
+        fp::fmuls(fp::fmuls((attrs).x_vel(), (item).facing_dir()), __t1)
+    });
     (item).x40_vel().set_y({
-        let __t1 = 0.0;
-        (item).x40_vel().set_z(__t1);
-        __t1
+        let __t2 = 0.0;
+        (item).x40_vel().set_z(__t2);
+        __t2
     });
     fns::it_80275158(ctx, item_gobj, (attrs).lifetime());
     fns::it_802C4BB8(ctx, item_gobj);

@@ -496,11 +496,10 @@ pub fn GXLoadPosMtxImm<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, id: u32) {
     reg = (addr | (0xb0000_i32 as u32));
     (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((16_i32) as u8));
     (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32((reg));
-    statics::dolphin__gx__GXTransform::WriteMTXPS4x3(
-        ctx,
-        mtx,
-        (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).f32_ref(),
-    );
+    {
+        let __t1 = (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).f32_ref();
+        statics::dolphin__gx__GXTransform::WriteMTXPS4x3(ctx, mtx, __t1)
+    };
 }
 
 pub fn GXLoadNrmMtxImm<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, id: u32) {
@@ -515,11 +514,10 @@ pub fn GXLoadNrmMtxImm<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, id: u32) {
     reg = (addr | (0x80000_i32 as u32));
     (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((16_i32) as u8));
     (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32((reg));
-    statics::dolphin__gx__GXTransform::WriteMTXPS3x3from3x4(
-        ctx,
-        mtx,
-        (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).f32_ref(),
-    );
+    {
+        let __t1 = (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).f32_ref();
+        statics::dolphin__gx__GXTransform::WriteMTXPS3x3from3x4(ctx, mtx, __t1)
+    };
 }
 
 pub fn GXSetCurrentMtx<'a>(ctx: &'a Ctx, id: u32) {
@@ -567,17 +565,15 @@ pub fn GXLoadTexMtxImm<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, id: u32, r#type:
     (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((16_i32) as u8));
     (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32((reg));
     if (r#type as u32) == ((enums::GX_MTX3x4 as i32) as u32) {
-        statics::dolphin__gx__GXTransform::WriteMTXPS4x3(
-            ctx,
-            mtx,
-            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).f32_ref(),
-        );
+        {
+            let __t1 = (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).f32_ref();
+            statics::dolphin__gx__GXTransform::WriteMTXPS4x3(ctx, mtx, __t1)
+        };
     } else {
-        statics::dolphin__gx__GXTransform::WriteMTXPS4x2(
-            ctx,
-            mtx,
-            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).f32_ref(),
-        );
+        {
+            let __t2 = (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).f32_ref();
+            statics::dolphin__gx__GXTransform::WriteMTXPS4x2(ctx, mtx, __t2)
+        };
     }
 }
 

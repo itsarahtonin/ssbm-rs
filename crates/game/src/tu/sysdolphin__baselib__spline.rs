@@ -231,13 +231,16 @@ pub fn splArcLengthGetParameter<'a>(ctx: &'a Ctx, spl: HSD_Spline<'a>, arg1: f64
                         simpsons = fp::fdivs(
                             fp::fmuls(
                                 dx,
-                                (fp::fadds(
+                                ({
+                                    let __t1 = inl_splArcLengthPolynomial(ctx, coeffs, result);
                                     fp::fadds(
-                                        middle,
-                                        inl_splArcLengthPolynomial(ctx, coeffs, start),
-                                    ),
-                                    inl_splArcLengthPolynomial(ctx, coeffs, result),
-                                )),
+                                        fp::fadds(
+                                            middle,
+                                            inl_splArcLengthPolynomial(ctx, coeffs, start),
+                                        ),
+                                        __t1,
+                                    )
+                                }),
                             ),
                             3.0,
                         );

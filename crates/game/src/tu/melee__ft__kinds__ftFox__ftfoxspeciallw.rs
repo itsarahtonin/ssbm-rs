@@ -200,13 +200,17 @@ pub fn ftFx_SpecialLwStart_CheckPass<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i3
 pub fn ftFx_SpecialLwStart_Pass<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    fns::ftCo_8009A184(
-        ctx,
-        gobj,
-        (enums::ftFx_MS_SpecialAirLwStart as i32),
-        0xc4c5082_u32,
-        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).cur_anim_frame(),
-    );
+    {
+        let __t1 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
+            .cur_anim_frame();
+        fns::ftCo_8009A184(
+            ctx,
+            gobj,
+            (enums::ftFx_MS_SpecialAirLwStart as i32),
+            0xc4c5082_u32,
+            __t1,
+        )
+    };
     statics::melee__ft__kinds__ftFox__ftfoxspeciallw::ftFx_SpecialLw_CreateReflectHit(ctx, gobj);
 }
 
@@ -374,13 +378,17 @@ pub fn ftFx_SpecialLwLoop_CheckPass<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32
 pub fn ftFx_SpecialLwLoop_Pass<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    fns::ftCo_8009A184(
-        ctx,
-        gobj,
-        (enums::ftFx_MS_SpecialAirLwLoop as i32),
-        0xc4c5082_u32,
-        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).cur_anim_frame(),
-    );
+    {
+        let __t1 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
+            .cur_anim_frame();
+        fns::ftCo_8009A184(
+            ctx,
+            gobj,
+            (enums::ftFx_MS_SpecialAirLwLoop as i32),
+            0xc4c5082_u32,
+            __t1,
+        )
+    };
     statics::melee__ft__kinds__ftFox__ftfoxspeciallw::ftFx_SpecialLw_CreateReflectHit(ctx, gobj);
 }
 

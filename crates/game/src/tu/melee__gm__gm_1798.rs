@@ -162,12 +162,9 @@ pub fn fn_80179990<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: i32, arg2: i32) {
                     .set_imagedesc((Handle::add(image_desc1, arg2)));
             }
             if ((disp).state().x0_4() != 0) {
+                let __t1 = inl_fn_80179990_img_at_unfused(ctx, (disp).player_img2().get(0), arg2);
                 ((((((disp).jobjs().at(arg2).get()).u().dobj()).next()).mobj()).tobj())
-                    .set_imagedesc(inl_fn_80179990_img_at_unfused(
-                        ctx,
-                        (disp).player_img2().get(0),
-                        arg2,
-                    ));
+                    .set_imagedesc(__t1);
             }
         } else {
             if ctx.call::<_, i32>(0x800876b4, (fns::Player_GetEntity(ctx, arg2),)) == 0_i32 {
@@ -197,12 +194,10 @@ pub fn fn_80179990<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: i32, arg2: i32) {
                     );
                     fns::HSD_CObjEndCurrent(ctx);
                     (disp).state().player_flags().at(arg2).set((1_i32 as u8));
+                    let __t2 =
+                        inl_fn_80179990_img_at_unfused(ctx, (disp).player_img2().get(0), arg2);
                     ((((((disp).jobjs().at(arg2).get()).u().dobj()).next()).mobj()).tobj())
-                        .set_imagedesc(inl_fn_80179990_img_at_unfused(
-                            ctx,
-                            (disp).player_img2().get(0),
-                            arg2,
-                        ));
+                        .set_imagedesc(__t2);
                 }
             }
         }
@@ -1589,10 +1584,10 @@ pub fn fn_8017A67C<'a>(ctx: &'a Ctx, kind: i32, arg1: i32, arg2: i32) -> HSD_GOb
                     arg2,
                     fp::fmuls(
                         scale,
-                        (fp::fmuls(
-                            sp.at(slot_type).get(),
-                            (fp::fdivs(20.0, fns::Player_800360D8(ctx, arg2))),
-                        )),
+                        ({
+                            let __t1 = (fp::fdivs(20.0, fns::Player_800360D8(ctx, arg2)));
+                            fp::fmuls(sp.at(slot_type).get(), __t1)
+                        }),
                     ),
                 );
                 pos.set_y(fp::fmuls(

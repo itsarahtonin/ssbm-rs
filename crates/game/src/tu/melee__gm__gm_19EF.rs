@@ -1334,13 +1334,16 @@ pub fn fn_801A0B60<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 .wrapping_add((1_i32 as u32)),
         );
     }
-    if fp::fctiwz(inl_HSD_AObjGetCurrFrame_unfused(
-        ctx,
-        (statics::melee__gm__gm_19EF::lbl_804D66F4(ctx).get()).aobj(),
-    )) >= fp::fctiwz(inl_HSD_AObjGetEndFrame_unfused(
-        ctx,
-        (statics::melee__gm__gm_19EF::lbl_804D66F4(ctx).get()).aobj(),
-    )) {
+    if {
+        let __t1 = fp::fctiwz(inl_HSD_AObjGetEndFrame_unfused(
+            ctx,
+            (statics::melee__gm__gm_19EF::lbl_804D66F4(ctx).get()).aobj(),
+        ));
+        fp::fctiwz(inl_HSD_AObjGetCurrFrame_unfused(
+            ctx,
+            (statics::melee__gm__gm_19EF::lbl_804D66F4(ctx).get()).aobj(),
+        )) >= __t1
+    } {
         fns::gm_801A4B60(ctx);
     }
 }

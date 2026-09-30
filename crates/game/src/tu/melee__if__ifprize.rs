@@ -375,19 +375,22 @@ fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JOb
 fn inl_createCamera_unfused<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
     let mut gobj: HSD_GObj<'a> =
         fns::GObj_Create(ctx, (19_i32 as u16), (20_i32 as u8), (0_i32 as u8));
-    fns::HSD_GObjObject_80390A70(
-        ctx,
-        gobj,
-        (((fns::HSD_GObj_CameraKind(ctx).get() as i32) & 255_i32) as u8),
-        Handle::cast::<Addr<'a>>(fns::HSD_CObjLoadDesc(
+    {
+        let __t1 = Handle::cast::<Addr<'a>>(fns::HSD_CObjLoadDesc(
             ctx,
             (Handle::add(
                 (statics::melee__if__ifprize::un_804D6D9C(ctx).get()).cameras(),
                 0_i32,
             ))
             .desc(),
-        )),
-    );
+        ));
+        fns::HSD_GObjObject_80390A70(
+            ctx,
+            gobj,
+            (((fns::HSD_GObj_CameraKind(ctx).get() as i32) & 255_i32) as u8),
+            __t1,
+        )
+    };
     fns::GObj_SetupGXLinkMax(ctx, gobj, fnptr(ctx, 0x803910d8), (8_i32 as u32));
     (gobj).set_gxlink_prios((0xc00_i32 as u64));
     return gobj;
@@ -396,15 +399,18 @@ fn inl_createCamera_unfused<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
 fn inl_createLight_unfused<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
     let mut gobj: HSD_GObj<'a> =
         fns::GObj_Create(ctx, (11_i32 as u16), (3_i32 as u8), (0_i32 as u8));
-    fns::HSD_GObjObject_80390A70(
-        ctx,
-        gobj,
-        (((fns::HSD_GObj_LightKind(ctx).get() as i32) & 255_i32) as u8),
-        Handle::cast::<Addr<'a>>(fns::lb_80011AC4(
+    {
+        let __t1 = Handle::cast::<Addr<'a>>(fns::lb_80011AC4(
             ctx,
             (statics::melee__if__ifprize::un_804D6D9C(ctx).get()).lights(),
-        )),
-    );
+        ));
+        fns::HSD_GObjObject_80390A70(
+            ctx,
+            gobj,
+            (((fns::HSD_GObj_LightKind(ctx).get() as i32) & 255_i32) as u8),
+            __t1,
+        )
+    };
     fns::GObj_SetupGXLink(
         ctx,
         gobj,

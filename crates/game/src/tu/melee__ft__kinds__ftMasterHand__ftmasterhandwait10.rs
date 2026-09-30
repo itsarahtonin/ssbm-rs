@@ -322,13 +322,14 @@ pub fn ftMh_Wait1_0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 } else {
                     let mut qwe4: i32 = (fns::ftMh_Init_803D40D0(ctx)
                         .x54()
-                        .at(((fp)
-                            .u()
-                            .mh()
-                            .x224C()
-                            .wrapping_mul((5_i32 as u32))
-                            .wrapping_add((fns::HSD_Randi(ctx, 5_i32) as u32))
-                            as i32))
+                        .at(({
+                            let __t1 = (fns::HSD_Randi(ctx, 5_i32) as u32);
+                            (fp).u()
+                                .mh()
+                                .x224C()
+                                .wrapping_mul((5_i32 as u32))
+                                .wrapping_add(__t1)
+                        } as i32))
                         .get() as i32);
                     tmp = qwe4;
                     if qwe4 == 2_i32 {
@@ -344,8 +345,10 @@ pub fn ftMh_Wait1_0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     .states()
                     .at((fns::ftMh_Init_803D40D0(ctx)
                         .x38()
-                        .at(((qwe).a() as i32)
-                            .wrapping_add(fns::HSD_Randi(ctx, ((qwe).b() as i32))))
+                        .at({
+                            let __t2 = fns::HSD_Randi(ctx, ((qwe).b() as i32));
+                            ((qwe).a() as i32).wrapping_add(__t2)
+                        })
                         .get() as i32))
                     .get();
                 (fp).u().mh().set_x224C((tmp as u32));

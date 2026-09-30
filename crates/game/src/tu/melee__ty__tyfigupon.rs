@@ -162,14 +162,16 @@ pub fn _tyFigupon_80314C5C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             (tp1)
                 .translate()
                 .set_y(fp::fadds((tp1).translate().y(), (tp1).offset().y()));
-            if inl_HSD_JObjGetTranslationX(ctx, jobj)
-                > inl_HSD_JObjGetTranslationX(ctx, (temp_r29).jobjs().at(2_i32).get())
-            {
+            if {
+                let __t2 = inl_HSD_JObjGetTranslationX(ctx, (temp_r29).jobjs().at(2_i32).get());
+                inl_HSD_JObjGetTranslationX(ctx, jobj) > __t2
+            } {
                 inl_HSD_JObjAddTranslationX(ctx, jobj, (tp1).translate().x());
             }
-            if inl_HSD_JObjGetTranslationZ(ctx, jobj)
-                > inl_HSD_JObjGetTranslationZ(ctx, (temp_r29).jobjs().at(2_i32).get())
-            {
+            if {
+                let __t3 = inl_HSD_JObjGetTranslationZ(ctx, (temp_r29).jobjs().at(2_i32).get());
+                inl_HSD_JObjGetTranslationZ(ctx, jobj) > __t3
+            } {
                 inl_HSD_JObjAddTranslationZ(ctx, jobj, (tp1).translate().z());
             }
             inl_HSD_JObjAddTranslationY(ctx, jobj, (tp1).translate().y());
@@ -898,7 +900,10 @@ pub fn _tyFigupon_80316420<'a>(ctx: &'a Ctx, arg0: i32) {
     fns::Toy_SetUnlockState(ctx, arg0, 1_i32);
     fns::Toy_8031234C(ctx, 1_i32);
     fns::lbCardGame_SaveChanges(ctx);
-    fns::HSD_SisLib_803A6368(ctx, (data).x14(), fns::Toy_80308328(ctx, arg0));
+    {
+        let __t1 = fns::Toy_80308328(ctx, arg0);
+        fns::HSD_SisLib_803A6368(ctx, (data).x14(), __t1)
+    };
     fns::Toy_803083D8(ctx, (ef4).jobjs().at(12_i32).get(), (id as i32));
     if ((Handle::cast::<TyModeState<'a>>(fns::Toy_804A284C(ctx).at(0))).x0() as i32) == 2_i32 {
         if ((data).x10() as u32) == (0_i32 as u32) {
@@ -1353,16 +1358,19 @@ pub fn _tyFigupon_8031753C<'a>(ctx: &'a Ctx) {
             (0_i32 as u8),
         )));
         jobj = fns::HSD_JObjLoadJoint(ctx, panel.joint());
-        fns::HSD_GObjObject_80390A70(
-            ctx,
-            ptr::<HSD_GObj<'a>>(ctx, (ef4).x00() as u32),
-            {
+        {
+            let __t2 = {
                 let __t1 = fns::HSD_GObj_JObjKind(ctx).get();
                 temp = __t1;
                 __t1
-            },
-            Handle::cast::<Addr<'a>>(jobj),
-        );
+            };
+            fns::HSD_GObjObject_80390A70(
+                ctx,
+                ptr::<HSD_GObj<'a>>(ctx, (ef4).x00() as u32),
+                __t2,
+                Handle::cast::<Addr<'a>>(jobj),
+            )
+        };
         panel.set_render_cb(fnptr(ctx, 0x80391070));
         fns::GObj_SetupGXLink(
             ctx,
@@ -1398,16 +1406,14 @@ pub fn _tyFigupon_8031753C<'a>(ctx: &'a Ctx) {
             (0_i32 as u8),
         ));
         jobj = fns::HSD_JObjLoadJoint(ctx, joint);
-        fns::HSD_GObjObject_80390A70(
-            ctx,
-            (ef4).unk4(),
-            {
-                let __t2 = fns::HSD_GObj_JObjKind(ctx).get();
-                temp = __t2;
-                __t2
-            },
-            Handle::cast::<Addr<'a>>(jobj),
-        );
+        {
+            let __t4 = {
+                let __t3 = fns::HSD_GObj_JObjKind(ctx).get();
+                temp = __t3;
+                __t3
+            };
+            fns::HSD_GObjObject_80390A70(ctx, (ef4).unk4(), __t4, Handle::cast::<Addr<'a>>(jobj))
+        };
         fns::GObj_SetupGXLink(
             ctx,
             (ef4).unk4(),
@@ -1458,9 +1464,9 @@ pub fn _tyFigupon_8031753C<'a>(ctx: &'a Ctx) {
                 digits_s
                     .digits()
                     .at({
-                        let __t3 = count;
+                        let __t5 = count;
                         count = count.wrapping_add(1);
-                        __t3
+                        __t5
                     })
                     .set(rem_i32(total, 10_i32));
                 total = div_i32(total, 10_i32);
@@ -1547,16 +1553,19 @@ pub fn _tyFigupon_8031753C<'a>(ctx: &'a Ctx) {
             (0_i32 as u8),
         )));
         jobj = fns::HSD_JObjLoadJoint(ctx, joint);
-        fns::HSD_GObjObject_80390A70(
-            ctx,
-            ptr::<HSD_GObj<'a>>(ctx, (ef4).x08() as u32),
-            {
-                let __t4 = fns::HSD_GObj_JObjKind(ctx).get();
-                temp = __t4;
-                __t4
-            },
-            Handle::cast::<Addr<'a>>(jobj),
-        );
+        {
+            let __t7 = {
+                let __t6 = fns::HSD_GObj_JObjKind(ctx).get();
+                temp = __t6;
+                __t6
+            };
+            fns::HSD_GObjObject_80390A70(
+                ctx,
+                ptr::<HSD_GObj<'a>>(ctx, (ef4).x08() as u32),
+                __t7,
+                Handle::cast::<Addr<'a>>(jobj),
+            )
+        };
         fns::GObj_SetupGXLink(
             ctx,
             ptr::<HSD_GObj<'a>>(ctx, (ef4).x08() as u32),
@@ -1871,16 +1880,19 @@ pub fn tyFigupon_Scene_OnEnter<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
                 (0_i32 as u8),
             )));
             lobj = fns::Toy_LoadLObjList(ctx, temp, null::<Val<'a, i32>>(ctx));
-            fns::HSD_GObjObject_80390A70(
-                ctx,
-                ptr::<HSD_GObj<'a>>(ctx, (ed4).x0() as u32),
-                {
+            {
+                let __t2 = {
                     let __t1 = (fns::HSD_GObj_LightKind(ctx).get() as u8);
                     kind = __t1;
                     __t1
-                },
-                Handle::cast::<Addr<'a>>(lobj),
-            );
+                };
+                fns::HSD_GObjObject_80390A70(
+                    ctx,
+                    ptr::<HSD_GObj<'a>>(ctx, (ed4).x0() as u32),
+                    __t2,
+                    Handle::cast::<Addr<'a>>(lobj),
+                )
+            };
             {
                 let mut gobj: HSD_GObj<'a> = ptr::<HSD_GObj<'a>>(ctx, (ed4).x0() as u32);
                 fns::GObj_SetupGXLink(
@@ -1912,16 +1924,14 @@ pub fn tyFigupon_Scene_OnEnter<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
         (0_i32 as u8),
     ));
     jobj = fns::HSD_JObjLoadJoint(ctx, joint);
-    fns::HSD_GObjObject_80390A70(
-        ctx,
-        (data).x8(),
-        {
-            let __t2 = fns::HSD_GObj_JObjKind(ctx).get();
-            kind = __t2;
-            __t2
-        },
-        Handle::cast::<Addr<'a>>(jobj),
-    );
+    {
+        let __t4 = {
+            let __t3 = fns::HSD_GObj_JObjKind(ctx).get();
+            kind = __t3;
+            __t3
+        };
+        fns::HSD_GObjObject_80390A70(ctx, (data).x8(), __t4, Handle::cast::<Addr<'a>>(jobj))
+    };
     statics::melee__ty__tyfigupon::_tyFigupon_80314AA8(
         ctx,
         jobj,
@@ -2261,8 +2271,10 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
 
 fn inl_tyFigupon_GetTotalCount_unfused<'a>(ctx: &'a Ctx, ef4: un_804D6EF4_t<'a>) -> i32 {
     let mut ef4 = ef4;
-    return ((ef4).x54() as i32)
-        .wrapping_add(statics::melee__ty__tyfigupon::_tyFigupon_80314B54(ctx));
+    return {
+        let __t1 = statics::melee__ty__tyfigupon::_tyFigupon_80314B54(ctx);
+        ((ef4).x54() as i32).wrapping_add(__t1)
+    };
 }
 
 fn inl_tyFigupon_CountRemaining_unfused<'a>(ctx: &'a Ctx, remaining: Val<'a, i32>) {
@@ -2324,8 +2336,10 @@ fn inl_setupPercentDisplay_unfused<'a>(ctx: &'a Ctx, ef4: un_804D6EF4_t<'a>) {
     let mut pct: f64 = 0.0;
     let mut fval: f64 = 0.0;
     fval = fp::frsp(
-        (((ef4_3).x54() as i32)
-            .wrapping_add(statics::melee__ty__tyfigupon::_tyFigupon_80314B54(ctx))) as f64,
+        ({
+            let __t1 = statics::melee__ty__tyfigupon::_tyFigupon_80314B54(ctx);
+            ((ef4_3).x54() as i32).wrapping_add(__t1)
+        }) as f64,
     );
     if sc != 0_i32 {
         sc = sc.wrapping_sub(1_i32);
@@ -2711,8 +2725,10 @@ fn inl_setupPercentDisplay<'a>(ctx: &'a Ctx, ef4: un_804D6EF4_t<'a>) {
     let mut pct: f64 = 0.0;
     let mut fval: f64 = 0.0;
     fval = fp::frsp(
-        (((ef4_3).x54() as i32)
-            .wrapping_add(statics::melee__ty__tyfigupon::_tyFigupon_80314B54(ctx))) as f64,
+        ({
+            let __t1 = statics::melee__ty__tyfigupon::_tyFigupon_80314B54(ctx);
+            ((ef4_3).x54() as i32).wrapping_add(__t1)
+        }) as f64,
     );
     if sc != 0_i32 {
         sc = sc.wrapping_sub(1_i32);

@@ -310,13 +310,14 @@ pub fn grFlatzone_802174EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 'c2: {
                     let mut next_anim: i32 = fns::HSD_Randi(ctx, 4_i32);
                     next_anim = next_anim.wrapping_add(1);
-                    if ((gp).u().flatzone3().xCA() as i32)
-                        == (({
+                    if {
+                        let __t3 = (({
                             let __t2 = (next_anim as u8);
                             (gp).u().flatzone3().set_xC9(__t2);
                             __t2
-                        }) as i32)
-                    {
+                        }) as i32);
+                        ((gp).u().flatzone3().xCA() as i32) == __t3
+                    } {
                         break 'c2;
                     }
                     row_entry = (Handle::add(
@@ -469,24 +470,25 @@ pub fn grFlatzone_802176BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 .set_timer((gp).u().flatzone2().timer().wrapping_sub(1_i32));
             if (gp).u().flatzone2().timer() <= 0_i32 {
                 (gp).u().flatzone2().set_xD0(1_i32);
-                (gp).u().flatzone2().set_timer(
+                (gp).u().flatzone2().set_timer({
+                    let __t2 = ({
+                        let __t1 = inl_rand_int_inner(
+                            ctx,
+                            (statics::melee__gr__grflatzone::yakumono_param(ctx).get())
+                                .unk34()
+                                .wrapping_sub(
+                                    (statics::melee__gr__grflatzone::yakumono_param(ctx).get())
+                                        .unk30(),
+                                ),
+                        );
+                        (statics::melee__gr__grflatzone::yakumono_param(ctx).get())
+                            .unk30()
+                            .wrapping_add(__t1)
+                    });
                     (statics::melee__gr__grflatzone::yakumono_param(ctx).get())
                         .unk2C()
-                        .wrapping_mul(
-                            ((statics::melee__gr__grflatzone::yakumono_param(ctx).get())
-                                .unk30()
-                                .wrapping_add(inl_rand_int_inner(
-                                    ctx,
-                                    (statics::melee__gr__grflatzone::yakumono_param(ctx).get())
-                                        .unk34()
-                                        .wrapping_sub(
-                                            (statics::melee__gr__grflatzone::yakumono_param(ctx)
-                                                .get())
-                                            .unk30(),
-                                        ),
-                                ))),
-                        ),
-                );
+                        .wrapping_mul(__t2)
+                });
                 if (gp).u().flatzone2().xC8() == 1.0 {
                     fns::grAnime_801C8138(ctx, gobj, (gp).map_id(), 0_i32);
                 } else {

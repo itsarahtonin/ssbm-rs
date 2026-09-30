@@ -670,54 +670,55 @@ pub fn __AXSyncPBs<'a>(ctx: &'a Ctx, lessDspCycles: u32) {
                     );
                 }
                 (pvpb).set_depop((0_i32 as u32));
-                statics::dolphin__ax__AXVPB::__AXPB(ctx)
-                    .get(((pvpb).index() as i32))
-                    .set_state({
-                        let __t6 = {
-                            let __t5 = {
-                                let __t4 = {
-                                    let __t3 = {
-                                        let __t2 = (0_i32 as u16);
-                                        statics::dolphin__ax__AXVPB::__AXPB(ctx)
-                                            .get(((pvpb).index() as i32))
-                                            .update()
-                                            .updNum()
-                                            .at(4_i32)
-                                            .set(__t2);
-                                        __t2
-                                    };
+                let __t7 = {
+                    let __t6 = {
+                        let __t5 = {
+                            let __t4 = {
+                                let __t3 = {
+                                    let __t2 = (0_i32 as u16);
                                     statics::dolphin__ax__AXVPB::__AXPB(ctx)
                                         .get(((pvpb).index() as i32))
                                         .update()
                                         .updNum()
-                                        .at(3_i32)
-                                        .set(__t3);
-                                    __t3
+                                        .at(4_i32)
+                                        .set(__t2);
+                                    __t2
                                 };
                                 statics::dolphin__ax__AXVPB::__AXPB(ctx)
                                     .get(((pvpb).index() as i32))
                                     .update()
                                     .updNum()
-                                    .at(2_i32)
-                                    .set(__t4);
-                                __t4
+                                    .at(3_i32)
+                                    .set(__t3);
+                                __t3
                             };
                             statics::dolphin__ax__AXVPB::__AXPB(ctx)
                                 .get(((pvpb).index() as i32))
                                 .update()
                                 .updNum()
-                                .at(1_i32)
-                                .set(__t5);
-                            __t5
+                                .at(2_i32)
+                                .set(__t4);
+                            __t4
                         };
                         statics::dolphin__ax__AXVPB::__AXPB(ctx)
                             .get(((pvpb).index() as i32))
                             .update()
                             .updNum()
-                            .at(0_i32)
-                            .set(__t6);
-                        __t6
-                    });
+                            .at(1_i32)
+                            .set(__t5);
+                        __t5
+                    };
+                    statics::dolphin__ax__AXVPB::__AXPB(ctx)
+                        .get(((pvpb).index() as i32))
+                        .update()
+                        .updNum()
+                        .at(0_i32)
+                        .set(__t6);
+                    __t6
+                };
+                statics::dolphin__ax__AXVPB::__AXPB(ctx)
+                    .get(((pvpb).index() as i32))
+                    .set_state(__t7);
             }
             pvpb = (pvpb).next();
         }

@@ -85,7 +85,11 @@ pub fn grBigBlueRoute_8020B95C<'a>(ctx: &'a Ctx) {
         val = 0_i32;
     }
     if val == 0_i32 {
-        fns::grZakoGenerator_801CAEB0(ctx, fns::Ground_801C5840(ctx), fns::Ground_801C5940(ctx));
+        {
+            let __t1 = fns::Ground_801C5940(ctx);
+            let __t2 = fns::Ground_801C5840(ctx);
+            fns::grZakoGenerator_801CAEB0(ctx, __t2, __t1)
+        };
     }
 }
 
@@ -946,15 +950,16 @@ pub fn grBigBlueRoute_8020CD20<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                                     i,
                                 ))
                                 .set_x1C(0.0);
+                                let __t1 = fp::fmsubs(
+                                    5.235987663269043,
+                                    fns::HSD_Randf(ctx),
+                                    2.6179938316345215,
+                                );
                                 (Handle::add(
                                     (Handle::cast::<RouteEntry<'a>>((gp).u().car().car_info())),
                                     i,
                                 ))
-                                .set_x20(fp::fmsubs(
-                                    5.235987663269043,
-                                    fns::HSD_Randf(ctx),
-                                    2.6179938316345215,
-                                ));
+                                .set_x20(__t1);
                                 (Handle::add(
                                     (Handle::cast::<RouteEntry<'a>>((gp).u().car().car_info())),
                                     i,
@@ -1125,11 +1130,12 @@ pub fn grBigBlueRoute_8020CD20<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                                     i,
                                 ))
                                 .set_xC(0.5);
+                                let __t2 = fns::HSD_Randf(ctx);
                                 (Handle::add(
                                     (Handle::cast::<RouteEntry<'a>>((gp).u().car().car_info())),
                                     i,
                                 ))
-                                .set_x10(fns::HSD_Randf(ctx));
+                                .set_x10(__t2);
                                 (Handle::add(
                                     (Handle::cast::<RouteEntry<'a>>((gp).u().car().car_info())),
                                     i,
@@ -1174,15 +1180,15 @@ pub fn grBigBlueRoute_8020CD20<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                             prog = fp::fdivs(
                                 (fp::fsubs(
                                     ({
-                                        let __t1 = (Handle::add(
+                                        let __t3 = (Handle::add(
                                             (Handle::cast::<RouteEntry<'a>>(
                                                 (gp).u().car().car_info(),
                                             )),
                                             i,
                                         ))
                                         .x4();
-                                        t_4 = __t1;
-                                        __t1
+                                        t_4 = __t3;
+                                        __t3
                                     }),
                                     (Handle::add(
                                         (Handle::cast::<RouteEntry<'a>>((gp).u().car().car_info())),
@@ -1287,15 +1293,15 @@ pub fn grBigBlueRoute_8020CD20<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                             prog_2 = fp::fdivs(
                                 (fp::fsubs(
                                     ({
-                                        let __t2 = (Handle::add(
+                                        let __t4 = (Handle::add(
                                             (Handle::cast::<RouteEntry<'a>>(
                                                 (gp).u().car().car_info(),
                                             )),
                                             i,
                                         ))
                                         .x14();
-                                        t = __t2;
-                                        __t2
+                                        t = __t4;
+                                        __t4
                                     }),
                                     (Handle::add(
                                         (Handle::cast::<RouteEntry<'a>>((gp).u().car().car_info())),

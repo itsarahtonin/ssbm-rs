@@ -53,16 +53,16 @@ pub fn ftCamera_80076064<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     (camera_box).set_state((enums::CmSubjectState_Active as i32));
     if (fp).facing_dir() == 1.0 {
         (camera_box).target_ext().h().set_x(spC.x0().z());
-        (camera_box)
-            .target_ext()
-            .h()
-            .set_y(fp::fmuls(spC.x0().y(), fns::Stage_GetCamFixedZoom(ctx)));
+        (camera_box).target_ext().h().set_y({
+            let __t1 = fns::Stage_GetCamFixedZoom(ctx);
+            fp::fmuls(spC.x0().y(), __t1)
+        });
         (camera_box).set_facing_dir(1.0);
     } else {
-        (camera_box).target_ext().h().set_x(fp::fmuls(
-            fp::fneg(spC.x0().y()),
-            fns::Stage_GetCamFixedZoom(ctx),
-        ));
+        (camera_box).target_ext().h().set_x({
+            let __t2 = fns::Stage_GetCamFixedZoom(ctx);
+            fp::fmuls(fp::fneg(spC.x0().y()), __t2)
+        });
         (camera_box).target_ext().h().set_y(fp::fneg(spC.x0().z()));
         (camera_box).set_facing_dir(fp::fneg(1.0));
     }
@@ -95,16 +95,16 @@ pub fn ftCamera_UpdateCameraBox<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         );
         if (fp).facing_dir() == 1.0 {
             (camera_box).target_ext().h().set_x(cam_floats.x0().z());
-            (camera_box).target_ext().h().set_y(fp::fmuls(
-                cam_floats.x0().y(),
-                fns::Stage_GetCamFixedZoom(ctx),
-            ));
+            (camera_box).target_ext().h().set_y({
+                let __t1 = fns::Stage_GetCamFixedZoom(ctx);
+                fp::fmuls(cam_floats.x0().y(), __t1)
+            });
             (camera_box).set_facing_dir(1.0);
         } else {
-            (camera_box).target_ext().h().set_x(fp::fmuls(
-                fp::fneg(cam_floats.x0().y()),
-                fns::Stage_GetCamFixedZoom(ctx),
-            ));
+            (camera_box).target_ext().h().set_x({
+                let __t2 = fns::Stage_GetCamFixedZoom(ctx);
+                fp::fmuls(fp::fneg(cam_floats.x0().y()), __t2)
+            });
             (camera_box)
                 .target_ext()
                 .h()

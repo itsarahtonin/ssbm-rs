@@ -52,17 +52,20 @@ pub fn ftKp_SpecialLw_80134ACC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         v.x(),
     ));
     v.set_y(fp::fmadds((da).x28(), (fp).x34_scale().y(), v.y()));
-    let _ = fns::itKoopaFlame_Spawn(
-        ctx,
-        gobj,
-        v,
-        (fp).facing_dir(),
-        (fp).mv().kp().specialn().x4(),
-        inl_ftKp_SpecialN_80134ACC_inline(ctx, gobj, dirs),
-        fp::fctiwz((fp).u().kp().x222C()),
-        fp::fctiwz((fp).u().kp().x2230()),
-        (enums::It_Kind_Koopa_Flame as i32),
-    );
+    let _ = {
+        let __t1 = inl_ftKp_SpecialN_80134ACC_inline(ctx, gobj, dirs);
+        fns::itKoopaFlame_Spawn(
+            ctx,
+            gobj,
+            v,
+            (fp).facing_dir(),
+            (fp).mv().kp().specialn().x4(),
+            __t1,
+            fp::fctiwz((fp).u().kp().x222C()),
+            fp::fctiwz((fp).u().kp().x2230()),
+            (enums::It_Kind_Koopa_Flame as i32),
+        )
+    };
     if (fp).mv().kp().specialn().x14() == 0_i32 {
         (fp).mv().kp().specialn().set_x4(fns::Item_8026AE60(ctx));
         fns::ft_80089824(ctx, gobj);

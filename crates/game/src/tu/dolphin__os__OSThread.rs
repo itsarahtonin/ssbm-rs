@@ -1082,9 +1082,10 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                                 &[],
                             );
                         }
-                        if !((thread).priority()
-                            == inl___OSGetEffectivePriority_unfused(ctx, thread))
-                        {
+                        if !({
+                            let __t1 = inl___OSGetEffectivePriority_unfused(ctx, thread);
+                            (thread).priority() == __t1
+                        }) {
                             fns::OSReport(
                                 ctx,
                                 cstr(ctx, 0x80402924),
@@ -1122,7 +1123,10 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                             &[],
                         );
                     }
-                    if !((thread).priority() == inl___OSGetEffectivePriority_unfused(ctx, thread)) {
+                    if !({
+                        let __t2 = inl___OSGetEffectivePriority_unfused(ctx, thread);
+                        (thread).priority() == __t2
+                    }) {
                         fns::OSReport(ctx, cstr(ctx, 0x80402924), &[VarArg::Int(0x594_i32 as u32)]);
                         fns::OSPanic(
                             ctx,
@@ -1168,9 +1172,10 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                         );
                     }
                     if (thread).suspend() <= 0_i32 {
-                        if !((thread).priority()
-                            == inl___OSGetEffectivePriority_unfused(ctx, thread))
-                        {
+                        if !({
+                            let __t3 = inl___OSGetEffectivePriority_unfused(ctx, thread);
+                            (thread).priority() == __t3
+                        }) {
                             fns::OSReport(
                                 ctx,
                                 cstr(ctx, 0x80402924),

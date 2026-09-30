@@ -182,14 +182,17 @@ pub fn ftKb_SpecialNSs_800FCDE0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         );
         pos.set_z(0.0);
         saved_item = (fp).item_gobj();
-        fns::it_802B56E4(
-            ctx,
-            Handle::cast::<HSD_GObj<'a>>((fp).u().kb().xA4()),
-            pos,
-            fp::frsp(inl_facing_to_angle_unfused(ctx, fp)),
-            fp::frsp(((fp).u().kb().xA8() as u32) as f64),
-            (da).specialn_ss_charge_time(),
-        );
+        {
+            let __t3 = fp::frsp(inl_facing_to_angle_unfused(ctx, fp));
+            fns::it_802B56E4(
+                ctx,
+                Handle::cast::<HSD_GObj<'a>>((fp).u().kb().xA4()),
+                pos,
+                __t3,
+                fp::frsp(((fp).u().kb().xA8() as u32) as f64),
+                (da).specialn_ss_charge_time(),
+            )
+        };
         if ((fp).motion_id() == (enums::ftKb_MS_SsSpecialAirN as i32))
             || (((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32))
         {

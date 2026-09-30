@@ -348,34 +348,37 @@ pub fn hsd_80391AC8<'a>(
                         if __case <= 0 {
                             p = Handle::cast::<Val<'a, u8>>((Handle::add(str, i)));
                             (color).set_r(
-                                ((inl_hexval_unfused(ctx, ((Handle::add(p, 2_i32)).get() as i32))
-                                    .wrapping_add(
-                                        inl_hexval_unfused(
-                                            ctx,
-                                            ((Handle::add(p, 1_i32)).get() as i32),
-                                        )
-                                        .wrapping_mul(16_i32),
-                                    )) as u8),
+                                (({
+                                    let __t1 = inl_hexval_unfused(
+                                        ctx,
+                                        ((Handle::add(p, 1_i32)).get() as i32),
+                                    )
+                                    .wrapping_mul(16_i32);
+                                    inl_hexval_unfused(ctx, ((Handle::add(p, 2_i32)).get() as i32))
+                                        .wrapping_add(__t1)
+                                }) as u8),
                             );
                             (color).set_g(
-                                ((inl_hexval_unfused(ctx, ((Handle::add(p, 4_i32)).get() as i32))
-                                    .wrapping_add(
-                                        inl_hexval_unfused(
-                                            ctx,
-                                            ((Handle::add(p, 3_i32)).get() as i32),
-                                        )
-                                        .wrapping_mul(16_i32),
-                                    )) as u8),
+                                (({
+                                    let __t2 = inl_hexval_unfused(
+                                        ctx,
+                                        ((Handle::add(p, 3_i32)).get() as i32),
+                                    )
+                                    .wrapping_mul(16_i32);
+                                    inl_hexval_unfused(ctx, ((Handle::add(p, 4_i32)).get() as i32))
+                                        .wrapping_add(__t2)
+                                }) as u8),
                             );
                             (color).set_b(
-                                ((inl_hexval_unfused(ctx, ((Handle::add(p, 6_i32)).get() as i32))
-                                    .wrapping_add(
-                                        inl_hexval_unfused(
-                                            ctx,
-                                            ((Handle::add(p, 5_i32)).get() as i32),
-                                        )
-                                        .wrapping_mul(16_i32),
-                                    )) as u8),
+                                (({
+                                    let __t3 = inl_hexval_unfused(
+                                        ctx,
+                                        ((Handle::add(p, 5_i32)).get() as i32),
+                                    )
+                                    .wrapping_mul(16_i32);
+                                    inl_hexval_unfused(ctx, ((Handle::add(p, 6_i32)).get() as i32))
+                                        .wrapping_add(__t3)
+                                }) as u8),
                             );
                             i = i.wrapping_add(6_i32);
                             (color).set_a((255_i32 as u8));

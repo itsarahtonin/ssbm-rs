@@ -748,12 +748,14 @@ pub fn HSD_LObjAddCurrent<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>) {
             p = statics::sysdolphin__baselib__lobj::current_lights(ctx);
             'l3: while !Handle::is_null((p).get()) {
                 'c4: {
-                    if (inl_HSD_LObjGetPriority_unfused(
-                        ctx,
-                        Handle::cast::<HSD_LObj<'a>>(((p).get()).data()),
-                    ) as i32)
-                        > (inl_HSD_LObjGetPriority_unfused(ctx, lobj) as i32)
-                    {
+                    if {
+                        let __t1 = (inl_HSD_LObjGetPriority_unfused(ctx, lobj) as i32);
+                        (inl_HSD_LObjGetPriority_unfused(
+                            ctx,
+                            Handle::cast::<HSD_LObj<'a>>(((p).get()).data()),
+                        ) as i32)
+                            > __t1
+                    } {
                         break 'l3;
                     }
                 }

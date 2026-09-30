@@ -760,20 +760,19 @@ pub fn hsd_80394F48<'a>(ctx: &'a Ctx, data: Addr<'a>) {
             'c4: {
                 statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
                     .set_x4(col_start.wrapping_mul(11_i32).wrapping_add(20_i32));
-                statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).set_x8(
+                statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).set_x8({
+                    let __t2 = ({
+                        let __t1 = cur_row;
+                        cur_row = cur_row.wrapping_sub(1);
+                        __t1
+                    }
+                    .wrapping_add(1_i32))
+                    .wrapping_mul(14_i32);
                     (statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
                         .x40()
                         .wrapping_sub(40_i32))
-                    .wrapping_sub(
-                        ({
-                            let __t1 = cur_row;
-                            cur_row = cur_row.wrapping_sub(1);
-                            __t1
-                        }
-                        .wrapping_add(1_i32))
-                        .wrapping_mul(14_i32),
-                    ),
-                );
+                    .wrapping_sub(__t2)
+                });
                 inl_hsd_80394F48_putc_unfused(ctx, (124_i32 as u8), color);
                 if i == (dp).index() {
                     (color).set(Handle::cast::<Addr<'a>>(
@@ -1799,7 +1798,19 @@ pub fn hsd_803962A8<'a>(ctx: &'a Ctx, data: Addr<'a>) -> i32 {
                                     k = 0_i32;
                                     'l10: loop {
                                         'c11: {
-                                            fns::OSReport(ctx, statics::sysdolphin__baselib__debugconsole_main::lbl_804D62E8(ctx).at(0), &[VarArg::Int((({ let __t1 = addr; addr = Handle::add(addr, 1); __t1 }).get() as i32) as u32)]);
+                                            {
+                                                let __t2 = VarArg::Int(
+                                                    (({
+                                                        let __t1 = addr;
+                                                        addr = Handle::add(addr, 1);
+                                                        __t1
+                                                    })
+                                                    .get()
+                                                        as i32)
+                                                        as u32,
+                                                );
+                                                fns::OSReport(ctx, statics::sysdolphin__baselib__debugconsole_main::lbl_804D62E8(ctx).at(0), &[__t2])
+                                            };
                                             k = k.wrapping_add(1);
                                         }
                                         if !(k < 4_i32) {
@@ -2165,9 +2176,10 @@ pub fn hsd_80396A20<'a>(ctx: &'a Ctx, data: Addr<'a>) -> i32 {
                 };
             }
             10 => {
-                __state = if (fns::lbl_8040BC3C(ctx).x10() & (0xfffffff_i32 as u32))
-                    < fns::OSGetPhysicalMemSize(ctx)
-                {
+                __state = if {
+                    let __t1 = fns::OSGetPhysicalMemSize(ctx);
+                    (fns::lbl_8040BC3C(ctx).x10() & (0xfffffff_i32 as u32)) < __t1
+                } {
                     28
                 } else {
                     29
@@ -2528,20 +2540,19 @@ pub fn hsd_80396E40<'a>(ctx: &'a Ctx, keycode: i32) {
                 }
             }
             statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).set_x4(0x106_i32);
-            statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).set_x8(
+            statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).set_x8({
+                let __t3 = ({
+                    let __t2 = row;
+                    row = row.wrapping_sub(1);
+                    __t2
+                }
+                .wrapping_add(1_i32))
+                .wrapping_mul(14_i32);
                 (statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
                     .x40()
                     .wrapping_sub(40_i32))
-                .wrapping_sub(
-                    ({
-                        let __t2 = row;
-                        row = row.wrapping_sub(1);
-                        __t2
-                    }
-                    .wrapping_add(1_i32))
-                    .wrapping_mul(14_i32),
-                ),
-            );
+                .wrapping_sub(__t3)
+            });
             fns::hsd_80394434(ctx, Handle::cast::<Addr<'a>>(buf.at(0)));
             let _ = fns::sprintf(
                 ctx,
@@ -2553,20 +2564,19 @@ pub fn hsd_80396E40<'a>(ctx: &'a Ctx, keycode: i32) {
                 ],
             );
             statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).set_x4(0x106_i32);
-            statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).set_x8(
+            statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).set_x8({
+                let __t5 = ({
+                    let __t4 = row;
+                    row = row.wrapping_sub(1);
+                    __t4
+                }
+                .wrapping_add(1_i32))
+                .wrapping_mul(14_i32);
                 (statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
                     .x40()
                     .wrapping_sub(40_i32))
-                .wrapping_sub(
-                    ({
-                        let __t3 = row;
-                        row = row.wrapping_sub(1);
-                        __t3
-                    }
-                    .wrapping_add(1_i32))
-                    .wrapping_mul(14_i32),
-                ),
-            );
+                .wrapping_sub(__t5)
+            });
             fns::hsd_80394434(ctx, Handle::cast::<Addr<'a>>(buf.at(0)));
             i = i.wrapping_add(1);
         }
@@ -2575,20 +2585,19 @@ pub fn hsd_80396E40<'a>(ctx: &'a Ctx, keycode: i32) {
         }
     }
     statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).set_x4(0x106_i32);
-    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).set_x8(
+    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).set_x8({
+        let __t7 = ({
+            let __t6 = row;
+            row = row.wrapping_sub(1);
+            __t6
+        }
+        .wrapping_add(1_i32))
+        .wrapping_mul(14_i32);
         (statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
             .x40()
             .wrapping_sub(40_i32))
-        .wrapping_sub(
-            ({
-                let __t4 = row;
-                row = row.wrapping_sub(1);
-                __t4
-            }
-            .wrapping_add(1_i32))
-            .wrapping_mul(14_i32),
-        ),
-    );
+        .wrapping_sub(__t7)
+    });
     fns::hsd_80394434(
         ctx,
         Handle::cast::<Addr<'a>>(
@@ -2682,17 +2691,16 @@ pub fn hsd_80397110<'a>(ctx: &'a Ctx) {
         statics::sysdolphin__baselib__debugconsole_main::lbl_8040AB00(ctx),
     ));
     (px4).set(20_i32);
-    (px8).set(
-        ((px40).get().wrapping_sub(40_i32)).wrapping_sub(
-            ({
-                let __t1 = row;
-                row = row.wrapping_sub(1);
-                __t1
-            }
-            .wrapping_add(1_i32))
-            .wrapping_mul(14_i32),
-        ),
-    );
+    (px8).set({
+        let __t2 = ({
+            let __t1 = row;
+            row = row.wrapping_sub(1);
+            __t1
+        }
+        .wrapping_add(1_i32))
+        .wrapping_mul(14_i32);
+        ((px40).get().wrapping_sub(40_i32)).wrapping_sub(__t2)
+    });
     fns::hsd_80394434(
         ctx,
         Handle::cast::<Addr<'a>>(
@@ -2700,17 +2708,16 @@ pub fn hsd_80397110<'a>(ctx: &'a Ctx) {
         ),
     );
     (px4).set(20_i32);
-    (px8).set(
-        ((px40).get().wrapping_sub(40_i32)).wrapping_sub(
-            ({
-                let __t2 = row;
-                row = row.wrapping_sub(1);
-                __t2
-            }
-            .wrapping_add(1_i32))
-            .wrapping_mul(14_i32),
-        ),
-    );
+    (px8).set({
+        let __t4 = ({
+            let __t3 = row;
+            row = row.wrapping_sub(1);
+            __t3
+        }
+        .wrapping_add(1_i32))
+        .wrapping_mul(14_i32);
+        ((px40).get().wrapping_sub(40_i32)).wrapping_sub(__t4)
+    });
     fns::hsd_80394434(
         ctx,
         Handle::cast::<Addr<'a>>(
@@ -2749,17 +2756,16 @@ pub fn hsd_80397110<'a>(ctx: &'a Ctx) {
                     ));
                 }
                 (px4).set(20_i32);
-                (px8).set(
-                    ((px40).get().wrapping_sub(40_i32)).wrapping_sub(
-                        ({
-                            let __t3 = row;
-                            row = row.wrapping_sub(1);
-                            __t3
-                        }
-                        .wrapping_add(1_i32))
-                        .wrapping_mul(14_i32),
-                    ),
-                );
+                (px8).set({
+                    let __t6 = ({
+                        let __t5 = row;
+                        row = row.wrapping_sub(1);
+                        __t5
+                    }
+                    .wrapping_add(1_i32))
+                    .wrapping_mul(14_i32);
+                    ((px40).get().wrapping_sub(40_i32)).wrapping_sub(__t6)
+                });
                 if (spr_entry).spr() == (0_i32 as u32) {
                     fns::hsd_80394434(
                         ctx,
@@ -2816,17 +2822,22 @@ pub fn hsd_80397110<'a>(ctx: &'a Ctx) {
                             break 's5;
                         }
                     }
-                    let _ = fns::sprintf(
-                        ctx,
-                        buf.at(0),
-                        statics::sysdolphin__baselib__debugconsole_main::lbl_804D6324(ctx).get(),
-                        &[
-                            VarArg::Int((spr_entry).spr() as u32),
-                            VarArg::Int(Handle::addr((spr_entry).name())),
-                            VarArg::Int(Handle::addr(padding)),
-                            VarArg::Int(fns::baselib_mfspr(ctx, ((spr_entry).spr() as i32)) as u32),
-                        ],
-                    );
+                    let _ = {
+                        let __t7 =
+                            VarArg::Int(fns::baselib_mfspr(ctx, ((spr_entry).spr() as i32)) as u32);
+                        fns::sprintf(
+                            ctx,
+                            buf.at(0),
+                            statics::sysdolphin__baselib__debugconsole_main::lbl_804D6324(ctx)
+                                .get(),
+                            &[
+                                VarArg::Int((spr_entry).spr() as u32),
+                                VarArg::Int(Handle::addr((spr_entry).name())),
+                                VarArg::Int(Handle::addr(padding)),
+                                __t7,
+                            ],
+                        )
+                    };
                     fns::hsd_80394434(ctx, Handle::cast::<Addr<'a>>(buf.at(0)));
                 }
                 offset = offset.wrapping_add(16_u32);
@@ -2840,17 +2851,16 @@ pub fn hsd_80397110<'a>(ctx: &'a Ctx) {
     'l6: while row > 0_i32 {
         'c7: {
             (px4).set(20_i32);
-            (px8).set(
-                ((px40).get().wrapping_sub(40_i32)).wrapping_sub(
-                    ({
-                        let __t4 = row;
-                        row = row.wrapping_sub(1);
-                        __t4
-                    }
-                    .wrapping_add(1_i32))
-                    .wrapping_mul(14_i32),
-                ),
-            );
+            (px8).set({
+                let __t9 = ({
+                    let __t8 = row;
+                    row = row.wrapping_sub(1);
+                    __t8
+                }
+                .wrapping_add(1_i32))
+                .wrapping_mul(14_i32);
+                ((px40).get().wrapping_sub(40_i32)).wrapping_sub(__t9)
+            });
             fns::hsd_80394434(
                 ctx,
                 Handle::cast::<Addr<'a>>(

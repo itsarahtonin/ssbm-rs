@@ -98,12 +98,15 @@ pub fn fn_801A9FCC<'a>(ctx: &'a Ctx) -> Addr<'a> {
     let mut lines: PerfLabelLine<'a> = statics::melee__gm__gmopening::gm_80480B38(ctx).get(0);
     (Handle::add(lines, 0_i32)).set_unk_04(0_i32);
     idx = 0_i32;
-    let _ = fns::sprintf(
-        ctx,
-        (Handle::add(lines, idx)).text().at(0),
-        cstr(ctx, 0x803dbf9c),
-        &[VarArg::Int(fns::lbMthp_8001F5F4(ctx) as u32)],
-    );
+    let _ = {
+        let __t1 = VarArg::Int(fns::lbMthp_8001F5F4(ctx) as u32);
+        fns::sprintf(
+            ctx,
+            (Handle::add(lines, idx)).text().at(0),
+            cstr(ctx, 0x803dbf9c),
+            &[__t1],
+        )
+    };
     (Handle::add(lines, 0_i32)).set_next((Handle::add(lines, 1_i32)));
     (Handle::add(lines, 1_i32)).set_unk_04(0_i32);
     ms = (fns::lbMthp_8001F5E4(ctx) as u32);

@@ -47,14 +47,17 @@ pub fn ftMr_SpecialS_CreateCape<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             coords,
         );
         {
-            let mut cape: HSD_GObj<'a> = fns::it_802B2560(
-                ctx,
-                gobj,
-                (fp).facing_dir(),
-                coords,
-                fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_RThumbNb as i32)),
-                (sa).specials().cape_kind(),
-            );
+            let mut cape: HSD_GObj<'a> = {
+                let __t1 = fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_RThumbNb as i32));
+                fns::it_802B2560(
+                    ctx,
+                    gobj,
+                    (fp).facing_dir(),
+                    coords,
+                    __t1,
+                    (sa).specials().cape_kind(),
+                )
+            };
             (fp).u().mr().set_x223C_capeGObj(cape);
         }
         (fp).set_x1984_heldItemSpec((fp).u().mr().x223C_capeGObj());

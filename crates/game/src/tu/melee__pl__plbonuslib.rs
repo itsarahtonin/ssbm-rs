@@ -232,7 +232,10 @@ pub fn pl_8003D644<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32, arg2: i32, arg3: i32)
                     .x0_staleMoveTable()
                     .set_xCB4((temp_r3_3).x0_staleMoveTable().xCB4().wrapping_add(1_i32));
             }
-            if (fns::pl_804D6470(ctx).get()).x120() == fns::Player_GetDamage(ctx, arg0) {
+            if {
+                let __t1 = fns::Player_GetDamage(ctx, arg0);
+                (fns::pl_804D6470(ctx).get()).x120() == __t1
+            } {
                 fns::pl_80038824(ctx, temp_r23, 118_i32);
             }
             's3: {
@@ -958,7 +961,10 @@ pub fn pl_8003EAAC<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32, arg2: i32) {
                 .xCA8()
                 .wrapping_add((1_i32 as u32)),
         );
-        if (temp_r31).x0_staleMoveTable().xCA8() == fns::it_8026C1D4(ctx) {
+        if {
+            let __t1 = fns::it_8026C1D4(ctx);
+            (temp_r31).x0_staleMoveTable().xCA8() == __t1
+        } {
             fns::pl_80038788(ctx, arg0, 194_i32, 1_i32);
         }
     }
@@ -1309,93 +1315,114 @@ pub fn fn_8003F294<'a>(ctx: &'a Ctx, slot: i32, index: i32) {
             break 'l3;
         }
     }
-    let _ = fns::pl_8003906C(
-        ctx,
-        slot,
-        59_i32,
-        null::<Val<'a, u32>>(ctx),
-        (fns::pl_804D6470(ctx).get()).x70(),
-        ({
+    let _ = {
+        let __t2 = inl_plBonusLib_8003F294_inline_unfused(ctx, stats, 107_i32);
+        let __t3 = ({
             let __t1 = ((fns::pl_804D6470(ctx).get()).x74() as i32);
             threshold2 = __t1;
             __t1
-        } as u32),
-        inl_plBonusLib_8003F294_inline_unfused(ctx, stats, 107_i32),
-        (table).xD9C_ref(),
-    );
-    let _ = fns::pl_8003906C(
-        ctx,
-        slot,
-        69_i32,
-        null::<Val<'a, u32>>(ctx),
-        (fns::pl_804D6470(ctx).get()).x90(),
-        {
-            let __t2 = (fns::pl_804D6470(ctx).get()).x94();
-            threshold = __t2;
-            __t2
-        },
-        inl_plBonusLib_8003F294_inline_unfused(ctx, stats, 112_i32),
-        (table).xDA0_ref(),
-    );
-    {
-        let mut e8: i32 = fns::pl_800386E8(ctx, Handle::cast::<pl_800386E8_arg0_t<'a>>(stats));
-        let _ = fns::pl_8003906C(
+        } as u32);
+        fns::pl_8003906C(
             ctx,
             slot,
-            73_i32,
+            59_i32,
             null::<Val<'a, u32>>(ctx),
-            (fns::pl_804D6470(ctx).get()).xA8(),
-            {
-                let __t3 = (fns::pl_804D6470(ctx).get()).xAC();
-                threshold = __t3;
-                __t3
-            },
-            (e8 as u32),
-            (table).xDA4_ref(),
-        );
-    }
-    let _ = fns::pl_8003906C(
-        ctx,
-        slot,
-        84_i32,
-        null::<Val<'a, u32>>(ctx),
-        (fns::pl_804D6470(ctx).get()).xC4(),
-        {
-            let __t4 = (fns::pl_804D6470(ctx).get()).xC8();
+            (fns::pl_804D6470(ctx).get()).x70(),
+            __t3,
+            __t2,
+            (table).xD9C_ref(),
+        )
+    };
+    let _ = {
+        let __t5 = inl_plBonusLib_8003F294_inline_unfused(ctx, stats, 112_i32);
+        let __t6 = {
+            let __t4 = (fns::pl_804D6470(ctx).get()).x94();
             threshold = __t4;
             __t4
-        },
-        inl_plBonusLib_8003F294_inline_unfused(ctx, stats, 111_i32),
-        (table).xDA8_ref(),
-    );
-    let _ = fns::pl_8003906C(
-        ctx,
-        slot,
-        1_i32.wrapping_neg(),
-        Handle::cast::<Val<'a, u32>>((table).xDC8_ref()),
-        (fns::pl_804D6470(ctx).get()).x18(),
-        {
-            let __t5 = (fns::pl_804D6470(ctx).get()).x1C();
-            threshold = __t5;
-            __t5
-        },
-        (stats).hits().total(),
-        (table).xDAC_ref(),
-    );
-    let _ = fns::pl_8003906C(
-        ctx,
-        slot,
-        19_i32,
-        null::<Val<'a, u32>>(ctx),
-        (fns::pl_804D6470(ctx).get()).x2C(),
-        {
-            let __t6 = (fns::pl_804D6470(ctx).get()).x30();
-            threshold = __t6;
-            __t6
-        },
-        (stats).attacks().total(),
-        (table).xDB0_ref(),
-    );
+        };
+        fns::pl_8003906C(
+            ctx,
+            slot,
+            69_i32,
+            null::<Val<'a, u32>>(ctx),
+            (fns::pl_804D6470(ctx).get()).x90(),
+            __t6,
+            __t5,
+            (table).xDA0_ref(),
+        )
+    };
+    {
+        let mut e8: i32 = fns::pl_800386E8(ctx, Handle::cast::<pl_800386E8_arg0_t<'a>>(stats));
+        let _ = {
+            let __t8 = {
+                let __t7 = (fns::pl_804D6470(ctx).get()).xAC();
+                threshold = __t7;
+                __t7
+            };
+            fns::pl_8003906C(
+                ctx,
+                slot,
+                73_i32,
+                null::<Val<'a, u32>>(ctx),
+                (fns::pl_804D6470(ctx).get()).xA8(),
+                __t8,
+                (e8 as u32),
+                (table).xDA4_ref(),
+            )
+        };
+    }
+    let _ = {
+        let __t10 = inl_plBonusLib_8003F294_inline_unfused(ctx, stats, 111_i32);
+        let __t11 = {
+            let __t9 = (fns::pl_804D6470(ctx).get()).xC8();
+            threshold = __t9;
+            __t9
+        };
+        fns::pl_8003906C(
+            ctx,
+            slot,
+            84_i32,
+            null::<Val<'a, u32>>(ctx),
+            (fns::pl_804D6470(ctx).get()).xC4(),
+            __t11,
+            __t10,
+            (table).xDA8_ref(),
+        )
+    };
+    let _ = {
+        let __t13 = {
+            let __t12 = (fns::pl_804D6470(ctx).get()).x1C();
+            threshold = __t12;
+            __t12
+        };
+        fns::pl_8003906C(
+            ctx,
+            slot,
+            1_i32.wrapping_neg(),
+            Handle::cast::<Val<'a, u32>>((table).xDC8_ref()),
+            (fns::pl_804D6470(ctx).get()).x18(),
+            __t13,
+            (stats).hits().total(),
+            (table).xDAC_ref(),
+        )
+    };
+    let _ = {
+        let __t15 = {
+            let __t14 = (fns::pl_804D6470(ctx).get()).x30();
+            threshold = __t14;
+            __t14
+        };
+        fns::pl_8003906C(
+            ctx,
+            slot,
+            19_i32,
+            null::<Val<'a, u32>>(ctx),
+            (fns::pl_804D6470(ctx).get()).x2C(),
+            __t15,
+            (stats).attacks().total(),
+            (table).xDB0_ref(),
+        )
+    };
     threshold = (fns::pl_804D6470(ctx).get()).xE4();
     let _ = fns::pl_8003906C(
         ctx,
@@ -1407,20 +1434,23 @@ pub fn fn_8003F294<'a>(ctx: &'a Ctx, slot: i32, index: i32) {
         ((table).xD70() as u32),
         (table).xDB4_ref(),
     );
-    let _ = fns::pl_8003906C(
-        ctx,
-        slot,
-        153_i32,
-        null::<Val<'a, u32>>(ctx),
-        (fns::pl_804D6470(ctx).get()).x130(),
-        {
-            let __t7 = (fns::pl_804D6470(ctx).get()).x134();
-            threshold = __t7;
-            __t7
-        },
-        ((table).xD34() as u32),
-        (table).xDB8_ref(),
-    );
+    let _ = {
+        let __t17 = {
+            let __t16 = (fns::pl_804D6470(ctx).get()).x134();
+            threshold = __t16;
+            __t16
+        };
+        fns::pl_8003906C(
+            ctx,
+            slot,
+            153_i32,
+            null::<Val<'a, u32>>(ctx),
+            (fns::pl_804D6470(ctx).get()).x130(),
+            __t17,
+            ((table).xD34() as u32),
+            (table).xDB8_ref(),
+        )
+    };
     threshold = (fns::pl_804D6470(ctx).get()).x80();
     let _ = fns::pl_8003906C(
         ctx,
@@ -1460,20 +1490,23 @@ pub fn fn_8003F294<'a>(ctx: &'a Ctx, slot: i32, index: i32) {
             mag,
         );
     }
-    if (fns::pl_8003906C(
-        ctx,
-        slot,
-        1_i32.wrapping_neg(),
-        Handle::cast::<Val<'a, u32>>((table).xDCC_ref()),
-        (fns::pl_804D6470(ctx).get()).xB8(),
-        {
-            let __t8 = (fns::pl_804D6470(ctx).get()).xBC();
-            new_var = __t8;
-            __t8
-        },
-        ((table).xCF4() as u32),
-        (table).xDC4_ref(),
-    ) != 0)
+    if ({
+        let __t19 = {
+            let __t18 = (fns::pl_804D6470(ctx).get()).xBC();
+            new_var = __t18;
+            __t18
+        };
+        fns::pl_8003906C(
+            ctx,
+            slot,
+            1_i32.wrapping_neg(),
+            Handle::cast::<Val<'a, u32>>((table).xDCC_ref()),
+            (fns::pl_804D6470(ctx).get()).xB8(),
+            __t19,
+            ((table).xCF4() as u32),
+            (table).xDC4_ref(),
+        )
+    } != 0)
     {
         let mut v: u32 = fns::gm_GetFrameCount(ctx);
         let mut xb8: u32 = (fns::pl_804D6470(ctx).get()).xB8();

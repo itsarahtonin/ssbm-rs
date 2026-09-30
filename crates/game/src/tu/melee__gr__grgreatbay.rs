@@ -196,15 +196,15 @@ pub fn grGreatBay_801F454C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (gp).x11_flags().set_b012((1_i32 as u8));
     (gp).set_xC_callback(null::<FnPtr<'a>>(ctx));
     (gp).x10_flags().set_b5((1_i32 as u8));
-    fns::Ground_801C4E70(
-        ctx,
-        fns::Ground_801C3FA4(ctx, gobj, 4_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 1_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 3_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 2_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 6_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 5_i32),
-    );
+    {
+        let __t1 = fns::Ground_801C3FA4(ctx, gobj, 5_i32);
+        let __t2 = fns::Ground_801C3FA4(ctx, gobj, 6_i32);
+        let __t3 = fns::Ground_801C3FA4(ctx, gobj, 2_i32);
+        let __t4 = fns::Ground_801C3FA4(ctx, gobj, 3_i32);
+        let __t5 = fns::Ground_801C3FA4(ctx, gobj, 1_i32);
+        let __t6 = fns::Ground_801C3FA4(ctx, gobj, 4_i32);
+        fns::Ground_801C4E70(ctx, __t6, __t5, __t4, __t3, __t2, __t1)
+    };
     fns::mpLib_80057BC0(ctx, 1_i32);
     fns::grGreatBay_801F5D4C(ctx, gobj);
     fns::Ground_801C10B8(ctx, gobj, fnptr(ctx, 0x801f4520));
@@ -453,22 +453,19 @@ pub fn grGreatBay_801F499C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         };
                         if __case <= 0 {
                             {
-                                inl_HSD_JObjSetTranslateX_unfused(
-                                    ctx,
-                                    jobj,
-                                    fp::fadds(
-                                        (fns::grGb_804D69E0(ctx).x0()).kame_x(),
-                                        fp::frsp(inl_rand_range_unfused(
-                                            ctx,
-                                            fp::fctiwz(
-                                                (fns::grGb_804D69E0(ctx).x0()).kame_x_fb_offset_b(),
-                                            ),
-                                            fp::fctiwz(
-                                                (fns::grGb_804D69E0(ctx).x0()).kame_x_fb_offset_a(),
-                                            ),
-                                        ) as f64),
-                                    ),
-                                );
+                                inl_HSD_JObjSetTranslateX_unfused(ctx, jobj, {
+                                    let __t1 = fp::frsp(inl_rand_range_unfused(
+                                        ctx,
+                                        fp::fctiwz(
+                                            (fns::grGb_804D69E0(ctx).x0()).kame_x_fb_offset_b(),
+                                        ),
+                                        fp::fctiwz(
+                                            (fns::grGb_804D69E0(ctx).x0()).kame_x_fb_offset_a(),
+                                        ),
+                                    )
+                                        as f64);
+                                    fp::fadds((fns::grGb_804D69E0(ctx).x0()).kame_x(), __t1)
+                                });
                                 fns::mpLib_80057BC0(ctx, 2_i32);
                                 fns::mpLib_80057BC0(ctx, 3_i32);
                                 fns::mpLib_80057BC0(ctx, 4_i32);
@@ -491,22 +488,19 @@ pub fn grGreatBay_801F499C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         }
                         if __case <= 2 {
                             {
-                                inl_HSD_JObjSetTranslateX_unfused(
-                                    ctx,
-                                    jobj,
-                                    fp::fadds(
-                                        (fns::grGb_804D69E0(ctx).x0()).kame_x(),
-                                        fp::frsp(inl_rand_range_unfused(
-                                            ctx,
-                                            fp::fctiwz(
-                                                (fns::grGb_804D69E0(ctx).x0()).kame_x_lr_offset_b(),
-                                            ),
-                                            fp::fctiwz(
-                                                (fns::grGb_804D69E0(ctx).x0()).kame_x_lr_offset_a(),
-                                            ),
-                                        ) as f64),
-                                    ),
-                                );
+                                inl_HSD_JObjSetTranslateX_unfused(ctx, jobj, {
+                                    let __t2 = fp::frsp(inl_rand_range_unfused(
+                                        ctx,
+                                        fp::fctiwz(
+                                            (fns::grGb_804D69E0(ctx).x0()).kame_x_lr_offset_b(),
+                                        ),
+                                        fp::fctiwz(
+                                            (fns::grGb_804D69E0(ctx).x0()).kame_x_lr_offset_a(),
+                                        ),
+                                    )
+                                        as f64);
+                                    fp::fadds((fns::grGb_804D69E0(ctx).x0()).kame_x(), __t2)
+                                });
                                 fns::mpJointListAdd(ctx, 2_i32);
                                 fns::mpJointListAdd(ctx, 3_i32);
                                 fns::mpJointListAdd(ctx, 4_i32);
@@ -516,22 +510,19 @@ pub fn grGreatBay_801F499C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         }
                         if __case <= 3 {
                             {
-                                inl_HSD_JObjSetTranslateX_unfused(
-                                    ctx,
-                                    jobj,
-                                    fp::fadds(
-                                        (fns::grGb_804D69E0(ctx).x0()).kame_x(),
-                                        fp::frsp(inl_rand_range_unfused(
-                                            ctx,
-                                            fp::fctiwz(
-                                                (fns::grGb_804D69E0(ctx).x0()).kame_x_fb_offset_b(),
-                                            ),
-                                            fp::fctiwz(
-                                                (fns::grGb_804D69E0(ctx).x0()).kame_x_fb_offset_a(),
-                                            ),
-                                        ) as f64),
-                                    ),
-                                );
+                                inl_HSD_JObjSetTranslateX_unfused(ctx, jobj, {
+                                    let __t3 = fp::frsp(inl_rand_range_unfused(
+                                        ctx,
+                                        fp::fctiwz(
+                                            (fns::grGb_804D69E0(ctx).x0()).kame_x_fb_offset_b(),
+                                        ),
+                                        fp::fctiwz(
+                                            (fns::grGb_804D69E0(ctx).x0()).kame_x_fb_offset_a(),
+                                        ),
+                                    )
+                                        as f64);
+                                    fp::fadds((fns::grGb_804D69E0(ctx).x0()).kame_x(), __t3)
+                                });
                                 fns::mpLib_80057BC0(ctx, 2_i32);
                                 fns::mpLib_80057BC0(ctx, 3_i32);
                                 fns::mpLib_80057BC0(ctx, 4_i32);
@@ -1330,7 +1321,10 @@ pub fn grGreatBay_801F63F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     }
     fns::lb_8000B1CC(ctx, jobj, rot, pos);
     pos.set_z(0.0);
-    if pos.y() <= fns::Stage_GetBlastZoneBottomOffset(ctx) {
+    if {
+        let __t1 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+        pos.y() <= __t1
+    } {
         return 0_i32;
     }
     if fns::HSD_Randf(ctx) > (fns::grGb_804D69E0(ctx).x0()).kame_item_prob() {

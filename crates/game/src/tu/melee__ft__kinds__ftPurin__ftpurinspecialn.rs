@@ -1442,15 +1442,18 @@ pub fn ftPr_SpecialNRelease_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     {
         let mut max_vel: f64 = 0.0;
-        if (if ((fp).gr_vel()) < fp::frsp(0_i32 as f64) {
-            fp::fneg(((fp).gr_vel()))
-        } else {
-            ((fp).gr_vel())
-        }) > ({
-            let __t1 = (da).x4C();
-            max_vel = __t1;
-            __t1
-        }) {
+        if {
+            let __t2 = ({
+                let __t1 = (da).x4C();
+                max_vel = __t1;
+                __t1
+            });
+            (if ((fp).gr_vel()) < fp::frsp(0_i32 as f64) {
+                fp::fneg(((fp).gr_vel()))
+            } else {
+                ((fp).gr_vel())
+            }) > __t2
+        } {
             if (fp).gr_vel() < 0.0 {
                 max_vel = fp::fneg(max_vel);
             }
@@ -1459,15 +1462,18 @@ pub fn ftPr_SpecialNRelease_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     {
         let mut max_vel_2: f64 = 0.0;
-        if (if ((fp).gr_vel()) < fp::frsp(0_i32 as f64) {
-            fp::fneg(((fp).gr_vel()))
-        } else {
-            ((fp).gr_vel())
-        }) > ({
-            let __t2 = (da).x50();
-            max_vel_2 = __t2;
-            __t2
-        }) {
+        if {
+            let __t4 = ({
+                let __t3 = (da).x50();
+                max_vel_2 = __t3;
+                __t3
+            });
+            (if ((fp).gr_vel()) < fp::frsp(0_i32 as f64) {
+                fp::fneg(((fp).gr_vel()))
+            } else {
+                ((fp).gr_vel())
+            }) > __t4
+        } {
             if (fp).gr_vel() < 0.0 {
                 max_vel_2 = fp::fneg(max_vel_2);
             }
@@ -1504,10 +1510,10 @@ pub fn ftPr_SpecialNTurn_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut da: _ftPurinAttributes<'a> = Handle::cast::<_ftPurinAttributes<'a>>((fp).dat_attrs());
-    let mut scale: f64 = fp::fmuls(
-        (da).xC4(),
-        fns::mpLib_800569EC(ctx, (fp).coll_data().floor().flags()),
-    );
+    let mut scale: f64 = {
+        let __t1 = fns::mpLib_800569EC(ctx, (fp).coll_data().floor().flags());
+        fp::fmuls((da).xC4(), __t1)
+    };
     let mut slope: f64 = (if ((fp).coll_data().floor().normal().x()) < fp::frsp(0_i32 as f64) {
         fp::fneg(((fp).coll_data().floor().normal().x()))
     } else {

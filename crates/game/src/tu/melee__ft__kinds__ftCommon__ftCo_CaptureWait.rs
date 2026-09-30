@@ -63,10 +63,10 @@ pub fn fn_800DB5D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             sp18.b_offset().set_y(__t4);
             __t4
         });
-        sp18.set_scale(fp::fdivs(
-            fns::ftYs_Init_8012BAC0(ctx, victim_fp),
-            fns::ftCommon_GetModelScale(ctx, fp),
-        ));
+        sp18.set_scale({
+            let __t5 = fns::ftCommon_GetModelScale(ctx, fp);
+            fp::fdivs(fns::ftYs_Init_8012BAC0(ctx, victim_fp), __t5)
+        });
         fns::ftColl_HurtboxInit(ctx, fp, (fp).hurt_capsules().get(0), sp18);
     }
     fns::ftCommon_8007E2F4(ctx, fp, (0x1ff_i32 as i16));
@@ -176,10 +176,10 @@ pub fn fn_800DB790<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             hurt.b_offset().set_y(__t6);
             __t6
         });
-        hurt.set_scale(fp::fdivs(
-            fns::ftYs_Init_8012BAC0(ctx, victim_fp),
-            fns::ftCommon_GetModelScale(ctx, fp),
-        ));
+        hurt.set_scale({
+            let __t7 = fns::ftCommon_GetModelScale(ctx, fp);
+            fp::fdivs(fns::ftYs_Init_8012BAC0(ctx, victim_fp), __t7)
+        });
         fns::ftColl_HurtboxInit(ctx, fp, (fp).hurt_capsules().get(0), hurt);
     }
     fns::ftCommon_8007E2F4(ctx, fp, (0x1ff_i32 as i16));
@@ -354,10 +354,10 @@ pub fn fn_800DBAE4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             hurt.b_offset().set_y(__t6);
             __t6
         });
-        hurt.set_scale(fp::fdivs(
-            fns::ftYs_Init_8012BAC0(ctx, victim_fp),
-            fns::ftCommon_GetModelScale(ctx, fp),
-        ));
+        hurt.set_scale({
+            let __t7 = fns::ftCommon_GetModelScale(ctx, fp);
+            fp::fdivs(fns::ftYs_Init_8012BAC0(ctx, victim_fp), __t7)
+        });
         fns::ftColl_HurtboxInit(ctx, fp, (fp).hurt_capsules().get(0), hurt);
     }
     fns::ftCommon_8007E2F4(ctx, fp, (0x1ff_i32 as i16));

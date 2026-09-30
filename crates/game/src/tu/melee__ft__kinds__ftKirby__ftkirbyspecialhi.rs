@@ -600,19 +600,14 @@ pub fn ftKb_SpecialHi2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             (fp).self_vel().set_y(0.0);
             (fp).self_vel().set_x(0.0);
             (fp).set_gr_vel(0.0);
-            fns::ftPartSetRotX(
-                ctx,
-                fp,
-                0_i32,
-                fp::fmuls(
-                    (fp).facing_dir(),
-                    fns::atan2f(
-                        ctx,
-                        (fp).coll_data().floor().normal().x(),
-                        (fp).coll_data().floor().normal().y(),
-                    ),
-                ),
-            );
+            fns::ftPartSetRotX(ctx, fp, 0_i32, {
+                let __t1 = fns::atan2f(
+                    ctx,
+                    (fp).coll_data().floor().normal().x(),
+                    (fp).coll_data().floor().normal().y(),
+                );
+                fp::fmuls((fp).facing_dir(), __t1)
+            });
             return;
         }
         if (fns::ftCliffCommon_80081298(ctx, gobj) != 0) {
@@ -657,19 +652,14 @@ pub fn ftKb_SpecialHi3_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).self_vel().set_y(0.0);
         (fp).self_vel().set_x(0.0);
         (fp).set_gr_vel(0.0);
-        fns::ftPartSetRotX(
-            ctx,
-            fp,
-            0_i32,
-            fp::fmuls(
-                (fp).facing_dir(),
-                fns::atan2f(
-                    ctx,
-                    (fp).coll_data().floor().normal().x(),
-                    (fp).coll_data().floor().normal().y(),
-                ),
-            ),
-        );
+        fns::ftPartSetRotX(ctx, fp, 0_i32, {
+            let __t1 = fns::atan2f(
+                ctx,
+                (fp).coll_data().floor().normal().x(),
+                (fp).coll_data().floor().normal().y(),
+            );
+            fp::fmuls((fp).facing_dir(), __t1)
+        });
         return;
     }
     if (fns::ftCliffCommon_80081298(ctx, gobj) != 0) {
@@ -697,19 +687,14 @@ pub fn ftKb_SpecialHi4_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::ftPartSetRotX(ctx, fp, 0_i32, 0.0);
         return;
     }
-    fns::ftPartSetRotX(
-        ctx,
-        fp,
-        0_i32,
-        fp::fmuls(
-            (fp).facing_dir(),
-            fns::atan2f(
-                ctx,
-                (fp).coll_data().floor().normal().x(),
-                (fp).coll_data().floor().normal().y(),
-            ),
-        ),
-    );
+    fns::ftPartSetRotX(ctx, fp, 0_i32, {
+        let __t1 = fns::atan2f(
+            ctx,
+            (fp).coll_data().floor().normal().x(),
+            (fp).coll_data().floor().normal().y(),
+        );
+        fp::fmuls((fp).facing_dir(), __t1)
+    });
 }
 
 pub fn ftKb_SpecialAirHi1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -772,19 +757,14 @@ pub fn ftKb_SpecialAirHi2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             (fp).self_vel().set_y(0.0);
             (fp).self_vel().set_x(0.0);
             (fp).set_gr_vel(0.0);
-            fns::ftPartSetRotX(
-                ctx,
-                fp,
-                0_i32,
-                fp::fmuls(
-                    (fp).facing_dir(),
-                    fns::atan2f(
-                        ctx,
-                        (fp).coll_data().floor().normal().x(),
-                        (fp).coll_data().floor().normal().y(),
-                    ),
-                ),
-            );
+            fns::ftPartSetRotX(ctx, fp, 0_i32, {
+                let __t1 = fns::atan2f(
+                    ctx,
+                    (fp).coll_data().floor().normal().x(),
+                    (fp).coll_data().floor().normal().y(),
+                );
+                fp::fmuls((fp).facing_dir(), __t1)
+            });
             return;
         }
         if (fns::ftCliffCommon_80081298(ctx, gobj) != 0) {
@@ -829,19 +809,14 @@ pub fn ftKb_SpecialAirHi3_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).self_vel().set_y(0.0);
         (fp).self_vel().set_x(0.0);
         (fp).set_gr_vel(0.0);
-        fns::ftPartSetRotX(
-            ctx,
-            fp,
-            0_i32,
-            fp::fmuls(
-                (fp).facing_dir(),
-                fns::atan2f(
-                    ctx,
-                    (fp).coll_data().floor().normal().x(),
-                    (fp).coll_data().floor().normal().y(),
-                ),
-            ),
-        );
+        fns::ftPartSetRotX(ctx, fp, 0_i32, {
+            let __t1 = fns::atan2f(
+                ctx,
+                (fp).coll_data().floor().normal().x(),
+                (fp).coll_data().floor().normal().y(),
+            );
+            fp::fmuls((fp).facing_dir(), __t1)
+        });
         return;
     }
     if (fns::ftCliffCommon_80081298(ctx, gobj) != 0) {
@@ -866,19 +841,14 @@ pub fn ftKb_SpecialAirHiEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).set_accessory4_cb(fnptr(ctx, 0x800f21e8));
         (fp).self_vel().set_z(0.0);
         (fp).self_vel().set_y(0.0);
-        fns::ftPartSetRotX(
-            ctx,
-            fp,
-            0_i32,
-            fp::fmuls(
-                (fp).facing_dir(),
-                fns::atan2f(
-                    ctx,
-                    (fp).coll_data().floor().normal().x(),
-                    (fp).coll_data().floor().normal().y(),
-                ),
-            ),
-        );
+        fns::ftPartSetRotX(ctx, fp, 0_i32, {
+            let __t1 = fns::atan2f(
+                ctx,
+                (fp).coll_data().floor().normal().x(),
+                (fp).coll_data().floor().normal().y(),
+            );
+            fp::fmuls((fp).facing_dir(), __t1)
+        });
         return;
     }
     fns::ftPartSetRotX(ctx, fp, 0_i32, 0.0);

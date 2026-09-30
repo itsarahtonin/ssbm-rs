@@ -262,15 +262,16 @@ pub fn mnCharSel_8025C020<'a>(ctx: &'a Ctx, arg0: i32) {
             if arg0 != 0_i32 {
                 fns::HSD_JObjSetFlags(ctx, sp7C.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
             } else {
-                let _ = fns::HSD_SisLib_803A70A0(
-                    ctx,
-                    statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
-                    0_i32,
-                    cstr(ctx, 0x804d50f0),
-                    &[VarArg::Int(
-                        inl_getClassicHighscore_unfused(ctx, hud_index) as u32
-                    )],
-                );
+                let _ = {
+                    let __t1 = VarArg::Int(inl_getClassicHighscore_unfused(ctx, hud_index) as u32);
+                    fns::HSD_SisLib_803A70A0(
+                        ctx,
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                        0_i32,
+                        cstr(ctx, 0x804d50f0),
+                        &[__t1],
+                    )
+                };
                 if fns::gmMainLib_8015D0D8(ctx, hud_index) != 0_i32 {
                     fns::HSD_JObjClearFlags(
                         ctx,
@@ -279,13 +280,16 @@ pub fn mnCharSel_8025C020<'a>(ctx: &'a Ctx, arg0: i32) {
                     );
                 }
             }
-            let _ = fns::HSD_SisLib_803A70A0(
-                ctx,
-                statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
-                0_i32,
-                cstr(ctx, 0x804d50f8),
-                &[VarArg::Int(fns::gm_80162C48(ctx) as u32)],
-            );
+            let _ = {
+                let __t2 = VarArg::Int(fns::gm_80162C48(ctx) as u32);
+                fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
+                    0_i32,
+                    cstr(ctx, 0x804d50f8),
+                    &[__t2],
+                )
+            };
             if fns::gm_80162D1C(ctx) != 0_i32 {
                 sp7C.set(inl_inline3_unfused(
                     ctx,
@@ -305,15 +309,17 @@ pub fn mnCharSel_8025C020<'a>(ctx: &'a Ctx, arg0: i32) {
             if arg0 != 0_i32 {
                 fns::HSD_JObjSetFlags(ctx, sp7C.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
             } else {
-                let _ = fns::HSD_SisLib_803A70A0(
-                    ctx,
-                    statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
-                    0_i32,
-                    cstr(ctx, 0x804d50f0),
-                    &[VarArg::Int(
-                        inl_getAdventureHighscore_unfused(ctx, hud_index) as u32,
-                    )],
-                );
+                let _ = {
+                    let __t3 =
+                        VarArg::Int(inl_getAdventureHighscore_unfused(ctx, hud_index) as u32);
+                    fns::HSD_SisLib_803A70A0(
+                        ctx,
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                        0_i32,
+                        cstr(ctx, 0x804d50f0),
+                        &[__t3],
+                    )
+                };
                 if fns::gmMainLib_8015D200(ctx, hud_index) != 0_i32 {
                     fns::HSD_JObjClearFlags(
                         ctx,
@@ -322,13 +328,16 @@ pub fn mnCharSel_8025C020<'a>(ctx: &'a Ctx, arg0: i32) {
                     );
                 }
             }
-            let _ = fns::HSD_SisLib_803A70A0(
-                ctx,
-                statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
-                0_i32,
-                cstr(ctx, 0x804d50f8),
-                &[VarArg::Int(fns::gm_80162E44(ctx) as u32)],
-            );
+            let _ = {
+                let __t4 = VarArg::Int(fns::gm_80162E44(ctx) as u32);
+                fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
+                    0_i32,
+                    cstr(ctx, 0x804d50f8),
+                    &[__t4],
+                )
+            };
             if fns::gm_80162F18(ctx) != 0_i32 {
                 sp7C.set(inl_inline3_unfused(
                     ctx,
@@ -348,15 +357,16 @@ pub fn mnCharSel_8025C020<'a>(ctx: &'a Ctx, arg0: i32) {
             if arg0 != 0_i32 {
                 fns::HSD_JObjSetFlags(ctx, sp7C.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
             } else {
-                let _ = fns::HSD_SisLib_803A70A0(
-                    ctx,
-                    statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
-                    0_i32,
-                    cstr(ctx, 0x804d50f0),
-                    &[VarArg::Int(
-                        inl_getAllStarHighscore_unfused(ctx, hud_index) as u32
-                    )],
-                );
+                let _ = {
+                    let __t5 = VarArg::Int(inl_getAllStarHighscore_unfused(ctx, hud_index) as u32);
+                    fns::HSD_SisLib_803A70A0(
+                        ctx,
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                        0_i32,
+                        cstr(ctx, 0x804d50f0),
+                        &[__t5],
+                    )
+                };
                 if fns::gmMainLib_8015D328(ctx, hud_index) != 0_i32 {
                     fns::HSD_JObjClearFlags(
                         ctx,
@@ -365,13 +375,16 @@ pub fn mnCharSel_8025C020<'a>(ctx: &'a Ctx, arg0: i32) {
                     );
                 }
             }
-            let _ = fns::HSD_SisLib_803A70A0(
-                ctx,
-                statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
-                0_i32,
-                cstr(ctx, 0x804d50f8),
-                &[VarArg::Int(fns::gm_80163040(ctx) as u32)],
-            );
+            let _ = {
+                let __t6 = VarArg::Int(fns::gm_80163040(ctx) as u32);
+                fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
+                    0_i32,
+                    cstr(ctx, 0x804d50f8),
+                    &[__t6],
+                )
+            };
             if fns::gm_80163114(ctx) != 0_i32 {
                 sp7C.set(inl_inline3_unfused(
                     ctx,
@@ -466,36 +479,38 @@ pub fn mnCharSel_8025C020<'a>(ctx: &'a Ctx, arg0: i32) {
         if __case <= 4 {
             if arg0 == 0_i32 {
                 if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
-                    let _ = fns::HSD_SisLib_803A70A0(
-                        ctx,
-                        statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
-                        0_i32,
-                        cstr(ctx, 0x804d5110),
-                        &[VarArg::Float(inl_toMeters_unfused(
+                    let _ = {
+                        let __t7 = VarArg::Float(inl_toMeters_unfused(
                             ctx,
                             fp::frsp(fns::gm_801631CC(ctx, hud_index) as f64),
-                        ))],
-                    );
+                        ));
+                        fns::HSD_SisLib_803A70A0(
+                            ctx,
+                            statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                            0_i32,
+                            cstr(ctx, 0x804d5110),
+                            &[__t7],
+                        )
+                    };
                 } else {
-                    let _ = fns::HSD_SisLib_803A70A0(
-                        ctx,
-                        statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
-                        0_i32,
-                        cstr(ctx, 0x804d5110),
-                        &[VarArg::Float(inl_toFeet_unfused(
+                    let _ = {
+                        let __t8 = VarArg::Float(inl_toFeet_unfused(
                             ctx,
                             fp::frsp(fns::gm_801631CC(ctx, hud_index) as f64),
-                        ))],
-                    );
+                        ));
+                        fns::HSD_SisLib_803A70A0(
+                            ctx,
+                            statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                            0_i32,
+                            cstr(ctx, 0x804d5110),
+                            &[__t8],
+                        )
+                    };
                 }
             }
             if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
-                let _ = fns::HSD_SisLib_803A70A0(
-                    ctx,
-                    statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
-                    0_i32,
-                    cstr(ctx, 0x804d5110),
-                    &[VarArg::Float(fp::fdivs(
+                let _ = {
+                    let __t9 = VarArg::Float(fp::fdivs(
                         fp::frsp(fp::fctiwz(
                             (fp::fmuls(
                                 10.0,
@@ -503,15 +518,18 @@ pub fn mnCharSel_8025C020<'a>(ctx: &'a Ctx, arg0: i32) {
                             )),
                         ) as f64),
                         10.0,
-                    ))],
-                );
+                    ));
+                    fns::HSD_SisLib_803A70A0(
+                        ctx,
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
+                        0_i32,
+                        cstr(ctx, 0x804d5110),
+                        &[__t9],
+                    )
+                };
             } else {
-                let _ = fns::HSD_SisLib_803A70A0(
-                    ctx,
-                    statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
-                    0_i32,
-                    cstr(ctx, 0x804d5110),
-                    &[VarArg::Float(fp::fdivs(
+                let _ = {
+                    let __t10 = VarArg::Float(fp::fdivs(
                         fp::frsp(fp::fctiwz(
                             (fp::fmuls(
                                 10.0,
@@ -522,22 +540,30 @@ pub fn mnCharSel_8025C020<'a>(ctx: &'a Ctx, arg0: i32) {
                             )),
                         ) as f64),
                         10.0,
-                    ))],
-                );
+                    ));
+                    fns::HSD_SisLib_803A70A0(
+                        ctx,
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
+                        0_i32,
+                        cstr(ctx, 0x804d5110),
+                        &[__t10],
+                    )
+                };
             }
             break 's1;
         }
         if __case <= 5 {
             if arg0 == 0_i32 {
-                let _ = fns::HSD_SisLib_803A70A0(
-                    ctx,
-                    statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
-                    0_i32,
-                    cstr(ctx, 0x804d5118),
-                    &[VarArg::Int(
-                        (fns::gm_80163274(ctx, hud_index) as i32) as u32,
-                    )],
-                );
+                let _ = {
+                    let __t11 = VarArg::Int((fns::gm_80163274(ctx, hud_index) as i32) as u32);
+                    fns::HSD_SisLib_803A70A0(
+                        ctx,
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                        0_i32,
+                        cstr(ctx, 0x804d5118),
+                        &[__t11],
+                    )
+                };
             }
             break 's1;
         }
@@ -545,21 +571,27 @@ pub fn mnCharSel_8025C020<'a>(ctx: &'a Ctx, arg0: i32) {
             if arg0 == 0_i32 {
                 if fns::gm_8016365C(ctx, hud_index) != 0_i32 {
                     let _ = (if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
-                        fns::HSD_SisLib_803A70A0(
-                            ctx,
-                            (statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get()),
-                            0_i32,
-                            cstr(ctx, 0x803f0fb4),
-                            &[VarArg::Int((fns::gm_80163690(ctx, hud_index)) as u32)],
-                        )
+                        {
+                            let __t12 = VarArg::Int((fns::gm_80163690(ctx, hud_index)) as u32);
+                            fns::HSD_SisLib_803A70A0(
+                                ctx,
+                                (statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get()),
+                                0_i32,
+                                cstr(ctx, 0x803f0fb4),
+                                &[__t12],
+                            )
+                        }
                     } else {
-                        fns::HSD_SisLib_803A70A0(
-                            ctx,
-                            (statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get()),
-                            0_i32,
-                            cstr(ctx, 0x803f0fc0),
-                            &[VarArg::Int((fns::gm_80163690(ctx, hud_index)) as u32)],
-                        )
+                        {
+                            let __t13 = VarArg::Int((fns::gm_80163690(ctx, hud_index)) as u32);
+                            fns::HSD_SisLib_803A70A0(
+                                ctx,
+                                (statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get()),
+                                0_i32,
+                                cstr(ctx, 0x803f0fc0),
+                                &[__t13],
+                            )
+                        }
                     });
                 } else {
                     fns::gm_801636D8(ctx, hud_index, sp7B, sp7A, sp79, sp78);
@@ -625,21 +657,27 @@ pub fn mnCharSel_8025C020<'a>(ctx: &'a Ctx, arg0: i32) {
             if arg0 == 0_i32 {
                 if fns::gm_801639C0(ctx, hud_index) != 0_i32 {
                     let _ = (if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
-                        fns::HSD_SisLib_803A70A0(
-                            ctx,
-                            (statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get()),
-                            0_i32,
-                            cstr(ctx, 0x803f0fb4),
-                            &[VarArg::Int((fns::gm_801639F4(ctx, hud_index)) as u32)],
-                        )
+                        {
+                            let __t14 = VarArg::Int((fns::gm_801639F4(ctx, hud_index)) as u32);
+                            fns::HSD_SisLib_803A70A0(
+                                ctx,
+                                (statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get()),
+                                0_i32,
+                                cstr(ctx, 0x803f0fb4),
+                                &[__t14],
+                            )
+                        }
                     } else {
-                        fns::HSD_SisLib_803A70A0(
-                            ctx,
-                            (statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get()),
-                            0_i32,
-                            cstr(ctx, 0x803f0fc0),
-                            &[VarArg::Int((fns::gm_801639F4(ctx, hud_index)) as u32)],
-                        )
+                        {
+                            let __t15 = VarArg::Int((fns::gm_801639F4(ctx, hud_index)) as u32);
+                            fns::HSD_SisLib_803A70A0(
+                                ctx,
+                                (statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get()),
+                                0_i32,
+                                cstr(ctx, 0x803f0fc0),
+                                &[__t15],
+                            )
+                        }
                     });
                 } else {
                     fns::gm_80163A3C(ctx, hud_index, sp7B, sp7A, sp79, sp78);
@@ -704,180 +742,214 @@ pub fn mnCharSel_8025C020<'a>(ctx: &'a Ctx, arg0: i32) {
         if __case <= 8 {
             if arg0 == 0_i32 {
                 if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
-                    let _ = fns::HSD_SisLib_803A70A0(
-                        ctx,
-                        statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
-                        0_i32,
-                        cstr(ctx, 0x803f0fb4),
-                        &[VarArg::Int(
+                    let _ = {
+                        let __t16 = VarArg::Int(
                             (fns::gm_Get3MinMultimanHighscore(ctx, hud_index) as i32) as u32,
-                        )],
-                    );
+                        );
+                        fns::HSD_SisLib_803A70A0(
+                            ctx,
+                            statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                            0_i32,
+                            cstr(ctx, 0x803f0fb4),
+                            &[__t16],
+                        )
+                    };
                 } else {
-                    let _ = fns::HSD_SisLib_803A70A0(
-                        ctx,
-                        statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
-                        0_i32,
-                        cstr(ctx, 0x803f0fc0),
-                        &[VarArg::Int(
+                    let _ = {
+                        let __t17 = VarArg::Int(
                             (fns::gm_Get3MinMultimanHighscore(ctx, hud_index) as i32) as u32,
-                        )],
-                    );
+                        );
+                        fns::HSD_SisLib_803A70A0(
+                            ctx,
+                            statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                            0_i32,
+                            cstr(ctx, 0x803f0fc0),
+                            &[__t17],
+                        )
+                    };
                 }
             }
             if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
-                let _ = fns::HSD_SisLib_803A70A0(
-                    ctx,
-                    statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
-                    0_i32,
-                    cstr(ctx, 0x803f0fb4),
-                    &[VarArg::Int(
-                        fns::gm_Get3MinMultimanTotalHighscore(ctx) as u32
-                    )],
-                );
+                let _ = {
+                    let __t18 = VarArg::Int(fns::gm_Get3MinMultimanTotalHighscore(ctx) as u32);
+                    fns::HSD_SisLib_803A70A0(
+                        ctx,
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
+                        0_i32,
+                        cstr(ctx, 0x803f0fb4),
+                        &[__t18],
+                    )
+                };
             } else {
-                let _ = fns::HSD_SisLib_803A70A0(
-                    ctx,
-                    statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
-                    0_i32,
-                    cstr(ctx, 0x803f0fc0),
-                    &[VarArg::Int(
-                        fns::gm_Get3MinMultimanTotalHighscore(ctx) as u32
-                    )],
-                );
+                let _ = {
+                    let __t19 = VarArg::Int(fns::gm_Get3MinMultimanTotalHighscore(ctx) as u32);
+                    fns::HSD_SisLib_803A70A0(
+                        ctx,
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
+                        0_i32,
+                        cstr(ctx, 0x803f0fc0),
+                        &[__t19],
+                    )
+                };
             }
             break 's1;
         }
         if __case <= 9 {
             if !(arg0 != 0) {
                 if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
-                    let _ = fns::HSD_SisLib_803A70A0(
-                        ctx,
-                        statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
-                        0_i32,
-                        cstr(ctx, 0x803f0fb4),
-                        &[VarArg::Int(
+                    let _ = {
+                        let __t20 = VarArg::Int(
                             (fns::gm_Get15MinMultimanHighscore(ctx, hud_index) as i32) as u32,
-                        )],
-                    );
+                        );
+                        fns::HSD_SisLib_803A70A0(
+                            ctx,
+                            statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                            0_i32,
+                            cstr(ctx, 0x803f0fb4),
+                            &[__t20],
+                        )
+                    };
                 } else {
-                    let _ = fns::HSD_SisLib_803A70A0(
-                        ctx,
-                        statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
-                        0_i32,
-                        cstr(ctx, 0x803f0fc0),
-                        &[VarArg::Int(
+                    let _ = {
+                        let __t21 = VarArg::Int(
                             (fns::gm_Get15MinMultimanHighscore(ctx, hud_index) as i32) as u32,
-                        )],
-                    );
+                        );
+                        fns::HSD_SisLib_803A70A0(
+                            ctx,
+                            statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                            0_i32,
+                            cstr(ctx, 0x803f0fc0),
+                            &[__t21],
+                        )
+                    };
                 }
             }
             if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
-                let _ = fns::HSD_SisLib_803A70A0(
-                    ctx,
-                    statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
-                    0_i32,
-                    cstr(ctx, 0x803f0fb4),
-                    &[VarArg::Int(
-                        fns::gm_Get15MinMultimanTotalHighscore(ctx) as u32
-                    )],
-                );
+                let _ = {
+                    let __t22 = VarArg::Int(fns::gm_Get15MinMultimanTotalHighscore(ctx) as u32);
+                    fns::HSD_SisLib_803A70A0(
+                        ctx,
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
+                        0_i32,
+                        cstr(ctx, 0x803f0fb4),
+                        &[__t22],
+                    )
+                };
             } else {
-                let _ = fns::HSD_SisLib_803A70A0(
-                    ctx,
-                    statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
-                    0_i32,
-                    cstr(ctx, 0x803f0fc0),
-                    &[VarArg::Int(
-                        fns::gm_Get15MinMultimanTotalHighscore(ctx) as u32
-                    )],
-                );
+                let _ = {
+                    let __t23 = VarArg::Int(fns::gm_Get15MinMultimanTotalHighscore(ctx) as u32);
+                    fns::HSD_SisLib_803A70A0(
+                        ctx,
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
+                        0_i32,
+                        cstr(ctx, 0x803f0fc0),
+                        &[__t23],
+                    )
+                };
             }
             break 's1;
         }
         if __case <= 10 {
             if !(arg0 != 0) {
                 let _ = (if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
-                    fns::HSD_SisLib_803A70A0(
-                        ctx,
-                        (statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get()),
-                        0_i32,
-                        cstr(ctx, 0x803f0fb4),
-                        &[VarArg::Int(
-                            (fns::gm_GetEndlessHighscore(ctx, hud_index)) as u32,
-                        )],
-                    )
+                    {
+                        let __t24 =
+                            VarArg::Int((fns::gm_GetEndlessHighscore(ctx, hud_index)) as u32);
+                        fns::HSD_SisLib_803A70A0(
+                            ctx,
+                            (statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get()),
+                            0_i32,
+                            cstr(ctx, 0x803f0fb4),
+                            &[__t24],
+                        )
+                    }
                 } else {
-                    fns::HSD_SisLib_803A70A0(
-                        ctx,
-                        (statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get()),
-                        0_i32,
-                        cstr(ctx, 0x803f0fc0),
-                        &[VarArg::Int(
-                            (fns::gm_GetEndlessHighscore(ctx, hud_index)) as u32,
-                        )],
-                    )
+                    {
+                        let __t25 =
+                            VarArg::Int((fns::gm_GetEndlessHighscore(ctx, hud_index)) as u32);
+                        fns::HSD_SisLib_803A70A0(
+                            ctx,
+                            (statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get()),
+                            0_i32,
+                            cstr(ctx, 0x803f0fc0),
+                            &[__t25],
+                        )
+                    }
                 });
             }
             let _ = (if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
-                fns::HSD_SisLib_803A70A0(
-                    ctx,
-                    (statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get()),
-                    0_i32,
-                    cstr(ctx, 0x803f0fb4),
-                    &[VarArg::Int((fns::gm_GetEndlessTotalHighscore(ctx)) as u32)],
-                )
+                {
+                    let __t26 = VarArg::Int((fns::gm_GetEndlessTotalHighscore(ctx)) as u32);
+                    fns::HSD_SisLib_803A70A0(
+                        ctx,
+                        (statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get()),
+                        0_i32,
+                        cstr(ctx, 0x803f0fb4),
+                        &[__t26],
+                    )
+                }
             } else {
-                fns::HSD_SisLib_803A70A0(
-                    ctx,
-                    (statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get()),
-                    0_i32,
-                    cstr(ctx, 0x803f0fc0),
-                    &[VarArg::Int((fns::gm_GetEndlessTotalHighscore(ctx)) as u32)],
-                )
+                {
+                    let __t27 = VarArg::Int((fns::gm_GetEndlessTotalHighscore(ctx)) as u32);
+                    fns::HSD_SisLib_803A70A0(
+                        ctx,
+                        (statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get()),
+                        0_i32,
+                        cstr(ctx, 0x803f0fc0),
+                        &[__t27],
+                    )
+                }
             });
             break 's1;
         }
         if __case <= 11 {
             if !(arg0 != 0) {
                 let _ = (if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
-                    fns::HSD_SisLib_803A70A0(
-                        ctx,
-                        (statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get()),
-                        0_i32,
-                        cstr(ctx, 0x803f0fb4),
-                        &[VarArg::Int(
-                            (fns::gm_GetCruelHighscore(ctx, hud_index)) as u32,
-                        )],
-                    )
+                    {
+                        let __t28 = VarArg::Int((fns::gm_GetCruelHighscore(ctx, hud_index)) as u32);
+                        fns::HSD_SisLib_803A70A0(
+                            ctx,
+                            (statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get()),
+                            0_i32,
+                            cstr(ctx, 0x803f0fb4),
+                            &[__t28],
+                        )
+                    }
                 } else {
-                    fns::HSD_SisLib_803A70A0(
-                        ctx,
-                        (statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get()),
-                        0_i32,
-                        cstr(ctx, 0x803f0fc0),
-                        &[VarArg::Int(
-                            (fns::gm_GetCruelHighscore(ctx, hud_index)) as u32,
-                        )],
-                    )
+                    {
+                        let __t29 = VarArg::Int((fns::gm_GetCruelHighscore(ctx, hud_index)) as u32);
+                        fns::HSD_SisLib_803A70A0(
+                            ctx,
+                            (statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get()),
+                            0_i32,
+                            cstr(ctx, 0x803f0fc0),
+                            &[__t29],
+                        )
+                    }
                 });
             }
             let _ = (if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
-                fns::HSD_SisLib_803A70A0(
-                    ctx,
-                    (statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get()),
-                    0_i32,
-                    cstr(ctx, 0x803f0fb4),
-                    &[VarArg::Int((fns::gm_GetCruelTotalHighscore(ctx)) as u32)],
-                )
+                {
+                    let __t30 = VarArg::Int((fns::gm_GetCruelTotalHighscore(ctx)) as u32);
+                    fns::HSD_SisLib_803A70A0(
+                        ctx,
+                        (statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get()),
+                        0_i32,
+                        cstr(ctx, 0x803f0fb4),
+                        &[__t30],
+                    )
+                }
             } else {
-                fns::HSD_SisLib_803A70A0(
-                    ctx,
-                    (statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get()),
-                    0_i32,
-                    cstr(ctx, 0x803f0fc0),
-                    &[VarArg::Int((fns::gm_GetCruelTotalHighscore(ctx)) as u32)],
-                )
+                {
+                    let __t31 = VarArg::Int((fns::gm_GetCruelTotalHighscore(ctx)) as u32);
+                    fns::HSD_SisLib_803A70A0(
+                        ctx,
+                        (statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get()),
+                        0_i32,
+                        cstr(ctx, 0x803f0fc0),
+                        &[__t31],
+                    )
+                }
             });
             break 's1;
         }
@@ -1262,21 +1334,24 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                 &[],
             );
         } else {
-            let _ = fns::HSD_SisLib_803A70A0(
-                ctx,
-                (statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
-                    .get((arg0 as i32))
-                    .data())
-                .text(),
-                0_i32,
-                fns::gm_80160980(
+            let _ = {
+                let __t1 = fns::gm_80160980(
                     ctx,
                     statics::melee__mn__mncharsel::icons(ctx)
                         .get((sel_icon as i32))
                         .char_kind(),
-                ),
-                &[],
-            );
+                );
+                fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    (statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                        .get((arg0 as i32))
+                        .data())
+                    .text(),
+                    0_i32,
+                    __t1,
+                    &[],
+                )
+            };
         }
     }
     {
@@ -3389,13 +3464,8 @@ pub fn mnCharSel_CostumeChange<'a>(ctx: &'a Ctx, door: i32, input: u32) {
                     .doors()
                     .get(door)
                     .set_costume(
-                        (rem_i32(
-                            ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
-                                .doors()
-                                .get(door)
-                                .costume() as i32)
-                                .wrapping_add(1_i32)),
-                            (fns::gm_GetNumCostumesForCKind(
+                        ({
+                            let __t1 = (fns::gm_GetNumCostumesForCKind(
                                 ctx,
                                 statics::melee__mn__mncharsel::icons(ctx)
                                     .get(
@@ -3406,8 +3476,16 @@ pub fn mnCharSel_CostumeChange<'a>(ctx: &'a Ctx, door: i32, input: u32) {
                                             as i32),
                                     )
                                     .char_kind(),
-                            ) as i32),
-                        ) as u8),
+                            ) as i32);
+                            rem_i32(
+                                ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                                    .doors()
+                                    .get(door)
+                                    .costume() as i32)
+                                    .wrapping_add(1_i32)),
+                                __t1,
+                            )
+                        } as u8),
                     );
             }
             if !(inl_isDuplicateCostume_unfused(ctx, door) != 0) {
@@ -6158,19 +6236,19 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 };
             }
             442 => {
-                let _ = fns::lb_80011E24(
-                    ctx,
-                    statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
-                    sp98,
-                    &[
-                        VarArg::Int(
-                            (statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
-                                .get((((cursor).x4_ref()).get() as i32))
-                                .name_jointl() as i32) as u32,
-                        ),
-                        VarArg::Int(1_i32.wrapping_neg() as u32),
-                    ],
-                );
+                let _ = {
+                    let __t5 = VarArg::Int(
+                        (statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
+                            .get((((cursor).x4_ref()).get() as i32))
+                            .name_jointl() as i32) as u32,
+                    );
+                    fns::lb_80011E24(
+                        ctx,
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
+                        sp98,
+                        &[__t5, VarArg::Int(1_i32.wrapping_neg() as u32)],
+                    )
+                };
                 __state = 441;
             }
             443 => {
@@ -6552,16 +6630,15 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 unreachable!();
             }
             495 => {
+                let __t7 = (({
+                    let __t6 = ((cport7 as i32).wrapping_add(1_i32) as u32);
+                    next_port = __t6;
+                    __t6
+                }) as u8);
                 (statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
                     .at((cport7 as i32))
                     .get())
-                .set_x5(
-                    (({
-                        let __t5 = ((cport7 as i32).wrapping_add(1_i32) as u32);
-                        next_port = __t5;
-                        __t5
-                    }) as u8),
-                );
+                .set_x5(__t7);
                 (statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)
                     .at((cport7 as i32))
                     .get())
@@ -7028,14 +7105,14 @@ pub fn fn_80262648<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         let mut dx_2: f64 = 0.0;
         let mut tx: f64 = 0.0;
         let mut dy_2: f64 = 0.0;
-        dx_2 = fp::fsubs(
-            (model).x10(),
-            ({
+        dx_2 = {
+            let __t3 = ({
                 let __t2 = (model).x8();
                 tx = __t2;
                 __t2
-            }),
-        );
+            });
+            fp::fsubs((model).x10(), __t3)
+        };
         dy_2 = fp::fsubs((model).x14(), (model).xC());
         if (fp::fmadds(dx_2, dx_2, fp::fmuls(dy_2, dy_2))) < 4.0 {
             (model).set_x10(tx);
@@ -8024,11 +8101,8 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 __state = 25;
             }
             30 => {
-                let _ = fns::HSD_SisLib_803A70A0(
-                    ctx,
-                    (tag).name_ls(),
-                    0_i32,
-                    fns::gm_80160980(
+                let _ = {
+                    let __t1 = fns::gm_80160980(
                         ctx,
                         statics::melee__mn__mncharsel::icons(ctx)
                             .get(
@@ -8038,9 +8112,9 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                                     .sel_icon() as i32),
                             )
                             .char_kind(),
-                    ),
-                    &[],
-                );
+                    );
+                    fns::HSD_SisLib_803A70A0(ctx, (tag).name_ls(), 0_i32, __t1, &[])
+                };
                 __state = 29;
             }
             31 => {
@@ -8395,13 +8469,10 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 __state = 85;
             }
             90 => {
-                let _ = fns::HSD_SisLib_803A70A0(
-                    ctx,
-                    (tag).name_ls(),
-                    j.wrapping_add(2_i32),
-                    fns::GetNameText(ctx, ((row_idx as u8) as i32)),
-                    &[],
-                );
+                let _ = {
+                    let __t2 = fns::GetNameText(ctx, ((row_idx as u8) as i32));
+                    fns::HSD_SisLib_803A70A0(ctx, (tag).name_ls(), j.wrapping_add(2_i32), __t2, &[])
+                };
                 Handle::copy_from(row_color, white);
                 fns::HSD_SisLib_803A74F0(ctx, (tag).name_ls(), j.wrapping_add(2_i32), name_color);
                 p2 = 0_i32;
@@ -8590,11 +8661,8 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 };
             }
             113 => {
-                let _ = fns::HSD_SisLib_803A70A0(
-                    ctx,
-                    (tag).text(),
-                    0_i32,
-                    fns::gm_80160980(
+                let _ = {
+                    let __t3 = fns::gm_80160980(
                         ctx,
                         statics::melee__mn__mncharsel::icons(ctx)
                             .get(
@@ -8604,9 +8672,9 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                                     .sel_icon() as i32),
                             )
                             .char_kind(),
-                    ),
-                    &[],
-                );
+                    );
+                    fns::HSD_SisLib_803A70A0(ctx, (tag).text(), 0_i32, __t3, &[])
+                };
                 __state = 112;
             }
             114 => {
@@ -8875,13 +8943,10 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 __state = 164;
             }
             167 => {
-                let _ = fns::HSD_SisLib_803A70A0(
-                    ctx,
-                    (tag).text(),
-                    0_i32,
-                    fns::GetNameText(ctx, row.wrapping_sub(1_i32)),
-                    &[],
-                );
+                let _ = {
+                    let __t4 = fns::GetNameText(ctx, row.wrapping_sub(1_i32));
+                    fns::HSD_SisLib_803A70A0(ctx, (tag).text(), 0_i32, __t4, &[])
+                };
                 ((tag).text()).set_default_kerning((0_i32 as u8));
                 ((tag).text()).set_hidden((0_i32 as u8));
                 __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
@@ -10162,20 +10227,17 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                     .players()
                     .get((statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).get() as i32))
                     .set_ckind(((Handle::add(char_kinds, icon_off)).get() as i8));
+                let __t3 = (fns::HSD_Randi(
+                    ctx,
+                    (fns::gm_GetNumCostumesForCKind(ctx, (Handle::add(char_kinds, icon_off)).get())
+                        as i32),
+                ) as u8);
                 (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
                     .vs()
                     .start()
                     .players()
                     .get((statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).get() as i32))
-                    .set_color(
-                        (fns::HSD_Randi(
-                            ctx,
-                            (fns::gm_GetNumCostumesForCKind(
-                                ctx,
-                                (Handle::add(char_kinds, icon_off)).get(),
-                            ) as i32),
-                        ) as u8),
-                    );
+                    .set_color(__t3);
                 __state = 90;
             }
             96 => {
@@ -10511,24 +10573,24 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                     .get(slot)
                     .set_sel_icon((found as u8));
                 (model).set_x8({
-                    let __t3 = fp::fadds(
+                    let __t4 = fp::fadds(
                         3.4000000953674316,
                         statics::melee__mn__mncharsel::icons(ctx)
                             .get(found)
                             .bound_l(),
                     );
-                    (model).set_x10(__t3);
-                    __t3
+                    (model).set_x10(__t4);
+                    __t4
                 });
                 (model).set_xC({
-                    let __t4 = fp::fadds(
+                    let __t5 = fp::fadds(
                         fp::fneg(3.0),
                         statics::melee__mn__mncharsel::icons(ctx)
                             .get(found)
                             .bound_u(),
                     );
-                    (model).set_x14(__t4);
-                    __t4
+                    (model).set_x14(__t5);
+                    __t5
                 });
                 __state = 107;
             }
@@ -11064,11 +11126,8 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
             }
             199 => {
                 (td).set_use_tag((1_i32 as u8));
-                let _ = fns::HSD_SisLib_803A70A0(
-                    ctx,
-                    (td).text(),
-                    0_i32,
-                    fns::GetNameText(
+                let _ = {
+                    let __t6 = fns::GetNameText(
                         ctx,
                         ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
                             .vs()
@@ -11076,9 +11135,9 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                             .players()
                             .get(player_2)
                             .nametag() as i32),
-                    ),
-                    &[],
-                );
+                    );
+                    fns::HSD_SisLib_803A70A0(ctx, (td).text(), 0_i32, __t6, &[])
+                };
                 ((td).text()).set_default_kerning((0_i32 as u8));
                 __state = 200;
             }

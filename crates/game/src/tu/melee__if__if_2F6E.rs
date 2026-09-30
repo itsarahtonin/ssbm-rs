@@ -170,15 +170,18 @@ pub fn ifStatus_802F7134<'a>(ctx: &'a Ctx) {
         }
     }
     archive = fns::ifAll_GetArchive(ctx);
-    fns::lbArchive_LoadSections(
-        ctx,
-        (archive).get(),
-        Handle::cast::<Addr<'a>>(models),
-        &[
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803f9768))),
-            VarArg::Int(0_i32 as u32),
-        ],
-    );
+    {
+        let __t1 = Handle::cast::<Addr<'a>>(models);
+        fns::lbArchive_LoadSections(
+            ctx,
+            (archive).get(),
+            __t1,
+            &[
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803f9768))),
+                VarArg::Int(0_i32 as u32),
+            ],
+        )
+    };
     {
         i = 0_i32;
         'l3: while i < 8_i32 {

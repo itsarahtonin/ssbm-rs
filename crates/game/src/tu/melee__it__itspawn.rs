@@ -447,13 +447,13 @@ pub fn it_8026D018<'a>(ctx: &'a Ctx) {
                 fnptr(ctx, 0x8026c88c),
                 (0_i32 as u8),
             );
-            inl_it_8026D018_inline3(
-                ctx,
-                fns::HSD_Randf(ctx),
-                (fns::it_804D6D28(ctx).get())
+            {
+                let __t1 = (fns::it_804D6D28(ctx).get())
                     .xFC()
-                    .at(fns::gm_8016AE80(ctx).wrapping_mul(2_i32)),
-            );
+                    .at(fns::gm_8016AE80(ctx).wrapping_mul(2_i32));
+                let __t2 = fns::HSD_Randf(ctx);
+                inl_it_8026D018_inline3(ctx, __t2, __t1)
+            };
         }
     }
 }
@@ -616,10 +616,8 @@ fn inl_it_8026C88C_inline<'a>(ctx: &'a Ctx, alloc: RandomItemSpawner<'a>) {
                     randf,
                     fp::frsp((Handle::add(range, 0_i32)).get() as f64),
                 )));
-                (alloc).set_x0(fp::fctiwz(fp::fmuls(
-                    fp::frsp((alloc).x0() as f64),
-                    fns::Ground_801C2AE8(ctx, fns::Stage_80225194(ctx)),
-                )));
+                let __t3 = fns::Ground_801C2AE8(ctx, fns::Stage_80225194(ctx));
+                (alloc).set_x0(fp::fctiwz(fp::fmuls(fp::frsp((alloc).x0() as f64), __t3)));
             }
         }
     }
@@ -688,9 +686,10 @@ fn inl_it_8026D018_inline3<'a>(ctx: &'a Ctx, randf: f64, range: Val<'a, i32>) {
         randf,
         fp::frsp((Handle::add(range, 0_i32)).get() as f64),
     )));
+    let __t1 = fns::Ground_801C2AE8(ctx, fns::Stage_80225194(ctx));
     fns::it_804A0E30(ctx).set_x0(fp::fctiwz(fp::fmuls(
         fp::frsp(fns::it_804A0E30(ctx).x0() as f64),
-        fns::Ground_801C2AE8(ctx, fns::Stage_80225194(ctx)),
+        __t1,
     )));
 }
 

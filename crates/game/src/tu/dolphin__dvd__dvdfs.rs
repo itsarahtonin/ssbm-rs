@@ -342,23 +342,26 @@ fn inl_isSame_unfused<'a>(ctx: &'a Ctx, path: Val<'a, i8>, string: Val<'a, i8>) 
     let mut string = string;
     'l1: while ((string).get() as i32) != 0_i32 {
         'c2: {
-            if fns::tolower(
-                ctx,
-                (({
-                    let __t1 = path;
-                    path = Handle::add(path, 1);
-                    __t1
-                })
-                .get() as i32),
-            ) != fns::tolower(
-                ctx,
-                (({
-                    let __t2 = string;
-                    string = Handle::add(string, 1);
-                    __t2
-                })
-                .get() as i32),
-            ) {
+            if {
+                let __t3 = fns::tolower(
+                    ctx,
+                    (({
+                        let __t2 = string;
+                        string = Handle::add(string, 1);
+                        __t2
+                    })
+                    .get() as i32),
+                );
+                fns::tolower(
+                    ctx,
+                    (({
+                        let __t1 = path;
+                        path = Handle::add(path, 1);
+                        __t1
+                    })
+                    .get() as i32),
+                ) != __t3
+            } {
                 return 0_i32;
             }
         }

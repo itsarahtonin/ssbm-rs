@@ -157,51 +157,45 @@ pub fn parseFloat<'a>(ctx: &'a Ctx, pos: Ptr<'a, Val<'a, u8>>, frac: u8) -> f64 
             ))
             .get() as i32) as u32),
         );
-        u.set_d(
-            (u.d()
-                | (shl_i32(
-                    ((Handle::add(
-                        ({
-                            let __t2 = (pos).get();
-                            (pos).set(Handle::add((pos).get(), 1));
-                            __t2
-                        }),
-                        0_i32,
-                    ))
-                    .get() as i32),
-                    (8_i32 as u32),
-                ) as u32)),
-        );
-        u.set_d(
-            (u.d()
-                | (shl_i32(
-                    ((Handle::add(
-                        ({
-                            let __t3 = (pos).get();
-                            (pos).set(Handle::add((pos).get(), 1));
-                            __t3
-                        }),
-                        0_i32,
-                    ))
-                    .get() as i32),
-                    (16_i32 as u32),
-                ) as u32)),
-        );
-        u.set_d(
-            (u.d()
-                | (shl_i32(
-                    ((Handle::add(
-                        ({
-                            let __t4 = (pos).get();
-                            (pos).set(Handle::add((pos).get(), 1));
-                            __t4
-                        }),
-                        0_i32,
-                    ))
-                    .get() as i32),
-                    (24_i32 as u32),
-                ) as u32)),
-        );
+        let __t3 = (shl_i32(
+            ((Handle::add(
+                ({
+                    let __t2 = (pos).get();
+                    (pos).set(Handle::add((pos).get(), 1));
+                    __t2
+                }),
+                0_i32,
+            ))
+            .get() as i32),
+            (8_i32 as u32),
+        ) as u32);
+        u.set_d((u.d() | __t3));
+        let __t5 = (shl_i32(
+            ((Handle::add(
+                ({
+                    let __t4 = (pos).get();
+                    (pos).set(Handle::add((pos).get(), 1));
+                    __t4
+                }),
+                0_i32,
+            ))
+            .get() as i32),
+            (16_i32 as u32),
+        ) as u32);
+        u.set_d((u.d() | __t5));
+        let __t7 = (shl_i32(
+            ((Handle::add(
+                ({
+                    let __t6 = (pos).get();
+                    (pos).set(Handle::add((pos).get(), 1));
+                    __t6
+                }),
+                0_i32,
+            ))
+            .get() as i32),
+            (24_i32 as u32),
+        ) as u32);
+        u.set_d((u.d() | __t7));
         return u.f();
     }
     denom = (shl_i32(1_i32, (((frac as i32) & 31_i32) as u32)));

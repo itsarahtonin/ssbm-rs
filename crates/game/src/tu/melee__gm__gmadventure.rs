@@ -109,19 +109,22 @@ pub fn gm_801B4064<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     tmp = statics::melee__gm__gmadventure::gm_80490910(ctx)
         .at(inl_getIndex_unfused(ctx, ((arg0).id() as i32)))
         .get();
-    fns::gm_8017CE34(
-        ctx,
-        temp_r28,
-        (temp_r27).x0(),
-        (temp_r31).xA().at(0),
-        ((temp_r31).x4() as u8),
-        (var_r30 as u8),
-        (var_r29 as u8),
-        ((temp_r31).x2() as i32),
-        ((temp_r31).x6() as i32),
-        (fns::gm_8017E48C(ctx, arg0) as i32),
-        (tmp as i32),
-    );
+    {
+        let __t1 = (fns::gm_8017E48C(ctx, arg0) as i32);
+        fns::gm_8017CE34(
+            ctx,
+            temp_r28,
+            (temp_r27).x0(),
+            (temp_r31).xA().at(0),
+            ((temp_r31).x4() as u8),
+            (var_r30 as u8),
+            (var_r29 as u8),
+            ((temp_r31).x2() as i32),
+            ((temp_r31).x6() as i32),
+            __t1,
+            (tmp as i32),
+        )
+    };
     fns::gm_LoadRumbleEnabled(ctx, temp_r28);
     if ((((temp_r31).x1() as i32) & 8_i32) != 0) {
         (temp_r28)
@@ -167,13 +170,11 @@ pub fn gm_801B4294<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     let mut scene = scene;
     let mut data: DebugGameOverData<'a> =
         Handle::cast::<DebugGameOverData<'a>>(fns::gm_GetGameModeStateExitData(ctx, scene));
-    fns::gm_8017CA38(
-        ctx,
-        data,
-        (fns::gm_GetAdventureData(ctx)).x0(),
-        fns::gmMainLib_8015CDD4(ctx),
-        (0_i32 as u8),
-    );
+    {
+        let __t1 = fns::gmMainLib_8015CDD4(ctx);
+        let __t2 = (fns::gm_GetAdventureData(ctx)).x0();
+        fns::gm_8017CA38(ctx, data, __t2, __t1, (0_i32 as u8))
+    };
 }
 
 pub fn gm_801B42E8<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
@@ -182,17 +183,20 @@ pub fn gm_801B42E8<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     let mut css: CSSData<'a> =
         Handle::cast::<CSSData<'a>>(fns::gm_GetGameModeStateEnterData(ctx, scene));
     let mut temp_r31: gmm_x0_528_t<'a> = fns::gmMainLib_8015CDD4(ctx);
-    fns::gm_801B06B0(
-        ctx,
-        css,
-        (12_i32 as u8),
-        (temp_r31).c_kind(),
-        ((temp_r31).stocks() as i8),
-        ((temp_r31).color() as i8),
-        (temp_r31).nametag(),
-        (temp_r31).cpu_level(),
-        (fns::gm_GetAdventureData(ctx)).x0().x0().slot(),
-    );
+    {
+        let __t1 = (fns::gm_GetAdventureData(ctx)).x0().x0().slot();
+        fns::gm_801B06B0(
+            ctx,
+            css,
+            (12_i32 as u8),
+            (temp_r31).c_kind(),
+            ((temp_r31).stocks() as i8),
+            ((temp_r31).color() as i8),
+            (temp_r31).nametag(),
+            (temp_r31).cpu_level(),
+            __t1,
+        )
+    };
 }
 
 pub fn gm_801B4350<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
@@ -761,38 +765,44 @@ fn inl_gm_8016A22C_inline_unfused<'a>(
     let mut temp_r29 = temp_r29;
     let mut count: u8 = fns::gm_8017E48C(ctx, arg0);
     let mut temp_r25_2: gm_803DE650_t<'a> = fns::gm_8017E4C4(ctx, (arg0).id());
-    fns::gm_8016A22C(
-        ctx,
-        (temp_r25_2).xA().at(0_i32).get(),
-        (temp_r25_2).xA().at(1_i32).get(),
-        (temp_r25_2).xA().at(2_i32).get(),
-        (temp_r25_2).xD(),
-        (temp_r25_2).xE(),
-        (temp_r25_2).xF(),
-        1_i32,
-        0_i32,
-        (1_i32 as u8),
-        ((temp_r29).x0().x0().ckind() as u8),
-        (temp_r29).x0().x0().color(),
-        ((temp_r29).x0().x4C().call::<_, u8>((
+    {
+        let __t1 = (temp_r29)
+            .x0()
+            .x68()
+            .call::<_, f64>((count, (temp_r29).x0().x0().cpu_level()));
+        let __t2 = (temp_r29)
+            .x0()
+            .x64()
+            .call::<_, f64>((count, (temp_r29).x0().x0().cpu_level()));
+        let __t3 = fns::gm_8017BE8C(ctx, (temp_r25_2).xA().at(0));
+        let __t4 = ((temp_r29).x0().x4C().call::<_, u8>((
             count,
             (temp_r29).x0().x0().cpu_level(),
             (0_i32 as u8),
-        )) as i32),
-        ((temp_r25_2).x4() as i32),
-        fns::gm_8017BE8C(ctx, (temp_r25_2).xA().at(0)),
-        1_i32,
-        0_i32,
-        1_i32,
-        (temp_r29)
-            .x0()
-            .x64()
-            .call::<_, f64>((count, (temp_r29).x0().x0().cpu_level())),
-        (temp_r29)
-            .x0()
-            .x68()
-            .call::<_, f64>((count, (temp_r29).x0().x0().cpu_level())),
-    );
+        )) as i32);
+        fns::gm_8016A22C(
+            ctx,
+            (temp_r25_2).xA().at(0_i32).get(),
+            (temp_r25_2).xA().at(1_i32).get(),
+            (temp_r25_2).xA().at(2_i32).get(),
+            (temp_r25_2).xD(),
+            (temp_r25_2).xE(),
+            (temp_r25_2).xF(),
+            1_i32,
+            0_i32,
+            (1_i32 as u8),
+            ((temp_r29).x0().x0().ckind() as u8),
+            (temp_r29).x0().x0().color(),
+            __t4,
+            ((temp_r25_2).x4() as i32),
+            __t3,
+            1_i32,
+            0_i32,
+            1_i32,
+            __t2,
+            __t1,
+        )
+    };
     (temp_r29).x0().xC().set_x11((1_i32 as u8));
 }
 

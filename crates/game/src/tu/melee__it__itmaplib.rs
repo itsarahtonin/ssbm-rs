@@ -1053,14 +1053,17 @@ pub fn it_8027737C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, pos: Vec<'a>) {
     (item)
         .x7C()
         .set_y(fp::fmuls((item).x7C().y(), ((item).xCC_item_attr()).x54()));
-    if inl_sqrtf_accurate_store(
-        ctx,
-        fp::fadds(
-            (fp::fmuls(((item).x7C().x()), ((item).x7C().x()))),
-            (fp::fmuls(((item).x7C().y()), ((item).x7C().y()))),
-        ),
-        sqrt_0,
-    ) > (fns::it_804D6D28(ctx).get()).xC8()
+    if {
+        let __t1 = sqrt_0;
+        inl_sqrtf_accurate_store(
+            ctx,
+            fp::fadds(
+                (fp::fmuls(((item).x7C().x()), ((item).x7C().x()))),
+                (fp::fmuls(((item).x7C().y()), ((item).x7C().y()))),
+            ),
+            __t1,
+        )
+    } > (fns::it_804D6D28(ctx).get()).xC8()
     {
         let _ = fns::lbVector_NormalizeXY(ctx, (item).x7C());
         temp_f1 = (fns::it_804D6D28(ctx).get()).xC8();

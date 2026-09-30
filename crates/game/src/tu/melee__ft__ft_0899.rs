@@ -215,14 +215,14 @@ pub fn ft_80089B08<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
         if ((((fp).x221C_u16_y() as i32) & 4_i32) != 0) {
             let mut line_id: i32 = (fp).coll_data().floor().index();
-            let mut angle: f64 = fp::fmuls(
-                (fp).facing_dir(),
-                fns::atan2f(
+            let mut angle: f64 = {
+                let __t1 = fns::atan2f(
                     ctx,
                     (fp).coll_data().floor().normal().x(),
                     (fp).coll_data().floor().normal().y(),
-                ),
-            );
+                );
+                fp::fmuls((fp).facing_dir(), __t1)
+            };
             let mut dx: f64 = 0.0;
             let mut dy: f64 = 0.0;
             let mut line_len: f64 = 0.0;
@@ -262,8 +262,10 @@ pub fn ft_80089B08<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                             != 0)
                     {
                         let _ = fns::mpLineGetNormal(ctx, next_id, sp1C);
-                        adj_angle =
-                            fp::fmuls((fp).facing_dir(), fns::atan2f(ctx, sp1C.x(), sp1C.y()));
+                        adj_angle = {
+                            let __t2 = fns::atan2f(ctx, sp1C.x(), sp1C.y());
+                            fp::fmuls((fp).facing_dir(), __t2)
+                        };
                     }
                 }
                 {

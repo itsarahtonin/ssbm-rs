@@ -194,12 +194,15 @@ pub fn itNessbat_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             if !Handle::is_null((ip).xDD4_itemVar().nessbat().x0()) {
                 if fns::ftCo_800BF228(ctx, (ip).xDD4_itemVar().nessbat().x0()) == 1_i32 {
                     let mut owner: HSD_GObj<'a> = (ip).xDD4_itemVar().nessbat().x0();
-                    inl_Item_CopyJObjScale_unfused(
-                        ctx,
-                        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj))),
-                        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, owner))),
-                        scale,
-                    );
+                    {
+                        let __t1 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(
+                            ctx, owner,
+                        )));
+                        let __t2 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(
+                            ctx, gobj,
+                        )));
+                        inl_Item_CopyJObjScale_unfused(ctx, __t2, __t1, scale)
+                    };
                 }
             }
         }

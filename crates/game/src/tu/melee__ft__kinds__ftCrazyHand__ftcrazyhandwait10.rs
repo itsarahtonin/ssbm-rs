@@ -207,24 +207,26 @@ pub fn ftCh_Wait1_0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     if (fns::ftBossLib_8015C2E0(ctx) != 0) {
                         tmp = ((data)
                             .x68()
-                            .at(((fp)
-                                .u()
-                                .ch()
-                                .x224C()
-                                .wrapping_mul((5_i32 as u32))
-                                .wrapping_add((fns::HSD_Randi(ctx, 4_i32) as u32))
-                                as i32))
+                            .at(({
+                                let __t1 = (fns::HSD_Randi(ctx, 4_i32) as u32);
+                                (fp).u()
+                                    .ch()
+                                    .x224C()
+                                    .wrapping_mul((5_i32 as u32))
+                                    .wrapping_add(__t1)
+                            } as i32))
                             .get() as i32);
                     } else {
                         tmp = ((data)
                             .x68()
-                            .at(((fp)
-                                .u()
-                                .ch()
-                                .x224C()
-                                .wrapping_mul((5_i32 as u32))
-                                .wrapping_add((fns::HSD_Randi(ctx, 5_i32) as u32))
-                                as i32))
+                            .at(({
+                                let __t2 = (fns::HSD_Randi(ctx, 5_i32) as u32);
+                                (fp).u()
+                                    .ch()
+                                    .x224C()
+                                    .wrapping_mul((5_i32 as u32))
+                                    .wrapping_add(__t2)
+                            } as i32))
                             .get() as i32);
                     }
                     if tmp == 2_i32 {
@@ -240,8 +242,10 @@ pub fn ftCh_Wait1_0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     .states()
                     .at(((data)
                         .x48()
-                        .at(((qwe).a() as i32)
-                            .wrapping_add(fns::HSD_Randi(ctx, ((qwe).b() as i32))))
+                        .at({
+                            let __t3 = fns::HSD_Randi(ctx, ((qwe).b() as i32));
+                            ((qwe).a() as i32).wrapping_add(__t3)
+                        })
                         .get() as i32))
                     .get();
                 (fp).u().ch().set_x224C((tmp as u32));

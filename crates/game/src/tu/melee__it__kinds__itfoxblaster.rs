@@ -821,12 +821,14 @@ pub fn itFoxblaster_UnkMotion10_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) 
         if (!Handle::is_null(it)) && (!Handle::is_null((it).xDD4_itemVar().foxblaster().owner())) {
             if fns::ftCo_800BF228(ctx, (it).xDD4_itemVar().foxblaster().owner()) == 1_i32 {
                 let mut owner: HSD_GObj<'a> = (it).xDD4_itemVar().foxblaster().owner();
-                inl_Item_CopyJObjScale_unfused(
-                    ctx,
-                    (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, item_gobj))),
-                    (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, owner))),
-                    scale,
-                );
+                {
+                    let __t1 =
+                        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, owner)));
+                    let __t2 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(
+                        ctx, item_gobj,
+                    )));
+                    inl_Item_CopyJObjScale_unfused(ctx, __t2, __t1, scale)
+                };
             }
         }
     }

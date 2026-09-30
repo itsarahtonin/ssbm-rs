@@ -100,10 +100,14 @@ pub fn itClimbersBlizzard_802C2248<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             var_f31 = fp::frsp(fp::fsub(var_f31, 6.283185307179586));
         }
     }
-    (ip).x40_vel()
-        .set_x(fp::fmuls((attrs).x4(), fns::cosf(ctx, var_f31)));
-    (ip).x40_vel()
-        .set_y(fp::fmuls((attrs).x4(), fns::sinf(ctx, var_f31)));
+    (ip).x40_vel().set_x({
+        let __t1 = fns::cosf(ctx, var_f31);
+        fp::fmuls((attrs).x4(), __t1)
+    });
+    (ip).x40_vel().set_y({
+        let __t2 = fns::sinf(ctx, var_f31);
+        fp::fmuls((attrs).x4(), __t2)
+    });
     (ip).x40_vel().set_z(0.0);
     fns::it_80275158(ctx, gobj, (attrs).x0());
     (ip).xDD4_itemVar()

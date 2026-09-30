@@ -584,11 +584,15 @@ fn inl_inline0_unfused<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
         'l1: while (i as u32) < (div_u32(28_u32, 4_u32)) {
             'c2: {
                 if (((Handle::add(r30, i)).x1() as i32) == 2_i32)
-                    || (((Handle::add(r30, i)).x1() as i32) == fns::lbLang_GetLanguageSetting(ctx))
+                    || ({
+                        let __t1 = fns::lbLang_GetLanguageSetting(ctx);
+                        ((Handle::add(r30, i)).x1() as i32) == __t1
+                    })
                 {
-                    if (fns::gm_801BEBC0(ctx, (Handle::add(r30, i)).x0()) as i32)
-                        == (fns::gm_801BEBC0(ctx, (arg0 as u8)) as i32)
-                    {
+                    if {
+                        let __t2 = (fns::gm_801BEBC0(ctx, (arg0 as u8)) as i32);
+                        (fns::gm_801BEBC0(ctx, (Handle::add(r30, i)).x0()) as i32) == __t2
+                    } {
                         return ((Handle::add(r30, i)).x2() as i32);
                     }
                 }

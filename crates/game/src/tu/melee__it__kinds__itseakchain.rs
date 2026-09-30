@@ -89,12 +89,16 @@ pub fn it_802BAF2C<'a>(ctx: &'a Ctx, ip: Item<'a>, jobj: HSD_JObj<'a>) -> i32 {
                     Handle::copy_from((link).pos(), zero);
                     (link).set_x2C_b0((0_i32 as u8));
                     fns::it_802A24D0(ctx, link, 1.0);
-                    fns::HSD_GObjObject_80390A70(
-                        ctx,
-                        link_gobj,
-                        fns::HSD_GObj_JObjKind(ctx).get(),
-                        Handle::cast::<Addr<'a>>(inl_it_802BAF2C_Load_x64_unfused(ctx, ip)),
-                    );
+                    {
+                        let __t1 =
+                            Handle::cast::<Addr<'a>>(inl_it_802BAF2C_Load_x64_unfused(ctx, ip));
+                        fns::HSD_GObjObject_80390A70(
+                            ctx,
+                            link_gobj,
+                            fns::HSD_GObj_JObjKind(ctx).get(),
+                            __t1,
+                        )
+                    };
                     fns::GObj_SetupGXLink(
                         ctx,
                         link_gobj,
@@ -139,12 +143,16 @@ pub fn it_802BAF2C<'a>(ctx: &'a Ctx, ip: Item<'a>, jobj: HSD_JObj<'a>) -> i32 {
                     Handle::copy_from((link).pos(), zero);
                     (link).set_x2C_b0((0_i32 as u8));
                     fns::it_802A24D0(ctx, link, 1.0);
-                    fns::HSD_GObjObject_80390A70(
-                        ctx,
-                        link_gobj,
-                        fns::HSD_GObj_JObjKind(ctx).get(),
-                        Handle::cast::<Addr<'a>>(inl_it_802BAF2C_Load_x64_unfused(ctx, ip)),
-                    );
+                    {
+                        let __t2 =
+                            Handle::cast::<Addr<'a>>(inl_it_802BAF2C_Load_x64_unfused(ctx, ip));
+                        fns::HSD_GObjObject_80390A70(
+                            ctx,
+                            link_gobj,
+                            fns::HSD_GObj_JObjKind(ctx).get(),
+                            __t2,
+                        )
+                    };
                     fns::GObj_SetupGXLink(
                         ctx,
                         link_gobj,

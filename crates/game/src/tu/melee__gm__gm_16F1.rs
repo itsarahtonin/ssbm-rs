@@ -189,11 +189,10 @@ pub fn fn_8016F39C<'a>(
                 }
             }
             if matched != 0_i32 {
-                fns::HSD_SisLib_803A6368(
-                    ctx,
-                    (Handle::add(arg0, count)).get(),
-                    (inl_fn_8016F39C_GetSisTextId_unfused(ctx, idx) as i32),
-                );
+                {
+                    let __t1 = (inl_fn_8016F39C_GetSisTextId_unfused(ctx, idx) as i32);
+                    fns::HSD_SisLib_803A6368(ctx, (Handle::add(arg0, count)).get(), __t1)
+                };
                 count = count.wrapping_add(1);
                 if count == (arg2 as i32) {
                     break 'l1;
@@ -580,13 +579,16 @@ pub fn fn_8016FAD4<'a>(
         }
     }
     if ((((entry).x6() as i32) & 1_i32) != 0) && ((flags & 4_i32) != 0) {
-        return (((div_i32(
-            statics::melee__gm__gm_16F1::lbl_803D5648(ctx)
-                .at(((entry).x2() as i32).wrapping_sub(2_i32))
-                .get(),
-            10_i32,
-        )) as u32)
-            .wrapping_mul(fns::pl_80039418(ctx, (player as i32), kind)) as i32);
+        return ({
+            let __t1 = fns::pl_80039418(ctx, (player as i32), kind);
+            ((div_i32(
+                statics::melee__gm__gm_16F1::lbl_803D5648(ctx)
+                    .at(((entry).x2() as i32).wrapping_sub(2_i32))
+                    .get(),
+                10_i32,
+            )) as u32)
+                .wrapping_mul(__t1)
+        } as i32);
     }
     if ((entry).x5() as i32) == 1_i32 {
         if kind == 227_i32 {
@@ -610,11 +612,13 @@ pub fn fn_8016FAD4<'a>(
                 .get()
                 .wrapping_mul(((Handle::add(x58, (player as i32))).self_destructs() as i32));
         } else {
-            return ((statics::melee__gm__gm_16F1::lbl_803D5648(ctx)
-                .at(((entry).x2() as i32).wrapping_sub(2_i32))
-                .get() as u32)
-                .wrapping_mul(fns::pl_80039418(ctx, (player as i32), kind))
-                as i32);
+            return ({
+                let __t2 = fns::pl_80039418(ctx, (player as i32), kind);
+                (statics::melee__gm__gm_16F1::lbl_803D5648(ctx)
+                    .at(((entry).x2() as i32).wrapping_sub(2_i32))
+                    .get() as u32)
+                    .wrapping_mul(__t2)
+            } as i32);
         }
     }
     return statics::melee__gm__gm_16F1::lbl_803D5648(ctx)
@@ -1530,8 +1534,10 @@ pub fn fn_801701C0<'a>(ctx: &'a Ctx, rules: MatchEnd<'a>, arg1: i32, arg2: i32) 
                         j_6 = j_6.wrapping_sub(1);
                     }
                 }
-                if (vals_5.at(0_i32).get() == fns::pl_800407C8(ctx, arg1))
-                    && (vals_5.at(0_i32).get() > fp::fmuls(2.0, vals_5.at(1_i32).get()))
+                if ({
+                    let __t1 = fns::pl_800407C8(ctx, arg1);
+                    vals_5.at(0_i32).get() == __t1
+                }) && (vals_5.at(0_i32).get() > fp::fmuls(2.0, vals_5.at(1_i32).get()))
                 {
                     return 1_i32;
                 }
@@ -1662,7 +1668,10 @@ pub fn fn_801701C0<'a>(ctx: &'a Ctx, rules: MatchEnd<'a>, arg1: i32, arg2: i32) 
         }
         if __case <= 38 {
             if ((fns::pl_800408DC(ctx, arg1) as u32) != (0_i32 as u32))
-                && (((rules).x7() as u32) == (fns::pl_800408DC(ctx, arg1) as u32))
+                && ({
+                    let __t2 = (fns::pl_800408DC(ctx, arg1) as u32);
+                    ((rules).x7() as u32) == __t2
+                })
             {
                 return 1_i32;
             }
@@ -1738,9 +1747,11 @@ pub fn fn_801701C0<'a>(ctx: &'a Ctx, rules: MatchEnd<'a>, arg1: i32, arg2: i32) 
                                 j_7 = j_7.wrapping_sub(1);
                             }
                         }
-                        if (vals_6.at(0_i32).get() == fns::pl_800408B8(ctx, arg1))
-                            && (vals_6.at(0_i32).get()
-                                <= div_u32(vals_6.at(1_i32).get(), (2_i32 as u32)))
+                        if ({
+                            let __t3 = fns::pl_800408B8(ctx, arg1);
+                            vals_6.at(0_i32).get() == __t3
+                        }) && (vals_6.at(0_i32).get()
+                            <= div_u32(vals_6.at(1_i32).get(), (2_i32 as u32)))
                         {
                             return 1_i32;
                         }
@@ -1816,9 +1827,11 @@ pub fn fn_801701C0<'a>(ctx: &'a Ctx, rules: MatchEnd<'a>, arg1: i32, arg2: i32) 
                                 j_8 = j_8.wrapping_sub(1);
                             }
                         }
-                        if (vals_7.at(0_i32).get() == fns::pl_80040894(ctx, arg1))
-                            && (vals_7.at(0_i32).get()
-                                >= vals_7.at(1_i32).get().wrapping_mul((2_i32 as u32)))
+                        if ({
+                            let __t4 = fns::pl_80040894(ctx, arg1);
+                            vals_7.at(0_i32).get() == __t4
+                        }) && (vals_7.at(0_i32).get()
+                            >= vals_7.at(1_i32).get().wrapping_mul((2_i32 as u32)))
                         {
                             return 1_i32;
                         }
@@ -2053,15 +2066,16 @@ pub fn fn_80171BA4<'a>(ctx: &'a Ctx, arg0: Addr<'a>) -> i32 {
                             j = j.wrapping_add(1);
                         }
                     }
-                    if statics::melee__gm__gm_16F1::lbl_804D65B0(ctx).get()
-                        < ({
+                    if {
+                        let __t2 = ({
                             let __t1 = (statics::melee__gm__gm_16F1::lbl_804D65A8(ctx)
                                 .at(player)
                                 .get() as i32);
                             result = __t1;
                             __t1
-                        })
-                    {
+                        });
+                        statics::melee__gm__gm_16F1::lbl_804D65B0(ctx).get() < __t2
+                    } {
                         statics::melee__gm__gm_16F1::lbl_804D65B0(ctx).set(result);
                     }
                 }
@@ -2616,12 +2630,16 @@ pub fn gm_DecideChallengerCpuLevel<'a>(ctx: &'a Ctx, cpu_ckind: u8, human_nameta
     let mut human_nametag = human_nametag;
     let mut var_r0: i32 = 0;
     let mut var_r31: lbl_803B7AD0_t<'a> = inl_inline2_unfused(ctx, cpu_ckind);
-    var_r0 = ((var_r31).x1() as i32).wrapping_sub(((var_r31).x2() as i32).wrapping_mul(
-        (fns::gmMainLib_8015DB6C(
-            ctx,
-            (fns::gm_CKindToUnlockIndex(ctx, (cpu_ckind as i32)) as u8),
-        ) as i32),
-    ));
+    var_r0 = {
+        let __t2 = {
+            let __t1 = (fns::gmMainLib_8015DB6C(
+                ctx,
+                (fns::gm_CKindToUnlockIndex(ctx, (cpu_ckind as i32)) as u8),
+            ) as i32);
+            ((var_r31).x2() as i32).wrapping_mul(__t1)
+        };
+        ((var_r31).x1() as i32).wrapping_sub(__t2)
+    };
     if var_r0 < 0_i32 {
         var_r0 = 0_i32;
     } else if var_r0 > 9_i32 {

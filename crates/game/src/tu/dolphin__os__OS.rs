@@ -40,39 +40,43 @@ pub fn OSGetConsoleType<'a>(ctx: &'a Ctx) -> u32 {
 pub fn ClearArena<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x10);
     if ctx.call::<_, u32>(0x803486b4, ()) != 0x80000000_u32 {
-        let _ = fns::memset(
-            ctx,
-            fns::OSGetArenaLo(ctx),
-            0_i32,
-            Handle::addr(fns::OSGetArenaHi(ctx)).wrapping_sub(Handle::addr(fns::OSGetArenaLo(ctx))),
-        );
+        let _ = {
+            let __t2 = {
+                let __t1 = Handle::addr(fns::OSGetArenaLo(ctx));
+                Handle::addr(fns::OSGetArenaHi(ctx)).wrapping_sub(__t1)
+            };
+            let __t3 = fns::OSGetArenaLo(ctx);
+            fns::memset(ctx, __t3, 0_i32, __t2)
+        };
     } else {
         let mut boot_region_start: u32 = ((ptr::<Val<'a, u32>>(ctx, 0x812fdff0_u32 as u32)).get());
         let mut boot_region_end: u32 = ((ptr::<Val<'a, u32>>(ctx, 0x812fdfec_u32 as u32)).get());
         if boot_region_start == (0_i32 as u32) {
-            let _ = fns::memset(
-                ctx,
-                fns::OSGetArenaLo(ctx),
-                0_i32,
-                Handle::addr(fns::OSGetArenaHi(ctx))
-                    .wrapping_sub(Handle::addr(fns::OSGetArenaLo(ctx))),
-            );
+            let _ = {
+                let __t5 = {
+                    let __t4 = Handle::addr(fns::OSGetArenaLo(ctx));
+                    Handle::addr(fns::OSGetArenaHi(ctx)).wrapping_sub(__t4)
+                };
+                let __t6 = fns::OSGetArenaLo(ctx);
+                fns::memset(ctx, __t6, 0_i32, __t5)
+            };
         } else if Handle::addr(fns::OSGetArenaLo(ctx)) < boot_region_start {
             if Handle::addr(fns::OSGetArenaHi(ctx)) <= boot_region_start {
-                let _ = fns::memset(
-                    ctx,
-                    fns::OSGetArenaLo(ctx),
-                    0_i32,
-                    Handle::addr(fns::OSGetArenaHi(ctx))
-                        .wrapping_sub(Handle::addr(fns::OSGetArenaLo(ctx))),
-                );
+                let _ = {
+                    let __t8 = {
+                        let __t7 = Handle::addr(fns::OSGetArenaLo(ctx));
+                        Handle::addr(fns::OSGetArenaHi(ctx)).wrapping_sub(__t7)
+                    };
+                    let __t9 = fns::OSGetArenaLo(ctx);
+                    fns::memset(ctx, __t9, 0_i32, __t8)
+                };
             } else {
-                let _ = fns::memset(
-                    ctx,
-                    fns::OSGetArenaLo(ctx),
-                    0_i32,
-                    boot_region_start.wrapping_sub(Handle::addr(fns::OSGetArenaLo(ctx))),
-                );
+                let _ = {
+                    let __t10 =
+                        boot_region_start.wrapping_sub(Handle::addr(fns::OSGetArenaLo(ctx)));
+                    let __t11 = fns::OSGetArenaLo(ctx);
+                    fns::memset(ctx, __t11, 0_i32, __t10)
+                };
                 if Handle::addr(fns::OSGetArenaHi(ctx)) > boot_region_end {
                     let _ = fns::memset(
                         ctx,
@@ -297,14 +301,11 @@ pub fn OSInit<'a>(ctx: &'a Ctx) {
                 20_u32,
             ) as u32)],
         );
-        fns::OSReport(
-            ctx,
-            cstr(ctx, 0x804016e8),
-            &[
-                VarArg::Int(Handle::addr(fns::OSGetArenaLo(ctx))),
-                VarArg::Int(Handle::addr(fns::OSGetArenaHi(ctx))),
-            ],
-        );
+        {
+            let __t1 = VarArg::Int(Handle::addr(fns::OSGetArenaHi(ctx)));
+            let __t2 = VarArg::Int(Handle::addr(fns::OSGetArenaLo(ctx)));
+            fns::OSReport(ctx, cstr(ctx, 0x804016e8), &[__t2, __t1])
+        };
         if (!Handle::is_null(statics::dolphin__os__OS::BI2DebugFlag(ctx).get()))
             && ((statics::dolphin__os__OS::BI2DebugFlag(ctx).get()).get() >= (2_i32 as u32))
         {

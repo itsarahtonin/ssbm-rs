@@ -51,10 +51,10 @@ pub fn it_8029B7C0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         Handle::cast::<itUnkAttributes<'a>>(((it).xC4_article_data()).x4_specialAttributes());
     let mut x0: f64 = (ap).x0_float();
     let mut x4: f64 = (ap).x4_float();
-    (it).x40_vel().set_x(fp::fmuls(
-        (it).facing_dir(),
-        (fp::fmuls(x0, fns::cosf(ctx, x4))),
-    ));
+    (it).x40_vel().set_x({
+        let __t1 = (fp::fmuls(x0, fns::cosf(ctx, x4)));
+        fp::fmuls((it).facing_dir(), __t1)
+    });
     (it).x40_vel().set_y(fp::fmuls(x0, fns::sinf(ctx, x4)));
     (it).x40_vel().set_z(0.0);
     fns::it_80275158(ctx, gobj, (ap).x8());

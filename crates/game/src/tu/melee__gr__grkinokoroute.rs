@@ -71,7 +71,11 @@ pub fn grKinokoRoute_802074D8<'a>(ctx: &'a Ctx) {
         val = 0_i32;
     }
     if val == 0_i32 {
-        fns::grZakoGenerator_801CAEB0(ctx, fns::Ground_801C5840(ctx), fns::Ground_801C5940(ctx));
+        {
+            let __t1 = fns::Ground_801C5940(ctx);
+            let __t2 = fns::Ground_801C5840(ctx);
+            fns::grZakoGenerator_801CAEB0(ctx, __t2, __t1)
+        };
     }
     fns::grZakoGenerator_801CADE0(ctx);
 }

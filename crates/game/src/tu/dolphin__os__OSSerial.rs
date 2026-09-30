@@ -50,9 +50,10 @@ pub fn CompleteTransfer<'a>(ctx: &'a Ctx) -> u32 {
     sr = (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006400_u32 as u32)), 14_i32)).get();
     inl_SIClearTCInterrupt_unfused(ctx);
     if statics::dolphin__os__OSSerial::Si(ctx).chan() != 1_i32.wrapping_neg() {
+        let __t1 = ctx.call::<_, i64>(0x8034c410, ());
         statics::dolphin__os__OSSerial::XferTime(ctx)
             .at(statics::dolphin__os__OSSerial::Si(ctx).chan())
-            .set(ctx.call::<_, i64>(0x8034c410, ()));
+            .set(__t1);
         input = Handle::cast::<Val<'a, u8>>(statics::dolphin__os__OSSerial::Si(ctx).input());
         rLen = (div_u32(
             statics::dolphin__os__OSSerial::Si(ctx).inputBytes(),
@@ -88,9 +89,9 @@ pub fn CompleteTransfer<'a>(ctx: &'a Ctx) -> u32 {
                 'l3: while i < rLen {
                     'c4: {
                         ({
-                            let __t1 = input;
+                            let __t2 = input;
                             input = Handle::add(input, 1);
-                            __t1
+                            __t2
                         })
                         .set(
                             (shr_u32(
@@ -129,9 +130,10 @@ pub fn CompleteTransfer<'a>(ctx: &'a Ctx) -> u32 {
                 sr = (4_i32 as u32);
             }
         } else {
+            let __t3 = (ctx.call::<_, i64>(0x8034c410, ()) as u64);
             statics::dolphin__os__OSSerial::TypeTime(ctx)
                 .at(statics::dolphin__os__OSSerial::Si(ctx).chan())
-                .set((ctx.call::<_, i64>(0x8034c410, ()) as u64));
+                .set(__t3);
             sr = (0_i32 as u32);
         }
         statics::dolphin__os__OSSerial::Si(ctx).set_chan(1_i32.wrapping_neg());
@@ -1087,7 +1089,10 @@ fn inl_SITransferNext_unfused<'a>(ctx: &'a Ctx, chan: i32) {
                 chan = rem_i32(chan, 4_i32);
                 packet = statics::dolphin__os__OSSerial::Packet(ctx).get(chan);
                 if (packet).chan() != 1_i32.wrapping_neg() {
-                    if (packet).time() <= ctx.call::<_, i64>(0x8034c410, ()) {
+                    if {
+                        let __t1 = ctx.call::<_, i64>(0x8034c410, ());
+                        (packet).time() <= __t1
+                    } {
                         if statics::dolphin__os__OSSerial::__SITransfer(
                             ctx,
                             (packet).chan(),

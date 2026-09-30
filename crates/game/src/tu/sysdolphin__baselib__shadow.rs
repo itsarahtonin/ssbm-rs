@@ -586,12 +586,10 @@ pub fn makeMatrix<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>) {
             });
         }
     }
-    fns::PSMTXConcat(
-        ctx,
-        Mprj.get(0),
-        inl_HSD_CObjGetViewingMtxPtrDirect_unfused(ctx, (shadow).camera()),
-        ((shadow).texture()).mtx().get(0),
-    );
+    {
+        let __t1 = inl_HSD_CObjGetViewingMtxPtrDirect_unfused(ctx, (shadow).camera());
+        fns::PSMTXConcat(ctx, Mprj.get(0), __t1, ((shadow).texture()).mtx().get(0))
+    };
 }
 
 pub fn HSD_ShadowSetViewingRect<'a>(
@@ -643,12 +641,18 @@ pub fn HSD_ShadowSetViewingRect<'a>(
             {
                 let mut width: f64 = 0.0;
                 let mut height: f64 = 0.0;
-                if inl_fabsf_bitwise_unfused(ctx, top) > inl_fabsf_bitwise_unfused(ctx, bottom) {
+                if {
+                    let __t1 = inl_fabsf_bitwise_unfused(ctx, bottom);
+                    inl_fabsf_bitwise_unfused(ctx, top) > __t1
+                } {
                     width = inl_fabsf_bitwise_unfused(ctx, top);
                 } else {
                     width = inl_fabsf_bitwise_unfused(ctx, bottom);
                 }
-                if inl_fabsf_bitwise_unfused(ctx, left) > inl_fabsf_bitwise_unfused(ctx, right) {
+                if {
+                    let __t2 = inl_fabsf_bitwise_unfused(ctx, right);
+                    inl_fabsf_bitwise_unfused(ctx, left) > __t2
+                } {
                     height = inl_fabsf_bitwise_unfused(ctx, left);
                 } else {
                     height = inl_fabsf_bitwise_unfused(ctx, right);

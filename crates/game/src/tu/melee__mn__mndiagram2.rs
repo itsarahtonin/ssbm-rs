@@ -184,11 +184,11 @@ pub fn mnDiagram2_UpdateHeader<'a>(
         if !Handle::is_null(jobj) {
             fns::HSD_JObjRemoveAll(ctx, jobj);
         }
-        fns::HSD_JObjAddChild(
-            ctx,
-            (data).x18(),
-            fns::mnDiagram_CreateFighterIcon(ctx, (nametag_slot_or_selkind as i32), 0_i32),
-        );
+        {
+            let __t1 =
+                fns::mnDiagram_CreateFighterIcon(ctx, (nametag_slot_or_selkind as i32), 0_i32);
+            fns::HSD_JObjAddChild(ctx, (data).x18(), __t1)
+        };
     }
     if !Handle::is_null((data).header_text()) {
         fns::HSD_SisLib_803A5CC4(ctx, (data).header_text());
@@ -1974,18 +1974,22 @@ pub fn mnDiagram2_UpdateScrollArrows<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     jobj = (data).right_arrow();
     let _ = fns::mn_8022ED6C(ctx, jobj, (base).anim().get(1_i32));
     if ((data).is_name_mode() as i32) != 0_i32 {
-        if ((data).selected_name_idx() as i32)
-            != (fns::mnDiagram_GetNextNameIndex(ctx, ((data).selected_name_idx() as i32)) as i32)
-        {
+        if {
+            let __t1 =
+                (fns::mnDiagram_GetNextNameIndex(ctx, ((data).selected_name_idx() as i32)) as i32);
+            ((data).selected_name_idx() as i32) != __t1
+        } {
             fns::HSD_JObjClearFlagsAll(ctx, jobj, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
         } else {
             fns::HSD_JObjSetFlagsAll(ctx, jobj, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
         }
     } else {
-        if ((data).selected_fighter_idx() as i32)
-            != (fns::mnDiagram_GetNextFighterIndex(ctx, ((data).selected_fighter_idx() as i32))
-                as i32)
-        {
+        if {
+            let __t2 =
+                (fns::mnDiagram_GetNextFighterIndex(ctx, ((data).selected_fighter_idx() as i32))
+                    as i32);
+            ((data).selected_fighter_idx() as i32) != __t2
+        } {
             fns::HSD_JObjClearFlagsAll(ctx, jobj, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
         } else {
             fns::HSD_JObjSetFlagsAll(ctx, jobj, ((shl_i32(1_i32, (4_i32 as u32))) as u32));

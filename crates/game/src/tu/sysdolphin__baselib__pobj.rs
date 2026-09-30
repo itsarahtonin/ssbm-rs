@@ -2220,12 +2220,15 @@ pub fn SetupEnvelopeModelMtx<'a>(
                         inl_HSD_PerfCountMtxLoad_unfused(ctx);
                     }
                     if (((flags as u32) & ((enums::SETUP_NORMAL_PROJECTION as i32) as u32)) != 0) {
-                        fns::GXLoadTexMtxImm(
-                            ctx,
-                            mtx_2.get(0),
-                            (fns::HSD_Index2TexMtx(ctx, (MtxIdx as u32)) as u32),
-                            (enums::GX_MTX3x4 as i32),
-                        );
+                        {
+                            let __t12 = (fns::HSD_Index2TexMtx(ctx, (MtxIdx as u32)) as u32);
+                            fns::GXLoadTexMtxImm(
+                                ctx,
+                                mtx_2.get(0),
+                                __t12,
+                                (enums::GX_MTX3x4 as i32),
+                            )
+                        };
                         inl_HSD_PerfCountMtxLoad_unfused(ctx);
                     }
                 }

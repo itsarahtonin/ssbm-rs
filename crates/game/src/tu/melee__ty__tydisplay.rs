@@ -1069,16 +1069,16 @@ pub fn _tyDisplay_80319EF0<'a>(ctx: &'a Ctx) {
     {
         let mut zmin: f64 = 0.0;
         if ({
-            let __t3 = fp::fsubs(
-                (grid).x10_max_z(),
-                ({
+            let __t4 = {
+                let __t3 = ({
                     let __t2 = (grid).x08_min_z();
                     zmin = __t2;
                     __t2
-                }),
-            );
-            range = __t3;
-            __t3
+                });
+                fp::fsubs((grid).x10_max_z(), __t3)
+            };
+            range = __t4;
+            __t4
         }) < 0.0
         {
             range = fp::fneg(range);
@@ -1505,46 +1505,38 @@ pub fn _tyDisplay_8031A94C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             || ((fns::Toy_80305B88(ctx) & 1_i32) != 0)
         {
             inl_HSD_JObjAddTranslationX(ctx, trophy, fp::fneg(0.009999999776482582));
-            statics::melee__ty__tydisplay::_tyDisplay_8031BA78(
-                ctx,
-                (cfg).x7C(),
-                0_i32,
-                inl_HSD_JObjGetTranslationX(ctx, trophy),
-            );
+            {
+                let __t1 = inl_HSD_JObjGetTranslationX(ctx, trophy);
+                statics::melee__ty__tydisplay::_tyDisplay_8031BA78(ctx, (cfg).x7C(), 0_i32, __t1)
+            };
         }
         if (((fns::Toy_80305C44(ctx) & 0x100_i32) != 0) && ((cfg).x20() > 0.800000011920929))
             || ((fns::Toy_80305B88(ctx) & 2_i32) != 0)
         {
             inl_HSD_JObjAddTranslationX(ctx, trophy, 0.009999999776482582);
-            statics::melee__ty__tydisplay::_tyDisplay_8031BA78(
-                ctx,
-                (cfg).x7C(),
-                0_i32,
-                inl_HSD_JObjGetTranslationX(ctx, trophy),
-            );
+            {
+                let __t2 = inl_HSD_JObjGetTranslationX(ctx, trophy);
+                statics::melee__ty__tydisplay::_tyDisplay_8031BA78(ctx, (cfg).x7C(), 0_i32, __t2)
+            };
         }
         if (((fns::Toy_80305C44(ctx) & 0x100_i32) != 0) && ((cfg).x24() > 0.800000011920929))
             || ((fns::Toy_80305B88(ctx) & 8_i32) != 0)
         {
             inl_HSD_JObjAddTranslationZ(ctx, trophy, fp::fneg(0.009999999776482582));
-            statics::melee__ty__tydisplay::_tyDisplay_8031BA78(
-                ctx,
-                (cfg).x7C(),
-                2_i32,
-                inl_HSD_JObjGetTranslationZ(ctx, trophy),
-            );
+            {
+                let __t3 = inl_HSD_JObjGetTranslationZ(ctx, trophy);
+                statics::melee__ty__tydisplay::_tyDisplay_8031BA78(ctx, (cfg).x7C(), 2_i32, __t3)
+            };
         }
         if (((fns::Toy_80305C44(ctx) & 0x100_i32) != 0)
             && ((cfg).x24() < fp::fneg(0.800000011920929)))
             || ((fns::Toy_80305B88(ctx) & 4_i32) != 0)
         {
             inl_HSD_JObjAddTranslationZ(ctx, trophy, 0.009999999776482582);
-            statics::melee__ty__tydisplay::_tyDisplay_8031BA78(
-                ctx,
-                (cfg).x7C(),
-                2_i32,
-                inl_HSD_JObjGetTranslationZ(ctx, trophy),
-            );
+            {
+                let __t4 = inl_HSD_JObjGetTranslationZ(ctx, trophy);
+                statics::melee__ty__tydisplay::_tyDisplay_8031BA78(ctx, (cfg).x7C(), 2_i32, __t4)
+            };
         }
         if ((fns::Toy_80305B88(ctx) & 32_i32) != 0) {
             fns::HSD_GObjFree(ctx, (cfg).x78());
@@ -1716,16 +1708,14 @@ pub fn _tyDisplay_8031B1FC<'a>(ctx: &'a Ctx) {
             (zero as u8),
         ));
         jobj = fns::HSD_JObjLoadJoint(ctx, joint);
-        fns::HSD_GObjObject_80390A70(
-            ctx,
-            (ptr_).gobj4(),
-            {
+        {
+            let __t2 = {
                 let __t1 = fns::HSD_GObj_JObjKind(ctx).get();
                 temp = __t1;
                 __t1
-            },
-            Handle::cast::<Addr<'a>>(jobj),
-        );
+            };
+            fns::HSD_GObjObject_80390A70(ctx, (ptr_).gobj4(), __t2, Handle::cast::<Addr<'a>>(jobj))
+        };
         fns::GObj_SetupGXLink(
             ctx,
             (ptr_).gobj4(),
@@ -1850,16 +1840,15 @@ pub fn _tyDisplay_8031B328<'a>(ctx: &'a Ctx) {
             (4_i32 as u8),
             (0_i32 as u8),
         ));
-        fns::HSD_GObjObject_80390A70(
-            ctx,
-            (scene).x08(),
-            ({
+        {
+            let __t5 = Handle::cast::<Addr<'a>>(fns::HSD_FogLoadDesc(ctx, fogDesc));
+            let __t6 = ({
                 let __t4 = fns::HSD_GObj_FogKind(ctx).get();
                 temp2 = __t4;
                 __t4
-            } as u8),
-            Handle::cast::<Addr<'a>>(fns::HSD_FogLoadDesc(ctx, fogDesc)),
-        );
+            } as u8);
+            fns::HSD_GObjObject_80390A70(ctx, (scene).x08(), __t6, __t5)
+        };
         fns::GObj_SetupGXLink(
             ctx,
             (scene).x08(),
@@ -2000,16 +1989,14 @@ pub fn tyDisplay_Scene_OnEnter<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
             (2_i32 as u8),
             (0_i32 as u8),
         ));
-        fns::HSD_GObjObject_80390A70(
-            ctx,
-            (cfg2).x00(),
-            {
+        {
+            let __t2 = {
                 let __t1 = fns::HSD_GObj_CameraKind(ctx).get();
                 kind = __t1;
                 __t1
-            },
-            Handle::cast::<Addr<'a>>(cobj),
-        );
+            };
+            fns::HSD_GObjObject_80390A70(ctx, (cfg2).x00(), __t2, Handle::cast::<Addr<'a>>(cobj))
+        };
         fns::GObj_SetupGXLinkMax(ctx, (cfg2).x00(), fnptr(ctx, 0x803068e0), (0_i32 as u32));
         {
             let mut gobj: HSD_GObj<'a> = (cfg2).x00();
@@ -2040,9 +2027,9 @@ pub fn tyDisplay_Scene_OnEnter<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
         let mut m: i32 = 0;
         's5: {
             let __case = match {
-                let __t2 = (grid).x00();
-                m = __t2;
-                __t2
+                let __t3 = (grid).x00();
+                m = __t3;
+                __t3
             } {
                 0_i32 => 0,
                 1_i32 => 0,
@@ -2664,12 +2651,13 @@ pub fn tyDisplay_8031C454<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
         if ((idx as i8) as i32) == 1_i32.wrapping_neg() {
             idx = (0_i32 as u8);
         }
-        (Handle::add(archArr, ((entry).x04() as i32))).set(fns::lbArchive_LoadSymbols(
+        let __t1 = fns::lbArchive_LoadSymbols(
             ctx,
             names1.entries().at(((idx as i8) as i32)).get(),
             null::<Addr<'a>>(ctx),
             &[],
-        ));
+        );
+        (Handle::add(archArr, ((entry).x04() as i32))).set(__t1);
     } else {
         result = 1_i32;
     }

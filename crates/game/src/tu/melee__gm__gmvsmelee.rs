@@ -353,11 +353,14 @@ pub fn gmVsMelee_ExitVs<'a>(ctx: &'a Ctx, state: GameModeState<'a>, id0: u8, id1
             (exit).match_end().match_kind(),
             (exit).match_end().outcome(),
         );
-        fns::gm_SetupResultsScreenPlayTime(
-            ctx,
-            div_u32((exit).match_end().frame_count(), (60_i32 as u32)),
-            fns::gm_80162800(ctx, (exit).match_end()),
-        );
+        {
+            let __t1 = fns::gm_80162800(ctx, (exit).match_end());
+            fns::gm_SetupResultsScreenPlayTime(
+                ctx,
+                div_u32((exit).match_end().frame_count(), (60_i32 as u32)),
+                __t1,
+            )
+        };
     }
     if !(fns::gm_MatchHasMultipleWinners(ctx, (exit).match_end()) != 0) {
         fns::gm_SetNextGameModeStateId(ctx, id0);

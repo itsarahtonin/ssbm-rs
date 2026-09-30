@@ -109,18 +109,16 @@ pub fn ftKb_SpecialHi_800F346C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 (fp).dmg()
                     .set_x1834(fp::frsp((dat_attr).speciallw_hp() as f64));
                 (fp).u().kb().hat().set_x4({
-                    let __t1 = (rem_i32(
-                        ((fp)
-                            .u()
-                            .kb()
-                            .hat()
-                            .x4()
-                            .wrapping_add(fns::HSD_Randi(ctx, 4_i32))),
+                    let __t2 = (rem_i32(
+                        ({
+                            let __t1 = fns::HSD_Randi(ctx, 4_i32);
+                            (fp).u().kb().hat().x4().wrapping_add(__t1)
+                        }),
                         5_i32,
                     ))
                     .wrapping_add(new_var);
-                    (fp).mv().kb().specialhi().x10().set_i(__t1);
-                    __t1
+                    (fp).mv().kb().specialhi().x10().set_i(__t2);
+                    __t2
                 });
                 (fp).mv().kb().specialhi().set_x14(0_i32);
                 (fp).mv().kb().specialhi().set_xC(1_i32);
@@ -166,14 +164,14 @@ pub fn ftKb_SpecialHi_800F3570<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).mv().kb().specialhi().x18(),
         (fp).coll_data().floor().normal(),
     );
-    (fp).mv().kb().specialhi().set_xC4(fp::fmuls(
-        (fp).facing_dir(),
-        fns::atan2f(
+    (fp).mv().kb().specialhi().set_xC4({
+        let __t1 = fns::atan2f(
             ctx,
             (fp).mv().kb().specialhi().x18().x(),
             (fp).mv().kb().specialhi().x18().y(),
-        ),
-    ));
+        );
+        fp::fmuls((fp).facing_dir(), __t1)
+    });
     if 0.0 != (fp).mv().kb().specialhi().x18().x() {
         pos = (fp).cur_pos().y();
         pos_x_alias = (fp).cur_pos().x();
@@ -209,9 +207,9 @@ pub fn ftKb_SpecialHi_800F3570<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 Handle::copy_from((fp).mv().kb().specialhi().x18(), (p).vec());
                 (fp).set_xE4_ground_accel_1(
                     ({
-                        let __t1 = 0.0;
-                        (fp).mv().kb().specialhi().set_xC4(__t1);
-                        __t1
+                        let __t2 = 0.0;
+                        (fp).mv().kb().specialhi().set_xC4(__t2);
+                        __t2
                     }),
                 );
                 (fp).set_gr_vel(0.0);

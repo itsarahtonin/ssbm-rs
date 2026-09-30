@@ -240,12 +240,10 @@ pub fn gm_8017E7FC<'a>(ctx: &'a Ctx, matchResult: u8) {
     let mut cond: i32 = 0;
     if (((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_ADVENTURE as i32))
         && (((r31).x0().x0().cpu_level() as i32) >= 2_i32))
-        && ((r31)
-            .x0()
-            .xC()
-            .x20()
-            .wrapping_add(fns::gm_GetFrameCount(ctx))
-            < 0xfd20_u32)
+        && ({
+            let __t1 = fns::gm_GetFrameCount(ctx);
+            (r31).x0().xC().x20().wrapping_add(__t1)
+        } < 0xfd20_u32)
     {
         cond = 1_i32;
     } else {
@@ -278,11 +276,10 @@ pub fn fn_8017E8A4<'a>(ctx: &'a Ctx, arg0_int: i32) {
     }
     if ((gm).start().x4_5() != 0) {
         main_data = fns::gmMainLib_8015CDD4(ctx);
-        total_time = (adv)
-            .x0()
-            .xC()
-            .x20()
-            .wrapping_add(fns::gm_GetFrameCount(ctx));
+        total_time = {
+            let __t1 = fns::gm_GetFrameCount(ctx);
+            (adv).x0().xC().x20().wrapping_add(__t1)
+        };
         (Handle::cast::<u8_bits<'a>>((Handle::add(flags, 0_i32)))).set_b6((1_i32 as u8));
         if ((adv).x0().x0().cpu_level() as i32) == 4_i32 {
             (Handle::cast::<u8_bits<'a>>((Handle::add(flags, 0_i32)))).set_b3((1_i32 as u8));

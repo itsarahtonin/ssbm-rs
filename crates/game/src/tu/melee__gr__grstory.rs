@@ -352,13 +352,16 @@ fn inl_randi_unfused<'a>(ctx: &'a Ctx, max_val: i32) -> i32 {
 
 fn inl_reset_shyguy_timer_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>) {
     let mut gp = gp;
-    (gp).u().shyguys().set_timer(fp::fctiwz(fp::fadds(
-        (statics::melee__gr__grstory::yakumono_param(ctx).get()).timer_min(),
-        fp::frsp(inl_randi_unfused(
+    (gp).u().shyguys().set_timer(fp::fctiwz({
+        let __t1 = fp::frsp(inl_randi_unfused(
             ctx,
             fp::fctiwz((statics::melee__gr__grstory::yakumono_param(ctx).get()).timer_rand()),
-        ) as f64),
-    )));
+        ) as f64);
+        fp::fadds(
+            (statics::melee__gr__grstory::yakumono_param(ctx).get()).timer_min(),
+            __t1,
+        )
+    }));
     (gp).u().shyguys().set_timer(120_i32);
 }
 
@@ -377,13 +380,16 @@ fn inl_randi<'a>(ctx: &'a Ctx, max_val: i32) -> i32 {
 
 fn inl_reset_shyguy_timer<'a>(ctx: &'a Ctx, gp: Ground<'a>) {
     let mut gp = gp;
-    (gp).u().shyguys().set_timer(fp::fctiwz(fp::fadds(
-        (statics::melee__gr__grstory::yakumono_param(ctx).get()).timer_min(),
-        fp::frsp(inl_randi(
+    (gp).u().shyguys().set_timer(fp::fctiwz({
+        let __t1 = fp::frsp(inl_randi(
             ctx,
             fp::fctiwz((statics::melee__gr__grstory::yakumono_param(ctx).get()).timer_rand()),
-        ) as f64),
-    )));
+        ) as f64);
+        fp::fadds(
+            (statics::melee__gr__grstory::yakumono_param(ctx).get()).timer_min(),
+            __t1,
+        )
+    }));
     (gp).u().shyguys().set_timer(120_i32);
 }
 

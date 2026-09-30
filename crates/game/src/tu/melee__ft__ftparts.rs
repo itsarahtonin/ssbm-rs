@@ -409,11 +409,10 @@ pub fn ftPartsSetupEnvelopeMtx<'a>(
                     inl_ftPartsSetupZScaleMtx_unfused(ctx, tmp.get(0), mtx.get(0));
                     inl_ftPartsSetupNrmMtx_unfused(ctx, jobj, mtx.get(0), (mtx_id as i32));
                     if (((flags as u32) & ((enums::SETUP_NORMAL_PROJECTION as i32) as u32)) != 0) {
-                        inl_ftPartsSetupTexMtx_unfused(
-                            ctx,
-                            mtx.get(0),
-                            fns::HSD_Index2TexMtx(ctx, (i as u32)),
-                        );
+                        {
+                            let __t12 = fns::HSD_Index2TexMtx(ctx, (i as u32));
+                            inl_ftPartsSetupTexMtx_unfused(ctx, mtx.get(0), __t12)
+                        };
                     }
                 }
                 envelope_list = (envelope_list).next();

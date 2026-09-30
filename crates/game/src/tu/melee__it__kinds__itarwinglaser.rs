@@ -1850,7 +1850,11 @@ pub fn it_802E8420<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             break 's1;
         }
         if __case <= 1 {
-            if fp::fmuls((ip).x40_vel().x(), fns::ftLib_GetFacingDir(ctx, gobj)) < 0.0 {
+            if {
+                let __t1 = fns::ftLib_GetFacingDir(ctx, gobj);
+                fp::fmuls((ip).x40_vel().x(), __t1)
+            } < 0.0
+            {
                 (ip).set_facing_dir(fp::fneg((ip).facing_dir()));
             }
             break 's1;

@@ -366,25 +366,25 @@ pub fn itLgunbeam_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     Handle::copy_from((ip).xDD4_itemVar().lgunbeam().position0(), (ip).pos());
     (ip).xDD4_itemVar().lgunbeam().velocity().set_x({
-        let __t1 = fp::fmuls(
-            (ip).xDD4_itemVar().lgunbeam().angle1(),
-            fns::sinf(ctx, (ip).xDD4_itemVar().lgunbeam().angle0()),
-        );
-        (ip).x40_vel().set_x(__t1);
-        __t1
-    });
-    (ip).xDD4_itemVar().lgunbeam().velocity().set_y({
-        let __t2 = fp::fmuls(
-            (ip).xDD4_itemVar().lgunbeam().angle1(),
-            fns::cosf(ctx, (ip).xDD4_itemVar().lgunbeam().angle0()),
-        );
-        (ip).x40_vel().set_y(__t2);
+        let __t2 = {
+            let __t1 = fns::sinf(ctx, (ip).xDD4_itemVar().lgunbeam().angle0());
+            fp::fmuls((ip).xDD4_itemVar().lgunbeam().angle1(), __t1)
+        };
+        (ip).x40_vel().set_x(__t2);
         __t2
     });
+    (ip).xDD4_itemVar().lgunbeam().velocity().set_y({
+        let __t4 = {
+            let __t3 = fns::cosf(ctx, (ip).xDD4_itemVar().lgunbeam().angle0());
+            fp::fmuls((ip).xDD4_itemVar().lgunbeam().angle1(), __t3)
+        };
+        (ip).x40_vel().set_y(__t4);
+        __t4
+    });
     (ip).xDD4_itemVar().lgunbeam().velocity().set_z({
-        let __t3 = 0.0;
-        (ip).x40_vel().set_z(__t3);
-        __t3
+        let __t5 = 0.0;
+        (ip).x40_vel().set_z(__t5);
+        __t5
     });
     let _ = fns::lbVector_Normalize(ctx, (ip).xDD4_itemVar().lgunbeam().velocity());
 }

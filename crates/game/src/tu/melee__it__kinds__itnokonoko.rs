@@ -60,7 +60,10 @@ pub fn itNokonoko_Logic3_DmgReceived<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i3
     }
     (ip).set_init_facing_dir((ip).facing_dir());
     (ip).set_xC9C(fp::fctiwz(
-        (fp::fadds(fp::frsp((ip).xC9C() as f64), fns::it_8027CBFC(ctx, gobj))),
+        ({
+            let __t1 = fns::it_8027CBFC(ctx, gobj);
+            fp::fadds(fp::frsp((ip).xC9C() as f64), __t1)
+        }),
     ));
     if (ip).msid() == 10_i32 {
         fns::it_802DD78C(ctx, gobj);

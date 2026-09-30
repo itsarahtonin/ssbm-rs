@@ -344,34 +344,36 @@ pub fn itNesspkthunderball_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>)
                     == Handle::addr((ip).xDD4_itemVar().pkthunder().xF04())
                 {
                     let mut dir: f64 = (ip).facing_dir();
+                    let __t1 = fns::it_802AC43C(
+                        ctx,
+                        (ip).xDD4_itemVar().pkthunder().xF04(),
+                        gobj,
+                        (ip).pos(),
+                        (ip).xDD4_itemVar().pkthunder().xEFC(),
+                        ((ip).xAC4_ignoreItemID() as i32),
+                        dir,
+                    );
                     (ip).xDD4_itemVar()
                         .pkthunder()
                         .xDD4()
                         .at((ip).xDD4_itemVar().pkthunder().xEFC())
-                        .set(fns::it_802AC43C(
-                            ctx,
-                            (ip).xDD4_itemVar().pkthunder().xF04(),
-                            gobj,
-                            (ip).pos(),
-                            (ip).xDD4_itemVar().pkthunder().xEFC(),
-                            ((ip).xAC4_ignoreItemID() as i32),
-                            dir,
-                        ));
+                        .set(__t1);
                 } else {
                     let mut dir_2: f64 = (ip).facing_dir();
+                    let __t2 = fns::it_802AC43C(
+                        ctx,
+                        null::<HSD_GObj<'a>>(ctx),
+                        gobj,
+                        (ip).pos(),
+                        (ip).xDD4_itemVar().pkthunder().xEFC(),
+                        ((ip).xAC4_ignoreItemID() as i32),
+                        dir_2,
+                    );
                     (ip).xDD4_itemVar()
                         .pkthunder()
                         .xDD4()
                         .at((ip).xDD4_itemVar().pkthunder().xEFC())
-                        .set(fns::it_802AC43C(
-                            ctx,
-                            null::<HSD_GObj<'a>>(ctx),
-                            gobj,
-                            (ip).pos(),
-                            (ip).xDD4_itemVar().pkthunder().xEFC(),
-                            ((ip).xAC4_ignoreItemID() as i32),
-                            dir_2,
-                        ));
+                        .set(__t2);
                 }
                 (ip).xDD4_itemVar()
                     .pkthunder()
@@ -514,20 +516,20 @@ pub fn itNesspkthunderball_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>)
                         )));
                 }
             }
-            (ip).x40_vel().set_x(fp::fmuls(
-                (ip).xDD4_itemVar().pkthunder().xEEC(),
-                fns::cosf(
+            (ip).x40_vel().set_x({
+                let __t1 = fns::cosf(
                     ctx,
                     (ip).xDD4_itemVar().pkthunder().angles().at(0_i32).get(),
-                ),
-            ));
-            (ip).x40_vel().set_y(fp::fmuls(
-                (ip).xDD4_itemVar().pkthunder().xEEC(),
-                fns::sinf(
+                );
+                fp::fmuls((ip).xDD4_itemVar().pkthunder().xEEC(), __t1)
+            });
+            (ip).x40_vel().set_y({
+                let __t2 = fns::sinf(
                     ctx,
                     (ip).xDD4_itemVar().pkthunder().angles().at(0_i32).get(),
-                ),
-            ));
+                );
+                fp::fmuls((ip).xDD4_itemVar().pkthunder().xEEC(), __t2)
+            });
             (ip).x40_vel().set_z(0.0);
         }
     } else {
@@ -641,20 +643,20 @@ pub fn it_802AC098<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             i = i.wrapping_add(1);
         }
     }
-    (ip).x40_vel().set_x(fp::fmuls(
-        (ip).xDD4_itemVar().pkthunder().xEEC(),
-        fns::cosf(
+    (ip).x40_vel().set_x({
+        let __t1 = fns::cosf(
             ctx,
             (ip).xDD4_itemVar().pkthunder().angles().at(0_i32).get(),
-        ),
-    ));
-    (ip).x40_vel().set_y(fp::fmuls(
-        (ip).xDD4_itemVar().pkthunder().xEEC(),
-        fns::sinf(
+        );
+        fp::fmuls((ip).xDD4_itemVar().pkthunder().xEEC(), __t1)
+    });
+    (ip).x40_vel().set_y({
+        let __t2 = fns::sinf(
             ctx,
             (ip).xDD4_itemVar().pkthunder().angles().at(0_i32).get(),
-        ),
-    ));
+        );
+        fp::fmuls((ip).xDD4_itemVar().pkthunder().xEEC(), __t2)
+    });
     (ip).x40_vel().set_z(0.0);
     return 0_i32;
 }

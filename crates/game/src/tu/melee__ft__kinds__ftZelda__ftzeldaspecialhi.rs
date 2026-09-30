@@ -474,10 +474,13 @@ pub fn ftZd_SpecialHi_8013A058<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 );
                 (fp).mv().zd().specialhi().x4().set_x(inputVector.x());
                 (fp).mv().zd().specialhi().x4().set_y(inputVector.y());
-                temp_f6 = fp::fmuls(
-                    (fp::fmadds((attributes).x54(), var_f31, (attributes).x58())),
-                    fns::cosf(ctx, temp_f5),
-                );
+                temp_f6 = {
+                    let __t1 = fns::cosf(ctx, temp_f5);
+                    fp::fmuls(
+                        (fp::fmadds((attributes).x54(), var_f31, (attributes).x58())),
+                        __t1,
+                    )
+                };
                 (fp).set_gr_vel(fp::fmuls((fp).facing_dir(), temp_f6));
                 fns::Fighter_ChangeMotionState(
                     ctx,
@@ -592,17 +595,23 @@ pub fn ftZd_SpecialHi_8013A244<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             __t1
         };
     }
-    (fp).self_vel().set_x(fp::fmuls(
-        (fp).facing_dir(),
-        (fp::fmuls(
+    (fp).self_vel().set_x({
+        let __t3 = ({
+            let __t2 = fns::cosf(ctx, var_f30);
+            fp::fmuls(
+                (fp::fmadds((attributes).x54(), var_f31, (attributes).x58())),
+                __t2,
+            )
+        });
+        fp::fmuls((fp).facing_dir(), __t3)
+    });
+    (fp).self_vel().set_y({
+        let __t4 = fns::sinf(ctx, var_f30);
+        fp::fmuls(
             (fp::fmadds((attributes).x54(), var_f31, (attributes).x58())),
-            fns::cosf(ctx, var_f30),
-        )),
-    ));
-    (fp).self_vel().set_y(fp::fmuls(
-        (fp::fmadds((attributes).x54(), var_f31, (attributes).x58())),
-        fns::sinf(ctx, var_f30),
-    ));
+            __t4,
+        )
+    });
     fns::Fighter_ChangeMotionState(
         ctx,
         gobj,

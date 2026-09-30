@@ -1863,11 +1863,8 @@ pub fn fn_80198D18<'a>(ctx: &'a Ctx) {
     );
     inl_fn_80198C60_unfused(ctx);
     gobj = fns::GObj_Create(ctx, (14_i32 as u16), (26_i32 as u8), (0_i32 as u8));
-    fns::HSD_GObjObject_80390A70(
-        ctx,
-        gobj,
-        (fns::HSD_GObj_FogKind(ctx).get() as u8),
-        Handle::cast::<Addr<'a>>(
+    {
+        let __t1 = Handle::cast::<Addr<'a>>(
             ({
                 fns::HSD_FogLoadDesc(
                     ctx,
@@ -1878,8 +1875,9 @@ pub fn fn_80198D18<'a>(ctx: &'a Ctx) {
                     .desc(),
                 )
             }),
-        ),
-    );
+        );
+        fns::HSD_GObjObject_80390A70(ctx, gobj, (fns::HSD_GObj_FogKind(ctx).get() as u8), __t1)
+    };
     fns::GObj_SetupGXLink(
         ctx,
         gobj,
@@ -4168,11 +4166,8 @@ fn inl_fn_80198D18<'a>(ctx: &'a Ctx) {
     );
     fns::fn_80198C60(ctx);
     gobj = fns::GObj_Create(ctx, (14_i32 as u16), (26_i32 as u8), (0_i32 as u8));
-    fns::HSD_GObjObject_80390A70(
-        ctx,
-        gobj,
-        (fns::HSD_GObj_FogKind(ctx).get() as u8),
-        Handle::cast::<Addr<'a>>(
+    {
+        let __t1 = Handle::cast::<Addr<'a>>(
             ({
                 fns::HSD_FogLoadDesc(
                     ctx,
@@ -4183,8 +4178,9 @@ fn inl_fn_80198D18<'a>(ctx: &'a Ctx) {
                     .desc(),
                 )
             }),
-        ),
-    );
+        );
+        fns::HSD_GObjObject_80390A70(ctx, gobj, (fns::HSD_GObj_FogKind(ctx).get() as u8), __t1)
+    };
     fns::GObj_SetupGXLink(
         ctx,
         gobj,
@@ -4311,11 +4307,8 @@ fn inl_fn_80198D18_unfused<'a>(ctx: &'a Ctx) {
     );
     fns::fn_80198C60(ctx);
     gobj = fns::GObj_Create(ctx, (14_i32 as u16), (26_i32 as u8), (0_i32 as u8));
-    fns::HSD_GObjObject_80390A70(
-        ctx,
-        gobj,
-        (fns::HSD_GObj_FogKind(ctx).get() as u8),
-        Handle::cast::<Addr<'a>>(
+    {
+        let __t1 = Handle::cast::<Addr<'a>>(
             ({
                 fns::HSD_FogLoadDesc(
                     ctx,
@@ -4326,8 +4319,9 @@ fn inl_fn_80198D18_unfused<'a>(ctx: &'a Ctx) {
                     .desc(),
                 )
             }),
-        ),
-    );
+        );
+        fns::HSD_GObjObject_80390A70(ctx, gobj, (fns::HSD_GObj_FogKind(ctx).get() as u8), __t1)
+    };
     fns::GObj_SetupGXLink(
         ctx,
         gobj,

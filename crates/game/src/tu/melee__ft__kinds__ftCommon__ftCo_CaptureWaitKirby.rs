@@ -99,10 +99,8 @@ pub fn ftCo_CaptureWaitKirby_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         inl_ftCo_800BD6EC_noinline_unfused(ctx, gobj);
         inl_inlineB0_unfused(ctx, gobj);
     }
-    (fp).set_grab_timer(fp::fsubs(
-        (fp).grab_timer(),
-        fns::ftKb_SpecialN_800F5B00(ctx, (fp).victim_gobj()),
-    ));
+    let __t1 = fns::ftKb_SpecialN_800F5B00(ctx, (fp).victim_gobj());
+    (fp).set_grab_timer(fp::fsubs((fp).grab_timer(), __t1));
     (fp).mv()
         .co()
         .capturekirby()

@@ -119,10 +119,13 @@ pub fn parse_format<'a>(
     }
     if c == 42_i32 {
         if ({
-            let __t2 =
-                ((Handle::cast::<Val<'a, i32>>(fns::__va_arg(ctx, (arg).get(0), 1_u8))).get());
-            f.set_field_width(__t2);
-            __t2
+            let __t3 = ((Handle::cast::<Val<'a, i32>>({
+                let __t2 = 1_u8;
+                fns::__va_arg(ctx, (arg).get(0), __t2)
+            }))
+            .get());
+            f.set_field_width(__t3);
+            __t3
         }) < 0_i32
         {
             f.set_justification_options(((enums::left_justification as i32) as u8));
@@ -155,20 +158,23 @@ pub fn parse_format<'a>(
     if c == 46_i32 {
         f.set_precision_specified((1_i32 as u8));
         if ({
-            let __t3 = (({
+            let __t4 = (({
                 s = Handle::add(s, 1);
                 s
             })
             .get() as i32);
-            c = __t3;
-            __t3
+            c = __t4;
+            __t4
         }) == 42_i32
         {
             if ({
-                let __t4 =
-                    ((Handle::cast::<Val<'a, i32>>(fns::__va_arg(ctx, (arg).get(0), 1_u8))).get());
-                f.set_precision(__t4);
-                __t4
+                let __t6 = ((Handle::cast::<Val<'a, i32>>({
+                    let __t5 = 1_u8;
+                    fns::__va_arg(ctx, (arg).get(0), __t5)
+                }))
+                .get());
+                f.set_precision(__t6);
+                __t6
             }) < 0_i32
             {
                 f.set_precision_specified((0_i32 as u8));
@@ -896,7 +902,11 @@ pub fn float2str<'a>(
                 };
             }
             1 => {
-                num = ((Handle::cast::<Val<'a, F64>>(fns::__va_arg(ctx, arg, 3_u8))).get());
+                num = ((Handle::cast::<Val<'a, F64>>({
+                    let __t1 = 3_u8;
+                    fns::__va_arg(ctx, arg, __t1)
+                }))
+                .get());
                 __state = 2;
             }
             2 => {
@@ -907,7 +917,11 @@ pub fn float2str<'a>(
                 };
             }
             3 => {
-                num = ((Handle::cast::<Val<'a, F64>>(fns::__va_arg(ctx, arg, 3_u8))).get());
+                num = ((Handle::cast::<Val<'a, F64>>({
+                    let __t2 = 3_u8;
+                    fns::__va_arg(ctx, arg, __t2)
+                }))
+                .get());
                 __state = 2;
             }
             4 => {
@@ -1146,10 +1160,10 @@ pub fn float2str<'a>(
             }
             53 => {
                 __state = if ({
-                    let __t1 = (dec.sig().length() as i32)
+                    let __t3 = (dec.sig().length() as i32)
                         .wrapping_sub(((dec.exp() as i32).wrapping_add(1_i32)));
-                    (format).set_precision(__t1);
-                    __t1
+                    (format).set_precision(__t3);
+                    __t3
                 }) < 0_i32
                 {
                     55
@@ -1172,12 +1186,12 @@ pub fn float2str<'a>(
             }
             58 => {
                 __state = if ({
-                    let __t3 = (dec.exp() as i32)
+                    let __t5 = (dec.exp() as i32)
                         .wrapping_neg()
                         .wrapping_add((dec.sig().length() as i32))
                         .wrapping_sub(1_i32);
-                    frac_digits = __t3;
-                    __t3
+                    frac_digits = __t5;
+                    __t5
                 }) < 0_i32
                 {
                     103
@@ -1331,7 +1345,7 @@ pub fn float2str<'a>(
                 };
             }
             84 => {
-                let __t2 = ({
+                let __t4 = ({
                     q = Handle::add(q, -1);
                     q
                 })
@@ -1340,7 +1354,7 @@ pub fn float2str<'a>(
                     p = Handle::add(p, -1);
                     p
                 })
-                .set(__t2);
+                .set(__t4);
                 __state = 85;
             }
             85 => {
@@ -1457,12 +1471,12 @@ pub fn float2str<'a>(
                         .wrapping_sub((frac_digits.wrapping_sub((format).precision()))),
                 );
                 __state = if ({
-                    let __t4 = (dec.exp() as i32)
+                    let __t6 = (dec.exp() as i32)
                         .wrapping_neg()
                         .wrapping_add((dec.sig().length() as i32))
                         .wrapping_sub(1_i32);
-                    frac_digits = __t4;
-                    __t4
+                    frac_digits = __t6;
+                    __t6
                 }) < 0_i32
                 {
                     109
@@ -1472,9 +1486,9 @@ pub fn float2str<'a>(
             }
             107 => {
                 __state = if ({
-                    let __t5 = (dec.exp() as i32).wrapping_add(1_i32);
-                    int_digits = __t5;
-                    __t5
+                    let __t7 = (dec.exp() as i32).wrapping_add(1_i32);
+                    int_digits = __t7;
+                    __t7
                 }) < 0_i32
                 {
                     112
@@ -1560,7 +1574,7 @@ pub fn float2str<'a>(
                 };
             }
             125 => {
-                let __t6 = ({
+                let __t8 = ({
                     q = Handle::add(q, -1);
                     q
                 })
@@ -1569,7 +1583,7 @@ pub fn float2str<'a>(
                     p = Handle::add(p, -1);
                     p
                 })
-                .set(__t6);
+                .set(__t8);
                 __state = 126;
             }
             126 => {
@@ -1669,7 +1683,7 @@ pub fn float2str<'a>(
                 __state = if digits < int_digits { 147 } else { 149 };
             }
             147 => {
-                let __t7 = ({
+                let __t9 = ({
                     q = Handle::add(q, -1);
                     q
                 })
@@ -1678,7 +1692,7 @@ pub fn float2str<'a>(
                     p = Handle::add(p, -1);
                     p
                 })
-                .set(__t7);
+                .set(__t9);
                 __state = 148;
             }
             148 => {

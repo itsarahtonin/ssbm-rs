@@ -613,18 +613,32 @@ pub fn HSD_ForeachAnim<'a>(
         }
         if __case <= 1 {
             arg.set_f(fp::frsp(
-                ((Handle::cast::<Val<'a, F64>>(fns::__va_arg(ctx, ap.get(0), 3_u8))).get()),
+                ((Handle::cast::<Val<'a, F64>>({
+                    let __t1 = 3_u8;
+                    fns::__va_arg(ctx, ap.get(0), __t1)
+                }))
+                .get()),
             ));
             break 's1;
         }
         if __case <= 2 {
             arg.set_v(
-                ((Handle::cast::<Ptr<'a, Addr<'a>>>(fns::__va_arg(ctx, ap.get(0), 1_u8))).get()),
+                ((Handle::cast::<Ptr<'a, Addr<'a>>>({
+                    let __t2 = 1_u8;
+                    fns::__va_arg(ctx, ap.get(0), __t2)
+                }))
+                .get()),
             );
             break 's1;
         }
         if __case <= 3 {
-            arg.set_d(((Handle::cast::<Val<'a, u32>>(fns::__va_arg(ctx, ap.get(0), 1_u8))).get()));
+            arg.set_d(
+                ((Handle::cast::<Val<'a, u32>>({
+                    let __t3 = 1_u8;
+                    fns::__va_arg(ctx, ap.get(0), __t3)
+                }))
+                .get()),
+            );
             break 's1;
         }
         if __case <= 4 {
@@ -958,7 +972,10 @@ fn inl_fmodf_unfused<'a>(ctx: &'a Ctx, a: f64, b: f64) -> f64 {
     let mut a = a;
     let mut b = b;
     let mut quotient: i64 = 0;
-    if fp::fabs(b) > fp::fabs(a) {
+    if {
+        let __t1 = fp::fabs(a);
+        fp::fabs(b) > __t1
+    } {
         return a;
     }
     quotient = (fns::__cvt_dbl_usll(ctx, fp::fdivs(a, b)) as i64);

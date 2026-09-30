@@ -133,7 +133,10 @@ pub fn itThunder_UnkMotion2_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     if !(fns::it_80272C6C(ctx, gobj) != 0) {
         inl_itThunder_UnkMotion2_Anim_inline2_unfused(ctx, gobj);
     }
-    if (item).pos().y() > fns::Stage_GetBlastZoneTopOffset(ctx) {
+    if {
+        let __t1 = fns::Stage_GetBlastZoneTopOffset(ctx);
+        (item).pos().y() > __t1
+    } {
         return 1_i32;
     }
     return 0_i32;

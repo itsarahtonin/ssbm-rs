@@ -115,9 +115,11 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 unreachable!();
             }
             9 => {
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
-                        .get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t3 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t3)
+                }))
+                .get());
                 return Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(ctx, gfx_id, va_vec3));
             }
             10 => {
@@ -134,9 +136,11 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 __state = 10;
             }
             13 => {
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
-                        .get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t4 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t4)
+                }))
+                .get());
                 return Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(ctx, gfx_id, va_vec3));
             }
             14 => {
@@ -269,11 +273,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     (0x1770_i32 as u32),
                     gobj,
                     Handle::cast::<HSD_JObj<'a>>(
-                        ((Handle::cast::<Ptr<'a, Addr<'a>>>(fns::__va_arg(
-                            ctx,
-                            vlist.get(0),
-                            1_u8,
-                        )))
+                        ((Handle::cast::<Ptr<'a, Addr<'a>>>({
+                            let __t5 = 1_u8;
+                            fns::__va_arg(ctx, vlist.get(0), __t5)
+                        }))
                         .get()),
                     ),
                 ));
@@ -285,11 +288,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     (0x1771_i32 as u32),
                     gobj,
                     Handle::cast::<HSD_JObj<'a>>(
-                        ((Handle::cast::<Ptr<'a, Addr<'a>>>(fns::__va_arg(
-                            ctx,
-                            vlist.get(0),
-                            1_u8,
-                        )))
+                        ((Handle::cast::<Ptr<'a, Addr<'a>>>({
+                            let __t7 = 1_u8;
+                            fns::__va_arg(ctx, vlist.get(0), __t7)
+                        }))
                         .get()),
                     ),
                 ));
@@ -301,11 +303,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     0_i32,
                     7_i32,
                     0x1b58_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t9 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t9)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -316,21 +317,19 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     0_i32,
                     7_i32,
                     0x1b5c_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t10 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t10)
+                    }))
                     .get()),
                 ));
                 __state = 113;
             }
             29 => {
-                jobj_1 = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                    ctx,
-                    vlist.get(0),
-                    1_u8,
-                )))
+                jobj_1 = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                    let __t11 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t11)
+                }))
                 .get());
                 ret_obj = Handle::cast::<Addr<'a>>(fns::hsd_8039EFAC(
                     ctx, 0_i32, 7_i32, 0x1b5d_i32, jobj_1,
@@ -343,11 +342,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     0x1b58_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t12 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t12)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -358,11 +356,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     (0x1b59_i32 as u32),
                     gobj,
                     Handle::cast::<HSD_JObj<'a>>(
-                        ((Handle::cast::<Ptr<'a, Addr<'a>>>(fns::__va_arg(
-                            ctx,
-                            vlist.get(0),
-                            1_u8,
-                        )))
+                        ((Handle::cast::<Ptr<'a, Addr<'a>>>({
+                            let __t13 = 1_u8;
+                            fns::__va_arg(ctx, vlist.get(0), __t13)
+                        }))
                         .get()),
                     ),
                 ));
@@ -374,11 +371,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     (0x1b5a_i32 as u32),
                     gobj,
                     Handle::cast::<HSD_JObj<'a>>(
-                        ((Handle::cast::<Ptr<'a, Addr<'a>>>(fns::__va_arg(
-                            ctx,
-                            vlist.get(0),
-                            1_u8,
-                        )))
+                        ((Handle::cast::<Ptr<'a, Addr<'a>>>({
+                            let __t15 = 1_u8;
+                            fns::__va_arg(ctx, vlist.get(0), __t15)
+                        }))
                         .get()),
                     ),
                 ));
@@ -394,11 +390,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     (0x1b5b_i32 as u32),
                     gobj,
                     Handle::cast::<HSD_JObj<'a>>(
-                        ((Handle::cast::<Ptr<'a, Addr<'a>>>(fns::__va_arg(
-                            ctx,
-                            vlist.get(0),
-                            1_u8,
-                        )))
+                        ((Handle::cast::<Ptr<'a, Addr<'a>>>({
+                            let __t18 = 1_u8;
+                            fns::__va_arg(ctx, vlist.get(0), __t18)
+                        }))
                         .get()),
                     ),
                 ));
@@ -410,11 +405,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     (0x1b5c_i32 as u32),
                     gobj,
                     Handle::cast::<HSD_JObj<'a>>(
-                        ((Handle::cast::<Ptr<'a, Addr<'a>>>(fns::__va_arg(
-                            ctx,
-                            vlist.get(0),
-                            1_u8,
-                        )))
+                        ((Handle::cast::<Ptr<'a, Addr<'a>>>({
+                            let __t20 = 1_u8;
+                            fns::__va_arg(ctx, vlist.get(0), __t20)
+                        }))
                         .get()),
                     ),
                 ));
@@ -426,11 +420,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     (0x1f40_i32 as u32),
                     gobj,
                     Handle::cast::<HSD_JObj<'a>>(
-                        ((Handle::cast::<Ptr<'a, Addr<'a>>>(fns::__va_arg(
-                            ctx,
-                            vlist.get(0),
-                            1_u8,
-                        )))
+                        ((Handle::cast::<Ptr<'a, Addr<'a>>>({
+                            let __t22 = 1_u8;
+                            fns::__va_arg(ctx, vlist.get(0), __t22)
+                        }))
                         .get()),
                     ),
                 ));
@@ -442,11 +435,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     (0x1f41_i32 as u32),
                     gobj,
                     Handle::cast::<HSD_JObj<'a>>(
-                        ((Handle::cast::<Ptr<'a, Addr<'a>>>(fns::__va_arg(
-                            ctx,
-                            vlist.get(0),
-                            1_u8,
-                        )))
+                        ((Handle::cast::<Ptr<'a, Addr<'a>>>({
+                            let __t23 = 1_u8;
+                            fns::__va_arg(ctx, vlist.get(0), __t23)
+                        }))
                         .get()),
                     ),
                 ));
@@ -457,11 +449,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     (0x1f42_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t24 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t24)
+                    }))
                     .get()),
                 ));
                 ret_eff = Handle::cast::<EF_Effect<'a>>(ret_obj);
@@ -472,11 +463,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     (0x1f43_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t26 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t26)
+                    }))
                     .get()),
                 ));
                 ret_eff = Handle::cast::<EF_Effect<'a>>(ret_obj);
@@ -487,11 +477,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     (0x1f44_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t28 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t28)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -501,11 +490,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     (0x1f45_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t29 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t29)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -515,8 +503,11 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     0x1f46_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t30 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t30)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 168 } else { 169 };
             }
@@ -525,11 +516,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     0x2328_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t31 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t31)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -538,8 +528,11 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     (0x2328_u32 as i32),
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t32 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t32)
+                    }))
+                    .get()),
                 ));
                 __state = 113;
             }
@@ -548,9 +541,11 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
             }
             46 => {
                 scale_f32 = 1.0;
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
-                        .get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t33 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t33)
+                }))
+                .get());
                 Handle::copy_from(translate, (va_vec3));
                 __state = if gfx_id == 0x4cf_i32 { 174 } else { 175 };
             }
@@ -559,11 +554,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     0x2710_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t36 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t36)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -573,11 +567,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     0x2711_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t37 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t37)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -587,11 +580,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     (0x2712_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t38 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t38)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -602,11 +594,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     0_i32,
                     11_i32,
                     0x2af8_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t39 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t39)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -616,11 +607,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     (0x2af8_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t40 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t40)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -631,11 +621,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     0_i32,
                     11_i32,
                     0x2af9_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t41 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t41)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -656,17 +645,19 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     0x2ee0_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t47 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t47)
+                    }))
+                    .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 212 } else { 213 };
             }
             55 => {
-                jobj_2 = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                    ctx,
-                    vlist.get(0),
-                    1_u8,
-                )))
+                jobj_2 = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                    let __t50 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t50)
+                }))
                 .get());
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Scale(
                     ctx,
@@ -726,11 +717,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     0x32c8_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t51 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t51)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -744,8 +734,11 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     0x32ca_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t55 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t55)
+                    }))
+                    .get()),
                 ));
                 __state = 113;
             }
@@ -753,8 +746,11 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     (0x18a_u32 as i32),
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t56 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t56)
+                    }))
+                    .get()),
                 ));
                 __state = 113;
             }
@@ -762,8 +758,11 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     (0x194_u32 as i32),
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t57 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t57)
+                    }))
+                    .get()),
                 ));
                 __state = 113;
             }
@@ -773,11 +772,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     0_i32,
                     0_i32,
                     0x17d_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t58 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t58)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -788,11 +786,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     0_i32,
                     0_i32,
                     0x17e_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t59 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t59)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -801,8 +798,11 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     (0x196_u32 as i32),
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t60 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t60)
+                    }))
+                    .get()),
                 ));
                 __state = 113;
             }
@@ -811,8 +811,11 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     0x32cb_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t61 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t61)
+                    }))
+                    .get()),
                 ));
                 __state = 113;
             }
@@ -822,11 +825,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     0_i32,
                     14_i32,
                     0x36b0_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t62 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t62)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -837,11 +839,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     0_i32,
                     14_i32,
                     0x36b1_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t63 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t63)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -860,11 +861,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     0_i32,
                     14_i32,
                     0x36b7_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t64 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t64)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -874,11 +874,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     0x36b0_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t65 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t65)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -889,11 +888,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     0_i32,
                     0_i32,
                     100_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t66 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t66)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -903,17 +901,19 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     0x3a98_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t67 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t67)
+                    }))
+                    .get()),
                 ));
                 __state = 113;
             }
             77 => {
-                jobj_2 = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                    ctx,
-                    vlist.get(0),
-                    1_u8,
-                )))
+                jobj_2 = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                    let __t68 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t68)
+                }))
                 .get());
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_Attach_AddAppSRT(
                     ctx, 0x172_i32, jobj_2,
@@ -924,11 +924,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_Attach(
                     ctx,
                     0x11e_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t69 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t69)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -947,11 +946,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     (0x3e80_i32 as u32),
                     gobj,
                     Handle::cast::<HSD_JObj<'a>>(
-                        ((Handle::cast::<Ptr<'a, Addr<'a>>>(fns::__va_arg(
-                            ctx,
-                            vlist.get(0),
-                            1_u8,
-                        )))
+                        ((Handle::cast::<Ptr<'a, Addr<'a>>>({
+                            let __t70 = 1_u8;
+                            fns::__va_arg(ctx, vlist.get(0), __t70)
+                        }))
                         .get()),
                     ),
                 ));
@@ -963,11 +961,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     (0x3e81_i32 as u32),
                     gobj,
                     Handle::cast::<HSD_JObj<'a>>(
-                        ((Handle::cast::<Ptr<'a, Addr<'a>>>(fns::__va_arg(
-                            ctx,
-                            vlist.get(0),
-                            1_u8,
-                        )))
+                        ((Handle::cast::<Ptr<'a, Addr<'a>>>({
+                            let __t71 = 1_u8;
+                            fns::__va_arg(ctx, vlist.get(0), __t71)
+                        }))
                         .get()),
                     ),
                 ));
@@ -978,11 +975,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     0x4268_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t72 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t72)
+                    }))
                     .get()),
                 ));
                 __state = 264;
@@ -992,11 +988,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     0x4269_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t73 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t73)
+                    }))
                     .get()),
                 ));
                 __state = 264;
@@ -1006,11 +1001,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     (0x426a_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t75 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t75)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -1020,11 +1014,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     (0x426b_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t76 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t76)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -1062,11 +1055,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     0_i32,
                     0_i32,
                     113_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t77 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t77)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -1076,11 +1068,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     0x426c_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t78 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t78)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -1121,11 +1112,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     0_i32,
                     0_i32,
                     0x1a6_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t79 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t79)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -1136,11 +1126,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     0_i32,
                     17_i32,
                     0x426d_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t80 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t80)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -1151,11 +1140,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     0_i32,
                     17_i32,
                     0x4271_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t81 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t81)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -1164,8 +1152,11 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     (106_u32 as i32),
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t82 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t82)
+                    }))
+                    .get()),
                 ));
                 __state = 113;
             }
@@ -1195,17 +1186,19 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     (0x4658_u32 as i32),
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t93 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t93)
+                    }))
+                    .get()),
                 ));
                 __state = 113;
             }
             101 => {
-                jobj_1 = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                    ctx,
-                    vlist.get(0),
-                    1_u8,
-                )))
+                jobj_1 = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                    let __t94 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t94)
+                }))
                 .get());
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(
                     ctx, 0x4650_u32, gobj, jobj_1,
@@ -1216,8 +1209,11 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
                     ctx,
                     (0x4652_u32 as i32),
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t96 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t96)
+                    }))
+                    .get()),
                 ));
                 __state = 113;
             }
@@ -1226,11 +1222,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     (0x4651_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t97 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t97)
+                    }))
                     .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 312 } else { 313 };
@@ -1241,11 +1236,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     0_i32,
                     0_i32,
                     95_i32,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t98 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t98)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -1256,11 +1250,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     (0x4a38_i32 as u32),
                     gobj,
                     Handle::cast::<HSD_JObj<'a>>(
-                        ((Handle::cast::<Ptr<'a, Addr<'a>>>(fns::__va_arg(
-                            ctx,
-                            vlist.get(0),
-                            1_u8,
-                        )))
+                        ((Handle::cast::<Ptr<'a, Addr<'a>>>({
+                            let __t99 = 1_u8;
+                            fns::__va_arg(ctx, vlist.get(0), __t99)
+                        }))
                         .get()),
                     ),
                 ));
@@ -1271,11 +1264,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     0x4a3a_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t101 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t101)
+                    }))
                     .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 321 } else { 322 };
@@ -1285,11 +1277,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     0x4a3b_u32,
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t103 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t103)
+                    }))
                     .get()),
                 ));
                 __state = 113;
@@ -1299,11 +1290,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     (0x4a3c_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t104 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t104)
+                    }))
                     .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 326 } else { 327 };
@@ -1313,11 +1303,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     ctx,
                     (0x4a3d_i32 as u32),
                     gobj,
-                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                        let __t106 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t106)
+                    }))
                     .get()),
                 ));
                 __state = if !Handle::is_null(ret_obj) { 334 } else { 335 };
@@ -1336,11 +1325,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     (0xbf68_i32 as u32),
                     gobj,
                     Handle::cast::<HSD_JObj<'a>>(
-                        ((Handle::cast::<Ptr<'a, Addr<'a>>>(fns::__va_arg(
-                            ctx,
-                            vlist.get(0),
-                            1_u8,
-                        )))
+                        ((Handle::cast::<Ptr<'a, Addr<'a>>>({
+                            let __t108 = 1_u8;
+                            fns::__va_arg(ctx, vlist.get(0), __t108)
+                        }))
                         .get()),
                     ),
                 ));
@@ -1352,11 +1340,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                     (0xbf69_i32 as u32),
                     gobj,
                     Handle::cast::<HSD_JObj<'a>>(
-                        ((Handle::cast::<Ptr<'a, Addr<'a>>>(fns::__va_arg(
-                            ctx,
-                            vlist.get(0),
-                            1_u8,
-                        )))
+                        ((Handle::cast::<Ptr<'a, Addr<'a>>>({
+                            let __t109 = 1_u8;
+                            fns::__va_arg(ctx, vlist.get(0), __t109)
+                        }))
                         .get()),
                     ),
                 ));
@@ -1377,11 +1364,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                         ctx,
                         (0x1772_i32 as u32),
                         gobj,
-                        ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                            ctx,
-                            vlist.get(0),
-                            1_u8,
-                        )))
+                        ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                            let __t6 = 1_u8;
+                            fns::__va_arg(ctx, vlist.get(0), __t6)
+                        }))
                         .get()),
                     )),
                 ));
@@ -1402,11 +1388,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                         ctx,
                         (0x1773_i32 as u32),
                         gobj,
-                        ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                            ctx,
-                            vlist.get(0),
-                            1_u8,
-                        )))
+                        ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                            let __t8 = 1_u8;
+                            fns::__va_arg(ctx, vlist.get(0), __t8)
+                        }))
                         .get()),
                     )),
                 ));
@@ -1434,11 +1419,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 __state = 31;
             }
             128 => {
-                va_f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(
-                    ctx,
-                    vlist.get(0),
-                    1_u8,
-                )))
+                va_f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t14 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t14)
+                }))
                 .get())
                 .get();
                 inl_HSD_JObjSetRotationZ_unfused(
@@ -1461,11 +1445,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 __state = 32;
             }
             132 => {
-                va_f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(
-                    ctx,
-                    vlist.get(0),
-                    1_u8,
-                )))
+                va_f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t16 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t16)
+                }))
                 .get())
                 .get();
                 inl_HSD_JObjSetRotationZ_unfused(
@@ -1488,9 +1471,11 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 __state = 33;
             }
             136 => {
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
-                        .get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t17 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t17)
+                }))
+                .get());
                 ret_obj = Handle::cast::<Addr<'a>>(r#gen);
                 psAppSRT = (r#gen).appsrt();
                 Handle::copy_from((psAppSRT).translate(), (va_vec3));
@@ -1506,11 +1491,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 __state = 34;
             }
             140 => {
-                va_f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(
-                    ctx,
-                    vlist.get(0),
-                    1_u8,
-                )))
+                va_f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t19 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t19)
+                }))
                 .get())
                 .get();
                 inl_HSD_JObjSetRotationZ_unfused(
@@ -1533,11 +1517,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 __state = 35;
             }
             144 => {
-                va_f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(
-                    ctx,
-                    vlist.get(0),
-                    1_u8,
-                )))
+                va_f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t21 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t21)
+                }))
                 .get())
                 .get();
                 inl_HSD_JObjSetRotationZ_unfused(
@@ -1566,11 +1549,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 __state = 38;
             }
             150 => {
-                __state = if ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(
-                    ctx,
-                    vlist.get(0),
-                    1_u8,
-                )))
+                __state = if ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t25 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t25)
+                }))
                 .get())
                 .get()
                     < 0.0
@@ -1618,11 +1600,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 __state = 39;
             }
             158 => {
-                __state = if ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(
-                    ctx,
-                    vlist.get(0),
-                    1_u8,
-                )))
+                __state = if ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t27 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t27)
+                }))
                 .get())
                 .get()
                     < 0.0
@@ -1705,11 +1686,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 __state = 45;
             }
             174 => {
-                scale_f32 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(
-                    ctx,
-                    vlist.get(0),
-                    1_u8,
-                )))
+                scale_f32 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t34 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t34)
+                }))
                 .get())
                 .get();
                 __state = 175;
@@ -1830,9 +1810,9 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
             }
             195 => {
                 ret_obj = Handle::cast::<Addr<'a>>({
-                    let __t3 = effect;
-                    eff_1 = __t3;
-                    __t3
+                    let __t35 = effect;
+                    eff_1 = __t35;
+                    __t35
                 });
                 __state = 194;
             }
@@ -1873,32 +1853,35 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 __state = 53;
             }
             208 => {
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
-                        .get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t42 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t42)
+                }))
+                .get());
                 psAppSRT = (generator).appsrt();
                 Handle::copy_from((psAppSRT).translate(), (va_vec3));
                 inl_HSD_JObjGetScale_unfused(
                     ctx,
                     ({
-                        let __t4 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(
+                        let __t43 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(
                             ctx, gobj,
                         )));
-                        jobj_2 = __t4;
-                        __t4
+                        jobj_2 = __t43;
+                        __t43
                     }),
                     scale,
                 );
                 ret_obj = Handle::cast::<Addr<'a>>(generator);
-                ((generator).appsrt()).scale().set_x({
-                    let __t6 = {
-                        let __t5 = scale.y();
-                        ((generator).appsrt()).scale().set_z(__t5);
-                        __t5
+                let __t46 = {
+                    let __t45 = {
+                        let __t44 = scale.y();
+                        ((generator).appsrt()).scale().set_z(__t44);
+                        __t44
                     };
-                    ((generator).appsrt()).scale().set_y(__t6);
-                    __t6
-                });
+                    ((generator).appsrt()).scale().set_y(__t45);
+                    __t45
+                };
+                ((generator).appsrt()).scale().set_x(__t46);
                 ((generator).appsrt())
                     .rot()
                     .set_y(fp::frsp((fp::fdiv(3.141592653589793, (2_i32 as f64)))));
@@ -1914,11 +1897,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 __state = 54;
             }
             212 => {
-                __state = if ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(
-                    ctx,
-                    vlist.get(0),
-                    1_u8,
-                )))
+                __state = if ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t48 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t48)
+                }))
                 .get())
                 .get()
                     < 0.0
@@ -1949,11 +1931,11 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 inl_HSD_JObjGetScale_unfused(
                     ctx,
                     ({
-                        let __t7 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(
+                        let __t49 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(
                             ctx, gobj,
                         )));
-                        jobj_2 = __t7;
-                        __t7
+                        jobj_2 = __t49;
+                        __t49
                     }),
                     scale,
                 );
@@ -2019,11 +2001,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 __state = 62;
             }
             233 => {
-                jobj_1 = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(
-                    ctx,
-                    vlist.get(0),
-                    1_u8,
-                )))
+                jobj_1 = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>({
+                    let __t52 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t52)
+                }))
                 .get());
                 (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_attach_jobj(jobj_1);
                 (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_update(fnptr(ctx, 0x8005ddb8));
@@ -2055,13 +2036,16 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 inl_HSD_JObjGetScale_unfused(ctx, cursor, scale);
                 Handle::copy_from(
                     (Handle::cast::<EF_Effect<'a>>(ret_obj)).params(),
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
-                        .get()),
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                        let __t53 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t53)
+                    }))
+                    .get()),
                 );
-                let __t8 = (inl_efSync_GetEffect_unfused(ctx, ret_obj))
+                let __t54 = (inl_efSync_GetEffect_unfused(ctx, ret_obj))
                     .params()
                     .y_ref();
-                __t8.set(fp::fmuls(__t8.get(), scale.y()));
+                __t54.set(fp::fmuls(__t54.get(), scale.y()));
                 __state = 234;
             }
             240 => {
@@ -2150,11 +2134,11 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 inl_HSD_JObjGetScale_unfused(
                     ctx,
                     ({
-                        let __t9 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(
+                        let __t74 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(
                             ctx, gobj,
                         )));
-                        jobj_2 = __t9;
-                        __t9
+                        jobj_2 = __t74;
+                        __t74
                     }),
                     scale,
                 );
@@ -2272,32 +2256,35 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 __state = 98;
             }
             294 => {
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
-                        .get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t83 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t83)
+                }))
+                .get());
                 psAppSRT = (generator_2).appsrt();
                 Handle::copy_from((psAppSRT).translate(), (va_vec3));
                 inl_HSD_JObjGetScale_unfused(
                     ctx,
                     ({
-                        let __t10 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(
+                        let __t84 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(
                             ctx, gobj,
                         )));
-                        jobj_2 = __t10;
-                        __t10
+                        jobj_2 = __t84;
+                        __t84
                     }),
                     scale,
                 );
                 ret_obj = Handle::cast::<Addr<'a>>(generator_2);
-                ((generator_2).appsrt()).scale().set_x({
-                    let __t12 = {
-                        let __t11 = scale.y();
-                        ((generator_2).appsrt()).scale().set_z(__t11);
-                        __t11
+                let __t87 = {
+                    let __t86 = {
+                        let __t85 = scale.y();
+                        ((generator_2).appsrt()).scale().set_z(__t85);
+                        __t85
                     };
-                    ((generator_2).appsrt()).scale().set_y(__t12);
-                    __t12
-                });
+                    ((generator_2).appsrt()).scale().set_y(__t86);
+                    __t86
+                };
+                ((generator_2).appsrt()).scale().set_x(__t87);
                 __state = 295;
             }
             295 => {
@@ -2310,30 +2297,33 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 __state = 99;
             }
             298 => {
-                va_vec3 =
-                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
-                        .get());
+                va_vec3 = ((Handle::cast::<Ptr<'a, Vec<'a>>>({
+                    let __t88 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t88)
+                }))
+                .get());
                 psAppSRT = (generator_3).appsrt();
                 Handle::copy_from((psAppSRT).translate(), (va_vec3));
                 inl_HSD_JObjGetScale_unfused(
                     ctx,
                     ({
-                        let __t13 = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
-                        jobj_2 = __t13;
-                        __t13
+                        let __t89 = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
+                        jobj_2 = __t89;
+                        __t89
                     }),
                     scale,
                 );
                 ret_obj = Handle::cast::<Addr<'a>>(generator_3);
-                ((generator_3).appsrt()).scale().set_x({
-                    let __t15 = {
-                        let __t14 = scale.y();
-                        ((generator_3).appsrt()).scale().set_z(__t14);
-                        __t14
+                let __t92 = {
+                    let __t91 = {
+                        let __t90 = scale.y();
+                        ((generator_3).appsrt()).scale().set_z(__t90);
+                        __t90
                     };
-                    ((generator_3).appsrt()).scale().set_y(__t15);
-                    __t15
-                });
+                    ((generator_3).appsrt()).scale().set_y(__t91);
+                    __t91
+                };
+                ((generator_3).appsrt()).scale().set_x(__t92);
                 __state = 299;
             }
             299 => {
@@ -2349,11 +2339,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 __state = 101;
             }
             303 => {
-                __state = if ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(
-                    ctx,
-                    vlist.get(0),
-                    1_u8,
-                )))
+                __state = if ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t95 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t95)
+                }))
                 .get())
                 .get()
                     < 0.0
@@ -2419,11 +2408,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                         (0x4a39_i32 as u32),
                         gobj,
                         Handle::cast::<HSD_JObj<'a>>(
-                            ((Handle::cast::<Ptr<'a, Addr<'a>>>(fns::__va_arg(
-                                ctx,
-                                vlist.get(0),
-                                1_u8,
-                            )))
+                            ((Handle::cast::<Ptr<'a, Addr<'a>>>({
+                                let __t100 = 1_u8;
+                                fns::__va_arg(ctx, vlist.get(0), __t100)
+                            }))
                             .get()),
                         ),
                     )),
@@ -2441,11 +2429,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
             }
             321 => {
                 (Handle::cast::<EF_Effect<'a>>(ret_obj)).params().set_z(
-                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(
-                        ctx,
-                        vlist.get(0),
-                        1_u8,
-                    )))
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                        let __t102 = 1_u8;
+                        fns::__va_arg(ctx, vlist.get(0), __t102)
+                    }))
                     .get())
                     .get(),
                 );
@@ -2465,11 +2452,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 __state = 108;
             }
             326 => {
-                __state = if ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(
-                    ctx,
-                    vlist.get(0),
-                    1_u8,
-                )))
+                __state = if ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t105 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t105)
+                }))
                 .get())
                 .get()
                     < 0.0
@@ -2509,11 +2495,10 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
                 __state = 109;
             }
             334 => {
-                __state = if ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(
-                    ctx,
-                    vlist.get(0),
-                    1_u8,
-                )))
+                __state = if ((Handle::cast::<Ptr<'a, Val<'a, F32>>>({
+                    let __t107 = 1_u8;
+                    fns::__va_arg(ctx, vlist.get(0), __t107)
+                }))
                 .get())
                 .get()
                     < 0.0

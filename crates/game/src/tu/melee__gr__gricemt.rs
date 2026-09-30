@@ -413,11 +413,11 @@ pub fn grIceMt_801F7080<'a>(ctx: &'a Ctx) {
             ((statics::melee__gr__gricemt::yakumono_param(ctx).get()).xB8() as i32),
         ) != 0)
         {
-            fns::grZakoGenerator_801CAEB0(
-                ctx,
-                fns::Ground_801C5840(ctx),
-                fns::Ground_801C5940(ctx),
-            );
+            {
+                let __t7 = fns::Ground_801C5940(ctx);
+                let __t8 = fns::Ground_801C5840(ctx);
+                fns::grZakoGenerator_801CAEB0(ctx, __t8, __t7)
+            };
         }
         fns::grZakoGenerator_801CADE0(ctx);
     } else {
@@ -1419,17 +1419,20 @@ pub fn stageGObj4_OnInit<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
         (gp).u().icemt1().x34().at(0_i32),
     );
     r = statics::melee__gr__gricemt::grIceMt_801FA500(ctx, arg0, jobj3);
-    statics::melee__gr__gricemt::grIceMt_801F91EC(
-        ctx,
-        arg0,
-        (gp).u().icemt().x108().at(0),
-        statics::melee__gr__gricemt::grIceMt_801FA500(ctx, arg0, jobj2),
-        r,
-        117_i32,
-        0x109_i32,
-        0x27e_i32,
-        fnptr(ctx, 0x801f9558),
-    );
+    {
+        let __t1 = statics::melee__gr__gricemt::grIceMt_801FA500(ctx, arg0, jobj2);
+        statics::melee__gr__gricemt::grIceMt_801F91EC(
+            ctx,
+            arg0,
+            (gp).u().icemt().x108().at(0),
+            __t1,
+            r,
+            117_i32,
+            0x109_i32,
+            0x27e_i32,
+            fnptr(ctx, 0x801f9558),
+        )
+    };
 }
 
 pub fn stageGObj4_Callback1<'a>(ctx: &'a Ctx, param1: HSD_GObj<'a>) -> i32 {
@@ -1678,15 +1681,15 @@ pub fn stageGObj8_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     fns::grAnime_801C8138(ctx, gobj, (gp).map_id(), 0_i32);
     fns::grAnime_801C77FC(ctx, gobj, 0_i32, (7_i32 as u32));
-    fns::Ground_801C4E70(
-        ctx,
-        fns::Ground_801C3FA4(ctx, gobj, 1_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 2_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 3_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 4_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 5_i32),
-        fns::Ground_801C3FA4(ctx, gobj, 6_i32),
-    );
+    {
+        let __t1 = fns::Ground_801C3FA4(ctx, gobj, 6_i32);
+        let __t2 = fns::Ground_801C3FA4(ctx, gobj, 5_i32);
+        let __t3 = fns::Ground_801C3FA4(ctx, gobj, 4_i32);
+        let __t4 = fns::Ground_801C3FA4(ctx, gobj, 3_i32);
+        let __t5 = fns::Ground_801C3FA4(ctx, gobj, 2_i32);
+        let __t6 = fns::Ground_801C3FA4(ctx, gobj, 1_i32);
+        fns::Ground_801C4E70(ctx, __t6, __t5, __t4, __t3, __t2, __t1)
+    };
     (gp).u().icemt_bg().set_x0(0.0);
     (gp).x11_flags().set_b012((2_i32 as u8));
 }
@@ -3545,10 +3548,13 @@ pub fn grIceMt_801FA364<'a>(
     }
     result = (state).cur();
     if ((state).burst_count() as i32) != 0_i32 {
-        result = fp::fmuls(
-            (statics::melee__gr__gricemt::yakumono_param(ctx).get()).x3C(),
-            fns::Ground_801C0498(ctx),
-        );
+        result = {
+            let __t1 = fns::Ground_801C0498(ctx);
+            fp::fmuls(
+                (statics::melee__gr__gricemt::yakumono_param(ctx).get()).x3C(),
+                __t1,
+            )
+        };
         (state).set_burst_count((state).burst_count().wrapping_sub(1));
     }
     (out).set(result);

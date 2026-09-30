@@ -53,22 +53,23 @@ pub fn ftCo_800C78B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, owner: HSD_GObj<'a>) 
     fns::ftCommon_8007E2FC(ctx, gobj);
     cd = fns::p_ftCommonData(ctx).get();
     {
-        let mut tmp1: f64 = fp::fmuls(
-            (cd).x74C(),
-            (fp::fsubs(
-                (cd).x750(),
-                fp::frsp(
+        let mut tmp1: f64 = {
+            let __t2 = ({
+                let __t1 = fp::frsp(
                     (fns::Player_80033BB8(ctx, ((fp).player_idx() as i32)).wrapping_add(1_i32))
                         as f64,
-                ),
-            )),
-        );
+                );
+                fp::fsubs((cd).x750(), __t1)
+            });
+            fp::fmuls((cd).x74C(), __t2)
+        };
         let mut tmp2: f64 = (fp::fmadds(
             (cd).x744(),
-            (fp::fsubs(
-                (cd).x748(),
-                fp::frsp(fns::Player_GetHandicap(ctx, ((fp).player_idx() as i32)) as f64),
-            )),
+            ({
+                let __t5 =
+                    fp::frsp(fns::Player_GetHandicap(ctx, ((fp).player_idx() as i32)) as f64);
+                fp::fsubs((cd).x748(), __t5)
+            }),
             (cd).x740(),
         ));
         tmp2 = fp::fadds(tmp2, tmp1);

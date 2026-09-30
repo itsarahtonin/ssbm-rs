@@ -194,19 +194,20 @@ fn inl_inlineA0<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> f64 {
         (fns::p_ftCommonData(ctx).get()).x638(),
         (fp::fmadds(
             (fns::p_ftCommonData(ctx).get()).x630(),
-            (fp::fsubs(
-                (fns::p_ftCommonData(ctx).get()).x634(),
-                fp::frsp(
+            ({
+                let __t17 = fp::frsp(
                     ((fns::Player_80033BB8(ctx, ((fp).player_idx() as i32))).wrapping_add(1_i32))
                         as f64,
-                ),
-            )),
+                );
+                fp::fsubs((fns::p_ftCommonData(ctx).get()).x634(), __t17)
+            }),
             fp::fmadds(
                 (fns::p_ftCommonData(ctx).get()).x628(),
-                (fp::fsubs(
-                    (fns::p_ftCommonData(ctx).get()).x62C(),
-                    fp::frsp(fns::Player_GetHandicap(ctx, ((fp).player_idx() as i32)) as f64),
-                )),
+                ({
+                    let __t20 =
+                        fp::frsp(fns::Player_GetHandicap(ctx, ((fp).player_idx() as i32)) as f64);
+                    fp::fsubs((fns::p_ftCommonData(ctx).get()).x62C(), __t20)
+                }),
                 (fns::p_ftCommonData(ctx).get()).x624(),
             ),
         )),

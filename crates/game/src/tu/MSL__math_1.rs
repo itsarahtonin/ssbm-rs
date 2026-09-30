@@ -29,7 +29,10 @@ use crate::support::*;
 pub fn tanf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     let __frame = ctx.stack_frame(0x20);
     let mut x = x;
-    return fp::fdivs(fns::sin__Ff(ctx, x), fns::cos__Ff(ctx, x));
+    return {
+        let __t1 = fns::cos__Ff(ctx, x);
+        fp::fdivs(fns::sin__Ff(ctx, x), __t1)
+    };
 }
 
 pub fn fabsf__Ff<'a>(ctx: &'a Ctx, param_1: f64) -> f64 {

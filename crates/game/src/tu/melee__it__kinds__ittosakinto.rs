@@ -241,7 +241,10 @@ pub fn itTosakinto_Logic0_Destroyed<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut it_r31: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if fp::fsubs((it_r31).pos().y(), 50.0) < fns::Stage_GetBlastZoneBottomOffset(ctx) {
+    if {
+        let __t1 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+        fp::fsubs((it_r31).pos().y(), 50.0) < __t1
+    } {
         let _ = fns::lbAudioAx_800263E8(
             ctx,
             3.0,

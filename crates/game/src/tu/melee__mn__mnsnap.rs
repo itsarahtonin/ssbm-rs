@@ -223,11 +223,10 @@ pub fn mnSnap_8025329C<'a>(ctx: &'a Ctx) {
         (p52).set((p52).get().wrapping_add(1_i32));
         (p51).set((p51).get().wrapping_sub(1_i32));
         if (p51).get() != 0_i32 {
-            (snap).set_card_result(fns::lbSnap_8001E058(
-                ctx,
-                (snap).active_slot(),
-                inl_mnSnap_GetLoadPhotoIdx_unfused(ctx, snap, p52),
-            ));
+            (snap).set_card_result({
+                let __t1 = inl_mnSnap_GetLoadPhotoIdx_unfused(ctx, snap, p52);
+                fns::lbSnap_8001E058(ctx, (snap).active_slot(), __t1)
+            });
             if (snap).card_result() == 8_i32 {
                 fns::mnSnap_80254298(ctx);
                 return;
@@ -1571,13 +1570,14 @@ pub fn fn_802545C4<'a>(ctx: &'a Ctx) {
                 ctx,
                 statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_pos(),
             );
-            (statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_text()).set_pos_x(fp::fsubs(
+            let __t2 = fp::fsubs(
                 inl_HSD_JObjGetTranslationX_unfused(
                     ctx,
                     statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_pos(),
                 ),
                 6.0,
-            ));
+            );
+            (statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_text()).set_pos_x(__t2);
         }
     }
     state = statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).state();
@@ -1715,9 +1715,8 @@ pub fn fn_802545C4<'a>(ctx: &'a Ctx) {
                         statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_pos(),
                     );
                     jobj = statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_pos();
-                    (statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_text()).set_pos_x(
-                        fp::fsubs(inl_HSD_JObjGetTranslationX_unfused(ctx, jobj), 6.0),
-                    );
+                    let __t3 = fp::fsubs(inl_HSD_JObjGetTranslationX_unfused(ctx, jobj), 6.0);
+                    (statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_text()).set_pos_x(__t3);
                     fns::lbAudioAx_80024030(ctx, 3_i32);
                 }
                 inl_mnSnap_AnimateCardSlots_unfused(ctx, active_slot);
@@ -1763,11 +1762,11 @@ pub fn fn_802545C4<'a>(ctx: &'a Ctx) {
                 }
                 if result != 0_i32 {
                     if ((({
-                        let __t2 = statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx)
+                        let __t4 = statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx)
                             .card_status()
                             .at(0_i32);
-                        card_status = __t2;
-                        __t2
+                        card_status = __t4;
+                        __t4
                     })
                     .get() as i32)
                         != 0_i32)
@@ -1794,10 +1793,10 @@ pub fn fn_802545C4<'a>(ctx: &'a Ctx) {
                         }
                     }
                     if ({
-                        let __t3 =
+                        let __t5 =
                             statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).active_slot_ref();
-                        active_slot_2 = __t3;
-                        __t3
+                        active_slot_2 = __t5;
+                        __t5
                     })
                     .get()
                         >= 0_i32
@@ -1874,11 +1873,12 @@ pub fn fn_802545C4<'a>(ctx: &'a Ctx) {
                                     );
                                     jobj =
                                         statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_pos();
+                                    let __t6 = fp::fsubs(
+                                        inl_HSD_JObjGetTranslationX_unfused(ctx, jobj),
+                                        6.0,
+                                    );
                                     (statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_text())
-                                        .set_pos_x(fp::fsubs(
-                                            inl_HSD_JObjGetTranslationX_unfused(ctx, jobj),
-                                            6.0,
-                                        ));
+                                        .set_pos_x(__t6);
                                     fns::lbAudioAx_80024030(ctx, 3_i32);
                                 }
                             }
@@ -2061,11 +2061,10 @@ pub fn fn_802545C4<'a>(ctx: &'a Ctx) {
                                 statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_pos(),
                             );
                             jobj = statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_pos();
+                            let __t7 =
+                                fp::fsubs(inl_HSD_JObjGetTranslationX_unfused(ctx, jobj), 6.0);
                             (statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_text())
-                                .set_pos_x(fp::fsubs(
-                                    inl_HSD_JObjGetTranslationX_unfused(ctx, jobj),
-                                    6.0,
-                                ));
+                                .set_pos_x(__t7);
                         } else if statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx)
                             .photo_count()
                             .at(slot)
@@ -2130,11 +2129,10 @@ pub fn fn_802545C4<'a>(ctx: &'a Ctx) {
                                 statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_pos(),
                             );
                             jobj = statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_pos();
+                            let __t8 =
+                                fp::fsubs(inl_HSD_JObjGetTranslationX_unfused(ctx, jobj), 6.0);
                             (statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_text())
-                                .set_pos_x(fp::fsubs(
-                                    inl_HSD_JObjGetTranslationX_unfused(ctx, jobj),
-                                    6.0,
-                                ));
+                                .set_pos_x(__t8);
                             fns::lbAudioAx_80024030(ctx, 3_i32);
                         } else {
                             inl_sfxForward_unfused(ctx);
@@ -2267,9 +2265,8 @@ pub fn fn_802545C4<'a>(ctx: &'a Ctx) {
                         statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_pos(),
                     );
                     jobj = statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_pos();
-                    (statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_text()).set_pos_x(
-                        fp::fsubs(inl_HSD_JObjGetTranslationX_unfused(ctx, jobj), 6.0),
-                    );
+                    let __t9 = fp::fsubs(inl_HSD_JObjGetTranslationX_unfused(ctx, jobj), 6.0);
+                    (statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_text()).set_pos_x(__t9);
                     fns::lbAudioAx_80024030(ctx, 3_i32);
                 } else {
                     statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).set_state(6_i32);
@@ -2705,9 +2702,8 @@ pub fn fn_802545C4<'a>(ctx: &'a Ctx) {
                         statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_pos(),
                     );
                     jobj = statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_pos();
-                    (statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_text()).set_pos_x(
-                        fp::fsubs(inl_HSD_JObjGetTranslationX_unfused(ctx, jobj), 6.0),
-                    );
+                    let __t10 = fp::fsubs(inl_HSD_JObjGetTranslationX_unfused(ctx, jobj), 6.0);
+                    (statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_text()).set_pos_x(__t10);
                     statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).set_state(12_i32);
                 } else if statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).menu_sel() == 3_i32 {
                     statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).set_dlg_timer(9_i32);
@@ -2756,9 +2752,8 @@ pub fn fn_802545C4<'a>(ctx: &'a Ctx) {
                         statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_pos(),
                     );
                     jobj = statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_pos();
-                    (statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_text()).set_pos_x(
-                        fp::fsubs(inl_HSD_JObjGetTranslationX_unfused(ctx, jobj), 6.0),
-                    );
+                    let __t11 = fp::fsubs(inl_HSD_JObjGetTranslationX_unfused(ctx, jobj), 6.0);
+                    (statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_text()).set_pos_x(__t11);
                     fns::lbAudioAx_80024030(ctx, 7_i32);
                     statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).set_state(20_i32);
                 } else if statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).menu_sel() == 4_i32 {
@@ -2817,9 +2812,8 @@ pub fn fn_802545C4<'a>(ctx: &'a Ctx) {
                         statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_pos(),
                     );
                     jobj = statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_pos();
-                    (statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_text()).set_pos_x(
-                        fp::fsubs(inl_HSD_JObjGetTranslationX_unfused(ctx, jobj), 6.0),
-                    );
+                    let __t12 = fp::fsubs(inl_HSD_JObjGetTranslationX_unfused(ctx, jobj), 6.0);
+                    (statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).dlg_text()).set_pos_x(__t12);
                     statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).set_state(21_i32);
                 }
             }
@@ -2867,12 +2861,15 @@ pub fn fn_802545C4<'a>(ctx: &'a Ctx) {
                         {
                             let mut mi: i32 =
                                 statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).move_idx();
-                            result = fns::lbSnap_8001D7B0(
-                                ctx,
-                                statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).active_slot(),
-                                inl_mnSnap_GetCursorIdx_unfused(ctx),
-                                mi,
-                            );
+                            result = {
+                                let __t13 = inl_mnSnap_GetCursorIdx_unfused(ctx);
+                                fns::lbSnap_8001D7B0(
+                                    ctx,
+                                    statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).active_slot(),
+                                    __t13,
+                                    mi,
+                                )
+                            };
                         }
                         if result != 8_i32 {
                             'l12: loop {
@@ -4045,61 +4042,66 @@ pub fn mnSnap_80257F24<'a>(ctx: &'a Ctx) {
     warn_matanim = (snap).warn_matanim_ref();
     warn_shapeanim = (snap).warn_shapeanim_ref();
     main_joint = (snap).main_joint_ref();
-    fns::lbArchive_LoadSections(
-        ctx,
-        archive,
-        Handle::cast::<Addr<'a>>(inl_mnSnap_GetMainJoint(ctx, snap)),
-        &[
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803f02ec))),
-            VarArg::Int(Handle::addr(main_animjoint)),
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803f0304))),
-            VarArg::Int(Handle::addr(main_matanim)),
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803f0320))),
-            VarArg::Int(Handle::addr(inl_mnSnap_GetMainShapeAnim(ctx, snap))),
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803f0340))),
-            VarArg::Int(Handle::addr(csr_joint)),
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803f0364))),
-            VarArg::Int(Handle::addr(csr_animjoint)),
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803f037c))),
-            VarArg::Int(Handle::addr(csr_matanim)),
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803f0398))),
-            VarArg::Int(Handle::addr(csr_shapeanim)),
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803f03b8))),
-            VarArg::Int(Handle::addr(photo_joint)),
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803f03dc))),
-            VarArg::Int(Handle::addr(sub_animjoint)),
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803f03f8))),
-            VarArg::Int(Handle::addr(sub_matanim)),
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803f0418))),
-            VarArg::Int(Handle::addr(sub_shapeanim)),
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803f043c))),
-            VarArg::Int(Handle::addr(page_joint)),
-            VarArg::Int(Handle::addr(
-                ({
-                    let __t1 = cstr(ctx, 0x803f0460);
-                    page_name = __t1;
-                    __t1
-                }),
-            )),
-            VarArg::Int(Handle::addr(arrows_joint)),
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803f047c))),
-            VarArg::Int(Handle::addr(arrows_animjoint)),
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803f0494))),
-            VarArg::Int(Handle::addr(arrows_matanim)),
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803f04b0))),
-            VarArg::Int(Handle::addr(arrows_shapeanim)),
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803f04d0))),
-            VarArg::Int(Handle::addr(warn_joint)),
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803f04f4))),
-            VarArg::Int(Handle::addr(warn_animjoint)),
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803f050c))),
-            VarArg::Int(Handle::addr(warn_matanim)),
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803f0528))),
-            VarArg::Int(Handle::addr(warn_shapeanim)),
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803f0548))),
-            VarArg::Int(0_i32 as u32),
-        ],
-    );
+    {
+        let __t2 = VarArg::Int(Handle::addr(
+            ({
+                let __t1 = cstr(ctx, 0x803f0460);
+                page_name = __t1;
+                __t1
+            }),
+        ));
+        let __t3 = VarArg::Int(Handle::addr(inl_mnSnap_GetMainShapeAnim(ctx, snap)));
+        let __t4 = Handle::cast::<Addr<'a>>(inl_mnSnap_GetMainJoint(ctx, snap));
+        fns::lbArchive_LoadSections(
+            ctx,
+            archive,
+            __t4,
+            &[
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803f02ec))),
+                VarArg::Int(Handle::addr(main_animjoint)),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803f0304))),
+                VarArg::Int(Handle::addr(main_matanim)),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803f0320))),
+                __t3,
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803f0340))),
+                VarArg::Int(Handle::addr(csr_joint)),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803f0364))),
+                VarArg::Int(Handle::addr(csr_animjoint)),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803f037c))),
+                VarArg::Int(Handle::addr(csr_matanim)),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803f0398))),
+                VarArg::Int(Handle::addr(csr_shapeanim)),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803f03b8))),
+                VarArg::Int(Handle::addr(photo_joint)),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803f03dc))),
+                VarArg::Int(Handle::addr(sub_animjoint)),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803f03f8))),
+                VarArg::Int(Handle::addr(sub_matanim)),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803f0418))),
+                VarArg::Int(Handle::addr(sub_shapeanim)),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803f043c))),
+                VarArg::Int(Handle::addr(page_joint)),
+                __t2,
+                VarArg::Int(Handle::addr(arrows_joint)),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803f047c))),
+                VarArg::Int(Handle::addr(arrows_animjoint)),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803f0494))),
+                VarArg::Int(Handle::addr(arrows_matanim)),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803f04b0))),
+                VarArg::Int(Handle::addr(arrows_shapeanim)),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803f04d0))),
+                VarArg::Int(Handle::addr(warn_joint)),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803f04f4))),
+                VarArg::Int(Handle::addr(warn_animjoint)),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803f050c))),
+                VarArg::Int(Handle::addr(warn_matanim)),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803f0528))),
+                VarArg::Int(Handle::addr(warn_shapeanim)),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803f0548))),
+                VarArg::Int(0_i32 as u32),
+            ],
+        )
+    };
     gobj = fns::GObj_Create(ctx, (6_i32 as u16), (7_i32 as u8), (128_i32 as u8));
     (snap).set_main_gobj(gobj);
     jobj = fns::HSD_JObjLoadJoint(ctx, ((main_joint).get()));
@@ -4143,9 +4145,9 @@ pub fn mnSnap_80257F24<'a>(ctx: &'a Ctx) {
     );
     jobj2.set(
         ({
-            let __t2 = (snap).slot_jobjs().at(0_i32);
-            slot_jobj_ptr = __t2;
-            __t2
+            let __t5 = (snap).slot_jobjs().at(0_i32);
+            slot_jobj_ptr = __t5;
+            __t5
         })
         .get(),
     );
@@ -4953,8 +4955,10 @@ fn inl_mnSnap_CheckCopy_unfused<'a>(ctx: &'a Ctx, source_slot: i32, cursor: i32)
         result = 5_i32;
     } else if fns::lbSnap_8001D3CC(ctx, other_slot) == 0_i32 {
         result = 1_i32;
-    } else if fns::lbSnap_8001D3E8(ctx, source_slot, cursor) > fns::lbSnap_8001D3B0(ctx, other_slot)
-    {
+    } else if {
+        let __t1 = fns::lbSnap_8001D3B0(ctx, other_slot);
+        fns::lbSnap_8001D3E8(ctx, source_slot, cursor) > __t1
+    } {
         result = 1_i32;
     } else {
         result = 0_i32;

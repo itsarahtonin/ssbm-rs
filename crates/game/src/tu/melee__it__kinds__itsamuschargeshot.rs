@@ -197,14 +197,14 @@ pub fn it_802B56E4<'a>(
         ));
         Handle::copy_from((ip).pos(), (vec));
         (ip).xDD4_itemVar().samuschargeshot().set_xDFC(0_i32);
-        (ip).x40_vel().set_x(fp::fmuls(
-            (ip).xDD4_itemVar().samuschargeshot().xDDC(),
-            fns::cosf(ctx, (ip).xDD4_itemVar().samuschargeshot().xDD8()),
-        ));
-        (ip).x40_vel().set_y(fp::fmuls(
-            (ip).xDD4_itemVar().samuschargeshot().xDDC(),
-            fns::sinf(ctx, (ip).xDD4_itemVar().samuschargeshot().xDD8()),
-        ));
+        (ip).x40_vel().set_x({
+            let __t3 = fns::cosf(ctx, (ip).xDD4_itemVar().samuschargeshot().xDD8());
+            fp::fmuls((ip).xDD4_itemVar().samuschargeshot().xDDC(), __t3)
+        });
+        (ip).x40_vel().set_y({
+            let __t4 = fns::sinf(ctx, (ip).xDD4_itemVar().samuschargeshot().xDD8());
+            fp::fmuls((ip).xDD4_itemVar().samuschargeshot().xDDC(), __t4)
+        });
         (ip).x40_vel().set_z(0.0);
         (ip).xDD4_itemVar().samuschargeshot().set_xDE8(1_i32);
     }
@@ -474,14 +474,14 @@ pub fn itSamuschargeshot_UnkMotion8_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    (ip).x40_vel().set_x(fp::fmuls(
-        (ip).xDD4_itemVar().samuschargeshot().xDDC(),
-        fns::cosf(ctx, (ip).xDD4_itemVar().samuschargeshot().xDD8()),
-    ));
-    (ip).x40_vel().set_y(fp::fmuls(
-        (ip).xDD4_itemVar().samuschargeshot().xDDC(),
-        fns::sinf(ctx, (ip).xDD4_itemVar().samuschargeshot().xDD8()),
-    ));
+    (ip).x40_vel().set_x({
+        let __t1 = fns::cosf(ctx, (ip).xDD4_itemVar().samuschargeshot().xDD8());
+        fp::fmuls((ip).xDD4_itemVar().samuschargeshot().xDDC(), __t1)
+    });
+    (ip).x40_vel().set_y({
+        let __t2 = fns::sinf(ctx, (ip).xDD4_itemVar().samuschargeshot().xDD8());
+        fp::fmuls((ip).xDD4_itemVar().samuschargeshot().xDDC(), __t2)
+    });
 }
 
 pub fn itSamuschargeshot_UnkMotion8_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {

@@ -572,14 +572,17 @@ pub fn ftFx_Throw_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 __state = 8;
             }
             14 => {
-                blasterGObj = fns::it_802AE8A8(
-                    ctx,
-                    (fp).facing_dir(),
-                    gobj,
-                    (fp).cur_pos(),
-                    fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_RThumbNb as i32)),
-                    (da).x20_FOX_BLASTER_GUN_ITKIND(),
-                );
+                blasterGObj = {
+                    let __t2 = fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_RThumbNb as i32));
+                    fns::it_802AE8A8(
+                        ctx,
+                        (fp).facing_dir(),
+                        gobj,
+                        (fp).cur_pos(),
+                        __t2,
+                        (da).x20_FOX_BLASTER_GUN_ITKIND(),
+                    )
+                };
                 (fp).u().fx().set_x222C_blasterGObj(blasterGObj);
                 __state = if !Handle::is_null(blasterGObj) {
                     18
@@ -1066,14 +1069,17 @@ fn inl_ftFox_SpecialN_SpawnBlaster_unfused<'a>(
     let mut fp = fp;
     let mut da = da;
     let mut assert_line = assert_line;
-    let mut blaster_gobj: HSD_GObj<'a> = fns::it_802AE8A8(
-        ctx,
-        (fp).facing_dir(),
-        gobj,
-        (fp).cur_pos(),
-        fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_RThumbNb as i32)),
-        (da).x20_FOX_BLASTER_GUN_ITKIND(),
-    );
+    let mut blaster_gobj: HSD_GObj<'a> = {
+        let __t1 = fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_RThumbNb as i32));
+        fns::it_802AE8A8(
+            ctx,
+            (fp).facing_dir(),
+            gobj,
+            (fp).cur_pos(),
+            __t1,
+            (da).x20_FOX_BLASTER_GUN_ITKIND(),
+        )
+    };
     (fp).u().fx().set_x222C_blasterGObj(blaster_gobj);
     if !Handle::is_null(blaster_gobj) {
         fns::it_8026BAE8(ctx, (fp).u().fx().x222C_blasterGObj(), fp::frsp(0.85));

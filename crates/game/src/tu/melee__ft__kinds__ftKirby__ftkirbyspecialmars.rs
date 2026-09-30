@@ -1002,15 +1002,14 @@ fn inl_setupStartAccessory_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, scale: 
     });
     jobj = (fp).x20A0_accessory();
     inl_HSD_JObjSetScale_unfused(ctx, jobj, scale);
-    fns::lb_8000C2F8(
-        ctx,
-        (fp).x20A0_accessory(),
-        (Handle::add(
+    {
+        let __t3 = (Handle::add(
             (fp).parts(),
             fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_RThumbNb as i32)),
         ))
-        .joint(),
-    );
+        .joint();
+        fns::lb_8000C2F8(ctx, (fp).x20A0_accessory(), __t3)
+    };
 }
 
 fn inl_getFighter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {

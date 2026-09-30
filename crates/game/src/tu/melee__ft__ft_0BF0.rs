@@ -131,16 +131,20 @@ pub fn ftCo_800BF108<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
         if __case <= 2 {
             {
-                (fp).set_item_gobj(fns::itDrMarioPill_802C09C4(
-                    ctx,
-                    gobj,
-                    (fp).cur_pos(),
-                    fns::ftMr_SpecialN_VitaminRandom(ctx, gobj),
-                    (enums::It_Kind_DrMario_Vitamin as i32),
-                    2_i32,
-                    fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_RThumbNb as i32)),
-                    (fp).facing_dir(),
-                ));
+                (fp).set_item_gobj({
+                    let __t1 = fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_RThumbNb as i32));
+                    let __t2 = fns::ftMr_SpecialN_VitaminRandom(ctx, gobj);
+                    fns::itDrMarioPill_802C09C4(
+                        ctx,
+                        gobj,
+                        (fp).cur_pos(),
+                        __t2,
+                        (enums::It_Kind_DrMario_Vitamin as i32),
+                        2_i32,
+                        __t1,
+                        (fp).facing_dir(),
+                    )
+                });
                 return;
             }
         }

@@ -1476,15 +1476,18 @@ pub fn ftKb_PrSpecialN1_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     {
         let mut max_vel: f64 = 0.0;
-        if (if ((fp).gr_vel()) < fp::frsp(0_i32 as f64) {
-            fp::fneg(((fp).gr_vel()))
-        } else {
-            ((fp).gr_vel())
-        }) > ({
-            let __t1 = (da).specialn_pr_base_speed();
-            max_vel = __t1;
-            __t1
-        }) {
+        if {
+            let __t2 = ({
+                let __t1 = (da).specialn_pr_base_speed();
+                max_vel = __t1;
+                __t1
+            });
+            (if ((fp).gr_vel()) < fp::frsp(0_i32 as f64) {
+                fp::fneg(((fp).gr_vel()))
+            } else {
+                ((fp).gr_vel())
+            }) > __t2
+        } {
             if (fp).gr_vel() < 0.0 {
                 max_vel = fp::fneg(max_vel);
             }
@@ -1493,15 +1496,18 @@ pub fn ftKb_PrSpecialN1_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     {
         let mut max_vel_2: f64 = 0.0;
-        if (if ((fp).gr_vel()) < fp::frsp(0_i32 as f64) {
-            fp::fneg(((fp).gr_vel()))
-        } else {
-            ((fp).gr_vel())
-        }) > ({
-            let __t2 = (da).specialn_pr_max_speed();
-            max_vel_2 = __t2;
-            __t2
-        }) {
+        if {
+            let __t4 = ({
+                let __t3 = (da).specialn_pr_max_speed();
+                max_vel_2 = __t3;
+                __t3
+            });
+            (if ((fp).gr_vel()) < fp::frsp(0_i32 as f64) {
+                fp::fneg(((fp).gr_vel()))
+            } else {
+                ((fp).gr_vel())
+            }) > __t4
+        } {
             if (fp).gr_vel() < 0.0 {
                 max_vel_2 = fp::fneg(max_vel_2);
             }
@@ -1532,10 +1538,10 @@ pub fn ftKb_PrSpecialNTurn_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut da: ftKb_DatAttrs<'a> = Handle::cast::<ftKb_DatAttrs<'a>>((fp).dat_attrs());
-    let mut scale: f64 = fp::fmuls(
-        (da).specialn_pr_turn_rate_related(),
-        fns::mpLib_800569EC(ctx, (fp).coll_data().floor().flags()),
-    );
+    let mut scale: f64 = {
+        let __t1 = fns::mpLib_800569EC(ctx, (fp).coll_data().floor().flags());
+        fp::fmuls((da).specialn_pr_turn_rate_related(), __t1)
+    };
     let mut slope: f64 = (if ((fp).coll_data().floor().normal().x()) < fp::frsp(0_i32 as f64) {
         fp::fneg(((fp).coll_data().floor().normal().x()))
     } else {

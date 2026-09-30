@@ -124,15 +124,15 @@ pub fn ftKb_SpecialNYs_8010AC78<'a>(ctx: &'a Ctx, victim: HSD_GObj<'a>, gobj: HS
         Handle::cast::<HSD_Joint<'a>>(fns::ftKb_SpecialNYs_801093A0(ctx, gobj)),
     );
     inl_HSD_JObjSetScale_unfused(ctx, (fp).x20A0_accessory(), scale);
-    fns::lb_8000C2F8(
-        ctx,
-        inl_HSD_JObjGetChild_unfused(ctx, (fp).x20A0_accessory()),
-        (Handle::add(
+    {
+        let __t3 = (Handle::add(
             (fp).parts(),
             fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_TransN as i32)),
         ))
-        .joint(),
-    );
+        .joint();
+        let __t4 = inl_HSD_JObjGetChild_unfused(ctx, (fp).x20A0_accessory());
+        fns::lb_8000C2F8(ctx, __t4, __t3)
+    };
     Handle::copy_from((fp).mv().co().yoshiegg().scale(), scale);
     inl_inlineB0_unfused(ctx, victim, hurt);
     fns::ftKb_SpecialNYs_80109260(ctx, gobj, (fp).self_vel());
@@ -185,21 +185,24 @@ pub fn ftCo_KirbyYoshiEgg_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         let mut xBCp: ftCo_DatAttrs_xBC_t<'a> = null(ctx);
         fns::ft_PlaySFX(ctx, fp, 0x44618_i32, (127_i32 as u8), (64_i32 as u8));
         fp2 = Handle::cast::<Fighter<'a>>((gobj).user_data());
-        fns::efAsync_Spawn(
-            ctx,
-            gobj,
-            (fp2).x60C_ref(),
-            (4_i32 as u32),
-            (0x4cf_i32 as u32),
-            (Handle::add((fp).parts(), 0_i32)).joint(),
-            &[VarArg::Int(Handle::addr(
+        {
+            let __t2 = VarArg::Int(Handle::addr(
                 ({
                     let __t1 = (fp).co_attrs().xBC();
                     xBCp = __t1;
                     __t1
                 }),
-            ))],
-        );
+            ));
+            fns::efAsync_Spawn(
+                ctx,
+                gobj,
+                (fp2).x60C_ref(),
+                (4_i32 as u32),
+                (0x4cf_i32 as u32),
+                (Handle::add((fp).parts(), 0_i32)).joint(),
+                &[__t2],
+            )
+        };
         fns::ftKb_SpecialNYs_80109354(ctx, (fp).self_vel());
         fns::ftCommon_8007D5D4(ctx, fp);
         fns::ftColl_8007B760(ctx, gobj, fns::ftKb_SpecialNYs_8010933C(ctx));

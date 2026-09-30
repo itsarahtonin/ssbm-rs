@@ -425,7 +425,10 @@ pub fn __DSP_insert_task<'a>(ctx: &'a Ctx, task: STRUCT_DSP_TASK<'a>) {
     temp = fns::__DSP_first_task(ctx).get();
     'l1: while !Handle::is_null(temp) {
         'c2: {
-            if (task).priority() < (temp).priority() {
+            if {
+                let __t3 = (temp).priority();
+                (task).priority() < __t3
+            } {
                 (task).set_prev((temp).prev());
                 (temp).set_prev(task);
                 (task).set_next(temp);

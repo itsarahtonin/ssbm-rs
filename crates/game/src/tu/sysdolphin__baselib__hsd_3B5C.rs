@@ -916,7 +916,7 @@ fn inl_hsd_803B6BE4_inline_unfused<'a>(
     ));
     fns::hsd_804D79B8(ctx).set(Handle::cast::<Val<'a, u8>>(src));
     fns::hsd_804D79BC(ctx).set(Handle::cast::<Val<'a, u8>>(src));
-    (state.work()).work().prev_dc().at(0_i32).set({
+    let __t3 = {
         let __t2 = {
             let __t1 = 0_i32;
             (state.work()).work().prev_dc().at(2_i32).set(__t1);
@@ -924,9 +924,10 @@ fn inl_hsd_803B6BE4_inline_unfused<'a>(
         };
         (state.work()).work().prev_dc().at(1_i32).set(__t2);
         __t2
-    });
+    };
+    (state.work()).work().prev_dc().at(0_i32).set(__t3);
     fns::hsd_804D79C4(ctx).set(0_i32);
-    let __t3 = ctx.setjmp_with(Handle::addr((state.work()).jmp()), || -> i32 {
+    let __t4 = ctx.setjmp_with(Handle::addr((state.work()).jmp()), || -> i32 {
         src_byte0 = (Handle::add(fns::hsd_804D79BC(ctx).get(), fns::hsd_804D79C0(ctx).get()));
         'back_find_luma_quant: loop {
             if ((Handle::cast::<Val<'a, u16>>(fns::hsd_804D79B8(ctx).get())).get() as i32)
@@ -1025,9 +1026,9 @@ fn inl_hsd_803B6BE4_inline_unfused<'a>(
                                 qptr =
                                     Handle::add((state.quant_table()).luma().at(0), zigzag_index);
                                 (Handle::add(qptr, 64_i32)).set({
-                                    let __t4 = (src_byte8).get();
-                                    qbyte = __t4;
-                                    __t4
+                                    let __t5 = (src_byte8).get();
+                                    qbyte = __t5;
+                                    __t5
                                 });
                                 src_byte9 = fns::hsd_804D79B8(ctx).get();
                                 fns::hsd_804D79B8(ctx).set(Handle::add(src_byte9, 1_i32));
@@ -1035,9 +1036,9 @@ fn inl_hsd_803B6BE4_inline_unfused<'a>(
                                 qptr =
                                     Handle::add((state.quant_table()).luma().at(0), zigzag_index);
                                 (Handle::add(qptr, 64_i32)).set({
-                                    let __t5 = (src_byte9).get();
-                                    qbyte = __t5;
-                                    __t5
+                                    let __t6 = (src_byte9).get();
+                                    qbyte = __t6;
+                                    __t6
                                 });
                                 src_byte10 = fns::hsd_804D79B8(ctx).get();
                                 fns::hsd_804D79B8(ctx).set(Handle::add(src_byte10, 1_i32));
@@ -1045,9 +1046,9 @@ fn inl_hsd_803B6BE4_inline_unfused<'a>(
                                 qptr =
                                     Handle::add((state.quant_table()).luma().at(0), zigzag_index);
                                 (Handle::add(qptr, 64_i32)).set({
-                                    let __t6 = (src_byte10).get();
-                                    qbyte = __t6;
-                                    __t6
+                                    let __t7 = (src_byte10).get();
+                                    qbyte = __t7;
+                                    __t7
                                 });
                                 src_byte11 = fns::hsd_804D79B8(ctx).get();
                                 fns::hsd_804D79B8(ctx).set(Handle::add(src_byte11, 1_i32));
@@ -1055,9 +1056,9 @@ fn inl_hsd_803B6BE4_inline_unfused<'a>(
                                 qptr =
                                     Handle::add((state.quant_table()).luma().at(0), zigzag_index);
                                 (Handle::add(qptr, 64_i32)).set({
-                                    let __t7 = (src_byte11).get();
-                                    qbyte = __t7;
-                                    __t7
+                                    let __t8 = (src_byte11).get();
+                                    qbyte = __t8;
+                                    __t8
                                 });
                                 src_byte12 = fns::hsd_804D79B8(ctx).get();
                                 fns::hsd_804D79B8(ctx).set(Handle::add(src_byte12, 1_i32));
@@ -1065,9 +1066,9 @@ fn inl_hsd_803B6BE4_inline_unfused<'a>(
                                 qptr =
                                     Handle::add((state.quant_table()).luma().at(0), zigzag_index);
                                 (Handle::add(qptr, 64_i32)).set({
-                                    let __t8 = (src_byte12).get();
-                                    qbyte = __t8;
-                                    __t8
+                                    let __t9 = (src_byte12).get();
+                                    qbyte = __t9;
+                                    __t9
                                 });
                                 src_byte13 = fns::hsd_804D79B8(ctx).get();
                                 fns::hsd_804D79B8(ctx).set(Handle::add(src_byte13, 1_i32));
@@ -1075,9 +1076,9 @@ fn inl_hsd_803B6BE4_inline_unfused<'a>(
                                 qptr =
                                     Handle::add((state.quant_table()).luma().at(0), zigzag_index);
                                 qbyte = {
-                                    let __t9 = (src_byte13).get();
-                                    quant_byte = __t9;
-                                    __t9
+                                    let __t10 = (src_byte13).get();
+                                    quant_byte = __t10;
+                                    __t10
                                 };
                                 (Handle::add(qptr, 64_i32)).set(qbyte);
                                 src_byte14 = fns::hsd_804D79B8(ctx).get();
@@ -1086,9 +1087,9 @@ fn inl_hsd_803B6BE4_inline_unfused<'a>(
                                 qptr =
                                     Handle::add((state.quant_table()).luma().at(0), zigzag_index);
                                 (Handle::add(qptr, 64_i32)).set({
-                                    let __t10 = (src_byte14).get();
-                                    qbyte = __t10;
-                                    __t10
+                                    let __t11 = (src_byte14).get();
+                                    qbyte = __t11;
+                                    __t11
                                 });
                                 src_byte15 = fns::hsd_804D79B8(ctx).get();
                                 fns::hsd_804D79B8(ctx).set(Handle::add(src_byte15, 1_i32));
@@ -1097,9 +1098,9 @@ fn inl_hsd_803B6BE4_inline_unfused<'a>(
                                     Handle::add((state.quant_table()).luma().at(0), zigzag_index);
                                 zigzag = Handle::add(zigzag, 8_i32);
                                 (Handle::add(qptr, 64_i32)).set({
-                                    let __t11 = (src_byte15).get();
-                                    qbyte = __t11;
-                                    __t11
+                                    let __t12 = (src_byte15).get();
+                                    qbyte = __t12;
+                                    __t12
                                 });
                             }
                             i = i.wrapping_add(8_i32);
@@ -1367,10 +1368,10 @@ fn inl_hsd_803B6BE4_inline_unfused<'a>(
                                                     let mut quant_chroma: Val<'a, u8> =
                                                         (state.quant_table()).chroma().at(0);
                                                     cb_coeff = {
-                                                        let __t12 =
+                                                        let __t13 =
                                                             (state.work()).work().coeff().at(0);
-                                                        coefficients = __t12;
-                                                        __t12
+                                                        coefficients = __t13;
+                                                        __t13
                                                     };
                                                     cb_out = (state.work()).work().cb().at(0);
                                                     {
@@ -1667,7 +1668,7 @@ fn inl_hsd_803B6BE4_inline_unfused<'a>(
         #[allow(unreachable_code)]
         return 0;
     });
-    match __t3 {
+    match __t4 {
         Ok(v) => return v,
         Err(_) => {
             return 0_i32;

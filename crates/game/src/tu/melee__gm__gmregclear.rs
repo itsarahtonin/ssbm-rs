@@ -675,10 +675,8 @@ pub fn fn_8017FBA4<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
     ((p).x7C()).set_default_alignment((2_i32 as u8));
     (p).set_xF8((p).xF8().wrapping_add(1_i32));
     if (p).xF8() < 12_i32 {
-        fns::HSD_SisLib_803A7548(
-            ctx,
-            (p).x7C(),
-            fns::HSD_SisLib_803A6B98(
+        {
+            let __t1 = fns::HSD_SisLib_803A6B98(
                 ctx,
                 (p).x7C(),
                 0.0,
@@ -688,15 +686,18 @@ pub fn fn_8017FBA4<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
                     VarArg::Int(Handle::addr(cstr(ctx, 0x804d4088))),
                     VarArg::Int((p).xCC() as u32),
                 ],
-            ),
-            fp::fmuls(0.10000000149011612, sx),
-            fp::fmuls(0.06499999761581421, sy),
-        );
+            );
+            fns::HSD_SisLib_803A7548(
+                ctx,
+                (p).x7C(),
+                __t1,
+                fp::fmuls(0.10000000149011612, sx),
+                fp::fmuls(0.06499999761581421, sy),
+            )
+        };
     } else if (p).xF8() < 32_i32 {
-        fns::HSD_SisLib_803A7548(
-            ctx,
-            (p).x7C(),
-            fns::HSD_SisLib_803A6B98(
+        {
+            let __t2 = fns::HSD_SisLib_803A6B98(
                 ctx,
                 (p).x7C(),
                 0.0,
@@ -706,10 +707,15 @@ pub fn fn_8017FBA4<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
                     VarArg::Int(Handle::addr(cstr(ctx, 0x804d4088))),
                     VarArg::Int((p).xDC().wrapping_add((p).xD0()) as u32),
                 ],
-            ),
-            fp::fmuls(0.10000000149011612, sx),
-            fp::fmuls(0.06499999761581421, sy),
-        );
+            );
+            fns::HSD_SisLib_803A7548(
+                ctx,
+                (p).x7C(),
+                __t2,
+                fp::fmuls(0.10000000149011612, sx),
+                fp::fmuls(0.06499999761581421, sy),
+            )
+        };
     } else {
         if (p).xF0() >= 0_i32 {
             str = fns::HSD_SisLib_803A6B98(
@@ -815,9 +821,9 @@ pub fn fn_8017FF1C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     fns::fn_8017FBA4(ctx, Handle::cast::<Addr<'a>>(data.arg()));
     if (((data.state()).x117() as i32) != 0_i32) && ((data.state()).x110() > 41_u32) {
-        (data.state()).set_xC0(
-            (fns::fn_8017F47C(ctx, (data.state()).x84_ref(), ((data.state()).xC0() as i32)) as u16),
-        );
+        let __t2 =
+            (fns::fn_8017F47C(ctx, (data.state()).x84_ref(), ((data.state()).xC0() as i32)) as u16);
+        (data.state()).set_xC0(__t2);
         mask = (fns::fn_8017F008(ctx) as u8);
         if fns::fn_8016F9A8(
             ctx,
@@ -891,15 +897,14 @@ pub fn fn_8017FF1C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     ) > 7_i32
                     {
                         mask = (fns::fn_8017F008(ctx) as u8);
-                        (data.state()).set_xC0(
-                            (fns::fn_8016F740(
-                                ctx,
-                                Handle::cast::<Addr<'a>>(fns::gm_8016B774(ctx)),
-                                (data.state()).xC0(),
-                                mask,
-                                (0_i32 as u8),
-                            ) as u16),
-                        );
+                        let __t3 = (fns::fn_8016F740(
+                            ctx,
+                            Handle::cast::<Addr<'a>>(fns::gm_8016B774(ctx)),
+                            (data.state()).xC0(),
+                            mask,
+                            (0_i32 as u8),
+                        ) as u16);
+                        (data.state()).set_xC0(__t3);
                         (data.state()).set_xC8((1_i32 as u8));
                         (data.state()).set_xC4((data.state()).x110());
                     }
@@ -914,23 +919,18 @@ pub fn fn_8017FF1C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     | ((repeat | buttons) & (0_i32 as u64)))
                     != 0)
                 {
-                    if fns::fn_8016F870(
-                        ctx,
-                        Handle::cast::<Addr<'a>>(fns::gm_8016B774(ctx)),
-                        (data.state()).xC0(),
-                        (fns::fn_8017F008(ctx) as u8),
-                        (0_i32 as u8),
-                    ) >= 0_i32
+                    if {
+                        let __t4 = (fns::fn_8017F008(ctx) as u8);
+                        let __t5 = Handle::cast::<Addr<'a>>(fns::gm_8016B774(ctx));
+                        fns::fn_8016F870(ctx, __t5, (data.state()).xC0(), __t4, (0_i32 as u8))
+                    } >= 0_i32
                     {
-                        (data.state()).set_xC0(
-                            (fns::fn_8016F870(
-                                ctx,
-                                Handle::cast::<Addr<'a>>(fns::gm_8016B774(ctx)),
-                                (data.state()).xC0(),
-                                (fns::fn_8017F008(ctx) as u8),
-                                (0_i32 as u8),
-                            ) as u16),
-                        );
+                        let __t8 = ({
+                            let __t6 = (fns::fn_8017F008(ctx) as u8);
+                            let __t7 = Handle::cast::<Addr<'a>>(fns::gm_8016B774(ctx));
+                            fns::fn_8016F870(ctx, __t7, (data.state()).xC0(), __t6, (0_i32 as u8))
+                        } as u16);
+                        (data.state()).set_xC0(__t8);
                         (data.state()).set_xC8((1_i32 as u8));
                         (data.state()).set_xC4((data.state()).x110());
                     }
@@ -1340,20 +1340,21 @@ pub fn fn_80180630<'a>(
                 &[VarArg::Int(Handle::addr(cstr(ctx, 0x803d8b9c)))],
             );
         }
-        fns::fn_80168A6C(
-            ctx,
-            Handle::cast::<Addr<'a>>(scene_data.get()),
-            Handle::cast::<Addr<'a>>(inl_fn_80180630_GetModelDesc_unfused(ctx, state)),
-            0_i32,
-        );
+        {
+            let __t2 = Handle::cast::<Addr<'a>>(inl_fn_80180630_GetModelDesc_unfused(ctx, state));
+            fns::fn_80168A6C(ctx, Handle::cast::<Addr<'a>>(scene_data.get()), __t2, 0_i32)
+        };
     }
     inl_fn_80180630_CreateLightAndCamera_unfused(ctx, state, cam_gobj);
-    fns::HSD_GObjObject_80390A70(
-        ctx,
-        cam_gobj.get(),
-        fns::HSD_GObj_CameraKind(ctx).get(),
-        inl_fn_80180630_LoadCameraDesc_unfused(ctx, state),
-    );
+    {
+        let __t3 = inl_fn_80180630_LoadCameraDesc_unfused(ctx, state);
+        fns::HSD_GObjObject_80390A70(
+            ctx,
+            cam_gobj.get(),
+            fns::HSD_GObj_CameraKind(ctx).get(),
+            __t3,
+        )
+    };
     fns::GObj_SetupGXLinkMax(ctx, cam_gobj.get(), fnptr(ctx, 0x803910d8), 8_u32);
     (cam_gobj.get()).set_gxlink_prios((0x4c00_i32 as u64));
     inl_fn_80180630_SetupSisLib_unfused(ctx, cam_gobj.get());
@@ -1483,12 +1484,15 @@ fn inl_fn_80180630_CreateLightAndCamera_unfused<'a>(
     let mut cam_gobj = cam_gobj;
     let mut light_gobj: HSD_GObj<'a> = null(ctx);
     light_gobj = fns::GObj_Create(ctx, (11_u32 as u16), (3_u32 as u8), (0_u32 as u8));
-    fns::HSD_GObjObject_80390A70(
-        ctx,
-        light_gobj,
-        (fns::HSD_GObj_LightKind(ctx).get() as u8),
-        inl_fn_80180630_LoadLightList_unfused(ctx, state),
-    );
+    {
+        let __t1 = inl_fn_80180630_LoadLightList_unfused(ctx, state);
+        fns::HSD_GObjObject_80390A70(
+            ctx,
+            light_gobj,
+            (fns::HSD_GObj_LightKind(ctx).get() as u8),
+            __t1,
+        )
+    };
     fns::GObj_SetupGXLink(
         ctx,
         light_gobj,

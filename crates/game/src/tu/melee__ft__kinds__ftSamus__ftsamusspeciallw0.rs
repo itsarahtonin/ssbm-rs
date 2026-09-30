@@ -555,10 +555,14 @@ fn inl_ftSamus_80128B1C_inner_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, angl
     let mut samus_attr: _ftSamusAttributes<'a> =
         Handle::cast::<_ftSamusAttributes<'a>>(inl_getFtSpecialAttrs_unfused(ctx, fp));
     fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    (fp).self_vel()
-        .set_x(fp::fmuls((samus_attr).x8(), fns::cosf(ctx, angle)));
-    (fp).self_vel()
-        .set_y(fp::fmuls((samus_attr).x8(), fns::sinf(ctx, angle)));
+    (fp).self_vel().set_x({
+        let __t1 = fns::cosf(ctx, angle);
+        fp::fmuls((samus_attr).x8(), __t1)
+    });
+    (fp).self_vel().set_y({
+        let __t2 = fns::sinf(ctx, angle);
+        fp::fmuls((samus_attr).x8(), __t2)
+    });
     fns::ftCommon_ClampSelfVelX(
         ctx,
         fp,

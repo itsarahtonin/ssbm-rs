@@ -820,13 +820,13 @@ fn inl_spinSpeedDirect_unfused<'a>(
     let mut speed: f64 = 0.0;
     fns::ftLib_GetCameraBonePos(ctx, fighter, pos);
     fns::ftLib_GetPosDelta(ctx, fighter, vel);
-    speed = fp::fmuls(
-        (attrs).x18_spinMultiplier(),
-        inl_sqrtf_unfused(
+    speed = {
+        let __t1 = inl_sqrtf_unfused(
             ctx,
             fp::fadds(fp::fmuls(vel.x(), vel.x()), fp::fmuls(vel.y(), vel.y())),
-        ),
-    );
+        );
+        fp::fmuls((attrs).x18_spinMultiplier(), __t1)
+    };
     return speed;
 }
 
@@ -934,7 +934,10 @@ fn inl_spinSpeed<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, fighter: HSD_GObj<'a>, po
     let mut speed: f64 = 0.0;
     fns::ftLib_GetCameraBonePos(ctx, fighter, pos);
     fns::ftLib_GetPosDelta(ctx, fighter, vel);
-    speed = fp::fmuls((attrs).x18_spinMultiplier(), inl_lbVector_Len_xy(ctx, vel));
+    speed = {
+        let __t1 = inl_lbVector_Len_xy(ctx, vel);
+        fp::fmuls((attrs).x18_spinMultiplier(), __t1)
+    };
     return speed;
 }
 
@@ -1037,10 +1040,10 @@ fn inl_spinSpeed_unfused<'a>(
     let mut speed: f64 = 0.0;
     fns::ftLib_GetCameraBonePos(ctx, fighter, pos);
     fns::ftLib_GetPosDelta(ctx, fighter, vel);
-    speed = fp::fmuls(
-        (attrs).x18_spinMultiplier(),
-        inl_lbVector_Len_xy_unfused(ctx, vel),
-    );
+    speed = {
+        let __t1 = inl_lbVector_Len_xy_unfused(ctx, vel);
+        fp::fmuls((attrs).x18_spinMultiplier(), __t1)
+    };
     return speed;
 }
 

@@ -83,10 +83,9 @@ pub fn HSD_TObjAddAnim<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>, texanim: _HSD_TexAn
                     i = 0_i32;
                     'l3: while i < ((ta).n_tluttbl() as i32) {
                         'c4: {
-                            (Handle::add((tobj).tluttbl(), i)).set(fns::HSD_TlutLoadDesc(
-                                ctx,
-                                (Handle::add((ta).tluttbl(), i)).get(),
-                            ));
+                            let __t2 =
+                                fns::HSD_TlutLoadDesc(ctx, (Handle::add((ta).tluttbl(), i)).get());
+                            (Handle::add((tobj).tluttbl(), i)).set(__t2);
                         }
                         i = i.wrapping_add(1);
                     }
@@ -903,12 +902,10 @@ pub fn TObjSetupMtx<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
         if __case <= 2 {
             {
                 let mut cobj_2: HSD_CObj<'a> = fns::HSD_CObjGetCurrent(ctx);
-                fns::PSMTXConcat(
-                    ctx,
-                    (tobj).mtx().get(0),
-                    fns::HSD_CObjGetInvViewingMtxPtrDirect(ctx, cobj_2),
-                    mtx_3.get(0),
-                );
+                {
+                    let __t4 = fns::HSD_CObjGetInvViewingMtxPtrDirect(ctx, cobj_2);
+                    fns::PSMTXConcat(ctx, (tobj).mtx().get(0), __t4, mtx_3.get(0))
+                };
                 fns::GXLoadTexMtxImm(ctx, mtx_3.get(0), (tobj).mtxid(), (enums::GX_MTX3x4 as i32));
             }
             break 's1;
@@ -3296,16 +3293,19 @@ fn inl_setupTextureCoordGenBump_unfused<'a>(ctx: &'a Ctx, bump: HSD_TObj<'a>) {
     if i >= 8_i32 {
         i = 0_i32;
     }
-    inl_GXSetTexCoordGen_unfused(
-        ctx,
-        ((((bump).coord() as u32).wrapping_add((1_i32 as u32))) as i32),
-        At::new(ctx, 0x804056b8)
-            .field::<ArrV<'a, i32, 8>>(0)
-            .at(i)
-            .get(),
-        fns::HSD_TexCoordID2TexGenSrc(ctx, (bump).coord()),
-        ((enums::GX_IDENTITY as i32) as u32),
-    );
+    {
+        let __t1 = fns::HSD_TexCoordID2TexGenSrc(ctx, (bump).coord());
+        inl_GXSetTexCoordGen_unfused(
+            ctx,
+            ((((bump).coord() as u32).wrapping_add((1_i32 as u32))) as i32),
+            At::new(ctx, 0x804056b8)
+                .field::<ArrV<'a, i32, 8>>(0)
+                .at(i)
+                .get(),
+            __t1,
+            ((enums::GX_IDENTITY as i32) as u32),
+        )
+    };
 }
 
 fn inl_setupTextureCoordGenToon_unfused<'a>(ctx: &'a Ctx, toon: HSD_TObj<'a>) {

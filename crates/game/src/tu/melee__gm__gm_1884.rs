@@ -543,7 +543,7 @@ pub fn fn_80188EE8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fp::frsp(((sub).anim_frames().at(1_i32).get() as u32) as f64),
     );
     fns::HSD_JObjAnimAll(ctx, (sub).jobjs().at(1_i32).get());
-    ((sub).text()).set_pos_x(fp::fmadds(
+    let __t3 = fp::fmadds(
         12.0,
         (fp::fadds(
             9.798828125,
@@ -554,7 +554,8 @@ pub fn fn_80188EE8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             }),
         )),
         50.0,
-    ));
+    );
+    ((sub).text()).set_pos_x(__t3);
     ((sub).text()).set_pos_y(150.0);
     fns::fn_80188738(ctx, (sub).jobjs().at(9_i32).get());
     fns::fn_80188910(ctx, (sub).jobjs().at(5_i32).get());

@@ -131,7 +131,10 @@ pub fn itHouou_UnkMotion2_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (ip).x40_vel().y(),
         (ip).xDD4_itemVar().houou().vel_accum(),
     ));
-    if (ip).pos().y() > fns::Stage_GetBlastZoneTopOffset(ctx) {
+    if {
+        let __t1 = fns::Stage_GetBlastZoneTopOffset(ctx);
+        (ip).pos().y() > __t1
+    } {
         (ip).x40_vel().set_y(0.0);
         fns::it_802D27B0(ctx, gobj);
     }
@@ -363,20 +366,9 @@ pub fn it_802D2D2C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut new_gobj: HSD_GObj<'a> = null(ctx);
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     Handle::copy_from(tmp, (ip).xDD4_itemVar().houou().start_pos());
-    if (fns::mpCheckAllRemap(
-        ctx,
-        hit_pos,
-        line_id,
-        null::<Val<'a, u32>>(ctx),
-        null::<Vec<'a>>(ctx),
-        1_i32.wrapping_neg(),
-        1_i32.wrapping_neg(),
-        tmp.x(),
-        tmp.y(),
-        tmp.x(),
-        fns::Stage_GetBlastZoneBottomOffset(ctx),
-    ) != 0)
-        || (fns::mpCheckAllRemap(
+    if ({
+        let __t1 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+        fns::mpCheckAllRemap(
             ctx,
             hit_pos,
             line_id,
@@ -385,19 +377,36 @@ pub fn it_802D2D2C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             1_i32.wrapping_neg(),
             1_i32.wrapping_neg(),
             tmp.x(),
-            fns::Stage_GetBlastZoneTopOffset(ctx),
-            tmp.x(),
             tmp.y(),
-        ) != 0)
+            tmp.x(),
+            __t1,
+        )
+    } != 0)
+        || ({
+            let __t2 = fns::Stage_GetBlastZoneTopOffset(ctx);
+            fns::mpCheckAllRemap(
+                ctx,
+                hit_pos,
+                line_id,
+                null::<Val<'a, u32>>(ctx),
+                null::<Vec<'a>>(ctx),
+                1_i32.wrapping_neg(),
+                1_i32.wrapping_neg(),
+                tmp.x(),
+                __t2,
+                tmp.x(),
+                tmp.y(),
+            )
+        } != 0)
     {
         Handle::copy_from(spawn.prev_pos(), hit_pos);
         Handle::copy_from(spawn.pos(), (ip).xDD4_itemVar().houou().start_pos());
         spawn.set_facing_dir((ip).facing_dir());
         spawn.set_x3C_damage((0_i32 as i16));
         spawn.vel().set_y({
-            let __t1 = 0.0;
-            spawn.vel().set_x(__t1);
-            __t1
+            let __t3 = 0.0;
+            spawn.vel().set_x(__t3);
+            __t3
         });
         spawn.vel().set_z(0.0);
         spawn.set_kind((enums::It_Kind_Houou_SacredFire as i32));

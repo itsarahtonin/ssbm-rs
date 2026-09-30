@@ -143,12 +143,13 @@ pub fn __CARDAllocBlock<'a>(ctx: &'a Ctx, chan: i32, cBlock: u32, callback: FnPt
     count = (0_i32 as u16);
     'l1: while (0_i32 as u32) < cBlock {
         'c2: {
-            if ((card).cBlock() as i32).wrapping_sub(5_i32)
-                < ({
+            if {
+                let __t1 = ({
                     count = count.wrapping_add(1);
                     count
-                } as i32)
-            {
+                } as i32);
+                ((card).cBlock() as i32).wrapping_sub(5_i32) < __t1
+            } {
                 return (6_i32.wrapping_neg());
             }
             iBlock = iBlock.wrapping_add(1);

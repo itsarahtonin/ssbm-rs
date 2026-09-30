@@ -112,12 +112,16 @@ pub fn it_802BE65C<'a>(ctx: &'a Ctx, ip: Item<'a>, bone_jobj: HSD_JObj<'a>) -> H
                     Handle::copy_from((link).pos(), (ip).pos());
                     (link).set_x2C_b0((0_i32 as u8));
                     fns::it_802A24D0(ctx, link, 1.0);
-                    fns::HSD_GObjObject_80390A70(
-                        ctx,
-                        link_gobj,
-                        fns::HSD_GObj_JObjKind(ctx).get(),
-                        Handle::cast::<Addr<'a>>(inl_it_802BE65C_LoadString_unfused(ctx, ip)),
-                    );
+                    {
+                        let __t1 =
+                            Handle::cast::<Addr<'a>>(inl_it_802BE65C_LoadString_unfused(ctx, ip));
+                        fns::HSD_GObjObject_80390A70(
+                            ctx,
+                            link_gobj,
+                            fns::HSD_GObj_JObjKind(ctx).get(),
+                            __t1,
+                        )
+                    };
                     fns::GObj_SetupGXLink(
                         ctx,
                         link_gobj,
@@ -171,12 +175,16 @@ pub fn it_802BE65C<'a>(ctx: &'a Ctx, ip: Item<'a>, bone_jobj: HSD_JObj<'a>) -> H
                     Handle::copy_from((link).pos(), (ip).pos());
                     (link).set_x2C_b0((0_i32 as u8));
                     fns::it_802A24D0(ctx, link, 1.0);
-                    fns::HSD_GObjObject_80390A70(
-                        ctx,
-                        link_gobj,
-                        fns::HSD_GObj_JObjKind(ctx).get(),
-                        Handle::cast::<Addr<'a>>(inl_it_802BE65C_LoadString_unfused(ctx, ip)),
-                    );
+                    {
+                        let __t2 =
+                            Handle::cast::<Addr<'a>>(inl_it_802BE65C_LoadString_unfused(ctx, ip));
+                        fns::HSD_GObjObject_80390A70(
+                            ctx,
+                            link_gobj,
+                            fns::HSD_GObj_JObjKind(ctx).get(),
+                            __t2,
+                        )
+                    };
                     fns::GObj_SetupGXLink(
                         ctx,
                         link_gobj,
@@ -482,9 +490,14 @@ pub fn it_802BF28C<'a>(
         }
     }
     {
-        let mut min_len: f64 =
-            fp::fmuls((attrs).x10_UNK1(), fns::ftLib_GetScale(ctx, (ip).owner()));
-        let mut max_len: f64 = fp::fmuls((attrs).xC_SIZE(), fns::ftLib_GetScale(ctx, (ip).owner()));
+        let mut min_len: f64 = {
+            let __t1 = fns::ftLib_GetScale(ctx, (ip).owner());
+            fp::fmuls((attrs).x10_UNK1(), __t1)
+        };
+        let mut max_len: f64 = {
+            let __t2 = fns::ftLib_GetScale(ctx, (ip).owner());
+            fp::fmuls((attrs).xC_SIZE(), __t2)
+        };
         let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(
             ctx,
             (ip).xDD4_itemVar().nessyoyo().x10(),
@@ -581,7 +594,10 @@ pub fn it_802BF4A0<'a>(
     let mut count: i32 = 0;
     let mut size: f64 = 0.0;
     let _ = fns::ftLib_GetScale(ctx, (ip).owner());
-    size = fp::fmuls((attrs).xC_SIZE(), fns::ftLib_GetScale(ctx, (ip).owner()));
+    size = {
+        let __t1 = fns::ftLib_GetScale(ctx, (ip).owner());
+        fp::fmuls((attrs).xC_SIZE(), __t1)
+    };
     cur = link;
     next = (link).next();
     if (if ((link).vel().x()) < fp::frsp(0_i32 as f64) {
@@ -705,7 +721,10 @@ pub fn it_802BF800<'a>(
     let mut dist = dist;
     let mut len: f64 = 0.0;
     let mut step: f64 = 0.0;
-    let mut size: f64 = fp::fmuls((attrs).xC_SIZE(), fns::ftLib_GetScale(ctx, (ip).owner()));
+    let mut size: f64 = {
+        let __t1 = fns::ftLib_GetScale(ctx, (ip).owner());
+        fp::fmuls((attrs).xC_SIZE(), __t1)
+    };
     let mut prev: ItemLink<'a> = (item).prev();
     let mut cur: ItemLink<'a> = item;
     'l1: while (!Handle::is_null(prev)) && (!((cur).x2C_b0() != 0)) {

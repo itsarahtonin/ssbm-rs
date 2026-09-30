@@ -444,18 +444,20 @@ pub fn lbSnap_8001DC0C<'a>(ctx: &'a Ctx, image: Val<'a, u8>) -> i32 {
     (statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).set_x0(4_i32);
     (statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).set_width((0x280_i32 as u16));
     (statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).set_height((0x1e0_i32 as u16));
-    (statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).set_stkind(fns::gm_GetStKind(ctx));
+    let __t1 = fns::gm_GetStKind(ctx);
+    (statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).set_stkind(__t1);
     fns::it_8026C47C(
         ctx,
         (statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).x14(),
     );
-    (statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).set_x34(fns::ft_GetFtKindMask(ctx));
+    let __t2 = fns::ft_GetFtKindMask(ctx);
+    (statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).set_x34(__t2);
     (statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).set_x8((3_i32 as u8));
     fns::hsd_803B5C2C(
         ctx,
         ((statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).x8() as i32),
     );
-    (statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).set_xC(fns::hsd_803B51C8(
+    let __t3 = fns::hsd_803B51C8(
         ctx,
         (Handle::addr(image) as i32),
         ((statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).width() as i32),
@@ -464,7 +466,8 @@ pub fn lbSnap_8001DC0C<'a>(ctx: &'a Ctx, image: Val<'a, u8>) -> i32 {
             .x38()
             .at(0),
         0x3e800_i32,
-    ));
+    );
+    (statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).set_xC(__t3);
     if (statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).xC() != 0_i32 {
         ret = 1_i32;
     }

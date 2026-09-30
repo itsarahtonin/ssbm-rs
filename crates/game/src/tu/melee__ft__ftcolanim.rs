@@ -156,17 +156,20 @@ pub fn ftCo_800BFFD0<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32, arg2: i32) ->
     let mut arg1 = arg1;
     let mut arg2 = arg2;
     if (arg1 as u32) >= ((enums::FtColAnim_SpycloakStart as i32) as u32) {
-        if (fns::lb_800144C8(
-            ctx,
-            (fp).x508(),
-            fns::Fighter_804D6538(ctx).get(),
-            {
+        if ({
+            let __t1 = {
                 arg1 = ((arg1 as u32).wrapping_sub(((enums::FtColAnim_SpycloakStart as i32) as u32))
                     as i32);
                 arg1
-            },
-            arg2,
-        ) != 0)
+            };
+            fns::lb_800144C8(
+                ctx,
+                (fp).x508(),
+                fns::Fighter_804D6538(ctx).get(),
+                __t1,
+                arg2,
+            )
+        } != 0)
         {
             return 1_i32;
         }
@@ -354,17 +357,20 @@ fn inl_ftCo_800BFFD0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32, arg2:
     let mut arg1 = arg1;
     let mut arg2 = arg2;
     if (arg1 as u32) >= ((enums::FtColAnim_SpycloakStart as i32) as u32) {
-        if (fns::lb_800144C8(
-            ctx,
-            (fp).x508(),
-            fns::Fighter_804D6538(ctx).get(),
-            {
+        if ({
+            let __t1 = {
                 arg1 = ((arg1 as u32).wrapping_sub(((enums::FtColAnim_SpycloakStart as i32) as u32))
                     as i32);
                 arg1
-            },
-            arg2,
-        ) != 0)
+            };
+            fns::lb_800144C8(
+                ctx,
+                (fp).x508(),
+                fns::Fighter_804D6538(ctx).get(),
+                __t1,
+                arg2,
+            )
+        } != 0)
         {
             return 1_i32;
         }

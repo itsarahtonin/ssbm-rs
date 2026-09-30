@@ -45,18 +45,23 @@ pub fn mpCollPrev<'a>(ctx: &'a Ctx, cd: CollData<'a>) {
             || (!((cd).cur_pos().y() > fp::fneg(45000.0)))
         {
             if (fns::ftLib_IsFighter(ctx, (cd).x0_gobj()) != 0) {
-                fns::OSReport(
-                    ctx,
-                    cstr(ctx, 0x803bd270),
-                    &[
-                        VarArg::Int(Handle::addr(cstr(ctx, 0x803bd2a8))),
-                        VarArg::Int(203_i32 as u32),
-                        VarArg::Float((cd).cur_pos().x()),
-                        VarArg::Float((cd).cur_pos().y()),
-                        VarArg::Int((fns::ftLib_GetPlayerIndex(ctx, (cd).x0_gobj()) as i32) as u32),
-                        VarArg::Int(fns::ftLib_IsSubFighter(ctx, (cd).x0_gobj()) as u32),
-                    ],
-                );
+                {
+                    let __t1 = VarArg::Int(fns::ftLib_IsSubFighter(ctx, (cd).x0_gobj()) as u32);
+                    let __t2 =
+                        VarArg::Int((fns::ftLib_GetPlayerIndex(ctx, (cd).x0_gobj()) as i32) as u32);
+                    fns::OSReport(
+                        ctx,
+                        cstr(ctx, 0x803bd270),
+                        &[
+                            VarArg::Int(Handle::addr(cstr(ctx, 0x803bd2a8))),
+                            VarArg::Int(203_i32 as u32),
+                            VarArg::Float((cd).cur_pos().x()),
+                            VarArg::Float((cd).cur_pos().y()),
+                            __t2,
+                            __t1,
+                        ],
+                    )
+                };
             } else {
                 fns::OSReport(
                     ctx,
@@ -932,22 +937,26 @@ pub fn mpCollEnd<'a>(ctx: &'a Ctx, coll: CollData<'a>, arg1: i32, arg2: i32) {
             && ((coll).cur_pos().y() > fp::fneg(45000.0)))
         {
             if (fns::ftLib_IsFighter(ctx, (coll).x0_gobj()) != 0) {
-                fns::OSReport(
-                    ctx,
-                    cstr(ctx, 0x803bd308),
-                    &[
-                        VarArg::Int(Handle::addr(cstr(ctx, 0x803bd2b0))),
-                        VarArg::Int(0x546_i32 as u32),
-                        VarArg::Float((coll).last_pos().x()),
-                        VarArg::Float((coll).last_pos().y()),
-                        VarArg::Float((coll).cur_pos().x()),
-                        VarArg::Float((coll).cur_pos().y()),
-                        VarArg::Int(
-                            (fns::ftLib_GetPlayerIndex(ctx, (coll).x0_gobj()) as i32) as u32,
-                        ),
-                        VarArg::Int(fns::ftLib_IsSubFighter(ctx, (coll).x0_gobj()) as u32),
-                    ],
-                );
+                {
+                    let __t1 = VarArg::Int(fns::ftLib_IsSubFighter(ctx, (coll).x0_gobj()) as u32);
+                    let __t2 = VarArg::Int(
+                        (fns::ftLib_GetPlayerIndex(ctx, (coll).x0_gobj()) as i32) as u32,
+                    );
+                    fns::OSReport(
+                        ctx,
+                        cstr(ctx, 0x803bd308),
+                        &[
+                            VarArg::Int(Handle::addr(cstr(ctx, 0x803bd2b0))),
+                            VarArg::Int(0x546_i32 as u32),
+                            VarArg::Float((coll).last_pos().x()),
+                            VarArg::Float((coll).last_pos().y()),
+                            VarArg::Float((coll).cur_pos().x()),
+                            VarArg::Float((coll).cur_pos().y()),
+                            __t2,
+                            __t1,
+                        ],
+                    )
+                };
             } else {
                 let mut gobjid: i32 = (((coll).x0_gobj()).classifier() as i32);
                 fns::OSReport(
@@ -1636,8 +1645,10 @@ pub fn mpColl_80044164<'a>(ctx: &'a Ctx, cd: CollData<'a>, p_ledge_id: Val<'a, i
                 (cd).joint_id_skip(),
                 (cd).joint_id_only(),
             ) != 0))
-                || (fns::mpJointFromLine(ctx, ledge_id)
-                    == fns::mpJointFromLine(ctx, line_id.get())))
+                || ({
+                    let __t1 = fns::mpJointFromLine(ctx, line_id.get());
+                    fns::mpJointFromLine(ctx, ledge_id) == __t1
+                }))
                 && ((!(fns::mpCheckMultiple(
                     ctx,
                     fp::fadds((cd).cur_pos().x(), (cd).ecb().bottom().x()),
@@ -1655,8 +1666,10 @@ pub fn mpColl_80044164<'a>(ctx: &'a Ctx, cd: CollData<'a>, p_ledge_id: Val<'a, i
                     (cd).joint_id_skip(),
                     (cd).joint_id_only(),
                 ) != 0))
-                    || (fns::mpJointFromLine(ctx, ledge_id)
-                        == fns::mpJointFromLine(ctx, line_id.get())))))
+                    || ({
+                        let __t2 = fns::mpJointFromLine(ctx, line_id.get());
+                        fns::mpJointFromLine(ctx, ledge_id) == __t2
+                    }))))
     {
         if !Handle::is_null(p_ledge_id) {
             (p_ledge_id).set(ledge_id);
@@ -1747,8 +1760,10 @@ pub fn mpColl_800443C4<'a>(ctx: &'a Ctx, cd: CollData<'a>, p_ledge_id: Val<'a, i
                 (cd).joint_id_skip(),
                 (cd).joint_id_only(),
             ) != 0))
-                || (fns::mpJointFromLine(ctx, ledge_id)
-                    == fns::mpJointFromLine(ctx, line_id.get())))
+                || ({
+                    let __t1 = fns::mpJointFromLine(ctx, line_id.get());
+                    fns::mpJointFromLine(ctx, ledge_id) == __t1
+                }))
                 && ((!(fns::mpCheckMultiple(
                     ctx,
                     fp::fadds((cd).cur_pos().x(), (cd).ecb().bottom().x()),
@@ -1766,8 +1781,10 @@ pub fn mpColl_800443C4<'a>(ctx: &'a Ctx, cd: CollData<'a>, p_ledge_id: Val<'a, i
                     (cd).joint_id_skip(),
                     (cd).joint_id_only(),
                 ) != 0))
-                    || (fns::mpJointFromLine(ctx, ledge_id)
-                        == fns::mpJointFromLine(ctx, line_id.get())))))
+                    || ({
+                        let __t2 = fns::mpJointFromLine(ctx, line_id.get());
+                        fns::mpJointFromLine(ctx, ledge_id) == __t2
+                    }))))
     {
         if !Handle::is_null(p_ledge_id) {
             (p_ledge_id).set(ledge_id);

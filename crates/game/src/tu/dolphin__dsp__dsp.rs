@@ -43,11 +43,14 @@ pub fn DSPCheckMailFromDSP<'a>(ctx: &'a Ctx) -> u32 {
 }
 
 pub fn DSPReadMailFromDSP<'a>(ctx: &'a Ctx) -> u32 {
-    return (((shl_i32(
-        ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 2_i32)).get() as i32),
-        (16_i32 as u32),
-    )) | ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 3_i32)).get()
-        as i32)) as u32);
+    return ({
+        let __t1 =
+            ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 3_i32)).get() as i32);
+        ((shl_i32(
+            ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 2_i32)).get() as i32),
+            (16_i32 as u32),
+        )) | __t1)
+    } as u32);
 }
 
 pub fn DSPSendMailToDSP<'a>(ctx: &'a Ctx, mail: u32) {
@@ -132,7 +135,10 @@ pub fn DSPAssertTask<'a>(ctx: &'a Ctx, task: STRUCT_DSP_TASK<'a>) -> STRUCT_DSP_
         let _ = fns::OSRestoreInterrupts(ctx, old);
         return task;
     }
-    if (task).priority() < (fns::__DSP_curr_task(ctx).get()).priority() {
+    if {
+        let __t1 = (fns::__DSP_curr_task(ctx).get()).priority();
+        (task).priority() < __t1
+    } {
         fns::__DSP_rude_task(ctx).set(task);
         fns::__DSP_rude_task_pending(ctx).set(1_i32);
         if (fns::__DSP_curr_task(ctx).get()).state() == (1_i32 as u32) {

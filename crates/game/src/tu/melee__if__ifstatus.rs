@@ -705,17 +705,13 @@ pub fn ifStatus_802F61FC<'a>(
     inl_ifStatus_SetHUDPosition_unfused(ctx, jobj, idx);
     inl_HSD_JObjAddTranslationX_unfused(ctx, jobj, 0.25);
     Handle::copy_from(color, {
-        fns::gm_80160968(
-            ctx,
-            __ret_tmp,
-            fns::gm_80160854(
-                ctx,
-                (fns::Player_GetPadPort(ctx, (idx as i32)) as u8),
-                (fns::Player_GetTeam(ctx, (idx as i32)) as u8),
-                (fns::gm_8016B168(ctx) as u8),
-                (fns::Player_GetPlayerSlotType(ctx, (idx as i32)) as u8),
-            ),
-        );
+        fns::gm_80160968(ctx, __ret_tmp, {
+            let __t1 = (fns::Player_GetPlayerSlotType(ctx, (idx as i32)) as u8);
+            let __t2 = (fns::gm_8016B168(ctx) as u8);
+            let __t3 = (fns::Player_GetTeam(ctx, (idx as i32)) as u8);
+            let __t4 = (fns::Player_GetPadPort(ctx, (idx as i32)) as u8);
+            fns::gm_80160854(ctx, __t4, __t3, __t2, __t1)
+        });
         __ret_tmp
     });
     mobj = ((inl_HSD_JObjGetChild_unfused(ctx, jobj)).u().dobj()).mobj();

@@ -751,11 +751,10 @@ fn inl_updateVolumeAnim<'a>(
     );
     inl_HSD_JObjGetTranslation(ctx, (jobj_anim_1).get(), pos_0);
     inl_HSD_JObjGetTranslation(ctx, (jobj_anim_2).get(), pos_1);
-    inl_HSD_JObjSetTranslateX(
-        ctx,
-        (jobj_anim_0).get(),
-        inl_getVolumePosition(ctx, sound_music_mix, pos_0, pos_1),
-    );
+    {
+        let __t1 = inl_getVolumePosition(ctx, sound_music_mix, pos_0, pos_1);
+        inl_HSD_JObjSetTranslateX(ctx, (jobj_anim_0).get(), __t1)
+    };
     if direction != 0_i32 {
         fns::HSD_JObjReqAnimAll(
             ctx,

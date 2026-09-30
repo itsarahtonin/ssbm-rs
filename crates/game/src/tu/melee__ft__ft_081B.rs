@@ -563,7 +563,10 @@ pub fn ft_80082B1C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fp).self_vel().y() > fns::ftCo_800D0EC8(ctx, fp) {
+    if {
+        let __t1 = fns::ftCo_800D0EC8(ctx, fp);
+        (fp).self_vel().y() > __t1
+    } {
         fns::ft_8008A2BC(ctx, gobj);
     } else {
         fns::ftCo_Landing_Enter_Basic(ctx, gobj);
@@ -594,7 +597,10 @@ pub fn ftCo_AirCatchHit_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     if (var_r0 != 0) {
         fp2 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-        if (fp2).self_vel().y() > fns::ftCo_800D0EC8(ctx, fp2) {
+        if {
+            let __t1 = fns::ftCo_800D0EC8(ctx, fp2);
+            (fp2).self_vel().y() > __t1
+        } {
             fns::ft_8008A2BC(ctx, gobj);
         } else {
             fns::ftCo_Landing_Enter_Basic(ctx, gobj);
@@ -644,7 +650,10 @@ pub fn ft_80082D40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: f64) {
     }
     if (var_r0 != 0) {
         fp2 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-        if (fp2).self_vel().y() > fns::ftCo_800D0EC8(ctx, fp2) {
+        if {
+            let __t1 = fns::ftCo_800D0EC8(ctx, fp2);
+            (fp2).self_vel().y() > __t1
+        } {
             fns::ft_8008A2BC(ctx, gobj);
         } else {
             fns::ftCo_Landing_Enter_Basic(ctx, gobj);
@@ -709,7 +718,10 @@ pub fn ft_80082F28<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     {
         let mut fp: Fighter<'a> =
             (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-        if (fp).self_vel().y() > fns::ftCo_800D0EC8(ctx, fp) {
+        if {
+            let __t1 = fns::ftCo_800D0EC8(ctx, fp);
+            (fp).self_vel().y() > __t1
+        } {
             fns::ft_8008A2BC(ctx, gobj);
             return;
         }

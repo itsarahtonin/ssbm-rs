@@ -46,10 +46,8 @@ pub fn it_802E4B00<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut attr: itOctarockAttributes<'a> =
         Handle::cast::<itOctarockAttributes<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
     (ip).set_init_facing_dir((ip).facing_dir());
-    (ip).set_xC9C(fp::fctiwz(fp::fadds(
-        fp::frsp((ip).xC9C() as f64),
-        fns::it_8027CBFC(ctx, gobj),
-    )));
+    let __t1 = fns::it_8027CBFC(ctx, gobj);
+    (ip).set_xC9C(fp::fctiwz(fp::fadds(fp::frsp((ip).xC9C() as f64), __t1)));
     if ((ip).xC9C() > ((attr).x0()).get()) || ((ip).msid() == 6_i32) {
         inl_Item_ZakoDefeat_unfused(ctx, gobj, ip);
         if fns::HSD_Randf(ctx) < (fns::it_804D6D40(ctx).get()).x8() {

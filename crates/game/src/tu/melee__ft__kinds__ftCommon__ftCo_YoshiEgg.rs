@@ -128,15 +128,15 @@ pub fn ftCo_800BBED4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: HSD_GObj<'a>) {
             inl_HSD_JObjSetScale_unfused(ctx, (fp).x20A0_accessory(), scale);
             Handle::copy_from((fp).mv().co().yoshiegg().scale(), scale);
         }
-        fns::lb_8000C2F8(
-            ctx,
-            inl_HSD_JObjGetChild_unfused(ctx, (fp).x20A0_accessory()),
-            (Handle::add(
+        {
+            let __t3 = (Handle::add(
                 (fp).parts(),
                 fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_TransN as i32)),
             ))
-            .joint(),
-        );
+            .joint();
+            let __t4 = inl_HSD_JObjGetChild_unfused(ctx, (fp).x20A0_accessory());
+            fns::lb_8000C2F8(ctx, __t4, __t3)
+        };
         inl_inlineA0_unfused(ctx, gobj);
         fns::ftYs_SpecialN_SetupItemVel(ctx, arg1, (fp).self_vel());
         (fp).set_facing_dir(fns::ftYs_SpecialN_GetFacingDir(ctx, arg1));
@@ -180,10 +180,8 @@ pub fn ftCo_YoshiEgg_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    (fp).set_grab_timer(fp::fsubs(
-        (fp).grab_timer(),
-        fns::ftYs_SpecialN_GetExtAttr28(ctx),
-    ));
+    let __t1 = fns::ftYs_SpecialN_GetExtAttr28(ctx);
+    (fp).set_grab_timer(fp::fsubs((fp).grab_timer(), __t1));
     (fp).mv().co().yoshiegg().set_x4(fns::ftCommon_GrabMash(
         ctx,
         fp,

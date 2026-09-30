@@ -105,7 +105,10 @@ pub fn un_80321AF4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     {
                         (data).set_x24((data).x24().wrapping_add(1_i32));
                     } else {
-                        if (data).xC() == fns::ftLib_GetSpawnNum(ctx, cur) {
+                        if {
+                            let __t1 = fns::ftLib_GetSpawnNum(ctx, cur);
+                            (data).xC() == __t1
+                        } {
                             flag = 1_i32;
                         }
                     }
@@ -418,11 +421,11 @@ pub fn un_8032201C<'a>(ctx: &'a Ctx, arg0: u32, cat: i32) -> i32 {
             inl_un_80321C70_unfused(ctx);
         }
         gobj = fns::ftLib_FindBySpawnNum(ctx, arg0);
-        fns::pl_8003FDC8(
-            ctx,
-            (fns::ftLib_GetPlayerIndex(ctx, gobj) as i32),
-            fns::ftLib_IsSubFighter(ctx, gobj),
-        );
+        {
+            let __t1 = fns::ftLib_IsSubFighter(ctx, gobj);
+            let __t2 = (fns::ftLib_GetPlayerIndex(ctx, gobj) as i32);
+            fns::pl_8003FDC8(ctx, __t2, __t1)
+        };
     }
     return 1_i32;
 }

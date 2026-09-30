@@ -389,7 +389,10 @@ pub fn mnVibration_HandleInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             if ((inl_mnVibration_GetNameSlotRaw(ctx, data, 8_i32) as u8) as i32) != 255_i32 {
                 inl_sfxMove(ctx);
                 (data).set_scroll_offset((data).scroll_offset().wrapping_add(1));
-                if ((data).scroll_offset() as i32) >= fns::GetNameCount(ctx) {
+                if {
+                    let __t3 = fns::GetNameCount(ctx);
+                    ((data).scroll_offset() as i32) >= __t3
+                } {
                     (data).set_scroll_offset((0_i32 as u8));
                 }
                 fns::mnVibration_RefreshNameRows(ctx, fns::mnVibration_804D6C28(ctx).get());

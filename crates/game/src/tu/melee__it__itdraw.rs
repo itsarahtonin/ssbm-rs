@@ -60,13 +60,11 @@ pub fn it_8026EB18<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: Vec<'a
     } else {
         mptr = null::<ArrV<'a, F32, 4>>(ctx);
     }
-    fns::HSD_JObjDispAll(
-        ctx,
-        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj))),
-        mptr,
-        fns::HSD_GObj_80390EB8(ctx, arg1),
-        (0_i32 as u32),
-    );
+    {
+        let __t1 = fns::HSD_GObj_80390EB8(ctx, arg1);
+        let __t2 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
+        fns::HSD_JObjDispAll(ctx, __t2, mptr, __t1, (0_i32 as u32))
+    };
 }
 
 pub fn it_8026EBC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: u16, arg2: Val<'a, u8>) {

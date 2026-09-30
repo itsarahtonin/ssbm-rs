@@ -704,8 +704,10 @@ pub fn hsd_8039DAD4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) -> f64 {
             );
         }
         {
-            let mut first: f64 =
-                fp::fmuls(rot_mtx.get(2_i32).at(2_i32).get(), fns::cosf(ctx, angle1));
+            let mut first: f64 = {
+                let __t2 = fns::cosf(ctx, angle1);
+                fp::fmuls(rot_mtx.get(2_i32).at(2_i32).get(), __t2)
+            };
             let mut comb: f64 = fp::fmadds(
                 rot_mtx.get(1_i32).at(2_i32).get(),
                 fns::sinf(ctx, angle1),
@@ -762,10 +764,10 @@ pub fn hsd_8039DAD4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) -> f64 {
                     cur_angle = fp::frsp(
                         (fp::fmul(
                             ({
-                                let __t2 =
+                                let __t4 =
                                     fp::fmul(3.141592653589793, inl_hsd_8039DAD4_home(ctx, rnd_3));
-                                eps = __t2;
-                                __t2
+                                eps = __t4;
+                                __t4
                             }),
                             2.0,
                         )),
@@ -866,17 +868,17 @@ pub fn hsd_8039DAD4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) -> f64 {
                                         }
                                     } else {
                                         cone_angle = fp::frsp(
-                                            (fp::fadd(
-                                                (r#gen).angle(),
-                                                (fp::fsub(
+                                            ({
+                                                let __t5 = (fp::fsub(
                                                     (fp::fdiv(3.141592653589793, (2_i32 as f64))),
                                                     fns::atan2f(
                                                         ctx,
                                                         (r#gen).aux().cone().height(),
                                                         sin_az,
                                                     ),
-                                                )),
-                                            )),
+                                                ));
+                                                fp::fadd((r#gen).angle(), __t5)
+                                            }),
                                         );
                                     }
                                 }

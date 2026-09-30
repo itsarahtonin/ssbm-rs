@@ -537,10 +537,10 @@ fn inl_vi1202_SetupChild_unfused<'a>(ctx: &'a Ctx, child: HSD_JObj<'a>) {
     inl_HSD_JObjSetRotationYWithMtxDirty_unfused(ctx, child, scale);
     scale = fp::fmuls(
         0.49000000953674316,
-        (fp::fmuls(
-            fns::Toy_803060BC(ctx, 31_i32, 4_i32),
-            (fp::fdivs(1.0, fns::Toy_803060BC(ctx, 31_i32, 3_i32))),
-        )),
+        ({
+            let __t1 = (fp::fdivs(1.0, fns::Toy_803060BC(ctx, 31_i32, 3_i32)));
+            fp::fmuls(fns::Toy_803060BC(ctx, 31_i32, 4_i32), __t1)
+        }),
     );
     inl_HSD_JObjSetScaleXWithMtxDirty_unfused(ctx, child, scale);
     inl_HSD_JObjSetScaleYWithMtxDirty_unfused(ctx, child, scale);

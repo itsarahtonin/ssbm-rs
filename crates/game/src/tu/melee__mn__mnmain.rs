@@ -1400,16 +1400,18 @@ pub fn mn_8022B3A0<'a>(ctx: &'a Ctx, state: u8) -> HSD_GObj<'a> {
                         fp::frsp((i == (hovered_selection as i32)) as i32 as f64),
                     );
                     fns::HSD_JObjAnimAll(ctx, jobj.value());
-                    fns::HSD_JObjReqAnim(
-                        ctx,
-                        jobj.value(),
-                        fp::fadds(
-                            fns::mn_803EB6B0(ctx)
-                                .get((fns::mn_804A04F0(ctx).cur_menu() as i32))
-                                .start_frame(),
-                            fp::frsp(inl_GetSelectionFrameOffset_unfused(ctx, i) as f64),
-                        ),
-                    );
+                    {
+                        let __t2 = {
+                            let __t1 = fp::frsp(inl_GetSelectionFrameOffset_unfused(ctx, i) as f64);
+                            fp::fadds(
+                                fns::mn_803EB6B0(ctx)
+                                    .get((fns::mn_804A04F0(ctx).cur_menu() as i32))
+                                    .start_frame(),
+                                __t1,
+                            )
+                        };
+                        fns::HSD_JObjReqAnim(ctx, jobj.value(), __t2)
+                    };
                     fns::mn_8022F3D8(ctx, jobj.value(), (12_i32 as u8), (enums::TOBJ_MASK as i32));
                     fns::mn_8022F3D8(ctx, jobj.value(), (13_i32 as u8), (enums::TOBJ_MASK as i32));
                     fns::mn_8022F3D8(ctx, jobj.value(), (14_i32 as u8), (enums::TOBJ_MASK as i32));
