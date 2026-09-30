@@ -200,6 +200,690 @@ pub fn mnCharSel_8025BD30<'a>(ctx: &'a Ctx) {
     }
 }
 
+pub fn mnCharSel_8025C020<'a>(ctx: &'a Ctx, arg0: i32) {
+    let __frame = ctx.stack_frame(0xb0);
+    let sp7C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let sp7B: Val<'a, u8> = frame_at(ctx, &__frame, 0x4);
+    let sp7A: Val<'a, u8> = frame_at(ctx, &__frame, 0x8);
+    let sp79: Val<'a, u8> = frame_at(ctx, &__frame, 0xc);
+    let sp78: Val<'a, u8> = frame_at(ctx, &__frame, 0x10);
+    let mut arg0 = arg0;
+    let mut i: i32 = (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+        .doors()
+        .get(0_i32)
+        .sel_icon() as i32);
+    let mut hud_index: u8 = statics::melee__mn__mncharsel::icons(ctx)
+        .get(i)
+        .ft_hudindex();
+    if arg0 != 0_i32 {
+        if !Handle::is_null(statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get()) {
+            let _ = fns::HSD_SisLib_803A70A0(
+                ctx,
+                statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                0_i32,
+                null::<Val<'a, i8>>(ctx),
+                &[],
+            );
+        }
+        if !Handle::is_null(statics::melee__mn__mncharsel::mnCharSel_804D6CE0(ctx).get()) {
+            let _ = fns::HSD_SisLib_803A70A0(
+                ctx,
+                statics::melee__mn__mncharsel::mnCharSel_804D6CE0(ctx).get(),
+                0_i32,
+                null::<Val<'a, i8>>(ctx),
+                &[],
+            );
+        }
+    }
+    's1: {
+        let __case = match ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+            .match_type() as i32)
+        {
+            11_i32 => 0,
+            12_i32 => 1,
+            13_i32 => 2,
+            15_i32 => 3,
+            16_i32 => 4,
+            23_i32 => 5,
+            17_i32 => 6,
+            18_i32 => 7,
+            19_i32 => 8,
+            20_i32 => 9,
+            21_i32 => 10,
+            22_i32 => 11,
+            _ => 12,
+        };
+        if __case <= 0 {
+            sp7C.set(inl_inline3_unfused(
+                ctx,
+                66_i32,
+                fp::frsp((fns::gmMainLib_8015D194(ctx, hud_index)).get() as f64),
+            ));
+            if arg0 != 0_i32 {
+                fns::HSD_JObjSetFlags(ctx, sp7C.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
+            } else {
+                let _ = fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                    0_i32,
+                    cstr(ctx, 0x804d50f0),
+                    &[VarArg::Int(
+                        inl_getClassicHighscore_unfused(ctx, hud_index) as u32
+                    )],
+                );
+                if fns::gmMainLib_8015D0D8(ctx, hud_index) != 0_i32 {
+                    fns::HSD_JObjClearFlags(
+                        ctx,
+                        sp7C.get(),
+                        ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                    );
+                }
+            }
+            let _ = fns::HSD_SisLib_803A70A0(
+                ctx,
+                statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
+                0_i32,
+                cstr(ctx, 0x804d50f8),
+                &[VarArg::Int(fns::gm_80162C48(ctx) as u32)],
+            );
+            if fns::gm_80162D1C(ctx) != 0_i32 {
+                sp7C.set(inl_inline3_unfused(
+                    ctx,
+                    67_i32,
+                    fp::frsp(fns::gm_80162D6C(ctx) as f64),
+                ));
+                fns::HSD_JObjClearFlags(ctx, sp7C.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
+            }
+            break 's1;
+        }
+        if __case <= 1 {
+            sp7C.set(inl_inline3_unfused(
+                ctx,
+                66_i32,
+                fp::frsp((fns::gmMainLib_8015D2BC(ctx, hud_index)).get() as f64),
+            ));
+            if arg0 != 0_i32 {
+                fns::HSD_JObjSetFlags(ctx, sp7C.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
+            } else {
+                let _ = fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                    0_i32,
+                    cstr(ctx, 0x804d50f0),
+                    &[VarArg::Int(
+                        inl_getAdventureHighscore_unfused(ctx, hud_index) as u32,
+                    )],
+                );
+                if fns::gmMainLib_8015D200(ctx, hud_index) != 0_i32 {
+                    fns::HSD_JObjClearFlags(
+                        ctx,
+                        sp7C.get(),
+                        ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                    );
+                }
+            }
+            let _ = fns::HSD_SisLib_803A70A0(
+                ctx,
+                statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
+                0_i32,
+                cstr(ctx, 0x804d50f8),
+                &[VarArg::Int(fns::gm_80162E44(ctx) as u32)],
+            );
+            if fns::gm_80162F18(ctx) != 0_i32 {
+                sp7C.set(inl_inline3_unfused(
+                    ctx,
+                    67_i32,
+                    fp::frsp(fns::gm_80162F68(ctx) as f64),
+                ));
+                fns::HSD_JObjClearFlags(ctx, sp7C.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
+            }
+            break 's1;
+        }
+        if __case <= 2 {
+            sp7C.set(inl_inline3_unfused(
+                ctx,
+                66_i32,
+                fp::frsp((fns::gmMainLib_8015D3E4(ctx, hud_index)).get() as f64),
+            ));
+            if arg0 != 0_i32 {
+                fns::HSD_JObjSetFlags(ctx, sp7C.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
+            } else {
+                let _ = fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                    0_i32,
+                    cstr(ctx, 0x804d50f0),
+                    &[VarArg::Int(
+                        inl_getAllStarHighscore_unfused(ctx, hud_index) as u32
+                    )],
+                );
+                if fns::gmMainLib_8015D328(ctx, hud_index) != 0_i32 {
+                    fns::HSD_JObjClearFlags(
+                        ctx,
+                        sp7C.get(),
+                        ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                    );
+                }
+            }
+            let _ = fns::HSD_SisLib_803A70A0(
+                ctx,
+                statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
+                0_i32,
+                cstr(ctx, 0x804d50f8),
+                &[VarArg::Int(fns::gm_80163040(ctx) as u32)],
+            );
+            if fns::gm_80163114(ctx) != 0_i32 {
+                sp7C.set(inl_inline3_unfused(
+                    ctx,
+                    67_i32,
+                    fp::frsp(fns::gm_80163164(ctx) as f64),
+                ));
+                fns::HSD_JObjClearFlags(ctx, sp7C.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
+            }
+            break 's1;
+        }
+        if __case <= 3 {
+            if arg0 == 0_i32 {
+                let mut target_count: i32 = fns::gm_8016332C(ctx, hud_index);
+                if (target_count as u32) != 1_u32.wrapping_neg() {
+                    if fns::lbLang_IsSavedLanguageJP(ctx) != 0_i32 {
+                        let _ = fns::HSD_SisLib_803A70A0(
+                            ctx,
+                            statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                            0_i32,
+                            cstr(ctx, 0x804d5100),
+                            &[VarArg::Int(target_count as u32)],
+                        );
+                    } else {
+                        let _ = fns::HSD_SisLib_803A70A0(
+                            ctx,
+                            statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                            0_i32,
+                            cstr(ctx, 0x804d5108),
+                            &[VarArg::Int(target_count as u32)],
+                        );
+                    }
+                } else {
+                    fns::gm_80163374(ctx, hud_index, sp7B, sp7A, sp79, sp78);
+                    inl_drawTimeText_unfused(
+                        ctx,
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CE0(ctx).get(),
+                        (sp7B.get() as i32),
+                        (sp7A.get() as i32),
+                        (sp79.get() as i32),
+                        (sp78.get() as i32),
+                    );
+                }
+            }
+            let _ = fns::lb_80011E24(
+                ctx,
+                statics::melee__mn__mncharsel::mnCharSel_804D6CC8(ctx).get(),
+                sp7C,
+                &[
+                    VarArg::Int(3_i32 as u32),
+                    VarArg::Int(1_i32.wrapping_neg() as u32),
+                ],
+            );
+            if fns::gm_801634D4(ctx, sp7B, sp7A, sp79, sp78) != 0_i32 {
+                inl_drawTimeText_unfused(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CE8(ctx).get(),
+                    (sp7B.get() as i32),
+                    (sp7A.get() as i32),
+                    (sp79.get() as i32),
+                    (sp78.get() as i32),
+                );
+                fns::HSD_JObjClearFlagsAll(
+                    ctx,
+                    sp7C.get(),
+                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                );
+            } else {
+                let _ = fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
+                    0_i32,
+                    null::<Val<'a, i8>>(ctx),
+                    &[],
+                );
+                let _ = fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CE8(ctx).get(),
+                    0_i32,
+                    null::<Val<'a, i8>>(ctx),
+                    &[],
+                );
+                fns::HSD_JObjSetFlagsAll(
+                    ctx,
+                    sp7C.get(),
+                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                );
+            }
+            break 's1;
+        }
+        if __case <= 4 {
+            if arg0 == 0_i32 {
+                if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
+                    let _ = fns::HSD_SisLib_803A70A0(
+                        ctx,
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                        0_i32,
+                        cstr(ctx, 0x804d5110),
+                        &[VarArg::Float(inl_toMeters_unfused(
+                            ctx,
+                            fp::frsp(fns::gm_801631CC(ctx, hud_index) as f64),
+                        ))],
+                    );
+                } else {
+                    let _ = fns::HSD_SisLib_803A70A0(
+                        ctx,
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                        0_i32,
+                        cstr(ctx, 0x804d5110),
+                        &[VarArg::Float(inl_toFeet_unfused(
+                            ctx,
+                            fp::frsp(fns::gm_801631CC(ctx, hud_index) as f64),
+                        ))],
+                    );
+                }
+            }
+            if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
+                let _ = fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
+                    0_i32,
+                    cstr(ctx, 0x804d5110),
+                    &[VarArg::Float(fp::fdivs(
+                        fp::frsp(fp::fctiwz(
+                            (fp::fmuls(
+                                10.0,
+                                (fp::fdivs(fp::frsp(fns::gm_801631F0(ctx) as f64), 100.0)),
+                            )),
+                        ) as f64),
+                        10.0,
+                    ))],
+                );
+            } else {
+                let _ = fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
+                    0_i32,
+                    cstr(ctx, 0x804d5110),
+                    &[VarArg::Float(fp::fdivs(
+                        fp::frsp(fp::fctiwz(
+                            (fp::fmuls(
+                                10.0,
+                                (fp::fdivs(
+                                    fp::frsp(fns::gm_801631F0(ctx) as f64),
+                                    30.47879981994629,
+                                )),
+                            )),
+                        ) as f64),
+                        10.0,
+                    ))],
+                );
+            }
+            break 's1;
+        }
+        if __case <= 5 {
+            if arg0 == 0_i32 {
+                let _ = fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                    0_i32,
+                    cstr(ctx, 0x804d5118),
+                    &[VarArg::Int(
+                        (fns::gm_80163274(ctx, hud_index) as i32) as u32,
+                    )],
+                );
+            }
+            break 's1;
+        }
+        if __case <= 6 {
+            if arg0 == 0_i32 {
+                if fns::gm_8016365C(ctx, hud_index) != 0_i32 {
+                    let _ = (if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
+                        fns::HSD_SisLib_803A70A0(
+                            ctx,
+                            (statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get()),
+                            0_i32,
+                            cstr(ctx, 0x803f0fb4),
+                            &[VarArg::Int((fns::gm_80163690(ctx, hud_index)) as u32)],
+                        )
+                    } else {
+                        fns::HSD_SisLib_803A70A0(
+                            ctx,
+                            (statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get()),
+                            0_i32,
+                            cstr(ctx, 0x803f0fc0),
+                            &[VarArg::Int((fns::gm_80163690(ctx, hud_index)) as u32)],
+                        )
+                    });
+                } else {
+                    fns::gm_801636D8(ctx, hud_index, sp7B, sp7A, sp79, sp78);
+                    inl_drawTimeText_unfused(
+                        ctx,
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CE0(ctx).get(),
+                        (sp7B.get() as i32),
+                        (sp7A.get() as i32),
+                        (sp79.get() as i32),
+                        (sp78.get() as i32),
+                    );
+                }
+            }
+            let _ = fns::lb_80011E24(
+                ctx,
+                statics::melee__mn__mncharsel::mnCharSel_804D6CC8(ctx).get(),
+                sp7C,
+                &[
+                    VarArg::Int(3_i32 as u32),
+                    VarArg::Int(1_i32.wrapping_neg() as u32),
+                ],
+            );
+            if fns::gm_80163838(ctx, sp7B, sp7A, sp79, sp78) != 0_i32 {
+                inl_drawTimeText_unfused(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CE8(ctx).get(),
+                    (sp7B.get() as i32),
+                    (sp7A.get() as i32),
+                    (sp79.get() as i32),
+                    (sp78.get() as i32),
+                );
+                fns::HSD_JObjClearFlagsAll(
+                    ctx,
+                    sp7C.get(),
+                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                );
+            } else {
+                let _ = fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
+                    0_i32,
+                    null::<Val<'a, i8>>(ctx),
+                    &[],
+                );
+                let _ = fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CE8(ctx).get(),
+                    0_i32,
+                    null::<Val<'a, i8>>(ctx),
+                    &[],
+                );
+                fns::HSD_JObjSetFlagsAll(
+                    ctx,
+                    sp7C.get(),
+                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                );
+            }
+            break 's1;
+        }
+        if __case <= 7 {
+            if arg0 == 0_i32 {
+                if fns::gm_801639C0(ctx, hud_index) != 0_i32 {
+                    let _ = (if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
+                        fns::HSD_SisLib_803A70A0(
+                            ctx,
+                            (statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get()),
+                            0_i32,
+                            cstr(ctx, 0x803f0fb4),
+                            &[VarArg::Int((fns::gm_801639F4(ctx, hud_index)) as u32)],
+                        )
+                    } else {
+                        fns::HSD_SisLib_803A70A0(
+                            ctx,
+                            (statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get()),
+                            0_i32,
+                            cstr(ctx, 0x803f0fc0),
+                            &[VarArg::Int((fns::gm_801639F4(ctx, hud_index)) as u32)],
+                        )
+                    });
+                } else {
+                    fns::gm_80163A3C(ctx, hud_index, sp7B, sp7A, sp79, sp78);
+                    inl_drawTimeText_unfused(
+                        ctx,
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CE0(ctx).get(),
+                        (sp7B.get() as i32),
+                        (sp7A.get() as i32),
+                        (sp79.get() as i32),
+                        (sp78.get() as i32),
+                    );
+                }
+            }
+            let _ = fns::lb_80011E24(
+                ctx,
+                statics::melee__mn__mncharsel::mnCharSel_804D6CC8(ctx).get(),
+                sp7C,
+                &[
+                    VarArg::Int(3_i32 as u32),
+                    VarArg::Int(1_i32.wrapping_neg() as u32),
+                ],
+            );
+            if fns::gm_80163B9C(ctx, sp7B, sp7A, sp79, sp78) != 0_i32 {
+                inl_drawTimeText_unfused(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CE8(ctx).get(),
+                    (sp7B.get() as i32),
+                    (sp7A.get() as i32),
+                    (sp79.get() as i32),
+                    (sp78.get() as i32),
+                );
+                fns::HSD_JObjClearFlagsAll(
+                    ctx,
+                    sp7C.get(),
+                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                );
+            } else {
+                let _ = fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
+                    0_i32,
+                    null::<Val<'a, i8>>(ctx),
+                    &[],
+                );
+                let _ = fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CE8(ctx).get(),
+                    0_i32,
+                    null::<Val<'a, i8>>(ctx),
+                    &[],
+                );
+                fns::HSD_JObjSetFlagsAll(
+                    ctx,
+                    sp7C.get(),
+                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                );
+            }
+            break 's1;
+        }
+        if __case <= 8 {
+            if arg0 == 0_i32 {
+                if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
+                    let _ = fns::HSD_SisLib_803A70A0(
+                        ctx,
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                        0_i32,
+                        cstr(ctx, 0x803f0fb4),
+                        &[VarArg::Int(
+                            (fns::gm_Get3MinMultimanHighscore(ctx, hud_index) as i32) as u32,
+                        )],
+                    );
+                } else {
+                    let _ = fns::HSD_SisLib_803A70A0(
+                        ctx,
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                        0_i32,
+                        cstr(ctx, 0x803f0fc0),
+                        &[VarArg::Int(
+                            (fns::gm_Get3MinMultimanHighscore(ctx, hud_index) as i32) as u32,
+                        )],
+                    );
+                }
+            }
+            if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
+                let _ = fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
+                    0_i32,
+                    cstr(ctx, 0x803f0fb4),
+                    &[VarArg::Int(
+                        fns::gm_Get3MinMultimanTotalHighscore(ctx) as u32
+                    )],
+                );
+            } else {
+                let _ = fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
+                    0_i32,
+                    cstr(ctx, 0x803f0fc0),
+                    &[VarArg::Int(
+                        fns::gm_Get3MinMultimanTotalHighscore(ctx) as u32
+                    )],
+                );
+            }
+            break 's1;
+        }
+        if __case <= 9 {
+            if !(arg0 != 0) {
+                if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
+                    let _ = fns::HSD_SisLib_803A70A0(
+                        ctx,
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                        0_i32,
+                        cstr(ctx, 0x803f0fb4),
+                        &[VarArg::Int(
+                            (fns::gm_Get15MinMultimanHighscore(ctx, hud_index) as i32) as u32,
+                        )],
+                    );
+                } else {
+                    let _ = fns::HSD_SisLib_803A70A0(
+                        ctx,
+                        statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get(),
+                        0_i32,
+                        cstr(ctx, 0x803f0fc0),
+                        &[VarArg::Int(
+                            (fns::gm_Get15MinMultimanHighscore(ctx, hud_index) as i32) as u32,
+                        )],
+                    );
+                }
+            }
+            if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
+                let _ = fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
+                    0_i32,
+                    cstr(ctx, 0x803f0fb4),
+                    &[VarArg::Int(
+                        fns::gm_Get15MinMultimanTotalHighscore(ctx) as u32
+                    )],
+                );
+            } else {
+                let _ = fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get(),
+                    0_i32,
+                    cstr(ctx, 0x803f0fc0),
+                    &[VarArg::Int(
+                        fns::gm_Get15MinMultimanTotalHighscore(ctx) as u32
+                    )],
+                );
+            }
+            break 's1;
+        }
+        if __case <= 10 {
+            if !(arg0 != 0) {
+                let _ = (if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
+                    fns::HSD_SisLib_803A70A0(
+                        ctx,
+                        (statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get()),
+                        0_i32,
+                        cstr(ctx, 0x803f0fb4),
+                        &[VarArg::Int(
+                            (fns::gm_GetEndlessHighscore(ctx, hud_index)) as u32,
+                        )],
+                    )
+                } else {
+                    fns::HSD_SisLib_803A70A0(
+                        ctx,
+                        (statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get()),
+                        0_i32,
+                        cstr(ctx, 0x803f0fc0),
+                        &[VarArg::Int(
+                            (fns::gm_GetEndlessHighscore(ctx, hud_index)) as u32,
+                        )],
+                    )
+                });
+            }
+            let _ = (if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
+                fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    (statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get()),
+                    0_i32,
+                    cstr(ctx, 0x803f0fb4),
+                    &[VarArg::Int((fns::gm_GetEndlessTotalHighscore(ctx)) as u32)],
+                )
+            } else {
+                fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    (statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get()),
+                    0_i32,
+                    cstr(ctx, 0x803f0fc0),
+                    &[VarArg::Int((fns::gm_GetEndlessTotalHighscore(ctx)) as u32)],
+                )
+            });
+            break 's1;
+        }
+        if __case <= 11 {
+            if !(arg0 != 0) {
+                let _ = (if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
+                    fns::HSD_SisLib_803A70A0(
+                        ctx,
+                        (statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get()),
+                        0_i32,
+                        cstr(ctx, 0x803f0fb4),
+                        &[VarArg::Int(
+                            (fns::gm_GetCruelHighscore(ctx, hud_index)) as u32,
+                        )],
+                    )
+                } else {
+                    fns::HSD_SisLib_803A70A0(
+                        ctx,
+                        (statics::melee__mn__mncharsel::mnCharSel_804D6CDC(ctx).get()),
+                        0_i32,
+                        cstr(ctx, 0x803f0fc0),
+                        &[VarArg::Int(
+                            (fns::gm_GetCruelHighscore(ctx, hud_index)) as u32,
+                        )],
+                    )
+                });
+            }
+            let _ = (if (fns::lbLang_IsSavedLanguageJP(ctx) != 0) {
+                fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    (statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get()),
+                    0_i32,
+                    cstr(ctx, 0x803f0fb4),
+                    &[VarArg::Int((fns::gm_GetCruelTotalHighscore(ctx)) as u32)],
+                )
+            } else {
+                fns::HSD_SisLib_803A70A0(
+                    ctx,
+                    (statics::melee__mn__mncharsel::mnCharSel_804D6CE4(ctx).get()),
+                    0_i32,
+                    cstr(ctx, 0x803f0fc0),
+                    &[VarArg::Int((fns::gm_GetCruelTotalHighscore(ctx)) as u32)],
+                )
+            });
+            break 's1;
+        }
+    }
+}
+
 pub fn mnCharSel_8025D1C4<'a>(ctx: &'a Ctx, port: i32, mode: i32) {
     let __frame = ctx.stack_frame(0x40);
     let sp10: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
@@ -13414,6 +14098,14 @@ pub fn register(ctx: &Ctx) {
         0x8025bd30,
         |ctx| {
             Ret::put(mnCharSel_8025BD30(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8025c020,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(mnCharSel_8025C020(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

@@ -480,6 +480,184 @@ pub fn fn_803B376C<'a>(ctx: &'a Ctx, arg0: Val<'a, u8>) {
     }
 }
 
+pub fn hsd_803B46D4<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x18);
+    let sp8: ArrV<'a, u8, 5> = frame_at(ctx, &__frame, 0x0);
+    ctx.write_bytes(Handle::addr(sp8), b"\x4a\x46\x49\x46\x00");
+    if Handle::addr(fns::hsd_804D79A0(ctx).get())
+        < Handle::addr((Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())))
+    {
+        ({
+            let __t1 = fns::hsd_804D79A0(ctx).get();
+            fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+            __t1
+        })
+        .set((255_i32 as u8));
+    } else {
+        fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+    }
+    if Handle::addr(fns::hsd_804D79A0(ctx).get())
+        < Handle::addr((Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())))
+    {
+        ({
+            let __t2 = fns::hsd_804D79A0(ctx).get();
+            fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+            __t2
+        })
+        .set((224_i32 as u8));
+    } else {
+        fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+    }
+    if Handle::addr(fns::hsd_804D79A0(ctx).get())
+        < Handle::addr((Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())))
+    {
+        ({
+            let __t3 = fns::hsd_804D79A0(ctx).get();
+            fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+            __t3
+        })
+        .set((0_i32 as u8));
+    } else {
+        fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+    }
+    if Handle::addr(fns::hsd_804D79A0(ctx).get())
+        < Handle::addr((Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())))
+    {
+        ({
+            let __t4 = fns::hsd_804D79A0(ctx).get();
+            fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+            __t4
+        })
+        .set((16_i32 as u8));
+    } else {
+        fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+    }
+    if Handle::addr(fns::hsd_804D79A0(ctx).get())
+        < Handle::addr(Handle::add(
+            (Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())),
+            5_i32.wrapping_neg(),
+        ))
+    {
+        let _ = fns::memcpy(
+            ctx,
+            Handle::cast::<Addr<'a>>(fns::hsd_804D79A0(ctx).get()),
+            Handle::cast::<Addr<'a>>(sp8.at(0)),
+            5_u32,
+        );
+        fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 5_i32));
+    } else {
+        fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+    }
+    if Handle::addr(fns::hsd_804D79A0(ctx).get())
+        < Handle::addr((Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())))
+    {
+        ({
+            let __t5 = fns::hsd_804D79A0(ctx).get();
+            fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+            __t5
+        })
+        .set((1_i32 as u8));
+    } else {
+        fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+    }
+    if Handle::addr(fns::hsd_804D79A0(ctx).get())
+        < Handle::addr((Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())))
+    {
+        ({
+            let __t6 = fns::hsd_804D79A0(ctx).get();
+            fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+            __t6
+        })
+        .set((2_i32 as u8));
+    } else {
+        fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+    }
+    if Handle::addr(fns::hsd_804D79A0(ctx).get())
+        < Handle::addr((Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())))
+    {
+        ({
+            let __t7 = fns::hsd_804D79A0(ctx).get();
+            fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+            __t7
+        })
+        .set((1_i32 as u8));
+    } else {
+        fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+    }
+    if Handle::addr(fns::hsd_804D79A0(ctx).get())
+        < Handle::addr((Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())))
+    {
+        ({
+            let __t8 = fns::hsd_804D79A0(ctx).get();
+            fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+            __t8
+        })
+        .set((0_i32 as u8));
+    } else {
+        fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+    }
+    if Handle::addr(fns::hsd_804D79A0(ctx).get())
+        < Handle::addr((Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())))
+    {
+        ({
+            let __t9 = fns::hsd_804D79A0(ctx).get();
+            fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+            __t9
+        })
+        .set((72_i32 as u8));
+    } else {
+        fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+    }
+    if Handle::addr(fns::hsd_804D79A0(ctx).get())
+        < Handle::addr((Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())))
+    {
+        ({
+            let __t10 = fns::hsd_804D79A0(ctx).get();
+            fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+            __t10
+        })
+        .set((0_i32 as u8));
+    } else {
+        fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+    }
+    if Handle::addr(fns::hsd_804D79A0(ctx).get())
+        < Handle::addr((Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())))
+    {
+        ({
+            let __t11 = fns::hsd_804D79A0(ctx).get();
+            fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+            __t11
+        })
+        .set((72_i32 as u8));
+    } else {
+        fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+    }
+    if Handle::addr(fns::hsd_804D79A0(ctx).get())
+        < Handle::addr((Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())))
+    {
+        ({
+            let __t12 = fns::hsd_804D79A0(ctx).get();
+            fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+            __t12
+        })
+        .set((0_i32 as u8));
+    } else {
+        fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+    }
+    if Handle::addr(fns::hsd_804D79A0(ctx).get())
+        < Handle::addr((Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())))
+    {
+        ({
+            let __t13 = fns::hsd_804D79A0(ctx).get();
+            fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+            __t13
+        })
+        .set((0_i32 as u8));
+        return;
+    }
+    fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+}
+
 pub fn hsd_803B4A2C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
@@ -943,6 +1121,13 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (Val<'_, u8>,) = Args::take_all(ctx);
             Ret::put(fn_803B376C(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x803b46d4,
+        |ctx| {
+            Ret::put(hsd_803B46D4(ctx), ctx);
         },
         Returns::Nothing,
     );

@@ -80,6 +80,99 @@ pub fn lb_80011C18<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, flags: u32) {
     }
 }
 
+pub fn lb_80011E24<'a>(ctx: &'a Ctx, root: HSD_JObj<'a>, result: Ptr<'a, HSD_JObj<'a>>) -> i32 {
+    let __frame = ctx.stack_frame(0x98);
+    __frame.save_varargs();
+    let ap: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0x60);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x6c);
+    let mut root = root;
+    let mut result = result;
+    let mut found: i32 = 0;
+    let mut prev: i32 = 0;
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut saved: HSD_JObj<'a> = null(ctx);
+    let mut next_node: HSD_JObj<'a> = null(ctx);
+    let mut cur: i32 = 0;
+    let mut target: i32 = 0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    found = 0_i32;
+    prev = 1_i32.wrapping_neg();
+    if (Handle::is_null(root)) || (Handle::is_null(result)) {
+        return 0_i32;
+    }
+    __frame.va_info(Handle::addr(Handle::cast::<Addr<'a>>(ap)), 2, 0);
+    {
+        'l3: loop {
+            'c4: {
+                target =
+                    ((Handle::cast::<Val<'a, i32>>(fns::__va_arg(ctx, ap.get(0), 1_u8))).get());
+                if target == 1_i32.wrapping_neg() {
+                    break 'l3;
+                }
+                if (prev > target) || (prev == 1_i32.wrapping_neg()) {
+                    jobj = root;
+                    cur = 0_i32;
+                } else {
+                    cur = prev;
+                }
+                'l5: while !Handle::is_null(jobj) {
+                    'c6: {
+                        if cur == target {
+                            break 'l5;
+                        }
+                        saved = jobj;
+                        if (!(((jobj).flags() & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0))
+                            && (!Handle::is_null(inl_HSD_JObjGetChild_unfused(ctx, jobj)))
+                        {
+                            next_node = inl_HSD_JObjGetChild_unfused(ctx, jobj);
+                        } else if !Handle::is_null(inl_HSD_JObjGetNext_unfused(ctx, jobj)) {
+                            next_node = inl_HSD_JObjGetNext_unfused(ctx, jobj);
+                        } else {
+                            'l7: loop {
+                                'c8: {
+                                    if Handle::is_null(inl_HSD_JObjGetParent_unfused(ctx, saved)) {
+                                        next_node = null::<HSD_JObj<'a>>(ctx);
+                                        break 'l7;
+                                    }
+                                    if !Handle::is_null(inl_HSD_JObjGetNext_unfused(
+                                        ctx,
+                                        inl_HSD_JObjGetParent_unfused(ctx, saved),
+                                    )) {
+                                        next_node = {
+                                            let __t1 = inl_HSD_JObjGetNext_unfused(
+                                                ctx,
+                                                inl_HSD_JObjGetParent_unfused(ctx, saved),
+                                            );
+                                            saved = __t1;
+                                            __t1
+                                        };
+                                        break 'l7;
+                                    }
+                                    saved = inl_HSD_JObjGetParent_unfused(ctx, saved);
+                                }
+                            }
+                        }
+                        jobj = next_node;
+                        cur = cur.wrapping_add(1);
+                    }
+                }
+                (result).set(jobj);
+                prev = cur;
+                result = Handle::add(result, 1);
+                if !Handle::is_null(jobj) {
+                    found = found.wrapping_add(1);
+                }
+            }
+        }
+    }
+    return found;
+}
+
 pub fn lb_8001204C<'a>(
     ctx: &'a Ctx,
     root: HSD_JObj<'a>,
@@ -1351,6 +1444,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(lb_80011C18(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80011e24,
+        |ctx| {
+            let (a0, a1): (HSD_JObj<'_>, Ptr<'_, HSD_JObj<'_>>) = Args::take_all(ctx);
+            Ret::put(lb_80011E24(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x8001204c,

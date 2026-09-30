@@ -351,6 +351,203 @@ pub fn HSD_SisLib_803A67EC<'a>(ctx: &'a Ctx, data: Val<'a, u8>, string: Val<'a, 
     return out_idx.get();
 }
 
+pub fn HSD_SisLib_803A6B98<'a>(
+    ctx: &'a Ctx,
+    text: HSD_Text<'a>,
+    x: f64,
+    y: f64,
+    fmt: Val<'a, i8>,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x1e0);
+    __frame.save_varargs();
+    let buffer: ArrV<'a, u8, 128> = frame_at(ctx, &__frame, 0x60);
+    let encoded: ArrV<'a, u8, 128> = frame_at(ctx, &__frame, 0xe0);
+    let args: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0x160);
+    let mut text = text;
+    let mut x = x;
+    let mut y = y;
+    let mut fmt = fmt;
+    let mut x_coord: i32 = 0;
+    let mut y_coord: i32 = 0;
+    let mut old_buf: Val<'a, u8> = null(ctx);
+    let mut alloc: SisBuffer<'a> = null(ctx);
+    let mut encoded_len: i32 = 0;
+    let mut copied_bytes: i32 = 0;
+    let mut new_buf: Val<'a, u8> = null(ctx);
+    let mut copy_idx: i32 = 0;
+    let mut required_size: u32 = 0;
+    let mut old_size: u32 = 0;
+    encoded_len = 0_i32;
+    alloc = (text).alloc_data();
+    encoded.at(0_i32).set((0_i32 as u8));
+    if !Handle::is_null(fmt) {
+        __frame.va_info(Handle::addr(Handle::cast::<Addr<'a>>(args)), 2, 2);
+        let _ = fns::vsnprintf(
+            ctx,
+            Handle::cast::<Val<'a, i8>>(buffer.at(0)),
+            (1_i32.wrapping_neg() as u32),
+            fmt,
+            args.get(0),
+        );
+        encoded_len = fns::HSD_SisLib_803A67EC(ctx, encoded.at(0), buffer.at(0));
+    }
+    old_size = (alloc).size();
+    required_size = (((Handle::addr((alloc).end()).wrapping_sub(Handle::addr(
+        ({
+            let __t1 = (alloc).data();
+            old_buf = __t1;
+            __t1
+        }),
+    )) as i32)
+        / 1)
+    .wrapping_add(17_i32) as u32);
+    required_size = (encoded_len as u32).wrapping_add(required_size);
+    if old_size < required_size {
+        (alloc).set_size(
+            old_size.wrapping_add(
+                (shl_u32(
+                    ((shr_u32((required_size.wrapping_sub(old_size)), 7_u32))
+                        .wrapping_add((1_i32 as u32))),
+                    (7_i32 as u32),
+                )),
+            ),
+        );
+        new_buf = Handle::cast::<Val<'a, u8>>(fns::HSD_SisLib_Alloc(ctx, ((alloc).size() as i32)));
+        copy_idx = 0_i32;
+        'l1: while copy_idx < inl_sisBufferLength_unfused(ctx, alloc).wrapping_add(1_i32) {
+            'c2: {
+                (Handle::add(new_buf, copy_idx)).set((Handle::add(old_buf, copy_idx)).get());
+                copy_idx = copy_idx.wrapping_add(1_i32);
+            }
+        }
+        (alloc).set_data(new_buf);
+        (text).set_sis_buffer(new_buf);
+        (alloc).set_end(Handle::add(
+            new_buf,
+            ((Handle::addr((alloc).end()).wrapping_sub(Handle::addr(old_buf)) as i32) / 1),
+        ));
+        fns::HSD_SisLib_Free(ctx, Handle::cast::<Addr<'a>>(old_buf));
+    }
+    ({
+        let __t2 = (alloc).end();
+        (alloc).set_end(Handle::add((alloc).end(), 1));
+        __t2
+    })
+    .set((7_i32 as u8));
+    copied_bytes = 0_i32;
+    x_coord = ((fp::fctiwz(x) as i16) as i32);
+    ({
+        let __t3 = (alloc).end();
+        (alloc).set_end(Handle::add((alloc).end(), 1));
+        __t3
+    })
+    .set(((sar_i32(x_coord, (8_i32 as u32))) as u8));
+    ({
+        let __t4 = (alloc).end();
+        (alloc).set_end(Handle::add((alloc).end(), 1));
+        __t4
+    })
+    .set((x_coord as u8));
+    y_coord = ((fp::fctiwz(y) as i16) as i32);
+    ({
+        let __t5 = (alloc).end();
+        (alloc).set_end(Handle::add((alloc).end(), 1));
+        __t5
+    })
+    .set(((sar_i32(y_coord, (8_i32 as u32))) as u8));
+    ({
+        let __t6 = (alloc).end();
+        (alloc).set_end(Handle::add((alloc).end(), 1));
+        __t6
+    })
+    .set((y_coord as u8));
+    ({
+        let __t7 = (alloc).end();
+        (alloc).set_end(Handle::add((alloc).end(), 1));
+        __t7
+    })
+    .set((12_i32 as u8));
+    ({
+        let __t8 = (alloc).end();
+        (alloc).set_end(Handle::add((alloc).end(), 1));
+        __t8
+    })
+    .set((text).text_color().r());
+    ({
+        let __t9 = (alloc).end();
+        (alloc).set_end(Handle::add((alloc).end(), 1));
+        __t9
+    })
+    .set((text).text_color().g());
+    ({
+        let __t10 = (alloc).end();
+        (alloc).set_end(Handle::add((alloc).end(), 1));
+        __t10
+    })
+    .set((text).text_color().b());
+    ({
+        let __t11 = (alloc).end();
+        (alloc).set_end(Handle::add((alloc).end(), 1));
+        __t11
+    })
+    .set((14_i32 as u8));
+    ({
+        let __t12 = (alloc).end();
+        (alloc).set_end(Handle::add((alloc).end(), 1));
+        __t12
+    })
+    .set((fp::fctiwz((text).x34().x()) as u8));
+    ({
+        let __t13 = (alloc).end();
+        (alloc).set_end(Handle::add((alloc).end(), 1));
+        __t13
+    })
+    .set((fp::fctiwz((fp::fmuls(256.0, (text).x34().x()))) as u8));
+    ({
+        let __t14 = (alloc).end();
+        (alloc).set_end(Handle::add((alloc).end(), 1));
+        __t14
+    })
+    .set((fp::fctiwz((text).x34().y()) as u8));
+    ({
+        let __t15 = (alloc).end();
+        (alloc).set_end(Handle::add((alloc).end(), 1));
+        __t15
+    })
+    .set((fp::fctiwz((fp::fmuls(256.0, (text).x34().y()))) as u8));
+    {
+        'l3: while copied_bytes < encoded_len {
+            'c4: {
+                ({
+                    let __t16 = (alloc).end();
+                    (alloc).set_end(Handle::add((alloc).end(), 1));
+                    __t16
+                })
+                .set(encoded.at(copied_bytes).get());
+            }
+            copied_bytes = copied_bytes.wrapping_add(1);
+        }
+    }
+    ({
+        let __t17 = (alloc).end();
+        (alloc).set_end(Handle::add((alloc).end(), 1));
+        __t17
+    })
+    .set((15_i32 as u8));
+    ({
+        let __t18 = (alloc).end();
+        (alloc).set_end(Handle::add((alloc).end(), 1));
+        __t18
+    })
+    .set((13_i32 as u8));
+    ((alloc).end()).set((0_i32 as u8));
+    return ({
+        let __t19 = (alloc).count();
+        (alloc).set_count((alloc).count().wrapping_add(1));
+        __t19
+    } as i32);
+}
+
 pub fn fn_803A6FEC<'a>(
     ctx: &'a Ctx,
     sis_data: Val<'a, u8>,
@@ -433,6 +630,144 @@ pub fn fn_803A6FEC<'a>(
         }
     }
     return sis_data;
+}
+
+pub fn HSD_SisLib_803A70A0<'a>(
+    ctx: &'a Ctx,
+    text: HSD_Text<'a>,
+    entry_idx: i32,
+    fmt: Val<'a, i8>,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x1b0);
+    __frame.save_varargs();
+    let buffer: ArrV<'a, u8, 128> = frame_at(ctx, &__frame, 0x60);
+    let encoded: ArrV<'a, u8, 128> = frame_at(ctx, &__frame, 0xe0);
+    let old_size: Val<'a, i32> = frame_at(ctx, &__frame, 0x160);
+    let args: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0x164);
+    let mut text = text;
+    let mut entry_idx = entry_idx;
+    let mut fmt = fmt;
+    let mut old_buf: Val<'a, u8> = null(ctx);
+    let mut playhead: Val<'a, u8> = null(ctx);
+    let mut alloc: SisBuffer<'a> = null(ctx);
+    let mut new_size: i32 = 0;
+    let mut tail_len: i32 = 0;
+    let mut result: i32 = 0;
+    let mut entry: Val<'a, u8> = null(ctx);
+    let mut new_buf: Val<'a, u8> = null(ctx);
+    let mut copy_idx: i32 = 0;
+    let mut i: i32 = 0;
+    result = 0_i32;
+    entry = fns::fn_803A6FEC(ctx, (text).sis_buffer(), entry_idx, old_size);
+    if !Handle::is_null(entry) {
+        alloc = (text).alloc_data();
+        playhead = Handle::add(entry, 14_i32);
+        if !Handle::is_null(fmt) {
+            __frame.va_info(Handle::addr(Handle::cast::<Addr<'a>>(args)), 3, 0);
+            let _ = fns::vsnprintf(
+                ctx,
+                Handle::cast::<Val<'a, i8>>(buffer.at(0)),
+                (1_i32.wrapping_neg() as u32),
+                fmt,
+                args.get(0),
+            );
+            new_size = fns::HSD_SisLib_803A67EC(ctx, encoded.at(0), buffer.at(0));
+        } else {
+            new_size = 0_i32;
+        }
+        if old_size.get() < new_size {
+            let mut required_size: u32 = 0;
+            result = new_size.wrapping_sub(old_size.get());
+            tail_len =
+                ((Handle::addr((alloc).end()).wrapping_sub(Handle::addr(playhead)) as i32) / 1);
+            required_size = (new_size
+                .wrapping_add(
+                    ((Handle::addr((alloc).end()).wrapping_sub(Handle::addr(
+                        ({
+                            let __t1 = (alloc).data();
+                            old_buf = __t1;
+                            __t1
+                        }),
+                    )) as i32)
+                        / 1),
+                )
+                .wrapping_add(1_i32) as u32);
+            if (alloc).size() < required_size {
+                (alloc).set_size(
+                    (alloc).size().wrapping_add(
+                        (shl_u32(
+                            ((shr_u32((required_size.wrapping_sub((alloc).size())), 7_u32))
+                                .wrapping_add((1_i32 as u32))),
+                            (7_i32 as u32),
+                        )),
+                    ),
+                );
+                new_buf = Handle::cast::<Val<'a, u8>>(fns::HSD_SisLib_Alloc(
+                    ctx,
+                    ((alloc).size() as i32),
+                ));
+                copy_idx = 0_i32;
+                'l1: while copy_idx < inl_sisBufferLength_unfused(ctx, alloc).wrapping_add(1_i32) {
+                    'c2: {
+                        (Handle::add(new_buf, copy_idx))
+                            .set((Handle::add(old_buf, copy_idx)).get());
+                        copy_idx = copy_idx.wrapping_add(1_i32);
+                    }
+                }
+                (alloc).set_data(new_buf);
+                (text).set_sis_buffer(new_buf);
+                (alloc).set_end(Handle::add(
+                    new_buf,
+                    ((Handle::addr((alloc).end()).wrapping_sub(Handle::addr(old_buf)) as i32) / 1),
+                ));
+                fns::HSD_SisLib_Free(ctx, Handle::cast::<Addr<'a>>(old_buf));
+                playhead = Handle::add((alloc).end(), tail_len.wrapping_neg());
+            }
+            {
+                i = tail_len;
+                'l3: while i > 0_i32 {
+                    'c4: {
+                        (Handle::add(playhead, result.wrapping_add(i)))
+                            .set((Handle::add(playhead, i)).get());
+                    }
+                    i = i.wrapping_sub(1);
+                }
+            }
+            (alloc).set_end(Handle::add((alloc).end(), result));
+        } else if old_size.get() > new_size {
+            let mut shrink_size: i32 = old_size.get().wrapping_sub(new_size);
+            let mut tail_len_2: i32 =
+                ((Handle::addr((alloc).end()).wrapping_sub(Handle::addr(playhead)) as i32) / 1);
+            {
+                i = 0_i32;
+                'l5: while i < tail_len_2 {
+                    'c6: {
+                        (Handle::add(playhead, i))
+                            .set((Handle::add(playhead, shrink_size.wrapping_add(i))).get());
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+            (alloc).set_end(Handle::add((alloc).end(), shrink_size.wrapping_neg()));
+        }
+        {
+            i = 0_i32;
+            'l7: while i < new_size {
+                'c8: {
+                    ({
+                        let __t2 = playhead;
+                        playhead = Handle::add(playhead, 1);
+                        __t2
+                    })
+                    .set(encoded.at(i).get());
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+        (playhead).set((15_i32 as u8));
+        result = 1_i32;
+    }
+    return result;
 }
 
 pub fn HSD_SisLib_803A746C<'a>(
@@ -751,6 +1086,11 @@ fn inl_sisEndKerning_unfused<'a>(
     (out_idx).set(idx);
 }
 
+fn inl_sisBufferLength_unfused<'a>(ctx: &'a Ctx, buffer: SisBuffer<'a>) -> i32 {
+    let mut buffer = buffer;
+    return ((Handle::addr((buffer).end()).wrapping_sub(Handle::addr((buffer).data())) as i32) / 1);
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -794,10 +1134,26 @@ pub fn register(ctx: &Ctx) {
         Returns::Int,
     );
     ctx.register_port(
+        0x803a6b98,
+        |ctx| {
+            let (a0, a1, a2, a3): (HSD_Text<'_>, Single, Single, Val<'_, i8>) = Args::take_all(ctx);
+            Ret::put(HSD_SisLib_803A6B98(ctx, a0, a1.0, a2.0, a3), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
         0x803a6fec,
         |ctx| {
             let (a0, a1, a2): (Val<'_, u8>, i32, Val<'_, i32>) = Args::take_all(ctx);
             Ret::put(fn_803A6FEC(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x803a70a0,
+        |ctx| {
+            let (a0, a1, a2): (HSD_Text<'_>, i32, Val<'_, i8>) = Args::take_all(ctx);
+            Ret::put(HSD_SisLib_803A70A0(ctx, a0, a1, a2), ctx);
         },
         Returns::Int,
     );

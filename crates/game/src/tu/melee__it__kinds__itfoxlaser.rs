@@ -175,7 +175,7 @@ pub fn itFoxlaser_UnkMotion1_Coll<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> 
             break 'l1;
         }
     }
-    if (inl_it_8029C4D4_unfused(ctx, item_gobj, null::<CollData<'a>>(ctx)) != 0) {
+    if (inl_it_8029C4D4_unfused(ctx, item_gobj, null(ctx)) != 0) {
         fns::it_80275158(ctx, item_gobj, 1.0);
         Handle::copy_from((item).pos(), pos);
     }

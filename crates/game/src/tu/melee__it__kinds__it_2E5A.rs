@@ -616,7 +616,7 @@ pub fn it_802E6380<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: it_802E5FXX_
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
     let mut attr: it_2E5A_Attrs<'a> =
         Handle::cast::<it_2E5A_Attrs<'a>>(((item).xC4_article_data()).x4_specialAttributes());
-    let mut off: i32 = inl_it_802E6380_tier_unfused(ctx, item_gobj, attr, arg1);
+    let mut off: i32 = inl_it_802E6380_tier_unfused(ctx, null(ctx), attr, arg1);
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {

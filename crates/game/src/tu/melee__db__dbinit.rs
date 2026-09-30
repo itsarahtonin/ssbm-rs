@@ -191,6 +191,37 @@ pub fn db_PrintEntityCounts<'a>(ctx: &'a Ctx) {
     fns::OSReport(ctx, cstr(ctx, 0x803ea724), &[]);
 }
 
+pub fn db_PrintThreadInfo<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x10);
+    let mut peak: Val<'a, u8> = Handle::add(fns::_stack_end(ctx).at(0), 4_i32);
+    'l1: while ((peak).get() as i32) == 170_i32 {
+        'c2: {
+            peak = Handle::add(peak, 1_i32);
+        }
+    }
+    fns::OSReport(ctx, cstr(ctx, 0x803ea768), &[]);
+    fns::OSReport(
+        ctx,
+        cstr(ctx, 0x803ea784),
+        &[
+            VarArg::Int(Handle::addr(fns::_stack_addr(ctx).at(0))),
+            VarArg::Int(Handle::addr(fns::_stack_end(ctx).at(0))),
+            VarArg::Int(
+                ((Handle::addr(fns::_stack_addr(ctx).at(0))
+                    .wrapping_sub(Handle::addr(fns::_stack_end(ctx).at(0)))
+                    as i32)
+                    / 1) as u32,
+            ),
+            VarArg::Int(
+                ((Handle::addr(fns::_stack_addr(ctx).at(0)).wrapping_sub(Handle::addr(peak))
+                    as i32)
+                    / 1) as u32,
+            ),
+        ],
+    );
+    fns::OSReport(ctx, cstr(ctx, 0x803ea724), &[]);
+}
+
 pub fn db_RunEveryFrame<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
     let stack: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x0);
@@ -464,6 +495,13 @@ pub fn register(ctx: &Ctx) {
         0x802255d4,
         |ctx| {
             Ret::put(db_PrintEntityCounts(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x802256cc,
+        |ctx| {
+            Ret::put(db_PrintThreadInfo(ctx), ctx);
         },
         Returns::Nothing,
     );

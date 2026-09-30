@@ -214,7 +214,7 @@ fn inl_fn_800C8_inline_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp).set_stamina_dead((1_i32 as u8));
     fns::Fighter_ResetInputData_80068854(ctx, gobj);
     let _ = fns::ftCo_800BFFD0(ctx, fp, 122_i32, 0_i32);
-    inl_fn_800C8E40_unfused(ctx, fp, ft_sfx);
+    inl_fn_800C8E40_unfused(ctx, fp, null(ctx));
     (fp).set_x2225_b6((1_i32 as u8));
     fns::lbBgFlash_80021C48(ctx, 14_u32, 0_u32);
     fns::gm_80167470(

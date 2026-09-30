@@ -24,6 +24,7 @@ use ssbm_types::fns;
 use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
+use crate::manual::dolphin__os__OSInterrupt as manual;
 use crate::support::*;
 
 pub fn __OSSetInterruptHandler<'a>(ctx: &'a Ctx, interrupt: i16, handler: FnPtr<'a>) -> FnPtr<'a> {
@@ -581,6 +582,36 @@ fn inl___OSGetInterruptHandler_unfused<'a>(ctx: &'a Ctx, interrupt: i16) -> FnPt
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x80347b80,
+        |ctx| {
+            let (a0, a1): (u8, OSContext<'_>) = Args::take_all(ctx);
+            Ret::put(manual::ExternalInterruptHandler(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80347364,
+        |ctx| {
+            Ret::put(manual::OSDisableInterrupts(ctx), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80347378,
+        |ctx| {
+            Ret::put(manual::OSEnableInterrupts(ctx), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8034738c,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(manual::OSRestoreInterrupts(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
     ctx.register_port(
         0x803473b0,
         |ctx| {

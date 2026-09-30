@@ -687,7 +687,7 @@ pub fn ftCo_800DDDE4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, gobj2: HSD_GObj<'a>, 
         jobj = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, (fp4).gobj())));
         vec2.set_x(fp::fadds(
             (fp3).cur_pos().x(),
-            inl_ftCo_800DDDE4_inline3(ctx, fp3),
+            inl_ftCo_800DDDE4_inline3(ctx, null(ctx)),
         ));
         vec2.set_y(fp::fadds(
             (fp3).cur_pos().y(),
@@ -695,7 +695,7 @@ pub fn ftCo_800DDDE4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, gobj2: HSD_GObj<'a>, 
         ));
         vec2.set_z(fp::fadds(
             (fp3).cur_pos().z(),
-            inl_ftCo_800DDDE4_inline3(ctx, fp3),
+            inl_ftCo_800DDDE4_inline3(ctx, null(ctx)),
         ));
         Handle::copy_from((fp4).coll_data().last_pos(), vec2);
         fns::mpColl_80043670(ctx, cd);

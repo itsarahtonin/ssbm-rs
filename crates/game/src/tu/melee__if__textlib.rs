@@ -290,6 +290,24 @@ pub fn DevText_PrintInt<'a>(ctx: &'a Ctx, text: DevText<'a>, num: i32) {
     fns::DevText_Print(ctx, text, str.at(0));
 }
 
+pub fn DevText_Printf<'a>(ctx: &'a Ctx, text: DevText<'a>, format: Val<'a, i8>) {
+    let __frame = ctx.stack_frame(0xc8);
+    __frame.save_varargs();
+    let str: ArrV<'a, i8, 64> = frame_at(ctx, &__frame, 0x60);
+    let args: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0xa0);
+    let mut text = text;
+    let mut format = format;
+    __frame.va_info(Handle::addr(Handle::cast::<Addr<'a>>(args)), 2, 0);
+    let _ = fns::vsnprintf(
+        ctx,
+        str.at(0),
+        (1_i32.wrapping_neg() as u32),
+        format,
+        args.get(0),
+    );
+    fns::DevText_Print(ctx, text, str.at(0));
+}
+
 pub fn un_80302DF0<'a>(ctx: &'a Ctx) -> un_80304138_objalloc_t<'a> {
     return fns::un_804D6E44(ctx).get();
 }
@@ -502,6 +520,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (DevText<'_>, i32) = Args::take_all(ctx);
             Ret::put(DevText_PrintInt(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80302d4c,
+        |ctx| {
+            let (a0, a1): (DevText<'_>, Val<'_, i8>) = Args::take_all(ctx);
+            Ret::put(DevText_Printf(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );

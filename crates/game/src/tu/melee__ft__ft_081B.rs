@@ -750,7 +750,7 @@ pub fn ft_80083090<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: FnPtr<'a>, cb: Fn
             break 'l1;
         }
     }
-    if (inl_ft_80083090_inline_unfused(ctx, gobj, arg1, cb) != 0) {
+    if (inl_ft_80083090_inline_unfused(ctx, gobj, arg1, null(ctx)) != 0) {
         cb.call::<_, ()>((gobj,));
         return;
     }
@@ -778,7 +778,7 @@ pub fn ft_800831CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: FnPtr<'a>, cb: Fn
             break 'l1;
         }
     }
-    if (inl_ft_80083090_inline_unfused(ctx, gobj, arg1, cb) != 0) {
+    if (inl_ft_80083090_inline_unfused(ctx, gobj, arg1, null(ctx)) != 0) {
         cb.call::<_, ()>((gobj,));
         return;
     }
@@ -816,7 +816,7 @@ pub fn ft_80083318<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: FnPtr<'a>, cb: Fn
             break 'l1;
         }
     }
-    if (inl_ft_80083318_inline_unfused(ctx, gobj, arg1, cb) != 0) {
+    if (inl_ft_80083318_inline_unfused(ctx, gobj, arg1, null(ctx)) != 0) {
         cb.call::<_, ()>((gobj,));
         return;
     }
@@ -854,7 +854,7 @@ pub fn ft_80083464<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: FnPtr<'a>, cb: Fn
             break 'l1;
         }
     }
-    if (inl_ft_80083464_inline_unfused(ctx, gobj, arg1, cb) != 0) {
+    if (inl_ft_80083464_inline_unfused(ctx, gobj, arg1, null(ctx)) != 0) {
         cb.call::<_, ()>((gobj,));
         return;
     }
@@ -892,7 +892,7 @@ pub fn ft_800835B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: FnPtr<'a>, cb: Fn
             break 'l1;
         }
     }
-    if (inl_ft_80083090_inline_unfused(ctx, gobj, arg1, cb) != 0) {
+    if (inl_ft_80083090_inline_unfused(ctx, gobj, arg1, null(ctx)) != 0) {
         cb.call::<_, ()>((gobj,));
         return;
     }
@@ -1096,7 +1096,7 @@ pub fn ft_80083CE4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb1: FnPtr<'a>, cb2: Fn
             break 'l1;
         }
     }
-    if (inl_ft_80083CE4_inline_unfused(ctx, gobj, cb1, cb2) != 0) {
+    if (inl_ft_80083CE4_inline_unfused(ctx, gobj, cb1, null(ctx)) != 0) {
         cb2.call::<_, ()>((gobj,));
     }
 }

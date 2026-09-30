@@ -24,6 +24,7 @@ use ssbm_types::fns;
 use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
+use crate::manual::dolphin__ai__ai as manual;
 use crate::support::*;
 
 pub fn AIRegisterDMACallback<'a>(ctx: &'a Ctx, callback: FnPtr<'a>) -> FnPtr<'a> {
@@ -781,6 +782,14 @@ fn inl_AIResetStreamSampleCount_unfused<'a>(ctx: &'a Ctx) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x80350a50,
+        |ctx| {
+            let (a0,): (Addr<'_>,) = Args::take_all(ctx);
+            Ret::put(manual::__AICallbackStackSwitch(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
     ctx.register_port(
         0x803503e4,
         |ctx| {

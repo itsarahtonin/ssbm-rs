@@ -24,6 +24,7 @@ use ssbm_types::fns;
 use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
+use crate::manual::dolphin__os__OS as manual;
 use crate::support::*;
 
 pub fn OSGetConsoleType<'a>(ctx: &'a Ctx) -> u32 {
@@ -118,6 +119,14 @@ pub fn __OSGetDIConfig<'a>(ctx: &'a Ctx) -> u32 {
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
+        0x80343680,
+        |ctx| {
+            let (a0, a1): (u8, OSContext<'_>) = Args::take_all(ctx);
+            Ret::put(manual::OSDefaultExceptionHandler(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x80342e94,
         |ctx| {
             Ret::put(OSGetConsoleType(ctx), ctx);
@@ -128,6 +137,20 @@ pub fn register(ctx: &Ctx) {
         0x80342ebc,
         |ctx| {
             Ret::put(ClearArena(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8034358c,
+        |ctx| {
+            Ret::put(manual::__OSDBIntegrator(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x803435b0,
+        |ctx| {
+            Ret::put(manual::__OSDBJump(ctx), ctx);
         },
         Returns::Nothing,
     );
@@ -146,6 +169,20 @@ pub fn register(ctx: &Ctx) {
             Ret::put(__OSGetExceptionHandler(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x803435e4,
+        |ctx| {
+            Ret::put(manual::OSExceptionVector(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x803436d4,
+        |ctx| {
+            Ret::put(manual::__OSPSInit(ctx), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x8034370c,

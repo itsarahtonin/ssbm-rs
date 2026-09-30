@@ -6417,6 +6417,299 @@ impl<'a> FFlowerAttr<'a> {
     #[inline] pub fn set_x14(self, v: f64) { self.0.set::<F32>(0x14, v) }
     #[inline] pub fn x14_ref(self) -> Val<'a, F32> { self.0.field(0x14) }
 }
+/// C struct `FIO_Code`, 0x4 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct FIO_Code<'a>(pub At<'a>);
+impl<'a> Handle<'a> for FIO_Code<'a> {
+    const SIZE: u32 = 0x4;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> FIO_Code<'a> {
+    #[inline] pub fn descriptor(self) -> u32 { self.0.get::<u32>(0x0) }
+    #[inline] pub fn set_descriptor(self, v: u32) { self.0.set::<u32>(0x0, v) }
+    #[inline] pub fn descriptor_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
+}
+/// C struct `FIO_Code`, 0xc bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct FIO_Code_10<'a>(pub At<'a>);
+impl<'a> Handle<'a> for FIO_Code_10<'a> {
+    const SIZE: u32 = 0xc;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> FIO_Code_10<'a> {
+    #[inline] pub fn descriptor(self) -> u32 { self.0.get::<u32>(0x0) }
+    #[inline] pub fn set_descriptor(self, v: u32) { self.0.set::<u32>(0x0, v) }
+    #[inline] pub fn descriptor_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
+    #[inline] pub fn offset(self) -> u32 { self.0.get::<u32>(0x4) }
+    #[inline] pub fn set_offset(self, v: u32) { self.0.set::<u32>(0x4, v) }
+    #[inline] pub fn offset_ref(self) -> Val<'a, u32> { self.0.field(0x4) }
+    #[inline] pub fn base(self) -> u32 { self.0.get::<u32>(0x8) }
+    #[inline] pub fn set_base(self, v: u32) { self.0.set::<u32>(0x8, v) }
+    #[inline] pub fn base_ref(self) -> Val<'a, u32> { self.0.field(0x8) }
+}
+/// C struct `FIO_Code`, 0x4 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct FIO_Code_2<'a>(pub At<'a>);
+impl<'a> Handle<'a> for FIO_Code_2<'a> {
+    const SIZE: u32 = 0x4;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> FIO_Code_2<'a> {
+    #[inline] pub fn descriptor(self) -> u32 { self.0.get::<u32>(0x0) }
+    #[inline] pub fn set_descriptor(self, v: u32) { self.0.set::<u32>(0x0, v) }
+    #[inline] pub fn descriptor_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
+}
+/// C struct `FIO_Code`, 0x4 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct FIO_Code_3<'a>(pub At<'a>);
+impl<'a> Handle<'a> for FIO_Code_3<'a> {
+    const SIZE: u32 = 0x4;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> FIO_Code_3<'a> {
+    #[inline] pub fn descriptor(self) -> u32 { self.0.get::<u32>(0x0) }
+    #[inline] pub fn set_descriptor(self, v: u32) { self.0.set::<u32>(0x0, v) }
+    #[inline] pub fn descriptor_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
+}
+/// C struct `FIO_Code`, 0x1 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct FIO_Code_4<'a>(pub At<'a>);
+impl<'a> Handle<'a> for FIO_Code_4<'a> {
+    const SIZE: u32 = 0x1;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> FIO_Code_4<'a> {
+    #[inline] pub fn filename(self) -> u8 { self.0.get::<u8>(0x0) }
+    #[inline] pub fn set_filename(self, v: u8) { self.0.set::<u8>(0x0, v) }
+    #[inline] pub fn filename_ref(self) -> Val<'a, u8> { self.0.field(0x0) }
+}
+/// C struct `FIO_Code`, 0x4 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct FIO_Code_5<'a>(pub At<'a>);
+impl<'a> Handle<'a> for FIO_Code_5<'a> {
+    const SIZE: u32 = 0x4;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> FIO_Code_5<'a> {
+    #[inline] pub fn reserved(self) -> u32 { self.0.get::<u32>(0x0) }
+    #[inline] pub fn set_reserved(self, v: u32) { self.0.set::<u32>(0x0, v) }
+    #[inline] pub fn reserved_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
+}
+/// C struct `FIO_Code`, 0x8 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct FIO_Code_6<'a>(pub At<'a>);
+impl<'a> Handle<'a> for FIO_Code_6<'a> {
+    const SIZE: u32 = 0x8;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> FIO_Code_6<'a> {
+    #[inline] pub fn descriptor(self) -> u32 { self.0.get::<u32>(0x0) }
+    #[inline] pub fn set_descriptor(self, v: u32) { self.0.set::<u32>(0x0, v) }
+    #[inline] pub fn descriptor_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
+    #[inline] pub fn nbytes(self) -> u32 { self.0.get::<u32>(0x4) }
+    #[inline] pub fn set_nbytes(self, v: u32) { self.0.set::<u32>(0x4, v) }
+    #[inline] pub fn nbytes_ref(self) -> Val<'a, u32> { self.0.field(0x4) }
+}
+/// C struct `FIO_Code`, 0x8 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct FIO_Code_7<'a>(pub At<'a>);
+impl<'a> Handle<'a> for FIO_Code_7<'a> {
+    const SIZE: u32 = 0x8;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> FIO_Code_7<'a> {
+    #[inline] pub fn descriptor(self) -> u32 { self.0.get::<u32>(0x0) }
+    #[inline] pub fn set_descriptor(self, v: u32) { self.0.set::<u32>(0x0, v) }
+    #[inline] pub fn descriptor_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
+    #[inline] pub fn nbytes(self) -> u32 { self.0.get::<u32>(0x4) }
+    #[inline] pub fn set_nbytes(self, v: u32) { self.0.set::<u32>(0x4, v) }
+    #[inline] pub fn nbytes_ref(self) -> Val<'a, u32> { self.0.field(0x4) }
+}
+/// C struct `FIO_Code`, 0x8 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct FIO_Code_8<'a>(pub At<'a>);
+impl<'a> Handle<'a> for FIO_Code_8<'a> {
+    const SIZE: u32 = 0x8;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> FIO_Code_8<'a> {
+    #[inline] pub fn flag(self) -> u32 { self.0.get::<u32>(0x0) }
+    #[inline] pub fn set_flag(self, v: u32) { self.0.set::<u32>(0x0, v) }
+    #[inline] pub fn flag_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
+    #[inline] pub fn filename(self) -> i8 { self.0.get::<i8>(0x4) }
+    #[inline] pub fn set_filename(self, v: i8) { self.0.set::<i8>(0x4, v) }
+    #[inline] pub fn filename_ref(self) -> Val<'a, i8> { self.0.field(0x4) }
+}
+/// C struct `FIO_Code`, 0x4 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct FIO_Code_9<'a>(pub At<'a>);
+impl<'a> Handle<'a> for FIO_Code_9<'a> {
+    const SIZE: u32 = 0x4;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> FIO_Code_9<'a> {
+    #[inline] pub fn descriptor(self) -> u32 { self.0.get::<u32>(0x0) }
+    #[inline] pub fn set_descriptor(self, v: u32) { self.0.set::<u32>(0x0, v) }
+    #[inline] pub fn descriptor_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
+}
+/// C struct `FIO_Coder`, 0x4 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct FIO_Coder<'a>(pub At<'a>);
+impl<'a> Handle<'a> for FIO_Coder<'a> {
+    const SIZE: u32 = 0x4;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> FIO_Coder<'a> {
+    #[inline] pub fn result(self) -> u32 { self.0.get::<u32>(0x0) }
+    #[inline] pub fn set_result(self, v: u32) { self.0.set::<u32>(0x0, v) }
+    #[inline] pub fn result_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
+}
+/// C struct `FIO_Coder`, 0x8 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct FIO_Coder_10<'a>(pub At<'a>);
+impl<'a> Handle<'a> for FIO_Coder_10<'a> {
+    const SIZE: u32 = 0x8;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> FIO_Coder_10<'a> {
+    #[inline] pub fn result(self) -> u32 { self.0.get::<u32>(0x0) }
+    #[inline] pub fn set_result(self, v: u32) { self.0.set::<u32>(0x0, v) }
+    #[inline] pub fn result_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
+    #[inline] pub fn pos(self) -> u32 { self.0.get::<u32>(0x4) }
+    #[inline] pub fn set_pos(self, v: u32) { self.0.set::<u32>(0x4, v) }
+    #[inline] pub fn pos_ref(self) -> Val<'a, u32> { self.0.field(0x4) }
+}
+/// C struct `FIO_Coder`, 0x28 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct FIO_Coder_2<'a>(pub At<'a>);
+impl<'a> Handle<'a> for FIO_Coder_2<'a> {
+    const SIZE: u32 = 0x28;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> FIO_Coder_2<'a> {
+    #[inline] pub fn result(self) -> u32 { self.0.get::<u32>(0x0) }
+    #[inline] pub fn set_result(self, v: u32) { self.0.set::<u32>(0x0, v) }
+    #[inline] pub fn result_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
+    #[inline] pub fn stat(self) -> FIO_Stat<'a> { self.0.field(0x4) }
+}
+/// C struct `FIO_Coder`, 0x4 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct FIO_Coder_3<'a>(pub At<'a>);
+impl<'a> Handle<'a> for FIO_Coder_3<'a> {
+    const SIZE: u32 = 0x4;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> FIO_Coder_3<'a> {
+    #[inline] pub fn result(self) -> u32 { self.0.get::<u32>(0x0) }
+    #[inline] pub fn set_result(self, v: u32) { self.0.set::<u32>(0x0, v) }
+    #[inline] pub fn result_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
+}
+/// C struct `FIO_Coder`, 0x128 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct FIO_Coder_4<'a>(pub At<'a>);
+impl<'a> Handle<'a> for FIO_Coder_4<'a> {
+    const SIZE: u32 = 0x128;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> FIO_Coder_4<'a> {
+    #[inline] pub fn result(self) -> u32 { self.0.get::<u32>(0x0) }
+    #[inline] pub fn set_result(self, v: u32) { self.0.set::<u32>(0x0, v) }
+    #[inline] pub fn result_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
+    #[inline] pub fn findData(self) -> FIO_Finddata<'a> { self.0.field(0x4) }
+}
+/// C struct `FIO_Coder`, 0x128 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct FIO_Coder_5<'a>(pub At<'a>);
+impl<'a> Handle<'a> for FIO_Coder_5<'a> {
+    const SIZE: u32 = 0x128;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> FIO_Coder_5<'a> {
+    #[inline] pub fn result(self) -> u32 { self.0.get::<u32>(0x0) }
+    #[inline] pub fn set_result(self, v: u32) { self.0.set::<u32>(0x0, v) }
+    #[inline] pub fn result_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
+    #[inline] pub fn findData(self) -> FIO_Finddata<'a> { self.0.field(0x4) }
+}
+/// C struct `FIO_Coder`, 0xc bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct FIO_Coder_6<'a>(pub At<'a>);
+impl<'a> Handle<'a> for FIO_Coder_6<'a> {
+    const SIZE: u32 = 0xc;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> FIO_Coder_6<'a> {
+    #[inline] pub fn result(self) -> u32 { self.0.get::<u32>(0x0) }
+    #[inline] pub fn set_result(self, v: u32) { self.0.set::<u32>(0x0, v) }
+    #[inline] pub fn result_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
+    #[inline] pub fn nbytes(self) -> u32 { self.0.get::<u32>(0x4) }
+    #[inline] pub fn set_nbytes(self, v: u32) { self.0.set::<u32>(0x4, v) }
+    #[inline] pub fn nbytes_ref(self) -> Val<'a, u32> { self.0.field(0x4) }
+    #[inline] pub fn data(self) -> i8 { self.0.get::<i8>(0x8) }
+    #[inline] pub fn set_data(self, v: i8) { self.0.set::<i8>(0x8, v) }
+    #[inline] pub fn data_ref(self) -> Val<'a, i8> { self.0.field(0x8) }
+}
+/// C struct `FIO_Coder`, 0x8 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct FIO_Coder_7<'a>(pub At<'a>);
+impl<'a> Handle<'a> for FIO_Coder_7<'a> {
+    const SIZE: u32 = 0x8;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> FIO_Coder_7<'a> {
+    #[inline] pub fn result(self) -> u32 { self.0.get::<u32>(0x0) }
+    #[inline] pub fn set_result(self, v: u32) { self.0.set::<u32>(0x0, v) }
+    #[inline] pub fn result_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
+    #[inline] pub fn nbytes(self) -> u32 { self.0.get::<u32>(0x4) }
+    #[inline] pub fn set_nbytes(self, v: u32) { self.0.set::<u32>(0x4, v) }
+    #[inline] pub fn nbytes_ref(self) -> Val<'a, u32> { self.0.field(0x4) }
+}
+/// C struct `FIO_Coder`, 0x8 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct FIO_Coder_8<'a>(pub At<'a>);
+impl<'a> Handle<'a> for FIO_Coder_8<'a> {
+    const SIZE: u32 = 0x8;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> FIO_Coder_8<'a> {
+    #[inline] pub fn result(self) -> u32 { self.0.get::<u32>(0x0) }
+    #[inline] pub fn set_result(self, v: u32) { self.0.set::<u32>(0x0, v) }
+    #[inline] pub fn result_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
+    #[inline] pub fn descriptor(self) -> u32 { self.0.get::<u32>(0x4) }
+    #[inline] pub fn set_descriptor(self, v: u32) { self.0.set::<u32>(0x4, v) }
+    #[inline] pub fn descriptor_ref(self) -> Val<'a, u32> { self.0.field(0x4) }
+}
+/// C struct `FIO_Coder`, 0x4 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct FIO_Coder_9<'a>(pub At<'a>);
+impl<'a> Handle<'a> for FIO_Coder_9<'a> {
+    const SIZE: u32 = 0x4;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> FIO_Coder_9<'a> {
+    #[inline] pub fn result(self) -> u32 { self.0.get::<u32>(0x0) }
+    #[inline] pub fn set_result(self, v: u32) { self.0.set::<u32>(0x0, v) }
+    #[inline] pub fn result_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
+}
 /// C struct `FIO_Date`, 0x4 bytes.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct FIO_Date<'a>(pub At<'a>);
@@ -33786,6 +34079,74 @@ impl<'a> animateJointPadded_state<'a> {
     #[inline] pub fn jobj_ref(self) -> Ptr<'a, HSD_JObj<'a>> { self.0.field(0x0) }
     #[inline] pub fn pad(self) -> ArrV<'a, u8, 8> { self.0.field(0x4) }
 }
+/// C struct `struct (unnamed at libs/dolphin/src/dolphin/os/OSCache.c:560:9)`, 0x4 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct anon_394f5254<'a>(pub At<'a>);
+impl<'a> Handle<'a> for anon_394f5254<'a> {
+    const SIZE: u32 = 0x4;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> anon_394f5254<'a> {
+    #[inline] pub fn lcAddr(self) -> u32 { self.0.bits(0, 0, 27, false) as u32 }
+    #[inline] pub fn set_lcAddr(self, v: u32) { self.0.set_bits(0, 0, 27, v as i64) }
+    #[inline] pub fn dmaLd(self) -> u32 { self.0.bits(0, 27, 1, false) as u32 }
+    #[inline] pub fn set_dmaLd(self, v: u32) { self.0.set_bits(0, 27, 1, v as i64) }
+    #[inline] pub fn dmaLenL(self) -> u32 { self.0.bits(0, 28, 2, false) as u32 }
+    #[inline] pub fn set_dmaLenL(self, v: u32) { self.0.set_bits(0, 28, 2, v as i64) }
+    #[inline] pub fn dmaTrigger(self) -> u32 { self.0.bits(0, 30, 1, false) as u32 }
+    #[inline] pub fn set_dmaTrigger(self, v: u32) { self.0.set_bits(0, 30, 1, v as i64) }
+    #[inline] pub fn dmaFlush(self) -> u32 { self.0.bits(0, 31, 1, false) as u32 }
+    #[inline] pub fn set_dmaFlush(self, v: u32) { self.0.set_bits(0, 31, 1, v as i64) }
+}
+/// C union `union (unnamed at libs/dolphin/src/dolphin/os/OSSerial.c:316:5)`, 0x4 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct anon_3ece1956<'a>(pub At<'a>);
+impl<'a> Handle<'a> for anon_3ece1956<'a> {
+    const SIZE: u32 = 0x4;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> anon_3ece1956<'a> {
+    #[inline] pub fn val(self) -> u32 { self.0.get::<u32>(0x0) }
+    #[inline] pub fn set_val(self, v: u32) { self.0.set::<u32>(0x0, v) }
+    #[inline] pub fn val_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
+    #[inline] pub fn f(self) -> anon_5d552082<'a> { self.0.field(0x0) }
+}
+/// C struct `struct (unnamed at libs/dolphin/src/dolphin/os/OSSerial.c:318:9)`, 0x4 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct anon_5d552082<'a>(pub At<'a>);
+impl<'a> Handle<'a> for anon_5d552082<'a> {
+    const SIZE: u32 = 0x4;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> anon_5d552082<'a> {
+    #[inline] pub fn tcint(self) -> u32 { self.0.bits(0, 0, 1, false) as u32 }
+    #[inline] pub fn set_tcint(self, v: u32) { self.0.set_bits(0, 0, 1, v as i64) }
+    #[inline] pub fn tcintmsk(self) -> u32 { self.0.bits(0, 1, 1, false) as u32 }
+    #[inline] pub fn set_tcintmsk(self, v: u32) { self.0.set_bits(0, 1, 1, v as i64) }
+    #[inline] pub fn comerr(self) -> u32 { self.0.bits(0, 2, 1, false) as u32 }
+    #[inline] pub fn set_comerr(self, v: u32) { self.0.set_bits(0, 2, 1, v as i64) }
+    #[inline] pub fn rdstint(self) -> u32 { self.0.bits(0, 3, 1, false) as u32 }
+    #[inline] pub fn set_rdstint(self, v: u32) { self.0.set_bits(0, 3, 1, v as i64) }
+    #[inline] pub fn rdstintmsk(self) -> u32 { self.0.bits(0, 4, 1, false) as u32 }
+    #[inline] pub fn set_rdstintmsk(self, v: u32) { self.0.set_bits(0, 4, 1, v as i64) }
+    #[inline] pub fn pad2(self) -> u32 { self.0.bits(0, 5, 4, false) as u32 }
+    #[inline] pub fn set_pad2(self, v: u32) { self.0.set_bits(0, 5, 4, v as i64) }
+    #[inline] pub fn outlngth(self) -> u32 { self.0.bits(0, 9, 7, false) as u32 }
+    #[inline] pub fn set_outlngth(self, v: u32) { self.0.set_bits(0, 9, 7, v as i64) }
+    #[inline] pub fn pad1(self) -> u32 { self.0.bits(0, 16, 1, false) as u32 }
+    #[inline] pub fn set_pad1(self, v: u32) { self.0.set_bits(0, 16, 1, v as i64) }
+    #[inline] pub fn inlngth(self) -> u32 { self.0.bits(0, 17, 7, false) as u32 }
+    #[inline] pub fn set_inlngth(self, v: u32) { self.0.set_bits(0, 17, 7, v as i64) }
+    #[inline] pub fn pad0(self) -> u32 { self.0.bits(0, 24, 5, false) as u32 }
+    #[inline] pub fn set_pad0(self, v: u32) { self.0.set_bits(0, 24, 5, v as i64) }
+    #[inline] pub fn channel(self) -> u32 { self.0.bits(0, 29, 2, false) as u32 }
+    #[inline] pub fn set_channel(self, v: u32) { self.0.set_bits(0, 29, 2, v as i64) }
+    #[inline] pub fn tstart(self) -> u32 { self.0.bits(0, 31, 1, false) as u32 }
+    #[inline] pub fn set_tstart(self, v: u32) { self.0.set_bits(0, 31, 1, v as i64) }
+}
 /// C struct `struct (unnamed at libs/dolphin/src/dolphin/dvd/dvdlow.c:23:8)`, 0xc bytes.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct anon_6cb805d9<'a>(pub At<'a>);
@@ -33804,6 +34165,20 @@ impl<'a> anon_6cb805d9<'a> {
     #[inline] pub fn FSTLength(self) -> u32 { self.0.get::<u32>(0x8) }
     #[inline] pub fn set_FSTLength(self, v: u32) { self.0.set::<u32>(0x8, v) }
     #[inline] pub fn FSTLength_ref(self) -> Val<'a, u32> { self.0.field(0x8) }
+}
+/// C union `union (unnamed at libs/dolphin/src/dolphin/os/OSCache.c:558:5)`, 0x4 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct anon_a6c32f84<'a>(pub At<'a>);
+impl<'a> Handle<'a> for anon_a6c32f84<'a> {
+    const SIZE: u32 = 0x4;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> anon_a6c32f84<'a> {
+    #[inline] pub fn val(self) -> u32 { self.0.get::<u32>(0x0) }
+    #[inline] pub fn set_val(self, v: u32) { self.0.set::<u32>(0x0, v) }
+    #[inline] pub fn val_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
+    #[inline] pub fn f(self) -> anon_394f5254<'a> { self.0.field(0x0) }
 }
 /// C struct `struct (unnamed at libs/dolphin/src/dolphin/os/OSExi.c:20:5)`, 0x8 bytes.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]

@@ -24,6 +24,7 @@ use ssbm_types::fns;
 use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
+use crate::manual::dolphin__os__OSTime as manual;
 use crate::support::*;
 
 pub fn __OSGetSystemTime<'a>(ctx: &'a Ctx) -> i64 {
@@ -241,6 +242,20 @@ fn inl_IsLeapYear_unfused<'a>(ctx: &'a Ctx, year: i32) -> i32 {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x8034c3f0,
+        |ctx| {
+            Ret::put(manual::OSGetTime(ctx), ctx);
+        },
+        Returns::Int64,
+    );
+    ctx.register_port(
+        0x8034c408,
+        |ctx| {
+            Ret::put(manual::OSGetTick(ctx), ctx);
+        },
+        Returns::Int,
+    );
     ctx.register_port(
         0x8034c410,
         |ctx| {

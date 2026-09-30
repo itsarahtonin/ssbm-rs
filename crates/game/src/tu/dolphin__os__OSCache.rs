@@ -24,6 +24,7 @@ use ssbm_types::fns;
 use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
+use crate::manual::dolphin__os__OSCache as manual;
 use crate::support::*;
 
 pub fn LCEnable<'a>(ctx: &'a Ctx) {
@@ -89,6 +90,45 @@ pub fn L2GlobalInvalidate<'a>(ctx: &'a Ctx) {
     }
 }
 
+pub fn DMAErrorHandler<'a>(ctx: &'a Ctx, error: u16, context: OSContext<'a>) {
+    let __frame = ctx.stack_frame(0x80);
+    __frame.save_varargs();
+    let mut error = error;
+    let mut context = context;
+    let mut hid2: u32 = ctx.call::<_, u32>(0x80335ea8, ());
+    fns::OSReport(ctx, cstr(ctx, 0x80401c1c), &[]);
+    fns::OSReport(
+        ctx,
+        cstr(ctx, 0x80401c34),
+        &[
+            VarArg::Int(hid2 as u32),
+            VarArg::Int((context).srr1() as u32),
+        ],
+    );
+    if (!((hid2 & ((((0x800000_i32 | 0x400000_i32) | 0x200000_i32) | 0x100000_i32) as u32)) != 0))
+        || (!(((context).srr1() & (0x200000_i32 as u32)) != 0))
+    {
+        fns::OSReport(ctx, cstr(ctx, 0x80401c50), &[]);
+        fns::OSDumpContext(ctx, context);
+        ctx.call::<_, ()>(0x80335e94, ());
+    }
+    fns::OSReport(ctx, cstr(ctx, 0x80401c80), &[]);
+    fns::OSReport(ctx, cstr(ctx, 0x80401cbc), &[]);
+    if ((hid2 & (0x800000_i32 as u32)) != 0) {
+        fns::OSReport(ctx, cstr(ctx, 0x80401cf4), &[]);
+    }
+    if ((hid2 & (0x400000_i32 as u32)) != 0) {
+        fns::OSReport(ctx, cstr(ctx, 0x80401d34), &[]);
+    }
+    if ((hid2 & (0x200000_i32 as u32)) != 0) {
+        fns::OSReport(ctx, cstr(ctx, 0x80401d60), &[]);
+    }
+    if ((hid2 & (0x100000_i32 as u32)) != 0) {
+        fns::OSReport(ctx, cstr(ctx, 0x80401d80), &[]);
+    }
+    fns::PPCMthid2(ctx, hid2);
+}
+
 pub fn __OSCacheInit<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x10);
     if !((ctx.call::<_, u32>(0x80335e6c, ()) & 0x8000_u32) != 0) {
@@ -138,9 +178,100 @@ fn inl_L2Enable_unfused<'a>(ctx: &'a Ctx) {
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
+        0x803447c8,
+        |ctx| {
+            Ret::put(manual::DCEnable(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x803447dc,
+        |ctx| {
+            let (a0, a1): (Addr<'_>, u32) = Args::take_all(ctx);
+            Ret::put(manual::DCInvalidateRange(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8034480c,
+        |ctx| {
+            let (a0, a1): (Addr<'_>, u32) = Args::take_all(ctx);
+            Ret::put(manual::DCFlushRange(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80344840,
+        |ctx| {
+            let (a0, a1): (Addr<'_>, u32) = Args::take_all(ctx);
+            Ret::put(manual::DCStoreRange(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80344874,
+        |ctx| {
+            let (a0, a1): (Addr<'_>, u32) = Args::take_all(ctx);
+            Ret::put(manual::DCFlushRangeNoSync(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x803448a4,
+        |ctx| {
+            let (a0, a1): (Addr<'_>, u32) = Args::take_all(ctx);
+            Ret::put(manual::DCZeroRange(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x803448d4,
+        |ctx| {
+            let (a0, a1): (Addr<'_>, u32) = Args::take_all(ctx);
+            Ret::put(manual::ICInvalidateRange(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8034490c,
+        |ctx| {
+            Ret::put(manual::ICFlashInvalidate(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8034491c,
+        |ctx| {
+            Ret::put(manual::ICEnable(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80344930,
+        |ctx| {
+            Ret::put(manual::__LCEnable(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x803449fc,
         |ctx| {
             Ret::put(LCEnable(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80344a34,
+        |ctx| {
+            Ret::put(manual::LCDisable(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80344a5c,
+        |ctx| {
+            let (a0, a1, a2): (Addr<'_>, Addr<'_>, u32) = Args::take_all(ctx);
+            Ret::put(manual::LCStoreBlocks(ctx, a0, a1, a2), ctx);
         },
         Returns::Nothing,
     );
@@ -153,9 +284,25 @@ pub fn register(ctx: &Ctx) {
         Returns::Int,
     );
     ctx.register_port(
+        0x80344b2c,
+        |ctx| {
+            let (a0,): (u32,) = Args::take_all(ctx);
+            Ret::put(manual::LCQueueWait(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x80344b44,
         |ctx| {
             Ret::put(L2GlobalInvalidate(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80344bdc,
+        |ctx| {
+            let (a0, a1): (u16, OSContext<'_>) = Args::take_all(ctx);
+            Ret::put(DMAErrorHandler(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );

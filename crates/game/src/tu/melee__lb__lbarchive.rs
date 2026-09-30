@@ -70,10 +70,69 @@ pub fn lbArchive_InitializeDAT<'a>(
     }
 }
 
+pub fn lbArchive_LoadSections<'a>(ctx: &'a Ctx, archive: HSD_Archive<'a>, symbol: Addr<'a>) {
+    let __frame = ctx.stack_frame(0x98);
+    __frame.save_varargs();
+    let symbols: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0x60);
+    let mut archive = archive;
+    let mut symbol = symbol;
+    __frame.va_info(Handle::addr(Handle::cast::<Addr<'a>>(symbols)), 2, 0);
+    inl_vLoadSections_unfused(
+        ctx,
+        archive,
+        Handle::cast::<Ptr<'a, Addr<'a>>>(symbol),
+        symbols.get(0),
+    );
+}
+
 pub fn lbArchive_LoadArchive<'a>(ctx: &'a Ctx, filename: Val<'a, i8>) -> HSD_Archive<'a> {
     let __frame = ctx.stack_frame(0x20);
     let mut filename = filename;
     return inl_loadArchive_unfused(ctx, filename);
+}
+
+pub fn lbArchive_LoadSymbols<'a>(
+    ctx: &'a Ctx,
+    filename: Val<'a, i8>,
+    symbols: Addr<'a>,
+) -> HSD_Archive<'a> {
+    let __frame = ctx.stack_frame(0xa0);
+    __frame.save_varargs();
+    let sections: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0x60);
+    let mut filename = filename;
+    let mut symbols = symbols;
+    let mut archive: HSD_Archive<'a> = null(ctx);
+    __frame.va_info(Handle::addr(Handle::cast::<Addr<'a>>(sections)), 2, 0);
+    archive = inl_loadArchive_unfused(ctx, filename);
+    inl_vLoadSectionsFatal_unfused(
+        ctx,
+        archive,
+        Handle::cast::<Ptr<'a, Addr<'a>>>(symbols),
+        sections.get(0),
+    );
+    return archive;
+}
+
+pub fn lbArchive_80016DBC<'a>(
+    ctx: &'a Ctx,
+    filename: Val<'a, i8>,
+    symbols: Addr<'a>,
+) -> HSD_Archive<'a> {
+    let __frame = ctx.stack_frame(0xa0);
+    __frame.save_varargs();
+    let sections: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0x60);
+    let mut filename = filename;
+    let mut symbols = symbols;
+    let mut archive: HSD_Archive<'a> = null(ctx);
+    __frame.va_info(Handle::addr(Handle::cast::<Addr<'a>>(sections)), 2, 0);
+    archive = inl_loadArchive_unfused(ctx, filename);
+    inl_vLoadSections_unfused(
+        ctx,
+        archive,
+        Handle::cast::<Ptr<'a, Addr<'a>>>(symbols),
+        sections.get(0),
+    );
+    return archive;
 }
 
 pub fn lbArchive_80016EFC<'a>(ctx: &'a Ctx, archive: HSD_Archive<'a>) {
@@ -127,6 +186,74 @@ pub fn lbArchive_80016F80<'a>(
         archive = inl_loadArchive_unfused(ctx, filename);
         preloaded = 0_i32;
     }
+    if !Handle::is_null(dst) {
+        (dst).set(archive);
+    }
+    return preloaded;
+}
+
+pub fn lbArchive_80017040<'a>(
+    ctx: &'a Ctx,
+    dst: Ptr<'a, HSD_Archive<'a>>,
+    filename: Val<'a, i8>,
+    symbols: Addr<'a>,
+) -> i32 {
+    let __frame = ctx.stack_frame(0xb0);
+    __frame.save_varargs();
+    let args: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0x60);
+    let mut dst = dst;
+    let mut filename = filename;
+    let mut symbols = symbols;
+    let mut archive: HSD_Archive<'a> = null(ctx);
+    let mut preloaded: i32 = 0;
+    __frame.va_info(Handle::addr(Handle::cast::<Addr<'a>>(args)), 3, 0);
+    archive = fns::lbDvd_8001819C(ctx, filename);
+    if !Handle::is_null(archive) {
+        preloaded = 1_i32;
+    } else {
+        archive = inl_loadArchive_unfused(ctx, filename);
+        preloaded = 0_i32;
+    }
+    inl_vLoadSectionsFatal_unfused(
+        ctx,
+        archive,
+        Handle::cast::<Ptr<'a, Addr<'a>>>(symbols),
+        args.get(0),
+    );
+    if !Handle::is_null(dst) {
+        (dst).set(archive);
+    }
+    return preloaded;
+}
+
+pub fn lbArchive_800171CC<'a>(
+    ctx: &'a Ctx,
+    dst: Ptr<'a, HSD_Archive<'a>>,
+    filename: Val<'a, i8>,
+    symbols: Addr<'a>,
+) -> i32 {
+    let __frame = ctx.stack_frame(0xb0);
+    __frame.save_varargs();
+    let args: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0x60);
+    let mut dst = dst;
+    let mut filename = filename;
+    let mut symbols = symbols;
+    let mut archive: HSD_Archive<'a> = null(ctx);
+    let mut preloaded: i32 = 0;
+    __frame.va_info(Handle::addr(Handle::cast::<Addr<'a>>(args)), 3, 0);
+    archive = fns::lbDvd_8001819C(ctx, filename);
+    if !Handle::is_null(archive) {
+        preloaded = 1_i32;
+    } else {
+        archive = inl_loadArchive_unfused(ctx, filename);
+        preloaded = 0_i32;
+    }
+    inl_vLoadSections_unfused(
+        ctx,
+        archive,
+        Handle::cast::<Ptr<'a, Addr<'a>>>(symbols),
+        args.get(0),
+    );
     if !Handle::is_null(dst) {
         (dst).set(archive);
     }
@@ -200,6 +327,39 @@ pub fn lbArchiveRelocate<'a>(
     return 0_i32;
 }
 
+fn inl_vLoadSections_unfused<'a>(
+    ctx: &'a Ctx,
+    archive: HSD_Archive<'a>,
+    symbol: Ptr<'a, Addr<'a>>,
+    symbols: __va_list_t<'a>,
+) {
+    let mut archive = archive;
+    let mut symbol = symbol;
+    let mut symbols = symbols;
+    let mut symbol_name: Val<'a, i8> = null(ctx);
+    {
+        'l1: while !Handle::is_null(symbol) {
+            'c2: {
+                symbol_name =
+                    ((Handle::cast::<Ptr<'a, Val<'a, i8>>>(fns::__va_arg(ctx, symbols, 1_u8)))
+                        .get());
+                (symbol).set(null::<Addr<'a>>(ctx));
+                (symbol).set(fns::HSD_ArchiveGetPublicAddress(ctx, archive, symbol_name));
+                if Handle::is_null((symbol).get()) {
+                    fns::OSReport(
+                        ctx,
+                        cstr(ctx, 0x803ba5b0),
+                        &[VarArg::Int(Handle::addr(symbol_name))],
+                    );
+                }
+            }
+            symbol =
+                ((Handle::cast::<Ptr<'a, Ptr<'a, Addr<'a>>>>(fns::__va_arg(ctx, symbols, 1_u8)))
+                    .get());
+        }
+    }
+}
+
 fn inl_readArchive_unfused<'a>(
     ctx: &'a Ctx,
     filename: Val<'a, i8>,
@@ -230,6 +390,49 @@ fn inl_loadArchive_unfused<'a>(ctx: &'a Ctx, filename: Val<'a, i8>) -> HSD_Archi
     archive = Handle::cast::<HSD_Archive<'a>>(fns::lbHeap_80015BD0(ctx, 0_i32, 68_u32));
     inl_readArchive_unfused(ctx, filename, data, archive);
     return archive;
+}
+
+fn inl_vLoadSectionsFatal_unfused<'a>(
+    ctx: &'a Ctx,
+    archive: HSD_Archive<'a>,
+    symbol: Ptr<'a, Addr<'a>>,
+    symbols: __va_list_t<'a>,
+) {
+    let mut archive = archive;
+    let mut symbol = symbol;
+    let mut symbols = symbols;
+    let mut symbol_name: Val<'a, i8> = null(ctx);
+    {
+        'l1: while !Handle::is_null(symbol) {
+            'c2: {
+                symbol_name =
+                    ((Handle::cast::<Ptr<'a, Val<'a, i8>>>(fns::__va_arg(ctx, symbols, 1_u8)))
+                        .get());
+                (symbol).set(null::<Addr<'a>>(ctx));
+                (symbol).set(fns::HSD_ArchiveGetPublicAddress(ctx, archive, symbol_name));
+                if Handle::is_null((symbol).get()) {
+                    fns::OSReport(
+                        ctx,
+                        cstr(ctx, 0x803ba5b0),
+                        &[VarArg::Int(Handle::addr(symbol_name))],
+                    );
+                    (if ((0_i32) != 0) {
+                        ({ () })
+                    } else {
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803ba5a0),
+                            (94_i32 as u32),
+                            cstr(ctx, 0x803ba5a0),
+                        )
+                    });
+                }
+            }
+            symbol =
+                ((Handle::cast::<Ptr<'a, Ptr<'a, Addr<'a>>>>(fns::__va_arg(ctx, symbols, 1_u8)))
+                    .get());
+        }
+    }
 }
 
 fn inl_Locate_unfused<'a>(ctx: &'a Ctx, archive: HSD_Archive<'a>, base_addr: i32) {
@@ -265,10 +468,34 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x80016af0,
+        |ctx| {
+            let (a0, a1): (HSD_Archive<'_>, Addr<'_>) = Args::take_all(ctx);
+            Ret::put(lbArchive_LoadSections(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x80016be0,
         |ctx| {
             let (a0,): (Val<'_, i8>,) = Args::take_all(ctx);
             Ret::put(lbArchive_LoadArchive(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80016c64,
+        |ctx| {
+            let (a0, a1): (Val<'_, i8>, Addr<'_>) = Args::take_all(ctx);
+            Ret::put(lbArchive_LoadSymbols(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80016dbc,
+        |ctx| {
+            let (a0, a1): (Val<'_, i8>, Addr<'_>) = Args::take_all(ctx);
+            Ret::put(lbArchive_80016DBC(ctx, a0, a1), ctx);
         },
         Returns::Int,
     );
@@ -285,6 +512,24 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (Ptr<'_, HSD_Archive<'_>>, Val<'_, i8>) = Args::take_all(ctx);
             Ret::put(lbArchive_80016F80(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80017040,
+        |ctx| {
+            let (a0, a1, a2): (Ptr<'_, HSD_Archive<'_>>, Val<'_, i8>, Addr<'_>) =
+                Args::take_all(ctx);
+            Ret::put(lbArchive_80017040(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x800171cc,
+        |ctx| {
+            let (a0, a1, a2): (Ptr<'_, HSD_Archive<'_>>, Val<'_, i8>, Addr<'_>) =
+                Args::take_all(ctx);
+            Ret::put(lbArchive_800171CC(ctx, a0, a1, a2), ctx);
         },
         Returns::Int,
     );

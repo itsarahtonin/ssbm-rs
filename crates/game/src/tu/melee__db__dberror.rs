@@ -58,6 +58,34 @@ pub fn fn_HSDPanicHandler<'a>(ctx: &'a Ctx, v_ctx: OSContext<'a>) {
     fns::hsd_80397DA4(ctx, v_ctx);
 }
 
+pub fn fn_OSErrorHandler<'a>(ctx: &'a Ctx, error: u16, v_ctx: OSContext<'a>) {
+    let __frame = ctx.stack_frame(0x90);
+    __frame.save_varargs();
+    let va: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0x60);
+    let mut error = error;
+    let mut v_ctx = v_ctx;
+    let mut dsisr: i32 = 0;
+    let mut dar: i32 = 0;
+    __frame.va_info(Handle::addr(Handle::cast::<Addr<'a>>(va)), 2, 0);
+    dsisr = ((Handle::cast::<Val<'a, i32>>(fns::__va_arg(ctx, va.get(0), 1_u8))).get());
+    dar = ((Handle::cast::<Val<'a, i32>>(fns::__va_arg(ctx, va.get(0), 1_u8))).get());
+    let _ = fns::HSD_VISetUserPreRetraceCallback(ctx, null::<FnPtr<'a>>(ctx));
+    let _ = fns::HSD_VISetUserPostRetraceCallback(ctx, null::<FnPtr<'a>>(ctx));
+    fns::lb_80019A48(ctx);
+    fns::OSReport(
+        ctx,
+        cstr(ctx, 0x804d4b10),
+        &[VarArg::Int(Handle::addr(
+            ptr::<ArrV<'a, i8, 0>>(ctx, 0x803ea6c8).at(0),
+        ))],
+    );
+    fns::Exception_ReportStackTrace(ctx, v_ctx, 16_i32);
+    fns::Exception_ReportCodeline(ctx, error, dsisr, dar, v_ctx);
+    fns::hsd_80397DFC(ctx, (0x1388_i32 as u32));
+    fns::Exception_StoreDebugLevel(ctx, fns::DbLevel(ctx).get());
+    fns::hsd_80397DA4(ctx, v_ctx);
+}
+
 pub fn db_SetupCrashHandler<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x10);
     let mut x: u16 = 0;
@@ -105,6 +133,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (OSContext<'_>,) = Args::take_all(ctx);
             Ret::put(fn_HSDPanicHandler(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80228b28,
+        |ctx| {
+            let (a0, a1): (u16, OSContext<'_>) = Args::take_all(ctx);
+            Ret::put(fn_OSErrorHandler(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );

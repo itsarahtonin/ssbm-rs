@@ -172,6 +172,223 @@ pub fn __THPPrepBitStream<'a>(ctx: &'a Ctx, info: _THPFileInfo<'a>) {
     }
 }
 
+pub fn THPDec_8032F8D4<'a>(ctx: &'a Ctx, data: Val<'a, u8>, out: THPDec_8032FD40_Data<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x58);
+    let hSample: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let vSample: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
+    let componentId: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
+    let quantizationSelector: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let tag: ArrV<'a, u8, 5> = frame_at(ctx, &__frame, 0x10);
+    let mut data = data;
+    let mut out = out;
+    let mut marker: u8 = 0;
+    let mut componentCount: u8 = 0;
+    ctx.write_bytes(Handle::addr(tag), b"\x4a\x46\x49\x46\x00");
+    let mut i: u8 = 0;
+    let mut valid: u8 = 0;
+    let mut j: u32 = 0;
+    let mut length: u16 = 0;
+    valid = (0_i32 as u8);
+    let _ = fns::memset(ctx, Handle::cast::<Addr<'a>>(out), 0_i32, (12_i32 as u32));
+    {
+        let mut soi0: u8 = ({
+            let __t1 = data;
+            data = Handle::add(data, 1);
+            __t1
+        })
+        .get();
+        let mut soi1: u8 = ({
+            let __t2 = data;
+            data = Handle::add(data, 1);
+            __t2
+        })
+        .get();
+        if ((soi0 as i32) != 255_i32) || ((soi1 as i32) != 216_i32) {
+            return 0_i32;
+        }
+    }
+    {
+        'l1: loop {
+            'c2: {
+                if (({
+                    let __t3 = data;
+                    data = Handle::add(data, 1);
+                    __t3
+                })
+                .get() as i32)
+                    != 255_i32
+                {
+                    return 0_i32;
+                }
+                'l3: while (((data).get() as i8) as i32) == 255_i32 {
+                    'c4: {
+                        data = Handle::add(data, 1);
+                    }
+                }
+                marker = ({
+                    let __t4 = data;
+                    data = Handle::add(data, 1);
+                    __t4
+                })
+                .get();
+                if (marker as i32) == 192_i32 {
+                    (out).set__pad(
+                        ((((Handle::add(data, 4_i32)).get() as i32)
+                            | (shl_i32(((Handle::add(data, 3_i32)).get() as i32), (8_i32 as u32))))
+                            as u16),
+                    );
+                    (out).set_val1(
+                        ((((Handle::add(data, 6_i32)).get() as i32)
+                            | (shl_i32(((Handle::add(data, 5_i32)).get() as i32), (8_i32 as u32))))
+                            as u16),
+                    );
+                    componentCount = (Handle::add(data, 7_i32)).get();
+                    data = Handle::add(data, 8_i32);
+                    if (componentCount as i32) != 3_i32 {
+                        return 0_i32;
+                    }
+                    {
+                        i = (0_i32 as u8);
+                        'l5: while (i as i32) < (componentCount as i32) {
+                            'c6: {
+                                let mut factors: u8 = 0;
+                                componentId.at((i as i32)).set(
+                                    ({
+                                        let __t5 = data;
+                                        data = Handle::add(data, 1);
+                                        __t5
+                                    })
+                                    .get(),
+                                );
+                                factors = ({
+                                    let __t6 = data;
+                                    data = Handle::add(data, 1);
+                                    __t6
+                                })
+                                .get();
+                                hSample
+                                    .at((i as i32))
+                                    .set(((sar_i32((factors as i32), (4_i32 as u32))) as u8));
+                                vSample
+                                    .at((i as i32))
+                                    .set((((factors as i32) & 15_i32) as u8));
+                                quantizationSelector.at((i as i32)).set(
+                                    ({
+                                        let __t7 = data;
+                                        data = Handle::add(data, 1);
+                                        __t7
+                                    })
+                                    .get(),
+                                );
+                            }
+                            i = i.wrapping_add(1);
+                        }
+                    }
+                    if (div_i32(
+                        (hSample.at(0_i32).get() as i32),
+                        (hSample.at(1_i32).get() as i32),
+                    ) == 2_i32)
+                        && (div_i32(
+                            (hSample.at(0_i32).get() as i32),
+                            (hSample.at(2_i32).get() as i32),
+                        ) == 2_i32)
+                    {
+                        if (div_i32(
+                            (vSample.at(0_i32).get() as i32),
+                            (vSample.at(1_i32).get() as i32),
+                        ) == 2_i32)
+                            && (div_i32(
+                                (vSample.at(0_i32).get() as i32),
+                                (vSample.at(2_i32).get() as i32),
+                            ) == 2_i32)
+                        {
+                            (out).set_val2((4_i32 as u8));
+                        } else if ((vSample.at(0_i32).get() as i32)
+                            == (vSample.at(1_i32).get() as i32))
+                            && ((vSample.at(0_i32).get() as i32)
+                                == (vSample.at(2_i32).get() as i32))
+                        {
+                            (out).set_val2((2_i32 as u8));
+                        }
+                    } else if ((hSample.at(0_i32).get() as i32) == (hSample.at(1_i32).get() as i32))
+                        && ((hSample.at(0_i32).get() as i32) == (hSample.at(2_i32).get() as i32))
+                    {
+                        if ((vSample.at(0_i32).get() as i32) == (vSample.at(1_i32).get() as i32))
+                            && ((vSample.at(0_i32).get() as i32)
+                                == (vSample.at(2_i32).get() as i32))
+                        {
+                            (out).set_val2((1_i32 as u8));
+                        }
+                    } else {
+                        return 0_i32;
+                    }
+                } else if (marker as i32) == 224_i32 {
+                    length = (({
+                        let __t8 = data;
+                        data = Handle::add(data, 1);
+                        __t8
+                    })
+                    .get() as u16);
+                    length = (((shl_i32((length as i32), (8_i32 as u32)))
+                        | (({
+                            let __t9 = data;
+                            data = Handle::add(data, 1);
+                            __t9
+                        })
+                        .get() as i32)) as u16);
+                    {
+                        i = (0_i32 as u8);
+                        'l7: while (i as i32) < 5_i32 {
+                            'c8: {
+                                componentCount = ({
+                                    let __t10 = data;
+                                    data = Handle::add(data, 1);
+                                    __t10
+                                })
+                                .get();
+                                if (componentCount as i32) != (tag.at((i as i32)).get() as i32) {
+                                    return 0_i32;
+                                }
+                            }
+                            i = i.wrapping_add(1);
+                        }
+                    }
+                    valid = (1_i32 as u8);
+                    {
+                        j = (0_i32 as u32);
+                        'l9: while j < (((length as i32).wrapping_sub(7_i32)) as u32) {
+                            'c10: {
+                                data = Handle::add(data, 1);
+                            }
+                            j = j.wrapping_add(1);
+                        }
+                    }
+                } else if (marker as i32) == 218_i32 {
+                    break 'l1;
+                } else if (192_i32 <= (marker as i32)) && ((marker as i32) <= 254_i32) {
+                    length = ((((Handle::add(data, 1_i32)).get() as i32)
+                        | (shl_i32(((Handle::add(data, 0_i32)).get() as i32), (8_i32 as u32))))
+                        as u16);
+                    data = Handle::add(data, 2_i32);
+                    {
+                        j = (0_i32 as u32);
+                        'l11: while j < (((length as i32).wrapping_sub(2_i32)) as u32) {
+                            'c12: {
+                                data = Handle::add(data, 1);
+                            }
+                            j = j.wrapping_add(1);
+                        }
+                    }
+                }
+                if (((out).val2() as i32) != 0_i32) && ((valid as i32) != 0_i32) {
+                    break 'l1;
+                }
+            }
+        }
+    }
+    return 1_i32;
+}
+
 pub fn THPDec_8032FD40<'a>(ctx: &'a Ctx, data: THPDec_8032FD40_Data<'a>, num: u16) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut data = data;
@@ -379,6 +596,80 @@ pub fn THPDec_803300E0<'a>(ctx: &'a Ctx, info: _THPFileInfo<'a>) {
             i = i.wrapping_add(1);
         }
     }
+}
+
+pub fn THPDec_80330158<'a>(ctx: &'a Ctx, info: _THPFileInfo<'a>) -> u8 {
+    let __frame = ctx.stack_frame(0x20);
+    let tag: ArrV<'a, u8, 5> = frame_at(ctx, &__frame, 0x0);
+    let mut info = info;
+    ctx.write_bytes(Handle::addr(tag), b"\x4a\x46\x49\x46\x00");
+    let mut length: u16 = 0;
+    let mut i: u32 = 0;
+    let mut xThumb: u8 = 0;
+    let mut yThumb: u8 = 0;
+    let mut version: u16 = 0;
+    let mut units: u8 = 0;
+    let mut segmentLength: u32 = 0;
+    length = (((shl_i32(
+        ((Handle::add((info).file(), 0_i32)).get() as i32),
+        (8_i32 as u32),
+    )) | ((Handle::add((info).file(), 1_i32)).get() as i32)) as u16);
+    (info).set_file(Handle::add((info).file(), 2_i32));
+    {
+        i = (0_i32 as u32);
+        'l1: while i < (5_i32 as u32) {
+            'c2: {
+                if (({
+                    let __t1 = (info).file();
+                    (info).set_file(Handle::add((info).file(), 1));
+                    __t1
+                })
+                .get() as i32)
+                    != (tag.at((i as i32)).get() as i32)
+                {
+                    return (3_i32 as u8);
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    version = (((shl_i32(
+        ((Handle::add((info).file(), 0_i32)).get() as i32),
+        (8_i32 as u32),
+    )) | ((Handle::add((info).file(), 1_i32)).get() as i32)) as u16);
+    (info).set_file(Handle::add((info).file(), 2_i32));
+    units = ({
+        let __t2 = (info).file();
+        (info).set_file(Handle::add((info).file(), 1));
+        __t2
+    })
+    .get();
+    (info).set_file(Handle::add((info).file(), 1_i32));
+    (info).set_file(Handle::add((info).file(), 1_i32));
+    (info).set_file(Handle::add((info).file(), 1_i32));
+    (info).set_file(Handle::add((info).file(), 1_i32));
+    xThumb = ({
+        let __t3 = (info).file();
+        (info).set_file(Handle::add((info).file(), 1));
+        __t3
+    })
+    .get();
+    yThumb = ({
+        let __t4 = (info).file();
+        (info).set_file(Handle::add((info).file(), 1));
+        __t4
+    })
+    .get();
+    if ((xThumb as i32) != 0_i32) || ((yThumb as i32) != 0_i32) {
+        return (7_i32 as u8);
+    }
+    segmentLength = (((Handle::addr((info).file()).wrapping_sub(Handle::addr((info).dataStart()))
+        as i32)
+        / 1) as u32);
+    if ((length as i32).wrapping_add(4_i32) as u32) != segmentLength {
+        return (8_i32 as u8);
+    }
+    return (0_i32 as u8);
 }
 
 pub fn THPDec_803302EC<'a>(ctx: &'a Ctx, data: Ptr<'a, Val<'a, u8>>) -> i32 {
@@ -1114,6 +1405,14 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x8032f8d4,
+        |ctx| {
+            let (a0, a1): (Val<'_, u8>, THPDec_8032FD40_Data<'_>) = Args::take_all(ctx);
+            Ret::put(THPDec_8032F8D4(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
         0x8032fd40,
         |ctx| {
             let (a0, a1): (THPDec_8032FD40_Data<'_>, u16) = Args::take_all(ctx);
@@ -1142,6 +1441,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(THPDec_803300E0(ctx, a0), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80330158,
+        |ctx| {
+            let (a0,): (_THPFileInfo<'_>,) = Args::take_all(ctx);
+            Ret::put(THPDec_80330158(ctx, a0), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x803302ec,

@@ -280,8 +280,8 @@ pub fn AXFXReverbStdCallback<'a>(
         inl_ReverbSTDCallback_unfused(
             ctx,
             (bufferUpdate).left(),
-            (bufferUpdate).right(),
-            (bufferUpdate).surround(),
+            null(ctx),
+            null(ctx),
             (reverb).rv(),
         );
     }

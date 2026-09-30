@@ -48,6 +48,21 @@ pub fn TRKTargetTranslate<'a>(ctx: &'a Ctx, addr: u32) -> u32 {
     return ((addr & (0x3fffffff_i32 as u32)) | 0x80000000_u32);
 }
 
+pub fn TRK_copy_vector<'a>(ctx: &'a Ctx, offset: u32) {
+    let __frame = ctx.stack_frame(0x10);
+    let mut offset = offset;
+    let mut destPtr: u32 = fns::TRKTargetTranslate(ctx, offset);
+    let _ = fns::TRK_memcpy(
+        ctx,
+        ptr::<Addr<'a>>(ctx, destPtr as u32),
+        Handle::cast::<Addr<'a>>(
+            (Handle::add(fns::gTRKInterruptVectorTable(ctx).at(0), (offset as i32))),
+        ),
+        (0x100_i32 as u32),
+    );
+    fns::TRK_flush_cache(ctx, destPtr, (0x100_i32 as u32));
+}
+
 pub fn __TRK_copy_vectors<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
     let mut i: i32 = 0;
@@ -102,6 +117,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(TRKTargetTranslate(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x8032a724,
+        |ctx| {
+            let (a0,): (u32,) = Args::take_all(ctx);
+            Ret::put(TRK_copy_vector(ctx, a0), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x8032a784,

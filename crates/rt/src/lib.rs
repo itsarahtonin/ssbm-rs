@@ -141,6 +141,9 @@ pub const MSR_EE: u32 = 1 << 15;
 /// Instructions between heartbeats.
 pub const HEARTBEAT: u64 = 1 << 24;
 
+/// Time base ticks that pass per read of its low word: about 200 CPU cycles.
+pub const TB_READ_STEP: u64 = 16;
+
 /// The word starts a function with a native implementation.
 pub const FLAG_NATIVE: u8 = 1;
 /// The word has a hook.
@@ -225,6 +228,14 @@ impl Ctx {
         if old & MSR_EE == 0 && v & MSR_EE != 0 {
             self.check_interrupts();
         }
+    }
+
+    /// `mftb` of the time base's low word. Time passes between reads, so loops that wait on
+    /// the time base finish.
+    pub fn read_tbl(&self) -> u32 {
+        let v = self.regs.tb.get() as u32;
+        self.tick(TB_READ_STEP);
+        v
     }
 
     /// Lets `ticks` of time base pass, as code that reads the clock or polls hardware does.
@@ -443,6 +454,13 @@ impl Ctx {
             *b = self.read_u8(src.wrapping_add(i as u32));
         }
         for (i, b) in buf.iter().enumerate() {
+            self.write_u8(dst.wrapping_add(i as u32), *b);
+        }
+    }
+
+    /// Writes `bytes` at `dst`.
+    pub fn write_bytes(&self, dst: u32, bytes: &[u8]) {
+        for (i, b) in bytes.iter().enumerate() {
             self.write_u8(dst.wrapping_add(i as u32), *b);
         }
     }
@@ -698,6 +716,30 @@ impl<'a> StackFrame<'a> {
     /// The reserved block as a handle.
     pub fn get<H: Handle<'a>>(&self) -> H {
         At::new(self.ctx, self.base).field(0)
+    }
+
+    /// Saves the argument registers where a variadic function's prologue does: r3 to r10 at
+    /// the block's start, then f1 to f8 as doubles if CR bit 6 says the caller passed floats.
+    pub fn save_varargs(&self) {
+        let ctx = self.ctx;
+        for i in 0..8 {
+            ctx.write_u32(self.base + 4 * i as u32, ctx.regs.r(3 + i));
+        }
+        if ctx.regs.cr.get() & (1 << (31 - 6)) != 0 {
+            for i in 0..8 {
+                ctx.write_u64(self.base + 0x20 + 8 * i as u32, ctx.regs.f(1 + i).to_bits());
+            }
+        }
+    }
+
+    /// Fills the `va_list` at `ap` as MWCC's `__builtin_va_info` does, for a function whose
+    /// fixed parameters take `gpr` general and `fpr` float registers: the arguments after them
+    /// are in the registers `save_varargs` saved, then in the caller's argument area.
+    pub fn va_info(&self, ap: u32, gpr: u8, fpr: u8) {
+        let ctx = self.ctx;
+        ctx.write_u32(ap, (u32::from(gpr) << 24) | (u32::from(fpr) << 16));
+        ctx.write_u32(ap + 4, self.old + 8);
+        ctx.write_u32(ap + 8, self.base);
     }
 }
 

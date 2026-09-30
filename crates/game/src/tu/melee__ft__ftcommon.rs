@@ -145,7 +145,7 @@ pub fn ftCommon_CalcGroundAccel_AccelToLStickX<'a>(
         target_vel = fp::frsp(0_i32 as f64);
         accel = fp::frsp(0_i32 as f64);
     }
-    inl_ftCommon_CalcGroundAccel_AccelToVel_unfused(ctx, fp, accel, target_vel, lsx);
+    inl_ftCommon_CalcGroundAccel_AccelToVel_unfused(ctx, fp, accel, target_vel, 0.0);
 }
 
 pub fn ftCommon_SetSelfMovementFromGroundedMovement<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

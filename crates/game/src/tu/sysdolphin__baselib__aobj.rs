@@ -570,6 +570,208 @@ pub fn JObjForeachAnim<'a>(
     }
 }
 
+pub fn HSD_ForeachAnim<'a>(
+    ctx: &'a Ctx,
+    obj: Addr<'a>,
+    r#type: i32,
+    mask: i32,
+    func: Addr<'a>,
+    arg_type: i32,
+) {
+    let __frame = ctx.stack_frame(0xb0);
+    __frame.save_varargs();
+    let ap: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0x60);
+    let arg: _callbackArg<'a> = frame_at(ctx, &__frame, 0x6c);
+    let mut obj = obj;
+    let mut r#type = r#type;
+    let mut mask = mask;
+    let mut func = func;
+    let mut arg_type = arg_type;
+    if Handle::is_null(obj) {
+        return;
+    }
+    __frame.va_info(Handle::addr(Handle::cast::<Addr<'a>>(ap)), 5, 0);
+    's1: {
+        let __case = match (arg_type as u32) {
+            0_u32 => 0,
+            4_u32 => 0,
+            8_u32 => 0,
+            1_u32 => 1,
+            5_u32 => 1,
+            9_u32 => 1,
+            2_u32 => 2,
+            6_u32 => 2,
+            10_u32 => 2,
+            3_u32 => 3,
+            7_u32 => 3,
+            11_u32 => 3,
+            _ => 4,
+        };
+        if __case <= 0 {
+            break 's1;
+        }
+        if __case <= 1 {
+            arg.set_f(fp::frsp(
+                ((Handle::cast::<Val<'a, F64>>(fns::__va_arg(ctx, ap.get(0), 3_u8))).get()),
+            ));
+            break 's1;
+        }
+        if __case <= 2 {
+            arg.set_v(
+                ((Handle::cast::<Ptr<'a, Addr<'a>>>(fns::__va_arg(ctx, ap.get(0), 1_u8))).get()),
+            );
+            break 's1;
+        }
+        if __case <= 3 {
+            arg.set_d(((Handle::cast::<Val<'a, u32>>(fns::__va_arg(ctx, ap.get(0), 1_u8))).get()));
+            break 's1;
+        }
+        if __case <= 4 {
+            fns::HSD_Panic(
+                ctx,
+                cstr(ctx, 0x80405fc0),
+                (0x33a_i32 as u32),
+                cstr(ctx, 0x8040601c),
+            );
+            break 's1;
+        }
+    }
+    's2: {
+        let __case = match (r#type as u32) {
+            6_u32 => 0,
+            3_u32 => 1,
+            8_u32 => 2,
+            9_u32 => 3,
+            11_u32 => 4,
+            7_u32 => 5,
+            2_u32 => 6,
+            10_u32 => 7,
+            12_u32 => 8,
+            5_u32 => 9,
+            _ => 10,
+        };
+        if __case <= 0 {
+            inl_JObjForeachAnim_unfused_2(
+                ctx,
+                Handle::cast::<HSD_JObj<'a>>(obj),
+                mask,
+                Handle::cast::<FnPtr<'a>>(func),
+                arg_type,
+                arg,
+            );
+            break 's2;
+        }
+        if __case <= 1 {
+            statics::sysdolphin__baselib__aobj::DObjForeachAnim(
+                ctx,
+                Handle::cast::<HSD_DObj<'a>>(obj),
+                mask,
+                Handle::cast::<FnPtr<'a>>(func),
+                arg_type,
+                arg,
+            );
+            break 's2;
+        }
+        if __case <= 2 {
+            inl_MObjForeachAnim_unfused_2(
+                ctx,
+                Handle::cast::<HSD_MObj<'a>>(obj),
+                mask,
+                Handle::cast::<FnPtr<'a>>(func),
+                arg_type,
+                arg,
+            );
+            break 's2;
+        }
+        if __case <= 3 {
+            inl_PObjForeachAnim_unfused(
+                ctx,
+                Handle::cast::<HSD_PObj<'a>>(obj),
+                mask,
+                Handle::cast::<FnPtr<'a>>(func),
+                arg_type,
+                arg,
+            );
+            break 's2;
+        }
+        if __case <= 4 {
+            inl_TObjForeachAnim_unfused(
+                ctx,
+                Handle::cast::<HSD_TObj<'a>>(obj),
+                mask,
+                Handle::cast::<FnPtr<'a>>(func),
+                arg_type,
+                arg,
+            );
+            break 's2;
+        }
+        if __case <= 5 {
+            inl_LObjForeachAnim_unfused(
+                ctx,
+                Handle::cast::<HSD_LObj<'a>>(obj),
+                mask,
+                Handle::cast::<FnPtr<'a>>(func),
+                arg_type,
+                arg,
+            );
+            break 's2;
+        }
+        if __case <= 6 {
+            inl_CObjForeachAnim_unfused(
+                ctx,
+                Handle::cast::<HSD_CObj<'a>>(obj),
+                mask,
+                Handle::cast::<FnPtr<'a>>(func),
+                arg_type,
+                arg,
+            );
+            break 's2;
+        }
+        if __case <= 7 {
+            statics::sysdolphin__baselib__aobj::RObjForeachAnim(
+                ctx,
+                Handle::cast::<HSD_RObj<'a>>(obj),
+                mask,
+                Handle::cast::<FnPtr<'a>>(func),
+                arg_type,
+                arg,
+            );
+            break 's2;
+        }
+        if __case <= 8 {
+            inl_WObjForeachAnim_unfused(
+                ctx,
+                Handle::cast::<HSD_WObj<'a>>(obj),
+                mask,
+                Handle::cast::<FnPtr<'a>>(func),
+                arg_type,
+                arg,
+            );
+            break 's2;
+        }
+        if __case <= 9 {
+            inl_FogForeachAnim_unfused(
+                ctx,
+                Handle::cast::<HSD_Fog<'a>>(obj),
+                mask,
+                Handle::cast::<FnPtr<'a>>(func),
+                arg_type,
+                arg,
+            );
+            break 's2;
+        }
+        if __case <= 10 {
+            fns::HSD_Panic(
+                ctx,
+                cstr(ctx, 0x80405fc0),
+                (0x35e_i32 as u32),
+                cstr(ctx, 0x8040603c),
+            );
+            break 's2;
+        }
+    }
+}
+
 pub fn HSD_AObjSetRate<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>, rate: f64) {
     let mut aobj = aobj;
     let mut rate = rate;
@@ -903,6 +1105,259 @@ fn inl_JObjForeachAnim_unfused<'a>(
     }
 }
 
+fn inl_JObjForeachAnim_unfused_2<'a>(
+    ctx: &'a Ctx,
+    obj: HSD_JObj<'a>,
+    mask: i32,
+    func: FnPtr<'a>,
+    arg_type: i32,
+    arg: _callbackArg<'a>,
+) {
+    let mut obj = obj;
+    let mut mask = mask;
+    let mut func = func;
+    let mut arg_type = arg_type;
+    let mut arg = arg;
+    (if !Handle::is_null((obj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80405fc0),
+            (0x19d_i32 as u32),
+            cstr(ctx, 0x80405fc0),
+        )
+    });
+    if (((mask as u32) & ((enums::JOBJ_MASK as i32) as u32)) != 0)
+        && (!Handle::is_null((obj).aobj()))
+    {
+        statics::sysdolphin__baselib__aobj::callbackForeachFunc(
+            ctx,
+            (obj).aobj(),
+            Handle::cast::<Addr<'a>>(obj),
+            (enums::JOBJ_TYPE as i32),
+            Handle::cast::<Addr<'a>>(func),
+            arg_type,
+            arg,
+        );
+    }
+    if ((if (((obj).flags()
+        & (((shl_i32(1_i32, (5_i32 as u32))) | (shl_i32(1_i32, (14_i32 as u32)))) as u32))
+        != 0)
+    {
+        0_i32
+    } else {
+        1_i32
+    }) != 0)
+    {
+        statics::sysdolphin__baselib__aobj::DObjForeachAnim(
+            ctx,
+            (obj).u().dobj(),
+            mask,
+            func,
+            arg_type,
+            arg,
+        );
+    }
+    statics::sysdolphin__baselib__aobj::RObjForeachAnim(
+        ctx,
+        (obj).robj(),
+        mask,
+        func,
+        arg_type,
+        arg,
+    );
+    if !(((obj).flags() & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0) {
+        {
+            obj = (obj).child();
+            'l1: while !Handle::is_null(obj) {
+                'c2: {
+                    statics::sysdolphin__baselib__aobj::JObjForeachAnim(
+                        ctx, obj, mask, func, arg_type, arg,
+                    );
+                }
+                obj = (obj).next();
+            }
+        }
+    }
+}
+
+fn inl_MObjForeachAnim_unfused_2<'a>(
+    ctx: &'a Ctx,
+    mobj: HSD_MObj<'a>,
+    mask: i32,
+    func: FnPtr<'a>,
+    arg_type: i32,
+    arg: _callbackArg<'a>,
+) {
+    let mut mobj = mobj;
+    let mut mask = mask;
+    let mut func = func;
+    let mut arg_type = arg_type;
+    let mut arg = arg;
+    if Handle::is_null(mobj) {
+        return;
+    }
+    if (((mask as u32) & ((enums::MOBJ_MASK as i32) as u32)) != 0)
+        && (!Handle::is_null((mobj).aobj()))
+    {
+        statics::sysdolphin__baselib__aobj::callbackForeachFunc(
+            ctx,
+            (mobj).aobj(),
+            Handle::cast::<Addr<'a>>(mobj),
+            (enums::MOBJ_TYPE as i32),
+            Handle::cast::<Addr<'a>>(func),
+            arg_type,
+            arg,
+        );
+    }
+    statics::sysdolphin__baselib__aobj::TObjForeachAnim(
+        ctx,
+        (mobj).tobj(),
+        mask,
+        func,
+        arg_type,
+        arg,
+    );
+}
+
+fn inl_WObjForeachAnim_unfused<'a>(
+    ctx: &'a Ctx,
+    wobj: HSD_WObj<'a>,
+    mask: i32,
+    func: FnPtr<'a>,
+    arg_type: i32,
+    arg: _callbackArg<'a>,
+) {
+    let mut wobj = wobj;
+    let mut mask = mask;
+    let mut func = func;
+    let mut arg_type = arg_type;
+    let mut arg = arg;
+    if Handle::is_null(wobj) {
+        return;
+    }
+    if (((mask as u32) & ((enums::WOBJ_MASK as i32) as u32)) != 0)
+        && (!Handle::is_null((wobj).aobj()))
+    {
+        statics::sysdolphin__baselib__aobj::callbackForeachFunc(
+            ctx,
+            (wobj).aobj(),
+            Handle::cast::<Addr<'a>>(wobj),
+            (enums::WOBJ_TYPE as i32),
+            Handle::cast::<Addr<'a>>(func),
+            arg_type,
+            arg,
+        );
+    }
+    statics::sysdolphin__baselib__aobj::RObjForeachAnim(
+        ctx,
+        (wobj).robj(),
+        mask,
+        func,
+        arg_type,
+        arg,
+    );
+}
+
+fn inl_LObjForeachAnim_unfused<'a>(
+    ctx: &'a Ctx,
+    lobj: HSD_LObj<'a>,
+    mask: i32,
+    func: FnPtr<'a>,
+    arg_type: i32,
+    arg: _callbackArg<'a>,
+) {
+    let mut lobj = lobj;
+    let mut mask = mask;
+    let mut func = func;
+    let mut arg_type = arg_type;
+    let mut arg = arg;
+    {
+        'l1: while !Handle::is_null(lobj) {
+            'c2: {
+                if (((mask as u32) & ((enums::LOBJ_MASK as i32) as u32)) != 0)
+                    && (!Handle::is_null((lobj).aobj()))
+                {
+                    statics::sysdolphin__baselib__aobj::callbackForeachFunc(
+                        ctx,
+                        (lobj).aobj(),
+                        Handle::cast::<Addr<'a>>(lobj),
+                        (enums::LOBJ_TYPE as i32),
+                        Handle::cast::<Addr<'a>>(func),
+                        arg_type,
+                        arg,
+                    );
+                }
+                inl_WObjForeachAnim_unfused(ctx, (lobj).position(), mask, func, arg_type, arg);
+                inl_WObjForeachAnim_unfused(ctx, (lobj).interest(), mask, func, arg_type, arg);
+            }
+            lobj = (lobj).next();
+        }
+    }
+}
+
+fn inl_CObjForeachAnim_unfused<'a>(
+    ctx: &'a Ctx,
+    cobj: HSD_CObj<'a>,
+    mask: i32,
+    func: FnPtr<'a>,
+    arg_type: i32,
+    arg: _callbackArg<'a>,
+) {
+    let mut cobj = cobj;
+    let mut mask = mask;
+    let mut func = func;
+    let mut arg_type = arg_type;
+    let mut arg = arg;
+    if Handle::is_null(cobj) {
+        return;
+    }
+    if (((mask as u32) & ((enums::COBJ_MASK as i32) as u32)) != 0)
+        && (!Handle::is_null((cobj).aobj()))
+    {
+        statics::sysdolphin__baselib__aobj::callbackForeachFunc(
+            ctx,
+            (cobj).aobj(),
+            Handle::cast::<Addr<'a>>(cobj),
+            (enums::COBJ_TYPE as i32),
+            Handle::cast::<Addr<'a>>(func),
+            arg_type,
+            arg,
+        );
+    }
+    inl_WObjForeachAnim_unfused(ctx, (cobj).eyepos(), mask, func, arg_type, arg);
+    inl_WObjForeachAnim_unfused(ctx, (cobj).interest(), mask, func, arg_type, arg);
+}
+
+fn inl_FogForeachAnim_unfused<'a>(
+    ctx: &'a Ctx,
+    fog: HSD_Fog<'a>,
+    mask: i32,
+    func: FnPtr<'a>,
+    arg_type: i32,
+    arg: _callbackArg<'a>,
+) {
+    let mut fog = fog;
+    let mut mask = mask;
+    let mut func = func;
+    let mut arg_type = arg_type;
+    let mut arg = arg;
+    if ((((mask as u32) & ((enums::FOG_MASK as i32) as u32)) != 0) && (!Handle::is_null(fog)))
+        && (!Handle::is_null((fog).aobj()))
+    {
+        statics::sysdolphin__baselib__aobj::callbackForeachFunc(
+            ctx,
+            (fog).aobj(),
+            Handle::cast::<Addr<'a>>(fog),
+            (enums::FOG_TYPE as i32),
+            Handle::cast::<Addr<'a>>(func),
+            arg_type,
+            arg,
+        );
+    }
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -1068,6 +1523,14 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1, a2, a3, a4): (HSD_JObj<'_>, i32, FnPtr<'_>, i32, _callbackArg<'_>) =
                 Args::take_all(ctx);
             Ret::put(JObjForeachAnim(ctx, a0, a1, a2, a3, a4), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80364c08,
+        |ctx| {
+            let (a0, a1, a2, a3, a4): (Addr<'_>, i32, i32, Addr<'_>, i32) = Args::take_all(ctx);
+            Ret::put(HSD_ForeachAnim(ctx, a0, a1, a2, a3, a4), ctx);
         },
         Returns::Nothing,
     );

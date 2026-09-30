@@ -1282,7 +1282,7 @@ pub fn fn_80192758<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut val: u8 = 0;
     data = statics::melee__gm__gmtou_0::lbl_804799B8(ctx);
     tmdata = fns::gm_GetTournamentData(ctx);
-    jobj = inl_fn_80192758_get_jobj_unfused(ctx, gobj, data);
+    jobj = inl_fn_80192758_get_jobj_unfused(ctx, gobj, null(ctx));
     if (tmdata).cur_option() <= 9_i32 {
         fns::HSD_JObjSetFlagsAll(ctx, jobj, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
         return;

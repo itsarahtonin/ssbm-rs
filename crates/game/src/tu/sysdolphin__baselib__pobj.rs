@@ -2324,9 +2324,9 @@ pub fn HSD_PObjDisp<'a>(
         .setup_mtx()
         .call::<_, ()>((pobj, vmtx, pmtx, rendermode));
     if (((pobj).flags() as i32) & 0x3000_i32) == (shl_i32(1_i32, (12_i32 as u32))) {
-        inl_PObjDispShapeAnim_unfused(ctx, pobj, rendermode);
+        inl_PObjDispShapeAnim_unfused(ctx, pobj, 0);
     } else {
-        inl_PObjDispSimplePrimitive_unfused(ctx, pobj, rendermode);
+        inl_PObjDispSimplePrimitive_unfused(ctx, pobj, 0);
     }
 }
 

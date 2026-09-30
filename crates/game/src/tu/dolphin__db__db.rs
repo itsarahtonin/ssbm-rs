@@ -24,6 +24,7 @@ use ssbm_types::fns;
 use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
+use crate::manual::dolphin__db__db as manual;
 use crate::support::*;
 
 pub fn DBInit<'a>(ctx: &'a Ctx) {
@@ -74,6 +75,12 @@ pub fn __DBIsExceptionMarked<'a>(ctx: &'a Ctx, exception: u8) -> i32 {
     return (((fns::__DBInterface(ctx).get()).exceptionMask() & mask) as i32);
 }
 
+pub fn DBPrintf<'a>(ctx: &'a Ctx, str: Val<'a, i8>) {
+    let __frame = ctx.stack_frame(0x70);
+    __frame.save_varargs();
+    let mut str = str;
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -98,11 +105,26 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x80335f4c,
+        |ctx| {
+            Ret::put(manual::__DBExceptionDestination(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x80335f5c,
         |ctx| {
             let (a0,): (u8,) = Args::take_all(ctx);
             Ret::put(__DBIsExceptionMarked(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x80335f78,
+        |ctx| {
+            let (a0,): (Val<'_, i8>,) = Args::take_all(ctx);
+            Ret::put(DBPrintf(ctx, a0), ctx);
+        },
+        Returns::Nothing,
     );
 }

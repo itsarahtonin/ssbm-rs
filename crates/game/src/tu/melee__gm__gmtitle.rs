@@ -336,6 +336,69 @@ pub fn gmTitle_801A1A3C<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
     return gobj;
 }
 
+pub fn gmTitle_801A1AC0<'a>(ctx: &'a Ctx) -> HSD_Archive<'a> {
+    let __frame = ctx.stack_frame(0x78);
+    let dat: ArrV<'a, i8, 12> = frame_at(ctx, &__frame, 0x0);
+    let usd: ArrV<'a, i8, 12> = frame_at(ctx, &__frame, 0xc);
+    ctx.write_bytes(
+        Handle::addr(dat),
+        b"\x47\x6d\x54\x74\x41\x6c\x6c\x2e\x64\x61\x74\x00",
+    );
+    ctx.write_bytes(
+        Handle::addr(usd),
+        b"\x47\x6d\x54\x74\x41\x6c\x6c\x2e\x75\x73\x64\x00",
+    );
+    return fns::lbArchive_LoadSymbols(
+        ctx,
+        (if (fns::lbLang_IsSettingUS(ctx) != 0) {
+            usd.at(0)
+        } else {
+            dat.at(0)
+        }),
+        Handle::cast::<Addr<'a>>(statics::melee__gm__gmtitle::model_desc_0(ctx).joint_ref()),
+        &[
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803da520))),
+            VarArg::Int(Handle::addr(
+                statics::melee__gm__gmtitle::model_desc_0(ctx).animjoint_ref(),
+            )),
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803da534))),
+            VarArg::Int(Handle::addr(
+                statics::melee__gm__gmtitle::model_desc_0(ctx).matanim_joint_ref(),
+            )),
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803da54c))),
+            VarArg::Int(Handle::addr(
+                statics::melee__gm__gmtitle::model_desc_0(ctx).shapeanim_joint_ref(),
+            )),
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803da568))),
+            VarArg::Int(Handle::addr(statics::melee__gm__gmtitle::cobj_desc(ctx))),
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803da584))),
+            VarArg::Int(Handle::addr(statics::melee__gm__gmtitle::list_list(ctx))),
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803da59c))),
+            VarArg::Int(Handle::addr(statics::melee__gm__gmtitle::fog_desc(ctx))),
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803da5b4))),
+            VarArg::Int(Handle::addr(
+                statics::melee__gm__gmtitle::model_desc_1(ctx).joint_ref(),
+            )),
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803da5c0))),
+            VarArg::Int(Handle::addr(
+                statics::melee__gm__gmtitle::model_desc_1(ctx).animjoint_ref(),
+            )),
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803da5d0))),
+            VarArg::Int(Handle::addr(
+                statics::melee__gm__gmtitle::model_desc_1(ctx).matanim_joint_ref(),
+            )),
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803da5e4))),
+            VarArg::Int(Handle::addr(
+                statics::melee__gm__gmtitle::model_desc_1(ctx).shapeanim_joint_ref(),
+            )),
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803da5fc))),
+            VarArg::Int(Handle::addr(fns::gm_804D67F0(ctx))),
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803da618))),
+            VarArg::Int(0_i32 as u32),
+        ],
+    );
+}
+
 pub fn gm_Scene_Title_OnFrame<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x10);
     let mut input: i32 = (fns::gm_GetButtonsTriggered(ctx, (4_i32 as u8)) as i32);
@@ -429,7 +492,7 @@ pub fn gm_Scene_Title_OnEnter<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
     let _ = fns::lbAudioAx_800236DC(ctx);
     statics::melee__gm__gmtitle::countdown_timer(ctx).set(20_i32);
     statics::melee__gm__gmtitle::frame_count(ctx).set((0_i32 as u32));
-    archive = fns::gmTitle_801A1AC0(ctx);
+    archive = inl_gmTitle_801A1AC0_unfused(ctx);
     fns::lbAudioAx_80026F2C(
         ctx,
         (((shl_i32(1_i32, (1_i32 as u32))) | (shl_i32(1_i32, (4_i32 as u32)))) as u32),
@@ -596,6 +659,69 @@ fn inl_isEmblemUnlocked_unfused<'a>(ctx: &'a Ctx) -> i32 {
 
 fn inl_sfxForward_unfused<'a>(ctx: &'a Ctx) {
     fns::lbAudioAx_80024030(ctx, 1_i32);
+}
+
+fn inl_gmTitle_801A1AC0_unfused<'a>(ctx: &'a Ctx) -> HSD_Archive<'a> {
+    let __frame = ctx.stack_frame(0x20);
+    let dat: ArrV<'a, i8, 12> = frame_at(ctx, &__frame, 0x0);
+    let usd: ArrV<'a, i8, 12> = frame_at(ctx, &__frame, 0xc);
+    ctx.write_bytes(
+        Handle::addr(dat),
+        b"\x47\x6d\x54\x74\x41\x6c\x6c\x2e\x64\x61\x74\x00",
+    );
+    ctx.write_bytes(
+        Handle::addr(usd),
+        b"\x47\x6d\x54\x74\x41\x6c\x6c\x2e\x75\x73\x64\x00",
+    );
+    return fns::lbArchive_LoadSymbols(
+        ctx,
+        (if (fns::lbLang_IsSettingUS(ctx) != 0) {
+            usd.at(0)
+        } else {
+            dat.at(0)
+        }),
+        Handle::cast::<Addr<'a>>(statics::melee__gm__gmtitle::model_desc_0(ctx).joint_ref()),
+        &[
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803da520))),
+            VarArg::Int(Handle::addr(
+                statics::melee__gm__gmtitle::model_desc_0(ctx).animjoint_ref(),
+            )),
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803da534))),
+            VarArg::Int(Handle::addr(
+                statics::melee__gm__gmtitle::model_desc_0(ctx).matanim_joint_ref(),
+            )),
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803da54c))),
+            VarArg::Int(Handle::addr(
+                statics::melee__gm__gmtitle::model_desc_0(ctx).shapeanim_joint_ref(),
+            )),
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803da568))),
+            VarArg::Int(Handle::addr(statics::melee__gm__gmtitle::cobj_desc(ctx))),
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803da584))),
+            VarArg::Int(Handle::addr(statics::melee__gm__gmtitle::list_list(ctx))),
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803da59c))),
+            VarArg::Int(Handle::addr(statics::melee__gm__gmtitle::fog_desc(ctx))),
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803da5b4))),
+            VarArg::Int(Handle::addr(
+                statics::melee__gm__gmtitle::model_desc_1(ctx).joint_ref(),
+            )),
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803da5c0))),
+            VarArg::Int(Handle::addr(
+                statics::melee__gm__gmtitle::model_desc_1(ctx).animjoint_ref(),
+            )),
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803da5d0))),
+            VarArg::Int(Handle::addr(
+                statics::melee__gm__gmtitle::model_desc_1(ctx).matanim_joint_ref(),
+            )),
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803da5e4))),
+            VarArg::Int(Handle::addr(
+                statics::melee__gm__gmtitle::model_desc_1(ctx).shapeanim_joint_ref(),
+            )),
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803da5fc))),
+            VarArg::Int(Handle::addr(fns::gm_804D67F0(ctx))),
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803da618))),
+            VarArg::Int(0_i32 as u32),
+        ],
+    );
 }
 
 fn inl_gmTitle_801A1A3C_unfused<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
@@ -766,6 +892,13 @@ pub fn register(ctx: &Ctx) {
         0x801a1a3c,
         |ctx| {
             Ret::put(gmTitle_801A1A3C(ctx), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x801a1ac0,
+        |ctx| {
+            Ret::put(gmTitle_801A1AC0(ctx), ctx);
         },
         Returns::Int,
     );

@@ -69,9 +69,6 @@ impl Backend for Interpreter {
     }
 }
 
-/// Time base ticks that pass per read of its low word: about 200 CPU cycles.
-pub const TB_READ_STEP: u64 = 16;
-
 const XER_SO: u32 = 1 << 31;
 const XER_OV: u32 = 1 << 30;
 const XER_CA: u32 = 1 << 29;
@@ -616,11 +613,8 @@ fn op31(ctx: &Ctx, pc: u32, w: u32) {
         }
         339 | 371 => {
             let n = ((w >> 16) & 31) | (((w >> 11) & 31) << 5);
-            set_r(ctx, d, ctx.regs.get_spr(n));
-            if n == spr::TBL_R {
-                // Time passes between reads, so loops that wait on the time base finish.
-                ctx.tick(TB_READ_STEP);
-            }
+            let v = if n == spr::TBL_R { ctx.read_tbl() } else { ctx.regs.get_spr(n) };
+            set_r(ctx, d, v);
         }
         467 => {
             let n = ((w >> 16) & 31) | (((w >> 11) & 31) << 5);

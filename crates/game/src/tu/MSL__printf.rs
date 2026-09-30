@@ -1803,6 +1803,28 @@ pub fn __StringWrite<'a>(
     return res;
 }
 
+pub fn printf<'a>(ctx: &'a Ctx, format: Val<'a, i8>) -> i32 {
+    let __frame = ctx.stack_frame(0x80);
+    __frame.save_varargs();
+    let args: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0x60);
+    let mut format = format;
+    let mut res: i32 = 0;
+    if fns::fwide(ctx, (fns::__files(ctx).get(1_i32)), 1_i32.wrapping_neg()) >= 0_i32 {
+        return 1_i32.wrapping_neg();
+    }
+    {
+        __frame.va_info(Handle::addr(Handle::cast::<Addr<'a>>(args)), 1, 0);
+        res = statics::MSL__printf::__pformatter(
+            ctx,
+            fnptr(ctx, 0x80323fec),
+            Handle::cast::<Addr<'a>>((fns::__files(ctx).get(1_i32))),
+            format,
+            args.get(0),
+        );
+    }
+    return res;
+}
+
 pub fn vprintf<'a>(ctx: &'a Ctx, format: Val<'a, i8>, arg: __va_list_t<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
     let mut format = format;
@@ -1855,12 +1877,58 @@ pub fn vsnprintf<'a>(
     return end;
 }
 
+pub fn sprintf<'a>(ctx: &'a Ctx, s: Val<'a, i8>, format: Val<'a, i8>) -> i32 {
+    let __frame = ctx.stack_frame(0x90);
+    __frame.save_varargs();
+    let args: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0x60);
+    let mut s = s;
+    let mut format = format;
+    __frame.va_info(Handle::addr(Handle::cast::<Addr<'a>>(args)), 2, 0);
+    return inl_vsnprintf_unfused(ctx, s, 0xffffffff_u32, format, args.get(0));
+}
+
 fn inl_isdigit_unfused<'a>(ctx: &'a Ctx, c: i32) -> i32 {
     let mut c = c;
     return ((ptr::<ArrV<'a, u8, 0>>(ctx, 0x803b8c30)
         .at(((c as u8) as i32))
         .get() as i32)
         & 16_i32);
+}
+
+fn inl_vsnprintf_unfused<'a>(
+    ctx: &'a Ctx,
+    s: Val<'a, i8>,
+    n: u32,
+    format: Val<'a, i8>,
+    arg: __va_list_t<'a>,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let osc: __OutStrCtrl<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut s = s;
+    let mut n = n;
+    let mut format = format;
+    let mut arg = arg;
+    let mut end: i32 = 0;
+    osc.set_CharStr(s);
+    osc.set_MaxCharCount(n);
+    osc.set_CharsWritten((0_i32 as u32));
+    end = statics::MSL__printf::__pformatter(
+        ctx,
+        fnptr(ctx, 0x80323f80),
+        Handle::cast::<Addr<'a>>(osc),
+        format,
+        arg,
+    );
+    (Handle::add(
+        s,
+        ((if (end as u32) < n {
+            (end as u32)
+        } else {
+            n.wrapping_sub((1_i32 as u32))
+        }) as i32),
+    ))
+    .set((0_i32 as i8));
+    return end;
 }
 
 /// Registers this unit's ports.
@@ -1924,6 +1992,14 @@ pub fn register(ctx: &Ctx) {
         Returns::Int,
     );
     ctx.register_port(
+        0x80323eb4,
+        |ctx| {
+            let (a0,): (Val<'_, i8>,) = Args::take_all(ctx);
+            Ret::put(printf(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
         0x80323e38,
         |ctx| {
             let (a0, a1): (Val<'_, i8>, __va_list_t<'_>) = Args::take_all(ctx);
@@ -1937,6 +2013,14 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1, a2, a3): (Val<'_, i8>, u32, Val<'_, i8>, __va_list_t<'_>) =
                 Args::take_all(ctx);
             Ret::put(vsnprintf(ctx, a0, a1, a2, a3), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80323cf4,
+        |ctx| {
+            let (a0, a1): (Val<'_, i8>, Val<'_, i8>) = Args::take_all(ctx);
+            Ret::put(sprintf(ctx, a0, a1), ctx);
         },
         Returns::Int,
     );

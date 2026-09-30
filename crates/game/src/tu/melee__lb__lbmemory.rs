@@ -286,13 +286,7 @@ pub fn lbMemory_8001529C<'a>(ctx: &'a Ctx, h: Handle_<'a>, cb: FnPtr<'a>, arg: u
         'l1: while !Handle::is_null(block) {
             'c2: {
                 if Handle::addr((block).addr()) != (fns::lbMemory_804318B0(ctx).compact_cursor()) {
-                    inl_lbMemory_80015320_unfused(
-                        ctx,
-                        0_i32,
-                        Handle::addr(block),
-                        null::<Addr<'a>>(ctx),
-                        0_i32,
-                    );
+                    inl_lbMemory_80015320_unfused(ctx, 0, Handle::addr(block), null(ctx), 0_i32);
                     return (1_i32 as u32);
                 }
                 fns::lbMemory_804318B0(ctx)
@@ -361,13 +355,7 @@ pub fn lbMemory_80015320<'a>(ctx: &'a Ctx, arg0: i32, arg1: u32, arg2: Addr<'a>,
         }
         fns::lbMemory_804318B0(ctx)
             .set_compact_cursor(Handle::addr((block).addr()).wrapping_add((block).size()));
-        inl_lbMemory_80015320_unfused(
-            ctx,
-            0_i32,
-            Handle::addr((block).next()),
-            null::<Addr<'a>>(ctx),
-            0_i32,
-        );
+        inl_lbMemory_80015320_unfused(ctx, 0, Handle::addr((block).next()), null(ctx), 0_i32);
         return;
     }
     (fns::lbMemory_804318B0(ctx).compact_cb())

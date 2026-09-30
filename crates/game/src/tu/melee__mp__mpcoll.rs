@@ -921,7 +921,7 @@ pub fn mpCollEnd<'a>(ctx: &'a Ctx, coll: CollData<'a>, arg1: i32, arg2: i32) {
             ctx,
             coll,
             (coll).ceiling().index(),
-            arg2,
+            0,
             fp::fsubs((coll).cur_pos().y(), (coll).last_pos().y()),
         );
     }

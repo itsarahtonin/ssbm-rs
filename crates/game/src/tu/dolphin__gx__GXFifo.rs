@@ -38,7 +38,7 @@ pub fn GXCPInterruptHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext
             & ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)))
             != 0)
     {
-        inl_GXUnderflowHandler_unfused(ctx, interrupt, context);
+        inl_GXUnderflowHandler_unfused(ctx, 0, null(ctx));
     }
     if ((((shr_u32(((fns::gx(ctx).get()).cpEnable()), ((2_i32) as u32))) as i32)
         & ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)))
@@ -47,7 +47,7 @@ pub fn GXCPInterruptHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext
             & ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)))
             != 0)
     {
-        inl_GXOverflowHandler_unfused(ctx, interrupt, context);
+        inl_GXOverflowHandler_unfused(ctx, 0, null(ctx));
     }
     if ((((shr_u32(((fns::gx(ctx).get()).cpEnable()), ((5_i32) as u32))) as i32)
         & ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)))
@@ -56,7 +56,7 @@ pub fn GXCPInterruptHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext
             & ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)))
             != 0)
     {
-        inl_GXBreakPointHandler_unfused(ctx, interrupt, context);
+        inl_GXBreakPointHandler_unfused(ctx, 0, context);
     }
 }
 

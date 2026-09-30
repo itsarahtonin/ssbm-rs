@@ -419,7 +419,7 @@ pub fn itSeakneedlethrown_UnkMotion2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
     inl_itResetVelocity_unfused(ctx, ip);
     inl_itSeakNeedleThrown_Coll2_Inline_unfused(
         ctx,
-        gobj,
+        null(ctx),
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))),
     );
     inl_itSeakNeedleThrown_Coll2_Rotate_unfused(ctx, ip, child);

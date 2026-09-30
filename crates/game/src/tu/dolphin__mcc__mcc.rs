@@ -212,6 +212,59 @@ pub fn MCCStreamWrite<'a>(ctx: &'a Ctx, chID: i32, data: Addr<'a>, dataBlockSize
     return 0_i32;
 }
 
+pub fn LoadChannelInfo<'a>(ctx: &'a Ctx, info: MCC_ChannelInfo<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x28);
+    let mut info = info;
+    let mut result: i32 = 0_i32;
+    let mut count: u8 = 0;
+    let mut unused: i32 = 0;
+    if statics::dolphin__mcc__mcc::gIsChannelinfoDirty(ctx).get() == 0_i32 {
+        result = 1_i32;
+    } else {
+        count = (0_i32 as u8);
+        inl_mccDebugPrint_unfused(ctx, null(ctx));
+        'l1: while ({
+            let __t1 = fns::HIORead(
+                ctx,
+                (0x700_i32 as u32),
+                Handle::cast::<Addr<'a>>(statics::dolphin__mcc__mcc::channelInfo(ctx).get(0)),
+                64_i32,
+            );
+            result = __t1;
+            __t1
+        }) != 1_i32
+        {
+            'c2: {
+                count = ((count as i32).wrapping_sub(1_i32) as u8);
+                if (count as i32) == 0_i32 {
+                    break 'l1;
+                }
+            }
+        }
+        if (result != 0) {
+            fns::DCInvalidateRange(
+                ctx,
+                Handle::cast::<Addr<'a>>(statics::dolphin__mcc__mcc::channelInfo(ctx).get(0)),
+                (64_i32 as u32),
+            );
+            {
+                count = (0_i32 as u8);
+                'l3: while (count as i32) < 16_i32 {
+                    'c4: {
+                        Handle::copy_from(
+                            (Handle::add(info, (count as i32))).info(),
+                            statics::dolphin__mcc__mcc::channelInfo(ctx).get((count as i32)),
+                        );
+                    }
+                    count = count.wrapping_add(1);
+                }
+            }
+            statics::dolphin__mcc__mcc::SetChannelInfoDirty(ctx, 0_i32);
+        }
+    }
+    return result;
+}
+
 pub fn FlushChannelInfo<'a>(ctx: &'a Ctx, info: MCC_ChannelInfo<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
     let mut info = info;
@@ -373,6 +426,243 @@ pub fn SearchFreeBlocks<'a>(ctx: &'a Ctx, mode: i32, index: Val<'a, u8>) -> u8 {
     return fSize;
 }
 
+pub fn NotifyCompulsorily<'a>(ctx: &'a Ctx, chID: i32, notify: u32, timeout: u32) -> i32 {
+    let __frame = ctx.stack_frame(0x38);
+    let status: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let mut chID = chID;
+    let mut notify = notify;
+    let mut timeout = timeout;
+    let mut notifyData: u32 = 0;
+    let mut tickStart: u32 = 0;
+    let mut tickCur: u32 = 0;
+    let mut tickSec: u32 = 0;
+    let mut unused: i32 = 0;
+    'goto_exit: {
+        status.set((0_i32 as u32));
+        tickStart = fns::OSGetTick(ctx);
+        notifyData = ((shl_i32(chID, (24_i32 as u32))) as u32);
+        notifyData = (notifyData | (notify & (0x10000000_i32 as u32)));
+        notifyData = (notifyData | (notify & (0xffffff_i32 as u32)));
+        'l1: loop {
+            'c2: {
+                if !(fns::HIOReadStatus(ctx, status) != 0) {
+                    inl_mccDebugPrint_unfused(ctx, null(ctx));
+                }
+                if (status.get() & (2_i32 as u32)) == (0_i32 as u32) {
+                    break 'l1;
+                }
+                tickCur = fns::OSGetTick(ctx);
+                tickSec = (if tickStart < tickCur {
+                    tickCur.wrapping_sub(tickStart)
+                } else {
+                    ((1_i32.wrapping_neg() as u32).wrapping_sub(tickStart)).wrapping_add(tickCur)
+                });
+                tickSec = (div_u32(
+                    (tickSec),
+                    (div_u32(
+                        ((ptr::<Val<'a, u32>>(
+                            ctx,
+                            ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                        ))
+                        .get()),
+                        (4_i32 as u32),
+                    )),
+                ));
+                if (timeout == (0_i32 as u32)) || (tickSec > timeout) {
+                    break 'l1;
+                }
+            }
+        }
+        if !(fns::HIOWriteMailbox(ctx, notifyData) != 0) {
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((6_i32 as u8));
+            break 'goto_exit;
+        }
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
+pub fn WaitAMinute<'a>(ctx: &'a Ctx, timeout: i32, flag: Val<'a, i32>, value: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x30);
+    let mut timeout = timeout;
+    let mut flag = flag;
+    let mut value = value;
+    let mut tickStart: u32 = 0;
+    let mut tickDist: u32 = 0;
+    tickStart = fns::OSGetTick(ctx);
+    'l1: while (flag).get() != value {
+        'c2: {
+            tickDist = fns::OSGetTick(ctx).wrapping_sub(tickStart);
+            tickDist = (if ((tickDist & 0x80000000_u32) != 0) {
+                (0x80000000_u32.wrapping_sub(tickStart)).wrapping_add(fns::OSGetTick(ctx))
+            } else {
+                tickDist
+            });
+            if (div_u32(
+                (tickDist),
+                (div_u32(
+                    ((ptr::<Val<'a, u32>>(
+                        ctx,
+                        ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                    ))
+                    .get()),
+                    (4_i32 as u32),
+                )),
+            )) >= (timeout as u32)
+            {
+                inl_mccDebugPrint_unfused(ctx, null(ctx));
+                return 0_i32;
+            }
+        }
+    }
+    return 1_i32;
+}
+
+pub fn MailboxCheck<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x38);
+    let mailbox: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, i32, 3> = frame_at(ctx, &__frame, 0x4);
+    let mut isNotify: i32 = 0;
+    let mut chID: u8 = 0;
+    let mut value: u32 = 0;
+    let mut bDoCall: i32 = 0;
+    mailbox.set((0_i32 as u32));
+    if fns::HIOReadMailbox(ctx, mailbox) == 0_i32 {
+        inl_mccDebugPrint_unfused(ctx, null(ctx));
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((5_i32 as u8));
+        return;
+    }
+    isNotify = ((mailbox.get() & (0x10000000_i32 as u32)) != (0_i32 as u32)) as i32;
+    chID = (((shr_u32(mailbox.get(), 24_u32)) & (15_i32 as u32)) as u8);
+    value = (mailbox.get() & (0xffffff_i32 as u32));
+    if (chID as i32) == 0_i32 {
+        bDoCall = 1_i32;
+        's1: {
+            let __case = match value {
+                2_u32 => 0,
+                3_u32 => 1,
+                1_u32 => 2,
+                4_u32 => 3,
+                5_u32 => 4,
+                _ => 5,
+            };
+            if __case <= 0 {
+                statics::dolphin__mcc__mcc::gMccInitialized(ctx).set(1_i32);
+                statics::dolphin__mcc__mcc::gMccSession(ctx).set(1_i32);
+                statics::dolphin__mcc__mcc::gOtherSideInitDone(ctx).set(1_i32);
+                break 's1;
+            }
+            if __case <= 1 {
+                let _ = statics::dolphin__mcc__mcc::NotifyCompulsorily(
+                    ctx,
+                    0_i32,
+                    (4_i32 as u32),
+                    10_u32,
+                );
+                break 's1;
+            }
+            if __case <= 2 {
+                statics::dolphin__mcc__mcc::gMccSession(ctx).set(0_i32);
+                break 's1;
+            }
+            if __case <= 3 {
+                if statics::dolphin__mcc__mcc::gPingFlag(ctx).get() == 0_i32 {
+                    bDoCall = 0_i32;
+                }
+                statics::dolphin__mcc__mcc::gPingFlag(ctx).set(0_i32);
+                break 's1;
+            }
+            if __case <= 4 {
+                inl_SetChannelInfoDirty_unfused(ctx, 1_i32);
+                break 's1;
+            }
+            if __case <= 5 {
+                if value == 8_u32 {
+                    bDoCall = 0_i32;
+                } else {
+                    value = (0_i32 as u32);
+                }
+                break 's1;
+            }
+        }
+        if (bDoCall != 0_i32)
+            && (!Handle::is_null(statics::dolphin__mcc__mcc::gCallbackSysEvent(ctx).get()))
+        {
+            statics::dolphin__mcc__mcc::gCallbackSysEvent(ctx)
+                .get()
+                .call::<_, ()>(((value as i32),));
+        }
+    } else {
+        if statics::dolphin__mcc__mcc::LoadChannelInfo(
+            ctx,
+            statics::dolphin__mcc__mcc::gChannelInfo(ctx).get(0),
+        ) == 0_i32
+        {
+            inl_mccDebugPrint_unfused(ctx, null(ctx));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((11_i32 as u8));
+            return;
+        }
+        if inl_IsChannelOpened_unfused(ctx, (chID as i32)) != 0_i32 {
+            if !(!(isNotify != 0)) {
+                if !Handle::is_null(
+                    statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                        .get((chID as i32))
+                        .callbackEvent(),
+                ) {
+                    statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                        .get((chID as i32))
+                        .callbackEvent()
+                        .call::<_, ()>(((chID as i32), (0x100_i32 as u32), value));
+                }
+            } else {
+                's2: {
+                    let __case = match value {
+                        64_u32 => 0,
+                        128_u32 => 0,
+                        1_u32 => 1,
+                        2_u32 => 1,
+                        4_u32 => 1,
+                        8_u32 => 1,
+                        16_u32 => 1,
+                        32_u32 => 1,
+                        _ => 2,
+                    };
+                    if __case <= 0 {
+                        inl_mccDebugPrint_unfused(ctx, null(ctx));
+                        break 's2;
+                    }
+                    if __case <= 1 {
+                        if !Handle::is_null(
+                            statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                                .get((chID as i32))
+                                .callbackEvent(),
+                        ) {
+                            statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                                .get((chID as i32))
+                                .callbackEvent()
+                                .call::<_, ()>(((chID as i32), value, (0_i32 as u32)));
+                        }
+                        break 's2;
+                    }
+                    if __case <= 2 {
+                        if !Handle::is_null(
+                            statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                                .get((chID as i32))
+                                .callbackEvent(),
+                        ) {
+                            statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                                .get((chID as i32))
+                                .callbackEvent()
+                                .call::<_, ()>(((chID as i32), (0_i32 as u32), (0_i32 as u32)));
+                        }
+                        break 's2;
+                    }
+                }
+            }
+        }
+    }
+}
+
 pub fn MCCExiCallback<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
     statics::dolphin__mcc__mcc::MailboxCheck(ctx);
@@ -386,6 +676,161 @@ pub fn MCCRxCallback<'a>(ctx: &'a Ctx) {
     inl_AsyncResourceStateDone_unfused(ctx);
 }
 
+pub fn mccInitializeCheck<'a>(ctx: &'a Ctx, timeout: u8) -> i32 {
+    let __frame = ctx.stack_frame(0x40);
+    let unused: ArrV<'a, i32, 3> = frame_at(ctx, &__frame, 0x0);
+    let mut timeout = timeout;
+    let mut dmyFlag: i32 = 0;
+    let mut i: i32 = 0;
+    dmyFlag = 0_i32;
+    if inl_InitializeCodeCheck_unfused(ctx) == 0_i32 {
+        if statics::dolphin__mcc__mcc::gMccInitialized(ctx).get() != 0_i32 {
+            if statics::dolphin__mcc__mcc::gMccSession(ctx).get() == 0_i32 {
+                inl_SetChannelInfoDirty_unfused(ctx, 1_i32);
+                {
+                    i = 0_i32;
+                    'l1: while i < 16_i32 {
+                        'c2: {
+                            inl_ClearChannelInfo_unfused(ctx, i);
+                        }
+                        i = i.wrapping_add(1);
+                    }
+                }
+                if statics::dolphin__mcc__mcc::FlushChannelInfo(
+                    ctx,
+                    statics::dolphin__mcc__mcc::gChannelInfo(ctx).get(0),
+                ) == 0_i32
+                {
+                    inl_mccDebugPrint_unfused(ctx, null(ctx));
+                    statics::dolphin__mcc__mcc::gLastError(ctx).set((10_i32 as u8));
+                    return 0_i32;
+                }
+            }
+            return 1_i32;
+        }
+        let _ = inl_InitializeCodeSet_unfused(ctx);
+        if statics::dolphin__mcc__mcc::FlushChannelInfo(
+            ctx,
+            statics::dolphin__mcc__mcc::gChannelInfo(ctx).get(0),
+        ) == 0_i32
+        {
+            inl_mccDebugPrint_unfused(ctx, null(ctx));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((10_i32 as u8));
+        } else if ((timeout as i32) != 0_i32)
+            && (inl_WaitAMinute_unfused(
+                ctx,
+                (timeout as i32),
+                statics::dolphin__mcc__mcc::gOtherSideInitDone(ctx),
+                1_i32,
+            ) == 0_i32)
+        {
+            let _ = inl_InitializeCodeClear_unfused(ctx);
+            inl_mccDebugPrint_unfused(ctx, null(ctx));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((2_i32 as u8));
+            return 0_i32;
+        } else {
+            return 1_i32;
+        }
+    } else {
+        let _ = inl_InitializeCodeClear_unfused(ctx);
+        if inl_NotifyInitDone_unfused(ctx) == 0_i32 {
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((4_i32 as u8));
+        } else {
+            if !Handle::is_null(statics::dolphin__mcc__mcc::gCallbackSysEvent(ctx).get()) {
+                statics::dolphin__mcc__mcc::gCallbackSysEvent(ctx)
+                    .get()
+                    .call::<_, ()>((2_i32,));
+            }
+            statics::dolphin__mcc__mcc::gMccInitialized(ctx).set(1_i32);
+            statics::dolphin__mcc__mcc::gMccSession(ctx).set(1_i32);
+            return 1_i32;
+        }
+    }
+    return 0_i32;
+}
+
+pub fn MCCInit<'a>(ctx: &'a Ctx, exiChannel: i32, timeout: u8, callbackSysEvent: FnPtr<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x60);
+    let dmyFlag: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let mailbox: Val<'a, u32> = frame_at(ctx, &__frame, 0x4);
+    let status: Val<'a, u32> = frame_at(ctx, &__frame, 0x8);
+    let unused: ArrV<'a, i32, 3> = frame_at(ctx, &__frame, 0xc);
+    let mut exiChannel = exiChannel;
+    let mut timeout = timeout;
+    let mut callbackSysEvent = callbackSysEvent;
+    let mut adapterMode: u8 = 0;
+    let mut i: i32 = 0;
+    inl_mccDebugPrint_unfused(ctx, null(ctx));
+    if statics::dolphin__mcc__mcc::gMccInitialized(ctx).get() != 0_i32 {
+        inl_SetChannelInfoDirty_unfused(ctx, 1_i32);
+        return statics::dolphin__mcc__mcc::mccInitializeCheck(ctx, timeout);
+    }
+    if !((((exiChannel as u32) == (0_i32 as u32)) || ((exiChannel as u32) == (1_i32 as u32)))
+        || ((exiChannel as u32) == (2_i32 as u32)))
+    {
+        inl_mccDebugPrint_unfused(ctx, null(ctx));
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((4_i32 as u8));
+        return 0_i32;
+    }
+    if fns::HIOInit(ctx, exiChannel, fnptr(ctx, 0x8032d260)) == 0_i32 {
+        inl_mccDebugPrint_unfused(ctx, null(ctx));
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((4_i32 as u8));
+    } else {
+        dmyFlag.set(0_i32);
+        adapterMode = inl_GetUsbAdapterMode_unfused(ctx);
+        adapterMode = (inl_SetUsbAdapterMode_unfused(ctx, (1_i32 as u8)) as u8);
+        mailbox.set((0_i32 as u32));
+        status.set((0_i32 as u32));
+        if (fns::HIOReadStatus(ctx, status) != 0_i32) && ((status.get() & (1_i32 as u32)) != 0) {
+            let _ = fns::HIOReadMailbox(ctx, mailbox);
+        }
+        let _ = inl_WaitAMinute_unfused(ctx, 1_i32, dmyFlag, 1_i32);
+        if inl_NotifyInit_unfused(ctx) == 0_i32 {
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((4_i32 as u8));
+        } else {
+            statics::dolphin__mcc__mcc::gCallbackSysEvent(ctx).set(callbackSysEvent);
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((0_i32 as u8));
+            inl_SetChannelInfoDirty_unfused(ctx, 1_i32);
+            {
+                i = 0_i32;
+                'l1: while i < 16_i32 {
+                    'c2: {
+                        inl_ClearChannelInfo_unfused(ctx, i);
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+            inl_AsyncResourceClearState_unfused(ctx);
+            return statics::dolphin__mcc__mcc::mccInitializeCheck(ctx, timeout);
+        }
+    }
+    return 0_i32;
+}
+
+pub fn MCCExit<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut chID: u8 = 0;
+    if statics::dolphin__mcc__mcc::gMccInitialized(ctx).get() == 0_i32 {
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((1_i32 as u8));
+    } else {
+        inl_mccDebugPrint_unfused(ctx, null(ctx));
+        {
+            chID = (1_i32 as u8);
+            'l1: while (chID as i32) < 16_i32 {
+                'c2: {
+                    if inl_IsChannelOpened_unfused(ctx, (chID as i32)) != 0_i32 {
+                        let _ = fns::MCCClose(ctx, (chID as i32));
+                    }
+                }
+                chID = chID.wrapping_add(1);
+            }
+        }
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((0_i32 as u8));
+    }
+    statics::dolphin__mcc__mcc::gMccInitialized(ctx).set(0_i32);
+    statics::dolphin__mcc__mcc::gMccSession(ctx).set(0_i32);
+}
+
 pub fn MCCEnumDevices<'a>(ctx: &'a Ctx, callbackEnumDevices: FnPtr<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut callbackEnumDevices = callbackEnumDevices;
@@ -397,6 +842,865 @@ pub fn MCCEnumDevices<'a>(ctx: &'a Ctx, callbackEnumDevices: FnPtr<'a>) -> i32 {
     } else {
         statics::dolphin__mcc__mcc::gLastError(ctx).set((0_i32 as u8));
         return 1_i32;
+    }
+    return 0_i32;
+}
+
+pub fn MCCGetFreeBlocks<'a>(ctx: &'a Ctx, mode: i32) -> u8 {
+    let __frame = ctx.stack_frame(0x20);
+    let unused: ArrV<'a, i32, 3> = frame_at(ctx, &__frame, 0x0);
+    let mut mode = mode;
+    inl_mccDebugPrint_unfused(ctx, null(ctx));
+    if statics::dolphin__mcc__mcc::gMccInitialized(ctx).get() == 0_i32 {
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((1_i32 as u8));
+    } else if !((((mode as u32) == (0_i32 as u32)) || ((mode as u32) == (1_i32 as u32)))
+        || ((mode as u32) == (2_i32 as u32)))
+    {
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((13_i32 as u8));
+    } else {
+        if statics::dolphin__mcc__mcc::LoadChannelInfo(
+            ctx,
+            statics::dolphin__mcc__mcc::gChannelInfo(ctx).get(0),
+        ) == 0_i32
+        {
+            inl_mccDebugPrint_unfused(ctx, null(ctx));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((11_i32 as u8));
+        } else {
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((0_i32 as u8));
+            return statics::dolphin__mcc__mcc::SearchFreeBlocks(
+                ctx,
+                mode,
+                null::<Val<'a, u8>>(ctx),
+            );
+        }
+    }
+    return (0_i32 as u8);
+}
+
+pub fn MCCGetLastError<'a>(ctx: &'a Ctx) -> u8 {
+    inl_mccDebugPrint_unfused(ctx, null(ctx));
+    return statics::dolphin__mcc__mcc::gLastError(ctx).get();
+}
+
+pub fn MCCGetChannelInfo<'a>(ctx: &'a Ctx, chID: i32, info: MCC_Info<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x30);
+    let unused: ArrV<'a, i32, 3> = frame_at(ctx, &__frame, 0x0);
+    let mut chID = chID;
+    let mut info = info;
+    inl_mccDebugPrint_unfused(ctx, null(ctx));
+    if statics::dolphin__mcc__mcc::gMccInitialized(ctx).get() == 0_i32 {
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((1_i32 as u8));
+    } else if ((chID as u32) <= (0_i32 as u32)) || ((chID as u32) >= (16_i32 as u32)) {
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((14_i32 as u8));
+    } else if !(!Handle::is_null(info)) {
+        inl_mccDebugPrint_unfused(ctx, null(ctx));
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((13_i32 as u8));
+    } else {
+        if statics::dolphin__mcc__mcc::LoadChannelInfo(
+            ctx,
+            statics::dolphin__mcc__mcc::gChannelInfo(ctx).get(0),
+        ) == 0_i32
+        {
+            inl_mccDebugPrint_unfused(ctx, null(ctx));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((11_i32 as u8));
+        } else {
+            let _ = fns::memcpy(
+                ctx,
+                Handle::cast::<Addr<'a>>(info),
+                Handle::cast::<Addr<'a>>(
+                    statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                        .get(chID)
+                        .info(),
+                ),
+                4_u32,
+            );
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((0_i32 as u8));
+            return 1_i32;
+        }
+    }
+    return 0_i32;
+}
+
+pub fn MCCGetConnectionStatus<'a>(ctx: &'a Ctx, chID: i32, connect: Val<'a, i32>) -> i32 {
+    let __frame = ctx.stack_frame(0x28);
+    let info: MCC_Info<'a> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, i32, 2> = frame_at(ctx, &__frame, 0x4);
+    let mut chID = chID;
+    let mut connect = connect;
+    inl_mccDebugPrint_unfused(ctx, null(ctx));
+    if statics::dolphin__mcc__mcc::gMccInitialized(ctx).get() == 0_i32 {
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((1_i32 as u8));
+        return 0_i32;
+    }
+    if ((chID as u32) < (1_i32 as u32)) || ((chID as u32) >= (16_i32 as u32)) {
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((14_i32 as u8));
+        return 0_i32;
+    }
+    if inl_AsyncResourceIsBusy_unfused(ctx) != 0_i32 {
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((21_i32 as u8));
+        return 0_i32;
+    }
+    if !(!Handle::is_null(connect)) {
+        inl_mccDebugPrint_unfused(ctx, null(ctx));
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((13_i32 as u8));
+    } else {
+        if fns::MCCGetChannelInfo(ctx, chID, info) != 0_i32 {
+            (connect).set((info.connect() as i32));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((0_i32 as u8));
+            return 1_i32;
+        }
+    }
+    return 0_i32;
+}
+
+pub fn MCCNotify<'a>(ctx: &'a Ctx, chID: i32, notify: u32) -> i32 {
+    let __frame = ctx.stack_frame(0x28);
+    let connect: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, i32, 3> = frame_at(ctx, &__frame, 0x4);
+    let mut chID = chID;
+    let mut notify = notify;
+    inl_mccDebugPrint_unfused(ctx, null(ctx));
+    if statics::dolphin__mcc__mcc::gMccInitialized(ctx).get() == 0_i32 {
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((1_i32 as u8));
+    } else if ((chID as u32) <= (0_i32 as u32)) || ((chID as u32) >= (16_i32 as u32)) {
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((14_i32 as u8));
+    } else if statics::dolphin__mcc__mcc::LoadChannelInfo(
+        ctx,
+        statics::dolphin__mcc__mcc::gChannelInfo(ctx).get(0),
+    ) == 0_i32
+    {
+        inl_mccDebugPrint_unfused(ctx, null(ctx));
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((11_i32 as u8));
+    } else if fns::MCCGetConnectionStatus(ctx, chID, connect) == 0_i32 {
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((9_i32 as u8));
+    } else {
+        if (connect.get() as u32) != (3_i32 as u32) {
+            inl_mccDebugPrint_unfused(ctx, null(ctx));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((18_i32 as u8));
+        } else {
+            notify = (notify | (0x10000000_i32 as u32));
+            return statics::dolphin__mcc__mcc::NotifyCompulsorily(ctx, chID, notify, 10_u32);
+        }
+    }
+    return 0_i32;
+}
+
+pub fn MCCSetChannelEventMask<'a>(ctx: &'a Ctx, chID: i32, event: u32) -> u32 {
+    let __frame = ctx.stack_frame(0x30);
+    let unused: ArrV<'a, i32, 2> = frame_at(ctx, &__frame, 0x0);
+    let mut chID = chID;
+    let mut event = event;
+    let mut oldMask: u32 = 0;
+    oldMask = 0xffffffff_u32;
+    if statics::dolphin__mcc__mcc::gMccInitialized(ctx).get() == 0_i32 {
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((1_i32 as u8));
+    } else if ((chID as u32) <= (0_i32 as u32)) || ((chID as u32) >= (16_i32 as u32)) {
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((14_i32 as u8));
+    } else if statics::dolphin__mcc__mcc::LoadChannelInfo(
+        ctx,
+        statics::dolphin__mcc__mcc::gChannelInfo(ctx).get(0),
+    ) == 0_i32
+    {
+        inl_mccDebugPrint_unfused(ctx, null(ctx));
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((11_i32 as u8));
+    } else if inl_IsChannelOpened_unfused(ctx, chID) == 0_i32 {
+        inl_mccDebugPrint_unfused(ctx, null(ctx));
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((18_i32 as u8));
+    } else {
+        oldMask = statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+            .get(chID)
+            .eventMask();
+        statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+            .get(chID)
+            .set_eventMask(((event as u16) as u32));
+    }
+    return oldMask;
+}
+
+pub fn MCCOpen<'a>(ctx: &'a Ctx, chID: i32, blockSize: u8, callbackEvent: FnPtr<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x58);
+    let blockIndex: Val<'a, u8> = frame_at(ctx, &__frame, 0x0);
+    let unused2: ArrV<'a, i32, 2> = frame_at(ctx, &__frame, 0x4);
+    let unused: ArrV<'a, i32, 6> = frame_at(ctx, &__frame, 0xc);
+    let mut chID = chID;
+    let mut blockSize = blockSize;
+    let mut callbackEvent = callbackEvent;
+    let mut connectSide: u8 = 0;
+    let mut freeBlocks: u8 = 0;
+    'goto_exit: {
+        inl_mccDebugPrint_unfused(ctx, null(ctx));
+        if statics::dolphin__mcc__mcc::gMccInitialized(ctx).get() == 0_i32 {
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((1_i32 as u8));
+            return 0_i32;
+        }
+        if ((chID as u32) < (1_i32 as u32)) || ((chID as u32) >= (16_i32 as u32)) {
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((14_i32 as u8));
+            return 0_i32;
+        }
+        if inl_AsyncResourceIsBusy_unfused(ctx) != 0_i32 {
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((21_i32 as u8));
+            return 0_i32;
+        }
+        if (blockSize as i32) == 0_i32 {
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((15_i32 as u8));
+            return 0_i32;
+        }
+        if ((chID as u32) <= (0_i32 as u32)) || ((chID as u32) >= (16_i32 as u32)) {
+            inl_mccDebugPrint_unfused(ctx, null(ctx));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((14_i32 as u8));
+            break 'goto_exit;
+        } else {
+            connectSide = (2_i32 as u8);
+            if statics::dolphin__mcc__mcc::LoadChannelInfo(
+                ctx,
+                statics::dolphin__mcc__mcc::gChannelInfo(ctx).get(0),
+            ) == 0_i32
+            {
+                inl_mccDebugPrint_unfused(ctx, null(ctx));
+                statics::dolphin__mcc__mcc::gLastError(ctx).set((11_i32 as u8));
+                break 'goto_exit;
+            } else if !(statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                .get(chID)
+                .info()
+                .connect()
+                != 0)
+            {
+                freeBlocks = statics::dolphin__mcc__mcc::SearchFreeBlocks(ctx, 1_i32, blockIndex);
+                if (blockSize as i32) > (freeBlocks as i32) {
+                    inl_mccDebugPrint_unfused(ctx, null(ctx));
+                    statics::dolphin__mcc__mcc::gLastError(ctx).set((12_i32 as u8));
+                    break 'goto_exit;
+                } else {
+                    statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                        .get(chID)
+                        .info()
+                        .set_firstBlock(blockIndex.get());
+                    statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                        .get(chID)
+                        .info()
+                        .set_blockLength(blockSize);
+                    statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                        .get(chID)
+                        .info()
+                        .set_connect(connectSide);
+                    statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                        .get(chID)
+                        .info()
+                        .set_isLocked((0_i32 as u8));
+                    statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                        .get(chID)
+                        .set_eventMask((0_i32 as u32));
+                    statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                        .get(chID)
+                        .set_callbackEvent(callbackEvent);
+                    statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                        .get(chID)
+                        .set_isStreamDone(0_i32);
+                    if statics::dolphin__mcc__mcc::FlushChannelInfo(
+                        ctx,
+                        statics::dolphin__mcc__mcc::gChannelInfo(ctx).get(0),
+                    ) == 0_i32
+                    {
+                        inl_mccDebugPrint_unfused(ctx, null(ctx));
+                        statics::dolphin__mcc__mcc::gLastError(ctx).set((10_i32 as u8));
+                        break 'goto_exit;
+                    }
+                    statics::dolphin__mcc__mcc::gLastError(ctx).set((0_i32 as u8));
+                    return 1_i32;
+                }
+            }
+        }
+        if (((statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+            .get(chID)
+            .info()
+            .connect() as i32)
+            & (connectSide as i32))
+            != 0)
+        {
+            inl_mccDebugPrint_unfused(ctx, null(ctx));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((17_i32 as u8));
+            break 'goto_exit;
+        } else if (blockSize as i32)
+            != (statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                .get(chID)
+                .info()
+                .blockLength() as i32)
+        {
+            inl_mccDebugPrint_unfused(ctx, null(ctx));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((13_i32 as u8));
+            break 'goto_exit;
+        }
+        statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+            .get(chID)
+            .info()
+            .set_connect((3_i32 as u8));
+        statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+            .get(chID)
+            .set_callbackEvent(callbackEvent);
+        if statics::dolphin__mcc__mcc::FlushChannelInfo(
+            ctx,
+            statics::dolphin__mcc__mcc::gChannelInfo(ctx).get(0),
+        ) == 0_i32
+        {
+            inl_mccDebugPrint_unfused(ctx, null(ctx));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((10_i32 as u8));
+            break 'goto_exit;
+        }
+        if (((!(statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+            .get(chID)
+            .eventMask()))
+            & (1_i32 as u32))
+            != 0)
+        {
+            let _ =
+                statics::dolphin__mcc__mcc::NotifyCompulsorily(ctx, chID, (1_i32 as u32), 10_u32);
+            if !Handle::is_null(
+                statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                    .get(chID)
+                    .callbackEvent(),
+            ) {
+                statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                    .get(chID)
+                    .callbackEvent()
+                    .call::<_, ()>((chID, (1_i32 as u32), (0_i32 as u32)));
+            }
+        }
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((0_i32 as u8));
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
+pub fn MCCClose<'a>(ctx: &'a Ctx, chID: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x38);
+    let unused: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x0);
+    let mut chID = chID;
+    let mut connectSide: u8 = 0;
+    'goto_exit: {
+        connectSide = (2_i32 as u8);
+        inl_mccDebugPrint_unfused(ctx, null(ctx));
+        if statics::dolphin__mcc__mcc::gMccInitialized(ctx).get() == 0_i32 {
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((1_i32 as u8));
+            return 0_i32;
+        }
+        if ((chID as u32) < (1_i32 as u32)) || ((chID as u32) >= (16_i32 as u32)) {
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((14_i32 as u8));
+            return 0_i32;
+        }
+        if inl_AsyncResourceIsBusy_unfused(ctx) != 0_i32 {
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((21_i32 as u8));
+            return 0_i32;
+        }
+        if statics::dolphin__mcc__mcc::LoadChannelInfo(
+            ctx,
+            statics::dolphin__mcc__mcc::gChannelInfo(ctx).get(0),
+        ) == 0_i32
+        {
+            inl_mccDebugPrint_unfused(ctx, null(ctx));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((11_i32 as u8));
+            break 'goto_exit;
+        }
+        if inl_IsChannelOpened_unfused(ctx, chID) == 0_i32 {
+            inl_mccDebugPrint_unfused(ctx, null(ctx));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((18_i32 as u8));
+            break 'goto_exit;
+        }
+        statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+            .get(chID)
+            .info()
+            .set_connect(
+                (((statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                    .get(chID)
+                    .info()
+                    .connect() as i32)
+                    & (!(connectSide as i32))) as u8),
+            );
+        if (statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+            .get(chID)
+            .info()
+            .connect() as i32)
+            == 0_i32
+        {
+            inl_ClearChannelInfo_unfused(ctx, chID);
+        }
+        if statics::dolphin__mcc__mcc::FlushChannelInfo(
+            ctx,
+            statics::dolphin__mcc__mcc::gChannelInfo(ctx).get(0),
+        ) == 0_i32
+        {
+            inl_mccDebugPrint_unfused(ctx, null(ctx));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((10_i32 as u8));
+            break 'goto_exit;
+        }
+        if (statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+            .get(chID)
+            .info()
+            .connect() as i32)
+            != 0_i32
+        {
+            if (((!(statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                .get(chID)
+                .eventMask()))
+                & (2_i32 as u32))
+                != 0)
+            {
+                let _ = statics::dolphin__mcc__mcc::NotifyCompulsorily(
+                    ctx,
+                    chID,
+                    (2_i32 as u32),
+                    10_u32,
+                );
+                if !Handle::is_null(
+                    statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                        .get(chID)
+                        .callbackEvent(),
+                ) {
+                    statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                        .get(chID)
+                        .callbackEvent()
+                        .call::<_, ()>((chID, (2_i32 as u32), (0_i32 as u32)));
+                }
+            }
+        }
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((0_i32 as u8));
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
+pub fn MCCRead<'a>(
+    ctx: &'a Ctx,
+    chID: i32,
+    offset: u32,
+    data: Addr<'a>,
+    size: i32,
+    r#async: i32,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x70);
+    let unused: ArrV<'a, i32, 11> = frame_at(ctx, &__frame, 0x0);
+    let mut chID = chID;
+    let mut offset = offset;
+    let mut data = data;
+    let mut size = size;
+    let mut r#async = r#async;
+    'goto_exit: {
+        inl_mccDebugPrint_unfused(ctx, null(ctx));
+        if statics::dolphin__mcc__mcc::gMccInitialized(ctx).get() == 0_i32 {
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((1_i32 as u8));
+            return 0_i32;
+        }
+        if ((chID as u32) < (1_i32 as u32)) || ((chID as u32) >= (16_i32 as u32)) {
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((14_i32 as u8));
+            return 0_i32;
+        }
+        if !(((r#async as u32) == (1_i32 as u32)) || ((r#async as u32) == (0_i32 as u32))) {
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((13_i32 as u8));
+            return 0_i32;
+        }
+        if (((offset & (3_i32 as u32)) != 0) || ((Handle::addr(data) & (31_i32 as u32)) != 0))
+            || ((rem_i32(size, 32_i32)) != 0_i32)
+        {
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((13_i32 as u8));
+            return 0_i32;
+        }
+        if inl_AsyncResourceIsBusy_unfused(ctx) != 0_i32 {
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((21_i32 as u8));
+            return 0_i32;
+        }
+        if statics::dolphin__mcc__mcc::LoadChannelInfo(
+            ctx,
+            statics::dolphin__mcc__mcc::gChannelInfo(ctx).get(0),
+        ) == 0_i32
+        {
+            inl_mccDebugPrint_unfused(ctx, null(ctx));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((11_i32 as u8));
+            break 'goto_exit;
+        }
+        if inl_IsChannelOpened_unfused(ctx, chID) == 0_i32 {
+            inl_mccDebugPrint_unfused(ctx, null(ctx));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((18_i32 as u8));
+            break 'goto_exit;
+        }
+        if offset
+            > (shl_i32(
+                (statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                    .get(chID)
+                    .info()
+                    .blockLength() as i32),
+                (13_i32 as u32),
+            ) as u32)
+        {
+            inl_mccDebugPrint_unfused(ctx, null(ctx));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((16_i32 as u8));
+            break 'goto_exit;
+        }
+        if (offset.wrapping_add((size as u32)))
+            > (shl_i32(
+                (statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                    .get(chID)
+                    .info()
+                    .blockLength() as i32),
+                (13_i32 as u32),
+            ) as u32)
+        {
+            inl_mccDebugPrint_unfused(ctx, null(ctx));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((15_i32 as u8));
+            break 'goto_exit;
+        }
+        if (r#async as u32) == (1_i32 as u32) {
+            if ctx.call::<_, i32>(0x8032e868, ()) == 0_i32 {
+                inl_mccDebugPrint_unfused(ctx, null(ctx));
+                statics::dolphin__mcc__mcc::gLastError(ctx).set((21_i32 as u8));
+                break 'goto_exit;
+            }
+            inl_AsyncResourceStateBusy_unfused(ctx, (chID as u8), (0_u32 as u16));
+            if fns::HIOReadAsync(
+                ctx,
+                offset.wrapping_add(
+                    ((shl_i32(
+                        (statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                            .get(chID)
+                            .info()
+                            .firstBlock() as i32),
+                        (13_i32 as u32),
+                    )) as u32),
+                ),
+                data,
+                size,
+                fnptr(ctx, 0x8032d29c),
+            ) == 0_i32
+            {
+                inl_mccDebugPrint_unfused(ctx, null(ctx));
+                statics::dolphin__mcc__mcc::gLastError(ctx).set((7_i32 as u8));
+                break 'goto_exit;
+            }
+            fns::DCInvalidateRange(ctx, data, (size as u32));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((0_i32 as u8));
+            return 1_i32;
+        }
+        if fns::HIORead(
+            ctx,
+            offset.wrapping_add(
+                ((shl_i32(
+                    (statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                        .get(chID)
+                        .info()
+                        .firstBlock() as i32),
+                    (13_i32 as u32),
+                )) as u32),
+            ),
+            data,
+            size,
+        ) == 0_i32
+        {
+            inl_mccDebugPrint_unfused(ctx, null(ctx));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((7_i32 as u8));
+            break 'goto_exit;
+        }
+        fns::DCInvalidateRange(ctx, data, (size as u32));
+        if (((!(statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+            .get(chID)
+            .eventMask()))
+            & (16_i32 as u32))
+            != 0)
+        {
+            let _ = inl_NotifyChannelEvent_unfused(ctx, chID, (16_i32 as u32));
+        }
+        if (((!(statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+            .get(chID)
+            .eventMask()))
+            & (64_i32 as u32))
+            != 0)
+            && (!Handle::is_null(
+                statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                    .get(chID)
+                    .callbackEvent(),
+            ))
+        {
+            statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                .get(chID)
+                .callbackEvent()
+                .call::<_, ()>((chID, (64_i32 as u32), (0_i32 as u32)));
+        }
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((0_i32 as u8));
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
+pub fn MCCWrite<'a>(
+    ctx: &'a Ctx,
+    chID: i32,
+    offset: u32,
+    data: Addr<'a>,
+    size: i32,
+    r#async: i32,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x70);
+    let unused: ArrV<'a, i32, 11> = frame_at(ctx, &__frame, 0x0);
+    let mut chID = chID;
+    let mut offset = offset;
+    let mut data = data;
+    let mut size = size;
+    let mut r#async = r#async;
+    'goto_exit: {
+        inl_mccDebugPrint_unfused(ctx, null(ctx));
+        if statics::dolphin__mcc__mcc::gMccInitialized(ctx).get() == 0_i32 {
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((1_i32 as u8));
+            return 0_i32;
+        }
+        if ((chID as u32) < (1_i32 as u32)) || ((chID as u32) >= (16_i32 as u32)) {
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((14_i32 as u8));
+            return 0_i32;
+        }
+        if !(((r#async as u32) == (1_i32 as u32)) || ((r#async as u32) == (0_i32 as u32))) {
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((13_i32 as u8));
+            return 0_i32;
+        }
+        if (((offset & (3_i32 as u32)) != 0) || ((Handle::addr(data) & (31_i32 as u32)) != 0))
+            || ((rem_i32(size, 32_i32)) != 0_i32)
+        {
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((13_i32 as u8));
+            return 0_i32;
+        }
+        if inl_AsyncResourceIsBusy_unfused(ctx) != 0_i32 {
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((21_i32 as u8));
+            return 0_i32;
+        }
+        if statics::dolphin__mcc__mcc::LoadChannelInfo(
+            ctx,
+            statics::dolphin__mcc__mcc::gChannelInfo(ctx).get(0),
+        ) == 0_i32
+        {
+            inl_mccDebugPrint_unfused(ctx, null(ctx));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((11_i32 as u8));
+            break 'goto_exit;
+        }
+        if inl_IsChannelOpened_unfused(ctx, chID) == 0_i32 {
+            inl_mccDebugPrint_unfused(ctx, null(ctx));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((18_i32 as u8));
+            break 'goto_exit;
+        }
+        if (statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+            .get(chID)
+            .info()
+            .isLocked() as i32)
+            == 1_i32
+        {
+            inl_mccDebugPrint_unfused(ctx, null(ctx));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((19_i32 as u8));
+            break 'goto_exit;
+        }
+        if offset
+            > ((shl_i32(
+                (statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                    .get(chID)
+                    .info()
+                    .blockLength() as i32),
+                (13_i32 as u32),
+            )) as u32)
+        {
+            inl_mccDebugPrint_unfused(ctx, null(ctx));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((16_i32 as u8));
+            break 'goto_exit;
+        }
+        if offset.wrapping_add((size as u32))
+            > ((shl_i32(
+                (statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                    .get(chID)
+                    .info()
+                    .blockLength() as i32),
+                (13_i32 as u32),
+            )) as u32)
+        {
+            inl_mccDebugPrint_unfused(ctx, null(ctx));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((15_i32 as u8));
+            break 'goto_exit;
+        }
+        if (r#async as u32) == (1_i32 as u32) {
+            if ctx.call::<_, i32>(0x8032e868, ()) == 0_i32 {
+                inl_mccDebugPrint_unfused(ctx, null(ctx));
+                statics::dolphin__mcc__mcc::gLastError(ctx).set((21_i32 as u8));
+                break 'goto_exit;
+            }
+            inl_AsyncResourceStateBusy_unfused(ctx, (chID as u8), (0x100_u32 as u16));
+            fns::DCFlushRange(ctx, data, (size as u32));
+            if fns::HIOWriteAsync(
+                ctx,
+                offset.wrapping_add(
+                    ((shl_i32(
+                        (statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                            .get(chID)
+                            .info()
+                            .firstBlock() as i32),
+                        (13_i32 as u32),
+                    )) as u32),
+                ),
+                data,
+                size,
+                fnptr(ctx, 0x8032d280),
+            ) == 0_i32
+            {
+                inl_mccDebugPrint_unfused(ctx, null(ctx));
+                statics::dolphin__mcc__mcc::gLastError(ctx).set((8_i32 as u8));
+                break 'goto_exit;
+            }
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((0_i32 as u8));
+            return 1_i32;
+        }
+        fns::DCFlushRange(ctx, data, (size as u32));
+        if fns::HIOWrite(
+            ctx,
+            offset.wrapping_add(
+                ((shl_i32(
+                    (statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                        .get(chID)
+                        .info()
+                        .firstBlock() as i32),
+                    (13_i32 as u32),
+                )) as u32),
+            ),
+            data,
+            size,
+        ) == 0_i32
+        {
+            inl_mccDebugPrint_unfused(ctx, null(ctx));
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((8_i32 as u8));
+            break 'goto_exit;
+        }
+        if (((!(statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+            .get(chID)
+            .eventMask()))
+            & (32_i32 as u32))
+            != 0)
+        {
+            let _ = inl_NotifyChannelEvent_unfused(ctx, chID, (32_i32 as u32));
+        }
+        if (((!(statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+            .get(chID)
+            .eventMask()))
+            & (128_i32 as u32))
+            != 0)
+            && (!Handle::is_null(
+                statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                    .get(chID)
+                    .callbackEvent(),
+            ))
+        {
+            statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                .get(chID)
+                .callbackEvent()
+                .call::<_, ()>((chID, (128_i32 as u32), (0_i32 as u32)));
+        }
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((0_i32 as u8));
+        return 1_i32;
+    }
+    return 0_i32;
+    #[allow(unreachable_code)]
+    return 0;
+}
+
+pub fn MCCCheckAsyncDone<'a>(ctx: &'a Ctx) -> i32 {
+    let __frame = ctx.stack_frame(0x40);
+    let unused: ArrV<'a, i32, 5> = frame_at(ctx, &__frame, 0x0);
+    let mut stat: u16 = 0;
+    let mut mode: u16 = 0;
+    let mut chID: u8 = 0;
+    if statics::dolphin__mcc__mcc::gMccInitialized(ctx).get() == 0_i32 {
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((1_i32 as u8));
+        return 0_i32;
+    }
+    stat = inl_AsyncResourceGetStat_unfused(ctx);
+    if (stat as i32) == 0x1000_i32 {
+        return 0_i32;
+    } else if ((stat as i32) != 0) && ((stat as i32) == 0x2000_i32) {
+        mode = inl_AsyncResourceGetMode_unfused(ctx);
+        chID = inl_AsyncResourceGetChannel_unfused(ctx);
+        inl_AsyncResourceClearState_unfused(ctx);
+        if (mode as i32) == 0_i32 {
+            if (((!(statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                .get((chID as i32))
+                .eventMask()))
+                & (16_i32 as u32))
+                != 0)
+            {
+                let _ = inl_NotifyChannelEvent_unfused(ctx, (chID as i32), (16_i32 as u32));
+            }
+            if (((!(statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                .get((chID as i32))
+                .eventMask()))
+                & (64_i32 as u32))
+                != 0)
+                && (!Handle::is_null(
+                    statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                        .get((chID as i32))
+                        .callbackEvent(),
+                ))
+            {
+                statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                    .get((chID as i32))
+                    .callbackEvent()
+                    .call::<_, ()>(((chID as i32), (64_i32 as u32), (0_i32 as u32)));
+            }
+        } else {
+            if (((!(statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                .get((chID as i32))
+                .eventMask()))
+                & (32_i32 as u32))
+                != 0)
+            {
+                let _ = inl_NotifyChannelEvent_unfused(ctx, (chID as i32), (32_i32 as u32));
+            }
+            if (((!(statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                .get((chID as i32))
+                .eventMask()))
+                & (128_i32 as u32))
+                != 0)
+                && (!Handle::is_null(
+                    statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                        .get((chID as i32))
+                        .callbackEvent(),
+                ))
+            {
+                statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                    .get((chID as i32))
+                    .callbackEvent()
+                    .call::<_, ()>(((chID as i32), (128_i32 as u32), (0_i32 as u32)));
+            }
+        }
+    }
+    return 1_i32;
+}
+
+fn inl_mccDebugPrint_unfused<'a>(ctx: &'a Ctx, str: Val<'a, i8>) {
+    let mut str = str;
+}
+
+fn inl_SetChannelInfoDirty_unfused<'a>(ctx: &'a Ctx, dirty: i32) {
+    let mut dirty = dirty;
+    statics::dolphin__mcc__mcc::gIsChannelinfoDirty(ctx).set(dirty);
+}
+
+fn inl_IsChannelOpened_unfused<'a>(ctx: &'a Ctx, chID: i32) -> i32 {
+    let mut chID = chID;
+    let mut connectSide: u8 = 0;
+    'goto_exit: {
+        if ((chID as u32) <= (0_i32 as u32)) || ((chID as u32) >= (16_i32 as u32)) {
+            statics::dolphin__mcc__mcc::gLastError(ctx).set((14_i32 as u8));
+            break 'goto_exit;
+        }
+        connectSide = (2_i32 as u8);
+        return (if (((connectSide as i32)
+            & (statics::dolphin__mcc__mcc::gChannelInfo(ctx)
+                .get(chID)
+                .info()
+                .connect() as i32))
+            != 0)
+        {
+            1_i32
+        } else {
+            0_i32
+        });
     }
     return 0_i32;
 }
@@ -445,11 +1749,6 @@ fn inl_InitializeCodeCheck_unfused<'a>(ctx: &'a Ctx) -> i32 {
     return result;
 }
 
-fn inl_SetChannelInfoDirty_unfused<'a>(ctx: &'a Ctx, dirty: i32) {
-    let mut dirty = dirty;
-    statics::dolphin__mcc__mcc::gIsChannelinfoDirty(ctx).set(dirty);
-}
-
 fn inl_ClearChannelInfo_unfused<'a>(ctx: &'a Ctx, i: i32) {
     let mut i = i;
     statics::dolphin__mcc__mcc::gChannelInfo(ctx)
@@ -479,9 +1778,195 @@ fn inl_ClearChannelInfo_unfused<'a>(ctx: &'a Ctx, i: i32) {
         .set_isStreamDone(0_i32);
 }
 
+fn inl_InitializeCodeSet_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    let _ = fns::strcpy(
+        ctx,
+        statics::dolphin__mcc__mcc::m_szInitCode(ctx).at(0),
+        cstr(ctx, 0x804008d8),
+    );
+    fns::DCFlushRange(
+        ctx,
+        Handle::cast::<Addr<'a>>(statics::dolphin__mcc__mcc::m_szInitCode(ctx).at(0)),
+        (32_i32 as u32),
+    );
+    return fns::HIOWrite(
+        ctx,
+        (0x600_i32 as u32),
+        Handle::cast::<Addr<'a>>(statics::dolphin__mcc__mcc::m_szInitCode(ctx).at(0)),
+        32_i32,
+    );
+    #[allow(unreachable_code)]
+    return 0;
+}
+
+fn inl_WaitAMinute_unfused<'a>(ctx: &'a Ctx, timeout: i32, flag: Val<'a, i32>, value: i32) -> i32 {
+    let mut timeout = timeout;
+    let mut flag = flag;
+    let mut value = value;
+    let mut tickStart: u32 = 0;
+    let mut tickDist: u32 = 0;
+    tickStart = fns::OSGetTick(ctx);
+    'l1: while (flag).get() != value {
+        'c2: {
+            tickDist = fns::OSGetTick(ctx).wrapping_sub(tickStart);
+            tickDist = (if ((tickDist & 0x80000000_u32) != 0) {
+                (0x80000000_u32.wrapping_sub(tickStart)).wrapping_add(fns::OSGetTick(ctx))
+            } else {
+                tickDist
+            });
+            if (div_u32(
+                (tickDist),
+                (div_u32(
+                    ((ptr::<Val<'a, u32>>(
+                        ctx,
+                        ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                    ))
+                    .get()),
+                    (4_i32 as u32),
+                )),
+            )) >= (timeout as u32)
+            {
+                inl_mccDebugPrint_unfused(ctx, null(ctx));
+                return 0_i32;
+            }
+        }
+    }
+    return 1_i32;
+}
+
+fn inl_InitializeCodeClear_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    let _ = fns::memset(
+        ctx,
+        Handle::cast::<Addr<'a>>(statics::dolphin__mcc__mcc::m_szInitCode(ctx).at(0)),
+        0_i32,
+        (32_i32 as u32),
+    );
+    fns::DCFlushRange(
+        ctx,
+        Handle::cast::<Addr<'a>>(statics::dolphin__mcc__mcc::m_szInitCode(ctx).at(0)),
+        (32_i32 as u32),
+    );
+    return fns::HIOWrite(
+        ctx,
+        (0x600_i32 as u32),
+        Handle::cast::<Addr<'a>>(statics::dolphin__mcc__mcc::m_szInitCode(ctx).at(0)),
+        32_i32,
+    );
+    #[allow(unreachable_code)]
+    return 0;
+}
+
+fn inl_NotifyInitDone_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    return statics::dolphin__mcc__mcc::NotifyCompulsorily(ctx, 0_i32, (2_i32 as u32), 0_u32);
+}
+
+fn inl_GetUsbAdapterMode_unfused<'a>(ctx: &'a Ctx) -> u8 {
+    if fns::HIORead(
+        ctx,
+        (0x680_i32 as u32),
+        Handle::cast::<Addr<'a>>(statics::dolphin__mcc__mcc::m_szAdapterMode(ctx).at(0)),
+        32_i32,
+    ) != 0_i32
+    {
+        fns::DCInvalidateRange(
+            ctx,
+            Handle::cast::<Addr<'a>>(statics::dolphin__mcc__mcc::m_szAdapterMode(ctx).at(0)),
+            (32_i32 as u32),
+        );
+        return (statics::dolphin__mcc__mcc::m_szAdapterMode(ctx)
+            .at(0_i32)
+            .get() as u8);
+    }
+    return (0_i32 as u8);
+}
+
+fn inl_SetUsbAdapterMode_unfused<'a>(ctx: &'a Ctx, mode: u8) -> i32 {
+    let mut mode = mode;
+    let mut result: i32 = 0_i32;
+    if fns::HIORead(
+        ctx,
+        (0x680_i32 as u32),
+        Handle::cast::<Addr<'a>>(statics::dolphin__mcc__mcc::m_szAdapterMode(ctx).at(0)),
+        32_i32,
+    ) != 0_i32
+    {
+        fns::DCInvalidateRange(
+            ctx,
+            Handle::cast::<Addr<'a>>(statics::dolphin__mcc__mcc::m_szAdapterMode(ctx).at(0)),
+            (32_i32 as u32),
+        );
+        statics::dolphin__mcc__mcc::m_szAdapterMode(ctx)
+            .at(0_i32)
+            .set((mode as i8));
+        fns::DCFlushRange(
+            ctx,
+            Handle::cast::<Addr<'a>>(statics::dolphin__mcc__mcc::m_szAdapterMode(ctx).at(0)),
+            (32_i32 as u32),
+        );
+        if fns::HIOWrite(
+            ctx,
+            (0x680_i32 as u32),
+            Handle::cast::<Addr<'a>>(statics::dolphin__mcc__mcc::m_szAdapterMode(ctx).at(0)),
+            32_i32,
+        ) != 0_i32
+        {
+            result = 1_i32;
+        }
+    }
+    return result;
+}
+
+fn inl_NotifyInit_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    return statics::dolphin__mcc__mcc::NotifyCompulsorily(ctx, 0_i32, (1_i32 as u32), 0_u32);
+}
+
+fn inl_AsyncResourceClearState_unfused<'a>(ctx: &'a Ctx) {
+    statics::dolphin__mcc__mcc::gAsyncResourceStatus(ctx).set((0_i32 as u16));
+}
+
 fn inl_AsyncResourceGetStat_unfused<'a>(ctx: &'a Ctx) -> u16 {
     return (((statics::dolphin__mcc__mcc::gAsyncResourceStatus(ctx).get() as i32) & 0xf000_i32)
         as u16);
+}
+
+fn inl_AsyncResourceIsBusy_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    return ((inl_AsyncResourceGetStat_unfused(ctx) as i32) & 0x1000_i32);
+}
+
+fn inl_AsyncResourceStateBusy_unfused<'a>(ctx: &'a Ctx, channel: u8, mode: u16) {
+    let mut channel = channel;
+    let mut mode = mode;
+    inl_AsyncResourceClearState_unfused(ctx);
+    inl_AsyncResourceSetState_unfused(ctx, (0x1000_i32 as u16));
+    statics::dolphin__mcc__mcc::gAsyncResourceStatus(ctx).set(
+        (((statics::dolphin__mcc__mcc::gAsyncResourceStatus(ctx).get() as i32) | (channel as i32))
+            as u16),
+    );
+    statics::dolphin__mcc__mcc::gAsyncResourceStatus(ctx).set(
+        (((statics::dolphin__mcc__mcc::gAsyncResourceStatus(ctx).get() as i32) | (mode as i32))
+            as u16),
+    );
+}
+
+fn inl_NotifyChannelEvent_unfused<'a>(ctx: &'a Ctx, chID: i32, notify: u32) -> i32 {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, i32, 2> = frame_at(ctx, &__frame, 0x0);
+    let mut chID = chID;
+    let mut notify = notify;
+    if statics::dolphin__mcc__mcc::LoadChannelInfo(
+        ctx,
+        statics::dolphin__mcc__mcc::gChannelInfo(ctx).get(0),
+    ) == 0_i32
+    {
+        inl_mccDebugPrint_unfused(ctx, null(ctx));
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((11_i32 as u8));
+    } else if inl_IsChannelOpened_unfused(ctx, chID) == 0_i32 {
+        inl_mccDebugPrint_unfused(ctx, null(ctx));
+        statics::dolphin__mcc__mcc::gLastError(ctx).set((18_i32 as u8));
+    } else if statics::dolphin__mcc__mcc::NotifyCompulsorily(ctx, chID, notify, 10_u32) != 0_i32 {
+        return 1_i32;
+    }
+    return 0_i32;
 }
 
 fn inl_AsyncResourceGetMode_unfused<'a>(ctx: &'a Ctx) -> u16 {
@@ -491,10 +1976,6 @@ fn inl_AsyncResourceGetMode_unfused<'a>(ctx: &'a Ctx) -> u16 {
 
 fn inl_AsyncResourceGetChannel_unfused<'a>(ctx: &'a Ctx) -> u8 {
     return (statics::dolphin__mcc__mcc::gAsyncResourceStatus(ctx).get() as u8);
-}
-
-fn inl_AsyncResourceClearState_unfused<'a>(ctx: &'a Ctx) {
-    statics::dolphin__mcc__mcc::gAsyncResourceStatus(ctx).set((0_i32 as u16));
 }
 
 /// Registers this unit's ports.
@@ -532,6 +2013,14 @@ pub fn register(ctx: &Ctx) {
         Returns::Int,
     );
     ctx.register_port(
+        0x8032ca60,
+        |ctx| {
+            let (a0,): (MCC_ChannelInfo<'_>,) = Args::take_all(ctx);
+            Ret::put(LoadChannelInfo(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
         0x8032cb7c,
         |ctx| {
             let (a0,): (MCC_ChannelInfo<'_>,) = Args::take_all(ctx);
@@ -564,6 +2053,29 @@ pub fn register(ctx: &Ctx) {
         Returns::Int,
     );
     ctx.register_port(
+        0x8032ce40,
+        |ctx| {
+            let (a0, a1, a2): (i32, u32, u32) = Args::take_all(ctx);
+            Ret::put(NotifyCompulsorily(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8032cf48,
+        |ctx| {
+            let (a0, a1, a2): (i32, Val<'_, i32>, i32) = Args::take_all(ctx);
+            Ret::put(WaitAMinute(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8032cfd8,
+        |ctx| {
+            Ret::put(MailboxCheck(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x8032d260,
         |ctx| {
             Ret::put(MCCExiCallback(ctx), ctx);
@@ -585,10 +2097,119 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x8032d2b8,
+        |ctx| {
+            let (a0,): (u8,) = Args::take_all(ctx);
+            Ret::put(mccInitializeCheck(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8032d5e8,
+        |ctx| {
+            let (a0, a1, a2): (i32, u8, FnPtr<'_>) = Args::take_all(ctx);
+            Ret::put(MCCInit(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8032d88c,
+        |ctx| {
+            Ret::put(MCCExit(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x8032d954,
         |ctx| {
             let (a0,): (FnPtr<'_>,) = Args::take_all(ctx);
             Ret::put(MCCEnumDevices(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8032d9ac,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(MCCGetFreeBlocks(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8032da3c,
+        |ctx| {
+            Ret::put(MCCGetLastError(ctx), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8032da44,
+        |ctx| {
+            let (a0, a1): (i32, MCC_Info<'_>) = Args::take_all(ctx);
+            Ret::put(MCCGetChannelInfo(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8032db14,
+        |ctx| {
+            let (a0, a1): (i32, Val<'_, i32>) = Args::take_all(ctx);
+            Ret::put(MCCGetConnectionStatus(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8032dbd4,
+        |ctx| {
+            let (a0, a1): (i32, u32) = Args::take_all(ctx);
+            Ret::put(MCCNotify(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8032dcb0,
+        |ctx| {
+            let (a0, a1): (i32, u32) = Args::take_all(ctx);
+            Ret::put(MCCSetChannelEventMask(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8032ddc0,
+        |ctx| {
+            let (a0, a1, a2): (i32, u8, FnPtr<'_>) = Args::take_all(ctx);
+            Ret::put(MCCOpen(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8032dfdc,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(MCCClose(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8032e1b8,
+        |ctx| {
+            let (a0, a1, a2, a3, a4): (i32, u32, Addr<'_>, i32, i32) = Args::take_all(ctx);
+            Ret::put(MCCRead(ctx, a0, a1, a2, a3, a4), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8032e504,
+        |ctx| {
+            let (a0, a1, a2, a3, a4): (i32, u32, Addr<'_>, i32, i32) = Args::take_all(ctx);
+            Ret::put(MCCWrite(ctx, a0, a1, a2, a3, a4), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8032e868,
+        |ctx| {
+            Ret::put(MCCCheckAsyncDone(ctx), ctx);
         },
         Returns::Int,
     );

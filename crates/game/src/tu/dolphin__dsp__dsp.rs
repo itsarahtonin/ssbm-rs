@@ -58,6 +58,50 @@ pub fn DSPSendMailToDSP<'a>(ctx: &'a Ctx, mail: u32) {
         .set(((mail & (0xffff_i32 as u32)) as u16));
 }
 
+pub fn DSPInit<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x10);
+    let mut old: i32 = 0;
+    let mut tmp: u16 = 0;
+    fns::__DSP_debug_printf(
+        ctx,
+        cstr(ctx, 0x80400c08),
+        &[
+            VarArg::Int(Handle::addr(cstr(ctx, 0x80400c28))),
+            VarArg::Int(Handle::addr(cstr(ctx, 0x80400c34))),
+        ],
+    );
+    if statics::dolphin__dsp__dsp::__DSP_init_flag(ctx).get() == 1_i32 {
+        return;
+    }
+    old = fns::OSDisableInterrupts(ctx);
+    let _ = fns::__OSSetInterruptHandler(ctx, (7_i32 as i16), fnptr(ctx, 0x8033625c));
+    let _ = fns::__OSUnmaskInterrupts(ctx, (shr_u32(0x80000000_u32, ((7_i32) as u32))));
+    tmp = (Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 5_i32)).get();
+    tmp = ((((tmp as i32) & (!168_i32)) | 0x800_i32) as u16);
+    (Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 5_i32)).set(tmp);
+    tmp = (Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 5_i32)).get();
+    (Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 5_i32)).set({
+        let __t1 = (((tmp as i32) & (!172_i32)) as u16);
+        tmp = __t1;
+        __t1
+    });
+    fns::__DSP_first_task(ctx).set({
+        let __t4 = {
+            let __t3 = {
+                let __t2 = null::<STRUCT_DSP_TASK<'a>>(ctx);
+                fns::__DSP_tmp_task(ctx).set(__t2);
+                __t2
+            };
+            fns::__DSP_curr_task(ctx).set(__t3);
+            __t3
+        };
+        fns::__DSP_last_task(ctx).set(__t4);
+        __t4
+    });
+    statics::dolphin__dsp__dsp::__DSP_init_flag(ctx).set(1_i32);
+    let _ = fns::OSRestoreInterrupts(ctx, old);
+}
+
 pub fn DSPCheckInit<'a>(ctx: &'a Ctx) -> i32 {
     return statics::dolphin__dsp__dsp::__DSP_init_flag(ctx).get();
 }
@@ -139,6 +183,13 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (u32,) = Args::take_all(ctx);
             Ret::put(DSPSendMailToDSP(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80336014,
+        |ctx| {
+            Ret::put(DSPInit(ctx), ctx);
         },
         Returns::Nothing,
     );

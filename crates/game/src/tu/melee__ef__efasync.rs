@@ -26,6 +26,3555 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn efAsync_Dispatch<'a>(
+    ctx: &'a Ctx,
+    gfx_id: i32,
+    gobj: HSD_GObj<'a>,
+    vlist: __va_list_t<'a>,
+) -> Addr<'a> {
+    let __frame = ctx.stack_frame(0x218);
+    let translate: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let state: efAsync_Dispatch_state<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x1c);
+    let mut gfx_id = gfx_id;
+    let mut gobj = gobj;
+    let mut vlist = vlist;
+    let mut generator: HSD_Generator<'a> = null(ctx);
+    let mut psAppSRT: HSD_psAppSRT<'a> = null(ctx);
+    let mut effect: EF_Effect<'a> = null(ctx);
+    let mut va_pos: Addr<'a> = null(ctx);
+    let mut va_jobj: Addr<'a> = null(ctx);
+    let mut ret_obj: Addr<'a> = null(ctx);
+    let mut rot_y: f64 = 0.0;
+    let mut f32_2: f64 = 0.0;
+    let mut f32_1: f64 = 0.0;
+    let mut u32_2: i32 = 0;
+    let mut u32_1: i32 = 0;
+    let mut color: u32 = 0;
+    let mut jobj_2: HSD_JObj<'a> = null(ctx);
+    let mut jobj_1: HSD_JObj<'a> = null(ctx);
+    let mut jobj_3: HSD_JObj<'a> = null(ctx);
+    let mut va_vec3: Vec<'a> = null(ctx);
+    let mut count: i32 = 0;
+    let mut result: HSD_Generator<'a> = null(ctx);
+    let mut result_2: HSD_Generator<'a> = null(ctx);
+    let mut result_3: HSD_Generator<'a> = null(ctx);
+    let mut child: HSD_JObj<'a> = null(ctx);
+    let mut result_4: HSD_Generator<'a> = null(ctx);
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut node: EF_Effect<'a> = null(ctx);
+    let mut i: i32 = 0;
+    let mut setter_jobj: HSD_JObj<'a> = null(ctx);
+    let mut result_5: HSD_Generator<'a> = null(ctx);
+    let mut result_6: HSD_Generator<'a> = null(ctx);
+    let mut result_7: HSD_Generator<'a> = null(ctx);
+    let mut result_8: HSD_Generator<'a> = null(ctx);
+    let mut source_jobj: HSD_JObj<'a> = null(ctx);
+    let mut result_9: HSD_Generator<'a> = null(ctx);
+    let mut result_10: HSD_Generator<'a> = null(ctx);
+    let mut result_11: HSD_Generator<'a> = null(ctx);
+    let mut result_12: HSD_Generator<'a> = null(ctx);
+    let mut result_13: HSD_Generator<'a> = null(ctx);
+    let mut result_14: HSD_Generator<'a> = null(ctx);
+    let mut result_15: HSD_Generator<'a> = null(ctx);
+    let mut result_16: HSD_Generator<'a> = null(ctx);
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                ret_obj = null::<Addr<'a>>(ctx);
+                __state = match gfx_id {
+                    0x3e8_i32 => 1,
+                    0x3e9_i32 => 2,
+                    0x3ea_i32 => 3,
+                    0x3eb_i32 => 4,
+                    0x3ec_i32 => 5,
+                    0x3ed_i32 => 6,
+                    0x3ee_i32 => 7,
+                    0x3ef_i32 => 8,
+                    0x3f0_i32 => 8,
+                    0x3f1_i32 => 9,
+                    0x3f2_i32 => 9,
+                    0x3f3_i32 => 10,
+                    0x3f4_i32 => 11,
+                    0x3f5_i32 => 12,
+                    0x3f6_i32 => 13,
+                    0x3f7_i32 => 14,
+                    0x3f8_i32 => 15,
+                    0x3f9_i32 => 16,
+                    0x3fa_i32 => 17,
+                    0x3fb_i32 => 18,
+                    0x3fc_i32 => 19,
+                    0x3fd_i32 => 20,
+                    0x3fe_i32 => 21,
+                    0x3ff_i32 => 22,
+                    0x400_i32 => 23,
+                    0x401_i32 => 23,
+                    0x402_i32 => 24,
+                    0x403_i32 => 25,
+                    0x404_i32 => 26,
+                    0x405_i32 => 27,
+                    0x406_i32 => 28,
+                    0x407_i32 => 29,
+                    0x408_i32 => 30,
+                    0x409_i32 => 31,
+                    0x40a_i32 => 32,
+                    0x40b_i32 => 33,
+                    0x40c_i32 => 34,
+                    0x40d_i32 => 35,
+                    0x40e_i32 => 36,
+                    0x40f_i32 => 37,
+                    0x410_i32 => 38,
+                    0x411_i32 => 39,
+                    0x412_i32 => 40,
+                    0x413_i32 => 41,
+                    0x414_i32 => 42,
+                    0x415_i32 => 43,
+                    0x416_i32 => 44,
+                    0x417_i32 => 45,
+                    0x418_i32 => 46,
+                    0x419_i32 => 47,
+                    0x41a_i32 => 48,
+                    0x41b_i32 => 49,
+                    0x41c_i32 => 50,
+                    0x41d_i32 => 51,
+                    0x41e_i32 => 52,
+                    0x41f_i32 => 53,
+                    0x420_i32 => 54,
+                    0x421_i32 => 55,
+                    0x422_i32 => 56,
+                    0x423_i32 => 57,
+                    0x424_i32 => 58,
+                    0x425_i32 => 59,
+                    0x426_i32 => 60,
+                    0x427_i32 => 61,
+                    0x428_i32 => 62,
+                    0x429_i32 => 63,
+                    0x42a_i32 => 64,
+                    0x42b_i32 => 65,
+                    0x42c_i32 => 66,
+                    0x42d_i32 => 67,
+                    0x42e_i32 => 68,
+                    0x42f_i32 => 69,
+                    0x430_i32 => 70,
+                    0x431_i32 => 71,
+                    0x432_i32 => 72,
+                    0x433_i32 => 73,
+                    0x434_i32 => 74,
+                    0x435_i32 => 75,
+                    0x436_i32 => 76,
+                    0x437_i32 => 77,
+                    0x438_i32 => 78,
+                    0x439_i32 => 79,
+                    0x43a_i32 => 80,
+                    0x43b_i32 => 81,
+                    0x43c_i32 => 82,
+                    0x43d_i32 => 83,
+                    0x43e_i32 => 84,
+                    0x43f_i32 => 85,
+                    0x440_i32 => 86,
+                    0x441_i32 => 87,
+                    0x442_i32 => 88,
+                    0x443_i32 => 89,
+                    0x444_i32 => 90,
+                    0x445_i32 => 91,
+                    0x446_i32 => 92,
+                    0x447_i32 => 93,
+                    0x448_i32 => 94,
+                    0x449_i32 => 95,
+                    0x44a_i32 => 96,
+                    0x44b_i32 => 97,
+                    0x44c_i32 => 98,
+                    0x44d_i32 => 99,
+                    0x44e_i32 => 100,
+                    0x457_i32 => 100,
+                    0x44f_i32 => 101,
+                    0x458_i32 => 101,
+                    0x450_i32 => 102,
+                    0x459_i32 => 102,
+                    0x451_i32 => 103,
+                    0x45a_i32 => 103,
+                    0x453_i32 => 104,
+                    0x454_i32 => 105,
+                    0x455_i32 => 106,
+                    0x456_i32 => 107,
+                    0x452_i32 => 108,
+                    0x45b_i32 => 109,
+                    0x45c_i32 => 110,
+                    0x45d_i32 => 111,
+                    0x45e_i32 => 112,
+                    0x45f_i32 => 113,
+                    0x460_i32 => 114,
+                    0x461_i32 => 115,
+                    0x462_i32 => 116,
+                    0x463_i32 => 117,
+                    0x464_i32 => 118,
+                    0x465_i32 => 119,
+                    0x466_i32 => 120,
+                    0x467_i32 => 121,
+                    0x468_i32 => 122,
+                    0x469_i32 => 123,
+                    0x46a_i32 => 124,
+                    0x46b_i32 => 125,
+                    0x46c_i32 => 126,
+                    0x46d_i32 => 127,
+                    0x46e_i32 => 128,
+                    0x46f_i32 => 129,
+                    0x470_i32 => 130,
+                    0x471_i32 => 131,
+                    0x472_i32 => 132,
+                    0x473_i32 => 133,
+                    0x477_i32 => 134,
+                    0x474_i32 => 135,
+                    0x475_i32 => 136,
+                    0x476_i32 => 137,
+                    _ => 138,
+                };
+            }
+            1 => {
+                __state = if fns::HSD_Randi(ctx, 8_i32) == 0_i32 {
+                    140
+                } else {
+                    142
+                };
+            }
+            2 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    12_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            3 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    20_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            4 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Pos(
+                    ctx,
+                    (7_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 156 } else { 157 };
+            }
+            5 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Pos(
+                    ctx,
+                    (8_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 160 } else { 161 };
+            }
+            6 => {
+                va_vec3 =
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                f32_1 = (va_vec3).x();
+                Handle::copy_from(translate, (va_vec3));
+                ret_obj =
+                    Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(ctx, 80_i32, translate));
+                __state = if !Handle::is_null(ret_obj) { 164 } else { 165 };
+            }
+            7 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Pos(
+                    ctx,
+                    (39_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 175 } else { 176 };
+            }
+            8 => {
+                va_vec3 =
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                Handle::copy_from(translate, (va_vec3));
+                __state = if gfx_id == 0x3f0_i32 { 179 } else { 181 };
+            }
+            9 => {
+                va_vec3 =
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                Handle::copy_from(translate, (va_vec3));
+                __state = if gfx_id == 0x3f2_i32 { 184 } else { 186 };
+            }
+            10 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    11_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            11 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    72_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            12 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Pos(
+                    ctx,
+                    (16_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 191 } else { 192 };
+            }
+            13 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Pos(
+                    ctx,
+                    (17_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 195 } else { 196 };
+            }
+            14 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Pos(
+                    ctx,
+                    (18_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 199 } else { 200 };
+            }
+            15 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Pos(
+                    ctx,
+                    (19_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 203 } else { 204 };
+            }
+            16 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Pos(
+                    ctx,
+                    (20_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 207 } else { 208 };
+            }
+            17 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Pos(
+                    ctx,
+                    (21_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 211 } else { 212 };
+            }
+            18 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Pos(
+                    ctx,
+                    (22_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 215 } else { 216 };
+            }
+            19 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Pos(
+                    ctx,
+                    (23_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 219 } else { 220 };
+            }
+            20 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Pos(
+                    ctx,
+                    (3_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 223 } else { 224 };
+            }
+            21 => {
+                va_vec3 =
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                Handle::copy_from(translate, (va_vec3));
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_Translate_FacingDir(
+                    ctx, 0x107_i32, translate, f32_1,
+                ));
+                __state = 138;
+            }
+            22 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Pos(
+                    ctx,
+                    (5_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 228 } else { 229 };
+            }
+            23 => {
+                va_vec3 =
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                Handle::copy_from(translate, (va_vec3));
+                __state = if gfx_id == 0x401_i32 { 232 } else { 234 };
+            }
+            24 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::hsd_8039EFAC(
+                    ctx,
+                    0_i32,
+                    0_i32,
+                    89_i32,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = 138;
+            }
+            25 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::hsd_8039EFAC(
+                    ctx,
+                    0_i32,
+                    0_i32,
+                    94_i32,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = 138;
+            }
+            26 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Pos(
+                    ctx,
+                    (24_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 239 } else { 240 };
+            }
+            27 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    44_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            28 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Pos(
+                    ctx,
+                    (4_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 244 } else { 245 };
+            }
+            29 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    60_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            30 => {
+                result = fns::efLib_CreateGenerator_AddAppSRT(ctx, 62_i32);
+                __state = if !Handle::is_null(result) { 249 } else { 250 };
+            }
+            31 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::hsd_8039EFAC(
+                    ctx,
+                    0_i32,
+                    0_i32,
+                    226_i32,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = 138;
+            }
+            32 => {
+                result_2 = fns::efLib_CreateGenerator_AddAppSRT(ctx, 0x241_i32);
+                __state = if !Handle::is_null(result_2) { 254 } else { 255 };
+            }
+            33 => {
+                result_3 = fns::efLib_CreateGenerator_AddAppSRT(ctx, 0x242_i32);
+                __state = if !Handle::is_null(result_3) { 258 } else { 259 };
+            }
+            34 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    25_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            35 => {
+                state.set_generator(fns::efLib_CreateGenerator_AddAppSRT(ctx, 25_i32));
+                __state = if !Handle::is_null(state.generator()) {
+                    263
+                } else {
+                    264
+                };
+            }
+            36 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    67_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            37 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    227_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            38 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    0x22a_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            39 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    75_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            40 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::hsd_8039EFAC(
+                    ctx,
+                    0_i32,
+                    0_i32,
+                    19_i32,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = 138;
+            }
+            41 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::hsd_8039EFAC(
+                    ctx,
+                    0_i32,
+                    0_i32,
+                    55_i32,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = 138;
+            }
+            42 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::hsd_8039EFAC(
+                    ctx,
+                    0_i32,
+                    0_i32,
+                    225_i32,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = 138;
+            }
+            43 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_AttachChild(
+                    ctx,
+                    (37_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 274 } else { 275 };
+            }
+            44 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    0x196_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            45 => {
+                fns::efLib_LoadKind(ctx).set((1_i32 as u32));
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(
+                    ctx,
+                    (11_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 279 } else { 280 };
+            }
+            46 => {
+                fns::efLib_LoadKind(ctx).set((1_i32 as u32));
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(
+                    ctx,
+                    (12_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 291 } else { 292 };
+            }
+            47 => {
+                fns::efLib_LoadKind(ctx).set((1_i32 as u32));
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(
+                    ctx,
+                    (13_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 303 } else { 304 };
+            }
+            48 => {
+                fns::efLib_LoadKind(ctx).set((1_i32 as u32));
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(
+                    ctx,
+                    (14_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 311 } else { 312 };
+            }
+            49 => {
+                fns::efLib_LoadKind(ctx).set((1_i32 as u32));
+                result_4 = fns::efLib_CreateGenerator_AddAppSRT(ctx, 49_i32);
+                __state = if !Handle::is_null(result_4) { 323 } else { 324 };
+            }
+            50 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    93_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            51 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Pos(
+                    ctx,
+                    (15_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 328 } else { 329 };
+            }
+            52 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_AppSRT_SetScale(
+                    ctx, 85_i32, vlist,
+                ));
+                __state = 138;
+            }
+            53 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    92_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            54 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    0x159_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            55 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    63_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            56 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::hsd_8039EFAC(
+                    ctx,
+                    0_i32,
+                    0_i32,
+                    91_i32,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = 138;
+            }
+            57 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(
+                    ctx,
+                    (1_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 337 } else { 338 };
+            }
+            58 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(
+                    ctx,
+                    (2_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 341 } else { 342 };
+            }
+            59 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    126_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            60 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    127_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            61 => {
+                va_vec3 =
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                Handle::copy_from(translate, (va_vec3));
+                i = 0_i32;
+                __state = 347;
+            }
+            62 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_AppSRT_SetScale(
+                    ctx, 202_i32, vlist,
+                ));
+                __state = 138;
+            }
+            63 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_AppSRT_SetScale(
+                    ctx, 206_i32, vlist,
+                ));
+                __state = 138;
+            }
+            64 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_AppSRT_SetScale(
+                    ctx, 207_i32, vlist,
+                ));
+                __state = 138;
+            }
+            65 => {
+                fns::efLib_LoadKind(ctx).set((1_i32 as u32));
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Pos(
+                    ctx,
+                    (25_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 364 } else { 365 };
+            }
+            66 => {
+                fns::efLib_LoadKind(ctx).set((1_i32 as u32));
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Pos(
+                    ctx,
+                    (26_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 372 } else { 373 };
+            }
+            67 => {
+                fns::efLib_LoadKind(ctx).set((1_i32 as u32));
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    0x121_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            68 => {
+                va_vec3 =
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                Handle::copy_from(translate, (va_vec3));
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_Translate_FacingDir(
+                    ctx, 0x13c_i32, translate, f32_1,
+                ));
+                __state = 138;
+            }
+            69 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Pos(
+                    ctx,
+                    (32_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 378 } else { 379 };
+            }
+            70 => {
+                va_vec3 =
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                Handle::copy_from(translate, (va_vec3));
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_Translate_FacingDir(
+                    ctx, 0x140_i32, translate, f32_1,
+                ));
+                __state = 138;
+            }
+            71 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Pos(
+                    ctx,
+                    (33_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 387 } else { 388 };
+            }
+            72 => {
+                result_5 = fns::efLib_CreateGenerator_AddAppSRT(ctx, 0x145_i32);
+                __state = if !Handle::is_null(result_5) { 395 } else { 396 };
+            }
+            73 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::hsd_8039EFAC(
+                    ctx,
+                    0_i32,
+                    0_i32,
+                    0x115_i32,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = 138;
+            }
+            74 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    0x14d_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            75 => {
+                u32_1 = 0x14e_i32;
+                __state = 401;
+            }
+            76 => {
+                u32_1 = 0x153_i32;
+                __state = 401;
+            }
+            77 => {
+                u32_1 = 0x156_i32;
+                __state = 401;
+            }
+            78 => {
+                __state = 409;
+            }
+            79 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(
+                    ctx,
+                    (35_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 417 } else { 418 };
+            }
+            80 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    0x193_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            81 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    0x192_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            82 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    0x1a0_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            83 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::hsd_8039EFAC(
+                    ctx,
+                    0_i32,
+                    0_i32,
+                    0x1af_i32,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = 138;
+            }
+            84 => {
+                fns::efLib_LoadKind(ctx).set((1_i32 as u32));
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(
+                    ctx,
+                    (36_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 425 } else { 426 };
+            }
+            85 => {
+                fns::efLib_LoadKind(ctx).set((1_i32 as u32));
+                result_7 = fns::efLib_CreateGenerator_AddAppSRT(ctx, 202_i32);
+                __state = if !Handle::is_null(result_7) { 429 } else { 430 };
+            }
+            86 => {
+                va_vec3 =
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                Handle::copy_from(translate, (va_vec3));
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_Translate_FacingDir(
+                    ctx, 0x1d8_i32, translate, f32_1,
+                ));
+                __state = 138;
+            }
+            87 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    0x1fb_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            88 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    0x1dc_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            89 => {
+                result_8 = fns::efLib_CreateGenerator_AddAppSRT(ctx, 0x1f1_i32);
+                __state = if !Handle::is_null(result_8) { 436 } else { 437 };
+            }
+            90 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    0x1ff_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            91 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    0x209_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            92 => {
+                source_jobj =
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get());
+                va_vec3 =
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_AppSRT_SetPos(
+                    ctx,
+                    27_i32,
+                    gobj,
+                    source_jobj,
+                    va_vec3,
+                ));
+                __state = if !Handle::is_null(ret_obj) { 442 } else { 443 };
+            }
+            93 => {
+                fns::efLib_LoadKind(ctx).set((1_i32 as u32));
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Pos(
+                    ctx,
+                    (40_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 446 } else { 447 };
+            }
+            94 => {
+                va_jobj =
+                    ((Handle::cast::<Ptr<'a, Addr<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                va_pos =
+                    ((Handle::cast::<Ptr<'a, Addr<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_AppSRT_SetPos(
+                    ctx,
+                    146_i32,
+                    gobj,
+                    Handle::cast::<HSD_JObj<'a>>(va_jobj),
+                    Handle::cast::<Vec<'a>>(va_pos),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 453 } else { 454 };
+            }
+            95 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(
+                    ctx,
+                    (38_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = 138;
+            }
+            96 => {
+                f32_2 = 0.5;
+                __state = 458;
+            }
+            97 => {
+                f32_2 = 1.0;
+                __state = 458;
+            }
+            98 => {
+                f32_2 = 2.0;
+                __state = 458;
+            }
+            99 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_AppSRT_SetScale(
+                    ctx, 72_i32, vlist,
+                ));
+                __state = 138;
+            }
+            100 => {
+                ret_obj = Handle::cast::<Addr<'a>>(
+                    fns::efLib_CreateGenerator_AppSRT_SetFacingDirScale(ctx, 218_i32, vlist),
+                );
+                __state = 138;
+            }
+            101 => {
+                ret_obj = Handle::cast::<Addr<'a>>(
+                    fns::efLib_CreateGenerator_AppSRT_SetFacingDirScale(ctx, 219_i32, vlist),
+                );
+                __state = 138;
+            }
+            102 => {
+                ret_obj = Handle::cast::<Addr<'a>>(
+                    fns::efLib_CreateGenerator_AppSRT_SetFacingDirScale(ctx, 220_i32, vlist),
+                );
+                __state = 138;
+            }
+            103 => {
+                ret_obj = Handle::cast::<Addr<'a>>(
+                    fns::efLib_CreateGenerator_AppSRT_SetFacingDirScale(ctx, 221_i32, vlist),
+                );
+                __state = 138;
+            }
+            104 => {
+                fns::lb_8000B1CC(
+                    ctx,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                    null::<Vec<'a>>(ctx),
+                    translate,
+                );
+                result_10 = fns::efLib_CreateGenerator_Translate_FacingDir(
+                    ctx,
+                    0x234_i32,
+                    translate,
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get())
+                    .get(),
+                );
+                __state = if !Handle::is_null(result_10) {
+                    470
+                } else {
+                    471
+                };
+            }
+            105 => {
+                fns::lb_8000B1CC(
+                    ctx,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                    null::<Vec<'a>>(ctx),
+                    translate,
+                );
+                result_11 = fns::efLib_CreateGenerator_Translate_FacingDir(
+                    ctx,
+                    0x235_i32,
+                    translate,
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get())
+                    .get(),
+                );
+                __state = if !Handle::is_null(result_11) {
+                    474
+                } else {
+                    475
+                };
+            }
+            106 => {
+                fns::lb_8000B1CC(
+                    ctx,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                    null::<Vec<'a>>(ctx),
+                    translate,
+                );
+                result_12 = fns::efLib_CreateGenerator_Translate_FacingDir(
+                    ctx,
+                    0x236_i32,
+                    translate,
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get())
+                    .get(),
+                );
+                __state = if !Handle::is_null(result_12) {
+                    478
+                } else {
+                    479
+                };
+            }
+            107 => {
+                fns::lb_8000B1CC(
+                    ctx,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                    null::<Vec<'a>>(ctx),
+                    translate,
+                );
+                result_13 = fns::efLib_CreateGenerator_Translate_FacingDir(
+                    ctx,
+                    0x23d_i32,
+                    translate,
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get())
+                    .get(),
+                );
+                __state = if !Handle::is_null(result_13) {
+                    482
+                } else {
+                    483
+                };
+            }
+            108 => {
+                result_14 = fns::efLib_CreateGenerator_AddAppSRT(ctx, 0x21e_i32);
+                __state = if !Handle::is_null(result_14) {
+                    486
+                } else {
+                    487
+                };
+            }
+            109 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_AppSRT_SetScale(
+                    ctx, 140_i32, vlist,
+                ));
+                __state = 138;
+            }
+            110 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_AppSRT_SetScale(
+                    ctx, 141_i32, vlist,
+                ));
+                __state = 138;
+            }
+            111 => {
+                result_15 = fns::efLib_CreateGenerator_AddAppSRT(ctx, 0x23f_i32);
+                __state = if !Handle::is_null(result_15) {
+                    492
+                } else {
+                    493
+                };
+            }
+            112 => {
+                result_16 = fns::efLib_CreateGenerator_AddAppSRT(ctx, 0x240_i32);
+                __state = if !Handle::is_null(result_16) {
+                    496
+                } else {
+                    497
+                };
+            }
+            113 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_AppSRT_SetScale(
+                    ctx, 142_i32, vlist,
+                ));
+                __state = 138;
+            }
+            114 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_AppSRT_SetScale(
+                    ctx, 153_i32, vlist,
+                ));
+                __state = 138;
+            }
+            115 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_AppSRT_SetScale(
+                    ctx, 149_i32, vlist,
+                ));
+                __state = 138;
+            }
+            116 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_AppSRT_SetScale(
+                    ctx, 0x219_i32, vlist,
+                ));
+                __state = 138;
+            }
+            117 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(
+                    ctx,
+                    (41_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 504 } else { 505 };
+            }
+            118 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(
+                    ctx,
+                    (42_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 508 } else { 509 };
+            }
+            119 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_AppSRT_SetScale(
+                    ctx, 136_i32, vlist,
+                ));
+                __state = 138;
+            }
+            120 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_AppSRT_SetScale(
+                    ctx, 137_i32, vlist,
+                ));
+                __state = 138;
+            }
+            121 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_AppSRT_SetScale(
+                    ctx, 138_i32, vlist,
+                ));
+                __state = 138;
+            }
+            122 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(
+                    ctx,
+                    (44_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 515 } else { 516 };
+            }
+            123 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(
+                    ctx,
+                    (46_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 519 } else { 520 };
+            }
+            124 => {
+                generator = fns::efLib_CreateGenerator_AddAppSRT(ctx, 172_i32);
+                __state = if !Handle::is_null(generator) {
+                    523
+                } else {
+                    524
+                };
+            }
+            125 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(
+                    ctx,
+                    (43_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 527 } else { 528 };
+            }
+            126 => {
+                generator = fns::efLib_CreateGenerator_AddAppSRT(ctx, 158_i32);
+                __state = if !Handle::is_null(generator) {
+                    531
+                } else {
+                    532
+                };
+            }
+            127 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(
+                    ctx,
+                    (45_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 535 } else { 536 };
+            }
+            128 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_AppSRT_SetScale(
+                    ctx, 174_i32, vlist,
+                ));
+                __state = 138;
+            }
+            129 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_AppSRT_SetScale(
+                    ctx, 160_i32, vlist,
+                ));
+                __state = 138;
+            }
+            130 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_AppSRT_SetScale(
+                    ctx, 0x21b_i32, vlist,
+                ));
+                __state = 138;
+            }
+            131 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_AppSRT_SetScale(
+                    ctx, 0x220_i32, vlist,
+                ));
+                __state = 138;
+            }
+            132 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_AppSRT_SetScale(
+                    ctx, 0x131_i32, vlist,
+                ));
+                __state = 138;
+            }
+            133 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::hsd_8039EFAC(
+                    ctx,
+                    0_i32,
+                    0_i32,
+                    130_i32,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = 138;
+            }
+            134 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    0x7918_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            135 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    247_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            136 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    252_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            137 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
+                    ctx,
+                    255_i32,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 138;
+            }
+            138 => {
+                __state = 549;
+            }
+            139 => {
+                unreachable!();
+            }
+            140 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Pos(
+                    ctx,
+                    (9_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 141;
+            }
+            141 => {
+                __state = if !Handle::is_null(ret_obj) { 144 } else { 145 };
+            }
+            142 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Pos(
+                    ctx,
+                    (10_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                ));
+                __state = 141;
+            }
+            143 => {
+                unreachable!();
+            }
+            144 => {
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_state_flags(
+                    ((((Handle::cast::<EF_Effect<'a>>(ret_obj)).state_flags() as i32) | 128_i32)
+                        as u8),
+                );
+                f32_1 = fp::fmadds(
+                    0.03999999910593033,
+                    (((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get())
+                    .get()),
+                    0.30000001192092896,
+                );
+                __state = if f32_1 < 0.30000001192092896 {
+                    147
+                } else {
+                    148
+                };
+            }
+            145 => {
+                __state = 138;
+            }
+            146 => {
+                unreachable!();
+            }
+            147 => {
+                f32_1 = 0.30000001192092896;
+                __state = 148;
+            }
+            148 => {
+                __state = if f32_1 > 1.5 { 150 } else { 151 };
+            }
+            149 => {
+                unreachable!();
+            }
+            150 => {
+                f32_1 = 1.5;
+                __state = 151;
+            }
+            151 => {
+                scale.set_x({
+                    let __t2 = {
+                        let __t1 = f32_1;
+                        scale.set_z(__t1);
+                        __t1
+                    };
+                    scale.set_y(__t2);
+                    __t2
+                });
+                inl_HSD_JObjSetScale(
+                    ctx,
+                    (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
+                        ctx,
+                        (Handle::cast::<EF_Effect<'a>>(ret_obj)).gobj(),
+                    ))),
+                    scale,
+                );
+                __state = 145;
+            }
+            152 => {
+                unreachable!();
+            }
+            153 => {
+                __state = 2;
+            }
+            154 => {
+                __state = 3;
+            }
+            155 => {
+                __state = 4;
+            }
+            156 => {
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_state_flags(
+                    ((((Handle::cast::<EF_Effect<'a>>(ret_obj)).state_flags() as i32) | 128_i32)
+                        as u8),
+                );
+                __state = 157;
+            }
+            157 => {
+                __state = 138;
+            }
+            158 => {
+                unreachable!();
+            }
+            159 => {
+                __state = 5;
+            }
+            160 => {
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_state_flags(
+                    ((((Handle::cast::<EF_Effect<'a>>(ret_obj)).state_flags() as i32) | 128_i32)
+                        as u8),
+                );
+                inl_efAsync_SetEffectRandomRotationZ(ctx, Handle::cast::<EF_Effect<'a>>(ret_obj));
+                __state = 161;
+            }
+            161 => {
+                __state = 138;
+            }
+            162 => {
+                unreachable!();
+            }
+            163 => {
+                __state = 6;
+            }
+            164 => {
+                generator = fns::efLib_CreateGenerator_AddAppSRT(ctx, 84_i32);
+                __state = if !Handle::is_null(generator) {
+                    167
+                } else {
+                    168
+                };
+            }
+            165 => {
+                __state = 138;
+            }
+            166 => {
+                unreachable!();
+            }
+            167 => {
+                psAppSRT = (generator).appsrt();
+                Handle::copy_from((psAppSRT).translate(), translate);
+                __state =
+                    if ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get())
+                    .get()
+                        < 0.0
+                    {
+                        170
+                    } else {
+                        172
+                    };
+            }
+            168 => {
+                __state = 165;
+            }
+            169 => {
+                unreachable!();
+            }
+            170 => {
+                rot_y = 0.0;
+                __state = 171;
+            }
+            171 => {
+                psAppSRT = (generator).appsrt();
+                (psAppSRT).rot().set_y(fp::frsp(rot_y));
+                __state = 168;
+            }
+            172 => {
+                rot_y = fp::fneg(3.141592653589793);
+                __state = 171;
+            }
+            173 => {
+                unreachable!();
+            }
+            174 => {
+                __state = 7;
+            }
+            175 => {
+                inl_efAsync_SetEffectRandomRotationZ(ctx, Handle::cast::<EF_Effect<'a>>(ret_obj));
+                __state = 176;
+            }
+            176 => {
+                __state = 138;
+            }
+            177 => {
+                unreachable!();
+            }
+            178 => {
+                __state = 8;
+            }
+            179 => {
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                __state = 180;
+            }
+            180 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_Translate_FacingDir(
+                    ctx, 66_i32, translate, f32_1,
+                ));
+                __state = 138;
+            }
+            181 => {
+                f32_1 = fp::fneg(
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get())
+                    .get(),
+                );
+                __state = 180;
+            }
+            182 => {
+                unreachable!();
+            }
+            183 => {
+                __state = 9;
+            }
+            184 => {
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                __state = 185;
+            }
+            185 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_Translate_FacingDir(
+                    ctx, 0x14b_i32, translate, f32_1,
+                ));
+                __state = 138;
+            }
+            186 => {
+                f32_1 = fp::fneg(
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get())
+                    .get(),
+                );
+                __state = 185;
+            }
+            187 => {
+                unreachable!();
+            }
+            188 => {
+                __state = 10;
+            }
+            189 => {
+                __state = 11;
+            }
+            190 => {
+                __state = 12;
+            }
+            191 => {
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_state_flags(
+                    ((((Handle::cast::<EF_Effect<'a>>(ret_obj)).state_flags() as i32) | 128_i32)
+                        as u8),
+                );
+                inl_efAsync_SetEffectFacingDir(
+                    ctx,
+                    Handle::cast::<EF_Effect<'a>>(ret_obj),
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get())
+                    .get(),
+                );
+                __state = 192;
+            }
+            192 => {
+                __state = 138;
+            }
+            193 => {
+                unreachable!();
+            }
+            194 => {
+                __state = 13;
+            }
+            195 => {
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_state_flags(
+                    ((((Handle::cast::<EF_Effect<'a>>(ret_obj)).state_flags() as i32) | 128_i32)
+                        as u8),
+                );
+                __state = 196;
+            }
+            196 => {
+                __state = 138;
+            }
+            197 => {
+                unreachable!();
+            }
+            198 => {
+                __state = 14;
+            }
+            199 => {
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_state_flags(
+                    ((((Handle::cast::<EF_Effect<'a>>(ret_obj)).state_flags() as i32) | 128_i32)
+                        as u8),
+                );
+                inl_efAsync_SetEffectFacingDir(
+                    ctx,
+                    Handle::cast::<EF_Effect<'a>>(ret_obj),
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get())
+                    .get(),
+                );
+                inl_efAsync_SetEffectRotationZFromPtr(
+                    ctx,
+                    Handle::cast::<EF_Effect<'a>>(ret_obj),
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                );
+                __state = 200;
+            }
+            200 => {
+                __state = 138;
+            }
+            201 => {
+                unreachable!();
+            }
+            202 => {
+                __state = 15;
+            }
+            203 => {
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_state_flags(
+                    ((((Handle::cast::<EF_Effect<'a>>(ret_obj)).state_flags() as i32) | 128_i32)
+                        as u8),
+                );
+                inl_efAsync_SetEffectFacingDir(
+                    ctx,
+                    Handle::cast::<EF_Effect<'a>>(ret_obj),
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get())
+                    .get(),
+                );
+                inl_efAsync_SetEffectRotationZFromPtr(
+                    ctx,
+                    Handle::cast::<EF_Effect<'a>>(ret_obj),
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                );
+                __state = 204;
+            }
+            204 => {
+                __state = 138;
+            }
+            205 => {
+                unreachable!();
+            }
+            206 => {
+                __state = 16;
+            }
+            207 => {
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_state_flags(
+                    ((((Handle::cast::<EF_Effect<'a>>(ret_obj)).state_flags() as i32) | 128_i32)
+                        as u8),
+                );
+                inl_efAsync_SetEffectFacingDir(
+                    ctx,
+                    Handle::cast::<EF_Effect<'a>>(ret_obj),
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get())
+                    .get(),
+                );
+                inl_efAsync_SetEffectRotationZFromPtr(
+                    ctx,
+                    Handle::cast::<EF_Effect<'a>>(ret_obj),
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                );
+                __state = 208;
+            }
+            208 => {
+                __state = 138;
+            }
+            209 => {
+                unreachable!();
+            }
+            210 => {
+                __state = 17;
+            }
+            211 => {
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_state_flags(
+                    ((((Handle::cast::<EF_Effect<'a>>(ret_obj)).state_flags() as i32) | 128_i32)
+                        as u8),
+                );
+                __state = 212;
+            }
+            212 => {
+                __state = 138;
+            }
+            213 => {
+                unreachable!();
+            }
+            214 => {
+                __state = 18;
+            }
+            215 => {
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_state_flags(
+                    ((((Handle::cast::<EF_Effect<'a>>(ret_obj)).state_flags() as i32) | 128_i32)
+                        as u8),
+                );
+                __state = 216;
+            }
+            216 => {
+                __state = 138;
+            }
+            217 => {
+                unreachable!();
+            }
+            218 => {
+                __state = 19;
+            }
+            219 => {
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_state_flags(
+                    ((((Handle::cast::<EF_Effect<'a>>(ret_obj)).state_flags() as i32) | 128_i32)
+                        as u8),
+                );
+                __state = 220;
+            }
+            220 => {
+                __state = 138;
+            }
+            221 => {
+                unreachable!();
+            }
+            222 => {
+                __state = 20;
+            }
+            223 => {
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_state_flags(
+                    ((((Handle::cast::<EF_Effect<'a>>(ret_obj)).state_flags() as i32) | 128_i32)
+                        as u8),
+                );
+                inl_efAsync_SetEffectFacingDir(
+                    ctx,
+                    Handle::cast::<EF_Effect<'a>>(ret_obj),
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get())
+                    .get(),
+                );
+                inl_efAsync_SetEffectRotationZFromPtr(
+                    ctx,
+                    Handle::cast::<EF_Effect<'a>>(ret_obj),
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                );
+                __state = 224;
+            }
+            224 => {
+                __state = 138;
+            }
+            225 => {
+                unreachable!();
+            }
+            226 => {
+                __state = 21;
+            }
+            227 => {
+                __state = 22;
+            }
+            228 => {
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_state_flags(
+                    ((((Handle::cast::<EF_Effect<'a>>(ret_obj)).state_flags() as i32) | 128_i32)
+                        as u8),
+                );
+                inl_efAsync_SetEffectFacingDir(
+                    ctx,
+                    Handle::cast::<EF_Effect<'a>>(ret_obj),
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get())
+                    .get(),
+                );
+                inl_efAsync_SetEffectRotationZFromPtr(
+                    ctx,
+                    Handle::cast::<EF_Effect<'a>>(ret_obj),
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                );
+                __state = 229;
+            }
+            229 => {
+                __state = 138;
+            }
+            230 => {
+                unreachable!();
+            }
+            231 => {
+                __state = 23;
+            }
+            232 => {
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                __state = 233;
+            }
+            233 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_Translate_FacingDir(
+                    ctx, 90_i32, translate, f32_1,
+                ));
+                __state = 138;
+            }
+            234 => {
+                f32_1 = fp::fneg(
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get())
+                    .get(),
+                );
+                __state = 233;
+            }
+            235 => {
+                unreachable!();
+            }
+            236 => {
+                __state = 24;
+            }
+            237 => {
+                __state = 25;
+            }
+            238 => {
+                __state = 26;
+            }
+            239 => {
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_state_flags(
+                    ((((Handle::cast::<EF_Effect<'a>>(ret_obj)).state_flags() as i32) | 128_i32)
+                        as u8),
+                );
+                inl_efAsync_SetEffectRotationZFromPtr(
+                    ctx,
+                    Handle::cast::<EF_Effect<'a>>(ret_obj),
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                );
+                __state = 240;
+            }
+            240 => {
+                __state = 138;
+            }
+            241 => {
+                unreachable!();
+            }
+            242 => {
+                __state = 27;
+            }
+            243 => {
+                __state = 28;
+            }
+            244 => {
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_state_flags(
+                    ((((Handle::cast::<EF_Effect<'a>>(ret_obj)).state_flags() as i32) | 128_i32)
+                        as u8),
+                );
+                inl_efAsync_SetEffectRotationZFromPtr(
+                    ctx,
+                    Handle::cast::<EF_Effect<'a>>(ret_obj),
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                );
+                __state = 245;
+            }
+            245 => {
+                __state = 138;
+            }
+            246 => {
+                unreachable!();
+            }
+            247 => {
+                __state = 29;
+            }
+            248 => {
+                __state = 30;
+            }
+            249 => {
+                va_vec3 =
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                psAppSRT = (result).appsrt();
+                Handle::copy_from((psAppSRT).translate(), (va_vec3));
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                ret_obj = Handle::cast::<Addr<'a>>(result);
+                ((result).appsrt()).rot().set_z(f32_1);
+                __state = 250;
+            }
+            250 => {
+                __state = 138;
+            }
+            251 => {
+                unreachable!();
+            }
+            252 => {
+                __state = 31;
+            }
+            253 => {
+                __state = 32;
+            }
+            254 => {
+                va_vec3 =
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                psAppSRT = (result_2).appsrt();
+                Handle::copy_from((psAppSRT).translate(), (va_vec3));
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                ret_obj = Handle::cast::<Addr<'a>>(result_2);
+                ((result_2).appsrt()).rot().set_z(f32_1);
+                __state = 255;
+            }
+            255 => {
+                __state = 138;
+            }
+            256 => {
+                unreachable!();
+            }
+            257 => {
+                __state = 33;
+            }
+            258 => {
+                va_vec3 =
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                psAppSRT = (result_3).appsrt();
+                Handle::copy_from((psAppSRT).translate(), (va_vec3));
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                ret_obj = Handle::cast::<Addr<'a>>(result_3);
+                ((result_3).appsrt()).rot().set_z(f32_1);
+                __state = 259;
+            }
+            259 => {
+                __state = 138;
+            }
+            260 => {
+                unreachable!();
+            }
+            261 => {
+                __state = 34;
+            }
+            262 => {
+                __state = 35;
+            }
+            263 => {
+                va_vec3 =
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                psAppSRT = (state.generator()).appsrt();
+                Handle::copy_from((psAppSRT).translate(), (va_vec3));
+                jobj_1 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, gobj)));
+                inl_HSD_JObjGetScale(ctx, jobj_1, scale);
+                ret_obj = Handle::cast::<Addr<'a>>(state.generator());
+                ((state.generator()).appsrt()).scale().set_x({
+                    let __t4 = {
+                        let __t3 = scale.y();
+                        ((state.generator()).appsrt()).scale().set_z(__t3);
+                        __t3
+                    };
+                    ((state.generator()).appsrt()).scale().set_y(__t4);
+                    __t4
+                });
+                __state = 264;
+            }
+            264 => {
+                __state = 138;
+            }
+            265 => {
+                unreachable!();
+            }
+            266 => {
+                __state = 36;
+            }
+            267 => {
+                __state = 37;
+            }
+            268 => {
+                __state = 38;
+            }
+            269 => {
+                __state = 39;
+            }
+            270 => {
+                __state = 40;
+            }
+            271 => {
+                __state = 41;
+            }
+            272 => {
+                __state = 42;
+            }
+            273 => {
+                __state = 43;
+            }
+            274 => {
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_state_flags(
+                    ((((Handle::cast::<EF_Effect<'a>>(ret_obj)).state_flags() as i32) | 128_i32)
+                        as u8),
+                );
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                scale.set_x({
+                    let __t6 = {
+                        let __t5 = f32_1;
+                        scale.set_z(__t5);
+                        __t5
+                    };
+                    scale.set_y(__t6);
+                    __t6
+                });
+                inl_efAsync_SetEffectScale(ctx, Handle::cast::<EF_Effect<'a>>(ret_obj), scale);
+                __state = 275;
+            }
+            275 => {
+                __state = 138;
+            }
+            276 => {
+                unreachable!();
+            }
+            277 => {
+                __state = 44;
+            }
+            278 => {
+                __state = 45;
+            }
+            279 => {
+                jobj_1 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
+                    ctx,
+                    (Handle::cast::<EF_Effect<'a>>(ret_obj)).gobj(),
+                )));
+                u32_1 = (((Handle::cast::<Val<'a, u32>>(fns::__va_arg(ctx, vlist, 1_u8))).get())
+                    as i32);
+                __state = if Handle::is_null(jobj_1) { 282 } else { 284 };
+            }
+            280 => {
+                __state = 138;
+            }
+            281 => {
+                unreachable!();
+            }
+            282 => {
+                jobj_2 = null::<HSD_JObj<'a>>(ctx);
+                __state = 283;
+            }
+            283 => {
+                __state = if ((u32_1 as u32).wrapping_add(0xffa00000_u32)) == 0x6060_u32 {
+                    286
+                } else {
+                    288
+                };
+            }
+            284 => {
+                jobj_2 = (jobj_1).child();
+                __state = 283;
+            }
+            285 => {
+                unreachable!();
+            }
+            286 => {
+                u32_2 = 0x808080_i32;
+                __state = 287;
+            }
+            287 => {
+                fns::efLib_SetTevKonstColor(ctx, jobj_2, 1_i32, (u32_2 as u32), (u32_1 as u32));
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_scale_flags(
+                    ((((Handle::cast::<EF_Effect<'a>>(ret_obj)).scale_flags() as i32) | 1_i32)
+                        as u8),
+                );
+                fns::efLib_SetParamGfxId(ctx, gobj, gfx_id);
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_update(fnptr(ctx, 0x8005fab8));
+                __state = 280;
+            }
+            288 => {
+                u32_2 = 0xffffff_i32;
+                __state = 287;
+            }
+            289 => {
+                unreachable!();
+            }
+            290 => {
+                __state = 46;
+            }
+            291 => {
+                jobj_1 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
+                    ctx,
+                    (Handle::cast::<EF_Effect<'a>>(ret_obj)).gobj(),
+                )));
+                u32_1 = (((Handle::cast::<Val<'a, u32>>(fns::__va_arg(ctx, vlist, 1_u8))).get())
+                    as i32);
+                __state = if Handle::is_null(jobj_1) { 294 } else { 296 };
+            }
+            292 => {
+                __state = 138;
+            }
+            293 => {
+                unreachable!();
+            }
+            294 => {
+                jobj_2 = null::<HSD_JObj<'a>>(ctx);
+                __state = 295;
+            }
+            295 => {
+                __state = if ((u32_1 as u32).wrapping_add(0xffa00000_u32)) == 0x6060_u32 {
+                    298
+                } else {
+                    300
+                };
+            }
+            296 => {
+                jobj_2 = (jobj_1).child();
+                __state = 295;
+            }
+            297 => {
+                unreachable!();
+            }
+            298 => {
+                u32_2 = 0x808080_i32;
+                __state = 299;
+            }
+            299 => {
+                fns::efLib_SetTevKonstColor(ctx, jobj_2, 0_i32, (u32_2 as u32), (u32_1 as u32));
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_scale_flags(
+                    ((((Handle::cast::<EF_Effect<'a>>(ret_obj)).scale_flags() as i32) | 1_i32)
+                        as u8),
+                );
+                fns::efLib_SetParamGfxId(ctx, gobj, gfx_id);
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_update(fnptr(ctx, 0x8005fab8));
+                __state = 292;
+            }
+            300 => {
+                u32_2 = 0xffffff_i32;
+                __state = 299;
+            }
+            301 => {
+                unreachable!();
+            }
+            302 => {
+                __state = 47;
+            }
+            303 => {
+                jobj_1 = inl_efAsync_GetEffectJObj(ctx, Handle::cast::<EF_Effect<'a>>(ret_obj));
+                u32_1 = (((Handle::cast::<Val<'a, u32>>(fns::__va_arg(ctx, vlist, 1_u8))).get())
+                    as i32);
+                __state = if ((u32_1 as u32).wrapping_add(0xffa00000_u32)) == 0x6060_u32 {
+                    306
+                } else {
+                    308
+                };
+            }
+            304 => {
+                __state = 138;
+            }
+            305 => {
+                unreachable!();
+            }
+            306 => {
+                color = (0x808080_i32 as u32);
+                __state = 307;
+            }
+            307 => {
+                u32_2 = (color as i32);
+                child = inl_HSD_JObjGetChild(ctx, jobj_1);
+                fns::efLib_SetTevKonstColor(ctx, child, 0_i32, (u32_2 as u32), (u32_1 as u32));
+                jobj_1 = inl_HSD_JObjGetNext(ctx, child);
+                fns::efLib_SetTevKonstColor(ctx, jobj_1, 0_i32, (u32_2 as u32), (u32_1 as u32));
+                jobj_1 = inl_HSD_JObjGetNext(ctx, jobj_1);
+                fns::efLib_SetTevKonstColor(ctx, jobj_1, 0_i32, (u32_2 as u32), (u32_1 as u32));
+                jobj_1 = inl_HSD_JObjGetNext(ctx, jobj_1);
+                fns::efLib_SetTevKonstColor(ctx, jobj_1, 0_i32, (u32_2 as u32), (u32_1 as u32));
+                jobj_1 = inl_HSD_JObjGetNext(ctx, jobj_1);
+                fns::efLib_SetTevKonstColor(ctx, jobj_1, 0_i32, (u32_2 as u32), (u32_1 as u32));
+                jobj_1 = inl_HSD_JObjGetNext(ctx, jobj_1);
+                fns::efLib_SetTevKonstColor(ctx, jobj_1, 0_i32, (u32_2 as u32), (u32_1 as u32));
+                jobj_1 = inl_HSD_JObjGetNext(ctx, jobj_1);
+                fns::efLib_SetTevKonstColor(ctx, jobj_1, 0_i32, (u32_2 as u32), (u32_1 as u32));
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_scale_flags(
+                    ((((Handle::cast::<EF_Effect<'a>>(ret_obj)).scale_flags() as i32) | 1_i32)
+                        as u8),
+                );
+                fns::efLib_SetParamGfxId(ctx, gobj, gfx_id);
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_update(fnptr(ctx, 0x8005fab8));
+                __state = 304;
+            }
+            308 => {
+                color = (0xffffff_i32 as u32);
+                __state = 307;
+            }
+            309 => {
+                unreachable!();
+            }
+            310 => {
+                __state = 48;
+            }
+            311 => {
+                jobj_1 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
+                    ctx,
+                    (Handle::cast::<EF_Effect<'a>>(ret_obj)).gobj(),
+                )));
+                u32_1 = (((Handle::cast::<Val<'a, u32>>(fns::__va_arg(ctx, vlist, 1_u8))).get())
+                    as i32);
+                __state = if Handle::is_null(jobj_1) { 314 } else { 316 };
+            }
+            312 => {
+                __state = 138;
+            }
+            313 => {
+                unreachable!();
+            }
+            314 => {
+                jobj_2 = null::<HSD_JObj<'a>>(ctx);
+                __state = 315;
+            }
+            315 => {
+                __state = if ((u32_1 as u32).wrapping_add(0xffa00000_u32)) == 0x6060_u32 {
+                    318
+                } else {
+                    320
+                };
+            }
+            316 => {
+                jobj_2 = (jobj_1).child();
+                __state = 315;
+            }
+            317 => {
+                unreachable!();
+            }
+            318 => {
+                u32_2 = 0x808080_i32;
+                __state = 319;
+            }
+            319 => {
+                fns::efLib_SetTevKonstColor(ctx, jobj_2, 0_i32, (u32_2 as u32), (u32_1 as u32));
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_scale_flags(
+                    ((((Handle::cast::<EF_Effect<'a>>(ret_obj)).scale_flags() as i32) | 1_i32)
+                        as u8),
+                );
+                fns::efLib_SetParamGfxId(ctx, gobj, gfx_id);
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_update(fnptr(ctx, 0x8005fab8));
+                __state = 312;
+            }
+            320 => {
+                u32_2 = 0xffffff_i32;
+                __state = 319;
+            }
+            321 => {
+                unreachable!();
+            }
+            322 => {
+                __state = 49;
+            }
+            323 => {
+                jobj = ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get());
+                fns::lb_8000B1CC(
+                    ctx,
+                    jobj,
+                    null::<Vec<'a>>(ctx),
+                    ((result_4).appsrt()).translate(),
+                );
+                inl_HSD_JObjGetScale(ctx, jobj, scale);
+                ((result_4).appsrt()).scale().set_x({
+                    let __t8 = {
+                        let __t7 = scale.y();
+                        ((result_4).appsrt()).scale().set_z(__t7);
+                        __t7
+                    };
+                    ((result_4).appsrt()).scale().set_y(__t8);
+                    __t8
+                });
+                __state = 324;
+            }
+            324 => {
+                __state = 138;
+            }
+            325 => {
+                unreachable!();
+            }
+            326 => {
+                __state = 50;
+            }
+            327 => {
+                __state = 51;
+            }
+            328 => {
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_state_flags(
+                    ((((Handle::cast::<EF_Effect<'a>>(ret_obj)).state_flags() as i32) | 128_i32)
+                        as u8),
+                );
+                __state = 329;
+            }
+            329 => {
+                __state = 138;
+            }
+            330 => {
+                unreachable!();
+            }
+            331 => {
+                __state = 52;
+            }
+            332 => {
+                __state = 53;
+            }
+            333 => {
+                __state = 54;
+            }
+            334 => {
+                __state = 55;
+            }
+            335 => {
+                __state = 56;
+            }
+            336 => {
+                __state = 57;
+            }
+            337 => {
+                inl_efAsync_SetEffectRotationZFromPtr(
+                    ctx,
+                    Handle::cast::<EF_Effect<'a>>(ret_obj),
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                );
+                __state = 338;
+            }
+            338 => {
+                __state = 138;
+            }
+            339 => {
+                unreachable!();
+            }
+            340 => {
+                __state = 58;
+            }
+            341 => {
+                inl_efAsync_SetEffectRotationZFromPtr(
+                    ctx,
+                    Handle::cast::<EF_Effect<'a>>(ret_obj),
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                );
+                __state = 342;
+            }
+            342 => {
+                __state = 138;
+            }
+            343 => {
+                unreachable!();
+            }
+            344 => {
+                __state = 59;
+            }
+            345 => {
+                __state = 60;
+            }
+            346 => {
+                __state = 61;
+            }
+            347 => {
+                __state = if i < 6_i32 { 348 } else { 350 };
+            }
+            348 => {
+                node = fns::efLib_Create_Attach_Pos(ctx, (27_i32 as u32), gobj, translate);
+                __state = if Handle::is_null(node) { 352 } else { 353 };
+            }
+            349 => {
+                i = i.wrapping_add(1);
+                __state = 347;
+            }
+            350 => {
+                __state = 138;
+            }
+            351 => {
+                unreachable!();
+            }
+            352 => {
+                __state = 350;
+            }
+            353 => {
+                (node).set_update(fnptr(ctx, 0x8005e648));
+                (node).set_lifetime((40_i32 as u16));
+                (node).params().set_y(fp::fmadds(
+                    0.4000000059604645,
+                    fns::HSD_Randf(ctx),
+                    2.799999952316284,
+                ));
+                f32_1 = fp::frsp((fp::fmul(6.283185307179586, fns::HSD_Randf(ctx))));
+                jobj_1 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, (node).gobj())));
+                inl_HSD_JObjSetRotationY(ctx, jobj_1, f32_1);
+                __state = if i != 0_i32 { 356 } else { 358 };
+            }
+            354 => {
+                unreachable!();
+            }
+            355 => {
+                __state = 353;
+            }
+            356 => {
+                (effect).set_next(node);
+                effect = (effect).next();
+                __state = 357;
+            }
+            357 => {
+                __state = 349;
+            }
+            358 => {
+                ret_obj = Handle::cast::<Addr<'a>>({
+                    let __t9 = node;
+                    effect = __t9;
+                    __t9
+                });
+                __state = 357;
+            }
+            359 => {
+                unreachable!();
+            }
+            360 => {
+                __state = 62;
+            }
+            361 => {
+                __state = 63;
+            }
+            362 => {
+                __state = 64;
+            }
+            363 => {
+                __state = 65;
+            }
+            364 => {
+                jobj_1 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
+                    ctx,
+                    (Handle::cast::<EF_Effect<'a>>(ret_obj)).gobj(),
+                )));
+                setter_jobj = jobj_1;
+                f32_2 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                inl_HSD_JObjSetRotationZ(ctx, setter_jobj, f32_2);
+                f32_2 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                scale.set_x({
+                    let __t11 = {
+                        let __t10 = f32_2;
+                        scale.set_z(__t10);
+                        __t10
+                    };
+                    scale.set_y(__t11);
+                    __t11
+                });
+                inl_HSD_JObjSetScale(ctx, setter_jobj, scale);
+                __state = if Handle::is_null(jobj_1) { 367 } else { 369 };
+            }
+            365 => {
+                __state = 138;
+            }
+            366 => {
+                unreachable!();
+            }
+            367 => {
+                jobj_2 = null::<HSD_JObj<'a>>(ctx);
+                __state = 368;
+            }
+            368 => {
+                fns::efLib_SetTevKonstColor(
+                    ctx,
+                    jobj_2,
+                    0_i32,
+                    ((Handle::cast::<Val<'a, u32>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                    ((Handle::cast::<Val<'a, u32>>(fns::__va_arg(ctx, vlist, 1_u8))).get()),
+                );
+                __state = 365;
+            }
+            369 => {
+                jobj_2 = (jobj_1).child();
+                __state = 368;
+            }
+            370 => {
+                unreachable!();
+            }
+            371 => {
+                __state = 66;
+            }
+            372 => {
+                jobj_2 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
+                    ctx,
+                    (Handle::cast::<EF_Effect<'a>>(ret_obj)).gobj(),
+                )));
+                f32_2 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                inl_HSD_JObjSetRotationZ(ctx, jobj_2, f32_2);
+                __state = 373;
+            }
+            373 => {
+                __state = 138;
+            }
+            374 => {
+                unreachable!();
+            }
+            375 => {
+                __state = 67;
+            }
+            376 => {
+                __state = 68;
+            }
+            377 => {
+                __state = 69;
+            }
+            378 => {
+                __state =
+                    if ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get())
+                    .get()
+                        < 0.0
+                    {
+                        381
+                    } else {
+                        383
+                    };
+            }
+            379 => {
+                __state = 138;
+            }
+            380 => {
+                unreachable!();
+            }
+            381 => {
+                rot_y = fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))));
+                __state = 382;
+            }
+            382 => {
+                f32_2 = fp::frsp(rot_y);
+                jobj_2 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
+                    ctx,
+                    (Handle::cast::<EF_Effect<'a>>(ret_obj)).gobj(),
+                )));
+                inl_HSD_JObjSetRotationY(ctx, jobj_2, f32_2);
+                __state = 379;
+            }
+            383 => {
+                rot_y = (fp::fdiv(3.141592653589793, (2_i32 as f64)));
+                __state = 382;
+            }
+            384 => {
+                unreachable!();
+            }
+            385 => {
+                __state = 70;
+            }
+            386 => {
+                __state = 71;
+            }
+            387 => {
+                __state =
+                    if ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get())
+                    .get()
+                        < 0.0
+                    {
+                        390
+                    } else {
+                        392
+                    };
+            }
+            388 => {
+                __state = 138;
+            }
+            389 => {
+                unreachable!();
+            }
+            390 => {
+                rot_y = fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))));
+                __state = 391;
+            }
+            391 => {
+                f32_2 = fp::frsp(rot_y);
+                jobj_2 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
+                    ctx,
+                    (Handle::cast::<EF_Effect<'a>>(ret_obj)).gobj(),
+                )));
+                inl_HSD_JObjSetRotationY(ctx, jobj_2, f32_2);
+                __state = 388;
+            }
+            392 => {
+                rot_y = (fp::fdiv(3.141592653589793, (2_i32 as f64)));
+                __state = 391;
+            }
+            393 => {
+                unreachable!();
+            }
+            394 => {
+                __state = 72;
+            }
+            395 => {
+                va_vec3 =
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                psAppSRT = (result_5).appsrt();
+                Handle::copy_from((psAppSRT).translate(), (va_vec3));
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                ((result_5).appsrt()).scale().set_x({
+                    let __t13 = {
+                        let __t12 = f32_1;
+                        ((result_5).appsrt()).scale().set_z(__t12);
+                        __t12
+                    };
+                    ((result_5).appsrt()).scale().set_y(__t13);
+                    __t13
+                });
+                __state = 396;
+            }
+            396 => {
+                __state = 138;
+            }
+            397 => {
+                unreachable!();
+            }
+            398 => {
+                __state = 73;
+            }
+            399 => {
+                __state = 74;
+            }
+            400 => {
+                __state = 75;
+            }
+            401 => {
+                result_6 = fns::efLib_CreateGenerator_AddAppSRT(ctx, u32_1);
+                __state = if !Handle::is_null(result_6) { 404 } else { 405 };
+            }
+            402 => {
+                __state = 76;
+            }
+            403 => {
+                __state = 77;
+            }
+            404 => {
+                va_vec3 =
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                psAppSRT = (result_6).appsrt();
+                Handle::copy_from((psAppSRT).translate(), (va_vec3));
+                ((result_6).appsrt())
+                    .rot()
+                    .set_y(fp::frsp((fp::fdiv(3.141592653589793, (2_i32 as f64)))));
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                ret_obj = Handle::cast::<Addr<'a>>(result_6);
+                ((result_6).appsrt()).rot().set_z(f32_1);
+                __state = 405;
+            }
+            405 => {
+                __state = 138;
+            }
+            406 => {
+                unreachable!();
+            }
+            407 => {
+                __state = 78;
+            }
+            408 => {
+                unreachable!();
+            }
+            409 => {
+                __state = 410;
+            }
+            410 => {
+                __state = if (0_i32 != 0) { 409 } else { 411 };
+            }
+            411 => {
+                ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(
+                    ctx,
+                    (34_i32 as u32),
+                    gobj,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                ));
+                __state = if !Handle::is_null(ret_obj) { 413 } else { 414 };
+            }
+            412 => {
+                unreachable!();
+            }
+            413 => {
+                jobj_3 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, gobj)));
+                let _ = inl_HSD_JObjGetRotationY(ctx, jobj_3);
+                f32_2 = (jobj_3).rotate().y();
+                jobj_2 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
+                    ctx,
+                    (Handle::cast::<EF_Effect<'a>>(ret_obj)).gobj(),
+                )));
+                inl_HSD_JObjSetRotationY(ctx, jobj_2, f32_2);
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_update(fnptr(ctx, 0x8005de94));
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).params().set_x(
+                    ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get())
+                    .get(),
+                );
+                __state = 414;
+            }
+            414 => {
+                __state = 138;
+            }
+            415 => {
+                unreachable!();
+            }
+            416 => {
+                __state = 79;
+            }
+            417 => {
+                f32_2 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                inl_efAsync_SetEffectScaleXYZ(ctx, Handle::cast::<EF_Effect<'a>>(ret_obj), f32_2);
+                __state = 418;
+            }
+            418 => {
+                __state = 138;
+            }
+            419 => {
+                unreachable!();
+            }
+            420 => {
+                __state = 80;
+            }
+            421 => {
+                __state = 81;
+            }
+            422 => {
+                __state = 82;
+            }
+            423 => {
+                __state = 83;
+            }
+            424 => {
+                __state = 84;
+            }
+            425 => {
+                f32_2 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                inl_efAsync_SetEffectScaleXYZ(ctx, Handle::cast::<EF_Effect<'a>>(ret_obj), f32_2);
+                __state = 426;
+            }
+            426 => {
+                __state = 138;
+            }
+            427 => {
+                unreachable!();
+            }
+            428 => {
+                __state = 85;
+            }
+            429 => {
+                va_vec3 =
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                psAppSRT = (result_7).appsrt();
+                Handle::copy_from((psAppSRT).translate(), (va_vec3));
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                ((result_7).appsrt()).scale().set_x({
+                    let __t15 = {
+                        let __t14 = f32_1;
+                        ((result_7).appsrt()).scale().set_z(__t14);
+                        __t14
+                    };
+                    ((result_7).appsrt()).scale().set_y(__t15);
+                    __t15
+                });
+                __state = 430;
+            }
+            430 => {
+                __state = 138;
+            }
+            431 => {
+                unreachable!();
+            }
+            432 => {
+                __state = 86;
+            }
+            433 => {
+                __state = 87;
+            }
+            434 => {
+                __state = 88;
+            }
+            435 => {
+                __state = 89;
+            }
+            436 => {
+                va_vec3 =
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                psAppSRT = (result_8).appsrt();
+                Handle::copy_from((psAppSRT).translate(), (va_vec3));
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                ((result_8).appsrt()).scale().set_x({
+                    let __t17 = {
+                        let __t16 = f32_1;
+                        ((result_8).appsrt()).scale().set_z(__t16);
+                        __t16
+                    };
+                    ((result_8).appsrt()).scale().set_y(__t17);
+                    __t17
+                });
+                __state = 437;
+            }
+            437 => {
+                __state = 138;
+            }
+            438 => {
+                unreachable!();
+            }
+            439 => {
+                __state = 90;
+            }
+            440 => {
+                __state = 91;
+            }
+            441 => {
+                __state = 92;
+            }
+            442 => {
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_lifetime((22_i32 as u16));
+                __state = 443;
+            }
+            443 => {
+                __state = 138;
+            }
+            444 => {
+                unreachable!();
+            }
+            445 => {
+                __state = 93;
+            }
+            446 => {
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_update(fnptr(ctx, 0x8005f748));
+                __state = if gfx_id == 0x447_i32 { 449 } else { 450 };
+            }
+            447 => {
+                __state = 138;
+            }
+            448 => {
+                unreachable!();
+            }
+            449 => {
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                scale.set_x({
+                    let __t19 = {
+                        let __t18 = f32_1;
+                        scale.set_z(__t18);
+                        __t18
+                    };
+                    scale.set_y(__t19);
+                    __t19
+                });
+                jobj_2 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
+                    ctx,
+                    (Handle::cast::<EF_Effect<'a>>(ret_obj)).gobj(),
+                )));
+                inl_HSD_JObjSetScale(ctx, jobj_2, scale);
+                __state = 450;
+            }
+            450 => {
+                __state = 447;
+            }
+            451 => {
+                unreachable!();
+            }
+            452 => {
+                __state = 94;
+            }
+            453 => {
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_lifetime((180_i32 as u16));
+                __state = 454;
+            }
+            454 => {
+                __state = 138;
+            }
+            455 => {
+                unreachable!();
+            }
+            456 => {
+                __state = 95;
+            }
+            457 => {
+                __state = 96;
+            }
+            458 => {
+                result_9 = fns::efLib_CreateGenerator_AddAppSRT(ctx, 0x237_i32);
+                __state = if !Handle::is_null(result_9) { 461 } else { 462 };
+            }
+            459 => {
+                __state = 97;
+            }
+            460 => {
+                __state = 98;
+            }
+            461 => {
+                va_vec3 =
+                    ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist, 1_u8))).get());
+                psAppSRT = (result_9).appsrt();
+                Handle::copy_from((psAppSRT).translate(), (va_vec3));
+                ((result_9).appsrt()).scale().set_x({
+                    let __t21 = {
+                        let __t20 = f32_2;
+                        ((result_9).appsrt()).scale().set_z(__t20);
+                        __t20
+                    };
+                    ((result_9).appsrt()).scale().set_y(__t21);
+                    __t21
+                });
+                __state = 462;
+            }
+            462 => {
+                __state = 138;
+            }
+            463 => {
+                unreachable!();
+            }
+            464 => {
+                __state = 99;
+            }
+            465 => {
+                __state = 100;
+            }
+            466 => {
+                __state = 101;
+            }
+            467 => {
+                __state = 102;
+            }
+            468 => {
+                __state = 103;
+            }
+            469 => {
+                __state = 104;
+            }
+            470 => {
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                ret_obj = Handle::cast::<Addr<'a>>(result_10);
+                ((result_10).appsrt()).scale().set_x({
+                    let __t23 = {
+                        let __t22 = f32_1;
+                        ((result_10).appsrt()).scale().set_z(__t22);
+                        __t22
+                    };
+                    ((result_10).appsrt()).scale().set_y(__t23);
+                    __t23
+                });
+                __state = 471;
+            }
+            471 => {
+                __state = 138;
+            }
+            472 => {
+                unreachable!();
+            }
+            473 => {
+                __state = 105;
+            }
+            474 => {
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                ret_obj = Handle::cast::<Addr<'a>>(result_11);
+                ((result_11).appsrt()).scale().set_x({
+                    let __t25 = {
+                        let __t24 = f32_1;
+                        ((result_11).appsrt()).scale().set_z(__t24);
+                        __t24
+                    };
+                    ((result_11).appsrt()).scale().set_y(__t25);
+                    __t25
+                });
+                __state = 475;
+            }
+            475 => {
+                __state = 138;
+            }
+            476 => {
+                unreachable!();
+            }
+            477 => {
+                __state = 106;
+            }
+            478 => {
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                ret_obj = Handle::cast::<Addr<'a>>(result_12);
+                ((result_12).appsrt()).scale().set_x({
+                    let __t27 = {
+                        let __t26 = f32_1;
+                        ((result_12).appsrt()).scale().set_z(__t26);
+                        __t26
+                    };
+                    ((result_12).appsrt()).scale().set_y(__t27);
+                    __t27
+                });
+                __state = 479;
+            }
+            479 => {
+                __state = 138;
+            }
+            480 => {
+                unreachable!();
+            }
+            481 => {
+                __state = 107;
+            }
+            482 => {
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                ret_obj = Handle::cast::<Addr<'a>>(result_13);
+                ((result_13).appsrt()).scale().set_x({
+                    let __t29 = {
+                        let __t28 = f32_1;
+                        ((result_13).appsrt()).scale().set_z(__t28);
+                        __t28
+                    };
+                    ((result_13).appsrt()).scale().set_y(__t29);
+                    __t29
+                });
+                __state = 483;
+            }
+            483 => {
+                __state = 138;
+            }
+            484 => {
+                unreachable!();
+            }
+            485 => {
+                __state = 108;
+            }
+            486 => {
+                fns::lb_8000B1CC(
+                    ctx,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                    null::<Vec<'a>>(ctx),
+                    ((result_14).appsrt()).translate(),
+                );
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                ret_obj = Handle::cast::<Addr<'a>>(result_14);
+                ((result_14).appsrt()).scale().set_x({
+                    let __t31 = {
+                        let __t30 = f32_1;
+                        ((result_14).appsrt()).scale().set_z(__t30);
+                        __t30
+                    };
+                    ((result_14).appsrt()).scale().set_y(__t31);
+                    __t31
+                });
+                __state = 487;
+            }
+            487 => {
+                __state = 138;
+            }
+            488 => {
+                unreachable!();
+            }
+            489 => {
+                __state = 109;
+            }
+            490 => {
+                __state = 110;
+            }
+            491 => {
+                __state = 111;
+            }
+            492 => {
+                fns::lb_8000B1CC(
+                    ctx,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                    null::<Vec<'a>>(ctx),
+                    ((result_15).appsrt()).translate(),
+                );
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                ret_obj = Handle::cast::<Addr<'a>>(result_15);
+                ((result_15).appsrt()).scale().set_x({
+                    let __t33 = {
+                        let __t32 = f32_1;
+                        ((result_15).appsrt()).scale().set_z(__t32);
+                        __t32
+                    };
+                    ((result_15).appsrt()).scale().set_y(__t33);
+                    __t33
+                });
+                __state = 493;
+            }
+            493 => {
+                __state = 138;
+            }
+            494 => {
+                unreachable!();
+            }
+            495 => {
+                __state = 112;
+            }
+            496 => {
+                fns::lb_8000B1CC(
+                    ctx,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                    null::<Vec<'a>>(ctx),
+                    ((result_16).appsrt()).translate(),
+                );
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                ret_obj = Handle::cast::<Addr<'a>>(result_16);
+                ((result_16).appsrt()).scale().set_x({
+                    let __t35 = {
+                        let __t34 = f32_1;
+                        ((result_16).appsrt()).scale().set_z(__t34);
+                        __t34
+                    };
+                    ((result_16).appsrt()).scale().set_y(__t35);
+                    __t35
+                });
+                __state = 497;
+            }
+            497 => {
+                __state = 138;
+            }
+            498 => {
+                unreachable!();
+            }
+            499 => {
+                __state = 113;
+            }
+            500 => {
+                __state = 114;
+            }
+            501 => {
+                __state = 115;
+            }
+            502 => {
+                __state = 116;
+            }
+            503 => {
+                __state = 117;
+            }
+            504 => {
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                scale.set_x({
+                    let __t37 = {
+                        let __t36 = f32_1;
+                        scale.set_z(__t36);
+                        __t36
+                    };
+                    scale.set_y(__t37);
+                    __t37
+                });
+                jobj_2 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
+                    ctx,
+                    (Handle::cast::<EF_Effect<'a>>(ret_obj)).gobj(),
+                )));
+                inl_HSD_JObjSetScale(ctx, jobj_2, scale);
+                __state = 505;
+            }
+            505 => {
+                __state = 138;
+            }
+            506 => {
+                unreachable!();
+            }
+            507 => {
+                __state = 118;
+            }
+            508 => {
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                scale.set_x({
+                    let __t39 = {
+                        let __t38 = f32_1;
+                        scale.set_z(__t38);
+                        __t38
+                    };
+                    scale.set_y(__t39);
+                    __t39
+                });
+                jobj_2 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
+                    ctx,
+                    (Handle::cast::<EF_Effect<'a>>(ret_obj)).gobj(),
+                )));
+                inl_HSD_JObjSetScale(ctx, jobj_2, scale);
+                __state = 509;
+            }
+            509 => {
+                __state = 138;
+            }
+            510 => {
+                unreachable!();
+            }
+            511 => {
+                __state = 119;
+            }
+            512 => {
+                __state = 120;
+            }
+            513 => {
+                __state = 121;
+            }
+            514 => {
+                __state = 122;
+            }
+            515 => {
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                scale.set_x({
+                    let __t41 = {
+                        let __t40 = f32_1;
+                        scale.set_z(__t40);
+                        __t40
+                    };
+                    scale.set_y(__t41);
+                    __t41
+                });
+                jobj_2 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
+                    ctx,
+                    (Handle::cast::<EF_Effect<'a>>(ret_obj)).gobj(),
+                )));
+                inl_HSD_JObjSetScale(ctx, jobj_2, scale);
+                __state = 516;
+            }
+            516 => {
+                __state = 138;
+            }
+            517 => {
+                unreachable!();
+            }
+            518 => {
+                __state = 123;
+            }
+            519 => {
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                scale.set_x({
+                    let __t43 = {
+                        let __t42 = f32_1;
+                        scale.set_z(__t42);
+                        __t42
+                    };
+                    scale.set_y(__t43);
+                    __t43
+                });
+                jobj_2 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
+                    ctx,
+                    (Handle::cast::<EF_Effect<'a>>(ret_obj)).gobj(),
+                )));
+                inl_HSD_JObjSetScale(ctx, jobj_2, scale);
+                __state = 520;
+            }
+            520 => {
+                __state = 138;
+            }
+            521 => {
+                unreachable!();
+            }
+            522 => {
+                __state = 124;
+            }
+            523 => {
+                fns::lb_8000B1CC(
+                    ctx,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                    null::<Vec<'a>>(ctx),
+                    ((generator).appsrt()).translate(),
+                );
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                ((generator).appsrt()).scale().set_x({
+                    let __t45 = {
+                        let __t44 = f32_1;
+                        ((generator).appsrt()).scale().set_z(__t44);
+                        __t44
+                    };
+                    ((generator).appsrt()).scale().set_y(__t45);
+                    __t45
+                });
+                jobj_3 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, gobj)));
+                f32_2 = inl_HSD_JObjGetRotationY(ctx, jobj_3);
+                ret_obj = Handle::cast::<Addr<'a>>(generator);
+                ((generator).appsrt()).rot().set_y((jobj_3).rotate().y());
+                __state = 524;
+            }
+            524 => {
+                __state = 138;
+            }
+            525 => {
+                unreachable!();
+            }
+            526 => {
+                __state = 125;
+            }
+            527 => {
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                scale.set_x({
+                    let __t47 = {
+                        let __t46 = f32_1;
+                        scale.set_z(__t46);
+                        __t46
+                    };
+                    scale.set_y(__t47);
+                    __t47
+                });
+                jobj_2 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
+                    ctx,
+                    (Handle::cast::<EF_Effect<'a>>(ret_obj)).gobj(),
+                )));
+                inl_HSD_JObjSetScale(ctx, jobj_2, scale);
+                __state = 528;
+            }
+            528 => {
+                __state = 138;
+            }
+            529 => {
+                unreachable!();
+            }
+            530 => {
+                __state = 126;
+            }
+            531 => {
+                fns::lb_8000B1CC(
+                    ctx,
+                    ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                        .get()),
+                    null::<Vec<'a>>(ctx),
+                    ((generator).appsrt()).translate(),
+                );
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                ((generator).appsrt()).scale().set_x({
+                    let __t49 = {
+                        let __t48 = f32_1;
+                        ((generator).appsrt()).scale().set_z(__t48);
+                        __t48
+                    };
+                    ((generator).appsrt()).scale().set_y(__t49);
+                    __t49
+                });
+                jobj_3 = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
+                f32_2 = inl_HSD_JObjGetRotationY(ctx, jobj_3);
+                ret_obj = Handle::cast::<Addr<'a>>(generator);
+                ((generator).appsrt()).rot().set_y((jobj_3).rotate().y());
+                __state = 532;
+            }
+            532 => {
+                __state = 138;
+            }
+            533 => {
+                unreachable!();
+            }
+            534 => {
+                __state = 127;
+            }
+            535 => {
+                f32_1 = ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist, 1_u8)))
+                    .get())
+                .get();
+                scale.set_x({
+                    let __t51 = {
+                        let __t50 = f32_1;
+                        scale.set_z(__t50);
+                        __t50
+                    };
+                    scale.set_y(__t51);
+                    __t51
+                });
+                jobj_2 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
+                    ctx,
+                    (Handle::cast::<EF_Effect<'a>>(ret_obj)).gobj(),
+                )));
+                inl_HSD_JObjSetScale(ctx, jobj_2, scale);
+                __state = 536;
+            }
+            536 => {
+                __state = 138;
+            }
+            537 => {
+                unreachable!();
+            }
+            538 => {
+                __state = 128;
+            }
+            539 => {
+                __state = 129;
+            }
+            540 => {
+                __state = 130;
+            }
+            541 => {
+                __state = 131;
+            }
+            542 => {
+                __state = 132;
+            }
+            543 => {
+                __state = 133;
+            }
+            544 => {
+                __state = 134;
+            }
+            545 => {
+                __state = 135;
+            }
+            546 => {
+                __state = 136;
+            }
+            547 => {
+                __state = 137;
+            }
+            548 => {
+                __state = 138;
+            }
+            549 => {
+                __state = if fns::efLib_AnimCount(ctx).get() != 0_i32 {
+                    550
+                } else {
+                    552
+                };
+            }
+            550 => {
+                count = fns::efLib_AnimCount(ctx).get().wrapping_sub(1_i32);
+                fns::efLib_AnimCount(ctx).set(count);
+                fns::HSD_JObjAnimAll(
+                    ctx,
+                    (Handle::add(
+                        (Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::efLib_AnimQueue(ctx).get(0))),
+                        count,
+                    ))
+                    .get(),
+                );
+                __state = 549;
+            }
+            551 => {
+                __state = 549;
+            }
+            552 => {
+                return ret_obj;
+            }
+            553 => {
+                unreachable!();
+            }
+            554 => {
+                return null(ctx);
+            }
+            555 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn efAsync_LoadAsync<'a>(ctx: &'a Ctx, index: i32) {
     let __frame = ctx.stack_frame(0x18);
     let mut index = index;
@@ -344,6 +3893,147 @@ pub fn efAsync_QueueClear<'a>(ctx: &'a Ctx, head: Ptr<'a, EF_QueuedEffect<'a>>) 
     (head).set(null::<EF_QueuedEffect<'a>>(ctx));
 }
 
+pub fn efAsync_Spawn<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    queue_head: Ptr<'a, EF_QueuedEffect<'a>>,
+    spawn_kind: u32,
+    gfx_id: u32,
+    jobj: HSD_JObj<'a>,
+) {
+    let __frame = ctx.stack_frame(0xb0);
+    __frame.save_varargs();
+    let vlist: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0x60);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x6c);
+    let mut gobj = gobj;
+    let mut queue_head = queue_head;
+    let mut spawn_kind = spawn_kind;
+    let mut gfx_id = gfx_id;
+    let mut jobj = jobj;
+    let mut va_vec3: Vec<'a> = null(ctx);
+    let mut extra1: Val<'a, F32> = null(ctx);
+    let mut extra2: Val<'a, F32> = null(ctx);
+    let mut queued: EF_QueuedEffect<'a> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    __frame.va_info(Handle::addr(Handle::cast::<Addr<'a>>(vlist)), 5, 0);
+    queued =
+        Handle::cast::<EF_QueuedEffect<'a>>(fns::HSD_ObjAlloc(ctx, fns::efAsync_AllocData(ctx)));
+    (queued).set_spawn_kind((spawn_kind as u8));
+    (queued).set_gfx_id((gfx_id as i32));
+    (queued).set_jobj(jobj);
+    's3: {
+        let __case = match spawn_kind {
+            0_u32 => 0,
+            1_u32 => 0,
+            2_u32 => 1,
+            3_u32 => 2,
+            4_u32 => 3,
+            5_u32 => 4,
+            6_u32 => 5,
+            7_u32 => 6,
+            8_u32 => 7,
+            _ => 8,
+        };
+        if __case <= 0 {
+            break 's3;
+        }
+        if __case <= 1 {
+            Handle::copy_from(
+                (queued).params(),
+                ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8))).get()),
+            );
+            break 's3;
+        }
+        if __case <= 2 {
+            (queued).params().set_x(
+                ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
+                    .get())
+                .get(),
+            );
+            break 's3;
+        }
+        if __case <= 3 {
+            (queued).params().set_x(
+                ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
+                    .get())
+                .get(),
+            );
+            break 's3;
+        }
+        if __case <= 4 {
+            va_vec3 =
+                ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8))).get());
+            extra2 =
+                ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
+                    .get());
+            Handle::copy_from((queued).params(), (va_vec3));
+            (queued).set_extra1((extra2).get());
+            break 's3;
+        }
+        if __case <= 5 {
+            va_vec3 =
+                ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8))).get());
+            extra1 =
+                ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
+                    .get());
+            extra2 =
+                ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8)))
+                    .get());
+            Handle::copy_from((queued).params(), (va_vec3));
+            (queued).set_extra1((extra1).get());
+            (queued).set_extra2((extra2).get());
+            break 's3;
+        }
+        if __case <= 6 {
+            Handle::copy_from(
+                (queued).params(),
+                ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8))).get()),
+            );
+            break 's3;
+        }
+        if __case <= 7 {
+            Handle::copy_from(
+                (queued).params(),
+                ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist.get(0), 1_u8))).get()),
+            );
+            break 's3;
+        }
+        if __case <= 8 {
+            (if ((0_i32) != 0) {
+                { () }
+            } else {
+                ({
+                    fns::OSReport(
+                        ctx,
+                        cstr(ctx, 0x803c04c0),
+                        &[VarArg::Int(spawn_kind as u32)],
+                    );
+                    fns::__assert(
+                        ctx,
+                        cstr(ctx, 0x803bfb24),
+                        (0x5af_i32 as u32),
+                        cstr(ctx, 0x803bfb24),
+                    )
+                })
+            });
+            break 's3;
+        }
+    }
+    if (!Handle::is_null(fns::HSD_GObj_CurrentInvokedProc(ctx).get()))
+        && (((fns::HSD_GObj_CurrentInvokedProc(ctx).get()).s_link() as u32) < 9_u32)
+    {
+        (queued).set_next((queue_head).get());
+        (queue_head).set(queued);
+        return;
+    }
+    fns::efAsync_QueueProcessDeferred(ctx, gobj, queued);
+}
+
 pub fn efAsync_QueueInit<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
     fns::HSD_ObjAllocInit(ctx, fns::efAsync_AllocData(ctx), 36_u32, 4_u32);
@@ -577,8 +4267,113 @@ fn inl_HSD_JObjGetNext<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
     return null(ctx);
 }
 
+fn inl_HSD_JObjGetRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bfb24),
+            (0x172_i32 as u32),
+            cstr(ctx, 0x803bfb24),
+        )
+    });
+    return (jobj).rotate().y();
+}
+
+fn inl_HSD_JObjSetScaleX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
+    let mut jobj = jobj;
+    let mut x = x;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bfb24),
+            (0x192_i32 as u32),
+            cstr(ctx, 0x803bfb24),
+        )
+    });
+    (jobj).scale().set_x(x);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_HSD_JObjSetScaleY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
+    let mut jobj = jobj;
+    let mut y = y;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bfb24),
+            (0x1a4_i32 as u32),
+            cstr(ctx, 0x803bfb24),
+        )
+    });
+    (jobj).scale().set_y(y);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_HSD_JObjSetScaleZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
+    let mut jobj = jobj;
+    let mut z = z;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bfb24),
+            (0x1b6_i32 as u32),
+            cstr(ctx, 0x803bfb24),
+        )
+    });
+    (jobj).scale().set_z(z);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_efAsync_SetEffectScaleXYZ<'a>(ctx: &'a Ctx, effect: EF_Effect<'a>, scale: f64) {
+    let mut effect = effect;
+    let mut scale = scale;
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    jobj = Handle::cast::<HSD_JObj<'a>>(((effect).gobj()).hsd_obj());
+    jobj = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, (effect).gobj())));
+    inl_HSD_JObjSetScaleX(ctx, jobj, scale);
+    jobj = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, (effect).gobj())));
+    inl_HSD_JObjSetScaleY(ctx, jobj, scale);
+    jobj = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, (effect).gobj())));
+    inl_HSD_JObjSetScaleZ(ctx, jobj, scale);
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x80063930,
+        |ctx| {
+            let (a0, a1, a2): (i32, HSD_GObj<'_>, __va_list_t<'_>) = Args::take_all(ctx);
+            Ret::put(efAsync_Dispatch(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Int,
+    );
     ctx.register_port(
         0x8006729c,
         |ctx| {
@@ -624,6 +4419,20 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (Ptr<'_, EF_QueuedEffect<'_>>,) = Args::take_all(ctx);
             Ret::put(efAsync_QueueClear(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x800676f0,
+        |ctx| {
+            let (a0, a1, a2, a3, a4): (
+                HSD_GObj<'_>,
+                Ptr<'_, EF_QueuedEffect<'_>>,
+                u32,
+                u32,
+                HSD_JObj<'_>,
+            ) = Args::take_all(ctx);
+            Ret::put(efAsync_Spawn(ctx, a0, a1, a2, a3, a4), ctx);
         },
         Returns::Nothing,
     );

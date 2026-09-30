@@ -253,6 +253,138 @@ pub fn OSDestroyHeap<'a>(ctx: &'a Ctx, heap: i32) {
     (hd).set_size(1_i32.wrapping_neg());
 }
 
+pub fn OSCheckHeap<'a>(ctx: &'a Ctx, heap: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x8);
+    let mut heap = heap;
+    let mut hd: HeapDesc<'a> = null(ctx);
+    let mut cell: Cell<'a> = null(ctx);
+    let mut total: i32 = 0_i32;
+    let mut free: i32 = 0_i32;
+    if !(!Handle::is_null((statics::dolphin__os__OSAlloc::HeapArray(ctx).get()))) {
+        fns::OSReport(ctx, cstr(ctx, 0x804017d8), &[VarArg::Int(0x37d_i32 as u32)]);
+        return 1_i32.wrapping_neg();
+    }
+    if !((0_i32 <= heap) && (heap < statics::dolphin__os__OSAlloc::NumHeaps(ctx).get())) {
+        fns::OSReport(ctx, cstr(ctx, 0x804017fc), &[VarArg::Int(0x37e_i32 as u32)]);
+        return 1_i32.wrapping_neg();
+    }
+    hd = (Handle::add(statics::dolphin__os__OSAlloc::HeapArray(ctx).get(), heap));
+    if !(0_i32 <= (hd).size()) {
+        fns::OSReport(ctx, cstr(ctx, 0x80401834), &[VarArg::Int(0x381_i32 as u32)]);
+        return 1_i32.wrapping_neg();
+    }
+    if !((Handle::is_null((hd).allocated())) || (Handle::is_null(((hd).allocated()).prev()))) {
+        fns::OSReport(ctx, cstr(ctx, 0x8040185c), &[VarArg::Int(0x383_i32 as u32)]);
+        return 1_i32.wrapping_neg();
+    }
+    {
+        cell = (hd).allocated();
+        'l1: while !Handle::is_null(cell) {
+            'c2: {
+                if !((Handle::addr(statics::dolphin__os__OSAlloc::ArenaStart(ctx).get())
+                    <= Handle::addr(cell))
+                    && (Handle::addr(cell)
+                        < Handle::addr(statics::dolphin__os__OSAlloc::ArenaEnd(ctx).get())))
+                {
+                    fns::OSReport(ctx, cstr(ctx, 0x804018ac), &[VarArg::Int(0x386_i32 as u32)]);
+                    return 1_i32.wrapping_neg();
+                }
+                if !((Handle::addr((cell)) & (((32_i32).wrapping_sub(1_i32)) as u32))
+                    == (0_i32 as u32))
+                {
+                    fns::OSReport(ctx, cstr(ctx, 0x804018ec), &[VarArg::Int(0x387_i32 as u32)]);
+                    return 1_i32.wrapping_neg();
+                }
+                if !((Handle::is_null((cell).next()))
+                    || (Handle::addr(((cell).next()).prev()) == Handle::addr(cell)))
+                {
+                    fns::OSReport(ctx, cstr(ctx, 0x80401924), &[VarArg::Int(0x388_i32 as u32)]);
+                    return 1_i32.wrapping_neg();
+                }
+                if !(64_u32 <= ((cell).size() as u32)) {
+                    fns::OSReport(ctx, cstr(ctx, 0x80401970), &[VarArg::Int(0x389_i32 as u32)]);
+                    return 1_i32.wrapping_neg();
+                }
+                if !(((((cell).size()) as u32) & (((32_i32).wrapping_sub(1_i32)) as u32))
+                    == (0_i32 as u32))
+                {
+                    fns::OSReport(ctx, cstr(ctx, 0x804019a4), &[VarArg::Int(0x38a_i32 as u32)]);
+                    return 1_i32.wrapping_neg();
+                }
+                total = total.wrapping_add((cell).size());
+                if !((0_i32 < total) && (total <= (hd).size())) {
+                    fns::OSReport(ctx, cstr(ctx, 0x804019e4), &[VarArg::Int(0x38d_i32 as u32)]);
+                    return 1_i32.wrapping_neg();
+                }
+            }
+            cell = (cell).next();
+        }
+    }
+    if !((Handle::is_null((hd).free())) || (Handle::is_null(((hd).free()).prev()))) {
+        fns::OSReport(ctx, cstr(ctx, 0x80401a20), &[VarArg::Int(0x395_i32 as u32)]);
+        return 1_i32.wrapping_neg();
+    }
+    {
+        cell = (hd).free();
+        'l3: while !Handle::is_null(cell) {
+            'c4: {
+                if !((Handle::addr(statics::dolphin__os__OSAlloc::ArenaStart(ctx).get())
+                    <= Handle::addr(cell))
+                    && (Handle::addr(cell)
+                        < Handle::addr(statics::dolphin__os__OSAlloc::ArenaEnd(ctx).get())))
+                {
+                    fns::OSReport(ctx, cstr(ctx, 0x804018ac), &[VarArg::Int(0x398_i32 as u32)]);
+                    return 1_i32.wrapping_neg();
+                }
+                if !((Handle::addr((cell)) & (((32_i32).wrapping_sub(1_i32)) as u32))
+                    == (0_i32 as u32))
+                {
+                    fns::OSReport(ctx, cstr(ctx, 0x804018ec), &[VarArg::Int(0x399_i32 as u32)]);
+                    return 1_i32.wrapping_neg();
+                }
+                if !((Handle::is_null((cell).next()))
+                    || (Handle::addr(((cell).next()).prev()) == Handle::addr(cell)))
+                {
+                    fns::OSReport(ctx, cstr(ctx, 0x80401924), &[VarArg::Int(0x39a_i32 as u32)]);
+                    return 1_i32.wrapping_neg();
+                }
+                if !(64_u32 <= ((cell).size() as u32)) {
+                    fns::OSReport(ctx, cstr(ctx, 0x80401970), &[VarArg::Int(0x39b_i32 as u32)]);
+                    return 1_i32.wrapping_neg();
+                }
+                if !(((((cell).size()) as u32) & (((32_i32).wrapping_sub(1_i32)) as u32))
+                    == (0_i32 as u32))
+                {
+                    fns::OSReport(ctx, cstr(ctx, 0x804019a4), &[VarArg::Int(0x39c_i32 as u32)]);
+                    return 1_i32.wrapping_neg();
+                }
+                if !((Handle::is_null((cell).next()))
+                    || (Handle::addr(Handle::add(
+                        Handle::cast::<Val<'a, i8>>(cell),
+                        (cell).size(),
+                    )) < Handle::addr(Handle::cast::<Val<'a, i8>>((cell).next()))))
+                {
+                    fns::OSReport(ctx, cstr(ctx, 0x80401a68), &[VarArg::Int(0x39d_i32 as u32)]);
+                    return 1_i32.wrapping_neg();
+                }
+                total = total.wrapping_add((cell).size());
+                free = ((cell).size().wrapping_add(free));
+                free = ((free as u32).wrapping_sub(32_u32) as i32);
+                if !((0_i32 < total) && (total <= (hd).size())) {
+                    fns::OSReport(ctx, cstr(ctx, 0x804019e4), &[VarArg::Int(0x3a1_i32 as u32)]);
+                    return 1_i32.wrapping_neg();
+                }
+            }
+            cell = (cell).next();
+        }
+    }
+    if !(total == (hd).size()) {
+        fns::OSReport(ctx, cstr(ctx, 0x80401ac8), &[VarArg::Int(0x3a8_i32 as u32)]);
+        return 1_i32.wrapping_neg();
+    }
+    return free;
+}
+
 fn inl_DLExtract_unfused<'a>(ctx: &'a Ctx, list: Cell<'a>, cell: Cell<'a>) -> Cell<'a> {
     let mut list = list;
     let mut cell = cell;
@@ -334,5 +466,13 @@ pub fn register(ctx: &Ctx) {
             Ret::put(OSDestroyHeap(ctx, a0), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80344168,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(OSCheckHeap(ctx, a0), ctx);
+        },
+        Returns::Int,
     );
 }

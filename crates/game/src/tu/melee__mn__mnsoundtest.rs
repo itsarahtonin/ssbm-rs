@@ -505,13 +505,13 @@ pub fn fn_8024AED0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             } else {
                 (user_data).set_unk4(((temp_r3_3.wrapping_sub(1_i32)) as u16));
             }
-            inl_fn_8024AED0_inline_unfused(ctx, arg0, string1.at(0));
+            inl_fn_8024AED0_inline_unfused(ctx, null(ctx), string1.at(0));
         } else if ((events & ((enums::MenuInput_Right as i32) as u64)) != 0) {
             (user_data).set_unk4((((user_data).unk4() as i32).wrapping_add(1_i32) as u16));
             if ((user_data).unk4() as i32) >= temp_r3_3 {
                 (user_data).set_unk4((0_i32 as u16));
             }
-            inl_fn_8024AED0_inline_unfused(ctx, arg0, string2.at(0));
+            inl_fn_8024AED0_inline_unfused(ctx, null(ctx), string2.at(0));
         }
         fns::mnSoundTest_8024A790(
             ctx,

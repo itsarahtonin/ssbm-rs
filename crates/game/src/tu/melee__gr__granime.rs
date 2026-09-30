@@ -625,6 +625,143 @@ pub fn grAnime_801C7228<'a>(
     }
 }
 
+pub fn grAnime_801C752C<'a>(
+    ctx: &'a Ctx,
+    obj: HSD_JObj<'a>,
+    arg1: i32,
+    flags: i32,
+    func: Addr<'a>,
+    r#type: u32,
+) {
+    let __frame = ctx.stack_frame(0xb0);
+    __frame.save_varargs();
+    let ap: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0x60);
+    let arg: _callbackArg<'a> = frame_at(ctx, &__frame, 0x6c);
+    let mut obj = obj;
+    let mut arg1 = arg1;
+    let mut flags = flags;
+    let mut func = func;
+    let mut r#type = r#type;
+    let mut obj_tmp: HSD_JObj<'a> = null(ctx);
+    let mut robj: HSD_RObj<'a> = null(ctx);
+    let mut flags2: i32 = 0;
+    let mut child: HSD_JObj<'a> = null(ctx);
+    if Handle::is_null(obj) {
+        return;
+    }
+    __frame.va_info(Handle::addr(Handle::cast::<Addr<'a>>(ap)), 5, 0);
+    obj_tmp = obj;
+    's1: {
+        let __case = match r#type {
+            0_u32 => 0,
+            4_u32 => 0,
+            8_u32 => 0,
+            1_u32 => 1,
+            5_u32 => 1,
+            9_u32 => 1,
+            2_u32 => 2,
+            6_u32 => 2,
+            10_u32 => 2,
+            3_u32 => 3,
+            7_u32 => 3,
+            11_u32 => 3,
+            _ => 4,
+        };
+        if __case <= 0 {
+            break 's1;
+        }
+        if __case <= 1 {
+            arg.set_f(fp::frsp(
+                ((Handle::cast::<Val<'a, F64>>(fns::__va_arg(ctx, ap.get(0), 3_u8))).get()),
+            ));
+            break 's1;
+        }
+        if __case <= 2 {
+            arg.set_v(
+                ((Handle::cast::<Ptr<'a, Addr<'a>>>(fns::__va_arg(ctx, ap.get(0), 1_u8))).get()),
+            );
+            break 's1;
+        }
+        if __case <= 3 {
+            arg.set_d(((Handle::cast::<Val<'a, u32>>(fns::__va_arg(ctx, ap.get(0), 1_u8))).get()));
+            break 's1;
+        }
+        if __case <= 4 {
+            (if ((0_i32) != 0) {
+                { () }
+            } else {
+                ({
+                    fns::OSReport(ctx, cstr(ctx, 0x803e09cc), &[]);
+                    fns::__assert(
+                        ctx,
+                        cstr(ctx, 0x803e09e8),
+                        (0x2b3_i32 as u32),
+                        cstr(ctx, 0x803e09e8),
+                    )
+                })
+            });
+            break 's1;
+        }
+    }
+    if (inl_grAnime_801C6F50_wrapped_unfused(
+        ctx,
+        obj_tmp,
+        flags,
+        func,
+        r#type,
+        Handle::cast::<Addr<'a>>(arg),
+    ) != 0)
+    {
+        inl_grAnime_801C70E0_noinline_unfused(
+            ctx,
+            (obj).u().dobj(),
+            flags,
+            func,
+            r#type,
+            Handle::cast::<Addr<'a>>(arg),
+        );
+    }
+    flags2 = (flags & 0x200_i32);
+    {
+        robj = (obj).robj();
+        'l2: while !Handle::is_null(robj) {
+            'c3: {
+                if (flags2 != 0) && (!Handle::is_null((robj).aobj())) {
+                    statics::melee__gr__granime::grAnime_801C6F50(
+                        ctx,
+                        (robj).aobj(),
+                        Handle::cast::<Addr<'a>>(robj),
+                        (10_i32 as u32),
+                        func,
+                        r#type,
+                        Handle::cast::<Addr<'a>>(arg),
+                    );
+                }
+            }
+            robj = (robj).next();
+        }
+    }
+    if (arg1 != 0_i32) && (!(((obj).flags() & (0x1000_i32 as u32)) != 0)) {
+        {
+            child = (obj).child();
+            'l4: while !Handle::is_null(child) {
+                'c5: {
+                    inl_grAnime_801C7228_noinline_unfused(
+                        ctx,
+                        child,
+                        flags,
+                        func,
+                        r#type,
+                        Handle::cast::<Addr<'a>>(arg),
+                        arg1,
+                    );
+                }
+                child = (child).next();
+            }
+        }
+    }
+}
+
 pub fn grAnime_801C775C<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -1945,6 +2082,74 @@ fn inl_grAnime_801C7228_unfused<'a>(
     }
 }
 
+fn inl_grAnime_801C70E0_inner_unfused<'a>(
+    ctx: &'a Ctx,
+    arg0: HSD_DObj<'a>,
+    arg1: i32,
+    arg2: Addr<'a>,
+    arg3: u32,
+    arg4: Addr<'a>,
+) {
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut arg3 = arg3;
+    let mut arg4 = arg4;
+    statics::melee__gr__granime::grAnime_801C70E0(ctx, arg0, arg1, arg2, arg3, arg4);
+}
+
+fn inl_grAnime_801C70E0_noinline_unfused<'a>(
+    ctx: &'a Ctx,
+    arg0: HSD_DObj<'a>,
+    arg1: i32,
+    arg2: Addr<'a>,
+    arg3: u32,
+    arg4: Addr<'a>,
+) {
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut arg3 = arg3;
+    let mut arg4 = arg4;
+    inl_grAnime_801C70E0_inner_unfused(ctx, arg0, arg1, arg2, arg3, arg4);
+}
+
+fn inl_grAnime_801C7228_inner_unfused<'a>(
+    ctx: &'a Ctx,
+    arg0: HSD_JObj<'a>,
+    arg1: i32,
+    arg2: Addr<'a>,
+    arg3: u32,
+    arg4: Addr<'a>,
+    arg5: i32,
+) {
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut arg3 = arg3;
+    let mut arg4 = arg4;
+    let mut arg5 = arg5;
+    statics::melee__gr__granime::grAnime_801C7228(ctx, arg0, arg1, arg2, arg3, arg4, arg5);
+}
+
+fn inl_grAnime_801C7228_noinline_unfused<'a>(
+    ctx: &'a Ctx,
+    arg0: HSD_JObj<'a>,
+    arg1: i32,
+    arg2: Addr<'a>,
+    arg3: u32,
+    arg4: Addr<'a>,
+    arg5: i32,
+) {
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut arg3 = arg3;
+    let mut arg4 = arg4;
+    let mut arg5 = arg5;
+    inl_grAnime_801C7228_inner_unfused(ctx, arg0, arg1, arg2, arg3, arg4, arg5);
+}
+
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
@@ -2181,6 +2386,14 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1, a2, a3, a4, a5): (HSD_JObj<'_>, i32, Addr<'_>, u32, Addr<'_>, i32) =
                 Args::take_all(ctx);
             Ret::put(grAnime_801C7228(ctx, a0, a1, a2, a3, a4, a5), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801c752c,
+        |ctx| {
+            let (a0, a1, a2, a3, a4): (HSD_JObj<'_>, i32, i32, Addr<'_>, u32) = Args::take_all(ctx);
+            Ret::put(grAnime_801C752C(ctx, a0, a1, a2, a3, a4), ctx);
         },
         Returns::Nothing,
     );

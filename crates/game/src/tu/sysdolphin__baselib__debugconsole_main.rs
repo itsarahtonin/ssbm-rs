@@ -1361,6 +1361,207 @@ pub fn hsd_80395A78<'a>(ctx: &'a Ctx) -> i32 {
     return 0_i32;
 }
 
+pub fn hsd_80395D88<'a>(ctx: &'a Ctx, data: Addr<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x30);
+    let mut data = data;
+    let mut cmd: u32 = 0;
+    let mut ctx_ptr: Ptr<'a, OSContext<'a>> = null(ctx);
+    let mut saved: i32 = 0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                __state = match fns::hsd_80395550(ctx, data) {
+                    1_i32 => 1,
+                    2_i32 => 2,
+                    (-1_i32) => 3,
+                    _ => 4,
+                };
+            }
+            1 => {
+                return 1_i32;
+            }
+            2 => {
+                cmd = (Handle::cast::<Val<'a, u32>>(
+                    (Handle::add(Handle::cast::<Val<'a, u8>>(data), 20_i32)),
+                ))
+                .get();
+                __state = match cmd {
+                    0_u32 => 7,
+                    1_u32 => 8,
+                    2_u32 => 9,
+                    3_u32 => 10,
+                    4_u32 => 11,
+                    5_u32 => 12,
+                    6_u32 => 13,
+                    7_u32 => 14,
+                    8_u32 => 15,
+                    _ => 16,
+                };
+            }
+            3 => {
+                inl_ps_remove_node_unfused(
+                    ctx,
+                    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx),
+                    data,
+                );
+                return 1_i32;
+            }
+            4 => {
+                return 0_i32;
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                __state = 2;
+            }
+            7 => {
+                statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
+                    .set_xBC((8_i32 as u32));
+                return 0_i32;
+            }
+            8 => {
+                statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
+                    .set_xBC((4_i32 as u32));
+                return 0_i32;
+            }
+            9 => {
+                statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
+                    .set_xBC((1_i32 as u32));
+                return 0_i32;
+            }
+            10 => {
+                statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
+                    .set_xBC((2_i32 as u32));
+                return 0_i32;
+            }
+            11 => {
+                statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
+                    .set_xBC((0x100_i32 as u32));
+                __state = 23;
+            }
+            12 => {
+                statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
+                    .set_xBC((0x400_i32 as u32));
+                __state = 23;
+            }
+            13 => {
+                __state = if !Handle::is_null(
+                    ({
+                        let __t1 =
+                            statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
+                                .xD4_ref();
+                        ctx_ptr = __t1;
+                        __t1
+                    })
+                    .get(),
+                ) {
+                    26
+                } else {
+                    27
+                };
+            }
+            14 => {
+                statics::sysdolphin__baselib__debugconsole_main::hsd_80394E8C(
+                    ctx,
+                    Handle::cast::<lbl_8040B904_t<'a>>(Handle::cast::<Addr<'a>>(
+                        fns::lbl_8040BEC4(ctx),
+                    )),
+                );
+                return 1_i32;
+            }
+            15 => {
+                inl_ps_clear_nodes_unfused(
+                    ctx,
+                    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx),
+                );
+                return 1_i32;
+            }
+            16 => {
+                __state = 17;
+            }
+            17 => {
+                __state = 4;
+            }
+            18 => {
+                unreachable!();
+            }
+            19 => {
+                __state = 8;
+            }
+            20 => {
+                __state = 9;
+            }
+            21 => {
+                __state = 10;
+            }
+            22 => {
+                __state = 11;
+            }
+            23 => {
+                inl_ps_remove_node_unfused(
+                    ctx,
+                    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx),
+                    data,
+                );
+                return 0_i32;
+            }
+            24 => {
+                __state = 12;
+            }
+            25 => {
+                __state = 13;
+            }
+            26 => {
+                saved = fns::hsd_80393D2C(ctx, 1_i32);
+                inl_hsd_80395D88_dump_gpr_unfused(ctx, (ctx_ptr).get());
+                fns::hsd_80394950(ctx, (ctx_ptr).get());
+                inl_hsd_80395D88_dump_misc_unfused(ctx, (ctx_ptr).get());
+                let _ = fns::hsd_80393D2C(ctx, saved);
+                __state = 27;
+            }
+            27 => {
+                inl_ps_remove_node_unfused(
+                    ctx,
+                    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx),
+                    data,
+                );
+                return 1_i32;
+            }
+            28 => {
+                unreachable!();
+            }
+            29 => {
+                __state = 14;
+            }
+            30 => {
+                __state = 15;
+            }
+            31 => {
+                __state = 16;
+            }
+            32 => {
+                __state = 17;
+            }
+            33 => {
+                __state = 3;
+            }
+            34 => {
+                __state = 4;
+            }
+            35 => {
+                return 0;
+            }
+            36 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn hsd_80396130<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
     let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
@@ -4030,6 +4231,200 @@ fn inl_ps_push_node_unfused<'a>(ctx: &'a Ctx, node: _ExcptNode<'a>) {
     }
 }
 
+fn inl_ps_remove_node_unfused<'a>(ctx: &'a Ctx, sp: ParticleScreenState<'a>, node: Addr<'a>) {
+    let mut sp = sp;
+    let mut node = node;
+    let mut head_ptr: Ptr<'a, Addr<'a>> = null(ctx);
+    let mut cur: Addr<'a> = null(ctx);
+    if Handle::is_null(node) {
+        return;
+    }
+    if Handle::is_null(
+        ({
+            let __t1 = (sp).xD0_ref();
+            head_ptr = __t1;
+            __t1
+        })
+        .get(),
+    ) {
+        return;
+    }
+    'l1: while (!Handle::is_null(
+        ({
+            let __t2 = (head_ptr).get();
+            cur = __t2;
+            __t2
+        }),
+    )) && (Handle::addr(cur) != Handle::addr(node))
+    {
+        'c2: {
+            let mut next: Addr<'a> = (Handle::cast::<Ptr<'a, Addr<'a>>>(cur)).get();
+            (Handle::cast::<Ptr<'a, Addr<'a>>>(cur)).set((null::<Addr<'a>>(ctx)));
+            (head_ptr).set(next);
+        }
+    }
+    if Handle::addr(cur) == Handle::addr(node) {
+        let mut next_2: Addr<'a> = (Handle::cast::<Ptr<'a, Addr<'a>>>(node)).get();
+        (Handle::cast::<Ptr<'a, Addr<'a>>>(node)).set((null::<Addr<'a>>(ctx)));
+        (head_ptr).set(next_2);
+    }
+    (sp).set_x0_b5((1_i32 as u8));
+}
+
+fn inl_hsd_80395D88_dump_gpr_unfused<'a>(ctx: &'a Ctx, v_ctx: OSContext<'a>) {
+    let mut v_ctx = v_ctx;
+    let mut i: i32 = 0;
+    fns::OSReport(ctx, cstr(ctx, 0x8040b228), &[]);
+    i = 0_i32;
+    'l1: loop {
+        'c2: {
+            fns::OSReport(
+                ctx,
+                cstr(ctx, 0x8040b260),
+                &[
+                    VarArg::Int(i as u32),
+                    VarArg::Int((v_ctx).gpr().at(i).get() as u32),
+                    VarArg::Int((v_ctx).gpr().at(i).get() as u32),
+                    VarArg::Int(i.wrapping_add(16_i32) as u32),
+                    VarArg::Int((v_ctx).gpr().at(i.wrapping_add(16_i32)).get() as u32),
+                    VarArg::Int((v_ctx).gpr().at(i.wrapping_add(16_i32)).get() as u32),
+                ],
+            );
+            i = i.wrapping_add(1);
+        }
+        if !(i < 16_i32) {
+            break 'l1;
+        }
+    }
+}
+
+fn inl_hsd_80395D88_dump_misc_unfused<'a>(ctx: &'a Ctx, v_ctx: OSContext<'a>) {
+    let mut v_ctx = v_ctx;
+    let mut i: i32 = 0;
+    fns::OSReport(ctx, cstr(ctx, 0x8040b328), &[]);
+    fns::OSReport(
+        ctx,
+        cstr(ctx, 0x8040b360),
+        &[
+            VarArg::Int(
+                (Handle::add(
+                    (Handle::cast::<Val<'a, u32>>(v_ctx)),
+                    div_i32(0x198_i32, 4_i32),
+                ))
+                .get() as u32,
+            ),
+            VarArg::Int(
+                (Handle::add(
+                    (Handle::cast::<Val<'a, u32>>(v_ctx)),
+                    div_i32(0x19c_i32, 4_i32),
+                ))
+                .get() as u32,
+            ),
+        ],
+    );
+    fns::OSReport(
+        ctx,
+        cstr(ctx, 0x8040b378),
+        &[
+            VarArg::Int(
+                (Handle::add(
+                    (Handle::cast::<Val<'a, u32>>(v_ctx)),
+                    div_i32(128_i32, 4_i32),
+                ))
+                .get() as u32,
+            ),
+            VarArg::Int(
+                (Handle::add(
+                    (Handle::cast::<Val<'a, u32>>(v_ctx)),
+                    div_i32(132_i32, 4_i32),
+                ))
+                .get() as u32,
+            ),
+        ],
+    );
+    fns::OSReport(
+        ctx,
+        cstr(ctx, 0x8040b390),
+        &[
+            VarArg::Int(
+                (Handle::add(
+                    (Handle::cast::<Val<'a, u32>>(v_ctx)),
+                    div_i32(136_i32, 4_i32),
+                ))
+                .get() as u32,
+            ),
+            VarArg::Int(
+                (Handle::add(
+                    (Handle::cast::<Val<'a, u32>>(v_ctx)),
+                    div_i32(140_i32, 4_i32),
+                ))
+                .get() as u32,
+            ),
+        ],
+    );
+    fns::OSReport(
+        ctx,
+        cstr(ctx, 0x8040b3a8),
+        &[VarArg::Int(
+            (Handle::add(
+                (Handle::cast::<Val<'a, u32>>(v_ctx)),
+                div_i32(0x194_i32, 4_i32),
+            ))
+            .get() as u32,
+        )],
+    );
+    i = 0_i32;
+    'l1: loop {
+        'c2: {
+            fns::OSReport(
+                ctx,
+                cstr(ctx, 0x8040b3b4),
+                &[
+                    VarArg::Int(i as u32),
+                    VarArg::Int(
+                        (Handle::add((Handle::cast::<Val<'a, u32>>(v_ctx)), i)).get() as u32,
+                    ),
+                    VarArg::Int(i.wrapping_add(4_i32) as u32),
+                    VarArg::Int(
+                        (Handle::add(
+                            (Handle::cast::<Val<'a, u32>>(v_ctx)),
+                            div_i32(0x1b4_i32, 4_i32).wrapping_add(i),
+                        ))
+                        .get() as u32,
+                    ),
+                ],
+            );
+            i = i.wrapping_add(1);
+        }
+        if !(i < 4_i32) {
+            break 'l1;
+        }
+    }
+}
+
+fn inl_ps_clear_nodes_unfused<'a>(ctx: &'a Ctx, sp: ParticleScreenState<'a>) {
+    let mut sp = sp;
+    let mut head_ptr: Ptr<'a, Addr<'a>> = null(ctx);
+    let mut cur: _ExcptNode<'a> = null(ctx);
+    cur = Handle::cast::<_ExcptNode<'a>>(
+        ({
+            let __t1 = (sp).xD0_ref();
+            head_ptr = __t1;
+            __t1
+        })
+        .get(),
+    );
+    'l1: while !Handle::is_null(cur) {
+        'c2: {
+            let mut next: _ExcptNode<'a> = (cur).next();
+            (cur).set_next(null::<_ExcptNode<'a>>(ctx));
+            cur = next;
+        }
+    }
+    (head_ptr).set((null::<Addr<'a>>(ctx)));
+    (sp).set_x0_b5((1_i32 as u8));
+}
+
 fn inl_hsd_80396188_get_x50_unfused<'a>(ctx: &'a Ctx) -> Addr<'a> {
     return statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x50();
 }
@@ -4099,46 +4494,6 @@ fn inl_hsd_80396188_draw_rows_unfused<'a>(
         }
     }
     (x4).set(col);
-}
-
-fn inl_ps_remove_node_unfused<'a>(ctx: &'a Ctx, sp: ParticleScreenState<'a>, node: Addr<'a>) {
-    let mut sp = sp;
-    let mut node = node;
-    let mut head_ptr: Ptr<'a, Addr<'a>> = null(ctx);
-    let mut cur: Addr<'a> = null(ctx);
-    if Handle::is_null(node) {
-        return;
-    }
-    if Handle::is_null(
-        ({
-            let __t1 = (sp).xD0_ref();
-            head_ptr = __t1;
-            __t1
-        })
-        .get(),
-    ) {
-        return;
-    }
-    'l1: while (!Handle::is_null(
-        ({
-            let __t2 = (head_ptr).get();
-            cur = __t2;
-            __t2
-        }),
-    )) && (Handle::addr(cur) != Handle::addr(node))
-    {
-        'c2: {
-            let mut next: Addr<'a> = (Handle::cast::<Ptr<'a, Addr<'a>>>(cur)).get();
-            (Handle::cast::<Ptr<'a, Addr<'a>>>(cur)).set((null::<Addr<'a>>(ctx)));
-            (head_ptr).set(next);
-        }
-    }
-    if Handle::addr(cur) == Handle::addr(node) {
-        let mut next_2: Addr<'a> = (Handle::cast::<Ptr<'a, Addr<'a>>>(node)).get();
-        (Handle::cast::<Ptr<'a, Addr<'a>>>(node)).set((null::<Addr<'a>>(ctx)));
-        (head_ptr).set(next_2);
-    }
-    (sp).set_x0_b5((1_i32 as u8));
 }
 
 fn inl_hsd_80396884_get_x50_unfused<'a>(ctx: &'a Ctx) -> Addr<'a> {
@@ -4368,6 +4723,14 @@ pub fn register(ctx: &Ctx) {
         0x80395a78,
         |ctx| {
             Ret::put(hsd_80395A78(ctx), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80395d88,
+        |ctx| {
+            let (a0,): (Addr<'_>,) = Args::take_all(ctx);
+            Ret::put(hsd_80395D88(ctx, a0), ctx);
         },
         Returns::Int,
     );

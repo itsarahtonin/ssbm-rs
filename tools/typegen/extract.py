@@ -12,6 +12,7 @@ import bisect
 import json
 import os
 import re
+import subprocess
 import sys
 from concurrent.futures import ProcessPoolExecutor
 
@@ -184,6 +185,22 @@ def load_symbols(path):
     return syms
 
 
+def linker_symbols(elf, known):
+    """Symbols the linker script defines, such as `_stack_end` or `__ArenaLo`, which only the
+    built ELF has, as objects C code can declare `extern`."""
+    nm = os.path.join("build", "binutils", "powerpc-eabi-nm" + (".exe" if os.name == "nt" else ""))
+    if not os.path.exists(elf) or not os.path.exists(nm):
+        return []
+    out = subprocess.run([nm, elf], capture_output=True, text=True, check=True).stdout
+    syms = []
+    for line in out.splitlines():
+        parts = line.split()
+        if len(parts) == 3 and parts[1] == "A" and parts[2] not in known:
+            syms.append({"name": parts[2], "section": "", "addr": int(parts[0], 16), "type": "object",
+                         "size": 0, "scope": "global"})
+    return syms
+
+
 def load_splits(path):
     ranges, cur = [], None
     for line in open(path):
@@ -276,6 +293,13 @@ class Collector:
                 self.enum(c)
             elif c.kind == CK.FUNCTION_DECL:
                 defined_here = c.is_definition() and os.path.normpath(str(c.location.file)) == os.path.normpath(source)
+                if c.is_definition():
+                    # Structs and enums a function body defines for its locals.
+                    for d in c.walk_preorder():
+                        if d.kind in (CK.STRUCT_DECL, CK.UNION_DECL) and d.is_definition():
+                            self.record(d)
+                        elif d.kind == CK.ENUM_DECL and d.is_definition():
+                            self.enum(d)
                 self.functions.append({
                     "name": c.spelling, "static": c.linkage == ci.LinkageKind.INTERNAL,
                     "defined": defined_here, "type": self.tref(c.type),
@@ -312,6 +336,7 @@ def main():
              for u in json.load(open("objdiff.json"))["units"]
              if (u.get("metadata") or {}).get("source_path", "").endswith(".c")]
     symbols = load_symbols("config/GALE01/symbols.txt")
+    symbols += linker_symbols("build/GALE01/main.elf", {s["name"] for s in symbols})
     splits = load_splits("config/GALE01/splits.txt")
     starts = [s[0] for s in splits]
 
@@ -360,7 +385,8 @@ def main():
                                       "addr": sym["addr"] if sym else None, "size": sym["size"] if sym else None,
                                       "symbol": sym["name"] if sym else None}
             for g in gls:
-                cands = [s for s in by_name.get(g["name"], []) if s["type"] == "object"]
+                # Labels, such as `_dtors`, name data C declares as extern arrays.
+                cands = [s for s in by_name.get(g["name"], []) if s["type"] in ("object", "label")]
                 if g["static"]:
                     cands = [s for s in cands if s["tu"] == unit]
                 elif len(cands) > 1:

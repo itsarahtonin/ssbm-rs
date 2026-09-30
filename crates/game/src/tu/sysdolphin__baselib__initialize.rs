@@ -495,6 +495,91 @@ pub fn HSD_ObjDumpStat<'a>(ctx: &'a Ctx) {
     }
 }
 
+pub fn HSD_SetInitParameter<'a>(ctx: &'a Ctx, param: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x80);
+    __frame.save_varargs();
+    let ap: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0x60);
+    let mut param = param;
+    let mut ok: i32 = 0_i32;
+    if (statics::sysdolphin__baselib__initialize::init_done(ctx).get() != 0) {
+        if !(statics::sysdolphin__baselib__initialize::shown(ctx).get() != 0) {
+            fns::OSReport(ctx, cstr(ctx, 0x80406ca4), &[]);
+            statics::sysdolphin__baselib__initialize::shown(ctx).set(1_i32);
+        }
+        return 0_i32;
+    }
+    __frame.va_info(Handle::addr(Handle::cast::<Addr<'a>>(ap)), 1, 0);
+    's1: {
+        let __case = match (param as u32) {
+            0_u32 => 0,
+            1_u32 => 1,
+            2_u32 => 2,
+            3_u32 => 3,
+            4_u32 => 4,
+            _ => 5,
+        };
+        if __case <= 0 {
+            {
+                let mut fifo_size: u32 =
+                    ((Handle::cast::<Val<'a, u32>>(fns::__va_arg(ctx, ap.get(0), 1_u8))).get());
+                if fifo_size > (0_i32 as u32) {
+                    statics::sysdolphin__baselib__initialize::iparam_fifo_size(ctx).set(fifo_size);
+                    ok = 1_i32;
+                }
+            }
+            break 's1;
+        }
+        if __case <= 1 {
+            {
+                let mut xfb_max_num: u32 =
+                    ((Handle::cast::<Val<'a, u32>>(fns::__va_arg(ctx, ap.get(0), 1_u8))).get());
+                if xfb_max_num > (0_i32 as u32) {
+                    statics::sysdolphin__baselib__initialize::iparam_xfb_max_num(ctx)
+                        .set((xfb_max_num as i32));
+                    ok = 1_i32;
+                }
+            }
+            break 's1;
+        }
+        if __case <= 2 {
+            {
+                let mut heap_size: u32 =
+                    ((Handle::cast::<Val<'a, u32>>(fns::__va_arg(ctx, ap.get(0), 1_u8))).get());
+                if heap_size > (0_i32 as u32) {
+                    statics::sysdolphin__baselib__initialize::iparam_heap_max_num(ctx)
+                        .set((heap_size as i32));
+                    ok = 1_i32;
+                }
+            }
+            break 's1;
+        }
+        if __case <= 3 {
+            {
+                let mut heap_size_2: u32 =
+                    ((Handle::cast::<Val<'a, u32>>(fns::__va_arg(ctx, ap.get(0), 1_u8))).get());
+                if heap_size_2 > (0_i32 as u32) {
+                    statics::sysdolphin__baselib__initialize::iparam_audio_heap_size(ctx)
+                        .set(heap_size_2);
+                    ok = 1_i32;
+                }
+            }
+            break 's1;
+        }
+        if __case <= 4 {
+            statics::sysdolphin__baselib__initialize::rmode(ctx).set(
+                ((Handle::cast::<Ptr<'a, _GXRenderModeObj<'a>>>(fns::__va_arg(
+                    ctx,
+                    ap.get(0),
+                    1_u8,
+                )))
+                .get()),
+            );
+            break 's1;
+        }
+    }
+    return ok;
+}
+
 fn inl_HSD_VIGetRenderMode_unfused<'a>(ctx: &'a Ctx) -> _GXRenderModeObj<'a> {
     return fns::HSD_VIData(ctx).current().vi().rmode();
 }
@@ -664,5 +749,13 @@ pub fn register(ctx: &Ctx) {
             Ret::put(HSD_ObjDumpStat(ctx), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x803756f8,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(HSD_SetInitParameter(ctx, a0), ctx);
+        },
+        Returns::Int,
     );
 }

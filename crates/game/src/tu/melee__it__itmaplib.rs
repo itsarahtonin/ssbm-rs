@@ -507,7 +507,7 @@ pub fn it_8027649C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> f64 {
     up.set_z(0.0);
     up.set_x(0.0);
     up.set_y(1.0);
-    inl_it_80276408_unfused(ctx, item_gobj, coll, normal);
+    inl_it_80276408_unfused(ctx, null(ctx), coll, normal);
     angle = fns::lbVector_Angle(ctx, normal, up);
     angle = fp::fmuls(
         (ip).facing_dir(),
@@ -837,7 +837,7 @@ pub fn it_80277040<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
                 up.set_z(0.0);
                 up.set_x(0.0);
                 up.set_y(1.0);
-                inl_it_80276408_unfused(ctx, item_gobj, coll, normal);
+                inl_it_80276408_unfused(ctx, null(ctx), coll, normal);
                 Handle::copy_from((item1).x94(), (item1).x88());
                 angle1 = fns::lbVector_AngleXY(ctx, normal, up);
                 __state = if angle1 < 0.0 { 5 } else { 6 };

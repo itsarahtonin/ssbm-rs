@@ -156,6 +156,309 @@ pub fn HSD_TObjReqAnimAll<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>, startframe: f64)
     inl_HSD_TObjReqAnimAllByFlags_unfused(ctx, tobj, startframe, (16_i32 as u32));
 }
 
+pub fn TObjUpdateFunc<'a>(ctx: &'a Ctx, obj: Addr<'a>, r#type: i32, val: HSD_ObjData<'a>) {
+    let __frame = ctx.stack_frame(0x30);
+    let mut obj = obj;
+    let mut r#type = r#type;
+    let mut val = val;
+    let mut tobj: HSD_TObj<'a> = null(ctx);
+    let mut n: i32 = 0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                tobj = Handle::cast::<HSD_TObj<'a>>(obj);
+                __state = if Handle::is_null(tobj) { 1 } else { 2 };
+            }
+            1 => {
+                return;
+            }
+            2 => {
+                __state = match r#type {
+                    1_i32 => 5,
+                    10_i32 => 6,
+                    9_i32 => 7,
+                    6_i32 => 8,
+                    7_i32 => 9,
+                    8_i32 => 10,
+                    2_i32 => 11,
+                    3_i32 => 12,
+                    4_i32 => 13,
+                    5_i32 => 14,
+                    11_i32 => 15,
+                    12_i32 => 16,
+                    13_i32 => 17,
+                    14_i32 => 18,
+                    15_i32 => 19,
+                    16_i32 => 20,
+                    17_i32 => 21,
+                    18_i32 => 22,
+                    19_i32 => 23,
+                    20_i32 => 24,
+                    21_i32 => 25,
+                    22_i32 => 26,
+                    23_i32 => 27,
+                    24_i32 => 28,
+                    _ => 29,
+                };
+            }
+            3 => {
+                unreachable!();
+            }
+            4 => {
+                __state = 2;
+            }
+            5 => {
+                (if !Handle::is_null(((tobj).imagetbl())) {
+                    ({ () })
+                } else {
+                    fns::__assert(
+                        ctx,
+                        cstr(ctx, 0x80405574),
+                        (146_i32 as u32),
+                        cstr(ctx, 0x80405574),
+                    )
+                });
+                n = fp::fctiwz((val).fv());
+                __state = if !Handle::is_null((Handle::add((tobj).imagetbl(), n)).get()) {
+                    31
+                } else {
+                    32
+                };
+            }
+            6 => {
+                __state = if !Handle::is_null((tobj).tluttbl()) {
+                    35
+                } else {
+                    36
+                };
+            }
+            7 => {
+                (tobj).set_blending((val).fv());
+                __state = 29;
+            }
+            8 => {
+                (tobj).rotate().set_x((val).fv());
+                __state = 40;
+            }
+            9 => {
+                (tobj).rotate().set_y((val).fv());
+                __state = 40;
+            }
+            10 => {
+                (tobj).rotate().set_z((val).fv());
+                __state = 40;
+            }
+            11 => {
+                (tobj).translate().set_x((val).fv());
+                __state = 40;
+            }
+            12 => {
+                (tobj).translate().set_y((val).fv());
+                __state = 40;
+            }
+            13 => {
+                (tobj).scale().set_x((val).fv());
+                __state = 40;
+            }
+            14 => {
+                (tobj).scale().set_y((val).fv());
+                __state = 40;
+            }
+            15 => {
+                ((tobj).lod()).set_LODBias((val).fv());
+                __state = 29;
+            }
+            16 => {
+                ((tobj).tev())
+                    .konst()
+                    .set_r((fp::fctiwz((fp::fmul(255.0, (val).fv()))) as u8));
+                __state = 29;
+            }
+            17 => {
+                ((tobj).tev())
+                    .konst()
+                    .set_g((fp::fctiwz((fp::fmul(255.0, (val).fv()))) as u8));
+                __state = 29;
+            }
+            18 => {
+                ((tobj).tev())
+                    .konst()
+                    .set_b((fp::fctiwz((fp::fmul(255.0, (val).fv()))) as u8));
+                __state = 29;
+            }
+            19 => {
+                ((tobj).tev())
+                    .konst()
+                    .set_a((fp::fctiwz((fp::fmul(255.0, (val).fv()))) as u8));
+                __state = 29;
+            }
+            20 => {
+                ((tobj).tev())
+                    .tev0()
+                    .set_r((fp::fctiwz((fp::fmul(255.0, (val).fv()))) as u8));
+                __state = 29;
+            }
+            21 => {
+                ((tobj).tev())
+                    .tev0()
+                    .set_g((fp::fctiwz((fp::fmul(255.0, (val).fv()))) as u8));
+                __state = 29;
+            }
+            22 => {
+                ((tobj).tev())
+                    .tev0()
+                    .set_b((fp::fctiwz((fp::fmul(255.0, (val).fv()))) as u8));
+                __state = 29;
+            }
+            23 => {
+                ((tobj).tev())
+                    .tev0()
+                    .set_a((fp::fctiwz((fp::fmul(255.0, (val).fv()))) as u8));
+                __state = 29;
+            }
+            24 => {
+                ((tobj).tev())
+                    .tev1()
+                    .set_r((fp::fctiwz((fp::fmul(255.0, (val).fv()))) as u8));
+                __state = 29;
+            }
+            25 => {
+                ((tobj).tev())
+                    .tev1()
+                    .set_g((fp::fctiwz((fp::fmul(255.0, (val).fv()))) as u8));
+                __state = 29;
+            }
+            26 => {
+                ((tobj).tev())
+                    .tev1()
+                    .set_b((fp::fctiwz((fp::fmul(255.0, (val).fv()))) as u8));
+                __state = 29;
+            }
+            27 => {
+                ((tobj).tev())
+                    .tev1()
+                    .set_a((fp::fctiwz((fp::fmul(255.0, (val).fv()))) as u8));
+                __state = 29;
+            }
+            28 => {
+                (tobj).set_blending((val).fv());
+                __state = 29;
+            }
+            29 => {
+                return;
+            }
+            30 => {
+                unreachable!();
+            }
+            31 => {
+                (tobj).set_imagedesc((Handle::add((tobj).imagetbl(), n)).get());
+                __state = 32;
+            }
+            32 => {
+                __state = 29;
+            }
+            33 => {
+                unreachable!();
+            }
+            34 => {
+                __state = 6;
+            }
+            35 => {
+                (tobj).set_tlut_no((fp::fctiwz((val).fv()) as u8));
+                __state = 36;
+            }
+            36 => {
+                __state = 29;
+            }
+            37 => {
+                unreachable!();
+            }
+            38 => {
+                __state = 7;
+            }
+            39 => {
+                __state = 8;
+            }
+            40 => {
+                (tobj).set_flags(((tobj).flags() | (shl_u32(1_u32, (31_i32 as u32)))));
+                __state = 29;
+            }
+            41 => {
+                __state = 9;
+            }
+            42 => {
+                __state = 10;
+            }
+            43 => {
+                __state = 11;
+            }
+            44 => {
+                __state = 12;
+            }
+            45 => {
+                __state = 13;
+            }
+            46 => {
+                __state = 14;
+            }
+            47 => {
+                __state = 40;
+            }
+            48 => {
+                __state = 15;
+            }
+            49 => {
+                __state = 16;
+            }
+            50 => {
+                __state = 17;
+            }
+            51 => {
+                __state = 18;
+            }
+            52 => {
+                __state = 19;
+            }
+            53 => {
+                __state = 20;
+            }
+            54 => {
+                __state = 21;
+            }
+            55 => {
+                __state = 22;
+            }
+            56 => {
+                __state = 23;
+            }
+            57 => {
+                __state = 24;
+            }
+            58 => {
+                __state = 25;
+            }
+            59 => {
+                __state = 26;
+            }
+            60 => {
+                __state = 27;
+            }
+            61 => {
+                __state = 28;
+            }
+            62 => {
+                __state = 29;
+            }
+            63 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn HSD_TObjAnim<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut tobj = tobj;
@@ -3236,6 +3539,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (HSD_TObj<'_>, Single) = Args::take_all(ctx);
             Ret::put(HSD_TObjReqAnimAll(ctx, a0, a1.0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8035e860,
+        |ctx| {
+            let (a0, a1, a2): (Addr<'_>, i32, HSD_ObjData<'_>) = Args::take_all(ctx);
+            Ret::put(TObjUpdateFunc(ctx, a0, a1, a2), ctx);
         },
         Returns::Nothing,
     );

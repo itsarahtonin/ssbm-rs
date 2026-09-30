@@ -119,7 +119,7 @@ pub fn HSD_CObjRemoveAnim<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) {
     if Handle::is_null(cobj) {
         return;
     }
-    inl_HSD_CObjRemoveAnimByFlags_unfused(ctx, cobj, (0x7ff_i32 as u32));
+    inl_HSD_CObjRemoveAnimByFlags_unfused(ctx, cobj, 0);
 }
 
 pub fn HSD_CObjAddAnim<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, canim: HSD_CameraAnim<'a>) {

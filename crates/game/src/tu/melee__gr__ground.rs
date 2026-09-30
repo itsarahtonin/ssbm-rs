@@ -3616,6 +3616,147 @@ pub fn Ground_801C4E70<'a>(
     Handle::copy_from(fns::stage_info(ctx).x16C(), vec);
 }
 
+pub fn Ground_801C4FAC<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) {
+    let __frame = ctx.stack_frame(0x98);
+    let sp74: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp68: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp5C: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let sp50: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x48);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x54);
+    let sqrt_tmp: ArrV<'a, F32, 3> = frame_at(ctx, &__frame, 0x60);
+    let mut cobj = cobj;
+    let mut fog: HSD_Fog<'a> = null(ctx);
+    let mut xz_inv_len: f64 = 0.0;
+    let mut dx: f64 = 0.0;
+    let mut dz: f64 = 0.0;
+    let mut dx2: f64 = 0.0;
+    let mut dy2: f64 = 0.0;
+    let mut dz2: f64 = 0.0;
+    let mut xz_x_weight: f64 = 0.0;
+    let mut xz_z_weight: f64 = 0.0;
+    let mut dy: f64 = 0.0;
+    let mut phi_f31: f64 = 0.0;
+    let mut phi_f30: f64 = 0.0;
+    if (fns::stage_info(ctx).unk8C().b3() != 0) {
+        let _ = fns::HSD_CObjGetEyeVector(ctx, cobj, sp74);
+        Handle::copy_from(sp68, fns::stage_info(ctx).x130());
+        Handle::copy_from(sp5C, fns::stage_info(ctx).x13C());
+        if sp74.x() < fp::frsp(0_i32 as f64) {
+            Handle::copy_from(sp50, fns::stage_info(ctx).x148());
+            Handle::copy_from(sp44, fns::stage_info(ctx).x154());
+        } else {
+            Handle::copy_from(sp50, fns::stage_info(ctx).x160());
+            Handle::copy_from(sp44, fns::stage_info(ctx).x16C());
+        }
+        if sp74.z() < fp::frsp(0_i32 as f64) {
+            xz_inv_len = fp::fdivs(
+                1.0,
+                inl_sqrtf(
+                    ctx,
+                    fp::fadds(
+                        (fp::fmuls(sp74.x(), sp74.x())),
+                        (fp::fmuls(sp74.z(), sp74.z())),
+                    ),
+                ),
+            );
+            xz_x_weight = fp::fmuls(
+                xz_inv_len,
+                (if (sp74.x()) < fp::frsp(0_i32 as f64) {
+                    fp::fneg((sp74.x()))
+                } else {
+                    (sp74.x())
+                }),
+            );
+            xz_z_weight = fp::fmuls(
+                xz_inv_len,
+                (if (sp74.z()) < fp::frsp(0_i32 as f64) {
+                    fp::fneg((sp74.z()))
+                } else {
+                    (sp74.z())
+                }),
+            );
+            sp50.set_x(fp::fmuls(sp50.x(), xz_x_weight));
+            sp50.set_y(fp::fmuls(sp50.y(), xz_x_weight));
+            sp50.set_z(fp::fmuls(sp50.z(), xz_x_weight));
+            sp44.set_x(fp::fmuls(sp44.x(), xz_x_weight));
+            sp44.set_y(fp::fmuls(sp44.y(), xz_x_weight));
+            sp44.set_z(fp::fmuls(sp44.z(), xz_x_weight));
+            sp68.set_x(fp::fmuls(sp68.x(), xz_z_weight));
+            sp68.set_y(fp::fmuls(sp68.y(), xz_z_weight));
+            sp68.set_z(fp::fmuls(sp68.z(), xz_z_weight));
+            sp5C.set_x(fp::fmuls(sp5C.x(), xz_z_weight));
+            sp5C.set_y(fp::fmuls(sp5C.y(), xz_z_weight));
+            sp5C.set_z(fp::fmuls(sp5C.z(), xz_z_weight));
+            fns::PSVECAdd(ctx, sp68, sp50, sp38);
+            fns::PSVECAdd(ctx, sp5C, sp44, sp2C);
+        } else {
+            Handle::copy_from(sp38, sp50);
+            Handle::copy_from(sp2C, sp44);
+        }
+        fns::HSD_CObjGetEyePosition(ctx, cobj, sp20);
+        if !Handle::is_null(fns::stage_info(ctx).x12C()) {
+            fog = (Handle::cast::<HSD_Fog<'a>>(inl_HSD_GObjGetHSDObj(
+                ctx,
+                fns::stage_info(ctx).x12C(),
+            )));
+            if !Handle::is_null(fog) {
+                dx = fp::fsubs(sp38.x(), sp20.x());
+                dy = fp::fsubs(sp38.y(), sp20.y());
+                dz = sp38.z();
+                dz = fp::fsubs(dz, sp20.z());
+                dx2 = fp::fmuls(dx, dx);
+                dy2 = fp::fmuls(dy, dy);
+                dz2 = fp::fmuls(dz, dz);
+                phi_f31 = inl_sqrtf(ctx, fp::fadds(fp::fadds(dx2, dy2), dz2));
+                dx = fp::fsubs(sp2C.x(), sp20.x());
+                dz = sp2C.z();
+                dz = fp::fsubs(dz, sp20.z());
+                dx2 = fp::fmuls(dx, dx);
+                dy2 = fp::fmuls(
+                    (fp::fsubs(sp2C.y(), sp20.y())),
+                    (fp::fsubs(sp2C.y(), sp20.y())),
+                );
+                dz2 = fp::fmuls(dz, dz);
+                phi_f30 = inl_sqrtf(ctx, fp::fadds(fp::fadds(dx2, dy2), dz2));
+                if phi_f30 < fp::frsp(10_i32 as f64) {
+                    phi_f30 = fp::frsp(10_i32 as f64);
+                }
+                if phi_f31 < fp::frsp(5_i32 as f64) {
+                    phi_f31 = fp::frsp(5_i32 as f64);
+                }
+                if phi_f31 > phi_f30 {
+                    phi_f30 = fp::fadds(1.0, phi_f31);
+                }
+                (if !Handle::is_null((fog)) {
+                    { () }
+                } else {
+                    fns::__assert(
+                        ctx,
+                        cstr(ctx, 0x804d4524),
+                        (180_i32 as u32),
+                        cstr(ctx, 0x803b7d80),
+                    )
+                });
+                (fog).set_start(phi_f31);
+                (if !Handle::is_null((fog)) {
+                    { () }
+                } else {
+                    fns::__assert(
+                        ctx,
+                        cstr(ctx, 0x804d4524),
+                        (191_i32 as u32),
+                        cstr(ctx, 0x803b7d80),
+                    )
+                });
+                (fog).set_end(phi_f30);
+            }
+        }
+    }
+}
+
 pub fn Ground_801C53EC<'a>(ctx: &'a Ctx, arg0: u32) {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
@@ -5375,6 +5516,14 @@ pub fn register(ctx: &Ctx) {
                 HSD_JObj<'_>,
             ) = Args::take_all(ctx);
             Ret::put(Ground_801C4E70(ctx, a0, a1, a2, a3, a4, a5), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801c4fac,
+        |ctx| {
+            let (a0,): (HSD_CObj<'_>,) = Args::take_all(ctx);
+            Ret::put(Ground_801C4FAC(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

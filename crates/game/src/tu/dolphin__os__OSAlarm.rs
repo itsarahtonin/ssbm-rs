@@ -24,6 +24,7 @@ use ssbm_types::fns;
 use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
+use crate::manual::dolphin__os__OSAlarm as manual;
 use crate::support::*;
 
 pub fn OSInitAlarm<'a>(ctx: &'a Ctx) {
@@ -229,6 +230,14 @@ fn inl_SetTimer_unfused<'a>(ctx: &'a Ctx, alarm: OSAlarm<'a>) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x80343df8,
+        |ctx| {
+            let (a0, a1): (u8, OSContext<'_>) = Args::take_all(ctx);
+            Ret::put(manual::DecrementerExceptionHandler(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
     ctx.register_port(
         0x80343720,
         |ctx| {

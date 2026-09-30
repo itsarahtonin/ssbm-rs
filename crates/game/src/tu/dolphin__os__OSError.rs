@@ -26,6 +26,60 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn OSReport<'a>(ctx: &'a Ctx, msg: Val<'a, i8>) {
+    let __frame = ctx.stack_frame(0x78);
+    __frame.save_varargs();
+    let marker: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0x60);
+    let mut msg = msg;
+    __frame.va_info(Handle::addr(Handle::cast::<Addr<'a>>(marker)), 1, 0);
+    let _ = fns::vprintf(ctx, msg, marker.get(0));
+}
+
+pub fn OSPanic<'a>(ctx: &'a Ctx, file: Val<'a, i8>, line: i32, msg: Val<'a, i8>) {
+    let __frame = ctx.stack_frame(0x90);
+    __frame.save_varargs();
+    let marker: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0x60);
+    let mut file = file;
+    let mut line = line;
+    let mut msg = msg;
+    let mut i: u32 = 0;
+    let mut p: Val<'a, u32> = null(ctx);
+    let _ = fns::OSDisableInterrupts(ctx);
+    __frame.va_info(Handle::addr(Handle::cast::<Addr<'a>>(marker)), 3, 0);
+    let _ = fns::vprintf(ctx, msg, marker.get(0));
+    fns::OSReport(
+        ctx,
+        cstr(ctx, 0x80401ff8),
+        &[VarArg::Int(Handle::addr(file)), VarArg::Int(line as u32)],
+    );
+    fns::OSReport(ctx, cstr(ctx, 0x80402010), &[]);
+    {
+        i = (0_i32 as u32);
+        p = ptr::<Val<'a, u32>>(ctx, fns::OSGetStackPointer(ctx) as u32);
+        'l1: while ((!Handle::is_null(p)) && (Handle::addr(p) != 0xffffffff_u32))
+            && ({
+                let __t1 = i;
+                i = i.wrapping_add(1);
+                __t1
+            } < (16_i32 as u32))
+        {
+            'c2: {
+                fns::OSReport(
+                    ctx,
+                    cstr(ctx, 0x80402038),
+                    &[
+                        VarArg::Int(Handle::addr(p)),
+                        VarArg::Int((Handle::add(p, 0_i32)).get() as u32),
+                        VarArg::Int((Handle::add(p, 1_i32)).get() as u32),
+                    ],
+                );
+            }
+            p = ptr::<Val<'a, u32>>(ctx, (p).get() as u32);
+        }
+    }
+    ctx.call::<_, ()>(0x80335e94, ());
+}
+
 pub fn OSSetErrorHandler<'a>(ctx: &'a Ctx, error: u16, handler: FnPtr<'a>) -> FnPtr<'a> {
     let mut error = error;
     let mut handler = handler;
@@ -37,6 +91,22 @@ pub fn OSSetErrorHandler<'a>(ctx: &'a Ctx, error: u16, handler: FnPtr<'a>) -> Fn
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x803456a8,
+        |ctx| {
+            let (a0,): (Val<'_, i8>,) = Args::take_all(ctx);
+            Ret::put(OSReport(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80345728,
+        |ctx| {
+            let (a0, a1, a2): (Val<'_, i8>, i32, Val<'_, i8>) = Args::take_all(ctx);
+            Ret::put(OSPanic(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Nothing,
+    );
     ctx.register_port(
         0x80345854,
         |ctx| {

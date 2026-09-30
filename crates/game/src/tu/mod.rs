@@ -57,6 +57,7 @@ pub mod dolphin__axfx__axfx;
 pub mod dolphin__axfx__chorus;
 pub mod dolphin__axfx__delay;
 pub mod dolphin__axfx__reverb_std;
+pub mod dolphin__base__PPCArch;
 pub mod dolphin__card__CARDBios;
 pub mod dolphin__card__CARDBlock;
 pub mod dolphin__card__CARDCheck;
@@ -72,6 +73,7 @@ pub mod dolphin__card__CARDUnlock;
 pub mod dolphin__card__CARDWrite;
 pub mod dolphin__db__db;
 pub mod dolphin__dsp__dsp;
+pub mod dolphin__dsp__dsp_debug;
 pub mod dolphin__dsp__dsp_task;
 pub mod dolphin__dvd__dvd;
 pub mod dolphin__dvd__dvderror;
@@ -111,6 +113,7 @@ pub mod dolphin__os__OSExi;
 pub mod dolphin__os__OSInterrupt;
 pub mod dolphin__os__OSMutex;
 pub mod dolphin__os__OSRtc;
+pub mod dolphin__os__OSSync;
 pub mod dolphin__os__OSThread;
 pub mod dolphin__os__OSTime;
 pub mod dolphin__pad__PadClamp;
@@ -129,8 +132,10 @@ pub mod melee__db__dbinit;
 pub mod melee__db__dbitem;
 pub mod melee__db__dbscreenshot;
 pub mod melee__db__dbsound;
+pub mod melee__ef__efalt;
 pub mod melee__ef__efasync;
 pub mod melee__ef__eflib;
+pub mod melee__ef__efsync;
 pub mod melee__ft__fighter;
 pub mod melee__ft__ftCo_800C703C;
 pub mod melee__ft__ftCo_800C7070;
@@ -1051,6 +1056,7 @@ pub mod sysdolphin__baselib__hsd_392A;
 pub mod sysdolphin__baselib__hsd_392C;
 pub mod sysdolphin__baselib__hsd_3933;
 pub mod sysdolphin__baselib__hsd_393C;
+pub mod sysdolphin__baselib__hsd_397E;
 pub mod sysdolphin__baselib__hsd_3982;
 pub mod sysdolphin__baselib__hsd_3A64;
 pub mod sysdolphin__baselib__hsd_3A76;
@@ -1175,6 +1181,7 @@ pub static UNITS: &[(&str, Register)] = &[
         "dolphin/axfx/reverb_std",
         dolphin__axfx__reverb_std::register,
     ),
+    ("dolphin/base/PPCArch", dolphin__base__PPCArch::register),
     ("dolphin/card/CARDBios", dolphin__card__CARDBios::register),
     ("dolphin/card/CARDBlock", dolphin__card__CARDBlock::register),
     ("dolphin/card/CARDCheck", dolphin__card__CARDCheck::register),
@@ -1205,6 +1212,7 @@ pub static UNITS: &[(&str, Register)] = &[
     ("dolphin/card/CARDWrite", dolphin__card__CARDWrite::register),
     ("dolphin/db/db", dolphin__db__db::register),
     ("dolphin/dsp/dsp", dolphin__dsp__dsp::register),
+    ("dolphin/dsp/dsp_debug", dolphin__dsp__dsp_debug::register),
     ("dolphin/dsp/dsp_task", dolphin__dsp__dsp_task::register),
     ("dolphin/dvd/dvd", dolphin__dvd__dvd::register),
     ("dolphin/dvd/dvderror", dolphin__dvd__dvderror::register),
@@ -1253,6 +1261,7 @@ pub static UNITS: &[(&str, Register)] = &[
     ("dolphin/os/OSInterrupt", dolphin__os__OSInterrupt::register),
     ("dolphin/os/OSMutex", dolphin__os__OSMutex::register),
     ("dolphin/os/OSRtc", dolphin__os__OSRtc::register),
+    ("dolphin/os/OSSync", dolphin__os__OSSync::register),
     ("dolphin/os/OSThread", dolphin__os__OSThread::register),
     ("dolphin/os/OSTime", dolphin__os__OSTime::register),
     ("dolphin/pad/PadClamp", dolphin__pad__PadClamp::register),
@@ -1271,8 +1280,10 @@ pub static UNITS: &[(&str, Register)] = &[
     ("melee/db/dbitem", melee__db__dbitem::register),
     ("melee/db/dbscreenshot", melee__db__dbscreenshot::register),
     ("melee/db/dbsound", melee__db__dbsound::register),
+    ("melee/ef/efalt", melee__ef__efalt::register),
     ("melee/ef/efasync", melee__ef__efasync::register),
     ("melee/ef/eflib", melee__ef__eflib::register),
+    ("melee/ef/efsync", melee__ef__efsync::register),
     ("melee/ft/fighter", melee__ft__fighter::register),
     ("melee/ft/ftCo_800C703C", melee__ft__ftCo_800C703C::register),
     ("melee/ft/ftCo_800C7070", melee__ft__ftCo_800C7070::register),
@@ -3890,6 +3901,10 @@ pub static UNITS: &[(&str, Register)] = &[
     (
         "sysdolphin/baselib/hsd_393C",
         sysdolphin__baselib__hsd_393C::register,
+    ),
+    (
+        "sysdolphin/baselib/hsd_397E",
+        sysdolphin__baselib__hsd_397E::register,
     ),
     (
         "sysdolphin/baselib/hsd_3982",

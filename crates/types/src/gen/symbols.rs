@@ -29657,6 +29657,7 @@ pub static SYMBOLS: &[(u32, u32, &str, bool)] = &[
     (0x804d79c0, 0x4, "hsd_804D79C0", false),
     (0x804d79c4, 0x4, "hsd_804D79C4", false),
     (0x804d79c8, 0x1, "hsd_804D79C8", false),
+    (0x804d79e0, 0x0, "_f_sdata2", false),
     (0x804d79e0, 0x8, "@4", false),
     (0x804d79e8, 0x4, "@16", false),
     (0x804d79f0, 0x4, "@275", false),
@@ -32680,6 +32681,7 @@ pub static SYMBOLS: &[(u32, u32, &str, bool)] = &[
     (0x804db694, 0x4, "@610", false),
     (0x804db698, 0x4, "@611", false),
     (0x804db69c, 0x4, "@721", false),
+    (0x804db6a0, 0x0, "_SDA_BASE_", false),
     (0x804db6a0, 0x8, "@757", false),
     (0x804db6a8, 0x8, "@758", false),
     (0x804db6b0, 0x4, "@759", false),
@@ -35291,6 +35293,12 @@ pub static SYMBOLS: &[(u32, u32, &str, bool)] = &[
     (0x804debec, 0x4, "@261", false),
     (0x804debf0, 0x4, "@262", false),
     (0x804debf8, 0x8, "@263", false),
+    (0x804dec00, 0x0, "_stack_end", false),
+    (0x804df9e0, 0x0, "_SDA2_BASE_", false),
+    (0x804eec00, 0x0, "_stack_addr", false),
+    (0x804f0c00, 0x0, "__ArenaLo", false),
+    (0x804f0c00, 0x0, "_db_stack_addr", false),
+    (0x81700000, 0x0, "__ArenaHi", false),
 ];
 /// (address, translation unit) for every function with a C prototype.
 pub static FUNCTION_TUS: &[(u32, &str)] = &[

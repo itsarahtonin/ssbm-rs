@@ -26,6 +26,69 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn __OSThreadInit<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut thread: OSThread<'a> = statics::dolphin__os__OSThread::DefaultThread(ctx);
+    let mut prio: i32 = 0;
+    (thread).set_state((2_i32 as u16));
+    (thread).set_attr((1_i32 as u16));
+    (thread).set_priority({
+        let __t1 = 16_i32;
+        (thread).set_base(__t1);
+        __t1
+    });
+    (thread).set_suspend(0_i32);
+    (thread).set_val(ptr::<Addr<'a>>(ctx, 1_i32.wrapping_neg() as u32));
+    (thread).set_mutex(null::<OSMutex<'a>>(ctx));
+    fns::OSInitThreadQueue(ctx, (thread).queueJoin());
+    (thread).queueMutex().set_head({
+        let __t2 = null::<OSMutex<'a>>(ctx);
+        (thread).queueMutex().set_tail(__t2);
+        __t2
+    });
+    (ptr::<Ptr<'a, OSThread<'a>>>(ctx, 0x800000d8_u32 as u32)).set(thread);
+    fns::OSClearContext(ctx, (thread).context());
+    fns::OSSetCurrentContext(ctx, (thread).context());
+    (thread).set_stackBase(Handle::cast::<Val<'a, u8>>(fns::_stack_addr(ctx)));
+    (thread).set_stackEnd(Handle::cast::<Val<'a, u32>>(fns::_stack_end(ctx)));
+    ((thread).stackEnd()).set(0xdeadbabe_u32);
+    (ptr::<Ptr<'a, OSThread<'a>>>(ctx, 0x800000e4_u32 as u32)).set(thread);
+    statics::dolphin__os__OSThread::RunQueueBits(ctx).set((0_i32 as u32));
+    statics::dolphin__os__OSThread::RunQueueHint(ctx).set(0_i32);
+    {
+        prio = 0_i32;
+        'l1: while prio <= 31_i32 {
+            'c2: {
+                fns::OSInitThreadQueue(
+                    ctx,
+                    statics::dolphin__os__OSThread::RunQueue(ctx).get(prio),
+                );
+            }
+            prio = prio.wrapping_add(1);
+        }
+    }
+    fns::OSInitThreadQueue(ctx, (ptr::<OSThreadQueue<'a>>(ctx, 0x800000dc_u32 as u32)));
+    'l3: loop {
+        'c4: {
+            let mut v_prev: OSThread<'a> =
+                (ptr::<OSThreadQueue<'a>>(ctx, 0x800000dc_u32 as u32)).tail();
+            if Handle::is_null(v_prev) {
+                (ptr::<OSThreadQueue<'a>>(ctx, 0x800000dc_u32 as u32)).set_head((thread));
+            } else {
+                (v_prev).linkActive().set_next((thread));
+            }
+            (thread).linkActive().set_prev(v_prev);
+            (thread).linkActive().set_next(null::<OSThread<'a>>(ctx));
+            (ptr::<OSThreadQueue<'a>>(ctx, 0x800000dc_u32 as u32)).set_tail((thread));
+        }
+        if !(0_i32 != 0) {
+            break 'l3;
+        }
+    }
+    fns::OSClearContext(ctx, statics::dolphin__os__OSThread::IdleContext(ctx));
+    statics::dolphin__os__OSThread::Reschedule(ctx).set(0_i32);
+}
+
 pub fn OSInitThreadQueue<'a>(ctx: &'a Ctx, queue: OSThreadQueue<'a>) {
     let mut queue = queue;
     (queue).set_head({
@@ -794,6 +857,411 @@ pub fn CheckThreadQueue<'a>(ctx: &'a Ctx, queue: OSThreadQueue<'a>) -> i32 {
     return 1_i32;
 }
 
+pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
+    let __frame = ctx.stack_frame(0x38);
+    let mut thread: OSThread<'a> = null(ctx);
+    let mut prio: i32 = 0;
+    let mut cThread: i32 = 0;
+    let mut enabled: i32 = 0;
+    cThread = 0_i32;
+    enabled = fns::OSDisableInterrupts(ctx);
+    {
+        prio = 0_i32;
+        'l1: while prio <= 31_i32 {
+            'c2: {
+                if ((statics::dolphin__os__OSThread::RunQueueBits(ctx).get()
+                    & ((shl_i32(1_i32, ((31_i32.wrapping_sub(prio)) as u32))) as u32))
+                    != 0)
+                {
+                    if !((!Handle::is_null(
+                        statics::dolphin__os__OSThread::RunQueue(ctx)
+                            .get(prio)
+                            .head(),
+                    )) && (!Handle::is_null(
+                        statics::dolphin__os__OSThread::RunQueue(ctx)
+                            .get(prio)
+                            .tail(),
+                    ))) {
+                        fns::OSReport(ctx, cstr(ctx, 0x80402420), &[VarArg::Int(0x566_i32 as u32)]);
+                        fns::OSPanic(
+                            ctx,
+                            cstr(ctx, 0x8040277c),
+                            0x566_i32,
+                            cstr(ctx, 0x8040277c),
+                            &[],
+                        );
+                    }
+                } else {
+                    if !((Handle::is_null(
+                        statics::dolphin__os__OSThread::RunQueue(ctx)
+                            .get(prio)
+                            .head(),
+                    )) && (Handle::is_null(
+                        statics::dolphin__os__OSThread::RunQueue(ctx)
+                            .get(prio)
+                            .tail(),
+                    ))) {
+                        fns::OSReport(ctx, cstr(ctx, 0x8040248c), &[VarArg::Int(0x56b_i32 as u32)]);
+                        fns::OSPanic(
+                            ctx,
+                            cstr(ctx, 0x8040277c),
+                            0x56b_i32,
+                            cstr(ctx, 0x8040277c),
+                            &[],
+                        );
+                    }
+                }
+                if !((statics::dolphin__os__OSThread::CheckThreadQueue(
+                    ctx,
+                    statics::dolphin__os__OSThread::RunQueue(ctx).get(prio),
+                )) != 0)
+                {
+                    fns::OSReport(ctx, cstr(ctx, 0x804024ec), &[VarArg::Int(0x56d_i32 as u32)]);
+                    fns::OSPanic(
+                        ctx,
+                        cstr(ctx, 0x8040277c),
+                        0x56d_i32,
+                        cstr(ctx, 0x8040277c),
+                        &[],
+                    );
+                }
+            }
+            prio = prio.wrapping_add(1);
+        }
+    }
+    if !((Handle::is_null((ptr::<OSThreadQueue<'a>>(ctx, 0x800000dc_u32 as u32)).head()))
+        || (Handle::is_null(
+            ((ptr::<OSThreadQueue<'a>>(ctx, 0x800000dc_u32 as u32)).head())
+                .linkActive()
+                .prev(),
+        )))
+    {
+        fns::OSReport(ctx, cstr(ctx, 0x80402534), &[VarArg::Int(0x572_i32 as u32)]);
+        fns::OSPanic(
+            ctx,
+            cstr(ctx, 0x8040277c),
+            0x572_i32,
+            cstr(ctx, 0x8040277c),
+            &[],
+        );
+    }
+    if !((Handle::is_null((ptr::<OSThreadQueue<'a>>(ctx, 0x800000dc_u32 as u32)).tail()))
+        || (Handle::is_null(
+            ((ptr::<OSThreadQueue<'a>>(ctx, 0x800000dc_u32 as u32)).tail())
+                .linkActive()
+                .next(),
+        )))
+    {
+        fns::OSReport(ctx, cstr(ctx, 0x804025b4), &[VarArg::Int(0x574_i32 as u32)]);
+        fns::OSPanic(
+            ctx,
+            cstr(ctx, 0x8040277c),
+            0x574_i32,
+            cstr(ctx, 0x8040277c),
+            &[],
+        );
+    }
+    thread = (ptr::<OSThreadQueue<'a>>(ctx, 0x800000dc_u32 as u32)).head();
+    'l3: while !Handle::is_null(thread) {
+        'c4: {
+            cThread = cThread.wrapping_add(1);
+            if !((Handle::is_null((thread).linkActive().next()))
+                || (Handle::addr(thread)
+                    == Handle::addr(((thread).linkActive().next()).linkActive().prev())))
+            {
+                fns::OSReport(ctx, cstr(ctx, 0x80402634), &[VarArg::Int(0x57c_i32 as u32)]);
+                fns::OSPanic(
+                    ctx,
+                    cstr(ctx, 0x8040277c),
+                    0x57c_i32,
+                    cstr(ctx, 0x8040277c),
+                    &[],
+                );
+            }
+            if !((Handle::is_null((thread).linkActive().prev()))
+                || (Handle::addr(thread)
+                    == Handle::addr(((thread).linkActive().prev()).linkActive().next())))
+            {
+                fns::OSReport(ctx, cstr(ctx, 0x804026b0), &[VarArg::Int(0x57e_i32 as u32)]);
+                fns::OSPanic(
+                    ctx,
+                    cstr(ctx, 0x8040277c),
+                    0x57e_i32,
+                    cstr(ctx, 0x8040277c),
+                    &[],
+                );
+            }
+            if !(((thread).stackEnd()).get() == 0xdeadbabe_u32) {
+                fns::OSReport(ctx, cstr(ctx, 0x8040272c), &[VarArg::Int(0x581_i32 as u32)]);
+                fns::OSPanic(
+                    ctx,
+                    cstr(ctx, 0x8040277c),
+                    0x581_i32,
+                    cstr(ctx, 0x8040277c),
+                    &[],
+                );
+            }
+            if !((0_i32 <= (thread).priority())
+                && ((thread).priority() <= 31_i32.wrapping_add(1_i32)))
+            {
+                fns::OSReport(ctx, cstr(ctx, 0x80402780), &[VarArg::Int(0x584_i32 as u32)]);
+                fns::OSPanic(
+                    ctx,
+                    cstr(ctx, 0x8040277c),
+                    0x584_i32,
+                    cstr(ctx, 0x8040277c),
+                    &[],
+                );
+            }
+            if !(0_i32 <= (thread).suspend()) {
+                fns::OSReport(ctx, cstr(ctx, 0x804027f4), &[VarArg::Int(0x585_i32 as u32)]);
+                fns::OSPanic(
+                    ctx,
+                    cstr(ctx, 0x8040277c),
+                    0x585_i32,
+                    cstr(ctx, 0x8040277c),
+                    &[],
+                );
+            }
+            if !((statics::dolphin__os__OSThread::CheckThreadQueue(ctx, (thread).queueJoin())) != 0)
+            {
+                fns::OSReport(ctx, cstr(ctx, 0x80402830), &[VarArg::Int(0x586_i32 as u32)]);
+                fns::OSPanic(
+                    ctx,
+                    cstr(ctx, 0x8040277c),
+                    0x586_i32,
+                    cstr(ctx, 0x8040277c),
+                    &[],
+                );
+            }
+            's5: {
+                let __case = match ((thread).state() as i32) {
+                    1_i32 => 0,
+                    2_i32 => 1,
+                    4_i32 => 2,
+                    8_i32 => 3,
+                    _ => 4,
+                };
+                if __case <= 0 {
+                    if (thread).suspend() <= 0_i32 {
+                        if !(Handle::addr((thread).queue())
+                            == Handle::addr(
+                                statics::dolphin__os__OSThread::RunQueue(ctx)
+                                    .get((thread).priority()),
+                            ))
+                        {
+                            fns::OSReport(
+                                ctx,
+                                cstr(ctx, 0x8040287c),
+                                &[VarArg::Int(0x58c_i32 as u32)],
+                            );
+                            fns::OSPanic(
+                                ctx,
+                                cstr(ctx, 0x8040277c),
+                                0x58c_i32,
+                                cstr(ctx, 0x8040277c),
+                                &[],
+                            );
+                        }
+                        if !((inl_IsMember_unfused(
+                            ctx,
+                            statics::dolphin__os__OSThread::RunQueue(ctx).get((thread).priority()),
+                            thread,
+                        )) != 0)
+                        {
+                            fns::OSReport(
+                                ctx,
+                                cstr(ctx, 0x804028d0),
+                                &[VarArg::Int(0x58d_i32 as u32)],
+                            );
+                            fns::OSPanic(
+                                ctx,
+                                cstr(ctx, 0x8040277c),
+                                0x58d_i32,
+                                cstr(ctx, 0x8040277c),
+                                &[],
+                            );
+                        }
+                        if !((thread).priority()
+                            == inl___OSGetEffectivePriority_unfused(ctx, thread))
+                        {
+                            fns::OSReport(
+                                ctx,
+                                cstr(ctx, 0x80402924),
+                                &[VarArg::Int(0x58e_i32 as u32)],
+                            );
+                            fns::OSPanic(
+                                ctx,
+                                cstr(ctx, 0x8040277c),
+                                0x58e_i32,
+                                cstr(ctx, 0x8040277c),
+                                &[],
+                            );
+                        }
+                    }
+                    break 's5;
+                }
+                if __case <= 1 {
+                    if !(!((thread).suspend() > 0_i32)) {
+                        fns::OSReport(ctx, cstr(ctx, 0x80402980), &[VarArg::Int(0x592_i32 as u32)]);
+                        fns::OSPanic(
+                            ctx,
+                            cstr(ctx, 0x8040277c),
+                            0x592_i32,
+                            cstr(ctx, 0x8040277c),
+                            &[],
+                        );
+                    }
+                    if !(Handle::is_null((thread).queue())) {
+                        fns::OSReport(ctx, cstr(ctx, 0x804029c4), &[VarArg::Int(0x593_i32 as u32)]);
+                        fns::OSPanic(
+                            ctx,
+                            cstr(ctx, 0x8040277c),
+                            0x593_i32,
+                            cstr(ctx, 0x8040277c),
+                            &[],
+                        );
+                    }
+                    if !((thread).priority() == inl___OSGetEffectivePriority_unfused(ctx, thread)) {
+                        fns::OSReport(ctx, cstr(ctx, 0x80402924), &[VarArg::Int(0x594_i32 as u32)]);
+                        fns::OSPanic(
+                            ctx,
+                            cstr(ctx, 0x8040277c),
+                            0x594_i32,
+                            cstr(ctx, 0x8040277c),
+                            &[],
+                        );
+                    }
+                    break 's5;
+                }
+                if __case <= 2 {
+                    if !(!Handle::is_null((thread).queue())) {
+                        fns::OSReport(ctx, cstr(ctx, 0x80402a00), &[VarArg::Int(0x597_i32 as u32)]);
+                        fns::OSPanic(
+                            ctx,
+                            cstr(ctx, 0x8040277c),
+                            0x597_i32,
+                            cstr(ctx, 0x8040277c),
+                            &[],
+                        );
+                    }
+                    if !((statics::dolphin__os__OSThread::CheckThreadQueue(ctx, (thread).queue()))
+                        != 0)
+                    {
+                        fns::OSReport(ctx, cstr(ctx, 0x80402a3c), &[VarArg::Int(0x598_i32 as u32)]);
+                        fns::OSPanic(
+                            ctx,
+                            cstr(ctx, 0x8040277c),
+                            0x598_i32,
+                            cstr(ctx, 0x8040277c),
+                            &[],
+                        );
+                    }
+                    if !((inl_IsMember_unfused(ctx, (thread).queue(), thread)) != 0) {
+                        fns::OSReport(ctx, cstr(ctx, 0x80402a80), &[VarArg::Int(0x599_i32 as u32)]);
+                        fns::OSPanic(
+                            ctx,
+                            cstr(ctx, 0x8040277c),
+                            0x599_i32,
+                            cstr(ctx, 0x8040277c),
+                            &[],
+                        );
+                    }
+                    if (thread).suspend() <= 0_i32 {
+                        if !((thread).priority()
+                            == inl___OSGetEffectivePriority_unfused(ctx, thread))
+                        {
+                            fns::OSReport(
+                                ctx,
+                                cstr(ctx, 0x80402924),
+                                &[VarArg::Int(0x59c_i32 as u32)],
+                            );
+                            fns::OSPanic(
+                                ctx,
+                                cstr(ctx, 0x8040277c),
+                                0x59c_i32,
+                                cstr(ctx, 0x8040277c),
+                                &[],
+                            );
+                        }
+                    } else {
+                        if !((thread).priority() == 32_i32) {
+                            fns::OSReport(
+                                ctx,
+                                cstr(ctx, 0x80402ac4),
+                                &[VarArg::Int(0x5a0_i32 as u32)],
+                            );
+                            fns::OSPanic(
+                                ctx,
+                                cstr(ctx, 0x8040277c),
+                                0x5a0_i32,
+                                cstr(ctx, 0x8040277c),
+                                &[],
+                            );
+                        }
+                    }
+                    if !(!(fns::__OSCheckDeadLock(ctx, thread) != 0)) {
+                        fns::OSReport(ctx, cstr(ctx, 0x80402b00), &[VarArg::Int(0x5a2_i32 as u32)]);
+                        fns::OSPanic(
+                            ctx,
+                            cstr(ctx, 0x8040277c),
+                            0x5a2_i32,
+                            cstr(ctx, 0x8040277c),
+                            &[],
+                        );
+                    }
+                    break 's5;
+                }
+                if __case <= 3 {
+                    if !((Handle::is_null((thread).queueMutex().head()))
+                        && (Handle::is_null((thread).queueMutex().tail())))
+                    {
+                        fns::OSReport(ctx, cstr(ctx, 0x80402b40), &[VarArg::Int(0x5a6_i32 as u32)]);
+                        fns::OSPanic(
+                            ctx,
+                            cstr(ctx, 0x8040277c),
+                            0x5a6_i32,
+                            cstr(ctx, 0x8040277c),
+                            &[],
+                        );
+                    }
+                    break 's5;
+                }
+                if __case <= 4 {
+                    fns::OSReport(
+                        ctx,
+                        cstr(ctx, 0x80402ba8),
+                        &[
+                            VarArg::Int(((thread).state() as i32) as u32),
+                            VarArg::Int(Handle::addr(thread)),
+                        ],
+                    );
+                    fns::OSPanic(
+                        ctx,
+                        cstr(ctx, 0x80402480),
+                        0x5ac_i32,
+                        cstr(ctx, 0x8040277c),
+                        &[],
+                    );
+                }
+            }
+            if !((fns::__OSCheckMutexes(ctx, thread)) != 0) {
+                fns::OSReport(ctx, cstr(ctx, 0x80402bf0), &[VarArg::Int(0x5b1_i32 as u32)]);
+                fns::OSPanic(
+                    ctx,
+                    cstr(ctx, 0x8040277c),
+                    0x5b1_i32,
+                    cstr(ctx, 0x8040277c),
+                    &[],
+                );
+            }
+            thread = (thread).linkActive().next();
+        }
+    }
+    let _ = fns::OSRestoreInterrupts(ctx, enabled);
+    return cThread;
+}
+
 fn inl_SetRun_unfused<'a>(ctx: &'a Ctx, thread: OSThread<'a>) {
     let mut thread = thread;
     (thread).set_queue(statics::dolphin__os__OSThread::RunQueue(ctx).get((thread).priority()));
@@ -885,8 +1353,30 @@ fn inl___OSGetEffectivePriority_unfused<'a>(ctx: &'a Ctx, thread: OSThread<'a>) 
     return priority;
 }
 
+fn inl_IsMember_unfused<'a>(ctx: &'a Ctx, queue: OSThreadQueue<'a>, thread: OSThread<'a>) -> i32 {
+    let mut queue = queue;
+    let mut thread = thread;
+    let mut member: OSThread<'a> = (queue).head();
+    'l1: while !Handle::is_null(member) {
+        'c2: {
+            if Handle::addr(thread) == Handle::addr(member) {
+                return 1_i32;
+            }
+            member = (member).link().next();
+        }
+    }
+    return 0_i32;
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x8034ac04,
+        |ctx| {
+            Ret::put(__OSThreadInit(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
     ctx.register_port(
         0x8034ad2c,
         |ctx| {
@@ -1024,6 +1514,13 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (OSThreadQueue<'_>,) = Args::take_all(ctx);
             Ret::put(CheckThreadQueue(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8034bca0,
+        |ctx| {
+            Ret::put(OSCheckActiveThreads(ctx), ctx);
         },
         Returns::Int,
     );

@@ -74,6 +74,10 @@ class Unsupported(Exception):
     pass
 
 
+# Bytes a variadic function's prologue saves the argument registers in: r3 to r10, f1 to f8.
+VA_SAVE_SIZE = 0x60
+
+
 class CrossingGotos(Unsupported):
     """Gotos whose blocks would cross: the function takes the state machine instead."""
 
@@ -240,6 +244,7 @@ class FnCtx:
         # Whether gotos jump into blocks, so the body becomes a state machine.
         self.cfg = False
         self.hoisted = set()  # locals declared ahead of the blocks that stand in for gotos
+        self.variadic = None  # a variadic function's type, whose frame starts with the saves
 
     def fresh(self, base):
         name = base
@@ -619,7 +624,11 @@ class Translator:
         if ft["k"] != "fn" or ft["params"] is None:
             raise Unsupported("no prototype")
         if ft["variadic"]:
-            raise Unsupported("variadic definition")
+            if self.inline:
+                raise Unsupported("variadic inline")
+            # MWCC's prologue saves the argument registers at the frame's start, for va_arg.
+            self.f.variadic = ft
+            self.f.frame_size = VA_SAVE_SIZE
         self.f.ret = ft["ret"]
         body = [x for x in children(c) if x.kind == CK.COMPOUND_STMT]
         if not body:
@@ -676,8 +685,12 @@ class Translator:
             self.f.cursor.linkage != ci.LinkageKind.INTERNAL or name in self.u.frame_sizes) else 0
         needed = (8 + self.f.frame_size + 7) & ~7 if self.f.frame else 0
         size = max(original, needed)
+        if self.f.variadic:
+            size = max(size, (8 + VA_SAVE_SIZE + 7) & ~7)
         if size:
             lines.append(f"    let __frame = ctx.stack_frame({size:#x});")
+            if self.f.variadic:
+                lines.append("    __frame.save_varargs();")
             for rname, hty, off in self.f.frame:
                 lines.append(f"    let {ident(rname)}: {hty} = frame_at(ctx, &__frame, {off:#x});")
         lines += ["    " + p for p in pre]
@@ -1206,7 +1219,9 @@ class Translator:
             ref = [r for r in n.get_children() if r.kind == CK.LABEL_REF]
             at, blk, lp = self.f.goto_labels.get(ref[0].spelling if ref else "", (None, None, None))
             if at is None:
-                raise Unsupported("goto without its label")
+                # A label blocks cannot reach, such as one between a switch's cases: the
+                # function takes the state machine.
+                raise CrossingGotos("goto to a label out of reach")
             if n.extent.start.offset < at:
                 return [f"break {blk};"]
             return [f"continue {lp};"]
@@ -1416,7 +1431,19 @@ class Translator:
                 return self.initialize(lv, t, kids[0])
             raise Unsupported("init list")
         if t["k"] == "arr" and strip(init).kind == CK.STRING_LITERAL:
-            raise Unsupported("char array from string")
+            # MWCC copies the literal, zero-padded to the array's size, from its data.
+            data = self.string_bytes(strip(init))
+            try:
+                sjis = data.decode("utf-8").encode("cp932")
+                data = sjis
+            except (UnicodeDecodeError, UnicodeEncodeError):
+                pass
+            n = self.u.size_of(t)
+            if len(data) > n:
+                data = data[:n]
+            data += b"\0" * (n - len(data))
+            lit = "".join(f"\\x{b:02x}" for b in data)
+            return [f'ctx.write_bytes(Handle::addr({lv.addr_code}), b"{lit}");']
         v = self.expr(init)
         if t["k"] == "rec":
             return [f"Handle::copy_from({lv.addr_code}, {v.code});"]
@@ -1865,10 +1892,14 @@ class Translator:
 
     def string_bytes(self, c):
         toks = [t.spelling for t in c.get_tokens()]
+        if not all(tok.startswith('"') for tok in toks):
+            # A literal a macro makes, from `#x` or `__FILE__`: clang spells it expanded.
+            sp = c.spelling
+            if len(sp) < 2 or not (sp.startswith('"') and sp.endswith('"')):
+                raise Unsupported("string literal token")
+            return c_unescape(sp[1:-1])
         data = b""
         for tok in toks:
-            if not tok.startswith('"'):
-                raise Unsupported("string literal token")
             data += c_unescape(tok[1:-1])
         return data
 
@@ -2299,7 +2330,8 @@ class Translator:
                 except Unsupported as e:
                     self.u.inline_fallbacks.append((self.f.cursor.spelling, name, str(e)))
                 else:
-                    argv = self.forwarding(self.call_args(ft, args, inlined=True), fwd)
+                    argv = self.forwarding(self.call_args(ft, args, inlined=True,
+                                                          unread=unread_params(defn)), fwd)
                     if t["k"] == "rec":
                         return self.sret_call(rname, argv, t)
                     return Expr(f"{rname}(ctx{''.join(', ' + a for a in argv)})", t, False)
@@ -2328,7 +2360,7 @@ class Translator:
             if defn is None:
                 raise Unsupported(f"call to {name}, which has no address or body")
             fwd = self.forward_args(defn, args)
-            argv = self.forwarding(self.call_args(ft, args, inlined=True), fwd)
+            argv = self.forwarding(self.call_args(ft, args, inlined=True, unread=unread_params(defn)), fwd)
             rname = self.u.request_inline(defn, self.fuse, self, self.reg_ptr_args(defn, args),
                                           {pn: neg for pn, (_, _, neg) in fwd.values()},
                                           self.same_args(defn, args))
@@ -2615,6 +2647,20 @@ class Translator:
             out += [f"if {tmp} != 0 {{"] + self.indent(self.block(kids[2])) + ["}"]
         return out
 
+    def arg_registers(self, ft):
+        """How many general and float registers a function's fixed parameters take, as the
+        EABI assigns them: a 64-bit integer an aligned pair, a struct its address."""
+        gpr = 1 if ft["ret"]["k"] == "rec" and self.u.size_of(ft["ret"]) not in (4, 8) else 0
+        fpr = 0
+        for pt in ft["params"]:
+            if is_float(pt):
+                fpr += 1
+            elif is_int(pt) and int_info(pt)[0] == 8:
+                gpr += gpr % 2 + 2
+            else:
+                gpr += 1
+        return min(gpr, 8), min(fpr, 8)
+
     def helper(self, name, argv, t):
         """A call to one of MWCC's runtime helpers, as the original makes one."""
         f = self.u.prog.function(name, self.u.name)
@@ -2660,18 +2706,23 @@ class Translator:
         return Expr("{ " + f"{path}(ctx, {ident(slot)}{''.join(', ' + a for a in argv)}); {ident(slot)}" + " }",
                     t, False)
 
-    def call_args(self, ft, args, marshal=False, inlined=False):
+    def call_args(self, ft, args, marshal=False, inlined=False, unread=()):
         self.in_args += inlined
         try:
-            return self._call_args(ft, args, marshal)
+            return self._call_args(ft, args, marshal, unread)
         finally:
             self.in_args -= inlined
 
-    def _call_args(self, ft, args, marshal=False):
+    def _call_args(self, ft, args, marshal=False, unread=()):
         params = ft["params"]
         out = []
         for i, a in enumerate(args[:len(params)]):
             pt = params[i]
+            if i in unread and pt["k"] not in ("rec", "arr") and not has_effects(a):
+                # An inlined function never reads it, and MWCC drops what has no effect,
+                # string literals included.
+                out.append(self.zero(pt))
+                continue
             if pt["k"] == "rec":
                 out.append(self.expr(a).code)
                 continue
@@ -2710,6 +2761,12 @@ class Translator:
             return Expr(f"{simple[name]}({v.code})", t, v.pure)
         if name == "__c2rs_inline_asm":
             raise Unsupported("inline asm")
+        if name == "__builtin_va_info":
+            if not self.f.variadic:
+                raise Unsupported("va_start outside a variadic function")
+            gpr, fpr = self.arg_registers(self.f.variadic)
+            ap = self.convert(self.expr(args[0]), {"k": "ptr", "to": {"k": "void"}})
+            return Expr(f"__frame.va_info(Handle::addr({ap.code}), {gpr}, {fpr})", {"k": "void"}, False)
         if name in ("__HI", "__LO"):
             # MSL's words of a double: the high one holds the sign and exponent.
             v = self.convert(self.expr(args[0]), DOUBLE)
@@ -2823,6 +2880,15 @@ class Translator:
 
 
 NEGATED = {"fmadd": "fnmadd", "fmsub": "fnmsub", "fnmadd": "fmadd", "fnmsub": "fmsub"}
+
+
+def unread_params(defn):
+    """Indices of the parameters a function's body never mentions."""
+    params = [a for a in children(defn) if a.kind == CK.PARM_DECL]
+    body = [x for x in children(defn) if x.kind == CK.COMPOUND_STMT]
+    used = {n.referenced.spelling for n in (body[0].walk_preorder() if body else ())
+            if n.kind == CK.DECL_REF_EXPR and n.referenced is not None and n.referenced.kind == CK.PARM_DECL}
+    return {i for i, a in enumerate(params) if a.spelling not in used}
 
 
 def has_effects(node, depth=0):
