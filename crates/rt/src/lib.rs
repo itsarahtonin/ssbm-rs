@@ -191,13 +191,6 @@ impl Ctx {
     /// Writes MSR, as `mtmsr` does: enabling interrupts lets pending ones in.
     pub fn set_msr(&self, v: u32) {
         let old = self.regs.msr.replace(v);
-        if (old ^ v) & MSR_EE != 0 && std::env::var_os("MSR_TRACE").is_some() {
-            eprintln!(
-                "msr ee {} lr {}",
-                v & MSR_EE != 0,
-                self.name_of(self.regs.lr.get())
-            );
-        }
         if old & MSR_EE == 0 && v & MSR_EE != 0 {
             self.check_interrupts();
         }

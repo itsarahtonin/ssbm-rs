@@ -120,17 +120,10 @@ fn main() -> ExitCode {
                         ctx.name_of(interp3.pc.get()),
                         w = 2 * len as usize
                     );
-                    let f: Vec<String> = [0, 1, 2, 31]
-                        .iter()
-                        .map(|&i| format!("f{i}={:016X}", ctx.regs.f(i).to_bits()))
+                    let f: Vec<String> = (0..4)
+                        .map(|i| format!("f{i}={:016X}", ctx.regs.f(i).to_bits()))
                         .collect();
-                    let base = addr & !0xFF;
-                    eprintln!(
-                        "    {}  kb_vel {:08X} {:08X}",
-                        f.join(" "),
-                        ctx.read_u32(base + 0x8C),
-                        ctx.read_u32(base + 0x90)
-                    );
+                    eprintln!("    {}", f.join(" "));
                     for (a, b) in interp3.recent_jumps().iter().rev().take(4) {
                         eprintln!("    after {} -> {}", ctx.name_of(*a), ctx.name_of(*b));
                     }

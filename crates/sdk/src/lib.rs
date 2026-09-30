@@ -161,14 +161,6 @@ impl Sdk {
     /// unmasked, or else as soon as they are.
     pub fn raise(&self, ctx: &Ctx, n: u32) {
         self.pending.set(self.pending.get() | (0x8000_0000 >> n));
-        if std::env::var_os("SDK_TRACE").is_some() {
-            eprintln!(
-                "raise {n} ee {} in_service {} at tb {}",
-                ctx.regs.msr.get() & MSR_EE != 0,
-                self.in_service.get(),
-                Self::now(ctx)
-            );
-        }
         if ctx.regs.msr.get() & MSR_EE != 0 {
             Self::take_interrupts(ctx);
         }
@@ -178,14 +170,6 @@ impl Sdk {
     /// interrupts are enabled.
     fn take_interrupts(ctx: &Ctx) {
         let sdk = ctx.ext::<Sdk>();
-        if std::env::var_os("SDK_TRACE").is_some() && sdk.pending.get() != 0 {
-            eprintln!(
-                "take: in_service {} pending {:08X} lr {:08X}",
-                sdk.in_service.get(),
-                sdk.pending.get(),
-                ctx.regs.lr.get()
-            );
-        }
         if sdk.in_service.get() {
             return;
         }
@@ -214,9 +198,6 @@ impl Sdk {
             return false;
         }
         let n = ready.leading_zeros();
-        if std::env::var_os("SDK_TRACE").is_some() {
-            eprintln!("deliver {n}");
-        }
         self.pending.set(self.pending.get() & !(0x8000_0000 >> n));
         let handler = ctx.read_u32(INTERRUPT_TABLE + 4 * n);
         if handler != 0 {
