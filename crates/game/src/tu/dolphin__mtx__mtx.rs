@@ -25,6 +25,867 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
+
+pub fn PSMTXIdentity<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>) {
+    // Transliterated from its machine code, whose source is assembly.
+    (a0,).put_regs(ctx);
+    asm_PSMTXIdentity(ctx);
+}
+
+fn asm_PSMTXIdentity(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    // lfs f0, "@10"@sda21(r0)
+    {
+        let ea = g[2].get().wrapping_add(0xffffe934_u32);
+        c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
+    }
+    // lfs f1, "@9"@sda21(r0)
+    {
+        let ea = g[2].get().wrapping_add(0xffffe930_u32);
+        c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
+    }
+    // psq_st f0, 0x8(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x8_u32);
+        c::psq_store(ctx, ea, 0, false, 0);
+    }
+    // ps_merge01 f2, f0, f1
+    {
+        let v = fp::ps_merge01(f[0].get(), f[1].get());
+        f[2].set(v);
+    }
+    // psq_st f0, 0x18(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x18_u32);
+        c::psq_store(ctx, ea, 0, false, 0);
+    }
+    // ps_merge10 f1, f1, f0
+    {
+        let v = fp::ps_merge10(f[1].get(), f[0].get());
+        f[1].set(v);
+    }
+    // psq_st f0, 0x20(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x20_u32);
+        c::psq_store(ctx, ea, 0, false, 0);
+    }
+    // psq_st f2, 0x10(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x10_u32);
+        c::psq_store(ctx, ea, 2, false, 0);
+    }
+    // psq_st f1, 0x0(r3), 0, qr0
+    {
+        let ea = g[3].get();
+        c::psq_store(ctx, ea, 1, false, 0);
+    }
+    // psq_st f1, 0x28(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x28_u32);
+        c::psq_store(ctx, ea, 1, false, 0);
+    }
+    // blr
+    let to = ctx.regs.lr.get() & !3;
+    if to != lr0 & !3 {
+        c::tail_call(ctx, to);
+    }
+    return;
+}
+
+pub fn PSMTXCopy<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>, a1: ArrV<'a, F32, 4>) {
+    // Transliterated from its machine code, whose source is assembly.
+    (a0, a1).put_regs(ctx);
+    asm_PSMTXCopy(ctx);
+}
+
+fn asm_PSMTXCopy(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    // psq_l f0, 0x0(r3), 0, qr0
+    {
+        let ea = g[3].get();
+        c::psq_load(ctx, ea, 0, false, 0);
+    }
+    // psq_st f0, 0x0(r4), 0, qr0
+    {
+        let ea = g[4].get();
+        c::psq_store(ctx, ea, 0, false, 0);
+    }
+    // psq_l f1, 0x8(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x8_u32);
+        c::psq_load(ctx, ea, 1, false, 0);
+    }
+    // psq_st f1, 0x8(r4), 0, qr0
+    {
+        let ea = g[4].get().wrapping_add(0x8_u32);
+        c::psq_store(ctx, ea, 1, false, 0);
+    }
+    // psq_l f2, 0x10(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x10_u32);
+        c::psq_load(ctx, ea, 2, false, 0);
+    }
+    // psq_st f2, 0x10(r4), 0, qr0
+    {
+        let ea = g[4].get().wrapping_add(0x10_u32);
+        c::psq_store(ctx, ea, 2, false, 0);
+    }
+    // psq_l f3, 0x18(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x18_u32);
+        c::psq_load(ctx, ea, 3, false, 0);
+    }
+    // psq_st f3, 0x18(r4), 0, qr0
+    {
+        let ea = g[4].get().wrapping_add(0x18_u32);
+        c::psq_store(ctx, ea, 3, false, 0);
+    }
+    // psq_l f4, 0x20(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x20_u32);
+        c::psq_load(ctx, ea, 4, false, 0);
+    }
+    // psq_st f4, 0x20(r4), 0, qr0
+    {
+        let ea = g[4].get().wrapping_add(0x20_u32);
+        c::psq_store(ctx, ea, 4, false, 0);
+    }
+    // psq_l f5, 0x28(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x28_u32);
+        c::psq_load(ctx, ea, 5, false, 0);
+    }
+    // psq_st f5, 0x28(r4), 0, qr0
+    {
+        let ea = g[4].get().wrapping_add(0x28_u32);
+        c::psq_store(ctx, ea, 5, false, 0);
+    }
+    // blr
+    let to = ctx.regs.lr.get() & !3;
+    if to != lr0 & !3 {
+        c::tail_call(ctx, to);
+    }
+    return;
+}
+
+pub fn PSMTXConcat<'a>(
+    ctx: &'a Ctx,
+    a0: ArrV<'a, F32, 4>,
+    a1: ArrV<'a, F32, 4>,
+    a2: ArrV<'a, F32, 4>,
+) {
+    // Transliterated from its machine code, whose source is assembly.
+    (a0, a1, a2).put_regs(ctx);
+    asm_PSMTXConcat(ctx);
+}
+
+fn asm_PSMTXConcat(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    // stwu r1, -0x40(r1)
+    {
+        let ea = g[1].get().wrapping_add(0xffffffc0_u32);
+        ctx.write_u32(ea, g[1].get());
+        g[1].set(ea);
+    }
+    // psq_l f0, 0x0(r3), 0, qr0
+    {
+        let ea = g[3].get();
+        c::psq_load(ctx, ea, 0, false, 0);
+    }
+    // stfd f14, 0x8(r1)
+    {
+        let ea = g[1].get().wrapping_add(0x8_u32);
+        ctx.write_u64(ea, ctx.regs.f(14).to_bits());
+    }
+    // psq_l f6, 0x0(r4), 0, qr0
+    {
+        let ea = g[4].get();
+        c::psq_load(ctx, ea, 6, false, 0);
+    }
+    // lis r6, Unit01@ha
+    g[6].set(0x804d0000_u32);
+    // psq_l f7, 0x8(r4), 0, qr0
+    {
+        let ea = g[4].get().wrapping_add(0x8_u32);
+        c::psq_load(ctx, ea, 7, false, 0);
+    }
+    // stfd f15, 0x10(r1)
+    {
+        let ea = g[1].get().wrapping_add(0x10_u32);
+        ctx.write_u64(ea, ctx.regs.f(15).to_bits());
+    }
+    // addi r6, r6, Unit01@l
+    g[6].set(g[6].get().wrapping_add(0x5c00_u32));
+    // stfd f31, 0x28(r1)
+    {
+        let ea = g[1].get().wrapping_add(0x28_u32);
+        ctx.write_u64(ea, ctx.regs.f(31).to_bits());
+    }
+    // psq_l f8, 0x10(r4), 0, qr0
+    {
+        let ea = g[4].get().wrapping_add(0x10_u32);
+        c::psq_load(ctx, ea, 8, false, 0);
+    }
+    // ps_muls0 f12, f6, f0
+    {
+        let v = fp::ps_muls0(f[6].get(), f[0].get());
+        f[12].set(v);
+    }
+    // psq_l f2, 0x10(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x10_u32);
+        c::psq_load(ctx, ea, 2, false, 0);
+    }
+    // ps_muls0 f13, f7, f0
+    {
+        let v = fp::ps_muls0(f[7].get(), f[0].get());
+        f[13].set(v);
+    }
+    // psq_l f31, 0x0(r6), 0, qr0
+    {
+        let ea = g[6].get();
+        c::psq_load(ctx, ea, 31, false, 0);
+    }
+    // ps_muls0 f14, f6, f2
+    {
+        let v = fp::ps_muls0(f[6].get(), f[2].get());
+        f[14].set(v);
+    }
+    // psq_l f9, 0x18(r4), 0, qr0
+    {
+        let ea = g[4].get().wrapping_add(0x18_u32);
+        c::psq_load(ctx, ea, 9, false, 0);
+    }
+    // ps_muls0 f15, f7, f2
+    {
+        let v = fp::ps_muls0(f[7].get(), f[2].get());
+        f[15].set(v);
+    }
+    // psq_l f1, 0x8(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x8_u32);
+        c::psq_load(ctx, ea, 1, false, 0);
+    }
+    // ps_madds1 f12, f8, f0, f12
+    {
+        let v = fp::ps_madds1(f[8].get(), f[0].get(), f[12].get());
+        f[12].set(v);
+    }
+    // psq_l f3, 0x18(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x18_u32);
+        c::psq_load(ctx, ea, 3, false, 0);
+    }
+    // ps_madds1 f14, f8, f2, f14
+    {
+        let v = fp::ps_madds1(f[8].get(), f[2].get(), f[14].get());
+        f[14].set(v);
+    }
+    // psq_l f10, 0x20(r4), 0, qr0
+    {
+        let ea = g[4].get().wrapping_add(0x20_u32);
+        c::psq_load(ctx, ea, 10, false, 0);
+    }
+    // ps_madds1 f13, f9, f0, f13
+    {
+        let v = fp::ps_madds1(f[9].get(), f[0].get(), f[13].get());
+        f[13].set(v);
+    }
+    // psq_l f11, 0x28(r4), 0, qr0
+    {
+        let ea = g[4].get().wrapping_add(0x28_u32);
+        c::psq_load(ctx, ea, 11, false, 0);
+    }
+    // ps_madds1 f15, f9, f2, f15
+    {
+        let v = fp::ps_madds1(f[9].get(), f[2].get(), f[15].get());
+        f[15].set(v);
+    }
+    // psq_l f4, 0x20(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x20_u32);
+        c::psq_load(ctx, ea, 4, false, 0);
+    }
+    // psq_l f5, 0x28(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x28_u32);
+        c::psq_load(ctx, ea, 5, false, 0);
+    }
+    // ps_madds0 f12, f10, f1, f12
+    {
+        let v = fp::ps_madds0(f[10].get(), f[1].get(), f[12].get());
+        f[12].set(v);
+    }
+    // ps_madds0 f13, f11, f1, f13
+    {
+        let v = fp::ps_madds0(f[11].get(), f[1].get(), f[13].get());
+        f[13].set(v);
+    }
+    // ps_madds0 f14, f10, f3, f14
+    {
+        let v = fp::ps_madds0(f[10].get(), f[3].get(), f[14].get());
+        f[14].set(v);
+    }
+    // ps_madds0 f15, f11, f3, f15
+    {
+        let v = fp::ps_madds0(f[11].get(), f[3].get(), f[15].get());
+        f[15].set(v);
+    }
+    // psq_st f12, 0x0(r5), 0, qr0
+    {
+        let ea = g[5].get();
+        c::psq_store(ctx, ea, 12, false, 0);
+    }
+    // ps_muls0 f2, f6, f4
+    {
+        let v = fp::ps_muls0(f[6].get(), f[4].get());
+        f[2].set(v);
+    }
+    // ps_madds1 f13, f31, f1, f13
+    {
+        let v = fp::ps_madds1(f[31].get(), f[1].get(), f[13].get());
+        f[13].set(v);
+    }
+    // ps_muls0 f0, f7, f4
+    {
+        let v = fp::ps_muls0(f[7].get(), f[4].get());
+        f[0].set(v);
+    }
+    // psq_st f14, 0x10(r5), 0, qr0
+    {
+        let ea = g[5].get().wrapping_add(0x10_u32);
+        c::psq_store(ctx, ea, 14, false, 0);
+    }
+    // ps_madds1 f15, f31, f3, f15
+    {
+        let v = fp::ps_madds1(f[31].get(), f[3].get(), f[15].get());
+        f[15].set(v);
+    }
+    // psq_st f13, 0x8(r5), 0, qr0
+    {
+        let ea = g[5].get().wrapping_add(0x8_u32);
+        c::psq_store(ctx, ea, 13, false, 0);
+    }
+    // ps_madds1 f2, f8, f4, f2
+    {
+        let v = fp::ps_madds1(f[8].get(), f[4].get(), f[2].get());
+        f[2].set(v);
+    }
+    // ps_madds1 f0, f9, f4, f0
+    {
+        let v = fp::ps_madds1(f[9].get(), f[4].get(), f[0].get());
+        f[0].set(v);
+    }
+    // ps_madds0 f2, f10, f5, f2
+    {
+        let v = fp::ps_madds0(f[10].get(), f[5].get(), f[2].get());
+        f[2].set(v);
+    }
+    // lfd f14, 0x8(r1)
+    {
+        let ea = g[1].get().wrapping_add(0x8_u32);
+        ctx.regs.set_f(14, f64::from_bits(ctx.read_u64(ea)));
+    }
+    // psq_st f15, 0x18(r5), 0, qr0
+    {
+        let ea = g[5].get().wrapping_add(0x18_u32);
+        c::psq_store(ctx, ea, 15, false, 0);
+    }
+    // ps_madds0 f0, f11, f5, f0
+    {
+        let v = fp::ps_madds0(f[11].get(), f[5].get(), f[0].get());
+        f[0].set(v);
+    }
+    // psq_st f2, 0x20(r5), 0, qr0
+    {
+        let ea = g[5].get().wrapping_add(0x20_u32);
+        c::psq_store(ctx, ea, 2, false, 0);
+    }
+    // ps_madds1 f0, f31, f5, f0
+    {
+        let v = fp::ps_madds1(f[31].get(), f[5].get(), f[0].get());
+        f[0].set(v);
+    }
+    // lfd f15, 0x10(r1)
+    {
+        let ea = g[1].get().wrapping_add(0x10_u32);
+        ctx.regs.set_f(15, f64::from_bits(ctx.read_u64(ea)));
+    }
+    // psq_st f0, 0x28(r5), 0, qr0
+    {
+        let ea = g[5].get().wrapping_add(0x28_u32);
+        c::psq_store(ctx, ea, 0, false, 0);
+    }
+    // lfd f31, 0x28(r1)
+    {
+        let ea = g[1].get().wrapping_add(0x28_u32);
+        ctx.regs.set_f(31, f64::from_bits(ctx.read_u64(ea)));
+    }
+    // addi r1, r1, 0x40
+    g[1].set(g[1].get().wrapping_add(0x40_u32));
+    // blr
+    let to = ctx.regs.lr.get() & !3;
+    if to != lr0 & !3 {
+        c::tail_call(ctx, to);
+    }
+    return;
+}
+
+pub fn PSMTXTranspose<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>, a1: ArrV<'a, F32, 4>) {
+    // Transliterated from its machine code, whose source is assembly.
+    (a0, a1).put_regs(ctx);
+    asm_PSMTXTranspose(ctx);
+}
+
+fn asm_PSMTXTranspose(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    // lfs f0, "@10"@sda21(r0)
+    {
+        let ea = g[2].get().wrapping_add(0xffffe934_u32);
+        c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
+    }
+    // psq_l f1, 0x0(r3), 0, qr0
+    {
+        let ea = g[3].get();
+        c::psq_load(ctx, ea, 1, false, 0);
+    }
+    // stfs f0, 0x2c(r4)
+    {
+        let ea = g[4].get().wrapping_add(0x2c_u32);
+        ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
+    }
+    // psq_l f2, 0x10(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x10_u32);
+        c::psq_load(ctx, ea, 2, false, 0);
+    }
+    // ps_merge00 f4, f1, f2
+    {
+        let v = fp::ps_merge00(f[1].get(), f[2].get());
+        f[4].set(v);
+    }
+    // psq_l f3, 0x8(r3), 1, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x8_u32);
+        c::psq_load(ctx, ea, 3, true, 0);
+    }
+    // ps_merge11 f5, f1, f2
+    {
+        let v = fp::ps_merge11(f[1].get(), f[2].get());
+        f[5].set(v);
+    }
+    // psq_l f2, 0x18(r3), 1, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x18_u32);
+        c::psq_load(ctx, ea, 2, true, 0);
+    }
+    // psq_st f4, 0x0(r4), 0, qr0
+    {
+        let ea = g[4].get();
+        c::psq_store(ctx, ea, 4, false, 0);
+    }
+    // psq_l f1, 0x20(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x20_u32);
+        c::psq_load(ctx, ea, 1, false, 0);
+    }
+    // ps_merge00 f2, f3, f2
+    {
+        let v = fp::ps_merge00(f[3].get(), f[2].get());
+        f[2].set(v);
+    }
+    // psq_st f5, 0x10(r4), 0, qr0
+    {
+        let ea = g[4].get().wrapping_add(0x10_u32);
+        c::psq_store(ctx, ea, 5, false, 0);
+    }
+    // ps_merge00 f4, f1, f0
+    {
+        let v = fp::ps_merge00(f[1].get(), f[0].get());
+        f[4].set(v);
+    }
+    // psq_st f2, 0x20(r4), 0, qr0
+    {
+        let ea = g[4].get().wrapping_add(0x20_u32);
+        c::psq_store(ctx, ea, 2, false, 0);
+    }
+    // ps_merge10 f5, f1, f0
+    {
+        let v = fp::ps_merge10(f[1].get(), f[0].get());
+        f[5].set(v);
+    }
+    // psq_st f4, 0x8(r4), 0, qr0
+    {
+        let ea = g[4].get().wrapping_add(0x8_u32);
+        c::psq_store(ctx, ea, 4, false, 0);
+    }
+    // lfs f3, 0x28(r3)
+    {
+        let ea = g[3].get().wrapping_add(0x28_u32);
+        c::fill(ctx, 3, fp::lfs(ctx.read_u32(ea)));
+    }
+    // psq_st f5, 0x18(r4), 0, qr0
+    {
+        let ea = g[4].get().wrapping_add(0x18_u32);
+        c::psq_store(ctx, ea, 5, false, 0);
+    }
+    // stfs f3, 0x28(r4)
+    {
+        let ea = g[4].get().wrapping_add(0x28_u32);
+        ctx.write_u32(ea, fp::stfs(ctx.regs.f(3)));
+    }
+    // blr
+    let to = ctx.regs.lr.get() & !3;
+    if to != lr0 & !3 {
+        c::tail_call(ctx, to);
+    }
+    return;
+}
+
+pub fn PSMTXInverse<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>, a1: ArrV<'a, F32, 4>) -> u32 {
+    // Transliterated from its machine code, whose source is assembly.
+    (a0, a1).put_regs(ctx);
+    asm_PSMTXInverse(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_PSMTXInverse(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80342320_u32;
+    loop {
+        match pc {
+            0x80342320_u32 => {
+                // psq_l f0, 0x0(r3), 1, qr0
+                {
+                    let ea = g[3].get();
+                    c::psq_load(ctx, ea, 0, true, 0);
+                }
+                // psq_l f1, 0x4(r3), 0, qr0
+                {
+                    let ea = g[3].get().wrapping_add(0x4_u32);
+                    c::psq_load(ctx, ea, 1, false, 0);
+                }
+                // psq_l f2, 0x10(r3), 1, qr0
+                {
+                    let ea = g[3].get().wrapping_add(0x10_u32);
+                    c::psq_load(ctx, ea, 2, true, 0);
+                }
+                // ps_merge10 f6, f1, f0
+                {
+                    let v = fp::ps_merge10(f[1].get(), f[0].get());
+                    f[6].set(v);
+                }
+                // psq_l f3, 0x14(r3), 0, qr0
+                {
+                    let ea = g[3].get().wrapping_add(0x14_u32);
+                    c::psq_load(ctx, ea, 3, false, 0);
+                }
+                // psq_l f4, 0x20(r3), 1, qr0
+                {
+                    let ea = g[3].get().wrapping_add(0x20_u32);
+                    c::psq_load(ctx, ea, 4, true, 0);
+                }
+                // ps_merge10 f7, f3, f2
+                {
+                    let v = fp::ps_merge10(f[3].get(), f[2].get());
+                    f[7].set(v);
+                }
+                // psq_l f5, 0x24(r3), 0, qr0
+                {
+                    let ea = g[3].get().wrapping_add(0x24_u32);
+                    c::psq_load(ctx, ea, 5, false, 0);
+                }
+                // ps_mul f11, f3, f6
+                {
+                    let v = fp::ps_mul(f[3].get(), f[6].get());
+                    f[11].set(v);
+                }
+                // ps_mul f13, f5, f7
+                {
+                    let v = fp::ps_mul(f[5].get(), f[7].get());
+                    f[13].set(v);
+                }
+                // ps_merge10 f8, f5, f4
+                {
+                    let v = fp::ps_merge10(f[5].get(), f[4].get());
+                    f[8].set(v);
+                }
+                // ps_msub f11, f1, f7, f11
+                {
+                    let v = fp::ps_msub(f[1].get(), f[7].get(), f[11].get());
+                    f[11].set(v);
+                }
+                // ps_mul f12, f1, f8
+                {
+                    let v = fp::ps_mul(f[1].get(), f[8].get());
+                    f[12].set(v);
+                }
+                // ps_msub f13, f3, f8, f13
+                {
+                    let v = fp::ps_msub(f[3].get(), f[8].get(), f[13].get());
+                    f[13].set(v);
+                }
+                // ps_mul f10, f3, f4
+                {
+                    let v = fp::ps_mul(f[3].get(), f[4].get());
+                    f[10].set(v);
+                }
+                // ps_msub f12, f5, f6, f12
+                {
+                    let v = fp::ps_msub(f[5].get(), f[6].get(), f[12].get());
+                    f[12].set(v);
+                }
+                // ps_mul f9, f0, f5
+                {
+                    let v = fp::ps_mul(f[0].get(), f[5].get());
+                    f[9].set(v);
+                }
+                // ps_mul f8, f1, f2
+                {
+                    let v = fp::ps_mul(f[1].get(), f[2].get());
+                    f[8].set(v);
+                }
+                // ps_sub f6, f6, f6
+                {
+                    let v = fp::ps_sub(f[6].get(), f[6].get());
+                    f[6].set(v);
+                }
+                // ps_msub f10, f2, f5, f10
+                {
+                    let v = fp::ps_msub(f[2].get(), f[5].get(), f[10].get());
+                    f[10].set(v);
+                }
+                // ps_mul f7, f0, f13
+                {
+                    let v = fp::ps_mul(f[0].get(), f[13].get());
+                    f[7].set(v);
+                }
+                // ps_msub f9, f1, f4, f9
+                {
+                    let v = fp::ps_msub(f[1].get(), f[4].get(), f[9].get());
+                    f[9].set(v);
+                }
+                // ps_madd f7, f2, f12, f7
+                {
+                    let v = fp::ps_madd(f[2].get(), f[12].get(), f[7].get());
+                    f[7].set(v);
+                }
+                // ps_msub f8, f0, f3, f8
+                {
+                    let v = fp::ps_msub(f[0].get(), f[3].get(), f[8].get());
+                    f[8].set(v);
+                }
+                // ps_madd f7, f4, f11, f7
+                {
+                    let v = fp::ps_madd(f[4].get(), f[11].get(), f[7].get());
+                    f[7].set(v);
+                }
+                // ps_cmpo0 cr0, f7, f6
+                c::fp_compare(ctx, 0, f[7].get().ps0, f[6].get().ps0);
+                // bne .L_80342394
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80342394_u32;
+                    continue;
+                }
+                pc = 0x8034238c_u32;
+            }
+            0x8034238c_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                pc = 0x80342394_u32;
+            }
+            0x80342394_u32 => {
+                // fres f0, f7
+                {
+                    let v = fp::fres(ctx.regs.f(7));
+                    c::fill(ctx, 0, v);
+                }
+                // ps_add f6, f0, f0
+                {
+                    let v = fp::ps_add(f[0].get(), f[0].get());
+                    f[6].set(v);
+                }
+                // ps_mul f5, f0, f0
+                {
+                    let v = fp::ps_mul(f[0].get(), f[0].get());
+                    f[5].set(v);
+                }
+                // ps_nmsub f0, f7, f5, f6
+                {
+                    let v = fp::ps_nmsub(f[7].get(), f[5].get(), f[6].get());
+                    f[0].set(v);
+                }
+                // lfs f1, 0xc(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0xc_u32);
+                    c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
+                }
+                // ps_muls0 f13, f13, f0
+                {
+                    let v = fp::ps_muls0(f[13].get(), f[0].get());
+                    f[13].set(v);
+                }
+                // lfs f2, 0x1c(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x1c_u32);
+                    c::fill(ctx, 2, fp::lfs(ctx.read_u32(ea)));
+                }
+                // ps_muls0 f12, f12, f0
+                {
+                    let v = fp::ps_muls0(f[12].get(), f[0].get());
+                    f[12].set(v);
+                }
+                // lfs f3, 0x2c(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x2c_u32);
+                    c::fill(ctx, 3, fp::lfs(ctx.read_u32(ea)));
+                }
+                // ps_muls0 f11, f11, f0
+                {
+                    let v = fp::ps_muls0(f[11].get(), f[0].get());
+                    f[11].set(v);
+                }
+                // ps_merge00 f5, f13, f12
+                {
+                    let v = fp::ps_merge00(f[13].get(), f[12].get());
+                    f[5].set(v);
+                }
+                // ps_muls0 f10, f10, f0
+                {
+                    let v = fp::ps_muls0(f[10].get(), f[0].get());
+                    f[10].set(v);
+                }
+                // ps_merge11 f4, f13, f12
+                {
+                    let v = fp::ps_merge11(f[13].get(), f[12].get());
+                    f[4].set(v);
+                }
+                // ps_muls0 f9, f9, f0
+                {
+                    let v = fp::ps_muls0(f[9].get(), f[0].get());
+                    f[9].set(v);
+                }
+                // psq_st f5, 0x0(r4), 0, qr0
+                {
+                    let ea = g[4].get();
+                    c::psq_store(ctx, ea, 5, false, 0);
+                }
+                // ps_mul f6, f13, f1
+                {
+                    let v = fp::ps_mul(f[13].get(), f[1].get());
+                    f[6].set(v);
+                }
+                // psq_st f4, 0x10(r4), 0, qr0
+                {
+                    let ea = g[4].get().wrapping_add(0x10_u32);
+                    c::psq_store(ctx, ea, 4, false, 0);
+                }
+                // ps_muls0 f8, f8, f0
+                {
+                    let v = fp::ps_muls0(f[8].get(), f[0].get());
+                    f[8].set(v);
+                }
+                // ps_madd f6, f12, f2, f6
+                {
+                    let v = fp::ps_madd(f[12].get(), f[2].get(), f[6].get());
+                    f[6].set(v);
+                }
+                // psq_st f10, 0x20(r4), 1, qr0
+                {
+                    let ea = g[4].get().wrapping_add(0x20_u32);
+                    c::psq_store(ctx, ea, 10, true, 0);
+                }
+                // ps_nmadd f6, f11, f3, f6
+                {
+                    let v = fp::ps_nmadd(f[11].get(), f[3].get(), f[6].get());
+                    f[6].set(v);
+                }
+                // psq_st f9, 0x24(r4), 1, qr0
+                {
+                    let ea = g[4].get().wrapping_add(0x24_u32);
+                    c::psq_store(ctx, ea, 9, true, 0);
+                }
+                // ps_mul f7, f10, f1
+                {
+                    let v = fp::ps_mul(f[10].get(), f[1].get());
+                    f[7].set(v);
+                }
+                // ps_merge00 f5, f11, f6
+                {
+                    let v = fp::ps_merge00(f[11].get(), f[6].get());
+                    f[5].set(v);
+                }
+                // psq_st f8, 0x28(r4), 1, qr0
+                {
+                    let ea = g[4].get().wrapping_add(0x28_u32);
+                    c::psq_store(ctx, ea, 8, true, 0);
+                }
+                // ps_merge11 f4, f11, f6
+                {
+                    let v = fp::ps_merge11(f[11].get(), f[6].get());
+                    f[4].set(v);
+                }
+                // psq_st f5, 0x8(r4), 0, qr0
+                {
+                    let ea = g[4].get().wrapping_add(0x8_u32);
+                    c::psq_store(ctx, ea, 5, false, 0);
+                }
+                // ps_madd f7, f9, f2, f7
+                {
+                    let v = fp::ps_madd(f[9].get(), f[2].get(), f[7].get());
+                    f[7].set(v);
+                }
+                // psq_st f4, 0x18(r4), 0, qr0
+                {
+                    let ea = g[4].get().wrapping_add(0x18_u32);
+                    c::psq_store(ctx, ea, 4, false, 0);
+                }
+                // ps_nmadd f7, f8, f3, f7
+                {
+                    let v = fp::ps_nmadd(f[8].get(), f[3].get(), f[7].get());
+                    f[7].set(v);
+                }
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // psq_st f7, 0x2c(r4), 1, qr0
+                {
+                    let ea = g[4].get().wrapping_add(0x2c_u32);
+                    c::psq_store(ctx, ea, 7, true, 0);
+                }
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of PSMTXInverse");
+            }
+            _ => unreachable!("PSMTXInverse: no block at {pc:#010x}"),
+        }
+    }
+}
 
 pub fn MTXRotRad<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, axis: i8, rad: f64) {
     let __frame = ctx.stack_frame(0x28);
@@ -36,6 +897,950 @@ pub fn MTXRotRad<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, axis: i8, rad: f64) {
     sinA = fns::sinf(ctx, rad);
     cosA = fns::cosf(ctx, rad);
     fns::PSMTXRotTrig(ctx, m, axis, sinA, cosA);
+}
+
+pub fn PSMTXRotTrig<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>, a1: i8, a2: f64, a3: f64) {
+    // Transliterated from its machine code, whose source is assembly.
+    (a0, a1, Single(a2), Single(a3)).put_regs(ctx);
+    asm_PSMTXRotTrig(ctx);
+}
+
+fn asm_PSMTXRotTrig(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80342488_u32;
+    loop {
+        match pc {
+            0x80342488_u32 => {
+                // lfs f0, "@10"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffffe934_u32);
+                    c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
+                }
+                // lfs f3, "@9"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffffe930_u32);
+                    c::fill(ctx, 3, fp::lfs(ctx.read_u32(ea)));
+                }
+                // ori r0, r4, 0x20
+                g[0].set(g[4].get() | 0x20_u32);
+                // ps_neg f4, f1
+                {
+                    let v = fp::ps_neg(f[1].get());
+                    f[4].set(v);
+                }
+                // cmplwi r0, 0x78
+                {
+                    let (x, y) = (g[0].get(), 0x78_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_803424B4
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x803424b4_u32;
+                    continue;
+                }
+                pc = 0x803424a0_u32;
+            }
+            0x803424a0_u32 => {
+                // cmplwi r0, 0x79
+                {
+                    let (x, y) = (g[0].get(), 0x79_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_803424DC
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x803424dc_u32;
+                    continue;
+                }
+                pc = 0x803424a8_u32;
+            }
+            0x803424a8_u32 => {
+                // cmplwi r0, 0x7a
+                {
+                    let (x, y) = (g[0].get(), 0x7a_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80342508
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80342508_u32;
+                    continue;
+                }
+                pc = 0x803424b0_u32;
+            }
+            0x803424b0_u32 => {
+                // b .L_8034252C
+                pc = 0x8034252c_u32;
+                continue;
+                pc = 0x803424b4_u32;
+            }
+            0x803424b4_u32 => {
+                // psq_st f3, 0x0(r3), 1, qr0
+                {
+                    let ea = g[3].get();
+                    c::psq_store(ctx, ea, 3, true, 0);
+                }
+                // psq_st f0, 0x4(r3), 0, qr0
+                {
+                    let ea = g[3].get().wrapping_add(0x4_u32);
+                    c::psq_store(ctx, ea, 0, false, 0);
+                }
+                // ps_merge00 f5, f1, f2
+                {
+                    let v = fp::ps_merge00(f[1].get(), f[2].get());
+                    f[5].set(v);
+                }
+                // psq_st f0, 0xc(r3), 0, qr0
+                {
+                    let ea = g[3].get().wrapping_add(0xc_u32);
+                    c::psq_store(ctx, ea, 0, false, 0);
+                }
+                // ps_merge00 f2, f2, f4
+                {
+                    let v = fp::ps_merge00(f[2].get(), f[4].get());
+                    f[2].set(v);
+                }
+                // psq_st f0, 0x1c(r3), 0, qr0
+                {
+                    let ea = g[3].get().wrapping_add(0x1c_u32);
+                    c::psq_store(ctx, ea, 0, false, 0);
+                }
+                // psq_st f0, 0x2c(r3), 1, qr0
+                {
+                    let ea = g[3].get().wrapping_add(0x2c_u32);
+                    c::psq_store(ctx, ea, 0, true, 0);
+                }
+                // psq_st f5, 0x24(r3), 0, qr0
+                {
+                    let ea = g[3].get().wrapping_add(0x24_u32);
+                    c::psq_store(ctx, ea, 5, false, 0);
+                }
+                // psq_st f2, 0x14(r3), 0, qr0
+                {
+                    let ea = g[3].get().wrapping_add(0x14_u32);
+                    c::psq_store(ctx, ea, 2, false, 0);
+                }
+                // b .L_8034252C
+                pc = 0x8034252c_u32;
+                continue;
+                pc = 0x803424dc_u32;
+            }
+            0x803424dc_u32 => {
+                // ps_merge00 f5, f2, f0
+                {
+                    let v = fp::ps_merge00(f[2].get(), f[0].get());
+                    f[5].set(v);
+                }
+                // ps_merge00 f2, f0, f3
+                {
+                    let v = fp::ps_merge00(f[0].get(), f[3].get());
+                    f[2].set(v);
+                }
+                // psq_st f0, 0x18(r3), 0, qr0
+                {
+                    let ea = g[3].get().wrapping_add(0x18_u32);
+                    c::psq_store(ctx, ea, 0, false, 0);
+                }
+                // psq_st f5, 0x0(r3), 0, qr0
+                {
+                    let ea = g[3].get();
+                    c::psq_store(ctx, ea, 5, false, 0);
+                }
+                // ps_merge00 f4, f4, f0
+                {
+                    let v = fp::ps_merge00(f[4].get(), f[0].get());
+                    f[4].set(v);
+                }
+                // ps_merge00 f0, f1, f0
+                {
+                    let v = fp::ps_merge00(f[1].get(), f[0].get());
+                    f[0].set(v);
+                }
+                // psq_st f5, 0x28(r3), 0, qr0
+                {
+                    let ea = g[3].get().wrapping_add(0x28_u32);
+                    c::psq_store(ctx, ea, 5, false, 0);
+                }
+                // psq_st f2, 0x10(r3), 0, qr0
+                {
+                    let ea = g[3].get().wrapping_add(0x10_u32);
+                    c::psq_store(ctx, ea, 2, false, 0);
+                }
+                // psq_st f0, 0x8(r3), 0, qr0
+                {
+                    let ea = g[3].get().wrapping_add(0x8_u32);
+                    c::psq_store(ctx, ea, 0, false, 0);
+                }
+                // psq_st f4, 0x20(r3), 0, qr0
+                {
+                    let ea = g[3].get().wrapping_add(0x20_u32);
+                    c::psq_store(ctx, ea, 4, false, 0);
+                }
+                // b .L_8034252C
+                pc = 0x8034252c_u32;
+                continue;
+                pc = 0x80342508_u32;
+            }
+            0x80342508_u32 => {
+                // psq_st f0, 0x8(r3), 0, qr0
+                {
+                    let ea = g[3].get().wrapping_add(0x8_u32);
+                    c::psq_store(ctx, ea, 0, false, 0);
+                }
+                // ps_merge00 f5, f1, f2
+                {
+                    let v = fp::ps_merge00(f[1].get(), f[2].get());
+                    f[5].set(v);
+                }
+                // ps_merge00 f4, f2, f4
+                {
+                    let v = fp::ps_merge00(f[2].get(), f[4].get());
+                    f[4].set(v);
+                }
+                // psq_st f0, 0x18(r3), 0, qr0
+                {
+                    let ea = g[3].get().wrapping_add(0x18_u32);
+                    c::psq_store(ctx, ea, 0, false, 0);
+                }
+                // psq_st f0, 0x20(r3), 0, qr0
+                {
+                    let ea = g[3].get().wrapping_add(0x20_u32);
+                    c::psq_store(ctx, ea, 0, false, 0);
+                }
+                // ps_merge00 f2, f3, f0
+                {
+                    let v = fp::ps_merge00(f[3].get(), f[0].get());
+                    f[2].set(v);
+                }
+                // psq_st f5, 0x10(r3), 0, qr0
+                {
+                    let ea = g[3].get().wrapping_add(0x10_u32);
+                    c::psq_store(ctx, ea, 5, false, 0);
+                }
+                // psq_st f4, 0x0(r3), 0, qr0
+                {
+                    let ea = g[3].get();
+                    c::psq_store(ctx, ea, 4, false, 0);
+                }
+                // psq_st f2, 0x28(r3), 0, qr0
+                {
+                    let ea = g[3].get().wrapping_add(0x28_u32);
+                    c::psq_store(ctx, ea, 2, false, 0);
+                }
+                pc = 0x8034252c_u32;
+            }
+            0x8034252c_u32 => {
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of PSMTXRotTrig");
+            }
+            _ => unreachable!("PSMTXRotTrig: no block at {pc:#010x}"),
+        }
+    }
+}
+
+pub fn PSMTXRotAxisRad<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>, a1: Vec<'a>, a2: f64) {
+    // Transliterated from its machine code, whose source is assembly.
+    (a0, a1, Single(a2)).put_regs(ctx);
+    asm_PSMTXRotAxisRad(ctx);
+}
+
+fn asm_PSMTXRotAxisRad(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80342530_u32;
+    loop {
+        match pc {
+            0x80342530_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x58(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffa8_u32);
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stfd f31, 0x50(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x50_u32);
+                    ctx.write_u64(ea, ctx.regs.f(31).to_bits());
+                }
+                // stfd f30, 0x48(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x48_u32);
+                    ctx.write_u64(ea, ctx.regs.f(30).to_bits());
+                }
+                // stfd f29, 0x40(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x40_u32);
+                    ctx.write_u64(ea, ctx.regs.f(29).to_bits());
+                }
+                // stfd f28, 0x38(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x38_u32);
+                    ctx.write_u64(ea, ctx.regs.f(28).to_bits());
+                }
+                // stfd f27, 0x30(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x30_u32);
+                    ctx.write_u64(ea, ctx.regs.f(27).to_bits());
+                }
+                // stw r31, 0x2c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x2c_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r30, 0x28(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x28_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // stw r29, 0x24(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x24_u32);
+                    ctx.write_u32(ea, g[29].get());
+                }
+                // fmr f27, f1
+                {
+                    let v = ctx.regs.f(1);
+                    ctx.regs.set_f(27, v);
+                }
+                // mr r29, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[29].set(v);
+                }
+                // mr r30, r4
+                {
+                    let v = g[4].get() | g[4].get();
+                    g[30].set(v);
+                }
+                // fmr f1, f27
+                {
+                    let v = ctx.regs.f(27);
+                    ctx.regs.set_f(1, v);
+                }
+                // lfs f28, "@10"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffffe934_u32);
+                    c::fill(ctx, 28, fp::lfs(ctx.read_u32(ea)));
+                }
+                // addi r31, r1, 0x14
+                g[31].set(g[1].get().wrapping_add(0x14_u32));
+                // bl sinf
+                c::call(ctx, 0x803263d4_u32, 0x80342578_u32);
+                pc = 0x80342578_u32;
+            }
+            0x80342578_u32 => {
+                // fmr f30, f1
+                {
+                    let v = ctx.regs.f(1);
+                    ctx.regs.set_f(30, v);
+                }
+                // fmr f1, f27
+                {
+                    let v = ctx.regs.f(27);
+                    ctx.regs.set_f(1, v);
+                }
+                // bl cosf
+                c::call(ctx, 0x80326240_u32, 0x80342584_u32);
+                pc = 0x80342584_u32;
+            }
+            0x80342584_u32 => {
+                // fmr f31, f1
+                {
+                    let v = ctx.regs.f(1);
+                    ctx.regs.set_f(31, v);
+                }
+                // lfs f0, "@9"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffffe930_u32);
+                    c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
+                }
+                // mr r3, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[3].set(v);
+                }
+                // mr r4, r31
+                {
+                    let v = g[31].get() | g[31].get();
+                    g[4].set(v);
+                }
+                // fsubs f29, f0, f31
+                {
+                    let v = fp::fsubs(ctx.regs.f(0), ctx.regs.f(31));
+                    c::fill(ctx, 29, v);
+                }
+                // bl PSVECNormalize
+                c::call(ctx, 0x80342db8_u32, 0x8034259c_u32);
+                pc = 0x8034259c_u32;
+            }
+            0x8034259c_u32 => {
+                // psq_l f27, 0x0(r31), 0, qr0
+                {
+                    let ea = g[31].get();
+                    c::psq_load(ctx, ea, 27, false, 0);
+                }
+                // lfs f1, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
+                }
+                // ps_merge00 f0, f31, f31
+                {
+                    let v = fp::ps_merge00(f[31].get(), f[31].get());
+                    f[0].set(v);
+                }
+                // ps_muls0 f4, f27, f29
+                {
+                    let v = fp::ps_muls0(f[27].get(), f[29].get());
+                    f[4].set(v);
+                }
+                // ps_muls0 f5, f1, f29
+                {
+                    let v = fp::ps_muls0(f[1].get(), f[29].get());
+                    f[5].set(v);
+                }
+                // ps_muls1 f3, f4, f27
+                {
+                    let v = fp::ps_muls1(f[4].get(), f[27].get());
+                    f[3].set(v);
+                }
+                // ps_muls0 f2, f4, f27
+                {
+                    let v = fp::ps_muls0(f[4].get(), f[27].get());
+                    f[2].set(v);
+                }
+                // ps_muls0 f27, f27, f30
+                {
+                    let v = fp::ps_muls0(f[27].get(), f[30].get());
+                    f[27].set(v);
+                }
+                // ps_muls0 f4, f4, f1
+                {
+                    let v = fp::ps_muls0(f[4].get(), f[1].get());
+                    f[4].set(v);
+                }
+                // fnmsubs f6, f1, f30, f3
+                {
+                    let v = fp::fnmsubs(ctx.regs.f(1), ctx.regs.f(30), ctx.regs.f(3));
+                    c::fill(ctx, 6, v);
+                }
+                // fmadds f7, f1, f30, f3
+                {
+                    let v = fp::fmadds(ctx.regs.f(1), ctx.regs.f(30), ctx.regs.f(3));
+                    c::fill(ctx, 7, v);
+                }
+                // ps_neg f9, f27
+                {
+                    let v = fp::ps_neg(f[27].get());
+                    f[9].set(v);
+                }
+                // ps_sum0 f8, f4, f28, f27
+                {
+                    let v = fp::ps_sum0(f[4].get(), f[28].get(), f[27].get());
+                    f[8].set(v);
+                }
+                // ps_sum0 f2, f2, f6, f0
+                {
+                    let v = fp::ps_sum0(f[2].get(), f[6].get(), f[0].get());
+                    f[2].set(v);
+                }
+                // ps_sum1 f3, f0, f7, f3
+                {
+                    let v = fp::ps_sum1(f[0].get(), f[7].get(), f[3].get());
+                    f[3].set(v);
+                }
+                // ps_sum0 f6, f9, f28, f4
+                {
+                    let v = fp::ps_sum0(f[9].get(), f[28].get(), f[4].get());
+                    f[6].set(v);
+                }
+                // ps_sum0 f9, f4, f4, f9
+                {
+                    let v = fp::ps_sum0(f[4].get(), f[4].get(), f[9].get());
+                    f[9].set(v);
+                }
+                // psq_st f8, 0x8(r29), 0, qr0
+                {
+                    let ea = g[29].get().wrapping_add(0x8_u32);
+                    c::psq_store(ctx, ea, 8, false, 0);
+                }
+                // ps_muls0 f5, f5, f1
+                {
+                    let v = fp::ps_muls0(f[5].get(), f[1].get());
+                    f[5].set(v);
+                }
+                // psq_st f2, 0x0(r29), 0, qr0
+                {
+                    let ea = g[29].get();
+                    c::psq_store(ctx, ea, 2, false, 0);
+                }
+                // ps_sum1 f4, f27, f9, f4
+                {
+                    let v = fp::ps_sum1(f[27].get(), f[9].get(), f[4].get());
+                    f[4].set(v);
+                }
+                // psq_st f3, 0x10(r29), 0, qr0
+                {
+                    let ea = g[29].get().wrapping_add(0x10_u32);
+                    c::psq_store(ctx, ea, 3, false, 0);
+                }
+                // ps_sum0 f5, f5, f28, f0
+                {
+                    let v = fp::ps_sum0(f[5].get(), f[28].get(), f[0].get());
+                    f[5].set(v);
+                }
+                // psq_st f6, 0x18(r29), 0, qr0
+                {
+                    let ea = g[29].get().wrapping_add(0x18_u32);
+                    c::psq_store(ctx, ea, 6, false, 0);
+                }
+                // psq_st f4, 0x20(r29), 0, qr0
+                {
+                    let ea = g[29].get().wrapping_add(0x20_u32);
+                    c::psq_store(ctx, ea, 4, false, 0);
+                }
+                // psq_st f5, 0x28(r29), 0, qr0
+                {
+                    let ea = g[29].get().wrapping_add(0x28_u32);
+                    c::psq_store(ctx, ea, 5, false, 0);
+                }
+                // lwz r0, 0x5c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x5c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lfd f31, 0x50(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x50_u32);
+                    ctx.regs.set_f(31, f64::from_bits(ctx.read_u64(ea)));
+                }
+                // lfd f30, 0x48(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x48_u32);
+                    ctx.regs.set_f(30, f64::from_bits(ctx.read_u64(ea)));
+                }
+                // lfd f29, 0x40(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x40_u32);
+                    ctx.regs.set_f(29, f64::from_bits(ctx.read_u64(ea)));
+                }
+                // lfd f28, 0x38(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x38_u32);
+                    ctx.regs.set_f(28, f64::from_bits(ctx.read_u64(ea)));
+                }
+                // lfd f27, 0x30(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x30_u32);
+                    ctx.regs.set_f(27, f64::from_bits(ctx.read_u64(ea)));
+                }
+                // lwz r31, 0x2c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x2c_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x28(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x28_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // lwz r29, 0x24(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x24_u32);
+                    g[29].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x58
+                g[1].set(g[1].get().wrapping_add(0x58_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of PSMTXRotAxisRad");
+            }
+            _ => unreachable!("PSMTXRotAxisRad: no block at {pc:#010x}"),
+        }
+    }
+}
+
+pub fn PSMTXTrans<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>, a1: f64, a2: f64, a3: f64) {
+    // Transliterated from its machine code, whose source is assembly.
+    (a0, Single(a1), Single(a2), Single(a3)).put_regs(ctx);
+    asm_PSMTXTrans(ctx);
+}
+
+fn asm_PSMTXTrans(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    // lfs f0, "@10"@sda21(r0)
+    {
+        let ea = g[2].get().wrapping_add(0xffffe934_u32);
+        c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
+    }
+    // lfs f4, "@9"@sda21(r0)
+    {
+        let ea = g[2].get().wrapping_add(0xffffe930_u32);
+        c::fill(ctx, 4, fp::lfs(ctx.read_u32(ea)));
+    }
+    // stfs f1, 0xc(r3)
+    {
+        let ea = g[3].get().wrapping_add(0xc_u32);
+        ctx.write_u32(ea, fp::stfs(ctx.regs.f(1)));
+    }
+    // stfs f2, 0x1c(r3)
+    {
+        let ea = g[3].get().wrapping_add(0x1c_u32);
+        ctx.write_u32(ea, fp::stfs(ctx.regs.f(2)));
+    }
+    // psq_st f0, 0x4(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x4_u32);
+        c::psq_store(ctx, ea, 0, false, 0);
+    }
+    // psq_st f0, 0x20(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x20_u32);
+        c::psq_store(ctx, ea, 0, false, 0);
+    }
+    // stfs f0, 0x10(r3)
+    {
+        let ea = g[3].get().wrapping_add(0x10_u32);
+        ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
+    }
+    // stfs f4, 0x14(r3)
+    {
+        let ea = g[3].get().wrapping_add(0x14_u32);
+        ctx.write_u32(ea, fp::stfs(ctx.regs.f(4)));
+    }
+    // stfs f0, 0x18(r3)
+    {
+        let ea = g[3].get().wrapping_add(0x18_u32);
+        ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
+    }
+    // stfs f4, 0x28(r3)
+    {
+        let ea = g[3].get().wrapping_add(0x28_u32);
+        ctx.write_u32(ea, fp::stfs(ctx.regs.f(4)));
+    }
+    // stfs f3, 0x2c(r3)
+    {
+        let ea = g[3].get().wrapping_add(0x2c_u32);
+        ctx.write_u32(ea, fp::stfs(ctx.regs.f(3)));
+    }
+    // stfs f4, 0x0(r3)
+    {
+        let ea = g[3].get();
+        ctx.write_u32(ea, fp::stfs(ctx.regs.f(4)));
+    }
+    // blr
+    let to = ctx.regs.lr.get() & !3;
+    if to != lr0 & !3 {
+        c::tail_call(ctx, to);
+    }
+    return;
+}
+
+pub fn PSMTXScale<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>, a1: f64, a2: f64, a3: f64) {
+    // Transliterated from its machine code, whose source is assembly.
+    (a0, Single(a1), Single(a2), Single(a3)).put_regs(ctx);
+    asm_PSMTXScale(ctx);
+}
+
+fn asm_PSMTXScale(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    // lfs f0, "@10"@sda21(r0)
+    {
+        let ea = g[2].get().wrapping_add(0xffffe934_u32);
+        c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
+    }
+    // stfs f1, 0x0(r3)
+    {
+        let ea = g[3].get();
+        ctx.write_u32(ea, fp::stfs(ctx.regs.f(1)));
+    }
+    // psq_st f0, 0x4(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x4_u32);
+        c::psq_store(ctx, ea, 0, false, 0);
+    }
+    // psq_st f0, 0xc(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0xc_u32);
+        c::psq_store(ctx, ea, 0, false, 0);
+    }
+    // stfs f2, 0x14(r3)
+    {
+        let ea = g[3].get().wrapping_add(0x14_u32);
+        ctx.write_u32(ea, fp::stfs(ctx.regs.f(2)));
+    }
+    // psq_st f0, 0x18(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x18_u32);
+        c::psq_store(ctx, ea, 0, false, 0);
+    }
+    // psq_st f0, 0x20(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x20_u32);
+        c::psq_store(ctx, ea, 0, false, 0);
+    }
+    // stfs f3, 0x28(r3)
+    {
+        let ea = g[3].get().wrapping_add(0x28_u32);
+        ctx.write_u32(ea, fp::stfs(ctx.regs.f(3)));
+    }
+    // stfs f0, 0x2c(r3)
+    {
+        let ea = g[3].get().wrapping_add(0x2c_u32);
+        ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
+    }
+    // blr
+    let to = ctx.regs.lr.get() & !3;
+    if to != lr0 & !3 {
+        c::tail_call(ctx, to);
+    }
+    return;
+}
+
+pub fn PSMTXQuat<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>, a1: Quaternion<'a>) {
+    // Transliterated from its machine code, whose source is assembly.
+    (a0, a1).put_regs(ctx);
+    asm_PSMTXQuat(ctx);
+}
+
+fn asm_PSMTXQuat(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    // lfs f1, "@9"@sda21(r0)
+    {
+        let ea = g[2].get().wrapping_add(0xffffe930_u32);
+        c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
+    }
+    // psq_l f4, 0x0(r4), 0, qr0
+    {
+        let ea = g[4].get();
+        c::psq_load(ctx, ea, 4, false, 0);
+    }
+    // psq_l f5, 0x8(r4), 0, qr0
+    {
+        let ea = g[4].get().wrapping_add(0x8_u32);
+        c::psq_load(ctx, ea, 5, false, 0);
+    }
+    // fsubs f0, f1, f1
+    {
+        let v = fp::fsubs(ctx.regs.f(1), ctx.regs.f(1));
+        c::fill(ctx, 0, v);
+    }
+    // fadds f2, f1, f1
+    {
+        let v = fp::fadds(ctx.regs.f(1), ctx.regs.f(1));
+        c::fill(ctx, 2, v);
+    }
+    // ps_mul f6, f4, f4
+    {
+        let v = fp::ps_mul(f[4].get(), f[4].get());
+        f[6].set(v);
+    }
+    // ps_merge10 f9, f4, f4
+    {
+        let v = fp::ps_merge10(f[4].get(), f[4].get());
+        f[9].set(v);
+    }
+    // ps_madd f8, f5, f5, f6
+    {
+        let v = fp::ps_madd(f[5].get(), f[5].get(), f[6].get());
+        f[8].set(v);
+    }
+    // ps_mul f7, f5, f5
+    {
+        let v = fp::ps_mul(f[5].get(), f[5].get());
+        f[7].set(v);
+    }
+    // ps_sum0 f3, f8, f8, f8
+    {
+        let v = fp::ps_sum0(f[8].get(), f[8].get(), f[8].get());
+        f[3].set(v);
+    }
+    // ps_muls1 f10, f9, f5
+    {
+        let v = fp::ps_muls1(f[9].get(), f[5].get());
+        f[10].set(v);
+    }
+    // fres f11, f3
+    {
+        let v = fp::fres(ctx.regs.f(3));
+        c::fill(ctx, 11, v);
+    }
+    // ps_sum1 f8, f7, f8, f6
+    {
+        let v = fp::ps_sum1(f[7].get(), f[8].get(), f[6].get());
+        f[8].set(v);
+    }
+    // ps_nmsub f3, f3, f11, f2
+    {
+        let v = fp::ps_nmsub(f[3].get(), f[11].get(), f[2].get());
+        f[3].set(v);
+    }
+    // ps_muls1 f7, f5, f5
+    {
+        let v = fp::ps_muls1(f[5].get(), f[5].get());
+        f[7].set(v);
+    }
+    // ps_mul f3, f11, f3
+    {
+        let v = fp::ps_mul(f[11].get(), f[3].get());
+        f[3].set(v);
+    }
+    // ps_sum0 f6, f6, f6, f6
+    {
+        let v = fp::ps_sum0(f[6].get(), f[6].get(), f[6].get());
+        f[6].set(v);
+    }
+    // fmuls f3, f3, f2
+    {
+        let v = fp::fmuls(ctx.regs.f(3), ctx.regs.f(2));
+        c::fill(ctx, 3, v);
+    }
+    // ps_madd f11, f4, f9, f7
+    {
+        let v = fp::ps_madd(f[4].get(), f[9].get(), f[7].get());
+        f[11].set(v);
+    }
+    // ps_msub f7, f4, f9, f7
+    {
+        let v = fp::ps_msub(f[4].get(), f[9].get(), f[7].get());
+        f[7].set(v);
+    }
+    // psq_st f0, 0xc(r3), 1, qr0
+    {
+        let ea = g[3].get().wrapping_add(0xc_u32);
+        c::psq_store(ctx, ea, 0, true, 0);
+    }
+    // ps_nmsub f6, f6, f3, f1
+    {
+        let v = fp::ps_nmsub(f[6].get(), f[3].get(), f[1].get());
+        f[6].set(v);
+    }
+    // ps_nmsub f8, f8, f3, f1
+    {
+        let v = fp::ps_nmsub(f[8].get(), f[3].get(), f[1].get());
+        f[8].set(v);
+    }
+    // psq_st f0, 0x2c(r3), 1, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x2c_u32);
+        c::psq_store(ctx, ea, 0, true, 0);
+    }
+    // ps_mul f11, f11, f3
+    {
+        let v = fp::ps_mul(f[11].get(), f[3].get());
+        f[11].set(v);
+    }
+    // ps_mul f7, f7, f3
+    {
+        let v = fp::ps_mul(f[7].get(), f[3].get());
+        f[7].set(v);
+    }
+    // psq_st f6, 0x28(r3), 1, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x28_u32);
+        c::psq_store(ctx, ea, 6, true, 0);
+    }
+    // ps_madds0 f9, f4, f5, f10
+    {
+        let v = fp::ps_madds0(f[4].get(), f[5].get(), f[10].get());
+        f[9].set(v);
+    }
+    // ps_merge00 f5, f11, f8
+    {
+        let v = fp::ps_merge00(f[11].get(), f[8].get());
+        f[5].set(v);
+    }
+    // ps_nmsub f10, f10, f2, f9
+    {
+        let v = fp::ps_nmsub(f[10].get(), f[2].get(), f[9].get());
+        f[10].set(v);
+    }
+    // ps_merge10 f4, f8, f7
+    {
+        let v = fp::ps_merge10(f[8].get(), f[7].get());
+        f[4].set(v);
+    }
+    // psq_st f5, 0x10(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x10_u32);
+        c::psq_store(ctx, ea, 5, false, 0);
+    }
+    // ps_mul f9, f9, f3
+    {
+        let v = fp::ps_mul(f[9].get(), f[3].get());
+        f[9].set(v);
+    }
+    // ps_mul f10, f10, f3
+    {
+        let v = fp::ps_mul(f[10].get(), f[3].get());
+        f[10].set(v);
+    }
+    // psq_st f4, 0x0(r3), 0, qr0
+    {
+        let ea = g[3].get();
+        c::psq_store(ctx, ea, 4, false, 0);
+    }
+    // psq_st f9, 0x8(r3), 1, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x8_u32);
+        c::psq_store(ctx, ea, 9, true, 0);
+    }
+    // ps_merge10 f7, f10, f0
+    {
+        let v = fp::ps_merge10(f[10].get(), f[0].get());
+        f[7].set(v);
+    }
+    // ps_merge01 f11, f10, f9
+    {
+        let v = fp::ps_merge01(f[10].get(), f[9].get());
+        f[11].set(v);
+    }
+    // psq_st f7, 0x18(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x18_u32);
+        c::psq_store(ctx, ea, 7, false, 0);
+    }
+    // psq_st f11, 0x20(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x20_u32);
+        c::psq_store(ctx, ea, 11, false, 0);
+    }
+    // blr
+    let to = ctx.regs.lr.get() & !3;
+    if to != lr0 & !3 {
+        c::tail_call(ctx, to);
+    }
+    return;
 }
 
 pub fn C_MTXLookAt<'a>(
@@ -299,10 +2104,91 @@ pub fn MTXLightOrtho<'a>(
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
+        0x803421a4,
+        |ctx| {
+            let (a0,): (ArrV<'_, F32, 4>,) = Args::take_all(ctx);
+            Ret::put(PSMTXIdentity(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x803421d0,
+        |ctx| {
+            let (a0, a1): (ArrV<'_, F32, 4>, ArrV<'_, F32, 4>) = Args::take_all(ctx);
+            Ret::put(PSMTXCopy(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80342204,
+        |ctx| {
+            let (a0, a1, a2): (ArrV<'_, F32, 4>, ArrV<'_, F32, 4>, ArrV<'_, F32, 4>) =
+                Args::take_all(ctx);
+            Ret::put(PSMTXConcat(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x803422d0,
+        |ctx| {
+            let (a0, a1): (ArrV<'_, F32, 4>, ArrV<'_, F32, 4>) = Args::take_all(ctx);
+            Ret::put(PSMTXTranspose(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80342320,
+        |ctx| {
+            let (a0, a1): (ArrV<'_, F32, 4>, ArrV<'_, F32, 4>) = Args::take_all(ctx);
+            Ret::put(PSMTXInverse(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
         0x80342418,
         |ctx| {
             let (a0, a1, a2): (ArrV<'_, F32, 4>, i8, Single) = Args::take_all(ctx);
             Ret::put(MTXRotRad(ctx, a0, a1, a2.0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80342488,
+        |ctx| {
+            let (a0, a1, a2, a3): (ArrV<'_, F32, 4>, i8, Single, Single) = Args::take_all(ctx);
+            Ret::put(PSMTXRotTrig(ctx, a0, a1, a2.0, a3.0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80342530,
+        |ctx| {
+            let (a0, a1, a2): (ArrV<'_, F32, 4>, Vec<'_>, Single) = Args::take_all(ctx);
+            Ret::put(PSMTXRotAxisRad(ctx, a0, a1, a2.0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80342634,
+        |ctx| {
+            let (a0, a1, a2, a3): (ArrV<'_, F32, 4>, Single, Single, Single) = Args::take_all(ctx);
+            Ret::put(PSMTXTrans(ctx, a0, a1.0, a2.0, a3.0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80342668,
+        |ctx| {
+            let (a0, a1, a2, a3): (ArrV<'_, F32, 4>, Single, Single, Single) = Args::take_all(ctx);
+            Ret::put(PSMTXScale(ctx, a0, a1.0, a2.0, a3.0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80342690,
+        |ctx| {
+            let (a0, a1): (ArrV<'_, F32, 4>, Quaternion<'_>) = Args::take_all(ctx);
+            Ret::put(PSMTXQuat(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );

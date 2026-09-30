@@ -26,6 +26,7 @@ use ssbm_types::tu as statics;
 
 use crate::manual::melee__gm__gm_1601 as manual;
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn gm_801601C4<'a>(ctx: &'a Ctx, arg0: i8) -> i32 {
     let __frame = ctx.stack_frame(0x18);
@@ -4197,6 +4198,36 @@ pub fn gm_80166378<'a>(ctx: &'a Ctx, arg0_raw: MatchEnd<'a>) {
     let _ = fns::fn_801661E0(ctx, arg0);
 }
 
+pub fn fn_80166A8C<'a>(ctx: &'a Ctx, a0: Vec<'a>, a1: Vec<'a>) -> f64 {
+    // Transliterated from its machine code, whose source is assembly.
+    (a0, a1).put_regs(ctx);
+    asm_fn_80166A8C(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_fn_80166A8C(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    // lfs f1, 0x0(r3)
+    {
+        let ea = g[3].get();
+        c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
+    }
+    // psq_st f1, 0x0(r4), 1, qr3
+    {
+        let ea = g[4].get();
+        c::psq_store(ctx, ea, 1, true, 3);
+    }
+    // blr
+    let to = ctx.regs.lr.get() & !3;
+    if to != lr0 & !3 {
+        c::tail_call(ctx, to);
+    }
+    return;
+}
+
 pub fn gm_80166A98<'a>(
     ctx: &'a Ctx,
     arg0: MatchEnd<'a>,
@@ -7252,6 +7283,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(gm_80166378(ctx, a0), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80166a8c,
+        |ctx| {
+            let (a0, a1): (Vec<'_>, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(fn_80166A8C(ctx, a0, a1), ctx);
+        },
+        Returns::Float,
     );
     ctx.register_port(
         0x80166a98,

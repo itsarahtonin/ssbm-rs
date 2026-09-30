@@ -9,9 +9,8 @@
 use std::cell::{Cell, RefCell};
 
 use gekko_fp::{self as fp, Ps};
+use ssbm_rt::cpu::*;
 use ssbm_rt::{Backend, Ctx, FLAG_HOOK, FLAG_NATIVE, HEARTBEAT, Mode, RETURN_SENTINEL, spr};
-
-mod quant;
 
 /// Runs original code. Counts instructions for profiling.
 #[derive(Default)]
@@ -69,9 +68,6 @@ impl Backend for Interpreter {
     }
 }
 
-const XER_SO: u32 = 1 << 31;
-const XER_OV: u32 = 1 << 30;
-const XER_CA: u32 = 1 << 29;
 
 #[inline]
 fn fd(w: u32) -> usize {
@@ -132,104 +128,6 @@ fn f0(ctx: &Ctx, i: usize) -> f64 {
 fn set_f0(ctx: &Ctx, i: usize, v: f64) {
     ctx.regs.set_f(i, v)
 }
-/// Single-precision results fill both halves of the register.
-#[inline]
-fn fill(ctx: &Ctx, i: usize, v: f64) {
-    ctx.regs.fpr[i].set(Ps::splat(v))
-}
-
-fn cr_bit(ctx: &Ctx, b: u32) -> bool {
-    (ctx.regs.cr.get() >> (31 - b)) & 1 != 0
-}
-
-fn set_cr_bit(ctx: &Ctx, b: u32, v: bool) {
-    let m = 1 << (31 - b);
-    let cr = ctx.regs.cr.get();
-    ctx.regs.cr.set(if v { cr | m } else { cr & !m });
-}
-
-fn set_cr_field(ctx: &Ctx, field: u32, v: u32) {
-    let sh = 28 - 4 * field;
-    let cr = ctx.regs.cr.get();
-    ctx.regs.cr.set((cr & !(0xF << sh)) | ((v & 0xF) << sh));
-}
-
-fn cr_field(ctx: &Ctx, field: u32) -> u32 {
-    (ctx.regs.cr.get() >> (28 - 4 * field)) & 0xF
-}
-
-fn so(ctx: &Ctx) -> u32 {
-    ctx.regs.xer.get() >> 31
-}
-
-fn update_cr0(ctx: &Ctx, v: u32) {
-    let s = v as i32;
-    let f = if s < 0 {
-        8
-    } else if s > 0 {
-        4
-    } else {
-        2
-    };
-    set_cr_field(ctx, 0, f | so(ctx));
-}
-
-fn update_cr1(ctx: &Ctx) {
-    set_cr_field(ctx, 1, ctx.regs.fpscr.get() >> 28);
-}
-
-fn ca(ctx: &Ctx) -> u32 {
-    (ctx.regs.xer.get() >> 29) & 1
-}
-
-fn set_ca(ctx: &Ctx, c: bool) {
-    let x = ctx.regs.xer.get();
-    ctx.regs.xer.set(if c { x | XER_CA } else { x & !XER_CA });
-}
-
-fn set_ov(ctx: &Ctx, o: bool) {
-    let x = ctx.regs.xer.get();
-    ctx.regs
-        .xer
-        .set(if o { x | XER_OV | XER_SO } else { x & !XER_OV });
-}
-
-/// `a + b + c` with carry out and signed overflow.
-fn add3(a: u32, b: u32, c: u32) -> (u32, bool, bool) {
-    let sum = u64::from(a) + u64::from(b) + u64::from(c);
-    let d = sum as u32;
-    (d, sum >> 32 != 0, ((a ^ d) & (b ^ d)) >> 31 != 0)
-}
-
-fn rot_mask(mb: u32, me: u32) -> u32 {
-    let begin = u32::MAX >> mb;
-    let end = u32::MAX << (31 - me);
-    if mb <= me { begin & end } else { begin | end }
-}
-
-fn compare(ctx: &Ctx, field: u32, lt: bool, gt: bool) {
-    let f = if lt {
-        8
-    } else if gt {
-        4
-    } else {
-        2
-    };
-    set_cr_field(ctx, field, f | so(ctx));
-}
-
-fn fp_compare(ctx: &Ctx, field: u32, a: f64, b: f64) {
-    let f = match fp::fcmp(a, b) {
-        fp::FpCompare::Less => 8,
-        fp::FpCompare::Greater => 4,
-        fp::FpCompare::Equal => 2,
-        fp::FpCompare::Unordered => 1,
-    };
-    set_cr_field(ctx, field, f);
-    let fpscr = ctx.regs.fpscr.get();
-    ctx.regs.fpscr.set((fpscr & !0xF000) | (f << 12));
-}
-
 #[cold]
 fn illegal(ctx: &Ctx, pc: u32, w: u32) -> ! {
     panic!(
@@ -255,19 +153,6 @@ fn branch(ctx: &Ctx, pc: u32, target: u32, link: bool) -> u32 {
         return if link { pc.wrapping_add(4) } else { ret };
     }
     target
-}
-
-fn cond_ok(ctx: &Ctx, bo: u32, bi: u32) -> bool {
-    bo & 0x10 != 0 || cr_bit(ctx, bi) == (bo & 0x08 != 0)
-}
-
-fn ctr_ok(ctx: &Ctx, bo: u32) -> bool {
-    if bo & 0x04 != 0 {
-        return true;
-    }
-    let ctr = ctx.regs.ctr.get().wrapping_sub(1);
-    ctx.regs.ctr.set(ctr);
-    (ctr != 0) != (bo & 0x02 != 0)
 }
 
 /// Executes one instruction and returns the next PC.
@@ -379,7 +264,7 @@ pub fn step(ctx: &Ctx, pc: u32, w: u32) -> u32 {
                 ra0(ctx, w)
             }
             .wrapping_add(simm12(w));
-            quant::load(ctx, ea, fd(w), (w >> 15) & 1 != 0, ((w >> 12) & 7) as usize);
+            psq_load(ctx, ea, fd(w), (w >> 15) & 1 != 0, ((w >> 12) & 7) as usize);
             if w >> 26 == 57 {
                 set_r(ctx, fa(w), ea);
             }
@@ -391,7 +276,7 @@ pub fn step(ctx: &Ctx, pc: u32, w: u32) -> u32 {
                 ra0(ctx, w)
             }
             .wrapping_add(simm12(w));
-            quant::store(ctx, ea, fd(w), (w >> 15) & 1 != 0, ((w >> 12) & 7) as usize);
+            psq_store(ctx, ea, fd(w), (w >> 15) & 1 != 0, ((w >> 12) & 7) as usize);
             if w >> 26 == 61 {
                 set_r(ctx, fa(w), ea);
             }
@@ -401,15 +286,6 @@ pub fn step(ctx: &Ctx, pc: u32, w: u32) -> u32 {
         _ => illegal(ctx, pc, w),
     }
     next
-}
-
-fn trap(to: u32, a: u32, b: u32) -> bool {
-    let (sa, sb) = (a as i32, b as i32);
-    (to & 16 != 0 && sa < sb)
-        || (to & 8 != 0 && sa > sb)
-        || (to & 4 != 0 && a == b)
-        || (to & 2 != 0 && a < b)
-        || (to & 1 != 0 && a > b)
 }
 
 fn op19(ctx: &Ctx, pc: u32, w: u32) -> u32 {
@@ -856,9 +732,9 @@ fn paired(ctx: &Ctx, pc: u32, w: u32) {
             let ea = if update { r(ctx, a) } else { ra0(ctx, w) }.wrapping_add(r(ctx, b));
             let (wbit, i) = ((w >> 10) & 1 != 0, ((w >> 7) & 7) as usize);
             if (w >> 1) & 1 == 0 {
-                quant::load(ctx, ea, d, wbit, i);
+                psq_load(ctx, ea, d, wbit, i);
             } else {
-                quant::store(ctx, ea, d, wbit, i);
+                psq_store(ctx, ea, d, wbit, i);
             }
             if update {
                 set_r(ctx, a, ea);

@@ -17,6 +17,8 @@ How C maps to Rust:
 - Locals whose address is taken, and struct and array locals, live on the emulated stack, so pointers to them are GameCube addresses.
 - String literals point at their original addresses in the game's data.
 
-A function using `goto`, inline asm or a static local is left out for now, so the original keeps running it. The generated code is formatted with rustfmt and should not be edited by hand: fix the translator, or port the function by hand and leave it out of translation.
+Functions whose source is assembly, and C functions that only MWCC can compile (inline asm, code under `#ifdef __MWERKS__`), are ported from their machine code instead: `asm2rs.py` reads each instruction word from the decomp's listing and writes what the interpreter does for it, with its fields as constants, using the same helpers (`ssbm_rt::cpu`, `gekko-fp`). Branches within the function become a state machine over its blocks, and calls go through dispatch.
+
+A function the translator cannot handle is left out, so the original keeps running it, and the report says why. The generated code is formatted with rustfmt and should not be edited by hand: fix the translator, or port the function by hand in `crates/game/src/manual` and leave it out of translation.
 
 Ports are checked with `ssbm-run --port UNITS --lockstep`, which runs the original next to every call of a port and compares memory and results, and without `--lockstep` against the replay oracle.

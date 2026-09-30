@@ -25,10 +25,172 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn __TRK_reset<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
     fns::__TRK_copy_vectors(ctx);
+}
+
+pub fn InitMetroTRK<'a>(ctx: &'a Ctx) {
+    // Transliterated from its machine code, whose source is assembly.
+    ().put_regs(ctx);
+    asm_InitMetroTRK(ctx);
+}
+
+fn asm_InitMetroTRK(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8032a628_u32;
+    loop {
+        match pc {
+            0x8032a628_u32 => {
+                // subi r1, r1, 0x4
+                g[1].set(g[1].get().wrapping_add(0xfffffffc_u32));
+                // stw r3, 0x0(r1)
+                {
+                    let ea = g[1].get();
+                    ctx.write_u32(ea, g[3].get());
+                }
+                // lis r3, gTRKCPUState@h
+                g[3].set(0x804a0000_u32);
+                // ori r3, r3, gTRKCPUState@l
+                g[3].set(g[3].get() | 0x4c98_u32);
+                // stmw r0, 0x0(r3)
+                {
+                    let ea = g[3].get();
+                    for (i, reg) in (0..32).enumerate() {
+                        ctx.write_u32(ea.wrapping_add(4 * i as u32), g[reg].get());
+                    }
+                }
+                // lwz r4, 0x0(r1)
+                {
+                    let ea = g[1].get();
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x4
+                g[1].set(g[1].get().wrapping_add(0x4_u32));
+                // stw r1, 0x4(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[1].get());
+                }
+                // stw r4, 0xc(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0xc_u32);
+                    ctx.write_u32(ea, g[4].get());
+                }
+                // mflr r4
+                g[4].set(ctx.regs.get_spr(8));
+                // stw r4, 0x84(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x84_u32);
+                    ctx.write_u32(ea, g[4].get());
+                }
+                // stw r4, 0x80(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x80_u32);
+                    ctx.write_u32(ea, g[4].get());
+                }
+                // mfcr r4
+                g[4].set(ctx.regs.cr.get());
+                // stw r4, 0x88(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x88_u32);
+                    ctx.write_u32(ea, g[4].get());
+                }
+                // mfmsr r4
+                g[4].set(ctx.regs.msr.get());
+                // ori r3, r4, 0x8000
+                g[3].set(g[4].get() | 0x8000_u32);
+                // xori r3, r3, 0x8000
+                g[3].set(g[3].get() ^ 0x8000_u32);
+                // mtmsr r3
+                ctx.set_msr(g[3].get());
+                // mtsrr1 r4
+                ctx.regs.set_spr(27, g[4].get());
+                // bl TRKSaveExtended1Block
+                c::call(ctx, 0x8032a868_u32, 0x8032a678_u32);
+                pc = 0x8032a678_u32;
+            }
+            0x8032a678_u32 => {
+                // lis r3, gTRKCPUState@h
+                g[3].set(0x804a0000_u32);
+                // ori r3, r3, gTRKCPUState@l
+                g[3].set(g[3].get() | 0x4c98_u32);
+                // .4byte 0xB8030000 /* illegal: lmw r0, 0x0(r3) */
+                {
+                    let ea = g[3].get();
+                    for (i, reg) in (0..32).enumerate() {
+                        g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
+                    }
+                }
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // mtspr IABR, r0
+                ctx.regs.set_spr(1010, g[0].get());
+                // mtspr DABR, r0
+                ctx.regs.set_spr(1013, g[0].get());
+                // lis r1, _db_stack_addr@h
+                g[1].set(0x804f0000_u32);
+                // ori r1, r1, _db_stack_addr@l
+                g[1].set(g[1].get() | 0xc00_u32);
+                // mr r3, r5
+                {
+                    let v = g[5].get() | g[5].get();
+                    g[3].set(v);
+                }
+                // bl InitMetroTRKCommTable
+                c::call(ctx, 0x8032ace8_u32, 0x8032a6a0_u32);
+                pc = 0x8032a6a0_u32;
+            }
+            0x8032a6a0_u32 => {
+                // cmpwi r3, 0x1
+                {
+                    let (x, y) = (g[3].get() as i32, 1_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_8032A6B8
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x8032a6b8_u32;
+                    continue;
+                }
+                pc = 0x8032a6a8_u32;
+            }
+            0x8032a6a8_u32 => {
+                // lwz r4, 0x84(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x84_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // mtlr r4
+                ctx.regs.set_spr(8, g[4].get());
+                // .4byte 0xB8030000 /* illegal: lmw r0, 0x0(r3) */
+                {
+                    let ea = g[3].get();
+                    for (i, reg) in (0..32).enumerate() {
+                        g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
+                    }
+                }
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                pc = 0x8032a6b8_u32;
+            }
+            0x8032a6b8_u32 => {
+                // b TRK_main
+                c::tail_call(ctx, 0x8032abe0_u32);
+                return;
+                panic!("ran off the end of InitMetroTRK");
+            }
+            _ => unreachable!("InitMetroTRK: no block at {pc:#010x}"),
+        }
+    }
 }
 
 pub fn EnableMetroTRKInterrupts<'a>(ctx: &'a Ctx) {
@@ -100,6 +262,13 @@ pub fn register(ctx: &Ctx) {
         0x800051cc,
         |ctx| {
             Ret::put(__TRK_reset(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8032a628,
+        |ctx| {
+            Ret::put(InitMetroTRK(ctx), ctx);
         },
         Returns::Nothing,
     );

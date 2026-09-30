@@ -25,6 +25,192 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
+
+pub fn TRKLoadContext<'a>(ctx: &'a Ctx, a0: OSContext<'a>, a1: u32) {
+    // Transliterated from its machine code, whose source is assembly.
+    (a0, a1).put_regs(ctx);
+    asm_TRKLoadContext(ctx);
+}
+
+fn asm_TRKLoadContext(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8032ac28_u32;
+    loop {
+        match pc {
+            0x8032ac28_u32 => {
+                // lwz r0, 0x0(r3)
+                {
+                    let ea = g[3].get();
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r1, 0x4(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x4_u32);
+                    g[1].set(ctx.read_u32(ea));
+                }
+                // lwz r2, 0x8(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x8_u32);
+                    g[2].set(ctx.read_u32(ea));
+                }
+                // lhz r5, 0x1a2(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x1a2_u32);
+                    g[5].set(u32::from(ctx.read_u16(ea)));
+                }
+                // rlwinm. r6, r5, 0, 30, 30
+                {
+                    let v = g[5].get().rotate_left(0) & 0x2_u32;
+                    g[6].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_8032AC50
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x8032ac50_u32;
+                    continue;
+                }
+                pc = 0x8032ac40_u32;
+            }
+            0x8032ac40_u32 => {
+                // rlwinm r5, r5, 0, 31, 29
+                {
+                    let v = g[5].get().rotate_left(0) & 0xfffffffd_u32;
+                    g[5].set(v);
+                }
+                // sth r5, 0x1a2(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x1a2_u32);
+                    ctx.write_u16(ea, g[5].get() as u16);
+                }
+                // lmw r5, 0x14(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x14_u32);
+                    for (i, reg) in (5..32).enumerate() {
+                        g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
+                    }
+                }
+                // b .L_8032AC54
+                pc = 0x8032ac54_u32;
+                continue;
+                pc = 0x8032ac50_u32;
+            }
+            0x8032ac50_u32 => {
+                // lmw r13, 0x34(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x34_u32);
+                    for (i, reg) in (13..32).enumerate() {
+                        g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
+                    }
+                }
+                pc = 0x8032ac54_u32;
+            }
+            0x8032ac54_u32 => {
+                // mr r31, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[31].set(v);
+                }
+                // mr r3, r4
+                {
+                    let v = g[4].get() | g[4].get();
+                    g[3].set(v);
+                }
+                // lwz r4, 0x80(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x80_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // mtcrf 255, r4
+                {
+                    let v = g[4].get();
+                    c::set_cr_field(ctx, 0, v >> 28);
+                    c::set_cr_field(ctx, 1, v >> 24);
+                    c::set_cr_field(ctx, 2, v >> 20);
+                    c::set_cr_field(ctx, 3, v >> 16);
+                    c::set_cr_field(ctx, 4, v >> 12);
+                    c::set_cr_field(ctx, 5, v >> 8);
+                    c::set_cr_field(ctx, 6, v >> 4);
+                    c::set_cr_field(ctx, 7, v >> 0);
+                }
+                // lwz r4, 0x84(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x84_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // mtlr r4
+                ctx.regs.set_spr(8, g[4].get());
+                // lwz r4, 0x88(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x88_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // mtctr r4
+                ctx.regs.set_spr(9, g[4].get());
+                // lwz r4, 0x8c(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x8c_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // mtxer r4
+                ctx.regs.set_spr(1, g[4].get());
+                // mfmsr r4
+                g[4].set(ctx.regs.msr.get());
+                // rlwinm r4, r4, 0, 17, 15
+                {
+                    let v = g[4].get().rotate_left(0) & 0xffff7fff_u32;
+                    g[4].set(v);
+                }
+                // rlwinm r4, r4, 0, 31, 29
+                {
+                    let v = g[4].get().rotate_left(0) & 0xfffffffd_u32;
+                    g[4].set(v);
+                }
+                // mtmsr r4
+                ctx.set_msr(g[4].get());
+                // mtsprg 1, r2
+                ctx.regs.set_spr(273, g[2].get());
+                // lwz r4, 0xc(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0xc_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // mtsprg 2, r4
+                ctx.regs.set_spr(274, g[4].get());
+                // lwz r4, 0x10(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x10_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // mtsprg 3, r4
+                ctx.regs.set_spr(275, g[4].get());
+                // lwz r2, 0x198(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x198_u32);
+                    g[2].set(ctx.read_u32(ea));
+                }
+                // lwz r4, 0x19c(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x19c_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x7c(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x7c_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // b TRKInterruptHandler
+                c::tail_call(ctx, 0x803299ec_u32);
+                return;
+                panic!("ran off the end of TRKLoadContext");
+            }
+            _ => unreachable!("TRKLoadContext: no block at {pc:#010x}"),
+        }
+    }
+}
 
 pub fn TRKEXICallBack<'a>(ctx: &'a Ctx, interrupt: i16, v_ctx: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x10);
@@ -164,6 +350,14 @@ pub fn TRK_board_display<'a>(ctx: &'a Ctx, str: Val<'a, i8>) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x8032ac28,
+        |ctx| {
+            let (a0, a1): (OSContext<'_>, u32) = Args::take_all(ctx);
+            Ret::put(TRKLoadContext(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
     ctx.register_port(
         0x8032acb0,
         |ctx| {

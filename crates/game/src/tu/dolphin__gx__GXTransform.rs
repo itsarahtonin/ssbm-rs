@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn GXProject<'a>(
     ctx: &'a Ctx,
@@ -266,6 +267,223 @@ pub fn GXGetProjectionv<'a>(ctx: &'a Ctx, ptr_: Val<'a, F32>) {
     (Handle::add(ptr_, 4_i32)).set((fns::gx(ctx).get()).projMtx().at(3_i32).get());
     (Handle::add(ptr_, 5_i32)).set((fns::gx(ctx).get()).projMtx().at(4_i32).get());
     (Handle::add(ptr_, 6_i32)).set((fns::gx(ctx).get()).projMtx().at(5_i32).get());
+}
+
+pub fn WriteMTXPS4x3<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>, a1: Val<'a, F32>) {
+    // Transliterated from its machine code, whose source is assembly.
+    (a0, a1).put_regs(ctx);
+    asm_WriteMTXPS4x3(ctx);
+}
+
+fn asm_WriteMTXPS4x3(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    // psq_l f0, 0x0(r3), 0, qr0
+    {
+        let ea = g[3].get();
+        c::psq_load(ctx, ea, 0, false, 0);
+    }
+    // psq_l f1, 0x8(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x8_u32);
+        c::psq_load(ctx, ea, 1, false, 0);
+    }
+    // psq_l f2, 0x10(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x10_u32);
+        c::psq_load(ctx, ea, 2, false, 0);
+    }
+    // psq_l f3, 0x18(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x18_u32);
+        c::psq_load(ctx, ea, 3, false, 0);
+    }
+    // psq_l f4, 0x20(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x20_u32);
+        c::psq_load(ctx, ea, 4, false, 0);
+    }
+    // psq_l f5, 0x28(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x28_u32);
+        c::psq_load(ctx, ea, 5, false, 0);
+    }
+    // psq_st f0, 0x0(r4), 0, qr0
+    {
+        let ea = g[4].get();
+        c::psq_store(ctx, ea, 0, false, 0);
+    }
+    // psq_st f1, 0x0(r4), 0, qr0
+    {
+        let ea = g[4].get();
+        c::psq_store(ctx, ea, 1, false, 0);
+    }
+    // psq_st f2, 0x0(r4), 0, qr0
+    {
+        let ea = g[4].get();
+        c::psq_store(ctx, ea, 2, false, 0);
+    }
+    // psq_st f3, 0x0(r4), 0, qr0
+    {
+        let ea = g[4].get();
+        c::psq_store(ctx, ea, 3, false, 0);
+    }
+    // psq_st f4, 0x0(r4), 0, qr0
+    {
+        let ea = g[4].get();
+        c::psq_store(ctx, ea, 4, false, 0);
+    }
+    // psq_st f5, 0x0(r4), 0, qr0
+    {
+        let ea = g[4].get();
+        c::psq_store(ctx, ea, 5, false, 0);
+    }
+    // blr
+    let to = ctx.regs.lr.get() & !3;
+    if to != lr0 & !3 {
+        c::tail_call(ctx, to);
+    }
+    return;
+}
+
+pub fn WriteMTXPS3x3from3x4<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>, a1: Val<'a, F32>) {
+    // Transliterated from its machine code, whose source is assembly.
+    (a0, a1).put_regs(ctx);
+    asm_WriteMTXPS3x3from3x4(ctx);
+}
+
+fn asm_WriteMTXPS3x3from3x4(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    // psq_l f0, 0x0(r3), 0, qr0
+    {
+        let ea = g[3].get();
+        c::psq_load(ctx, ea, 0, false, 0);
+    }
+    // lfs f1, 0x8(r3)
+    {
+        let ea = g[3].get().wrapping_add(0x8_u32);
+        c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
+    }
+    // psq_l f2, 0x10(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x10_u32);
+        c::psq_load(ctx, ea, 2, false, 0);
+    }
+    // lfs f3, 0x18(r3)
+    {
+        let ea = g[3].get().wrapping_add(0x18_u32);
+        c::fill(ctx, 3, fp::lfs(ctx.read_u32(ea)));
+    }
+    // psq_l f4, 0x20(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x20_u32);
+        c::psq_load(ctx, ea, 4, false, 0);
+    }
+    // lfs f5, 0x28(r3)
+    {
+        let ea = g[3].get().wrapping_add(0x28_u32);
+        c::fill(ctx, 5, fp::lfs(ctx.read_u32(ea)));
+    }
+    // psq_st f0, 0x0(r4), 0, qr0
+    {
+        let ea = g[4].get();
+        c::psq_store(ctx, ea, 0, false, 0);
+    }
+    // stfs f1, 0x0(r4)
+    {
+        let ea = g[4].get();
+        ctx.write_u32(ea, fp::stfs(ctx.regs.f(1)));
+    }
+    // psq_st f2, 0x0(r4), 0, qr0
+    {
+        let ea = g[4].get();
+        c::psq_store(ctx, ea, 2, false, 0);
+    }
+    // stfs f3, 0x0(r4)
+    {
+        let ea = g[4].get();
+        ctx.write_u32(ea, fp::stfs(ctx.regs.f(3)));
+    }
+    // psq_st f4, 0x0(r4), 0, qr0
+    {
+        let ea = g[4].get();
+        c::psq_store(ctx, ea, 4, false, 0);
+    }
+    // stfs f5, 0x0(r4)
+    {
+        let ea = g[4].get();
+        ctx.write_u32(ea, fp::stfs(ctx.regs.f(5)));
+    }
+    // blr
+    let to = ctx.regs.lr.get() & !3;
+    if to != lr0 & !3 {
+        c::tail_call(ctx, to);
+    }
+    return;
+}
+
+pub fn WriteMTXPS4x2<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>, a1: Val<'a, F32>) {
+    // Transliterated from its machine code, whose source is assembly.
+    (a0, a1).put_regs(ctx);
+    asm_WriteMTXPS4x2(ctx);
+}
+
+fn asm_WriteMTXPS4x2(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    // psq_l f0, 0x0(r3), 0, qr0
+    {
+        let ea = g[3].get();
+        c::psq_load(ctx, ea, 0, false, 0);
+    }
+    // psq_l f1, 0x8(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x8_u32);
+        c::psq_load(ctx, ea, 1, false, 0);
+    }
+    // psq_l f2, 0x10(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x10_u32);
+        c::psq_load(ctx, ea, 2, false, 0);
+    }
+    // psq_l f3, 0x18(r3), 0, qr0
+    {
+        let ea = g[3].get().wrapping_add(0x18_u32);
+        c::psq_load(ctx, ea, 3, false, 0);
+    }
+    // psq_st f0, 0x0(r4), 0, qr0
+    {
+        let ea = g[4].get();
+        c::psq_store(ctx, ea, 0, false, 0);
+    }
+    // psq_st f1, 0x0(r4), 0, qr0
+    {
+        let ea = g[4].get();
+        c::psq_store(ctx, ea, 1, false, 0);
+    }
+    // psq_st f2, 0x0(r4), 0, qr0
+    {
+        let ea = g[4].get();
+        c::psq_store(ctx, ea, 2, false, 0);
+    }
+    // psq_st f3, 0x0(r4), 0, qr0
+    {
+        let ea = g[4].get();
+        c::psq_store(ctx, ea, 3, false, 0);
+    }
+    // blr
+    let to = ctx.regs.lr.get() & !3;
+    if to != lr0 & !3 {
+        c::tail_call(ctx, to);
+    }
+    return;
 }
 
 pub fn GXLoadPosMtxImm<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, id: u32) {
@@ -758,6 +976,30 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (Val<'_, F32>,) = Args::take_all(ctx);
             Ret::put(GXGetProjectionv(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80341408,
+        |ctx| {
+            let (a0, a1): (ArrV<'_, F32, 4>, Val<'_, F32>) = Args::take_all(ctx);
+            Ret::put(WriteMTXPS4x3(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8034143c,
+        |ctx| {
+            let (a0, a1): (ArrV<'_, F32, 4>, Val<'_, F32>) = Args::take_all(ctx);
+            Ret::put(WriteMTXPS3x3from3x4(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80341470,
+        |ctx| {
+            let (a0, a1): (ArrV<'_, F32, 4>, Val<'_, F32>) = Args::take_all(ctx);
+            Ret::put(WriteMTXPS4x2(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );

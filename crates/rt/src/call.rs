@@ -256,6 +256,13 @@ pub trait Args<'a>: Sized {
     fn take_all(ctx: &'a Ctx) -> Self {
         Self::take_from(ctx, &mut ArgRegs::for_take(ctx))
     }
+
+    /// Puts the arguments that go in registers there, as a function being entered finds them.
+    /// Arguments past the registers stay where the caller put them.
+    #[inline]
+    fn put_regs(self, ctx: &'a Ctx) {
+        self.put_into(ctx, &mut ArgRegs::for_put());
+    }
 }
 
 macro_rules! tuple_args {

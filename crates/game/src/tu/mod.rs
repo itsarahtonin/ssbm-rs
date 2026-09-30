@@ -9,6 +9,7 @@ pub mod MSL__math;
 pub mod MSL__math_1;
 pub mod MSL__mbstring;
 pub mod MSL__mem;
+pub mod MSL__mem_funcs;
 pub mod MSL__misc_io;
 pub mod MSL__printf;
 pub mod MSL__rand;
@@ -20,9 +21,11 @@ pub mod MSL__wchar_io;
 pub mod MetroTRK__dispatch;
 pub mod MetroTRK__dolphin_trk;
 pub mod MetroTRK__dolphin_trk_glue;
+pub mod MetroTRK__flush_cache;
 pub mod MetroTRK__main_TRK;
 pub mod MetroTRK__mainloop;
 pub mod MetroTRK__mem_TRK;
+pub mod MetroTRK__mpc_7xx_603e;
 pub mod MetroTRK__msg;
 pub mod MetroTRK__msgbuf;
 pub mod MetroTRK__msghndlr;
@@ -101,6 +104,8 @@ pub mod dolphin__mcc__fio;
 pub mod dolphin__mcc__mcc;
 pub mod dolphin__mtx__mtx;
 pub mod dolphin__mtx__mtx44;
+pub mod dolphin__mtx__mtxvec;
+pub mod dolphin__mtx__vec;
 pub mod dolphin__odenotstub__odenotstub;
 pub mod dolphin__os__OS;
 pub mod dolphin__os__OSAlarm;
@@ -1115,6 +1120,7 @@ pub static UNITS: &[(&str, Register)] = &[
     ("MSL/math_1", MSL__math_1::register),
     ("MSL/mbstring", MSL__mbstring::register),
     ("MSL/mem", MSL__mem::register),
+    ("MSL/mem_funcs", MSL__mem_funcs::register),
     ("MSL/misc_io", MSL__misc_io::register),
     ("MSL/printf", MSL__printf::register),
     ("MSL/rand", MSL__rand::register),
@@ -1129,9 +1135,11 @@ pub static UNITS: &[(&str, Register)] = &[
         "MetroTRK/dolphin_trk_glue",
         MetroTRK__dolphin_trk_glue::register,
     ),
+    ("MetroTRK/flush_cache", MetroTRK__flush_cache::register),
     ("MetroTRK/main_TRK", MetroTRK__main_TRK::register),
     ("MetroTRK/mainloop", MetroTRK__mainloop::register),
     ("MetroTRK/mem_TRK", MetroTRK__mem_TRK::register),
+    ("MetroTRK/mpc_7xx_603e", MetroTRK__mpc_7xx_603e::register),
     ("MetroTRK/msg", MetroTRK__msg::register),
     ("MetroTRK/msgbuf", MetroTRK__msgbuf::register),
     ("MetroTRK/msghndlr", MetroTRK__msghndlr::register),
@@ -1243,6 +1251,8 @@ pub static UNITS: &[(&str, Register)] = &[
     ("dolphin/mcc/mcc", dolphin__mcc__mcc::register),
     ("dolphin/mtx/mtx", dolphin__mtx__mtx::register),
     ("dolphin/mtx/mtx44", dolphin__mtx__mtx44::register),
+    ("dolphin/mtx/mtxvec", dolphin__mtx__mtxvec::register),
+    ("dolphin/mtx/vec", dolphin__mtx__vec::register),
     (
         "dolphin/odenotstub/odenotstub",
         dolphin__odenotstub__odenotstub::register,

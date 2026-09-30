@@ -25,6 +25,8 @@ import clang.cindex as ci
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "typegen"))
 import extract  # noqa: E402
+
+import asm2rs  # noqa: E402
 from gen_rust import Gen, ident, tu_mod  # noqa: E402
 
 CK = ci.CursorKind
@@ -364,6 +366,7 @@ class Unit:
         self.static_addrs = {}
         self.skipped = []
         self.ported = []
+        self.transliterated = []  # ported from their machine code
         self.fuse_check = []
         self.inline_fallbacks = []  # (caller, callee, why) for inlined calls kept as calls
         self.inline_partial = set()  # (caller, callee, calls in the asm, calls in the source)
@@ -394,10 +397,12 @@ class Unit:
         self.fused_ops = {}
         self.calls = {}
         self.frame_sizes = {}
+        self.listing = ""
         if not os.path.exists(path):
             return ranges
+        self.listing = open(path, encoding="utf-8", errors="replace").read()
         current = None
-        for line in open(path, encoding="utf-8", errors="replace"):
+        for line in self.listing.splitlines(keepends=True):
             m = re.match(r"# 0x([0-9A-F]+)\.\.0x([0-9A-F]+) \| size: 0x[0-9A-F]+", line)
             if m:
                 ranges.append((int(m.group(1), 16), int(m.group(2), 16)))
@@ -3056,6 +3061,41 @@ def returns_of(unit, cursor):
     return "Int"
 
 
+# What makes a function's C untranslatable where its machine code is the source to port.
+MACHINE_CODE_REASONS = ("MWCC-only code", "inline asm")
+
+
+def asm_port(unit, cursor, f):
+    """A port of the function at `cursor` transliterated from its machine code, for code whose
+    source is assembly: its C prototype as the signature, its instructions as the body."""
+    name = cursor.spelling
+    ft = unit.ctype(cursor.type)
+    if ft["params"] is None:
+        ft = {**ft, "params": []}
+    if ft.get("variadic"):
+        raise Unsupported("variadic assembly")
+    if ft["ret"]["k"] == "rec":
+        raise Unsupported("assembly returning a struct")
+    body = asm2rs.translate(unit.listing, f.get("symbol") or name)
+    params, puts = [], []
+    for i, pt in enumerate(ft["params"]):
+        if pt["k"] == "arr":
+            pt = {"k": "ptr", "to": pt["of"]}
+        if pt["k"] == "rec":
+            raise Unsupported("assembly taking a struct")
+        params.append(f"a{i}: {unit.rust_value_ty(pt)}")
+        puts.append(f"Single(a{i})" if is_float(pt) and pt["size"] == 4 else f"a{i}")
+    ret = "" if ft["ret"]["k"] == "void" else " -> " + unit.rust_value_ty(ft["ret"])
+    lines = [f"pub fn {ident(name)}<'a>(ctx: &'a Ctx{''.join(', ' + p for p in params)}){ret} {{",
+             "    // Transliterated from its machine code, whose source is assembly.",
+             f"    ({''.join(x + ', ' for x in puts)}).put_regs(ctx);",
+             f"    asm_{name}(ctx);"]
+    if ret:
+        lines.append("    Ret::get(ctx)")
+    lines += ["}", "", f"fn asm_{name}(ctx: &Ctx) {{"] + ["    " + x for x in body] + ["}"]
+    return "\n".join(lines)
+
+
 def manual_ports(out_dir, unit_name):
     """Functions of this unit ported by hand in `manual/<unit module>.rs`, which the
     translator leaves alone."""
@@ -3107,7 +3147,16 @@ def translate_unit(args):
         if f is None:
             continue  # inlined everywhere; translated on demand
         if is_asm and name not in manual:
-            unit.skipped.append((name, "assembly"))
+            try:
+                code = asm_port(unit, c, f)
+            except (Unsupported, asm2rs.AsmUnsupported) as e:
+                unit.skipped.append((name, f"assembly: {e}"))
+                continue
+            out_fns.append(code)
+            unit.transliterated.append(name)
+            regs.append(f"    ctx.register_port({f['addr']:#x}, {unit.adapter(c, ident(name))}, "
+                        f"Returns::{returns_of(unit, c)});")
+            unit.ported.append(name)
             continue
         if name in manual:
             # Ported by hand; register the manual port under the same signature.
@@ -3122,6 +3171,19 @@ def translate_unit(args):
             if os.environ.get("C2RS_TRACE") == name:
                 import traceback
                 traceback.print_exc()
+            if any(r in str(e) for r in MACHINE_CODE_REASONS):
+                # C around assembly: the machine code is the source to port.
+                try:
+                    code = asm_port(unit, c, f)
+                except (Unsupported, asm2rs.AsmUnsupported) as e2:
+                    unit.skipped.append((name, f"{e} (line {tr.line}); assembly: {e2}"))
+                    continue
+                out_fns.append(code)
+                unit.transliterated.append(name)
+                regs.append(f"    ctx.register_port({f['addr']:#x}, {unit.adapter(c, ident(name))}, "
+                            f"Returns::{returns_of(unit, c)});")
+                unit.ported.append(name)
+                continue
             unit.skipped.append((name, f"{e} (line {tr.line})"))
             continue
         except Exception as e:  # noqa: BLE001
@@ -3149,6 +3211,8 @@ def translate_unit(args):
     text = HEADER.format(source=source.replace("\\", "/"), unit=unit_name)
     if manual:
         text += f"use crate::manual::{tu_mod(unit_name)} as manual;\n"
+    if unit.transliterated:
+        text += "use ssbm_rt::cpu as c;\n"
     text += "\n"
     text += "\n\n".join(out_fns + inline_code) + "\n\n"
     text += "/// Registers this unit's ports.\npub fn register(ctx: &Ctx) {\n" + "\n".join(regs) + "\n}\n"
