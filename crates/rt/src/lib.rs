@@ -1,0 +1,397 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+//! Runtime core: the machine context every function runs against.
+//!
+//! Game code takes `&Ctx` and reaches memory only through handles. Every call goes through
+//! dispatch by original address, so any function can be a Rust port, an SDK stand-in, or (in
+//! dev builds) the original code run by the interpreter.
+
+use std::cell::{Cell, OnceCell, RefCell};
+use std::collections::HashMap;
+use std::fmt;
+use std::rc::Rc;
+
+pub use ssbm_mem::{MEM1_SIZE, Mem, PAGE_SIZE, Pages};
+
+mod call;
+mod handle;
+pub mod lockstep;
+mod regs;
+
+pub use call::{Arg, ArgRegs, Args, Ret, Single, VarArg, VarArgs};
+pub use handle::{Addr, Arr, ArrP, ArrV, At, F32, F64, FnPtr, Handle, Ptr, Scalar, Val, null};
+pub use regs::{Regs, RegsSnapshot, spr};
+
+/// Code run when execution reaches an address.
+pub type Hook = Rc<dyn Fn(&Ctx)>;
+
+/// A function at the register level: arguments and results are in `ctx.regs`.
+pub type Native = fn(&Ctx);
+
+/// How a call to an address with a native implementation runs.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Mode {
+    /// Run the native implementation.
+    Native,
+    /// Run the original and the native implementation from the same state and compare.
+    Lockstep,
+    /// Run the original even though a native implementation exists.
+    Original,
+}
+
+#[derive(Clone, Copy)]
+pub struct Entry {
+    pub native: Native,
+    pub mode: Mode,
+}
+
+/// Runs original PowerPC code. Only dev builds provide one.
+pub trait Backend {
+    /// Runs the function at `addr` until it returns.
+    fn run(&self, ctx: &Ctx, addr: u32);
+}
+
+/// Hardware registers at `0xCC00_0000`, including the GX write-gather pipe.
+pub trait Mmio {
+    fn read(&self, ctx: &Ctx, addr: u32, size: u32) -> u32;
+    fn write(&self, ctx: &Ctx, addr: u32, size: u32, value: u32);
+}
+
+/// A bad memory access, raised as a panic payload (the console would take a DSI exception).
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct Fault {
+    pub addr: u32,
+    pub len: u32,
+    pub write: bool,
+}
+
+impl fmt::Display for Fault {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let kind = if self.write { "write" } else { "read" };
+        write!(
+            f,
+            "unmapped {kind} of {} bytes at {:#010X}",
+            self.len, self.addr
+        )
+    }
+}
+
+const MMIO_BASE: u32 = 0xCC00_0000;
+const MMIO_END: u32 = 0xCC01_0000;
+const LOCKED_CACHE: u32 = 0xE000_0000;
+const LOCKED_CACHE_SIZE: u32 = 0x4000;
+/// Return address that ends a call into original code.
+pub const RETURN_SENTINEL: u32 = 0xFFFF_FFF0;
+
+/// The machine: memory, registers, and what implements each function.
+pub struct Ctx {
+    pub mem: Mem,
+    pub regs: Regs,
+    locked_cache: Box<[Cell<u8>]>,
+    dispatch: RefCell<HashMap<u32, Entry>>,
+    backend: OnceCell<Box<dyn Backend>>,
+    mmio: OnceCell<Box<dyn Mmio>>,
+    names: OnceCell<Box<dyn Fn(u32) -> Option<String>>>,
+    hooks: RefCell<HashMap<u32, Hook>>,
+    pub lockstep: lockstep::State,
+}
+
+impl Default for Ctx {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl Ctx {
+    pub fn new() -> Self {
+        Self {
+            mem: Mem::new(),
+            regs: Regs::default(),
+            locked_cache: vec![Cell::new(0); LOCKED_CACHE_SIZE as usize].into_boxed_slice(),
+            dispatch: RefCell::default(),
+            backend: OnceCell::new(),
+            mmio: OnceCell::new(),
+            names: OnceCell::new(),
+            hooks: RefCell::default(),
+            lockstep: lockstep::State::default(),
+        }
+    }
+
+    pub fn set_backend(&self, backend: Box<dyn Backend>) {
+        assert!(self.backend.set(backend).is_ok(), "backend already set");
+    }
+
+    pub fn has_backend(&self) -> bool {
+        self.backend.get().is_some()
+    }
+
+    pub fn set_mmio(&self, mmio: Box<dyn Mmio>) {
+        assert!(self.mmio.set(mmio).is_ok(), "MMIO already set");
+    }
+
+    /// Names addresses in diagnostics, usually from the decomp's symbols.
+    pub fn set_names(&self, names: Box<dyn Fn(u32) -> Option<String>>) {
+        let _ = self.names.set(names);
+    }
+
+    pub fn name_of(&self, addr: u32) -> String {
+        self.names
+            .get()
+            .and_then(|f| f(addr))
+            .unwrap_or_else(|| format!("{addr:#010X}"))
+    }
+
+    // Memory. Faults panic with a `Fault` payload.
+
+    #[cold]
+    fn fault(&self, addr: u32, len: u32, write: bool) -> ! {
+        std::panic::panic_any(Fault { addr, len, write })
+    }
+
+    #[inline]
+    fn locked(&self, addr: u32, len: u32) -> Option<&[Cell<u8>]> {
+        let off = addr.wrapping_sub(LOCKED_CACHE);
+        (off < LOCKED_CACHE_SIZE && off + len <= LOCKED_CACHE_SIZE)
+            .then(|| &self.locked_cache[off as usize..(off + len) as usize])
+    }
+
+    fn read_slow(&self, addr: u32, len: u32) -> u64 {
+        if (MMIO_BASE..MMIO_END).contains(&addr)
+            && let Some(mmio) = self.mmio.get()
+        {
+            return u64::from(mmio.read(self, addr, len));
+        }
+        match self.locked(addr, len) {
+            Some(cells) => cells
+                .iter()
+                .fold(0, |acc, c| (acc << 8) | u64::from(c.get())),
+            None => self.fault(addr, len, false),
+        }
+    }
+
+    fn write_slow(&self, addr: u32, len: u32, value: u64) {
+        if (MMIO_BASE..MMIO_END).contains(&addr)
+            && let Some(mmio) = self.mmio.get()
+        {
+            return mmio.write(self, addr, len, value as u32);
+        }
+        match self.locked(addr, len) {
+            Some(cells) => {
+                for (i, c) in cells.iter().enumerate() {
+                    c.set((value >> (8 * (len as usize - 1 - i))) as u8);
+                }
+            }
+            None => self.fault(addr, len, true),
+        }
+    }
+
+    #[inline]
+    pub fn read_u8(&self, addr: u32) -> u8 {
+        match self.mem.read_u8(addr) {
+            Ok(v) => v,
+            Err(_) => self.read_slow(addr, 1) as u8,
+        }
+    }
+
+    #[inline]
+    pub fn read_u16(&self, addr: u32) -> u16 {
+        match self.mem.read_u16(addr) {
+            Ok(v) => v,
+            Err(_) => self.read_slow(addr, 2) as u16,
+        }
+    }
+
+    #[inline]
+    pub fn read_u32(&self, addr: u32) -> u32 {
+        match self.mem.read_u32(addr) {
+            Ok(v) => v,
+            Err(_) => self.read_slow(addr, 4) as u32,
+        }
+    }
+
+    #[inline]
+    pub fn read_u64(&self, addr: u32) -> u64 {
+        match self.mem.read_u64(addr) {
+            Ok(v) => v,
+            Err(_) => (self.read_slow(addr, 4) << 32) | self.read_slow(addr.wrapping_add(4), 4),
+        }
+    }
+
+    #[inline]
+    pub fn write_u8(&self, addr: u32, v: u8) {
+        if self.mem.write_u8(addr, v).is_err() {
+            self.write_slow(addr, 1, u64::from(v));
+        }
+    }
+
+    #[inline]
+    pub fn write_u16(&self, addr: u32, v: u16) {
+        if self.mem.write_u16(addr, v).is_err() {
+            self.write_slow(addr, 2, u64::from(v));
+        }
+    }
+
+    #[inline]
+    pub fn write_u32(&self, addr: u32, v: u32) {
+        if self.mem.write_u32(addr, v).is_err() {
+            self.write_slow(addr, 4, u64::from(v));
+        }
+    }
+
+    #[inline]
+    pub fn write_u64(&self, addr: u32, v: u64) {
+        if self.mem.write_u64(addr, v).is_err() {
+            self.write_slow(addr, 4, v >> 32);
+            self.write_slow(addr.wrapping_add(4), 4, v & 0xFFFF_FFFF);
+        }
+    }
+
+    /// Reads `n` (1..=8) bytes as a big-endian integer.
+    pub fn read_be(&self, addr: u32, n: u32) -> u64 {
+        (0..n).fold(0, |acc, i| {
+            (acc << 8) | u64::from(self.read_u8(addr.wrapping_add(i)))
+        })
+    }
+
+    /// Writes the low `n` (1..=8) bytes of `v` big-endian.
+    pub fn write_be(&self, addr: u32, n: u32, v: u64) {
+        for i in 0..n {
+            self.write_u8(addr.wrapping_add(i), (v >> (8 * (n - 1 - i))) as u8);
+        }
+    }
+
+    /// `memmove` within emulated memory.
+    pub fn copy(&self, dst: u32, src: u32, n: u32) {
+        let mut buf = vec![0; n as usize];
+        for (i, b) in buf.iter_mut().enumerate() {
+            *b = self.read_u8(src.wrapping_add(i as u32));
+        }
+        for (i, b) in buf.iter().enumerate() {
+            self.write_u8(dst.wrapping_add(i as u32), *b);
+        }
+    }
+
+    pub fn fill(&self, dst: u32, byte: u8, n: u32) {
+        for i in 0..n {
+            self.write_u8(dst.wrapping_add(i), byte);
+        }
+    }
+
+    // Dispatch.
+
+    /// Registers a native implementation for the function at `addr`.
+    pub fn register(&self, addr: u32, native: Native) {
+        self.dispatch.borrow_mut().insert(
+            addr,
+            Entry {
+                native,
+                mode: Mode::Native,
+            },
+        );
+    }
+
+    pub fn set_mode(&self, addr: u32, mode: Mode) {
+        if let Some(e) = self.dispatch.borrow_mut().get_mut(&addr) {
+            e.mode = mode;
+        }
+    }
+
+    /// Sets every registered function's mode.
+    pub fn set_all_modes(&self, mode: Mode) {
+        for e in self.dispatch.borrow_mut().values_mut() {
+            e.mode = mode;
+        }
+    }
+
+    pub fn entry(&self, addr: u32) -> Option<Entry> {
+        self.dispatch.borrow().get(&addr).copied()
+    }
+
+    pub fn registered(&self) -> Vec<u32> {
+        let mut v: Vec<u32> = self.dispatch.borrow().keys().copied().collect();
+        v.sort_unstable();
+        v
+    }
+
+    /// Runs the function at `addr` with arguments already in registers.
+    pub fn invoke(&self, addr: u32) {
+        let Some(e) = self.entry(addr) else {
+            return self.run_original(addr);
+        };
+        match e.mode {
+            Mode::Native => (e.native)(self),
+            Mode::Original if self.has_backend() => self.run_original(addr),
+            Mode::Lockstep if self.has_backend() && !self.lockstep.is_active() => {
+                lockstep::run(self, addr, e.native)
+            }
+            // Nested inside a lockstep run, or no original available.
+            _ => (e.native)(self),
+        }
+    }
+
+    /// Runs the original code at `addr`, which needs a backend.
+    pub fn run_original(&self, addr: u32) {
+        match self.backend.get() {
+            Some(b) => b.run(self, addr),
+            None => panic!("no implementation of {}", self.name_of(addr)),
+        }
+    }
+
+    // Hooks run when original code reaches an address; ported code calls `run_hook`.
+
+    pub fn set_hook(&self, addr: u32, hook: Hook) {
+        self.hooks.borrow_mut().insert(addr, hook);
+    }
+
+    pub fn has_hook(&self, addr: u32) -> bool {
+        self.hooks.borrow().contains_key(&addr)
+    }
+
+    pub fn run_hook(&self, addr: u32) {
+        let hook = self.hooks.borrow().get(&addr).cloned();
+        if let Some(hook) = hook {
+            hook(self);
+        }
+    }
+
+    // Stack.
+
+    /// Reserves `size` bytes on the emulated stack for locals whose address escapes. The
+    /// block starts 8 bytes above r1, leaving room for a callee's back chain and saved LR.
+    pub fn stack_alloc(&self, size: u32) -> StackFrame<'_> {
+        let old = self.regs.r(1);
+        let new = (old - (size + 8)) & !0xF;
+        self.write_u32(new, old);
+        self.regs.set_r(1, new);
+        StackFrame {
+            ctx: self,
+            old,
+            base: new + 8,
+        }
+    }
+}
+
+/// Space on the emulated stack; restores r1 when dropped.
+pub struct StackFrame<'a> {
+    ctx: &'a Ctx,
+    old: u32,
+    base: u32,
+}
+
+impl<'a> StackFrame<'a> {
+    /// Address of the reserved block.
+    pub fn base(&self) -> u32 {
+        self.base
+    }
+
+    /// The reserved block as a handle.
+    pub fn get<H: Handle<'a>>(&self) -> H {
+        At::new(self.ctx, self.base).field(0)
+    }
+}
+
+impl Drop for StackFrame<'_> {
+    fn drop(&mut self) {
+        self.ctx.regs.set_r(1, self.old);
+    }
+}

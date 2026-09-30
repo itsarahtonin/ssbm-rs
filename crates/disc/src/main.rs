@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 //! `ssbm-disc <image>`: verifies a Melee disc image and loads `main.dol` into memory.
+//! `ssbm-disc extract <image> <file|main.dol> <out>`: copies one file off the disc.
 
 use std::io::Write;
 use std::path::Path;
@@ -10,11 +11,18 @@ use ssbm_disc::{DISC_SHA1, Disc};
 use ssbm_mem::Mem;
 
 fn main() -> ExitCode {
-    let Some(path) = std::env::args_os().nth(1) else {
-        eprintln!("usage: ssbm-disc <disc image>");
-        return ExitCode::from(2);
+    let args: Vec<_> = std::env::args_os().skip(1).collect();
+    let result = match args.as_slice() {
+        [cmd, image, file, out] if cmd == "extract" => {
+            extract(Path::new(image), &file.to_string_lossy(), Path::new(out)).map(|()| true)
+        }
+        [image] => verify(Path::new(image)),
+        _ => {
+            eprintln!("usage: ssbm-disc <image> | ssbm-disc extract <image> <file|main.dol> <out>");
+            return ExitCode::from(2);
+        }
     };
-    match run(Path::new(&path)) {
+    match result {
         Ok(true) => ExitCode::SUCCESS,
         Ok(false) => ExitCode::FAILURE,
         Err(err) => {
@@ -24,7 +32,19 @@ fn main() -> ExitCode {
     }
 }
 
-fn run(path: &Path) -> ssbm_disc::Result<bool> {
+fn extract(image: &Path, file: &str, out: &Path) -> ssbm_disc::Result<()> {
+    let disc = Disc::open(image)?;
+    let data = if file == "main.dol" {
+        disc.main_dol()?.raw().to_vec()
+    } else {
+        disc.read_file(file)?
+    };
+    std::fs::write(out, &data)?;
+    println!("wrote {} bytes to {}", data.len(), out.display());
+    Ok(())
+}
+
+fn verify(path: &Path) -> ssbm_disc::Result<bool> {
     let mut disc = Disc::open(path)?;
     println!("GALE01 revision 2, {} image", disc.format());
 

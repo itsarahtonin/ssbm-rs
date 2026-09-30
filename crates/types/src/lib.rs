@@ -1,0 +1,56 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+//! Generated from the decomp by `tools/typegen`: a handle type per C struct, enum constants,
+//! accessors for globals, and a call stub plus ABI adapter per function. C names are kept.
+
+#![allow(
+    non_snake_case,
+    non_camel_case_types,
+    non_upper_case_globals,
+    dead_code,
+    unused_imports,
+    unused_parens,
+    clippy::all
+)]
+
+#[rustfmt::skip]
+#[path = "gen/enums.rs"]
+pub mod enums;
+#[rustfmt::skip]
+#[path = "gen/fns.rs"]
+pub mod fns;
+#[rustfmt::skip]
+#[path = "gen/records.rs"]
+pub mod records;
+#[rustfmt::skip]
+#[path = "gen/symbols.rs"]
+pub mod symbols;
+#[rustfmt::skip]
+#[path = "gen/tu.rs"]
+pub mod tu;
+
+/// The symbol containing `addr`, with its start address.
+pub fn symbol_at(addr: u32) -> Option<(u32, &'static str)> {
+    let i = symbols::SYMBOLS.partition_point(|s| s.0 <= addr);
+    let (start, size, name, _) = *symbols::SYMBOLS.get(i.checked_sub(1)?)?;
+    (addr < start + size.max(1)).then_some((start, name))
+}
+
+/// Names addresses for diagnostics, as `name+0xoff`.
+pub fn describe(addr: u32) -> Option<String> {
+    let (start, name) = symbol_at(addr)?;
+    Some(if addr == start {
+        name.to_owned()
+    } else {
+        format!("{name}+{:#x}", addr - start)
+    })
+}
+
+/// Everything a port needs in scope.
+pub mod prelude {
+    pub use crate::enums::*;
+    pub use crate::fns::*;
+    pub use crate::records::*;
+    pub use gekko_fp::*;
+    pub use ssbm_rt::*;
+}

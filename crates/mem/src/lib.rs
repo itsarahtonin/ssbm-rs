@@ -3,13 +3,17 @@
 //! GameCube main memory (MEM1): 24 MB of big-endian RAM at its original 32-bit addresses.
 //!
 //! Writes take `&self` so typed handles can share one `Mem`. Floats go through `gekko-fp`'s
-//! `lfs`/`stfs`, so loads and stores match the CPU bit for bit.
+//! `lfs`/`stfs`, so loads and stores match the CPU bit for bit. A page journal records the
+//! original contents of written pages, which is how lockstep checks snapshot and roll back.
 
-use std::cell::Cell;
+use std::cell::{Cell, RefCell};
+use std::collections::BTreeMap;
 use std::fmt;
 
 /// Size of main memory.
 pub const MEM1_SIZE: u32 = 0x0180_0000;
+/// Journal granularity.
+pub const PAGE_SIZE: u32 = 0x1000;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, thiserror::Error)]
 pub enum MemError {
@@ -19,9 +23,14 @@ pub enum MemError {
 
 pub type Result<T> = std::result::Result<T, MemError>;
 
+/// Page contents keyed by page index, used both for journals and snapshots.
+pub type Pages = BTreeMap<u32, Box<[u8]>>;
+
 /// Main memory, mapped at `0x8000_0000` (cached) and mirrored at `0xC000_0000` (uncached).
 pub struct Mem {
     mem1: Box<[Cell<u8>]>,
+    journaling: Cell<bool>,
+    journal: RefCell<Pages>,
 }
 
 impl Default for Mem {
@@ -40,14 +49,24 @@ impl fmt::Debug for Mem {
 
 macro_rules! access {
     ($read:ident, $write:ident, $t:ty) => {
+        #[inline]
         pub fn $read(&self, addr: u32) -> Result<$t> {
             Ok(<$t>::from_be_bytes(self.read_array(addr)?))
         }
 
+        #[inline]
         pub fn $write(&self, addr: u32, value: $t) -> Result<()> {
             self.write_bytes(addr, &value.to_be_bytes())
         }
     };
+}
+
+/// Physical offset of `addr` in MEM1, if `len` bytes there are mapped.
+#[inline]
+pub fn phys(addr: u32, len: u32) -> Option<u32> {
+    let phys = addr & 0x3FFF_FFFF;
+    let in_range = phys.checked_add(len).is_some_and(|end| end <= MEM1_SIZE);
+    (matches!(addr >> 30, 0b10 | 0b11) && in_range).then_some(phys)
 }
 
 impl Mem {
@@ -55,19 +74,20 @@ impl Mem {
     pub fn new() -> Self {
         Self {
             mem1: vec![Cell::new(0); MEM1_SIZE as usize].into_boxed_slice(),
+            journaling: Cell::new(false),
+            journal: RefCell::new(Pages::new()),
         }
     }
 
+    #[inline]
     fn cells(&self, addr: u32, len: u32) -> Result<&[Cell<u8>]> {
-        let phys = addr & 0x3FFF_FFFF;
-        let in_range = phys.checked_add(len).is_some_and(|end| end <= MEM1_SIZE);
-        if matches!(addr >> 30, 0b10 | 0b11) && in_range {
-            Ok(&self.mem1[phys as usize..(phys + len) as usize])
-        } else {
-            Err(MemError::Unmapped { addr, len })
+        match phys(addr, len) {
+            Some(p) => Ok(&self.mem1[p as usize..(p + len) as usize]),
+            None => Err(MemError::Unmapped { addr, len }),
         }
     }
 
+    #[inline]
     fn read_array<const N: usize>(&self, addr: u32) -> Result<[u8; N]> {
         let cells = self.cells(addr, N as u32)?;
         Ok(std::array::from_fn(|i| cells[i].get()))
@@ -81,12 +101,34 @@ impl Mem {
         Ok(())
     }
 
+    #[inline]
     pub fn write_bytes(&self, addr: u32, data: &[u8]) -> Result<()> {
         let cells = self.cells(addr, data.len() as u32)?;
+        if self.journaling.get() {
+            self.note_write(addr & 0x3FFF_FFFF, data.len() as u32);
+        }
         for (cell, byte) in cells.iter().zip(data) {
             cell.set(*byte);
         }
         Ok(())
+    }
+
+    #[cold]
+    fn note_write(&self, phys: u32, len: u32) {
+        let mut journal = self.journal.borrow_mut();
+        for page in phys / PAGE_SIZE..=(phys + len.max(1) - 1) / PAGE_SIZE {
+            journal
+                .entry(page)
+                .or_insert_with(|| self.page_contents(page));
+        }
+    }
+
+    fn page_contents(&self, page: u32) -> Box<[u8]> {
+        let start = (page * PAGE_SIZE) as usize;
+        self.mem1[start..start + PAGE_SIZE as usize]
+            .iter()
+            .map(Cell::get)
+            .collect()
     }
 
     access!(read_u8, write_u8, u8);
@@ -112,6 +154,46 @@ impl Mem {
     /// `stfd`
     pub fn write_f64(&self, addr: u32, value: f64) -> Result<()> {
         self.write_u64(addr, value.to_bits())
+    }
+
+    /// Starts recording the original contents of every page written from now on.
+    pub fn begin_journal(&self) {
+        assert!(!self.journaling.get(), "journals do not nest");
+        self.journal.borrow_mut().clear();
+        self.journaling.set(true);
+    }
+
+    /// Stops recording and returns the original contents of the pages written.
+    pub fn end_journal(&self) -> Pages {
+        self.journaling.set(false);
+        std::mem::take(&mut *self.journal.borrow_mut())
+    }
+
+    pub fn is_journaling(&self) -> bool {
+        self.journaling.get()
+    }
+
+    /// The current contents of the given pages.
+    pub fn capture<'a>(&self, pages: impl IntoIterator<Item = &'a u32>) -> Pages {
+        pages
+            .into_iter()
+            .map(|&p| (p, self.page_contents(p)))
+            .collect()
+    }
+
+    /// Writes page contents back, bypassing the journal.
+    pub fn restore(&self, pages: &Pages) {
+        for (&page, data) in pages {
+            let start = (page * PAGE_SIZE) as usize;
+            for (cell, byte) in self.mem1[start..].iter().zip(data.iter()) {
+                cell.set(*byte);
+            }
+        }
+    }
+
+    /// A copy of all of MEM1.
+    pub fn to_vec(&self) -> Vec<u8> {
+        self.mem1.iter().map(Cell::get).collect()
     }
 }
 
@@ -165,5 +247,22 @@ mod tests {
             mem.read_f32(0x8000_0104).unwrap().to_bits(),
             0x7FF0_0000_2000_0000
         );
+    }
+
+    #[test]
+    fn journal_rolls_back_writes() {
+        let mem = Mem::new();
+        mem.write_u32(0x8000_1FFE, 0xAAAA_AAAA).unwrap();
+        mem.begin_journal();
+        mem.write_u32(0x8000_1FFE, 0x1234_5678).unwrap(); // spans two pages
+        mem.write_u8(0x8010_0000, 7).unwrap();
+        let original = mem.end_journal();
+        assert_eq!(original.keys().copied().collect::<Vec<_>>(), [1, 2, 0x100]);
+        let changed = mem.capture(original.keys());
+        mem.restore(&original);
+        assert_eq!(mem.read_u32(0x8000_1FFE).unwrap(), 0xAAAA_AAAA);
+        assert_eq!(mem.read_u8(0x8010_0000).unwrap(), 0);
+        mem.restore(&changed);
+        assert_eq!(mem.read_u32(0x8000_1FFE).unwrap(), 0x1234_5678);
     }
 }

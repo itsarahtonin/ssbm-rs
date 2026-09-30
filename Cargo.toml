@@ -1,6 +1,7 @@
 [workspace]
 resolver = "3"
 members = ["crates/*", "tools/*"]
+exclude = ["tools/typegen"]
 
 [workspace.package]
 version = "0.1.0"
@@ -13,6 +14,8 @@ publish = false
 gekko-fp = { path = "crates/gekko-fp" }
 ssbm-mem = { path = "crates/mem" }
 ssbm-disc = { path = "crates/disc" }
+ssbm-rt = { path = "crates/rt" }
+ssbm-types = { path = "crates/types" }
 nod = "2.0.0-alpha.9"
 peppi = "2.1.2"
 ssbm-data = "0.1"

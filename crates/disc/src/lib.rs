@@ -191,6 +191,11 @@ impl Dol {
         })
     }
 
+    /// The whole executable as read from the disc.
+    pub fn raw(&self) -> &[u8] {
+        &self.raw
+    }
+
     pub fn section_data(&self, section: &Section) -> &[u8] {
         &self.raw[section.offset as usize..(section.offset + section.size) as usize]
     }

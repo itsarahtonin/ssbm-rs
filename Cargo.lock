@@ -1141,6 +1141,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "ssbm-rt"
+version = "0.1.0"
+dependencies = [
+ "gekko-fp",
+ "ssbm-mem",
+]
+
+[[package]]
+name = "ssbm-types"
+version = "0.1.0"
+dependencies = [
+ "gekko-fp",
+ "ssbm-rt",
+]
+
+[[package]]
 name = "static_assertions"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
