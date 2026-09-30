@@ -92,15 +92,22 @@ fn field(command: u8, offset: usize) -> &'static str {
 ///   hold whatever controller is plugged in during playback;
 /// - item misc bytes: item-specific scratch that most items never write, so they hold heap
 ///   leftovers from before the match (menus, matchmaking) that no replay records;
-/// - frame end's latest finalized frame: online rollback bookkeeping.
-fn ignored(command: u8, offset: usize) -> bool {
+/// - frame end's latest finalized frame: online rollback bookkeeping;
+/// - game end's LRAS initiator in a no contest: online, an online-only code records who ended
+///   the game with L+R+A+Start. Playback leaves that code out and ends the game itself when
+///   the inputs run out, with no initiator, as Slippi Dolphin does.
+fn ignored(command: u8, payload: &[u8], offset: usize) -> bool {
     match command {
         event::PRE_FRAME => (0x30..0x3A).contains(&offset),
         event::ITEM => (0x25..0x29).contains(&offset),
         event::FRAME_BOOKEND => offset >= 4,
+        event::GAME_END => offset == 1 && payload.first() == Some(&GAME_END_NO_CONTEST),
         _ => false,
     }
 }
+
+/// Game end method of a game ended with L+R+A+Start.
+const GAME_END_NO_CONTEST: u8 = 7;
 
 fn event_name(command: u8) -> &'static str {
     match command {
@@ -224,7 +231,7 @@ pub fn compare(original: &[Event], recorded: &[u8]) -> Report {
             report.last_frame_compared = Some(key.1);
         }
         let n = orig.len().min(mine.len());
-        if let Some(at) = (0..n).find(|&i| orig[i] != mine[i] && !ignored(key.0, i)) {
+        if let Some(at) = (0..n).find(|&i| orig[i] != mine[i] && !ignored(key.0, orig, i)) {
             // Report the whole field the first differing byte is in.
             let name = field(key.0, at);
             let end = (at + 4).min(n);
