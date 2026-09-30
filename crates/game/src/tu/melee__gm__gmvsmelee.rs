@@ -453,7 +453,7 @@ pub fn gmVsMelee_ExitResults<'a>(
     let mut ko: Val<'a, u8> = statics::melee__gm__gmvsmelee::ko_counts(ctx).at(0);
     let mut unk_bool: i32 = 0;
     let mut idx: i32 = 0;
-    let mut unk_: u8 = 0;
+    let mut unk: u8 = 0;
     let mut foo: u16 = 0;
     match_end = fns::gmVsMelee_VsExitInfo(ctx).match_end();
     if !(fns::gm_WasMatchCanceled(ctx, (match_end).outcome()) != 0) {
@@ -467,15 +467,15 @@ pub fn gmVsMelee_ExitResults<'a>(
             let _ = fns::gm_GetVsPlayMatchTotal(ctx);
             unk_bool = 0_i32;
             idx = (statics::melee__gm__gmvsmelee::findSmallestLoser(ctx, match_end) as i32);
-            unk_ = fns::gm_80172DD4(ctx, (fns::gmMainLib_8015ED98(ctx)).x0());
-            if (unk_ as i32) != (enums::ChKind_None as i32) {
+            unk = fns::gm_80172DD4(ctx, (fns::gmMainLib_8015ED98(ctx)).x0());
+            if (unk as i32) != (enums::ChKind_None as i32) {
                 fns::gm_InitChallengerData(
                     ctx,
                     ((match_end).player_standings().get(idx).ckind() as u8),
                     ((match_end).player_standings().get(idx).x3_u().x0().x3_b0()),
                     (idx as u8),
                     (match_end).player_standings().get(idx).x4(),
-                    unk_,
+                    unk,
                     (0_i32 as u8),
                 );
                 fns::gm_SetNextGameModeStateId(
@@ -485,7 +485,7 @@ pub fn gmVsMelee_ExitResults<'a>(
                 unk_bool = 1_i32;
             } else if (({
                 let __t1 = fns::gm_80172D78(ctx);
-                unk_ = __t1;
+                unk = __t1;
                 __t1
             }) as i32)
                 != (enums::ChKind_None as i32)
@@ -496,7 +496,7 @@ pub fn gmVsMelee_ExitResults<'a>(
                     ((match_end).player_standings().get(idx).x3_u().x0().x3_b0()),
                     (idx as u8),
                     (match_end).player_standings().get(idx).x4(),
-                    unk_,
+                    unk,
                     (0_i32 as u8),
                 );
                 fns::gm_SetNextGameModeStateId(
@@ -506,7 +506,7 @@ pub fn gmVsMelee_ExitResults<'a>(
                 unk_bool = 1_i32;
             } else if (({
                 let __t2 = fns::gm_80172E74(ctx);
-                unk_ = __t2;
+                unk = __t2;
                 __t2
             }) as i32)
                 != (enums::ChKind_None as i32)
@@ -517,7 +517,7 @@ pub fn gmVsMelee_ExitResults<'a>(
                     ((match_end).player_standings().get(idx).x3_u().x0().x3_b0()),
                     (idx as u8),
                     (match_end).player_standings().get(idx).x4(),
-                    unk_,
+                    unk,
                     (0_i32 as u8),
                 );
                 fns::gm_SetNextGameModeStateId(
@@ -540,7 +540,7 @@ pub fn gmVsMelee_ExitResults<'a>(
                     (0_i32 as u8),
                     (idx as u8),
                     (120_i32 as u8),
-                    unk_,
+                    unk,
                     (0_i32 as u8),
                 );
                 fns::gm_SetNextGameModeStateId(ctx, ((enums::gmVsMode_State_Prize as i32) as u8));

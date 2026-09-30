@@ -491,7 +491,7 @@ pub fn ftSk_SpecialNCancel_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
     }
     if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
-        inl_Fighter_SetDamageCallback_unfused(ctx, gobj, null::<FnPtr<'a>>(ctx));
+        inl_Fighter_SetDamageCallback_unfused_2(ctx, gobj, null::<FnPtr<'a>>(ctx));
         if (da).x10() == fp::frsp(0_i32 as f64) {
             fns::ftCo_Fall_Enter(ctx, gobj);
         } else {
@@ -515,7 +515,7 @@ pub fn ftSk_SpecialNEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut da: _ftSeakAttributes<'a> = Handle::cast::<_ftSeakAttributes<'a>>((fp).dat_attrs());
     if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
-        inl_Fighter_SetDamageCallback_unfused(ctx, gobj, null::<FnPtr<'a>>(ctx));
+        inl_Fighter_SetDamageCallback_unfused_2(ctx, gobj, null::<FnPtr<'a>>(ctx));
         (fp).u().sk().set_x0(0_i32);
         (fp).mv().sk().specialn().set_x4(0_i32);
         if (da).x10() == fp::frsp(0_i32 as f64) {
@@ -558,7 +558,7 @@ pub fn ftSk_SpecialAirNCancel_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     if (fns::ft_80081D0C(ctx, gobj) as u32) != ((enums::GA_Ground as i32) as u32) {
         fns::ftCo_Landing_Enter_Basic(ctx, gobj);
-        inl_Fighter_SetDamageCallback_unfused(ctx, gobj, null::<FnPtr<'a>>(ctx));
+        inl_Fighter_SetDamageCallback_unfused_2(ctx, gobj, null::<FnPtr<'a>>(ctx));
     }
 }
 
@@ -568,7 +568,7 @@ pub fn ftSk_SpecialAirNEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if (fns::ft_80081D0C(ctx, gobj) as u32) != ((enums::GA_Ground as i32) as u32) {
-        inl_Fighter_SetDamageCallback_unfused(ctx, gobj, null::<FnPtr<'a>>(ctx));
+        inl_Fighter_SetDamageCallback_unfused_2(ctx, gobj, null::<FnPtr<'a>>(ctx));
         (fp).u().sk().set_x0(0_i32);
         (fp).mv().sk().specialn().set_x4(0_i32);
         fns::ftCo_Landing_Enter_Basic(ctx, gobj);
@@ -655,8 +655,8 @@ fn inl_Fighter_SetDamageCallback_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, c
     let mut cb = cb;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    (fp).set_take_dmg_cb(cb);
-    (fp).set_death2_cb(cb);
+    (fp).set_take_dmg_cb(fnptr(ctx, 0x80110198));
+    (fp).set_death2_cb(fnptr(ctx, 0x80110198));
 }
 
 fn inl_doEnter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
@@ -745,6 +745,15 @@ fn inl_ftCommon_GroundToAirStateChange_unfused<'a>(
         0.0,
         null::<HSD_GObj<'a>>(ctx),
     );
+}
+
+fn inl_Fighter_SetDamageCallback_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
+    let mut gobj = gobj;
+    let mut cb = cb;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    (fp).set_take_dmg_cb(cb);
+    (fp).set_death2_cb(cb);
 }
 
 fn inl_ftCommon_AirToGroundStateChange_unfused<'a>(

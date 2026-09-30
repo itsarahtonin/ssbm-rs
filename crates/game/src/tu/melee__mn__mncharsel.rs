@@ -3602,7 +3602,7 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 };
             }
             6 => {
-                __state = 153;
+                __state = 163;
             }
             7 => {
                 unreachable!();
@@ -4153,7 +4153,7 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 };
             }
             100 => {
-                __state = 153;
+                __state = 163;
             }
             101 => {
                 unreachable!();
@@ -4162,38 +4162,56 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 door = ((cursor).x6() as i32);
                 __state = match door {
                     0_i32 => 105,
-                    1_i32 => 105,
-                    2_i32 => 105,
-                    3_i32 => 105,
-                    4_i32 => 106,
-                    5_i32 => 106,
-                    6_i32 => 106,
-                    7_i32 => 106,
-                    8_i32 => 107,
-                    9_i32 => 107,
-                    10_i32 => 107,
-                    11_i32 => 107,
-                    _ => 108,
+                    1_i32 => 106,
+                    2_i32 => 107,
+                    3_i32 => 108,
+                    4_i32 => 109,
+                    5_i32 => 110,
+                    6_i32 => 111,
+                    7_i32 => 112,
+                    8_i32 => 113,
+                    9_i32 => 114,
+                    10_i32 => 115,
+                    11_i32 => 116,
+                    _ => 117,
                 };
             }
             103 => {
                 __state = if ((cursor).xC() > 17.299999237060547) && ((cursor).x10() > 22.0) {
-                    199
+                    209
                 } else {
-                    200
+                    210
                 };
             }
             104 => {
                 unreachable!();
             }
             105 => {
-                __state = if (cursor).x10() < 0.20000000298023224 {
-                    110
-                } else {
-                    112
-                };
+                __state = 106;
             }
             106 => {
+                __state = 107;
+            }
+            107 => {
+                __state = 108;
+            }
+            108 => {
+                __state = if (cursor).x10() < 0.20000000298023224 {
+                    120
+                } else {
+                    122
+                };
+            }
+            109 => {
+                __state = 110;
+            }
+            110 => {
+                __state = 111;
+            }
+            111 => {
+                __state = 112;
+            }
+            112 => {
                 slider_door = door.wrapping_sub(4_i32);
                 inl_updateGrabbedSlider(
                     ctx,
@@ -4207,9 +4225,18 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     sp88,
                     0_i32,
                 );
-                __state = 108;
+                __state = 117;
             }
-            107 => {
+            113 => {
+                __state = 114;
+            }
+            114 => {
+                __state = 115;
+            }
+            115 => {
+                __state = 116;
+            }
+            116 => {
                 hc_door = door.wrapping_sub(8_i32);
                 inl_updateGrabbedSlider(
                     ctx,
@@ -4223,15 +4250,18 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     sp88,
                     1_i32,
                 );
-                __state = 108;
+                __state = 117;
             }
-            108 => {
-                __state = 153;
+            117 => {
+                __state = 163;
             }
-            109 => {
+            118 => {
                 unreachable!();
             }
-            110 => {
+            119 => {
+                __state = 105;
+            }
+            120 => {
                 __state = if ((port_3 as i32) != door)
                     || (((port_3 as i32) == door)
                         && ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
@@ -4240,32 +4270,32 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                             .p_kind() as i32)
                             == 3_i32))
                 {
-                    114
+                    124
                 } else {
-                    116
+                    126
                 };
             }
-            111 => {
-                __state = 108;
+            121 => {
+                __state = 117;
             }
-            112 => {
+            122 => {
                 a_press = (trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32));
-                __state = if a_press != (0_i32 as u32) { 126 } else { 127 };
+                __state = if a_press != (0_i32 as u32) { 136 } else { 137 };
             }
-            113 => {
+            123 => {
                 unreachable!();
             }
-            114 => {
+            124 => {
                 let _ = fns::mnCharSel_8025FDEC(ctx, (door as u8));
                 let _ = fns::lbAudioAx_800237A8(ctx, 184_i32, 127_i32, 64_i32);
-                __state = 115;
+                __state = 125;
             }
-            115 => {
+            125 => {
                 fns::mnCharSel_8025DB34(ctx, (door as u8));
                 (cursor).set_x5((2_i32 as u8));
-                __state = 111;
+                __state = 121;
             }
-            116 => {
+            126 => {
                 (statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
                     .at(door)
                     .get())
@@ -4277,48 +4307,48 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
                     == 1_i32
                 {
-                    118
+                    128
                 } else {
-                    120
+                    130
                 };
             }
-            117 => {
+            127 => {
                 unreachable!();
             }
-            118 => {
-                __state = if door != 0_i32 { 122 } else { 124 };
+            128 => {
+                __state = if door != 0_i32 { 132 } else { 134 };
             }
-            119 => {
+            129 => {
                 (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
                     .vs()
                     .start()
                     .players()
                     .get(player_idx)
                     .set_ckind(((enums::ChKind_None as i32) as i8));
-                __state = 115;
+                __state = 125;
             }
-            120 => {
+            130 => {
                 player_idx = door;
-                __state = 119;
+                __state = 129;
             }
-            121 => {
+            131 => {
                 unreachable!();
             }
-            122 => {
+            132 => {
                 player_idx = (statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).get() as i32);
-                __state = 123;
+                __state = 133;
             }
-            123 => {
-                __state = 119;
+            133 => {
+                __state = 129;
             }
-            124 => {
+            134 => {
                 player_idx = (statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32);
-                __state = 123;
+                __state = 133;
             }
-            125 => {
+            135 => {
                 unreachable!();
             }
-            126 => {
+            136 => {
                 m = statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
                     .at(door)
                     .get();
@@ -4326,81 +4356,81 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     && ((((m).x8() > fp::fneg(30.0)) && ((m).x8() < fp::fneg(24.399999618530273)))
                         || (((m).x8() > 24.399999618530273) && ((m).x8() < 30.200000762939453)))
                 {
-                    129
+                    139
                 } else {
-                    130
+                    140
                 };
             }
-            127 => {
+            137 => {
                 m2 = statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
                     .at(door)
                     .get();
                 i = 0_i32;
-                __state = 155;
+                __state = 165;
             }
-            128 => {
+            138 => {
                 unreachable!();
             }
-            129 => {
+            139 => {
                 icon_count = 0_i32;
-                __state = 132;
+                __state = 142;
             }
-            130 => {
-                __state = 127;
+            140 => {
+                __state = 137;
             }
-            131 => {
+            141 => {
                 unreachable!();
             }
-            132 => {
-                __state = if icon_count < 25_i32 { 133 } else { 135 };
+            142 => {
+                __state = if icon_count < 25_i32 { 143 } else { 145 };
             }
-            133 => {
+            143 => {
                 __state = if (statics::melee__mn__mncharsel::icons(ctx)
                     .get(icon_count)
                     .state() as i32)
                     < 2_i32
                 {
-                    137
+                    147
                 } else {
-                    138
+                    148
                 };
             }
-            134 => {
-                icon_count = icon_count.wrapping_add(1);
-                __state = 132;
-            }
-            135 => {
-                __state = if icon_count == 25_i32 { 141 } else { 142 };
-            }
-            136 => {
-                unreachable!();
-            }
-            137 => {
-                __state = 135;
-            }
-            138 => {
-                __state = 134;
-            }
-            139 => {
-                unreachable!();
-            }
-            140 => {
-                __state = 138;
-            }
-            141 => {
-                fns::mnCharSel_8025FB50(ctx, (door as u8), 0_i32);
-                __state = 144;
-            }
-            142 => {
-                __state = 130;
-            }
-            143 => {
-                unreachable!();
-            }
             144 => {
-                __state = if (1_i32 != 0) { 145 } else { 147 };
+                icon_count = icon_count.wrapping_add(1);
+                __state = 142;
             }
             145 => {
+                __state = if icon_count == 25_i32 { 151 } else { 152 };
+            }
+            146 => {
+                unreachable!();
+            }
+            147 => {
+                __state = 145;
+            }
+            148 => {
+                __state = 144;
+            }
+            149 => {
+                unreachable!();
+            }
+            150 => {
+                __state = 148;
+            }
+            151 => {
+                fns::mnCharSel_8025FB50(ctx, (door as u8), 0_i32);
+                __state = 154;
+            }
+            152 => {
+                __state = 140;
+            }
+            153 => {
+                unreachable!();
+            }
+            154 => {
+                __state = if (1_i32 != 0) { 155 } else { 157 };
+            }
+            155 => {
                 statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
                     .doors()
                     .get(door)
@@ -4422,46 +4452,46 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         ) as u8),
                     );
                 __state = if !(inl_isDuplicateCostume(ctx, door) != 0) {
-                    149
+                    159
                 } else {
-                    150
+                    160
                 };
             }
-            146 => {
-                __state = 144;
+            156 => {
+                __state = 154;
             }
-            147 => {
+            157 => {
                 fns::mnCharSel_8025DB34(ctx, (door as u8));
                 (cursor).set_x5((2_i32 as u8));
                 let _ = fns::lbAudioAx_800237A8(ctx, 184_i32, 127_i32, 64_i32);
-                __state = 153;
+                __state = 163;
             }
-            148 => {
+            158 => {
                 unreachable!();
             }
-            149 => {
-                __state = 147;
+            159 => {
+                __state = 157;
             }
-            150 => {
-                __state = 144;
+            160 => {
+                __state = 154;
             }
-            151 => {
+            161 => {
                 unreachable!();
             }
-            152 => {
-                __state = 150;
+            162 => {
+                __state = 160;
             }
-            153 => {
+            163 => {
                 inl_updateCursorDisplay(ctx, jobj, cursor, state_jobj, color_jobj);
                 return;
             }
-            154 => {
-                __state = 142;
+            164 => {
+                __state = 152;
             }
-            155 => {
-                __state = if i < 25_i32 { 156 } else { 158 };
+            165 => {
+                __state = if i < 25_i32 { 166 } else { 168 };
             }
-            156 => {
+            166 => {
                 __state = if (((((m2).x8()
                     > statics::melee__mn__mncharsel::icons(ctx).get(i).bound_l())
                     && ((m2).x8() < statics::melee__mn__mncharsel::icons(ctx).get(i).bound_r()))
@@ -4469,66 +4499,66 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     && ((m2).xC() > statics::melee__mn__mncharsel::icons(ctx).get(i).bound_d()))
                     && ((statics::melee__mn__mncharsel::icons(ctx).get(i).state() as i32) >= 1_i32)
                 {
-                    160
+                    170
                 } else {
-                    161
+                    171
                 };
             }
-            157 => {
+            167 => {
                 i = i.wrapping_add(1);
-                __state = 155;
+                __state = 165;
             }
-            158 => {
+            168 => {
                 fns::mnCharSel_8025D5AC(ctx, door, 0_i32, 1_i32);
                 td = statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
                     .get(door)
                     .data();
                 __state = if ((td).use_tag() as i32) == 0_i32 {
-                    181
+                    191
                 } else {
-                    182
+                    192
                 };
             }
-            159 => {
+            169 => {
                 unreachable!();
             }
-            160 => {
+            170 => {
                 statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
                     .doors()
                     .get(door)
                     .set_sel_icon((i as u8));
                 fns::mnCharSel_8025DB34(ctx, (door as u8));
                 __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
-                    163
+                    173
                 } else {
-                    164
+                    174
                 };
             }
-            161 => {
-                __state = 157;
+            171 => {
+                __state = 167;
             }
-            162 => {
+            172 => {
                 unreachable!();
             }
-            163 => {
+            173 => {
                 __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
                     == 1_i32
                 {
-                    166
+                    176
                 } else {
-                    168
+                    178
                 };
             }
-            164 => {
-                __state = 179;
+            174 => {
+                __state = 189;
             }
-            165 => {
+            175 => {
                 unreachable!();
             }
-            166 => {
-                __state = if door != 0_i32 { 170 } else { 172 };
+            176 => {
+                __state = if door != 0_i32 { 180 } else { 182 };
             }
-            167 => {
+            177 => {
                 (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
                     .vs()
                     .start()
@@ -4547,35 +4577,35 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
                     == 1_i32
                 {
-                    174
+                    184
                 } else {
-                    176
+                    186
                 };
             }
-            168 => {
+            178 => {
                 player_idx_2 = door;
-                __state = 167;
+                __state = 177;
             }
-            169 => {
+            179 => {
                 unreachable!();
             }
-            170 => {
+            180 => {
                 player_idx_2 =
                     (statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).get() as i32);
-                __state = 171;
+                __state = 181;
             }
-            171 => {
-                __state = 167;
+            181 => {
+                __state = 177;
             }
-            172 => {
+            182 => {
                 player_idx_2 =
                     (statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32);
-                __state = 171;
+                __state = 181;
             }
-            173 => {
+            183 => {
                 unreachable!();
             }
-            174 => {
+            184 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -4589,9 +4619,9 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         VarArg::Int(1_i32.wrapping_neg() as u32),
                     ],
                 );
-                __state = 175;
+                __state = 185;
             }
-            175 => {
+            185 => {
                 fns::HSD_ForeachAnim(
                     ctx,
                     Handle::cast::<Addr<'a>>(sp98.get()),
@@ -4645,9 +4675,9 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         .char_kind() as u32),
                 );
                 let _ = fns::lbAudioAx_800237A8(ctx, 184_i32, 127_i32, 64_i32);
-                __state = 153;
+                __state = 163;
             }
-            176 => {
+            186 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -4661,274 +4691,212 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         VarArg::Int(1_i32.wrapping_neg() as u32),
                     ],
                 );
-                __state = 175;
-            }
-            177 => {
-                unreachable!();
-            }
-            178 => {
-                __state = 164;
-            }
-            179 => {
-                __state = if ((trigger & ((shl_i32(1_i32, (9_i32 as u32))) as u32)) != 0) {
-                    188
-                } else {
-                    190
-                };
-            }
-            180 => {
-                __state = 161;
-            }
-            181 => {
-                ((td).text()).set_hidden((1_i32 as u8));
-                __state = 182;
-            }
-            182 => {
-                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
-                    .doors()
-                    .get(door)
-                    .set_sel_icon_prev((25_i32 as u8));
-                __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
-                    184
-                } else {
-                    186
-                };
-            }
-            183 => {
-                unreachable!();
-            }
-            184 => {
-                fns::lbAudioAx_80024030(ctx, 3_i32);
                 __state = 185;
-            }
-            185 => {
-                __state = 111;
-            }
-            186 => {
-                __state = 179;
             }
             187 => {
                 unreachable!();
             }
             188 => {
-                __state = if fns::mnCharSel_8025FDEC(ctx, (door as u8)) == 0_i32 {
-                    192
-                } else {
-                    193
-                };
+                __state = 174;
             }
             189 => {
-                __state = 185;
+                __state = if ((trigger & ((shl_i32(1_i32, (9_i32 as u32))) as u32)) != 0) {
+                    198
+                } else {
+                    200
+                };
             }
             190 => {
-                fns::mnCharSel_CostumeChange(ctx, door, trigger);
-                __state = 189;
+                __state = 171;
             }
             191 => {
-                unreachable!();
+                ((td).text()).set_hidden((1_i32 as u8));
+                __state = 192;
             }
             192 => {
-                fns::mnCharSel_8025DB34(ctx, (door as u8));
-                (cursor).set_x5((2_i32 as u8));
-                __state = 193;
+                statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
+                    .doors()
+                    .get(door)
+                    .set_sel_icon_prev((25_i32 as u8));
+                __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
+                    194
+                } else {
+                    196
+                };
             }
             193 => {
-                __state = 189;
-            }
-            194 => {
                 unreachable!();
             }
+            194 => {
+                fns::lbAudioAx_80024030(ctx, 3_i32);
+                __state = 195;
+            }
             195 => {
-                __state = 106;
+                __state = 121;
             }
             196 => {
-                __state = 107;
+                __state = 189;
             }
             197 => {
-                __state = 108;
+                unreachable!();
             }
             198 => {
-                __state = 103;
-            }
-            199 => {
-                (cursor).set_x8((1_i32 as u16));
-                __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
+                __state = if fns::mnCharSel_8025FDEC(ctx, (door as u8)) == 0_i32 {
                     202
                 } else {
                     203
                 };
             }
+            199 => {
+                __state = 195;
+            }
             200 => {
-                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
-                    == 1_i32
-                {
-                    206
-                } else {
-                    207
-                };
+                fns::mnCharSel_CostumeChange(ctx, door, trigger);
+                __state = 199;
             }
             201 => {
                 unreachable!();
             }
             202 => {
-                statics::melee__mn__mncharsel::mnCharSel_804D6CF6(ctx).set((2_i32 as u8));
-                __state = 153;
+                fns::mnCharSel_8025DB34(ctx, (door as u8));
+                (cursor).set_x5((2_i32 as u8));
+                __state = 203;
             }
             203 => {
-                __state = 200;
+                __state = 199;
             }
             204 => {
                 unreachable!();
             }
             205 => {
-                __state = 203;
+                __state = 109;
             }
             206 => {
-                __state = if ((statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
-                    .at(((cursor).x4() as i32))
-                    .get())
-                .x5() as i32)
-                    == 0_i32
-                {
-                    209
-                } else {
-                    210
-                };
+                __state = 113;
             }
             207 => {
-                __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
-                    .match_type() as i32)
-                    != 2_i32
-                {
-                    282
-                } else {
-                    283
-                };
+                __state = 117;
             }
             208 => {
-                unreachable!();
+                __state = 103;
             }
             209 => {
-                fns::mnCharSel_CostumeChange(ctx, 0_i32, trigger);
-                __state = 210;
-            }
-            210 => {
-                __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
-                    .match_type() as u32)
-                    < 13_u32
-                {
+                (cursor).set_x8((1_i32 as u16));
+                __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
                     212
                 } else {
-                    214
+                    213
+                };
+            }
+            210 => {
+                __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
+                    == 1_i32
+                {
+                    216
+                } else {
+                    217
                 };
             }
             211 => {
                 unreachable!();
             }
             212 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF6(ctx).set((2_i32 as u8));
+                __state = 163;
+            }
+            213 => {
+                __state = 210;
+            }
+            214 => {
+                unreachable!();
+            }
+            215 => {
+                __state = 213;
+            }
+            216 => {
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
+                    .at(((cursor).x4() as i32))
+                    .get())
+                .x5() as i32)
+                    == 0_i32
+                {
+                    219
+                } else {
+                    220
+                };
+            }
+            217 => {
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .match_type() as i32)
+                    != 2_i32
+                {
+                    292
+                } else {
+                    293
+                };
+            }
+            218 => {
+                unreachable!();
+            }
+            219 => {
+                fns::mnCharSel_CostumeChange(ctx, 0_i32, trigger);
+                __state = 220;
+            }
+            220 => {
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .match_type() as u32)
+                    < 13_u32
+                {
+                    222
+                } else {
+                    224
+                };
+            }
+            221 => {
+                unreachable!();
+            }
+            222 => {
                 cy = (cursor).x10();
                 __state = if (cy < statics::melee__mn__mncharsel::data2(ctx).x108())
                     && (cy > statics::melee__mn__mncharsel::data2(ctx).x10c())
                 {
-                    216
+                    226
                 } else {
-                    218
+                    228
                 };
             }
-            213 => {
-                __state = 153;
+            223 => {
+                __state = 163;
             }
-            214 => {
-                __state = 228;
+            224 => {
+                __state = 238;
             }
-            215 => {
+            225 => {
                 unreachable!();
             }
-            216 => {
+            226 => {
                 cx = (cursor).xC();
                 __state = if (cx > statics::melee__mn__mncharsel::data2(ctx).xf8())
                     && (cx < statics::melee__mn__mncharsel::data2(ctx).xfc())
-                {
-                    220
-                } else {
-                    222
-                };
-            }
-            217 => {
-                __state = 213;
-            }
-            218 => {
-                __state = 228;
-            }
-            219 => {
-                unreachable!();
-            }
-            220 => {
-                (cursor).set_x8((1_i32 as u16));
-                __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0)
-                    && ((statics::melee__mn__mncharsel::data2(ctx).stocks() as u32) > 1_u32)
-                {
-                    224
-                } else {
-                    226
-                };
-            }
-            221 => {
-                __state = 217;
-            }
-            222 => {
-                __state = if (cx > statics::melee__mn__mncharsel::data2(ctx).x100())
-                    && (cx < statics::melee__mn__mncharsel::data2(ctx).x104())
                 {
                     230
                 } else {
                     232
                 };
             }
-            223 => {
-                unreachable!();
-            }
-            224 => {
-                statics::melee__mn__mncharsel::data2(ctx).set_stocks(
-                    (((statics::melee__mn__mncharsel::data2(ctx).stocks() as i32)
-                        .wrapping_sub(1_i32)) as u8),
-                );
-                inl_updateStockIcons(ctx, statics::melee__mn__mncharsel::data2(ctx), sp54, 1_i32);
-                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
-                    .vs()
-                    .start()
-                    .players()
-                    .get((statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32))
-                    .set_stocks((statics::melee__mn__mncharsel::data2(ctx).stocks() as i8));
-                inl_sfxMove(ctx);
-                __state = 225;
-            }
-            225 => {
-                __state = 221;
-            }
-            226 => {
-                __state = 228;
-            }
             227 => {
-                unreachable!();
+                __state = 223;
             }
             228 => {
-                __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
-                    .match_type() as u32)
-                    <= 13_u32
-                {
-                    241
-                } else {
-                    243
-                };
+                __state = 238;
             }
             229 => {
-                __state = 225;
+                unreachable!();
             }
             230 => {
                 (cursor).set_x8((1_i32 as u16));
                 __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0)
-                    && ((statics::melee__mn__mncharsel::data2(ctx).stocks() as u32) < 5_u32)
+                    && ((statics::melee__mn__mncharsel::data2(ctx).stocks() as u32) > 1_u32)
                 {
                     234
                 } else {
@@ -4936,10 +4904,16 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 };
             }
             231 => {
-                __state = 221;
+                __state = 227;
             }
             232 => {
-                __state = 228;
+                __state = if (cx > statics::melee__mn__mncharsel::data2(ctx).x100())
+                    && (cx < statics::melee__mn__mncharsel::data2(ctx).x104())
+                {
+                    240
+                } else {
+                    242
+                };
             }
             233 => {
                 unreachable!();
@@ -4947,9 +4921,9 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             234 => {
                 statics::melee__mn__mncharsel::data2(ctx).set_stocks(
                     (((statics::melee__mn__mncharsel::data2(ctx).stocks() as i32)
-                        .wrapping_add(1_i32)) as u8),
+                        .wrapping_sub(1_i32)) as u8),
                 );
-                inl_updateStockIcons(ctx, statics::melee__mn__mncharsel::data2(ctx), sp50, 1_i32);
+                inl_updateStockIcons(ctx, statics::melee__mn__mncharsel::data2(ctx), sp54, 1_i32);
                 (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
                     .vs()
                     .start()
@@ -4963,86 +4937,142 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 __state = 231;
             }
             236 => {
-                __state = 228;
+                __state = 238;
             }
             237 => {
                 unreachable!();
             }
             238 => {
-                __state = 235;
+                __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .match_type() as u32)
+                    <= 13_u32
+                {
+                    251
+                } else {
+                    253
+                };
             }
             239 => {
-                __state = 231;
+                __state = 235;
             }
             240 => {
-                __state = 217;
+                (cursor).set_x8((1_i32 as u16));
+                __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0)
+                    && ((statics::melee__mn__mncharsel::data2(ctx).stocks() as u32) < 5_u32)
+                {
+                    244
+                } else {
+                    246
+                };
             }
             241 => {
+                __state = 231;
+            }
+            242 => {
+                __state = 238;
+            }
+            243 => {
+                unreachable!();
+            }
+            244 => {
+                statics::melee__mn__mncharsel::data2(ctx).set_stocks(
+                    (((statics::melee__mn__mncharsel::data2(ctx).stocks() as i32)
+                        .wrapping_add(1_i32)) as u8),
+                );
+                inl_updateStockIcons(ctx, statics::melee__mn__mncharsel::data2(ctx), sp50, 1_i32);
+                (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
+                    .vs()
+                    .start()
+                    .players()
+                    .get((statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32))
+                    .set_stocks((statics::melee__mn__mncharsel::data2(ctx).stocks() as i8));
+                inl_sfxMove(ctx);
+                __state = 245;
+            }
+            245 => {
+                __state = 241;
+            }
+            246 => {
+                __state = 238;
+            }
+            247 => {
+                unreachable!();
+            }
+            248 => {
+                __state = 245;
+            }
+            249 => {
+                __state = 241;
+            }
+            250 => {
+                __state = 227;
+            }
+            251 => {
                 cy2 = (cursor).x10();
                 __state = if (cy2
                     < statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).cpubtn_top())
                     && (cy2 > statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).cpubtn_btm())
                 {
-                    245
+                    255
                 } else {
-                    247
+                    257
                 };
             }
-            242 => {
-                __state = 213;
+            252 => {
+                __state = 223;
             }
-            243 => {
-                __state = 261;
+            253 => {
+                __state = 271;
             }
-            244 => {
+            254 => {
                 unreachable!();
             }
-            245 => {
+            255 => {
                 cx2 = (cursor).xC();
                 __state = if (cx2
                     > statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).cpudown_left())
                     && (cx2
                         < statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).cpudown_right())
                 {
-                    249
+                    259
                 } else {
-                    251
+                    261
                 };
             }
-            246 => {
-                __state = 242;
+            256 => {
+                __state = 252;
             }
-            247 => {
-                __state = 261;
+            257 => {
+                __state = 271;
             }
-            248 => {
+            258 => {
                 unreachable!();
             }
-            249 => {
+            259 => {
                 (cursor).set_x8((1_i32 as u16));
                 __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
-                    253
+                    263
                 } else {
-                    255
+                    265
                 };
             }
-            250 => {
-                __state = 246;
+            260 => {
+                __state = 256;
             }
-            251 => {
+            261 => {
                 __state = if (cx2
                     > statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).cpuup_left())
                     && (cx2 < statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).cpuup_right())
                 {
-                    264
+                    274
                 } else {
-                    266
+                    276
                 };
             }
-            252 => {
+            262 => {
                 unreachable!();
             }
-            253 => {
+            263 => {
                 __state = if (({
                     let __t2 = ({
                         let __t1 =
@@ -5056,21 +5086,21 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 }) as i32)
                     != 0_i32
                 {
-                    257
+                    267
                 } else {
-                    259
+                    269
                 };
             }
-            254 => {
-                __state = 250;
+            264 => {
+                __state = 260;
             }
-            255 => {
-                __state = 261;
+            265 => {
+                __state = 271;
             }
-            256 => {
+            266 => {
                 unreachable!();
             }
-            257 => {
+            267 => {
                 (level).set((((current_level as i32).wrapping_sub(1_i32)) as u8));
                 statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx)
                     .set_scroll_flag((1_i32 as u8));
@@ -5084,45 +5114,45 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     )
                     .set_cpu_level((level).get());
                 inl_sfxMove(ctx);
-                __state = 258;
-            }
-            258 => {
-                __state = 254;
-            }
-            259 => {
-                __state = 261;
-            }
-            260 => {
-                unreachable!();
-            }
-            261 => {
-                a_press2 = (trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32));
-                __state = if a_press2 != (0_i32 as u32) { 339 } else { 341 };
-            }
-            262 => {
-                __state = 258;
-            }
-            263 => {
-                __state = 254;
-            }
-            264 => {
-                (cursor).set_x8((1_i32 as u16));
-                __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
-                    268
-                } else {
-                    270
-                };
-            }
-            265 => {
-                __state = 250;
-            }
-            266 => {
-                __state = 261;
-            }
-            267 => {
-                unreachable!();
+                __state = 268;
             }
             268 => {
+                __state = 264;
+            }
+            269 => {
+                __state = 271;
+            }
+            270 => {
+                unreachable!();
+            }
+            271 => {
+                a_press2 = (trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32));
+                __state = if a_press2 != (0_i32 as u32) { 360 } else { 362 };
+            }
+            272 => {
+                __state = 268;
+            }
+            273 => {
+                __state = 264;
+            }
+            274 => {
+                (cursor).set_x8((1_i32 as u16));
+                __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
+                    278
+                } else {
+                    280
+                };
+            }
+            275 => {
+                __state = 260;
+            }
+            276 => {
+                __state = 271;
+            }
+            277 => {
+                unreachable!();
+            }
+            278 => {
                 __state = if (({
                     let __t4 = ({
                         let __t3 =
@@ -5136,21 +5166,21 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 }) as u32)
                     < 4_u32
                 {
-                    272
+                    282
                 } else {
-                    274
+                    284
                 };
             }
-            269 => {
-                __state = 265;
+            279 => {
+                __state = 275;
             }
-            270 => {
-                __state = 261;
+            280 => {
+                __state = 271;
             }
-            271 => {
+            281 => {
                 unreachable!();
             }
-            272 => {
+            282 => {
                 (level_2).set((((current_level_2 as i32).wrapping_add(1_i32)) as u8));
                 statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx)
                     .set_scroll_flag((1_i32 as u8));
@@ -5164,88 +5194,88 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     )
                     .set_cpu_level((level_2).get());
                 inl_sfxMove(ctx);
-                __state = 273;
-            }
-            273 => {
-                __state = 269;
-            }
-            274 => {
-                __state = 261;
-            }
-            275 => {
-                unreachable!();
-            }
-            276 => {
-                __state = 273;
-            }
-            277 => {
-                __state = 269;
-            }
-            278 => {
-                __state = 265;
-            }
-            279 => {
-                __state = 246;
-            }
-            280 => {
-                __state = 242;
-            }
-            281 => {
-                __state = 207;
-            }
-            282 => {
-                cx3 = (cursor).xC();
-                __state = if ((cx3 > fp::fneg(17.0)) && (cx3 < 15.0)) && ((cursor).x10() > 22.0) {
-                    285
-                } else {
-                    286
-                };
+                __state = 283;
             }
             283 => {
-                __state = if ((cursor).xC() < fp::fneg(25.5)) && ((cursor).x10() > 22.0) {
-                    300
-                } else {
-                    302
-                };
+                __state = 279;
             }
             284 => {
-                unreachable!();
+                __state = 271;
             }
             285 => {
-                (cursor).set_x8((1_i32 as u16));
-                __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
-                    288
-                } else {
-                    289
-                };
+                unreachable!();
             }
             286 => {
                 __state = 283;
             }
             287 => {
-                unreachable!();
+                __state = 279;
             }
             288 => {
-                statics::melee__mn__mncharsel::mnCharSel_804D6CF6(ctx).set((3_i32 as u8));
-                loop_i = 0_i32;
-                __state = 291;
+                __state = 275;
             }
             289 => {
-                __state = 286;
+                __state = 256;
             }
             290 => {
-                unreachable!();
+                __state = 252;
             }
             291 => {
+                __state = 217;
+            }
+            292 => {
+                cx3 = (cursor).xC();
+                __state = if ((cx3 > fp::fneg(17.0)) && (cx3 < 15.0)) && ((cursor).x10() > 22.0) {
+                    295
+                } else {
+                    296
+                };
+            }
+            293 => {
+                __state = if ((cursor).xC() < fp::fneg(25.5)) && ((cursor).x10() > 22.0) {
+                    310
+                } else {
+                    312
+                };
+            }
+            294 => {
+                unreachable!();
+            }
+            295 => {
+                (cursor).set_x8((1_i32 as u16));
+                __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
+                    298
+                } else {
+                    299
+                };
+            }
+            296 => {
+                __state = 293;
+            }
+            297 => {
+                unreachable!();
+            }
+            298 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF6(ctx).set((3_i32 as u8));
+                loop_i = 0_i32;
+                __state = 301;
+            }
+            299 => {
+                __state = 296;
+            }
+            300 => {
+                unreachable!();
+            }
+            301 => {
                 __state = if loop_i
                     < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
                 {
-                    292
+                    302
                 } else {
-                    294
+                    304
                 };
             }
-            292 => {
+            302 => {
                 __state = if (((statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)
                     .at(loop_i)
                     .get())
@@ -5253,83 +5283,116 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     == 1_i32)
                     && (fns::mnCharSel_8025FDEC(ctx, (loop_i as u8)) == 0_i32)
                 {
-                    296
+                    306
                 } else {
-                    297
+                    307
                 };
             }
-            293 => {
+            303 => {
                 loop_i = loop_i.wrapping_add(1);
-                __state = 291;
+                __state = 301;
             }
-            294 => {
+            304 => {
                 return;
             }
-            295 => {
+            305 => {
                 unreachable!();
             }
-            296 => {
+            306 => {
                 fns::mnCharSel_8025DB34(ctx, (loop_i as u8));
                 (statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)
                     .at(loop_i)
                     .get())
                 .set_x5((2_i32 as u8));
-                __state = 297;
+                __state = 307;
             }
-            297 => {
-                __state = 293;
+            307 => {
+                __state = 303;
             }
-            298 => {
+            308 => {
                 unreachable!();
             }
-            299 => {
-                __state = 289;
+            309 => {
+                __state = 299;
             }
-            300 => {
+            310 => {
                 __state = match ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
                     .match_type() as i32)
                 {
-                    0_i32 => 304,
-                    1_i32 => 304,
-                    2_i32 => 304,
-                    3_i32 => 304,
-                    4_i32 => 304,
-                    5_i32 => 304,
-                    6_i32 => 304,
-                    7_i32 => 304,
-                    8_i32 => 304,
-                    9_i32 => 304,
-                    10_i32 => 304,
-                    _ => 305,
+                    0_i32 => 314,
+                    1_i32 => 315,
+                    2_i32 => 316,
+                    3_i32 => 317,
+                    4_i32 => 318,
+                    5_i32 => 319,
+                    6_i32 => 320,
+                    7_i32 => 321,
+                    8_i32 => 322,
+                    9_i32 => 323,
+                    10_i32 => 324,
+                    _ => 325,
                 };
             }
-            301 => {
+            311 => {
                 __state = 100;
             }
-            302 => {
-                __state = 332;
+            312 => {
+                __state = 353;
             }
-            303 => {
+            313 => {
                 unreachable!();
             }
-            304 => {
+            314 => {
+                __state = 315;
+            }
+            315 => {
+                __state = 316;
+            }
+            316 => {
+                __state = 317;
+            }
+            317 => {
+                __state = 318;
+            }
+            318 => {
+                __state = 319;
+            }
+            319 => {
+                __state = 320;
+            }
+            320 => {
+                __state = 321;
+            }
+            321 => {
+                __state = 322;
+            }
+            322 => {
+                __state = 323;
+            }
+            323 => {
+                __state = 324;
+            }
+            324 => {
                 (cursor).set_x8((1_i32 as u16));
                 __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
-                    308
+                    329
                 } else {
-                    310
+                    331
                 };
             }
-            305 => {
-                __state = 332;
+            325 => {
+                __state = 353;
             }
-            306 => {
-                __state = 301;
+            326 => {
+                __state = 311;
             }
-            307 => {
+            327 => {
                 unreachable!();
             }
-            308 => {
+            328 => {
+                __state = 314;
+            }
+            329 => {
                 inl_sfxMove(ctx);
                 is_teams = (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
                     .vs()
@@ -5344,60 +5407,60 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     .is_teams() as i32)
                     == 0_i32
                 {
-                    312
+                    333
                 } else {
-                    313
+                    334
                 };
             }
-            309 => {
-                __state = 306;
+            330 => {
+                __state = 326;
             }
-            310 => {
-                __state = 332;
+            331 => {
+                __state = 353;
             }
-            311 => {
+            332 => {
                 unreachable!();
             }
-            312 => {
+            333 => {
                 k = 0_i32;
-                __state = 315;
+                __state = 336;
             }
-            313 => {
+            334 => {
                 fns::mnCharSel_8025EE8C(
                     ctx,
                     (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type(),
                 );
-                __state = 309;
+                __state = 330;
             }
-            314 => {
+            335 => {
                 unreachable!();
             }
-            315 => {
+            336 => {
                 __state =
                     if k < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) {
-                        316
+                        337
                     } else {
-                        318
+                        339
                     };
             }
-            316 => {
+            337 => {
                 __state = if (inl_isDuplicateCostumeCached(ctx, k) != 0) {
-                    320
+                    341
                 } else {
-                    321
+                    342
                 };
             }
-            317 => {
+            338 => {
                 k = k.wrapping_add(1);
-                __state = 315;
+                __state = 336;
             }
-            318 => {
-                __state = 313;
+            339 => {
+                __state = 334;
             }
-            319 => {
+            340 => {
                 unreachable!();
             }
-            320 => {
+            341 => {
                 statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
                     .doors()
                     .get(k)
@@ -5406,18 +5469,18 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx),
                 ));
-                __state = 323;
+                __state = 344;
             }
-            321 => {
-                __state = 317;
+            342 => {
+                __state = 338;
             }
-            322 => {
+            343 => {
                 unreachable!();
             }
-            323 => {
-                __state = if true { 324 } else { 326 };
+            344 => {
+                __state = if true { 345 } else { 347 };
             }
-            324 => {
+            345 => {
                 __state = if !(inl_isDuplicateCostumeWith(
                     ctx,
                     k,
@@ -5425,24 +5488,24 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get(),
                 ) != 0)
                 {
-                    328
+                    349
                 } else {
-                    329
+                    350
                 };
             }
-            325 => {
-                __state = 323;
+            346 => {
+                __state = 344;
             }
-            326 => {
-                __state = 321;
+            347 => {
+                __state = 342;
             }
-            327 => {
+            348 => {
                 unreachable!();
             }
-            328 => {
-                __state = 326;
+            349 => {
+                __state = 347;
             }
-            329 => {
+            350 => {
                 statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
                     .doors()
                     .get(k)
@@ -5453,15 +5516,15 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                             .costume() as i32)
                             .wrapping_add(1_i32)) as u8),
                     );
-                __state = 325;
+                __state = 346;
             }
-            330 => {
+            351 => {
                 unreachable!();
             }
-            331 => {
-                __state = 329;
+            352 => {
+                __state = 350;
             }
-            332 => {
+            353 => {
                 cport2 = (cursor).x4();
                 __state = if ((((statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
                     .at((cport2 as i32))
@@ -5480,62 +5543,62 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         .p_kind() as i32)
                         != 3_i32)
                 {
-                    336
+                    357
                 } else {
-                    337
+                    358
                 };
             }
-            333 => {
-                __state = 309;
+            354 => {
+                __state = 330;
             }
-            334 => {
-                __state = 305;
+            355 => {
+                __state = 325;
             }
-            335 => {
-                __state = 306;
+            356 => {
+                __state = 326;
             }
-            336 => {
+            357 => {
                 fns::mnCharSel_CostumeChange(ctx, (cport2 as i32), trigger);
-                __state = 337;
+                __state = 358;
             }
-            337 => {
-                __state = 261;
+            358 => {
+                __state = 271;
             }
-            338 => {
+            359 => {
                 unreachable!();
             }
-            339 => {
+            360 => {
                 __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
                     != 1_i32
                 {
-                    343
+                    364
                 } else {
-                    344
+                    365
                 };
             }
-            340 => {
+            361 => {
                 cy9 = (cursor).x10();
                 __state = if (cy9 > 0.20000000298023224) && (cy9 < 22.0) {
-                    464
+                    486
                 } else {
-                    465
+                    487
                 };
             }
-            341 => {
+            362 => {
                 __state = if ((trigger & ((shl_i32(1_i32, (9_i32 as u32))) as u32)) != 0) {
-                    452
+                    474
                 } else {
-                    453
+                    475
                 };
             }
-            342 => {
+            363 => {
                 unreachable!();
             }
-            343 => {
+            364 => {
                 door = 0_i32;
-                __state = 346;
+                __state = 367;
             }
-            344 => {
+            365 => {
                 __state = if ((((cursor).x4() as i32) != 3_i32)
                     || (((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type()
                         as i32)
@@ -5546,48 +5609,48 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         .p_kind() as i32)
                         == 0_i32)
                 {
-                    415
+                    437
                 } else {
-                    416
+                    438
                 };
             }
-            345 => {
+            366 => {
                 unreachable!();
             }
-            346 => {
+            367 => {
                 __state = if door
                     < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
                 {
-                    347
+                    368
                 } else {
-                    349
+                    370
                 };
             }
-            347 => {
+            368 => {
                 __state = if (door == 3_i32)
                     && (((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type()
                         as i32)
                         == 1_i32)
                 {
-                    351
+                    372
                 } else {
-                    352
+                    373
                 };
             }
-            348 => {
+            369 => {
                 door = door.wrapping_add(1);
-                __state = 346;
+                __state = 367;
             }
-            349 => {
-                __state = 344;
+            370 => {
+                __state = 365;
             }
-            350 => {
+            371 => {
                 unreachable!();
             }
-            351 => {
-                __state = 348;
+            372 => {
+                __state = 369;
             }
-            352 => {
+            373 => {
                 __state = if ((((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
                     .doors()
                     .get(door)
@@ -5608,28 +5671,28 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     .x5() as i32)
                         != 1_i32)
                 {
-                    355
+                    376
                 } else {
-                    356
+                    377
                 };
             }
-            353 => {
+            374 => {
                 unreachable!();
             }
-            354 => {
-                __state = 352;
+            375 => {
+                __state = 373;
             }
-            355 => {
+            376 => {
                 tag_data = statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
                     .get(door)
                     .data();
                 __state = if ((tag_data).state() as i32) != 0_i32 {
-                    358
+                    379
                 } else {
-                    359
+                    380
                 };
             }
-            356 => {
+            377 => {
                 __state = if (((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
                     .vs()
                     .start()
@@ -5642,18 +5705,18 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         .p_kind() as i32)
                         != 3_i32)
                 {
-                    387
+                    409
                 } else {
-                    388
+                    410
                 };
             }
-            357 => {
+            378 => {
                 unreachable!();
             }
-            358 => {
-                __state = 348;
+            379 => {
+                __state = 369;
             }
-            359 => {
+            380 => {
                 cx4 = (cursor).xC();
                 __state = if (cx4
                     > statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
@@ -5666,32 +5729,32 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                             .get(door)
                             .togglebtn_right())
                 {
-                    362
+                    383
                 } else {
-                    363
+                    384
                 };
             }
-            360 => {
+            381 => {
                 unreachable!();
             }
-            361 => {
-                __state = 359;
+            382 => {
+                __state = 380;
             }
-            362 => {
+            383 => {
                 cy4 = (cursor).x10();
                 __state = if (cy4 < 0.20000009536743146) && (cy4 > fp::fneg(4.600000095367432)) {
-                    365
+                    386
                 } else {
-                    366
+                    387
                 };
             }
-            363 => {
-                __state = 356;
+            384 => {
+                __state = 377;
             }
-            364 => {
+            385 => {
                 unreachable!();
             }
-            365 => {
+            386 => {
                 (cursor).set_x10(fp::fneg(2.200000047683716));
                 new_kind = ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
                     .doors()
@@ -5703,38 +5766,38 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     .get(door)
                     .set_p_kind(new_kind);
                 __state = match (new_kind as i32) {
-                    3_i32 => 368,
-                    2_i32 => 369,
-                    4_i32 => 370,
-                    _ => 371,
+                    3_i32 => 389,
+                    2_i32 => 390,
+                    4_i32 => 391,
+                    _ => 392,
                 };
             }
-            366 => {
-                __state = 363;
+            387 => {
+                __state = 384;
             }
-            367 => {
+            388 => {
                 unreachable!();
             }
-            368 => {
-                __state = 371;
+            389 => {
+                __state = 392;
             }
-            369 => {
+            390 => {
                 statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
                     .doors()
                     .get(door)
                     .set_p_kind((3_i32 as u8));
-                __state = 371;
+                __state = 392;
             }
-            370 => {
+            391 => {
                 __state = if (fns::HSD_PadCopyStatus(ctx).get(((door as u8) as i32)).err() as i32)
                     != 0_i32
                 {
-                    375
+                    397
                 } else {
-                    377
+                    399
                 };
             }
-            371 => {
+            392 => {
                 (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
                     .vs()
                     .start()
@@ -5752,44 +5815,47 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     .p_kind() as i32)
                     == 1_i32
                 {
-                    380
+                    402
                 } else {
-                    381
+                    403
                 };
             }
-            372 => {
+            393 => {
                 unreachable!();
             }
-            373 => {
-                __state = 369;
+            394 => {
+                __state = 389;
             }
-            374 => {
-                __state = 370;
+            395 => {
+                __state = 390;
             }
-            375 => {
+            396 => {
+                __state = 391;
+            }
+            397 => {
                 statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
                     .doors()
                     .get(door)
                     .set_p_kind((1_i32 as u8));
-                __state = 376;
+                __state = 398;
             }
-            376 => {
-                __state = 371;
+            398 => {
+                __state = 392;
             }
-            377 => {
+            399 => {
                 statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
                     .doors()
                     .get(door)
                     .set_p_kind((0_i32 as u8));
-                __state = 376;
+                __state = 398;
             }
-            378 => {
+            400 => {
                 unreachable!();
             }
-            379 => {
-                __state = 371;
+            401 => {
+                __state = 392;
             }
-            380 => {
+            402 => {
                 (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
                     .vs()
                     .start()
@@ -5807,33 +5873,33 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     == 0_i32)
                     && (((cursor).x4() as i32) != door)
                 {
-                    383
+                    405
                 } else {
-                    384
+                    406
                 };
             }
-            381 => {
+            403 => {
                 fns::mnCharSel_8025DB34(ctx, (door as u8));
                 inl_sfxMove(ctx);
-                __state = 349;
+                __state = 370;
             }
-            382 => {
+            404 => {
                 unreachable!();
             }
-            383 => {
+            405 => {
                 fns::mnCharSel_8025FB50(ctx, (door as u8), 1_i32);
-                __state = 384;
+                __state = 406;
             }
-            384 => {
-                __state = 381;
+            406 => {
+                __state = 403;
             }
-            385 => {
+            407 => {
                 unreachable!();
             }
-            386 => {
-                __state = 366;
+            408 => {
+                __state = 387;
             }
-            387 => {
+            409 => {
                 inl_cycleTeam(
                     ctx,
                     cursor,
@@ -5842,15 +5908,15 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         .get(door),
                     door,
                 );
-                __state = 388;
+                __state = 410;
             }
-            388 => {
-                __state = if a_press2 != (0_i32 as u32) { 390 } else { 391 };
+            410 => {
+                __state = if a_press2 != (0_i32 as u32) { 412 } else { 413 };
             }
-            389 => {
+            411 => {
                 unreachable!();
             }
-            390 => {
+            412 => {
                 __state = if ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
                     .doors()
                     .get(door)
@@ -5862,41 +5928,41 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         .p_kind() as i32)
                         == 1_i32)
                 {
-                    393
+                    415
                 } else {
-                    394
+                    416
                 };
             }
-            391 => {
-                __state = 348;
+            413 => {
+                __state = 369;
             }
-            392 => {
+            414 => {
                 unreachable!();
             }
-            393 => {
+            415 => {
                 rules2 = fns::gmMainLib_GetGameRules(ctx);
                 __state = if ((rules2).handicap() as i32) != 0_i32 {
-                    396
+                    418
                 } else {
-                    398
+                    420
                 };
             }
-            394 => {
+            416 => {
                 __state = if (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
                     .doors()
                     .get(door)
                     .is_hold_handicap_slider() as i32)
                     == 0_i32
                 {
-                    403
+                    425
                 } else {
-                    404
+                    426
                 };
             }
-            395 => {
+            417 => {
                 unreachable!();
             }
-            396 => {
+            418 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -5911,9 +5977,9 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         VarArg::Int(1_i32.wrapping_neg() as u32),
                     ],
                 );
-                __state = 397;
+                __state = 419;
             }
-            397 => {
+            419 => {
                 fns::lb_8000B1CC(ctx, sp98.get(), null::<Vec<'a>>(ctx), (sp88));
                 dx = fp::fsubs(
                     (cursor).xC(),
@@ -5921,12 +5987,12 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 );
                 dy = fp::fsubs((cursor).x10(), (fp::fadds(1.7000000476837158, sp88.y())));
                 __state = if (fp::fmadds(dx, dx, fp::fmuls(dy, dy))) < 5.0 {
-                    400
+                    422
                 } else {
-                    401
+                    423
                 };
             }
-            398 => {
+            420 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -5941,12 +6007,12 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         VarArg::Int(1_i32.wrapping_neg() as u32),
                     ],
                 );
-                __state = 397;
+                __state = 419;
             }
-            399 => {
+            421 => {
                 unreachable!();
             }
-            400 => {
+            422 => {
                 (cursor).set_x5((1_i32 as u8));
                 (cursor).set_x6(((door.wrapping_add(4_i32)) as u8));
                 (cursor).set_xC((fp::fadds(fp::fneg(2.9000000953674316), sp88.x())));
@@ -5956,29 +6022,29 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     .get(door)
                     .set_is_hold_cpu_slider((1_i32 as u8));
                 let _ = fns::lbAudioAx_800237A8(ctx, 183_i32, 127_i32, 64_i32);
-                __state = 401;
+                __state = 423;
             }
-            401 => {
-                __state = 394;
+            423 => {
+                __state = 416;
             }
-            402 => {
+            424 => {
                 unreachable!();
             }
-            403 => {
+            425 => {
                 rules3 = fns::gmMainLib_GetGameRules(ctx);
                 __state = if ((rules3).handicap() as i32) == 2_i32 {
-                    406
+                    428
                 } else {
-                    407
+                    429
                 };
             }
-            404 => {
-                __state = 391;
+            426 => {
+                __state = 413;
             }
-            405 => {
+            427 => {
                 unreachable!();
             }
-            406 => {
+            428 => {
                 pk = statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
                     .doors()
                     .get(door)
@@ -5986,18 +6052,18 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 __state = if ((pk as i32) != 3_i32)
                     && (((pk as i32) == 1_i32) || (door == ((cursor).x4() as i32)))
                 {
-                    409
+                    431
                 } else {
-                    410
+                    432
                 };
             }
-            407 => {
-                __state = 404;
+            429 => {
+                __state = 426;
             }
-            408 => {
+            430 => {
                 unreachable!();
             }
-            409 => {
+            431 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -6019,18 +6085,18 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 );
                 hdy = fp::fsubs((cursor).x10(), (fp::fadds(1.7000000476837158, sp88.y())));
                 __state = if (fp::fmadds(hdx, hdx, fp::fmuls(hdy, hdy))) < 5.0 {
-                    412
+                    434
                 } else {
-                    413
+                    435
                 };
             }
-            410 => {
-                __state = 407;
+            432 => {
+                __state = 429;
             }
-            411 => {
+            433 => {
                 unreachable!();
             }
-            412 => {
+            434 => {
                 (cursor).set_x5((1_i32 as u8));
                 (cursor).set_x6(((door.wrapping_add(8_i32)) as u8));
                 (cursor).set_xC((fp::fadds(fp::fneg(2.9000000953674316), sp88.x())));
@@ -6040,33 +6106,33 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     .get(door)
                     .set_is_hold_handicap_slider((1_i32 as u8));
                 let _ = fns::lbAudioAx_800237A8(ctx, 183_i32, 127_i32, 64_i32);
-                __state = 413;
+                __state = 435;
             }
-            413 => {
-                __state = 410;
+            435 => {
+                __state = 432;
             }
-            414 => {
+            436 => {
                 unreachable!();
             }
-            415 => {
+            437 => {
                 __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
                     == 1_i32
                 {
-                    418
+                    440
                 } else {
-                    420
+                    442
                 };
             }
-            416 => {
+            438 => {
                 closest_dist = 9.0;
                 ci = 0_i32;
                 closest = 1_i32.wrapping_neg();
-                __state = 432;
+                __state = 454;
             }
-            417 => {
+            439 => {
                 unreachable!();
             }
-            418 => {
+            440 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -6079,19 +6145,19 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         VarArg::Int(1_i32.wrapping_neg() as u32),
                     ],
                 );
-                __state = 419;
+                __state = 441;
             }
-            419 => {
+            441 => {
                 fns::lb_8000B1CC(ctx, sp98.get(), null::<Vec<'a>>(ctx), (sp88));
                 __state = if ((cursor).xC() > (fp::fsubs(sp88.x(), 4.699999809265137)))
                     && ((cursor).xC() < (fp::fadds(5.199999809265137, sp88.x())))
                 {
-                    422
+                    444
                 } else {
-                    423
+                    445
                 };
             }
-            420 => {
+            442 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -6105,42 +6171,42 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         VarArg::Int(1_i32.wrapping_neg() as u32),
                     ],
                 );
-                __state = 419;
+                __state = 441;
             }
-            421 => {
+            443 => {
                 unreachable!();
             }
-            422 => {
+            444 => {
                 __state = if ((cursor).x10() < (fp::fadds(2.0, sp88.y())))
                     && ((cursor).x10() > (fp::fsubs(sp88.y(), 1.0)))
                 {
-                    425
+                    447
                 } else {
-                    426
+                    448
                 };
             }
-            423 => {
-                __state = 416;
+            445 => {
+                __state = 438;
             }
-            424 => {
+            446 => {
                 unreachable!();
             }
-            425 => {
+            447 => {
                 __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
                     == 1_i32
                 {
-                    428
+                    450
                 } else {
-                    430
+                    452
                 };
             }
-            426 => {
-                __state = 423;
+            448 => {
+                __state = 445;
             }
-            427 => {
+            449 => {
                 unreachable!();
             }
-            428 => {
+            450 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -6153,9 +6219,9 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         VarArg::Int(1_i32.wrapping_neg() as u32),
                     ],
                 );
-                __state = 429;
+                __state = 451;
             }
-            429 => {
+            451 => {
                 fns::lb_8000B1CC(ctx, sp74.get(), null::<Vec<'a>>(ctx), (sp88));
                 (cursor).set_xC(sp88.x());
                 (cursor).set_x10((fp::fsubs(sp88.y(), 5.0)));
@@ -6163,9 +6229,9 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     .get(((cursor).x4() as i32))
                     .data())
                 .set_state((1_i32 as u8));
-                __state = 426;
+                __state = 448;
             }
-            430 => {
+            452 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -6179,33 +6245,33 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         VarArg::Int(1_i32.wrapping_neg() as u32),
                     ],
                 );
-                __state = 429;
+                __state = 451;
             }
-            431 => {
+            453 => {
                 unreachable!();
             }
-            432 => {
-                __state = if ci < n_doors { 433 } else { 435 };
+            454 => {
+                __state = if ci < n_doors { 455 } else { 457 };
             }
-            433 => {
+            455 => {
                 cy7 = (cursor).x10();
                 __state = if (!(cy7 < 0.20000000298023224)) && (!(cy7 > 22.0)) {
-                    437
+                    459
                 } else {
-                    438
+                    460
                 };
             }
-            434 => {
+            456 => {
                 ci = ci.wrapping_add(1);
-                __state = 432;
+                __state = 454;
             }
-            435 => {
-                __state = if closest >= 0_i32 { 449 } else { 450 };
+            457 => {
+                __state = if closest >= 0_i32 { 471 } else { 472 };
             }
-            436 => {
+            458 => {
                 unreachable!();
             }
-            437 => {
+            459 => {
                 pk2 = statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
                     .doors()
                     .get(ci)
@@ -6218,57 +6284,57 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         < 25_u32))
                     && (((pk2 as i32) != 0_i32) || (((cursor).x4() as i32) == ci))
                 {
-                    440
+                    462
                 } else {
-                    441
+                    463
                 };
             }
-            438 => {
-                __state = 434;
+            460 => {
+                __state = 456;
             }
-            439 => {
+            461 => {
                 unreachable!();
             }
-            440 => {
+            462 => {
                 mc = statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
                     .at(ci)
                     .get();
                 __state = if ((mc).x5() as i32) == 0_i32 {
-                    443
+                    465
                 } else {
-                    444
+                    466
                 };
             }
-            441 => {
-                __state = 438;
+            463 => {
+                __state = 460;
             }
-            442 => {
+            464 => {
                 unreachable!();
             }
-            443 => {
+            465 => {
                 ddx = fp::fadds(3.799999952316284, (fp::fsubs((cursor).xC(), (mc).x8())));
                 ddy = fp::fadds(fp::fneg(2.5999999046325684), (fp::fsubs(cy7, (mc).xC())));
                 dist = fp::fmadds(ddx, ddx, (fp::fmuls(ddy, ddy)));
-                __state = if dist < closest_dist { 446 } else { 447 };
+                __state = if dist < closest_dist { 468 } else { 469 };
             }
-            444 => {
-                __state = 441;
+            466 => {
+                __state = 463;
             }
-            445 => {
+            467 => {
                 unreachable!();
             }
-            446 => {
+            468 => {
                 closest_dist = dist;
                 closest = ci;
-                __state = 447;
+                __state = 469;
             }
-            447 => {
-                __state = 444;
+            469 => {
+                __state = 466;
             }
-            448 => {
+            470 => {
                 unreachable!();
             }
-            449 => {
+            471 => {
                 cport4 = (cursor).x4();
                 closest_door = ((closest as u8) as i32);
                 (statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
@@ -6317,15 +6383,15 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         fp::fneg(2.0),
                     )),
                 );
-                __state = 450;
+                __state = 472;
             }
-            450 => {
-                __state = 340;
+            472 => {
+                __state = 361;
             }
-            451 => {
+            473 => {
                 unreachable!();
             }
-            452 => {
+            474 => {
                 let _ = statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
                     .doors()
                     .get(
@@ -6346,50 +6412,50 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         .sel_icon() as u32)
                         < 25_u32)
                 {
-                    455
+                    477
                 } else {
-                    456
+                    478
                 };
             }
-            453 => {
-                __state = 340;
+            475 => {
+                __state = 361;
             }
-            454 => {
+            476 => {
                 unreachable!();
             }
-            455 => {
+            477 => {
                 cy8 = (cursor).x10();
                 __state = if (cy8 > 0.20000000298023224) && (cy8 < 22.0) {
-                    458
+                    480
                 } else {
-                    459
+                    481
                 };
             }
-            456 => {
-                __state = 453;
+            478 => {
+                __state = 475;
             }
-            457 => {
+            479 => {
                 unreachable!();
             }
-            458 => {
+            480 => {
                 __state = if ((statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
                     .at(((cursor).x4() as i32))
                     .get())
                 .x5() as i32)
                     == 0_i32
                 {
-                    461
+                    483
                 } else {
-                    462
+                    484
                 };
             }
-            459 => {
-                __state = 456;
+            481 => {
+                __state = 478;
             }
-            460 => {
+            482 => {
                 unreachable!();
             }
-            461 => {
+            483 => {
                 (statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
                     .at((cport5 as i32))
                     .get())
@@ -6418,51 +6484,51 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     .gobj(),
                 );
                 let _ = fns::lbAudioAx_800237A8(ctx, 183_i32, 127_i32, 64_i32);
-                __state = 462;
+                __state = 484;
             }
-            462 => {
-                __state = 459;
+            484 => {
+                __state = 481;
             }
-            463 => {
+            485 => {
                 unreachable!();
             }
-            464 => {
+            486 => {
                 cport6 = (cursor).x4();
                 __state = if ((cport6 as i32) != 3_i32)
                     || (((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type()
                         as i32)
                         != 1_i32)
                 {
-                    467
+                    489
                 } else {
-                    468
+                    490
                 };
             }
-            465 => {
-                __state = 301;
+            487 => {
+                __state = 311;
             }
-            466 => {
+            488 => {
                 unreachable!();
             }
-            467 => {
+            489 => {
                 __state = if (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
                     .doors()
                     .get((cport6 as i32))
                     .p_kind() as i32)
                     == 3_i32
                 {
-                    470
+                    492
                 } else {
-                    471
+                    493
                 };
             }
-            468 => {
-                __state = 465;
+            490 => {
+                __state = 487;
             }
-            469 => {
+            491 => {
                 unreachable!();
             }
-            470 => {
+            492 => {
                 statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
                     .doors()
                     .get((cport6 as i32))
@@ -6475,9 +6541,9 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     .set_slot_type((0_i32 as u8));
                 fns::mnCharSel_8025DB34(ctx, (cursor).x4());
                 inl_sfxMove(ctx);
-                __state = 471;
+                __state = 493;
             }
-            471 => {
+            493 => {
                 cport7 = (cursor).x4();
                 __state = if (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
                     .doors()
@@ -6485,15 +6551,15 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     .sel_icon() as u32)
                     >= 25_u32
                 {
-                    473
+                    495
                 } else {
-                    474
+                    496
                 };
             }
-            472 => {
+            494 => {
                 unreachable!();
             }
-            473 => {
+            495 => {
                 (statics::melee__mn__mncharsel::mnCharSel_804A0BD0(ctx)
                     .at((cport7 as i32))
                     .get())
@@ -6546,21 +6612,21 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     .at(((cursor).x4() as i32))
                     .get())
                 .set_xC(val_y);
-                __state = 474;
+                __state = 496;
             }
-            474 => {
-                __state = 468;
+            496 => {
+                __state = 490;
             }
-            475 => {
+            497 => {
                 unreachable!();
             }
-            476 => {
-                __state = 153;
+            498 => {
+                __state = 163;
             }
-            477 => {
+            499 => {
                 __state = 6;
             }
-            478 => {
+            500 => {
                 unreachable!();
             }
             _ => unreachable!(),
@@ -6764,19 +6830,15 @@ pub fn fn_80262648<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                                                     )),
                                                 );
                                             }
-                                            (model).set_x8(fp::fneg(
-                                                (fp::fmsubs(
-                                                    0.009999999776482582,
-                                                    fns::sinf(ctx, angle),
-                                                    (model).x8(),
-                                                )),
+                                            (model).set_x8(fp::fnmsubs(
+                                                0.009999999776482582,
+                                                fns::sinf(ctx, angle),
+                                                (model).x8(),
                                             ));
-                                            (model).set_xC(fp::fneg(
-                                                (fp::fmsubs(
-                                                    0.009999999776482582,
-                                                    fns::cosf(ctx, angle),
-                                                    (model).xC(),
-                                                )),
+                                            (model).set_xC(fp::fnmsubs(
+                                                0.009999999776482582,
+                                                fns::cosf(ctx, angle),
+                                                (model).xC(),
                                             ));
                                         }
                                     }
@@ -7861,19 +7923,19 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     .sel_icon() as u32)
                     < 25_u32
                 {
-                    23
+                    24
                 } else {
-                    25
+                    26
                 };
             }
             17 => {
                 t = ((tag).timer().wrapping_add(1_i32) as u32);
                 (tag).set_timer((t as i32));
-                __state = if t > 10_u32 { 32 } else { 33 };
+                __state = if t > 10_u32 { 33 } else { 34 };
             }
             18 => {
                 vel = (tag).scroll_amt();
-                __state = if (vel != 0.0) { 36 } else { 37 };
+                __state = if (vel != 0.0) { 37 } else { 38 };
             }
             19 => {
                 fns::HSD_ForeachAnim(
@@ -7890,23 +7952,26 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     && ((statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
                         == 4_i32)
                 {
-                    197
-                } else {
                     198
+                } else {
+                    199
                 };
             }
             20 => {
                 t2 = ((tag).timer().wrapping_add(1_i32) as u32);
                 (tag).set_timer((t2 as i32));
-                __state = if t2 > 10_u32 { 201 } else { 202 };
+                __state = if t2 > 10_u32 { 202 } else { 203 };
             }
             21 => {
-                __state = 206;
+                __state = 207;
             }
             22 => {
                 unreachable!();
             }
             23 => {
+                __state = 16;
+            }
+            24 => {
                 __state = if (fns::lbLang_IsSavedLanguageUS(ctx) != 0_i32)
                     && ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
                         .doors()
@@ -7914,12 +7979,12 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         .sel_icon() as i32)
                         == 22_i32)
                 {
-                    27
+                    28
                 } else {
-                    29
+                    30
                 };
             }
-            24 => {
+            25 => {
                 Handle::copy_from(gray_copy, gray);
                 fns::HSD_SisLib_803A74F0(ctx, (tag).text(), 0_i32, gray_copy);
                 fns::HSD_ForeachAnim(
@@ -7936,7 +8001,7 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 inl_sfxMove(ctx);
                 return;
             }
-            25 => {
+            26 => {
                 let _ = fns::HSD_SisLib_803A70A0(
                     ctx,
                     (tag).name_ls(),
@@ -7944,12 +8009,12 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     cstr(ctx, 0x803f1000),
                     &[],
                 );
-                __state = 24;
-            }
-            26 => {
-                unreachable!();
+                __state = 25;
             }
             27 => {
+                unreachable!();
+            }
+            28 => {
                 let _ = fns::HSD_SisLib_803A70A0(
                     ctx,
                     (tag).name_ls(),
@@ -7961,12 +8026,12 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     ),
                     &[],
                 );
-                __state = 28;
-            }
-            28 => {
-                __state = 24;
+                __state = 29;
             }
             29 => {
+                __state = 25;
+            }
+            30 => {
                 let _ = fns::HSD_SisLib_803A70A0(
                     ctx,
                     (tag).name_ls(),
@@ -7984,15 +8049,15 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     ),
                     &[],
                 );
-                __state = 28;
-            }
-            30 => {
-                unreachable!();
+                __state = 29;
             }
             31 => {
-                __state = 17;
+                unreachable!();
             }
             32 => {
+                __state = 17;
+            }
+            33 => {
                 fns::HSD_ForeachAnim(
                     ctx,
                     Handle::cast::<Addr<'a>>(list_jobj.get()),
@@ -8004,131 +8069,131 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 );
                 ((tag).name_ls()).set_hidden((0_i32 as u8));
                 (tag).set_state((3_i32 as u8));
-                __state = 33;
-            }
-            33 => {
-                return;
+                __state = 34;
             }
             34 => {
-                unreachable!();
+                return;
             }
             35 => {
-                __state = 18;
+                unreachable!();
             }
             36 => {
+                __state = 18;
+            }
+            37 => {
                 (tag).set_scroll_force(fp::fmadds(
                     10.0,
                     vel,
                     (if vel < 0.0 { fp::fneg(1.0) } else { 1.0 }),
                 ));
-                __state = 37;
-            }
-            37 => {
-                __state = if ((tag).scroll_force() != 0.0) {
-                    39
-                } else {
-                    40
-                };
+                __state = 38;
             }
             38 => {
-                unreachable!();
+                __state = if ((tag).scroll_force() != 0.0) {
+                    40
+                } else {
+                    41
+                };
             }
             39 => {
+                unreachable!();
+            }
+            40 => {
                 scroll_pos = (tag).x8();
                 new_pos = fp::fadds(scroll_pos, (tag).scroll_force());
                 page = fp::fctiwz((fp::fdivs(scroll_pos, 32.0)));
                 (tag).set_x8(new_pos);
                 new_page = fp::fctiwz((fp::fdivs((tag).x8(), 32.0)));
-                __state = if (tag).x8() > 0.0 { 42 } else { 43 };
+                __state = if (tag).x8() > 0.0 { 43 } else { 44 };
             }
-            40 => {
+            41 => {
                 __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
                     == 1_i32
                 {
-                    62
+                    63
                 } else {
-                    64
+                    65
                 };
-            }
-            41 => {
-                unreachable!();
             }
             42 => {
-                (tag).set_x8(0.0);
-                __state = 43;
+                unreachable!();
             }
             43 => {
-                __state = if ((tag).next_tag() as u32) > 7_u32 {
-                    45
-                } else {
-                    47
-                };
+                (tag).set_x8(0.0);
+                __state = 44;
             }
             44 => {
-                unreachable!();
-            }
-            45 => {
-                __state = if (tag).x8() < fp::fmuls(fp::fneg(32.0), fp::frsp(num_entries as f64)) {
-                    49
+                __state = if ((tag).next_tag() as u32) > 7_u32 {
+                    46
                 } else {
-                    50
+                    48
                 };
             }
+            45 => {
+                unreachable!();
+            }
             46 => {
-                __state = if (tag).scroll_amt() == 0.0 { 52 } else { 53 };
+                __state = if (tag).x8() < fp::fmuls(fp::fneg(32.0), fp::frsp(num_entries as f64)) {
+                    50
+                } else {
+                    51
+                };
             }
             47 => {
-                (tag).set_x8(0.0);
-                __state = 46;
+                __state = if (tag).scroll_amt() == 0.0 { 53 } else { 54 };
             }
             48 => {
-                unreachable!();
+                (tag).set_x8(0.0);
+                __state = 47;
             }
             49 => {
-                (tag).set_x8(fp::fmuls(fp::fneg(32.0), fp::frsp(num_entries as f64)));
-                __state = 50;
+                unreachable!();
             }
             50 => {
-                __state = 46;
+                (tag).set_x8(fp::fmuls(fp::fneg(32.0), fp::frsp(num_entries as f64)));
+                __state = 51;
             }
             51 => {
-                unreachable!();
+                __state = 47;
             }
             52 => {
-                __state = if page < new_page { 55 } else { 57 };
+                unreachable!();
             }
             53 => {
-                __state = 40;
+                __state = if page < new_page { 56 } else { 58 };
             }
             54 => {
-                unreachable!();
+                __state = 41;
             }
             55 => {
-                (tag).set_x8(fp::fmuls(32.0, fp::frsp(page as f64)));
-                (tag).set_scroll_force(0.0);
-                __state = 56;
+                unreachable!();
             }
             56 => {
-                __state = 53;
+                (tag).set_x8(fp::fmuls(32.0, fp::frsp(page as f64)));
+                (tag).set_scroll_force(0.0);
+                __state = 57;
             }
             57 => {
-                __state = if page > new_page { 59 } else { 60 };
+                __state = 54;
             }
             58 => {
-                unreachable!();
+                __state = if page > new_page { 60 } else { 61 };
             }
             59 => {
-                (tag).set_x8(fp::fmuls(32.0, fp::frsp(new_page as f64)));
-                (tag).set_scroll_force(0.0);
-                __state = 60;
-            }
-            60 => {
-                __state = 56;
-            }
-            61 => {
                 unreachable!();
             }
+            60 => {
+                (tag).set_x8(fp::fmuls(32.0, fp::frsp(new_page as f64)));
+                (tag).set_scroll_force(0.0);
+                __state = 61;
+            }
+            61 => {
+                __state = 57;
+            }
             62 => {
+                unreachable!();
+            }
+            63 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -8141,12 +8206,12 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         VarArg::Int(1_i32.wrapping_neg() as u32),
                     ],
                 );
-                __state = 63;
-            }
-            63 => {
-                __state = if (tag).x8() == 0.0 { 66 } else { 68 };
+                __state = 64;
             }
             64 => {
+                __state = if (tag).x8() == 0.0 { 67 } else { 69 };
+            }
+            65 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -8160,40 +8225,40 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         VarArg::Int(1_i32.wrapping_neg() as u32),
                     ],
                 );
-                __state = 63;
-            }
-            65 => {
-                unreachable!();
+                __state = 64;
             }
             66 => {
+                unreachable!();
+            }
+            67 => {
                 fns::HSD_JObjSetFlags(
                     ctx,
                     arrow_jobj.get(),
                     ((shl_i32(1_i32, (4_i32 as u32))) as u32),
                 );
-                __state = 67;
+                __state = 68;
             }
-            67 => {
+            68 => {
                 __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
                     == 1_i32
                 {
-                    70
+                    71
                 } else {
-                    72
+                    73
                 };
             }
-            68 => {
+            69 => {
                 fns::HSD_JObjClearFlags(
                     ctx,
                     arrow_jobj.get(),
                     ((shl_i32(1_i32, (4_i32 as u32))) as u32),
                 );
-                __state = 67;
-            }
-            69 => {
-                unreachable!();
+                __state = 68;
             }
             70 => {
+                unreachable!();
+            }
+            71 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -8206,16 +8271,16 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         VarArg::Int(1_i32.wrapping_neg() as u32),
                     ],
                 );
-                __state = 71;
-            }
-            71 => {
-                __state = if ((tag).next_tag() as u32) > 7_u32 {
-                    74
-                } else {
-                    76
-                };
+                __state = 72;
             }
             72 => {
+                __state = if ((tag).next_tag() as u32) > 7_u32 {
+                    75
+                } else {
+                    77
+                };
+            }
+            73 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -8229,20 +8294,20 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         VarArg::Int(1_i32.wrapping_neg() as u32),
                     ],
                 );
-                __state = 71;
-            }
-            73 => {
-                unreachable!();
+                __state = 72;
             }
             74 => {
-                __state = if (tag).x8() == (fp::fmuls(fp::fneg(32.0), fp::frsp(num_entries as f64)))
-                {
-                    78
-                } else {
-                    80
-                };
+                unreachable!();
             }
             75 => {
+                __state = if (tag).x8() == (fp::fmuls(fp::fneg(32.0), fp::frsp(num_entries as f64)))
+                {
+                    79
+                } else {
+                    81
+                };
+            }
+            76 => {
                 fns::HSD_SisLib_803A746C(ctx, (tag).name_ls(), 0_i32, 0.0, (tag).x8());
                 fns::HSD_SisLib_803A746C(
                     ctx,
@@ -8255,63 +8320,63 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 used_name_color = used_row_color;
                 page_off = (div_i32(fp::fctiwz((tag).x8()), 32_i32)).wrapping_add(1_i32);
                 j = 0_i32;
-                __state = 82;
-            }
-            76 => {
-                fns::HSD_JObjSetFlags(
-                    ctx,
-                    arrow_jobj.get(),
-                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
-                );
-                __state = 75;
+                __state = 83;
             }
             77 => {
-                unreachable!();
-            }
-            78 => {
                 fns::HSD_JObjSetFlags(
                     ctx,
                     arrow_jobj.get(),
                     ((shl_i32(1_i32, (4_i32 as u32))) as u32),
                 );
-                __state = 79;
+                __state = 76;
+            }
+            78 => {
+                unreachable!();
             }
             79 => {
-                __state = 75;
+                fns::HSD_JObjSetFlags(
+                    ctx,
+                    arrow_jobj.get(),
+                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                );
+                __state = 80;
             }
             80 => {
+                __state = 76;
+            }
+            81 => {
                 fns::HSD_JObjClearFlags(
                     ctx,
                     arrow_jobj.get(),
                     ((shl_i32(1_i32, (4_i32 as u32))) as u32),
                 );
-                __state = 79;
-            }
-            81 => {
-                unreachable!();
+                __state = 80;
             }
             82 => {
-                __state = if j < 9_i32 { 83 } else { 85 };
-            }
-            83 => {
-                row_idx = j.wrapping_sub(page_off);
-                __state = if row_idx < 0_i32 { 87 } else { 89 };
-            }
-            84 => {
-                j = j.wrapping_add(1);
-                __state = 82;
-            }
-            85 => {
-                __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
-                    100
-                } else {
-                    101
-                };
-            }
-            86 => {
                 unreachable!();
             }
+            83 => {
+                __state = if j < 9_i32 { 84 } else { 86 };
+            }
+            84 => {
+                row_idx = j.wrapping_sub(page_off);
+                __state = if row_idx < 0_i32 { 88 } else { 90 };
+            }
+            85 => {
+                j = j.wrapping_add(1);
+                __state = 83;
+            }
+            86 => {
+                __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
+                    101
+                } else {
+                    102
+                };
+            }
             87 => {
+                unreachable!();
+            }
+            88 => {
                 let _ = fns::HSD_SisLib_803A70A0(
                     ctx,
                     (tag).name_ls(),
@@ -8319,9 +8384,9 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     null::<Val<'a, i8>>(ctx),
                     &[],
                 );
-                __state = 88;
+                __state = 89;
             }
-            88 => {
+            89 => {
                 fns::HSD_SisLib_803A746C(
                     ctx,
                     (tag).name_ls(),
@@ -8335,9 +8400,9 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         ),
                     ),
                 );
-                __state = 84;
+                __state = 85;
             }
-            89 => {
+            90 => {
                 let _ = fns::HSD_SisLib_803A70A0(
                     ctx,
                     (tag).name_ls(),
@@ -8348,20 +8413,20 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 Handle::copy_from(row_color, white);
                 fns::HSD_SisLib_803A74F0(ctx, (tag).name_ls(), j.wrapping_add(2_i32), name_color);
                 p2 = 0_i32;
-                __state = 91;
-            }
-            90 => {
-                unreachable!();
+                __state = 92;
             }
             91 => {
-                __state =
-                    if p2 < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) {
-                        92
-                    } else {
-                        94
-                    };
+                unreachable!();
             }
             92 => {
+                __state =
+                    if p2 < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) {
+                        93
+                    } else {
+                        95
+                    };
+            }
+            93 => {
                 __state = if (p2 != ((tag).port() as i32))
                     && (((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
                         .vs()
@@ -8371,22 +8436,22 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         .nametag() as i32)
                         == row_idx)
                 {
-                    96
-                } else {
                     97
+                } else {
+                    98
                 };
             }
-            93 => {
-                p2 = p2.wrapping_add(1);
-                __state = 91;
-            }
             94 => {
-                __state = 88;
+                p2 = p2.wrapping_add(1);
+                __state = 92;
             }
             95 => {
-                unreachable!();
+                __state = 89;
             }
             96 => {
+                unreachable!();
+            }
+            97 => {
                 Handle::copy_from(used_row_color, gray);
                 fns::HSD_SisLib_803A74F0(
                     ctx,
@@ -8394,33 +8459,33 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     j.wrapping_add(2_i32),
                     used_name_color,
                 );
-                __state = 94;
-            }
-            97 => {
-                __state = 93;
+                __state = 95;
             }
             98 => {
-                unreachable!();
+                __state = 94;
             }
             99 => {
-                __state = 97;
+                unreachable!();
             }
             100 => {
+                __state = 98;
+            }
+            101 => {
                 __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
                     == 1_i32
                 {
-                    103
+                    104
                 } else {
-                    105
+                    106
                 };
             }
-            101 => {
-                __state = 138;
-            }
             102 => {
-                unreachable!();
+                __state = 139;
             }
             103 => {
+                unreachable!();
+            }
+            104 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -8433,9 +8498,9 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         VarArg::Int(1_i32.wrapping_neg() as u32),
                     ],
                 );
-                __state = 104;
+                __state = 105;
             }
-            104 => {
+            105 => {
                 fns::lb_8000B1CC(
                     ctx,
                     list_origin_jobj.get(),
@@ -8458,12 +8523,12 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 );
                 row = fp::fctiwz(cursor_row);
                 __state = if fp::fctiwz(cursor_row) == 0_i32 {
-                    107
-                } else {
                     108
+                } else {
+                    109
                 };
             }
-            105 => {
+            106 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -8477,12 +8542,12 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         VarArg::Int(1_i32.wrapping_neg() as u32),
                     ],
                 );
-                __state = 104;
-            }
-            106 => {
-                unreachable!();
+                __state = 105;
             }
             107 => {
+                unreachable!();
+            }
+            108 => {
                 __state = if (fns::lbLang_IsSavedLanguageUS(ctx) != 0_i32)
                     && ((statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
                         .doors()
@@ -8490,22 +8555,22 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         .sel_icon() as i32)
                         == 22_i32)
                 {
-                    110
+                    111
                 } else {
-                    112
-                };
-            }
-            108 => {
-                __state = if ((tag).next_tag() as i32) == row {
-                    140
-                } else {
-                    141
+                    113
                 };
             }
             109 => {
-                unreachable!();
+                __state = if ((tag).next_tag() as i32) == row {
+                    141
+                } else {
+                    142
+                };
             }
             110 => {
+                unreachable!();
+            }
+            111 => {
                 let _ = fns::HSD_SisLib_803A70A0(
                     ctx,
                     (tag).text(),
@@ -8517,9 +8582,9 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     ),
                     &[],
                 );
-                __state = 111;
+                __state = 112;
             }
-            111 => {
+            112 => {
                 ((tag).text()).set_default_kerning((1_i32 as u8));
                 __state = if (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
                     .doors()
@@ -8527,12 +8592,12 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     .sel_icon() as u32)
                     < 25_u32
                 {
-                    114
+                    115
                 } else {
-                    116
+                    117
                 };
             }
-            112 => {
+            113 => {
                 let _ = fns::HSD_SisLib_803A70A0(
                     ctx,
                     (tag).text(),
@@ -8550,16 +8615,16 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     ),
                     &[],
                 );
-                __state = 111;
-            }
-            113 => {
-                unreachable!();
+                __state = 112;
             }
             114 => {
-                ((tag).text()).set_hidden((0_i32 as u8));
-                __state = 115;
+                unreachable!();
             }
             115 => {
+                ((tag).text()).set_hidden((0_i32 as u8));
+                __state = 116;
+            }
+            116 => {
                 __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
                     .vs()
                     .start()
@@ -8568,28 +8633,28 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     .nametag() as i32)
                     != 120_i32
                 {
-                    118
-                } else {
                     119
+                } else {
+                    120
                 };
             }
-            116 => {
-                ((tag).text()).set_hidden((1_i32 as u8));
-                __state = 115;
-            }
             117 => {
-                unreachable!();
+                ((tag).text()).set_hidden((1_i32 as u8));
+                __state = 116;
             }
             118 => {
+                unreachable!();
+            }
+            119 => {
                 match_type =
                     (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type();
                 __state = if (match_type as i32) < 3_i32 {
-                    121
-                } else {
                     122
+                } else {
+                    123
                 };
             }
-            119 => {
+            120 => {
                 (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
                     .vs()
                     .start()
@@ -8599,145 +8664,145 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 (tag).set_use_tag((0_i32 as u8));
                 (tag).set_state((4_i32 as u8));
                 inl_sfxMove(ctx);
-                __state = 138;
-            }
-            120 => {
-                unreachable!();
+                __state = 139;
             }
             121 => {
-                __state = if (match_type as i32) == 0_i32 {
-                    124
-                } else {
-                    125
-                };
+                unreachable!();
             }
             122 => {
-                __state = if (match_type as i32) < 11_i32 {
-                    131
+                __state = if (match_type as i32) == 0_i32 {
+                    125
                 } else {
-                    133
+                    126
                 };
             }
             123 => {
-                unreachable!();
+                __state = if (match_type as i32) < 11_i32 {
+                    132
+                } else {
+                    134
+                };
             }
             124 => {
-                __state = 127;
+                unreachable!();
             }
             125 => {
-                __state = 129;
+                __state = 128;
             }
             126 => {
-                unreachable!();
+                __state = 130;
             }
             127 => {
-                val = 1_i32;
-                __state = 132;
-            }
-            128 => {
-                __state = 125;
-            }
-            129 => {
-                val = 0_i32;
-                __state = 132;
-            }
-            130 => {
-                __state = 122;
-            }
-            131 => {
-                __state = 127;
-            }
-            132 => {
-                __state = if val != 0_i32 { 135 } else { 136 };
-            }
-            133 => {
-                __state = 129;
-            }
-            134 => {
                 unreachable!();
             }
+            128 => {
+                val = 1_i32;
+                __state = 133;
+            }
+            129 => {
+                __state = 126;
+            }
+            130 => {
+                val = 0_i32;
+                __state = 133;
+            }
+            131 => {
+                __state = 123;
+            }
+            132 => {
+                __state = 128;
+            }
+            133 => {
+                __state = if val != 0_i32 { 136 } else { 137 };
+            }
+            134 => {
+                __state = 130;
+            }
             135 => {
+                unreachable!();
+            }
+            136 => {
                 (Handle::add(
                     (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).ko_counts(),
                     ((tag).port() as i32),
                 ))
                 .set((0_i32 as u8));
-                __state = 136;
-            }
-            136 => {
-                __state = 119;
+                __state = 137;
             }
             137 => {
-                unreachable!();
+                __state = 120;
             }
             138 => {
-                __state = if ((trigger & ((shl_i32(1_i32, (9_i32 as u32))) as u32)) != 0) {
-                    192
-                } else {
-                    193
-                };
+                unreachable!();
             }
             139 => {
-                __state = 108;
-            }
-            140 => {
-                __state = if fns::IsNameListFull(ctx) == 0_i32 {
-                    143
+                __state = if ((trigger & ((shl_i32(1_i32, (9_i32 as u32))) as u32)) != 0) {
+                    193
                 } else {
-                    144
+                    194
                 };
             }
+            140 => {
+                __state = 109;
+            }
             141 => {
-                __state = if ((tag).next_tag() as i32) > row {
-                    160
+                __state = if fns::IsNameListFull(ctx) == 0_i32 {
+                    144
                 } else {
-                    161
+                    145
                 };
             }
             142 => {
-                unreachable!();
+                __state = if ((tag).next_tag() as i32) > row {
+                    161
+                } else {
+                    162
+                };
             }
             143 => {
+                unreachable!();
+            }
+            144 => {
                 __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
                     == 1_i32
                 {
-                    146
+                    147
                 } else {
-                    148
+                    149
                 };
             }
-            144 => {
-                __state = 138;
-            }
             145 => {
-                unreachable!();
+                __state = 139;
             }
             146 => {
-                statics::melee__mn__mncharsel::mnCharSel_804D6CF9(ctx)
-                    .set(statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get());
-                __state = 147;
-            }
-            147 => {
-                statics::melee__mn__mncharsel::mnCharSel_804D6CF6(ctx).set((4_i32 as u8));
-                k = 0_i32;
-                __state = 150;
-            }
-            148 => {
-                statics::melee__mn__mncharsel::mnCharSel_804D6CF9(ctx).set(((tag).port() as i8));
-                __state = 147;
-            }
-            149 => {
                 unreachable!();
             }
+            147 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF9(ctx)
+                    .set(statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get());
+                __state = 148;
+            }
+            148 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF6(ctx).set((4_i32 as u8));
+                k = 0_i32;
+                __state = 151;
+            }
+            149 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF9(ctx).set(((tag).port() as i8));
+                __state = 148;
+            }
             150 => {
-                __state =
-                    if k < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) {
-                        151
-                    } else {
-                        153
-                    };
+                unreachable!();
             }
             151 => {
+                __state =
+                    if k < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) {
+                        152
+                    } else {
+                        154
+                    };
+            }
+            152 => {
                 __state = if (((statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)
                     .at(k)
                     .get())
@@ -8745,60 +8810,60 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     == 1_i32)
                     && (fns::mnCharSel_8025FDEC(ctx, (k as u8)) == 0_i32)
                 {
-                    155
-                } else {
                     156
+                } else {
+                    157
                 };
             }
-            152 => {
-                k = k.wrapping_add(1);
-                __state = 150;
-            }
             153 => {
-                return;
+                k = k.wrapping_add(1);
+                __state = 151;
             }
             154 => {
-                unreachable!();
+                return;
             }
             155 => {
+                unreachable!();
+            }
+            156 => {
                 fns::mnCharSel_8025DB34(ctx, (k as u8));
                 (statics::melee__mn__mncharsel::mnCharSel_804A0BC0(ctx)
                     .at(k)
                     .get())
                 .set_x5((2_i32 as u8));
-                __state = 156;
-            }
-            156 => {
-                __state = 152;
+                __state = 157;
             }
             157 => {
-                unreachable!();
+                __state = 153;
             }
             158 => {
-                __state = 144;
-            }
-            159 => {
-                __state = 141;
-            }
-            160 => {
-                p = 0_i32;
-                __state = 163;
-            }
-            161 => {
-                __state = 101;
-            }
-            162 => {
                 unreachable!();
             }
+            159 => {
+                __state = 145;
+            }
+            160 => {
+                __state = 142;
+            }
+            161 => {
+                p = 0_i32;
+                __state = 164;
+            }
+            162 => {
+                __state = 102;
+            }
             163 => {
-                __state =
-                    if p < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) {
-                        164
-                    } else {
-                        166
-                    };
+                unreachable!();
             }
             164 => {
+                __state =
+                    if p < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) {
+                        165
+                    } else {
+                        167
+                    };
+            }
+            165 => {
                 __state = if (p != port)
                     && (((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
                         .vs()
@@ -8808,16 +8873,16 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         .nametag() as i32)
                         == (row.wrapping_sub(1_i32)))
                 {
-                    168
-                } else {
                     169
+                } else {
+                    170
                 };
             }
-            165 => {
-                p = p.wrapping_add(1);
-                __state = 163;
-            }
             166 => {
+                p = p.wrapping_add(1);
+                __state = 164;
+            }
+            167 => {
                 let _ = fns::HSD_SisLib_803A70A0(
                     ctx,
                     (tag).text(),
@@ -8835,36 +8900,36 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     .nametag() as i32)
                     != (row.wrapping_sub(1_i32))
                 {
-                    172
-                } else {
                     173
+                } else {
+                    174
                 };
             }
-            167 => {
-                unreachable!();
-            }
             168 => {
-                __state = 138;
+                unreachable!();
             }
             169 => {
-                __state = 165;
+                __state = 139;
             }
             170 => {
-                unreachable!();
+                __state = 166;
             }
             171 => {
-                __state = 169;
+                unreachable!();
             }
             172 => {
+                __state = 170;
+            }
+            173 => {
                 match_type =
                     (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type();
                 __state = if (match_type as i32) < 3_i32 {
-                    175
-                } else {
                     176
+                } else {
+                    177
                 };
             }
-            173 => {
+            174 => {
                 (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
                     .vs()
                     .start()
@@ -8874,95 +8939,95 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 (tag).set_use_tag((1_i32 as u8));
                 (tag).set_state((4_i32 as u8));
                 inl_sfxMove(ctx);
-                __state = 161;
-            }
-            174 => {
-                unreachable!();
+                __state = 162;
             }
             175 => {
-                __state = if (match_type as i32) == 0_i32 {
-                    178
-                } else {
-                    179
-                };
+                unreachable!();
             }
             176 => {
-                __state = if (match_type as i32) < 11_i32 {
-                    185
+                __state = if (match_type as i32) == 0_i32 {
+                    179
                 } else {
-                    187
+                    180
                 };
             }
             177 => {
-                unreachable!();
+                __state = if (match_type as i32) < 11_i32 {
+                    186
+                } else {
+                    188
+                };
             }
             178 => {
-                __state = 181;
+                unreachable!();
             }
             179 => {
-                __state = 183;
+                __state = 182;
             }
             180 => {
-                unreachable!();
+                __state = 184;
             }
             181 => {
-                val = 1_i32;
-                __state = 186;
-            }
-            182 => {
-                __state = 179;
-            }
-            183 => {
-                val = 0_i32;
-                __state = 186;
-            }
-            184 => {
-                __state = 176;
-            }
-            185 => {
-                __state = 181;
-            }
-            186 => {
-                __state = if val != 0_i32 { 189 } else { 190 };
-            }
-            187 => {
-                __state = 183;
-            }
-            188 => {
                 unreachable!();
             }
+            182 => {
+                val = 1_i32;
+                __state = 187;
+            }
+            183 => {
+                __state = 180;
+            }
+            184 => {
+                val = 0_i32;
+                __state = 187;
+            }
+            185 => {
+                __state = 177;
+            }
+            186 => {
+                __state = 182;
+            }
+            187 => {
+                __state = if val != 0_i32 { 190 } else { 191 };
+            }
+            188 => {
+                __state = 184;
+            }
             189 => {
+                unreachable!();
+            }
+            190 => {
                 (Handle::add(
                     (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).ko_counts(),
                     ((tag).port() as i32),
                 ))
                 .set((0_i32 as u8));
-                __state = 190;
-            }
-            190 => {
-                __state = 173;
+                __state = 191;
             }
             191 => {
-                unreachable!();
+                __state = 174;
             }
             192 => {
+                unreachable!();
+            }
+            193 => {
                 (tag).set_state((4_i32 as u8));
                 inl_sfxBack(ctx);
                 return;
             }
-            193 => {
+            194 => {
                 __state = 21;
             }
-            194 => {
+            195 => {
                 unreachable!();
             }
-            195 => {
-                __state = 193;
-            }
             196 => {
-                __state = 19;
+                __state = 194;
             }
             197 => {
+                __state = 19;
+            }
+            198 => {
                 hval = inl_getHandicapValue(ctx, ((tag).port() as i32));
                 hval_f = fp::frsp(hval as f64);
                 let _ = fns::lb_80011E24(
@@ -9003,51 +9068,51 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 hval = inl_getHandicapValue(ctx, ((tag).port() as i32));
                 hval_f = fp::fmuls(1.25, fp::frsp((hval.wrapping_sub(1_i32)) as f64));
                 inl_HSD_JObjSetTranslateX(ctx, list_jobj.get(), hval_f);
-                __state = 198;
+                __state = 199;
             }
-            198 => {
+            199 => {
                 (tag).set_state((5_i32 as u8));
                 (tag).set_timer(0_i32);
                 return;
             }
-            199 => {
+            200 => {
                 unreachable!();
             }
-            200 => {
+            201 => {
                 __state = 20;
             }
-            201 => {
+            202 => {
                 fns::mnCharSel_8025D1C4(ctx, ((tag).port() as i32), 2_i32);
                 Handle::copy_from(white_copy, white);
                 fns::HSD_SisLib_803A74F0(ctx, (tag).text(), 0_i32, white_copy);
                 (tag).set_state((0_i32 as u8));
-                __state = 202;
-            }
-            202 => {
-                __state = 21;
+                __state = 203;
             }
             203 => {
-                unreachable!();
-            }
-            204 => {
                 __state = 21;
             }
-            205 => {
+            204 => {
                 unreachable!();
+            }
+            205 => {
+                __state = 21;
             }
             206 => {
-                __state = 207;
-            }
-            207 => {
-                __state = if (0_i32 != 0) { 206 } else { 208 };
-            }
-            208 => {
-                return;
-            }
-            209 => {
                 unreachable!();
             }
+            207 => {
+                __state = 208;
+            }
+            208 => {
+                __state = if (0_i32 != 0) { 207 } else { 209 };
+            }
+            209 => {
+                return;
+            }
             210 => {
+                unreachable!();
+            }
+            211 => {
                 unreachable!();
             }
             _ => unreachable!(),
@@ -9236,9 +9301,9 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                 mt_p =
                     (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type_ref();
                 __state = if ((mt_p).get() as u32) >= 11_u32 {
-                    15
+                    16
                 } else {
-                    17
+                    18
                 };
             }
             3 => {
@@ -9276,99 +9341,102 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                 unreachable!();
             }
             11 => {
-                __state = 6;
+                __state = 5;
             }
             12 => {
-                __state = 7;
+                __state = 6;
             }
             13 => {
-                __state = 8;
+                __state = 7;
             }
             14 => {
-                __state = 9;
+                __state = 8;
             }
             15 => {
-                statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).set((1_i32 as u8));
-                num_players = 1_i32;
-                __state = 16;
+                __state = 9;
             }
             16 => {
-                __state = if ((mt_p).get() as i32) == (enums::TRAINING_MODE as i32) {
-                    19
-                } else {
-                    20
-                };
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).set((1_i32 as u8));
+                num_players = 1_i32;
+                __state = 17;
             }
             17 => {
-                statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).set((4_i32 as u8));
-                num_players = 4_i32;
-                __state = 16;
+                __state = if ((mt_p).get() as i32) == (enums::TRAINING_MODE as i32) {
+                    20
+                } else {
+                    21
+                };
             }
             18 => {
-                unreachable!();
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).set((4_i32 as u8));
+                num_players = 4_i32;
+                __state = 17;
             }
             19 => {
-                num_players = 2_i32;
-                __state = 20;
+                unreachable!();
             }
             20 => {
+                num_players = 2_i32;
+                __state = 21;
+            }
+            21 => {
                 statics::melee__mn__mncharsel::mnCharSel_804D6CF6(ctx).set((0_i32 as u8));
                 __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
                     == 1_i32)
                     && ((statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32)
                         < 0_i32)
                 {
-                    22
-                } else {
                     23
+                } else {
+                    24
                 };
             }
-            21 => {
+            22 => {
                 unreachable!();
             }
-            22 => {
-                statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).set((0_i32 as i8));
-                __state = 23;
-            }
             23 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).set((0_i32 as i8));
+                __state = 24;
+            }
+            24 => {
                 __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32)
                     == 0_i32
                 {
-                    25
+                    26
                 } else {
-                    27
+                    28
                 };
             }
-            24 => {
+            25 => {
                 unreachable!();
             }
-            25 => {
-                statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).set((1_i32 as i8));
-                __state = 26;
-            }
             26 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).set((1_i32 as i8));
+                __state = 27;
+            }
+            27 => {
                 __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CF4(ctx).get() as u8)
                     as i32)
                     != 0_i32
                 {
-                    29
-                } else {
                     30
+                } else {
+                    31
                 };
             }
-            27 => {
-                statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).set((0_i32 as i8));
-                __state = 26;
-            }
             28 => {
-                unreachable!();
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).set((0_i32 as i8));
+                __state = 27;
             }
             29 => {
-                statics::melee__mn__mncharsel::mnCharSel_804D6CF4(ctx).set((0_i32 as i8));
-                i = 0_i32;
-                __state = 32;
+                unreachable!();
             }
             30 => {
+                statics::melee__mn__mncharsel::mnCharSel_804D6CF4(ctx).set((0_i32 as i8));
+                i = 0_i32;
+                __state = 33;
+            }
+            31 => {
                 gobj = {
                     let __t1 =
                         fns::GObj_Create(ctx, (2_i32 as u16), (3_i32 as u8), (128_i32 as u8));
@@ -9486,37 +9554,37 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                 __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
                     == 1_i32
                 {
-                    37
+                    38
                 } else {
-                    39
+                    40
                 };
             }
-            31 => {
+            32 => {
                 unreachable!();
             }
-            32 => {
-                __state = if i < num_players { 33 } else { 35 };
-            }
             33 => {
+                __state = if i < num_players { 34 } else { 36 };
+            }
+            34 => {
                 (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
                     .vs()
                     .start()
                     .players()
                     .get(i)
                     .set_handicap((9_i32 as i8));
-                __state = 34;
-            }
-            34 => {
-                i = i.wrapping_add(1);
-                __state = 32;
+                __state = 35;
             }
             35 => {
-                __state = 30;
+                i = i.wrapping_add(1);
+                __state = 33;
             }
             36 => {
-                unreachable!();
+                __state = 31;
             }
             37 => {
+                unreachable!();
+            }
+            38 => {
                 statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).set(fns::HSD_JObjLoadJoint(
                     ctx,
                     (statics::melee__mn__mncharsel::css_models(ctx).get())
@@ -9536,9 +9604,9 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                         .regend_menu()
                         .shapeanim_joint(),
                 );
-                __state = 38;
+                __state = 39;
             }
-            38 => {
+            39 => {
                 obj_kind = fns::HSD_GObj_JObjKind(ctx).get();
                 fns::HSD_GObjObject_80390A70(
                     ctx,
@@ -9583,12 +9651,12 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                 );
                 __state =
                     if fns::gm_IsCKindUnlocked(ctx, ((enums::CKind_Luigi as i32) as u8)) == 0_i32 {
-                        41
+                        42
                     } else {
-                        43
+                        44
                     };
             }
-            39 => {
+            40 => {
                 statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).set(fns::HSD_JObjLoadJoint(
                     ctx,
                     (statics::melee__mn__mncharsel::css_models(ctx).get())
@@ -9608,34 +9676,34 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                         .menu()
                         .shapeanim_joint(),
                 );
-                __state = 38;
-            }
-            40 => {
-                unreachable!();
+                __state = 39;
             }
             41 => {
-                row_a = 2_i32;
-                row_b = 19_i32;
-                __state = 42;
+                unreachable!();
             }
             42 => {
+                row_a = 2_i32;
+                row_b = 19_i32;
+                __state = 43;
+            }
+            43 => {
                 __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
                     == 1_i32
                 {
-                    45
+                    46
                 } else {
-                    47
+                    48
                 };
             }
-            43 => {
+            44 => {
                 row_a = 19_i32;
                 row_b = 2_i32;
-                __state = 42;
-            }
-            44 => {
-                unreachable!();
+                __state = 43;
             }
             45 => {
+                unreachable!();
+            }
+            46 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -9649,9 +9717,9 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                         VarArg::Int(1_i32.wrapping_neg() as u32),
                     ],
                 );
-                __state = 46;
+                __state = 47;
             }
-            46 => {
+            47 => {
                 inl_HSD_JObjSetTranslateY(ctx, sp108.get(), 5.800000190734863);
                 statics::melee__mn__mncharsel::icons(ctx)
                     .get(row_a)
@@ -9662,12 +9730,12 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                 __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
                     == 1_i32
                 {
-                    49
+                    50
                 } else {
-                    51
+                    52
                 };
             }
-            47 => {
+            48 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -9681,12 +9749,12 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                         VarArg::Int(1_i32.wrapping_neg() as u32),
                     ],
                 );
-                __state = 46;
-            }
-            48 => {
-                unreachable!();
+                __state = 47;
             }
             49 => {
+                unreachable!();
+            }
+            50 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -9700,9 +9768,9 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                         VarArg::Int(1_i32.wrapping_neg() as u32),
                     ],
                 );
-                __state = 50;
+                __state = 51;
             }
-            50 => {
+            51 => {
                 inl_HSD_JObjSetTranslateY(ctx, sp108.get(), 20.200000762939453);
                 statics::melee__mn__mncharsel::icons(ctx)
                     .get(row_b)
@@ -9711,9 +9779,9 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                     .get(row_b)
                     .set_bound_d(13.0);
                 icon = 0_i32;
-                __state = 53;
+                __state = 54;
             }
-            51 => {
+            52 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -9727,15 +9795,15 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                         VarArg::Int(1_i32.wrapping_neg() as u32),
                     ],
                 );
-                __state = 50;
-            }
-            52 => {
-                unreachable!();
+                __state = 51;
             }
             53 => {
-                __state = if icon < 25_i32 { 54 } else { 56 };
+                unreachable!();
             }
             54 => {
+                __state = if icon < 25_i32 { 55 } else { 57 };
+            }
+            55 => {
                 statics::melee__mn__mncharsel::icons(ctx)
                     .get(icon)
                     .set_state(
@@ -9752,27 +9820,27 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                 __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
                     == 1_i32
                 {
-                    58
+                    59
                 } else {
-                    60
+                    61
                 };
-            }
-            55 => {
-                icon = icon.wrapping_add(1);
-                __state = 53;
             }
             56 => {
-                mt = (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type();
-                __state = if ((mt as u32) >= 15_u32) && ((mt as u32) <= 22_u32) {
-                    76
-                } else {
-                    77
-                };
+                icon = icon.wrapping_add(1);
+                __state = 54;
             }
             57 => {
-                unreachable!();
+                mt = (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type();
+                __state = if ((mt as u32) >= 15_u32) && ((mt as u32) <= 22_u32) {
+                    83
+                } else {
+                    84
+                };
             }
             58 => {
+                unreachable!();
+            }
+            59 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -9786,20 +9854,20 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                         VarArg::Int(1_i32.wrapping_neg() as u32),
                     ],
                 );
-                __state = 59;
-            }
-            59 => {
-                __state = match icon {
-                    0_i32 => 62,
-                    8_i32 => 62,
-                    9_i32 => 62,
-                    17_i32 => 62,
-                    18_i32 => 62,
-                    24_i32 => 62,
-                    _ => 63,
-                };
+                __state = 60;
             }
             60 => {
+                __state = match icon {
+                    0_i32 => 63,
+                    8_i32 => 64,
+                    9_i32 => 65,
+                    17_i32 => 66,
+                    18_i32 => 67,
+                    24_i32 => 68,
+                    _ => 69,
+                };
+            }
+            61 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -9813,43 +9881,61 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                         VarArg::Int(1_i32.wrapping_neg() as u32),
                     ],
                 );
-                __state = 59;
-            }
-            61 => {
-                unreachable!();
+                __state = 60;
             }
             62 => {
-                __state = if (statics::melee__mn__mncharsel::icons(ctx).get(icon).state() as i32)
-                    == 0_i32
-                {
-                    66
-                } else {
-                    68
-                };
-            }
-            63 => {
-                __state = if (statics::melee__mn__mncharsel::icons(ctx).get(icon).state() as i32)
-                    == 0_i32
-                {
-                    71
-                } else {
-                    73
-                };
-            }
-            64 => {
-                __state = 55;
-            }
-            65 => {
                 unreachable!();
             }
+            63 => {
+                __state = 64;
+            }
+            64 => {
+                __state = 65;
+            }
+            65 => {
+                __state = 66;
+            }
             66 => {
-                fns::HSD_JObjSetFlags(ctx, sp108.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
                 __state = 67;
             }
             67 => {
-                __state = 64;
+                __state = 68;
             }
             68 => {
+                __state = if (statics::melee__mn__mncharsel::icons(ctx).get(icon).state() as i32)
+                    == 0_i32
+                {
+                    73
+                } else {
+                    75
+                };
+            }
+            69 => {
+                __state = if (statics::melee__mn__mncharsel::icons(ctx).get(icon).state() as i32)
+                    == 0_i32
+                {
+                    78
+                } else {
+                    80
+                };
+            }
+            70 => {
+                __state = 56;
+            }
+            71 => {
+                unreachable!();
+            }
+            72 => {
+                __state = 63;
+            }
+            73 => {
+                fns::HSD_JObjSetFlags(ctx, sp108.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
+                __state = 74;
+            }
+            74 => {
+                __state = 70;
+            }
+            75 => {
                 sp108.set(inl_HSD_JObjGetParent(ctx, sp108.get()));
                 statics::melee__mn__mncharsel::icons(ctx)
                     .get(icon)
@@ -9865,15 +9951,15 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                     &[VarArg::Float(20.0)],
                 );
                 fns::HSD_JObjAnimAll(ctx, sp108.get());
-                __state = 67;
+                __state = 74;
             }
-            69 => {
+            76 => {
                 unreachable!();
             }
-            70 => {
-                __state = 63;
+            77 => {
+                __state = 69;
             }
-            71 => {
+            78 => {
                 fns::HSD_ForeachAnim(
                     ctx,
                     Handle::cast::<Addr<'a>>(sp108.get()),
@@ -9884,24 +9970,24 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                     &[VarArg::Float(30.0)],
                 );
                 fns::HSD_JObjAnimAll(ctx, sp108.get());
-                __state = 72;
+                __state = 79;
             }
-            72 => {
-                __state = 64;
+            79 => {
+                __state = 70;
             }
-            73 => {
+            80 => {
                 statics::melee__mn__mncharsel::icons(ctx)
                     .get(icon)
                     .set_state((2_i32 as u8));
-                __state = 72;
+                __state = 79;
             }
-            74 => {
+            81 => {
                 unreachable!();
             }
-            75 => {
-                __state = 64;
+            82 => {
+                __state = 70;
             }
-            76 => {
+            83 => {
                 gobj = fns::GObj_Create(ctx, (4_i32 as u16), (5_i32 as u8), (128_i32 as u8));
                 statics::melee__mn__mncharsel::mnCharSel_804D6CC8(ctx).set(fns::HSD_JObjLoadJoint(
                     ctx,
@@ -9954,22 +10040,22 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                     (enums::AOBJ_ARG_AOV as i32),
                     &[VarArg::Int(0_i32 as u32), VarArg::Int(0_i32 as u32)],
                 );
-                __state = 77;
+                __state = 84;
             }
-            77 => {
+            84 => {
                 __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
                     .match_type() as i32)
                     == 23_i32
                 {
-                    79
+                    86
                 } else {
-                    80
+                    87
                 };
             }
-            78 => {
+            85 => {
                 unreachable!();
             }
-            79 => {
+            86 => {
                 gobj = fns::GObj_Create(ctx, (4_i32 as u16), (5_i32 as u8), (128_i32 as u8));
                 statics::melee__mn__mncharsel::mnCharSel_804D6CC4(ctx).set(fns::HSD_JObjLoadJoint(
                     ctx,
@@ -10031,49 +10117,49 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                 __state = if (((ck as i8) as i32) >= (enums::CKind_Playable_Count as i32))
                     || (fns::gm_IsCKindUnlocked(ctx, ck) == 0_i32)
                 {
-                    82
+                    89
                 } else {
-                    83
+                    90
                 };
             }
-            80 => {
+            87 => {
                 __state = if ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
                     .match_type() as i32)
                     == 1_i32
                 {
-                    90
+                    97
                 } else {
-                    91
+                    98
                 };
             }
-            81 => {
+            88 => {
                 unreachable!();
             }
-            82 => {
-                __state = 86;
+            89 => {
+                __state = 93;
             }
-            83 => {
-                __state = 80;
-            }
-            84 => {
-                unreachable!();
-            }
-            85 => {
-                unreachable!();
-            }
-            86 => {
-                i = fns::HSD_Randi(ctx, 25_i32);
+            90 => {
                 __state = 87;
             }
-            87 => {
+            91 => {
+                unreachable!();
+            }
+            92 => {
+                unreachable!();
+            }
+            93 => {
+                i = fns::HSD_Randi(ctx, 25_i32);
+                __state = 94;
+            }
+            94 => {
                 __state =
                     if (statics::melee__mn__mncharsel::icons(ctx).get(i).state() as i32) == 0_i32 {
-                        86
+                        93
                     } else {
-                        88
+                        95
                     };
             }
-            88 => {
+            95 => {
                 char_kinds = statics::melee__mn__mncharsel::icons(ctx)
                     .get(0_i32)
                     .char_kind_ref();
@@ -10098,12 +10184,12 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                             ) as i32),
                         ) as u8),
                     );
-                __state = 83;
+                __state = 90;
             }
-            89 => {
+            96 => {
                 unreachable!();
             }
-            90 => {
+            97 => {
                 gobj = fns::GObj_Create(ctx, (4_i32 as u16), (5_i32 as u8), (128_i32 as u8));
                 statics::melee__mn__mncharsel::mnCharSel_804D6CCC(ctx).set(fns::HSD_JObjLoadJoint(
                     ctx,
@@ -10145,20 +10231,20 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                     statics::melee__mn__mncharsel::mnCharSel_804D6CCC(ctx).get(),
                     0.0,
                 );
-                __state = 91;
+                __state = 98;
             }
-            91 => {
+            98 => {
                 i = (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
                     .wrapping_sub(1_i32);
-                __state = 93;
+                __state = 100;
             }
-            92 => {
+            99 => {
                 unreachable!();
             }
-            93 => {
-                __state = if i >= 0_i32 { 94 } else { 96 };
+            100 => {
+                __state = if i >= 0_i32 { 101 } else { 103 };
             }
-            94 => {
+            101 => {
                 cursor_gobj = fns::GObj_Create(ctx, (4_i32 as u16), (5_i32 as u8), (128_i32 as u8));
                 jobj = fns::HSD_JObjLoadJoint(
                     ctx,
@@ -10229,24 +10315,24 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                 (cursor).set_x5((2_i32 as u8));
                 (cursor).set_xC((fp::fmsubs(15.0, fp::frsp(i as f64), 31.0)));
                 (cursor).set_x10(fp::fneg(21.5));
-                __state = 95;
+                __state = 102;
             }
-            95 => {
+            102 => {
                 i = i.wrapping_sub(1);
-                __state = 93;
+                __state = 100;
             }
-            96 => {
+            103 => {
                 i = 0_i32;
                 slot = 0_i32;
-                __state = 98;
+                __state = 105;
             }
-            97 => {
+            104 => {
                 unreachable!();
             }
-            98 => {
-                __state = if i < num_players { 99 } else { 101 };
+            105 => {
+                __state = if i < num_players { 106 } else { 108 };
             }
-            99 => {
+            106 => {
                 model_gobj = fns::GObj_Create(ctx, (4_i32 as u16), (5_i32 as u8), (128_i32 as u8));
                 jobj = fns::HSD_JObjLoadJoint(
                     ctx,
@@ -10312,56 +10398,56 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                 __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
                     == 1_i32
                 {
-                    103
+                    110
                 } else {
-                    105
+                    112
                 };
             }
-            100 => {
+            107 => {
                 i = i.wrapping_add(1);
                 slot = slot.wrapping_add(1);
-                __state = 98;
-            }
-            101 => {
-                Handle::copy_from(spE8, statics::melee__mn__mncharsel::mnCharSel_804DC580(ctx));
-                i = 0_i32;
-                __state = 126;
-            }
-            102 => {
-                unreachable!();
-            }
-            103 => {
-                __state = if i != 0_i32 { 107 } else { 109 };
-            }
-            104 => {
-                found = 0_i32;
-                __state = 111;
-            }
-            105 => {
-                player = i;
-                __state = 104;
-            }
-            106 => {
-                unreachable!();
-            }
-            107 => {
-                player = (statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).get() as i32);
-                __state = 108;
+                __state = 105;
             }
             108 => {
-                __state = 104;
+                Handle::copy_from(spE8, statics::melee__mn__mncharsel::mnCharSel_804DC580(ctx));
+                i = 0_i32;
+                __state = 133;
             }
             109 => {
-                player = (statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32);
-                __state = 108;
-            }
-            110 => {
                 unreachable!();
             }
+            110 => {
+                __state = if i != 0_i32 { 114 } else { 116 };
+            }
             111 => {
-                __state = if found < 25_i32 { 112 } else { 114 };
+                found = 0_i32;
+                __state = 118;
             }
             112 => {
+                player = i;
+                __state = 111;
+            }
+            113 => {
+                unreachable!();
+            }
+            114 => {
+                player = (statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).get() as i32);
+                __state = 115;
+            }
+            115 => {
+                __state = 111;
+            }
+            116 => {
+                player = (statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32);
+                __state = 115;
+            }
+            117 => {
+                unreachable!();
+            }
+            118 => {
+                __state = if found < 25_i32 { 119 } else { 121 };
+            }
+            119 => {
                 __state = if (((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
                     .vs()
                     .start()
@@ -10381,34 +10467,34 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                             .ckind() as u8),
                     ) != 0_i32)
                 {
-                    116
+                    123
                 } else {
-                    117
+                    124
                 };
             }
-            113 => {
-                found = found.wrapping_add(1);
-                __state = 111;
-            }
-            114 => {
-                __state = if found >= 25_i32 { 120 } else { 121 };
-            }
-            115 => {
-                unreachable!();
-            }
-            116 => {
-                __state = 114;
-            }
-            117 => {
-                __state = 113;
-            }
-            118 => {
-                unreachable!();
-            }
-            119 => {
-                __state = 117;
-            }
             120 => {
+                found = found.wrapping_add(1);
+                __state = 118;
+            }
+            121 => {
+                __state = if found >= 25_i32 { 127 } else { 128 };
+            }
+            122 => {
+                unreachable!();
+            }
+            123 => {
+                __state = 121;
+            }
+            124 => {
+                __state = 120;
+            }
+            125 => {
+                unreachable!();
+            }
+            126 => {
+                __state = 124;
+            }
+            127 => {
                 (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
                     .vs()
                     .start()
@@ -10422,12 +10508,12 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                     .get(player)
                     .slot_type_ref();
                 __state = if ((slot_type).get() as i32) == 1_i32 {
-                    123
+                    130
                 } else {
-                    124
+                    131
                 };
             }
-            121 => {
+            128 => {
                 statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
                     .doors()
                     .get(slot)
@@ -10452,25 +10538,25 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                     (model).set_x14(__t4);
                     __t4
                 });
-                __state = 100;
+                __state = 107;
             }
-            122 => {
+            129 => {
                 unreachable!();
             }
-            123 => {
+            130 => {
                 (slot_type).set((3_i32 as u8));
-                __state = 124;
+                __state = 131;
             }
-            124 => {
-                __state = 121;
+            131 => {
+                __state = 128;
             }
-            125 => {
+            132 => {
                 unreachable!();
             }
-            126 => {
-                __state = if i < num_players { 127 } else { 129 };
+            133 => {
+                __state = if i < num_players { 134 } else { 136 };
             }
-            127 => {
+            134 => {
                 gobj = fns::GObj_Create(ctx, (4_i32 as u16), (5_i32 as u8), (128_i32 as u8));
                 td = Handle::cast::<CSSTagData<'a>>(fns::HSD_MemAlloc(ctx, (28_u32 as i32)));
                 statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
@@ -10501,40 +10587,40 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                 __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
                     == 1_i32
                 {
-                    131
+                    138
                 } else {
-                    133
+                    140
                 };
             }
-            128 => {
+            135 => {
                 i = i.wrapping_add(1);
-                __state = 126;
+                __state = 133;
             }
-            129 => {
+            136 => {
                 __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
                     == 1_i32
                 {
-                    195
+                    202
                 } else {
-                    197
+                    204
                 };
             }
-            130 => {
+            137 => {
                 unreachable!();
             }
-            131 => {
-                __state = if i != 0_i32 { 135 } else { 137 };
+            138 => {
+                __state = if i != 0_i32 { 142 } else { 144 };
             }
-            132 => {
+            139 => {
                 __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
                     == 1_i32
                 {
-                    139
+                    146
                 } else {
-                    141
+                    148
                 };
             }
-            133 => {
+            140 => {
                 name_joint = statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
                     .get(i)
                     .name_jointl();
@@ -10588,19 +10674,19 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                     cstr(ctx, 0x803f1018),
                     &[],
                 );
-                __state = 132;
+                __state = 139;
             }
-            134 => {
+            141 => {
                 unreachable!();
             }
-            135 => {
+            142 => {
                 text = (td).text();
                 (text).set_pos_x(15.600000381469727);
                 (text).set_pos_y(20.200000762939453);
                 (text).set_pos_z(0.0);
-                __state = 136;
+                __state = 143;
             }
-            136 => {
+            143 => {
                 text = (td).text();
                 (text).set_box_size_x(200.0);
                 (text).set_box_size_y(32.0);
@@ -10612,9 +10698,9 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                     cstr(ctx, 0x803f1018),
                     &[],
                 );
-                __state = 132;
+                __state = 139;
             }
-            137 => {
+            144 => {
                 tag_box_joint =
                     statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx).tag_box_joint();
                 let _ = fns::lb_80011E24(
@@ -10653,12 +10739,12 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                 (text).set_pos_x(fp::fsubs(spEC.x(), 0.10000000149011612));
                 (text).set_pos_y(20.200000762939453);
                 (text).set_pos_z(0.0);
-                __state = 136;
+                __state = 143;
             }
-            138 => {
+            145 => {
                 unreachable!();
             }
-            139 => {
+            146 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -10671,9 +10757,9 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                         VarArg::Int(1_i32.wrapping_neg() as u32),
                     ],
                 );
-                __state = 140;
+                __state = 147;
             }
-            140 => {
+            147 => {
                 fns::lb_8000B1CC(ctx, sp108.get(), null::<Vec<'a>>(ctx), spEC);
                 (td).set_name_ls(fns::HSD_SisLib_803A6754(ctx, 0_i32, v_ctx));
                 ((td).name_ls()).set_default_fitting((1_i32 as u8));
@@ -10715,9 +10801,9 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                 Handle::copy_from((color2_ptr), spE8);
                 fns::HSD_SisLib_803A74F0(ctx, (td).name_ls(), 1_i32, color2_ptr);
                 found_2 = 0_i32;
-                __state = 146;
+                __state = 153;
             }
-            141 => {
+            148 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -10731,25 +10817,25 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                         VarArg::Int(1_i32.wrapping_neg() as u32),
                     ],
                 );
-                __state = if i == 3_i32 { 143 } else { 144 };
+                __state = if i == 3_i32 { 150 } else { 151 };
             }
-            142 => {
+            149 => {
                 unreachable!();
             }
-            143 => {
+            150 => {
                 inl_HSD_JObjSetTranslateX(ctx, sp108.get(), 16.700000762939453);
-                __state = 144;
+                __state = 151;
             }
-            144 => {
-                __state = 140;
+            151 => {
+                __state = 147;
             }
-            145 => {
+            152 => {
                 unreachable!();
             }
-            146 => {
-                __state = if found_2 < 9_i32 { 147 } else { 149 };
+            153 => {
+                __state = if found_2 < 9_i32 { 154 } else { 156 };
             }
-            147 => {
+            154 => {
                 let _ = fns::HSD_SisLib_803A6B98(
                     ctx,
                     (td).name_ls(),
@@ -10758,34 +10844,34 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                     cstr(ctx, 0x803f1018),
                     &[],
                 );
-                __state = 148;
+                __state = 155;
             }
-            148 => {
+            155 => {
                 found_2 = found_2.wrapping_add(1);
-                __state = 146;
+                __state = 153;
             }
-            149 => {
+            156 => {
                 found_2 = 0_i32;
-                __state = 151;
+                __state = 158;
             }
-            150 => {
+            157 => {
                 unreachable!();
             }
-            151 => {
-                __state = if found_2 < 120_i32 { 152 } else { 154 };
+            158 => {
+                __state = if found_2 < 120_i32 { 159 } else { 161 };
             }
-            152 => {
+            159 => {
                 __state = if Handle::is_null(fns::GetNameText(ctx, ((found_2 as u8) as i32))) {
-                    156
+                    163
                 } else {
-                    157
+                    164
                 };
             }
-            153 => {
+            160 => {
                 found_2 = found_2.wrapping_add(1);
-                __state = 151;
+                __state = 158;
             }
-            154 => {
+            161 => {
                 (td).set_next_tag(((found_2.wrapping_add(1_i32)) as u8));
                 let _ = fns::lb_80011E24(
                     ctx,
@@ -10815,90 +10901,90 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                     ],
                 );
                 __state = if ((td).next_tag() as u32) > 7_u32 {
-                    160
+                    167
                 } else {
-                    162
+                    169
                 };
             }
-            155 => {
+            162 => {
                 unreachable!();
             }
-            156 => {
-                __state = 154;
+            163 => {
+                __state = 161;
             }
-            157 => {
-                __state = 153;
+            164 => {
+                __state = 160;
             }
-            158 => {
+            165 => {
                 unreachable!();
             }
-            159 => {
-                __state = 157;
+            166 => {
+                __state = 164;
             }
-            160 => {
+            167 => {
                 fns::HSD_JObjClearFlags(
                     ctx,
                     sp108.get(),
                     ((shl_i32(1_i32, (4_i32 as u32))) as u32),
                 );
-                __state = 161;
+                __state = 168;
             }
-            161 => {
+            168 => {
                 __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
                     == 1_i32
                 {
-                    164
+                    171
                 } else {
-                    166
+                    173
                 };
             }
-            162 => {
+            169 => {
                 fns::HSD_JObjSetFlags(ctx, sp108.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
-                __state = 161;
+                __state = 168;
             }
-            163 => {
+            170 => {
                 unreachable!();
             }
-            164 => {
-                __state = if i != 0_i32 { 168 } else { 170 };
+            171 => {
+                __state = if i != 0_i32 { 175 } else { 177 };
             }
-            165 => {
+            172 => {
                 __state = if (player_2
                     == (statics::melee__mn__mncharsel::mnCharSel_804D6CF9(ctx).get() as i32))
                     && ((statics::melee__mn__mncharsel::mnCharSel_804D6CF8(ctx).get() as i32)
                         < ((td).next_tag() as i32))
                 {
-                    172
+                    179
                 } else {
-                    173
+                    180
                 };
             }
-            166 => {
-                player_2 = i;
-                __state = 165;
-            }
-            167 => {
-                unreachable!();
-            }
-            168 => {
-                player_2 = (statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).get() as i32);
-                __state = 169;
-            }
-            169 => {
-                __state = 165;
-            }
-            170 => {
-                player_2 = (statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32);
-                __state = 169;
-            }
-            171 => {
-                unreachable!();
-            }
-            172 => {
-                mt_2 = (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type();
-                __state = if (mt_2 as i32) < 3_i32 { 175 } else { 176 };
-            }
             173 => {
+                player_2 = i;
+                __state = 172;
+            }
+            174 => {
+                unreachable!();
+            }
+            175 => {
+                player_2 = (statics::melee__mn__mncharsel::mnCharSel_804D6CF1(ctx).get() as i32);
+                __state = 176;
+            }
+            176 => {
+                __state = 172;
+            }
+            177 => {
+                player_2 = (statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32);
+                __state = 176;
+            }
+            178 => {
+                unreachable!();
+            }
+            179 => {
+                mt_2 = (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type();
+                __state = if (mt_2 as i32) < 3_i32 { 182 } else { 183 };
+            }
+            180 => {
                 __state = if ((Handle::add(
                     (Handle::cast::<Val<'a, u8>>(
                         statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get(),
@@ -10908,67 +10994,67 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                 .get() as i32)
                     != 120_i32
                 {
-                    192
+                    199
                 } else {
-                    193
+                    200
                 };
             }
-            174 => {
-                unreachable!();
-            }
-            175 => {
-                __state = if (mt_2 as i32) == 0_i32 { 178 } else { 179 };
-            }
-            176 => {
-                __state = if (mt_2 as i32) < 11_i32 { 185 } else { 187 };
-            }
-            177 => {
-                unreachable!();
-            }
-            178 => {
-                __state = 181;
-            }
-            179 => {
-                __state = 183;
-            }
-            180 => {
-                unreachable!();
-            }
             181 => {
-                clear = 1_i32;
-                __state = 186;
+                unreachable!();
             }
             182 => {
-                __state = 179;
+                __state = if (mt_2 as i32) == 0_i32 { 185 } else { 186 };
             }
             183 => {
-                clear = 0_i32;
-                __state = 186;
+                __state = if (mt_2 as i32) < 11_i32 { 192 } else { 194 };
             }
             184 => {
-                __state = 176;
-            }
-            185 => {
-                __state = 181;
-            }
-            186 => {
-                __state = if clear != 0_i32 { 189 } else { 190 };
-            }
-            187 => {
-                __state = 183;
-            }
-            188 => {
                 unreachable!();
             }
+            185 => {
+                __state = 188;
+            }
+            186 => {
+                __state = 190;
+            }
+            187 => {
+                unreachable!();
+            }
+            188 => {
+                clear = 1_i32;
+                __state = 193;
+            }
             189 => {
+                __state = 186;
+            }
+            190 => {
+                clear = 0_i32;
+                __state = 193;
+            }
+            191 => {
+                __state = 183;
+            }
+            192 => {
+                __state = 188;
+            }
+            193 => {
+                __state = if clear != 0_i32 { 196 } else { 197 };
+            }
+            194 => {
+                __state = 190;
+            }
+            195 => {
+                unreachable!();
+            }
+            196 => {
                 (Handle::add(
                     (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).ko_counts(),
                     player_2,
                 ))
                 .set((0_i32 as u8));
-                __state = 190;
+                __state = 197;
             }
-            190 => {
+            197 => {
                 (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
                     .vs()
                     .start()
@@ -10979,12 +11065,12 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                             .wrapping_sub(1_i32) as u8),
                     );
                 statics::melee__mn__mncharsel::mnCharSel_804D6CF8(ctx).set((td).next_tag());
-                __state = 173;
+                __state = 180;
             }
-            191 => {
+            198 => {
                 unreachable!();
             }
-            192 => {
+            199 => {
                 (td).set_use_tag((1_i32 as u8));
                 let _ = fns::HSD_SisLib_803A70A0(
                     ctx,
@@ -11002,35 +11088,35 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                     &[],
                 );
                 ((td).text()).set_default_kerning((0_i32 as u8));
-                __state = 193;
+                __state = 200;
             }
-            193 => {
-                __state = 128;
+            200 => {
+                __state = 135;
             }
-            194 => {
+            201 => {
                 unreachable!();
             }
-            195 => {
+            202 => {
                 __state = match ((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
                     .match_type() as i32)
                 {
-                    11_i32 => 199,
-                    12_i32 => 199,
-                    13_i32 => 199,
-                    15_i32 => 200,
-                    16_i32 => 201,
-                    17_i32 => 202,
-                    18_i32 => 202,
-                    19_i32 => 203,
-                    20_i32 => 203,
-                    21_i32 => 203,
-                    22_i32 => 203,
-                    23_i32 => 204,
-                    14_i32 => 205,
-                    _ => 206,
+                    11_i32 => 206,
+                    12_i32 => 207,
+                    13_i32 => 208,
+                    15_i32 => 209,
+                    16_i32 => 210,
+                    17_i32 => 211,
+                    18_i32 => 212,
+                    19_i32 => 213,
+                    20_i32 => 214,
+                    21_i32 => 215,
+                    22_i32 => 216,
+                    23_i32 => 217,
+                    14_i32 => 218,
+                    _ => 219,
                 };
             }
-            196 => {
+            203 => {
                 gobj = fns::GObj_Create(ctx, (4_i32 as u16), (5_i32 as u8), (128_i32 as u8));
                 jobj = fns::HSD_JObjLoadJoint(
                     ctx,
@@ -11079,12 +11165,12 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                 __state = if (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32)
                     == 1_i32
                 {
-                    251
+                    265
                 } else {
-                    253
+                    267
                 };
             }
-            197 => {
+            204 => {
                 statics::melee__mn__mncharsel::mnCharSel_803F0EBC(ctx)
                     .set_scroll_flag((0_i32 as u8));
                 text = fns::HSD_SisLib_803A5ACC(
@@ -11105,12 +11191,18 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                 fns::HSD_SisLib_803A6368(ctx, text, 74_i32);
                 fns::mnCharSel_8025BD30(ctx);
                 mt_3 = (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type();
-                __state = if (mt_3 as i32) < 3_i32 { 223 } else { 224 };
+                __state = if (mt_3 as i32) < 3_i32 { 237 } else { 238 };
             }
-            198 => {
+            205 => {
                 unreachable!();
             }
-            199 => {
+            206 => {
+                __state = 207;
+            }
+            207 => {
+                __state = 208;
+            }
+            208 => {
                 Handle::copy_from(spE4, statics::melee__mn__mncharsel::mnCharSel_804DC584(ctx));
                 Handle::copy_from(spE0, statics::melee__mn__mncharsel::mnCharSel_804DC588(ctx));
                 Handle::copy_from(spDC, statics::melee__mn__mncharsel::mnCharSel_804DC58C(ctx));
@@ -11233,12 +11325,12 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                 );
                 css = statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get();
                 __state = if ((css).match_type() as i32) == 13_i32 {
-                    208
+                    222
                 } else {
-                    210
+                    224
                 };
             }
-            200 => {
+            209 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC8(ctx).get(),
@@ -11323,9 +11415,9 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                     sp108.get(),
                     ((shl_i32(1_i32, (4_i32 as u32))) as u32),
                 );
-                __state = 213;
+                __state = 227;
             }
-            201 => {
+            210 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC8(ctx).get(),
@@ -11360,12 +11452,15 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                 (text).font_size().set_y(0.054999999701976776);
                 (text).set_default_kerning((1_i32 as u8));
                 __state = if fns::lbLang_IsSavedLanguageJP(ctx) != 0_i32 {
-                    215
+                    229
                 } else {
-                    217
+                    231
                 };
             }
-            202 => {
+            211 => {
+                __state = 212;
+            }
+            212 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC8(ctx).get(),
@@ -11450,9 +11545,18 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                     sp108.get(),
                     ((shl_i32(1_i32, (4_i32 as u32))) as u32),
                 );
-                __state = 213;
+                __state = 227;
             }
-            203 => {
+            213 => {
+                __state = 214;
+            }
+            214 => {
+                __state = 215;
+            }
+            215 => {
+                __state = 216;
+            }
+            216 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC8(ctx).get(),
@@ -11499,9 +11603,9 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                 (text).set_default_alignment((2_i32 as u8));
                 let _ =
                     fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 0.0, null::<Val<'a, i8>>(ctx), &[]);
-                __state = 213;
+                __state = 227;
             }
-            204 => {
+            217 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC4(ctx).get(),
@@ -11525,18 +11629,21 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                 (text).set_default_alignment((2_i32 as u8));
                 let _ =
                     fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 0.0, null::<Val<'a, i8>>(ctx), &[]);
-                __state = 205;
+                __state = 218;
             }
-            205 => {
-                __state = 213;
+            218 => {
+                __state = 227;
             }
-            206 => {
-                __state = 196;
+            219 => {
+                __state = 203;
             }
-            207 => {
+            220 => {
                 unreachable!();
             }
-            208 => {
+            221 => {
+                __state = 206;
+            }
+            222 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -11590,9 +11697,9 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                 );
                 hide_jobj = sp108.get();
                 fns::HSD_JObjSetFlagsAll(ctx, hide_jobj, ((shl_i32(1_i32, (4_i32 as u32))) as u32));
-                __state = 209;
+                __state = 223;
             }
-            209 => {
+            223 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -11679,9 +11786,9 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                 );
                 sp108.set(jobj43.get());
                 fns::HSD_JObjSetFlags(ctx, sp108.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
-                __state = 206;
+                __state = 219;
             }
-            210 => {
+            224 => {
                 statics::melee__mn__mncharsel::data2(ctx).set_stocks(
                     ((css)
                         .vs()
@@ -11698,15 +11805,15 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                     .players()
                     .get((statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32))
                     .set_stocks((statics::melee__mn__mncharsel::data2(ctx).stocks() as i8));
-                __state = 209;
+                __state = 223;
             }
-            211 => {
+            225 => {
                 unreachable!();
             }
-            212 => {
-                __state = 200;
+            226 => {
+                __state = 209;
             }
-            213 => {
+            227 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -11763,17 +11870,17 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                     sp108.get(),
                     ((shl_i32(1_i32, (4_i32 as u32))) as u32),
                 );
-                __state = 206;
+                __state = 219;
             }
-            214 => {
-                __state = 201;
+            228 => {
+                __state = 210;
             }
-            215 => {
+            229 => {
                 let _ = fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 0.0, cstr(ctx, 0x804d513c), &[]);
                 let _ = fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 35.0, cstr(ctx, 0x804d513c), &[]);
-                __state = 216;
+                __state = 230;
             }
-            216 => {
+            230 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC8(ctx).get(),
@@ -11797,95 +11904,95 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                 (text).set_default_alignment((2_i32 as u8));
                 let _ =
                     fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 0.0, null::<Val<'a, i8>>(ctx), &[]);
-                __state = 213;
-            }
-            217 => {
-                let _ = fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 0.0, cstr(ctx, 0x804d5140), &[]);
-                let _ = fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 35.0, cstr(ctx, 0x804d5140), &[]);
-                __state = 216;
-            }
-            218 => {
-                unreachable!();
-            }
-            219 => {
-                __state = 202;
-            }
-            220 => {
-                __state = 203;
-            }
-            221 => {
-                __state = 204;
-            }
-            222 => {
-                __state = 206;
-            }
-            223 => {
-                __state = if (mt_3 as i32) == 0_i32 { 226 } else { 227 };
-            }
-            224 => {
-                __state = if (mt_3 as i32) < 11_i32 { 233 } else { 235 };
-            }
-            225 => {
-                unreachable!();
-            }
-            226 => {
-                __state = 229;
-            }
-            227 => {
-                __state = 231;
-            }
-            228 => {
-                unreachable!();
-            }
-            229 => {
-                clear_2 = 1_i32;
-                __state = 234;
-            }
-            230 => {
                 __state = 227;
             }
             231 => {
-                clear_2 = 0_i32;
-                __state = 234;
+                let _ = fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 0.0, cstr(ctx, 0x804d5140), &[]);
+                let _ = fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 35.0, cstr(ctx, 0x804d5140), &[]);
+                __state = 230;
             }
             232 => {
-                __state = 224;
+                unreachable!();
             }
             233 => {
-                __state = 229;
+                __state = 211;
             }
             234 => {
-                __state = if clear_2 != 0_i32 { 237 } else { 239 };
+                __state = 213;
             }
             235 => {
-                __state = 231;
+                __state = 217;
             }
             236 => {
-                unreachable!();
+                __state = 219;
             }
             237 => {
-                i = 0_i32;
-                __state = 241;
+                __state = if (mt_3 as i32) == 0_i32 { 240 } else { 241 };
             }
             238 => {
-                __state = 196;
+                __state = if (mt_3 as i32) < 11_i32 { 247 } else { 249 };
             }
             239 => {
-                i = 0_i32;
-                __state = 246;
-            }
-            240 => {
                 unreachable!();
             }
+            240 => {
+                __state = 243;
+            }
             241 => {
-                __state =
-                    if i < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) {
-                        242
-                    } else {
-                        244
-                    };
+                __state = 245;
             }
             242 => {
+                unreachable!();
+            }
+            243 => {
+                clear_2 = 1_i32;
+                __state = 248;
+            }
+            244 => {
+                __state = 241;
+            }
+            245 => {
+                clear_2 = 0_i32;
+                __state = 248;
+            }
+            246 => {
+                __state = 238;
+            }
+            247 => {
+                __state = 243;
+            }
+            248 => {
+                __state = if clear_2 != 0_i32 { 251 } else { 253 };
+            }
+            249 => {
+                __state = 245;
+            }
+            250 => {
+                unreachable!();
+            }
+            251 => {
+                i = 0_i32;
+                __state = 255;
+            }
+            252 => {
+                __state = 203;
+            }
+            253 => {
+                i = 0_i32;
+                __state = 260;
+            }
+            254 => {
+                unreachable!();
+            }
+            255 => {
+                __state =
+                    if i < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) {
+                        256
+                    } else {
+                        258
+                    };
+            }
+            256 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -11924,27 +12031,27 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                 (text).font_size().set_x(0.07000000029802322);
                 (text).font_size().set_y(0.07000000029802322);
                 fns::mnCharSel_8025D1C4(ctx, i, 0_i32);
-                __state = 243;
+                __state = 257;
             }
-            243 => {
+            257 => {
                 i = i.wrapping_add(1);
-                __state = 241;
+                __state = 255;
             }
-            244 => {
-                __state = 238;
+            258 => {
+                __state = 252;
             }
-            245 => {
+            259 => {
                 unreachable!();
             }
-            246 => {
+            260 => {
                 __state =
                     if i < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) {
-                        247
+                        261
                     } else {
-                        249
+                        263
                     };
             }
-            247 => {
+            261 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -11967,19 +12074,19 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                     sp108.get(),
                     ((shl_i32(1_i32, (4_i32 as u32))) as u32),
                 );
-                __state = 248;
+                __state = 262;
             }
-            248 => {
+            262 => {
                 i = i.wrapping_add(1);
-                __state = 246;
+                __state = 260;
             }
-            249 => {
-                __state = 238;
+            263 => {
+                __state = 252;
             }
-            250 => {
+            264 => {
                 unreachable!();
             }
-            251 => {
+            265 => {
                 (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
                     .vs()
                     .start()
@@ -12039,29 +12146,29 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                             .sel_icon(),
                     );
                 __state = if ((css_2).match_type() as i32) != 23_i32 {
-                    255
+                    269
                 } else {
-                    256
+                    270
                 };
             }
-            252 => {
+            266 => {
                 fns::mnCharSel_8025EE8C(
                     ctx,
                     (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get()).match_type(),
                 );
-                __state = 280;
+                __state = 295;
             }
-            253 => {
+            267 => {
                 i = 0_i32;
-                __state = 260;
+                __state = 274;
             }
-            254 => {
+            268 => {
                 unreachable!();
             }
-            255 => {
-                __state = 258;
+            269 => {
+                __state = 272;
             }
-            256 => {
+            270 => {
                 (css_2)
                     .vs()
                     .start()
@@ -12095,26 +12202,26 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                             .get(1_i32)
                             .sel_icon(),
                     );
-                __state = 258;
+                __state = 272;
             }
-            257 => {
+            271 => {
                 unreachable!();
             }
-            258 => {
-                __state = 252;
+            272 => {
+                __state = 266;
             }
-            259 => {
-                __state = 256;
+            273 => {
+                __state = 270;
             }
-            260 => {
+            274 => {
                 __state =
                     if i < (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32) {
-                        261
+                        275
                     } else {
-                        263
+                        277
                     };
             }
-            261 => {
+            275 => {
                 statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
                     .doors()
                     .get(i)
@@ -12168,22 +12275,22 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                     );
                 rules = fns::gmMainLib_GetGameRules(ctx);
                 __state = if ((rules).handicap() as i32) != 0_i32 {
-                    265
+                    279
                 } else {
-                    267
+                    281
                 };
             }
-            262 => {
+            276 => {
                 i = i.wrapping_add(1);
-                __state = 260;
+                __state = 274;
             }
-            263 => {
-                __state = 252;
+            277 => {
+                __state = 266;
             }
-            264 => {
+            278 => {
                 unreachable!();
             }
-            265 => {
+            279 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -12199,12 +12306,12 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                     ],
                 );
                 __state = if ((fns::gmMainLib_GetGameRules(ctx)).handicap() as i32) == 1_i32 {
-                    269
+                    283
                 } else {
-                    271
+                    285
                 };
             }
-            266 => {
+            280 => {
                 cpu_level_2 = (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
                     .vs()
                     .start()
@@ -12212,12 +12319,12 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                     .get(i)
                     .cpu_level_ref();
                 __state = if ((cpu_level_2).get() as i32) == 0_i32 {
-                    276
+                    291
                 } else {
-                    277
+                    292
                 };
             }
-            267 => {
+            281 => {
                 let _ = fns::lb_80011E24(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
@@ -12232,12 +12339,12 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                         VarArg::Int(1_i32.wrapping_neg() as u32),
                     ],
                 );
-                __state = 266;
+                __state = 280;
             }
-            268 => {
+            282 => {
                 unreachable!();
             }
-            269 => {
+            283 => {
                 hval = ((fns::gm_801685D4(
                     ctx,
                     (i as u8),
@@ -12248,31 +12355,31 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                         .get(i)
                         .nametag(),
                 ) as u8) as i32);
-                __state = 270;
+                __state = 284;
             }
-            270 => {
+            284 => {
                 __state = match hval {
-                    0_i32 => 273,
-                    _ => 274,
+                    0_i32 => 287,
+                    _ => 288,
                 };
             }
-            271 => {
+            285 => {
                 hval = (((statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
                     .vs()
                     .start()
                     .players()
                     .get(i)
                     .handicap() as u8) as i32);
-                __state = 270;
+                __state = 284;
             }
-            272 => {
+            286 => {
                 unreachable!();
             }
-            273 => {
+            287 => {
                 hval = 1_i32;
-                __state = 274;
+                __state = 288;
             }
-            274 => {
+            288 => {
                 slider_x = fp::fmuls(1.25, fp::frsp((hval.wrapping_sub(1_i32)) as f64));
                 inl_HSD_JObjSetTranslateX(ctx, sp108.get(), slider_x);
                 let _ = fns::lb_80011E24(
@@ -12289,16 +12396,19 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                         VarArg::Int(1_i32.wrapping_neg() as u32),
                     ],
                 );
-                __state = 266;
+                __state = 280;
             }
-            275 => {
+            289 => {
                 unreachable!();
             }
-            276 => {
-                (cpu_level_2).set((1_i32 as u8));
-                __state = 277;
+            290 => {
+                __state = 287;
             }
-            277 => {
+            291 => {
+                (cpu_level_2).set((1_i32 as u8));
+                __state = 292;
+            }
+            292 => {
                 inl_HSD_JObjSetTranslateX_2(
                     ctx,
                     sp108.get(),
@@ -12313,30 +12423,30 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
                             .wrapping_sub(1_i32)) as f64,
                     ),
                 );
-                __state = 262;
+                __state = 276;
             }
-            278 => {
+            293 => {
                 unreachable!();
             }
-            279 => {
+            294 => {
                 unreachable!();
             }
-            280 => {
-                __state = 281;
+            295 => {
+                __state = 296;
             }
-            281 => {
-                __state = if (0_i32 != 0) { 280 } else { 282 };
+            296 => {
+                __state = if (0_i32 != 0) { 295 } else { 297 };
             }
-            282 => {
+            297 => {
                 return fns::lbAudioAx_80023F28(ctx, fns::gmMainLib_8015ECB0(ctx));
             }
-            283 => {
+            298 => {
                 unreachable!();
             }
-            284 => {
+            299 => {
                 return 0;
             }
-            285 => {
+            300 => {
                 unreachable!();
             }
             _ => unreachable!(),

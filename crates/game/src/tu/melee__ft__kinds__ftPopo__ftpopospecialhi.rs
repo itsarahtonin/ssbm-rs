@@ -54,9 +54,8 @@ pub fn ftPp_SpecialS_80120E68<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).self_vel()
             .set_y(fp::fsubs((fp2).cur_pos().y(), (fp).cur_pos().y()));
         (fp).self_vel().set_z(0.0);
-        (fp).self_vel().set_x(fp::fneg(
-            (fp::fmsubs(3.0, (fp2).facing_dir(), (fp).self_vel().x())),
-        ));
+        (fp).self_vel()
+            .set_x(fp::fnmsubs(3.0, (fp2).facing_dir(), (fp).self_vel().x()));
         (fp).self_vel().set_y(fp::fadds((fp).self_vel().y(), 5.0));
         let _ = fns::lbVector_Normalize(ctx, (fp).self_vel());
         dx = (fp::fmuls(
@@ -1410,7 +1409,7 @@ fn inl_checkNanaInRange_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             (fp::fsubs((fp).cur_pos().y(), (nana_pos).y())),
             (fp::fsubs((fp).cur_pos().y(), (nana_pos).y())),
         ));
-        if (fns::sqrtf(ctx, fp::fadds(dx, dy)) < (da).x7C())
+        if (fns::sqrtf__Ff(ctx, fp::fadds(dx, dy)) < (da).x7C())
             && (fns::ftNn_Init_8012300C(ctx, nana_gobj) == 1_i32)
         {
             return 1_i32;

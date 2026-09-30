@@ -178,9 +178,8 @@ pub fn ftPp_SpecialHi_0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     if !(statics::melee__ft__kinds__ftNana__ftnanaspecialhi::ftNn_Init_801230D0(ctx, gobj) != 0) {
-        (fp).cur_pos().set_x(fp::fneg(
-            (fp::fmsubs(8.0, (fp).facing_dir(), (fp).cur_pos().x())),
-        ));
+        (fp).cur_pos()
+            .set_x(fp::fnmsubs(8.0, (fp).facing_dir(), (fp).cur_pos().x()));
         fns::ftCo_Fall_Enter(ctx, gobj);
     }
 }

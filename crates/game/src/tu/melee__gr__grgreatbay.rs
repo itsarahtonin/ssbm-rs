@@ -1451,12 +1451,12 @@ pub fn grGreatBay_801F66A4<'a>(ctx: &'a Ctx) -> i32 {
     return 0_i32;
 }
 
-pub fn grGreatBay_801F6708<'a>(ctx: &'a Ctx, unk_: u32, gobj: HSD_GObj<'a>) -> i32 {
+pub fn grGreatBay_801F6708<'a>(ctx: &'a Ctx, unk: u32, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
     let current: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     let previous: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
-    let mut unk_ = unk_;
+    let mut unk = unk;
     let mut gobj = gobj;
     let mut arg: f64 = 0.0;
     'l1: loop {

@@ -235,14 +235,15 @@ pub mod Runtime____init_cpp_exceptions {
     use super::*;
     use crate::fns::*;
     #[inline] pub fn fragmentID(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d5b40).field(0) }
+    #[inline] pub fn GetR2<'a>(ctx: &'a Ctx) -> Val<'a, i8> { ctx.call(0x80322f20, ()) }
     /// Addresses of this scope's functions.
     pub mod addr {
-
+        pub const GetR2: u32 = 0x80322f20;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
-
+        #[inline] pub fn GetR2(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> Val<'a, i8>) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     }
 }
 /// Statics of `Runtime/__mem`.
@@ -1418,17 +1419,11 @@ pub mod dolphin__os__OS {
     #[inline] pub fn OSExceptionTable(ctx: &Ctx) -> Ptr<'_, Ptr<'_, FnPtr<'_>>> { At::new(ctx, 0x804d7348).field(0) }
     #[inline] pub fn ClearArena<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80342ebc, ()) }
     #[inline] pub fn OSExceptionInit<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8034330c, ()) }
-    #[inline] pub fn __OSDBIntegrator<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8034358c, ()) }
-    #[inline] pub fn __OSDBJump<'a>(ctx: &'a Ctx) -> () { ctx.call(0x803435b0, ()) }
-    #[inline] pub fn OSExceptionVector<'a>(ctx: &'a Ctx) -> () { ctx.call(0x803435e4, ()) }
     #[inline] pub fn OSDefaultExceptionHandler<'a>(ctx: &'a Ctx, exception: u8, context: OSContext<'a>) -> () { ctx.call(0x80343680, (exception, context, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const ClearArena: u32 = 0x80342ebc;
         pub const OSExceptionInit: u32 = 0x8034330c;
-        pub const __OSDBIntegrator: u32 = 0x8034358c;
-        pub const __OSDBJump: u32 = 0x803435b0;
-        pub const OSExceptionVector: u32 = 0x803435e4;
         pub const OSDefaultExceptionHandler: u32 = 0x80343680;
     }
     /// Adapters that register a Rust port under C calling conventions.
@@ -1436,9 +1431,6 @@ pub mod dolphin__os__OS {
         use super::*;
         #[inline] pub fn ClearArena(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
         #[inline] pub fn OSExceptionInit(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-        #[inline] pub fn __OSDBIntegrator(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-        #[inline] pub fn __OSDBJump(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-        #[inline] pub fn OSExceptionVector(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
         #[inline] pub fn OSDefaultExceptionHandler(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u8, OSContext<'a>) -> ()) { let (exception, context, ): (u8, OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, exception, context), ctx); }
     }
 }
@@ -1608,16 +1600,25 @@ pub mod dolphin__os__OSMemory {
     #[inline] pub fn ResetFunctionInfo(ctx: &Ctx) -> OSResetFunctionInfo<'_> { At::new(ctx, 0x80402348).field(0) }
     #[inline] pub fn OnReset<'a>(ctx: &'a Ctx, r#final: i32) -> i32 { ctx.call(0x80347bfc, (r#final, )) }
     #[inline] pub fn MEMIntrruptHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'a>) -> () { ctx.call(0x80347c38, (interrupt, context, )) }
+    #[inline] pub fn Config24MB<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80347ca4, ()) }
+    #[inline] pub fn Config48MB<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80347d24, ()) }
+    #[inline] pub fn RealMode<'a>(ctx: &'a Ctx, a_Event: FnPtr<'a>) -> () { ctx.call(0x80347da4, (a_Event, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const OnReset: u32 = 0x80347bfc;
         pub const MEMIntrruptHandler: u32 = 0x80347c38;
+        pub const Config24MB: u32 = 0x80347ca4;
+        pub const Config48MB: u32 = 0x80347d24;
+        pub const RealMode: u32 = 0x80347da4;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
         #[inline] pub fn OnReset(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> i32) { let (r#final, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, r#final), ctx); }
         #[inline] pub fn MEMIntrruptHandler(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i16, OSContext<'a>) -> ()) { let (interrupt, context, ): (i16, OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, interrupt, context), ctx); }
+        #[inline] pub fn Config24MB(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+        #[inline] pub fn Config48MB(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+        #[inline] pub fn RealMode(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, FnPtr<'a>) -> ()) { let (a_Event, ): (FnPtr<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, a_Event), ctx); }
     }
 }
 /// Statics of `dolphin/os/OSReboot`.
@@ -1741,21 +1742,6 @@ pub mod dolphin__os__OSSerial {
         #[inline] pub fn GetTypeCallback(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, u32, OSContext<'a>) -> ()) { let (chan, error, context, ): (i32, u32, OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, chan, error, context), ctx); }
     }
 }
-/// Statics of `dolphin/os/OSSync`.
-pub mod dolphin__os__OSSync {
-    use super::*;
-    use crate::fns::*;
-    #[inline] pub fn SystemCallVector<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8034ab80, ()) }
-    /// Addresses of this scope's functions.
-    pub mod addr {
-        pub const SystemCallVector: u32 = 0x8034ab80;
-    }
-    /// Adapters that register a Rust port under C calling conventions.
-    pub mod abi {
-        use super::*;
-        #[inline] pub fn SystemCallVector(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-    }
-}
 /// Statics of `dolphin/os/OSThread`.
 pub mod dolphin__os__OSThread {
     use super::*;
@@ -1824,17 +1810,14 @@ pub mod dolphin__os__init____start {
     use super::*;
     use crate::fns::*;
     #[inline] pub fn __check_pad3<'a>(ctx: &'a Ctx) -> () { ctx.call(0x800051ec, ()) }
-    #[inline] pub fn __init_data<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8000535c, ()) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const __check_pad3: u32 = 0x800051ec;
-        pub const __init_data: u32 = 0x8000535c;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
         #[inline] pub fn __check_pad3(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-        #[inline] pub fn __init_data(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     }
 }
 /// Statics of `dolphin/pad/PadClamp`.
@@ -10251,7 +10234,7 @@ pub mod melee__gr__grtfox {
     use crate::fns::*;
     #[inline] pub fn grTFx_StageCallbacks(ctx: &Ctx) -> Arr<'_, StageCallbacks<'_>, 4> { At::new(ctx, 0x803e89d8).field(0) }
     #[inline] pub fn yakumono_param(ctx: &Ctx) -> Ptr<'_, grTFox_YakumonoParam<'_>> { At::new(ctx, 0x804d6b00).field(0) }
-    #[inline] pub fn grTFox_80220B80<'a>(ctx: &'a Ctx, a_unk: i32) -> () { ctx.call(0x80220b80, (a_unk, )) }
+    #[inline] pub fn grTFox_80220B80<'a>(ctx: &'a Ctx, unk: i32) -> () { ctx.call(0x80220b80, (unk, )) }
     #[inline] pub fn grTFox_80220B84<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80220b84, ()) }
     #[inline] pub fn grTFox_UnkStage0_OnLoad<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80220bfc, ()) }
     #[inline] pub fn grTFox_UnkStage0_OnStart<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80220c00, ()) }
@@ -10297,7 +10280,7 @@ pub mod melee__gr__grtfox {
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
-        #[inline] pub fn grTFox_80220B80(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> ()) { let (a_unk, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, a_unk), ctx); }
+        #[inline] pub fn grTFox_80220B80(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> ()) { let (unk, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, unk), ctx); }
         #[inline] pub fn grTFox_80220B84(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
         #[inline] pub fn grTFox_UnkStage0_OnLoad(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
         #[inline] pub fn grTFox_UnkStage0_OnStart(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
@@ -10661,7 +10644,7 @@ pub mod melee__gr__grtluigi {
 pub mod melee__gr__grtmario {
     use super::*;
     use crate::fns::*;
-    #[inline] pub fn grTMario_8021F840<'a>(ctx: &'a Ctx, a_unk: i32) -> () { ctx.call(0x8021f840, (a_unk, )) }
+    #[inline] pub fn grTMario_8021F840<'a>(ctx: &'a Ctx, unk: i32) -> () { ctx.call(0x8021f840, (unk, )) }
     #[inline] pub fn grTMario_OnInit<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8021f844, ()) }
     #[inline] pub fn grTmario_UnkStage0_OnLoad<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8021f8b4, ()) }
     #[inline] pub fn grTmario_UnkStage0_OnStart<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8021f8b8, ()) }
@@ -10680,7 +10663,7 @@ pub mod melee__gr__grtmario {
     #[inline] pub fn grTMario_8021FB24<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x8021fb24, (gobj, )) }
     #[inline] pub fn stageGObj1_GObjProc<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8021fb2c, (gobj, )) }
     #[inline] pub fn grTMario_8021FB4C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8021fb4c, (gobj, )) }
-    #[inline] pub fn lbl_8021FB50<'a>(ctx: &'a Ctx, a_unk: i32, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x8021fb50, (a_unk, gobj, )) }
+    #[inline] pub fn lbl_8021FB50<'a>(ctx: &'a Ctx, unk: i32, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x8021fb50, (unk, gobj, )) }
     #[inline] pub fn grTMario_8021FBE8<'a>(ctx: &'a Ctx, vec: Vec<'a>, arg8: f64) -> () { ctx.call(0x8021fbe8, (vec, Single(gekko_fp::frsp(arg8)), )) }
     #[inline] pub fn grTMario_8021FC50<'a>(ctx: &'a Ctx, arg0: i32) -> DynamicsDesc<'a> { ctx.call(0x8021fc50, (arg0, )) }
     #[inline] pub fn grTMario_8021FC58<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: i32, arg2: HSD_JObj<'a>) -> i32 { ctx.call(0x8021fc58, (arg0, arg1, arg2, )) }
@@ -10713,7 +10696,7 @@ pub mod melee__gr__grtmario {
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
         use super::*;
-        #[inline] pub fn grTMario_8021F840(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> ()) { let (a_unk, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, a_unk), ctx); }
+        #[inline] pub fn grTMario_8021F840(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> ()) { let (unk, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, unk), ctx); }
         #[inline] pub fn grTMario_OnInit(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
         #[inline] pub fn grTmario_UnkStage0_OnLoad(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
         #[inline] pub fn grTmario_UnkStage0_OnStart(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
@@ -10732,7 +10715,7 @@ pub mod melee__gr__grtmario {
         #[inline] pub fn grTMario_8021FB24(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> i32) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn stageGObj1_GObjProc(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
         #[inline] pub fn grTMario_8021FB4C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_GObj<'a>) -> ()) { let (gobj, ): (HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, gobj), ctx); }
-        #[inline] pub fn lbl_8021FB50(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, HSD_GObj<'a>) -> i32) { let (a_unk, gobj, ): (i32, HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, a_unk, gobj), ctx); }
+        #[inline] pub fn lbl_8021FB50(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, HSD_GObj<'a>) -> i32) { let (unk, gobj, ): (i32, HSD_GObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, unk, gobj), ctx); }
         #[inline] pub fn grTMario_8021FBE8(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>, f64) -> ()) { let (vec, arg8, ): (Vec<'_>, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, vec, arg8.0), ctx); }
         #[inline] pub fn grTMario_8021FC50(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> DynamicsDesc<'a>) { let (arg0, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0), ctx); }
         #[inline] pub fn grTMario_8021FC58(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>, i32, HSD_JObj<'a>) -> i32) { let (arg0, arg1, arg2, ): (Vec<'_>, i32, HSD_JObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0, arg1, arg2), ctx); }

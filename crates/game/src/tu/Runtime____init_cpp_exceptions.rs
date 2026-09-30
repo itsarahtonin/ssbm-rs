@@ -25,6 +25,32 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
+
+pub fn GetR2<'a>(ctx: &'a Ctx) -> Val<'a, i8> {
+    // Transliterated from its machine code, whose source is assembly.
+    ().put_regs(ctx);
+    asm_GetR2(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_GetR2(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    // mr r3, r2
+    {
+        let v = g[2].get() | g[2].get();
+        g[3].set(v);
+    }
+    // blr
+    let to = ctx.regs.lr.get() & !3;
+    if to != lr0 & !3 {
+        c::tail_call(ctx, to);
+    }
+    return;
+}
 
 pub fn __fini_cpp_exceptions<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
@@ -37,12 +63,37 @@ pub fn __fini_cpp_exceptions<'a>(ctx: &'a Ctx) {
     }
 }
 
+pub fn __init_cpp_exceptions<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x8);
+    if statics::Runtime____init_cpp_exceptions::fragmentID(ctx).get() == 2_i32.wrapping_neg() {
+        statics::Runtime____init_cpp_exceptions::fragmentID(ctx).set(fns::__register_fragment(
+            ctx,
+            fns::_eti_init_info(ctx).get(0),
+            statics::Runtime____init_cpp_exceptions::GetR2(ctx),
+        ));
+    }
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x80322f20,
+        |ctx| {
+            Ret::put(GetR2(ctx), ctx);
+        },
+        Returns::Int,
+    );
     ctx.register_port(
         0x80322f28,
         |ctx| {
             Ret::put(__fini_cpp_exceptions(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80322f5c,
+        |ctx| {
+            Ret::put(__init_cpp_exceptions(ctx), ctx);
         },
         Returns::Nothing,
     );

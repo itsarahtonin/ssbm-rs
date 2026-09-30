@@ -26,6 +26,87 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn __AXOutNewFrame<'a>(ctx: &'a Ctx, lessDspCycles: u32) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut lessDspCycles = lessDspCycles;
+    let mut cl: u32 = 0;
+    let mut profile: _AXPROFILE<'a> = null(ctx);
+    let mut src: Val<'a, u8> = null(ctx);
+    let mut dest: Val<'a, u8> = null(ctx);
+    let mut i: u32 = 0;
+    fns::__AXLocalProfile(ctx).set_axFrameStart((fns::OSGetTime(ctx) as u64));
+    fns::__AXSyncPBs(ctx, lessDspCycles);
+    fns::__AXPrintStudio(ctx);
+    cl = fns::__AXGetCommandListAddress(ctx);
+    fns::DSPSendMailToDSP(ctx, 0xbabe0180_u32);
+    'l1: loop {
+        'c2: {}
+        if !(fns::DSPCheckMailToDSP(ctx) != 0_u32) {
+            break 'l1;
+        }
+    }
+    fns::DSPSendMailToDSP(ctx, cl);
+    'l3: loop {
+        'c4: {}
+        if !(fns::DSPCheckMailToDSP(ctx) != 0_u32) {
+            break 'l3;
+        }
+    }
+    fns::__AXServiceCallbackStack(ctx);
+    fns::__AXLocalProfile(ctx).set_auxProcessingStart((fns::OSGetTime(ctx) as u64));
+    fns::__AXProcessAux(ctx);
+    fns::__AXLocalProfile(ctx).set_auxProcessingEnd((fns::OSGetTime(ctx) as u64));
+    fns::__AXLocalProfile(ctx).set_userCallbackStart((fns::OSGetTime(ctx) as u64));
+    if !Handle::is_null(statics::dolphin__ax__AXOut::__AXUserFrameCallback(ctx).get()) {
+        statics::dolphin__ax__AXOut::__AXUserFrameCallback(ctx)
+            .get()
+            .call::<_, ()>(());
+    }
+    fns::__AXLocalProfile(ctx).set_userCallbackEnd((fns::OSGetTime(ctx) as u64));
+    fns::__AXNextFrame(
+        ctx,
+        Handle::cast::<Addr<'a>>(statics::dolphin__ax__AXOut::__AXOutSBuffer(ctx).at(0)),
+        Handle::cast::<Addr<'a>>(
+            statics::dolphin__ax__AXOut::__AXOutBuffer(ctx)
+                .get((statics::dolphin__ax__AXOut::__AXOutFrame(ctx).get() as i32))
+                .at(0_i32),
+        ),
+    );
+    statics::dolphin__ax__AXOut::__AXOutFrame(ctx).set(
+        statics::dolphin__ax__AXOut::__AXOutFrame(ctx)
+            .get()
+            .wrapping_add((1_i32 as u32)),
+    );
+    statics::dolphin__ax__AXOut::__AXOutFrame(ctx)
+        .set((statics::dolphin__ax__AXOut::__AXOutFrame(ctx).get() & (1_i32 as u32)));
+    fns::AIInitDMA(
+        ctx,
+        Handle::addr(
+            statics::dolphin__ax__AXOut::__AXOutBuffer(ctx)
+                .get((statics::dolphin__ax__AXOut::__AXOutFrame(ctx).get() as i32))
+                .at(0_i32),
+        ),
+        (0x280_i32 as u32),
+    );
+    fns::__AXLocalProfile(ctx).set_axFrameEnd((fns::OSGetTime(ctx) as u64));
+    fns::__AXLocalProfile(ctx).set_axNumVoices(fns::__AXGetNumVoices(ctx));
+    profile =
+        Handle::cast::<_AXPROFILE<'a>>(Handle::cast::<Addr<'a>>(fns::__AXGetCurrentProfile(ctx)));
+    if !Handle::is_null(profile) {
+        i = (56_i32 as u32);
+        dest = Handle::cast::<Val<'a, u8>>(profile);
+        src = Handle::cast::<Val<'a, u8>>(fns::__AXLocalProfile(ctx));
+        'l5: while i != (0_i32 as u32) {
+            'c6: {
+                (dest).set((src).get());
+                dest = Handle::add(dest, 1);
+                src = Handle::add(src, 1);
+                i = i.wrapping_sub(1);
+            }
+        }
+    }
+}
+
 pub fn __AXOutAiCallback<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
     if statics::dolphin__ax__AXOut::__AXOutDspReady(ctx).get() == (0_i32 as u32) {
@@ -173,6 +254,14 @@ pub fn AXRegisterCallback<'a>(ctx: &'a Ctx, callback: FnPtr<'a>) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x80359724,
+        |ctx| {
+            let (a0,): (u32,) = Args::take_all(ctx);
+            Ret::put(__AXOutNewFrame(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
     ctx.register_port(
         0x803598ac,
         |ctx| {

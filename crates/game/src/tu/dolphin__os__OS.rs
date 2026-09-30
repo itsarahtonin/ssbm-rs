@@ -85,6 +85,235 @@ pub fn ClearArena<'a>(ctx: &'a Ctx) {
     }
 }
 
+pub fn OSInit<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x10);
+    let mut consoleType: u32 = 0;
+    let mut bi2StartAddr: u32 = 0;
+    if statics::dolphin__os__OS::AreWeInitialized(ctx).get() == 0_i32 {
+        statics::dolphin__os__OS::AreWeInitialized(ctx).set(1_i32);
+        fns::__OSStartTime(ctx).set((ctx.call::<_, i64>(0x8034c410, ()) as u64));
+        let _ = fns::OSDisableInterrupts(ctx);
+        statics::dolphin__os__OS::BootInfo(ctx).set(Handle::cast::<OSBootInfo_s<'a>>(
+            (ptr::<Addr<'a>>(
+                ctx,
+                (((shl_i32(0x8000_i32, (16_i32 as u32))) as u32).wrapping_add(((0_i32) as u32)))
+                    as u32,
+            )),
+        ));
+        statics::dolphin__os__OS::BI2DebugFlag(ctx).set(null::<Val<'a, u32>>(ctx));
+        fns::__DVDLongFileNameFlag(ctx).set((0_i32 as u32));
+        bi2StartAddr = (Handle::cast::<Val<'a, u32>>(
+            (ptr::<Addr<'a>>(
+                ctx,
+                (((shl_i32(0x8000_i32, (16_i32 as u32))) as u32).wrapping_add(((244_i32) as u32)))
+                    as u32,
+            )),
+        ))
+        .get();
+        if (bi2StartAddr != 0) {
+            statics::dolphin__os__OS::BI2DebugFlag(ctx).set(Handle::cast::<Val<'a, u32>>(
+                Handle::cast::<Addr<'a>>(
+                    (Handle::add(ptr::<Val<'a, i8>>(ctx, bi2StartAddr as u32), 12_i32)),
+                ),
+            ));
+            fns::__PADSpec(ctx)
+                .set((Handle::add((ptr::<Val<'a, u32>>(ctx, bi2StartAddr as u32)), 9_i32)).get());
+            (Handle::cast::<Val<'a, u8>>(
+                (ptr::<Addr<'a>>(
+                    ctx,
+                    (((shl_i32(0x8000_i32, (16_i32 as u32))) as u32)
+                        .wrapping_add(((0x30e8_i32) as u32))) as u32,
+                )),
+            ))
+            .set(((statics::dolphin__os__OS::BI2DebugFlag(ctx).get()).get() as u8));
+            (Handle::cast::<Val<'a, u8>>(
+                (ptr::<Addr<'a>>(
+                    ctx,
+                    (((shl_i32(0x8000_i32, (16_i32 as u32))) as u32)
+                        .wrapping_add(((0x30e9_i32) as u32))) as u32,
+                )),
+            ))
+            .set((fns::__PADSpec(ctx).get() as u8));
+        } else if !Handle::is_null(ptr::<Addr<'a>>(
+            ctx,
+            ((Handle::cast::<Val<'a, u32>>(
+                (ptr::<Addr<'a>>(
+                    ctx,
+                    (((shl_i32(0x8000_i32, (16_i32 as u32))) as u32)
+                        .wrapping_add(((52_i32) as u32))) as u32,
+                )),
+            ))
+            .get()) as u32,
+        )) {
+            bi2StartAddr = ((Handle::cast::<Val<'a, u8>>(
+                (ptr::<Addr<'a>>(
+                    ctx,
+                    (((shl_i32(0x8000_i32, (16_i32 as u32))) as u32)
+                        .wrapping_add(((0x30e8_i32) as u32))) as u32,
+                )),
+            ))
+            .get() as u32);
+            statics::dolphin__os__OS::BI2DebugFlagHolder(ctx).set(bi2StartAddr);
+            statics::dolphin__os__OS::BI2DebugFlag(ctx)
+                .set(statics::dolphin__os__OS::BI2DebugFlagHolder(ctx));
+            fns::__PADSpec(ctx).set(
+                ((Handle::cast::<Val<'a, u8>>(
+                    (ptr::<Addr<'a>>(
+                        ctx,
+                        (((shl_i32(0x8000_i32, (16_i32 as u32))) as u32)
+                            .wrapping_add(((0x30e9_i32) as u32))) as u32,
+                    )),
+                ))
+                .get() as u32),
+            );
+        }
+        fns::__DVDLongFileNameFlag(ctx).set((1_i32 as u32));
+        fns::OSSetArenaLo(
+            ctx,
+            (if !(!Handle::is_null((statics::dolphin__os__OS::BootInfo(ctx).get()).arenaLo())) {
+                Handle::cast::<Addr<'a>>(fns::__ArenaLo(ctx))
+            } else {
+                (statics::dolphin__os__OS::BootInfo(ctx).get()).arenaLo()
+            }),
+        );
+        if ((!(!Handle::is_null((statics::dolphin__os__OS::BootInfo(ctx).get()).arenaLo())))
+            && (!Handle::is_null((statics::dolphin__os__OS::BI2DebugFlag(ctx).get()))))
+            && ((statics::dolphin__os__OS::BI2DebugFlag(ctx).get()).get() < (2_i32 as u32))
+        {
+            fns::OSSetArenaLo(
+                ctx,
+                ptr::<Addr<'a>>(
+                    ctx,
+                    ((Handle::addr(Handle::cast::<Val<'a, i8>>(ptr::<ArrV<'a, i8, 0>>(
+                        ctx, 0x804eec00,
+                    )))
+                    .wrapping_add((31_i32 as u32)))
+                        & 0xffffffe0_u32) as u32,
+                ),
+            );
+        }
+        fns::OSSetArenaHi(
+            ctx,
+            (if !(!Handle::is_null((statics::dolphin__os__OS::BootInfo(ctx).get()).arenaHi())) {
+                Handle::cast::<Addr<'a>>(fns::__ArenaHi(ctx))
+            } else {
+                (statics::dolphin__os__OS::BootInfo(ctx).get()).arenaHi()
+            }),
+        );
+        statics::dolphin__os__OS::OSExceptionInit(ctx);
+        fns::__OSInitSystemCall(ctx);
+        fns::OSInitAlarm(ctx);
+        fns::__OSModuleInit(ctx);
+        fns::__OSInterruptInit(ctx);
+        let _ = fns::__OSSetInterruptHandler(ctx, (22_i32 as i16), fnptr(ctx, 0x803486e4));
+        fns::__OSContextInit(ctx);
+        fns::__OSCacheInit(ctx);
+        ctx.call::<_, ()>(0x80346c6c, ());
+        ctx.call::<_, ()>(0x80349db0, ());
+        ctx.call::<_, ()>(0x80348c08, ());
+        fns::__OSThreadInit(ctx);
+        fns::__OSInitAudioSystem(ctx);
+        fns::PPCMthid2(ctx, (ctx.call::<_, u32>(0x80335ea8, ()) & 0xbfffffff_u32));
+        if ((statics::dolphin__os__OS::BootInfo(ctx).get()).consoleType() & (0x10000000_i32 as u32))
+            != (0_i32 as u32)
+        {
+            (statics::dolphin__os__OS::BootInfo(ctx).get())
+                .set_consoleType((0x10000004_i32 as u32));
+        } else {
+            (statics::dolphin__os__OS::BootInfo(ctx).get()).set_consoleType((1_i32 as u32));
+        }
+        (statics::dolphin__os__OS::BootInfo(ctx).get()).set_consoleType(
+            (statics::dolphin__os__OS::BootInfo(ctx).get())
+                .consoleType()
+                .wrapping_add(shr_u32(
+                    ((Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc003000_u32 as u32)), 11_i32))
+                        .get()
+                        & 0xf0000000_u32),
+                    (28_i32 as u32),
+                )),
+        );
+        fns::__OSInitMemoryProtection(ctx);
+        fns::OSReport(ctx, cstr(ctx, 0x80401618), &[]);
+        fns::OSReport(
+            ctx,
+            cstr(ctx, 0x80401638),
+            &[
+                VarArg::Int(Handle::addr(cstr(ctx, 0x80401650))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x8040165c))),
+            ],
+        );
+        fns::OSReport(ctx, cstr(ctx, 0x80401668), &[]);
+        consoleType = inl_OSGetConsoleType_unfused(ctx);
+        if (consoleType & (0x10000000_i32 as u32)) == (0_i32 as u32) {
+            fns::OSReport(
+                ctx,
+                cstr(ctx, 0x80401678),
+                &[VarArg::Int(consoleType as u32)],
+            );
+        } else {
+            's1: {
+                let __case = match consoleType {
+                    0x10000000_u32 => 0,
+                    0x10000001_u32 => 1,
+                    0x10000002_u32 => 2,
+                    0x10000003_u32 => 3,
+                    _ => 4,
+                };
+                if __case <= 0 {
+                    fns::OSReport(ctx, cstr(ctx, 0x80401684), &[]);
+                    break 's1;
+                }
+                if __case <= 1 {
+                    fns::OSReport(ctx, cstr(ctx, 0x80401694), &[]);
+                    break 's1;
+                }
+                if __case <= 2 {
+                    fns::OSReport(ctx, cstr(ctx, 0x804016a4), &[]);
+                    break 's1;
+                }
+                if __case <= 3 {
+                    fns::OSReport(ctx, cstr(ctx, 0x804016b4), &[]);
+                    break 's1;
+                }
+                if __case <= 4 {
+                    fns::OSReport(
+                        ctx,
+                        cstr(ctx, 0x804016c4),
+                        &[VarArg::Int(
+                            (consoleType.wrapping_sub((0x10000000_i32 as u32)))
+                                .wrapping_sub((3_i32 as u32)) as u32,
+                        )],
+                    );
+                    break 's1;
+                }
+            }
+        }
+        fns::OSReport(
+            ctx,
+            cstr(ctx, 0x804016d8),
+            &[VarArg::Int(shr_u32(
+                (statics::dolphin__os__OS::BootInfo(ctx).get()).memorySize(),
+                20_u32,
+            ) as u32)],
+        );
+        fns::OSReport(
+            ctx,
+            cstr(ctx, 0x804016e8),
+            &[
+                VarArg::Int(Handle::addr(fns::OSGetArenaLo(ctx))),
+                VarArg::Int(Handle::addr(fns::OSGetArenaHi(ctx))),
+            ],
+        );
+        if (!Handle::is_null(statics::dolphin__os__OS::BI2DebugFlag(ctx).get()))
+            && ((statics::dolphin__os__OS::BI2DebugFlag(ctx).get()).get() >= (2_i32 as u32))
+        {
+            fns::EnableMetroTRKInterrupts(ctx);
+        }
+        statics::dolphin__os__OS::ClearArena(ctx);
+        let _ = fns::OSEnableInterrupts(ctx);
+    }
+}
+
 pub fn __OSSetExceptionHandler<'a>(ctx: &'a Ctx, exception: u8, handler: FnPtr<'a>) -> FnPtr<'a> {
     let mut exception = exception;
     let mut handler = handler;
@@ -116,6 +345,15 @@ pub fn __OSGetDIConfig<'a>(ctx: &'a Ctx) -> u32 {
         & (255_i32 as u32));
 }
 
+fn inl_OSGetConsoleType_unfused<'a>(ctx: &'a Ctx) -> u32 {
+    if (!(!Handle::is_null(statics::dolphin__os__OS::BootInfo(ctx).get())))
+        || ((statics::dolphin__os__OS::BootInfo(ctx).get()).consoleType() == (0_i32 as u32))
+    {
+        return (0x10000002_i32 as u32);
+    }
+    return (statics::dolphin__os__OS::BootInfo(ctx).get()).consoleType();
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -141,16 +379,9 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
-        0x8034358c,
+        0x80342fc8,
         |ctx| {
-            Ret::put(manual::__OSDBIntegrator(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x803435b0,
-        |ctx| {
-            Ret::put(manual::__OSDBJump(ctx), ctx);
+            Ret::put(OSInit(ctx), ctx);
         },
         Returns::Nothing,
     );
@@ -169,13 +400,6 @@ pub fn register(ctx: &Ctx) {
             Ret::put(__OSGetExceptionHandler(ctx, a0), ctx);
         },
         Returns::Int,
-    );
-    ctx.register_port(
-        0x803435e4,
-        |ctx| {
-            Ret::put(manual::OSExceptionVector(ctx), ctx);
-        },
-        Returns::Nothing,
     );
     ctx.register_port(
         0x803436d4,

@@ -11940,12 +11940,12 @@ pub fn mpGetSpeed<'a>(ctx: &'a Ctx, line_id: i32, pos: Vec<'a>, speed: Vec<'a>) 
     return 1_i32;
 }
 
-pub fn mpLib_800569EC<'a>(ctx: &'a Ctx, unk_: u32) -> f64 {
-    let mut unk_ = unk_;
+pub fn mpLib_800569EC<'a>(ctx: &'a Ctx, unk: u32) -> f64 {
+    let mut unk = unk;
     return ((statics::melee__mp__mplib::mpLib_803BF248(ctx)
         .get(fns::stage_info(ctx).grkind())
         .x4())
-    .at(((unk_ as u8) as i32))
+    .at(((unk as u8) as i32))
     .get())
     .x0();
 }

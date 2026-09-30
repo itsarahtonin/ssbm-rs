@@ -732,7 +732,7 @@ pub fn fn_80227D38<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, arg1: Vec<'a>, arg2: 
                 ctx,
                 sp28,
                 sp28,
-                fp::fmuls(dist, fp::fneg((fp::fmsubs(0.05000000074505806, arg2, 1.0)))),
+                fp::fmuls(dist, fp::fnmsubs(0.05000000074505806, arg2, 1.0)),
             );
             fns::PSVECSubtract(
                 ctx,
@@ -756,7 +756,7 @@ pub fn fn_80227D38<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, arg1: Vec<'a>, arg2: 
                 ctx,
                 sp1C,
                 sp1C,
-                fp::fmuls(dist, fp::fneg((fp::fmsubs(0.05000000074505806, arg2, 1.0)))),
+                fp::fmuls(dist, fp::fnmsubs(0.05000000074505806, arg2, 1.0)),
             );
             fns::PSVECSubtract(
                 ctx,

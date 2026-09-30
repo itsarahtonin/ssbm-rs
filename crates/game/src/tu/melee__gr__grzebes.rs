@@ -3031,18 +3031,16 @@ pub fn grZebes_801DC408<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         .x(),
                     bubble_r,
                 );
-                let mut x_range: f64 = fp::fneg(
-                    (fp::fmsubs(
-                        2.0,
-                        bubble_r,
-                        (fp::fsubs(
-                            statics::melee__gr__grzebes::grZe_8049F140(ctx)
-                                .get(1_i32)
-                                .x(),
-                            statics::melee__gr__grzebes::grZe_8049F158(ctx)
-                                .get(0_i32)
-                                .x(),
-                        )),
+                let mut x_range: f64 = fp::fnmsubs(
+                    2.0,
+                    bubble_r,
+                    (fp::fsubs(
+                        statics::melee__gr__grzebes::grZe_8049F140(ctx)
+                            .get(1_i32)
+                            .x(),
+                        statics::melee__gr__grzebes::grZe_8049F158(ctx)
+                            .get(0_i32)
+                            .x(),
                     )),
                 );
                 let mut y_range: f64 = fp::fsubs(

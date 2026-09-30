@@ -1081,15 +1081,13 @@ pub fn lb_8001044C<'a>(
                                         inl_groundHeight(ctx, cur, floor_point2);
                                     let mut horiz_dist: f64 = inl_sqrtf(
                                         ctx,
-                                        fp::fneg(
-                                            (fp::fmsubs(
-                                                height_diff,
-                                                height_diff,
-                                                fp::fmuls(
-                                                    (cur).desc().lb_unk0().unk_48(),
-                                                    (cur).desc().lb_unk0().unk_48(),
-                                                ),
-                                            )),
+                                        fp::fnmsubs(
+                                            height_diff,
+                                            height_diff,
+                                            fp::fmuls(
+                                                (cur).desc().lb_unk0().unk_48(),
+                                                (cur).desc().lb_unk0().unk_48(),
+                                            ),
                                         ),
                                     );
                                     let mut ground_angle: f64 =

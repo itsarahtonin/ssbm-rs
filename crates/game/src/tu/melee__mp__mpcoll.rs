@@ -1365,13 +1365,11 @@ pub fn mpColl_80043C6C<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32, ignor
         fns::mpLeftWallGetTop(ctx, line_id, pos);
         f1 = fp::fsubs(pos.x(), 2.0);
         f2 = pos.y();
-        pos.set_x(fp::fneg((fp::fmsubs(2.0, right_dx, f1))));
-        pos.set_y(fp::fneg(
-            (fp::fmsubs(
-                2.0,
-                (fp::fsubs((coll).ecb().right().y(), (coll).ecb().bottom().y())),
-                f2,
-            )),
+        pos.set_x(fp::fnmsubs(2.0, right_dx, f1));
+        pos.set_y(fp::fnmsubs(
+            2.0,
+            (fp::fsubs((coll).ecb().right().y(), (coll).ecb().bottom().y())),
+            f2,
         ));
         if (fns::mpCheckFloor(
             ctx,

@@ -4040,7 +4040,7 @@ pub fn grCorneria_801E2EEC<'a>(ctx: &'a Ctx, v: Vec<'a>, arg1: i32, jobj: HSD_JO
                 (fp::fdivs((fp::fmuls(107.0, fns::Ground_801C0498(ctx))), temp_f31)),
                 sp14.x(),
             );
-            if (v).x() > fp::fneg((fp::fmsubs(107.0, fns::Ground_801C0498(ctx), temp_f31_2))) {
+            if (v).x() > fp::fnmsubs(107.0, fns::Ground_801C0498(ctx), temp_f31_2) {
                 return 0_i32;
             }
         }
@@ -4882,7 +4882,7 @@ fn inl_Ground_UpdateStarFoxSequence_unfused<'a>(
             }) < 0_i32
             {
                 let mut sequence_gobj: HSD_GObj<'a> =
-                    create_gobj.call::<_, HSD_GObj<'a>>((sequence_gobj_id,));
+                    fns::grCorneria_801DD534(ctx, sequence_gobj_id);
                 fns::grCorneria_801E2738(
                     ctx,
                     sequence_gobj,

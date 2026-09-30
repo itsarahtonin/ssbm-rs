@@ -245,12 +245,10 @@ pub fn ftCo_800C18A8<'a>(
         null::<HSD_GObj<'a>>(ctx),
     );
     if msid == (enums::ftCo_MS_FlyReflectWall as i32) {
-        (fp).cur_pos().set_x(fp::fneg(
-            (fp::fmsubs(
-                (fp).x68C_transNPos().z(),
-                fp::fneg((fp).facing_dir()),
-                (fp::fadds((fp).cur_pos().x(), (offset).x())),
-            )),
+        (fp).cur_pos().set_x(fp::fnmsubs(
+            (fp).x68C_transNPos().z(),
+            fp::fneg((fp).facing_dir()),
+            (fp::fadds((fp).cur_pos().x(), (offset).x())),
         ));
         let _ = fns::ft_80081F2C(ctx, gobj);
     } else {

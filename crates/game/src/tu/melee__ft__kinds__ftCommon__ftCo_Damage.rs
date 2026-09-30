@@ -1186,7 +1186,7 @@ pub fn ftCo_Damage_SetMv8FromKbThreshold<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut fp = fp;
     let mut kb_vel: f64 = (if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
-        fns::sqrtf(
+        inl_sqrtf_unfused(
             ctx,
             (fp::fadds(
                 fp::fadds(
@@ -1402,7 +1402,7 @@ pub fn ftCo_DamageFlyRoll_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         inl_doFlyRoll_unfused(ctx, gobj);
     }
     if !Handle::is_null((fp).x1064_thrownHitbox().x134().owner()) {
-        if fns::sqrtf(
+        if fns::sqrtf__Ff(
             ctx,
             (fp::fadds(
                 fp::fadds(
@@ -1845,6 +1845,29 @@ fn inl_inlineC0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     }
     #[allow(unreachable_code)]
     return 0;
+}
+
+fn inl_sqrtf_unfused<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+    let mut x = x;
+    let mut y: f64 = 0.0;
+    if x > 0.0 {
+        let mut guess: f64 = fp::frsqrte(x);
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
+        );
+        y = fp::frsp((fp::fmul(x, guess)));
+        return y;
+    }
+    return x;
 }
 
 fn inl_inlineD0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

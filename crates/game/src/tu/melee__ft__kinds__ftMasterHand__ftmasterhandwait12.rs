@@ -289,7 +289,7 @@ fn inl_ftMh_MS_389_80150DC4_unfused<'a>(
     } else {
         fns::ftMh_MS_389_80150C8C(ctx, gobj);
     }
-    (fp).mv().mh().unk0().set_x4(cb);
+    (fp).mv().mh().unk0().set_x4(fnptr(ctx, 0x8014ffdc));
     Handle::copy_from((fp).mv().mh().unk0().xC(), (pos));
 }
 

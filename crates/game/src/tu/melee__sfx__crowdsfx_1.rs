@@ -152,6 +152,30 @@ pub fn un_803224DC<'a>(ctx: &'a Ctx, spawn_id: i32, pos_x: f64, kb_mag: f64) -> 
     return 0_i32;
 }
 
+pub fn un_80322598<'a>(ctx: &'a Ctx, arg0: i32, arg1: f64) -> i32 {
+    let __frame = ctx.stack_frame(0x8);
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut val14: f64 = fns::mpLib_80458868(ctx).get(1_i32).bottom();
+    let mut cat: i32 = 0;
+    let mut vdata: CrowdConfig<'a> = null(ctx);
+    if (arg1 >= val14) || (arg1 < fp::fadds((fns::gCrowdConfig(ctx).get()).recovery_y_low(), val14))
+    {
+        return 0_i32;
+    }
+    vdata = fns::gCrowdConfig(ctx).get();
+    if arg1 > fp::fadds((vdata).recovery_y_high(), val14) {
+        cat = 3_i32;
+    } else if arg1 > fp::fadds((vdata).recovery_y_mid(), val14) {
+        cat = 2_i32;
+    } else {
+        cat = 1_i32;
+    }
+    return fns::un_8032201C(ctx, (arg0 as u32), cat);
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 fn inl_un_80322298_unfused<'a>(ctx: &'a Ctx, arg: f64) -> i32 {
     let mut arg = arg;
     let mut vdata: CrowdConfig<'a> = fns::gCrowdConfig(ctx).get();
@@ -224,6 +248,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1, a2): (i32, Single, Single) = Args::take_all(ctx);
             Ret::put(un_803224DC(ctx, a0, a1.0, a2.0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80322598,
+        |ctx| {
+            let (a0, a1): (i32, Single) = Args::take_all(ctx);
+            Ret::put(un_80322598(ctx, a0, a1.0), ctx);
         },
         Returns::Int,
     );

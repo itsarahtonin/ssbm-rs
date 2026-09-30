@@ -933,19 +933,19 @@ pub fn ifStatus_802F69C0<'a>(ctx: &'a Ctx, player_idx: i32, arg1: i32) {
 pub fn ifStatus_802F6AF8<'a>(ctx: &'a Ctx, player_idx: i32) {
     let __frame = ctx.stack_frame(0x18);
     let mut player_idx = player_idx;
-    inl_ifStatus_TriggerStockLoss_unfused(ctx, player_idx, fnptr(ctx, 0x802f7af8));
+    inl_ifStatus_TriggerStockLoss_unfused_2(ctx, player_idx, fnptr(ctx, 0x802f7af8));
 }
 
 pub fn ifStatus_802F6C04<'a>(ctx: &'a Ctx, player_idx: i32) {
     let __frame = ctx.stack_frame(0x18);
     let mut player_idx = player_idx;
-    inl_ifStatus_TriggerStockLoss_unfused(ctx, player_idx, fnptr(ctx, 0x802f7c30));
+    inl_ifStatus_TriggerStockLoss_unfused_3(ctx, player_idx, fnptr(ctx, 0x802f7c30));
 }
 
 pub fn ifStatus_802F6D10<'a>(ctx: &'a Ctx, player_idx: i32) {
     let __frame = ctx.stack_frame(0x18);
     let mut player_idx = player_idx;
-    inl_ifStatus_TriggerStockLoss_unfused(ctx, player_idx, fnptr(ctx, 0x802f7d08));
+    inl_ifStatus_TriggerStockLoss_unfused_4(ctx, player_idx, fnptr(ctx, 0x802f7d08));
 }
 
 pub fn ifStatus_802F6E1C<'a>(ctx: &'a Ctx, slot: i32) {
@@ -1835,9 +1835,135 @@ fn inl_ifStatus_TriggerStockLoss_unfused<'a>(ctx: &'a Ctx, player_idx: i32, call
     }
     if ((((big_thing).start().match_kind() as i32) != 1_i32)
         && (((big_thing).start().x2_5() as i32) != 0_i32))
-        && (!Handle::is_null(callback))
+        && (!Handle::is_null(fnptr(ctx, 0x802f7bb4)))
     {
-        callback.call::<_, ()>((player_idx,));
+        fns::if_802F7BB4(ctx, player_idx);
+    }
+}
+
+fn inl_ifStatus_TriggerStockLoss_unfused_2<'a>(ctx: &'a Ctx, player_idx: i32, callback: FnPtr<'a>) {
+    let mut player_idx = player_idx;
+    let mut callback = callback;
+    let mut hud_player: IfDamageState<'a> = null(ctx);
+    let mut big_thing: VsSceneController<'a> = null(ctx);
+    let mut small_thing: StartMeleeRules<'a> = null(ctx);
+    let mut hud_player_flags: IfDamageFlags<'a> = null(ctx);
+    big_thing = fns::gmVs_GetSceneController(ctx);
+    (big_thing).state().set_unk_D((player_idx as u8));
+    small_thing = fns::gm_GetStartMeleeRules(ctx);
+    hud_player = (inl_ifStatus_GetHUDInfo_unfused(ctx))
+        .players()
+        .get(player_idx);
+    hud_player_flags = (hud_player).flags();
+    if ((hud_player_flags).explode_animation() as i32) != 1_i32 {
+        (hud_player_flags).set_explode_animation((1_i32 as u8));
+        (hud_player_flags).set_randomize_velocity((1_i32 as u8));
+        if ((small_thing).x2_7() as i32) != 0_i32 {
+            (hud_player).set_unk9((1_i32 as u8));
+        }
+    }
+    if ((((big_thing).start().is_stock() as i32) != 0_i32)
+        && (((fns::Player_GetPlayerSlotType(ctx, player_idx) as u32)
+            == ((enums::Gm_PKind_Human as i32) as u32))
+            || ((fns::Player_GetPlayerSlotType(ctx, player_idx) as u32)
+                == ((enums::Gm_PKind_Cpu as i32) as u32))))
+        && (fns::Player_GetStocks(ctx, player_idx) == 0_i32)
+    {
+        fns::gm_8016B8D4(
+            ctx,
+            player_idx,
+            (fns::Player_GetPlayerSlotType(ctx, player_idx) as u8),
+        );
+    }
+    if ((((big_thing).start().match_kind() as i32) != 1_i32)
+        && (((big_thing).start().x2_5() as i32) != 0_i32))
+        && (!Handle::is_null(fnptr(ctx, 0x802f7af8)))
+    {
+        fns::if_802F7AF8(ctx, player_idx);
+    }
+}
+
+fn inl_ifStatus_TriggerStockLoss_unfused_3<'a>(ctx: &'a Ctx, player_idx: i32, callback: FnPtr<'a>) {
+    let mut player_idx = player_idx;
+    let mut callback = callback;
+    let mut hud_player: IfDamageState<'a> = null(ctx);
+    let mut big_thing: VsSceneController<'a> = null(ctx);
+    let mut small_thing: StartMeleeRules<'a> = null(ctx);
+    let mut hud_player_flags: IfDamageFlags<'a> = null(ctx);
+    big_thing = fns::gmVs_GetSceneController(ctx);
+    (big_thing).state().set_unk_D((player_idx as u8));
+    small_thing = fns::gm_GetStartMeleeRules(ctx);
+    hud_player = (inl_ifStatus_GetHUDInfo_unfused(ctx))
+        .players()
+        .get(player_idx);
+    hud_player_flags = (hud_player).flags();
+    if ((hud_player_flags).explode_animation() as i32) != 1_i32 {
+        (hud_player_flags).set_explode_animation((1_i32 as u8));
+        (hud_player_flags).set_randomize_velocity((1_i32 as u8));
+        if ((small_thing).x2_7() as i32) != 0_i32 {
+            (hud_player).set_unk9((1_i32 as u8));
+        }
+    }
+    if ((((big_thing).start().is_stock() as i32) != 0_i32)
+        && (((fns::Player_GetPlayerSlotType(ctx, player_idx) as u32)
+            == ((enums::Gm_PKind_Human as i32) as u32))
+            || ((fns::Player_GetPlayerSlotType(ctx, player_idx) as u32)
+                == ((enums::Gm_PKind_Cpu as i32) as u32))))
+        && (fns::Player_GetStocks(ctx, player_idx) == 0_i32)
+    {
+        fns::gm_8016B8D4(
+            ctx,
+            player_idx,
+            (fns::Player_GetPlayerSlotType(ctx, player_idx) as u8),
+        );
+    }
+    if ((((big_thing).start().match_kind() as i32) != 1_i32)
+        && (((big_thing).start().x2_5() as i32) != 0_i32))
+        && (!Handle::is_null(fnptr(ctx, 0x802f7c30)))
+    {
+        fns::if_802F7C30(ctx, player_idx);
+    }
+}
+
+fn inl_ifStatus_TriggerStockLoss_unfused_4<'a>(ctx: &'a Ctx, player_idx: i32, callback: FnPtr<'a>) {
+    let mut player_idx = player_idx;
+    let mut callback = callback;
+    let mut hud_player: IfDamageState<'a> = null(ctx);
+    let mut big_thing: VsSceneController<'a> = null(ctx);
+    let mut small_thing: StartMeleeRules<'a> = null(ctx);
+    let mut hud_player_flags: IfDamageFlags<'a> = null(ctx);
+    big_thing = fns::gmVs_GetSceneController(ctx);
+    (big_thing).state().set_unk_D((player_idx as u8));
+    small_thing = fns::gm_GetStartMeleeRules(ctx);
+    hud_player = (inl_ifStatus_GetHUDInfo_unfused(ctx))
+        .players()
+        .get(player_idx);
+    hud_player_flags = (hud_player).flags();
+    if ((hud_player_flags).explode_animation() as i32) != 1_i32 {
+        (hud_player_flags).set_explode_animation((1_i32 as u8));
+        (hud_player_flags).set_randomize_velocity((1_i32 as u8));
+        if ((small_thing).x2_7() as i32) != 0_i32 {
+            (hud_player).set_unk9((1_i32 as u8));
+        }
+    }
+    if ((((big_thing).start().is_stock() as i32) != 0_i32)
+        && (((fns::Player_GetPlayerSlotType(ctx, player_idx) as u32)
+            == ((enums::Gm_PKind_Human as i32) as u32))
+            || ((fns::Player_GetPlayerSlotType(ctx, player_idx) as u32)
+                == ((enums::Gm_PKind_Cpu as i32) as u32))))
+        && (fns::Player_GetStocks(ctx, player_idx) == 0_i32)
+    {
+        fns::gm_8016B8D4(
+            ctx,
+            player_idx,
+            (fns::Player_GetPlayerSlotType(ctx, player_idx) as u8),
+        );
+    }
+    if ((((big_thing).start().match_kind() as i32) != 1_i32)
+        && (((big_thing).start().x2_5() as i32) != 0_i32))
+        && (!Handle::is_null(fnptr(ctx, 0x802f7d08)))
+    {
+        fns::if_802F7D08(ctx, player_idx);
     }
 }
 

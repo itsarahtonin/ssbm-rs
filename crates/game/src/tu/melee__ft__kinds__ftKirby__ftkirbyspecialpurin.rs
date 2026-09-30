@@ -175,14 +175,14 @@ pub fn ftKb_SpecialNPr_80100F94<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftKb_SpecialNPr_801010D4<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
-    unk_: i32,
+    unk: i32,
     flags: u32,
     anim_start: f64,
 ) {
     let __frame = ctx.stack_frame(0x50);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
-    let mut unk_ = unk_;
+    let mut unk = unk;
     let mut flags = flags;
     let mut anim_start = anim_start;
     let mut fp: Fighter<'a> =
@@ -196,7 +196,7 @@ pub fn ftKb_SpecialNPr_801010D4<'a>(
     }
     (fp).set_facing_dir((fp).mv().pr().specialn().x34().x());
     fns::ftColl_8007AFF8(ctx, gobj);
-    if unk_ == 0_i32 {
+    if unk == 0_i32 {
         let mut msid: i32 = 0;
         if (fp).facing_dir() == 1.0 {
             msid = (enums::ftKb_MS_PrSpecialNEndR as i32);

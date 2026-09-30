@@ -376,15 +376,13 @@ pub fn ifMagnify_802FBBDC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
                                         fns::Stage_GetCamBoundsTopOffset(ctx),
                                         world_pos.y(),
                                     )),
-                                    fp::fneg(
-                                        (fp::fmsubs(
-                                            0.5,
-                                            (fp::fadds(
-                                                fns::Stage_GetCamBoundsTopOffset(ctx),
-                                                fns::Stage_GetCamBoundsBottomOffset(ctx),
-                                            )),
+                                    fp::fnmsubs(
+                                        0.5,
+                                        (fp::fadds(
                                             fns::Stage_GetCamBoundsTopOffset(ctx),
+                                            fns::Stage_GetCamBoundsBottomOffset(ctx),
                                         )),
+                                        fns::Stage_GetCamBoundsTopOffset(ctx),
                                     ),
                                 )),
                             );

@@ -1440,8 +1440,8 @@ fn inl_Fighter_SetDamageCallbacks_unfused<'a>(
     let mut fp = fp;
     let mut take_dmg_cb = take_dmg_cb;
     let mut death2_cb = death2_cb;
-    (fp).set_take_dmg_cb(take_dmg_cb);
-    (fp).set_death2_cb(death2_cb);
+    (fp).set_take_dmg_cb(fnptr(ctx, 0x800ee7b8));
+    (fp).set_death2_cb(fnptr(ctx, 0x800ee74c));
 }
 
 fn inl_ftKb_SpecialLw_SetStoneVecs_unfused<'a>(

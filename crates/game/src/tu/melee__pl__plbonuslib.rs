@@ -1434,7 +1434,7 @@ pub fn fn_8003F294<'a>(ctx: &'a Ctx, slot: i32, index: i32) {
     );
     {
         let mut t2: pl_StaleMoveTableExt_t<'a> = fns::Player_GetStaleMoveTableIndexPtr2(ctx, slot);
-        let mut mag: f64 = fns::sqrtf(
+        let mut mag: f64 = fns::sqrtf__Ff(
             ctx,
             fp::fadds(
                 fp::fmuls(

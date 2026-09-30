@@ -551,11 +551,11 @@ fn inl_gm_SetDbPauseInputHandlers_unfused<'a>(
     statics::melee__gm__gmscene::gm_80479D58(ctx)
         .unk_10()
         .db_input()
-        .set_check_pause(check_db_pause);
+        .set_check_pause(fnptr(ctx, 0x801a46f4));
     statics::melee__gm__gmscene::gm_80479D58(ctx)
         .unk_10()
         .db_input()
-        .set_check_framestep(check_db_framestep);
+        .set_check_framestep(fnptr(ctx, 0x801a47e4));
 }
 
 fn inl_gm_SetPreGObjProcCallback_unfused<'a>(ctx: &'a Ctx, cb: FnPtr<'a>) {

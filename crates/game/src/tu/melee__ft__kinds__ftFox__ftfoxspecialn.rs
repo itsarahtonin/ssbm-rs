@@ -472,6 +472,435 @@ pub fn ftFx_SpecialAirNEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::ftCo_AirCatchHit_Coll(ctx, gobj);
 }
 
+pub fn ftFx_Throw_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x70);
+    let sp50: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp44: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = null(ctx);
+    let mut da: ftFox_DatAttrs<'a> = null(ctx);
+    let mut ftKind: i32 = 0;
+    let mut blasterGObj: HSD_GObj<'a> = null(ctx);
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                fp = {
+                    let __t1 =
+                        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+                    fp = __t1;
+                    __t1
+                };
+                da = Handle::cast::<ftFox_DatAttrs<'a>>((fp).dat_attrs());
+                ftKind = inl_ftGetKind_unfused(ctx, fp);
+                __state = if (ftKind == (enums::Ft_Kind_Fox as i32))
+                    || (ftKind == (enums::Ft_Kind_Falco as i32))
+                {
+                    1
+                } else {
+                    2
+                };
+            }
+            1 => {
+                __state = if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
+                    4
+                } else {
+                    5
+                };
+            }
+            2 => {
+                return;
+            }
+            3 => {
+                unreachable!();
+            }
+            4 => {
+                (fp).u()
+                    .fx()
+                    .set_x222C_blasterGObj(null::<HSD_GObj<'a>>(ctx));
+                inl_Fighter_SetDamageCallback_unfused(ctx, gobj, null::<FnPtr<'a>>(ctx));
+                return;
+            }
+            5 => {
+                __state = match (fp).cmd_vars().at(1_i32).get() {
+                    1_u32 => 8,
+                    2_u32 => 9,
+                    0_u32 => 10,
+                    _ => 11,
+                };
+            }
+            6 => {
+                unreachable!();
+            }
+            7 => {
+                __state = 5;
+            }
+            8 => {
+                __state = if Handle::is_null((fp).u().fx().x222C_blasterGObj()) {
+                    14
+                } else {
+                    16
+                };
+            }
+            9 => {
+                __state = if !Handle::is_null((fp).u().fx().x222C_blasterGObj()) {
+                    70
+                } else {
+                    71
+                };
+            }
+            10 => {
+                (fp).u()
+                    .fx()
+                    .set_x222C_blasterGObj(null::<HSD_GObj<'a>>(ctx));
+                inl_Fighter_SetDamageCallback_unfused(ctx, gobj, null::<FnPtr<'a>>(ctx));
+                fns::ftpickupitem_80094818(ctx, gobj, 0_i32);
+                __state = 11;
+            }
+            11 => {
+                __state = 2;
+            }
+            12 => {
+                unreachable!();
+            }
+            13 => {
+                __state = 8;
+            }
+            14 => {
+                blasterGObj = fns::it_802AE8A8(
+                    ctx,
+                    (fp).facing_dir(),
+                    gobj,
+                    (fp).cur_pos(),
+                    fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_RThumbNb as i32)),
+                    (da).x20_FOX_BLASTER_GUN_ITKIND(),
+                );
+                (fp).u().fx().set_x222C_blasterGObj(blasterGObj);
+                __state = if !Handle::is_null(blasterGObj) {
+                    18
+                } else {
+                    19
+                };
+            }
+            15 => {
+                __state = 9;
+            }
+            16 => {
+                fns::it_802ADDD0(
+                    ctx,
+                    (fp).u().fx().x222C_blasterGObj(),
+                    ((fp).cmd_vars().at(1_i32).get() as i32),
+                );
+                __state = match (fp).cmd_vars().at(3_i32).get() {
+                    1_u32 => 22,
+                    2_u32 => 23,
+                    _ => 24,
+                };
+            }
+            17 => {
+                unreachable!();
+            }
+            18 => {
+                fns::it_8026BAE8(
+                    ctx,
+                    (fp).u().fx().x222C_blasterGObj(),
+                    (fp::fmuls(
+                        0.8500000238418579,
+                        (fp::fmuls((fp).x34_scale().y(), (fp).co_attrs().model_scaling())),
+                    )),
+                );
+                inl_Fighter_SetDamageCallback_unfused(ctx, gobj, fnptr(ctx, 0x800e5588));
+                __state = 19;
+            }
+            19 => {
+                return;
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                __state = 15;
+            }
+            22 => {
+                (fp).cmd_vars().at(3_i32).set((0_i32 as u32));
+                fns::it_802AE538(ctx, (fp).u().fx().x222C_blasterGObj());
+                __state = 24;
+            }
+            23 => {
+                (fp).cmd_vars().at(3_i32).set((0_i32 as u32));
+                fns::it_802AE608(ctx, (fp).u().fx().x222C_blasterGObj());
+                __state = 24;
+            }
+            24 => {
+                __state = if (inl_ftCheckThrowB0_unfused(ctx, fp) != 0) {
+                    29
+                } else {
+                    30
+                };
+            }
+            25 => {
+                unreachable!();
+            }
+            26 => {
+                __state = 22;
+            }
+            27 => {
+                __state = 23;
+            }
+            28 => {
+                __state = 24;
+            }
+            29 => {
+                inl_ftFx_SpecialN_FtGetHoldJoint_unfused(ctx, gobj, sp50);
+                inl_ftFx_SpecialN_ItGetHoldJoint_unfused(ctx, gobj, sp44);
+                sp44.set_z(fp::frsp(0_i32 as f64));
+                sp50.set_z(fp::frsp(0_i32 as f64));
+                __state = match inl_ftGetAction_unfused(ctx, fp) {
+                    220_i32 => 32,
+                    221_i32 => 33,
+                    222_i32 => 34,
+                    _ => 35,
+                };
+            }
+            30 => {
+                __state = 11;
+            }
+            31 => {
+                unreachable!();
+            }
+            32 => {
+                __state = 33;
+            }
+            33 => {
+                __state = 34;
+            }
+            34 => {
+                fns::it_8029C6CC(
+                    ctx,
+                    fns::atan2f(
+                        ctx,
+                        fp::fsubs(sp50.y(), sp44.y()),
+                        fp::fsubs(sp50.x(), sp44.x()),
+                    ),
+                    (da).x14_FOX_BLASTER_VEL(),
+                    gobj,
+                    sp50,
+                    (da).x1C_FOX_BLASTER_SHOT_ITKIND(),
+                );
+                __state = 36;
+            }
+            35 => {
+                fns::it_8029C6A4(
+                    ctx,
+                    fns::atan2f(
+                        ctx,
+                        fp::fsubs(sp50.y(), sp44.y()),
+                        fp::fsubs(sp50.x(), sp44.x()),
+                    ),
+                    (da).x14_FOX_BLASTER_VEL(),
+                    gobj,
+                    sp50,
+                    (da).x1C_FOX_BLASTER_SHOT_ITKIND(),
+                );
+                __state = 36;
+            }
+            36 => {
+                fns::it_802AE1D0(ctx, (fp).u().fx().x222C_blasterGObj());
+                __state = match inl_ftGetAction_unfused(ctx, fp) {
+                    221_i32 => 41,
+                    222_i32 => 42,
+                    220_i32 => 44,
+                    _ => 43,
+                };
+            }
+            37 => {
+                unreachable!();
+            }
+            38 => {
+                __state = 32;
+            }
+            39 => {
+                __state = 35;
+            }
+            40 => {
+                __state = 36;
+            }
+            41 => {
+                __state = 42;
+            }
+            42 => {
+                __state = match (fns::ftLib_GetKind(ctx, gobj) as u32) {
+                    1_u32 => 48,
+                    22_u32 => 49,
+                    _ => 50,
+                };
+            }
+            43 => {
+                __state = 45;
+            }
+            44 => {
+                __state = match (fns::ftLib_GetKind(ctx, gobj) as u32) {
+                    1_u32 => 58,
+                    22_u32 => 59,
+                    _ => 60,
+                };
+            }
+            45 => {
+                __state = 11;
+            }
+            46 => {
+                unreachable!();
+            }
+            47 => {
+                __state = 41;
+            }
+            48 => {
+                fns::ft_PlaySFX(ctx, fp, 0x1ae1d_i32, (127_i32 as u8), (64_i32 as u8));
+                return;
+            }
+            49 => {
+                fns::ft_PlaySFX(ctx, fp, 0x18709_i32, (127_i32 as u8), (64_i32 as u8));
+                return;
+            }
+            50 => {
+                __state = 51;
+            }
+            51 => {
+                __state = 43;
+            }
+            52 => {
+                unreachable!();
+            }
+            53 => {
+                __state = 48;
+            }
+            54 => {
+                __state = 49;
+            }
+            55 => {
+                __state = 50;
+            }
+            56 => {
+                __state = 51;
+            }
+            57 => {
+                __state = 44;
+            }
+            58 => {
+                fns::ft_PlaySFX(
+                    ctx,
+                    fp,
+                    (fns::foxSFX(ctx)
+                        .at((fp::frsp(1_i32 as f64) == (fp).facing_dir()) as i32)
+                        .get() as i32),
+                    (127_i32 as u8),
+                    (64_i32 as u8),
+                );
+                return;
+            }
+            59 => {
+                fns::ft_PlaySFX(
+                    ctx,
+                    fp,
+                    (fns::falcoSFX(ctx)
+                        .at((fp::frsp(1_i32 as f64) == (fp).facing_dir()) as i32)
+                        .get() as i32),
+                    (127_i32 as u8),
+                    (64_i32 as u8),
+                );
+                return;
+            }
+            60 => {
+                __state = 61;
+            }
+            61 => {
+                __state = 45;
+            }
+            62 => {
+                unreachable!();
+            }
+            63 => {
+                __state = 58;
+            }
+            64 => {
+                __state = 59;
+            }
+            65 => {
+                __state = 60;
+            }
+            66 => {
+                __state = 61;
+            }
+            67 => {
+                __state = 45;
+            }
+            68 => {
+                __state = 30;
+            }
+            69 => {
+                __state = 15;
+            }
+            70 => {
+                (fp).u()
+                    .fx()
+                    .set_x222C_blasterGObj(null::<HSD_GObj<'a>>(ctx));
+                inl_Fighter_SetDamageCallback_unfused(ctx, gobj, null::<FnPtr<'a>>(ctx));
+                __state = match (fns::ftLib_GetKind(ctx, gobj) as u32) {
+                    1_u32 => 73,
+                    22_u32 => 74,
+                    _ => 75,
+                };
+            }
+            71 => {
+                __state = 11;
+            }
+            72 => {
+                unreachable!();
+            }
+            73 => {
+                fns::ft_PlaySFX(ctx, fp, 0x1ae14_i32, (127_i32 as u8), (64_i32 as u8));
+                return;
+            }
+            74 => {
+                fns::ft_PlaySFX(ctx, fp, 0x18700_i32, (127_i32 as u8), (64_i32 as u8));
+                return;
+            }
+            75 => {
+                __state = 76;
+            }
+            76 => {
+                __state = 71;
+            }
+            77 => {
+                unreachable!();
+            }
+            78 => {
+                __state = 73;
+            }
+            79 => {
+                __state = 74;
+            }
+            80 => {
+                __state = 75;
+            }
+            81 => {
+                __state = 76;
+            }
+            82 => {
+                __state = 10;
+            }
+            83 => {
+                __state = 11;
+            }
+            84 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     let mut gobj = gobj;
     return (gobj).user_data();
@@ -1085,6 +1514,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(ftFx_SpecialAirNEnd_Coll(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x800e6cdc,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftFx_Throw_Anim(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

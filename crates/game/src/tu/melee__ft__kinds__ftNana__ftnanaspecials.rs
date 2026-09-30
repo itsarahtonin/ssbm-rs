@@ -523,15 +523,13 @@ fn inl_ftPp_SpecialS_0_Coll_inline4<'a>(
         if (nana_fp).mv().pp().unk_80123954().x0() > 5_i32 {
             (nana_fp).mv().pp().unk_80123954().set_x0(5_i32);
         }
-        (nana_fp).cur_pos().set_x(fp::fneg(
-            (fp::fmsubs(
-                1.5,
-                (fp::fmuls(
-                    fp::frsp((nana_fp).mv().pp().unk_80123954().x0() as f64),
-                    (nana_fp).facing_dir(),
-                )),
-                (popo_fp).cur_pos().x(),
+        (nana_fp).cur_pos().set_x(fp::fnmsubs(
+            1.5,
+            (fp::fmuls(
+                fp::frsp((nana_fp).mv().pp().unk_80123954().x0() as f64),
+                (nana_fp).facing_dir(),
             )),
+            (popo_fp).cur_pos().x(),
         ));
         if !(fns::ft_80082888(ctx, nana_gobj, fns::ftNn_Unk2_803CDD60(ctx)) != 0) {
             inl_ftPp_SpecialS_0_Coll_inline3(ctx, nana_gobj);
@@ -628,15 +626,13 @@ fn inl_ftPp_SpecialS_1_Coll_inline4<'a>(
         if (nana_fp).mv().pp().unk_80123954().x0() > 5_i32 {
             (nana_fp).mv().pp().unk_80123954().set_x0(5_i32);
         }
-        (nana_fp).cur_pos().set_x(fp::fneg(
-            (fp::fmsubs(
-                1.5,
-                (fp::fmuls(
-                    fp::frsp((nana_fp).mv().pp().unk_80123954().x0() as f64),
-                    (nana_fp).facing_dir(),
-                )),
-                (popo_fp).cur_pos().x(),
+        (nana_fp).cur_pos().set_x(fp::fnmsubs(
+            1.5,
+            (fp::fmuls(
+                fp::frsp((nana_fp).mv().pp().unk_80123954().x0() as f64),
+                (nana_fp).facing_dir(),
             )),
+            (popo_fp).cur_pos().x(),
         ));
         if (fns::ft_800824A0(ctx, nana_gobj, fns::ftNn_Unk2_803CDD60(ctx)) != 0) {
             inl_ftPp_SpecialS_1_Coll_inline3(ctx, nana_gobj);

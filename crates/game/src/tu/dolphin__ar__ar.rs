@@ -180,6 +180,26 @@ pub fn ARGetSize<'a>(ctx: &'a Ctx) -> u32 {
     return statics::dolphin__ar__ar::__AR_Size(ctx).get();
 }
 
+pub fn __ARHandler<'a>(ctx: &'a Ctx, exception: i16, context: OSContext<'a>) {
+    let __frame = ctx.stack_frame(0x2e0);
+    let exceptionContext: OSContext<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut exception = exception;
+    let mut context = context;
+    let mut tmp: u16 = 0;
+    tmp = (Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 5_i32)).get();
+    tmp = ((((tmp as i32) & (!136_i32)) | 32_i32) as u16);
+    (Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 5_i32)).set((tmp));
+    fns::OSClearContext(ctx, exceptionContext);
+    fns::OSSetCurrentContext(ctx, exceptionContext);
+    if !Handle::is_null(statics::dolphin__ar__ar::__AR_Callback(ctx).get()) {
+        statics::dolphin__ar__ar::__AR_Callback(ctx)
+            .get()
+            .call::<_, ()>(());
+    }
+    fns::OSClearContext(ctx, exceptionContext);
+    fns::OSSetCurrentContext(ctx, context);
+}
+
 pub fn __ARChecksize<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x140);
     let test_data_pad: ArrV<'a, u8, 63> = frame_at(ctx, &__frame, 0x0);
@@ -600,6 +620,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(ARGetSize(ctx), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x80350f98,
+        |ctx| {
+            let (a0, a1): (i16, OSContext<'_>) = Args::take_all(ctx);
+            Ret::put(__ARHandler(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x80351010,

@@ -438,11 +438,11 @@ pub fn grGarden_80203498<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, gp: Ground<'
     let mut gp = gp;
 }
 
-pub fn grGarden_8020349C<'a>(ctx: &'a Ctx, unk_: u32, player: HSD_GObj<'a>, water: Vec<'a>) -> i32 {
+pub fn grGarden_8020349C<'a>(ctx: &'a Ctx, unk: u32, player: HSD_GObj<'a>, water: Vec<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
     let current: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     let previous: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let mut unk_ = unk_;
+    let mut unk = unk;
     let mut player = player;
     let mut water = water;
     let mut uVar1: i32 = 0;

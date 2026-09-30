@@ -388,24 +388,20 @@ pub fn grOldPupupu_80210D10<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             if cam_right.get() < 200.0 {
                 cam_right.set(200.0);
             }
-            x = fp::fneg(
-                (fp::fmsubs(
-                    fp::frsp(count as f64),
-                    step,
-                    (fp::fadds(50.0, cam_right.get())),
-                )),
+            x = fp::fnmsubs(
+                fp::frsp(count as f64),
+                step,
+                (fp::fadds(50.0, cam_right.get())),
             );
         } else {
             step = 10.0;
             if cam_left.get() > fp::fneg(200.0) {
                 cam_left.set(fp::fneg(200.0));
             }
-            x = fp::fneg(
-                (fp::fmsubs(
-                    fp::frsp(count as f64),
-                    step,
-                    (fp::fsubs(cam_left.get(), 50.0)),
-                )),
+            x = fp::fnmsubs(
+                fp::frsp(count as f64),
+                step,
+                (fp::fsubs(cam_left.get(), 50.0)),
             );
         }
         {

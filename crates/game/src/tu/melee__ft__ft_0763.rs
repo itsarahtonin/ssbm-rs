@@ -141,11 +141,12 @@ fn inl_comboCount_Push<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         var_f2 = (fns::p_ftCommonData(ctx).get()).x4D4();
     }
     temp_f2 = fp::fmuls((fp).facing_dir(), var_f2);
-    (fp).cur_pos().set_x(fp::fneg(
-        (fp::fmsubs((pos).y(), temp_f2, (fp).cur_pos().x())),
-    ));
-    (fp).cur_pos().set_y(fp::fneg(
-        (fp::fmsubs(fp::fneg((pos).x()), temp_f2, (fp).cur_pos().y())),
+    (fp).cur_pos()
+        .set_x(fp::fnmsubs((pos).y(), temp_f2, (fp).cur_pos().x()));
+    (fp).cur_pos().set_y(fp::fnmsubs(
+        fp::fneg((pos).x()),
+        temp_f2,
+        (fp).cur_pos().y(),
     ));
 }
 

@@ -17,7 +17,7 @@ How C maps to Rust:
 - Locals whose address is taken, and struct and array locals, live on the emulated stack, so pointers to them are GameCube addresses.
 - String literals point at their original addresses in the game's data.
 
-Functions whose source is assembly, and C functions that only MWCC can compile (inline asm, code under `#ifdef __MWERKS__`), are ported from their machine code instead: `asm2rs.py` reads each instruction word from the decomp's listing and writes what the interpreter does for it, with its fields as constants, using the same helpers (`ssbm_rt::cpu`, `gekko-fp`). Branches within the function become a state machine over its blocks, and calls go through dispatch.
+Functions whose source is assembly, and C functions that only MWCC can compile (inline asm, code under `#ifdef __MWERKS__`), are ported from their machine code instead: `asm2rs.py` reads each instruction word from the decomp's listing and writes what the interpreter does for it, with its fields as constants, using the same helpers (`ssbm_rt::cpu`, `gekko-fp`). Branches within the function become a state machine over its blocks, and calls go through dispatch. `FROM_MACHINE_CODE` in `c2rs.py` lists the few C functions ported this way anyway, with the reason.
 
 A function the translator cannot handle is left out, so the original keeps running it, and the report says why. The generated code is formatted with rustfmt and should not be edited by hand: fix the translator, or port the function by hand in `crates/game/src/manual` and leave it out of translation.
 

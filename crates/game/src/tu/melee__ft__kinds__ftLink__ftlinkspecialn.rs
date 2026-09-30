@@ -591,8 +591,8 @@ fn inl_Fighter_SetDamageCallback_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, c
     let mut cb = cb;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    (fp).set_take_dmg_cb(cb);
-    (fp).set_death2_cb(cb);
+    (fp).set_take_dmg_cb(fnptr(ctx, 0x800eaf58));
+    (fp).set_death2_cb(fnptr(ctx, 0x800eaf58));
 }
 
 fn inl_isDrawback_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {

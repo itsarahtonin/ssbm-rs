@@ -114,7 +114,7 @@ pub fn ftPe_SpecialHi_8011D620<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftPe_SpecialHi_8011D650<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
-    inl_ensureUnkItem_unfused(ctx, gobj, fnptr(ctx, 0x802bdc18));
+    inl_ensureUnkItem_unfused_2(ctx, gobj, fnptr(ctx, 0x802bdc18));
 }
 
 pub fn ftPe_SpecialHi_NotActive<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
@@ -397,13 +397,13 @@ pub fn ftPe_SpecialHi_8011E064<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftPe_SpecialHiEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
-    inl_doColl_unfused(ctx, gobj, fnptr(ctx, 0x8011e064));
+    inl_doColl_unfused_2(ctx, gobj, fnptr(ctx, 0x8011e064));
 }
 
 pub fn ftPe_SpecialAirHiEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
-    inl_doColl_unfused(ctx, gobj, fnptr(ctx, 0x8011e064));
+    inl_doColl_unfused_2(ctx, gobj, fnptr(ctx, 0x8011e064));
 }
 
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
@@ -438,7 +438,17 @@ fn inl_ensureUnkItem_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if !Handle::is_null((fp).u().pe().parasol_gobj_0()) {
-        cb.call::<_, ()>(((fp).u().pe().parasol_gobj_0(),));
+        fns::it_802BDBF8(ctx, (fp).u().pe().parasol_gobj_0());
+    }
+}
+
+fn inl_ensureUnkItem_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
+    let mut gobj = gobj;
+    let mut cb = cb;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if !Handle::is_null((fp).u().pe().parasol_gobj_0()) {
+        fns::it_802BDC18(ctx, (fp).u().pe().parasol_gobj_0());
     }
 }
 
@@ -625,7 +635,7 @@ fn inl_doColl_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
             fns::ft_80083B68(ctx, gobj);
             return;
         }
-        fns::ft_800831CC(ctx, gobj, fnptr(ctx, 0x80096cc8), cb);
+        fns::ft_800831CC(ctx, gobj, fnptr(ctx, 0x80096cc8), fnptr(ctx, 0x8011dd8c));
         return;
     }
     fns::ft_80084104(ctx, gobj);
@@ -647,6 +657,24 @@ fn inl_ftPe_SpecialHi_8011DD8C_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).dat_attrs(),
     );
     fns::ftCo_LandingFallSpecial_Enter(ctx, gobj, 0_i32, (da).x74());
+}
+
+fn inl_doColl_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
+    let mut gobj = gobj;
+    let mut cb = cb;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (!((fp).cmd_vars().at(0_i32).get() != 0))
+            || ((fp).self_vel().y() >= fp::frsp(0_i32 as f64))
+        {
+            fns::ft_80083B68(ctx, gobj);
+            return;
+        }
+        fns::ft_800831CC(ctx, gobj, fnptr(ctx, 0x80096cc8), fnptr(ctx, 0x8011e064));
+        return;
+    }
+    fns::ft_80084104(ctx, gobj);
 }
 
 /// Registers this unit's ports.

@@ -252,7 +252,7 @@ pub fn ftCo_8009C45C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     ctx.fill(Handle::addr(unused), 0, 0x8);
     unused.at(0).set((0_i32 as u8));
-    inl_inlineB1_unfused(ctx, gobj, fnptr(ctx, 0x8007d7fc), 4_i32.wrapping_neg());
+    inl_inlineB1_unfused_2(ctx, gobj, fnptr(ctx, 0x8007d7fc), 4_i32.wrapping_neg());
 }
 
 fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
@@ -328,7 +328,17 @@ fn inl_inlineB1_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>, off
     let mut offset = offset;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    cb.call::<_, ()>((fp,));
+    fns::ftCommon_8007D5D4(ctx, fp);
+    inl_inlineB0_unfused(ctx, gobj, (fp).motion_id().wrapping_add(offset));
+}
+
+fn inl_inlineB1_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>, offset: i32) {
+    let mut gobj = gobj;
+    let mut cb = cb;
+    let mut offset = offset;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    fns::ftCommon_8007D7FC(ctx, fp);
     inl_inlineB0_unfused(ctx, gobj, (fp).motion_id().wrapping_add(offset));
 }
 

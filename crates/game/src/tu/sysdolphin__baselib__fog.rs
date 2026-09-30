@@ -26,6 +26,106 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn HSD_FogSet<'a>(ctx: &'a Ctx, fog: HSD_Fog<'a>) {
+    let __frame = ctx.stack_frame(0xc8);
+    let tbl: _GXFogAdjTable<'a> = frame_at(ctx, &__frame, 0x0);
+    let v: ArrV<'a, F32, 6> = frame_at(ctx, &__frame, 0x14);
+    let proj: HSD_FogSet_proj<'a> = frame_at(ctx, &__frame, 0x2c);
+    let mtx: Arr<'a, ArrV<'a, F32, 4>, 4> = frame_at(ctx, &__frame, 0x48);
+    let mut fog = fog;
+    let mut cobj: HSD_CObj<'a> = null(ctx);
+    let mut range: i32 = 0;
+    if Handle::is_null(fog) {
+        fns::GXSetFog(ctx, 0_i32, 0.0, 0.0, 0.0, 0.0, fns::HSD_Fog_804DE6F0(ctx));
+        return;
+    }
+    cobj = fns::HSD_CObjGetCurrent(ctx);
+    if Handle::is_null(cobj) {
+        fns::HSD_Panic(
+            ctx,
+            cstr(ctx, 0x803b95a8),
+            (77_i32 as u32),
+            cstr(ctx, 0x804070f0),
+        );
+    }
+    fns::GXSetFog(
+        ctx,
+        ((fog).r#type() as i32),
+        (fog).start(),
+        (fog).end(),
+        fns::HSD_CObjGetNear(ctx, cobj),
+        fns::HSD_CObjGetFar(ctx, cobj),
+        (fog).color(),
+    );
+    if !Handle::is_null((fog).fog_adj()) {
+        fns::GXGetViewportv(ctx, v.at(0));
+        range = fp::fctiwz(fp::fadds(
+            v.at(0_i32).get(),
+            fp::fdivs(
+                fp::fmuls(
+                    v.at(2_i32).get(),
+                    fp::frsp(((((fog).fog_adj()).center() as i32).wrapping_add(0x140_i32)) as f64),
+                ),
+                640.0,
+            ),
+        ));
+        if range < 0_i32 {
+            range = 0_i32;
+        }
+        if range > 0x280_i32 {
+            range = 0x280_i32;
+        }
+        if (((fog).fog_adj()).width() as i32) != 0_i32 {
+            fns::GXInitFogAdjTable(
+                ctx,
+                tbl,
+                ((fog).fog_adj()).width(),
+                ((fog).fog_adj()).mtx().get(0),
+            );
+        } else {
+            ctx.fill(Handle::addr(mtx), 0, 0x40);
+            mtx.get(0).at(0).set(fp::frsp(0_i32 as f64));
+            fns::GXGetProjectionv(ctx, Handle::cast::<Val<'a, F32>>(proj));
+            's1: {
+                let __case = match fp::fctiwz(proj.x0()) {
+                    0_i32 => 0,
+                    1_i32 => 1,
+                    _ => 2,
+                };
+                if __case <= 0 {
+                    mtx.get(0_i32).at(0_i32).set(proj.v().at(0_i32).get());
+                    mtx.get(0_i32).at(2_i32).set(proj.v().at(1_i32).get());
+                    mtx.get(1_i32).at(1_i32).set(proj.v().at(2_i32).get());
+                    mtx.get(1_i32).at(2_i32).set(proj.v().at(3_i32).get());
+                    mtx.get(2_i32).at(2_i32).set(proj.v().at(4_i32).get());
+                    mtx.get(2_i32).at(3_i32).set(proj.v().at(5_i32).get());
+                    mtx.get(3_i32).at(2_i32).set(fp::fneg(1.0));
+                    break 's1;
+                }
+                if __case <= 1 {
+                    mtx.get(0_i32).at(0_i32).set(proj.v().at(0_i32).get());
+                    mtx.get(0_i32).at(3_i32).set(proj.v().at(1_i32).get());
+                    mtx.get(1_i32).at(1_i32).set(proj.v().at(2_i32).get());
+                    mtx.get(1_i32).at(3_i32).set(proj.v().at(3_i32).get());
+                    mtx.get(2_i32).at(2_i32).set(proj.v().at(4_i32).get());
+                    mtx.get(2_i32).at(3_i32).set(proj.v().at(5_i32).get());
+                    mtx.get(3_i32).at(3_i32).set(1.0);
+                    break 's1;
+                }
+            }
+            fns::GXInitFogAdjTable(ctx, tbl, (fp::fctiwz(v.at(2_i32).get()) as u16), mtx.get(0));
+        }
+        fns::GXSetFogRangeAdj(ctx, (1_i32 as u8), (range as u16), tbl);
+        return;
+    }
+    fns::GXSetFogRangeAdj(
+        ctx,
+        (0_i32 as u8),
+        (0_i32 as u16),
+        null::<_GXFogAdjTable<'a>>(ctx),
+    );
+}
+
 pub fn HSD_FogLoadDesc<'a>(ctx: &'a Ctx, desc: HSD_FogDesc<'a>) -> HSD_Fog<'a> {
     let __frame = ctx.stack_frame(0x20);
     let mut desc = desc;
@@ -321,6 +421,14 @@ fn inl_ref_DEC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) -> i32 {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x8037d970,
+        |ctx| {
+            let (a0,): (HSD_Fog<'_>,) = Args::take_all(ctx);
+            Ret::put(HSD_FogSet(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
     ctx.register_port(
         0x8037dc38,
         |ctx| {

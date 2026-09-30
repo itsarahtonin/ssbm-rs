@@ -2608,8 +2608,7 @@ fn inl_Ground_UpdateStarFoxSequence_unfused<'a>(
                 __t1
             }) < 0_i32
             {
-                let mut sequence_gobj: HSD_GObj<'a> =
-                    create_gobj.call::<_, HSD_GObj<'a>>((sequence_gobj_id,));
+                let mut sequence_gobj: HSD_GObj<'a> = fns::grVenom_80203EAC(ctx, sequence_gobj_id);
                 fns::grCorneria_801E2738(
                     ctx,
                     sequence_gobj,

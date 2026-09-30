@@ -1863,12 +1863,10 @@ pub fn fn_802FAC34<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
                                     fp::frsp((rem_i32(n.at(0_i32).get(), 5_i32)) as f64),
                                     fp::fneg(21.0),
                                 ),
-                                fp::fneg(
-                                    (fp::fmsubs(
-                                        2.450000047683716,
-                                        fp::frsp((div_i32(n.at(0_i32).get(), 5_i32)) as f64),
-                                        11.0,
-                                    )),
+                                fp::fnmsubs(
+                                    2.450000047683716,
+                                    fp::frsp((div_i32(n.at(0_i32).get(), 5_i32)) as f64),
+                                    11.0,
                                 ),
                             ));
                         if n.at(0_i32).get() == 0_i32 {

@@ -198,7 +198,7 @@ pub fn ftCo_800BE000<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, thrower_gobj: HSD_GOb
             break 'l1;
         }
     }
-    inl_inlineB2_unfused(
+    inl_inlineB2_unfused_2(
         ctx,
         gobj,
         fp,
@@ -543,11 +543,12 @@ fn inl_inlineB2_unfused<'a>(
     (fp).mv()
         .co()
         .thrownkirby()
-        .set_x4(vel_func.call::<_, f64>((
+        .set_x4(fns::ftKb_SpecialN_800F58AC(
+            ctx,
             thrower_gobj,
             (fp).self_vel(),
-            Single(fp::frsp((fp).facing_dir())),
-        )));
+            (fp).facing_dir(),
+        ));
     fns::Fighter_UpdateModelScale(ctx, gobj);
     inl_HSD_JObjGetScale_unfused(ctx, jobj, (fp).mv().co().thrownkirby().scale());
     fns::Fighter_ChangeMotionState(ctx, gobj, msid, 0x100_u32, 0.0, 1.0, 0.0, thrower_gobj);
@@ -557,7 +558,12 @@ fn inl_inlineB2_unfused<'a>(
     (fp).set_invisible((1_i32 as u8));
     fns::ftColl_8007B62C(ctx, gobj, 2_i32);
     fns::ftCommon_8007EFC0(ctx, fp, (1_i32 as u32));
-    fns::ftCommon_InitGrab(ctx, fp, 0_i32, get_float.call::<_, f64>((thrower_gobj,)));
+    fns::ftCommon_InitGrab(
+        ctx,
+        fp,
+        0_i32,
+        fns::ftKb_SpecialN_800F5A88(ctx, thrower_gobj),
+    );
     fns::ftAnim_8006EBA4(ctx, gobj);
     fns::ftCommon_8007D5D4(ctx, fp);
     (fp).mv()
@@ -666,6 +672,93 @@ fn inl_inlineA0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).grab_timer(),
         fns::ftKb_SpecialN_800F5AC0(ctx),
     ));
+}
+
+fn inl_inlineB2_unfused_2<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    fp: Fighter<'a>,
+    thrower_gobj: HSD_GObj<'a>,
+    scale: Vec<'a>,
+    msid: i32,
+    vel_func: FnPtr<'a>,
+    get_float: FnPtr<'a>,
+    x18_b0: i32,
+) {
+    let mut gobj = gobj;
+    let mut fp = fp;
+    let mut thrower_gobj = thrower_gobj;
+    let mut scale = scale;
+    let mut msid = msid;
+    let mut vel_func = vel_func;
+    let mut get_float = get_float;
+    let mut x18_b0 = x18_b0;
+    let mut jobj: HSD_JObj<'a> =
+        (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
+    (fp).set_facing_dir(fp::fneg(
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, thrower_gobj)))
+            .facing_dir(),
+    ));
+    (fp).mv().co().thrownkirby().set_thrower_gobj(thrower_gobj);
+    (fp).mv().co().thrownkirby().set_x8(0.0);
+    (fp).mv()
+        .co()
+        .thrownkirby()
+        .set_x4(fns::ftKb_SpecialN_800F58D8(
+            ctx,
+            thrower_gobj,
+            (fp).self_vel(),
+            (fp).facing_dir(),
+        ));
+    fns::Fighter_UpdateModelScale(ctx, gobj);
+    inl_HSD_JObjGetScale_unfused(ctx, jobj, (fp).mv().co().thrownkirby().scale());
+    fns::Fighter_ChangeMotionState(ctx, gobj, msid, 0x100_u32, 0.0, 1.0, 0.0, thrower_gobj);
+    (fp).set_take_dmg_2_cb(fnptr(ctx, 0x800be7c0));
+    (fp).set_take_dmg_cb(fnptr(ctx, 0x800be7c0));
+    fns::ftCommon_8007E2F4(ctx, fp, (0x1ff_i32 as i16));
+    (fp).set_invisible((1_i32 as u8));
+    fns::ftColl_8007B62C(ctx, gobj, 2_i32);
+    fns::ftCommon_8007EFC0(ctx, fp, (1_i32 as u32));
+    fns::ftCommon_InitGrab(
+        ctx,
+        fp,
+        0_i32,
+        fns::ftKb_SpecialN_800F5AB0(ctx, thrower_gobj),
+    );
+    fns::ftAnim_8006EBA4(ctx, gobj);
+    fns::ftCommon_8007D5D4(ctx, fp);
+    (fp).mv()
+        .co()
+        .thrownkirby()
+        .x18_u()
+        .x0()
+        .set_x18_b0((x18_b0 as u8));
+    (fp).mv()
+        .co()
+        .thrownkirby()
+        .x18_u()
+        .x0()
+        .set_x18_b1((0_i32 as u8));
+    fns::ftCommon_SetAccessory(ctx, fp, fns::ftKb_SpecialN_800F5898(ctx, thrower_gobj));
+    (scale).set_x({
+        let __t2 = {
+            let __t1 = inl_inlineB0_unfused(ctx, gobj);
+            (scale).set_z(__t1);
+            __t1
+        };
+        (scale).set_y(__t2);
+        __t2
+    });
+    inl_HSD_JObjSetScale_unfused(ctx, (fp).x20A0_accessory(), scale);
+    fns::lb_8000C2F8(
+        ctx,
+        (fp).x20A0_accessory(),
+        (Handle::add(
+            (fp).parts(),
+            fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_YRotN as i32)),
+        ))
+        .joint(),
+    );
 }
 
 fn inl_inlineC0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

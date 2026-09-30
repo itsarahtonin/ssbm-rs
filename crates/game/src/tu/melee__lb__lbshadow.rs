@@ -441,14 +441,20 @@ pub fn lbShadow_8000F38C<'a>(ctx: &'a Ctx, arg0: i32) {
                 upVec.set_y(fns::lbShadow_804D7B88(ctx).get());
                 let _ = fns::lbVector_Diff(ctx, lightDir, lightPos, normDir);
                 if fns::lbVector_Normalize(ctx, normDir) < fns::lbShadow_804D7B90(ctx).get() {
-                    lightPos.set_x(fp::fneg(
-                        (fp::fmsubs(fns::lbShadow_804D7B90(ctx).get(), normDir.x(), lightDir.x())),
+                    lightPos.set_x(fp::fnmsubs(
+                        fns::lbShadow_804D7B90(ctx).get(),
+                        normDir.x(),
+                        lightDir.x(),
                     ));
-                    lightPos.set_y(fp::fneg(
-                        (fp::fmsubs(fns::lbShadow_804D7B90(ctx).get(), normDir.y(), lightDir.y())),
+                    lightPos.set_y(fp::fnmsubs(
+                        fns::lbShadow_804D7B90(ctx).get(),
+                        normDir.y(),
+                        lightDir.y(),
                     ));
-                    lightPos.set_z(fp::fneg(
-                        (fp::fmsubs(fns::lbShadow_804D7B90(ctx).get(), normDir.z(), lightDir.z())),
+                    lightPos.set_z(fp::fnmsubs(
+                        fns::lbShadow_804D7B90(ctx).get(),
+                        normDir.z(),
+                        lightDir.z(),
                     ));
                 }
                 let _ = fns::lbVector_CrossprodNormalized(ctx, upVec, normDir, rightVec);
@@ -737,7 +743,7 @@ fn inl_splGetCardinalTangent<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, tension:
         (fp::fmadds(
             fp::fmuls(3.0, (fp::fsubs(tension, 2.0))),
             u2,
-            (fp::fmuls(fp::fmuls(2.0, fp::fneg((fp::fmsubs(2.0, tension, 3.0)))), u)),
+            (fp::fmuls(fp::fmuls(2.0, fp::fnmsubs(2.0, tension, 3.0)), u)),
         )),
     );
     car3 = fp::fmuls(tension, (fp::fmsubs(3.0, u2, (fp::fmuls(2.0, u)))));

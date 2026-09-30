@@ -7475,7 +7475,14 @@ fn inl_retryCardReadAsync_unfused<'a>(
         i = 0_i32;
         'l1: while i < 10_i32 {
             'c2: {
-                result = fns::CARDReadAsync(ctx, file_info, buffer, length, offset, callback);
+                result = fns::CARDReadAsync(
+                    ctx,
+                    file_info,
+                    buffer,
+                    length,
+                    offset,
+                    fnptr(ctx, 0x803a949c),
+                );
                 if result != 1_i32.wrapping_neg() {
                     break 'l1;
                 }
@@ -7524,7 +7531,14 @@ fn inl_retryCardWriteAsync_unfused<'a>(
         i = 0_i32;
         'l1: while i < 10_i32 {
             'c2: {
-                result = fns::CARDWriteAsync(ctx, file_info, buffer, length, offset, callback);
+                result = fns::CARDWriteAsync(
+                    ctx,
+                    file_info,
+                    buffer,
+                    length,
+                    offset,
+                    fnptr(ctx, 0x803a949c),
+                );
                 if result != 1_i32.wrapping_neg() {
                     break 'l1;
                 }
@@ -7554,8 +7568,14 @@ fn inl_retryCardCreateAsync_unfused<'a>(
         i = 0_i32;
         'l1: while i < 10_i32 {
             'c2: {
-                result =
-                    fns::CARDCreateAsync(ctx, chan, filename, (size as u32), file_info, callback);
+                result = fns::CARDCreateAsync(
+                    ctx,
+                    chan,
+                    filename,
+                    (size as u32),
+                    file_info,
+                    fnptr(ctx, 0x803a949c),
+                );
                 if result != 1_i32.wrapping_neg() {
                     break 'l1;
                 }
@@ -7650,7 +7670,7 @@ fn inl_retryCardSetStatusAsync_unfused<'a>(
         i = 0_i32;
         'l1: while i < 10_i32 {
             'c2: {
-                result = fns::CARDSetStatusAsync(ctx, chan, file_no, stat, callback);
+                result = fns::CARDSetStatusAsync(ctx, chan, file_no, stat, fnptr(ctx, 0x803a949c));
                 if result != 1_i32.wrapping_neg() {
                     break 'l1;
                 }

@@ -383,8 +383,8 @@ fn inl_Fighter_SetDamageCallbacks_unfused<'a>(
     let mut fp = fp;
     let mut take_dmg_cb = take_dmg_cb;
     let mut death2_cb = death2_cb;
-    (fp).set_take_dmg_cb(take_dmg_cb);
-    (fp).set_death2_cb(death2_cb);
+    (fp).set_take_dmg_cb(fnptr(ctx, 0x800c4858));
+    (fp).set_death2_cb(fnptr(ctx, 0x800c48ac));
 }
 
 fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

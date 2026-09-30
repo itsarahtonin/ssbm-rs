@@ -184,16 +184,14 @@ pub fn itHeiho_UnkMotion1_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         .get(),
     ));
     if (ip).xDD4_itemVar().heiho().x2C() > 0x3c0_i32 {
-        (ip).x40_vel().set_y(fp::fneg(
-            (fp::fmsubs(
-                fp::fneg(0.03999999910593033),
-                (if ((ip).x40_vel().x()) < fp::frsp(0_i32 as f64) {
-                    fp::fneg(((ip).x40_vel().x()))
-                } else {
-                    ((ip).x40_vel().x())
-                }),
-                (ip).x40_vel().y(),
-            )),
+        (ip).x40_vel().set_y(fp::fnmsubs(
+            fp::fneg(0.03999999910593033),
+            (if ((ip).x40_vel().x()) < fp::frsp(0_i32 as f64) {
+                fp::fneg(((ip).x40_vel().x()))
+            } else {
+                ((ip).x40_vel().x())
+            }),
+            (ip).x40_vel().y(),
         ));
     }
     statics::melee__it__kinds__itheiho::it_802D9714(ctx, gobj);
@@ -432,16 +430,14 @@ pub fn itHeiho_UnkMotion4_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         )),
     ));
     if (ip).xDD4_itemVar().heiho().x2C() > 0x3c0_i32 {
-        (ip).x40_vel().set_y(fp::fneg(
-            (fp::fmsubs(
-                fp::fneg(0.03999999910593033),
-                (if ((ip).x40_vel().x()) < fp::frsp(0_i32 as f64) {
-                    fp::fneg(((ip).x40_vel().x()))
-                } else {
-                    ((ip).x40_vel().x())
-                }),
-                (ip).x40_vel().y(),
-            )),
+        (ip).x40_vel().set_y(fp::fnmsubs(
+            fp::fneg(0.03999999910593033),
+            (if ((ip).x40_vel().x()) < fp::frsp(0_i32 as f64) {
+                fp::fneg(((ip).x40_vel().x()))
+            } else {
+                ((ip).x40_vel().x())
+            }),
+            (ip).x40_vel().y(),
         ));
     }
     if (ip).xDD4_itemVar().heiho().x24() != 0_i32 {

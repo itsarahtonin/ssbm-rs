@@ -2869,15 +2869,13 @@ pub fn Camera_8002D318<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
             statics::melee__cm__camera::game_camera(ctx)
                 .transform()
                 .target_interest()
-                .set_x(fp::fneg(
-                    (fp::fmsubs(
-                        half_z,
-                        fns::cosf(
-                            ctx,
-                            statics::melee__cm__camera::game_camera(ctx).yaw_offset(),
-                        ),
-                        (pos).x(),
-                    )),
+                .set_x(fp::fnmsubs(
+                    half_z,
+                    fns::cosf(
+                        ctx,
+                        statics::melee__cm__camera::game_camera(ctx).yaw_offset(),
+                    ),
+                    (pos).x(),
                 ));
             statics::melee__cm__camera::game_camera(ctx)
                 .transform()
@@ -4800,7 +4798,7 @@ pub fn Camera_8002F0E4<'a>(ctx: &'a Ctx, arg0: i32) {
                 temp_f30 = fns::atan2f(
                     ctx,
                     spC.y(),
-                    fns::sqrtf(
+                    fns::sqrtf__Ff(
                         ctx,
                         fp::fadds(fp::fmuls(spC.x(), spC.x()), fp::fmuls(spC.z(), spC.z())),
                     ),
@@ -4810,7 +4808,7 @@ pub fn Camera_8002F0E4<'a>(ctx: &'a Ctx, arg0: i32) {
                     .x368()
                     .orbit()
                     .set_distance(
-                        (fp::fctiwz(fns::sqrtf(
+                        (fp::fctiwz(fns::sqrtf__Ff(
                             ctx,
                             fp::fadds(
                                 fp::fmuls(spC.z(), spC.z()),
@@ -5691,7 +5689,7 @@ pub fn Camera_8002FEEC<'a>(ctx: &'a Ctx, arg0: i32) {
                     )),
                 )),
             );
-            temp_f1_4 = fp::fdivs(temp_f31, fns::sqrtf(ctx, new_var));
+            temp_f1_4 = fp::fdivs(temp_f31, fns::sqrtf__Ff(ctx, new_var));
             fns::cm_80453004(ctx).follow_eye_offset().set_x(fp::fmuls(
                 fns::cm_80453004(ctx).follow_eye_offset().x(),
                 temp_f1_4,
@@ -6714,7 +6712,7 @@ fn inl_update_zoom_distance<'a>(ctx: &'a Ctx) {
         dy2 = fp::fmuls(target_dy, target_dy);
         dz2 = fp::fmuls(target_dz, target_dz);
         dx2 = fp::fmuls(target_dx, target_dx);
-        statics::melee__cm__camera::game_camera(ctx).set_x2C0(fns::sqrtf(ctx, {
+        statics::melee__cm__camera::game_camera(ctx).set_x2C0(fns::sqrtf__Ff(ctx, {
             let __t1 = fp::fadds((fp::fadds(dx2, dy2)), dz2);
             sum = __t1;
             __t1
@@ -6931,7 +6929,7 @@ fn inl_Camera_8002BA00<'a>(ctx: &'a Ctx, slot: i32, arg1: i32) -> i32 {
 
 fn inl_lbVector_Len<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
     let mut vec = vec;
-    return fns::sqrtf(
+    return inl_sqrtf(
         ctx,
         fp::fadds(
             fp::fadds(
@@ -7297,8 +7295,10 @@ fn inl_project_ground_x<'a>(
     let mut eye_pos = eye_pos;
     let mut dir_x = dir_x;
     let mut dir_z = dir_z;
-    (value).set(fp::fneg(
-        (fp::fmsubs(dir_x, (fp::fdivs((eye_pos).z(), dir_z)), (eye_pos).x())),
+    (value).set(fp::fnmsubs(
+        dir_x,
+        (fp::fdivs((eye_pos).z(), dir_z)),
+        (eye_pos).x(),
     ));
 }
 

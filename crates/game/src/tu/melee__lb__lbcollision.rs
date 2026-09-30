@@ -1614,7 +1614,7 @@ pub fn lbColl_800077A0<'a>(
                 n0,
                 (fp::fmuls(
                     fp::fmuls(4.0, dot_diff_cb),
-                    fp::fneg((fp::fmsubs(offset_dist, offset_dist, ba_dot))),
+                    fp::fnmsubs(offset_dist, offset_dist, ba_dot),
                 )),
             );
             if n1 < 0.0 {

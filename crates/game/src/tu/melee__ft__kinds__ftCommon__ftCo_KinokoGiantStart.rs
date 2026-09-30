@@ -233,7 +233,7 @@ fn inl_ftCo_Kinoko_Anim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<
     let mut gobj = gobj;
     let mut cb = cb;
     if !(fns::fn_800D2A3C(ctx, gobj) != 0) {
-        cb.call::<_, ()>((gobj,));
+        fns::ftCo_800D15D0(ctx, gobj);
     }
 }
 

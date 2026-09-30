@@ -580,7 +580,7 @@ def strip(c):
 
 class Translator:
     def __init__(self, unit, fn_cursor, fuse=None, inline=False, asm=None, reg_ptrs=frozenset(),
-                 forward=None, same=frozenset()):
+                 forward=None, same=frozenset(), fnargs=None):
         self.u = unit
         self.f = FnCtx(unit.name, fn_cursor)
         self.line = fn_cursor.location.line
@@ -598,6 +598,8 @@ class Translator:
         self.reg_ptrs = reg_ptrs
         # Pairs of this inline copy's parameters whose arguments are the same value.
         self.same = same
+        # This inline copy's parameters its caller passed known functions in.
+        self.fnargs = fnargs or {}
         self.force_cfg = False
         # An inline copy's float parameters used once, whose argument is a product: they take
         # the product's factors, as MWCC substitutes the argument into that use (name -> negated).
@@ -678,8 +680,9 @@ class Translator:
         if not self.f.cfg and self.f.ret["k"] not in ("void", "rec") and kids and \
                 self.falls_off_after_call(kids[-1]):
             # MWCC returns what is in r3 then: the call's result.
+            stmts = self.stmts(kids[:-1])
             v = self.convert(self.expr(kids[-1]), self.f.ret)
-            stmts = self.stmts(kids[:-1]) + [f"return {v.code};"]
+            stmts.append(f"return {v.code};")
         else:
             stmts = self.cfg_body(body) if self.f.cfg else self.stmts(kids)
         ret = "" if self.f.ret["k"] == "void" or self.f.sret else " -> " + self.u.rust_value_ty(self.f.ret)
@@ -731,6 +734,17 @@ class Translator:
 
     def scan(self, node):
         """Finds locals whose address is taken; they must live on the emulated stack."""
+        for d in node.walk_preorder():
+            # An array sized by a const variable, which MWCC takes as a constant.
+            if d.kind == CK.VAR_DECL and d.type.kind == TK.VARIABLEARRAY:
+                sizes = [k for k in children(d) if k.kind.is_expression()]
+                n = evaluate(sizes[0]) if sizes else None
+                if n is None and sizes and strip(sizes[0]).kind == CK.DECL_REF_EXPR:
+                    r = strip(sizes[0]).referenced
+                    n = evaluate(var_init(r)) if r is not None and var_init(r) is not None else None
+                if not isinstance(n, int):
+                    raise Unsupported("variable-length array")
+                self.u.col.vla_sizes[d.type.spelling] = n
         ext = self.f.cursor.extent
         for start, end in self.u.regions(str(ext.start.file)):
             if start <= ext.end.line and ext.start.line <= end:
@@ -860,6 +874,11 @@ class Translator:
     # Statements.
 
     def stmts(self, nodes):
+        nodes = list(nodes)
+        for k, n in enumerate(nodes):
+            rest = self.setjmp_rest(n, nodes[k + 1:])
+            if rest is not None:
+                return self.stmts(nodes[:k]) + rest
         if any(n.kind == CK.LABEL_STMT for n in nodes):
             return self.goto_region(list(nodes))
         out = []
@@ -874,6 +893,7 @@ class Translator:
         self.cfg_blocks = []  # [lines, terminator]
         self.cfg_labels = {}  # goto label -> block
         self.cfg_loops = []  # (break block, continue block or None)
+        self.cfg_cases = []  # per switch being lowered: case label cursor hash -> block
         self.cfg_cur = self.cfg_block()
         self.cfg_stmt(body)
         if self.cfg_blocks[self.cfg_cur][1] is None:
@@ -966,7 +986,11 @@ class Translator:
         elif k == CK.SWITCH_STMT:
             self.cfg_switch(n)
         elif k in (CK.CASE_STMT, CK.DEFAULT_STMT):
-            raise Unsupported("case label outside a switch body")
+            b = self.cfg_cases[-1].get(n.hash) if self.cfg_cases else None
+            if b is None:
+                raise Unsupported("case label outside a switch body")
+            self.cfg_goto(b)  # the code above falls through into the case
+            self.cfg_stmt(children(n)[-1])
         elif k == CK.NULL_STMT:
             pass
         else:
@@ -1010,43 +1034,36 @@ class Translator:
     def cfg_switch(self, n):
         cond_node, body = children(n)
         v = self.convert(self.expr(cond_node), promote(self.u.ctype(cond_node.type)))
-        items = children(body) if body.kind == CK.COMPOUND_STMT else [body]
-        groups = []  # [labels, stmts]
-        for it in items:
-            if it.kind in (CK.CASE_STMT, CK.DEFAULT_STMT):
-                labels, node = [], it
-                while node.kind in (CK.CASE_STMT, CK.DEFAULT_STMT):
-                    kids = children(node)
-                    if node.kind == CK.CASE_STMT:
-                        val = evaluate(kids[0])
-                        if val is None:
-                            raise Unsupported("case value")
-                        labels.append(int(val))
-                        node = kids[1]
-                    else:
-                        labels.append("default")
-                        node = kids[0]
-                groups.append([labels, [node]])
-            else:
-                if not groups:
-                    groups.append([[], []])
-                groups[-1][1].append(it)
-        blocks = [self.cfg_block() for _ in groups]
+        # Each of the switch's case labels starts a block, wherever in its body it is, even
+        # inside a block of its own.
+        labels = []
+
+        def scan(node):
+            for k in children(node):
+                if k.kind == CK.SWITCH_STMT:
+                    continue
+                if k.kind in (CK.CASE_STMT, CK.DEFAULT_STMT):
+                    labels.append(k)
+                scan(k)
+        scan(body)
+        blocks = {lab.hash: self.cfg_block() for lab in labels}
         exit_b = self.cfg_block()
         arms, default = [], exit_b
-        for (labels, _), b in zip(groups, blocks):
-            for lab in labels:
-                if lab == "default":
-                    default = b
-                else:
-                    arms.append((self.int_literal(lab, v.ty), b))
+        for lab in labels:
+            if lab.kind == CK.CASE_STMT:
+                val = evaluate(children(lab)[0])
+                if val is None:
+                    raise Unsupported("case value")
+                arms.append((self.int_literal(int(val), v.ty), blocks[lab.hash]))
+            else:
+                default = blocks[lab.hash]
         self.cfg_end([], ("switch", v.code, arms, default))
         self.cfg_loops.append((exit_b, None))
-        for i, ((_, nodes), b) in enumerate(zip(groups, blocks)):
-            self.cfg_cur = b
-            for node in nodes:
-                self.cfg_stmt(node)
-            self.cfg_goto(blocks[i + 1] if i + 1 < len(blocks) else exit_b)
+        self.cfg_cases.append(blocks)
+        self.cfg_cur = self.cfg_block()  # what comes before the first case, which nothing reaches
+        self.cfg_stmt(body)
+        self.cfg_goto(exit_b)
+        self.cfg_cases.pop()
         self.cfg_loops.pop()
         self.cfg_cur = exit_b
 
@@ -1233,7 +1250,7 @@ class Translator:
         if k == CK.LABEL_STMT:
             raise Unsupported("label outside a statement list")
         if k in (CK.CASE_STMT, CK.DEFAULT_STMT):
-            raise Unsupported("case label outside a switch body")
+            raise CrossingGotos("case label inside a block of its switch")
         # An expression statement.
         return self.effect(n)
 
@@ -1354,8 +1371,8 @@ class Translator:
 
     def decl(self, d):
         if d.kind != CK.VAR_DECL:
-            if d.kind in (CK.STRUCT_DECL, CK.UNION_DECL, CK.ENUM_DECL, CK.TYPEDEF_DECL):
-                return []
+            if d.kind in (CK.STRUCT_DECL, CK.UNION_DECL, CK.ENUM_DECL, CK.TYPEDEF_DECL, CK.STATIC_ASSERT):
+                return []  # nothing at run time
             raise Unsupported(f"declaration {d.kind}")
         if d.storage_class == ci.StorageClass.EXTERN:
             return []
@@ -1412,26 +1429,20 @@ class Translator:
         """Statements that store initializer `init` into lvalue `lv` of type t."""
         if init.kind == CK.INIT_LIST_EXPR:
             kids = children(init)
-            if t["k"] == "arr":
-                out = []
-                if len(kids) < t["n"]:
-                    out.append(f"ctx.fill(Handle::addr({lv.addr_code}), 0, {self.u.size_of(t):#x});")
-                for i, k in enumerate(kids):
-                    out += self.initialize(self.index_lvalue(lv, t, Expr(str(i), INT, True)), t["of"], k)
-                return out
-            if t["k"] == "rec":
-                rec = self.u.prog.data["records"][t["id"]]
-                fields = [f for f in rec["fields"] if f["name"] or f["type"]["k"] == "rec"]
-                out = []
-                if len(kids) < len(fields) or rec["kind"] == "union":
-                    out.append(f"ctx.fill(Handle::addr({lv.addr_code}), 0, {self.u.size_of(t):#x});")
-                for f, k in zip(fields, kids):
-                    if not f["name"]:
-                        raise Unsupported("anonymous member initializer")
-                    out += self.initialize(self.field_lvalue(lv, t, f["name"]), f["type"], k)
-                    if rec["kind"] == "union":
-                        break
-                return out
+            if t["k"] in ("arr", "rec"):
+                stmts, used, elided = self.init_aggregate(lv, t, kids, 0)
+                if used != len(kids):
+                    raise Unsupported("init list longer than its object")
+                if t["k"] == "arr":
+                    partial = len(kids) < t["n"]
+                else:
+                    rec = self.u.prog.data["records"][t["id"]]
+                    fields = [f for f in rec["fields"] if f["name"] or f["type"]["k"] == "rec"]
+                    partial = len(kids) < len(fields) or rec["kind"] == "union"
+                if partial or elided:
+                    # What the list leaves out is zero.
+                    stmts = [f"ctx.fill(Handle::addr({lv.addr_code}), 0, {self.u.size_of(t):#x});"] + stmts
+                return stmts
             if len(kids) == 1:
                 return self.initialize(lv, t, kids[0])
             raise Unsupported("init list")
@@ -1453,6 +1464,40 @@ class Translator:
         if t["k"] == "rec":
             return [f"Handle::copy_from({lv.addr_code}, {v.code});"]
         return [lv.write(self.convert(v, t).code) + ";"]
+
+    def init_aggregate(self, lv, t, kids, i):
+        """Stores kids[i:] into the members of aggregate lv, in order. Returns (statements,
+        index of the first kid not used, whether C's brace elision took part)."""
+        out, elided = [], False
+        members = []
+        if t["k"] == "arr":
+            members = [(lambda j=j: self.index_lvalue(lv, t, Expr(str(j), INT, True)), t["of"])
+                       for j in range(t["n"])]
+        else:
+            rec = self.u.prog.data["records"][t["id"]]
+            for f in [f for f in rec["fields"] if f["name"] or f["type"]["k"] == "rec"]:
+                if not f["name"]:
+                    raise Unsupported("anonymous member initializer")
+                members.append((lambda f=f: self.field_lvalue(lv, t, f["name"]), f["type"]))
+                if rec["kind"] == "union":
+                    break
+        for member_lv, mt in members:
+            if i >= len(kids):
+                break
+            if mt["k"] in ("arr", "rec") and self.scalar_init(kids[i]):
+                # C lets the member's braces go: its scalars take the kids that follow.
+                stmts, i, _ = self.init_aggregate(member_lv(), mt, kids, i)
+                elided = True
+            else:
+                stmts, i = self.initialize(member_lv(), mt, kids[i]), i + 1
+            out += stmts
+        return out, i, elided
+
+    def scalar_init(self, kid):
+        """Whether an init list's kid is a scalar rather than a list, string or aggregate."""
+        k = strip(kid)
+        return k.kind not in (CK.INIT_LIST_EXPR, CK.STRING_LITERAL) and \
+            self.u.ctype(k.type)["k"] not in ("arr", "rec")
 
     def zero(self, t):
         if is_int(t):
@@ -1872,6 +1917,13 @@ class Translator:
             return Expr(self.int_literal(val, t), t, True)
         if r.kind == CK.FUNCTION_DECL:
             return self.fn_value(c)
+        if r.kind == CK.PARM_DECL and self.inline and r.spelling in self.fnargs:
+            fn = self.fnargs[r.spelling]
+            self.decisions[("fnarg", r.spelling)] = fn.spelling
+            f = self.u.prog.function(fn.spelling, self.u.name, is_static(fn))
+            if f is None:
+                raise Unsupported("function pointer to a function without an address")
+            return Expr(f"fnptr(ctx, {f['addr']:#x})", self.u.ctype(c.type), True)
         if r.kind == CK.PARM_DECL and r.spelling in self.forwarded:
             t = self.u.ctype(c.type)
             a, cc, neg = self.forwarded[r.spelling]
@@ -1879,8 +1931,11 @@ class Translator:
             return Expr(f"fp::fneg({v.code})", t, True) if neg else v
         if r.kind == CK.VAR_DECL and vkey(r) not in self.f.locals \
                 and self.u.prog.global_(r.spelling, self.u.name) is None:
-            # A header constant (`static const T x = 0;`) that MWCC folded into its uses.
+            # A header constant (`static const T x = 0;`) that MWCC folded into its uses. One
+            # that is also volatile MWCC reads from its own copy, which holds the same value.
             val = evaluate(c)
+            if val is None and r.type.is_const_qualified() and var_init(r) is not None:
+                val = evaluate(var_init(r))
             t = self.u.ctype(c.type)
             if val is not None and is_int(t):
                 return Expr(self.int_literal(int(val), t), t, True)
@@ -2301,17 +2356,32 @@ class Translator:
         callee = strip(kids[0])
         args = kids[1:]
         t = self.u.ctype(c.type)
-        if callee.kind == CK.DECL_REF_EXPR and callee.referenced is not None and \
-                callee.referenced.kind == CK.FUNCTION_DECL:
-            name = callee.referenced.spelling
+        ref = None
+        if callee.kind == CK.DECL_REF_EXPR and callee.referenced is not None:
+            r = callee.referenced
+            if r.kind == CK.FUNCTION_DECL:
+                ref = r
+            elif r.kind == CK.PARM_DECL and self.inline and r.spelling in self.fnargs:
+                # A parameter the caller passed a known function in: MWCC calls that function
+                # directly, or inlines it.
+                ref = self.fnargs[r.spelling]
+                self.decisions[("fnarg", r.spelling)] = ref.spelling
+        if ref is not None:
+            return self.call_function(ref, args, t)
+        return self.call_pointer(kids, args, t)
+
+    def call_function(self, ref, args, t):
+        """A call to the function `ref` declares."""
+        if True:
+            name = ref.spelling
             special = self.builtin(name, args, t)
             if special is not None:
                 return special
-            ft = self.u.ctype(callee.referenced.type)
-            f = self.u.prog.function(name, self.u.name, is_static(callee.referenced))
+            ft = self.u.ctype(ref.type)
+            f = self.u.prog.function(name, self.u.name, is_static(ref))
             if ft["k"] == "fn" and ft["params"] is None:
                 # Declared `f()`: take the parameters from its definition, or its stub's.
-                d = callee.referenced.get_definition()
+                d = ref.get_definition()
                 if d is not None and self.u.ctype(d.type)["params"] is not None:
                     ft = self.u.ctype(d.type)
                 elif d is not None and not any(a.kind == CK.PARM_DECL for a in children(d)):
@@ -2323,20 +2393,22 @@ class Translator:
                 if not ft.get("variadic") and len(ft["params"]) < len(args):
                     # `f()` called with arguments: they go in registers all the same.
                     ft = self.unprototyped(ft, args)
-            if f is not None and self.inlined_in_original(f.get("symbol") or name, callee.referenced):
+            if f is not None and self.inlined_in_original(f.get("symbol") or name, ref):
                 # The original has no call here: MWCC inlined the function, so its code runs
                 # as part of this one, and patches to the function's own copy do not apply.
-                defn = callee.referenced.get_definition()
+                defn = ref.get_definition()
                 fwd = self.forward_args(defn, args)
+                fnargs = self.fn_args(defn, args)
                 try:
-                    rname = self.u.request_inline(defn, self.fuse, self, self.reg_ptr_args(callee.referenced, args),
+                    rname = self.u.request_inline(defn, self.fuse, self, self.reg_ptr_args(ref, args),
                                                   {pn: neg for pn, (_, _, neg) in fwd.values()},
-                                                  self.same_args(defn, args))
+                                                  self.same_args(defn, args), fnargs)
                 except Unsupported as e:
                     self.u.inline_fallbacks.append((self.f.cursor.spelling, name, str(e)))
                 else:
                     argv = self.forwarding(self.call_args(ft, args, inlined=True,
-                                                          unread=unread_params(defn)), fwd)
+                                                          unread=unread_params(defn) | self.fn_arg_slots(defn, fnargs)),
+                                           fwd)
                     if t["k"] == "rec":
                         return self.sret_call(rname, argv, t)
                     return Expr(f"{rname}(ctx{''.join(', ' + a for a in argv)})", t, False)
@@ -2361,22 +2433,28 @@ class Translator:
                 if t["k"] == "void" or st["ret"]["k"] == "void":
                     return Expr(res.code, t, False)
                 return self.convert(res, t, explicit=True)
-            defn = callee.referenced.get_definition()
+            defn = ref.get_definition()
             if defn is None:
                 raise Unsupported(f"call to {name}, which has no address or body")
             fwd = self.forward_args(defn, args)
-            argv = self.forwarding(self.call_args(ft, args, inlined=True, unread=unread_params(defn)), fwd)
+            fnargs = self.fn_args(defn, args)
+            argv = self.forwarding(self.call_args(ft, args, inlined=True,
+                                                  unread=unread_params(defn) | self.fn_arg_slots(defn, fnargs)),
+                                   fwd)
             rname = self.u.request_inline(defn, self.fuse, self, self.reg_ptr_args(defn, args),
                                           {pn: neg for pn, (_, _, neg) in fwd.values()},
-                                          self.same_args(defn, args))
+                                          self.same_args(defn, args), fnargs)
             if t["k"] == "rec":
                 return self.sret_call(rname, argv, t)
             return Expr(f"{rname}(ctx{''.join(', ' + a for a in argv)})", t, False)
-        # Through a function pointer.
+    def call_pointer(self, kids, args, t):
+        """A call through a function pointer."""
         fp_ = self.expr(kids[0])
         ft = fp_.ty["to"] if fp_.ty["k"] == "ptr" else fp_.ty
-        if ft["k"] != "fn" or ft["params"] is None:
-            raise Unsupported("call through a pointer without a prototype")
+        if ft["k"] != "fn":
+            raise Unsupported("call through a pointer to a non-function")
+        if ft["params"] is None:
+            ft = self.unprototyped(ft, args)
         if ft.get("variadic"):
             raise Unsupported("variadic call through a pointer")
         argv = self.call_args(ft, args, marshal=True)
@@ -2506,6 +2584,35 @@ class Translator:
         """Call arguments with each forwarded product passed as its two factors."""
         return [f"{fwd[i][1][0]}, {fwd[i][1][1]}" if i in fwd else a for i, a in enumerate(argv)]
 
+    def fn_args(self, fn, args):
+        """The callee's parameters its arguments here give known functions: parameter name ->
+        the function's declaration, for an inline copy to call them directly."""
+        params = [a for a in fn.get_children() if a.kind == CK.PARM_DECL]
+        out = {}
+        for param, arg in zip(params, args):
+            n = strip(arg)
+            while n.kind in (CK.UNEXPOSED_EXPR, CK.CSTYLE_CAST_EXPR) and children(n):
+                n = strip(children(n)[-1])
+            if n.kind == CK.UNARY_OPERATOR and UNOPS.get(_lib.clang_getCursorUnaryOperatorKind(n)) == "&":
+                n = strip(children(n)[0])
+            if n.kind != CK.DECL_REF_EXPR or n.referenced is None:
+                continue
+            r = n.referenced
+            if r.kind == CK.FUNCTION_DECL:
+                out[param.spelling] = r
+            elif r.kind == CK.PARM_DECL and self.inline and r.spelling in self.fnargs:
+                self.decisions[("fnarg", r.spelling)] = self.fnargs[r.spelling].spelling
+                out[param.spelling] = self.fnargs[r.spelling]
+        return out
+
+    def fn_arg_slots(self, fn, fnargs):
+        """Indices of the arguments giving functions without an address, which the inline copy
+        calls directly and never reads."""
+        params = [a.spelling for a in fn.get_children() if a.kind == CK.PARM_DECL]
+        return {i for i, pn in enumerate(params)
+                if pn in fnargs and self.u.prog.function(fnargs[pn].spelling, self.u.name,
+                                                         is_static(fnargs[pn])) is None}
+
     def same_args(self, fn, args):
         """Pairs of the callee's parameters whose arguments here are the same value, which
         MWCC sees as one once it substitutes them."""
@@ -2614,6 +2721,38 @@ class Translator:
         asm = self.asm or {}
         return self.asm is not None and asm.get(f.get("symbol") or name, 0) == 0 and \
             callee.referenced.get_definition() is not None
+
+    def setjmp_rest(self, n, rest):
+        """`if (setjmp(env) != 0) handler;` among a function body's statements: the statements
+        after it run under `Ctx::setjmp_with`, which a longjmp to env ends early, and then the
+        handler runs; else the function returns what they return."""
+        if n.kind != CK.IF_STMT or self.f.cfg or self.f.targets:
+            return None
+        kids = children(n)
+        if len(kids) != 2:
+            return None
+        jump = self.setjmp_test(kids[0])
+        if jump is None or jump[1]:
+            return None
+        body = self.f.cursor
+        top = [x for x in children(body) if x.kind == CK.COMPOUND_STMT]
+        if not top or not any(x.hash == n.hash for x in children(top[0])):
+            raise Unsupported("setjmp handler below a function's top level")
+        handler = kids[1]
+        last = children(handler)[-1] if handler.kind == CK.COMPOUND_STMT and children(handler) else handler
+        if last.kind != CK.RETURN_STMT:
+            raise Unsupported("setjmp handler that does not return")
+        env, _ = jump
+        tmp = self.f.temp()
+        addr = f"Handle::addr({self.expr(env).code})"
+        rty = "()" if self.f.ret["k"] == "void" or self.f.sret else self.u.rust_value_ty(self.f.ret)
+        inner = self.stmts(rest)
+        if rty != "()":
+            inner += ["#[allow(unreachable_code)]", f"return {self.zero(self.f.ret)};"]
+        out = [f"let {tmp} = ctx.setjmp_with({addr}, || -> {rty} {{"] + self.indent(inner) + ["});"]
+        out += [f"match {tmp} {{", "    Ok(v) => return v,", "    Err(_) => {"]
+        out += self.indent(self.indent(self.block(kids[1]))) + ["    }", "}"]
+        return out
 
     def setjmp_test(self, cond):
         """(jmp_buf address node, whether the then branch runs when setjmp returns 0) for a
@@ -2920,7 +3059,10 @@ def has_effects(node, depth=0):
 
 
 def negate_fused(code):
-    """`-fmadds(a, c, b)` as the one instruction, fnmadds(a, c, b), if code is one fused op."""
+    """`-fmadds(a, c, b)` as the one instruction, fnmadds(a, c, b), if code is one fused op.
+    The two differ in a zero's sign where Slippi's Dolphin computes fnmadds and fnmsubs."""
+    while code.startswith("(") and code.endswith(")") and enclosed(code):
+        code = code[1:-1]
     m = re.match(r"fp::(f(?:n)?m(?:add|sub))(s?)\(", code)
     if not m:
         return None
@@ -2932,6 +3074,16 @@ def negate_fused(code):
                 return None
             break
     return f"fp::{NEGATED[m.group(1)]}{m.group(2)}{code[m.end() - 1:]}"
+
+
+def enclosed(code):
+    """Whether code's first parenthesis closes at its end."""
+    depth = 0
+    for i, ch in enumerate(code):
+        depth += {"(": 1, ")": -1}.get(ch, 0)
+        if depth == 0:
+            return i == len(code) - 1
+    return False
 
 
 FUSED_RE = re.compile(r"\bfp::f(?:n)?m(?:add|sub)s?\(")
@@ -3064,6 +3216,13 @@ def returns_of(unit, cursor):
 # What makes a function's C untranslatable where its machine code is the source to port.
 MACHINE_CODE_REASONS = ("MWCC-only code", "inline asm")
 
+# C functions ported from their machine code anyway, and why.
+FROM_MACHINE_CODE = {
+    # MWCC inlines the stream setters and schedules their hardware register accesses out of
+    # the source's order, which the audio interface sees.
+    "AIInit": "hardware register order",
+}
+
 
 def asm_port(unit, cursor, f):
     """A port of the function at `cursor` transliterated from its machine code, for code whose
@@ -3122,7 +3281,10 @@ def translate_unit(args):
         tu, asm_fns = extract.parse(index, source)
         errors = [d.spelling for d in tu.diagnostics if d.severity >= ci.Diagnostic.Error]
     if errors:
-        return unit_name, source, None, [("*", "parse error: " + errors[0])], [], [], {}
+        # Every function the unit defines is left to the original.
+        names = sorted({f["name"] for f in prog.data["functions"]
+                        if f.get("tu") == unit_name and f.get("addr") is not None}) or ["*"]
+        return unit_name, source, None, [(n, "parse error: " + errors[0]) for n in names], [], [], {}
     unit = Unit(prog, unit_name, source)
     unit.gekko = gekko
     manual = manual_ports(out_dir, unit_name)
@@ -3161,6 +3323,14 @@ def translate_unit(args):
         if name in manual:
             # Ported by hand; register the manual port under the same signature.
             regs.append(f"    ctx.register_port({f['addr']:#x}, {unit.adapter(c, 'manual::' + ident(name))}, "
+                        f"Returns::{returns_of(unit, c)});")
+            unit.ported.append(name)
+            continue
+        if name in FROM_MACHINE_CODE:
+            code = asm_port(unit, c, f)
+            out_fns.append(code)
+            unit.transliterated.append(name)
+            regs.append(f"    ctx.register_port({f['addr']:#x}, {unit.adapter(c, ident(name))}, "
                         f"Returns::{returns_of(unit, c)});")
             unit.ported.append(name)
             continue
@@ -3222,7 +3392,8 @@ def translate_unit(args):
 PROGRAM = []
 
 
-def _request_inline(self, defn, fuse, caller, reg_ptrs=frozenset(), forward=None, same=frozenset()):
+def _request_inline(self, defn, fuse, caller, reg_ptrs=frozenset(), forward=None, same=frozenset(),
+                    fnargs=None):
     """An inline function's Rust name, translating it on first use. MWCC contracts inlined
     code as its caller's, and inlines the calls in it as the function it ends up in does, so
     there is a copy for each way of doing both."""
@@ -3233,8 +3404,11 @@ def _request_inline(self, defn, fuse, caller, reg_ptrs=frozenset(), forward=None
     asm = caller.asm
 
     forward = forward or {}
+    fnargs = fnargs or {}
 
     def holds(key, value):
+        if isinstance(key, tuple) and key[0] == "fnarg":
+            return (fnargs[key[1]].spelling if key[1] in fnargs else None) == value
         if isinstance(key, tuple) and key[0] == "fwd":
             return forward.get(key[1]) == value
         if isinstance(key, tuple) and key[0] == "same":
@@ -3259,7 +3433,7 @@ def _request_inline(self, defn, fuse, caller, reg_ptrs=frozenset(), forward=None
     all_variants = {k: list(v) for k, v in self.inline_variants.items()}
     try:
         tr = Translator(self, defn, fuse, inline=True, asm=asm, reg_ptrs=reg_ptrs, forward=forward,
-                        same=same)
+                        same=same, fnargs=fnargs)
         code = tr.function()
     except Exception as e:
         self.inlines, self.inline_variants = inlines, all_variants

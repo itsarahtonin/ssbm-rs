@@ -450,7 +450,7 @@ pub fn setupTopHalfCamera<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> i32 {
                     ),
                 );
                 w = fp::fmuls(t, (cobj).projection_param().perspective().aspect());
-                b = fp::fmuls(t, fp::fneg((fp::fmsubs(2.0, h_scale, 1.0))));
+                b = fp::fmuls(t, fp::fnmsubs(2.0, h_scale, 1.0));
                 fns::MTXFrustum(
                     ctx,
                     p.get(0),
@@ -469,15 +469,13 @@ pub fn setupTopHalfCamera<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> i32 {
                     ctx,
                     p.get(0),
                     (cobj).projection_param().perspective().fov(),
-                    fp::fneg(
-                        (fp::fmsubs(
-                            h_scale,
-                            (fp::fsubs(
-                                (cobj).projection_param().perspective().fov(),
-                                (cobj).projection_param().perspective().aspect(),
-                            )),
+                    fp::fnmsubs(
+                        h_scale,
+                        (fp::fsubs(
                             (cobj).projection_param().perspective().fov(),
+                            (cobj).projection_param().perspective().aspect(),
                         )),
+                        (cobj).projection_param().perspective().fov(),
                     ),
                     (cobj).projection_param().frustum().left(),
                     (cobj).projection_param().frustum().right(),
@@ -492,15 +490,13 @@ pub fn setupTopHalfCamera<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> i32 {
                     ctx,
                     p.get(0),
                     (cobj).projection_param().perspective().fov(),
-                    fp::fneg(
-                        (fp::fmsubs(
-                            h_scale,
-                            (fp::fsubs(
-                                (cobj).projection_param().perspective().fov(),
-                                (cobj).projection_param().perspective().aspect(),
-                            )),
+                    fp::fnmsubs(
+                        h_scale,
+                        (fp::fsubs(
                             (cobj).projection_param().perspective().fov(),
+                            (cobj).projection_param().perspective().aspect(),
                         )),
+                        (cobj).projection_param().perspective().fov(),
                     ),
                     (cobj).projection_param().frustum().left(),
                     (cobj).projection_param().frustum().right(),

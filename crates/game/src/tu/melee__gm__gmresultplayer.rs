@@ -209,11 +209,11 @@ pub fn fn_80177DD0<'a>(ctx: &'a Ctx, slot: i32) -> i32 {
     let __frame = ctx.stack_frame(0x30);
     let mut slot = slot;
     let mut data: ResultsData<'a> = null(ctx);
-    let mut unk_: Addr<'a> = null(ctx);
+    let mut unk: Addr<'a> = null(ctx);
     let mut result: i32 = 0;
     let mut scroll_max: i32 = 0;
     data = fns::lbl_8046DBE8(ctx);
-    unk_ = Handle::cast::<Addr<'a>>(ptr::<ArrP<'a, Addr<'a>, 0>>(ctx, 0x803d6878));
+    unk = Handle::cast::<Addr<'a>>(ptr::<ArrP<'a, Addr<'a>, 0>>(ctx, 0x803d6878));
     result = 0_i32;
     if (fns::HSD_PadCopyStatus(ctx).get(slot).err() as i32) == 0_i32 {
         return fns::fn_80177B7C(ctx, slot);
@@ -222,7 +222,7 @@ pub fn fn_80177DD0<'a>(ctx: &'a Ctx, slot: i32) -> i32 {
         ctx,
         Handle::cast::<StatsList<'a>>(fns::fn_801748EC(
             ctx,
-            unk_,
+            unk,
             ((data).player_data().get(slot).page() as i32),
             ((slot as u64) as i32),
         )),

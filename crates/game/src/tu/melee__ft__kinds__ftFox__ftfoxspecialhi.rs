@@ -336,22 +336,18 @@ pub fn ftFx_SpecialAirHi_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         .SpecialHi()
         .set_unk((fp).mv().fx().SpecialHi().unk().wrapping_add(1));
     if fp::frsp((fp).mv().fx().SpecialHi().unk() as f64) >= (da).x70_FOX_FIREFOX_DURATION_END() {
-        (fp).self_vel().set_x(fp::fneg(
-            (fp::fmsubs(
-                (fp).facing_dir(),
-                (fp::fmuls(
-                    (da).x78_FOX_FIREFOX_REVERSE_ACCEL(),
-                    fns::cosf(ctx, (fp).mv().fx().SpecialHi().rotateModel()),
-                )),
-                (fp).self_vel().x(),
-            )),
-        ));
-        (fp).self_vel().set_y(fp::fneg(
-            (fp::fmsubs(
+        (fp).self_vel().set_x(fp::fnmsubs(
+            (fp).facing_dir(),
+            (fp::fmuls(
                 (da).x78_FOX_FIREFOX_REVERSE_ACCEL(),
-                fns::sinf(ctx, (fp).mv().fx().SpecialHi().rotateModel()),
-                (fp).self_vel().y(),
+                fns::cosf(ctx, (fp).mv().fx().SpecialHi().rotateModel()),
             )),
+            (fp).self_vel().x(),
+        ));
+        (fp).self_vel().set_y(fp::fnmsubs(
+            (da).x78_FOX_FIREFOX_REVERSE_ACCEL(),
+            fns::sinf(ctx, (fp).mv().fx().SpecialHi().rotateModel()),
+            (fp).self_vel().y(),
         ));
     }
 }

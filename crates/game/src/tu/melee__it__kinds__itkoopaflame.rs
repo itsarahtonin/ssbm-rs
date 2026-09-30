@@ -158,7 +158,7 @@ pub fn itKoopaFlame_Spawn<'a>(
     parent: HSD_GObj<'a>,
     pos: Vec<'a>,
     facing_dir: f64,
-    unk_: u32,
+    unk: u32,
     gfx: i32,
     base_speed: i32,
     scale: i32,
@@ -170,7 +170,7 @@ pub fn itKoopaFlame_Spawn<'a>(
     let mut parent = parent;
     let mut pos = pos;
     let mut facing_dir = facing_dir;
-    let mut unk_ = unk_;
+    let mut unk = unk;
     let mut gfx = gfx;
     let mut base_speed = base_speed;
     let mut scale = scale;
@@ -201,7 +201,7 @@ pub fn itKoopaFlame_Spawn<'a>(
     spawn.set_x0_parent_gobj(parent);
     spawn.set_x4_parent_gobj2(spawn.x0_parent_gobj());
     spawn.x44_flag().x0().set_b0((1_i32 as u8));
-    spawn.set_x40((unk_ as i32));
+    spawn.set_x40((unk as i32));
     gobj = fns::Item_80268B18(ctx, spawn);
     if !Handle::is_null(gobj) {
         let mut it: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
@@ -299,14 +299,14 @@ pub fn itKoopaFlame_Spawn<'a>(
     return gobj;
 }
 
-pub fn itKoopaFlame_Setup<'a>(ctx: &'a Ctx, gobj_i: HSD_GObj<'a>, gobj_f: HSD_GObj<'a>, unk_: i32) {
+pub fn itKoopaFlame_Setup<'a>(ctx: &'a Ctx, gobj_i: HSD_GObj<'a>, gobj_f: HSD_GObj<'a>, unk: i32) {
     let __frame = ctx.stack_frame(0x1e8);
     let pad_stack: ArrV<'a, i8, 412> = frame_at(ctx, &__frame, 0x0);
     let vec: Vec<'a> = frame_at(ctx, &__frame, 0x19c);
     let pad_stack_2: ArrV<'a, i8, 20> = frame_at(ctx, &__frame, 0x1a8);
     let mut gobj_i = gobj_i;
     let mut gobj_f = gobj_f;
-    let mut unk_ = unk_;
+    let mut unk = unk;
     let mut it: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj_i)));
     inl_Item_ClearFlagsAndEnterState_unfused(ctx, gobj_i, it, 0_i32);
     Handle::copy_from(vec, (it).pos());

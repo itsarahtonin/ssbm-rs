@@ -1996,11 +1996,15 @@ fn inl_grRCruise_801FFADC_inline<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, sp64: Vec
     fns::lb_8000B1CC(ctx, cam_jobj, null::<Vec<'a>>(ctx), sp18);
     fns::lb_8000B1CC(ctx, int_jobj, null::<Vec<'a>>(ctx), sp24);
     let _ = fns::lbVector_Diff(ctx, sp24, sp18, diff);
-    (sp64).set_x(fp::fneg(
-        (fp::fmsubs(diff.x(), (fp::fdivs(sp18.z(), diff.z())), sp18.x())),
+    (sp64).set_x(fp::fnmsubs(
+        diff.x(),
+        (fp::fdivs(sp18.z(), diff.z())),
+        sp18.x(),
     ));
-    (sp64).set_y(fp::fneg(
-        (fp::fmsubs(diff.y(), (fp::fdivs(sp18.z(), diff.z())), sp18.y())),
+    (sp64).set_y(fp::fnmsubs(
+        diff.y(),
+        (fp::fdivs(sp18.z(), diff.z())),
+        sp18.y(),
     ));
     (sp64).set_z(0.0);
     let _ = fns::lbVector_Sub(ctx, sp64, cam_offset2);

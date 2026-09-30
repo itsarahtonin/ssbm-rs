@@ -565,7 +565,7 @@ pub fn mnVibration_CreateNameRow<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: u8,
     );
     text = fns::HSD_SisLib_803A6754(ctx, 0_i32, 1_i32);
     (data).texts().at((arg2 as i32)).set(text);
-    pos_y = fp::fneg((fp::fmadds(spacing, fp::frsp(arg2 as f64), sp20.y())));
+    pos_y = fp::fnmadds(spacing, fp::frsp(arg2 as f64), sp20.y());
     pos_z = sp20.z();
     pos_x = sp20.x();
     (text).set_pos_x(pos_x);

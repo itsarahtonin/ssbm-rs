@@ -870,15 +870,13 @@ pub fn fn_80191D38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         ctx,
         jobj,
         666.0,
-        fp::fneg(
-            (fp::fmsubs(
-                2.6200008392333984,
-                fp::frsp(
-                    (idx.wrapping_sub((statics::melee__gm__gmtou_0::lbl_804799B8(ctx).x3() as i32)))
-                        as f64,
-                ),
-                12.800007820129395,
-            )),
+        fp::fnmsubs(
+            2.6200008392333984,
+            fp::frsp(
+                (idx.wrapping_sub((statics::melee__gm__gmtou_0::lbl_804799B8(ctx).x3() as i32)))
+                    as f64,
+            ),
+            12.800007820129395,
         ),
         0.10000000149011612,
     );
@@ -937,15 +935,13 @@ pub fn fn_80191E9C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         ctx,
         jobj,
         666.0,
-        fp::fneg(
-            (fp::fmsubs(
-                2.6200008392333984,
-                fp::frsp(
-                    (idx.wrapping_sub((statics::melee__gm__gmtou_0::lbl_804799B8(ctx).x3() as i32)))
-                        as f64,
-                ),
-                12.800007820129395,
-            )),
+        fp::fnmsubs(
+            2.6200008392333984,
+            fp::frsp(
+                (idx.wrapping_sub((statics::melee__gm__gmtou_0::lbl_804799B8(ctx).x3() as i32)))
+                    as f64,
+            ),
+            12.800007820129395,
         ),
         0.10000000149011612,
     );
@@ -1171,17 +1167,15 @@ pub fn fn_8019237C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             ),
             fp::fneg(1.7999999523162842),
         ),
-        fp::fneg(
-            (fp::fmsubs(
-                2.299999952316284,
-                fp::frsp(
-                    (div_i32(
-                        (statics::melee__gm__gmtou_0::lbl_804799B8(ctx).x5() as i32),
-                        4_i32,
-                    )) as f64,
-                ),
-                2.700000047683716,
-            )),
+        fp::fnmsubs(
+            2.299999952316284,
+            fp::frsp(
+                (div_i32(
+                    (statics::melee__gm__gmtou_0::lbl_804799B8(ctx).x5() as i32),
+                    4_i32,
+                )) as f64,
+            ),
+            2.700000047683716,
         ),
         666.0,
     );
@@ -1552,11 +1546,7 @@ pub fn fn_80192BB0<'a>(ctx: &'a Ctx) {
                 );
                 jobj = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
                 fns::fn_8018FBD8(ctx, Handle::cast::<Addr<'a>>(gobj), i);
-                inl_HSD_JObjSetTranslateY(
-                    ctx,
-                    jobj,
-                    fp::fneg((fp::fmsubs(3.5, fp::frsp(i as f64), 11.5))),
-                );
+                inl_HSD_JObjSetTranslateY(ctx, jobj, fp::fnmsubs(3.5, fp::frsp(i as f64), 11.5));
                 gobj = fns::fn_8019035C(
                     ctx,
                     1_i32,
@@ -1574,11 +1564,7 @@ pub fn fn_80192BB0<'a>(ctx: &'a Ctx) {
                 );
                 jobj = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
                 fns::fn_8018FBD8(ctx, Handle::cast::<Addr<'a>>(gobj), i);
-                inl_HSD_JObjSetTranslateY(
-                    ctx,
-                    jobj,
-                    fp::fneg((fp::fmsubs(3.5, fp::frsp(i as f64), 11.5))),
-                );
+                inl_HSD_JObjSetTranslateY(ctx, jobj, fp::fnmsubs(3.5, fp::frsp(i as f64), 11.5));
                 gobj = fns::fn_8019035C(
                     ctx,
                     1_i32,
@@ -1596,11 +1582,7 @@ pub fn fn_80192BB0<'a>(ctx: &'a Ctx) {
                 );
                 jobj = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
                 fns::fn_8018FBD8(ctx, Handle::cast::<Addr<'a>>(gobj), i);
-                inl_HSD_JObjSetTranslateY(
-                    ctx,
-                    jobj,
-                    fp::fneg((fp::fmsubs(3.5, fp::frsp(i as f64), 11.5))),
-                );
+                inl_HSD_JObjSetTranslateY(ctx, jobj, fp::fnmsubs(3.5, fp::frsp(i as f64), 11.5));
             }
             i = i.wrapping_add(1);
         }
@@ -1813,18 +1795,16 @@ pub fn fn_80192E6C<'a>(ctx: &'a Ctx) {
                         ctx,
                         new_var3,
                         fp::fmadds(6.0, fp::frsp((rem_i32(j, 5_i32)) as f64), fp::fneg(3.0)),
-                        fp::fneg(
-                            (fp::fmsubs(
-                                4.500006198883057,
-                                fp::frsp(
-                                    ({
-                                        let __t2 = div_i32(j, 5_i32);
-                                        new_var = __t2;
-                                        __t2
-                                    }) as f64,
-                                ),
-                                2.299999952316284,
-                            )),
+                        fp::fnmsubs(
+                            4.500006198883057,
+                            fp::frsp(
+                                ({
+                                    let __t2 = div_i32(j, 5_i32);
+                                    new_var = __t2;
+                                    __t2
+                                }) as f64,
+                            ),
+                            2.299999952316284,
                         ),
                         0.20000000298023224,
                     );

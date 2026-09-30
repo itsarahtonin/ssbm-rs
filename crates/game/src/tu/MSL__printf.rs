@@ -969,7 +969,7 @@ pub fn float2str<'a>(
                 __state = 17;
             }
             15 => {
-                __state = if num < (0_i32 as f64) { 20 } else { 22 };
+                __state = if num < (0_i32 as f64) { 21 } else { 23 };
             }
             16 => {
                 p = Handle::add(buff, 4_i32.wrapping_neg());
@@ -989,149 +989,161 @@ pub fn float2str<'a>(
                 })
                 .set((0_i32 as i8));
                 __state = match ((format).conversion_char() as i32) {
-                    103_i32 => 26,
-                    71_i32 => 26,
-                    101_i32 => 27,
-                    69_i32 => 27,
-                    102_i32 => 28,
-                    _ => 29,
+                    103_i32 => 27,
+                    71_i32 => 28,
+                    101_i32 => 29,
+                    69_i32 => 30,
+                    102_i32 => 31,
+                    _ => 32,
                 };
             }
             18 => {
                 unreachable!();
             }
             19 => {
-                __state = 15;
+                __state = 14;
             }
             20 => {
-                p = Handle::add(buff, 5_i32.wrapping_neg());
-                let _ = fns::strcpy(ctx, p, cstr(ctx, 0x803b8f31));
-                __state = 21;
+                __state = 15;
             }
             21 => {
-                return p;
+                p = Handle::add(buff, 5_i32.wrapping_neg());
+                let _ = fns::strcpy(ctx, p, cstr(ctx, 0x803b8f31));
+                __state = 22;
             }
             22 => {
-                p = Handle::add(buff, 4_i32.wrapping_neg());
-                let _ = fns::strcpy(ctx, p, cstr(ctx, 0x803b8f32));
-                __state = 21;
-            }
-            23 => {
-                unreachable!();
-            }
-            24 => {
-                __state = 16;
-            }
-            25 => {
-                __state = 17;
-            }
-            26 => {
-                __state = if (dec.sig().length() as i32) > (format).precision() {
-                    31
-                } else {
-                    32
-                };
-            }
-            27 => {
-                __state = 45;
-            }
-            28 => {
-                __state = 54;
-            }
-            29 => {
                 return p;
             }
-            30 => {
+            23 => {
+                p = Handle::add(buff, 4_i32.wrapping_neg());
+                let _ = fns::strcpy(ctx, p, cstr(ctx, 0x803b8f32));
+                __state = 22;
+            }
+            24 => {
                 unreachable!();
             }
+            25 => {
+                __state = 16;
+            }
+            26 => {
+                __state = 17;
+            }
+            27 => {
+                __state = 28;
+            }
+            28 => {
+                __state = if (dec.sig().length() as i32) > (format).precision() {
+                    35
+                } else {
+                    36
+                };
+            }
+            29 => {
+                __state = 30;
+            }
+            30 => {
+                __state = 49;
+            }
             31 => {
-                statics::MSL__printf::round_decimal(ctx, dec, (format).precision());
-                __state = 32;
+                __state = 58;
             }
             32 => {
-                __state = if ((dec.exp() as i32) < 4_i32.wrapping_neg())
-                    || ((dec.exp() as i32) >= (format).precision())
-                {
-                    34
-                } else {
-                    35
-                };
+                return p;
             }
             33 => {
                 unreachable!();
             }
             34 => {
-                __state = if ((format).alternate_form() != 0) {
-                    37
+                __state = 27;
+            }
+            35 => {
+                statics::MSL__printf::round_decimal(ctx, dec, (format).precision());
+                __state = 36;
+            }
+            36 => {
+                __state = if ((dec.exp() as i32) < 4_i32.wrapping_neg())
+                    || ((dec.exp() as i32) >= (format).precision())
+                {
+                    38
                 } else {
                     39
                 };
             }
-            35 => {
-                __state = if ((format).alternate_form() != 0) {
-                    47
-                } else {
-                    49
-                };
-            }
-            36 => {
+            37 => {
                 unreachable!();
             }
-            37 => {
-                (format).set_precision((format).precision().wrapping_sub(1));
-                __state = 38;
-            }
             38 => {
-                __state = if ((format).conversion_char() as i32) == 103_i32 {
+                __state = if ((format).alternate_form() != 0) {
                     41
                 } else {
                     43
                 };
             }
             39 => {
-                (format).set_precision((dec.sig().length() as i32).wrapping_sub(1_i32));
-                __state = 38;
+                __state = if ((format).alternate_form() != 0) {
+                    51
+                } else {
+                    53
+                };
             }
             40 => {
                 unreachable!();
             }
             41 => {
-                (format).set_conversion_char((101_i32 as u8));
+                (format).set_precision((format).precision().wrapping_sub(1));
                 __state = 42;
             }
             42 => {
-                __state = 45;
+                __state = if ((format).conversion_char() as i32) == 103_i32 {
+                    45
+                } else {
+                    47
+                };
             }
             43 => {
-                (format).set_conversion_char((69_i32 as u8));
+                (format).set_precision((dec.sig().length() as i32).wrapping_sub(1_i32));
                 __state = 42;
             }
             44 => {
                 unreachable!();
             }
             45 => {
-                __state = if (dec.sig().length() as i32) > (format).precision().wrapping_add(1_i32)
-                {
-                    56
-                } else {
-                    57
-                };
+                (format).set_conversion_char((101_i32 as u8));
+                __state = 46;
             }
             46 => {
-                __state = 35;
+                __state = 49;
             }
             47 => {
+                (format).set_conversion_char((69_i32 as u8));
+                __state = 46;
+            }
+            48 => {
+                unreachable!();
+            }
+            49 => {
+                __state = if (dec.sig().length() as i32) > (format).precision().wrapping_add(1_i32)
+                {
+                    60
+                } else {
+                    61
+                };
+            }
+            50 => {
+                __state = 39;
+            }
+            51 => {
                 (format).set_precision(
                     (format)
                         .precision()
                         .wrapping_sub((dec.exp() as i32).wrapping_add(1_i32)),
                 );
-                __state = 48;
+                __state = 52;
             }
-            48 => {
-                __state = 54;
+            52 => {
+                __state = 58;
             }
-            49 => {
+            53 => {
                 __state = if ({
                     let __t1 = (dec.sig().length() as i32)
                         .wrapping_sub(((dec.exp() as i32).wrapping_add(1_i32)));
@@ -1139,25 +1151,25 @@ pub fn float2str<'a>(
                     __t1
                 }) < 0_i32
                 {
-                    51
+                    55
                 } else {
-                    52
+                    56
                 };
             }
-            50 => {
+            54 => {
                 unreachable!();
             }
-            51 => {
+            55 => {
                 (format).set_precision(0_i32);
+                __state = 56;
+            }
+            56 => {
                 __state = 52;
             }
-            52 => {
-                __state = 48;
-            }
-            53 => {
+            57 => {
                 unreachable!();
             }
-            54 => {
+            58 => {
                 __state = if ({
                     let __t3 = (dec.exp() as i32)
                         .wrapping_neg()
@@ -1167,59 +1179,59 @@ pub fn float2str<'a>(
                     __t3
                 }) < 0_i32
                 {
-                    99
+                    103
                 } else {
-                    100
+                    104
                 };
             }
-            55 => {
-                __state = 27;
+            59 => {
+                __state = 29;
             }
-            56 => {
+            60 => {
                 statics::MSL__printf::round_decimal(
                     ctx,
                     dec,
                     (format).precision().wrapping_add(1_i32),
                 );
-                __state = 57;
-            }
-            57 => {
-                n = (dec.exp() as i32);
-                sign = 43_i32;
-                __state = if n < 0_i32 { 59 } else { 60 };
-            }
-            58 => {
-                unreachable!();
-            }
-            59 => {
-                n = n.wrapping_neg();
-                sign = 45_i32;
-                __state = 60;
-            }
-            60 => {
-                digits = 0_i32;
-                __state = 62;
+                __state = 61;
             }
             61 => {
-                unreachable!();
+                n = (dec.exp() as i32);
+                sign = 43_i32;
+                __state = if n < 0_i32 { 63 } else { 64 };
             }
             62 => {
-                __state = if (n != 0) || (digits < 2_i32) { 63 } else { 65 };
+                unreachable!();
             }
             63 => {
+                n = n.wrapping_neg();
+                sign = 45_i32;
+                __state = 64;
+            }
+            64 => {
+                digits = 0_i32;
+                __state = 66;
+            }
+            65 => {
+                unreachable!();
+            }
+            66 => {
+                __state = if (n != 0) || (digits < 2_i32) { 67 } else { 69 };
+            }
+            67 => {
                 ({
                     p = Handle::add(p, -1);
                     p
                 })
                 .set((rem_i32(n, 10_i32).wrapping_add(48_i32) as i8));
                 n = div_i32(n, 10_i32);
-                __state = 64;
+                __state = 68;
             }
-            64 => {
+            68 => {
                 digits = digits.wrapping_add(1);
-                __state = 62;
+                __state = 66;
             }
-            65 => {
+            69 => {
                 ({
                     p = Handle::add(p, -1);
                     p
@@ -1234,90 +1246,90 @@ pub fn float2str<'a>(
                     .wrapping_add((format).precision())
                     > 0x1fd_i32
                 {
-                    67
-                } else {
-                    68
-                };
-            }
-            66 => {
-                unreachable!();
-            }
-            67 => {
-                return null::<Val<'a, i8>>(ctx);
-            }
-            68 => {
-                __state = if (dec.sig().length() as i32) < (format).precision().wrapping_add(1_i32)
-                {
                     71
                 } else {
                     72
                 };
             }
-            69 => {
+            70 => {
                 unreachable!();
             }
-            70 => {
-                __state = 68;
-            }
             71 => {
-                n = (format)
-                    .precision()
-                    .wrapping_add(1_i32)
-                    .wrapping_sub((dec.sig().length() as i32))
-                    .wrapping_add(1_i32);
-                __state = 74;
+                return null::<Val<'a, i8>>(ctx);
             }
             72 => {
-                n = (dec.sig().length() as i32);
-                q = Handle::add(
-                    Handle::cast::<Val<'a, i8>>(dec.sig().text().at(0)),
-                    (dec.sig().length() as i32),
-                );
-                __state = 79;
+                __state = if (dec.sig().length() as i32) < (format).precision().wrapping_add(1_i32)
+                {
+                    75
+                } else {
+                    76
+                };
             }
             73 => {
                 unreachable!();
             }
             74 => {
+                __state = 72;
+            }
+            75 => {
+                n = (format)
+                    .precision()
+                    .wrapping_add(1_i32)
+                    .wrapping_sub((dec.sig().length() as i32))
+                    .wrapping_add(1_i32);
+                __state = 78;
+            }
+            76 => {
+                n = (dec.sig().length() as i32);
+                q = Handle::add(
+                    Handle::cast::<Val<'a, i8>>(dec.sig().text().at(0)),
+                    (dec.sig().length() as i32),
+                );
+                __state = 83;
+            }
+            77 => {
+                unreachable!();
+            }
+            78 => {
                 __state = if ({
                     n = n.wrapping_sub(1);
                     n
                 } != 0)
                 {
-                    75
+                    79
                 } else {
-                    77
+                    81
                 };
             }
-            75 => {
+            79 => {
                 ({
                     p = Handle::add(p, -1);
                     p
                 })
                 .set((48_i32 as i8));
+                __state = 80;
+            }
+            80 => {
+                __state = 78;
+            }
+            81 => {
                 __state = 76;
             }
-            76 => {
-                __state = 74;
-            }
-            77 => {
-                __state = 72;
-            }
-            78 => {
+            82 => {
                 unreachable!();
             }
-            79 => {
+            83 => {
                 __state = if ({
                     n = n.wrapping_sub(1);
                     n
                 } != 0)
                 {
-                    80
+                    84
                 } else {
-                    82
+                    86
                 };
             }
-            80 => {
+            84 => {
                 let __t2 = ({
                     q = Handle::add(q, -1);
                     q
@@ -1328,58 +1340,37 @@ pub fn float2str<'a>(
                     p
                 })
                 .set(__t2);
-                __state = 81;
+                __state = 85;
             }
-            81 => {
-                __state = 79;
+            85 => {
+                __state = 83;
             }
-            82 => {
+            86 => {
                 __state =
                     if ((format).precision() != 0) || (((format).alternate_form() as i32) != 0) {
-                        84
+                        88
                     } else {
-                        85
+                        89
                     };
             }
-            83 => {
+            87 => {
                 unreachable!();
             }
-            84 => {
+            88 => {
                 ({
                     p = Handle::add(p, -1);
                     p
                 })
                 .set((46_i32 as i8));
-                __state = 85;
+                __state = 89;
             }
-            85 => {
+            89 => {
                 ({
                     p = Handle::add(p, -1);
                     p
                 })
                 .set(((dec.sig().text().at(0)).get() as i8));
-                __state = if (dec.sign() != 0) { 87 } else { 89 };
-            }
-            86 => {
-                unreachable!();
-            }
-            87 => {
-                ({
-                    p = Handle::add(p, -1);
-                    p
-                })
-                .set((45_i32 as i8));
-                __state = 88;
-            }
-            88 => {
-                __state = 29;
-            }
-            89 => {
-                __state = if ((format).sign_options() as i32) == (enums::sign_always as i32) {
-                    91
-                } else {
-                    93
-                };
+                __state = if (dec.sign() != 0) { 91 } else { 93 };
             }
             90 => {
                 unreachable!();
@@ -1389,17 +1380,17 @@ pub fn float2str<'a>(
                     p = Handle::add(p, -1);
                     p
                 })
-                .set((43_i32 as i8));
+                .set((45_i32 as i8));
                 __state = 92;
             }
             92 => {
-                __state = 88;
+                __state = 32;
             }
             93 => {
-                __state = if ((format).sign_options() as i32) == (enums::space_holder as i32) {
+                __state = if ((format).sign_options() as i32) == (enums::sign_always as i32) {
                     95
                 } else {
-                    96
+                    97
                 };
             }
             94 => {
@@ -1410,33 +1401,54 @@ pub fn float2str<'a>(
                     p = Handle::add(p, -1);
                     p
                 })
-                .set((32_i32 as i8));
+                .set((43_i32 as i8));
                 __state = 96;
             }
             96 => {
                 __state = 92;
             }
             97 => {
-                unreachable!();
+                __state = if ((format).sign_options() as i32) == (enums::space_holder as i32) {
+                    99
+                } else {
+                    100
+                };
             }
             98 => {
-                __state = 28;
+                unreachable!();
             }
             99 => {
-                frac_digits = 0_i32;
+                ({
+                    p = Handle::add(p, -1);
+                    p
+                })
+                .set((32_i32 as i8));
                 __state = 100;
             }
             100 => {
-                __state = if frac_digits > (format).precision() {
-                    102
-                } else {
-                    103
-                };
+                __state = 96;
             }
             101 => {
                 unreachable!();
             }
             102 => {
+                __state = 31;
+            }
+            103 => {
+                frac_digits = 0_i32;
+                __state = 104;
+            }
+            104 => {
+                __state = if frac_digits > (format).precision() {
+                    106
+                } else {
+                    107
+                };
+            }
+            105 => {
+                unreachable!();
+            }
+            106 => {
                 statics::MSL__printf::round_decimal(
                     ctx,
                     dec,
@@ -1452,101 +1464,101 @@ pub fn float2str<'a>(
                     __t4
                 }) < 0_i32
                 {
-                    105
+                    109
                 } else {
-                    106
+                    110
                 };
             }
-            103 => {
+            107 => {
                 __state = if ({
                     let __t5 = (dec.exp() as i32).wrapping_add(1_i32);
                     int_digits = __t5;
                     __t5
                 }) < 0_i32
                 {
-                    108
+                    112
                 } else {
-                    109
+                    113
                 };
-            }
-            104 => {
-                unreachable!();
-            }
-            105 => {
-                frac_digits = 0_i32;
-                __state = 106;
-            }
-            106 => {
-                __state = 103;
-            }
-            107 => {
-                unreachable!();
             }
             108 => {
-                int_digits = 0_i32;
-                __state = 109;
-            }
-            109 => {
-                __state = if int_digits.wrapping_add(frac_digits) > 0x1fd_i32 {
-                    111
-                } else {
-                    112
-                };
-            }
-            110 => {
                 unreachable!();
             }
+            109 => {
+                frac_digits = 0_i32;
+                __state = 110;
+            }
+            110 => {
+                __state = 107;
+            }
             111 => {
-                return null::<Val<'a, i8>>(ctx);
+                unreachable!();
             }
             112 => {
+                int_digits = 0_i32;
+                __state = 113;
+            }
+            113 => {
+                __state = if int_digits.wrapping_add(frac_digits) > 0x1fd_i32 {
+                    115
+                } else {
+                    116
+                };
+            }
+            114 => {
+                unreachable!();
+            }
+            115 => {
+                return null::<Val<'a, i8>>(ctx);
+            }
+            116 => {
                 q = Handle::add(
                     Handle::cast::<Val<'a, i8>>(dec.sig().text().at(0)),
                     (dec.sig().length() as i32),
                 );
                 digits = 0_i32;
-                __state = 115;
+                __state = 119;
             }
-            113 => {
+            117 => {
                 unreachable!();
             }
-            114 => {
-                __state = 112;
+            118 => {
+                __state = 116;
             }
-            115 => {
+            119 => {
                 __state = if digits < ((format).precision().wrapping_sub(frac_digits)) {
-                    116
+                    120
                 } else {
-                    118
+                    122
                 };
             }
-            116 => {
+            120 => {
                 ({
                     p = Handle::add(p, -1);
                     p
                 })
                 .set((48_i32 as i8));
-                __state = 117;
-            }
-            117 => {
-                digits = digits.wrapping_add(1);
-                __state = 115;
-            }
-            118 => {
-                digits = 0_i32;
-                __state = 120;
-            }
-            119 => {
-                unreachable!();
-            }
-            120 => {
-                __state = if (digits < frac_digits) && (digits < (dec.sig().length() as i32)) {
-                    121
-                } else {
-                    123
-                };
+                __state = 121;
             }
             121 => {
+                digits = digits.wrapping_add(1);
+                __state = 119;
+            }
+            122 => {
+                digits = 0_i32;
+                __state = 124;
+            }
+            123 => {
+                unreachable!();
+            }
+            124 => {
+                __state = if (digits < frac_digits) && (digits < (dec.sig().length() as i32)) {
+                    125
+                } else {
+                    127
+                };
+            }
+            125 => {
                 let __t6 = ({
                     q = Handle::add(q, -1);
                     q
@@ -1557,105 +1569,105 @@ pub fn float2str<'a>(
                     p
                 })
                 .set(__t6);
-                __state = 122;
-            }
-            122 => {
-                digits = digits.wrapping_add(1);
-                __state = 120;
-            }
-            123 => {
-                __state = 125;
-            }
-            124 => {
-                unreachable!();
-            }
-            125 => {
-                __state = if digits < frac_digits { 126 } else { 128 };
+                __state = 126;
             }
             126 => {
-                ({
-                    p = Handle::add(p, -1);
-                    p
-                })
-                .set((48_i32 as i8));
-                __state = 127;
+                digits = digits.wrapping_add(1);
+                __state = 124;
             }
             127 => {
-                digits = digits.wrapping_add(1);
-                __state = 125;
+                __state = 129;
             }
             128 => {
-                __state =
-                    if ((format).precision() != 0) || (((format).alternate_form() as i32) != 0) {
-                        130
-                    } else {
-                        131
-                    };
+                unreachable!();
             }
             129 => {
-                unreachable!();
+                __state = if digits < frac_digits { 130 } else { 132 };
             }
             130 => {
                 ({
                     p = Handle::add(p, -1);
                     p
                 })
-                .set((46_i32 as i8));
+                .set((48_i32 as i8));
                 __state = 131;
             }
             131 => {
-                __state = if (int_digits != 0) { 133 } else { 135 };
+                digits = digits.wrapping_add(1);
+                __state = 129;
             }
             132 => {
-                unreachable!();
+                __state =
+                    if ((format).precision() != 0) || (((format).alternate_form() as i32) != 0) {
+                        134
+                    } else {
+                        135
+                    };
             }
             133 => {
-                digits = 0_i32;
-                __state = 137;
+                unreachable!();
             }
             134 => {
-                __state = if (dec.sign() != 0) { 147 } else { 149 };
-            }
-            135 => {
                 ({
                     p = Handle::add(p, -1);
                     p
                 })
-                .set((48_i32 as i8));
-                __state = 134;
+                .set((46_i32 as i8));
+                __state = 135;
+            }
+            135 => {
+                __state = if (int_digits != 0) { 137 } else { 139 };
             }
             136 => {
                 unreachable!();
             }
             137 => {
-                __state = if digits < int_digits.wrapping_sub((dec.sig().length() as i32)) {
-                    138
-                } else {
-                    140
-                };
+                digits = 0_i32;
+                __state = 141;
             }
             138 => {
+                __state = if (dec.sign() != 0) { 151 } else { 153 };
+            }
+            139 => {
                 ({
                     p = Handle::add(p, -1);
                     p
                 })
                 .set((48_i32 as i8));
-                __state = 139;
-            }
-            139 => {
-                digits = digits.wrapping_add(1);
-                __state = 137;
+                __state = 138;
             }
             140 => {
-                __state = 142;
-            }
-            141 => {
                 unreachable!();
             }
+            141 => {
+                __state = if digits < int_digits.wrapping_sub((dec.sig().length() as i32)) {
+                    142
+                } else {
+                    144
+                };
+            }
             142 => {
-                __state = if digits < int_digits { 143 } else { 145 };
+                ({
+                    p = Handle::add(p, -1);
+                    p
+                })
+                .set((48_i32 as i8));
+                __state = 143;
             }
             143 => {
+                digits = digits.wrapping_add(1);
+                __state = 141;
+            }
+            144 => {
+                __state = 146;
+            }
+            145 => {
+                unreachable!();
+            }
+            146 => {
+                __state = if digits < int_digits { 147 } else { 149 };
+            }
+            147 => {
                 let __t7 = ({
                     q = Handle::add(q, -1);
                     q
@@ -1666,35 +1678,14 @@ pub fn float2str<'a>(
                     p
                 })
                 .set(__t7);
-                __state = 144;
-            }
-            144 => {
-                digits = digits.wrapping_add(1);
-                __state = 142;
-            }
-            145 => {
-                __state = 134;
-            }
-            146 => {
-                unreachable!();
-            }
-            147 => {
-                ({
-                    p = Handle::add(p, -1);
-                    p
-                })
-                .set((45_i32 as i8));
                 __state = 148;
             }
             148 => {
-                __state = 29;
+                digits = digits.wrapping_add(1);
+                __state = 146;
             }
             149 => {
-                __state = if ((format).sign_options() as i32) == (enums::sign_always as i32) {
-                    151
-                } else {
-                    153
-                };
+                __state = 138;
             }
             150 => {
                 unreachable!();
@@ -1704,17 +1695,17 @@ pub fn float2str<'a>(
                     p = Handle::add(p, -1);
                     p
                 })
-                .set((43_i32 as i8));
+                .set((45_i32 as i8));
                 __state = 152;
             }
             152 => {
-                __state = 148;
+                __state = 32;
             }
             153 => {
-                __state = if ((format).sign_options() as i32) == (enums::space_holder as i32) {
+                __state = if ((format).sign_options() as i32) == (enums::sign_always as i32) {
                     155
                 } else {
-                    156
+                    157
                 };
             }
             154 => {
@@ -1725,22 +1716,43 @@ pub fn float2str<'a>(
                     p = Handle::add(p, -1);
                     p
                 })
-                .set((32_i32 as i8));
+                .set((43_i32 as i8));
                 __state = 156;
             }
             156 => {
                 __state = 152;
             }
             157 => {
-                unreachable!();
+                __state = if ((format).sign_options() as i32) == (enums::space_holder as i32) {
+                    159
+                } else {
+                    160
+                };
             }
             158 => {
-                __state = 29;
+                unreachable!();
             }
             159 => {
-                return null(ctx);
+                ({
+                    p = Handle::add(p, -1);
+                    p
+                })
+                .set((32_i32 as i8));
+                __state = 160;
             }
             160 => {
+                __state = 156;
+            }
+            161 => {
+                unreachable!();
+            }
+            162 => {
+                __state = 32;
+            }
+            163 => {
+                return null(ctx);
+            }
+            164 => {
                 unreachable!();
             }
             _ => unreachable!(),

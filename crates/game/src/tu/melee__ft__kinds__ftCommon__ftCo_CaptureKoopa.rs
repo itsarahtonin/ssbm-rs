@@ -135,7 +135,7 @@ pub fn ftCo_800BC8D4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, vic_gobj: HSD_GObj<'a
     let __frame = ctx.stack_frame(0x28);
     let mut gobj = gobj;
     let mut vic_gobj = vic_gobj;
-    inl_inlineA0_unfused(ctx, gobj, vic_gobj, fnptr(ctx, 0x800bcaf4));
+    inl_inlineA0_unfused_2(ctx, gobj, vic_gobj, fnptr(ctx, 0x800bcaf4));
 }
 
 pub fn ftCo_CaptureKoopaAir_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -299,7 +299,51 @@ fn inl_inlineA0_unfused<'a>(
         .vel()
         .set_y(fp::frsp(0_i32 as f64));
     fns::ftCo_800DB368(ctx, vic_fp, fp);
-    cb.call::<_, ()>((gobj,));
+    fns::ftCo_800BC9C8(ctx, gobj);
+    fns::ftCommon_8007D5D4(ctx, fp);
+    (fp).mv()
+        .co()
+        .capturekoopa()
+        .set_xC(fns::ftKp_SpecialS_80132E10(ctx, (fp).victim_gobj()));
+    (fp).mv()
+        .co()
+        .capturekoopa()
+        .set_x10(fns::ftKp_SpecialS_80132E20(ctx, (fp).victim_gobj()));
+    fns::ftCommon_8007E2FC(ctx, gobj);
+}
+
+fn inl_inlineA0_unfused_2<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    vic_gobj: HSD_GObj<'a>,
+    cb: FnPtr<'a>,
+) {
+    let mut gobj = gobj;
+    let mut vic_gobj = vic_gobj;
+    let mut cb = cb;
+    let mut vic_fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, vic_gobj)));
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    inl_ftCo_ReleaseItemAndVictim_unfused(ctx, gobj);
+    (fp).set_x1A5C(vic_gobj);
+    (fp).set_victim_gobj(vic_gobj);
+    (fp).x221B().set_x221B_b5((0_i32 as u8));
+    (fp).x221B().set_x221B_b7((0_i32 as u8));
+    (fp).set_facing_dir((vic_fp).facing_dir());
+    fns::ftCommon_InitGrab(
+        ctx,
+        fp,
+        0_i32,
+        fns::ftKp_SpecialS_80132DC0(ctx, (fp).victim_gobj()),
+    );
+    (fp).mv()
+        .ca()
+        .specialhi()
+        .vel()
+        .set_y(fp::frsp(0_i32 as f64));
+    fns::ftCo_800DB368(ctx, vic_fp, fp);
+    fns::ftCo_800BCAF4(ctx, gobj);
     fns::ftCommon_8007D5D4(ctx, fp);
     (fp).mv()
         .co()

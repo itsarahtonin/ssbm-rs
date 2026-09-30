@@ -1083,12 +1083,10 @@ pub fn ftNs_SpecialHi_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut vel_y: f64 = (fp0).self_vel().y();
     let mut ness_attr: ftNessAttributes<'a> =
         Handle::cast::<ftNessAttributes<'a>>((fp0).dat_attrs());
-    (fp0).set_gr_vel(fp::fneg(
-        (fp::fmsubs(
-            (ness_attr).x5C_PK_THUNDER_2_DECELERATION_RATE(),
-            (fp0).facing_dir(),
-            ground_vel,
-        )),
+    (fp0).set_gr_vel(fp::fnmsubs(
+        (ness_attr).x5C_PK_THUNDER_2_DECELERATION_RATE(),
+        (fp0).facing_dir(),
+        ground_vel,
     ));
     if (fp0).facing_dir() == fp::frsp(1_i32 as f64) {
         if (fp0).gr_vel() <= 9.999999747378752e-05_f64 {
@@ -1902,9 +1900,32 @@ fn inl_getFtSpecialAttrs2<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> {
     return (fp).dat_attrs();
 }
 
+fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+    let mut x = x;
+    let mut y: f64 = 0.0;
+    if x > 0.0 {
+        let mut guess: f64 = fp::frsqrte(x);
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        y = fp::frsp((fp::fmul(x, guess)));
+        return y;
+    }
+    return x;
+}
+
 fn inl_lbVector_Len_xy<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
     let mut vec = vec;
-    return fns::sqrtf(
+    return inl_sqrtf(
         ctx,
         fp::fadds(
             fp::fmuls((vec).x(), (vec).x()),

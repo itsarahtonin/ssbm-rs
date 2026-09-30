@@ -180,7 +180,7 @@ pub fn efAlt_Spawn<'a>(
                         .get());
                 ret_obj =
                     Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(ctx, 0x3e8_u32, gobj, jobj));
-                __state = if !Handle::is_null(ret_obj) { 74 } else { 75 };
+                __state = if !Handle::is_null(ret_obj) { 75 } else { 76 };
             }
             8 => {
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
@@ -198,7 +198,7 @@ pub fn efAlt_Spawn<'a>(
                     ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get()),
                 ));
-                __state = if !Handle::is_null(ret_obj) { 83 } else { 84 };
+                __state = if !Handle::is_null(ret_obj) { 84 } else { 85 };
             }
             10 => {
                 ret_obj = Handle::cast::<Addr<'a>>(fns::hsd_8039EFAC(
@@ -263,7 +263,7 @@ pub fn efAlt_Spawn<'a>(
                     ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get()),
                 ));
-                __state = if !Handle::is_null(ret_obj) { 92 } else { 93 };
+                __state = if !Handle::is_null(ret_obj) { 93 } else { 94 };
             }
             16 => {
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
@@ -302,7 +302,7 @@ pub fn efAlt_Spawn<'a>(
                     gobj,
                     ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8))).get()),
                 ));
-                __state = if !Handle::is_null(ret_obj) { 99 } else { 100 };
+                __state = if !Handle::is_null(ret_obj) { 100 } else { 101 };
             }
             20 => {
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_AttachChild_Scale(
@@ -362,7 +362,7 @@ pub fn efAlt_Spawn<'a>(
                     ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get()),
                 ));
-                __state = if !Handle::is_null(ret_obj) { 112 } else { 113 };
+                __state = if !Handle::is_null(ret_obj) { 113 } else { 114 };
             }
             26 => {
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator_AppSRT_SetFacingDir(
@@ -377,7 +377,7 @@ pub fn efAlt_Spawn<'a>(
                     gobj,
                     ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8))).get()),
                 ));
-                __state = if !Handle::is_null(ret_obj) { 117 } else { 118 };
+                __state = if !Handle::is_null(ret_obj) { 118 } else { 119 };
             }
             28 => {
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Scale_FacingDir(
@@ -387,7 +387,7 @@ pub fn efAlt_Spawn<'a>(
                     ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get()),
                 ));
-                __state = if !Handle::is_null(ret_obj) { 121 } else { 122 };
+                __state = if !Handle::is_null(ret_obj) { 122 } else { 123 };
             }
             29 => {
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(
@@ -397,7 +397,7 @@ pub fn efAlt_Spawn<'a>(
                     ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get()),
                 ));
-                __state = if !Handle::is_null(ret_obj) { 125 } else { 126 };
+                __state = if !Handle::is_null(ret_obj) { 126 } else { 127 };
             }
             30 => {
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(
@@ -417,7 +417,7 @@ pub fn efAlt_Spawn<'a>(
                     ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get()),
                 ));
-                __state = if !Handle::is_null(ret_obj) { 130 } else { 131 };
+                __state = if !Handle::is_null(ret_obj) { 131 } else { 132 };
             }
             32 => {
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Scale(
@@ -427,7 +427,7 @@ pub fn efAlt_Spawn<'a>(
                     ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get()),
                 ));
-                __state = if !Handle::is_null(ret_obj) { 138 } else { 139 };
+                __state = if !Handle::is_null(ret_obj) { 139 } else { 140 };
             }
             33 => {
                 effect_flags = (65_i32 as u16);
@@ -437,7 +437,7 @@ pub fn efAlt_Spawn<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_AttachChild(
                     ctx, 0x1388_u32, gobj, jobj_2,
                 ));
-                __state = if !Handle::is_null(ret_obj) { 146 } else { 147 };
+                __state = if !Handle::is_null(ret_obj) { 147 } else { 148 };
             }
             34 => {
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Scale(
@@ -447,7 +447,7 @@ pub fn efAlt_Spawn<'a>(
                     ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get()),
                 ));
-                __state = if !Handle::is_null(ret_obj) { 156 } else { 157 };
+                __state = if !Handle::is_null(ret_obj) { 157 } else { 158 };
             }
             35 => {
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(
@@ -467,7 +467,7 @@ pub fn efAlt_Spawn<'a>(
                     ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get()),
                 ));
-                __state = if !Handle::is_null(ret_obj) { 165 } else { 166 };
+                __state = if !Handle::is_null(ret_obj) { 166 } else { 167 };
             }
             37 => {
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_AttachChild(
@@ -524,7 +524,7 @@ pub fn efAlt_Spawn<'a>(
                     gobj,
                     ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8))).get()),
                 ));
-                __state = if !Handle::is_null(ret_obj) { 174 } else { 175 };
+                __state = if !Handle::is_null(ret_obj) { 175 } else { 176 };
             }
             43 => {
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
@@ -541,7 +541,7 @@ pub fn efAlt_Spawn<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(
                     ctx, 0x7d00_u32, gobj, jobj_2_3,
                 ));
-                __state = if !Handle::is_null(ret_obj) { 183 } else { 184 };
+                __state = if !Handle::is_null(ret_obj) { 184 } else { 185 };
             }
             45 => {
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
@@ -609,7 +609,7 @@ pub fn efAlt_Spawn<'a>(
                     gobj,
                     ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8))).get()),
                 ));
-                __state = if !Handle::is_null(ret_obj) { 199 } else { 200 };
+                __state = if !Handle::is_null(ret_obj) { 200 } else { 201 };
             }
             54 => {
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Scale(
@@ -619,7 +619,7 @@ pub fn efAlt_Spawn<'a>(
                     ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get()),
                 ));
-                __state = if !Handle::is_null(ret_obj) { 207 } else { 208 };
+                __state = if !Handle::is_null(ret_obj) { 208 } else { 209 };
             }
             55 => {
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Scale(
@@ -629,7 +629,7 @@ pub fn efAlt_Spawn<'a>(
                     ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get()),
                 ));
-                __state = if !Handle::is_null(ret_obj) { 215 } else { 216 };
+                __state = if !Handle::is_null(ret_obj) { 216 } else { 217 };
             }
             56 => {
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Scale_FacingDir(
@@ -639,7 +639,7 @@ pub fn efAlt_Spawn<'a>(
                     ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get()),
                 ));
-                __state = if !Handle::is_null(ret_obj) { 223 } else { 224 };
+                __state = if !Handle::is_null(ret_obj) { 224 } else { 225 };
             }
             57 => {
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Pos(
@@ -648,7 +648,7 @@ pub fn efAlt_Spawn<'a>(
                     gobj,
                     ((Handle::cast::<Ptr<'a, Vec<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8))).get()),
                 ));
-                __state = if !Handle::is_null(ret_obj) { 227 } else { 228 };
+                __state = if !Handle::is_null(ret_obj) { 228 } else { 229 };
             }
             58 => {
                 jobj =
@@ -690,7 +690,7 @@ pub fn efAlt_Spawn<'a>(
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach(
                     ctx, 0x9088_u32, gobj, input_jobj,
                 ));
-                __state = if !Handle::is_null(ret_obj) { 235 } else { 236 };
+                __state = if !Handle::is_null(ret_obj) { 236 } else { 237 };
             }
             63 => {
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_CreateGenerator(
@@ -708,7 +708,7 @@ pub fn efAlt_Spawn<'a>(
                     ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get()),
                 ));
-                __state = if !Handle::is_null(ret_obj) { 244 } else { 245 };
+                __state = if !Handle::is_null(ret_obj) { 245 } else { 246 };
             }
             65 => {
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Scale_FacingDir(
@@ -738,7 +738,7 @@ pub fn efAlt_Spawn<'a>(
                     ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get()),
                 ));
-                __state = 250;
+                __state = 251;
             }
             68 => {
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_AttachChild(
@@ -748,7 +748,7 @@ pub fn efAlt_Spawn<'a>(
                     ((Handle::cast::<Ptr<'a, HSD_JObj<'a>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get()),
                 ));
-                __state = 250;
+                __state = 251;
             }
             69 => {
                 ret_obj = Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Scale_FacingDir(
@@ -771,32 +771,35 @@ pub fn efAlt_Spawn<'a>(
                 __state = 71;
             }
             71 => {
-                __state = 261;
+                __state = 262;
             }
             72 => {
                 unreachable!();
             }
             73 => {
-                __state = 7;
+                __state = 6;
             }
             74 => {
+                __state = 7;
+            }
+            75 => {
                 value_ptr =
                     ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get());
-                __state = if (value_ptr).get() < 0.0 { 77 } else { 79 };
+                __state = if (value_ptr).get() < 0.0 { 78 } else { 80 };
             }
-            75 => {
+            76 => {
                 let _ = fns::hsd_8039EFAC(ctx, 0_i32, 1_i32, 0x3e9_i32, jobj);
                 __state = 71;
             }
-            76 => {
+            77 => {
                 unreachable!();
             }
-            77 => {
-                temp_d = fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))));
-                __state = 78;
-            }
             78 => {
+                temp_d = fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))));
+                __state = 79;
+            }
+            79 => {
                 rotate_y_2 = fp::frsp(temp_d);
                 inl_HSD_JObjSetRotationY_unfused(
                     ctx,
@@ -806,88 +809,88 @@ pub fn efAlt_Spawn<'a>(
                     ))),
                     rotate_y_2,
                 );
-                __state = 75;
-            }
-            79 => {
-                temp_d = (fp::fdiv(3.141592653589793, (2_i32 as f64)));
-                __state = 78;
+                __state = 76;
             }
             80 => {
-                unreachable!();
+                temp_d = (fp::fdiv(3.141592653589793, (2_i32 as f64)));
+                __state = 79;
             }
             81 => {
-                __state = 8;
+                unreachable!();
             }
             82 => {
-                __state = 9;
+                __state = 8;
             }
             83 => {
-                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_update(fnptr(ctx, 0x8005f08c));
-                __state = 84;
+                __state = 9;
             }
             84 => {
-                __state = 71;
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_update(fnptr(ctx, 0x8005f08c));
+                __state = 85;
             }
             85 => {
-                unreachable!();
-            }
-            86 => {
-                __state = 10;
-            }
-            87 => {
-                __state = 11;
-            }
-            88 => {
-                __state = 12;
-            }
-            89 => {
-                __state = 13;
-            }
-            90 => {
-                __state = 14;
-            }
-            91 => {
-                __state = 15;
-            }
-            92 => {
-                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_update(fnptr(ctx, 0x8005ebc8));
-                __state = 93;
-            }
-            93 => {
                 __state = 71;
             }
-            94 => {
+            86 => {
                 unreachable!();
             }
+            87 => {
+                __state = 10;
+            }
+            88 => {
+                __state = 11;
+            }
+            89 => {
+                __state = 12;
+            }
+            90 => {
+                __state = 13;
+            }
+            91 => {
+                __state = 14;
+            }
+            92 => {
+                __state = 15;
+            }
+            93 => {
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_update(fnptr(ctx, 0x8005ebc8));
+                __state = 94;
+            }
+            94 => {
+                __state = 71;
+            }
             95 => {
-                __state = 16;
+                unreachable!();
             }
             96 => {
-                __state = 17;
+                __state = 16;
             }
             97 => {
-                __state = 18;
+                __state = 17;
             }
             98 => {
-                __state = 19;
+                __state = 18;
             }
             99 => {
+                __state = 19;
+            }
+            100 => {
                 value_ptr =
                     ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get());
-                __state = if (value_ptr).get() < 0.0 { 102 } else { 104 };
-            }
-            100 => {
-                __state = 71;
+                __state = if (value_ptr).get() < 0.0 { 103 } else { 105 };
             }
             101 => {
-                unreachable!();
+                __state = 71;
             }
             102 => {
-                temp_d_2 = fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))));
-                __state = 103;
+                unreachable!();
             }
             103 => {
+                temp_d_2 = fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))));
+                __state = 104;
+            }
+            104 => {
                 rotate_y_2_2 = fp::frsp(temp_d_2);
                 inl_HSD_JObjSetRotationY_unfused(
                     ctx,
@@ -897,50 +900,50 @@ pub fn efAlt_Spawn<'a>(
                     ))),
                     rotate_y_2_2,
                 );
-                __state = 100;
-            }
-            104 => {
-                temp_d_2 = (fp::fdiv(3.141592653589793, (2_i32 as f64)));
-                __state = 103;
+                __state = 101;
             }
             105 => {
-                unreachable!();
+                temp_d_2 = (fp::fdiv(3.141592653589793, (2_i32 as f64)));
+                __state = 104;
             }
             106 => {
-                __state = 20;
-            }
-            107 => {
-                __state = 21;
-            }
-            108 => {
-                __state = 22;
-            }
-            109 => {
-                __state = 23;
-            }
-            110 => {
-                __state = 24;
-            }
-            111 => {
-                __state = 25;
-            }
-            112 => {
-                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_update(fnptr(ctx, 0x8005e3a0));
-                __state = 113;
-            }
-            113 => {
-                __state = 71;
-            }
-            114 => {
                 unreachable!();
             }
+            107 => {
+                __state = 20;
+            }
+            108 => {
+                __state = 21;
+            }
+            109 => {
+                __state = 22;
+            }
+            110 => {
+                __state = 23;
+            }
+            111 => {
+                __state = 24;
+            }
+            112 => {
+                __state = 25;
+            }
+            113 => {
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_update(fnptr(ctx, 0x8005e3a0));
+                __state = 114;
+            }
+            114 => {
+                __state = 71;
+            }
             115 => {
-                __state = 26;
+                unreachable!();
             }
             116 => {
-                __state = 27;
+                __state = 26;
             }
             117 => {
+                __state = 27;
+            }
+            118 => {
                 effect = Handle::cast::<EF_Effect<'a>>(ret_obj);
                 inl_HSD_JObjSetRotationY_unfused(
                     ctx,
@@ -960,18 +963,18 @@ pub fn efAlt_Spawn<'a>(
                         .get())
                     .get(),
                 );
-                __state = 118;
-            }
-            118 => {
-                __state = 71;
+                __state = 119;
             }
             119 => {
-                unreachable!();
+                __state = 71;
             }
             120 => {
-                __state = 28;
+                unreachable!();
             }
             121 => {
+                __state = 28;
+            }
+            122 => {
                 (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_next(Handle::cast::<EF_Effect<'a>>(
                     Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Scale_FacingDir(
                         ctx,
@@ -983,55 +986,55 @@ pub fn efAlt_Spawn<'a>(
                         .get()),
                     )),
                 ));
-                __state = 122;
-            }
-            122 => {
-                __state = 71;
+                __state = 123;
             }
             123 => {
-                unreachable!();
+                __state = 71;
             }
             124 => {
-                __state = 29;
+                unreachable!();
             }
             125 => {
+                __state = 29;
+            }
+            126 => {
                 (Handle::cast::<EF_Effect<'a>>(ret_obj)).params().set_z(
                     ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get())
                     .get(),
                 );
                 (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_update(fnptr(ctx, 0x8005eddc));
-                __state = 126;
-            }
-            126 => {
-                __state = 71;
+                __state = 127;
             }
             127 => {
-                unreachable!();
+                __state = 71;
             }
             128 => {
-                __state = 30;
+                unreachable!();
             }
             129 => {
-                __state = 31;
+                __state = 30;
             }
             130 => {
+                __state = 31;
+            }
+            131 => {
                 value_ptr =
                     ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get());
-                __state = if (value_ptr).get() < 0.0 { 133 } else { 135 };
-            }
-            131 => {
-                __state = 71;
+                __state = if (value_ptr).get() < 0.0 { 134 } else { 136 };
             }
             132 => {
-                unreachable!();
+                __state = 71;
             }
             133 => {
-                temp_d_3 = fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))));
-                __state = 134;
+                unreachable!();
             }
             134 => {
+                temp_d_3 = fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))));
+                __state = 135;
+            }
+            135 => {
                 rotate_y_2_3 = fp::frsp(temp_d_3);
                 inl_HSD_JObjSetRotationY_unfused(
                     ctx,
@@ -1041,35 +1044,35 @@ pub fn efAlt_Spawn<'a>(
                     ))),
                     rotate_y_2_3,
                 );
-                __state = 131;
-            }
-            135 => {
-                temp_d_3 = (fp::fdiv(3.141592653589793, (2_i32 as f64)));
-                __state = 134;
+                __state = 132;
             }
             136 => {
-                unreachable!();
+                temp_d_3 = (fp::fdiv(3.141592653589793, (2_i32 as f64)));
+                __state = 135;
             }
             137 => {
-                __state = 32;
+                unreachable!();
             }
             138 => {
+                __state = 32;
+            }
+            139 => {
                 value_ptr =
                     ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get());
-                __state = if (value_ptr).get() < 0.0 { 141 } else { 143 };
-            }
-            139 => {
-                __state = 71;
+                __state = if (value_ptr).get() < 0.0 { 142 } else { 144 };
             }
             140 => {
-                unreachable!();
+                __state = 71;
             }
             141 => {
-                temp_d_4 = fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))));
-                __state = 142;
+                unreachable!();
             }
             142 => {
+                temp_d_4 = fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))));
+                __state = 143;
+            }
+            143 => {
                 rotate_y_2_4 = fp::frsp(temp_d_4);
                 inl_HSD_JObjSetRotationY_unfused(
                     ctx,
@@ -1079,19 +1082,19 @@ pub fn efAlt_Spawn<'a>(
                     ))),
                     rotate_y_2_4,
                 );
-                __state = 139;
-            }
-            143 => {
-                temp_d_4 = (fp::fdiv(3.141592653589793, (2_i32 as f64)));
-                __state = 142;
+                __state = 140;
             }
             144 => {
-                unreachable!();
+                temp_d_4 = (fp::fdiv(3.141592653589793, (2_i32 as f64)));
+                __state = 143;
             }
             145 => {
-                __state = 33;
+                unreachable!();
             }
             146 => {
+                __state = 33;
+            }
+            147 => {
                 effect_1 = Handle::cast::<EF_Effect<'a>>(ret_obj);
                 (effect_1).set_update(fnptr(ctx, 0x8005e090));
                 (effect_1).set_lifetime(effect_flags);
@@ -1100,15 +1103,15 @@ pub fn efAlt_Spawn<'a>(
                     fns::efLib_Create_Attach(ctx, 0x1389_u32, gobj, jobj_2),
                 ));
                 (effect_1).set_next(next_eff);
-                __state = if !Handle::is_null(next_eff) { 149 } else { 150 };
-            }
-            147 => {
-                __state = 71;
+                __state = if !Handle::is_null(next_eff) { 150 } else { 151 };
             }
             148 => {
-                unreachable!();
+                __state = 71;
             }
             149 => {
+                unreachable!();
+            }
+            150 => {
                 effect_2 =
                     Handle::cast::<EF_Effect<'a>>(Handle::cast::<Addr<'a>>((effect_1).next()));
                 (effect_2).set_update(fnptr(ctx, 0x8005e090));
@@ -1118,48 +1121,48 @@ pub fn efAlt_Spawn<'a>(
                     fns::efLib_Create_Attach(ctx, 0x138a_u32, gobj, jobj_2_2),
                 ));
                 (effect_2).set_next(next_eff);
-                __state = if !Handle::is_null(next_eff) { 152 } else { 153 };
-            }
-            150 => {
-                __state = 147;
+                __state = if !Handle::is_null(next_eff) { 153 } else { 154 };
             }
             151 => {
-                unreachable!();
+                __state = 148;
             }
             152 => {
+                unreachable!();
+            }
+            153 => {
                 effect_1 =
                     Handle::cast::<EF_Effect<'a>>(Handle::cast::<Addr<'a>>((effect_2).next()));
                 (effect_1).set_update(fnptr(ctx, 0x8005e090));
                 (effect_1).set_lifetime(effect_flags);
                 (effect_1).set_user_data(Handle::cast::<Addr<'a>>(fp));
-                __state = 153;
-            }
-            153 => {
-                __state = 150;
+                __state = 154;
             }
             154 => {
-                unreachable!();
+                __state = 151;
             }
             155 => {
-                __state = 34;
+                unreachable!();
             }
             156 => {
+                __state = 34;
+            }
+            157 => {
                 value_ptr =
                     ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get());
-                __state = if (value_ptr).get() < 0.0 { 159 } else { 161 };
-            }
-            157 => {
-                __state = 71;
+                __state = if (value_ptr).get() < 0.0 { 160 } else { 162 };
             }
             158 => {
-                unreachable!();
+                __state = 71;
             }
             159 => {
-                temp_d_5 = fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))));
-                __state = 160;
+                unreachable!();
             }
             160 => {
+                temp_d_5 = fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))));
+                __state = 161;
+            }
+            161 => {
                 rotate_y_2_5 = fp::frsp(temp_d_5);
                 inl_HSD_JObjSetRotationY_unfused(
                     ctx,
@@ -1169,50 +1172,50 @@ pub fn efAlt_Spawn<'a>(
                     ))),
                     rotate_y_2_5,
                 );
-                __state = 157;
-            }
-            161 => {
-                temp_d_5 = (fp::fdiv(3.141592653589793, (2_i32 as f64)));
-                __state = 160;
+                __state = 158;
             }
             162 => {
-                unreachable!();
+                temp_d_5 = (fp::fdiv(3.141592653589793, (2_i32 as f64)));
+                __state = 161;
             }
             163 => {
-                __state = 35;
-            }
-            164 => {
-                __state = 36;
-            }
-            165 => {
-                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_update(fnptr(ctx, 0x8005e2b4));
-                __state = 166;
-            }
-            166 => {
-                __state = 71;
-            }
-            167 => {
                 unreachable!();
             }
+            164 => {
+                __state = 35;
+            }
+            165 => {
+                __state = 36;
+            }
+            166 => {
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_update(fnptr(ctx, 0x8005e2b4));
+                __state = 167;
+            }
+            167 => {
+                __state = 71;
+            }
             168 => {
-                __state = 37;
+                unreachable!();
             }
             169 => {
-                __state = 38;
+                __state = 37;
             }
             170 => {
-                __state = 39;
+                __state = 38;
             }
             171 => {
-                __state = 40;
+                __state = 39;
             }
             172 => {
-                __state = 41;
+                __state = 40;
             }
             173 => {
-                __state = 42;
+                __state = 41;
             }
             174 => {
+                __state = 42;
+            }
+            175 => {
                 gobj_jobj =
                     (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
                 jobj_3 = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(
@@ -1246,18 +1249,18 @@ pub fn efAlt_Spawn<'a>(
                 .get()
                     < 0.0
                 {
-                    177
+                    178
                 } else {
-                    179
+                    180
                 };
             }
-            175 => {
+            176 => {
                 __state = 71;
             }
-            176 => {
+            177 => {
                 unreachable!();
             }
-            177 => {
+            178 => {
                 inl_HSD_JObjSetRotationY_unfused(
                     ctx,
                     jobj_3,
@@ -1274,13 +1277,13 @@ pub fn efAlt_Spawn<'a>(
                         .get(),
                     ),
                 );
-                __state = 178;
-            }
-            178 => {
-                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_update(fnptr(ctx, 0x8005e1d8));
-                __state = 175;
+                __state = 179;
             }
             179 => {
+                (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_update(fnptr(ctx, 0x8005e1d8));
+                __state = 176;
+            }
+            180 => {
                 inl_HSD_JObjSetRotationY_unfused(
                     ctx,
                     jobj_3,
@@ -1293,36 +1296,36 @@ pub fn efAlt_Spawn<'a>(
                         .get())
                     .get(),
                 );
-                __state = 178;
-            }
-            180 => {
-                unreachable!();
+                __state = 179;
             }
             181 => {
-                __state = 43;
+                unreachable!();
             }
             182 => {
-                __state = 44;
+                __state = 43;
             }
             183 => {
+                __state = 44;
+            }
+            184 => {
                 effect = Handle::cast::<EF_Effect<'a>>(ret_obj);
                 value_ptr =
                     ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get());
-                __state = if (value_ptr).get() < 0.0 { 186 } else { 188 };
+                __state = if (value_ptr).get() < 0.0 { 187 } else { 189 };
             }
-            184 => {
+            185 => {
                 let _ = fns::hsd_8039EFAC(ctx, 0_i32, 32_i32, 0x7d00_i32, jobj_2_3);
                 __state = 71;
             }
-            185 => {
+            186 => {
                 unreachable!();
             }
-            186 => {
-                temp_d_6 = fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))));
-                __state = 187;
-            }
             187 => {
+                temp_d_6 = fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))));
+                __state = 188;
+            }
+            188 => {
                 rotate_y_2_6 = fp::frsp(temp_d_6);
                 inl_HSD_JObjSetRotationY_unfused(
                     ctx,
@@ -1332,59 +1335,59 @@ pub fn efAlt_Spawn<'a>(
                     ))),
                     rotate_y_2_6,
                 );
-                __state = 184;
-            }
-            188 => {
-                temp_d_6 = (fp::fdiv(3.141592653589793, (2_i32 as f64)));
-                __state = 187;
+                __state = 185;
             }
             189 => {
-                unreachable!();
+                temp_d_6 = (fp::fdiv(3.141592653589793, (2_i32 as f64)));
+                __state = 188;
             }
             190 => {
-                __state = 45;
+                unreachable!();
             }
             191 => {
-                __state = 46;
+                __state = 45;
             }
             192 => {
-                __state = 47;
+                __state = 46;
             }
             193 => {
-                __state = 48;
+                __state = 47;
             }
             194 => {
-                __state = 49;
+                __state = 48;
             }
             195 => {
-                __state = 50;
+                __state = 49;
             }
             196 => {
-                __state = 51;
+                __state = 50;
             }
             197 => {
-                __state = 52;
+                __state = 51;
             }
             198 => {
-                __state = 53;
+                __state = 52;
             }
             199 => {
+                __state = 53;
+            }
+            200 => {
                 value_ptr =
                     ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get());
-                __state = if (value_ptr).get() < 0.0 { 202 } else { 204 };
-            }
-            200 => {
-                __state = 71;
+                __state = if (value_ptr).get() < 0.0 { 203 } else { 205 };
             }
             201 => {
-                unreachable!();
+                __state = 71;
             }
             202 => {
-                temp_d_7 = fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))));
-                __state = 203;
+                unreachable!();
             }
             203 => {
+                temp_d_7 = fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))));
+                __state = 204;
+            }
+            204 => {
                 rotate_y_2_7 = fp::frsp(temp_d_7);
                 inl_HSD_JObjSetRotationY_unfused(
                     ctx,
@@ -1394,36 +1397,36 @@ pub fn efAlt_Spawn<'a>(
                     ))),
                     rotate_y_2_7,
                 );
-                __state = 200;
-            }
-            204 => {
-                temp_d_7 = (fp::fdiv(3.141592653589793, (2_i32 as f64)));
-                __state = 203;
+                __state = 201;
             }
             205 => {
-                unreachable!();
+                temp_d_7 = (fp::fdiv(3.141592653589793, (2_i32 as f64)));
+                __state = 204;
             }
             206 => {
-                __state = 54;
+                unreachable!();
             }
             207 => {
+                __state = 54;
+            }
+            208 => {
                 effect = Handle::cast::<EF_Effect<'a>>(ret_obj);
                 value_ptr =
                     ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get());
-                __state = if (value_ptr).get() < 0.0 { 210 } else { 212 };
-            }
-            208 => {
-                __state = 71;
+                __state = if (value_ptr).get() < 0.0 { 211 } else { 213 };
             }
             209 => {
-                unreachable!();
+                __state = 71;
             }
             210 => {
-                temp_d_8 = fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))));
-                __state = 211;
+                unreachable!();
             }
             211 => {
+                temp_d_8 = fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))));
+                __state = 212;
+            }
+            212 => {
                 rotate_y_2_8 = fp::frsp(temp_d_8);
                 inl_HSD_JObjSetRotationY_unfused(
                     ctx,
@@ -1440,36 +1443,36 @@ pub fn efAlt_Spawn<'a>(
                         (effect).gobj(),
                     ))),
                 );
-                __state = 208;
-            }
-            212 => {
-                temp_d_8 = (fp::fdiv(3.141592653589793, (2_i32 as f64)));
-                __state = 211;
+                __state = 209;
             }
             213 => {
-                unreachable!();
+                temp_d_8 = (fp::fdiv(3.141592653589793, (2_i32 as f64)));
+                __state = 212;
             }
             214 => {
-                __state = 55;
+                unreachable!();
             }
             215 => {
+                __state = 55;
+            }
+            216 => {
                 effect = Handle::cast::<EF_Effect<'a>>(ret_obj);
                 value_ptr =
                     ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get());
-                __state = if (value_ptr).get() < 0.0 { 218 } else { 220 };
-            }
-            216 => {
-                __state = 71;
+                __state = if (value_ptr).get() < 0.0 { 219 } else { 221 };
             }
             217 => {
-                unreachable!();
+                __state = 71;
             }
             218 => {
-                temp_d_9 = fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))));
-                __state = 219;
+                unreachable!();
             }
             219 => {
+                temp_d_9 = fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))));
+                __state = 220;
+            }
+            220 => {
                 rotate_y_2_9 = fp::frsp(temp_d_9);
                 inl_HSD_JObjSetRotationY_unfused(
                     ctx,
@@ -1486,19 +1489,19 @@ pub fn efAlt_Spawn<'a>(
                         (effect).gobj(),
                     ))),
                 );
-                __state = 216;
-            }
-            220 => {
-                temp_d_9 = (fp::fdiv(3.141592653589793, (2_i32 as f64)));
-                __state = 219;
+                __state = 217;
             }
             221 => {
-                unreachable!();
+                temp_d_9 = (fp::fdiv(3.141592653589793, (2_i32 as f64)));
+                __state = 220;
             }
             222 => {
-                __state = 56;
+                unreachable!();
             }
             223 => {
+                __state = 56;
+            }
+            224 => {
                 (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_next(Handle::cast::<EF_Effect<'a>>(
                     Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Scale_FacingDir(
                         ctx,
@@ -1510,18 +1513,18 @@ pub fn efAlt_Spawn<'a>(
                         .get()),
                     )),
                 ));
-                __state = 224;
-            }
-            224 => {
-                __state = 71;
+                __state = 225;
             }
             225 => {
-                unreachable!();
+                __state = 71;
             }
             226 => {
-                __state = 57;
+                unreachable!();
             }
             227 => {
+                __state = 57;
+            }
+            228 => {
                 effect = Handle::cast::<EF_Effect<'a>>(ret_obj);
                 inl_HSD_JObjSetRotationY_unfused(
                     ctx,
@@ -1541,47 +1544,47 @@ pub fn efAlt_Spawn<'a>(
                         .get())
                     .get(),
                 );
-                __state = 228;
-            }
-            228 => {
-                __state = 71;
+                __state = 229;
             }
             229 => {
-                unreachable!();
+                __state = 71;
             }
             230 => {
-                __state = 58;
+                unreachable!();
             }
             231 => {
-                __state = 59;
+                __state = 58;
             }
             232 => {
-                __state = 60;
+                __state = 59;
             }
             233 => {
-                __state = 61;
+                __state = 60;
             }
             234 => {
-                __state = 62;
+                __state = 61;
             }
             235 => {
+                __state = 62;
+            }
+            236 => {
                 value_ptr =
                     ((Handle::cast::<Ptr<'a, Val<'a, F32>>>(fns::__va_arg(ctx, vlist_arg, 1_u8)))
                         .get());
-                __state = if (value_ptr).get() < 0.0 { 238 } else { 240 };
+                __state = if (value_ptr).get() < 0.0 { 239 } else { 241 };
             }
-            236 => {
+            237 => {
                 let _ = fns::hsd_8039EFAC(ctx, 0_i32, 37_i32, 0x9088_i32, input_jobj);
                 __state = 71;
             }
-            237 => {
+            238 => {
                 unreachable!();
             }
-            238 => {
-                temp_d_10 = fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))));
-                __state = 239;
-            }
             239 => {
+                temp_d_10 = fp::fneg((fp::fdiv(3.141592653589793, (2_i32 as f64))));
+                __state = 240;
+            }
+            240 => {
                 effect = Handle::cast::<EF_Effect<'a>>(ret_obj);
                 rotate_y_2_10 = fp::frsp(temp_d_10);
                 inl_HSD_JObjSetRotationY_unfused(
@@ -1592,22 +1595,22 @@ pub fn efAlt_Spawn<'a>(
                     ))),
                     rotate_y_2_10,
                 );
-                __state = 236;
-            }
-            240 => {
-                temp_d_10 = (fp::fdiv(3.141592653589793, (2_i32 as f64)));
-                __state = 239;
+                __state = 237;
             }
             241 => {
-                unreachable!();
+                temp_d_10 = (fp::fdiv(3.141592653589793, (2_i32 as f64)));
+                __state = 240;
             }
             242 => {
-                __state = 63;
+                unreachable!();
             }
             243 => {
-                __state = 64;
+                __state = 63;
             }
             244 => {
+                __state = 64;
+            }
+            245 => {
                 (Handle::cast::<EF_Effect<'a>>(ret_obj)).set_next(Handle::cast::<EF_Effect<'a>>(
                     Handle::cast::<Addr<'a>>(fns::efLib_Create_Attach_Scale_FacingDir(
                         ctx,
@@ -1619,30 +1622,30 @@ pub fn efAlt_Spawn<'a>(
                         .get()),
                     )),
                 ));
-                __state = 245;
-            }
-            245 => {
-                __state = 71;
+                __state = 246;
             }
             246 => {
-                unreachable!();
+                __state = 71;
             }
             247 => {
-                __state = 65;
+                unreachable!();
             }
             248 => {
-                __state = 66;
+                __state = 65;
             }
             249 => {
-                __state = 67;
+                __state = 66;
             }
             250 => {
-                __state = if !Handle::is_null(ret_obj) { 252 } else { 253 };
+                __state = 67;
             }
             251 => {
-                __state = 68;
+                __state = if !Handle::is_null(ret_obj) { 253 } else { 254 };
             }
             252 => {
+                __state = 68;
+            }
+            253 => {
                 effect = Handle::cast::<EF_Effect<'a>>(ret_obj);
                 inl_HSD_JObjGetScale_unfused(
                     ctx,
@@ -1655,27 +1658,27 @@ pub fn efAlt_Spawn<'a>(
                         (effect).gobj(),
                     ))),
                 ) {
-                    255
-                } else {
                     256
+                } else {
+                    257
                 };
             }
-            253 => {
+            254 => {
                 __state = 71;
             }
-            254 => {
+            255 => {
                 unreachable!();
             }
-            255 => {
+            256 => {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x804d39d8),
                     (0x337_i32 as u32),
                     cstr(ctx, 0x804d39e0),
                 );
-                __state = 256;
+                __state = 257;
             }
-            256 => {
+            257 => {
                 inl_HSD_JObjSetScale_unfused(
                     ctx,
                     (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(
@@ -1684,28 +1687,28 @@ pub fn efAlt_Spawn<'a>(
                     ))),
                     scale,
                 );
-                __state = 253;
-            }
-            257 => {
-                unreachable!();
+                __state = 254;
             }
             258 => {
-                __state = 69;
+                unreachable!();
             }
             259 => {
-                __state = 70;
+                __state = 69;
             }
             260 => {
-                __state = 71;
+                __state = 70;
             }
             261 => {
-                __state = if fns::efLib_AnimCount(ctx).get() != 0_i32 {
-                    262
-                } else {
-                    264
-                };
+                __state = 71;
             }
             262 => {
+                __state = if fns::efLib_AnimCount(ctx).get() != 0_i32 {
+                    263
+                } else {
+                    265
+                };
+            }
+            263 => {
                 cnt = fns::efLib_AnimCount(ctx).get().wrapping_sub(1_i32);
                 fns::efLib_AnimCount(ctx).set(cnt);
                 fns::HSD_JObjAnimAll(
@@ -1716,21 +1719,21 @@ pub fn efAlt_Spawn<'a>(
                     ))
                     .get(),
                 );
-                __state = 261;
-            }
-            263 => {
-                __state = 261;
+                __state = 262;
             }
             264 => {
-                return ret_obj;
+                __state = 262;
             }
             265 => {
-                unreachable!();
+                return ret_obj;
             }
             266 => {
-                return null(ctx);
+                unreachable!();
             }
             267 => {
+                return null(ctx);
+            }
+            268 => {
                 unreachable!();
             }
             _ => unreachable!(),

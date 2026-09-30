@@ -212,9 +212,7 @@ pub fn mnEvent_8024D15C<'a>(ctx: &'a Ctx, idx: i32, event_id: i32) {
         spacing = inl_HSD_JObjGetTranslationY(ctx, jobj_0A.get());
         spacing = fp::fsubs(inl_HSD_JObjGetTranslationY(ctx, jobj_0C.get()), spacing);
         inl_HSD_JObjGetTranslation(ctx, jobj_0A.get(), pos);
-        pos.set_y(fp::fneg(
-            (fp::fmadds(fp::frsp(idx as f64), spacing, pos.y())),
-        ));
+        pos.set_y(fp::fnmadds(fp::frsp(idx as f64), spacing, pos.y()));
         if !Handle::is_null((data).gobjs().at(idx).get()) {
             let mut gobjs: Ptr<'a, HSD_GObj<'a>> = (data).gobjs().at(0);
             let mut old_gobj: HSD_GObj<'a> = (Handle::add(gobjs, idx)).get();

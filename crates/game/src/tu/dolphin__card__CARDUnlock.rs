@@ -385,7 +385,7 @@ pub fn InitCallback<'a>(ctx: &'a Ctx, _task: Addr<'a>) {
 pub fn DoneCallback<'a>(ctx: &'a Ctx, _task: Addr<'a>) {
     let __frame = ctx.stack_frame(0x88);
     let rbuf: ArrV<'a, u8, 64> = frame_at(ctx, &__frame, 0x0);
-    let unk_: Val<'a, u8> = frame_at(ctx, &__frame, 0x40);
+    let unk: Val<'a, u8> = frame_at(ctx, &__frame, 0x40);
     let mut _task = _task;
     let mut data: u32 = 0;
     let mut dummy: i32 = 0;
@@ -464,13 +464,13 @@ pub fn DoneCallback<'a>(ctx: &'a Ctx, _task: Addr<'a>) {
         fns::__CARDMountCallback(ctx, chan, (3_i32.wrapping_neg()));
         return;
     }
-    result = fns::__CARDReadStatus(ctx, chan, unk_);
+    result = fns::__CARDReadStatus(ctx, chan, unk);
     if !(fns::EXIProbe(ctx, chan) != 0) {
         let _ = fns::EXIUnlock(ctx, chan);
         fns::__CARDMountCallback(ctx, chan, (3_i32.wrapping_neg()));
         return;
     }
-    if (result == 0_i32) && (!(((unk_.get() as i32) & 64_i32) != 0)) {
+    if (result == 0_i32) && (!(((unk.get() as i32) & 64_i32) != 0)) {
         let _ = fns::EXIUnlock(ctx, chan);
         result = (5_i32.wrapping_neg());
     }

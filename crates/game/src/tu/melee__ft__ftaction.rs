@@ -34,7 +34,7 @@ pub fn ftAction_80071028<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<
     let mut cmd = cmd;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    let mut unk_: f64 = 0.0;
+    let mut unk: f64 = 0.0;
     let mut bone: i32 = 0;
     let mut use_common_bone_id: i32 = 0;
     let mut destroy_on_state_change: i32 = 0;
@@ -58,7 +58,7 @@ pub fn ftAction_80071028<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<
                 }
             }
             gfx_id = ((cmd).x8().u()).spawn_gfx_1().gfxID();
-            unk_ = fp::frsp(((cmd).x8().u()).spawn_gfx_1().unkFloat() as f64);
+            unk = fp::frsp(((cmd).x8().u()).spawn_gfx_1().unkFloat() as f64);
             'l3: loop {
                 'c4: {
                     (cmd).x8().set_u(Handle::add((cmd).x8().u(), 1));
@@ -124,7 +124,7 @@ pub fn ftAction_80071028<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<
                 destroy_on_state_change,
                 offset,
                 range,
-                unk_,
+                unk,
             );
         } else {
             fns::ftAction_800711DC(ctx, gobj, cmd);
@@ -1602,6 +1602,460 @@ pub fn ftAction_800722C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<
     }
 }
 
+pub fn ftAction_80072320<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
+    let __frame = ctx.stack_frame(0x40);
+    let mut gobj = gobj;
+    let mut cmd = cmd;
+    let mut fp: Fighter<'a> = null(ctx);
+    let mut pitch_select: u8 = 0;
+    let mut spC: i32 = 0;
+    let mut sp8: i32 = 0;
+    let mut sfx: i32 = 0;
+    let mut behavior: u32 = 0;
+    let mut sfx_base: u32 = 0;
+    let mut direction: f64 = 0.0;
+    let mut sfx_param0: i32 = 0;
+    let mut sfx_param1: i32 = 0;
+    let mut sfx_param2: i32 = 0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+                pitch_select = (((cmd).x8().u()).stage_sfx_0().pitch_select() as u8);
+                behavior = ((cmd).x8().u()).stage_sfx_0().sfx_base();
+                sfx_base = ((cmd).x8().u()).stage_sfx_0().x2_b0_7();
+                __state = match (pitch_select as i32) {
+                    0_i32 => 1,
+                    1_i32 => 2,
+                    2_i32 => 3,
+                    3_i32 => 4,
+                    _ => 5,
+                };
+            }
+            1 => {
+                direction = 0.0;
+                __state = 5;
+            }
+            2 => {
+                direction = 1.0;
+                __state = 5;
+            }
+            3 => {
+                direction = fp::fneg(1.0);
+                __state = 5;
+            }
+            4 => {
+                direction = (fp).facing_dir();
+                __state = 5;
+            }
+            5 => {
+                __state = 13;
+            }
+            6 => {
+                unreachable!();
+            }
+            7 => {
+                __state = 1;
+            }
+            8 => {
+                __state = 2;
+            }
+            9 => {
+                __state = 3;
+            }
+            10 => {
+                __state = 4;
+            }
+            11 => {
+                __state = 5;
+            }
+            12 => {
+                unreachable!();
+            }
+            13 => {
+                (cmd).x8().set_u(Handle::add((cmd).x8().u(), 1));
+                __state = 14;
+            }
+            14 => {
+                __state = if (0_i32 != 0) { 13 } else { 15 };
+            }
+            15 => {
+                sfx = fns::ft_80087D0C(ctx, fp, (((cmd).x8().u()).stage_sfx_1().sfx_id() as i32));
+                __state = 18;
+            }
+            16 => {
+                unreachable!();
+            }
+            17 => {
+                unreachable!();
+            }
+            18 => {
+                (cmd).x8().set_u(Handle::add((cmd).x8().u(), 1));
+                __state = 19;
+            }
+            19 => {
+                __state = if (0_i32 != 0) { 18 } else { 20 };
+            }
+            20 => {
+                sfx_param2 = (((cmd).x8().u()).stage_sfx_2().x2_b0_15() as i32);
+                __state = 23;
+            }
+            21 => {
+                unreachable!();
+            }
+            22 => {
+                unreachable!();
+            }
+            23 => {
+                (cmd).x8().set_u(Handle::add((cmd).x8().u(), 1));
+                __state = 24;
+            }
+            24 => {
+                __state = if (0_i32 != 0) { 23 } else { 25 };
+            }
+            25 => {
+                sfx_param0 = (((cmd).x8().u()).stage_sfx_3().x2_b0_7() as i32);
+                sfx_param1 = (((cmd).x8().u()).stage_sfx_3().x3_b0_7() as i32);
+                __state = 28;
+            }
+            26 => {
+                unreachable!();
+            }
+            27 => {
+                unreachable!();
+            }
+            28 => {
+                (cmd).x8().set_u(Handle::add((cmd).x8().u(), 1));
+                __state = 29;
+            }
+            29 => {
+                __state = if (0_i32 != 0) { 28 } else { 30 };
+            }
+            30 => {
+                __state = match sfx_base {
+                    0_u32 => 32,
+                    1_u32 => 33,
+                    2_u32 => 34,
+                    3_u32 => 35,
+                    4_u32 => 36,
+                    5_u32 => 37,
+                    6_u32 => 38,
+                    _ => 39,
+                };
+            }
+            31 => {
+                unreachable!();
+            }
+            32 => {
+                sp8 = 0_i32;
+                spC = 1_i32.wrapping_neg();
+                (fp).set_x2160(fns::lbAudioAx_800264E4(
+                    ctx,
+                    fns::lbAudioAx_800263E8(
+                        ctx,
+                        direction,
+                        gobj,
+                        (behavior as i32),
+                        sfx,
+                        127_i32,
+                        127_i32,
+                        sfx_param0,
+                        sfx_param1,
+                        sfx_param2,
+                        sp8,
+                        spC,
+                    ),
+                ));
+                __state = 40;
+            }
+            33 => {
+                sp8 = ((fp).player_idx() as i32).wrapping_add(((fp).is_sub_fighter() as i32));
+                (fp).set_x214C(fns::lbAudioAx_800264E4(
+                    ctx,
+                    fns::lbAudioAx_800263E8(
+                        ctx,
+                        direction,
+                        gobj,
+                        (behavior as i32),
+                        sfx,
+                        127_i32,
+                        127_i32,
+                        sfx_param0,
+                        sfx_param1,
+                        sfx_param2,
+                        sp8.wrapping_add(54_i32),
+                        1_i32.wrapping_neg(),
+                    ),
+                ));
+                __state = 40;
+            }
+            34 => {
+                __state = if !((fp).x2225_b6() != 0) { 45 } else { 46 };
+            }
+            35 => {
+                sp8 = ((fp).player_idx() as i32).wrapping_add(((fp).is_sub_fighter() as i32));
+                (fp).set_x2150(fns::lbAudioAx_800264E4(
+                    ctx,
+                    fns::lbAudioAx_800263E8(
+                        ctx,
+                        direction,
+                        gobj,
+                        (behavior as i32),
+                        sfx,
+                        127_i32,
+                        127_i32,
+                        sfx_param0,
+                        sfx_param1,
+                        sfx_param2,
+                        sp8.wrapping_add(66_i32),
+                        1_i32.wrapping_neg(),
+                    ),
+                ));
+                __state = 40;
+            }
+            36 => {
+                sp8 = ((fp).player_idx() as i32).wrapping_add(((fp).is_sub_fighter() as i32));
+                (fp).set_x2154(fns::lbAudioAx_800264E4(
+                    ctx,
+                    fns::lbAudioAx_800263E8(
+                        ctx,
+                        direction,
+                        gobj,
+                        (behavior as i32),
+                        sfx,
+                        127_i32,
+                        127_i32,
+                        sfx_param0,
+                        sfx_param1,
+                        sfx_param2,
+                        sp8.wrapping_add(78_i32),
+                        1_i32.wrapping_neg(),
+                    ),
+                ));
+                __state = 40;
+            }
+            37 => {
+                sp8 = ((fp).player_idx() as i32).wrapping_add(((fp).is_sub_fighter() as i32));
+                (fp).set_x2158(fns::lbAudioAx_800264E4(
+                    ctx,
+                    fns::lbAudioAx_800263E8(
+                        ctx,
+                        direction,
+                        gobj,
+                        (behavior as i32),
+                        sfx,
+                        127_i32,
+                        127_i32,
+                        sfx_param0,
+                        sfx_param1,
+                        sfx_param2,
+                        sp8.wrapping_add(90_i32),
+                        1_i32.wrapping_neg(),
+                    ),
+                ));
+                __state = 40;
+            }
+            38 => {
+                __state = if !((fp).x2225_b6() != 0) { 61 } else { 62 };
+            }
+            39 => {
+                __state = 40;
+            }
+            40 => {
+                return;
+            }
+            41 => {
+                unreachable!();
+            }
+            42 => {
+                __state = 32;
+            }
+            43 => {
+                __state = 33;
+            }
+            44 => {
+                __state = 34;
+            }
+            45 => {
+                sp8 = ((fp).player_idx() as i32).wrapping_add(((fp).is_sub_fighter() as i32));
+                (fp).set_x2144(fns::lbAudioAx_800264E4(
+                    ctx,
+                    fns::lbAudioAx_800263E8(
+                        ctx,
+                        direction,
+                        gobj,
+                        (behavior as i32),
+                        sfx,
+                        127_i32,
+                        127_i32,
+                        sfx_param0,
+                        sfx_param1,
+                        sfx_param2,
+                        sp8.wrapping_add(30_i32),
+                        1_i32.wrapping_neg(),
+                    ),
+                ));
+                __state = 40;
+            }
+            46 => {
+                __state = match ((fp).kind() as u32) {
+                    24_u32 => 49,
+                    13_u32 => 50,
+                    _ => 51,
+                };
+            }
+            47 => {
+                unreachable!();
+            }
+            48 => {
+                __state = 46;
+            }
+            49 => {
+                __state = 50;
+            }
+            50 => {
+                sp8 = ((fp).player_idx() as i32).wrapping_add(((fp).is_sub_fighter() as i32));
+                (fp).set_x2144(fns::lbAudioAx_800264E4(
+                    ctx,
+                    fns::lbAudioAx_800263E8(
+                        ctx,
+                        direction,
+                        gobj,
+                        (behavior as i32),
+                        sfx,
+                        127_i32,
+                        127_i32,
+                        sfx_param0,
+                        sfx_param1,
+                        sfx_param2,
+                        sp8.wrapping_add(30_i32),
+                        1_i32.wrapping_neg(),
+                    ),
+                ));
+                __state = 52;
+            }
+            51 => {
+                __state = 52;
+            }
+            52 => {
+                __state = 40;
+            }
+            53 => {
+                unreachable!();
+            }
+            54 => {
+                __state = 49;
+            }
+            55 => {
+                __state = 51;
+            }
+            56 => {
+                __state = 52;
+            }
+            57 => {
+                __state = 35;
+            }
+            58 => {
+                __state = 36;
+            }
+            59 => {
+                __state = 37;
+            }
+            60 => {
+                __state = 38;
+            }
+            61 => {
+                sp8 = ((fp).player_idx() as i32).wrapping_add(((fp).is_sub_fighter() as i32));
+                (fp).set_x2148(fns::lbAudioAx_800264E4(
+                    ctx,
+                    fns::lbAudioAx_800263E8(
+                        ctx,
+                        direction,
+                        gobj,
+                        (behavior as i32),
+                        sfx,
+                        127_i32,
+                        127_i32,
+                        sfx_param0,
+                        sfx_param1,
+                        sfx_param2,
+                        sp8.wrapping_add(42_i32),
+                        1_i32.wrapping_neg(),
+                    ),
+                ));
+                __state = 40;
+            }
+            62 => {
+                __state = match ((fp).kind() as u32) {
+                    24_u32 => 66,
+                    13_u32 => 67,
+                    _ => 68,
+                };
+            }
+            63 => {
+                unreachable!();
+            }
+            64 => {
+                __state = 39;
+            }
+            65 => {
+                __state = 62;
+            }
+            66 => {
+                __state = 67;
+            }
+            67 => {
+                sp8 = ((fp).player_idx() as i32).wrapping_add(((fp).is_sub_fighter() as i32));
+                (fp).set_x2148(fns::lbAudioAx_800264E4(
+                    ctx,
+                    fns::lbAudioAx_800263E8(
+                        ctx,
+                        direction,
+                        gobj,
+                        (behavior as i32),
+                        sfx,
+                        127_i32,
+                        127_i32,
+                        sfx_param0,
+                        sfx_param1,
+                        sfx_param2,
+                        sp8.wrapping_add(42_i32),
+                        1_i32.wrapping_neg(),
+                    ),
+                ));
+                __state = 69;
+            }
+            68 => {
+                __state = 69;
+            }
+            69 => {
+                __state = 40;
+            }
+            70 => {
+                unreachable!();
+            }
+            71 => {
+                __state = 66;
+            }
+            72 => {
+                __state = 68;
+            }
+            73 => {
+                __state = 69;
+            }
+            74 => {
+                __state = 40;
+            }
+            75 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn ftAction_800726C0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
     let mut gobj = gobj;
     let mut cmd = cmd;
@@ -2876,6 +3330,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
             Ret::put(ftAction_800722C8(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80072320,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, CommandInfo<'_>) = Args::take_all(ctx);
+            Ret::put(ftAction_80072320(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );

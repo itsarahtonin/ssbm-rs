@@ -293,7 +293,7 @@ fn inl_inline0_unfused<'a>(
     mobility: f64,
     landing_lag: f64,
     arg6: f64,
-    unk_: i32,
+    unk: i32,
 ) {
     let mut gobj = gobj;
     let mut arg1 = arg1;
@@ -302,7 +302,7 @@ fn inl_inline0_unfused<'a>(
     let mut mobility = mobility;
     let mut landing_lag = landing_lag;
     let mut arg6 = arg6;
-    let mut unk_ = unk_;
+    let mut unk = unk;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut ca: ftCo_DatAttrs<'a> = (fp).co_attrs();
@@ -335,7 +335,7 @@ fn inl_inline0_unfused<'a>(
     (fp).mv().co().fallspecial().set_x4(fp::frsp(0_i32 as f64));
     if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
         fns::ftCommon_8007D60C(ctx, fp);
-    } else if (unk_ != 0) {
+    } else if (unk != 0) {
         fns::ftCommon_UseAllJumps(ctx, fp);
     }
     let _ = fns::un_80322598(ctx, (fp).x8_spawnNum(), (fp).cur_pos().y());

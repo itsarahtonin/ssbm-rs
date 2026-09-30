@@ -347,6 +347,158 @@ pub fn getColorMatAmb<'a>(
     }
 }
 
+pub fn particleSort<'a>(
+    ctx: &'a Ctx,
+    arg0: i32,
+    arg1: u8,
+    arg2: Ptr<'a, HSD_Particle<'a>>,
+    arg3: Ptr<'a, HSD_Particle<'a>>,
+) -> HSD_Particle<'a> {
+    let __frame = ctx.stack_frame(0xb0);
+    let buckets: Arr<'a, psdisp_ParticleSortBucket<'a>, 16> = frame_at(ctx, &__frame, 0x0);
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut arg3 = arg3;
+    let mut new_var: Ptr<'a, HSD_Particle<'a>> = null(ctx);
+    let mut var_r28: HSD_Particle<'a> = null(ctx);
+    let mut var_r3: HSD_Particle<'a> = null(ctx);
+    let mut var_r4: HSD_Particle<'a> = null(ctx);
+    let mut var_r5: HSD_Particle<'a> = null(ctx);
+    let mut var_r7: HSD_Particle<'a> = null(ctx);
+    let mut temp_r29: Ptr<'a, HSD_Particle<'a>> = null(ctx);
+    let mut var_r6_2: Ptr<'a, HSD_Particle<'a>> = null(ctx);
+    let mut var_r7_2: Ptr<'a, HSD_Particle<'a>> = null(ctx);
+    let mut i: i32 = 0;
+    let mut temp_r3: u32 = 0;
+    let mut temp_r3_2: u32 = 0;
+    let mut temp_r4: i32 = 0;
+    let mut var_r0: i32 = 0;
+    let mut var_r0_2: i32 = 0;
+    let mut var_r6: i32 = 0;
+    let mut temp_r9: Val<'a, u8> = null(ctx);
+    temp_r9 = statics::sysdolphin__baselib__psdisp::HSD_PSDisp_8040C360(ctx).at(arg0);
+    temp_r29 = ({
+        let __t1 = fns::hsd_804D0908(ctx).at(arg0);
+        new_var = __t1;
+        __t1
+    });
+    var_r28 = (temp_r29).get();
+    if ((temp_r9).get() as i32) == (arg1 as i32) {
+        (arg2).set(var_r28);
+        (arg3).set(
+            statics::sysdolphin__baselib__psdisp::particle_list(ctx)
+                .at(arg0)
+                .get(),
+        );
+        return var_r28;
+    }
+    (temp_r9).set(arg1);
+    if Handle::is_null(var_r28) {
+        statics::sysdolphin__baselib__psdisp::particle_list(ctx)
+            .at(arg0)
+            .set(null::<HSD_Particle<'a>>(ctx));
+        (arg2).set(null::<HSD_Particle<'a>>(ctx));
+        (arg3).set(null::<HSD_Particle<'a>>(ctx));
+        return null::<HSD_Particle<'a>>(ctx);
+    }
+    let _ = fns::memset(
+        ctx,
+        Handle::cast::<Addr<'a>>(buckets.get(0)),
+        0_i32,
+        128_u32,
+    );
+    temp_r3 = (var_r28).kind();
+    if ((temp_r3 & (8_i32 as u32)) != 0) {
+        var_r0 = 0_i32;
+    } else {
+        var_r0 = 1_i32;
+    }
+    temp_r4 = (((shr_u32(temp_r3, (25_i32 as u32))) & (7_i32 as u32))
+        .wrapping_add(((var_r0.wrapping_mul(8_i32)) as u32)) as i32);
+    buckets.get(temp_r4).set_head(var_r28);
+    var_r6 = temp_r4;
+    var_r7 = (var_r28).next();
+    'l1: while !Handle::is_null(var_r7) {
+        'c2: {
+            if ((((var_r28).kind() ^ (var_r7).kind()) & (0xe000008_i32 as u32)) != 0) {
+                buckets.get(var_r6).set_tail(var_r28);
+                temp_r3_2 = (var_r7).kind();
+                if ((temp_r3_2 & (8_i32 as u32)) != 0) {
+                    var_r0_2 = 0_i32;
+                } else {
+                    var_r0_2 = 1_i32;
+                }
+                var_r6 = (((shr_u32(temp_r3_2, (25_i32 as u32))) & (7_i32 as u32))
+                    .wrapping_add(((var_r0_2.wrapping_mul(8_i32)) as u32))
+                    as i32);
+                if Handle::is_null(buckets.get(var_r6).head()) {
+                    buckets.get(var_r6).set_head(var_r7);
+                } else {
+                    (buckets.get(var_r6).tail()).set_next(var_r7);
+                }
+            }
+            var_r28 = var_r7;
+            var_r7 = (var_r7).next();
+        }
+    }
+    buckets.get(var_r6).set_tail(var_r28);
+    var_r6_2 = null::<Ptr<'a, HSD_Particle<'a>>>(ctx);
+    var_r4 = null::<HSD_Particle<'a>>(ctx);
+    var_r7_2 = null::<Ptr<'a, HSD_Particle<'a>>>(ctx);
+    var_r5 = null::<HSD_Particle<'a>>(ctx);
+    {
+        i = 0_i32;
+        'l3: while i < 8_i32 {
+            'c4: {
+                if !Handle::is_null(buckets.get(i).head()) {
+                    if Handle::is_null(var_r4) {
+                        var_r4 = buckets.get(i).head();
+                    } else {
+                        (var_r6_2).set(buckets.get(i).head());
+                    }
+                    var_r6_2 = (buckets.get(i).tail()).next_ref();
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    {
+        i = 8_i32;
+        'l5: while i < 16_i32 {
+            'c6: {
+                if !Handle::is_null(buckets.get(i).head()) {
+                    if Handle::is_null(var_r5) {
+                        var_r5 = buckets.get(i).head();
+                    } else {
+                        (var_r7_2).set(buckets.get(i).head());
+                    }
+                    var_r7_2 = (buckets.get(i).tail()).next_ref();
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    var_r3 = null::<HSD_Particle<'a>>(ctx);
+    if !Handle::is_null(var_r6_2) {
+        var_r3 = var_r4;
+        (var_r6_2).set(var_r5);
+    }
+    if !Handle::is_null(var_r7_2) {
+        if Handle::is_null(var_r3) {
+            var_r3 = var_r5;
+        }
+        (var_r7_2).set(null::<HSD_Particle<'a>>(ctx));
+    }
+    (temp_r29).set(var_r3);
+    statics::sysdolphin__baselib__psdisp::particle_list(ctx)
+        .at(arg0)
+        .set(var_r5);
+    (arg2).set(var_r3);
+    (arg3).set(var_r5);
+    return var_r3;
+}
+
 pub fn psDispParticles<'a>(ctx: &'a Ctx, target_link: u32, sw: u32) {
     let __frame = ctx.stack_frame(0x9a0);
     let tlut_obj: psdisp_Tlut<'a> = frame_at(ctx, &__frame, 0x0);
@@ -4404,6 +4556,19 @@ pub fn register(ctx: &Ctx) {
             Ret::put(getColorMatAmb(ctx, a0, a1, a2), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8039fc70,
+        |ctx| {
+            let (a0, a1, a2, a3): (
+                i32,
+                u8,
+                Ptr<'_, HSD_Particle<'_>>,
+                Ptr<'_, HSD_Particle<'_>>,
+            ) = Args::take_all(ctx);
+            Ret::put(particleSort(ctx, a0, a1, a2, a3), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x803a0088,

@@ -143,12 +143,10 @@ pub fn itNesspkfirepillar_Logic24_DmgReceived<'a>(ctx: &'a Ctx, item_gobj: HSD_G
         Handle::cast::<itNessPKFirepillarAttributes<'a>>(
             ((item).xC4_article_data()).x4_specialAttributes(),
         );
-    (item).set_xD44_lifeTimer(fp::fneg(
-        (fp::fmsubs(
-            fp::frsp((item).xC9C() as f64),
-            (attrs).x4(),
-            (item).xD44_lifeTimer(),
-        )),
+    (item).set_xD44_lifeTimer(fp::fnmsubs(
+        fp::frsp((item).xC9C() as f64),
+        (attrs).x4(),
+        (item).xD44_lifeTimer(),
     ));
     if (item).xD44_lifeTimer() <= 0.0 {
         (item).set_xD44_lifeTimer(inl_get_min_life(ctx));

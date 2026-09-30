@@ -4368,7 +4368,7 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             24 => {
                 (state).set_x30(
                     (fp::fdivs(
-                        fp::fneg((fp::fmsubs(0.20000000298023224, fp::frsp(sign as f64), tmp))),
+                        fp::fnmsubs(0.20000000298023224, fp::frsp(sign as f64), tmp),
                         0.800000011920929,
                     )),
                 );
@@ -4408,7 +4408,7 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             32 => {
                 (state).set_x34(
                     (fp::fdivs(
-                        fp::fneg((fp::fmsubs(0.20000000298023224, fp::frsp(sign as f64), tmp))),
+                        fp::fnmsubs(0.20000000298023224, fp::frsp(sign as f64), tmp),
                         0.800000011920929,
                     )),
                 );
@@ -4446,7 +4446,7 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             40 => {
                 (state).set_x40(
                     (fp::fdivs(
-                        fp::fneg((fp::fmsubs(0.20000000298023224, fp::frsp(sign as f64), tmp))),
+                        fp::fnmsubs(0.20000000298023224, fp::frsp(sign as f64), tmp),
                         0.800000011920929,
                     )),
                 );
@@ -4484,7 +4484,7 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             48 => {
                 (state).set_x44(
                     (fp::fdivs(
-                        fp::fneg((fp::fmsubs(0.20000000298023224, fp::frsp(sign as f64), tmp))),
+                        fp::fnmsubs(0.20000000298023224, fp::frsp(sign as f64), tmp),
                         0.800000011920929,
                     )),
                 );
@@ -4528,9 +4528,9 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 __state = match ((state).x61() as i32) {
                     0_i32 => 59,
                     1_i32 => 60,
-                    3_i32 => 60,
-                    2_i32 => 61,
-                    _ => 62,
+                    3_i32 => 61,
+                    2_i32 => 62,
+                    _ => 63,
                 };
             }
             57 => {
@@ -4542,86 +4542,92 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             59 => {
                 trigger = (inl_Toy_80305B88(ctx) as u32);
                 __state = if ((trigger & ((shl_i32(1_i32, (9_i32 as u32))) as u32)) != 0) {
-                    64
+                    66
                 } else {
-                    65
+                    67
                 };
             }
             60 => {
-                statics::melee__ty__toy::_Toy_80308F04(ctx, cobj);
-                rotate_update = 0.0;
-                __state = 62;
+                __state = 61;
             }
             61 => {
-                trigger = (inl_Toy_80305B88(ctx) as u32);
-                __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
-                    113
-                } else {
-                    114
-                };
+                statics::melee__ty__toy::_Toy_80308F04(ctx, cobj);
+                rotate_update = 0.0;
+                __state = 63;
             }
             62 => {
-                __state = if (rotate_update != 0.0) { 206 } else { 207 };
+                trigger = (inl_Toy_80305B88(ctx) as u32);
+                __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
+                    115
+                } else {
+                    116
+                };
             }
             63 => {
-                unreachable!();
+                __state = if (rotate_update != 0.0) { 208 } else { 209 };
             }
             64 => {
+                unreachable!();
+            }
+            65 => {
+                __state = 59;
+            }
+            66 => {
                 inl_sfxBack(ctx);
                 fns::Toy_80310660(ctx, 1_i32);
                 fns::HSD_GObj_80390CD4(ctx, gobj);
                 fns::tyList_803147C4(ctx);
                 return;
             }
-            65 => {
+            67 => {
                 __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
                     || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
                 {
-                    68
-                } else {
                     70
+                } else {
+                    72
                 };
-            }
-            66 => {
-                unreachable!();
-            }
-            67 => {
-                __state = 65;
             }
             68 => {
-                trophy_count = ((base).trophy_count() as i32);
-                __state = 69;
+                unreachable!();
             }
             69 => {
-                __state = if trophy_count == 0_i32 { 72 } else { 73 };
+                __state = 67;
             }
             70 => {
-                trophy_count = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
-                __state = 69;
+                trophy_count = ((base).trophy_count() as i32);
+                __state = 71;
             }
             71 => {
-                unreachable!();
+                __state = if trophy_count == 0_i32 { 74 } else { 75 };
             }
             72 => {
-                return;
+                trophy_count = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
+                __state = 71;
             }
             73 => {
-                __state = if (fp::fadds((state).x40(), (state).x44()) != 0.0) {
-                    76
-                } else {
-                    77
-                };
-            }
-            74 => {
                 unreachable!();
             }
+            74 => {
+                return;
+            }
             75 => {
-                __state = 73;
+                __state = if (fp::fadds((state).x40(), (state).x44()) != 0.0) {
+                    78
+                } else {
+                    79
+                };
             }
             76 => {
-                __state = 79;
+                unreachable!();
             }
             77 => {
+                __state = 75;
+            }
+            78 => {
+                __state = 81;
+            }
+            79 => {
                 trigger = (inl_Toy_80305B88(ctx) as u32);
                 __state = if ((trigger
                     & (((((shl_i32(1_i32, (0_i32 as u32))) | (shl_i32(1_i32, (1_i32 as u32))))
@@ -4629,110 +4635,110 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         | (shl_i32(1_i32, (3_i32 as u32)))) as u32))
                     != 0)
                 {
-                    81
-                } else {
                     83
+                } else {
+                    85
                 };
             }
-            78 => {
+            80 => {
                 unreachable!();
             }
-            79 => {
-                (state).set_x58(0_i32);
-                __state = 82;
-            }
-            80 => {
-                __state = 77;
-            }
             81 => {
-                __state = 79;
+                (state).set_x58(0_i32);
+                __state = 84;
             }
             82 => {
+                __state = 79;
+            }
+            83 => {
+                __state = 81;
+            }
+            84 => {
                 __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
                     || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
                 {
-                    97
-                } else {
                     99
-                };
-            }
-            83 => {
-                __state = if fp::frsp((state).x58() as f64) > 2400.0 {
-                    85
                 } else {
-                    86
+                    101
                 };
-            }
-            84 => {
-                unreachable!();
             }
             85 => {
-                (state).set_x24(fp::fadds((state).x24(), 0.009999999776482582));
-                __state = if (state).x24() > 1.0 { 88 } else { 89 };
-            }
-            86 => {
-                (state).set_x58((state).x58().wrapping_add(1_i32));
-                __state = 82;
-            }
-            87 => {
-                unreachable!();
-            }
-            88 => {
-                (state).set_x24(1.0);
-                __state = 89;
-            }
-            89 => {
-                (state).set_x1C((fp::fadds((state).x1C(), (state).x24())));
-                tmp = (state).x1C();
-                __state = if tmp < fp::fneg(360.0) { 91 } else { 92 };
-            }
-            90 => {
-                unreachable!();
-            }
-            91 => {
-                (state).set_x1C(fp::fadds((state).x1C(), 360.0));
-                __state = 92;
-            }
-            92 => {
-                tmp = (state).x1C();
-                __state = if tmp > 360.0 { 94 } else { 95 };
-            }
-            93 => {
-                unreachable!();
-            }
-            94 => {
-                (state).set_x1C((fp::fsubs(tmp, 360.0)));
-                __state = 95;
-            }
-            95 => {
-                (ed4).set_x18((state).x1C());
-                __state = 86;
-            }
-            96 => {
-                unreachable!();
-            }
-            97 => {
-                trophy_count_2 = ((base).trophy_count() as i32);
-                __state = 98;
-            }
-            98 => {
-                __state = if trophy_count_2 == 1_i32 { 101 } else { 102 };
-            }
-            99 => {
-                trophy_count_2 = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
-                __state = 98;
-            }
-            100 => {
-                unreachable!();
-            }
-            101 => {
-                __state = if (fp::fadds((state).x30(), (state).x34()) != 0.0) {
-                    104
+                __state = if fp::frsp((state).x58() as f64) > 2400.0 {
+                    87
                 } else {
-                    105
+                    88
                 };
             }
+            86 => {
+                unreachable!();
+            }
+            87 => {
+                (state).set_x24(fp::fadds((state).x24(), 0.009999999776482582));
+                __state = if (state).x24() > 1.0 { 90 } else { 91 };
+            }
+            88 => {
+                (state).set_x58((state).x58().wrapping_add(1_i32));
+                __state = 84;
+            }
+            89 => {
+                unreachable!();
+            }
+            90 => {
+                (state).set_x24(1.0);
+                __state = 91;
+            }
+            91 => {
+                (state).set_x1C((fp::fadds((state).x1C(), (state).x24())));
+                tmp = (state).x1C();
+                __state = if tmp < fp::fneg(360.0) { 93 } else { 94 };
+            }
+            92 => {
+                unreachable!();
+            }
+            93 => {
+                (state).set_x1C(fp::fadds((state).x1C(), 360.0));
+                __state = 94;
+            }
+            94 => {
+                tmp = (state).x1C();
+                __state = if tmp > 360.0 { 96 } else { 97 };
+            }
+            95 => {
+                unreachable!();
+            }
+            96 => {
+                (state).set_x1C((fp::fsubs(tmp, 360.0)));
+                __state = 97;
+            }
+            97 => {
+                (ed4).set_x18((state).x1C());
+                __state = 88;
+            }
+            98 => {
+                unreachable!();
+            }
+            99 => {
+                trophy_count_2 = ((base).trophy_count() as i32);
+                __state = 100;
+            }
+            100 => {
+                __state = if trophy_count_2 == 1_i32 { 103 } else { 104 };
+            }
+            101 => {
+                trophy_count_2 = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
+                __state = 100;
+            }
             102 => {
+                unreachable!();
+            }
+            103 => {
+                __state = if (fp::fadds((state).x30(), (state).x34()) != 0.0) {
+                    106
+                } else {
+                    107
+                };
+            }
+            104 => {
                 trigger = (inl_Toy_80305B88(ctx) as u32);
                 __state = if ((trigger
                     & (((shl_i32(1_i32, (8_i32 as u32)))
@@ -4740,26 +4746,26 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         as u32))
                     != 0)
                 {
-                    107
+                    109
                 } else {
-                    108
+                    110
                 };
             }
-            103 => {
-                unreachable!();
-            }
-            104 => {
-                (state).set_x34(0.0);
-                (state).set_x30(0.0);
-                __state = 105;
-            }
             105 => {
-                __state = 102;
+                unreachable!();
             }
             106 => {
-                unreachable!();
+                (state).set_x34(0.0);
+                (state).set_x30(0.0);
+                __state = 107;
             }
             107 => {
+                __state = 104;
+            }
+            108 => {
+                unreachable!();
+            }
+            109 => {
                 inl_sfxForward(ctx);
                 fns::_Toy_sbss_804D6E80(ctx).set(fns::HSD_CObjGetTop(ctx, cobj));
                 fns::_Toy_sbss_804D6E84(ctx).set(fns::HSD_CObjGetBottom(ctx, cobj));
@@ -4773,104 +4779,104 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 statics::melee__ty__toy::_Toy_8030715C(ctx, 0.0, 0.0);
                 return;
             }
-            108 => {
-                rotate_update = 1.0;
-                __state = 62;
-            }
-            109 => {
-                unreachable!();
-            }
             110 => {
-                __state = 108;
+                rotate_update = 1.0;
+                __state = 63;
             }
             111 => {
-                __state = 60;
+                unreachable!();
             }
             112 => {
-                __state = 61;
+                __state = 110;
             }
             113 => {
-                fns::_Toy_sbss_804D6E58(ctx).set((fns::_Toy_sbss_804D6E58(ctx).get() ^ 1_i32));
-                __state = if fns::_Toy_sbss_804D6E58(ctx).get() != 0_i32 {
-                    116
-                } else {
-                    118
-                };
+                __state = 60;
             }
             114 => {
+                __state = 62;
+            }
+            115 => {
+                fns::_Toy_sbss_804D6E58(ctx).set((fns::_Toy_sbss_804D6E58(ctx).get() ^ 1_i32));
+                __state = if fns::_Toy_sbss_804D6E58(ctx).get() != 0_i32 {
+                    118
+                } else {
+                    120
+                };
+            }
+            116 => {
                 trigger = (inl_Toy_80305B88(ctx) as u32);
                 __state = if ((trigger & ((shl_i32(1_i32, (9_i32 as u32))) as u32)) != 0)
                     || (fp::frsp((state).x5C() as f64) > 7200.0)
                 {
-                    130
+                    132
                 } else {
-                    131
+                    133
                 };
             }
-            115 => {
-                unreachable!();
-            }
-            116 => {
-                jobj_node = Handle::cast::<ToyJObjNode<'a>>(
-                    ((fns::Toy_sbss_804D6ED8(ctx).get()).gobj2()).hsd_obj(),
-                );
-                __state = 120;
-            }
             117 => {
-                __state = 114;
+                unreachable!();
             }
             118 => {
                 jobj_node = Handle::cast::<ToyJObjNode<'a>>(
                     ((fns::Toy_sbss_804D6ED8(ctx).get()).gobj2()).hsd_obj(),
                 );
-                __state = 125;
+                __state = 122;
             }
             119 => {
-                unreachable!();
+                __state = 116;
             }
             120 => {
-                __state = if !Handle::is_null(jobj_node) {
-                    121
-                } else {
-                    123
-                };
+                jobj_node = Handle::cast::<ToyJObjNode<'a>>(
+                    ((fns::Toy_sbss_804D6ED8(ctx).get()).gobj2()).hsd_obj(),
+                );
+                __state = 127;
             }
             121 => {
-                (jobj_node).set_x40(9_i32);
-                jobj_node = Handle::cast::<ToyJObjNode<'a>>((jobj_node).x4());
-                __state = 120;
+                unreachable!();
             }
             122 => {
-                __state = 120;
-            }
-            123 => {
-                __state = 117;
-            }
-            124 => {
-                unreachable!();
-            }
-            125 => {
                 __state = if !Handle::is_null(jobj_node) {
-                    126
+                    123
                 } else {
-                    128
+                    125
                 };
             }
-            126 => {
-                (jobj_node).set_x40(8_i32);
+            123 => {
+                (jobj_node).set_x40(9_i32);
                 jobj_node = Handle::cast::<ToyJObjNode<'a>>((jobj_node).x4());
-                __state = 125;
+                __state = 122;
             }
-            127 => {
-                __state = 125;
+            124 => {
+                __state = 122;
             }
-            128 => {
-                __state = 117;
+            125 => {
+                __state = 119;
             }
-            129 => {
+            126 => {
                 unreachable!();
             }
+            127 => {
+                __state = if !Handle::is_null(jobj_node) {
+                    128
+                } else {
+                    130
+                };
+            }
+            128 => {
+                (jobj_node).set_x40(8_i32);
+                jobj_node = Handle::cast::<ToyJObjNode<'a>>((jobj_node).x4());
+                __state = 127;
+            }
+            129 => {
+                __state = 127;
+            }
             130 => {
+                __state = 119;
+            }
+            131 => {
+                unreachable!();
+            }
+            132 => {
                 inl_sfxBack(ctx);
                 fns::_Toy_sbss_804D6E80(ctx).set(fns::HSD_CObjGetTop(ctx, cobj));
                 fns::_Toy_sbss_804D6E84(ctx).set(fns::HSD_CObjGetBottom(ctx, cobj));
@@ -4885,39 +4891,39 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 jobj_node_2 = Handle::cast::<ToyJObjNode<'a>>(
                     ((fns::Toy_sbss_804D6ED8(ctx).get()).gobj2()).hsd_obj(),
                 );
-                __state = 133;
+                __state = 135;
             }
-            131 => {
+            133 => {
                 trigger = (inl_Toy_80305B88(ctx) as u32);
                 tmp = fp::fadds(
                     (state).x44(),
                     (fp::fadds((state).x40(), (fp::fadds((state).x30(), (state).x34())))),
                 );
                 __state = if !((fp::fadds(tmp, fp::frsp(trigger as f64))) != 0.0) {
-                    138
-                } else {
                     140
-                };
-            }
-            132 => {
-                unreachable!();
-            }
-            133 => {
-                __state = if !Handle::is_null(jobj_node_2) {
-                    134
                 } else {
-                    136
+                    142
                 };
             }
             134 => {
-                (jobj_node_2).set_x40(9_i32);
-                jobj_node_2 = Handle::cast::<ToyJObjNode<'a>>((jobj_node_2).x4());
-                __state = 133;
+                unreachable!();
             }
             135 => {
-                __state = 133;
+                __state = if !Handle::is_null(jobj_node_2) {
+                    136
+                } else {
+                    138
+                };
             }
             136 => {
+                (jobj_node_2).set_x40(9_i32);
+                jobj_node_2 = Handle::cast::<ToyJObjNode<'a>>((jobj_node_2).x4());
+                __state = 135;
+            }
+            137 => {
+                __state = 135;
+            }
+            138 => {
                 (state).set_x5C(0_i32);
                 Handle::copy_from(transition_eye, statics::melee__ty__toy::_Toy_803B88E0(ctx));
                 Handle::copy_from(
@@ -4942,344 +4948,346 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 fns::_Toy_sbss_804D6E90(ctx).set(fp::fdivs((fp::fsubs((state).x20(), 38.0)), 10.0));
                 fns::_Toy_sbss_804D6E94(ctx).set(fp::fdivs((state).x18(), 10.0));
                 (state).set_x61((3_i32 as i8));
-                __state = 131;
-            }
-            137 => {
-                unreachable!();
-            }
-            138 => {
-                (state).set_x5C((state).x5C().wrapping_add(1_i32));
-                __state = 139;
+                __state = 133;
             }
             139 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
-                __state = if ((button & ((shl_i32(1_i32, (0_i32 as u32))) as u32)) != 0) {
-                    142
-                } else {
-                    143
-                };
+                unreachable!();
             }
             140 => {
-                (state).set_x5C(0_i32);
-                __state = 139;
+                (state).set_x5C((state).x5C().wrapping_add(1_i32));
+                __state = 141;
             }
             141 => {
-                unreachable!();
+                button = (inl_Toy_80305C44(ctx) as u32);
+                __state = if ((button & ((shl_i32(1_i32, (0_i32 as u32))) as u32)) != 0) {
+                    144
+                } else {
+                    145
+                };
             }
             142 => {
-                (state)
-                    .set_x50((fp::fmuls(fp::fneg(0.30000001192092896), (fp::fdivs(dist, 38.0)))));
-                __state = 143;
+                (state).set_x5C(0_i32);
+                __state = 141;
             }
             143 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
-                __state = if ((button & ((shl_i32(1_i32, (1_i32 as u32))) as u32)) != 0) {
-                    145
-                } else {
-                    146
-                };
+                unreachable!();
             }
             144 => {
-                unreachable!();
+                (state)
+                    .set_x50((fp::fmuls(fp::fneg(0.30000001192092896), (fp::fdivs(dist, 38.0)))));
+                __state = 145;
             }
             145 => {
-                (state).set_x50((fp::fmuls(0.30000001192092896, (fp::fdivs(dist, 38.0)))));
-                __state = 146;
+                button = (inl_Toy_80305C44(ctx) as u32);
+                __state = if ((button & ((shl_i32(1_i32, (1_i32 as u32))) as u32)) != 0) {
+                    147
+                } else {
+                    148
+                };
             }
             146 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
-                __state = if ((button & ((shl_i32(1_i32, (3_i32 as u32))) as u32)) != 0) {
-                    148
-                } else {
-                    149
-                };
+                unreachable!();
             }
             147 => {
-                unreachable!();
+                (state).set_x50((fp::fmuls(0.30000001192092896, (fp::fdivs(dist, 38.0)))));
+                __state = 148;
             }
             148 => {
-                (state).set_x54((fp::fmuls(0.30000001192092896, (fp::fdivs(dist, 38.0)))));
-                __state = 149;
+                button = (inl_Toy_80305C44(ctx) as u32);
+                __state = if ((button & ((shl_i32(1_i32, (3_i32 as u32))) as u32)) != 0) {
+                    150
+                } else {
+                    151
+                };
             }
             149 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
-                __state = if ((button & ((shl_i32(1_i32, (2_i32 as u32))) as u32)) != 0) {
-                    151
-                } else {
-                    152
-                };
+                unreachable!();
             }
             150 => {
-                unreachable!();
+                (state).set_x54((fp::fmuls(0.30000001192092896, (fp::fdivs(dist, 38.0)))));
+                __state = 151;
             }
             151 => {
-                (state)
-                    .set_x54((fp::fmuls(fp::fneg(0.30000001192092896), (fp::fdivs(dist, 38.0)))));
-                __state = 152;
-            }
-            152 => {
                 button = (inl_Toy_80305C44(ctx) as u32);
-                __state = if ((button & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
-                    154
+                __state = if ((button & ((shl_i32(1_i32, (2_i32 as u32))) as u32)) != 0) {
+                    153
                 } else {
-                    155
+                    154
                 };
             }
-            153 => {
+            152 => {
                 unreachable!();
             }
+            153 => {
+                (state)
+                    .set_x54((fp::fmuls(fp::fneg(0.30000001192092896), (fp::fdivs(dist, 38.0)))));
+                __state = 154;
+            }
             154 => {
-                tmp = (state).x30();
-                __state = if (tmp != 0.0) && (tmp < 0.0) {
-                    157
+                button = (inl_Toy_80305C44(ctx) as u32);
+                __state = if ((button & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
+                    156
                 } else {
-                    158
+                    157
                 };
             }
             155 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
-                __state = if ((button & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
-                    160
-                } else {
-                    161
-                };
+                unreachable!();
             }
             156 => {
-                unreachable!();
+                tmp = (state).x30();
+                __state = if (tmp != 0.0) && (tmp < 0.0) {
+                    159
+                } else {
+                    160
+                };
             }
             157 => {
-                (state).set_x50(
-                    (fp::fmuls(fp::fmuls(0.30000001192092896, tmp), (fp::fdivs(dist, 38.0)))),
-                );
-                __state = 158;
+                button = (inl_Toy_80305C44(ctx) as u32);
+                __state = if ((button & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
+                    162
+                } else {
+                    163
+                };
             }
             158 => {
-                __state = 155;
+                unreachable!();
             }
             159 => {
-                unreachable!();
-            }
-            160 => {
-                tmp = (state).x30();
-                __state = if (tmp != 0.0) && (tmp > 0.0) {
-                    163
-                } else {
-                    164
-                };
-            }
-            161 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
-                __state = if ((button & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
-                    166
-                } else {
-                    167
-                };
-            }
-            162 => {
-                unreachable!();
-            }
-            163 => {
                 (state).set_x50(
                     (fp::fmuls(fp::fmuls(0.30000001192092896, tmp), (fp::fdivs(dist, 38.0)))),
                 );
-                __state = 164;
+                __state = 160;
             }
-            164 => {
-                __state = 161;
+            160 => {
+                __state = 157;
             }
-            165 => {
+            161 => {
                 unreachable!();
             }
-            166 => {
-                tmp = (state).x34();
+            162 => {
+                tmp = (state).x30();
                 __state = if (tmp != 0.0) && (tmp > 0.0) {
-                    169
+                    165
                 } else {
-                    170
+                    166
                 };
             }
-            167 => {
+            163 => {
                 button = (inl_Toy_80305C44(ctx) as u32);
                 __state = if ((button & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
-                    172
+                    168
                 } else {
-                    173
+                    169
                 };
             }
-            168 => {
+            164 => {
                 unreachable!();
             }
+            165 => {
+                (state).set_x50(
+                    (fp::fmuls(fp::fmuls(0.30000001192092896, tmp), (fp::fdivs(dist, 38.0)))),
+                );
+                __state = 166;
+            }
+            166 => {
+                __state = 163;
+            }
+            167 => {
+                unreachable!();
+            }
+            168 => {
+                tmp = (state).x34();
+                __state = if (tmp != 0.0) && (tmp > 0.0) {
+                    171
+                } else {
+                    172
+                };
+            }
             169 => {
+                button = (inl_Toy_80305C44(ctx) as u32);
+                __state = if ((button & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
+                    174
+                } else {
+                    175
+                };
+            }
+            170 => {
+                unreachable!();
+            }
+            171 => {
                 (state).set_x54(
                     (fp::fmuls(fp::fmuls(0.30000001192092896, tmp), (fp::fdivs(dist, 38.0)))),
                 );
-                __state = 170;
-            }
-            170 => {
-                __state = 167;
-            }
-            171 => {
-                unreachable!();
+                __state = 172;
             }
             172 => {
-                tmp = (state).x34();
-                __state = if (tmp != 0.0) && (tmp < 0.0) {
-                    175
-                } else {
-                    176
-                };
+                __state = 169;
             }
             173 => {
+                unreachable!();
+            }
+            174 => {
+                tmp = (state).x34();
+                __state = if (tmp != 0.0) && (tmp < 0.0) {
+                    177
+                } else {
+                    178
+                };
+            }
+            175 => {
                 __state = if (((state).x50() != 0.0) || ((state).x54() != 0.0))
                     || ((inl_Toy_80305C44(ctx) & (shl_i32(1_i32, (8_i32 as u32)))) != 0)
                 {
-                    178
-                } else {
                     180
+                } else {
+                    182
                 };
             }
-            174 => {
+            176 => {
                 unreachable!();
             }
-            175 => {
+            177 => {
                 (state).set_x54(
                     (fp::fmuls(fp::fmuls(0.30000001192092896, tmp), (fp::fdivs(dist, 38.0)))),
                 );
-                __state = 176;
-            }
-            176 => {
-                __state = 173;
-            }
-            177 => {
-                unreachable!();
+                __state = 178;
             }
             178 => {
-                statics::melee__ty__toy::_Toy_803102C4(ctx, (0_i32 as i8));
-                __state = 179;
+                __state = 175;
             }
             179 => {
-                __state = if ((state).x50() != 0.0) || ((state).x54() != 0.0) {
-                    182
-                } else {
-                    183
-                };
+                unreachable!();
             }
             180 => {
-                statics::melee__ty__toy::_Toy_803102C4(ctx, (1_i32 as i8));
-                __state = 179;
+                statics::melee__ty__toy::_Toy_803102C4(ctx, (0_i32 as i8));
+                __state = 181;
             }
             181 => {
-                unreachable!();
+                __state = if ((state).x50() != 0.0) || ((state).x54() != 0.0) {
+                    184
+                } else {
+                    185
+                };
             }
             182 => {
-                movement_update = 1.0;
-                __state = 183;
+                statics::melee__ty__toy::_Toy_803102C4(ctx, (1_i32 as i8));
+                __state = 181;
             }
             183 => {
-                __state = if !(movement_update != 0.0) { 185 } else { 186 };
+                unreachable!();
             }
             184 => {
-                unreachable!();
+                movement_update = 1.0;
+                __state = 185;
             }
             185 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
-                __state = if ((button & ((shl_i32(1_i32, (11_i32 as u32))) as u32)) != 0) {
-                    188
-                } else {
-                    190
-                };
+                __state = if !(movement_update != 0.0) { 187 } else { 188 };
             }
             186 => {
-                rotate_update = 1.0;
-                __state = 62;
+                unreachable!();
             }
             187 => {
-                unreachable!();
+                button = (inl_Toy_80305C44(ctx) as u32);
+                __state = if ((button & ((shl_i32(1_i32, (11_i32 as u32))) as u32)) != 0) {
+                    190
+                } else {
+                    192
+                };
             }
             188 => {
-                (state).set_x20(fp::fneg(
-                    (fp::fmsubs(0.02500000037252903, dist, (state).x20())),
-                ));
-                zoom_update = 1.0;
-                __state = 189;
+                rotate_update = 1.0;
+                __state = 63;
             }
             189 => {
-                __state = if (state).x20() < 5.0 { 199 } else { 200 };
+                unreachable!();
             }
             190 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
-                __state = if ((button & ((shl_i32(1_i32, (10_i32 as u32))) as u32)) != 0) {
-                    192
-                } else {
-                    194
-                };
+                (state).set_x20(fp::fnmsubs(0.02500000037252903, dist, (state).x20()));
+                zoom_update = 1.0;
+                __state = 191;
             }
             191 => {
-                unreachable!();
+                __state = if (state).x20() < 5.0 { 201 } else { 202 };
             }
             192 => {
-                (state).set_x20(fp::fneg(
-                    (fp::fmsubs(fp::fneg(0.02500000037252903), dist, (state).x20())),
-                ));
-                zoom_update = 1.0;
-                __state = 193;
-            }
-            193 => {
-                __state = 189;
-            }
-            194 => {
-                tmp = (state).x34();
-                __state = if (tmp != 0.0) { 196 } else { 197 };
-            }
-            195 => {
-                unreachable!();
-            }
-            196 => {
-                (state).set_x20(fp::fneg(
-                    (fp::fmsubs(dist, (fp::fmuls(0.02500000037252903, tmp)), (state).x20())),
-                ));
-                zoom_update = 1.0;
-                __state = 197;
-            }
-            197 => {
-                __state = 193;
-            }
-            198 => {
-                unreachable!();
-            }
-            199 => {
-                (state).set_x20(5.0);
-                __state = 200;
-            }
-            200 => {
-                __state = if (state).x20() > 250.0 { 202 } else { 203 };
-            }
-            201 => {
-                unreachable!();
-            }
-            202 => {
-                (state).set_x20(250.0);
-                __state = 203;
-            }
-            203 => {
-                __state = 186;
-            }
-            204 => {
-                unreachable!();
-            }
-            205 => {
-                __state = 62;
-            }
-            206 => {
-                (state).set_x1C(fp::fneg((fp::fmsubs(3.0, (state).x40(), (state).x1C()))));
-                (state).set_x18(fp::fneg((fp::fmsubs(3.0, (state).x44(), (state).x18()))));
-                __state = if (state).x18() < fp::fneg(89.0) {
-                    209
+                button = (inl_Toy_80305C44(ctx) as u32);
+                __state = if ((button & ((shl_i32(1_i32, (10_i32 as u32))) as u32)) != 0) {
+                    194
                 } else {
-                    210
+                    196
                 };
             }
+            193 => {
+                unreachable!();
+            }
+            194 => {
+                (state).set_x20(fp::fnmsubs(
+                    fp::fneg(0.02500000037252903),
+                    dist,
+                    (state).x20(),
+                ));
+                zoom_update = 1.0;
+                __state = 195;
+            }
+            195 => {
+                __state = 191;
+            }
+            196 => {
+                tmp = (state).x34();
+                __state = if (tmp != 0.0) { 198 } else { 199 };
+            }
+            197 => {
+                unreachable!();
+            }
+            198 => {
+                (state).set_x20(fp::fnmsubs(
+                    dist,
+                    (fp::fmuls(0.02500000037252903, tmp)),
+                    (state).x20(),
+                ));
+                zoom_update = 1.0;
+                __state = 199;
+            }
+            199 => {
+                __state = 195;
+            }
+            200 => {
+                unreachable!();
+            }
+            201 => {
+                (state).set_x20(5.0);
+                __state = 202;
+            }
+            202 => {
+                __state = if (state).x20() > 250.0 { 204 } else { 205 };
+            }
+            203 => {
+                unreachable!();
+            }
+            204 => {
+                (state).set_x20(250.0);
+                __state = 205;
+            }
+            205 => {
+                __state = 188;
+            }
+            206 => {
+                unreachable!();
+            }
             207 => {
+                __state = 63;
+            }
+            208 => {
+                (state).set_x1C(fp::fnmsubs(3.0, (state).x40(), (state).x1C()));
+                (state).set_x18(fp::fnmsubs(3.0, (state).x44(), (state).x18()));
+                __state = if (state).x18() < fp::fneg(89.0) {
+                    211
+                } else {
+                    212
+                };
+            }
+            209 => {
                 statics::melee__ty__toy::_Toy_8030715C(ctx, (state).x50(), (state).x54());
                 (state).set_x38((state).x30());
                 (state).set_x3C((state).x34());
@@ -5287,178 +5295,178 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 (state).set_x4C((state).x44());
                 return;
             }
-            208 => {
-                unreachable!();
-            }
-            209 => {
-                (state).set_x18(fp::fneg(89.0));
-                __state = 210;
-            }
             210 => {
-                __state = if (state).x18() > 89.0 { 212 } else { 213 };
+                unreachable!();
             }
             211 => {
-                unreachable!();
+                (state).set_x18(fp::fneg(89.0));
+                __state = 212;
             }
             212 => {
-                (state).set_x18(89.0);
-                __state = 213;
+                __state = if (state).x18() > 89.0 { 214 } else { 215 };
             }
             213 => {
-                tmp = (state).x1C();
-                __state = if tmp < fp::fneg(360.0) { 215 } else { 216 };
+                unreachable!();
             }
             214 => {
-                unreachable!();
+                (state).set_x18(89.0);
+                __state = 215;
             }
             215 => {
-                (state).set_x1C(fp::fadds((state).x1C(), 360.0));
-                __state = 216;
+                tmp = (state).x1C();
+                __state = if tmp < fp::fneg(360.0) { 217 } else { 218 };
             }
             216 => {
-                tmp = (state).x1C();
-                __state = if tmp > 360.0 { 218 } else { 219 };
-            }
-            217 => {
                 unreachable!();
             }
+            217 => {
+                (state).set_x1C(fp::fadds((state).x1C(), 360.0));
+                __state = 218;
+            }
             218 => {
-                (state).set_x1C((fp::fsubs(tmp, 360.0)));
-                __state = 219;
+                tmp = (state).x1C();
+                __state = if tmp > 360.0 { 220 } else { 221 };
             }
             219 => {
+                unreachable!();
+            }
+            220 => {
+                (state).set_x1C((fp::fsubs(tmp, 360.0)));
+                __state = 221;
+            }
+            221 => {
                 (ed4).set_x18((state).x1C());
                 (ed4).set_x14((state).x18());
                 __state = if (fp::fadds((state).x40(), (state).x44()) != 0.0) {
-                    221
+                    223
                 } else {
-                    222
+                    224
                 };
-            }
-            220 => {
-                unreachable!();
-            }
-            221 => {
-                (state).set_x24(0.0);
-                __state = 222;
             }
             222 => {
-                __state = if (!(movement_update != 0.0)) && (!(zoom_update != 0.0)) {
-                    224
-                } else {
-                    225
-                };
-            }
-            223 => {
                 unreachable!();
             }
+            223 => {
+                (state).set_x24(0.0);
+                __state = 224;
+            }
             224 => {
-                __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
-                    || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
-                {
-                    227
+                __state = if (!(movement_update != 0.0)) && (!(zoom_update != 0.0)) {
+                    226
                 } else {
-                    229
+                    227
                 };
             }
             225 => {
-                inl__Toy_ReadTrigger(ctx, btn);
-                __state = if ((btn.get() & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0) {
-                    322
-                } else {
-                    323
-                };
+                unreachable!();
             }
             226 => {
-                unreachable!();
-            }
-            227 => {
-                trophy_count_3 = ((base).trophy_count() as i32);
-                __state = 228;
-            }
-            228 => {
-                __state = if trophy_count_3 > 1_i32 { 231 } else { 232 };
-            }
-            229 => {
-                trophy_count_3 = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
-                __state = 228;
-            }
-            230 => {
-                unreachable!();
-            }
-            231 => {
-                tmp = (state).x30();
-                __state = if tmp < 0.0 { 234 } else { 235 };
-            }
-            232 => {
-                __state = 225;
-            }
-            233 => {
-                unreachable!();
-            }
-            234 => {
-                tmp = fp::fneg(tmp);
-                __state = 235;
-            }
-            235 => {
-                __state = if !(tmp > 0.8999999761581421) {
-                    237
+                __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
+                    || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
+                {
+                    229
                 } else {
-                    238
+                    231
                 };
             }
-            236 => {
+            227 => {
+                inl__Toy_ReadTrigger(ctx, btn);
+                __state = if ((btn.get() & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0) {
+                    324
+                } else {
+                    325
+                };
+            }
+            228 => {
                 unreachable!();
             }
+            229 => {
+                trophy_count_3 = ((base).trophy_count() as i32);
+                __state = 230;
+            }
+            230 => {
+                __state = if trophy_count_3 > 1_i32 { 233 } else { 234 };
+            }
+            231 => {
+                trophy_count_3 = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
+                __state = 230;
+            }
+            232 => {
+                unreachable!();
+            }
+            233 => {
+                tmp = (state).x30();
+                __state = if tmp < 0.0 { 236 } else { 237 };
+            }
+            234 => {
+                __state = 227;
+            }
+            235 => {
+                unreachable!();
+            }
+            236 => {
+                tmp = fp::fneg(tmp);
+                __state = 237;
+            }
             237 => {
+                __state = if !(tmp > 0.8999999761581421) {
+                    239
+                } else {
+                    240
+                };
+            }
+            238 => {
+                unreachable!();
+            }
+            239 => {
                 trigger = (inl_Toy_80305B88(ctx) as u32);
                 __state = if !((trigger
                     & (((shl_i32(1_i32, (6_i32 as u32))) | (shl_i32(1_i32, (5_i32 as u32))))
                         as u32))
                     != 0)
                 {
-                    240
+                    242
                 } else {
-                    241
+                    243
                 };
-            }
-            238 => {
-                display = fns::Toy_sbss_804D6EE0(ctx).get();
-                __state = if ((state).x30() < 0.0) || ((inl_Toy_80305B88(ctx) & 0x441_i32) != 0) {
-                    245
-                } else {
-                    247
-                };
-            }
-            239 => {
-                unreachable!();
             }
             240 => {
-                __state = 243;
+                display = fns::Toy_sbss_804D6EE0(ctx).get();
+                __state = if ((state).x30() < 0.0) || ((inl_Toy_80305B88(ctx) & 0x441_i32) != 0) {
+                    247
+                } else {
+                    249
+                };
             }
             241 => {
-                __state = 238;
-            }
-            242 => {
                 unreachable!();
             }
+            242 => {
+                __state = 245;
+            }
             243 => {
-                __state = 232;
+                __state = 240;
             }
             244 => {
-                __state = 241;
+                unreachable!();
             }
             245 => {
+                __state = 234;
+            }
+            246 => {
+                __state = 243;
+            }
+            247 => {
                 inl_sfxMove(ctx);
                 (display)
                     .set_selectedIdx((((display).selectedIdx() as i32).wrapping_sub(1_i32) as i16));
                 __state = if ((display).selectedIdx() as i32) < 0_i32 {
-                    249
+                    251
                 } else {
-                    250
+                    252
                 };
             }
-            246 => {
+            248 => {
                 statics::melee__ty__toy::_Toy_80307828(ctx, 0_i32);
                 statics::melee__ty__toy::_Toy_8030715C(ctx, 0.0, 0.0);
                 (state).set_x58(0x95e_i32);
@@ -5472,94 +5480,94 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
                     || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
                 {
-                    311
-                } else {
                     313
+                } else {
+                    315
                 };
-            }
-            247 => {
-                __state = if (state).x30() > 0.0 { 275 } else { 276 };
-            }
-            248 => {
-                unreachable!();
             }
             249 => {
-                __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
-                    || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
-                {
-                    252
-                } else {
-                    254
-                };
+                __state = if (state).x30() > 0.0 { 277 } else { 278 };
             }
             250 => {
-                __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
-                    || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
-                {
-                    256
-                } else {
-                    258
-                };
+                unreachable!();
             }
             251 => {
-                unreachable!();
-            }
-            252 => {
-                total = ((base).trophy_count() as i32);
-                __state = 253;
-            }
-            253 => {
-                (display).set_selectedIdx(((total.wrapping_sub(1_i32)) as i16));
-                __state = 250;
-            }
-            254 => {
-                total = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
-                __state = 253;
-            }
-            255 => {
-                unreachable!();
-            }
-            256 => {
-                total = ((base).trophy_count() as i32);
-                __state = 257;
-            }
-            257 => {
-                __state = if total > 3_i32 { 260 } else { 262 };
-            }
-            258 => {
-                total = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
-                __state = 257;
-            }
-            259 => {
-                unreachable!();
-            }
-            260 => {
-                __state = if (((display).selectedIdx() as i32).wrapping_sub(1_i32)) < 0_i32 {
-                    264
-                } else {
-                    266
-                };
-            }
-            261 => {
-                __state = 246;
-            }
-            262 => {
-                (display).set_selected_entry(((display).selected_entry()).prev());
-                __state = 261;
-            }
-            263 => {
-                unreachable!();
-            }
-            264 => {
                 __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
                     || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
                 {
-                    268
+                    254
                 } else {
-                    270
+                    256
                 };
             }
+            252 => {
+                __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
+                    || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
+                {
+                    258
+                } else {
+                    260
+                };
+            }
+            253 => {
+                unreachable!();
+            }
+            254 => {
+                total = ((base).trophy_count() as i32);
+                __state = 255;
+            }
+            255 => {
+                (display).set_selectedIdx(((total.wrapping_sub(1_i32)) as i16));
+                __state = 252;
+            }
+            256 => {
+                total = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
+                __state = 255;
+            }
+            257 => {
+                unreachable!();
+            }
+            258 => {
+                total = ((base).trophy_count() as i32);
+                __state = 259;
+            }
+            259 => {
+                __state = if total > 3_i32 { 262 } else { 264 };
+            }
+            260 => {
+                total = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
+                __state = 259;
+            }
+            261 => {
+                unreachable!();
+            }
+            262 => {
+                __state = if (((display).selectedIdx() as i32).wrapping_sub(1_i32)) < 0_i32 {
+                    266
+                } else {
+                    268
+                };
+            }
+            263 => {
+                __state = 248;
+            }
+            264 => {
+                (display).set_selected_entry(((display).selected_entry()).prev());
+                __state = 263;
+            }
             265 => {
+                unreachable!();
+            }
+            266 => {
+                __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
+                    || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
+                {
+                    270
+                } else {
+                    272
+                };
+            }
+            267 => {
                 __state = if !Handle::is_null(
                     ({
                         let __t1 = ((display).last_entry()).archive();
@@ -5567,12 +5575,12 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         __t1
                     }),
                 ) {
-                    272
+                    274
                 } else {
-                    273
+                    275
                 };
             }
-            266 => {
+            268 => {
                 tid_2 = (Handle::add(
                     fns::Toy_sbss_804D6EDC(ctx).get(),
                     ((display).selectedIdx() as i32).wrapping_sub(1_i32),
@@ -5589,16 +5597,16 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         VarArg::Int(0_i32 as u32),
                     ],
                 ));
-                __state = 265;
-            }
-            267 => {
-                unreachable!();
-            }
-            268 => {
-                list_idx = ((base).trophy_count() as i32);
-                __state = 269;
+                __state = 267;
             }
             269 => {
+                unreachable!();
+            }
+            270 => {
+                list_idx = ((base).trophy_count() as i32);
+                __state = 271;
+            }
+            271 => {
                 list_idx = list_idx.wrapping_add(((display).selectedIdx() as i32));
                 keys = Handle::addr(fns::Toy_sbss_804D6EDC(ctx).get());
                 entry = (display).first_entry();
@@ -5615,150 +5623,150 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         VarArg::Int(0_i32 as u32),
                     ],
                 ));
-                __state = 265;
-            }
-            270 => {
-                list_idx = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
-                __state = 269;
-            }
-            271 => {
-                unreachable!();
+                __state = 267;
             }
             272 => {
-                fns::lbArchive_80016EFC(ctx, ma);
-                ((display).last_entry()).set_archive(null::<HSD_Archive<'a>>(ctx));
-                __state = 273;
+                list_idx = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
+                __state = 271;
             }
             273 => {
+                unreachable!();
+            }
+            274 => {
+                fns::lbArchive_80016EFC(ctx, ma);
+                ((display).last_entry()).set_archive(null::<HSD_Archive<'a>>(ctx));
+                __state = 275;
+            }
+            275 => {
                 (display).set_selected_entry(((display).selected_entry()).prev());
                 (display).set_first_entry(((display).first_entry()).prev());
                 (display).set_last_entry(((display).last_entry()).prev());
-                __state = 261;
-            }
-            274 => {
-                unreachable!();
-            }
-            275 => {
-                __state = 278;
+                __state = 263;
             }
             276 => {
-                inl__Toy_ReadTrigger(ctx, btn3);
-                __state = if !((btn3.get() & (0x822_i32 as u32)) != 0) {
-                    280
-                } else {
-                    281
-                };
-            }
-            277 => {
                 unreachable!();
             }
+            277 => {
+                __state = 280;
+            }
             278 => {
+                inl__Toy_ReadTrigger(ctx, btn3);
+                __state = if !((btn3.get() & (0x822_i32 as u32)) != 0) {
+                    282
+                } else {
+                    283
+                };
+            }
+            279 => {
+                unreachable!();
+            }
+            280 => {
                 inl_sfxMove(ctx);
                 (display)
                     .set_selectedIdx((((display).selectedIdx() as i32).wrapping_add(1_i32) as i16));
                 __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
                     || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
                 {
-                    285
-                } else {
                     287
+                } else {
+                    289
                 };
-            }
-            279 => {
-                __state = 276;
-            }
-            280 => {
-                __state = 283;
             }
             281 => {
                 __state = 278;
             }
             282 => {
-                unreachable!();
+                __state = 285;
             }
             283 => {
-                __state = 246;
+                __state = 280;
             }
             284 => {
-                __state = 281;
-            }
-            285 => {
-                total_2 = ((base).trophy_count() as i32);
-                __state = 286;
-            }
-            286 => {
-                __state = if ((display).selectedIdx() as i32) >= total_2 {
-                    289
-                } else {
-                    290
-                };
-            }
-            287 => {
-                total_2 = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
-                __state = 286;
-            }
-            288 => {
                 unreachable!();
             }
+            285 => {
+                __state = 248;
+            }
+            286 => {
+                __state = 283;
+            }
+            287 => {
+                total_2 = ((base).trophy_count() as i32);
+                __state = 288;
+            }
+            288 => {
+                __state = if ((display).selectedIdx() as i32) >= total_2 {
+                    291
+                } else {
+                    292
+                };
+            }
             289 => {
-                (display).set_selectedIdx((0_i32 as i16));
-                __state = 290;
+                total_2 = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
+                __state = 288;
             }
             290 => {
+                unreachable!();
+            }
+            291 => {
+                (display).set_selectedIdx((0_i32 as i16));
+                __state = 292;
+            }
+            292 => {
                 __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
                     || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
                 {
-                    292
-                } else {
                     294
+                } else {
+                    296
                 };
             }
-            291 => {
-                unreachable!();
-            }
-            292 => {
-                total_2 = ((base).trophy_count() as i32);
-                __state = 293;
-            }
             293 => {
-                __state = if total_2 > 3_i32 { 296 } else { 298 };
+                unreachable!();
             }
             294 => {
-                total_2 = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
-                __state = 293;
+                total_2 = ((base).trophy_count() as i32);
+                __state = 295;
             }
             295 => {
-                unreachable!();
+                __state = if total_2 > 3_i32 { 298 } else { 300 };
             }
             296 => {
+                total_2 = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
+                __state = 295;
+            }
+            297 => {
+                unreachable!();
+            }
+            298 => {
                 __state = if (((display).selectedIdx() as i32).wrapping_add(1_i32))
                     >= inl__Toy_GetTrophyTotal(ctx, base)
                 {
-                    300
-                } else {
                     302
+                } else {
+                    304
                 };
             }
-            297 => {
-                __state = 283;
-            }
-            298 => {
-                (display).set_selected_entry(((display).selected_entry()).next());
-                __state = 297;
-            }
             299 => {
-                unreachable!();
+                __state = 285;
             }
             300 => {
+                (display).set_selected_entry(((display).selected_entry()).next());
+                __state = 299;
+            }
+            301 => {
+                unreachable!();
+            }
+            302 => {
                 __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
                     || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
                 {
-                    304
-                } else {
                     306
+                } else {
+                    308
                 };
             }
-            301 => {
+            303 => {
                 __state = if !Handle::is_null(
                     ({
                         let __t2 = ((display).first_entry()).archive();
@@ -5766,12 +5774,12 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         __t2
                     }),
                 ) {
-                    308
+                    310
                 } else {
-                    309
+                    311
                 };
             }
-            302 => {
+            304 => {
                 tid_4 = (Handle::add(
                     fns::Toy_sbss_804D6EDC(ctx).get(),
                     ((display).selectedIdx() as i32).wrapping_add(1_i32),
@@ -5788,16 +5796,16 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         VarArg::Int(0_i32 as u32),
                     ],
                 ));
-                __state = 301;
-            }
-            303 => {
-                unreachable!();
-            }
-            304 => {
-                cnt2 = ((base).trophy_count() as i32);
-                __state = 305;
+                __state = 303;
             }
             305 => {
+                unreachable!();
+            }
+            306 => {
+                cnt2 = ((base).trophy_count() as i32);
+                __state = 307;
+            }
+            307 => {
                 lk = ((display).selectedIdx() as i32).wrapping_sub(cnt2);
                 tid_3 =
                     (Handle::add(fns::Toy_sbss_804D6EDC(ctx).get(), lk.wrapping_add(1_i32))).get();
@@ -5812,49 +5820,49 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         VarArg::Int(0_i32 as u32),
                     ],
                 ));
-                __state = 301;
-            }
-            306 => {
-                cnt2 = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
-                __state = 305;
-            }
-            307 => {
-                unreachable!();
+                __state = 303;
             }
             308 => {
-                fns::lbArchive_80016EFC(ctx, ma_2);
-                ((display).first_entry()).set_archive(null::<HSD_Archive<'a>>(ctx));
-                __state = 309;
+                cnt2 = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
+                __state = 307;
             }
             309 => {
+                unreachable!();
+            }
+            310 => {
+                fns::lbArchive_80016EFC(ctx, ma_2);
+                ((display).first_entry()).set_archive(null::<HSD_Archive<'a>>(ctx));
+                __state = 311;
+            }
+            311 => {
                 (display).set_selected_entry(((display).selected_entry()).next());
                 (display).set_first_entry(((display).first_entry()).next());
                 (display).set_last_entry(((display).last_entry()).next());
-                __state = 297;
-            }
-            310 => {
-                unreachable!();
-            }
-            311 => {
-                flags = (base).trophy_flags().at(0);
-                __state = 312;
+                __state = 299;
             }
             312 => {
-                __state =
-                    if ((((Handle::add(flags, (idx_2 as i32))).get() as i32) & 0x8000_i32) != 0) {
-                        315
-                    } else {
-                        316
-                    };
-            }
-            313 => {
-                flags = Handle::cast::<Val<'a, u16>>(fns::gmMainLib_GetTrophyFlags(ctx));
-                __state = 312;
-            }
-            314 => {
                 unreachable!();
             }
+            313 => {
+                flags = (base).trophy_flags().at(0);
+                __state = 314;
+            }
+            314 => {
+                __state =
+                    if ((((Handle::add(flags, (idx_2 as i32))).get() as i32) & 0x8000_i32) != 0) {
+                        317
+                    } else {
+                        318
+                    };
+            }
             315 => {
+                flags = Handle::cast::<Val<'a, u16>>(fns::gmMainLib_GetTrophyFlags(ctx));
+                __state = 314;
+            }
+            316 => {
+                unreachable!();
+            }
+            317 => {
                 selected_trophy = (Handle::add(
                     fns::Toy_sbss_804D6EDC(ctx).get(),
                     ((display).selectedIdx() as i32),
@@ -5864,12 +5872,12 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
                     || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
                 {
-                    318
-                } else {
                     320
+                } else {
+                    322
                 };
             }
-            316 => {
+            318 => {
                 statics::melee__ty__toy::_Toy_803084A0(
                     ctx,
                     (((display).selected_entry()).trophy_id() as i32),
@@ -5880,57 +5888,57 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     (((display).selected_entry()).trophy_id() as i32),
                 );
                 (state).set_x60((20_i32 as i8));
-                __state = 243;
-            }
-            317 => {
-                unreachable!();
-            }
-            318 => {
-                flags = (base).trophy_flags().at(0);
-                __state = 319;
+                __state = 245;
             }
             319 => {
-                flags = Handle::add(flags, (idx_2 as i32));
-                (flags).set(((((flags).get() as i32) ^ 0x8000_i32) as u16));
-                __state = 316;
-            }
-            320 => {
-                flags = Handle::cast::<Val<'a, u16>>(fns::gmMainLib_GetTrophyFlags(ctx));
-                __state = 319;
-            }
-            321 => {
                 unreachable!();
             }
+            320 => {
+                flags = (base).trophy_flags().at(0);
+                __state = 321;
+            }
+            321 => {
+                flags = Handle::add(flags, (idx_2 as i32));
+                (flags).set(((((flags).get() as i32) ^ 0x8000_i32) as u16));
+                __state = 318;
+            }
             322 => {
+                flags = Handle::cast::<Val<'a, u16>>(fns::gmMainLib_GetTrophyFlags(ctx));
+                __state = 321;
+            }
+            323 => {
+                unreachable!();
+            }
+            324 => {
                 inl_sfxMove(ctx);
                 (state).set_x58(0_i32);
                 (ed4).set_x10(((ed4).x10().wrapping_add(1_i32)));
-                __state = if (ed4).x10() == 6_i32 { 325 } else { 326 };
-            }
-            323 => {
-                inl__Toy_ReadTrigger(ctx, btn2);
-                __state = if ((btn2.get() & ((shl_i32(1_i32, (4_i32 as u32))) as u32)) != 0) {
-                    328
-                } else {
-                    329
-                };
-            }
-            324 => {
-                unreachable!();
+                __state = if (ed4).x10() == 6_i32 { 327 } else { 328 };
             }
             325 => {
-                (ed4).set_x10(0_i32);
-                __state = 326;
+                inl__Toy_ReadTrigger(ctx, btn2);
+                __state = if ((btn2.get() & ((shl_i32(1_i32, (4_i32 as u32))) as u32)) != 0) {
+                    330
+                } else {
+                    331
+                };
             }
             326 => {
-                fns::Toy_80306D70(ctx, (ed4).x10());
-                statics::melee__ty__toy::_Toy_803075E8(ctx, (ed4).x10());
-                __state = 323;
-            }
-            327 => {
                 unreachable!();
             }
+            327 => {
+                (ed4).set_x10(0_i32);
+                __state = 328;
+            }
             328 => {
+                fns::Toy_80306D70(ctx, (ed4).x10());
+                statics::melee__ty__toy::_Toy_803075E8(ctx, (ed4).x10());
+                __state = 325;
+            }
+            329 => {
+                unreachable!();
+            }
+            330 => {
                 statics::melee__ty__toy::_Toy_80307828(ctx, 0_i32);
                 camera = fns::Toy_sbss_804D6ED4(ctx).get();
                 (camera).set_x10(0_i32);
@@ -5941,16 +5949,16 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 (anim).set_x0F((0_i32 as i8));
                 (anim).set_x0E((0_i32 as i8));
                 statics::melee__ty__toy::_Toy_80307F64(ctx, 2_i32, 0_i32);
-                __state = 329;
-            }
-            329 => {
-                statics::melee__ty__toy::_Toy_80308DC8(ctx, cobj);
-                __state = 207;
-            }
-            330 => {
-                unreachable!();
+                __state = 331;
             }
             331 => {
+                statics::melee__ty__toy::_Toy_80308DC8(ctx, cobj);
+                __state = 209;
+            }
+            332 => {
+                unreachable!();
+            }
+            333 => {
                 unreachable!();
             }
             _ => unreachable!(),
@@ -6175,7 +6183,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             }
             27 => {
                 adj_x = fp::fdivs(
-                    fp::fneg((fp::fmsubs(0.20000000298023224, fp::frsp(sign as f64), stick_x))),
+                    fp::fnmsubs(0.20000000298023224, fp::frsp(sign as f64), stick_x),
                     0.800000011920929,
                 );
                 __state = 23;
@@ -6214,7 +6222,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             }
             35 => {
                 adj_y = fp::fdivs(
-                    fp::fneg((fp::fmsubs(0.20000000298023224, fp::frsp(sign_2 as f64), stick_y))),
+                    fp::fnmsubs(0.20000000298023224, fp::frsp(sign_2 as f64), stick_y),
                     0.800000011920929,
                 );
                 __state = 31;
@@ -6251,9 +6259,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             }
             43 => {
                 adj_sx = fp::fdivs(
-                    fp::fneg(
-                        (fp::fmsubs(0.20000000298023224, fp::frsp(sign_3 as f64), substick_x)),
-                    ),
+                    fp::fnmsubs(0.20000000298023224, fp::frsp(sign_3 as f64), substick_x),
                     0.800000011920929,
                 );
                 __state = 39;
@@ -6289,9 +6295,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             }
             51 => {
                 adj_sy = fp::fdivs(
-                    fp::fneg(
-                        (fp::fmsubs(0.20000000298023224, fp::frsp(sign_4 as f64), substick_y)),
-                    ),
+                    fp::fnmsubs(0.20000000298023224, fp::frsp(sign_4 as f64), substick_y),
                     0.800000011920929,
                 );
                 __state = 47;
@@ -6478,7 +6482,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 };
             }
             87 => {
-                __state = 211;
+                __state = 212;
             }
             88 => {
                 btn3 = (inl_Toy_80305C44(ctx) as u32);
@@ -6532,8 +6536,10 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             }
             96 => {
                 dist = (state).x20();
-                (state).set_x20(fp::fneg(
-                    (fp::fmsubs(dist, (fp::fmuls(0.02500000037252903, adj_y)), dist)),
+                (state).set_x20(fp::fnmsubs(
+                    dist,
+                    (fp::fmuls(0.02500000037252903, adj_y)),
+                    dist,
                 ));
                 __state = if (state).x20() < 5.0 { 99 } else { 100 };
             }
@@ -6936,12 +6942,12 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 __state = if bm != (8_i32 as u32) { 171 } else { 173 };
             }
             169 => {
-                (state).set_x1C(fp::fneg((fp::fmsubs(3.0, adj_x, (state).x1C()))));
-                (state).set_x18(fp::fneg((fp::fmsubs(3.0, adj_y, (state).x18()))));
+                (state).set_x1C(fp::fnmsubs(3.0, adj_x, (state).x1C()));
+                (state).set_x18(fp::fnmsubs(3.0, adj_y, (state).x18()));
                 __state = if (state).x18() < fp::fneg(89.0) {
-                    198
-                } else {
                     199
+                } else {
+                    200
                 };
             }
             170 => {
@@ -7031,86 +7037,89 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 unreachable!();
             }
             195 => {
-                __state = 191;
+                __state = 190;
             }
             196 => {
-                __state = 192;
+                __state = 191;
             }
             197 => {
-                __state = 193;
+                __state = 192;
             }
             198 => {
-                (state).set_x18(fp::fneg(89.0));
-                __state = 199;
+                __state = 193;
             }
             199 => {
-                __state = if (state).x18() > 89.0 { 201 } else { 202 };
+                (state).set_x18(fp::fneg(89.0));
+                __state = 200;
             }
             200 => {
-                unreachable!();
+                __state = if (state).x18() > 89.0 { 202 } else { 203 };
             }
             201 => {
-                (state).set_x18(89.0);
-                __state = 202;
+                unreachable!();
             }
             202 => {
-                yaw = (state).x1C();
-                __state = if yaw < fp::fneg(360.0) { 204 } else { 205 };
+                (state).set_x18(89.0);
+                __state = 203;
             }
             203 => {
-                unreachable!();
+                yaw = (state).x1C();
+                __state = if yaw < fp::fneg(360.0) { 205 } else { 206 };
             }
             204 => {
-                (state).set_x1C(fp::fadds((state).x1C(), 360.0));
-                __state = 205;
-            }
-            205 => {
-                yaw_2 = (state).x1C();
-                __state = if yaw_2 > 360.0 { 207 } else { 208 };
-            }
-            206 => {
                 unreachable!();
             }
+            205 => {
+                (state).set_x1C(fp::fadds((state).x1C(), 360.0));
+                __state = 206;
+            }
+            206 => {
+                yaw_2 = (state).x1C();
+                __state = if yaw_2 > 360.0 { 208 } else { 209 };
+            }
             207 => {
-                (state).set_x1C((fp::fsubs(yaw_2, 360.0)));
-                __state = 208;
+                unreachable!();
             }
             208 => {
+                (state).set_x1C((fp::fsubs(yaw_2, 360.0)));
+                __state = 209;
+            }
+            209 => {
                 (ed4).set_x18((state).x1C());
                 (ed4).set_x14((state).x18());
                 __state = 138;
-            }
-            209 => {
-                unreachable!();
             }
             210 => {
                 unreachable!();
             }
             211 => {
-                __state = 212;
+                unreachable!();
             }
             212 => {
-                __state = if (0_i32 != 0) { 211 } else { 213 };
+                __state = 213;
             }
             213 => {
+                __state = if (0_i32 != 0) { 212 } else { 214 };
+            }
+            214 => {
                 moved_x = fp::fmuls(0.30000001192092896, adj_sx);
                 moved_y = fp::fmuls(0.30000001192092896, adj_sy);
                 trigger = (inl_Toy_80305B88(ctx) as u32);
                 __state = if ((trigger & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0) {
-                    215
-                } else {
                     216
+                } else {
+                    217
                 };
             }
-            214 => {
+            215 => {
                 unreachable!();
             }
-            215 => {
+            216 => {
                 (state).set_x58(0_i32);
                 (ed4).set_x10((ed4).x10().wrapping_add(1_i32));
-                __state = if (ed4).x10() == 6_i32 { 218 } else { 219 };
+                __state = if (ed4).x10() == 6_i32 { 219 } else { 220 };
             }
-            216 => {
+            217 => {
                 statics::melee__ty__toy::_Toy_80308DC8(ctx, cobj);
                 trigger = (inl_Toy_80305B88(ctx) as u32);
                 __state = if ((trigger
@@ -7118,57 +7127,57 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                         as u32))
                     != 0)
                 {
-                    221
-                } else {
                     222
+                } else {
+                    223
                 };
             }
-            217 => {
-                unreachable!();
-            }
             218 => {
-                (ed4).set_x10(0_i32);
-                __state = 219;
+                unreachable!();
             }
             219 => {
-                fns::Toy_80306D70(ctx, (ed4).x10());
-                statics::melee__ty__toy::_Toy_803075E8(ctx, (ed4).x10());
-                __state = 216;
+                (ed4).set_x10(0_i32);
+                __state = 220;
             }
             220 => {
-                unreachable!();
+                fns::Toy_80306D70(ctx, (ed4).x10());
+                statics::melee__ty__toy::_Toy_803075E8(ctx, (ed4).x10());
+                __state = 217;
             }
             221 => {
+                unreachable!();
+            }
+            222 => {
                 display = fns::Toy_sbss_804D6EE0(ctx).get();
                 trig2 = (inl_Toy_80305B88(ctx) as u32);
                 __state = if ((trig2 & (0x441_i32 as u32)) != 0) {
-                    224
+                    225
                 } else {
-                    226
-                };
-            }
-            222 => {
-                trigger = (inl_Toy_80305B88(ctx) as u32);
-                __state = if ((trigger & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0) {
-                    280
-                } else {
-                    281
+                    227
                 };
             }
             223 => {
-                unreachable!();
+                trigger = (inl_Toy_80305B88(ctx) as u32);
+                __state = if ((trigger & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0) {
+                    281
+                } else {
+                    282
+                };
             }
             224 => {
+                unreachable!();
+            }
+            225 => {
                 inl_sfxMove(ctx);
                 (display)
                     .set_selectedIdx((((display).selectedIdx() as i32).wrapping_sub(1_i32) as i16));
                 __state = if ((display).selectedIdx() as i32) < 0_i32 {
-                    228
-                } else {
                     229
+                } else {
+                    230
                 };
             }
-            225 => {
+            226 => {
                 statics::melee__ty__toy::_Toy_80307828(ctx, 0_i32);
                 statics::melee__ty__toy::_Toy_8030715C(ctx, 0.0, 0.0);
                 (state).set_x58(0x95e_i32);
@@ -7183,107 +7192,107 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                     (ed8).x30(),
                     (((display).selected_entry()).trophy_id() as i32),
                 );
-                __state = 222;
+                __state = 223;
             }
-            226 => {
+            227 => {
                 inl_sfxMove(ctx);
                 (display)
                     .set_selectedIdx((((display).selectedIdx() as i32).wrapping_add(1_i32) as i16));
                 __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
                     || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
                 {
-                    254
+                    255
                 } else {
-                    256
+                    257
                 };
-            }
-            227 => {
-                unreachable!();
             }
             228 => {
-                __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
-                    || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
-                {
-                    231
-                } else {
-                    233
-                };
+                unreachable!();
             }
             229 => {
                 __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
                     || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
                 {
-                    235
+                    232
                 } else {
-                    237
+                    234
                 };
             }
             230 => {
-                unreachable!();
-            }
-            231 => {
-                total = ((base).trophy_count() as i32);
-                __state = 232;
-            }
-            232 => {
-                (display).set_selectedIdx(((total.wrapping_sub(1_i32)) as i16));
-                __state = 229;
-            }
-            233 => {
-                total = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
-                __state = 232;
-            }
-            234 => {
-                unreachable!();
-            }
-            235 => {
-                total = ((base).trophy_count() as i32);
-                __state = 236;
-            }
-            236 => {
-                __state = if total > 3_i32 { 239 } else { 241 };
-            }
-            237 => {
-                total = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
-                __state = 236;
-            }
-            238 => {
-                unreachable!();
-            }
-            239 => {
-                __state = if (((display).selectedIdx() as i32).wrapping_sub(1_i32)) < 0_i32 {
-                    243
-                } else {
-                    245
-                };
-            }
-            240 => {
-                __state = 225;
-            }
-            241 => {
-                (display).set_selected_entry(((display).selected_entry()).prev());
-                __state = 240;
-            }
-            242 => {
-                unreachable!();
-            }
-            243 => {
                 __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
                     || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
                 {
-                    247
+                    236
                 } else {
-                    249
+                    238
                 };
             }
-            244 => {
-                __state = if !Handle::is_null(((display).last_entry()).archive()) {
-                    251
+            231 => {
+                unreachable!();
+            }
+            232 => {
+                total = ((base).trophy_count() as i32);
+                __state = 233;
+            }
+            233 => {
+                (display).set_selectedIdx(((total.wrapping_sub(1_i32)) as i16));
+                __state = 230;
+            }
+            234 => {
+                total = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
+                __state = 233;
+            }
+            235 => {
+                unreachable!();
+            }
+            236 => {
+                total = ((base).trophy_count() as i32);
+                __state = 237;
+            }
+            237 => {
+                __state = if total > 3_i32 { 240 } else { 242 };
+            }
+            238 => {
+                total = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
+                __state = 237;
+            }
+            239 => {
+                unreachable!();
+            }
+            240 => {
+                __state = if (((display).selectedIdx() as i32).wrapping_sub(1_i32)) < 0_i32 {
+                    244
                 } else {
-                    252
+                    246
+                };
+            }
+            241 => {
+                __state = 226;
+            }
+            242 => {
+                (display).set_selected_entry(((display).selected_entry()).prev());
+                __state = 241;
+            }
+            243 => {
+                unreachable!();
+            }
+            244 => {
+                __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
+                    || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
+                {
+                    248
+                } else {
+                    250
                 };
             }
             245 => {
+                __state = if !Handle::is_null(((display).last_entry()).archive()) {
+                    252
+                } else {
+                    253
+                };
+            }
+            246 => {
                 tid_2 = (Handle::add(
                     fns::Toy_sbss_804D6EDC(ctx).get(),
                     ((display).selectedIdx() as i32).wrapping_sub(1_i32),
@@ -7300,16 +7309,16 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                         VarArg::Int(0_i32 as u32),
                     ],
                 ));
-                __state = 244;
-            }
-            246 => {
-                unreachable!();
+                __state = 245;
             }
             247 => {
-                lk = ((base).trophy_count() as i32);
-                __state = 248;
+                unreachable!();
             }
             248 => {
+                lk = ((base).trophy_count() as i32);
+                __state = 249;
+            }
+            249 => {
                 lk = lk.wrapping_add(((display).selectedIdx() as i32));
                 keys = Handle::addr(fns::Toy_sbss_804D6EDC(ctx).get());
                 entry = (display).first_entry();
@@ -7326,112 +7335,112 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                         VarArg::Int(0_i32 as u32),
                     ],
                 ));
-                __state = 244;
-            }
-            249 => {
-                lk = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
-                __state = 248;
+                __state = 245;
             }
             250 => {
-                unreachable!();
+                lk = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
+                __state = 249;
             }
             251 => {
-                fns::lbArchive_80016EFC(ctx, ((display).last_entry()).archive());
-                ((display).last_entry()).set_archive(null::<HSD_Archive<'a>>(ctx));
-                __state = 252;
+                unreachable!();
             }
             252 => {
+                fns::lbArchive_80016EFC(ctx, ((display).last_entry()).archive());
+                ((display).last_entry()).set_archive(null::<HSD_Archive<'a>>(ctx));
+                __state = 253;
+            }
+            253 => {
                 (display).set_selected_entry(((display).selected_entry()).prev());
                 (display).set_first_entry(((display).first_entry()).prev());
                 (display).set_last_entry(((display).last_entry()).prev());
-                __state = 240;
-            }
-            253 => {
-                unreachable!();
+                __state = 241;
             }
             254 => {
-                total_2 = ((base).trophy_count() as i32);
-                __state = 255;
+                unreachable!();
             }
             255 => {
-                __state = if ((display).selectedIdx() as i32) >= total_2 {
-                    258
-                } else {
-                    259
-                };
+                total_2 = ((base).trophy_count() as i32);
+                __state = 256;
             }
             256 => {
-                total_2 = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
-                __state = 255;
+                __state = if ((display).selectedIdx() as i32) >= total_2 {
+                    259
+                } else {
+                    260
+                };
             }
             257 => {
-                unreachable!();
+                total_2 = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
+                __state = 256;
             }
             258 => {
-                (display).set_selectedIdx((0_i32 as i16));
-                __state = 259;
+                unreachable!();
             }
             259 => {
-                __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
-                    || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
-                {
-                    261
-                } else {
-                    263
-                };
+                (display).set_selectedIdx((0_i32 as i16));
+                __state = 260;
             }
             260 => {
-                unreachable!();
-            }
-            261 => {
-                total_2 = ((base).trophy_count() as i32);
-                __state = 262;
-            }
-            262 => {
-                __state = if total_2 > 3_i32 { 265 } else { 267 };
-            }
-            263 => {
-                total_2 = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
-                __state = 262;
-            }
-            264 => {
-                unreachable!();
-            }
-            265 => {
-                cnt = inl__Toy_GetTrophyTotal(ctx, base);
-                __state = if (((display).selectedIdx() as i32).wrapping_add(1_i32)) >= cnt {
-                    269
-                } else {
-                    271
-                };
-            }
-            266 => {
-                __state = 225;
-            }
-            267 => {
-                (display).set_selected_entry(((display).selected_entry()).next());
-                __state = 266;
-            }
-            268 => {
-                unreachable!();
-            }
-            269 => {
                 __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
                     || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
                 {
-                    273
+                    262
                 } else {
-                    275
+                    264
                 };
             }
-            270 => {
-                __state = if !Handle::is_null(((display).first_entry()).archive()) {
-                    277
+            261 => {
+                unreachable!();
+            }
+            262 => {
+                total_2 = ((base).trophy_count() as i32);
+                __state = 263;
+            }
+            263 => {
+                __state = if total_2 > 3_i32 { 266 } else { 268 };
+            }
+            264 => {
+                total_2 = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
+                __state = 263;
+            }
+            265 => {
+                unreachable!();
+            }
+            266 => {
+                cnt = inl__Toy_GetTrophyTotal(ctx, base);
+                __state = if (((display).selectedIdx() as i32).wrapping_add(1_i32)) >= cnt {
+                    270
                 } else {
-                    278
+                    272
+                };
+            }
+            267 => {
+                __state = 226;
+            }
+            268 => {
+                (display).set_selected_entry(((display).selected_entry()).next());
+                __state = 267;
+            }
+            269 => {
+                unreachable!();
+            }
+            270 => {
+                __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
+                    || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
+                {
+                    274
+                } else {
+                    276
                 };
             }
             271 => {
+                __state = if !Handle::is_null(((display).first_entry()).archive()) {
+                    278
+                } else {
+                    279
+                };
+            }
+            272 => {
                 tid_4 = (Handle::add(
                     fns::Toy_sbss_804D6EDC(ctx).get(),
                     ((display).selectedIdx() as i32).wrapping_add(1_i32),
@@ -7448,16 +7457,16 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                         VarArg::Int(0_i32 as u32),
                     ],
                 ));
-                __state = 270;
-            }
-            272 => {
-                unreachable!();
+                __state = 271;
             }
             273 => {
-                cnt2 = ((base).trophy_count() as i32);
-                __state = 274;
+                unreachable!();
             }
             274 => {
+                cnt2 = ((base).trophy_count() as i32);
+                __state = 275;
+            }
+            275 => {
                 lk_2 = ((display).selectedIdx() as i32).wrapping_sub(cnt2);
                 tid_3 = (Handle::add(fns::Toy_sbss_804D6EDC(ctx).get(), lk_2.wrapping_add(1_i32)))
                     .get();
@@ -7472,34 +7481,34 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                         VarArg::Int(0_i32 as u32),
                     ],
                 ));
-                __state = 270;
-            }
-            275 => {
-                cnt2 = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
-                __state = 274;
+                __state = 271;
             }
             276 => {
-                unreachable!();
+                cnt2 = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
+                __state = 275;
             }
             277 => {
-                fns::lbArchive_80016EFC(ctx, ((display).first_entry()).archive());
-                ((display).first_entry()).set_archive(null::<HSD_Archive<'a>>(ctx));
-                __state = 278;
+                unreachable!();
             }
             278 => {
+                fns::lbArchive_80016EFC(ctx, ((display).first_entry()).archive());
+                ((display).first_entry()).set_archive(null::<HSD_Archive<'a>>(ctx));
+                __state = 279;
+            }
+            279 => {
                 (display).set_selected_entry(((display).selected_entry()).next());
                 (display).set_first_entry(((display).first_entry()).next());
                 (display).set_last_entry(((display).last_entry()).next());
-                __state = 266;
-            }
-            279 => {
-                unreachable!();
+                __state = 267;
             }
             280 => {
-                statics::melee__ty__toy::_Toy_80307828(ctx, 0_i32);
-                __state = 281;
+                unreachable!();
             }
             281 => {
+                statics::melee__ty__toy::_Toy_80307828(ctx, 0_i32);
+                __state = 282;
+            }
+            282 => {
                 top = fns::HSD_CObjGetTop(ctx, cobj);
                 bottom = fns::HSD_CObjGetBottom(ctx, cobj);
                 right = fns::HSD_CObjGetRight(ctx, cobj);
@@ -7508,15 +7517,15 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                     & ((shl_i32(1_i32, (12_i32 as u32))) as u32))
                     != 0)
                 {
-                    283
-                } else {
                     284
+                } else {
+                    285
                 };
             }
-            282 => {
+            283 => {
                 unreachable!();
             }
-            283 => {
+            284 => {
                 fns::OSReport(
                     ctx,
                     cstr(ctx, 0x803fe588),
@@ -7529,23 +7538,23 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 );
                 return;
             }
-            284 => {
+            285 => {
                 __state = if ((fns::HSD_PadCopyStatus(ctx).get(1_i32).button()
                     & ((shl_i32(1_i32, (3_i32 as u32))) as u32))
                     != 0)
                 {
-                    287
-                } else {
                     288
+                } else {
+                    289
                 };
             }
-            285 => {
+            286 => {
                 unreachable!();
             }
-            286 => {
-                __state = 284;
-            }
             287 => {
+                __state = 285;
+            }
+            288 => {
                 top = fp::fadds(top, 0.0010000000474974513);
                 bottom = fp::fadds(bottom, 0.0010000000474974513);
                 fns::HSD_CObjSetTop(ctx, cobj, top);
@@ -7557,23 +7566,23 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 );
                 return;
             }
-            288 => {
+            289 => {
                 __state = if ((fns::HSD_PadCopyStatus(ctx).get(1_i32).button()
                     & ((shl_i32(1_i32, (2_i32 as u32))) as u32))
                     != 0)
                 {
-                    291
-                } else {
                     292
+                } else {
+                    293
                 };
             }
-            289 => {
+            290 => {
                 unreachable!();
             }
-            290 => {
-                __state = 288;
-            }
             291 => {
+                __state = 289;
+            }
+            292 => {
                 top = fp::fsubs(top, 0.0010000000474974513);
                 bottom = fp::fsubs(bottom, 0.0010000000474974513);
                 fns::HSD_CObjSetTop(ctx, cobj, top);
@@ -7585,23 +7594,23 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 );
                 return;
             }
-            292 => {
+            293 => {
                 __state = if ((fns::HSD_PadCopyStatus(ctx).get(1_i32).button()
                     & ((shl_i32(1_i32, (0_i32 as u32))) as u32))
                     != 0)
                 {
-                    295
-                } else {
                     296
+                } else {
+                    297
                 };
             }
-            293 => {
+            294 => {
                 unreachable!();
             }
-            294 => {
-                __state = 292;
-            }
             295 => {
+                __state = 293;
+            }
+            296 => {
                 nr = fns::HSD_CObjGetRight(ctx, cobj);
                 nl = fns::HSD_CObjGetLeft(ctx, cobj);
                 nr = fp::fsubs(nr, 0.0010000000474974513);
@@ -7615,23 +7624,23 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 );
                 return;
             }
-            296 => {
+            297 => {
                 __state = if ((fns::HSD_PadCopyStatus(ctx).get(1_i32).button()
                     & ((shl_i32(1_i32, (1_i32 as u32))) as u32))
                     != 0)
                 {
-                    299
-                } else {
                     300
+                } else {
+                    301
                 };
             }
-            297 => {
+            298 => {
                 unreachable!();
             }
-            298 => {
-                __state = 296;
-            }
             299 => {
+                __state = 297;
+            }
+            300 => {
                 nr_2 = fns::HSD_CObjGetRight(ctx, cobj);
                 nl_2 = fns::HSD_CObjGetLeft(ctx, cobj);
                 nr_2 = fp::fadds(nr_2, 0.0010000000474974513);
@@ -7645,17 +7654,17 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 );
                 return;
             }
-            300 => {
+            301 => {
                 statics::melee__ty__toy::_Toy_8030715C(ctx, moved_x, moved_y);
                 __state = 2;
             }
-            301 => {
+            302 => {
                 unreachable!();
             }
-            302 => {
-                __state = 300;
-            }
             303 => {
+                __state = 301;
+            }
+            304 => {
                 unreachable!();
             }
             _ => unreachable!(),
@@ -7829,7 +7838,7 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             24 => {
                 (state).set_x30(
                     (fp::fdivs(
-                        fp::fneg((fp::fmsubs(0.20000000298023224, fp::frsp(sign as f64), tmp))),
+                        fp::fnmsubs(0.20000000298023224, fp::frsp(sign as f64), tmp),
                         0.800000011920929,
                     )),
                 );
@@ -7869,7 +7878,7 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             32 => {
                 (state).set_x34(
                     (fp::fdivs(
-                        fp::fneg((fp::fmsubs(0.20000000298023224, fp::frsp(sign as f64), tmp))),
+                        fp::fnmsubs(0.20000000298023224, fp::frsp(sign as f64), tmp),
                         0.800000011920929,
                     )),
                 );
@@ -7907,7 +7916,7 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             40 => {
                 (state).set_x40(
                     (fp::fdivs(
-                        fp::fneg((fp::fmsubs(0.20000000298023224, fp::frsp(sign as f64), tmp))),
+                        fp::fnmsubs(0.20000000298023224, fp::frsp(sign as f64), tmp),
                         0.800000011920929,
                     )),
                 );
@@ -7941,7 +7950,7 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             48 => {
                 (state).set_x44(
                     (fp::fdivs(
-                        fp::fneg((fp::fmsubs(0.20000000298023224, fp::frsp(sign as f64), tmp))),
+                        fp::fnmsubs(0.20000000298023224, fp::frsp(sign as f64), tmp),
                         0.800000011920929,
                     )),
                 );
@@ -7964,9 +7973,9 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 __state = match ((mode as i8) as i32) {
                     0_i32 => 55,
                     1_i32 => 56,
-                    3_i32 => 56,
-                    2_i32 => 57,
-                    _ => 58,
+                    3_i32 => 57,
+                    2_i32 => 58,
+                    _ => 59,
                 };
             }
             53 => {
@@ -7978,74 +7987,80 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             55 => {
                 trigger = (inl_Toy_80305B88(ctx) as u32);
                 __state = if ((trigger & ((shl_i32(1_i32, (9_i32 as u32))) as u32)) != 0) {
-                    61
+                    63
                 } else {
-                    62
+                    64
                 };
             }
             56 => {
-                statics::melee__ty__toy::_Toy_80308F04(ctx, cobj);
-                __state = 77;
+                __state = 57;
             }
             57 => {
+                statics::melee__ty__toy::_Toy_80308F04(ctx, cobj);
+                __state = 79;
+            }
+            58 => {
                 trigger = (inl_Toy_80305B88(ctx) as u32);
                 __state = if ((trigger & ((shl_i32(1_i32, (9_i32 as u32))) as u32)) != 0)
                     || (fp::frsp((state).x5C() as f64) > 7200.0)
                 {
-                    80
+                    82
                 } else {
-                    81
+                    83
                 };
             }
-            58 => {
-                __state = 77;
-            }
             59 => {
-                return;
+                __state = 79;
             }
             60 => {
-                unreachable!();
+                return;
             }
             61 => {
+                unreachable!();
+            }
+            62 => {
+                __state = 55;
+            }
+            63 => {
                 inl_sfxBack(ctx);
                 fns::Toy_80310660(ctx, 1_i32);
                 fns::HSD_GObj_80390CD4(ctx, arg0);
                 fns::tyList_803147C4(ctx);
                 return;
             }
-            62 => {
+            64 => {
                 __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
                     || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
                 {
-                    65
-                } else {
                     67
+                } else {
+                    69
                 };
             }
-            63 => {
-                unreachable!();
-            }
-            64 => {
-                __state = 62;
-            }
             65 => {
-                tc = ((base).trophy_count() as i32);
-                __state = 66;
+                unreachable!();
             }
             66 => {
-                __state = if tc == 0_i32 { 69 } else { 70 };
+                __state = 64;
             }
             67 => {
-                tc = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
-                __state = 66;
+                tc = ((base).trophy_count() as i32);
+                __state = 68;
             }
             68 => {
-                unreachable!();
+                __state = if tc == 0_i32 { 71 } else { 72 };
             }
             69 => {
-                return;
+                tc = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
+                __state = 68;
             }
             70 => {
+                unreachable!();
+            }
+            71 => {
+                return;
+            }
+            72 => {
                 trigger = (inl_Toy_80305B88(ctx) as u32);
                 __state = if ((trigger
                     & (((shl_i32(1_i32, (8_i32 as u32)))
@@ -8053,18 +8068,18 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                         as u32))
                     != 0)
                 {
-                    73
+                    75
                 } else {
-                    74
+                    76
                 };
             }
-            71 => {
+            73 => {
                 unreachable!();
             }
-            72 => {
-                __state = 70;
+            74 => {
+                __state = 72;
             }
-            73 => {
+            75 => {
                 inl_sfxForward(ctx);
                 fns::_Toy_sbss_804D6E80(ctx).set(fns::HSD_CObjGetTop(ctx, cobj));
                 fns::_Toy_sbss_804D6E84(ctx).set(fns::HSD_CObjGetBottom(ctx, cobj));
@@ -8075,30 +8090,30 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 statics::melee__ty__toy::_Toy_8030715C(ctx, 0.0, 0.0);
                 return;
             }
-            74 => {
-                __state = 77;
-            }
-            75 => {
-                unreachable!();
-            }
             76 => {
-                __state = 74;
+                __state = 79;
             }
             77 => {
-                trigger = (inl_Toy_80305B88(ctx) as u32);
-                __state = if ((trigger & ((shl_i32(1_i32, (11_i32 as u32))) as u32)) != 0) {
-                    136
-                } else {
-                    137
-                };
+                unreachable!();
             }
             78 => {
-                __state = 56;
+                __state = 76;
             }
             79 => {
-                __state = 57;
+                trigger = (inl_Toy_80305B88(ctx) as u32);
+                __state = if ((trigger & ((shl_i32(1_i32, (11_i32 as u32))) as u32)) != 0) {
+                    138
+                } else {
+                    139
+                };
             }
             80 => {
+                __state = 56;
+            }
+            81 => {
+                __state = 58;
+            }
+            82 => {
                 inl_sfxBack(ctx);
                 fns::_Toy_sbss_804D6E80(ctx).set(fns::HSD_CObjGetTop(ctx, cobj));
                 fns::_Toy_sbss_804D6E84(ctx).set(fns::HSD_CObjGetBottom(ctx, cobj));
@@ -8107,35 +8122,35 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 jobj_node = Handle::cast::<ToyJObjNode<'a>>(
                     ((fns::Toy_sbss_804D6ED8(ctx).get()).gobj2()).hsd_obj(),
                 );
-                __state = 83;
+                __state = 85;
             }
-            81 => {
+            83 => {
                 trigger = (inl_Toy_80305B88(ctx) as u32);
                 tmp = fp::fadds(
                     (state).x44(),
                     (fp::fadds((state).x40(), (fp::fadds((state).x30(), (state).x34())))),
                 );
                 __state = if !((fp::fadds(tmp, fp::frsp(trigger as f64))) != 0.0) {
-                    88
-                } else {
                     90
+                } else {
+                    92
                 };
             }
-            82 => {
+            84 => {
                 unreachable!();
             }
-            83 => {
-                __state = if !Handle::is_null(jobj_node) { 84 } else { 86 };
-            }
-            84 => {
-                (jobj_node).set_x40(9_i32);
-                jobj_node = Handle::cast::<ToyJObjNode<'a>>((jobj_node).x4());
-                __state = 83;
-            }
             85 => {
-                __state = 83;
+                __state = if !Handle::is_null(jobj_node) { 86 } else { 88 };
             }
             86 => {
+                (jobj_node).set_x40(9_i32);
+                jobj_node = Handle::cast::<ToyJObjNode<'a>>((jobj_node).x4());
+                __state = 85;
+            }
+            87 => {
+                __state = 85;
+            }
+            88 => {
                 (state).set_x5C(0_i32);
                 Handle::copy_from(sp134, statics::melee__ty__toy::_Toy_803B88F8(ctx));
                 Handle::copy_from(sp128, statics::melee__ty__toy::_Toy_803B8904(ctx));
@@ -8154,483 +8169,483 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 fns::_Toy_sbss_804D6E90(ctx).set(fp::fdivs((fp::fsubs((state).x20(), 38.0)), 10.0));
                 fns::_Toy_sbss_804D6E94(ctx).set(fp::fdivs((state).x18(), 10.0));
                 (state).set_x61((3_i32 as i8));
-                __state = 81;
-            }
-            87 => {
-                unreachable!();
-            }
-            88 => {
-                (state).set_x5C((state).x5C().wrapping_add(1_i32));
-                __state = 89;
+                __state = 83;
             }
             89 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
-                __state = if ((button & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
-                    92
-                } else {
-                    93
-                };
+                unreachable!();
             }
             90 => {
-                (state).set_x5C(0_i32);
-                __state = 89;
+                (state).set_x5C((state).x5C().wrapping_add(1_i32));
+                __state = 91;
             }
             91 => {
-                unreachable!();
-            }
-            92 => {
-                sx = (state).x30();
-                __state = if (sx != 0.0) && (sx < 0.0) { 95 } else { 96 };
-            }
-            93 => {
                 button = (inl_Toy_80305C44(ctx) as u32);
                 __state = if ((button & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
-                    98
+                    94
                 } else {
-                    99
+                    95
                 };
             }
-            94 => {
+            92 => {
+                (state).set_x5C(0_i32);
+                __state = 91;
+            }
+            93 => {
                 unreachable!();
             }
+            94 => {
+                sx = (state).x30();
+                __state = if (sx != 0.0) && (sx < 0.0) { 97 } else { 98 };
+            }
             95 => {
+                button = (inl_Toy_80305C44(ctx) as u32);
+                __state = if ((button & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
+                    100
+                } else {
+                    101
+                };
+            }
+            96 => {
+                unreachable!();
+            }
+            97 => {
                 (state).set_x50(
                     (fp::fmuls(
                         fp::fmuls(0.30000001192092896, sx),
                         (fp::fdivs((state).x20(), 38.0)),
                     )),
                 );
-                __state = 96;
-            }
-            96 => {
-                __state = 93;
-            }
-            97 => {
-                unreachable!();
+                __state = 98;
             }
             98 => {
-                sx_2 = (state).x30();
-                __state = if (sx_2 != 0.0) && (sx_2 > 0.0) {
-                    101
-                } else {
-                    102
-                };
+                __state = 95;
             }
             99 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
-                __state = if ((button & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
-                    104
-                } else {
-                    105
-                };
-            }
-            100 => {
                 unreachable!();
             }
+            100 => {
+                sx_2 = (state).x30();
+                __state = if (sx_2 != 0.0) && (sx_2 > 0.0) {
+                    103
+                } else {
+                    104
+                };
+            }
             101 => {
+                button = (inl_Toy_80305C44(ctx) as u32);
+                __state = if ((button & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
+                    106
+                } else {
+                    107
+                };
+            }
+            102 => {
+                unreachable!();
+            }
+            103 => {
                 (state).set_x50(
                     (fp::fmuls(
                         fp::fmuls(0.30000001192092896, sx_2),
                         (fp::fdivs((state).x20(), 38.0)),
                     )),
                 );
-                __state = 102;
-            }
-            102 => {
-                __state = 99;
-            }
-            103 => {
-                unreachable!();
+                __state = 104;
             }
             104 => {
-                sy = (state).x34();
-                __state = if (sy != 0.0) && (sy > 0.0) { 107 } else { 108 };
+                __state = 101;
             }
             105 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
-                __state = if ((button & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
-                    110
-                } else {
-                    111
-                };
-            }
-            106 => {
                 unreachable!();
             }
+            106 => {
+                sy = (state).x34();
+                __state = if (sy != 0.0) && (sy > 0.0) { 109 } else { 110 };
+            }
             107 => {
+                button = (inl_Toy_80305C44(ctx) as u32);
+                __state = if ((button & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
+                    112
+                } else {
+                    113
+                };
+            }
+            108 => {
+                unreachable!();
+            }
+            109 => {
                 (state).set_x54(
                     (fp::fmuls(
                         fp::fmuls(0.30000001192092896, sy),
                         (fp::fdivs((state).x20(), 38.0)),
                     )),
                 );
-                __state = 108;
-            }
-            108 => {
-                __state = 105;
-            }
-            109 => {
-                unreachable!();
+                __state = 110;
             }
             110 => {
-                sy_2 = (state).x34();
-                __state = if (sy_2 != 0.0) && (sy_2 < 0.0) {
-                    113
-                } else {
-                    114
-                };
+                __state = 107;
             }
             111 => {
+                unreachable!();
+            }
+            112 => {
+                sy_2 = (state).x34();
+                __state = if (sy_2 != 0.0) && (sy_2 < 0.0) {
+                    115
+                } else {
+                    116
+                };
+            }
+            113 => {
                 __state = if (((state).x50() != 0.0) || ((state).x54() != 0.0))
                     || ((inl_Toy_80305C44(ctx) & (shl_i32(1_i32, (8_i32 as u32)))) != 0)
                 {
-                    116
-                } else {
                     118
+                } else {
+                    120
                 };
             }
-            112 => {
+            114 => {
                 unreachable!();
             }
-            113 => {
+            115 => {
                 (state).set_x54(
                     (fp::fmuls(
                         fp::fmuls(0.30000001192092896, sy_2),
                         (fp::fdivs((state).x20(), 38.0)),
                     )),
                 );
-                __state = 114;
-            }
-            114 => {
-                __state = 111;
-            }
-            115 => {
-                unreachable!();
+                __state = 116;
             }
             116 => {
-                statics::melee__ty__toy::_Toy_803102C4(ctx, (0_i32 as i8));
-                __state = 117;
+                __state = 113;
             }
             117 => {
-                __state = if ((state).x50() != 0.0) || ((state).x54() != 0.0) {
-                    120
-                } else {
-                    121
-                };
+                unreachable!();
             }
             118 => {
-                statics::melee__ty__toy::_Toy_803102C4(ctx, (1_i32 as i8));
-                __state = 117;
+                statics::melee__ty__toy::_Toy_803102C4(ctx, (0_i32 as i8));
+                __state = 119;
             }
             119 => {
-                unreachable!();
+                __state = if ((state).x50() != 0.0) || ((state).x54() != 0.0) {
+                    122
+                } else {
+                    123
+                };
             }
             120 => {
-                moved_x = 1.0;
-                __state = 121;
+                statics::melee__ty__toy::_Toy_803102C4(ctx, (1_i32 as i8));
+                __state = 119;
             }
             121 => {
-                __state = if !(moved_x != 0.0) { 123 } else { 124 };
+                unreachable!();
             }
             122 => {
-                unreachable!();
+                moved_x = 1.0;
+                __state = 123;
             }
             123 => {
-                sy_3 = (state).x34();
-                __state = if (sy_3 != 0.0) { 126 } else { 127 };
+                __state = if !(moved_x != 0.0) { 125 } else { 126 };
             }
             124 => {
-                __state = 77;
-            }
-            125 => {
                 unreachable!();
             }
+            125 => {
+                sy_3 = (state).x34();
+                __state = if (sy_3 != 0.0) { 128 } else { 129 };
+            }
             126 => {
+                __state = 79;
+            }
+            127 => {
+                unreachable!();
+            }
+            128 => {
                 (state).set_x20(fp::fnmsubs(
                     (state).x20(),
                     (fp::fmuls(0.02500000037252903, sy_3)),
                     (state).x20(),
                 ));
                 moved_y = 1.0;
-                __state = 127;
-            }
-            127 => {
-                __state = if (state).x20() < 5.0 { 129 } else { 130 };
-            }
-            128 => {
-                unreachable!();
+                __state = 129;
             }
             129 => {
-                (state).set_x20(5.0);
-                __state = 130;
+                __state = if (state).x20() < 5.0 { 131 } else { 132 };
             }
             130 => {
-                __state = if (state).x20() > 250.0 { 132 } else { 133 };
+                unreachable!();
             }
             131 => {
-                unreachable!();
+                (state).set_x20(5.0);
+                __state = 132;
             }
             132 => {
-                (state).set_x20(250.0);
-                __state = 133;
+                __state = if (state).x20() > 250.0 { 134 } else { 135 };
             }
             133 => {
-                __state = 124;
+                unreachable!();
             }
             134 => {
-                unreachable!();
+                (state).set_x20(250.0);
+                __state = 135;
             }
             135 => {
-                __state = 58;
+                __state = 126;
             }
             136 => {
-                fns::_Toy_sbss_804D6E54(ctx).set((fns::_Toy_sbss_804D6E54(ctx).get() ^ 1_i32));
-                __state = 137;
+                unreachable!();
             }
             137 => {
-                (state).set_x1C(fp::fneg((fp::fmsubs(3.0, (state).x40(), (state).x1C()))));
-                (state).set_x18(fp::fneg((fp::fmsubs(3.0, (state).x44(), (state).x18()))));
-                __state = if (state).x18() < fp::fneg(89.0) {
-                    139
-                } else {
-                    140
-                };
+                __state = 59;
             }
             138 => {
-                unreachable!();
+                fns::_Toy_sbss_804D6E54(ctx).set((fns::_Toy_sbss_804D6E54(ctx).get() ^ 1_i32));
+                __state = 139;
             }
             139 => {
-                (state).set_x18(fp::fneg(89.0));
-                __state = 140;
+                (state).set_x1C(fp::fnmsubs(3.0, (state).x40(), (state).x1C()));
+                (state).set_x18(fp::fnmsubs(3.0, (state).x44(), (state).x18()));
+                __state = if (state).x18() < fp::fneg(89.0) {
+                    141
+                } else {
+                    142
+                };
             }
             140 => {
-                __state = if (state).x18() > 89.0 { 142 } else { 143 };
+                unreachable!();
             }
             141 => {
-                unreachable!();
+                (state).set_x18(fp::fneg(89.0));
+                __state = 142;
             }
             142 => {
-                (state).set_x18(89.0);
-                __state = 143;
+                __state = if (state).x18() > 89.0 { 144 } else { 145 };
             }
             143 => {
-                tmp = (state).x1C();
-                __state = if tmp < fp::fneg(360.0) { 145 } else { 146 };
+                unreachable!();
             }
             144 => {
-                unreachable!();
+                (state).set_x18(89.0);
+                __state = 145;
             }
             145 => {
-                (state).set_x1C(fp::fadds((state).x1C(), 360.0));
-                __state = 146;
+                tmp = (state).x1C();
+                __state = if tmp < fp::fneg(360.0) { 147 } else { 148 };
             }
             146 => {
-                tmp = (state).x1C();
-                __state = if tmp > 360.0 { 148 } else { 149 };
-            }
-            147 => {
                 unreachable!();
             }
+            147 => {
+                (state).set_x1C(fp::fadds((state).x1C(), 360.0));
+                __state = 148;
+            }
             148 => {
-                (state).set_x1C((fp::fsubs(tmp, 360.0)));
-                __state = 149;
+                tmp = (state).x1C();
+                __state = if tmp > 360.0 { 150 } else { 151 };
             }
             149 => {
+                unreachable!();
+            }
+            150 => {
+                (state).set_x1C((fp::fsubs(tmp, 360.0)));
+                __state = 151;
+            }
+            151 => {
                 (ed4).set_x18((state).x1C());
                 (ed4).set_x14((state).x18());
                 __state = if (fp::fadds((state).x40(), (state).x44()) != 0.0) {
-                    151
+                    153
                 } else {
-                    152
+                    154
                 };
-            }
-            150 => {
-                unreachable!();
-            }
-            151 => {
-                (state).set_x24(0.0);
-                __state = 152;
             }
             152 => {
-                __state = if (!(moved_x != 0.0)) && (!(moved_y != 0.0)) {
-                    154
-                } else {
-                    155
-                };
-            }
-            153 => {
                 unreachable!();
             }
+            153 => {
+                (state).set_x24(0.0);
+                __state = 154;
+            }
             154 => {
+                __state = if (!(moved_x != 0.0)) && (!(moved_y != 0.0)) {
+                    156
+                } else {
+                    157
+                };
+            }
+            155 => {
+                unreachable!();
+            }
+            156 => {
                 trigger = (inl_Toy_80305B88(ctx) as u32);
                 __state = if ((trigger
                     & (((shl_i32(1_i32, (6_i32 as u32))) | (shl_i32(1_i32, (5_i32 as u32))))
                         as u32))
                     != 0)
                 {
-                    157
+                    159
                 } else {
-                    158
+                    160
                 };
             }
-            155 => {
-                __state = 227;
+            157 => {
+                __state = 229;
             }
-            156 => {
+            158 => {
                 unreachable!();
             }
-            157 => {
+            159 => {
                 display = fns::Toy_sbss_804D6EE0(ctx).get();
                 __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
                     || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
                 {
-                    160
-                } else {
                     162
+                } else {
+                    164
                 };
             }
-            158 => {
-                __state = 227;
-            }
-            159 => {
-                unreachable!();
-            }
             160 => {
-                tc_2 = ((base).trophy_count() as i32);
-                __state = 161;
+                __state = 229;
             }
             161 => {
-                __state = if tc_2 == 1_i32 { 164 } else { 165 };
-            }
-            162 => {
-                tc_2 = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
-                __state = 161;
-            }
-            163 => {
                 unreachable!();
             }
+            162 => {
+                tc_2 = ((base).trophy_count() as i32);
+                __state = 163;
+            }
+            163 => {
+                __state = if tc_2 == 1_i32 { 166 } else { 167 };
+            }
             164 => {
+                tc_2 = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
+                __state = 163;
+            }
+            165 => {
+                unreachable!();
+            }
+            166 => {
                 (state).set_x58(0x961_i32);
                 return;
             }
-            165 => {
+            167 => {
                 __state = if ((state).x30() < 0.0) || ((inl_Toy_80305B88(ctx) & 0x441_i32) != 0) {
-                    168
-                } else {
                     170
+                } else {
+                    172
                 };
             }
-            166 => {
+            168 => {
                 unreachable!();
             }
-            167 => {
-                __state = 165;
+            169 => {
+                __state = 167;
             }
-            168 => {
+            170 => {
                 inl_sfxMove(ctx);
                 (display)
                     .set_selectedIdx((((display).selectedIdx() as i32).wrapping_sub(1_i32) as i16));
                 __state = if ((display).selectedIdx() as i32) < 0_i32 {
-                    172
+                    174
                 } else {
-                    173
+                    175
                 };
             }
-            169 => {
+            171 => {
                 statics::melee__ty__toy::_Toy_80307828(ctx, 0_i32);
                 (state).set_x58(0x95e_i32);
                 let _ =
                     fns::Toy_803087F4(ctx, Handle::cast::<Addr<'a>>((display).selected_entry()));
                 (state).set_x60((20_i32 as i8));
-                __state = 227;
-            }
-            170 => {
-                __state = if ((state).x30() > 0.0) || ((inl_Toy_80305B88(ctx) & 0x822_i32) != 0) {
-                    198
-                } else {
-                    199
-                };
-            }
-            171 => {
-                unreachable!();
+                __state = 229;
             }
             172 => {
-                __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
-                    || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
-                {
-                    175
+                __state = if ((state).x30() > 0.0) || ((inl_Toy_80305B88(ctx) & 0x822_i32) != 0) {
+                    200
                 } else {
-                    177
+                    201
                 };
             }
             173 => {
-                __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
-                    || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
-                {
-                    179
-                } else {
-                    181
-                };
+                unreachable!();
             }
             174 => {
-                unreachable!();
-            }
-            175 => {
-                total = ((base).trophy_count() as i32);
-                __state = 176;
-            }
-            176 => {
-                (display).set_selectedIdx(((total.wrapping_sub(1_i32)) as i16));
-                __state = 173;
-            }
-            177 => {
-                total = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
-                __state = 176;
-            }
-            178 => {
-                unreachable!();
-            }
-            179 => {
-                total = ((base).trophy_count() as i32);
-                __state = 180;
-            }
-            180 => {
-                __state = if total > 3_i32 { 183 } else { 185 };
-            }
-            181 => {
-                total = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
-                __state = 180;
-            }
-            182 => {
-                unreachable!();
-            }
-            183 => {
-                __state = if (((display).selectedIdx() as i32).wrapping_sub(1_i32)) < 0_i32 {
-                    187
-                } else {
-                    189
-                };
-            }
-            184 => {
-                __state = 169;
-            }
-            185 => {
-                (display).set_selected_entry(((display).selected_entry()).prev());
-                __state = 184;
-            }
-            186 => {
-                unreachable!();
-            }
-            187 => {
                 __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
                     || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
                 {
-                    191
+                    177
                 } else {
-                    193
+                    179
                 };
             }
+            175 => {
+                __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
+                    || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
+                {
+                    181
+                } else {
+                    183
+                };
+            }
+            176 => {
+                unreachable!();
+            }
+            177 => {
+                total = ((base).trophy_count() as i32);
+                __state = 178;
+            }
+            178 => {
+                (display).set_selectedIdx(((total.wrapping_sub(1_i32)) as i16));
+                __state = 175;
+            }
+            179 => {
+                total = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
+                __state = 178;
+            }
+            180 => {
+                unreachable!();
+            }
+            181 => {
+                total = ((base).trophy_count() as i32);
+                __state = 182;
+            }
+            182 => {
+                __state = if total > 3_i32 { 185 } else { 187 };
+            }
+            183 => {
+                total = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
+                __state = 182;
+            }
+            184 => {
+                unreachable!();
+            }
+            185 => {
+                __state = if (((display).selectedIdx() as i32).wrapping_sub(1_i32)) < 0_i32 {
+                    189
+                } else {
+                    191
+                };
+            }
+            186 => {
+                __state = 171;
+            }
+            187 => {
+                (display).set_selected_entry(((display).selected_entry()).prev());
+                __state = 186;
+            }
             188 => {
+                unreachable!();
+            }
+            189 => {
+                __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
+                    || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
+                {
+                    193
+                } else {
+                    195
+                };
+            }
+            190 => {
                 __state = if !Handle::is_null(
                     ({
                         let __t1 = ((display).last_entry()).archive();
@@ -8638,12 +8653,12 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                         __t1
                     }),
                 ) {
-                    195
+                    197
                 } else {
-                    196
+                    198
                 };
             }
-            189 => {
+            191 => {
                 trophy_id_3 = (Handle::add(
                     fns::Toy_sbss_804D6EDC(ctx).get(),
                     ((display).selectedIdx() as i32).wrapping_sub(1_i32),
@@ -8660,16 +8675,16 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                         VarArg::Int(0_i32 as u32),
                     ],
                 ));
-                __state = 188;
-            }
-            190 => {
-                unreachable!();
-            }
-            191 => {
-                count = ((base).trophy_count() as i32);
-                __state = 192;
+                __state = 190;
             }
             192 => {
+                unreachable!();
+            }
+            193 => {
+                count = ((base).trophy_count() as i32);
+                __state = 194;
+            }
+            194 => {
                 count = count.wrapping_add(((display).selectedIdx() as i32));
                 list_idx = count;
                 keys = Handle::addr(fns::Toy_sbss_804D6EDC(ctx).get());
@@ -8687,124 +8702,124 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                         VarArg::Int(0_i32 as u32),
                     ],
                 ));
-                __state = 188;
-            }
-            193 => {
-                count = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
-                __state = 192;
-            }
-            194 => {
-                unreachable!();
+                __state = 190;
             }
             195 => {
-                fns::lbArchive_80016EFC(ctx, old_archive);
-                ((display).last_entry()).set_archive(null::<HSD_Archive<'a>>(ctx));
-                __state = 196;
+                count = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
+                __state = 194;
             }
             196 => {
+                unreachable!();
+            }
+            197 => {
+                fns::lbArchive_80016EFC(ctx, old_archive);
+                ((display).last_entry()).set_archive(null::<HSD_Archive<'a>>(ctx));
+                __state = 198;
+            }
+            198 => {
                 (display).set_selected_entry(((display).selected_entry()).prev());
                 (display).set_first_entry(((display).first_entry()).prev());
                 (display).set_last_entry(((display).last_entry()).prev());
-                __state = 184;
+                __state = 186;
             }
-            197 => {
+            199 => {
                 unreachable!();
             }
-            198 => {
+            200 => {
                 inl_sfxMove(ctx);
                 (display)
                     .set_selectedIdx((((display).selectedIdx() as i32).wrapping_add(1_i32) as i16));
                 __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
                     || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
                 {
-                    201
-                } else {
                     203
+                } else {
+                    205
                 };
-            }
-            199 => {
-                __state = 169;
-            }
-            200 => {
-                unreachable!();
             }
             201 => {
-                total_2 = ((base).trophy_count() as i32);
-                __state = 202;
+                __state = 171;
             }
             202 => {
-                __state = if ((display).selectedIdx() as i32) >= total_2 {
-                    205
-                } else {
-                    206
-                };
-            }
-            203 => {
-                total_2 = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
-                __state = 202;
-            }
-            204 => {
                 unreachable!();
             }
+            203 => {
+                total_2 = ((base).trophy_count() as i32);
+                __state = 204;
+            }
+            204 => {
+                __state = if ((display).selectedIdx() as i32) >= total_2 {
+                    207
+                } else {
+                    208
+                };
+            }
             205 => {
-                (display).set_selectedIdx((0_i32 as i16));
-                __state = 206;
+                total_2 = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
+                __state = 204;
             }
             206 => {
+                unreachable!();
+            }
+            207 => {
+                (display).set_selectedIdx((0_i32 as i16));
+                __state = 208;
+            }
+            208 => {
                 __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
                     || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
                 {
-                    208
-                } else {
                     210
+                } else {
+                    212
                 };
             }
-            207 => {
-                unreachable!();
-            }
-            208 => {
-                total_2 = ((base).trophy_count() as i32);
-                __state = 209;
-            }
             209 => {
-                __state = if total_2 > 3_i32 { 212 } else { 214 };
+                unreachable!();
             }
             210 => {
-                total_2 = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
-                __state = 209;
+                total_2 = ((base).trophy_count() as i32);
+                __state = 211;
             }
             211 => {
-                unreachable!();
+                __state = if total_2 > 3_i32 { 214 } else { 216 };
             }
             212 => {
+                total_2 = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
+                __state = 211;
+            }
+            213 => {
+                unreachable!();
+            }
+            214 => {
                 __state = if (((display).selectedIdx() as i32).wrapping_add(1_i32))
                     >= inl__Toy_GetTrophyTotal(ctx, base)
                 {
-                    216
-                } else {
                     218
+                } else {
+                    220
                 };
             }
-            213 => {
-                __state = 199;
-            }
-            214 => {
-                (display).set_selected_entry(((display).selected_entry()).next());
-                __state = 213;
-            }
             215 => {
-                unreachable!();
+                __state = 201;
             }
             216 => {
+                (display).set_selected_entry(((display).selected_entry()).next());
+                __state = 215;
+            }
+            217 => {
+                unreachable!();
+            }
+            218 => {
                 __state = if (fns::gm_IsCurrently1PMode(ctx) != 0_i32)
                     || ((fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOY_LOTTERY as i32))
                 {
-                    220
-                } else {
                     222
+                } else {
+                    224
                 };
             }
-            217 => {
+            219 => {
                 __state = if !Handle::is_null(
                     ({
                         let __t2 = ((display).first_entry()).archive();
@@ -8812,12 +8827,12 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                         __t2
                     }),
                 ) {
-                    224
+                    226
                 } else {
-                    225
+                    227
                 };
             }
-            218 => {
+            220 => {
                 trophy_id_5 = (Handle::add(
                     fns::Toy_sbss_804D6EDC(ctx).get(),
                     ((display).selectedIdx() as i32).wrapping_add(1_i32),
@@ -8834,16 +8849,16 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                         VarArg::Int(0_i32 as u32),
                     ],
                 ));
-                __state = 217;
-            }
-            219 => {
-                unreachable!();
-            }
-            220 => {
-                count2 = ((base).trophy_count() as i32);
-                __state = 221;
+                __state = 219;
             }
             221 => {
+                unreachable!();
+            }
+            222 => {
+                count2 = ((base).trophy_count() as i32);
+                __state = 223;
+            }
+            223 => {
                 list_idx_2 = ((display).selectedIdx() as i32).wrapping_sub(count2);
                 trophy_id_4 = (Handle::add(
                     fns::Toy_sbss_804D6EDC(ctx).get(),
@@ -8861,73 +8876,73 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                         VarArg::Int(0_i32 as u32),
                     ],
                 ));
-                __state = 217;
-            }
-            222 => {
-                count2 = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
-                __state = 221;
-            }
-            223 => {
-                unreachable!();
+                __state = 219;
             }
             224 => {
-                fns::lbArchive_80016EFC(ctx, old_archive_2);
-                ((display).first_entry()).set_archive(null::<HSD_Archive<'a>>(ctx));
-                __state = 225;
+                count2 = ((fns::gmMainLib_GetTrophyCount(ctx)).get() as i32);
+                __state = 223;
             }
             225 => {
+                unreachable!();
+            }
+            226 => {
+                fns::lbArchive_80016EFC(ctx, old_archive_2);
+                ((display).first_entry()).set_archive(null::<HSD_Archive<'a>>(ctx));
+                __state = 227;
+            }
+            227 => {
                 (display).set_selected_entry(((display).selected_entry()).next());
                 (display).set_first_entry(((display).first_entry()).next());
                 (display).set_last_entry(((display).last_entry()).next());
-                __state = 213;
-            }
-            226 => {
-                unreachable!();
-            }
-            227 => {
-                trigger = (inl_Toy_80305B88(ctx) as u32);
-                __state = if ((trigger & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0) {
-                    230
-                } else {
-                    231
-                };
+                __state = 215;
             }
             228 => {
-                __state = 158;
+                unreachable!();
             }
             229 => {
-                __state = 155;
+                trigger = (inl_Toy_80305B88(ctx) as u32);
+                __state = if ((trigger & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0) {
+                    232
+                } else {
+                    233
+                };
             }
             230 => {
+                __state = 160;
+            }
+            231 => {
+                __state = 157;
+            }
+            232 => {
                 inl_sfxMove(ctx);
                 (state).set_x58(0_i32);
                 (ed4).set_x10((ed4).x10().wrapping_add(1_i32));
-                __state = if (ed4).x10() == 6_i32 { 233 } else { 234 };
-            }
-            231 => {
-                trigger = (inl_Toy_80305B88(ctx) as u32);
-                __state = if ((trigger & ((shl_i32(1_i32, (4_i32 as u32))) as u32)) != 0) {
-                    236
-                } else {
-                    237
-                };
-            }
-            232 => {
-                unreachable!();
+                __state = if (ed4).x10() == 6_i32 { 235 } else { 236 };
             }
             233 => {
-                (ed4).set_x10(0_i32);
-                __state = 234;
+                trigger = (inl_Toy_80305B88(ctx) as u32);
+                __state = if ((trigger & ((shl_i32(1_i32, (4_i32 as u32))) as u32)) != 0) {
+                    238
+                } else {
+                    239
+                };
             }
             234 => {
-                fns::Toy_80306D70(ctx, (ed4).x10());
-                statics::melee__ty__toy::_Toy_803075E8(ctx, (ed4).x10());
-                __state = 231;
-            }
-            235 => {
                 unreachable!();
             }
+            235 => {
+                (ed4).set_x10(0_i32);
+                __state = 236;
+            }
             236 => {
+                fns::Toy_80306D70(ctx, (ed4).x10());
+                statics::melee__ty__toy::_Toy_803075E8(ctx, (ed4).x10());
+                __state = 233;
+            }
+            237 => {
+                unreachable!();
+            }
+            238 => {
                 statics::melee__ty__toy::_Toy_80307828(ctx, 0_i32);
                 ed4_2 = fns::Toy_sbss_804D6ED4(ctx).get();
                 (ed4_2).set_x10(0_i32);
@@ -8936,9 +8951,9 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 (anim).set_x11((0_i32 as i8));
                 (anim).set_x10((0_i32 as i8));
                 (anim).set_x0E((1_i32 as i8));
-                __state = 237;
+                __state = 239;
             }
-            237 => {
+            239 => {
                 fns::HSD_JObjSetFlagsAll(
                     ctx,
                     (anim).jobj().at(0_i32).get(),
@@ -8954,15 +8969,15 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 (state).set_x3C((state).x34());
                 (state).set_x48((state).x40());
                 (state).set_x4C((state).x44());
-                __state = 59;
-            }
-            238 => {
-                unreachable!();
-            }
-            239 => {
-                __state = 59;
+                __state = 60;
             }
             240 => {
+                unreachable!();
+            }
+            241 => {
+                __state = 60;
+            }
+            242 => {
                 unreachable!();
             }
             _ => unreachable!(),

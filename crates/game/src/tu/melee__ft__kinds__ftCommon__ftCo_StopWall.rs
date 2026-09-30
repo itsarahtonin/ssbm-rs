@@ -83,12 +83,10 @@ pub fn ftCo_8009EE30<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             fp::frsp(0_i32 as f64),
             null::<HSD_GObj<'a>>(ctx),
         );
-        (fp).cur_pos().set_x(fp::fneg(
-            (fp::fmsubs(
-                (fp).x68C_transNPos().z(),
-                fp::fneg((fp).facing_dir()),
-                (fp::fadds((fp).cur_pos().x(), vec.x())),
-            )),
+        (fp).cur_pos().set_x(fp::fnmsubs(
+            (fp).x68C_transNPos().z(),
+            fp::fneg((fp).facing_dir()),
+            (fp::fadds((fp).cur_pos().x(), vec.x())),
         ));
     }
     fns::ft_800843FC(ctx, gobj);

@@ -223,7 +223,7 @@ pub fn it_802D1830<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     prod = fp::fmuls(8.0, x18);
     sqrtval = inl_my_sqrtf_accurate(
         ctx,
-        fp::fneg((fp::fmsubs(prod, fp::fneg(disc), (fp::fmuls(x18, x18))))),
+        fp::fnmsubs(prod, fp::fneg(disc), (fp::fmuls(x18, x18))),
     );
     (ip).xDD4_itemVar().lugia().xE50().set_x(fp::fneg(
         (fp::fdivs((fp::fadds(fp::fneg(x18), sqrtval)), fp::frsp(2_i32 as f64))),

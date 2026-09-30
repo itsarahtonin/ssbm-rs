@@ -854,7 +854,13 @@ fn inl_it_802C248C_setupGObj_unfused<'a>(
         fns::HSD_GObj_JObjKind(ctx).get(),
         Handle::cast::<Addr<'a>>(loaded_jobj),
     );
-    fns::GObj_SetupGXLink(ctx, link_gobj, callback, (6_i32 as u8), (0_i32 as u32));
+    fns::GObj_SetupGXLink(
+        ctx,
+        link_gobj,
+        fnptr(ctx, 0x802a24a0),
+        (6_i32 as u8),
+        (0_i32 as u32),
+    );
 }
 
 fn inl_it_802C248C_joint28_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) -> HSD_Joint<'a> {

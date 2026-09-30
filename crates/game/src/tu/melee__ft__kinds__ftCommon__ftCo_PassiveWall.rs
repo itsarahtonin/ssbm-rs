@@ -152,12 +152,10 @@ pub fn ftCo_800C1E64<'a>(
             null::<HSD_JObj<'a>>(ctx),
             &[VarArg::Int(Handle::addr(ef_pos))],
         );
-        (fp).cur_pos().set_x(fp::fneg(
-            (fp::fmsubs(
-                (fp).x68C_transNPos().z(),
-                fp::fneg((fp).facing_dir()),
-                pos_x_offset,
-            )),
+        (fp).cur_pos().set_x(fp::fnmsubs(
+            (fp).x68C_transNPos().z(),
+            fp::fneg((fp).facing_dir()),
+            pos_x_offset,
         ));
     }
     let _ = fns::ft_80081F2C(ctx, gobj);

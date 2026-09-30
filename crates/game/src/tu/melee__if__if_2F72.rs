@@ -405,7 +405,7 @@ pub fn if_802F7D08<'a>(ctx: &'a Ctx, slot: i32) {
                 fns::HSD_GObj_SetupProc(ctx, (gobjp).get(), fnptr(ctx, 0x802f7994), (17_i32 as u8));
         }
     } else if ret == 1_i32.wrapping_neg() {
-        inl_SpawnGObj_unfused(ctx, slot, (1_i32 as u16), fnptr(ctx, 0x802f7994));
+        inl_SpawnGObj_unfused_2(ctx, slot, (1_i32 as u16), fnptr(ctx, 0x802f7994));
     } else {
         inl_SpawnGObj_unfused(ctx, slot, (1_i32 as u16), fnptr(ctx, 0x802f75d4));
     }
@@ -606,7 +606,35 @@ fn inl_SpawnGObj_unfused<'a>(ctx: &'a Ctx, slot: i32, anim: u16, proc: FnPtr<'a>
             anim,
         ));
     if !Handle::is_null((models).slots().get((idx as i32)).gobj()) {
-        let _ = fns::HSD_GObj_SetupProc(ctx, (gobjp).get(), proc, (17_i32 as u8));
+        let _ = fns::HSD_GObj_SetupProc(ctx, (gobjp).get(), fnptr(ctx, 0x802f75d4), (17_i32 as u8));
+    }
+}
+
+fn inl_SpawnGObj_unfused_2<'a>(ctx: &'a Ctx, slot: i32, anim: u16, proc: FnPtr<'a>) {
+    let mut slot = slot;
+    let mut anim = anim;
+    let mut proc = proc;
+    let mut models: ScInfStcModels<'a> = statics::melee__if__if_2F72::scinfstc_models(ctx);
+    let mut idx: u8 = (slot as u8);
+    let mut gobjp: Ptr<'a, HSD_GObj<'a>> = Handle::add(
+        (models).slots().get((idx as i32)).gobj_ref(),
+        1_i32.wrapping_neg(),
+    );
+    (models)
+        .slots()
+        .get((idx as i32))
+        .set_gobj(fns::fn_802F77F8(
+            ctx,
+            ({
+                gobjp = Handle::add(gobjp, 1);
+                gobjp
+            })
+            .get(),
+            idx,
+            anim,
+        ));
+    if !Handle::is_null((models).slots().get((idx as i32)).gobj()) {
+        let _ = fns::HSD_GObj_SetupProc(ctx, (gobjp).get(), fnptr(ctx, 0x802f7994), (17_i32 as u8));
     }
 }
 

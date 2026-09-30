@@ -3367,7 +3367,7 @@ fn inl_isNearTarget_unfused<'a>(
     if (fns::grCastle_801CDF54(ctx, target) != 0)
         && (({
             fns::lb_8000B1CC(ctx, jobj, null::<Vec<'a>>(ctx), pos);
-            (fns::sqrtf(
+            (fns::sqrtf__Ff(
                 ctx,
                 fp::fadds(
                     fp::fmuls(

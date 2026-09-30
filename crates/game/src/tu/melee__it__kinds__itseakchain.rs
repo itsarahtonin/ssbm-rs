@@ -596,9 +596,9 @@ pub fn it_802BBED0<'a>(
         'l1: while !Handle::is_null(prev) {
             'c2: {
                 if ((prev).x2C_b0() != 0) {
-                    (prev).vel().set_y(fp::fneg(
-                        (fp::fmsubs((sa).x18(), vel_scale, (prev).vel().y())),
-                    ));
+                    (prev)
+                        .vel()
+                        .set_y(fp::fnmsubs((sa).x18(), vel_scale, (prev).vel().y()));
                     vel_scale = fp::fmuls(vel_scale, (sa).x34());
                     fns::it_802A4420(ctx, prev);
                     if fns::it_802A3C98(ctx, (prev).pos(), (cur).pos(), pos) > (sa).x4() {

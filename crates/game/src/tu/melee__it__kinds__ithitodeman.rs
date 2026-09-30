@@ -384,12 +384,10 @@ pub fn itHitodeman_UnkMotion1_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut attrs: itHitodemanAttributes<'a> =
         Handle::cast::<itHitodemanAttributes<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
     if (ip).xDB0_itcmd_var1() != (0_i32 as u32) {
-        (ip).x40_vel().set_x(fp::fneg(
-            (fp::fmsubs(
-                fp::fneg((ip).facing_dir()),
-                (attrs).x4C(),
-                (ip).x40_vel().x(),
-            )),
+        (ip).x40_vel().set_x(fp::fnmsubs(
+            fp::fneg((ip).facing_dir()),
+            (attrs).x4C(),
+            (ip).x40_vel().x(),
         ));
     }
 }

@@ -222,16 +222,16 @@ pub fn TObjUpdateFunc<'a>(ctx: &'a Ctx, obj: Addr<'a>, r#type: i32, val: HSD_Obj
                 });
                 n = fp::fctiwz((val).fv());
                 __state = if !Handle::is_null((Handle::add((tobj).imagetbl(), n)).get()) {
-                    31
-                } else {
                     32
+                } else {
+                    33
                 };
             }
             6 => {
                 __state = if !Handle::is_null((tobj).tluttbl()) {
-                    35
-                } else {
                     36
+                } else {
+                    37
                 };
             }
             7 => {
@@ -240,31 +240,31 @@ pub fn TObjUpdateFunc<'a>(ctx: &'a Ctx, obj: Addr<'a>, r#type: i32, val: HSD_Obj
             }
             8 => {
                 (tobj).rotate().set_x((val).fv());
-                __state = 40;
+                __state = 41;
             }
             9 => {
                 (tobj).rotate().set_y((val).fv());
-                __state = 40;
+                __state = 41;
             }
             10 => {
                 (tobj).rotate().set_z((val).fv());
-                __state = 40;
+                __state = 41;
             }
             11 => {
                 (tobj).translate().set_x((val).fv());
-                __state = 40;
+                __state = 41;
             }
             12 => {
                 (tobj).translate().set_y((val).fv());
-                __state = 40;
+                __state = 41;
             }
             13 => {
                 (tobj).scale().set_x((val).fv());
-                __state = 40;
+                __state = 41;
             }
             14 => {
                 (tobj).scale().set_y((val).fv());
-                __state = 40;
+                __state = 41;
             }
             15 => {
                 ((tobj).lod()).set_LODBias((val).fv());
@@ -353,105 +353,108 @@ pub fn TObjUpdateFunc<'a>(ctx: &'a Ctx, obj: Addr<'a>, r#type: i32, val: HSD_Obj
                 unreachable!();
             }
             31 => {
-                (tobj).set_imagedesc((Handle::add((tobj).imagetbl(), n)).get());
-                __state = 32;
+                __state = 5;
             }
             32 => {
-                __state = 29;
+                (tobj).set_imagedesc((Handle::add((tobj).imagetbl(), n)).get());
+                __state = 33;
             }
             33 => {
-                unreachable!();
-            }
-            34 => {
-                __state = 6;
-            }
-            35 => {
-                (tobj).set_tlut_no((fp::fctiwz((val).fv()) as u8));
-                __state = 36;
-            }
-            36 => {
                 __state = 29;
             }
-            37 => {
+            34 => {
                 unreachable!();
             }
+            35 => {
+                __state = 6;
+            }
+            36 => {
+                (tobj).set_tlut_no((fp::fctiwz((val).fv()) as u8));
+                __state = 37;
+            }
+            37 => {
+                __state = 29;
+            }
             38 => {
-                __state = 7;
+                unreachable!();
             }
             39 => {
-                __state = 8;
+                __state = 7;
             }
             40 => {
+                __state = 8;
+            }
+            41 => {
                 (tobj).set_flags(((tobj).flags() | (shl_u32(1_u32, (31_i32 as u32)))));
                 __state = 29;
             }
-            41 => {
+            42 => {
                 __state = 9;
             }
-            42 => {
+            43 => {
                 __state = 10;
             }
-            43 => {
+            44 => {
                 __state = 11;
             }
-            44 => {
+            45 => {
                 __state = 12;
             }
-            45 => {
+            46 => {
                 __state = 13;
             }
-            46 => {
+            47 => {
                 __state = 14;
             }
-            47 => {
-                __state = 40;
-            }
             48 => {
-                __state = 15;
+                __state = 41;
             }
             49 => {
-                __state = 16;
+                __state = 15;
             }
             50 => {
-                __state = 17;
+                __state = 16;
             }
             51 => {
-                __state = 18;
+                __state = 17;
             }
             52 => {
-                __state = 19;
+                __state = 18;
             }
             53 => {
-                __state = 20;
+                __state = 19;
             }
             54 => {
-                __state = 21;
+                __state = 20;
             }
             55 => {
-                __state = 22;
+                __state = 21;
             }
             56 => {
-                __state = 23;
+                __state = 22;
             }
             57 => {
-                __state = 24;
+                __state = 23;
             }
             58 => {
-                __state = 25;
+                __state = 24;
             }
             59 => {
-                __state = 26;
+                __state = 25;
             }
             60 => {
-                __state = 27;
+                __state = 26;
             }
             61 => {
-                __state = 28;
+                __state = 27;
             }
             62 => {
-                __state = 29;
+                __state = 28;
             }
             63 => {
+                __state = 29;
+            }
+            64 => {
                 unreachable!();
             }
             _ => unreachable!(),

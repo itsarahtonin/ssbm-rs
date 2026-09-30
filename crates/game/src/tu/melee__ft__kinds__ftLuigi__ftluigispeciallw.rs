@@ -128,7 +128,7 @@ pub fn ftLg_SpecialLw_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
-        inl_Fighter_SetDamageCallback_unfused(ctx, gobj, null::<FnPtr<'a>>(ctx));
+        inl_Fighter_SetDamageCallback_unfused_2(ctx, gobj, null::<FnPtr<'a>>(ctx));
         fns::ft_8008A2BC(ctx, gobj);
     }
 }
@@ -145,7 +145,7 @@ pub fn ftLg_SpecialAirLw_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).u().lg().set_x222C_cycloneCharge(1_i32);
     }
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
-        inl_Fighter_SetDamageCallback_unfused(ctx, gobj, null::<FnPtr<'a>>(ctx));
+        inl_Fighter_SetDamageCallback_unfused_2(ctx, gobj, null::<FnPtr<'a>>(ctx));
         {
             let mut landing_lag: i32 = (attrs).x94_LUIGI_CYCLONE_LANDING_LAG();
             if (landing_lag as f64) == 0.0 {
@@ -336,8 +336,8 @@ fn inl_Fighter_SetDamageCallback_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, c
     let mut cb = cb;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    (fp).set_take_dmg_cb(cb);
-    (fp).set_death2_cb(cb);
+    (fp).set_take_dmg_cb(fnptr(ctx, 0x801445c4));
+    (fp).set_death2_cb(fnptr(ctx, 0x801445c4));
 }
 
 fn inl_Fighter_SetEffectHitlagCallbacks_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
@@ -354,6 +354,15 @@ fn inl_ftLuigi_SpecialLw_SetGFX_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let _ = fns::efSync_Spawn(ctx, 0x509_i32, gobj, &[VarArg::Int(Handle::addr(hsd_obj))]);
     (fp).set_x2219_b0((1_i32 as u8));
     inl_Fighter_SetEffectHitlagCallbacks_unfused(ctx, fp);
+}
+
+fn inl_Fighter_SetDamageCallback_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
+    let mut gobj = gobj;
+    let mut cb = cb;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    (fp).set_take_dmg_cb(cb);
+    (fp).set_death2_cb(cb);
 }
 
 fn inl_getFtSpecialAttrsD_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> {

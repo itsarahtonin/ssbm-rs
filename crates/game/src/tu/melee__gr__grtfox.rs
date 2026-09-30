@@ -26,8 +26,8 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
-pub fn grTFox_80220B80<'a>(ctx: &'a Ctx, unk_: i32) {
-    let mut unk_ = unk_;
+pub fn grTFox_80220B80<'a>(ctx: &'a Ctx, unk: i32) {
+    let mut unk = unk;
 }
 
 pub fn grTFox_80220B84<'a>(ctx: &'a Ctx) {
@@ -177,9 +177,9 @@ fn inl_Ground_InitTargetStage_unfused<'a>(ctx: &'a Ctx, create_gobj: FnPtr<'a>) 
     let mut create_gobj = create_gobj;
     fns::stage_info(ctx).unk8C().set_b4((0_i32 as u8));
     fns::stage_info(ctx).unk8C().set_b5((1_i32 as u8));
-    let _ = create_gobj.call::<_, HSD_GObj<'a>>((0_i32,));
-    let _ = create_gobj.call::<_, HSD_GObj<'a>>((1_i32,));
-    let _ = create_gobj.call::<_, HSD_GObj<'a>>((2_i32,));
+    let _ = statics::melee__gr__grtfox::grTFox_80220C2C(ctx, 0_i32);
+    let _ = statics::melee__gr__grtfox::grTFox_80220C2C(ctx, 1_i32);
+    let _ = statics::melee__gr__grtfox::grTFox_80220C2C(ctx, 2_i32);
     fns::Ground_801C39C0(ctx);
     fns::Ground_801C3BB4(ctx);
     let _ = fns::Ground_801C4210(ctx);

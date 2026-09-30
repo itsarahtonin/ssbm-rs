@@ -586,12 +586,10 @@ pub fn ftCo_DamageIce_Collide<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, normal: Vec<
         if (((coll_data).env_flags() & 0x800_i32) != 0_i32)
             || (((coll_data).env_flags() & 0x800_i32) != 0_i32)
         {
-            (fp).cur_pos().set_x(fp::fneg(
-                (fp::fmsubs(
-                    (fp).x68C_transNPos().z(),
-                    fp::fneg((fp).facing_dir()),
-                    (fp::fadds((fp).cur_pos().x(), (vec).x())),
-                )),
+            (fp).cur_pos().set_x(fp::fnmsubs(
+                (fp).x68C_transNPos().z(),
+                fp::fneg((fp).facing_dir()),
+                (fp::fadds((fp).cur_pos().x(), (vec).x())),
             ));
         } else {
             (fp).cur_pos().set_y(fp::fadds(

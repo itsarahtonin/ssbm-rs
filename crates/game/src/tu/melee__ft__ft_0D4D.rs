@@ -204,12 +204,10 @@ pub fn ftCo_800D4FF4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 .get(),
             ),
         );
-        pos_vec.set_x(fp::fneg(
-            (fp::fmsubs(
-                (fp).facing_dir(),
-                fns::ftCommon_800804EC(ctx, fp),
-                (fp).cur_pos().x(),
-            )),
+        pos_vec.set_x(fp::fnmsubs(
+            (fp).facing_dir(),
+            fns::ftCommon_800804EC(ctx, fp),
+            (fp).cur_pos().x(),
         ));
         pos_vec.set_y((fp).cur_pos().y());
         pos_vec.set_z((fp).cur_pos().z());
@@ -324,12 +322,10 @@ pub fn fn_800D54A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             }
         }
     }
-    sp.set_x(fp::fneg(
-        (fp::fmsubs(
-            (fp).facing_dir(),
-            fns::ftCommon_800804EC(ctx, fp),
-            (fp).cur_pos().x(),
-        )),
+    sp.set_x(fp::fnmsubs(
+        (fp).facing_dir(),
+        fns::ftCommon_800804EC(ctx, fp),
+        (fp).cur_pos().x(),
     ));
     sp.set_y((fp).cur_pos().y());
     sp.set_z((fp).cur_pos().z());

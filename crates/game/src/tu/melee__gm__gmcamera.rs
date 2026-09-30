@@ -882,16 +882,16 @@ pub fn gmCamera_801A31FC<'a>(ctx: &'a Ctx) {
         .set(null::<HSD_Text<'a>>(ctx));
 }
 
-fn inl_freeTexts_unfused<'a>(ctx: &'a Ctx, unk_: _gmCameraUnkStruct<'a>) {
-    let mut unk_ = unk_;
+fn inl_freeTexts_unfused<'a>(ctx: &'a Ctx, unk: _gmCameraUnkStruct<'a>) {
+    let mut unk = unk;
     let mut i: i32 = 0;
-    if !Handle::is_null((unk_).x48().at(0_i32).get()) {
+    if !Handle::is_null((unk).x48().at(0_i32).get()) {
         {
             i = 0_i32;
             'l1: while i < 3_i32 {
                 'c2: {
-                    fns::HSD_SisLib_803A5CC4(ctx, (unk_).x48().at(i).get());
-                    (unk_).x48().at(i).set(null::<HSD_Text<'a>>(ctx));
+                    fns::HSD_SisLib_803A5CC4(ctx, (unk).x48().at(i).get());
+                    (unk).x48().at(i).set(null::<HSD_Text<'a>>(ctx));
                 }
                 i = i.wrapping_add(1);
             }

@@ -487,7 +487,7 @@ fn inl_splArcLengthPolynomial<'a>(ctx: &'a Ctx, coeffs: Val<'a, F32>, t: f64) ->
     if (result < 0.0) && (result > fp::fneg(0.0010000000474974513)) {
         result = 0.0;
     }
-    return fns::sqrtf(ctx, result);
+    return fns::sqrtf__Ff(ctx, result);
 }
 
 fn inl_spl_IterateSimpsonsMiddle<'a>(ctx: &'a Ctx, coeffs: Val<'a, F32>, dx: f64, t: f64) -> f64 {

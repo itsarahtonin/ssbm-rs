@@ -9,6 +9,7 @@ as static asserts), plus -fsigned-char to match MWCC. Symbols come from the deco
 """
 
 import bisect
+import ctypes
 import json
 import os
 import re
@@ -31,7 +32,8 @@ FLAGS = [
 SDK_SRC = "libs/dolphin/src"
 
 # MWCC assembly functions: `asm void f(...) {`, with `static` before or after `asm`.
-ASM_FN = re.compile(r"^(?:static\s+)?asm\s+(?:static\s+)?[^;{()]*?\b(\w+)\s*\([^;{]*?\)\s*\{", re.M | re.S)
+ASM_FN = re.compile(r"^(?:__declspec\((?:[^()]|\([^()]*\))*\)\s*)*(?:static\s+)?asm\s+(?:static\s+)?[^;{()]*?\b(\w+)\s*\([^;{]*?\)\s*\{",
+                    re.M | re.S)
 
 
 def flags_for(source):
@@ -48,8 +50,15 @@ def flags_for(source):
     ]
 
 
-# MWCC's lvalue casts, `((u8*) buf) += n;`, which clang refuses.
-LVALUE_CAST = re.compile(r"\(\((\w[\w\s]*\*)\)\s*(\w+)\)\s*([+-])=\s*([^;]+);")
+# MWCC's lvalue casts, `((u8*) buf) += n;` or `(u8*) p->buf += n;`, which clang refuses.
+LVALUE_CAST = re.compile(r"\(\((\w[\w\s]*\*)\)\s*([\w.>-]+)\)\s*([+-])=\s*([^;]+);")
+LVALUE_CAST_BARE = re.compile(r"(?<![\w)])\((\w[\w\s]*\*)\)\s*([\w.>-]+)\s*([+-])=\s*([^;]+);")
+# `*((u32*) p)++ = x;`, a store through p as a u32* that steps it past the stored word.
+LVALUE_CAST_STORE = re.compile(r"\*\(\((\w[\w\s]*\*)\)\s*([\w.>-]+)\)\+\+\s*=\s*([^;]+);")
+# MWCC's variables at fixed addresses, `u16 x : 0x800030E0;`.
+FIXED_ADDRESS = re.compile(r"^((?:extern[ \t]+)?(?:volatile[ \t]+)?(?:const[ \t]+)?[A-Za-z_][\w \t]*?[ \t\*]+)"
+                           r"([A-Za-z_]\w*)[ \t]*:[ \t]*((?:0x[0-9A-Fa-f]+|\(|[A-Z_]\w*)[^;:\n]*);", re.M)
+FIXED_PREFIX = "__c2rs_at_"
 
 INLINE_ASM = re.compile(r"\basm\s*(?:volatile\s*)?\{")
 
@@ -60,6 +69,11 @@ def without_asm_bodies(text):
     names of the assembly functions)."""
     text = without_inline_asm(text)
     text = LVALUE_CAST.sub(lambda m: f"{m[2]} = ({m[1]}) {m[2]} {m[3]} ({m[4]});", text)
+    text = LVALUE_CAST_BARE.sub(lambda m: f"{m[2]} = ({m[1]}) {m[2]} {m[3]} ({m[4]});", text)
+    text = LVALUE_CAST_STORE.sub(lambda m: f"*({m[1]}) {m[2]} = {m[3]}; {m[2]} = (void*) (({m[1]}) {m[2]} + 1);", text)
+    # A fixed-address variable is a declaration, and a constant typegen reads its address from.
+    text = FIXED_ADDRESS.sub(
+        lambda m: f"{m[1]}{m[2]}; static const unsigned long {FIXED_PREFIX}{m[2]} = ({m[3]});", text)
     out, names, at = [], [], 0
     for m in ASM_FN.finditer(text):
         if m.start() < at:
@@ -72,6 +86,10 @@ def without_asm_bodies(text):
             i += 1
         head = text[m.start():m.end() - 1]
         decl = re.sub(r"\basm\b", "", head).rstrip() + ";"
+        decl = re.sub(r"__declspec\((?:[^()]|\([^()]*\))*\)\s*", "", decl)
+        if re.search(r"\bstatic\b", decl) and re.search(
+                r"^(?!static)(?!.*\bstatic\b)[^\n;{}#]*\b" + re.escape(m.group(1)) + r"\s*\([^;{]*\)\s*;", text[:m.start()], re.M):
+            decl = re.sub(r"\bstatic\s+", "", decl)
         if m.group(1) in ASM_PROTOTYPES:
             decl = ASM_PROTOTYPES[m.group(1)] + ";"
         body = text[m.end() - 1:i + 1]
@@ -79,7 +97,34 @@ def without_asm_bodies(text):
         names.append(m.group(1))
         at = i + 1
     out.append(text[at:])
-    return "".join(out), names
+    return with_mwerks_declarations("".join(out)), names
+
+
+def with_mwerks_declarations(text):
+    """The declarations inside `#ifdef __MWERKS__` blocks without an `#else` repeated after
+    them, so the code after the block can use the functions they declare."""
+    lines = text.split("\n")
+    i = 0
+    while i < len(lines):
+        if lines[i].strip() == "#ifdef __MWERKS__":
+            depth, j, decls, has_else = 1, i + 1, [], False
+            while j < len(lines) and depth:
+                t = lines[j].strip()
+                if t.startswith("#if"):
+                    depth += 1
+                elif t.startswith("#endif"):
+                    depth -= 1
+                elif t.startswith("#el") and depth == 1:
+                    has_else = True
+                elif depth == 1 and re.match(r"^(?:static\s+)?\w[\w\s\*]*\([^;{}]*\)\s*;\s*$", lines[j]):
+                    decls.append(lines[j].strip())
+                j += 1
+            if decls and not has_else and j < len(lines):
+                lines[j] = " ".join(decls) + " " + lines[j]
+            i = j
+            continue
+        i += 1
+    return "\n".join(lines)
 
 
 def without_inline_asm(text):
@@ -165,7 +210,13 @@ def parse(index, source, extra=()):
     unsaved += msl_headers() + runtime_header()
     if source.replace("\\", "/").startswith(SDK_SRC + "/"):
         unsaved += sdk_headers()
-    return index.parse(source, args=flags_for(source) + list(extra), unsaved_files=unsaved or None), asm
+    tu = index.parse(source, args=flags_for(source) + list(extra), unsaved_files=unsaved or None)
+    if any(d.severity >= ci.Diagnostic.Error and "static declaration of" in d.spelling for d in tu.diagnostics):
+        # A static definition after a header's non-static prototype, which MWCC takes and
+        # clang only allows as a Microsoft extension.
+        tu = index.parse(source, args=flags_for(source) + list(extra) + ["-fms-extensions"],
+                         unsaved_files=unsaved or None)
+    return tu, asm
 
 
 SIGNED = {TK.SCHAR, TK.CHAR_S, TK.SHORT, TK.INT, TK.LONG, TK.LONGLONG, TK.WCHAR}
@@ -215,11 +266,36 @@ def load_splits(path):
     return ranges
 
 
+def evaluate_int(cursor):
+    """An integer constant expression's value, or None."""
+    res = ci.conf.lib.clang_Cursor_Evaluate(cursor)
+    if not res:
+        return None
+    try:
+        if ci.conf.lib.clang_EvalResult_getKind(res) != 1:
+            return None
+        return ci.conf.lib.clang_EvalResult_getAsLongLong(res)
+    finally:
+        ci.conf.lib.clang_EvalResult_dispose(res)
+
+
+ci.conf.lib.clang_Cursor_Evaluate.argtypes = [ci.Cursor]
+ci.conf.lib.clang_Cursor_Evaluate.restype = ctypes.c_void_p
+ci.conf.lib.clang_EvalResult_getKind.argtypes = [ctypes.c_void_p]
+ci.conf.lib.clang_EvalResult_getKind.restype = ctypes.c_int
+ci.conf.lib.clang_EvalResult_getAsLongLong.argtypes = [ctypes.c_void_p]
+ci.conf.lib.clang_EvalResult_getAsLongLong.restype = ctypes.c_longlong
+ci.conf.lib.clang_EvalResult_dispose.argtypes = [ctypes.c_void_p]
+
+
 class Collector:
     def __init__(self, tu):
         self.tu = tu
         self.records, self.enums, self.typedefs = {}, {}, {}
         self.functions, self.globals = [], []
+        self.fixed = {}  # variables at fixed addresses: name -> address
+        # Arrays sized by a const variable, which MWCC takes as constant: spelling -> length.
+        self.vla_sizes = {}
 
     def tref(self, t):
         t = t.get_canonical()
@@ -230,6 +306,8 @@ class Collector:
             return {"k": "arr", "of": self.tref(t.element_type), "n": t.element_count}
         if k == TK.INCOMPLETEARRAY:
             return {"k": "arr", "of": self.tref(t.element_type), "n": 0}
+        if k == TK.VARIABLEARRAY and t.spelling in self.vla_sizes:
+            return {"k": "arr", "of": self.tref(t.element_type), "n": self.vla_sizes[t.spelling]}
         if k == TK.RECORD:
             return {"k": "rec", "id": self.record(t.get_declaration())}
         if k == TK.ENUM:
@@ -305,6 +383,11 @@ class Collector:
                     "defined": defined_here, "type": self.tref(c.type),
                     "param_names": [a.spelling for a in c.get_arguments()],
                 })
+            elif c.kind == CK.VAR_DECL and c.spelling.startswith(FIXED_PREFIX):
+                init = [k for k in c.get_children() if k.kind.is_expression()]
+                value = evaluate_int(init[-1]) if init else None
+                if value is not None:
+                    self.fixed[c.spelling[len(FIXED_PREFIX):]] = value & 0xFFFF_FFFF
             elif c.kind == CK.VAR_DECL:
                 defined_here = os.path.normpath(str(c.location.file)) == os.path.normpath(source)
                 self.globals.append({
@@ -318,15 +401,20 @@ def parse_unit(args):
     root, unit_name, source = args
     os.chdir(root)
     index = ci.Index.create()
-    tu, asm = parse(index, source)
+    # As c2rs does: code for MWCC on the Gekko where the file parses with it.
+    tu, asm = parse(index, source, ["-DMWERKS_GEKKO"])
     errors = [f"{d.location}: {d.spelling}" for d in tu.diagnostics if d.severity >= ci.Diagnostic.Error]
+    if errors:
+        tu, asm = parse(index, source)
+        errors = [f"{d.location}: {d.spelling}" for d in tu.diagnostics if d.severity >= ci.Diagnostic.Error]
     col = Collector(unit_name)
     col.visit(tu.cursor, source)
     for f in col.functions:
         # An assembly function is defined here too, though clang sees only its declaration.
         if f["name"] in asm:
             f["asm"] = True
-    return unit_name, source, errors, col.records, col.enums, col.typedefs, col.functions, col.globals
+    return (unit_name, source, errors, col.records, col.enums, col.typedefs, col.functions, col.globals,
+            col.fixed)
 
 
 def main():
@@ -357,7 +445,7 @@ def main():
 
     records, enums, typedefs, functions, globals_, errors = {}, {}, {}, {}, {}, {}
     with ProcessPoolExecutor() as pool:
-        for unit, source, errs, recs, ens, tds, fns, gls in pool.map(
+        for unit, source, errs, recs, ens, tds, fns, gls, fixed in pool.map(
                 parse_unit, [(root, u, s) for u, s in units], chunksize=8):
             if errs:
                 errors[unit] = errs[:5]
@@ -372,6 +460,9 @@ def main():
                 cands = [s for s in by_name.get(f["name"], []) if s["type"] == "function"]
                 if not cands:
                     cands = [s for s in by_base.get(f["name"], []) if s["type"] == "function"]
+                if not cands and not f["defined"]:
+                    # A label in assembly that C declares as a function, to take its address.
+                    cands = [s for s in by_name.get(f["name"], []) if s["type"] == "label"]
                 # A static function is its own unit's, never a same-named one elsewhere.
                 if f["static"]:
                     cands = [s for s in cands if s["tu"] == unit]
@@ -387,6 +478,9 @@ def main():
             for g in gls:
                 # Labels, such as `_dtors`, name data C declares as extern arrays.
                 cands = [s for s in by_name.get(g["name"], []) if s["type"] in ("object", "label")]
+                if g["name"] in fixed:
+                    cands = [{"name": g["name"], "addr": fixed[g["name"]], "size": 0, "section": "",
+                              "tu": unit, "type": "object"}]
                 if g["static"]:
                     cands = [s for s in cands if s["tu"] == unit]
                 elif len(cands) > 1:
@@ -394,14 +488,14 @@ def main():
                 sym = cands[0] if len(cands) == 1 else None
                 if sym is None:
                     continue
-                entry = globals_.get(sym["addr"])
+                entry = globals_.get((sym["addr"], g["name"]))
                 if entry is None or (g["defined"] and not entry.get("defined")):
-                    globals_[sym["addr"]] = {**g, "tu": sym["tu"], "addr": sym["addr"], "size": sym["size"],
+                    globals_[(sym["addr"], g["name"])] = {**g, "tu": sym["tu"], "addr": sym["addr"], "size": sym["size"],
                                              "section": sym["section"]}
 
     json.dump({"records": records, "enums": enums, "typedefs": typedefs,
                "functions": sorted(functions.values(), key=lambda f: (f["addr"] is None, f["addr"] or 0, f["name"])),
-               "globals": sorted(globals_.values(), key=lambda g: g["addr"]),
+               "globals": sorted(globals_.values(), key=lambda g: (g["addr"], g["name"])),
                "symbols": symbols, "errors": errors},
               open(out, "w"), indent=None)
     placed = sum(1 for f in functions.values() if f["addr"] is not None)

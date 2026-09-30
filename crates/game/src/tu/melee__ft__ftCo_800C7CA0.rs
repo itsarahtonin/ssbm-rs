@@ -165,12 +165,10 @@ pub fn fn_800C7DC4<'a>(
                     break 'goto_t2;
                 }
             }
-            (fp).cur_pos().set_x(fp::fneg(
-                (fp::fmsubs(
-                    (fp).x68C_transNPos().z(),
-                    fp::fneg((fp).facing_dir()),
-                    (fp::fadds((fp).cur_pos().x(), (offset).x())),
-                )),
+            (fp).cur_pos().set_x(fp::fnmsubs(
+                (fp).x68C_transNPos().z(),
+                fp::fneg((fp).facing_dir()),
+                (fp::fadds((fp).cur_pos().x(), (offset).x())),
             ));
             break 'goto_end;
         }

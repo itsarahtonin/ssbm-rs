@@ -1984,12 +1984,12 @@ pub fn grKongo_801D8058<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 pub fn grKongo_801D8078<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x48);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unk_: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
+    let unk: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
     let item_pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut unused1: i32 = 0;
     let mut cur: HSD_GObj<'a> = null(ctx);
-    let _ = fns::Ground_801C4DA0(ctx, pos, unk_);
+    let _ = fns::Ground_801C4DA0(ctx, pos, unk);
     {
         cur = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 9_i32)).get();
         'l1: while !Handle::is_null(cur) {
@@ -2025,7 +2025,7 @@ pub fn fn_801D8134<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<'a>) -> 
     let __frame = ctx.stack_frame(0x50);
     let pos_gnd: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     let pos_ft: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unk_: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
+    let unk: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut gp: Ground<'a> = null(ctx);
@@ -2033,7 +2033,7 @@ pub fn fn_801D8134<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<'a>) -> 
     let mut diff: f64 = 0.0;
     gp = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData(ctx, arg0)));
     if ((gp).u().kongo3().xC6() as i32) == 0_i32 {
-        let _ = fns::Ground_801C4DA0(ctx, pos_gnd, unk_);
+        let _ = fns::Ground_801C4DA0(ctx, pos_gnd, unk);
         fns::ftLib_GetPos(ctx, arg1, pos_ft);
         if fp::fadds(
             fp::fadds(

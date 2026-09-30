@@ -26,6 +26,7 @@ use ssbm_types::tu as statics;
 
 use crate::manual::dolphin__ai__ai as manual;
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn AIRegisterDMACallback<'a>(ctx: &'a Ctx, callback: FnPtr<'a>) -> FnPtr<'a> {
     let __frame = ctx.stack_frame(0x18);
@@ -390,115 +391,421 @@ pub fn AIGetStreamVolRight<'a>(ctx: &'a Ctx) -> u8 {
     ) as u8);
 }
 
-pub fn AIInit<'a>(ctx: &'a Ctx, stack: Val<'a, u8>) {
-    let __frame = ctx.stack_frame(0x18);
-    let mut stack = stack;
-    if statics::dolphin__ai__ai::__AI_init_flag(ctx).get() != 1_i32 {
-        statics::dolphin__ai__ai::bound_32KHz(ctx).set(
-            ((div_u32(
-                (((0x7b24_i32) as u32).wrapping_mul(
-                    (div_u32(
-                        (div_u32(
-                            ((ptr::<Val<'a, u32>>(
-                                ctx,
-                                ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
-                            ))
-                            .get()),
-                            (4_i32 as u32),
-                        )),
-                        (0x1e848_i32 as u32),
-                    )),
-                )),
-                (0x1f40_i32 as u32),
-            )) as i64),
-        );
-        statics::dolphin__ai__ai::bound_48KHz(ctx).set(
-            ((div_u32(
-                (((0xa428_i32) as u32).wrapping_mul(
-                    (div_u32(
-                        (div_u32(
-                            ((ptr::<Val<'a, u32>>(
-                                ctx,
-                                ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
-                            ))
-                            .get()),
-                            (4_i32 as u32),
-                        )),
-                        (0x1e848_i32 as u32),
-                    )),
-                )),
-                (0x1f40_i32 as u32),
-            )) as i64),
-        );
-        statics::dolphin__ai__ai::min_wait(ctx).set(
-            ((div_u32(
-                (((0xa410_i32) as u32).wrapping_mul(
-                    (div_u32(
-                        (div_u32(
-                            ((ptr::<Val<'a, u32>>(
-                                ctx,
-                                ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
-                            ))
-                            .get()),
-                            (4_i32 as u32),
-                        )),
-                        (0x1e848_i32 as u32),
-                    )),
-                )),
-                (0x1f40_i32 as u32),
-            )) as i64),
-        );
-        statics::dolphin__ai__ai::max_wait(ctx).set(
-            ((div_u32(
-                (((0xf618_i32) as u32).wrapping_mul(
-                    (div_u32(
-                        (div_u32(
-                            ((ptr::<Val<'a, u32>>(
-                                ctx,
-                                ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
-                            ))
-                            .get()),
-                            (4_i32 as u32),
-                        )),
-                        (0x1e848_i32 as u32),
-                    )),
-                )),
-                (0x1f40_i32 as u32),
-            )) as i64),
-        );
-        statics::dolphin__ai__ai::buffer(ctx).set(
-            ((div_u32(
-                (((0xbb8_i32) as u32).wrapping_mul(
-                    (div_u32(
-                        (div_u32(
-                            ((ptr::<Val<'a, u32>>(
-                                ctx,
-                                ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
-                            ))
-                            .get()),
-                            (4_i32 as u32),
-                        )),
-                        (0x1e848_i32 as u32),
-                    )),
-                )),
-                (0x1f40_i32 as u32),
-            )) as i64),
-        );
-        inl_AISetStreamVolRight_unfused(ctx, (0_i32 as u8));
-        inl_AISetStreamVolLeft_unfused(ctx, (0_i32 as u8));
-        inl_AISetStreamTrigger_unfused(ctx, (0_i32 as u32));
-        inl_AIResetStreamSampleCount_unfused(ctx);
-        statics::dolphin__ai__ai::__AI_set_stream_sample_rate(ctx, (1_i32 as u32));
-        fns::AISetDSPSampleRate(ctx, (0_i32 as u32));
-        statics::dolphin__ai__ai::__AIS_Callback(ctx).set(null::<FnPtr<'a>>(ctx));
-        statics::dolphin__ai__ai::__AID_Callback(ctx).set(null::<FnPtr<'a>>(ctx));
-        statics::dolphin__ai__ai::__CallbackStack(ctx).set(stack);
-        if !Handle::is_null(stack) {}
-        let _ = fns::__OSSetInterruptHandler(ctx, (5_i32 as i16), fnptr(ctx, 0x803509c0));
-        let _ = fns::__OSUnmaskInterrupts(ctx, (0x4000000_i32 as u32));
-        let _ = fns::__OSSetInterruptHandler(ctx, (8_i32 as i16), fnptr(ctx, 0x80350944));
-        let _ = fns::__OSUnmaskInterrupts(ctx, (0x800000_i32 as u32));
-        statics::dolphin__ai__ai::__AI_init_flag(ctx).set(1_i32);
+pub fn AIInit<'a>(ctx: &'a Ctx, a0: Val<'a, u8>) {
+    // Transliterated from its machine code, whose source is assembly.
+    (a0,).put_regs(ctx);
+    asm_AIInit(ctx);
+}
+
+fn asm_AIInit(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x803507e0_u32;
+    loop {
+        match pc {
+            0x803507e0_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // addi r30, r3, 0x0
+                g[30].set(g[3].get());
+                // lwz r0, __AI_init_flag@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbde0_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmpwi r0, 0x1
+                {
+                    let (x, y) = (g[0].get() as i32, 1_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_8035092C
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x8035092c_u32;
+                    continue;
+                }
+                pc = 0x80350804_u32;
+            }
+            0x80350804_u32 => {
+                // lis r3, 0x8000
+                g[3].set(0x80000000_u32);
+                // lwz r0, 0xf8(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0xf8_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lis r3, 0x431c
+                g[3].set(0x431c0000_u32);
+                // lis r4, 0x1
+                g[4].set(0x10000_u32);
+                // srwi r0, r0, 2
+                {
+                    let v = g[0].get().rotate_left(30) & 0x3fffffff_u32;
+                    g[0].set(v);
+                }
+                // subi r3, r3, 0x217d
+                g[3].set(g[3].get().wrapping_add(0xffffde83_u32));
+                // mulhwu r0, r3, r0
+                {
+                    let (v, ov) = (
+                        (((u64::from(g[3].get()) * u64::from(g[0].get())) >> 32) as u32),
+                        false,
+                    );
+                    g[0].set(v);
+                    let _ = ov;
+                }
+                // srwi r9, r0, 15
+                {
+                    let v = g[0].get().rotate_left(17) & 0x1ffff_u32;
+                    g[9].set(v);
+                }
+                // subi r5, r4, 0x5bd8
+                g[5].set(g[4].get().wrapping_add(0xffffa428_u32));
+                // subi r3, r4, 0x5bf0
+                g[3].set(g[4].get().wrapping_add(0xffffa410_u32));
+                // subi r0, r4, 0x9e8
+                g[0].set(g[4].get().wrapping_add(0xfffff618_u32));
+                // lis r4, 0x1062
+                g[4].set(0x10620000_u32);
+                // mullw r7, r9, r5
+                {
+                    let (v, ov) = {
+                        let p = i64::from(g[9].get() as i32) * i64::from(g[5].get() as i32);
+                        (p as u32, p != i64::from(p as i32))
+                    };
+                    g[7].set(v);
+                    let _ = ov;
+                }
+                // addi r10, r4, 0x4dd3
+                g[10].set(g[4].get().wrapping_add(0x4dd3_u32));
+                // mullw r5, r9, r3
+                {
+                    let (v, ov) = {
+                        let p = i64::from(g[9].get() as i32) * i64::from(g[3].get() as i32);
+                        (p as u32, p != i64::from(p as i32))
+                    };
+                    g[5].set(v);
+                    let _ = ov;
+                }
+                // mullw r4, r9, r0
+                {
+                    let (v, ov) = {
+                        let p = i64::from(g[9].get() as i32) * i64::from(g[0].get() as i32);
+                        (p as u32, p != i64::from(p as i32))
+                    };
+                    g[4].set(v);
+                    let _ = ov;
+                }
+                // mulli r8, r9, 0x7b24
+                g[8].set((g[9].get() as i32).wrapping_mul(31524_i32) as u32);
+                // mulli r3, r9, 0xbb8
+                g[3].set((g[9].get() as i32).wrapping_mul(3000_i32) as u32);
+                // mulhwu r8, r10, r8
+                {
+                    let (v, ov) = (
+                        (((u64::from(g[10].get()) * u64::from(g[8].get())) >> 32) as u32),
+                        false,
+                    );
+                    g[8].set(v);
+                    let _ = ov;
+                }
+                // mulhwu r7, r10, r7
+                {
+                    let (v, ov) = (
+                        (((u64::from(g[10].get()) * u64::from(g[7].get())) >> 32) as u32),
+                        false,
+                    );
+                    g[7].set(v);
+                    let _ = ov;
+                }
+                // mulhwu r5, r10, r5
+                {
+                    let (v, ov) = (
+                        (((u64::from(g[10].get()) * u64::from(g[5].get())) >> 32) as u32),
+                        false,
+                    );
+                    g[5].set(v);
+                    let _ = ov;
+                }
+                // mulhwu r4, r10, r4
+                {
+                    let (v, ov) = (
+                        (((u64::from(g[10].get()) * u64::from(g[4].get())) >> 32) as u32),
+                        false,
+                    );
+                    g[4].set(v);
+                    let _ = ov;
+                }
+                // mulhwu r3, r10, r3
+                {
+                    let (v, ov) = (
+                        (((u64::from(g[10].get()) * u64::from(g[3].get())) >> 32) as u32),
+                        false,
+                    );
+                    g[3].set(v);
+                    let _ = ov;
+                }
+                // srwi r8, r8, 9
+                {
+                    let v = g[8].get().rotate_left(23) & 0x7fffff_u32;
+                    g[8].set(v);
+                }
+                // srwi r7, r7, 9
+                {
+                    let v = g[7].get().rotate_left(23) & 0x7fffff_u32;
+                    g[7].set(v);
+                }
+                // stw r8, bound_32KHz+0x4@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbdec_u32);
+                    ctx.write_u32(ea, g[8].get());
+                }
+                // srwi r5, r5, 9
+                {
+                    let v = g[5].get().rotate_left(23) & 0x7fffff_u32;
+                    g[5].set(v);
+                }
+                // srwi r4, r4, 9
+                {
+                    let v = g[4].get().rotate_left(23) & 0x7fffff_u32;
+                    g[4].set(v);
+                }
+                // stw r7, bound_48KHz+0x4@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbdf4_u32);
+                    ctx.write_u32(ea, g[7].get());
+                }
+                // li r31, 0x0
+                g[31].set(0_u32);
+                // srwi r3, r3, 9
+                {
+                    let v = g[3].get().rotate_left(23) & 0x7fffff_u32;
+                    g[3].set(v);
+                }
+                // stw r5, min_wait+0x4@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbdfc_u32);
+                    ctx.write_u32(ea, g[5].get());
+                }
+                // lis r6, 0xcc00
+                g[6].set(0xcc000000_u32);
+                // stw r3, buffer+0x4@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbe0c_u32);
+                    ctx.write_u32(ea, g[3].get());
+                }
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // lwz r0, 0x6c00(r6)
+                {
+                    let ea = g[6].get().wrapping_add(0x6c00_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // stw r4, max_wait+0x4@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbe04_u32);
+                    ctx.write_u32(ea, g[4].get());
+                }
+                // rlwinm r0, r0, 0, 27, 25
+                {
+                    let v = g[0].get().rotate_left(0) & 0xffffffdf_u32;
+                    g[0].set(v);
+                }
+                // ori r0, r0, 0x20
+                g[0].set(g[0].get() | 0x20_u32);
+                // stw r31, bound_32KHz@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbde8_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r31, bound_48KHz@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbdf0_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r31, min_wait@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbdf8_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r31, max_wait@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbe00_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r31, buffer@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbe08_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // lwz r5, 0x6c04(r6)
+                {
+                    let ea = g[6].get().wrapping_add(0x6c04_u32);
+                    g[5].set(ctx.read_u32(ea));
+                }
+                // stw r0, 0x6c00(r6)
+                {
+                    let ea = g[6].get().wrapping_add(0x6c00_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // rlwinm r0, r5, 0, 24, 15
+                {
+                    let v = g[5].get().rotate_left(0) & 0xffff00ff_u32;
+                    g[0].set(v);
+                }
+                // nop
+                g[0].set(g[0].get() | 0x0_u32);
+                // stw r0, 0x6c04(r6)
+                {
+                    let ea = g[6].get().wrapping_add(0x6c04_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lwz r0, 0x6c04(r6)
+                {
+                    let ea = g[6].get().wrapping_add(0x6c04_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // clrrwi r0, r0, 8
+                {
+                    let v = g[0].get().rotate_left(0) & 0xffffff00_u32;
+                    g[0].set(v);
+                }
+                // nop
+                g[0].set(g[0].get() | 0x0_u32);
+                // stw r0, 0x6c04(r6)
+                {
+                    let ea = g[6].get().wrapping_add(0x6c04_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stw r31, 0x6c0c(r6)
+                {
+                    let ea = g[6].get().wrapping_add(0x6c0c_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // bl __AI_set_stream_sample_rate
+                c::call(ctx, 0x803506a4_u32, 0x803508e0_u32);
+                pc = 0x803508e0_u32;
+            }
+            0x803508e0_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // bl AISetDSPSampleRate
+                c::call(ctx, 0x803505b0_u32, 0x803508e8_u32);
+                pc = 0x803508e8_u32;
+            }
+            0x803508e8_u32 => {
+                // lis r3, __AIDHandler@ha
+                g[3].set(0x80350000_u32);
+                // stw r31, __AIS_Callback@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbdd0_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // addi r4, r3, __AIDHandler@l
+                g[4].set(g[3].get().wrapping_add(0x9c0_u32));
+                // stw r31, __AID_Callback@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbdd4_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // li r3, 0x5
+                g[3].set(0x5_u32);
+                // stw r30, __CallbackStack@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbdd8_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // bl __OSSetInterruptHandler
+                c::call(ctx, 0x803473b0_u32, 0x80350904_u32);
+                pc = 0x80350904_u32;
+            }
+            0x80350904_u32 => {
+                // lis r3, 0x400
+                g[3].set(0x4000000_u32);
+                // bl __OSUnmaskInterrupts
+                c::call(ctx, 0x803477b4_u32, 0x8035090c_u32);
+                pc = 0x8035090c_u32;
+            }
+            0x8035090c_u32 => {
+                // lis r3, __AISHandler@ha
+                g[3].set(0x80350000_u32);
+                // addi r4, r3, __AISHandler@l
+                g[4].set(g[3].get().wrapping_add(0x944_u32));
+                // li r3, 0x8
+                g[3].set(0x8_u32);
+                // bl __OSSetInterruptHandler
+                c::call(ctx, 0x803473b0_u32, 0x8035091c_u32);
+                pc = 0x8035091c_u32;
+            }
+            0x8035091c_u32 => {
+                // lis r3, 0x80
+                g[3].set(0x800000_u32);
+                // bl __OSUnmaskInterrupts
+                c::call(ctx, 0x803477b4_u32, 0x80350924_u32);
+                pc = 0x80350924_u32;
+            }
+            0x80350924_u32 => {
+                // li r0, 0x1
+                g[0].set(0x1_u32);
+                // stw r0, __AI_init_flag@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbde0_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                pc = 0x8035092c_u32;
+            }
+            0x8035092c_u32 => {
+                // lwz r0, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // addi r1, r1, 0x18
+                g[1].set(g[1].get().wrapping_add(0x18_u32));
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of AIInit");
+            }
+            _ => unreachable!("AIInit: no block at {pc:#010x}"),
+        }
     }
 }
 
@@ -521,6 +828,33 @@ pub fn __AISHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'a>) {
                 2_i32,
             ))
             .get(),));
+    }
+    fns::OSClearContext(ctx, exceptionContext);
+    fns::OSSetCurrentContext(ctx, context);
+}
+
+pub fn __AIDHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'a>) {
+    let __frame = ctx.stack_frame(0x2e0);
+    let exceptionContext: OSContext<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut interrupt = interrupt;
+    let mut context = context;
+    let mut tmp: u16 = 0;
+    tmp = (Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 5_i32)).get();
+    tmp = ((((tmp as i32) & (!160_i32)) | 8_i32) as u16);
+    (Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 5_i32)).set(tmp);
+    fns::OSClearContext(ctx, exceptionContext);
+    fns::OSSetCurrentContext(ctx, exceptionContext);
+    if !Handle::is_null(statics::dolphin__ai__ai::__AID_Callback(ctx).get()) {
+        if !Handle::is_null(statics::dolphin__ai__ai::__CallbackStack(ctx).get()) {
+            statics::dolphin__ai__ai::__AICallbackStackSwitch(
+                ctx,
+                Handle::cast::<Addr<'a>>(statics::dolphin__ai__ai::__AID_Callback(ctx).get()),
+            );
+        } else {
+            statics::dolphin__ai__ai::__AID_Callback(ctx)
+                .get()
+                .call::<_, ()>(());
+        }
     }
     fns::OSClearContext(ctx, exceptionContext);
     fns::OSSetCurrentContext(ctx, context);
@@ -729,57 +1063,6 @@ fn inl_AIGetStreamPlayState_unfused<'a>(ctx: &'a Ctx) -> u32 {
         & (1_i32 as u32));
 }
 
-fn inl_AISetStreamVolRight_unfused<'a>(ctx: &'a Ctx, vol: u8) {
-    let mut vol = vol;
-    'l1: loop {
-        'c2: {
-            (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006c00_u32 as u32)), 1_i32)).set(
-                ((((Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006c00_u32 as u32)), 1_i32)).get())
-                    & ((!(shl_i32(
-                        ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
-                        ((8_i32) as u32),
-                    ))) as u32))
-                    | (shl_u32(((vol) as u32), ((8_i32) as u32)))),
-            );
-        }
-        if !(0_i32 != 0) {
-            break 'l1;
-        }
-    }
-}
-
-fn inl_AISetStreamVolLeft_unfused<'a>(ctx: &'a Ctx, vol: u8) {
-    let mut vol = vol;
-    'l1: loop {
-        'c2: {
-            (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006c00_u32 as u32)), 1_i32)).set(
-                ((((Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006c00_u32 as u32)), 1_i32)).get())
-                    & ((!(shl_i32(
-                        ((shl_i32(1_i32, ((8_i32) as u32))).wrapping_sub(1_i32)),
-                        ((0_i32) as u32),
-                    ))) as u32))
-                    | (shl_u32(((vol) as u32), ((0_i32) as u32)))),
-            );
-        }
-        if !(0_i32 != 0) {
-            break 'l1;
-        }
-    }
-}
-
-fn inl_AISetStreamTrigger_unfused<'a>(ctx: &'a Ctx, trigger: u32) {
-    let mut trigger = trigger;
-    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006c00_u32 as u32)), 3_i32)).set(trigger);
-}
-
-fn inl_AIResetStreamSampleCount_unfused<'a>(ctx: &'a Ctx) {
-    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006c00_u32 as u32)), 0_i32)).set(
-        (((Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006c00_u32 as u32)), 0_i32)).get()
-            & ((!32_i32) as u32))
-            | (32_i32 as u32)),
-    );
-}
-
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -901,6 +1184,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (i16, OSContext<'_>) = Args::take_all(ctx);
             Ret::put(__AISHandler(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x803509c0,
+        |ctx| {
+            let (a0, a1): (i16, OSContext<'_>) = Args::take_all(ctx);
+            Ret::put(__AIDHandler(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );

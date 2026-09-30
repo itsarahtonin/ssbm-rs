@@ -1273,7 +1273,7 @@ pub fn fn_80239574<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             }
             7 => {
                 state = (data).gobj().p_link();
-                __state = if (state as i32) != 0_i32 { 29 } else { 31 };
+                __state = if (state as i32) != 0_i32 { 30 } else { 32 };
             }
             8 => {
                 unreachable!();
@@ -1336,212 +1336,227 @@ pub fn fn_80239574<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 __state = if (((state as i32) == 0_i32) || ((state as i32) == 1_i32))
                     || ((state as i32) == 3_i32)
                 {
-                    26
-                } else {
                     27
+                } else {
+                    28
                 };
             }
             21 => {
                 unreachable!();
             }
             22 => {
-                __state = 17;
+                __state = 16;
             }
             23 => {
-                __state = 18;
+                __state = 17;
             }
             24 => {
-                __state = 19;
+                __state = 18;
             }
             25 => {
-                __state = 20;
+                __state = 19;
             }
             26 => {
+                __state = 20;
+            }
+            27 => {
                 doUpdate = 1_i32;
                 doSel = 1_i32;
                 doSelReset = (1_i32 as u32);
-                __state = 27;
-            }
-            27 => {
-                __state = 7;
+                __state = 28;
             }
             28 => {
-                unreachable!();
+                __state = 7;
             }
             29 => {
-                __state = match (state as i32) {
-                    1_i32 => 33,
-                    2_i32 => 34,
-                    3_i32 => 35,
-                    4_i32 => 36,
-                    _ => 37,
-                };
-            }
-            30 => {
-                return;
-            }
-            31 => {
-                __state = 56;
-            }
-            32 => {
                 unreachable!();
             }
+            30 => {
+                __state = match (state as i32) {
+                    1_i32 => 34,
+                    2_i32 => 35,
+                    3_i32 => 36,
+                    4_i32 => 37,
+                    _ => 38,
+                };
+            }
+            31 => {
+                return;
+            }
+            32 => {
+                __state = 61;
+            }
             33 => {
-                anim = (Handle::add(base, 0_i32));
-                __state = 37;
+                unreachable!();
             }
             34 => {
-                anim = (Handle::add(base, 2_i32));
-                __state = 37;
+                anim = (Handle::add(base, 0_i32));
+                __state = 38;
             }
             35 => {
-                anim = (Handle::add(base, 1_i32));
-                __state = 37;
+                anim = (Handle::add(base, 2_i32));
+                __state = 38;
             }
             36 => {
-                anim = (Handle::add(base, 3_i32));
-                __state = 37;
+                anim = (Handle::add(base, 1_i32));
+                __state = 38;
             }
             37 => {
+                anim = (Handle::add(base, 3_i32));
+                __state = 38;
+            }
+            38 => {
                 jobj_2 = Handle::cast::<HSD_JObj<'a>>((data).gobj().next_gx());
                 new_var = jobj_2;
                 __state = if fns::mn_8022F298(ctx, new_var) >= (anim).end_frame() {
-                    43
-                } else {
                     45
+                } else {
+                    47
                 };
-            }
-            38 => {
-                unreachable!();
             }
             39 => {
-                __state = 34;
-            }
-            40 => {
-                __state = 35;
-            }
-            41 => {
-                __state = 36;
-            }
-            42 => {
-                __state = 37;
-            }
-            43 => {
-                state = (data).gobj().p_link();
-                __state = match (state as i32) {
-                    3_i32 => 47,
-                    1_i32 => 47,
-                    2_i32 => 48,
-                    4_i32 => 48,
-                    _ => 49,
-                };
-            }
-            44 => {
-                __state = 30;
-            }
-            45 => {
-                __state = 52;
-            }
-            46 => {
                 unreachable!();
             }
+            40 => {
+                __state = 34;
+            }
+            41 => {
+                __state = 35;
+            }
+            42 => {
+                __state = 36;
+            }
+            43 => {
+                __state = 37;
+            }
+            44 => {
+                __state = 38;
+            }
+            45 => {
+                state = (data).gobj().p_link();
+                __state = match (state as i32) {
+                    3_i32 => 49,
+                    1_i32 => 50,
+                    2_i32 => 51,
+                    4_i32 => 52,
+                    _ => 53,
+                };
+            }
+            46 => {
+                __state = 31;
+            }
             47 => {
-                (data).gobj().set_p_link((0_u32 as u8));
-                __state = 52;
+                __state = 57;
             }
             48 => {
+                unreachable!();
+            }
+            49 => {
+                __state = 50;
+            }
+            50 => {
+                (data).gobj().set_p_link((0_u32 as u8));
+                __state = 57;
+            }
+            51 => {
+                __state = 52;
+            }
+            52 => {
                 fns::HSD_GObjFree(ctx, arg0);
                 return;
             }
-            49 => {
-                __state = 52;
-            }
-            50 => {
-                __state = 44;
-            }
-            51 => {
-                unreachable!();
-            }
-            52 => {
-                fns::HSD_JObjAnim(ctx, new_var);
-                __state = 56;
-            }
             53 => {
-                __state = 48;
+                __state = 57;
             }
             54 => {
-                __state = 49;
+                __state = 46;
             }
             55 => {
-                __state = 50;
+                unreachable!();
             }
             56 => {
-                __state = if (fns::mn_804A04F0(ctx).x10() as i32) != 1_i32 {
-                    58
-                } else {
-                    59
-                };
+                __state = 49;
             }
             57 => {
-                __state = 44;
+                fns::HSD_JObjAnim(ctx, new_var);
+                __state = 61;
             }
             58 => {
+                __state = 51;
+            }
+            59 => {
+                __state = 53;
+            }
+            60 => {
+                __state = 54;
+            }
+            61 => {
+                __state = if (fns::mn_804A04F0(ctx).x10() as i32) != 1_i32 {
+                    63
+                } else {
+                    64
+                };
+            }
+            62 => {
+                __state = 46;
+            }
+            63 => {
                 state = (data).gobj().p_link();
                 __state = if ((((state as i32) == 0_i32) || ((state as i32) == 1_i32))
                     || ((state as i32) == 3_i32))
                     && (((Handle::add(Handle::cast::<Val<'a, u8>>(data), 1_i32)).get() as i32)
                         != (fns::mn_804A04F0(ctx).hovered_selection() as i32))
                 {
-                    61
+                    66
                 } else {
-                    62
+                    67
                 };
             }
-            59 => {
+            64 => {
                 fns::mnName_80238C34(ctx, arg0, (doSel as u8), (doSelReset as u8));
                 __state = if ((doSel != 0_i32)
                     && ((fns::mn_804A04F0(ctx).hovered_selection() as u32) >= 24_u32))
                     && ((((Handle::add(Handle::cast::<Val<'a, u8>>(data), 1_i32)).get()) as u32)
                         >= 24_u32)
                 {
-                    64
+                    69
                 } else {
-                    65
-                };
-            }
-            60 => {
-                unreachable!();
-            }
-            61 => {
-                doSel = 1_i32;
-                __state = 62;
-            }
-            62 => {
-                __state = 59;
-            }
-            63 => {
-                unreachable!();
-            }
-            64 => {
-                idx = (fns::mn_804A04F0(ctx).hovered_selection() as i32).wrapping_sub(24_i32);
-                new_var2 = idx;
-                __state = if !Handle::is_null((data).text2()) {
-                    67
-                } else {
-                    68
+                    70
                 };
             }
             65 => {
-                __state = if doUpdate != 0_i32 { 70 } else { 71 };
-            }
-            66 => {
                 unreachable!();
             }
+            66 => {
+                doSel = 1_i32;
+                __state = 67;
+            }
             67 => {
-                fns::HSD_SisLib_803A5CC4(ctx, (data).text2());
-                __state = 68;
+                __state = 64;
             }
             68 => {
+                unreachable!();
+            }
+            69 => {
+                idx = (fns::mn_804A04F0(ctx).hovered_selection() as i32).wrapping_sub(24_i32);
+                new_var2 = idx;
+                __state = if !Handle::is_null((data).text2()) {
+                    72
+                } else {
+                    73
+                };
+            }
+            70 => {
+                __state = if doUpdate != 0_i32 { 75 } else { 76 };
+            }
+            71 => {
+                unreachable!();
+            }
+            72 => {
+                fns::HSD_SisLib_803A5CC4(ctx, (data).text2());
+                __state = 73;
+            }
+            73 => {
                 text = fns::HSD_SisLib_803A5ACC(
                     ctx,
                     0_i32,
@@ -1560,33 +1575,33 @@ pub fn fn_80239574<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                     text,
                     (fns::mnName_804D4BE8(ctx).at(new_var2).get() as i32),
                 );
-                __state = 65;
-            }
-            69 => {
-                unreachable!();
-            }
-            70 => {
-                (Handle::cast::<Val<'a, u8>>(data)).set(fns::mn_804A04F0(ctx).cur_menu());
-                __state = 71;
-            }
-            71 => {
-                __state = if doSel != 0_i32 { 73 } else { 74 };
-            }
-            72 => {
-                unreachable!();
-            }
-            73 => {
-                (Handle::add(Handle::cast::<Val<'a, u8>>(data), 1_i32))
-                    .set((fns::mn_804A04F0(ctx).hovered_selection() as u8));
-                __state = 74;
+                __state = 70;
             }
             74 => {
-                __state = 30;
-            }
-            75 => {
                 unreachable!();
             }
+            75 => {
+                (Handle::cast::<Val<'a, u8>>(data)).set(fns::mn_804A04F0(ctx).cur_menu());
+                __state = 76;
+            }
             76 => {
+                __state = if doSel != 0_i32 { 78 } else { 79 };
+            }
+            77 => {
+                unreachable!();
+            }
+            78 => {
+                (Handle::add(Handle::cast::<Val<'a, u8>>(data), 1_i32))
+                    .set((fns::mn_804A04F0(ctx).hovered_selection() as u8));
+                __state = 79;
+            }
+            79 => {
+                __state = 31;
+            }
+            80 => {
+                unreachable!();
+            }
+            81 => {
                 unreachable!();
             }
             _ => unreachable!(),

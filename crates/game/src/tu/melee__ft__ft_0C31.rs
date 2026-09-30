@@ -174,12 +174,10 @@ pub fn ftCo_800C6408<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (temp_r31).mv().co().entry().set_x28(temp_f0_2);
         (temp_r31).mv().co().entry().set_x20(temp_f0_2);
         temp_r29_3 = Handle::cast::<Fighter<'a>>((gobj).user_data());
-        sp20.set_x(fp::fneg(
-            (fp::fmsubs(
-                (temp_r29_3).facing_dir(),
-                fns::ftCommon_800804EC(ctx, temp_r29_3),
-                (temp_r29_3).cur_pos().x(),
-            )),
+        sp20.set_x(fp::fnmsubs(
+            (temp_r29_3).facing_dir(),
+            fns::ftCommon_800804EC(ctx, temp_r29_3),
+            (temp_r29_3).cur_pos().x(),
         ));
         sp20.set_y((temp_r29_3).cur_pos().y());
         sp20.set_z((temp_r29_3).cur_pos().z());
@@ -340,12 +338,10 @@ pub fn fn_800C69F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             }
         }
         temp_r31_2 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
-        sp20.set_x(fp::fneg(
-            (fp::fmsubs(
-                (temp_r31_2).facing_dir(),
-                fns::ftCommon_800804EC(ctx, temp_r31_2),
-                (temp_r31_2).cur_pos().x(),
-            )),
+        sp20.set_x(fp::fnmsubs(
+            (temp_r31_2).facing_dir(),
+            fns::ftCommon_800804EC(ctx, temp_r31_2),
+            (temp_r31_2).cur_pos().x(),
         ));
         sp20.set_y((temp_r31_2).cur_pos().y());
         sp20.set_z((temp_r31_2).cur_pos().z());
@@ -532,12 +528,10 @@ pub fn fn_800C6F34<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             }
         }
         fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
-        sp20.set_x(fp::fneg(
-            (fp::fmsubs(
-                (fp).facing_dir(),
-                fns::ftCommon_800804EC(ctx, fp),
-                (fp).cur_pos().x(),
-            )),
+        sp20.set_x(fp::fnmsubs(
+            (fp).facing_dir(),
+            fns::ftCommon_800804EC(ctx, fp),
+            (fp).cur_pos().x(),
         ));
         sp20.set_y((fp).cur_pos().y());
         sp20.set_z((fp).cur_pos().z());

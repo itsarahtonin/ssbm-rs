@@ -1268,7 +1268,7 @@ pub fn _tyDisplay_8031A4EC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             sign = 1_i32.wrapping_neg();
         }
         (cfg).set_x20(fp::fdivs(
-            fp::fneg((fp::fmsubs(0.20000000298023224, fp::frsp(sign as f64), val))),
+            fp::fnmsubs(0.20000000298023224, fp::frsp(sign as f64), val),
             0.800000011920929,
         ));
     }
@@ -1283,7 +1283,7 @@ pub fn _tyDisplay_8031A4EC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             sign = 1_i32.wrapping_neg();
         }
         (cfg).set_x24(fp::fdivs(
-            fp::fneg((fp::fmsubs(0.20000000298023224, fp::frsp(sign as f64), val))),
+            fp::fnmsubs(0.20000000298023224, fp::frsp(sign as f64), val),
             0.800000011920929,
         ));
     }
@@ -1299,7 +1299,7 @@ pub fn _tyDisplay_8031A4EC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             sign = 1_i32.wrapping_neg();
         }
         (cfg).set_x30(fp::fdivs(
-            fp::fneg((fp::fmsubs(0.20000000298023224, fp::frsp(sign as f64), val))),
+            fp::fnmsubs(0.20000000298023224, fp::frsp(sign as f64), val),
             0.800000011920929,
         ));
     }
@@ -1313,7 +1313,7 @@ pub fn _tyDisplay_8031A4EC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             sign = 1_i32.wrapping_neg();
         }
         (cfg).set_x34(fp::fdivs(
-            fp::fneg((fp::fmsubs(0.20000000298023224, fp::frsp(sign as f64), val))),
+            fp::fnmsubs(0.20000000298023224, fp::frsp(sign as f64), val),
             0.800000011920929,
         ));
     }
@@ -1335,8 +1335,10 @@ pub fn _tyDisplay_8031A4EC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     {
         stick = (cfg).x20();
         if stick != zero {
-            (cfg).set_x10(fp::fneg(
-                (fp::fmsubs(stick, (fp::fmuls(0.019999999552965164, fov)), (cfg).x10())),
+            (cfg).set_x10(fp::fnmsubs(
+                stick,
+                (fp::fmuls(0.019999999552965164, fov)),
+                (cfg).x10(),
             ));
             if (cfg).x10() < fp::fneg((cfg).x1C()) {
                 (cfg).set_x10(fp::fneg((cfg).x1C()));
@@ -1433,7 +1435,7 @@ pub fn _tyDisplay_8031A94C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             sign = 1_i32.wrapping_neg();
         }
         (cfg).set_x20(fp::fdivs(
-            fp::fneg((fp::fmsubs(0.20000000298023224, fp::frsp(sign as f64), val))),
+            fp::fnmsubs(0.20000000298023224, fp::frsp(sign as f64), val),
             0.800000011920929,
         ));
     }
@@ -1447,7 +1449,7 @@ pub fn _tyDisplay_8031A94C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             sign = 1_i32.wrapping_neg();
         }
         (cfg).set_x24(fp::fdivs(
-            fp::fneg((fp::fmsubs(0.20000000298023224, fp::frsp(sign as f64), val))),
+            fp::fnmsubs(0.20000000298023224, fp::frsp(sign as f64), val),
             0.800000011920929,
         ));
     }
@@ -1463,7 +1465,7 @@ pub fn _tyDisplay_8031A94C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             sign = 1_i32.wrapping_neg();
         }
         (cfg).set_x30(fp::fdivs(
-            fp::fneg((fp::fmsubs(0.20000000298023224, fp::frsp(sign as f64), val))),
+            fp::fnmsubs(0.20000000298023224, fp::frsp(sign as f64), val),
             0.800000011920929,
         ));
     }
@@ -1477,7 +1479,7 @@ pub fn _tyDisplay_8031A94C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             sign = 1_i32.wrapping_neg();
         }
         (cfg).set_x34(fp::fdivs(
-            fp::fneg((fp::fmsubs(0.20000000298023224, fp::frsp(sign as f64), val))),
+            fp::fnmsubs(0.20000000298023224, fp::frsp(sign as f64), val),
             0.800000011920929,
         ));
     }
@@ -1581,8 +1583,10 @@ pub fn _tyDisplay_8031A94C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             let mut stick: f64 = (cfg).x20();
             let mut zero: f64 = 0.0;
             if stick != zero {
-                (cfg).set_x10(fp::fneg(
-                    (fp::fmsubs(stick, (fp::fmuls(0.019999999552965164, fov)), (cfg).x10())),
+                (cfg).set_x10(fp::fnmsubs(
+                    stick,
+                    (fp::fmuls(0.019999999552965164, fov)),
+                    (cfg).x10(),
                 ));
                 if (cfg).x10() < fp::fneg((cfg).x1C()) {
                     (cfg).set_x10(fp::fneg((cfg).x1C()));

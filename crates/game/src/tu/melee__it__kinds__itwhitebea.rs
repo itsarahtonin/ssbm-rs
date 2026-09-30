@@ -226,7 +226,7 @@ pub fn it_802E35CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         dx = fp::fsubs((pos).x(), sp30.x());
         dy = fp::fsubs((pos).y(), sp30.y());
         dz = fp::fsubs((pos).z(), sp30.z());
-        dist = fns::sqrtf(
+        dist = fns::sqrtf__Ff(
             ctx,
             fp::fmadds(dz, dz, fp::fmadds(dx, dx, fp::fmuls(dy, dy))),
         );

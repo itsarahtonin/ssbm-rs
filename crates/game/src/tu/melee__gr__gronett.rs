@@ -1155,12 +1155,10 @@ pub fn grOnett_801E5214<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     (statics::melee__gr__gronett::yakumono_param(ctx).get()).max_displacement(),
                 );
                 if error < 0.0 {
-                    force = fp::fneg(
-                        (fp::fmsubs(
-                            (statics::melee__gr__gronett::yakumono_param(ctx).get()).spring_force(),
-                            abs_ratio,
-                            force,
-                        )),
+                    force = fp::fnmsubs(
+                        (statics::melee__gr__gronett::yakumono_param(ctx).get()).spring_force(),
+                        abs_ratio,
+                        force,
                     );
                 } else {
                     force = fp::fmadds(

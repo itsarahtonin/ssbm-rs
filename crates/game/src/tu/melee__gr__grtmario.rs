@@ -26,8 +26,8 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
-pub fn grTMario_8021F840<'a>(ctx: &'a Ctx, unk_: i32) {
-    let mut unk_ = unk_;
+pub fn grTMario_8021F840<'a>(ctx: &'a Ctx, unk: i32) {
+    let mut unk = unk;
 }
 
 pub fn grTMario_OnInit<'a>(ctx: &'a Ctx) {
@@ -141,11 +141,11 @@ pub fn grTMario_8021FB4C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
 }
 
-pub fn lbl_8021FB50<'a>(ctx: &'a Ctx, unk_: i32, gobj: HSD_GObj<'a>) -> i32 {
+pub fn lbl_8021FB50<'a>(ctx: &'a Ctx, unk: i32, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
     let current: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     let previous: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let mut unk_ = unk_;
+    let mut unk = unk;
     let mut gobj = gobj;
     let mut temp_f1: f64 = 0.0;
     let mut temp_f31: f64 = 0.0;
@@ -199,9 +199,9 @@ fn inl_Ground_InitTargetStage_unfused<'a>(ctx: &'a Ctx, create_gobj: FnPtr<'a>) 
     let mut create_gobj = create_gobj;
     fns::stage_info(ctx).unk8C().set_b4((0_i32 as u8));
     fns::stage_info(ctx).unk8C().set_b5((1_i32 as u8));
-    let _ = create_gobj.call::<_, HSD_GObj<'a>>((0_i32,));
-    let _ = create_gobj.call::<_, HSD_GObj<'a>>((1_i32,));
-    let _ = create_gobj.call::<_, HSD_GObj<'a>>((2_i32,));
+    let _ = statics::melee__gr__grtmario::grTMario_8021F8E4(ctx, 0_i32);
+    let _ = statics::melee__gr__grtmario::grTMario_8021F8E4(ctx, 1_i32);
+    let _ = statics::melee__gr__grtmario::grTMario_8021F8E4(ctx, 2_i32);
     fns::Ground_801C39C0(ctx);
     fns::Ground_801C3BB4(ctx);
     let _ = fns::Ground_801C4210(ctx);

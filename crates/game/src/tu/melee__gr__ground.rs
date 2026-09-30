@@ -3985,6 +3985,53 @@ pub fn Ground_801C58E0<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) -> HSD_GObj<'a> {
     return result;
 }
 
+pub fn Ground_801C5940<'a>(ctx: &'a Ctx) -> i32 {
+    let __frame = ctx.stack_frame(0x90);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let vals: ArrV<'a, i32, 32> = frame_at(ctx, &__frame, 0x4);
+    let mut phi_r8: Ground_801C5940_phi_r8<'a> = null(ctx);
+    let mut i: i32 = 0;
+    let mut j: i32 = 0;
+    let mut out_idx: i32 = 0;
+    let mut archive: UnkArchiveStruct<'a> = null(ctx);
+    let mut vals_count: u32 = (32_i32 as u32);
+    archive = fns::grDatFiles_GetArchive(ctx);
+    out_idx = 0_i32;
+    if ((archive).unk4()).unk4() == 0_i32 {
+        return 1_i32.wrapping_neg();
+    }
+    phi_r8 = Handle::cast::<Ground_801C5940_phi_r8<'a>>(((archive).unk4()).unk0());
+    {
+        i = 0_i32;
+        'l1: while i < ((archive).unk4()).unk4() {
+            'c2: {
+                let mut max: i32 = (phi_r8).unk8();
+                {
+                    j = 0_i32;
+                    'l3: while j < max {
+                        'c4: {
+                            let mut val: i32 = ((Handle::add((phi_r8).unk4(), j)).b() as i32);
+                            if ((val >= 220_i32) && (val < 252_i32))
+                                && ((out_idx as u32) < vals_count)
+                            {
+                                vals.at(out_idx).set(val);
+                                out_idx = out_idx.wrapping_add(1);
+                            }
+                        }
+                        j = j.wrapping_add(1);
+                    }
+                }
+            }
+            i = i.wrapping_add(1);
+            phi_r8 = Handle::add(phi_r8, 1);
+        }
+    }
+    if out_idx == 0_i32 {
+        return 1_i32.wrapping_neg();
+    }
+    return vals.at(inl_randi_unfused(ctx, out_idx)).get();
+}
+
 pub fn Ground_801C5A28<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
     fns::Toy_803124BC(ctx);
@@ -4489,6 +4536,14 @@ fn inl_initSinglePlayerDisplay_unfused<'a>(ctx: &'a Ctx, stageinfo: StageInfo<'a
     let mut display_id: i32 = fns::tyDisplay_8031C2EC(ctx);
     let _ = fns::tyDisplay_8031C454(ctx, display_id);
     (stageinfo).x6E4().at(0_i32).set(display_id);
+}
+
+fn inl_randi_unfused<'a>(ctx: &'a Ctx, max_val: i32) -> i32 {
+    let mut max_val = max_val;
+    if max_val != 0_i32 {
+        return fns::HSD_Randi(ctx, max_val);
+    }
+    return 0_i32;
 }
 
 /// Registers this unit's ports.
@@ -5691,6 +5746,13 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (i32, i32) = Args::take_all(ctx);
             Ret::put(Ground_801C58E0(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x801c5940,
+        |ctx| {
+            Ret::put(Ground_801C5940(ctx), ctx);
         },
         Returns::Int,
     );

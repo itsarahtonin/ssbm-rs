@@ -2606,7 +2606,7 @@ fn inl_samus_grapple_calc_grav<'a>(ctx: &'a Ctx, vel_y: f64) -> f64 {
     let mut vel_y = vel_y;
     if fns::HSD_Randf(ctx) > 0.9 {
         if vel_y < 0.0 {
-            return fp::fneg((fp::fmsubs(0.6000000238418579, fns::HSD_Randf(ctx), vel_y)));
+            return fp::fnmsubs(0.6000000238418579, fns::HSD_Randf(ctx), vel_y);
         } else {
             return fp::fmadds(0.6000000238418579, fns::HSD_Randf(ctx), vel_y);
         }
@@ -2667,7 +2667,7 @@ fn inl_it_802B9328_grav<'a>(ctx: &'a Ctx, vely: f64) -> f64 {
     let mut one: f64 = 1.0;
     if fns::HSD_Randf(ctx) > 0.9 {
         if vely < 0.0 {
-            return fp::fneg((fp::fmsubs(one, fns::HSD_Randf(ctx), vely)));
+            return fp::fnmsubs(one, fns::HSD_Randf(ctx), vely);
         } else {
             return fp::fmadds(one, fns::HSD_Randf(ctx), vely);
         }

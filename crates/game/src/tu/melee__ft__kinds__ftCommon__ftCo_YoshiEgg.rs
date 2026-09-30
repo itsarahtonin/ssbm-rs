@@ -289,12 +289,10 @@ pub fn ftCo_800BC3D0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
-    (fp).set_grab_timer(fp::fneg(
-        (fp::fmsubs(
-            (fp).dmg().x1838_percentTemp(),
-            fns::ftYs_SpecialN_8012CDB4(ctx),
-            (fp).grab_timer(),
-        )),
+    (fp).set_grab_timer(fp::fnmsubs(
+        (fp).dmg().x1838_percentTemp(),
+        fns::ftYs_SpecialN_8012CDB4(ctx),
+        (fp).grab_timer(),
     ));
     if ((fp).dmg().x18CC() == 3_i32) && (fns::ftCo_800C0C88(ctx, (fp).dmg().x18D0()) != 0) {
         (fp).set_grab_timer(fp::frsp(0_i32 as f64));

@@ -839,18 +839,9 @@ fn inl_hsd_80391F28_len<'a>(ctx: &'a Ctx, dy: f64, dx: f64) -> f64 {
     len = fp::fmadds(dx, dx, (fp::fmuls(dy, dy)));
     if len > 0.0 {
         let mut e: f64 = fp::frsqrte(len);
-        e = fp::fmul(
-            fp::fmul(0.5, e),
-            fp::fneg((fp::fmsub(len, (fp::fmul(e, e)), 3.0))),
-        );
-        e = fp::fmul(
-            fp::fmul(0.5, e),
-            fp::fneg((fp::fmsub(len, (fp::fmul(e, e)), 3.0))),
-        );
-        e = fp::fmul(
-            fp::fmul(0.5, e),
-            fp::fneg((fp::fmsub(len, (fp::fmul(e, e)), 3.0))),
-        );
+        e = fp::fmul(fp::fmul(0.5, e), fp::fnmsub(len, (fp::fmul(e, e)), 3.0));
+        e = fp::fmul(fp::fmul(0.5, e), fp::fnmsub(len, (fp::fmul(e, e)), 3.0));
+        e = fp::fmul(fp::fmul(0.5, e), fp::fnmsub(len, (fp::fmul(e, e)), 3.0));
         e = fp::fmul(len, e);
         {
             let mut temp: f64 = fp::frsp(e);

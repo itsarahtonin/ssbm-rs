@@ -499,7 +499,7 @@ fn inl_lbFile_800164A4_unfused_2<'a>(
             & ((!(32_i32.wrapping_sub(1_i32))) as u32)),
         r#type,
         pri,
-        callback,
+        fnptr(ctx, 0x8001615c),
         args,
     );
 }
@@ -553,7 +553,7 @@ fn inl_lbFile_80016580_unfused<'a>(
         Handle::addr(dst),
         size,
         1_i32,
-        callback,
+        fnptr(ctx, 0x8001615c),
         args,
     );
 }

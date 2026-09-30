@@ -811,12 +811,10 @@ pub fn HSD_SisLib_803A8134<'a>(
                                     kern_width = ((pair).left() as i32)
                                         .wrapping_add(((pair).right() as i32))
                                         .wrapping_sub(2_i32);
-                                    (out_width).set(fp::fneg(
-                                        (fp::fmsubs(
-                                            (text).x80().x(),
-                                            fp::frsp(kern_width as f64),
-                                            (out_width).get(),
-                                        )),
+                                    (out_width).set(fp::fnmsubs(
+                                        (text).x80().x(),
+                                        fp::frsp(kern_width as f64),
+                                        (out_width).get(),
                                     ));
                                 } else {
                                     let mut pair_2: TextGlyphMetrics<'a> = (Handle::add(
@@ -827,12 +825,10 @@ pub fn HSD_SisLib_803A8134<'a>(
                                     kern_width = ((pair_2).left() as i32)
                                         .wrapping_add(((pair_2).right() as i32))
                                         .wrapping_sub(2_i32);
-                                    (out_width).set(fp::fneg(
-                                        (fp::fmsubs(
-                                            (text).x80().x(),
-                                            fp::frsp(kern_width as f64),
-                                            (out_width).get(),
-                                        )),
+                                    (out_width).set(fp::fnmsubs(
+                                        (text).x80().x(),
+                                        fp::frsp(kern_width as f64),
+                                        (out_width).get(),
                                     ));
                                 }
                             }
@@ -1339,7 +1335,7 @@ pub fn HSD_SisLib_803A84BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
                 __state = 46;
             }
             49 => {
-                __state = 92;
+                __state = 95;
             }
             50 => {
                 unreachable!();
@@ -1393,14 +1389,14 @@ pub fn HSD_SisLib_803A84BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
                     18_i32 => 77,
                     20_i32 => 78,
                     17_i32 => 79,
-                    19_i32 => 79,
-                    21_i32 => 79,
-                    22_i32 => 80,
-                    23_i32 => 81,
-                    24_i32 => 82,
-                    25_i32 => 83,
-                    26_i32 => 84,
-                    _ => 85,
+                    19_i32 => 80,
+                    21_i32 => 81,
+                    22_i32 => 82,
+                    23_i32 => 83,
+                    24_i32 => 84,
+                    25_i32 => 85,
+                    26_i32 => 86,
+                    _ => 87,
                 };
             }
             58 => {
@@ -1411,7 +1407,7 @@ pub fn HSD_SisLib_803A84BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
             }
             60 => {
                 pop_result = fns::HSD_SisLib_803A7F0C(ctx, text, 5_i32);
-                __state = if !Handle::is_null(pop_result) { 88 } else { 89 };
+                __state = if !Handle::is_null(pop_result) { 91 } else { 92 };
             }
             61 => {
                 (text).set_x60(null::<Val<'a, u8>>(ctx));
@@ -1428,7 +1424,7 @@ pub fn HSD_SisLib_803A84BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
                 (text).set_fitting((text).default_fitting());
                 (text).set_x94(0_u32);
                 (text).set_x4B((0_u32 as u8));
-                __state = 94;
+                __state = 97;
             }
             62 => {
                 (text).set_x98((0_i32 as u32));
@@ -1437,13 +1433,13 @@ pub fn HSD_SisLib_803A84BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
                 __state = 45;
             }
             63 => {
-                __state = if line_started == 0_u32 { 100 } else { 101 };
+                __state = if line_started == 0_u32 { 103 } else { 104 };
             }
             64 => {
-                __state = if skip_count != 0_u32 { 108 } else { 110 };
+                __state = if skip_count != 0_u32 { 111 } else { 113 };
             }
             65 => {
-                __state = if skip_count != 0_u32 { 113 } else { 115 };
+                __state = if skip_count != 0_u32 { 116 } else { 118 };
             }
             66 => {
                 line_delay =
@@ -1451,7 +1447,7 @@ pub fn HSD_SisLib_803A84BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
                 char_delay =
                     ((Handle::cast::<Val<'a, u16>>((Handle::add(sis_cursor, 3_i32)))).get());
                 sis_cursor = Handle::add(sis_cursor, 4_i32);
-                __state = 86;
+                __state = 88;
             }
             67 => {
                 line_started = 1_u32;
@@ -1468,9 +1464,9 @@ pub fn HSD_SisLib_803A84BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
                 __state = if (((text).fitting() as i32) == 1_i32)
                     && ((text).box_size_x() < line_width_out.get())
                 {
-                    119
+                    122
                 } else {
-                    121
+                    124
                 };
             }
             68 => {
@@ -1483,24 +1479,24 @@ pub fn HSD_SisLib_803A84BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
                         .get()),
                     1_i32.wrapping_neg(),
                 );
-                __state = 86;
+                __state = 88;
             }
             70 => {
-                __state = if (Handle::is_null((text).alloc_data()))
-                    || ((saved_kerning as i32) == 0_i32)
-                {
-                    133
-                } else {
-                    134
-                };
-            }
-            71 => {
                 __state = if (Handle::is_null((text).alloc_data()))
                     || ((saved_kerning as i32) == 0_i32)
                 {
                     137
                 } else {
                     138
+                };
+            }
+            71 => {
+                __state = if (Handle::is_null((text).alloc_data()))
+                    || ((saved_kerning as i32) == 0_i32)
+                {
+                    141
+                } else {
+                    142
                 };
             }
             72 => {
@@ -1515,11 +1511,11 @@ pub fn HSD_SisLib_803A84BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
                     .active_color()
                     .set_b((Handle::add(sis_cursor, 3_i32)).get());
                 sis_cursor = Handle::add(sis_cursor, 3_i32);
-                __state = 86;
+                __state = 88;
             }
             73 => {
                 let _ = fns::HSD_SisLib_803A7F0C(ctx, text, 2_i32);
-                __state = 86;
+                __state = 88;
             }
             74 => {
                 fns::HSD_SisLib_803A7684(ctx, text, sis_cursor, (3_u32 as u8));
@@ -1538,73 +1534,82 @@ pub fn HSD_SisLib_803A84BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
                     256.0,
                 ));
                 sis_cursor = Handle::add(sis_cursor, 4_i32);
-                __state = 86;
+                __state = 88;
             }
             75 => {
                 let _ = fns::HSD_SisLib_803A7F0C(ctx, text, 3_i32);
-                __state = 86;
+                __state = 88;
             }
             76 => {
                 fns::HSD_SisLib_803A7684(ctx, text, sis_cursor, (4_u32 as u8));
                 (text).set_alignment((1_u32 as u8));
-                __state = 86;
+                __state = 88;
             }
             77 => {
                 fns::HSD_SisLib_803A7684(ctx, text, sis_cursor, (4_u32 as u8));
                 (text).set_alignment((0_u32 as u8));
-                __state = 86;
+                __state = 88;
             }
             78 => {
                 fns::HSD_SisLib_803A7684(ctx, text, sis_cursor, (4_u32 as u8));
                 (text).set_alignment((2_u32 as u8));
-                __state = 86;
+                __state = 88;
             }
             79 => {
-                let _ = fns::HSD_SisLib_803A7F0C(ctx, text, 4_i32);
-                __state = 86;
+                __state = 80;
             }
             80 => {
-                (text).set_kerning((1_u32 as u8));
-                __state = 86;
+                __state = 81;
             }
             81 => {
-                (text).set_kerning((0_u32 as u8));
-                __state = 86;
+                let _ = fns::HSD_SisLib_803A7F0C(ctx, text, 4_i32);
+                __state = 88;
             }
             82 => {
-                (text).set_fitting((1_u32 as u8));
-                __state = 86;
+                (text).set_kerning((1_u32 as u8));
+                __state = 88;
             }
             83 => {
-                (text).set_fitting((0_u32 as u8));
-                __state = 86;
+                (text).set_kerning((0_u32 as u8));
+                __state = 88;
             }
             84 => {
-                __state = if line_started == 0_u32 { 153 } else { 154 };
+                (text).set_fitting((1_u32 as u8));
+                __state = 88;
             }
             85 => {
-                __state = if (opcode as u32) >= 32_u32 { 161 } else { 162 };
+                (text).set_fitting((0_u32 as u8));
+                __state = 88;
             }
             86 => {
-                __state = 56;
+                __state = if line_started == 0_u32 { 157 } else { 158 };
             }
             87 => {
-                unreachable!();
+                __state = if (opcode as u32) >= 32_u32 { 165 } else { 166 };
             }
             88 => {
-                sis_cursor = Handle::add(pop_result, 4_i32);
-                __state = 86;
+                __state = 56;
             }
             89 => {
-                __state = 92;
-            }
-            90 => {
                 unreachable!();
             }
+            90 => {
+                __state = 60;
+            }
             91 => {
-                __state = 89;
+                sis_cursor = Handle::add(pop_result, 4_i32);
+                __state = 88;
             }
             92 => {
+                __state = 95;
+            }
+            93 => {
+                unreachable!();
+            }
+            94 => {
+                __state = 92;
+            }
+            95 => {
                 fns::HSD_StateInvalidate(ctx, 1_i32.wrapping_neg());
                 (text).active_color().set_r(saved_color_r);
                 (text).active_color().set_g(saved_color_g);
@@ -1618,41 +1623,41 @@ pub fn HSD_SisLib_803A84BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
                 (text).set_fitting(saved_fitting);
                 (text).set_state_stack_used(saved_stack_used);
                 clear_i = ((text).state_stack_used() as i32);
-                __state = 213;
-            }
-            93 => {
-                __state = 61;
-            }
-            94 => {
-                __state = if clear_idx < ((text).state_stack_capacity() as i32) {
-                    95
-                } else {
-                    97
-                };
-            }
-            95 => {
-                (Handle::add((text).state_stack(), clear_idx)).set((0_i32 as u8));
-                clear_idx = clear_idx.wrapping_add(1_i32);
-                __state = 94;
+                __state = 217;
             }
             96 => {
-                __state = 94;
+                __state = 61;
             }
             97 => {
+                __state = if clear_idx < ((text).state_stack_capacity() as i32) {
+                    98
+                } else {
+                    100
+                };
+            }
+            98 => {
+                (Handle::add((text).state_stack(), clear_idx)).set((0_i32 as u8));
+                clear_idx = clear_idx.wrapping_add(1_i32);
+                __state = 97;
+            }
+            99 => {
+                __state = 97;
+            }
+            100 => {
                 (text).set_state_stack_used((0_i32 as u16));
                 __state = 62;
             }
-            98 => {
+            101 => {
                 unreachable!();
             }
-            99 => {
+            102 => {
                 __state = 63;
             }
-            100 => {
+            103 => {
                 line_height_out.set(fp::fmuls(32.0, (text).x80().y()));
-                __state = 101;
+                __state = 104;
             }
-            101 => {
+            104 => {
                 line_started = 0_u32;
                 (text).set_current_height(
                     (fp::fmadds(
@@ -1661,140 +1666,140 @@ pub fn HSD_SisLib_803A84BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
                         (text).current_height(),
                     )),
                 );
-                __state = if skip_count != 0_u32 { 103 } else { 105 };
-            }
-            102 => {
-                unreachable!();
-            }
-            103 => {
-                skip_count = skip_count.wrapping_sub((1_i32 as u32));
-                __state = 104;
-            }
-            104 => {
-                __state = 86;
+                __state = if skip_count != 0_u32 { 106 } else { 108 };
             }
             105 => {
+                unreachable!();
+            }
+            106 => {
+                skip_count = skip_count.wrapping_sub((1_i32 as u32));
+                __state = 107;
+            }
+            107 => {
+                __state = 88;
+            }
+            108 => {
                 (text).set_x98((text).x98().wrapping_add((1_i32 as u32)));
                 (text).set_x94((char_delay as u32));
                 (text).set_x60(Handle::add(sis_cursor, 1_i32));
-                __state = 104;
-            }
-            106 => {
-                unreachable!();
-            }
-            107 => {
-                __state = 64;
-            }
-            108 => {
-                skip_count = skip_count.wrapping_sub((1_i32 as u32));
-                __state = 109;
+                __state = 107;
             }
             109 => {
-                __state = 86;
+                unreachable!();
             }
             110 => {
+                __state = 64;
+            }
+            111 => {
+                skip_count = skip_count.wrapping_sub((1_i32 as u32));
+                __state = 112;
+            }
+            112 => {
+                __state = 88;
+            }
+            113 => {
                 (text).set_x98((text).x98().wrapping_add((1_i32 as u32)));
                 (text).set_x4B((1_u32 as u8));
                 (text).set_x60(Handle::add(sis_cursor, 1_i32));
-                __state = 109;
-            }
-            111 => {
-                unreachable!();
-            }
-            112 => {
-                __state = 65;
-            }
-            113 => {
-                skip_count = skip_count.wrapping_sub((1_i32 as u32));
-                __state = 114;
+                __state = 112;
             }
             114 => {
-                sis_cursor = Handle::add(sis_cursor, 2_i32);
-                __state = 86;
+                unreachable!();
             }
             115 => {
+                __state = 65;
+            }
+            116 => {
+                skip_count = skip_count.wrapping_sub((1_i32 as u32));
+                __state = 117;
+            }
+            117 => {
+                sis_cursor = Handle::add(sis_cursor, 2_i32);
+                __state = 88;
+            }
+            118 => {
                 (text).set_x98((text).x98().wrapping_add((1_i32 as u32)));
                 (text).set_x94(
                     (((Handle::cast::<Val<'a, u16>>((Handle::add(sis_cursor, 1_i32)))).get())
                         as u32),
                 );
                 (text).set_x60(Handle::add(sis_cursor, 3_i32));
-                __state = 114;
-            }
-            116 => {
-                unreachable!();
-            }
-            117 => {
-                __state = 66;
-            }
-            118 => {
-                __state = 67;
+                __state = 117;
             }
             119 => {
-                (text).set_x88((fp::fdivs((text).box_size_x(), line_width_out.get())));
-                __state = 120;
-            }
-            120 => {
-                __state = match ((text).alignment() as i32) {
-                    1_i32 => 123,
-                    2_i32 => 124,
-                    _ => 125,
-                };
-            }
-            121 => {
-                (text).set_x88(1.0);
-                __state = 120;
-            }
-            122 => {
                 unreachable!();
             }
+            120 => {
+                __state = 66;
+            }
+            121 => {
+                __state = 67;
+            }
+            122 => {
+                (text).set_x88((fp::fdivs((text).box_size_x(), line_width_out.get())));
+                __state = 123;
+            }
             123 => {
-                (text).set_current_width(fp::fneg(
-                    (fp::fmsubs(
-                        0.5,
-                        (fp::fmuls(line_width_out.get(), (text).x88())),
-                        x_origin,
-                    )),
-                ));
-                __state = 126;
+                __state = match ((text).alignment() as i32) {
+                    1_i32 => 126,
+                    2_i32 => 127,
+                    _ => 128,
+                };
             }
             124 => {
-                (text).set_current_width(
-                    (fp::fneg((fp::fmsubs(line_width_out.get(), (text).x88(), x_origin)))),
-                );
-                __state = 126;
+                (text).set_x88(1.0);
+                __state = 123;
             }
             125 => {
-                (text).set_current_width(x_origin);
-                __state = 126;
+                unreachable!();
             }
             126 => {
+                (text).set_current_width(fp::fnmsubs(
+                    0.5,
+                    (fp::fmuls(line_width_out.get(), (text).x88())),
+                    x_origin,
+                ));
+                __state = 129;
+            }
+            127 => {
+                (text)
+                    .set_current_width((fp::fnmsubs(line_width_out.get(), (text).x88(), x_origin)));
+                __state = 129;
+            }
+            128 => {
+                (text).set_current_width(x_origin);
+                __state = 129;
+            }
+            129 => {
                 y_offset = ((Handle::cast::<Val<'a, i16>>((Handle::add(sis_cursor, 3_i32)))).get());
                 sis_cursor = Handle::add(sis_cursor, 4_i32);
                 (text).set_current_height(
                     (fp::fmuls(fp::frsp(y_offset as f64), (text).font_size().y())),
                 );
-                __state = 86;
-            }
-            127 => {
-                unreachable!();
-            }
-            128 => {
-                __state = 124;
-            }
-            129 => {
-                __state = 125;
+                __state = 88;
             }
             130 => {
-                __state = 126;
+                unreachable!();
             }
             131 => {
-                __state = 68;
+                __state = 126;
             }
             132 => {
-                __state = 70;
+                __state = 127;
             }
             133 => {
+                __state = 128;
+            }
+            134 => {
+                __state = 129;
+            }
+            135 => {
+                __state = 68;
+            }
+            136 => {
+                __state = 70;
+            }
+            137 => {
                 fns::HSD_SisLib_803A7684(ctx, text, sis_cursor, (1_u32 as u8));
                 (text).x78().set_x(fp::fdivs(
                     fp::frsp(
@@ -1810,75 +1815,75 @@ pub fn HSD_SisLib_803A84BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
                     ),
                     256.0,
                 ));
-                __state = 134;
-            }
-            134 => {
-                sis_cursor = Handle::add(sis_cursor, 4_i32);
-                __state = 86;
-            }
-            135 => {
-                unreachable!();
-            }
-            136 => {
-                __state = 71;
-            }
-            137 => {
-                let _ = fns::HSD_SisLib_803A7F0C(ctx, text, 1_i32);
                 __state = 138;
             }
             138 => {
-                __state = 86;
+                sis_cursor = Handle::add(sis_cursor, 4_i32);
+                __state = 88;
             }
             139 => {
                 unreachable!();
             }
             140 => {
-                __state = 72;
+                __state = 71;
             }
             141 => {
-                __state = 73;
+                let _ = fns::HSD_SisLib_803A7F0C(ctx, text, 1_i32);
+                __state = 142;
             }
             142 => {
-                __state = 74;
+                __state = 88;
             }
             143 => {
-                __state = 75;
+                unreachable!();
             }
             144 => {
-                __state = 76;
+                __state = 72;
             }
             145 => {
-                __state = 77;
+                __state = 73;
             }
             146 => {
-                __state = 78;
+                __state = 74;
             }
             147 => {
-                __state = 79;
+                __state = 75;
             }
             148 => {
-                __state = 80;
+                __state = 76;
             }
             149 => {
-                __state = 81;
+                __state = 77;
             }
             150 => {
-                __state = 82;
+                __state = 78;
             }
             151 => {
-                __state = 83;
+                __state = 79;
             }
             152 => {
-                __state = 84;
+                __state = 82;
             }
             153 => {
+                __state = 83;
+            }
+            154 => {
+                __state = 84;
+            }
+            155 => {
+                __state = 85;
+            }
+            156 => {
+                __state = 86;
+            }
+            157 => {
                 line_started = line_started.wrapping_add((1_i32 as u32));
                 fns::HSD_SisLib_803A8134(ctx, sis_cursor, text, line_width_out, line_height_out);
                 measured_width = line_width_out.get();
                 inl_sisFitLineToBox(ctx, text, measured_width);
-                __state = 154;
+                __state = 158;
             }
-            154 => {
+            158 => {
                 (text).set_current_width(fp::frsp(
                     (fp::fmadd(
                         (text).x88(),
@@ -1886,62 +1891,62 @@ pub fn HSD_SisLib_803A84BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
                         (text).current_width(),
                     )),
                 ));
-                __state = if skip_count != 0_u32 { 156 } else { 158 };
-            }
-            155 => {
-                unreachable!();
-            }
-            156 => {
-                skip_count = skip_count.wrapping_sub((1_i32 as u32));
-                __state = 157;
-            }
-            157 => {
-                __state = 86;
-            }
-            158 => {
-                (text).set_x98((text).x98().wrapping_add((1_i32 as u32)));
-                (text).set_x94((line_delay as u32));
-                (text).set_x60(Handle::add(sis_cursor, 1_i32));
-                __state = 157;
+                __state = if skip_count != 0_u32 { 160 } else { 162 };
             }
             159 => {
                 unreachable!();
             }
             160 => {
-                __state = 85;
+                skip_count = skip_count.wrapping_sub((1_i32 as u32));
+                __state = 161;
             }
             161 => {
-                __state = if line_started == 0_u32 { 164 } else { 165 };
+                __state = 88;
             }
             162 => {
-                __state = 86;
+                (text).set_x98((text).x98().wrapping_add((1_i32 as u32)));
+                (text).set_x94((line_delay as u32));
+                (text).set_x60(Handle::add(sis_cursor, 1_i32));
+                __state = 161;
             }
             163 => {
                 unreachable!();
             }
             164 => {
+                __state = 87;
+            }
+            165 => {
+                __state = if line_started == 0_u32 { 168 } else { 169 };
+            }
+            166 => {
+                __state = 88;
+            }
+            167 => {
+                unreachable!();
+            }
+            168 => {
                 line_started = line_started.wrapping_add((1_i32 as u32));
                 fns::HSD_SisLib_803A8134(ctx, sis_cursor, text, line_width_out, line_height_out);
                 measured_width_2 = line_width_out.get();
                 inl_sisFitLineToBox(ctx, text, measured_width_2);
-                __state = 165;
+                __state = 169;
             }
-            165 => {
+            169 => {
                 glyph_idx = ((Handle::cast::<Val<'a, u16>>((sis_cursor))).get());
                 __state = if (glyph_idx as u32) < 0x4000_u32 {
-                    167
+                    171
                 } else {
-                    169
+                    173
                 };
             }
-            166 => {
+            170 => {
                 unreachable!();
             }
-            167 => {
+            171 => {
                 tex_offset = ((glyph_idx as i32).wrapping_sub(0x2000_i32) as u16);
-                __state = 168;
+                __state = 172;
             }
-            168 => {
+            172 => {
                 glyph_x = fp::fmadds(
                     (text).current_width(),
                     (text).font_size().x(),
@@ -1949,26 +1954,26 @@ pub fn HSD_SisLib_803A84BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
                 );
                 scale_x = (text).font_size().x();
                 __state = if ((text).kerning() as i32) != 0_i32 {
-                    171
-                } else {
-                    172
-                };
-            }
-            169 => {
-                tex_offset = ((glyph_idx as i32).wrapping_sub(0x4000_i32) as u16);
-                __state = 168;
-            }
-            170 => {
-                unreachable!();
-            }
-            171 => {
-                __state = if (glyph_idx as u32) < 0x4000_u32 {
-                    174
+                    175
                 } else {
                     176
                 };
             }
-            172 => {
+            173 => {
+                tex_offset = ((glyph_idx as i32).wrapping_sub(0x4000_i32) as u16);
+                __state = 172;
+            }
+            174 => {
+                unreachable!();
+            }
+            175 => {
+                __state = if (glyph_idx as u32) < 0x4000_u32 {
+                    178
+                } else {
+                    180
+                };
+            }
+            176 => {
                 scale_y = (text).font_size().y();
                 glyph_size = fp::fmuls(32.0, (text).x80().y());
                 uv_top = 0.0;
@@ -1988,81 +1993,77 @@ pub fn HSD_SisLib_803A84BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
                 uv_right = 1.0;
                 quad_bottom = fp::fadds(quad_top, glyph_h);
                 __state = if ((text).x4E() as i32) != 0_i32 {
-                    178
+                    182
                 } else {
-                    179
+                    183
                 };
-            }
-            173 => {
-                unreachable!();
-            }
-            174 => {
-                glyph_x = fp::fneg(
-                    (fp::fmsubs(
-                        scale_x,
-                        (fp::fmuls(
-                            (text).x80().x(),
-                            fp::frsp(
-                                (((Handle::add(default_widths, (tex_offset as i32))).left() as i32)
-                                    .wrapping_sub(1_i32)) as f64,
-                            ),
-                        )),
-                        glyph_x,
-                    )),
-                );
-                __state = 175;
-            }
-            175 => {
-                __state = 172;
-            }
-            176 => {
-                glyph_x = fp::fneg(
-                    (fp::fmsubs(
-                        scale_x,
-                        (fp::fmuls(
-                            (text).x80().x(),
-                            fp::frsp(
-                                (((Handle::add(glyph_widths, (tex_offset as i32))).left() as i32)
-                                    .wrapping_sub(1_i32)) as f64,
-                            ),
-                        )),
-                        glyph_x,
-                    )),
-                );
-                __state = 175;
             }
             177 => {
                 unreachable!();
             }
             178 => {
+                glyph_x = fp::fnmsubs(
+                    scale_x,
+                    (fp::fmuls(
+                        (text).x80().x(),
+                        fp::frsp(
+                            (((Handle::add(default_widths, (tex_offset as i32))).left() as i32)
+                                .wrapping_sub(1_i32)) as f64,
+                        ),
+                    )),
+                    glyph_x,
+                );
+                __state = 179;
+            }
+            179 => {
+                __state = 176;
+            }
+            180 => {
+                glyph_x = fp::fnmsubs(
+                    scale_x,
+                    (fp::fmuls(
+                        (text).x80().x(),
+                        fp::frsp(
+                            (((Handle::add(glyph_widths, (tex_offset as i32))).left() as i32)
+                                .wrapping_sub(1_i32)) as f64,
+                        ),
+                    )),
+                    glyph_x,
+                );
+                __state = 179;
+            }
+            181 => {
+                unreachable!();
+            }
+            182 => {
                 __state = if (((min_x > quad_right) || (max_x < glyph_x)) || (min_y > quad_bottom))
                     || (max_y < quad_top)
                 {
-                    181
+                    185
                 } else {
-                    182
+                    186
                 };
-            }
-            179 => {
-                __state = if (glyph_idx as u32) < 0x4000_u32 {
-                    198
-                } else {
-                    200
-                };
-            }
-            180 => {
-                unreachable!();
-            }
-            181 => {
-                __state = 184;
-            }
-            182 => {
-                __state = if min_x > glyph_x { 186 } else { 187 };
             }
             183 => {
-                unreachable!();
+                __state = if (glyph_idx as u32) < 0x4000_u32 {
+                    202
+                } else {
+                    204
+                };
             }
             184 => {
+                unreachable!();
+            }
+            185 => {
+                __state = 188;
+            }
+            186 => {
+                __state = if min_x > glyph_x { 190 } else { 191 };
+            }
+            187 => {
+                unreachable!();
+            }
+            188 => {
                 (text).set_current_width(
                     (fp::fmadds(
                         (text).x88(),
@@ -2071,30 +2072,30 @@ pub fn HSD_SisLib_803A84BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
                     )),
                 );
                 __state = if ((text).kerning() as i32) != 0_i32 {
-                    202
+                    206
                 } else {
-                    203
+                    207
                 };
             }
-            185 => {
-                __state = 182;
+            189 => {
+                __state = 186;
             }
-            186 => {
+            190 => {
                 clip_left = fp::fsubs(min_x, glyph_x);
                 uv_left = fp::fdivs(
                     clip_left,
                     (fp::fmuls(fp::fmuls(32.0, (text).x80().x()), scale_x)),
                 );
                 glyph_x = fp::fadds(glyph_x, clip_left);
-                __state = 187;
+                __state = 191;
             }
-            187 => {
-                __state = if max_x < quad_right { 189 } else { 190 };
+            191 => {
+                __state = if max_x < quad_right { 193 } else { 194 };
             }
-            188 => {
+            192 => {
                 unreachable!();
             }
-            189 => {
+            193 => {
                 clip_right = fp::fsubs(quad_right, max_x);
                 uv_right = fp::fsubs(
                     1.0,
@@ -2104,39 +2105,39 @@ pub fn HSD_SisLib_803A84BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
                     )),
                 );
                 quad_right = fp::fsubs(quad_right, clip_right);
-                __state = 190;
+                __state = 194;
             }
-            190 => {
-                __state = if min_y > quad_top { 192 } else { 193 };
+            194 => {
+                __state = if min_y > quad_top { 196 } else { 197 };
             }
-            191 => {
+            195 => {
                 unreachable!();
             }
-            192 => {
+            196 => {
                 clip_top = fp::fsubs(min_y, quad_top);
                 uv_top = fp::fdivs(clip_top, glyph_h);
                 quad_top = fp::fadds(quad_top, clip_top);
-                __state = 193;
+                __state = 197;
             }
-            193 => {
-                __state = if max_y < quad_bottom { 195 } else { 196 };
+            197 => {
+                __state = if max_y < quad_bottom { 199 } else { 200 };
             }
-            194 => {
+            198 => {
                 unreachable!();
             }
-            195 => {
+            199 => {
                 clip_bottom = fp::fsubs(quad_bottom, max_y);
                 uv_bottom = fp::fsubs(1.0, (fp::fdivs(clip_bottom, glyph_h)));
                 quad_bottom = fp::fsubs(quad_bottom, clip_bottom);
-                __state = 196;
+                __state = 200;
             }
-            196 => {
-                __state = 179;
+            200 => {
+                __state = 183;
             }
-            197 => {
+            201 => {
                 unreachable!();
             }
-            198 => {
+            202 => {
                 fns::GXInitTexObj(
                     ctx,
                     tex_obj,
@@ -2152,9 +2153,9 @@ pub fn HSD_SisLib_803A84BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
                     (enums::GX_CLAMP as i32),
                     (0_u32 as u8),
                 );
-                __state = 199;
+                __state = 203;
             }
-            199 => {
+            203 => {
                 fns::GXLoadTexObj(ctx, tex_obj, (enums::GX_TEXMAP0 as i32));
                 fns::GXSetTevColor(ctx, (enums::GX_TEVREG0 as i32), (text).active_color());
                 fns::GXBegin(
@@ -2175,9 +2176,9 @@ pub fn HSD_SisLib_803A84BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
                 inl_GXPosition3f32(ctx, glyph_x, neg_quad_bottom, glyph_depth);
                 inl_GXTexCoord2f32(ctx, uv_left, uv_bottom);
                 inl_GXEnd(ctx);
-                __state = 184;
+                __state = 188;
             }
-            200 => {
+            204 => {
                 fns::GXInitTexObj(
                     ctx,
                     tex_obj,
@@ -2193,111 +2194,105 @@ pub fn HSD_SisLib_803A84BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
                     (enums::GX_CLAMP as i32),
                     (0_u32 as u8),
                 );
-                __state = 199;
-            }
-            201 => {
-                unreachable!();
-            }
-            202 => {
-                __state = if (glyph_idx as u32) < 0x4000_u32 {
-                    205
-                } else {
-                    207
-                };
-            }
-            203 => {
-                __state = if skip_count != 0_u32 { 209 } else { 211 };
-            }
-            204 => {
-                unreachable!();
-            }
-            205 => {
-                kern_pair = (Handle::add(default_widths, (tex_offset as i32)));
-                (text).set_current_width(
-                    (fp::fneg(
-                        (fp::fmsubs(
-                            (text).x88(),
-                            (fp::fmuls(
-                                (text).x80().x(),
-                                fp::frsp(
-                                    (((kern_pair).left() as i32)
-                                        .wrapping_add(((kern_pair).right() as i32))
-                                        .wrapping_sub(2_i32))
-                                        as f64,
-                                ),
-                            )),
-                            (text).current_width(),
-                        )),
-                    )),
-                );
-                __state = 206;
-            }
-            206 => {
                 __state = 203;
             }
+            205 => {
+                unreachable!();
+            }
+            206 => {
+                __state = if (glyph_idx as u32) < 0x4000_u32 {
+                    209
+                } else {
+                    211
+                };
+            }
             207 => {
-                kern_pair_2 = (Handle::add(glyph_widths, (tex_offset as i32)));
-                (text).set_current_width(
-                    (fp::fneg(
-                        (fp::fmsubs(
-                            (text).x88(),
-                            (fp::fmuls(
-                                (text).x80().x(),
-                                fp::frsp(
-                                    (((kern_pair_2).left() as i32)
-                                        .wrapping_add(((kern_pair_2).right() as i32))
-                                        .wrapping_sub(2_i32))
-                                        as f64,
-                                ),
-                            )),
-                            (text).current_width(),
-                        )),
-                    )),
-                );
-                __state = 206;
+                __state = if skip_count != 0_u32 { 213 } else { 215 };
             }
             208 => {
                 unreachable!();
             }
             209 => {
-                skip_count = skip_count.wrapping_sub((1_i32 as u32));
+                kern_pair = (Handle::add(default_widths, (tex_offset as i32)));
+                (text).set_current_width(
+                    (fp::fnmsubs(
+                        (text).x88(),
+                        (fp::fmuls(
+                            (text).x80().x(),
+                            fp::frsp(
+                                (((kern_pair).left() as i32)
+                                    .wrapping_add(((kern_pair).right() as i32))
+                                    .wrapping_sub(2_i32)) as f64,
+                            ),
+                        )),
+                        (text).current_width(),
+                    )),
+                );
                 __state = 210;
             }
             210 => {
-                sis_cursor = Handle::add(sis_cursor, 1_i32);
-                __state = 162;
+                __state = 207;
             }
             211 => {
-                (text).set_x98((text).x98().wrapping_add((1_i32 as u32)));
-                (text).set_x94((line_delay as u32));
-                (text).set_x60(Handle::add(sis_cursor, 2_i32));
+                kern_pair_2 = (Handle::add(glyph_widths, (tex_offset as i32)));
+                (text).set_current_width(
+                    (fp::fnmsubs(
+                        (text).x88(),
+                        (fp::fmuls(
+                            (text).x80().x(),
+                            fp::frsp(
+                                (((kern_pair_2).left() as i32)
+                                    .wrapping_add(((kern_pair_2).right() as i32))
+                                    .wrapping_sub(2_i32)) as f64,
+                            ),
+                        )),
+                        (text).current_width(),
+                    )),
+                );
                 __state = 210;
             }
             212 => {
                 unreachable!();
             }
             213 => {
-                __state = if clear_i < ((text).state_stack_capacity() as i32) {
-                    214
-                } else {
-                    216
-                };
+                skip_count = skip_count.wrapping_sub((1_i32 as u32));
+                __state = 214;
             }
             214 => {
-                (Handle::add((text).state_stack(), clear_i)).set((0_i32 as u8));
-                clear_i = clear_i.wrapping_add(1_i32);
-                __state = 213;
+                sis_cursor = Handle::add(sis_cursor, 1_i32);
+                __state = 166;
             }
             215 => {
-                __state = 213;
+                (text).set_x98((text).x98().wrapping_add((1_i32 as u32)));
+                (text).set_x94((line_delay as u32));
+                (text).set_x60(Handle::add(sis_cursor, 2_i32));
+                __state = 214;
             }
             216 => {
-                __state = 10;
-            }
-            217 => {
                 unreachable!();
             }
+            217 => {
+                __state = if clear_i < ((text).state_stack_capacity() as i32) {
+                    218
+                } else {
+                    220
+                };
+            }
             218 => {
+                (Handle::add((text).state_stack(), clear_i)).set((0_i32 as u8));
+                clear_i = clear_i.wrapping_add(1_i32);
+                __state = 217;
+            }
+            219 => {
+                __state = 217;
+            }
+            220 => {
+                __state = 10;
+            }
+            221 => {
+                unreachable!();
+            }
+            222 => {
                 unreachable!();
             }
             _ => unreachable!(),

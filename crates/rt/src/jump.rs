@@ -47,6 +47,15 @@ impl Ctx {
     /// else the value the `longjmp` passed. As after the original's `longjmp`, the registers a
     /// call preserves hold what they held at the `setjmp`.
     pub fn setjmp(&self, env: u32, body: impl FnOnce()) -> i32 {
+        match self.setjmp_with(env, body) {
+            Ok(()) => 0,
+            Err(value) => value,
+        }
+    }
+
+    /// `setjmp` around code that goes on to return from its function: the body's result if it
+    /// finishes, else the nonzero value a longjmp to `env` gave.
+    pub fn setjmp_with<T>(&self, env: u32, body: impl FnOnce() -> T) -> Result<T, i32> {
         let saved = self.regs.snapshot();
         let natives = self.natives_depth();
         let at = self.jump_targets.borrow().len();
@@ -56,7 +65,7 @@ impl Ctx {
         let ours = self.latest_target(env).is_some_and(|(i, _)| i == at);
         self.jump_targets.borrow_mut().truncate(at);
         let payload = match result {
-            Ok(()) => return 0,
+            Ok(v) => return Ok(v),
             Err(p) => p,
         };
         let jump = match payload.downcast::<LongJmp>() {
@@ -74,7 +83,7 @@ impl Ctx {
         }
         r.cr.set(saved.cr);
         r.fpscr.set(saved.fpscr);
-        if jump.value == 0 { 1 } else { jump.value }
+        Err(if jump.value == 0 { 1 } else { jump.value })
     }
 
     /// `__setjmp(env)` called from original code: saves where it returns and the registers a

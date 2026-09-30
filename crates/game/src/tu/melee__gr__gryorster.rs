@@ -370,6 +370,504 @@ pub fn grYorster_802024F0<'a>(
     }
 }
 
+pub fn grYorster_8020266C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x98);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let unused_2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x14);
+    let mut gobj = gobj;
+    let mut gp: Ground<'a> = null(ctx);
+    let mut gp2: Ground<'a> = null(ctx);
+    let mut i: i32 = 0;
+    let mut joint: i32 = 0;
+    let mut advance: i32 = 0;
+    let mut frames_left: i32 = 0;
+    let mut end_frame: f64 = 0.0;
+    let mut frames_left_2: i32 = 0;
+    let mut end_frame_2: f64 = 0.0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                gp2 = {
+                    let __t1 = Handle::cast::<Ground<'a>>((gobj).user_data());
+                    gp = __t1;
+                    __t1
+                };
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = 3;
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                i = 0_i32;
+                __state = 6;
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                __state = if i < 9_i32 { 7 } else { 9 };
+            }
+            7 => {
+                joint = fns::Ground_801C32D4(
+                    ctx,
+                    (gp).map_id(),
+                    (gp2).u().yorster().elements().get(i).x14(),
+                );
+                __state = match (((gp).u().yorster().elements().get(i).x01() as i8) as i32) {
+                    0_i32 => 11,
+                    1_i32 => 12,
+                    2_i32 => 13,
+                    3_i32 => 14,
+                    4_i32 => 15,
+                    _ => 16,
+                };
+            }
+            8 => {
+                i = i.wrapping_add(1);
+                __state = 6;
+            }
+            9 => {
+                return;
+            }
+            10 => {
+                unreachable!();
+            }
+            11 => {
+                __state = 12;
+            }
+            12 => {
+                advance = 0_i32;
+                __state = if (gp).u().yorster().elements().get(i).x04()
+                    >= (fns::grYt_804D6A20(ctx).x0()).x08()
+                {
+                    20
+                } else {
+                    22
+                };
+            }
+            13 => {
+                __state = if (gp).u().yorster().elements().get(i).x0C() <= 0_i32 {
+                    48
+                } else {
+                    50
+                };
+            }
+            14 => {
+                __state = 54;
+            }
+            15 => {
+                __state = if (fns::grAnime_801C84A4(
+                    ctx,
+                    gobj,
+                    (gp2).u().yorster().elements().get(i).x14(),
+                    7_i32,
+                ) != 0_i32)
+                    || ((gp).u().yorster().elements().get(i).x0C() >= 25_i32)
+                {
+                    67
+                } else {
+                    69
+                };
+            }
+            16 => {
+                __state = 17;
+            }
+            17 => {
+                (gp).u().yorster().elements().get(i).set_x08(0.0);
+                __state = 8;
+            }
+            18 => {
+                unreachable!();
+            }
+            19 => {
+                __state = 11;
+            }
+            20 => {
+                fns::grMaterial_801C8E28(ctx, (gp2).u().yorster().elements().get(i).x1C());
+                (gp).u().yorster().elements().get(i).set_x04(fp::fsubs(
+                    (gp).u().yorster().elements().get(i).x04(),
+                    (fns::grYt_804D6A20(ctx).x0()).x08(),
+                ));
+                __state = if (gp).u().yorster().elements().get(i).x04()
+                    >= (fns::grYt_804D6A20(ctx).x0()).x0C()
+                {
+                    24
+                } else {
+                    26
+                };
+            }
+            21 => {
+                __state = if advance != 0_i32 { 44 } else { 45 };
+            }
+            22 => {
+                __state = if (gp).u().yorster().elements().get(i).x08()
+                    >= (fns::grYt_804D6A20(ctx).x0()).x00()
+                {
+                    31
+                } else {
+                    32
+                };
+            }
+            23 => {
+                unreachable!();
+            }
+            24 => {
+                frames_left = 0_i32;
+                __state = 25;
+            }
+            25 => {
+                end_frame = fp::frsp((fns::grYt_804D6A20(ctx).x0()).x1C() as f64);
+                __state = if end_frame
+                    >= fns::lbGetJObjEndFrame(ctx, (gp2).u().yorster().elements().get(i).x18())
+                {
+                    28
+                } else {
+                    29
+                };
+            }
+            26 => {
+                frames_left = fp::fctiwz(
+                    (fp::fsubs(
+                        (fns::grYt_804D6A20(ctx).x0()).x0C(),
+                        (gp).u().yorster().elements().get(i).x04(),
+                    )),
+                );
+                __state = 25;
+            }
+            27 => {
+                unreachable!();
+            }
+            28 => {
+                end_frame =
+                    fns::lbGetJObjEndFrame(ctx, (gp2).u().yorster().elements().get(i).x18());
+                __state = 29;
+            }
+            29 => {
+                advance = 1_i32;
+                (gp).u().yorster().elements().get(i).set_x10(fp::fctiwz(
+                    (fp::fmuls(
+                        fp::frsp(frames_left as f64),
+                        (fp::fdivs(end_frame, (fns::grYt_804D6A20(ctx).x0()).x0C())),
+                    )),
+                ));
+                __state = 21;
+            }
+            30 => {
+                unreachable!();
+            }
+            31 => {
+                fns::grMaterial_801C8E28(ctx, (gp2).u().yorster().elements().get(i).x1C());
+                (gp).u().yorster().elements().get(i).set_x08(fp::fsubs(
+                    (gp).u().yorster().elements().get(i).x08(),
+                    (fns::grYt_804D6A20(ctx).x0()).x00(),
+                ));
+                __state = if (gp).u().yorster().elements().get(i).x08()
+                    <= (fns::grYt_804D6A20(ctx).x0()).x00()
+                {
+                    34
+                } else {
+                    35
+                };
+            }
+            32 => {
+                __state = 21;
+            }
+            33 => {
+                unreachable!();
+            }
+            34 => {
+                (gp).u()
+                    .yorster()
+                    .elements()
+                    .get(i)
+                    .set_x08((fns::grYt_804D6A20(ctx).x0()).x00());
+                __state = 35;
+            }
+            35 => {
+                __state = if (gp).u().yorster().elements().get(i).x08()
+                    >= (fns::grYt_804D6A20(ctx).x0()).x04()
+                {
+                    37
+                } else {
+                    39
+                };
+            }
+            36 => {
+                unreachable!();
+            }
+            37 => {
+                frames_left_2 = 0_i32;
+                __state = 38;
+            }
+            38 => {
+                end_frame_2 = fp::frsp((fns::grYt_804D6A20(ctx).x0()).x1C() as f64);
+                __state = if end_frame_2
+                    >= fns::lbGetJObjEndFrame(ctx, (gp2).u().yorster().elements().get(i).x18())
+                {
+                    41
+                } else {
+                    42
+                };
+            }
+            39 => {
+                frames_left_2 = fp::fctiwz(
+                    (fp::fmuls(
+                        10.0,
+                        (fp::fsubs(
+                            (fns::grYt_804D6A20(ctx).x0()).x04(),
+                            (gp).u().yorster().elements().get(i).x08(),
+                        )),
+                    )),
+                );
+                __state = 38;
+            }
+            40 => {
+                unreachable!();
+            }
+            41 => {
+                end_frame_2 =
+                    fns::lbGetJObjEndFrame(ctx, (gp2).u().yorster().elements().get(i).x18());
+                __state = 42;
+            }
+            42 => {
+                advance = 1_i32;
+                (gp).u().yorster().elements().get(i).set_x10(fp::fctiwz(
+                    (fp::fmuls(
+                        fp::frsp(frames_left_2 as f64),
+                        (fp::fdivs(
+                            end_frame_2,
+                            (fp::fmuls(10.0, (fns::grYt_804D6A20(ctx).x0()).x04())),
+                        )),
+                    )),
+                ));
+                (gp).u().yorster().elements().get(i).set_x08(0.0);
+                fns::Ground_801C53EC(ctx, (14_i32 as u32));
+                __state = 32;
+            }
+            43 => {
+                unreachable!();
+            }
+            44 => {
+                (gp).u()
+                    .yorster()
+                    .elements()
+                    .get(i)
+                    .set_x0C((fns::grYt_804D6A20(ctx).x0()).x18());
+                (gp).u().yorster().elements().get(i).set_x01((2_i32 as u8));
+                __state = 45;
+            }
+            45 => {
+                __state = 17;
+            }
+            46 => {
+                unreachable!();
+            }
+            47 => {
+                __state = 13;
+            }
+            48 => {
+                fns::grAnime_801C7FF8(
+                    ctx,
+                    gobj,
+                    (gp2).u().yorster().elements().get(i).x14(),
+                    7_i32,
+                    0_i32,
+                    fp::frsp((gp2).u().yorster().elements().get(i).x10() as f64),
+                    1.0,
+                );
+                fns::mpLib_80057BC0(ctx, joint);
+                (gp).u().yorster().elements().get(i).set_x01((3_i32 as u8));
+                (gp).u()
+                    .yorster()
+                    .elements()
+                    .get(i)
+                    .set_x0C((gp).u().yorster().elements().get(i).x10());
+                __state = 49;
+            }
+            49 => {
+                __state = 17;
+            }
+            50 => {
+                (gp).u()
+                    .yorster()
+                    .elements()
+                    .get(i)
+                    .set_x0C((gp).u().yorster().elements().get(i).x0C().wrapping_sub(1));
+                __state = 49;
+            }
+            51 => {
+                unreachable!();
+            }
+            52 => {
+                __state = 14;
+            }
+            53 => {
+                unreachable!();
+            }
+            54 => {
+                __state = 55;
+            }
+            55 => {
+                __state = if (0_i32 != 0) { 54 } else { 56 };
+            }
+            56 => {
+                __state = if (gp).u().yorster().elements().get(i).x0C() >= 0x143_i32 {
+                    58
+                } else {
+                    60
+                };
+            }
+            57 => {
+                unreachable!();
+            }
+            58 => {
+                inl_HSD_JObjGetTranslation(ctx, (gp).u().yorster().elements().get(i).x18(), pos);
+                __state = if (fns::grLib_801C9EE8(
+                    ctx,
+                    pos,
+                    fp::fmsubs(10.0, fns::Ground_801C0498(ctx), 2.0),
+                ) != 0)
+                {
+                    62
+                } else {
+                    64
+                };
+            }
+            59 => {
+                __state = 17;
+            }
+            60 => {
+                (gp).u()
+                    .yorster()
+                    .elements()
+                    .get(i)
+                    .set_x0C((gp).u().yorster().elements().get(i).x0C().wrapping_add(1));
+                __state = 59;
+            }
+            61 => {
+                unreachable!();
+            }
+            62 => {
+                fns::grAnime_801C7FF8(
+                    ctx,
+                    gobj,
+                    (gp2).u().yorster().elements().get(i).x14(),
+                    7_i32,
+                    2_i32,
+                    0.0,
+                    0.30000001192092896,
+                );
+                (gp).u().yorster().elements().get(i).set_x0C(0_i32);
+                (gp).u().yorster().elements().get(i).set_x01((4_i32 as u8));
+                __state = 63;
+            }
+            63 => {
+                __state = 59;
+            }
+            64 => {
+                fns::grAnime_801C7FF8(
+                    ctx,
+                    gobj,
+                    (gp2).u().yorster().elements().get(i).x14(),
+                    7_i32,
+                    1_i32,
+                    0.0,
+                    1.0,
+                );
+                fns::mpJointListAdd(ctx, joint);
+                fns::grMaterial_801C8E08(ctx, (gp2).u().yorster().elements().get(i).x1C());
+                (gp).u().yorster().elements().get(i).set_x04(0.0);
+                (gp).u().yorster().elements().get(i).set_x08(0.0);
+                (gp).u().yorster().elements().get(i).set_x01((1_i32 as u8));
+                fns::OSReport(
+                    ctx,
+                    cstr(ctx, 0x803e5230),
+                    &[VarArg::Int(
+                        (gp2).u().yorster().elements().get(i).x0C() as u32
+                    )],
+                );
+                __state = 63;
+            }
+            65 => {
+                unreachable!();
+            }
+            66 => {
+                __state = 15;
+            }
+            67 => {
+                (gp).u().yorster().elements().get(i).set_x0C(0_i32);
+                inl_HSD_JObjGetTranslation(ctx, (gp).u().yorster().elements().get(i).x18(), pos);
+                __state = if !(fns::grLib_801C9EE8(
+                    ctx,
+                    pos,
+                    fp::fdivs((fp::fmuls(10.0, fns::Ground_801C0498(ctx))), 2.0),
+                ) != 0)
+                {
+                    71
+                } else {
+                    72
+                };
+            }
+            68 => {
+                __state = 17;
+            }
+            69 => {
+                (gp).u()
+                    .yorster()
+                    .elements()
+                    .get(i)
+                    .set_x0C((gp).u().yorster().elements().get(i).x0C().wrapping_add(1));
+                __state = 68;
+            }
+            70 => {
+                unreachable!();
+            }
+            71 => {
+                fns::grAnime_801C7FF8(
+                    ctx,
+                    gobj,
+                    (gp2).u().yorster().elements().get(i).x14(),
+                    7_i32,
+                    1_i32,
+                    0.0,
+                    1.0,
+                );
+                fns::mpJointListAdd(ctx, joint);
+                fns::grMaterial_801C8E08(ctx, (gp2).u().yorster().elements().get(i).x1C());
+                (gp).u().yorster().elements().get(i).set_x04(0.0);
+                (gp).u().yorster().elements().get(i).set_x08(0.0);
+                (gp).u().yorster().elements().get(i).set_x01((1_i32 as u8));
+                __state = 72;
+            }
+            72 => {
+                __state = 68;
+            }
+            73 => {
+                unreachable!();
+            }
+            74 => {
+                __state = 16;
+            }
+            75 => {
+                __state = 17;
+            }
+            76 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn grYorster_80202B5C<'a>(ctx: &'a Ctx, unused: i32) -> DynamicsDesc<'a> {
     let mut unused = unused;
     return null::<DynamicsDesc<'a>>(ctx);
@@ -606,6 +1104,14 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1, a2, a3, a4, a5): (Addr<'_>, i32, CollData<'_>, i32, i32, Single) =
                 Args::take_all(ctx);
             Ret::put(grYorster_802024F0(ctx, a0, a1, a2, a3, a4, a5.0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8020266c,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(grYorster_8020266C(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

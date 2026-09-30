@@ -1121,7 +1121,7 @@ pub fn ftYs_SpecialAirSLoop_0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         if floor_nx > 0.0 {
             let mut slope: f64 = fp::fsubs(1.0, (fp).coll_data().floor().normal().y());
             f5 = fp::fmadds(slope, (fp::fmuls(dir, (attributes).x94())), 1.0);
-            f6 = fp::fneg((fp::fmsubs(slope, dir, 1.0)));
+            f6 = fp::fnmsubs(slope, dir, 1.0);
         } else {
             let mut temp: f64 =
                 fp::fmuls((fp::fsubs(1.0, (fp).coll_data().floor().normal().y())), dir);
@@ -1133,7 +1133,7 @@ pub fn ftYs_SpecialAirSLoop_0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             let mut neg_dir: f64 = fp::fneg(dir);
             let mut slope_2: f64 = fp::fsubs(1.0, (fp).coll_data().floor().normal().y());
             f5 = fp::fmadds(slope_2, (fp::fmuls(neg_dir, (attributes).x94())), 1.0);
-            f6 = fp::fneg((fp::fmsubs(slope_2, neg_dir, 1.0)));
+            f6 = fp::fnmsubs(slope_2, neg_dir, 1.0);
         } else {
             let mut temp_2: f64 = fp::fmuls(
                 (fp::fsubs(1.0, (fp).coll_data().floor().normal().y())),

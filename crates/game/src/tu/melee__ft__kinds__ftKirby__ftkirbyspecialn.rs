@@ -1173,7 +1173,7 @@ pub fn ftKb_SpecialAirN_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
         inl_ftKb_SpecialN_SetHitlagCb_unfused(ctx, gobj, 0x174_i32, (0x212_i32 as u32));
-        inl_ftKb_SpecialN_SetThrowCb_unfused(
+        inl_ftKb_SpecialN_SetThrowCb_unfused_2(
             ctx,
             gobj,
             16_i32,
@@ -2451,7 +2451,40 @@ fn inl_ftKb_SpecialN_SetThrowCb_unfused<'a>(
     let mut throw_cb = throw_cb;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    fns::ftCommon_8007E2D0(ctx, fp, (mask as i16), capture_cb, release_cb, throw_cb);
+    fns::ftCommon_8007E2D0(
+        ctx,
+        fp,
+        (mask as i16),
+        fnptr(ctx, 0x800f6210),
+        fnptr(ctx, 0x800f6178),
+        fnptr(ctx, 0x800bd1dc),
+    );
+    (fp).set_x2225_b1((1_i32 as u8));
+}
+
+fn inl_ftKb_SpecialN_SetThrowCb_unfused_2<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    mask: i32,
+    capture_cb: FnPtr<'a>,
+    release_cb: FnPtr<'a>,
+    throw_cb: FnPtr<'a>,
+) {
+    let mut gobj = gobj;
+    let mut mask = mask;
+    let mut capture_cb = capture_cb;
+    let mut release_cb = release_cb;
+    let mut throw_cb = throw_cb;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    fns::ftCommon_8007E2D0(
+        ctx,
+        fp,
+        (mask as i16),
+        fnptr(ctx, 0x800f6318),
+        fnptr(ctx, 0x800f6280),
+        fnptr(ctx, 0x800bd1dc),
+    );
     (fp).set_x2225_b1((1_i32 as u8));
 }
 

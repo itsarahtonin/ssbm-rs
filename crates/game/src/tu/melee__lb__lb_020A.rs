@@ -73,15 +73,15 @@ pub fn fn_80020AEC<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, out: ArrV<'a, F32, 4>) 
                     let mut e: f64 = fp::frsqrte(scale_sq);
                     e = fp::fmul(
                         fp::fmul(0.5, e),
-                        fp::fneg((fp::fmsub(scale_sq, (fp::fmul(e, e)), 3.0))),
+                        fp::fnmsub(scale_sq, (fp::fmul(e, e)), 3.0),
                     );
                     e = fp::fmul(
                         fp::fmul(0.5, e),
-                        fp::fneg((fp::fmsub(scale_sq, (fp::fmul(e, e)), 3.0))),
+                        fp::fnmsub(scale_sq, (fp::fmul(e, e)), 3.0),
                     );
                     e = fp::fmul(
                         fp::fmul(0.5, e),
-                        fp::fneg((fp::fmsub(scale_sq, (fp::fmul(e, e)), 3.0))),
+                        fp::fnmsub(scale_sq, (fp::fmul(e, e)), 3.0),
                     );
                     scale_mag = fp::frsp((fp::fmul(scale_sq, e)));
                     scale_sq = scale_mag;
@@ -178,18 +178,9 @@ pub fn lbBgFlash_80020E38<'a>(
     mag_sq = fp::fmadds((z_col_z), (z_col_z), mag_sq);
     if mag_sq > 0.0 {
         let mut e: f64 = fp::frsqrte(mag_sq);
-        e = fp::fmul(
-            fp::fmul(0.5, e),
-            fp::fneg((fp::fmsub(mag_sq, (fp::fmul(e, e)), 3.0))),
-        );
-        e = fp::fmul(
-            fp::fmul(0.5, e),
-            fp::fneg((fp::fmsub(mag_sq, (fp::fmul(e, e)), 3.0))),
-        );
-        e = fp::fmul(
-            fp::fmul(0.5, e),
-            fp::fneg((fp::fmsub(mag_sq, (fp::fmul(e, e)), 3.0))),
-        );
+        e = fp::fmul(fp::fmul(0.5, e), fp::fnmsub(mag_sq, (fp::fmul(e, e)), 3.0));
+        e = fp::fmul(fp::fmul(0.5, e), fp::fnmsub(mag_sq, (fp::fmul(e, e)), 3.0));
+        e = fp::fmul(fp::fmul(0.5, e), fp::fnmsub(mag_sq, (fp::fmul(e, e)), 3.0));
         tmp = fp::frsp((fp::fmul(mag_sq, e)));
         mag_sq = tmp;
     }
@@ -323,12 +314,10 @@ pub fn lbBgFlash_80021410<'a>(ctx: &'a Ctx, data: IKState<'a>) {
         let mut d: f64 = 0.0;
         let mut x: f64 = 0.0;
         nx = (Handle::cast::<Val<'a, F32>>(axis)).get();
-        dot = fp::fneg(
-            (fp::fmadds(
-                nz,
-                (data).pos1().z(),
-                (fp::fmadds(nx, (data).pos1().x(), (fp::fmuls(ny, (data).pos1().y())))),
-            )),
+        dot = fp::fnmadds(
+            nz,
+            (data).pos1().z(),
+            (fp::fmadds(nx, (data).pos1().x(), (fp::fmuls(ny, (data).pos1().y())))),
         );
         x = (data).pos4().x();
         d = fp::fneg(

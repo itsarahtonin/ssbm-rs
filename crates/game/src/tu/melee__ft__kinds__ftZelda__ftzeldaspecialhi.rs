@@ -944,7 +944,7 @@ fn inl_ftCommon_HandleTeleportCollisions_unfused<'a>(
                 0.01745329238474369,
             )))
     {
-        on_collide.call::<_, ()>((gobj,));
+        fns::ftZd_SpecialHi_8013A764(ctx, gobj);
     }
     if (((coll).env_flags() & 63_i32) != 0)
         && (fns::lbVector_AngleXY(ctx, (coll).left_facing_wall().normal(), (fp).self_vel())
@@ -953,7 +953,7 @@ fn inl_ftCommon_HandleTeleportCollisions_unfused<'a>(
                 0.01745329238474369,
             )))
     {
-        on_collide.call::<_, ()>((gobj,));
+        fns::ftZd_SpecialHi_8013A764(ctx, gobj);
     }
     if (((coll).env_flags() & 0xfc0_i32) != 0)
         && (fns::lbVector_AngleXY(ctx, (coll).right_facing_wall().normal(), (fp).self_vel())
@@ -962,7 +962,7 @@ fn inl_ftCommon_HandleTeleportCollisions_unfused<'a>(
                 0.01745329238474369,
             )))
     {
-        on_collide.call::<_, ()>((gobj,));
+        fns::ftZd_SpecialHi_8013A764(ctx, gobj);
     }
 }
 

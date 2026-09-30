@@ -192,24 +192,22 @@ pub fn cosf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     if ((n & 1_i32) != 0) {
         n = shl_i32(n, (1_i32 as u32));
         z = fp::fmuls(
-            fp::fneg(
+            fp::fnmadds(
                 (fp::fmadds(
                     (fp::fmadds(
                         (fp::fmadds(
-                            (fp::fmadds(
-                                ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(1_i32).get(),
-                                ysq,
-                                ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(3_i32).get(),
-                            )),
+                            ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(1_i32).get(),
                             ysq,
-                            ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(5_i32).get(),
+                            ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(3_i32).get(),
                         )),
                         ysq,
-                        ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(7_i32).get(),
+                        ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(5_i32).get(),
                     )),
                     ysq,
-                    ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(9_i32).get(),
+                    ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(7_i32).get(),
                 )),
+                ysq,
+                ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(9_i32).get(),
             ),
             y,
         );

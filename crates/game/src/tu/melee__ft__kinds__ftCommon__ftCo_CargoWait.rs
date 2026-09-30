@@ -51,7 +51,7 @@ pub fn ftCo_8009B56C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     ctx.fill(Handle::addr(unused), 0, 0x10);
     unused.at(0).set((0_i32 as u8));
-    inl_inlineA0_unfused(ctx, gobj, fnptr(ctx, 0x8009c640));
+    inl_inlineA0_unfused_2(ctx, gobj, fnptr(ctx, 0x8009c640));
 }
 
 pub fn ftCo_CargoWait_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -139,7 +139,24 @@ fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
         fp::frsp(0_i32 as f64),
         null::<HSD_GObj<'a>>(ctx),
     );
-    cb.call::<_, ()>(((fp).victim_gobj(), 0x10a_i32));
+    fns::ftCo_8009C5A4(ctx, (fp).victim_gobj(), 0x10a_i32);
+}
+
+fn inl_inlineA0_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
+    let mut gobj = gobj;
+    let mut cb = cb;
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
+    fns::Fighter_ChangeMotionState(
+        ctx,
+        gobj,
+        ((fp).x2CC()).x4_motion_state(),
+        0_u32,
+        fp::frsp(0_i32 as f64),
+        fp::frsp(1_i32 as f64),
+        fp::frsp(0_i32 as f64),
+        null::<HSD_GObj<'a>>(ctx),
+    );
+    fns::ftCo_8009C640(ctx, (fp).victim_gobj(), 0x10a_i32);
 }
 
 /// Registers this unit's ports.

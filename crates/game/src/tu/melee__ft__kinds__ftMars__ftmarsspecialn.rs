@@ -95,7 +95,7 @@ pub fn ftMs_SpecialNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftMs_SpecialAirNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    inl_doStartAnim_unfused(ctx, gobj, fnptr(ctx, 0x80136eac));
+    inl_doStartAnim_unfused_2(ctx, gobj, fnptr(ctx, 0x80136eac));
 }
 
 pub fn ftMs_SpecialNStart_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -193,7 +193,7 @@ pub fn ftMs_SpecialNLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftMs_SpecialAirNLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
     let mut gobj = gobj;
-    inl_doLoopAnim_unfused(ctx, gobj, fnptr(ctx, 0x801373b8));
+    inl_doLoopAnim_unfused_2(ctx, gobj, fnptr(ctx, 0x801373b8));
 }
 
 pub fn ftMs_SpecialNLoop_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -205,7 +205,7 @@ pub fn ftMs_SpecialNLoop_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftMs_SpecialAirNLoop_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
-    inl_doLoopIasa_unfused(ctx, gobj, fnptr(ctx, 0x801373b8));
+    inl_doLoopIasa_unfused_2(ctx, gobj, fnptr(ctx, 0x801373b8));
 }
 
 pub fn ftMs_SpecialNLoop_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -303,7 +303,7 @@ pub fn ftMs_SpecialNEnd_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftMs_SpecialAirNEnd_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
     let mut gobj = gobj;
-    inl_inlineA0_unfused(ctx, gobj, fnptr(ctx, 0x800cc730));
+    inl_inlineA0_unfused_2(ctx, gobj, fnptr(ctx, 0x800cc730));
 }
 
 pub fn ftMs_SpecialNEnd_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -433,7 +433,24 @@ fn inl_doStartAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) 
     let mut gobj = gobj;
     let mut cb = cb;
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
-        cb.call::<_, ()>((gobj,));
+        fns::ftMs_SpecialN_80136E74(ctx, gobj);
+        {
+            let mut fp: Fighter<'a> =
+                (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+            if ((fp).kind() as u32) == ((enums::Ft_Kind_Mars as i32) as u32) {
+                let _ = fns::ftCo_800BFFD0(ctx, fp, 99_i32, 0_i32);
+            } else {
+                let _ = fns::ftCo_800BFFD0(ctx, fp, 100_i32, 0_i32);
+            }
+        }
+    }
+}
+
+fn inl_doStartAnim_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
+    let mut gobj = gobj;
+    let mut cb = cb;
+    if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
+        fns::ftMs_SpecialN_80136EAC(ctx, gobj);
         {
             let mut fp: Fighter<'a> =
                 (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -547,7 +564,66 @@ fn inl_doLoopAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
                 .set_cur_frame((fp).mv().ms().specialn().cur_frame().wrapping_add(1));
             if (fp).mv().ms().specialn().cur_frame() > (da).x0().wrapping_mul(30_i32) {
                 (fp).cmd_vars().at(0_i32).set((1_i32 as u32));
-                cb.call::<_, ()>((gobj,));
+                fns::ftMs_SpecialN_80137354(ctx, gobj);
+            }
+        }
+    }
+}
+
+fn inl_doLoopAnim_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut cb = cb;
+    'l1: loop {
+        'c2: {
+            let mut _0: u64 = (0_i32 as u64);
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    {
+        let mut fp: Fighter<'a> =
+            (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+        let mut da: _MarsAttributes<'a> = Handle::cast::<_MarsAttributes<'a>>((fp).dat_attrs());
+        'l3: loop {
+            'c4: {
+                let mut _0_2: u64 = (0_i32 as u64);
+                let mut _1: u64 = (0_i32 as u64);
+            }
+            if !(0_i32 != 0) {
+                break 'l3;
+            }
+        }
+        {
+            if rem_i32((fp).mv().ms().specialn().cur_frame(), 30_i32) == 0_i32 {
+                fns::lb_8000B1CC(
+                    ctx,
+                    (Handle::add(
+                        (fp).parts(),
+                        fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_HipN as i32)),
+                    ))
+                    .joint(),
+                    null::<Vec<'a>>(ctx),
+                    pos,
+                );
+                fns::lb_800119DC(
+                    ctx,
+                    pos,
+                    10_i32,
+                    fp::frsp(0.5),
+                    fp::frsp(0.05),
+                    (fp::fmuls(fp::frsp((60_i32) as f64), 0.01745329238474369)),
+                );
+            }
+            (fp).mv()
+                .ms()
+                .specialn()
+                .set_cur_frame((fp).mv().ms().specialn().cur_frame().wrapping_add(1));
+            if (fp).mv().ms().specialn().cur_frame() > (da).x0().wrapping_mul(30_i32) {
+                (fp).cmd_vars().at(0_i32).set((1_i32 as u32));
+                fns::ftMs_SpecialN_801373B8(ctx, gobj);
             }
         }
     }
@@ -562,7 +638,20 @@ fn inl_doLoopIasa_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
         != 0)
     {
         (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
-        cb.call::<_, ()>((gobj,));
+        fns::ftMs_SpecialN_80137354(ctx, gobj);
+    }
+}
+
+fn inl_doLoopIasa_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
+    let mut gobj = gobj;
+    let mut cb = cb;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if !(((fp).input().held_buttons().at(0_i32).get() & ((shl_i32(1_i32, (9_i32 as u32))) as u32))
+        != 0)
+    {
+        (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
+        fns::ftMs_SpecialN_801373B8(ctx, gobj);
     }
 }
 
@@ -631,7 +720,76 @@ fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
         );
     }
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
-        cb.call::<_, ()>((gobj,));
+        fns::ft_8008A2BC(ctx, gobj);
+    }
+}
+
+fn inl_inlineA0_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let position: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut cb = cb;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut da: _MarsAttributes<'a> = Handle::cast::<_MarsAttributes<'a>>((fp).dat_attrs());
+    let mut i: i32 = 0;
+    if (fp).cmd_vars().at(0_i32).get() == (0_i32 as u32) {
+        'l1: loop {
+            'c2: {
+                let mut _0: u64 = (0_i32 as u64);
+                let mut _1: u64 = (0_i32 as u64);
+            }
+            if !(0_i32 != 0) {
+                break 'l1;
+            }
+        }
+        i = 0_i32;
+        'l3: while i < ((div_u32(0x4e0_u32, 0x138_u32)) as i32) {
+            'c4: {
+                if ((fp).x914().get(i).state() as u32)
+                    == ((enums::HitCapsule_Enabled as i32) as u32)
+                {
+                    fns::ftColl_8007ABD0(
+                        ctx,
+                        (fp).x914().get(i),
+                        fns::__cvt_fp2unsigned(
+                            ctx,
+                            fp::frsp(
+                                ((da).x4().wrapping_add(
+                                    div_i32((fp).mv().ms().specialn().cur_frame(), 30_i32)
+                                        .wrapping_mul((da).x8()),
+                                )) as f64,
+                            ),
+                        ),
+                        gobj,
+                    );
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    }
+    if (fp).cur_anim_frame() == fp::frsp(9_i32 as f64) {
+        fns::lb_8000B1CC(
+            ctx,
+            (Handle::add(
+                (fp).parts(),
+                fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_HipN as i32)),
+            ))
+            .joint(),
+            null::<Vec<'a>>(ctx),
+            position,
+        );
+        fns::lb_800119DC(
+            ctx,
+            position,
+            120_i32,
+            0.8999999761581421,
+            0.019999999552965164,
+            (fp::fmuls(fp::frsp((60_i32) as f64), 0.01745329238474369)),
+        );
+    }
+    if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
+        fns::ftCo_Fall_Enter(ctx, gobj);
     }
 }
 

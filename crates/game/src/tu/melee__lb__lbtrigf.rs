@@ -111,7 +111,7 @@ pub fn asinf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         ctx,
         fp::fmuls(
             x,
-            statics::melee__lb__lbtrigf::lb_sqrtf(ctx, fp::fneg((fp::fmsubs(x, x, 1.0)))),
+            statics::melee__lb__lbtrigf::lb_sqrtf(ctx, fp::fnmsubs(x, x, 1.0)),
         ),
     );
 }

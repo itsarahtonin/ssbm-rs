@@ -1239,12 +1239,10 @@ fn inl_getAttrStuff<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
         ctx,
         temp_r30,
         0_i32,
-        fp::fneg(
-            (fp::fmsubs(
-                (fp::fdivs(180.0, (temp_r31).x78_PSI_MAGNET_UNK1())),
-                0.01745329238474369,
-                fns::ftPartGetRotZ(ctx, temp_r30, 0_i32),
-            )),
+        fp::fnmsubs(
+            (fp::fdivs(180.0, (temp_r31).x78_PSI_MAGNET_UNK1())),
+            0.01745329238474369,
+            fns::ftPartGetRotZ(ctx, temp_r30, 0_i32),
         ),
     );
 }

@@ -34079,49 +34079,15 @@ impl<'a> animateJointPadded_state<'a> {
     #[inline] pub fn jobj_ref(self) -> Ptr<'a, HSD_JObj<'a>> { self.0.field(0x0) }
     #[inline] pub fn pad(self) -> ArrV<'a, u8, 8> { self.0.field(0x4) }
 }
-/// C struct `struct (unnamed at libs/dolphin/src/dolphin/os/OSCache.c:560:9)`, 0x4 bytes.
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
-pub struct anon_394f5254<'a>(pub At<'a>);
-impl<'a> Handle<'a> for anon_394f5254<'a> {
-    const SIZE: u32 = 0x4;
-    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
-    #[inline] fn at(self) -> At<'a> { self.0 }
-}
-impl<'a> anon_394f5254<'a> {
-    #[inline] pub fn lcAddr(self) -> u32 { self.0.bits(0, 0, 27, false) as u32 }
-    #[inline] pub fn set_lcAddr(self, v: u32) { self.0.set_bits(0, 0, 27, v as i64) }
-    #[inline] pub fn dmaLd(self) -> u32 { self.0.bits(0, 27, 1, false) as u32 }
-    #[inline] pub fn set_dmaLd(self, v: u32) { self.0.set_bits(0, 27, 1, v as i64) }
-    #[inline] pub fn dmaLenL(self) -> u32 { self.0.bits(0, 28, 2, false) as u32 }
-    #[inline] pub fn set_dmaLenL(self, v: u32) { self.0.set_bits(0, 28, 2, v as i64) }
-    #[inline] pub fn dmaTrigger(self) -> u32 { self.0.bits(0, 30, 1, false) as u32 }
-    #[inline] pub fn set_dmaTrigger(self, v: u32) { self.0.set_bits(0, 30, 1, v as i64) }
-    #[inline] pub fn dmaFlush(self) -> u32 { self.0.bits(0, 31, 1, false) as u32 }
-    #[inline] pub fn set_dmaFlush(self, v: u32) { self.0.set_bits(0, 31, 1, v as i64) }
-}
-/// C union `union (unnamed at libs/dolphin/src/dolphin/os/OSSerial.c:316:5)`, 0x4 bytes.
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
-pub struct anon_3ece1956<'a>(pub At<'a>);
-impl<'a> Handle<'a> for anon_3ece1956<'a> {
-    const SIZE: u32 = 0x4;
-    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
-    #[inline] fn at(self) -> At<'a> { self.0 }
-}
-impl<'a> anon_3ece1956<'a> {
-    #[inline] pub fn val(self) -> u32 { self.0.get::<u32>(0x0) }
-    #[inline] pub fn set_val(self, v: u32) { self.0.set::<u32>(0x0, v) }
-    #[inline] pub fn val_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
-    #[inline] pub fn f(self) -> anon_5d552082<'a> { self.0.field(0x0) }
-}
 /// C struct `struct (unnamed at libs/dolphin/src/dolphin/os/OSSerial.c:318:9)`, 0x4 bytes.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
-pub struct anon_5d552082<'a>(pub At<'a>);
-impl<'a> Handle<'a> for anon_5d552082<'a> {
+pub struct anon_2e047596<'a>(pub At<'a>);
+impl<'a> Handle<'a> for anon_2e047596<'a> {
     const SIZE: u32 = 0x4;
     #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
     #[inline] fn at(self) -> At<'a> { self.0 }
 }
-impl<'a> anon_5d552082<'a> {
+impl<'a> anon_2e047596<'a> {
     #[inline] pub fn tcint(self) -> u32 { self.0.bits(0, 0, 1, false) as u32 }
     #[inline] pub fn set_tcint(self, v: u32) { self.0.set_bits(0, 0, 1, v as i64) }
     #[inline] pub fn tcintmsk(self) -> u32 { self.0.bits(0, 1, 1, false) as u32 }
@@ -34146,6 +34112,26 @@ impl<'a> anon_5d552082<'a> {
     #[inline] pub fn set_channel(self, v: u32) { self.0.set_bits(0, 29, 2, v as i64) }
     #[inline] pub fn tstart(self) -> u32 { self.0.bits(0, 31, 1, false) as u32 }
     #[inline] pub fn set_tstart(self, v: u32) { self.0.set_bits(0, 31, 1, v as i64) }
+}
+/// C struct `struct (unnamed at libs/dolphin/src/dolphin/os/OSCache.c:560:9)`, 0x4 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct anon_394f5254<'a>(pub At<'a>);
+impl<'a> Handle<'a> for anon_394f5254<'a> {
+    const SIZE: u32 = 0x4;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> anon_394f5254<'a> {
+    #[inline] pub fn lcAddr(self) -> u32 { self.0.bits(0, 0, 27, false) as u32 }
+    #[inline] pub fn set_lcAddr(self, v: u32) { self.0.set_bits(0, 0, 27, v as i64) }
+    #[inline] pub fn dmaLd(self) -> u32 { self.0.bits(0, 27, 1, false) as u32 }
+    #[inline] pub fn set_dmaLd(self, v: u32) { self.0.set_bits(0, 27, 1, v as i64) }
+    #[inline] pub fn dmaLenL(self) -> u32 { self.0.bits(0, 28, 2, false) as u32 }
+    #[inline] pub fn set_dmaLenL(self, v: u32) { self.0.set_bits(0, 28, 2, v as i64) }
+    #[inline] pub fn dmaTrigger(self) -> u32 { self.0.bits(0, 30, 1, false) as u32 }
+    #[inline] pub fn set_dmaTrigger(self, v: u32) { self.0.set_bits(0, 30, 1, v as i64) }
+    #[inline] pub fn dmaFlush(self) -> u32 { self.0.bits(0, 31, 1, false) as u32 }
+    #[inline] pub fn set_dmaFlush(self, v: u32) { self.0.set_bits(0, 31, 1, v as i64) }
 }
 /// C struct `struct (unnamed at libs/dolphin/src/dolphin/dvd/dvdlow.c:23:8)`, 0xc bytes.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
@@ -34195,6 +34181,20 @@ impl<'a> anon_dfa8751f<'a> {
     #[inline] pub fn callback(self) -> FnPtr<'a> { self.0.ptr(0x4) }
     #[inline] pub fn set_callback(self, v: FnPtr<'a>) { self.0.set_ptr(0x4, v) }
     #[inline] pub fn callback_ref(self) -> Ptr<'a, FnPtr<'a>> { self.0.field(0x4) }
+}
+/// C union `union (unnamed at libs/dolphin/src/dolphin/os/OSSerial.c:316:5)`, 0x4 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct anon_e6cc7a26<'a>(pub At<'a>);
+impl<'a> Handle<'a> for anon_e6cc7a26<'a> {
+    const SIZE: u32 = 0x4;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> anon_e6cc7a26<'a> {
+    #[inline] pub fn val(self) -> u32 { self.0.get::<u32>(0x0) }
+    #[inline] pub fn set_val(self, v: u32) { self.0.set::<u32>(0x0, v) }
+    #[inline] pub fn val_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
+    #[inline] pub fn f(self) -> anon_2e047596<'a> { self.0.field(0x0) }
 }
 /// C struct `struct (unnamed at libs/dolphin/src/dolphin/dvd/dvdqueue.c:6:8)`, 0x8 bytes.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
@@ -68046,22 +68046,6 @@ impl<'a> un_804D6FD0_t<'a> {
     #[inline] pub fn set_unk4(self, v: HSD_GObj<'a>) { self.0.set_ptr(0x4, v) }
     #[inline] pub fn unk4_ref(self) -> Ptr<'a, HSD_GObj<'a>> { self.0.field(0x4) }
 }
-/// C struct `unk`, 0x8 bytes.
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
-pub struct unk<'a>(pub At<'a>);
-impl<'a> Handle<'a> for unk<'a> {
-    const SIZE: u32 = 0x8;
-    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
-    #[inline] fn at(self) -> At<'a> { self.0 }
-}
-impl<'a> unk<'a> {
-    #[inline] pub fn pad(self) -> _GXColor<'a> { self.0.ptr(0x0) }
-    #[inline] pub fn set_pad(self, v: _GXColor<'a>) { self.0.set_ptr(0x0, v) }
-    #[inline] pub fn pad_ref(self) -> Ptr<'a, _GXColor<'a>> { self.0.field(0x0) }
-    #[inline] pub fn pad_x(self) -> _GXColor<'a> { self.0.ptr(0x4) }
-    #[inline] pub fn set_pad_x(self, v: _GXColor<'a>) { self.0.set_ptr(0x4, v) }
-    #[inline] pub fn pad_x_ref(self) -> Ptr<'a, _GXColor<'a>> { self.0.field(0x4) }
-}
 /// C struct `unk0`, 0x4 bytes.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct unk0<'a>(pub At<'a>);
@@ -68474,6 +68458,22 @@ impl<'a> unk_jobj_node<'a> {
     #[inline] pub fn x4(self) -> i32 { self.0.get::<i32>(0x4) }
     #[inline] pub fn set_x4(self, v: i32) { self.0.set::<i32>(0x4, v) }
     #[inline] pub fn x4_ref(self) -> Val<'a, i32> { self.0.field(0x4) }
+}
+/// C struct `unk`, 0x8 bytes.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub struct unk_t<'a>(pub At<'a>);
+impl<'a> Handle<'a> for unk_t<'a> {
+    const SIZE: u32 = 0x8;
+    #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
+    #[inline] fn at(self) -> At<'a> { self.0 }
+}
+impl<'a> unk_t<'a> {
+    #[inline] pub fn pad(self) -> _GXColor<'a> { self.0.ptr(0x0) }
+    #[inline] pub fn set_pad(self, v: _GXColor<'a>) { self.0.set_ptr(0x0, v) }
+    #[inline] pub fn pad_ref(self) -> Ptr<'a, _GXColor<'a>> { self.0.field(0x0) }
+    #[inline] pub fn pad_x(self) -> _GXColor<'a> { self.0.ptr(0x4) }
+    #[inline] pub fn set_pad_x(self, v: _GXColor<'a>) { self.0.set_ptr(0x4, v) }
+    #[inline] pub fn pad_x_ref(self) -> Ptr<'a, _GXColor<'a>> { self.0.field(0x4) }
 }
 /// C struct `unkd4d0`, 0x24 bytes.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]

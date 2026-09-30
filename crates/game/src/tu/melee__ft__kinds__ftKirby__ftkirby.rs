@@ -1243,7 +1243,7 @@ pub fn ftKb_SpecialN_800EFA40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
     }
     if Handle::is_null((fp).u().kb().hat().jobj()) {
-        let mut unk_: Kirby_Unk<'a> = fns::ft_80459B88(ctx).x0();
+        let mut unk: Kirby_Unk<'a> = fns::ft_80459B88(ctx).x0();
         (fp).u()
             .kb()
             .hat()
@@ -1256,7 +1256,7 @@ pub fn ftKb_SpecialN_800EFA40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).u()
             .kb()
             .hat()
-            .set_jobj(fns::HSD_JObjLoadJoint(ctx, (unk_).x0()));
+            .set_jobj(fns::HSD_JObjLoadJoint(ctx, (unk).x0()));
         (fp).set_x2225_b2((1_i32 as u8));
         fns::ftPartsPObjClearDefaultClass(ctx);
         fns::ftParts_80075650(
@@ -1267,7 +1267,7 @@ pub fn ftKb_SpecialN_800EFA40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         );
         fns::ftParts_8007487C(
             ctx,
-            (unk_).x4(),
+            (unk).x4(),
             (fp).u().kb().hat().x24(),
             (0_i32 as u32),
             (fp).u().kb().hat().x14(),

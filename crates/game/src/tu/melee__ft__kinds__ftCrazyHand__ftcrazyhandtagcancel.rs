@@ -290,7 +290,7 @@ fn inl_ftCh_GrabUnk1_8015BA34_unfused<'a>(
     } else {
         fns::ftCh_GrabUnk1_8015B8FC(ctx, gobj);
     }
-    (fp).mv().ch().unk0().set_x4(cb);
+    (fp).mv().ch().unk0().set_x4(fnptr(ctx, 0x80156198));
     Handle::copy_from((fp).mv().ch().unk0().xC(), (pos));
 }
 

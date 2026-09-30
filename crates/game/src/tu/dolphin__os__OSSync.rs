@@ -27,12 +27,29 @@ use ssbm_types::tu as statics;
 use crate::manual::dolphin__os__OSSync as manual;
 use crate::support::*;
 
+pub fn __OSInitSystemCall<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x10);
+    let mut addr: Addr<'a> = (ptr::<Addr<'a>>(
+        ctx,
+        (((shl_i32(0x8000_i32, (16_i32 as u32))) as u32).wrapping_add(((0xc00_i32) as u32))) as u32,
+    ));
+    let _ = fns::memcpy(
+        ctx,
+        addr,
+        Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8034ab80)),
+        Handle::addr(fnptr(ctx, 0x8034ab9c)).wrapping_sub(Handle::addr(fnptr(ctx, 0x8034ab80))),
+    );
+    fns::DCFlushRangeNoSync(ctx, addr, (0x100_i32 as u32));
+    ();
+    fns::ICInvalidateRange(ctx, addr, (0x100_i32 as u32));
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
-        0x8034ab80,
+        0x8034aba0,
         |ctx| {
-            Ret::put(manual::SystemCallVector(ctx), ctx);
+            Ret::put(__OSInitSystemCall(ctx), ctx);
         },
         Returns::Nothing,
     );

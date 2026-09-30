@@ -665,7 +665,7 @@ pub fn grOldKongo_80210454<'a>(ctx: &'a Ctx, ground_gobj: HSD_GObj<'a>, keep: HS
     let __frame = ctx.stack_frame(0x50);
     let pos_gnd: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     let pos_ft: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unk_: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
+    let unk: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
     let mut ground_gobj = ground_gobj;
     let mut keep = keep;
     let mut gp: Ground<'a> = null(ctx);
@@ -676,7 +676,7 @@ pub fn grOldKongo_80210454<'a>(ctx: &'a Ctx, ground_gobj: HSD_GObj<'a>, keep: HS
         if ((gp).u().taru().xC6() as i32) != 0_i32 {
             break 'goto_done;
         }
-        let _ = fns::Ground_801C4DA0(ctx, pos_gnd, unk_);
+        let _ = fns::Ground_801C4DA0(ctx, pos_gnd, unk);
         fns::ftLib_GetPos(ctx, keep, pos_ft);
         if !(fp::fadds(
             fp::fadds(

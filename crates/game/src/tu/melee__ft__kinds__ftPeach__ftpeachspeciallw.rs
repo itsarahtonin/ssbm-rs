@@ -191,7 +191,7 @@ pub fn ftPe_SpecialLw_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftPe_SpecialAirLw_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    inl_doAnim_unfused(ctx, gobj, fnptr(ctx, 0x800cc730));
+    inl_doAnim_unfused_2(ctx, gobj, fnptr(ctx, 0x800cc730));
 }
 
 pub fn ftPe_SpecialLw_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -360,7 +360,16 @@ fn inl_doAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
     let mut gobj = gobj;
     let mut cb = cb;
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
-        cb.call::<_, ()>((gobj,));
+        fns::ft_8008A2BC(ctx, gobj);
+        inl_ftPe_SpecialLw_UnsetVeg_unfused(ctx, gobj);
+    }
+}
+
+fn inl_doAnim_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
+    let mut gobj = gobj;
+    let mut cb = cb;
+    if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
+        fns::ftCo_Fall_Enter(ctx, gobj);
         inl_ftPe_SpecialLw_UnsetVeg_unfused(ctx, gobj);
     }
 }

@@ -4740,24 +4740,28 @@ pub fn grBigBlue_801EBAF8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 .set_b1((1_i32 as u32));
         }
         if fp::fneg(3.4028234663852886e+38_f64) != target_y {
-            (gp).u().bigblue().x0_u().road().set_lateral_drift(fp::fneg(
-                (fp::fmsubs(
+            (gp).u()
+                .bigblue()
+                .x0_u()
+                .road()
+                .set_lateral_drift(fp::fnmsubs(
                     3.0,
                     (fp::fmuls(
                         (statics::melee__gr__grbigblue::yakumono_param(ctx).get()).x78(),
                         fns::Ground_801C0498(ctx),
                     )),
                     (gp).u().bigblue().x0_u().road().lateral_drift(),
-                )),
-            ));
+                ));
         } else {
-            (gp).u().bigblue().x0_u().road().set_lateral_drift(fp::fneg(
-                (fp::fmsubs(
+            (gp).u()
+                .bigblue()
+                .x0_u()
+                .road()
+                .set_lateral_drift(fp::fnmsubs(
                     (statics::melee__gr__grbigblue::yakumono_param(ctx).get()).x78(),
                     fns::Ground_801C0498(ctx),
                     (gp).u().bigblue().x0_u().road().lateral_drift(),
-                )),
-            ));
+                ));
         }
         target.set_x(center.x());
         target.set_y(fp::fadds(
@@ -4828,13 +4832,16 @@ pub fn grBigBlue_801EBAF8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 .set_rotation(fp::frsp(wrapped));
         }
     }
-    (gp).u().bigblue().x0_u().road().position().set_x(fp::fneg(
-        (fp::fmsubs(
+    (gp).u()
+        .bigblue()
+        .x0_u()
+        .road()
+        .position()
+        .set_x(fp::fnmsubs(
             (statics::melee__gr__grbigblue::yakumono_param(ctx).get()).x6C(),
             fns::Ground_801C0498(ctx),
             (gp).u().bigblue().x0_u().road().position().x(),
-        )),
-    ));
+        ));
     {
         let mut lat_adj: f64 = fp::fmuls(
             fp::fmuls(
@@ -8562,12 +8569,10 @@ fn inl_grBigBlue_801EE398_inline<'a>(
         if __case <= 4 {
             {
                 let mut blast_2: f64 = fns::Stage_GetBlastZoneLeftOffset(ctx);
-                (pos).set_x(fp::fneg(
-                    (fp::fmsubs(
-                        (statics::melee__gr__grbigblue::yakumono_param(ctx).get()).x68(),
-                        fns::Ground_801C0498(ctx),
-                        blast_2,
-                    )),
+                (pos).set_x(fp::fnmsubs(
+                    (statics::melee__gr__grbigblue::yakumono_param(ctx).get()).x68(),
+                    fns::Ground_801C0498(ctx),
+                    blast_2,
                 ));
                 (pos).set_z(0.0);
                 (pos).set_y(0.0);

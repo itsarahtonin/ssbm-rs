@@ -1084,7 +1084,7 @@ pub fn _tyFigupon_80316C24<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 dir = 1_i32.wrapping_neg();
             }
             stick_scroll = fp::fdivs(
-                fp::fneg((fp::fmsubs(0.20000000298023224, fp::frsp(dir as f64), stick))),
+                fp::fnmsubs(0.20000000298023224, fp::frsp(dir as f64), stick),
                 0.800000011920929,
             );
         }

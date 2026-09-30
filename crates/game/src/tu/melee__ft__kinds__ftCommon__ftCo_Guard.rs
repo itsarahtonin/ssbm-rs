@@ -1934,7 +1934,7 @@ fn inl_inlineC0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) -> 
     if (((fp).mv().co().guard().xC() != 0) && (!((fp).mv().co().guard().x10() != 0.0)))
         || ((!((fp).x221B().x221B_b0() != 0)) && (!((fp).reflecting() != 0)))
     {
-        cb.call::<_, ()>((gobj,));
+        fns::ftCo_80092BE8(ctx, gobj);
         return 1_i32;
     }
     if (fp).mv().co().guard().x1C() != 0_i32 {
@@ -2122,7 +2122,7 @@ fn inl_ftCo_8009370C_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, on_reflect: F
     reflect.set_x18_damage_mul((fns::p_ftCommonData(ctx).get()).x2AC());
     reflect.set_x1C_speed_mul((fns::p_ftCommonData(ctx).get()).x2B0());
     reflect.set_x20_behavior((1_i32 as u8));
-    fns::ftColl_CreateReflectHit(ctx, gobj, reflect, on_reflect);
+    fns::ftColl_CreateReflectHit(ctx, gobj, reflect, fnptr(ctx, 0x80093790));
 }
 
 fn inl_sqrtf_unfused<'a>(ctx: &'a Ctx, x: f64) -> f64 {
@@ -2637,6 +2637,47 @@ fn inl_ftCo_80092BCC_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+fn inl_ftCo_80092C54_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
+    fns::Fighter_ChangeMotionState(
+        ctx,
+        gobj,
+        (enums::ftCo_MS_GuardOff as i32),
+        0_u32,
+        fp::frsp(0_i32 as f64),
+        fp::frsp(1_i32 as f64),
+        fp::frsp(0_i32 as f64),
+        null::<HSD_GObj<'a>>(ctx),
+    );
+    fns::ft_PlaySFX(ctx, fp, 127_i32, (127_i32 as u8), (64_i32 as u8));
+}
+
+fn inl_ftCo_80092BE8_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
+    fns::pl_8003E114(
+        ctx,
+        ((fp).player_idx() as i32),
+        ((fp).is_sub_fighter() as i32),
+        (fp).shield_health(),
+    );
+    's1: {
+        let __case = match ((fp).kind() as u32) {
+            14_u32 => 0,
+            _ => 1,
+        };
+        if __case <= 0 {
+            fns::ftYs_Shield_8012C49C(ctx, gobj);
+            return;
+        }
+        if __case <= 1 {
+            inl_ftCo_80092C54_unfused(ctx, gobj);
+            return;
+        }
+    }
+}
+
 fn inl_inlineC0_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) -> i32 {
     let mut gobj = gobj;
     let mut cb = cb;
@@ -2645,7 +2686,7 @@ fn inl_inlineC0_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) -
     if (((fp).mv().co().guard().xC() != 0) && (!((fp).mv().co().guard().x10() != 0.0)))
         || ((!((fp).x221B().x221B_b0() != 0)) && (!((fp).reflecting() != 0)))
     {
-        cb.call::<_, ()>((gobj,));
+        inl_ftCo_80092BE8_unfused(ctx, gobj);
         return 1_i32;
     }
     if (fp).mv().co().guard().x1C() != 0_i32 {

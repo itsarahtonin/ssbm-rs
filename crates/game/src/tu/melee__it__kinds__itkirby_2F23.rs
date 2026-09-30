@@ -216,9 +216,32 @@ fn inl_it_802F23EC_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     inl_HSD_JObjGetScale_unfused(ctx, jobj, (ip).xDD4_itemVar().kirby2f23().x1E8());
 }
 
+fn inl_sqrtf_unfused<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+    let mut x = x;
+    let mut y: f64 = 0.0;
+    if x > 0.0 {
+        let mut guess: f64 = fp::frsqrte(x);
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
+        );
+        y = fp::frsp((fp::fmul(x, guess)));
+        return y;
+    }
+    return x;
+}
+
 fn inl_lbVector_Len_unfused<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
     let mut vec = vec;
-    return fns::sqrtf(
+    return inl_sqrtf_unfused(
         ctx,
         fp::fadds(
             fp::fadds(

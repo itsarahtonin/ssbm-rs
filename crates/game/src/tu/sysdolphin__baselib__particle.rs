@@ -896,18 +896,9 @@ pub fn hsd_80398F8C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, angle: f64) {
     vx = fp::fmadds(vz, vz, (fp::fmadds(vx, vx, fp::fmuls(vy, vy))));
     if vx > 0.0 {
         let mut x: f64 = fp::frsqrte(vx);
-        x = fp::fmul(
-            fp::fmul(0.5, x),
-            fp::fneg((fp::fmsub(vx, (fp::fmul(x, x)), 3.0))),
-        );
-        x = fp::fmul(
-            fp::fmul(0.5, x),
-            fp::fneg((fp::fmsub(vx, (fp::fmul(x, x)), 3.0))),
-        );
-        x = fp::fmul(
-            fp::fmul(0.5, x),
-            fp::fneg((fp::fmsub(vx, (fp::fmul(x, x)), 3.0))),
-        );
+        x = fp::fmul(fp::fmul(0.5, x), fp::fnmsub(vx, (fp::fmul(x, x)), 3.0));
+        x = fp::fmul(fp::fmul(0.5, x), fp::fnmsub(vx, (fp::fmul(x, x)), 3.0));
+        x = fp::fmul(fp::fmul(0.5, x), fp::fnmsub(vx, (fp::fmul(x, x)), 3.0));
         magnitude = fp::frsp((fp::fmul(vx, x)));
         vx = magnitude;
     }
@@ -981,6 +972,6223 @@ pub fn hsd_803991D8<'a>(
         .vel()
         .set_y(fp::fmadds(scale, dz, (r#gen).vel().y()));
     return 0_i32;
+}
+
+pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'a>) -> Addr<'a> {
+    let __frame = ctx.stack_frame(0x438);
+    let pc: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x0);
+    let pad_top: ArrV<'a, u8, 84> = frame_at(ctx, &__frame, 0x4);
+    let pad_mid: ArrV<'a, u8, 144> = frame_at(ctx, &__frame, 0x58);
+    let pad_bot: ArrV<'a, u8, 120> = frame_at(ctx, &__frame, 0xe8);
+    let p_10: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x160);
+    let p_11: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x164);
+    let p_12: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x168);
+    let p_13: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x16c);
+    let p_14: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x170);
+    let p_15: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x174);
+    let p_16: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x178);
+    let p_17: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x17c);
+    let p_18: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x180);
+    let p_19: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x184);
+    let p_20: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x188);
+    let p_21: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x18c);
+    let q: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x190);
+    let p_22: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x194);
+    let p_23: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x198);
+    let q_2: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x19c);
+    let q_3: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x1a0);
+    let q_4: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x1a4);
+    let p_24: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x1a8);
+    let p_25: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x1ac);
+    let p_26: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x1b0);
+    let q_5: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x1b4);
+    let q_6: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x1b8);
+    let q_7: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x1bc);
+    let q_8: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x1c0);
+    let q_9: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x1c4);
+    let q_10: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x1c8);
+    let p_27: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x1cc);
+    let p_28: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x1d0);
+    let q_11: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x1d4);
+    let q_12: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x1d8);
+    let mut pp = pp;
+    let mut prev = prev;
+    let mut bank: i32 = 0;
+    let mut val: f64 = 0.0;
+    let mut operand: u16 = 0;
+    let mut opcode: u8 = 0;
+    let mut cls: u8 = 0;
+    let mut child: HSD_Particle<'a> = null(ctx);
+    let mut gchild: HSD_Generator<'a> = null(ctx);
+    let mut cl: _HSD_PSCmdList<'a> = null(ctx);
+    let mut tg: _HSD_PSTexGroup<'a> = null(ctx);
+    let mut sqrt_res: f64 = 0.0;
+    let mut vel_res: f64 = 0.0;
+    let mut dist_res: f64 = 0.0;
+    let mut pn: u8 = 0;
+    let mut tga: Ptr<'a, _HSD_PSTexGroup<'a>> = null(ctx);
+    let mut texGrp: _HSD_PSTexGroup<'a> = null(ctx);
+    let mut bank_2: u8 = 0;
+    let mut tgIdx: u8 = 0;
+    let mut p: Val<'a, u8> = null(ctx);
+    let mut cnt: u16 = 0;
+    let mut linkNo: i32 = 0;
+    let mut idx: i32 = 0;
+    let mut palflag: i32 = 0;
+    let mut c: HSD_Particle<'a> = null(ctx);
+    let mut idx_2: i32 = 0;
+    let mut palflag_2: i32 = 0;
+    let mut c_2: HSD_Particle<'a> = null(ctx);
+    let mut linkNo_2: i32 = 0;
+    let mut idx_3: i32 = 0;
+    let mut srt: HSD_psAppSRT<'a> = null(ctx);
+    let mut jobj: HSD_JObj<'a> = null(ctx);
+    let mut idx_4: i32 = 0;
+    let mut flags: u8 = 0;
+    let mut srt_2: HSD_psAppSRT<'a> = null(ctx);
+    let mut jobj_2: HSD_JObj<'a> = null(ctx);
+    let mut idx_5: i32 = 0;
+    let mut flags_2: u8 = 0;
+    let mut srt_3: HSD_psAppSRT<'a> = null(ctx);
+    let mut bank_3: i32 = 0;
+    let mut jobj_3: HSD_JObj<'a> = null(ctx);
+    let mut baseLife: i32 = 0;
+    let mut randomRange: i32 = 0;
+    let mut threshold: i32 = 0;
+    let mut randomRange_2: i32 = 0;
+    let mut idx_6: i32 = 0;
+    let mut palflag_3: i32 = 0;
+    let mut linkNo_3: i32 = 0;
+    let mut c_3: HSD_Particle<'a> = null(ctx);
+    let mut srt_4: HSD_psAppSRT<'a> = null(ctx);
+    let mut scale: f64 = 0.0;
+    let mut range: f64 = 0.0;
+    let mut cnt_2: u16 = 0;
+    let mut srt_5: HSD_psAppSRT<'a> = null(ctx);
+    let mut translate: Vec<'a> = null(ctx);
+    let mut rot: Vec<'a> = null(ctx);
+    let mut scale_2: Vec<'a> = null(ctx);
+    let mut mtx: ArrV<'a, F32, 4> = null(ctx);
+    let mut step: i32 = 0;
+    let mut p_2: Val<'a, u8> = null(ctx);
+    let mut cnt_3: u16 = 0;
+    let mut p_3: Val<'a, u8> = null(ctx);
+    let mut cnt_4: u16 = 0;
+    let mut jobj_4: HSD_JObj<'a> = null(ctx);
+    let mut matrix: ArrV<'a, F32, 4> = null(ctx);
+    let mut dz: f64 = 0.0;
+    let mut dy: f64 = 0.0;
+    let mut dx: f64 = 0.0;
+    let mut vel_mag_sq: f64 = 0.0;
+    let mut dist_sq: f64 = 0.0;
+    let mut guess: f64 = 0.0;
+    let mut guess_2: f64 = 0.0;
+    let mut scale_3: f64 = 0.0;
+    let mut idx_7: i32 = 0;
+    let mut force: f64 = 0.0;
+    let mut range_2: f64 = 0.0;
+    let mut jobj_5: HSD_JObj<'a> = null(ctx);
+    let mut linkNo_4: i32 = 0;
+    let mut idx_8: i32 = 0;
+    let mut palflag_4: i32 = 0;
+    let mut c_4: HSD_Particle<'a> = null(ctx);
+    let mut srt_6: HSD_psAppSRT<'a> = null(ctx);
+    let mut idx_9: i32 = 0;
+    let mut palflag_5: i32 = 0;
+    let mut c_5: HSD_Particle<'a> = null(ctx);
+    let mut linkNo_5: i32 = 0;
+    let mut srt_7: HSD_psAppSRT<'a> = null(ctx);
+    let mut step_2: i32 = 0;
+    let mut delta: i8 = 0;
+    let mut rand_val: f64 = 0.0;
+    let mut step_3: i32 = 0;
+    let mut delta_2: i8 = 0;
+    let mut rand_val_2: f64 = 0.0;
+    let mut randRange: f64 = 0.0;
+    let mut bank_4: u8 = 0;
+    let mut tgIdx_2: u8 = 0;
+    let mut tga_2: Ptr<'a, _HSD_PSTexGroup<'a>> = null(ctx);
+    let mut texGrp_2: _HSD_PSTexGroup<'a> = null(ctx);
+    let mut base_speed: f64 = 0.0;
+    let mut random_range: f64 = 0.0;
+    let mut mag: f64 = 0.0;
+    let mut guess_3: f64 = 0.0;
+    let mut p_4: Val<'a, u8> = null(ctx);
+    let mut idx_10: u8 = 0;
+    let mut step_4: i32 = 0;
+    let mut cnt_5: u16 = 0;
+    let mut p_5: Val<'a, u8> = null(ctx);
+    let mut step_5: i32 = 0;
+    let mut cnt_6: u16 = 0;
+    let mut p_6: Val<'a, u8> = null(ctx);
+    let mut step_6: i32 = 0;
+    let mut delta_3: i8 = 0;
+    let mut rand_r: f64 = 0.0;
+    let mut rand_g: f64 = 0.0;
+    let mut rand_b: f64 = 0.0;
+    let mut rand_a: f64 = 0.0;
+    let mut step_7: i32 = 0;
+    let mut timing: i32 = 0;
+    let mut flags_3: i32 = 0;
+    let mut scale_4: f64 = 0.0;
+    let mut delta_4: i8 = 0;
+    let mut delta_float: f64 = 0.0;
+    let mut a_rand: f64 = 0.0;
+    let mut idx_11: i32 = 0;
+    let mut idx_12: i32 = 0;
+    let mut v: f64 = 0.0;
+    let mut mode: u8 = 0;
+    let mut mode_2: u8 = 0;
+    let mut trail: f64 = 0.0;
+    let mut step_8: i32 = 0;
+    let mut cnt_7: u16 = 0;
+    let mut flags_4: u8 = 0;
+    let mut p_7: Val<'a, u8> = null(ctx);
+    let mut step_9: i32 = 0;
+    let mut cnt_8: u16 = 0;
+    let mut flags_5: u8 = 0;
+    let mut p_8: Val<'a, u8> = null(ctx);
+    let mut range_val: f64 = 0.0;
+    let mut base_val: f64 = 0.0;
+    let mut timing_2: i32 = 0;
+    let mut p_9: Val<'a, u8> = null(ctx);
+    let mut randi: i32 = 0;
+    let mut next_pp: HSD_Particle<'a> = null(ctx);
+    let mut head: HSD_Particle<'a> = null(ctx);
+    let mut gp: HSD_Generator<'a> = null(ctx);
+    let mut sinA: f64 = 0.0;
+    let mut sinB: f64 = 0.0;
+    let mut cosA: f64 = 0.0;
+    let mut cosB: f64 = 0.0;
+    let mut d: f64 = 0.0;
+    let mut nd: f64 = 0.0;
+    let mut e: f64 = 0.0;
+    let mut vz: f64 = 0.0;
+    let mut R: f64 = 0.0;
+    let mut ang: f64 = 0.0;
+    let mut jobj_idx: i32 = 0;
+    let mut new_jobj: HSD_JObj<'a> = null(ctx);
+    let mut jobj_6: HSD_JObj<'a> = null(ctx);
+    let mut result: i32 = 0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                __state = if (((pp).kind() & (0x800_i32 as u32)) != 0) {
+                    1
+                } else {
+                    2
+                };
+            }
+            1 => {
+                return Handle::cast::<Addr<'a>>((pp).next());
+            }
+            2 => {
+                __state = if ((pp).sizeCount() as i32) != 0_i32 {
+                    5
+                } else {
+                    6
+                };
+            }
+            3 => {
+                unreachable!();
+            }
+            4 => {
+                __state = 2;
+            }
+            5 => {
+                (pp).set_size(fp::fadds(
+                    (pp).size(),
+                    fp::fdivs(
+                        (fp::fsubs((pp).sizeTarget(), (pp).size())),
+                        fp::frsp((pp).sizeCount() as f64),
+                    ),
+                ));
+                (pp).set_sizeCount((pp).sizeCount().wrapping_sub(1));
+                __state = 6;
+            }
+            6 => {
+                __state = if ((pp).primColCount() as i32) != 0_i32 {
+                    8
+                } else {
+                    9
+                };
+            }
+            7 => {
+                unreachable!();
+            }
+            8 => {
+                (pp).set_primColRemain((pp).primColRemain().wrapping_sub(1));
+                __state = if ((pp).primColRemain() as i32) == 0_i32 {
+                    11
+                } else {
+                    12
+                };
+            }
+            9 => {
+                __state = if ((pp).envColCount() as i32) != 0_i32 {
+                    14
+                } else {
+                    15
+                };
+            }
+            10 => {
+                unreachable!();
+            }
+            11 => {
+                (pp).set_primColCount((0_i32 as u16));
+                (pp).primCol().set_r((pp).primColTarget().r());
+                (pp).primCol().set_g((pp).primColTarget().g());
+                (pp).primCol().set_b((pp).primColTarget().b());
+                (pp).primCol().set_a((pp).primColTarget().a());
+                __state = 12;
+            }
+            12 => {
+                __state = 9;
+            }
+            13 => {
+                unreachable!();
+            }
+            14 => {
+                (pp).set_envColRemain((pp).envColRemain().wrapping_sub(1));
+                __state = if ((pp).envColRemain() as i32) == 0_i32 {
+                    17
+                } else {
+                    18
+                };
+            }
+            15 => {
+                __state = if ((pp).matColCount() as i32) != 0_i32 {
+                    20
+                } else {
+                    21
+                };
+            }
+            16 => {
+                unreachable!();
+            }
+            17 => {
+                (pp).set_envColCount((0_i32 as u16));
+                (pp).envCol().set_r((pp).envColTarget().r());
+                (pp).envCol().set_g((pp).envColTarget().g());
+                (pp).envCol().set_b((pp).envColTarget().b());
+                (pp).envCol().set_a((pp).envColTarget().a());
+                __state = 18;
+            }
+            18 => {
+                __state = 15;
+            }
+            19 => {
+                unreachable!();
+            }
+            20 => {
+                (pp).set_matColRemain((pp).matColRemain().wrapping_sub(1));
+                __state = if ((pp).matColRemain() as i32) == 0_i32 {
+                    23
+                } else {
+                    24
+                };
+            }
+            21 => {
+                __state = if ((pp).ambColCount() as i32) != 0_i32 {
+                    26
+                } else {
+                    27
+                };
+            }
+            22 => {
+                unreachable!();
+            }
+            23 => {
+                (pp).set_matColCount((0_i32 as u16));
+                (pp).set_matRGB((pp).matRGBTarget());
+                (pp).set_matA((pp).matATarget());
+                __state = 24;
+            }
+            24 => {
+                __state = 21;
+            }
+            25 => {
+                unreachable!();
+            }
+            26 => {
+                (pp).set_ambColRemain((pp).ambColRemain().wrapping_sub(1));
+                __state = if ((pp).ambColRemain() as i32) == 0_i32 {
+                    29
+                } else {
+                    30
+                };
+            }
+            27 => {
+                __state = if ((pp).aCmpCount() as i32) != 0_i32 {
+                    32
+                } else {
+                    33
+                };
+            }
+            28 => {
+                unreachable!();
+            }
+            29 => {
+                (pp).set_ambColCount((0_i32 as u16));
+                (pp).set_ambRGB((pp).ambRGBTarget());
+                (pp).set_ambA((pp).ambATarget());
+                __state = 30;
+            }
+            30 => {
+                __state = 27;
+            }
+            31 => {
+                unreachable!();
+            }
+            32 => {
+                (pp).set_aCmpRemain((pp).aCmpRemain().wrapping_sub(1));
+                __state = if ((pp).aCmpRemain() as i32) == 0_i32 {
+                    35
+                } else {
+                    36
+                };
+            }
+            33 => {
+                __state = if ((pp).rotateCount() as i32) != 0_i32 {
+                    38
+                } else {
+                    39
+                };
+            }
+            34 => {
+                unreachable!();
+            }
+            35 => {
+                (pp).set_aCmpCount((0_i32 as u16));
+                (pp).set_aCmpParam1((pp).aCmpParam1Target());
+                (pp).set_aCmpParam2((pp).aCmpParam2Target());
+                __state = 36;
+            }
+            36 => {
+                __state = 33;
+            }
+            37 => {
+                unreachable!();
+            }
+            38 => {
+                (pp).set_rotate(fp::fadds(
+                    (pp).rotate(),
+                    fp::fdivs(
+                        (fp::fsubs((pp).rotateTarget(), (pp).rotate())),
+                        fp::frsp((pp).rotateCount() as f64),
+                    ),
+                ));
+                (pp).set_rotateCount((pp).rotateCount().wrapping_sub(1));
+                __state = 39;
+            }
+            39 => {
+                __state = if ((pp).cmdWait() as i32) == 0_i32 {
+                    41
+                } else {
+                    42
+                };
+            }
+            40 => {
+                unreachable!();
+            }
+            41 => {
+                __state = 44;
+            }
+            42 => {
+                __state = if ({
+                    (pp).set_cmdWait((pp).cmdWait().wrapping_sub(1));
+                    (pp).cmdWait()
+                } as i32)
+                    != 0_i32
+                {
+                    46
+                } else {
+                    47
+                };
+            }
+            43 => {
+                unreachable!();
+            }
+            44 => {
+                __state = if ({
+                    (pp).set_life((pp).life().wrapping_sub(1));
+                    (pp).life()
+                } as i32)
+                    == 0_i32
+                {
+                    916
+                } else {
+                    917
+                };
+            }
+            45 => {
+                __state = 42;
+            }
+            46 => {
+                __state = 44;
+            }
+            47 => {
+                operand = (0_i32 as u16);
+                pc.set(Handle::add((pp).cmdList(), ((pp).cmdPtr() as i32)));
+                __state = 50;
+            }
+            48 => {
+                unreachable!();
+            }
+            49 => {
+                __state = 47;
+            }
+            50 => {
+                __state = if true { 51 } else { 53 };
+            }
+            51 => {
+                opcode = ({
+                    let __t1 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t1
+                })
+                .get();
+                __state = if (opcode as i32) < 128_i32 { 55 } else { 57 };
+            }
+            52 => {
+                __state = 50;
+            }
+            53 => {
+                __state = 362;
+            }
+            54 => {
+                unreachable!();
+            }
+            55 => {
+                operand = (((opcode as i32) & 31_i32) as u16);
+                __state = if (((opcode as i32) & 32_i32) != 0) {
+                    59
+                } else {
+                    60
+                };
+            }
+            56 => {
+                __state = if (operand as i32) != 0_i32 { 912 } else { 913 };
+            }
+            57 => {
+                operand = (0_i32 as u16);
+                cls = (((opcode as i32) & 248_i32) as u8);
+                __state = if (cls as i32) > 152_i32 { 72 } else { 73 };
+            }
+            58 => {
+                unreachable!();
+            }
+            59 => {
+                operand = ((shl_i32((operand as i32), (8_i32 as u32))).wrapping_add(
+                    (({
+                        let __t2 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t2
+                    })
+                    .get() as i32),
+                ) as u16);
+                __state = 60;
+            }
+            60 => {
+                __state = match ((opcode as i32) & 192_i32) {
+                    0_i32 => 62,
+                    64_i32 => 63,
+                    _ => 64,
+                };
+            }
+            61 => {
+                unreachable!();
+            }
+            62 => {
+                __state = 64;
+            }
+            63 => {
+                pn = ({
+                    let __t3 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t3
+                })
+                .get();
+                (pp).set_poseNum(pn);
+                bank_2 = (pp).bank();
+                tgIdx = (pp).texGroup();
+                tga = fns::psTexGroupArray(ctx).at((bank_2 as i32)).get();
+                texGrp = (Handle::add(tga, (tgIdx as i32))).get();
+                __state = if !Handle::is_null(texGrp) { 68 } else { 69 };
+            }
+            64 => {
+                __state = 56;
+            }
+            65 => {
+                unreachable!();
+            }
+            66 => {
+                __state = 62;
+            }
+            67 => {
+                __state = 63;
+            }
+            68 => {
+                inl_psEnableTexture(ctx, pp, (texGrp).texTable().at(0));
+                __state = 69;
+            }
+            69 => {
+                __state = 64;
+            }
+            70 => {
+                unreachable!();
+            }
+            71 => {
+                __state = 64;
+            }
+            72 => {
+                cls = (((opcode as i32) & 240_i32) as u8);
+                __state = if ((cls as i32) != 192_i32) && ((cls as i32) != 208_i32) {
+                    75
+                } else {
+                    76
+                };
+            }
+            73 => {
+                __state = match (cls as i32) {
+                    128_i32 => 78,
+                    136_i32 => 79,
+                    144_i32 => 80,
+                    152_i32 => 81,
+                    160_i32 => 82,
+                    161_i32 => 83,
+                    162_i32 => 84,
+                    163_i32 => 85,
+                    164_i32 => 86,
+                    241_i32 => 87,
+                    165_i32 => 88,
+                    239_i32 => 89,
+                    240_i32 => 90,
+                    166_i32 => 91,
+                    167_i32 => 92,
+                    168_i32 => 93,
+                    169_i32 => 94,
+                    170_i32 => 95,
+                    171_i32 => 96,
+                    172_i32 => 97,
+                    173_i32 => 98,
+                    174_i32 => 99,
+                    175_i32 => 100,
+                    176_i32 => 101,
+                    177_i32 => 102,
+                    178_i32 => 103,
+                    179_i32 => 104,
+                    180_i32 => 105,
+                    181_i32 => 106,
+                    182_i32 => 107,
+                    183_i32 => 108,
+                    184_i32 => 109,
+                    185_i32 => 110,
+                    242_i32 => 111,
+                    186_i32 => 112,
+                    187_i32 => 113,
+                    188_i32 => 114,
+                    189_i32 => 115,
+                    190_i32 => 116,
+                    191_i32 => 117,
+                    192_i32 => 118,
+                    208_i32 => 119,
+                    224_i32 => 120,
+                    233_i32 => 121,
+                    225_i32 => 122,
+                    236_i32 => 123,
+                    226_i32 => 124,
+                    227_i32 => 125,
+                    228_i32 => 126,
+                    229_i32 => 127,
+                    230_i32 => 128,
+                    231_i32 => 129,
+                    232_i32 => 130,
+                    234_i32 => 131,
+                    235_i32 => 132,
+                    237_i32 => 133,
+                    250_i32 => 134,
+                    251_i32 => 135,
+                    252_i32 => 136,
+                    253_i32 => 137,
+                    254_i32 => 138,
+                    255_i32 => 139,
+                    _ => 140,
+                };
+            }
+            74 => {
+                unreachable!();
+            }
+            75 => {
+                cls = opcode;
+                __state = 76;
+            }
+            76 => {
+                __state = 73;
+            }
+            77 => {
+                unreachable!();
+            }
+            78 => {
+                __state = if (((opcode as i32) & 1_i32) != 0) {
+                    144
+                } else {
+                    145
+                };
+            }
+            79 => {
+                __state = if (((opcode as i32) & 1_i32) != 0) {
+                    154
+                } else {
+                    155
+                };
+            }
+            80 => {
+                __state = if (((opcode as i32) & 1_i32) != 0) {
+                    164
+                } else {
+                    165
+                };
+            }
+            81 => {
+                __state = if (((opcode as i32) & 1_i32) != 0) {
+                    174
+                } else {
+                    175
+                };
+            }
+            82 => {
+                p = pc.get();
+                (pp).set_sizeCount(
+                    (({
+                        let __t4 = p;
+                        p = Handle::add(p, 1);
+                        __t4
+                    })
+                    .get() as u16),
+                );
+                cnt = (pp).sizeCount();
+                __state = if (((cnt as i32) & 128_i32) != 0) {
+                    184
+                } else {
+                    185
+                };
+            }
+            83 => {
+                (pp).set_kind(((pp).kind() & ((!(enums::DispTexture as i32)) as u32)));
+                __state = 141;
+            }
+            84 => {
+                p_22.set(pc.get());
+                inl_psReadFloat(ctx, p_22);
+                pc.set(p_22.get());
+                (pp).set_grav(
+                    ((Handle::cast::<Val<'a, F32>>(
+                        statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                    ))
+                    .get()),
+                );
+                __state = if (pp).grav() == 0.0 { 192 } else { 194 };
+            }
+            85 => {
+                p_23.set(pc.get());
+                inl_psReadFloat(ctx, p_23);
+                pc.set(p_23.get());
+                (pp).set_fric(
+                    ((Handle::cast::<Val<'a, F32>>(
+                        statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                    ))
+                    .get()),
+                );
+                __state = if (pp).fric() == 1.0 { 197 } else { 199 };
+            }
+            86 => {
+                linkNo = ((pp).linkNo() as i32);
+                bank = ((pp).bank() as i32);
+                idx = shl_i32(
+                    ((Handle::add(pc.get(), 0_i32)).get() as i32),
+                    (8_i32 as u32),
+                );
+                idx = idx.wrapping_add(((Handle::add(pc.get(), 1_i32)).get() as i32));
+                pc.set(Handle::add(pc.get(), 2_i32));
+                child = inl_psSpawnChild(ctx, (pp).next_ref(), linkNo, bank, idx);
+                c = child;
+                __state = if !Handle::is_null(child) { 202 } else { 203 };
+            }
+            87 => {
+                bank = ((pp).bank() as i32);
+                idx_2 = shl_i32(
+                    ((Handle::add(pc.get(), 0_i32)).get() as i32),
+                    (8_i32 as u32),
+                );
+                idx_2 = idx_2.wrapping_add(((Handle::add(pc.get(), 1_i32)).get() as i32));
+                pc.set(Handle::add(pc.get(), 2_i32));
+                __state = if !Handle::is_null(fns::hsd_804D0948(ctx).at(((pp).bank() as i32)).get())
+                {
+                    209
+                } else {
+                    210
+                };
+            }
+            88 => {
+                idx_3 = shl_i32(
+                    ((Handle::add(pc.get(), 0_i32)).get() as i32),
+                    (8_i32 as u32),
+                );
+                idx_3 = idx_3.wrapping_add(((Handle::add(pc.get(), 1_i32)).get() as i32));
+                pc.set(Handle::add(pc.get(), 2_i32));
+                gchild =
+                    fns::hsd_8039F05C(ctx, ((pp).linkNo() as i32), ((pp).bank() as i32), idx_3);
+                __state = if !Handle::is_null(gchild) { 239 } else { 240 };
+            }
+            89 => {
+                idx_4 = shl_i32(
+                    ((Handle::add(pc.get(), 0_i32)).get() as i32),
+                    (8_i32 as u32),
+                );
+                idx_4 = idx_4.wrapping_add(((Handle::add(pc.get(), 1_i32)).get() as i32));
+                flags = (Handle::add(pc.get(), 2_i32)).get();
+                pc.set(Handle::add(pc.get(), 3_i32));
+                gchild =
+                    fns::hsd_8039F05C(ctx, ((pp).linkNo() as i32), ((pp).bank() as i32), idx_4);
+                __state = if Handle::is_null(gchild) { 277 } else { 278 };
+            }
+            90 => {
+                idx_5 = shl_i32(
+                    ((Handle::add(pc.get(), 0_i32)).get() as i32),
+                    (8_i32 as u32),
+                );
+                idx_5 = idx_5.wrapping_add(((Handle::add(pc.get(), 1_i32)).get() as i32));
+                flags_2 = (Handle::add(pc.get(), 2_i32)).get();
+                pc.set(Handle::add(pc.get(), 3_i32));
+                bank_3 = ((pp).bank() as i32);
+                __state = if !Handle::is_null(fns::hsd_804D0948(ctx).at(bank_3).get()) {
+                    316
+                } else {
+                    317
+                };
+            }
+            91 => {
+                baseLife = shl_i32(
+                    (({
+                        let __t9 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t9
+                    })
+                    .get() as i32),
+                    (8_i32 as u32),
+                );
+                baseLife = baseLife.wrapping_add(
+                    (({
+                        let __t10 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t10
+                    })
+                    .get() as i32),
+                );
+                randomRange = shl_i32(
+                    (({
+                        let __t11 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t11
+                    })
+                    .get() as i32),
+                    (8_i32 as u32),
+                );
+                randomRange = randomRange.wrapping_add(
+                    (({
+                        let __t12 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t12
+                    })
+                    .get() as i32),
+                );
+                (pp).set_life(
+                    (baseLife.wrapping_add(fp::fctiwz(
+                        (fp::fmuls(fp::frsp(randomRange as f64), fns::HSD_Randf(ctx))),
+                    )) as u16),
+                );
+                __state = 141;
+            }
+            92 => {
+                threshold = (({
+                    let __t13 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t13
+                })
+                .get() as i32);
+                __state = if threshold >= fp::fctiwz((fp::fmuls(100.0, fns::HSD_Randf(ctx)))) {
+                    359
+                } else {
+                    360
+                };
+            }
+            93 => {
+                q_2.set(pc.get());
+                inl_psReadFloat(ctx, q_2);
+                pc.set(q_2.get());
+                (pp).pos().set_x(fp::fadds(
+                    (pp).pos().x(),
+                    fp::fmsubs(
+                        fp::fmuls(
+                            2.0,
+                            ((Handle::cast::<Val<'a, F32>>(
+                                statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                            ))
+                            .get()),
+                        ),
+                        fns::HSD_Randf(ctx),
+                        ((Handle::cast::<Val<'a, F32>>(
+                            statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                        ))
+                        .get()),
+                    ),
+                ));
+                q_3.set(pc.get());
+                inl_psReadFloat(ctx, q_3);
+                pc.set(q_3.get());
+                (pp).pos().set_y(fp::fadds(
+                    (pp).pos().y(),
+                    fp::fmsubs(
+                        fp::fmuls(
+                            2.0,
+                            ((Handle::cast::<Val<'a, F32>>(
+                                statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                            ))
+                            .get()),
+                        ),
+                        fns::HSD_Randf(ctx),
+                        ((Handle::cast::<Val<'a, F32>>(
+                            statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                        ))
+                        .get()),
+                    ),
+                ));
+                q_4.set(pc.get());
+                inl_psReadFloat(ctx, q_4);
+                pc.set(q_4.get());
+                (pp).pos().set_z(fp::fadds(
+                    (pp).pos().z(),
+                    fp::fmsubs(
+                        fp::fmuls(
+                            2.0,
+                            ((Handle::cast::<Val<'a, F32>>(
+                                statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                            ))
+                            .get()),
+                        ),
+                        fns::HSD_Randf(ctx),
+                        ((Handle::cast::<Val<'a, F32>>(
+                            statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                        ))
+                        .get()),
+                    ),
+                ));
+                __state = 141;
+            }
+            94 => {
+                p_24.set(pc.get());
+                inl_psReadFloat(ctx, p_24);
+                pc.set(p_24.get());
+                fns::hsd_80398F8C(
+                    ctx,
+                    pp,
+                    ((Handle::cast::<Val<'a, F32>>(
+                        statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                    ))
+                    .get()),
+                );
+                __state = 141;
+            }
+            95 => {
+                idx_6 = shl_i32(
+                    (({
+                        let __t14 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t14
+                    })
+                    .get() as i32),
+                    (8_i32 as u32),
+                );
+                idx_6 = idx_6.wrapping_add(
+                    (({
+                        let __t15 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t15
+                    })
+                    .get() as i32),
+                );
+                randomRange_2 = shl_i32(
+                    (({
+                        let __t16 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t16
+                    })
+                    .get() as i32),
+                    (8_i32 as u32),
+                );
+                randomRange_2 = randomRange_2.wrapping_add(
+                    (({
+                        let __t17 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t17
+                    })
+                    .get() as i32),
+                );
+                idx_6 = idx_6.wrapping_add(fp::fctiwz(
+                    (fp::fmuls(fp::frsp(randomRange_2 as f64), fns::HSD_Randf(ctx))),
+                ));
+                bank = ((pp).bank() as i32);
+                __state = if !Handle::is_null(fns::hsd_804D0948(ctx).at(((pp).bank() as i32)).get())
+                {
+                    367
+                } else {
+                    368
+                };
+            }
+            96 => {
+                p_25.set(pc.get());
+                inl_psReadFloat(ctx, p_25);
+                pc.set(p_25.get());
+                scale = ((Handle::cast::<Val<'a, F32>>(
+                    statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                ))
+                .get());
+                (pp).vel().set_x(fp::fmuls((pp).vel().x(), scale));
+                (pp).vel().set_y(fp::fmuls((pp).vel().y(), scale));
+                (pp).vel().set_z(fp::fmuls((pp).vel().z(), scale));
+                __state = 141;
+            }
+            97 => {
+                p_26.set(pc.get());
+                (pp).set_sizeCount(
+                    (({
+                        let __t19 = p_26.get();
+                        p_26.set(Handle::add(p_26.get(), 1));
+                        __t19
+                    })
+                    .get() as u16),
+                );
+                cnt_2 = (pp).sizeCount();
+                __state = if (((cnt_2 as i32) & 128_i32) != 0) {
+                    401
+                } else {
+                    402
+                };
+            }
+            98 => {
+                (pp).set_kind(((pp).kind() | ((enums::PrimEnv as i32) as u32)));
+                __state = 141;
+            }
+            99 => {
+                (pp).set_kind(
+                    ((pp).kind() & ((!((enums::MirrorS as i32) | (enums::MirrorT as i32))) as u32)),
+                );
+                __state = 141;
+            }
+            100 => {
+                (pp).set_kind(((pp).kind() & ((!(enums::MirrorT as i32)) as u32)));
+                (pp).set_kind(((pp).kind() | ((enums::MirrorS as i32) as u32)));
+                __state = 141;
+            }
+            101 => {
+                (pp).set_kind(((pp).kind() & ((!(enums::MirrorS as i32)) as u32)));
+                (pp).set_kind(((pp).kind() | ((enums::MirrorT as i32) as u32)));
+                __state = 141;
+            }
+            102 => {
+                (pp).set_kind(
+                    ((pp).kind() | (((enums::MirrorS as i32) | (enums::MirrorT as i32)) as u32)),
+                );
+                __state = 141;
+            }
+            103 => {
+                srt_5 = (pp).appsrt();
+                __state = if Handle::is_null(srt_5) { 413 } else { 414 };
+            }
+            104 => {
+                __state = if ((pp).aCmpCount() as i32) != 0_i32 {
+                    422
+                } else {
+                    423
+                };
+            }
+            105 => {
+                (pp).set_kind(((pp).kind() | ((enums::TexInterpNear as i32) as u32)));
+                __state = 141;
+            }
+            106 => {
+                (pp).set_kind(((pp).kind() & ((!(enums::TexInterpNear as i32)) as u32)));
+                __state = 141;
+            }
+            107 => {
+                p_3 = pc.get();
+                (pp).set_rotateCount(
+                    (({
+                        let __t24 = p_3;
+                        p_3 = Handle::add(p_3, 1);
+                        __t24
+                    })
+                    .get() as u16),
+                );
+                cnt_4 = (pp).rotateCount();
+                __state = if (((cnt_4 as i32) & 128_i32) != 0) {
+                    435
+                } else {
+                    436
+                };
+            }
+            108 => {
+                jobj_4 = statics::sysdolphin__baselib__particle::hsd_804D08E8(ctx)
+                    .at((({
+                        let __t26 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t26
+                    })
+                    .get() as i32)
+                        .wrapping_add(((pp).pJObjOfs() as i32)))
+                    .get();
+                __state = if Handle::is_null(jobj_4) { 442 } else { 443 };
+            }
+            109 => {
+                idx_7 = (({
+                    let __t28 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t28
+                })
+                .get() as i32);
+                idx_7 = idx_7.wrapping_add(((pp).pJObjOfs() as i32));
+                inl_psReadFloat(ctx, pc);
+                force = ((Handle::cast::<Val<'a, F32>>(
+                    statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                ))
+                .get());
+                inl_psReadFloat(ctx, pc);
+                range_2 = ((Handle::cast::<Val<'a, F32>>(
+                    statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                ))
+                .get());
+                jobj_5 = statics::sysdolphin__baselib__particle::hsd_804D08E8(ctx)
+                    .at(idx_7)
+                    .get();
+                __state = if fns::hsd_803991D8(
+                    ctx,
+                    Handle::cast::<HSD_Generator<'a>>(pp),
+                    jobj_5,
+                    force,
+                    range_2,
+                ) != 0_i32
+                {
+                    457
+                } else {
+                    458
+                };
+            }
+            110 => {
+                linkNo_4 = ((pp).linkNo() as i32);
+                bank = ((pp).bank() as i32);
+                idx_8 = shl_i32(
+                    ((Handle::add(pc.get(), 0_i32)).get() as i32),
+                    (8_i32 as u32),
+                );
+                idx_8 = idx_8.wrapping_add(((Handle::add(pc.get(), 1_i32)).get() as i32));
+                pc.set(Handle::add(pc.get(), 2_i32));
+                __state = if linkNo_4 >= 8_i32 { 462 } else { 464 };
+            }
+            111 => {
+                bank = ((pp).bank() as i32);
+                idx_9 = shl_i32(
+                    ((Handle::add(pc.get(), 0_i32)).get() as i32),
+                    (8_i32 as u32),
+                );
+                idx_9 = idx_9.wrapping_add(((Handle::add(pc.get(), 1_i32)).get() as i32));
+                pc.set(Handle::add(pc.get(), 2_i32));
+                __state = if !Handle::is_null(fns::hsd_804D0948(ctx).at(((pp).bank() as i32)).get())
+                {
+                    492
+                } else {
+                    493
+                };
+            }
+            112 => {
+                __state = if ((pp).primColCount() as i32) != 0_i32 {
+                    525
+                } else {
+                    526
+                };
+            }
+            113 => {
+                __state = if ((pp).envColCount() as i32) != 0_i32 {
+                    557
+                } else {
+                    558
+                };
+            }
+            114 => {
+                (pp).set_poseNum(
+                    ({
+                        let __t39 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t39
+                    })
+                    .get(),
+                );
+                randRange = fp::frsp(
+                    ({
+                        let __t40 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t40
+                    })
+                    .get() as f64,
+                );
+                (pp).set_poseNum(
+                    (fp::fctiwz(
+                        (fp::fmadds(
+                            randRange,
+                            fns::HSD_Randf(ctx),
+                            fp::frsp((pp).poseNum() as f64),
+                        )),
+                    ) as u8),
+                );
+                bank_4 = (pp).bank();
+                tgIdx_2 = (pp).texGroup();
+                tga_2 = fns::psTexGroupArray(ctx).at((bank_4 as i32)).get();
+                texGrp_2 = (Handle::add(tga_2, (tgIdx_2 as i32))).get();
+                __state = if !Handle::is_null(texGrp_2) { 589 } else { 590 };
+            }
+            115 => {
+                q_6.set(pc.get());
+                inl_psReadFloat(ctx, q_6);
+                pc.set(q_6.get());
+                base_speed = ((Handle::cast::<Val<'a, F32>>(
+                    statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                ))
+                .get());
+                q_7.set(pc.get());
+                inl_psReadFloat(ctx, q_7);
+                pc.set(q_7.get());
+                random_range = ((Handle::cast::<Val<'a, F32>>(
+                    statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                ))
+                .get());
+                base_speed = fp::fmadds(random_range, fns::HSD_Randf(ctx), base_speed);
+                mag = fp::fadds(
+                    fp::fadds(
+                        fp::fmuls((pp).vel().x(), (pp).vel().x()),
+                        fp::fmuls((pp).vel().y(), (pp).vel().y()),
+                    ),
+                    fp::fmuls((pp).vel().z(), (pp).vel().z()),
+                );
+                __state = if mag > 0.0 { 593 } else { 594 };
+            }
+            116 => {
+                p_4 = pc.get();
+                q_8.set(p_4);
+                inl_psReadFloat(ctx, q_8);
+                p_4 = q_8.get();
+                (pp).vel().set_x(fp::fmuls(
+                    (pp).vel().x(),
+                    ((Handle::cast::<Val<'a, F32>>(
+                        statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                    ))
+                    .get()),
+                ));
+                q_9.set(p_4);
+                inl_psReadFloat(ctx, q_9);
+                p_4 = q_9.get();
+                (pp).vel().set_y(fp::fmuls(
+                    (pp).vel().y(),
+                    ((Handle::cast::<Val<'a, F32>>(
+                        statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                    ))
+                    .get()),
+                ));
+                q_10.set(p_4);
+                inl_psReadFloat(ctx, q_10);
+                p_4 = q_10.get();
+                pc.set(p_4);
+                (pp).vel().set_z(fp::fmuls(
+                    (pp).vel().z(),
+                    ((Handle::cast::<Val<'a, F32>>(
+                        statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                    ))
+                    .get()),
+                ));
+                __state = 141;
+            }
+            117 => {
+                idx_10 = ({
+                    let __t41 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t41
+                })
+                .get();
+                (pp).set_kind(
+                    ((pp).kind()
+                        | (((shl_i32(
+                            (((idx_10 as i32).wrapping_add(((pp).pJObjOfs() as i32))) & 7_i32),
+                            (12_i32 as u32),
+                        )) | 0x8000_i32) as u32)),
+                );
+                __state = 141;
+            }
+            118 => {
+                __state = if ((pp).primColCount() as i32) != 0_i32 {
+                    602
+                } else {
+                    603
+                };
+            }
+            119 => {
+                __state = if ((pp).envColCount() as i32) != 0_i32 {
+                    625
+                } else {
+                    626
+                };
+            }
+            120 => {
+                __state = if ((pp).primColCount() as i32) != 0_i32 {
+                    648
+                } else {
+                    649
+                };
+            }
+            121 => {
+                __state = if ((pp).primColCount() as i32) != 0_i32 {
+                    709
+                } else {
+                    710
+                };
+            }
+            122 => {
+                idx_11 = (({
+                    let __t64 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t64
+                })
+                .get() as i32);
+                __state = if idx_11 == 0_i32 { 810 } else { 812 };
+            }
+            123 => {
+                idx_12 = (({
+                    let __t65 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t65
+                })
+                .get() as i32);
+                p_27.set(pc.get());
+                inl_psReadFloat(ctx, p_27);
+                pc.set(p_27.get());
+                v = ((Handle::cast::<Val<'a, F32>>(
+                    statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                ))
+                .get());
+                __state = if (!Handle::is_null(((pp).r#gen()).userfunc()))
+                    && (!Handle::is_null((((pp).r#gen()).userfunc()).setUserData()))
+                {
+                    815
+                } else {
+                    817
+                };
+            }
+            124 => {
+                (pp).set_kind(((pp).kind() | ((enums::TexEdge as i32) as u32)));
+                __state = 141;
+            }
+            125 => {
+                (pp).set_palNum(
+                    ({
+                        let __t66 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t66
+                    })
+                    .get(),
+                );
+                __state = 141;
+            }
+            126 => {
+                mode = (((({
+                    let __t67 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t67
+                })
+                .get() as i32)
+                    & 3_i32) as u8);
+                __state = match (mode as i32) {
+                    0_i32 => 825,
+                    1_i32 => 826,
+                    2_i32 => 827,
+                    3_i32 => 828,
+                    _ => 829,
+                };
+            }
+            127 => {
+                mode_2 = (((({
+                    let __t68 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t68
+                })
+                .get() as i32)
+                    & 3_i32) as u8);
+                __state = match (mode_2 as i32) {
+                    0_i32 => 841,
+                    1_i32 => 842,
+                    2_i32 => 843,
+                    3_i32 => 844,
+                    _ => 845,
+                };
+            }
+            128 => {
+                (pp).set_kind(((pp).kind() | ((enums::DirVec as i32) as u32)));
+                __state = 141;
+            }
+            129 => {
+                (pp).set_kind(((pp).kind() & ((!(enums::DirVec as i32)) as u32)));
+                __state = 141;
+            }
+            130 => {
+                p_28.set(pc.get());
+                inl_psReadFloat(ctx, p_28);
+                pc.set(p_28.get());
+                trail = ((Handle::cast::<Val<'a, F32>>(
+                    statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                ))
+                .get());
+                __state = if trail < 0.0 { 859 } else { 861 };
+            }
+            131 => {
+                __state = if ((pp).matColCount() as i32) != 0_i32 {
+                    864
+                } else {
+                    865
+                };
+            }
+            132 => {
+                __state = if ((pp).ambColCount() as i32) != 0_i32 {
+                    881
+                } else {
+                    882
+                };
+            }
+            133 => {
+                p_9 = pc.get();
+                q_11.set(p_9);
+                inl_psReadFloat(ctx, q_11);
+                p_9 = q_11.get();
+                base_val = ((Handle::cast::<Val<'a, F32>>(
+                    statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                ))
+                .get());
+                q_12.set(p_9);
+                inl_psReadFloat(ctx, q_12);
+                p_9 = q_12.get();
+                range_val = ((Handle::cast::<Val<'a, F32>>(
+                    statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                ))
+                .get());
+                pc.set(p_9);
+                timing_2 = (({
+                    let __t79 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t79
+                })
+                .get() as i32);
+                __state = if timing_2 != 0_i32 { 898 } else { 900 };
+            }
+            134 => {
+                (pp).set_loopCount(
+                    ({
+                        let __t80 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t80
+                    })
+                    .get(),
+                );
+                (pp).set_cmdLoopPtr(
+                    (((Handle::addr(pc.get()).wrapping_sub(Handle::addr((pp).cmdList())) as i32)
+                        / 1) as u16),
+                );
+                __state = 141;
+            }
+            135 => {
+                __state = if ({
+                    (pp).set_loopCount((pp).loopCount().wrapping_sub(1));
+                    (pp).loopCount()
+                } as i32)
+                    != 0_i32
+                {
+                    904
+                } else {
+                    905
+                };
+            }
+            136 => {
+                (pp).set_cmdMarkPtr(
+                    (((Handle::addr(pc.get()).wrapping_sub(Handle::addr((pp).cmdList())) as i32)
+                        / 1) as u16),
+                );
+                __state = 141;
+            }
+            137 => {
+                pc.set(Handle::add((pp).cmdList(), ((pp).cmdMarkPtr() as i32)));
+                __state = 141;
+            }
+            138 => {
+                __state = 139;
+            }
+            139 => {
+                (pp).set_life((1_i32 as u16));
+                __state = 362;
+            }
+            140 => {
+                __state = 141;
+            }
+            141 => {
+                __state = 56;
+            }
+            142 => {
+                unreachable!();
+            }
+            143 => {
+                __state = 78;
+            }
+            144 => {
+                p_10.set(pc.get());
+                inl_psReadFloat(ctx, p_10);
+                pc.set(p_10.get());
+                (pp).pos().set_x(
+                    ((Handle::cast::<Val<'a, F32>>(
+                        statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                    ))
+                    .get()),
+                );
+                __state = 145;
+            }
+            145 => {
+                __state = if (((opcode as i32) & 2_i32) != 0) {
+                    147
+                } else {
+                    148
+                };
+            }
+            146 => {
+                unreachable!();
+            }
+            147 => {
+                p_11.set(pc.get());
+                inl_psReadFloat(ctx, p_11);
+                pc.set(p_11.get());
+                (pp).pos().set_y(
+                    ((Handle::cast::<Val<'a, F32>>(
+                        statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                    ))
+                    .get()),
+                );
+                __state = 148;
+            }
+            148 => {
+                __state = if (((opcode as i32) & 4_i32) != 0) {
+                    150
+                } else {
+                    151
+                };
+            }
+            149 => {
+                unreachable!();
+            }
+            150 => {
+                p_12.set(pc.get());
+                inl_psReadFloat(ctx, p_12);
+                pc.set(p_12.get());
+                (pp).pos().set_z(
+                    ((Handle::cast::<Val<'a, F32>>(
+                        statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                    ))
+                    .get()),
+                );
+                __state = 151;
+            }
+            151 => {
+                __state = 141;
+            }
+            152 => {
+                unreachable!();
+            }
+            153 => {
+                __state = 79;
+            }
+            154 => {
+                p_13.set(pc.get());
+                inl_psReadFloat(ctx, p_13);
+                pc.set(p_13.get());
+                (pp).pos().set_x(fp::fadds(
+                    (pp).pos().x(),
+                    ((Handle::cast::<Val<'a, F32>>(
+                        statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                    ))
+                    .get()),
+                ));
+                __state = 155;
+            }
+            155 => {
+                __state = if (((opcode as i32) & 2_i32) != 0) {
+                    157
+                } else {
+                    158
+                };
+            }
+            156 => {
+                unreachable!();
+            }
+            157 => {
+                p_14.set(pc.get());
+                inl_psReadFloat(ctx, p_14);
+                pc.set(p_14.get());
+                (pp).pos().set_y(fp::fadds(
+                    (pp).pos().y(),
+                    ((Handle::cast::<Val<'a, F32>>(
+                        statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                    ))
+                    .get()),
+                ));
+                __state = 158;
+            }
+            158 => {
+                __state = if (((opcode as i32) & 4_i32) != 0) {
+                    160
+                } else {
+                    161
+                };
+            }
+            159 => {
+                unreachable!();
+            }
+            160 => {
+                p_15.set(pc.get());
+                inl_psReadFloat(ctx, p_15);
+                pc.set(p_15.get());
+                (pp).pos().set_z(fp::fadds(
+                    (pp).pos().z(),
+                    ((Handle::cast::<Val<'a, F32>>(
+                        statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                    ))
+                    .get()),
+                ));
+                __state = 161;
+            }
+            161 => {
+                __state = 141;
+            }
+            162 => {
+                unreachable!();
+            }
+            163 => {
+                __state = 80;
+            }
+            164 => {
+                p_16.set(pc.get());
+                inl_psReadFloat(ctx, p_16);
+                pc.set(p_16.get());
+                (pp).vel().set_x(
+                    ((Handle::cast::<Val<'a, F32>>(
+                        statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                    ))
+                    .get()),
+                );
+                __state = 165;
+            }
+            165 => {
+                __state = if (((opcode as i32) & 2_i32) != 0) {
+                    167
+                } else {
+                    168
+                };
+            }
+            166 => {
+                unreachable!();
+            }
+            167 => {
+                p_17.set(pc.get());
+                inl_psReadFloat(ctx, p_17);
+                pc.set(p_17.get());
+                (pp).vel().set_y(
+                    ((Handle::cast::<Val<'a, F32>>(
+                        statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                    ))
+                    .get()),
+                );
+                __state = 168;
+            }
+            168 => {
+                __state = if (((opcode as i32) & 4_i32) != 0) {
+                    170
+                } else {
+                    171
+                };
+            }
+            169 => {
+                unreachable!();
+            }
+            170 => {
+                p_18.set(pc.get());
+                inl_psReadFloat(ctx, p_18);
+                pc.set(p_18.get());
+                (pp).vel().set_z(
+                    ((Handle::cast::<Val<'a, F32>>(
+                        statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                    ))
+                    .get()),
+                );
+                __state = 171;
+            }
+            171 => {
+                __state = 141;
+            }
+            172 => {
+                unreachable!();
+            }
+            173 => {
+                __state = 81;
+            }
+            174 => {
+                p_19.set(pc.get());
+                inl_psReadFloat(ctx, p_19);
+                pc.set(p_19.get());
+                (pp).vel().set_x(fp::fadds(
+                    (pp).vel().x(),
+                    ((Handle::cast::<Val<'a, F32>>(
+                        statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                    ))
+                    .get()),
+                ));
+                __state = 175;
+            }
+            175 => {
+                __state = if (((opcode as i32) & 2_i32) != 0) {
+                    177
+                } else {
+                    178
+                };
+            }
+            176 => {
+                unreachable!();
+            }
+            177 => {
+                p_20.set(pc.get());
+                inl_psReadFloat(ctx, p_20);
+                pc.set(p_20.get());
+                (pp).vel().set_y(fp::fadds(
+                    (pp).vel().y(),
+                    ((Handle::cast::<Val<'a, F32>>(
+                        statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                    ))
+                    .get()),
+                ));
+                __state = 178;
+            }
+            178 => {
+                __state = if (((opcode as i32) & 4_i32) != 0) {
+                    180
+                } else {
+                    181
+                };
+            }
+            179 => {
+                unreachable!();
+            }
+            180 => {
+                p_21.set(pc.get());
+                inl_psReadFloat(ctx, p_21);
+                pc.set(p_21.get());
+                (pp).vel().set_z(fp::fadds(
+                    (pp).vel().z(),
+                    ((Handle::cast::<Val<'a, F32>>(
+                        statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                    ))
+                    .get()),
+                ));
+                __state = 181;
+            }
+            181 => {
+                __state = 141;
+            }
+            182 => {
+                unreachable!();
+            }
+            183 => {
+                __state = 82;
+            }
+            184 => {
+                cnt = ((shl_i32(((cnt as i32) & 127_i32), (8_i32 as u32))).wrapping_add(
+                    (({
+                        let __t5 = p;
+                        p = Handle::add(p, 1);
+                        __t5
+                    })
+                    .get() as i32),
+                ) as u16);
+                (pp).set_sizeCount(cnt);
+                __state = 185;
+            }
+            185 => {
+                q.set(p);
+                inl_psReadFloat(ctx, q);
+                p = q.get();
+                pc.set(p);
+                (pp).set_sizeTarget(
+                    ((Handle::cast::<Val<'a, F32>>(
+                        statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                    ))
+                    .get()),
+                );
+                __state = if ((pp).sizeCount() as i32) == 0_i32 {
+                    187
+                } else {
+                    188
+                };
+            }
+            186 => {
+                unreachable!();
+            }
+            187 => {
+                (pp).set_size((pp).sizeTarget());
+                __state = 188;
+            }
+            188 => {
+                __state = 141;
+            }
+            189 => {
+                unreachable!();
+            }
+            190 => {
+                __state = 83;
+            }
+            191 => {
+                __state = 84;
+            }
+            192 => {
+                (pp).set_kind(((pp).kind() & ((!1_i32) as u32)));
+                __state = 193;
+            }
+            193 => {
+                __state = 141;
+            }
+            194 => {
+                (pp).set_kind(((pp).kind() | (1_i32 as u32)));
+                __state = 193;
+            }
+            195 => {
+                unreachable!();
+            }
+            196 => {
+                __state = 85;
+            }
+            197 => {
+                (pp).set_kind(((pp).kind() & ((!2_i32) as u32)));
+                __state = 198;
+            }
+            198 => {
+                __state = 141;
+            }
+            199 => {
+                (pp).set_kind(((pp).kind() | (2_i32 as u32)));
+                __state = 198;
+            }
+            200 => {
+                unreachable!();
+            }
+            201 => {
+                __state = 86;
+            }
+            202 => {
+                (child).set_idnum((pp).idnum());
+                (child).set_gen((pp).r#gen());
+                __state = if !Handle::is_null((pp).r#gen()) {
+                    205
+                } else {
+                    206
+                };
+            }
+            203 => {
+                __state = 141;
+            }
+            204 => {
+                unreachable!();
+            }
+            205 => {
+                ((pp).r#gen()).set_numChild(((pp).r#gen()).numChild().wrapping_add(1));
+                __state = 206;
+            }
+            206 => {
+                let _ = fns::psAttachParticleAppSRT(ctx, c, (pp).appsrt());
+                (child).pos().set_x((pp).pos().x());
+                (child).pos().set_y((pp).pos().y());
+                (child).pos().set_z((pp).pos().z());
+                let _ = fns::hsd_8039930C(ctx, c, pp);
+                __state = 203;
+            }
+            207 => {
+                unreachable!();
+            }
+            208 => {
+                __state = 87;
+            }
+            209 => {
+                idx_2 = ((Handle::add(fns::hsd_804D0948(ctx).at(((pp).bank() as i32)).get(), idx_2))
+                    .get() as i32);
+                __state = 210;
+            }
+            210 => {
+                linkNo_2 = ((pp).linkNo() as i32);
+                __state = if linkNo_2 >= 8_i32 { 212 } else { 214 };
+            }
+            211 => {
+                unreachable!();
+            }
+            212 => {
+                child = null::<HSD_Particle<'a>>(ctx);
+                __state = 213;
+            }
+            213 => {
+                c_2 = child;
+                __state = if !Handle::is_null(child) { 232 } else { 233 };
+            }
+            214 => {
+                __state = if bank >= 65_i32 { 216 } else { 218 };
+            }
+            215 => {
+                unreachable!();
+            }
+            216 => {
+                child = null::<HSD_Particle<'a>>(ctx);
+                __state = 217;
+            }
+            217 => {
+                __state = 213;
+            }
+            218 => {
+                __state = if idx_2 >= fns::psCmdListArray(ctx).at(bank).get() {
+                    220
+                } else {
+                    222
+                };
+            }
+            219 => {
+                unreachable!();
+            }
+            220 => {
+                child = null::<HSD_Particle<'a>>(ctx);
+                __state = 221;
+            }
+            221 => {
+                __state = 217;
+            }
+            222 => {
+                cl = (Handle::add(fns::ptclref_804D0E5C(ctx).at(bank).get(), idx_2)).get();
+                __state = if Handle::is_null(cl) { 224 } else { 226 };
+            }
+            223 => {
+                unreachable!();
+            }
+            224 => {
+                child = null::<HSD_Particle<'a>>(ctx);
+                __state = 225;
+            }
+            225 => {
+                __state = 221;
+            }
+            226 => {
+                tg = (Handle::add(
+                    fns::psTexGroupArray(ctx).at(bank).get(),
+                    ((cl).texGroup() as i32),
+                ))
+                .get();
+                __state = if !Handle::is_null(tg) { 228 } else { 230 };
+            }
+            227 => {
+                unreachable!();
+            }
+            228 => {
+                palflag_2 = ((tg).palflag() as i32);
+                __state = 229;
+            }
+            229 => {
+                child = fns::psGenerateParticle0(
+                    ctx,
+                    (pp).next_ref(),
+                    linkNo_2,
+                    bank,
+                    (cl).kind(),
+                    (cl).texGroup(),
+                    (cl).cmdList().at(0),
+                    ((cl).life() as i32),
+                    palflag_2,
+                    0.0,
+                    0.0,
+                    0.0,
+                    (cl).vx(),
+                    (cl).vy(),
+                    (cl).vz(),
+                    (cl).size(),
+                    (cl).grav(),
+                    (cl).fric(),
+                    null::<HSD_Generator<'a>>(ctx),
+                    0_i32,
+                );
+                __state = 225;
+            }
+            230 => {
+                palflag_2 = 0_i32;
+                __state = 229;
+            }
+            231 => {
+                unreachable!();
+            }
+            232 => {
+                (child).set_idnum((pp).idnum());
+                (child).set_gen((pp).r#gen());
+                __state = if !Handle::is_null((pp).r#gen()) {
+                    235
+                } else {
+                    236
+                };
+            }
+            233 => {
+                __state = 141;
+            }
+            234 => {
+                unreachable!();
+            }
+            235 => {
+                ((pp).r#gen()).set_numChild(((pp).r#gen()).numChild().wrapping_add(1));
+                __state = 236;
+            }
+            236 => {
+                let _ = fns::psAttachParticleAppSRT(ctx, c_2, (pp).appsrt());
+                (child).pos().set_x((pp).pos().x());
+                (child).pos().set_y((pp).pos().y());
+                (child).pos().set_z((pp).pos().z());
+                let _ = fns::hsd_8039930C(ctx, c_2, pp);
+                __state = 233;
+            }
+            237 => {
+                unreachable!();
+            }
+            238 => {
+                __state = 88;
+            }
+            239 => {
+                (gchild).set_idnum((pp).idnum());
+                __state = if !Handle::is_null((pp).r#gen()) {
+                    242
+                } else {
+                    243
+                };
+            }
+            240 => {
+                __state = 141;
+            }
+            241 => {
+                unreachable!();
+            }
+            242 => {
+                jobj = ((pp).r#gen()).jobj();
+                __state = if !Handle::is_null(gchild) { 245 } else { 246 };
+            }
+            243 => {
+                (gchild).set_type(((((gchild).r#type() as i32) | 0x100_i32) as u16));
+                __state = if !Handle::is_null((pp).r#gen()) {
+                    251
+                } else {
+                    252
+                };
+            }
+            244 => {
+                unreachable!();
+            }
+            245 => {
+                (gchild).set_jobj(jobj);
+                __state = if !Handle::is_null(jobj) { 248 } else { 249 };
+            }
+            246 => {
+                __state = 243;
+            }
+            247 => {
+                unreachable!();
+            }
+            248 => {
+                inl_ref_INC(ctx, Handle::cast::<Addr<'a>>(jobj));
+                __state = 249;
+            }
+            249 => {
+                __state = 246;
+            }
+            250 => {
+                unreachable!();
+            }
+            251 => {
+                (gchild).set_type(
+                    ((((gchild).r#type() as i32) | ((((pp).r#gen()).r#type() as i32) & 0x1e00_i32))
+                        as u16),
+                );
+                __state = if (((gchild).kind() & ((shl_i32(1_i32, (17_i32 as u32))) as u32)) != 0) {
+                    254
+                } else {
+                    255
+                };
+            }
+            252 => {
+                __state = if !Handle::is_null(
+                    ({
+                        let __t6 = (pp).appsrt();
+                        srt = __t6;
+                        __t6
+                    }),
+                ) {
+                    257
+                } else {
+                    258
+                };
+            }
+            253 => {
+                unreachable!();
+            }
+            254 => {
+                (gchild).set_type(
+                    ((((gchild).r#type() as i32) & (!(shl_i32(1_i32, (9_i32 as u32))))) as u16),
+                );
+                __state = 255;
+            }
+            255 => {
+                __state = 252;
+            }
+            256 => {
+                unreachable!();
+            }
+            257 => {
+                let _ = fns::psAttachGeneratorAppSRT(ctx, gchild, srt);
+                __state = 258;
+            }
+            258 => {
+                __state = if !Handle::is_null((pp).appsrt()) {
+                    260
+                } else {
+                    262
+                };
+            }
+            259 => {
+                unreachable!();
+            }
+            260 => {
+                __state = if Handle::is_null((gchild).appsrt()) {
+                    264
+                } else {
+                    265
+                };
+            }
+            261 => {
+                __state = 240;
+            }
+            262 => {
+                __state = if !Handle::is_null((gchild).appsrt()) {
+                    272
+                } else {
+                    274
+                };
+            }
+            263 => {
+                unreachable!();
+            }
+            264 => {
+                __state = 141;
+            }
+            265 => {
+                __state = if Handle::addr((gchild).appsrt()) == Handle::addr((pp).appsrt()) {
+                    268
+                } else {
+                    270
+                };
+            }
+            266 => {
+                unreachable!();
+            }
+            267 => {
+                __state = 265;
+            }
+            268 => {
+                (gchild).pos().set_x((pp).pos().x());
+                (gchild).pos().set_y((pp).pos().y());
+                (gchild).pos().set_z((pp).pos().z());
+                __state = 269;
+            }
+            269 => {
+                __state = 261;
+            }
+            270 => {
+                ((gchild).appsrt())
+                    .translate()
+                    .set_x(((pp).appsrt()).translate().x());
+                ((gchild).appsrt())
+                    .translate()
+                    .set_y(((pp).appsrt()).translate().y());
+                ((gchild).appsrt())
+                    .translate()
+                    .set_z(((pp).appsrt()).translate().z());
+                __state = 269;
+            }
+            271 => {
+                unreachable!();
+            }
+            272 => {
+                ((gchild).appsrt()).translate().set_x((pp).pos().x());
+                ((gchild).appsrt()).translate().set_y((pp).pos().y());
+                ((gchild).appsrt()).translate().set_z((pp).pos().z());
+                __state = 273;
+            }
+            273 => {
+                __state = 261;
+            }
+            274 => {
+                (gchild).pos().set_x((pp).pos().x());
+                (gchild).pos().set_y((pp).pos().y());
+                (gchild).pos().set_z((pp).pos().z());
+                __state = 273;
+            }
+            275 => {
+                unreachable!();
+            }
+            276 => {
+                __state = 89;
+            }
+            277 => {
+                __state = 141;
+            }
+            278 => {
+                (gchild).set_idnum((pp).idnum());
+                __state = if !Handle::is_null((pp).r#gen()) {
+                    281
+                } else {
+                    282
+                };
+            }
+            279 => {
+                unreachable!();
+            }
+            280 => {
+                __state = 278;
+            }
+            281 => {
+                jobj_2 = ((pp).r#gen()).jobj();
+                __state = if !Handle::is_null(gchild) { 284 } else { 285 };
+            }
+            282 => {
+                (gchild).set_type(((((gchild).r#type() as i32) | 0x100_i32) as u16));
+                __state = if !Handle::is_null((pp).r#gen()) {
+                    290
+                } else {
+                    291
+                };
+            }
+            283 => {
+                unreachable!();
+            }
+            284 => {
+                (gchild).set_jobj(jobj_2);
+                __state = if !Handle::is_null(jobj_2) { 287 } else { 288 };
+            }
+            285 => {
+                __state = 282;
+            }
+            286 => {
+                unreachable!();
+            }
+            287 => {
+                inl_ref_INC(ctx, Handle::cast::<Addr<'a>>(jobj_2));
+                __state = 288;
+            }
+            288 => {
+                __state = 285;
+            }
+            289 => {
+                unreachable!();
+            }
+            290 => {
+                (gchild).set_type(
+                    ((((gchild).r#type() as i32) | ((((pp).r#gen()).r#type() as i32) & 0x1e00_i32))
+                        as u16),
+                );
+                __state = if (((gchild).kind() & ((shl_i32(1_i32, (17_i32 as u32))) as u32)) != 0) {
+                    293
+                } else {
+                    294
+                };
+            }
+            291 => {
+                __state = if !Handle::is_null(
+                    ({
+                        let __t7 = (pp).appsrt();
+                        srt_2 = __t7;
+                        __t7
+                    }),
+                ) {
+                    296
+                } else {
+                    297
+                };
+            }
+            292 => {
+                unreachable!();
+            }
+            293 => {
+                (gchild).set_type(
+                    ((((gchild).r#type() as i32) & (!(shl_i32(1_i32, (9_i32 as u32))))) as u16),
+                );
+                __state = 294;
+            }
+            294 => {
+                __state = 291;
+            }
+            295 => {
+                unreachable!();
+            }
+            296 => {
+                let _ = fns::psAttachGeneratorAppSRT(ctx, gchild, srt_2);
+                __state = 297;
+            }
+            297 => {
+                (gchild).set_kind(((gchild).kind() & 0xf1ffffff_u32));
+                (gchild).set_kind(
+                    ((gchild).kind()
+                        | ((shl_i32(((flags as i32) & 7_i32), (25_i32 as u32))) as u32)),
+                );
+                __state = if !Handle::is_null((pp).appsrt()) {
+                    299
+                } else {
+                    301
+                };
+            }
+            298 => {
+                unreachable!();
+            }
+            299 => {
+                __state = if Handle::is_null((gchild).appsrt()) {
+                    303
+                } else {
+                    304
+                };
+            }
+            300 => {
+                __state = 141;
+            }
+            301 => {
+                __state = if !Handle::is_null((gchild).appsrt()) {
+                    311
+                } else {
+                    313
+                };
+            }
+            302 => {
+                unreachable!();
+            }
+            303 => {
+                __state = 141;
+            }
+            304 => {
+                __state = if Handle::addr((gchild).appsrt()) == Handle::addr((pp).appsrt()) {
+                    307
+                } else {
+                    309
+                };
+            }
+            305 => {
+                unreachable!();
+            }
+            306 => {
+                __state = 304;
+            }
+            307 => {
+                (gchild).pos().set_x((pp).pos().x());
+                (gchild).pos().set_y((pp).pos().y());
+                (gchild).pos().set_z((pp).pos().z());
+                __state = 308;
+            }
+            308 => {
+                __state = 300;
+            }
+            309 => {
+                ((gchild).appsrt())
+                    .translate()
+                    .set_x(((pp).appsrt()).translate().x());
+                ((gchild).appsrt())
+                    .translate()
+                    .set_y(((pp).appsrt()).translate().y());
+                ((gchild).appsrt())
+                    .translate()
+                    .set_z(((pp).appsrt()).translate().z());
+                __state = 308;
+            }
+            310 => {
+                unreachable!();
+            }
+            311 => {
+                ((gchild).appsrt()).translate().set_x((pp).pos().x());
+                ((gchild).appsrt()).translate().set_y((pp).pos().y());
+                ((gchild).appsrt()).translate().set_z((pp).pos().z());
+                __state = 312;
+            }
+            312 => {
+                __state = 300;
+            }
+            313 => {
+                (gchild).pos().set_x((pp).pos().x());
+                (gchild).pos().set_y((pp).pos().y());
+                (gchild).pos().set_z((pp).pos().z());
+                __state = 312;
+            }
+            314 => {
+                unreachable!();
+            }
+            315 => {
+                __state = 90;
+            }
+            316 => {
+                idx_5 =
+                    ((Handle::add(fns::hsd_804D0948(ctx).at(bank_3).get(), idx_5)).get() as i32);
+                __state = 317;
+            }
+            317 => {
+                gchild = fns::hsd_8039F05C(ctx, ((pp).linkNo() as i32), bank_3, idx_5);
+                __state = if Handle::is_null(gchild) { 319 } else { 320 };
+            }
+            318 => {
+                unreachable!();
+            }
+            319 => {
+                __state = 141;
+            }
+            320 => {
+                (gchild).set_idnum((pp).idnum());
+                __state = if !Handle::is_null((pp).r#gen()) {
+                    323
+                } else {
+                    324
+                };
+            }
+            321 => {
+                unreachable!();
+            }
+            322 => {
+                __state = 320;
+            }
+            323 => {
+                jobj_3 = ((pp).r#gen()).jobj();
+                __state = if !Handle::is_null(gchild) { 326 } else { 327 };
+            }
+            324 => {
+                (gchild).set_type(((((gchild).r#type() as i32) | 0x100_i32) as u16));
+                __state = if !Handle::is_null((pp).r#gen()) {
+                    332
+                } else {
+                    333
+                };
+            }
+            325 => {
+                unreachable!();
+            }
+            326 => {
+                (gchild).set_jobj(jobj_3);
+                __state = if !Handle::is_null(jobj_3) { 329 } else { 330 };
+            }
+            327 => {
+                __state = 324;
+            }
+            328 => {
+                unreachable!();
+            }
+            329 => {
+                inl_ref_INC(ctx, Handle::cast::<Addr<'a>>(jobj_3));
+                __state = 330;
+            }
+            330 => {
+                __state = 327;
+            }
+            331 => {
+                unreachable!();
+            }
+            332 => {
+                (gchild).set_type(
+                    ((((gchild).r#type() as i32) | ((((pp).r#gen()).r#type() as i32) & 0x1e00_i32))
+                        as u16),
+                );
+                __state = if (((gchild).kind() & ((shl_i32(1_i32, (17_i32 as u32))) as u32)) != 0) {
+                    335
+                } else {
+                    336
+                };
+            }
+            333 => {
+                __state = if !Handle::is_null(
+                    ({
+                        let __t8 = (pp).appsrt();
+                        srt_3 = __t8;
+                        __t8
+                    }),
+                ) {
+                    338
+                } else {
+                    339
+                };
+            }
+            334 => {
+                unreachable!();
+            }
+            335 => {
+                (gchild).set_type(
+                    ((((gchild).r#type() as i32) & (!(shl_i32(1_i32, (9_i32 as u32))))) as u16),
+                );
+                __state = 336;
+            }
+            336 => {
+                __state = 333;
+            }
+            337 => {
+                unreachable!();
+            }
+            338 => {
+                let _ = fns::psAttachGeneratorAppSRT(ctx, gchild, srt_3);
+                __state = 339;
+            }
+            339 => {
+                (gchild).set_kind(((gchild).kind() & 0xf1ffffff_u32));
+                (gchild).set_kind(
+                    ((gchild).kind()
+                        | ((shl_i32(((flags_2 as i32) & 7_i32), (25_i32 as u32))) as u32)),
+                );
+                __state = if !Handle::is_null((pp).appsrt()) {
+                    341
+                } else {
+                    343
+                };
+            }
+            340 => {
+                unreachable!();
+            }
+            341 => {
+                __state = if Handle::is_null((gchild).appsrt()) {
+                    345
+                } else {
+                    346
+                };
+            }
+            342 => {
+                __state = 141;
+            }
+            343 => {
+                __state = if !Handle::is_null((gchild).appsrt()) {
+                    353
+                } else {
+                    355
+                };
+            }
+            344 => {
+                unreachable!();
+            }
+            345 => {
+                __state = 141;
+            }
+            346 => {
+                __state = if Handle::addr((gchild).appsrt()) == Handle::addr((pp).appsrt()) {
+                    349
+                } else {
+                    351
+                };
+            }
+            347 => {
+                unreachable!();
+            }
+            348 => {
+                __state = 346;
+            }
+            349 => {
+                (gchild).pos().set_x((pp).pos().x());
+                (gchild).pos().set_y((pp).pos().y());
+                (gchild).pos().set_z((pp).pos().z());
+                __state = 350;
+            }
+            350 => {
+                __state = 342;
+            }
+            351 => {
+                ((gchild).appsrt())
+                    .translate()
+                    .set_x(((pp).appsrt()).translate().x());
+                ((gchild).appsrt())
+                    .translate()
+                    .set_y(((pp).appsrt()).translate().y());
+                ((gchild).appsrt())
+                    .translate()
+                    .set_z(((pp).appsrt()).translate().z());
+                __state = 350;
+            }
+            352 => {
+                unreachable!();
+            }
+            353 => {
+                ((gchild).appsrt()).translate().set_x((pp).pos().x());
+                ((gchild).appsrt()).translate().set_y((pp).pos().y());
+                ((gchild).appsrt()).translate().set_z((pp).pos().z());
+                __state = 354;
+            }
+            354 => {
+                __state = 342;
+            }
+            355 => {
+                (gchild).pos().set_x((pp).pos().x());
+                (gchild).pos().set_y((pp).pos().y());
+                (gchild).pos().set_z((pp).pos().z());
+                __state = 354;
+            }
+            356 => {
+                unreachable!();
+            }
+            357 => {
+                __state = 91;
+            }
+            358 => {
+                __state = 92;
+            }
+            359 => {
+                (pp).set_life((1_i32 as u16));
+                __state = 362;
+            }
+            360 => {
+                __state = 141;
+            }
+            361 => {
+                unreachable!();
+            }
+            362 => {
+                (pp).set_cmdPtr(
+                    (((Handle::addr(pc.get()).wrapping_sub(Handle::addr((pp).cmdList())) as i32)
+                        / 1) as u16),
+                );
+                (pp).set_cmdWait(operand);
+                __state = 44;
+            }
+            363 => {
+                __state = 360;
+            }
+            364 => {
+                __state = 93;
+            }
+            365 => {
+                __state = 94;
+            }
+            366 => {
+                __state = 95;
+            }
+            367 => {
+                idx_6 = ((Handle::add(fns::hsd_804D0948(ctx).at(((pp).bank() as i32)).get(), idx_6))
+                    .get() as i32);
+                __state = 368;
+            }
+            368 => {
+                linkNo_3 = ((pp).linkNo() as i32);
+                __state = if linkNo_3 >= 8_i32 { 370 } else { 372 };
+            }
+            369 => {
+                unreachable!();
+            }
+            370 => {
+                child = null::<HSD_Particle<'a>>(ctx);
+                __state = 371;
+            }
+            371 => {
+                c_3 = child;
+                __state = if !Handle::is_null(child) { 390 } else { 391 };
+            }
+            372 => {
+                __state = if bank >= 65_i32 { 374 } else { 376 };
+            }
+            373 => {
+                unreachable!();
+            }
+            374 => {
+                child = null::<HSD_Particle<'a>>(ctx);
+                __state = 375;
+            }
+            375 => {
+                __state = 371;
+            }
+            376 => {
+                __state = if idx_6 >= fns::psCmdListArray(ctx).at(bank).get() {
+                    378
+                } else {
+                    380
+                };
+            }
+            377 => {
+                unreachable!();
+            }
+            378 => {
+                child = null::<HSD_Particle<'a>>(ctx);
+                __state = 379;
+            }
+            379 => {
+                __state = 375;
+            }
+            380 => {
+                cl = (Handle::add(fns::ptclref_804D0E5C(ctx).at(bank).get(), idx_6)).get();
+                __state = if Handle::is_null(cl) { 382 } else { 384 };
+            }
+            381 => {
+                unreachable!();
+            }
+            382 => {
+                child = null::<HSD_Particle<'a>>(ctx);
+                __state = 383;
+            }
+            383 => {
+                __state = 379;
+            }
+            384 => {
+                tg = (Handle::add(
+                    fns::psTexGroupArray(ctx).at(bank).get(),
+                    ((cl).texGroup() as i32),
+                ))
+                .get();
+                __state = if !Handle::is_null(tg) { 386 } else { 388 };
+            }
+            385 => {
+                unreachable!();
+            }
+            386 => {
+                palflag_3 = ((tg).palflag() as i32);
+                __state = 387;
+            }
+            387 => {
+                child = fns::psGenerateParticle0(
+                    ctx,
+                    (pp).next_ref(),
+                    linkNo_3,
+                    bank,
+                    (cl).kind(),
+                    (cl).texGroup(),
+                    (cl).cmdList().at(0),
+                    ((cl).life() as i32),
+                    palflag_3,
+                    0.0,
+                    0.0,
+                    0.0,
+                    (cl).vx(),
+                    (cl).vy(),
+                    (cl).vz(),
+                    (cl).size(),
+                    (cl).grav(),
+                    (cl).fric(),
+                    null::<HSD_Generator<'a>>(ctx),
+                    0_i32,
+                );
+                __state = 383;
+            }
+            388 => {
+                palflag_3 = 0_i32;
+                __state = 387;
+            }
+            389 => {
+                unreachable!();
+            }
+            390 => {
+                (child).pos().set_x((pp).pos().x());
+                (child).pos().set_y((pp).pos().y());
+                (child).pos().set_z((pp).pos().z());
+                (child).set_idnum((pp).idnum());
+                (child).set_gen((pp).r#gen());
+                __state = if !Handle::is_null((pp).r#gen()) {
+                    393
+                } else {
+                    394
+                };
+            }
+            391 => {
+                __state = 141;
+            }
+            392 => {
+                unreachable!();
+            }
+            393 => {
+                ((pp).r#gen()).set_numChild(((pp).r#gen()).numChild().wrapping_add(1));
+                __state = 394;
+            }
+            394 => {
+                __state = if !Handle::is_null(
+                    ({
+                        let __t18 = (pp).appsrt();
+                        srt_4 = __t18;
+                        __t18
+                    }),
+                ) {
+                    396
+                } else {
+                    397
+                };
+            }
+            395 => {
+                unreachable!();
+            }
+            396 => {
+                let _ = fns::psAttachParticleAppSRT(ctx, c_3, srt_4);
+                __state = 397;
+            }
+            397 => {
+                let _ = fns::hsd_8039930C(ctx, c_3, pp);
+                __state = 391;
+            }
+            398 => {
+                unreachable!();
+            }
+            399 => {
+                __state = 96;
+            }
+            400 => {
+                __state = 97;
+            }
+            401 => {
+                cnt_2 = ((shl_i32(((cnt_2 as i32) & 127_i32), (8_i32 as u32))).wrapping_add(
+                    (({
+                        let __t20 = p_26.get();
+                        p_26.set(Handle::add(p_26.get(), 1));
+                        __t20
+                    })
+                    .get() as i32),
+                ) as u16);
+                (pp).set_sizeCount(cnt_2);
+                __state = 402;
+            }
+            402 => {
+                inl_psReadFloat(ctx, p_26);
+                (pp).set_sizeTarget(
+                    ((Handle::cast::<Val<'a, F32>>(
+                        statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                    ))
+                    .get()),
+                );
+                inl_psReadFloat(ctx, p_26);
+                range = ((Handle::cast::<Val<'a, F32>>(
+                    statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                ))
+                .get());
+                pc.set(p_26.get());
+                (pp).set_sizeTarget(fp::fmadds(range, fns::HSD_Randf(ctx), (pp).sizeTarget()));
+                __state = if ((pp).sizeCount() as i32) == 0_i32 {
+                    404
+                } else {
+                    405
+                };
+            }
+            403 => {
+                unreachable!();
+            }
+            404 => {
+                (pp).set_size((pp).sizeTarget());
+                __state = 405;
+            }
+            405 => {
+                __state = 141;
+            }
+            406 => {
+                unreachable!();
+            }
+            407 => {
+                __state = 98;
+            }
+            408 => {
+                __state = 99;
+            }
+            409 => {
+                __state = 100;
+            }
+            410 => {
+                __state = 101;
+            }
+            411 => {
+                __state = 102;
+            }
+            412 => {
+                __state = 103;
+            }
+            413 => {
+                __state = 141;
+            }
+            414 => {
+                __state = if ((srt_5).xA2() as i32) != 0_i32 {
+                    417
+                } else {
+                    418
+                };
+            }
+            415 => {
+                unreachable!();
+            }
+            416 => {
+                __state = 414;
+            }
+            417 => {
+                __state = 141;
+            }
+            418 => {
+                fns::hsd_803983A4(ctx, (srt_5).gp());
+                srt_5 = (pp).appsrt();
+                translate = (srt_5).translate();
+                rot = Handle::cast::<Vec<'a>>((srt_5).rot());
+                scale_2 = (srt_5).scale();
+                mtx = (srt_5).mmtx().get(0);
+                fns::HSD_MtxSRT(ctx, mtx, scale_2, rot, translate, null::<Vec<'a>>(ctx));
+                (pp).pos().set_x(fp::fadds(
+                    fp::fmadds(
+                        ((pp).appsrt()).mmtx().get(0_i32).at(2_i32).get(),
+                        (pp).pos().z(),
+                        fp::fmadds(
+                            ((pp).appsrt()).mmtx().get(0_i32).at(0_i32).get(),
+                            (pp).pos().x(),
+                            fp::fmuls(
+                                ((pp).appsrt()).mmtx().get(0_i32).at(1_i32).get(),
+                                (pp).pos().y(),
+                            ),
+                        ),
+                    ),
+                    ((pp).appsrt()).mmtx().get(0_i32).at(3_i32).get(),
+                ));
+                (pp).pos().set_y(fp::fadds(
+                    fp::fmadds(
+                        ((pp).appsrt()).mmtx().get(1_i32).at(2_i32).get(),
+                        (pp).pos().z(),
+                        fp::fmadds(
+                            ((pp).appsrt()).mmtx().get(1_i32).at(0_i32).get(),
+                            (pp).pos().x(),
+                            fp::fmuls(
+                                ((pp).appsrt()).mmtx().get(1_i32).at(1_i32).get(),
+                                (pp).pos().y(),
+                            ),
+                        ),
+                    ),
+                    ((pp).appsrt()).mmtx().get(1_i32).at(3_i32).get(),
+                ));
+                (pp).pos().set_z(fp::fadds(
+                    fp::fmadds(
+                        ((pp).appsrt()).mmtx().get(2_i32).at(2_i32).get(),
+                        (pp).pos().z(),
+                        fp::fmadds(
+                            ((pp).appsrt()).mmtx().get(2_i32).at(0_i32).get(),
+                            (pp).pos().x(),
+                            fp::fmuls(
+                                ((pp).appsrt()).mmtx().get(2_i32).at(1_i32).get(),
+                                (pp).pos().y(),
+                            ),
+                        ),
+                    ),
+                    ((pp).appsrt()).mmtx().get(2_i32).at(3_i32).get(),
+                ));
+                let _ = fns::psRemoveParticleAppSRT(ctx, pp);
+                __state = 141;
+            }
+            419 => {
+                unreachable!();
+            }
+            420 => {
+                __state = 418;
+            }
+            421 => {
+                __state = 104;
+            }
+            422 => {
+                step = div_i32(
+                    (shl_i32(((pp).aCmpRemain() as i32), (16_i32 as u32))),
+                    ((pp).aCmpCount() as i32),
+                );
+                (pp).set_aCmpParam1(
+                    ((sar_i32(
+                        ((shl_i32(((pp).aCmpParam1Target() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step.wrapping_mul(
+                                    (((pp).aCmpParam1() as i32)
+                                        .wrapping_sub(((pp).aCmpParam1Target() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).set_aCmpParam2(
+                    ((sar_i32(
+                        ((shl_i32(((pp).aCmpParam2Target() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step.wrapping_mul(
+                                    (((pp).aCmpParam2() as i32)
+                                        .wrapping_sub(((pp).aCmpParam2Target() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                __state = 423;
+            }
+            423 => {
+                p_2 = pc.get();
+                (pp).set_aCmpCount(
+                    (({
+                        let __t21 = p_2;
+                        p_2 = Handle::add(p_2, 1);
+                        __t21
+                    })
+                    .get() as u16),
+                );
+                cnt_3 = (pp).aCmpCount();
+                __state = if (((cnt_3 as i32) & 128_i32) != 0) {
+                    425
+                } else {
+                    426
+                };
+            }
+            424 => {
+                unreachable!();
+            }
+            425 => {
+                cnt_3 = ((shl_i32(((cnt_3 as i32) & 127_i32), (8_i32 as u32))).wrapping_add(
+                    (({
+                        let __t22 = p_2;
+                        p_2 = Handle::add(p_2, 1);
+                        __t22
+                    })
+                    .get() as i32),
+                ) as u16);
+                (pp).set_aCmpCount(cnt_3);
+                __state = 426;
+            }
+            426 => {
+                pc.set(p_2);
+                (pp).set_aCmpMode(
+                    ({
+                        let __t23 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t23
+                    })
+                    .get(),
+                );
+                (pp).set_aCmpParam1Target((Handle::add(pc.get(), 0_i32)).get());
+                (pp).set_aCmpParam2Target((Handle::add(pc.get(), 1_i32)).get());
+                pc.set(Handle::add(pc.get(), 2_i32));
+                __state = if ((pp).aCmpCount() as i32) == 0_i32 {
+                    428
+                } else {
+                    430
+                };
+            }
+            427 => {
+                unreachable!();
+            }
+            428 => {
+                (pp).set_aCmpParam1((pp).aCmpParam1Target());
+                (pp).set_aCmpParam2((pp).aCmpParam2Target());
+                (pp).set_aCmpRemain((0_i32 as u16));
+                (pp).set_aCmpCount((0_i32 as u16));
+                __state = 429;
+            }
+            429 => {
+                __state = 141;
+            }
+            430 => {
+                (pp).set_aCmpRemain((pp).aCmpCount());
+                __state = 429;
+            }
+            431 => {
+                unreachable!();
+            }
+            432 => {
+                __state = 105;
+            }
+            433 => {
+                __state = 106;
+            }
+            434 => {
+                __state = 107;
+            }
+            435 => {
+                cnt_4 = ((shl_i32(((cnt_4 as i32) & 127_i32), (8_i32 as u32))).wrapping_add(
+                    (({
+                        let __t25 = p_3;
+                        p_3 = Handle::add(p_3, 1);
+                        __t25
+                    })
+                    .get() as i32),
+                ) as u16);
+                (pp).set_rotateCount(cnt_4);
+                __state = 436;
+            }
+            436 => {
+                q_5.set(p_3);
+                inl_psReadFloat(ctx, q_5);
+                p_3 = q_5.get();
+                pc.set(p_3);
+                (pp).set_rotateTarget(fp::fadds(
+                    (pp).rotateTarget(),
+                    ((Handle::cast::<Val<'a, F32>>(
+                        statics::sysdolphin__baselib__particle::hsd_804D78D0(ctx),
+                    ))
+                    .get()),
+                ));
+                __state = if ((pp).rotateCount() as i32) == 0_i32 {
+                    438
+                } else {
+                    439
+                };
+            }
+            437 => {
+                unreachable!();
+            }
+            438 => {
+                (pp).set_rotate((pp).rotateTarget());
+                __state = 439;
+            }
+            439 => {
+                __state = 141;
+            }
+            440 => {
+                unreachable!();
+            }
+            441 => {
+                __state = 108;
+            }
+            442 => {
+                __state = 141;
+            }
+            443 => {
+                inl_HSD_JObjSetupMatrix(ctx, jobj_4);
+                matrix = (jobj_4).mtx().get(0);
+                val = fp::fadds(
+                    fp::fmuls((pp).vel().x(), (pp).vel().x()),
+                    fp::fmuls((pp).vel().y(), (pp).vel().y()),
+                );
+                vel_mag_sq = fp::fmuls((pp).vel().z(), (pp).vel().z());
+                vel_mag_sq = fp::fadds(vel_mag_sq, val);
+                dx = fp::fsubs((Handle::add(matrix, 0_i32)).at(3_i32).get(), (pp).pos().x());
+                dy = (Handle::add(matrix, 1_i32)).at(3_i32).get();
+                dy = fp::fsubs(dy, (pp).pos().y());
+                dz = fp::fsubs((Handle::add(matrix, 2_i32)).at(3_i32).get(), (pp).pos().z());
+                __state = if vel_mag_sq > 0.0 { 446 } else { 447 };
+            }
+            444 => {
+                unreachable!();
+            }
+            445 => {
+                __state = 443;
+            }
+            446 => {
+                guess = fp::frsqrte(vel_mag_sq);
+                guess = fp::fmul(
+                    fp::fmul(0.5, guess),
+                    (fp::fnmsub(fp::fmul(guess, guess), vel_mag_sq, 3.0)),
+                );
+                guess = fp::fmul(
+                    fp::fmul(0.5, guess),
+                    (fp::fnmsub(fp::fmul(guess, guess), vel_mag_sq, 3.0)),
+                );
+                guess = fp::fmul(
+                    fp::fmul(0.5, guess),
+                    (fp::fnmsub(fp::fmul(guess, guess), vel_mag_sq, 3.0)),
+                );
+                vel_res = fp::frsp((fp::fmul(vel_mag_sq, guess)));
+                vel_mag_sq = vel_res;
+                __state = 447;
+            }
+            447 => {
+                val = fp::fmadds(dx, dx, fp::fmuls(dy, dy));
+                __state = if ({
+                    let __t27 = fp::fmadds(dz, dz, val);
+                    dist_sq = __t27;
+                    __t27
+                }) == 0.0
+                {
+                    449
+                } else {
+                    450
+                };
+            }
+            448 => {
+                unreachable!();
+            }
+            449 => {
+                __state = 141;
+            }
+            450 => {
+                __state = if dist_sq > 0.0 { 453 } else { 454 };
+            }
+            451 => {
+                unreachable!();
+            }
+            452 => {
+                __state = 450;
+            }
+            453 => {
+                guess_2 = fp::frsqrte(dist_sq);
+                guess_2 = fp::fmul(
+                    fp::fmul(0.5, guess_2),
+                    (fp::fnmsub(fp::fmul(guess_2, guess_2), dist_sq, 3.0)),
+                );
+                guess_2 = fp::fmul(
+                    fp::fmul(0.5, guess_2),
+                    (fp::fnmsub(fp::fmul(guess_2, guess_2), dist_sq, 3.0)),
+                );
+                guess_2 = fp::fmul(
+                    fp::fmul(0.5, guess_2),
+                    (fp::fnmsub(fp::fmul(guess_2, guess_2), dist_sq, 3.0)),
+                );
+                dist_res = fp::frsp((fp::fmul(dist_sq, guess_2)));
+                dist_sq = dist_res;
+                __state = 454;
+            }
+            454 => {
+                scale_3 = fp::fdivs(vel_mag_sq, dist_sq);
+                (pp).vel().set_x(fp::fmuls(dx, scale_3));
+                (pp).vel().set_y(fp::fmuls(dy, scale_3));
+                (pp).vel().set_z(fp::fmuls(dz, scale_3));
+                __state = 141;
+            }
+            455 => {
+                unreachable!();
+            }
+            456 => {
+                __state = 109;
+            }
+            457 => {
+                (pp).set_life((1_i32 as u16));
+                __state = 362;
+            }
+            458 => {
+                __state = 141;
+            }
+            459 => {
+                unreachable!();
+            }
+            460 => {
+                __state = 458;
+            }
+            461 => {
+                __state = 110;
+            }
+            462 => {
+                child = null::<HSD_Particle<'a>>(ctx);
+                __state = 463;
+            }
+            463 => {
+                c_4 = child;
+                __state = if !Handle::is_null(child) { 482 } else { 483 };
+            }
+            464 => {
+                __state = if bank >= 65_i32 { 466 } else { 468 };
+            }
+            465 => {
+                unreachable!();
+            }
+            466 => {
+                child = null::<HSD_Particle<'a>>(ctx);
+                __state = 467;
+            }
+            467 => {
+                __state = 463;
+            }
+            468 => {
+                __state = if idx_8 >= fns::psCmdListArray(ctx).at(bank).get() {
+                    470
+                } else {
+                    472
+                };
+            }
+            469 => {
+                unreachable!();
+            }
+            470 => {
+                child = null::<HSD_Particle<'a>>(ctx);
+                __state = 471;
+            }
+            471 => {
+                __state = 467;
+            }
+            472 => {
+                cl = (Handle::add(fns::ptclref_804D0E5C(ctx).at(bank).get(), idx_8)).get();
+                __state = if Handle::is_null(cl) { 474 } else { 476 };
+            }
+            473 => {
+                unreachable!();
+            }
+            474 => {
+                child = null::<HSD_Particle<'a>>(ctx);
+                __state = 475;
+            }
+            475 => {
+                __state = 471;
+            }
+            476 => {
+                tg = (Handle::add(
+                    fns::psTexGroupArray(ctx).at(bank).get(),
+                    ((cl).texGroup() as i32),
+                ))
+                .get();
+                __state = if !Handle::is_null(tg) { 478 } else { 480 };
+            }
+            477 => {
+                unreachable!();
+            }
+            478 => {
+                palflag_4 = ((tg).palflag() as i32);
+                __state = 479;
+            }
+            479 => {
+                child = fns::psGenerateParticle0(
+                    ctx,
+                    (pp).next_ref(),
+                    linkNo_4,
+                    bank,
+                    (cl).kind(),
+                    (cl).texGroup(),
+                    (cl).cmdList().at(0),
+                    ((cl).life() as i32),
+                    palflag_4,
+                    0.0,
+                    0.0,
+                    0.0,
+                    (cl).vx(),
+                    (cl).vy(),
+                    (cl).vz(),
+                    (cl).size(),
+                    (cl).grav(),
+                    (cl).fric(),
+                    null::<HSD_Generator<'a>>(ctx),
+                    0_i32,
+                );
+                __state = 475;
+            }
+            480 => {
+                palflag_4 = 0_i32;
+                __state = 479;
+            }
+            481 => {
+                unreachable!();
+            }
+            482 => {
+                (child).pos().set_x((pp).pos().x());
+                (child).pos().set_y((pp).pos().y());
+                (child).pos().set_z((pp).pos().z());
+                (child).vel().set_x((pp).vel().x());
+                (child).vel().set_y((pp).vel().y());
+                (child).vel().set_z((pp).vel().z());
+                (child).set_idnum((pp).idnum());
+                (child).set_gen((pp).r#gen());
+                __state = if !Handle::is_null((pp).r#gen()) {
+                    485
+                } else {
+                    486
+                };
+            }
+            483 => {
+                __state = 141;
+            }
+            484 => {
+                unreachable!();
+            }
+            485 => {
+                ((pp).r#gen()).set_numChild(((pp).r#gen()).numChild().wrapping_add(1));
+                __state = 486;
+            }
+            486 => {
+                __state = if !Handle::is_null(
+                    ({
+                        let __t29 = (pp).appsrt();
+                        srt_6 = __t29;
+                        __t29
+                    }),
+                ) {
+                    488
+                } else {
+                    489
+                };
+            }
+            487 => {
+                unreachable!();
+            }
+            488 => {
+                let _ = fns::psAttachParticleAppSRT(ctx, c_4, srt_6);
+                __state = 489;
+            }
+            489 => {
+                let _ = fns::hsd_8039930C(ctx, c_4, pp);
+                __state = 483;
+            }
+            490 => {
+                unreachable!();
+            }
+            491 => {
+                __state = 111;
+            }
+            492 => {
+                idx_9 = ((Handle::add(fns::hsd_804D0948(ctx).at(((pp).bank() as i32)).get(), idx_9))
+                    .get() as i32);
+                __state = 493;
+            }
+            493 => {
+                linkNo_5 = ((pp).linkNo() as i32);
+                __state = if linkNo_5 >= 8_i32 { 495 } else { 497 };
+            }
+            494 => {
+                unreachable!();
+            }
+            495 => {
+                child = null::<HSD_Particle<'a>>(ctx);
+                __state = 496;
+            }
+            496 => {
+                c_5 = child;
+                __state = if !Handle::is_null(child) { 515 } else { 516 };
+            }
+            497 => {
+                __state = if bank >= 65_i32 { 499 } else { 501 };
+            }
+            498 => {
+                unreachable!();
+            }
+            499 => {
+                child = null::<HSD_Particle<'a>>(ctx);
+                __state = 500;
+            }
+            500 => {
+                __state = 496;
+            }
+            501 => {
+                __state = if idx_9 >= fns::psCmdListArray(ctx).at(bank).get() {
+                    503
+                } else {
+                    505
+                };
+            }
+            502 => {
+                unreachable!();
+            }
+            503 => {
+                child = null::<HSD_Particle<'a>>(ctx);
+                __state = 504;
+            }
+            504 => {
+                __state = 500;
+            }
+            505 => {
+                cl = (Handle::add(fns::ptclref_804D0E5C(ctx).at(bank).get(), idx_9)).get();
+                __state = if Handle::is_null(cl) { 507 } else { 509 };
+            }
+            506 => {
+                unreachable!();
+            }
+            507 => {
+                child = null::<HSD_Particle<'a>>(ctx);
+                __state = 508;
+            }
+            508 => {
+                __state = 504;
+            }
+            509 => {
+                tg = (Handle::add(
+                    fns::psTexGroupArray(ctx).at(bank).get(),
+                    ((cl).texGroup() as i32),
+                ))
+                .get();
+                __state = if !Handle::is_null(tg) { 511 } else { 513 };
+            }
+            510 => {
+                unreachable!();
+            }
+            511 => {
+                palflag_5 = ((tg).palflag() as i32);
+                __state = 512;
+            }
+            512 => {
+                child = fns::psGenerateParticle0(
+                    ctx,
+                    (pp).next_ref(),
+                    linkNo_5,
+                    bank,
+                    (cl).kind(),
+                    (cl).texGroup(),
+                    (cl).cmdList().at(0),
+                    ((cl).life() as i32),
+                    palflag_5,
+                    0.0,
+                    0.0,
+                    0.0,
+                    (cl).vx(),
+                    (cl).vy(),
+                    (cl).vz(),
+                    (cl).size(),
+                    (cl).grav(),
+                    (cl).fric(),
+                    null::<HSD_Generator<'a>>(ctx),
+                    0_i32,
+                );
+                __state = 508;
+            }
+            513 => {
+                palflag_5 = 0_i32;
+                __state = 512;
+            }
+            514 => {
+                unreachable!();
+            }
+            515 => {
+                (child).pos().set_x((pp).pos().x());
+                (child).pos().set_y((pp).pos().y());
+                (child).pos().set_z((pp).pos().z());
+                (child).vel().set_x((pp).vel().x());
+                (child).vel().set_y((pp).vel().y());
+                (child).vel().set_z((pp).vel().z());
+                (child).set_idnum((pp).idnum());
+                (child).set_gen((pp).r#gen());
+                __state = if !Handle::is_null((pp).r#gen()) {
+                    518
+                } else {
+                    519
+                };
+            }
+            516 => {
+                __state = 141;
+            }
+            517 => {
+                unreachable!();
+            }
+            518 => {
+                ((pp).r#gen()).set_numChild(((pp).r#gen()).numChild().wrapping_add(1));
+                __state = 519;
+            }
+            519 => {
+                __state = if !Handle::is_null(
+                    ({
+                        let __t30 = (pp).appsrt();
+                        srt_7 = __t30;
+                        __t30
+                    }),
+                ) {
+                    521
+                } else {
+                    522
+                };
+            }
+            520 => {
+                unreachable!();
+            }
+            521 => {
+                let _ = fns::psAttachParticleAppSRT(ctx, c_5, srt_7);
+                __state = 522;
+            }
+            522 => {
+                let _ = fns::hsd_8039930C(ctx, c_5, pp);
+                __state = 516;
+            }
+            523 => {
+                unreachable!();
+            }
+            524 => {
+                __state = 112;
+            }
+            525 => {
+                step_2 = div_i32(
+                    (shl_i32(((pp).primColRemain() as i32), (16_i32 as u32))),
+                    ((pp).primColCount() as i32),
+                );
+                (pp).primCol().set_r(
+                    ((sar_i32(
+                        ((shl_i32(((pp).primColTarget().r() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_2.wrapping_mul(
+                                    (((pp).primCol().r() as i32)
+                                        .wrapping_sub(((pp).primColTarget().r() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).primCol().set_g(
+                    ((sar_i32(
+                        ((shl_i32(((pp).primColTarget().g() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_2.wrapping_mul(
+                                    (((pp).primCol().g() as i32)
+                                        .wrapping_sub(((pp).primColTarget().g() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).primCol().set_b(
+                    ((sar_i32(
+                        ((shl_i32(((pp).primColTarget().b() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_2.wrapping_mul(
+                                    (((pp).primCol().b() as i32)
+                                        .wrapping_sub(((pp).primColTarget().b() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).primCol().set_a(
+                    ((sar_i32(
+                        ((shl_i32(((pp).primColTarget().a() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_2.wrapping_mul(
+                                    (((pp).primCol().a() as i32)
+                                        .wrapping_sub(((pp).primColTarget().a() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                __state = 526;
+            }
+            526 => {
+                rand_val = fns::HSD_Randf(ctx);
+                delta = (({
+                    let __t31 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t31
+                })
+                .get() as i8);
+                rand_val = fp::fmuls(
+                    fp::frsp((shl_i32((delta as i32), (1_i32 as u32))) as f64),
+                    rand_val,
+                );
+                val = fp::fadds(fp::frsp((pp).primColTarget().r() as f64), rand_val);
+                __state = if val < 0.0 { 528 } else { 529 };
+            }
+            527 => {
+                unreachable!();
+            }
+            528 => {
+                val = 0.0;
+                __state = 529;
+            }
+            529 => {
+                __state = if val > 255.0 { 531 } else { 532 };
+            }
+            530 => {
+                unreachable!();
+            }
+            531 => {
+                val = 255.0;
+                __state = 532;
+            }
+            532 => {
+                (pp).primColTarget().set_r((fp::fctiwz(val) as u8));
+                rand_val = fns::HSD_Randf(ctx);
+                delta = (({
+                    let __t32 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t32
+                })
+                .get() as i8);
+                rand_val = fp::fmuls(
+                    fp::frsp((shl_i32((delta as i32), (1_i32 as u32))) as f64),
+                    rand_val,
+                );
+                val = fp::fadds(fp::frsp((pp).primColTarget().g() as f64), rand_val);
+                __state = if val < 0.0 { 534 } else { 535 };
+            }
+            533 => {
+                unreachable!();
+            }
+            534 => {
+                val = 0.0;
+                __state = 535;
+            }
+            535 => {
+                __state = if val > 255.0 { 537 } else { 538 };
+            }
+            536 => {
+                unreachable!();
+            }
+            537 => {
+                val = 255.0;
+                __state = 538;
+            }
+            538 => {
+                (pp).primColTarget().set_g((fp::fctiwz(val) as u8));
+                rand_val = fns::HSD_Randf(ctx);
+                delta = (({
+                    let __t33 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t33
+                })
+                .get() as i8);
+                rand_val = fp::fmuls(
+                    fp::frsp((shl_i32((delta as i32), (1_i32 as u32))) as f64),
+                    rand_val,
+                );
+                val = fp::fadds(fp::frsp((pp).primColTarget().b() as f64), rand_val);
+                __state = if val < 0.0 { 540 } else { 541 };
+            }
+            539 => {
+                unreachable!();
+            }
+            540 => {
+                val = 0.0;
+                __state = 541;
+            }
+            541 => {
+                __state = if val > 255.0 { 543 } else { 544 };
+            }
+            542 => {
+                unreachable!();
+            }
+            543 => {
+                val = 255.0;
+                __state = 544;
+            }
+            544 => {
+                (pp).primColTarget().set_b((fp::fctiwz(val) as u8));
+                rand_val = fns::HSD_Randf(ctx);
+                delta = (({
+                    let __t34 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t34
+                })
+                .get() as i8);
+                rand_val = fp::fmuls(
+                    fp::frsp((shl_i32((delta as i32), (1_i32 as u32))) as f64),
+                    rand_val,
+                );
+                val = fp::fadds(fp::frsp((pp).primColTarget().a() as f64), rand_val);
+                __state = if val < 0.0 { 546 } else { 547 };
+            }
+            545 => {
+                unreachable!();
+            }
+            546 => {
+                val = 0.0;
+                __state = 547;
+            }
+            547 => {
+                __state = if val > 255.0 { 549 } else { 550 };
+            }
+            548 => {
+                unreachable!();
+            }
+            549 => {
+                val = 255.0;
+                __state = 550;
+            }
+            550 => {
+                (pp).primColTarget().set_a((fp::fctiwz(val) as u8));
+                __state = if ((pp).primColCount() as i32) == 0_i32 {
+                    552
+                } else {
+                    554
+                };
+            }
+            551 => {
+                unreachable!();
+            }
+            552 => {
+                Handle::copy_from((pp).primCol(), (pp).primColTarget());
+                __state = 553;
+            }
+            553 => {
+                __state = 141;
+            }
+            554 => {
+                (pp).set_primColRemain((pp).primColCount());
+                __state = 553;
+            }
+            555 => {
+                unreachable!();
+            }
+            556 => {
+                __state = 113;
+            }
+            557 => {
+                step_3 = div_i32(
+                    (shl_i32(((pp).envColRemain() as i32), (16_i32 as u32))),
+                    ((pp).envColCount() as i32),
+                );
+                (pp).envCol().set_r(
+                    ((sar_i32(
+                        ((shl_i32(((pp).envColTarget().r() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_3.wrapping_mul(
+                                    (((pp).envCol().r() as i32)
+                                        .wrapping_sub(((pp).envColTarget().r() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).envCol().set_g(
+                    ((sar_i32(
+                        ((shl_i32(((pp).envColTarget().g() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_3.wrapping_mul(
+                                    (((pp).envCol().g() as i32)
+                                        .wrapping_sub(((pp).envColTarget().g() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).envCol().set_b(
+                    ((sar_i32(
+                        ((shl_i32(((pp).envColTarget().b() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_3.wrapping_mul(
+                                    (((pp).envCol().b() as i32)
+                                        .wrapping_sub(((pp).envColTarget().b() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).envCol().set_a(
+                    ((sar_i32(
+                        ((shl_i32(((pp).envColTarget().a() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_3.wrapping_mul(
+                                    (((pp).envCol().a() as i32)
+                                        .wrapping_sub(((pp).envColTarget().a() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                __state = 558;
+            }
+            558 => {
+                rand_val_2 = fns::HSD_Randf(ctx);
+                delta_2 = (({
+                    let __t35 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t35
+                })
+                .get() as i8);
+                rand_val_2 = fp::fmuls(
+                    fp::frsp((shl_i32((delta_2 as i32), (1_i32 as u32))) as f64),
+                    rand_val_2,
+                );
+                val = fp::fadds(fp::frsp((pp).envColTarget().r() as f64), rand_val_2);
+                __state = if val < 0.0 { 560 } else { 561 };
+            }
+            559 => {
+                unreachable!();
+            }
+            560 => {
+                val = 0.0;
+                __state = 561;
+            }
+            561 => {
+                __state = if val > 255.0 { 563 } else { 564 };
+            }
+            562 => {
+                unreachable!();
+            }
+            563 => {
+                val = 255.0;
+                __state = 564;
+            }
+            564 => {
+                (pp).envColTarget().set_r((fp::fctiwz(val) as u8));
+                rand_val_2 = fns::HSD_Randf(ctx);
+                delta_2 = (({
+                    let __t36 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t36
+                })
+                .get() as i8);
+                rand_val_2 = fp::fmuls(
+                    fp::frsp((shl_i32((delta_2 as i32), (1_i32 as u32))) as f64),
+                    rand_val_2,
+                );
+                val = fp::fadds(fp::frsp((pp).envColTarget().g() as f64), rand_val_2);
+                __state = if val < 0.0 { 566 } else { 567 };
+            }
+            565 => {
+                unreachable!();
+            }
+            566 => {
+                val = 0.0;
+                __state = 567;
+            }
+            567 => {
+                __state = if val > 255.0 { 569 } else { 570 };
+            }
+            568 => {
+                unreachable!();
+            }
+            569 => {
+                val = 255.0;
+                __state = 570;
+            }
+            570 => {
+                (pp).envColTarget().set_g((fp::fctiwz(val) as u8));
+                rand_val_2 = fns::HSD_Randf(ctx);
+                delta_2 = (({
+                    let __t37 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t37
+                })
+                .get() as i8);
+                rand_val_2 = fp::fmuls(
+                    fp::frsp((shl_i32((delta_2 as i32), (1_i32 as u32))) as f64),
+                    rand_val_2,
+                );
+                val = fp::fadds(fp::frsp((pp).envColTarget().b() as f64), rand_val_2);
+                __state = if val < 0.0 { 572 } else { 573 };
+            }
+            571 => {
+                unreachable!();
+            }
+            572 => {
+                val = 0.0;
+                __state = 573;
+            }
+            573 => {
+                __state = if val > 255.0 { 575 } else { 576 };
+            }
+            574 => {
+                unreachable!();
+            }
+            575 => {
+                val = 255.0;
+                __state = 576;
+            }
+            576 => {
+                (pp).envColTarget().set_b((fp::fctiwz(val) as u8));
+                rand_val_2 = fns::HSD_Randf(ctx);
+                delta_2 = (({
+                    let __t38 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t38
+                })
+                .get() as i8);
+                rand_val_2 = fp::fmuls(
+                    fp::frsp((shl_i32((delta_2 as i32), (1_i32 as u32))) as f64),
+                    rand_val_2,
+                );
+                val = fp::fadds(fp::frsp((pp).envColTarget().a() as f64), rand_val_2);
+                __state = if val < 0.0 { 578 } else { 579 };
+            }
+            577 => {
+                unreachable!();
+            }
+            578 => {
+                val = 0.0;
+                __state = 579;
+            }
+            579 => {
+                __state = if val > 255.0 { 581 } else { 582 };
+            }
+            580 => {
+                unreachable!();
+            }
+            581 => {
+                val = 255.0;
+                __state = 582;
+            }
+            582 => {
+                (pp).envColTarget().set_a((fp::fctiwz(val) as u8));
+                __state = if ((pp).envColCount() as i32) == 0_i32 {
+                    584
+                } else {
+                    586
+                };
+            }
+            583 => {
+                unreachable!();
+            }
+            584 => {
+                Handle::copy_from((pp).envCol(), (pp).envColTarget());
+                __state = 585;
+            }
+            585 => {
+                __state = 141;
+            }
+            586 => {
+                (pp).set_envColRemain((pp).envColCount());
+                __state = 585;
+            }
+            587 => {
+                unreachable!();
+            }
+            588 => {
+                __state = 114;
+            }
+            589 => {
+                inl_psEnableTexture(ctx, pp, (texGrp_2).texTable().at(0));
+                __state = 590;
+            }
+            590 => {
+                __state = 141;
+            }
+            591 => {
+                unreachable!();
+            }
+            592 => {
+                __state = 115;
+            }
+            593 => {
+                guess_3 = fp::frsqrte(mag);
+                guess_3 = fp::fmul(
+                    fp::fmul(0.5, guess_3),
+                    (fp::fnmsub(fp::fmul(guess_3, guess_3), mag, 3.0)),
+                );
+                guess_3 = fp::fmul(
+                    fp::fmul(0.5, guess_3),
+                    (fp::fnmsub(fp::fmul(guess_3, guess_3), mag, 3.0)),
+                );
+                guess_3 = fp::fmul(
+                    fp::fmul(0.5, guess_3),
+                    (fp::fnmsub(fp::fmul(guess_3, guess_3), mag, 3.0)),
+                );
+                sqrt_res = fp::frsp((fp::fmul(mag, guess_3)));
+                mag = sqrt_res;
+                __state = 594;
+            }
+            594 => {
+                __state = if mag > 1.000000013351432e-10_f64 {
+                    596
+                } else {
+                    597
+                };
+            }
+            595 => {
+                unreachable!();
+            }
+            596 => {
+                base_speed = fp::fdivs(base_speed, mag);
+                (pp).vel().set_x(fp::fmuls((pp).vel().x(), base_speed));
+                (pp).vel().set_y(fp::fmuls((pp).vel().y(), base_speed));
+                (pp).vel().set_z(fp::fmuls((pp).vel().z(), base_speed));
+                __state = 597;
+            }
+            597 => {
+                __state = 141;
+            }
+            598 => {
+                unreachable!();
+            }
+            599 => {
+                __state = 116;
+            }
+            600 => {
+                __state = 117;
+            }
+            601 => {
+                __state = 118;
+            }
+            602 => {
+                step_4 = div_i32(
+                    (shl_i32(((pp).primColRemain() as i32), (16_i32 as u32))),
+                    ((pp).primColCount() as i32),
+                );
+                (pp).primCol().set_r(
+                    ((sar_i32(
+                        ((shl_i32(((pp).primColTarget().r() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_4.wrapping_mul(
+                                    (((pp).primCol().r() as i32)
+                                        .wrapping_sub(((pp).primColTarget().r() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).primCol().set_g(
+                    ((sar_i32(
+                        ((shl_i32(((pp).primColTarget().g() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_4.wrapping_mul(
+                                    (((pp).primCol().g() as i32)
+                                        .wrapping_sub(((pp).primColTarget().g() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).primCol().set_b(
+                    ((sar_i32(
+                        ((shl_i32(((pp).primColTarget().b() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_4.wrapping_mul(
+                                    (((pp).primCol().b() as i32)
+                                        .wrapping_sub(((pp).primColTarget().b() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).primCol().set_a(
+                    ((sar_i32(
+                        ((shl_i32(((pp).primColTarget().a() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_4.wrapping_mul(
+                                    (((pp).primCol().a() as i32)
+                                        .wrapping_sub(((pp).primColTarget().a() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                __state = 603;
+            }
+            603 => {
+                p_5 = pc.get();
+                (pp).set_primColCount(
+                    (({
+                        let __t42 = p_5;
+                        p_5 = Handle::add(p_5, 1);
+                        __t42
+                    })
+                    .get() as u16),
+                );
+                cnt_5 = (pp).primColCount();
+                __state = if (((cnt_5 as i32) & 128_i32) != 0) {
+                    605
+                } else {
+                    606
+                };
+            }
+            604 => {
+                unreachable!();
+            }
+            605 => {
+                cnt_5 = ((shl_i32(((cnt_5 as i32) & 127_i32), (8_i32 as u32))).wrapping_add(
+                    (({
+                        let __t43 = p_5;
+                        p_5 = Handle::add(p_5, 1);
+                        __t43
+                    })
+                    .get() as i32),
+                ) as u16);
+                (pp).set_primColCount(cnt_5);
+                __state = 606;
+            }
+            606 => {
+                pc.set(p_5);
+                Handle::copy_from((pp).primColTarget(), (pp).primCol());
+                __state = if (((opcode as i32) & 1_i32) != 0) {
+                    608
+                } else {
+                    609
+                };
+            }
+            607 => {
+                unreachable!();
+            }
+            608 => {
+                (pp).primColTarget().set_r(
+                    ({
+                        let __t44 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t44
+                    })
+                    .get(),
+                );
+                __state = 609;
+            }
+            609 => {
+                __state = if (((opcode as i32) & 2_i32) != 0) {
+                    611
+                } else {
+                    612
+                };
+            }
+            610 => {
+                unreachable!();
+            }
+            611 => {
+                (pp).primColTarget().set_g(
+                    ({
+                        let __t45 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t45
+                    })
+                    .get(),
+                );
+                __state = 612;
+            }
+            612 => {
+                __state = if (((opcode as i32) & 4_i32) != 0) {
+                    614
+                } else {
+                    615
+                };
+            }
+            613 => {
+                unreachable!();
+            }
+            614 => {
+                (pp).primColTarget().set_b(
+                    ({
+                        let __t46 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t46
+                    })
+                    .get(),
+                );
+                __state = 615;
+            }
+            615 => {
+                __state = if (((opcode as i32) & 8_i32) != 0) {
+                    617
+                } else {
+                    618
+                };
+            }
+            616 => {
+                unreachable!();
+            }
+            617 => {
+                (pp).primColTarget().set_a(
+                    ({
+                        let __t47 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t47
+                    })
+                    .get(),
+                );
+                __state = 618;
+            }
+            618 => {
+                __state = if ((pp).primColCount() as i32) == 0_i32 {
+                    620
+                } else {
+                    622
+                };
+            }
+            619 => {
+                unreachable!();
+            }
+            620 => {
+                Handle::copy_from((pp).primCol(), (pp).primColTarget());
+                (pp).set_primColRemain((0_i32 as u16));
+                __state = 621;
+            }
+            621 => {
+                __state = 141;
+            }
+            622 => {
+                (pp).set_primColRemain((pp).primColCount());
+                __state = 621;
+            }
+            623 => {
+                unreachable!();
+            }
+            624 => {
+                __state = 119;
+            }
+            625 => {
+                step_5 = div_i32(
+                    (shl_i32(((pp).envColRemain() as i32), (16_i32 as u32))),
+                    ((pp).envColCount() as i32),
+                );
+                (pp).envCol().set_r(
+                    ((sar_i32(
+                        ((shl_i32(((pp).envColTarget().r() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_5.wrapping_mul(
+                                    (((pp).envCol().r() as i32)
+                                        .wrapping_sub(((pp).envColTarget().r() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).envCol().set_g(
+                    ((sar_i32(
+                        ((shl_i32(((pp).envColTarget().g() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_5.wrapping_mul(
+                                    (((pp).envCol().g() as i32)
+                                        .wrapping_sub(((pp).envColTarget().g() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).envCol().set_b(
+                    ((sar_i32(
+                        ((shl_i32(((pp).envColTarget().b() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_5.wrapping_mul(
+                                    (((pp).envCol().b() as i32)
+                                        .wrapping_sub(((pp).envColTarget().b() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).envCol().set_a(
+                    ((sar_i32(
+                        ((shl_i32(((pp).envColTarget().a() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_5.wrapping_mul(
+                                    (((pp).envCol().a() as i32)
+                                        .wrapping_sub(((pp).envColTarget().a() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                __state = 626;
+            }
+            626 => {
+                p_6 = pc.get();
+                (pp).set_envColCount(
+                    (({
+                        let __t48 = p_6;
+                        p_6 = Handle::add(p_6, 1);
+                        __t48
+                    })
+                    .get() as u16),
+                );
+                cnt_6 = (pp).envColCount();
+                __state = if (((cnt_6 as i32) & 128_i32) != 0) {
+                    628
+                } else {
+                    629
+                };
+            }
+            627 => {
+                unreachable!();
+            }
+            628 => {
+                cnt_6 = ((shl_i32(((cnt_6 as i32) & 127_i32), (8_i32 as u32))).wrapping_add(
+                    (({
+                        let __t49 = p_6;
+                        p_6 = Handle::add(p_6, 1);
+                        __t49
+                    })
+                    .get() as i32),
+                ) as u16);
+                (pp).set_envColCount(cnt_6);
+                __state = 629;
+            }
+            629 => {
+                pc.set(p_6);
+                Handle::copy_from((pp).envColTarget(), (pp).envCol());
+                __state = if (((opcode as i32) & 1_i32) != 0) {
+                    631
+                } else {
+                    632
+                };
+            }
+            630 => {
+                unreachable!();
+            }
+            631 => {
+                (pp).envColTarget().set_r(
+                    ({
+                        let __t50 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t50
+                    })
+                    .get(),
+                );
+                __state = 632;
+            }
+            632 => {
+                __state = if (((opcode as i32) & 2_i32) != 0) {
+                    634
+                } else {
+                    635
+                };
+            }
+            633 => {
+                unreachable!();
+            }
+            634 => {
+                (pp).envColTarget().set_g(
+                    ({
+                        let __t51 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t51
+                    })
+                    .get(),
+                );
+                __state = 635;
+            }
+            635 => {
+                __state = if (((opcode as i32) & 4_i32) != 0) {
+                    637
+                } else {
+                    638
+                };
+            }
+            636 => {
+                unreachable!();
+            }
+            637 => {
+                (pp).envColTarget().set_b(
+                    ({
+                        let __t52 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t52
+                    })
+                    .get(),
+                );
+                __state = 638;
+            }
+            638 => {
+                __state = if (((opcode as i32) & 8_i32) != 0) {
+                    640
+                } else {
+                    641
+                };
+            }
+            639 => {
+                unreachable!();
+            }
+            640 => {
+                (pp).envColTarget().set_a(
+                    ({
+                        let __t53 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t53
+                    })
+                    .get(),
+                );
+                __state = 641;
+            }
+            641 => {
+                __state = if ((pp).envColCount() as i32) == 0_i32 {
+                    643
+                } else {
+                    645
+                };
+            }
+            642 => {
+                unreachable!();
+            }
+            643 => {
+                Handle::copy_from((pp).envCol(), (pp).envColTarget());
+                (pp).set_envColRemain((0_i32 as u16));
+                __state = 644;
+            }
+            644 => {
+                __state = 141;
+            }
+            645 => {
+                (pp).set_envColRemain((pp).envColCount());
+                __state = 644;
+            }
+            646 => {
+                unreachable!();
+            }
+            647 => {
+                __state = 120;
+            }
+            648 => {
+                step_6 = div_i32(
+                    (shl_i32(((pp).primColRemain() as i32), (16_i32 as u32))),
+                    ((pp).primColCount() as i32),
+                );
+                (pp).primCol().set_r(
+                    ((sar_i32(
+                        ((shl_i32(((pp).primColTarget().r() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_6.wrapping_mul(
+                                    (((pp).primCol().r() as i32)
+                                        .wrapping_sub(((pp).primColTarget().r() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).primCol().set_g(
+                    ((sar_i32(
+                        ((shl_i32(((pp).primColTarget().g() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_6.wrapping_mul(
+                                    (((pp).primCol().g() as i32)
+                                        .wrapping_sub(((pp).primColTarget().g() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).primCol().set_b(
+                    ((sar_i32(
+                        ((shl_i32(((pp).primColTarget().b() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_6.wrapping_mul(
+                                    (((pp).primCol().b() as i32)
+                                        .wrapping_sub(((pp).primColTarget().b() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).primCol().set_a(
+                    ((sar_i32(
+                        ((shl_i32(((pp).primColTarget().a() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_6.wrapping_mul(
+                                    (((pp).primCol().a() as i32)
+                                        .wrapping_sub(((pp).primColTarget().a() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                __state = 649;
+            }
+            649 => {
+                __state = if ((pp).envColCount() as i32) != 0_i32 {
+                    651
+                } else {
+                    652
+                };
+            }
+            650 => {
+                unreachable!();
+            }
+            651 => {
+                step_6 = div_i32(
+                    (shl_i32(((pp).envColRemain() as i32), (16_i32 as u32))),
+                    ((pp).envColCount() as i32),
+                );
+                (pp).envCol().set_r(
+                    ((sar_i32(
+                        ((shl_i32(((pp).envColTarget().r() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_6.wrapping_mul(
+                                    (((pp).envCol().r() as i32)
+                                        .wrapping_sub(((pp).envColTarget().r() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).envCol().set_g(
+                    ((sar_i32(
+                        ((shl_i32(((pp).envColTarget().g() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_6.wrapping_mul(
+                                    (((pp).envCol().g() as i32)
+                                        .wrapping_sub(((pp).envColTarget().g() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).envCol().set_b(
+                    ((sar_i32(
+                        ((shl_i32(((pp).envColTarget().b() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_6.wrapping_mul(
+                                    (((pp).envCol().b() as i32)
+                                        .wrapping_sub(((pp).envColTarget().b() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).envCol().set_a(
+                    ((sar_i32(
+                        ((shl_i32(((pp).envColTarget().a() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_6.wrapping_mul(
+                                    (((pp).envCol().a() as i32)
+                                        .wrapping_sub(((pp).envColTarget().a() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                __state = 652;
+            }
+            652 => {
+                rand_r = fns::HSD_Randf(ctx);
+                delta_3 = (({
+                    let __t54 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t54
+                })
+                .get() as i8);
+                rand_r = fp::fmuls(
+                    fp::frsp((shl_i32((delta_3 as i32), (1_i32 as u32))) as f64),
+                    rand_r,
+                );
+                val = fp::fadds(fp::frsp((pp).primColTarget().r() as f64), rand_r);
+                __state = if val < 0.0 { 654 } else { 655 };
+            }
+            653 => {
+                unreachable!();
+            }
+            654 => {
+                val = 0.0;
+                __state = 655;
+            }
+            655 => {
+                __state = if val > 255.0 { 657 } else { 658 };
+            }
+            656 => {
+                unreachable!();
+            }
+            657 => {
+                val = 255.0;
+                __state = 658;
+            }
+            658 => {
+                (pp).primColTarget().set_r((fp::fctiwz(val) as u8));
+                val = fp::fadds(fp::frsp((pp).envColTarget().r() as f64), rand_r);
+                __state = if val < 0.0 { 660 } else { 661 };
+            }
+            659 => {
+                unreachable!();
+            }
+            660 => {
+                val = 0.0;
+                __state = 661;
+            }
+            661 => {
+                __state = if val > 255.0 { 663 } else { 664 };
+            }
+            662 => {
+                unreachable!();
+            }
+            663 => {
+                val = 255.0;
+                __state = 664;
+            }
+            664 => {
+                (pp).envColTarget().set_r((fp::fctiwz(val) as u8));
+                rand_g = fns::HSD_Randf(ctx);
+                delta_3 = (({
+                    let __t55 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t55
+                })
+                .get() as i8);
+                rand_g = fp::fmuls(
+                    fp::frsp((shl_i32((delta_3 as i32), (1_i32 as u32))) as f64),
+                    rand_g,
+                );
+                val = fp::fadds(fp::frsp((pp).primColTarget().g() as f64), rand_g);
+                __state = if val < 0.0 { 666 } else { 667 };
+            }
+            665 => {
+                unreachable!();
+            }
+            666 => {
+                val = 0.0;
+                __state = 667;
+            }
+            667 => {
+                __state = if val > 255.0 { 669 } else { 670 };
+            }
+            668 => {
+                unreachable!();
+            }
+            669 => {
+                val = 255.0;
+                __state = 670;
+            }
+            670 => {
+                (pp).primColTarget().set_g((fp::fctiwz(val) as u8));
+                val = fp::fadds(fp::frsp((pp).envColTarget().g() as f64), rand_g);
+                __state = if val < 0.0 { 672 } else { 673 };
+            }
+            671 => {
+                unreachable!();
+            }
+            672 => {
+                val = 0.0;
+                __state = 673;
+            }
+            673 => {
+                __state = if val > 255.0 { 675 } else { 676 };
+            }
+            674 => {
+                unreachable!();
+            }
+            675 => {
+                val = 255.0;
+                __state = 676;
+            }
+            676 => {
+                (pp).envColTarget().set_g((fp::fctiwz(val) as u8));
+                rand_b = fns::HSD_Randf(ctx);
+                delta_3 = (({
+                    let __t56 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t56
+                })
+                .get() as i8);
+                rand_b = fp::fmuls(
+                    fp::frsp((shl_i32((delta_3 as i32), (1_i32 as u32))) as f64),
+                    rand_b,
+                );
+                val = fp::fadds(fp::frsp((pp).primColTarget().b() as f64), rand_b);
+                __state = if val < 0.0 { 678 } else { 679 };
+            }
+            677 => {
+                unreachable!();
+            }
+            678 => {
+                val = 0.0;
+                __state = 679;
+            }
+            679 => {
+                __state = if val > 255.0 { 681 } else { 682 };
+            }
+            680 => {
+                unreachable!();
+            }
+            681 => {
+                val = 255.0;
+                __state = 682;
+            }
+            682 => {
+                (pp).primColTarget().set_b((fp::fctiwz(val) as u8));
+                val = fp::fadds(fp::frsp((pp).envColTarget().b() as f64), rand_b);
+                __state = if val < 0.0 { 684 } else { 685 };
+            }
+            683 => {
+                unreachable!();
+            }
+            684 => {
+                val = 0.0;
+                __state = 685;
+            }
+            685 => {
+                __state = if val > 255.0 { 687 } else { 688 };
+            }
+            686 => {
+                unreachable!();
+            }
+            687 => {
+                val = 255.0;
+                __state = 688;
+            }
+            688 => {
+                (pp).envColTarget().set_b((fp::fctiwz(val) as u8));
+                rand_a = fns::HSD_Randf(ctx);
+                delta_3 = (({
+                    let __t57 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t57
+                })
+                .get() as i8);
+                rand_a = fp::fmuls(
+                    fp::frsp((shl_i32((delta_3 as i32), (1_i32 as u32))) as f64),
+                    rand_a,
+                );
+                val = fp::fadds(fp::frsp((pp).primColTarget().a() as f64), rand_a);
+                __state = if val < 0.0 { 690 } else { 691 };
+            }
+            689 => {
+                unreachable!();
+            }
+            690 => {
+                val = 0.0;
+                __state = 691;
+            }
+            691 => {
+                __state = if val > 255.0 { 693 } else { 694 };
+            }
+            692 => {
+                unreachable!();
+            }
+            693 => {
+                val = 255.0;
+                __state = 694;
+            }
+            694 => {
+                (pp).primColTarget().set_a((fp::fctiwz(val) as u8));
+                val = fp::fadds(fp::frsp((pp).envColTarget().a() as f64), rand_a);
+                __state = if val < 0.0 { 696 } else { 697 };
+            }
+            695 => {
+                unreachable!();
+            }
+            696 => {
+                val = 0.0;
+                __state = 697;
+            }
+            697 => {
+                __state = if val > 255.0 { 699 } else { 700 };
+            }
+            698 => {
+                unreachable!();
+            }
+            699 => {
+                val = 255.0;
+                __state = 700;
+            }
+            700 => {
+                (pp).envColTarget().set_a((fp::fctiwz(val) as u8));
+                __state = if ((pp).primColCount() as i32) == 0_i32 {
+                    702
+                } else {
+                    703
+                };
+            }
+            701 => {
+                unreachable!();
+            }
+            702 => {
+                Handle::copy_from((pp).primCol(), (pp).primColTarget());
+                __state = 703;
+            }
+            703 => {
+                (pp).set_primColRemain((pp).primColCount());
+                __state = if ((pp).envColCount() as i32) == 0_i32 {
+                    705
+                } else {
+                    706
+                };
+            }
+            704 => {
+                unreachable!();
+            }
+            705 => {
+                Handle::copy_from((pp).envCol(), (pp).envColTarget());
+                __state = 706;
+            }
+            706 => {
+                (pp).set_envColRemain((pp).envColCount());
+                __state = 141;
+            }
+            707 => {
+                unreachable!();
+            }
+            708 => {
+                __state = 121;
+            }
+            709 => {
+                step_7 = div_i32(
+                    (shl_i32(((pp).primColRemain() as i32), (16_i32 as u32))),
+                    ((pp).primColCount() as i32),
+                );
+                (pp).primCol().set_r(
+                    ((sar_i32(
+                        ((shl_i32(((pp).primColTarget().r() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_7.wrapping_mul(
+                                    (((pp).primCol().r() as i32)
+                                        .wrapping_sub(((pp).primColTarget().r() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).primCol().set_g(
+                    ((sar_i32(
+                        ((shl_i32(((pp).primColTarget().g() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_7.wrapping_mul(
+                                    (((pp).primCol().g() as i32)
+                                        .wrapping_sub(((pp).primColTarget().g() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).primCol().set_b(
+                    ((sar_i32(
+                        ((shl_i32(((pp).primColTarget().b() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_7.wrapping_mul(
+                                    (((pp).primCol().b() as i32)
+                                        .wrapping_sub(((pp).primColTarget().b() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).primCol().set_a(
+                    ((sar_i32(
+                        ((shl_i32(((pp).primColTarget().a() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_7.wrapping_mul(
+                                    (((pp).primCol().a() as i32)
+                                        .wrapping_sub(((pp).primColTarget().a() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                __state = 710;
+            }
+            710 => {
+                __state = if ((pp).envColCount() as i32) != 0_i32 {
+                    712
+                } else {
+                    713
+                };
+            }
+            711 => {
+                unreachable!();
+            }
+            712 => {
+                step_7 = div_i32(
+                    (shl_i32(((pp).envColRemain() as i32), (16_i32 as u32))),
+                    ((pp).envColCount() as i32),
+                );
+                (pp).envCol().set_r(
+                    ((sar_i32(
+                        ((shl_i32(((pp).envColTarget().r() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_7.wrapping_mul(
+                                    (((pp).envCol().r() as i32)
+                                        .wrapping_sub(((pp).envColTarget().r() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).envCol().set_g(
+                    ((sar_i32(
+                        ((shl_i32(((pp).envColTarget().g() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_7.wrapping_mul(
+                                    (((pp).envCol().g() as i32)
+                                        .wrapping_sub(((pp).envColTarget().g() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).envCol().set_b(
+                    ((sar_i32(
+                        ((shl_i32(((pp).envColTarget().b() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_7.wrapping_mul(
+                                    (((pp).envCol().b() as i32)
+                                        .wrapping_sub(((pp).envColTarget().b() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).envCol().set_a(
+                    ((sar_i32(
+                        ((shl_i32(((pp).envColTarget().a() as i32), (16_i32 as u32)))
+                            .wrapping_add(
+                                step_7.wrapping_mul(
+                                    (((pp).envCol().a() as i32)
+                                        .wrapping_sub(((pp).envColTarget().a() as i32))),
+                                ),
+                            )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                __state = 713;
+            }
+            713 => {
+                flags_3 = (({
+                    let __t58 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t58
+                })
+                .get() as i32);
+                timing = (({
+                    let __t59 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t59
+                })
+                .get() as i32);
+                __state = if timing != 0_i32 { 715 } else { 717 };
+            }
+            714 => {
+                unreachable!();
+            }
+            715 => {
+                scale_4 = fp::fdivs(
+                    fp::frsp(fp::fctiwz(
+                        (fp::fmuls(
+                            fp::frsp((timing.wrapping_add(1_i32)) as f64),
+                            fns::HSD_Randf(ctx),
+                        )),
+                    ) as f64),
+                    fp::frsp(timing as f64),
+                );
+                __state = 716;
+            }
+            716 => {
+                __state = if ((flags_3 & 1_i32) != 0) { 719 } else { 720 };
+            }
+            717 => {
+                scale_4 = fns::HSD_Randf(ctx);
+                __state = 716;
+            }
+            718 => {
+                unreachable!();
+            }
+            719 => {
+                delta_4 = (({
+                    let __t60 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t60
+                })
+                .get() as i8);
+                delta_float = fp::fmuls(
+                    scale_4,
+                    fp::frsp((shl_i32((delta_4 as i32), (1_i32 as u32))) as f64),
+                );
+                __state = if ((flags_3 & 16_i32) != 0) { 722 } else { 723 };
+            }
+            720 => {
+                __state = if ((flags_3 & 2_i32) != 0) { 740 } else { 741 };
+            }
+            721 => {
+                unreachable!();
+            }
+            722 => {
+                val = fp::fadds(fp::frsp((pp).primColTarget().r() as f64), delta_float);
+                __state = if val < 0.0 { 725 } else { 726 };
+            }
+            723 => {
+                __state = if ((flags_3 & 32_i32) != 0) { 731 } else { 732 };
+            }
+            724 => {
+                unreachable!();
+            }
+            725 => {
+                val = 0.0;
+                __state = 726;
+            }
+            726 => {
+                __state = if val > 255.0 { 728 } else { 729 };
+            }
+            727 => {
+                unreachable!();
+            }
+            728 => {
+                val = 255.0;
+                __state = 729;
+            }
+            729 => {
+                (pp).primColTarget().set_r((fp::fctiwz(val) as u8));
+                __state = 723;
+            }
+            730 => {
+                unreachable!();
+            }
+            731 => {
+                val = fp::fadds(fp::frsp((pp).envColTarget().r() as f64), delta_float);
+                __state = if val < 0.0 { 734 } else { 735 };
+            }
+            732 => {
+                __state = 720;
+            }
+            733 => {
+                unreachable!();
+            }
+            734 => {
+                val = 0.0;
+                __state = 735;
+            }
+            735 => {
+                __state = if val > 255.0 { 737 } else { 738 };
+            }
+            736 => {
+                unreachable!();
+            }
+            737 => {
+                val = 255.0;
+                __state = 738;
+            }
+            738 => {
+                (pp).envColTarget().set_r((fp::fctiwz(val) as u8));
+                __state = 732;
+            }
+            739 => {
+                unreachable!();
+            }
+            740 => {
+                delta_4 = (({
+                    let __t61 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t61
+                })
+                .get() as i8);
+                delta_float = fp::fmuls(
+                    scale_4,
+                    fp::frsp((shl_i32((delta_4 as i32), (1_i32 as u32))) as f64),
+                );
+                __state = if ((flags_3 & 16_i32) != 0) { 743 } else { 744 };
+            }
+            741 => {
+                __state = if ((flags_3 & 4_i32) != 0) { 761 } else { 762 };
+            }
+            742 => {
+                unreachable!();
+            }
+            743 => {
+                val = fp::fadds(fp::frsp((pp).primColTarget().g() as f64), delta_float);
+                __state = if val < 0.0 { 746 } else { 747 };
+            }
+            744 => {
+                __state = if ((flags_3 & 32_i32) != 0) { 752 } else { 753 };
+            }
+            745 => {
+                unreachable!();
+            }
+            746 => {
+                val = 0.0;
+                __state = 747;
+            }
+            747 => {
+                __state = if val > 255.0 { 749 } else { 750 };
+            }
+            748 => {
+                unreachable!();
+            }
+            749 => {
+                val = 255.0;
+                __state = 750;
+            }
+            750 => {
+                (pp).primColTarget().set_g((fp::fctiwz(val) as u8));
+                __state = 744;
+            }
+            751 => {
+                unreachable!();
+            }
+            752 => {
+                val = fp::fadds(fp::frsp((pp).envColTarget().g() as f64), delta_float);
+                __state = if val < 0.0 { 755 } else { 756 };
+            }
+            753 => {
+                __state = 741;
+            }
+            754 => {
+                unreachable!();
+            }
+            755 => {
+                val = 0.0;
+                __state = 756;
+            }
+            756 => {
+                __state = if val > 255.0 { 758 } else { 759 };
+            }
+            757 => {
+                unreachable!();
+            }
+            758 => {
+                val = 255.0;
+                __state = 759;
+            }
+            759 => {
+                (pp).envColTarget().set_g((fp::fctiwz(val) as u8));
+                __state = 753;
+            }
+            760 => {
+                unreachable!();
+            }
+            761 => {
+                delta_4 = (({
+                    let __t62 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t62
+                })
+                .get() as i8);
+                delta_float = fp::fmuls(
+                    scale_4,
+                    fp::frsp((shl_i32((delta_4 as i32), (1_i32 as u32))) as f64),
+                );
+                __state = if ((flags_3 & 16_i32) != 0) { 764 } else { 765 };
+            }
+            762 => {
+                __state = if ((flags_3 & 8_i32) != 0) { 782 } else { 783 };
+            }
+            763 => {
+                unreachable!();
+            }
+            764 => {
+                val = fp::fadds(fp::frsp((pp).primColTarget().b() as f64), delta_float);
+                __state = if val < 0.0 { 767 } else { 768 };
+            }
+            765 => {
+                __state = if ((flags_3 & 32_i32) != 0) { 773 } else { 774 };
+            }
+            766 => {
+                unreachable!();
+            }
+            767 => {
+                val = 0.0;
+                __state = 768;
+            }
+            768 => {
+                __state = if val > 255.0 { 770 } else { 771 };
+            }
+            769 => {
+                unreachable!();
+            }
+            770 => {
+                val = 255.0;
+                __state = 771;
+            }
+            771 => {
+                (pp).primColTarget().set_b((fp::fctiwz(val) as u8));
+                __state = 765;
+            }
+            772 => {
+                unreachable!();
+            }
+            773 => {
+                val = fp::fadds(fp::frsp((pp).envColTarget().b() as f64), delta_float);
+                __state = if val < 0.0 { 776 } else { 777 };
+            }
+            774 => {
+                __state = 762;
+            }
+            775 => {
+                unreachable!();
+            }
+            776 => {
+                val = 0.0;
+                __state = 777;
+            }
+            777 => {
+                __state = if val > 255.0 { 779 } else { 780 };
+            }
+            778 => {
+                unreachable!();
+            }
+            779 => {
+                val = 255.0;
+                __state = 780;
+            }
+            780 => {
+                (pp).envColTarget().set_b((fp::fctiwz(val) as u8));
+                __state = 774;
+            }
+            781 => {
+                unreachable!();
+            }
+            782 => {
+                a_rand = fns::HSD_Randf(ctx);
+                delta_4 = (Handle::cast::<Val<'a, i8>>({
+                    let __t63 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t63
+                }))
+                .get();
+                a_rand = fp::frsp(fp::fctiwz(
+                    (fp::fmuls(fp::frsp((timing.wrapping_add(1_i32)) as f64), a_rand)),
+                ) as f64);
+                delta_float = fp::fdivs(
+                    (fp::fmuls(
+                        fp::frsp((shl_i32((delta_4 as i32), (1_i32 as u32))) as f64),
+                        a_rand,
+                    )),
+                    fp::frsp(timing as f64),
+                );
+                __state = if ((flags_3 & 16_i32) != 0) { 785 } else { 786 };
+            }
+            783 => {
+                __state = if ((pp).primColCount() as i32) == 0_i32 {
+                    803
+                } else {
+                    804
+                };
+            }
+            784 => {
+                unreachable!();
+            }
+            785 => {
+                val = fp::fadds(fp::frsp((pp).primColTarget().a() as f64), delta_float);
+                __state = if val < 0.0 { 788 } else { 789 };
+            }
+            786 => {
+                __state = if ((flags_3 & 32_i32) != 0) { 794 } else { 795 };
+            }
+            787 => {
+                unreachable!();
+            }
+            788 => {
+                val = 0.0;
+                __state = 789;
+            }
+            789 => {
+                __state = if val > 255.0 { 791 } else { 792 };
+            }
+            790 => {
+                unreachable!();
+            }
+            791 => {
+                val = 255.0;
+                __state = 792;
+            }
+            792 => {
+                (pp).primColTarget().set_a((fp::fctiwz(val) as u8));
+                __state = 786;
+            }
+            793 => {
+                unreachable!();
+            }
+            794 => {
+                val = fp::fadds(fp::frsp((pp).envColTarget().a() as f64), delta_float);
+                __state = if val < 0.0 { 797 } else { 798 };
+            }
+            795 => {
+                __state = 783;
+            }
+            796 => {
+                unreachable!();
+            }
+            797 => {
+                val = 0.0;
+                __state = 798;
+            }
+            798 => {
+                __state = if val > 255.0 { 800 } else { 801 };
+            }
+            799 => {
+                unreachable!();
+            }
+            800 => {
+                val = 255.0;
+                __state = 801;
+            }
+            801 => {
+                (pp).envColTarget().set_a((fp::fctiwz(val) as u8));
+                __state = 795;
+            }
+            802 => {
+                unreachable!();
+            }
+            803 => {
+                Handle::copy_from((pp).primCol(), (pp).primColTarget());
+                __state = 804;
+            }
+            804 => {
+                (pp).set_primColRemain((pp).primColCount());
+                __state = if ((pp).envColCount() as i32) == 0_i32 {
+                    806
+                } else {
+                    807
+                };
+            }
+            805 => {
+                unreachable!();
+            }
+            806 => {
+                Handle::copy_from((pp).envCol(), (pp).envColTarget());
+                __state = 807;
+            }
+            807 => {
+                (pp).set_envColRemain((pp).envColCount());
+                __state = 141;
+            }
+            808 => {
+                unreachable!();
+            }
+            809 => {
+                __state = 122;
+            }
+            810 => {
+                (pp).set_callback(null::<FnPtr<'a>>(ctx));
+                __state = 811;
+            }
+            811 => {
+                __state = 141;
+            }
+            812 => {
+                (pp).set_callback(
+                    (Handle::add(
+                        statics::sysdolphin__baselib__particle::psCallback(ctx).get(),
+                        idx_11.wrapping_sub(1_i32),
+                    ))
+                    .get(),
+                );
+                __state = 811;
+            }
+            813 => {
+                unreachable!();
+            }
+            814 => {
+                __state = 123;
+            }
+            815 => {
+                let _ = (((pp).r#gen()).userfunc()).setUserData().call::<_, i32>((
+                    pp,
+                    (idx_12 as u8),
+                    Single(fp::frsp(v)),
+                ));
+                __state = 816;
+            }
+            816 => {
+                __state = 141;
+            }
+            817 => {
+                __state = if !Handle::is_null((pp).userdata()) {
+                    819
+                } else {
+                    820
+                };
+            }
+            818 => {
+                unreachable!();
+            }
+            819 => {
+                (Handle::add((pp).userdata(), idx_12)).set(v);
+                __state = 820;
+            }
+            820 => {
+                __state = 816;
+            }
+            821 => {
+                unreachable!();
+            }
+            822 => {
+                __state = 124;
+            }
+            823 => {
+                __state = 125;
+            }
+            824 => {
+                __state = 126;
+            }
+            825 => {
+                (pp).set_kind(((pp).kind() & ((!(enums::TexFlipS as i32)) as u32)));
+                __state = 829;
+            }
+            826 => {
+                (pp).set_kind(((pp).kind() | ((enums::TexFlipS as i32) as u32)));
+                __state = 829;
+            }
+            827 => {
+                (pp).set_kind(((pp).kind() ^ ((enums::TexFlipS as i32) as u32)));
+                __state = 829;
+            }
+            828 => {
+                __state = if fns::HSD_Randf(ctx) < 0.5 { 835 } else { 837 };
+            }
+            829 => {
+                __state = 141;
+            }
+            830 => {
+                unreachable!();
+            }
+            831 => {
+                __state = 825;
+            }
+            832 => {
+                __state = 826;
+            }
+            833 => {
+                __state = 827;
+            }
+            834 => {
+                __state = 828;
+            }
+            835 => {
+                (pp).set_kind(((pp).kind() & ((!(enums::TexFlipS as i32)) as u32)));
+                __state = 836;
+            }
+            836 => {
+                __state = 829;
+            }
+            837 => {
+                (pp).set_kind(((pp).kind() | ((enums::TexFlipS as i32) as u32)));
+                __state = 836;
+            }
+            838 => {
+                unreachable!();
+            }
+            839 => {
+                __state = 829;
+            }
+            840 => {
+                __state = 127;
+            }
+            841 => {
+                (pp).set_kind(((pp).kind() & ((!(enums::TexFlipT as i32)) as u32)));
+                __state = 845;
+            }
+            842 => {
+                (pp).set_kind(((pp).kind() | ((enums::TexFlipT as i32) as u32)));
+                __state = 845;
+            }
+            843 => {
+                (pp).set_kind(((pp).kind() ^ ((enums::TexFlipT as i32) as u32)));
+                __state = 845;
+            }
+            844 => {
+                __state = if fns::HSD_Randf(ctx) < 0.5 { 851 } else { 853 };
+            }
+            845 => {
+                __state = 141;
+            }
+            846 => {
+                unreachable!();
+            }
+            847 => {
+                __state = 841;
+            }
+            848 => {
+                __state = 842;
+            }
+            849 => {
+                __state = 843;
+            }
+            850 => {
+                __state = 844;
+            }
+            851 => {
+                (pp).set_kind(((pp).kind() & ((!(enums::TexFlipT as i32)) as u32)));
+                __state = 852;
+            }
+            852 => {
+                __state = 845;
+            }
+            853 => {
+                (pp).set_kind(((pp).kind() | ((enums::TexFlipT as i32) as u32)));
+                __state = 852;
+            }
+            854 => {
+                unreachable!();
+            }
+            855 => {
+                __state = 845;
+            }
+            856 => {
+                __state = 128;
+            }
+            857 => {
+                __state = 129;
+            }
+            858 => {
+                __state = 130;
+            }
+            859 => {
+                (pp).set_kind(((pp).kind() & ((!(enums::Trail as i32)) as u32)));
+                __state = 860;
+            }
+            860 => {
+                __state = 141;
+            }
+            861 => {
+                (pp).set_kind(((pp).kind() | ((enums::Trail as i32) as u32)));
+                (pp).set_trail(trail);
+                __state = 860;
+            }
+            862 => {
+                unreachable!();
+            }
+            863 => {
+                __state = 131;
+            }
+            864 => {
+                step_8 = div_i32(
+                    (shl_i32(((pp).matColRemain() as i32), (16_i32 as u32))),
+                    ((pp).matColCount() as i32),
+                );
+                (pp).set_matRGB(
+                    ((sar_i32(
+                        ((shl_i32(((pp).matRGBTarget() as i32), (16_i32 as u32))).wrapping_add(
+                            step_8.wrapping_mul(
+                                (((pp).matRGB() as i32).wrapping_sub(((pp).matRGBTarget() as i32))),
+                            ),
+                        )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).set_matA(
+                    ((sar_i32(
+                        ((shl_i32(((pp).matATarget() as i32), (16_i32 as u32))).wrapping_add(
+                            step_8.wrapping_mul(
+                                (((pp).matA() as i32).wrapping_sub(((pp).matATarget() as i32))),
+                            ),
+                        )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                __state = 865;
+            }
+            865 => {
+                p_7 = pc.get();
+                (pp).set_matColCount(
+                    (({
+                        let __t69 = p_7;
+                        p_7 = Handle::add(p_7, 1);
+                        __t69
+                    })
+                    .get() as u16),
+                );
+                cnt_7 = (pp).matColCount();
+                __state = if (((cnt_7 as i32) & 128_i32) != 0) {
+                    867
+                } else {
+                    868
+                };
+            }
+            866 => {
+                unreachable!();
+            }
+            867 => {
+                cnt_7 = ((shl_i32(((cnt_7 as i32) & 127_i32), (8_i32 as u32))).wrapping_add(
+                    (({
+                        let __t70 = p_7;
+                        p_7 = Handle::add(p_7, 1);
+                        __t70
+                    })
+                    .get() as i32),
+                ) as u16);
+                (pp).set_matColCount(cnt_7);
+                __state = 868;
+            }
+            868 => {
+                pc.set(p_7);
+                flags_4 = ({
+                    let __t71 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t71
+                })
+                .get();
+                (pp).set_matRGBTarget((pp).matRGB());
+                __state = if (((flags_4 as i32) & 1_i32) != 0) {
+                    870
+                } else {
+                    871
+                };
+            }
+            869 => {
+                unreachable!();
+            }
+            870 => {
+                (pp).set_matRGBTarget(
+                    ({
+                        let __t72 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t72
+                    })
+                    .get(),
+                );
+                __state = 871;
+            }
+            871 => {
+                __state = if (((flags_4 as i32) & 8_i32) != 0) {
+                    873
+                } else {
+                    874
+                };
+            }
+            872 => {
+                unreachable!();
+            }
+            873 => {
+                (pp).set_matATarget(
+                    ({
+                        let __t73 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t73
+                    })
+                    .get(),
+                );
+                __state = 874;
+            }
+            874 => {
+                __state = if ((pp).matColCount() as i32) == 0_i32 {
+                    876
+                } else {
+                    878
+                };
+            }
+            875 => {
+                unreachable!();
+            }
+            876 => {
+                (pp).set_matRGB((pp).matRGBTarget());
+                (pp).set_matColRemain((0_i32 as u16));
+                __state = 877;
+            }
+            877 => {
+                __state = 141;
+            }
+            878 => {
+                (pp).set_matColRemain((pp).matColCount());
+                __state = 877;
+            }
+            879 => {
+                unreachable!();
+            }
+            880 => {
+                __state = 132;
+            }
+            881 => {
+                step_9 = div_i32(
+                    (shl_i32(((pp).ambColRemain() as i32), (16_i32 as u32))),
+                    ((pp).ambColCount() as i32),
+                );
+                (pp).set_ambRGB(
+                    ((sar_i32(
+                        ((shl_i32(((pp).ambRGBTarget() as i32), (16_i32 as u32))).wrapping_add(
+                            step_9.wrapping_mul(
+                                (((pp).ambRGB() as i32).wrapping_sub(((pp).ambRGBTarget() as i32))),
+                            ),
+                        )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                (pp).set_ambA(
+                    ((sar_i32(
+                        ((shl_i32(((pp).ambATarget() as i32), (16_i32 as u32))).wrapping_add(
+                            step_9.wrapping_mul(
+                                (((pp).ambA() as i32).wrapping_sub(((pp).ambATarget() as i32))),
+                            ),
+                        )),
+                        (16_i32 as u32),
+                    )) as u8),
+                );
+                __state = 882;
+            }
+            882 => {
+                p_8 = pc.get();
+                (pp).set_ambColCount(
+                    (({
+                        let __t74 = p_8;
+                        p_8 = Handle::add(p_8, 1);
+                        __t74
+                    })
+                    .get() as u16),
+                );
+                cnt_8 = (pp).ambColCount();
+                __state = if (((cnt_8 as i32) & 128_i32) != 0) {
+                    884
+                } else {
+                    885
+                };
+            }
+            883 => {
+                unreachable!();
+            }
+            884 => {
+                cnt_8 = ((shl_i32(((cnt_8 as i32) & 127_i32), (8_i32 as u32))).wrapping_add(
+                    (({
+                        let __t75 = p_8;
+                        p_8 = Handle::add(p_8, 1);
+                        __t75
+                    })
+                    .get() as i32),
+                ) as u16);
+                (pp).set_ambColCount(cnt_8);
+                __state = 885;
+            }
+            885 => {
+                pc.set(p_8);
+                flags_5 = ({
+                    let __t76 = pc.get();
+                    pc.set(Handle::add(pc.get(), 1));
+                    __t76
+                })
+                .get();
+                (pp).set_ambRGBTarget((pp).ambRGB());
+                __state = if (((flags_5 as i32) & 1_i32) != 0) {
+                    887
+                } else {
+                    888
+                };
+            }
+            886 => {
+                unreachable!();
+            }
+            887 => {
+                (pp).set_ambRGBTarget(
+                    ({
+                        let __t77 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t77
+                    })
+                    .get(),
+                );
+                __state = 888;
+            }
+            888 => {
+                __state = if (((flags_5 as i32) & 8_i32) != 0) {
+                    890
+                } else {
+                    891
+                };
+            }
+            889 => {
+                unreachable!();
+            }
+            890 => {
+                (pp).set_ambATarget(
+                    ({
+                        let __t78 = pc.get();
+                        pc.set(Handle::add(pc.get(), 1));
+                        __t78
+                    })
+                    .get(),
+                );
+                __state = 891;
+            }
+            891 => {
+                __state = if ((pp).ambColCount() as i32) == 0_i32 {
+                    893
+                } else {
+                    895
+                };
+            }
+            892 => {
+                unreachable!();
+            }
+            893 => {
+                (pp).set_ambRGB((pp).ambRGBTarget());
+                (pp).set_ambColRemain((0_i32 as u16));
+                __state = 894;
+            }
+            894 => {
+                __state = 141;
+            }
+            895 => {
+                (pp).set_ambColRemain((pp).ambColCount());
+                __state = 894;
+            }
+            896 => {
+                unreachable!();
+            }
+            897 => {
+                __state = 133;
+            }
+            898 => {
+                randi = fp::fctiwz(
+                    (fp::fmuls(
+                        fp::frsp((timing_2.wrapping_add(1_i32)) as f64),
+                        fns::HSD_Randf(ctx),
+                    )),
+                );
+                base_val = fp::fadds(
+                    base_val,
+                    fp::fdivs(
+                        fp::fmuls(range_val, fp::frsp(randi as f64)),
+                        fp::frsp(timing_2 as f64),
+                    ),
+                );
+                __state = 899;
+            }
+            899 => {
+                (pp).set_rotateTarget(fp::fadds((pp).rotateTarget(), base_val));
+                (pp).set_rotate(fp::fadds((pp).rotate(), base_val));
+                __state = 141;
+            }
+            900 => {
+                base_val = fp::fmadds(range_val, fns::HSD_Randf(ctx), base_val);
+                __state = 899;
+            }
+            901 => {
+                unreachable!();
+            }
+            902 => {
+                __state = 134;
+            }
+            903 => {
+                __state = 135;
+            }
+            904 => {
+                pc.set(Handle::add((pp).cmdList(), ((pp).cmdLoopPtr() as i32)));
+                __state = 905;
+            }
+            905 => {
+                __state = 141;
+            }
+            906 => {
+                unreachable!();
+            }
+            907 => {
+                __state = 136;
+            }
+            908 => {
+                __state = 137;
+            }
+            909 => {
+                __state = 138;
+            }
+            910 => {
+                __state = 140;
+            }
+            911 => {
+                __state = 141;
+            }
+            912 => {
+                __state = 53;
+            }
+            913 => {
+                __state = 52;
+            }
+            914 => {
+                unreachable!();
+            }
+            915 => {
+                __state = 913;
+            }
+            916 => {
+                __state = 919;
+            }
+            917 => {
+                __state = if (((pp).kind() & ((enums::Tornado as i32) as u32)) != 0) {
+                    940
+                } else {
+                    942
+                };
+            }
+            918 => {
+                unreachable!();
+            }
+            919 => {
+                __state = if ((!Handle::is_null((pp).r#gen()))
+                    && (!Handle::is_null(((pp).r#gen()).userfunc())))
+                    && (!Handle::is_null((((pp).r#gen()).userfunc()).hookDelete()))
+                {
+                    920
+                } else {
+                    921
+                };
+            }
+            920 => {
+                let _ = (((pp).r#gen()).userfunc())
+                    .hookDelete()
+                    .call::<_, i32>((pp,));
+                __state = 921;
+            }
+            921 => {
+                __state = if Handle::is_null(prev) { 923 } else { 925 };
+            }
+            922 => {
+                unreachable!();
+            }
+            923 => {
+                fns::hsd_804D0908(ctx)
+                    .at(((pp).linkNo() as i32))
+                    .set((pp).next());
+                __state = 924;
+            }
+            924 => {
+                next_pp = (pp).next();
+                __state = if !Handle::is_null((pp).r#gen()) {
+                    927
+                } else {
+                    928
+                };
+            }
+            925 => {
+                (prev).set_next((pp).next());
+                __state = 924;
+            }
+            926 => {
+                unreachable!();
+            }
+            927 => {
+                ((pp).r#gen()).set_numChild(((pp).r#gen()).numChild().wrapping_sub(1));
+                __state = 928;
+            }
+            928 => {
+                __state = if !Handle::is_null((pp).appsrt()) {
+                    930
+                } else {
+                    931
+                };
+            }
+            929 => {
+                unreachable!();
+            }
+            930 => {
+                __state =
+                    if (fns::psRemoveParticleAppSRT(ctx, pp) == 0_i32) && (Handle::is_null(prev)) {
+                        933
+                    } else {
+                        934
+                    };
+            }
+            931 => {
+                fns::hsd_8039D048(ctx, Handle::cast::<Addr<'a>>(pp));
+                fns::HSD_ObjFree(
+                    ctx,
+                    fns::hsd_804D0F60(ctx).alloc_data(),
+                    Handle::cast::<Addr<'a>>(pp),
+                );
+                statics::sysdolphin__baselib__particle::hsd_804D78E2(ctx).set(
+                    statics::sysdolphin__baselib__particle::hsd_804D78E2(ctx)
+                        .get()
+                        .wrapping_sub(1),
+                );
+                return Handle::cast::<Addr<'a>>(next_pp);
+            }
+            932 => {
+                unreachable!();
+            }
+            933 => {
+                head = fns::hsd_804D0908(ctx).at(((pp).linkNo() as i32)).get();
+                __state = if Handle::addr(head) != Handle::addr(next_pp) {
+                    936
+                } else {
+                    937
+                };
+            }
+            934 => {
+                __state = 931;
+            }
+            935 => {
+                unreachable!();
+            }
+            936 => {
+                next_pp = head;
+                __state = 937;
+            }
+            937 => {
+                __state = 934;
+            }
+            938 => {
+                unreachable!();
+            }
+            939 => {
+                __state = 917;
+            }
+            940 => {
+                gp = (pp).r#gen();
+                sinA = fns::sinf(ctx, (pp).grav());
+                sinB = fns::sinf(ctx, (pp).fric());
+                cosA = fns::cosf(ctx, (pp).grav());
+                cosB = fns::cosf(ctx, (pp).fric());
+                (pp).vel()
+                    .set_z(fp::fadds((pp).vel().z(), (gp).aux().tornado().vel()));
+                R = (if (gp).radius() < 0.0 {
+                    fp::fneg((gp).radius())
+                } else {
+                    (gp).radius()
+                });
+                __state = if ({
+                    let __t81 = (gp).angle();
+                    ang = __t81;
+                    __t81
+                }) < 0.0
+                {
+                    944
+                } else {
+                    945
+                };
+            }
+            941 => {
+                __state = if (((pp).kind() & (0x8000_i32 as u32)) != 0) {
+                    953
+                } else {
+                    954
+                };
+            }
+            942 => {
+                __state = if (((pp).kind() & (1_i32 as u32)) != 0) {
+                    947
+                } else {
+                    948
+                };
+            }
+            943 => {
+                unreachable!();
+            }
+            944 => {
+                ang = fp::fneg(ang);
+                __state = 945;
+            }
+            945 => {
+                R = fp::fmadds((pp).vel().z(), fns::tanf(ctx, ang), R);
+                R = fp::fmuls(R, (pp).vel().y());
+                (pp).vel().set_x(fp::fadds((pp).vel().x(), (gp).grav()));
+                d = fp::fmuls(R, fns::cosf(ctx, (pp).vel().x()));
+                e = fp::fmuls(R, fns::sinf(ctx, (pp).vel().x()));
+                nd = fp::fneg(d);
+                vz = (pp).vel().z();
+                (pp).pos().set_x(fp::fadds(
+                    (gp).pos().x(),
+                    (fp::fmadds(d, cosB, fp::fmuls(vz, sinB))),
+                ));
+                (pp).pos().set_y(fp::fadds(
+                    (gp).pos().y(),
+                    (fp::fmadds(
+                        cosB,
+                        (fp::fmuls(vz, sinA)),
+                        (fp::fmadds(sinB, (fp::fmuls(nd, sinA)), fp::fmuls(e, cosA))),
+                    )),
+                ));
+                (pp).pos().set_z(fp::fadds(
+                    (gp).pos().z(),
+                    (fp::fmadds(
+                        cosB,
+                        (fp::fmuls(vz, cosA)),
+                        (fp::fmsubs(sinB, (fp::fmuls(nd, cosA)), fp::fmuls(e, sinA))),
+                    )),
+                ));
+                __state = 941;
+            }
+            946 => {
+                unreachable!();
+            }
+            947 => {
+                (pp).vel().set_y(fp::fsubs((pp).vel().y(), (pp).grav()));
+                __state = 948;
+            }
+            948 => {
+                __state = if (((pp).kind() & (2_i32 as u32)) != 0) {
+                    950
+                } else {
+                    951
+                };
+            }
+            949 => {
+                unreachable!();
+            }
+            950 => {
+                (pp).vel().set_x(fp::fmuls((pp).vel().x(), (pp).fric()));
+                (pp).vel().set_y(fp::fmuls((pp).vel().y(), (pp).fric()));
+                (pp).vel().set_z(fp::fmuls((pp).vel().z(), (pp).fric()));
+                __state = 951;
+            }
+            951 => {
+                (pp).pos().set_x(fp::fadds((pp).pos().x(), (pp).vel().x()));
+                (pp).pos().set_y(fp::fadds((pp).pos().y(), (pp).vel().y()));
+                (pp).pos().set_z(fp::fadds((pp).pos().z(), (pp).vel().z()));
+                __state = 941;
+            }
+            952 => {
+                unreachable!();
+            }
+            953 => {
+                jobj_idx = (shr_u32(((pp).kind() & (0x7000_i32 as u32)), (12_i32 as u32)) as i32);
+                __state = if Handle::is_null(
+                    statics::sysdolphin__baselib__particle::hsd_804D08E8(ctx)
+                        .at(jobj_idx)
+                        .get(),
+                ) {
+                    956
+                } else {
+                    957
+                };
+            }
+            954 => {
+                __state = if !Handle::is_null((pp).callback()) {
+                    965
+                } else {
+                    966
+                };
+            }
+            955 => {
+                unreachable!();
+            }
+            956 => {
+                new_jobj = fns::HSD_JObjAlloc(ctx);
+                __state = if !Handle::is_null(new_jobj) { 959 } else { 960 };
+            }
+            957 => {
+                __state = if !Handle::is_null(
+                    ({
+                        let __t82 = statics::sysdolphin__baselib__particle::hsd_804D08E8(ctx)
+                            .at(jobj_idx)
+                            .get();
+                        jobj_6 = __t82;
+                        __t82
+                    }),
+                ) {
+                    962
+                } else {
+                    963
+                };
+            }
+            958 => {
+                unreachable!();
+            }
+            959 => {
+                fns::hsd_8039CF4C(ctx, jobj_idx.wrapping_add(1_i32), new_jobj);
+                fns::HSD_JObjUnref(ctx, new_jobj);
+                __state = 960;
+            }
+            960 => {
+                __state = 957;
+            }
+            961 => {
+                unreachable!();
+            }
+            962 => {
+                inl_HSD_JObjSetupMatrix(
+                    ctx,
+                    statics::sysdolphin__baselib__particle::hsd_804D08E8(ctx)
+                        .at(jobj_idx)
+                        .get(),
+                );
+                jobj_6 = statics::sysdolphin__baselib__particle::hsd_804D08E8(ctx)
+                    .at(jobj_idx)
+                    .get();
+                inl_HSD_JObjAddTranslationX(
+                    ctx,
+                    jobj_6,
+                    fp::fsubs((pp).pos().x(), (jobj_6).mtx().get(0_i32).at(3_i32).get()),
+                );
+                jobj_6 = statics::sysdolphin__baselib__particle::hsd_804D08E8(ctx)
+                    .at(jobj_idx)
+                    .get();
+                inl_HSD_JObjAddTranslationY(
+                    ctx,
+                    jobj_6,
+                    fp::fsubs((pp).pos().y(), (jobj_6).mtx().get(1_i32).at(3_i32).get()),
+                );
+                jobj_6 = statics::sysdolphin__baselib__particle::hsd_804D08E8(ctx)
+                    .at(jobj_idx)
+                    .get();
+                inl_HSD_JObjAddTranslationZ(
+                    ctx,
+                    jobj_6,
+                    fp::fsubs((pp).pos().z(), (jobj_6).mtx().get(2_i32).at(3_i32).get()),
+                );
+                __state = 963;
+            }
+            963 => {
+                __state = 954;
+            }
+            964 => {
+                unreachable!();
+            }
+            965 => {
+                result = (pp).callback().call::<_, i32>((pp,));
+                __state = if result == 1_i32.wrapping_neg() {
+                    968
+                } else {
+                    969
+                };
+            }
+            966 => {
+                return Handle::cast::<Addr<'a>>((pp).next());
+            }
+            967 => {
+                unreachable!();
+            }
+            968 => {
+                __state = 919;
+            }
+            969 => {
+                __state = 966;
+            }
+            970 => {
+                unreachable!();
+            }
+            971 => {
+                __state = 969;
+            }
+            972 => {
+                return null(ctx);
+            }
+            973 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
 }
 
 pub fn hsd_8039CEAC<'a>(ctx: &'a Ctx, mask: u32) {
@@ -1372,6 +7580,81 @@ fn inl_ref_INC<'a>(ctx: &'a Ctx, o: Addr<'a>) {
     }
 }
 
+fn inl_HSD_JObjAddTranslationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
+    let mut jobj = jobj;
+    let mut x = x;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80005524),
+            (0x297_i32 as u32),
+            cstr(ctx, 0x80005524),
+        )
+    });
+    (jobj)
+        .translate()
+        .set_x(fp::fadds((jobj).translate().x(), x));
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_HSD_JObjAddTranslationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
+    let mut jobj = jobj;
+    let mut y = y;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80005524),
+            (0x2a0_i32 as u32),
+            cstr(ctx, 0x80005524),
+        )
+    });
+    (jobj)
+        .translate()
+        .set_y(fp::fadds((jobj).translate().y(), y));
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_HSD_JObjAddTranslationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
+    let mut jobj = jobj;
+    let mut z = z;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80005524),
+            (0x2b2_i32 as u32),
+            cstr(ctx, 0x80005524),
+        )
+    });
+    (jobj)
+        .translate()
+        .set_z(fp::fadds((jobj).translate().z(), z));
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
 fn inl_ref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
     let mut o = o;
     if !Handle::is_null(o) {
@@ -1547,6 +7830,14 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1, a2, a3): (HSD_Generator<'_>, HSD_JObj<'_>, Single, Single) =
                 Args::take_all(ctx);
             Ret::put(hsd_803991D8(ctx, a0, a1, a2.0, a3.0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8039930c,
+        |ctx| {
+            let (a0, a1): (HSD_Particle<'_>, HSD_Particle<'_>) = Args::take_all(ctx);
+            Ret::put(hsd_8039930C(ctx, a0, a1), ctx);
         },
         Returns::Int,
     );

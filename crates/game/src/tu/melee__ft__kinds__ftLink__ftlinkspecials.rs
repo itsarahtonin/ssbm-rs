@@ -392,7 +392,7 @@ pub fn ftLk_SpecialAirS1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftLk_SpecialAirS2_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    inl_doS2Anim_unfused(ctx, gobj, fnptr(ctx, 0x800cc730));
+    inl_doS2Anim_unfused_2(ctx, gobj, fnptr(ctx, 0x800cc730));
 }
 
 pub fn ftLk_SpecialAirS1Empty_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -582,7 +582,23 @@ fn inl_doS2Anim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
         (fp).cmd_vars().at(1_i32).set((0_i32 as u32));
     }
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
-        cb.call::<_, ()>((gobj,));
+        fns::ft_8008A2BC(ctx, gobj);
+    }
+}
+
+fn inl_doS2Anim_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
+    let mut gobj = gobj;
+    let mut cb = cb;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if ((fp).cmd_vars().at(1_i32).get() != 0) {
+        if !Handle::is_null((fp).u().lk().boomerang_gobj()) {
+            fns::it_802A07B4(ctx, (fp).u().lk().boomerang_gobj());
+        }
+        (fp).cmd_vars().at(1_i32).set((0_i32 as u32));
+    }
+    if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
+        fns::ftCo_Fall_Enter(ctx, gobj);
     }
 }
 

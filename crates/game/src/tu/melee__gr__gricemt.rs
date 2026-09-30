@@ -1717,7 +1717,7 @@ pub fn stageGObj8_GObjProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     cur = inl_HSD_JObjGetTranslationY(ctx, jobj);
     cur = fp::fsubs(cur, mul);
     if cur > fp::fmuls(0.5, (fp::fmuls(3500.0, fns::Ground_801C0498(ctx)))) {
-        cur = fp::fneg((fp::fmsubs(3500.0, fns::Ground_801C0498(ctx), cur)));
+        cur = fp::fnmsubs(3500.0, fns::Ground_801C0498(ctx), cur);
     } else if cur
         < fp::fmuls(
             0.5,
@@ -2544,15 +2544,13 @@ pub fn grIceMt_801F993C<'a>(ctx: &'a Ctx, under_id: i32, upper_id: i32) -> f64 {
             cstr(ctx, 0x803b8220),
         )
     });
-    return fp::fneg(
-        (fp::fmsubs(
+    return fp::fnmsubs(
+        y,
+        fns::icemt_field(ctx).get((upper_ix as i32)).x8(),
+        (fp::fmadds(
             y,
-            fns::icemt_field(ctx).get((upper_ix as i32)).x8(),
-            (fp::fmadds(
-                y,
-                fns::icemt_field(ctx).get((under_ix as i32)).x4(),
-                (statics::melee__gr__gricemt::yakumono_param(ctx).get()).x40(),
-            )),
+            fns::icemt_field(ctx).get((under_ix as i32)).x4(),
+            (statics::melee__gr__gricemt::yakumono_param(ctx).get()).x40(),
         )),
     );
 }

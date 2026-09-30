@@ -378,7 +378,7 @@ fn inl_un_802FFD94_unfused<'a>(ctx: &'a Ctx, arg0: i32, arg1: Addr<'a>, arg2: Fn
         d = fns::un_80302DF0(ctx);
         inl_sfxForward_unfused(ctx);
         let _ = fns::un_80304210(ctx, d, arg1, 0_i32, 60_i32.wrapping_neg(), 0_i32);
-        fns::un_80302DF8(ctx, fns::un_80302DF0(ctx), arg2);
+        fns::un_80302DF8(ctx, fns::un_80302DF0(ctx), fnptr(ctx, 0x802ffe6c));
     }
 }
 

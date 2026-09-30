@@ -40,8 +40,10 @@ pub fn ftGw_SpecialHi_ItemRescueSetup<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             null::<Vec<'a>>(ctx),
             sp10,
         );
-        sp10.set_y(fp::fneg(
-            (fp::fmsubs(2.5, fns::ftCommon_GetModelScale(ctx, fp), sp10.y())),
+        sp10.set_y(fp::fnmsubs(
+            2.5,
+            fns::ftCommon_GetModelScale(ctx, fp),
+            sp10.y(),
         ));
         rescueGObj = fns::it_802C8038(
             ctx,

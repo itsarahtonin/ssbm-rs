@@ -1388,16 +1388,16 @@ pub fn hsd_80395D88<'a>(ctx: &'a Ctx, data: Addr<'a>) -> i32 {
                 ))
                 .get();
                 __state = match cmd {
-                    0_u32 => 7,
-                    1_u32 => 8,
-                    2_u32 => 9,
-                    3_u32 => 10,
-                    4_u32 => 11,
-                    5_u32 => 12,
-                    6_u32 => 13,
-                    7_u32 => 14,
-                    8_u32 => 15,
-                    _ => 16,
+                    0_u32 => 8,
+                    1_u32 => 9,
+                    2_u32 => 10,
+                    3_u32 => 11,
+                    4_u32 => 12,
+                    5_u32 => 13,
+                    6_u32 => 14,
+                    7_u32 => 15,
+                    8_u32 => 16,
+                    _ => 17,
                 };
             }
             3 => {
@@ -1415,39 +1415,42 @@ pub fn hsd_80395D88<'a>(ctx: &'a Ctx, data: Addr<'a>) -> i32 {
                 unreachable!();
             }
             6 => {
-                __state = 2;
+                __state = 1;
             }
             7 => {
+                __state = 2;
+            }
+            8 => {
                 statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
                     .set_xBC((8_i32 as u32));
                 return 0_i32;
             }
-            8 => {
+            9 => {
                 statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
                     .set_xBC((4_i32 as u32));
                 return 0_i32;
             }
-            9 => {
+            10 => {
                 statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
                     .set_xBC((1_i32 as u32));
                 return 0_i32;
             }
-            10 => {
+            11 => {
                 statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
                     .set_xBC((2_i32 as u32));
                 return 0_i32;
             }
-            11 => {
-                statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
-                    .set_xBC((0x100_i32 as u32));
-                __state = 23;
-            }
             12 => {
                 statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
-                    .set_xBC((0x400_i32 as u32));
-                __state = 23;
+                    .set_xBC((0x100_i32 as u32));
+                __state = 25;
             }
             13 => {
+                statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
+                    .set_xBC((0x400_i32 as u32));
+                __state = 25;
+            }
+            14 => {
                 __state = if !Handle::is_null(
                     ({
                         let __t1 =
@@ -1458,12 +1461,12 @@ pub fn hsd_80395D88<'a>(ctx: &'a Ctx, data: Addr<'a>) -> i32 {
                     })
                     .get(),
                 ) {
-                    26
+                    28
                 } else {
-                    27
+                    29
                 };
             }
-            14 => {
+            15 => {
                 statics::sysdolphin__baselib__debugconsole_main::hsd_80394E8C(
                     ctx,
                     Handle::cast::<lbl_8040B904_t<'a>>(Handle::cast::<Addr<'a>>(
@@ -1472,35 +1475,38 @@ pub fn hsd_80395D88<'a>(ctx: &'a Ctx, data: Addr<'a>) -> i32 {
                 );
                 return 1_i32;
             }
-            15 => {
+            16 => {
                 inl_ps_clear_nodes_unfused(
                     ctx,
                     statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx),
                 );
                 return 1_i32;
             }
-            16 => {
-                __state = 17;
-            }
             17 => {
-                __state = 4;
+                __state = 18;
             }
             18 => {
-                unreachable!();
+                __state = 4;
             }
             19 => {
-                __state = 8;
+                unreachable!();
             }
             20 => {
-                __state = 9;
+                __state = 8;
             }
             21 => {
-                __state = 10;
+                __state = 9;
             }
             22 => {
-                __state = 11;
+                __state = 10;
             }
             23 => {
+                __state = 11;
+            }
+            24 => {
+                __state = 12;
+            }
+            25 => {
                 inl_ps_remove_node_unfused(
                     ctx,
                     statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx),
@@ -1508,21 +1514,21 @@ pub fn hsd_80395D88<'a>(ctx: &'a Ctx, data: Addr<'a>) -> i32 {
                 );
                 return 0_i32;
             }
-            24 => {
-                __state = 12;
-            }
-            25 => {
+            26 => {
                 __state = 13;
             }
-            26 => {
+            27 => {
+                __state = 14;
+            }
+            28 => {
                 saved = fns::hsd_80393D2C(ctx, 1_i32);
                 inl_hsd_80395D88_dump_gpr_unfused(ctx, (ctx_ptr).get());
                 fns::hsd_80394950(ctx, (ctx_ptr).get());
                 inl_hsd_80395D88_dump_misc_unfused(ctx, (ctx_ptr).get());
                 let _ = fns::hsd_80393D2C(ctx, saved);
-                __state = 27;
+                __state = 29;
             }
-            27 => {
+            29 => {
                 inl_ps_remove_node_unfused(
                     ctx,
                     statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx),
@@ -1530,31 +1536,31 @@ pub fn hsd_80395D88<'a>(ctx: &'a Ctx, data: Addr<'a>) -> i32 {
                 );
                 return 1_i32;
             }
-            28 => {
+            30 => {
                 unreachable!();
             }
-            29 => {
-                __state = 14;
-            }
-            30 => {
+            31 => {
                 __state = 15;
             }
-            31 => {
+            32 => {
                 __state = 16;
             }
-            32 => {
+            33 => {
                 __state = 17;
             }
-            33 => {
-                __state = 3;
-            }
             34 => {
-                __state = 4;
+                __state = 18;
             }
             35 => {
-                return 0;
+                __state = 3;
             }
             36 => {
+                __state = 4;
+            }
+            37 => {
+                return 0;
+            }
+            38 => {
                 unreachable!();
             }
             _ => unreachable!(),
@@ -2145,25 +2151,25 @@ pub fn hsd_80396A20<'a>(ctx: &'a Ctx, data: Addr<'a>) -> i32 {
             }
             8 => {
                 __state = if fns::lbl_8040BC3C(ctx).x14() > 0_i32 {
-                    19
-                } else {
                     20
+                } else {
+                    21
                 };
             }
             9 => {
                 __state = if fns::lbl_8040BC3C(ctx).x14() < 5_i32 {
-                    23
-                } else {
                     24
+                } else {
+                    25
                 };
             }
             10 => {
                 __state = if (fns::lbl_8040BC3C(ctx).x10() & (0xfffffff_i32 as u32))
                     < fns::OSGetPhysicalMemSize(ctx)
                 {
-                    27
-                } else {
                     28
+                } else {
+                    29
                 };
             }
             11 => {
@@ -2186,7 +2192,7 @@ pub fn hsd_80396A20<'a>(ctx: &'a Ctx, data: Addr<'a>) -> i32 {
                 return 1_i32;
             }
             14 => {
-                __state = 31;
+                __state = 32;
             }
             15 => {
                 __state = 1;
@@ -2195,76 +2201,79 @@ pub fn hsd_80396A20<'a>(ctx: &'a Ctx, data: Addr<'a>) -> i32 {
                 unreachable!();
             }
             17 => {
-                __state = 7;
+                __state = 6;
             }
             18 => {
-                __state = 8;
+                __state = 7;
             }
             19 => {
-                fns::lbl_8040BC3C(ctx).set_x14(fns::lbl_8040BC3C(ctx).x14().wrapping_sub(1));
-                __state = 20;
+                __state = 8;
             }
             20 => {
-                return 1_i32;
+                fns::lbl_8040BC3C(ctx).set_x14(fns::lbl_8040BC3C(ctx).x14().wrapping_sub(1));
+                __state = 21;
             }
             21 => {
-                unreachable!();
-            }
-            22 => {
-                __state = 9;
-            }
-            23 => {
-                fns::lbl_8040BC3C(ctx).set_x14(fns::lbl_8040BC3C(ctx).x14().wrapping_add(1));
-                __state = 24;
-            }
-            24 => {
                 return 1_i32;
             }
-            25 => {
+            22 => {
                 unreachable!();
             }
+            23 => {
+                __state = 9;
+            }
+            24 => {
+                fns::lbl_8040BC3C(ctx).set_x14(fns::lbl_8040BC3C(ctx).x14().wrapping_add(1));
+                __state = 25;
+            }
+            25 => {
+                return 1_i32;
+            }
             26 => {
-                __state = 10;
+                unreachable!();
             }
             27 => {
+                __state = 10;
+            }
+            28 => {
                 statics::sysdolphin__baselib__debugconsole_main::hsd_80394E8C(
                     ctx,
                     Handle::cast::<lbl_8040B904_t<'a>>(fns::lbl_8040BC3C(ctx).x18()),
                 );
                 return 1_i32;
             }
-            28 => {
-                __state = 31;
-            }
             29 => {
-                unreachable!();
+                __state = 32;
             }
             30 => {
-                __state = 28;
+                unreachable!();
             }
             31 => {
+                __state = 29;
+            }
+            32 => {
                 bit = shl_u32(bit, (1_i32 as u32));
                 __state = 15;
             }
-            32 => {
+            33 => {
                 __state = 11;
             }
-            33 => {
+            34 => {
                 __state = 12;
             }
-            34 => {
+            35 => {
                 __state = 13;
             }
-            35 => {
+            36 => {
                 __state = 14;
             }
-            36 => {
+            37 => {
                 __state = 15;
             }
-            37 => {
+            38 => {
                 return 0;
             }
-            38 => {
+            39 => {
                 unreachable!();
             }
             _ => unreachable!(),
@@ -3903,7 +3912,7 @@ pub fn fn_80397814<'a>(ctx: &'a Ctx, arg: Addr<'a>) -> Addr<'a> {
                 __state = 181;
             }
             184 => {
-                __state = if ((sp).x0_b5() != 0) { 196 } else { 197 };
+                __state = if ((sp).x0_b5() != 0) { 197 } else { 198 };
             }
             185 => {
                 unreachable!();
@@ -3932,7 +3941,7 @@ pub fn fn_80397814<'a>(ctx: &'a Ctx, arg: Addr<'a>) -> Addr<'a> {
                 __state = 191;
             }
             190 => {
-                __state = 194;
+                __state = 195;
             }
             191 => {
                 __state = 187;
@@ -3941,28 +3950,31 @@ pub fn fn_80397814<'a>(ctx: &'a Ctx, arg: Addr<'a>) -> Addr<'a> {
                 unreachable!();
             }
             193 => {
-                __state = 190;
+                __state = 189;
             }
             194 => {
-                __state = if result != 0_i32 { 200 } else { 201 };
+                __state = 190;
             }
             195 => {
-                __state = 191;
+                __state = if result != 0_i32 { 201 } else { 202 };
             }
             196 => {
-                __state = 180;
+                __state = 191;
             }
             197 => {
-                result = 0_i32;
-                __state = 194;
+                __state = 180;
             }
             198 => {
-                unreachable!();
+                result = 0_i32;
+                __state = 195;
             }
             199 => {
-                __state = 197;
+                unreachable!();
             }
             200 => {
+                __state = 198;
+            }
+            201 => {
                 idx = statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x34();
                 idx = rem_i32(
                     (idx.wrapping_add(1_i32)),
@@ -4000,22 +4012,22 @@ pub fn fn_80397814<'a>(ctx: &'a Ctx, arg: Addr<'a>) -> Addr<'a> {
                         .wrapping_sub(1_i32),
                 );
                 node = (Handle::cast::<Ptr<'a, PSNode<'a>>>(keybuf)).get();
-                __state = if !Handle::is_null(node) { 203 } else { 204 };
-            }
-            201 => {
-                __state = 213;
+                __state = if !Handle::is_null(node) { 204 } else { 205 };
             }
             202 => {
-                unreachable!();
+                __state = 214;
             }
             203 => {
-                __state = if !Handle::is_null((node).child()) {
-                    206
-                } else {
-                    207
-                };
+                unreachable!();
             }
             204 => {
+                __state = if !Handle::is_null((node).child()) {
+                    207
+                } else {
+                    208
+                };
+            }
+            205 => {
                 fb_idx = statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x34();
                 fns::DCFlushRange(
                     ctx,
@@ -4028,59 +4040,59 @@ pub fn fn_80397814<'a>(ctx: &'a Ctx, arg: Addr<'a>) -> Addr<'a> {
                     ptr::<Addr<'a>>(ctx, (Handle::add(((sp).x24_ref()), fb_idx)).get() as u32),
                 );
                 fns::VIFlush(ctx);
-                __state = 201;
-            }
-            205 => {
-                unreachable!();
+                __state = 202;
             }
             206 => {
+                unreachable!();
+            }
+            207 => {
                 inl_hsd_80397520_unfused(
                     ctx,
                     Handle::cast::<Addr<'a>>(inl_ps_node_child_unfused(ctx, node)),
                 );
-                __state = 207;
-            }
-            207 => {
-                __state = if !Handle::is_null((node).callback()) {
-                    209
-                } else {
-                    210
-                };
+                __state = 208;
             }
             208 => {
-                unreachable!();
+                __state = if !Handle::is_null((node).callback()) {
+                    210
+                } else {
+                    211
+                };
             }
             209 => {
-                (node).callback().call::<_, ()>((node,));
-                __state = 210;
+                unreachable!();
             }
             210 => {
-                __state = 204;
+                (node).callback().call::<_, ()>((node,));
+                __state = 211;
             }
             211 => {
-                unreachable!();
+                __state = 205;
             }
             212 => {
                 unreachable!();
             }
             213 => {
-                next_retrace2 = fns::VIGetRetraceCount(ctx);
-                __state = 214;
+                unreachable!();
             }
             214 => {
-                __state = if next_retrace2 == retrace2 { 213 } else { 215 };
+                next_retrace2 = fns::VIGetRetraceCount(ctx);
+                __state = 215;
             }
             215 => {
+                __state = if next_retrace2 == retrace2 { 214 } else { 216 };
+            }
+            216 => {
                 retrace2 = next_retrace2;
                 __state = 175;
             }
-            216 => {
+            217 => {
                 unreachable!();
             }
-            217 => {
+            218 => {
                 return null(ctx);
             }
-            218 => {
+            219 => {
                 unreachable!();
             }
             _ => unreachable!(),
