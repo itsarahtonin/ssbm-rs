@@ -3415,6 +3415,8 @@ FROM_MACHINE_CODE = {
     "__va_arg": "register it leaves that other code reads",
     # MWCC drops its second, dead read of a video interface register, volatile as it is.
     "__VIRetraceHandler": "dead read of a hardware register that MWCC drops",
+    # Reads a Vec3 local as a Quaternion: its w is the local MWCC's stack layout puts next.
+    "fn_8002113C": "read past a local into the one the original's frame puts next",
 }
 
 
