@@ -1088,10 +1088,10 @@ pub fn grBigBlueRoute_8020CD20<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                             fns::splGetSplinePoint(ctx, pos, (gp).u().car().xCC(), t_3);
                             fns::lbShadow_8000E9F0(ctx, c1_tangent, (gp).u().car().xCC(), t_3);
                             let _ = fns::grBigBlueRoute_8020DD64(ctx, c1_tangent);
-                            ctx.call::<_, ()>(0x80342e58, (c1_up, c1_tangent, c1_side));
+                            fns::PSVECCrossProduct(ctx, c1_up, c1_tangent, c1_side);
                             fns::lbVector_RotateAboutUnitAxis(ctx, c1_side, c1_tangent, angle);
                             let _ = fns::grBigBlueRoute_8020DD64(ctx, c1_side);
-                            ctx.call::<_, ()>(0x80342e58, (c1_tangent, c1_side, c1_up));
+                            fns::PSVECCrossProduct(ctx, c1_tangent, c1_side, c1_up);
                             let _ = fns::grBigBlueRoute_8020DD64(ctx, c1_up);
                             fns::Ground_801C5AEC(ctx, c1_orient, c1_tangent, c1_side, c1_up);
                             Handle::copy_from(rot, c1_orient);
@@ -1243,10 +1243,10 @@ pub fn grBigBlueRoute_8020CD20<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                             fns::splGetSplinePoint(ctx, c2_air, (gp).u().car().xCC(), t_4);
                             fns::lbShadow_8000E9F0(ctx, c2_tangent, (gp).u().car().xCC(), t_4);
                             let _ = fns::grBigBlueRoute_8020DD64(ctx, c2_tangent);
-                            ctx.call::<_, ()>(0x80342e58, (c2_up, c2_tangent, c2_side));
+                            fns::PSVECCrossProduct(ctx, c2_up, c2_tangent, c2_side);
                             fns::lbVector_RotateAboutUnitAxis(ctx, c2_side, c2_tangent, angle_2);
                             let _ = fns::grBigBlueRoute_8020DD64(ctx, c2_side);
-                            ctx.call::<_, ()>(0x80342e58, (c2_tangent, c2_side, c2_up));
+                            fns::PSVECCrossProduct(ctx, c2_tangent, c2_side, c2_up);
                             let _ = fns::grBigBlueRoute_8020DD64(ctx, c2_up);
                             fns::Ground_801C5AEC(ctx, c2_orient, c2_tangent, c2_side, c2_up);
                             {
@@ -1327,10 +1327,10 @@ pub fn grBigBlueRoute_8020CD20<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                             fns::splGetSplinePoint(ctx, c3_air, (gp).u().car().xCC(), t);
                             fns::lbShadow_8000E9F0(ctx, c3_tangent, (gp).u().car().xCC(), t);
                             let _ = fns::grBigBlueRoute_8020DD64(ctx, c3_tangent);
-                            ctx.call::<_, ()>(0x80342e58, (c3_up, c3_tangent, c3_side));
+                            fns::PSVECCrossProduct(ctx, c3_up, c3_tangent, c3_side);
                             fns::lbVector_RotateAboutUnitAxis(ctx, c3_side, c3_tangent, angle_3);
                             let _ = fns::grBigBlueRoute_8020DD64(ctx, c3_side);
-                            ctx.call::<_, ()>(0x80342e58, (c3_tangent, c3_side, c3_up));
+                            fns::PSVECCrossProduct(ctx, c3_tangent, c3_side, c3_up);
                             let _ = fns::grBigBlueRoute_8020DD64(ctx, c3_up);
                             fns::Ground_801C5AEC(ctx, c3_orient, c3_tangent, c3_side, c3_up);
                             Handle::copy_from(c3_air_rot, c3_orient);

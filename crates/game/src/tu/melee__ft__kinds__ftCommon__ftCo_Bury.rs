@@ -468,13 +468,11 @@ pub fn ftCo_800C0FCC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<'a>) {
             offset,
         ) != 0)
         {
-            ctx.call::<_, ()>(
-                0x80342d54,
-                (
-                    inl_ftCo_Bury_GetTranslate_unfused(ctx, fp),
-                    offset,
-                    (fp).mv().co().bury().translate(),
-                ),
+            fns::PSVECAdd(
+                ctx,
+                inl_ftCo_Bury_GetTranslate_unfused(ctx, fp),
+                offset,
+                (fp).mv().co().bury().translate(),
             );
             inl_HSD_JObjSetTranslate_unfused(ctx, jobj, (fp).mv().co().bury().translate());
         }

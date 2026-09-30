@@ -1868,14 +1868,11 @@ pub fn _Toy_8030715C<'a>(ctx: &'a Ctx, cstick_x: f64, cstick_y: f64) {
     fns::HSD_CObjGetInterest(ctx, cobj, interest);
     fns::HSD_CObjGetInterest(ctx, cobj, new_interest);
     let _ = fns::HSD_CObjGetUpVector(ctx, cobj, up_vec);
-    ctx.call::<_, ()>(
-        0x80342d9c,
-        (up_vec, up_vec, Single(fp::frsp(fp::fneg(cstick_y)))),
-    );
-    ctx.call::<_, ()>(0x80342d54, (up_vec, new_interest, new_interest));
+    fns::PSVECScale(ctx, up_vec, up_vec, fp::fneg(cstick_y));
+    fns::PSVECAdd(ctx, up_vec, new_interest, new_interest);
     let _ = fns::HSD_CObjGetLeftVector(ctx, cobj, left_vec);
-    ctx.call::<_, ()>(0x80342d9c, (left_vec, left_vec, Single(fp::frsp(cstick_x))));
-    ctx.call::<_, ()>(0x80342d54, (left_vec, new_interest, new_interest));
+    fns::PSVECScale(ctx, left_vec, left_vec, cstick_x);
+    fns::PSVECAdd(ctx, left_vec, new_interest, new_interest);
     if (((((new_interest.x() <= fp::fneg(3000.0)) || (new_interest.y() <= fp::fneg(3000.0)))
         || (new_interest.z() <= fp::fneg(3000.0)))
         || (new_interest.x() >= 3000.0))
@@ -1894,14 +1891,14 @@ pub fn _Toy_8030715C<'a>(ctx: &'a Ctx, cstick_x: f64, cstick_y: f64) {
         (120_i32 as i8),
         fp::fmuls(0.01745329238474369, (data).x18()),
     );
-    ctx.call::<_, ()>(0x80342afc, (mtx.get(0), euler, euler));
+    fns::PSMTXMultVecSR(ctx, mtx.get(0), euler, euler);
     fns::MTXRotRad(
         ctx,
         mtx.get(0),
         (121_i32 as i8),
         fp::fmuls(0.01745329238474369, fp::fneg((data).x1C())),
     );
-    ctx.call::<_, ()>(0x80342afc, (mtx.get(0), euler, euler));
+    fns::PSMTXMultVecSR(ctx, mtx.get(0), euler, euler);
     euler.set_x(fp::fadds(euler.x(), new_interest.x()));
     euler.set_y(fp::fadds(euler.y(), new_interest.y()));
     euler.set_z(fp::fadds(euler.z(), new_interest.z()));
@@ -3409,7 +3406,7 @@ pub fn _Toy_8030FA50<'a>(ctx: &'a Ctx) {
     eye.set_x(0.0);
     eye.set_z(fns::HSD_CObjGetEyeDistance(ctx, cobj));
     fns::MTXRotRad(ctx, mtx.get(0), (121_i32 as i8), 0.5759586691856384);
-    ctx.call::<_, ()>(0x80342afc, (mtx.get(0), eye, eye));
+    fns::PSMTXMultVecSR(ctx, mtx.get(0), eye, eye);
     fns::HSD_CObjSetEyePosition(ctx, cobj, eye);
     (Handle::add(state, 3_i32)).set(Handle::cast::<Addr<'a>>(fns::GObj_Create(
         ctx,
@@ -4597,30 +4594,30 @@ pub fn _Toy_80312050<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
             (enums::GX_VTXFMT0 as i32),
             (6_i32 as u16),
         );
-        ctx.call::<_, ()>(0x80342d9c, (left, scaled, Single(fp::frsp(fp::fneg(3.25)))));
-        ctx.call::<_, ()>(0x80342d54, (scaled, interest, endpoint));
+        fns::PSVECScale(ctx, left, scaled, fp::fneg(3.25));
+        fns::PSVECAdd(ctx, scaled, interest, endpoint);
         color_ff = (255_i32 as u8);
         color_00 = (0_i32 as u8);
         inl_GXPosition3f32_unfused(ctx, endpoint.x(), endpoint.y(), endpoint.z());
         inl_GXColor4u8_unfused(ctx, color_ff, color_00, color_00, color_ff);
-        ctx.call::<_, ()>(0x80342d9c, (left, scaled, Single(fp::frsp(3.25))));
-        ctx.call::<_, ()>(0x80342d54, (scaled, interest, endpoint));
+        fns::PSVECScale(ctx, left, scaled, 3.25);
+        fns::PSVECAdd(ctx, scaled, interest, endpoint);
         inl_GXPosition3f32_unfused(ctx, endpoint.x(), endpoint.y(), endpoint.z());
         inl_GXColor4u8_unfused(ctx, color_ff, color_00, color_00, color_ff);
-        ctx.call::<_, ()>(0x80342d9c, (up, scaled, Single(fp::frsp(fp::fneg(3.25)))));
-        ctx.call::<_, ()>(0x80342d54, (scaled, interest, endpoint));
+        fns::PSVECScale(ctx, up, scaled, fp::fneg(3.25));
+        fns::PSVECAdd(ctx, scaled, interest, endpoint);
         inl_GXPosition3f32_unfused(ctx, endpoint.x(), endpoint.y(), endpoint.z());
         inl_GXColor4u8_unfused(ctx, color_00, color_ff, color_00, color_ff);
-        ctx.call::<_, ()>(0x80342d9c, (up, scaled, Single(fp::frsp(3.25))));
-        ctx.call::<_, ()>(0x80342d54, (scaled, interest, endpoint));
+        fns::PSVECScale(ctx, up, scaled, 3.25);
+        fns::PSVECAdd(ctx, scaled, interest, endpoint);
         inl_GXPosition3f32_unfused(ctx, endpoint.x(), endpoint.y(), endpoint.z());
         inl_GXColor4u8_unfused(ctx, color_00, color_ff, color_00, color_ff);
-        ctx.call::<_, ()>(0x80342d9c, (eye, scaled, Single(fp::frsp(fp::fneg(3.25)))));
-        ctx.call::<_, ()>(0x80342d54, (scaled, interest, endpoint));
+        fns::PSVECScale(ctx, eye, scaled, fp::fneg(3.25));
+        fns::PSVECAdd(ctx, scaled, interest, endpoint);
         inl_GXPosition3f32_unfused(ctx, endpoint.x(), endpoint.y(), endpoint.z());
         inl_GXColor4u8_unfused(ctx, color_00, color_00, color_ff, color_ff);
-        ctx.call::<_, ()>(0x80342d9c, (eye, scaled, Single(fp::frsp(3.25))));
-        ctx.call::<_, ()>(0x80342d54, (scaled, interest, endpoint));
+        fns::PSVECScale(ctx, eye, scaled, 3.25);
+        fns::PSVECAdd(ctx, scaled, interest, endpoint);
         inl_GXPosition3f32_unfused(ctx, endpoint.x(), endpoint.y(), endpoint.z());
         inl_GXColor4u8_unfused(ctx, color_00, color_00, color_ff, color_ff);
     }

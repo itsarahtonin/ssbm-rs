@@ -539,8 +539,8 @@ pub fn lbShadow_8000F38C<'a>(ctx: &'a Ctx, arg0: i32) {
                             );
                         }
                         (shadow2).set_intensity(intensity);
-                        ctx.call::<_, ()>(0x80342d54, ((cm).bone_pos(), lightPos, eyePos));
-                        ctx.call::<_, ()>(0x80342d54, ((cm).bone_pos(), lightDir, interestPos));
+                        fns::PSVECAdd(ctx, (cm).bone_pos(), lightPos, eyePos);
+                        fns::PSVECAdd(ctx, (cm).bone_pos(), lightDir, interestPos);
                         fns::HSD_CObjSetEyePosition(ctx, ((fp).x20A4().shadow()).camera(), eyePos);
                         fns::HSD_CObjSetInterest(
                             ctx,

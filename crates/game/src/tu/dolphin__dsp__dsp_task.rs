@@ -38,7 +38,7 @@ pub fn __DSPHandler<'a>(ctx: &'a Ctx, intr: i16, context: OSContext<'a>) {
     tmp = ((((tmp as i32) & (!40_i32)) | 128_i32) as u16);
     (Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 5_i32)).set(tmp);
     fns::OSClearContext(ctx, exceptionContext);
-    ctx.call::<_, ()>(0x8034508c, (exceptionContext,));
+    fns::OSSetCurrentContext(ctx, exceptionContext);
     'l1: while fns::DSPCheckMailFromDSP(ctx) == (0_i32 as u32) {
         'c2: {}
     }
@@ -242,7 +242,7 @@ pub fn __DSPHandler<'a>(ctx: &'a Ctx, intr: i16, context: OSContext<'a>) {
         }
     }
     fns::OSClearContext(ctx, exceptionContext);
-    ctx.call::<_, ()>(0x8034508c, (context,));
+    fns::OSSetCurrentContext(ctx, context);
 }
 
 pub fn __DSP_exec_task<'a>(ctx: &'a Ctx, curr: STRUCT_DSP_TASK<'a>, next: STRUCT_DSP_TASK<'a>) {

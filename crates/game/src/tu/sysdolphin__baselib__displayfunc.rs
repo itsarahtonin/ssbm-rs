@@ -80,13 +80,13 @@ pub fn mkVBillBoardMtx<'a>(
     sx = inl_HSD_MtxColMag(ctx, src, 0_i32);
     sz = inl_HSD_MtxColMag(ctx, src, 2_i32);
     if (((jobj).flags() & (0x2000_i32 as u32)) != 0) {
-        ctx.call::<_, ()>(0x80342e58, (pos, ay, ax));
+        fns::PSVECCrossProduct(ctx, pos, ay, ax);
     } else {
-        ctx.call::<_, ()>(0x80342e58, (ay, fns::zOne(ctx), ax));
+        fns::PSVECCrossProduct(ctx, ay, fns::zOne(ctx), ax);
     }
-    ctx.call::<_, ()>(0x80342e58, (ax, ay, az));
-    sx = fp::fdivs(sx, ctx.call::<_, f64>(0x80342dfc, (ax,)));
-    sz = fp::fdivs(sz, ctx.call::<_, f64>(0x80342dfc, (az,)));
+    fns::PSVECCrossProduct(ctx, ax, ay, az);
+    sx = fp::fdivs(sx, fns::PSVECMag(ctx, ax));
+    sz = fp::fdivs(sz, fns::PSVECMag(ctx, az));
     (Handle::add(dst, 0_i32))
         .at(0_i32)
         .set(fp::fmuls(sx, ax.x()));
@@ -137,13 +137,13 @@ pub fn mkHBillBoardMtx<'a>(
         ));
         uy.set_x(fp::fmuls(fp::fdivs(fp::fneg(pos.y()), uy.y()), pos.x()));
         uy.set_z(fp::fmuls(fp::fdivs(fp::fneg(pos.y()), uy.y()), pos.z()));
-        ctx.call::<_, ()>(0x80342e58, (ax, uy, az));
+        fns::PSVECCrossProduct(ctx, ax, uy, az);
     } else {
-        ctx.call::<_, ()>(0x80342e58, (ax, fns::yOne(ctx), az));
+        fns::PSVECCrossProduct(ctx, ax, fns::yOne(ctx), az);
     }
-    ctx.call::<_, ()>(0x80342e58, (az, ax, ay));
-    sy = fp::fdivs(sy, ctx.call::<_, f64>(0x80342dfc, (ay,)));
-    sz = fp::fdivs(sz, ctx.call::<_, f64>(0x80342dfc, (az,)));
+    fns::PSVECCrossProduct(ctx, az, ax, ay);
+    sy = fp::fdivs(sy, fns::PSVECMag(ctx, ay));
+    sz = fp::fdivs(sz, fns::PSVECMag(ctx, az));
     inl_HSD_MtxSetColVec(ctx, dst, 0_i32, ax);
     (Handle::add(dst, 0_i32))
         .at(1_i32)
@@ -186,21 +186,21 @@ pub fn mkBillBoardMtx<'a>(
     sx = inl_HSD_MtxColMag(ctx, src, 0_i32);
     sz = inl_HSD_MtxColMag(ctx, src, 2_i32);
     inl_HSD_MtxColVec(ctx, src, 1_i32, ay);
-    sy = ctx.call::<_, f64>(0x80342dfc, (ay,));
+    sy = fns::PSVECMag(ctx, ay);
     inl_HSD_MtxColVec(ctx, src, 3_i32, pos);
     if (((jobj).flags() & (0x2000_i32 as u32)) != 0) {
-        ctx.call::<_, ()>(0x80342e58, (pos, ay, ax));
-        ctx.call::<_, ()>(0x80342e58, (ax, pos, ay));
+        fns::PSVECCrossProduct(ctx, pos, ay, ax);
+        fns::PSVECCrossProduct(ctx, ax, pos, ay);
         az = pos;
-        sz = fp::fdivs(sz, fp::fneg(ctx.call::<_, f64>(0x80342dfc, (az,))));
+        sz = fp::fdivs(sz, fp::fneg(fns::PSVECMag(ctx, az)));
     } else {
-        ctx.call::<_, ()>(0x80342e58, (ay, fns::zOne2(ctx), ax));
-        ctx.call::<_, ()>(0x80342e58, (fns::zOne2(ctx), ax, ay));
+        fns::PSVECCrossProduct(ctx, ay, fns::zOne2(ctx), ax);
+        fns::PSVECCrossProduct(ctx, fns::zOne2(ctx), ax, ay);
         az = fns::zOne2(ctx);
-        sz = fp::fdivs(sz, ctx.call::<_, f64>(0x80342dfc, (fns::zOne2(ctx),)));
+        sz = fp::fdivs(sz, fns::PSVECMag(ctx, fns::zOne2(ctx)));
     }
-    sx = fp::fdivs(sx, ctx.call::<_, f64>(0x80342dfc, (ax,)));
-    sy = fp::fdivs(sy, ctx.call::<_, f64>(0x80342dfc, (ay,)));
+    sx = fp::fdivs(sx, fns::PSVECMag(ctx, ax));
+    sy = fp::fdivs(sy, fns::PSVECMag(ctx, ay));
     (Handle::add(dst, 0_i32))
         .at(0_i32)
         .set(fp::fmuls(sx, ax.x()));
@@ -259,7 +259,7 @@ pub fn _HSD_mkEnvelopeModelNodeMtx<'a>(
         } else if (((x).flags() & ((shl_i32(1_i32, (1_i32 as u32))) as u32)) != 0) {
             fns::HSD_MtxInverseConcat(ctx, (x).mtx().get(0), (m).mtx().get(0), mtx);
         } else {
-            ctx.call::<_, ()>(0x80342204, ((x).mtx().get(0), (x).envelopemtx(), n.get(0)));
+            fns::PSMTXConcat(ctx, (x).mtx().get(0), (x).envelopemtx(), n.get(0));
             fns::HSD_MtxInverseConcat(ctx, n.get(0), (m).mtx().get(0), mtx);
         }
         return mtx;

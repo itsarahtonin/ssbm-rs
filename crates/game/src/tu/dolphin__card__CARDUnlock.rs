@@ -144,14 +144,14 @@ pub fn DummyLen<'a>(ctx: &'a Ctx) -> i32 {
     let mut max: u32 = 0;
     wk = (1_i32 as u32);
     max = (0_i32 as u32);
-    tick = (fns::OSGetTick(ctx) as u32);
+    tick = fns::OSGetTick(ctx);
     fns::srand(ctx, tick);
     tmp = fns::rand(ctx);
     tmp = (tmp & 31_i32);
     tmp = tmp.wrapping_add(1_i32);
     'l1: while (tmp < 4_i32) && (max < (10_i32 as u32)) {
         'c2: {
-            tick = (fns::OSGetTick(ctx) as u32);
+            tick = fns::OSGetTick(ctx);
             tmp = ((shl_u32(tick, wk)) as i32);
             wk = wk.wrapping_add(1);
             if wk > (16_i32 as u32) {
@@ -299,7 +299,7 @@ pub fn DoneCallback<'a>(ctx: &'a Ctx, _task: Addr<'a>) {
 fn inl_GetInitVal_unfused<'a>(ctx: &'a Ctx) -> u32 {
     let mut tmp: u32 = 0;
     let mut tick: u32 = 0;
-    tick = (fns::OSGetTick(ctx) as u32);
+    tick = fns::OSGetTick(ctx);
     fns::srand(ctx, tick);
     tmp = (0x7fec8000_i32 as u32);
     tmp = (tmp | (fns::rand(ctx) as u32));

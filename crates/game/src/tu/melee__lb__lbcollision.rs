@@ -1485,11 +1485,8 @@ pub fn lbColl_80006E58<'a>(
         return 1_i32;
     }
     fns::HSD_MtxInverse(ctx, hurt_mtx, inv_hurt_mtx.get(0));
-    ctx.call::<_, ()>(
-        0x80342aa8,
-        (inv_hurt_mtx.get(0), hit_closest, hit_start_copy),
-    );
-    ctx.call::<_, ()>(0x80342aa8, (inv_hurt_mtx.get(0), hurt_closest, hit_delta));
+    fns::PSMTXMultVec(ctx, inv_hurt_mtx.get(0), hit_closest, hit_start_copy);
+    fns::PSMTXMultVec(ctx, inv_hurt_mtx.get(0), hurt_closest, hit_delta);
     separation.set_x(fp::fsubs(hit_start_copy.x(), hit_delta.x()));
     separation.set_y(fp::fsubs(hit_start_copy.y(), hit_delta.y()));
     separation.set_z(fp::fsubs(hit_start_copy.z(), hit_delta.z()));
@@ -1573,11 +1570,11 @@ pub fn lbColl_800077A0<'a>(
         normal_x.set_x(x);
         normal_x.set_y(0.0);
         normal_x.set_z(0.0);
-        ctx.call::<_, ()>(0x80342aa8, (arg1, normal_x, normal_x));
+        fns::PSMTXMultVec(ctx, arg1, normal_x, normal_x);
         multi_mtx.set_x(0.0);
         multi_mtx.set_y(0.0);
         multi_mtx.set_z(0.0);
-        ctx.call::<_, ()>(0x80342aa8, (arg1, multi_mtx, multi_mtx));
+        fns::PSMTXMultVec(ctx, arg1, multi_mtx, multi_mtx);
         dist = inl_sqrDistance(ctx, normal_x, multi_mtx);
         dist = inl_sqrtf_store(ctx, dist, sqrt_tmp.at(0_i32));
         offset_dist = fp::fadds(dist, dist_offset);
@@ -2189,15 +2186,7 @@ pub fn lbColl_80008FC8<'a>(
     fns::HSD_StateInitTev(ctx);
     fns::lbColl_80008DA4(ctx, arg2, arg3);
     fns::HSD_CObjGetViewingMtx(ctx, fns::HSD_CObjGetCurrent(ctx), sp104.get(0));
-    ctx.call::<_, ()>(
-        0x80342668,
-        (
-            spA4.get(0),
-            Single(fp::frsp(arg4)),
-            Single(fp::frsp(arg4)),
-            Single(fp::frsp(arg4)),
-        ),
-    );
+    fns::PSMTXScale(ctx, spA4.get(0), arg4, arg4, arg4);
     sp38.set_x(fp::fsubs(arg0.x(), arg1.x()));
     sp38.set_y(fp::fsubs(arg0.y(), arg1.y()));
     sp38.set_z(fp::fsubs(arg0.z(), arg1.z()));
@@ -2225,17 +2214,9 @@ pub fn lbColl_80008FC8<'a>(
         sp44.get(0_i32).at(2_i32).set(0.0);
         sp44.get(1_i32).at(2_i32).set(0.0);
         sp44.get(2_i32).at(2_i32).set(fp::fneg(1.0));
-        ctx.call::<_, ()>(0x80342204, (sp44.get(0), spA4.get(0), spD4.get(0)));
+        fns::PSMTXConcat(ctx, sp44.get(0), spA4.get(0), spD4.get(0));
     } else {
-        ctx.call::<_, ()>(
-            0x80342668,
-            (
-                sp74.get(0),
-                Single(fp::frsp(var_f31)),
-                Single(fp::frsp(arg4)),
-                Single(fp::frsp(arg4)),
-            ),
-        );
+        fns::PSMTXScale(ctx, sp74.get(0), var_f31, arg4, arg4);
         if (inl_isSmall(ctx, sp38.x()) != 0) && (inl_isSmall(ctx, sp38.y()) != 0) {
             sp2C.set_x(sp38.z());
             sp2C.set_y(0.0);
@@ -2247,7 +2228,7 @@ pub fn lbColl_80008FC8<'a>(
         }
         fns::PSVECNormalize(ctx, sp38, sp38);
         fns::PSVECNormalize(ctx, sp2C, sp2C);
-        ctx.call::<_, ()>(0x80342e58, (sp38, sp2C, sp20));
+        fns::PSVECCrossProduct(ctx, sp38, sp2C, sp20);
         fns::PSMTXIdentity(ctx, sp44.get(0));
         sp44.get(0_i32).at(0_i32).set(sp38.x());
         sp44.get(1_i32).at(0_i32).set(sp38.y());
@@ -2258,8 +2239,8 @@ pub fn lbColl_80008FC8<'a>(
         sp44.get(0_i32).at(2_i32).set(sp20.x());
         sp44.get(1_i32).at(2_i32).set(sp20.y());
         sp44.get(2_i32).at(2_i32).set(sp20.z());
-        ctx.call::<_, ()>(0x80342204, (sp44.get(0), spA4.get(0), spD4.get(0)));
-        ctx.call::<_, ()>(0x80342204, (sp44.get(0), sp74.get(0), sp74.get(0)));
+        fns::PSMTXConcat(ctx, sp44.get(0), spA4.get(0), spD4.get(0));
+        fns::PSMTXConcat(ctx, sp44.get(0), sp74.get(0), sp74.get(0));
         sp44.get(0_i32).at(0_i32).set(fp::fneg(sp38.x()));
         sp44.get(1_i32).at(0_i32).set(fp::fneg(sp38.y()));
         sp44.get(2_i32).at(0_i32).set(fp::fneg(sp38.z()));
@@ -2269,12 +2250,12 @@ pub fn lbColl_80008FC8<'a>(
         sp44.get(0_i32).at(2_i32).set(fp::fneg(sp20.x()));
         sp44.get(1_i32).at(2_i32).set(fp::fneg(sp20.y()));
         sp44.get(2_i32).at(2_i32).set(fp::fneg(sp20.z()));
-        ctx.call::<_, ()>(0x80342204, (sp44.get(0), spA4.get(0), spA4.get(0)));
+        fns::PSMTXConcat(ctx, sp44.get(0), spA4.get(0), spA4.get(0));
     }
     fns::PSMTXTrans(ctx, sp44.get(0), arg0.x(), arg0.y(), arg0.z());
-    ctx.call::<_, ()>(0x80342204, (sp44.get(0), spD4.get(0), spD4.get(0)));
+    fns::PSMTXConcat(ctx, sp44.get(0), spD4.get(0), spD4.get(0));
     fns::PSMTXTrans(ctx, sp44.get(0), arg1.x(), arg1.y(), arg1.z());
-    ctx.call::<_, ()>(0x80342204, (sp44.get(0), spA4.get(0), spA4.get(0)));
+    fns::PSMTXConcat(ctx, sp44.get(0), spA4.get(0), spA4.get(0));
     fns::PSMTXTrans(
         ctx,
         sp44.get(0),
@@ -2282,7 +2263,7 @@ pub fn lbColl_80008FC8<'a>(
         fp::frsp(fp::fmul(0.5, (fp::fadds(arg0.y(), arg1.y())))),
         fp::frsp(fp::fmul(0.5, (fp::fadds(arg0.z(), arg1.z())))),
     );
-    ctx.call::<_, ()>(0x80342204, (sp44.get(0), sp74.get(0), sp74.get(0)));
+    fns::PSMTXConcat(ctx, sp44.get(0), sp74.get(0), sp74.get(0));
     fns::GXSetCullMode(ctx, (enums::GX_CULL_BACK as i32));
     fns::GXClearVtxDesc(ctx);
     fns::GXSetArray(
@@ -2315,7 +2296,7 @@ pub fn lbColl_80008FC8<'a>(
         (enums::GX_RGBA4 as i32),
         (14_i32 as u8),
     );
-    ctx.call::<_, ()>(0x80342204, (sp104.get(0), spD4.get(0), spD4.get(0)));
+    fns::PSMTXConcat(ctx, sp104.get(0), spD4.get(0), spD4.get(0));
     fns::GXLoadPosMtxImm(ctx, spD4.get(0), (0_i32 as u32));
     fns::HSD_MtxInverse(ctx, spD4.get(0), spD4.get(0));
     fns::PSMTXTranspose(ctx, spD4.get(0), spD4.get(0));
@@ -2356,7 +2337,7 @@ pub fn lbColl_80008FC8<'a>(
         (enums::GX_RGBA4 as i32),
         (14_i32 as u8),
     );
-    ctx.call::<_, ()>(0x80342204, (sp104.get(0), spA4.get(0), spA4.get(0)));
+    fns::PSMTXConcat(ctx, sp104.get(0), spA4.get(0), spA4.get(0));
     fns::GXLoadPosMtxImm(ctx, spA4.get(0), (0_i32 as u32));
     fns::HSD_MtxInverse(ctx, spA4.get(0), spA4.get(0));
     fns::PSMTXTranspose(ctx, spA4.get(0), spA4.get(0));
@@ -2398,7 +2379,7 @@ pub fn lbColl_80008FC8<'a>(
             (enums::GX_RGBA4 as i32),
             (6_i32 as u8),
         );
-        ctx.call::<_, ()>(0x80342204, (sp104.get(0), sp74.get(0), sp74.get(0)));
+        fns::PSMTXConcat(ctx, sp104.get(0), sp74.get(0), sp74.get(0));
         fns::GXLoadPosMtxImm(ctx, sp74.get(0), (0_i32 as u32));
         fns::HSD_MtxInverse(ctx, sp74.get(0), sp74.get(0));
         fns::PSMTXTranspose(ctx, sp74.get(0), sp74.get(0));
@@ -2440,15 +2421,7 @@ pub fn lbColl_800096B4<'a>(
     fns::HSD_StateInitTev(ctx);
     fns::lbColl_80008DA4(ctx, arg3, arg4);
     fns::HSD_CObjGetViewingMtx(ctx, fns::HSD_CObjGetCurrent(ctx), sp108.get(0));
-    ctx.call::<_, ()>(
-        0x80342668,
-        (
-            spA8.get(0),
-            Single(fp::frsp(arg5)),
-            Single(fp::frsp(arg5)),
-            Single(fp::frsp(arg5)),
-        ),
-    );
+    fns::PSMTXScale(ctx, spA8.get(0), arg5, arg5, arg5);
     sp3C.set_x(fp::fsubs(arg1.x(), arg2.x()));
     sp3C.set_y(fp::fsubs(arg1.y(), arg2.y()));
     sp3C.set_z(fp::fsubs(arg1.z(), arg2.z()));
@@ -2476,17 +2449,9 @@ pub fn lbColl_800096B4<'a>(
         sp48.get(0_i32).at(2_i32).set(0.0);
         sp48.get(1_i32).at(2_i32).set(0.0);
         sp48.get(2_i32).at(2_i32).set(fp::fneg(1.0));
-        ctx.call::<_, ()>(0x80342204, (sp48.get(0), spA8.get(0), spD8.get(0)));
+        fns::PSMTXConcat(ctx, sp48.get(0), spA8.get(0), spD8.get(0));
     } else {
-        ctx.call::<_, ()>(
-            0x80342668,
-            (
-                sp78.get(0),
-                Single(fp::frsp(var_f31)),
-                Single(fp::frsp(arg5)),
-                Single(fp::frsp(arg5)),
-            ),
-        );
+        fns::PSMTXScale(ctx, sp78.get(0), var_f31, arg5, arg5);
         if (inl_isSmall(ctx, sp3C.x()) != 0) && (inl_isSmall(ctx, sp3C.y()) != 0) {
             sp30.set_x(sp3C.z());
             sp30.set_y(0.0);
@@ -2498,7 +2463,7 @@ pub fn lbColl_800096B4<'a>(
         }
         fns::PSVECNormalize(ctx, sp3C, sp3C);
         fns::PSVECNormalize(ctx, sp30, sp30);
-        ctx.call::<_, ()>(0x80342e58, (sp3C, sp30, sp24));
+        fns::PSVECCrossProduct(ctx, sp3C, sp30, sp24);
         fns::PSMTXIdentity(ctx, sp48.get(0));
         sp48.get(0_i32).at(0_i32).set(sp3C.x());
         sp48.get(1_i32).at(0_i32).set(sp3C.y());
@@ -2509,8 +2474,8 @@ pub fn lbColl_800096B4<'a>(
         sp48.get(0_i32).at(2_i32).set(sp24.x());
         sp48.get(1_i32).at(2_i32).set(sp24.y());
         sp48.get(2_i32).at(2_i32).set(sp24.z());
-        ctx.call::<_, ()>(0x80342204, (sp48.get(0), spA8.get(0), spD8.get(0)));
-        ctx.call::<_, ()>(0x80342204, (sp48.get(0), sp78.get(0), sp78.get(0)));
+        fns::PSMTXConcat(ctx, sp48.get(0), spA8.get(0), spD8.get(0));
+        fns::PSMTXConcat(ctx, sp48.get(0), sp78.get(0), sp78.get(0));
         sp48.get(0_i32).at(0_i32).set(fp::fneg(sp3C.x()));
         sp48.get(1_i32).at(0_i32).set(fp::fneg(sp3C.y()));
         sp48.get(2_i32).at(0_i32).set(fp::fneg(sp3C.z()));
@@ -2520,12 +2485,12 @@ pub fn lbColl_800096B4<'a>(
         sp48.get(0_i32).at(2_i32).set(fp::fneg(sp24.x()));
         sp48.get(1_i32).at(2_i32).set(fp::fneg(sp24.y()));
         sp48.get(2_i32).at(2_i32).set(fp::fneg(sp24.z()));
-        ctx.call::<_, ()>(0x80342204, (sp48.get(0), spA8.get(0), spA8.get(0)));
+        fns::PSMTXConcat(ctx, sp48.get(0), spA8.get(0), spA8.get(0));
     }
     fns::PSMTXTrans(ctx, sp48.get(0), arg1.x(), arg1.y(), arg1.z());
-    ctx.call::<_, ()>(0x80342204, (sp48.get(0), spD8.get(0), spD8.get(0)));
+    fns::PSMTXConcat(ctx, sp48.get(0), spD8.get(0), spD8.get(0));
     fns::PSMTXTrans(ctx, sp48.get(0), arg2.x(), arg2.y(), arg2.z());
-    ctx.call::<_, ()>(0x80342204, (sp48.get(0), spA8.get(0), spA8.get(0)));
+    fns::PSMTXConcat(ctx, sp48.get(0), spA8.get(0), spA8.get(0));
     fns::PSMTXTrans(
         ctx,
         sp48.get(0),
@@ -2533,10 +2498,10 @@ pub fn lbColl_800096B4<'a>(
         fp::frsp(fp::fmul(0.5, (fp::fadds(arg1.y(), arg2.y())))),
         fp::frsp(fp::fmul(0.5, (fp::fadds(arg1.z(), arg2.z())))),
     );
-    ctx.call::<_, ()>(0x80342204, (sp48.get(0), sp78.get(0), sp78.get(0)));
-    ctx.call::<_, ()>(0x80342204, (arg0, spD8.get(0), spD8.get(0)));
-    ctx.call::<_, ()>(0x80342204, (arg0, spA8.get(0), spA8.get(0)));
-    ctx.call::<_, ()>(0x80342204, (arg0, sp78.get(0), sp78.get(0)));
+    fns::PSMTXConcat(ctx, sp48.get(0), sp78.get(0), sp78.get(0));
+    fns::PSMTXConcat(ctx, arg0, spD8.get(0), spD8.get(0));
+    fns::PSMTXConcat(ctx, arg0, spA8.get(0), spA8.get(0));
+    fns::PSMTXConcat(ctx, arg0, sp78.get(0), sp78.get(0));
     fns::GXSetCullMode(ctx, (enums::GX_CULL_BACK as i32));
     fns::GXClearVtxDesc(ctx);
     fns::GXSetArray(
@@ -2569,7 +2534,7 @@ pub fn lbColl_800096B4<'a>(
         (enums::GX_RGBA4 as i32),
         (14_i32 as u8),
     );
-    ctx.call::<_, ()>(0x80342204, (sp108.get(0), spD8.get(0), spD8.get(0)));
+    fns::PSMTXConcat(ctx, sp108.get(0), spD8.get(0), spD8.get(0));
     fns::GXLoadPosMtxImm(ctx, spD8.get(0), (0_i32 as u32));
     fns::HSD_MtxInverse(ctx, spD8.get(0), spD8.get(0));
     fns::PSMTXTranspose(ctx, spD8.get(0), spD8.get(0));
@@ -2610,7 +2575,7 @@ pub fn lbColl_800096B4<'a>(
         (enums::GX_RGBA4 as i32),
         (14_i32 as u8),
     );
-    ctx.call::<_, ()>(0x80342204, (sp108.get(0), spA8.get(0), spA8.get(0)));
+    fns::PSMTXConcat(ctx, sp108.get(0), spA8.get(0), spA8.get(0));
     fns::GXLoadPosMtxImm(ctx, spA8.get(0), (0_i32 as u32));
     fns::HSD_MtxInverse(ctx, spA8.get(0), spA8.get(0));
     fns::PSMTXTranspose(ctx, spA8.get(0), spA8.get(0));
@@ -2652,7 +2617,7 @@ pub fn lbColl_800096B4<'a>(
             (enums::GX_RGBA4 as i32),
             (6_i32 as u8),
         );
-        ctx.call::<_, ()>(0x80342204, (sp108.get(0), sp78.get(0), sp78.get(0)));
+        fns::PSMTXConcat(ctx, sp108.get(0), sp78.get(0), sp78.get(0));
         fns::GXLoadPosMtxImm(ctx, sp78.get(0), (0_i32 as u32));
         fns::HSD_MtxInverse(ctx, sp78.get(0), sp78.get(0));
         fns::PSMTXTranspose(ctx, sp78.get(0), sp78.get(0));

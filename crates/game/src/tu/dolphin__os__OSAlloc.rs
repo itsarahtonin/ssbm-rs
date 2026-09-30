@@ -103,7 +103,7 @@ pub fn OSAllocFromHeap<'a>(ctx: &'a Ctx, heap: i32, size: u32) -> Addr<'a> {
         }
     }
     if Handle::is_null(cell) {
-        return (null::<Addr<'a>>(ctx));
+        return null::<Addr<'a>>(ctx);
     }
     leftoverSize = (((cell).size() as u32).wrapping_sub(size) as i32);
     if (leftoverSize as u32) < 64_u32 {

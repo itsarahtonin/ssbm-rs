@@ -104,12 +104,10 @@ pub fn __AXPrintStudio<'a>(ctx: &'a Ctx) {
         )),
         statics::dolphin__ax__AXSPB::__AXStudio(ctx).dpopBSDelta_ref(),
     );
-    ctx.call::<_, ()>(
-        0x8034480c,
-        (
-            Handle::cast::<Addr<'a>>(statics::dolphin__ax__AXSPB::__AXStudio(ctx)),
-            54_u32,
-        ),
+    fns::DCFlushRange(
+        ctx,
+        Handle::cast::<Addr<'a>>(statics::dolphin__ax__AXSPB::__AXStudio(ctx)),
+        54_u32,
     );
 }
 

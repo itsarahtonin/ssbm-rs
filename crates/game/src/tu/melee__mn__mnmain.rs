@@ -1567,7 +1567,7 @@ pub fn mn_8022BA1C<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>) {
     Handle::copy_from(sp30, statics::melee__mn__mnmain::mn_803B8500(ctx));
     let _ = fns::HSD_CObjGetEyeVector(ctx, cobj, sp48);
     fns::HSD_CObjGetInterest(ctx, cobj, sp18);
-    ctx.call::<_, ()>(0x80342e58, (sp30, sp48, sp3C));
+    fns::PSVECCrossProduct(ctx, sp30, sp48, sp3C);
     fns::PSVECNormalize(ctx, sp3C, sp3C);
     fns::PSMTXRotAxisRad(
         ctx,
@@ -1575,23 +1575,16 @@ pub fn mn_8022BA1C<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>) {
         sp3C,
         fp::fmuls(0.01745329238474369, var_f30),
     );
-    ctx.call::<_, ()>(0x80342aa8, (sp54.get(0), sp48, sp48));
+    fns::PSMTXMultVec(ctx, sp54.get(0), sp48, sp48);
     fns::PSMTXRotAxisRad(
         ctx,
         sp54.get(0),
         sp30,
         fp::fmuls(0.01745329238474369, var_f31),
     );
-    ctx.call::<_, ()>(0x80342aa8, (sp54.get(0), sp48, sp48));
-    ctx.call::<_, ()>(
-        0x80342d9c,
-        (
-            sp48,
-            sp48,
-            Single(fp::frsp(fns::HSD_CObjGetEyeDistance(ctx, cobj))),
-        ),
-    );
-    ctx.call::<_, ()>(0x80342d78, (sp18, sp48, sp24));
+    fns::PSMTXMultVec(ctx, sp54.get(0), sp48, sp48);
+    fns::PSVECScale(ctx, sp48, sp48, fns::HSD_CObjGetEyeDistance(ctx, cobj));
+    fns::PSVECSubtract(ctx, sp18, sp48, sp24);
     fns::HSD_CObjSetEyePosition(ctx, cobj, sp24);
 }
 

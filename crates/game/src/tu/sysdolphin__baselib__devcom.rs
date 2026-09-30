@@ -199,16 +199,14 @@ pub fn HSD_DevComARAMWakeUp<'a>(ctx: &'a Ctx) {
                         }
                     }
                 }
-                ctx.call::<_, ()>(
-                    0x80344840,
-                    (
-                        Handle::cast::<Addr<'a>>(
-                            statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
-                                .get(req_idx)
-                                .at(0),
-                        ),
-                        (0x4000_i32 as u32),
+                fns::DCStoreRange(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
+                            .get(req_idx)
+                            .at(0),
                     ),
+                    (0x4000_i32 as u32),
                 );
                 fns::ARQPostRequest(
                     ctx,
@@ -241,15 +239,13 @@ pub fn HSD_DevComARAMWakeUp<'a>(ctx: &'a Ctx) {
             } else if ((statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).r#type() as i32)
                 == 11_i32
             {
-                ctx.call::<_, ()>(
-                    0x80344840,
-                    (
-                        ptr::<Addr<'a>>(
-                            ctx,
-                            (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).src() as u32,
-                        ),
-                        (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).size(),
+                fns::DCStoreRange(
+                    ctx,
+                    ptr::<Addr<'a>>(
+                        ctx,
+                        (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).src() as u32,
                     ),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).size(),
                 );
                 fns::ARQPostRequest(
                     ctx,
@@ -268,15 +264,13 @@ pub fn HSD_DevComARAMWakeUp<'a>(ctx: &'a Ctx) {
             } else if ((statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).r#type() as i32)
                 == 25_i32
             {
-                ctx.call::<_, ()>(
-                    0x803447dc,
-                    (
-                        ptr::<Addr<'a>>(
-                            ctx,
-                            (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).dest() as u32,
-                        ),
-                        (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).size(),
+                fns::DCInvalidateRange(
+                    ctx,
+                    ptr::<Addr<'a>>(
+                        ctx,
+                        (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).dest() as u32,
                     ),
+                    (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).size(),
                 );
                 fns::ARQPostRequest(
                     ctx,
@@ -295,16 +289,14 @@ pub fn HSD_DevComARAMWakeUp<'a>(ctx: &'a Ctx) {
             } else if ((statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).r#type() as i32)
                 == 26_i32
             {
-                ctx.call::<_, ()>(
-                    0x803447dc,
-                    (
-                        Handle::cast::<Addr<'a>>(
-                            statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
-                                .get(req_idx)
-                                .at(0),
-                        ),
-                        (0x4000_i32 as u32),
+                fns::DCInvalidateRange(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
+                            .get(req_idx)
+                            .at(0),
                     ),
+                    (0x4000_i32 as u32),
                 );
                 fns::ARQPostRequest(
                     ctx,
@@ -327,16 +319,14 @@ pub fn HSD_DevComARAMWakeUp<'a>(ctx: &'a Ctx) {
             } else if ((statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).r#type() as i32)
                 == 27_i32
             {
-                ctx.call::<_, ()>(
-                    0x803447dc,
-                    (
-                        Handle::cast::<Addr<'a>>(
-                            statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
-                                .get(req_idx)
-                                .at(0),
-                        ),
-                        (0x4000_i32 as u32),
+                fns::DCInvalidateRange(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(
+                        statics::sysdolphin__baselib__devcom::HSD_DevCom_804C6330_bufs(ctx)
+                            .get(req_idx)
+                            .at(0),
                     ),
+                    (0x4000_i32 as u32),
                 );
                 if (statics::sysdolphin__baselib__devcom::aramDC(ctx).get()).size()
                     > (0x4000_i32 as u32)

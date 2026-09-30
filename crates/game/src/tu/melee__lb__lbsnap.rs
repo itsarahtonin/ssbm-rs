@@ -168,7 +168,7 @@ pub fn lbSnap_8001D4A4<'a>(ctx: &'a Ctx, chan: i32, arg1: Val<'a, i8>) {
         (statics::melee__lb__lbsnap::lbSnap_80433380(ctx).slot()),
         chan,
     ));
-    let mut time2: i64 = ctx.call::<_, i64>(0x8034c3f0, ());
+    let mut time2: i64 = fns::OSGetTime(ctx);
     let mut time: u32 = ((div_i64(
         (time2),
         ((div_u32(
@@ -443,16 +443,14 @@ pub fn lbSnap_8001DE8C<'a>(ctx: &'a Ctx, arg0: Addr<'a>) -> i32 {
             (statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).xC(),
             arg0,
         );
-        ctx.call::<_, ()>(
-            0x8034480c,
-            (
-                arg0,
-                (((statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).width() as i32)
-                    .wrapping_mul(
-                        ((statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).height() as i32),
-                    )
-                    .wrapping_mul(2_i32) as u32),
-            ),
+        fns::DCFlushRange(
+            ctx,
+            arg0,
+            (((statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).width() as i32)
+                .wrapping_mul(
+                    ((statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).height() as i32),
+                )
+                .wrapping_mul(2_i32) as u32),
         );
         if temp != 0_i32 {
             ret = 1_i32;

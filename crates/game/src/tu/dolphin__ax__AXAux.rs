@@ -136,9 +136,10 @@ pub fn __AXProcessAux<'a>(ctx: &'a Ctx) {
                 .get((statics::dolphin__ax__AXAux::__AXAuxCpuReadWritePosition(ctx).get() as i32))
                 .at(0x140_i32),
         );
-        ctx.call::<_, ()>(
-            0x803447dc,
-            (Handle::cast::<Addr<'a>>(auxData.l()), (0x780_i32 as u32)),
+        fns::DCInvalidateRange(
+            ctx,
+            Handle::cast::<Addr<'a>>(auxData.l()),
+            (0x780_i32 as u32),
         );
         statics::dolphin__ax__AXAux::__AXCallbackAuxA(ctx)
             .get()
@@ -146,9 +147,10 @@ pub fn __AXProcessAux<'a>(ctx: &'a Ctx) {
                 Handle::cast::<Addr<'a>>(auxData.l_ref()),
                 statics::dolphin__ax__AXAux::__AXContextAuxA(ctx).get(),
             ));
-        ctx.call::<_, ()>(
-            0x80344874,
-            (Handle::cast::<Addr<'a>>(auxData.l()), (0x780_i32 as u32)),
+        fns::DCFlushRangeNoSync(
+            ctx,
+            Handle::cast::<Addr<'a>>(auxData.l()),
+            (0x780_i32 as u32),
         );
     }
     if (!Handle::is_null(statics::dolphin__ax__AXAux::__AXCallbackAuxB(ctx).get()))
@@ -169,9 +171,10 @@ pub fn __AXProcessAux<'a>(ctx: &'a Ctx) {
                 .get((statics::dolphin__ax__AXAux::__AXAuxCpuReadWritePosition(ctx).get() as i32))
                 .at(0x140_i32),
         );
-        ctx.call::<_, ()>(
-            0x803447dc,
-            (Handle::cast::<Addr<'a>>(auxData.l()), (0x780_i32 as u32)),
+        fns::DCInvalidateRange(
+            ctx,
+            Handle::cast::<Addr<'a>>(auxData.l()),
+            (0x780_i32 as u32),
         );
         statics::dolphin__ax__AXAux::__AXCallbackAuxB(ctx)
             .get()
@@ -179,9 +182,10 @@ pub fn __AXProcessAux<'a>(ctx: &'a Ctx) {
                 Handle::cast::<Addr<'a>>(auxData.l_ref()),
                 statics::dolphin__ax__AXAux::__AXContextAuxB(ctx).get(),
             ));
-        ctx.call::<_, ()>(
-            0x80344874,
-            (Handle::cast::<Addr<'a>>(auxData.l()), (0x780_i32 as u32)),
+        fns::DCFlushRangeNoSync(
+            ctx,
+            Handle::cast::<Addr<'a>>(auxData.l()),
+            (0x780_i32 as u32),
         );
     }
     statics::dolphin__ax__AXAux::__AXAuxDspWritePosition(ctx).set(

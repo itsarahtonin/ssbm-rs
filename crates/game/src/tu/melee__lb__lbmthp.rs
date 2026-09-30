@@ -48,7 +48,7 @@ pub fn fn_8001E910<'a>(ctx: &'a Ctx, arg0: i32, arg1: u32, arg2: Addr<'a>, cance
             cstr(ctx, 0x803badb8),
         )
     });
-    tick_diff = ((fns::OSGetTick(ctx) as u32).wrapping_sub((streamPlayer).unk_13C()) as i32);
+    tick_diff = (fns::OSGetTick(ctx).wrapping_sub((streamPlayer).unk_13C()) as i32);
     (streamPlayer).set_unk_134(tick_diff);
     (streamPlayer).set_unk_130(sar_i32(tick_diff, (31_i32 as u32)));
     (streamPlayer).set_unk_108((streamPlayer).unk_108().wrapping_add(1_i32));
@@ -71,7 +71,7 @@ pub fn fn_8001E910<'a>(ctx: &'a Ctx, arg0: i32, arg1: u32, arg2: Addr<'a>, cance
     );
     if ((streamPlayer).unk_90() != (streamPlayer).unk_8C()) && ((streamPlayer).unk_70() != 0_i32) {
         intr = fns::OSDisableInterrupts(ctx);
-        (streamPlayer).set_unk_13C((fns::OSGetTick(ctx) as u32));
+        (streamPlayer).set_unk_13C(fns::OSGetTick(ctx));
         (streamPlayer).set_unk_138(
             (({
                 let __t1 = 0_i32;
@@ -389,13 +389,13 @@ pub fn fn_8001ECF4<'a>(ctx: &'a Ctx, data: THPDecComp<'a>, buf: Addr<'a>) {
         }
     }
     (data).set_unk_50(Handle::cast::<Addr<'a>>(var_r29));
-    ctx.call::<_, ()>(0x803447dc, (Handle::cast::<Addr<'a>>(var_r29), y_size));
+    fns::DCInvalidateRange(ctx, Handle::cast::<Addr<'a>>(var_r29), y_size);
     var_r29 = Handle::add(var_r29, (y_size as i32));
     (data).set_unk_54(Handle::cast::<Addr<'a>>(var_r29));
-    ctx.call::<_, ()>(0x803447dc, (Handle::cast::<Addr<'a>>(var_r29), uv_size));
+    fns::DCInvalidateRange(ctx, Handle::cast::<Addr<'a>>(var_r29), uv_size);
     var_r29 = Handle::add(var_r29, (uv_size as i32));
     (data).set_unk_58(Handle::cast::<Addr<'a>>(var_r29));
-    ctx.call::<_, ()>(0x803447dc, (Handle::cast::<Addr<'a>>(var_r29), uv_size));
+    fns::DCInvalidateRange(ctx, Handle::cast::<Addr<'a>>(var_r29), uv_size);
     var_r29 = Handle::add(var_r29, (uv_size as i32));
     (data).set_unk_98(Handle::cast::<_THPFileInfo<'a>>(var_r29));
 }
@@ -428,31 +428,25 @@ pub fn fn_8001EF5C<'a>(ctx: &'a Ctx, data: THPDecComp<'a>) -> i32 {
                 (data).unk_54(),
                 (data).unk_58(),
             );
-            ctx.call::<_, ()>(
-                0x80344840,
-                (
-                    (data).unk_50(),
-                    (data).width().wrapping_mul((data).height()),
+            fns::DCStoreRange(
+                ctx,
+                (data).unk_50(),
+                (data).width().wrapping_mul((data).height()),
+            );
+            fns::DCStoreRange(
+                ctx,
+                (data).unk_54(),
+                shr_u32(
+                    ((data).width().wrapping_mul((data).height())),
+                    (2_i32 as u32),
                 ),
             );
-            ctx.call::<_, ()>(
-                0x80344840,
-                (
-                    (data).unk_54(),
-                    shr_u32(
-                        ((data).width().wrapping_mul((data).height())),
-                        (2_i32 as u32),
-                    ),
-                ),
-            );
-            ctx.call::<_, ()>(
-                0x80344840,
-                (
-                    (data).unk_58(),
-                    shr_u32(
-                        ((data).width().wrapping_mul((data).height())),
-                        (2_i32 as u32),
-                    ),
+            fns::DCStoreRange(
+                ctx,
+                (data).unk_58(),
+                shr_u32(
+                    ((data).width().wrapping_mul((data).height())),
+                    (2_i32 as u32),
                 ),
             );
         } else {
@@ -481,7 +475,7 @@ pub fn fn_8001F13C<'a>(ctx: &'a Ctx, streamPlayer: THPDecComp<'a>) -> i32 {
     if (((streamPlayer).unk_90() != (streamPlayer).unk_8C()) && ((streamPlayer).unk_110() == 0_i32))
         && ((streamPlayer).unk_70() != 0_i32)
     {
-        (streamPlayer).set_unk_13C((fns::OSGetTick(ctx) as u32));
+        (streamPlayer).set_unk_13C(fns::OSGetTick(ctx));
         (streamPlayer).set_unk_138((0_i32 as u32));
         if (streamPlayer).unk_74() != (streamPlayer).unk_40() {
             (if (streamPlayer).currPackedSize() != (0_i32 as u32) {

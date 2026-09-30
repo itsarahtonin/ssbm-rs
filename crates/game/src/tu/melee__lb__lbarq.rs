@@ -111,7 +111,7 @@ pub fn lbArq_80014BD0<'a>(
             break 'l1;
         }
     }
-    ctx.call::<_, ()>(0x803447dc, (dest, length));
+    fns::DCInvalidateRange(ctx, dest, length);
     intr = fns::OSDisableInterrupts(ctx);
     head = fns::lbArq_804316C0(ctx)
         .list()

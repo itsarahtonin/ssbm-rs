@@ -806,10 +806,7 @@ pub fn lbRefract_PObjLoad<'a>(ctx: &'a Ctx, pobj: HSD_PObj<'a>, desc: HSD_PObjDe
             }
         }
     }
-    ctx.call::<_, ()>(
-        0x8034480c,
-        (Handle::cast::<Addr<'a>>(display), (total_bytes as u32)),
-    );
+    fns::DCFlushRange(ctx, Handle::cast::<Addr<'a>>(display), (total_bytes as u32));
     return 0_i32;
 }
 

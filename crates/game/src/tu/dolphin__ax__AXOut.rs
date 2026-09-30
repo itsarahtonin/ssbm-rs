@@ -29,7 +29,7 @@ use crate::support::*;
 pub fn __AXOutAiCallback<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
     if statics::dolphin__ax__AXOut::__AXOutDspReady(ctx).get() == (0_i32 as u32) {
-        statics::dolphin__ax__AXOut::__AXOsTime(ctx).set(ctx.call::<_, i64>(0x8034c3f0, ()));
+        statics::dolphin__ax__AXOut::__AXOsTime(ctx).set(fns::OSGetTime(ctx));
     }
     if statics::dolphin__ax__AXOut::__AXOutDspReady(ctx).get() == (1_i32 as u32) {
         statics::dolphin__ax__AXOut::__AXOutDspReady(ctx).set((0_i32 as u32));
@@ -53,8 +53,7 @@ pub fn __AXDSPResumeCallback<'a>(ctx: &'a Ctx, task: Addr<'a>) {
         fns::__AXOutNewFrame(
             ctx,
             div_u32(
-                ((ctx
-                    .call::<_, i64>(0x8034c3f0, ())
+                ((fns::OSGetTime(ctx)
                     .wrapping_sub(statics::dolphin__ax__AXOut::__AXOsTime(ctx).get()))
                     as u32),
                 (4_i32 as u32),
@@ -117,12 +116,10 @@ pub fn __AXOutInit<'a>(ctx: &'a Ctx) {
             }
         }
     }
-    ctx.call::<_, ()>(
-        0x8034480c,
-        (
-            Handle::cast::<Addr<'a>>(statics::dolphin__ax__AXOut::__AXOutBuffer(ctx).get(0)),
-            0x500_u32,
-        ),
+    fns::DCFlushRange(
+        ctx,
+        Handle::cast::<Addr<'a>>(statics::dolphin__ax__AXOut::__AXOutBuffer(ctx).get(0)),
+        0x500_u32,
     );
     {
         let mut p_2: Val<'a, u32> =
@@ -139,12 +136,10 @@ pub fn __AXOutInit<'a>(ctx: &'a Ctx) {
             }
         }
     }
-    ctx.call::<_, ()>(
-        0x8034480c,
-        (
-            Handle::cast::<Addr<'a>>(statics::dolphin__ax__AXOut::__AXOutSBuffer(ctx).at(0)),
-            0x280_u32,
-        ),
+    fns::DCFlushRange(
+        ctx,
+        Handle::cast::<Addr<'a>>(statics::dolphin__ax__AXOut::__AXOutSBuffer(ctx).at(0)),
+        0x280_u32,
     );
     fns::__AXOutInitDSP(ctx);
     let _ = fns::AIRegisterDMACallback(ctx, fnptr(ctx, 0x803598ac));

@@ -602,7 +602,7 @@ pub fn fn_802279E8<'a>(
         if (fp::fadds(pitch, new_pitch)) < 1.0 {
             new_pitch = fp::fsubs(1.0, pitch);
         }
-        ctx.call::<_, ()>(0x80342e58, (up_vec, forward_vec, axis));
+        fns::PSVECCrossProduct(ctx, up_vec, forward_vec, axis);
         fns::PSVECNormalize(ctx, axis, axis);
         fns::PSMTXRotAxisRad(
             ctx,
@@ -610,7 +610,7 @@ pub fn fn_802279E8<'a>(
             axis,
             fp::fmuls(0.01745329238474369, new_pitch),
         );
-        ctx.call::<_, ()>(0x80342aa8, (mtx.get(0), forward_vec, forward_vec));
+        fns::PSMTXMultVec(ctx, mtx.get(0), forward_vec, forward_vec);
         eye_dist = fns::HSD_CObjGetEyeDistance(ctx, cobj);
         fns::PSMTXRotAxisRad(
             ctx,
@@ -618,12 +618,9 @@ pub fn fn_802279E8<'a>(
             up_vec,
             fp::fmuls(0.01745329238474369, (fp::fmuls(2.0, cstick_x))),
         );
-        ctx.call::<_, ()>(0x80342aa8, (mtx.get(0), forward_vec, forward_vec));
-        ctx.call::<_, ()>(
-            0x80342d9c,
-            (forward_vec, forward_vec, Single(fp::frsp(eye_dist))),
-        );
-        ctx.call::<_, ()>(0x80342d78, (camera_interest, forward_vec, camera_pos));
+        fns::PSMTXMultVec(ctx, mtx.get(0), forward_vec, forward_vec);
+        fns::PSVECScale(ctx, forward_vec, forward_vec, eye_dist);
+        fns::PSVECSubtract(ctx, camera_interest, forward_vec, camera_pos);
     }
 }
 
@@ -699,25 +696,18 @@ pub fn fn_80227CAC<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, cstick_y: f64) {
         let _ = fns::HSD_CObjGetEyeVector(ctx, cobj, forward);
         {
             let mut dist: f64 = fns::HSD_CObjGetEyeDistance(ctx, cobj);
-            ctx.call::<_, ()>(
-                0x80342d9c,
-                (
-                    forward,
-                    forward,
-                    Single(fp::frsp(fp::fmuls(
-                        dist,
-                        (fp::fnmsubs(0.05000000074505806, cstick_y, 1.0)),
-                    ))),
-                ),
+            fns::PSVECScale(
+                ctx,
+                forward,
+                forward,
+                fp::fmuls(dist, (fp::fnmsubs(0.05000000074505806, cstick_y, 1.0))),
             );
         }
-        ctx.call::<_, ()>(
-            0x80342d78,
-            (
-                fns::cm_80453004(ctx).free_int_pos(),
-                forward,
-                fns::cm_80453004(ctx).free_eye_pos(),
-            ),
+        fns::PSVECSubtract(
+            ctx,
+            fns::cm_80453004(ctx).free_int_pos(),
+            forward,
+            fns::cm_80453004(ctx).free_eye_pos(),
         );
     }
 }
@@ -738,24 +728,17 @@ pub fn fn_80227D38<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, arg1: Vec<'a>, arg2: 
             cobj = (Handle::cast::<HSD_CObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, camera)));
             let _ = fns::HSD_CObjGetEyeVector(ctx, cobj, sp28);
             dist = fns::HSD_CObjGetEyeDistance(ctx, cobj);
-            ctx.call::<_, ()>(
-                0x80342d9c,
-                (
-                    sp28,
-                    sp28,
-                    Single(fp::frsp(fp::fmuls(
-                        dist,
-                        fp::fneg((fp::fmsubs(0.05000000074505806, arg2, 1.0))),
-                    ))),
-                ),
+            fns::PSVECScale(
+                ctx,
+                sp28,
+                sp28,
+                fp::fmuls(dist, fp::fneg((fp::fmsubs(0.05000000074505806, arg2, 1.0)))),
             );
-            ctx.call::<_, ()>(
-                0x80342d78,
-                (
-                    fns::cm_80453004(ctx).follow_int_offset(),
-                    sp28,
-                    fns::cm_80453004(ctx).follow_eye_offset(),
-                ),
+            fns::PSVECSubtract(
+                ctx,
+                fns::cm_80453004(ctx).follow_int_offset(),
+                sp28,
+                fns::cm_80453004(ctx).follow_eye_offset(),
             );
         }
         Handle::copy_from(sp40, fns::cm_80453004(ctx).follow_int_offset());
@@ -769,24 +752,17 @@ pub fn fn_80227D38<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, arg1: Vec<'a>, arg2: 
             cobj = (Handle::cast::<HSD_CObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, camera)));
             let _ = fns::HSD_CObjGetEyeVector(ctx, cobj, sp1C);
             dist = fns::HSD_CObjGetEyeDistance(ctx, cobj);
-            ctx.call::<_, ()>(
-                0x80342d9c,
-                (
-                    sp1C,
-                    sp1C,
-                    Single(fp::frsp(fp::fmuls(
-                        dist,
-                        fp::fneg((fp::fmsubs(0.05000000074505806, arg2, 1.0))),
-                    ))),
-                ),
+            fns::PSVECScale(
+                ctx,
+                sp1C,
+                sp1C,
+                fp::fmuls(dist, fp::fneg((fp::fmsubs(0.05000000074505806, arg2, 1.0)))),
             );
-            ctx.call::<_, ()>(
-                0x80342d78,
-                (
-                    fns::cm_80453004(ctx).free_int_pos(),
-                    sp1C,
-                    fns::cm_80453004(ctx).free_eye_pos(),
-                ),
+            fns::PSVECSubtract(
+                ctx,
+                fns::cm_80453004(ctx).free_int_pos(),
+                sp1C,
+                fns::cm_80453004(ctx).free_eye_pos(),
             );
         }
     }
@@ -830,25 +806,15 @@ pub fn fn_80227EB0<'a>(
     );
     if arg8 != 0.0 {
         let _ = fns::HSD_CObjGetLeftVector(ctx, cobj, sp2C);
-        ctx.call::<_, ()>(
-            0x80342d9c,
-            (sp2C, sp2C, Single(fp::frsp(fp::fmuls(dist, arg8)))),
-        );
-        ctx.call::<_, ()>(0x80342d54, (arg2, sp2C, arg2));
-        ctx.call::<_, ()>(0x80342d54, (arg1, sp2C, arg1));
+        fns::PSVECScale(ctx, sp2C, sp2C, fp::fmuls(dist, arg8));
+        fns::PSVECAdd(ctx, arg2, sp2C, arg2);
+        fns::PSVECAdd(ctx, arg1, sp2C, arg1);
     }
     if arg9 != 0.0 {
         let _ = fns::HSD_CObjGetUpVector(ctx, cobj, sp20);
-        ctx.call::<_, ()>(
-            0x80342d9c,
-            (
-                sp20,
-                sp20,
-                Single(fp::frsp(fp::fmuls(fp::fneg(dist), arg9))),
-            ),
-        );
-        ctx.call::<_, ()>(0x80342d54, (arg2, sp20, arg2));
-        ctx.call::<_, ()>(0x80342d54, (arg1, sp20, arg1));
+        fns::PSVECScale(ctx, sp20, sp20, fp::fmuls(fp::fneg(dist), arg9));
+        fns::PSVECAdd(ctx, arg2, sp20, arg2);
+        fns::PSVECAdd(ctx, arg1, sp20, arg1);
     }
 }
 
@@ -887,36 +853,24 @@ pub fn fn_80227FE0<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, cstick_x: f64, cstick
         );
         if cstick_x != 0.0 {
             let _ = fns::HSD_CObjGetLeftVector(ctx, cobj, left_vec);
-            ctx.call::<_, ()>(
-                0x80342d9c,
-                (
-                    left_vec,
-                    left_vec,
-                    Single(fp::frsp(fp::fmuls(scale_factor, cstick_x))),
-                ),
-            );
+            fns::PSVECScale(ctx, left_vec, left_vec, fp::fmuls(scale_factor, cstick_x));
             temp_r3 = fns::cm_80453004(ctx).free_int_pos();
-            ctx.call::<_, ()>(0x80342d54, (temp_r3, left_vec, temp_r3));
+            fns::PSVECAdd(ctx, temp_r3, left_vec, temp_r3);
             temp_r3_2 = fns::cm_80453004(ctx).free_eye_pos();
-            ctx.call::<_, ()>(0x80342d54, (temp_r3_2, left_vec, temp_r3_2));
+            fns::PSVECAdd(ctx, temp_r3_2, left_vec, temp_r3_2);
         }
         if cstick_y != 0.0 {
             let _ = fns::HSD_CObjGetUpVector(ctx, cobj, up_vec);
-            ctx.call::<_, ()>(
-                0x80342d9c,
-                (
-                    up_vec,
-                    up_vec,
-                    Single(fp::frsp(fp::fmuls(fp::fneg(scale_factor), cstick_y))),
-                ),
+            fns::PSVECScale(
+                ctx,
+                up_vec,
+                up_vec,
+                fp::fmuls(fp::fneg(scale_factor), cstick_y),
             );
             temp_r3_3 = fns::cm_80453004(ctx).free_int_pos();
-            ctx.call::<_, ()>(
-                0x80342d54,
-                (fns::cm_80453004(ctx).free_int_pos(), up_vec, temp_r3_3),
-            );
+            fns::PSVECAdd(ctx, fns::cm_80453004(ctx).free_int_pos(), up_vec, temp_r3_3);
             temp_r3_4 = fns::cm_80453004(ctx).free_eye_pos();
-            ctx.call::<_, ()>(0x80342d54, (temp_r3_4, up_vec, temp_r3_4));
+            fns::PSVECAdd(ctx, temp_r3_4, up_vec, temp_r3_4);
         }
     }
 }
@@ -956,52 +910,34 @@ pub fn fn_80228124<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, arg1: Vec<'a>, arg2: 
         );
         if arg2 != 0.0 {
             let _ = fns::HSD_CObjGetLeftVector(ctx, cobj, sp20);
-            ctx.call::<_, ()>(
-                0x80342d9c,
-                (sp20, sp20, Single(fp::frsp(fp::fmuls(dist, arg2)))),
+            fns::PSVECScale(ctx, sp20, sp20, fp::fmuls(dist, arg2));
+            fns::PSVECAdd(
+                ctx,
+                fns::cm_80453004(ctx).follow_int_offset(),
+                sp20,
+                fns::cm_80453004(ctx).follow_int_offset(),
             );
-            ctx.call::<_, ()>(
-                0x80342d54,
-                (
-                    fns::cm_80453004(ctx).follow_int_offset(),
-                    sp20,
-                    fns::cm_80453004(ctx).follow_int_offset(),
-                ),
-            );
-            ctx.call::<_, ()>(
-                0x80342d54,
-                (
-                    fns::cm_80453004(ctx).follow_eye_offset(),
-                    sp20,
-                    fns::cm_80453004(ctx).follow_eye_offset(),
-                ),
+            fns::PSVECAdd(
+                ctx,
+                fns::cm_80453004(ctx).follow_eye_offset(),
+                sp20,
+                fns::cm_80453004(ctx).follow_eye_offset(),
             );
         }
         if arg3 != 0.0 {
             let _ = fns::HSD_CObjGetUpVector(ctx, cobj, sp2C);
-            ctx.call::<_, ()>(
-                0x80342d9c,
-                (
-                    sp2C,
-                    sp2C,
-                    Single(fp::frsp(fp::fmuls(fp::fneg(dist), arg3))),
-                ),
+            fns::PSVECScale(ctx, sp2C, sp2C, fp::fmuls(fp::fneg(dist), arg3));
+            fns::PSVECAdd(
+                ctx,
+                fns::cm_80453004(ctx).follow_int_offset(),
+                sp2C,
+                fns::cm_80453004(ctx).follow_int_offset(),
             );
-            ctx.call::<_, ()>(
-                0x80342d54,
-                (
-                    fns::cm_80453004(ctx).follow_int_offset(),
-                    sp2C,
-                    fns::cm_80453004(ctx).follow_int_offset(),
-                ),
-            );
-            ctx.call::<_, ()>(
-                0x80342d54,
-                (
-                    fns::cm_80453004(ctx).follow_eye_offset(),
-                    sp2C,
-                    fns::cm_80453004(ctx).follow_eye_offset(),
-                ),
+            fns::PSVECAdd(
+                ctx,
+                fns::cm_80453004(ctx).follow_eye_offset(),
+                sp2C,
+                fns::cm_80453004(ctx).follow_eye_offset(),
             );
         }
         Handle::copy_from(sp44, fns::cm_80453004(ctx).follow_int_offset());

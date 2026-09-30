@@ -268,7 +268,7 @@ pub fn hsd_80392E80<'a>(ctx: &'a Ctx) -> i32 {
                         } else {
                             fns::OSReport(ctx, cstr(ctx, 0x8040a878), &[]);
                             waiting = 1_i32;
-                            startTick = ((fns::OSGetTick(ctx) as u32) as i32);
+                            startTick = (fns::OSGetTick(ctx) as i32);
                             {
                                 'l6: loop {
                                     'c7: {
@@ -278,8 +278,7 @@ pub fn hsd_80392E80<'a>(ctx: &'a Ctx) -> i32 {
                                         {
                                             waiting = 0_i32;
                                         } else if (div_u32(
-                                            ((fns::OSGetTick(ctx) as u32)
-                                                .wrapping_sub((startTick as u32))),
+                                            (fns::OSGetTick(ctx).wrapping_sub((startTick as u32))),
                                             (div_u32(
                                                 ((ptr::<Val<'a, u32>>(
                                                     ctx,

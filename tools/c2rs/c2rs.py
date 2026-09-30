@@ -49,6 +49,12 @@ _lib.clang_Cursor_getVarDeclInitializer.restype = ci.Cursor
 _lib.clang_Cursor_getVarDeclInitializer.errcheck = ci.Cursor.from_result
 
 
+def vkey(decl, fallback=None):
+    """A key for a local variable or parameter: its USR, which two locals a macro declares at
+    one expansion share, told apart by the declaration's cursor hash, which references share."""
+    return f"{decl.get_usr() or decl.spelling or fallback}#{decl.hash}"
+
+
 def var_init(decl):
     """A variable declaration's initializer, or None."""
     c = _lib.clang_Cursor_getVarDeclInitializer(decl)
@@ -524,6 +530,9 @@ class Translator:
         c = self.f.cursor
         name = c.spelling
         ft = self.u.ctype(c.type)
+        if ft["k"] == "fn" and ft["params"] is None and \
+                not any(a.kind == CK.PARM_DECL for a in children(c)):
+            ft = {**ft, "params": [], "variadic": False}  # `f()`: no parameters
         if ft["k"] != "fn" or ft["params"] is None:
             raise Unsupported("no prototype")
         if ft["variadic"]:
@@ -547,11 +556,11 @@ class Translator:
             if pt["k"] == "rec":
                 # By-value struct: the caller passes a copy's address.
                 params.append(f"{ident(rname)}: {self.u.rust_value_ty(pt)}")
-                self.f.locals[a.get_usr() or pname] = (rname, pt, "handle")
+                self.f.locals[vkey(a, pname)] = (rname, pt, "handle")
                 continue
             if pt["k"] == "arr":
                 pt = {"k": "ptr", "to": pt["of"]}
-            key = a.get_usr() or pname
+            key = vkey(a, pname)
             if self.inline:
                 self.decisions[("fwd", a.spelling)] = self.forward.get(a.spelling)
             if a.spelling in self.forward:
@@ -618,7 +627,7 @@ class Translator:
                 if target.kind == CK.DECL_REF_EXPR and target.referenced is not None and \
                         target.referenced.kind in (CK.VAR_DECL, CK.PARM_DECL):
                     r = target.referenced
-                    self.f.escaping.add(r.get_usr() or r.spelling)
+                    self.f.escaping.add(vkey(r))
             if n.kind == CK.VAR_DECL and n.storage_class == ci.StorageClass.STATIC:
                 raise Unsupported("static local")
 
@@ -837,7 +846,7 @@ class Translator:
         if d.storage_class == ci.StorageClass.EXTERN:
             return []
         t = self.u.ctype(d.type)
-        key = d.get_usr() or d.spelling
+        key = vkey(d)
         base = self.safe(d.spelling or "anon")
         init = var_init(d)
         on_stack = t["k"] in ("rec", "arr") or key in self.f.escaping
@@ -985,7 +994,7 @@ class Translator:
             if r is None:
                 raise Unsupported("unresolved name")
             if r.kind in (CK.VAR_DECL, CK.PARM_DECL):
-                key = r.get_usr() or r.spelling
+                key = vkey(r)
                 if key in self.f.locals:
                     rname, t, where = self.f.locals[key]
                     if where == "reg":
@@ -1059,7 +1068,7 @@ class Translator:
         if c.kind != CK.DECL_REF_EXPR or c.referenced is None:
             return False
         r = c.referenced
-        entry = self.f.locals.get(r.get_usr() or r.spelling)
+        entry = self.f.locals.get(vkey(r))
         return entry is not None and entry[2] == "reg" and is_ptr(entry[1])
 
     def is_arrow(self, c):
@@ -1291,7 +1300,7 @@ class Translator:
             a, cc, neg = self.forwarded[r.spelling]
             v = self.arith_op("*", Expr(a, t, True), Expr(cc, t, True), t)
             return Expr(f"fp::fneg({v.code})", t, True) if neg else v
-        if r.kind == CK.VAR_DECL and (r.get_usr() or r.spelling) not in self.f.locals \
+        if r.kind == CK.VAR_DECL and vkey(r) not in self.f.locals \
                 and self.u.prog.global_(r.spelling, self.u.name) is None:
             # A header constant (`static const T x = 0;`) that MWCC folded into its uses.
             val = evaluate(c)
@@ -1589,6 +1598,15 @@ class Translator:
                 return special
             ft = self.u.ctype(callee.referenced.type)
             f = self.u.prog.function(name, self.u.name, is_static(callee.referenced))
+            if ft["k"] == "fn" and ft["params"] is None:
+                # Declared `f()`: take the parameters from its definition, or its stub's.
+                d = callee.referenced.get_definition()
+                if d is not None and self.u.ctype(d.type)["params"] is not None:
+                    ft = self.u.ctype(d.type)
+                elif d is not None and not any(a.kind == CK.PARM_DECL for a in children(d)):
+                    ft = {**ft, "params": [], "variadic": False}
+                elif f is not None and f["type"].get("params") is not None:
+                    ft = f["type"]
             if f is not None and self.inlined_in_original(f.get("symbol") or name, callee.referenced):
                 # The original has no call here: MWCC inlined the function, so its code runs
                 # as part of this one, and patches to the function's own copy do not apply.
@@ -1653,7 +1671,7 @@ class Translator:
         the function this code ends up in calls it nowhere, or only from inside functions it
         inlined, which MWCC does not inline into further on its own."""
         defn = ref.get_definition()
-        if defn is None or ref.type.is_function_variadic():
+        if defn is None or (ref.type.kind == TK.FUNCTIONPROTO and ref.type.is_function_variadic()):
             return False
         n = self.asm.get(name, 0) if self.asm is not None else None
         self.decisions[name] = n == 0
@@ -1712,7 +1730,7 @@ class Translator:
             r = n.referenced
             if r.semantic_parent is not None and r.semantic_parent.kind == CK.TRANSLATION_UNIT:
                 return True
-            return (r.get_usr() or r.spelling) in self.stack_resident()
+            return vkey(r) in self.stack_resident()
         return False
 
     def is_load(self, node):
@@ -1778,7 +1796,7 @@ class Translator:
                     r = target.referenced
                     local = r.semantic_parent is None or r.semantic_parent.kind != CK.TRANSLATION_UNIT
                     if local and r.storage_class != ci.StorageClass.STATIC and \
-                            (r.get_usr() or r.spelling) not in self.stack_resident():
+                            vkey(r) not in self.stack_resident():
                         out.add(param.spelling)
             elif self.inline and n.kind == CK.DECL_REF_EXPR and n.referenced is not None and \
                     n.referenced.kind == CK.PARM_DECL and n.referenced.type.kind == ci.TypeKind.POINTER:
@@ -1800,7 +1818,7 @@ class Translator:
                             target.referenced.kind in (CK.VAR_DECL, CK.PARM_DECL):
                         r = target.referenced
                         if not self.inlined_arg(parent):
-                            out.add(r.get_usr() or r.spelling)
+                            out.add(vkey(r))
                 # Casts and parentheses are transparent: an address's user is what they sit in.
                 up = parent if node.kind in (CK.UNEXPOSED_EXPR, CK.PAREN_EXPR, CK.CSTYLE_CAST_EXPR) else node
                 for k in node.get_children():
@@ -1929,6 +1947,8 @@ class Translator:
         if name in simple:
             v = self.convert(self.expr(args[0]), DOUBLE)
             return Expr(f"{simple[name]}({v.code})", t, v.pure)
+        if name == "__c2rs_inline_asm":
+            raise Unsupported("inline asm")
         if name == "__cntlzw":
             v = self.convert(self.expr(args[0]), UINT)
             return Expr(f"({v.code}.leading_zeros() as i32)", t, v.pure)
@@ -2197,11 +2217,11 @@ def translate_unit(args):
     index = ci.Index.create()
     # Code for MWCC on the Gekko (such as __va_arg) is plain C where the file parses with it.
     gekko = True
-    tu = index.parse(source, args=extract.FLAGS + ["-DMWERKS_GEKKO"])
+    tu, asm_fns = extract.parse(index, source, ["-DMWERKS_GEKKO"])
     errors = [d.spelling for d in tu.diagnostics if d.severity >= ci.Diagnostic.Error]
     if errors:
         gekko = False
-        tu = index.parse(source, args=extract.FLAGS)
+        tu, asm_fns = extract.parse(index, source)
         errors = [d.spelling for d in tu.diagnostics if d.severity >= ci.Diagnostic.Error]
     if errors:
         return unit_name, source, None, [("*", "parse error: " + errors[0])], [], [], {}
@@ -2211,8 +2231,13 @@ def translate_unit(args):
     unit.col.visit(tu.cursor, source)
     out_fns, regs = [], []
     src_norm = os.path.normpath(source)
+    seen_asm = set()
     for c in tu.cursor.get_children():
-        if c.kind != CK.FUNCTION_DECL or not c.is_definition():
+        # Assembly functions are declarations here: hand ports, or left to the original.
+        is_asm = c.kind == CK.FUNCTION_DECL and c.spelling in asm_fns and c.spelling not in seen_asm and             os.path.normpath(str(c.location.file)) == src_norm
+        if is_asm:
+            seen_asm.add(c.spelling)
+        if c.kind != CK.FUNCTION_DECL or not (c.is_definition() or is_asm):
             continue
         if os.path.normpath(str(c.location.file)) != src_norm:
             continue
@@ -2222,6 +2247,9 @@ def translate_unit(args):
         f = prog.function(name, unit_name, local=True)
         if f is None:
             continue  # inlined everywhere; translated on demand
+        if is_asm and name not in manual:
+            unit.skipped.append((name, "assembly"))
+            continue
         if name in manual:
             # Ported by hand; register the manual port under the same signature.
             regs.append(f"    ctx.register_port({f['addr']:#x}, {unit.adapter(c, 'manual::' + ident(name))}, "
@@ -2235,6 +2263,9 @@ def translate_unit(args):
             unit.skipped.append((name, f"{e} (line {tr.line})"))
             continue
         except Exception as e:  # noqa: BLE001
+            if os.environ.get("C2RS_TRACE"):
+                import traceback
+                traceback.print_exc()
             unit.skipped.append((name, f"translator error: {type(e).__name__}: {e} (line {tr.line})"))
             continue
         out_fns.append(code)
@@ -2295,11 +2326,17 @@ def _request_inline(self, defn, fuse, caller, reg_ptrs=frozenset(), forward=None
             return rname
     rname = base if not variants else f"{base}_{len(variants) + 1}"
     self.inline_active[base] = rname
+    # Copies made for this one may call it; if it fails, they go too.
+    inlines = dict(self.inlines)
+    all_variants = {k: list(v) for k, v in self.inline_variants.items()}
     try:
         tr = Translator(self, defn, fuse, inline=True, asm=asm, reg_ptrs=reg_ptrs, forward=forward)
         code = tr.function()
-    except Unsupported as e:
-        raise Unsupported(f"inline {name}: {e}")
+    except Exception as e:
+        self.inlines, self.inline_variants = inlines, all_variants
+        if isinstance(e, Unsupported):
+            raise Unsupported(f"inline {name}: {e}")
+        raise
     finally:
         del self.inline_active[base]
     self.inlines[rname] = code.replace(f"pub fn {ident(name)}<'a>", f"fn {rname}<'a>", 1)
@@ -2323,6 +2360,8 @@ def _finish_inlines(self):
 def _adapter(self, cursor, rname):
     """A closure that takes the port's arguments from registers and puts its result back."""
     ft = self.ctype(cursor.type)
+    if ft["params"] is None:
+        ft = {**ft, "params": []}  # `f()`: no parameters
     names, types, passes = [], [], []
     # The EABI returns structs of up to 8 bytes in r3 and r4, other structs through a pointer.
     small = self.size_of(ft["ret"]) if ft["ret"]["k"] == "rec" and self.size_of(ft["ret"]) in (4, 8) else None

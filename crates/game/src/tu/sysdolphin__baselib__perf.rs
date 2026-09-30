@@ -39,7 +39,7 @@ pub fn HSD_PerfInitStat<'a>(ctx: &'a Ctx) {
 
 pub fn HSD_PerfSetStartTime<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
-    fns::start_time(ctx).set(ctx.call::<_, i64>(0x8034c3f0, ()));
+    fns::start_time(ctx).set(fns::OSGetTime(ctx));
 }
 
 pub fn HSD_PerfCountEnvelopeBlending<'a>(ctx: &'a Ctx, n: i32) {

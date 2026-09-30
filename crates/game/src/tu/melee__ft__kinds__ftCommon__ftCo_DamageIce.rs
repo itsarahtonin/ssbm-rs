@@ -224,8 +224,8 @@ pub fn ftCo_DamageIce_Init<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::HSD_MtxQuat(ctx, rot_mtx_x.get(0), rot_x);
     }
     fns::PSMTXTranspose(ctx, rot_mtx_x.get(0), sp14C.get(0));
-    ctx.call::<_, ()>(0x80342204, (spEC.get(0), sp11C.get(0), sp17C.get(0)));
-    ctx.call::<_, ()>(0x80342204, (sp17C.get(0), sp14C.get(0), sp17C.get(0)));
+    fns::PSMTXConcat(ctx, spEC.get(0), sp11C.get(0), sp17C.get(0));
+    fns::PSMTXConcat(ctx, sp17C.get(0), sp14C.get(0), sp17C.get(0));
     fns::HSD_MtxGetTranslate(ctx, sp17C.get(0), pos);
     inl_HSD_JObjAddTranslationY(ctx, yrotn, pos.y());
     inl_HSD_JObjAddTranslationZ(ctx, yrotn, pos.z());

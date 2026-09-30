@@ -673,10 +673,7 @@ pub fn ftCo_8008E5A4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             lstick_vec3.set_x((fp).input().lstick().get(0_i32).x());
             lstick_vec3.set_y((fp).input().lstick().get(0_i32).y());
             lstick_vec3.set_z(fp::frsp(0_i32 as f64));
-            ctx.call::<_, ()>(
-                0x80342e58,
-                ((fp).x8c_kb_vel(), lstick_vec3, kb_vel_cross_lstick),
-            );
+            fns::PSVECCrossProduct(ctx, (fp).x8c_kb_vel(), lstick_vec3, kb_vel_cross_lstick);
             if kb_vel_cross_lstick.z() < fp::frsp(0_i32 as f64) {
                 f30 = fp::fneg(f30);
             }

@@ -2276,9 +2276,9 @@ pub fn grMuteCity_801F1A34<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<
             let _ = fns::lbVector_Normalize(ctx, sp9C);
             let _ = fns::lbVector_Add(ctx, spA8, sp9C);
             let _ = fns::lbVector_Normalize(ctx, spA8);
-            ctx.call::<_, ()>(0x80342e58, (spA8, spB4, sp90));
+            fns::PSVECCrossProduct(ctx, spA8, spB4, sp90);
             let _ = fns::lbVector_Normalize(ctx, sp90);
-            ctx.call::<_, ()>(0x80342e58, (spB4, sp90, spA8));
+            fns::PSVECCrossProduct(ctx, spB4, sp90, spA8);
             let _ = fns::lbVector_Normalize(ctx, spA8);
             car_pos.set_x(fp::frsp(fp::fmadd(
                 3.0,

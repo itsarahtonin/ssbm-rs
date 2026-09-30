@@ -854,13 +854,11 @@ pub fn grIzumi_801CCEA0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, renderpass: i32) {
             0.5,
             0.5,
         );
-        ctx.call::<_, ()>(
-            0x80342204,
-            (
-                mtx.get(0),
-                fns::HSD_CObjGetViewingMtxPtr(ctx, cobj),
-                (refl).texture_matrix().get(0),
-            ),
+        fns::PSMTXConcat(
+            ctx,
+            mtx.get(0),
+            fns::HSD_CObjGetViewingMtxPtr(ctx, cobj),
+            (refl).texture_matrix().get(0),
         );
         fns::ftDrawCommon_80081118(ctx);
     }
@@ -948,10 +946,7 @@ pub fn grIzumi_801CD220<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, renderpass: i32) {
         inl_HSD_GObjGetUserData_unfused(ctx, (gp).u().izumi().xC8()),
     );
     let mut tobj: HSD_TObj<'a> = (gp).u().izumi().xC4();
-    ctx.call::<_, ()>(
-        0x803421d0,
-        ((refl).texture_matrix().get(0), (tobj).mtx().get(0)),
-    );
+    fns::PSMTXCopy(ctx, (refl).texture_matrix().get(0), (tobj).mtx().get(0));
     fns::grDisplay_801C5DB0(ctx, gobj, renderpass);
 }
 

@@ -98,7 +98,7 @@ pub fn HSD_FogAdjInit<'a>(ctx: &'a Ctx, adj: HSD_FogAdj<'a>, desc: HSD_FogAdjDes
         if !Handle::is_null(desc) {
             (adj).set_width((desc).width());
             (adj).set_center(((desc).center() as i16));
-            ctx.call::<_, ()>(0x803421d0, ((desc).mtx().get(0), (adj).mtx().get(0)));
+            fns::PSMTXCopy(ctx, (desc).mtx().get(0), (adj).mtx().get(0));
         } else {
             fns::GXGetViewportv(ctx, v.at(0));
             (adj).set_width((fp::fctiwz(v.at(2_i32).get()) as u16));

@@ -216,7 +216,7 @@ pub fn set_dirup_matrix<'a>(
     let mut update_func = update_func;
     let mut kz: f64 = 0.0;
     let mut kdir: f64 = 0.0;
-    ctx.call::<_, ()>(0x80342e58, (dir_ptr, uv_ptr, z_vec));
+    fns::PSVECCrossProduct(ctx, dir_ptr, uv_ptr, z_vec);
     kdir = inl_sqrtf(
         ctx,
         fp::fdivs(
@@ -227,7 +227,7 @@ pub fn set_dirup_matrix<'a>(
             )),
         ),
     );
-    ctx.call::<_, ()>(0x80342d9c, (dir_ptr, dir_ptr, Single(fp::frsp(kdir))));
+    fns::PSVECScale(ctx, dir_ptr, dir_ptr, kdir);
     kz = inl_sqrtf(
         ctx,
         fp::fdivs(
@@ -238,8 +238,8 @@ pub fn set_dirup_matrix<'a>(
             )),
         ),
     );
-    ctx.call::<_, ()>(0x80342d9c, (z_vec, z_vec, Single(fp::frsp(kz))));
-    ctx.call::<_, ()>(0x80342e58, (z_vec, dir_ptr, uv_ptr));
+    fns::PSVECScale(ctx, z_vec, z_vec, kz);
+    fns::PSVECCrossProduct(ctx, z_vec, dir_ptr, uv_ptr);
     v.set_x(fp::fmuls((dir_ptr).x(), (scale_ptr).x()));
     v.set_y(fp::fmuls((dir_ptr).y(), (scale_ptr).x()));
     v.set_z(fp::fmuls((dir_ptr).z(), (scale_ptr).x()));
@@ -298,9 +298,9 @@ pub fn resolveCnsDirUp<'a>(
                 .at(3_i32)
                 .get(),
         );
-        ctx.call::<_, ()>(0x80342d78, (this_pos, dir, this_pos));
+        fns::PSVECSubtract(ctx, this_pos, dir, this_pos);
         if fns::HSD_RObjGetGlobalPosition(ctx, robj, 3_i32, up) != 0_i32 {
-            ctx.call::<_, ()>(0x80342d78, (up, dir, up));
+            fns::PSVECSubtract(ctx, up, dir, up);
         } else {
             k = fp::fsubs(1.0, fns::PSVECDotProduct(ctx, this_pos, up));
             if inl_fabsf_bitwise_unfused(ctx, k) < 1.000000013351432e-10_f64 {

@@ -705,7 +705,7 @@ pub fn JObjUpdateFunc<'a>(ctx: &'a Ctx, obj: Addr<'a>, r#type: i32, val: HSD_Obj
                         mtx.get(0),
                     );
                 } else {
-                    ctx.call::<_, ()>(0x803421d0, ((jobj).mtx().get(0), mtx.get(0)));
+                    fns::PSMTXCopy(ctx, (jobj).mtx().get(0), mtx.get(0));
                 }
                 if ((r#type as u32) == 54_u32) || ((r#type as u32) == 56_u32) {
                     fns::HSD_MtxGetTranslate(ctx, mtx.get(0), (jobj).translate());
@@ -1551,24 +1551,24 @@ pub fn resolveIKJoint1<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
             fns::HSD_MtxGetTranslate(ctx, (robj_4).mtx().get(0), spB0);
         }
         let _ = fns::HSD_RObjGetGlobalPosition(ctx, (var_r28).robj(), 1_i32, (var_r28).translate());
-        ctx.call::<_, ()>(0x80342d78, ((var_r28).translate(), spB0, sp8C));
+        fns::PSVECSubtract(ctx, (var_r28).translate(), spB0, sp8C);
         temp_f31 = fns::PSVECDotProduct(ctx, sp8C, sp8C);
         if temp_f31 > var_f5 {
             Handle::copy_from(sp68, sp8C);
             if (fns::HSD_RObjGetGlobalPosition(ctx, (jobj).robj(), 3_i32, sp5C) != 0) {
-                ctx.call::<_, ()>(0x80342d78, (sp5C, spB0, sp5C));
+                fns::PSVECSubtract(ctx, sp5C, spB0, sp5C);
                 if temp_f26 != 0.0 {
                     fns::PSMTXRotAxisRad(ctx, sp20.get(0), sp68, temp_f26);
-                    ctx.call::<_, ()>(0x80342aa8, (sp20.get(0), sp5C, sp5C));
+                    fns::PSMTXMultVec(ctx, sp20.get(0), sp5C, sp5C);
                 }
-                ctx.call::<_, ()>(0x80342e58, (sp68, sp5C, sp50));
-                ctx.call::<_, ()>(0x80342e58, (sp50, sp68, sp5C));
+                fns::PSVECCrossProduct(ctx, sp68, sp5C, sp50);
+                fns::PSVECCrossProduct(ctx, sp50, sp68, sp5C);
             } else {
                 sp50.set_x((jobj).mtx().get(0_i32).at(2_i32).get());
                 sp50.set_y((jobj).mtx().get(1_i32).at(2_i32).get());
                 sp50.set_z((jobj).mtx().get(2_i32).at(2_i32).get());
-                ctx.call::<_, ()>(0x80342e58, (sp50, sp68, sp5C));
-                ctx.call::<_, ()>(0x80342e58, (sp68, sp5C, sp50));
+                fns::PSVECCrossProduct(ctx, sp50, sp68, sp5C);
+                fns::PSVECCrossProduct(ctx, sp68, sp5C, sp50);
             }
             var_f4 = inl_sqrtf(
                 ctx,
@@ -1580,7 +1580,7 @@ pub fn resolveIKJoint1<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
                     )),
                 ),
             );
-            ctx.call::<_, ()>(0x80342d9c, (sp50, sp80, Single(fp::frsp(var_f4))));
+            fns::PSVECScale(ctx, sp50, sp80, var_f4);
             var_f4_2 = inl_sqrtf(
                 ctx,
                 fp::fdivs(
@@ -1591,7 +1591,7 @@ pub fn resolveIKJoint1<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
                     )),
                 ),
             );
-            ctx.call::<_, ()>(0x80342d9c, (sp5C, sp74, Single(fp::frsp(var_f4_2))));
+            fns::PSVECScale(ctx, sp5C, sp74, var_f4_2);
             temp_f5 = fp::fmuls(temp_f30, temp_f30);
             var_f28 = fp::fmuls(var_f29, var_f29);
             temp_f1_7 = fp::fsubs(temp_f5, var_f28);
@@ -1625,12 +1625,12 @@ pub fn resolveIKJoint1<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
             var_f29_2 = fp::fneg(var_f29_2);
         }
         if (fp::fsubs(var_f28, var_f27)) < temp_f31 {
-            ctx.call::<_, ()>(0x80342d9c, (sp8C, sp98, Single(fp::frsp(var_f1))));
+            fns::PSVECScale(ctx, sp8C, sp98, var_f1);
         } else {
-            ctx.call::<_, ()>(0x80342d9c, (sp8C, sp98, Single(fp::frsp(fp::fneg(var_f1)))));
+            fns::PSVECScale(ctx, sp8C, sp98, fp::fneg(var_f1));
         }
-        ctx.call::<_, ()>(0x80342d9c, (sp74, sp5C, Single(fp::frsp(var_f29_2))));
-        ctx.call::<_, ()>(0x80342d54, (sp98, sp5C, sp98));
+        fns::PSVECScale(ctx, sp74, sp5C, var_f29_2);
+        fns::PSVECAdd(ctx, sp98, sp5C, sp98);
         var_f4_4 = inl_sqrtf(
             ctx,
             fp::fdivs(
@@ -1641,7 +1641,7 @@ pub fn resolveIKJoint1<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
                 )),
             ),
         );
-        ctx.call::<_, ()>(0x80342d9c, (sp98, sp98, Single(fp::frsp(var_f4_4))));
+        fns::PSVECScale(ctx, sp98, sp98, var_f4_4);
         (jobj)
             .mtx()
             .get(0_i32)
@@ -1657,7 +1657,7 @@ pub fn resolveIKJoint1<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
             .get(2_i32)
             .at(0_i32)
             .set(fp::fmuls(sp98.z(), spBC.x()));
-        ctx.call::<_, ()>(0x80342e58, (sp80, sp98, sp5C));
+        fns::PSVECCrossProduct(ctx, sp80, sp98, sp5C);
         (jobj)
             .mtx()
             .get(0_i32)
@@ -1749,7 +1749,7 @@ pub fn resolveIKJoint2<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
             )),
         ),
     );
-    ctx.call::<_, ()>(0x80342d9c, (sp7C, sp7C, Single(fp::frsp(var_f4))));
+    fns::PSVECScale(ctx, sp7C, sp7C, var_f4);
     if !Handle::is_null(((jobj).parent()).scl()) {
         var_f31 = (((jobj).parent()).scl()).x();
     }
@@ -1769,34 +1769,27 @@ pub fn resolveIKJoint2<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
             cstr(ctx, 0x803b94c4),
         )
     });
-    ctx.call::<_, ()>(
-        0x80342d9c,
-        (
-            sp7C,
-            sp7C,
-            Single(fp::frsp(fp::fmuls(
-                (robj).u().ik_hint().bone_length(),
-                var_f31,
-            ))),
-        ),
+    fns::PSVECScale(
+        ctx,
+        sp7C,
+        sp7C,
+        fp::fmuls((robj).u().ik_hint().bone_length(), var_f31),
     );
-    ctx.call::<_, ()>(0x80342d54, (sp88, sp7C, sp94));
-    ctx.call::<_, ()>(0x80342d78, ((var_r29).translate(), sp94, sp7C));
-    ctx.call::<_, ()>(
-        0x80342d9c,
-        (
-            sp7C,
-            sp7C,
-            Single(fp::frsp(inl_sqrtf(
-                ctx,
-                fp::fdivs(
-                    1.0,
-                    (fp::fadds(
-                        1.000000013351432e-10_f64,
-                        fns::PSVECDotProduct(ctx, sp7C, sp7C),
-                    )),
-                ),
-            ))),
+    fns::PSVECAdd(ctx, sp88, sp7C, sp94);
+    fns::PSVECSubtract(ctx, (var_r29).translate(), sp94, sp7C);
+    fns::PSVECScale(
+        ctx,
+        sp7C,
+        sp7C,
+        inl_sqrtf(
+            ctx,
+            fp::fdivs(
+                1.0,
+                (fp::fadds(
+                    1.000000013351432e-10_f64,
+                    fns::PSVECDotProduct(ctx, sp7C, sp7C),
+                )),
+            ),
         ),
     );
     temp_r28 = fns::HSD_RObjGetByType(ctx, (jobj).robj(), (0x20000000_i32 as u32), (5_i32 as u32));
@@ -1854,7 +1847,7 @@ pub fn resolveIKJoint2<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
                 sp1C.set_z((Handle::add(mtx_4, 2_i32)).at(2_i32).get());
             }
             fns::PSMTXRotAxisRad(ctx, sp34.get(0), sp1C, var_f1_2);
-            ctx.call::<_, ()>(0x80342aa8, (sp34.get(0), sp28, sp7C));
+            fns::PSMTXMultVec(ctx, sp34.get(0), sp28, sp7C);
         }
     }
     {
@@ -1863,7 +1856,7 @@ pub fn resolveIKJoint2<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
         sp64.set_y((Handle::add(mtx_5, 1_i32)).at(2_i32).get());
         sp64.set_z((Handle::add(mtx_5, 2_i32)).at(2_i32).get());
     }
-    ctx.call::<_, ()>(0x80342e58, (sp64, sp7C, sp70));
+    fns::PSVECCrossProduct(ctx, sp64, sp7C, sp70);
     var_f4_2 = inl_sqrtf(
         ctx,
         fp::fdivs(
@@ -1874,8 +1867,8 @@ pub fn resolveIKJoint2<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
             )),
         ),
     );
-    ctx.call::<_, ()>(0x80342d9c, (sp70, sp70, Single(fp::frsp(var_f4_2))));
-    ctx.call::<_, ()>(0x80342e58, (sp7C, sp70, sp64));
+    fns::PSVECScale(ctx, sp70, sp70, var_f4_2);
+    fns::PSVECCrossProduct(ctx, sp7C, sp70, sp64);
     (jobj)
         .mtx()
         .get(0_i32)
@@ -1972,38 +1965,31 @@ pub fn HSD_JObjSetupMatrixSub<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
                         sp10.set_x((parent).mtx().get(0_i32).at(0_i32).get());
                         sp10.set_y((parent).mtx().get(1_i32).at(0_i32).get());
                         sp10.set_z((parent).mtx().get(2_i32).at(0_i32).get());
-                        ctx.call::<_, ()>(
-                            0x80342d9c,
-                            (
-                                sp10,
-                                sp10,
-                                Single(fp::frsp(inl_sqrtf(
-                                    ctx,
-                                    fp::fdivs(
-                                        1.0,
-                                        (fp::fadds(
-                                            1.000000013351432e-10_f64,
-                                            fns::PSVECDotProduct(ctx, sp10, sp10),
-                                        )),
-                                    ),
-                                ))),
+                        fns::PSVECScale(
+                            ctx,
+                            sp10,
+                            sp10,
+                            inl_sqrtf(
+                                ctx,
+                                fp::fdivs(
+                                    1.0,
+                                    (fp::fadds(
+                                        1.000000013351432e-10_f64,
+                                        fns::PSVECDotProduct(ctx, sp10, sp10),
+                                    )),
+                                ),
                             ),
                         );
                         if !Handle::is_null((parent).scl()) {
                             x_scale = ((parent).scl()).x();
                         }
-                        ctx.call::<_, ()>(
-                            0x80342d9c,
-                            (
-                                sp10,
-                                sp10,
-                                Single(fp::frsp(fp::fmuls(
-                                    (robj).u().ik_hint().bone_length(),
-                                    x_scale,
-                                ))),
-                            ),
+                        fns::PSVECScale(
+                            ctx,
+                            sp10,
+                            sp10,
+                            fp::fmuls((robj).u().ik_hint().bone_length(), x_scale),
                         );
-                        ctx.call::<_, ()>(0x80342d54, (sp1C, sp10, sp28));
+                        fns::PSVECAdd(ctx, sp1C, sp10, sp28);
                         (jobj).mtx().get(0_i32).at(3_i32).set(sp28.x());
                         (jobj).mtx().get(1_i32).at(3_i32).set(sp28.y());
                         (jobj).mtx().get(2_i32).at(3_i32).set(sp28.z());

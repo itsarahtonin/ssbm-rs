@@ -274,7 +274,7 @@ pub fn HSD_LObjGetLightVector<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, dir: Vec<'a>
     }
     let _ = fns::HSD_LObjGetPosition(ctx, lobj, position);
     let _ = fns::HSD_LObjGetInterest(ctx, lobj, interest);
-    ctx.call::<_, ()>(0x80342d78, (interest, position, dir));
+    fns::PSVECSubtract(ctx, interest, position, dir);
     fns::PSVECNormalize(ctx, dir, dir);
 }
 
@@ -1272,7 +1272,7 @@ fn inl_setup_infinite_lightobj_unfused<'a>(
     lpos.set_x(fp::fmuls(lpos.x(), 1048576.0));
     lpos.set_y(fp::fmuls(lpos.y(), 1048576.0));
     lpos.set_z(fp::fmuls(lpos.z(), 1048576.0));
-    ctx.call::<_, ()>(0x80342aa8, (vmtx, lpos, lpos));
+    fns::PSMTXMultVec(ctx, vmtx, lpos, lpos);
     if ((((lobj).flags() as i32) & (shl_i32(1_i32, (2_i32 as u32)))) != 0) {
         fns::GXInitLightPos(ctx, (lobj).lightobj(), lpos.x(), lpos.y(), lpos.z());
         fns::GXInitLightAttn(

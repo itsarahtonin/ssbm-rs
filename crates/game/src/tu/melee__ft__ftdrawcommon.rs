@@ -62,7 +62,7 @@ pub fn ftDrawCommon_8008051C<'a>(
         let mut mtx: ArrV<'a, F32, 4> = (current).view_mtx().get(0);
         fns::PSMTXIdentity(ctx, sp18.get(0));
         inl_mtx_thing_2_unfused(ctx, sp18.get(0), sp54, v);
-        ctx.call::<_, ()>(0x80342204, (mtx, sp18.get(0), arg2));
+        fns::PSMTXConcat(ctx, mtx, sp18.get(0), arg2);
         return arg2;
     }
     return null::<ArrV<'a, F32, 4>>(ctx);
@@ -272,13 +272,11 @@ fn inl_ftDrawCommon_80080E18_inline2_unfused<'a>(
     let mut pos: Vec<'a> = null(ctx);
     let mut matrix: ArrV<'a, F32, 4> =
         fns::HSD_CObjGetInvViewingMtxPtr(ctx, fns::Camera_800310B8(ctx));
-    ctx.call::<_, ()>(
-        0x80342aa8,
-        (
-            matrix,
-            Handle::cast::<Vec<'a>>((old).mv().co().walk().fast_anim_frame_ref()),
-            (fp).cur_pos(),
-        ),
+    fns::PSMTXMultVec(
+        ctx,
+        matrix,
+        Handle::cast::<Vec<'a>>((old).mv().co().walk().fast_anim_frame_ref()),
+        (fp).cur_pos(),
     );
     pos = (fp).cur_pos();
     inl_HSD_JObjSetTranslate_unfused(ctx, jobj, pos);

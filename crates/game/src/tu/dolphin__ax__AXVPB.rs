@@ -592,19 +592,15 @@ pub fn __AXSyncPBs<'a>(ctx: &'a Ctx, lessDspCycles: u32) {
     let mut i: u32 = 0;
     let mut pvpb: _AXVPB<'a> = null(ctx);
     statics::dolphin__ax__AXVPB::__AXNumVoices(ctx).set((0_i32 as u32));
-    ctx.call::<_, ()>(
-        0x803447dc,
-        (
-            Handle::cast::<Addr<'a>>(statics::dolphin__ax__AXVPB::__AXPB(ctx).get(0)),
-            0x3000_u32,
-        ),
+    fns::DCInvalidateRange(
+        ctx,
+        Handle::cast::<Addr<'a>>(statics::dolphin__ax__AXVPB::__AXPB(ctx).get(0)),
+        0x3000_u32,
     );
-    ctx.call::<_, ()>(
-        0x803447dc,
-        (
-            Handle::cast::<Addr<'a>>(statics::dolphin__ax__AXVPB::__AXITD(ctx).get(0)),
-            0x1000_u32,
-        ),
+    fns::DCInvalidateRange(
+        ctx,
+        Handle::cast::<Addr<'a>>(statics::dolphin__ax__AXVPB::__AXITD(ctx).get(0)),
+        0x1000_u32,
     );
     cycles = (fns::__AXGetCommandListCycles(ctx).wrapping_add((0x10000_i32 as u32)))
         .wrapping_sub((0x55f0_i32 as u32))
@@ -726,26 +722,20 @@ pub fn __AXSyncPBs<'a>(ctx: &'a Ctx, lessDspCycles: u32) {
             pvpb = (pvpb).next();
         }
     }
-    ctx.call::<_, ()>(
-        0x8034480c,
-        (
-            Handle::cast::<Addr<'a>>(statics::dolphin__ax__AXVPB::__AXPB(ctx).get(0)),
-            0x3000_u32,
-        ),
+    fns::DCFlushRange(
+        ctx,
+        Handle::cast::<Addr<'a>>(statics::dolphin__ax__AXVPB::__AXPB(ctx).get(0)),
+        0x3000_u32,
     );
-    ctx.call::<_, ()>(
-        0x8034480c,
-        (
-            Handle::cast::<Addr<'a>>(statics::dolphin__ax__AXVPB::__AXITD(ctx).get(0)),
-            0x1000_u32,
-        ),
+    fns::DCFlushRange(
+        ctx,
+        Handle::cast::<Addr<'a>>(statics::dolphin__ax__AXVPB::__AXITD(ctx).get(0)),
+        0x1000_u32,
     );
-    ctx.call::<_, ()>(
-        0x8034480c,
-        (
-            Handle::cast::<Addr<'a>>(statics::dolphin__ax__AXVPB::__AXUpdates(ctx).get(0)),
-            0x4000_u32,
-        ),
+    fns::DCFlushRange(
+        ctx,
+        Handle::cast::<Addr<'a>>(statics::dolphin__ax__AXVPB::__AXUpdates(ctx).get(0)),
+        0x4000_u32,
     );
 }
 
@@ -923,12 +913,10 @@ pub fn __AXVPBInit<'a>(ctx: &'a Ctx) {
             i = i.wrapping_add(1);
         }
     }
-    ctx.call::<_, ()>(
-        0x8034480c,
-        (
-            Handle::cast::<Addr<'a>>(statics::dolphin__ax__AXVPB::__AXPB(ctx).get(0)),
-            0x3000_u32,
-        ),
+    fns::DCFlushRange(
+        ctx,
+        Handle::cast::<Addr<'a>>(statics::dolphin__ax__AXVPB::__AXPB(ctx).get(0)),
+        0x3000_u32,
     );
 }
 

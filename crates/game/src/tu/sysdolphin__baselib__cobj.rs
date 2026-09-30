@@ -812,7 +812,7 @@ pub fn HSD_CObjGetEyeVector<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, eye: Vec<'a>) 
     {
         inl_HSD_CObjGetEyePosition_unfused(ctx, cobj, eyepos);
         inl_HSD_CObjGetInterest_unfused(ctx, cobj, interest);
-        ctx.call::<_, ()>(0x80342d78, (interest, eyepos, eye));
+        fns::PSVECSubtract(ctx, interest, eyepos, eye);
         if inl_vec_normalize_check_unfused(ctx, eye, eye) == 0_i32 {
             return 0_i32;
         }
@@ -856,8 +856,8 @@ pub fn HSD_CObjGetEyeDistance<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> f64 {
     });
     inl_HSD_CObjGetEyePosition_unfused(ctx, cobj, position);
     inl_HSD_CObjGetInterest_unfused(ctx, cobj, interest);
-    ctx.call::<_, ()>(0x80342d78, (interest, position, look_vector));
-    return ctx.call::<_, f64>(0x80342dfc, (look_vector,));
+    fns::PSVECSubtract(ctx, interest, position, look_vector);
+    return fns::PSVECMag(ctx, look_vector);
 }
 
 pub fn HSD_CObjGetUpVector<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, up: Vec<'a>) -> i32 {
@@ -891,7 +891,7 @@ pub fn HSD_CObjGetLeftVector<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, left: Vec<'a>
     if (!Handle::is_null(cobj)) && (!Handle::is_null(left)) {
         if inl_HSD_CObjGetEyeVector_unfused(ctx, cobj, eye) == 0_i32 {
             if inl_HSD_CObjGetUpVector_unfused(ctx, cobj, up) == 0_i32 {
-                ctx.call::<_, ()>(0x80342e58, (up, eye, left));
+                fns::PSVECCrossProduct(ctx, up, eye, left);
                 if !(inl_vec_normalize_check_unfused(ctx, left, left) != 0) {
                     return 0_i32;
                 }
@@ -2033,7 +2033,7 @@ fn inl_HSD_CObjGetEyeVector<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, eye: Vec<'a>) 
     {
         inl_HSD_CObjGetEyePosition(ctx, cobj, eyepos);
         inl_HSD_CObjGetInterest(ctx, cobj, interest);
-        ctx.call::<_, ()>(0x80342d78, (interest, eyepos, eye));
+        fns::PSVECSubtract(ctx, interest, eyepos, eye);
         if inl_vec_normalize_check(ctx, eye, eye) == 0_i32 {
             return 0_i32;
         }
@@ -2063,7 +2063,7 @@ fn inl_HSD_CObjGetEyeVector_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, eye: V
     {
         inl_HSD_CObjGetEyePosition_unfused(ctx, cobj, eyepos);
         inl_HSD_CObjGetInterest_unfused(ctx, cobj, interest);
-        ctx.call::<_, ()>(0x80342d78, (interest, eyepos, eye));
+        fns::PSVECSubtract(ctx, interest, eyepos, eye);
         if inl_vec_normalize_check_unfused(ctx, eye, eye) == 0_i32 {
             return 0_i32;
         }

@@ -369,7 +369,7 @@ pub fn hsd_8039DAD4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) -> f64 {
         && ((((r#gen).r#type() as i32) & 0x400_i32) != 0))
         && (!(((r#gen).kind() & (0x30000_i32 as u32)) != 0))
     {
-        ctx.call::<_, ()>(0x803421d0, (((r#gen).jobj()).mtx().get(0), jobj_mtx.get(0)));
+        fns::PSMTXCopy(ctx, ((r#gen).jobj()).mtx().get(0), jobj_mtx.get(0));
         vec.set_x(jobj_mtx.get(0_i32).at(0_i32).get());
         vec.set_y(jobj_mtx.get(1_i32).at(0_i32).get());
         vec.set_z(jobj_mtx.get(2_i32).at(0_i32).get());
@@ -421,8 +421,8 @@ pub fn hsd_8039DAD4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) -> f64 {
         fns::PSVECNormalize(ctx, look_dir, look_dir);
         let _ = fns::HSD_CObjGetUpVector(ctx, fns::psCamera(ctx).get(), cam_up);
         fns::PSVECNormalize(ctx, cam_up, cam_up);
-        ctx.call::<_, ()>(0x80342e58, (cam_up, look_dir, cross1));
-        ctx.call::<_, ()>(0x80342e58, (look_dir, cross1, cam_up));
+        fns::PSVECCrossProduct(ctx, cam_up, look_dir, cross1);
+        fns::PSVECCrossProduct(ctx, look_dir, cross1, cam_up);
         rot_mtx.get(0_i32).at(0_i32).set(cross1.x());
         rot_mtx.get(1_i32).at(0_i32).set(cross1.y());
         rot_mtx.get(2_i32).at(0_i32).set(cross1.z());
@@ -486,10 +486,7 @@ pub fn hsd_8039DAD4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) -> f64 {
             trig_mtx.get(2_i32).at(2_i32).set(fp::fmuls(sin_az, cos_el));
             trig_mtx.get(2_i32).at(3_i32).set(0.0);
         }
-        ctx.call::<_, ()>(
-            0x80342204,
-            (rot_mtx.get(0), trig_mtx.get(0), rot_mtx.get(0)),
-        );
+        fns::PSMTXConcat(ctx, rot_mtx.get(0), trig_mtx.get(0), rot_mtx.get(0));
     }
     elevation = vel_mag_sq;
     if (((r#gen).r#type() as i32) & 15_i32) == 2_i32 {
@@ -761,11 +758,11 @@ pub fn hsd_8039DAD4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) -> f64 {
                             vec.set_y(fp::fmuls(vec.y(), radius));
                             vec.set_z(fp::fmuls(vec.z(), radius));
                         }
-                        ctx.call::<_, ()>(0x80342aa8, (rot_mtx.get(0), emit_pos, emit_pos));
+                        fns::PSMTXMultVec(ctx, rot_mtx.get(0), emit_pos, emit_pos);
                         emit_pos.set_x(fp::fadds(emit_pos.x(), (r#gen).pos().x()));
                         emit_pos.set_y(fp::fadds(emit_pos.y(), (r#gen).pos().y()));
                         emit_pos.set_z(fp::fadds(emit_pos.z(), (r#gen).pos().z()));
-                        ctx.call::<_, ()>(0x80342aa8, (rot_mtx.get(0), vec, vec));
+                        fns::PSMTXMultVec(ctx, rot_mtx.get(0), vec, vec);
                         cur_angle = cos_az;
                         fns::hsd_80398F0C(
                             ctx,
@@ -796,11 +793,11 @@ pub fn hsd_8039DAD4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) -> f64 {
                         emit_pos.set_x(fp::fmuls(rnd_7, (r#gen).aux().line().x2()));
                         emit_pos.set_y(fp::fmuls(rnd_7, (r#gen).aux().line().y2()));
                         emit_pos.set_z(fp::fmuls(rnd_7, (r#gen).aux().line().z2()));
-                        ctx.call::<_, ()>(0x80342aa8, (rot_mtx.get(0), emit_pos, emit_pos));
+                        fns::PSMTXMultVec(ctx, rot_mtx.get(0), emit_pos, emit_pos);
                         emit_pos.set_x(fp::fadds(emit_pos.x(), (r#gen).pos().x()));
                         emit_pos.set_y(fp::fadds(emit_pos.y(), (r#gen).pos().y()));
                         emit_pos.set_z(fp::fadds(emit_pos.z(), (r#gen).pos().z()));
-                        ctx.call::<_, ()>(0x80342aa8, (rot_mtx.get(0), vel_copy, vec));
+                        fns::PSMTXMultVec(ctx, rot_mtx.get(0), vel_copy, vec);
                         fns::hsd_80398F0C(
                             ctx,
                             ((r#gen).linkNo() as i32),
@@ -1020,7 +1017,7 @@ pub fn hsd_8039DAD4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) -> f64 {
                                 fp::fmuls((r#gen).aux().rect().yz(), emit_pos.y()),
                             ),
                         ));
-                        ctx.call::<_, ()>(0x80342aa8, (rot_mtx.get(0), tmpvec, emit_pos));
+                        fns::PSMTXMultVec(ctx, rot_mtx.get(0), tmpvec, emit_pos);
                         emit_pos.set_x(fp::fadds(emit_pos.x(), (r#gen).pos().x()));
                         emit_pos.set_y(fp::fadds(emit_pos.y(), (r#gen).pos().y()));
                         emit_pos.set_z(fp::fadds(emit_pos.z(), (r#gen).pos().z()));
@@ -1042,7 +1039,7 @@ pub fn hsd_8039DAD4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) -> f64 {
                                 vec.set_z(fp::fmuls((r#gen).aux().rect().zz(), scale));
                             }
                         }
-                        ctx.call::<_, ()>(0x80342aa8, (rot_mtx.get(0), vec, vec));
+                        fns::PSMTXMultVec(ctx, rot_mtx.get(0), vec, vec);
                         fns::hsd_80398F0C(
                             ctx,
                             ((r#gen).linkNo() as i32),
@@ -1119,7 +1116,7 @@ pub fn hsd_8039DAD4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) -> f64 {
                             vec.set_y(fp::fmuls(sin_r, sin_el));
                             vec.set_z(fns::cosf(ctx, radius));
                         }
-                        ctx.call::<_, ()>(0x80342aa8, (rot_mtx.get(0), vec, emit_pos));
+                        fns::PSMTXMultVec(ctx, rot_mtx.get(0), vec, emit_pos);
                         vec.set_x(fp::fmuls(emit_pos.x(), (r#gen).aux().rect().x()));
                         vec.set_y(fp::fmuls(emit_pos.y(), (r#gen).aux().rect().x()));
                         vec.set_z(fp::fmuls(emit_pos.z(), (r#gen).aux().rect().x()));

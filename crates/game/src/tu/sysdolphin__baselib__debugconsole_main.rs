@@ -375,7 +375,7 @@ pub fn hsd_80394950<'a>(ctx: &'a Ctx, v_ctx: OSContext<'a>) {
     irq = fns::OSDisableInterrupts(ctx);
     saved = fns::OSGetCurrentContext(ctx);
     fns::OSClearContext(ctx, tmp);
-    ctx.call::<_, ()>(0x8034508c, (tmp,));
+    fns::OSSetCurrentContext(ctx, tmp);
     fns::OSReport(ctx, cstr(ctx, 0x8040b284), &[]);
     {
         i = 0_i32;
@@ -427,7 +427,7 @@ pub fn hsd_80394950<'a>(ctx: &'a Ctx, v_ctx: OSContext<'a>) {
         }
     }
     fns::OSClearContext(ctx, tmp);
-    ctx.call::<_, ()>(0x8034508c, (saved,));
+    fns::OSSetCurrentContext(ctx, saved);
     let _ = fns::OSRestoreInterrupts(ctx, irq);
 }
 
@@ -2566,6 +2566,111 @@ pub fn hsd_80397520<'a>(ctx: &'a Ctx, node_ptr: Addr<'a>) {
     }
 }
 
+pub fn hsd_803975D4<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut sp: ParticleScreenState<'a> =
+        statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx);
+    let mut cur_pads: PADStatus<'a> = null(ctx);
+    let mut pads: PADStatus<'a> = null(ctx);
+    let mut reset_mask: u32 = 0;
+    let mut port: i32 = 0;
+    let mut buttons: u16 = 0;
+    let mut new_press: u32 = 0;
+    reset_mask = (0_i32 as u32);
+    if fns::OSGetResetSwitchState(ctx) != 0_i32 {
+        (sp).set_xC4(1_i32);
+    } else if (sp).xC4() != 0_i32 {
+        fns::OSResetSystem(ctx, 1_i32, (0_i32 as u32), 0_i32);
+        {
+            'l1: loop {
+                'c2: {}
+            }
+        }
+    }
+    cur_pads = Handle::cast::<PADStatus<'a>>((sp)._pad4().at(0));
+    let _ = fns::memcpy(
+        ctx,
+        Handle::cast::<Addr<'a>>((sp)._pad4().at(48_i32)),
+        Handle::cast::<Addr<'a>>(cur_pads),
+        (48_i32 as u32),
+    );
+    let _ = fns::PADRead(ctx, cur_pads);
+    fns::PADClamp(ctx, cur_pads);
+    {
+        port = 0_i32;
+        'l3: while port < 4_i32 {
+            'c4: {
+                if (((sp)
+                    ._pad4()
+                    .at(10_i32.wrapping_add(port.wrapping_mul(12_i32)))
+                    .get() as i8) as i32)
+                    == 1_i32.wrapping_neg()
+                {
+                    reset_mask = (reset_mask | shr_u32(0x80000000_u32, (port as u32)));
+                }
+            }
+            port = port.wrapping_add(1);
+        }
+    }
+    if reset_mask != (0_i32 as u32) {
+        let _ = fns::PADReset(ctx, reset_mask);
+    }
+    {
+        port = 0_i32;
+        'l5: while port < 4_i32 {
+            'c6: {
+                if ((((sp)
+                    ._pad4()
+                    .at(58_i32.wrapping_add(port.wrapping_mul(12_i32)))
+                    .get() as i8) as i32)
+                    == 0_i32)
+                    && ((((sp)
+                        ._pad4()
+                        .at(10_i32.wrapping_add(port.wrapping_mul(12_i32)))
+                        .get() as i8) as i32)
+                        == 0_i32)
+                {
+                    break 'l5;
+                }
+            }
+            port = port.wrapping_add(1);
+        }
+    }
+    if port == 4_i32 {
+        (sp).set_xBC((0_i32 as u32));
+        (sp).set_xC0((0_i32 as u32));
+        return;
+    }
+    (Handle::cast::<ParticleInputState<'a>>(sp)).set_port(port);
+    pads = (Handle::cast::<ParticleInputState<'a>>(sp)).pads().get(0);
+    buttons = (Handle::add(pads, (Handle::cast::<ParticleInputState<'a>>(sp)).port())).button();
+    new_press = ((((buttons as i32)
+        & (((Handle::add(
+            (Handle::add((Handle::cast::<PADStatus<'a>>((sp)._pad4().at(0))), 4_i32)),
+            (Handle::cast::<ParticleInputState<'a>>(sp)).port(),
+        ))
+        .button() as i32)
+            ^ (buttons as i32))) as u16) as u32);
+    (sp).set_xC0((buttons as u32));
+    if new_press != (0_i32 as u32) {
+        (Handle::cast::<ParticleInputState<'a>>(sp)).set_repeat(0_i32);
+    } else if ((Handle::add(pads, (Handle::cast::<ParticleInputState<'a>>(sp)).port())).button()
+        as i32)
+        != 0_i32
+    {
+        (Handle::cast::<ParticleInputState<'a>>(sp)).set_repeat(
+            (Handle::cast::<ParticleInputState<'a>>(sp))
+                .repeat()
+                .wrapping_add(1_i32),
+        );
+        if (Handle::cast::<ParticleInputState<'a>>(sp)).repeat() > 30_i32 {
+            new_press = ((Handle::add(pads, (Handle::cast::<ParticleInputState<'a>>(sp)).port()))
+                .button() as u32);
+        }
+    }
+    (sp).set_xBC(new_press);
+}
+
 pub fn hsd_80397DA4<'a>(ctx: &'a Ctx, v_ctx: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x320);
     let thread: OSThread<'a> = frame_at(ctx, &__frame, 0x0);
@@ -3185,6 +3290,13 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (Addr<'_>,) = Args::take_all(ctx);
             Ret::put(hsd_80397520(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x803975d4,
+        |ctx| {
+            Ret::put(hsd_803975D4(ctx), ctx);
         },
         Returns::Nothing,
     );

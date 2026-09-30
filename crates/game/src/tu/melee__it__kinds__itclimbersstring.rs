@@ -604,7 +604,7 @@ pub fn it_802C3520<'a>(ctx: &'a Ctx, ip: Item<'a>, target: Vec<'a>) {
             attrs = Handle::cast::<itClimbersStringAttributes<'a>>(
                 ((ip).xC4_article_data()).x4_specialAttributes(),
             );
-            ctx.call::<_, ()>(0x803421d0, ((jobj).mtx().get(0), m.get(0)));
+            fns::PSMTXCopy(ctx, (jobj).mtx().get(0), m.get(0));
             m.get(0_i32)
                 .at(0_i32)
                 .set(fp::fmuls(m.get(0_i32).at(0_i32).get(), (attrs).x8()));
@@ -632,7 +632,7 @@ pub fn it_802C3520<'a>(ctx: &'a Ctx, ip: Item<'a>, target: Vec<'a>) {
             m.get(2_i32)
                 .at(2_i32)
                 .set(fp::fmuls(m.get(2_i32).at(2_i32).get(), (attrs).x8()));
-            ctx.call::<_, ()>(0x803421d0, (m.get(0), (jobj).mtx().get(0)));
+            fns::PSMTXCopy(ctx, m.get(0), (jobj).mtx().get(0));
             link = (link).prev();
         }
     }

@@ -79,7 +79,7 @@ pub fn hsd_80393328<'a>(ctx: &'a Ctx) -> i32 {
         );
     }
     result = 1_i32;
-    startTick = ((fns::OSGetTick(ctx) as u32) as i32);
+    startTick = (fns::OSGetTick(ctx) as i32);
     ticksPerUnit = ((((div_u32(
         ((ptr::<Val<'a, u32>>(
             ctx,
@@ -98,7 +98,7 @@ pub fn hsd_80393328<'a>(ctx: &'a Ctx) -> i32 {
             }
         }
         if !(div_u32(
-            ((fns::OSGetTick(ctx) as u32).wrapping_sub((startTick as u32))),
+            (fns::OSGetTick(ctx).wrapping_sub((startTick as u32))),
             ticksPerUnit,
         ) < (3_i32 as u32))
         {
@@ -378,7 +378,7 @@ pub fn hsd_80393A5C<'a>(ctx: &'a Ctx, filename: Val<'a, i8>, data: Addr<'a>, siz
     if ((filename).get() as i32) == 47_i32 {
         filename = Handle::add(filename, 1);
     }
-    start = (fns::OSGetTick(ctx) as u32);
+    start = fns::OSGetTick(ctx);
     fd = fns::FIOFopen(ctx, filename, (0xa02_i32 as u32));
     if ((fd.wrapping_add(0x10000_i32)) as u32) == (0xffff_i32 as u32) {
         fns::OSReport(ctx, (messages).cannot_open().at(0), &[]);
@@ -397,7 +397,7 @@ pub fn hsd_80393A5C<'a>(ctx: &'a Ctx, filename: Val<'a, i8>, data: Addr<'a>, siz
     }
     let _ = fns::FIOFclose(ctx, fd);
     elapsed = fp::fdivs(
-        fp::frsp(((fns::OSGetTick(ctx) as u32).wrapping_sub(start)) as f64),
+        fp::frsp((fns::OSGetTick(ctx).wrapping_sub(start)) as f64),
         (fp::fmuls(
             (1.0),
             fp::frsp(

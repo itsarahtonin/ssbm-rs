@@ -49,13 +49,11 @@ pub fn it_8026EB18<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: Vec<'a
             m.get(0_i32).at(3_i32).set((arg2).x());
             m.get(1_i32).at(3_i32).set((arg2).y());
             m.get(2_i32).at(3_i32).set((arg2).z());
-            ctx.call::<_, ()>(
-                0x80342204,
-                (
-                    vmtx,
-                    Handle::cast::<ArrV<'a, F32, 4>>(m),
-                    Handle::cast::<ArrV<'a, F32, 4>>(m2),
-                ),
+            fns::PSMTXConcat(
+                ctx,
+                vmtx,
+                Handle::cast::<ArrV<'a, F32, 4>>(m),
+                Handle::cast::<ArrV<'a, F32, 4>>(m2),
             );
             mptr = Handle::cast::<ArrV<'a, F32, 4>>(m2);
         }

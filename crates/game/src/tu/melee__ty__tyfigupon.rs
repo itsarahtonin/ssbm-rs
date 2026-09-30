@@ -995,7 +995,7 @@ pub fn _tyFigupon_803168DC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     );
     let _ = fns::HSD_CObjGetEyeVector(ctx, cobj, eye_vec);
     fns::HSD_CObjGetInterest(ctx, cobj, interest);
-    ctx.call::<_, ()>(0x80342e58, (up_copy, eye_vec, cross));
+    fns::PSVECCrossProduct(ctx, up_copy, eye_vec, cross);
     let _ = fns::lbVector_Normalize(ctx, cross);
     fns::PSMTXRotAxisRad(
         ctx,
@@ -1003,23 +1003,21 @@ pub fn _tyFigupon_803168DC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
         cross,
         fp::fmuls(0.01745329238474369, rot_y),
     );
-    ctx.call::<_, ()>(0x80342aa8, (mtx.get(0), eye_vec, eye_vec));
+    fns::PSMTXMultVec(ctx, mtx.get(0), eye_vec, eye_vec);
     fns::PSMTXRotAxisRad(
         ctx,
         mtx.get(0),
         up_copy,
         fp::fmuls(0.01745329238474369, rot_x),
     );
-    ctx.call::<_, ()>(0x80342aa8, (mtx.get(0), eye_vec, eye_vec));
-    ctx.call::<_, ()>(
-        0x80342d9c,
-        (
-            eye_vec,
-            eye_vec,
-            Single(fp::frsp(fns::HSD_CObjGetEyeDistance(ctx, cobj))),
-        ),
+    fns::PSMTXMultVec(ctx, mtx.get(0), eye_vec, eye_vec);
+    fns::PSVECScale(
+        ctx,
+        eye_vec,
+        eye_vec,
+        fns::HSD_CObjGetEyeDistance(ctx, cobj),
     );
-    ctx.call::<_, ()>(0x80342d78, (interest, eye_vec, eye_pos));
+    fns::PSVECSubtract(ctx, interest, eye_vec, eye_pos);
     fns::HSD_CObjSetEyePosition(ctx, cobj, eye_pos);
     if !Handle::is_null((data).gobj()) {
         if rot_y > 10.0 {

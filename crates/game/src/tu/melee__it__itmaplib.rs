@@ -807,7 +807,7 @@ pub fn it_8027737C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, pos: Vec<'a>) {
     if (((item).xDC8_word().flags().x1F() as i32) == 0_i32) || ((item).xD5C() == (0_i32 as u32)) {
         return;
     }
-    ctx.call::<_, ()>(0x80342d54, ((item).x88(), (item).x7C(), (item).x7C()));
+    fns::PSVECAdd(ctx, (item).x88(), (item).x7C(), (item).x7C());
     (item)
         .x7C()
         .set_x(fp::fmuls((item).x7C().x(), ((item).xCC_item_attr()).x54()));
@@ -841,7 +841,7 @@ pub fn it_8027737C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, pos: Vec<'a>) {
     }
     fns::it_802775F0(ctx, item_gobj, (item).x7C());
     fns::it_80274A64(ctx, item_gobj);
-    ctx.call::<_, ()>(0x80342d54, ((item).x7C(), pos, sp1C));
+    fns::PSVECAdd(ctx, (item).x7C(), pos, sp1C);
     Handle::copy_from((pos), sp1C);
 }
 
@@ -855,7 +855,7 @@ pub fn it_80277544<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     item = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
     if (((item).xD5C() != 0_u32) && (fns::it_80277040(ctx, item_gobj) != 0_i32))
         && ((({
-            ctx.call::<_, ()>(0x80342d54, ((item).x40_vel(), (item).x70_nudge(), sp10));
+            fns::PSVECAdd(ctx, (item).x40_vel(), (item).x70_nudge(), sp10);
             ((fp::fadds(
                 (fp::fmuls((sp10.x()), (sp10.x()))),
                 (fp::fmuls((sp10.y()), (sp10.y()))),

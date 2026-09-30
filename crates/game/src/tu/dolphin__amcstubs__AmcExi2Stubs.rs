@@ -57,6 +57,10 @@ pub fn EXI2_Reserve<'a>(ctx: &'a Ctx) {}
 
 pub fn EXI2_Unreserve<'a>(ctx: &'a Ctx) {}
 
+pub fn AMC_IsStub<'a>(ctx: &'a Ctx) -> i32 {
+    return 1_i32;
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -110,5 +114,12 @@ pub fn register(ctx: &Ctx) {
             Ret::put(EXI2_Unreserve(ctx), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8032afdc,
+        |ctx| {
+            Ret::put(AMC_IsStub(ctx), ctx);
+        },
+        Returns::Int,
     );
 }

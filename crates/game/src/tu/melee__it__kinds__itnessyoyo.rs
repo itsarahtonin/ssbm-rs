@@ -714,7 +714,7 @@ pub fn it_802BFAFC<'a>(ctx: &'a Ctx, ip: Item<'a>, target: Vec<'a>) {
                 scale = 1.0;
             }
             scale = fp::fmuls(scale, fns::ftLib_GetScale(ctx, (ip).owner()));
-            ctx.call::<_, ()>(0x803421d0, ((jobj).mtx().get(0), m.get(0)));
+            fns::PSMTXCopy(ctx, (jobj).mtx().get(0), m.get(0));
             m.get(0_i32)
                 .at(0_i32)
                 .set(fp::fmuls(m.get(0_i32).at(0_i32).get(), scale));
@@ -742,7 +742,7 @@ pub fn it_802BFAFC<'a>(ctx: &'a Ctx, ip: Item<'a>, target: Vec<'a>) {
             m.get(2_i32)
                 .at(2_i32)
                 .set(fp::fmuls(m.get(2_i32).at(2_i32).get(), scale));
-            ctx.call::<_, ()>(0x803421d0, (m.get(0), (jobj).mtx().get(0)));
+            fns::PSMTXCopy(ctx, m.get(0), (jobj).mtx().get(0));
             link = (link).prev();
         }
     }

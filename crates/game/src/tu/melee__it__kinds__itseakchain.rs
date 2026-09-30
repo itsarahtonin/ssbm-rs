@@ -980,7 +980,7 @@ pub fn it_802BCB88<'a>(ctx: &'a Ctx, ip: Item<'a>, vec: Vec<'a>) {
                                 }
                             }
                             {
-                                ctx.call::<_, ()>(0x803421d0, ((jobj).mtx().get(0), mtx.get(0)));
+                                fns::PSMTXCopy(ctx, (jobj).mtx().get(0), mtx.get(0));
                                 mtx.get(0_i32)
                                     .at(0_i32)
                                     .set(fp::fmuls(mtx.get(0_i32).at(0_i32).get(), (sa).x4()));
@@ -1008,7 +1008,7 @@ pub fn it_802BCB88<'a>(ctx: &'a Ctx, ip: Item<'a>, vec: Vec<'a>) {
                                 mtx.get(2_i32)
                                     .at(2_i32)
                                     .set(fp::fmuls(mtx.get(2_i32).at(2_i32).get(), (sa).x4()));
-                                ctx.call::<_, ()>(0x803421d0, (mtx.get(0), (jobj).mtx().get(0)));
+                                fns::PSMTXCopy(ctx, mtx.get(0), (jobj).mtx().get(0));
                             }
                         }
                     }

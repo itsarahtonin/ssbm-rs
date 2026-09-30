@@ -138,7 +138,7 @@ pub fn fn_801AA854<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
         fns::HSD_CObjEraseScreen(ctx, cobj, 1_i32, 0_i32, 0_i32);
         fns::HSD_GObj_80390ED0(ctx, gobj, (7_i32 as u32));
         fns::HSD_FogSet(ctx, null::<HSD_Fog<'a>>(ctx));
-        ctx.call::<_, ()>(0x803421d0, ((cobj).view_mtx().get(0), sp10.get(0)));
+        fns::PSMTXCopy(ctx, (cobj).view_mtx().get(0), sp10.get(0));
         gobj = (Handle::add(fns::HSD_GObjGXLinkHead(ctx).get(), 9_i32)).get();
         'l1: while !Handle::is_null(gobj) {
             'c2: {
@@ -212,20 +212,17 @@ pub fn fn_801AA854<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
                                     cstr(ctx, 0x803dbfdc),
                                 )
                             });
-                            ctx.call::<_, ()>(
-                                0x80342204,
-                                (
-                                    (cobj).view_mtx().get(0),
-                                    ((Handle::add(
-                                        statics::melee__gm__gmstaffroll::staffInfoSortBuf(ctx)
-                                            .get(),
-                                        i,
-                                    ))
-                                    .jobj())
-                                    .mtx()
-                                    .get(0),
-                                    (cobj).view_mtx().get(0),
-                                ),
+                            fns::PSMTXConcat(
+                                ctx,
+                                (cobj).view_mtx().get(0),
+                                ((Handle::add(
+                                    statics::melee__gm__gmstaffroll::staffInfoSortBuf(ctx).get(),
+                                    i,
+                                ))
+                                .jobj())
+                                .mtx()
+                                .get(0),
+                                (cobj).view_mtx().get(0),
                             );
                             if (cobj).view_mtx().get(2_i32).at(2_i32).get() >= 0.0 {
                                 fns::HSD_SisLib_803A84BC(
@@ -263,7 +260,7 @@ pub fn fn_801AA854<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
                                     2_i32,
                                 );
                             }
-                            ctx.call::<_, ()>(0x803421d0, (sp10.get(0), (cobj).view_mtx().get(0)));
+                            fns::PSMTXCopy(ctx, sp10.get(0), (cobj).view_mtx().get(0));
                         }
                         i = i.wrapping_sub(1);
                     }

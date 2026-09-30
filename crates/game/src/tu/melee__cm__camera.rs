@@ -2431,9 +2431,9 @@ pub fn Camera_8002C5B4<'a>(ctx: &'a Ctx, arg0: Camera_x2D0<'a>) {
             fp::fmuls((eye_offset_z).get(), (eye_offset_z).get()),
         ),
     );
-    ctx.call::<_, ()>(0x80342e58, (eye_offset, (cam).pause_up(), cross1));
+    fns::PSVECCrossProduct(ctx, eye_offset, (cam).pause_up(), cross1);
     let _ = fns::lbVector_Normalize(ctx, cross1);
-    ctx.call::<_, ()>(0x80342e58, (cross1, eye_offset, cross2));
+    fns::PSVECCrossProduct(ctx, cross1, eye_offset, cross2);
     let _ = fns::lbVector_Normalize(ctx, cross2);
     pitch = fns::atan2f(ctx, (eye_offset_y).get(), xz_dist);
     if pitch > (params).angle_down() {
@@ -5736,9 +5736,9 @@ fn inl_OrthonormalizeBasis_unfused<'a>(
     let mut forward = forward;
     let mut up = up;
     let mut right = right;
-    ctx.call::<_, ()>(0x80342e58, (up, forward, right));
+    fns::PSVECCrossProduct(ctx, up, forward, right);
     let _ = fns::lbVector_Normalize(ctx, right);
-    ctx.call::<_, ()>(0x80342e58, (forward, right, up));
+    fns::PSVECCrossProduct(ctx, forward, right, up);
     let _ = fns::lbVector_Normalize(ctx, up);
 }
 
@@ -5746,9 +5746,9 @@ fn inl_OrthonormalizeBasis<'a>(ctx: &'a Ctx, forward: Vec<'a>, up: Vec<'a>, righ
     let mut forward = forward;
     let mut up = up;
     let mut right = right;
-    ctx.call::<_, ()>(0x80342e58, (up, forward, right));
+    fns::PSVECCrossProduct(ctx, up, forward, right);
     let _ = fns::lbVector_Normalize(ctx, right);
-    ctx.call::<_, ()>(0x80342e58, (forward, right, up));
+    fns::PSVECCrossProduct(ctx, forward, right, up);
     let _ = fns::lbVector_Normalize(ctx, up);
 }
 

@@ -463,13 +463,11 @@ pub fn makeMatrix<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>) {
             });
         }
     }
-    ctx.call::<_, ()>(
-        0x80342204,
-        (
-            Mprj.get(0),
-            inl_HSD_CObjGetViewingMtxPtrDirect_unfused(ctx, (shadow).camera()),
-            ((shadow).texture()).mtx().get(0),
-        ),
+    fns::PSMTXConcat(
+        ctx,
+        Mprj.get(0),
+        inl_HSD_CObjGetViewingMtxPtrDirect_unfused(ctx, (shadow).camera()),
+        ((shadow).texture()).mtx().get(0),
     );
 }
 
@@ -606,15 +604,12 @@ pub fn HSD_ViewingRectInit<'a>(
         )
     });
     Handle::copy_from((rect).origin(), (position));
-    ctx.call::<_, ()>(0x80342d78, (interest, position, (rect).eye_v()));
+    fns::PSVECSubtract(ctx, interest, position, (rect).eye_v());
     fns::PSVECNormalize(ctx, (rect).eye_v(), (rect).eye_vn());
     fns::PSVECNormalize(ctx, upvector, v);
-    ctx.call::<_, ()>(0x80342e58, ((rect).eye_vn(), v, (rect).right_v()));
-    ctx.call::<_, ()>(
-        0x80342e58,
-        ((rect).right_v(), (rect).eye_vn(), (rect).up_v()),
-    );
-    (rect).set_distance(ctx.call::<_, f64>(0x80342dfc, ((rect).eye_v(),)));
+    fns::PSVECCrossProduct(ctx, (rect).eye_vn(), v, (rect).right_v());
+    fns::PSVECCrossProduct(ctx, (rect).right_v(), (rect).eye_vn(), (rect).up_v());
+    (rect).set_distance(fns::PSVECMag(ctx, (rect).eye_v()));
     (rect).set_top({
         let __t1 = fp::fneg(3.4028234663852886e+38_f64);
         (rect).set_right(__t1);
@@ -687,15 +682,15 @@ pub fn HSD_ViewingRectAddRect<'a>(
             cstr(ctx, 0x80407318),
         )
     });
-    ctx.call::<_, ()>(0x80342d78, (position, (rect).origin(), o2p));
+    fns::PSVECSubtract(ctx, position, (rect).origin(), o2p);
     dot = fns::PSVECDotProduct(ctx, o2p, (rect).eye_vn());
     if ((rect).perspective() != 0) {
         if dot <= 0.0 {
             return;
         }
         scale = fp::fdivs((rect).distance(), dot);
-        ctx.call::<_, ()>(0x80342d9c, (o2p, o2p, Single(fp::frsp(scale))));
-        ctx.call::<_, ()>(0x80342d78, (o2p, (rect).eye_v(), e2p));
+        fns::PSVECScale(ctx, o2p, o2p, scale);
+        fns::PSVECSubtract(ctx, o2p, (rect).eye_v(), e2p);
         x = fns::PSVECDotProduct(ctx, (rect).right_v(), e2p);
         y = fns::PSVECDotProduct(ctx, (rect).up_v(), e2p);
         top = fp::fmuls(top, scale);
@@ -703,8 +698,8 @@ pub fn HSD_ViewingRectAddRect<'a>(
         left = fp::fmuls(left, scale);
         right = fp::fmuls(right, scale);
     } else {
-        ctx.call::<_, ()>(0x80342d9c, ((rect).eye_vn(), tmp, Single(fp::frsp(dot))));
-        ctx.call::<_, ()>(0x80342d78, (o2p, tmp, e2p));
+        fns::PSVECScale(ctx, (rect).eye_vn(), tmp, dot);
+        fns::PSVECSubtract(ctx, o2p, tmp, e2p);
         x = fns::PSVECDotProduct(ctx, (rect).right_v(), e2p);
         y = fns::PSVECDotProduct(ctx, (rect).up_v(), e2p);
     }

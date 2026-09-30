@@ -170,9 +170,10 @@ pub fn __AXNextFrame<'a>(ctx: &'a Ctx, sbuffer: Addr<'a>, buffer: Addr<'a>) {
             .get()
             .wrapping_add((2_i32 as u32)),
     );
-    ctx.call::<_, ()>(
-        0x8034480c,
-        (Handle::cast::<Addr<'a>>(pCommandList), (0x300_i32 as u32)),
+    fns::DCFlushRange(
+        ctx,
+        Handle::cast::<Addr<'a>>(pCommandList),
+        (0x300_i32 as u32),
     );
 }
 

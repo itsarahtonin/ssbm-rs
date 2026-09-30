@@ -215,14 +215,8 @@ pub fn __ARChecksize<'a>(ctx: &'a Ctx) {
             i = i.wrapping_add(1);
         }
     }
-    ctx.call::<_, ()>(
-        0x8034480c,
-        (Handle::cast::<Addr<'a>>(test_data), (32_i32 as u32)),
-    );
-    ctx.call::<_, ()>(
-        0x8034480c,
-        (Handle::cast::<Addr<'a>>(dummy_data), (32_i32 as u32)),
-    );
+    fns::DCFlushRange(ctx, Handle::cast::<Addr<'a>>(test_data), (32_i32 as u32));
+    fns::DCFlushRange(ctx, Handle::cast::<Addr<'a>>(dummy_data), (32_i32 as u32));
     'l3: loop {
         'c4: {}
         if !(!((((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 11_i32)).get()
@@ -251,16 +245,10 @@ pub fn __ARChecksize<'a>(ctx: &'a Ctx) {
         0_i32,
         (32_i32 as u32),
     );
-    ctx.call::<_, ()>(
-        0x8034480c,
-        (Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32)),
-    );
+    fns::DCFlushRange(ctx, Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32));
     inl___ARWriteDMA_unfused(ctx, Handle::addr(test_data), 0_u32, 32_u32);
     inl___ARReadDMA_unfused(ctx, Handle::addr(buffer), 0_u32, 32_u32);
-    ctx.call::<_, ()>(
-        0x803447dc,
-        (Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32)),
-    );
+    fns::DCInvalidateRange(ctx, Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32));
     if (buffer).get() != (test_data).get() {
     } else {
         let _ = fns::memset(
@@ -269,15 +257,9 @@ pub fn __ARChecksize<'a>(ctx: &'a Ctx) {
             0_i32,
             (32_i32 as u32),
         );
-        ctx.call::<_, ()>(
-            0x8034480c,
-            (Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32)),
-        );
+        fns::DCFlushRange(ctx, Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32));
         inl___ARReadDMA_unfused(ctx, Handle::addr(buffer), 0x200000_u32, 32_u32);
-        ctx.call::<_, ()>(
-            0x803447dc,
-            (Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32)),
-        );
+        fns::DCInvalidateRange(ctx, Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32));
         if (buffer).get() == (test_data).get() {
             ARAM_mode = (0_i32 as u16);
             ARAM_size = (0x200000_i32 as u32);
@@ -288,15 +270,9 @@ pub fn __ARChecksize<'a>(ctx: &'a Ctx) {
                 0_i32,
                 (32_i32 as u32),
             );
-            ctx.call::<_, ()>(
-                0x8034480c,
-                (Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32)),
-            );
+            fns::DCFlushRange(ctx, Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32));
             inl___ARReadDMA_unfused(ctx, Handle::addr(buffer), 0x1000000_u32, 32_u32);
-            ctx.call::<_, ()>(
-                0x803447dc,
-                (Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32)),
-            );
+            fns::DCInvalidateRange(ctx, Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32));
             if (buffer).get() == (test_data).get() {
                 ARAM_mode = (1_i32 as u16);
                 ARAM_size = (0x400000_i32 as u32);
@@ -307,15 +283,9 @@ pub fn __ARChecksize<'a>(ctx: &'a Ctx) {
                     0_i32,
                     (32_i32 as u32),
                 );
-                ctx.call::<_, ()>(
-                    0x8034480c,
-                    (Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32)),
-                );
+                fns::DCFlushRange(ctx, Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32));
                 inl___ARReadDMA_unfused(ctx, Handle::addr(buffer), 0x200_u32, 32_u32);
-                ctx.call::<_, ()>(
-                    0x803447dc,
-                    (Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32)),
-                );
+                fns::DCInvalidateRange(ctx, Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32));
                 if (buffer).get() == (test_data).get() {
                     ARAM_mode = (2_i32 as u16);
                     ARAM_size = (0x800000_i32 as u32);
@@ -326,15 +296,9 @@ pub fn __ARChecksize<'a>(ctx: &'a Ctx) {
                         0_i32,
                         (32_i32 as u32),
                     );
-                    ctx.call::<_, ()>(
-                        0x8034480c,
-                        (Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32)),
-                    );
+                    fns::DCFlushRange(ctx, Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32));
                     inl___ARReadDMA_unfused(ctx, Handle::addr(buffer), 0x400000_u32, 32_u32);
-                    ctx.call::<_, ()>(
-                        0x803447dc,
-                        (Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32)),
-                    );
+                    fns::DCInvalidateRange(ctx, Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32));
                     if (buffer).get() == (test_data).get() {
                         ARAM_mode = (3_i32 as u16);
                         ARAM_size = (0x1000000_i32 as u32);
@@ -384,16 +348,10 @@ pub fn __ARChecksize<'a>(ctx: &'a Ctx) {
         0_i32,
         (32_i32 as u32),
     );
-    ctx.call::<_, ()>(
-        0x8034480c,
-        (Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32)),
-    );
+    fns::DCFlushRange(ctx, Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32));
     inl___ARWriteDMA_unfused(ctx, Handle::addr(test_data), ARAM_size, 32_u32);
     inl___ARReadDMA_unfused(ctx, Handle::addr(buffer), ARAM_size, 32_u32);
-    ctx.call::<_, ()>(
-        0x803447dc,
-        (Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32)),
-    );
+    fns::DCInvalidateRange(ctx, Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32));
     if (buffer).get() == (test_data).get() {
         let _ = fns::memset(
             ctx,
@@ -401,20 +359,14 @@ pub fn __ARChecksize<'a>(ctx: &'a Ctx) {
             0_i32,
             (32_i32 as u32),
         );
-        ctx.call::<_, ()>(
-            0x8034480c,
-            (Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32)),
-        );
+        fns::DCFlushRange(ctx, Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32));
         inl___ARReadDMA_unfused(
             ctx,
             Handle::addr(buffer),
             ARAM_size.wrapping_add((0x200000_i32 as u32)),
             32_u32,
         );
-        ctx.call::<_, ()>(
-            0x803447dc,
-            (Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32)),
-        );
+        fns::DCInvalidateRange(ctx, Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32));
         if (buffer).get() == (test_data).get() {
             ARAM_size = ARAM_size.wrapping_add((0x200000_i32 as u32));
         } else {
@@ -424,20 +376,14 @@ pub fn __ARChecksize<'a>(ctx: &'a Ctx) {
                 0_i32,
                 (32_i32 as u32),
             );
-            ctx.call::<_, ()>(
-                0x8034480c,
-                (Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32)),
-            );
+            fns::DCFlushRange(ctx, Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32));
             inl___ARReadDMA_unfused(
                 ctx,
                 Handle::addr(buffer),
                 ARAM_size.wrapping_add((0x1000000_i32 as u32)),
                 32_u32,
             );
-            ctx.call::<_, ()>(
-                0x803447dc,
-                (Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32)),
-            );
+            fns::DCInvalidateRange(ctx, Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32));
             if (buffer).get() == (test_data).get() {
                 ARAM_mode = (((ARAM_mode as i32) | 8_i32) as u16);
                 ARAM_size = ARAM_size.wrapping_add((0x400000_i32 as u32));
@@ -448,20 +394,14 @@ pub fn __ARChecksize<'a>(ctx: &'a Ctx) {
                     0_i32,
                     (32_i32 as u32),
                 );
-                ctx.call::<_, ()>(
-                    0x8034480c,
-                    (Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32)),
-                );
+                fns::DCFlushRange(ctx, Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32));
                 inl___ARReadDMA_unfused(
                     ctx,
                     Handle::addr(buffer),
                     ARAM_size.wrapping_add((0x200_i32 as u32)),
                     32_u32,
                 );
-                ctx.call::<_, ()>(
-                    0x803447dc,
-                    (Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32)),
-                );
+                fns::DCInvalidateRange(ctx, Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32));
                 if (buffer).get() == (test_data).get() {
                     ARAM_mode = (((ARAM_mode as i32) | 16_i32) as u16);
                     ARAM_size = ARAM_size.wrapping_add((0x800000_i32 as u32));
@@ -472,20 +412,14 @@ pub fn __ARChecksize<'a>(ctx: &'a Ctx) {
                         0_i32,
                         (32_i32 as u32),
                     );
-                    ctx.call::<_, ()>(
-                        0x8034480c,
-                        (Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32)),
-                    );
+                    fns::DCFlushRange(ctx, Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32));
                     inl___ARReadDMA_unfused(
                         ctx,
                         Handle::addr(buffer),
                         ARAM_size.wrapping_add((0x400000_i32 as u32)),
                         32_u32,
                     );
-                    ctx.call::<_, ()>(
-                        0x803447dc,
-                        (Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32)),
-                    );
+                    fns::DCInvalidateRange(ctx, Handle::cast::<Addr<'a>>(buffer), (32_i32 as u32));
                     if (buffer).get() == (test_data).get() {
                         ARAM_mode = (((ARAM_mode as i32) | 24_i32) as u16);
                         ARAM_size = ARAM_size.wrapping_add((0x1000000_i32 as u32));

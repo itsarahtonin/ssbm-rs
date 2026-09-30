@@ -58,12 +58,12 @@ pub fn DbgHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'a>) {
         .set((0x1000_i32 as u32));
     if !Handle::is_null(statics::dolphin__hio__hio::ExiCallback(ctx).get()) {
         fns::OSClearContext(ctx, exceptionContext);
-        ctx.call::<_, ()>(0x8034508c, (exceptionContext,));
+        fns::OSSetCurrentContext(ctx, exceptionContext);
         statics::dolphin__hio__hio::ExiCallback(ctx)
             .get()
             .call::<_, ()>(());
         fns::OSClearContext(ctx, exceptionContext);
-        ctx.call::<_, ()>(0x8034508c, (context,));
+        fns::OSSetCurrentContext(ctx, context);
     }
 }
 

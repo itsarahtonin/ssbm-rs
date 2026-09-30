@@ -104,7 +104,7 @@ pub fn lbVector_CrossprodNormalized<'a>(
     let mut a = a;
     let mut b = b;
     let mut result = result;
-    ctx.call::<_, ()>(0x80342e58, (a, b, result));
+    fns::PSVECCrossProduct(ctx, a, b, result);
     let _ = inl_lbVector_Normalize_unfused(ctx, result);
     return result;
 }
@@ -341,7 +341,7 @@ pub fn lbVector_EulerAnglesFromPartialONB<'a>(
     let mut result_angles = result_angles;
     let mut a = a;
     let mut c = c;
-    ctx.call::<_, ()>(0x80342e58, (c, a, b));
+    fns::PSVECCrossProduct(ctx, c, a, b);
     let _ = inl_lbVector_Normalize_unfused(ctx, b);
     let _ = inl_lbVector_EulerAnglesFromONB_unfused(ctx, result_angles, a, b, c);
     return result_angles;

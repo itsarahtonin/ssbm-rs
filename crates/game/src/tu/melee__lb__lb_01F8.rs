@@ -190,12 +190,10 @@ pub fn lbMthp8001FAA0<'a>(ctx: &'a Ctx, filename: Val<'a, i8>, width: i32, heigh
     yuv_size = (statics::melee__lb__lb_01F8::lbl_804335B8(ctx).x6C() as i32)
         .wrapping_mul((statics::melee__lb__lb_01F8::lbl_804335B8(ctx).x6E() as i32));
     statics::melee__lb__lb_01F8::lbl_804335B8(ctx).set_x20(fns::HSD_MemAlloc(ctx, yuv_size));
-    ctx.call::<_, ()>(
-        0x803447dc,
-        (
-            statics::melee__lb__lb_01F8::lbl_804335B8(ctx).x20(),
-            (yuv_size as u32),
-        ),
+    fns::DCInvalidateRange(
+        ctx,
+        statics::melee__lb__lb_01F8::lbl_804335B8(ctx).x20(),
+        (yuv_size as u32),
     );
     uv_size = sar_i32(
         ((statics::melee__lb__lb_01F8::lbl_804335B8(ctx).x6C() as i32)
@@ -203,20 +201,16 @@ pub fn lbMthp8001FAA0<'a>(ctx: &'a Ctx, filename: Val<'a, i8>, width: i32, heigh
         (2_i32 as u32),
     );
     statics::melee__lb__lb_01F8::lbl_804335B8(ctx).set_x44(fns::HSD_MemAlloc(ctx, uv_size));
-    ctx.call::<_, ()>(
-        0x803447dc,
-        (
-            statics::melee__lb__lb_01F8::lbl_804335B8(ctx).x44(),
-            (uv_size as u32),
-        ),
+    fns::DCInvalidateRange(
+        ctx,
+        statics::melee__lb__lb_01F8::lbl_804335B8(ctx).x44(),
+        (uv_size as u32),
     );
     statics::melee__lb__lb_01F8::lbl_804335B8(ctx).set_x68(fns::HSD_MemAlloc(ctx, uv_size));
-    ctx.call::<_, ()>(
-        0x803447dc,
-        (
-            statics::melee__lb__lb_01F8::lbl_804335B8(ctx).x68(),
-            (uv_size as u32),
-        ),
+    fns::DCInvalidateRange(
+        ctx,
+        statics::melee__lb__lb_01F8::lbl_804335B8(ctx).x68(),
+        (uv_size as u32),
     );
     context = fns::HSD_MemAlloc(ctx, 12_i32);
     let _ = fns::memset(ctx, Handle::cast::<Addr<'a>>(header), 0_i32, 28_u32);

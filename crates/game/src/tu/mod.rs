@@ -40,8 +40,10 @@ pub mod Runtime__Gecko_setjmp;
 pub mod Runtime____init_cpp_exceptions;
 pub mod Runtime____mem;
 pub mod Runtime__global_destructor_chain;
+pub mod dolphin__ai__ai;
 pub mod dolphin__amcstubs__AmcExi2Stubs;
 pub mod dolphin__ar__ar;
+pub mod dolphin__ar__arq;
 pub mod dolphin__ax__AX;
 pub mod dolphin__ax__AXAlloc;
 pub mod dolphin__ax__AXAux;
@@ -51,30 +53,66 @@ pub mod dolphin__ax__AXProf;
 pub mod dolphin__ax__AXSPB;
 pub mod dolphin__ax__AXVPB;
 pub mod dolphin__axfx__axfx;
+pub mod dolphin__axfx__chorus;
 pub mod dolphin__axfx__delay;
+pub mod dolphin__axfx__reverb_std;
+pub mod dolphin__card__CARDBios;
+pub mod dolphin__card__CARDBlock;
+pub mod dolphin__card__CARDCheck;
+pub mod dolphin__card__CARDCreate;
 pub mod dolphin__card__CARDDelete;
+pub mod dolphin__card__CARDDir;
+pub mod dolphin__card__CARDFormat;
 pub mod dolphin__card__CARDOpen;
+pub mod dolphin__card__CARDRead;
 pub mod dolphin__card__CARDRename;
 pub mod dolphin__card__CARDStat;
 pub mod dolphin__card__CARDUnlock;
+pub mod dolphin__card__CARDWrite;
+pub mod dolphin__db__db;
 pub mod dolphin__dsp__dsp;
 pub mod dolphin__dsp__dsp_task;
+pub mod dolphin__dvd__dvd;
+pub mod dolphin__dvd__dvderror;
+pub mod dolphin__dvd__dvdfs;
+pub mod dolphin__dvd__dvdlow;
 pub mod dolphin__dvd__dvdqueue;
 pub mod dolphin__dvd__fstload;
 pub mod dolphin__gx__GXAttr;
 pub mod dolphin__gx__GXBump;
+pub mod dolphin__gx__GXDisplayList;
+pub mod dolphin__gx__GXFifo;
 pub mod dolphin__gx__GXFrameBuf;
 pub mod dolphin__gx__GXGeometry;
+pub mod dolphin__gx__GXInit;
 pub mod dolphin__gx__GXLight;
+pub mod dolphin__gx__GXMisc;
 pub mod dolphin__gx__GXPerf;
 pub mod dolphin__gx__GXPixel;
 pub mod dolphin__gx__GXStubs;
 pub mod dolphin__gx__GXTev;
+pub mod dolphin__gx__GXTexture;
+pub mod dolphin__gx__GXTransform;
 pub mod dolphin__hio__hio;
+pub mod dolphin__mcc__fio;
+pub mod dolphin__mcc__mcc;
 pub mod dolphin__odenotstub__odenotstub;
+pub mod dolphin__os__OS;
+pub mod dolphin__os__OSAlarm;
 pub mod dolphin__os__OSAlloc;
 pub mod dolphin__os__OSArena;
+pub mod dolphin__os__OSAudioSystem;
+pub mod dolphin__os__OSCache;
+pub mod dolphin__os__OSError;
+pub mod dolphin__os__OSExi;
+pub mod dolphin__os__OSInterrupt;
+pub mod dolphin__os__OSMutex;
+pub mod dolphin__os__OSRtc;
+pub mod dolphin__os__OSThread;
+pub mod dolphin__os__OSTime;
 pub mod dolphin__pad__PadClamp;
+pub mod dolphin__thp__THPDec;
+pub mod dolphin__vi__vi;
 pub mod melee__cm__camera;
 pub mod melee__cm__cmsnap;
 pub mod melee__db__dballoc;
@@ -1108,11 +1146,13 @@ pub static UNITS: &[(&str, Register)] = &[
         "Runtime/global_destructor_chain",
         Runtime__global_destructor_chain::register,
     ),
+    ("dolphin/ai/ai", dolphin__ai__ai::register),
     (
         "dolphin/amcstubs/AmcExi2Stubs",
         dolphin__amcstubs__AmcExi2Stubs::register,
     ),
     ("dolphin/ar/ar", dolphin__ar__ar::register),
+    ("dolphin/ar/arq", dolphin__ar__arq::register),
     ("dolphin/ax/AX", dolphin__ax__AX::register),
     ("dolphin/ax/AXAlloc", dolphin__ax__AXAlloc::register),
     ("dolphin/ax/AXAux", dolphin__ax__AXAux::register),
@@ -1122,12 +1162,30 @@ pub static UNITS: &[(&str, Register)] = &[
     ("dolphin/ax/AXSPB", dolphin__ax__AXSPB::register),
     ("dolphin/ax/AXVPB", dolphin__ax__AXVPB::register),
     ("dolphin/axfx/axfx", dolphin__axfx__axfx::register),
+    ("dolphin/axfx/chorus", dolphin__axfx__chorus::register),
     ("dolphin/axfx/delay", dolphin__axfx__delay::register),
+    (
+        "dolphin/axfx/reverb_std",
+        dolphin__axfx__reverb_std::register,
+    ),
+    ("dolphin/card/CARDBios", dolphin__card__CARDBios::register),
+    ("dolphin/card/CARDBlock", dolphin__card__CARDBlock::register),
+    ("dolphin/card/CARDCheck", dolphin__card__CARDCheck::register),
+    (
+        "dolphin/card/CARDCreate",
+        dolphin__card__CARDCreate::register,
+    ),
     (
         "dolphin/card/CARDDelete",
         dolphin__card__CARDDelete::register,
     ),
+    ("dolphin/card/CARDDir", dolphin__card__CARDDir::register),
+    (
+        "dolphin/card/CARDFormat",
+        dolphin__card__CARDFormat::register,
+    ),
     ("dolphin/card/CARDOpen", dolphin__card__CARDOpen::register),
+    ("dolphin/card/CARDRead", dolphin__card__CARDRead::register),
     (
         "dolphin/card/CARDRename",
         dolphin__card__CARDRename::register,
@@ -1137,27 +1195,60 @@ pub static UNITS: &[(&str, Register)] = &[
         "dolphin/card/CARDUnlock",
         dolphin__card__CARDUnlock::register,
     ),
+    ("dolphin/card/CARDWrite", dolphin__card__CARDWrite::register),
+    ("dolphin/db/db", dolphin__db__db::register),
     ("dolphin/dsp/dsp", dolphin__dsp__dsp::register),
     ("dolphin/dsp/dsp_task", dolphin__dsp__dsp_task::register),
+    ("dolphin/dvd/dvd", dolphin__dvd__dvd::register),
+    ("dolphin/dvd/dvderror", dolphin__dvd__dvderror::register),
+    ("dolphin/dvd/dvdfs", dolphin__dvd__dvdfs::register),
+    ("dolphin/dvd/dvdlow", dolphin__dvd__dvdlow::register),
     ("dolphin/dvd/dvdqueue", dolphin__dvd__dvdqueue::register),
     ("dolphin/dvd/fstload", dolphin__dvd__fstload::register),
     ("dolphin/gx/GXAttr", dolphin__gx__GXAttr::register),
     ("dolphin/gx/GXBump", dolphin__gx__GXBump::register),
+    (
+        "dolphin/gx/GXDisplayList",
+        dolphin__gx__GXDisplayList::register,
+    ),
+    ("dolphin/gx/GXFifo", dolphin__gx__GXFifo::register),
     ("dolphin/gx/GXFrameBuf", dolphin__gx__GXFrameBuf::register),
     ("dolphin/gx/GXGeometry", dolphin__gx__GXGeometry::register),
+    ("dolphin/gx/GXInit", dolphin__gx__GXInit::register),
     ("dolphin/gx/GXLight", dolphin__gx__GXLight::register),
+    ("dolphin/gx/GXMisc", dolphin__gx__GXMisc::register),
     ("dolphin/gx/GXPerf", dolphin__gx__GXPerf::register),
     ("dolphin/gx/GXPixel", dolphin__gx__GXPixel::register),
     ("dolphin/gx/GXStubs", dolphin__gx__GXStubs::register),
     ("dolphin/gx/GXTev", dolphin__gx__GXTev::register),
+    ("dolphin/gx/GXTexture", dolphin__gx__GXTexture::register),
+    ("dolphin/gx/GXTransform", dolphin__gx__GXTransform::register),
     ("dolphin/hio/hio", dolphin__hio__hio::register),
+    ("dolphin/mcc/fio", dolphin__mcc__fio::register),
+    ("dolphin/mcc/mcc", dolphin__mcc__mcc::register),
     (
         "dolphin/odenotstub/odenotstub",
         dolphin__odenotstub__odenotstub::register,
     ),
+    ("dolphin/os/OS", dolphin__os__OS::register),
+    ("dolphin/os/OSAlarm", dolphin__os__OSAlarm::register),
     ("dolphin/os/OSAlloc", dolphin__os__OSAlloc::register),
     ("dolphin/os/OSArena", dolphin__os__OSArena::register),
+    (
+        "dolphin/os/OSAudioSystem",
+        dolphin__os__OSAudioSystem::register,
+    ),
+    ("dolphin/os/OSCache", dolphin__os__OSCache::register),
+    ("dolphin/os/OSError", dolphin__os__OSError::register),
+    ("dolphin/os/OSExi", dolphin__os__OSExi::register),
+    ("dolphin/os/OSInterrupt", dolphin__os__OSInterrupt::register),
+    ("dolphin/os/OSMutex", dolphin__os__OSMutex::register),
+    ("dolphin/os/OSRtc", dolphin__os__OSRtc::register),
+    ("dolphin/os/OSThread", dolphin__os__OSThread::register),
+    ("dolphin/os/OSTime", dolphin__os__OSTime::register),
     ("dolphin/pad/PadClamp", dolphin__pad__PadClamp::register),
+    ("dolphin/thp/THPDec", dolphin__thp__THPDec::register),
+    ("dolphin/vi/vi", dolphin__vi__vi::register),
     ("melee/cm/camera", melee__cm__camera::register),
     ("melee/cm/cmsnap", melee__cm__cmsnap::register),
     ("melee/db/dballoc", melee__db__dballoc::register),

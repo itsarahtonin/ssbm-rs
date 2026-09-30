@@ -1497,16 +1497,13 @@ pub fn Item_802697D4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     if ((item_data).xDC8_word().flags().x13() as i32) == 0_i32 {
         if ((item_data).xDC8_word().flags().x9() as i32) == 0_i32 {
-            ctx.call::<_, ()>(
-                0x80342d54,
-                ((item_data).x40_vel(), (item_data).x70_nudge(), sp1C),
-            );
+            fns::PSVECAdd(ctx, (item_data).x40_vel(), (item_data).x70_nudge(), sp1C);
             if (((item_data).ground_or_air() as u32) == (0_i32 as u32))
                 && (((item_data).xDCD_flag().x0().b3() as i32) == 0_i32)
             {
                 fns::it_8027737C(ctx, gobj, sp1C);
             }
-            ctx.call::<_, ()>(0x80342d54, ((item_data).pos(), sp1C, (item_data).pos()));
+            fns::PSVECAdd(ctx, (item_data).pos(), sp1C, (item_data).pos());
         }
         if ((((item_data).xDCC_flag().b3() as i32) == 1_i32)
             && ((((item_data).xDCC_flag().b4567() as i32) & 15_i32) != 0))
@@ -1525,13 +1522,11 @@ pub fn Item_802697D4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     {
         let _ = fns::grLib_801C9E60(ctx, (item_data).x58_vec_unk());
     }
-    ctx.call::<_, ()>(
-        0x80342d54,
-        (
-            (item_data).pos(),
-            (item_data).x58_vec_unk(),
-            (item_data).pos(),
-        ),
+    fns::PSVECAdd(
+        ctx,
+        (item_data).pos(),
+        (item_data).x58_vec_unk(),
+        (item_data).pos(),
     );
     fns::it_80273484(ctx, gobj);
     if ((item_data).ground_or_air() as u32) == (0_i32 as u32) {
@@ -1553,13 +1548,11 @@ pub fn Item_802697D4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             );
         }
     }
-    ctx.call::<_, ()>(
-        0x80342d54,
-        (
-            (item_data).pos(),
-            (item_data).x64_vec_unk2(),
-            (item_data).pos(),
-        ),
+    fns::PSVECAdd(
+        ctx,
+        (item_data).pos(),
+        (item_data).x64_vec_unk2(),
+        (item_data).pos(),
     );
     fns::it_8027346C(ctx, gobj);
     fns::it_802714C0(ctx, gobj);
