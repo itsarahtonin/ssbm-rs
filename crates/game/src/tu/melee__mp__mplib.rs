@@ -558,14 +558,14 @@ pub fn mpRemap2d<'a>(
     dy = fp::fsubs(ay1, ay0);
     f30 = fp::fsubs(px, ax0);
     f29 = fp::fsubs(py, ay0);
-    dist2 = fp::fmadd(dx, dx, (fp::fmul(dy, dy)));
+    dist2 = fp::fmadd(dy, dy, (fp::fmul(dx, dx)));
     if (if (dist2) < (0_i32 as f64) {
         fp::fneg((dist2))
     } else {
         (dist2)
     }) > 0.0001
     {
-        let mut t: f64 = fp::fdiv((fp::fmadd(dx, f30, fp::fmul(dy, f29))), dist2);
+        let mut t: f64 = fp::fdiv((fp::fmadd(dy, f29, fp::fmul(dx, f30))), dist2);
         if t > 1.0 {
             t = 1.0;
         } else if t < 0.0 {
@@ -708,8 +708,9 @@ pub fn mpLib_8004ED5C<'a>(
     if inl_mpLineGetPrev(ctx, line_id) != 1_i32.wrapping_neg() {
         distance = inl_sqrtf(
             ctx,
-            fp::fadds(
-                (fp::fmuls((fp::fsubs(x0_f0, x1_f2)), (fp::fsubs(x0_f0, x1_f2)))),
+            fp::fmadds(
+                (fp::fsubs(x0_f0, x1_f2)),
+                (fp::fsubs(x0_f0, x1_f2)),
                 (fp::fmuls((fp::fsubs(y0_f1, y1_f3)), (fp::fsubs(y0_f1, y1_f3)))),
             ),
         );
@@ -723,8 +724,9 @@ pub fn mpLib_8004ED5C<'a>(
         if !(calculated_distance != 0) {
             distance = inl_sqrtf(
                 ctx,
-                fp::fadds(
-                    (fp::fmuls((fp::fsubs(x0_f0, x1_f2)), (fp::fsubs(x0_f0, x1_f2)))),
+                fp::fmadds(
+                    (fp::fsubs(x0_f0, x1_f2)),
+                    (fp::fsubs(x0_f0, x1_f2)),
                     (fp::fmuls((fp::fsubs(y0_f1, y1_f3)), (fp::fsubs(y0_f1, y1_f3)))),
                 ),
             );
@@ -5192,11 +5194,11 @@ fn inl_mpLineGetPrev<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                 .v1_idx() as i32),
             ));
             if fp::fmadds(
-                (fp::fsubs((v0).pos().y(), (v1).pos().y())),
-                (fp::fsubs((v0).pos().y(), (v1).pos().y())),
+                (fp::fsubs((v0).pos().x(), (v1).pos().x())),
+                (fp::fsubs((v0).pos().x(), (v1).pos().x())),
                 (fp::fmuls(
-                    (fp::fsubs((v0).pos().x(), (v1).pos().x())),
-                    (fp::fsubs((v0).pos().x(), (v1).pos().x())),
+                    (fp::fsubs((v0).pos().y(), (v1).pos().y())),
+                    (fp::fsubs((v0).pos().y(), (v1).pos().y())),
                 )),
             ) < 4.0
             {
@@ -5272,11 +5274,11 @@ fn inl_mpLineGetNext<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                 .v0_idx() as i32),
             ));
             if fp::fmadds(
-                (fp::fsubs((v1).pos().y(), (v0).pos().y())),
-                (fp::fsubs((v1).pos().y(), (v0).pos().y())),
+                (fp::fsubs((v1).pos().x(), (v0).pos().x())),
+                (fp::fsubs((v1).pos().x(), (v0).pos().x())),
                 (fp::fmuls(
-                    (fp::fsubs((v1).pos().x(), (v0).pos().x())),
-                    (fp::fsubs((v1).pos().x(), (v0).pos().x())),
+                    (fp::fsubs((v1).pos().y(), (v0).pos().y())),
+                    (fp::fsubs((v1).pos().y(), (v0).pos().y())),
                 )),
             ) < 4.0
             {

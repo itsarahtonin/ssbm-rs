@@ -70,7 +70,7 @@ pub fn ftCo_800976A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     vel_y = fp::fadds((fp).self_vel().y(), (fp).x8c_kb_vel().y());
     dist.set(inl_sqrtf(
         ctx,
-        fp::fadds((fp::fmuls((vel_x), (vel_x))), (fp::fmuls((vel_y), (vel_y)))),
+        fp::fmadds((vel_x), (vel_x), (fp::fmuls((vel_y), (vel_y)))),
     ));
     inl_ftCo_800976A4_inline(ctx, fp, dist);
     ef_id = 0x407_i32;

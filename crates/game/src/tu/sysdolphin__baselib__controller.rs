@@ -594,7 +594,7 @@ fn inl_vec2DSqDist<'a>(ctx: &'a Ctx, x: f64, y: f64) -> f64 {
     let mut x = x;
     let mut y = y;
     let mut ret: f64 = 0.0;
-    ret = fp::fmadds(y, y, (fp::fmuls(x, x)));
+    ret = fp::fmadds(x, x, (fp::fmuls(y, y)));
     return ret;
 }
 

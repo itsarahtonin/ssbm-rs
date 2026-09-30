@@ -170,7 +170,7 @@ pub fn itHassam_802CDE1C<'a>(ctx: &'a Ctx, vec: Vec<'a>, gobj: HSD_GObj<'a>) -> 
                         fns::ftLib_GetCameraBonePos(ctx, cur_fgobj, sp20);
                         y_dist = fp::fsubs((vec).y(), sp20.y());
                         x_dist = fp::fsubs((vec).x(), sp20.x());
-                        temp_f0 = fp::fmadds(y_dist, y_dist, (fp::fmuls(x_dist, x_dist)));
+                        temp_f0 = fp::fmadds(x_dist, x_dist, (fp::fmuls(y_dist, y_dist)));
                         if (temp_f0 < min_dist) && (sp20.y() > (vec).y()) {
                             min_dist = temp_f0;
                             closest_fgobj = cur_fgobj;

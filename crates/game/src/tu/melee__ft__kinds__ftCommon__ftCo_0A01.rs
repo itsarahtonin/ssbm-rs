@@ -970,10 +970,7 @@ pub fn ftCo_800A1AB4<'a>(ctx: &'a Ctx, fp0: Fighter<'a>, fp1: Fighter<'a>) -> f6
     let mut fp1 = fp1;
     let mut dx: f64 = fp::fsubs((fp0).cur_pos().x(), (fp1).cur_pos().x());
     let mut dy: f64 = fp::fsubs((fp0).cur_pos().y(), (fp1).cur_pos().y());
-    return inl_sqrtf(
-        ctx,
-        fp::fadds((fp::fmuls((dx), (dx))), (fp::fmuls((dy), (dy)))),
-    );
+    return inl_sqrtf(ctx, fp::fmadds((dx), (dx), (fp::fmuls((dy), (dy)))));
 }
 
 pub fn ftCo_800A1B38<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
@@ -1465,14 +1462,11 @@ pub fn ftCo_800A2A70<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> f64 {
             if (arg1 != 0) {
                 let mut x: f64 = fp::fsubs((data).x8().x(), (fp).cur_pos().x());
                 let mut y: f64 = fp::fsubs((data).x8().y(), (fp).cur_pos().y());
-                r = inl_sqrtf(ctx, fp::fadds((fp::fmuls((x), (x))), (fp::fmuls((y), (y)))));
+                r = inl_sqrtf(ctx, fp::fmadds((x), (x), (fp::fmuls((y), (y)))));
             } else {
                 let mut x_2: f64 = fp::fsubs((data).x14().x(), (fp).cur_pos().x());
                 let mut y_2: f64 = fp::fsubs((data).x14().y(), (fp).cur_pos().y());
-                r = inl_sqrtf(
-                    ctx,
-                    fp::fadds((fp::fmuls((x_2), (x_2))), (fp::fmuls((y_2), (y_2)))),
-                );
+                r = inl_sqrtf(ctx, fp::fmadds((x_2), (x_2), (fp::fmuls((y_2), (y_2)))));
             }
             return r;
         }
@@ -1992,7 +1986,7 @@ pub fn ftCo_800A3554<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: f64) -> i32 {
     {
         let mut x: f64 = fp::fsubs((data).x54().x(), (fp).cur_pos().x());
         let mut y: f64 = fp::fsubs((data).x54().y(), (fp).cur_pos().y());
-        if inl_sqrtf(ctx, fp::fadds((fp::fmuls((x), (x))), (fp::fmuls((y), (y)))))
+        if inl_sqrtf(ctx, fp::fmadds((x), (x), (fp::fmuls((y), (y)))))
             < fp::fadds((data).x38(), arg1)
         {
             if (data).x60() != 0_i32 {
@@ -2272,8 +2266,7 @@ pub fn ftCo_800A3908<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> i32 {
                                     break 'l5;
                                 }
                             }
-                            dist =
-                                inl_sqrtf(ctx, fp::fadds(fp::fmuls(ex, ex), fp::fmuls(ddy, ddy)));
+                            dist = inl_sqrtf(ctx, fp::fmadds(ex, ex, fp::fmuls(ddy, ddy)));
                             if (data).x5C() > dist {
                                 inl_ftCo_800A75DC_set_target(
                                     ctx,
@@ -2488,8 +2481,7 @@ pub fn ftCo_800A4038<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> i32 {
                                     break 'l3;
                                 }
                             }
-                            dist =
-                                inl_sqrtf(ctx, fp::fadds(fp::fmuls(ex, ex), fp::fmuls(ddy, ddy)));
+                            dist = inl_sqrtf(ctx, fp::fmadds(ex, ex, fp::fmuls(ddy, ddy)));
                             if (data).x5C() > dist {
                                 inl_ftCo_800A75DC_set_target(
                                     ctx,
@@ -2537,7 +2529,7 @@ pub fn ftCo_800A4768<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>) -> i32 {
                     dx = fp::fsubs((fp).cur_pos().x(), pt.x());
                     if dx > 0.0 {
                         dy = fp::fsubs((fp).cur_pos().y(), pt.y());
-                        dist = fp::fmadds(dy, dy, fp::fmuls(dx, dx));
+                        dist = fp::fmadds(dx, dx, fp::fmuls(dy, dy));
                         if (best < 0.0) || (best > dist) {
                             best = dist;
                             tmp_x = fp::frsp(fp::fsub(pt.x(), 5.0));
@@ -2552,7 +2544,7 @@ pub fn ftCo_800A4768<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>) -> i32 {
                     dx = fp::fsubs((fp).cur_pos().x(), pt.x());
                     if dx < 0.0 {
                         dy = fp::fsubs((fp).cur_pos().y(), pt.y());
-                        dist = fp::fmadds(dy, dy, fp::fmuls(dx, dx));
+                        dist = fp::fmadds(dx, dx, fp::fmuls(dy, dy));
                         if (best < 0.0) || (best > dist) {
                             best = dist;
                             (arg1).set_x(fp::frsp(fp::fadd(pt.x(), 5.0)));
@@ -2574,10 +2566,7 @@ pub fn ftCo_800A49B4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let mut data: CpuFighter<'a> = (fp).cpu();
     let mut dx: f64 = fp::fsubs((fp).cur_pos().x(), (data).x54().x());
     let mut dy: f64 = fp::fsubs((fp).cur_pos().y(), (data).x54().y());
-    (data).set_x5C(inl_sqrtf(
-        ctx,
-        fp::fadds(fp::fmuls(dx, dx), fp::fmuls(dy, dy)),
-    ));
+    (data).set_x5C(inl_sqrtf(ctx, fp::fmadds(dx, dx, fp::fmuls(dy, dy))));
 }
 
 pub fn ftCo_800A4A40<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Fighter<'a> {
@@ -3419,7 +3408,7 @@ pub fn ftCo_800A6700<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>, arg2: Vec
                         if !(inl_ftCo_800A6700_inline0(ctx, fp, px, ay) != 0) {
                             px = fp::fsubs(px, (arg1).x());
                             dy = fp::fsubs(ay, (arg1).y());
-                            dist = fp::fmadds(dy, dy, fp::fmuls(px, px));
+                            dist = fp::fmadds(px, px, fp::fmuls(dy, dy));
                             if dist > best {
                                 best = dist;
                                 (arg2).set_x(fp::frsp(fp::fadd(ax, 5.0)));
@@ -3451,7 +3440,7 @@ pub fn ftCo_800A6700<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>, arg2: Vec
                         if !(inl_ftCo_800A6700_inline0(ctx, fp, px, by) != 0) {
                             px = fp::fsubs(px, (arg1).x());
                             dy = fp::fsubs(by, (arg1).y());
-                            dist = fp::fmadds(dy, dy, fp::fmuls(px, px));
+                            dist = fp::fmadds(px, px, fp::fmuls(dy, dy));
                             if dist > best {
                                 best = dist;
                                 (arg2).set_x(fp::frsp(fp::fsub(ax, 5.0)));
@@ -4335,7 +4324,7 @@ pub fn ftCo_800A80E4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     {
         let mut dx: f64 = fp::fsubs((fp).cur_pos().x(), (other_fp).cur_pos().x());
         let mut dy: f64 = fp::fsubs((fp).cur_pos().y(), (other_fp).cur_pos().y());
-        if (!(inl_sqrtf(ctx, fp::fadds(fp::fmuls(dx, dx), fp::fmuls(dy, dy))) > 50.0))
+        if (!(inl_sqrtf(ctx, fp::fmadds(dx, dx, fp::fmuls(dy, dy))) > 50.0))
             && (statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A6700(
                 ctx,
                 fp,
@@ -5686,7 +5675,7 @@ pub fn ftCo_800AA42C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     {
         let mut dx: f64 = fp::fsubs((data).x54().x(), (fp).cur_pos().x());
         let mut dy: f64 = fp::fsubs((data).x54().y(), (fp).cur_pos().y());
-        dist = inl_sqrtf(ctx, fp::fadds(fp::fmuls(dx, dx), fp::fmuls(dy, dy)));
+        dist = inl_sqrtf(ctx, fp::fmadds(dx, dx, fp::fmuls(dy, dy)));
     }
     near = (data).x38();
     if fp::fsubs(dist, near) > (data).x3C() {
@@ -6306,12 +6295,11 @@ pub fn ftCo_800ABBA8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             if ok == 0_i32 {
                 disc = inl_sqrtf(
                     ctx,
-                    (if (fp::fadds(fp::fmuls(fp::fmuls(2.0, g), h), fp::fmuls(v, v)))
-                        < fp::frsp(0_i32 as f64)
+                    (if (fp::fmadds(fp::fmuls(2.0, g), h, fp::fmuls(v, v))) < fp::frsp(0_i32 as f64)
                     {
-                        fp::fneg((fp::fadds(fp::fmuls(fp::fmuls(2.0, g), h), fp::fmuls(v, v))))
+                        fp::fneg((fp::fmadds(fp::fmuls(2.0, g), h, fp::fmuls(v, v))))
                     } else {
-                        (fp::fadds(fp::fmuls(fp::fmuls(2.0, g), h), fp::fmuls(v, v)))
+                        (fp::fmadds(fp::fmuls(2.0, g), h, fp::fmuls(v, v)))
                     }),
                 );
                 t = fp::fctiwz(fp::fdivs((fp::fsubs(fp::fneg(disc), v)), g));
@@ -6588,7 +6576,7 @@ pub fn ftCo_800AC5A0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         let mut kb_x: f64 = (fp).x8c_kb_vel().x();
         let mut kb_y: f64 = (fp).x8c_kb_vel().y();
         let mut kb_mag: f64 = 0.0;
-        kb_mag = fp::fmadds(kb_y, kb_y, fp::fmuls(kb_x, kb_x));
+        kb_mag = fp::fmadds(kb_x, kb_x, (fp::fmuls(kb_y, kb_y)));
         kb_mag = inl_sqrtf(ctx, kb_mag);
         if !(inl_ftCo_IsNearlyZero(ctx, kb_mag) != 0) {
             let mut x: f64 = fp::fmuls(kb_x, (fp::fdivs(1.0, kb_mag)));
@@ -7263,7 +7251,7 @@ pub fn ftCo_800ADE48<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
         let mut dx: f64 = 0.0;
         let mut dist: f64 = 0.0;
         dx = fp::fsubs((fp).cur_pos().x(), (data_2).x54().x());
-        dist = inl_sqrtf(ctx, fp::fadds(fp::fmuls(dx, dx), fp::fmuls(dy, dy)));
+        dist = inl_sqrtf(ctx, fp::fmadds(dx, dx, fp::fmuls(dy, dy)));
         (data_2).set_x5C(dist);
     }
     if (data).x88() > 0_i32 {
@@ -8230,14 +8218,14 @@ pub fn ftCo_800B0AF4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         (data).set_rtrigger(((data).x448()).x5());
         if ((fp).x2225_b3() != 0) {
             (fp).cur_pos().set_x(fp::frsp(fp::fmadd(
-                0.05,
-                ((data).x448()).cur_pos().x(),
-                fp::fmul(0.95, (fp).cur_pos().x()),
+                0.95,
+                (fp).cur_pos().x(),
+                fp::fmul(0.05, ((data).x448()).cur_pos().x()),
             )));
             (fp).cur_pos().set_y(fp::frsp(fp::fmadd(
-                0.05,
-                ((data).x448()).cur_pos().y(),
-                fp::fmul(0.95, (fp).cur_pos().y()),
+                0.95,
+                (fp).cur_pos().y(),
+                fp::fmul(0.05, ((data).x448()).cur_pos().y()),
             )));
             if ((fp).motion_id() != (enums::ftPp_MS_SpecialLw as i32))
                 && ((fp).motion_id() != (enums::ftPp_MS_SpecialAirLw as i32))
@@ -8360,14 +8348,14 @@ pub fn ftCo_800B0E98<'a>(ctx: &'a Ctx, fp0: Fighter<'a>, fp1: Fighter<'a>) -> i3
             let mut x: f64 = fp::fsubs((fp0).pos_delta().x(), (fp1).pos_delta().x());
             let mut y: f64 = fp::fsubs((fp0).pos_delta().y(), (fp1).pos_delta().y());
             let mut r: f64 = (fp0).co_attrs().mid_walk_point();
-            if fp::fmadds((y), (y), (fp::fmuls((x), (x)))) > (fp::fmuls((r), (r))) {
+            if fp::fmadds((x), (x), (fp::fmuls((y), (y)))) > (fp::fmuls((r), (r))) {
                 return 0_i32;
             }
         }
         {
             let mut x_2: f64 = fp::fsubs((fp0).cur_pos().x(), (fp1).cur_pos().x());
             let mut y_2: f64 = fp::fsubs((fp1).cur_pos().y(), (fp0).cur_pos().y());
-            if fp::fmadds((y_2), (y_2), (fp::fmuls((x_2), (x_2)))) < (fp::fmul((25.0), (25.0))) {
+            if fp::fmadds((x_2), (x_2), (fp::fmuls((y_2), (y_2)))) < (fp::fmul((25.0), (25.0))) {
                 return 1_i32;
             }
         }
@@ -9270,10 +9258,7 @@ fn inl_ftCo_800A1AB4<'a>(ctx: &'a Ctx, fp0: Fighter<'a>, fp1: Fighter<'a>) -> f6
     let mut fp1 = fp1;
     let mut dx: f64 = fp::fsubs((fp0).cur_pos().x(), (fp1).cur_pos().x());
     let mut dy: f64 = fp::fsubs((fp0).cur_pos().y(), (fp1).cur_pos().y());
-    return inl_sqrtf(
-        ctx,
-        fp::fadds((fp::fmuls((dx), (dx))), (fp::fmuls((dy), (dy)))),
-    );
+    return fns::sqrtf(ctx, fp::fmadds((dx), (dx), (fp::fmuls((dy), (dy)))));
 }
 
 fn inl_checkZebesIsland_unfused<'a>(ctx: &'a Ctx, island: mp_UnkStruct0<'a>) -> i32 {
@@ -9789,7 +9774,7 @@ fn inl_ftCo_GetItemDistance<'a>(ctx: &'a Ctx, fp: Fighter<'a>, ip: Item<'a>) -> 
     }
     dx = fp::fsubs((fp).cur_pos().x(), (ip).pos().x());
     dy = fp::fsubs((fp).cur_pos().y(), (ip).pos().y());
-    return inl_sqrtf(ctx, fp::fadds(fp::fmuls(dx, dx), fp::fmuls(dy, dy)));
+    return inl_sqrtf(ctx, fp::fmadds(dx, dx, fp::fmuls(dy, dy)));
 }
 
 fn inl_HSD_GObjGetNext<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_GObj<'a> {
@@ -11322,7 +11307,7 @@ fn inl_ftCo_CpuApproachFoodItemTarget<'a>(
             {
                 dy = fp::fsubs((fp).cur_pos().y(), (nearby_fp).cur_pos().y());
                 dx = fp::fsubs((fp).cur_pos().x(), (nearby_fp).cur_pos().x());
-                dist = inl_sqrtf(ctx, fp::fadds(fp::fmuls(dx, dx), fp::fmuls(dy, dy)));
+                dist = fns::sqrtf(ctx, fp::fmadds(dx, dx, fp::fmuls(dy, dy)));
                 if (!(dist > 50.0))
                     && (statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800A6700(
                         ctx,
@@ -11495,7 +11480,7 @@ fn inl_ftCo_800B101C_inline0<'a>(ctx: &'a Ctx, fp: Fighter<'a>, other: Fighter<'
     } else {
         let mut dx: f64 = fp::fsubs((fp).cur_pos().x(), (other).cur_pos().x());
         let mut dy: f64 = fp::fsubs((other).cur_pos().y(), (fp).cur_pos().y());
-        if fp::fmadds((dy), (dy), (fp::fmuls((dx), (dx)))) > (fp::fmul((25.0), (25.0))) {
+        if fp::fmadds((dx), (dx), (fp::fmuls((dy), (dy)))) > (fp::fmul((25.0), (25.0))) {
             return 1_i32;
         } else if (statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800B0CA8(ctx, fp, other)
             != 0)

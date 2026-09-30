@@ -371,7 +371,7 @@ pub fn lbAudioAx_80023870<'a>(ctx: &'a Ctx, id: i32, vol: i32, pan: i32, track: 
         fns::HSD_AudioSFXKeyOffTrack(ctx, track);
         return 1_i32.wrapping_neg();
     }
-    return statics::melee__lb__lbaudio_ax::fn_80023750(ctx, id, vol, pan, track, 7_i32);
+    return inl_fn_80023750_unfused(ctx, id, vol, pan, track, 7_i32);
 }
 
 pub fn lbAudioAx_8002392C<'a>(ctx: &'a Ctx) {
@@ -2825,16 +2825,14 @@ pub fn lbAudioAx_80027DF8<'a>(ctx: &'a Ctx) {
             if fns::HSD_AudioSFXCheck(ctx, statics::melee__lb__lbaudio_ax::lbl_804D38F0(ctx).get())
                 == 0_i32
             {
-                statics::melee__lb__lbaudio_ax::lbl_804D38F0(ctx).set(
-                    statics::melee__lb__lbaudio_ax::fn_80023750(
-                        ctx,
-                        132_i32,
-                        statics::melee__lb__lbaudio_ax::lbl_804D6428(ctx).get(),
-                        64_i32,
-                        5_i32,
-                        4_i32,
-                    ),
-                );
+                statics::melee__lb__lbaudio_ax::lbl_804D38F0(ctx).set(inl_fn_80023750_unfused(
+                    ctx,
+                    132_i32,
+                    statics::melee__lb__lbaudio_ax::lbl_804D6428(ctx).get(),
+                    64_i32,
+                    5_i32,
+                    4_i32,
+                ));
             } else {
                 inl_lbAudioAx_80024B58_unfused(
                     ctx,
@@ -2844,15 +2842,13 @@ pub fn lbAudioAx_80027DF8<'a>(ctx: &'a Ctx) {
             }
         } else {
             statics::melee__lb__lbaudio_ax::lbl_804D6428(ctx).set(127_i32);
-            statics::melee__lb__lbaudio_ax::lbl_804D38F0(ctx).set(
-                statics::melee__lb__lbaudio_ax::fn_80023750(
-                    ctx, 132_i32, 127_i32, 64_i32, 5_i32, 4_i32,
-                ),
-            );
+            statics::melee__lb__lbaudio_ax::lbl_804D38F0(ctx).set(inl_fn_80023750_unfused(
+                ctx, 132_i32, 127_i32, 64_i32, 5_i32, 4_i32,
+            ));
             statics::melee__lb__lbaudio_ax::lbl_804D642C(ctx).set(0_i32);
         }
     } else if statics::melee__lb__lbaudio_ax::lbl_804D38F0(ctx).get() != 1_i32.wrapping_neg() {
-        let _ = statics::melee__lb__lbaudio_ax::fn_80023750(
+        let _ = inl_fn_80023750_unfused(
             ctx,
             0x83d60_i32,
             statics::melee__lb__lbaudio_ax::lbl_804D6428(ctx).get(),
@@ -2879,16 +2875,14 @@ pub fn lbAudioAx_80027DF8<'a>(ctx: &'a Ctx) {
             if fns::HSD_AudioSFXCheck(ctx, statics::melee__lb__lbaudio_ax::lbl_804D38F4(ctx).get())
                 == 0_i32
             {
-                statics::melee__lb__lbaudio_ax::lbl_804D38F4(ctx).set(
-                    statics::melee__lb__lbaudio_ax::fn_80023750(
-                        ctx,
-                        133_i32,
-                        statics::melee__lb__lbaudio_ax::lbl_804D642C(ctx).get(),
-                        64_i32,
-                        6_i32,
-                        4_i32,
-                    ),
-                );
+                statics::melee__lb__lbaudio_ax::lbl_804D38F4(ctx).set(inl_fn_80023750_unfused(
+                    ctx,
+                    133_i32,
+                    statics::melee__lb__lbaudio_ax::lbl_804D642C(ctx).get(),
+                    64_i32,
+                    6_i32,
+                    4_i32,
+                ));
             } else {
                 inl_lbAudioAx_80024B58_unfused(
                     ctx,
@@ -2898,15 +2892,13 @@ pub fn lbAudioAx_80027DF8<'a>(ctx: &'a Ctx) {
             }
         } else {
             statics::melee__lb__lbaudio_ax::lbl_804D642C(ctx).set(127_i32);
-            statics::melee__lb__lbaudio_ax::lbl_804D38F4(ctx).set(
-                statics::melee__lb__lbaudio_ax::fn_80023750(
-                    ctx, 133_i32, 127_i32, 64_i32, 6_i32, 4_i32,
-                ),
-            );
+            statics::melee__lb__lbaudio_ax::lbl_804D38F4(ctx).set(inl_fn_80023750_unfused(
+                ctx, 133_i32, 127_i32, 64_i32, 6_i32, 4_i32,
+            ));
             statics::melee__lb__lbaudio_ax::lbl_804D6428(ctx).set(0_i32);
         }
     } else if statics::melee__lb__lbaudio_ax::lbl_804D38F4(ctx).get() != 1_i32.wrapping_neg() {
-        let _ = statics::melee__lb__lbaudio_ax::fn_80023750(
+        let _ = inl_fn_80023750_unfused(
             ctx,
             0x83d60_i32,
             statics::melee__lb__lbaudio_ax::lbl_804D642C(ctx).get(),

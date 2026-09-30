@@ -315,11 +315,11 @@ pub fn it_802B75FC<'a>(
     (attrs).set_x58(fp::fmuls((attrs).x30(), scale));
     if scale > 1.0 {
         temp = fp::fmadds(
-            (fp::fsubs(1.0, (attrs).x8())),
-            (fp::fmuls(fp::frsp((attrs).xC() as f64), (attrs).x10())),
+            (attrs).x8(),
+            (fp::fmuls(fp::frsp((attrs).xC() as f64), (attrs).x38())),
             (fp::fmuls(
-                (attrs).x8(),
-                (fp::fmuls(fp::frsp((attrs).xC() as f64), (attrs).x38())),
+                (fp::fsubs(1.0, (attrs).x8())),
+                (fp::fmuls(fp::frsp((attrs).xC() as f64), (attrs).x10())),
             )),
         );
     } else {

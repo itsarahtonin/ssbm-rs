@@ -381,7 +381,7 @@ pub fn fn_80181E18<'a>(ctx: &'a Ctx) {
                     return;
                 }
                 if next == 0x3e7_i32 {
-                    if fns::fn_80181BFC(ctx, null::<Val<'a, i32>>(ctx)) == 0_i32 {
+                    if inl_fn_80181BFC_unfused(ctx, null::<Val<'a, i32>>(ctx)) == 0_i32 {
                         (data).record().get(0_i32).set_x0((1_i32 as u8));
                         fns::gm_8016B33C(ctx, 7_i32);
                         fns::gm_8016B328(ctx);
@@ -1360,6 +1360,29 @@ fn inl_fn_80181C80_CountPlayers_unfused<'a>(ctx: &'a Ctx, out: Val<'a, i32>) -> 
 
 fn inl_countActiveOpponents_unfused<'a>(ctx: &'a Ctx) -> i32 {
     return fns::fn_80181BFC(ctx, null::<Val<'a, i32>>(ctx));
+}
+
+fn inl_fn_80181BFC_unfused<'a>(ctx: &'a Ctx, arg0: Val<'a, i32>) -> i32 {
+    let mut arg0 = arg0;
+    let mut i: i32 = 0;
+    let mut count: i32 = 0_i32;
+    {
+        i = 1_i32;
+        'l1: while i < 6_i32 {
+            'c2: {
+                if (fns::Player_GetFalls(ctx, i) == 0_i32)
+                    && ((fns::Player_GetPlayerSlotType(ctx, i) as u32)
+                        != ((enums::Gm_PKind_NA as i32) as u32))
+                {
+                    count = count.wrapping_add(1_i32);
+                } else if !Handle::is_null(arg0) {
+                    (arg0).set(i);
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return count;
 }
 
 fn inl_gm_80182578_GetIndexFromPointer_unfused<'a>(ctx: &'a Ctx, idx_ptr: Val<'a, i32>) -> i32 {

@@ -368,14 +368,14 @@ pub fn fn_8017A078<'a>(ctx: &'a Ctx, arg0: i32) {
         Handle::cast::<Addr<'a>>(cobj),
     );
     eye.set_y(fp::fmadds(
-        0.699999988079071,
-        fns::Player_800360D8(ctx, arg0),
-        (fp::fmuls(eye.y(), fp::frsp((arg0.wrapping_add(1_i32)) as f64))),
+        eye.y(),
+        fp::frsp((arg0.wrapping_add(1_i32)) as f64),
+        (fp::fmuls(0.699999988079071, fns::Player_800360D8(ctx, arg0))),
     ));
     interest.set_y(fp::fmadds(
-        0.699999988079071,
-        fns::Player_800360D8(ctx, arg0),
-        (fp::fmuls(interest.y(), fp::frsp((arg0.wrapping_add(1_i32)) as f64))),
+        interest.y(),
+        fp::frsp((arg0.wrapping_add(1_i32)) as f64),
+        (fp::fmuls(0.699999988079071, fns::Player_800360D8(ctx, arg0))),
     ));
     mode = fns::fn_801795D4(ctx);
     idx = fns::fn_801796F0(ctx, arg0);

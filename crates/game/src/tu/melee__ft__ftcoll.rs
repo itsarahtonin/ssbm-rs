@@ -2125,9 +2125,12 @@ pub fn ftColl_80079AB0<'a>(
                                     )),
                                 )),
                                 (fp::fmadds(
-                                    (ftd).x114(),
-                                    (fp::fmuls(x118, fp::frsp((hit).x28() as f64))),
-                                    fp::fmuls(x118, (ftd).x110()),
+                                    x118,
+                                    (ftd).x110(),
+                                    fp::fmuls(
+                                        (ftd).x114(),
+                                        (fp::fmuls(x118, fp::frsp((hit).x28() as f64))),
+                                    ),
                                 )),
                             )),
                             (ftd).x120(),
@@ -2159,19 +2162,19 @@ pub fn ftColl_80079AB0<'a>(
                                     )),
                                 )),
                                 (fp::fmadds(
-                                    (ftd).x114(),
-                                    (fp::fmuls(
-                                        fp::frsp(unk_count as f64),
-                                        (fp::fadds(
-                                            fp::frsp(count as f64),
-                                            (fp).dmg().x1838_percentTemp(),
-                                        )),
+                                    (ftd).x110(),
+                                    (fp::fadds(
+                                        fp::frsp(count as f64),
+                                        (fp).dmg().x1838_percentTemp(),
                                     )),
                                     fp::fmuls(
-                                        (ftd).x110(),
-                                        (fp::fadds(
-                                            fp::frsp(count as f64),
-                                            (fp).dmg().x1838_percentTemp(),
+                                        (ftd).x114(),
+                                        (fp::fmuls(
+                                            fp::frsp(unk_count as f64),
+                                            (fp::fadds(
+                                                fp::frsp(count as f64),
+                                                (fp).dmg().x1838_percentTemp(),
+                                            )),
                                         )),
                                     ),
                                 )),
@@ -2254,9 +2257,12 @@ pub fn ftColl_80079EA8<'a>(
                                     )),
                                 )),
                                 (fp::fmadds(
-                                    (ftd).x114(),
-                                    (fp::fmuls(x118, fp::frsp((hit).x28() as f64))),
-                                    fp::fmuls(x118, (ftd).x110()),
+                                    x118,
+                                    (ftd).x110(),
+                                    fp::fmuls(
+                                        (ftd).x114(),
+                                        (fp::fmuls(x118, fp::frsp((hit).x28() as f64))),
+                                    ),
                                 )),
                             )),
                             (ftd).x120(),
@@ -2290,19 +2296,19 @@ pub fn ftColl_80079EA8<'a>(
                                         )),
                                     )),
                                     (fp::fmadds(
-                                        (ftd).x114(),
-                                        (fp::fmuls(
-                                            fp::frsp(unk_count as f64),
-                                            (fp::fadds(
-                                                fp::frsp(count as f64),
-                                                (fp).dmg().x1838_percentTemp(),
-                                            )),
+                                        (ftd).x110(),
+                                        (fp::fadds(
+                                            fp::frsp(count as f64),
+                                            (fp).dmg().x1838_percentTemp(),
                                         )),
                                         fp::fmuls(
-                                            (ftd).x110(),
-                                            (fp::fadds(
-                                                fp::frsp(count as f64),
-                                                (fp).dmg().x1838_percentTemp(),
+                                            (ftd).x114(),
+                                            (fp::fmuls(
+                                                fp::frsp(unk_count as f64),
+                                                (fp::fadds(
+                                                    fp::frsp(count as f64),
+                                                    (fp).dmg().x1838_percentTemp(),
+                                                )),
                                             )),
                                         ),
                                     )),
@@ -2423,7 +2429,7 @@ pub fn ftColl_8007A06C<'a>(
                             } else {
                                 attack = 1.0;
                             }
-                            kb = fns::ftColl_80079AB0(
+                            kb = inl_ftColl_80079AB0(
                                 ctx,
                                 fp,
                                 (entry).xC().hit0(),
@@ -2458,7 +2464,7 @@ pub fn ftColl_8007A06C<'a>(
                             stack_hit,
                             Handle::cast::<lbColl_80008D30_arg1<'a>>((entry).xC().unk_anim0()),
                         );
-                        kb = fns::ftColl_80079AB0(
+                        kb = inl_ftColl_80079AB0(
                             ctx,
                             fp,
                             stack_hit,
@@ -4105,9 +4111,12 @@ fn inl_ftColl_80079AB0<'a>(
                                     )),
                                 )),
                                 (fp::fmadds(
-                                    (ftd).x114(),
-                                    (fp::fmuls(x118, fp::frsp((hit).x28() as f64))),
-                                    fp::fmuls(x118, (ftd).x110()),
+                                    x118,
+                                    (ftd).x110(),
+                                    fp::fmuls(
+                                        (ftd).x114(),
+                                        (fp::fmuls(x118, fp::frsp((hit).x28() as f64))),
+                                    ),
                                 )),
                             )),
                             (ftd).x120(),
@@ -4139,19 +4148,19 @@ fn inl_ftColl_80079AB0<'a>(
                                     )),
                                 )),
                                 (fp::fmadds(
-                                    (ftd).x114(),
-                                    (fp::fmuls(
-                                        fp::frsp(unk_count as f64),
-                                        (fp::fadds(
-                                            fp::frsp(count as f64),
-                                            (fp).dmg().x1838_percentTemp(),
-                                        )),
+                                    (ftd).x110(),
+                                    (fp::fadds(
+                                        fp::frsp(count as f64),
+                                        (fp).dmg().x1838_percentTemp(),
                                     )),
                                     fp::fmuls(
-                                        (ftd).x110(),
-                                        (fp::fadds(
-                                            fp::frsp(count as f64),
-                                            (fp).dmg().x1838_percentTemp(),
+                                        (ftd).x114(),
+                                        (fp::fmuls(
+                                            fp::frsp(unk_count as f64),
+                                            (fp::fadds(
+                                                fp::frsp(count as f64),
+                                                (fp).dmg().x1838_percentTemp(),
+                                            )),
                                         )),
                                     ),
                                 )),

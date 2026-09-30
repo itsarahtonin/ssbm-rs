@@ -392,12 +392,10 @@ pub fn grHomeRun_8021D680<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     inl_HSD_JObjSetTranslateX(
         ctx,
         jobj,
-        fp::fsubs(
+        fp::fnmsubs(
+            1.5,
+            (fp::fmuls(2150.989990234375, fns::Ground_801C0498(ctx))),
             x,
-            fp::fmuls(
-                1.5,
-                (fp::fmuls(2150.989990234375, fns::Ground_801C0498(ctx))),
-            ),
         ),
     );
     jobj = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
@@ -417,12 +415,10 @@ pub fn grHomeRun_8021D680<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     inl_HSD_JObjSetTranslateX(
         ctx,
         jobj,
-        fp::fsubs(
+        fp::fnmsubs(
+            0.5,
+            (fp::fmuls(2150.989990234375, fns::Ground_801C0498(ctx))),
             x,
-            fp::fmuls(
-                0.5,
-                (fp::fmuls(2150.989990234375, fns::Ground_801C0498(ctx))),
-            ),
         ),
     );
     jobj = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
@@ -442,12 +438,10 @@ pub fn grHomeRun_8021D680<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     inl_HSD_JObjSetTranslateX(
         ctx,
         jobj,
-        fp::fadds(
+        fp::fmadds(
+            0.5,
+            (fp::fmuls(2150.989990234375, fns::Ground_801C0498(ctx))),
             x,
-            fp::fmuls(
-                0.5,
-                (fp::fmuls(2150.989990234375, fns::Ground_801C0498(ctx))),
-            ),
         ),
     );
     jobj = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(
@@ -467,12 +461,10 @@ pub fn grHomeRun_8021D680<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     inl_HSD_JObjSetTranslateX(
         ctx,
         jobj,
-        fp::fadds(
+        fp::fmadds(
+            1.5,
+            (fp::fmuls(2150.989990234375, fns::Ground_801C0498(ctx))),
             x,
-            fp::fmuls(
-                1.5,
-                (fp::fmuls(2150.989990234375, fns::Ground_801C0498(ctx))),
-            ),
         ),
     );
     inl_Ground_UpdateWindAndMapColl(ctx, gobj);

@@ -2461,8 +2461,7 @@ pub fn fn_803AD16C<'a>(ctx: &'a Ctx, state: CardState<'a>) -> i32 {
         file_idx = 0_i32;
         'l5: while file_idx < 9_i32 {
             'c6: {
-                file_blocks =
-                    (statics::sysdolphin__baselib__card::fn_803AC634(ctx, state, file_idx) as i32);
+                file_blocks = (inl_fn_803AC634_unfused(ctx, state, file_idx) as i32);
                 if file_blocks <= 0_i32 {
                     break 'c6;
                 }
@@ -2617,8 +2616,7 @@ pub fn fn_803AD16C<'a>(ctx: &'a Ctx, state: CardState<'a>) -> i32 {
                 {
                     break 'c26;
                 }
-                file_blocks =
-                    (statics::sysdolphin__baselib__card::fn_803AC634(ctx, state, file_idx) as i32);
+                file_blocks = (inl_fn_803AC634_unfused(ctx, state, file_idx) as i32);
                 blocks_before = inl_fn_803AC6B8_blocks_before_unfused(ctx, state, file_idx);
                 {
                     i = 0_i32;
@@ -2661,8 +2659,7 @@ pub fn fn_803AD16C<'a>(ctx: &'a Ctx, state: CardState<'a>) -> i32 {
                 {
                     break 'c32;
                 }
-                file_blocks =
-                    (statics::sysdolphin__baselib__card::fn_803AC634(ctx, state, file_idx) as i32);
+                file_blocks = (inl_fn_803AC634_unfused(ctx, state, file_idx) as i32);
                 blocks_before = inl_fn_803AC6B8_blocks_before_unfused(ctx, state, file_idx);
                 {
                     i = 0_i32;
@@ -4809,6 +4806,52 @@ fn inl_fn_803ACFC0_checksum_start_unfused<'a>(
     return Handle::add((state).sector_buf(), hdr_offset);
 }
 
+fn inl_fn_803AC634_unfused<'a>(ctx: &'a Ctx, state: CardState<'a>, file_idx: i32) -> u32 {
+    let mut state = state;
+    let mut file_idx = file_idx;
+    if (state).file_sizes().at(file_idx).get() <= 0_i32 {
+        return (0_i32 as u32);
+    }
+    if file_idx == 0_i32 {
+        let mut usable: u32 = 0;
+        let mut sector_size: u32 = (state).sector_size();
+        let mut remaining: i32 = 0;
+        remaining = (state).file_sizes().at(0_i32).get();
+        remaining = remaining.wrapping_sub(
+            ((({
+                let __t1 = sector_size.wrapping_sub((32_i32 as u32));
+                usable = __t1;
+                __t1
+            })
+            .wrapping_sub(rem_u32(
+                ((state).header_size().wrapping_add((48_i32 as u32))),
+                sector_size,
+            ))) as i32),
+        );
+        if remaining <= 0_i32 {
+            return (1_i32 as u32);
+        }
+        return div_u32(
+            ((remaining as u32)
+                .wrapping_add(sector_size)
+                .wrapping_sub((33_i32 as u32))),
+            usable,
+        )
+        .wrapping_add((1_i32 as u32));
+    }
+    {
+        let mut sector_size_2: u32 = (state).sector_size();
+        return div_u32(
+            (((state).file_sizes().at(file_idx).get() as u32)
+                .wrapping_add(sector_size_2)
+                .wrapping_sub((33_i32 as u32))),
+            (sector_size_2.wrapping_sub((32_i32 as u32))),
+        );
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 fn inl_fn_803AC6B8_blocks_before_unfused<'a>(
     ctx: &'a Ctx,
     state: CardState<'a>,
@@ -5561,52 +5604,6 @@ fn inl_fn_803B0E9C_write_block_final_unfused<'a>(
         }
     }
     return result;
-}
-
-fn inl_fn_803AC634_unfused<'a>(ctx: &'a Ctx, state: CardState<'a>, file_idx: i32) -> u32 {
-    let mut state = state;
-    let mut file_idx = file_idx;
-    if (state).file_sizes().at(file_idx).get() <= 0_i32 {
-        return (0_i32 as u32);
-    }
-    if file_idx == 0_i32 {
-        let mut usable: u32 = 0;
-        let mut sector_size: u32 = (state).sector_size();
-        let mut remaining: i32 = 0;
-        remaining = (state).file_sizes().at(0_i32).get();
-        remaining = remaining.wrapping_sub(
-            ((({
-                let __t1 = sector_size.wrapping_sub((32_i32 as u32));
-                usable = __t1;
-                __t1
-            })
-            .wrapping_sub(rem_u32(
-                ((state).header_size().wrapping_add((48_i32 as u32))),
-                sector_size,
-            ))) as i32),
-        );
-        if remaining <= 0_i32 {
-            return (1_i32 as u32);
-        }
-        return div_u32(
-            ((remaining as u32)
-                .wrapping_add(sector_size)
-                .wrapping_sub((33_i32 as u32))),
-            usable,
-        )
-        .wrapping_add((1_i32 as u32));
-    }
-    {
-        let mut sector_size_2: u32 = (state).sector_size();
-        return div_u32(
-            (((state).file_sizes().at(file_idx).get() as u32)
-                .wrapping_add(sector_size_2)
-                .wrapping_sub((33_i32 as u32))),
-            (sector_size_2.wrapping_sub((32_i32 as u32))),
-        );
-    }
-    #[allow(unreachable_code)]
-    return 0;
 }
 
 fn inl_fn_803B1338_queue_write_unfused<'a>(

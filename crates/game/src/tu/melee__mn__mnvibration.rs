@@ -313,8 +313,9 @@ pub fn mnVibration_HandleInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 inl_setCursorTranslateY(
                     ctx,
                     cursor_jobj,
-                    fp::fadds(
-                        (fp::fmuls(spacing, fp::frsp(cursor_row as f64))),
+                    fp::fmadds(
+                        spacing,
+                        fp::frsp(cursor_row as f64),
                         inl_HSD_JObjGetTranslationY(ctx, (data2).jobjs().at(17_i32).get()),
                     ),
                 );
@@ -364,8 +365,9 @@ pub fn mnVibration_HandleInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 inl_setCursorTranslateY(
                     ctx,
                     cursor_jobj_2,
-                    fp::fadds(
-                        (fp::fmuls(spacing_2, fp::frsp(cursor_row as f64))),
+                    fp::fmadds(
+                        spacing_2,
+                        fp::frsp(cursor_row as f64),
                         inl_HSD_JObjGetTranslationY(ctx, (data2_2).jobjs().at(17_i32).get()),
                     ),
                 );

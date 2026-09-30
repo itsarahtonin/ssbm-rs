@@ -151,9 +151,9 @@ pub fn gm_801A85E4<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: i32, arg2: i32) {
             0.01745329238474369,
             (fp::fsubs(
                 fp::fmadds(
-                    2.0,
-                    fns::HSD_Randf(ctx),
-                    (fp::fmuls(45.0, fp::frsp(idx as f64))),
+                    45.0,
+                    fp::frsp(idx as f64),
+                    (fp::fmuls(2.0, fns::HSD_Randf(ctx))),
                 ),
                 1.0,
             )),
@@ -164,10 +164,7 @@ pub fn gm_801A85E4<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: i32, arg2: i32) {
             jobj,
             fp::fmuls(
                 0.8999999761581421,
-                (fp::fadds(
-                    (fp::fmuls(25.0, fp::fneg(fns::sinf(ctx, angle)))),
-                    fp::fneg(18.0),
-                )),
+                (fp::fmadds(25.0, fp::fneg(fns::sinf(ctx, angle)), fp::fneg(18.0))),
             ),
         );
     } else if arg1 <= 12_i32 {
@@ -182,12 +179,9 @@ pub fn gm_801A85E4<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: i32, arg2: i32) {
             0.01745329238474369,
             (fp::fsubs(
                 fp::fmadds(
-                    4.0,
-                    fns::HSD_Randf(ctx),
-                    (fp::fmuls(
-                        25.714284896850586,
-                        fp::frsp((idx.wrapping_sub(5_i32)) as f64),
-                    )),
+                    25.714284896850586,
+                    fp::frsp((idx.wrapping_sub(5_i32)) as f64),
+                    (fp::fmuls(4.0, fns::HSD_Randf(ctx))),
                 ),
                 2.0,
             )),
@@ -198,10 +192,7 @@ pub fn gm_801A85E4<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: i32, arg2: i32) {
             jobj,
             fp::fmuls(
                 0.8999999761581421,
-                (fp::fadds(
-                    (fp::fmuls(50.0, fp::fneg(fns::sinf(ctx, angle)))),
-                    fp::fneg(18.0),
-                )),
+                (fp::fmadds(50.0, fp::fneg(fns::sinf(ctx, angle)), fp::fneg(18.0))),
             ),
         );
     } else if arg1 <= 21_i32 {
@@ -229,10 +220,7 @@ pub fn gm_801A85E4<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: i32, arg2: i32) {
             jobj,
             fp::fmuls(
                 0.800000011920929,
-                (fp::fadds(
-                    (fp::fmuls(75.0, fp::fneg(fns::sinf(ctx, angle)))),
-                    fp::fneg(18.0),
-                )),
+                (fp::fmadds(75.0, fp::fneg(fns::sinf(ctx, angle)), fp::fneg(18.0))),
             ),
         );
     } else if arg1 == 22_i32 {

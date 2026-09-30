@@ -578,7 +578,7 @@ pub fn it_802A13EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> f64 {
             );
             dy = fp::fsubs(pos.y(), (ip).pos().y());
             dx = fp::fsubs(pos.x(), inl_it_802A13EC_inline(ctx, ip));
-            ret = inl_sqrtf(ctx, fp::fadds(fp::fmuls((dx), (dx)), fp::fmuls((dy), (dy))));
+            ret = inl_sqrtf(ctx, fp::fmadds((dx), (dx), fp::fmuls((dy), (dy))));
             if (ip).xDD4_itemVar().linkboomerang().xF80() > 0.0 {
                 (ip).xDD4_itemVar().linkboomerang().set_xF80(fp::fsubs(
                     (ip).xDD4_itemVar().linkboomerang().xF80(),

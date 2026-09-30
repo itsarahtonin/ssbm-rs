@@ -273,7 +273,7 @@ pub fn ftCo_800C18A8<'a>(
         let mut vel_y: f64 = fp::fadds((fp).self_vel().y(), (fp).x8c_kb_vel().y());
         let mut mag: f64 = inl_sqrtf(
             ctx,
-            fp::fadds((fp::fmuls((vel_x), (vel_x))), (fp::fmuls((vel_y), (vel_y)))),
+            fp::fmadds((vel_x), (vel_x), (fp::fmuls((vel_y), (vel_y)))),
         );
         fns::ftCo_80097630(
             ctx,

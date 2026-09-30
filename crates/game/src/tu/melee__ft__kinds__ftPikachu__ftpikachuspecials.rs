@@ -554,7 +554,7 @@ pub fn ftPk_SpecialS_ChangeMotion_Unk10<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             (sa).x24(),
         );
         (fp).self_vel()
-            .set_y(fp::fmadds((sa).x44(), temp, fp::fmuls(0.5, (sa).x44())));
+            .set_y(fp::fmadds(0.5, (sa).x44(), fp::fmuls((sa).x44(), temp)));
     }
     fns::Fighter_ChangeMotionState(
         ctx,

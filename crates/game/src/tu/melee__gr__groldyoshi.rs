@@ -691,8 +691,8 @@ pub fn grOldYoshi_8020F31C<'a>(
     }
     fVar4 = fp::fmadds(
         fVar3,
-        fVar2,
-        fp::fmuls(fVar3, (fp::fmuls(fp::fmuls(fp::fneg(param2), 0.5), fVar3))),
+        (fp::fmuls(fp::fmuls(fp::fneg(param2), 0.5), fVar3)),
+        (fp::fmuls(fVar3, fVar2)),
     );
     param1 = inl_grOldYoshi_8020F31C_inline(ctx, param1, param2, param3, param4, fVar4);
     if param1 > param5 {

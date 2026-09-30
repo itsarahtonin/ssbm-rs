@@ -492,7 +492,7 @@ pub fn hsd_80398F8C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, angle: f64) {
     }
     {
         let mut azimuth_2: f64 = 0.0;
-        temp = fp::fmadds(vz, cos_a, fp::fmuls(vy, sin_a));
+        temp = fp::fmadds(vy, sin_a, fp::fmuls(vz, cos_a));
         abs_temp.set(temp);
         (Handle::cast::<Val<'a, i32>>(abs_temp))
             .set(((Handle::cast::<Val<'a, i32>>(abs_temp)).get() & 0x7fffffff_i32));
@@ -508,7 +508,7 @@ pub fn hsd_80398F8C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, angle: f64) {
         sin_e = fns::sinf(ctx, azimuth_2);
         cos_e = fns::cosf(ctx, azimuth_2);
     }
-    vx = fp::fmadds(vz, vz, (fp::fmadds(vy, vy, fp::fmuls(vx, vx))));
+    vx = fp::fmadds(vz, vz, (fp::fmadds(vx, vx, fp::fmuls(vy, vy))));
     if vx > 0.0 {
         let mut x: f64 = fp::frsqrte(vx);
         x = fp::fmul(
@@ -533,23 +533,23 @@ pub fn hsd_80398F8C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, angle: f64) {
     sin_rand = fp::fmuls(sin_angle, fns::sinf(ctx, rand_angle));
     cos_angle = fp::fmuls(vx, fns::cosf(ctx, angle_copy));
     (pp).vel()
-        .set_x(fp::fmadds(cos_angle, sin_e, fp::fmuls(cos_rand, cos_e)));
+        .set_x(fp::fmadds(cos_rand, cos_e, fp::fmuls(cos_angle, sin_e)));
     (pp).vel().set_y(fp::fmadds(
         cos_e,
         (fp::fmuls(cos_angle, sin_a)),
         (fp::fmadds(
-            sin_rand,
-            cos_a,
-            fp::fmuls(sin_e, (fp::fmuls(fp::fneg(cos_rand), sin_a))),
+            sin_e,
+            (fp::fmuls(fp::fneg(cos_rand), sin_a)),
+            fp::fmuls(sin_rand, cos_a),
         )),
     ));
     (pp).vel().set_z(fp::fmadds(
         cos_e,
         (fp::fmuls(cos_angle, cos_a)),
-        (fp::fnmsubs(
-            sin_rand,
-            sin_a,
-            fp::fmuls(sin_e, (fp::fmuls(fp::fneg(cos_rand), cos_a))),
+        (fp::fmsubs(
+            sin_e,
+            (fp::fmuls(fp::fneg(cos_rand), cos_a)),
+            fp::fmuls(sin_rand, sin_a),
         )),
     ));
 }

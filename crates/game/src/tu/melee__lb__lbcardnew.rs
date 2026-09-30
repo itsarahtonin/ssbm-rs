@@ -497,9 +497,8 @@ pub fn taskOpen<'a>(ctx: &'a Ctx, filename: Val<'a, i8>, entries: LbCardEntry<'a
             statics::melee__lb__lbcardnew::state(ctx).unused_bytes_ref(),
             statics::melee__lb__lbcardnew::state(ctx).unused_files_ref(),
         );
-        statics::melee__lb__lbcardnew::state(ctx).set_saved_error(
-            statics::melee__lb__lbcardnew::convertSdkResult(ctx, free_result),
-        );
+        statics::melee__lb__lbcardnew::state(ctx)
+            .set_saved_error(inl_convertSdkResult_unfused(ctx, free_result));
         if (statics::melee__lb__lbcardnew::state(ctx).saved_error()) == 0_i32 {
             if Handle::is_null(filename) {
                 statics::melee__lb__lbcardnew::state(ctx)

@@ -790,10 +790,7 @@ pub fn mnDiagram2_CreateStatRow<'a>(
                         inl_HSD_JObjSetTranslateY(
                             ctx,
                             jobj,
-                            fp::fadds(
-                                (fp::fmuls(f30, fp::frsp(row_idx as f64))),
-                                (base).icon_pos().y(),
-                            ),
+                            fp::fmadds(f30, fp::frsp(row_idx as f64), (base).icon_pos().y()),
                         );
                         inl_HSD_JObjSetTranslateZ(ctx, jobj, (base).icon_pos().z());
                         fns::HSD_JObjAddChild(ctx, (data).icon_parent(), jobj);

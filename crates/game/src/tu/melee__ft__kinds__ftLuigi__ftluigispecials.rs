@@ -823,15 +823,18 @@ pub fn ftLg_SpecialSFly_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     } else {
         let mut vel_y: f64 = (sa).x2C_LUIGI_GREENMISSILE_VEL_Y();
         (fp).self_vel().set_y(fp::fmadds(
+            0.5,
             vel_y,
-            (fp::fdivs(
-                fp::fmuls(
-                    0.5,
-                    fp::frsp((fp).mv().lg().SpecialS().chargeFrames() as f64),
-                ),
-                (sa).xC_LUIGI_GREENMISSILE_MAX_CHARGE_FRAMES(),
-            )),
-            fp::fmuls(0.5, vel_y),
+            fp::fmuls(
+                vel_y,
+                (fp::fdivs(
+                    fp::fmuls(
+                        0.5,
+                        fp::frsp((fp).mv().lg().SpecialS().chargeFrames() as f64),
+                    ),
+                    (sa).xC_LUIGI_GREENMISSILE_MAX_CHARGE_FRAMES(),
+                )),
+            ),
         ));
     }
     fns::Fighter_ChangeMotionState(

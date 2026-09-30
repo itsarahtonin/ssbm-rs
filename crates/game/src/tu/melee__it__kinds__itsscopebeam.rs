@@ -220,9 +220,9 @@ pub fn itSscopebeam_UnkMotion9_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32
                 vel,
                 axis,
                 fp::fmadds(
-                    (ip).facing_dir(),
-                    (fp::fmuls((attrs).x78(), rand)),
-                    (fp::fmuls(2.0, angle)),
+                    2.0,
+                    angle,
+                    (fp::fmuls((ip).facing_dir(), (fp::fmuls((attrs).x78(), rand)))),
                 ),
             );
             (ip).x40_vel().set_x(vel.x());

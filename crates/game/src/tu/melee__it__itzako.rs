@@ -232,22 +232,22 @@ pub fn it_8027BB1C<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: Vec<'a>) {
         sin = fns::sinf(ctx, (arg1).x());
         t1 = (arg0).y();
         t2 = (arg0).z();
-        (arg0).set_y(fp::fnmsubs(t2, sin, (fp::fmuls(t1, cos))));
-        (arg0).set_z(fp::fmadds(t2, cos, (fp::fmuls(t1, sin))));
+        (arg0).set_y(fp::fmsubs(t1, cos, (fp::fmuls(t2, sin))));
+        (arg0).set_z(fp::fmadds(t1, sin, (fp::fmuls(t2, cos))));
     }
     {
         cos = fns::cosf(ctx, (arg1).y());
         sin = fns::sinf(ctx, (arg1).y());
         t1 = (arg0).x();
         t2 = (arg0).z();
-        (arg0).set_x(fp::fmadds(t2, sin, (fp::fmuls(t1, cos))));
-        (arg0).set_z(fp::fnmsubs(t1, sin, (fp::fmuls(t2, cos))));
+        (arg0).set_x(fp::fmadds(t1, cos, (fp::fmuls(t2, sin))));
+        (arg0).set_z(fp::fmsubs(t2, cos, (fp::fmuls(t1, sin))));
     }
     {
         cos = fns::cosf(ctx, (arg1).z());
         sin = fns::sinf(ctx, (arg1).z());
-        t1 = fp::fnmsubs((arg0).y(), sin, (fp::fmuls((arg0).x(), cos)));
-        t2 = fp::fmadds((arg0).y(), cos, (fp::fmuls((arg0).x(), sin)));
+        t1 = fp::fmsubs((arg0).x(), cos, (fp::fmuls((arg0).y(), sin)));
+        t2 = fp::fmadds((arg0).x(), sin, (fp::fmuls((arg0).y(), cos)));
         (arg0).set_x(t1);
         (arg0).set_y(t2);
     }
@@ -312,15 +312,15 @@ pub fn it_8027BBF4<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg_chk: i32, arg8
             .zako()
             .x14()
             .set_x((item).xDD4_itemVar().zako().x14().x().wrapping_sub(1));
-        if (fp::fnmsubs(sp5C.y(), sp68.x(), (fp::fmuls(sp5C.x(), sp68.y()))))
+        if (fp::fmsubs(sp5C.x(), sp68.y(), (fp::fmuls(sp5C.y(), sp68.x()))))
             < fp::frsp(0_i32 as f64)
         {
             var_f29 = fp::fneg(var_f29);
         }
         temp_f30 = fns::cosf(ctx, var_f29);
         temp_f1 = fns::sinf(ctx, var_f29);
-        var_f29 = fp::fnmsubs(sp5C.y(), temp_f1, (fp::fmuls(sp5C.x(), temp_f30)));
-        var_f28 = fp::fmadds(sp5C.y(), temp_f30, (fp::fmuls(sp5C.x(), temp_f1)));
+        var_f29 = fp::fmsubs(sp5C.x(), temp_f30, (fp::fmuls(sp5C.y(), temp_f1)));
+        var_f28 = fp::fmadds(sp5C.x(), temp_f1, (fp::fmuls(sp5C.y(), temp_f30)));
     }
     Handle::copy_from(sp44, (Handle::add(vecs, 0_i32)));
     Handle::copy_from(sp50, (Handle::add(vecs, 1_i32)));
@@ -419,15 +419,15 @@ pub fn it_8027C0F0<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: Vec<'a>, arg
                 .zako()
                 .x14()
                 .set_x((item).xDD4_itemVar().zako().x14().x().wrapping_sub(1));
-            if (fp::fnmsubs(sp5C.y(), sp68.x(), (fp::fmuls(sp5C.x(), sp68.y()))))
+            if (fp::fmsubs(sp5C.x(), sp68.y(), (fp::fmuls(sp5C.y(), sp68.x()))))
                 < fp::frsp(0_i32 as f64)
             {
                 var_f29 = fp::fneg(var_f29);
             }
             temp_f30 = fns::cosf(ctx, var_f29);
             temp_f1 = fns::sinf(ctx, var_f29);
-            var_f29 = fp::fnmsubs(sp5C.y(), temp_f1, (fp::fmuls(sp5C.x(), temp_f30)));
-            var_f28 = fp::fmadds(sp5C.y(), temp_f30, (fp::fmuls(sp5C.x(), temp_f1)));
+            var_f29 = fp::fmsubs(sp5C.x(), temp_f30, (fp::fmuls(sp5C.y(), temp_f1)));
+            var_f28 = fp::fmadds(sp5C.x(), temp_f1, (fp::fmuls(sp5C.y(), temp_f30)));
         }
         Handle::copy_from(sp44, (Handle::add(vecs, 0_i32)));
         Handle::copy_from(sp50, (Handle::add(vecs, 1_i32)));
@@ -569,11 +569,11 @@ pub fn it_8027C8D0<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: Vec<'a>, arg8: f64) {
     }
     (arg0).set_x(fp::fmuls(
         vec_mag,
-        (fp::fnmsubs(sp1C.y(), dir, (fp::fmuls(sp1C.x(), var_f6)))),
+        (fp::fmsubs(sp1C.x(), var_f6, (fp::fmuls(sp1C.y(), dir)))),
     ));
     (arg0).set_y(fp::fmuls(
         vec_mag,
-        (fp::fmadds(sp1C.y(), var_f6, (fp::fmuls(sp1C.x(), dir)))),
+        (fp::fmadds(sp1C.x(), dir, (fp::fmuls(sp1C.y(), var_f6)))),
     ));
     (arg0).set_z(0.0);
 }
@@ -1142,7 +1142,7 @@ fn inl_product_xyz<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>) -> f64 {
     return (fp::fmadds(
         (a).z(),
         (b).z(),
-        fp::fmadds((a).y(), (b).y(), fp::fmuls((a).x(), (b).x())),
+        fp::fmadds((a).x(), (b).x(), fp::fmuls((a).y(), (b).y())),
     ));
 }
 

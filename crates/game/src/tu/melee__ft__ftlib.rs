@@ -161,7 +161,7 @@ pub fn ftLib_FindNearestOpponent<'a>(
                 fns::ftLib_GetCameraBonePos(ctx, cur, cur_v);
                 dx = fp::fsubs((pos).x(), cur_v.x());
                 dy = fp::fsubs((pos).y(), cur_v.y());
-                dist = fp::fmadds(dy, dy, (fp::fmuls(dx, dx)));
+                dist = fp::fmadds(dx, dx, (fp::fmuls(dy, dy)));
                 if dist < min_dist {
                     min_dist = dist;
                     result = cur;
@@ -221,7 +221,7 @@ pub fn ftLib_FindNearestOpponentInDir<'a>(
                 }
                 dx = fp::fsubs((v).x(), sp24.x());
                 dy = fp::fsubs((v).y(), sp24.y());
-                diff = fp::fmadds(dy, dy, fp::fmuls(dx, dx));
+                diff = fp::fmadds(dx, dx, fp::fmuls(dy, dy));
                 if diff < min_diff {
                     min_diff = diff;
                     result = cur;

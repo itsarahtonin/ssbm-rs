@@ -148,9 +148,9 @@ pub fn ftpickupitem_800942A0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, flags: u32) -
                                         let mut y_diff: f64 = fp::fsubs(it_pos.y(), y0);
                                         let mut x_diff: f64 = fp::fsubs(it_pos.x(), x0);
                                         let mut dist_sq: f64 = fp::fmadds(
-                                            (y_diff),
-                                            (y_diff),
-                                            (fp::fmuls((x_diff), (x_diff))),
+                                            (x_diff),
+                                            (x_diff),
+                                            (fp::fmuls((y_diff), (y_diff))),
                                         );
                                         if dist_sq < min_dist_sq {
                                             result = cur;

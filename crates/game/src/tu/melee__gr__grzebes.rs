@@ -2397,7 +2397,7 @@ pub fn grZebes_801DB3CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                                 let mut dx: f64 = fp::fsubs((left).x08_x(), (cur).x08_x());
                                 let mut dy: f64 = fp::fsubs((left).x0C_y(), (cur).x0C_y());
                                 let mut dist: f64 =
-                                    inl_sqrtf(ctx, fp::fadds(fp::fmuls(dx, dx), fp::fmuls(dy, dy)));
+                                    inl_sqrtf(ctx, fp::fmadds(dx, dx, fp::fmuls(dy, dy)));
                                 {
                                     let mut col_r: f64 =
                                         (statics::melee__gr__grzebes::yakumono_param(ctx).get())
@@ -2426,10 +2426,8 @@ pub fn grZebes_801DB3CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                                 if ((right).x00_active() as i32) != 0_i32 {
                                     let mut dx2: f64 = fp::fsubs((right).x08_x(), (cur).x08_x());
                                     let mut dy2: f64 = fp::fsubs((right).x0C_y(), (cur).x0C_y());
-                                    let mut dist2: f64 = inl_sqrtf(
-                                        ctx,
-                                        fp::fadds(fp::fmuls(dx2, dx2), fp::fmuls(dy2, dy2)),
-                                    );
+                                    let mut dist2: f64 =
+                                        inl_sqrtf(ctx, fp::fmadds(dx2, dx2, fp::fmuls(dy2, dy2)));
                                     {
                                         let mut col_r2: f64 =
                                             (statics::melee__gr__grzebes::yakumono_param(ctx)
@@ -2503,7 +2501,7 @@ pub fn grZebes_801DB3CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                                         );
                                         let mut dist_2: f64 = inl_sqrtf(
                                             ctx,
-                                            fp::fadds(fp::fmuls(dx_2, dx_2), fp::fmuls(dy_2, dy_2)),
+                                            fp::fmadds(dx_2, dx_2, fp::fmuls(dy_2, dy_2)),
                                         );
                                         {
                                             let mut yp_2: grZe_YakumonoParam<'a> =
@@ -2702,29 +2700,29 @@ pub fn grZebes_801DBB60<'a>(ctx: &'a Ctx, yaku: HSD_GObj<'a>) -> i32 {
                                     {
                                         dist_sq = fp::fmadds(
                                             (fp::fsubs(
-                                                ei_y,
+                                                ei_x,
                                                 statics::melee__gr__grzebes::grZe_8049F170(ctx)
                                                     .get(j)
-                                                    .x0C_y(),
+                                                    .x08_x(),
                                             )),
                                             (fp::fsubs(
-                                                ei_y,
+                                                ei_x,
                                                 statics::melee__gr__grzebes::grZe_8049F170(ctx)
                                                     .get(j)
-                                                    .x0C_y(),
+                                                    .x08_x(),
                                             )),
                                             fp::fmuls(
                                                 (fp::fsubs(
-                                                    ei_x,
+                                                    ei_y,
                                                     statics::melee__gr__grzebes::grZe_8049F170(ctx)
                                                         .get(j)
-                                                        .x08_x(),
+                                                        .x0C_y(),
                                                 )),
                                                 (fp::fsubs(
-                                                    ei_x,
+                                                    ei_y,
                                                     statics::melee__gr__grzebes::grZe_8049F170(ctx)
                                                         .get(j)
-                                                        .x08_x(),
+                                                        .x0C_y(),
                                                 )),
                                             ),
                                         );
@@ -2794,7 +2792,7 @@ pub fn grZebes_801DBB60<'a>(ctx: &'a Ctx, yaku: HSD_GObj<'a>) -> i32 {
             dy = fp::fsubs(y2, y1);
             dx = fp::fsubs(x2, x1);
             width = 1.0;
-            inv_len_sq = fp::fdivs(1.0, (fp::fmadds(dy, dy, fp::fmuls(dx, dx))));
+            inv_len_sq = fp::fdivs(1.0, (fp::fmadds(dx, dx, fp::fmuls(dy, dy))));
             {
                 k = 0_i32;
                 'l7: while k < 20_i32 {
@@ -2807,9 +2805,9 @@ pub fn grZebes_801DBB60<'a>(ctx: &'a Ctx, yaku: HSD_GObj<'a>) -> i32 {
                             let mut dpx: f64 = fp::fsubs(by, y1);
                             let mut dpy: f64 = fp::fsubs(bx, x1);
                             let mut t: f64 =
-                                fp::fmuls(inv_len_sq, (fp::fmadds(dy, dpx, fp::fmuls(dx, dpy))));
+                                fp::fmuls(inv_len_sq, (fp::fmadds(dx, dpy, fp::fmuls(dy, dpx))));
                             if t < 0.0 {
-                                bx = fp::fmadds(dpx, dpx, fp::fmuls(dpy, dpy));
+                                bx = fp::fmadds(dpy, dpy, fp::fmuls(dpx, dpx));
                             } else if t > 1.0 {
                                 dpx = fp::fsubs(bx, x2);
                                 dpy = inl_grZebes_Subtract(ctx, by, y2);
@@ -2862,10 +2860,7 @@ pub fn grZebes_801DBB60<'a>(ctx: &'a Ctx, yaku: HSD_GObj<'a>) -> i32 {
                                             (fp::fsubs(new_width, width)),
                                             inl_sqrtf(
                                                 ctx,
-                                                fp::fadds(
-                                                    fp::fmuls(dpx2, dpx2),
-                                                    fp::fmuls(dpy2, dpy2),
-                                                ),
+                                                fp::fmadds(dpx2, dpx2, fp::fmuls(dpy2, dpy2)),
                                             ),
                                         );
                                         width = new_width;
@@ -2909,8 +2904,9 @@ pub fn grZebes_801DBB60<'a>(ctx: &'a Ctx, yaku: HSD_GObj<'a>) -> i32 {
                                             (fp::fsubs(new_width, width)),
                                             inl_sqrtf(
                                                 ctx,
-                                                fp::fadds(
-                                                    fp::fmuls(dpx2_2, dpx2_2),
+                                                fp::fmadds(
+                                                    dpx2_2,
+                                                    dpx2_2,
                                                     fp::fmuls(dpy2_2, dpy2_2),
                                                 ),
                                             ),
@@ -2922,7 +2918,7 @@ pub fn grZebes_801DBB60<'a>(ctx: &'a Ctx, yaku: HSD_GObj<'a>) -> i32 {
                                     dy = fp::fsubs(y2, y1);
                                     dx = fp::fsubs(x2, x1);
                                     inv_len_sq =
-                                        fp::fdivs(1.0, (fp::fmadds(dy, dy, fp::fmuls(dx, dx))));
+                                        fp::fdivs(1.0, (fp::fmadds(dx, dx, fp::fmuls(dy, dy))));
                                 }
                             }
                         }

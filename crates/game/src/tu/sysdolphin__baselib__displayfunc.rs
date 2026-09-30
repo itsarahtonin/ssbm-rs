@@ -133,7 +133,7 @@ pub fn mkHBillBoardMtx<'a>(
     if (((jobj).flags() & (0x2000_i32 as u32)) != 0) {
         uy.set_y(inl_sqrtf(
             ctx,
-            fp::fadds(fp::fmuls(pos.x(), pos.x()), fp::fmuls(pos.z(), pos.z())),
+            fp::fmadds(pos.x(), pos.x(), fp::fmuls(pos.z(), pos.z())),
         ));
         uy.set_x(fp::fmuls(fp::fdivs(fp::fneg(pos.y()), uy.y()), pos.x()));
         uy.set_z(fp::fmuls(fp::fdivs(fp::fneg(pos.y()), uy.y()), pos.z()));

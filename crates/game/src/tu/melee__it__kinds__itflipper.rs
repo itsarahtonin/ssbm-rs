@@ -780,29 +780,6 @@ fn inl_HSD_JObjSetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64
     }
 }
 
-fn inl_sqrtf_unfused<'a>(ctx: &'a Ctx, x: f64) -> f64 {
-    let mut x = x;
-    let mut y: f64 = 0.0;
-    if x > 0.0 {
-        let mut guess: f64 = fp::frsqrte(x);
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
-        );
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
-        );
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
-        );
-        y = fp::frsp((fp::fmul(x, guess)));
-        return y;
-    }
-    return x;
-}
-
 fn inl_spinSpeedDirect_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
@@ -822,7 +799,7 @@ fn inl_spinSpeedDirect_unfused<'a>(
     fns::ftLib_GetPosDelta(ctx, fighter, vel);
     speed = fp::fmuls(
         (attrs).x18_spinMultiplier(),
-        inl_sqrtf_unfused(
+        fns::sqrtf(
             ctx,
             fp::fadds(fp::fmuls(vel.x(), vel.x()), fp::fmuls(vel.y(), vel.y())),
         ),
@@ -888,37 +865,11 @@ fn inl_bounce<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ip: Item<'a>) {
     }
 }
 
-fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
-    let mut x = x;
-    let mut y: f64 = 0.0;
-    if x > 0.0 {
-        let mut guess: f64 = fp::frsqrte(x);
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
-        );
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
-        );
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
-        );
-        y = fp::frsp((fp::fmul(x, guess)));
-        return y;
-    }
-    return x;
-}
-
 fn inl_lbVector_Len_xy<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
     let mut vec = vec;
-    return inl_sqrtf(
+    return fns::sqrtf(
         ctx,
-        fp::fadds(
-            fp::fmuls((vec).x(), (vec).x()),
-            fp::fmuls((vec).y(), (vec).y()),
-        ),
+        fp::fmadds((vec).x(), (vec).x(), fp::fmuls((vec).y(), (vec).y())),
     );
 }
 
@@ -1011,7 +962,7 @@ fn inl_bounceOrSpin<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 fn inl_lbVector_Len_xy_unfused<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
     let mut vec = vec;
-    return inl_sqrtf_unfused(
+    return fns::sqrtf(
         ctx,
         fp::fadds(
             fp::fmuls((vec).x(), (vec).x()),

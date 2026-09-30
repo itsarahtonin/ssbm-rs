@@ -452,7 +452,7 @@ pub fn hsd_8039DAD4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) -> f64 {
         sin_az = fns::cosf(ctx, sin_az);
         {
             let mut projected_z: f64 =
-                fp::fmadds(vel_norm.z(), sin_az, fp::fmuls(vel_norm.y(), cos_az));
+                fp::fmadds(vel_norm.y(), cos_az, fp::fmuls(vel_norm.z(), sin_az));
             if inl_fabsf_bitwise(ctx, projected_z) < 1.1754943508222875e-38_f64 {
                 if vel_norm.x() >= 0.0 {
                     elevation = 1.5707963705062866;
@@ -964,9 +964,9 @@ pub fn hsd_8039DAD4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) -> f64 {
                                     let mut r0: f64 = fp::fdivs(
                                         1.0,
                                         (fp::fmadds(
-                                            b2,
-                                            a2_4,
-                                            fp::fmuls(c2, (fp::fadds(b2, a2_4))),
+                                            c2,
+                                            (fp::fadds(b2, a2_4)),
+                                            fp::fmuls(b2, a2_4),
                                         )),
                                     );
                                     if rnd_12 < fp::fmuls(r0, (fp::fmuls(c2, b2))) {
@@ -997,27 +997,27 @@ pub fn hsd_8039DAD4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) -> f64 {
                             (r#gen).aux().rect().zx(),
                             emit_pos.z(),
                             fp::fmadds(
-                                (r#gen).aux().rect().yx(),
-                                emit_pos.y(),
-                                fp::fmuls((r#gen).aux().rect().xx(), emit_pos.x()),
+                                (r#gen).aux().rect().xx(),
+                                emit_pos.x(),
+                                fp::fmuls((r#gen).aux().rect().yx(), emit_pos.y()),
                             ),
                         ));
                         tmpvec.set_y(fp::fmadds(
                             (r#gen).aux().rect().zy(),
                             emit_pos.z(),
                             fp::fmadds(
-                                (r#gen).aux().rect().yy(),
-                                emit_pos.y(),
-                                fp::fmuls((r#gen).aux().rect().xy(), emit_pos.x()),
+                                (r#gen).aux().rect().xy(),
+                                emit_pos.x(),
+                                fp::fmuls((r#gen).aux().rect().yy(), emit_pos.y()),
                             ),
                         ));
                         tmpvec.set_z(fp::fmadds(
                             (r#gen).aux().rect().zz(),
                             emit_pos.z(),
                             fp::fmadds(
-                                (r#gen).aux().rect().yz(),
-                                emit_pos.y(),
-                                fp::fmuls((r#gen).aux().rect().xz(), emit_pos.x()),
+                                (r#gen).aux().rect().xz(),
+                                emit_pos.x(),
+                                fp::fmuls((r#gen).aux().rect().yz(), emit_pos.y()),
                             ),
                         ));
                         ctx.call::<_, ()>(0x80342aa8, (rot_mtx.get(0), tmpvec, emit_pos));
@@ -1029,9 +1029,9 @@ pub fn hsd_8039DAD4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) -> f64 {
                                 (r#gen).aux().rect().zz(),
                                 (r#gen).aux().rect().zz(),
                                 fp::fmadds(
-                                    (r#gen).aux().rect().zy(),
-                                    (r#gen).aux().rect().zy(),
-                                    fp::fmuls((r#gen).aux().rect().zx(), (r#gen).aux().rect().zx()),
+                                    (r#gen).aux().rect().zx(),
+                                    (r#gen).aux().rect().zx(),
+                                    fp::fmuls((r#gen).aux().rect().zy(), (r#gen).aux().rect().zy()),
                                 ),
                             );
                             mag = inl_sqrtf(ctx, mag);

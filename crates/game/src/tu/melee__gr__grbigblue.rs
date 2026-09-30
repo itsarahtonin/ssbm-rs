@@ -2222,7 +2222,7 @@ pub fn fn_801E8560<'a>(
     {
         let mut dx: f64 = fp::fsubs(pos.x(), (coll).cur_pos().x());
         let mut dy: f64 = fp::fsubs(pos.y(), (coll).cur_pos().y());
-        dist = inl_sqrtf(ctx, fp::fadds(fp::fmuls(dy, dy), fp::fmuls(dx, dx)));
+        dist = inl_sqrtf(ctx, fp::fmadds(dy, dy, fp::fmuls(dx, dx)));
     }
     if dist > 2.0 {
         let mut i: i32 = 0;
@@ -4558,8 +4558,8 @@ pub fn grBigBlue_801EBAF8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     if angular_vel != 0.0 {
         let mut s_2: f64 = fns::sinf(ctx, angular_vel);
         let mut c: f64 = fns::cosf(ctx, angular_vel);
-        let mut new_y: f64 = fp::fmadd(vel.y(), c, fp::fmul(vel.x(), s_2));
-        vel.set_x(fp::frsp((fp::fnmsub(vel.y(), s_2, fp::fmul(vel.x(), c)))));
+        let mut new_y: f64 = fp::fmadd(vel.x(), s_2, fp::fmul(vel.y(), c));
+        vel.set_x(fp::frsp((fp::fmsub(vel.x(), c, fp::fmul(vel.y(), s_2)))));
         vel.set_y(fp::frsp(new_y));
     }
     let _ = fns::lbVector_Add(ctx, vel, center);

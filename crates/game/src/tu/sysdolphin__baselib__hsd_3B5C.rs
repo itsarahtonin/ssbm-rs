@@ -244,16 +244,16 @@ pub fn fn_803B61B4<'a>(ctx: &'a Ctx, block: Val<'a, i32>) {
                 row0 = (Handle::add(row, 0_i32)).get();
                 row4 = (Handle::add(row, 4_i32)).get();
                 odd0 = fp::frsp(
-                    (fp::fnmsub(0.19509, (row1 as f64), (fp::fmul(0.980785, (row7 as f64))))),
+                    (fp::fmsub(0.980785, (row7 as f64), (fp::fmul(0.19509, (row1 as f64))))),
                 );
                 odd1 = fp::frsp(
-                    (fp::fnmsub(0.55557, (row3 as f64), (fp::fmul(0.83147, (row5 as f64))))),
+                    (fp::fmsub(0.83147, (row5 as f64), (fp::fmul(0.55557, (row3 as f64))))),
                 );
                 odd2 = fp::frsp(
-                    (fp::fmadd(0.83147, (row3 as f64), (fp::fmul(0.55557, (row5 as f64))))),
+                    (fp::fmadd(0.55557, (row5 as f64), (fp::fmul(0.83147, (row3 as f64))))),
                 );
                 odd3 = fp::frsp(
-                    (fp::fmadd(0.980785, (row1 as f64), (fp::fmul(0.19509, (row7 as f64))))),
+                    (fp::fmadd(0.19509, (row7 as f64), (fp::fmul(0.980785, (row1 as f64))))),
                 );
                 even_sum = fp::frsp((fp::fmul(0.707107, ((row0.wrapping_add(row4)) as f64))));
                 even_diff = fp::frsp((fp::fmul(0.707107, ((row0.wrapping_sub(row4)) as f64))));
@@ -264,13 +264,13 @@ pub fn fn_803B61B4<'a>(ctx: &'a Ctx, block: Val<'a, i32>) {
                 odd_sum = fp::fadds(odd2, odd3);
                 even_rotation_diff = fp::frsp(
                     (fp::fmadd(
-                        0.382683,
-                        (row2 as f64),
-                        (fp::fmul(fp::fneg(0.92388), (row6 as f64))),
+                        fp::fneg(0.92388),
+                        (row6 as f64),
+                        (fp::fmul(0.382683, (row2 as f64))),
                     )),
                 );
                 even_rotation_sum = fp::frsp(
-                    (fp::fmadd(0.92388, (row2 as f64), (fp::fmul(0.382683, (row6 as f64))))),
+                    (fp::fmadd(0.382683, (row6 as f64), (fp::fmul(0.92388, (row2 as f64))))),
                 );
                 odd_rotation_diff = fp::frsp(
                     (fp::fmul(0.707107, (fp::fadds(fp::fneg(odd_pair_sum), odd_pair_diff)))),
@@ -308,16 +308,16 @@ pub fn fn_803B61B4<'a>(ctx: &'a Ctx, block: Val<'a, i32>) {
                 col0 = (Handle::add(column, 0_i32)).get();
                 col4 = (Handle::add(column, 32_i32)).get();
                 odd0 = fp::frsp(
-                    (fp::fnmsub(0.19509, (col1 as f64), (fp::fmul(0.980785, (col7 as f64))))),
+                    (fp::fmsub(0.980785, (col7 as f64), (fp::fmul(0.19509, (col1 as f64))))),
                 );
                 odd1 = fp::frsp(
-                    (fp::fnmsub(0.55557, (col3 as f64), (fp::fmul(0.83147, (col5 as f64))))),
+                    (fp::fmsub(0.83147, (col5 as f64), (fp::fmul(0.55557, (col3 as f64))))),
                 );
                 odd2 = fp::frsp(
-                    (fp::fmadd(0.83147, (col3 as f64), (fp::fmul(0.55557, (col5 as f64))))),
+                    (fp::fmadd(0.55557, (col5 as f64), (fp::fmul(0.83147, (col3 as f64))))),
                 );
                 odd3 = fp::frsp(
-                    (fp::fmadd(0.980785, (col1 as f64), (fp::fmul(0.19509, (col7 as f64))))),
+                    (fp::fmadd(0.19509, (col7 as f64), (fp::fmul(0.980785, (col1 as f64))))),
                 );
                 even_sum = fp::frsp((fp::fmul(0.707107, ((col0.wrapping_add(col4)) as f64))));
                 even_diff = fp::frsp((fp::fmul(0.707107, ((col0.wrapping_sub(col4)) as f64))));
@@ -328,13 +328,13 @@ pub fn fn_803B61B4<'a>(ctx: &'a Ctx, block: Val<'a, i32>) {
                 odd_sum = fp::fadds(odd2, odd3);
                 even_rotation_diff = fp::frsp(
                     (fp::fmadd(
-                        0.382683,
-                        (col2 as f64),
-                        (fp::fmul(fp::fneg(0.92388), (col6 as f64))),
+                        fp::fneg(0.92388),
+                        (col6 as f64),
+                        (fp::fmul(0.382683, (col2 as f64))),
                     )),
                 );
                 even_rotation_sum = fp::frsp(
-                    (fp::fmadd(0.92388, (col2 as f64), (fp::fmul(0.382683, (col6 as f64))))),
+                    (fp::fmadd(0.382683, (col6 as f64), (fp::fmul(0.92388, (col2 as f64))))),
                 );
                 {
                     let mut odd_rotation_sum_2: f64 = fp::frsp(

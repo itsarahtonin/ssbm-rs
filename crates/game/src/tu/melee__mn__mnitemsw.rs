@@ -594,8 +594,9 @@ pub fn mnItemSw_8023453C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: u8, arg2: u
                 inl_HSD_JObjSetTranslateY(
                     ctx,
                     cjobj,
-                    fp::fadds(
-                        fp::fmuls(y_spacing, fp::frsp(cursor as f64)),
+                    fp::fmadds(
+                        y_spacing,
+                        fp::frsp(cursor as f64),
                         inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(4_i32).get()),
                     ),
                 );
@@ -609,11 +610,9 @@ pub fn mnItemSw_8023453C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: u8, arg2: u
                 inl_HSD_JObjSetTranslateY(
                     ctx,
                     cjobj,
-                    fp::fadds(
-                        fp::fmuls(
-                            y_spacing,
-                            fp::frsp(((cursor as i32).wrapping_sub(16_i32)) as f64),
-                        ),
+                    fp::fmadds(
+                        y_spacing,
+                        fp::frsp(((cursor as i32).wrapping_sub(16_i32)) as f64),
                         inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(4_i32).get()),
                     ),
                 );
@@ -1337,8 +1336,9 @@ fn inl_mnItemSw_SetCursorPosition<'a>(ctx: &'a Ctx, data: MnItemSwData<'a>) {
             inl_HSD_JObjSetTranslateY(
                 ctx,
                 cjobj,
-                fp::fadds(
-                    fp::fmuls(y_spacing, fp::frsp(cursor as f64)),
+                fp::fmadds(
+                    y_spacing,
+                    fp::frsp(cursor as f64),
                     inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(4_i32).get()),
                 ),
             );
@@ -1351,11 +1351,9 @@ fn inl_mnItemSw_SetCursorPosition<'a>(ctx: &'a Ctx, data: MnItemSwData<'a>) {
             inl_HSD_JObjSetTranslateY(
                 ctx,
                 cjobj,
-                fp::fadds(
-                    fp::fmuls(
-                        y_spacing,
-                        fp::frsp(((cursor as i32).wrapping_sub(16_i32)) as f64),
-                    ),
+                fp::fmadds(
+                    y_spacing,
+                    fp::frsp(((cursor as i32).wrapping_sub(16_i32)) as f64),
                     inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(4_i32).get()),
                 ),
             );
@@ -1593,8 +1591,9 @@ fn inl_setInitialCursorPosition<'a>(
             inl_HSD_JObjSetTranslateY(
                 ctx,
                 cjobj,
-                fp::fadds(
-                    fp::fmuls(y_spacing, fp::frsp(cursor as f64)),
+                fp::fmadds(
+                    y_spacing,
+                    fp::frsp(cursor as f64),
                     inl_HSD_JObjGetTranslationY(ctx, (user_data).jobjs().at(4_i32).get()),
                 ),
             );
@@ -1607,11 +1606,9 @@ fn inl_setInitialCursorPosition<'a>(
             inl_HSD_JObjSetTranslateY(
                 ctx,
                 cjobj,
-                fp::fadds(
-                    fp::fmuls(
-                        y_spacing,
-                        fp::frsp(((cursor as i32).wrapping_sub(16_i32)) as f64),
-                    ),
+                fp::fmadds(
+                    y_spacing,
+                    fp::frsp(((cursor as i32).wrapping_sub(16_i32)) as f64),
                     inl_HSD_JObjGetTranslationY(ctx, (user_data).jobjs().at(4_i32).get()),
                 ),
             );

@@ -36,6 +36,7 @@ pub mod MetroTRK__targcont;
 pub mod MetroTRK__targimpl;
 pub mod MetroTRK__usr_put;
 pub mod Runtime__Gecko_ExceptionPPC;
+pub mod Runtime__Gecko_setjmp;
 pub mod Runtime____init_cpp_exceptions;
 pub mod Runtime____mem;
 pub mod Runtime__global_destructor_chain;
@@ -1097,6 +1098,7 @@ pub static UNITS: &[(&str, Register)] = &[
         "Runtime/Gecko_ExceptionPPC",
         Runtime__Gecko_ExceptionPPC::register,
     ),
+    ("Runtime/Gecko_setjmp", Runtime__Gecko_setjmp::register),
     (
         "Runtime/__init_cpp_exceptions",
         Runtime____init_cpp_exceptions::register,

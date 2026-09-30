@@ -494,7 +494,7 @@ def strip(c):
 
 
 class Translator:
-    def __init__(self, unit, fn_cursor, fuse=None, inline=False, asm=None):
+    def __init__(self, unit, fn_cursor, fuse=None, inline=False, asm=None, reg_ptrs=frozenset()):
         self.u = unit
         self.f = FnCtx(unit.name, fn_cursor)
         self.line = fn_cursor.location.line
@@ -505,8 +505,11 @@ class Translator:
         # The calls in the asm of the function this code ends up in: its own, or for an
         # inline copy, those of the function it is inlined into.
         self.asm = asm if inline else unit.calls.get(fn_cursor.spelling)
-        # Whether MWCC inlined each function this code calls, as far as the code depends on it.
+        # Whether MWCC inlined each function this code calls, as far as the code depends on it,
+        # and for an inline copy, whether each pointer parameter it depends on points at a local
+        # the original keeps in registers (("ptr", parameter) keys).
         self.decisions = {}
+        self.reg_ptrs = reg_ptrs
         self.in_args = 0
         self._call_sites = None
 
@@ -1337,6 +1340,9 @@ class Translator:
         if op == "-":
             v = self.convert(self.expr(kid), t)
             if is_float(t):
+                negated = negate_fused(v.code)
+                if negated is not None:
+                    return Expr(negated, t, v.pure)
                 return Expr(f"fp::fneg({v.code})", t, v.pure)
             return Expr(f"{v.code}.wrapping_neg()", t, v.pure)
         if op == "~":
@@ -1441,6 +1447,10 @@ class Translator:
         if not same_type(self.u.ctype(n.type), t):
             return None
         a, c = children(n)
+        # In the arguments of a call it inlines, MWCC contracts only products of values it
+        # already holds in registers, not of loads from memory.
+        if self.in_args and (self.is_load(a) or self.is_load(c)):
+            return None
         return self.convert(self.expr(a), t), self.convert(self.expr(c), t)
 
     def fused(self, kind, a, c, b, t):
@@ -1449,18 +1459,18 @@ class Translator:
         return Expr(f"fp::{fn}({a.code}, {c.code}, {b.code})", t, a.pure and b.pure and c.pure)
 
     def try_fuse_binary(self, op, left, right, t):
-        if not self.fuse or self.in_args:
+        if not self.fuse:
             return None
-        # When both sides are products, MWCC computes the left one and fuses the right one:
-        # `a*b + c*d` is fmadds(c, d, a*b).
-        p = self.product(right, t)
-        if p is not None:
-            b = self.convert(self.expr(left), t)
-            return self.fused("madd" if op == "+" else "nmsub", p[0], p[1], b, t)
+        # When both sides are products, MWCC computes the right one and fuses the left one:
+        # `a*b + c*d` is fmadds(a, b, c*d).
         p = self.product(left, t)
         if p is not None:
             b = self.convert(self.expr(right), t)
             return self.fused("madd" if op == "+" else "msub", p[0], p[1], b, t)
+        p = self.product(right, t)
+        if p is not None:
+            b = self.convert(self.expr(left), t)
+            return self.fused("madd" if op == "+" else "nmsub", p[0], p[1], b, t)
         return None
 
     def try_fuse(self, op, cur, rhs_node, t):
@@ -1469,6 +1479,9 @@ class Translator:
             return None
         p = self.product(rhs_node, t)
         if p is None:
+            return None
+        # `cur -= a * (b*c + d)` keeps its multiply and subtract (ftCo_800925A4).
+        if op == "-" and any(FUSED_RE.match(x.code.lstrip("(")) for x in p):
             return None
         return self.fused("madd" if op == "+" else "nmsub", p[0], p[1], cur, t)
 
@@ -1531,11 +1544,12 @@ class Translator:
                 return special
             ft = self.u.ctype(callee.referenced.type)
             f = self.u.prog.function(name, self.u.name, is_static(callee.referenced))
-            if f is not None and self.inlined_in_original(name, callee.referenced):
+            if f is not None and self.inlined_in_original(f.get("symbol") or name, callee.referenced):
                 # The original has no call here: MWCC inlined the function, so its code runs
                 # as part of this one, and patches to the function's own copy do not apply.
                 try:
-                    rname = self.u.request_inline(callee.referenced.get_definition(), self.fuse, self)
+                    rname = self.u.request_inline(callee.referenced.get_definition(), self.fuse, self,
+                                                  self.reg_ptr_args(callee.referenced, args))
                 except Unsupported as e:
                     self.u.inline_fallbacks.append((self.f.cursor.spelling, name, str(e)))
                 else:
@@ -1568,7 +1582,7 @@ class Translator:
             defn = callee.referenced.get_definition()
             if defn is None:
                 raise Unsupported(f"call to {name}, which has no address or body")
-            rname = self.u.request_inline(defn, self.fuse, self)
+            rname = self.u.request_inline(defn, self.fuse, self, self.reg_ptr_args(defn, args))
             if t["k"] == "rec":
                 return self.sret_call(rname, argv, t)
             return Expr(f"{rname}(ctx{''.join(', ' + a for a in argv)})", t, False)
@@ -1586,8 +1600,9 @@ class Translator:
         return Expr(f"{fp_.code}.call::<_, {rty}>(({''.join(a + ', ' for a in argv)}))", t, False)
 
     def inlined_in_original(self, name, ref):
-        """Whether MWCC inlined every call to `name` here: the function this code ends up in
-        calls it nowhere, and its body is in this unit to inline."""
+        """Whether MWCC inlined the calls to `name` here, whose body is in this unit to inline:
+        the function this code ends up in calls it nowhere, or only from inside functions it
+        inlined, which MWCC does not inline into further on its own."""
         defn = ref.get_definition()
         if defn is None or ref.type.is_function_variadic():
             return False
@@ -1598,16 +1613,129 @@ class Translator:
         if n is None or self.inline:
             return False
         if self._call_sites is None:
-            self._call_sites = {}
+            self._call_sites, self._nested_sites = {}, {}
             for x in self.f.cursor.walk_preorder():
-                if x.kind == CK.CALL_EXPR and x.referenced is not None:
-                    callee = x.referenced.spelling
-                    self._call_sites[callee] = self._call_sites.get(callee, 0) + 1
-        sites = self._call_sites.get(name, 0)
+                if x.kind != CK.CALL_EXPR or x.referenced is None:
+                    continue
+                callee = x.referenced
+                self._call_sites[callee.spelling] = self._call_sites.get(callee.spelling, 0) + 1
+                body = callee.get_definition() if callee.kind == CK.FUNCTION_DECL else None
+                f = self.u.prog.function(callee.spelling, self.u.name, is_static(callee))
+                if body is None or self.asm.get((f or {}).get("symbol") or callee.spelling, 0):
+                    continue
+                for y in body.walk_preorder():
+                    if y.kind == CK.CALL_EXPR and y.referenced is not None:
+                        k = y.referenced.spelling
+                        self._nested_sites[k] = self._nested_sites.get(k, 0) + 1
+        sites = self._call_sites.get(ref.spelling, 0)
+        if n == self._nested_sites.get(ref.spelling, 0):
+            return True
         if n < sites:
             # Some calls inlined, some not; which ones is not known, so all stay calls.
             self.u.inline_partial.add((self.f.cursor.spelling, name, n, sites))
         return False
+
+    def is_memory(self, node):
+        """Whether a C operand is a load from memory in the original: through a pointer, from
+        an array or a global, or from a local that lives on the stack because its address
+        reaches more than inlined calls."""
+        n = strip(node)
+        while n.kind == CK.MEMBER_REF_EXPR:
+            kids = children(n)
+            if not kids:
+                return False
+            base = strip(kids[0])
+            if base.type.kind == ci.TypeKind.POINTER:
+                if self.inline and base.kind == CK.DECL_REF_EXPR and base.referenced is not None and \
+                        base.referenced.kind == CK.PARM_DECL:
+                    key = base.referenced.spelling
+                    bound = key in self.reg_ptrs
+                    self.decisions[("ptr", key)] = bound
+                    return not bound
+                return True
+            n = base
+        if n.kind == CK.ARRAY_SUBSCRIPT_EXPR:
+            return True
+        if n.kind == CK.UNARY_OPERATOR and _lib.clang_getCursorUnaryOperatorKind(n) == 6:
+            return True
+        if n.kind == CK.DECL_REF_EXPR and n.referenced is not None and \
+                n.referenced.kind in (CK.VAR_DECL, CK.PARM_DECL):
+            r = n.referenced
+            if r.semantic_parent is not None and r.semantic_parent.kind == CK.TRANSLATION_UNIT:
+                return True
+            return (r.get_usr() or r.spelling) in self.stack_resident()
+        return False
+
+    def is_load(self, node):
+        """Whether a C operand is a load from memory, or a conversion of one."""
+        n = strip(node)
+        while n.kind == CK.CSTYLE_CAST_EXPR or (n.kind == CK.UNEXPOSED_EXPR and len(children(n)) == 1):
+            n = strip(children(n)[-1])
+        return self.is_memory(n)
+
+    def reg_ptr_args(self, fn, args):
+        """The callee's pointer parameters whose argument is the address of a local the
+        original keeps in registers, or such a parameter of this inline copy."""
+        params = [a for a in (fn.get_definition() or fn).get_children() if a.kind == CK.PARM_DECL]
+        out = set()
+        for param, arg in zip(params, args):
+            n = strip(arg)
+            while n.kind == CK.CSTYLE_CAST_EXPR or (n.kind == CK.UNEXPOSED_EXPR and len(children(n)) == 1):
+                n = strip(children(n)[-1])
+            if n.kind == CK.UNARY_OPERATOR and _lib.clang_getCursorUnaryOperatorKind(n) == 5:
+                target = strip(children(n)[0])
+                if target.kind == CK.DECL_REF_EXPR and target.referenced is not None and \
+                        target.referenced.kind in (CK.VAR_DECL, CK.PARM_DECL):
+                    r = target.referenced
+                    local = r.semantic_parent is None or r.semantic_parent.kind != CK.TRANSLATION_UNIT
+                    if local and r.storage_class != ci.StorageClass.STATIC and \
+                            (r.get_usr() or r.spelling) not in self.stack_resident():
+                        out.add(param.spelling)
+            elif self.inline and n.kind == CK.DECL_REF_EXPR and n.referenced is not None and \
+                    n.referenced.kind == CK.PARM_DECL and n.referenced.type.kind == ci.TypeKind.POINTER:
+                bound = n.referenced.spelling in self.reg_ptrs
+                self.decisions[("ptr", n.referenced.spelling)] = bound
+                if bound:
+                    out.add(param.spelling)
+        return frozenset(out)
+
+    def stack_resident(self):
+        """Locals whose address goes somewhere other than an argument of an inlined call."""
+        if getattr(self, "_stack_resident", None) is None:
+            out = set()
+
+            def walk(node, parent):
+                if node.kind == CK.UNARY_OPERATOR and _lib.clang_getCursorUnaryOperatorKind(node) == 5:
+                    target = strip(children(node)[0])
+                    if target.kind == CK.DECL_REF_EXPR and target.referenced is not None and \
+                            target.referenced.kind in (CK.VAR_DECL, CK.PARM_DECL):
+                        r = target.referenced
+                        if not self.inlined_arg(parent):
+                            out.add(r.get_usr() or r.spelling)
+                # Casts and parentheses are transparent: an address's user is what they sit in.
+                up = parent if node.kind in (CK.UNEXPOSED_EXPR, CK.PAREN_EXPR, CK.CSTYLE_CAST_EXPR) else node
+                for k in node.get_children():
+                    walk(k, up)
+
+            walk(self.f.cursor, None)
+            self._stack_resident = out
+        return self._stack_resident
+
+    def inlined_arg(self, parent):
+        """Whether `parent`, the node an address is used in, is a call the original inlines."""
+        if parent is None or parent.kind != CK.CALL_EXPR:
+            return False
+        callee = strip(children(parent)[0])
+        if callee.kind != CK.DECL_REF_EXPR or callee.referenced is None or \
+                callee.referenced.kind != CK.FUNCTION_DECL:
+            return False
+        name = callee.referenced.spelling
+        f = self.u.prog.function(name, self.u.name, is_static(callee.referenced))
+        if f is None:
+            return callee.referenced.get_definition() is not None
+        asm = self.asm or {}
+        return self.asm is not None and asm.get(f.get("symbol") or name, 0) == 0 and \
+            callee.referenced.get_definition() is not None
 
     def raw_call(self, addr, ft, args, t):
         if ft.get("params") is None:
@@ -1628,7 +1756,6 @@ class Translator:
                     t, False)
 
     def call_args(self, ft, args, marshal=False, inlined=False):
-        # MWCC does not contract multiply-adds in the arguments of a call it inlines.
         self.in_args += inlined
         try:
             return self._call_args(ft, args, marshal)
@@ -1756,6 +1883,24 @@ class Translator:
         if fk == "fn" and tk == "ptr":
             return Expr(v.code, to, pure)
         raise Unsupported(f"conversion {fk} -> {tk}")
+
+
+NEGATED = {"fmadd": "fnmadd", "fmsub": "fnmsub", "fnmadd": "fmadd", "fnmsub": "fmsub"}
+
+
+def negate_fused(code):
+    """`-fmadds(a, c, b)` as the one instruction, fnmadds(a, c, b), if code is one fused op."""
+    m = re.match(r"fp::(f(?:n)?m(?:add|sub))(s?)\(", code)
+    if not m:
+        return None
+    depth = 0
+    for i in range(m.end() - 1, len(code)):
+        depth += {"(": 1, ")": -1}.get(code[i], 0)
+        if depth == 0:
+            if i != len(code) - 1:
+                return None
+            break
+    return f"fp::{NEGATED[m.group(1)]}{m.group(2)}{code[m.end() - 1:]}"
 
 
 FUSED_RE = re.compile(r"\bfp::f(?:n)?m(?:add|sub)s?\(")
@@ -1971,7 +2116,7 @@ def translate_unit(args):
 PROGRAM = []
 
 
-def _request_inline(self, defn, fuse, caller):
+def _request_inline(self, defn, fuse, caller, reg_ptrs=frozenset()):
     """An inline function's Rust name, translating it on first use. MWCC contracts inlined
     code as its caller's, and inlines the calls in it as the function it ends up in does, so
     there is a copy for each way of doing both."""
@@ -1980,15 +2125,25 @@ def _request_inline(self, defn, fuse, caller):
     if base in self.inline_active:
         return self.inline_active[base]  # recursion: the copy being translated
     asm = caller.asm
+
+    def holds(key, value):
+        if isinstance(key, tuple):
+            return (key[1] in reg_ptrs) == value
+        return (asm is not None and asm.get(key, 0) == 0) == value
+
+    def inherit(decisions):
+        # The caller depends on the same inlining; pointer bindings are this call's own.
+        caller.decisions.update((k, v) for k, v in decisions.items() if not isinstance(k, tuple))
+
     variants = self.inline_variants.setdefault(base, [])
     for rname, decisions in variants:
-        if all((asm is not None and asm.get(n, 0) == 0) == d for n, d in decisions.items()):
-            caller.decisions.update(decisions)
+        if all(holds(k, v) for k, v in decisions.items()):
+            inherit(decisions)
             return rname
     rname = base if not variants else f"{base}_{len(variants) + 1}"
     self.inline_active[base] = rname
     try:
-        tr = Translator(self, defn, fuse, inline=True, asm=asm)
+        tr = Translator(self, defn, fuse, inline=True, asm=asm, reg_ptrs=reg_ptrs)
         code = tr.function()
     except Unsupported as e:
         raise Unsupported(f"inline {name}: {e}")
@@ -1996,7 +2151,7 @@ def _request_inline(self, defn, fuse, caller):
         del self.inline_active[base]
     self.inlines[rname] = code.replace(f"pub fn {ident(name)}<'a>", f"fn {rname}<'a>", 1)
     variants.append((rname, tr.decisions))
-    caller.decisions.update(tr.decisions)
+    inherit(tr.decisions)
     return rname
 
 

@@ -662,12 +662,12 @@ pub fn ftCo_8008E5A4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         let mut kb_x: f64 = (fp).x8c_kb_vel().x();
         let mut kb_y: f64 = (fp).x8c_kb_vel().y();
         let mut kb_vel_x_neg: f64 = fp::fneg(kb_x);
-        let mut kb_mag: f64 = fp::fmadds(kb_y, kb_y, fp::fmuls(kb_vel_x_neg, kb_vel_x_neg));
+        let mut kb_mag: f64 = fp::fmadds(kb_vel_x_neg, kb_vel_x_neg, fp::fmuls(kb_y, kb_y));
         if !(kb_mag < 9.999999747378752e-06_f64) {
             let mut f3: f64 = fp::fmadds(
-                kb_vel_x_neg,
-                (fp).input().lstick().get(0_i32).y(),
-                fp::fmuls(kb_y, (fp).input().lstick().get(0_i32).x()),
+                kb_y,
+                (fp).input().lstick().get(0_i32).x(),
+                fp::fmuls(kb_vel_x_neg, (fp).input().lstick().get(0_i32).y()),
             );
             let mut f30: f64 = fp::fdivs(fp::fmuls(f3, f3), kb_mag);
             lstick_vec3.set_x((fp).input().lstick().get(0_i32).x());
@@ -683,7 +683,7 @@ pub fn ftCo_8008E5A4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             {
                 let mut angle: f64 = fns::atan2f(ctx, kb_y, kb_x);
                 let mut scale: f64 = 0.0;
-                kb_mag = inl_sqrtf(ctx, fp::fadds(fp::fmuls(kb_x, kb_x), fp::fmuls(kb_y, kb_y)));
+                kb_mag = inl_sqrtf(ctx, fp::fmadds(kb_x, kb_x, fp::fmuls(kb_y, kb_y)));
                 scale = (fp::fmuls(
                     ((fns::p_ftCommonData(ctx).get()).x1A8()),
                     0.01745329238474369,
@@ -704,11 +704,11 @@ pub fn ftCo_Damage_OnExitHitlag<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut isPointInCircle: i32 = 0;
     if (fp::fmadds(
-        ((fp).input().lstick().get(0_i32).y()),
-        ((fp).input().lstick().get(0_i32).y()),
+        ((fp).input().lstick().get(0_i32).x()),
+        ((fp).input().lstick().get(0_i32).x()),
         (fp::fmuls(
-            ((fp).input().lstick().get(0_i32).x()),
-            ((fp).input().lstick().get(0_i32).x()),
+            ((fp).input().lstick().get(0_i32).y()),
+            ((fp).input().lstick().get(0_i32).y()),
         )),
     )) >= (fp::fmuls(
         ((fns::p_ftCommonData(ctx).get()).sdi_min_stick_mag()),
@@ -753,7 +753,7 @@ pub fn ftCo_Damage_OnExitHitlag<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         if (kb_x != 0.0) || (kb_y != 0.0) {
             let mut kb_angle: f64 = fns::atan2f(ctx, kb_y, kb_x);
             let mut scaled_kb_mag: f64 = fp::fmuls(
-                inl_sqrtf(ctx, fp::fadds(fp::fmuls(kb_x, kb_x), fp::fmuls(kb_y, kb_y))),
+                inl_sqrtf(ctx, fp::fmadds(kb_x, kb_x, fp::fmuls(kb_y, kb_y))),
                 (fns::p_ftCommonData(ctx).get()).x1AC(),
             );
             (fp).x8c_kb_vel()
@@ -980,7 +980,7 @@ pub fn ftCo_Damage_SetMv8FromKbThreshold<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut fp = fp;
     let mut kb_vel: f64 = (if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
-        inl_sqrtf_unfused(
+        fns::sqrtf(
             ctx,
             (fp::fadds(
                 fp::fadds(
@@ -1254,7 +1254,7 @@ fn inl_calcAngle<'a>(ctx: &'a Ctx, angle: f64) -> f64 {
     let mut sm: f64 = (fp::fdivs(3.1415927410125732, 2.0));
     let mut x: f64 = fp::fadds(ca, cm);
     let mut y: f64 = fp::fadds(fns::sinf(ctx, angle), fns::sinf(ctx, sm));
-    if fp::fmadds(y, y, fp::fmuls(x, x)) <= 9.999999747378752e-05_f64 {
+    if fp::fmadds(x, x, fp::fmuls(y, y)) <= 9.999999747378752e-05_f64 {
         return fp::frsp(0_i32 as f64);
     }
     return fns::atan2f(ctx, y, x);
@@ -1501,29 +1501,6 @@ fn inl_inlineC0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     }
     #[allow(unreachable_code)]
     return 0;
-}
-
-fn inl_sqrtf_unfused<'a>(ctx: &'a Ctx, x: f64) -> f64 {
-    let mut x = x;
-    let mut y: f64 = 0.0;
-    if x > 0.0 {
-        let mut guess: f64 = fp::frsqrte(x);
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
-        );
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
-        );
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
-        );
-        y = fp::frsp((fp::fmul(x, guess)));
-        return y;
-    }
-    return x;
 }
 
 fn inl_inlineD0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

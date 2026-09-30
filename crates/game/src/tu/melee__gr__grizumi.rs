@@ -603,7 +603,7 @@ pub fn grIzumi_801CC358<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             if f_4 < 0.009999999776482582 {
                 f_4 = 0.009999999776482582;
             }
-            inl_HSD_JObjSetScaleX(ctx, jobj2, fp::fadds(fp::fmuls(0.5, f_4), 0.5));
+            inl_HSD_JObjSetScaleX(ctx, jobj2, fp::fmadds(0.5, f_4, 0.5));
             inl_HSD_JObjSetScaleY(ctx, jobj2, f_4);
             inl_HSD_JObjSetTranslateY(ctx, (gp).u().izumi3().xCC(), (gp).u().izumi3().xD0());
         }

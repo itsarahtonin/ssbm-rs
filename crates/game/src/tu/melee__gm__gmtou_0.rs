@@ -1555,7 +1555,7 @@ pub fn fn_80192BB0<'a>(ctx: &'a Ctx) {
                 inl_HSD_JObjSetTranslateY(
                     ctx,
                     jobj,
-                    fp::fneg((fp::fsubs((fp::fmuls(3.5, fp::frsp(i as f64))), 11.5))),
+                    fp::fneg((fp::fmsubs(3.5, fp::frsp(i as f64), 11.5))),
                 );
                 gobj = fns::fn_8019035C(
                     ctx,
@@ -1577,7 +1577,7 @@ pub fn fn_80192BB0<'a>(ctx: &'a Ctx) {
                 inl_HSD_JObjSetTranslateY(
                     ctx,
                     jobj,
-                    fp::fneg((fp::fsubs((fp::fmuls(3.5, fp::frsp(i as f64))), 11.5))),
+                    fp::fneg((fp::fmsubs(3.5, fp::frsp(i as f64), 11.5))),
                 );
                 gobj = fns::fn_8019035C(
                     ctx,
@@ -1599,7 +1599,7 @@ pub fn fn_80192BB0<'a>(ctx: &'a Ctx) {
                 inl_HSD_JObjSetTranslateY(
                     ctx,
                     jobj,
-                    fp::fneg((fp::fsubs((fp::fmuls(3.5, fp::frsp(i as f64))), 11.5))),
+                    fp::fneg((fp::fmsubs(3.5, fp::frsp(i as f64), 11.5))),
                 );
             }
             i = i.wrapping_add(1);

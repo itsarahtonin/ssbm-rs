@@ -2039,11 +2039,11 @@ pub fn fn_801D8134<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<'a>) -> 
             (fp::fsubs(pos_gnd.z(), pos_ft.z())),
             (fp::fsubs(pos_gnd.z(), pos_ft.z())),
             fp::fmadds(
-                (fp::fsubs(pos_gnd.y(), pos_ft.y())),
-                (fp::fsubs(pos_gnd.y(), pos_ft.y())),
+                (fp::fsubs(pos_gnd.x(), pos_ft.x())),
+                (fp::fsubs(pos_gnd.x(), pos_ft.x())),
                 fp::fmuls(
-                    (fp::fsubs(pos_gnd.x(), pos_ft.x())),
-                    (fp::fsubs(pos_gnd.x(), pos_ft.x())),
+                    (fp::fsubs(pos_gnd.y(), pos_ft.y())),
+                    (fp::fsubs(pos_gnd.y(), pos_ft.y())),
                 ),
             ),
         ) < fp::fmuls(

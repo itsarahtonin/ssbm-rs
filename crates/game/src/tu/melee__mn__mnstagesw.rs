@@ -304,8 +304,9 @@ pub fn mnStageSw_80236178<'a>(ctx: &'a Ctx, data: MnStageSwData<'a>, idx: u8) {
         inl_HSD_JObjSetTranslateY(
             ctx,
             jobj,
-            fp::fadds(
-                fp::fmuls(delta, fp::frsp(idx as f64)),
+            fp::fmadds(
+                delta,
+                fp::frsp(idx as f64),
                 inl_HSD_JObjGetTranslationY(ctx, (data).x2C()),
             ),
         );
@@ -315,8 +316,9 @@ pub fn mnStageSw_80236178<'a>(ctx: &'a Ctx, data: MnStageSwData<'a>, idx: u8) {
         inl_HSD_JObjSetTranslateY(
             ctx,
             jobj,
-            fp::fadds(
-                fp::fmuls(delta, fp::frsp(((idx as i32).wrapping_sub(15_i32)) as f64)),
+            fp::fmadds(
+                delta,
+                fp::frsp(((idx as i32).wrapping_sub(15_i32)) as f64),
                 inl_HSD_JObjGetTranslationY(ctx, (data).x2C()),
             ),
         );
@@ -417,8 +419,9 @@ pub fn mnStageSw_80236548<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: u8, arg2: 
             inl_HSD_JObjSetTranslateY(
                 ctx,
                 cursor_jobj,
-                fp::fadds(
-                    fp::fmuls(delta_y, fp::frsp(sel as f64)),
+                fp::fmadds(
+                    delta_y,
+                    fp::frsp(sel as f64),
                     inl_HSD_JObjGetTranslationY(ctx, (data).x2C()),
                 ),
             );
@@ -428,11 +431,9 @@ pub fn mnStageSw_80236548<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: u8, arg2: 
             inl_HSD_JObjSetTranslateY(
                 ctx,
                 cursor_jobj,
-                fp::fadds(
-                    fp::fmuls(
-                        delta_y,
-                        fp::frsp(((sel as i32).wrapping_sub(15_i32)) as f64),
-                    ),
+                fp::fmadds(
+                    delta_y,
+                    fp::frsp(((sel as i32).wrapping_sub(15_i32)) as f64),
                     inl_HSD_JObjGetTranslationY(ctx, (data).x2C()),
                 ),
             );
@@ -1166,8 +1167,9 @@ fn inl_mnStageSw_SetCursorPosition<'a>(ctx: &'a Ctx, user_data: MnStageSwData<'a
         inl_HSD_JObjSetTranslateY(
             ctx,
             cursor,
-            fp::fadds(
-                fp::fmuls(y_spacing, fp::frsp(hovered as f64)),
+            fp::fmadds(
+                y_spacing,
+                fp::frsp(hovered as f64),
                 inl_HSD_JObjGetTranslationY(ctx, (user_data).x2C()),
             ),
         );
@@ -1180,11 +1182,9 @@ fn inl_mnStageSw_SetCursorPosition<'a>(ctx: &'a Ctx, user_data: MnStageSwData<'a
         inl_HSD_JObjSetTranslateY(
             ctx,
             cursor,
-            fp::fadds(
-                fp::fmuls(
-                    y_spacing,
-                    fp::frsp(((hovered as i32).wrapping_sub(15_i32)) as f64),
-                ),
+            fp::fmadds(
+                y_spacing,
+                fp::frsp(((hovered as i32).wrapping_sub(15_i32)) as f64),
                 inl_HSD_JObjGetTranslationY(ctx, (user_data).x2C()),
             ),
         );

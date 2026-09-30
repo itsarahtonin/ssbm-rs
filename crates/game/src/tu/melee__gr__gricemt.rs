@@ -923,16 +923,19 @@ pub fn stageGObj10_GObjProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 (gp).u().icemt10().x0().state().cur(),
                 (statics::melee__gr__gricemt::yakumono_param(ctx).get()).xA0(),
             );
-            if fp::fnmsubs(
+            if fp::fmsubs(
+                (gp).u().icemt10().x0().state().cur(),
                 ratio,
                 (fp::fmuls(
-                    fp::fmuls(
-                        0.5,
-                        (statics::melee__gr__gricemt::yakumono_param(ctx).get()).xA0(),
-                    ),
                     ratio,
+                    (fp::fmuls(
+                        fp::fmuls(
+                            0.5,
+                            (statics::melee__gr__gricemt::yakumono_param(ctx).get()).xA0(),
+                        ),
+                        ratio,
+                    )),
                 )),
-                fp::fmuls((gp).u().icemt10().x0().state().cur(), ratio),
             ) > dist
             {
                 (gp).u().icemt10().x0().state().set_cur(fp::fsubs(
@@ -2887,7 +2890,7 @@ pub fn grIceMt_801FA0BC<'a>(ctx: &'a Ctx, ids: grIceMt_GObj9_GObj10_UnderUpperId
         inl_HSD_JObjSetTranslateY(
             ctx,
             jobj,
-            fp::fadds(fp::fmuls(fp::fneg(20.0), fns::Ground_801C0498(ctx)), frame),
+            fp::fmadds(fp::fneg(20.0), fns::Ground_801C0498(ctx), frame),
         );
         let _ = fns::Ground_801C3214(ctx, ((ids).under() as i32));
         let _ = fns::Ground_UpdateMapColl(ctx, mgobj);

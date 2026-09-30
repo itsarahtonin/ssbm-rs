@@ -518,17 +518,19 @@ pub fn ftCo_800925A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                 }),
             );
         }
-        (fp).set_shield_health(fp::fnmsubs(
-            (fns::p_ftCommonData(ctx).get()).x278(),
-            (fp::fmadds(
-                (fp).lightshield_amount(),
-                (fp::fsubs(
-                    (fns::p_ftCommonData(ctx).get()).x2F0(),
+        (fp).set_shield_health(fp::fsubs(
+            (fp).shield_health(),
+            fp::fmuls(
+                (fns::p_ftCommonData(ctx).get()).x278(),
+                (fp::fmadds(
+                    (fp).lightshield_amount(),
+                    (fp::fsubs(
+                        (fns::p_ftCommonData(ctx).get()).x2F0(),
+                        (fns::p_ftCommonData(ctx).get()).x2EC(),
+                    )),
                     (fns::p_ftCommonData(ctx).get()).x2EC(),
                 )),
-                (fns::p_ftCommonData(ctx).get()).x2EC(),
-            )),
-            (fp).shield_health(),
+            ),
         ));
         if (fp).shield_health() < fp::frsp(0_i32 as f64) {
             (fp).set_shield_health(fp::frsp(0_i32 as f64));

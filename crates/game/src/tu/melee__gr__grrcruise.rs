@@ -1083,7 +1083,7 @@ pub fn grRCruise_80200578<'a>(
         fns::lb_8000B1CC(ctx, jobj, null::<Vec<'a>>(ctx), pos);
         dx = fp::fsubs(pos.x(), (coll).cur_pos().x());
         dy = fp::fsubs(pos.y(), (coll).cur_pos().y());
-        dist = inl_sqrtf(ctx, fp::fadds(fp::fmuls(dy, dy), fp::fmuls(dx, dx)));
+        dist = inl_sqrtf(ctx, fp::fmadds(dy, dy, fp::fmuls(dx, dx)));
         if dist > 4.0 {
             if pos.x() < (coll).cur_pos().x() {
                 (gp).u().rcruise().set_x24(fp::fmadds(

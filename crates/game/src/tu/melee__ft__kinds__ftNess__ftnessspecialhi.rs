@@ -611,7 +611,7 @@ pub fn ftNs_SpecialHi_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             0.0,
             null::<HSD_GObj<'a>>(ctx),
         );
-        fns::ftNs_SpecialHiStopGFX(ctx, gobj);
+        inl_ftNs_SpecialHiStopGFX_unfused(ctx, gobj);
     }
 }
 
@@ -1420,7 +1420,7 @@ pub fn ftNs_SpecialAirHi_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             (fp).self_vel().set_z(0.0);
             (fp).self_vel().set_y(0.0);
             (fp).self_vel().set_x(0.0);
-            fns::ftNs_SpecialHiStopGFX(ctx, gobj);
+            inl_ftNs_SpecialHiStopGFX_unfused(ctx, gobj);
             fns::ftPartSetRotX(ctx, fp, 0_i32, fp::frsp(0_i32 as f64));
             fns::ftCo_80097D40(ctx, gobj);
             return;
@@ -1748,37 +1748,11 @@ fn inl_getFtSpecialAttrs2<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> {
     return (fp).dat_attrs();
 }
 
-fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
-    let mut x = x;
-    let mut y: f64 = 0.0;
-    if x > 0.0 {
-        let mut guess: f64 = fp::frsqrte(x);
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
-        );
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
-        );
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
-        );
-        y = fp::frsp((fp::fmul(x, guess)));
-        return y;
-    }
-    return x;
-}
-
 fn inl_lbVector_Len_xy<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
     let mut vec = vec;
-    return inl_sqrtf(
+    return fns::sqrtf(
         ctx,
-        fp::fadds(
-            fp::fmuls((vec).x(), (vec).x()),
-            fp::fmuls((vec).y(), (vec).y()),
-        ),
+        fp::fmadds((vec).x(), (vec).x(), fp::fmuls((vec).y(), (vec).y())),
     );
 }
 

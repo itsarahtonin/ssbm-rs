@@ -595,7 +595,7 @@ pub fn stageGObj2_GObjProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                     (fp::fmuls(
                         (statics::melee__gr__groldkongo::yakumono_param(ctx).get())
                             .rrange_bird_random_offset_y(),
-                        (fp::fsubs((fp::fmuls(2.0, ({ fns::HSD_Randf(ctx) }))), 1.0)),
+                        (fp::fmsubs(2.0, ({ fns::HSD_Randf(ctx) }), 1.0)),
                     )),
                     70.0,
                 ),

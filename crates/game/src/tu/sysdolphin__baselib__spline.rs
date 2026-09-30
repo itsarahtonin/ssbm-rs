@@ -60,9 +60,9 @@ pub fn splGetHelmite<'a>(
             d0,
             (fp::fadds(time, (fp::fsubs((fp::fsubs(t3_T2, t2_T)), t2_T)))),
             (fp::fmadds(
-                p1,
-                (fp::fadds(fp::fneg(_2t3_T3), _3t2_T2)),
-                (fp::fmuls(p0, (fp::fadds(1.0, (fp::fsubs(_2t3_T3, _3t2_T2)))))),
+                p0,
+                (fp::fadds(1.0, (fp::fsubs(_2t3_T3, _3t2_T2)))),
+                (fp::fmuls(p1, (fp::fadds(fp::fneg(_2t3_T3), _3t2_T2)))),
             )),
         )),
     );
@@ -199,9 +199,9 @@ fn inl_splGetBezierPoint<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, u: f64) {
             (Handle::add(cp, 2_i32)).x(),
             bez2,
             fp::fmadds(
-                (Handle::add(cp, 1_i32)).x(),
-                bez1,
-                (fp::fmuls((Handle::add(cp, 0_i32)).x(), bez0)),
+                (Handle::add(cp, 0_i32)).x(),
+                bez0,
+                (fp::fmuls((Handle::add(cp, 1_i32)).x(), bez1)),
             ),
         ),
     ));
@@ -212,9 +212,9 @@ fn inl_splGetBezierPoint<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, u: f64) {
             (Handle::add(cp, 2_i32)).y(),
             bez2,
             fp::fmadds(
-                (Handle::add(cp, 1_i32)).y(),
-                bez1,
-                (fp::fmuls((Handle::add(cp, 0_i32)).y(), bez0)),
+                (Handle::add(cp, 0_i32)).y(),
+                bez0,
+                (fp::fmuls((Handle::add(cp, 1_i32)).y(), bez1)),
             ),
         ),
     ));
@@ -225,9 +225,9 @@ fn inl_splGetBezierPoint<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, u: f64) {
             (Handle::add(cp, 2_i32)).z(),
             bez2,
             fp::fmadds(
-                (Handle::add(cp, 1_i32)).z(),
-                bez1,
-                (fp::fmuls((Handle::add(cp, 0_i32)).z(), bez0)),
+                (Handle::add(cp, 0_i32)).z(),
+                bez0,
+                (fp::fmuls((Handle::add(cp, 1_i32)).z(), bez1)),
             ),
         ),
     ));
@@ -244,7 +244,7 @@ fn inl_splGetBSplinePoint<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, u: f64) {
     let mut b0: f64 = fp::fmuls(fp::fmuls(fp::fmuls(k1_6, u_1), u_1), u_1);
     let mut b1: f64 = fp::fmuls(
         k1_6,
-        (fp::fadds(4.0, (fp::fnmsubs(6.0, u2, fp::fmuls(3.0, u3))))),
+        (fp::fadds(4.0, (fp::fmsubs(3.0, u3, fp::fmuls(6.0, u2))))),
     );
     let mut b2: f64 = fp::fmuls(
         k1_6,
@@ -258,9 +258,9 @@ fn inl_splGetBSplinePoint<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, u: f64) {
             (Handle::add(cp, 2_i32)).x(),
             b2,
             fp::fmadds(
-                (Handle::add(cp, 1_i32)).x(),
-                b1,
-                (fp::fmuls((Handle::add(cp, 0_i32)).x(), b0)),
+                (Handle::add(cp, 0_i32)).x(),
+                b0,
+                (fp::fmuls((Handle::add(cp, 1_i32)).x(), b1)),
             ),
         ),
     ));
@@ -271,9 +271,9 @@ fn inl_splGetBSplinePoint<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, u: f64) {
             (Handle::add(cp, 2_i32)).y(),
             b2,
             fp::fmadds(
-                (Handle::add(cp, 1_i32)).y(),
-                b1,
-                (fp::fmuls((Handle::add(cp, 0_i32)).y(), b0)),
+                (Handle::add(cp, 0_i32)).y(),
+                b0,
+                (fp::fmuls((Handle::add(cp, 1_i32)).y(), b1)),
             ),
         ),
     ));
@@ -284,9 +284,9 @@ fn inl_splGetBSplinePoint<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, u: f64) {
             (Handle::add(cp, 2_i32)).z(),
             b2,
             fp::fmadds(
-                (Handle::add(cp, 1_i32)).z(),
-                b1,
-                (fp::fmuls((Handle::add(cp, 0_i32)).z(), b0)),
+                (Handle::add(cp, 0_i32)).z(),
+                b0,
+                (fp::fmuls((Handle::add(cp, 1_i32)).z(), b1)),
             ),
         ),
     ));
@@ -302,9 +302,9 @@ fn inl_splGetCardinalPoint<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, tension: f
     let mut car0: f64 = fp::fmuls(tension, (fp::fsubs(fp::fmadds(2.0, u2, fp::fneg(u3)), u)));
     let mut car1: f64 = fp::fadds(
         fp::fmadds(
-            (fp::fsubs(tension, 3.0)),
-            u2,
-            (fp::fmuls((fp::fsubs(2.0, tension)), u3)),
+            (fp::fsubs(2.0, tension)),
+            u3,
+            (fp::fmuls((fp::fsubs(tension, 3.0)), u2)),
         ),
         1.0,
     );
@@ -312,9 +312,9 @@ fn inl_splGetCardinalPoint<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, tension: f
         tension,
         u,
         fp::fmadds(
-            (fp::fnmsubs(2.0, tension, 3.0)),
-            u2,
-            (fp::fmuls((fp::fsubs(tension, 2.0)), u3)),
+            (fp::fsubs(tension, 2.0)),
+            u3,
+            (fp::fmuls((fp::fnmsubs(2.0, tension, 3.0)), u2)),
         ),
     );
     let mut car3: f64 = fp::fmuls(tension, (fp::fsubs(u3, u2)));
@@ -325,9 +325,9 @@ fn inl_splGetCardinalPoint<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, tension: f
             (Handle::add(cp, 2_i32)).x(),
             car2,
             fp::fmadds(
-                (Handle::add(cp, 1_i32)).x(),
-                car1,
-                (fp::fmuls((Handle::add(cp, 0_i32)).x(), car0)),
+                (Handle::add(cp, 0_i32)).x(),
+                car0,
+                (fp::fmuls((Handle::add(cp, 1_i32)).x(), car1)),
             ),
         ),
     ));
@@ -338,9 +338,9 @@ fn inl_splGetCardinalPoint<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, tension: f
             (Handle::add(cp, 2_i32)).y(),
             car2,
             fp::fmadds(
-                (Handle::add(cp, 1_i32)).y(),
-                car1,
-                (fp::fmuls((Handle::add(cp, 0_i32)).y(), car0)),
+                (Handle::add(cp, 0_i32)).y(),
+                car0,
+                (fp::fmuls((Handle::add(cp, 1_i32)).y(), car1)),
             ),
         ),
     ));
@@ -351,9 +351,9 @@ fn inl_splGetCardinalPoint<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, tension: f
             (Handle::add(cp, 2_i32)).z(),
             car2,
             fp::fmadds(
-                (Handle::add(cp, 1_i32)).z(),
-                car1,
-                (fp::fmuls((Handle::add(cp, 0_i32)).z(), car0)),
+                (Handle::add(cp, 0_i32)).z(),
+                car0,
+                (fp::fmuls((Handle::add(cp, 1_i32)).z(), car1)),
             ),
         ),
     ));

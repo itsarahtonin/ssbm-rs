@@ -281,10 +281,7 @@ pub fn mnCharSel_8025D1C4<'a>(ctx: &'a Ctx, port: i32, mode: i32) {
                 ctx,
                 sp10.get(),
                 fp::fsubs(
-                    fp::fadds(
-                        fp::fmuls(0.8999999761581421, fp::frsp(star_count as f64)),
-                        star_x,
-                    ),
+                    fp::fmadds(0.8999999761581421, fp::frsp(star_count as f64), star_x),
                     4.5,
                 ),
             );
@@ -2962,7 +2959,7 @@ pub fn fn_80262648<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                                                 break 'l7;
                                             }
                                         }
-                                        if (fp::fmadds(dy, dy, fp::fmuls(dx, dx))) < 8.0 {
+                                        if (fp::fmadds(dx, dx, fp::fmuls(dy, dy))) < 8.0 {
                                             if (dy < 0.009999999776482582)
                                                 && (dy > fp::fneg(0.009999999776482582))
                                             {
@@ -3204,7 +3201,7 @@ pub fn fn_80262648<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             }),
         );
         dy_2 = fp::fsubs((model).x14(), (model).xC());
-        if (fp::fmadds(dy_2, dy_2, fp::fmuls(dx_2, dx_2))) < 4.0 {
+        if (fp::fmadds(dx_2, dx_2, fp::fmuls(dy_2, dy_2))) < 4.0 {
             (model).set_x10(tx);
             (model).set_x14((model).xC());
         } else {

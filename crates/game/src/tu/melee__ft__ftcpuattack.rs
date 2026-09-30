@@ -3050,7 +3050,7 @@ pub fn ftCo_800BA9A0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         return;
     }
     if temp_r3 == 178_i32 {
-        fns::ftCo_800B9F90(ctx, fp);
+        inl_ftCo_800B9F90_unfused(ctx, fp);
         return;
     }
     temp_r4 = ((temp_r5).xF8_b12() as u32);
@@ -3091,17 +3091,17 @@ pub fn ftCo_800BA9A0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                 if fns::HSD_Randf(ctx) > 0.5 {
                     inl_ftCo_CpuFireBlaster_unfused(ctx, fp);
                 } else {
-                    fns::ftCo_800B9F90(ctx, fp);
+                    inl_ftCo_800B9F90_unfused(ctx, fp);
                 }
             } else {
-                fns::ftCo_800B9F90(ctx, fp);
+                inl_ftCo_800B9F90_unfused(ctx, fp);
             }
         }
     } else {
         if temp_r4 == (3_i32 as u32) {
             inl_ftCo_800BA080_dontinline_unfused(ctx, fp);
         } else if Handle::is_null((temp_r5).xF0()) {
-            fns::ftCo_800B9F90(ctx, fp);
+            inl_ftCo_800B9F90_unfused(ctx, fp);
         } else {
             inl_inline2_unfused(ctx, fp, (temp_r5).xF0());
         }
@@ -4023,6 +4023,33 @@ fn inl_ftCo_CpuIsSpotDodge_unfused<'a>(ctx: &'a Ctx, id: i32) -> i32 {
         return 1_i32;
     }
     return 0_i32;
+}
+
+fn inl_ftCo_800B9F90_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
+    let mut fp = fp;
+    let mut cpu: CpuFighter<'a> = (fp).cpu();
+    let mut temp_r31: i32 = 0;
+    if (fp).motion_id() == (enums::ftCo_MS_Guard as i32) {
+        temp_r31 = 9_i32.wrapping_sub((cpu).level());
+        inl_ftCo_CpuSetNeutralStick_unfused(ctx, fp);
+        fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_PressR as i32) as u8));
+        if temp_r31 != 0_i32 {
+            fns::ftCo_800B46B8(
+                ctx,
+                fp,
+                ((enums::CpuCmd_WaitFor as i32) as u8),
+                (temp_r31.wrapping_mul(
+                    (fp::fctiwz((fp::fmuls(fp::frsp(4_i32 as f64), fns::HSD_Randf(ctx))))
+                        .wrapping_add(4_i32)),
+                ) as u8),
+            );
+        }
+        fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_Done as i32) as u8));
+    } else {
+        inl_ftCo_CpuSetNeutralStick_unfused(ctx, fp);
+        fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_PressR as i32) as u8));
+        fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_Done as i32) as u8));
+    }
 }
 
 fn inl_ftCo_CpuFireBlaster_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {

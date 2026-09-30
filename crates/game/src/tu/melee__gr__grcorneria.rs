@@ -2629,9 +2629,9 @@ pub fn grCorneria_801E2228<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 (gp).u().corneria().xD0(),
                 (fp::fmsubs(50.0, fns::Ground_801C0498(ctx), 250.0)),
             )) > (fp::fmadds(
-                fp::fmuls(fp::fneg(0.0024999999441206455), t),
+                speed,
                 t,
-                fp::fmuls(speed, t),
+                fp::fmuls(fp::fmuls(fp::fneg(0.0024999999441206455), t), t),
             )) {
                 (gp).u()
                     .corneria()
@@ -2661,9 +2661,9 @@ pub fn grCorneria_801E2228<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             let mut t_2: f64 = fp::fdivs(speed_2, 0.004999999888241291);
             if fp::fneg((gp).u().corneria().xD0())
                 > (fp::fmadds(
-                    fp::fmuls(fp::fneg(0.0024999999441206455), t_2),
+                    speed_2,
                     t_2,
-                    fp::fmuls(speed_2, t_2),
+                    fp::fmuls(fp::fmuls(fp::fneg(0.0024999999441206455), t_2), t_2),
                 ))
             {
                 t_2 = 0.004999999888241291;

@@ -119,7 +119,7 @@ pub fn lbVector_Angle<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>) -> f64 {
             (fp::fmadds(
                 (a).z(),
                 (b).z(),
-                fp::fmadds((a).y(), (b).y(), fp::fmuls((a).x(), (b).x())),
+                fp::fmadds((a).x(), (b).x(), fp::fmuls((a).y(), (b).y())),
             )),
             lena_lenb,
         );
@@ -144,7 +144,7 @@ pub fn lbVector_AngleXY<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>) -> f64 {
     );
     if (lena_lenb != 0.0) {
         let mut cosine: f64 = fp::fdivs(
-            (fp::fmadds((a).y(), (b).y(), fp::fmuls((a).x(), (b).x()))),
+            (fp::fmadds((a).x(), (b).x(), fp::fmuls((a).y(), (b).y()))),
             lena_lenb,
         );
         if cosine > 1.0 {
@@ -185,27 +185,27 @@ pub fn lbVector_RotateAboutUnitAxis<'a>(ctx: &'a Ctx, v: Vec<'a>, axis: Vec<'a>,
         unit_axis_yz_y = fp::fdivs((axis).z(), len_axis_yz);
         unit_axis_yz_z = fp::fdivs((axis).y(), len_axis_yz);
         x = (v).x();
-        y = fp::fnmsubs((v).z(), unit_axis_yz_z, fp::fmuls((v).y(), unit_axis_yz_y));
-        z = fp::fmadds((v).z(), unit_axis_yz_y, fp::fmuls((v).y(), unit_axis_yz_z));
+        y = fp::fmsubs((v).y(), unit_axis_yz_y, fp::fmuls((v).z(), unit_axis_yz_z));
+        z = fp::fmadds((v).y(), unit_axis_yz_z, fp::fmuls((v).z(), unit_axis_yz_y));
     } else {
         x = (v).x();
         y = (v).y();
         z = (v).z();
     }
-    x2 = fp::fnmsubs(z, (axis).x(), fp::fmuls(x, len_axis_yz));
-    z2 = fp::fmadds(z, len_axis_yz, fp::fmuls(x, (axis).x()));
-    x3 = fp::fnmsubs(y, s, fp::fmuls(x2, c));
-    y3 = fp::fmadds(y, c, fp::fmuls(x2, s));
-    x = fp::fmadds(z2, (axis).x(), fp::fmuls(x3, len_axis_yz));
+    x2 = fp::fmsubs(x, len_axis_yz, fp::fmuls(z, (axis).x()));
+    z2 = fp::fmadds(x, (axis).x(), fp::fmuls(z, len_axis_yz));
+    x3 = fp::fmsubs(x2, c, fp::fmuls(y, s));
+    y3 = fp::fmadds(x2, s, fp::fmuls(y, c));
+    x = fp::fmadds(x3, len_axis_yz, fp::fmuls(z2, (axis).x()));
     y = y3;
-    z = fp::fmadds(z2, len_axis_yz, fp::fmuls(fp::fneg(x3), (axis).x()));
+    z = fp::fmadds(fp::fneg(x3), (axis).x(), fp::fmuls(z2, len_axis_yz));
     if len_axis_yz > 1.000000013351432e-10_f64 {
         (v).set_x(x);
-        (v).set_y(fp::fmadds(z, unit_axis_yz_z, fp::fmuls(y, unit_axis_yz_y)));
+        (v).set_y(fp::fmadds(y, unit_axis_yz_y, fp::fmuls(z, unit_axis_yz_z)));
         (v).set_z(fp::fmadds(
-            z,
-            unit_axis_yz_y,
-            fp::fmuls(fp::fneg(y), unit_axis_yz_z),
+            fp::fneg(y),
+            unit_axis_yz_z,
+            fp::fmuls(z, unit_axis_yz_y),
         ));
     } else {
         (v).set_x(x);
@@ -232,19 +232,19 @@ pub fn lbVector_Rotate<'a>(ctx: &'a Ctx, v: Vec<'a>, axis: i32, angle: f64) {
         };
         if __case <= 0 {
             x = (v).x();
-            y = fp::fnmsubs((v).z(), s, fp::fmuls((v).y(), c));
-            z = fp::fmadds((v).z(), c, fp::fmuls((v).y(), s));
+            y = fp::fmsubs((v).y(), c, fp::fmuls((v).z(), s));
+            z = fp::fmadds((v).y(), s, fp::fmuls((v).z(), c));
             break 's1;
         }
         if __case <= 1 {
-            x = fp::fmadds((v).z(), s, fp::fmuls((v).x(), c));
+            x = fp::fmadds((v).x(), c, fp::fmuls((v).z(), s));
             y = (v).y();
-            z = fp::fnmsubs((v).x(), s, fp::fmuls((v).z(), c));
+            z = fp::fmsubs((v).z(), c, fp::fmuls((v).x(), s));
             break 's1;
         }
         if __case <= 2 {
-            x = fp::fnmsubs((v).y(), s, fp::fmuls((v).x(), c));
-            y = fp::fmadds((v).y(), c, fp::fmuls((v).x(), s));
+            x = fp::fmsubs((v).x(), c, fp::fmuls((v).y(), s));
+            y = fp::fmadds((v).x(), s, fp::fmuls((v).y(), c));
             z = (v).z();
             break 's1;
         }
@@ -259,9 +259,9 @@ pub fn lbVector_Mirror<'a>(ctx: &'a Ctx, a: Vec<'a>, unit_mirror_axis: Vec<'a>) 
     let mut unit_mirror_axis = unit_mirror_axis;
     let mut f: f64 = fp::fmuls(
         (fp::fmadds(
-            (unit_mirror_axis).y(),
-            (a).y(),
-            fp::fmuls((unit_mirror_axis).x(), (a).x()),
+            (unit_mirror_axis).x(),
+            (a).x(),
+            fp::fmuls((unit_mirror_axis).y(), (a).y()),
         )),
         fp::fneg(2.0),
     );
@@ -274,7 +274,7 @@ pub fn lbVector_CosAngle<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>) -> f64 {
     let mut a = a;
     let mut b = b;
     return fp::fdivs(
-        (fp::fmadds((a).y(), (b).y(), fp::fmuls((a).x(), (b).x()))),
+        (fp::fmadds((a).x(), (b).x(), fp::fmuls((a).y(), (b).y()))),
         (fp::fmuls(
             inl_sqrtf(
                 ctx,
@@ -501,9 +501,9 @@ pub fn lbVector_WorldToScreen<'a>(
             (Handle::add(mvMtx, 2_i32)).at(2_i32).get(),
             (pos3d).z(),
             fp::fmadds(
-                (Handle::add(mvMtx, 2_i32)).at(1_i32).get(),
-                (pos3d).y(),
-                fp::fmuls((Handle::add(mvMtx, 2_i32)).at(0_i32).get(), (pos3d).x()),
+                (Handle::add(mvMtx, 2_i32)).at(0_i32).get(),
+                (pos3d).x(),
+                fp::fmuls((Handle::add(mvMtx, 2_i32)).at(1_i32).get(), (pos3d).y()),
             ),
         ),
         (Handle::add(mvMtx, 2_i32)).at(3_i32).get(),
@@ -556,7 +556,7 @@ pub fn lbVector_8000E838<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>, c: Vec<'a>, d
     sqrlen_b_a = fp::fmadds(
         b_a.z(),
         b_a.z(),
-        fp::fmadds(b_a.y(), b_a.y(), fp::fmuls(b_a.x(), b_a.x())),
+        fp::fmadds(b_a.x(), b_a.x(), fp::fmuls(b_a.y(), b_a.y())),
     );
     let _ = inl_lbVector_Diff(ctx, c, a, c_a);
     if (sqrlen_b_a < 9.999999747378752e-06_f64)
@@ -568,13 +568,13 @@ pub fn lbVector_8000E838<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>, c: Vec<'a>, d
     }
     if (tooSmall != 0) {
         Handle::copy_from((d), (a));
-        return inl_lbVector_Len(ctx, c_a);
+        return inl_lbVector_Len_2(ctx, c_a);
     } else {
         let mut f1: f64 = fp::fdivs(
             (fp::fmadds(
                 b_a.z(),
                 c_a.z(),
-                fp::fmadds(b_a.y(), c_a.y(), fp::fmuls(b_a.x(), c_a.x())),
+                fp::fmadds(b_a.x(), c_a.x(), fp::fmuls(b_a.y(), c_a.y())),
             )),
             sqrlen_b_a,
         );
@@ -582,7 +582,7 @@ pub fn lbVector_8000E838<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>, c: Vec<'a>, d
         (d).set_y(fp::fmadds(b_a.y(), f1, (a).y()));
         (d).set_z(fp::fmadds(b_a.z(), f1, (a).z()));
         let _ = inl_lbVector_Diff(ctx, c, d, v3);
-        return inl_lbVector_Len(ctx, v3);
+        return inl_lbVector_Len_2(ctx, v3);
     }
     #[allow(unreachable_code)]
     return 0.0;
@@ -652,32 +652,9 @@ fn inl_sqrtf_accurate<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     return x;
 }
 
-fn inl_sqrtf_unfused<'a>(ctx: &'a Ctx, x: f64) -> f64 {
-    let mut x = x;
-    let mut y: f64 = 0.0;
-    if x > 0.0 {
-        let mut guess: f64 = fp::frsqrte(x);
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
-        );
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
-        );
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
-        );
-        y = fp::frsp((fp::fmul(x, guess)));
-        return y;
-    }
-    return x;
-}
-
 fn inl_lbVector_Len_unfused<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
     let mut vec = vec;
-    return inl_sqrtf_unfused(
+    return fns::sqrtf(
         ctx,
         fp::fadds(
             fp::fadds(
@@ -730,10 +707,13 @@ fn inl_lbvector_sin<'a>(ctx: &'a Ctx, angle: f64) -> f64 {
             angle,
         ),
         angle,
-        fp::fnmsubs(
-            fp::fmuls(fp::fmuls(0.1552709937095642, angle), angle),
+        fp::fmsubs(
+            0.9878619909286499,
             angle,
-            fp::fmuls(0.9878619909286499, angle),
+            fp::fmuls(
+                fp::fmuls(fp::fmuls(0.1552709937095642, angle), angle),
+                angle,
+            ),
         ),
     );
 }
@@ -755,10 +735,13 @@ fn inl_lbvector_cos<'a>(ctx: &'a Ctx, angle: f64) -> f64 {
             angle,
         ),
         angle,
-        fp::fnmsubs(
-            fp::fmuls(fp::fmuls(0.1552709937095642, angle), angle),
+        fp::fmsubs(
+            0.9878619909286499,
             angle,
-            fp::fmuls(0.9878619909286499, angle),
+            fp::fmuls(
+                fp::fmuls(fp::fmuls(0.1552709937095642, angle), angle),
+                angle,
+            ),
         ),
     );
 }
@@ -818,6 +801,18 @@ fn inl_lbVector_Diff<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>, result: Vec<'a>) 
     (result).set_y(fp::fsubs((a).y(), (b).y()));
     (result).set_z(fp::fsubs((a).z(), (b).z()));
     return result;
+}
+
+fn inl_lbVector_Len_2<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
+    let mut vec = vec;
+    return inl_sqrtf(
+        ctx,
+        fp::fmadds(
+            (vec).z(),
+            (vec).z(),
+            fp::fmadds((vec).x(), (vec).x(), fp::fmuls((vec).y(), (vec).y())),
+        ),
+    );
 }
 
 /// Registers this unit's ports.

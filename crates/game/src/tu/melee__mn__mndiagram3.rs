@@ -1063,8 +1063,9 @@ fn inl_mnDiagram3_PositionPopup<'a>(ctx: &'a Ctx, popup: HSD_JObj<'a>, n: u8, cu
     inl_HSD_JObjSetTranslateY(
         ctx,
         popup,
-        fp::fadds(
-            fp::fmuls(spacing, fp::frsp(n as f64)),
+        fp::fmadds(
+            spacing,
+            fp::frsp(n as f64),
             inl_HSD_JObjGetTranslationY(ctx, (cur).jobjs().at(8_i32).get()),
         ),
     );

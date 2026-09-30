@@ -502,7 +502,7 @@ pub fn fn_80174B4C<'a>(ctx: &'a Ctx, data: ResultsData<'a>, slot: i32) {
                 break 'l5;
             }
             if ((list).mode() as i32) != 2_i32 {
-                if !(fns::fn_801743C4(ctx, slot, (Handle::add((list).entries(), entry_idx))) != 0) {
+                if !(inl_fn_801743C4(ctx, slot, (Handle::add((list).entries(), entry_idx))) != 0) {
                     entry_idx = entry_idx.wrapping_add(1);
                     entry_offset = entry_offset.wrapping_add(16_i32);
                     break 'c6;
@@ -3338,6 +3338,27 @@ fn inl_fn_80174A60<'a>(ctx: &'a Ctx, list: StatsList<'a>, slot: i32) -> i32 {
         count = ((list).count() as i32);
     }
     return count;
+}
+
+fn inl_fn_801743C4<'a>(ctx: &'a Ctx, slot: i32, entry: StatsEntry<'a>) -> i32 {
+    let mut slot = slot;
+    let mut entry = entry;
+    if ((entry).value() as i32) >= 0_i32 {
+        return 1_i32;
+    }
+    if !Handle::is_null((entry).check()) {
+        if (entry).check().call::<_, i32>((slot,)) == 1_i32.wrapping_neg() {
+            return 0_i32;
+        }
+    }
+    if !Handle::is_null((entry).get()) {
+        if Handle::is_null((entry).get().call::<_, Val<'a, i8>>((slot,))) {
+            return 0_i32;
+        }
+    } else {
+        return 0_i32;
+    }
+    return 1_i32;
 }
 
 fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {

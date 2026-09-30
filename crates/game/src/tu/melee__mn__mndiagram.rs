@@ -2045,14 +2045,14 @@ pub fn mnDiagram_DrawCellValue<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, col: u8, ro
                     inl_HSD_JObjSetTranslateX(
                         ctx,
                         jobj,
-                        fp::fadds((fp::fmuls(x_spacing, fp::frsp(i as f64))), col_offset),
+                        fp::fmadds(x_spacing, fp::frsp(i as f64), col_offset),
                     );
                 } else {
                     inl_HSD_JObjSetTranslateX(
                         ctx,
                         jobj,
                         fp::fadds(
-                            fp::fadds((fp::fmuls(x_spacing, fp::frsp(i as f64))), col_offset),
+                            fp::fmadds(x_spacing, fp::frsp(i as f64), col_offset),
                             0.4000000059604645,
                         ),
                     );
@@ -2578,8 +2578,9 @@ pub fn mnDiagram_CursorProc<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     inl_HSD_JObjSetTranslateY(
         ctx,
         sp_jobj.get(),
-        fp::frsp(fp::fsub(
-            fp::fmul(y_spacing, (fp::fsub((row as f64), 4.5))),
+        fp::frsp(fp::fmsub(
+            y_spacing,
+            (fp::fsub((row as f64), 4.5)),
             0.10000000149011612,
         )),
     );
@@ -2600,8 +2601,9 @@ pub fn mnDiagram_CursorProc<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     inl_HSD_JObjSetTranslateY(
         ctx,
         sp_jobj.get(),
-        fp::frsp(fp::fsub(
-            fp::fmul(y_spacing, (fp::fsub((row as f64), 4.5))),
+        fp::frsp(fp::fmsub(
+            y_spacing,
+            (fp::fsub((row as f64), 4.5)),
             0.10000000149011612,
         )),
     );

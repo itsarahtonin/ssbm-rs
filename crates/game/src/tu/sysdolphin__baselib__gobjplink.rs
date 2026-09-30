@@ -111,11 +111,11 @@ pub fn CreateGObj<'a>(
             break 's1;
         }
         if __case <= 2 {
-            fns::GObj_PReorder(ctx, gobj, position);
+            inl_GObj_PReorder_unfused(ctx, gobj, position);
             break 's1;
         }
         if __case <= 3 {
-            fns::GObj_PReorder(ctx, gobj, (position).prev());
+            inl_GObj_PReorder_unfused(ctx, gobj, (position).prev());
             break 's1;
         }
     }
@@ -276,11 +276,11 @@ pub fn HSD_GObjPLink_ChangeGObjPri_Unk<'a>(
             break 's3;
         }
         if __case <= 2 {
-            fns::GObj_PReorder(ctx, gobj, position);
+            inl_GObj_PReorder_unfused(ctx, gobj, position);
             break 's3;
         }
         if __case <= 3 {
-            fns::GObj_PReorder(ctx, gobj, (position).prev());
+            inl_GObj_PReorder_unfused(ctx, gobj, (position).prev());
             break 's3;
         }
     }
@@ -345,6 +345,25 @@ fn inl_gobj_first_higher_prio_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             (Handle::add(fns::plinklow_gobjs(ctx).get(), ((gobj).p_link() as i32))).get()
         }),
     );
+}
+
+fn inl_GObj_PReorder_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, hiprio_gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut hiprio_gobj = hiprio_gobj;
+    let mut link: u8 = (gobj).p_link();
+    (gobj).set_prev(hiprio_gobj);
+    if !Handle::is_null(hiprio_gobj) {
+        (gobj).set_next((hiprio_gobj).next());
+        (hiprio_gobj).set_next(gobj);
+    } else {
+        (gobj).set_next((Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), (link as i32))).get());
+        (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), (link as i32))).set(gobj);
+    }
+    if !Handle::is_null((gobj).next()) {
+        ((gobj).next()).set_prev(gobj);
+    } else {
+        (Handle::add(fns::plinklow_gobjs(ctx).get(), (link as i32))).set(gobj);
+    }
 }
 
 /// Registers this unit's ports.

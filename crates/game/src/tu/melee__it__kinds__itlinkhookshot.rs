@@ -1867,7 +1867,7 @@ fn inl_it_link_lerp<'a>(ctx: &'a Ctx, a: f64, b: f64, t: f64) -> f64 {
     let mut a = a;
     let mut b = b;
     let mut t = t;
-    return fp::fmadds((fp::fsubs(1.0, t)), b, fp::fmuls(t, a));
+    return fp::fmadds(t, a, fp::fmuls((fp::fsubs(1.0, t)), b));
 }
 
 fn inl_it_link_attr_math<'a>(
@@ -2076,12 +2076,10 @@ fn inl_it_802A3C98<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: Vec<'a>, arg2: Vec<'a>
     (arg2).set_z(fp::fsubs((arg0).z(), (arg1).z()));
     len = inl_sqrtf(
         ctx,
-        fp::fadds(
-            fp::fadds(
-                fp::fmuls((arg2).x(), (arg2).x()),
-                fp::fmuls((arg2).y(), (arg2).y()),
-            ),
-            fp::fmuls((arg2).z(), (arg2).z()),
+        fp::fmadds(
+            (arg2).z(),
+            (arg2).z(),
+            fp::fmadds((arg2).x(), (arg2).x(), fp::fmuls((arg2).y(), (arg2).y())),
         ),
     );
     if len == 0.0 {
@@ -2182,12 +2180,10 @@ fn inl_it_802A6A78_normalize_diff<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>, vec:
     (vec).set_z(fp::fsubs((a).z(), (b).z()));
     len = inl_sqrtf(
         ctx,
-        fp::fadds(
-            fp::fadds(
-                fp::fmuls((vec).x(), (vec).x()),
-                fp::fmuls((vec).y(), (vec).y()),
-            ),
-            fp::fmuls((vec).z(), (vec).z()),
+        fp::fmadds(
+            (vec).z(),
+            (vec).z(),
+            fp::fmadds((vec).x(), (vec).x(), fp::fmuls((vec).y(), (vec).y())),
         ),
     );
     if len == 0.0 {
@@ -2228,12 +2224,10 @@ fn inl_it_802A6A78_normalize_diff_rev<'a>(
     (vec).set_z(fp::fsubs((a).z(), (b).z()));
     len = inl_sqrtf(
         ctx,
-        fp::fadds(
-            fp::fadds(
-                fp::fmuls((vec).x(), (vec).x()),
-                fp::fmuls((vec).y(), (vec).y()),
-            ),
-            fp::fmuls((vec).z(), (vec).z()),
+        fp::fmadds(
+            (vec).z(),
+            (vec).z(),
+            fp::fmadds((vec).x(), (vec).x(), fp::fmuls((vec).y(), (vec).y())),
         ),
     );
     if len == 0.0 {

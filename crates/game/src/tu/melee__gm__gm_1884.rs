@@ -297,7 +297,7 @@ pub fn fn_80188910<'a>(ctx: &'a Ctx, arg0: HSD_JObj<'a>) {
     let mut arg0 = arg0;
     let mut i: i32 = 0;
     let mut val: i32 = 0;
-    if fns::fn_8018846C(ctx) > 0x3e7_i32 {
+    if inl_fn_8018846C_unfused(ctx) > 0x3e7_i32 {
         val = 0x3e7_i32;
     } else {
         val = inl_fn_8018846C_noInline_unfused(ctx);
@@ -813,6 +813,29 @@ pub fn fn_8018A000<'a>(ctx: &'a Ctx) -> HSD_Text<'a> {
 }
 
 fn inl_gm_1884_sdata2_order_unfused<'a>(ctx: &'a Ctx) {}
+
+fn inl_fn_8018846C_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    let mut result: i32 = 0;
+    let mut ptr_: Val<'a, i32> =
+        Handle::cast::<Val<'a, i32>>(statics::melee__gm__gm_1884::lbl_80473700(ctx));
+    let mut p: Val<'a, i32> = null(ctx);
+    result = fns::pl_8004134C(ctx, 0_i32);
+    p = Handle::add(
+        Handle::add(ptr_, fns::Player_GetPlayerCharacter(ctx, 0_i32)),
+        2_i32,
+    );
+    if (p).get() < result {
+        (p).set(result);
+    }
+    if result != 0_i32 {
+        (Handle::add(ptr_, 67_i32)).set(result);
+        (Handle::add(ptr_, 68_i32)).set(1_i32);
+    }
+    if (Handle::add(ptr_, 68_i32)).get() != 0_i32 {
+        return (Handle::add(ptr_, 67_i32)).get();
+    }
+    return result;
+}
 
 fn inl_fn_8018846C_noInline_unfused<'a>(ctx: &'a Ctx) -> i32 {
     return fns::fn_8018846C(ctx);
