@@ -45,6 +45,7 @@ fn asm_HandleReverb(ctx: &Ctx) {
                 // stwu r1, -0xc0(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffff40_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -1884,6 +1885,7 @@ fn asm_DoCrossTalk(ctx: &Ctx) {
                 // stwu r1, -0x30(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffd0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }

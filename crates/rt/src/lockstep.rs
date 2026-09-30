@@ -168,6 +168,9 @@ pub struct State {
     /// differs when it mismatches.
     pub trace_calls: Cell<bool>,
     traces: RefCell<Vec<CallTrace>>,
+    /// Whether a check is taking its second look at a mismatch, when the ports its port calls
+    /// run unchecked: their own checks already ran.
+    pub(crate) rechecking: Cell<bool>,
     /// How many argument registers each callee takes, as ports' calls pass them: registers
     /// past them hold leftovers, which differ between the sides without meaning anything.
     arity: RefCell<BTreeMap<u32, usize>>,
@@ -360,34 +363,72 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
         sp,
     );
 
-    // The port saw a cleared stack. Run the original again on one: if it cannot follow its
-    // own log then, or matches the port, it reads stack it never wrote, which the port
-    // cannot reproduce. Otherwise the port differs from it given the same stack.
+    // Look again, with both sides on a cleared stack whose frames start zeroed: if the original
+    // cannot follow its own log then, or both sides agree, it reads stack it never wrote, whose
+    // leftovers the port cannot reproduce. Otherwise they differ given the same stack, and the
+    // differences are those of this second look.
     let mut uninitialized = false;
     if !diffs.is_empty() && original.is_none() {
+        let zero = ctx.zero_frames.replace(true);
+        let rechecking = state.rechecking.replace(true);
         ctx.mem.restore(&j2);
         ctx.regs.restore(&regs0);
         state.phase.set(Phase::Replay);
         state.cursor.set(start);
+        // Each side's calls are now those of its second run.
+        if traced && let Some(t) = state.traces.borrow_mut().last_mut() {
+            t.port_side = false;
+            t.depth = 0;
+            t.original.clear();
+        }
         ctx.mem.begin_journal();
         clear_stack(ctx, sp);
         let again = catch_unwind(AssertUnwindSafe(|| ctx.run_original(addr)));
+        let _ = ctx.take_resume_at();
         let j3 = ctx.mem.end_journal();
         let regs3 = ctx.regs.snapshot();
         if again.is_ok() && state.cursor.get() == end {
             let s3 = ctx.mem.capture(j3.keys());
-            let cleared = Outcome {
-                before: &j3,
-                after: &s3,
-                regs: &regs3,
-                panic: None,
-            };
-            diffs = compare(ctx, &cleared, &ported, returns, sp);
-            uninitialized = diffs.is_empty();
+            ctx.mem.restore(&j3);
+            ctx.regs.restore(&regs0);
+            state.phase.set(Phase::Port);
+            state.cursor.set(start);
+            if traced && let Some(t) = state.traces.borrow_mut().last_mut() {
+                t.port_side = true;
+                t.depth = 0;
+                t.port.clear();
+            }
+            ctx.mem.begin_journal();
+            clear_stack(ctx, sp);
+            let port_again = catch_unwind(AssertUnwindSafe(|| ctx.run_native(addr, native)));
+            ctx.truncate_natives(natives);
+            let _ = ctx.take_resume_at();
+            let j4 = ctx.mem.end_journal();
+            let regs4 = ctx.regs.snapshot();
+            if port_again.is_ok() && state.cursor.get() == end {
+                let s4 = ctx.mem.capture(j4.keys());
+                let original = Outcome {
+                    before: &j3,
+                    after: &s3,
+                    regs: &regs3,
+                    panic: None,
+                };
+                let port = Outcome {
+                    before: &j4,
+                    after: &s4,
+                    regs: &regs4,
+                    panic: None,
+                };
+                diffs = compare(ctx, &original, &port, returns, sp);
+                uninitialized = diffs.is_empty();
+            }
+            ctx.mem.restore(&j4);
         } else {
             uninitialized = true;
+            ctx.mem.restore(&j3);
         }
-        ctx.mem.restore(&j3);
+        state.rechecking.set(rechecking);
+        ctx.zero_frames.set(zero);
     }
 
     if traced && let Some(t) = state.traces.borrow_mut().pop() {

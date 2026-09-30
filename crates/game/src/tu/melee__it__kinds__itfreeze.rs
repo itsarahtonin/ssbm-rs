@@ -59,6 +59,7 @@ fn asm_it_8028EB88(ctx: &Ctx) {
                 // stwu r1, -0x78(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffff88_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }

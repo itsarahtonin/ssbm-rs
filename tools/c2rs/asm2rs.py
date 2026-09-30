@@ -319,7 +319,8 @@ class Emitter:
         if xo == 151:
             return [f"ctx.write_u32({ea_x}, {g(d)});"]
         if xo == 183:
-            return upd(f"ctx.write_u32(ea, {g(d)});")
+            frame = f"ctx.stack_allocated(ea, {g(1)}); " if a == 1 and d == 1 else ""
+            return upd(f"{frame}ctx.write_u32(ea, {g(d)});")
         if xo == 215:
             return [f"ctx.write_u8({ea_x}, {g(d)} as u8);"]
         if xo == 247:
@@ -474,6 +475,9 @@ class Emitter:
             return [f"{{ let ea = {ea}; for (i, reg) in ({d}..32).enumerate() {{ ctx.write_u32(ea.wrapping_add(4 * i as u32), g[reg].get()); }} }}"]
         key = op & ~1 if op not in (46, 47) else op
         stmt = body[key]
+        if op == 37 and a == 1 and d == 1:
+            # `stwu r1, -n(r1)` allocates a frame.
+            stmt = f"ctx.stack_allocated(ea, {g(1)}); {stmt}"
         out = f"{{ let ea = {ea}; {stmt}"
         if update:
             out += f" g[{a}].set(ea);"

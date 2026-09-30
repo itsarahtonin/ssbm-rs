@@ -194,6 +194,7 @@ fn asm_ftKb_SpecialNLk800FB500(ctx: &Ctx) {
                 // stwu r1, -0x38(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffc8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -504,6 +505,7 @@ fn asm_ftKb_SpecialNLk800FB5F4(ctx: &Ctx) {
                 // stwu r1, -0x38(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffc8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -796,6 +798,7 @@ fn asm_ftKb_SpecialNLk800FB6DC(ctx: &Ctx) {
                 // stwu r1, -0x68(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffff98_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -1216,6 +1219,7 @@ fn asm_ftKb_SpecialNLk800FB880(ctx: &Ctx) {
                 // stwu r1, -0x50(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffb0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -1734,6 +1738,7 @@ fn asm_ftKb_SpecialNLk800FBA00(ctx: &Ctx) {
                 // stwu r1, -0x50(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffb0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -2334,6 +2339,7 @@ fn asm_ftKb_LkSpecialNStart_Anim(ctx: &Ctx) {
                 // stwu r1, -0x70(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffff90_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -3121,6 +3127,7 @@ fn asm_ftKb_LkSpecialAirNStart_Anim(ctx: &Ctx) {
                 // stwu r1, -0x78(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffff88_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -3951,6 +3958,7 @@ fn asm_ftKb_LkSpecialAirNEnd_Anim(ctx: &Ctx) {
                 // stwu r1, -0x48(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffb8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -4310,6 +4318,7 @@ fn asm_ftKb_LkSpecialNStart_IASA(ctx: &Ctx) {
                 // stwu r1, -0x28(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffd8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -4729,6 +4738,7 @@ fn asm_ftKb_LkSpecialAirNStart_IASA(ctx: &Ctx) {
                 // stwu r1, -0x28(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffd8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }

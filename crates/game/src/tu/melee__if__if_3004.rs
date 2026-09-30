@@ -226,6 +226,7 @@ fn asm_un_80300758(ctx: &Ctx) {
                 // stwu r1, -0x8(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -303,6 +304,7 @@ fn asm_un_80300790(ctx: &Ctx) {
                 // stwu r1, -0x8(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -642,6 +644,7 @@ fn asm_fn_80300CC8(ctx: &Ctx) {
                 // stwu r1, -0x20(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -898,6 +901,7 @@ fn asm_fn_80300DE0(ctx: &Ctx) {
                 // stwu r1, -0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -1116,6 +1120,7 @@ fn asm_fn_80300ED0(ctx: &Ctx) {
                 // stwu r1, -0x8(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -1417,6 +1422,7 @@ fn asm_fn_803011EC(ctx: &Ctx) {
                 // stwu r1, -0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -2125,6 +2131,7 @@ fn asm_un_80301CE0(ctx: &Ctx) {
                 // stwu r1, -0x8(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }

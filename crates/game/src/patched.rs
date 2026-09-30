@@ -66,6 +66,7 @@ pub fn Fighter_800679B0__455b3169(ctx: &Ctx) {
                 // stwu r1, -0x10(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xfffffff0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -290,6 +291,7 @@ pub fn Fighter_Create__ba8e3d66(ctx: &Ctx) {
                 // stwu r1, -0x48(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffb8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -1694,6 +1696,7 @@ pub fn Fighter_procAnim__51389443(ctx: &Ctx) {
                 // stwu r1, -0x30(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffd0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -4413,6 +4416,7 @@ pub fn Fighter_procAnim__51389443(ctx: &Ctx) {
                 // injected at 0x8006a880, +0x8: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -4674,6 +4678,7 @@ pub fn Fighter_procCamera__e777805b(ctx: &Ctx) {
                 // stwu r1, -0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -4805,6 +4810,7 @@ pub fn Fighter_procCamera__e777805b(ctx: &Ctx) {
                 // injected at 0x8006da34, +0x8: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -5375,6 +5381,7 @@ pub fn Fighter_procInput__4bc3983e(ctx: &Ctx) {
                 // stwu r1, -0x78(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffff88_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -9048,6 +9055,7 @@ pub fn Fighter_procInput__4bc3983e(ctx: &Ctx) {
                 // injected at 0x8006b0dc, +0x8: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -9721,6 +9729,7 @@ pub fn Fighter_procInput__4bc3983e(ctx: &Ctx) {
                 // injected at 0x8006b0e0, +0x8: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -10309,6 +10318,7 @@ pub fn Fighter_procInput__4bc3983e(ctx: &Ctx) {
                 // injected at 0x8006b460, +0xb0: 9421ffc0
                 {
                     let ea = g[1].get().wrapping_add(0xffffffc0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -10944,6 +10954,7 @@ pub fn Fighter_procMap__efd52da9(ctx: &Ctx) {
                 // stwu r1, -0x38(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffc8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -12128,6 +12139,7 @@ pub fn Ground_GetStageGObj__cef35311(ctx: &Ctx) {
                 // stwu r1, -0xd0(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffff30_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -13726,6 +13738,7 @@ pub fn HSD_AudioSFXStartParam__41c53e66(ctx: &Ctx) {
                 // stwu r1, -0x48(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffb8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -14626,6 +14639,7 @@ pub fn HSD_AudioSFXStartParam__41c53e66(ctx: &Ctx) {
                 // injected at 0x8038d224, +0x30: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -14832,6 +14846,7 @@ pub fn HSD_AudioSFXStartParam__41c53e66(ctx: &Ctx) {
                 // injected at 0x8038d0b0, +0x2c: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -15203,6 +15218,7 @@ pub fn HSD_OSInit__6d84241e(ctx: &Ctx) {
                 // stwu r1, -0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -15534,6 +15550,7 @@ pub fn HSD_OSInit__6d84241e(ctx: &Ctx) {
                 // injected at 0x80375380, +0x18: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -15879,6 +15896,7 @@ pub fn HSD_OSInit__6d84241e(ctx: &Ctx) {
                 // injected at 0x80375380, +0x19c: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -16173,6 +16191,7 @@ pub fn HSD_PadRenewMasterStatus__b6c0a5ac(ctx: &Ctx) {
                 // stwu r1, -0xd8(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffff28_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -17673,6 +17692,7 @@ pub fn HSD_PadRenewRawStatus__30c9e281(ctx: &Ctx) {
                 // stwu r1, -0x68(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffff98_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -18723,6 +18743,7 @@ pub fn Toy_803048C0__adb3dc46(ctx: &Ctx) {
                 // stwu r1, -0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -18873,6 +18894,7 @@ pub fn __EXIProbe__018378eb(ctx: &Ctx) {
                 // stwu r1, -0x28(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffd8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -19329,6 +19351,7 @@ pub fn db_RunEveryFrame__aad497be(ctx: &Ctx) {
                 // stwu r1, -0x28(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffd8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -20322,6 +20345,7 @@ pub fn fn_800DB790__47b554c4(ctx: &Ctx) {
                 // stwu r1, -0x58(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffa8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -20682,6 +20706,7 @@ pub fn fn_800DBAE4__f236fea6(ctx: &Ctx) {
                 // stwu r1, -0x58(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffa8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -21042,6 +21067,7 @@ pub fn fn_8016B918__afe9ed93(ctx: &Ctx) {
                 // stwu r1, -0x30(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffd0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -21832,6 +21858,7 @@ pub fn fn_8016CFE0__7f27878e(ctx: &Ctx) {
                 // stwu r1, -0x38(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffc8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -22946,6 +22973,7 @@ pub fn fn_8016CFE0__7f27878e(ctx: &Ctx) {
                 // injected at 0x8016d298, +0x14: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -23273,6 +23301,7 @@ pub fn fn_8016DCC0__2704e874(ctx: &Ctx) {
                 // stwu r1, -0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -23959,6 +23988,7 @@ pub fn fn_8016DCC0__2704e874(ctx: &Ctx) {
                 // injected at 0x8016ded4, +0x8: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -24442,6 +24472,7 @@ pub fn fn_8016E2BC__836ef5ff(ctx: &Ctx) {
                 // stwu r1, -0x60(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffa0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -25311,6 +25342,7 @@ pub fn fn_8016E2BC__836ef5ff(ctx: &Ctx) {
                 // injected at 0x8016e510, +0x8: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -25840,6 +25872,7 @@ pub fn fn_8016E2BC__836ef5ff(ctx: &Ctx) {
                 // injected at 0x8016e510, +0x1c8: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -26266,6 +26299,7 @@ pub fn fn_8016E730__c9836013(ctx: &Ctx) {
                 // stwu r1, -0x20(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -26919,6 +26953,7 @@ pub fn fn_8016E730__c9836013(ctx: &Ctx) {
                 // injected at 0x8016e748, +0x18: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -27689,6 +27724,7 @@ pub fn fn_8016E730__c9836013(ctx: &Ctx) {
                 // injected at 0x8016e748, +0x34c: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -28072,6 +28108,7 @@ pub fn fn_8016E730__c9836013(ctx: &Ctx) {
                 // injected at 0x8016e748, +0x4b8: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -28234,6 +28271,7 @@ pub fn fn_8016E730__c9836013(ctx: &Ctx) {
                 // injected at 0x8016e74c, +0x8: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -29879,6 +29917,7 @@ pub fn fn_8016E730__c9836013(ctx: &Ctx) {
                 // injected at 0x8016e74c, +0x6e8: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -30060,6 +30099,7 @@ pub fn fn_8016E730__c9836013(ctx: &Ctx) {
                 // injected at 0x8016e74c, +0x790: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -30484,6 +30524,7 @@ pub fn fn_802FCC44__b9f38ccf(ctx: &Ctx) {
                 // stwu r1, -0x40(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffc0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -31666,6 +31707,7 @@ pub fn fn_803219AC__8d3e6794(ctx: &Ctx) {
                 // stwu r1, -0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -31776,6 +31818,7 @@ pub fn fn_803219AC__8d3e6794(ctx: &Ctx) {
                 // injected at 0x803219ec, +0x8: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -32075,6 +32118,7 @@ pub fn ftCo_8008EC90__3e1e8d0c(ctx: &Ctx) {
                 // stwu r1, -0xb0(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffff50_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -35924,6 +35968,7 @@ pub fn ftCo_8008EC90__3e1e8d0c(ctx: &Ctx) {
                 // injected at 0x8008f090, +0xbc: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -36746,6 +36791,7 @@ pub fn ftCo_80099794__b66bbee5(ctx: &Ctx) {
                 // stwu r1, -0x8(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -36924,6 +36970,7 @@ pub fn ftCo_8009980C__2f20089e(ctx: &Ctx) {
                 // stwu r1, -0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -37124,6 +37171,7 @@ pub fn ftCo_80099894__611ba8c0(ctx: &Ctx) {
                 // stwu r1, -0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -37525,6 +37573,7 @@ pub fn ftCo_8009A080__aec3506c(ctx: &Ctx) {
                 // stwu r1, -0x28(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffd8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -37891,6 +37940,7 @@ pub fn ftCo_8009DD94__6408eeb6(ctx: &Ctx) {
                 // stwu r1, -0x50(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffb0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -38905,6 +38955,7 @@ pub fn ftCo_8009DD94__6408eeb6(ctx: &Ctx) {
                 // injected at 0x8009e090, +0x18: 9421ffe8
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -39094,6 +39145,7 @@ pub fn ftCo_800AC5A0__36fed63a(ctx: &Ctx) {
                 // stwu r1, -0x30(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffd0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -39805,6 +39857,7 @@ pub fn ftCo_800DEBD0__3a3d82ce(ctx: &Ctx) {
                 // stwu r1, -0x20(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -40198,6 +40251,7 @@ pub fn ftCo_DamageFall_IASA__beb6152d(ctx: &Ctx) {
                 // stwu r1, -0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -40791,6 +40845,7 @@ pub fn ftCo_Damage_OnEveryHitlag__45f69be3(ctx: &Ctx) {
                 // stwu r1, -0x8(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -41351,6 +41406,7 @@ pub fn ftCo_DeadUpFall_Anim__6e50856e(ctx: &Ctx) {
                 // stwu r1, -0x40(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffc0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -42318,6 +42374,7 @@ pub fn ftCo_DeadUpFall_Phys__90618af0(ctx: &Ctx) {
                 // stwu r1, -0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -42764,6 +42821,7 @@ pub fn ftCo_LandingAir_EnterWithLag__b06788a5(ctx: &Ctx) {
                 // stwu r1, -0x38(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffc8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -43207,6 +43265,7 @@ pub fn ftCo_SquatRv_CheckInput__b8917e73(ctx: &Ctx) {
                 // stwu r1, -0x8(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -43495,6 +43554,7 @@ pub fn ftCo_Turn_IASA__81a864d2(ctx: &Ctx) {
                 // stwu r1, -0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -44404,6 +44464,7 @@ pub fn ftCo_Turn_IASA__81a864d2(ctx: &Ctx) {
                 // injected at 0x800c9a44, +0xac: 9421fff8
                 {
                     let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -44531,6 +44592,7 @@ pub fn ftDrawCommon_80080E18__e3842ae5(ctx: &Ctx) {
                 // stwu r1, -0xa0(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffff60_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -45410,6 +45472,7 @@ pub fn ftDrawCommon_80080E18__e3842ae5(ctx: &Ctx) {
                 // injected at 0x80080e80, +0x8: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -45559,6 +45622,7 @@ pub fn ftLib_GetOpponentsDir__8c3ff2d5(ctx: &Ctx) {
                 // stwu r1, -0x50(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffb0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -46027,6 +46091,7 @@ pub fn ftNn_Init_80123954__8af9e78c(ctx: &Ctx) {
                 // stwu r1, -0x50(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffb0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -46601,6 +46666,7 @@ pub fn ftPr_Init_8013C360__87f170f2(ctx: &Ctx) {
                 // stwu r1, -0x28(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffd8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -47066,6 +47132,7 @@ pub fn ft_800881D8__9dbe5e9b(ctx: &Ctx) {
                 // stwu r1, -0x28(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffd8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -47521,6 +47588,7 @@ pub fn ft_800881D8__9dbe5e9b(ctx: &Ctx) {
                 // injected at 0x80088224, +0x1c: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -47787,6 +47855,7 @@ pub fn ft_800881D8__9dbe5e9b(ctx: &Ctx) {
                 // injected at 0x800882b0, +0x1c: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -48162,6 +48231,7 @@ pub fn gmMainLib_8015D984__9bf5691d(ctx: &Ctx) {
                 // stwu r1, -0x28(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffd8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -48559,6 +48629,7 @@ pub fn gm_80164430__655face3(ctx: &Ctx) {
                 // stwu r1, -0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -48826,6 +48897,7 @@ pub fn gm_80164600__4f6168b8(ctx: &Ctx) {
                 // stwu r1, -0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -49019,6 +49091,7 @@ pub fn gm_80164ABC__deab522c(ctx: &Ctx) {
                 // stwu r1, -0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -49212,6 +49285,7 @@ pub fn gm_801721EC__44c5a9bb(ctx: &Ctx) {
                 // stwu r1, -0x10(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xfffffff0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -49514,6 +49588,7 @@ pub fn gm_80173754__5040ff19(ctx: &Ctx) {
                 // stwu r1, -0x20(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -49688,6 +49763,7 @@ pub fn gm_801A4510__4fb679fb(ctx: &Ctx) {
                 // stwu r1, -0x20(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -50063,6 +50139,7 @@ pub fn gm_801A4BD4__aaa4dd5c(ctx: &Ctx) {
                 // stwu r1, -0x30(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffd0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -50480,6 +50557,7 @@ pub fn gm_801A4D34__36d3cf50(ctx: &Ctx) {
                 // stwu r1, -0x50(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffb0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -51770,6 +51848,7 @@ pub fn gm_801A4D34__36d3cf50(ctx: &Ctx) {
                 // injected at 0x801a501c, +0xac: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -52009,6 +52088,7 @@ pub fn gm_801A4D34__36d3cf50(ctx: &Ctx) {
                 // injected at 0x801a5014, +0x30: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -52409,6 +52489,7 @@ pub fn gm_IsCKindUnlocked__b7c0e52b(ctx: &Ctx) {
                 // stwu r1, -0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -52673,6 +52754,7 @@ pub fn gm_Scene_DebugMenu_OnEnter__a63febda(ctx: &Ctx) {
                 // stwu r1, -0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -52852,6 +52934,7 @@ pub fn gm_Scene_DebugMenu_OnEnter__a63febda(ctx: &Ctx) {
                 // injected at 0x801a6348, +0x5c: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -53991,6 +54074,7 @@ pub fn gm_Scene_Vs_OnEnter__a91968fd(ctx: &Ctx) {
                 // stwu r1, -0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -54171,6 +54255,7 @@ pub fn gm_Scene_Vs_OnEnter__a91968fd(ctx: &Ctx) {
                 // injected at 0x8016e9b4, +0x48: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -54261,6 +54346,7 @@ pub fn gm_Scene_Vs_OnEnter__a91968fd(ctx: &Ctx) {
                 // injected at 0x8016e9b4, +0x90: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -55344,6 +55430,7 @@ pub fn gm_Scene_Vs_OnExit__650d9b79(ctx: &Ctx) {
                 // stwu r1, -0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -56024,6 +56111,7 @@ pub fn gm_Scene_Vs_OnExit__650d9b79(ctx: &Ctx) {
                 // injected at 0x8016e9e4, +0xc: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -56290,6 +56378,7 @@ pub fn gm_Scene_Vs_OnFrame__17746509(ctx: &Ctx) {
                 // stwu r1, -0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -56527,6 +56616,7 @@ pub fn gm_Scene_Vs_OnFrame__17746509(ctx: &Ctx) {
                 // injected at 0x8016d884, +0x8: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -56976,6 +57066,7 @@ pub fn grAnime_801C65B0__aab82208(ctx: &Ctx) {
                 // stwu r1, -0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -57296,6 +57387,7 @@ pub fn grIzumi_801CC358__605dc810(ctx: &Ctx) {
                 // stwu r1, -0x60(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffa0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -59702,6 +59794,7 @@ pub fn grLast_8021AAB0__16d4a755(ctx: &Ctx) {
                 // stwu r1, -0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -59956,6 +60049,7 @@ pub fn grOldPupupu_802113E0__a7eaff2c(ctx: &Ctx) {
                 // stwu r1, -0x100(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffff00_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -62744,6 +62838,7 @@ pub fn grStadium_801D2344__15bb625e(ctx: &Ctx) {
                 // stwu r1, -0x40(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffc0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -63398,6 +63493,7 @@ pub fn grStadium_801D2344__15bb625e(ctx: &Ctx) {
                 // injected at 0x801d24fc, +0x20: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -63612,6 +63708,7 @@ pub fn grStadium_801D4548__1875dd1c(ctx: &Ctx) {
                 // stwu r1, -0xb0(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffff50_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -67382,6 +67479,7 @@ pub fn lbFile_80016580__b7a5aa28(ctx: &Ctx) {
                 // stwu r1, -0x80(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffff80_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -67646,6 +67744,7 @@ pub fn lbFile_80016580__b7a5aa28(ctx: &Ctx) {
                 // injected at 0x800165ac, +0x8: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -67918,6 +68017,7 @@ pub fn main__c8b773b7(ctx: &Ctx) {
                 // stwu r1, -0x28(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffd8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -68778,6 +68878,7 @@ pub fn stub_800055F0__6661c6de(ctx: &Ctx) {
                 // injected at 0x800055f0, +0x8: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -69122,6 +69223,7 @@ pub fn stub_800055F8__57e64441(ctx: &Ctx) {
                 // injected at 0x800055f8, +0x8: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -69296,6 +69398,7 @@ pub fn stub_800055FC__c2469b50(ctx: &Ctx) {
                 // injected at 0x800055fc, +0x8: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -70044,6 +70147,7 @@ pub fn un_80304470__81be6218(ctx: &Ctx) {
                 // stwu r1, -0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -70305,6 +70409,7 @@ pub fn code_8016E748_318__3396e165(ctx: &Ctx) {
                 // injected at 0x8016e748, +0x18: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -71075,6 +71180,7 @@ pub fn code_8016E748_318__3396e165(ctx: &Ctx) {
                 // injected at 0x8016e748, +0x34c: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -71458,6 +71564,7 @@ pub fn code_8016E748_318__3396e165(ctx: &Ctx) {
                 // injected at 0x8016e748, +0x4b8: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -71626,6 +71733,7 @@ pub fn code_8016E748_33C__3396e165(ctx: &Ctx) {
                 // injected at 0x8016e748, +0x18: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -72396,6 +72504,7 @@ pub fn code_8016E748_33C__3396e165(ctx: &Ctx) {
                 // injected at 0x8016e748, +0x34c: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -72779,6 +72888,7 @@ pub fn code_8016E748_33C__3396e165(ctx: &Ctx) {
                 // injected at 0x8016e748, +0x4b8: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -72947,6 +73057,7 @@ pub fn code_8016E748_4B0__3396e165(ctx: &Ctx) {
                 // injected at 0x8016e748, +0x18: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -73717,6 +73828,7 @@ pub fn code_8016E748_4B0__3396e165(ctx: &Ctx) {
                 // injected at 0x8016e748, +0x34c: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -74100,6 +74212,7 @@ pub fn code_8016E748_4B0__3396e165(ctx: &Ctx) {
                 // injected at 0x8016e748, +0x4b8: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -74257,6 +74370,7 @@ pub fn code_8016E74C_6E0__74470719(ctx: &Ctx) {
                 // injected at 0x8016e74c, +0x8: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -75902,6 +76016,7 @@ pub fn code_8016E74C_6E0__74470719(ctx: &Ctx) {
                 // injected at 0x8016e74c, +0x6e8: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -76083,6 +76198,7 @@ pub fn code_8016E74C_6E0__74470719(ctx: &Ctx) {
                 // injected at 0x8016e74c, +0x790: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -76523,6 +76639,7 @@ pub fn code_8016E74C_788__74470719(ctx: &Ctx) {
                 // injected at 0x8016e74c, +0x8: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -78168,6 +78285,7 @@ pub fn code_8016E74C_788__74470719(ctx: &Ctx) {
                 // injected at 0x8016e74c, +0x6e8: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -78349,6 +78467,7 @@ pub fn code_8016E74C_788__74470719(ctx: &Ctx) {
                 // injected at 0x8016e74c, +0x790: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -78817,6 +78936,7 @@ pub fn code_8016E9B4_40__62e7ed03(ctx: &Ctx) {
                 // injected at 0x8016e9b4, +0x48: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -78907,6 +79027,7 @@ pub fn code_8016E9B4_40__62e7ed03(ctx: &Ctx) {
                 // injected at 0x8016e9b4, +0x90: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -80192,6 +80313,7 @@ pub fn code_801A6348_54__cc482dda(ctx: &Ctx) {
                 // injected at 0x801a6348, +0x5c: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -81358,6 +81480,7 @@ pub fn code_80375380_18C__edf8446a(ctx: &Ctx) {
                 // injected at 0x80375380, +0x18: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -81703,6 +81826,7 @@ pub fn code_80375380_18C__edf8446a(ctx: &Ctx) {
                 // injected at 0x80375380, +0x19c: 9421ff20
                 {
                     let ea = g[1].get().wrapping_add(0xffffff20_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }

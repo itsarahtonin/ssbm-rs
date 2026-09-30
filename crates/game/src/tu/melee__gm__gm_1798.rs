@@ -440,6 +440,7 @@ fn asm_fn_8017A318(ctx: &Ctx) {
                 // stwu r1, -0x90(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffff70_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }

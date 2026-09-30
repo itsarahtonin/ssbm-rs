@@ -154,6 +154,7 @@ fn asm_itLinkArrow_802A81C4(ctx: &Ctx) {
                 // stwu r1, -0x30(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffd0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -738,6 +739,7 @@ fn asm_itLinkArrow_802A850C(ctx: &Ctx) {
                 // stwu r1, -0xc8(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffff38_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }

@@ -1426,6 +1426,7 @@ fn asm_THPDec_80331340(ctx: &Ctx) {
                 // stwu r1, -0x20(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -1606,6 +1607,7 @@ fn asm_THPDec_803313D0(ctx: &Ctx) {
                 // stwu r1, -0x28(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffd8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -1795,6 +1797,7 @@ fn asm___THPDecompressiMCURow640x480(ctx: &Ctx) {
                 // stwu r1, -0x48(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffb8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -10128,6 +10131,7 @@ fn asm___THPDecompressiMCURowNxN(ctx: &Ctx) {
                 // stwu r1, -0x50(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffb0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -18465,6 +18469,7 @@ fn asm___THPHuffDecodeDCTCompY(ctx: &Ctx) {
                 // stwu r1, -0x20(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -20578,6 +20583,7 @@ fn asm___THPHuffDecodeDCTCompU(ctx: &Ctx) {
                 // stwu r1, -0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -22754,6 +22760,7 @@ fn asm___THPHuffDecodeDCTCompV(ctx: &Ctx) {
                 // stwu r1, -0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }
@@ -24938,6 +24945,7 @@ fn asm_THPInit(ctx: &Ctx) {
                 // stwu r1, -0x10(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xfffffff0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
                     ctx.write_u32(ea, g[1].get());
                     g[1].set(ea);
                 }

@@ -142,6 +142,9 @@ pub struct Ctx {
     shadow_on: Cell<bool>,
     /// Whether original code, rather than a port, an SDK stand-in or a hook, is running.
     running_original: Cell<bool>,
+    /// Whether each new frame starts zeroed, as lockstep's second look at a mismatch runs both
+    /// sides: reads of stack a function never wrote then agree.
+    pub(crate) zero_frames: Cell<bool>,
     uninit_hook: RefCell<Option<UninitHook>>,
     /// The running thread's stack, as (lowest address, top), where the OS layer knows it.
     stack_bounds: RefCell<Option<StackBounds>>,
@@ -214,6 +217,7 @@ impl Ctx {
             shadow: RefCell::default(),
             shadow_on: Cell::new(false),
             running_original: Cell::new(false),
+            zero_frames: Cell::new(false),
             uninit_hook: RefCell::default(),
             stack_bounds: RefCell::default(),
         }
@@ -266,6 +270,9 @@ impl Ctx {
     pub fn stack_allocated(&self, new_sp: u32, sp: u32) {
         if self.shadow_on.get() {
             self.shadow_unwrite(new_sp, sp);
+        }
+        if self.zero_frames.get() && new_sp < sp {
+            let _ = self.mem.write_bytes(new_sp, &vec![0; (sp - new_sp) as usize]);
         }
     }
 
@@ -761,7 +768,11 @@ impl Ctx {
             Mode::Lockstep if self.has_backend() && self.lockstep.in_original() => {
                 self.run_original(addr)
             }
-            Mode::Lockstep if self.has_backend() && !self.lockstep.is_checking(addr) => {
+            Mode::Lockstep
+                if self.has_backend()
+                    && !self.lockstep.is_checking(addr)
+                    && !self.lockstep.rechecking.get() =>
+            {
                 lockstep::run(self, addr, e.native, e.returns)
             }
             _ => self.run_native(addr, e.native),
