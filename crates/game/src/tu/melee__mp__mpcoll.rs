@@ -1299,9 +1299,9 @@ pub fn mpColl_80043BBC<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id_out: Val<'a
 
 pub fn mpColl_80043C6C<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32, ignore_bottom: i32) {
     let __frame = ctx.stack_frame(0x50);
-    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let wall_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x10);
+    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let wall_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x14);
     let mut coll = coll;
     let mut line_id = line_id;
     let mut ignore_bottom = ignore_bottom;
@@ -1446,9 +1446,9 @@ pub fn mpColl_80043E90<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id_out: Val<'a
 
 pub fn mpColl_80043F40<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32, ignore_bottom: i32) {
     let __frame = ctx.stack_frame(0x50);
-    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let wall_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x10);
+    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let wall_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x14);
     let mut coll = coll;
     let mut line_id = line_id;
     let mut ignore_bottom = ignore_bottom;
@@ -1789,9 +1789,9 @@ pub fn mpColl_80044628_Floor<'a>(
     left_right: i32,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x58);
-    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let bottom: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let prev_bottom: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
+    let bottom: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let prev_bottom: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let mut coll = coll;
     let mut cb = cb;
     let mut gobj = gobj;
@@ -4786,9 +4786,9 @@ pub fn mpColl_8004A678_Floor<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32)
 
 pub fn mpColl_8004A908_Floor<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let floor_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x4);
-    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let floor_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x8);
+    let normal: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut coll = coll;
     let mut line_id = line_id;
     let mut prev_bottom_x: f64 = 0.0;

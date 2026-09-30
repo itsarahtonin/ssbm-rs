@@ -935,8 +935,8 @@ pub fn ifStock_802F96D0<'a>(ctx: &'a Ctx, a: i32, b: i32, x: f64, y: f64) -> HSD
 
 pub fn ifStock_802F98E8<'a>(ctx: &'a Ctx, player: u8, b: u8) {
     let __frame = ctx.stack_frame(0x98);
-    let c2: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let c1: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let c2: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
+    let c1: _GXColor<'a> = frame_at(ctx, &__frame, 0x34);
     let mut player = player;
     let mut b = b;
     let mut stock: ifStock_804A1378_t<'a> = statics::melee__if__ifstock::ifStock_804A1378(ctx);
@@ -1920,7 +1920,7 @@ pub fn fn_802FAC34<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 
 pub fn ifStock_802FAEC4<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x30);
-    let scene_models: Ptr<'a, Ptr<'a, DynamicModelDesc<'a>>> = frame_at(ctx, &__frame, 0x0);
+    let scene_models: Ptr<'a, Ptr<'a, DynamicModelDesc<'a>>> = frame_at(ctx, &__frame, 0x4);
     let mut stock: ifStock_804A1378_t<'a> = statics::melee__if__ifstock::ifStock_804A1378(ctx);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     fns::memzero(ctx, Handle::cast::<Addr<'a>>(stock), (0x204_u32 as i32));

@@ -139,8 +139,8 @@ pub fn gm_801B5324<'a>(ctx: &'a Ctx, arg0: UnkAllstarData<'a>, arg1: i32) {
 
 pub fn gm_801B5624<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x80);
-    let chars: ArrV<'a, i8, 3> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
+    let chars: ArrV<'a, i8, 3> = frame_at(ctx, &__frame, 0x24);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x28);
     let mut arg0 = arg0;
     let mut data: StartMeleeData<'a> = null(ctx);
     let mut allstar: UnkAllstarData<'a> = null(ctx);
@@ -302,8 +302,8 @@ pub fn fn_801B5AA8<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn gm_801B5ACC<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let chars: ArrV<'a, i8, 3> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x4);
+    let chars: ArrV<'a, i8, 3> = frame_at(ctx, &__frame, 0x8);
+    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut color: u8 = 0;
     let mut round: u16 = 0;

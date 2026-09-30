@@ -3094,9 +3094,9 @@ pub fn _Toy_80307828<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn _Toy_803078E4<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0xf0);
-    let syms: ArrP<'a, HSD_SObjDesc<'a>, 7> = frame_at(ctx, &__frame, 0x0);
-    let pos_en: PosArrayFull<'a> = frame_at(ctx, &__frame, 0x1c);
-    let pos_jp: PosArrayFull<'a> = frame_at(ctx, &__frame, 0x54);
+    let syms: ArrP<'a, HSD_SObjDesc<'a>, 7> = frame_at(ctx, &__frame, 0x20);
+    let pos_en: PosArrayFull<'a> = frame_at(ctx, &__frame, 0x3c);
+    let pos_jp: PosArrayFull<'a> = frame_at(ctx, &__frame, 0x74);
     let mut data: tyLightData<'a> = null(ctx);
     let mut sobj: HSD_SObj<'a> = null(ctx);
     let mut i: i32 = 0;

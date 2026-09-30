@@ -501,13 +501,13 @@ pub fn particleSort<'a>(
 
 pub fn psDispParticles<'a>(ctx: &'a Ctx, target_link: u32, sw: u32) {
     let __frame = ctx.stack_frame(0x9a0);
-    let tlut_obj: psdisp_Tlut<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp764: _GXTexObj<'a> = frame_at(ctx, &__frame, 0xc);
-    let sorted_particles: Ptr<'a, HSD_Particle<'a>> = frame_at(ctx, &__frame, 0x2c);
-    let non_edge_particles: Ptr<'a, HSD_Particle<'a>> = frame_at(ctx, &__frame, 0x30);
-    let billboard_mtx: psdisp_Mtx<'a> = frame_at(ctx, &__frame, 0x34);
-    let gx_tlut_obj: _GXTlutObj<'a> = frame_at(ctx, &__frame, 0x64);
-    let temp_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x70);
+    let tlut_obj: psdisp_Tlut<'a> = frame_at(ctx, &__frame, 0x4);
+    let sp764: _GXTexObj<'a> = frame_at(ctx, &__frame, 0x10);
+    let sorted_particles: Ptr<'a, HSD_Particle<'a>> = frame_at(ctx, &__frame, 0x30);
+    let non_edge_particles: Ptr<'a, HSD_Particle<'a>> = frame_at(ctx, &__frame, 0x34);
+    let billboard_mtx: psdisp_Mtx<'a> = frame_at(ctx, &__frame, 0x38);
+    let gx_tlut_obj: _GXTlutObj<'a> = frame_at(ctx, &__frame, 0x68);
+    let temp_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x74);
     let mut target_link = target_link;
     let mut sw = sw;
     let mut sp7B4: i32 = 0;

@@ -248,7 +248,7 @@ pub fn lbDvd_800178E8<'a>(
     arg8: i32,
 ) {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut name = name;
     let mut arg2 = arg2;
@@ -1240,7 +1240,7 @@ fn inl_preloadFile_unfused<'a>(
 
 fn inl_preloadRumbleFile_unfused<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
-    let file: PreloadFile<'a> = frame_at(ctx, &__frame, 0x0);
+    let file: PreloadFile<'a> = frame_at(ctx, &__frame, 0x4);
     ctx.fill(Handle::addr(file), 0, 0xc);
     file.set_type((2_i32 as u8));
     file.set_name(cstr(ctx, 0x803ba6bc));
@@ -1256,8 +1256,8 @@ fn inl_preloadRumbleFile_unfused<'a>(ctx: &'a Ctx) {
 }
 
 fn inl_preloadCommonFiles_unfused<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x38);
-    let files: Arr<'a, PreloadFile<'a>, 4> = frame_at(ctx, &__frame, 0x0);
+    let __frame = ctx.stack_frame(0x40);
+    let files: Arr<'a, PreloadFile<'a>, 4> = frame_at(ctx, &__frame, 0x4);
     let mut i: i32 = 0;
     files.get(0).set_type((3_i32 as u8));
     files.get(0).set_name(cstr(ctx, 0x803ba6c8));

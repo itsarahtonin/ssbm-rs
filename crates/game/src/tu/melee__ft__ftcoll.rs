@@ -1399,7 +1399,7 @@ pub fn ftColl_8007861C<'a>(
 
 pub fn ftColl_80078710<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<'a>, arg2: Addr<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1427,7 +1427,7 @@ pub fn ftColl_80078710<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<'a>,
 
 pub fn ftColl_80078754<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<'a>, arg2: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1459,7 +1459,7 @@ pub fn ftColl_80078754<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<'a>,
 
 pub fn ftColl_800787B4<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<'a>, arg2: i32) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -3194,9 +3194,9 @@ pub fn ftColl_8007A06C<'a>(
     arg4: i32,
 ) {
     let __frame = ctx.stack_frame(0x2c8);
-    let best_kb: ftColl_8007A06C_best_kb<'a> = frame_at(ctx, &__frame, 0x0);
-    let stack_hit: HitCapsule<'a> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 120> = frame_at(ctx, &__frame, 0x13c);
+    let best_kb: ftColl_8007A06C_best_kb<'a> = frame_at(ctx, &__frame, 0x4);
+    let stack_hit: HitCapsule<'a> = frame_at(ctx, &__frame, 0x8);
+    let unused: ArrV<'a, u8, 120> = frame_at(ctx, &__frame, 0x140);
     let mut gobj = gobj;
     let mut dmg_ptr = dmg_ptr;
     let mut log = log;

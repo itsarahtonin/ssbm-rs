@@ -500,7 +500,7 @@ pub fn mnInfo_80252720<'a>(ctx: &'a Ctx, data: MnInfoData<'a>) {
 
 pub fn mnInfo_80252758<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut user_data: MnInfoData<'a> = null(ctx);
     let mut proc: HSD_GObjProc<'a> = null(ctx);
     let mut gobj: HSD_GObj<'a> = null(ctx);

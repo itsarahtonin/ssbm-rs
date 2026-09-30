@@ -997,10 +997,10 @@ pub fn MakeColorGenTExp<'a>(
     repeat: i32,
 ) {
     let __frame = ctx.stack_frame(0xc0);
-    let sel: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x0);
-    let exp: ArrP<'a, HSD_TExp<'a>, 4> = frame_at(ctx, &__frame, 0x10);
-    let sel_2: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x20);
-    let exp_2: ArrP<'a, HSD_TExp<'a>, 4> = frame_at(ctx, &__frame, 0x30);
+    let sel: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x4);
+    let exp: ArrP<'a, HSD_TExp<'a>, 4> = frame_at(ctx, &__frame, 0x14);
+    let sel_2: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x24);
+    let exp_2: ArrP<'a, HSD_TExp<'a>, 4> = frame_at(ctx, &__frame, 0x34);
     let mut lightmap = lightmap;
     let mut tobj = tobj;
     let mut c = c;
@@ -1634,8 +1634,8 @@ pub fn TObjMakeTExp<'a>(
     list: Ptr<'a, HSD_TExp<'a>>,
 ) {
     let __frame = ctx.stack_frame(0x50);
-    let c_src: Ptr<'a, HSD_TExp<'a>> = frame_at(ctx, &__frame, 0x0);
-    let a_src: Ptr<'a, HSD_TExp<'a>> = frame_at(ctx, &__frame, 0x4);
+    let c_src: Ptr<'a, HSD_TExp<'a>> = frame_at(ctx, &__frame, 0x4);
+    let a_src: Ptr<'a, HSD_TExp<'a>> = frame_at(ctx, &__frame, 0x8);
     let mut tobj = tobj;
     let mut lightmap = lightmap;
     let mut lightmap_done = lightmap_done;
@@ -2215,9 +2215,9 @@ pub fn HSD_TObjAssignResources<'a>(ctx: &'a Ctx, tobj_top: HSD_TObj<'a>) -> i32 
 
 pub fn HSD_TObjSetup<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
     let __frame = ctx.stack_frame(0x90);
-    let tlutobj: _GXTlutObj<'a> = frame_at(ctx, &__frame, 0x0);
-    let texobj: _GXTexObj<'a> = frame_at(ctx, &__frame, 0xc);
-    let tluts: ArrP<'a, _HSD_Tlut<'a>, 8> = frame_at(ctx, &__frame, 0x2c);
+    let tlutobj: _GXTlutObj<'a> = frame_at(ctx, &__frame, 0x4);
+    let texobj: _GXTexObj<'a> = frame_at(ctx, &__frame, 0x10);
+    let tluts: ArrP<'a, _HSD_Tlut<'a>, 8> = frame_at(ctx, &__frame, 0x30);
     let mut tobj = tobj;
     let mut num: i32 = 0;
     let mut nb_tluts: i32 = 0_i32;

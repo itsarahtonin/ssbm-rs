@@ -3504,8 +3504,8 @@ pub fn fn_80257D7C<'a>(ctx: &'a Ctx) {
 
 pub fn mnSnap_80257F24<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x190);
-    let jobj2: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let text: Ptr<'a, HSD_Text<'a>> = frame_at(ctx, &__frame, 0x4);
+    let jobj2: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x90);
+    let text: Ptr<'a, HSD_Text<'a>> = frame_at(ctx, &__frame, 0x94);
     let mut page_name: Val<'a, i8> = null(ctx);
     let mut snap: mnSnap_State<'a> = statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);

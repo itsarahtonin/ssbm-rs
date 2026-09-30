@@ -2910,7 +2910,7 @@ pub fn mnDiagram_CreateScreen<'a>(ctx: &'a Ctx, arg0: u8) {
 
 pub fn mnDiagram_Init<'a>(ctx: &'a Ctx, arg0: u8, arg1: u8) {
     let __frame = ctx.stack_frame(0x128);
-    let mode_storage: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let mode_storage: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xb8);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut gobj: HSD_GObj<'a> = null(ctx);

@@ -1717,9 +1717,9 @@ pub fn lbColl_80007BCC<'a>(
     arg6: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0xa8);
-    let sp74: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp68: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp38: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x18);
+    let sp74: Vec<'a> = frame_at(ctx, &__frame, 0x4);
+    let sp68: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let sp38: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x1c);
     let mut arg0 = arg0;
     let mut shield_hit = shield_hit;
     let mut arg2 = arg2;
@@ -1845,9 +1845,9 @@ pub fn lbColl_80007ECC<'a>(
     hurt_pos_z: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0xa8);
-    let sp70: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp64: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp34: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x18);
+    let sp70: Vec<'a> = frame_at(ctx, &__frame, 0x4);
+    let sp64: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let sp34: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x1c);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1920,9 +1920,9 @@ pub fn lbColl_8000805C<'a>(
     arg6: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0xa8);
-    let sp74: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp68: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp38: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x18);
+    let sp74: Vec<'a> = frame_at(ctx, &__frame, 0x4);
+    let sp68: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let sp38: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x1c);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -2011,9 +2011,9 @@ pub fn lbColl_80008248<'a>(
     arg5: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0xa8);
-    let sp70: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp64: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp34: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x18);
+    let sp70: Vec<'a> = frame_at(ctx, &__frame, 0x4);
+    let sp64: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let sp34: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x1c);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

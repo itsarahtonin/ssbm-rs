@@ -1907,7 +1907,7 @@ pub fn mn_802317E4<'a>(ctx: &'a Ctx, archive: HSD_Archive<'a>, arg1: i32) {
 
 pub fn mn_80231804<'a>(ctx: &'a Ctx, archive: HSD_Archive<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x380);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x240);
     let mut archive = archive;
     let mut arg1 = arg1;
     let mut temp_r3: HSD_GObjProc<'a> = null(ctx);

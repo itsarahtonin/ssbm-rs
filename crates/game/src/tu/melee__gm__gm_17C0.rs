@@ -608,8 +608,8 @@ pub fn gm_8017CE34<'a>(
     arg9: i32,
 ) {
     let __frame = ctx.stack_frame(0xd0);
-    let colors: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x10);
+    let colors: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x24);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x34);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

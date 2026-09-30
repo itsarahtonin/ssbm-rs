@@ -724,11 +724,11 @@ pub fn HSD_TExpSchedule<'a>(
     resource: HSD_TExpRes<'a>,
 ) {
     let __frame = ctx.stack_frame(0x258);
-    let dep_mtx: ArrV<'a, u32, 32> = frame_at(ctx, &__frame, 0x0);
-    let full_dep_matrix: ArrV<'a, u32, 32> = frame_at(ctx, &__frame, 0x80);
-    let order: ArrV<'a, u32, 32> = frame_at(ctx, &__frame, 0x100);
-    let min_order: ArrV<'a, u32, 32> = frame_at(ctx, &__frame, 0x180);
-    let min: Val<'a, i32> = frame_at(ctx, &__frame, 0x200);
+    let dep_mtx: ArrV<'a, u32, 32> = frame_at(ctx, &__frame, 0xc);
+    let full_dep_matrix: ArrV<'a, u32, 32> = frame_at(ctx, &__frame, 0x8c);
+    let order: ArrV<'a, u32, 32> = frame_at(ctx, &__frame, 0x10c);
+    let min_order: ArrV<'a, u32, 32> = frame_at(ctx, &__frame, 0x18c);
+    let min: Val<'a, i32> = frame_at(ctx, &__frame, 0x20c);
     let mut num = num;
     let mut list = list;
     let mut result = result;

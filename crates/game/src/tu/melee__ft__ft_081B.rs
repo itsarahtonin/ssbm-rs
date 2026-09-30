@@ -28,7 +28,7 @@ use crate::support::*;
 
 pub fn ft_80081B38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut sp8: Val<'a, u8> = null(ctx);
     let mut fp: Fighter<'a> = null(ctx);

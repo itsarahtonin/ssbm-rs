@@ -405,8 +405,9 @@ fn interact(ctx: &Ctx, kind: Kind, f: impl FnOnce() -> u32) -> u32 {
                 Some(x) if x.kind == kind => {
                     state.cursor.set(at + 1);
                     // Frames below the original's r1 are dead once the callee or handler
-                    // returns, and the side replaying may be using that stack.
-                    let dead = x.sp.wrapping_sub(STACK_SCRATCH)..x.sp;
+                    // returns, and the side replaying may be using that stack. So is the word
+                    // at 4(r1), where the callee saved its return address.
+                    let dead = x.sp.wrapping_sub(STACK_SCRATCH)..x.sp.wrapping_add(8);
                     for (at, bytes) in &x.writes {
                         if dead.contains(at) {
                             continue;

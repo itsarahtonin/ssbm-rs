@@ -243,7 +243,7 @@ pub fn gm_801BAC9C<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>, arg1: i32) -> i32 
 
 pub fn onEnterVs<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x88);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x24);
     let mut arg0 = arg0;
     let mut ev: EventData<'a> = inl_gm_GetEventData_unfused(ctx);
     let mut md: StartMeleeData<'a> =

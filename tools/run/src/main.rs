@@ -36,6 +36,7 @@ struct Stop;
 
 /// Ports lockstep does not check (see where they are set).
 const LOCKSTEP_EXEMPT: &[&str] = &[
+    "__start",
     "main",
     "runGameMode",
     "gm_801A4510",

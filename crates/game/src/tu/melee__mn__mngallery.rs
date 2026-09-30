@@ -606,7 +606,7 @@ pub fn mnGallery_8025963C<'a>(ctx: &'a Ctx) {
 
 pub fn mnGallery_80259868<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x78);
-    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x28);
     let mut archive: HSD_Archive<'a> = null(ctx);
     let mut new_var: Ptr<'a, Addr<'a>> = null(ctx);
     let mut gobj: HSD_GObj<'a> = null(ctx);

@@ -537,7 +537,7 @@ pub fn gm_801A6DC0<'a>(ctx: &'a Ctx) {
 
 pub fn gm_801A6EE4<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
     let mut var_r29: i32 = 0;
     'l1: loop {
         'c2: {}

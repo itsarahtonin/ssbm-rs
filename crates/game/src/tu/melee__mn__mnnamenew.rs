@@ -1746,7 +1746,7 @@ pub fn mnNameNew_EnterFromMnName<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
 
 pub fn mnNameNew_EnterFromMnCharSel<'a>(ctx: &'a Ctx, arg0: HSD_Archive<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x128);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut name_count: u8 = 0;

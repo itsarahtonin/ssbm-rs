@@ -230,7 +230,7 @@ pub fn hsd_80394544<'a>(
 
 pub fn hsd_80394668<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x4);
     let mut sp: ParticleScreenState<'a> =
         statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx);
     let mut pos: i32 = 0;
@@ -720,9 +720,9 @@ pub fn hsd_80394E8C<'a>(ctx: &'a Ctx, node_ptr: lbl_8040B904_t<'a>) {
 
 pub fn hsd_80394F48<'a>(ctx: &'a Ctx, data: Addr<'a>) {
     let __frame = ctx.stack_frame(0x98);
-    let k: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let j: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 64> = frame_at(ctx, &__frame, 0x8);
+    let k: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let j: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
+    let unused: ArrV<'a, u8, 64> = frame_at(ctx, &__frame, 0xc);
     let mut data = data;
     let mut width: i32 = 0;
     let mut color: Ptr<'a, Addr<'a>> = null(ctx);
@@ -971,7 +971,7 @@ pub fn hsd_803956D8<'a>(ctx: &'a Ctx, disp_ptr: Addr<'a>) -> i32 {
 
 pub fn hsd_803957C0<'a>(ctx: &'a Ctx, input: Addr<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x4);
     let mut input = input;
     let mut col: i32 = 0;
     let mut row: i32 = 0;
@@ -1960,8 +1960,8 @@ pub fn hsd_80396868<'a>(ctx: &'a Ctx) {
 
 pub fn hsd_80396884<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x78);
-    let buf: ArrV<'a, i8, 32> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x20);
+    let buf: ArrV<'a, i8, 32> = frame_at(ctx, &__frame, 0x4);
+    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x24);
     let mut saved: Addr<'a> = null(ctx);
     let mut x_base: i32 = 0;
     let mut b6: i32 = 0;
@@ -2357,8 +2357,8 @@ pub fn hsd_80396C78<'a>(ctx: &'a Ctx, data: Addr<'a>) -> i32 {
 
 pub fn hsd_80396E40<'a>(ctx: &'a Ctx, keycode: i32) {
     let __frame = ctx.stack_frame(0x98);
-    let buf: ArrV<'a, i8, 64> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x40);
+    let buf: ArrV<'a, i8, 64> = frame_at(ctx, &__frame, 0x8);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x48);
     let mut keycode = keycode;
     let mut sp: ParticleScreenState<'a> =
         statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx);
@@ -3088,7 +3088,7 @@ pub fn hsd_803975D4<'a>(ctx: &'a Ctx) {
 
 pub fn fn_80397814<'a>(ctx: &'a Ctx, arg: Addr<'a>) -> Addr<'a> {
     let __frame = ctx.stack_frame(0x110);
-    let unused: ArrV<'a, u8, 160> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 160> = frame_at(ctx, &__frame, 0x10);
     let mut arg = arg;
     let mut base: Val<'a, u8> = null(ctx);
     let mut v_ctx: Addr<'a> = null(ctx);

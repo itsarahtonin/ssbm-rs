@@ -303,15 +303,13 @@ all_tuples!(
 
 impl Ctx {
     fn call_with(&self, addr: u32, r: ArgRegs) {
-        if r.stack.is_empty() {
-            self.invoke(addr);
-        } else {
-            let frame = self.stack_alloc(4 * r.stack.len() as u32);
-            for (i, w) in r.stack.iter().enumerate() {
-                self.write_u32(frame.base() + 4 * i as u32, *w);
-            }
-            self.invoke(addr);
+        // Arguments past the registers go at 8(r1), which the caller's frame holds for them as
+        // the original's does, so the callee runs at the original's stack addresses.
+        let sp = self.regs.r(1);
+        for (i, w) in r.stack.iter().enumerate() {
+            self.write_u32(sp + 8 + 4 * i as u32, *w);
         }
+        self.invoke(addr);
         if let Some(to) = self.take_resume_at() {
             panic!(
                 "{} jumped to {} past a port that called it",

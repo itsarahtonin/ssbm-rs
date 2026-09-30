@@ -517,7 +517,7 @@ pub fn HSD_ShadowDeleteObject<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>, jobj: HS
 
 pub fn makeMatrix<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let Mprj: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let Mprj: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x4);
     let mut shadow = shadow;
     's1: {
         let __case = match fns::HSD_CObjGetProjectionType(ctx, (shadow).camera()) {

@@ -3255,8 +3255,8 @@ pub fn mnMain_Scene_OnFrame<'a>(ctx: &'a Ctx) {
 
 pub fn mnMain_Scene_OnEnter<'a>(ctx: &'a Ctx, user_data: Addr<'a>) {
     let __frame = ctx.stack_frame(0x450);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x280);
+    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x28c);
     let mut user_data = user_data;
     let mut hovered_selection: Val<'a, u16> = null(ctx);
     let mut temp_r3_8: HSD_GObj<'a> = null(ctx);

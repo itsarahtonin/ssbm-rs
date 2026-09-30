@@ -338,8 +338,8 @@ pub fn gmTitle_801A1A3C<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
 
 pub fn gmTitle_801A1AC0<'a>(ctx: &'a Ctx) -> HSD_Archive<'a> {
     let __frame = ctx.stack_frame(0x78);
-    let dat: ArrV<'a, i8, 12> = frame_at(ctx, &__frame, 0x0);
-    let usd: ArrV<'a, i8, 12> = frame_at(ctx, &__frame, 0xc);
+    let dat: ArrV<'a, i8, 12> = frame_at(ctx, &__frame, 0x48);
+    let usd: ArrV<'a, i8, 12> = frame_at(ctx, &__frame, 0x54);
     ctx.write_bytes(
         Handle::addr(dat),
         b"\x47\x6d\x54\x74\x41\x6c\x6c\x2e\x64\x61\x74\x00",
@@ -662,9 +662,9 @@ fn inl_sfxForward_unfused<'a>(ctx: &'a Ctx) {
 }
 
 fn inl_gmTitle_801A1AC0_unfused<'a>(ctx: &'a Ctx) -> HSD_Archive<'a> {
-    let __frame = ctx.stack_frame(0x20);
-    let dat: ArrV<'a, i8, 12> = frame_at(ctx, &__frame, 0x0);
-    let usd: ArrV<'a, i8, 12> = frame_at(ctx, &__frame, 0xc);
+    let __frame = ctx.stack_frame(0x68);
+    let dat: ArrV<'a, i8, 12> = frame_at(ctx, &__frame, 0x48);
+    let usd: ArrV<'a, i8, 12> = frame_at(ctx, &__frame, 0x54);
     ctx.write_bytes(
         Handle::addr(dat),
         b"\x47\x6d\x54\x74\x41\x6c\x6c\x2e\x64\x61\x74\x00",

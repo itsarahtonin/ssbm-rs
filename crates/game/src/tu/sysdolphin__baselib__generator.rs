@@ -518,17 +518,17 @@ pub fn hsd_8039D9C8<'a>(ctx: &'a Ctx) -> HSD_Generator<'a> {
 
 pub fn hsd_8039DAD4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) -> f64 {
     let __frame = ctx.stack_frame(0x230);
-    let vel_copy: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let emit_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let tmpvec: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let rot_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x30);
-    let jobj_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x60);
-    let look_dir: Vec<'a> = frame_at(ctx, &__frame, 0x90);
-    let cam_up: Vec<'a> = frame_at(ctx, &__frame, 0x9c);
-    let cross1: Vec<'a> = frame_at(ctx, &__frame, 0xa8);
-    let vel_norm: Vec<'a> = frame_at(ctx, &__frame, 0xb4);
-    let trig_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xc0);
+    let vel_copy: Vec<'a> = frame_at(ctx, &__frame, 0x4);
+    let emit_pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let tmpvec: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let rot_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x34);
+    let jobj_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x64);
+    let look_dir: Vec<'a> = frame_at(ctx, &__frame, 0x94);
+    let cam_up: Vec<'a> = frame_at(ctx, &__frame, 0xa0);
+    let cross1: Vec<'a> = frame_at(ctx, &__frame, 0xac);
+    let vel_norm: Vec<'a> = frame_at(ctx, &__frame, 0xb8);
+    let trig_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xc4);
     let mut r#gen = r#gen;
     let mut tmp: f64 = 0.0;
     let mut eps: f64 = 0.0;

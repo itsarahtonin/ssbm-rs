@@ -422,7 +422,7 @@ pub fn fn_80181E18<'a>(ctx: &'a Ctx) {
 
 pub fn gm_80182174<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
     let mut i: i32 = 0;
     let mut src: RegClearSpawnEntry<'a> = null(ctx);
     let mut dst: RegClearSpawnEntry<'a> = null(ctx);

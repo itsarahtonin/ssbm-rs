@@ -229,6 +229,8 @@ class FnCtx:
         self.names = set()
         self.frame = []  # (rust name, handle type, size, align)
         self.frame_size = 0
+        # Bytes at 8(r1) that calls from this frame pass arguments in, past the registers.
+        self.outgoing = 0
         self.labels = 0
         self.targets = []  # Loop objects and switch labels
         self.escaping = set()
@@ -362,6 +364,7 @@ class Unit:
         self.inlines = {}  # Rust name -> code of a translated inline function
         self.inline_variants = {}  # base Rust name -> [(Rust name, inlining decisions)]
         self.inline_active = {}  # base Rust name -> Rust name, while translating it
+        self.inline_outgoing = {}  # inline copy -> bytes at 8(r1) it needs of its caller's frame
         self.data_ranges = self.read_data_ranges()
         self.static_addrs = {}
         self.skipped = []
@@ -691,7 +694,14 @@ class Translator:
         # stack addresses as under the original, and see the same stack leftovers.
         original = self.u.frame_sizes.get(name, 0) if not self.inline and (
             self.f.cursor.linkage != ci.LinkageKind.INTERNAL or name in self.u.frame_sizes) else 0
-        needed = (8 + self.f.frame_size + 7) & ~7 if self.f.frame else 0
+        # Arguments past the registers go at 8(r1), as in the original's frame, so callees
+        # run at its addresses; locals come after them. An inline copy without locals has the
+        # caller's frame hold them instead, as MWCC's inlined code does.
+        out = self.f.outgoing
+        if self.f.variadic and out:
+            raise Unsupported("variadic function that passes arguments on the stack")
+        has_frame = bool(self.f.frame) or (out and not self.inline)
+        needed = (8 + out + self.f.frame_size + 7) & ~7 if has_frame else 0
         size = max(original, needed)
         if self.f.variadic:
             size = max(size, (8 + VA_SAVE_SIZE + 7) & ~7)
@@ -700,7 +710,7 @@ class Translator:
             if self.f.variadic:
                 lines.append("    __frame.save_varargs();")
             for rname, hty, off in self.f.frame:
-                lines.append(f"    let {ident(rname)}: {hty} = frame_at(ctx, &__frame, {off:#x});")
+                lines.append(f"    let {ident(rname)}: {hty} = frame_at(ctx, &__frame, {out + off:#x});")
         lines += ["    " + p for p in pre]
         lines += ["    " + s for s in stmts]
         if self.f.ret["k"] != "void" and not self.f.sret and not self.ends_in_return(body):
@@ -2805,6 +2815,41 @@ class Translator:
                 gpr += 1
         return min(gpr, 8), min(fpr, 8)
 
+    def reserve_outgoing(self, ft, args):
+        """Makes room at 8(r1) for the arguments a call passes past the registers, assigned
+        as `ArgRegs` does: a struct by its address, 64-bit values in aligned pairs or slots."""
+        gpr, fpr, words = 3, 1, 0
+        if ft["ret"]["k"] == "rec" and self.u.size_of(ft["ret"]) not in (4, 8):
+            gpr += 1
+
+        def one(t):
+            nonlocal gpr, fpr, words
+            if is_float(t):
+                if fpr <= 8:
+                    fpr += 1
+                elif t["size"] == 4:
+                    words += 1
+                else:
+                    words += words % 2 + 2
+            elif is_int(t) and int_info(t)[0] == 8:
+                gpr += 1 - gpr % 2
+                if gpr < 10:
+                    gpr += 2
+                else:
+                    words += words % 2 + 2
+            elif gpr <= 10:
+                gpr += 1
+            else:
+                words += 1
+
+        params = ft["params"]
+        for pt in params:
+            one(pt)
+        for a in args[len(params):] if ft.get("variadic") else ():
+            at = self.u.ctype(a.type)
+            one(DOUBLE if is_float(at) else INT)
+        self.f.outgoing = max(self.f.outgoing, 4 * words)
+
     def helper(self, name, argv, t):
         """A call to one of MWCC's runtime helpers, as the original makes one."""
         f = self.u.prog.function(name, self.u.name)
@@ -2851,6 +2896,8 @@ class Translator:
                     t, False)
 
     def call_args(self, ft, args, marshal=False, inlined=False, unread=()):
+        if not inlined:
+            self.reserve_outgoing(ft, args)
         self.in_args += inlined
         try:
             return self._call_args(ft, args, marshal, unread)
@@ -3421,11 +3468,16 @@ def _request_inline(self, defn, fuse, caller, reg_ptrs=frozenset(), forward=None
         # The caller depends on the same inlining; pointer bindings are this call's own.
         caller.decisions.update((k, v) for k, v in decisions.items() if not isinstance(k, tuple))
 
+    def holding(rname):
+        # A copy without a frame of its own passes its calls' stack arguments in the caller's.
+        caller.f.outgoing = max(caller.f.outgoing, self.inline_outgoing.get(rname, 0))
+        return rname
+
     variants = self.inline_variants.setdefault(base, [])
     for rname, decisions in variants:
         if all(holds(k, v) for k, v in decisions.items()):
             inherit(decisions)
-            return rname
+            return holding(rname)
     rname = base if not variants else f"{base}_{len(variants) + 1}"
     self.inline_active[base] = rname
     # Copies made for this one may call it; if it fails, they go too.
@@ -3443,9 +3495,10 @@ def _request_inline(self, defn, fuse, caller, reg_ptrs=frozenset(), forward=None
     finally:
         del self.inline_active[base]
     self.inlines[rname] = code.replace(f"pub fn {ident(name)}<'a>", f"fn {rname}<'a>", 1)
+    self.inline_outgoing[rname] = 0 if tr.f.frame else tr.f.outgoing
     variants.append((rname, tr.decisions))
     inherit(tr.decisions)
-    return rname
+    return holding(rname)
 
 
 def _regions(self, path):
