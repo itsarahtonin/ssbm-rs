@@ -30,7 +30,32 @@ use ssbm_sdk::{Sdk, boot, hw};
 /// Panic payload that ends the run on purpose.
 struct Stop;
 
+/// Ports lockstep does not check (see where they are set).
+const LOCKSTEP_EXEMPT: &[&str] = &[
+    "main",
+    "runGameMode",
+    "gm_801A4510",
+    "gm_801A4014",
+    "gm_801A4D34",
+    "ARInit",
+    "__ARChecksize",
+];
+
+/// Stack for the thread that runs the game. Every guest call nests Rust frames, and ports and
+/// lockstep checks make them deep.
+const STACK_SIZE: usize = 1 << 30;
+
 fn main() -> ExitCode {
+    std::thread::Builder::new()
+        .name("game".to_owned())
+        .stack_size(STACK_SIZE)
+        .spawn(run)
+        .expect("start the game thread")
+        .join()
+        .unwrap_or(ExitCode::FAILURE)
+}
+
+fn run() -> ExitCode {
     let mut disc_path = std::env::var("SSBM_DISC").ok();
     let mut fields = 600;
     let mut replay_path = None;
@@ -84,7 +109,8 @@ fn main() -> ExitCode {
 
     let default_hook = panic::take_hook();
     panic::set_hook(Box::new(move |info| {
-        if !info.payload().is::<Stop>() {
+        // Lockstep catches and reports the panics of the checks it runs.
+        if !info.payload().is::<Stop>() && !ssbm_rt::lockstep::checking() {
             default_hook(info);
         }
     }));
@@ -130,7 +156,32 @@ fn main() -> ExitCode {
         for &addr in &ported {
             ctx.set_mode(addr, ssbm_rt::Mode::Lockstep);
         }
+        // The game's outer loops never return, so they run as ports while everything they
+        // call is checked. ARInit DMAs through a stack buffer whose address the port's frame
+        // does not reproduce yet.
+        for name in LOCKSTEP_EXEMPT {
+            ctx.set_mode(ssbm_sdk::sym(name), ssbm_rt::Mode::Native);
+        }
         ctx.lockstep.keep_per_function.set(2);
+    }
+    // Playback's Gecko codes patch some functions; those keep running their patched code.
+    if let Some(dev) = &slippi {
+        let mut kept = Vec::new();
+        for (at, len) in ssbm_slippi::patched(dev) {
+            for f in ssbm_types::functions_overlapping(at, len) {
+                if ported.contains(&f) && !kept.contains(&f) {
+                    ctx.set_mode(f, ssbm_rt::Mode::Original);
+                    kept.push(f);
+                }
+            }
+        }
+        if !kept.is_empty() {
+            let names: Vec<String> = kept.iter().map(|&f| ctx.name_of(f)).collect();
+            eprintln!(
+                "patched by playback's codes, so kept original: {}",
+                names.join(", ")
+            );
+        }
     }
 
     // CALLS=name,... logs each call to these functions (symbols or hex addresses) with its
@@ -164,6 +215,41 @@ fn main() -> ExitCode {
                 }),
             );
         }
+    }
+
+    // WATCH_ADDR=addr[,len] logs every write to that memory, with the writer and the ports
+    // running, and whether a lockstep check's original side made it.
+    if let Ok(spec) = std::env::var("WATCH_ADDR") {
+        let mut parts = spec.split(',');
+        let addr = u32::from_str_radix(parts.next().unwrap().trim_start_matches("0x"), 16)
+            .expect("WATCH_ADDR=addr[,len]");
+        let len = parts.next().map_or(4, |l| l.parse().unwrap());
+        let interp4 = interp.clone();
+        ctx.set_watch(
+            addr,
+            len,
+            Rc::new(move |ctx, at, n| {
+                let ports: Vec<String> = ctx
+                    .native_stack()
+                    .iter()
+                    .rev()
+                    .take(3)
+                    .map(|a| ctx.name_of(*a))
+                    .collect();
+                eprintln!(
+                    "write {:0w$X} to {at:08X} at {} (ports: {}){}",
+                    ctx.read_be(at, n),
+                    ctx.name_of(interp4.pc.get()),
+                    ports.join(" < "),
+                    if ctx.lockstep.in_original() {
+                        " [original side]"
+                    } else {
+                        ""
+                    },
+                    w = 2 * n as usize
+                );
+            }),
+        );
     }
 
     // WATCH=port,offset,from,to logs writes to a fighter field during replay frames
@@ -361,13 +447,24 @@ fn main() -> ExitCode {
         let stats = ctx.lockstep.stats.borrow();
         let calls: u64 = stats.values().map(|s| s.calls).sum();
         let bad: Vec<_> = stats.iter().filter(|(_, s)| s.mismatches > 0).collect();
+        let unverifiable: Vec<_> = stats.iter().filter(|(_, s)| s.uninitialized > 0).collect();
         eprintln!(
             "lockstep: {calls} calls to {} of {} ported functions, {} functions mismatch",
             stats.len(),
             ported.len(),
             bad.len()
         );
-        for (addr, s) in bad.iter().take(20) {
+        if !unverifiable.is_empty() {
+            let names: Vec<String> = unverifiable
+                .iter()
+                .map(|(a, s)| format!("{} ({})", ctx.name_of(**a), s.uninitialized))
+                .collect();
+            eprintln!(
+                "  calls whose original reads uninitialized stack, not compared: {}",
+                names.join(", ")
+            );
+        }
+        for (addr, s) in &bad {
             eprintln!(
                 "  {}: {} of {} calls mismatch",
                 ctx.name_of(**addr),
@@ -375,7 +472,7 @@ fn main() -> ExitCode {
                 s.calls
             );
         }
-        for m in ctx.lockstep.mismatches.borrow().iter().take(10) {
+        for m in ctx.lockstep.mismatches.borrow().iter() {
             eprintln!("  {} call {}:", ctx.name_of(m.function), m.call);
             for d in m.diffs.iter().take(6) {
                 eprintln!("    {d:X?}");
@@ -412,6 +509,9 @@ fn main() -> ExitCode {
             eprintln!("  {}", sdk.describe(&ctx));
             for (from, to) in interp.recent_jumps() {
                 eprintln!("  jump {} -> {}", ctx.name_of(from), ctx.name_of(to));
+            }
+            for addr in ctx.native_stack().iter().rev() {
+                eprintln!("  in port {}", ctx.name_of(*addr));
             }
             eprintln!("  pc {}", ctx.name_of(interp.pc.get()));
             eprintln!("  lr {}", ctx.name_of(ctx.regs.lr.get()));
