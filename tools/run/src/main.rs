@@ -168,6 +168,11 @@ fn run() -> ExitCode {
     }));
 
     let ctx = Ctx::new();
+    // ORIGINAL_ENTRIES=1 reports where calls entered original code.
+    let count_entries = std::env::var_os("ORIGINAL_ENTRIES").is_some();
+    if count_entries {
+        ctx.count_original_entries();
+    }
     let interp = Rc::new(Interpreter::default());
     INTERP.with(|i| *i.borrow_mut() = Some(interp.clone()));
     ctx.set_backend(Box::new(RcBackend(interp.clone())));
@@ -209,11 +214,97 @@ fn run() -> ExitCode {
     if !ports.is_empty() {
         eprintln!("ported: {units} units, {} functions", ported.len());
     }
-    // Playback's Gecko codes patch some functions; those keep running their patched code.
+    // Playback's Gecko codes patch some functions. Those run ports made with the codes where
+    // tools/c2rs/patched.py has seen these codes, and their patched original code elsewhere.
+    // PATCHED_ORIGINAL=1 keeps them all original.
+    // Whether lockstep checks ports yet, for those registered as the run goes.
+    let checking = Rc::new(Cell::new(false));
     let mut kept = Vec::new();
+    let mut with_codes: Vec<u32> = Vec::new();
     if let Some(dev) = &slippi {
+        let codes = ssbm_slippi::applied_codes(dev);
+        let mut by_function: std::collections::BTreeMap<u32, Vec<ssbm_game::playback::Applied>> =
+            Default::default();
+        let mut other_codes = Vec::new();
+        for c in &codes {
+            let len = match c.kind {
+                0x00 => 1,
+                0x02 => 2 * ((c.first >> 16) + 1),
+                0x06 => c.first,
+                _ => 4,
+            };
+            let at = ssbm_types::functions_overlapping(c.addr, len);
+            match c.kind {
+                // A code outside any function stands behind a stub called at its address.
+                0x04 | 0xC2 => match at.first() {
+                    Some(&f) => by_function.entry(f).or_default(),
+                    None if c.kind == 0xC2 => by_function.entry(c.addr).or_default(),
+                    None => continue,
+                }
+                .push(ssbm_game::playback::Applied {
+                    kind: c.kind,
+                    addr: c.addr,
+                    first: c.first,
+                    words: &c.words,
+                }),
+                0x00 | 0x02 | 0x06 => other_codes.extend(at),
+                _ => {}
+            }
+        }
+        if std::env::var_os("PATCHED_ORIGINAL").is_none() && !ports.is_empty() {
+            for (&f, cs) in &by_function {
+                let stub = ssbm_types::functions_overlapping(f, 4).is_empty();
+                // Code the SDK or the Slippi device stands in for, such as the EXI transfer
+                // function, keeps its stand-in.
+                if (!stub && !ported.contains(&f))
+                    || other_codes.contains(&f)
+                    || ctx.entry(f).is_some_and(|e| e.external)
+                {
+                    continue;
+                }
+                if let Some(p) = ssbm_game::playback::find(f, cs) {
+                    ctx.register_port(f, p.port, ssbm_rt::Returns::Unknown);
+                    with_codes.push(f);
+                }
+            }
+            // Callers of a code that returns past its function's caller resume where it says.
+            for at in ssbm_slippi::returns_past_caller(dev) {
+                for f in ssbm_types::functions_overlapping(at, 4) {
+                    for site in dol.as_ref().map_or_else(Vec::new, |d| calls_to(d, f)) {
+                        for caller in ssbm_types::functions_overlapping(site, 4) {
+                            if ported.contains(&caller)
+                                && !with_codes.contains(&caller)
+                                && let Some(p) = ssbm_game::playback::find(caller, &[])
+                            {
+                                ctx.register_port(caller, p.port, ssbm_rt::Returns::Unknown);
+                                with_codes.push(caller);
+                            }
+                        }
+                    }
+                }
+            }
+            // Places in injected code that other code calls get ports when first called, at
+            // wherever playback placed the code.
+            let applied: Vec<ssbm_game::playback::Applied> =
+                by_function.values().flatten().copied().collect();
+            let entries = ssbm_game::playback::entries(&applied);
+            let checked = checking.clone();
+            ctx.set_resolver(Box::new(move |ctx, addr| {
+                let Some(e) = entries.iter().find(|e| {
+                    ssbm_game::playback::placed(ctx, e.site)
+                        .is_some_and(|at| at.wrapping_add(e.offset) == addr)
+                }) else {
+                    return false;
+                };
+                ctx.register_port(addr, e.port, ssbm_rt::Returns::Unknown);
+                if checked.get() {
+                    ctx.set_mode(addr, ssbm_rt::Mode::Lockstep);
+                }
+                true
+            }));
+        }
         let mut keep = |f: u32| {
-            if ported.contains(&f) && !kept.contains(&f) {
+            if ported.contains(&f) && !kept.contains(&f) && !with_codes.contains(&f) {
                 ctx.set_mode(f, ssbm_rt::Mode::Original);
                 kept.push(f);
             }
@@ -234,6 +325,12 @@ fn run() -> ExitCode {
                 }
             }
         }
+        if !with_codes.is_empty() {
+            eprintln!(
+                "ported with playback's codes: {} functions and stubs",
+                with_codes.len()
+            );
+        }
         if !kept.is_empty() {
             let names: Vec<String> = kept.iter().map(|&f| ctx.name_of(f)).collect();
             eprintln!(
@@ -250,13 +347,16 @@ fn run() -> ExitCode {
         let exempt: Vec<u32> = LOCKSTEP_EXEMPT.iter().map(|n| ssbm_sdk::sym(n)).collect();
         let checked: Vec<u32> = ported
             .iter()
+            .chain(&with_codes)
             .copied()
             .filter(|a| !kept.contains(a) && !exempt.contains(a))
             .collect();
+        let checking = checking.clone();
         let enable = move |ctx: &Ctx| {
             for &addr in &checked {
                 ctx.set_mode(addr, ssbm_rt::Mode::Lockstep);
             }
+            checking.set(true);
         };
         if lockstep_from == 0 {
             enable(&ctx);
@@ -583,6 +683,33 @@ fn run() -> ExitCode {
         executed / 1_000_000,
         sdk.hw.draws()
     );
+    if count_entries {
+        // Injected code sits where the branch at its code's site leads.
+        let placed: Vec<(u32, u32, u32)> = slippi
+            .as_ref()
+            .map(|d| ssbm_slippi::applied_codes(d))
+            .unwrap_or_default()
+            .iter()
+            .filter(|c| c.kind == 0xC2)
+            .filter_map(|c| {
+                let w = ctx.mem.read_u32(c.addr).ok()?;
+                (w & 0xFC00_0003 == 0x4800_0000).then(|| {
+                    let at = c.addr.wrapping_add((((w & 0x03FF_FFFC) << 6) as i32 >> 6) as u32);
+                    (c.addr, at, 4 * c.words.len() as u32)
+                })
+            })
+            .collect();
+        let entries = ctx.original_entries();
+        eprintln!("original code entered at {} addresses:", entries.len());
+        for (addr, n) in entries.iter().take(40) {
+            let code = placed
+                .iter()
+                .find(|&&(_, at, len)| addr.wrapping_sub(at) < len)
+                .map(|&(site, at, _)| format!(" (code at {site:#010x} +{:#x})", addr - at))
+                .unwrap_or_default();
+            eprintln!("  {:>9}  {}{code}", n, ctx.name_of(*addr));
+        }
+    }
     match result {
         Ok(()) => {
             eprintln!("the game returned from its entry point");

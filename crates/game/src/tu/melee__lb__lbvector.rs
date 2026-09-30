@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn lbVector_Normalize<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
     let __frame = ctx.stack_frame(0x18);
@@ -698,6 +699,150 @@ pub fn lbVector_8000E838<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>, c: Vec<'a>, d
     return 0.0;
 }
 
+/// sqrtf__Ff, transliterated from its machine code: not in the C clang reads.
+pub fn asm_sqrtf__Ff(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8000d5bc_u32;
+    loop {
+        match pc {
+            0x8000d5bc_u32 => {
+                // stwu r1, -0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff0_u32);
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // lfs f0, "@110"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffff80c8_u32);
+                    c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
+                }
+                // fcmpo cr0, f1, f0
+                c::fp_compare(ctx, 0, ctx.regs.f(1), ctx.regs.f(0));
+                // ble .L_8000D618
+                if (c::cr_bit(ctx, 1) == false) {
+                    pc = 0x8000d618_u32;
+                    continue;
+                }
+                pc = 0x8000d5cc_u32;
+            }
+            0x8000d5cc_u32 => {
+                // frsqrte f2, f1
+                {
+                    let v = fp::frsqrte(ctx.regs.f(1));
+                    ctx.regs.set_f(2, v);
+                }
+                // lfd f4, "@111"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffff80d0_u32);
+                    ctx.regs.set_f(4, f64::from_bits(ctx.read_u64(ea)));
+                }
+                // lfd f3, "@112"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffff80d8_u32);
+                    ctx.regs.set_f(3, f64::from_bits(ctx.read_u64(ea)));
+                }
+                // fmul f0, f2, f2
+                {
+                    let v = fp::fmul(ctx.regs.f(2), ctx.regs.f(2));
+                    ctx.regs.set_f(0, v);
+                }
+                // fmul f2, f4, f2
+                {
+                    let v = fp::fmul(ctx.regs.f(4), ctx.regs.f(2));
+                    ctx.regs.set_f(2, v);
+                }
+                // fnmsub f0, f1, f0, f3
+                {
+                    let v = fp::fnmsub(ctx.regs.f(1), ctx.regs.f(0), ctx.regs.f(3));
+                    ctx.regs.set_f(0, v);
+                }
+                // fmul f2, f2, f0
+                {
+                    let v = fp::fmul(ctx.regs.f(2), ctx.regs.f(0));
+                    ctx.regs.set_f(2, v);
+                }
+                // fmul f0, f2, f2
+                {
+                    let v = fp::fmul(ctx.regs.f(2), ctx.regs.f(2));
+                    ctx.regs.set_f(0, v);
+                }
+                // fmul f2, f4, f2
+                {
+                    let v = fp::fmul(ctx.regs.f(4), ctx.regs.f(2));
+                    ctx.regs.set_f(2, v);
+                }
+                // fnmsub f0, f1, f0, f3
+                {
+                    let v = fp::fnmsub(ctx.regs.f(1), ctx.regs.f(0), ctx.regs.f(3));
+                    ctx.regs.set_f(0, v);
+                }
+                // fmul f2, f2, f0
+                {
+                    let v = fp::fmul(ctx.regs.f(2), ctx.regs.f(0));
+                    ctx.regs.set_f(2, v);
+                }
+                // fmul f0, f2, f2
+                {
+                    let v = fp::fmul(ctx.regs.f(2), ctx.regs.f(2));
+                    ctx.regs.set_f(0, v);
+                }
+                // fmul f2, f4, f2
+                {
+                    let v = fp::fmul(ctx.regs.f(4), ctx.regs.f(2));
+                    ctx.regs.set_f(2, v);
+                }
+                // fnmsub f0, f1, f0, f3
+                {
+                    let v = fp::fnmsub(ctx.regs.f(1), ctx.regs.f(0), ctx.regs.f(3));
+                    ctx.regs.set_f(0, v);
+                }
+                // fmul f0, f2, f0
+                {
+                    let v = fp::fmul(ctx.regs.f(2), ctx.regs.f(0));
+                    ctx.regs.set_f(0, v);
+                }
+                // fmul f0, f1, f0
+                {
+                    let v = fp::fmul(ctx.regs.f(1), ctx.regs.f(0));
+                    ctx.regs.set_f(0, v);
+                }
+                // frsp f0, f0
+                {
+                    let v = fp::frsp(ctx.regs.f(0));
+                    c::fill(ctx, 0, v);
+                }
+                // stfs f0, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
+                }
+                // lfs f1, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
+                }
+                pc = 0x8000d618_u32;
+            }
+            0x8000d618_u32 => {
+                // addi r1, r1, 0x10
+                g[1].set(g[1].get().wrapping_add(0x10_u32));
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of sqrtf__Ff");
+            }
+            _ => unreachable!("sqrtf__Ff: no block at {pc:#010x}"),
+        }
+    }
+}
+
 fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     let mut x = x;
     let mut y: f64 = 0.0;
@@ -1126,4 +1271,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Float,
     );
+    ctx.register_port(0x8000d5bc, asm_sqrtf__Ff, Returns::Unknown);
 }

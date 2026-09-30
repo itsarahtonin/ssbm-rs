@@ -53,4 +53,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
+    ctx.register_port(0x8034ab80, manual::SystemCallVector, Returns::Unknown);
 }

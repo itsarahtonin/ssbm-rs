@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn lbColl_80005BB0<'a>(ctx: &'a Ctx, arg0: HitCapsule<'a>, arg1: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
@@ -3518,6 +3519,163 @@ pub fn lbColl_8000ACFC<'a>(ctx: &'a Ctx, victim: Addr<'a>, hitbox: HitCapsule<'a
     return (if i == count { 0_i32 } else { 1_i32 });
 }
 
+/// HSD_JObjSetupMatrix, transliterated from its machine code: not in the C clang reads.
+pub fn asm_HSD_JObjSetupMatrix(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80007d68_u32;
+    loop {
+        match pc {
+            0x80007d68_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // mr. r31, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[31].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_80007DC4
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80007dc4_u32;
+                    continue;
+                }
+                pc = 0x80007d80_u32;
+            }
+            0x80007d80_u32 => {
+                // bne .L_80007D94
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80007d94_u32;
+                    continue;
+                }
+                pc = 0x80007d84_u32;
+            }
+            0x80007d84_u32 => {
+                // li r3, "@871"@sda21
+                g[3].set(g[13].get().wrapping_add(0xffff8060_u32));
+                // li r4, 0x234
+                g[4].set(0x234_u32);
+                // li r5, "@872"@sda21
+                g[5].set(g[13].get().wrapping_add(0xffff8068_u32));
+                // bl __assert
+                c::call(ctx, 0x80388220_u32, 0x80007d94_u32);
+                pc = 0x80007d94_u32;
+            }
+            0x80007d94_u32 => {
+                // lwz r4, 0x14(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x14_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // rlwinm. r0, r4, 0, 8, 8
+                {
+                    let v = g[4].get().rotate_left(0) & 0x800000_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // bne .L_80007DB0
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80007db0_u32;
+                    continue;
+                }
+                pc = 0x80007da4_u32;
+            }
+            0x80007da4_u32 => {
+                // rlwinm. r0, r4, 0, 25, 25
+                {
+                    let v = g[4].get().rotate_left(0) & 0x40_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_80007DB0
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80007db0_u32;
+                    continue;
+                }
+                pc = 0x80007dac_u32;
+            }
+            0x80007dac_u32 => {
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                pc = 0x80007db0_u32;
+            }
+            0x80007db0_u32 => {
+                // cmpwi r3, 0x0
+                {
+                    let (x, y) = (g[3].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_80007DBC
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80007dbc_u32;
+                    continue;
+                }
+                pc = 0x80007db8_u32;
+            }
+            0x80007db8_u32 => {
+                // b .L_80007DC4
+                pc = 0x80007dc4_u32;
+                continue;
+                pc = 0x80007dbc_u32;
+            }
+            0x80007dbc_u32 => {
+                // mr r3, r31
+                {
+                    let v = g[31].get() | g[31].get();
+                    g[3].set(v);
+                }
+                // bl HSD_JObjSetupMatrixSub
+                c::call(ctx, 0x80373078_u32, 0x80007dc4_u32);
+                pc = 0x80007dc4_u32;
+            }
+            0x80007dc4_u32 => {
+                // lwz r0, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x18
+                g[1].set(g[1].get().wrapping_add(0x18_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of HSD_JObjSetupMatrix");
+            }
+            _ => unreachable!("HSD_JObjSetupMatrix: no block at {pc:#010x}"),
+        }
+    }
+}
+
 fn inl_approximatelyZero<'a>(ctx: &'a Ctx, x: f64) -> i32 {
     let mut x = x;
     let mut result: i32 = 0;
@@ -4205,4 +4363,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
+    ctx.register_port(0x80007d68, asm_HSD_JObjSetupMatrix, Returns::Unknown);
 }

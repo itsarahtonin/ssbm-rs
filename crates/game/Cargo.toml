@@ -15,3 +15,4 @@ ssbm-types.workspace = true
 [dev-dependencies]
 ssbm-disc.workspace = true
 ssbm-ppc.workspace = true
+ssbm-slippi.workspace = true

@@ -1147,4 +1147,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
+    ctx.register_port(0x8034358c, manual::__OSDBIntegrator, Returns::Unknown);
+    ctx.register_port(0x803435b0, manual::__OSDBJump, Returns::Unknown);
+    ctx.register_port(0x803435e4, manual::OSExceptionVector, Returns::Unknown);
 }

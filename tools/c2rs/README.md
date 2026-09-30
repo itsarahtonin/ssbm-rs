@@ -17,8 +17,20 @@ How C maps to Rust:
 - Locals whose address is taken, and struct and array locals, live on the emulated stack, so pointers to them are GameCube addresses.
 - String literals point at their original addresses in the game's data.
 
-Functions whose source is assembly, and C functions that only MWCC can compile (inline asm, code under `#ifdef __MWERKS__`), are ported from their machine code instead: `asm2rs.py` reads each instruction word from the decomp's listing and writes what the interpreter does for it, with its fields as constants, using the same helpers (`ssbm_rt::cpu`, `gekko-fp`). Branches within the function become a state machine over its blocks, and calls go through dispatch. `FROM_MACHINE_CODE` in `c2rs.py` lists the few C functions ported this way anyway, with the reason.
+Functions whose source is assembly, and C functions that only MWCC can compile (inline asm, code under `#ifdef __MWERKS__`), are ported from their machine code instead: `asm2rs.py` reads each instruction word from the decomp's listing and writes what the interpreter does for it, with its fields as constants, using the same helpers (`ssbm_rt::cpu`, `gekko-fp`). Branches within the function become a state machine over its blocks, and calls go through dispatch. `FROM_MACHINE_CODE` in `c2rs.py` lists the few C functions ported this way anyway, with the reason. So are functions the listing has and clang never sees, such as whole functions under `#ifdef __MWERKS__` and out-of-line copies of inline functions.
 
 A function the translator cannot handle is left out, so the original keeps running it, and the report says why. The generated code is formatted with rustfmt and should not be edited by hand: fix the translator, or port the function by hand in `crates/game/src/manual` and leave it out of translation.
 
 Ports are checked with `ssbm-run --port UNITS --lockstep`, which runs the original next to every call of a port and compares memory and results, and without `--lockstep` against the replay oracle.
+
+## Slippi's playback codes
+
+Replays run with Slippi's Gecko codes applied, which patch about 80 game functions. `patched.py` ports those functions from their machine code together with the codes, into `crates/game/src/patched.rs`:
+
+```sh
+python tools/c2rs/patched.py <decomp root> <replay.slp> [<replay.slp> ...]
+```
+
+The codes are the bootloader's and playback's (`crates/slippi/data`) and those each replay's list keeps. A port reads, at each address a code writes, the word there now and runs what it says, so it behaves as the original both before and after playback applies its codes. Injected instructions run where playback placed them, which the branch at the code's site gives; only the instructions reachable from their entry are transliterated, following where each return goes, so data among them, such as per-match settings, is read from memory as the original reads it. Callers of a code that returns past its function's caller resume where the code says. Places in injected code that other code calls, such as a process a code gives a GObj, are listed in `ENTRIES` and get their ports when first called; `ssbm-run` with `ORIGINAL_ENTRIES=1` reports any code that still runs as original.
+
+`ssbm-run` uses a port when the replay's codes match the ones it was made for, and keeps the patched original code otherwise (`PATCHED_ORIGINAL=1` keeps it everywhere).

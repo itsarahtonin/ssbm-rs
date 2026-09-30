@@ -151,6 +151,44 @@ pub fn targets(lines: &[(u32, u32)]) -> Vec<(u32, u32)> {
     out
 }
 
+/// One code of a list as a code handler reads it: its type, the address it writes, its first
+/// line's second word, and the words of the lines after.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Parsed {
+    pub kind: u8,
+    pub addr: u32,
+    pub first: u32,
+    pub words: Vec<u32>,
+}
+
+/// The codes of a list, up to its terminator.
+pub fn parse_codes(lines: &[(u32, u32)]) -> Vec<Parsed> {
+    let mut out = Vec::new();
+    let mut i = 0;
+    while i < lines.len() {
+        let (a, d) = lines[i];
+        let kind = (a >> 24) as u8 & 0xFE;
+        if kind == 0xF0 || kind == 0xFE {
+            break;
+        }
+        let n = match kind {
+            0xC0 | 0xC2 => d as usize,
+            0x06 => (d as usize).div_ceil(8),
+            0x08 => 1,
+            _ => 0,
+        };
+        let end = (i + 1 + n).min(lines.len());
+        out.push(Parsed {
+            kind,
+            addr: 0x8000_0000 | (a & 0x01FF_FFFF),
+            first: d,
+            words: lines[i + 1..end].iter().flat_map(|&(x, y)| [x, y]).collect(),
+        });
+        i += 1 + n;
+    }
+    out
+}
+
 /// The replay's code list as playback applies it: without the codes it leaves out.
 pub fn playback_list(replay_codes: &[u8]) -> Vec<u8> {
     crate::device::filter_codes(replay_codes)

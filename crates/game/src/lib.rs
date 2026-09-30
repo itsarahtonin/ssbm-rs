@@ -7,6 +7,9 @@ use ssbm_rt::Ctx;
 
 #[allow(non_snake_case)]
 pub mod manual;
+#[allow(non_snake_case)]
+pub mod patched;
+pub mod playback;
 pub mod support;
 pub mod tu;
 

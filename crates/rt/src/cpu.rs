@@ -176,6 +176,25 @@ pub fn tail_call(ctx: &Ctx, target: u32) {
     }
 }
 
+/// A jump out of a port transliterated from machine code: to a function, as a tail call, or
+/// elsewhere into the code that called the port, which continues there instead of after the
+/// call, as a code that returns past its function's caller makes it.
+pub fn jump_out(ctx: &Ctx, target: u32) {
+    if ctx.entry(target).is_some() {
+        tail_call(ctx, target);
+    } else {
+        ctx.resume_at(target);
+    }
+}
+
+/// A call from a port transliterated from machine code that may come back elsewhere than
+/// `ret`: returns where the callee asked to continue, if it did.
+pub fn call_resumable(ctx: &Ctx, target: u32, ret: u32) -> Option<u32> {
+    ctx.regs.lr.set(ret);
+    ctx.invoke(target);
+    ctx.take_resume_at()
+}
+
 // `psq_l`/`psq_st`: paired-single loads and stores converted through a GQR's type and scale.
 // Quantization semantics follow Dolphin's Interpreter_LoadStorePaired.cpp (GPL-2.0-or-later).
 

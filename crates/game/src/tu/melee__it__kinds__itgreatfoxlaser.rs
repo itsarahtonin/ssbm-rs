@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn it_802EAF34<'a>(
     ctx: &'a Ctx,
@@ -277,6 +278,30 @@ pub fn it_802EB5A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ref_gobj: HSD_GObj<'a>)
     let _ = fns::it_8026B894(ctx, gobj, ref_gobj);
 }
 
+/// it_802EAF28, transliterated from its machine code: not in the C clang reads.
+pub fn asm_it_802EAF28(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    // lwz r3, 0x2c(r3)
+    {
+        let ea = g[3].get().wrapping_add(0x2c_u32);
+        g[3].set(ctx.read_u32(ea));
+    }
+    // lwz r3, 0xe0c(r3)
+    {
+        let ea = g[3].get().wrapping_add(0xe0c_u32);
+        g[3].set(ctx.read_u32(ea));
+    }
+    // blr
+    let to = ctx.regs.lr.get() & !3;
+    if to != lr0 & !3 {
+        c::tail_call(ctx, to);
+    }
+    return;
+}
+
 fn inl_HSD_JObjGetRotation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate: Quaternion<'a>) {
     let mut jobj = jobj;
     let mut rotate = rotate;
@@ -514,4 +539,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
+    ctx.register_port(0x802eaf28, asm_it_802EAF28, Returns::Unknown);
 }

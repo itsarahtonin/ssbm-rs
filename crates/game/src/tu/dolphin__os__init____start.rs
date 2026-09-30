@@ -410,6 +410,32 @@ pub fn __init_data<'a>(ctx: &'a Ctx) {
     }
 }
 
+/// __init_registers, transliterated from its machine code: not in the C clang reads.
+pub fn asm___init_registers(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    // lis r1, _stack_addr@h
+    g[1].set(0x804e0000_u32);
+    // ori r1, r1, _stack_addr@l
+    g[1].set(g[1].get() | 0xec00_u32);
+    // lis r2, _SDA2_BASE_@h
+    g[2].set(0x804d0000_u32);
+    // ori r2, r2, _SDA2_BASE_@l
+    g[2].set(g[2].get() | 0xf9e0_u32);
+    // lis r13, _SDA_BASE_@h
+    g[13].set(0x804d0000_u32);
+    // ori r13, r13, _SDA_BASE_@l
+    g[13].set(g[13].get() | 0xb6a0_u32);
+    // blr
+    let to = ctx.regs.lr.get() & !3;
+    if to != lr0 & !3 {
+        c::tail_call(ctx, to);
+    }
+    return;
+}
+
 fn inl___copy_rom_section_unfused<'a>(ctx: &'a Ctx, dst: Addr<'a>, src: Addr<'a>, size: u32) {
     let mut dst = dst;
     let mut src = src;
@@ -451,4 +477,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
+    ctx.register_port(0x80005340, asm___init_registers, Returns::Unknown);
 }

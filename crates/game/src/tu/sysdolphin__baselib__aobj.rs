@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn HSD_AObjInitAllocData<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
@@ -823,6 +824,135 @@ pub fn _HSD_AObjForgetMemory<'a>(ctx: &'a Ctx, low: Addr<'a>, high: Addr<'a>) {
     statics::sysdolphin__baselib__aobj::endcallback_list(ctx).set(null::<_HSD_SList<'a>>(ctx));
 }
 
+/// fmodf, transliterated from its machine code: not in the C clang reads.
+pub fn asm_fmodf(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80364340_u32;
+    loop {
+        match pc {
+            0x80364340_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x28(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffd8_u32);
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stfd f31, 0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x20_u32);
+                    ctx.write_u64(ea, ctx.regs.f(31).to_bits());
+                }
+                // fmr f31, f2
+                {
+                    let v = ctx.regs.f(2);
+                    ctx.regs.set_f(31, v);
+                }
+                // stfd f30, 0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x18_u32);
+                    ctx.write_u64(ea, ctx.regs.f(30).to_bits());
+                }
+                // fmr f30, f1
+                {
+                    let v = ctx.regs.f(1);
+                    ctx.regs.set_f(30, v);
+                }
+                // fabs f1, f31
+                {
+                    let v = fp::fabs(ctx.regs.f(31));
+                    ctx.regs.set_f(1, v);
+                }
+                // fabs f0, f30
+                {
+                    let v = fp::fabs(ctx.regs.f(30));
+                    ctx.regs.set_f(0, v);
+                }
+                // fcmpo cr0, f1, f0
+                c::fp_compare(ctx, 0, ctx.regs.f(1), ctx.regs.f(0));
+                // ble .L_80364374
+                if (c::cr_bit(ctx, 1) == false) {
+                    pc = 0x80364374_u32;
+                    continue;
+                }
+                pc = 0x8036436c_u32;
+            }
+            0x8036436c_u32 => {
+                // fmr f1, f30
+                {
+                    let v = ctx.regs.f(30);
+                    ctx.regs.set_f(1, v);
+                }
+                // b .L_80364384
+                pc = 0x80364384_u32;
+                continue;
+                pc = 0x80364374_u32;
+            }
+            0x80364374_u32 => {
+                // fdivs f1, f30, f31
+                {
+                    let v = fp::fdivs(ctx.regs.f(30), ctx.regs.f(31));
+                    c::fill(ctx, 1, v);
+                }
+                // bl __cvt_dbl_usll
+                c::call(ctx, 0x80322e54_u32, 0x8036437c_u32);
+                pc = 0x8036437c_u32;
+            }
+            0x8036437c_u32 => {
+                // bl __cvt_sll_flt
+                c::call(ctx, 0x80322da0_u32, 0x80364380_u32);
+                pc = 0x80364380_u32;
+            }
+            0x80364380_u32 => {
+                // fnmsubs f1, f31, f1, f30
+                {
+                    let v = fp::fnmsubs(ctx.regs.f(31), ctx.regs.f(1), ctx.regs.f(30));
+                    c::fill(ctx, 1, v);
+                }
+                pc = 0x80364384_u32;
+            }
+            0x80364384_u32 => {
+                // lwz r0, 0x2c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x2c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lfd f31, 0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x20_u32);
+                    ctx.regs.set_f(31, f64::from_bits(ctx.read_u64(ea)));
+                }
+                // lfd f30, 0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x18_u32);
+                    ctx.regs.set_f(30, f64::from_bits(ctx.read_u64(ea)));
+                }
+                // addi r1, r1, 0x28
+                g[1].set(g[1].get().wrapping_add(0x28_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of fmodf");
+            }
+            _ => unreachable!("fmodf: no block at {pc:#010x}"),
+        }
+    }
+}
+
 fn inl_fmodf_unfused<'a>(ctx: &'a Ctx, a: f64, b: f64) -> f64 {
     let mut a = a;
     let mut b = b;
@@ -1574,4 +1704,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
+    ctx.register_port(0x80364340, asm_fmodf, Returns::Unknown);
 }

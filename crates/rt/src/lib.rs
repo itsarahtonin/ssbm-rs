@@ -131,7 +131,15 @@ pub struct Ctx {
     /// A debugging watchpoint: writes to `[start, start + len)` call `watch_hook`.
     watch: Cell<(u32, u32)>,
     watch_hook: RefCell<Option<WatchHook>>,
+    /// How often original code was entered at each address, when counted.
+    original_entries: RefCell<Option<HashMap<u32, u64>>>,
+    /// Registers a port for an address a call reaches without one, such as code placed at run
+    /// time, and says whether it did.
+    resolver: RefCell<Option<Resolver>>,
 }
+
+/// See `Ctx::set_resolver`.
+pub type Resolver = Box<dyn Fn(&Ctx, u32) -> bool>;
 
 /// Called with the address and size of a write to the watched range.
 pub type WatchHook = Rc<dyn Fn(&Ctx, u32, u32)>;
@@ -180,7 +188,32 @@ impl Ctx {
             resume_at: Cell::new(None),
             watch: Cell::new((0, 0)),
             watch_hook: RefCell::default(),
+            original_entries: RefCell::default(),
+            resolver: RefCell::default(),
         }
+    }
+
+    /// Sets what a call to an address without a port asks first: it may register one there,
+    /// for code whose address is only known at run time.
+    pub fn set_resolver(&self, resolver: Resolver) {
+        *self.resolver.borrow_mut() = Some(resolver);
+    }
+
+    /// Starts counting where calls enter original code.
+    pub fn count_original_entries(&self) {
+        *self.original_entries.borrow_mut() = Some(HashMap::new());
+    }
+
+    /// Addresses where calls entered original code, and how often, most often first.
+    pub fn original_entries(&self) -> Vec<(u32, u64)> {
+        let mut out: Vec<(u32, u64)> = self
+            .original_entries
+            .borrow()
+            .as_ref()
+            .map(|m| m.iter().map(|(&a, &n)| (a, n)).collect())
+            .unwrap_or_default();
+        out.sort_by(|a, b| b.1.cmp(&a.1).then(a.0.cmp(&b.0)));
+        out
     }
 
     /// Calls `hook` after every write that touches `[addr, addr + len)`. For debugging.
@@ -538,7 +571,14 @@ impl Ctx {
 
     /// Runs the function at `addr` with arguments already in registers.
     pub fn invoke(&self, addr: u32) {
-        let Some(e) = self.entry(addr) else {
+        let resolved = || {
+            let resolver = self.resolver.borrow();
+            resolver.as_ref().is_some_and(|r| r(self, addr))
+        };
+        let Some(e) = self
+            .entry(addr)
+            .or_else(|| resolved().then(|| self.entry(addr)).flatten())
+        else {
             return self.run_original(addr);
         };
         match e.mode {
@@ -601,6 +641,9 @@ impl Ctx {
         let Some(b) = self.backend.get() else {
             panic!("no implementation of {}", self.name_of(addr));
         };
+        if let Some(m) = self.original_entries.borrow_mut().as_mut() {
+            *m.entry(addr).or_default() += 1;
+        }
         let run = self.last_run.get() + 1;
         self.last_run.set(run);
         let outer = self.current_run.replace(run);

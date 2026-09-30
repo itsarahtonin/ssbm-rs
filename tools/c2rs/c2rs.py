@@ -3383,6 +3383,8 @@ FROM_MACHINE_CODE = {
     # Leaves the va_list's register save area in r5, which Slippi's Show Player Names code
     # passes on as a pointer after lb_80011E24 returns.
     "__va_arg": "register it leaves that other code reads",
+    # MWCC drops its second, dead read of a video interface register, volatile as it is.
+    "__VIRetraceHandler": "dead read of a hardware register that MWCC drops",
 }
 
 
@@ -3460,7 +3462,8 @@ def translate_unit(args):
     seen_asm = set()
     for c in tu.cursor.get_children():
         # Assembly functions are declarations here: hand ports, or left to the original.
-        is_asm = c.kind == CK.FUNCTION_DECL and c.spelling in asm_fns and c.spelling not in seen_asm and             os.path.normpath(str(c.location.file)) == src_norm
+        is_asm = c.kind == CK.FUNCTION_DECL and c.spelling in asm_fns and c.spelling not in seen_asm and \
+            os.path.normpath(str(c.location.file)) == src_norm
         if is_asm:
             seen_asm.add(c.spelling)
         if c.kind != CK.FUNCTION_DECL or not (c.is_definition() or is_asm):
@@ -3531,6 +3534,32 @@ def translate_unit(args):
         unit.fuse_check.append((name, unit.fused_ops.get(name), code))
         regs.append(f"    ctx.register_port({f['addr']:#x}, {unit.adapter(c, ident(name))}, "
                     f"Returns::{returns_of(unit, c)});")
+        unit.ported.append(name)
+    # Functions the listing has that clang never saw: whole functions under `#ifdef __MWERKS__`,
+    # and out-of-line copies of inline functions. Their machine code is the source to port.
+    registered = {int(m.group(1), 16) for r in regs for m in [re.search(r"register_port\((0x[0-9a-f]+)", r)] if m}
+    for name in re.findall(r"^\.fn (\w+),", unit.listing, re.M):
+        if only and name not in only or name.startswith("gap_"):
+            continue  # dtk's `gap_` symbols are padding between functions
+        words = asm2rs.function_words(unit.listing, name)
+        if not words or words[0][0] in registered:
+            continue
+        if name in manual:
+            # Ported by hand, working on the registers as the machine code does.
+            regs.append(f"    ctx.register_port({words[0][0]:#x}, manual::{ident(name)}, Returns::Unknown);")
+            registered.add(words[0][0])
+            unit.ported.append(name)
+            continue
+        try:
+            body = asm2rs.translate(unit.listing, name)
+        except asm2rs.AsmUnsupported as e:
+            unit.skipped.append((name, f"not in the C clang reads; assembly: {e}"))
+            continue
+        out_fns.append(f"/// {name}, transliterated from its machine code: not in the C clang reads.\n"
+                       f"pub fn asm_{name}(ctx: &Ctx) {{\n" + "\n".join("    " + x for x in body) + "\n}")
+        unit.transliterated.append(name)
+        regs.append(f"    ctx.register_port({words[0][0]:#x}, asm_{name}, Returns::Unknown);")
+        registered.add(words[0][0])
         unit.ported.append(name)
     inline_code = unit.finish_inlines()
     fuse = []

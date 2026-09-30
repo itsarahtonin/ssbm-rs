@@ -51,6 +51,11 @@ pub fn returns_past_caller(device: &Device) -> Vec<u32> {
     gecko::returns_past_caller(&applied_lines(device))
 }
 
+/// The codes playback applies, in order: the bootloader's, playback's own and the replay's.
+pub fn applied_codes(device: &Device) -> Vec<gecko::Parsed> {
+    gecko::parse_codes(&applied_lines(device))
+}
+
 fn applied_lines(device: &Device) -> Vec<(u32, u32)> {
     let mut lines: Vec<(u32, u32)> = gecko::parse_list(BOOTLOADER)
         .iter()
