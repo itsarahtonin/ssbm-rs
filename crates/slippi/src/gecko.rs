@@ -120,6 +120,57 @@ pub fn apply(ctx: &Ctx, codes: &[Code], list: u32) {
     }
 }
 
+/// Game addresses a code list writes, as (address, length): the words `04`, `02` and `00`
+/// codes write, the strings `06` codes write, and the branch a `C2` code puts at its address.
+/// Other code types (conditionals, pointer codes) write nothing directly.
+pub fn targets(lines: &[(u32, u32)]) -> Vec<(u32, u32)> {
+    let mut out = Vec::new();
+    let mut i = 0;
+    while i < lines.len() {
+        let (a, d) = lines[i];
+        let target = 0x8000_0000 | (a & 0x01FF_FFFF);
+        match a >> 24 & 0xFE {
+            0x00 => out.push((target, 1)),
+            0x02 => out.push((target, 2 * ((d >> 16) + 1))),
+            0x04 => out.push((target, 4)),
+            0x06 => {
+                out.push((target, d));
+                i += (d as usize).div_ceil(8);
+            }
+            0x08 => i += 1,
+            0xC0 => i += d as usize,
+            0xC2 => {
+                out.push((target, 4));
+                i += d as usize;
+            }
+            0xF0 | 0xFE => break,
+            _ => {}
+        }
+        i += 1;
+    }
+    out
+}
+
+/// The replay's code list as playback applies it: without the codes it leaves out.
+pub fn playback_list(replay_codes: &[u8]) -> Vec<u8> {
+    crate::device::filter_codes(replay_codes)
+}
+
+/// A code list's lines from its raw bytes, up to the `F0`/`FF` terminator.
+pub fn lines(raw: &[u8]) -> Vec<(u32, u32)> {
+    raw.as_chunks::<8>()
+        .0
+        .iter()
+        .map(|c| {
+            (
+                u32::from_be_bytes([c[0], c[1], c[2], c[3]]),
+                u32::from_be_bytes([c[4], c[5], c[6], c[7]]),
+            )
+        })
+        .take_while(|&(a, _)| a >> 24 != 0xFF)
+        .collect()
+}
+
 /// `b to`, placed at `from`.
 fn branch(from: u32, to: u32) -> u32 {
     0x4800_0000 | (to.wrapping_sub(from) & 0x03FF_FFFC)

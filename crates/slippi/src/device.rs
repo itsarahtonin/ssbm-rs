@@ -86,6 +86,11 @@ impl Device {
     }
 
     /// The game sends `data`.
+    /// The replay's own codes that playback applies.
+    pub fn gecko_list(&self) -> &[u8] {
+        &self.gecko_list
+    }
+
     pub fn dma_write(&self, data: &[u8]) {
         let mut at = 0;
         if data.first() == Some(&cmd::RECEIVE_COMMANDS) && data.len() > 1 {
@@ -294,7 +299,7 @@ fn character_data(q: &mut Vec<u8>, p: Option<&PlayerFrame>) {
 
 /// The replay's Gecko code list without the codes playback leaves out, as
 /// `CEXISlippi::prepareGeckoList` builds it.
-fn filter_codes(source: &[u8]) -> Vec<u8> {
+pub(crate) fn filter_codes(source: &[u8]) -> Vec<u8> {
     let mut out = Vec::new();
     let mut at = 0;
     while at + 8 <= source.len() {

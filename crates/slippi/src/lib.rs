@@ -38,6 +38,19 @@ pub fn install(ctx: &Ctx, replay: Replay) -> Rc<Device> {
     device
 }
 
+/// Game addresses that the codes playback applies write to: the bootloader, the playback
+/// code set and the replay's own codes. Code there differs from the game's, so a port of a
+/// function containing one would not do what playback does.
+pub fn patched(device: &Device) -> Vec<(u32, u32)> {
+    let mut lines: Vec<(u32, u32)> = gecko::parse_list(BOOTLOADER)
+        .iter()
+        .chain(gecko::parse_ini(PLAYBACK_INI).iter())
+        .flat_map(|c| c.lines.clone())
+        .collect();
+    lines.extend(gecko::lines(device.gecko_list()));
+    gecko::targets(&lines)
+}
+
 /// Applies the bootloader codes, as Dolphin's code handler does before the game gets far.
 pub fn apply_bootloader(ctx: &Ctx) {
     gecko::apply(ctx, &gecko::parse_list(BOOTLOADER), BOOTLOADER_LIST);
