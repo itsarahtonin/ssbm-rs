@@ -2585,6 +2585,7 @@ use crate::records::*;
 #[inline] pub fn lbVector_Sub<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>) -> Vec<'a> { ctx.call(0x8000d4c4, (a, b, )) }
 #[inline] pub fn lbVector_Diff<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>, result: Vec<'a>) -> Vec<'a> { ctx.call(0x8000d4f8, (a, b, result, )) }
 #[inline] pub fn lbVector_CrossprodNormalized<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>, result: Vec<'a>) -> Vec<'a> { ctx.call(0x8000d530, (a, b, result, )) }
+#[inline] pub fn sqrtf<'a>(ctx: &'a Ctx, arg0: f64) -> f64 { ctx.call(0x8000d5bc, (Single(gekko_fp::frsp(arg0)), )) }
 #[inline] pub fn lbVector_Angle<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>) -> f64 { ctx.call(0x8000d620, (a, b, )) }
 #[inline] pub fn lbVector_AngleXY<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>) -> f64 { ctx.call(0x8000d790, (a, b, )) }
 #[inline] pub fn lbVector_RotateAboutUnitAxis<'a>(ctx: &'a Ctx, v: Vec<'a>, axis: Vec<'a>, angle: f64) -> () { ctx.call(0x8000d8f4, (v, axis, Single(gekko_fp::frsp(angle)), )) }
@@ -19650,6 +19651,7 @@ pub mod addr {
     pub const lbVector_Sub: u32 = 0x8000d4c4;
     pub const lbVector_Diff: u32 = 0x8000d4f8;
     pub const lbVector_CrossprodNormalized: u32 = 0x8000d530;
+    pub const sqrtf: u32 = 0x8000d5bc;
     pub const lbVector_Angle: u32 = 0x8000d620;
     pub const lbVector_AngleXY: u32 = 0x8000d790;
     pub const lbVector_RotateAboutUnitAxis: u32 = 0x8000d8f4;
@@ -36694,6 +36696,7 @@ pub mod abi {
     #[inline] pub fn lbVector_Sub(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>, Vec<'a>) -> Vec<'a>) { let (a, b, ): (Vec<'_>, Vec<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, a, b), ctx); }
     #[inline] pub fn lbVector_Diff(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>, Vec<'a>, Vec<'a>) -> Vec<'a>) { let (a, b, result, ): (Vec<'_>, Vec<'_>, Vec<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, a, b, result), ctx); }
     #[inline] pub fn lbVector_CrossprodNormalized(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>, Vec<'a>, Vec<'a>) -> Vec<'a>) { let (a, b, result, ): (Vec<'_>, Vec<'_>, Vec<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, a, b, result), ctx); }
+    #[inline] pub fn sqrtf(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, f64) -> f64) { let (arg0, ): (Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, arg0.0), ctx); }
     #[inline] pub fn lbVector_Angle(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>, Vec<'a>) -> f64) { let (a, b, ): (Vec<'_>, Vec<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, a, b), ctx); }
     #[inline] pub fn lbVector_AngleXY(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>, Vec<'a>) -> f64) { let (a, b, ): (Vec<'_>, Vec<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, a, b), ctx); }
     #[inline] pub fn lbVector_RotateAboutUnitAxis(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Vec<'a>, Vec<'a>, f64) -> ()) { let (v, axis, angle, ): (Vec<'_>, Vec<'_>, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, v, axis, angle.0), ctx); }

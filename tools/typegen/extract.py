@@ -176,9 +176,15 @@ def main():
         return splits[i][2].rsplit(".", 1)[0] if i >= 0 and splits[i][0] <= addr < splits[i][1] else None
 
     by_name = {}
+    by_base = {}
     for s in symbols:
         s["tu"] = tu_of(s["addr"])
         by_name.setdefault(s["name"], []).append(s)
+        # C++-mangled names, such as sqrtf__Ff: MSL defines some C functions under
+        # `#pragma cplusplus on`, so their out-of-line copies carry C++ names.
+        m = re.match(r"^([A-Za-z]\w*?)__F\w*$", s["name"])
+        if m:
+            by_base.setdefault(m.group(1), []).append(s)
 
     records, enums, typedefs, functions, globals_, errors = {}, {}, {}, {}, {}, {}
     with ProcessPoolExecutor() as pool:
@@ -195,6 +201,8 @@ def main():
                 if not f["defined"] and f["static"]:
                     continue
                 cands = [s for s in by_name.get(f["name"], []) if s["type"] == "function"]
+                if not cands:
+                    cands = [s for s in by_base.get(f["name"], []) if s["type"] == "function"]
                 # A static function is its own unit's, never a same-named one elsewhere.
                 if f["static"]:
                     cands = [s for s in cands if s["tu"] == unit]
@@ -205,7 +213,8 @@ def main():
                 entry = functions.get(key)
                 if entry is None or (f["defined"] and not entry.get("defined")):
                     functions[key] = {**f, "tu": unit if f["defined"] or f["static"] else (sym or {}).get("tu"),
-                                      "addr": sym["addr"] if sym else None, "size": sym["size"] if sym else None}
+                                      "addr": sym["addr"] if sym else None, "size": sym["size"] if sym else None,
+                                      "symbol": sym["name"] if sym else None}
             for g in gls:
                 cands = [s for s in by_name.get(g["name"], []) if s["type"] == "object"]
                 if g["static"]:

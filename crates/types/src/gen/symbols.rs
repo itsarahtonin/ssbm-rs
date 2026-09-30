@@ -35425,6 +35425,7 @@ pub static FUNCTION_TUS: &[(u32, &str)] = &[
     (0x8000d4c4, "melee/lb/lbvector"),
     (0x8000d4f8, "melee/lb/lbvector"),
     (0x8000d530, "melee/lb/lbvector"),
+    (0x8000d5bc, "melee/lb/lbvector"),
     (0x8000d620, "melee/lb/lbvector"),
     (0x8000d790, "melee/lb/lbvector"),
     (0x8000d8f4, "melee/lb/lbvector"),
