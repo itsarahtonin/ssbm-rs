@@ -1080,6 +1080,10 @@ class Translator:
                 return self.incdec(c, op)
         if k == CK.CSTYLE_CAST_EXPR and self.u.ctype(c.type)["k"] == "void":
             return self.effect(children(c)[-1])
+        if not has_effects(c):
+            # MWCC drops what has no effect, such as the dead loads of the decomp's
+            # stack-padding GET_FIGHTER(0), which would fault.
+            return []
         v = self.expr(c)
         if v.ty["k"] == "void":
             return [f"{v.code};"]
@@ -1928,6 +1932,29 @@ class Translator:
 NEGATED = {"fmadd": "fnmadd", "fmsub": "fnmsub", "fnmadd": "fmadd", "fnmsub": "fmsub"}
 
 
+def has_effects(node, depth=0):
+    """Whether evaluating a C expression does more than compute a value: assigns, calls a
+    function that is not a plain `return` of such an expression, or touches volatile data."""
+    for n in node.walk_preorder():
+        k = n.kind
+        if k in (CK.COMPOUND_ASSIGNMENT_OPERATOR, CK.ASM_STMT):
+            return True
+        if k == CK.BINARY_OPERATOR and BINOPS.get(_lib.clang_getCursorBinaryOperatorKind(n)) == "=":
+            return True
+        if k == CK.UNARY_OPERATOR and UNOPS.get(_lib.clang_getCursorUnaryOperatorKind(n)) in                 ("++", "--", "post++", "post--"):
+            return True
+        if n.kind.is_expression() and n.type.is_volatile_qualified():
+            return True
+        if k == CK.CALL_EXPR:
+            ref = n.referenced
+            body = ref.get_definition() if ref is not None and ref.kind == CK.FUNCTION_DECL else None
+            stmts = [x for x in children(body) if x.kind == CK.COMPOUND_STMT] if body is not None else []
+            kids = children(stmts[0]) if stmts else []
+            if depth > 4 or len(kids) != 1 or kids[0].kind != CK.RETURN_STMT or                     any(has_effects(x, depth + 1) for x in children(kids[0])):
+                return True
+    return False
+
+
 def negate_fused(code):
     """`-fmadds(a, c, b)` as the one instruction, fnmadds(a, c, b), if code is one fused op."""
     m = re.match(r"fp::(f(?:n)?m(?:add|sub))(s?)\(", code)
@@ -2211,7 +2238,9 @@ def _adapter(self, cursor, rname):
     """A closure that takes the port's arguments from registers and puts its result back."""
     ft = self.ctype(cursor.type)
     names, types, passes = [], [], []
-    if ft["ret"]["k"] == "rec":
+    # The EABI returns structs of up to 8 bytes in r3 and r4, other structs through a pointer.
+    small = self.size_of(ft["ret"]) if ft["ret"]["k"] == "rec" and self.size_of(ft["ret"]) in (4, 8) else None
+    if ft["ret"]["k"] == "rec" and not small:
         names.append("__a")
         types.append(self.rust_value_ty(ft["ret"]).replace("'a", "'_"))
         passes.append("__a")
@@ -2230,6 +2259,10 @@ def _adapter(self, cursor, rname):
     if names:
         take = (f"let ({''.join(n + ', ' for n in names)}): ({''.join(t + ', ' for t in types)}) = "
                 f"Args::take_all(ctx); ")
+    if small:
+        return (f"|ctx| {{ {take}let __slot = ctx.stack_alloc(8); "
+                f"{rname}(ctx, __slot.get(){''.join(', ' + a for a in passes)}); "
+                f"ctx.take_small_ret(__slot.base(), {small}); }}")
     return f"|ctx| {{ {take}Ret::put({rname}(ctx{''.join(', ' + a for a in passes)}), ctx); }}"
 
 

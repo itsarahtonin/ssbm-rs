@@ -190,8 +190,6 @@ pub fn ftCo_800C18A8<'a>(
     let mut offset = offset;
     let mut fp: Fighter<'a> = null(ctx);
     fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
-    let _ = Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, null::<HSD_GObj<'a>>(ctx)));
-    let _ = Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, null::<HSD_GObj<'a>>(ctx)));
     vec0.set_x(fp::fadds((fp).cur_pos().x(), (offset).x()));
     vec0.set_y(fp::fadds((fp).cur_pos().y(), (offset).y()));
     vec0.set_z(fp::fadds((fp).cur_pos().z(), (offset).z()));

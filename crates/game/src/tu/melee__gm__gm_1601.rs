@@ -6242,8 +6242,10 @@ pub fn register(ctx: &Ctx) {
     ctx.register_port(
         0x80160968,
         |ctx| {
-            let (__a, a0): (_GXColor<'_>, u32) = Args::take_all(ctx);
-            Ret::put(gm_80160968(ctx, __a, a0), ctx);
+            let (a0,): (u32,) = Args::take_all(ctx);
+            let __slot = ctx.stack_alloc(8);
+            gm_80160968(ctx, __slot.get(), a0);
+            ctx.take_small_ret(__slot.base(), 4);
         },
         Returns::Nothing,
     );

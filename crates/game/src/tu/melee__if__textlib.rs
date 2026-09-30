@@ -344,16 +344,20 @@ pub fn register(ctx: &Ctx) {
     ctx.register_port(
         0x80302b64,
         |ctx| {
-            let (__a, a0, a1): (_GXColor<'_>, DevText<'_>, _GXColor<'_>) = Args::take_all(ctx);
-            Ret::put(DevText_SetTextColor(ctx, __a, a0, a1), ctx);
+            let (a0, a1): (DevText<'_>, _GXColor<'_>) = Args::take_all(ctx);
+            let __slot = ctx.stack_alloc(8);
+            DevText_SetTextColor(ctx, __slot.get(), a0, a1);
+            ctx.take_small_ret(__slot.base(), 4);
         },
         Returns::Nothing,
     );
     ctx.register_port(
         0x80302b90,
         |ctx| {
-            let (__a, a0, a1): (_GXColor<'_>, DevText<'_>, _GXColor<'_>) = Args::take_all(ctx);
-            Ret::put(DevText_SetBGColor(ctx, __a, a0, a1), ctx);
+            let (a0, a1): (DevText<'_>, _GXColor<'_>) = Args::take_all(ctx);
+            let __slot = ctx.stack_alloc(8);
+            DevText_SetBGColor(ctx, __slot.get(), a0, a1);
+            ctx.take_small_ret(__slot.base(), 4);
         },
         Returns::Nothing,
     );

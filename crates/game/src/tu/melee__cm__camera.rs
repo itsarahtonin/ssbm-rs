@@ -6741,8 +6741,9 @@ pub fn register(ctx: &Ctx) {
     ctx.register_port(
         0x80030758,
         |ctx| {
-            let (__a,): (_GXColor<'_>,) = Args::take_all(ctx);
-            Ret::put(Camera_GetBackgroundColor(ctx, __a), ctx);
+            let __slot = ctx.stack_alloc(8);
+            Camera_GetBackgroundColor(ctx, __slot.get());
+            ctx.take_small_ret(__slot.base(), 4);
         },
         Returns::Nothing,
     );

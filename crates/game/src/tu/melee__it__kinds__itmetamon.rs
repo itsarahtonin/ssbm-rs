@@ -66,7 +66,6 @@ pub fn it_802D30C4<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 pub fn itMetamon_UnkMotion0_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut item_gobj = item_gobj;
-    let _ = Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj));
     if !(fns::it_80272C6C(ctx, item_gobj) != 0) {
         return 1_i32;
     }

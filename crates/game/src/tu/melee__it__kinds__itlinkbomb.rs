@@ -327,7 +327,6 @@ pub fn itLinkbomb_UnkMotion3_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn itLinkbomb_UnkMotion3_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
     let mut gobj = gobj;
-    let _ = Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj));
     let _ = inl_itLinkbomb_UnkMotion2_Coll_unfused(ctx, gobj);
     return 0_i32;
 }

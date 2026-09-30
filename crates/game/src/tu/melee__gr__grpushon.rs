@@ -359,8 +359,6 @@ pub fn grPushOn_80218888<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut dx: f64 = 0.0;
     let mut dy: f64 = 0.0;
     let mut dist_sq: f64 = 0.0;
-    let _ = Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData(ctx, null::<HSD_GObj<'a>>(ctx)));
-    let _ = Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData(ctx, null::<HSD_GObj<'a>>(ctx)));
     gp = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     player = fns::Ground_GetP1Fighter(ctx);
     if !Handle::is_null(player) {

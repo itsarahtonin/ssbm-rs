@@ -2589,15 +2589,7 @@ fn inl_ftCommon_AirToGroundStateChange_unfused<'a>(
     );
 }
 
-fn inl_stack_pad_hack<'a>(ctx: &'a Ctx) {
-    let _ = Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, null::<HSD_GObj<'a>>(ctx)));
-    let _ = Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, null::<HSD_GObj<'a>>(ctx)));
-    let _ = Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, null::<HSD_GObj<'a>>(ctx)));
-    let _ = Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, null::<HSD_GObj<'a>>(ctx)));
-    let _ = Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, null::<HSD_GObj<'a>>(ctx)));
-    let _ = Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, null::<HSD_GObj<'a>>(ctx)));
-    let _ = Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, null::<HSD_GObj<'a>>(ctx)));
-}
+fn inl_stack_pad_hack<'a>(ctx: &'a Ctx) {}
 
 fn inl_ftYs_SpecialS_CheckButtonPressure<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
