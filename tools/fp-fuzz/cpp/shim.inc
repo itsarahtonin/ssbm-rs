@@ -1,4 +1,4 @@
-// C entry points for one variant. Included inside the variant's namespace.
+// C entry points. Included inside the Dolphin namespace.
 
 #define SHIM_CAT2(a, b) a##b
 #define SHIM_CAT(a, b) SHIM_CAT2(a, b)

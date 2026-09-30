@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Paired-single semantics ported from Dolphin's Interpreter_Paired.cpp (GPL-2.0-or-later).
 
-use crate::{add, div, fabs, fnabs, fneg, frsp, madd_single, mul, round_c, sub};
+use crate::{add, div, fabs, fnabs, fneg, frsp, madd_single, mul, nmadd_x86, round_c, slippi, sub};
 
 /// A paired-single register: two lanes of register values.
 #[derive(Clone, Copy, Debug, Default, PartialEq)]
@@ -71,12 +71,24 @@ pub fn ps_msub(a: Ps, c: Ps, b: Ps) -> Ps {
 
 /// `ps_nmadd`: `-(a * c + b)` per lane.
 pub fn ps_nmadd(a: Ps, c: Ps, b: Ps) -> Ps {
+    if slippi() {
+        return Ps::new(
+            frsp(nmadd_x86(a.ps0, round_c(c.ps0), b.ps0, false)),
+            frsp(nmadd_x86(a.ps1, round_c(c.ps1), b.ps1, false)),
+        );
+    }
     let r = ps_madd(a, c, b);
     Ps::new(negate_unless_nan(r.ps0), negate_unless_nan(r.ps1))
 }
 
 /// `ps_nmsub`: `-(a * c - b)` per lane.
 pub fn ps_nmsub(a: Ps, c: Ps, b: Ps) -> Ps {
+    if slippi() {
+        return Ps::new(
+            frsp(nmadd_x86(a.ps0, round_c(c.ps0), b.ps0, true)),
+            frsp(nmadd_x86(a.ps1, round_c(c.ps1), b.ps1, true)),
+        );
+    }
     let r = ps_msub(a, c, b);
     Ps::new(negate_unless_nan(r.ps0), negate_unless_nan(r.ps1))
 }

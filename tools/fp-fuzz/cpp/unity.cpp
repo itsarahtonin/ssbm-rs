@@ -1,5 +1,5 @@
-// Compiles one Dolphin variant's float instructions inside its own namespace, so both variants
-// link into one test binary. build.rs sets the include path and SHIM_PREFIX per variant.
+// Compiles Dolphin's float instructions inside their own namespace, so they link into the test
+// binary next to the Ishiiruka transcription. build.rs sets the include path and SHIM_PREFIX.
 #include "prelude.h"
 
 namespace SHIM_NAMESPACE

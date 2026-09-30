@@ -1,4 +1,4 @@
-// Headers shared by both Dolphin variants, included once outside their namespaces.
+// Headers the Dolphin sources share, included once outside their namespace.
 #pragma once
 
 #include <array>

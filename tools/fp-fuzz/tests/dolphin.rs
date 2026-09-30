@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 //! Differential fuzz: every float instruction the game uses, run by our interpreter (and so by
-//! `gekko-fp`) and by Dolphin's interpreter compiled from source, must give identical register
-//! bits and CR. Hardware mode is checked against current Dolphin, Slippi mode against Slippi's
-//! fork. Set `FP_FUZZ_ITERS` to raise the per-instruction case count.
+//! `gekko-fp`) and by a reference, must give identical register bits and CR. Hardware mode is
+//! checked against current Dolphin's interpreter, Slippi mode against what Slippi's Ishiiruka
+//! JIT emits. Set `FP_FUZZ_ITERS` to raise the per-instruction case count.
 
 use fp_fuzz::{Fprs, Variant};
-use gekko_fp::{self as fp, FmaMode, Ps};
+use gekko_fp::{self as fp, FpMode, Ps};
 use ssbm_rt::Ctx;
 
 const FD: u32 = 0;
@@ -234,6 +234,25 @@ fn inputs(rng: &mut Rng, fused: bool) -> Fprs {
     fpr
 }
 
+fn is_nan(bits: u64) -> bool {
+    f64::from_bits(bits).is_nan()
+}
+
+/// Whether our frD matches the reference's. Against Ishiiruka, a NaN matches any NaN, since
+/// which operand an x86 NaN comes from depends on the JIT's register allocation. So does the
+/// high lane of scalar double arithmetic and of the sign ops: the JIT leaves whatever its
+/// scratch register held there, and game code never reads it.
+fn matches(variant: Variant, word: u32, theirs: (u64, u64), ours: (u64, u64)) -> bool {
+    if variant == Variant::Master {
+        return theirs == ours;
+    }
+    let same = |a: u64, b: u64| a == b || (is_nan(a) && is_nan(b));
+    let (op, sub5, sub10) = (word >> 26, (word >> 1) & 31, (word >> 1) & 1023);
+    let high_undefined =
+        op == 63 && (matches!(sub5, 18 | 20 | 21 | 25) || matches!(sub10, 40 | 136 | 264));
+    same(theirs.0, ours.0) && (high_undefined || same(theirs.1, ours.1))
+}
+
 fn run_ours(ctx: &Ctx, word: u32, fpr: &Fprs) -> (Fprs, u32) {
     for (i, (ps0, ps1)) in fpr.iter().enumerate() {
         ctx.regs.fpr[i].set(Ps::new(f64::from_bits(*ps0), f64::from_bits(*ps1)));
@@ -256,28 +275,27 @@ fn iters() -> u64 {
         .unwrap_or(20_000)
 }
 
-fn fuzz(variant: Variant, mode: FmaMode, fused_only: bool, seed: u64) {
-    fp::set_fma_mode(mode);
+fn fuzz(variant: Variant, mode: FpMode, seed: u64) {
+    fp::set_fp_mode(mode);
     let ctx = Ctx::new();
     let mut rng = Rng(seed);
     let n = iters();
     let mut failures = Vec::new();
     for op in ops() {
-        if fused_only && op.kind != Kind::Fused {
-            continue;
-        }
         let mut bad = 0u64;
         for _ in 0..n {
             let fpr = inputs(&mut rng, op.kind == Kind::Fused);
             let mut theirs = fpr;
             let their_cr = variant.exec(op.word, &mut theirs);
             let (ours, our_cr) = run_ours(&ctx, op.word, &fpr);
-            if theirs[FD as usize] != ours[FD as usize] || their_cr != our_cr {
+            if !matches(variant, op.word, theirs[FD as usize], ours[FD as usize])
+                || their_cr != our_cr
+            {
                 bad += 1;
                 if bad <= 3 {
                     let r = |i: u32| fpr[i as usize];
                     failures.push(format!(
-                        "{}: a={:016X?} b={:016X?} c={:016X?} d0={:016X?} -> dolphin {:016X?} cr {their_cr:08X}, ours {:016X?} cr {our_cr:08X}",
+                        "{}: a={:016X?} b={:016X?} c={:016X?} d0={:016X?} -> reference {:016X?} cr {their_cr:08X}, ours {:016X?} cr {our_cr:08X}",
                         op.name,
                         r(FA),
                         r(FB),
@@ -301,8 +319,8 @@ fn fuzz(variant: Variant, mode: FmaMode, fused_only: bool, seed: u64) {
 }
 
 /// Every combination of special values in frA, frB and frC, in both halves.
-fn specials_exhaustive(variant: Variant, mode: FmaMode) {
-    fp::set_fma_mode(mode);
+fn specials_exhaustive(variant: Variant, mode: FpMode) {
+    fp::set_fp_mode(mode);
     let ctx = Ctx::new();
     let mut failures = Vec::new();
     for op in ops() {
@@ -318,11 +336,13 @@ fn specials_exhaustive(variant: Variant, mode: FmaMode) {
                     let mut theirs = fpr;
                     let their_cr = variant.exec(op.word, &mut theirs);
                     let (ours, our_cr) = run_ours(&ctx, op.word, &fpr);
-                    if theirs[FD as usize] != ours[FD as usize] || their_cr != our_cr {
+                    if !matches(variant, op.word, theirs[FD as usize], ours[FD as usize])
+                        || their_cr != our_cr
+                    {
                         bad += 1;
                         if bad <= 3 {
                             failures.push(format!(
-                                "{}: a={a:016X} b={b:016X} c={c:016X} -> dolphin {:016X?}, ours {:016X?}",
+                                "{}: a={a:016X} b={b:016X} c={c:016X} -> reference {:016X?}, ours {:016X?}",
                                 op.name, theirs[FD as usize], ours[FD as usize]
                             ));
                         }
@@ -343,38 +363,32 @@ fn specials_exhaustive(variant: Variant, mode: FmaMode) {
 
 #[test]
 fn hardware_mode_specials_match_dolphin_master() {
-    specials_exhaustive(Variant::Master, FmaMode::Hardware);
+    specials_exhaustive(Variant::Master, FpMode::Hardware);
 }
 
 #[test]
-fn slippi_mode_specials_match_slippi_dolphin() {
-    specials_exhaustive(Variant::Slippi, FmaMode::SlippiDolphin);
+fn slippi_mode_specials_match_ishiiruka() {
+    specials_exhaustive(Variant::Ishiiruka, FpMode::Slippi);
 }
 
 #[test]
 fn hardware_mode_matches_dolphin_master() {
-    fuzz(
-        Variant::Master,
-        FmaMode::Hardware,
-        false,
-        0x9E37_79B9_7F4A_7C15,
-    );
+    fuzz(Variant::Master, FpMode::Hardware, 0x9E37_79B9_7F4A_7C15);
 }
 
 #[test]
-fn slippi_mode_matches_slippi_dolphin() {
-    fuzz(
-        Variant::Slippi,
-        FmaMode::SlippiDolphin,
-        false,
-        0xD1B5_4A32_D192_ED03,
-    );
+fn slippi_mode_matches_ishiiruka() {
+    fuzz(Variant::Ishiiruka, FpMode::Slippi, 0xD1B5_4A32_D192_ED03);
 }
 
 #[test]
 fn load_store_conversions_match() {
     let mut rng = Rng(0x94D0_49BB_1331_11EB);
-    for variant in [Variant::Master, Variant::Slippi] {
+    for (variant, mode) in [
+        (Variant::Master, FpMode::Hardware),
+        (Variant::Ishiiruka, FpMode::Slippi),
+    ] {
+        fp::set_fp_mode(mode);
         for i in 0..iters() * 20 {
             let s = if i < 1 << 16 {
                 // Every exponent and sign with random mantissas, then anything.

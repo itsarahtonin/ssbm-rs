@@ -6,6 +6,9 @@
 //! Values are floating-point register contents (`f64`), as on PowerPC. Operand order follows the
 //! assembly (`fmadds frD, frA, frC, frB` is `fmadds(a, c, b)`). FPSCR is modelled as 0: round to
 //! nearest, non-IEEE mode off.
+//!
+//! [`FpMode::Slippi`] instead reproduces how Slippi's netplay Dolphin (the Ishiiruka fork, x86-64
+//! JIT with FMA3) computes, since that is what recorded Slippi replays.
 
 use std::cell::Cell;
 
@@ -23,28 +26,45 @@ const QUIET: u64 = 0x0008_0000_0000_0000;
 /// The NaN invalid operations produce. Unlike x86's default NaN, it is positive.
 pub const PPC_NAN: f64 = f64::from_bits(0x7FF8_0000_0000_0000);
 
-/// How single-precision fused multiply-adds round.
+/// x86's default NaN, which Slippi's Dolphin produces instead of [`PPC_NAN`].
+pub const X86_NAN: f64 = f64::from_bits(0xFFF8_0000_0000_0000);
+
+/// Whose floating point to reproduce.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
-pub enum FmaMode {
-    /// Real hardware: one rounding. Matches Dolphin 2603 and later.
+pub enum FpMode {
+    /// The Gekko itself, as current Dolphin reproduces it.
     #[default]
     Hardware,
-    /// Slippi Dolphin's x86-64 JIT, which rounds to double and then to single.
-    SlippiDolphin,
+    /// Slippi's netplay Dolphin (the Ishiiruka fork), whose x86-64 JIT recorded Slippi replays.
+    /// It differs from hardware: fused ops round to double and then to single;
+    /// `fnmadd`/`fnmsub` use x86's `-(a*c) - b` and `-(a*c) + b`, which give the other signed
+    /// zero when the result cancels; stores round to nearest instead of truncating; invalid
+    /// operations give x86's negative NaN; frC keeps subnormals as they are when rounded to 25
+    /// bits; and `fctiw` does not mark a negative zero.
+    Slippi,
 }
 
 thread_local! {
-    static FMA_MODE: Cell<FmaMode> = const { Cell::new(FmaMode::Hardware) };
+    static FP_MODE: Cell<FpMode> = const { Cell::new(FpMode::Hardware) };
 }
 
-/// The fused multiply-add rounding mode of the current thread.
-pub fn fma_mode() -> FmaMode {
-    FMA_MODE.with(Cell::get)
+/// The floating-point mode of the current thread.
+pub fn fp_mode() -> FpMode {
+    FP_MODE.with(Cell::get)
 }
 
-/// Sets the fused multiply-add rounding mode for the current thread.
-pub fn set_fma_mode(mode: FmaMode) {
-    FMA_MODE.with(|m| m.set(mode));
+/// Sets the floating-point mode for the current thread.
+pub fn set_fp_mode(mode: FpMode) {
+    FP_MODE.with(|m| m.set(mode));
+}
+
+pub(crate) fn slippi() -> bool {
+    fp_mode() == FpMode::Slippi
+}
+
+/// The NaN an invalid operation produces in the current mode.
+fn default_nan() -> f64 {
+    if slippi() { X86_NAN } else { PPC_NAN }
 }
 
 pub(crate) fn make_quiet(x: f64) -> f64 {
@@ -57,7 +77,7 @@ fn nan_result(a: f64, b: f64) -> f64 {
     } else if b.is_nan() {
         make_quiet(b)
     } else {
-        PPC_NAN
+        default_nan()
     }
 }
 
@@ -88,7 +108,7 @@ pub(crate) fn div(a: f64, b: f64) -> f64 {
 /// Rounds the frC operand of a single-precision multiply to 25 mantissa bits.
 pub(crate) fn round_c(c: f64) -> f64 {
     let bits = c.to_bits();
-    let (keep, round) = if bits & EXP == 0 && bits & FRAC != 0 {
+    let (keep, round) = if bits & EXP == 0 && bits & FRAC != 0 && !slippi() {
         // Subnormals are normalized first, which moves the rounding bit.
         let shift = (bits & FRAC).leading_zeros() - 11;
         (
@@ -119,7 +139,7 @@ pub(crate) fn madd_single(a: f64, c: f64, b: f64, negate_b: bool) -> f64 {
     // A double result exactly halfway between two singles may hide which way the exact
     // result lies; recover the double rounding error and nudge toward it.
     let bits = r.to_bits();
-    if bits & 0x1FFF_FFFF == 0x1000_0000 && fma_mode() == FmaMode::Hardware {
+    if bits & 0x1FFF_FFFF == 0x1000_0000 && !slippi() {
         let a_prime = b_signed - r;
         let b_prime = r + a_prime;
         let error = a.mul_add(c_round, a_prime) + (b_signed - b_prime);
@@ -134,11 +154,19 @@ pub(crate) fn madd_single(a: f64, c: f64, b: f64, negate_b: bool) -> f64 {
 
     if r.is_nan() {
         // Slippi's Dolphin picks the NaN after rounding frC, so it rounds a NaN's payload too.
-        let c = if fma_mode() == FmaMode::SlippiDolphin {
-            c_round
-        } else {
-            c
-        };
+        let c = if slippi() { c_round } else { c };
+        fused_nan_result(a, c, b)
+    } else {
+        r
+    }
+}
+
+/// Slippi's `fnmadd`/`fnmsub`: x86's `-(a*c) - b` and `-(a*c) + b`, one rounding to double. The
+/// negation is inside the fused op, so an exact cancellation gives +0 where PowerPC gives -0.
+pub(crate) fn nmadd_x86(a: f64, c: f64, b: f64, subtract: bool) -> f64 {
+    let addend = if subtract { b } else { -b };
+    let r = (-a).mul_add(c, addend);
+    if r.is_nan() {
         fused_nan_result(a, c, b)
     } else {
         r
@@ -154,7 +182,7 @@ fn fused_nan_result(a: f64, c: f64, b: f64) -> f64 {
     } else if c.is_nan() {
         make_quiet(c)
     } else {
-        PPC_NAN
+        default_nan()
     }
 }
 
@@ -201,11 +229,17 @@ pub fn fmsub(a: f64, c: f64, b: f64) -> f64 {
 
 /// `fnmadd`: `-(a * c + b)`.
 pub fn fnmadd(a: f64, c: f64, b: f64) -> f64 {
+    if slippi() {
+        return nmadd_x86(a, c, b, false);
+    }
     negate_unless_nan(madd_double(a, c, b, false))
 }
 
 /// `fnmsub`: `-(a * c - b)`.
 pub fn fnmsub(a: f64, c: f64, b: f64) -> f64 {
+    if slippi() {
+        return nmadd_x86(a, c, b, true);
+    }
     negate_unless_nan(madd_double(a, c, b, true))
 }
 
@@ -229,7 +263,7 @@ pub fn fdivs(a: f64, b: f64) -> f64 {
     frsp(div(a, b))
 }
 
-/// `fmadds`: `a * c + b`, rounded once to single (see [`FmaMode`]).
+/// `fmadds`: `a * c + b`, rounded once to single (see [`FpMode`]).
 pub fn fmadds(a: f64, c: f64, b: f64) -> f64 {
     frsp(madd_single(a, c, b, false))
 }
@@ -241,11 +275,17 @@ pub fn fmsubs(a: f64, c: f64, b: f64) -> f64 {
 
 /// `fnmadds`: `-(a * c + b)`, rounded once to single.
 pub fn fnmadds(a: f64, c: f64, b: f64) -> f64 {
+    if slippi() {
+        return frsp(nmadd_x86(a, round_c(c), b, false));
+    }
     negate_unless_nan(frsp(madd_single(a, c, b, false)))
 }
 
 /// `fnmsubs`: `-(a * c - b)`, rounded once to single.
 pub fn fnmsubs(a: f64, c: f64, b: f64) -> f64 {
+    if slippi() {
+        return frsp(nmadd_x86(a, round_c(c), b, true));
+    }
     negate_unless_nan(frsp(madd_single(a, c, b, true)))
 }
 
@@ -315,7 +355,8 @@ pub fn fctiw(b: f64) -> i32 {
 /// The full register image `fctiw`/`fctiwz` leave for a following `stfd`, given its result.
 pub fn fcti_bits(b: f64, value: i32) -> u64 {
     let mut bits = 0xFFF8_0000_0000_0000 | u64::from(value as u32);
-    if value == 0 && b.is_sign_negative() {
+    // Hardware marks a negative-zero input; Slippi's Dolphin does not.
+    if value == 0 && b.is_sign_negative() && !slippi() {
         bits |= 0x1_0000_0000;
     }
     bits
@@ -346,8 +387,29 @@ pub fn lfs(bits: u32) -> f64 {
     f64::from_bits(bits)
 }
 
-/// `stfs`: narrows a register value for memory. It truncates; round first with [`frsp`].
+/// Slippi's float stores: x86's conversion, which rounds to nearest. `keep_snan` restores a
+/// signaling NaN's quiet bit, as its `stfs` does and its `psq_st` does not.
+fn x86_to_single(x: f64, keep_snan: bool) -> u32 {
+    if x.is_nan() {
+        let bits = x.to_bits();
+        let s =
+            ((bits >> 32) as u32 & 0x8000_0000) | 0x7FC0_0000 | ((bits >> 29) as u32 & 0x003F_FFFF);
+        if keep_snan && bits & QUIET == 0 {
+            s & !0x0040_0000
+        } else {
+            s
+        }
+    } else {
+        (x as f32).to_bits()
+    }
+}
+
+/// `stfs`: narrows a register value for memory. Hardware truncates (round first with
+/// [`frsp`]); Slippi's Dolphin rounds to nearest.
 pub fn stfs(x: f64) -> u32 {
+    if slippi() {
+        return x86_to_single(x, true);
+    }
     let x = x.to_bits();
     let exp = (x >> 52) & 0x7FF;
     if (874..=896).contains(&exp) && x & !SIGN != 0 {
@@ -359,8 +421,12 @@ pub fn stfs(x: f64) -> u32 {
     }
 }
 
-/// The float conversion `psq_st` uses: like [`stfs`], but single subnormals become zero.
+/// The float conversion `psq_st` uses: like [`stfs`], but single subnormals become zero
+/// (Slippi's Dolphin keeps them and rounds).
 pub fn stfs_ftz(x: f64) -> u32 {
+    if slippi() {
+        return x86_to_single(x, false);
+    }
     let x = x.to_bits();
     let exp = (x >> 52) & 0x7FF;
     if exp > 896 || x & !SIGN == 0 {

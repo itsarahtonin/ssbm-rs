@@ -3,7 +3,7 @@
 mod common;
 
 use common::Rng;
-use gekko_fp::{FmaMode, fma_mode, fmadd, fmadds, fmsubs, fnmadds, fnmsubs, set_fma_mode};
+use gekko_fp::{FpMode, fmadd, fmadds, fmsubs, fnmadds, fnmsubs, fp_mode, set_fp_mode};
 use num_bigint::{BigInt, BigUint, Sign};
 
 fn decompose(x: f32) -> (bool, u64, i64) {
@@ -150,23 +150,23 @@ fn tie_cases_follow_the_selected_mode() {
             Some(hardware)
         );
 
-        set_fma_mode(FmaMode::Hardware);
+        set_fp_mode(FpMode::Hardware);
         assert_eq!(bits(fmadds(fa, fc, fb)), hardware, "hardware {a:08X}");
 
-        set_fma_mode(FmaMode::SlippiDolphin);
+        set_fp_mode(FpMode::Slippi);
         assert_eq!(bits(fmadds(fa, fc, fb)), slippi, "slippi {a:08X}");
         assert_eq!(bits(fa.mul_add(fc, fb)), slippi, "double rounding {a:08X}");
     }
-    set_fma_mode(FmaMode::Hardware);
+    set_fp_mode(FpMode::Hardware);
 }
 
 #[test]
-fn fma_mode_is_per_thread() {
-    set_fma_mode(FmaMode::SlippiDolphin);
-    let other = std::thread::spawn(fma_mode).join().unwrap();
-    assert_eq!(other, FmaMode::Hardware);
-    assert_eq!(fma_mode(), FmaMode::SlippiDolphin);
-    set_fma_mode(FmaMode::Hardware);
+fn fp_mode_is_per_thread() {
+    set_fp_mode(FpMode::Slippi);
+    let other = std::thread::spawn(fp_mode).join().unwrap();
+    assert_eq!(other, FpMode::Hardware);
+    assert_eq!(fp_mode(), FpMode::Slippi);
+    set_fp_mode(FpMode::Hardware);
 }
 
 #[test]

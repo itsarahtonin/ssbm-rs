@@ -69,8 +69,8 @@ fn main() -> ExitCode {
             replay.version,
             replay.frames.len()
         );
-        // Replays recorded in Slippi Dolphin carry its rounding of fused multiply-adds.
-        gekko_fp::set_fma_mode(gekko_fp::FmaMode::SlippiDolphin);
+        // Replays carry the floating point of the Dolphin that recorded them.
+        gekko_fp::set_fp_mode(gekko_fp::FpMode::Slippi);
         ssbm_slippi::install(&ctx, replay)
     });
     let slippi: Option<Rc<ssbm_slippi::Device>> = slippi;
