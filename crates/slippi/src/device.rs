@@ -48,6 +48,8 @@ pub struct Device {
     /// Frames the playback codes asked for.
     pub frames_read: Cell<u32>,
     pub terminated: Cell<bool>,
+    /// The recording codes sent the game's end.
+    pub ended: Cell<bool>,
     pub log: RefCell<Vec<String>>,
 }
 
@@ -78,6 +80,7 @@ impl Device {
             recorded: RefCell::default(),
             frames_read: Cell::new(0),
             terminated: Cell::new(false),
+            ended: Cell::new(false),
             log: RefCell::default(),
         }
     }
@@ -147,7 +150,7 @@ impl Device {
                     let end = (at + 1 + size).min(data.len());
                     self.recorded.borrow_mut().extend_from_slice(&data[at..end]);
                     if command == cmd::RECEIVE_GAME_END {
-                        self.log.borrow_mut().push("game end recorded".to_owned());
+                        self.ended.set(true);
                     }
                 }
             }

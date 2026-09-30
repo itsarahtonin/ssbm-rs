@@ -150,6 +150,22 @@ fn main() -> ExitCode {
         );
     }
 
+    // A replay run also stops once the game ends, a second after the recording codes send it.
+    if let Some(dev) = slippi.clone() {
+        fn check(dev: Rc<ssbm_slippi::Device>, field: u64) -> impl FnOnce(&Ctx) + 'static {
+            move |ctx| {
+                if dev.ended.get() || dev.terminated.get() {
+                    let sdk = ctx.ext::<Sdk>();
+                    sdk.after(ctx, ssbm_sdk::TB_HZ, |_| panic::panic_any(Stop));
+                } else {
+                    let sdk = ctx.ext::<Sdk>();
+                    sdk.schedule(hw::field_start(field + 60), check(dev, field + 60));
+                }
+            }
+        }
+        sdk.schedule(hw::field_start(60), check(dev, 60));
+    }
+
     // Stop after the requested number of fields.
     sdk.schedule(hw::field_start(fields), |_| panic::panic_any(Stop));
 
