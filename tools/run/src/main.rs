@@ -478,7 +478,7 @@ fn run() -> ExitCode {
                 .map(|(a, s)| format!("{} ({})", ctx.name_of(**a), s.uninitialized))
                 .collect();
             eprintln!(
-                "  calls whose original reads uninitialized stack, not compared: {}",
+                "  calls that differ only because the original reads stack it never wrote: {}",
                 names.join(", ")
             );
         }

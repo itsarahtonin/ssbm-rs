@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 //! Function-level lockstep: run the original and the port from the same state, compare the
-//! results, then continue with the original's results so one bug cannot cascade.
+//! results, then continue with the original's results so one bug cannot cascade. The original
+//! runs exactly as it would without the check, so the game goes on as it would.
 //!
 //! Only game memory and registers can be rolled back, so whatever reaches outside them happens
 //! once, for the original: calls to external functions (the SDK layer's devices and services),
@@ -25,9 +26,9 @@ use crate::{Ctx, Hook, Mmio, Native, PAGE_SIZE, Pages};
 /// Stack below the caller's r1 holds frames and scratch that ports need not reproduce.
 pub const STACK_SCRATCH: u32 = 0x1_0000;
 
-/// Stack below r1 cleared before each side of a check. Ports lay out their frames differently,
-/// so bytes neither side writes, such as a local struct's padding, would otherwise be
-/// different garbage on each side.
+/// Stack below r1 cleared for the port. Ports lay out their frames differently, so bytes it
+/// reads but never writes, such as a local struct's padding, would otherwise be leftovers from
+/// other addresses than the original's.
 const STACK_CLEARED: u32 = 0x1000;
 
 /// Which registers hold a function's result, and so are compared.
@@ -77,7 +78,8 @@ pub struct Stats {
     pub calls: u64,
     pub mismatches: u64,
     /// Calls whose results differ only because the original reads stack memory it never
-    /// wrote, which ports lay out differently.
+    /// wrote: run again on the port's cleared stack, it matches the port, or cannot follow
+    /// its own log.
     pub uninitialized: u64,
 }
 
@@ -196,7 +198,6 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
         Phase::Replay
     });
     ctx.mem.begin_journal();
-    clear_stack(ctx, sp);
     let original_panic = catch_unwind(AssertUnwindSafe(|| ctx.run_original(addr))).err();
     let original = original_panic.as_ref().map(|p| panic_text(p.as_ref()));
     let j1 = ctx.mem.end_journal();
@@ -229,6 +230,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     ctx.truncate_natives(natives);
     let j2 = ctx.mem.end_journal();
     let regs2 = ctx.regs.snapshot();
+    let s2 = ctx.mem.capture(j2.keys());
     let at = state.cursor.get();
     if original.is_none() && port.is_none() && at < end {
         port = Some(format!(
@@ -236,49 +238,53 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
             describe(ctx, state.log.borrow()[at].kind)
         ));
     }
+    let ported = Outcome {
+        before: &j2,
+        after: &s2,
+        regs: &regs2,
+        panic: port,
+    };
+    let mut diffs = compare(
+        &Outcome {
+            before: &j1,
+            after: &s1,
+            regs: &regs1,
+            panic: original.clone(),
+        },
+        &ported,
+        returns,
+        sp,
+    );
 
-    let mut diffs = Vec::new();
-    if original.is_some() || port.is_some() {
-        diffs.push(Diff::Panic {
-            original: original.clone(),
-            port,
-        });
-    }
-    let mut regs = vec![("r1", u64::from(regs1.gpr[1]), u64::from(regs2.gpr[1]))];
-    let r3 = ("r3", u64::from(regs1.gpr[3]), u64::from(regs2.gpr[3]));
-    let r4 = ("r4", u64::from(regs1.gpr[4]), u64::from(regs2.gpr[4]));
-    let f1 = ("f1", regs1.fpr[1].ps0.to_bits(), regs2.fpr[1].ps0.to_bits());
-    match returns {
-        Returns::Unknown => regs.extend([r3, r4, f1]),
-        Returns::Nothing => {}
-        Returns::Int => regs.push(r3),
-        Returns::Int64 => regs.extend([r3, r4]),
-        Returns::Float => regs.push(f1),
-    }
-    for (name, o, p) in regs {
-        if o != p {
-            diffs.push(Diff::Reg {
-                name,
-                original: o,
-                port: p,
-            });
+    // The port saw a cleared stack. Run the original again on one: if it cannot follow its
+    // own log then, or matches the port, it reads stack it never wrote, which the port
+    // cannot reproduce. Otherwise the port differs from it given the same stack.
+    let mut uninitialized = false;
+    if !diffs.is_empty() && original.is_none() {
+        ctx.mem.restore(&j2);
+        ctx.regs.restore(&regs0);
+        state.phase.set(Phase::Replay);
+        state.cursor.set(start);
+        ctx.mem.begin_journal();
+        clear_stack(ctx, sp);
+        let again = catch_unwind(AssertUnwindSafe(|| ctx.run_original(addr)));
+        let j3 = ctx.mem.end_journal();
+        let regs3 = ctx.regs.snapshot();
+        if again.is_ok() && state.cursor.get() == end {
+            let s3 = ctx.mem.capture(j3.keys());
+            let cleared = Outcome {
+                before: &j3,
+                after: &s3,
+                regs: &regs3,
+                panic: None,
+            };
+            diffs = compare(&cleared, &ported, returns, sp);
+            uninitialized = diffs.is_empty();
+        } else {
+            uninitialized = true;
         }
+        ctx.mem.restore(&j3);
     }
-    compare_pages(ctx, &j1, &s1, &j2, sp, &mut diffs);
-    let uninitialized = !diffs.is_empty()
-        && original.is_none()
-        && reads_uninitialized_stack(
-            ctx,
-            addr,
-            (start, end),
-            &j1,
-            &s1,
-            &j2,
-            &regs0,
-            &regs1,
-            sp,
-            returns,
-        );
 
     // Continue from the original's results.
     ctx.mem.restore(&j2);
@@ -320,75 +326,8 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
 }
 
 fn clear_stack(ctx: &Ctx, sp: u32) {
-    fill_stack(ctx, sp, 0);
-}
-
-fn fill_stack(ctx: &Ctx, sp: u32, byte: u8) {
     let start = sp.saturating_sub(STACK_CLEARED);
-    let _ = ctx.mem.write_bytes(start, &[byte; STACK_CLEARED as usize]);
-}
-
-/// After a mismatch: runs the original again from the same state with other leftovers on the
-/// stack. If its results change, it reads stack memory it never wrote, and the port cannot
-/// be expected to match it. Leaves memory as it was before the check.
-#[allow(clippy::too_many_arguments)]
-fn reads_uninitialized_stack(
-    ctx: &Ctx,
-    addr: u32,
-    (start, end): (usize, usize),
-    j1: &Pages,
-    s1: &Pages,
-    j2: &Pages,
-    regs0: &crate::RegsSnapshot,
-    regs1: &crate::RegsSnapshot,
-    sp: u32,
-    returns: Returns,
-) -> bool {
-    let state = &ctx.lockstep;
-    ctx.mem.restore(j2);
-    ctx.regs.restore(regs0);
-    let phase = state.phase.get();
-    state.phase.set(Phase::Replay);
-    state.cursor.set(start);
-    ctx.mem.begin_journal();
-    fill_stack(ctx, sp, 0x5A);
-    let again = catch_unwind(AssertUnwindSafe(|| ctx.run_original(addr)));
-    let j3 = ctx.mem.end_journal();
-    let regs3 = ctx.regs.snapshot();
-    let followed = again.is_ok() && state.cursor.get() == end;
-    state.phase.set(phase);
-    let mut diffs = Vec::new();
-    if followed {
-        let mut pages = j1.clone();
-        for (page, data) in &j3 {
-            pages.entry(*page).or_insert_with(|| data.clone());
-        }
-        let first: Pages = pages
-            .keys()
-            .map(|p| {
-                (
-                    *p,
-                    s1.get(p)
-                        .or_else(|| j1.get(p))
-                        .or_else(|| j3.get(p))
-                        .unwrap()
-                        .clone(),
-                )
-            })
-            .collect();
-        compare_pages(ctx, &Pages::new(), &first, &pages, sp, &mut diffs);
-    }
-    let regs_differ = match returns {
-        Returns::Nothing => false,
-        Returns::Int => regs1.gpr[3] != regs3.gpr[3],
-        Returns::Int64 => regs1.gpr[3..5] != regs3.gpr[3..5],
-        Returns::Float | Returns::Unknown => {
-            regs1.fpr[1].ps0.to_bits() != regs3.fpr[1].ps0.to_bits()
-                || (returns == Returns::Unknown && regs1.gpr[3..5] != regs3.gpr[3..5])
-        }
-    };
-    ctx.mem.restore(&j3);
-    !followed || !diffs.is_empty() || regs_differ
+    let _ = ctx.mem.write_bytes(start, &[0; STACK_CLEARED as usize]);
 }
 
 fn describe(ctx: &Ctx, kind: Kind) -> String {
@@ -510,18 +449,59 @@ pub(crate) fn interrupts(ctx: &Ctx, check: &Hook) {
     });
 }
 
-fn compare_pages(ctx: &Ctx, j1: &Pages, s1: &Pages, j2: &Pages, sp: u32, diffs: &mut Vec<Diff>) {
+/// What one side of a check left: the original contents of the pages it wrote and their
+/// contents afterwards, its registers, and how it failed, if it did.
+struct Outcome<'a> {
+    before: &'a Pages,
+    after: &'a Pages,
+    regs: &'a crate::RegsSnapshot,
+    panic: Option<String>,
+}
+
+/// The differences between two runs from the same state: their failures, result registers
+/// and memory.
+fn compare(a: &Outcome, b: &Outcome, returns: Returns, sp: u32) -> Vec<Diff> {
+    let mut diffs = Vec::new();
+    if a.panic.is_some() || b.panic.is_some() {
+        diffs.push(Diff::Panic {
+            original: a.panic.clone(),
+            port: b.panic.clone(),
+        });
+    }
+    let (ra, rb) = (a.regs, b.regs);
+    let mut regs = vec![("r1", u64::from(ra.gpr[1]), u64::from(rb.gpr[1]))];
+    let r3 = ("r3", u64::from(ra.gpr[3]), u64::from(rb.gpr[3]));
+    let r4 = ("r4", u64::from(ra.gpr[4]), u64::from(rb.gpr[4]));
+    let f1 = ("f1", ra.fpr[1].ps0.to_bits(), rb.fpr[1].ps0.to_bits());
+    match returns {
+        Returns::Unknown => regs.extend([r3, r4, f1]),
+        Returns::Nothing => {}
+        Returns::Int => regs.push(r3),
+        Returns::Int64 => regs.extend([r3, r4]),
+        Returns::Float => regs.push(f1),
+    }
+    for (name, o, p) in regs {
+        if o != p {
+            diffs.push(Diff::Reg {
+                name,
+                original: o,
+                port: p,
+            });
+        }
+    }
+
     // Frames below the caller's stack pointer, plus the back chain and saved LR words the
     // callee writes into the caller's frame, are linkage rather than results.
     let sp = sp & 0x3FFF_FFFF;
     let scratch = sp.saturating_sub(STACK_SCRATCH)..sp + 8;
-    let mut pages: Vec<u32> = j1.keys().chain(j2.keys()).copied().collect();
+    let mut pages: Vec<u32> = a.after.keys().chain(b.after.keys()).copied().collect();
     pages.sort_unstable();
     pages.dedup();
     for page in pages {
-        let expected = s1.get(&page).or_else(|| j2.get(&page)).unwrap();
-        let actual = ctx.mem.capture([page].iter());
-        let actual = &actual[&page];
+        // A page one side did not write still holds what both started from.
+        let base = a.before.get(&page).or_else(|| b.before.get(&page)).unwrap();
+        let expected = a.after.get(&page).unwrap_or(base);
+        let actual = b.after.get(&page).unwrap_or(base);
         let mut i = 0;
         while i < PAGE_SIZE as usize {
             let phys = page * PAGE_SIZE + i as u32;
@@ -540,4 +520,5 @@ fn compare_pages(ctx: &Ctx, j1: &Pages, s1: &Pages, j2: &Pages, sp: u32, diffs: 
             });
         }
     }
+    diffs
 }
