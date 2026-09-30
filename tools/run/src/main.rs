@@ -31,6 +31,8 @@ use ssbm_ppc::Interpreter;
 use ssbm_rt::Ctx;
 use ssbm_sdk::{Sdk, boot, hw};
 
+mod monkey;
+
 /// Panic payload that ends the run on purpose.
 struct Stop;
 
@@ -138,6 +140,8 @@ fn run() -> ExitCode {
     let mut ports: Vec<String> = Vec::new();
     let mut lockstep = false;
     let mut lockstep_from = 0u64;
+    let mut monkey_seed: Option<u64> = None;
+    let mut start_mode: Option<u32> = None;
     let mut args = std::env::args().skip(1);
     while let Some(a) = args.next() {
         match a.as_str() {
@@ -164,6 +168,20 @@ fn run() -> ExitCode {
                     .expect("--lockstep-from FIELD");
             }
             "--write-known" => write_known = Some(args.next().expect("--write-known FILE")),
+            "--monkey" => {
+                monkey_seed = Some(
+                    args.next()
+                        .and_then(|v| v.parse().ok())
+                        .expect("--monkey SEED"),
+                )
+            }
+            "--mode" => {
+                start_mode = Some(
+                    args.next()
+                        .and_then(|v| u32::from_str_radix(v.trim_start_matches("0x"), 16).ok())
+                        .expect("--mode KIND (hex)"),
+                )
+            }
             "--fp" => {
                 fp_mode = match args.next().as_deref() {
                     Some("hardware") => Some(gekko_fp::FpMode::Hardware),
@@ -222,6 +240,32 @@ fn run() -> ExitCode {
     ctx.set_names(Box::new(ssbm_types::describe));
     let dol = disc.main_dol().ok();
     let sdk = ssbm_sdk::install(&ctx, disc);
+    // --monkey SEED plays every controller at random; --mode KIND starts in that game mode
+    // (GameModeKind, in hex) instead of the title screen. MODES=1 logs each mode entered.
+    if let Some(seed) = monkey_seed {
+        monkey::install(&sdk, seed, 0);
+    }
+    let log_modes = std::env::var_os("MODES").is_some();
+    if start_mode.is_some() || log_modes {
+        let first = Cell::new(true);
+        ctx.set_hook(
+            ssbm_sdk::sym("runGameMode"),
+            Rc::new(move |ctx| {
+                // The title screen is the first mode past booting.
+                if let Some(mode) = start_mode
+                    && first.get()
+                    && ctx.regs.r(3) == 0
+                {
+                    first.set(false);
+                    ctx.regs.set_r(3, mode);
+                }
+                if log_modes {
+                    let fields = ctx.ext::<Sdk>().hw.fields.get();
+                    eprintln!("field {fields}: game mode {:#04x}", ctx.regs.r(3));
+                }
+            }),
+        );
+    }
     let slippi = replay_path.map(|path| {
         let bytes = std::fs::read(&path).unwrap_or_else(|e| panic!("{path}: {e}"));
         let replay = ssbm_slippi::Replay::parse(&bytes).unwrap_or_else(|e| panic!("{path}: {e}"));

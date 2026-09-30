@@ -24,6 +24,7 @@ use ssbm_rt::{Ctx, MSR_EE};
 
 pub mod boot;
 mod devices;
+pub use devices::PadStatus;
 mod gp;
 pub mod hw;
 mod os;
