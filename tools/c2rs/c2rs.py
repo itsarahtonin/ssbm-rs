@@ -657,6 +657,9 @@ class Translator:
             return [f"return {v.code};"]
         if k == CK.IF_STMT:
             kids = children(n)
+            jump = self.setjmp_test(kids[0])
+            if jump is not None:
+                return self.setjmp_if(jump, kids)
             cond = self.cond(kids[0])
             out = [f"if {cond} {{"] + self.indent(self.block(kids[1])) + ["}"]
             if len(kids) > 2:
@@ -1736,6 +1739,43 @@ class Translator:
         asm = self.asm or {}
         return self.asm is not None and asm.get(f.get("symbol") or name, 0) == 0 and \
             callee.referenced.get_definition() is not None
+
+    def setjmp_test(self, cond):
+        """(jmp_buf address node, whether the then branch runs when setjmp returns 0) for a
+        condition testing `setjmp(env)` against 0, else None."""
+        n = strip(cond)
+        zero_then = False
+        if n.kind == CK.UNARY_OPERATOR and UNOPS.get(_lib.clang_getCursorUnaryOperatorKind(n)) == "!":
+            n, zero_then = strip(children(n)[0]), True
+        elif n.kind == CK.BINARY_OPERATOR and \
+                BINOPS.get(_lib.clang_getCursorBinaryOperatorKind(n)) in ("==", "!="):
+            a, b = (strip(x) for x in children(n))
+            if b.kind != CK.INTEGER_LITERAL or evaluate(b) != 0:
+                return None
+            n, zero_then = a, BINOPS.get(_lib.clang_getCursorBinaryOperatorKind(n)) == "=="
+        if n.kind != CK.CALL_EXPR:
+            return None
+        callee = strip(children(n)[0])
+        if callee.kind != CK.DECL_REF_EXPR or callee.spelling != "__setjmp":
+            return None
+        return children(n)[1], zero_then
+
+    def setjmp_if(self, jump, kids):
+        """`if (setjmp(env) == 0) body else handler`: the body runs under `Ctx::setjmp`, which
+        a longjmp to env ends early, and the handler runs if one did."""
+        env, zero_then = jump
+        if not zero_then:
+            raise Unsupported("setjmp whose longjmp handler is the then branch")
+        body = kids[1]
+        for x in body.walk_preorder():
+            if x.kind in (CK.RETURN_STMT, CK.GOTO_STMT, CK.BREAK_STMT, CK.CONTINUE_STMT):
+                raise Unsupported("control leaving a setjmp body")
+        tmp = self.f.temp()
+        addr = f"Handle::addr({self.expr(env).code})"
+        out = [f"let {tmp} = ctx.setjmp({addr}, || {{"] + self.indent(self.block(body)) + ["});"]
+        if len(kids) > 2:
+            out += [f"if {tmp} != 0 {{"] + self.indent(self.block(kids[2])) + ["}"]
+        return out
 
     def raw_call(self, addr, ft, args, t):
         if ft.get("params") is None:

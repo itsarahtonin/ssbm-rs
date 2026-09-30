@@ -1245,7 +1245,7 @@ pub fn grAnime_801C8318<'a>(
     if ((arg2 & (4_i32 as u32)) != 0) {
         var_r30 = (((var_r30 as u32) | (0x100_i32 as u32)) as i32);
     }
-    if fns::__setjmp(ctx, fns::grAnime_8049EE40(ctx)) == 0_i32 {
+    let __t1 = ctx.setjmp(Handle::addr(fns::grAnime_8049EE40(ctx)), || {
         fns::HSD_ForeachAnim(
             ctx,
             Handle::cast::<Addr<'a>>(jobj),
@@ -1255,7 +1255,7 @@ pub fn grAnime_801C8318<'a>(
             (enums::AOBJ_ARG_AV as i32),
             &[VarArg::Int(Handle::addr(sp14))],
         );
-    }
+    });
     return sp14.get();
 }
 
@@ -1949,7 +1949,7 @@ fn inl_grAnime_801C8318_unfused<'a>(
     if ((arg2 & (4_i32 as u32)) != 0) {
         var_r30 = (((var_r30 as u32) | (0x100_i32 as u32)) as i32);
     }
-    if fns::__setjmp(ctx, fns::grAnime_8049EE40(ctx)) == 0_i32 {
+    let __t1 = ctx.setjmp(Handle::addr(fns::grAnime_8049EE40(ctx)), || {
         fns::HSD_ForeachAnim(
             ctx,
             Handle::cast::<Addr<'a>>(jobj),
@@ -1959,7 +1959,7 @@ fn inl_grAnime_801C8318_unfused<'a>(
             (enums::AOBJ_ARG_AV as i32),
             &[VarArg::Int(Handle::addr(sp14))],
         );
-    }
+    });
     return sp14.get();
 }
 
