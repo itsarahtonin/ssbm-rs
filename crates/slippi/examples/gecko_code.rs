@@ -1,13 +1,14 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-//! Prints one Gecko code from a replay's code list, by injection address.
+//! Prints one Gecko code from a replay's code list, by injection address, or lists every code
+//! with whether playback leaves it out.
 //!
-//! `cargo run -p ssbm-slippi --example gecko_code -- replay.slp 8006DA34`
+//! `cargo run -p ssbm-slippi --example gecko_code -- replay.slp [8006DA34]`
 
 fn main() {
     let a: Vec<String> = std::env::args().collect();
     let bytes = std::fs::read(&a[1]).unwrap();
-    let want = u32::from_str_radix(&a[2], 16).unwrap();
+    let want = a.get(2).map(|s| u32::from_str_radix(s, 16).unwrap());
     let replay = ssbm_slippi::Replay::parse(&bytes).unwrap();
     let src = &replay.gecko_codes;
     let word = |at: usize| u32::from_be_bytes(src[at..at + 4].try_into().unwrap());
@@ -21,13 +22,26 @@ fn main() {
             0x06 => 8 + ((word(at + 4) as usize + 7) & !7),
             _ => 8,
         };
-        if addr == want {
-            for i in (at..at + len).step_by(8) {
-                println!("{:08X} {:08X}", word(i), word(i + 4));
+        match want {
+            Some(want) if addr == want => {
+                for i in (at..at + len).step_by(8) {
+                    println!("{:08X} {:08X}", word(i), word(i + 4));
+                }
+                return;
             }
-            return;
+            Some(_) => {}
+            None => println!(
+                "{addr:08X} {kind:02X} {len:5} bytes{}",
+                if ssbm_slippi::denylist::DENYLIST.contains(&addr) {
+                    "  left out"
+                } else {
+                    ""
+                }
+            ),
         }
         at += len;
     }
-    println!("no code at {want:08X}");
+    if let Some(want) = want {
+        println!("no code at {want:08X}");
+    }
 }

@@ -10,7 +10,7 @@ use std::rc::Rc;
 use ssbm_rt::Ctx;
 
 pub mod compare;
-mod denylist;
+pub mod denylist;
 pub mod device;
 pub mod gecko;
 pub mod replay;

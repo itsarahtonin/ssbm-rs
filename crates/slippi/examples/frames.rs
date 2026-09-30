@@ -23,13 +23,17 @@ fn main() {
         if (first..=last).contains(&frame) {
             let w = |at: usize| u32::from_be_bytes(p[at..at + 4].try_into().unwrap());
             println!(
-                "frame {frame}: state {:04X} kb ({:08X}, {:08X}) air {} pos ({:08X}, {:08X})",
+                "frame {frame}: state {:04X} pos ({:08X}, {:08X}) self ({:08X}, {:08X}, ground {:08X}) kb ({:08X}, {:08X}) air {} flags {:02X?}",
                 u16::from_be_bytes([p[7], p[8]]),
+                w(0x9),
+                w(0xD),
+                w(0x34),
+                w(0x38),
+                w(0x44),
                 w(0x3C),
                 w(0x40),
                 p[0x2E],
-                w(0x9),
-                w(0xD)
+                &p[0x25..0x2A]
             );
         }
     }
