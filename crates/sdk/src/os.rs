@@ -26,7 +26,19 @@ pub struct Os {
     line: RefCell<String>,
 }
 
+/// Where the OS keeps the running thread (`__gCurrentThread`), and where an `OSThread` keeps
+/// its stack's top and lowest address.
+const CURRENT_THREAD: u32 = 0x8000_00E4;
+const THREAD_STACK_BASE: u32 = 0x304;
+const THREAD_STACK_END: u32 = 0x308;
+
 pub(crate) fn install(ctx: &Ctx) {
+    ctx.set_stack_bounds(Box::new(|ctx| {
+        let thread = ctx.mem.read_u32(CURRENT_THREAD).ok().filter(|&t| t != 0)?;
+        let top = ctx.mem.read_u32(thread.wrapping_add(THREAD_STACK_BASE)).ok()?;
+        let end = ctx.mem.read_u32(thread.wrapping_add(THREAD_STACK_END)).ok()?;
+        (end != 0 && end < top).then_some((end, top))
+    }));
     let reg = |name: &str, f: Native| ctx.register(sym(name), f);
     reg("OSReport", os_report);
     reg("OSPanic", os_panic);
@@ -193,7 +205,7 @@ pub fn default_sram() -> [u8; 64] {
 
 fn os_init_sram(ctx: &Ctx) {
     let scb = sym("Scb");
-    let _ = ctx.mem.write_bytes(scb, &default_sram());
+    let _ = ctx.dma_write(scb, &default_sram());
     ctx.write_u32(scb + 0x40, 0x40); // offset
     ctx.write_u32(scb + 0x44, 0); // enabled
     ctx.write_u32(scb + 0x48, 0); // locked

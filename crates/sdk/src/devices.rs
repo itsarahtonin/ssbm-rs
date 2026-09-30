@@ -136,7 +136,7 @@ fn pad_read(ctx: &Ctx) {
             b[10] = PAD_ERR_NO_CONTROLLER as u8;
             b
         };
-        let _ = ctx.mem.write_bytes(at, &bytes);
+        let _ = ctx.dma_write(at, &bytes);
     }
     ctx.regs.set_r(3, 0);
 }

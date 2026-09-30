@@ -300,7 +300,7 @@ impl Hw {
     /// the commands.
     fn burst(&self, ctx: &Ctx, sdk: &Rc<Sdk>, data: &[u8]) {
         let wptr = self.get32(PI_FIFO_WPTR);
-        let _ = ctx.mem.write_bytes(0x8000_0000 | wptr, data);
+        let _ = ctx.dma_write(0x8000_0000 | wptr, data);
         let next = if wptr == self.get32(PI_FIFO_END) & 0x03FF_FFE0 {
             self.get32(PI_FIFO_BASE) & 0x03FF_FFE0
         } else {
@@ -374,7 +374,7 @@ impl Hw {
             let sdk = ctx.ext::<Sdk>();
             let hw = &sdk.hw;
             let dma = |data: &[u8]| {
-                let _ = ctx.mem.write_bytes(0x8000_0000 | mar, data);
+                let _ = ctx.dma_write(0x8000_0000 | mar, data);
                 hw.set32(DI_MAR, mar + data.len() as u32);
                 hw.set32(DI_LENGTH, 0);
             };

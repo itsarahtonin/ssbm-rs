@@ -393,6 +393,9 @@ fn op31(ctx: &Ctx, pc: u32, w: u32) {
         151 => ctx.write_u32(ea_x(), r(ctx, d)),
         183 => {
             let ea = ea_ux();
+            if a == 1 && d == 1 {
+                ctx.stack_allocated(ea, r(ctx, 1));
+            }
             ctx.write_u32(ea, r(ctx, d));
             set_r(ctx, a, ea);
         }
@@ -601,6 +604,10 @@ fn load_store(ctx: &Ctx, w: u32) {
     let (d, a) = (fd(w), fa(w));
     let update = matches!(op, 33 | 35 | 37 | 39 | 41 | 43 | 45 | 49 | 51 | 53 | 55);
     let ea = if update { r(ctx, a) } else { ra0(ctx, w) }.wrapping_add(simm(w));
+    if op == 37 && a == 1 && d == 1 {
+        // `stwu r1, -n(r1)` allocates a frame.
+        ctx.stack_allocated(ea, r(ctx, 1));
+    }
     match op {
         32 | 33 => set_r(ctx, d, ctx.read_u32(ea)),
         34 | 35 => set_r(ctx, d, u32::from(ctx.read_u8(ea))),

@@ -136,6 +136,25 @@ pub struct Ctx {
     /// Registers a port for an address a call reaches without one, such as code placed at run
     /// time, and says whether it did.
     resolver: RefCell<Option<Resolver>>,
+    /// Stack below a lockstep check's r1 that its original run has written, while tracked, and
+    /// what hears of reads of the rest.
+    shadow: RefCell<Option<StackShadow>>,
+    shadow_on: Cell<bool>,
+    uninit_hook: RefCell<Option<UninitHook>>,
+    /// The running thread's stack, as (lowest address, top), where the OS layer knows it.
+    stack_bounds: RefCell<Option<StackBounds>>,
+}
+
+/// See `Ctx::set_stack_bounds`.
+pub type StackBounds = Box<dyn Fn(&Ctx) -> Option<(u32, u32)>>;
+
+/// See `Ctx::set_uninit_hook`: the address and length of a read of stack nothing wrote.
+pub type UninitHook = Box<dyn Fn(&Ctx, u32, u32)>;
+
+/// Which bytes of `[lo, lo + written.len())` have been written.
+struct StackShadow {
+    lo: u32,
+    written: Vec<bool>,
 }
 
 /// See `Ctx::set_resolver`.
@@ -190,6 +209,102 @@ impl Ctx {
             watch_hook: RefCell::default(),
             original_entries: RefCell::default(),
             resolver: RefCell::default(),
+            shadow: RefCell::default(),
+            shadow_on: Cell::new(false),
+            uninit_hook: RefCell::default(),
+            stack_bounds: RefCell::default(),
+        }
+    }
+
+    /// Sets what tells the running thread's stack, so what lies below it is not taken for
+    /// stack.
+    pub fn set_stack_bounds(&self, bounds: StackBounds) {
+        *self.stack_bounds.borrow_mut() = Some(bounds);
+    }
+
+    /// The lowest address of the stack `below` bytes under `sp`, no lower than the end of the
+    /// running thread's stack when `sp` is in it.
+    pub fn stack_floor(&self, sp: u32, below: u32) -> u32 {
+        let floor = sp.saturating_sub(below);
+        let bounds = self.stack_bounds.borrow().as_ref().and_then(|f| f(self));
+        match bounds {
+            Some((end, top)) if end <= sp && sp <= top => floor.max(end),
+            _ => floor,
+        }
+    }
+
+    /// Sets what hears of reads of stack that nothing wrote since tracking began, which
+    /// lockstep tracks through the original runs of its checks while this is set.
+    pub fn set_uninit_hook(&self, hook: UninitHook) {
+        *self.uninit_hook.borrow_mut() = Some(hook);
+    }
+
+    pub(crate) fn tracks_uninit(&self) -> bool {
+        self.uninit_hook.borrow().is_some()
+    }
+
+    /// Starts tracking which bytes of `[lo, hi)` are written, all unwritten so far.
+    pub(crate) fn begin_stack_shadow(&self, lo: u32, hi: u32) {
+        *self.shadow.borrow_mut() = Some(StackShadow {
+            lo,
+            written: vec![false; hi.wrapping_sub(lo) as usize],
+        });
+        self.shadow_on.set(true);
+    }
+
+    pub(crate) fn end_stack_shadow(&self) {
+        self.shadow_on.set(false);
+        *self.shadow.borrow_mut() = None;
+    }
+
+    /// A frame is being allocated from `sp` down to `new_sp`: none of its bytes hold anything
+    /// of its function's yet, whatever earlier calls left there.
+    #[inline]
+    pub fn stack_allocated(&self, new_sp: u32, sp: u32) {
+        if self.shadow_on.get() {
+            self.shadow_unwrite(new_sp, sp);
+        }
+    }
+
+    #[cold]
+    fn shadow_unwrite(&self, lo: u32, hi: u32) {
+        if let Some(sh) = self.shadow.borrow_mut().as_mut() {
+            for addr in lo..hi {
+                let off = addr.wrapping_sub(sh.lo) as usize;
+                if off < sh.written.len() {
+                    sh.written[off] = false;
+                }
+            }
+        }
+    }
+
+    #[cold]
+    fn shadow_write(&self, addr: u32, len: u32) {
+        if let Some(sh) = self.shadow.borrow_mut().as_mut() {
+            for i in 0..len {
+                let off = addr.wrapping_add(i).wrapping_sub(sh.lo) as usize;
+                if off < sh.written.len() {
+                    sh.written[off] = true;
+                }
+            }
+        }
+    }
+
+    #[cold]
+    fn shadow_read(&self, addr: u32, len: u32) {
+        let unwritten = self.shadow.borrow().as_ref().is_some_and(|sh| {
+            (0..len).any(|i| {
+                let off = addr.wrapping_add(i).wrapping_sub(sh.lo) as usize;
+                off < sh.written.len() && !sh.written[off]
+            })
+        });
+        if unwritten {
+            // The hook may read memory itself.
+            self.shadow_on.set(false);
+            if let Some(hook) = self.uninit_hook.borrow().as_ref() {
+                hook(self, addr, len);
+            }
+            self.shadow_on.set(true);
         }
     }
 
@@ -404,6 +519,9 @@ impl Ctx {
 
     #[inline]
     pub fn read_u8(&self, addr: u32) -> u8 {
+        if self.shadow_on.get() {
+            self.shadow_read(addr, 1);
+        }
         match self.mem.read_u8(addr) {
             Ok(v) => v,
             Err(_) => self.read_slow(addr, 1) as u8,
@@ -412,6 +530,9 @@ impl Ctx {
 
     #[inline]
     pub fn read_u16(&self, addr: u32) -> u16 {
+        if self.shadow_on.get() {
+            self.shadow_read(addr, 2);
+        }
         match self.mem.read_u16(addr) {
             Ok(v) => v,
             Err(_) => self.read_slow(addr, 2) as u16,
@@ -420,6 +541,9 @@ impl Ctx {
 
     #[inline]
     pub fn read_u32(&self, addr: u32) -> u32 {
+        if self.shadow_on.get() {
+            self.shadow_read(addr, 4);
+        }
         match self.mem.read_u32(addr) {
             Ok(v) => v,
             Err(_) => self.read_slow(addr, 4) as u32,
@@ -428,6 +552,9 @@ impl Ctx {
 
     #[inline]
     pub fn read_u64(&self, addr: u32) -> u64 {
+        if self.shadow_on.get() {
+            self.shadow_read(addr, 8);
+        }
         match self.mem.read_u64(addr) {
             Ok(v) => v,
             Err(_) => (self.read_slow(addr, 4) << 32) | self.read_slow(addr.wrapping_add(4), 4),
@@ -440,6 +567,9 @@ impl Ctx {
             self.write_slow(addr, 1, u64::from(v));
         }
         self.watched(addr, 1);
+        if self.shadow_on.get() {
+            self.shadow_write(addr, 1);
+        }
     }
 
     #[inline]
@@ -448,6 +578,9 @@ impl Ctx {
             self.write_slow(addr, 2, u64::from(v));
         }
         self.watched(addr, 2);
+        if self.shadow_on.get() {
+            self.shadow_write(addr, 2);
+        }
     }
 
     #[inline]
@@ -456,6 +589,9 @@ impl Ctx {
             self.write_slow(addr, 4, u64::from(v));
         }
         self.watched(addr, 4);
+        if self.shadow_on.get() {
+            self.shadow_write(addr, 4);
+        }
     }
 
     #[inline]
@@ -465,6 +601,9 @@ impl Ctx {
             self.write_slow(addr.wrapping_add(4), 4, v & 0xFFFF_FFFF);
         }
         self.watched(addr, 8);
+        if self.shadow_on.get() {
+            self.shadow_write(addr, 8);
+        }
     }
 
     /// Reads `n` (1..=8) bytes as a big-endian integer.
@@ -497,6 +636,17 @@ impl Ctx {
         for (i, b) in bytes.iter().enumerate() {
             self.write_u8(dst.wrapping_add(i as u32), *b);
         }
+    }
+
+    /// Writes a block into memory as a device's DMA does, past any hardware registers, where
+    /// the debugging watchpoint and lockstep's stack tracking see it.
+    pub fn dma_write(&self, dst: u32, bytes: &[u8]) -> ssbm_mem::Result<()> {
+        let result = self.mem.write_bytes(dst, bytes);
+        self.watched(dst, bytes.len() as u32);
+        if self.shadow_on.get() {
+            self.shadow_write(dst, bytes.len() as u32);
+        }
+        result
     }
 
     pub fn fill(&self, dst: u32, byte: u8, n: u32) {
@@ -703,6 +853,7 @@ impl Ctx {
     pub fn stack_frame(&self, size: u32) -> StackFrame<'_> {
         let old = self.regs.r(1);
         let new = old - size;
+        self.stack_allocated(new, old);
         self.write_u32(new, old);
         self.regs.set_r(1, new);
         StackFrame {

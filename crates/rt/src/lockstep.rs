@@ -142,6 +142,12 @@ pub struct State {
     checking: RefCell<Vec<u32>>,
     /// Mismatches kept per function; later ones only count in `stats`.
     pub keep_per_function: Cell<usize>,
+    /// Calls to check per function, if limited: past them its port runs unchecked, so a long
+    /// run spends its checks on what it has not checked yet.
+    pub calls_per_function: Cell<Option<u64>>,
+    /// Ports checked as often as that, to run unchecked once no check is running: a mode that
+    /// changed between the sides of a check would give them different callees.
+    checked_enough: RefCell<Vec<u32>>,
     pub mismatches: RefCell<Vec<Mismatch>>,
     pub stats: RefCell<BTreeMap<u32, Stats>>,
 }
@@ -220,7 +226,16 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
         Phase::Replay
     });
     ctx.mem.begin_journal();
+    // The stack below r1 holds nothing the original wrote yet: reads of it before it writes
+    // there take whatever an earlier call left.
+    let shadowed = outermost && ctx.tracks_uninit();
+    if shadowed {
+        ctx.begin_stack_shadow(ctx.stack_floor(sp, STACK_SCRATCH), sp);
+    }
     let original_panic = catch_unwind(AssertUnwindSafe(|| ctx.run_original(addr))).err();
+    if shadowed {
+        ctx.end_stack_shadow();
+    }
     let original = original_panic.as_ref().map(|p| panic_text(p.as_ref()));
     let j1 = ctx.mem.end_journal();
     let regs1 = ctx.regs.snapshot();
@@ -332,6 +347,14 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     let mut stats = state.stats.borrow_mut();
     let entry = stats.entry(addr).or_default();
     entry.calls += 1;
+    if state.calls_per_function.get().is_some_and(|n| entry.calls == n) {
+        state.checked_enough.borrow_mut().push(addr);
+    }
+    if outermost {
+        for addr in state.checked_enough.borrow_mut().drain(..) {
+            ctx.set_mode(addr, crate::Mode::Native);
+        }
+    }
     if uninitialized {
         entry.uninitialized += 1;
     } else if !diffs.is_empty() {
@@ -353,8 +376,8 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
 }
 
 fn clear_stack(ctx: &Ctx, sp: u32) {
-    let start = sp.saturating_sub(STACK_CLEARED);
-    let _ = ctx.mem.write_bytes(start, &[0; STACK_CLEARED as usize]);
+    let start = ctx.stack_floor(sp, STACK_CLEARED);
+    let _ = ctx.mem.write_bytes(start, &vec![0; (sp - start) as usize]);
 }
 
 fn describe(ctx: &Ctx, kind: Kind) -> String {
@@ -407,7 +430,7 @@ fn interact(ctx: &Ctx, kind: Kind, f: impl FnOnce() -> u32) -> u32 {
                     // Frames below the original's r1 are dead once the callee or handler
                     // returns, and the side replaying may be using that stack. So is the word
                     // at 4(r1), where the callee saved its return address.
-                    let dead = x.sp.wrapping_sub(STACK_SCRATCH)..x.sp.wrapping_add(8);
+                    let dead = ctx.stack_floor(x.sp, STACK_SCRATCH)..x.sp.wrapping_add(8);
                     for (at, bytes) in &x.writes {
                         if dead.contains(at) {
                             continue;
@@ -531,7 +554,7 @@ fn compare(ctx: &Ctx, a: &Outcome, b: &Outcome, returns: Returns, sp: u32) -> Ve
     // callee writes into the caller's frame, are linkage rather than results. So are jump
     // buffers: a port's `setjmp` saves no registers there, and only `longjmp` reads them.
     let sp = sp & 0x3FFF_FFFF;
-    let scratch = sp.saturating_sub(STACK_SCRATCH)..sp + 8;
+    let scratch = ctx.stack_floor(sp, STACK_SCRATCH)..sp + 8;
     let jump_buffers: Vec<std::ops::Range<u32>> = ctx
         .jump_buffers
         .borrow()

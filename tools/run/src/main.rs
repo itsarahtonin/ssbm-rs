@@ -20,7 +20,7 @@
 //! For debugging, `LOCKSTEP_TRACE` shows the jumps original code made before a panic inside a
 //! lockstep check, and `STUCK_TRACE` the ports running at each heartbeat of a stall.
 
-use std::cell::Cell;
+use std::cell::{Cell, RefCell};
 use std::collections::HashMap;
 use std::panic::{self, AssertUnwindSafe};
 use std::process::ExitCode;
@@ -69,6 +69,49 @@ fn calls_to(dol: &ssbm_disc::Dol, target: u32) -> Vec<u32> {
         }
     }
     sites
+}
+
+/// Adds `checked` (address, calls, mismatching calls, calls that differ only by reads of
+/// stack the original never wrote) to the CSV ledger at `path`. Returns how many ports it has
+/// checked, and how many of them mismatch.
+fn update_ledger(
+    path: &str,
+    checked: &[(u32, u64, u64, u64)],
+    ported: &[u32],
+    name: &dyn Fn(u32) -> String,
+) -> std::io::Result<(usize, usize)> {
+    let mut rows: std::collections::BTreeMap<u32, [u64; 4]> = Default::default();
+    if let Ok(text) = std::fs::read_to_string(path) {
+        for line in text.lines().skip(1) {
+            let f: Vec<&str> = line.split(',').collect();
+            if f.len() < 6 {
+                continue;
+            }
+            let Ok(addr) = u32::from_str_radix(f[0].trim_start_matches("0x"), 16) else {
+                continue;
+            };
+            let n = |i: usize| f[i].parse::<u64>().unwrap_or(0);
+            rows.insert(addr, [n(2), n(3), n(4), n(5)]);
+        }
+    }
+    for &(addr, calls, bad, uninit) in checked {
+        let r = rows.entry(addr).or_default();
+        r[0] += calls;
+        r[1] += bad;
+        r[2] += uninit;
+        r[3] += 1;
+    }
+    let mut out = String::from("address,name,calls,mismatches,uninitialized,runs\n");
+    for (addr, r) in &rows {
+        out += &format!("{addr:#010x},{},{},{},{},{}\n", name(*addr), r[0], r[1], r[2], r[3]);
+    }
+    if let Some(dir) = std::path::Path::new(path).parent() {
+        std::fs::create_dir_all(dir)?;
+    }
+    std::fs::write(path, out)?;
+    let n = rows.keys().filter(|a| ported.contains(a)).count();
+    let bad = rows.iter().filter(|(a, r)| ported.contains(a) && r[1] > 0).count();
+    Ok((n, bad))
 }
 
 /// Stack for the thread that runs the game. Every guest call nests Rust frames, and ports and
@@ -217,6 +260,10 @@ fn run() -> ExitCode {
     // Playback's Gecko codes patch some functions. Those run ports made with the codes where
     // tools/c2rs/patched.py has seen these codes, and their patched original code elsewhere.
     // PATCHED_ORIGINAL=1 keeps them all original.
+    // Where the original read stack it never wrote: instruction -> (count, r1 offset, length,
+    // a few return addresses at the read, which name a leaf function's callers).
+    type UninitReads = HashMap<u32, (u64, u32, u32, Vec<u32>)>;
+    let uninit_reads: Rc<RefCell<UninitReads>> = Rc::default();
     // Whether lockstep checks ports yet, for those registered as the run goes.
     let checking = Rc::new(Cell::new(false));
     let mut kept = Vec::new();
@@ -364,6 +411,31 @@ fn run() -> ExitCode {
             sdk.schedule(hw::field_start(lockstep_from), enable);
         }
         ctx.lockstep.keep_per_function.set(2);
+        // LOCKSTEP_CALLS=N checks each port's first N calls, then lets it run unchecked.
+        if let Some(n) = std::env::var("LOCKSTEP_CALLS").ok().and_then(|v| v.parse().ok()) {
+            ctx.lockstep.calls_per_function.set(Some(n));
+        }
+        // LOCKSTEP_UNINIT=1 reports which instructions of the original read stack it never
+        // wrote, as lockstep's checks run it.
+        if std::env::var_os("LOCKSTEP_UNINIT").is_some() {
+            let reads = uninit_reads.clone();
+            let interp = interp.clone();
+            ctx.set_uninit_hook(Box::new(move |ctx, addr, len| {
+                let pc = interp.pc.get();
+                let off = addr.wrapping_sub(ctx.regs.r(1));
+                // A check's original that a port called returns to the sentinel: name the port.
+                let lr = match ctx.regs.lr.get() {
+                    ssbm_rt::RETURN_SENTINEL => ctx.native_stack().last().copied().unwrap_or(0),
+                    lr => lr,
+                };
+                let mut reads = reads.borrow_mut();
+                let e = reads.entry(pc).or_insert((0, off, len, Vec::new()));
+                e.0 += 1;
+                if e.3.len() < 3 && !e.3.contains(&lr) {
+                    e.3.push(lr);
+                }
+            }));
+        }
     }
 
     // CALLS=name,... logs each call to these functions (symbols or hex addresses) with its
@@ -640,6 +712,25 @@ fn run() -> ExitCode {
         }
     }
     let mut lockstep_ok = true;
+    if !uninit_reads.borrow().is_empty() {
+        let mut reads: Vec<(u32, (u64, u32, u32, Vec<u32>))> = uninit_reads
+            .borrow()
+            .iter()
+            .map(|(&pc, e)| (pc, e.clone()))
+            .collect();
+        reads.sort_by_key(|&(pc, _)| pc);
+        eprintln!("reads of stack the original never wrote, by instruction:");
+        for (pc, (n, off, len, lrs)) in reads {
+            let from: Vec<String> = lrs.iter().map(|&a| ctx.name_of(a)).collect();
+            eprintln!(
+                "  {:>9}  {}  ({len} bytes at r1{:+#x}; LR {})",
+                n,
+                ctx.name_of(pc),
+                off as i32,
+                from.join(", ")
+            );
+        }
+    }
     if lockstep {
         let stats = ctx.lockstep.stats.borrow();
         let calls: u64 = stats.values().map(|s| s.calls).sum();
@@ -676,6 +767,21 @@ fn run() -> ExitCode {
             }
         }
         lockstep_ok = bad.is_empty();
+        // LOCKSTEP_LEDGER=FILE adds this run's checks to a ledger of every port's, kept
+        // across runs.
+        if let Ok(path) = std::env::var("LOCKSTEP_LEDGER") {
+            let checked: Vec<(u32, u64, u64, u64)> = stats
+                .iter()
+                .map(|(&a, s)| (a, s.calls, s.mismatches, s.uninitialized))
+                .collect();
+            match update_ledger(&path, &checked, &ported, &|a| ctx.name_of(a)) {
+                Ok((n, bad)) => eprintln!(
+                    "ledger {path}: {n} of {} ports checked, {bad} of them with mismatches",
+                    ported.len()
+                ),
+                Err(e) => eprintln!("ledger {path}: {e}"),
+            }
+        }
     }
     eprintln!(
         "{} fields, {} M instructions, {} draws",
