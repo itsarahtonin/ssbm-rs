@@ -267,9 +267,13 @@ class Program:
                 self.enum_first.setdefault(cname, v)
         self.dol = load_dol(os.path.join(root, "build", "GALE01", "main.dol"))
 
-    def function(self, name, unit):
+    def function(self, name, unit, local=False):
+        """The function `name` refers to from `unit`. A `local` (static or defined here) one
+        must be the unit's own: a same-named function elsewhere is a different function."""
         cands = [f for f in self.functions_by_name.get(name, []) if f["addr"] is not None]
-        if len(cands) > 1:
+        if local:
+            cands = [f for f in cands if f["tu"] == unit]
+        elif len(cands) > 1:
             cands = [f for f in cands if f["tu"] == unit] or cands
         return cands[0] if len(cands) == 1 else None
 
@@ -321,16 +325,40 @@ class Unit:
         self.data_ranges = self.read_data_ranges()
         self.skipped = []
         self.ported = []
+        self.fuse_check = []
 
     def read_data_ranges(self):
+        """The unit's data sections, and how many fused multiply-adds each function's asm has."""
         path = os.path.join(self.prog.root, "build", "GALE01", "asm", self.name + ".s")
         ranges = []
+        self.fused_ops = {}
+        self.calls = {}
+        self.frame_sizes = {}
         if not os.path.exists(path):
             return ranges
+        current = None
         for line in open(path, encoding="utf-8", errors="replace"):
             m = re.match(r"# 0x([0-9A-F]+)\.\.0x([0-9A-F]+) \| size: 0x[0-9A-F]+", line)
             if m:
                 ranges.append((int(m.group(1), 16), int(m.group(2), 16)))
+                continue
+            m = re.match(r"\.fn (\S+),", line)
+            if m:
+                current = m.group(1)
+                self.fused_ops[current] = 0
+                self.calls[current] = set()
+                continue
+            if line.startswith(".endfn"):
+                current = None
+                continue
+            if current and re.search(r"\tf(?:n)?m(?:add|sub)s?\b", line):
+                self.fused_ops[current] += 1
+            m = re.search(r"\tbl (\S+)", line)
+            if current and m:
+                self.calls[current].add(m.group(1))
+            m = re.search(r"\tstwu r1, -0x([0-9a-fA-F]+)\(r1\)", line)
+            if current and m and current not in self.frame_sizes:
+                self.frame_sizes[current] = int(m.group(1), 16)
         return ranges
 
     def string_addr(self, data):
@@ -402,8 +430,53 @@ class Unit:
         return min(self.size_of(t), 8)
 
 
+def is_null_code(code):
+    while code.startswith("(") and code.endswith(")"):
+        code = code[1:-1]
+    return code == "null(ctx)" or (code.startswith("null::<") and code.endswith(">(ctx)"))
+
+
+def loop_head(cond):
+    """`while cond`, or `loop` for a condition that is always true."""
+    bare = cond
+    while bare.startswith("(") and bare.endswith(")"):
+        bare = bare[1:-1]
+    if bare in ("true", "1_i32 != 0"):
+        return "loop"
+    return f"while {cond}"
+
+
+def is_static(decl):
+    return decl.linkage == ci.LinkageKind.INTERNAL
+
+
 def same_type(a, b):
     return json.dumps(a, sort_keys=True) == json.dumps(b, sort_keys=True)
+
+
+def abi_class(t):
+    """How a value travels in registers: int, float, struct, or nothing."""
+    k = t["k"]
+    if k == "void":
+        return "void"
+    if k == "float":
+        return "f"
+    if k == "rec":
+        return "rec"
+    if k in ("int", "enum") and t.get("size", 4) == 8:
+        return "i64"
+    return "i"
+
+
+def same_signature(a, b):
+    """Whether two prototypes pass arguments and results the same way."""
+    if a["k"] != "fn" or b["k"] != "fn" or a.get("params") is None or b.get("params") is None:
+        return False
+    if bool(a.get("variadic")) != bool(b.get("variadic")) or len(a["params"]) != len(b["params"]):
+        return False
+    if abi_class(a["ret"]) != abi_class(b["ret"]):
+        return False
+    return all(abi_class(x) == abi_class(y) for x, y in zip(a["params"], b["params"]))
 
 
 def strip(c):
@@ -418,10 +491,13 @@ def strip(c):
 
 
 class Translator:
-    def __init__(self, unit, fn_cursor):
+    def __init__(self, unit, fn_cursor, fuse=None):
         self.u = unit
         self.f = FnCtx(unit.name, fn_cursor)
         self.line = fn_cursor.location.line
+        # Whether to contract multiply-adds: only where the original's asm has fused ops.
+        self.fuse = fuse if fuse is not None else unit.fused_ops.get(fn_cursor.spelling, 1) > 0
+        self.in_args = 0
 
     # Entry point.
 
@@ -468,8 +544,14 @@ class Translator:
         stmts = self.stmts(children(body))
         ret = "" if self.f.ret["k"] == "void" or self.f.sret else " -> " + self.u.rust_value_ty(self.f.ret)
         lines = [f"pub fn {ident(name)}<'a>(ctx: &'a Ctx{''.join(', ' + p for p in params)}){ret} {{"]
-        if self.f.frame:
-            lines.append(f"    let __frame = ctx.stack_alloc({max(self.f.frame_size, 8):#x});")
+        # The port takes the original's frame size, so functions it calls run at the same
+        # stack addresses as under the original, and see the same stack leftovers.
+        original = self.u.frame_sizes.get(name, 0) if self.f.cursor.linkage != ci.LinkageKind.INTERNAL or \
+            name in self.u.frame_sizes else 0
+        needed = (8 + self.f.frame_size + 7) & ~7 if self.f.frame else 0
+        size = max(original, needed)
+        if size:
+            lines.append(f"    let __frame = ctx.stack_frame({size:#x});")
             for rname, hty, off in self.f.frame:
                 lines.append(f"    let {ident(rname)}: {hty} = frame_at(ctx, &__frame, {off:#x});")
         lines += ["    " + p for p in pre]
@@ -485,12 +567,20 @@ class Translator:
         return bool(kids) and kids[-1].kind == CK.RETURN_STMT
 
     def safe(self, name):
+        if name == "_":
+            return "unused"
+        if name in self.u.prog.gen.type_names or name in ("enums", "fns", "statics", "support", "ptr", "cstr", "fnptr", "frame_at", "null"):
+            return name + "_"
         if name in ("ctx", "__frame") or name.startswith("__"):
             return "v_" + name.lstrip("_")
         return name
 
     def scan(self, node):
         """Finds locals whose address is taken; they must live on the emulated stack."""
+        ext = self.f.cursor.extent
+        for start, end in self.u.regions(str(ext.start.file)):
+            if start <= ext.end.line and ext.start.line <= end:
+                raise Unsupported("MWCC-only code")
         for n in node.walk_preorder():
             if n.kind == CK.GOTO_STMT or n.kind == CK.INDIRECT_GOTO_STMT:
                 raise Unsupported("goto")
@@ -548,7 +638,7 @@ class Translator:
                 return ["return;"]
             if self.f.sret:
                 v = self.expr(kids[0])
-                return [f"__ret.copy_from({v.code});", "return;"]
+                return [f"Handle::copy_from(__ret, {v.code});", "return;"]
             v = self.convert(self.expr(kids[0]), self.f.ret)
             return [f"return {v.code};"]
         if k == CK.IF_STMT:
@@ -570,7 +660,7 @@ class Translator:
             self.f.targets.append(Loop(brk, cont))
             inner = self.block(body)
             self.f.targets.pop()
-            return [f"{brk}: while {self.cond(cond_node)} {{", f"    {cont}: {{"] + \
+            return [f"{brk}: {loop_head(self.cond(cond_node))} {{", f"    {cont}: {{"] + \
                 self.indent(self.indent(inner)) + ["    }", "}"]
         if k == CK.DO_STMT:
             body, cond_node = children(n)
@@ -639,7 +729,7 @@ class Translator:
         inner = self.block(body)
         self.f.targets.pop()
         cond = self.cond(cond_node) if cond_node is not None else "true"
-        loop = [f"{brk}: while {cond} {{", f"    {cont}: {{"] + self.indent(self.indent(inner)) + ["    }"]
+        loop = [f"{brk}: {loop_head(cond)} {{", f"    {cont}: {{"] + self.indent(self.indent(inner)) + ["    }"]
         if incr is not None:
             loop += self.indent(self.effect(incr))
         loop.append("}")
@@ -737,6 +827,12 @@ class Translator:
             if len(kids) != 1:
                 raise Unsupported("scalar init list")
             init = kids[0]
+        refers_to_self = any(n.kind == CK.DECL_REF_EXPR and n.referenced is not None and n.referenced == d
+                             for n in init.walk_preorder())
+        if refers_to_self:
+            out = [f"let mut {ident(rname)}: {rty} = {self.zero(t)};"]
+            return out + self.effect(init) if strip(init).kind == CK.BINARY_OPERATOR else \
+                out + [f"{ident(rname)} = {self.convert(self.expr(init), t).code};"]
         v = self.convert(self.expr(init), t)
         return [f"let mut {ident(rname)}: {rty} = {v.code};"]
 
@@ -747,7 +843,7 @@ class Translator:
             if t["k"] == "arr":
                 out = []
                 if len(kids) < t["n"]:
-                    out.append(f"ctx.fill({lv.addr_code}.addr(), 0, {self.u.size_of(t):#x});")
+                    out.append(f"ctx.fill(Handle::addr({lv.addr_code}), 0, {self.u.size_of(t):#x});")
                 for i, k in enumerate(kids):
                     out += self.initialize(self.index_lvalue(lv, t, Expr(str(i), INT, True)), t["of"], k)
                 return out
@@ -756,7 +852,7 @@ class Translator:
                 fields = [f for f in rec["fields"] if f["name"] or f["type"]["k"] == "rec"]
                 out = []
                 if len(kids) < len(fields) or rec["kind"] == "union":
-                    out.append(f"ctx.fill({lv.addr_code}.addr(), 0, {self.u.size_of(t):#x});")
+                    out.append(f"ctx.fill(Handle::addr({lv.addr_code}), 0, {self.u.size_of(t):#x});")
                 for f, k in zip(fields, kids):
                     if not f["name"]:
                         raise Unsupported("anonymous member initializer")
@@ -771,7 +867,7 @@ class Translator:
             raise Unsupported("char array from string")
         v = self.expr(init)
         if t["k"] == "rec":
-            return [f"{lv.addr_code}.copy_from({v.code});"]
+            return [f"Handle::copy_from({lv.addr_code}, {v.code});"]
         return [lv.write(self.convert(v, t).code) + ";"]
 
     def zero(self, t):
@@ -793,7 +889,7 @@ class Translator:
         k = t["k"]
         if k in ("rec", "arr"):
             lv = LValue(t, lambda: h, None, lambda: h, pure)
-            lv._write = lambda v: f"{h}.copy_from({v})"
+            lv._write = lambda v: f"Handle::copy_from({h}, {v})"
         else:
             lv = LValue(t, lambda: f"{h}.get()", lambda v: f"{h}.set({v})", lambda: h, pure)
         lv.addr_code = h
@@ -814,6 +910,8 @@ class Translator:
         off, f = found
         ft = f["type"]
         h = base.addr_code
+        if field == "_":
+            field = f"_{off // 8:x}"
         acc = ident(field)
         if "bits" in f:
             size, signed = int_info(ft) if is_int(ft) else (4, False)
@@ -872,6 +970,8 @@ class Translator:
                 if g is None:
                     raise Unsupported(f"global {r.spelling} without an address")
                 t = self.u.ctype(r.type)
+                if not same_type(t, g["type"]):
+                    return self.handle_lvalue(f"ptr::<{self.u.storage_ty(t)}>(ctx, {g['addr']:#x})", t)
                 return self.handle_lvalue(f"{self.u.prog.global_path(g)}(ctx)", t)
             raise Unsupported(f"lvalue of {r.kind}")
         if k == CK.MEMBER_REF_EXPR:
@@ -895,8 +995,8 @@ class Translator:
             a, i = children(c)
             at = self.u.ctype(strip(a).type)
             idx = self.expr(i)
-            if at["k"] == "arr" and not is_int(self.u.ctype(i.type)) is False:
-                pass
+            if at["k"] == "arr" and self.is_pointer_local(strip(a)):
+                at = {"k": "ptr", "to": at["of"]}
             if at["k"] == "arr":
                 return self.index_lvalue(self.lvalue(a), at, idx)
             p = self.expr(a)
@@ -905,7 +1005,7 @@ class Translator:
                 p, idx = idx, p
                 if p.ty["k"] != "ptr":
                     raise Unsupported("subscript")
-            return self.deref_lvalue(Expr(f"{p.code}.add({self.convert(idx, INT).code})", p.ty,
+            return self.deref_lvalue(Expr(f"Handle::add({p.code}, {self.convert(idx, INT).code})", p.ty,
                                           p.pure and idx.pure))
         if k == CK.UNARY_OPERATOR and _lib.clang_getCursorUnaryOperatorKind(c) == 6:
             p = self.expr(children(c)[0])
@@ -922,6 +1022,15 @@ class Translator:
         if k == CK.COMPOUND_LITERAL_EXPR:
             raise Unsupported("compound literal")
         raise Unsupported(f"lvalue {k}")
+
+    def is_pointer_local(self, c):
+        """A reference to a local that C declares as an array but holds a pointer, such as
+        an array parameter."""
+        if c.kind != CK.DECL_REF_EXPR or c.referenced is None:
+            return False
+        r = c.referenced
+        entry = self.f.locals.get(r.get_usr() or r.spelling)
+        return entry is not None and entry[2] == "reg" and is_ptr(entry[1])
 
     def is_arrow(self, c):
         toks = [t.spelling for t in c.get_tokens()]
@@ -966,7 +1075,7 @@ class Translator:
         t = lv.ty
         if t["k"] == "rec":
             v = self.expr(b)
-            return [f"{lv.addr_code}.copy_from({v.code});"]
+            return [f"Handle::copy_from({lv.addr_code}, {v.code});"]
         v = self.convert(self.expr(b), t)
         return [lv.write(v.code) + ";"]
 
@@ -983,7 +1092,7 @@ class Translator:
             if op not in "+-":
                 raise Unsupported("pointer compound op")
             n = self.convert(rhs, INT).code
-            code = f"{cur.code}.add({n})" if op == "+" else f"{cur.code}.add({n}.wrapping_neg())"
+            code = f"Handle::add({cur.code}, {n})" if op == "+" else f"Handle::add({cur.code}, {n}.wrapping_neg())"
             return pre + [lv.write(code) + ";"]
         if op in ("+", "-") and is_float(lv.ty):
             fused = self.try_fuse(op, cur, b, lv.ty)
@@ -1004,14 +1113,15 @@ class Translator:
         cur = lv.read()
         t = lv.ty
         if is_ptr(t):
-            return [lv.write(f"{cur}.add({delta})") + ";"]
+            return [lv.write(f"Handle::add({cur}, {delta})") + ";"]
         if is_float(t):
             one = self.convert(Expr("1.0", DOUBLE, True), t)
             fn = "fadd" if t["size"] == 8 else "fadds"
             fn = fn if delta > 0 else fn.replace("add", "sub")
             return [lv.write(f"fp::{fn}({cur}, {one.code})") + ";"]
-        rty = self.u.rust_value_ty(t)
-        return [lv.write(f"{cur}.wrapping_add({delta} as {rty})") + ";"]
+        if delta > 0:
+            return [lv.write(f"{cur}.wrapping_add(1)") + ";"]
+        return [lv.write(f"{cur}.wrapping_sub(1)") + ";"]
 
     def expr(self, c):
         self.line = c.location.line
@@ -1095,6 +1205,13 @@ class Translator:
         # Array to pointer, function to pointer, lvalue to rvalue, or a real conversion.
         inner = strip(child)
         from_t = self.u.ctype(child.type)
+        if from_t["k"] == "enum" and is_int(to) and not int_info(to)[1] and int_info(to)[0] == 4:
+            # MWCC compiles with `-enum int`: enums are signed ints, where clang makes an
+            # enum without negative values unsigned.
+            to = INT
+        if to["k"] == "ptr" and from_t["k"] == "arr" and self.is_pointer_local(inner):
+            v = self.expr(child)
+            return self.convert(v, to)
         if to["k"] == "ptr" and from_t["k"] == "arr":
             if inner.kind == CK.STRING_LITERAL:
                 v = self.expr(inner)
@@ -1117,7 +1234,7 @@ class Translator:
 
     def fn_value(self, c):
         r = c.referenced
-        f = self.u.prog.function(r.spelling, self.u.name) if r is not None else None
+        f = self.u.prog.function(r.spelling, self.u.name, is_static(r)) if r is not None else None
         if f is None:
             raise Unsupported("function pointer to a function without an address")
         return Expr(f"fnptr(ctx, {f['addr']:#x})", {"k": "ptr", "to": self.u.ctype(r.type)}, True)
@@ -1225,9 +1342,17 @@ class Translator:
         a, b = children(c)
         t = self.u.ctype(c.type)
         if op == "=":
+            # The value of an assignment is the value stored; reading the lvalue back would
+            # repeat any side effects in it, such as the ++q in `*++q = *++p`.
             lv = self.lvalue(a)
-            stmts = self.assign(a, b)
-            return self.stmt_expr(stmts, Expr(lv.read(), lv.ty, False))
+            if lv.ty["k"] == "rec":
+                if not lv.pure:
+                    raise Unsupported("struct assignment to an impure lvalue as a value")
+                stmts = self.assign(a, b)
+                return self.stmt_expr(stmts, Expr(lv.addr_code, lv.ty, False))
+            v = self.convert(self.expr(b), lv.ty)
+            tmp = self.f.temp()
+            return Expr("{ " + f"let {tmp} = {v.code}; {lv.write(tmp)}; {tmp}" + " }", lv.ty, False)
         if op == ",":
             return self.stmt_expr(self.effect(a), self.expr(b))
         if op in ("&&", "||"):
@@ -1244,19 +1369,22 @@ class Translator:
             fused = self.try_fuse_binary(op, a, b, t)
             if fused is not None:
                 return fused
+        if op in ("/", "%") and is_int(t):
+            # Signedness from the operands as MWCC types them (enums are signed there).
+            t = arith(va.ty, vb.ty)
         return self.arith_op(op, self.convert(va, t), self.convert(vb, t), t)
 
     def ptr_arith(self, op, va, vb):
         if is_ptr(va.ty) and is_ptr(vb.ty):
             size = self.u.size_of(va.ty["to"]) if va.ty["to"]["k"] not in ("void", "unknown") else 1
-            return Expr(f"(({va.code}.addr().wrapping_sub({vb.code}.addr()) as i32) / {size})", INT,
+            return Expr(f"((Handle::addr({va.code}).wrapping_sub(Handle::addr({vb.code})) as i32) / {size})", INT,
                         va.pure and vb.pure)
         if is_ptr(vb.ty):
             va, vb = vb, va
         n = self.convert(vb, INT).code
         if op == "-":
             n = f"{n}.wrapping_neg()"
-        return Expr(f"{va.code}.add({n})", va.ty, va.pure and vb.pure)
+        return Expr(f"Handle::add({va.code}, {n})", va.ty, va.pure and vb.pure)
 
     def shift(self, op, va, vb):
         t = va.ty
@@ -1310,6 +1438,8 @@ class Translator:
         return Expr(f"fp::{fn}({a.code}, {c.code}, {b.code})", t, a.pure and b.pure and c.pure)
 
     def try_fuse_binary(self, op, left, right, t):
+        if not self.fuse or self.in_args:
+            return None
         p = self.product(left, t)
         if p is not None:
             b = self.convert(self.expr(right), t)
@@ -1322,6 +1452,8 @@ class Translator:
 
     def try_fuse(self, op, cur, rhs_node, t):
         """`cur += a * c` and `cur -= a * c`."""
+        if not self.fuse or self.in_args:
+            return None
         p = self.product(rhs_node, t)
         if p is None:
             return None
@@ -1349,7 +1481,7 @@ class Translator:
     def truthy(self, v):
         t = v.ty
         if is_ptr(t) or t["k"] == "fn":
-            return f"!{v.code}.is_null()"
+            return f"!Handle::is_null({v.code})"
         if is_float(t):
             return f"({v.code} != 0.0)"
         if t["k"] == "arr":
@@ -1360,13 +1492,13 @@ class Translator:
         va, vb = self.expr(a), self.expr(b)
         if is_ptr(va.ty) or is_ptr(vb.ty) or va.ty["k"] == "fn" or vb.ty["k"] == "fn":
             def addr(v):
-                if v.code == "null(ctx)":
+                if is_null_code(v.code):
                     return "0"
-                return f"{v.code}.addr()" if not is_int(v.ty) else f"({v.code} as u32)"
+                return f"Handle::addr({v.code})" if not is_int(v.ty) else f"({v.code} as u32)"
             ca, cb = addr(va), addr(vb)
             if op in ("==", "!=") and "0" in (ca, cb):
                 p = va if cb == "0" else vb
-                return f"{p.code}.is_null()" if op == "==" else f"!{p.code}.is_null()"
+                return f"Handle::is_null({p.code})" if op == "==" else f"!Handle::is_null({p.code})"
             return f"{ca} {op} {cb}"
         t = arith(va.ty, vb.ty)
         return f"{self.convert(va, t).code} {op} {self.convert(vb, t).code}"
@@ -1385,21 +1517,33 @@ class Translator:
             if special is not None:
                 return special
             ft = self.u.ctype(callee.referenced.type)
-            f = self.u.prog.function(name, self.u.name)
-            argv = self.call_args(ft, args)
+            f = self.u.prog.function(name, self.u.name, is_static(callee.referenced))
+            if f is not None and not same_signature(ft, f["type"]):
+                # The decomp declares this function differently here than where its stub came
+                # from; call it by address with the types this call site uses.
+                return self.raw_call(f["addr"], ft, args, t)
             if f is not None:
+                # The stub has the defining unit's types, which may name the same registers
+                # differently (u32 for s32, another pointer type).
+                st = f["type"]
+                argv = self.call_args(st, args)
                 path = self.u.prog.stub_path(f)
-                if ft.get("variadic"):
+                if st.get("variadic"):
                     fixed, extra = argv
-                    return Expr(f"{path}(ctx{''.join(', ' + a for a in fixed)}, &[{', '.join(extra)}])",
-                                t, False)
-                if t["k"] == "rec":
+                    res = Expr(f"{path}(ctx{''.join(', ' + a for a in fixed)}, &[{', '.join(extra)}])",
+                               st["ret"], False)
+                elif t["k"] == "rec":
                     return self.sret_call(path, argv, t)
-                return Expr(f"{path}(ctx{''.join(', ' + a for a in argv)})", t, False)
+                else:
+                    res = Expr(f"{path}(ctx{''.join(', ' + a for a in argv)})", st["ret"], False)
+                if t["k"] == "void" or st["ret"]["k"] == "void":
+                    return Expr(res.code, t, False)
+                return self.convert(res, t, explicit=True)
+            argv = self.call_args(ft, args, inlined=True)
             defn = callee.referenced.get_definition()
             if defn is None:
                 raise Unsupported(f"call to {name}, which has no address or body")
-            rname = self.u.request_inline(defn)
+            rname = self.u.request_inline(defn, self.fuse)
             if t["k"] == "rec":
                 return self.sret_call(rname, argv, t)
             return Expr(f"{rname}(ctx{''.join(', ' + a for a in argv)})", t, False)
@@ -1416,12 +1560,33 @@ class Translator:
         rty = "()" if t["k"] == "void" else self.u.rust_value_ty(t)
         return Expr(f"{fp_.code}.call::<_, {rty}>(({''.join(a + ', ' for a in argv)}))", t, False)
 
+    def raw_call(self, addr, ft, args, t):
+        if ft.get("params") is None:
+            raise Unsupported("call without a prototype")
+        if t["k"] == "rec":
+            raise Unsupported("struct return through a mismatched prototype")
+        rty = "()" if t["k"] == "void" else self.u.rust_value_ty(t)
+        argv = self.call_args(ft, args, marshal=True)
+        if ft.get("variadic"):
+            fixed, extra = argv
+            return Expr(f"ctx.call_variadic::<_, {rty}>({addr:#x}, ({''.join(a + ', ' for a in fixed)}), "
+                        f"&[{', '.join(extra)}])", t, False)
+        return Expr(f"ctx.call::<_, {rty}>({addr:#x}, ({''.join(a + ', ' for a in argv)}))", t, False)
+
     def sret_call(self, path, argv, t):
         slot = self.stack_slot("__ret_tmp", t)
         return Expr("{ " + f"{path}(ctx, {ident(slot)}{''.join(', ' + a for a in argv)}); {ident(slot)}" + " }",
                     t, False)
 
-    def call_args(self, ft, args, marshal=False):
+    def call_args(self, ft, args, marshal=False, inlined=False):
+        # MWCC does not contract multiply-adds in the arguments of a call it inlines.
+        self.in_args += inlined
+        try:
+            return self._call_args(ft, args, marshal)
+        finally:
+            self.in_args -= inlined
+
+    def _call_args(self, ft, args, marshal=False):
         params = ft["params"]
         out = []
         for i, a in enumerate(args[:len(params)]):
@@ -1443,7 +1608,7 @@ class Translator:
                 if is_float(v.ty):
                     extra.append(f"VarArg::Float({self.convert(v, DOUBLE).code})")
                 elif is_ptr(v.ty) or v.ty["k"] in ("arr", "fn"):
-                    extra.append(f"VarArg::Int({v.code}.addr())")
+                    extra.append(f"VarArg::Int(Handle::addr({v.code}))")
                 elif is_int(v.ty):
                     size, _ = int_info(v.ty)
                     if size == 8:
@@ -1515,23 +1680,23 @@ class Translator:
             return Expr(f"cvt_fp2unsigned(ctx, {v.code})", to, False)
         if (fk in ("ptr", "arr", "fn")) and is_int(to):
             size, _ = int_info(to)
-            code = f"{v.code}.addr()"
+            code = f"Handle::addr({v.code})"
             if size != 4:
                 code = f"({code} as {self.u.rust_value_ty(to)})"
             elif int_info(to)[1]:
                 code = f"({code} as i32)"
             return Expr(code, to, pure)
         if is_int(fr) and tk == "ptr":
-            if v.code in ("0_i32", "0_u32", "0"):
-                return Expr("null(ctx)", to, True)
-            return Expr(f"ptr(ctx, {v.code} as u32)", to, pure)
+            if v.code.strip("()") in ("0_i32", "0_u32", "0"):
+                return Expr(f"null::<{self.u.rust_value_ty(to)}>(ctx)", to, True)
+            return Expr(f"ptr::<{self.u.rust_value_ty(to)}>(ctx, {v.code} as u32)", to, pure)
         if fk == "ptr" and tk == "ptr":
             a, b = self.u.rust_value_ty(fr), self.u.rust_value_ty(to)
             if a == b:
                 return Expr(v.code, to, pure)
-            if v.code == "null(ctx)":
-                return Expr(v.code, to, True)
-            return Expr(f"{v.code}.cast::<{b}>()", to, pure)
+            if is_null_code(v.code):
+                return Expr(f"null::<{b}>(ctx)", to, True)
+            return Expr(f"Handle::cast::<{b}>({v.code})", to, pure)
         if fk == "arr" and tk == "ptr":
             if fr.get("string"):
                 return self.convert(Expr(v.code, {"k": "ptr", "to": fr["of"]}, pure), to)
@@ -1542,6 +1707,70 @@ class Translator:
         if fk == "fn" and tk == "ptr":
             return Expr(v.code, to, pure)
         raise Unsupported(f"conversion {fk} -> {tk}")
+
+
+FUSED_RE = re.compile(r"\bfp::f(?:n)?m(?:add|sub)s?\(")
+INLINE_CALL_RE = re.compile(r"\b(inl_\w+)\(")
+
+
+STUB_CALL_RE = re.compile(r"\b(?:fns|statics::\w+)::(\w+)\(ctx")
+
+
+def fused_count(code, inlines, seen=(), local=None, asm_calls=None):
+    """Fused multiply-adds in generated code, counting each inline call's body where it is
+    called, as MWCC inlines it, and so too the bodies of this unit's functions that the
+    original's asm does not call because MWCC inlined them."""
+    n = len(FUSED_RE.findall(code))
+    for name in INLINE_CALL_RE.findall(code):
+        body = inlines.get(name)
+        if body and name not in seen:
+            n += fused_count(body.split("{", 1)[1], inlines, seen + (name,), local, None)
+    if local is not None and asm_calls is not None:
+        for name in STUB_CALL_RE.findall(code):
+            body = local.get(name)
+            if body and name not in asm_calls and name not in seen:
+                n += fused_count(body.split("{", 1)[1], inlines, seen + (name,), local, set())
+    return n
+
+
+def mwcc_regions(path, gekko_defined):
+    """Line ranges of preprocessor branches that only MWCC compiles (or only other compilers
+    do) and that hold code rather than pragmas. What clang sees there is not what MWCC
+    compiled, so functions overlapping them cannot be translated from it."""
+    try:
+        lines = open(path, encoding="utf-8", errors="replace").read().splitlines()
+    except OSError:
+        return []
+    stack = []  # [depends on MWCC, branch start line, branch holds code]
+    regions = []
+
+    def mwcc(cond):
+        return "__MWERKS__" in cond or ("MWERKS_GEKKO" in cond and not gekko_defined)
+
+    for i, raw in enumerate(lines, 1):
+        text = raw.strip()
+        if text.startswith("#"):
+            d = text[1:].strip()
+            if d.startswith(("ifdef", "ifndef", "if")) and not d.startswith("include"):
+                stack.append([mwcc(d) or bool(stack and stack[-1][0]), i, False])
+                continue
+            if d.startswith(("else", "elif")):
+                if stack:
+                    top = stack[-1]
+                    if top[0] and top[2]:
+                        regions.append((top[1], i))
+                    top[1], top[2] = i, False
+                continue
+            if d.startswith("endif"):
+                if stack:
+                    top = stack.pop()
+                    if top[0] and top[2]:
+                        regions.append((top[1], i))
+                continue
+            continue
+        if stack and stack[-1][0] and text and not text.startswith(("//", "/*", "*")):
+            stack[-1][2] = True
+    return regions
 
 
 def c_unescape(s):
@@ -1581,7 +1810,9 @@ HEADER = """// SPDX-License-Identifier: GPL-3.0-or-later
 // Generated by tools/c2rs from {source}. Do not edit; fix the translator or port by hand.
 // unit: {unit}
 #![allow(unused_mut, unused_variables, unused_assignments, unused_parens, unused_braces)]
-#![allow(unused_labels, unreachable_code, non_snake_case, clippy::all)]
+#![allow(unused_labels, unreachable_code, unused_imports, unused_comparisons, non_snake_case)]
+#![allow(dead_code)]
+#![allow(clippy::all)]
 use gekko_fp as fp;
 use ssbm_rt::*;
 use ssbm_types::enums;
@@ -1593,18 +1824,47 @@ use crate::support::*;
 """
 
 
+def returns_of(unit, cursor):
+    rt = unit.ctype(cursor.type)["ret"]
+    if rt["k"] in ("void", "rec"):
+        return "Nothing"
+    if is_float(rt):
+        return "Float"
+    if is_int(rt) and int_info(rt)[0] == 8:
+        return "Int64"
+    return "Int"
+
+
+def manual_ports(out_dir, unit_name):
+    """Functions of this unit ported by hand in `manual/<unit module>.rs`, which the
+    translator leaves alone."""
+    path = os.path.join(out_dir, "manual", tu_mod(unit_name) + ".rs")
+    if not os.path.exists(path):
+        return set()
+    text = open(path, encoding="utf-8").read()
+    return set(re.findall(r"^pub fn (\w+)", text, re.M))
+
+
 def translate_unit(args):
-    root, types_path, unit_name, source, only = args
+    root, types_path, unit_name, source, only, out_dir = args
     os.chdir(root)
     prog = PROGRAM[0] if PROGRAM else Program(root, types_path)
     if not PROGRAM:
         PROGRAM.append(prog)
     index = ci.Index.create()
-    tu = index.parse(source, args=extract.FLAGS)
+    # Code for MWCC on the Gekko (such as __va_arg) is plain C where the file parses with it.
+    gekko = True
+    tu = index.parse(source, args=extract.FLAGS + ["-DMWERKS_GEKKO"])
     errors = [d.spelling for d in tu.diagnostics if d.severity >= ci.Diagnostic.Error]
     if errors:
-        return unit_name, source, None, [("*", "parse error: " + errors[0])], []
+        gekko = False
+        tu = index.parse(source, args=extract.FLAGS)
+        errors = [d.spelling for d in tu.diagnostics if d.severity >= ci.Diagnostic.Error]
+    if errors:
+        return unit_name, source, None, [("*", "parse error: " + errors[0])], [], []
     unit = Unit(prog, unit_name, source)
+    unit.gekko = gekko
+    manual = manual_ports(out_dir, unit_name)
     unit.col.visit(tu.cursor, source)
     out_fns, regs = [], []
     src_norm = os.path.normpath(source)
@@ -1616,9 +1876,15 @@ def translate_unit(args):
         name = c.spelling
         if only and name not in only:
             continue
-        f = prog.function(name, unit_name)
+        f = prog.function(name, unit_name, local=True)
         if f is None:
             continue  # inlined everywhere; translated on demand
+        if name in manual:
+            # Ported by hand; register the manual port under the same signature.
+            regs.append(f"    ctx.register_port({f['addr']:#x}, {unit.adapter(c, 'manual::' + ident(name))}, "
+                        f"Returns::{returns_of(unit, c)});")
+            unit.ported.append(name)
+            continue
         tr = Translator(unit, c)
         try:
             code = tr.function()
@@ -1629,49 +1895,89 @@ def translate_unit(args):
             unit.skipped.append((name, f"translator error: {type(e).__name__}: {e} (line {tr.line})"))
             continue
         out_fns.append(code)
-        rt = unit.ctype(c.type)["ret"]
-        if rt["k"] in ("void", "rec"):
-            returns = "Nothing"
-        elif is_float(rt):
-            returns = "Float"
-        elif is_int(rt) and int_info(rt)[0] == 8:
-            returns = "Int64"
-        else:
-            returns = "Int"
-        regs.append(f"    ctx.register_port({f['addr']:#x}, |ctx| {prog.abi_path(f)}(ctx, {ident(name)}), "
-                    f"Returns::{returns});")
+        unit.fuse_check.append((name, unit.fused_ops.get(name), code))
+        regs.append(f"    ctx.register_port({f['addr']:#x}, {unit.adapter(c, ident(name))}, "
+                    f"Returns::{returns_of(unit, c)});")
         unit.ported.append(name)
     inline_code = unit.finish_inlines()
-    if not out_fns:
-        return unit_name, source, None, unit.skipped, unit.ported
-    text = HEADER.format(source=source.replace("\\", "/"), unit=unit_name) + "\n"
+    fuse = []
+    local = {name: code for name, _, code in unit.fuse_check}
+    for name, asm_n, code in unit.fuse_check:
+        if asm_n is not None:
+            fuse.append((name, asm_n, fused_count(code.split("{", 1)[1], unit.inlines, (name,), local,
+                                                  unit.calls.get(name, set()))))
+    unit.fuse_report = fuse
+    if not out_fns and not regs:
+        return unit_name, source, None, unit.skipped, unit.ported, fuse
+    text = HEADER.format(source=source.replace("\\", "/"), unit=unit_name)
+    if manual:
+        text += f"use crate::manual::{tu_mod(unit_name)} as manual;\n"
+    text += "\n"
     text += "\n\n".join(out_fns + inline_code) + "\n\n"
     text += "/// Registers this unit's ports.\npub fn register(ctx: &Ctx) {\n" + "\n".join(regs) + "\n}\n"
-    return unit_name, source, text, unit.skipped, unit.ported
+    return unit_name, source, text, unit.skipped, unit.ported, fuse
 
 
 PROGRAM = []
 
 
-def _request_inline(self, defn):
+def _request_inline(self, defn, fuse):
+    """An inline function's Rust name, translating it on first use. MWCC contracts inlined
+    code as its caller's, so there is a copy for each."""
     name = defn.spelling
-    rname = "inl_" + name
-    if name not in self.inlines:
-        self.inlines[name] = None
+    rname = "inl_" + name + ("" if fuse else "_unfused")
+    if rname not in self.inlines:
+        self.inlines[rname] = None
         try:
-            code = Translator(self, defn).function()
+            code = Translator(self, defn, fuse).function()
             code = code.replace(f"pub fn {ident(name)}<'a>", f"fn {rname}<'a>", 1)
-            self.inlines[name] = code
+            self.inlines[rname] = code
         except Unsupported as e:
-            del self.inlines[name]
+            del self.inlines[rname]
             raise Unsupported(f"inline {name}: {e}")
     return rname
+
+
+def _regions(self, path):
+    key = os.path.normpath(path)
+    cache = self.__dict__.setdefault("_region_cache", {})
+    if key not in cache:
+        cache[key] = mwcc_regions(key, getattr(self, "gekko", False))
+    return cache[key]
 
 
 def _finish_inlines(self):
     return [code for code in self.inlines.values() if code]
 
 
+def _adapter(self, cursor, rname):
+    """A closure that takes the port's arguments from registers and puts its result back."""
+    ft = self.ctype(cursor.type)
+    names, types, passes = [], [], []
+    if ft["ret"]["k"] == "rec":
+        names.append("__a")
+        types.append(self.rust_value_ty(ft["ret"]).replace("'a", "'_"))
+        passes.append("__a")
+    for i, pt in enumerate(ft["params"]):
+        n = f"a{i}"
+        names.append(n)
+        if pt["k"] == "arr":
+            pt = {"k": "ptr", "to": pt["of"]}
+        if is_float(pt) and pt["size"] == 4:
+            types.append("Single")
+            passes.append(f"{n}.0")
+        else:
+            types.append(self.rust_value_ty(pt).replace("'a", "'_"))
+            passes.append(n)
+    take = ""
+    if names:
+        take = (f"let ({''.join(n + ', ' for n in names)}): ({''.join(t + ', ' for t in types)}) = "
+                f"Args::take_all(ctx); ")
+    return f"|ctx| {{ {take}Ret::put({rname}(ctx{''.join(', ' + a for a in passes)}), ctx); }}"
+
+
+Unit.adapter = _adapter
+Unit.regions = _regions
 Unit.request_inline = _request_inline
 Unit.finish_inlines = _finish_inlines
 
@@ -1696,7 +2002,7 @@ def main():
         units = sorted(set(sel))
     os.makedirs(os.path.join(out, "tu"), exist_ok=True)
     results = []
-    jobs = [(root, types_path, u, s, only.get(u)) for u, s in units]
+    jobs = [(root, types_path, u, s, only.get(u), out) for u, s in units]
     if len(jobs) == 1:
         results = [translate_unit(jobs[0])]
     else:
@@ -1706,7 +2012,15 @@ def main():
     report = {}
     written = []
     total_ported = total_skipped = 0
-    for unit_name, source, text, skipped, ported in results:
+    fuse_total = fuse_match = 0
+    fuse_examples = []
+    for unit_name, source, text, skipped, ported, fuse in results:
+        for name, asm_n, ours in fuse:
+            fuse_total += 1
+            if asm_n == ours:
+                fuse_match += 1
+            elif len(fuse_examples) < 400:
+                fuse_examples.append((unit_name, name, asm_n, ours))
         mod = tu_mod(unit_name)
         path = os.path.join(out, "tu", mod + ".rs")
         if text:
@@ -1716,7 +2030,8 @@ def main():
             written.append(path)
         elif os.path.exists(path) and not only:
             os.remove(path)
-        report[unit_name] = {"ported": ported, "skipped": skipped}
+        report[unit_name] = {"ported": ported, "skipped": skipped,
+                             "fused": [f for f in fuse if f[1] != f[2]]}
         total_ported += len(ported)
         total_skipped += len(skipped)
     # The module list covers every unit translated so far, not just this run's.
@@ -1739,14 +2054,20 @@ def main():
         for mod, unit_name in present:
             w.write(f"    ({json.dumps(unit_name)}, {mod}::register),\n")
         w.write("];\n")
+    written.append(os.path.join(out, "tu", "mod.rs"))
     for i in range(0, len(written), 64):
-        subprocess.run(["rustfmt", "--edition", "2024", *written[i:i + 64]], check=True)
+        # A file rustfmt cannot parse will not compile either; the build reports it.
+        subprocess.run(["rustfmt", "--edition", "2024", *written[i:i + 64]],
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     json.dump(report, open(os.path.join(root, "build", "c2rs-report.json"), "w"), indent=1)
     reasons = defaultdict(int)
     for r in report.values():
         for _, why in r["skipped"]:
             reasons[re.sub(r"\b0x[0-9a-f]+|\d+", "N", why.split(" (line")[0].split(":")[0])] += 1
     print(f"{len(results)} units, {total_ported} functions translated, {total_skipped} left to the original")
+    print(f"fused multiply-adds match the asm in {fuse_match} of {fuse_total} functions")
+    more = sum(1 for e in fuse_examples if e[3] > e[2])
+    print(f"  of the first {len(fuse_examples)} that differ, {more} have more fused ops than the asm")
     for why, n in sorted(reasons.items(), key=lambda x: -x[1])[:25]:
         print(f"  {n:6} {why}")
 

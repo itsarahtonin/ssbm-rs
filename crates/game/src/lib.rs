@@ -5,6 +5,8 @@
 
 use ssbm_rt::Ctx;
 
+#[allow(non_snake_case)]
+pub mod manual;
 pub mod support;
 pub mod tu;
 
