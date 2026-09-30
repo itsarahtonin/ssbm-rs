@@ -114,8 +114,12 @@ fn event_name(command: u8) -> &'static str {
     }
 }
 
+/// The events of the timeline the game settled on, by key. Online games roll back: a frame
+/// start for a frame already seen means the game simulated again from there, so whatever was
+/// recorded for that frame and later belongs to a discarded timeline.
 fn keyed(events: &[Event]) -> BTreeMap<Key, &[u8]> {
     let mut out = BTreeMap::new();
+    let mut latest = i32::MIN;
     for e in events {
         let p = &e.payload;
         let frame = |at: usize| i32::from_be_bytes(p[at..at + 4].try_into().unwrap());
@@ -129,6 +133,12 @@ fn keyed(events: &[Event]) -> BTreeMap<Key, &[u8]> {
             event::GAME_END => (e.command, 0, 0),
             _ => continue,
         };
+        if e.command == event::FRAME_START {
+            if key.1 <= latest {
+                out.retain(|k: &Key, _| k.1 < key.1 || k.0 == event::GAME_END);
+            }
+            latest = latest.max(key.1);
+        }
         out.insert(key, p.as_slice());
     }
     out
@@ -176,6 +186,8 @@ pub struct Report {
     pub compared: usize,
     /// Events the original has and the run does not.
     pub missing: usize,
+    /// The first few of them: event, frame and port.
+    pub first_missing: Vec<(&'static str, i32, u8)>,
     /// Every divergence, in frame order.
     pub divergences: Vec<Divergence>,
     pub last_frame_compared: Option<i32>,
@@ -200,6 +212,11 @@ pub fn compare(original: &[Event], recorded: &[u8]) -> Report {
     for (key, orig) in &theirs {
         let Some(mine) = ours.get(key) else {
             report.missing += 1;
+            if report.first_missing.len() < 4 {
+                report
+                    .first_missing
+                    .push((event_name(key.0), key.1, (key.2 >> 8) as u8));
+            }
             continue;
         };
         report.compared += 1;
