@@ -1561,7 +1561,6 @@ pub mod dolphin__os__OSExi {
     #[inline] pub fn TCIntrruptHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'a>) -> () { ctx.call(0x8034698c, (interrupt, context, )) }
     #[inline] pub fn EXTIntrruptHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'a>) -> () { ctx.call(0x80346ba4, (interrupt, context, )) }
     #[inline] pub fn UnlockedHandler<'a>(ctx: &'a Ctx, chan: i32, context: OSContext<'a>) -> () { ctx.call(0x80346f68, (chan, context, )) }
-    #[inline] pub fn CompleteTransfer<'a>(ctx: &'a Ctx, chan: i32) -> () { ctx.call(0x80349518, (chan, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const SetExiInterruptMask: u32 = 0x80345a70;
@@ -1570,7 +1569,6 @@ pub mod dolphin__os__OSExi {
         pub const TCIntrruptHandler: u32 = 0x8034698c;
         pub const EXTIntrruptHandler: u32 = 0x80346ba4;
         pub const UnlockedHandler: u32 = 0x80346f68;
-        pub const CompleteTransfer: u32 = 0x80349518;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
@@ -1581,7 +1579,6 @@ pub mod dolphin__os__OSExi {
         #[inline] pub fn TCIntrruptHandler(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i16, OSContext<'a>) -> ()) { let (interrupt, context, ): (i16, OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, interrupt, context), ctx); }
         #[inline] pub fn EXTIntrruptHandler(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i16, OSContext<'a>) -> ()) { let (interrupt, context, ): (i16, OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, interrupt, context), ctx); }
         #[inline] pub fn UnlockedHandler(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, OSContext<'a>) -> ()) { let (chan, context, ): (i32, OSContext<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, chan, context), ctx); }
-        #[inline] pub fn CompleteTransfer(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> ()) { let (chan, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, chan), ctx); }
     }
 }
 /// Statics of `dolphin/os/OSInterrupt`.
@@ -1718,6 +1715,8 @@ pub mod dolphin__os__OSSerial {
     #[inline] pub fn InputBuffer(ctx: &Ctx) -> Arr<'_, ArrV<'_, u32, 2>, 4> { At::new(ctx, 0x804a7f78).field(0) }
     #[inline] pub fn InputBufferVcount(ctx: &Ctx) -> ArrV<'_, u32, 4> { At::new(ctx, 0x804a7f98).field(0) }
     #[inline] pub fn cmdFixDevice(ctx: &Ctx) -> ArrV<'_, u32, 4> { At::new(ctx, 0x804a7fa8).field(0) }
+    /// `CompleteTransfer` has no prototype; arguments must already be in registers.
+#[inline] pub fn CompleteTransfer(ctx: &Ctx) { ctx.invoke(0x80349518) }
     #[inline] pub fn SIInterruptHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'a>) -> () { ctx.call(0x80349814, (interrupt, context, )) }
     #[inline] pub fn SIEnablePollingInterrupt<'a>(ctx: &'a Ctx, enable: i32) -> i32 { ctx.call(0x80349b58, (enable, )) }
     #[inline] pub fn __SITransfer<'a>(ctx: &'a Ctx, chan: i32, output: Addr<'a>, outputBytes: u32, input: Addr<'a>, inputBytes: u32, callback: FnPtr<'a>) -> i32 { ctx.call(0x80349e44, (chan, output, outputBytes, input, inputBytes, callback, )) }
@@ -1726,6 +1725,7 @@ pub mod dolphin__os__OSSerial {
     #[inline] pub fn GetTypeCallback<'a>(ctx: &'a Ctx, chan: i32, error: u32, context: OSContext<'a>) -> () { ctx.call(0x8034a5e8, (chan, error, context, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
+        pub const CompleteTransfer: u32 = 0x80349518;
         pub const SIInterruptHandler: u32 = 0x80349814;
         pub const SIEnablePollingInterrupt: u32 = 0x80349b58;
         pub const __SITransfer: u32 = 0x80349e44;
@@ -7308,7 +7308,6 @@ pub mod melee__gm__gmtoycollection {
 pub mod melee__gm__gmtoygallery {
     use super::*;
     use crate::fns::*;
-    #[inline] pub fn gm_804D6918(ctx: &Ctx) -> ArrP<'_, Addr<'_>, 2> { At::new(ctx, 0x804d6918).field(0) }
     #[inline] pub fn onExit<'a>(ctx: &'a Ctx, state: GameModeState<'a>) -> () { ctx.call(0x801bec80, (state, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
@@ -16916,13 +16915,11 @@ pub mod sysdolphin__baselib__fobj {
     #[inline] pub fn parseFloat<'a>(ctx: &'a Ctx, pos: Ptr<'a, Val<'a, u8>>, frac: u8) -> f64 { ctx.call(0x8036ac10, (pos, frac, )) }
     #[inline] pub fn parsePackInfo<'a>(ctx: &'a Ctx, adp: Ptr<'a, Val<'a, u8>>) -> u32 { ctx.call(0x8036addc, (adp, )) }
     #[inline] pub fn FObjLaunchKeyData<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) -> () { ctx.call(0x8036ae38, (fobj, )) }
-    #[inline] pub fn parseWait<'a>(ctx: &'a Ctx, adp: Ptr<'a, Val<'a, u8>>) -> i32 { ctx.call(0x8038c678, (adp, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const parseFloat: u32 = 0x8036ac10;
         pub const parsePackInfo: u32 = 0x8036addc;
         pub const FObjLaunchKeyData: u32 = 0x8036ae38;
-        pub const parseWait: u32 = 0x8038c678;
     }
     /// Adapters that register a Rust port under C calling conventions.
     pub mod abi {
@@ -16930,7 +16927,6 @@ pub mod sysdolphin__baselib__fobj {
         #[inline] pub fn parseFloat(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Ptr<'a, Val<'a, u8>>, u8) -> f64) { let (pos, frac, ): (Ptr<'_, Val<'_, u8>>, u8, ) = Args::take_all(ctx); Ret::put(__f(ctx, pos, frac), ctx); }
         #[inline] pub fn parsePackInfo(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Ptr<'a, Val<'a, u8>>) -> u32) { let (adp, ): (Ptr<'_, Val<'_, u8>>, ) = Args::take_all(ctx); Ret::put(__f(ctx, adp), ctx); }
         #[inline] pub fn FObjLaunchKeyData(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_FObj<'a>) -> ()) { let (fobj, ): (HSD_FObj<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, fobj), ctx); }
-        #[inline] pub fn parseWait(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Ptr<'a, Val<'a, u8>>) -> i32) { let (adp, ): (Ptr<'_, Val<'_, u8>>, ) = Args::take_all(ctx); Ret::put(__f(ctx, adp), ctx); }
     }
 }
 /// Statics of `sysdolphin/baselib/fog`.

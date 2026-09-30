@@ -195,7 +195,10 @@ def main():
                 if not f["defined"] and f["static"]:
                     continue
                 cands = [s for s in by_name.get(f["name"], []) if s["type"] == "function"]
-                if f["static"] or len(cands) > 1:
+                # A static function is its own unit's, never a same-named one elsewhere.
+                if f["static"]:
+                    cands = [s for s in cands if s["tu"] == unit]
+                elif len(cands) > 1:
                     cands = [s for s in cands if s["tu"] == unit] or cands
                 sym = cands[0] if len(cands) == 1 else None
                 key = (sym["addr"] if sym else None, f["name"] if not sym else None)
@@ -205,7 +208,9 @@ def main():
                                       "addr": sym["addr"] if sym else None, "size": sym["size"] if sym else None}
             for g in gls:
                 cands = [s for s in by_name.get(g["name"], []) if s["type"] == "object"]
-                if g["static"] or len(cands) > 1:
+                if g["static"]:
+                    cands = [s for s in cands if s["tu"] == unit]
+                elif len(cands) > 1:
                     cands = [s for s in cands if s["tu"] == unit] or cands
                 sym = cands[0] if len(cands) == 1 else None
                 if sym is None:

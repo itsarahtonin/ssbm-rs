@@ -19251,6 +19251,7 @@ use crate::records::*;
 #[inline] pub fn HSD_AudioSFXKeyOffAll<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8038bd6c, ()) }
 #[inline] pub fn HSD_AudioSFXKeyOffTrack<'a>(ctx: &'a Ctx, track: i32) -> () { ctx.call(0x8038be64, (track, )) }
 #[inline] pub fn AXDriverExec<'a>(ctx: &'a Ctx, v: HSD_SM<'a>) -> () { ctx.call(0x8038bf6c, (v, )) }
+#[inline] pub fn parseWait<'a>(ctx: &'a Ctx, param_type: u32, param_value: u32) -> u32 { ctx.call(0x8038c678, (param_type, param_value, )) }
 #[inline] pub fn AXDriverInterp<'a>(ctx: &'a Ctx, v: HSD_SM<'a>) -> () { ctx.call(0x8038c6c0, (v, )) }
 #[inline] pub fn HSD_AudioSFXStartParam<'a>(ctx: &'a Ctx, sound_id: i32, volume: u8, pan: u8, track: i32, channel: i32) -> i32 { ctx.call(0x8038cff4, (sound_id, volume, pan, track, channel, )) }
 #[inline] pub fn HSD_AudioSFXSetPan<'a>(ctx: &'a Ctx, vid: i32, pan: u8) -> i32 { ctx.call(0x8038d2b4, (vid, pan, )) }
@@ -36292,6 +36293,7 @@ pub mod addr {
     pub const HSD_AudioSFXKeyOffAll: u32 = 0x8038bd6c;
     pub const HSD_AudioSFXKeyOffTrack: u32 = 0x8038be64;
     pub const AXDriverExec: u32 = 0x8038bf6c;
+    pub const parseWait: u32 = 0x8038c678;
     pub const AXDriverInterp: u32 = 0x8038c6c0;
     pub const HSD_AudioSFXStartParam: u32 = 0x8038cff4;
     pub const HSD_AudioSFXSetPan: u32 = 0x8038d2b4;
@@ -53312,6 +53314,7 @@ pub mod abi {
     #[inline] pub fn HSD_AudioSFXKeyOffAll(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     #[inline] pub fn HSD_AudioSFXKeyOffTrack(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32) -> ()) { let (track, ): (i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, track), ctx); }
     #[inline] pub fn AXDriverExec(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_SM<'a>) -> ()) { let (v, ): (HSD_SM<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, v), ctx); }
+    #[inline] pub fn parseWait(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u32, u32) -> u32) { let (param_type, param_value, ): (u32, u32, ) = Args::take_all(ctx); Ret::put(__f(ctx, param_type, param_value), ctx); }
     #[inline] pub fn AXDriverInterp(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, HSD_SM<'a>) -> ()) { let (v, ): (HSD_SM<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, v), ctx); }
     #[inline] pub fn HSD_AudioSFXStartParam(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, u8, u8, i32, i32) -> i32) { let (sound_id, volume, pan, track, channel, ): (i32, u8, u8, i32, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, sound_id, volume, pan, track, channel), ctx); }
     #[inline] pub fn HSD_AudioSFXSetPan(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, u8) -> i32) { let (vid, pan, ): (i32, u8, ) = Args::take_all(ctx); Ret::put(__f(ctx, vid, pan), ctx); }
