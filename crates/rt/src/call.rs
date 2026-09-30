@@ -305,6 +305,13 @@ impl Ctx {
             }
             self.invoke(addr);
         }
+        if let Some(to) = self.take_resume_at() {
+            panic!(
+                "{} jumped to {} past a port that called it",
+                self.name_of(addr),
+                self.name_of(to)
+            );
+        }
     }
 
     /// Calls the function at `addr` with C calling conventions.

@@ -250,6 +250,9 @@ fn branch(ctx: &Ctx, pc: u32, target: u32, link: bool) -> u32 {
     {
         let ret = ctx.regs.lr.get();
         ctx.invoke(target);
+        if let Some(to) = ctx.take_resume_at() {
+            return to;
+        }
         // A tail call returns to our caller.
         return if link { pc.wrapping_add(4) } else { ret };
     }

@@ -5,4 +5,5 @@
 //! skips every function defined here and registers these instead.
 
 pub mod MSL__string;
+pub mod Runtime__Gecko_setjmp;
 pub mod melee__gm__gm_1601;

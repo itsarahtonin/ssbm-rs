@@ -114,9 +114,19 @@ pub struct Ctx {
     interrupt_check: RefCell<Option<Hook>>,
     /// Ports running, innermost last. A panic leaves it as it was, for the report.
     natives: RefCell<Vec<u32>>,
+    /// The jump buffers of the `setjmp`s ports are inside, innermost last.
+    jump_targets: RefCell<Vec<u32>>,
+    /// Where the original code that called the running native continues, if not after the call.
+    resume_at: Cell<Option<u32>>,
     /// A debugging watchpoint: writes to `[start, start + len)` call `watch_hook`.
     watch: Cell<(u32, u32)>,
     watch_hook: RefCell<Option<WatchHook>>,
+}
+
+/// Panic payload of a `longjmp` to a port's `setjmp`, which catches it.
+struct LongJmp {
+    env: u32,
+    value: i32,
 }
 
 /// Called with the address and size of a write to the watched range.
@@ -156,6 +166,8 @@ impl Ctx {
             heartbeat: RefCell::default(),
             interrupt_check: RefCell::default(),
             natives: RefCell::default(),
+            jump_targets: RefCell::default(),
+            resume_at: Cell::new(None),
             watch: Cell::new((0, 0)),
             watch_hook: RefCell::default(),
         }
@@ -546,6 +558,58 @@ impl Ctx {
     /// Forgets ports a caught panic left running.
     pub(crate) fn truncate_natives(&self, depth: usize) {
         self.natives.borrow_mut().truncate(depth);
+    }
+
+    /// `if (setjmp(env) == 0) body` in a port: runs `body`, which a `longjmp` to `env` from
+    /// anywhere inside it, ported or original, ends early. Returns 0 when the body finishes,
+    /// else the value the `longjmp` passed. As after the original's `longjmp`, the registers a
+    /// call preserves hold what they held at the `setjmp`.
+    pub fn setjmp(&self, env: u32, body: impl FnOnce()) -> i32 {
+        let saved = self.regs.snapshot();
+        let natives = self.natives_depth();
+        let targets = self.jump_targets.borrow().len();
+        self.jump_targets.borrow_mut().push(env);
+        let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(body));
+        self.jump_targets.borrow_mut().truncate(targets);
+        match result {
+            Ok(()) => 0,
+            Err(p) => match p.downcast::<LongJmp>() {
+                Ok(jump) if jump.env == env => {
+                    self.truncate_natives(natives);
+                    let r = &self.regs;
+                    for i in [1, 2].into_iter().chain(13..32) {
+                        r.set_r(i, saved.gpr[i]);
+                    }
+                    for i in 14..32 {
+                        r.fpr[i].set(saved.fpr[i]);
+                    }
+                    r.cr.set(saved.cr);
+                    r.fpscr.set(saved.fpscr);
+                    if jump.value == 0 { 1 } else { jump.value }
+                }
+                Ok(jump) => std::panic::resume_unwind(jump),
+                Err(p) => std::panic::resume_unwind(p),
+            },
+        }
+    }
+
+    /// Makes the original code that called the running native continue at `addr` rather than
+    /// after the call, as a `longjmp` to the original's `setjmp` does.
+    pub fn resume_at(&self, addr: u32) {
+        self.resume_at.set(Some(addr));
+    }
+
+    /// Where the native that just returned asked its caller to continue.
+    pub fn take_resume_at(&self) -> Option<u32> {
+        self.resume_at.take()
+    }
+
+    /// `longjmp(env, value)` to a `setjmp` in a port: unwinds to it, and does not return. Returns
+    /// if no port's `setjmp` saved `env`, which leaves the jump to the original's.
+    pub fn longjmp(&self, env: u32, value: i32) {
+        if self.jump_targets.borrow().contains(&env) {
+            std::panic::resume_unwind(Box::new(LongJmp { env, value }));
+        }
     }
 
     /// Runs the original code at `addr`, which needs a backend.

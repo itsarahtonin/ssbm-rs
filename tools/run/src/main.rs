@@ -39,6 +39,8 @@ const LOCKSTEP_EXEMPT: &[&str] = &[
     "gm_801A4D34",
     "ARInit",
     "__ARChecksize",
+    "__setjmp",
+    "__longjmp",
 ];
 
 /// Stack for the thread that runs the game. Every guest call nests Rust frames, and ports and
@@ -182,7 +184,8 @@ fn run() -> ExitCode {
     if lockstep {
         // The game's outer loops never return, so they run as ports while everything they
         // call is checked. ARInit DMAs through a stack buffer whose address the port's frame
-        // does not reproduce yet.
+        // does not reproduce yet. `__setjmp` and `__longjmp` return elsewhere than to their
+        // caller.
         let exempt: Vec<u32> = LOCKSTEP_EXEMPT.iter().map(|n| ssbm_sdk::sym(n)).collect();
         let checked: Vec<u32> = ported
             .iter()
