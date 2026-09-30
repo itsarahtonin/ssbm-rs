@@ -42,10 +42,6 @@ impl Backend for Interpreter {
     fn run(&self, ctx: &Ctx, addr: u32) {
         ctx.regs.lr.set(RETURN_SENTINEL);
         let mut pc = addr;
-        let mut n = 0u64;
-        // Heartbeats count every instruction run so far, so they keep coming when ported code
-        // calls into original code in short runs.
-        let base = self.executed.get();
         while pc != RETURN_SENTINEL {
             if ctx.flags_at(pc) & FLAG_HOOK != 0 {
                 ctx.run_hook(pc);
@@ -59,12 +55,14 @@ impl Backend for Interpreter {
                 self.jumps.borrow_mut()[i] = (from, pc);
                 self.next_jump.set((i + 1) % JUMPS);
             }
-            n += 1;
-            if (base + n).is_multiple_of(HEARTBEAT) {
+            // Heartbeats count every instruction run so far, in this run and the ones nested
+            // in it through ported code, so they come at a steady rate.
+            let n = self.executed.get() + 1;
+            self.executed.set(n);
+            if n.is_multiple_of(HEARTBEAT) {
                 ctx.beat(pc);
             }
         }
-        self.executed.set(self.executed.get() + n);
     }
 }
 
