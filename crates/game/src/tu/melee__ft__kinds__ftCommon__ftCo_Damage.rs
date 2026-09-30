@@ -1386,6 +1386,39 @@ pub fn ftCo_DamageFlyRoll_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn ftCo_DamageFlyRoll_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x38);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        inl_inlineE0_unfused(ctx, gobj);
+    } else {
+        fns::ft_80084F3C(ctx, gobj);
+    }
+    if (fp).motion_id() == (enums::ftCo_MS_DamageFlyRoll as i32) {
+        inl_doFlyRoll_unfused(ctx, gobj);
+    }
+    if !Handle::is_null((fp).x1064_thrownHitbox().x134().owner()) {
+        if fns::sqrtf(
+            ctx,
+            (fp::fadds(
+                fp::fadds(
+                    (fp::fmuls(((fp).x8c_kb_vel().x()), ((fp).x8c_kb_vel().x()))),
+                    (fp::fmuls(((fp).x8c_kb_vel().y()), ((fp).x8c_kb_vel().y()))),
+                ),
+                (fp::fmuls(((fp).x8c_kb_vel().z()), ((fp).x8c_kb_vel().z()))),
+            )),
+        ) < (fns::p_ftCommonData(ctx).get()).x1C8()
+        {
+            fns::ftColl_8007AFF8(ctx, gobj);
+        }
+    }
+    if (fp).motion_id() == (enums::ftCo_MS_DamageFlyRoll as i32) {
+        inl_doFlyRoll_unfused(ctx, gobj);
+    }
+}
+
 pub fn ftCo_DamageFlyRoll_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
     let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
@@ -2170,6 +2203,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(ftCo_DamageFlyRoll_IASA(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8009035c,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftCo_DamageFlyRoll_Phys(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

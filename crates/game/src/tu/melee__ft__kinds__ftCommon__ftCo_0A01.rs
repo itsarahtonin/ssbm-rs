@@ -2910,6 +2910,81 @@ pub fn ftCo_800A4BEC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Fighter<'a> {
     return closest;
 }
 
+pub fn ftCo_800A4E8C<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>) -> Fighter<'a> {
+    let __frame = ctx.stack_frame(0x68);
+    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let mut fp = fp;
+    let mut arg1 = arg1;
+    let mut cur_fp: Fighter<'a> = null(ctx);
+    let mut closest_fp: Fighter<'a> = null(ctx);
+    let mut cur: HSD_GObj<'a> = null(ctx);
+    let mut closest: f64 = 0.0;
+    let mut distance: f64 = 0.0;
+    let mut dx: f64 = 0.0;
+    let mut dy: f64 = 0.0;
+    let mut dz: f64 = 0.0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if Handle::is_null(fp) {
+        return null::<Fighter<'a>>(ctx);
+    }
+    closest_fp = null::<Fighter<'a>>(ctx);
+    {
+        cur = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 8_i32)).get();
+        'l3: while !Handle::is_null(cur) {
+            'c4: {
+                if Handle::addr((fp).gobj()) != Handle::addr(cur) {
+                    cur_fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, cur)));
+                    if (!(inl_inlineD0(ctx, fp, cur_fp) != 0))
+                        && (!(inl_ftCo_IsAlly_dontinline(ctx, fp, cur_fp) != 0))
+                    {
+                        if !(inl_ftCo_800A1C44(ctx, cur_fp) != 0) {
+                            if !(inl_inlineD1(ctx, cur_fp) != 0) {
+                                if Handle::is_null(closest_fp) {
+                                    closest_fp = cur_fp;
+                                    distance = fp::fsubs(
+                                        ({
+                                            let __t1 = (cur_fp).cur_pos().x();
+                                            dx = __t1;
+                                            __t1
+                                        }),
+                                        (arg1).x(),
+                                    );
+                                    dy = fp::fsubs((cur_fp).cur_pos().y(), (arg1).y());
+                                    dx = distance;
+                                    dz = fp::fsubs((cur_fp).cur_pos().z(), (arg1).z());
+                                    closest = fns::sqrtf(
+                                        ctx,
+                                        fp::fmadds(dz, dz, (fp::fmadds(dx, dx, fp::fmuls(dy, dy)))),
+                                    );
+                                } else {
+                                    dx = fp::fsubs((cur_fp).cur_pos().x(), (arg1).x());
+                                    dz = fp::fsubs((cur_fp).cur_pos().z(), (arg1).z());
+                                    dy = fp::fsubs((cur_fp).cur_pos().y(), (arg1).y());
+                                    distance = fns::sqrtf(
+                                        ctx,
+                                        fp::fmadds(dz, dz, (fp::fmadds(dx, dx, fp::fmuls(dy, dy)))),
+                                    );
+                                    if closest > distance {
+                                        closest = distance;
+                                        closest_fp = cur_fp;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            cur = (cur).next();
+        }
+    }
+    return closest_fp;
+}
+
 pub fn ftCo_800A50D4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Fighter<'a> {
     let __frame = ctx.stack_frame(0x58);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
@@ -14964,6 +15039,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (Fighter<'_>,) = Args::take_all(ctx);
             Ret::put(ftCo_800A4BEC(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x800a4e8c,
+        |ctx| {
+            let (a0, a1): (Fighter<'_>, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(ftCo_800A4E8C(ctx, a0, a1), ctx);
         },
         Returns::Int,
     );

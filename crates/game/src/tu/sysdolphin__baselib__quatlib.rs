@@ -75,6 +75,38 @@ pub fn HSD_QuatLib_8037EC4C<'a>(
     return 0_i32;
 }
 
+pub fn HSD_QuatLib_8037ECE0<'a>(ctx: &'a Ctx, axis: Vec<'a>, q: Quaternion<'a>, angle: f64) -> i32 {
+    let __frame = ctx.stack_frame(0x30);
+    let mut axis = axis;
+    let mut q = q;
+    let mut angle = angle;
+    let mut len: f64 = 0.0;
+    let mut half_angle: f64 = 0.0;
+    let mut inv_len: f64 = 0.0;
+    let mut s: f64 = 0.0;
+    len = inl_sqrtf(
+        ctx,
+        fp::fadds(
+            fp::fadds(
+                fp::fmuls((axis).x(), (axis).x()),
+                fp::fmuls((axis).y(), (axis).y()),
+            ),
+            fp::fmuls((axis).z(), (axis).z()),
+        ),
+    );
+    if fp::fabs(len) < 1.1754943508222875e-38_f64 {
+        return 1_i32.wrapping_neg();
+    }
+    inv_len = fp::fdivs(1.0, len);
+    half_angle = fp::fmuls(0.5, angle);
+    (q).set_w(fns::cosf(ctx, half_angle));
+    s = fns::sinf(ctx, half_angle);
+    (q).set_x(fp::fmuls(s, (fp::fmuls(inv_len, (axis).x()))));
+    (q).set_y(fp::fmuls(s, (fp::fmuls(inv_len, (axis).y()))));
+    (q).set_z(fp::fmuls(s, (fp::fmuls(inv_len, (axis).z()))));
+    return 0_i32;
+}
+
 pub fn EulerToQuat<'a>(ctx: &'a Ctx, euler: Vec<'a>, q: Quaternion<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
     let mut euler = euler;
@@ -235,6 +267,14 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1, a2): (Quaternion<'_>, Quaternion<'_>, Quaternion<'_>) =
                 Args::take_all(ctx);
             Ret::put(HSD_QuatLib_8037EC4C(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8037ece0,
+        |ctx| {
+            let (a0, a1, a2): (Vec<'_>, Quaternion<'_>, Single) = Args::take_all(ctx);
+            Ret::put(HSD_QuatLib_8037ECE0(ctx, a0, a1, a2.0), ctx);
         },
         Returns::Int,
     );

@@ -237,6 +237,60 @@ pub fn ftPp_SpecialAirHi_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp).u().pp().x2240().set_x(0.0);
 }
 
+pub fn ftPp_SpecialHiStart_0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x58);
+    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if (fp).cmd_vars().at(2_i32).get() != (0_i32 as u32) {
+        (fp).cmd_vars().at(2_i32).set((0_i32 as u32));
+        if !(inl_checkNanaInRange_unfused(ctx, gobj) != 0) {
+            fns::ftPp_SpecialHi_80122098(ctx, gobj);
+            return;
+        }
+        (fp).set_x2222_b2((1_i32 as u8));
+    }
+    if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
+        fns::ftPp_SpecialHi_80121DA0(ctx, gobj);
+    } else {
+        inl_incrementMvAndCheck_unfused(ctx, gobj);
+    }
+}
+
+pub fn ftPp_SpecialAirHiStart_0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x58);
+    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if (fp).cmd_vars().at(2_i32).get() != (0_i32 as u32) {
+        (fp).cmd_vars().at(2_i32).set((0_i32 as u32));
+        if !(inl_checkNanaInRange_unfused(ctx, gobj) != 0) {
+            fns::ftPp_SpecialHi_801220D4(ctx, gobj);
+            return;
+        }
+        (fp).set_x2222_b2((1_i32 as u8));
+    }
+    if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
+        fns::ftPp_SpecialHi_80121DD8(ctx, gobj);
+        return;
+    }
+    inl_incrementMvAndCheck_unfused(ctx, gobj);
+}
+
 pub fn ftPp_SpecialHiStart_0_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
     let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
@@ -1336,6 +1390,46 @@ fn inl_ftPp_SpecialS_8012114C_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp).set_take_dmg_cb(null::<FnPtr<'a>>(ctx));
 }
 
+fn inl_checkNanaInRange_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut da: ftIceClimberAttributes<'a> =
+        Handle::cast::<ftIceClimberAttributes<'a>>((fp).dat_attrs());
+    let mut nana_gobj: HSD_GObj<'a> =
+        fns::Player_GetEntityAtIndex(ctx, ((fp).player_idx() as i32), 1_i32);
+    if !Handle::is_null(nana_gobj) {
+        let mut nana_pos: Vec<'a> =
+            (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, nana_gobj)))
+                .cur_pos();
+        let mut dx: f64 = (fp::fmuls(
+            (fp::fsubs((fp).cur_pos().x(), (nana_pos).x())),
+            (fp::fsubs((fp).cur_pos().x(), (nana_pos).x())),
+        ));
+        let mut dy: f64 = (fp::fmuls(
+            (fp::fsubs((fp).cur_pos().y(), (nana_pos).y())),
+            (fp::fsubs((fp).cur_pos().y(), (nana_pos).y())),
+        ));
+        if (fns::sqrtf(ctx, fp::fadds(dx, dy)) < (da).x7C())
+            && (fns::ftNn_Init_8012300C(ctx, nana_gobj) == 1_i32)
+        {
+            return 1_i32;
+        }
+    }
+    return 0_i32;
+}
+
+fn inl_incrementMvAndCheck_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    (fp).mv()
+        .pp()
+        .unk_80123954()
+        .set_x0((fp).mv().pp().unk_80123954().x0().wrapping_add(1));
+    let _ = fns::ftPp_SpecialS_80120FE0(ctx, gobj);
+}
+
 fn inl_ftGetFacingDirInt_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     let mut fp = fp;
     if (fp).facing_dir() < 0.0 {
@@ -1465,6 +1559,22 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(ftPp_SpecialAirHi_Enter(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801212c4,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftPp_SpecialHiStart_0_Anim(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801213cc,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(ftPp_SpecialAirHiStart_0_Anim(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

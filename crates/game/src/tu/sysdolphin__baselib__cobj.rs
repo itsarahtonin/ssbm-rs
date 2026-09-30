@@ -916,6 +916,44 @@ pub fn HSD_CObjGetEyeDistance<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> f64 {
     return fns::PSVECMag(ctx, look_vector);
 }
 
+pub fn roll2upvec<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, up: Vec<'a>, roll: f64) -> i32 {
+    let __frame = ctx.stack_frame(0xa8);
+    let eye: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let v0: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let v1: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x24);
+    let mut cobj = cobj;
+    let mut up = up;
+    let mut roll = roll;
+    let mut res: i32 = 0;
+    res = inl_HSD_CObjGetEyeVector(ctx, cobj, eye);
+    if res != 0_i32 {
+        return res;
+    }
+    if fp::fsub(1.0, inl_vec_get_abs_y(ctx, eye)) < 0.0001 {
+        v0.set_x(inl_sqrtf(
+            ctx,
+            fp::fadds(fp::fmuls(eye.y(), eye.y()), fp::fmuls(eye.z(), eye.z())),
+        ));
+        v0.set_y(fp::fmuls(
+            eye.y(),
+            (fp::fdivs(fp::fneg(inl_vec_get_x(ctx, eye)), v0.x())),
+        ));
+        v0.set_z(fp::fmuls(eye.z(), (fp::fdivs(fp::fneg(eye.x()), v0.x()))));
+    } else {
+        v0.set_y(inl_sqrtf(
+            ctx,
+            fp::fadds(fp::fmuls(eye.x(), eye.x()), fp::fmuls(eye.z(), eye.z())),
+        ));
+        v0.set_x(fp::fmuls(eye.x(), (fp::fdivs(fp::fneg(eye.y()), v0.y()))));
+        v0.set_z(fp::fmuls(eye.z(), (fp::fdivs(fp::fneg(eye.y()), v0.y()))));
+    }
+    fns::PSMTXRotAxisRad(ctx, m.get(0), eye, fp::fneg(roll));
+    fns::PSMTXMultVecSR(ctx, m.get(0), v0, v1);
+    fns::PSVECNormalize(ctx, v1, up);
+    return 0_i32;
+}
+
 pub fn HSD_CObjGetUpVector<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, up: Vec<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x80);
     let mut cobj = cobj;
@@ -925,8 +963,7 @@ pub fn HSD_CObjGetUpVector<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, up: Vec<'a>) ->
             Handle::copy_from((up), (cobj).u().up());
             return 0_i32;
         }
-        if statics::sysdolphin__baselib__cobj::roll2upvec(ctx, cobj, up, (cobj).u().roll()) == 0_i32
-        {
+        if inl_roll2upvec(ctx, cobj, up, (cobj).u().roll()) == 0_i32 {
             return 0_i32;
         }
     }
@@ -936,6 +973,32 @@ pub fn HSD_CObjGetUpVector<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, up: Vec<'a>) ->
         (up).set_z(0.0);
     }
     return 1_i32.wrapping_neg();
+}
+
+pub fn HSD_CObjSetUpVector<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, up: Vec<'a>) {
+    let __frame = ctx.stack_frame(0xa8);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut cobj = cobj;
+    let mut up = up;
+    if (!(!Handle::is_null(cobj))) || (!(!Handle::is_null(up))) {
+        return;
+    }
+    if ((cobj).flags() & (1_i32 as u32)) != (0_i32 as u32) {
+        if (inl_vec_normalize_check_unfused(ctx, up, v) != 0) {
+            up = statics::sysdolphin__baselib__cobj::uy2(ctx);
+        } else {
+            up = v;
+        }
+        if (((cobj).u().up().x() != inl_cobj_get_up_x_unfused(ctx, up))
+            || ((cobj).u().up().y() != (up).y()))
+            || ((cobj).u().up().z() != (up).z())
+        {
+            fns::HSD_CObjSetMtxDirty(ctx, cobj);
+        }
+        Handle::copy_from((cobj).u().up(), (up));
+    } else {
+        fns::HSD_CObjSetRoll(ctx, cobj, inl_upvec2roll_unfused(ctx, cobj, up));
+    }
 }
 
 pub fn HSD_CObjGetLeftVector<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, left: Vec<'a>) -> i32 {
@@ -1073,7 +1136,7 @@ pub fn HSD_CObjSetRoll<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, roll: f64) {
         return;
     }
     if ((cobj).flags() & (1_i32 as u32)) != (0_i32 as u32) {
-        let _ = statics::sysdolphin__baselib__cobj::roll2upvec(ctx, cobj, up, roll);
+        let _ = inl_roll2upvec(ctx, cobj, up, roll);
         fns::HSD_CObjSetUpVector(ctx, cobj, up);
     } else {
         if (cobj).u().roll() != roll {
@@ -2248,9 +2311,120 @@ fn inl_HSD_CObjGetEyeVector<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, eye: Vec<'a>) 
     return 1_i32.wrapping_neg();
 }
 
+fn inl_vec_get_abs_y<'a>(ctx: &'a Ctx, v: Vec<'a>) -> f64 {
+    let mut v = v;
+    return fp::fabs((v).y());
+}
+
+fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+    let mut x = x;
+    let mut y: f64 = 0.0;
+    if x > 0.0 {
+        let mut guess: f64 = fp::frsqrte(x);
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        y = fp::frsp((fp::fmul(x, guess)));
+        return y;
+    }
+    return x;
+}
+
+fn inl_vec_get_x<'a>(ctx: &'a Ctx, v: Vec<'a>) -> f64 {
+    let mut v = v;
+    return (v).x();
+}
+
+fn inl_roll2upvec<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, up: Vec<'a>, roll: f64) -> i32 {
+    let __frame = ctx.stack_frame(0x60);
+    let eye: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let v0: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let v1: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x24);
+    let mut cobj = cobj;
+    let mut up = up;
+    let mut roll = roll;
+    let mut res: i32 = 0;
+    res = fns::HSD_CObjGetEyeVector(ctx, cobj, eye);
+    if res != 0_i32 {
+        return res;
+    }
+    if fp::fsub(1.0, inl_vec_get_abs_y(ctx, eye)) < 0.0001 {
+        v0.set_x(inl_sqrtf(
+            ctx,
+            fp::fadds(fp::fmuls(eye.y(), eye.y()), fp::fmuls(eye.z(), eye.z())),
+        ));
+        v0.set_y(fp::fmuls(
+            eye.y(),
+            (fp::fdivs(fp::fneg(inl_vec_get_x(ctx, eye)), v0.x())),
+        ));
+        v0.set_z(fp::fmuls(eye.z(), (fp::fdivs(fp::fneg(eye.x()), v0.x()))));
+    } else {
+        v0.set_y(inl_sqrtf(
+            ctx,
+            fp::fadds(fp::fmuls(eye.x(), eye.x()), fp::fmuls(eye.z(), eye.z())),
+        ));
+        v0.set_x(fp::fmuls(eye.x(), (fp::fdivs(fp::fneg(eye.y()), v0.y()))));
+        v0.set_z(fp::fmuls(eye.z(), (fp::fdivs(fp::fneg(eye.y()), v0.y()))));
+    }
+    fns::PSMTXRotAxisRad(ctx, m.get(0), eye, fp::fneg(roll));
+    fns::PSMTXMultVecSR(ctx, m.get(0), v0, v1);
+    fns::PSVECNormalize(ctx, v1, up);
+    return 0_i32;
+}
+
 fn inl_cobj_get_up_x_unfused<'a>(ctx: &'a Ctx, up: Vec<'a>) -> f64 {
     let mut up = up;
     return (up).x();
+}
+
+fn inl_upvec2roll_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, up: Vec<'a>) -> f64 {
+    let __frame = ctx.stack_frame(0x50);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let eye: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let vmtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x18);
+    let mut cobj = cobj;
+    let mut up = up;
+    let mut dot: f64 = 0.0;
+    if fns::HSD_CObjGetEyeVector(ctx, cobj, eye) != 0_i32 {
+        dot = 0.0;
+    } else {
+        dot = fp::fabs(fns::PSVECDotProduct(ctx, up, eye));
+        dot = fp::fsubs(1.0, dot);
+        if dot < 1.1754943508222875e-38_f64 {
+            dot = 0.0;
+        } else {
+            fns::C_MTXLookAt(
+                ctx,
+                vmtx.get(0),
+                statics::sysdolphin__baselib__cobj::orig(ctx),
+                statics::sysdolphin__baselib__cobj::uy(ctx),
+                eye,
+            );
+            fns::PSMTXMultVecSR(ctx, vmtx.get(0), up, v);
+            if inl_fabsf_bitwise_unfused(ctx, v.y()) == 0.0 {
+                dot = fp::frsp(
+                    (if fp::fneg(v.x()) >= 0.0 {
+                        1.5707963267948966
+                    } else {
+                        fp::fneg(1.5707963267948966)
+                    }),
+                );
+            } else {
+                dot = fns::atan2f(ctx, fp::fneg(v.x()), v.y());
+            }
+        }
+    }
+    return dot;
 }
 
 fn inl_HSD_CObjGetEyeVector_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, eye: Vec<'a>) -> i32 {
@@ -2728,12 +2902,28 @@ pub fn register(ctx: &Ctx) {
         Returns::Float,
     );
     ctx.register_port(
+        0x80368bc0,
+        |ctx| {
+            let (a0, a1, a2): (HSD_CObj<'_>, Vec<'_>, Single) = Args::take_all(ctx);
+            Ret::put(roll2upvec(ctx, a0, a1, a2.0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
         0x80368e70,
         |ctx| {
             let (a0, a1): (HSD_CObj<'_>, Vec<'_>) = Args::take_all(ctx);
             Ret::put(HSD_CObjGetUpVector(ctx, a0, a1), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x803690b4,
+        |ctx| {
+            let (a0, a1): (HSD_CObj<'_>, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(HSD_CObjSetUpVector(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x803692e8,

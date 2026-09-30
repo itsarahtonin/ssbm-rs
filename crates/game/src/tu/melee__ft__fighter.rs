@@ -2336,6 +2336,379 @@ pub fn Fighter_procInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn Fighter_procUpdate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x90);
+    let windOffset: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let selfVel: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let difference: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+    if ((fp).is_sleeping() != 0) {
+        return;
+    }
+    if !((fp).x2219_b5() != 0) {
+        let mut p_kb_vel: Vec<'a> = null(ctx);
+        let mut pAtkShieldKB: Vec<'a> = null(ctx);
+        let mut kb_vel_x: f64 = 0.0;
+        let mut kb_vel_y: f64 = 0.0;
+        let mut atkShieldKB_X: f64 = 0.0;
+        if ((fp).x2064_ledgeCooldown() != 0) {
+            (fp).set_x2064_ledgeCooldown((fp).x2064_ledgeCooldown().wrapping_sub(1_i32));
+        }
+        if (fp).capture_timer() != 0_i32 {
+            (fp).set_capture_timer((fp).capture_timer().wrapping_sub(1));
+        }
+        fns::ftCo_800C0A98(ctx, gobj);
+        if !Handle::is_null((fp).phys_cb()) {
+            (fp).phys_cb().call::<_, ()>((gobj,));
+        }
+        p_kb_vel = (fp).x8c_kb_vel();
+        if (({
+            let __t1 = (p_kb_vel).x();
+            kb_vel_x = __t1;
+            __t1
+        }) != fp::frsp(0_i32 as f64))
+            || ((p_kb_vel).y() != fp::frsp(0_i32 as f64))
+        {
+            if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+                kb_vel_x = (p_kb_vel).x();
+                kb_vel_y = (p_kb_vel).y();
+                if ((fp).is_sandbag() != 0) {
+                    (p_kb_vel).set_x(fns::ftCommon_SandbagKnockbackDeaccel(
+                        ctx,
+                        (p_kb_vel).x(),
+                        fns::ftCommon_SandbagGetKnockbackDeaccelX(ctx, fp),
+                    ));
+                    (p_kb_vel).set_y(fns::ftCommon_SandbagKnockbackDeaccel(
+                        ctx,
+                        (p_kb_vel).y(),
+                        fns::ftCommon_SandbagGetKnockbackDeaccelY(ctx, fp),
+                    ));
+                } else {
+                    let mut kb_angle: f64 = fns::atan2f(ctx, kb_vel_y, kb_vel_x);
+                    if inl_sqrtf(
+                        ctx,
+                        fp::fmadds(kb_vel_x, kb_vel_x, fp::fmuls(kb_vel_y, kb_vel_y)),
+                    ) < (fns::p_ftCommonData(ctx).get()).x204_knockbackFrameDecay()
+                    {
+                        (p_kb_vel).set_x({
+                            let __t2 = fp::frsp(0_i32 as f64);
+                            (p_kb_vel).set_y(__t2);
+                            __t2
+                        });
+                    } else {
+                        (p_kb_vel).set_x(fp::fnmsubs(
+                            (fns::p_ftCommonData(ctx).get()).x204_knockbackFrameDecay(),
+                            fns::cosf(ctx, kb_angle),
+                            (p_kb_vel).x(),
+                        ));
+                        (p_kb_vel).set_y(fp::fnmsubs(
+                            (fns::p_ftCommonData(ctx).get()).x204_knockbackFrameDecay(),
+                            fns::sinf(ctx, kb_angle),
+                            (p_kb_vel).y(),
+                        ));
+                    }
+                }
+                (fp).set_xF0_ground_kb_vel(fp::frsp(0_i32 as f64));
+            } else {
+                let mut pNormal: Vec<'a> = (fp).coll_data().floor().normal();
+                let mut pAttr: ftCo_DatAttrs<'a> = null(ctx);
+                if (fp).xF0_ground_kb_vel() == fp::frsp(0_i32 as f64) {
+                    (fp).set_xF0_ground_kb_vel(kb_vel_x);
+                }
+                pAttr = (fp).co_attrs();
+                fns::ftCommon_ApplyGroundedKnockbackFriction(
+                    ctx,
+                    fp,
+                    fp::fmuls(
+                        fp::fmuls(
+                            fns::ft_GetGroundFrictionMultiplier(ctx, fp),
+                            (pAttr).ground_friction(),
+                        ),
+                        (fns::p_ftCommonData(ctx).get()).x200(),
+                    ),
+                );
+                (p_kb_vel).set_x(fp::fmuls((pNormal).y(), (fp).xF0_ground_kb_vel()));
+                (p_kb_vel).set_y(fp::fmuls(fp::fneg((pNormal).x()), (fp).xF0_ground_kb_vel()));
+            }
+        }
+        pAtkShieldKB = (fp).x98_atk_shield_kb();
+        if (({
+            let __t3 = (pAtkShieldKB).x();
+            atkShieldKB_X = __t3;
+            __t3
+        }) != fp::frsp(0_i32 as f64))
+            || ((pAtkShieldKB).y() != fp::frsp(0_i32 as f64))
+        {
+            if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+                let mut kb_x: f64 = (pAtkShieldKB).x();
+                let mut kb_y: f64 = (pAtkShieldKB).y();
+                let mut atkShieldKBAngle: f64 = fns::atan2f(ctx, kb_y, kb_x);
+                if inl_sqrtf(ctx, fp::fmadds(kb_x, kb_x, fp::fmuls(kb_y, kb_y)))
+                    < (fns::p_ftCommonData(ctx).get()).x3E8_shieldKnockbackFrameDecay()
+                {
+                    (pAtkShieldKB).set_x({
+                        let __t4 = fp::frsp(0_i32 as f64);
+                        (p_kb_vel).set_y(__t4);
+                        __t4
+                    });
+                } else {
+                    (pAtkShieldKB).set_x(fp::fnmsubs(
+                        (fns::p_ftCommonData(ctx).get()).x3E8_shieldKnockbackFrameDecay(),
+                        fns::cosf(ctx, atkShieldKBAngle),
+                        (pAtkShieldKB).x(),
+                    ));
+                    (pAtkShieldKB).set_y(fp::fnmsubs(
+                        (fns::p_ftCommonData(ctx).get()).x3E8_shieldKnockbackFrameDecay(),
+                        fns::sinf(ctx, atkShieldKBAngle),
+                        (pAtkShieldKB).y(),
+                    ));
+                }
+                (fp).set_xF4_ground_attacker_shield_kb_vel(fp::frsp(0_i32 as f64));
+            } else {
+                let mut pNormal_2: Vec<'a> = (fp).coll_data().floor().normal();
+                let mut pAttr_2: ftCo_DatAttrs<'a> = null(ctx);
+                if (fp).xF4_ground_attacker_shield_kb_vel() == fp::frsp(0_i32 as f64) {
+                    (fp).set_xF4_ground_attacker_shield_kb_vel(atkShieldKB_X);
+                }
+                pAttr_2 = (fp).co_attrs();
+                fns::ftCommon_ApplyShieldKnockbackFriction(
+                    ctx,
+                    fp,
+                    fp::fmuls(
+                        fp::fmuls(
+                            fns::ft_GetGroundFrictionMultiplier(ctx, fp),
+                            (pAttr_2).ground_friction(),
+                        ),
+                        (fns::p_ftCommonData(ctx).get()).x3EC_shieldGroundFrictionMultiplier(),
+                    ),
+                );
+                (pAtkShieldKB).set_x(fp::fmuls(
+                    (pNormal_2).y(),
+                    (fp).xF4_ground_attacker_shield_kb_vel(),
+                ));
+                (pAtkShieldKB).set_y(fp::fmuls(
+                    fp::fneg((pNormal_2).x()),
+                    (fp).xF4_ground_attacker_shield_kb_vel(),
+                ));
+            }
+        }
+        (fp).set_gr_vel(fp::fadds(
+            (fp).gr_vel(),
+            fp::fadds((fp).xE4_ground_accel_1(), (fp).xE8_ground_accel_2()),
+        ));
+        (fp).set_xE4_ground_accel_1({
+            let __t5 = fp::frsp(0_i32 as f64);
+            (fp).set_xE8_ground_accel_2(__t5);
+            __t5
+        });
+        fns::PSVECAdd(ctx, (fp).self_vel(), (fp).x74_self_accel(), (fp).self_vel());
+        'l1: loop {
+            'c2: {
+                let mut vecLocal: Vec<'a> =
+                    Handle::cast::<Vec<'a>>(Handle::cast::<Addr<'a>>((fp).x74_self_accel()));
+                let mut c: f64 = fp::frsp(0_i32 as f64);
+                (vecLocal).set_x({
+                    let __t7 = {
+                        let __t6 = c;
+                        (vecLocal).set_z(__t6);
+                        __t6
+                    };
+                    (vecLocal).set_y(__t7);
+                    __t7
+                });
+            }
+            if !(0_i32 != 0) {
+                break 'l1;
+            }
+        }
+        Handle::copy_from(selfVel, (fp).self_vel());
+        if (fp).dmg().x1948() != 0_i32 {
+            let mut C1: f64 = 1.0;
+            let mut C2: f64 = fp::fsubs(
+                C1,
+                fp::fdivs(
+                    fp::frsp((fp).dmg().x194C() as f64),
+                    fp::frsp((fp).dmg().x1948() as f64),
+                ),
+            );
+            selfVel.set_x(fp::fmadds(
+                C2,
+                (fp::fsubs((fp).self_vel().x(), (fp).xA4_unk_vel().x())),
+                (fp).xA4_unk_vel().x(),
+            ));
+            selfVel.set_y(fp::fmadds(
+                C2,
+                (fp::fsubs((fp).self_vel().y(), (fp).xA4_unk_vel().y())),
+                (fp).xA4_unk_vel().y(),
+            ));
+            (fp).dmg().set_x194C((fp).dmg().x194C().wrapping_sub(1));
+            if (fp).dmg().x194C() == 0_i32 {
+                (fp).dmg().set_x1948(0_i32);
+            }
+        }
+        (fp).cur_pos()
+            .set_x(fp::fadds((fp).cur_pos().x(), (fp).xF8_playerNudgeVel().x()));
+        (fp).cur_pos()
+            .set_y(fp::fadds((fp).cur_pos().y(), fp::frsp(0_i32 as f64)));
+        (fp).cur_pos()
+            .set_z(fp::fadds((fp).cur_pos().z(), (fp).xF8_playerNudgeVel().y()));
+        if (((fp).x2222_b6() as i32) != 0) && (!((fp).x2222_b7() != 0)) {
+            let mut bit: i32 = 0;
+            fns::PSVECAdd(ctx, (fp).xD4_unk_vel(), selfVel, (fp).xD4_unk_vel());
+            (fp).xD4_unk_vel()
+                .set_x(fp::fadds((fp).xD4_unk_vel().x(), (p_kb_vel).x()));
+            (fp).xD4_unk_vel()
+                .set_y(fp::fadds((fp).xD4_unk_vel().y(), (p_kb_vel).y()));
+            (fp).xD4_unk_vel()
+                .set_z(fp::fadds((fp).xD4_unk_vel().z(), 0.0));
+            if ((fp).x2210().x0().throw_flags_b2() != 0) {
+                (fp).x2210().x0().set_throw_flags_b2((0_i32 as u8));
+                bit = 1_i32;
+            } else {
+                bit = 0_i32;
+            }
+            if ((bit != 0) || (fns::ftAnim_80070FD0(ctx, fp) != 0))
+                || (((fp).x594().x0().x594_b7() as i32) != 0)
+            {
+                fns::PSVECAdd(ctx, (fp).cur_pos(), (fp).xD4_unk_vel(), (fp).cur_pos());
+                'l3: loop {
+                    'c4: {
+                        let mut vecLocal_2: Vec<'a> =
+                            Handle::cast::<Vec<'a>>(Handle::cast::<Addr<'a>>((fp).xD4_unk_vel()));
+                        let mut c_2: f64 = fp::frsp(0_i32 as f64);
+                        (vecLocal_2).set_x({
+                            let __t9 = {
+                                let __t8 = c_2;
+                                (vecLocal_2).set_z(__t8);
+                                __t8
+                            };
+                            (vecLocal_2).set_y(__t9);
+                            __t9
+                        });
+                    }
+                    if !(0_i32 != 0) {
+                        break 'l3;
+                    }
+                }
+            }
+            fns::PSVECAdd(ctx, (fp).cur_pos(), pAtkShieldKB, (fp).cur_pos());
+        } else {
+            fns::PSVECAdd(ctx, (fp).cur_pos(), selfVel, (fp).cur_pos());
+            (fp).cur_pos()
+                .set_x(fp::fadds((fp).cur_pos().x(), (p_kb_vel).x()));
+            (fp).cur_pos()
+                .set_y(fp::fadds((fp).cur_pos().y(), (p_kb_vel).y()));
+            (fp).cur_pos()
+                .set_z(fp::fadds((fp).cur_pos().z(), fp::frsp(0_i32 as f64)));
+            fns::PSVECAdd(ctx, (fp).cur_pos(), pAtkShieldKB, (fp).cur_pos());
+        }
+        fns::ftColl_GetWindOffsetVec(ctx, gobj, windOffset);
+    } else {
+        'l5: loop {
+            'c6: {
+                let mut vecLocal_3: Vec<'a> =
+                    Handle::cast::<Vec<'a>>(Handle::cast::<Addr<'a>>(windOffset));
+                let mut c_3: f64 = fp::frsp(0_i32 as f64);
+                (vecLocal_3).set_x({
+                    let __t11 = {
+                        let __t10 = c_3;
+                        (vecLocal_3).set_z(__t10);
+                        __t10
+                    };
+                    (vecLocal_3).set_y(__t11);
+                    __t11
+                });
+            }
+            if !(0_i32 != 0) {
+                break 'l5;
+            }
+        }
+    }
+    fns::ftColl_80076528(ctx, gobj);
+    if !Handle::is_null((fp).hitlag_cb()) {
+        (fp).hitlag_cb().call::<_, ()>((gobj,));
+    }
+    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        if (fns::mpGetSpeed(
+            ctx,
+            (fp).coll_data().floor().index(),
+            (fp).cur_pos(),
+            difference,
+        ) != 0)
+        {
+            fns::PSVECAdd(ctx, (fp).cur_pos(), difference, (fp).cur_pos());
+        }
+    }
+    (fp).cur_pos()
+        .set_x(fp::fadds((fp).cur_pos().x(), windOffset.x()));
+    (fp).cur_pos()
+        .set_y(fp::fadds((fp).cur_pos().y(), windOffset.y()));
+    (fp).cur_pos()
+        .set_z(fp::fadds((fp).cur_pos().z(), windOffset.z()));
+    let _ = fns::ftCo_800D3158(ctx, gobj);
+    if ((fp).x2225_b0() != 0) {
+        if ((fp).prev_pos().y() <= fns::Stage_CalcUnkCamYBounds(ctx))
+            && ((fp).cur_pos().y() > fns::Stage_CalcUnkCamYBounds(ctx))
+        {
+            (fp).set_x2225_b0((0_i32 as u8));
+        }
+    } else {
+        if (!((fp).x222A_b1() != 0)) && (!((fp).x2228_b5() != 0)) {
+            if ((fp).prev_pos().y() >= fns::Stage_CalcUnkCamY(ctx))
+                && ((fp).cur_pos().y() < fns::Stage_CalcUnkCamY(ctx))
+            {
+                fns::ft_PlaySFX(ctx, fp, 96_i32, (127_i32 as u8), (64_i32 as u8));
+                (fp).set_x2225_b0((1_i32 as u8));
+            }
+        }
+    }
+    if (((fp).dmg().x18A4_knockbackMagnitude() != 0.0) && (!((fp).x221C_b6() != 0)))
+        && (!(fns::un_80322258(ctx, (fp).cur_pos().x()) != 0))
+    {
+        (fp).dmg().set_x18A4_knockbackMagnitude(0.0);
+    }
+    fns::ftColl_8007AF28(ctx, gobj);
+    if ((fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_DebugRom as i32) as u32))
+        && ((((if 4_u32 == 4_u32 {
+            inl___fpclassifyf(ctx, ((fp).cur_pos().x()))
+        } else {
+            inl___fpclassifyd(ctx, ((fp).cur_pos().x()))
+        }) == (enums::FP_NAN as i32))
+            || ((if 4_u32 == 4_u32 {
+                inl___fpclassifyf(ctx, ((fp).cur_pos().y()))
+            } else {
+                inl___fpclassifyd(ctx, ((fp).cur_pos().y()))
+            }) == (enums::FP_NAN as i32)))
+            || ((if 4_u32 == 4_u32 {
+                inl___fpclassifyf(ctx, ((fp).cur_pos().z()))
+            } else {
+                inl___fpclassifyd(ctx, ((fp).cur_pos().z()))
+            }) == (enums::FP_NAN as i32)))
+    {
+        (if ((0_i32) != 0) {
+            { () }
+        } else {
+            ({
+                fns::OSReport(
+                    ctx,
+                    cstr(ctx, 0x803c05ac),
+                    &[
+                        VarArg::Float((fp).cur_pos().x()),
+                        VarArg::Float((fp).cur_pos().y()),
+                    ],
+                );
+                fns::__assert(
+                    ctx,
+                    cstr(ctx, 0x803b7488),
+                    (0x9a1_i32 as u32),
+                    cstr(ctx, 0x803b7488),
+                )
+            })
+        });
+    }
+}
+
 pub fn Fighter_UnkApplyTransformation_8006C0F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xa8);
     let mtx1: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
@@ -2364,6 +2737,81 @@ pub fn Fighter_UnkApplyTransformation_8006C0F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<
             null::<Vec<'a>>(ctx),
         );
         fns::PSMTXConcat(ctx, mtx2.get(0), mtx1.get(0), (fp).x44_mtx().get(0));
+    }
+}
+
+pub fn Fighter_procMap<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x38);
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    if !((fp).is_sleeping() != 0) {
+        if ((fp).ecb_lock() != 0) {
+            (fp).set_ecb_lock((fp).ecb_lock().wrapping_sub(1));
+            if !((fp).ecb_lock() != 0) {
+                fns::ftCommon_UnlockECB(ctx, fp);
+            }
+        }
+        (fp).set_x2223_b5((0_i32 as u8));
+        inl_HSD_JObjSetTranslate_unfused(
+            ctx,
+            Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()),
+            (fp).cur_pos(),
+        );
+        if !Handle::is_null((fp).coll_cb()) {
+            (fp).coll_cb().call::<_, ()>((gobj,));
+            fns::ftKb_SpecialN_800F1D24(ctx, gobj);
+        }
+        if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+            fns::pl_80041280(
+                ctx,
+                ((fp).player_idx() as i32),
+                ((fp).is_sub_fighter() as i32),
+            );
+        }
+        if (fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_DebugRom as i32) as u32) {
+            if (((if 4_u32 == 4_u32 {
+                inl___fpclassifyf_unfused(ctx, ((fp).cur_pos().x()))
+            } else {
+                inl___fpclassifyd_unfused(ctx, ((fp).cur_pos().x()))
+            }) == (enums::FP_NAN as i32))
+                || ((if 4_u32 == 4_u32 {
+                    inl___fpclassifyf_unfused(ctx, ((fp).cur_pos().y()))
+                } else {
+                    inl___fpclassifyd_unfused(ctx, ((fp).cur_pos().y()))
+                }) == (enums::FP_NAN as i32)))
+                || ((if 4_u32 == 4_u32 {
+                    inl___fpclassifyf_unfused(ctx, ((fp).cur_pos().z()))
+                } else {
+                    inl___fpclassifyd_unfused(ctx, ((fp).cur_pos().z()))
+                }) == (enums::FP_NAN as i32))
+            {
+                let mut x: f64 = inl_Fighter_GetPosX_unfused(ctx, fp);
+                let mut y: f64 = inl_Fighter_GetPosY_unfused(ctx, fp);
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803c05e0),
+                            &[VarArg::Float(x), VarArg::Float(y)],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803b7488),
+                            (0x9eb_i32 as u32),
+                            cstr(ctx, 0x803b7488),
+                        )
+                    })
+                });
+            }
+        }
+        inl_HSD_JObjSetTranslate_unfused(
+            ctx,
+            Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()),
+            (fp).cur_pos(),
+        );
     }
 }
 
@@ -3591,6 +4039,40 @@ fn inl___fpclassifyf<'a>(ctx: &'a Ctx, x: f64) -> i32 {
     return 0;
 }
 
+fn inl___fpclassifyd<'a>(ctx: &'a Ctx, x: f64) -> i32 {
+    let mut x = x;
+    's1: {
+        let __case = match (((x.to_bits() >> 32) as u32 as i32) & 0x7ff00000_i32) {
+            0x7ff00000_i32 => 0,
+            0_i32 => 1,
+            _ => 2,
+        };
+        if __case <= 0 {
+            return (if ((((x.to_bits() >> 32) as u32 as i32) & 0xfffff_i32) != 0)
+                || (((((x.to_bits()) as u32 as i32) as u32) & 0xffffffff_u32) != 0)
+            {
+                (enums::FP_NAN as i32)
+            } else {
+                (enums::FP_INFINITE as i32)
+            });
+        }
+        if __case <= 1 {
+            return (if ((((x.to_bits() >> 32) as u32 as i32) & 0xfffff_i32) != 0)
+                || (((((x.to_bits()) as u32 as i32) as u32) & 0xffffffff_u32) != 0)
+            {
+                (enums::FP_SUBNORMAL as i32)
+            } else {
+                (enums::FP_ZERO as i32)
+            });
+        }
+        if __case <= 2 {
+            return (enums::FP_NORMAL as i32);
+        }
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
     let mut jobj = jobj;
     if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
@@ -3673,6 +4155,50 @@ fn inl___fpclassifyf_unfused<'a>(ctx: &'a Ctx, x: f64) -> i32 {
     }
     #[allow(unreachable_code)]
     return 0;
+}
+
+fn inl___fpclassifyd_unfused<'a>(ctx: &'a Ctx, x: f64) -> i32 {
+    let mut x = x;
+    's1: {
+        let __case = match (((x.to_bits() >> 32) as u32 as i32) & 0x7ff00000_i32) {
+            0x7ff00000_i32 => 0,
+            0_i32 => 1,
+            _ => 2,
+        };
+        if __case <= 0 {
+            return (if ((((x.to_bits() >> 32) as u32 as i32) & 0xfffff_i32) != 0)
+                || (((((x.to_bits()) as u32 as i32) as u32) & 0xffffffff_u32) != 0)
+            {
+                (enums::FP_NAN as i32)
+            } else {
+                (enums::FP_INFINITE as i32)
+            });
+        }
+        if __case <= 1 {
+            return (if ((((x.to_bits() >> 32) as u32 as i32) & 0xfffff_i32) != 0)
+                || (((((x.to_bits()) as u32 as i32) as u32) & 0xffffffff_u32) != 0)
+            {
+                (enums::FP_SUBNORMAL as i32)
+            } else {
+                (enums::FP_ZERO as i32)
+            });
+        }
+        if __case <= 2 {
+            return (enums::FP_NORMAL as i32);
+        }
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
+fn inl_Fighter_GetPosX_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> f64 {
+    let mut fp = fp;
+    return (fp).cur_pos().x();
+}
+
+fn inl_Fighter_GetPosY_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> f64 {
+    let mut fp = fp;
+    return (fp).cur_pos().y();
 }
 
 fn inl_Fighter_UnkApplyTransformation_8006C0F0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -3906,10 +4432,26 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x8006b82c,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(Fighter_procUpdate(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x8006c0f0,
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(Fighter_UnkApplyTransformation_8006C0F0(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8006c27c,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(Fighter_procMap(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

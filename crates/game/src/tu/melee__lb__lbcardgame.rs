@@ -35,6 +35,68 @@ pub fn lb_8001C600<'a>(ctx: &'a Ctx) {
     }
 }
 
+pub fn lb_8001C658<'a>(ctx: &'a Ctx) -> Val<'a, i8> {
+    let __frame = ctx.stack_frame(0x40);
+    let time: OSCalendarTime<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut title: Val<'a, i8> = null(ctx);
+    let mut i: i32 = 0;
+    let mut ticks: i64 = fns::OSGetTime(ctx);
+    let mut seconds: u32 = ((div_i64(
+        (ticks),
+        ((div_u32(
+            ((ptr::<Val<'a, u32>>(
+                ctx,
+                ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+            ))
+            .get()),
+            (4_i32 as u32),
+        )) as i64),
+    )) as u32);
+    fns::OSTicksToCalendarTime(
+        ctx,
+        (((seconds as u64).wrapping_mul(
+            ((div_u32(
+                ((ptr::<Val<'a, u32>>(
+                    ctx,
+                    ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                ))
+                .get()),
+                (4_i32 as u32),
+            )) as u64),
+        )) as i64),
+        time,
+    );
+    {
+        i = 0_i32;
+        'l1: while i < 64_i32 {
+            'c2: {
+                statics::melee__lb__lbcardgame::state(ctx)
+                    .comment()
+                    .at(i)
+                    .set((0_i32 as i8));
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    if (fns::lbLang_IsSettingJP(ctx) != 0) {
+        title = cstr(ctx, 0x803babec);
+    } else {
+        title = cstr(ctx, 0x803bac1c);
+    }
+    let _ = fns::sprintf(
+        ctx,
+        statics::melee__lb__lbcardgame::state(ctx).comment().at(0),
+        cstr(ctx, 0x803bac48),
+        &[
+            VarArg::Int(Handle::addr(title)),
+            VarArg::Int(time.year() as u32),
+            VarArg::Int(time.mon().wrapping_add(1_i32) as u32),
+            VarArg::Int(time.mday() as u32),
+        ],
+    );
+    return statics::melee__lb__lbcardgame::state(ctx).comment().at(0);
+}
+
 pub fn getCurrentIcon<'a>(ctx: &'a Ctx) -> Addr<'a> {
     let __frame = ctx.stack_frame(0x8);
     let mut idx: i32 = 0;
@@ -82,7 +144,7 @@ pub fn lb_8001C8BC<'a>(ctx: &'a Ctx) -> i32 {
         fns::filename(ctx).at(0),
         Handle::cast::<Ptr<'a, Addr<'a>>>(statics::melee__lb__lbcardgame::manifest(ctx).get(0)),
         Handle::cast::<Addr<'a>>(statics::melee__lb__lbcardgame::lb_803BAB60(ctx)),
-        statics::melee__lb__lbcardgame::lb_8001C658(ctx),
+        inl_lb_8001C658_unfused(ctx),
         inl_getCurrentIcon_unfused(ctx),
         (Handle::add(
             (statics::melee__lb__lbcardgame::state(ctx).icon_data()),
@@ -432,6 +494,68 @@ pub fn lbCardGame_Init<'a>(ctx: &'a Ctx) {
     }
 }
 
+fn inl_lb_8001C658_unfused<'a>(ctx: &'a Ctx) -> Val<'a, i8> {
+    let __frame = ctx.stack_frame(0x30);
+    let time: OSCalendarTime<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut title: Val<'a, i8> = null(ctx);
+    let mut i: i32 = 0;
+    let mut ticks: i64 = fns::OSGetTime(ctx);
+    let mut seconds: u32 = ((div_i64(
+        (ticks),
+        ((div_u32(
+            ((ptr::<Val<'a, u32>>(
+                ctx,
+                ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+            ))
+            .get()),
+            (4_i32 as u32),
+        )) as i64),
+    )) as u32);
+    fns::OSTicksToCalendarTime(
+        ctx,
+        (((seconds as u64).wrapping_mul(
+            ((div_u32(
+                ((ptr::<Val<'a, u32>>(
+                    ctx,
+                    ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                ))
+                .get()),
+                (4_i32 as u32),
+            )) as u64),
+        )) as i64),
+        time,
+    );
+    {
+        i = 0_i32;
+        'l1: while i < 64_i32 {
+            'c2: {
+                statics::melee__lb__lbcardgame::state(ctx)
+                    .comment()
+                    .at(i)
+                    .set((0_i32 as i8));
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    if (fns::lbLang_IsSettingJP(ctx) != 0) {
+        title = cstr(ctx, 0x803babec);
+    } else {
+        title = cstr(ctx, 0x803bac1c);
+    }
+    let _ = fns::sprintf(
+        ctx,
+        statics::melee__lb__lbcardgame::state(ctx).comment().at(0),
+        cstr(ctx, 0x803bac48),
+        &[
+            VarArg::Int(Handle::addr(title)),
+            VarArg::Int(time.year() as u32),
+            VarArg::Int(time.mon().wrapping_add(1_i32) as u32),
+            VarArg::Int(time.mday() as u32),
+        ],
+    );
+    return statics::melee__lb__lbcardgame::state(ctx).comment().at(0);
+}
+
 fn inl_getCurrentIcon_unfused<'a>(ctx: &'a Ctx) -> Addr<'a> {
     let mut idx: i32 = 0;
     if fns::un_80304470(ctx) != 0_i32 {
@@ -556,6 +680,13 @@ pub fn register(ctx: &Ctx) {
             Ret::put(lb_8001C600(ctx), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8001c658,
+        |ctx| {
+            Ret::put(lb_8001C658(ctx), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x8001c820,

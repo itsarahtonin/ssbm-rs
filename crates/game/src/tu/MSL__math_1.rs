@@ -32,6 +32,11 @@ pub fn tanf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     return fp::fdivs(fns::sin__Ff(ctx, x), fns::cos__Ff(ctx, x));
 }
 
+pub fn fabsf__Ff<'a>(ctx: &'a Ctx, param_1: f64) -> f64 {
+    let mut param_1 = param_1;
+    return fp::fabs(param_1);
+}
+
 pub fn frexp<'a>(ctx: &'a Ctx, x: f64, exponent: Val<'a, i32>) -> f64 {
     let __frame = ctx.stack_frame(0x18);
     let x__slot: Val<'a, F64> = frame_at(ctx, &__frame, 0x0);
@@ -70,6 +75,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (Single,) = Args::take_all(ctx);
             Ret::put(tanf(ctx, a0.0), ctx);
+        },
+        Returns::Float,
+    );
+    ctx.register_port(
+        0x803261b4,
+        |ctx| {
+            let (a0,): (Single,) = Args::take_all(ctx);
+            Ret::put(fabsf__Ff(ctx, a0.0), ctx);
         },
         Returns::Float,
     );

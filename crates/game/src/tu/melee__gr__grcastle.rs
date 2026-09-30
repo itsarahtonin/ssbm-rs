@@ -2187,6 +2187,232 @@ pub fn fn_801CFB68<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, gp: Ground<'a>, go
     }
 }
 
+pub fn grCastle_801CFBD4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) -> i32 {
+    let __frame = ctx.stack_frame(0xc0);
+    let cb1: grCastle_CallbackTable<'a> = frame_at(ctx, &__frame, 0x0);
+    let cb2: grCastle_CallbackTable2<'a> = frame_at(ctx, &__frame, 0x14);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let target_pos: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x40);
+    let mut gobj = gobj;
+    let mut arg1 = arg1;
+    let mut i: i32 = 0_i32;
+    let mut result: i32 = 1_i32;
+    let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
+    let mut newScale: f64 = 0.0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    {
+        'l3: while i < 5_i32 {
+            'c4: {
+                let mut jobj: HSD_JObj<'a> = null(ctx);
+                if !Handle::is_null(
+                    ({
+                        let __t1 = (gp).u().castle10().jobjs().at(i).get();
+                        jobj = __t1;
+                        __t1
+                    }),
+                ) {
+                    let mut eff_a: HSD_JObj<'a> = (gp).u().castle10().effect_a().at(i).get();
+                    let mut eff_b: HSD_JObj<'a> = (gp).u().castle10().effect_b().at(i).get();
+                    if arg1 != 0_i32 {
+                        if ((fns::HSD_JObjGetFlags(ctx, jobj) & (16_i32 as u32)) != 0) {
+                            if !(inl_isNearTarget_unfused(ctx, jobj, pos, target_pos) != 0) {
+                                fns::HSD_JObjClearFlags(
+                                    ctx,
+                                    jobj,
+                                    ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                                );
+                                if (!Handle::is_null(eff_a)) && (!Handle::is_null(eff_b)) {
+                                    if (fns::gm_8016AE80(ctx) != 1_i32.wrapping_neg())
+                                        && (fns::gm_8016B238(ctx) == 0_i32)
+                                    {
+                                        fns::HSD_JObjClearFlags(
+                                            ctx,
+                                            eff_a,
+                                            ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                                        );
+                                        inl_HSD_JObjSetScaleY_unfused(
+                                            ctx,
+                                            eff_a,
+                                            9.999999747378752e-05_f64,
+                                        );
+                                        fns::HSD_JObjSetFlags(
+                                            ctx,
+                                            eff_b,
+                                            ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                                        );
+                                        inl_HSD_JObjSetScaleY_unfused(ctx, eff_b, 1.0);
+                                    } else {
+                                        fns::HSD_JObjSetFlags(
+                                            ctx,
+                                            eff_a,
+                                            ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                                        );
+                                        inl_HSD_JObjSetScaleY_unfused(ctx, eff_a, 1.0);
+                                        fns::HSD_JObjClearFlags(
+                                            ctx,
+                                            eff_b,
+                                            ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                                        );
+                                        inl_HSD_JObjSetScaleY_unfused(
+                                            ctx,
+                                            eff_b,
+                                            9.999999747378752e-05_f64,
+                                        );
+                                    }
+                                } else {
+                                    inl_HSD_JObjSetScaleY_unfused(
+                                        ctx,
+                                        jobj,
+                                        9.999999747378752e-05_f64,
+                                    );
+                                }
+                            }
+                            (gp).u().castle10().state().at(i).set((0_i32 as u8));
+                            result = 0_i32;
+                            (gp).u().castle10().idx().at(i).set((0_i32 as u8));
+                        } else {
+                            let mut target: HSD_JObj<'a> = null(ctx);
+                            if (!Handle::is_null(eff_a)) && (!Handle::is_null(eff_b)) {
+                                if ((fns::HSD_JObjGetFlags(ctx, eff_a) & (16_i32 as u32)) != 0) {
+                                    target = eff_b;
+                                } else {
+                                    target = eff_a;
+                                }
+                            } else {
+                                target = jobj;
+                            }
+                            if ({
+                                let __t2 = inl_HSD_JObjGetScaleY_unfused(ctx, target);
+                                newScale = __t2;
+                                __t2
+                            }) < 1.0
+                            {
+                                newScale = fp::fadds(
+                                    newScale,
+                                    (statics::melee__gr__grcastle::yakumono_param(ctx).get()).x48(),
+                                );
+                                if newScale >= 1.0 {
+                                    newScale = 1.0;
+                                    fns::mpJointListAdd(
+                                        ctx,
+                                        (gp).u().castle10().x120().at(i).get(),
+                                    );
+                                    if (!Handle::is_null(eff_a))
+                                        && (!((fns::HSD_JObjGetFlags(ctx, eff_a)
+                                            & (16_i32 as u32))
+                                            != 0))
+                                    {
+                                        Handle::copy_from(
+                                            cb1,
+                                            statics::melee__gr__grcastle::grCs_803B7F28(ctx),
+                                        );
+                                        Handle::copy_from(
+                                            cb2,
+                                            statics::melee__gr__grcastle::grCs_803B7F3C(ctx),
+                                        );
+                                        (gp).u().castle10().x10C().at(i).set(Handle::addr(
+                                            fns::grMaterial_801C8CFC(
+                                                ctx,
+                                                0_i32,
+                                                2_i32,
+                                                gp,
+                                                target,
+                                                null::<FnPtr<'a>>(ctx),
+                                                cb1.callbacks().at(i).get(),
+                                                cb2.callbacks().at(i).get(),
+                                            ),
+                                        ));
+                                        fns::grMaterial_801C8DE0(
+                                            ctx,
+                                            ptr::<HSD_GObj<'a>>(
+                                                ctx,
+                                                (gp).u().castle10().x10C().at(i).get() as u32,
+                                            ),
+                                            0.0,
+                                            0.0,
+                                            0.0,
+                                            0.0,
+                                            0.0,
+                                            0.0,
+                                            8.0,
+                                        );
+                                        fns::grMaterial_801C8E08(
+                                            ctx,
+                                            ptr::<HSD_GObj<'a>>(
+                                                ctx,
+                                                (gp).u().castle10().x10C().at(i).get() as u32,
+                                            ),
+                                        );
+                                    }
+                                }
+                                inl_HSD_JObjSetScaleY_unfused(ctx, target, newScale);
+                                result = 0_i32;
+                            }
+                        }
+                    } else {
+                        if !((fns::HSD_JObjGetFlags(ctx, jobj) & (16_i32 as u32)) != 0) {
+                            let mut target_2: HSD_JObj<'a> = null(ctx);
+                            if (!Handle::is_null(eff_a)) && (!Handle::is_null(eff_b)) {
+                                if ((fns::HSD_JObjGetFlags(ctx, eff_a) & (16_i32 as u32)) != 0) {
+                                    target_2 = eff_b;
+                                } else {
+                                    target_2 = eff_a;
+                                }
+                            } else {
+                                target_2 = jobj;
+                            }
+                            if ({
+                                let __t3 = inl_HSD_JObjGetScaleY_unfused(ctx, target_2);
+                                newScale = __t3;
+                                __t3
+                            }) > 9.999999747378752e-05_f64
+                            {
+                                newScale = fp::fsubs(
+                                    newScale,
+                                    (statics::melee__gr__grcastle::yakumono_param(ctx).get()).x4C(),
+                                );
+                                if newScale <= 9.999999747378752e-05_f64 {
+                                    newScale = 9.999999747378752e-05_f64;
+                                    fns::HSD_JObjSetFlags(
+                                        ctx,
+                                        jobj,
+                                        ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                                    );
+                                    if !Handle::is_null(eff_a) {
+                                        fns::HSD_JObjSetFlags(
+                                            ctx,
+                                            eff_a,
+                                            ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                                        );
+                                    }
+                                    if !Handle::is_null(eff_b) {
+                                        fns::HSD_JObjSetFlags(
+                                            ctx,
+                                            eff_b,
+                                            ((shl_i32(1_i32, (4_i32 as u32))) as u32),
+                                        );
+                                    }
+                                }
+                                inl_HSD_JObjSetScaleY_unfused(ctx, target_2, newScale);
+                                result = 0_i32;
+                            }
+                        }
+                        fns::mpLib_80057BC0(ctx, (gp).u().castle10().x120().at(i).get());
+                    }
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return result;
+}
+
 pub fn grCastle_801D0298<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
@@ -3129,6 +3355,53 @@ fn inl_grCastle_PickSatellite_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>, wp: Val<
     }
 }
 
+fn inl_isNearTarget_unfused<'a>(
+    ctx: &'a Ctx,
+    jobj: HSD_JObj<'a>,
+    pos: Vec<'a>,
+    target: Vec<'a>,
+) -> i32 {
+    let mut jobj = jobj;
+    let mut pos = pos;
+    let mut target = target;
+    if (fns::grCastle_801CDF54(ctx, target) != 0)
+        && (({
+            fns::lb_8000B1CC(ctx, jobj, null::<Vec<'a>>(ctx), pos);
+            (fns::sqrtf(
+                ctx,
+                fp::fadds(
+                    fp::fmuls(
+                        (fp::fsubs((pos).x(), (target).x())),
+                        (fp::fsubs((pos).x(), (target).x())),
+                    ),
+                    fp::fmuls(
+                        (fp::fsubs((pos).y(), (target).y())),
+                        (fp::fsubs((pos).y(), (target).y())),
+                    ),
+                ),
+            ) < 40.0) as i32
+        }) != 0)
+    {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
+fn inl_HSD_JObjGetScaleY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7e94),
+            (0x1d5_i32 as u32),
+            cstr(ctx, 0x803b7e94),
+        )
+    });
+    return (jobj).scale().y();
+}
+
 fn inl_grCastle_801D0550_sub_unfused<'a>(ctx: &'a Ctx, arg0: unkCastle<'a>, i: i32) {
     let mut arg0 = arg0;
     let mut i = i;
@@ -3578,6 +3851,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(fn_801CFB68(ctx, a0, a1, a2), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801cfbd4,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
+            Ret::put(grCastle_801CFBD4(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x801d0298,

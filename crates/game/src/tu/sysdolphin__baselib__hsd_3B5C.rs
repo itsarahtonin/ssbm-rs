@@ -84,6 +84,199 @@ pub fn hsd_803B5C4C<'a>(ctx: &'a Ctx, bit_count: i32) -> i32 {
     return bits;
 }
 
+pub fn hsd_803B5D70<'a>(ctx: &'a Ctx, ac: i32, component: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x28);
+    let mut ac = ac;
+    let mut component = component;
+    let mut value_idx: i32 = 0;
+    let mut code: i32 = 0;
+    let mut code_table_tmp: Val<'a, u16> = null(ctx);
+    let mut code_table: Val<'a, u16> = null(ctx);
+    let mut length_table_tmp: Val<'a, u8> = null(ctx);
+    let mut length_table_base: Val<'a, u8> = null(ctx);
+    let mut length_table: Val<'a, u8> = null(ctx);
+    let mut code_cursor: Val<'a, u16> = null(ctx);
+    let mut value_table: Val<'a, u8> = null(ctx);
+    let mut bit_len: i32 = 0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                value_idx = 0_i32;
+                code = 0_i32;
+                __state = if ac == 0_i32 { 1 } else { 3 };
+            }
+            1 => {
+                __state = if component == 0_i32 { 5 } else { 7 };
+            }
+            2 => {
+                code_cursor = code_table;
+                length_table = length_table_base;
+                bit_len = 1_i32;
+                __state = 25;
+            }
+            3 => {
+                __state = if component == 0_i32 { 13 } else { 15 };
+            }
+            4 => {
+                unreachable!();
+            }
+            5 => {
+                code_table_tmp = fns::lbl_80431678(ctx).at(0);
+                __state = 6;
+            }
+            6 => {
+                code_table = code_table_tmp;
+                __state = if component == 0_i32 { 9 } else { 11 };
+            }
+            7 => {
+                code_table_tmp = fns::lbl_8043169C(ctx).at(0);
+                __state = 6;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                length_table_tmp = fns::lbl_80431690(ctx).at(0);
+                __state = 10;
+            }
+            10 => {
+                length_table_base = length_table_tmp;
+                length_table_tmp = Handle::add(fns::lbl_80431090(ctx).at(0), 128_i32);
+                value_table = length_table_tmp;
+                __state = 2;
+            }
+            11 => {
+                length_table_tmp = fns::lbl_804316B4(ctx).at(0);
+                __state = 10;
+            }
+            12 => {
+                unreachable!();
+            }
+            13 => {
+                code_table_tmp = Handle::cast::<Val<'a, u16>>(
+                    (Handle::add(fns::lbl_80431090(ctx).at(0), 140_i32)),
+                );
+                __state = 14;
+            }
+            14 => {
+                code_table = code_table_tmp;
+                __state = if component == 0_i32 { 17 } else { 19 };
+            }
+            15 => {
+                code_table_tmp = Handle::cast::<Val<'a, u16>>(
+                    (Handle::add(fns::lbl_80431090(ctx).at(0), 0x3bc_i32)),
+                );
+                __state = 14;
+            }
+            16 => {
+                unreachable!();
+            }
+            17 => {
+                length_table_tmp = Handle::add(fns::lbl_80431090(ctx).at(0), 0x1d0_i32);
+                __state = 18;
+            }
+            18 => {
+                length_table_base = length_table_tmp;
+                __state = if component == 0_i32 { 21 } else { 23 };
+            }
+            19 => {
+                length_table_tmp = Handle::add(fns::lbl_80431090(ctx).at(0), 0x318_i32);
+                __state = 18;
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                length_table_tmp = Handle::add(fns::lbl_80431090(ctx).at(0), 0x274_i32);
+                __state = 22;
+            }
+            22 => {
+                value_table = length_table_tmp;
+                __state = 2;
+            }
+            23 => {
+                length_table_tmp = Handle::add(fns::lbl_80431090(ctx).at(0), 0x500_i32);
+                __state = 22;
+            }
+            24 => {
+                unreachable!();
+            }
+            25 => {
+                code = ((code.wrapping_mul(2_i32)) | fns::hsd_803B5C4C(ctx, 1_i32));
+                code_table_tmp = code_cursor;
+                __state = 26;
+            }
+            26 => {
+                __state = if bit_len == ((length_table).get() as i32) {
+                    33
+                } else {
+                    34
+                };
+            }
+            27 => {
+                __state = 28;
+            }
+            28 => {
+                __state = if code == ((code_table_tmp).get() as i32) {
+                    29
+                } else {
+                    30
+                };
+            }
+            29 => {
+                return ((Handle::add(value_table, value_idx)).get() as i32);
+            }
+            30 => {
+                code_table_tmp = Handle::add(code_table_tmp, 1_i32);
+                code_cursor = Handle::add(code_cursor, 1_i32);
+                value_idx = value_idx.wrapping_add(1_i32);
+                length_table = Handle::add(length_table, 1_i32);
+                __state = 26;
+            }
+            31 => {
+                unreachable!();
+            }
+            32 => {
+                __state = 30;
+            }
+            33 => {
+                __state = 28;
+            }
+            34 => {
+                bit_len = bit_len.wrapping_add(1_i32);
+                __state = if bit_len <= 16_i32 { 37 } else { 38 };
+            }
+            35 => {
+                unreachable!();
+            }
+            36 => {
+                __state = 34;
+            }
+            37 => {
+                __state = 25;
+            }
+            38 => {
+                return (0_u32 as i32);
+            }
+            39 => {
+                unreachable!();
+            }
+            40 => {
+                __state = 38;
+            }
+            41 => {
+                return 0;
+            }
+            42 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn hsd_803B5EA0<'a>(ctx: &'a Ctx, component: i32) {
     let __frame = ctx.stack_frame(0x28);
     let mut component = component;
@@ -666,6 +859,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (i32,) = Args::take_all(ctx);
             Ret::put(hsd_803B5C4C(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x803b5d70,
+        |ctx| {
+            let (a0, a1): (i32, i32) = Args::take_all(ctx);
+            Ret::put(hsd_803B5D70(ctx, a0, a1), ctx);
         },
         Returns::Int,
     );

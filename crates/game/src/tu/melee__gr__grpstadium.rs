@@ -2112,6 +2112,81 @@ pub fn grStadium_801D39A0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn grStadium_801D3A0C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x38);
+    let sp24: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x4);
+    let mut gobj = gobj;
+    let mut temp_r3: HSD_Text<'a> = null(ctx);
+    let mut gp: Ground<'a> =
+        (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    let mut tmp: HSD_GObj<'a> = (gp).u().display().xD4();
+    let mut gp2: TextWrapper<'a> =
+        Handle::cast::<TextWrapper<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, tmp));
+    Handle::copy_from(sp24, fns::grPs_804DAF70(ctx));
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    (if !Handle::is_null(((gp2).win_static_p())) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7f68),
+            (0x632_i32 as u32),
+            cstr(ctx, 0x803b7f68),
+        )
+    });
+    (if !Handle::is_null(((gp2).win_dynamic_p())) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b7f68),
+            (0x633_i32 as u32),
+            cstr(ctx, 0x803b7f68),
+        )
+    });
+    fns::HSD_SisLib_803A7664(ctx, (gp2).win_dynamic_p());
+    fns::HSD_SisLib_803A6368(ctx, (gp2).win_static_p(), 3_i32);
+    ((gp2).win_dynamic_p()).set_default_kerning((1_i32 as u8));
+    sp24.set_r((192_i32 as u8));
+    sp24.set_g((192_i32 as u8));
+    sp24.set_b((255_i32 as u8));
+    Handle::copy_from(((gp2).win_dynamic_p()).text_color(), sp24);
+    ((gp2).win_dynamic_p()).set_default_alignment((1_i32 as u8));
+    if ((gp).u().display().xF0() as i32) == (enums::Gm_PKind_Human as i32) {
+        temp_r3 = (gp2).win_dynamic_p();
+        (temp_r3).x34().set_x(0.625);
+        (temp_r3).x34().set_y(1.5);
+        let _ = fns::HSD_SisLib_803A6B98(
+            ctx,
+            (gp2).win_dynamic_p(),
+            125.0,
+            56.0,
+            cstr(ctx, 0x803e1598),
+            &[VarArg::Int(
+                ((gp).u().display().xEE() as i32).wrapping_add(1_i32) as u32,
+            )],
+        );
+    } else {
+        temp_r3 = (gp2).win_dynamic_p();
+        (temp_r3).x34().set_x(0.41999998688697815);
+        (temp_r3).x34().set_y(1.2000000476837158);
+        let _ = fns::HSD_SisLib_803A6B98(
+            ctx,
+            (gp2).win_dynamic_p(),
+            125.0,
+            56.0,
+            cstr(ctx, 0x803e15bc),
+            &[],
+        );
+    }
+}
+
 pub fn grStadium_801D3B4C<'a>(ctx: &'a Ctx, arg0: i32, slot_type: i32) {
     let __frame = ctx.stack_frame(0x20);
     let mut arg0 = arg0;
@@ -3956,6 +4031,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(grStadium_801D39A0(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801d3a0c,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(grStadium_801D3A0C(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

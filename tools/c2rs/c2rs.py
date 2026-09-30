@@ -74,6 +74,10 @@ class Unsupported(Exception):
     pass
 
 
+class CrossingGotos(Unsupported):
+    """Gotos whose blocks would cross: the function takes the state machine instead."""
+
+
 def evaluate(cursor):
     """An integer or float constant expression's value, or None."""
     res = _lib.clang_Cursor_Evaluate(cursor)
@@ -257,10 +261,13 @@ class Program:
         self.data = json.load(open(types_path))
         self.gen = Gen(self.data)
         self.functions_by_name = defaultdict(list)
+        self.functions_by_symbol = defaultdict(list)
         self.stub_scope = {}
         names_seen = set()
         for f in self.data["functions"]:
             self.functions_by_name[f["name"]].append(f)
+            if f.get("symbol") and f["symbol"] != f["name"]:
+                self.functions_by_symbol[f["symbol"]].append(f)
             if f["addr"] is None or not re.match(r"^[A-Za-z_]\w*$", f["name"]):
                 continue
             scope = f["tu"] if f["static"] else None
@@ -288,6 +295,8 @@ class Program:
         """The function `name` refers to from `unit`. A `local` (static or defined here) one
         must be the unit's own: a same-named function elsewhere is a different function."""
         cands = [f for f in self.functions_by_name.get(name, []) if f["addr"] is not None]
+        if not cands:
+            cands = [f for f in self.functions_by_symbol.get(name, []) if f["addr"] is not None]
         if local:
             cands = [f for f in cands if f["tu"] == unit]
         elif len(cands) > 1:
@@ -402,6 +411,29 @@ class Unit:
         return ranges
 
     def string_addr(self, data):
+        for alt in self.string_forms(data):
+            try:
+                return self.find_string(alt)
+            except Unsupported:
+                pass
+        return self.find_string(data)
+
+    @staticmethod
+    def string_forms(data):
+        """Other spellings the game's data may hold a literal in: the base name of a __FILE__
+        path, as MWCC gives it, and Shift-JIS for text the decomp writes in UTF-8."""
+        forms = []
+        if data.endswith(b".c") and b"/" in data:
+            forms.append(data.rsplit(b"/", 1)[1])
+        try:
+            sjis = data.decode("utf-8").encode("cp932")
+            if sjis != data:
+                forms.append(sjis)
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            pass
+        return forms
+
+    def find_string(self, data):
         needle = data + b"\0"
         found = []
         for start, end in self.data_ranges:
@@ -548,6 +580,7 @@ class Translator:
         # the original keeps in registers (("ptr", parameter) keys).
         self.decisions = {}
         self.reg_ptrs = reg_ptrs
+        self.force_cfg = False
         # An inline copy's float parameters used once, whose argument is a product: they take
         # the product's factors, as MWCC substitutes the argument into that use (name -> negated).
         self.forward = forward or {}
@@ -558,6 +591,17 @@ class Translator:
     # Entry point.
 
     def function(self):
+        try:
+            return self.function_once()
+        except CrossingGotos:
+            again = Translator(self.u, self.f.cursor, self.fuse, self.inline, self.asm, self.reg_ptrs,
+                               self.forward)
+            again.force_cfg = True
+            code = again.function_once()
+            self.decisions = again.decisions
+            return code
+
+    def function_once(self):
         c = self.f.cursor
         name = c.spelling
         ft = self.u.ctype(c.type)
@@ -681,6 +725,9 @@ class Translator:
     def check_gotos(self, body):
         """Gotos become breaks out of blocks and continues of loops, which only reach labels
         in a statement list around the goto."""
+        if self.force_cfg:
+            self.f.cfg = True
+            return
         parent = {}
 
         def walk(n, up):
@@ -954,7 +1001,7 @@ class Translator:
         for a in spans:
             for b in spans:
                 if a is not b and a[0] < b[0] < a[1] < b[1]:
-                    raise Unsupported("gotos across each other")
+                    raise CrossingGotos("gotos across each other")
         # Outer spans first where they start together: longer ones enclose shorter ones.
         spans.sort(key=lambda x: (x[0], -x[1]))
         return out + self.emit_spans(nodes, 0, len(nodes), spans)
@@ -2347,13 +2394,18 @@ class Translator:
         return out
 
     def builtin(self, name, args, t):
-        simple = {"__fabs": "fp::fabs", "__fnabs": "fp::fnabs", "__frsqrte": "fp::frsqrte",
-                  "__fres": "fp::fres"}
+        simple = {"__fabs": "fp::fabs", "__fabsf": "fp::fabs", "__fnabs": "fp::fnabs",
+                  "__frsqrte": "fp::frsqrte", "__fres": "fp::fres"}
         if name in simple:
             v = self.convert(self.expr(args[0]), DOUBLE)
             return Expr(f"{simple[name]}({v.code})", t, v.pure)
         if name == "__c2rs_inline_asm":
             raise Unsupported("inline asm")
+        if name in ("__HI", "__LO"):
+            # MSL's words of a double: the high one holds the sign and exponent.
+            v = self.convert(self.expr(args[0]), DOUBLE)
+            shift = " >> 32" if name == "__HI" else ""
+            return Expr(f"(({v.code}.to_bits(){shift}) as u32 as i32)", INT, v.pure)
         if name == "__c2rs_va_type":
             # MWCC's class of a va_arg type for __va_arg: 0 struct, 1 word, 2 long long, 3 double.
             arg = strip(args[0])

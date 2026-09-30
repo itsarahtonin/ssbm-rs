@@ -177,6 +177,81 @@ pub fn itOldottosea_UnkMotion11_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i3
     return fns::it_802E35CC(ctx, gobj);
 }
 
+pub fn it_802E35CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x50);
+    let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0xc);
+    let mut gobj = gobj;
+    let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+    let mut attrs: itOldottoseaAttributes<'a> = Handle::cast::<itOldottoseaAttributes<'a>>(
+        ((ip).xC4_article_data()).x4_specialAttributes(),
+    );
+    let mut ip2: Item<'a> = null(ctx);
+    let mut dx: f64 = 0.0;
+    let mut dy: f64 = 0.0;
+    let mut dz: f64 = 0.0;
+    let mut dist: f64 = 0.0;
+    let mut pos: Vec<'a> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    if (ip).pos().x() > fns::Stage_GetBlastZoneRightOffset(ctx) {
+        (ip).xDCC_flag().set_b3((1_i32 as u8));
+    }
+    if (ip).pos().x() < fns::Stage_GetBlastZoneLeftOffset(ctx) {
+        (ip).xDCC_flag().set_b3((1_i32 as u8));
+    }
+    if (ip).pos().y() > fns::Stage_GetBlastZoneTopOffset(ctx) {
+        (ip).xDCC_flag().set_b3((1_i32 as u8));
+    }
+    if (ip).pos().y() < fns::Stage_GetBlastZoneBottomOffset(ctx) {
+        (ip).xDCC_flag().set_b3((1_i32 as u8));
+    }
+    if ((ip).xDCC_flag().b3() as i32) == 1_i32 {
+        if !Handle::is_null((ip).xDD4_itemVar().whitebea().x20()) {
+            fns::it_8028ECE0(ctx, (ip).xDD4_itemVar().whitebea().x20());
+        }
+        fns::it_2725_Logic9_Destroyed(ctx, gobj);
+        return 1_i32;
+    }
+    if !Handle::is_null((ip).xDD4_itemVar().whitebea().x20()) {
+        let mut x20: HSD_GObj<'a> = null(ctx);
+        ip2 = Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj));
+        x20 = (ip2).xDD4_itemVar().whitebea().x20();
+        let _ = fns::it_8028ECF0(ctx, x20, sp30);
+        pos = (ip2).pos();
+        dx = fp::fsubs((pos).x(), sp30.x());
+        dy = fp::fsubs((pos).y(), sp30.y());
+        dz = fp::fsubs((pos).z(), sp30.z());
+        dist = fns::sqrtf(
+            ctx,
+            fp::fmadds(dz, dz, fp::fmadds(dx, dx, fp::fmuls(dy, dy))),
+        );
+        if dist > (attrs).x18() {
+            fns::it_8028ECE0(ctx, (ip).xDD4_itemVar().whitebea().x20());
+            fns::it_802E37A4(ctx, gobj);
+        } else if dist <= (attrs).x14() {
+            if (ip).msid() == 7_i32 {
+                fns::it_8028EC98(
+                    ctx,
+                    (ip).xDD4_itemVar().whitebea().x20(),
+                    fp::fmuls((ip).x40_vel().x(), (attrs).x20()),
+                );
+            } else {
+                fns::it_8028EC98(
+                    ctx,
+                    (ip).xDD4_itemVar().whitebea().x20(),
+                    fp::fmuls((ip).x40_vel().x(), (attrs).x1C()),
+                );
+            }
+        }
+    }
+    return 0_i32;
+}
+
 pub fn it_802E3784<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ref_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
@@ -1192,6 +1267,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(itOldottosea_UnkMotion11_Coll(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x802e35cc,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(it_802E35CC(ctx, a0), ctx);
         },
         Returns::Int,
     );

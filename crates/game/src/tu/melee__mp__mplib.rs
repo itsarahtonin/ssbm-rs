@@ -593,6 +593,714 @@ pub fn mpRemap2d<'a>(
     }
 }
 
+pub fn mpLib_8004DD90_Floor<'a>(
+    ctx: &'a Ctx,
+    line_id: i32,
+    vec: Vec<'a>,
+    y_out: Val<'a, F32>,
+    flags_out: Val<'a, u32>,
+    normal_out: Vec<'a>,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x40);
+    let mut line_id = line_id;
+    let mut vec = vec;
+    let mut y_out = y_out;
+    let mut flags_out = flags_out;
+    let mut normal_out = normal_out;
+    let mut dir: i32 = 0_i32;
+    let mut x0: f64 = 0.0;
+    let mut y0: f64 = 0.0;
+    let mut x1: f64 = 0.0;
+    let mut y1: f64 = 0.0;
+    let mut x: f64 = 0.0;
+    let mut y: f64 = 0.0;
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x306_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x456_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    'l3: loop {
+        'c4: {
+            let mut line: CollLine<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                line_id,
+            ));
+            x0 = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((line).x0()).v0_idx() as i32),
+            ))
+            .pos()
+            .x();
+            x1 = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((line).x0()).v1_idx() as i32),
+            ))
+            .pos()
+            .x();
+            x = (vec).x();
+            y = (vec).y();
+            if x < x0 {
+                if dir != 1_i32 {
+                    let mut new_id: i32 = inl_mpLineGetPrev_unfused(ctx, line_id);
+                    if (new_id == 1_i32.wrapping_neg())
+                        || (!(((Handle::add(
+                            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                            new_id,
+                        ))
+                        .flags()
+                            & ((enums::CollLine_Floor as i32) as u32))
+                            != 0))
+                    {
+                        if fp::fsubs(x, x0) < fp::fneg(0.1) {
+                            return 1_i32.wrapping_neg();
+                        }
+                        x = x0;
+                        break 'l3;
+                    }
+                    line_id = new_id;
+                    dir = 1_i32.wrapping_neg();
+                } else {
+                    x = x0;
+                    break 'l3;
+                }
+            } else if x > x1 {
+                if dir != 1_i32.wrapping_neg() {
+                    let mut new_id_2: i32 = inl_mpLineGetNext_unfused(ctx, line_id);
+                    if (new_id_2 == 1_i32.wrapping_neg())
+                        || (!(((Handle::add(
+                            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                            new_id_2,
+                        ))
+                        .flags()
+                            & ((enums::CollLine_Floor as i32) as u32))
+                            != 0))
+                    {
+                        if fp::fsubs(x, x1) > 0.1 {
+                            return 1_i32.wrapping_neg();
+                        }
+                        x = x1;
+                        break 'l3;
+                    }
+                    line_id = new_id_2;
+                } else {
+                    x = x1;
+                    break 'l3;
+                }
+            } else {
+                break 'l3;
+            }
+        }
+    }
+    if !Handle::is_null(flags_out) {
+        (flags_out).set(
+            (((Handle::add(
+                statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                line_id,
+            ))
+            .x0())
+            .lo_flags() as u32),
+        );
+    }
+    y0 = (Handle::add(
+        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+        (((Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            line_id,
+        ))
+        .x0())
+        .v0_idx() as i32),
+    ))
+    .pos()
+    .y();
+    y1 = (Handle::add(
+        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+        (((Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            line_id,
+        ))
+        .x0())
+        .v1_idx() as i32),
+    ))
+    .pos()
+    .y();
+    if !Handle::is_null(y_out) {
+        (y_out).set(fp::frsp(fp::fadd(
+            fp::fsubs(
+                fp::fadds(
+                    fp::fdivs(
+                        fp::fmuls((fp::fsubs(y1, y0)), (fp::fsubs(x, x0))),
+                        (fp::fsubs(x1, x0)),
+                    ),
+                    y0,
+                ),
+                y,
+            ),
+            0.0001,
+        )));
+    }
+    if !Handle::is_null(normal_out) {
+        (normal_out).set_x(fp::fneg((fp::fsubs(y1, y0))));
+        (normal_out).set_y(fp::fsubs(x1, x0));
+        (normal_out).set_z(0.0);
+        fns::PSVECNormalize(ctx, normal_out, normal_out);
+    }
+    return line_id;
+}
+
+pub fn mpLib_8004E090_Ceiling<'a>(
+    ctx: &'a Ctx,
+    line_id: i32,
+    vec: Vec<'a>,
+    y_out: Val<'a, F32>,
+    flags_out: Val<'a, u32>,
+    normal_out: Vec<'a>,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x40);
+    let mut line_id = line_id;
+    let mut vec = vec;
+    let mut y_out = y_out;
+    let mut flags_out = flags_out;
+    let mut normal_out = normal_out;
+    let mut dir: i32 = 0_i32;
+    let mut x0: f64 = 0.0;
+    let mut y0: f64 = 0.0;
+    let mut x1: f64 = 0.0;
+    let mut y1: f64 = 0.0;
+    let mut x: f64 = 0.0;
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x37d_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x4a4_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    x = (vec).x();
+    'l3: loop {
+        'c4: {
+            let mut line_r4: CollLine<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                line_id,
+            ));
+            x0 = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((line_r4).x0()).v0_idx() as i32),
+            ))
+            .pos()
+            .x();
+            x1 = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((line_r4).x0()).v1_idx() as i32),
+            ))
+            .pos()
+            .x();
+            if (vec).x() < x1 {
+                if dir != 1_i32 {
+                    let mut new_id: i32 = inl_mpLineGetNext_unfused(ctx, line_id);
+                    if (new_id == 1_i32.wrapping_neg())
+                        || (!(((Handle::add(
+                            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                            new_id,
+                        ))
+                        .flags()
+                            & ((enums::CollLine_Ceiling as i32) as u32))
+                            != 0))
+                    {
+                        if fp::fsubs((vec).x(), x1) < fp::fneg(0.1) {
+                            return 1_i32.wrapping_neg();
+                        }
+                        x = x1;
+                        break 'l3;
+                    }
+                    line_id = new_id;
+                    dir = 1_i32.wrapping_neg();
+                    break 'c4;
+                }
+                x = x1;
+            } else if (vec).x() > x0 {
+                if dir != 1_i32.wrapping_neg() {
+                    let mut new_id_2: i32 = inl_mpLineGetPrev_unfused(ctx, line_id);
+                    if (new_id_2 == 1_i32.wrapping_neg())
+                        || (!(((Handle::add(
+                            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                            new_id_2,
+                        ))
+                        .flags()
+                            & ((enums::CollLine_Ceiling as i32) as u32))
+                            != 0))
+                    {
+                        if fp::fsubs((vec).x(), x0) > 0.1 {
+                            return 1_i32.wrapping_neg();
+                        }
+                        x = x0;
+                        break 'l3;
+                    }
+                    line_id = new_id_2;
+                    dir = 1_i32;
+                    break 'c4;
+                }
+                x = x0;
+            }
+            break 'l3;
+        }
+    }
+    if !Handle::is_null(flags_out) {
+        (flags_out).set(
+            (((Handle::add(
+                statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                line_id,
+            ))
+            .x0())
+            .lo_flags() as u32),
+        );
+    }
+    y0 = (Handle::add(
+        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+        (((Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            line_id,
+        ))
+        .x0())
+        .v0_idx() as i32),
+    ))
+    .pos()
+    .y();
+    y1 = (Handle::add(
+        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+        (((Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            line_id,
+        ))
+        .x0())
+        .v1_idx() as i32),
+    ))
+    .pos()
+    .y();
+    if !Handle::is_null(y_out) {
+        (y_out).set(fp::frsp(fp::fsub(
+            fp::fsubs(
+                fp::fadds(
+                    fp::fdivs(
+                        fp::fmuls((fp::fsubs(y1, y0)), (fp::fsubs(x, x0))),
+                        (fp::fsubs(x1, x0)),
+                    ),
+                    y0,
+                ),
+                (vec).y(),
+            ),
+            0.0001,
+        )));
+    }
+    if !Handle::is_null(normal_out) {
+        (normal_out).set_x(fp::fneg((fp::fsubs(y1, y0))));
+        (normal_out).set_y(fp::fsubs(x1, x0));
+        (normal_out).set_z(0.0);
+        fns::PSVECNormalize(ctx, normal_out, normal_out);
+    }
+    return line_id;
+}
+
+pub fn mpLib_8004E398_LeftWall<'a>(
+    ctx: &'a Ctx,
+    line_id: i32,
+    vec: Vec<'a>,
+    x_out: Val<'a, F32>,
+    flags_out: Val<'a, u32>,
+    normal_out: Vec<'a>,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x40);
+    let mut line_id = line_id;
+    let mut vec = vec;
+    let mut x_out = x_out;
+    let mut flags_out = flags_out;
+    let mut normal_out = normal_out;
+    let mut dir: i32 = 0_i32;
+    let mut x0: f64 = 0.0;
+    let mut y0: f64 = 0.0;
+    let mut x1: f64 = 0.0;
+    let mut y1: f64 = 0.0;
+    let mut y: f64 = 0.0;
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x3f6_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x4f0_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    y = (vec).y();
+    'l3: loop {
+        'c4: {
+            let mut line_r4: CollLine<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                line_id,
+            ));
+            y0 = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((line_r4).x0()).v0_idx() as i32),
+            ))
+            .pos()
+            .y();
+            y1 = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((line_r4).x0()).v1_idx() as i32),
+            ))
+            .pos()
+            .y();
+            if (vec).y() < y0 {
+                if dir != 1_i32 {
+                    let mut new_id: i32 = inl_mpLineGetPrev_unfused(ctx, line_id);
+                    if (new_id == 1_i32.wrapping_neg())
+                        || (!(((Handle::add(
+                            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                            new_id,
+                        ))
+                        .flags()
+                            & ((enums::CollLine_LeftWall as i32) as u32))
+                            != 0))
+                    {
+                        if fp::fsubs((vec).y(), y0) < fp::fneg(0.1) {
+                            return 1_i32.wrapping_neg();
+                        }
+                        y = y0;
+                        break 'l3;
+                    }
+                    line_id = new_id;
+                    dir = 1_i32.wrapping_neg();
+                    break 'c4;
+                }
+            } else if (vec).y() > y1 {
+                if dir != 1_i32.wrapping_neg() {
+                    let mut new_id_2: i32 = inl_mpLineGetNext_unfused(ctx, line_id);
+                    if (new_id_2 == 1_i32.wrapping_neg())
+                        || (!(((Handle::add(
+                            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                            new_id_2,
+                        ))
+                        .flags()
+                            & ((enums::CollLine_LeftWall as i32) as u32))
+                            != 0))
+                    {
+                        if fp::fsubs((vec).y(), y1) > 0.1 {
+                            return 1_i32.wrapping_neg();
+                        }
+                        y = y1;
+                        break 'l3;
+                    }
+                    line_id = new_id_2;
+                    dir = 1_i32;
+                    break 'c4;
+                }
+            }
+            break 'l3;
+        }
+    }
+    if !Handle::is_null(flags_out) {
+        (flags_out).set(
+            (((Handle::add(
+                statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                line_id,
+            ))
+            .x0())
+            .lo_flags() as u32),
+        );
+    }
+    x0 = (Handle::add(
+        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+        (((Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            line_id,
+        ))
+        .x0())
+        .v0_idx() as i32),
+    ))
+    .pos()
+    .x();
+    x1 = (Handle::add(
+        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+        (((Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            line_id,
+        ))
+        .x0())
+        .v1_idx() as i32),
+    ))
+    .pos()
+    .x();
+    if !Handle::is_null(x_out) {
+        (x_out).set(fp::fsubs(
+            fp::fadds(
+                x0,
+                fp::fdivs(
+                    fp::fmuls((fp::fsubs(x1, x0)), (fp::fsubs(y, y0))),
+                    (fp::fsubs(y1, y0)),
+                ),
+            ),
+            (vec).x(),
+        ));
+    }
+    if !Handle::is_null(normal_out) {
+        (normal_out).set_x(fp::fneg((fp::fsubs(y1, y0))));
+        (normal_out).set_y(fp::fsubs(x1, x0));
+        (normal_out).set_z(0.0);
+        fns::PSVECNormalize(ctx, normal_out, normal_out);
+    }
+    return line_id;
+}
+
+pub fn mpLib_8004E684_RightWall<'a>(
+    ctx: &'a Ctx,
+    line_id: i32,
+    vec: Vec<'a>,
+    x_out: Val<'a, F32>,
+    flags_out: Val<'a, u32>,
+    normal_out: Vec<'a>,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x40);
+    let mut line_id = line_id;
+    let mut vec = vec;
+    let mut x_out = x_out;
+    let mut flags_out = flags_out;
+    let mut normal_out = normal_out;
+    let mut dir: i32 = 0_i32;
+    let mut x0: f64 = 0.0;
+    let mut y0: f64 = 0.0;
+    let mut x1: f64 = 0.0;
+    let mut y1: f64 = 0.0;
+    let mut y: f64 = 0.0;
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x46e_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x538_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    y = (vec).y();
+    'l3: loop {
+        'c4: {
+            let mut line_r4: CollLine<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                line_id,
+            ));
+            y0 = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((line_r4).x0()).v0_idx() as i32),
+            ))
+            .pos()
+            .y();
+            y1 = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((line_r4).x0()).v1_idx() as i32),
+            ))
+            .pos()
+            .y();
+            if (vec).y() > y0 {
+                if dir != 1_i32.wrapping_neg() {
+                    let mut new_id_r8: i32 = inl_mpLineGetPrev_unfused(ctx, line_id);
+                    if (new_id_r8 == 1_i32.wrapping_neg())
+                        || (!(((Handle::add(
+                            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                            new_id_r8,
+                        ))
+                        .flags()
+                            & ((enums::CollLine_RightWall as i32) as u32))
+                            != 0))
+                    {
+                        if fp::fsubs((vec).y(), y0) > 0.1 {
+                            return 1_i32.wrapping_neg();
+                        }
+                        y = y0;
+                        break 'l3;
+                    }
+                    line_id = new_id_r8;
+                    dir = 1_i32;
+                    break 'c4;
+                }
+                y = y0;
+            } else if (vec).y() < y1 {
+                if dir != 1_i32 {
+                    let mut new_id_r9: i32 = inl_mpLineGetNext_unfused(ctx, line_id);
+                    if (new_id_r9 == 1_i32.wrapping_neg())
+                        || (!(((Handle::add(
+                            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                            new_id_r9,
+                        ))
+                        .flags()
+                            & ((enums::CollLine_RightWall as i32) as u32))
+                            != 0))
+                    {
+                        if fp::fsubs((vec).y(), y1) < fp::fneg(0.1) {
+                            return 1_i32.wrapping_neg();
+                        }
+                        y = y1;
+                        break 'l3;
+                    }
+                    line_id = new_id_r9;
+                    dir = 1_i32.wrapping_neg();
+                    break 'c4;
+                }
+                y = y1;
+            }
+            break 'l3;
+        }
+    }
+    if !Handle::is_null(flags_out) {
+        (flags_out).set(
+            (((Handle::add(
+                statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                line_id,
+            ))
+            .x0())
+            .lo_flags() as u32),
+        );
+    }
+    x0 = (Handle::add(
+        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+        (((Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            line_id,
+        ))
+        .x0())
+        .v0_idx() as i32),
+    ))
+    .pos()
+    .x();
+    x1 = (Handle::add(
+        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+        (((Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            line_id,
+        ))
+        .x0())
+        .v1_idx() as i32),
+    ))
+    .pos()
+    .x();
+    if !Handle::is_null(x_out) {
+        (x_out).set(fp::fsubs(
+            fp::fadds(
+                x0,
+                fp::fdivs(
+                    (fp::fmuls((fp::fsubs(x1, x0)), (fp::fsubs(y, y0)))),
+                    (fp::fsubs(y1, y0)),
+                ),
+            ),
+            (vec).x(),
+        ));
+    }
+    if !Handle::is_null(normal_out) {
+        (normal_out).set_x(fp::fneg((fp::fsubs(y1, y0))));
+        (normal_out).set_y(fp::fsubs(x1, x0));
+        (normal_out).set_z(0.0);
+        fns::PSVECNormalize(ctx, normal_out, normal_out);
+    }
+    return line_id;
+}
+
 pub fn mpLineIntersection<'a>(
     ctx: &'a Ctx,
     a0x: f64,
@@ -7235,6 +7943,2906 @@ pub fn mpCheckAll<'a>(
     );
 }
 
+pub fn mpLineNextNonFloor<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let mut line_id = line_id;
+    let mut first_line: MapLine<'a> = null(ctx);
+    let mut line: MapLine<'a> = null(ctx);
+    let mut new_id: i32 = 0;
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x102b_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0xe86_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    first_line = (Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .x0();
+    new_id = inl_mpLineGetNextCheckInline_unfused(ctx, first_line, (first_line).next_id1());
+    'l3: while ((new_id != 1_i32.wrapping_neg()) && (new_id != line_id))
+        && (((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id)).flags()
+            & ((enums::CollLine_Floor as i32) as u32))
+            != 0)
+    {
+        'c4: {
+            line = (Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id)).x0();
+            new_id = ((line).next_id1() as i32);
+            new_id = inl_mpLineGetNextCheckInlineVtx_unfused(
+                ctx,
+                line,
+                (new_id as i16),
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+            );
+        }
+    }
+    return inl_mpLineIterNonResult_unfused(ctx, new_id, line_id);
+}
+
+pub fn mpLinePrevNonFloor<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let mut line_id = line_id;
+    let mut first_line: MapLine<'a> = null(ctx);
+    let mut line: MapLine<'a> = null(ctx);
+    let mut new_id: i32 = 0;
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x1034_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0xe98_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    first_line = (Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .x0();
+    new_id = inl_mpLineGetPrevCheckInline_unfused(ctx, first_line, (first_line).prev_id1());
+    'l3: while ((new_id != 1_i32.wrapping_neg()) && (new_id != line_id))
+        && (((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id)).flags()
+            & ((enums::CollLine_Floor as i32) as u32))
+            != 0)
+    {
+        'c4: {
+            line = (Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id)).x0();
+            new_id = ((line).prev_id1() as i32);
+            new_id = inl_mpLineGetPrevCheckInlineVtx_unfused(
+                ctx,
+                line,
+                (new_id as i16),
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+            );
+        }
+    }
+    return inl_mpLineIterNonResult_unfused(ctx, new_id, line_id);
+}
+
+pub fn mpLinePrevNonCeiling<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let mut line_id = line_id;
+    let mut first_line: MapLine<'a> = null(ctx);
+    let mut line: MapLine<'a> = null(ctx);
+    let mut new_id: i32 = 0;
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x103d_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0xeaa_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    first_line = (Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .x0();
+    new_id = inl_mpLineGetPrevCheckInline_unfused(ctx, first_line, (first_line).prev_id1());
+    'l3: while ((new_id != 1_i32.wrapping_neg()) && (new_id != line_id))
+        && (((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id)).flags()
+            & ((enums::CollLine_Ceiling as i32) as u32))
+            != 0)
+    {
+        'c4: {
+            line = (Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id)).x0();
+            new_id = ((line).prev_id1() as i32);
+            new_id = inl_mpLineGetPrevCheckInlineVtx_unfused(
+                ctx,
+                line,
+                (new_id as i16),
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+            );
+        }
+    }
+    return inl_mpLineIterNonResult_unfused(ctx, new_id, line_id);
+}
+
+pub fn mpLineNextNonCeiling<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let mut line_id = line_id;
+    let mut first_line: MapLine<'a> = null(ctx);
+    let mut line: MapLine<'a> = null(ctx);
+    let mut new_id: i32 = 0;
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x1046_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0xebc_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    first_line = (Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .x0();
+    new_id = inl_mpLineGetNextCheckInline_unfused(ctx, first_line, (first_line).next_id1());
+    'l3: while ((new_id != 1_i32.wrapping_neg()) && (new_id != line_id))
+        && (((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id)).flags()
+            & ((enums::CollLine_Ceiling as i32) as u32))
+            != 0)
+    {
+        'c4: {
+            line = (Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id)).x0();
+            new_id = ((line).next_id1() as i32);
+            new_id = inl_mpLineGetNextCheckInlineVtx_unfused(
+                ctx,
+                line,
+                (new_id as i16),
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+            );
+        }
+    }
+    return inl_mpLineIterNonResult_unfused(ctx, new_id, line_id);
+}
+
+pub fn mpLineNextNonLeftWall<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let mut line_id = line_id;
+    let mut first_line: MapLine<'a> = null(ctx);
+    let mut line: MapLine<'a> = null(ctx);
+    let mut new_id: i32 = 0;
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x104f_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0xece_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    first_line = (Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .x0();
+    new_id = inl_mpLineGetNextCheckInline_unfused(ctx, first_line, (first_line).next_id1());
+    'l3: while ((new_id != 1_i32.wrapping_neg()) && (new_id != line_id))
+        && (((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id)).flags()
+            & ((enums::CollLine_LeftWall as i32) as u32))
+            != 0)
+    {
+        'c4: {
+            line = (Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id)).x0();
+            new_id = ((line).next_id1() as i32);
+            new_id = inl_mpLineGetNextCheckInlineVtx_unfused(
+                ctx,
+                line,
+                (new_id as i16),
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+            );
+        }
+    }
+    return inl_mpLineIterNonResult_unfused(ctx, new_id, line_id);
+}
+
+pub fn mpLinePrevNonLeftWall<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let mut line_id = line_id;
+    let mut first_line: MapLine<'a> = null(ctx);
+    let mut line: MapLine<'a> = null(ctx);
+    let mut new_id: i32 = 0;
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x1058_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0xee0_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    first_line = (Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .x0();
+    new_id = inl_mpLineGetPrevCheckInline_unfused(ctx, first_line, (first_line).prev_id1());
+    'l3: while ((new_id != 1_i32.wrapping_neg()) && (new_id != line_id))
+        && (((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id)).flags()
+            & ((enums::CollLine_LeftWall as i32) as u32))
+            != 0)
+    {
+        'c4: {
+            line = (Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id)).x0();
+            new_id = ((line).prev_id1() as i32);
+            new_id = inl_mpLineGetPrevCheckInlineVtx_unfused(
+                ctx,
+                line,
+                (new_id as i16),
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+            );
+        }
+    }
+    return inl_mpLineIterNonResult_unfused(ctx, new_id, line_id);
+}
+
+pub fn mpLinePrevNonRightWall<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let mut line_id = line_id;
+    let mut first_line: MapLine<'a> = null(ctx);
+    let mut line: MapLine<'a> = null(ctx);
+    let mut new_id: i32 = 0;
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x1061_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0xef2_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    first_line = (Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .x0();
+    new_id = inl_mpLineGetPrevCheckInline_unfused(ctx, first_line, (first_line).prev_id1());
+    'l3: while ((new_id != 1_i32.wrapping_neg()) && (new_id != line_id))
+        && (((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id)).flags()
+            & ((enums::CollLine_RightWall as i32) as u32))
+            != 0)
+    {
+        'c4: {
+            line = (Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id)).x0();
+            new_id = ((line).prev_id1() as i32);
+            new_id = inl_mpLineGetPrevCheckInlineVtx_unfused(
+                ctx,
+                line,
+                (new_id as i16),
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+            );
+        }
+    }
+    return inl_mpLineIterNonResult_unfused(ctx, new_id, line_id);
+}
+
+pub fn mpLineNextNonRightWall<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let mut line_id = line_id;
+    let mut first_line: MapLine<'a> = null(ctx);
+    let mut line: MapLine<'a> = null(ctx);
+    let mut new_id: i32 = 0;
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x106a_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0xf04_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    first_line = (Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .x0();
+    new_id = inl_mpLineGetNextCheckInline_unfused(ctx, first_line, (first_line).next_id1());
+    'l3: while ((new_id != 1_i32.wrapping_neg()) && (new_id != line_id))
+        && (((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id)).flags()
+            & ((enums::CollLine_RightWall as i32) as u32))
+            != 0)
+    {
+        'c4: {
+            line = (Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id)).x0();
+            new_id = ((line).next_id1() as i32);
+            new_id = inl_mpLineGetNextCheckInlineVtx_unfused(
+                ctx,
+                line,
+                (new_id as i16),
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+            );
+        }
+    }
+    return inl_mpLineIterNonResult_unfused(ctx, new_id, line_id);
+}
+
+pub fn mpLib_80053394_Floor<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let mut line_id = line_id;
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x109c_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0xf29_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    return inl_mpLineWalkNon_unfused(ctx, line_id, (enums::CollLine_Floor as i32), 1_i32);
+}
+
+pub fn mpLib_80053448_Floor<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let mut line_id = line_id;
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x10a5_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0xf2f_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    return inl_mpLineWalkNon_unfused(ctx, line_id, (enums::CollLine_Floor as i32), 0_i32);
+}
+
+pub fn mpLib_800534FC_Floor<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let mut line_id = line_id;
+    let mut line: MapLine<'a> = null(ctx);
+    let mut result: i32 = 0;
+    let mut new_id: i32 = 0;
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x10b0_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0xf73_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    new_id = inl_mpLineGetNextCachedInline_unfused(ctx, line_id);
+    'l3: while new_id != 1_i32.wrapping_neg() {
+        'c4: {
+            if !(((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id))
+                .flags()
+                & ((enums::CollLine_Floor as i32) as u32))
+                != 0)
+            {
+                new_id = 1_i32.wrapping_neg();
+            } else if new_id
+                != (((Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    line_id,
+                ))
+                .x0())
+                .next_id1() as i32)
+            {
+                line_id = new_id;
+                line = (Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id))
+                    .x0();
+                new_id = inl_mpLineGetNextCheckResultFirst_unfused(
+                    ctx,
+                    ((line).next_id1() as i32),
+                    line,
+                );
+                break 'c4;
+            }
+            break 'l3;
+        }
+    }
+    if new_id != 1_i32.wrapping_neg() {
+        result = new_id;
+    } else {
+        result = 1_i32.wrapping_neg();
+    }
+    return result;
+}
+
+pub fn mpLib_800536CC_Floor<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let mut line_id = line_id;
+    let mut line: MapLine<'a> = null(ctx);
+    let mut new_id: i32 = 0;
+    let mut result: i32 = 0;
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x10c5_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0xfb9_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    new_id = inl_mpLineGetPrevInline_unfused(ctx, line_id);
+    'l3: while new_id != 1_i32.wrapping_neg() {
+        'c4: {
+            if !(((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id))
+                .flags()
+                & ((enums::CollLine_Floor as i32) as u32))
+                != 0)
+            {
+                new_id = 1_i32.wrapping_neg();
+            } else if new_id
+                != (((Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    line_id,
+                ))
+                .x0())
+                .prev_id1() as i32)
+            {
+                line_id = new_id;
+                line = (Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id))
+                    .x0();
+                new_id = inl_mpLineGetPrevCheckResultFirst_unfused(
+                    ctx,
+                    ((line).prev_id1() as i32),
+                    line,
+                );
+                break 'c4;
+            }
+            break 'l3;
+        }
+    }
+    if new_id != 1_i32.wrapping_neg() {
+        result = new_id;
+    } else {
+        result = 1_i32.wrapping_neg();
+    }
+    return result;
+}
+
+pub fn mpLib_8005389C_Ceiling<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let mut line_id = line_id;
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x10da_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0xfd5_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    return inl_mpLineWalkNon_unfused(ctx, line_id, (enums::CollLine_Ceiling as i32), 0_i32);
+}
+
+pub fn mpLib_80053950_Ceiling<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let mut line_id = line_id;
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x10e3_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0xfdb_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    return inl_mpLineWalkNon_unfused(ctx, line_id, (enums::CollLine_Ceiling as i32), 1_i32);
+}
+
+pub fn mpLib_80053A04_Ceiling<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let mut line_id = line_id;
+    let mut line: MapLine<'a> = null(ctx);
+    let mut result: i32 = 0;
+    let mut new_id: i32 = 0;
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x10ee_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0xfe4_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    new_id = inl_mpLineGetPrevInline_unfused(ctx, line_id);
+    'l3: while new_id != 1_i32.wrapping_neg() {
+        'c4: {
+            if !(((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id))
+                .flags()
+                & ((enums::CollLine_Ceiling as i32) as u32))
+                != 0)
+            {
+                new_id = 1_i32.wrapping_neg();
+            } else if new_id
+                != (((Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    line_id,
+                ))
+                .x0())
+                .prev_id1() as i32)
+            {
+                line_id = new_id;
+                line = (Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id))
+                    .x0();
+                new_id = inl_mpLineGetPrevCheckResultFirst_unfused(
+                    ctx,
+                    ((line).prev_id1() as i32),
+                    line,
+                );
+                break 'c4;
+            }
+            break 'l3;
+        }
+    }
+    if new_id != 1_i32.wrapping_neg() {
+        result = new_id;
+    } else {
+        result = 1_i32.wrapping_neg();
+    }
+    return result;
+}
+
+pub fn mpLib_80053BD4_Ceiling<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let mut line_id = line_id;
+    let mut result: i32 = 0;
+    let mut new_id: i32 = 0;
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x1103_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x1002_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    new_id = inl_mpLineGetNextInline_unfused(ctx, line_id);
+    'l3: while new_id != 1_i32.wrapping_neg() {
+        'c4: {
+            if !(((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id))
+                .flags()
+                & ((enums::CollLine_Ceiling as i32) as u32))
+                != 0)
+            {
+                new_id = 1_i32.wrapping_neg();
+            } else if new_id
+                != (((Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    line_id,
+                ))
+                .x0())
+                .next_id1() as i32)
+            {
+                line_id = new_id;
+                new_id = inl_mpLineGetNextInline_unfused(ctx, new_id);
+                break 'c4;
+            }
+            break 'l3;
+        }
+    }
+    if new_id != 1_i32.wrapping_neg() {
+        result = new_id;
+    } else {
+        result = 1_i32.wrapping_neg();
+    }
+    return result;
+}
+
+pub fn mpLib_80053DA4_Floor<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut line_id = line_id;
+    let mut pos_out = pos_out;
+    let mut next_id: i16 = 0;
+    let mut vtx: CollVtx<'a> = null(ctx);
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = if ((line_id) == 1_i32.wrapping_neg())
+                    || ((line_id)
+                        >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+                {
+                    6
+                } else {
+                    7
+                };
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                __state = 9;
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x114c_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x101b_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+                __state = 7;
+            }
+            7 => {
+                __state = 3;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                next_id = ((Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    line_id,
+                ))
+                .x0())
+                .next_id0();
+                __state = if ((next_id as i32) != 1_i32.wrapping_neg())
+                    && (((Handle::add(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                        (next_id as i32),
+                    ))
+                    .flags()
+                        & ((enums::CollLine_Floor as i32) as u32))
+                        != 0)
+                {
+                    12
+                } else {
+                    13
+                };
+            }
+            10 => {
+                __state = 11;
+            }
+            11 => {
+                line_id = (next_id as i32);
+                __state = 9;
+            }
+            12 => {
+                __state = 11;
+            }
+            13 => {
+                __state = 17;
+            }
+            14 => {
+                unreachable!();
+            }
+            15 => {
+                __state = 13;
+            }
+            16 => {
+                unreachable!();
+            }
+            17 => {
+                __state = if ((line_id) == 1_i32.wrapping_neg())
+                    || ((line_id)
+                        >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+                {
+                    21
+                } else {
+                    22
+                };
+            }
+            18 => {
+                __state = if (0_i32 != 0) { 17 } else { 19 };
+            }
+            19 => {
+                vtx = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((Handle::add(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                        line_id,
+                    ))
+                    .x0())
+                    .v1_idx() as i32),
+                ));
+                (pos_out).set_x((vtx).pos().x());
+                (pos_out).set_y((vtx).pos().y());
+                (pos_out).set_z(0.0);
+                return;
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x1151_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x1026_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+                __state = 22;
+            }
+            22 => {
+                __state = 18;
+            }
+            23 => {
+                unreachable!();
+            }
+            24 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
+pub fn mpLib_80053ECC_Floor<'a>(ctx: &'a Ctx, line_id: i32, vec: Vec<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut line_id = line_id;
+    let mut vec = vec;
+    let mut prev_id: i16 = 0;
+    let mut vtx: CollVtx<'a> = null(ctx);
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = if ((line_id) == 1_i32.wrapping_neg())
+                    || ((line_id)
+                        >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+                {
+                    6
+                } else {
+                    7
+                };
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                __state = 9;
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x1160_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x1033_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+                __state = 7;
+            }
+            7 => {
+                __state = 3;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                prev_id = ((Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    line_id,
+                ))
+                .x0())
+                .prev_id0();
+                __state = if ((prev_id as i32) != 1_i32.wrapping_neg())
+                    && (((Handle::add(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                        (prev_id as i32),
+                    ))
+                    .flags()
+                        & ((enums::CollLine_Floor as i32) as u32))
+                        != 0)
+                {
+                    12
+                } else {
+                    13
+                };
+            }
+            10 => {
+                __state = 11;
+            }
+            11 => {
+                line_id = (prev_id as i32);
+                __state = 9;
+            }
+            12 => {
+                __state = 11;
+            }
+            13 => {
+                __state = 17;
+            }
+            14 => {
+                unreachable!();
+            }
+            15 => {
+                __state = 13;
+            }
+            16 => {
+                unreachable!();
+            }
+            17 => {
+                __state = if ((line_id) == 1_i32.wrapping_neg())
+                    || ((line_id)
+                        >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+                {
+                    21
+                } else {
+                    22
+                };
+            }
+            18 => {
+                __state = if (0_i32 != 0) { 17 } else { 19 };
+            }
+            19 => {
+                vtx = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((Handle::add(
+                        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                        line_id,
+                    ))
+                    .x0())
+                    .v0_idx() as i32),
+                ));
+                (vec).set_x((vtx).pos().x());
+                (vec).set_y((vtx).pos().y());
+                (vec).set_z(0.0);
+                return;
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x1165_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x103e_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+                __state = 22;
+            }
+            22 => {
+                __state = 18;
+            }
+            23 => {
+                unreachable!();
+            }
+            24 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
+pub fn mpFloorGetRight<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let w: mpFloorGetRight_w<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut line_id = line_id;
+    let mut pos_out = pos_out;
+    let mut kind: u32 = 0;
+    let mut line_offset: i32 = 0;
+    let mut line: MapLine<'a> = null(ctx);
+    let mut next: i32 = 0;
+    let mut vtx: CollVtx<'a> = null(ctx);
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = if ((line_id) == 1_i32.wrapping_neg())
+                    || ((line_id)
+                        >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+                {
+                    6
+                } else {
+                    7
+                };
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                w.set_id(line_id);
+                kind = inl_mpLineGetKindInline_unfused(ctx, line_id);
+                __state = 9;
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x1171_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x1055_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+                __state = 7;
+            }
+            7 => {
+                __state = 3;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    ((w.id() as u32) as i32),
+                ))
+                .x0();
+                line_offset = ((w.id() as u32).wrapping_mul(8_u32) as i32);
+                next = ((line).next_id1() as i32);
+                w.set_id(inl_mpLineGetNextCheckInline_unfused(
+                    ctx,
+                    line,
+                    (next as i16),
+                ));
+                __state = if w.id() == 1_i32.wrapping_neg() {
+                    10
+                } else {
+                    11
+                };
+            }
+            10 => {
+                __state = 13;
+            }
+            11 => {
+                __state = if kind
+                    == ((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), w.id()))
+                        .flags()
+                        & ((15_i32) as u32))
+                {
+                    15
+                } else {
+                    16
+                };
+            }
+            12 => {
+                unreachable!();
+            }
+            13 => {
+                vtx = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((ptr::<CollLine<'a>>(
+                        ctx,
+                        ((Handle::addr(statics::melee__mp__mplib::groundCollLine(ctx).get())
+                            as i32)
+                            .wrapping_add(line_offset)) as u32,
+                    ))
+                    .x0())
+                    .v1_idx() as i32),
+                ));
+                (pos_out).set_x((vtx).pos().x());
+                (pos_out).set_y((vtx).pos().y());
+                (pos_out).set_z(0.0);
+                return;
+            }
+            14 => {
+                __state = 11;
+            }
+            15 => {
+                __state = 9;
+            }
+            16 => {
+                __state = 13;
+            }
+            17 => {
+                unreachable!();
+            }
+            18 => {
+                __state = 16;
+            }
+            19 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
+pub fn mpFloorGetLeft<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let w: mpFloorGetLeft_w<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut line_id = line_id;
+    let mut pos_out = pos_out;
+    let mut kind: u32 = 0;
+    let mut line_offset: i32 = 0;
+    let mut line: MapLine<'a> = null(ctx);
+    let mut next: i32 = 0;
+    let mut vtx: CollVtx<'a> = null(ctx);
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = if ((line_id) == 1_i32.wrapping_neg())
+                    || ((line_id)
+                        >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+                {
+                    6
+                } else {
+                    7
+                };
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                w.set_id(line_id);
+                kind = inl_mpLineGetKindInline_unfused(ctx, line_id);
+                __state = 9;
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x117a_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x107c_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+                __state = 7;
+            }
+            7 => {
+                __state = 3;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    ((w.id() as u32) as i32),
+                ))
+                .x0();
+                line_offset = ((w.id() as u32).wrapping_mul(8_u32) as i32);
+                next = ((line).prev_id1() as i32);
+                w.set_id(inl_mpLineGetPrevCheckInline_unfused(
+                    ctx,
+                    line,
+                    (next as i16),
+                ));
+                __state = if w.id() == 1_i32.wrapping_neg() {
+                    10
+                } else {
+                    11
+                };
+            }
+            10 => {
+                __state = 13;
+            }
+            11 => {
+                __state = if kind
+                    == ((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), w.id()))
+                        .flags()
+                        & ((15_i32) as u32))
+                {
+                    15
+                } else {
+                    16
+                };
+            }
+            12 => {
+                unreachable!();
+            }
+            13 => {
+                vtx = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((ptr::<CollLine<'a>>(
+                        ctx,
+                        ((Handle::addr(statics::melee__mp__mplib::groundCollLine(ctx).get())
+                            as i32)
+                            .wrapping_add(line_offset)) as u32,
+                    ))
+                    .x0())
+                    .v0_idx() as i32),
+                ));
+                (pos_out).set_x((vtx).pos().x());
+                (pos_out).set_y((vtx).pos().y());
+                (pos_out).set_z(0.0);
+                return;
+            }
+            14 => {
+                __state = 11;
+            }
+            15 => {
+                __state = 9;
+            }
+            16 => {
+                __state = 13;
+            }
+            17 => {
+                unreachable!();
+            }
+            18 => {
+                __state = 16;
+            }
+            19 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
+pub fn mpCeilingGetRight<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let w: mpCeilingGetRight_w<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut line_id = line_id;
+    let mut pos_out = pos_out;
+    let mut kind: u32 = 0;
+    let mut line_offset: i32 = 0;
+    let mut line: MapLine<'a> = null(ctx);
+    let mut next: i32 = 0;
+    let mut vtx: CollVtx<'a> = null(ctx);
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = if ((line_id) == 1_i32.wrapping_neg())
+                    || ((line_id)
+                        >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+                {
+                    6
+                } else {
+                    7
+                };
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                __state = if line_id != 1_i32.wrapping_neg() {
+                    9
+                } else {
+                    10
+                };
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x1183_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x10a3_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+                __state = 7;
+            }
+            7 => {
+                __state = 3;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                __state = 10;
+            }
+            10 => {
+                kind = inl_mpLineGetKindInline_unfused(ctx, line_id);
+                w.set_id(line_id);
+                __state = 12;
+            }
+            11 => {
+                unreachable!();
+            }
+            12 => {
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    ((w.id() as u32) as i32),
+                ))
+                .x0();
+                line_offset = ((w.id() as u32).wrapping_mul(8_u32) as i32);
+                next = ((line).prev_id1() as i32);
+                w.set_id(inl_mpLineGetPrevCheckInline_unfused(
+                    ctx,
+                    line,
+                    (next as i16),
+                ));
+                __state = if w.id() == 1_i32.wrapping_neg() {
+                    13
+                } else {
+                    14
+                };
+            }
+            13 => {
+                __state = 16;
+            }
+            14 => {
+                __state = if kind
+                    == ((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), w.id()))
+                        .flags()
+                        & ((15_i32) as u32))
+                {
+                    18
+                } else {
+                    19
+                };
+            }
+            15 => {
+                unreachable!();
+            }
+            16 => {
+                vtx = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((ptr::<CollLine<'a>>(
+                        ctx,
+                        ((Handle::addr(statics::melee__mp__mplib::groundCollLine(ctx).get())
+                            as i32)
+                            .wrapping_add(line_offset)) as u32,
+                    ))
+                    .x0())
+                    .v0_idx() as i32),
+                ));
+                (pos_out).set_x((vtx).pos().x());
+                (pos_out).set_y((vtx).pos().y());
+                (pos_out).set_z(0.0);
+                return;
+            }
+            17 => {
+                __state = 14;
+            }
+            18 => {
+                __state = 12;
+            }
+            19 => {
+                __state = 16;
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                __state = 19;
+            }
+            22 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
+pub fn mpCeilingGetLeft<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let w: mpCeilingGetLeft_w<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut line_id = line_id;
+    let mut pos_out = pos_out;
+    let mut kind: u32 = 0;
+    let mut line_offset: i32 = 0;
+    let mut line: MapLine<'a> = null(ctx);
+    let mut next: i32 = 0;
+    let mut vtx: CollVtx<'a> = null(ctx);
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = if ((line_id) == 1_i32.wrapping_neg())
+                    || ((line_id)
+                        >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+                {
+                    6
+                } else {
+                    7
+                };
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                __state = if line_id != 1_i32.wrapping_neg() {
+                    9
+                } else {
+                    10
+                };
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x118c_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x10cd_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+                __state = 7;
+            }
+            7 => {
+                __state = 3;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                __state = 10;
+            }
+            10 => {
+                w.set_id(line_id);
+                kind = inl_mpLineGetKindInline_unfused(ctx, line_id);
+                __state = 12;
+            }
+            11 => {
+                unreachable!();
+            }
+            12 => {
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    ((w.id() as u32) as i32),
+                ))
+                .x0();
+                line_offset = ((w.id() as u32).wrapping_mul(8_u32) as i32);
+                next = ((line).next_id1() as i32);
+                w.set_id(inl_mpLineGetNextCheckInline_unfused(
+                    ctx,
+                    line,
+                    (next as i16),
+                ));
+                __state = if w.id() == 1_i32.wrapping_neg() {
+                    13
+                } else {
+                    14
+                };
+            }
+            13 => {
+                __state = 16;
+            }
+            14 => {
+                __state = if kind
+                    == ((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), w.id()))
+                        .flags()
+                        & ((15_i32) as u32))
+                {
+                    18
+                } else {
+                    19
+                };
+            }
+            15 => {
+                unreachable!();
+            }
+            16 => {
+                vtx = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((ptr::<CollLine<'a>>(
+                        ctx,
+                        ((Handle::addr(statics::melee__mp__mplib::groundCollLine(ctx).get())
+                            as i32)
+                            .wrapping_add(line_offset)) as u32,
+                    ))
+                    .x0())
+                    .v1_idx() as i32),
+                ));
+                (pos_out).set_x((vtx).pos().x());
+                (pos_out).set_y((vtx).pos().y());
+                (pos_out).set_z(0.0);
+                return;
+            }
+            17 => {
+                __state = 14;
+            }
+            18 => {
+                __state = 12;
+            }
+            19 => {
+                __state = 16;
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                __state = 19;
+            }
+            22 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
+pub fn mpLeftWallGetTop<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let w: mpLeftWallGetTop_w<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut line_id = line_id;
+    let mut pos_out = pos_out;
+    let mut kind: u32 = 0;
+    let mut line_offset: i32 = 0;
+    let mut line: MapLine<'a> = null(ctx);
+    let mut next: i32 = 0;
+    let mut vtx: CollVtx<'a> = null(ctx);
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = if ((line_id) == 1_i32.wrapping_neg())
+                    || ((line_id)
+                        >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+                {
+                    6
+                } else {
+                    7
+                };
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                __state = if line_id != 1_i32.wrapping_neg() {
+                    9
+                } else {
+                    10
+                };
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x1195_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x10f7_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+                __state = 7;
+            }
+            7 => {
+                __state = 3;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                __state = 10;
+            }
+            10 => {
+                w.set_id(line_id);
+                kind = inl_mpLineGetKindInline_unfused(ctx, line_id);
+                __state = 12;
+            }
+            11 => {
+                unreachable!();
+            }
+            12 => {
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    ((w.id() as u32) as i32),
+                ))
+                .x0();
+                line_offset = ((w.id() as u32).wrapping_mul(8_u32) as i32);
+                next = ((line).next_id1() as i32);
+                w.set_id(inl_mpLineGetNextCheckInline_unfused(
+                    ctx,
+                    line,
+                    (next as i16),
+                ));
+                __state = if w.id() == 1_i32.wrapping_neg() {
+                    13
+                } else {
+                    14
+                };
+            }
+            13 => {
+                __state = 16;
+            }
+            14 => {
+                __state = if kind
+                    == ((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), w.id()))
+                        .flags()
+                        & ((15_i32) as u32))
+                {
+                    18
+                } else {
+                    19
+                };
+            }
+            15 => {
+                unreachable!();
+            }
+            16 => {
+                vtx = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((ptr::<CollLine<'a>>(
+                        ctx,
+                        ((Handle::addr(statics::melee__mp__mplib::groundCollLine(ctx).get())
+                            as i32)
+                            .wrapping_add(line_offset)) as u32,
+                    ))
+                    .x0())
+                    .v1_idx() as i32),
+                ));
+                (pos_out).set_x((vtx).pos().x());
+                (pos_out).set_y((vtx).pos().y());
+                (pos_out).set_z(0.0);
+                return;
+            }
+            17 => {
+                __state = 14;
+            }
+            18 => {
+                __state = 12;
+            }
+            19 => {
+                __state = 16;
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                __state = 19;
+            }
+            22 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
+pub fn mpLeftWallGetBottom<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let w: mpLeftWallGetBottom_w<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut line_id = line_id;
+    let mut pos_out = pos_out;
+    let mut kind: u32 = 0;
+    let mut line_offset: i32 = 0;
+    let mut line: MapLine<'a> = null(ctx);
+    let mut next: i32 = 0;
+    let mut vtx: CollVtx<'a> = null(ctx);
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = if ((line_id) == 1_i32.wrapping_neg())
+                    || ((line_id)
+                        >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+                {
+                    6
+                } else {
+                    7
+                };
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                __state = if line_id != 1_i32.wrapping_neg() {
+                    9
+                } else {
+                    10
+                };
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x119e_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x1121_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+                __state = 7;
+            }
+            7 => {
+                __state = 3;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                __state = 10;
+            }
+            10 => {
+                kind = inl_mpLineGetKindInline_unfused(ctx, line_id);
+                w.set_id(line_id);
+                __state = 12;
+            }
+            11 => {
+                unreachable!();
+            }
+            12 => {
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    ((w.id() as u32) as i32),
+                ))
+                .x0();
+                line_offset = ((w.id() as u32).wrapping_mul(8_u32) as i32);
+                next = ((line).prev_id1() as i32);
+                w.set_id(inl_mpLineGetPrevCheckInline_unfused(
+                    ctx,
+                    line,
+                    (next as i16),
+                ));
+                __state = if w.id() == 1_i32.wrapping_neg() {
+                    13
+                } else {
+                    14
+                };
+            }
+            13 => {
+                __state = 16;
+            }
+            14 => {
+                __state = if kind
+                    == ((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), w.id()))
+                        .flags()
+                        & ((15_i32) as u32))
+                {
+                    18
+                } else {
+                    19
+                };
+            }
+            15 => {
+                unreachable!();
+            }
+            16 => {
+                vtx = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((ptr::<CollLine<'a>>(
+                        ctx,
+                        ((Handle::addr(statics::melee__mp__mplib::groundCollLine(ctx).get())
+                            as i32)
+                            .wrapping_add(line_offset)) as u32,
+                    ))
+                    .x0())
+                    .v0_idx() as i32),
+                ));
+                (pos_out).set_x((vtx).pos().x());
+                (pos_out).set_y((vtx).pos().y());
+                (pos_out).set_z(0.0);
+                return;
+            }
+            17 => {
+                __state = 14;
+            }
+            18 => {
+                __state = 12;
+            }
+            19 => {
+                __state = 16;
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                __state = 19;
+            }
+            22 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
+pub fn mpRightWallGetTop<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let w: mpRightWallGetTop_w<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut line_id = line_id;
+    let mut pos_out = pos_out;
+    let mut kind: u32 = 0;
+    let mut line_offset: i32 = 0;
+    let mut line: MapLine<'a> = null(ctx);
+    let mut next: i32 = 0;
+    let mut vtx: CollVtx<'a> = null(ctx);
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = if ((line_id) == 1_i32.wrapping_neg())
+                    || ((line_id)
+                        >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+                {
+                    6
+                } else {
+                    7
+                };
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                __state = if line_id != 1_i32.wrapping_neg() {
+                    9
+                } else {
+                    10
+                };
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x11a7_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x114b_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+                __state = 7;
+            }
+            7 => {
+                __state = 3;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                __state = 10;
+            }
+            10 => {
+                w.set_id(line_id);
+                kind = inl_mpLineGetKindInline_unfused(ctx, line_id);
+                __state = 12;
+            }
+            11 => {
+                unreachable!();
+            }
+            12 => {
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    ((w.id() as u32) as i32),
+                ))
+                .x0();
+                line_offset = ((w.id() as u32).wrapping_mul(8_u32) as i32);
+                next = ((line).prev_id1() as i32);
+                w.set_id(inl_mpLineGetPrevCheckInline_unfused(
+                    ctx,
+                    line,
+                    (next as i16),
+                ));
+                __state = if w.id() == 1_i32.wrapping_neg() {
+                    13
+                } else {
+                    14
+                };
+            }
+            13 => {
+                __state = 16;
+            }
+            14 => {
+                __state = if kind
+                    == ((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), w.id()))
+                        .flags()
+                        & ((15_i32) as u32))
+                {
+                    18
+                } else {
+                    19
+                };
+            }
+            15 => {
+                unreachable!();
+            }
+            16 => {
+                vtx = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((ptr::<CollLine<'a>>(
+                        ctx,
+                        ((Handle::addr(statics::melee__mp__mplib::groundCollLine(ctx).get())
+                            as i32)
+                            .wrapping_add(line_offset)) as u32,
+                    ))
+                    .x0())
+                    .v0_idx() as i32),
+                ));
+                (pos_out).set_x((vtx).pos().x());
+                (pos_out).set_y((vtx).pos().y());
+                (pos_out).set_z(0.0);
+                return;
+            }
+            17 => {
+                __state = 14;
+            }
+            18 => {
+                __state = 12;
+            }
+            19 => {
+                __state = 16;
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                __state = 19;
+            }
+            22 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
+pub fn mpRightWallGetBottom<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let w: mpRightWallGetBottom_w<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut line_id = line_id;
+    let mut pos_out = pos_out;
+    let mut line_offset: i32 = 0;
+    let mut kind: u32 = 0;
+    let mut line: MapLine<'a> = null(ctx);
+    let mut next: i32 = 0;
+    let mut vtx: CollVtx<'a> = null(ctx);
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = if ((line_id) == 1_i32.wrapping_neg())
+                    || ((line_id)
+                        >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+                {
+                    6
+                } else {
+                    7
+                };
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                __state = if line_id != 1_i32.wrapping_neg() {
+                    9
+                } else {
+                    10
+                };
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x11b0_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x1175_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+                __state = 7;
+            }
+            7 => {
+                __state = 3;
+            }
+            8 => {
+                unreachable!();
+            }
+            9 => {
+                __state = 10;
+            }
+            10 => {
+                w.set_id(line_id);
+                kind = inl_mpLineGetKindInline_unfused(ctx, line_id);
+                __state = 12;
+            }
+            11 => {
+                unreachable!();
+            }
+            12 => {
+                line = (Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    ((w.id() as u32) as i32),
+                ))
+                .x0();
+                line_offset = ((w.id() as u32).wrapping_mul(8_u32) as i32);
+                next = ((line).next_id1() as i32);
+                w.set_id(inl_mpLineGetNextCheckInline_unfused(
+                    ctx,
+                    line,
+                    (next as i16),
+                ));
+                __state = if w.id() == 1_i32.wrapping_neg() {
+                    13
+                } else {
+                    14
+                };
+            }
+            13 => {
+                __state = 16;
+            }
+            14 => {
+                __state = if kind
+                    == ((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), w.id()))
+                        .flags()
+                        & ((15_i32) as u32))
+                {
+                    18
+                } else {
+                    19
+                };
+            }
+            15 => {
+                unreachable!();
+            }
+            16 => {
+                vtx = (Handle::add(
+                    statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                    (((ptr::<CollLine<'a>>(
+                        ctx,
+                        ((Handle::addr(statics::melee__mp__mplib::groundCollLine(ctx).get())
+                            as i32)
+                            .wrapping_add(line_offset)) as u32,
+                    ))
+                    .x0())
+                    .v1_idx() as i32),
+                ));
+                (pos_out).set_x((vtx).pos().x());
+                (pos_out).set_y((vtx).pos().y());
+                (pos_out).set_z(0.0);
+                return;
+            }
+            17 => {
+                __state = 14;
+            }
+            18 => {
+                __state = 12;
+            }
+            19 => {
+                __state = 16;
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                __state = 19;
+            }
+            22 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
+pub fn mpLineGetV1Pos<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut line_id = line_id;
+    let mut pos_out = pos_out;
+    let mut v1: CollVtx<'a> = null(ctx);
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x11bc_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x1199_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    v1 = (Handle::add(
+        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+        (((Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            line_id,
+        ))
+        .x0())
+        .v1_idx() as i32),
+    ));
+    (pos_out).set_x((v1).pos().x());
+    (pos_out).set_y((v1).pos().y());
+    (pos_out).set_z(0.0);
+}
+
+pub fn mpLineGetV0Pos<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut line_id = line_id;
+    let mut pos_out = pos_out;
+    let mut v0: CollVtx<'a> = null(ctx);
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x11cb_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x11a4_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    v0 = (Handle::add(
+        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+        (((Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            line_id,
+        ))
+        .x0())
+        .v0_idx() as i32),
+    ));
+    (pos_out).set_x((v0).pos().x());
+    (pos_out).set_y((v0).pos().y());
+    (pos_out).set_z(0.0);
+}
+
+pub fn mpLineGetKind<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let mut line_id = line_id;
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x11dd_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x11ad_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    return (((Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .flags()
+        & ((15_i32) as u32)) as i32);
+}
+
+pub fn mpLineGetFlags<'a>(ctx: &'a Ctx, line_id: i32) -> u32 {
+    let __frame = ctx.stack_frame(0x18);
+    let mut line_id = line_id;
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x11e7_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x11b3_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    return (((Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .x0())
+    .lo_flags() as u32);
+}
+
+pub fn mpLib_80054D68<'a>(ctx: &'a Ctx, line_id: i32, flags: u32) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut line_id = line_id;
+    let mut flags = flags;
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x11f3_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x11b9_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    {
+        let mut line: MapLine<'a> = (Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            line_id,
+        ))
+        .x0();
+        let mut old_flags: Val<'a, u16> = (line).lo_flags_ref();
+        (old_flags).set(((((((old_flags).get() as i32) & (!255_i32)) as u32) | flags) as u16));
+    }
+}
+
+pub fn mpLineGetNormal<'a>(ctx: &'a Ctx, line_id: i32, normal_out: Vec<'a>) -> Vec<'a> {
+    let __frame = ctx.stack_frame(0x28);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let mut line_id = line_id;
+    let mut normal_out = normal_out;
+    let mut line: MapLine<'a> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    'l3: loop {
+        'c4: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x1201_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x11c6_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l3;
+        }
+    }
+    line = (Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .x0();
+    {
+        let mut y0: f64 = (Handle::add(
+            statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+            ((line).v0_idx() as i32),
+        ))
+        .pos()
+        .y();
+        let mut y1: f64 = (Handle::add(
+            statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+            ((line).v1_idx() as i32),
+        ))
+        .pos()
+        .y();
+        let mut x0: f64 = (Handle::add(
+            statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+            ((line).v0_idx() as i32),
+        ))
+        .pos()
+        .x();
+        let mut x1: f64 = (Handle::add(
+            statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+            ((line).v1_idx() as i32),
+        ))
+        .pos()
+        .x();
+        (normal_out).set_x(fp::fneg((fp::fsubs(y1, y0))));
+        (normal_out).set_y((fp::fsubs(x1, x0)));
+        (normal_out).set_z(0.0);
+        fns::PSVECNormalize(ctx, normal_out, normal_out);
+    }
+    return normal_out;
+}
+
 pub fn mpLib_80054ED8<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut line_id = line_id;
@@ -7275,6 +10883,127 @@ pub fn mpLib_80054ED8<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
         return 0_i32;
     }
     return 1_i32;
+}
+
+pub fn mpLinesConnected<'a>(ctx: &'a Ctx, start_id: i32, target_id: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let mut start_id = start_id;
+    let mut target_id = target_id;
+    let mut line_id: i32 = 0;
+    let mut kind: u32 = 0;
+    let mut start_line: MapLine<'a> = null(ctx);
+    let mut flags_base: Val<'a, u32> = null(ctx);
+    'l1: loop {
+        'c2: {
+            if ((start_id) == 1_i32.wrapping_neg())
+                || ((start_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x1230_i32 as u32),
+                                VarArg::Int(start_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x1216_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    'l3: loop {
+        'c4: {
+            if ((target_id) == 1_i32.wrapping_neg())
+                || ((target_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x1231_i32 as u32),
+                                VarArg::Int(target_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x1217_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l3;
+        }
+    }
+    if start_id == target_id {
+        return 1_i32;
+    }
+    start_line = (Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        start_id,
+    ))
+    .x0();
+    flags_base = (statics::melee__mp__mplib::groundCollLine(ctx).get()).flags_ref();
+    kind = ((Handle::add(flags_base, start_id.wrapping_mul(2_i32))).get() & ((15_i32) as u32));
+    line_id = inl_mpLineGetNextFrom_unfused(ctx, start_line, flags_base);
+    'l5: while (line_id != 1_i32.wrapping_neg())
+        && (kind
+            == ((Handle::add(
+                statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                line_id,
+            ))
+            .flags()
+                & ((15_i32) as u32)))
+    {
+        'c6: {
+            if line_id == target_id {
+                return 1_i32;
+            }
+            line_id = inl_mpLineGetNext_unfused(ctx, line_id);
+        }
+    }
+    line_id = inl_mpLineGetPrevFrom_unfused(ctx, start_line, flags_base);
+    'l7: while (line_id != 1_i32.wrapping_neg())
+        && (kind
+            == ((Handle::add(
+                statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                line_id,
+            ))
+            .flags()
+                & ((15_i32) as u32)))
+    {
+        'c8: {
+            if line_id == target_id {
+                return 1_i32;
+            }
+            line_id = inl_mpLineGetPrev_unfused(ctx, line_id);
+        }
+    }
+    return 0_i32;
 }
 
 pub fn mpLib_800552B0<'a>(ctx: &'a Ctx, joint_id: i32, jobj: HSD_JObj<'a>, z: i32) {
@@ -8299,6 +12028,78 @@ pub fn mpLib_80056B34<'a>(ctx: &'a Ctx, arg0: i32, arg1: Val<'a, i32>) -> i32 {
     return (temp).x4C().at(1_i32).get();
 }
 
+pub fn mpJointFromLine<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let mut line_id = line_id;
+    if line_id != 1_i32.wrapping_neg() {
+        let mut i: i32 = 0;
+        let mut v0_idx: i32 = 0;
+        let mut joint: CollJoint<'a> = null(ctx);
+        let mut count: i32 = 0;
+        'l1: loop {
+            'c2: {
+                if ((line_id) == 1_i32.wrapping_neg())
+                    || ((line_id)
+                        >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+                {
+                    (if ((0_i32) != 0) {
+                        { () }
+                    } else {
+                        ({
+                            fns::OSReport(
+                                ctx,
+                                cstr(ctx, 0x803bf4b0),
+                                &[
+                                    VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                    VarArg::Int(0x1553_i32 as u32),
+                                    VarArg::Int(line_id as u32),
+                                ],
+                            );
+                            fns::__assert(
+                                ctx,
+                                cstr(ctx, 0x803bd3ec),
+                                (0x147c_i32 as u32),
+                                cstr(ctx, 0x803bd3ec),
+                            )
+                        })
+                    });
+                }
+            }
+            if !(0_i32 != 0) {
+                break 'l1;
+            }
+        }
+        v0_idx = (((Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            line_id,
+        ))
+        .x0())
+        .v0_idx() as i32);
+        count = (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).joint_count();
+        joint = statics::melee__mp__mplib::groundCollJoint(ctx).get();
+        {
+            i = 0_i32;
+            'l3: while i < count {
+                'c4: {
+                    if ((((joint).inner()).vtx_start() as i32) <= v0_idx)
+                        && (v0_idx
+                            < (((joint).inner()).vtx_start() as i32)
+                                .wrapping_add((((joint).inner()).vtx_count() as i32)))
+                    {
+                        return ((Handle::addr(joint).wrapping_sub(Handle::addr(
+                            statics::melee__mp__mplib::groundCollJoint(ctx).get(),
+                        )) as i32)
+                            / 52);
+                    }
+                    joint = Handle::add(joint, 1);
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    }
+    return 1_i32.wrapping_neg();
+}
+
 pub fn mpLib_80056C54<'a>(
     ctx: &'a Ctx,
     line_id: i32,
@@ -8403,7 +12204,7 @@ pub fn mpLib_80056C54<'a>(
                 __state = if (1_i32 != 0) { 14 } else { 16 };
             }
             14 => {
-                fns::mpLineGetV1Pos(ctx, line_id, sp4C);
+                inl_mpLineGetV1Pos(ctx, line_id, sp4C);
                 x_f2 = (fp::fmuls(
                     (fp::fsubs(sp58.x(), sp4C.x())),
                     (fp::fsubs(sp58.x(), sp4C.x())),
@@ -8417,7 +12218,7 @@ pub fn mpLib_80056C54<'a>(
                     fp::fadds(x_f2, y_f0),
                     Handle::add(sqrt_tmp.at(0), 4_i32.wrapping_neg()),
                 );
-                flags_r0 = (fns::mpLineGetKind(ctx, line_id) as u32);
+                flags_r0 = (inl_mpLineGetKind(ctx, line_id) as u32);
                 __state = if ((flags_r0 & (12_i32 as u32)) != 0) {
                     18
                 } else {
@@ -8523,7 +12324,7 @@ pub fn mpLib_80056C54<'a>(
                 __state = if (1_i32 != 0) { 42 } else { 44 };
             }
             42 => {
-                fns::mpLineGetV0Pos(ctx, line_id, sp4C);
+                inl_mpLineGetV0Pos(ctx, line_id, sp4C);
                 x_f2 = (fp::fmuls(
                     (fp::fsubs(sp58.x(), sp4C.x())),
                     (fp::fsubs(sp58.x(), sp4C.x())),
@@ -8537,7 +12338,7 @@ pub fn mpLib_80056C54<'a>(
                     fp::fadds(x_f2, y_f0),
                     Handle::add(sqrt_tmp.at(0), 5_i32.wrapping_neg()),
                 );
-                flags_r0 = (fns::mpLineGetKind(ctx, line_id) as u32);
+                flags_r0 = (inl_mpLineGetKind(ctx, line_id) as u32);
                 __state = if ((flags_r0 & (12_i32 as u32)) != 0) {
                     46
                 } else {
@@ -8640,13 +12441,12 @@ pub fn mpLib_80056C54<'a>(
                 __state = 41;
             }
             69 => {
-                __state = if !((fns::mpLineGetKind(ctx, line_id) & (enums::CollLine_Floor as i32))
-                    != 0)
-                {
-                    72
-                } else {
-                    73
-                };
+                __state =
+                    if !((inl_mpLineGetKind(ctx, line_id) & (enums::CollLine_Floor as i32)) != 0) {
+                        72
+                    } else {
+                        73
+                    };
             }
             70 => {
                 __state = if !Handle::is_null(line_id_out) {
@@ -8692,7 +12492,7 @@ pub fn mpLib_80056C54<'a>(
                 unreachable!();
             }
             81 => {
-                (flags_out).set(fns::mpLineGetFlags(ctx, line_id));
+                (flags_out).set(inl_mpLineGetFlags(ctx, line_id));
                 __state = 82;
             }
             82 => {
@@ -8702,7 +12502,7 @@ pub fn mpLib_80056C54<'a>(
                 unreachable!();
             }
             84 => {
-                let _ = fns::mpLineGetNormal(ctx, line_id, normal_out);
+                let _ = inl_mpLineGetNormal(ctx, line_id, normal_out);
                 __state = 85;
             }
             85 => {
@@ -12298,6 +16098,124 @@ pub fn mpLib_DrawZones<'a>(ctx: &'a Ctx) {
     fns::HSD_StateInvalidate(ctx, 1_i32.wrapping_neg());
 }
 
+fn inl_mpLineGetPrev_unfused<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let mut line_id = line_id;
+    let mut result: i16 = ((Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .x0())
+    .prev_id1();
+    let mut ret: i32 = (result as i32);
+    if (result as i32) != 1_i32.wrapping_neg() {
+        let mut flags: u32 = (Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            (result as i32),
+        ))
+        .flags();
+        if ((flags & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0)
+            && (!((flags & ((shl_i32(1_i32, (18_i32 as u32))) as u32)) != 0))
+        {
+            let mut v0: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    line_id,
+                ))
+                .x0())
+                .v0_idx() as i32),
+            ));
+            let mut v1: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    (result as i32),
+                ))
+                .x0())
+                .v1_idx() as i32),
+            ));
+            if fp::fadds(
+                (fp::fmuls(
+                    (fp::fsubs((v0).pos().x(), (v1).pos().x())),
+                    (fp::fsubs((v0).pos().x(), (v1).pos().x())),
+                )),
+                (fp::fmuls(
+                    (fp::fsubs((v0).pos().y(), (v1).pos().y())),
+                    (fp::fsubs((v0).pos().y(), (v1).pos().y())),
+                )),
+            ) < 4.0
+            {
+                return ret;
+            }
+        }
+    }
+    return (((Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .x0())
+    .prev_id0() as i32);
+}
+
+fn inl_mpLineGetNext_unfused<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let mut line_id = line_id;
+    let mut result: i16 = ((Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .x0())
+    .next_id1();
+    let mut ret: i32 = (result as i32);
+    if (result as i32) != 1_i32.wrapping_neg() {
+        let mut flags: u32 = (Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            (result as i32),
+        ))
+        .flags();
+        if ((flags & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0)
+            && (!((flags & ((shl_i32(1_i32, (18_i32 as u32))) as u32)) != 0))
+        {
+            let mut v1: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    line_id,
+                ))
+                .x0())
+                .v1_idx() as i32),
+            ));
+            let mut v0: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    (result as i32),
+                ))
+                .x0())
+                .v0_idx() as i32),
+            ));
+            if fp::fadds(
+                (fp::fmuls(
+                    (fp::fsubs((v1).pos().x(), (v0).pos().x())),
+                    (fp::fsubs((v1).pos().x(), (v0).pos().x())),
+                )),
+                (fp::fmuls(
+                    (fp::fsubs((v1).pos().y(), (v0).pos().y())),
+                    (fp::fsubs((v1).pos().y(), (v0).pos().y())),
+                )),
+            ) < 4.0
+            {
+                return ret;
+            }
+        }
+    }
+    return (((Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .x0())
+    .next_id0() as i32);
+}
+
 fn inl_mpLineGetCollLine<'a>(ctx: &'a Ctx, line_id: i32) -> CollLine<'a> {
     let mut line_id = line_id;
     return (Handle::add(
@@ -12441,6 +16359,564 @@ fn inl_mpLineGetNext<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
     ))
     .x0())
     .next_id0() as i32);
+}
+
+fn inl_mpLineGetNextCheckInline_unfused<'a>(ctx: &'a Ctx, line: MapLine<'a>, result: i16) -> i32 {
+    let mut line = line;
+    let mut result = result;
+    if (result as i32) != 1_i32.wrapping_neg() {
+        let mut flags: u32 = (Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            (result as i32),
+        ))
+        .flags();
+        if ((flags & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0)
+            && (!((flags & ((shl_i32(1_i32, (18_i32 as u32))) as u32)) != 0))
+        {
+            let mut v1: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                ((line).v1_idx() as i32),
+            ));
+            let mut v0: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    (result as i32),
+                ))
+                .x0())
+                .v0_idx() as i32),
+            ));
+            if fp::fadds(
+                (fp::fmuls(
+                    (fp::fsubs((v1).pos().x(), (v0).pos().x())),
+                    (fp::fsubs((v1).pos().x(), (v0).pos().x())),
+                )),
+                (fp::fmuls(
+                    (fp::fsubs((v1).pos().y(), (v0).pos().y())),
+                    (fp::fsubs((v1).pos().y(), (v0).pos().y())),
+                )),
+            ) < 4.0
+            {
+                return (result as i32);
+            }
+        }
+    }
+    return ((line).next_id0() as i32);
+}
+
+fn inl_mpLineGetNextCheckInlineVtx_unfused<'a>(
+    ctx: &'a Ctx,
+    line: MapLine<'a>,
+    result: i16,
+    vtx: CollVtx<'a>,
+) -> i32 {
+    let mut line = line;
+    let mut result = result;
+    let mut vtx = vtx;
+    if (result as i32) != 1_i32.wrapping_neg() {
+        let mut flags: u32 = (Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            (result as i32),
+        ))
+        .flags();
+        if ((flags & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0)
+            && (!((flags & ((shl_i32(1_i32, (18_i32 as u32))) as u32)) != 0))
+        {
+            let mut v1: CollVtx<'a> = (Handle::add(vtx, ((line).v1_idx() as i32)));
+            let mut v0: CollVtx<'a> = (Handle::add(
+                vtx,
+                (((Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    (result as i32),
+                ))
+                .x0())
+                .v0_idx() as i32),
+            ));
+            if fp::fadds(
+                (fp::fmuls(
+                    (fp::fsubs((v1).pos().x(), (v0).pos().x())),
+                    (fp::fsubs((v1).pos().x(), (v0).pos().x())),
+                )),
+                (fp::fmuls(
+                    (fp::fsubs((v1).pos().y(), (v0).pos().y())),
+                    (fp::fsubs((v1).pos().y(), (v0).pos().y())),
+                )),
+            ) < 4.0
+            {
+                return (result as i32);
+            }
+        }
+    }
+    result = (line).next_id0();
+    return (result as i32);
+}
+
+fn inl_mpLineIterNonResult_unfused<'a>(ctx: &'a Ctx, new_id: i32, line_id: i32) -> i32 {
+    let mut new_id = new_id;
+    let mut line_id = line_id;
+    let mut valid_id: i32 = 0_i32;
+    if (new_id != 1_i32.wrapping_neg()) && (new_id != line_id) {
+        valid_id = 1_i32;
+    }
+    if (valid_id != 0) {
+        return new_id;
+    }
+    return 1_i32.wrapping_neg();
+}
+
+fn inl_mpLineGetPrevCheckInline_unfused<'a>(ctx: &'a Ctx, line: MapLine<'a>, result: i16) -> i32 {
+    let mut line = line;
+    let mut result = result;
+    if (result as i32) != 1_i32.wrapping_neg() {
+        let mut flags: u32 = (Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            (result as i32),
+        ))
+        .flags();
+        if ((flags & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0)
+            && (!((flags & ((shl_i32(1_i32, (18_i32 as u32))) as u32)) != 0))
+        {
+            let mut v0: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                ((line).v0_idx() as i32),
+            ));
+            let mut v1: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    (result as i32),
+                ))
+                .x0())
+                .v1_idx() as i32),
+            ));
+            if fp::fadds(
+                (fp::fmuls(
+                    (fp::fsubs((v0).pos().x(), (v1).pos().x())),
+                    (fp::fsubs((v0).pos().x(), (v1).pos().x())),
+                )),
+                (fp::fmuls(
+                    (fp::fsubs((v0).pos().y(), (v1).pos().y())),
+                    (fp::fsubs((v0).pos().y(), (v1).pos().y())),
+                )),
+            ) < 4.0
+            {
+                return (result as i32);
+            }
+        }
+    }
+    return ((line).prev_id0() as i32);
+}
+
+fn inl_mpLineGetPrevCheckInlineVtx_unfused<'a>(
+    ctx: &'a Ctx,
+    line: MapLine<'a>,
+    result: i16,
+    vtx: CollVtx<'a>,
+) -> i32 {
+    let mut line = line;
+    let mut result = result;
+    let mut vtx = vtx;
+    if (result as i32) != 1_i32.wrapping_neg() {
+        let mut flags: u32 = (Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            (result as i32),
+        ))
+        .flags();
+        if ((flags & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0)
+            && (!((flags & ((shl_i32(1_i32, (18_i32 as u32))) as u32)) != 0))
+        {
+            let mut v0: CollVtx<'a> = (Handle::add(vtx, ((line).v0_idx() as i32)));
+            let mut v1: CollVtx<'a> = (Handle::add(
+                vtx,
+                (((Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    (result as i32),
+                ))
+                .x0())
+                .v1_idx() as i32),
+            ));
+            if fp::fadds(
+                (fp::fmuls(
+                    (fp::fsubs((v0).pos().x(), (v1).pos().x())),
+                    (fp::fsubs((v0).pos().x(), (v1).pos().x())),
+                )),
+                (fp::fmuls(
+                    (fp::fsubs((v0).pos().y(), (v1).pos().y())),
+                    (fp::fsubs((v0).pos().y(), (v1).pos().y())),
+                )),
+            ) < 4.0
+            {
+                return (result as i32);
+            }
+        }
+    }
+    result = (line).prev_id0();
+    return (result as i32);
+}
+
+fn inl_mpLineWalkNon_unfused<'a>(ctx: &'a Ctx, line_id: i32, kind: i32, next: i32) -> i32 {
+    let mut line_id = line_id;
+    let mut kind = kind;
+    let mut next = next;
+    let mut new_id: i32 = 0;
+    if (next != 0) {
+        new_id = (((Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            line_id,
+        ))
+        .x0())
+        .next_id0() as i32);
+        'l1: while (new_id != 1_i32.wrapping_neg())
+            && (((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id))
+                .flags()
+                & (kind as u32))
+                != 0)
+        {
+            'c2: {
+                new_id =
+                    (((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id))
+                        .x0())
+                    .next_id0() as i32);
+            }
+        }
+    } else {
+        new_id = (((Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            line_id,
+        ))
+        .x0())
+        .prev_id0() as i32);
+        'l3: while (new_id != 1_i32.wrapping_neg())
+            && (((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id))
+                .flags()
+                & (kind as u32))
+                != 0)
+        {
+            'c4: {
+                new_id =
+                    (((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id))
+                        .x0())
+                    .prev_id0() as i32);
+            }
+        }
+    }
+    if new_id != 1_i32.wrapping_neg() {
+        return new_id;
+    }
+    return 1_i32.wrapping_neg();
+}
+
+fn inl_mpLineGetNextCachedInline_unfused<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let mut line_id = line_id;
+    let mut line: MapLine<'a> = null(ctx);
+    let mut result: i32 = (({
+        let __t1 = (Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            line_id,
+        ))
+        .x0();
+        line = __t1;
+        __t1
+    })
+    .next_id1() as i32);
+    if result != 1_i32.wrapping_neg() {
+        let mut flags: u32 =
+            (Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), result)).flags();
+        if ((flags & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0)
+            && (!((flags & ((shl_i32(1_i32, (18_i32 as u32))) as u32)) != 0))
+        {
+            let mut v1: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                ((line).v1_idx() as i32),
+            ));
+            let mut v0: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), result)).x0())
+                    .v0_idx() as i32),
+            ));
+            if fp::fadds(
+                (fp::fmuls(
+                    (fp::fsubs((v1).pos().x(), (v0).pos().x())),
+                    (fp::fsubs((v1).pos().x(), (v0).pos().x())),
+                )),
+                (fp::fmuls(
+                    (fp::fsubs((v1).pos().y(), (v0).pos().y())),
+                    (fp::fsubs((v1).pos().y(), (v0).pos().y())),
+                )),
+            ) < 4.0
+            {
+                return result;
+            }
+        }
+    }
+    return ((line).next_id0() as i32);
+}
+
+fn inl_mpLineGetNextCheckResultFirst_unfused<'a>(
+    ctx: &'a Ctx,
+    result: i32,
+    line: MapLine<'a>,
+) -> i32 {
+    let mut result = result;
+    let mut line = line;
+    if result != 1_i32.wrapping_neg() {
+        let mut flags: u32 =
+            (Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), result)).flags();
+        if ((flags & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0)
+            && (!((flags & ((shl_i32(1_i32, (18_i32 as u32))) as u32)) != 0))
+        {
+            let mut v1: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                ((line).v1_idx() as i32),
+            ));
+            let mut v0: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), result)).x0())
+                    .v0_idx() as i32),
+            ));
+            if fp::fadds(
+                (fp::fmuls(
+                    (fp::fsubs((v1).pos().x(), (v0).pos().x())),
+                    (fp::fsubs((v1).pos().x(), (v0).pos().x())),
+                )),
+                (fp::fmuls(
+                    (fp::fsubs((v1).pos().y(), (v0).pos().y())),
+                    (fp::fsubs((v1).pos().y(), (v0).pos().y())),
+                )),
+            ) < 4.0
+            {
+                return result;
+            }
+        }
+    }
+    return ((line).next_id0() as i32);
+}
+
+fn inl_mpLineGetPrevInline_unfused<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let mut line_id = line_id;
+    let mut line: MapLine<'a> = null(ctx);
+    let mut result: i32 = (({
+        let __t1 = (Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            line_id,
+        ))
+        .x0();
+        line = __t1;
+        __t1
+    })
+    .prev_id1() as i32);
+    if result != 1_i32.wrapping_neg() {
+        let mut flags: u32 =
+            (Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), result)).flags();
+        if ((flags & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0)
+            && (!((flags & ((shl_i32(1_i32, (18_i32 as u32))) as u32)) != 0))
+        {
+            let mut v0: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                ((line).v0_idx() as i32),
+            ));
+            let mut v1: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), result)).x0())
+                    .v1_idx() as i32),
+            ));
+            if fp::fadds(
+                (fp::fmuls(
+                    (fp::fsubs((v0).pos().x(), (v1).pos().x())),
+                    (fp::fsubs((v0).pos().x(), (v1).pos().x())),
+                )),
+                (fp::fmuls(
+                    (fp::fsubs((v0).pos().y(), (v1).pos().y())),
+                    (fp::fsubs((v0).pos().y(), (v1).pos().y())),
+                )),
+            ) < 4.0
+            {
+                return result;
+            }
+        }
+    }
+    return ((line).prev_id0() as i32);
+}
+
+fn inl_mpLineGetPrevCheckResultFirst_unfused<'a>(
+    ctx: &'a Ctx,
+    result: i32,
+    line: MapLine<'a>,
+) -> i32 {
+    let mut result = result;
+    let mut line = line;
+    if result != 1_i32.wrapping_neg() {
+        let mut flags: u32 =
+            (Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), result)).flags();
+        if ((flags & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0)
+            && (!((flags & ((shl_i32(1_i32, (18_i32 as u32))) as u32)) != 0))
+        {
+            let mut v0: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                ((line).v0_idx() as i32),
+            ));
+            let mut v1: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), result)).x0())
+                    .v1_idx() as i32),
+            ));
+            if fp::fadds(
+                (fp::fmuls(
+                    (fp::fsubs((v0).pos().x(), (v1).pos().x())),
+                    (fp::fsubs((v0).pos().x(), (v1).pos().x())),
+                )),
+                (fp::fmuls(
+                    (fp::fsubs((v0).pos().y(), (v1).pos().y())),
+                    (fp::fsubs((v0).pos().y(), (v1).pos().y())),
+                )),
+            ) < 4.0
+            {
+                return result;
+            }
+        }
+    }
+    return ((line).prev_id0() as i32);
+}
+
+fn inl_mpLineGetNextInline_unfused<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let mut line_id = line_id;
+    let mut result: i32 = (((Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .x0())
+    .next_id1() as i32);
+    if result != 1_i32.wrapping_neg() {
+        let mut flags: u32 =
+            (Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), result)).flags();
+        if ((flags & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0)
+            && (!((flags & ((shl_i32(1_i32, (18_i32 as u32))) as u32)) != 0))
+        {
+            let mut v1: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((Handle::add(
+                    statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                    line_id,
+                ))
+                .x0())
+                .v1_idx() as i32),
+            ));
+            let mut v0: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), result)).x0())
+                    .v0_idx() as i32),
+            ));
+            if fp::fadds(
+                (fp::fmuls(
+                    (fp::fsubs((v1).pos().x(), (v0).pos().x())),
+                    (fp::fsubs((v1).pos().x(), (v0).pos().x())),
+                )),
+                (fp::fmuls(
+                    (fp::fsubs((v1).pos().y(), (v0).pos().y())),
+                    (fp::fsubs((v1).pos().y(), (v0).pos().y())),
+                )),
+            ) < 4.0
+            {
+                return result;
+            }
+        }
+    }
+    return (((Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .x0())
+    .next_id0() as i32);
+}
+
+fn inl_mpLineGetKindInline_unfused<'a>(ctx: &'a Ctx, line_id: i32) -> u32 {
+    let mut line_id = line_id;
+    return ((Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .flags()
+        & ((15_i32) as u32));
+}
+
+fn inl_mpLineGetNextFrom_unfused<'a>(
+    ctx: &'a Ctx,
+    line: MapLine<'a>,
+    flags_base: Val<'a, u32>,
+) -> i32 {
+    let mut line = line;
+    let mut flags_base = flags_base;
+    let mut result: i32 = ((line).next_id1() as i32);
+    if result != 1_i32.wrapping_neg() {
+        let mut flags: u32 = (Handle::add(flags_base, result.wrapping_mul(2_i32))).get();
+        if ((flags & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0)
+            && (!((flags & ((shl_i32(1_i32, (18_i32 as u32))) as u32)) != 0))
+        {
+            let mut v1: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                ((line).v1_idx() as i32),
+            ));
+            let mut v0: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), result)).x0())
+                    .v0_idx() as i32),
+            ));
+            if fp::fadds(
+                (fp::fmuls(
+                    (fp::fsubs((v1).pos().x(), (v0).pos().x())),
+                    (fp::fsubs((v1).pos().x(), (v0).pos().x())),
+                )),
+                (fp::fmuls(
+                    (fp::fsubs((v1).pos().y(), (v0).pos().y())),
+                    (fp::fsubs((v1).pos().y(), (v0).pos().y())),
+                )),
+            ) < 4.0
+            {
+                return result;
+            }
+        }
+    }
+    return ((line).next_id0() as i32);
+}
+
+fn inl_mpLineGetPrevFrom_unfused<'a>(
+    ctx: &'a Ctx,
+    line: MapLine<'a>,
+    flags_base: Val<'a, u32>,
+) -> i32 {
+    let mut line = line;
+    let mut flags_base = flags_base;
+    let mut result: i32 = ((line).prev_id1() as i32);
+    if result != 1_i32.wrapping_neg() {
+        let mut flags: u32 = (Handle::add(flags_base, result.wrapping_mul(2_i32))).get();
+        if ((flags & ((shl_i32(1_i32, (16_i32 as u32))) as u32)) != 0)
+            && (!((flags & ((shl_i32(1_i32, (18_i32 as u32))) as u32)) != 0))
+        {
+            let mut v0: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                ((line).v0_idx() as i32),
+            ));
+            let mut v1: CollVtx<'a> = (Handle::add(
+                statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+                (((Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), result)).x0())
+                    .v1_idx() as i32),
+            ));
+            if fp::fadds(
+                (fp::fmuls(
+                    (fp::fsubs((v0).pos().x(), (v1).pos().x())),
+                    (fp::fsubs((v0).pos().x(), (v1).pos().x())),
+                )),
+                (fp::fmuls(
+                    (fp::fsubs((v0).pos().y(), (v1).pos().y())),
+                    (fp::fsubs((v0).pos().y(), (v1).pos().y())),
+                )),
+            ) < 4.0
+            {
+                return result;
+            }
+        }
+    }
+    return ((line).prev_id0() as i32);
 }
 
 fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
@@ -12614,6 +17090,57 @@ fn inl_mpLib_80054ED8<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
     return 1_i32;
 }
 
+fn inl_mpLineGetV1Pos<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
+    let mut line_id = line_id;
+    let mut pos_out = pos_out;
+    let mut v1: CollVtx<'a> = null(ctx);
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x11bc_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x1199_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    v1 = (Handle::add(
+        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+        (((Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            line_id,
+        ))
+        .x0())
+        .v1_idx() as i32),
+    ));
+    (pos_out).set_x((v1).pos().x());
+    (pos_out).set_y((v1).pos().y());
+    (pos_out).set_z(0.0);
+}
+
 fn inl_sqrtf_store<'a>(ctx: &'a Ctx, x: f64, y: Val<'a, F32>) -> f64 {
     let mut x = x;
     let mut y = y;
@@ -12635,6 +17162,226 @@ fn inl_sqrtf_store<'a>(ctx: &'a Ctx, x: f64, y: Val<'a, F32>) -> f64 {
         return (y).get();
     }
     return x;
+}
+
+fn inl_mpLineGetKind<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
+    let mut line_id = line_id;
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x11dd_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x11ad_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    return (((Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .flags()
+        & ((15_i32) as u32)) as i32);
+}
+
+fn inl_mpLineGetV0Pos<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
+    let mut line_id = line_id;
+    let mut pos_out = pos_out;
+    let mut v0: CollVtx<'a> = null(ctx);
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x11cb_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x11a4_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    v0 = (Handle::add(
+        statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+        (((Handle::add(
+            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+            line_id,
+        ))
+        .x0())
+        .v0_idx() as i32),
+    ));
+    (pos_out).set_x((v0).pos().x());
+    (pos_out).set_y((v0).pos().y());
+    (pos_out).set_z(0.0);
+}
+
+fn inl_mpLineGetFlags<'a>(ctx: &'a Ctx, line_id: i32) -> u32 {
+    let mut line_id = line_id;
+    'l1: loop {
+        'c2: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x11e7_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x11b3_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    return (((Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .x0())
+    .lo_flags() as u32);
+}
+
+fn inl_mpLineGetNormal<'a>(ctx: &'a Ctx, line_id: i32, normal_out: Vec<'a>) -> Vec<'a> {
+    let __frame = ctx.stack_frame(0x10);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let mut line_id = line_id;
+    let mut normal_out = normal_out;
+    let mut line: MapLine<'a> = null(ctx);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    'l3: loop {
+        'c4: {
+            if ((line_id) == 1_i32.wrapping_neg())
+                || ((line_id)
+                    >= (statics::melee__mp__mplib::mpLib_804D64B4(ctx).get()).line_count())
+            {
+                (if ((0_i32) != 0) {
+                    { () }
+                } else {
+                    ({
+                        fns::OSReport(
+                            ctx,
+                            cstr(ctx, 0x803bf4b0),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d3958))),
+                                VarArg::Int(0x1201_i32 as u32),
+                                VarArg::Int(line_id as u32),
+                            ],
+                        );
+                        fns::__assert(
+                            ctx,
+                            cstr(ctx, 0x803bd3ec),
+                            (0x11c6_i32 as u32),
+                            cstr(ctx, 0x803bd3ec),
+                        )
+                    })
+                });
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l3;
+        }
+    }
+    line = (Handle::add(
+        statics::melee__mp__mplib::groundCollLine(ctx).get(),
+        line_id,
+    ))
+    .x0();
+    {
+        let mut y0: f64 = (Handle::add(
+            statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+            ((line).v0_idx() as i32),
+        ))
+        .pos()
+        .y();
+        let mut y1: f64 = (Handle::add(
+            statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+            ((line).v1_idx() as i32),
+        ))
+        .pos()
+        .y();
+        let mut x0: f64 = (Handle::add(
+            statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+            ((line).v0_idx() as i32),
+        ))
+        .pos()
+        .x();
+        let mut x1: f64 = (Handle::add(
+            statics::melee__mp__mplib::groundCollVtx(ctx).get(),
+            ((line).v1_idx() as i32),
+        ))
+        .pos()
+        .x();
+        (normal_out).set_x(fp::fneg((fp::fsubs(y1, y0))));
+        (normal_out).set_y((fp::fsubs(x1, x0)));
+        (normal_out).set_z(0.0);
+        fns::PSVECNormalize(ctx, normal_out, normal_out);
+    }
+    return normal_out;
 }
 
 fn inl_mpLib_80057424_unfused<'a>(ctx: &'a Ctx, joint_id: i32) {
@@ -12791,6 +17538,42 @@ pub fn register(ctx: &Ctx) {
             );
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8004dd90,
+        |ctx| {
+            let (a0, a1, a2, a3, a4): (i32, Vec<'_>, Val<'_, F32>, Val<'_, u32>, Vec<'_>) =
+                Args::take_all(ctx);
+            Ret::put(mpLib_8004DD90_Floor(ctx, a0, a1, a2, a3, a4), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8004e090,
+        |ctx| {
+            let (a0, a1, a2, a3, a4): (i32, Vec<'_>, Val<'_, F32>, Val<'_, u32>, Vec<'_>) =
+                Args::take_all(ctx);
+            Ret::put(mpLib_8004E090_Ceiling(ctx, a0, a1, a2, a3, a4), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8004e398,
+        |ctx| {
+            let (a0, a1, a2, a3, a4): (i32, Vec<'_>, Val<'_, F32>, Val<'_, u32>, Vec<'_>) =
+                Args::take_all(ctx);
+            Ret::put(mpLib_8004E398_LeftWall(ctx, a0, a1, a2, a3, a4), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8004e684,
+        |ctx| {
+            let (a0, a1, a2, a3, a4): (i32, Vec<'_>, Val<'_, F32>, Val<'_, u32>, Vec<'_>) =
+                Args::take_all(ctx);
+            Ret::put(mpLib_8004E684_RightWall(ctx, a0, a1, a2, a3, a4), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x8004e97c,
@@ -13205,10 +17988,274 @@ pub fn register(ctx: &Ctx) {
         Returns::Int,
     );
     ctx.register_port(
+        0x80052534,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(mpLineNextNonFloor(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80052700,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(mpLinePrevNonFloor(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x800528cc,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(mpLinePrevNonCeiling(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80052a98,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(mpLineNextNonCeiling(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80052c64,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(mpLineNextNonLeftWall(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80052e30,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(mpLinePrevNonLeftWall(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80052ffc,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(mpLinePrevNonRightWall(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x800531c8,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(mpLineNextNonRightWall(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80053394,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(mpLib_80053394_Floor(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80053448,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(mpLib_80053448_Floor(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x800534fc,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(mpLib_800534FC_Floor(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x800536cc,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(mpLib_800536CC_Floor(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8005389c,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(mpLib_8005389C_Ceiling(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80053950,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(mpLib_80053950_Ceiling(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80053a04,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(mpLib_80053A04_Ceiling(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80053bd4,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(mpLib_80053BD4_Ceiling(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80053da4,
+        |ctx| {
+            let (a0, a1): (i32, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(mpLib_80053DA4_Floor(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80053ecc,
+        |ctx| {
+            let (a0, a1): (i32, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(mpLib_80053ECC_Floor(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80053ff4,
+        |ctx| {
+            let (a0, a1): (i32, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(mpFloorGetRight(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80054158,
+        |ctx| {
+            let (a0, a1): (i32, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(mpFloorGetLeft(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x800542bc,
+        |ctx| {
+            let (a0, a1): (i32, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(mpCeilingGetRight(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80054420,
+        |ctx| {
+            let (a0, a1): (i32, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(mpCeilingGetLeft(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80054584,
+        |ctx| {
+            let (a0, a1): (i32, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(mpLeftWallGetTop(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x800546e8,
+        |ctx| {
+            let (a0, a1): (i32, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(mpLeftWallGetBottom(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8005484c,
+        |ctx| {
+            let (a0, a1): (i32, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(mpRightWallGetTop(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x800549b0,
+        |ctx| {
+            let (a0, a1): (i32, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(mpRightWallGetBottom(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80054b14,
+        |ctx| {
+            let (a0, a1): (i32, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(mpLineGetV1Pos(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80054bc0,
+        |ctx| {
+            let (a0, a1): (i32, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(mpLineGetV0Pos(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80054c6c,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(mpLineGetKind(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80054cec,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(mpLineGetFlags(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80054d68,
+        |ctx| {
+            let (a0, a1): (i32, u32) = Args::take_all(ctx);
+            Ret::put(mpLib_80054D68(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80054dfc,
+        |ctx| {
+            let (a0, a1): (i32, Vec<'_>) = Args::take_all(ctx);
+            Ret::put(mpLineGetNormal(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
         0x80054ed8,
         |ctx| {
             let (a0,): (i32,) = Args::take_all(ctx);
             Ret::put(mpLib_80054ED8(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80054f68,
+        |ctx| {
+            let (a0, a1): (i32, i32) = Args::take_all(ctx);
+            Ret::put(mpLinesConnected(ctx, a0, a1), ctx);
         },
         Returns::Int,
     );
@@ -13369,6 +18416,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (i32, Val<'_, i32>) = Args::take_all(ctx);
             Ret::put(mpLib_80056B34(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x80056b6c,
+        |ctx| {
+            let (a0,): (i32,) = Args::take_all(ctx);
+            Ret::put(mpJointFromLine(ctx, a0), ctx);
         },
         Returns::Int,
     );

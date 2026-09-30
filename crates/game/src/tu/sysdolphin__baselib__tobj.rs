@@ -372,6 +372,73 @@ pub fn HSD_TexMapID2PTTexMtx<'a>(ctx: &'a Ctx, id: i32) -> u32 {
     return (0_i32 as u32);
 }
 
+pub fn MakeTextureMtx<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
+    let __frame = ctx.stack_frame(0x98);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xc);
+    let trans: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let rot: Quaternion<'a> = frame_at(ctx, &__frame, 0x48);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x58);
+    let mut tobj = tobj;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    (if (((tobj).repeat_s() as i32) != 0) && (((tobj).repeat_t() as i32) != 0) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x80405574),
+            (0x175_i32 as u32),
+            cstr(ctx, 0x80405574),
+        )
+    });
+    scale.set_x(
+        (if fp::fabs((tobj).scale().x()) < 1.000000013351432e-10_f64 {
+            0.0
+        } else {
+            fp::fdivs(fp::frsp((tobj).repeat_s() as f64), (tobj).scale().x())
+        }),
+    );
+    scale.set_y(
+        (if fp::fabs((tobj).scale().y()) < 1.000000013351432e-10_f64 {
+            0.0
+        } else {
+            fp::fdivs(fp::frsp((tobj).repeat_t() as f64), (tobj).scale().y())
+        }),
+    );
+    scale.set_z((tobj).scale().z());
+    rot.set_x((tobj).rotate().x());
+    rot.set_y((tobj).rotate().y());
+    rot.set_z(fp::fneg((tobj).rotate().z()));
+    trans.set_x(fp::fneg((tobj).translate().x()));
+    trans.set_y(fp::fneg(
+        (fp::fadds(
+            (tobj).translate().y(),
+            (if ((tobj).wrap_t() as u32) == ((enums::GX_MIRROR as i32) as u32) {
+                fp::fdivs(
+                    1.0,
+                    (fp::fdivs(
+                        fp::frsp(((tobj).repeat_t() as i32) as f64),
+                        (tobj).scale().y(),
+                    )),
+                )
+            } else {
+                0.0
+            }),
+        )),
+    ));
+    trans.set_z((tobj).translate().z());
+    fns::PSMTXTrans(ctx, (tobj).mtx().get(0), trans.x(), trans.y(), trans.z());
+    fns::HSD_MkRotationMtx(ctx, m.get(0), Handle::cast::<Vec<'a>>(rot));
+    fns::PSMTXConcat(ctx, m.get(0), (tobj).mtx().get(0), (tobj).mtx().get(0));
+    fns::PSMTXScale(ctx, m.get(0), scale.x(), scale.y(), scale.z());
+    fns::PSMTXConcat(ctx, m.get(0), (tobj).mtx().get(0), (tobj).mtx().get(0));
+}
+
 pub fn TObjSetupMtx<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
     let __frame = ctx.stack_frame(0xc8);
     let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
@@ -3235,6 +3302,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(HSD_TexMapID2PTTexMtx(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x8035ef38,
+        |ctx| {
+            let (a0,): (HSD_TObj<'_>,) = Args::take_all(ctx);
+            Ret::put(MakeTextureMtx(ctx, a0), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x8035f0ec,

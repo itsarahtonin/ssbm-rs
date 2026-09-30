@@ -430,6 +430,104 @@ pub fn lbSnap_8001DA5C<'a>(ctx: &'a Ctx, src: Val<'a, u8>) {
     }
 }
 
+pub fn lbSnap_8001DC0C<'a>(ctx: &'a Ctx, image: Val<'a, u8>) -> i32 {
+    let __frame = ctx.stack_frame(0x50);
+    let time: OSCalendarTime<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut image = image;
+    let mut ticks: i64 = 0;
+    let mut seconds: u32 = 0;
+    let mut i: u32 = 0;
+    let mut text: Val<'a, i8> = null(ctx);
+    let mut ret: i32 = 0_i32;
+    (statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).set_x0(4_i32);
+    (statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).set_width((0x280_i32 as u16));
+    (statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).set_height((0x1e0_i32 as u16));
+    (statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).set_stkind(fns::gm_GetStKind(ctx));
+    fns::it_8026C47C(
+        ctx,
+        (statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).x14(),
+    );
+    (statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).set_x34(fns::ft_GetFtKindMask(ctx));
+    (statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).set_x8((3_i32 as u8));
+    fns::hsd_803B5C2C(
+        ctx,
+        ((statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).x8() as i32),
+    );
+    (statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).set_xC(fns::hsd_803B51C8(
+        ctx,
+        (Handle::addr(image) as i32),
+        ((statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).width() as i32),
+        ((statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).height() as i32),
+        (statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap())
+            .x38()
+            .at(0),
+        0x3e800_i32,
+    ));
+    if (statics::melee__lb__lbsnap::lbSnap_80433380(ctx).snap()).xC() != 0_i32 {
+        ret = 1_i32;
+    }
+    fns::lbSnap_8001DA5C(ctx, image);
+    ticks = fns::OSGetTime(ctx);
+    seconds = ((div_i64(
+        (ticks),
+        ((div_u32(
+            ((ptr::<Val<'a, u32>>(
+                ctx,
+                ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+            ))
+            .get()),
+            (4_i32 as u32),
+        )) as i64),
+    )) as u32);
+    fns::OSTicksToCalendarTime(
+        ctx,
+        (((seconds as u64).wrapping_mul(
+            ((div_u32(
+                ((ptr::<Val<'a, u32>>(
+                    ctx,
+                    ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                ))
+                .get()),
+                (4_i32 as u32),
+            )) as u64),
+        )) as i64),
+        time,
+    );
+    {
+        i = (0_i32 as u32);
+        'l1: while i < 64_u32 {
+            'c2: {
+                statics::melee__lb__lbsnap::lbSnap_80433380(ctx)
+                    .filename()
+                    .at((i as i32))
+                    .set((0_i32 as i8));
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    if (fns::lbLang_IsSettingJP(ctx) != 0) {
+        text = cstr(ctx, 0x803bad1c);
+    } else {
+        text = cstr(ctx, 0x803bad48);
+    }
+    let _ = fns::sprintf(
+        ctx,
+        statics::melee__lb__lbsnap::lbSnap_80433380(ctx)
+            .filename()
+            .at(0),
+        cstr(ctx, 0x803bad74),
+        &[
+            VarArg::Int(Handle::addr(text)),
+            VarArg::Int(time.mon().wrapping_add(1_i32) as u32),
+            VarArg::Int(time.mday() as u32),
+            VarArg::Int(time.hour() as u32),
+            VarArg::Int(time.min() as u32),
+            VarArg::Int(time.sec() as u32),
+        ],
+    );
+    return ret;
+}
+
 pub fn lbSnap_8001DE8C<'a>(ctx: &'a Ctx, arg0: Addr<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
     let mut arg0 = arg0;
@@ -848,6 +946,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(lbSnap_8001DA5C(ctx, a0), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8001dc0c,
+        |ctx| {
+            let (a0,): (Val<'_, u8>,) = Args::take_all(ctx);
+            Ret::put(lbSnap_8001DC0C(ctx, a0), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x8001de8c,

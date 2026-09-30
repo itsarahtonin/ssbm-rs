@@ -460,6 +460,32 @@ pub fn PickAutoName<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 {
     return inl_PickAutoNameInline_unfused(ctx, arg0);
 }
 
+pub fn NameContainsOnlySpaces<'a>(ctx: &'a Ctx) -> i32 {
+    let mut null_char: i16 = 0;
+    let mut text: Val<'a, i8> = fns::mnNameNew_CurrentNameText(ctx).at(0);
+    let mut i: i32 = 0;
+    {
+        i = 0_i32;
+        'l1: while i < 4_i32 {
+            'c2: {
+                null_char = ((fns::mnNameNew_NullCharacter(ctx).at(0)).get() as i16);
+                if (null_char as i32) != ((Handle::add(text, 0_i32)).get() as i32) {
+                    if (((cstr(ctx, 0x804d4cac)).get() as i32)
+                        != ((Handle::add(text, 0_i32)).get() as i32))
+                        || (((Handle::add((cstr(ctx, 0x804d4cac)), 1_i32)).get() as i32)
+                            != ((Handle::add(text, 1_i32)).get() as i32))
+                    {
+                        return 0_i32;
+                    }
+                }
+                text = Handle::add(text, 3_i32);
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return 1_i32;
+}
+
 pub fn WriteCharactersForNameAtIndex<'a>(ctx: &'a Ctx, slot: u8, port: i32) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut slot = slot;
@@ -2352,6 +2378,13 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(PickAutoName(ctx, a0), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8023bee0,
+        |ctx| {
+            Ret::put(NameContainsOnlySpaces(ctx), ctx);
         },
         Returns::Int,
     );

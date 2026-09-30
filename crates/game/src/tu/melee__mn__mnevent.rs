@@ -150,11 +150,279 @@ pub fn mnEvent_8024D0CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ckind: i32) {
     fns::HSD_JObjAnimAll(ctx, jobj.get());
 }
 
+pub fn mnEvent_8024D15C<'a>(ctx: &'a Ctx, idx: i32, event_id: i32) {
+    let __frame = ctx.stack_frame(0xc8);
+    let jobj_0A: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let jobj_0C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x14);
+    let icon_pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let icon_jobj_0C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x28);
+    let icon_jobj_0A: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x2c);
+    let unused_2: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x30);
+    let mut idx = idx;
+    let mut event_id = event_id;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    {
+        let mut data: MnEventData<'a> = null(ctx);
+        let mut text_base: Ptr<'a, HSD_Text<'a>> = null(ctx);
+        let mut text_slot: Ptr<'a, HSD_Text<'a>> = null(ctx);
+        let mut icon_base: Ptr<'a, HSD_Text<'a>> = null(ctx);
+        let mut icon_slot: Ptr<'a, HSD_Text<'a>> = null(ctx);
+        let mut text: HSD_Text<'a> = null(ctx);
+        let mut icon_text: HSD_Text<'a> = null(ctx);
+        let mut spacing: f64 = 0.0;
+        let mut text_x: f64 = 0.0;
+        let mut text_y: f64 = 0.0;
+        let mut tree: HSD_JObj<'a> = null(ctx);
+        let mut sis_idx: i32 = 0;
+        'l3: loop {
+            'c4: {}
+            if !(0_i32 != 0) {
+                break 'l3;
+            }
+        }
+        tree = Handle::cast::<HSD_JObj<'a>>(
+            (statics::melee__mn__mnevent::mnEvent_804D6C60(ctx).get()).hsd_obj(),
+        );
+        data = inl_mnEvent_GetData(ctx);
+        let _ = fns::lb_80011E24(
+            ctx,
+            tree,
+            jobj_0A,
+            &[
+                VarArg::Int(10_i32 as u32),
+                VarArg::Int(1_i32.wrapping_neg() as u32),
+            ],
+        );
+        let _ = fns::lb_80011E24(
+            ctx,
+            tree,
+            jobj_0C,
+            &[
+                VarArg::Int(12_i32 as u32),
+                VarArg::Int(1_i32.wrapping_neg() as u32),
+            ],
+        );
+        spacing = inl_HSD_JObjGetTranslationY(ctx, jobj_0A.get());
+        spacing = fp::fsubs(inl_HSD_JObjGetTranslationY(ctx, jobj_0C.get()), spacing);
+        inl_HSD_JObjGetTranslation(ctx, jobj_0A.get(), pos);
+        pos.set_y(fp::fneg(
+            (fp::fmadds(fp::frsp(idx as f64), spacing, pos.y())),
+        ));
+        if !Handle::is_null((data).gobjs().at(idx).get()) {
+            let mut gobjs: Ptr<'a, HSD_GObj<'a>> = (data).gobjs().at(0);
+            let mut old_gobj: HSD_GObj<'a> = (Handle::add(gobjs, idx)).get();
+            fns::HSD_GObjFree(ctx, old_gobj);
+            (data).gobjs().at(idx).set(null::<HSD_GObj<'a>>(ctx));
+        }
+        if fns::gmMainLib_8015CEFC(ctx, event_id) != 0_i32 {
+            inl_mnEvent_CreateIconForSlot(
+                ctx,
+                idx,
+                (data).gobjs().at(idx),
+                icon_jobj_0A,
+                icon_jobj_0C,
+                icon_pos,
+            );
+        }
+        text_base = (data).texts().at(0);
+        text_slot = (Handle::add(text_base, idx));
+        if !Handle::is_null((text_slot).get()) {
+            fns::HSD_SisLib_803A5CC4(ctx, (data).texts().at(idx).get());
+        }
+        text = fns::HSD_SisLib_803A6754(ctx, 0_i32, 1_i32);
+        (text_slot).set(text);
+        (text).font_size().set_x(0.03500000014901161);
+        (text).font_size().set_y(0.03500000014901161);
+        text_x = fp::fadds(
+            pos.x(),
+            statics::melee__mn__mnevent::mnEvent_803EF764(ctx).x(),
+        );
+        text_y = fp::fadds(
+            pos.y(),
+            statics::melee__mn__mnevent::mnEvent_803EF764(ctx).y(),
+        );
+        (text).set_pos_x(text_x);
+        (text).set_pos_y(text_y);
+        (text).set_pos_z(17.0);
+        (text).set_default_kerning((1_i32 as u8));
+        Handle::copy_from(
+            (text).text_color(),
+            statics::melee__mn__mnevent::mnEvent_804D5028(ctx),
+        );
+        let _ = fns::HSD_SisLib_803A6B98(
+            ctx,
+            text,
+            0.0,
+            0.0,
+            cstr(ctx, 0x803ef77c),
+            &[VarArg::Int(event_id.wrapping_add(1_i32) as u32)],
+        );
+        icon_base = (data).icons().at(0);
+        icon_slot = (Handle::add(icon_base, idx));
+        if !Handle::is_null((icon_slot).get()) {
+            fns::HSD_SisLib_803A5CC4(ctx, (data).icons().at(idx).get());
+        }
+        icon_text = fns::HSD_SisLib_803A5ACC(
+            ctx,
+            0_i32,
+            1_i32,
+            fp::fadds(
+                pos.x(),
+                statics::melee__mn__mnevent::mnEvent_803EF770(ctx).x(),
+            ),
+            fp::fadds(
+                pos.y(),
+                statics::melee__mn__mnevent::mnEvent_803EF770(ctx).y(),
+            ),
+            17.0,
+            364.6833190917969,
+            38.387718200683594,
+        );
+        (icon_slot).set(icon_text);
+        (icon_text).font_size().set_x(0.03500000014901161);
+        (icon_text).font_size().set_y(0.03500000014901161);
+        sis_idx = (((fns::gm_801BEBA8(ctx, (event_id as u8)) as i32).wrapping_mul(2_i32))
+            & 0x1fe_i32)
+            .wrapping_add(0x154_i32);
+        fns::HSD_SisLib_803A6368(ctx, icon_text, sis_idx);
+    }
+}
+
 pub fn mnEvent_8024D4E0<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut jobj = jobj;
     let mut translate = translate;
     inl_HSD_JObjSetTranslate_unfused(ctx, jobj, translate);
+}
+
+pub fn mnEvent_8024D5B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, event: u8) {
+    let __frame = ctx.stack_frame(0x48);
+    let sp18: ArrV<'a, i8, 4> = frame_at(ctx, &__frame, 0x0);
+    let sp14: ArrV<'a, i8, 4> = frame_at(ctx, &__frame, 0x4);
+    let sp10: ArrV<'a, i8, 4> = frame_at(ctx, &__frame, 0x8);
+    let mut gobj = gobj;
+    let mut event = event;
+    let mut time_text: HSD_Text<'a> = null(ctx);
+    let mut temp_r3: HSD_Text<'a> = null(ctx);
+    let mut temp_r30: u32 = 0;
+    let mut temp_r28: MnEventData<'a> = null(ctx);
+    let mut temp_r27: u8 = 0;
+    temp_r28 = Handle::cast::<MnEventData<'a>>((gobj).user_data());
+    temp_r27 = event;
+    temp_r3 = (temp_r28).name_text();
+    if !Handle::is_null(temp_r3) {
+        fns::HSD_SisLib_803A5CC4(ctx, (temp_r28).name_text());
+    }
+    time_text = fns::HSD_SisLib_803A6754(ctx, 0_i32, 1_i32);
+    (temp_r28).set_name_text(time_text);
+    (time_text).set_pos_x(3.799999952316284);
+    (time_text).set_pos_y(6.900000095367432);
+    (time_text).set_pos_z(17.0);
+    Handle::copy_from(
+        (time_text).text_color(),
+        statics::melee__mn__mnevent::mnEvent_804D502C(ctx),
+    );
+    (time_text).set_default_alignment((2_i32 as u8));
+    (time_text).font_size().set_x(0.029999999329447746);
+    (time_text).font_size().set_y(0.029999999329447746);
+    temp_r30 = (fns::gmMainLib_8015CF5C(
+        ctx,
+        (fns::gm_801BEBC0(ctx, (((temp_r27 as i32) & 255_i32) as u8)) as i32),
+    ) as u32);
+    if ((fns::gm_801BEB8C(
+        ctx,
+        ((fns::gm_801BEBC0(ctx, ((((temp_r27 as u32) & 255_u32) & 255_u32) as u8)) as u32) as u8),
+    ) as u32)
+        & 255_u32)
+        != (0_i32 as u32)
+    {
+        if fns::gmMainLib_8015CEFC(
+            ctx,
+            (fns::gm_801BEBC0(ctx, (((event as u32) & 0xffffffff_u32) as u8)) as i32),
+        ) != 0_i32
+        {
+            fns::mn_8022EA78(
+                ctx,
+                sp18.at(0),
+                2_i32,
+                rem_u32(
+                    (div_u32(div_u32(temp_r30, (60_i32 as u32)), (60_i32 as u32))),
+                    (60_i32 as u32),
+                ),
+            );
+            fns::mn_8022EA78(
+                ctx,
+                sp14.at(0),
+                2_i32,
+                rem_u32((div_u32(temp_r30, (60_i32 as u32))), (60_i32 as u32)),
+            );
+            fns::mn_8022EA78(
+                ctx,
+                sp10.at(0),
+                2_i32,
+                (fp::fctiwz(
+                    (fp::fdivs(
+                        (fp::fmuls(99.0, fp::frsp((rem_u32(temp_r30, (60_i32 as u32))) as f64))),
+                        59.0,
+                    )),
+                ) as u32),
+            );
+            let _ = fns::HSD_SisLib_803A6B98(
+                ctx,
+                time_text,
+                0.0,
+                0.0,
+                cstr(ctx, 0x803ef794),
+                &[
+                    VarArg::Int(Handle::addr(sp18.at(0))),
+                    VarArg::Int(Handle::addr(sp14.at(0))),
+                    VarArg::Int(Handle::addr(sp10.at(0))),
+                ],
+            );
+            return;
+        }
+        (time_text).set_pos_x(4.25);
+        (time_text).set_pos_y(6.900000095367432);
+        (time_text).set_pos_z(17.0);
+        (time_text).set_default_kerning((1_i32 as u8));
+        let _ = fns::HSD_SisLib_803A6B98(
+            ctx,
+            time_text,
+            0.0,
+            0.0,
+            cstr(ctx, 0x803ef7a0),
+            &[
+                VarArg::Int(Handle::addr(sp18.at(0))),
+                VarArg::Int(Handle::addr(sp14.at(0))),
+                VarArg::Int(Handle::addr(sp10.at(0))),
+            ],
+        );
+        return;
+    }
+    if fns::gmMainLib_8015CEFC(
+        ctx,
+        (fns::gm_801BEBC0(ctx, (((event as u64) & 0xffffffffffffffff_u64) as u8)) as i32),
+    ) != 0_i32
+    {
+        let _ = fns::HSD_SisLib_803A6B98(
+            ctx,
+            time_text,
+            0.0,
+            0.0,
+            cstr(ctx, 0x804d5040),
+            &[VarArg::Int(temp_r30 as u32)],
+        );
+        return;
+    }
+    (time_text).set_default_kerning((1_i32 as u8));
+    let _ = fns::HSD_SisLib_803A6B98(ctx, time_text, 0.0, 0.0, cstr(ctx, 0x803ef7ac), &[]);
 }
 
 pub fn mnEvent_8024D7E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, idx: i32) {
@@ -1063,10 +1331,26 @@ pub fn register(ctx: &Ctx) {
         Returns::Nothing,
     );
     ctx.register_port(
+        0x8024d15c,
+        |ctx| {
+            let (a0, a1): (i32, i32) = Args::take_all(ctx);
+            Ret::put(mnEvent_8024D15C(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
         0x8024d4e0,
         |ctx| {
             let (a0, a1): (HSD_JObj<'_>, Vec<'_>) = Args::take_all(ctx);
             Ret::put(mnEvent_8024D4E0(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8024d5b0,
+        |ctx| {
+            let (a0, a1): (HSD_GObj<'_>, u8) = Args::take_all(ctx);
+            Ret::put(mnEvent_8024D5B0(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );

@@ -412,6 +412,301 @@ pub fn mpIsland_8005ACE8<'a>(ctx: &'a Ctx, arg0: mp_UnkStruct0<'a>, arg1: Vec<'a
     }
 }
 
+pub fn mpIsland_8005AE1C<'a>(
+    ctx: &'a Ctx,
+    arg0: Ptr<'a, mp_UnkStruct0<'a>>,
+    arg1: Ptr<'a, mp_UnkStruct0<'a>>,
+    arg2: i32,
+    arg3: i32,
+    arg4: i32,
+) {
+    let __frame = ctx.stack_frame(0x40);
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut arg3 = arg3;
+    let mut arg4 = arg4;
+    let mut prev_b: mp_UnkStruct0<'a> = null(ctx);
+    let mut prev_a: mp_UnkStruct0<'a> = null(ctx);
+    let mut cur: mp_UnkStruct0<'a> = null(ctx);
+    let mut next: mp_UnkStruct0<'a> = null(ctx);
+    let mut vtx: CollVtx<'a> = null(ctx);
+    let mut end: i32 = 0;
+    let mut z_val: f64 = 0.0;
+    let mut v0: u16 = 0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                prev_b = null::<mp_UnkStruct0<'a>>(ctx);
+                prev_a = null::<mp_UnkStruct0<'a>>(ctx);
+                vtx = fns::mpGetGroundCollVtx(ctx);
+                cur = (arg0).get();
+                end = arg2.wrapping_add(arg3);
+                z_val = 0.0;
+                __state = 1;
+            }
+            1 => {
+                __state = if !Handle::is_null(cur) { 31 } else { 32 };
+            }
+            2 => {
+                __state = 3;
+            }
+            3 => {
+                v0 = (cur).x4();
+                next = (cur).next();
+                __state = if (v0 as i32) < arg2 { 4 } else { 5 };
+            }
+            4 => {
+                __state = if ((cur).x6() as i32) < arg2 { 7 } else { 8 };
+            }
+            5 => {
+                __state = if end > (v0 as i32) { 12 } else { 13 };
+            }
+            6 => {
+                unreachable!();
+            }
+            7 => {
+                __state = 10;
+            }
+            8 => {
+                __state = 5;
+            }
+            9 => {
+                unreachable!();
+            }
+            10 => {
+                (cur).set_next(prev_b);
+                prev_b = cur;
+                __state = 29;
+            }
+            11 => {
+                __state = 8;
+            }
+            12 => {
+                __state = 15;
+            }
+            13 => {
+                __state = if end <= ((cur).x6() as i32) { 17 } else { 18 };
+            }
+            14 => {
+                unreachable!();
+            }
+            15 => {
+                (cur).x8().set_x((Handle::add(vtx, (v0 as i32))).pos().x());
+                (cur)
+                    .x8()
+                    .set_y((Handle::add(vtx, ((cur).x4() as i32))).pos().y());
+                (cur).x8().set_z(z_val);
+                (cur)
+                    .x14()
+                    .set_x((Handle::add(vtx, ((cur).x6() as i32))).pos().x());
+                (cur)
+                    .x14()
+                    .set_y((Handle::add(vtx, ((cur).x6() as i32))).pos().y());
+                (cur).x14().set_z(z_val);
+                __state = if (arg4 != 0) { 21 } else { 22 };
+            }
+            16 => {
+                __state = 13;
+            }
+            17 => {
+                __state = 10;
+            }
+            18 => {
+                __state = 15;
+            }
+            19 => {
+                unreachable!();
+            }
+            20 => {
+                __state = 18;
+            }
+            21 => {
+                __state = 10;
+            }
+            22 => {
+                __state = if (((cur).x20() & 2_i32) != 0) { 25 } else { 26 };
+            }
+            23 => {
+                unreachable!();
+            }
+            24 => {
+                __state = 22;
+            }
+            25 => {
+                __state = 10;
+            }
+            26 => {
+                (cur).set_x20(((cur).x20() | 2_i32));
+                (cur).set_next(prev_a);
+                prev_a = cur;
+                __state = 29;
+            }
+            27 => {
+                unreachable!();
+            }
+            28 => {
+                __state = 26;
+            }
+            29 => {
+                cur = next;
+                __state = 1;
+            }
+            30 => {
+                __state = 10;
+            }
+            31 => {
+                __state = 3;
+            }
+            32 => {
+                cur = (arg1).get();
+                z_val = 0.0;
+                __state = 35;
+            }
+            33 => {
+                unreachable!();
+            }
+            34 => {
+                __state = 32;
+            }
+            35 => {
+                __state = if !Handle::is_null(cur) { 65 } else { 66 };
+            }
+            36 => {
+                __state = 37;
+            }
+            37 => {
+                v0 = (cur).x4();
+                next = (cur).next();
+                __state = if (v0 as i32) < arg2 { 38 } else { 39 };
+            }
+            38 => {
+                __state = if ((cur).x6() as i32) < arg2 { 41 } else { 42 };
+            }
+            39 => {
+                __state = if end > (v0 as i32) { 46 } else { 47 };
+            }
+            40 => {
+                unreachable!();
+            }
+            41 => {
+                __state = 44;
+            }
+            42 => {
+                __state = 39;
+            }
+            43 => {
+                unreachable!();
+            }
+            44 => {
+                (cur).set_next(prev_a);
+                prev_a = cur;
+                __state = 63;
+            }
+            45 => {
+                __state = 42;
+            }
+            46 => {
+                __state = 49;
+            }
+            47 => {
+                __state = if end <= ((cur).x6() as i32) { 51 } else { 52 };
+            }
+            48 => {
+                unreachable!();
+            }
+            49 => {
+                (cur).x8().set_x((Handle::add(vtx, (v0 as i32))).pos().x());
+                (cur)
+                    .x8()
+                    .set_y((Handle::add(vtx, ((cur).x4() as i32))).pos().y());
+                (cur).x8().set_z(z_val);
+                (cur)
+                    .x14()
+                    .set_x((Handle::add(vtx, ((cur).x6() as i32))).pos().x());
+                (cur)
+                    .x14()
+                    .set_y((Handle::add(vtx, ((cur).x6() as i32))).pos().y());
+                (cur).x14().set_z(z_val);
+                __state = if arg4 == 0_i32 { 55 } else { 56 };
+            }
+            50 => {
+                __state = 47;
+            }
+            51 => {
+                __state = 44;
+            }
+            52 => {
+                __state = 49;
+            }
+            53 => {
+                unreachable!();
+            }
+            54 => {
+                __state = 52;
+            }
+            55 => {
+                __state = 44;
+            }
+            56 => {
+                __state = if ((cur).x20() & 2_i32) == 0_i32 {
+                    59
+                } else {
+                    60
+                };
+            }
+            57 => {
+                unreachable!();
+            }
+            58 => {
+                __state = 56;
+            }
+            59 => {
+                __state = 44;
+            }
+            60 => {
+                (cur).set_x20(((cur).x20() & (!2_i32)));
+                (cur).set_next(prev_b);
+                prev_b = cur;
+                __state = 63;
+            }
+            61 => {
+                unreachable!();
+            }
+            62 => {
+                __state = 60;
+            }
+            63 => {
+                cur = next;
+                __state = 35;
+            }
+            64 => {
+                __state = 44;
+            }
+            65 => {
+                __state = 37;
+            }
+            66 => {
+                (arg0).set(prev_b);
+                (arg1).set(prev_a);
+                return;
+            }
+            67 => {
+                unreachable!();
+            }
+            68 => {
+                __state = 66;
+            }
+            69 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn mpIsland_8005B004<'a>(
     ctx: &'a Ctx,
     arg0: Ptr<'a, mp_UnkStruct0<'a>>,
@@ -807,6 +1102,20 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1, a2): (mp_UnkStruct0<'_>, Vec<'_>, Vec<'_>) = Args::take_all(ctx);
             Ret::put(mpIsland_8005ACE8(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8005ae1c,
+        |ctx| {
+            let (a0, a1, a2, a3, a4): (
+                Ptr<'_, mp_UnkStruct0<'_>>,
+                Ptr<'_, mp_UnkStruct0<'_>>,
+                i32,
+                i32,
+                i32,
+            ) = Args::take_all(ctx);
+            Ret::put(mpIsland_8005AE1C(ctx, a0, a1, a2, a3, a4), ctx);
         },
         Returns::Nothing,
     );

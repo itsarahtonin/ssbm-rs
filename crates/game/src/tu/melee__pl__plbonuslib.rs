@@ -1281,6 +1281,213 @@ pub fn fn_8003EE2C<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
     }
 }
 
+pub fn fn_8003F294<'a>(ctx: &'a Ctx, slot: i32, index: i32) {
+    let __frame = ctx.stack_frame(0x38);
+    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let mut slot = slot;
+    let mut index = index;
+    let mut table: pl_StaleMoveTableExt_t<'a> = fns::Player_GetStaleMoveTableIndexPtr2(ctx, slot);
+    let mut new_var: u32 = 0;
+    let mut threshold: u32 = 0;
+    let mut stats: plActionStats<'a> = null(ctx);
+    let mut threshold2: i32 = 0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    let _ = fns::Player_GetEntityAtIndex(ctx, slot, index);
+    stats = fns::Player_GetActionStats(ctx, slot);
+    'l3: loop {
+        'c4: {
+            if index == 1_i32 {
+                return;
+            }
+        }
+        if !(0_i32 != 0) {
+            break 'l3;
+        }
+    }
+    let _ = fns::pl_8003906C(
+        ctx,
+        slot,
+        59_i32,
+        null::<Val<'a, u32>>(ctx),
+        (fns::pl_804D6470(ctx).get()).x70(),
+        ({
+            let __t1 = ((fns::pl_804D6470(ctx).get()).x74() as i32);
+            threshold2 = __t1;
+            __t1
+        } as u32),
+        inl_plBonusLib_8003F294_inline_unfused(ctx, stats, 107_i32),
+        (table).xD9C_ref(),
+    );
+    let _ = fns::pl_8003906C(
+        ctx,
+        slot,
+        69_i32,
+        null::<Val<'a, u32>>(ctx),
+        (fns::pl_804D6470(ctx).get()).x90(),
+        {
+            let __t2 = (fns::pl_804D6470(ctx).get()).x94();
+            threshold = __t2;
+            __t2
+        },
+        inl_plBonusLib_8003F294_inline_unfused(ctx, stats, 112_i32),
+        (table).xDA0_ref(),
+    );
+    {
+        let mut e8: i32 = fns::pl_800386E8(ctx, Handle::cast::<pl_800386E8_arg0_t<'a>>(stats));
+        let _ = fns::pl_8003906C(
+            ctx,
+            slot,
+            73_i32,
+            null::<Val<'a, u32>>(ctx),
+            (fns::pl_804D6470(ctx).get()).xA8(),
+            {
+                let __t3 = (fns::pl_804D6470(ctx).get()).xAC();
+                threshold = __t3;
+                __t3
+            },
+            (e8 as u32),
+            (table).xDA4_ref(),
+        );
+    }
+    let _ = fns::pl_8003906C(
+        ctx,
+        slot,
+        84_i32,
+        null::<Val<'a, u32>>(ctx),
+        (fns::pl_804D6470(ctx).get()).xC4(),
+        {
+            let __t4 = (fns::pl_804D6470(ctx).get()).xC8();
+            threshold = __t4;
+            __t4
+        },
+        inl_plBonusLib_8003F294_inline_unfused(ctx, stats, 111_i32),
+        (table).xDA8_ref(),
+    );
+    let _ = fns::pl_8003906C(
+        ctx,
+        slot,
+        1_i32.wrapping_neg(),
+        Handle::cast::<Val<'a, u32>>((table).xDC8_ref()),
+        (fns::pl_804D6470(ctx).get()).x18(),
+        {
+            let __t5 = (fns::pl_804D6470(ctx).get()).x1C();
+            threshold = __t5;
+            __t5
+        },
+        (stats).hits().total(),
+        (table).xDAC_ref(),
+    );
+    let _ = fns::pl_8003906C(
+        ctx,
+        slot,
+        19_i32,
+        null::<Val<'a, u32>>(ctx),
+        (fns::pl_804D6470(ctx).get()).x2C(),
+        {
+            let __t6 = (fns::pl_804D6470(ctx).get()).x30();
+            threshold = __t6;
+            __t6
+        },
+        (stats).attacks().total(),
+        (table).xDB0_ref(),
+    );
+    threshold = (fns::pl_804D6470(ctx).get()).xE4();
+    let _ = fns::pl_8003906C(
+        ctx,
+        slot,
+        92_i32,
+        null::<Val<'a, u32>>(ctx),
+        (fns::pl_804D6470(ctx).get()).xE0(),
+        threshold,
+        ((table).xD70() as u32),
+        (table).xDB4_ref(),
+    );
+    let _ = fns::pl_8003906C(
+        ctx,
+        slot,
+        153_i32,
+        null::<Val<'a, u32>>(ctx),
+        (fns::pl_804D6470(ctx).get()).x130(),
+        {
+            let __t7 = (fns::pl_804D6470(ctx).get()).x134();
+            threshold = __t7;
+            __t7
+        },
+        ((table).xD34() as u32),
+        (table).xDB8_ref(),
+    );
+    threshold = (fns::pl_804D6470(ctx).get()).x80();
+    let _ = fns::pl_8003906C(
+        ctx,
+        slot,
+        61_i32,
+        null::<Val<'a, u32>>(ctx),
+        (fns::pl_804D6470(ctx).get()).x7C(),
+        threshold,
+        ((table).x0_staleMoveTable().xCD8() as u32),
+        (table).xDBC_ref(),
+    );
+    {
+        let mut t2: pl_StaleMoveTableExt_t<'a> = fns::Player_GetStaleMoveTableIndexPtr2(ctx, slot);
+        let mut mag: f64 = fns::sqrtf(
+            ctx,
+            fp::fadds(
+                fp::fmuls(
+                    (t2).x0_staleMoveTable().xCDC(),
+                    (t2).x0_staleMoveTable().xCDC(),
+                ),
+                fp::fmuls(
+                    (t2).x0_staleMoveTable().xCE0(),
+                    (t2).x0_staleMoveTable().xCE0(),
+                ),
+            ),
+        );
+        let mut x8c: f64 =
+            (Handle::cast::<Val<'a, F32>>((fns::pl_804D6470(ctx).get()).x8C_ref())).get();
+        let _ = fns::pl_80039238(
+            ctx,
+            slot,
+            68_i32,
+            null::<Val<'a, i32>>(ctx),
+            (fns::pl_804D6470(ctx).get()).x88(),
+            (table).xDC0_ref(),
+            x8c,
+            mag,
+        );
+    }
+    if (fns::pl_8003906C(
+        ctx,
+        slot,
+        1_i32.wrapping_neg(),
+        Handle::cast::<Val<'a, u32>>((table).xDCC_ref()),
+        (fns::pl_804D6470(ctx).get()).xB8(),
+        {
+            let __t8 = (fns::pl_804D6470(ctx).get()).xBC();
+            new_var = __t8;
+            __t8
+        },
+        ((table).xCF4() as u32),
+        (table).xDC4_ref(),
+    ) != 0)
+    {
+        let mut v: u32 = fns::gm_GetFrameCount(ctx);
+        let mut xb8: u32 = (fns::pl_804D6470(ctx).get()).xB8();
+        if xb8 == v {
+            if (table).xD5C() <= xb8 {
+                (table).xDD1().x0().set_bit5((1_i32 as u8));
+            }
+        } else if (((table).xDD1().x0().bit5() as i32) != 0) && ((table).xD5C() > xb8) {
+            (table).xDD1().x0().set_bit5((0_i32 as u8));
+        }
+        (table).set_xD5C((1_i32.wrapping_neg() as u32));
+    }
+}
+
 pub fn fn_8003F53C<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
     let __frame = ctx.stack_frame(0x20);
     let mut arg0 = arg0;
@@ -2884,6 +3091,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (i32, i32) = Args::take_all(ctx);
             Ret::put(fn_8003EE2C(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8003f294,
+        |ctx| {
+            let (a0, a1): (i32, i32) = Args::take_all(ctx);
+            Ret::put(fn_8003F294(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
     );

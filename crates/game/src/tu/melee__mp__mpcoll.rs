@@ -771,6 +771,86 @@ pub fn mpColl_LoadECB<'a>(ctx: &'a Ctx, coll: CollData<'a>) {
     fns::mpColl_80042384(ctx, coll);
 }
 
+pub fn mpCollInterpolateECB<'a>(ctx: &'a Ctx, coll: CollData<'a>, time: f64) {
+    let __frame = ctx.stack_frame(0x30);
+    let mut coll = coll;
+    let mut time = time;
+    Handle::copy_from((coll).prev_ecb(), (coll).ecb());
+    if ((coll).x34_flags().b6() != 0) {
+        Handle::copy_from((coll).ecb(), (coll).x64_ecb());
+        (coll).x34_flags().set_b6((0_i32 as u8));
+    }
+    inl_Vec2_Interpolate(ctx, time, (coll).ecb().top(), (coll).desired_ecb().top());
+    inl_Vec2_Interpolate(
+        ctx,
+        time,
+        (coll).ecb().bottom(),
+        (coll).desired_ecb().bottom(),
+    );
+    inl_Vec2_Interpolate(ctx, time, (coll).ecb().left(), (coll).desired_ecb().left());
+    inl_Vec2_Interpolate(
+        ctx,
+        time,
+        (coll).ecb().right(),
+        (coll).desired_ecb().right(),
+    );
+    if ((((((((if 4_u32 == 4_u32 {
+        inl___fpclassifyf(ctx, ((coll).ecb().top().x()))
+    } else {
+        inl___fpclassifyd(ctx, ((coll).ecb().top().x()))
+    }) == (enums::FP_NAN as i32))
+        || ((if 4_u32 == 4_u32 {
+            inl___fpclassifyf(ctx, ((coll).ecb().top().y()))
+        } else {
+            inl___fpclassifyd(ctx, ((coll).ecb().top().y()))
+        }) == (enums::FP_NAN as i32)))
+        || ((if 4_u32 == 4_u32 {
+            inl___fpclassifyf(ctx, ((coll).ecb().bottom().x()))
+        } else {
+            inl___fpclassifyd(ctx, ((coll).ecb().bottom().x()))
+        }) == (enums::FP_NAN as i32)))
+        || ((if 4_u32 == 4_u32 {
+            inl___fpclassifyf(ctx, ((coll).ecb().bottom().y()))
+        } else {
+            inl___fpclassifyd(ctx, ((coll).ecb().bottom().y()))
+        }) == (enums::FP_NAN as i32)))
+        || ((if 4_u32 == 4_u32 {
+            inl___fpclassifyf(ctx, ((coll).ecb().left().x()))
+        } else {
+            inl___fpclassifyd(ctx, ((coll).ecb().left().x()))
+        }) == (enums::FP_NAN as i32)))
+        || ((if 4_u32 == 4_u32 {
+            inl___fpclassifyf(ctx, ((coll).ecb().left().y()))
+        } else {
+            inl___fpclassifyd(ctx, ((coll).ecb().left().y()))
+        }) == (enums::FP_NAN as i32)))
+        || ((if 4_u32 == 4_u32 {
+            inl___fpclassifyf(ctx, ((coll).ecb().right().x()))
+        } else {
+            inl___fpclassifyd(ctx, ((coll).ecb().right().x()))
+        }) == (enums::FP_NAN as i32)))
+        || ((if 4_u32 == 4_u32 {
+            inl___fpclassifyf(ctx, ((coll).ecb().right().y()))
+        } else {
+            inl___fpclassifyd(ctx, ((coll).ecb().right().y()))
+        }) == (enums::FP_NAN as i32))
+    {
+        (if ((0_i32) != 0) {
+            { () }
+        } else {
+            ({
+                fns::OSReport(ctx, cstr(ctx, 0x804d394c), &[]);
+                fns::__assert(
+                    ctx,
+                    cstr(ctx, 0x803bd2b0),
+                    (0x2ab_i32 as u32),
+                    cstr(ctx, 0x803bd2b0),
+                )
+            })
+        });
+    }
+}
+
 pub fn mpColl_80043268<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32, arg2: i32, dy: f64) {
     let __frame = ctx.stack_frame(0x40);
     let callback: Ptr<'a, FnPtr<'a>> = frame_at(ctx, &__frame, 0x0);
@@ -5847,6 +5927,40 @@ fn inl___fpclassifyf<'a>(ctx: &'a Ctx, x: f64) -> i32 {
     return 0;
 }
 
+fn inl___fpclassifyd<'a>(ctx: &'a Ctx, x: f64) -> i32 {
+    let mut x = x;
+    's1: {
+        let __case = match (((x.to_bits() >> 32) as u32 as i32) & 0x7ff00000_i32) {
+            0x7ff00000_i32 => 0,
+            0_i32 => 1,
+            _ => 2,
+        };
+        if __case <= 0 {
+            return (if ((((x.to_bits() >> 32) as u32 as i32) & 0xfffff_i32) != 0)
+                || (((((x.to_bits()) as u32 as i32) as u32) & 0xffffffff_u32) != 0)
+            {
+                (enums::FP_NAN as i32)
+            } else {
+                (enums::FP_INFINITE as i32)
+            });
+        }
+        if __case <= 1 {
+            return (if ((((x.to_bits() >> 32) as u32 as i32) & 0xfffff_i32) != 0)
+                || (((((x.to_bits()) as u32 as i32) as u32) & 0xffffffff_u32) != 0)
+            {
+                (enums::FP_SUBNORMAL as i32)
+            } else {
+                (enums::FP_ZERO as i32)
+            });
+        }
+        if __case <= 2 {
+            return (enums::FP_NORMAL as i32);
+        }
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 fn inl_mpCollEnd_inline_unfused<'a>(
     ctx: &'a Ctx,
     coll: CollData<'a>,
@@ -6536,6 +6650,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (CollData<'_>,) = Args::take_all(ctx);
             Ret::put(mpColl_LoadECB(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80042db0,
+        |ctx| {
+            let (a0, a1): (CollData<'_>, Single) = Args::take_all(ctx);
+            Ret::put(mpCollInterpolateECB(ctx, a0, a1.0), ctx);
         },
         Returns::Nothing,
     );

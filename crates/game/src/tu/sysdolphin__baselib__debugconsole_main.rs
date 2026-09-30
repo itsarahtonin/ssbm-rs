@@ -2876,6 +2876,1017 @@ pub fn hsd_803975D4<'a>(ctx: &'a Ctx) {
     (sp).set_xBC(new_press);
 }
 
+pub fn fn_80397814<'a>(ctx: &'a Ctx, arg: Addr<'a>) -> Addr<'a> {
+    let __frame = ctx.stack_frame(0x110);
+    let unused: ArrV<'a, u8, 160> = frame_at(ctx, &__frame, 0x0);
+    let mut arg = arg;
+    let mut base: Val<'a, u8> = null(ctx);
+    let mut v_ctx: Addr<'a> = null(ctx);
+    let mut sp: ParticleScreenState<'a> = null(ctx);
+    let mut retrace: u32 = 0;
+    let mut next_retrace: u32 = 0;
+    let mut keybuf: Val<'a, u32> = null(ctx);
+    let mut head: Ptr<'a, _ExcptNode<'a>> = null(ctx);
+    let mut next: _ExcptNode<'a> = null(ctx);
+    let mut cur: _ExcptNode<'a> = null(ctx);
+    let mut retrace2: u32 = 0;
+    let mut next_retrace2: u32 = 0;
+    let mut size_ptr: Val<'a, i32> = null(ctx);
+    let mut lbl_ptr: Addr<'a> = null(ctx);
+    let mut fb_idx: i32 = 0;
+    let mut node: PSNode<'a> = null(ctx);
+    let mut tmp: PSNode<'a> = null(ctx);
+    let mut disp_node: Addr<'a> = null(ctx);
+    let mut result: i32 = 0;
+    let mut idx: i32 = 0;
+    let mut __state: u32 = 0;
+    #[allow(unreachable_code)]
+    loop {
+        match __state {
+            0 => {
+                base = Handle::cast::<Val<'a, u8>>(
+                    statics::sysdolphin__baselib__debugconsole_main::lbl_8040AB00(ctx),
+                );
+                sp = statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx);
+                __state = 2;
+            }
+            1 => {
+                unreachable!();
+            }
+            2 => {
+                __state = 3;
+            }
+            3 => {
+                __state = if (0_i32 != 0) { 2 } else { 4 };
+            }
+            4 => {
+                v_ctx = arg;
+                let _ = fns::hsd_80393D2C(ctx, 0_i32);
+                fns::hsd_80394314(ctx);
+                fns::PADSetSamplingRate(ctx, (0_i32 as u32));
+                retrace = fns::VIGetRetraceCount(ctx);
+                __state = 7;
+            }
+            5 => {
+                unreachable!();
+            }
+            6 => {
+                unreachable!();
+            }
+            7 => {
+                next_retrace = fns::VIGetRetraceCount(ctx);
+                __state = 8;
+            }
+            8 => {
+                __state = if next_retrace == retrace { 7 } else { 9 };
+            }
+            9 => {
+                retrace = next_retrace;
+                keybuf =
+                    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).xC0_ref();
+                __state = 12;
+            }
+            10 => {
+                unreachable!();
+            }
+            11 => {
+                unreachable!();
+            }
+            12 => {
+                fns::hsd_803975D4(ctx);
+                __state = 17;
+            }
+            13 => {
+                __state = if (keybuf).get() != (0_i32 as u32) {
+                    12
+                } else {
+                    14
+                };
+            }
+            14 => {
+                retrace = fns::VIGetRetraceCount(ctx);
+                __state = 22;
+            }
+            15 => {
+                unreachable!();
+            }
+            16 => {
+                unreachable!();
+            }
+            17 => {
+                next_retrace = fns::VIGetRetraceCount(ctx);
+                __state = 18;
+            }
+            18 => {
+                __state = if next_retrace == retrace { 17 } else { 19 };
+            }
+            19 => {
+                retrace = next_retrace;
+                __state = 13;
+            }
+            20 => {
+                unreachable!();
+            }
+            21 => {
+                unreachable!();
+            }
+            22 => {
+                next_retrace = fns::VIGetRetraceCount(ctx);
+                __state = 23;
+            }
+            23 => {
+                __state = if next_retrace == retrace { 22 } else { 24 };
+            }
+            24 => {
+                retrace = next_retrace;
+                __state = 27;
+            }
+            25 => {
+                unreachable!();
+            }
+            26 => {
+                unreachable!();
+            }
+            27 => {
+                fns::hsd_803975D4(ctx);
+                __state = 32;
+            }
+            28 => {
+                __state = if (keybuf).get() != (112_i32 as u32) {
+                    27
+                } else {
+                    29
+                };
+            }
+            29 => {
+                retrace = fns::VIGetRetraceCount(ctx);
+                __state = 37;
+            }
+            30 => {
+                unreachable!();
+            }
+            31 => {
+                unreachable!();
+            }
+            32 => {
+                next_retrace = fns::VIGetRetraceCount(ctx);
+                __state = 33;
+            }
+            33 => {
+                __state = if next_retrace == retrace { 32 } else { 34 };
+            }
+            34 => {
+                retrace = next_retrace;
+                __state = 28;
+            }
+            35 => {
+                unreachable!();
+            }
+            36 => {
+                unreachable!();
+            }
+            37 => {
+                next_retrace = fns::VIGetRetraceCount(ctx);
+                __state = 38;
+            }
+            38 => {
+                __state = if next_retrace == retrace { 37 } else { 39 };
+            }
+            39 => {
+                retrace = next_retrace;
+                __state = 42;
+            }
+            40 => {
+                unreachable!();
+            }
+            41 => {
+                unreachable!();
+            }
+            42 => {
+                fns::hsd_803975D4(ctx);
+                __state = 47;
+            }
+            43 => {
+                __state = if (keybuf).get() != (0_i32 as u32) {
+                    42
+                } else {
+                    44
+                };
+            }
+            44 => {
+                retrace = fns::VIGetRetraceCount(ctx);
+                __state = 52;
+            }
+            45 => {
+                unreachable!();
+            }
+            46 => {
+                unreachable!();
+            }
+            47 => {
+                next_retrace = fns::VIGetRetraceCount(ctx);
+                __state = 48;
+            }
+            48 => {
+                __state = if next_retrace == retrace { 47 } else { 49 };
+            }
+            49 => {
+                retrace = next_retrace;
+                __state = 43;
+            }
+            50 => {
+                unreachable!();
+            }
+            51 => {
+                unreachable!();
+            }
+            52 => {
+                next_retrace = fns::VIGetRetraceCount(ctx);
+                __state = 53;
+            }
+            53 => {
+                __state = if next_retrace == retrace { 52 } else { 54 };
+            }
+            54 => {
+                retrace = next_retrace;
+                __state = 57;
+            }
+            55 => {
+                unreachable!();
+            }
+            56 => {
+                unreachable!();
+            }
+            57 => {
+                fns::hsd_803975D4(ctx);
+                __state = 62;
+            }
+            58 => {
+                __state = if (keybuf).get() != (0x808_i32 as u32) {
+                    57
+                } else {
+                    59
+                };
+            }
+            59 => {
+                retrace = fns::VIGetRetraceCount(ctx);
+                __state = 67;
+            }
+            60 => {
+                unreachable!();
+            }
+            61 => {
+                unreachable!();
+            }
+            62 => {
+                next_retrace = fns::VIGetRetraceCount(ctx);
+                __state = 63;
+            }
+            63 => {
+                __state = if next_retrace == retrace { 62 } else { 64 };
+            }
+            64 => {
+                retrace = next_retrace;
+                __state = 58;
+            }
+            65 => {
+                unreachable!();
+            }
+            66 => {
+                unreachable!();
+            }
+            67 => {
+                next_retrace = fns::VIGetRetraceCount(ctx);
+                __state = 68;
+            }
+            68 => {
+                __state = if next_retrace == retrace { 67 } else { 69 };
+            }
+            69 => {
+                retrace = next_retrace;
+                __state = 72;
+            }
+            70 => {
+                unreachable!();
+            }
+            71 => {
+                unreachable!();
+            }
+            72 => {
+                fns::hsd_803975D4(ctx);
+                __state = 77;
+            }
+            73 => {
+                __state = if (keybuf).get() != (0_i32 as u32) {
+                    72
+                } else {
+                    74
+                };
+            }
+            74 => {
+                retrace = fns::VIGetRetraceCount(ctx);
+                __state = 82;
+            }
+            75 => {
+                unreachable!();
+            }
+            76 => {
+                unreachable!();
+            }
+            77 => {
+                next_retrace = fns::VIGetRetraceCount(ctx);
+                __state = 78;
+            }
+            78 => {
+                __state = if next_retrace == retrace { 77 } else { 79 };
+            }
+            79 => {
+                retrace = next_retrace;
+                __state = 73;
+            }
+            80 => {
+                unreachable!();
+            }
+            81 => {
+                unreachable!();
+            }
+            82 => {
+                next_retrace = fns::VIGetRetraceCount(ctx);
+                __state = 83;
+            }
+            83 => {
+                __state = if next_retrace == retrace { 82 } else { 84 };
+            }
+            84 => {
+                retrace = next_retrace;
+                __state = 87;
+            }
+            85 => {
+                unreachable!();
+            }
+            86 => {
+                unreachable!();
+            }
+            87 => {
+                fns::hsd_803975D4(ctx);
+                __state = 92;
+            }
+            88 => {
+                __state = if (keybuf).get() != (0x104_i32 as u32) {
+                    87
+                } else {
+                    89
+                };
+            }
+            89 => {
+                retrace = fns::VIGetRetraceCount(ctx);
+                __state = 97;
+            }
+            90 => {
+                unreachable!();
+            }
+            91 => {
+                unreachable!();
+            }
+            92 => {
+                next_retrace = fns::VIGetRetraceCount(ctx);
+                __state = 93;
+            }
+            93 => {
+                __state = if next_retrace == retrace { 92 } else { 94 };
+            }
+            94 => {
+                retrace = next_retrace;
+                __state = 88;
+            }
+            95 => {
+                unreachable!();
+            }
+            96 => {
+                unreachable!();
+            }
+            97 => {
+                next_retrace = fns::VIGetRetraceCount(ctx);
+                __state = 98;
+            }
+            98 => {
+                __state = if next_retrace == retrace { 97 } else { 99 };
+            }
+            99 => {
+                retrace = next_retrace;
+                __state = 102;
+            }
+            100 => {
+                unreachable!();
+            }
+            101 => {
+                unreachable!();
+            }
+            102 => {
+                fns::hsd_803975D4(ctx);
+                __state = 107;
+            }
+            103 => {
+                __state = if (keybuf).get() != (0_i32 as u32) {
+                    102
+                } else {
+                    104
+                };
+            }
+            104 => {
+                retrace = fns::VIGetRetraceCount(ctx);
+                __state = 112;
+            }
+            105 => {
+                unreachable!();
+            }
+            106 => {
+                unreachable!();
+            }
+            107 => {
+                next_retrace = fns::VIGetRetraceCount(ctx);
+                __state = 108;
+            }
+            108 => {
+                __state = if next_retrace == retrace { 107 } else { 109 };
+            }
+            109 => {
+                retrace = next_retrace;
+                __state = 103;
+            }
+            110 => {
+                unreachable!();
+            }
+            111 => {
+                unreachable!();
+            }
+            112 => {
+                next_retrace = fns::VIGetRetraceCount(ctx);
+                __state = 113;
+            }
+            113 => {
+                __state = if next_retrace == retrace { 112 } else { 114 };
+            }
+            114 => {
+                retrace = next_retrace;
+                __state = 117;
+            }
+            115 => {
+                unreachable!();
+            }
+            116 => {
+                unreachable!();
+            }
+            117 => {
+                fns::hsd_803975D4(ctx);
+                __state = 122;
+            }
+            118 => {
+                __state = if (keybuf).get() != (0x201_i32 as u32) {
+                    117
+                } else {
+                    119
+                };
+            }
+            119 => {
+                retrace = fns::VIGetRetraceCount(ctx);
+                __state = 127;
+            }
+            120 => {
+                unreachable!();
+            }
+            121 => {
+                unreachable!();
+            }
+            122 => {
+                next_retrace = fns::VIGetRetraceCount(ctx);
+                __state = 123;
+            }
+            123 => {
+                __state = if next_retrace == retrace { 122 } else { 124 };
+            }
+            124 => {
+                retrace = next_retrace;
+                __state = 118;
+            }
+            125 => {
+                unreachable!();
+            }
+            126 => {
+                unreachable!();
+            }
+            127 => {
+                next_retrace = fns::VIGetRetraceCount(ctx);
+                __state = 128;
+            }
+            128 => {
+                __state = if next_retrace == retrace { 127 } else { 129 };
+            }
+            129 => {
+                retrace = next_retrace;
+                __state = 132;
+            }
+            130 => {
+                unreachable!();
+            }
+            131 => {
+                unreachable!();
+            }
+            132 => {
+                fns::hsd_803975D4(ctx);
+                __state = 137;
+            }
+            133 => {
+                __state = if (keybuf).get() != (0_i32 as u32) {
+                    132
+                } else {
+                    134
+                };
+            }
+            134 => {
+                retrace = fns::VIGetRetraceCount(ctx);
+                __state = 142;
+            }
+            135 => {
+                unreachable!();
+            }
+            136 => {
+                unreachable!();
+            }
+            137 => {
+                next_retrace = fns::VIGetRetraceCount(ctx);
+                __state = 138;
+            }
+            138 => {
+                __state = if next_retrace == retrace { 137 } else { 139 };
+            }
+            139 => {
+                retrace = next_retrace;
+                __state = 133;
+            }
+            140 => {
+                unreachable!();
+            }
+            141 => {
+                unreachable!();
+            }
+            142 => {
+                next_retrace = fns::VIGetRetraceCount(ctx);
+                __state = 143;
+            }
+            143 => {
+                __state = if next_retrace == retrace { 142 } else { 144 };
+            }
+            144 => {
+                retrace = next_retrace;
+                __state = 147;
+            }
+            145 => {
+                unreachable!();
+            }
+            146 => {
+                unreachable!();
+            }
+            147 => {
+                fns::hsd_803975D4(ctx);
+                __state = 152;
+            }
+            148 => {
+                __state = if (keybuf).get() != (0x402_i32 as u32) {
+                    147
+                } else {
+                    149
+                };
+            }
+            149 => {
+                statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
+                    .set_xD4(Handle::cast::<OSContext<'a>>(v_ctx));
+                fns::VIConfigure(
+                    ctx,
+                    Handle::cast::<_GXRenderModeObj<'a>>(
+                        statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x30(),
+                    ),
+                );
+                fns::VISetBlack(ctx, 0_i32);
+                head = Handle::cast::<Ptr<'a, _ExcptNode<'a>>>(
+                    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).xD0_ref(),
+                );
+                keybuf = Handle::cast::<Val<'a, u32>>(head);
+                cur = (head).get();
+                __state = 156;
+            }
+            150 => {
+                unreachable!();
+            }
+            151 => {
+                unreachable!();
+            }
+            152 => {
+                next_retrace = fns::VIGetRetraceCount(ctx);
+                __state = 153;
+            }
+            153 => {
+                __state = if next_retrace == retrace { 152 } else { 154 };
+            }
+            154 => {
+                retrace = next_retrace;
+                __state = 148;
+            }
+            155 => {
+                unreachable!();
+            }
+            156 => {
+                __state = if !Handle::is_null(cur) { 157 } else { 159 };
+            }
+            157 => {
+                next = (cur).next();
+                (cur).set_next(null::<_ExcptNode<'a>>(ctx));
+                cur = next;
+                __state = 156;
+            }
+            158 => {
+                __state = 156;
+            }
+            159 => {
+                (head).set(null::<_ExcptNode<'a>>(ctx));
+                inl_ps_set_initial_node_unfused(
+                    ctx,
+                    Handle::cast::<_ExcptNode<'a>>(
+                        statics::sysdolphin__baselib__debugconsole_main::lbl_8040B8C4(ctx),
+                    ),
+                );
+                statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
+                    .set_x0_b5((1_i32 as u8));
+                fns::hsd_80394668(ctx);
+                fns::hsd_80394544(
+                    ctx,
+                    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x18(),
+                    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x14(),
+                    (statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x20()
+                        as u32),
+                    (statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x1C()
+                        as u32),
+                    20_i32,
+                    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
+                        .x40()
+                        .wrapping_sub(40_i32),
+                    (Handle::add(
+                        (statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
+                            .x24_ref()),
+                        statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x34(),
+                    ))
+                    .get(),
+                    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x3C(),
+                    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x40(),
+                    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x44(),
+                    (Handle::addr(ptr::<Arr<'a, DebugFontGlyph<'a>, 0>>(ctx, 0x804088b8).get(0))
+                        as i32),
+                    (null::<Addr<'a>>(ctx)),
+                );
+                statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).set_xC8(0_i32);
+                statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).set_xCC(
+                    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
+                        .x1C()
+                        .wrapping_sub(1_i32),
+                );
+                tmp = (Handle::cast::<Ptr<'a, PSNode<'a>>>(keybuf)).get();
+                node = tmp;
+                __state = if !Handle::is_null(node) { 161 } else { 162 };
+            }
+            160 => {
+                unreachable!();
+            }
+            161 => {
+                __state = if !Handle::is_null((node).child()) {
+                    164
+                } else {
+                    165
+                };
+            }
+            162 => {
+                size_ptr = (sp).x48_ref();
+                fb_idx = statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x34();
+                fns::DCFlushRange(
+                    ctx,
+                    ptr::<Addr<'a>>(
+                        ctx,
+                        (Handle::add(
+                            (statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
+                                .x24_ref()),
+                            fb_idx,
+                        ))
+                        .get() as u32,
+                    ),
+                    ((size_ptr).get() as u32),
+                );
+                fb_idx = statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x34();
+                fns::VISetNextFrameBuffer(
+                    ctx,
+                    ptr::<Addr<'a>>(
+                        ctx,
+                        (Handle::add(
+                            (statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
+                                .x24_ref()),
+                            fb_idx,
+                        ))
+                        .get() as u32,
+                    ),
+                );
+                fns::VIFlush(ctx);
+                retrace2 = fns::VIGetRetraceCount(ctx);
+                __state = 171;
+            }
+            163 => {
+                unreachable!();
+            }
+            164 => {
+                fns::hsd_80397520(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(inl_ps_node_child_unfused(ctx, node)),
+                );
+                __state = 165;
+            }
+            165 => {
+                __state = if !Handle::is_null((node).callback()) {
+                    167
+                } else {
+                    168
+                };
+            }
+            166 => {
+                unreachable!();
+            }
+            167 => {
+                (node).callback().call::<_, ()>((node,));
+                __state = 168;
+            }
+            168 => {
+                __state = 162;
+            }
+            169 => {
+                unreachable!();
+            }
+            170 => {
+                unreachable!();
+            }
+            171 => {
+                next_retrace2 = fns::VIGetRetraceCount(ctx);
+                __state = 172;
+            }
+            172 => {
+                __state = if next_retrace2 == retrace2 { 171 } else { 173 };
+            }
+            173 => {
+                retrace2 = next_retrace2;
+                lbl_ptr = Handle::cast::<Addr<'a>>(
+                    ptr::<Arr<'a, DebugFontGlyph<'a>, 0>>(ctx, 0x804088b8).get(0),
+                );
+                __state = 175;
+            }
+            174 => {
+                unreachable!();
+            }
+            175 => {
+                __state = if (keybuf).get() != (0_i32 as u32) {
+                    176
+                } else {
+                    178
+                };
+            }
+            176 => {
+                fns::hsd_803975D4(ctx);
+                __state = 180;
+            }
+            177 => {
+                __state = 175;
+            }
+            178 => {
+                fns::OSPanic(
+                    ctx,
+                    cstr(ctx, 0x8040abcc),
+                    0x8b4_i32,
+                    cstr(ctx, 0x8040bef4),
+                    &[],
+                );
+                return (null::<Addr<'a>>(ctx));
+            }
+            179 => {
+                unreachable!();
+            }
+            180 => {
+                (sp).set_x0_b5((0_i32 as u8));
+                disp_node = (Handle::cast::<Ptr<'a, Addr<'a>>>(keybuf)).get();
+                result = 0_i32;
+                __state = 181;
+            }
+            181 => {
+                __state = if (!Handle::is_null(disp_node)) && (!((sp).x0_b5() != 0)) {
+                    182
+                } else {
+                    184
+                };
+            }
+            182 => {
+                __state = if !Handle::is_null(
+                    (Handle::cast::<Ptr<'a, FnPtr<'a>>>(
+                        (Handle::add(Handle::cast::<Val<'a, u8>>(disp_node), 12_i32)),
+                    ))
+                    .get(),
+                ) {
+                    186
+                } else {
+                    187
+                };
+            }
+            183 => {
+                __state = 181;
+            }
+            184 => {
+                __state = if ((sp).x0_b5() != 0) { 196 } else { 197 };
+            }
+            185 => {
+                unreachable!();
+            }
+            186 => {
+                result = (Handle::addr(
+                    ((Handle::cast::<Ptr<'a, FnPtr<'a>>>(
+                        (Handle::add(Handle::cast::<Val<'a, u8>>(disp_node), 12_i32)),
+                    ))
+                    .get())
+                    .call::<_, Addr<'a>>((disp_node,)),
+                ) as i32);
+                __state = match result {
+                    0_i32 => 189,
+                    _ => 190,
+                };
+            }
+            187 => {
+                disp_node = (Handle::cast::<Ptr<'a, Addr<'a>>>(disp_node)).get();
+                __state = 181;
+            }
+            188 => {
+                unreachable!();
+            }
+            189 => {
+                __state = 191;
+            }
+            190 => {
+                __state = 194;
+            }
+            191 => {
+                __state = 187;
+            }
+            192 => {
+                unreachable!();
+            }
+            193 => {
+                __state = 190;
+            }
+            194 => {
+                __state = if result != 0_i32 { 200 } else { 201 };
+            }
+            195 => {
+                __state = 191;
+            }
+            196 => {
+                __state = 180;
+            }
+            197 => {
+                result = 0_i32;
+                __state = 194;
+            }
+            198 => {
+                unreachable!();
+            }
+            199 => {
+                __state = 197;
+            }
+            200 => {
+                idx = statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x34();
+                idx = rem_i32(
+                    (idx.wrapping_add(1_i32)),
+                    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x38(),
+                );
+                statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).set_x34(idx);
+                fns::hsd_80394668(ctx);
+                fns::hsd_80394544(
+                    ctx,
+                    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x18(),
+                    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x14(),
+                    (statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x20()
+                        as u32),
+                    (statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x1C()
+                        as u32),
+                    20_i32,
+                    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
+                        .x40()
+                        .wrapping_sub(40_i32),
+                    (Handle::add(
+                        ((sp).x24_ref()),
+                        statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x34(),
+                    ))
+                    .get(),
+                    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x3C(),
+                    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x40(),
+                    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x44(),
+                    (Handle::addr(lbl_ptr) as i32),
+                    (null::<Addr<'a>>(ctx)),
+                );
+                statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).set_xC8(0_i32);
+                statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).set_xCC(
+                    statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx)
+                        .x1C()
+                        .wrapping_sub(1_i32),
+                );
+                node = (Handle::cast::<Ptr<'a, PSNode<'a>>>(keybuf)).get();
+                __state = if !Handle::is_null(node) { 203 } else { 204 };
+            }
+            201 => {
+                __state = 213;
+            }
+            202 => {
+                unreachable!();
+            }
+            203 => {
+                __state = if !Handle::is_null((node).child()) {
+                    206
+                } else {
+                    207
+                };
+            }
+            204 => {
+                fb_idx = statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x34();
+                fns::DCFlushRange(
+                    ctx,
+                    ptr::<Addr<'a>>(ctx, (Handle::add(((sp).x24_ref()), fb_idx)).get() as u32),
+                    ((size_ptr).get() as u32),
+                );
+                fb_idx = statics::sysdolphin__baselib__debugconsole_main::hsd_804CF810(ctx).x34();
+                fns::VISetNextFrameBuffer(
+                    ctx,
+                    ptr::<Addr<'a>>(ctx, (Handle::add(((sp).x24_ref()), fb_idx)).get() as u32),
+                );
+                fns::VIFlush(ctx);
+                __state = 201;
+            }
+            205 => {
+                unreachable!();
+            }
+            206 => {
+                fns::hsd_80397520(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(inl_ps_node_child_unfused(ctx, node)),
+                );
+                __state = 207;
+            }
+            207 => {
+                __state = if !Handle::is_null((node).callback()) {
+                    209
+                } else {
+                    210
+                };
+            }
+            208 => {
+                unreachable!();
+            }
+            209 => {
+                (node).callback().call::<_, ()>((node,));
+                __state = 210;
+            }
+            210 => {
+                __state = 204;
+            }
+            211 => {
+                unreachable!();
+            }
+            212 => {
+                unreachable!();
+            }
+            213 => {
+                next_retrace2 = fns::VIGetRetraceCount(ctx);
+                __state = 214;
+            }
+            214 => {
+                __state = if next_retrace2 == retrace2 { 213 } else { 215 };
+            }
+            215 => {
+                retrace2 = next_retrace2;
+                __state = 175;
+            }
+            216 => {
+                unreachable!();
+            }
+            217 => {
+                return null(ctx);
+            }
+            218 => {
+                unreachable!();
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
 pub fn hsd_80397DA4<'a>(ctx: &'a Ctx, v_ctx: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x320);
     let thread: OSThread<'a> = frame_at(ctx, &__frame, 0x0);
@@ -3529,6 +4540,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(hsd_803975D4(ctx), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80397814,
+        |ctx| {
+            let (a0,): (Addr<'_>,) = Args::take_all(ctx);
+            Ret::put(fn_80397814(ctx, a0), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x80397da4,

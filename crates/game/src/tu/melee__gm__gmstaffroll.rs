@@ -836,6 +836,958 @@ pub fn fn_801AAB74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn fn_801AB200<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x150);
+    let cursor_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let jobj_pair: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x4);
+    let temp_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xc);
+    let xform_result: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let proj: ArrV<'a, F32, 8> = frame_at(ctx, &__frame, 0x1c);
+    let tally_color2: _GXColor<'a> = frame_at(ctx, &__frame, 0x3c);
+    let tally_color_copy: _GXColor<'a> = frame_at(ctx, &__frame, 0x40);
+    let mut gobj = gobj;
+    let mut leaf: HSD_GObj<'a> = null(ctx);
+    let mut tally_color: i32 = 0;
+    let mut fov_scale: f64 = 0.0;
+    let mut offset1: f64 = 0.0;
+    let mut offset2: f64 = 0.0;
+    let mut vel_x: f64 = 0.0;
+    let mut vel_y: f64 = 0.0;
+    let mut sq_x: f64 = 0.0;
+    let mut sq_y: f64 = 0.0;
+    let mut text_arr: Ptr<'a, HSD_Text<'a>> = null(ctx);
+    let mut x_pos: f64 = 0.0;
+    let mut half_size: f64 = 0.0;
+    let mut highlight_val: f64 = 0.0;
+    let mut adj_val: i32 = 0;
+    let mut raw_stick: i32 = 0;
+    let mut broke: i32 = 0;
+    let mut en_page: i32 = 0;
+    let mut selected: i32 = 0;
+    let mut entry_data: StaffEntryData<'a> = null(ctx);
+    let mut page_5: i32 = 0;
+    let mut tally_text: HSD_Text<'a> = null(ctx);
+    let mut text: HSD_Text<'a> = null(ctx);
+    let mut page_6: i32 = 0;
+    let mut r#gen: HSD_Generator<'a> = null(ctx);
+    let mut tally_count: i32 = 0;
+    let mut jp_page1: i32 = 0;
+    let mut base_page: i32 = 0;
+    let mut j: i32 = 0;
+    let mut page_8: i32 = 0;
+    let mut jp_page: i32 = 0;
+    let mut line_num: i32 = 0;
+    let mut sel: i32 = 0;
+    let mut text_idx: i32 = 0;
+    let mut root: HSD_JObj<'a> = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, gobj)));
+    let mut check_failed: i32 = 0;
+    let mut i: i32 = 0;
+    let mut entry_idx: i32 = 0;
+    let mut pad_idx: u8 = 0;
+    let mut hover_jobj: HSD_JObj<'a> = null(ctx);
+    let mut button: i32 = 0;
+    let mut appsrt: HSD_psAppSRT<'a> = null(ctx);
+    let _ = fns::lb_80011E24(
+        ctx,
+        root,
+        cursor_jobj,
+        &[
+            VarArg::Int(7_i32 as u32),
+            VarArg::Int(1_i32.wrapping_neg() as u32),
+        ],
+    );
+    pad_idx = (fns::gm_801BF010(ctx) as u8);
+    raw_stick = (fns::HSD_PadCopyStatus(ctx).get((pad_idx as i32)).stickX() as i32);
+    if raw_stick > 4_i32 {
+        adj_val = raw_stick.wrapping_sub(4_i32);
+    } else if raw_stick < 4_i32.wrapping_neg() {
+        adj_val = raw_stick.wrapping_add(4_i32);
+    } else {
+        adj_val = 0_i32;
+    }
+    vel_x = fp::frsp(adj_val as f64);
+    pad_idx = (fns::gm_801BF010(ctx) as u8);
+    raw_stick = (fns::HSD_PadCopyStatus(ctx).get((pad_idx as i32)).stickY() as i32);
+    if raw_stick > 4_i32 {
+        adj_val = raw_stick.wrapping_sub(4_i32);
+    } else if raw_stick < 4_i32.wrapping_neg() {
+        adj_val = raw_stick.wrapping_add(4_i32);
+    } else {
+        adj_val = 0_i32;
+    }
+    vel_y = fp::frsp(adj_val as f64);
+    sq_x = inl_sqrtf(ctx, fp::fmadds(vel_x, vel_x, 6400.0));
+    vel_x = fp::fmuls(vel_x, fp::fmuls(0.0003846153849735856, sq_x));
+    sq_y = inl_sqrtf(ctx, fp::fmadds(vel_y, vel_y, 6400.0));
+    vel_y = fp::fmuls(vel_y, fp::fmuls(0.0003846153849735856, sq_y));
+    if vel_y < fp::fneg(2.5999999046325684) {
+        vel_y = fp::fneg(2.5999999046325684);
+    }
+    if vel_y > 2.5999999046325684 {
+        vel_y = 2.5999999046325684;
+    }
+    statics::melee__gm__gmstaffroll::gm_804D6804(ctx).set_x0(vel_x);
+    statics::melee__gm__gmstaffroll::gm_804D6804(ctx).set_x4(vel_y);
+    inl_HSD_JObjSetTranslateX(
+        ctx,
+        cursor_jobj.get(),
+        statics::melee__gm__gmstaffroll::gm_804D6804(ctx).x0(),
+    );
+    inl_HSD_JObjSetTranslateY(
+        ctx,
+        cursor_jobj.get(),
+        statics::melee__gm__gmstaffroll::gm_804D6804(ctx).x4(),
+    );
+    selected = 1_i32.wrapping_neg();
+    {
+        i = 0_i32;
+        'l1: while i < statics::melee__gm__gmstaffroll::gm_804D6800(ctx).get() {
+            'c2: {
+                entry_idx = (Handle::add(
+                    statics::melee__gm__gmstaffroll::staffInfoSortBuf(ctx).get(),
+                    i,
+                ))
+                .index();
+                if (Handle::add(
+                    statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                    entry_idx,
+                ))
+                .x8()
+                    < 1_i32
+                {
+                    inl_gm_801AB200_ptcl(
+                        ctx,
+                        entry_idx,
+                        statics::melee__gm__gmstaffroll::gm_804D42C4(ctx),
+                    );
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    statics::melee__gm__gmstaffroll::gm_804D6804(ctx).set_x0(fp::fmuls(
+        statics::melee__gm__gmstaffroll::gm_804D6804(ctx).x0(),
+        0.29411762952804565,
+    ));
+    statics::melee__gm__gmstaffroll::gm_804D6804(ctx).set_x4(fp::fmuls(
+        statics::melee__gm__gmstaffroll::gm_804D6804(ctx).x4(),
+        0.29411762952804565,
+    ));
+    fov_scale = fp::frsp(
+        (fp::fmul(
+            1.1917536,
+            fns::tanf(
+                ctx,
+                fp::frsp(
+                    (fp::fmul(
+                        0.008726646471282037,
+                        fns::HSD_CObjGetFov(
+                            ctx,
+                            statics::melee__gm__gmstaffroll::gm_804D6830(ctx).get(),
+                        ),
+                    )),
+                ),
+            ),
+        )),
+    );
+    statics::melee__gm__gmstaffroll::gm_804D6804(ctx).set_x0(fp::fmuls(
+        statics::melee__gm__gmstaffroll::gm_804D6804(ctx).x0(),
+        fov_scale,
+    ));
+    statics::melee__gm__gmstaffroll::gm_804D6804(ctx).set_x4(fp::fmuls(
+        statics::melee__gm__gmstaffroll::gm_804D6804(ctx).x4(),
+        fov_scale,
+    ));
+    if statics::melee__gm__gmstaffroll::gm_804D6814(ctx).get() < 0x1285_i32 {
+        {
+            i = 0_i32;
+            'l3: while i < statics::melee__gm__gmstaffroll::gm_804D6800(ctx).get() {
+                'c4: {
+                    if (Handle::add(
+                        statics::melee__gm__gmstaffroll::staffInfoSortBuf(ctx).get(),
+                        i,
+                    ))
+                    .mtx()
+                    .get(2_i32)
+                    .at(3_i32)
+                    .get()
+                        < fp::fneg(1.0)
+                    {
+                        entry_idx = (Handle::add(
+                            statics::melee__gm__gmstaffroll::staffInfoSortBuf(ctx).get(),
+                            i,
+                        ))
+                        .index();
+                        if (entry_idx != 183_i32) && (entry_idx < 192_i32) {
+                            broke = 0_i32;
+                            hover_jobj = (Handle::add(
+                                statics::melee__gm__gmstaffroll::staffInfoSortBuf(ctx).get(),
+                                i,
+                            ))
+                            .jobj();
+                            half_size = fp::fmuls(
+                                0.16875000298023224,
+                                fp::frsp(
+                                    statics::melee__gm__gmstaffroll::gm_803DBFD8(ctx)
+                                        .get(entry_idx)
+                                        .x11()
+                                        .at(fns::lbLang_IsSavedLanguageUS(ctx))
+                                        .get() as f64,
+                                ),
+                            );
+                            statics::melee__gm__gmstaffroll::gm_803DD1E4(ctx)
+                                .get(1_i32)
+                                .set_x(fp::fneg(half_size));
+                            statics::melee__gm__gmstaffroll::gm_803DD1E4(ctx)
+                                .get(0_i32)
+                                .set_x(fp::fneg(half_size));
+                            statics::melee__gm__gmstaffroll::gm_803DD1E4(ctx)
+                                .get(3_i32)
+                                .set_x(half_size);
+                            statics::melee__gm__gmstaffroll::gm_803DD1E4(ctx)
+                                .get(2_i32)
+                                .set_x(half_size);
+                            {
+                                j = 0_i32;
+                                'l5: while j < 4_i32 {
+                                    'c6: {
+                                        fns::PSMTXMultVec(
+                                            ctx,
+                                            (Handle::add(
+                                                statics::melee__gm__gmstaffroll::staffInfoSortBuf(
+                                                    ctx,
+                                                )
+                                                .get(),
+                                                i,
+                                            ))
+                                            .mtx()
+                                            .get(0),
+                                            statics::melee__gm__gmstaffroll::gm_803DD1E4(ctx)
+                                                .get(j),
+                                            xform_result,
+                                        );
+                                        if xform_result.z() >= fp::fneg(1.0) {
+                                            broke = 1_i32;
+                                            break 'l5;
+                                        }
+                                        proj.at(j.wrapping_mul(2_i32)).set(fp::fdivs(
+                                            fp::fneg(xform_result.x()),
+                                            xform_result.z(),
+                                        ));
+                                        proj.at(j.wrapping_mul(2_i32).wrapping_add(1_i32)).set(
+                                            fp::fdivs(fp::fneg(xform_result.y()), xform_result.z()),
+                                        );
+                                    }
+                                    j = j.wrapping_add(1);
+                                }
+                            }
+                            if ((((broke == 0_i32)
+                                && (fp::fmuls(
+                                    (fp::fsubs(proj.at(3_i32).get(), proj.at(1_i32).get())),
+                                    (fp::fsubs(
+                                        statics::melee__gm__gmstaffroll::gm_804D6804(ctx).x0(),
+                                        proj.at(0_i32).get(),
+                                    )),
+                                ) >= fp::fmuls(
+                                    (fp::fsubs(
+                                        statics::melee__gm__gmstaffroll::gm_804D6804(ctx).x4(),
+                                        proj.at(1_i32).get(),
+                                    )),
+                                    (fp::fsubs(proj.at(2_i32).get(), proj.at(0_i32).get())),
+                                )))
+                                && (fp::fmuls(
+                                    (fp::fsubs(proj.at(5_i32).get(), proj.at(3_i32).get())),
+                                    (fp::fsubs(
+                                        statics::melee__gm__gmstaffroll::gm_804D6804(ctx).x0(),
+                                        proj.at(2_i32).get(),
+                                    )),
+                                ) >= fp::fmuls(
+                                    (fp::fsubs(
+                                        statics::melee__gm__gmstaffroll::gm_804D6804(ctx).x4(),
+                                        proj.at(3_i32).get(),
+                                    )),
+                                    (fp::fsubs(proj.at(4_i32).get(), proj.at(2_i32).get())),
+                                )))
+                                && (fp::fmuls(
+                                    (fp::fsubs(proj.at(7_i32).get(), proj.at(5_i32).get())),
+                                    (fp::fsubs(
+                                        statics::melee__gm__gmstaffroll::gm_804D6804(ctx).x0(),
+                                        proj.at(4_i32).get(),
+                                    )),
+                                ) >= fp::fmuls(
+                                    (fp::fsubs(
+                                        statics::melee__gm__gmstaffroll::gm_804D6804(ctx).x4(),
+                                        proj.at(5_i32).get(),
+                                    )),
+                                    (fp::fsubs(proj.at(6_i32).get(), proj.at(4_i32).get())),
+                                )))
+                                && (fp::fmuls(
+                                    (fp::fsubs(proj.at(1_i32).get(), proj.at(7_i32).get())),
+                                    (fp::fsubs(
+                                        statics::melee__gm__gmstaffroll::gm_804D6804(ctx).x0(),
+                                        proj.at(6_i32).get(),
+                                    )),
+                                ) >= fp::fmuls(
+                                    (fp::fsubs(
+                                        statics::melee__gm__gmstaffroll::gm_804D6804(ctx).x4(),
+                                        proj.at(7_i32).get(),
+                                    )),
+                                    (fp::fsubs(proj.at(0_i32).get(), proj.at(6_i32).get())),
+                                ))
+                            {
+                                entry_idx = (Handle::add(
+                                    statics::melee__gm__gmstaffroll::staffInfoSortBuf(ctx).get(),
+                                    i,
+                                ))
+                                .index();
+                                selected = entry_idx;
+                                if (Handle::add(
+                                    statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                                    entry_idx,
+                                ))
+                                .x8()
+                                    < 1_i32
+                                {
+                                    inl_gm_801AB200_ptcl(
+                                        ctx,
+                                        entry_idx,
+                                        statics::melee__gm__gmstaffroll::gm_804D42CC(ctx),
+                                    );
+                                    ((Handle::add(
+                                        statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                                        selected,
+                                    ))
+                                    .win()
+                                    .at(0_i32)
+                                    .get())
+                                    .active_color()
+                                    .set_r((180_i32 as u8));
+                                    ((Handle::add(
+                                        statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                                        selected,
+                                    ))
+                                    .win()
+                                    .at(1_i32)
+                                    .get())
+                                    .active_color()
+                                    .set_r((180_i32 as u8));
+                                }
+                                break 'l3;
+                            }
+                        }
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+    }
+    button = 0_i32;
+    if ((inl_gm_801AB200_GetTrigger(ctx, (fns::gm_801BF010(ctx) as u8))
+        & ((shl_i32(1_i32, (8_i32 as u32))) as u32))
+        != 0)
+    {
+        button = (shl_i32(1_i32, (8_i32 as u32)));
+    } else if ((inl_gm_801AB200_GetTrigger(ctx, (fns::gm_801BF010(ctx) as u8))
+        & ((shl_i32(1_i32, (9_i32 as u32))) as u32))
+        != 0)
+    {
+        button = (shl_i32(1_i32, (9_i32 as u32)));
+    } else if ((inl_gm_801AB200_GetTrigger(ctx, (fns::gm_801BF010(ctx) as u8))
+        & ((shl_i32(1_i32, (12_i32 as u32))) as u32))
+        != 0)
+    {
+        button = (shl_i32(1_i32, (12_i32 as u32)));
+    } else if ((inl_gm_801AB200_GetTrigger(ctx, (fns::gm_801BF010(ctx) as u8))
+        & ((shl_i32(1_i32, (4_i32 as u32))) as u32))
+        != 0)
+    {
+        button = (shl_i32(1_i32, (4_i32 as u32)));
+    }
+    if button != 0_i32 {
+        if ((statics::melee__gm__gmstaffroll::gm_804D6818(ctx).get() == 0_i32)
+            && (button == (shl_i32(1_i32, (8_i32 as u32)))))
+            && (statics::melee__gm__gmstaffroll::gm_804D6820(ctx).get() == 0_i32)
+        {
+            let _ = fns::lb_80011E24(
+                ctx,
+                root,
+                temp_jobj,
+                &[
+                    VarArg::Int(5_i32 as u32),
+                    VarArg::Int(1_i32.wrapping_neg() as u32),
+                ],
+            );
+            fns::HSD_JObjReqAnim(ctx, temp_jobj.get(), 0.0);
+            let _ = fns::lbAudioAx_800237A8(ctx, 0x7a12d_i32, 127_i32, 64_i32);
+        }
+        if (selected != 1_i32.wrapping_neg())
+            && ((button == (shl_i32(1_i32, (9_i32 as u32))))
+                || ((statics::melee__gm__gmstaffroll::gm_804D6818(ctx).get() == 0_i32)
+                    && (button == (shl_i32(1_i32, (8_i32 as u32))))))
+        {
+            let _ = fns::lb_80011E24(
+                ctx,
+                root,
+                temp_jobj,
+                &[
+                    VarArg::Int(8_i32 as u32),
+                    VarArg::Int(1_i32.wrapping_neg() as u32),
+                ],
+            );
+            fns::HSD_JObjReqAnimAll(ctx, temp_jobj.get(), 0.0);
+            let _ = fns::lbAudioAx_800237A8(ctx, 0x7a12a_i32, 127_i32, 64_i32);
+            check_failed = ((!Handle::is_null(
+                statics::melee__gm__gmstaffroll::gm_803DBFD8(ctx)
+                    .get(selected)
+                    .check(),
+            )) && (statics::melee__gm__gmstaffroll::gm_803DBFD8(ctx)
+                .get(selected)
+                .check()
+                .call::<_, i32>((statics::melee__gm__gmstaffroll::gm_803DBFD8(ctx)
+                    .get(selected)
+                    .check_arg(),))
+                == 0_i32)) as i32;
+            base_page = selected.wrapping_mul(15_i32);
+            jp_page = base_page.wrapping_add(7_i32);
+            entry_data = statics::melee__gm__gmstaffroll::gm_803DBFD8(ctx).get(selected);
+            text_arr = statics::melee__gm__gmstaffroll::gm_80480D58(ctx).at(0);
+            sel = selected;
+            jp_page1 = jp_page;
+            en_page = base_page.wrapping_add(11_i32);
+            page_5 = base_page.wrapping_add(5_i32);
+            page_6 = base_page.wrapping_add(6_i32);
+            page_8 = base_page.wrapping_add(8_i32);
+            {
+                text_idx = 0_i32;
+                'l7: while text_idx < 6_i32 {
+                    'c8: {
+                        if !Handle::is_null((text_arr).get()) {
+                            fns::HSD_SisLib_803A5CC4(ctx, (text_arr).get());
+                        }
+                        statics::melee__gm__gmstaffroll::gm_804D6810(ctx)
+                            .set(((entry_data).x0() as i32));
+                        if text_idx == 0_i32 {
+                            statics::melee__gm__gmstaffroll::gm_80480D58(ctx)
+                                .at(0_i32)
+                                .set(fns::HSD_SisLib_803A5ACC(
+                                    ctx,
+                                    0_i32,
+                                    0_i32,
+                                    fp::fadds(
+                                        1.4500000476837158,
+                                        inl_gm_801AB200_GetXPos(
+                                            ctx,
+                                            statics::melee__gm__gmstaffroll::gm_804D6810(ctx).get(),
+                                        ),
+                                    ),
+                                    0.8600000143051147,
+                                    0.0,
+                                    0.0,
+                                    100.0,
+                                ));
+                        } else if text_idx == 1_i32 {
+                            sel = selected;
+                            if sel == 172_i32 {
+                                offset1 = 0.20000000298023224;
+                            } else {
+                                offset1 = 0.0;
+                            }
+                            if sel == 175_i32 {
+                                offset2 = 0.10000000149011612;
+                            } else {
+                                offset2 = 0.0;
+                            }
+                            x_pos = statics::melee__gm__gmstaffroll::gm_803DBFD8_extra(ctx)
+                                .x_positions()
+                                .at(statics::melee__gm__gmstaffroll::gm_804D6810(ctx).get())
+                                .get();
+                            statics::melee__gm__gmstaffroll::gm_80480D58(ctx)
+                                .at(1_i32)
+                                .set(fns::HSD_SisLib_803A5ACC(
+                                    ctx,
+                                    0_i32,
+                                    0_i32,
+                                    fp::fadds(offset2, (fp::fadds(fp::fadds(3.0, x_pos), offset1))),
+                                    0.8600000143051147,
+                                    0.0,
+                                    0.0,
+                                    100.0,
+                                ));
+                        } else {
+                            (text_arr).set(fns::HSD_SisLib_803A5ACC(
+                                ctx,
+                                0_i32,
+                                0_i32,
+                                fp::fadds(
+                                    1.4500000476837158,
+                                    inl_gm_801AB200_GetXPos(
+                                        ctx,
+                                        statics::melee__gm__gmstaffroll::gm_804D6810(ctx).get(),
+                                    ),
+                                ),
+                                fp::fmadds(
+                                    0.1899999976158142,
+                                    fp::frsp(text_idx as f64),
+                                    0.6700000166893005,
+                                ),
+                                0.0,
+                                0.0,
+                                100.0,
+                            ));
+                        }
+                        ((text_arr).get()).set_default_kerning((1_i32 as u8));
+                        text = (text_arr).get();
+                        (text).font_size().set_x(0.003759999992325902);
+                        (text).font_size().set_y(0.0044999998062849045);
+                        if text_idx == 0_i32 {
+                            if (check_failed == 0_i32)
+                                || ((inl_gm_801AB200_HasCheck(ctx, entry_data) as i32) == 0_i32)
+                            {
+                                ((text_arr).get()).text_color().set_r((195_i32 as u8));
+                                ((text_arr).get()).text_color().set_g((195_i32 as u8));
+                                ((text_arr).get()).text_color().set_b((195_i32 as u8));
+                                if fns::lbLang_IsSavedLanguageJP(ctx) != 0_i32 {
+                                    fns::HSD_SisLib_803A6368(
+                                        ctx,
+                                        statics::melee__gm__gmstaffroll::gm_80480D58(ctx)
+                                            .at(0_i32)
+                                            .get(),
+                                        page_5,
+                                    );
+                                } else {
+                                    fns::HSD_SisLib_803A6368(
+                                        ctx,
+                                        statics::melee__gm__gmstaffroll::gm_80480D58(ctx)
+                                            .at(0_i32)
+                                            .get(),
+                                        page_6,
+                                    );
+                                }
+                            }
+                        } else if text_idx == 1_i32 {
+                            if (check_failed == 0_i32)
+                                || ((inl_gm_801AB200_HasCheck(ctx, entry_data) as i32) == 0_i32)
+                            {
+                                ((text_arr).get()).text_color().set_r((232_i32 as u8));
+                                ((text_arr).get()).text_color().set_g((55_i32 as u8));
+                                ((text_arr).get()).text_color().set_b((224_i32 as u8));
+                                if fns::lbLang_IsSavedLanguageJP(ctx) != 0_i32 {
+                                    fns::HSD_SisLib_803A6368(
+                                        ctx,
+                                        statics::melee__gm__gmstaffroll::gm_80480D58(ctx)
+                                            .at(1_i32)
+                                            .get(),
+                                        jp_page1,
+                                    );
+                                } else {
+                                    fns::HSD_SisLib_803A6368(
+                                        ctx,
+                                        statics::melee__gm__gmstaffroll::gm_80480D58(ctx)
+                                            .at(1_i32)
+                                            .get(),
+                                        page_8,
+                                    );
+                                }
+                            }
+                        } else {
+                            ((text_arr).get()).text_color().set_r((255_i32 as u8));
+                            ((text_arr).get()).text_color().set_g((180_i32 as u8));
+                            ((text_arr).get()).text_color().set_b((0_i32 as u8));
+                            if (sel == 75_i32) && (text_idx == 2_i32) {
+                                fns::HSD_SisLib_803A6368(
+                                    ctx,
+                                    (text_arr).get(),
+                                    0xbec_i32
+                                        .wrapping_add(fns::gm_IsCKindUnlocked(
+                                            ctx,
+                                            ((enums::CKind_Luigi as i32) as u8),
+                                        ))
+                                        .wrapping_add(
+                                            fns::gm_IsCKindUnlocked(
+                                                ctx,
+                                                ((enums::CKind_DrMario as i32) as u8),
+                                            )
+                                            .wrapping_mul(2_i32),
+                                        ),
+                                );
+                            } else if (text_idx == 2_i32) && (check_failed == 1_i32) {
+                                if fns::lbLang_IsSavedLanguageJP(ctx) != 0_i32 {
+                                    fns::HSD_SisLib_803A6368(
+                                        ctx,
+                                        (text_arr).get(),
+                                        (entry_data).alt_page().wrapping_add(2_i32),
+                                    );
+                                } else {
+                                    fns::HSD_SisLib_803A6368(
+                                        ctx,
+                                        (text_arr).get(),
+                                        (entry_data).alt_page().wrapping_add(3_i32),
+                                    );
+                                }
+                            } else if fns::lbLang_IsSavedLanguageJP(ctx) != 0_i32 {
+                                fns::HSD_SisLib_803A6368(ctx, (text_arr).get(), jp_page);
+                            } else {
+                                fns::HSD_SisLib_803A6368(ctx, (text_arr).get(), en_page);
+                            }
+                        }
+                    }
+                    text_idx = text_idx.wrapping_add(1);
+                    text_arr = Handle::add(text_arr, 1);
+                    jp_page = jp_page.wrapping_add(1);
+                    en_page = en_page.wrapping_add(1);
+                }
+            }
+            if (button == (shl_i32(1_i32, (8_i32 as u32))))
+                && (statics::melee__gm__gmstaffroll::gm_804D6820(ctx).get() == 0_i32)
+            {
+                r#gen = fns::hsd_8039F05C(ctx, 0_i32, 0_i32, 39_i32);
+                if Handle::is_null(
+                    ({
+                        let __t1 = (r#gen).appsrt();
+                        appsrt = __t1;
+                        __t1
+                    }),
+                ) {
+                    appsrt = fns::psAddGeneratorAppSRT_begin(ctx, r#gen, 1_i32);
+                }
+                inl_gm_801AB200_SetAppSRT(ctx, appsrt, hover_jobj);
+                (Handle::add(
+                    statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                    selected,
+                ))
+                .set_x8(
+                    (Handle::add(
+                        statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                        selected,
+                    ))
+                    .x8()
+                    .wrapping_add(1_i32),
+                );
+                if (Handle::add(
+                    statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
+                    selected,
+                ))
+                .x8()
+                    >= 1_i32
+                {
+                    inl_gm_801AB200_ptcl(
+                        ctx,
+                        selected,
+                        statics::melee__gm__gmstaffroll::gm_804D42C8(ctx),
+                    );
+                }
+                statics::melee__gm__gmstaffroll::gm_804D6828(ctx).set(fp::fmadds(
+                    0.5,
+                    statics::melee__gm__gmstaffroll::gm_804D6828(ctx).get(),
+                    1.7000000476837158,
+                ));
+            }
+        }
+    }
+    statics::melee__gm__gmstaffroll::gm_804D6828(ctx).set(fp::fsubs(
+        statics::melee__gm__gmstaffroll::gm_804D6828(ctx).get(),
+        0.017000000923871994,
+    ));
+    if statics::melee__gm__gmstaffroll::gm_804D6828(ctx).get() < 0.0 {
+        statics::melee__gm__gmstaffroll::gm_804D6828(ctx).set(0.0);
+    }
+    highlight_val = fp::fadds(
+        0.25,
+        statics::melee__gm__gmstaffroll::gm_804D6824(ctx).get(),
+    );
+    if highlight_val < statics::melee__gm__gmstaffroll::gm_804D6828(ctx).get() {
+        statics::melee__gm__gmstaffroll::gm_804D6824(ctx).set(highlight_val);
+    } else {
+        statics::melee__gm__gmstaffroll::gm_804D6824(ctx)
+            .set(statics::melee__gm__gmstaffroll::gm_804D6828(ctx).get());
+    }
+    let _ = fns::lb_80011E24(
+        ctx,
+        root,
+        temp_jobj,
+        &[
+            VarArg::Int(24_i32 as u32),
+            VarArg::Int(1_i32.wrapping_neg() as u32),
+        ],
+    );
+    inl_HSD_JObjSetRotationZ(
+        ctx,
+        temp_jobj.get(),
+        fp::frsp(
+            (fp::fsub(
+                fp::fneg(statics::melee__gm__gmstaffroll::gm_804D6824(ctx).get()),
+                0.7853981633974483,
+            )),
+        ),
+    );
+    let _ = fns::lb_80011E24(
+        ctx,
+        root,
+        temp_jobj,
+        &[
+            VarArg::Int(5_i32 as u32),
+            VarArg::Int(1_i32.wrapping_neg() as u32),
+        ],
+    );
+    fns::HSD_JObjAnimAll(ctx, temp_jobj.get());
+    let _ = fns::lb_80011E24(
+        ctx,
+        root,
+        jobj_pair.at(0),
+        &[
+            VarArg::Int(28_i32 as u32),
+            VarArg::Int(26_i32 as u32),
+            VarArg::Int(1_i32.wrapping_neg() as u32),
+        ],
+    );
+    if statics::melee__gm__gmstaffroll::gm_804D6818(ctx).get() == 0_i32 {
+        {
+            i = 0_i32;
+            'l9: while i < statics::melee__gm__gmstaffroll::gm_804D681C(ctx).get() {
+                'c10: {
+                    let _ = fns::lb_80011E24(
+                        ctx,
+                        root,
+                        temp_jobj,
+                        &[
+                            VarArg::Int(2_i32 as u32),
+                            VarArg::Int(1_i32.wrapping_neg() as u32),
+                        ],
+                    );
+                    fns::HSD_JObjAnimAll(ctx, temp_jobj.get());
+                    let _ = fns::lb_80011E24(
+                        ctx,
+                        root,
+                        temp_jobj,
+                        &[
+                            VarArg::Int(20_i32 as u32),
+                            VarArg::Int(1_i32.wrapping_neg() as u32),
+                        ],
+                    );
+                    fns::HSD_JObjAnimAll(ctx, temp_jobj.get());
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+        statics::melee__gm__gmstaffroll::gm_804D6814(ctx).set(
+            statics::melee__gm__gmstaffroll::gm_804D6814(ctx)
+                .get()
+                .wrapping_add(statics::melee__gm__gmstaffroll::gm_804D681C(ctx).get()),
+        );
+        if (statics::melee__gm__gmstaffroll::gm_804D6814(ctx).get() >= 0x1285_i32)
+            && (Handle::is_null(statics::melee__gm__gmstaffroll::gm_804D680C(ctx).get()))
+        {
+            tally_count = 0_i32;
+            Handle::copy_from(
+                tally_color2,
+                (Handle::cast::<_GXColor<'a>>(fns::gm_804DAAEC(ctx))),
+            );
+            {
+                j = 0_i32;
+                'l11: while j < 6_i32 {
+                    'c12: {
+                        fns::HSD_SisLib_803A5CC4(
+                            ctx,
+                            statics::melee__gm__gmstaffroll::gm_80480D58(ctx)
+                                .at(j)
+                                .get(),
+                        );
+                        statics::melee__gm__gmstaffroll::gm_80480D58(ctx)
+                            .at(j)
+                            .set(null::<HSD_Text<'a>>(ctx));
+                    }
+                    j = j.wrapping_add(1);
+                }
+            }
+            statics::melee__gm__gmstaffroll::gm_804D6810(ctx).set(0_i32);
+            statics::melee__gm__gmstaffroll::gm_804D680C(ctx)
+                .set(fns::HSD_SisLib_803A6754(ctx, 0_i32, 0_i32));
+            (statics::melee__gm__gmstaffroll::gm_804D680C(ctx).get())
+                .set_default_kerning((1_i32 as u8));
+            tally_text = statics::melee__gm__gmstaffroll::gm_804D680C(ctx).get();
+            (tally_text).set_pos_x(85.0);
+            (tally_text).set_pos_y(130.0);
+            (tally_text).set_pos_z(fp::fneg(280.0));
+            {
+                i = 0_i32;
+                'l13: while i < 198_i32 {
+                    'c14: {
+                        if (Handle::add(statics::melee__gm__gmstaffroll::staffInfo(ctx).get(), i))
+                            .x8()
+                            >= 1_i32
+                        {
+                            tally_count = tally_count.wrapping_add(1);
+                        }
+                    }
+                    i = i.wrapping_add(1);
+                }
+            }
+            line_num = fns::HSD_SisLib_803A6B98(
+                ctx,
+                statics::melee__gm__gmstaffroll::gm_804D680C(ctx).get(),
+                0.0,
+                0.0,
+                cstr(ctx, 0x803dd23c),
+                &[VarArg::Int(tally_count as u32)],
+            );
+            Handle::copy_from(tally_color_copy, tally_color2);
+            fns::HSD_SisLib_803A74F0(
+                ctx,
+                statics::melee__gm__gmstaffroll::gm_804D680C(ctx).get(),
+                line_num,
+                tally_color_copy,
+            );
+            inl_HSD_JObjSetTranslateY(
+                ctx,
+                (jobj_pair.at(0_i32).get()).child(),
+                fp::fneg(0.4000000059604645),
+            );
+            inl_HSD_JObjSetTranslateY(
+                ctx,
+                (jobj_pair.at(1_i32).get()).child(),
+                fp::fneg(0.4000000059604645),
+            );
+            statics::melee__gm__gmstaffroll::gm_804D681C(ctx).set(1_i32);
+        }
+        if statics::melee__gm__gmstaffroll::gm_804D6814(ctx).get() >= 0x12d5_i32 {
+            fns::lbAudioAx_80028B6C(ctx);
+        }
+        if statics::melee__gm__gmstaffroll::gm_804D6814(ctx).get() == 0x1311_i32 {
+            if statics::melee__gm__gmstaffroll::gm_804D6848(ctx).get() == 0_i32 {
+                fns::lbBgFlash_800206D4(
+                    ctx,
+                    statics::melee__gm__gmstaffroll::gm_804D42B8(ctx),
+                    statics::melee__gm__gmstaffroll::gm_804D42C0(ctx),
+                    60_i32,
+                );
+            } else {
+                fns::lbBgFlash_800206D4(
+                    ctx,
+                    statics::melee__gm__gmstaffroll::gm_804D42BC(ctx),
+                    statics::melee__gm__gmstaffroll::gm_804D42C0(ctx),
+                    60_i32,
+                );
+            }
+            let _ = fns::lbAudioAx_80023694(ctx);
+        }
+    }
+    inl_HSD_JObjSetTranslateX(
+        ctx,
+        jobj_pair.at(0_i32).get(),
+        statics::melee__gm__gmstaffroll::gm_803DBFD8_extra(ctx)
+            .x_positions()
+            .at(statics::melee__gm__gmstaffroll::gm_804D6810(ctx).get())
+            .get(),
+    );
+    if button == (shl_i32(1_i32, (12_i32 as u32))) {
+        if statics::melee__gm__gmstaffroll::gm_804D681C(ctx).get() == 1_i32 {
+            if statics::melee__gm__gmstaffroll::gm_804D6814(ctx).get() < 0x1285_i32 {
+                statics::melee__gm__gmstaffroll::gm_804D681C(ctx).set(6_i32);
+                fns::lbBgFlash_800206D4(
+                    ctx,
+                    statics::melee__gm__gmstaffroll::gm_804D42BC(ctx),
+                    statics::melee__gm__gmstaffroll::gm_804D42BC(ctx),
+                    1_i32,
+                );
+                statics::melee__gm__gmstaffroll::gm_804D6848(ctx).set(1_i32);
+            } else {
+                statics::melee__gm__gmstaffroll::gm_804D681C(ctx).set(1_i32);
+            }
+        } else if statics::melee__gm__gmstaffroll::gm_804D6814(ctx).get() < 0x1285_i32 {
+            statics::melee__gm__gmstaffroll::gm_804D681C(ctx).set(1_i32);
+            fns::lbBgFlash_800206D4(
+                ctx,
+                statics::melee__gm__gmstaffroll::gm_804D42B8(ctx),
+                statics::melee__gm__gmstaffroll::gm_804D42B8(ctx),
+                1_i32,
+            );
+            statics::melee__gm__gmstaffroll::gm_804D6848(ctx).set(0_i32);
+        } else {
+            statics::melee__gm__gmstaffroll::gm_804D681C(ctx).set(1_i32);
+        }
+    }
+    {
+        i = 1_i32;
+        'l15: while i < statics::melee__gm__gmstaffroll::gm_804D681C(ctx).get() {
+            'c16: {
+                fns::efLib_particles_proc_main(ctx, null::<HSD_GObj<'a>>(ctx));
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    if statics::melee__gm__gmstaffroll::gm_804D6820(ctx).get() != 0_i32 {
+        statics::melee__gm__gmstaffroll::gm_804D6820(ctx).set(
+            statics::melee__gm__gmstaffroll::gm_804D6820(ctx)
+                .get()
+                .wrapping_sub(1_i32),
+        );
+    }
+    if (statics::melee__gm__gmstaffroll::gm_804D6818(ctx).get() == 0_i32)
+        && (button == (shl_i32(1_i32, (9_i32 as u32))))
+    {
+        if statics::melee__gm__gmstaffroll::gm_804D6814(ctx).get() < 0x1285_i32 {
+            statics::melee__gm__gmstaffroll::gm_804D6818(ctx).set(1_i32);
+            {
+                let mut gobj_2: HSD_GObj<'a> =
+                    fns::HSD_GObjObject_80390A3C(ctx, (8_u32 as u16), (11_u32 as u8));
+                (if !Handle::is_null((gobj_2)) {
+                    ({ () })
+                } else {
+                    fns::__assert(
+                        ctx,
+                        cstr(ctx, 0x803dbfdc),
+                        (0x48f_i32 as u32),
+                        cstr(ctx, 0x803dbfdc),
+                    )
+                });
+                fns::HSD_GObj_80390C5C(ctx, gobj_2);
+            }
+        }
+    } else if ((statics::melee__gm__gmstaffroll::gm_804D6818(ctx).get() == 1_i32)
+        && (button != 0_i32))
+        && ((button != (shl_i32(1_i32, (9_i32 as u32)))) || (selected == 1_i32.wrapping_neg()))
+    {
+        statics::melee__gm__gmstaffroll::gm_804D6818(ctx).set(0_i32);
+        {
+            let mut gobj_3: HSD_GObj<'a> =
+                fns::HSD_GObjObject_80390A3C(ctx, (8_u32 as u16), (11_u32 as u8));
+            (if !Handle::is_null((gobj_3)) {
+                ({ () })
+            } else {
+                fns::__assert(
+                    ctx,
+                    cstr(ctx, 0x803dbfdc),
+                    (0x499_i32 as u32),
+                    cstr(ctx, 0x803dbfdc),
+                )
+            });
+            fns::HSD_GObj_80390C84(ctx, gobj_3);
+        }
+        statics::melee__gm__gmstaffroll::gm_804D6820(ctx).set(60_i32);
+    }
+    if statics::melee__gm__gmstaffroll::gm_804D6814(ctx).get()
+        >= statics::melee__gm__gmstaffroll::gm_803DBFD8_extra(ctx)
+            .sfx_cues()
+            .get(statics::melee__gm__gmstaffroll::gm_804D684C(ctx).get())
+            .frame()
+    {
+        let _ = fns::lbAudioAx_800237A8(
+            ctx,
+            statics::melee__gm__gmstaffroll::gm_803DBFD8_extra(ctx)
+                .sfx_cues()
+                .get(statics::melee__gm__gmstaffroll::gm_804D684C(ctx).get())
+                .sfx(),
+            127_i32,
+            64_i32,
+        );
+        statics::melee__gm__gmstaffroll::gm_804D684C(ctx).set(
+            statics::melee__gm__gmstaffroll::gm_804D684C(ctx)
+                .get()
+                .wrapping_add(1_i32),
+        );
+    }
+}
+
 pub fn fn_801AC67C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
@@ -1654,6 +2606,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(fn_801AAB74(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801ab200,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(fn_801AB200(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

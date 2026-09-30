@@ -220,6 +220,327 @@ pub fn fn_8017F2A4<'a>(ctx: &'a Ctx, arg0: Ptr<'a, HSD_Text<'a>>, farg0: f64, fa
     return 0;
 }
 
+pub fn fn_8017F47C<'a>(ctx: &'a Ctx, arg0: Ptr<'a, HSD_Text<'a>>, arg1: i32) -> i32 {
+    let __frame = ctx.stack_frame(0x48);
+    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut mask: u8 = 0;
+    let mut val: i32 = 0;
+    let mut p: Val<'a, i32> = null(ctx);
+    let mut i: i32 = 0;
+    let mut entry: i32 = 0;
+    let mut prev_idx: i32 = 0;
+    let mut idx: i32 = 0;
+    entry = arg1;
+    prev_idx = 0x3e7_i32.wrapping_neg();
+    mask = (fns::fn_8017F008(ctx) as u8);
+    let _ = fns::fn_8016F39C(
+        ctx,
+        Handle::add(arg0, 1_i32),
+        Handle::cast::<Addr<'a>>(fns::gm_8016B774(ctx)),
+        (7_i32 as u8),
+        (arg1 as u16),
+        mask,
+        (0_i32 as u8),
+    );
+    {
+        i = 0_i32;
+        p = Handle::cast::<Val<'a, i32>>(arg0);
+        'l1: while i < 7_i32 {
+            'c2: {
+                mask = (fns::fn_8017F008(ctx) as u8);
+                idx = fns::fn_8016F548(
+                    ctx,
+                    Handle::cast::<Addr<'a>>(fns::gm_8016B774(ctx)),
+                    (entry as u16),
+                    mask,
+                    (0_i32 as u8),
+                );
+                mask = (fns::fn_8017F008(ctx) as u8);
+                val = fns::fn_8016FAD4(
+                    ctx,
+                    fns::gm_8016B774(ctx),
+                    ((idx as u32) as i32),
+                    (mask as i32),
+                    (0_i32 as u8),
+                );
+                if (prev_idx == idx) || (idx < 0_i32) {
+                    break 'l1;
+                }
+                if (Handle::add(p, 8_i32)).get() != val {
+                    if val < 0_i32 {
+                        let _ = fns::HSD_SisLib_803A70A0(
+                            ctx,
+                            (arg0).get(),
+                            i,
+                            cstr(ctx, 0x804d4058),
+                            &[
+                                VarArg::Int(Handle::addr(cstr(ctx, 0x804d4060))),
+                                VarArg::Int(val.wrapping_neg() as u32),
+                            ],
+                        );
+                    } else {
+                        let _ = fns::HSD_SisLib_803A70A0(
+                            ctx,
+                            (arg0).get(),
+                            i,
+                            cstr(ctx, 0x804d4064),
+                            &[VarArg::Int(val as u32)],
+                        );
+                    }
+                    (Handle::add(p, 8_i32)).set(val);
+                }
+                prev_idx = idx;
+                entry = idx.wrapping_add(1_i32);
+            }
+            p = Handle::add(p, 1);
+            i = i.wrapping_add(1);
+        }
+    }
+    mask = (fns::fn_8017F008(ctx) as u8);
+    val = fns::fn_8016FFD4(ctx, fns::gm_8016B774(ctx), (mask as i32), (0_i32 as u8));
+    if val < 0_i32 {
+        let _ = fns::HSD_SisLib_803A70A0(
+            ctx,
+            (arg0).get(),
+            7_i32,
+            cstr(ctx, 0x804d4058),
+            &[
+                VarArg::Int(Handle::addr(cstr(ctx, 0x804d4060))),
+                VarArg::Int(val.wrapping_neg() as u32),
+            ],
+        );
+    } else {
+        let _ = fns::HSD_SisLib_803A70A0(
+            ctx,
+            (arg0).get(),
+            7_i32,
+            cstr(ctx, 0x804d4064),
+            &[VarArg::Int(val as u32)],
+        );
+    }
+    mask = (fns::fn_8017F008(ctx) as u8);
+    return fns::fn_8016F548(
+        ctx,
+        Handle::cast::<Addr<'a>>(fns::gm_8016B774(ctx)),
+        (arg1 as u16),
+        mask,
+        (0_i32 as u8),
+    );
+    'l3: loop {
+        'c4: {}
+        if !(0_i32 != 0) {
+            break 'l3;
+        }
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
+pub fn fn_8017F608<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
+    let __frame = ctx.stack_frame(0x60);
+    let sp4C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 36> = frame_at(ctx, &__frame, 0x18);
+    let mut arg0 = arg0;
+    let mut p: lbl_80472D28_t<'a> = Handle::cast::<lbl_80472D28_t<'a>>(arg0);
+    let mut text: HSD_Text<'a> = null(ctx);
+    let mut gm: VsSceneController<'a> = null(ctx);
+    let mut show: i32 = 0;
+    Handle::copy_from(sp40, statics::melee__gm__gmregclear::lbl_803B7C18(ctx));
+    if Handle::is_null((p).x6C()) {
+        (p).set_x6C(fns::HSD_SisLib_803A5ACC(
+            ctx, 0_i32, 0_i32, 0.0, 0.0, 0.0, 6.0, 300.0,
+        ));
+        fns::HSD_SisLib_803A6368(ctx, (p).x6C(), 2_i32);
+    }
+    if Handle::is_null((p).x70()) {
+        text = fns::HSD_SisLib_803A5ACC(ctx, 0_i32, 0_i32, 0.0, 0.0, 0.0, 6.0, 300.0);
+        (p).set_x70(text);
+        if ((p).x11A() as i32) != 0_i32 {
+            fns::HSD_SisLib_803A6368(ctx, (p).x70(), 4_i32);
+        } else {
+            fns::HSD_SisLib_803A6368(ctx, (p).x70(), 3_i32);
+        }
+    }
+    if (p).xD0() != (p).xD4() {
+        let mut str: i32 = 0;
+        (p).set_xD8((p).xD8().wrapping_add(1_i32));
+        text = (p).x74();
+        if !Handle::is_null(text) {
+            fns::HSD_SisLib_803A5CC4(ctx, text);
+        }
+        (p).set_x74(fns::HSD_SisLib_803A6754(ctx, 0_i32, 0_i32));
+        {
+            let mut state: lbl_80472D28_t<'a> = statics::melee__gm__gmregclear::lbl_80472D28(ctx);
+            ((p).x74()).set_pos_z(fp::fneg(10.0));
+            ((p).x74()).set_default_alignment((2_i32 as u8));
+            gm = fns::gmVs_GetSceneController(ctx);
+            if ((((state).x118() as i32) != 0_i32)
+                || ((((state).x11A() as i32) != 0_i32) && (((state).x11B() as i32) == 0_i32)))
+                || (((gm).start().timer_counts_up() as i32) != 0)
+            {
+                show = 0_i32;
+            } else {
+                show = 1_i32;
+            }
+            if show == 0_i32 {
+                str =
+                    fns::HSD_SisLib_803A6B98(ctx, (p).x74(), 0.0, 0.0, cstr(ctx, 0x804d4060), &[]);
+                fns::HSD_SisLib_803A7548(
+                    ctx,
+                    (p).x74(),
+                    str,
+                    0.10000000149011612,
+                    0.06499999761581421,
+                );
+                (p).set_xD4((p).xD0());
+            } else if (p).xD8() < 60_i32 {
+                ((p).x74()).set_default_kerning((1_i32 as u8));
+                str = fns::HSD_SisLib_803A6B98(
+                    ctx,
+                    (p).x74(),
+                    0.0,
+                    0.0,
+                    cstr(ctx, 0x804d4068),
+                    &[
+                        VarArg::Int(div_i32((p).xD0(), ((p).x108() as i32)) as u32),
+                        VarArg::Int(((p).x108() as i32) as u32),
+                    ],
+                );
+                fns::HSD_SisLib_803A7548(
+                    ctx,
+                    (p).x74(),
+                    str,
+                    0.08999999612569809,
+                    0.06499999761581421,
+                );
+            } else {
+                str = fns::HSD_SisLib_803A6B98(
+                    ctx,
+                    (p).x74(),
+                    0.0,
+                    0.0,
+                    cstr(ctx, 0x804d4064),
+                    &[VarArg::Int((p).xD0() as u32)],
+                );
+                fns::HSD_SisLib_803A7548(
+                    ctx,
+                    (p).x74(),
+                    str,
+                    0.10000000149011612,
+                    0.06499999761581421,
+                );
+                (p).set_xD4((p).xD0());
+            }
+        }
+    }
+    if (((p).x11A() as i32) == 0_i32) && ((p).xDC() != (p).xE0()) {
+        let mut str_2: i32 = 0;
+        (p).set_xE4((p).xE4().wrapping_add(1_i32));
+        text = (p).x78();
+        if !Handle::is_null(text) {
+            fns::HSD_SisLib_803A5CC4(ctx, text);
+        }
+        (p).set_x78(fns::HSD_SisLib_803A6754(ctx, 0_i32, 0_i32));
+        ((p).x78()).set_default_alignment((2_i32 as u8));
+        if (p).xE4() < 60_i32 {
+            ((p).x78()).set_default_kerning((1_i32 as u8));
+            str_2 = fns::HSD_SisLib_803A6B98(
+                ctx,
+                (p).x78(),
+                0.0,
+                0.0,
+                cstr(ctx, 0x804d4068),
+                &[
+                    VarArg::Int(div_i32((p).xDC(), ((p).x10A() as i32)) as u32),
+                    VarArg::Int(((p).x10A() as i32) as u32),
+                ],
+            );
+            fns::HSD_SisLib_803A7548(
+                ctx,
+                (p).x78(),
+                str_2,
+                0.10000000149011612,
+                0.06499999761581421,
+            );
+        } else {
+            str_2 = fns::HSD_SisLib_803A6B98(
+                ctx,
+                (p).x78(),
+                0.0,
+                0.0,
+                cstr(ctx, 0x804d4064),
+                &[VarArg::Int((p).xDC() as u32)],
+            );
+            fns::HSD_SisLib_803A7548(
+                ctx,
+                (p).x78(),
+                str_2,
+                0.10000000149011612,
+                0.06499999761581421,
+            );
+            (p).set_xE0((p).xDC());
+        }
+    }
+    fns::lb_8000B1CC(ctx, (p).x10(), sp40, sp4C);
+    text = (p).x70();
+    if !Handle::is_null(text) {
+        let mut px: f64 = 0.0;
+        let mut py: f64 = 0.0;
+        let mut pz: f64 = 0.0;
+        px = sp4C.x();
+        py = fp::fneg(sp4C.y());
+        pz = sp4C.z();
+        (text).set_pos_x(px);
+        (text).set_pos_y(py);
+        (text).set_pos_z(pz);
+    }
+    text = (p).x6C();
+    if !Handle::is_null(text) {
+        let mut px_2: f64 = 0.0;
+        let mut py_2: f64 = 0.0;
+        let mut pz_2: f64 = 0.0;
+        px_2 = fp::fadds(0.10000000149011612, sp4C.x());
+        py_2 = fp::fsubs(fp::fneg(sp4C.y()), 6.0);
+        pz_2 = sp4C.z();
+        (text).set_pos_x(px_2);
+        (text).set_pos_y(py_2);
+        (text).set_pos_z(pz_2);
+    }
+    text = (p).x74();
+    if !Handle::is_null(text) {
+        let mut px_3: f64 = 0.0;
+        let mut py_3: f64 = 0.0;
+        let mut pz_3: f64 = 0.0;
+        px_3 = fp::fadds(6.5, sp4C.x());
+        py_3 = fp::fsubs(fp::fneg(sp4C.y()), 33.5);
+        pz_3 = sp4C.z();
+        (text).set_pos_x(px_3);
+        (text).set_pos_y(py_3);
+        (text).set_pos_z(pz_3);
+    }
+    text = (p).x78();
+    if !Handle::is_null(text) {
+        let mut px_4: f64 = 0.0;
+        let mut py_4: f64 = 0.0;
+        let mut pz_4: f64 = 0.0;
+        px_4 = fp::fadds(6.5, sp4C.x());
+        py_4 = fp::fsubs(fp::fneg(sp4C.y()), 27.5);
+        pz_4 = sp4C.z();
+        (text).set_pos_x(px_4);
+        (text).set_pos_y(py_4);
+        (text).set_pos_z(pz_4);
+    }
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+}
+
 pub fn fn_8017FA1C<'a>(ctx: &'a Ctx, arg0: Addr<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
     let sp14: Vec<'a> = frame_at(ctx, &__frame, 0x0);
@@ -1253,6 +1574,22 @@ pub fn register(ctx: &Ctx) {
             Ret::put(fn_8017F2A4(ctx, a0, a1.0, a2.0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x8017f47c,
+        |ctx| {
+            let (a0, a1): (Ptr<'_, HSD_Text<'_>>, i32) = Args::take_all(ctx);
+            Ret::put(fn_8017F47C(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x8017f608,
+        |ctx| {
+            let (a0,): (Addr<'_>,) = Args::take_all(ctx);
+            Ret::put(fn_8017F608(ctx, a0), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x8017fa1c,
