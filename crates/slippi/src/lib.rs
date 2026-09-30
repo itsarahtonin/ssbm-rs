@@ -42,13 +42,23 @@ pub fn install(ctx: &Ctx, replay: Replay) -> Rc<Device> {
 /// code set and the replay's own codes. Code there differs from the game's, so a port of a
 /// function containing one would not do what playback does.
 pub fn patched(device: &Device) -> Vec<(u32, u32)> {
+    gecko::targets(&applied_lines(device))
+}
+
+/// Addresses of the injected codes playback applies that return past the instructions after
+/// the call to the function they are in: its caller does not run as the game's code does.
+pub fn returns_past_caller(device: &Device) -> Vec<u32> {
+    gecko::returns_past_caller(&applied_lines(device))
+}
+
+fn applied_lines(device: &Device) -> Vec<(u32, u32)> {
     let mut lines: Vec<(u32, u32)> = gecko::parse_list(BOOTLOADER)
         .iter()
         .chain(gecko::parse_ini(PLAYBACK_INI).iter())
         .flat_map(|c| c.lines.clone())
         .collect();
     lines.extend(gecko::lines(device.gecko_list()));
-    gecko::targets(&lines)
+    lines
 }
 
 /// Applies the bootloader codes, as Dolphin's code handler does before the game gets far.

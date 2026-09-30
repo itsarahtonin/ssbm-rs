@@ -43,6 +43,24 @@ const LOCKSTEP_EXEMPT: &[&str] = &[
     "__longjmp",
 ];
 
+/// Addresses of the `bl` instructions in the executable's code that call `target`.
+fn calls_to(dol: &ssbm_disc::Dol, target: u32) -> Vec<u32> {
+    let mut sites = Vec::new();
+    for section in dol.sections.iter().filter(|s| s.kind == ssbm_disc::SectionKind::Text) {
+        for (i, w) in dol.section_data(section).chunks_exact(4).enumerate() {
+            let w = u32::from_be_bytes([w[0], w[1], w[2], w[3]]);
+            let at = section.addr + 4 * i as u32;
+            // bl: opcode 18 with LK set and AA clear; the offset is 26 bits, sign-extended.
+            if w & 0xFC00_0003 == 0x4800_0001
+                && at.wrapping_add((((w & 0x03FF_FFFC) << 6) as i32 >> 6) as u32) == target
+            {
+                sites.push(at);
+            }
+        }
+    }
+    sites
+}
+
 /// Stack for the thread that runs the game. Every guest call nests Rust frames, and ports and
 /// lockstep checks make them deep.
 const STACK_SIZE: usize = 1 << 30;
@@ -129,6 +147,7 @@ fn run() -> ExitCode {
     let interp = Rc::new(Interpreter::default());
     ctx.set_backend(Box::new(RcBackend(interp.clone())));
     ctx.set_names(Box::new(ssbm_types::describe));
+    let dol = disc.main_dol().ok();
     let sdk = ssbm_sdk::install(&ctx, disc);
     let slippi = replay_path.map(|path| {
         let bytes = std::fs::read(&path).unwrap_or_else(|e| panic!("{path}: {e}"));
@@ -165,11 +184,25 @@ fn run() -> ExitCode {
     // Playback's Gecko codes patch some functions; those keep running their patched code.
     let mut kept = Vec::new();
     if let Some(dev) = &slippi {
+        let mut keep = |f: u32| {
+            if ported.contains(&f) && !kept.contains(&f) {
+                ctx.set_mode(f, ssbm_rt::Mode::Original);
+                kept.push(f);
+            }
+        };
         for (at, len) in ssbm_slippi::patched(dev) {
             for f in ssbm_types::functions_overlapping(at, len) {
-                if ported.contains(&f) && !kept.contains(&f) {
-                    ctx.set_mode(f, ssbm_rt::Mode::Original);
-                    kept.push(f);
+                keep(f);
+            }
+        }
+        // Some codes return past the instructions after the call to their function, so its
+        // callers must be the game's code too.
+        for at in ssbm_slippi::returns_past_caller(dev) {
+            for f in ssbm_types::functions_overlapping(at, 4) {
+                for site in dol.as_ref().map_or_else(Vec::new, |d| calls_to(d, f)) {
+                    for caller in ssbm_types::functions_overlapping(site, 4) {
+                        keep(caller);
+                    }
                 }
             }
         }

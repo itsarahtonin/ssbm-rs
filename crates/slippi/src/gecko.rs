@@ -156,6 +156,47 @@ pub fn playback_list(replay_codes: &[u8]) -> Vec<u8> {
     crate::device::filter_codes(replay_codes)
 }
 
+/// Addresses of `C2` codes that return to where their function's caller would, moved on: they
+/// load the saved return address from the stack, add to it, and return there.
+pub fn returns_past_caller(lines: &[(u32, u32)]) -> Vec<u32> {
+    let mut out = Vec::new();
+    let mut i = 0;
+    while i < lines.len() {
+        let (a, d) = lines[i];
+        match a >> 24 & 0xFE {
+            0xC2 => {
+                let body = &lines[(i + 1).min(lines.len())..(i + 1 + d as usize).min(lines.len())];
+                let mut loaded = [false; 32];
+                let mut moved = [false; 32];
+                let mut hit = false;
+                for w in body.iter().flat_map(|&(x, y)| [x, y]) {
+                    let (rd, ra) = ((w >> 21 & 31) as usize, (w >> 16 & 31) as usize);
+                    match w >> 26 {
+                        // lwz rD, d(r1)
+                        32 if ra == 1 => loaded[rd] = true,
+                        // addi rD, rD, n
+                        14 if rd == ra && loaded[ra] => moved[rd] = true,
+                        // mtlr rS
+                        31 if w & 0xFC1F_FFFF == 0x7C08_03A6 && moved[rd] => hit = true,
+                        _ => {}
+                    }
+                }
+                if hit {
+                    out.push(0x8000_0000 | (a & 0x01FF_FFFF));
+                }
+                i += d as usize;
+            }
+            0x06 => i += (d as usize).div_ceil(8),
+            0x08 => i += 1,
+            0xC0 => i += d as usize,
+            0xF0 | 0xFE => break,
+            _ => {}
+        }
+        i += 1;
+    }
+    out
+}
+
 /// A code list's lines from its raw bytes. The `F0`/`FF` terminator only ends a list where a
 /// code starts, so it is left for [`targets`] to find: inside a `C2` code's instructions, a
 /// word such as `FF800890` (`fmr`) is an instruction.
@@ -220,6 +261,20 @@ $Beta
         // Branch from 0x80002000 to the body at 0x80001810, and back to 0x80002004.
         assert_eq!(ctx.read_u32(0x8000_2000), branch(0x8000_2000, 0x8000_1810));
         assert_eq!(ctx.read_u32(0x8000_1814), branch(0x8000_1814, 0x8000_2004));
+    }
+
+    #[test]
+    fn finds_codes_that_return_past_their_callers_call() {
+        // lwz r7, 0x1C(r1); addi r1, r1, 0x18; addi r7, r7, 8; mtlr r7; blr
+        let lines = [
+            (0xC209_98A4, 3),
+            (0x80E1_001C, 0x3821_0018),
+            (0x38E7_0008, 0x7CE8_03A6),
+            (0x4E80_0020, 0x0000_0000),
+            (0xC200_2000, 1),
+            (0x7C08_03A6, 0x0000_0000),
+        ];
+        assert_eq!(returns_past_caller(&lines), [0x8009_98A4]);
     }
 
     #[test]
