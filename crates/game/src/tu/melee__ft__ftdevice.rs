@@ -108,7 +108,7 @@ pub fn ftCo_800C06E8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, func: Addr
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803c6b74),
-                (64_i32 as u32),
+                (73_i32 as u32),
                 cstr(ctx, 0x803c6b74),
             )
         })
@@ -146,12 +146,7 @@ pub fn ftCo_800C0764<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: u32, arg2: Addr
     } else {
         ({
             fns::OSReport(ctx, cstr(ctx, 0x803c6b4c), &[]);
-            fns::__assert(
-                ctx,
-                cstr(ctx, 0x803c6b74),
-                (80_i32 as u32),
-                cstr(ctx, 0x803c6b74),
-            )
+            fns::__assert(ctx, cstr(ctx, 0x803c6b74), 111_u32, cstr(ctx, 0x803c6b74))
         })
     });
 }
@@ -187,7 +182,7 @@ pub fn ftCo_800C07F8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: u32, arg2: Addr
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803c6b74),
-                (98_i32 as u32),
+                (149_i32 as u32),
                 cstr(ctx, 0x803c6b74),
             )
         })

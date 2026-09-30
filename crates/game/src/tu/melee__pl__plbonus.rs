@@ -46,7 +46,7 @@ pub fn pl_80038824<'a>(ctx: &'a Ctx, player: i32, kind: i32) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d7f20),
-            (48_i32 as u32),
+            (92_i32 as u32),
             cstr(ctx, 0x804d7f20),
         )
     });
@@ -73,7 +73,7 @@ pub fn pl_80038898<'a>(ctx: &'a Ctx, player: i32, kind: i32) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d7f20),
-            (57_i32 as u32),
+            (103_i32 as u32),
             cstr(ctx, 0x804d7f20),
         )
     });
@@ -1734,7 +1734,7 @@ fn inl_setPointValue_unfused<'a>(ctx: &'a Ctx, player: i32, kind: i32, val: u32)
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d7f20),
-            (33_i32 as u32),
+            (80_i32 as u32),
             cstr(ctx, 0x804d7f20),
         )
     });
@@ -1744,7 +1744,7 @@ fn inl_setPointValue_unfused<'a>(ctx: &'a Ctx, player: i32, kind: i32, val: u32)
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d7f20),
-            (34_i32 as u32),
+            (81_i32 as u32),
             cstr(ctx, 0x804d7f20),
         )
     });
@@ -1791,7 +1791,7 @@ fn inl_setFlag_unfused<'a>(ctx: &'a Ctx, player: i32, kind: i32) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d7f20),
-            (24_i32 as u32),
+            (56_i32 as u32),
             cstr(ctx, 0x804d7f20),
         )
     });
@@ -1801,7 +1801,7 @@ fn inl_setFlag_unfused<'a>(ctx: &'a Ctx, player: i32, kind: i32) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d7f20),
-            (25_i32 as u32),
+            (57_i32 as u32),
             cstr(ctx, 0x804d7f20),
         )
     });
@@ -1821,7 +1821,7 @@ fn inl_pl_CalculateAverage_unfused<'a>(ctx: &'a Ctx, val: f64, total: f64) -> f6
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d7f20),
-            (8_i32 as u32),
+            (16_i32 as u32),
             cstr(ctx, 0x804d7f20),
         )
     });

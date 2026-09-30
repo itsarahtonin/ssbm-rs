@@ -2862,9 +2862,9 @@ pub fn gm_801647F8<'a>(ctx: &'a Ctx, arg0: u8) -> i32 {
     if (arg0 as i32) == 32_i32 {
         arg0 = (14_i32 as u8);
     }
-    'l1: while (var_r5).x0() != (0x148_i32 as u32) {
+    'l1: while ((var_r5).x0() as i32) != 0x148_i32 {
         'c2: {
-            if (var_r5).x1() == (arg0 as u32) {
+            if ((var_r5).x1() as i32) == (arg0 as i32) {
                 return ((var_r5).x0() as i32);
             }
             var_r5 = Handle::add(var_r5, 1);
@@ -4199,7 +4199,7 @@ pub fn gm_80166378<'a>(ctx: &'a Ctx, arg0_raw: MatchEnd<'a>) {
 }
 
 pub fn fn_80166A8C<'a>(ctx: &'a Ctx, a0: Vec<'a>, a1: Vec<'a>) -> f64 {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: inline asm.
     (a0, a1).put_regs(ctx);
     asm_fn_80166A8C(ctx);
     Ret::get(ctx)

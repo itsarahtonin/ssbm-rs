@@ -581,7 +581,14 @@ pub fn it_802D208C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 __t1
             };
             dy = fp::fsubs((ip).xDD4_itemVar().lugia().x64().y(), target.y());
-            dz = fp::fsubs(((ip).xDD4_itemVar().lugia().x64().z()), target.z());
+            dz = fp::fsubs(
+                ({
+                    let __t2 = (ip).xDD4_itemVar().lugia().x64().z();
+                    dz = __t2;
+                    __t2
+                }),
+                target.z(),
+            );
             {
                 let mut dx2: f64 = fp::fmuls(dx, dx);
                 let mut dy2: f64 = fp::fmuls(dy, dy);

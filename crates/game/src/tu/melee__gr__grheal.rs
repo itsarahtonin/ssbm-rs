@@ -143,6 +143,127 @@ pub fn stageGObj0_Callback3<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
 }
 
+pub fn stageGObj1_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0xc0);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let coin_pos: Vec<'a> = frame_at(ctx, &__frame, 0x4);
+    let next_players: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x10);
+    let next_jobjs: ArrP<'a, HSD_JObj<'a>, 3> = frame_at(ctx, &__frame, 0x14);
+    let player_jobjs: ArrP<'a, HSD_JObj<'a>, 26> = frame_at(ctx, &__frame, 0x20);
+    let mut gobj = gobj;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    {
+        let mut reserved_next_jobj: HSD_JObj<'a> = null(ctx);
+        let mut reserved_player_jobj: HSD_JObj<'a> = null(ctx);
+        let mut next_count: i32 = 0;
+        let mut line_id: i32 = 0;
+        let mut next_idx: i32 = 0;
+        let mut i: u32 = 0;
+        let mut gp: Ground<'a> = null(ctx);
+        gp = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+        fns::grAnime_801C8138(ctx, gobj, (gp).map_id(), 0_i32);
+        if rem_i32(
+            (fns::gm_80473A18(ctx)._94().at(0_i32).get() as i32),
+            (statics::melee__gr__grheal::grHeal_804D6AF0(ctx)
+                .at(0_i32)
+                .get())
+            .x4(),
+        ) == 0_i32
+        {
+            Handle::copy_from(coin_pos, statics::melee__gr__grheal::grHeal_803B84A8(ctx));
+            let _ = fns::Ground_801C2D24(ctx, 220_i32, coin_pos);
+            line_id = fns::Ground_801C5840(ctx);
+            if line_id != 1_i32.wrapping_neg() {
+                let _ = fns::it_802F2094(ctx, null::<HSD_GObj<'a>>(ctx), coin_pos, line_id, 0_i32);
+                fns::Toy_80304A58(ctx, line_id);
+            }
+        }
+        {
+            next_count = 0_i32;
+            'l3: while next_count < (fns::gm_80473A18(ctx)._94().at(1_i32).get() as i32) {
+                'c4: {
+                    next_players.at(next_count).set(
+                        fns::gm_80473A18(ctx)
+                            ._94()
+                            .at(next_count.wrapping_add(2_i32))
+                            .get(),
+                    );
+                }
+                next_count = next_count.wrapping_add(1);
+            }
+        }
+        next_jobjs
+            .at(0_i32)
+            .set(fns::Ground_801C3FA4(ctx, gobj, 58_i32));
+        next_jobjs
+            .at(1_i32)
+            .set(fns::Ground_801C3FA4(ctx, gobj, 59_i32));
+        next_jobjs
+            .at(2_i32)
+            .set(fns::Ground_801C3FA4(ctx, gobj, 60_i32));
+        {
+            next_idx = 0_i32;
+            'l5: while next_idx < next_count {
+                'c6: {
+                    statics::melee__gr__grheal::grHeal_8021F4E8(
+                        ctx,
+                        statics::melee__gr__grheal::grHeal_8021F70C(
+                            ctx,
+                            (next_players.at(next_idx).get() as i32),
+                        ),
+                        next_jobjs.at(next_idx).get(),
+                    );
+                }
+                next_idx = next_idx.wrapping_add(1);
+            }
+        }
+        {
+            i = (0_i32 as u32);
+            'l7: while i < (div_u32(52_u32, 2_u32)) {
+                'c8: {
+                    player_jobjs.at((i as i32)).set(fns::Ground_801C3FA4(
+                        ctx,
+                        gobj,
+                        (statics::melee__gr__grheal::grHeal_803E83B8(ctx)
+                            .at((i as i32))
+                            .get() as i32),
+                    ));
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+        {
+            i = (0_i32 as u32);
+            'l9: while i < (div_u32(52_u32, 2_u32)) {
+                'c10: {
+                    let mut character_id: i32 =
+                        (fns::gm_80473A18(ctx).x76().at((i as i32)).get() as i32);
+                    if character_id != 33_i32 {
+                        statics::melee__gr__grheal::grHeal_8021F628(
+                            ctx,
+                            statics::melee__gr__grheal::grHeal_8021F70C(ctx, character_id),
+                            player_jobjs.at((i as i32)).get(),
+                        );
+                    }
+                }
+                i = i.wrapping_add(1);
+            }
+        }
+        fns::mpJointSetCb1(
+            ctx,
+            0_i32,
+            Handle::cast::<Addr<'a>>(gp),
+            fnptr(ctx, 0x8021f4c0),
+        );
+        (gp).u().flatzone2().set_xC4(0_i32);
+    }
+}
+
 pub fn stageGObj1_Callback1<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
     return 0_i32;
@@ -218,7 +339,7 @@ pub fn grHeal_8021F4E8<'a>(ctx: &'a Ctx, arg0: i32, parent_jobj: HSD_JObj<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b84a8),
-            (0x147_i32 as u32),
+            (0x1b8_i32 as u32),
             cstr(ctx, 0x803b84a8),
         )
     });
@@ -284,7 +405,7 @@ pub fn grHeal_8021F628<'a>(ctx: &'a Ctx, arg0: i32, jobj_parent: HSD_JObj<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b84a8),
-            (0x175_i32 as u32),
+            (0x201_i32 as u32),
             cstr(ctx, 0x803b84a8),
         )
     });
@@ -485,6 +606,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(stageGObj0_Callback3(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8021f180,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(stageGObj1_OnInit(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

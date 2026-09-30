@@ -44,7 +44,7 @@ pub fn GObj_InitUserData<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x804085ec),
-            (9_i32 as u32),
+            (40_i32 as u32),
             cstr(ctx, 0x804085ec),
         )
     });
@@ -65,7 +65,7 @@ pub fn GObj_RemoveUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x804085ec),
-            (21_i32 as u32),
+            (99_i32 as u32),
             cstr(ctx, 0x804085ec),
         )
     });

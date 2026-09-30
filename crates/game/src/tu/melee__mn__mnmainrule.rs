@@ -1411,7 +1411,7 @@ pub fn mn_80230E38<'a>(ctx: &'a Ctx, arg0: i32) -> HSD_GObj<'a> {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803ec600),
-                (0x443_i32 as u32),
+                (0x575_i32 as u32),
                 cstr(ctx, 0x803ec600),
             )
         })

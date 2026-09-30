@@ -44,7 +44,7 @@ pub fn fn_8001E910<'a>(ctx: &'a Ctx, arg0: i32, arg1: u32, arg2: Addr<'a>, cance
         fns::__assert(
             ctx,
             cstr(ctx, 0x803badb8),
-            (104_i32 as u32),
+            (0x148_i32 as u32),
             cstr(ctx, 0x803badb8),
         )
     });
@@ -97,7 +97,7 @@ pub fn fn_8001E910<'a>(ctx: &'a Ctx, arg0: i32, arg1: u32, arg2: Addr<'a>, cance
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803badb8),
-                        (134_i32 as u32),
+                        (0x121_i32 as u32),
                         cstr(ctx, 0x803badb8),
                     )
                 })
@@ -354,7 +354,7 @@ pub fn fn_8001ECF4<'a>(ctx: &'a Ctx, data: THPDecComp<'a>, buf: Addr<'a>) {
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x803badb8),
-                                (0x126_i32 as u32),
+                                (0x10a_i32 as u32),
                                 cstr(ctx, 0x803badb8),
                             )
                         });
@@ -523,7 +523,7 @@ pub fn fn_8001F13C<'a>(ctx: &'a Ctx, streamPlayer: THPDecComp<'a>) -> i32 {
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803badb8),
-                        (0x19b_i32 as u32),
+                        (0x121_i32 as u32),
                         cstr(ctx, 0x803badb8),
                     )
                 })
@@ -623,7 +623,7 @@ pub fn lbMthp_8001F410<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x803badb8),
-            (0x210_i32 as u32),
+            (0x341_i32 as u32),
             cstr(ctx, 0x803badb8),
         )
     });
@@ -642,7 +642,7 @@ pub fn lbMthp_8001F410<'a>(
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803badb8),
-                (0x216_i32 as u32),
+                (0x350_i32 as u32),
                 cstr(ctx, 0x803badb8),
             )
         });

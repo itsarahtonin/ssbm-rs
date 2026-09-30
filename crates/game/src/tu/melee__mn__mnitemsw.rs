@@ -1029,7 +1029,7 @@ pub fn mnItemSw_802351A0<'a>(ctx: &'a Ctx, arg0: i32) -> HSD_GObj<'a> {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803ed340),
-                (0x34d_i32 as u32),
+                (0x3d7_i32 as u32),
                 cstr(ctx, 0x803ed340),
             )
         })
@@ -1219,7 +1219,7 @@ fn inl_HSD_JObjGetTranslationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ed340),
-            (0x24c_i32 as u32),
+            (0x3ee_i32 as u32),
             cstr(ctx, 0x803ed340),
         )
     });
@@ -1234,7 +1234,7 @@ fn inl_HSD_JObjGetTranslationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ed340),
-            (0x246_i32 as u32),
+            (0x3e1_i32 as u32),
             cstr(ctx, 0x803ed340),
         )
     });
@@ -1250,7 +1250,7 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ed340),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803ed340),
         )
     });
@@ -1272,7 +1272,7 @@ fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ed340),
-            (0x201_i32 as u32),
+            (0x3a4_i32 as u32),
             cstr(ctx, 0x803ed340),
         )
     });
@@ -1295,7 +1295,7 @@ fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ed340),
-            (0x213_i32 as u32),
+            (0x3b3_i32 as u32),
             cstr(ctx, 0x803ed340),
         )
     });
@@ -1532,7 +1532,7 @@ fn inl_HSD_JObjAddTranslationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a: f64, 
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ed340),
-            (0x2a0_i32 as u32),
+            (0x45a_i32 as u32),
             cstr(ctx, 0x803ed340),
         )
     });

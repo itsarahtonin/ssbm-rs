@@ -337,7 +337,7 @@ fn inl_HSD_JObjGetTranslation2_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, tra
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d3adc),
-            (0x240_i32 as u32),
+            (0x3d3_i32 as u32),
             cstr(ctx, 0x804d3adc),
         )
     });

@@ -418,7 +418,7 @@ pub fn grKinokoRoute_80207B5C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b82e8),
-            (0x155_i32 as u32),
+            (0x1d3_i32 as u32),
             cstr(ctx, 0x803b82e8),
         )
     });
@@ -565,7 +565,7 @@ pub fn grKinokoRoute_80207C88<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b82e8),
-                (0x1c4_i32 as u32),
+                (0x269_i32 as u32),
                 cstr(ctx, 0x803b82e8),
             )
         });
@@ -592,7 +592,7 @@ pub fn grKinokoRoute_80207C88<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803b82e8),
-                        (0x1d2_i32 as u32),
+                        (0x28e_i32 as u32),
                         cstr(ctx, 0x803b82e8),
                     )
                 });
@@ -870,7 +870,7 @@ fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, tran
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b82e8),
-            (0x237_i32 as u32),
+            (0x3d3_i32 as u32),
             cstr(ctx, 0x803b82e8),
         )
     });
@@ -880,7 +880,7 @@ fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, tran
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b82e8),
-            (0x238_i32 as u32),
+            (0x3d4_i32 as u32),
             cstr(ctx, 0x803b82e8),
         )
     });
@@ -896,7 +896,7 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b82e8),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803b82e8),
         )
     });
@@ -917,7 +917,7 @@ fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x__a:
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b82e8),
-            (0x201_i32 as u32),
+            (0x3a4_i32 as u32),
             cstr(ctx, 0x803b82e8),
         )
     });
@@ -939,7 +939,7 @@ fn inl_HSD_JObjSetTranslateY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a:
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b82e8),
-            (0x213_i32 as u32),
+            (0x3b3_i32 as u32),
             cstr(ctx, 0x803b82e8),
         )
     });
@@ -972,7 +972,7 @@ fn inl_HSD_JObjGetTranslation<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: V
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b82e8),
-            (0x237_i32 as u32),
+            (0x3d3_i32 as u32),
             cstr(ctx, 0x803b82e8),
         )
     });
@@ -982,7 +982,7 @@ fn inl_HSD_JObjGetTranslation<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: V
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b82e8),
-            (0x238_i32 as u32),
+            (0x3d4_i32 as u32),
             cstr(ctx, 0x803b82e8),
         )
     });
@@ -998,7 +998,7 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b82e8),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803b82e8),
         )
     });
@@ -1020,7 +1020,7 @@ fn inl_HSD_JObjSetTranslate<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b82e8),
-            (0x1e1_i32 as u32),
+            (0x394_i32 as u32),
             cstr(ctx, 0x803b82e8),
         )
     });
@@ -1030,7 +1030,7 @@ fn inl_HSD_JObjSetTranslate<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b82e8),
-            (0x1e2_i32 as u32),
+            (0x395_i32 as u32),
             cstr(ctx, 0x803b82e8),
         )
     });

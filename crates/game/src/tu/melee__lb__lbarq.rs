@@ -127,7 +127,7 @@ pub fn lbArq_80014BD0<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d3784),
-            (114_i32 as u32),
+            (103_i32 as u32),
             cstr(ctx, 0x804d3784),
         )
     });

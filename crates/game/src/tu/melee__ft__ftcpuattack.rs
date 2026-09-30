@@ -147,7 +147,7 @@ pub fn ftCo_800B4AB0<'a>(
                 if v <= 0.0 {
                     fpPredY = fp::fmadds(fpVy, t, fpY);
                 } else if t < v {
-                    sq = inl_sqrtf(ctx, t);
+                    sq = inl_sqrtf_store(ctx, t, sqrt_tmp.at(2_i32));
                     fpPredY = fp::frsp(
                         (fp::fadd(
                             fpY,
@@ -155,7 +155,7 @@ pub fn ftCo_800B4AB0<'a>(
                         )),
                     );
                 } else {
-                    sq = inl_sqrtf(ctx, v);
+                    sq = inl_sqrtf_store(ctx, v, sqrt_tmp.at(1_i32));
                     fpPredY = fp::frsp(
                         (fp::fadd(
                             fpY,
@@ -185,7 +185,7 @@ pub fn ftCo_800B4AB0<'a>(
                 if v <= 0.0 {
                     relPredY = fp::fsubs((fp::fmadds(tgtVy, t, tgtY)), fpPredY);
                 } else if t < v {
-                    sq = inl_sqrtf(ctx, t);
+                    sq = inl_sqrtf_store(ctx, t, sqrt_tmp.at(0_i32));
                     relPredY = fp::frsp(
                         (fp::fsub(
                             (fp::fnmsub(
@@ -197,7 +197,7 @@ pub fn ftCo_800B4AB0<'a>(
                         )),
                     );
                 } else {
-                    sq = inl_sqrtf(ctx, v);
+                    sq = inl_sqrtf_store(ctx, v, Handle::add(sqrt_tmp.at(0), 1_i32.wrapping_neg()));
                     relPredY = fp::frsp(
                         (fp::fsub(
                             (fp::fadd(
@@ -297,7 +297,7 @@ pub fn ftCo_800B4AB0<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x803c61f4),
-            (0x178_i32 as u32),
+            (250_i32 as u32),
             cstr(ctx, 0x803c61f4),
         )
     });
@@ -436,7 +436,7 @@ pub fn ftCo_800B52AC<'a>(
                 if v <= 0.0 {
                     fpPredY = fp::fmadds(fpVy, t, fpY);
                 } else if t < v {
-                    sq = inl_sqrtf(ctx, t);
+                    sq = inl_sqrtf_store(ctx, t, sqrt_tmp.at(2_i32));
                     fpPredY = fp::frsp(
                         (fp::fadd(
                             fpY,
@@ -444,7 +444,7 @@ pub fn ftCo_800B52AC<'a>(
                         )),
                     );
                 } else {
-                    sq = inl_sqrtf(ctx, v);
+                    sq = inl_sqrtf_store(ctx, v, sqrt_tmp.at(1_i32));
                     fpPredY = fp::frsp(
                         (fp::fadd(
                             fpY,
@@ -474,7 +474,7 @@ pub fn ftCo_800B52AC<'a>(
                 if v <= 0.0 {
                     relPredY = fp::fsubs((fp::fmadds(tgtVy, t, tgtY)), fpPredY);
                 } else if t < v {
-                    sq = inl_sqrtf(ctx, t);
+                    sq = inl_sqrtf_store(ctx, t, sqrt_tmp.at(0_i32));
                     relPredY = fp::frsp(
                         (fp::fsub(
                             (fp::fnmsub(
@@ -486,7 +486,7 @@ pub fn ftCo_800B52AC<'a>(
                         )),
                     );
                 } else {
-                    sq = inl_sqrtf(ctx, v);
+                    sq = inl_sqrtf_store(ctx, v, Handle::add(sqrt_tmp.at(0), 1_i32.wrapping_neg()));
                     relPredY = fp::frsp(
                         (fp::fsub(
                             (fp::fadd(
@@ -591,7 +591,7 @@ pub fn ftCo_800B52AC<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x803c61f4),
-            (0x24d_i32 as u32),
+            (0x1c5_i32 as u32),
             cstr(ctx, 0x803c61f4),
         )
     });
@@ -681,7 +681,9 @@ pub fn ftCo_800B5AB0<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Addr<'a>, arg2: Ad
                 list = Handle::add(list, 1);
                 break 'c2;
             }
-            t = fp::frsp(((list).x04()) as f64);
+            t = fp::frsp(
+                inl_ftCo_CpuAttackValue(ctx, (list).x04(), 0, 0, 0, 0, 0, 0, 0, 0, 0) as f64,
+            );
             relx = fp::fsubs((fp::fmadds(x50Vx, t, x50X)), (fp::fmadds(fpVx, t, fpX)));
             if ((x50).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
                 if (fpGrav < 9.999999747378752e-06_f64)
@@ -857,7 +859,7 @@ pub fn ftCo_800B5AB0<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Addr<'a>, arg2: Ad
         fns::__assert(
             ctx,
             cstr(ctx, 0x803c61f4),
-            (0x304_i32 as u32),
+            (0x26a_i32 as u32),
             cstr(ctx, 0x803c61f4),
         )
     });
@@ -920,7 +922,7 @@ pub fn ftCo_800B6208<'a>(ctx: &'a Ctx, arr: ftCo_AttackEntry<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803c61f4),
-            (0x330_i32 as u32),
+            (0x28a_i32 as u32),
             cstr(ctx, 0x803c61f4),
         )
     });
@@ -3889,9 +3891,9 @@ pub fn ftCo_800BB9B4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     return ((temp_r31).xF8_b12() as i32);
 }
 
-fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+fn inl_sqrtf_store<'a>(ctx: &'a Ctx, x: f64, y: Val<'a, F32>) -> f64 {
     let mut x = x;
-    let mut y: f64 = 0.0;
+    let mut y = y;
     if x > 0.0 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
@@ -3906,8 +3908,8 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
             fp::fmul(0.5, guess),
             (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
         );
-        y = fp::frsp((fp::fmul(x, guess)));
-        return y;
+        (y).set(fp::frsp((fp::fmul(x, guess))));
+        return (y).get();
     }
     return x;
 }
@@ -3934,6 +3936,55 @@ fn inl_ftCo_CpuSelectAttack<'a>(
         .x74()
         .set_y(fp::fmuls((fp).x34_scale().y(), (entry).x14()));
     return (entry).cmd();
+}
+
+fn inl_ftCo_CpuAttackValue<'a>(
+    ctx: &'a Ctx,
+    value: i32,
+    arg1: i32,
+    arg2: i32,
+    arg3: i32,
+    arg4: i32,
+    arg5: i32,
+    arg6: i32,
+    arg7: i32,
+    arg8: i64,
+    arg9: i64,
+) -> i32 {
+    let mut value = value;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut arg3 = arg3;
+    let mut arg4 = arg4;
+    let mut arg5 = arg5;
+    let mut arg6 = arg6;
+    let mut arg7 = arg7;
+    let mut arg8 = arg8;
+    let mut arg9 = arg9;
+    return value;
+}
+
+fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+    let mut x = x;
+    let mut y: f64 = 0.0;
+    if x > 0.0 {
+        let mut guess: f64 = fp::frsqrte(x);
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        y = fp::frsp((fp::fmul(x, guess)));
+        return y;
+    }
+    return x;
 }
 
 fn inl_get_scale<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> f64 {
@@ -4190,7 +4241,7 @@ fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, tran
         fns::__assert(
             ctx,
             cstr(ctx, 0x803c61f4),
-            (0x237_i32 as u32),
+            (0x3d3_i32 as u32),
             cstr(ctx, 0x803c61f4),
         )
     });
@@ -4200,7 +4251,7 @@ fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, tran
         fns::__assert(
             ctx,
             cstr(ctx, 0x803c61f4),
-            (0x238_i32 as u32),
+            (0x3d4_i32 as u32),
             cstr(ctx, 0x803c61f4),
         )
     });

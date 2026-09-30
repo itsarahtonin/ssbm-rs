@@ -114,7 +114,7 @@ pub fn HSD_VIPreRetraceCB<'a>(ctx: &'a Ctx, retraceCount: u32) {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x80406d0c),
-                    (82_i32 as u32),
+                    (252_i32 as u32),
                     cstr(ctx, 0x80406d0c),
                 )
             });
@@ -439,7 +439,7 @@ pub fn HSD_VIDrawDoneXFB<'a>(ctx: &'a Ctx, idx: i32) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406d0c),
-            (0x139_i32 as u32),
+            (0x2d2_i32 as u32),
             cstr(ctx, 0x80406d0c),
         )
     });
@@ -685,7 +685,7 @@ fn inl_HSD_VISetXFBWaitDone_unfused<'a>(ctx: &'a Ctx, idx: i32) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406d0c),
-            (0x11b_i32 as u32),
+            (0x24e_i32 as u32),
             cstr(ctx, 0x80406d0c),
         )
     });

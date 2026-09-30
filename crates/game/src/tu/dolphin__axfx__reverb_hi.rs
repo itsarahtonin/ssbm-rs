@@ -28,7 +28,7 @@ use crate::support::*;
 use ssbm_rt::cpu as c;
 
 pub fn HandleReverb<'a>(ctx: &'a Ctx, a0: Val<'a, i32>, a1: AXFX_REVHI_WORK<'a>, a2: i32) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0, a1, a2).put_regs(ctx);
     asm_HandleReverb(ctx);
 }
@@ -1867,7 +1867,7 @@ pub fn ReverbHICreate<'a>(
 }
 
 pub fn DoCrossTalk<'a>(ctx: &'a Ctx, a0: Val<'a, i32>, a1: Val<'a, i32>, a2: f64, a3: f64) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0, a1, Single(a2), Single(a3)).put_regs(ctx);
     asm_DoCrossTalk(ctx);
 }

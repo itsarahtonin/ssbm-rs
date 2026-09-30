@@ -28,7 +28,7 @@ use crate::support::*;
 use ssbm_rt::cpu as c;
 
 pub fn PSMTXIdentity<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: inline asm.
     (a0,).put_regs(ctx);
     asm_PSMTXIdentity(ctx);
 }
@@ -97,7 +97,7 @@ fn asm_PSMTXIdentity(ctx: &Ctx) {
 }
 
 pub fn PSMTXCopy<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>, a1: ArrV<'a, F32, 4>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0, a1).put_regs(ctx);
     asm_PSMTXCopy(ctx);
 }
@@ -181,7 +181,7 @@ pub fn PSMTXConcat<'a>(
     a1: ArrV<'a, F32, 4>,
     a2: ArrV<'a, F32, 4>,
 ) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0, a1, a2).put_regs(ctx);
     asm_PSMTXConcat(ctx);
 }
@@ -442,7 +442,7 @@ fn asm_PSMTXConcat(ctx: &Ctx) {
 }
 
 pub fn PSMTXTranspose<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>, a1: ArrV<'a, F32, 4>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: inline asm.
     (a0, a1).put_regs(ctx);
     asm_PSMTXTranspose(ctx);
 }
@@ -556,7 +556,7 @@ fn asm_PSMTXTranspose(ctx: &Ctx) {
 }
 
 pub fn PSMTXInverse<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>, a1: ArrV<'a, F32, 4>) -> u32 {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0, a1).put_regs(ctx);
     asm_PSMTXInverse(ctx);
     Ret::get(ctx)
@@ -900,7 +900,7 @@ pub fn MTXRotRad<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, axis: i8, rad: f64) {
 }
 
 pub fn PSMTXRotTrig<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>, a1: i8, a2: f64, a3: f64) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: inline asm.
     (a0, a1, Single(a2), Single(a3)).put_regs(ctx);
     asm_PSMTXRotTrig(ctx);
 }
@@ -1145,7 +1145,7 @@ fn asm_PSMTXRotTrig(ctx: &Ctx) {
 }
 
 pub fn PSMTXRotAxisRad<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>, a1: Vec<'a>, a2: f64) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: MWCC-only code.
     (a0, a1, Single(a2)).put_regs(ctx);
     asm_PSMTXRotAxisRad(ctx);
 }
@@ -1482,7 +1482,7 @@ fn asm_PSMTXRotAxisRad(ctx: &Ctx) {
 }
 
 pub fn PSMTXTrans<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>, a1: f64, a2: f64, a3: f64) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: inline asm.
     (a0, Single(a1), Single(a2), Single(a3)).put_regs(ctx);
     asm_PSMTXTrans(ctx);
 }
@@ -1561,7 +1561,7 @@ fn asm_PSMTXTrans(ctx: &Ctx) {
 }
 
 pub fn PSMTXScale<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>, a1: f64, a2: f64, a3: f64) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0, Single(a1), Single(a2), Single(a3)).put_regs(ctx);
     asm_PSMTXScale(ctx);
 }
@@ -1625,7 +1625,7 @@ fn asm_PSMTXScale(ctx: &Ctx) {
 }
 
 pub fn PSMTXQuat<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>, a1: Quaternion<'a>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: inline asm.
     (a0, a1).put_regs(ctx);
     asm_PSMTXQuat(ctx);
 }

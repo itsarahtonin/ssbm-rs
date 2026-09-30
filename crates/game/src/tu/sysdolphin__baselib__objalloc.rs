@@ -48,7 +48,7 @@ pub fn HSD_ObjAllocAddFree<'a>(ctx: &'a Ctx, data: _HSD_ObjAllocData<'a>, num: u
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406e48),
-            (27_i32 as u32),
+            (238_i32 as u32),
             cstr(ctx, 0x80406e48),
         )
     });
@@ -191,7 +191,7 @@ pub fn HSD_ObjAllocInit<'a>(ctx: &'a Ctx, data: _HSD_ObjAllocData<'a>, size: u32
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406e48),
-            (142_i32 as u32),
+            (0x185_i32 as u32),
             cstr(ctx, 0x80406e48),
         )
     });

@@ -88,7 +88,7 @@ pub fn ft_800CD914<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803c6ec8),
-                (50_i32 as u32),
+                (100_i32 as u32),
                 cstr(ctx, 0x803c6ec8),
             )
         });

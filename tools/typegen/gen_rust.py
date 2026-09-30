@@ -34,6 +34,8 @@ RESERVED_TYPES = {
 def ident(name):
     if name in NOT_RAW:
         return name + "_"
+    if name == "_":
+        return "__"  # a data-ordering array the decomp names `_`
     if name in KEYWORDS:
         return "r#" + name
     return name
@@ -322,7 +324,8 @@ def main():
         for tname, t in sorted(data["typedefs"].items()):
             if t["k"] == "rec" and t["id"] in g.rec_names and g.rec_names[t["id"]] != tname \
                     and re.match(r"^[A-Za-z_]\w*$", tname) and tname not in RESERVED_TYPES \
-                    and tname not in g.rec_names.values() and tname not in KEYWORDS                     and tname not in g.value_names:
+                    and tname not in g.rec_names.values() and tname not in KEYWORDS \
+                    and tname not in g.value_names:
                 aliases.append(f"pub type {tname}<'a> = {g.rec_names[t['id']]}<'a>;")
         w.write("\n".join(sorted(set(aliases))) + "\n")
 

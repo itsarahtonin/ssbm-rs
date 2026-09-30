@@ -585,7 +585,7 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b74f0),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803b74f0),
         )
     });
@@ -606,7 +606,7 @@ fn inl_HSD_JObjAddRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a: f64, y__
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b74f0),
-            (0x26a_i32 as u32),
+            (0x411_i32 as u32),
             cstr(ctx, 0x803b74f0),
         )
     });

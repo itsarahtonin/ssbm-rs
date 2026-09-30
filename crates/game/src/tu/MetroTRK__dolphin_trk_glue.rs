@@ -28,7 +28,7 @@ use crate::support::*;
 use ssbm_rt::cpu as c;
 
 pub fn TRKLoadContext<'a>(ctx: &'a Ctx, a0: OSContext<'a>, a1: u32) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: MWCC-only code.
     (a0, a1).put_regs(ctx);
     asm_TRKLoadContext(ctx);
 }

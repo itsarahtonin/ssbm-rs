@@ -33,7 +33,7 @@ pub fn __TRK_reset<'a>(ctx: &'a Ctx) {
 }
 
 pub fn InitMetroTRK<'a>(ctx: &'a Ctx) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: MWCC-only code.
     ().put_regs(ctx);
     asm_InitMetroTRK(ctx);
 }

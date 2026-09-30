@@ -70,7 +70,7 @@ pub fn ftColl_80076640<'a>(ctx: &'a Ctx, fp: Fighter<'a>, dmg_: Val<'a, F32>) ->
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803c0c40),
-                        (125_i32 as u32),
+                        (183_i32 as u32),
                         cstr(ctx, 0x803c0c40),
                     )
                 })
@@ -130,7 +130,7 @@ pub fn ftColl_80076764<'a>(
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803c0c40),
-                    (151_i32 as u32),
+                    (249_i32 as u32),
                     cstr(ctx, 0x803c0c40),
                 )
             })
@@ -543,7 +543,7 @@ pub fn ftColl_80076ED8<'a>(
                                     fns::__assert(
                                         ctx,
                                         cstr(ctx, 0x803c0c40),
-                                        (0x20f_i32 as u32),
+                                        (227_i32 as u32),
                                         cstr(ctx, 0x803c0c40),
                                     )
                                 })
@@ -1012,7 +1012,7 @@ pub fn ftColl_80077C60<'a>(
                                         fns::__assert(
                                             ctx,
                                             cstr(ctx, 0x803c0c40),
-                                            (0x3d2_i32 as u32),
+                                            (0x110_i32 as u32),
                                             cstr(ctx, 0x803c0c40),
                                         )
                                     })
@@ -1104,7 +1104,7 @@ pub fn ftColl_80077C60<'a>(
                                 fns::__assert(
                                     ctx,
                                     cstr(ctx, 0x803c0c40),
-                                    (0x422_i32 as u32),
+                                    (183_i32 as u32),
                                     cstr(ctx, 0x803c0c40),
                                 )
                             })
@@ -1154,7 +1154,7 @@ pub fn ftColl_80077C60<'a>(
                                 fns::__assert(
                                     ctx,
                                     cstr(ctx, 0x803c0c40),
-                                    (0x43e_i32 as u32),
+                                    (227_i32 as u32),
                                     cstr(ctx, 0x803c0c40),
                                 )
                             })
@@ -3902,7 +3902,7 @@ pub fn ftColl_8007B128<'a>(ctx: &'a Ctx, fighter_gobj: HSD_GObj<'a>, bone_id: i3
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803c0c40),
-                (0xa58_i32 as u32),
+                (0x888_i32 as u32),
                 cstr(ctx, 0x803c0c40),
             )
         })
@@ -3995,7 +3995,7 @@ pub fn ftColl_8007B320<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803c0c40),
-                    (0xa8d_i32 as u32),
+                    (0x8c9_i32 as u32),
                     cstr(ctx, 0x803c0c40),
                 )
             })
@@ -4033,7 +4033,7 @@ pub fn ftColl_8007B320<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803c0c40),
-                    (0xa9f_i32 as u32),
+                    (0x8df_i32 as u32),
                     cstr(ctx, 0x803c0c40),
                 )
             })
@@ -4899,7 +4899,7 @@ fn inl_tiplog_unfused<'a>(
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803c0c40),
-                    (171_i32 as u32),
+                    (0x110_i32 as u32),
                     cstr(ctx, 0x803c0c40),
                 )
             })
@@ -4921,7 +4921,7 @@ fn inl_inlineB2_unfused<'a>(ctx: &'a Ctx, fp1: Fighter<'a>, dmg_: f64, var_r24_3
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803c0c40),
-                        (0x170_i32 as u32),
+                        (183_i32 as u32),
                         cstr(ctx, 0x803c0c40),
                     )
                 })
@@ -5337,7 +5337,7 @@ fn inl_ftColl_80076640_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, dmg_: Val<'a, 
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803c0c40),
-                        (125_i32 as u32),
+                        (183_i32 as u32),
                         cstr(ctx, 0x803c0c40),
                     )
                 })

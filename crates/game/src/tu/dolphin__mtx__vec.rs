@@ -28,7 +28,7 @@ use crate::support::*;
 use ssbm_rt::cpu as c;
 
 pub fn PSVECAdd<'a>(ctx: &'a Ctx, a0: Vec<'a>, a1: Vec<'a>, a2: Vec<'a>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0, a1, a2).put_regs(ctx);
     asm_PSVECAdd(ctx);
 }
@@ -87,7 +87,7 @@ fn asm_PSVECAdd(ctx: &Ctx) {
 }
 
 pub fn PSVECSubtract<'a>(ctx: &'a Ctx, a0: Vec<'a>, a1: Vec<'a>, a2: Vec<'a>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0, a1, a2).put_regs(ctx);
     asm_PSVECSubtract(ctx);
 }
@@ -146,7 +146,7 @@ fn asm_PSVECSubtract(ctx: &Ctx) {
 }
 
 pub fn PSVECScale<'a>(ctx: &'a Ctx, a0: Vec<'a>, a1: Vec<'a>, a2: f64) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0, a1, Single(a2)).put_regs(ctx);
     asm_PSVECScale(ctx);
 }
@@ -195,7 +195,7 @@ fn asm_PSVECScale(ctx: &Ctx) {
 }
 
 pub fn PSVECNormalize<'a>(ctx: &'a Ctx, a0: Vec<'a>, a1: Vec<'a>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: inline asm.
     (a0, a1).put_regs(ctx);
     asm_PSVECNormalize(ctx);
 }
@@ -294,7 +294,7 @@ fn asm_PSVECNormalize(ctx: &Ctx) {
 }
 
 pub fn PSVECMag<'a>(ctx: &'a Ctx, a0: Vec<'a>) -> f64 {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0,).put_regs(ctx);
     asm_PSVECMag(ctx);
     Ret::get(ctx)
@@ -384,7 +384,7 @@ fn asm_PSVECMag(ctx: &Ctx) {
 }
 
 pub fn PSVECDotProduct<'a>(ctx: &'a Ctx, a0: Vec<'a>, a1: Vec<'a>) -> f64 {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0, a1).put_regs(ctx);
     asm_PSVECDotProduct(ctx);
     Ret::get(ctx)
@@ -439,7 +439,7 @@ fn asm_PSVECDotProduct(ctx: &Ctx) {
 }
 
 pub fn PSVECCrossProduct<'a>(ctx: &'a Ctx, a0: Vec<'a>, a1: Vec<'a>, a2: Vec<'a>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0, a1, a2).put_regs(ctx);
     asm_PSVECCrossProduct(ctx);
 }

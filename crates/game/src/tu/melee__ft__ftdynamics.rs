@@ -123,7 +123,7 @@ pub fn ftCo_8009CF84<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803c5754),
-                    (91_i32 as u32),
+                    (109_i32 as u32),
                     cstr(ctx, 0x803c5754),
                 )
             })
@@ -182,7 +182,7 @@ pub fn ftCo_8009D074<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803c5754),
-                (139_i32 as u32),
+                (135_i32 as u32),
                 cstr(ctx, 0x803c5754),
             )
         })
@@ -217,7 +217,7 @@ pub fn ftCo_8009D18C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803c5754),
-                (153_i32 as u32),
+                (167_i32 as u32),
                 cstr(ctx, 0x803c5754),
             )
         })
@@ -252,7 +252,7 @@ pub fn ftCo_8009D2A4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803c5754),
-                (167_i32 as u32),
+                (199_i32 as u32),
                 cstr(ctx, 0x803c5754),
             )
         })
@@ -287,7 +287,7 @@ pub fn ftCo_8009D3BC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803c5754),
-                (181_i32 as u32),
+                (232_i32 as u32),
                 cstr(ctx, 0x803c5754),
             )
         })
@@ -322,7 +322,7 @@ pub fn ftCo_8009D4D4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803c5754),
-                (195_i32 as u32),
+                (0x109_i32 as u32),
                 cstr(ctx, 0x803c5754),
             )
         })
@@ -357,7 +357,7 @@ pub fn ftCo_8009D5EC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803c5754),
-                (209_i32 as u32),
+                (0x12a_i32 as u32),
                 cstr(ctx, 0x803c5754),
             )
         })
@@ -392,7 +392,7 @@ pub fn ftCo_8009D704<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803c5754),
-                (223_i32 as u32),
+                (0x14b_i32 as u32),
                 cstr(ctx, 0x803c5754),
             )
         })
@@ -434,7 +434,7 @@ pub fn ftCo_8009D81C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803c5754),
-                (238_i32 as u32),
+                (0x16c_i32 as u32),
                 cstr(ctx, 0x803c5754),
             )
         })
@@ -498,7 +498,7 @@ pub fn ftCo_8009D920<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803c5754),
-                (0x107_i32 as u32),
+                (0x184_i32 as u32),
                 cstr(ctx, 0x803c5754),
             )
         })
@@ -533,7 +533,7 @@ pub fn ftCo_8009DA38<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803c5754),
-                (0x115_i32 as u32),
+                (0x1a5_i32 as u32),
                 cstr(ctx, 0x803c5754),
             )
         })
@@ -575,7 +575,7 @@ pub fn ftCo_8009DB50<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803c5754),
-                (0x124_i32 as u32),
+                (0x1c7_i32 as u32),
                 cstr(ctx, 0x803c5754),
             )
         })
@@ -646,7 +646,7 @@ pub fn ftCo_8009DC54<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803c5754),
-                (0x147_i32 as u32),
+                (0x1ea_i32 as u32),
                 cstr(ctx, 0x803c5754),
             )
         })
@@ -1469,7 +1469,7 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803c5754),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803c5754),
         )
     });
@@ -1491,7 +1491,7 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
         fns::__assert(
             ctx,
             cstr(ctx, 0x803c5754),
-            (0x1e1_i32 as u32),
+            (0x394_i32 as u32),
             cstr(ctx, 0x803c5754),
         )
     });
@@ -1501,7 +1501,7 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
         fns::__assert(
             ctx,
             cstr(ctx, 0x803c5754),
-            (0x1e2_i32 as u32),
+            (0x395_i32 as u32),
             cstr(ctx, 0x803c5754),
         )
     });
@@ -1524,7 +1524,7 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
         fns::__assert(
             ctx,
             cstr(ctx, 0x803c5754),
-            (0x17e_i32 as u32),
+            (0x2f8_i32 as u32),
             cstr(ctx, 0x803c5754),
         )
     });
@@ -1534,7 +1534,7 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
         fns::__assert(
             ctx,
             cstr(ctx, 0x803c5754),
-            (0x17f_i32 as u32),
+            (0x2f9_i32 as u32),
             cstr(ctx, 0x803c5754),
         )
     });

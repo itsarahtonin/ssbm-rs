@@ -9797,6 +9797,7 @@ pub mod melee__gr__grstory {
     use super::*;
     use crate::fns::*;
     #[inline] pub fn grSt_StageCallbacks(ctx: &Ctx) -> Arr<'_, StageCallbacks<'_>, 4> { At::new(ctx, 0x803e26f0).field(0) }
+    #[inline] pub fn __(ctx: &Ctx) -> ArrV<'_, u32, 12> { At::new(ctx, 0x803e27b0).field(0) }
     #[inline] pub fn yakumono_param(ctx: &Ctx) -> Ptr<'_, grStory_YakumonoParam<'_>> { At::new(ctx, 0x804d69b8).field(0) }
     #[inline] pub fn grStory_801E302C<'a>(ctx: &'a Ctx, a__: i32) -> () { ctx.call(0x801e302c, (a__, )) }
     #[inline] pub fn grStory_801E36D0<'a>(ctx: &'a Ctx, arg0: i32) -> DynamicsDesc<'a> { ctx.call(0x801e36d0, (arg0, )) }
@@ -15445,7 +15446,7 @@ pub mod melee__mn__mnsnap {
     use crate::fns::*;
     #[inline] pub fn mnSnap_804A0A10(ctx: &Ctx) -> mnSnap_State<'_> { At::new(ctx, 0x804a0a10).field(0) }
     #[inline] pub fn mnSnap_8025329C<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8025329c, ()) }
-    #[inline] pub fn mnSnap_8025441C<'a>(ctx: &'a Ctx, buttons: u64) -> () { ctx.call(0x8025441c, (buttons, )) }
+    #[inline] pub fn mnSnap_8025441C<'a>(ctx: &'a Ctx, buttons: u64) -> i32 { ctx.call(0x8025441c, (buttons, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const mnSnap_8025329C: u32 = 0x8025329c;
@@ -15455,7 +15456,7 @@ pub mod melee__mn__mnsnap {
     pub mod abi {
         use super::*;
         #[inline] pub fn mnSnap_8025329C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-        #[inline] pub fn mnSnap_8025441C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u64) -> ()) { let (buttons, ): (u64, ) = Args::take_all(ctx); Ret::put(__f(ctx, buttons), ctx); }
+        #[inline] pub fn mnSnap_8025441C(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u64) -> i32) { let (buttons, ): (u64, ) = Args::take_all(ctx); Ret::put(__f(ctx, buttons), ctx); }
     }
 }
 /// Statics of `melee/mn/mnsound`.
@@ -15762,7 +15763,7 @@ pub mod melee__mp__mplib {
     #[inline] pub fn mpLib_804D8150(ctx: &Ctx) -> Arr<'_, _GXColor<'_>, 2> { At::new(ctx, 0x804d8150).field(0) }
     #[inline] pub fn mpRemap2d<'a>(ctx: &'a Ctx, x_out: Val<'a, F32>, y_out: Val<'a, F32>, ax0: f64, ay0: f64, ax1: f64, ay1: f64, bx0: f64, by0: f64, bx1: f64, by1: f64, px: f64, py: f64) -> () { ctx.call(0x8004dc90, (x_out, y_out, Single(gekko_fp::frsp(ax0)), Single(gekko_fp::frsp(ay0)), Single(gekko_fp::frsp(ax1)), Single(gekko_fp::frsp(ay1)), Single(gekko_fp::frsp(bx0)), Single(gekko_fp::frsp(by0)), Single(gekko_fp::frsp(bx1)), Single(gekko_fp::frsp(by1)), Single(gekko_fp::frsp(px)), Single(gekko_fp::frsp(py)), )) }
     #[inline] pub fn mpLineIntersection<'a>(ctx: &'a Ctx, a0x: f64, a0y: f64, a1x: f64, a1y: f64, b0x: f64, b0y: f64, b1x: f64, b1y: f64, int_x: Val<'a, F32>, int_y: Val<'a, F32>) -> i32 { ctx.call(0x8004e97c, (Single(gekko_fp::frsp(a0x)), Single(gekko_fp::frsp(a0y)), Single(gekko_fp::frsp(a1x)), Single(gekko_fp::frsp(a1y)), Single(gekko_fp::frsp(b0x)), Single(gekko_fp::frsp(b0y)), Single(gekko_fp::frsp(b1x)), Single(gekko_fp::frsp(b1y)), int_x, int_y, )) }
-    #[inline] pub fn mpLib_DrawMatchingLines<'a>(ctx: &'a Ctx, value: i32, flag: i32, color: _GXColor<'a>) -> () { ctx.call(0x80059404, (value, flag, color, )) }
+    #[inline] pub fn mpLib_DrawMatchingLines<'a>(ctx: &'a Ctx, value: i32, flag: i32, color: _GXColor<'a>) -> i32 { ctx.call(0x80059404, (value, flag, color, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const mpRemap2d: u32 = 0x8004dc90;
@@ -15774,7 +15775,7 @@ pub mod melee__mp__mplib {
         use super::*;
         #[inline] pub fn mpRemap2d(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, Val<'a, F32>, Val<'a, F32>, f64, f64, f64, f64, f64, f64, f64, f64, f64, f64) -> ()) { let (x_out, y_out, ax0, ay0, ax1, ay1, bx0, by0, bx1, by1, px, py, ): (Val<'_, F32>, Val<'_, F32>, Single, Single, Single, Single, Single, Single, Single, Single, Single, Single, ) = Args::take_all(ctx); Ret::put(__f(ctx, x_out, y_out, ax0.0, ay0.0, ax1.0, ay1.0, bx0.0, by0.0, bx1.0, by1.0, px.0, py.0), ctx); }
         #[inline] pub fn mpLineIntersection(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, f64, f64, f64, f64, f64, f64, f64, f64, Val<'a, F32>, Val<'a, F32>) -> i32) { let (a0x, a0y, a1x, a1y, b0x, b0y, b1x, b1y, int_x, int_y, ): (Single, Single, Single, Single, Single, Single, Single, Single, Val<'_, F32>, Val<'_, F32>, ) = Args::take_all(ctx); Ret::put(__f(ctx, a0x.0, a0y.0, a1x.0, a1y.0, b0x.0, b0y.0, b1x.0, b1y.0, int_x, int_y), ctx); }
-        #[inline] pub fn mpLib_DrawMatchingLines(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, i32, _GXColor<'a>) -> ()) { let (value, flag, color, ): (i32, i32, _GXColor<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, value, flag, color), ctx); }
+        #[inline] pub fn mpLib_DrawMatchingLines(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i32, i32, _GXColor<'a>) -> i32) { let (value, flag, color, ): (i32, i32, _GXColor<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, value, flag, color), ctx); }
     }
 }
 /// Statics of `melee/pl/plbonuslib`.
@@ -16600,6 +16601,11 @@ pub mod sysdolphin__baselib__card {
 pub mod sysdolphin__baselib__class {
     use super::*;
     use crate::fns::*;
+    #[inline] pub fn unused1(ctx: &Ctx) -> ArrV<'_, i8, 17> { At::new(ctx, 0x80407640).field(0) }
+    #[inline] pub fn unused2(ctx: &Ctx) -> ArrV<'_, i8, 22> { At::new(ctx, 0x80407654).field(0) }
+    #[inline] pub fn unused3(ctx: &Ctx) -> ArrV<'_, i8, 13> { At::new(ctx, 0x8040766c).field(0) }
+    #[inline] pub fn unused4(ctx: &Ctx) -> ArrV<'_, i8, 26> { At::new(ctx, 0x8040767c).field(0) }
+    #[inline] pub fn unused5(ctx: &Ctx) -> ArrV<'_, i8, 10> { At::new(ctx, 0x804076d4).field(0) }
     #[inline] pub fn memory_list(ctx: &Ctx) -> Ptr<'_, Ptr<'_, _HSD_MemoryEntry<'_>>> { At::new(ctx, 0x804d7700).field(0) }
     #[inline] pub fn nb_memory_list(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d7704).field(0) }
     #[inline] pub fn current_hash(ctx: &Ctx) -> Ptr<'_, HSD_Hash<'_>> { At::new(ctx, 0x804d7708).field(0) }
@@ -17149,6 +17155,7 @@ pub mod sysdolphin__baselib__hsd_3B5C {
 pub mod sysdolphin__baselib__initialize {
     use super::*;
     use crate::fns::*;
+    #[inline] pub fn str_pix_fmt_neq_gx_pf_rgb565_z16(ctx: &Ctx) -> ArrV<'_, i8, 28> { At::new(ctx, 0x80406c54).field(0) }
     #[inline] pub fn FrameBuffer(ctx: &Ctx) -> ArrP<'_, Addr<'_>, 3> { At::new(ctx, 0x804c0948).field(0) }
     #[inline] pub fn memReport(ctx: &Ctx) -> _HSD_MemReport<'_> { At::new(ctx, 0x804c0954).field(0) }
     #[inline] pub fn current_heap(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d5e00).field(0) }
@@ -17190,6 +17197,20 @@ pub mod sysdolphin__baselib__initialize {
 pub mod sysdolphin__baselib__jobj {
     use super::*;
     use crate::fns::*;
+    #[inline] pub fn unused1(ctx: &Ctx) -> ArrV<'_, i8, 10> { At::new(ctx, 0x804068b8).field(0) }
+    #[inline] pub fn unused2(ctx: &Ctx) -> ArrV<'_, i8, 18> { At::new(ctx, 0x804068c4).field(0) }
+    #[inline] pub fn unused3(ctx: &Ctx) -> ArrV<'_, i8, 12> { At::new(ctx, 0x80406a14).field(0) }
+    #[inline] pub fn unused4(ctx: &Ctx) -> ArrV<'_, i8, 15> { At::new(ctx, 0x80406a20).field(0) }
+    #[inline] pub fn unused5(ctx: &Ctx) -> ArrV<'_, i8, 10> { At::new(ctx, 0x80406a30).field(0) }
+    #[inline] pub fn unused6(ctx: &Ctx) -> ArrV<'_, i8, 16> { At::new(ctx, 0x80406a3c).field(0) }
+    #[inline] pub fn unused7(ctx: &Ctx) -> ArrV<'_, i8, 10> { At::new(ctx, 0x80406a4c).field(0) }
+    #[inline] pub fn unused8(ctx: &Ctx) -> ArrV<'_, i8, 11> { At::new(ctx, 0x80406a58).field(0) }
+    #[inline] pub fn unused9(ctx: &Ctx) -> ArrV<'_, i8, 11> { At::new(ctx, 0x80406a64).field(0) }
+    #[inline] pub fn unused10(ctx: &Ctx) -> ArrV<'_, i8, 11> { At::new(ctx, 0x80406a70).field(0) }
+    #[inline] pub fn unused11(ctx: &Ctx) -> ArrV<'_, i8, 11> { At::new(ctx, 0x80406a7c).field(0) }
+    #[inline] pub fn unused12(ctx: &Ctx) -> ArrV<'_, i8, 11> { At::new(ctx, 0x80406a88).field(0) }
+    #[inline] pub fn unused13(ctx: &Ctx) -> ArrV<'_, i8, 11> { At::new(ctx, 0x80406a94).field(0) }
+    #[inline] pub fn unused14(ctx: &Ctx) -> ArrV<'_, u32, 6> { At::new(ctx, 0x80406ac4).field(0) }
     #[inline] pub fn default_class(ctx: &Ctx) -> Ptr<'_, _HSD_ClassInfo<'_>> { At::new(ctx, 0x804d7680).field(0) }
     #[inline] pub fn ufc_callbacks(ctx: &Ctx) -> Ptr<'_, _HSD_SList<'_>> { At::new(ctx, 0x804d7684).field(0) }
     #[inline] pub fn dptcl_callback(ctx: &Ctx) -> Ptr<'_, FnPtr<'_>> { At::new(ctx, 0x804d7688).field(0) }
@@ -17251,7 +17272,9 @@ pub mod sysdolphin__baselib__lobj {
 pub mod sysdolphin__baselib__mobj {
     use super::*;
     use crate::fns::*;
+    #[inline] pub fn unused1(ctx: &Ctx) -> ArrV<'_, i8, 34> { At::new(ctx, 0x80405eb0).field(0) }
     #[inline] pub fn tobj_toon_desc(ctx: &Ctx) -> _HSD_TObjDesc<'_> { At::new(ctx, 0x80405ee4).field(0) }
+    #[inline] pub fn unused2(ctx: &Ctx) -> ArrV<'_, i8, 33> { At::new(ctx, 0x80405f6c).field(0) }
     #[inline] pub fn default_class(ctx: &Ctx) -> Ptr<'_, _HSD_ClassInfo<'_>> { At::new(ctx, 0x804d7618).field(0) }
     #[inline] pub fn current_mobj(ctx: &Ctx) -> Ptr<'_, HSD_MObj<'_>> { At::new(ctx, 0x804d761c).field(0) }
     #[inline] pub fn MObjUpdateFunc<'a>(ctx: &'a Ctx, obj: Addr<'a>, r#type: i32, val: HSD_ObjData<'a>) -> () { ctx.call(0x80362eec, (obj, r#type, val, )) }
@@ -17302,6 +17325,7 @@ pub mod sysdolphin__baselib__particle {
     #[inline] pub fn psCallback(ctx: &Ctx) -> Ptr<'_, Ptr<'_, FnPtr<'_>>> { At::new(ctx, 0x804d78d4).field(0) }
     #[inline] pub fn numPeakParticles(ctx: &Ctx) -> Val<'_, u16> { At::new(ctx, 0x804d78dc).field(0) }
     #[inline] pub fn hsd_804D78E2(ctx: &Ctx) -> Val<'_, u16> { At::new(ctx, 0x804d78e2).field(0) }
+    #[inline] pub fn hsd_804D78E4(ctx: &Ctx) -> Val<'_, u16> { At::new(ctx, 0x804d78e4).field(0) }
     /// Addresses of this scope's functions.
     pub mod addr {
 

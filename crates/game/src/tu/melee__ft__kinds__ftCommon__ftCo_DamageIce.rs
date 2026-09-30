@@ -743,7 +743,7 @@ fn inl_HSD_JObjGetRotation<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate: Quatern
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b74b0),
-            (0x165_i32 as u32),
+            (0x2bb_i32 as u32),
             cstr(ctx, 0x803b74b0),
         )
     });
@@ -753,7 +753,7 @@ fn inl_HSD_JObjGetRotation<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate: Quatern
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b74b0),
-            (0x166_i32 as u32),
+            (0x2bc_i32 as u32),
             cstr(ctx, 0x803b74b0),
         )
     });
@@ -769,7 +769,7 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b74b0),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803b74b0),
         )
     });
@@ -791,7 +791,7 @@ fn inl_HSD_JObjAddTranslationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b74b0),
-            (0x2a0_i32 as u32),
+            (0x45a_i32 as u32),
             cstr(ctx, 0x803b74b0),
         )
     });
@@ -816,7 +816,7 @@ fn inl_HSD_JObjAddTranslationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b74b0),
-            (0x2b2_i32 as u32),
+            (0x466_i32 as u32),
             cstr(ctx, 0x803b74b0),
         )
     });
@@ -848,7 +848,7 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b74b0),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803b74b0),
         )
     });
@@ -870,7 +870,7 @@ fn inl_HSD_JObjAddRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b74b0),
-            (0x258_i32 as u32),
+            (0x405_i32 as u32),
             cstr(ctx, 0x803b74b0),
         )
     });

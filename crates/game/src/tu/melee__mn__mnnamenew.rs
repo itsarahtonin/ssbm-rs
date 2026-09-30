@@ -782,6 +782,370 @@ pub fn mnNameNew_GlyphVariantInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
+pub fn mnNameNew_MainInput<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
+    let __frame = ctx.stack_frame(0x58);
+    let unused: ArrV<'a, i8, 12> = frame_at(ctx, &__frame, 0x0);
+    let name_buffer: ArrV<'a, i8, 16> = frame_at(ctx, &__frame, 0xc);
+    let unused_2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x1c);
+    let mut arg0 = arg0;
+    let mut space_lead: i8 = 0;
+    let mut data: NameNewEntry<'a> = null(ctx);
+    let mut layout: MnNameNewDataLayout<'a> = null(ctx);
+    let mut buttons: u32 = 0;
+    let mut hovered: Val<'a, u16> = null(ctx);
+    let mut key_char: Val<'a, i8> = null(ctx);
+    let mut null_char: i8 = 0;
+    let mut n: i32 = 0;
+    let mut cursor: u8 = 0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    {
+        let mut entry: NameNewEntry<'a> =
+            Handle::cast::<NameNewEntry<'a>>((fns::mnNameNew_804D6C08(ctx).get()).user_data());
+        data = entry;
+    }
+    layout = Handle::cast::<MnNameNewDataLayout<'a>>(
+        statics::melee__mn__mnnamenew::mnNameNew_803EDA58(ctx).get(0),
+    );
+    if !Handle::is_null((data).variant_gobj()) {
+        fns::mnNameNew_GlyphVariantInput(ctx, arg0);
+        return;
+    }
+    buttons = (({
+        let __t1 = (fns::mn_80229624(ctx, (fns::mnNameNew_PortInUse(ctx).get() as u32)) as u64);
+        fns::mn_804A04F0(ctx).set_buttons(__t1);
+        __t1
+    }) as u32);
+    n = 0_i32;
+    if ((buttons & (0x200_i32 as u32)) != 0) {
+        let mut sel: u16 = ({
+            let __t2 = fns::mn_804A04F0(ctx).hovered_selection_ref();
+            hovered = __t2;
+            __t2
+        })
+        .get();
+        if (sel as u32) < 50_u32 {
+            if (((data).mode() as i32) != 2_i32) && ((sel as u32) < 50_u32) {
+                key_char = (layout)
+                    .lower_glyphs()
+                    .get(((sel as u8) as i32))
+                    .at(0_i32)
+                    .get();
+                space_lead = (-127_i8);
+                if ((space_lead as i32) == ((Handle::add(key_char, 0_i32)).get() as i32))
+                    && ((64_i8 as i32) == ((Handle::add(key_char, 1_i32)).get() as i32))
+                {
+                    n = 1_i32;
+                } else {
+                    n = 0_i32;
+                }
+                if n == 0_i32 {
+                    fns::lbAudioAx_80024030(ctx, 1_i32);
+                    fns::mn_804A04F0(ctx).set_confirmed_selection((0_i32 as u8));
+                    n = inl_mnNameNew_CountVariants_unfused(
+                        ctx,
+                        (layout).lower_glyphs().get(0),
+                        ((hovered).get() as u8),
+                    );
+                    {
+                        let mut variant_count: u8 = ((n.wrapping_mul(2_i32)) as u8);
+                        (data).set_variant_gobj(fns::mnNameNew_GlyphVariantSetup(
+                            ctx,
+                            data,
+                            (variant_count as u16),
+                            (((hovered).get() as i32) & 255_i32),
+                        ));
+                    }
+                    return;
+                }
+                cursor = (data).cursor_pos();
+                fns::mnNameNew_CurrentNameText(ctx)
+                    .at((cursor as i32).wrapping_mul(3_i32))
+                    .set((-127_i8));
+                fns::mnNameNew_CurrentNameText(ctx)
+                    .at((cursor as i32).wrapping_mul(3_i32).wrapping_add(1_i32))
+                    .set(64_i8);
+                fns::mnNameNew_CurrentNameText(ctx)
+                    .at((cursor as i32).wrapping_mul(3_i32).wrapping_add(2_i32))
+                    .set((fns::mnNameNew_NullCharacter(ctx).at(0)).get());
+                fns::lbAudioAx_80024030(ctx, 1_i32);
+                if ((data).cursor_pos() as i32) < 3_i32 {
+                    (data)
+                        .set_cursor_pos(((((data).cursor_pos() as i32).wrapping_add(1_i32)) as u8));
+                } else {
+                    (hovered).set((57_i32 as u16));
+                }
+                fns::mnNameNew_8023CE4C(ctx);
+                return;
+            }
+            let _ = fns::AddCharacterToName(
+                ctx,
+                fns::mnNameNew_CurrentNameText(ctx)
+                    .at(((data).cursor_pos() as i32).wrapping_mul(3_i32)),
+                (sel as u8),
+                (0_u32 as u8),
+                (data).mode(),
+            );
+            fns::lbAudioAx_80024030(ctx, 1_i32);
+            if ((data).cursor_pos() as i32) < 3_i32 {
+                (data).set_cursor_pos(((((data).cursor_pos() as i32).wrapping_add(1_i32)) as u8));
+            } else {
+                (hovered).set((57_i32 as u16));
+            }
+            fns::mnNameNew_8023CE4C(ctx);
+            return;
+        } else {
+            's3: {
+                let __case = match (sel as i32) {
+                    50_i32 => 0,
+                    51_i32 => 1,
+                    52_i32 => 2,
+                    53_i32 => 3,
+                    54_i32 => 4,
+                    55_i32 => 5,
+                    56_i32 => 6,
+                    57_i32 => 6,
+                    _ => 7,
+                };
+                if __case <= 0 {
+                    fns::lbAudioAx_80024030(ctx, 0_i32);
+                    fns::mnNameNew_8023B224(ctx, (0_u32 as u8));
+                    return;
+                }
+                if __case <= 1 {
+                    if ((data).mode() as i32) != 0_i32 {
+                        fns::lbAudioAx_80024030(ctx, 1_i32);
+                        (data).set_mode((0_i32 as u8));
+                        let _ = fns::mnNameNew_KeySetup(ctx, data, (0_i32 as u8));
+                        fns::mnNameNew_8023B0F8(
+                            ctx,
+                            fns::mnNameNew_804D6C08(ctx).get(),
+                            ((hovered).get() as u8),
+                        );
+                        return;
+                    }
+                    break 's3;
+                }
+                if __case <= 2 {
+                    if ((data).mode() as i32) != 1_i32 {
+                        fns::lbAudioAx_80024030(ctx, 1_i32);
+                        (data).set_mode((1_i32 as u8));
+                        let _ = fns::mnNameNew_KeySetup(ctx, data, (1_i32 as u8));
+                        fns::mnNameNew_8023B0F8(
+                            ctx,
+                            fns::mnNameNew_804D6C08(ctx).get(),
+                            ((hovered).get() as u8),
+                        );
+                        return;
+                    }
+                    break 's3;
+                }
+                if __case <= 3 {
+                    if ((data).mode() as i32) != 2_i32 {
+                        fns::lbAudioAx_80024030(ctx, 1_i32);
+                        (data).set_mode((2_i32 as u8));
+                        let _ = fns::mnNameNew_KeySetup(ctx, data, (2_i32 as u8));
+                        fns::mnNameNew_8023B0F8(
+                            ctx,
+                            fns::mnNameNew_804D6C08(ctx).get(),
+                            ((hovered).get() as u8),
+                        );
+                        return;
+                    }
+                    break 's3;
+                }
+                if __case <= 4 {
+                    fns::lbAudioAx_80024030(ctx, 0_i32);
+                    cursor = (data).cursor_pos();
+                    {
+                        let mut slot: Val<'a, i8> = fns::mnNameNew_CurrentNameText(ctx)
+                            .at((cursor as i32).wrapping_mul(3_i32));
+                        if ((fns::mnNameNew_NullCharacter(ctx).at(0)).get() as i32)
+                            == ((Handle::add(slot, 0_i32)).get() as i32)
+                        {
+                            n = 0_i32;
+                        } else {
+                            n = 1_i32;
+                        }
+                        if n != 0_i32 {
+                            (Handle::add(slot, 0_i32))
+                                .set((fns::mnNameNew_NullCharacter(ctx).at(0)).get());
+                            fns::mnNameNew_8023CE4C(ctx);
+                            return;
+                        }
+                    }
+                    if (cursor as i32) != 0_i32 {
+                        fns::mnNameNew_CurrentNameText(ctx)
+                            .at(((((cursor as i32).wrapping_sub(1_i32)) as u8) as i32)
+                                .wrapping_mul(3_i32))
+                            .set((fns::mnNameNew_NullCharacter(ctx).at(0)).get());
+                        (data).set_cursor_pos(
+                            ((((data).cursor_pos() as i32).wrapping_sub(1_i32)) as u8),
+                        );
+                        fns::mnNameNew_8023CE4C(ctx);
+                        return;
+                    }
+                    fns::lbAudioAx_80024030(ctx, 3_i32);
+                    return;
+                }
+                if __case <= 5 {
+                    fns::lbAudioAx_80024030(ctx, 1_i32);
+                    let _ = fns::PickAutoName(ctx, fns::mnNameNew_804D6C08(ctx).get());
+                    null_char = (fns::mnNameNew_NullCharacter(ctx).at(0)).get();
+                    {
+                        let mut p: Val<'a, i8> = fns::mnNameNew_CurrentNameText(ctx).at(0);
+                        if (null_char as i32) != ((p).get() as i32) {
+                            n = 1_i32;
+                            if (null_char as i32)
+                                != (({
+                                    p = Handle::add(p, 3_i32);
+                                    p
+                                })
+                                .get() as i32)
+                            {
+                                n = 2_i32;
+                                if (null_char as i32)
+                                    != (({
+                                        p = Handle::add(p, 3_i32);
+                                        p
+                                    })
+                                    .get() as i32)
+                                {
+                                    n = 3_i32;
+                                    if (null_char as i32)
+                                        != (({
+                                            p = Handle::add(p, 3_i32);
+                                            p
+                                        })
+                                        .get() as i32)
+                                    {
+                                        n = 4_i32;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if n == 4_i32 {
+                        (data).set_cursor_pos((3_i32 as u8));
+                    } else {
+                        (data).set_cursor_pos((n as u8));
+                    }
+                    fns::mnNameNew_8023CE4C(ctx);
+                    return;
+                }
+                if __case <= 6 {
+                    inl_copyName_unfused(
+                        ctx,
+                        fns::mnNameNew_CurrentNameText(ctx).at(0),
+                        name_buffer.at(0),
+                    );
+                    inl_SubmitName_unfused(ctx, data, name_buffer.at(0));
+                    return;
+                }
+            }
+        }
+    } else if ((buttons & (0x100_i32 as u32)) != 0) {
+        if ((fns::mn_804A04F0(ctx).hovered_selection() as i32) == 56_i32)
+            || ((fns::mn_804A04F0(ctx).hovered_selection() as i32) == 57_i32)
+        {
+            inl_copyName_unfused(
+                ctx,
+                fns::mnNameNew_CurrentNameText(ctx).at(0),
+                name_buffer.at(0),
+            );
+            inl_SubmitName_unfused(ctx, data, name_buffer.at(0));
+            return;
+        }
+        fns::mn_804A04F0(ctx).set_hovered_selection((57_i32 as u16));
+        return;
+    } else if ((buttons & (192_i32 as u32)) != 0) {
+        fns::lbAudioAx_80024030(ctx, 1_i32);
+        if ((buttons & (64_i32 as u32)) != 0) {
+            let mut mode: u8 = (data).mode();
+            if (mode as i32) != 0_i32 {
+                (data).set_mode(((((data).mode() as i32).wrapping_sub(1_i32)) as u8));
+            } else {
+                (data).set_mode((2_i32 as u8));
+            }
+        } else {
+            if ((data).mode() as i32) < 2_i32 {
+                (data).set_mode(((((data).mode() as i32).wrapping_add(1_i32)) as u8));
+            } else {
+                (data).set_mode((0_i32 as u8));
+            }
+        }
+        let _ = fns::mnNameNew_KeySetup(ctx, data, (data).mode());
+        fns::mnNameNew_8023B0F8(
+            ctx,
+            fns::mnNameNew_804D6C08(ctx).get(),
+            (fns::mn_804A04F0(ctx).hovered_selection() as u8),
+        );
+        fns::mnNameNew_8023B314(
+            ctx,
+            data,
+            (fns::mn_804A04F0(ctx).hovered_selection() as i32),
+        );
+        return;
+    } else if ((buttons & (32_i32 as u32)) != 0) {
+        fns::lbAudioAx_80024030(ctx, 0_i32);
+        if (fns::mnNameNew_CurrentNameText(ctx).at(0_i32).get() as i32)
+            == ((fns::mnNameNew_NullCharacter(ctx).at(0)).get() as i32)
+        {
+            n = 1_i32;
+        }
+        if n != 0_i32 {
+            fns::mnNameNew_8023B224(ctx, (0_u32 as u8));
+            return;
+        }
+        {
+            let mut cursor_pos: u8 = (data).cursor_pos();
+            cursor = cursor_pos;
+        }
+        if ((fns::mnNameNew_NullCharacter(ctx).at(0)).get() as i32)
+            == (fns::mnNameNew_CurrentNameText(ctx)
+                .at((cursor as i32).wrapping_mul(3_i32))
+                .get() as i32)
+        {
+            n = 0_i32;
+        } else {
+            n = 1_i32;
+        }
+        if n != 0_i32 {
+            fns::mnNameNew_CurrentNameText(ctx)
+                .at((cursor as i32).wrapping_mul(3_i32))
+                .set((fns::mnNameNew_NullCharacter(ctx).at(0)).get());
+            fns::mnNameNew_8023CE4C(ctx);
+            return;
+        }
+        if (cursor as i32) != 0_i32 {
+            fns::mnNameNew_CurrentNameText(ctx)
+                .at(((((cursor as i32).wrapping_sub(1_i32)) as u8) as i32).wrapping_mul(3_i32))
+                .set((fns::mnNameNew_NullCharacter(ctx).at(0)).get());
+            (data).set_cursor_pos(((((data).cursor_pos() as i32).wrapping_sub(1_i32)) as u8));
+            fns::mnNameNew_8023CE4C(ctx);
+            return;
+        }
+        fns::lbAudioAx_80024030(ctx, 3_i32);
+        return;
+    } else {
+        let mut new_sel: u8 = 0;
+        hovered = fns::mn_804A04F0(ctx).hovered_selection_ref();
+        new_sel =
+            (fns::mnNameNew_8023BAA8(ctx, data, (buttons as i32), ((hovered).get() as u8)) as u8);
+        if (new_sel as i32) != ((hovered).get() as i32) {
+            fns::lbAudioAx_80024030(ctx, 2_i32);
+            (hovered).set((new_sel as u16));
+            if (new_sel as i32) < 50_i32 {
+                (data).set_last_key_sel(new_sel);
+            }
+        }
+    }
+}
+
 pub fn mnNameNew_8023CE4C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x60);
     let text_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
@@ -1122,7 +1486,7 @@ pub fn mnNameNew_GlyphVariantSetup<'a>(
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803b8530),
-                    (0x625_i32 as u32),
+                    (0x5b4_i32 as u32),
                     cstr(ctx, 0x803b8530),
                 )
             })
@@ -1683,12 +2047,7 @@ pub fn mnNameNew_8023E32C<'a>(ctx: &'a Ctx, arg0: i32) {
     } else {
         ({
             fns::OSReport(ctx, cstr(ctx, 0x803ee35c), &[]);
-            fns::__assert(
-                ctx,
-                cstr(ctx, 0x803b8530),
-                (0x796_i32 as u32),
-                cstr(ctx, 0x803b8530),
-            )
+            fns::__assert(ctx, cstr(ctx, 0x803b8530), 0x717_u32, cstr(ctx, 0x803b8530))
         })
     });
     fns::GObj_InitUserData(
@@ -1924,7 +2283,7 @@ fn inl_HSD_JObjGetTranslationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> 
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8530),
-            (0x246_i32 as u32),
+            (0x3e1_i32 as u32),
             cstr(ctx, 0x803b8530),
         )
     });
@@ -1939,7 +2298,7 @@ fn inl_HSD_JObjGetTranslationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> 
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8530),
-            (0x24c_i32 as u32),
+            (0x3ee_i32 as u32),
             cstr(ctx, 0x803b8530),
         )
     });
@@ -2108,6 +2467,113 @@ fn inl_sfxMove_unfused<'a>(ctx: &'a Ctx) {
     fns::lbAudioAx_80024030(ctx, 2_i32);
 }
 
+fn inl_mnNameNew_CountVariants_unfused<'a>(
+    ctx: &'a Ctx,
+    glyphs: ArrP<'a, Val<'a, i8>, 4>,
+    selected_key: u8,
+) -> i32 {
+    let mut glyphs = glyphs;
+    let mut selected_key = selected_key;
+    let mut ptrs: Ptr<'a, Val<'a, i8>> = (Handle::add(glyphs, (selected_key as i32))).at(0);
+    let mut count: i32 = 0_i32;
+    let mut terminator: i8 = (fns::mnNameNew_NullCharacter(ctx).at(0)).get();
+    'l1: while (terminator as i32) != (((Handle::add(ptrs, 0_i32)).get()).get() as i32) {
+        'c2: {
+            ptrs = Handle::add(ptrs, 1);
+            count = count.wrapping_add(1);
+        }
+    }
+    return count;
+}
+
+fn inl_copyName_unfused<'a>(ctx: &'a Ctx, name_text: Val<'a, i8>, name_buffer: Val<'a, i8>) {
+    let mut name_text = name_text;
+    let mut name_buffer = name_buffer;
+    let mut ch: i8 = 0;
+    let mut dest: Val<'a, i8> = null(ctx);
+    let mut src: Val<'a, i8> = null(ctx);
+    let mut dest_iter: Val<'a, i8> = null(ctx);
+    let mut src_iter: Val<'a, i8> = null(ctx);
+    let mut len: i32 = 0;
+    let mut null_char: i8 = 0;
+    let mut i: i32 = 0;
+    src = name_text;
+    dest = name_buffer;
+    len = 0_i32;
+    {
+        i = 0_i32;
+        'l1: while i < 4_i32 {
+            'c2: {
+                src_iter = src;
+                dest_iter = dest;
+                'l3: while (({
+                    let __t2 = (fns::mnNameNew_NullCharacter(ctx).at(0)).get();
+                    null_char = __t2;
+                    __t2
+                }) as i32)
+                    != (({
+                        let __t3 = (src_iter).get();
+                        ch = __t3;
+                        __t3
+                    }) as i32)
+                {
+                    'c4: {
+                        ({
+                            let __t1 = dest_iter;
+                            dest_iter = Handle::add(dest_iter, 1);
+                            __t1
+                        })
+                        .set(ch);
+                        dest = Handle::add(dest, 1);
+                        len = len.wrapping_add(1);
+                        src_iter = Handle::add(src_iter, 1);
+                    }
+                }
+                src = Handle::add(src, 3_i32);
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    (Handle::add(name_buffer, len)).set(null_char);
+}
+
+fn inl_IsNameEmpty_unfused<'a>(ctx: &'a Ctx) -> i32 {
+    if (fns::mnNameNew_CurrentNameText(ctx).at(0_i32).get() as i32)
+        == ((fns::mnNameNew_NullCharacter(ctx).at(0)).get() as i32)
+    {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
+fn inl_CanConfirmName_unfused<'a>(ctx: &'a Ctx, name: Val<'a, i8>) -> i32 {
+    let mut name = name;
+    if (((!(inl_IsNameEmpty_unfused(ctx) != 0)) && (!(fns::NameContainsOnlySpaces(ctx) != 0)))
+        && (!(fns::IsNameUnique(ctx, name) != 0)))
+        && (!(fns::IsNameNotAllowed(ctx, name) != 0))
+    {
+        return 1_i32;
+    }
+    return 0_i32;
+}
+
+fn inl_SubmitName_unfused<'a>(ctx: &'a Ctx, data: NameNewEntry<'a>, name: Val<'a, i8>) {
+    let mut data = data;
+    let mut name = name;
+    if (inl_CanConfirmName_unfused(ctx, name) != 0) {
+        fns::lbAudioAx_80024030(ctx, 1_i32);
+        fns::CreateNameAtIndex(ctx, ((data).name_index() as i32));
+        let _ = fns::WriteCharactersForNameAtIndex(
+            ctx,
+            (data).name_index(),
+            (fns::mn_802295AC(ctx) as i32),
+        );
+        fns::mnNameNew_8023B224(ctx, (1_u32 as u8));
+        return;
+    }
+    fns::lbAudioAx_80024030(ctx, 3_i32);
+}
+
 fn inl_mnNameNew_GetEntryData_unfused<'a>(ctx: &'a Ctx) -> NameNewEntry<'a> {
     return Handle::cast::<NameNewEntry<'a>>((fns::mnNameNew_804D6C08(ctx).get()).user_data());
 }
@@ -2132,7 +2598,7 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8530),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803b8530),
         )
     });
@@ -2154,7 +2620,7 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8530),
-            (0x1e1_i32 as u32),
+            (0x394_i32 as u32),
             cstr(ctx, 0x803b8530),
         )
     });
@@ -2164,7 +2630,7 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8530),
-            (0x1e2_i32 as u32),
+            (0x395_i32 as u32),
             cstr(ctx, 0x803b8530),
         )
     });
@@ -2234,7 +2700,7 @@ fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x__a:
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8530),
-            (0x201_i32 as u32),
+            (0x3a4_i32 as u32),
             cstr(ctx, 0x803b8530),
         )
     });
@@ -2256,7 +2722,7 @@ fn inl_HSD_JObjSetTranslateY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a:
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8530),
-            (0x213_i32 as u32),
+            (0x3b3_i32 as u32),
             cstr(ctx, 0x803b8530),
         )
     });
@@ -2409,6 +2875,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(mnNameNew_GlyphVariantInput(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8023c54c,
+        |ctx| {
+            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
+            Ret::put(mnNameNew_MainInput(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

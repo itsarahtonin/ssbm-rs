@@ -58,7 +58,7 @@ pub fn DevText_Create<'a>(
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803fdca4),
-                    (51_i32 as u32),
+                    (0x135_i32 as u32),
                     cstr(ctx, 0x803fdca4),
                 )
             })

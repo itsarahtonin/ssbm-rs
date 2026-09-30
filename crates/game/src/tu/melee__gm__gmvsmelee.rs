@@ -146,7 +146,7 @@ pub fn findSmallestLoser<'a>(ctx: &'a Ctx, end: MatchEnd<'a>) -> u8 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803db04c),
-            (97_i32 as u32),
+            (178_i32 as u32),
             cstr(ctx, 0x803db04c),
         )
     });

@@ -628,9 +628,10 @@ class Translator:
         c = self.f.cursor
         name = c.spelling
         ft = self.u.ctype(c.type)
-        if ft["k"] == "fn" and ft["params"] is None and \
-                not any(a.kind == CK.PARM_DECL for a in children(c)):
-            ft = {**ft, "params": [], "variadic": False}  # `f()`: no parameters
+        if ft["k"] == "fn" and ft["params"] is None:
+            # `f()`: no parameters. (A PARM_DECL child can belong to a returned function
+            # pointer's type, and the decomp has no K&R definitions.)
+            ft = {**ft, "params": [], "variadic": False}
         if ft["k"] != "fn" or ft["params"] is None:
             raise Unsupported("no prototype")
         if ft["variadic"]:
@@ -662,6 +663,8 @@ class Translator:
                 continue
             if pt["k"] == "arr":
                 pt = {"k": "ptr", "to": pt["of"]}
+            if pt["k"] == "fn":
+                pt = {"k": "ptr", "to": pt}
             key = vkey(a, pname)
             if self.inline:
                 self.decisions[("fwd", a.spelling)] = self.forward.get(a.spelling)
@@ -754,7 +757,7 @@ class Translator:
                     n = evaluate(var_init(r)) if r is not None and var_init(r) is not None else None
                 if not isinstance(n, int):
                     raise Unsupported("variable-length array")
-                self.u.col.vla_sizes[d.type.spelling] = n
+                self.u.col.vla_sizes[d.type.get_canonical().spelling] = n
         ext = self.f.cursor.extent
         for start, end in self.u.regions(str(ext.start.file)):
             if start <= ext.end.line and ext.start.line <= end:
@@ -886,9 +889,10 @@ class Translator:
     def stmts(self, nodes):
         nodes = list(nodes)
         for k, n in enumerate(nodes):
-            rest = self.setjmp_rest(n, nodes[k + 1:])
-            if rest is not None:
-                return self.stmts(nodes[:k]) + rest
+            if self.is_setjmp_rest(n):
+                # The statements before it declare locals the rest uses.
+                before = self.stmts(nodes[:k])
+                return before + self.setjmp_rest(n, nodes[k + 1:])
         if any(n.kind == CK.LABEL_STMT for n in nodes):
             return self.goto_region(list(nodes))
         out = []
@@ -1193,6 +1197,10 @@ class Translator:
         if k == CK.RETURN_STMT:
             kids = children(n)
             if not kids:
+                if self.f.ret["k"] != "void" and not self.f.sret:
+                    # MWCC's `return;` where the function returns a value: the original
+                    # returns what r3 holds, which lockstep leaves unchecked.
+                    return [f"return {self.zero(self.f.ret)};"]
                 return ["return;"]
             if self.f.sret:
                 v = self.expr(kids[0])
@@ -1381,7 +1389,8 @@ class Translator:
 
     def decl(self, d):
         if d.kind != CK.VAR_DECL:
-            if d.kind in (CK.STRUCT_DECL, CK.UNION_DECL, CK.ENUM_DECL, CK.TYPEDEF_DECL, CK.STATIC_ASSERT):
+            if d.kind in (CK.STRUCT_DECL, CK.UNION_DECL, CK.ENUM_DECL, CK.TYPEDEF_DECL, CK.STATIC_ASSERT,
+                          CK.FUNCTION_DECL):
                 return []  # nothing at run time
             raise Unsupported(f"declaration {d.kind}")
         if d.storage_class == ci.StorageClass.EXTERN:
@@ -1391,7 +1400,8 @@ class Translator:
         if d.storage_class == ci.StorageClass.STATIC:
             addr = self.u.static_addrs.get(key)
             const = var_init(d)
-            if addr is None and d.type.is_const_qualified() and (is_int(t) or is_float(t)) and                     const is not None and evaluate(const) is not None:
+            if addr is None and d.type.is_const_qualified() and (is_int(t) or is_float(t)) and \
+                    const is not None and evaluate(const) is not None:
                 return []  # a constant MWCC folded into its uses; references evaluate it
             if addr is None:
                 raise Unsupported("static local without an address")
@@ -1621,6 +1631,9 @@ class Translator:
                 raise Unsupported("implicit member")
             base = kids[0]
             bt = self.u.ctype(base.type)
+            if bt["k"] == "arr" and self.is_pointer_local(strip(base)):
+                # An array parameter, such as a va_list: `->` goes through its pointer.
+                bt = {"k": "ptr", "to": bt["of"]}
             arrow = bt["k"] == "ptr"
             if arrow:
                 p = self.expr(base)
@@ -1725,7 +1738,9 @@ class Translator:
         if t["k"] == "rec":
             v = self.expr(b)
             if not lv.pure and not v.pure:
-                raise Unsupported("struct assignment with effects on both sides")
+                # MWCC evaluates the right side first, then where it goes.
+                tmp = self.f.temp()
+                return [f"let {tmp} = {v.code};", f"Handle::copy_from({lv.addr_code}, {tmp});"]
             return [f"Handle::copy_from({lv.addr_code}, {v.code});"]
         v = self.convert(self.expr(b), t)
         pre = []
@@ -1830,6 +1845,22 @@ class Translator:
                                                    "n": len(data) + 1, "string": True}, True)
         if k == CK.DECL_REF_EXPR:
             return self.decl_ref(c)
+        if k == CK.ARRAY_SUBSCRIPT_EXPR:
+            base, index = (strip(x) for x in children(c))
+            i = evaluate(index)
+            if base.kind == CK.STRING_LITERAL and isinstance(i, int):
+                # A constant byte of a literal, which MWCC folds: in Shift-JIS, as the game's
+                # text is.
+                data = self.string_bytes(base)
+                try:
+                    data = data.decode("utf-8").encode("cp932")
+                except (UnicodeDecodeError, UnicodeEncodeError):
+                    pass
+                data += b"\0"
+                if not 0 <= i < len(data):
+                    raise Unsupported("string literal index out of range")
+                t = self.u.ctype(c.type)
+                return Expr(self.int_literal(data[i] - 256 if int_info(t)[1] and data[i] >= 128 else data[i], t), t, True)
         if k == CK.MEMBER_REF_EXPR or k == CK.ARRAY_SUBSCRIPT_EXPR:
             lv = self.lvalue(c)
             if lv.ty["k"] in ("rec", "arr"):
@@ -1858,8 +1889,26 @@ class Translator:
             if to["k"] == "void":
                 return self.stmt_expr(self.effect(inner), Expr("()", to, False))
             return self.convert(self.expr(inner), to, explicit=True)
-        if k == CK.CXX_UNARY_EXPR or k == CK.UNARY_EXPR:
+        if k == CK.COMPOUND_LITERAL_EXPR:
+            # `(T){ ... }`: a temporary on the stack, as MWCC makes one.
+            t = self.u.ctype(c.type)
+            if t["k"] not in ("rec", "arr"):
+                raise Unsupported("scalar compound literal")
+            slot = self.stack_slot("__lit", t)
+            lv = self.stack_lvalue(slot, t)
+            init = [x for x in children(c) if x.kind == CK.INIT_LIST_EXPR]
+            if not init:
+                raise Unsupported("compound literal")
+            return self.stmt_expr(self.initialize(lv, t, init[0]), Expr(lv.addr_code, t, False))
+        if k == CK.CXX_UNARY_EXPR:
             val = evaluate(c)
+            kids = children(c)
+            if val is None and kids and next(c.get_tokens()).spelling == "sizeof":
+                # An array sized by a `const int`, which C calls variable-length and MWCC
+                # sizes as declared.
+                at = self.u.ctype(strip(kids[0]).type)
+                if at["k"] == "arr":
+                    val = self.u.size_of(at)
             if val is None:
                 raise Unsupported("sizeof")
             t = self.u.ctype(c.type)
@@ -1896,6 +1945,8 @@ class Translator:
                 return self.convert(self.expr(children(inner)[0]), to)
             return self.convert(self.fn_value(inner), to)
         v = self.expr(child)
+        if to["k"] == "fn" and v.ty["k"] == "ptr" and v.ty["to"]["k"] == "fn":
+            return v  # a parameter declared as a function, which holds a pointer to one
         return self.convert(v, to)
 
     def decay(self, lv, arr_t):
@@ -2466,7 +2517,12 @@ class Translator:
         if ft["params"] is None:
             ft = self.unprototyped(ft, args)
         if ft.get("variadic"):
-            raise Unsupported("variadic call through a pointer")
+            if t["k"] == "rec":
+                raise Unsupported("struct return through a pointer")
+            fixed, extra = self.call_args(ft, args, marshal=True)
+            rty = "()" if t["k"] == "void" else self.u.rust_value_ty(t)
+            return Expr(f"ctx.call_variadic::<_, {rty}>(Handle::addr({fp_.code}), "
+                        f"({''.join(a + ', ' for a in fixed)}), &[{', '.join(extra)}])", t, False)
         argv = self.call_args(ft, args, marshal=True)
         if t["k"] == "rec":
             raise Unsupported("struct return through a pointer")
@@ -2732,18 +2788,22 @@ class Translator:
         return self.asm is not None and asm.get(f.get("symbol") or name, 0) == 0 and \
             callee.referenced.get_definition() is not None
 
+    def is_setjmp_rest(self, n):
+        """Whether n is `if (setjmp(env) != 0) handler;`, whose handler a longjmp runs."""
+        if n.kind != CK.IF_STMT or self.f.cfg or self.f.targets:
+            return False
+        kids = children(n)
+        if len(kids) != 2:
+            return False
+        jump = self.setjmp_test(kids[0])
+        return jump is not None and not jump[1]
+
     def setjmp_rest(self, n, rest):
         """`if (setjmp(env) != 0) handler;` among a function body's statements: the statements
         after it run under `Ctx::setjmp_with`, which a longjmp to env ends early, and then the
         handler runs; else the function returns what they return."""
-        if n.kind != CK.IF_STMT or self.f.cfg or self.f.targets:
-            return None
         kids = children(n)
-        if len(kids) != 2:
-            return None
         jump = self.setjmp_test(kids[0])
-        if jump is None or jump[1]:
-            return None
         body = self.f.cursor
         top = [x for x in children(body) if x.kind == CK.COMPOUND_STMT]
         if not top or not any(x.hash == n.hash for x in children(top[0])):
@@ -2847,7 +2907,7 @@ class Translator:
             one(pt)
         for a in args[len(params):] if ft.get("variadic") else ():
             at = self.u.ctype(a.type)
-            one(DOUBLE if is_float(at) else INT)
+            one(DOUBLE if is_float(at) else at if is_int(at) and int_info(at)[0] == 8 else INT)
         self.f.outgoing = max(self.f.outgoing, 4 * words)
 
     def helper(self, name, argv, t):
@@ -2919,6 +2979,8 @@ class Translator:
                 continue
             if pt["k"] == "arr":
                 pt = {"k": "ptr", "to": pt["of"]}
+            if pt["k"] == "fn":
+                pt = {"k": "ptr", "to": pt}
             v = self.convert(self.expr(a), pt)
             if marshal and is_float(pt) and pt["size"] == 4:
                 out.append(f"Single(fp::frsp({v.code}))")
@@ -2935,8 +2997,9 @@ class Translator:
                 elif is_int(v.ty):
                     size, _ = int_info(v.ty)
                     if size == 8:
-                        raise Unsupported("64-bit variadic argument")
-                    extra.append(f"VarArg::Int({self.convert(v, promote(v.ty)).code} as u32)")
+                        extra.append(f"VarArg::Wide({v.code} as u64)")
+                    else:
+                        extra.append(f"VarArg::Int({self.convert(v, promote(v.ty)).code} as u32)")
                 else:
                     raise Unsupported("variadic argument type")
             return out, extra
@@ -2952,6 +3015,24 @@ class Translator:
             return Expr(f"{simple[name]}({v.code})", t, v.pure)
         if name == "__c2rs_inline_asm":
             raise Unsupported("inline asm")
+        if name == "__rlwinm":
+            # Rotate left, then keep bits mb through me (bit 0 the highest), wrapping around.
+            sh, mb, me = (evaluate(a) for a in args[1:])
+            if not all(isinstance(x, int) for x in (sh, mb, me)):
+                raise Unsupported("__rlwinm with operands that are not constants")
+            v = self.convert(self.expr(args[0]), UINT)
+            return Expr(f"(({v.code}).rotate_left({sh % 32}) & {rlw_mask(mb, me):#x}) as i32", INT, v.pure)
+        if name == "__rlwimi":
+            # Rotate b left and insert bits mb through me of it into a.
+            sh, mb, me = (evaluate(x) for x in args[2:])
+            if not all(isinstance(x, int) for x in (sh, mb, me)):
+                raise Unsupported("__rlwimi with operands that are not constants")
+            mask = rlw_mask(mb, me)
+            a = self.convert(self.expr(args[0]), UINT)
+            b = self.convert(self.expr(args[1]), UINT)
+            return Expr(f"{{ let __a: u32 = {a.code}; let __b: u32 = {b.code}; "
+                        f"((__b.rotate_left({sh % 32}) & {mask:#x}) | (__a & {~mask & 0xFFFF_FFFF:#x})) as i32 }}",
+                        INT, a.pure and b.pure)
         if name == "__builtin_va_info":
             if not self.f.variadic:
                 raise Unsupported("va_start outside a variadic function")
@@ -3100,7 +3181,8 @@ def has_effects(node, depth=0):
             body = ref.get_definition() if ref is not None and ref.kind == CK.FUNCTION_DECL else None
             stmts = [x for x in children(body) if x.kind == CK.COMPOUND_STMT] if body is not None else []
             kids = children(stmts[0]) if stmts else []
-            if depth > 4 or len(kids) != 1 or kids[0].kind != CK.RETURN_STMT or                     any(has_effects(x, depth + 1) for x in children(kids[0])):
+            if depth > 4 or len(kids) != 1 or kids[0].kind != CK.RETURN_STMT or \
+                    any(has_effects(x, depth + 1) for x in children(kids[0])):
                 return True
     return False
 
@@ -3251,13 +3333,37 @@ use crate::support::*;
 
 def returns_of(unit, cursor):
     rt = unit.ctype(cursor.type)["ret"]
-    if rt["k"] in ("void", "rec"):
+    if rt["k"] in ("void", "rec") or bare_return(cursor):
         return "Nothing"
     if is_float(rt):
         return "Float"
     if is_int(rt) and int_info(rt)[0] == 8:
         return "Int64"
     return "Int"
+
+
+def rlw_mask(mb, me):
+    """The mask of rlwinm and rlwimi: bits mb through me, bit 0 the highest, wrapping around."""
+    ones = 0xFFFF_FFFF
+    if mb <= me:
+        return (ones >> mb) & (ones << (31 - me)) & ones
+    return ((ones >> mb) | (ones << (31 - me))) & ones
+
+
+def bare_return(cursor):
+    """Whether a function returning a value only ever returns with `return;`, so what it returns
+    is whatever r3 holds."""
+    kinds = set()
+
+    def walk(n):
+        if n.kind == CK.RETURN_STMT:
+            kinds.add(bool(children(n)))
+        for x in children(n):
+            walk(x)
+    for x in children(cursor):
+        if x.kind == CK.COMPOUND_STMT:
+            walk(x)
+    return kinds == {False}
 
 
 # What makes a function's C untranslatable where its machine code is the source to port.
@@ -3268,12 +3374,22 @@ FROM_MACHINE_CODE = {
     # MWCC inlines the stream setters and schedules their hardware register accesses out of
     # the source's order, which the audio interface sees.
     "AIInit": "hardware register order",
+    # Its `L""` is somewhere in MSL's data that only the machine code points at.
+    "__pformatter": "wide string literal",
+    # Copies code from a debugger entry label that has no symbol of its own.
+    "OSExceptionInit": "label without a symbol",
+    # Calls __VIInitPhilips, which the SDK never defines, in a branch MWCC removes.
+    "__VIInit": "call to an undefined function in a dead branch",
+    # Leaves the va_list's register save area in r5, which Slippi's Show Player Names code
+    # passes on as a pointer after lb_80011E24 returns.
+    "__va_arg": "register it leaves that other code reads",
 }
 
 
-def asm_port(unit, cursor, f):
+def asm_port(unit, cursor, f, why="its source is assembly"):
     """A port of the function at `cursor` transliterated from its machine code, for code whose
-    source is assembly: its C prototype as the signature, its instructions as the body."""
+    source is assembly and the rest `why` names: its C prototype as the signature, its
+    instructions as the body."""
     name = cursor.spelling
     ft = unit.ctype(cursor.type)
     if ft["params"] is None:
@@ -3287,13 +3403,15 @@ def asm_port(unit, cursor, f):
     for i, pt in enumerate(ft["params"]):
         if pt["k"] == "arr":
             pt = {"k": "ptr", "to": pt["of"]}
+        if pt["k"] == "fn":
+            pt = {"k": "ptr", "to": pt}
         if pt["k"] == "rec":
             raise Unsupported("assembly taking a struct")
         params.append(f"a{i}: {unit.rust_value_ty(pt)}")
         puts.append(f"Single(a{i})" if is_float(pt) and pt["size"] == 4 else f"a{i}")
     ret = "" if ft["ret"]["k"] == "void" else " -> " + unit.rust_value_ty(ft["ret"])
     lines = [f"pub fn {ident(name)}<'a>(ctx: &'a Ctx{''.join(', ' + p for p in params)}){ret} {{",
-             "    // Transliterated from its machine code, whose source is assembly.",
+             f"    // Transliterated from its machine code: {why}.",
              f"    ({''.join(x + ', ' for x in puts)}).put_regs(ctx);",
              f"    asm_{name}(ctx);"]
     if ret:
@@ -3374,7 +3492,7 @@ def translate_unit(args):
             unit.ported.append(name)
             continue
         if name in FROM_MACHINE_CODE:
-            code = asm_port(unit, c, f)
+            code = asm_port(unit, c, f, FROM_MACHINE_CODE[name])
             out_fns.append(code)
             unit.transliterated.append(name)
             regs.append(f"    ctx.register_port({f['addr']:#x}, {unit.adapter(c, ident(name))}, "
@@ -3391,7 +3509,7 @@ def translate_unit(args):
             if any(r in str(e) for r in MACHINE_CODE_REASONS):
                 # C around assembly: the machine code is the source to port.
                 try:
-                    code = asm_port(unit, c, f)
+                    code = asm_port(unit, c, f, str(e))
                 except (Unsupported, asm2rs.AsmUnsupported) as e2:
                     unit.skipped.append((name, f"{e} (line {tr.line}); assembly: {e2}"))
                     continue
@@ -3530,6 +3648,8 @@ def _adapter(self, cursor, rname):
         names.append(n)
         if pt["k"] == "arr":
             pt = {"k": "ptr", "to": pt["of"]}
+        if pt["k"] == "fn":
+            pt = {"k": "ptr", "to": pt}
         if is_float(pt) and pt["size"] == 4:
             types.append("Single")
             passes.append(f"{n}.0")

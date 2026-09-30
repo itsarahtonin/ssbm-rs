@@ -28,7 +28,7 @@ use crate::support::*;
 use ssbm_rt::cpu as c;
 
 pub fn GetR2<'a>(ctx: &'a Ctx) -> Val<'a, i8> {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     ().put_regs(ctx);
     asm_GetR2(ctx);
     Ret::get(ctx)

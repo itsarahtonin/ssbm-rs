@@ -563,7 +563,11 @@ pub fn ftNs_SpecialHi_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         return;
     }
     {
-        fighter_data3 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+        fighter_data3 = {
+            let __t1 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
+            fighter_data3 = __t1;
+            __t1
+        };
         {
             let mut msid: i32 = (fighter_data3).motion_id();
             's1: {

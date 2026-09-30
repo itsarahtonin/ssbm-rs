@@ -136,7 +136,7 @@ pub fn HSD_FogLoadDesc<'a>(ctx: &'a Ctx, desc: HSD_FogDesc<'a>) -> HSD_Fog<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b95a8),
-            (98_i32 as u32),
+            (153_i32 as u32),
             cstr(ctx, 0x803b95a8),
         )
     });
@@ -181,7 +181,7 @@ pub fn HSD_FogAdjLoadDesc<'a>(ctx: &'a Ctx, desc: HSD_FogAdjDesc<'a>) -> HSD_Fog
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b95a8),
-            (138_i32 as u32),
+            (230_i32 as u32),
             cstr(ctx, 0x803b95a8),
         )
     });
@@ -375,7 +375,7 @@ fn inl_HSD_FogAlloc_unfused<'a>(ctx: &'a Ctx) -> HSD_Fog<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b95a8),
-            (91_i32 as u32),
+            (140_i32 as u32),
             cstr(ctx, 0x803b95a8),
         )
     });
@@ -391,7 +391,7 @@ fn inl_HSD_FogAdjAlloc_unfused<'a>(ctx: &'a Ctx) -> HSD_FogAdj<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b95a8),
-            (131_i32 as u32),
+            (214_i32 as u32),
             cstr(ctx, 0x803b95a8),
         )
     });

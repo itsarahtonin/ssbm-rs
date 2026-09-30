@@ -188,7 +188,7 @@ pub fn Ground_SetParamY<'a>(ctx: &'a Ctx, y: f64) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b7d80),
-                (0x13b_i32 as u32),
+                (0x209_i32 as u32),
                 cstr(ctx, 0x803b7d80),
             )
         });
@@ -937,7 +937,7 @@ pub fn Ground_GetStageGObj<'a>(ctx: &'a Ctx, map_id: i32) -> HSD_GObj<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b7d80),
-            (0x36e_i32 as u32),
+            (0x54e_i32 as u32),
             cstr(ctx, 0x803b7d80),
         )
     });
@@ -1350,7 +1350,7 @@ pub fn Ground_801C20E0<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b7d80),
-            (0x4dd_i32 as u32),
+            (0x773_i32 as u32),
             cstr(ctx, 0x803b7d80),
         )
     });
@@ -1360,7 +1360,7 @@ pub fn Ground_801C20E0<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b7d80),
-            (0x4de_i32 as u32),
+            (0x774_i32 as u32),
             cstr(ctx, 0x803b7d80),
         )
     });
@@ -1502,7 +1502,7 @@ pub fn Ground_801C247C<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) -> HSD_Spline<'a>
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b7d80),
-            (0x538_i32 as u32),
+            (0x7e1_i32 as u32),
             cstr(ctx, 0x803b7d80),
         )
     });
@@ -1691,7 +1691,7 @@ pub fn Ground_801C24F8<'a>(ctx: &'a Ctx, stkind: i32, arg1: u32, arg2: Val<'a, i
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b7d80),
-            (0x5c8_i32 as u32),
+            (0x8c2_i32 as u32),
             cstr(ctx, 0x803b7d80),
         )
     });
@@ -1852,7 +1852,7 @@ pub fn Ground_801C2BD4<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b7d80),
-            (0x629_i32 as u32),
+            (0x94d_i32 as u32),
             cstr(ctx, 0x803b7d80),
         )
     });
@@ -2409,7 +2409,7 @@ pub fn Ground_801C36F4<'a>(ctx: &'a Ctx, map_id: i32, root: HSD_JObj<'a>, joint:
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b7d80),
-            (0x7dd_i32 as u32),
+            (0xb78_i32 as u32),
             cstr(ctx, 0x803b7d80),
         )
     });
@@ -3093,7 +3093,7 @@ pub fn Ground_801C43C4<'a>(ctx: &'a Ctx, arg0: Addr<'a>) -> i32 {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b7d80),
-                (0x9e6_i32 as u32),
+                (0xe44_i32 as u32),
                 cstr(ctx, 0x803b7d80),
             )
         });
@@ -3654,12 +3654,13 @@ pub fn Ground_801C4FAC<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) {
         if sp74.z() < fp::frsp(0_i32 as f64) {
             xz_inv_len = fp::fdivs(
                 1.0,
-                inl_sqrtf(
+                inl_sqrtf_store(
                     ctx,
                     fp::fadds(
                         (fp::fmuls(sp74.x(), sp74.x())),
                         (fp::fmuls(sp74.z(), sp74.z())),
                     ),
+                    sqrt_tmp.at(2_i32),
                 ),
             );
             xz_x_weight = fp::fmuls(
@@ -3710,7 +3711,8 @@ pub fn Ground_801C4FAC<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) {
                 dx2 = fp::fmuls(dx, dx);
                 dy2 = fp::fmuls(dy, dy);
                 dz2 = fp::fmuls(dz, dz);
-                phi_f31 = inl_sqrtf(ctx, fp::fadds(fp::fadds(dx2, dy2), dz2));
+                phi_f31 =
+                    inl_sqrtf_store(ctx, fp::fadds(fp::fadds(dx2, dy2), dz2), sqrt_tmp.at(1_i32));
                 dx = fp::fsubs(sp2C.x(), sp20.x());
                 dz = sp2C.z();
                 dz = fp::fsubs(dz, sp20.z());
@@ -3720,7 +3722,8 @@ pub fn Ground_801C4FAC<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) {
                     (fp::fsubs(sp2C.y(), sp20.y())),
                 );
                 dz2 = fp::fmuls(dz, dz);
-                phi_f30 = inl_sqrtf(ctx, fp::fadds(fp::fadds(dx2, dy2), dz2));
+                phi_f30 =
+                    inl_sqrtf_store(ctx, fp::fadds(fp::fadds(dx2, dy2), dz2), sqrt_tmp.at(0_i32));
                 if phi_f30 < fp::frsp(10_i32 as f64) {
                     phi_f30 = fp::frsp(10_i32 as f64);
                 }
@@ -4123,7 +4126,7 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b7d80),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803b7d80),
         )
     });
@@ -4145,7 +4148,7 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b7d80),
-            (0x17e_i32 as u32),
+            (0x2f8_i32 as u32),
             cstr(ctx, 0x803b7d80),
         )
     });
@@ -4155,7 +4158,7 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b7d80),
-            (0x17f_i32 as u32),
+            (0x2f9_i32 as u32),
             cstr(ctx, 0x803b7d80),
         )
     });
@@ -4487,9 +4490,9 @@ fn inl_removeStageGObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
-fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+fn inl_sqrtf_store<'a>(ctx: &'a Ctx, x: f64, y: Val<'a, F32>) -> f64 {
     let mut x = x;
-    let mut y: f64 = 0.0;
+    let mut y = y;
     if x > 0.0 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
@@ -4504,8 +4507,8 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
             fp::fmul(0.5, guess),
             (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
         );
-        y = fp::frsp((fp::fmul(x, guess)));
-        return y;
+        (y).set(fp::frsp((fp::fmul(x, guess))));
+        return (y).get();
     }
     return x;
 }

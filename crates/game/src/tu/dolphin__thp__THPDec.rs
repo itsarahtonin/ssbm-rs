@@ -1402,7 +1402,7 @@ pub fn THPDec_80331340<'a>(
     a2: Addr<'a>,
     a3: Addr<'a>,
 ) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: MWCC-only code.
     (a0, a1, a2, a3).put_regs(ctx);
     asm_THPDec_80331340(ctx);
 }
@@ -1582,7 +1582,7 @@ pub fn THPDec_803313D0<'a>(
     a3: Addr<'a>,
     a4: u32,
 ) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: MWCC-only code.
     (a0, a1, a2, a3, a4).put_regs(ctx);
     asm_THPDec_803313D0(ctx);
 }
@@ -1769,7 +1769,7 @@ fn asm_THPDec_803313D0(ctx: &Ctx) {
 }
 
 pub fn __THPDecompressiMCURow640x480<'a>(ctx: &'a Ctx, a0: _THPFileInfo<'a>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: inline __THPInverseDCTNoYPos: MWCC-only code.
     (a0,).put_regs(ctx);
     asm___THPDecompressiMCURow640x480(ctx);
 }
@@ -10102,7 +10102,7 @@ fn asm___THPDecompressiMCURow640x480(ctx: &Ctx) {
 }
 
 pub fn __THPDecompressiMCURowNxN<'a>(ctx: &'a Ctx, a0: _THPFileInfo<'a>, a1: u32) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: inline __THPInverseDCTNoYPos: MWCC-only code.
     (a0, a1).put_regs(ctx);
     asm___THPDecompressiMCURowNxN(ctx);
 }
@@ -18448,7 +18448,7 @@ fn asm___THPDecompressiMCURowNxN(ctx: &Ctx) {
 }
 
 pub fn __THPHuffDecodeDCTCompY<'a>(ctx: &'a Ctx, a0: _THPFileInfo<'a>, a1: Val<'a, i16>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: MWCC-only code.
     (a0, a1).put_regs(ctx);
     asm___THPHuffDecodeDCTCompY(ctx);
 }
@@ -20561,7 +20561,7 @@ fn asm___THPHuffDecodeDCTCompY(ctx: &Ctx) {
 }
 
 pub fn __THPHuffDecodeDCTCompU<'a>(ctx: &'a Ctx, a0: _THPFileInfo<'a>, a1: Val<'a, i16>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: MWCC-only code.
     (a0, a1).put_regs(ctx);
     asm___THPHuffDecodeDCTCompU(ctx);
 }
@@ -22737,7 +22737,7 @@ fn asm___THPHuffDecodeDCTCompU(ctx: &Ctx) {
 }
 
 pub fn __THPHuffDecodeDCTCompV<'a>(ctx: &'a Ctx, a0: _THPFileInfo<'a>, a1: Val<'a, i16>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: MWCC-only code.
     (a0, a1).put_regs(ctx);
     asm___THPHuffDecodeDCTCompV(ctx);
 }
@@ -24912,7 +24912,7 @@ fn asm___THPHuffDecodeDCTCompV(ctx: &Ctx) {
 }
 
 pub fn THPInit<'a>(ctx: &'a Ctx) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: inline OSInitFastCast: MWCC-only code.
     ().put_regs(ctx);
     asm_THPInit(ctx);
 }

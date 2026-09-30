@@ -170,6 +170,7 @@ pub fn gm_ModeState_Prize_OnEnter<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     let mut var_r26: Val<'a, u8> = null(ctx);
     let mut var_r28_3: i32 = 0;
     let mut var_r27_2_s11: i32 = 0;
+    let mut var_r27_2: i32 = 0;
     let mut var_r31: Ptr<'a, Addr<'a>> = null(ctx);
     let mut var_r25_2: i32 = 0;
     let mut temp_r3: Ptr<'a, Addr<'a>> = null(ctx);
@@ -186,6 +187,7 @@ pub fn gm_ModeState_Prize_OnEnter<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     p3 = statics::melee__gm__gm_1BFA::gm_8049E558(ctx).at(68_i32);
     fns::memzero(ctx, Handle::cast::<Addr<'a>>(p3), 0x125_i32);
     fns::Toy_803124BC(ctx);
+    var_r27_2_s11 = var_r27_2;
     p3 = statics::melee__gm__gm_1BFA::gm_8049E558(ctx).at(0);
     {
         let mut var_r25: i32 = 0;

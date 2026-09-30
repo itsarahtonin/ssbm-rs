@@ -28,7 +28,7 @@ use crate::support::*;
 use ssbm_rt::cpu as c;
 
 pub fn do_src1<'a>(ctx: &'a Ctx, a0: AXFX_CHORUS_SRCINFO<'a>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0,).put_regs(ctx);
     asm_do_src1(ctx);
 }
@@ -530,7 +530,7 @@ fn asm_do_src1(ctx: &Ctx) {
 }
 
 pub fn do_src2<'a>(ctx: &'a Ctx, a0: AXFX_CHORUS_SRCINFO<'a>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0,).put_regs(ctx);
     asm_do_src2(ctx);
 }

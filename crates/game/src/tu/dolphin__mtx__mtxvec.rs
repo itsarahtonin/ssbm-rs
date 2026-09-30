@@ -28,7 +28,7 @@ use crate::support::*;
 use ssbm_rt::cpu as c;
 
 pub fn PSMTXMultVec<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>, a1: Vec<'a>, a2: Vec<'a>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0, a1, a2).put_regs(ctx);
     asm_PSMTXMultVec(ctx);
 }
@@ -147,7 +147,7 @@ fn asm_PSMTXMultVec(ctx: &Ctx) {
 }
 
 pub fn PSMTXMultVecSR<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>, a1: Vec<'a>, a2: Vec<'a>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0, a1, a2).put_regs(ctx);
     asm_PSMTXMultVecSR(ctx);
 }

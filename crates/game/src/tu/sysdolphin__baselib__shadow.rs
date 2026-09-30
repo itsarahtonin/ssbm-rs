@@ -116,7 +116,7 @@ pub fn HSD_ShadowInit<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80407318),
-            (105_i32 as u32),
+            (245_i32 as u32),
             cstr(ctx, 0x80407318),
         )
     });
@@ -150,7 +150,7 @@ pub fn HSD_ShadowSetSize<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>, width: u16, h
         fns::__assert(
             ctx,
             cstr(ctx, 0x80407318),
-            (116_i32 as u32),
+            (0x115_i32 as u32),
             cstr(ctx, 0x80407318),
         )
     });
@@ -160,7 +160,7 @@ pub fn HSD_ShadowSetSize<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>, width: u16, h
         fns::__assert(
             ctx,
             cstr(ctx, 0x80407318),
-            (117_i32 as u32),
+            (0x116_i32 as u32),
             cstr(ctx, 0x80407318),
         )
     });
@@ -170,7 +170,7 @@ pub fn HSD_ShadowSetSize<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>, width: u16, h
         fns::__assert(
             ctx,
             cstr(ctx, 0x80407318),
-            (118_i32 as u32),
+            (0x117_i32 as u32),
             cstr(ctx, 0x80407318),
         )
     });
@@ -195,7 +195,7 @@ pub fn HSD_ShadowSetSize<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>, width: u16, h
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x80407318),
-                (128_i32 as u32),
+                (0x122_i32 as u32),
                 cstr(ctx, 0x80407318),
             )
         });
@@ -285,7 +285,7 @@ pub fn HSD_ShadowStartRender<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80407318),
-            (179_i32 as u32),
+            (0x167_i32 as u32),
             cstr(ctx, 0x80407318),
         )
     });
@@ -295,7 +295,7 @@ pub fn HSD_ShadowStartRender<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80407318),
-            (180_i32 as u32),
+            (0x168_i32 as u32),
             cstr(ctx, 0x80407318),
         )
     });
@@ -305,7 +305,7 @@ pub fn HSD_ShadowStartRender<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80407318),
-            (181_i32 as u32),
+            (0x169_i32 as u32),
             cstr(ctx, 0x80407318),
         )
     });
@@ -315,7 +315,7 @@ pub fn HSD_ShadowStartRender<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80407318),
-            (182_i32 as u32),
+            (0x16a_i32 as u32),
             cstr(ctx, 0x80407318),
         )
     });
@@ -406,7 +406,7 @@ pub fn HSD_ShadowEndRender<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80407318),
-            (0x109_i32 as u32),
+            (0x1f5_i32 as u32),
             cstr(ctx, 0x80407318),
         )
     });
@@ -431,7 +431,7 @@ pub fn HSD_ShadowSetActive<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>, active: i32
         fns::__assert(
             ctx,
             cstr(ctx, 0x80407318),
-            (0x11c_i32 as u32),
+            (0x244_i32 as u32),
             cstr(ctx, 0x80407318),
         )
     });
@@ -580,7 +580,7 @@ pub fn makeMatrix<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>) {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x80407318),
-                    (0x178_i32 as u32),
+                    (0x2ba_i32 as u32),
                     cstr(ctx, 0x80407318),
                 )
             });
@@ -616,7 +616,7 @@ pub fn HSD_ShadowSetViewingRect<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x80407318),
-            (0x188_i32 as u32),
+            (0x2d1_i32 as u32),
             cstr(ctx, 0x80407318),
         )
     });
@@ -671,7 +671,7 @@ pub fn HSD_ShadowSetViewingRect<'a>(
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x80407318),
-                        (0x1a6_i32 as u32),
+                        (0x2f2_i32 as u32),
                         cstr(ctx, 0x80407318),
                     )
                 });
@@ -693,7 +693,7 @@ pub fn HSD_ShadowSetViewingRect<'a>(
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x80407318),
-                    (0x1ac_i32 as u32),
+                    (0x2fa_i32 as u32),
                     cstr(ctx, 0x80407318),
                 )
             });
@@ -722,7 +722,7 @@ pub fn HSD_ViewingRectInit<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x80407318),
-            (0x1b4_i32 as u32),
+            (0x31b_i32 as u32),
             cstr(ctx, 0x80407318),
         )
     });
@@ -755,7 +755,7 @@ pub fn HSD_ViewingRectCheck<'a>(ctx: &'a Ctx, rect: HSD_ViewingRect<'a>) -> i32 
         fns::__assert(
             ctx,
             cstr(ctx, 0x80407318),
-            (0x1c5_i32 as u32),
+            (0x332_i32 as u32),
             cstr(ctx, 0x80407318),
         )
     });
@@ -791,7 +791,7 @@ pub fn HSD_ViewingRectAddRect<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x80407318),
-            (0x1cf_i32 as u32),
+            (0x357_i32 as u32),
             cstr(ctx, 0x80407318),
         )
     });
@@ -801,7 +801,7 @@ pub fn HSD_ViewingRectAddRect<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x80407318),
-            (0x1d0_i32 as u32),
+            (0x358_i32 as u32),
             cstr(ctx, 0x80407318),
         )
     });
@@ -919,7 +919,7 @@ fn inl_ref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x80407318),
-                (87_i32 as u32),
+                (93_i32 as u32),
                 cstr(ctx, 0x80407318),
             )
         });

@@ -308,6 +308,7 @@ pub fn it_8026CD50<'a>(ctx: &'a Ctx, counts: Val<'a, i32>, mask: u64, weight: f6
     let mut counts = counts;
     let mut mask = mask;
     let mut weight = weight;
+    let mut spawner: RandomItemSpawner<'a> = fns::it_804A0E30(ctx);
     let mut p: Val<'a, i32> = null(ctx);
     let mut cnt: i32 = 0;
     let mut it_kind: i32 = 0;
@@ -333,17 +334,17 @@ pub fn it_8026CD50<'a>(ctx: &'a Ctx, counts: Val<'a, i32>, mask: u64, weight: f6
             mask = fns::__shr2u(ctx, mask, 1_i32);
         }
     }
-    fns::it_804A0E50(ctx).set_size((cnt as u8));
+    (Handle::cast::<ItemPickTable<'a>>((Handle::add(spawner, 1_i32)))).set_size((cnt as u8));
     let __t2 = Handle::cast::<Val<'a, u8>>(fns::HSD_MemAlloc(ctx, cnt.wrapping_mul(4_i32)));
     ({
-        let __t1 = fns::it_804A0E50(ctx).x4_ref();
+        let __t1 = (Handle::cast::<ItemPickTable<'a>>((Handle::add(spawner, 1_i32)))).x4_ref();
         item_kinds = __t1;
         __t1
     })
     .set(__t2);
     let __t4 = Handle::cast::<Val<'a, u16>>(fns::HSD_MemAlloc(ctx, cnt.wrapping_mul(4_i32)));
     ({
-        let __t3 = fns::it_804A0E50(ctx).xC_ref();
+        let __t3 = (Handle::cast::<ItemPickTable<'a>>((Handle::add(spawner, 1_i32)))).xC_ref();
         weights = __t3;
         __t3
     })

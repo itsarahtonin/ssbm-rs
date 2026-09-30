@@ -37,7 +37,7 @@ pub fn pl_80037B2C<'a>(ctx: &'a Ctx, arg0: plActionStats<'a>, h_player: i32, idx
         fns::__assert(
             ctx,
             cstr(ctx, 0x803bce74),
-            (24_i32 as u32),
+            (137_i32 as u32),
             cstr(ctx, 0x803bce74),
         )
     });
@@ -488,7 +488,7 @@ pub fn pl_80038144<'a>(
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803bce74),
-                        (0x155_i32 as u32),
+                        (126_i32 as u32),
                         cstr(ctx, 0x803bce74),
                     )
                 });
@@ -645,7 +645,7 @@ pub fn pl_80038628<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, kind: i32) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803bce74),
-            (0x1b7_i32 as u32),
+            (0x1a1_i32 as u32),
             cstr(ctx, 0x803bce74),
         )
     });

@@ -665,6 +665,14 @@ pub fn DVDLowBreak<'a>(ctx: &'a Ctx) -> i32 {
     return 1_i32;
 }
 
+pub fn DVDLowClearCallback<'a>(ctx: &'a Ctx) -> FnPtr<'a> {
+    let mut old: FnPtr<'a> = null(ctx);
+    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 1_i32)).set((0_i32 as u32));
+    old = statics::dolphin__dvd__dvdlow::Callback(ctx).get();
+    statics::dolphin__dvd__dvdlow::Callback(ctx).set(null::<FnPtr<'a>>(ctx));
+    return old;
+}
+
 pub fn __DVDLowSetWAType<'a>(ctx: &'a Ctx, r#type: u32, location: u32) {
     let __frame = ctx.stack_frame(0x18);
     let mut r#type = r#type;
@@ -959,6 +967,13 @@ pub fn register(ctx: &Ctx) {
         0x803378c4,
         |ctx| {
             Ret::put(DVDLowBreak(ctx), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
+        0x803378d8,
+        |ctx| {
+            Ret::put(DVDLowClearCallback(ctx), ctx);
         },
         Returns::Int,
     );

@@ -696,7 +696,7 @@ pub fn mnDiagram3_Create<'a>(ctx: &'a Ctx, arg0: i32) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803eec1c),
-                (0x271_i32 as u32),
+                (0x3fc_i32 as u32),
                 cstr(ctx, 0x803eec1c),
             )
         })
@@ -787,7 +787,7 @@ fn inl_HSD_JObjGetTranslationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803eec1c),
-            (0x24c_i32 as u32),
+            (0x3ee_i32 as u32),
             cstr(ctx, 0x803eec1c),
         )
     });
@@ -803,7 +803,7 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803eec1c),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803eec1c),
         )
     });
@@ -824,7 +824,7 @@ fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a: f64, y_
         fns::__assert(
             ctx,
             cstr(ctx, 0x803eec1c),
-            (0x213_i32 as u32),
+            (0x3b3_i32 as u32),
             cstr(ctx, 0x803eec1c),
         )
     });
@@ -977,7 +977,7 @@ fn inl_HSD_JObjGetTranslationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803eec1c),
-            (0x246_i32 as u32),
+            (0x3e1_i32 as u32),
             cstr(ctx, 0x803eec1c),
         )
     });
@@ -993,7 +993,7 @@ fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803eec1c),
-            (0x201_i32 as u32),
+            (0x3a4_i32 as u32),
             cstr(ctx, 0x803eec1c),
         )
     });
@@ -1016,7 +1016,7 @@ fn inl_HSD_JObjSetTranslateY_2<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803eec1c),
-            (0x213_i32 as u32),
+            (0x3b3_i32 as u32),
             cstr(ctx, 0x803eec1c),
         )
     });
@@ -1038,7 +1038,7 @@ fn inl_HSD_JObjGetTranslationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803eec1c),
-            (0x252_i32 as u32),
+            (0x3fb_i32 as u32),
             cstr(ctx, 0x803eec1c),
         )
     });
@@ -1054,7 +1054,7 @@ fn inl_HSD_JObjSetTranslateZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803eec1c),
-            (0x225_i32 as u32),
+            (0x3c2_i32 as u32),
             cstr(ctx, 0x803eec1c),
         )
     });
@@ -1167,7 +1167,7 @@ fn inl_HSD_JObjSetTranslateXWithMtxDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x
         fns::__assert(
             ctx,
             cstr(ctx, 0x803eec1c),
-            (0x20a_i32 as u32),
+            (0x3a4_i32 as u32),
             cstr(ctx, 0x803eec1c),
         )
     });
@@ -1202,7 +1202,7 @@ fn inl_HSD_JObjSetTranslateYWithMtxDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y
         fns::__assert(
             ctx,
             cstr(ctx, 0x803eec1c),
-            (0x21c_i32 as u32),
+            (0x3b3_i32 as u32),
             cstr(ctx, 0x803eec1c),
         )
     });
@@ -1221,7 +1221,7 @@ fn inl_HSD_JObjSetTranslateZWithMtxDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z
         fns::__assert(
             ctx,
             cstr(ctx, 0x803eec1c),
-            (0x22e_i32 as u32),
+            (0x3c2_i32 as u32),
             cstr(ctx, 0x803eec1c),
         )
     });
@@ -1297,7 +1297,13 @@ fn inl_mnDiagram3_SetupRows<'a>(
                         stat_idx = __t1;
                         __t1
                     }) as i32)
-                        .wrapping_add((type_idx as i32));
+                        .wrapping_add(
+                            (({
+                                let __t2 = type_idx;
+                                type_idx = __t2;
+                                __t2
+                            }) as i32),
+                        );
                     if val >= limit {
                         limit = val.wrapping_sub(limit);
                     } else {

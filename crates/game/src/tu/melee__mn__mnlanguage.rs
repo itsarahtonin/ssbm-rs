@@ -287,7 +287,7 @@ pub fn mnLanguage_8024C3C4<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803ef5a0),
-                (173_i32 as u32),
+                (0x163_i32 as u32),
                 cstr(ctx, 0x803ef5a0),
             )
         })

@@ -212,7 +212,7 @@ pub fn gm_SetupTitleDemo<'a>(ctx: &'a Ctx) {
         'c22: {
             count = stage_pool.at(fns::HSD_Randi(ctx, 8_i32)).get();
             cur_id = statics::melee__gm__gmopeningmode::gm_801BF694(ctx);
-            prev = ((cur_id as i32) & 255_i32);
+            prev = (((cur_id as i32) as u32).rotate_left(0) & 0xff) as i32;
             c = (fns::gm_801641CC(ctx, (count as u8)) as i32);
         }
         if !(c == prev) {

@@ -73,6 +73,31 @@ pub fn __assert<'a>(ctx: &'a Ctx, str: Val<'a, i8>, arg1: u32, arg2: Val<'a, i8>
     fns::HSD_Panic(ctx, str, arg1, cstr(ctx, 0x804d6010));
 }
 
+pub fn HSD_Panic<'a>(ctx: &'a Ctx, arg0: Val<'a, i8>, line: u32, arg2: Val<'a, i8>) {
+    let __frame = ctx.stack_frame(0x28);
+    let mut arg0 = arg0;
+    let mut line = line;
+    let mut arg2 = arg2;
+    if !Handle::is_null(statics::sysdolphin__baselib__debug::panicCallback(ctx).get()) {
+        let _ = fns::OSSaveContext(ctx, fns::HSD_Debug_804C2608(ctx).context());
+        fns::OSReport(
+            ctx,
+            cstr(ctx, 0x80407d78),
+            &[
+                VarArg::Int(Handle::addr(arg2)),
+                VarArg::Int(Handle::addr(arg0)),
+                VarArg::Int(line as u32),
+            ],
+        );
+        ctx.call_variadic::<_, ()>(
+            Handle::addr(statics::sysdolphin__baselib__debug::panicCallback(ctx).get()),
+            (fns::HSD_Debug_804C2608(ctx).context(),),
+            &[],
+        );
+    }
+    fns::OSPanic(ctx, arg0, (line as i32), arg2, &[]);
+}
+
 pub fn HSD_SetReportCallback<'a>(ctx: &'a Ctx, cb: FnPtr<'a>) {
     let mut cb = cb;
     statics::sysdolphin__baselib__debug::reportCallback(ctx).set(cb);
@@ -105,6 +130,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1, a2): (Val<'_, i8>, u32, Val<'_, i8>) = Args::take_all(ctx);
             Ret::put(__assert(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80388278,
+        |ctx| {
+            let (a0, a1, a2): (Val<'_, i8>, u32, Val<'_, i8>) = Args::take_all(ctx);
+            Ret::put(HSD_Panic(ctx, a0, a1, a2), ctx);
         },
         Returns::Nothing,
     );

@@ -7378,7 +7378,7 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80005524),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x80005524),
         )
     });
@@ -7408,7 +7408,7 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80005524),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x80005524),
         )
     });
@@ -7573,7 +7573,7 @@ fn inl_ref_INC<'a>(ctx: &'a Ctx, o: Addr<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x80005524),
-                (87_i32 as u32),
+                (93_i32 as u32),
                 cstr(ctx, 0x80005524),
             )
         });
@@ -7589,7 +7589,7 @@ fn inl_HSD_JObjAddTranslationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80005524),
-            (0x297_i32 as u32),
+            (0x44e_i32 as u32),
             cstr(ctx, 0x80005524),
         )
     });
@@ -7614,7 +7614,7 @@ fn inl_HSD_JObjAddTranslationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80005524),
-            (0x2a0_i32 as u32),
+            (0x45a_i32 as u32),
             cstr(ctx, 0x80005524),
         )
     });
@@ -7639,7 +7639,7 @@ fn inl_HSD_JObjAddTranslationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80005524),
-            (0x2b2_i32 as u32),
+            (0x466_i32 as u32),
             cstr(ctx, 0x80005524),
         )
     });
@@ -7668,7 +7668,7 @@ fn inl_ref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x80005524),
-                (87_i32 as u32),
+                (93_i32 as u32),
                 cstr(ctx, 0x80005524),
             )
         });

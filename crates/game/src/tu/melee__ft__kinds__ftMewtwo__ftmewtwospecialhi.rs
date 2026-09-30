@@ -412,7 +412,11 @@ pub fn ftMt_SpecialHi_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     stick_y = (fp).input().lstick().get(0_i32).y();
     stick_x = fp::fmuls(stick_x, stick_x);
     stick_y = fp::fmuls(stick_y, stick_y);
-    mewtwoAttrs = Handle::cast::<_ftMewtwoAttributes<'a>>(inl_getFtSpecialAttrsD(ctx, fp));
+    mewtwoAttrs = {
+        let __t1 = Handle::cast::<_ftMewtwoAttributes<'a>>(inl_getFtSpecialAttrsD(ctx, fp));
+        mewtwoAttrs = __t1;
+        __t1
+    };
     sqrt_stick = inl_sqrtf(ctx, fp::fadds(stick_x, stick_y));
     if sqrt_stick > fp::frsp(1_i32 as f64) {
         sqrt_stick = fp::frsp(1_i32 as f64);
@@ -481,7 +485,11 @@ pub fn ftMt_SpecialAirHi_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     stick_y = (fp).input().lstick().get(0_i32).y();
     stick_x = fp::fmuls(stick_x, stick_x);
     stick_y = fp::fmuls(stick_y, stick_y);
-    mewtwoAttrs = Handle::cast::<_ftMewtwoAttributes<'a>>(inl_getFtSpecialAttrsD(ctx, fp));
+    mewtwoAttrs = {
+        let __t1 = Handle::cast::<_ftMewtwoAttributes<'a>>(inl_getFtSpecialAttrsD(ctx, fp));
+        mewtwoAttrs = __t1;
+        __t1
+    };
     sqrt_stick = inl_sqrtf(ctx, fp::fadds(stick_x, stick_y));
     if sqrt_stick > fp::frsp(1_i32 as f64) {
         sqrt_stick = fp::frsp(1_i32 as f64);
@@ -516,9 +524,9 @@ pub fn ftMt_SpecialAirHi_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             .SpecialHi()
             .set_stickX(fp::frsp(0_i32 as f64));
         sqrt_stick = {
-            let __t1 = fp::frsp(1_i32 as f64);
-            (fp).mv().mt().SpecialHi().set_stickY(__t1);
-            __t1
+            let __t2 = fp::frsp(1_i32 as f64);
+            (fp).mv().mt().SpecialHi().set_stickY(__t2);
+            __t2
         };
     }
     (fp).self_vel().set_x(fp::fmuls(

@@ -96,7 +96,7 @@ pub fn HSD_DevComUnlink<'a>(ctx: &'a Ctx, dc: HSD_DevCom<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x804083c0),
-                (73_i32 as u32),
+                (110_i32 as u32),
                 cstr(ctx, 0x804083c0),
             )
         });
@@ -131,7 +131,7 @@ pub fn HSD_DevComStdCallback<'a>(ctx: &'a Ctx, request: ARQRequest<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x804083c0),
-                (88_i32 as u32),
+                (165_i32 as u32),
                 cstr(ctx, 0x804083c0),
             )
         });
@@ -489,7 +489,7 @@ pub fn HSD_DevComDVDStdCallback<'a>(ctx: &'a Ctx, request: ARQRequest<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x804083c0),
-                (244_i32 as u32),
+                (0x158_i32 as u32),
                 cstr(ctx, 0x804083c0),
             )
         });
@@ -634,7 +634,7 @@ pub fn HSD_DevComDVDCallback<'a>(ctx: &'a Ctx, result: i32, unused: DVDFileInfo<
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x804083c0),
-                (0x13a_i32 as u32),
+                (0x18c_i32 as u32),
                 cstr(ctx, 0x804083c0),
             )
         });
@@ -645,7 +645,7 @@ pub fn HSD_DevComDVDCallback<'a>(ctx: &'a Ctx, result: i32, unused: DVDFileInfo<
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x804083c0),
-                (0x13b_i32 as u32),
+                (0x18d_i32 as u32),
                 cstr(ctx, 0x804083c0),
             )
         });
@@ -924,7 +924,7 @@ pub fn HSD_DevComRequest<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x804083c0),
-            (0x1b5_i32 as u32),
+            (0x1ed_i32 as u32),
             cstr(ctx, 0x804083c0),
         )
     });
@@ -935,7 +935,7 @@ pub fn HSD_DevComRequest<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x804083c0),
-            (0x1b8_i32 as u32),
+            (0x1ee_i32 as u32),
             cstr(ctx, 0x804083c0),
         )
     });
@@ -945,7 +945,7 @@ pub fn HSD_DevComRequest<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x804083c0),
-            (0x1ba_i32 as u32),
+            (0x1ef_i32 as u32),
             cstr(ctx, 0x804083c0),
         )
     });
@@ -955,7 +955,7 @@ pub fn HSD_DevComRequest<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x804083c0),
-            (0x1bb_i32 as u32),
+            (0x1f0_i32 as u32),
             cstr(ctx, 0x804083c0),
         )
     });
@@ -965,7 +965,7 @@ pub fn HSD_DevComRequest<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x804083c0),
-            (0x1bc_i32 as u32),
+            (0x1f1_i32 as u32),
             cstr(ctx, 0x804083c0),
         )
     });
@@ -975,7 +975,7 @@ pub fn HSD_DevComRequest<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x804083c0),
-            (0x1bd_i32 as u32),
+            (0x1f2_i32 as u32),
             cstr(ctx, 0x804083c0),
         )
     });
@@ -1164,7 +1164,7 @@ fn inl_HSD_DevComUnlink_unfused<'a>(ctx: &'a Ctx, dc: HSD_DevCom<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x804083c0),
-                (73_i32 as u32),
+                (110_i32 as u32),
                 cstr(ctx, 0x804083c0),
             )
         });
@@ -1612,7 +1612,7 @@ fn inl_HSD_DevComStdCallback_unfused<'a>(ctx: &'a Ctx, request: ARQRequest<'a>) 
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x804083c0),
-                (88_i32 as u32),
+                (165_i32 as u32),
                 cstr(ctx, 0x804083c0),
             )
         });
@@ -1922,7 +1922,7 @@ fn inl_HSD_DevComDVDStdCallback_unfused<'a>(ctx: &'a Ctx, request: ARQRequest<'a
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x804083c0),
-                (244_i32 as u32),
+                (0x158_i32 as u32),
                 cstr(ctx, 0x804083c0),
             )
         });

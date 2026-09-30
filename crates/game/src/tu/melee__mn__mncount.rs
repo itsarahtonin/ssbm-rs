@@ -1418,7 +1418,7 @@ fn inl_mnCount_AllocUserData_unfused<'a>(ctx: &'a Ctx) -> MnCountData<'a> {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803efa88),
-                (0x317_i32 as u32),
+                (0x512_i32 as u32),
                 cstr(ctx, 0x803efa88),
             )
         })

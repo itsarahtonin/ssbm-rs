@@ -159,7 +159,7 @@ pub fn it_80277F90<'a>(
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803f1f94),
-                    (143_i32 as u32),
+                    (221_i32 as u32),
                     cstr(ctx, 0x803f1f94),
                 )
             });
@@ -314,7 +314,7 @@ pub fn it_80278108<'a>(ctx: &'a Ctx, item: Item<'a>, mobj: HSD_MObj<'a>, texp: H
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803f1f94),
-                    (252_i32 as u32),
+                    (0x144_i32 as u32),
                     cstr(ctx, 0x803f1f94),
                 )
             });
@@ -342,7 +342,7 @@ pub fn it_80278108<'a>(ctx: &'a Ctx, item: Item<'a>, mobj: HSD_MObj<'a>, texp: H
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803f1f94),
-                    (0x10f_i32 as u32),
+                    (0x152_i32 as u32),
                     cstr(ctx, 0x803f1f94),
                 )
             });

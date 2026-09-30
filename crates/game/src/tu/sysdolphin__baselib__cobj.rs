@@ -397,7 +397,11 @@ pub fn setupTopHalfCamera<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> i32 {
     left = (cobj).viewport().xmin();
     right = (cobj).viewport().xmax();
     top = (cobj).viewport().ymin();
-    bottom = (cobj).viewport().ymax();
+    bottom = {
+        let __t1 = (cobj).viewport().ymax();
+        bottom = __t1;
+        __t1
+    };
     bottom = (if bottom < fp::frsp(((rmode).efbHeight() as i32) as f64) {
         bottom
     } else {
@@ -745,7 +749,7 @@ pub fn HSD_CObjGetInterestWObj<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> HSD_WObj
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406224),
-            (0x20d_i32 as u32),
+            (0x295_i32 as u32),
             cstr(ctx, 0x80406224),
         )
     });
@@ -761,7 +765,7 @@ pub fn HSD_CObjGetEyePositionWObj<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> HSD_W
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406224),
-            (0x219_i32 as u32),
+            (0x2ad_i32 as u32),
             cstr(ctx, 0x80406224),
         )
     });
@@ -778,7 +782,7 @@ pub fn HSD_CObjGetInterest<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, interest: Vec<'
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406224),
-            (0x225_i32 as u32),
+            (0x2c5_i32 as u32),
             cstr(ctx, 0x80406224),
         )
     });
@@ -799,7 +803,7 @@ pub fn HSD_CObjSetInterest<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, interest: Vec<'
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406224),
-            (0x22b_i32 as u32),
+            (0x2d1_i32 as u32),
             cstr(ctx, 0x80406224),
         )
     });
@@ -820,7 +824,7 @@ pub fn HSD_CObjGetEyePosition<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, position: Ve
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406224),
-            (0x231_i32 as u32),
+            (0x2dd_i32 as u32),
             cstr(ctx, 0x80406224),
         )
     });
@@ -841,7 +845,7 @@ pub fn HSD_CObjSetEyePosition<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, position: Ve
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406224),
-            (0x237_i32 as u32),
+            (0x2e9_i32 as u32),
             cstr(ctx, 0x80406224),
         )
     });
@@ -892,7 +896,7 @@ pub fn HSD_CObjGetEyeDistance<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> f64 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406224),
-            (0x259_i32 as u32),
+            (0x327_i32 as u32),
             cstr(ctx, 0x80406224),
         )
     });
@@ -902,7 +906,7 @@ pub fn HSD_CObjGetEyeDistance<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> f64 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406224),
-            (0x25a_i32 as u32),
+            (0x328_i32 as u32),
             cstr(ctx, 0x80406224),
         )
     });
@@ -1761,7 +1765,7 @@ pub fn HSD_CObjAlloc<'a>(ctx: &'a Ctx) -> HSD_CObj<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406224),
-            (0x4e4_i32 as u32),
+            (0x7a2_i32 as u32),
             cstr(ctx, 0x80406224),
         )
     });
@@ -1834,7 +1838,7 @@ pub fn CObjLoad<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, desc: HSD_CObjDesc<'a>) ->
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x80406224),
-                    (0x512_i32 as u32),
+                    (0x7d0_i32 as u32),
                     cstr(ctx, 0x80406224),
                 )
             });
@@ -1878,7 +1882,7 @@ pub fn HSD_CObjLoadDesc<'a>(ctx: &'a Ctx, desc: HSD_CObjDesc<'a>) -> HSD_CObj<'a
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x80406224),
-                    (0x52c_i32 as u32),
+                    (0x7f7_i32 as u32),
                     cstr(ctx, 0x80406224),
                 )
             });
@@ -2104,7 +2108,7 @@ fn inl_HSD_CObjGetInterestWObj_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> 
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406224),
-            (0x20d_i32 as u32),
+            (0x295_i32 as u32),
             cstr(ctx, 0x80406224),
         )
     });
@@ -2119,7 +2123,7 @@ fn inl_HSD_CObjGetEyePositionWObj_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) 
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406224),
-            (0x219_i32 as u32),
+            (0x2ad_i32 as u32),
             cstr(ctx, 0x80406224),
         )
     });
@@ -2135,7 +2139,7 @@ fn inl_HSD_CObjGetEyePosition_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, posi
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406224),
-            (0x231_i32 as u32),
+            (0x2dd_i32 as u32),
             cstr(ctx, 0x80406224),
         )
     });
@@ -2155,7 +2159,7 @@ fn inl_HSD_CObjGetInterest_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, interes
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406224),
-            (0x225_i32 as u32),
+            (0x2c5_i32 as u32),
             cstr(ctx, 0x80406224),
         )
     });
@@ -2199,7 +2203,7 @@ fn inl_HSD_CObjGetEyePositionWObj<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> HSD_W
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406224),
-            (0x219_i32 as u32),
+            (0x2ad_i32 as u32),
             cstr(ctx, 0x80406224),
         )
     });
@@ -2215,7 +2219,7 @@ fn inl_HSD_CObjGetEyePosition<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, position: Ve
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406224),
-            (0x231_i32 as u32),
+            (0x2dd_i32 as u32),
             cstr(ctx, 0x80406224),
         )
     });
@@ -2230,7 +2234,7 @@ fn inl_HSD_CObjGetInterestWObj<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> HSD_WObj
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406224),
-            (0x20d_i32 as u32),
+            (0x295_i32 as u32),
             cstr(ctx, 0x80406224),
         )
     });
@@ -2246,7 +2250,7 @@ fn inl_HSD_CObjGetInterest<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, interest: Vec<'
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406224),
-            (0x225_i32 as u32),
+            (0x2c5_i32 as u32),
             cstr(ctx, 0x80406224),
         )
     });
@@ -2671,7 +2675,7 @@ fn inl_HSD_CObjAlloc_unfused<'a>(ctx: &'a Ctx) -> HSD_CObj<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406224),
-            (0x4e4_i32 as u32),
+            (0x7a2_i32 as u32),
             cstr(ctx, 0x80406224),
         )
     });

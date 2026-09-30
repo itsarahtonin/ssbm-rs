@@ -3617,7 +3617,7 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b9880),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803b9880),
         )
     });
@@ -3646,7 +3646,7 @@ fn inl_HSD_JObjGetMtxPtr_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b9880),
-            (0x2bb_i32 as u32),
+            (0x478_i32 as u32),
             cstr(ctx, 0x803b9880),
         )
     });

@@ -557,7 +557,7 @@ fn inl_pl_CalculateAverage_unfused<'a>(ctx: &'a Ctx, val: f64, total: f64) -> f6
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d7f80),
-            (8_i32 as u32),
+            (16_i32 as u32),
             cstr(ctx, 0x804d7f80),
         )
     });

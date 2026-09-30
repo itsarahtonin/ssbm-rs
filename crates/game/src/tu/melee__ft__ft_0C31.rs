@@ -564,7 +564,7 @@ fn inl_HSD_JObjGetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d3c84),
-            (0x1c8_i32 as u32),
+            (0x337_i32 as u32),
             cstr(ctx, 0x804d3c84),
         )
     });
@@ -574,7 +574,7 @@ fn inl_HSD_JObjGetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d3c84),
-            (0x1c9_i32 as u32),
+            (0x338_i32 as u32),
             cstr(ctx, 0x804d3c84),
         )
     });
@@ -590,7 +590,7 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d3c84),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x804d3c84),
         )
     });
@@ -612,7 +612,7 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d3c84),
-            (0x17e_i32 as u32),
+            (0x2f8_i32 as u32),
             cstr(ctx, 0x804d3c84),
         )
     });
@@ -622,7 +622,7 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d3c84),
-            (0x17f_i32 as u32),
+            (0x2f9_i32 as u32),
             cstr(ctx, 0x804d3c84),
         )
     });
@@ -650,7 +650,7 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d3c84),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x804d3c84),
         )
     });
@@ -672,7 +672,7 @@ fn inl_HSD_JObjSetScale<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d3c84),
-            (0x17e_i32 as u32),
+            (0x2f8_i32 as u32),
             cstr(ctx, 0x804d3c84),
         )
     });
@@ -682,7 +682,7 @@ fn inl_HSD_JObjSetScale<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d3c84),
-            (0x17f_i32 as u32),
+            (0x2f9_i32 as u32),
             cstr(ctx, 0x804d3c84),
         )
     });
@@ -705,7 +705,7 @@ fn inl_HSD_JObjSetRotation<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate: Quatern
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d3c84),
-            (0x114_i32 as u32),
+            (0x26a_i32 as u32),
             cstr(ctx, 0x804d3c84),
         )
     });
@@ -715,7 +715,7 @@ fn inl_HSD_JObjSetRotation<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate: Quatern
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d3c84),
-            (0x115_i32 as u32),
+            (0x26b_i32 as u32),
             cstr(ctx, 0x804d3c84),
         )
     });
@@ -738,7 +738,7 @@ fn inl_HSD_JObjSetTranslate<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d3c84),
-            (0x1e1_i32 as u32),
+            (0x394_i32 as u32),
             cstr(ctx, 0x804d3c84),
         )
     });
@@ -748,7 +748,7 @@ fn inl_HSD_JObjSetTranslate<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d3c84),
-            (0x1e2_i32 as u32),
+            (0x395_i32 as u32),
             cstr(ctx, 0x804d3c84),
         )
     });
@@ -785,7 +785,7 @@ fn inl_HSD_JObjSetTranslateWithMtxDirtyOutOfLine<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d3c84),
-            (0x1f7_i32 as u32),
+            (0x394_i32 as u32),
             cstr(ctx, 0x804d3c84),
         )
     });
@@ -795,7 +795,7 @@ fn inl_HSD_JObjSetTranslateWithMtxDirtyOutOfLine<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d3c84),
-            (0x1f8_i32 as u32),
+            (0x395_i32 as u32),
             cstr(ctx, 0x804d3c84),
         )
     });

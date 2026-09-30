@@ -420,7 +420,7 @@ fn inl_HSD_JObjGetRotationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803f9260),
-            (0x178_i32 as u32),
+            (0x2e9_i32 as u32),
             cstr(ctx, 0x803f9260),
         )
     });
@@ -436,7 +436,7 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803f9260),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803f9260),
         )
     });
@@ -458,7 +458,7 @@ fn inl_HSD_JObjSetRotationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803f9260),
-            (0x151_i32 as u32),
+            (0x2a9_i32 as u32),
             cstr(ctx, 0x803f9260),
         )
     });
@@ -468,7 +468,7 @@ fn inl_HSD_JObjSetRotationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803f9260),
-            (0x152_i32 as u32),
+            (0x2aa_i32 as u32),
             cstr(ctx, 0x803f9260),
         )
     });
@@ -514,7 +514,7 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803f9260),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803f9260),
         )
     });
@@ -535,7 +535,7 @@ fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a: 
         fns::__assert(
             ctx,
             cstr(ctx, 0x803f9260),
-            (0x13d_i32 as u32),
+            (0x294_i32 as u32),
             cstr(ctx, 0x803f9260),
         )
     });
@@ -545,7 +545,7 @@ fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a: 
         fns::__assert(
             ctx,
             cstr(ctx, 0x803f9260),
-            (0x13e_i32 as u32),
+            (0x295_i32 as u32),
             cstr(ctx, 0x803f9260),
         )
     });

@@ -221,7 +221,7 @@ pub fn ftWalkCommon_800DFEC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg_cb: FnPtr
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803c7108),
-                        (160_i32 as u32),
+                        (71_i32 as u32),
                         cstr(ctx, 0x803c7108),
                     )
                 });

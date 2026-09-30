@@ -133,7 +133,7 @@ pub fn gmRegSetupEnemyColorTable<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x803d79f0),
-                                (76_i32 as u32),
+                                (218_i32 as u32),
                                 cstr(ctx, 0x803d79f0),
                             )
                         })

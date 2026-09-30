@@ -65,7 +65,7 @@ pub fn grAnime_801C6620<'a>(ctx: &'a Ctx, arg0: HSD_PObj<'a>, arg1: HSD_ShapeAni
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803e09e8),
-                        (95_i32 as u32),
+                        (38_i32 as u32),
                         cstr(ctx, 0x803e09e8),
                     )
                 });
@@ -695,7 +695,7 @@ pub fn grAnime_801C752C<'a>(
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803e09e8),
-                        (0x2b3_i32 as u32),
+                        (0x36f_i32 as u32),
                         cstr(ctx, 0x803e09e8),
                     )
                 })
@@ -1072,7 +1072,7 @@ pub fn grAnime_801C7C1C<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x803e09e8),
-            (0x387_i32 as u32),
+            (0x4de_i32 as u32),
             cstr(ctx, 0x803e09e8),
         )
     });
@@ -1156,7 +1156,7 @@ pub fn grAnime_801C7C1C<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x803e09e8),
-            (0x3ac_i32 as u32),
+            (0x148_i32 as u32),
             cstr(ctx, 0x803e09e8),
         )
     });
@@ -1281,7 +1281,7 @@ pub fn grAnime_801C8138<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: i
         fns::__assert(
             ctx,
             cstr(ctx, 0x803e09e8),
-            (0x3e9_i32 as u32),
+            (0x556_i32 as u32),
             cstr(ctx, 0x803e09e8),
         )
     });
@@ -1321,7 +1321,7 @@ pub fn grAnime_801C8138<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: i
         fns::__assert(
             ctx,
             cstr(ctx, 0x803e09e8),
-            (0x408_i32 as u32),
+            (0x148_i32 as u32),
             cstr(ctx, 0x803e09e8),
         )
     });
@@ -1491,7 +1491,7 @@ pub fn grAnime_801C86D4<'a>(ctx: &'a Ctx, arg0: i32, arg1: HSD_GObj<'a>, arg2: i
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803e09e8),
-                (0x46f_i32 as u32),
+                (0x602_i32 as u32),
                 cstr(ctx, 0x803e09e8),
             )
         });
@@ -1527,7 +1527,7 @@ pub fn grAnime_801C8780<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x803e09e8),
-            (0x47f_i32 as u32),
+            (0x617_i32 as u32),
             cstr(ctx, 0x803e09e8),
         )
     });
@@ -1984,7 +1984,7 @@ fn inl_grAnime_801C6F50_wrapped_unfused<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x803e09e8),
-            (0x255_i32 as u32),
+            (0x33a_i32 as u32),
             cstr(ctx, 0x803e09e8),
         )
     });

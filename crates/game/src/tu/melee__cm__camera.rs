@@ -888,7 +888,7 @@ pub fn Camera_80029CF8<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b73b8),
-            (0x357_i32 as u32),
+            (0x4fa_i32 as u32),
             cstr(ctx, 0x803b73b8),
         )
     });
@@ -903,7 +903,7 @@ pub fn Camera_80029CF8<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b73b8),
-            (0x359_i32 as u32),
+            (0x4fb_i32 as u32),
             cstr(ctx, 0x803b73b8),
         )
     });
@@ -948,7 +948,7 @@ pub fn Camera_80029CF8<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b73b8),
-            (0x36d_i32 as u32),
+            (0x508_i32 as u32),
             cstr(ctx, 0x803b73b8),
         )
     });
@@ -963,7 +963,7 @@ pub fn Camera_80029CF8<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b73b8),
-            (0x36f_i32 as u32),
+            (0x509_i32 as u32),
             cstr(ctx, 0x803b73b8),
         )
     });
@@ -5068,7 +5068,7 @@ pub fn Camera_SetUpPauseCamera<'a>(ctx: &'a Ctx, pauserSlot: i8, pauserId: i8, a
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803b73b8),
-                    (0xda8_i32 as u32),
+                    (0xedf_i32 as u32),
                     cstr(ctx, 0x803b73b8),
                 )
             });

@@ -46,7 +46,7 @@ pub fn HSD_MemAlloc<'a>(ctx: &'a Ctx, size: i32) -> Addr<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80407308),
-            (23_i32 as u32),
+            (52_i32 as u32),
             cstr(ctx, 0x80407308),
         )
     });

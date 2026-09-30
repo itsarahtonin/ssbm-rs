@@ -340,7 +340,7 @@ pub fn grBigBlueRoute_8020BC68<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b83e0),
-            (0x173_i32 as u32),
+            (0x1c4_i32 as u32),
             cstr(ctx, 0x803b83e0),
         )
     });
@@ -515,7 +515,7 @@ pub fn grBigBlueRoute_8020C238<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b83e0),
-            (0x1fa_i32 as u32),
+            (0x2a2_i32 as u32),
             cstr(ctx, 0x803b83e0),
         )
     });
@@ -619,7 +619,7 @@ pub fn grBigBlueRoute_8020C530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b83e0),
-            (0x232_i32 as u32),
+            (0x2e5_i32 as u32),
             cstr(ctx, 0x803b83e0),
         )
     });
@@ -1577,7 +1577,7 @@ pub fn grBigBlueRoute_8020DAB4<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b83e0),
-            (0x440_i32 as u32),
+            (0x586_i32 as u32),
             cstr(ctx, 0x803b83e0),
         )
     });
@@ -1590,7 +1590,7 @@ pub fn grBigBlueRoute_8020DAB4<'a>(
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b83e0),
-                (0x443_i32 as u32),
+                (0x587_i32 as u32),
                 cstr(ctx, 0x803b83e0),
             )
         });
@@ -1616,7 +1616,7 @@ pub fn grBigBlueRoute_8020DAB4<'a>(
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803b83e0),
-                        (0x450_i32 as u32),
+                        (0x59a_i32 as u32),
                         cstr(ctx, 0x803b83e0),
                     )
                 });
@@ -1629,7 +1629,7 @@ pub fn grBigBlueRoute_8020DAB4<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x803b83e0),
-                                (0x455_i32 as u32),
+                                (0x59d_i32 as u32),
                                 cstr(ctx, 0x803b83e0),
                             )
                         });
@@ -1694,7 +1694,7 @@ pub fn grBigBlueRoute_8020DE48<'a>(ctx: &'a Ctx) -> DynamicModelDesc<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b83e0),
-            (0x48c_i32 as u32),
+            (0x5d7_i32 as u32),
             cstr(ctx, 0x803b83e0),
         )
     });
@@ -1769,7 +1769,7 @@ fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, tran
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b83e0),
-            (0x237_i32 as u32),
+            (0x3d3_i32 as u32),
             cstr(ctx, 0x803b83e0),
         )
     });
@@ -1779,7 +1779,7 @@ fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, tran
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b83e0),
-            (0x238_i32 as u32),
+            (0x3d4_i32 as u32),
             cstr(ctx, 0x803b83e0),
         )
     });
@@ -1795,7 +1795,7 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b83e0),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803b83e0),
         )
     });
@@ -1817,7 +1817,7 @@ fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f6
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b83e0),
-            (0x201_i32 as u32),
+            (0x3a4_i32 as u32),
             cstr(ctx, 0x803b83e0),
         )
     });
@@ -1840,7 +1840,7 @@ fn inl_HSD_JObjSetTranslateY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f6
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b83e0),
-            (0x213_i32 as u32),
+            (0x3b3_i32 as u32),
             cstr(ctx, 0x803b83e0),
         )
     });
@@ -1863,7 +1863,7 @@ fn inl_HSD_JObjSetScaleX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b83e0),
-            (0x192_i32 as u32),
+            (0x308_i32 as u32),
             cstr(ctx, 0x803b83e0),
         )
     });
@@ -1886,7 +1886,7 @@ fn inl_HSD_JObjSetScaleY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b83e0),
-            (0x1a4_i32 as u32),
+            (0x317_i32 as u32),
             cstr(ctx, 0x803b83e0),
         )
     });
@@ -1909,7 +1909,7 @@ fn inl_HSD_JObjSetScaleZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b83e0),
-            (0x1b6_i32 as u32),
+            (0x326_i32 as u32),
             cstr(ctx, 0x803b83e0),
         )
     });
@@ -1942,7 +1942,7 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b83e0),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803b83e0),
         )
     });
@@ -1964,7 +1964,7 @@ fn inl_HSD_JObjSetRotationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b83e0),
-            (0x129_i32 as u32),
+            (0x27f_i32 as u32),
             cstr(ctx, 0x803b83e0),
         )
     });
@@ -1974,7 +1974,7 @@ fn inl_HSD_JObjSetRotationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b83e0),
-            (0x12a_i32 as u32),
+            (0x280_i32 as u32),
             cstr(ctx, 0x803b83e0),
         )
     });
@@ -1997,7 +1997,7 @@ fn inl_HSD_JObjSetRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b83e0),
-            (0x13d_i32 as u32),
+            (0x294_i32 as u32),
             cstr(ctx, 0x803b83e0),
         )
     });
@@ -2007,7 +2007,7 @@ fn inl_HSD_JObjSetRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b83e0),
-            (0x13e_i32 as u32),
+            (0x295_i32 as u32),
             cstr(ctx, 0x803b83e0),
         )
     });
@@ -2030,7 +2030,7 @@ fn inl_HSD_JObjSetRotationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b83e0),
-            (0x151_i32 as u32),
+            (0x2a9_i32 as u32),
             cstr(ctx, 0x803b83e0),
         )
     });
@@ -2040,7 +2040,7 @@ fn inl_HSD_JObjSetRotationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b83e0),
-            (0x152_i32 as u32),
+            (0x2aa_i32 as u32),
             cstr(ctx, 0x803b83e0),
         )
     });
@@ -2111,6 +2111,7 @@ fn inl_grBigBlueRoute_SpawnRoute<'a>(
         }
         (gp).u().car().set_x10A((new_timer as i16));
     }
+    if !Handle::is_null(gobj) {}
     if route_idx != 1_i32.wrapping_neg() {
         let mut offset: i32 = ((route_idx as u32).wrapping_mul(44_u32) as i32);
         let mut re: RouteEntry<'a> = (Handle::cast::<RouteEntry<'a>>(
@@ -2228,7 +2229,7 @@ fn inl_grBigBlueRoute_SpawnRoute<'a>(
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803b83e0),
-                            (0x2a1_i32 as u32),
+                            (0x385_i32 as u32),
                             cstr(ctx, 0x803b83e0),
                         )
                     });
@@ -2288,7 +2289,7 @@ fn inl_HSD_JObjSetTranslate<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b83e0),
-            (0x1e1_i32 as u32),
+            (0x394_i32 as u32),
             cstr(ctx, 0x803b83e0),
         )
     });
@@ -2298,7 +2299,7 @@ fn inl_HSD_JObjSetTranslate<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b83e0),
-            (0x1e2_i32 as u32),
+            (0x395_i32 as u32),
             cstr(ctx, 0x803b83e0),
         )
     });

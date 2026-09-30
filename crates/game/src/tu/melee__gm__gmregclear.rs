@@ -1419,7 +1419,7 @@ fn inl_HSD_JObjGetScaleX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b7c20),
-            (0x1cf_i32 as u32),
+            (0x36b_i32 as u32),
             cstr(ctx, 0x803b7c20),
         )
     });
@@ -1434,7 +1434,7 @@ fn inl_HSD_JObjGetScaleY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b7c20),
-            (0x1d5_i32 as u32),
+            (0x378_i32 as u32),
             cstr(ctx, 0x803b7c20),
         )
     });

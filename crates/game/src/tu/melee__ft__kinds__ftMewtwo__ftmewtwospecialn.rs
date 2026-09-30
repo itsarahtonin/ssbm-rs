@@ -198,8 +198,16 @@ pub fn ftMt_SpecialN_ReleaseShadowBall<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut mewtwoAttrs: _ftMewtwoAttributes<'a> = null(ctx);
     let mut shadowBallGObj: HSD_GObj<'a> = null(ctx);
     let mut facingDir: f64 = 0.0;
-    fp = inl_getFighter_unfused(ctx, gobj);
-    mewtwoAttrs = Handle::cast::<_ftMewtwoAttributes<'a>>(inl_getFtSpecialAttrsD_unfused(ctx, fp));
+    fp = {
+        let __t1 = inl_getFighter_unfused(ctx, gobj);
+        fp = __t1;
+        __t1
+    };
+    mewtwoAttrs = {
+        let __t2 = Handle::cast::<_ftMewtwoAttributes<'a>>(inl_getFtSpecialAttrsD_unfused(ctx, fp));
+        mewtwoAttrs = __t2;
+        __t2
+    };
     if ((fp).cmd_vars().at(1_i32).get() == 1_u32)
         && (!Handle::is_null((fp).u().mt().x2230_shadowHeldGObj()))
     {
@@ -222,7 +230,11 @@ pub fn ftMt_SpecialN_ReleaseShadowBall<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         inl_ftMewtwo_SpecialN_SetRecoil_unfused(ctx, gobj);
         (fp).u().mt().set_x2234_shadowBallCharge(0_i32);
         if !Handle::is_null(gobj) {
-            temp_fp = inl_getFighter_unfused(ctx, gobj);
+            temp_fp = {
+                let __t3 = inl_getFighter_unfused(ctx, gobj);
+                temp_fp = __t3;
+                __t3
+            };
             if !Handle::is_null((temp_fp).u().mt().x2230_shadowHeldGObj()) {
                 (temp_fp)
                     .u()
@@ -230,7 +242,11 @@ pub fn ftMt_SpecialN_ReleaseShadowBall<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     .set_x2230_shadowHeldGObj(null::<HSD_GObj<'a>>(ctx));
             }
             if !Handle::is_null(gobj) {
-                fp2 = inl_getFighter_unfused(ctx, gobj);
+                fp2 = {
+                    let __t4 = inl_getFighter_unfused(ctx, gobj);
+                    fp2 = __t4;
+                    __t4
+                };
                 if !Handle::is_null((fp2).u().mt().x2238_shadowBallGObj()) {
                     fns::efLib_DestroyAll(ctx, gobj);
                     (fp2)

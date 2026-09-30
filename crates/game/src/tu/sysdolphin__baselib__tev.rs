@@ -705,7 +705,7 @@ pub fn HSD_Channel2Num<'a>(ctx: &'a Ctx, chan: i32) -> i32 {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x80405b98),
-                    (0x119_i32 as u32),
+                    (0x290_i32 as u32),
                     cstr(ctx, 0x80405b98),
                 )
             });
@@ -794,7 +794,7 @@ pub fn HSD_Index2TevStage<'a>(ctx: &'a Ctx, idx: i32) -> i32 {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x80405b98),
-                    (0x142_i32 as u32),
+                    (0x2c5_i32 as u32),
                     cstr(ctx, 0x80405b98),
                 )
             });
@@ -883,7 +883,7 @@ pub fn HSD_TevStage2Index<'a>(ctx: &'a Ctx, stage: i32) -> i32 {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x80405b98),
-                    (0x16f_i32 as u32),
+                    (0x2fa_i32 as u32),
                     cstr(ctx, 0x80405b98),
                 )
             });
@@ -972,7 +972,7 @@ pub fn HSD_TevStage2Num<'a>(ctx: &'a Ctx, stage: i32) -> i32 {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x80405b98),
-                    (0x19b_i32 as u32),
+                    (0x319_i32 as u32),
                     cstr(ctx, 0x80405b98),
                 )
             });
@@ -1092,7 +1092,7 @@ pub fn HSD_TexCoordID2Num<'a>(ctx: &'a Ctx, id: i32) -> i32 {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x80405b98),
-                    (0x1d3_i32 as u32),
+                    (0x3f2_i32 as u32),
                     cstr(ctx, 0x80405b98),
                 )
             });

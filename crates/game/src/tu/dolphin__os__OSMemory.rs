@@ -46,8 +46,34 @@ pub fn OnReset<'a>(ctx: &'a Ctx, r#final: i32) -> i32 {
     return 1_i32;
 }
 
+pub fn MEMIntrruptHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'a>) {
+    let __frame = ctx.stack_frame(0x8);
+    let mut interrupt = interrupt;
+    let mut context = context;
+    let mut cause: u32 =
+        ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc004000_u32 as u32)), 15_i32)).get() as u32);
+    let mut addr: u32 =
+        (((shl_i32(
+            (((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc004000_u32 as u32)), 18_i32)).get()
+                as i32)
+                & 0x3ff_i32),
+            (16_i32 as u32),
+        )) | ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc004000_u32 as u32)), 17_i32)).get()
+            as i32)) as u32);
+    (Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc004000_u32 as u32)), 16_i32)).set((0_i32 as u16));
+    if !Handle::is_null(fns::OSErrorTable(ctx).at(15_i32).get()) {
+        ctx.call_variadic::<_, ()>(
+            Handle::addr(fns::OSErrorTable(ctx).at(15_i32).get()),
+            ((15_i32 as u16), context),
+            &[VarArg::Int(cause as u32), VarArg::Int(addr as u32)],
+        );
+        return;
+    }
+    fns::__OSUnhandledException(ctx, (15_i32 as u8), context, cause, addr);
+}
+
 pub fn Config24MB<'a>(ctx: &'a Ctx) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     ().put_regs(ctx);
     asm_Config24MB(ctx);
 }
@@ -119,7 +145,7 @@ fn asm_Config24MB(ctx: &Ctx) {
 }
 
 pub fn Config48MB<'a>(ctx: &'a Ctx) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     ().put_regs(ctx);
     asm_Config48MB(ctx);
 }
@@ -191,7 +217,7 @@ fn asm_Config48MB(ctx: &Ctx) {
 }
 
 pub fn RealMode<'a>(ctx: &'a Ctx, a0: FnPtr<'a>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0,).put_regs(ctx);
     asm_RealMode(ctx);
 }
@@ -282,6 +308,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(OnReset(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x80347c38,
+        |ctx| {
+            let (a0, a1): (i16, OSContext<'_>) = Args::take_all(ctx);
+            Ret::put(MEMIntrruptHandler(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x80347ca4,

@@ -223,7 +223,7 @@ pub fn grDatFiles_801C62B4<'a>(ctx: &'a Ctx) -> UnkArchiveStruct<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803e0758),
-            (126_i32 as u32),
+            (229_i32 as u32),
             cstr(ctx, 0x803e0758),
         )
     });
@@ -281,7 +281,7 @@ pub fn grDatFiles_801C6478<'a>(ctx: &'a Ctx, data: Addr<'a>, length: i32) -> Unk
         fns::__assert(
             ctx,
             cstr(ctx, 0x803e0758),
-            (159_i32 as u32),
+            (0x122_i32 as u32),
             cstr(ctx, 0x803e0758),
         )
     });
@@ -317,7 +317,7 @@ fn inl_grDatFiles_801C62B4_unfused<'a>(ctx: &'a Ctx) -> UnkArchiveStruct<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803e0758),
-            (126_i32 as u32),
+            (229_i32 as u32),
             cstr(ctx, 0x803e0758),
         )
     });

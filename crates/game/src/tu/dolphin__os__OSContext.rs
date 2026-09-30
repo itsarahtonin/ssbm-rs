@@ -28,7 +28,7 @@ use crate::support::*;
 use ssbm_rt::cpu as c;
 
 pub fn __OSLoadFPUContext<'a>(ctx: &'a Ctx, a0: u32, a1: OSContext<'a>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0, a1).put_regs(ctx);
     asm___OSLoadFPUContext(ctx);
 }
@@ -430,7 +430,7 @@ fn asm___OSLoadFPUContext(ctx: &Ctx) {
 }
 
 pub fn __OSSaveFPUContext<'a>(ctx: &'a Ctx, a0: u32, a1: u32, a2: OSContext<'a>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0, a1, a2).put_regs(ctx);
     asm___OSSaveFPUContext(ctx);
 }
@@ -824,7 +824,7 @@ fn asm___OSSaveFPUContext(ctx: &Ctx) {
 }
 
 pub fn OSLoadFPUContext<'a>(ctx: &'a Ctx, a0: OSContext<'a>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0,).put_regs(ctx);
     asm_OSLoadFPUContext(ctx);
 }
@@ -842,7 +842,7 @@ fn asm_OSLoadFPUContext(ctx: &Ctx) {
 }
 
 pub fn OSSaveFPUContext<'a>(ctx: &'a Ctx, a0: OSContext<'a>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0,).put_regs(ctx);
     asm_OSSaveFPUContext(ctx);
 }
@@ -860,7 +860,7 @@ fn asm_OSSaveFPUContext(ctx: &Ctx) {
 }
 
 pub fn OSSetCurrentContext<'a>(ctx: &'a Ctx, a0: OSContext<'a>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0,).put_regs(ctx);
     asm_OSSetCurrentContext(ctx);
 }
@@ -981,7 +981,7 @@ pub fn OSGetCurrentContext<'a>(ctx: &'a Ctx) -> OSContext<'a> {
 }
 
 pub fn OSSaveContext<'a>(ctx: &'a Ctx, a0: OSContext<'a>) -> u32 {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0,).put_regs(ctx);
     asm_OSSaveContext(ctx);
     Ret::get(ctx)
@@ -1116,7 +1116,7 @@ fn asm_OSSaveContext(ctx: &Ctx) {
 }
 
 pub fn OSLoadContext<'a>(ctx: &'a Ctx, a0: OSContext<'a>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0,).put_regs(ctx);
     asm_OSLoadContext(ctx);
 }
@@ -1379,7 +1379,7 @@ fn asm_OSLoadContext(ctx: &Ctx) {
 }
 
 pub fn OSGetStackPointer<'a>(ctx: &'a Ctx) -> u32 {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     ().put_regs(ctx);
     asm_OSGetStackPointer(ctx);
     Ret::get(ctx)
@@ -1413,7 +1413,7 @@ pub fn OSClearContext<'a>(ctx: &'a Ctx, context: OSContext<'a>) {
 }
 
 pub fn OSInitContext<'a>(ctx: &'a Ctx, a0: OSContext<'a>, a1: u32, a2: u32) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0, a1, a2).put_regs(ctx);
     asm_OSInitContext(ctx);
 }
@@ -1825,7 +1825,7 @@ pub fn OSDumpContext<'a>(ctx: &'a Ctx, context: OSContext<'a>) {
 }
 
 pub fn OSSwitchFPUContext<'a>(ctx: &'a Ctx, a0: u8, a1: OSContext<'a>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0, a1).put_regs(ctx);
     asm_OSSwitchFPUContext(ctx);
 }

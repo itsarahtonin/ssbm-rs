@@ -855,7 +855,7 @@ pub fn mpIsland_8005B004<'a>(
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803b73e8),
-                            (0x213_i32 as u32),
+                            (0x206_i32 as u32),
                             cstr(ctx, 0x803b73e8),
                         )
                     });
@@ -1051,7 +1051,7 @@ fn inl_mpIsland_AssertSeg_unfused<'a>(ctx: &'a Ctx, mpisp: mp_UnkStruct0<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b73e8),
-            (51_i32 as u32),
+            (62_i32 as u32),
             cstr(ctx, 0x803b73e8),
         )
     });

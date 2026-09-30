@@ -6,7 +6,7 @@ Translates the Melee decomp's C into the Rust ports in `crates/game`, one module
 python tools/c2rs/c2rs.py <decomp root> local/typegen/types.json crates/game/src [unit[:function] ...]
 ```
 
-With no units it translates every C file. `types.json` comes from `tools/typegen/extract.py`, and the decomp must be built (`build/GALE01`), since the translator reads the built DOL for string literal addresses and each unit's asm listing for its data sections. It writes `build/c2rs-report.json` in the decomp with what it translated and why it left each other function out.
+With no units it translates every C file. `types.json` comes from `tools/typegen/extract.py`, and the decomp must be built (`build/GALE01`), since the translator reads the built DOL for string literal addresses and each unit's asm listing for its data sections. It writes `build/c2rs-report.json` in the decomp with what it translated and why it left each other function out. Both tools read the decomp as its matching build does, with `MUST_MATCH` defined, so records get the game's layouts and code takes the game's paths.
 
 How C maps to Rust:
 

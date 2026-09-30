@@ -280,7 +280,7 @@ pub fn HSD_AObjAlloc<'a>(ctx: &'a Ctx) -> HSD_AObj<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80405fc0),
-            (238_i32 as u32),
+            (0x1e9_i32 as u32),
             cstr(ctx, 0x80405fc0),
         )
     });
@@ -521,7 +521,7 @@ pub fn JObjForeachAnim<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x80405fc0),
-            (0x19d_i32 as u32),
+            (0x2cb_i32 as u32),
             cstr(ctx, 0x80405fc0),
         )
     });
@@ -892,7 +892,7 @@ fn inl_ref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x80405fc0),
-                (87_i32 as u32),
+                (93_i32 as u32),
                 cstr(ctx, 0x80405fc0),
             )
         });
@@ -1054,7 +1054,7 @@ fn inl_JObjForeachAnim_unfused<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x80405fc0),
-            (0x19d_i32 as u32),
+            (0x2cb_i32 as u32),
             cstr(ctx, 0x80405fc0),
         )
     });
@@ -1124,7 +1124,7 @@ fn inl_JObjForeachAnim_unfused_2<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x80405fc0),
-            (0x19d_i32 as u32),
+            (0x2cb_i32 as u32),
             cstr(ctx, 0x80405fc0),
         )
     });

@@ -63,7 +63,7 @@ pub fn GObj_SetupGXLink<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x804084fc),
-            (66_i32 as u32),
+            (167_i32 as u32),
             cstr(ctx, 0x804084fc),
         )
     });
@@ -118,7 +118,7 @@ pub fn HSD_GObjGXLink_8039084C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x804084fc),
-            (100_i32 as u32),
+            (0x19f_i32 as u32),
             cstr(ctx, 0x804084fc),
         )
     });
@@ -156,7 +156,7 @@ pub fn HSD_GObjGXLink_80390908<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, gx_link: u8
         fns::__assert(
             ctx,
             cstr(ctx, 0x804084fc),
-            (122_i32 as u32),
+            (0x217_i32 as u32),
             cstr(ctx, 0x804084fc),
         )
     });

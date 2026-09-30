@@ -89,6 +89,160 @@ pub fn OSSetErrorHandler<'a>(ctx: &'a Ctx, error: u16, handler: FnPtr<'a>) -> Fn
     return oldHandler;
 }
 
+pub fn __OSUnhandledException<'a>(
+    ctx: &'a Ctx,
+    exception: u8,
+    context: OSContext<'a>,
+    dsisr: u32,
+    dar: u32,
+) {
+    let __frame = ctx.stack_frame(0x38);
+    let mut exception = exception;
+    let mut context = context;
+    let mut dsisr = dsisr;
+    let mut dar = dar;
+    if !(((context).srr1() & (2_i32 as u32)) != 0) {
+        fns::OSReport(
+            ctx,
+            cstr(ctx, 0x80402054),
+            &[VarArg::Int((exception as i32) as u32)],
+        );
+    } else {
+        if !Handle::is_null(fns::OSErrorTable(ctx).at((exception as i32)).get()) {
+            let _ = fns::OSDisableScheduler(ctx);
+            ctx.call_variadic::<_, ()>(
+                Handle::addr(fns::OSErrorTable(ctx).at((exception as i32)).get()),
+                ((exception as u16), context),
+                &[VarArg::Int(dsisr as u32), VarArg::Int(dar as u32)],
+            );
+            let _ = fns::OSEnableScheduler(ctx);
+            fns::__OSReschedule(ctx);
+            fns::OSLoadContext(ctx, context);
+        }
+        if (exception as i32) == 8_i32 {
+            fns::OSLoadContext(ctx, context);
+        }
+        fns::OSReport(
+            ctx,
+            cstr(ctx, 0x80402074),
+            &[VarArg::Int((exception as i32) as u32)],
+        );
+    }
+    fns::OSReport(ctx, cstr(ctx, 0x8040200c), &[]);
+    fns::OSDumpContext(ctx, context);
+    fns::OSReport(
+        ctx,
+        cstr(ctx, 0x8040208c),
+        &[VarArg::Int(dsisr as u32), VarArg::Int(dar as u32)],
+    );
+    fns::OSReport(
+        ctx,
+        cstr(ctx, 0x804020c0),
+        &[VarArg::Wide(fns::OSGetTime(ctx) as u64)],
+    );
+    's1: {
+        let __case = match (exception as i32) {
+            2_i32 => 0,
+            3_i32 => 1,
+            5_i32 => 2,
+            6_i32 => 3,
+            15_i32 => 4,
+            _ => 5,
+        };
+        if __case <= 0 {
+            fns::OSReport(
+                ctx,
+                cstr(ctx, 0x804020d0),
+                &[
+                    VarArg::Int((context).srr0() as u32),
+                    VarArg::Int(dar as u32),
+                ],
+            );
+            break 's1;
+        }
+        if __case <= 1 {
+            fns::OSReport(
+                ctx,
+                cstr(ctx, 0x80402130),
+                &[VarArg::Int((context).srr0() as u32)],
+            );
+            break 's1;
+        }
+        if __case <= 2 {
+            fns::OSReport(
+                ctx,
+                cstr(ctx, 0x8040217c),
+                &[
+                    VarArg::Int((context).srr0() as u32),
+                    VarArg::Int(dar as u32),
+                ],
+            );
+            break 's1;
+        }
+        if __case <= 3 {
+            fns::OSReport(
+                ctx,
+                cstr(ctx, 0x804021e0),
+                &[
+                    VarArg::Int((context).srr0() as u32),
+                    VarArg::Int(dar as u32),
+                ],
+            );
+            break 's1;
+        }
+        if __case <= 4 {
+            fns::OSReport(ctx, cstr(ctx, 0x8040200c), &[]);
+            fns::OSReport(
+                ctx,
+                cstr(ctx, 0x80402240),
+                &[
+                    VarArg::Int(
+                        ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), (24_i32)))
+                            .get() as i32) as u32,
+                    ),
+                    VarArg::Int(
+                        ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), (25_i32)))
+                            .get() as i32) as u32,
+                    ),
+                ],
+            );
+            fns::OSReport(
+                ctx,
+                cstr(ctx, 0x80402260),
+                &[
+                    VarArg::Int(
+                        ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), (16_i32)))
+                            .get() as i32) as u32,
+                    ),
+                    VarArg::Int(
+                        ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), (17_i32)))
+                            .get() as i32) as u32,
+                    ),
+                ],
+            );
+            fns::OSReport(
+                ctx,
+                cstr(ctx, 0x80402280),
+                &[VarArg::Int(
+                    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 5_i32)).get()
+                        as u32,
+                )],
+            );
+            break 's1;
+        }
+    }
+    fns::OSReport(
+        ctx,
+        cstr(ctx, 0x8040229c),
+        &[
+            VarArg::Int((fns::__OSLastInterrupt(ctx).get() as i32) as u32),
+            VarArg::Int(fns::__OSLastInterruptSrr0(ctx).get() as u32),
+            VarArg::Wide(fns::__OSLastInterruptTime(ctx).get() as u64),
+        ],
+    );
+    ctx.call::<_, ()>(0x80335e94, ());
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -114,5 +268,13 @@ pub fn register(ctx: &Ctx) {
             Ret::put(OSSetErrorHandler(ctx, a0, a1), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x80345870,
+        |ctx| {
+            let (a0, a1, a2, a3): (u8, OSContext<'_>, u32, u32) = Args::take_all(ctx);
+            Ret::put(__OSUnhandledException(ctx, a0, a1, a2, a3), ctx);
+        },
+        Returns::Nothing,
     );
 }

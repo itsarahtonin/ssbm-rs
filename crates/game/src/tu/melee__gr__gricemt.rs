@@ -90,7 +90,7 @@ pub fn grIceMt_801F686C<'a>(ctx: &'a Ctx) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b8220),
-                (0x1c3_i32 as u32),
+                (0x258_i32 as u32),
                 cstr(ctx, 0x803b8220),
             )
         });
@@ -122,7 +122,7 @@ pub fn grIceMt_801F686C<'a>(ctx: &'a Ctx) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b8220),
-                (0x1d4_i32 as u32),
+                (0x261_i32 as u32),
                 cstr(ctx, 0x803b8220),
             )
         });
@@ -157,7 +157,7 @@ pub fn grIceMt_801F686C<'a>(ctx: &'a Ctx) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b8220),
-                (0x1e8_i32 as u32),
+                (0x26b_i32 as u32),
                 cstr(ctx, 0x803b8220),
             )
         });
@@ -237,7 +237,7 @@ pub fn grIceMt_801F686C<'a>(ctx: &'a Ctx) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b8220),
-                (0x1f9_i32 as u32),
+                (0x27c_i32 as u32),
                 cstr(ctx, 0x803b8220),
             )
         });
@@ -248,7 +248,7 @@ pub fn grIceMt_801F686C<'a>(ctx: &'a Ctx) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b8220),
-                (0x1fb_i32 as u32),
+                (0x27d_i32 as u32),
                 cstr(ctx, 0x803b8220),
             )
         });
@@ -272,7 +272,7 @@ pub fn grIceMt_801F686C<'a>(ctx: &'a Ctx) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b8220),
-                (0x201_i32 as u32),
+                (0x281_i32 as u32),
                 cstr(ctx, 0x803b8220),
             )
         });
@@ -283,7 +283,7 @@ pub fn grIceMt_801F686C<'a>(ctx: &'a Ctx) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b8220),
-                (0x203_i32 as u32),
+                (0x282_i32 as u32),
                 cstr(ctx, 0x803b8220),
             )
         });
@@ -307,7 +307,7 @@ pub fn grIceMt_801F686C<'a>(ctx: &'a Ctx) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b8220),
-                (0x209_i32 as u32),
+                (0x286_i32 as u32),
                 cstr(ctx, 0x803b8220),
             )
         });
@@ -318,7 +318,7 @@ pub fn grIceMt_801F686C<'a>(ctx: &'a Ctx) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b8220),
-                (0x20b_i32 as u32),
+                (0x287_i32 as u32),
                 cstr(ctx, 0x803b8220),
             )
         });
@@ -782,7 +782,7 @@ pub fn stageGObj10_Callback1<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b8220),
-                (0x30f_i32 as u32),
+                (0x475_i32 as u32),
                 cstr(ctx, 0x803b8220),
             )
         });
@@ -796,7 +796,7 @@ pub fn stageGObj10_Callback1<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b8220),
-                (0x314_i32 as u32),
+                (0x47a_i32 as u32),
                 cstr(ctx, 0x803b8220),
             )
         });
@@ -895,7 +895,7 @@ pub fn stageGObj10_GObjProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b8220),
-                (0x351_i32 as u32),
+                (0x4c3_i32 as u32),
                 cstr(ctx, 0x803b8220),
             )
         });
@@ -906,7 +906,7 @@ pub fn stageGObj10_GObjProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b8220),
-                (0x353_i32 as u32),
+                (0x4c5_i32 as u32),
                 cstr(ctx, 0x803b8220),
             )
         });
@@ -1710,7 +1710,7 @@ pub fn stageGObj8_GObjProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8220),
-            (0x4f5_i32 as u32),
+            (0x78f_i32 as u32),
             cstr(ctx, 0x803b8220),
         )
     });
@@ -1799,7 +1799,7 @@ pub fn grIceMt_801F8CDC<'a>(
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b8220),
-                (0x525_i32 as u32),
+                (0x7d4_i32 as u32),
                 cstr(ctx, 0x803b8220),
             )
         });
@@ -1827,7 +1827,7 @@ pub fn grIceMt_801F8CDC<'a>(
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803b8220),
-                            (0x52d_i32 as u32),
+                            (0x7e3_i32 as u32),
                             cstr(ctx, 0x803b8220),
                         )
                     });
@@ -1839,7 +1839,7 @@ pub fn grIceMt_801F8CDC<'a>(
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803b8220),
-                            (0x530_i32 as u32),
+                            (0x7e6_i32 as u32),
                             cstr(ctx, 0x803b8220),
                         )
                     });
@@ -1923,7 +1923,7 @@ pub fn fn_801F8E58<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, out: Val<'a, i32>) -> i
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8220),
-            (0x56c_i32 as u32),
+            (0x81d_i32 as u32),
             cstr(ctx, 0x803b8220),
         )
     });
@@ -2381,7 +2381,7 @@ pub fn grIceMt_801F9668<'a>(ctx: &'a Ctx, arg0: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8220),
-            (0x631_i32 as u32),
+            (0xa37_i32 as u32),
             cstr(ctx, 0x803b8220),
         )
     });
@@ -2392,7 +2392,7 @@ pub fn grIceMt_801F9668<'a>(ctx: &'a Ctx, arg0: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8220),
-            (0x633_i32 as u32),
+            (0xa38_i32 as u32),
             cstr(ctx, 0x803b8220),
         )
     });
@@ -2418,7 +2418,7 @@ pub fn grIceMt_801F96E0<'a>(
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b8220),
-                (0x640_i32 as u32),
+                (0xa45_i32 as u32),
                 cstr(ctx, 0x803b8220),
             )
         });
@@ -2429,7 +2429,7 @@ pub fn grIceMt_801F96E0<'a>(
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b8220),
-                (0x642_i32 as u32),
+                (0xa46_i32 as u32),
                 cstr(ctx, 0x803b8220),
             )
         });
@@ -2444,7 +2444,7 @@ pub fn grIceMt_801F96E0<'a>(
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b8220),
-                (0x648_i32 as u32),
+                (0xa4b_i32 as u32),
                 cstr(ctx, 0x803b8220),
             )
         });
@@ -2456,7 +2456,7 @@ pub fn grIceMt_801F96E0<'a>(
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b8220),
-                (0x64b_i32 as u32),
+                (0xa4c_i32 as u32),
                 cstr(ctx, 0x803b8220),
             )
         });
@@ -2519,7 +2519,7 @@ pub fn grIceMt_801F993C<'a>(ctx: &'a Ctx, under_id: i32, upper_id: i32) -> f64 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8220),
-            (0x673_i32 as u32),
+            (0xa9d_i32 as u32),
             cstr(ctx, 0x803b8220),
         )
     });
@@ -2540,7 +2540,7 @@ pub fn grIceMt_801F993C<'a>(ctx: &'a Ctx, under_id: i32, upper_id: i32) -> f64 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8220),
-            (0x67a_i32 as u32),
+            (0xaa2_i32 as u32),
             cstr(ctx, 0x803b8220),
         )
     });
@@ -2602,7 +2602,7 @@ pub fn grIceMt_801F9ACC<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8220),
-            (0x696_i32 as u32),
+            (0xab9_i32 as u32),
             cstr(ctx, 0x803b8220),
         )
     });
@@ -2613,7 +2613,7 @@ pub fn grIceMt_801F9ACC<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8220),
-            (0x698_i32 as u32),
+            (0xaba_i32 as u32),
             cstr(ctx, 0x803b8220),
         )
     });
@@ -2692,7 +2692,7 @@ pub fn grIceMt_801F9ACC<'a>(
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803b8220),
-                    (0x6c2_i32 as u32),
+                    (0xaf3_i32 as u32),
                     cstr(ctx, 0x803b8220),
                 )
             });
@@ -2713,7 +2713,7 @@ pub fn grIceMt_801F9ACC<'a>(
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803b8220),
-                    (0x6ca_i32 as u32),
+                    (0xafe_i32 as u32),
                     cstr(ctx, 0x803b8220),
                 )
             });
@@ -2724,7 +2724,7 @@ pub fn grIceMt_801F9ACC<'a>(
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803b8220),
-                    (0x6cc_i32 as u32),
+                    (0xaff_i32 as u32),
                     cstr(ctx, 0x803b8220),
                 )
             });
@@ -2769,7 +2769,7 @@ pub fn grIceMt_801F9ACC<'a>(
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803b8220),
-                    (0x6f0_i32 as u32),
+                    (0xb13_i32 as u32),
                     cstr(ctx, 0x803b8220),
                 )
             });
@@ -2790,7 +2790,7 @@ pub fn grIceMt_801F9ACC<'a>(
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803b8220),
-                    (0x6f8_i32 as u32),
+                    (0xb1e_i32 as u32),
                     cstr(ctx, 0x803b8220),
                 )
             });
@@ -2801,7 +2801,7 @@ pub fn grIceMt_801F9ACC<'a>(
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803b8220),
-                    (0x6fa_i32 as u32),
+                    (0xb1f_i32 as u32),
                     cstr(ctx, 0x803b8220),
                 )
             });
@@ -2870,7 +2870,7 @@ pub fn grIceMt_801FA0BC<'a>(ctx: &'a Ctx, ids: grIceMt_GObj9_GObj10_UnderUpperId
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b8220),
-                (0x732_i32 as u32),
+                (0xb44_i32 as u32),
                 cstr(ctx, 0x803b8220),
             )
         });
@@ -2881,7 +2881,7 @@ pub fn grIceMt_801FA0BC<'a>(ctx: &'a Ctx, ids: grIceMt_GObj9_GObj10_UnderUpperId
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b8220),
-                (0x734_i32 as u32),
+                (0xb46_i32 as u32),
                 cstr(ctx, 0x803b8220),
             )
         });
@@ -2902,7 +2902,7 @@ pub fn grIceMt_801FA0BC<'a>(ctx: &'a Ctx, ids: grIceMt_GObj9_GObj10_UnderUpperId
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b8220),
-                (0x73d_i32 as u32),
+                (0xb50_i32 as u32),
                 cstr(ctx, 0x803b8220),
             )
         });
@@ -2913,7 +2913,7 @@ pub fn grIceMt_801FA0BC<'a>(ctx: &'a Ctx, ids: grIceMt_GObj9_GObj10_UnderUpperId
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b8220),
-                (0x73f_i32 as u32),
+                (0xb52_i32 as u32),
                 cstr(ctx, 0x803b8220),
             )
         });
@@ -3071,7 +3071,7 @@ pub fn grIceMt_801FA500<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_JObj<'a>
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8220),
-            (0x79b_i32 as u32),
+            (0xbb1_i32 as u32),
             cstr(ctx, 0x803b8220),
         )
     });
@@ -3082,7 +3082,7 @@ pub fn grIceMt_801FA500<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_JObj<'a>
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8220),
-            (0x79d_i32 as u32),
+            (0xbb2_i32 as u32),
             cstr(ctx, 0x803b8220),
         )
     });
@@ -3260,7 +3260,7 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8220),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803b8220),
         )
     });
@@ -3282,7 +3282,7 @@ fn inl_HSD_JObjSetTranslateY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f6
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8220),
-            (0x213_i32 as u32),
+            (0x3b3_i32 as u32),
             cstr(ctx, 0x803b8220),
         )
     });
@@ -3319,7 +3319,7 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8220),
-            (0x1e1_i32 as u32),
+            (0x394_i32 as u32),
             cstr(ctx, 0x803b8220),
         )
     });
@@ -3329,7 +3329,7 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8220),
-            (0x1e2_i32 as u32),
+            (0x395_i32 as u32),
             cstr(ctx, 0x803b8220),
         )
     });
@@ -3351,7 +3351,7 @@ fn inl_HSD_JObjGetTranslationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8220),
-            (0x24c_i32 as u32),
+            (0x3ee_i32 as u32),
             cstr(ctx, 0x803b8220),
         )
     });
@@ -3372,7 +3372,7 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8220),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803b8220),
         )
     });
@@ -3394,7 +3394,7 @@ fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8220),
-            (0x213_i32 as u32),
+            (0x3b3_i32 as u32),
             cstr(ctx, 0x803b8220),
         )
     });
@@ -3473,7 +3473,7 @@ fn inl_HSD_JObjAddTranslationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: 
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8220),
-            (0x2a0_i32 as u32),
+            (0x45a_i32 as u32),
             cstr(ctx, 0x803b8220),
         )
     });
@@ -3497,7 +3497,7 @@ fn inl_HSD_JObjGetTranslationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> 
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8220),
-            (0x24c_i32 as u32),
+            (0x3ee_i32 as u32),
             cstr(ctx, 0x803b8220),
         )
     });
@@ -3512,7 +3512,7 @@ fn inl_HSD_JObjSetTranslateY_2<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a: f64, 
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b8220),
-            (0x213_i32 as u32),
+            (0x3b3_i32 as u32),
             cstr(ctx, 0x803b8220),
         )
     });

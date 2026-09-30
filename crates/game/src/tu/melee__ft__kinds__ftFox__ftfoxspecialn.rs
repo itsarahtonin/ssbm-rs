@@ -172,7 +172,11 @@ pub fn ftFx_SpecialN_CreateBlasterShot<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    fp = {
+        let __t1 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+        fp = __t1;
+        __t1
+    };
     da = Handle::cast::<ftFox_DatAttrs<'a>>(inl_getFtSpecialAttrs_unfused(ctx, fp));
     if (fp).cmd_vars().at(2_i32).get() != (0_i32 as u32) {
         (fp).cmd_vars().at(2_i32).set((0_i32 as u32));

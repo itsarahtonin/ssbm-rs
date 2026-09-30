@@ -185,7 +185,7 @@ pub fn ftpickupitem_8009447C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, item_gobj: HS
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x804d8588),
-                (156_i32 as u32),
+                (174_i32 as u32),
                 cstr(ctx, 0x804d8588),
             )
         })
@@ -501,7 +501,7 @@ pub fn ftpickupitem_80094B6C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, item_gobj: HS
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x804d8588),
-                (0x15b_i32 as u32),
+                (0x18f_i32 as u32),
                 cstr(ctx, 0x804d8588),
             )
         })

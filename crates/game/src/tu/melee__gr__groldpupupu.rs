@@ -1010,7 +1010,7 @@ fn inl_grOldPupupu_GetSpawnJObj<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_JOb
         fns::__assert(
             ctx,
             cstr(ctx, 0x803e6698),
-            (0x15c_i32 as u32),
+            (0x216_i32 as u32),
             cstr(ctx, 0x803e6698),
         )
     });
@@ -1026,7 +1026,7 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803e6698),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803e6698),
         )
     });
@@ -1047,7 +1047,7 @@ fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x__a: f64, x_
         fns::__assert(
             ctx,
             cstr(ctx, 0x803e6698),
-            (0x201_i32 as u32),
+            (0x3a4_i32 as u32),
             cstr(ctx, 0x803e6698),
         )
     });
@@ -1070,7 +1070,7 @@ fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803e6698),
-            (0x213_i32 as u32),
+            (0x3b3_i32 as u32),
             cstr(ctx, 0x803e6698),
         )
     });
@@ -1093,7 +1093,7 @@ fn inl_HSD_JObjSetTranslateZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803e6698),
-            (0x225_i32 as u32),
+            (0x3c2_i32 as u32),
             cstr(ctx, 0x803e6698),
         )
     });
@@ -1181,7 +1181,7 @@ fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, tran
         fns::__assert(
             ctx,
             cstr(ctx, 0x803e6698),
-            (0x237_i32 as u32),
+            (0x3d3_i32 as u32),
             cstr(ctx, 0x803e6698),
         )
     });
@@ -1191,7 +1191,7 @@ fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, tran
         fns::__assert(
             ctx,
             cstr(ctx, 0x803e6698),
-            (0x238_i32 as u32),
+            (0x3d4_i32 as u32),
             cstr(ctx, 0x803e6698),
         )
     });

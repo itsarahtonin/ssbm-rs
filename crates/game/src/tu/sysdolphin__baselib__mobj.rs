@@ -274,7 +274,7 @@ pub fn HSD_MObjLoadDesc<'a>(ctx: &'a Ctx, mobjdesc: _HSD_MObjDesc<'a>) -> HSD_MO
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x80405e2c),
-                    (179_i32 as u32),
+                    (0x161_i32 as u32),
                     cstr(ctx, 0x80405e2c),
                 )
             });
@@ -323,7 +323,7 @@ pub fn MObjMakeTExp<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x80405e2c),
-            (200_i32 as u32),
+            (0x1a0_i32 as u32),
             cstr(ctx, 0x80405e2c),
         )
     });
@@ -789,7 +789,7 @@ pub fn MObjSetupTev<'a>(ctx: &'a Ctx, mobj: HSD_MObj<'a>, tobj: HSD_TObj<'a>, ar
         fns::__assert(
             ctx,
             cstr(ctx, 0x80405e2c),
-            (0x181_i32 as u32),
+            (0x270_i32 as u32),
             cstr(ctx, 0x80405e2c),
         )
     });
@@ -870,7 +870,7 @@ pub fn HSD_MObjSetToonTextureImage<'a>(ctx: &'a Ctx, imagedesc: HSD_ImageDesc<'a
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x80405e2c),
-                    (0x1c7_i32 as u32),
+                    (0x2f8_i32 as u32),
                     cstr(ctx, 0x80405e2c),
                 )
             })
@@ -932,7 +932,7 @@ pub fn HSD_MObjAlloc<'a>(ctx: &'a Ctx) -> HSD_MObj<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80405e2c),
-            (0x1ec_i32 as u32),
+            (0x393_i32 as u32),
             cstr(ctx, 0x80405e2c),
         )
     });
@@ -949,7 +949,7 @@ pub fn HSD_MaterialAlloc<'a>(ctx: &'a Ctx) -> HSD_Material<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80405e2c),
-            (0x1f3_i32 as u32),
+            (0x3af_i32 as u32),
             cstr(ctx, 0x80405e2c),
         )
     });
@@ -968,7 +968,7 @@ pub fn HSD_MObjAddShadowTexture<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80405e2c),
-            (0x1fc_i32 as u32),
+            (0x3de_i32 as u32),
             cstr(ctx, 0x80405e2c),
         )
     });

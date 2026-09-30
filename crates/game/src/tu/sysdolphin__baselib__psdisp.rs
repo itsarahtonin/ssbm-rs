@@ -1113,7 +1113,7 @@ pub fn psDispParticles<'a>(ctx: &'a Ctx, target_link: u32, sw: u32) {
                                     fns::HSD_FogSet(ctx, null::<HSD_Fog<'a>>(ctx));
                                 }
                             }
-                            if (!Handle::is_null(
+                            if ((!Handle::is_null(
                                 (Handle::add((fns::psNumCmdList(ctx).at(0)), ((pp).bank() as i32)))
                                     .get(),
                             )) && (!Handle::is_null(
@@ -1130,7 +1130,8 @@ pub fn psDispParticles<'a>(ctx: &'a Ctx, target_link: u32, sw: u32) {
                                     form_group = __t6;
                                     __t6
                                 }),
-                            )) {
+                            ))) && (!Handle::is_null((form_group).formTable().at(0)))
+                            {
                                 form = (form_group).formTable().at(((pp).poseNum() as i32)).get();
                             } else {
                                 form = null::<Val<'a, u8>>(ctx);
@@ -1315,7 +1316,7 @@ pub fn psDispParticles<'a>(ctx: &'a Ctx, target_link: u32, sw: u32) {
                                                 fns::__assert(
                                                     ctx,
                                                     cstr(ctx, 0x800055fc),
-                                                    (0x862_i32 as u32),
+                                                    (0x8aa_i32 as u32),
                                                     cstr(ctx, 0x800055fc),
                                                 )
                                             });

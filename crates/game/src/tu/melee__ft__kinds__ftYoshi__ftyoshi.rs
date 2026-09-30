@@ -77,7 +77,7 @@ pub fn ftYs_Init_8012B6E8<'a>(ctx: &'a Ctx, fp: Fighter<'a>, unk_struct_arg: S_U
                                 fns::__assert(
                                     ctx,
                                     cstr(ctx, 0x803b75c0),
-                                    (0x17c_i32 as u32),
+                                    (97_i32 as u32),
                                     cstr(ctx, 0x803b75c0),
                                 )
                             })
@@ -222,7 +222,7 @@ pub fn ftYs_Init_OnLoad<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803b75c0),
-                    (0x1cf_i32 as u32),
+                    (113_i32 as u32),
                     cstr(ctx, 0x803b75c0),
                 )
             })
@@ -338,7 +338,7 @@ fn inl_HSD_AObjGetEndFrame_unfused<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>) -> f64 
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b75c0),
-            (99_i32 as u32),
+            (170_i32 as u32),
             cstr(ctx, 0x803b75c0),
         )
     });

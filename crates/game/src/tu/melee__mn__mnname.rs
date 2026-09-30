@@ -95,6 +95,61 @@ pub fn IsNameListFull<'a>(ctx: &'a Ctx) -> i32 {
     return 1_i32;
 }
 
+pub fn CompareNameStrings<'a>(ctx: &'a Ctx, str1: Val<'a, i8>, str2: Val<'a, i8>) -> i32 {
+    let __frame = ctx.stack_frame(0x10);
+    let string1: CompareNameStrings_string1<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut str1 = str1;
+    let mut str2 = str2;
+    let mut unsigned_str1: Val<'a, u8> = null(ctx);
+    let mut terminator: i8 = (fns::mnName_StringTerminator(ctx).at(0)).get();
+    let mut i: i32 = 0_i32;
+    string1.set_signed_characters(str1);
+    unsigned_str1 = string1.unsigned_characters();
+    'l1: loop {
+        'c2: {
+            let mut ch1: i8 = (Handle::add(str1, i)).get();
+            if (inl_signedCharactersEqual_unfused(ctx, terminator, (ch1 as u8)) != 0) {
+                if (inl_checkStringRest_unfused(
+                    ctx,
+                    (Handle::add(str2, (((i as u64) & 0xffffffffffffffff_u64) as i32))),
+                    inl_readNameTerminator_unfused(ctx, fns::mnName_StringTerminator(ctx).at(0)),
+                ) != 0)
+                {
+                    return 0_i32;
+                }
+                return 2_i32;
+            }
+            {
+                let mut ch2: i8 = (Handle::add(str2, i)).get();
+                if (inl_signedCharactersEqual_unfused(
+                    ctx,
+                    (fns::mnName_StringTerminator(ctx).at(0)).get(),
+                    inl_unsignedCharacter_unfused(ctx, (ch2 as i32)),
+                ) != 0)
+                {
+                    if (inl_checkStringRest_unfused(ctx, (Handle::add(str1, i)), terminator) != 0) {
+                        return 0_i32;
+                    }
+                    return 1_i32;
+                }
+                if ((Handle::add(unsigned_str1, i)).get() as i32)
+                    > (inl_unsignedCharacter_unfused(ctx, (ch2 as i32)) as i32)
+                {
+                    return 1_i32;
+                }
+                if ((Handle::add(unsigned_str1, i)).get() as i32)
+                    < (inl_unsignedCharacter_unfused(ctx, (ch2 as i32)) as i32)
+                {
+                    return 2_i32;
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 pub fn IsNameUnique<'a>(ctx: &'a Ctx, name: Val<'a, i8>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut name = name;
@@ -122,6 +177,81 @@ pub fn IsNameUnique<'a>(ctx: &'a Ctx, name: Val<'a, i8>) -> i32 {
         }
     }
     return 0_i32;
+}
+
+pub fn DeleteName<'a>(ctx: &'a Ctx, arg0: u8) {
+    let __frame = ctx.stack_frame(0x1d0);
+    let _2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let temp: NameTagData<'a> = frame_at(ctx, &__frame, 0x8);
+    let mut arg0 = arg0;
+    let mut i: i32 = 0;
+    let mut longpos: u64 = 0;
+    let mut pos: i32 = 0;
+    let mut j: i32 = 0;
+    let mut p: Val<'a, u16> = null(ctx);
+    let mut k: i32 = 0;
+    let mut pos_u8: u8 = 0;
+    pos = (arg0 as i32);
+    i = 0_i32;
+    'l1: loop {
+        'c2: {
+            if fns::IsNameValid(ctx, ((i as u8) as i32)) != 0_i32 {
+                p = Handle::cast::<Val<'a, u16>>(
+                    (Handle::add(
+                        Handle::cast::<Val<'a, u8>>(fns::GetPersistentNameData(ctx, i)),
+                        pos.wrapping_mul(2_i32),
+                    )),
+                );
+                {
+                    k = pos;
+                    'l3: while k < 120_i32 {
+                        'c4: {
+                            if k == 119_i32 {
+                                (p).set((0_i32 as u16));
+                            } else {
+                                (p).set((Handle::add(p, 1_i32)).get());
+                            }
+                            p = Handle::add(p, 1);
+                        }
+                        k = k.wrapping_add(1);
+                    }
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+        if !(i < 120_i32) {
+            break 'l1;
+        }
+    }
+    'l5: while pos < 120_i32 {
+        'c6: {
+            j = pos.wrapping_add(1_i32);
+            'l7: while j < 120_i32 {
+                'c8: {
+                    longpos = (pos as u64);
+                    if fns::IsNameValid(ctx, ((longpos as u8) as i32)) == 0_i32 {
+                        if fns::IsNameValid(ctx, ((j as u8) as i32)) != 0_i32 {
+                            Handle::copy_from(
+                                temp,
+                                (fns::GetPersistentNameData(ctx, ((pos as u8) as i32))),
+                            );
+                            let __t1 = (fns::GetPersistentNameData(ctx, ((j as u8) as i32)));
+                            Handle::copy_from(
+                                (fns::GetPersistentNameData(ctx, ((pos as u8) as i32))),
+                                __t1,
+                            );
+                            Handle::copy_from(
+                                (fns::GetPersistentNameData(ctx, ((j as u8) as i32))),
+                                temp,
+                            );
+                        }
+                    }
+                    j = j.wrapping_add(1);
+                }
+            }
+            pos = pos.wrapping_add(1);
+        }
+    }
 }
 
 pub fn IsNameValid<'a>(ctx: &'a Ctx, slot: i32) -> i32 {
@@ -2297,12 +2427,7 @@ pub fn mnName_8023A59C<'a>(ctx: &'a Ctx, arg0: u8) -> HSD_GObj<'a> {
     } else {
         ({
             fns::OSReport(ctx, cstr(ctx, 0x803ed650), &[]);
-            fns::__assert(
-                ctx,
-                cstr(ctx, 0x803ed538),
-                (0x634_i32 as u32),
-                cstr(ctx, 0x803ed538),
-            )
+            fns::__assert(ctx, cstr(ctx, 0x803ed538), 0x67c_u32, cstr(ctx, 0x803ed538))
         })
     });
     fns::GObj_InitUserData(
@@ -2692,6 +2817,28 @@ fn inl_readNameTerminator_unfused<'a>(ctx: &'a Ctx, terminator: Val<'a, i8>) -> 
     return (terminator).get();
 }
 
+fn inl_checkStringRest_unfused<'a>(ctx: &'a Ctx, ptr_: Val<'a, i8>, terminator: i8) -> i32 {
+    let mut ptr_ = ptr_;
+    let mut terminator = terminator;
+    let mut c: i8 = (-127_i8);
+    'l1: while (terminator as i32) != ((ptr_).get() as i32) {
+        'c2: {
+            if ((c as i32) != ((ptr_).get() as i32))
+                || ((64_i8 as i32) != ((Handle::add(ptr_, 1_i32)).get() as i32))
+            {
+                return 0_i32;
+            }
+            ptr_ = Handle::add(ptr_, 2_i32);
+        }
+    }
+    return 1_i32;
+}
+
+fn inl_unsignedCharacter_unfused<'a>(ctx: &'a Ctx, character: i32) -> u8 {
+    let mut character = character;
+    return (character as u8);
+}
+
 fn inl_sfxMove_unfused<'a>(ctx: &'a Ctx) {
     fns::lbAudioAx_80024030(ctx, 2_i32);
 }
@@ -2793,7 +2940,7 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ed538),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803ed538),
         )
     });
@@ -2815,7 +2962,7 @@ fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f6
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ed538),
-            (0x201_i32 as u32),
+            (0x3a4_i32 as u32),
             cstr(ctx, 0x803ed538),
         )
     });
@@ -2925,7 +3072,7 @@ fn inl_mnName_FindAnimLoop_unfused<'a>(
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803ed538),
-                (0x3d2_i32 as u32),
+                (0x3dc_i32 as u32),
                 cstr(ctx, 0x803ed538),
             )
         })
@@ -2947,7 +3094,7 @@ fn inl_HSD_JObjGetTranslationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> 
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ed538),
-            (0x246_i32 as u32),
+            (0x3e1_i32 as u32),
             cstr(ctx, 0x803ed538),
         )
     });
@@ -2962,7 +3109,7 @@ fn inl_HSD_JObjGetTranslationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> 
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ed538),
-            (0x24c_i32 as u32),
+            (0x3ee_i32 as u32),
             cstr(ctx, 0x803ed538),
         )
     });
@@ -2992,7 +3139,7 @@ fn inl_HSD_JObjSetTranslateY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f6
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ed538),
-            (0x213_i32 as u32),
+            (0x3b3_i32 as u32),
             cstr(ctx, 0x803ed538),
         )
     });
@@ -3189,12 +3336,28 @@ pub fn register(ctx: &Ctx) {
         Returns::Int,
     );
     ctx.register_port(
+        0x80237654,
+        |ctx| {
+            let (a0, a1): (Val<'_, i8>, Val<'_, i8>) = Args::take_all(ctx);
+            Ret::put(CompareNameStrings(ctx, a0, a1), ctx);
+        },
+        Returns::Int,
+    );
+    ctx.register_port(
         0x802377a8,
         |ctx| {
             let (a0,): (Val<'_, i8>,) = Args::take_all(ctx);
             Ret::put(IsNameUnique(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x80237834,
+        |ctx| {
+            let (a0,): (u8,) = Args::take_all(ctx);
+            Ret::put(DeleteName(ctx, a0), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x802379bc,

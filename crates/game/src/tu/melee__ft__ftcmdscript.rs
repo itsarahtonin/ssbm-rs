@@ -62,7 +62,7 @@ pub fn ftCo_800B3E04<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803c6104),
-                    (45_i32 as u32),
+                    (33_i32 as u32),
                     cstr(ctx, 0x803c6104),
                 )
             })
@@ -79,7 +79,7 @@ pub fn ftCo_800B3E04<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803c6104),
-                    (48_i32 as u32),
+                    (36_i32 as u32),
                     cstr(ctx, 0x803c6104),
                 )
             })
@@ -722,7 +722,7 @@ pub fn ftCo_800B463C<'a>(ctx: &'a Ctx, fp: Fighter<'a>, cmd: u8) {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803c6104),
-                    (0x14b_i32 as u32),
+                    (0x1f5_i32 as u32),
                     cstr(ctx, 0x803c6104),
                 )
             })
@@ -814,7 +814,7 @@ fn inl_ftCo_800B463C_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, cmd: u8) {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803c6104),
-                    (0x14b_i32 as u32),
+                    (0x1f5_i32 as u32),
                     cstr(ctx, 0x803c6104),
                 )
             })

@@ -192,7 +192,7 @@ pub fn lbDvd_80017740<'a>(
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b72c8),
-                (180_i32 as u32),
+                (0x1c1_i32 as u32),
                 cstr(ctx, 0x803b72c8),
             )
         });
@@ -215,7 +215,7 @@ pub fn lbDvd_80017740<'a>(
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803b72c8),
-                        (186_i32 as u32),
+                        (0x1cb_i32 as u32),
                         cstr(ctx, 0x803b72c8),
                     )
                 })
@@ -518,7 +518,7 @@ pub fn lbDvd_80017E64<'a>(ctx: &'a Ctx, key: i32, index: u32, value: Addr<'a>, c
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b72c8),
-                (0x16c_i32 as u32),
+                (0x33b_i32 as u32),
                 cstr(ctx, 0x803b72c8),
             )
         });
@@ -608,7 +608,7 @@ pub fn lbDvd_GetPreloadedArchive<'a>(ctx: &'a Ctx, entry_num: i32) -> Addr<'a> {
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803b72c8),
-                        (0x1a5_i32 as u32),
+                        (0x360_i32 as u32),
                         cstr(ctx, 0x803b72c8),
                     )
                 });
@@ -648,7 +648,7 @@ pub fn lbDvd_8001819C<'a>(ctx: &'a Ctx, basename: Val<'a, i8>) -> HSD_Archive<'a
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803b72c8),
-                    (0x1e1_i32 as u32),
+                    (0x3b4_i32 as u32),
                     cstr(ctx, 0x803b72c8),
                 )
             })

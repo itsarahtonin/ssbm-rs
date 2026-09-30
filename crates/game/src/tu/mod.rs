@@ -43,6 +43,7 @@ pub mod Runtime__Gecko_ExceptionPPC;
 pub mod Runtime__Gecko_setjmp;
 pub mod Runtime____init_cpp_exceptions;
 pub mod Runtime____mem;
+pub mod Runtime____va_arg;
 pub mod Runtime__global_destructor_chain;
 pub mod Runtime__runtime;
 pub mod dolphin__ai__ai;
@@ -1179,6 +1180,7 @@ pub static UNITS: &[(&str, Register)] = &[
         Runtime____init_cpp_exceptions::register,
     ),
     ("Runtime/__mem", Runtime____mem::register),
+    ("Runtime/__va_arg", Runtime____va_arg::register),
     (
         "Runtime/global_destructor_chain",
         Runtime__global_destructor_chain::register,

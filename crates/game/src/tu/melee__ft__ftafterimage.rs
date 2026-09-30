@@ -544,7 +544,7 @@ pub fn ftCo_800C2FD8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803c6bec),
-                            (0x193_i32 as u32),
+                            (0x16d_i32 as u32),
                             cstr(ctx, 0x803c6bec),
                         )
                     })
@@ -649,7 +649,7 @@ fn inl_ftCo_800C2600_get_params<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> itSword_Un
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803c6bec),
-                            (38_i32 as u32),
+                            (124_i32 as u32),
                             cstr(ctx, 0x803c6bec),
                         )
                     })

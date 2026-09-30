@@ -48,7 +48,7 @@ pub fn lbArchive_InitializeDAT<'a>(
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803ba5a0),
-                (20_i32 as u32),
+                (73_i32 as u32),
                 cstr(ctx, 0x803ba5a0),
             )
         });
@@ -144,7 +144,7 @@ pub fn lbArchive_80016EFC<'a>(ctx: &'a Ctx, archive: HSD_Archive<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ba5a0),
-            (129_i32 as u32),
+            (252_i32 as u32),
             cstr(ctx, 0x803ba5a0),
         )
     });
@@ -154,7 +154,7 @@ pub fn lbArchive_80016EFC<'a>(ctx: &'a Ctx, archive: HSD_Archive<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ba5a0),
-            (130_i32 as u32),
+            (253_i32 as u32),
             cstr(ctx, 0x803ba5a0),
         )
     });
@@ -422,7 +422,7 @@ fn inl_vLoadSectionsFatal_unfused<'a>(
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803ba5a0),
-                            (94_i32 as u32),
+                            (112_i32 as u32),
                             cstr(ctx, 0x803ba5a0),
                         )
                     });

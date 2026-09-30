@@ -513,7 +513,7 @@ pub fn Item_80267978<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803f11d4),
-                        (0x22f_i32 as u32),
+                        (0x2ae_i32 as u32),
                         cstr(ctx, 0x803f11d4),
                     )
                 })
@@ -2015,7 +2015,7 @@ pub fn Item_8026A8EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803f11d4),
-                    (0x7c1_i32 as u32),
+                    (0x965_i32 as u32),
                     cstr(ctx, 0x803f11d4),
                 )
             })
@@ -2354,7 +2354,7 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803f11d4),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803f11d4),
         )
     });
@@ -2376,7 +2376,7 @@ fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64
         fns::__assert(
             ctx,
             cstr(ctx, 0x803f11d4),
-            (0x13d_i32 as u32),
+            (0x294_i32 as u32),
             cstr(ctx, 0x803f11d4),
         )
     });
@@ -2386,7 +2386,7 @@ fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64
         fns::__assert(
             ctx,
             cstr(ctx, 0x803f11d4),
-            (0x13e_i32 as u32),
+            (0x295_i32 as u32),
             cstr(ctx, 0x803f11d4),
         )
     });
@@ -2424,7 +2424,7 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
         fns::__assert(
             ctx,
             cstr(ctx, 0x803f11d4),
-            (0x1e1_i32 as u32),
+            (0x394_i32 as u32),
             cstr(ctx, 0x803f11d4),
         )
     });
@@ -2434,7 +2434,7 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
         fns::__assert(
             ctx,
             cstr(ctx, 0x803f11d4),
-            (0x1e2_i32 as u32),
+            (0x395_i32 as u32),
             cstr(ctx, 0x803f11d4),
         )
     });
@@ -2512,7 +2512,7 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
         fns::__assert(
             ctx,
             cstr(ctx, 0x803f11d4),
-            (0x17e_i32 as u32),
+            (0x2f8_i32 as u32),
             cstr(ctx, 0x803f11d4),
         )
     });
@@ -2522,7 +2522,7 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
         fns::__assert(
             ctx,
             cstr(ctx, 0x803f11d4),
-            (0x17f_i32 as u32),
+            (0x2f9_i32 as u32),
             cstr(ctx, 0x803f11d4),
         )
     });

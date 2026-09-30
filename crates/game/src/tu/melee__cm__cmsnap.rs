@@ -36,7 +36,7 @@ pub fn cmSnap_800315C8<'a>(ctx: &'a Ctx) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803bcd98),
-            (20_i32 as u32),
+            (85_i32 as u32),
             cstr(ctx, 0x803bcd98),
         )
     });

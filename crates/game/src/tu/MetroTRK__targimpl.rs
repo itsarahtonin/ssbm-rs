@@ -28,7 +28,7 @@ use crate::support::*;
 use ssbm_rt::cpu as c;
 
 pub fn __TRK_get_MSR<'a>(ctx: &'a Ctx) -> u32 {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: MWCC-only code.
     ().put_regs(ctx);
     asm___TRK_get_MSR(ctx);
     Ret::get(ctx)
@@ -50,7 +50,7 @@ fn asm___TRK_get_MSR(ctx: &Ctx) {
 }
 
 pub fn __TRK_set_MSR<'a>(ctx: &'a Ctx, a0: u32) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: MWCC-only code.
     (a0,).put_regs(ctx);
     asm___TRK_set_MSR(ctx);
 }
@@ -138,7 +138,7 @@ pub fn TRKValidMemory32<'a>(ctx: &'a Ctx, addr: Addr<'a>, length: u32, readWrite
 }
 
 pub fn TRK_ppc_memcpy<'a>(ctx: &'a Ctx, a0: Addr<'a>, a1: Addr<'a>, a2: i32, a3: u32, a4: u32) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: MWCC-only code.
     (a0, a1, a2, a3, a4).put_regs(ctx);
     asm_TRK_ppc_memcpy(ctx);
 }
@@ -639,7 +639,7 @@ pub fn TRKTargetCPUType<'a>(ctx: &'a Ctx, cpuType: DSCPUType<'a>) -> i32 {
 }
 
 pub fn TRKInterruptHandler<'a>(ctx: &'a Ctx, a0: u16) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: MWCC-only code.
     (a0,).put_regs(ctx);
     asm_TRKInterruptHandler(ctx);
 }
@@ -1060,7 +1060,7 @@ pub fn TRKPostInterruptEvent<'a>(ctx: &'a Ctx) {
 }
 
 pub fn TRKSwapAndGo<'a>(ctx: &'a Ctx) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: MWCC-only code.
     ().put_regs(ctx);
     asm_TRKSwapAndGo(ctx);
 }
@@ -1266,7 +1266,7 @@ fn asm_TRKSwapAndGo(ctx: &Ctx) {
 }
 
 pub fn TRKInterruptHandlerEnableInterrupts<'a>(ctx: &'a Ctx) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: MWCC-only code.
     ().put_regs(ctx);
     asm_TRKInterruptHandlerEnableInterrupts(ctx);
 }

@@ -26,6 +26,66 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn HSD_Checksum<'a>(ctx: &'a Ctx, src: Val<'a, u8>, len: i32, dest: Addr<'a>) {
+    let __frame = ctx.stack_frame(0x28);
+    let md5_init: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let mut src = src;
+    let mut len = len;
+    let mut dest = dest;
+    let mut i: i32 = 0;
+    let mut md5_bytes: i32 = 16_i32;
+    md5_init.at(0_i32).set((1_i32 as u8));
+    md5_init.at(1_i32).set((35_i32 as u8));
+    md5_init.at(2_i32).set((69_i32 as u8));
+    md5_init.at(3_i32).set((103_i32 as u8));
+    md5_init.at(4_i32).set((137_i32 as u8));
+    md5_init.at(5_i32).set((171_i32 as u8));
+    md5_init.at(6_i32).set((205_i32 as u8));
+    md5_init.at(7_i32).set((239_i32 as u8));
+    md5_init.at(8_i32).set((254_i32 as u8));
+    md5_init.at(9_i32).set((220_i32 as u8));
+    md5_init.at(10_i32).set((186_i32 as u8));
+    md5_init.at(11_i32).set((152_i32 as u8));
+    md5_init.at(12_i32).set((118_i32 as u8));
+    md5_init.at(13_i32).set((84_i32 as u8));
+    md5_init.at(14_i32).set((50_i32 as u8));
+    md5_init.at(15_i32).set((16_i32 as u8));
+    {
+        i = 0_i32;
+        'l1: while i < len {
+            'c2: {
+                md5_init.at(rem_i32(i, md5_bytes)).set(
+                    ((md5_init.at(rem_i32(i, md5_bytes)).get() as i32).wrapping_add(
+                        (({
+                            let __t1 = src;
+                            src = Handle::add(src, 1);
+                            __t1
+                        })
+                        .get() as i32),
+                    ) as u8),
+                );
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    {
+        i = 1_i32;
+        'l3: while i < md5_bytes {
+            'c4: {
+                if (md5_init.at(i.wrapping_sub(1_i32)).get() as i32)
+                    == (md5_init.at(i).get() as i32)
+                {
+                    md5_init
+                        .at(i)
+                        .set((((md5_init.at(i).get() as i32) ^ 255_i32) as u8));
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    let _ = fns::memcpy(ctx, dest, Handle::cast::<Addr<'a>>(md5_init.at(0)), 16_u32);
+}
+
 pub fn encryptByte<'a>(ctx: &'a Ctx, prev: u8, cur: i32) -> i32 {
     let mut prev = prev;
     let mut cur = cur;
@@ -312,6 +372,14 @@ fn inl_encryptAt_unfused<'a>(ctx: &'a Ctx, ptr_: Val<'a, u8>) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x803b2b20,
+        |ctx| {
+            let (a0, a1, a2): (Val<'_, u8>, i32, Addr<'_>) = Args::take_all(ctx);
+            Ret::put(HSD_Checksum(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Nothing,
+    );
     ctx.register_port(
         0x803b2e04,
         |ctx| {

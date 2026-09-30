@@ -307,7 +307,11 @@ pub fn ftGw_SpecialN_Loop<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, anim_frame: f64)
         null::<HSD_GObj<'a>>(ctx),
     );
     fns::ftAnim_8006EBA4(ctx, gobj);
-    fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    fp = {
+        let __t1 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+        fp = __t1;
+        __t1
+    };
     (fp).cmd_vars().at(1_i32).set((0_i32 as u32));
     (fp).cmd_vars().at(2_i32).set((0_i32 as u32));
     (fp).mv().gw().SpecialN().set_isChefLoopDisable(0_i32);
@@ -332,7 +336,11 @@ pub fn ftGw_SpecialAirN_Loop<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, anim_frame: f
         null::<HSD_GObj<'a>>(ctx),
     );
     fns::ftAnim_8006EBA4(ctx, gobj);
-    fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    fp = {
+        let __t1 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+        fp = __t1;
+        __t1
+    };
     (fp).cmd_vars().at(1_i32).set((0_i32 as u32));
     (fp).cmd_vars().at(2_i32).set((0_i32 as u32));
     (fp).mv().gw().SpecialN().set_isChefLoopDisable(0_i32);

@@ -35,12 +35,7 @@ pub fn HSD_AudioMalloc<'a>(ctx: &'a Ctx, size: u32) -> Addr<'a> {
     } else {
         ({
             fns::OSReport(ctx, cstr(ctx, 0x80407d90), &[]);
-            fns::__assert(
-                ctx,
-                cstr(ctx, 0x80407f2c),
-                (122_i32 as u32),
-                cstr(ctx, 0x80407f2c),
-            )
+            fns::__assert(ctx, cstr(ctx, 0x80407f2c), 41_u32, cstr(ctx, 0x80407f2c))
         })
     });
     return p;
@@ -377,7 +372,7 @@ pub fn HSD_SynthSFXHeaderLoadCallback<'a>(
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x80407f2c),
-                    (0x108_i32 as u32),
+                    (205_i32 as u32),
                     cstr(ctx, 0x80407f2c),
                 )
             })
@@ -510,7 +505,7 @@ pub fn HSD_SynthSFXLoad<'a>(
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x80407f2c),
-                (0x12f_i32 as u32),
+                (0x103_i32 as u32),
                 cstr(ctx, 0x80407f2c),
             )
         })
@@ -674,7 +669,7 @@ pub fn HSD_SynthSFXAllocateBank<'a>(ctx: &'a Ctx, size: i32) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x80407f2c),
-                (0x17e_i32 as u32),
+                (0x158_i32 as u32),
                 cstr(ctx, 0x80407f2c),
             )
         })
@@ -779,7 +774,7 @@ pub fn HSD_SynthSFXGroupDataReaddressCallback<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x80407f2c),
-            (0x1c8_i32 as u32),
+            (0x182_i32 as u32),
             cstr(ctx, 0x80407f2c),
         )
     });
@@ -1335,7 +1330,7 @@ pub fn HSD_SynthSFXPlayWithGroup<'a>(
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x80407f2c),
-                (0x2f8_i32 as u32),
+                (0x30b_i32 as u32),
                 cstr(ctx, 0x80407f2c),
             )
         })
@@ -1518,7 +1513,7 @@ pub fn HSD_SynthSFXSetVolumeFade<'a>(ctx: &'a Ctx, sfx_id: i32, vol: u8, flag: i
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x80407f2c),
-                (0x378_i32 as u32),
+                (0x376_i32 as u32),
                 cstr(ctx, 0x80407f2c),
             )
         });
@@ -1615,7 +1610,7 @@ pub fn HSD_SynthSFXSetPitchRatio<'a>(ctx: &'a Ctx, sfx_id: i32, flag: i32, ratio
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x80407f2c),
-                (0x3ad_i32 as u32),
+                (0x3a7_i32 as u32),
                 cstr(ctx, 0x80407f2c),
             )
         });
@@ -2611,7 +2606,7 @@ pub fn HSD_SynthPStreamHeaderCallback<'a>(
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x80407f2c),
-                    (0x5b3_i32 as u32),
+                    (0x5cf_i32 as u32),
                     cstr(ctx, 0x804080ec),
                 )
             });
@@ -3037,12 +3032,7 @@ fn inl_HSD_AudioMalloc_unfused<'a>(ctx: &'a Ctx, size: u32) -> Addr<'a> {
     } else {
         ({
             fns::OSReport(ctx, cstr(ctx, 0x80407d90), &[]);
-            fns::__assert(
-                ctx,
-                cstr(ctx, 0x80407f2c),
-                (122_i32 as u32),
-                cstr(ctx, 0x80407f2c),
-            )
+            fns::__assert(ctx, cstr(ctx, 0x80407f2c), 41_u32, cstr(ctx, 0x80407f2c))
         })
     });
     return p;

@@ -24499,11 +24499,11 @@ impl<'a> TmData<'a> {
     #[inline] pub fn x534(self) -> ArrP<'a, HSD_Text<'a>, 3> { self.0.field(0x534) }
     #[inline] pub fn pad_x540(self) -> ArrV<'a, u8, 52> { self.0.field(0x540) }
 }
-/// C struct `TmData_80194F30`, 0x538 bytes.
+/// C struct `TmData_80194F30`, 0x4b7 bytes.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct TmData_80194F30<'a>(pub At<'a>);
 impl<'a> Handle<'a> for TmData_80194F30<'a> {
-    const SIZE: u32 = 0x538;
+    const SIZE: u32 = 0x4b7;
     #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
     #[inline] fn at(self) -> At<'a> { self.0 }
 }
@@ -24513,13 +24513,13 @@ impl<'a> TmData_80194F30<'a> {
     #[inline] pub fn set_x2E(self, v: u8) { self.0.set::<u8>(0x2e, v) }
     #[inline] pub fn x2E_ref(self) -> Val<'a, u8> { self.0.field(0x2e) }
     #[inline] pub fn pad_x2F(self) -> ArrV<'a, u8, 8> { self.0.field(0x2f) }
-    #[inline] pub fn x37(self) -> Arr<'a, TmData_80194F30_x37<'a>, 64> { self.0.field(0x38) }
+    #[inline] pub fn x37(self) -> Arr<'a, TmData_80194F30_x37<'a>, 64> { self.0.field(0x37) }
 }
-/// C struct `TmData_80194F30_x37`, 0x14 bytes.
+/// C struct `TmData_80194F30_x37`, 0x12 bytes.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct TmData_80194F30_x37<'a>(pub At<'a>);
 impl<'a> Handle<'a> for TmData_80194F30_x37<'a> {
-    const SIZE: u32 = 0x14;
+    const SIZE: u32 = 0x12;
     #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
     #[inline] fn at(self) -> At<'a> { self.0 }
 }
@@ -24551,22 +24551,22 @@ impl<'a> TmData_80194F30_x37<'a> {
     #[inline] pub fn x8(self) -> u8 { self.0.get::<u8>(0x8) }
     #[inline] pub fn set_x8(self, v: u8) { self.0.set::<u8>(0x8, v) }
     #[inline] pub fn x8_ref(self) -> Val<'a, u8> { self.0.field(0x8) }
-    #[inline] pub fn x9(self) -> u16 { self.0.get::<u16>(0xa) }
-    #[inline] pub fn set_x9(self, v: u16) { self.0.set::<u16>(0xa, v) }
-    #[inline] pub fn x9_ref(self) -> Val<'a, u16> { self.0.field(0xa) }
-    #[inline] pub fn xB(self) -> u16 { self.0.get::<u16>(0xc) }
-    #[inline] pub fn set_xB(self, v: u16) { self.0.set::<u16>(0xc, v) }
-    #[inline] pub fn xB_ref(self) -> Val<'a, u16> { self.0.field(0xc) }
-    #[inline] pub fn xD(self) -> u8 { self.0.get::<u8>(0xe) }
-    #[inline] pub fn set_xD(self, v: u8) { self.0.set::<u8>(0xe, v) }
-    #[inline] pub fn xD_ref(self) -> Val<'a, u8> { self.0.field(0xe) }
-    #[inline] pub fn xE(self) -> u8 { self.0.get::<u8>(0xf) }
-    #[inline] pub fn set_xE(self, v: u8) { self.0.set::<u8>(0xf, v) }
-    #[inline] pub fn xE_ref(self) -> Val<'a, u8> { self.0.field(0xf) }
-    #[inline] pub fn xF(self) -> u8 { self.0.get::<u8>(0x10) }
-    #[inline] pub fn set_xF(self, v: u8) { self.0.set::<u8>(0x10, v) }
-    #[inline] pub fn xF_ref(self) -> Val<'a, u8> { self.0.field(0x10) }
-    #[inline] pub fn pad_X10(self) -> ArrV<'a, u8, 2> { self.0.field(0x11) }
+    #[inline] pub fn x9(self) -> u16 { self.0.get::<u16>(0x9) }
+    #[inline] pub fn set_x9(self, v: u16) { self.0.set::<u16>(0x9, v) }
+    #[inline] pub fn x9_ref(self) -> Val<'a, u16> { self.0.field(0x9) }
+    #[inline] pub fn xB(self) -> u16 { self.0.get::<u16>(0xb) }
+    #[inline] pub fn set_xB(self, v: u16) { self.0.set::<u16>(0xb, v) }
+    #[inline] pub fn xB_ref(self) -> Val<'a, u16> { self.0.field(0xb) }
+    #[inline] pub fn xD(self) -> u8 { self.0.get::<u8>(0xd) }
+    #[inline] pub fn set_xD(self, v: u8) { self.0.set::<u8>(0xd, v) }
+    #[inline] pub fn xD_ref(self) -> Val<'a, u8> { self.0.field(0xd) }
+    #[inline] pub fn xE(self) -> u8 { self.0.get::<u8>(0xe) }
+    #[inline] pub fn set_xE(self, v: u8) { self.0.set::<u8>(0xe, v) }
+    #[inline] pub fn xE_ref(self) -> Val<'a, u8> { self.0.field(0xe) }
+    #[inline] pub fn xF(self) -> u8 { self.0.get::<u8>(0xf) }
+    #[inline] pub fn set_xF(self, v: u8) { self.0.set::<u8>(0xf, v) }
+    #[inline] pub fn xF_ref(self) -> Val<'a, u8> { self.0.field(0xf) }
+    #[inline] pub fn pad_X10(self) -> ArrV<'a, u8, 2> { self.0.field(0x10) }
 }
 /// C union `TmPlayerAnimFrameTable`, 0x24 bytes.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
@@ -62636,21 +62636,21 @@ impl<'a> lbl_803BC918_t<'a> {
     #[inline] pub fn set_channel(self, v: i32) { self.0.set::<i32>(0x8, v) }
     #[inline] pub fn channel_ref(self) -> Val<'a, i32> { self.0.field(0x8) }
 }
-/// C struct `lbl_803D5168_t`, 0x8 bytes.
+/// C struct `lbl_803D5168_t`, 0x2 bytes.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct lbl_803D5168_t<'a>(pub At<'a>);
 impl<'a> Handle<'a> for lbl_803D5168_t<'a> {
-    const SIZE: u32 = 0x8;
+    const SIZE: u32 = 0x2;
     #[inline] fn from_at(at: At<'a>) -> Self { Self(at) }
     #[inline] fn at(self) -> At<'a> { self.0 }
 }
 impl<'a> lbl_803D5168_t<'a> {
-    #[inline] pub fn x0(self) -> u32 { self.0.get::<u32>(0x0) }
-    #[inline] pub fn set_x0(self, v: u32) { self.0.set::<u32>(0x0, v) }
-    #[inline] pub fn x0_ref(self) -> Val<'a, u32> { self.0.field(0x0) }
-    #[inline] pub fn x1(self) -> u32 { self.0.get::<u32>(0x4) }
-    #[inline] pub fn set_x1(self, v: u32) { self.0.set::<u32>(0x4, v) }
-    #[inline] pub fn x1_ref(self) -> Val<'a, u32> { self.0.field(0x4) }
+    #[inline] pub fn x0(self) -> u8 { self.0.get::<u8>(0x0) }
+    #[inline] pub fn set_x0(self, v: u8) { self.0.set::<u8>(0x0, v) }
+    #[inline] pub fn x0_ref(self) -> Val<'a, u8> { self.0.field(0x0) }
+    #[inline] pub fn x1(self) -> u8 { self.0.get::<u8>(0x1) }
+    #[inline] pub fn set_x1(self, v: u8) { self.0.set::<u8>(0x1, v) }
+    #[inline] pub fn x1_ref(self) -> Val<'a, u8> { self.0.field(0x1) }
 }
 /// C struct `lbl_803D51A0_t`, 0x4 bytes.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]

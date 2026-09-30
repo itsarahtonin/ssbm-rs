@@ -1097,7 +1097,7 @@ pub fn lbRefSetUnuse<'a>(ctx: &'a Ctx) {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803bb0b4),
-                    (0x2a8_i32 as u32),
+                    (0x31c_i32 as u32),
                     cstr(ctx, 0x803bb0b4),
                 )
             })

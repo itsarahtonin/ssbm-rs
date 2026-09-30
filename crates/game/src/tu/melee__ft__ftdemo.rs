@@ -211,7 +211,7 @@ pub fn ftDemo_GetMotionFileString<'a>(ctx: &'a Ctx, cb_idx: i32, cb_arg: i32) ->
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803c6914),
-                    (157_i32 as u32),
+                    (0x128_i32 as u32),
                     cstr(ctx, 0x803c6914),
                 )
             })

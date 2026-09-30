@@ -123,7 +123,7 @@ pub fn gmMain_8015FDA4<'a>(ctx: &'a Ctx) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803d4ad4),
-                (101_i32 as u32),
+                (210_i32 as u32),
                 cstr(ctx, 0x803d4ad4),
             )
         });
@@ -132,7 +132,7 @@ pub fn gmMain_8015FDA4<'a>(ctx: &'a Ctx) {
 }
 
 pub fn main<'a>(ctx: &'a Ctx) -> i32 {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: inline init_spr_unk: MWCC-only code.
     ().put_regs(ctx);
     asm_main(ctx);
     Ret::get(ctx)

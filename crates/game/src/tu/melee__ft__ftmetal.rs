@@ -317,7 +317,7 @@ pub fn ft_800C85B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                                         fns::__assert(
                                             ctx,
                                             cstr(ctx, 0x803c6d6c),
-                                            (211_i32 as u32),
+                                            (248_i32 as u32),
                                             cstr(ctx, 0x803c6d6c),
                                         )
                                     })
@@ -352,7 +352,7 @@ pub fn ft_800C85B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                                 fns::__assert(
                                     ctx,
                                     cstr(ctx, 0x803c6d6c),
-                                    (225_i32 as u32),
+                                    (0x106_i32 as u32),
                                     cstr(ctx, 0x803c6d6c),
                                 )
                             })

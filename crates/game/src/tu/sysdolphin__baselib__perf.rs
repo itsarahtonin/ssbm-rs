@@ -126,7 +126,7 @@ pub fn HSD_PerfCountEnvelopeBlending<'a>(ctx: &'a Ctx, n: i32) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80407188),
-            (44_i32 as u32),
+            (164_i32 as u32),
             cstr(ctx, 0x80407188),
         )
     });

@@ -55,7 +55,7 @@ pub fn HSD_GObjObject_80390A70<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, kind: u8, o
         fns::__assert(
             ctx,
             cstr(ctx, 0x80408564),
-            (19_i32 as u32),
+            (42_i32 as u32),
             cstr(ctx, 0x80408564),
         )
     });

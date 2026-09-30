@@ -248,7 +248,7 @@ pub fn grLib_801C9A70<'a>(ctx: &'a Ctx, arg0: i32, v: Vec<'a>) {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x804d4588),
-                    (173_i32 as u32),
+                    (0x122_i32 as u32),
                     cstr(ctx, 0x804d4588),
                 )
             });
@@ -514,7 +514,7 @@ fn inl_HSD_JObjGetTranslationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> 
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d4588),
-            (0x246_i32 as u32),
+            (0x3e1_i32 as u32),
             cstr(ctx, 0x804d4588),
         )
     });
@@ -529,7 +529,7 @@ fn inl_HSD_JObjGetTranslationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> 
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d4588),
-            (0x24c_i32 as u32),
+            (0x3ee_i32 as u32),
             cstr(ctx, 0x804d4588),
         )
     });

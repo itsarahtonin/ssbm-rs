@@ -118,7 +118,7 @@ pub fn ftCo_800CED30<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x804d8f30),
-                            (39_i32 as u32),
+                            (54_i32 as u32),
                             cstr(ctx, 0x804d8f30),
                         )
                     })

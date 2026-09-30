@@ -216,7 +216,7 @@ pub fn TObjUpdateFunc<'a>(ctx: &'a Ctx, obj: Addr<'a>, r#type: i32, val: HSD_Obj
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x80405574),
-                        (146_i32 as u32),
+                        (0x114_i32 as u32),
                         cstr(ctx, 0x80405574),
                     )
                 });
@@ -548,7 +548,7 @@ pub fn HSD_TObjLoadDesc<'a>(ctx: &'a Ctx, td: _HSD_TObjDesc<'a>) -> HSD_TObj<'a>
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x80405574),
-                    (0x122_i32 as u32),
+                    (0x1d4_i32 as u32),
                     cstr(ctx, 0x80405574),
                 )
             });
@@ -698,7 +698,7 @@ pub fn MakeTextureMtx<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80405574),
-            (0x175_i32 as u32),
+            (0x24d_i32 as u32),
             cstr(ctx, 0x80405574),
         )
     });
@@ -825,7 +825,7 @@ pub fn TObjSetupMtx<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x80405574),
-                            (0x1b4_i32 as u32),
+                            (0x2a8_i32 as u32),
                             cstr(ctx, 0x80405574),
                         )
                     });
@@ -1434,7 +1434,7 @@ pub fn MakeColorGenTExp<'a>(
                                 fns::__assert(
                                     ctx,
                                     cstr(ctx, 0x80405574),
-                                    (0x346_i32 as u32),
+                                    (0x4a7_i32 as u32),
                                     cstr(ctx, 0x80405574),
                                 )
                             });
@@ -1589,7 +1589,7 @@ pub fn MakeColorGenTExp<'a>(
                                 fns::__assert(
                                     ctx,
                                     cstr(ctx, 0x80405574),
-                                    (0x38a_i32 as u32),
+                                    (0x4f0_i32 as u32),
                                     cstr(ctx, 0x80405574),
                                 )
                             });
@@ -1878,7 +1878,7 @@ pub fn TObjMakeTExp<'a>(
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x80405574),
-                    (0x3dd_i32 as u32),
+                    (0x55c_i32 as u32),
                     cstr(ctx, 0x80405574),
                 )
             });
@@ -2073,7 +2073,7 @@ pub fn TObjMakeTExp<'a>(
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x80405574),
-                        (0x412_i32 as u32),
+                        (0x596_i32 as u32),
                         cstr(ctx, 0x80405574),
                     )
                 });
@@ -2251,7 +2251,7 @@ pub fn HSD_TObjSetup<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x80405574),
-                        (0x494_i32 as u32),
+                        (0x62a_i32 as u32),
                         cstr(ctx, 0x80405574),
                     )
                 });
@@ -2261,7 +2261,7 @@ pub fn HSD_TObjSetup<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x80405574),
-                        (0x495_i32 as u32),
+                        (0x62b_i32 as u32),
                         cstr(ctx, 0x80405574),
                     )
                 });
@@ -2301,7 +2301,7 @@ pub fn HSD_TObjSetup<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
                                 fns::__assert(
                                     ctx,
                                     cstr(ctx, 0x80405574),
-                                    (0x4a6_i32 as u32),
+                                    (0x63b_i32 as u32),
                                     cstr(ctx, 0x80405574),
                                 )
                             });
@@ -2402,7 +2402,7 @@ pub fn HSD_TObjSetup<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80405574),
-                                (0x4d4_i32 as u32),
+                                (0x677_i32 as u32),
                                 cstr(ctx, 0x80405574),
                             )
                         });
@@ -2476,7 +2476,7 @@ pub fn HSD_TGTex2Index<'a>(ctx: &'a Ctx, tgtex: i32) -> u32 {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x80405574),
-                    (0x4f6_i32 as u32),
+                    (0x6a5_i32 as u32),
                     cstr(ctx, 0x80405574),
                 )
             });
@@ -2528,7 +2528,7 @@ pub fn HSD_TexCoordID2TexGenSrc<'a>(ctx: &'a Ctx, coord: i32) -> i32 {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x80405574),
-                    (0x50e_i32 as u32),
+                    (0x6ca_i32 as u32),
                     cstr(ctx, 0x80405574),
                 )
             });
@@ -2583,7 +2583,7 @@ pub fn HSD_TexCoord2Index<'a>(ctx: &'a Ctx, coord_id: i32) -> u32 {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x80405574),
-                    (0x527_i32 as u32),
+                    (0x6f0_i32 as u32),
                     cstr(ctx, 0x80405574),
                 )
             });
@@ -2638,7 +2638,7 @@ pub fn HSD_Index2TexCoord<'a>(ctx: &'a Ctx, index: u32) -> i32 {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x80405574),
-                    (0x540_i32 as u32),
+                    (0x708_i32 as u32),
                     cstr(ctx, 0x80405574),
                 )
             });
@@ -2820,7 +2820,7 @@ pub fn HSD_Index2TexMap<'a>(ctx: &'a Ctx, index: u32) -> i32 {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x80405574),
-                    (0x598_i32 as u32),
+                    (0x77b_i32 as u32),
                     cstr(ctx, 0x80405574),
                 )
             });
@@ -2875,7 +2875,7 @@ pub fn HSD_TexMap2Index<'a>(ctx: &'a Ctx, mapid: i32) -> u32 {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x80405574),
-                    (0x5b1_i32 as u32),
+                    (0x793_i32 as u32),
                     cstr(ctx, 0x80405574),
                 )
             });
@@ -2916,7 +2916,7 @@ pub fn HSD_TObjAlloc<'a>(ctx: &'a Ctx) -> HSD_TObj<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80405574),
-            (0x5dd_i32 as u32),
+            (0x7f8_i32 as u32),
             cstr(ctx, 0x80405574),
         )
     });
@@ -2943,7 +2943,7 @@ pub fn HSD_TlutAlloc<'a>(ctx: &'a Ctx) -> _HSD_Tlut<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80405574),
-            (0x5eb_i32 as u32),
+            (0x815_i32 as u32),
             cstr(ctx, 0x80405574),
         )
     });
@@ -2969,7 +2969,7 @@ pub fn HSD_TObjTevAlloc<'a>(ctx: &'a Ctx) -> _HSD_TObjTev<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80405574),
-            (0x5ff_i32 as u32),
+            (0x840_i32 as u32),
             cstr(ctx, 0x80405574),
         )
     });
@@ -2987,7 +2987,7 @@ pub fn HSD_ImageDescAlloc<'a>(ctx: &'a Ctx) -> HSD_ImageDesc<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80405574),
-            (0x613_i32 as u32),
+            (0x86b_i32 as u32),
             cstr(ctx, 0x80405574),
         )
     });
@@ -3447,7 +3447,8 @@ fn inl_HSD_TexMapID2PTTexMtx_unfused<'a>(ctx: &'a Ctx, id: i32) -> u32 {
 fn inl_DifferentTluts_unfused<'a>(ctx: &'a Ctx, t0: _HSD_Tlut<'a>, t1: _HSD_Tlut<'a>) -> i32 {
     let mut t0 = t0;
     let mut t1 = t1;
-    return ((((t0).n_entries() as i32) != ((t1).n_entries() as i32)) as i32);
+    return ((Handle::addr((t0).lut()) != Handle::addr((t0).lut()))
+        || (((t0).n_entries() as i32) != ((t1).n_entries() as i32))) as i32;
 }
 
 fn inl_hsdDelete_unfused<'a>(ctx: &'a Ctx, object: Addr<'a>) {

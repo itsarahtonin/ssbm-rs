@@ -438,7 +438,7 @@ pub fn fn_801C8EF8<'a>(ctx: &'a Ctx, mobj: HSD_MObj<'a>, rendermode: u32) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803e0a24),
-            (0x1af_i32 as u32),
+            (243_i32 as u32),
             cstr(ctx, 0x803e0a24),
         )
     });
@@ -922,7 +922,7 @@ fn inl_fn_801C8EF8_inline_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>, mobj: HSD_MO
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803e0a24),
-                        (0x14b_i32 as u32),
+                        (122_i32 as u32),
                         cstr(ctx, 0x803e0a24),
                     )
                 });
@@ -958,7 +958,7 @@ fn inl_fn_801C8EF8_inline_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>, mobj: HSD_MO
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803e0a24),
-                        (0x15f_i32 as u32),
+                        (136_i32 as u32),
                         cstr(ctx, 0x803e0a24),
                     )
                 });
@@ -1011,7 +1011,7 @@ fn inl_fn_801C8EF8_inline_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>, mobj: HSD_MO
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803e0a24),
-                        (0x181_i32 as u32),
+                        (167_i32 as u32),
                         cstr(ctx, 0x803e0a24),
                     )
                 });

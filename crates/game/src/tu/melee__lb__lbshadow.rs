@@ -107,7 +107,7 @@ pub fn lbShadow_8000ED54<'a>(ctx: &'a Ctx, lbshadow: LbShadow<'a>, jobj: HSD_JOb
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ba0ec),
-            (121_i32 as u32),
+            (54_i32 as u32),
             cstr(ctx, 0x803ba0ec),
         )
     });
@@ -146,12 +146,7 @@ pub fn lbShadow_8000EE8C<'a>(ctx: &'a Ctx, lbshadow: LbShadow<'a>) {
     (if !Handle::is_null((lbshadow)) {
         ({ () })
     } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803ba0ec),
-            (148_i32 as u32),
-            cstr(ctx, 0x803ba0ec),
-        )
+        fns::__assert(ctx, cstr(ctx, 0x803ba0ec), 98_u32, cstr(ctx, 0x803ba0ec))
     });
     if !Handle::is_null((lbshadow).shadow()) {
         fns::HSD_ShadowRemove(ctx, (lbshadow).shadow());
@@ -324,7 +319,11 @@ pub fn lbShadow_8000F38C<'a>(ctx: &'a Ctx, arg0: i32) {
     noLight = 0_i32;
     nextGx = ptr::<HSD_GObj<'a>>(ctx, (arg0.wrapping_sub(arg0)) as u32);
     {
-        gobj = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 8_i32)).get();
+        gobj = {
+            let __t1 = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 8_i32)).get();
+            gobj = __t1;
+            __t1
+        };
         'l3: while !Handle::is_null(gobj) {
             'c4: {
                 let mut lbs: LbShadow<'a> = fns::ftLib_GetShadow(ctx, gobj);
@@ -378,7 +377,7 @@ pub fn lbShadow_8000F38C<'a>(ctx: &'a Ctx, arg0: i32) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803ba0ec),
-                (0x17f_i32 as u32),
+                (0x181_i32 as u32),
                 cstr(ctx, 0x803ba0ec),
             )
         });
@@ -391,7 +390,7 @@ pub fn lbShadow_8000F38C<'a>(ctx: &'a Ctx, arg0: i32) {
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803ba0ec),
-                        (0x182_i32 as u32),
+                        (0x184_i32 as u32),
                         cstr(ctx, 0x803ba0ec),
                     )
                 })
@@ -410,12 +409,16 @@ pub fn lbShadow_8000F38C<'a>(ctx: &'a Ctx, arg0: i32) {
         let _ = fns::lbVector_Diff(ctx, lightPos, lightDir, lightVec);
         dist = fp::fadds(
             (fp::fmuls(lightVec.z(), lightVec.z())),
-            (fp::fadds(
-                (fp::fmuls(lightVec.x(), lightVec.x())),
-                (fp::fmuls(lightVec.y(), lightVec.y())),
-            )),
+            ({
+                let __t2 = fp::fadds(
+                    (fp::fmuls(lightVec.x(), lightVec.x())),
+                    (fp::fmuls(lightVec.y(), lightVec.y())),
+                );
+                dist = __t2;
+                __t2
+            }),
         );
-        dist = inl_sqrtf(ctx, dist);
+        dist = inl_my_sqrtf(ctx, dist);
         if dist < 0.0010000000474974513 {
             noLight = 1_i32;
             lightPos.set_x(fns::lbShadow_804D7B70(ctx).get());
@@ -424,9 +427,9 @@ pub fn lbShadow_8000F38C<'a>(ctx: &'a Ctx, arg0: i32) {
             lightPos.set_y(fns::lbShadow_804D7B70(ctx).get());
             lightDir.set_y(fns::lbShadow_804D7B70(ctx).get());
             lightPos.set_z({
-                let __t1 = fns::lbShadow_804D7B88(ctx).get();
-                upVec.set_y(__t1);
-                __t1
+                let __t3 = fns::lbShadow_804D7B88(ctx).get();
+                upVec.set_y(__t3);
+                __t3
             });
             lightDir.set_z(fns::lbShadow_804D7B70(ctx).get());
             upVec.set_z(fns::lbShadow_804D7B70(ctx).get());
@@ -820,22 +823,26 @@ fn inl_GXPosition3f32_unfused<'a>(ctx: &'a Ctx, x: f64, y: f64, z: f64) {
 
 fn inl_GXEnd_unfused<'a>(ctx: &'a Ctx) {}
 
-fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+fn inl_my_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+    let __frame = ctx.stack_frame(0x40);
+    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x0);
     let mut x = x;
+    ctx.fill(Handle::addr(unused), 0, 0x38);
+    unused.at(0).set((0_i32 as u8));
     let mut y: f64 = 0.0;
-    if x > 0.0 {
+    if x > fns::lbShadow_804D7B70(ctx).get() {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            fp::fmul(fns::lbShadow_804D7B78(ctx).get(), guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, fns::lbShadow_804D7B80(ctx).get())),
         );
         guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            fp::fmul(fns::lbShadow_804D7B78(ctx).get(), guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, fns::lbShadow_804D7B80(ctx).get())),
         );
         guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            fp::fmul(fns::lbShadow_804D7B78(ctx).get(), guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, fns::lbShadow_804D7B80(ctx).get())),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;

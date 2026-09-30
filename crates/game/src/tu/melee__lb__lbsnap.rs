@@ -392,10 +392,11 @@ pub fn lbSnap_8001DA5C<'a>(ctx: &'a Ctx, src: Val<'a, u8>) {
                             src_tile = div_i32(pixel_column, 4_i32);
                             src_row_in_tile = rem_i32(src_row, 4_i32);
                             src_column_in_tile = rem_i32(pixel_column, 4_i32);
-                            rgb5a3 = (((rgb5a3 as i32)
-                                | (((sar_i32((rgb565 as i32), (1_i32 as u32)))
-                                    & ((0x7c00_i32) | (0x3e0_i32)))
-                                    | (0x8000_i32))) as u16);
+                            rgb5a3 = (({
+                                let __a: u32 = ((rgb5a3 as i32) as u32);
+                                let __b: u32 = ((rgb565 as i32) as u32);
+                                ((__b.rotate_left(31) & 0x7fe0) | (__a & 0xffff801f)) as i32
+                            } | (0x8000_i32)) as u16);
                             offset_base = offset_base.wrapping_add(dst_tile_row);
                             src_tile = src_tile.wrapping_add(src_tile_row);
                             offset = (shl_i32(offset_base, (5_i32 as u32)))
@@ -808,7 +809,7 @@ fn inl_lbSnap_FormatTime_unfused<'a>(ctx: &'a Ctx, chan: i32, index: i32, text: 
         fns::__assert(
             ctx,
             cstr(ctx, 0x803baccc),
-            (175_i32 as u32),
+            (0x19a_i32 as u32),
             cstr(ctx, 0x803baccc),
         )
     });

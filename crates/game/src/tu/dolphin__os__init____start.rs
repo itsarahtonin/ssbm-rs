@@ -35,7 +35,7 @@ pub fn __check_pad3<'a>(ctx: &'a Ctx) {
 }
 
 pub fn __start<'a>(ctx: &'a Ctx) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     ().put_regs(ctx);
     asm___start(ctx);
 }

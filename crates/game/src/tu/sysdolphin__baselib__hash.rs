@@ -103,7 +103,7 @@ pub fn HSD_HashSearch<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x80382a46),
-            (41_i32 as u32),
+            (113_i32 as u32),
             cstr(ctx, 0x80382a46),
         )
     });

@@ -392,7 +392,7 @@ pub fn AIGetStreamVolRight<'a>(ctx: &'a Ctx) -> u8 {
 }
 
 pub fn AIInit<'a>(ctx: &'a Ctx, a0: Val<'a, u8>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: hardware register order.
     (a0,).put_regs(ctx);
     asm_AIInit(ctx);
 }

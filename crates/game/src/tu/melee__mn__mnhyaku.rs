@@ -241,7 +241,7 @@ pub fn mnHyaku_8024CB94<'a>(ctx: &'a Ctx, arg0: u8) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803ef668),
-                (187_i32 as u32),
+                (0x168_i32 as u32),
                 cstr(ctx, 0x803ef668),
             )
         })

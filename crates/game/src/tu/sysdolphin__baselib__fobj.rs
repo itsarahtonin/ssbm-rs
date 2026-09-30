@@ -439,7 +439,11 @@ pub fn HSD_FObjInterpretAnim<'a>(
                         if __case <= 3 {
                             {
                                 if fp::frsp(((fobj).fterm() as i32) as f64) <= (fobj).time() {
-                                    state = (3_i32 as u32);
+                                    state = {
+                                        let __t1 = (3_i32 as u32);
+                                        state = __t1;
+                                        __t1
+                                    };
                                     fterm = fp::frsp((fobj).fterm() as f64);
                                     (fobj).set_time(fp::fsubs(
                                         (fobj).time(),
@@ -449,14 +453,22 @@ pub fn HSD_FObjInterpretAnim<'a>(
                                     break 's3;
                                 }
                                 fns::FObjUpdateAnim(ctx, fobj, obj, obj_update);
-                                state = (5_i32 as u32);
+                                state = {
+                                    let __t2 = (5_i32 as u32);
+                                    state = __t2;
+                                    __t2
+                                };
                                 let _ = fns::HSD_FObjSetState(ctx, fobj, state);
                                 return;
                             }
                         }
                         if __case <= 4 {
                             {
-                                state = (4_i32 as u32);
+                                state = {
+                                    let __t3 = (4_i32 as u32);
+                                    state = __t3;
+                                    __t3
+                                };
                                 let _ = fns::HSD_FObjSetState(ctx, fobj, state);
                                 break 's3;
                             }
@@ -522,7 +534,7 @@ pub fn HSD_FObjAlloc<'a>(ctx: &'a Ctx) -> HSD_FObj<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406364),
-            (0x1ea_i32 as u32),
+            (0x2f3_i32 as u32),
             cstr(ctx, 0x80406364),
         )
     });
@@ -632,7 +644,7 @@ fn inl_FObjAnimCON_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) -> u32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406364),
-            (224_i32 as u32),
+            (0x17f_i32 as u32),
             cstr(ctx, 0x80406364),
         )
     });
@@ -662,7 +674,7 @@ fn inl_FObjAnimLinear_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) -> u32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406364),
-            (239_i32 as u32),
+            (0x193_i32 as u32),
             cstr(ctx, 0x80406364),
         )
     });
@@ -692,7 +704,7 @@ fn inl_FObjAnimSPL0_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) -> u32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406364),
-            (254_i32 as u32),
+            (0x1a7_i32 as u32),
             cstr(ctx, 0x80406364),
         )
     });
@@ -720,7 +732,7 @@ fn inl_FObjAnimSPL_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) -> u32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406364),
-            (0x10b_i32 as u32),
+            (0x1b9_i32 as u32),
             cstr(ctx, 0x80406364),
         )
     });
@@ -752,7 +764,7 @@ fn inl_FObjAnimSLP_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) -> u32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406364),
-            (0x118_i32 as u32),
+            (0x1cc_i32 as u32),
             cstr(ctx, 0x80406364),
         )
     });
@@ -774,7 +786,7 @@ fn inl_FObjAnimKey_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) -> u32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406364),
-            (0x123_i32 as u32),
+            (0x1e9_i32 as u32),
             cstr(ctx, 0x80406364),
         )
     });
@@ -877,7 +889,7 @@ fn inl_FObjLoadWait_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) -> u32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406364),
-            (210_i32 as u32),
+            (0x16c_i32 as u32),
             cstr(ctx, 0x80406364),
         )
     });

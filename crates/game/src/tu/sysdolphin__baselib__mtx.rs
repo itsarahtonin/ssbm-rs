@@ -1342,7 +1342,7 @@ pub fn HSD_VecAlloc<'a>(ctx: &'a Ctx) -> Addr<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x804de660),
-            (0x1ce_i32 as u32),
+            (0x335_i32 as u32),
             cstr(ctx, 0x804de660),
         )
     });
@@ -1367,7 +1367,7 @@ pub fn HSD_MtxAlloc<'a>(ctx: &'a Ctx) -> Addr<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x804de660),
-            (0x1df_i32 as u32),
+            (0x354_i32 as u32),
             cstr(ctx, 0x804de660),
         )
     });

@@ -361,7 +361,7 @@ pub fn HSD_TExpMakeDag<'a>(ctx: &'a Ctx, root: HSD_TExp<'a>, list: HSD_TExpDag<'
         fns::__assert(
             ctx,
             cstr(ctx, 0x80407ae4),
-            (176_i32 as u32),
+            (238_i32 as u32),
             cstr(ctx, 0x80407ae4),
         )
     });
@@ -384,7 +384,7 @@ pub fn HSD_TExpMakeDag<'a>(ctx: &'a Ctx, root: HSD_TExp<'a>, list: HSD_TExpDag<'
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x80407ae4),
-                        (183_i32 as u32),
+                        (246_i32 as u32),
                         cstr(ctx, 0x80407ae4),
                     )
                 });
@@ -575,7 +575,7 @@ pub fn HSD_TExpMakeDag<'a>(ctx: &'a Ctx, root: HSD_TExp<'a>, list: HSD_TExpDag<'
                                     fns::__assert(
                                         ctx,
                                         cstr(ctx, 0x80407ae4),
-                                        (0x105_i32 as u32),
+                                        (0x145_i32 as u32),
                                         cstr(ctx, 0x80407ae4),
                                     )
                                 });
@@ -643,7 +643,7 @@ pub fn HSD_TExpMakeDag<'a>(ctx: &'a Ctx, root: HSD_TExp<'a>, list: HSD_TExpDag<'
                                     fns::__assert(
                                         ctx,
                                         cstr(ctx, 0x80407ae4),
-                                        (0x11b_i32 as u32),
+                                        (0x15b_i32 as u32),
                                         cstr(ctx, 0x80407ae4),
                                     )
                                 });

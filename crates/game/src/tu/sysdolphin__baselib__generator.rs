@@ -602,7 +602,7 @@ pub fn hsd_8039DAD4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) -> f64 {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x8000558c),
-                (0x1b4_i32 as u32),
+                (0x2a5_i32 as u32),
                 cstr(ctx, 0x8000558c),
             )
         });
@@ -1844,7 +1844,7 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x8000558c),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x8000558c),
         )
     });
@@ -1911,7 +1911,7 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x8000558c),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x8000558c),
         )
     });
@@ -1982,7 +1982,7 @@ fn inl_ref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x8000558c),
-                (87_i32 as u32),
+                (93_i32 as u32),
                 cstr(ctx, 0x8000558c),
             )
         });

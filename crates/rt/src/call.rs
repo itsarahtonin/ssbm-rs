@@ -341,6 +341,7 @@ impl Ctx {
         for v in varargs {
             match *v {
                 VarArg::Int(x) => Arg::put(x, self, &mut r),
+                VarArg::Wide(x) => Arg::put(x, self, &mut r),
                 VarArg::Float(f) => {
                     floats = true;
                     Arg::put(f, self, &mut r)
@@ -359,6 +360,8 @@ impl Ctx {
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum VarArg {
     Int(u32),
+    /// A `long long`, in an aligned register pair or stack slot.
+    Wide(u64),
     Float(f64),
 }
 

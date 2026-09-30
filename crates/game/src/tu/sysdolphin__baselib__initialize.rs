@@ -592,7 +592,7 @@ fn inl_HSD_ObjAllocGetUsing_unfused<'a>(ctx: &'a Ctx, data: _HSD_ObjAllocData<'a
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b94f8),
-            (37_i32 as u32),
+            (205_i32 as u32),
             cstr(ctx, 0x803b94f8),
         )
     });
@@ -607,7 +607,7 @@ fn inl_HSD_ObjAllocGetFreed_unfused<'a>(ctx: &'a Ctx, data: _HSD_ObjAllocData<'a
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b94f8),
-            (43_i32 as u32),
+            (221_i32 as u32),
             cstr(ctx, 0x803b94f8),
         )
     });
@@ -622,7 +622,7 @@ fn inl_HSD_ObjAllocGetPeak_unfused<'a>(ctx: &'a Ctx, data: _HSD_ObjAllocData<'a>
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b94f8),
-            (49_i32 as u32),
+            (237_i32 as u32),
             cstr(ctx, 0x803b94f8),
         )
     });

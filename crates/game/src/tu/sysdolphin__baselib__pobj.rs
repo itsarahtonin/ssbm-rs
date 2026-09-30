@@ -181,7 +181,7 @@ pub fn loadShapeSetDesc<'a>(ctx: &'a Ctx, sdesc: HSD_ShapeSetDesc<'a>) -> HSD_Sh
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040639c),
-            (0x102_i32 as u32),
+            (0x1f2_i32 as u32),
             cstr(ctx, 0x8040639c),
         )
     });
@@ -290,7 +290,7 @@ pub fn HSD_PObjLoadDesc<'a>(ctx: &'a Ctx, pobjdesc: HSD_PObjDesc<'a>) -> HSD_POb
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x8040639c),
-                    (0x141_i32 as u32),
+                    (0x25d_i32 as u32),
                     cstr(ctx, 0x8040639c),
                 )
             });
@@ -336,7 +336,7 @@ pub fn HSD_PObjSetDefaultClass<'a>(ctx: &'a Ctx, info: HSD_PObjInfo<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x8040639c),
-                (0x162_i32 as u32),
+                (0x2a1_i32 as u32),
                 cstr(ctx, 0x8040639c),
             )
         });
@@ -356,7 +356,7 @@ pub fn HSD_PObjAlloc<'a>(ctx: &'a Ctx) -> HSD_PObj<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040639c),
-            (0x16a_i32 as u32),
+            (0x2bf_i32 as u32),
             cstr(ctx, 0x8040639c),
         )
     });
@@ -393,7 +393,7 @@ pub fn resolveEnvelope<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x8040639c),
-                                (0x182_i32 as u32),
+                                (0x2e0_i32 as u32),
                                 cstr(ctx, 0x8040639c),
                             )
                         });
@@ -637,7 +637,7 @@ pub fn get_shape_vertex_xyz<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040639c),
-            (0x242_i32 as u32),
+            (0x44e_i32 as u32),
             cstr(ctx, 0x8040639c),
         )
     });
@@ -719,7 +719,7 @@ pub fn get_shape_normal_xyz<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040639c),
-            (0x26f_i32 as u32),
+            (0x48d_i32 as u32),
             cstr(ctx, 0x8040639c),
         )
     });
@@ -790,7 +790,7 @@ pub fn get_shape_nbt_xyz<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040639c),
-            (0x291_i32 as u32),
+            (0x4c5_i32 as u32),
             cstr(ctx, 0x8040639c),
         )
     });
@@ -812,7 +812,7 @@ pub fn get_shape_nbt_xyz<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040639c),
-            (0x29a_i32 as u32),
+            (0x4ce_i32 as u32),
             cstr(ctx, 0x8040639c),
         )
     });
@@ -1326,7 +1326,7 @@ pub fn drawShapeAnim<'a>(ctx: &'a Ctx, pobj: HSD_PObj<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040639c),
-            (0x348_i32 as u32),
+            (0x57f_i32 as u32),
             cstr(ctx, 0x8040639c),
         )
     });
@@ -1353,7 +1353,7 @@ pub fn drawShapeAnim<'a>(ctx: &'a Ctx, pobj: HSD_PObj<'a>) {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x8040639c),
-                    (0x350_i32 as u32),
+                    (0x588_i32 as u32),
                     cstr(ctx, 0x8040639c),
                 )
             });
@@ -1367,7 +1367,7 @@ pub fn drawShapeAnim<'a>(ctx: &'a Ctx, pobj: HSD_PObj<'a>) {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x8040639c),
-                    (0x353_i32 as u32),
+                    (0x58b_i32 as u32),
                     cstr(ctx, 0x8040639c),
                 )
             });
@@ -1882,7 +1882,7 @@ pub fn HSD_PObjGetMtxMark<'a>(ctx: &'a Ctx, idx: i32, obj: Ptr<'a, Addr<'a>>, ma
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040639c),
-            (0x3d2_i32 as u32),
+            (0x677_i32 as u32),
             cstr(ctx, 0x8040639c),
         )
     });
@@ -1892,7 +1892,7 @@ pub fn HSD_PObjGetMtxMark<'a>(ctx: &'a Ctx, idx: i32, obj: Ptr<'a, Addr<'a>>, ma
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040639c),
-            (0x3d3_i32 as u32),
+            (0x678_i32 as u32),
             cstr(ctx, 0x8040639c),
         )
     });
@@ -2001,7 +2001,7 @@ pub fn SetupSharedVtxModelMtx<'a>(
         return;
     }
     flags = (flags | inl_GetSetupFlags_unfused(ctx, jobj, rendermode));
-    {
+    if (((flags as u32) | ((enums::SETUP_JOINT0 as i32) as u32)) != 0) {
         fns::GXSetCurrentMtx(ctx, ((enums::GX_PNMTX0 as i32) as u32));
         fns::GXLoadPosMtxImm(ctx, pmtx, ((enums::GX_PNMTX0 as i32) as u32));
         inl_HSD_PerfCountMtxLoad_unfused(ctx);
@@ -2022,7 +2022,7 @@ pub fn SetupSharedVtxModelMtx<'a>(
             }
         }
     }
-    {
+    if (((flags as u32) | ((enums::SETUP_JOINT1 as i32) as u32)) != 0) {
         inl_HSD_JObjSetupMatrix_unfused(ctx, (pobj).u().jobj());
         fns::PSMTXConcat(ctx, vmtx, ((pobj).u().jobj()).mtx().get(0), m.get(0));
         fns::GXLoadPosMtxImm(ctx, m.get(0), ((enums::GX_PNMTX1 as i32) as u32));
@@ -2086,7 +2086,7 @@ pub fn SetupEnvelopeModelMtx<'a>(
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x8040639c),
-                        (0x47b_i32 as u32),
+                        (0x750_i32 as u32),
                         cstr(ctx, 0x8040639c),
                     )
                 });
@@ -2161,7 +2161,7 @@ pub fn SetupEnvelopeModelMtx<'a>(
                                 fns::__assert(
                                     ctx,
                                     cstr(ctx, 0x8040639c),
-                                    (0x48c_i32 as u32),
+                                    (0x764_i32 as u32),
                                     cstr(ctx, 0x8040639c),
                                 )
                             });
@@ -2173,7 +2173,7 @@ pub fn SetupEnvelopeModelMtx<'a>(
                                 fns::__assert(
                                     ctx,
                                     cstr(ctx, 0x8040639c),
-                                    (0x48f_i32 as u32),
+                                    (0x767_i32 as u32),
                                     cstr(ctx, 0x8040639c),
                                 )
                             });
@@ -2183,7 +2183,7 @@ pub fn SetupEnvelopeModelMtx<'a>(
                                 fns::__assert(
                                     ctx,
                                     cstr(ctx, 0x8040639c),
-                                    (0x490_i32 as u32),
+                                    (0x768_i32 as u32),
                                     cstr(ctx, 0x8040639c),
                                 )
                             });
@@ -2436,7 +2436,7 @@ fn inl_HSD_PObjAddAnim_unfused<'a>(ctx: &'a Ctx, pobj: HSD_PObj<'a>, shapeanim: 
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040639c),
-            (82_i32 as u32),
+            (247_i32 as u32),
             cstr(ctx, 0x8040639c),
         )
     });
@@ -2512,7 +2512,7 @@ fn inl_HSD_EnvelopeAlloc_unfused<'a>(ctx: &'a Ctx) -> HSD_Envelope<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040639c),
-            (176_i32 as u32),
+            (0x1b9_i32 as u32),
             cstr(ctx, 0x8040639c),
         )
     });
@@ -2565,7 +2565,7 @@ fn inl_iref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040639c),
-            (118_i32 as u32),
+            (158_i32 as u32),
             cstr(ctx, 0x8040639c),
         )
     });
@@ -2615,7 +2615,7 @@ fn inl_HSD_PObjResolveRefs_unfused<'a>(ctx: &'a Ctx, pobj: HSD_PObj<'a>, pdesc: 
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x8040639c),
-                        (0x19a_i32 as u32),
+                        (0x2fb_i32 as u32),
                         cstr(ctx, 0x8040639c),
                     )
                 });
@@ -2790,7 +2790,7 @@ fn inl_HSD_PObjGetMtxMark_unfused<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040639c),
-            (0x3d2_i32 as u32),
+            (0x677_i32 as u32),
             cstr(ctx, 0x8040639c),
         )
     });
@@ -2800,7 +2800,7 @@ fn inl_HSD_PObjGetMtxMark_unfused<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040639c),
-            (0x3d3_i32 as u32),
+            (0x678_i32 as u32),
             cstr(ctx, 0x8040639c),
         )
     });
@@ -2886,7 +2886,7 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040639c),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x8040639c),
         )
     });
@@ -2938,7 +2938,7 @@ fn inl_PObjDispShapeAnim_unfused<'a>(ctx: &'a Ctx, pobj: HSD_PObj<'a>, rendermod
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040639c),
-            (0x4cf_i32 as u32),
+            (0x7b1_i32 as u32),
             cstr(ctx, 0x8040639c),
         )
     });

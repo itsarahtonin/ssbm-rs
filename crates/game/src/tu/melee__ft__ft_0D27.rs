@@ -303,7 +303,7 @@ fn inl_HSD_JObjGetScaleX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803c6ff0),
-            (0x1cf_i32 as u32),
+            (0x36b_i32 as u32),
             cstr(ctx, 0x803c6ff0),
         )
     });

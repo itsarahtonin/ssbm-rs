@@ -196,7 +196,7 @@ pub fn ftMaterial_800BF534<'a>(
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803c6984),
-                            (171_i32 as u32),
+                            (240_i32 as u32),
                             cstr(ctx, 0x803c6984),
                         )
                     })
@@ -381,7 +381,7 @@ pub fn ftMaterial_800BF6BC<'a>(
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803c6984),
-                            (0x120_i32 as u32),
+                            (0x160_i32 as u32),
                             cstr(ctx, 0x803c6984),
                         )
                     })
@@ -416,7 +416,7 @@ pub fn ftMaterial_800BF6BC<'a>(
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803c6984),
-                            (0x133_i32 as u32),
+                            (0x16e_i32 as u32),
                             cstr(ctx, 0x803c6984),
                         )
                     })

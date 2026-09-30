@@ -100,7 +100,7 @@ pub fn db_TakeScreenshotIfPending<'a>(ctx: &'a Ctx) {
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803eae04),
-                        (79_i32 as u32),
+                        (61_i32 as u32),
                         cstr(ctx, 0x803eae04),
                     )
                 })

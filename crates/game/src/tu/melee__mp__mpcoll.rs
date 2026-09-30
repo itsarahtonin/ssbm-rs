@@ -82,7 +82,7 @@ pub fn mpCollPrev<'a>(ctx: &'a Ctx, cd: CollData<'a>) {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803bd2b0),
-                    (109_i32 as u32),
+                    (228_i32 as u32),
                     cstr(ctx, 0x803bd2b0),
                 )
             });
@@ -843,7 +843,7 @@ pub fn mpCollInterpolateECB<'a>(ctx: &'a Ctx, coll: CollData<'a>, time: f64) {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803bd2b0),
-                    (0x2ab_i32 as u32),
+                    (0x4a9_i32 as u32),
                     cstr(ctx, 0x803bd2b0),
                 )
             })
@@ -976,7 +976,7 @@ pub fn mpCollEnd<'a>(ctx: &'a Ctx, coll: CollData<'a>, arg1: i32, arg2: i32) {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803bd2b0),
-                    (0x331_i32 as u32),
+                    (0x55e_i32 as u32),
                     cstr(ctx, 0x803bd2b0),
                 )
             });
@@ -3384,10 +3384,11 @@ pub fn mpColl_80046F78<'a>(ctx: &'a Ctx, coll: CollData<'a>, unused: u32) -> i32
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803bd2b0),
-                    (0xa26_i32 as u32),
+                    (0xe65_i32 as u32),
                     cstr(ctx, 0x803bd2b0),
                 )
             });
+            return 0;
         }
     }
     return 0_i32;
@@ -6168,7 +6169,7 @@ fn inl_mpColl_RightWall_inline_unfused<'a>(ctx: &'a Ctx, line_id: i32) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803bd2b0),
-            (0x2b8_i32 as u32),
+            (0x14a_i32 as u32),
             cstr(ctx, 0x803bd2b0),
         )
     });
@@ -6252,7 +6253,7 @@ fn inl_mpColl_LeftWall_inline3_unfused<'a>(ctx: &'a Ctx, line_id: i32, arr: Val<
         fns::__assert(
             ctx,
             cstr(ctx, 0x803bd2b0),
-            (0x2d3_i32 as u32),
+            (0x159_i32 as u32),
             cstr(ctx, 0x803bd2b0),
         )
     });
@@ -6292,7 +6293,7 @@ fn inl_mpColl_LeftWall_inline_unfused<'a>(ctx: &'a Ctx, line_id: i32) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803bd2b0),
-            (0x2c6_i32 as u32),
+            (0x159_i32 as u32),
             cstr(ctx, 0x803bd2b0),
         )
     });

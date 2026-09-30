@@ -365,7 +365,7 @@ pub fn HSD_GObj_SetupProc<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x804084b4),
-            (158_i32 as u32),
+            (216_i32 as u32),
             cstr(ctx, 0x804084b4),
         )
     });
@@ -427,7 +427,7 @@ fn inl_assertProc_unfused<'a>(ctx: &'a Ctx, gproc: HSD_GObjProc<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x804084b4),
-            (147_i32 as u32),
+            (31_i32 as u32),
             cstr(ctx, 0x804084b4),
         )
     });

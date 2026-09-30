@@ -53,7 +53,7 @@ pub fn HSD_SListAlloc<'a>(ctx: &'a Ctx) -> _HSD_SList<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d5f54),
-            (33_i32 as u32),
+            (76_i32 as u32),
             cstr(ctx, 0x804d5f54),
         )
     });
@@ -103,7 +103,7 @@ pub fn HSD_SListAppendList<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d5f54),
-            (61_i32 as u32),
+            (179_i32 as u32),
             cstr(ctx, 0x804d5f54),
         )
     });
@@ -133,7 +133,7 @@ pub fn HSD_SListPrependList<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d5f54),
-            (75_i32 as u32),
+            (202_i32 as u32),
             cstr(ctx, 0x804d5f54),
         )
     });
@@ -173,7 +173,7 @@ fn inl_HSD_SListAlloc_unfused<'a>(ctx: &'a Ctx) -> _HSD_SList<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d5f54),
-            (33_i32 as u32),
+            (76_i32 as u32),
             cstr(ctx, 0x804d5f54),
         )
     });

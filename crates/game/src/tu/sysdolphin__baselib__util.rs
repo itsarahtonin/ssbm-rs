@@ -128,7 +128,7 @@ pub fn HSD_Index2PosNrmMtx<'a>(ctx: &'a Ctx, arg0: u32) -> i32 {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x80406df4),
-                    (55_i32 as u32),
+                    (132_i32 as u32),
                     cstr(ctx, 0x80406df4),
                 )
             });

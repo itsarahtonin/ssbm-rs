@@ -37,7 +37,7 @@ pub fn ftCo_CalcYScaledKnockback<'a>(ctx: &'a Ctx, arg0: f64, scale: f64, arg2: 
         fns::__assert(
             ctx,
             cstr(ctx, 0x803c6fec),
-            (11_i32 as u32),
+            (30_i32 as u32),
             cstr(ctx, 0x803c6fec),
         )
     });
@@ -557,7 +557,7 @@ pub fn ftCo_800D105C<'a>(ctx: &'a Ctx, fgp: HSD_GObj<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803c6fec),
-                (233_i32 as u32),
+                (0x10d_i32 as u32),
                 cstr(ctx, 0x803c6fec),
             )
         })
@@ -591,7 +591,7 @@ fn inl_ftCo_CalcYScaledKnockback<'a>(ctx: &'a Ctx, arg0: f64, scale: f64, arg2: 
         fns::__assert(
             ctx,
             cstr(ctx, 0x803c6fec),
-            (11_i32 as u32),
+            (30_i32 as u32),
             cstr(ctx, 0x803c6fec),
         )
     });

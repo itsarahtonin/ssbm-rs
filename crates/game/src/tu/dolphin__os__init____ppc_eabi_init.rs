@@ -28,7 +28,7 @@ use crate::support::*;
 use ssbm_rt::cpu as c;
 
 pub fn __init_hardware<'a>(ctx: &'a Ctx) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     ().put_regs(ctx);
     asm___init_hardware(ctx);
 }
@@ -76,7 +76,7 @@ fn asm___init_hardware(ctx: &Ctx) {
 }
 
 pub fn __flush_cache<'a>(ctx: &'a Ctx, a0: Addr<'a>, a1: u32) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0, a1).put_regs(ctx);
     asm___flush_cache(ctx);
 }

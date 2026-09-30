@@ -72,7 +72,7 @@ pub fn fn_800CCEC4<'a>(ctx: &'a Ctx, x: i32) -> i32 {
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803c6d70),
-                        (43_i32 as u32),
+                        (82_i32 as u32),
                         cstr(ctx, 0x803c6d70),
                     )
                 })
@@ -118,7 +118,7 @@ pub fn ftCo_Attack_800CCF58<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803c6d70),
-            (75_i32 as u32),
+            (124_i32 as u32),
             cstr(ctx, 0x803c6d70),
         )
     });
@@ -208,7 +208,7 @@ fn inl_fn_800CCEC4_unfused<'a>(ctx: &'a Ctx, x: i32) -> i32 {
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803c6d70),
-                        (43_i32 as u32),
+                        (82_i32 as u32),
                         cstr(ctx, 0x803c6d70),
                     )
                 })
@@ -242,7 +242,7 @@ fn inl_get_anim_id_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, swing_type: i32, a
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803c6d70),
-                        (58_i32 as u32),
+                        (97_i32 as u32),
                         cstr(ctx, 0x803c6d70),
                     )
                 });

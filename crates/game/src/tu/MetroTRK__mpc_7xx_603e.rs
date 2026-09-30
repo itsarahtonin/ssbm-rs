@@ -28,7 +28,7 @@ use crate::support::*;
 use ssbm_rt::cpu as c;
 
 pub fn TRKSaveExtended1Block<'a>(ctx: &'a Ctx) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: MWCC-only code.
     ().put_regs(ctx);
     asm_TRKSaveExtended1Block(ctx);
 }
@@ -326,7 +326,7 @@ fn asm_TRKSaveExtended1Block(ctx: &Ctx) {
 }
 
 pub fn TRKRestoreExtended1Block<'a>(ctx: &'a Ctx) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: MWCC-only code.
     ().put_regs(ctx);
     asm_TRKRestoreExtended1Block(ctx);
 }

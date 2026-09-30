@@ -489,7 +489,7 @@ pub fn ftKb_SpecialNFx_800FE100<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803cb6f4),
-            (0x152_i32 as u32),
+            (0x1ad_i32 as u32),
             cstr(ctx, 0x803cb6f4),
         )
     });
@@ -554,7 +554,7 @@ pub fn ftKb_SpecialNFx_800FE240<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803cb6f4),
-            (0x18b_i32 as u32),
+            (0x1d1_i32 as u32),
             cstr(ctx, 0x803cb6f4),
         )
     });

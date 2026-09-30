@@ -126,6 +126,7 @@ pub fn fn_80392A3C<'a>(ctx: &'a Ctx) -> Addr<'a> {
             .content()
             .bytes()
             .at(4_i32);
+        colors = colors;
         statics::sysdolphin__baselib__hsd_392A::hsd_804CE3F8(ctx)
             .get(0_i32)
             .set_type(1_i32);

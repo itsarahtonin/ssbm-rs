@@ -175,7 +175,7 @@ pub fn HSD_TExpFreeList<'a>(
                                 fns::__assert(
                                     ctx,
                                     cstr(ctx, 0x8040775c),
-                                    (129_i32 as u32),
+                                    (219_i32 as u32),
                                     cstr(ctx, 0x8040775c),
                                 )
                             });
@@ -254,7 +254,7 @@ pub fn HSD_TExpFreeList<'a>(
                                 fns::__assert(
                                     ctx,
                                     cstr(ctx, 0x8040775c),
-                                    (171_i32 as u32),
+                                    (0x10b_i32 as u32),
                                     cstr(ctx, 0x8040775c),
                                 )
                             });
@@ -279,7 +279,7 @@ pub fn HSD_TExpTev<'a>(ctx: &'a Ctx, texp_list: Ptr<'a, HSD_TExp<'a>>) -> HSD_TE
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040775c),
-            (186_i32 as u32),
+            (0x126_i32 as u32),
             cstr(ctx, 0x8040775c),
         )
     });
@@ -331,7 +331,7 @@ pub fn HSD_TExpCnst<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040775c),
-            (207_i32 as u32),
+            (0x169_i32 as u32),
             cstr(ctx, 0x8040775c),
         )
     });
@@ -350,7 +350,7 @@ pub fn HSD_TExpCnst<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x8040775c),
-                                (215_i32 as u32),
+                                (0x170_i32 as u32),
                                 cstr(ctx, 0x8040775c),
                             )
                         });
@@ -401,7 +401,7 @@ pub fn HSD_TExpColorOp<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040775c),
-            (243_i32 as u32),
+            (0x198_i32 as u32),
             cstr(ctx, 0x8040775c),
         )
     });
@@ -411,7 +411,7 @@ pub fn HSD_TExpColorOp<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040775c),
-            (244_i32 as u32),
+            (0x199_i32 as u32),
             cstr(ctx, 0x8040775c),
         )
     });
@@ -452,7 +452,7 @@ pub fn HSD_TExpAlphaOp<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040775c),
-            (0x104_i32 as u32),
+            (0x1b2_i32 as u32),
             cstr(ctx, 0x8040775c),
         )
     });
@@ -462,7 +462,7 @@ pub fn HSD_TExpAlphaOp<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040775c),
-            (0x105_i32 as u32),
+            (0x1b3_i32 as u32),
             cstr(ctx, 0x8040775c),
         )
     });
@@ -600,7 +600,7 @@ pub fn HSD_TExpColorInSub<'a>(
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x8040775c),
-                            (0x149_i32 as u32),
+                            (0x1f2_i32 as u32),
                             cstr(ctx, 0x8040775c),
                         )
                     });
@@ -660,7 +660,7 @@ pub fn HSD_TExpColorInSub<'a>(
                                 fns::__assert(
                                     ctx,
                                     cstr(ctx, 0x8040775c),
-                                    (0x160_i32 as u32),
+                                    (0x207_i32 as u32),
                                     cstr(ctx, 0x8040775c),
                                 )
                             });
@@ -673,7 +673,7 @@ pub fn HSD_TExpColorInSub<'a>(
                                 fns::__assert(
                                     ctx,
                                     cstr(ctx, 0x8040775c),
-                                    (0x162_i32 as u32),
+                                    (0x209_i32 as u32),
                                     cstr(ctx, 0x8040775c),
                                 )
                             });
@@ -686,7 +686,7 @@ pub fn HSD_TExpColorInSub<'a>(
                                 fns::__assert(
                                     ctx,
                                     cstr(ctx, 0x8040775c),
-                                    (0x164_i32 as u32),
+                                    (0x20a_i32 as u32),
                                     cstr(ctx, 0x8040775c),
                                 )
                             });
@@ -840,7 +840,7 @@ pub fn HSD_TExpColorInSub<'a>(
                                         fns::__assert(
                                             ctx,
                                             cstr(ctx, 0x8040775c),
-                                            (0x19f_i32 as u32),
+                                            (0x22d_i32 as u32),
                                             cstr(ctx, 0x8040775c),
                                         )
                                     });
@@ -858,7 +858,7 @@ pub fn HSD_TExpColorInSub<'a>(
                                     fns::__assert(
                                         ctx,
                                         cstr(ctx, 0x8040775c),
-                                        (0x1a6_i32 as u32),
+                                        (0x232_i32 as u32),
                                         cstr(ctx, 0x8040775c),
                                     )
                                 });
@@ -924,7 +924,7 @@ pub fn HSD_TExpColorInSub<'a>(
                                         fns::__assert(
                                             ctx,
                                             cstr(ctx, 0x8040775c),
-                                            (0x1c0_i32 as u32),
+                                            (0x25d_i32 as u32),
                                             cstr(ctx, 0x8040775c),
                                         )
                                     });
@@ -942,7 +942,7 @@ pub fn HSD_TExpColorInSub<'a>(
                                     fns::__assert(
                                         ctx,
                                         cstr(ctx, 0x8040775c),
-                                        (0x1c7_i32 as u32),
+                                        (0x262_i32 as u32),
                                         cstr(ctx, 0x8040775c),
                                     )
                                 });
@@ -957,7 +957,7 @@ pub fn HSD_TExpColorInSub<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x8040775c),
-                                (0x1cb_i32 as u32),
+                                (0x274_i32 as u32),
                                 cstr(ctx, 0x8040775c),
                             )
                         });
@@ -999,7 +999,7 @@ pub fn HSD_TExpColorIn<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040775c),
-            (0x1d9_i32 as u32),
+            (0x2b3_i32 as u32),
             cstr(ctx, 0x8040775c),
         )
     });
@@ -1009,7 +1009,7 @@ pub fn HSD_TExpColorIn<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040775c),
-            (0x1da_i32 as u32),
+            (0x2b4_i32 as u32),
             cstr(ctx, 0x8040775c),
         )
     });
@@ -1126,7 +1126,7 @@ pub fn HSD_TExpAlphaInSub<'a>(
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x8040775c),
-                        (0x21e_i32 as u32),
+                        (0x2ec_i32 as u32),
                         cstr(ctx, 0x8040775c),
                     )
                 });
@@ -1171,7 +1171,7 @@ pub fn HSD_TExpAlphaInSub<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x8040775c),
-                                (0x22c_i32 as u32),
+                                (0x303_i32 as u32),
                                 cstr(ctx, 0x8040775c),
                             )
                         });
@@ -1181,7 +1181,7 @@ pub fn HSD_TExpAlphaInSub<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x8040775c),
-                                (0x22d_i32 as u32),
+                                (0x304_i32 as u32),
                                 cstr(ctx, 0x8040775c),
                             )
                         });
@@ -1201,7 +1201,7 @@ pub fn HSD_TExpAlphaInSub<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x8040775c),
-                                (0x232_i32 as u32),
+                                (0x308_i32 as u32),
                                 cstr(ctx, 0x8040775c),
                             )
                         });
@@ -1211,7 +1211,7 @@ pub fn HSD_TExpAlphaInSub<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x8040775c),
-                                (0x233_i32 as u32),
+                                (0x309_i32 as u32),
                                 cstr(ctx, 0x8040775c),
                             )
                         });
@@ -1233,7 +1233,7 @@ pub fn HSD_TExpAlphaInSub<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x8040775c),
-                                (0x238_i32 as u32),
+                                (0x30e_i32 as u32),
                                 cstr(ctx, 0x8040775c),
                             )
                         });
@@ -1250,7 +1250,7 @@ pub fn HSD_TExpAlphaInSub<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x8040775c),
-                                (0x23c_i32 as u32),
+                                (0x312_i32 as u32),
                                 cstr(ctx, 0x8040775c),
                             )
                         });
@@ -1267,7 +1267,7 @@ pub fn HSD_TExpAlphaInSub<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x8040775c),
-                                (0x240_i32 as u32),
+                                (0x316_i32 as u32),
                                 cstr(ctx, 0x8040775c),
                             )
                         });
@@ -1309,7 +1309,7 @@ pub fn HSD_TExpAlphaIn<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040775c),
-            (0x24e_i32 as u32),
+            (0x335_i32 as u32),
             cstr(ctx, 0x8040775c),
         )
     });
@@ -1319,7 +1319,7 @@ pub fn HSD_TExpAlphaIn<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040775c),
-            (0x24f_i32 as u32),
+            (0x336_i32 as u32),
             cstr(ctx, 0x8040775c),
         )
     });
@@ -1341,7 +1341,7 @@ pub fn HSD_TExpOrder<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, tex: HSD_TObj<'a>, ch
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040775c),
-            (0x25a_i32 as u32),
+            (0x345_i32 as u32),
             cstr(ctx, 0x8040775c),
         )
     });
@@ -1351,7 +1351,7 @@ pub fn HSD_TExpOrder<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, tex: HSD_TObj<'a>, ch
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040775c),
-            (0x25b_i32 as u32),
+            (0x346_i32 as u32),
             cstr(ctx, 0x8040775c),
         )
     });
@@ -1785,7 +1785,7 @@ pub fn TExpAssignReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, res: HSD_TExpRes<'a>)
                                     fns::__assert(
                                         ctx,
                                         cstr(ctx, 0x8040775c),
-                                        (0x33f_i32 as u32),
+                                        (0x47b_i32 as u32),
                                         cstr(ctx, 0x8040775c),
                                     )
                                 });
@@ -1808,7 +1808,7 @@ pub fn TExpAssignReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, res: HSD_TExpRes<'a>)
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x8040775c),
-                            (0x34a_i32 as u32),
+                            (0x488_i32 as u32),
                             cstr(ctx, 0x8040775c),
                         )
                     });
@@ -1835,7 +1835,7 @@ pub fn TExpAssignReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, res: HSD_TExpRes<'a>)
                                         fns::__assert(
                                             ctx,
                                             cstr(ctx, 0x8040775c),
-                                            (0x354_i32 as u32),
+                                            (0x49d_i32 as u32),
                                             cstr(ctx, 0x8040775c),
                                         )
                                     });
@@ -1861,7 +1861,7 @@ pub fn TExpAssignReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, res: HSD_TExpRes<'a>)
                                     fns::__assert(
                                         ctx,
                                         cstr(ctx, 0x8040775c),
-                                        (0x35e_i32 as u32),
+                                        (0x4a6_i32 as u32),
                                         cstr(ctx, 0x8040775c),
                                     )
                                 });
@@ -1891,7 +1891,7 @@ pub fn TExpAssignReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, res: HSD_TExpRes<'a>)
                                     fns::__assert(
                                         ctx,
                                         cstr(ctx, 0x8040775c),
-                                        (0x36c_i32 as u32),
+                                        (0x4b6_i32 as u32),
                                         cstr(ctx, 0x8040775c),
                                     )
                                 });
@@ -1917,7 +1917,7 @@ pub fn TExpAssignReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, res: HSD_TExpRes<'a>)
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x8040775c),
-                                (0x378_i32 as u32),
+                                (0x4c2_i32 as u32),
                                 cstr(ctx, 0x8040775c),
                             )
                         });
@@ -1945,7 +1945,7 @@ pub fn TExpAssignReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, res: HSD_TExpRes<'a>)
                                             fns::__assert(
                                                 ctx,
                                                 cstr(ctx, 0x8040775c),
-                                                (0x382_i32 as u32),
+                                                (0x4cf_i32 as u32),
                                                 cstr(ctx, 0x8040775c),
                                             )
                                         });
@@ -1972,7 +1972,7 @@ pub fn TExpAssignReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, res: HSD_TExpRes<'a>)
                                         fns::__assert(
                                             ctx,
                                             cstr(ctx, 0x8040775c),
-                                            (0x38c_i32 as u32),
+                                            (0x4d8_i32 as u32),
                                             cstr(ctx, 0x8040775c),
                                         )
                                     });
@@ -2009,7 +2009,7 @@ pub fn TExp2TevDesc<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040775c),
-            (0x3a0_i32 as u32),
+            (0x510_i32 as u32),
             cstr(ctx, 0x8040775c),
         )
     });
@@ -2019,7 +2019,7 @@ pub fn TExp2TevDesc<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040775c),
-            (0x3a1_i32 as u32),
+            (0x511_i32 as u32),
             cstr(ctx, 0x8040775c),
         )
     });
@@ -2029,7 +2029,7 @@ pub fn TExp2TevDesc<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040775c),
-            (0x3a2_i32 as u32),
+            (0x512_i32 as u32),
             cstr(ctx, 0x8040775c),
         )
     });
@@ -2174,7 +2174,7 @@ pub fn TExp2TevDesc<'a>(
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x8040775c),
-                (0x3d9_i32 as u32),
+                (0x551_i32 as u32),
                 cstr(ctx, 0x8040775c),
             )
         });
@@ -2278,7 +2278,7 @@ pub fn TExp2TevDesc<'a>(
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x8040775c),
-                (0x400_i32 as u32),
+                (0x575_i32 as u32),
                 cstr(ctx, 0x8040775c),
             )
         });
@@ -2316,7 +2316,7 @@ pub fn HSD_TExpSetReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>) {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x8040775c),
-                    (0x418_i32 as u32),
+                    (0x591_i32 as u32),
                     cstr(ctx, 0x8040775c),
                 )
             });
@@ -2637,7 +2637,7 @@ pub fn HSD_TExpCompile<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040775c),
-            (0x4a7_i32 as u32),
+            (0x65b_i32 as u32),
             cstr(ctx, 0x8040775c),
         )
     });
@@ -2647,7 +2647,7 @@ pub fn HSD_TExpCompile<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040775c),
-            (0x4a8_i32 as u32),
+            (0x65c_i32 as u32),
             cstr(ctx, 0x8040775c),
         )
     });
@@ -2669,7 +2669,7 @@ pub fn HSD_TExpCompile<'a>(
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x8040775c),
-                        (0x4b4_i32 as u32),
+                        (0x67c_i32 as u32),
                         cstr(ctx, 0x8040775c),
                     )
                 });
@@ -2786,7 +2786,7 @@ fn inl_TevAlloc_unfused<'a>(ctx: &'a Ctx) -> HSD_TExp<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040775c),
-            (28_i32 as u32),
+            (62_i32 as u32),
             cstr(ctx, 0x8040775c),
         )
     });
@@ -2802,7 +2802,7 @@ fn inl_CnstAlloc_unfused<'a>(ctx: &'a Ctx) -> HSD_TExp<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x8040775c),
-            (35_i32 as u32),
+            (70_i32 as u32),
             cstr(ctx, 0x8040775c),
         )
     });

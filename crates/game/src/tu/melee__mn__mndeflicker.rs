@@ -196,7 +196,7 @@ pub fn mnDeflicker_8024A4BC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803eefd8),
-                (154_i32 as u32),
+                (0x158_i32 as u32),
                 cstr(ctx, 0x803eefd8),
             )
         })

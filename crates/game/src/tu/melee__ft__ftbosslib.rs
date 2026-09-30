@@ -73,7 +73,7 @@ pub fn ftBossLib_ReportGObjSlotType<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b75e8),
-                (49_i32 as u32),
+                (103_i32 as u32),
                 cstr(ctx, 0x803b75e8),
             )
         })
@@ -590,7 +590,7 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b75e8),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803b75e8),
         )
     });
@@ -612,7 +612,7 @@ fn inl_HSD_JObjSetRotation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate:
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b75e8),
-            (0x114_i32 as u32),
+            (0x26a_i32 as u32),
             cstr(ctx, 0x803b75e8),
         )
     });
@@ -622,7 +622,7 @@ fn inl_HSD_JObjSetRotation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate:
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b75e8),
-            (0x115_i32 as u32),
+            (0x26b_i32 as u32),
             cstr(ctx, 0x803b75e8),
         )
     });

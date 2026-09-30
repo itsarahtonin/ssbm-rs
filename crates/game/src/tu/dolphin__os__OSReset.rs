@@ -28,7 +28,7 @@ use crate::support::*;
 use ssbm_rt::cpu as c;
 
 pub fn Reset<'a>(ctx: &'a Ctx, a0: u32) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0,).put_regs(ctx);
     asm_Reset(ctx);
 }

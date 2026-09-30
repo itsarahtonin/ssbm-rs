@@ -156,7 +156,7 @@ pub fn fn_801AA854<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803dbfdc),
-                        (0x1c1_i32 as u32),
+                        (0x167_i32 as u32),
                         cstr(ctx, 0x803dbfdc),
                     )
                 });
@@ -185,7 +185,7 @@ pub fn fn_801AA854<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
                                 fns::__assert(
                                     ctx,
                                     cstr(ctx, 0x803dbfdc),
-                                    (0x1c3_i32 as u32),
+                                    (0x169_i32 as u32),
                                     cstr(ctx, 0x803dbfdc),
                                 )
                             });
@@ -208,7 +208,7 @@ pub fn fn_801AA854<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
                                 fns::__assert(
                                     ctx,
                                     cstr(ctx, 0x803dbfdc),
-                                    (0x1c5_i32 as u32),
+                                    (0x16a_i32 as u32),
                                     cstr(ctx, 0x803dbfdc),
                                 )
                             });
@@ -1736,7 +1736,7 @@ pub fn fn_801AB200<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803dbfdc),
-                        (0x48f_i32 as u32),
+                        (0x12a_i32 as u32),
                         cstr(ctx, 0x803dbfdc),
                     )
                 });
@@ -1757,7 +1757,7 @@ pub fn fn_801AB200<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803dbfdc),
-                    (0x499_i32 as u32),
+                    (0x136_i32 as u32),
                     cstr(ctx, 0x803dbfdc),
                 )
             });
@@ -2233,7 +2233,7 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803dbfdc),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803dbfdc),
         )
     });
@@ -2262,7 +2262,7 @@ fn inl_HSD_JObjGetMtxPtr_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'
         fns::__assert(
             ctx,
             cstr(ctx, 0x803dbfdc),
-            (0x2bb_i32 as u32),
+            (0x478_i32 as u32),
             cstr(ctx, 0x803dbfdc),
         )
     });
@@ -2307,7 +2307,7 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803dbfdc),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803dbfdc),
         )
     });
@@ -2329,7 +2329,7 @@ fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803dbfdc),
-            (0x201_i32 as u32),
+            (0x3a4_i32 as u32),
             cstr(ctx, 0x803dbfdc),
         )
     });
@@ -2352,7 +2352,7 @@ fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803dbfdc),
-            (0x213_i32 as u32),
+            (0x3b3_i32 as u32),
             cstr(ctx, 0x803dbfdc),
         )
     });
@@ -2480,7 +2480,7 @@ fn inl_HSD_JObjSetRotationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803dbfdc),
-            (0x151_i32 as u32),
+            (0x2a9_i32 as u32),
             cstr(ctx, 0x803dbfdc),
         )
     });
@@ -2490,7 +2490,7 @@ fn inl_HSD_JObjSetRotationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803dbfdc),
-            (0x152_i32 as u32),
+            (0x2aa_i32 as u32),
             cstr(ctx, 0x803dbfdc),
         )
     });

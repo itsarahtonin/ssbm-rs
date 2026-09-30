@@ -585,7 +585,7 @@ pub fn pl_8003E2CC<'a>(ctx: &'a Ctx, arg0: i32, pl_itemlog_kind: i32) -> u32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803bd138),
-            (0x1e5_i32 as u32),
+            (0x22b_i32 as u32),
             cstr(ctx, 0x803bd138),
         )
     });
@@ -606,7 +606,7 @@ pub fn pl_8003E334<'a>(ctx: &'a Ctx, arg0: i32, pl_itemlog_kind: i32) -> u32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803bd138),
-            (0x1ed_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803bd138),
         )
     });
@@ -632,7 +632,7 @@ pub fn pl_8003E39C<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803bd138),
-                        (0x1fb_i32 as u32),
+                        (0x22b_i32 as u32),
                         cstr(ctx, 0x803bd138),
                     )
                 });
@@ -665,7 +665,7 @@ pub fn pl_8003E420<'a>(ctx: &'a Ctx, arg0: i32) -> u32 {
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803bd138),
-                        (0x20c_i32 as u32),
+                        (0x234_i32 as u32),
                         cstr(ctx, 0x803bd138),
                     )
                 });
@@ -761,7 +761,7 @@ pub fn pl_8003E70C<'a>(ctx: &'a Ctx, igobj: HSD_GObj<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803bd138),
-            (0x24e_i32 as u32),
+            (0x27a_i32 as u32),
             cstr(ctx, 0x803bd138),
         )
     });
@@ -806,7 +806,7 @@ pub fn pl_8003E7D4<'a>(ctx: &'a Ctx, arg0: i32, kind: i32) -> u32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803bd138),
-            (0x259_i32 as u32),
+            (0x289_i32 as u32),
             cstr(ctx, 0x803bd138),
         )
     });
@@ -1558,7 +1558,7 @@ pub fn fn_8003F654<'a>(ctx: &'a Ctx, slot: i32, index: i32, pos: Vec<'a>, prevPo
         b34_result = fns::ft_80087B34(ctx, entity);
         b34 = b34_result;
         if b34 == 1_i32 {
-            dist = inl_sqrtf(
+            dist = inl_my_sqrtf(
                 ctx,
                 fp::fadds(
                     (fp::fmuls(
@@ -2228,7 +2228,7 @@ pub fn pl_8004049C<'a>(ctx: &'a Ctx, player: i32, arg1: i32) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803bd138),
-                (0x571_i32 as u32),
+                (0x617_i32 as u32),
                 cstr(ctx, 0x803bd138),
             )
         })
@@ -2784,7 +2784,7 @@ fn inl_pl_CalculateAverage<'a>(ctx: &'a Ctx, val: f64, total: f64) -> f64 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803bd138),
-            (8_i32 as u32),
+            (16_i32 as u32),
             cstr(ctx, 0x803bd138),
         )
     });
@@ -2823,22 +2823,25 @@ fn inl_pl_Verify_gm_8016AEDC<'a>(ctx: &'a Ctx) -> i32 {
     return 0;
 }
 
-fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+fn inl_my_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     let mut x = x;
+    let mut unused: u32 = (0_i32 as u32);
     let mut y: f64 = 0.0;
+    let mut half: f64 = 0.5;
+    let mut three: f64 = 3.0;
     if x > 0.0 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            fp::fmul(half, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, three)),
         );
         guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            fp::fmul(half, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, three)),
         );
         guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            fp::fmul(half, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, three)),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;
@@ -2855,7 +2858,7 @@ fn inl_pl_CalculateAverage_unfused<'a>(ctx: &'a Ctx, val: f64, total: f64) -> f6
         fns::__assert(
             ctx,
             cstr(ctx, 0x803bd138),
-            (8_i32 as u32),
+            (16_i32 as u32),
             cstr(ctx, 0x803bd138),
         )
     });

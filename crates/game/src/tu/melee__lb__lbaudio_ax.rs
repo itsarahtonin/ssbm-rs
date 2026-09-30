@@ -404,6 +404,9 @@ pub fn lbAudioAx_80023968<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let mut arg0 = arg0;
     let mut i: i32 = 0_i32;
     let mut var_r4: Val<'a, i32> = null(ctx);
+    if (arg0 < 0_i32) && (arg0 >= 30_i32) {
+        return 1_i32.wrapping_neg();
+    }
     var_r4 = inl_getAudioLoadData_unfused(ctx, arg0);
     'l1: while (var_r4).get() != 0x83d60_i32 {
         'c2: {
@@ -419,6 +422,12 @@ pub fn lbAudioAx_80023A44<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) -> i32 {
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut var_r3: Val<'a, i32> = null(ctx);
+    if (arg0 < 0_i32) && (arg0 >= 30_i32) {
+        return 0x83d60_i32;
+    }
+    if (arg1 < 0_i32) && (0x83d60_i32 <= arg1) {
+        return 0x83d60_i32;
+    }
     var_r3 = inl_getAudioLoadData_unfused(ctx, arg0);
     return (Handle::add(var_r3, arg1)).get();
 }
@@ -2755,7 +2764,7 @@ pub fn lbAudioAx_80027168<'a>(ctx: &'a Ctx) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803bb300),
-                (0x862_i32 as u32),
+                (0xdb3_i32 as u32),
                 cstr(ctx, 0x803bb300),
             )
         });
@@ -3355,7 +3364,7 @@ pub fn lbAudioAx_8002838C<'a>(ctx: &'a Ctx) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803bb300),
-                (0x995_i32 as u32),
+                (0xf6e_i32 as u32),
                 cstr(ctx, 0x803bb300),
             )
         });
@@ -3384,7 +3393,7 @@ pub fn lbAudioAx_8002838C<'a>(ctx: &'a Ctx) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803bb300),
-                (0x99d_i32 as u32),
+                (0xf72_i32 as u32),
                 cstr(ctx, 0x803bb300),
             )
         });

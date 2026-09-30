@@ -28,7 +28,7 @@ use crate::support::*;
 use ssbm_rt::cpu as c;
 
 pub fn HandleReverb<'a>(ctx: &'a Ctx, a0: Val<'a, i32>, a1: AXFX_REVSTD_WORK<'a>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0, a1).put_regs(ctx);
     asm_HandleReverb(ctx);
 }

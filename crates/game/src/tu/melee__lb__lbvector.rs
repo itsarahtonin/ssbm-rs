@@ -469,7 +469,7 @@ pub fn lbVector_WorldToScreen<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ba0d4),
-            (0x17e_i32 as u32),
+            (0x2a4_i32 as u32),
             cstr(ctx, 0x803ba0d4),
         )
     });
@@ -479,7 +479,7 @@ pub fn lbVector_WorldToScreen<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ba0d4),
-            (0x17f_i32 as u32),
+            (0x2a5_i32 as u32),
             cstr(ctx, 0x803ba0d4),
         )
     });
@@ -489,7 +489,7 @@ pub fn lbVector_WorldToScreen<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ba0d4),
-            (0x180_i32 as u32),
+            (0x2a6_i32 as u32),
             cstr(ctx, 0x803ba0d4),
         )
     });
@@ -499,7 +499,7 @@ pub fn lbVector_WorldToScreen<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ba0d4),
-            (0x181_i32 as u32),
+            (0x2a7_i32 as u32),
             cstr(ctx, 0x803ba0d4),
         )
     });

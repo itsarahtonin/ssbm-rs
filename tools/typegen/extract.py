@@ -24,9 +24,13 @@ CK = ci.CursorKind
 
 FLAGS = [
     "-xc", "-std=c99", "-nostdinc", "-fno-builtin", "--target=ppc32-none-eabi", "-DLINT",
-    "-fno-short-enums", "-fsigned-char", "-DVERSION_GALE01", "-DBUILD_VERSION=0",
+    "-fno-short-enums", "-fsigned-char", "-DVERSION_GALE01", "-DBUILD_VERSION=0", "-DMUST_MATCH",
     "-Isrc", "-isystemsrc/MSL", "-isystemlibs/dolphin/include", "-isystemlibs/dolphin/src",
     "-isystembuild/GALE01/include", "-isystemlibs/dolphin/src/dolphin", "-fdeclspec",
+    # MWCC takes `return;` in a function returning a value, which the decomp's matching code
+    # uses where the original returns whatever r3 holds.
+    "-Wno-return-type",
+    "-include", os.path.join(os.path.dirname(os.path.abspath(__file__)), "prelude.h"),
 ]
 
 SDK_SRC = "libs/dolphin/src"
@@ -210,12 +214,31 @@ def parse(index, source, extra=()):
     unsaved += msl_headers() + runtime_header()
     if source.replace("\\", "/").startswith(SDK_SRC + "/"):
         unsaved += sdk_headers()
-    tu = index.parse(source, args=flags_for(source) + list(extra), unsaved_files=unsaved or None)
+    args = flags_for(source) + list(extra)
+    tu = index.parse(source, args=args, unsaved_files=unsaved or None)
     if any(d.severity >= ci.Diagnostic.Error and "static declaration of" in d.spelling for d in tu.diagnostics):
         # A static definition after a header's non-static prototype, which MWCC takes and
         # clang only allows as a Microsoft extension.
-        tu = index.parse(source, args=flags_for(source) + list(extra) + ["-fms-extensions"],
-                         unsaved_files=unsaved or None)
+        args += ["-fms-extensions"]
+        tu = index.parse(source, args=args, unsaved_files=unsaved or None)
+    lines = fixed.split("\n")
+    dropped = False
+    for d in tu.diagnostics:
+        m = re.match(r"conflicting types for '(\w+)'", d.spelling)
+        if d.severity < ci.Diagnostic.Error or not m or d.location.file is None or \
+                os.path.normpath(d.location.file.name) != os.path.normpath(source):
+            continue
+        # `T f();` inside a function, after f's prototype: MWCC calls f there as unprototyped,
+        # which only changes how it passes arguments already of their promoted types, and
+        # clang refuses it. The prototype stands in for it.
+        i = d.location.line - 1
+        decl = re.compile(r"^\s*(?:extern\s+)?\w[\w\s\*]*\b" + m.group(1) + r"\s*\(\s*\)\s*;\s*$")
+        if 0 <= i < len(lines) and decl.match(lines[i]):
+            lines[i] = ""
+            dropped = True
+    if dropped:
+        unsaved = [(source, "\n".join(lines))] + [u for u in unsaved if u[0] != source]
+        tu = index.parse(source, args=args, unsaved_files=unsaved)
     return tu, asm
 
 

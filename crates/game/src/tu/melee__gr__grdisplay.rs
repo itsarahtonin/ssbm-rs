@@ -71,7 +71,7 @@ pub fn grDisplay_801C5B90<'a>(
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803e074c),
-                        (41_i32 as u32),
+                        (82_i32 as u32),
                         cstr(ctx, 0x803e074c),
                     )
                 });
@@ -255,7 +255,7 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803e074c),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803e074c),
         )
     });

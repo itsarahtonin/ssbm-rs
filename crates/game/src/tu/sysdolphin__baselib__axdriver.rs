@@ -48,7 +48,7 @@ pub fn AXDriverAlloc<'a>(ctx: &'a Ctx, size: u32) -> Addr<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b95f8),
-            (64_i32 as u32),
+            (78_i32 as u32),
             cstr(ctx, 0x803b95f8),
         )
     });
@@ -85,7 +85,7 @@ pub fn AXDriverUnlink<'a>(ctx: &'a Ctx, v: HSD_SM<'a>, head: Ptr<'a, HSD_SM<'a>>
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b95f8),
-                (89_i32 as u32),
+                (113_i32 as u32),
                 cstr(ctx, 0x803b95f8),
             )
         });
@@ -211,12 +211,20 @@ pub fn AXDriverExec<'a>(ctx: &'a Ctx, v: HSD_SM<'a>) {
                                     ),
                                     65535.0,
                                 );
-                                let mut left_sqrt: f64 = inl_sqrtf(ctx, left_vol);
-                                let mut left_inv_sqrt: f64 =
-                                    inl_sqrtf(ctx, fp::fsubs(1.0, left_vol));
-                                let mut right_sqrt: f64 = inl_sqrtf(ctx, right_vol);
-                                let mut right_inv_sqrt: f64 =
-                                    inl_sqrtf(ctx, fp::fsubs(1.0, right_vol));
+                                let mut left_sqrt: f64 =
+                                    inl_sqrtf_store(ctx, left_vol, sqrt_tmp.at(7_i32));
+                                let mut left_inv_sqrt: f64 = inl_sqrtf_store(
+                                    ctx,
+                                    fp::fsubs(1.0, left_vol),
+                                    sqrt_tmp.at(6_i32),
+                                );
+                                let mut right_sqrt: f64 =
+                                    inl_sqrtf_store(ctx, right_vol, sqrt_tmp.at(5_i32));
+                                let mut right_inv_sqrt: f64 = inl_sqrtf_store(
+                                    ctx,
+                                    fp::fsubs(1.0, right_vol),
+                                    sqrt_tmp.at(4_i32),
+                                );
                                 let mut tmp2: f64 = fp::fmuls(left_inv_sqrt, right_inv_sqrt);
                                 let mut pitch1: f64 = fns::powf(
                                     ctx,
@@ -270,7 +278,7 @@ pub fn AXDriverExec<'a>(ctx: &'a Ctx, v: HSD_SM<'a>) {
                                         fns::__assert(
                                             ctx,
                                             cstr(ctx, 0x803b95f8),
-                                            (0x104_i32 as u32),
+                                            (0x13b_i32 as u32),
                                             cstr(ctx, 0x803b95f8),
                                         )
                                     });
@@ -339,12 +347,20 @@ pub fn AXDriverExec<'a>(ctx: &'a Ctx, v: HSD_SM<'a>) {
                                     ),
                                     65535.0,
                                 );
-                                let mut left_sqrt_2: f64 = inl_sqrtf(ctx, left_vol_2);
-                                let mut left_inv_sqrt_2: f64 =
-                                    inl_sqrtf(ctx, fp::fsubs(1.0, left_vol_2));
-                                let mut right_sqrt_2: f64 = inl_sqrtf(ctx, right_vol_2);
-                                let mut right_inv_sqrt_2: f64 =
-                                    inl_sqrtf(ctx, fp::fsubs(1.0, right_vol_2));
+                                let mut left_sqrt_2: f64 =
+                                    inl_sqrtf_store(ctx, left_vol_2, sqrt_tmp.at(3_i32));
+                                let mut left_inv_sqrt_2: f64 = inl_sqrtf_store(
+                                    ctx,
+                                    fp::fsubs(1.0, left_vol_2),
+                                    sqrt_tmp.at(2_i32),
+                                );
+                                let mut right_sqrt_2: f64 =
+                                    inl_sqrtf_store(ctx, right_vol_2, sqrt_tmp.at(1_i32));
+                                let mut right_inv_sqrt_2: f64 = inl_sqrtf_store(
+                                    ctx,
+                                    fp::fsubs(1.0, right_vol_2),
+                                    sqrt_tmp.at(0_i32),
+                                );
                                 fns::HSD_SynthSFXSetMix(
                                     ctx,
                                     (v).vID(),
@@ -867,7 +883,7 @@ pub fn AXDriverCallback<'a>(ctx: &'a Ctx) {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803b95f8),
-                            (0x20b_i32 as u32),
+                            (0x25f_i32 as u32),
                             cstr(ctx, 0x803b95f8),
                         )
                     });
@@ -890,7 +906,7 @@ pub fn AXDriverKillCallback<'a>(ctx: &'a Ctx, vID: i32) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b95f8),
-            (0x217_i32 as u32),
+            (0x26d_i32 as u32),
             cstr(ctx, 0x803b95f8),
         )
     });
@@ -924,7 +940,7 @@ pub fn AXDriverPauseCallback<'a>(ctx: &'a Ctx, vID: i32) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b95f8),
-            (0x22a_i32 as u32),
+            (0x288_i32 as u32),
             cstr(ctx, 0x803b95f8),
         )
     });
@@ -937,7 +953,7 @@ pub fn AXDriverPauseCallback<'a>(ctx: &'a Ctx, vID: i32) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b95f8),
-            (0x22d_i32 as u32),
+            (0x28a_i32 as u32),
             cstr(ctx, 0x803b95f8),
         )
     });
@@ -1048,7 +1064,7 @@ pub fn HSD_AudioSFXStartParam<'a>(
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b95f8),
-                (0x285_i32 as u32),
+                (0x2ea_i32 as u32),
                 cstr(ctx, 0x803b95f8),
             )
         });
@@ -1123,7 +1139,7 @@ pub fn HSD_AudioSFXSetPan<'a>(ctx: &'a Ctx, vid: i32, pan: u8) -> i32 {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b95f8),
-                (0x2a8_i32 as u32),
+                (0x30b_i32 as u32),
                 cstr(ctx, 0x803b95f8),
             )
         });
@@ -1179,7 +1195,7 @@ pub fn HSD_AudioSFXSetVolumeEx<'a>(ctx: &'a Ctx, vid: i32, volume: u8) -> i32 {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b95f8),
-                (0x2c4_i32 as u32),
+                (0x34d_i32 as u32),
                 cstr(ctx, 0x803b95f8),
             )
         });
@@ -1310,7 +1326,7 @@ pub fn HSD_AudioSFXSetMix<'a>(ctx: &'a Ctx, vid: i32, aux_bus: i32, send_level: 
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b95f8),
-                (0x313_i32 as u32),
+                (0x3ab_i32 as u32),
                 cstr(ctx, 0x803b95f8),
             )
         });
@@ -1678,7 +1694,7 @@ pub fn AXDriverSetupAux<'a>(ctx: &'a Ctx, channel: i32, r#type: i32, param: Addr
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b95f8),
-            (0x3d3_i32 as u32),
+            (0x49c_i32 as u32),
             cstr(ctx, 0x803b95f8),
         )
     });
@@ -1688,7 +1704,7 @@ pub fn AXDriverSetupAux<'a>(ctx: &'a Ctx, channel: i32, r#type: i32, param: Addr
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b95f8),
-            (0x3d6_i32 as u32),
+            (0x49d_i32 as u32),
             cstr(ctx, 0x803b95f8),
         )
     });
@@ -1698,7 +1714,7 @@ pub fn AXDriverSetupAux<'a>(ctx: &'a Ctx, channel: i32, r#type: i32, param: Addr
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b95f8),
-            (0x3d9_i32 as u32),
+            (0x49e_i32 as u32),
             cstr(ctx, 0x803b95f8),
         )
     });
@@ -2194,7 +2210,7 @@ pub fn PStreamPauseCh<'a>(ctx: &'a Ctx, vid: i32) -> i32 {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b95f8),
-                (0x4dc_i32 as u32),
+                (0x5d6_i32 as u32),
                 cstr(ctx, 0x803b95f8),
             )
         });
@@ -2254,7 +2270,7 @@ pub fn PStreamResumeCh<'a>(ctx: &'a Ctx, vid: i32) -> i32 {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b95f8),
-                (0x50a_i32 as u32),
+                (0x619_i32 as u32),
                 cstr(ctx, 0x803b95f8),
             )
         });
@@ -2383,7 +2399,7 @@ fn inl_AXDriverKeyOff_unfused<'a>(ctx: &'a Ctx, v: HSD_SM<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b95f8),
-            (117_i32 as u32),
+            (146_i32 as u32),
             cstr(ctx, 0x80408174),
         )
     });
@@ -2405,9 +2421,9 @@ fn inl_AXDriverKeyOff_unfused<'a>(ctx: &'a Ctx, v: HSD_SM<'a>) -> i32 {
     return 1_i32;
 }
 
-fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+fn inl_sqrtf_store<'a>(ctx: &'a Ctx, x: f64, y: Val<'a, F32>) -> f64 {
     let mut x = x;
-    let mut y: f64 = 0.0;
+    let mut y = y;
     if x > 0.0 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
@@ -2422,8 +2438,8 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
             fp::fmul(0.5, guess),
             (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
         );
-        y = fp::frsp((fp::fmul(x, guess)));
-        return y;
+        (y).set(fp::frsp((fp::fmul(x, guess))));
+        return (y).get();
     }
     return x;
 }
@@ -2439,7 +2455,7 @@ fn inl_AXDriverKeyOff<'a>(ctx: &'a Ctx, v: HSD_SM<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b95f8),
-            (117_i32 as u32),
+            (146_i32 as u32),
             cstr(ctx, 0x80408174),
         )
     });
@@ -2535,7 +2551,7 @@ fn inl_AXDriverUnlink_unfused<'a>(ctx: &'a Ctx, v: HSD_SM<'a>, head: Ptr<'a, HSD
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b95f8),
-                (89_i32 as u32),
+                (113_i32 as u32),
                 cstr(ctx, 0x803b95f8),
             )
         });
@@ -2554,7 +2570,7 @@ fn inl_AXDriverLink_unfused<'a>(ctx: &'a Ctx, v: HSD_SM<'a>, head: Ptr<'a, HSD_S
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b95f8),
-            (99_i32 as u32),
+            (122_i32 as u32),
             cstr(ctx, 0x803b95f8),
         )
     });
@@ -2587,6 +2603,29 @@ fn inl_AXDriverAssignVVoice_unfused<'a>(ctx: &'a Ctx) -> HSD_SM<'a> {
     }
     #[allow(unreachable_code)]
     return null(ctx);
+}
+
+fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+    let mut x = x;
+    let mut y: f64 = 0.0;
+    if x > 0.0 {
+        let mut guess: f64 = fp::frsqrte(x);
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        y = fp::frsp((fp::fmul(x, guess)));
+        return y;
+    }
+    return x;
 }
 
 /// Registers this unit's ports.

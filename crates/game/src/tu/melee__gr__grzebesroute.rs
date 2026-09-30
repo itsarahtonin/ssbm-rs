@@ -243,7 +243,7 @@ pub fn grZebesRoute_8020B548<'a>(ctx: &'a Ctx) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b83a0),
-            (239_i32 as u32),
+            (0x169_i32 as u32),
             cstr(ctx, 0x803b83a0),
         )
     });
@@ -269,7 +269,7 @@ pub fn grZebesRoute_8020B548<'a>(ctx: &'a Ctx) {
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x803b83a0),
-                                (0x101_i32 as u32),
+                                (0x174_i32 as u32),
                                 cstr(ctx, 0x803b83a0),
                             )
                         });

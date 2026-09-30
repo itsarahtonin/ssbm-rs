@@ -299,9 +299,13 @@ pub fn mnVibration_HandleInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     .x0()
                     .at(1_i32)
                     .set((data).x0().at(1_i32).get().wrapping_sub(1));
-                data2 = Handle::cast::<MnVibrationData<'a>>(
-                    (fns::mnVibration_804D6C28(ctx).get()).user_data(),
-                );
+                data2 = {
+                    let __t1 = Handle::cast::<MnVibrationData<'a>>(
+                        (fns::mnVibration_804D6C28(ctx).get()).user_data(),
+                    );
+                    data2 = __t1;
+                    __t1
+                };
                 cursor_jobj = Handle::cast::<HSD_JObj<'a>>(((data).cursor_gobj()).hsd_obj());
                 jobj17 = (data2).jobjs().at(17_i32).get();
                 cursor_row = inl_mnVibration_GetCursorRow(ctx, data);
@@ -347,9 +351,13 @@ pub fn mnVibration_HandleInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     .x0()
                     .at(1_i32)
                     .set((data).x0().at(1_i32).get().wrapping_add(1));
-                data2_2 = Handle::cast::<MnVibrationData<'a>>(
-                    (fns::mnVibration_804D6C28(ctx).get()).user_data(),
-                );
+                data2_2 = {
+                    let __t2 = Handle::cast::<MnVibrationData<'a>>(
+                        (fns::mnVibration_804D6C28(ctx).get()).user_data(),
+                    );
+                    data2_2 = __t2;
+                    __t2
+                };
                 cursor_jobj_2 = Handle::cast::<HSD_JObj<'a>>(((data).cursor_gobj()).hsd_obj());
                 jobj17_2 = (data2_2).jobjs().at(17_i32).get();
                 cursor_row = inl_mnVibration_GetCursorRow(ctx, data);
@@ -581,7 +589,11 @@ pub fn mnVibration_CreateNameRow<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: u8,
         fns::GetNameText(ctx, (arg1 as i32)),
         &[],
     );
-    new_jobj = fns::HSD_JObjLoadJoint(ctx, (assets).joint());
+    new_jobj = {
+        let __t1 = fns::HSD_JObjLoadJoint(ctx, (assets).joint());
+        new_jobj = __t1;
+        __t1
+    };
     fns::HSD_JObjAddAnimAll(
         ctx,
         new_jobj,
@@ -983,12 +995,14 @@ pub fn mnVibration_IntroProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             jobj18 = (data3).jobjs().at(18_i32).get();
             spacing = inl_mnVibration_GetCursorYSpacing(ctx, base_y, jobj18);
             {
-                let mut position_jobj: HSD_JObj<'a> = (data3).jobjs().at(17_i32).get();
+                let mut position_jobj: HSD_JObj<'a> = null(ctx);
+                position_jobj = (data3).jobjs().at(17_i32).get();
                 temp_x = inl_mnVibration_JObjGetTranslationX(ctx, position_jobj);
                 inl_mnVibration_JObjSetTranslateX(ctx, cursor_jobj, temp_x);
             }
             {
-                let mut position_jobj_2: HSD_JObj<'a> = (data3).jobjs().at(17_i32).get();
+                let mut position_jobj_2: HSD_JObj<'a> = null(ctx);
+                position_jobj_2 = (data3).jobjs().at(17_i32).get();
                 base_y = spacing;
                 base_y = fp::fmadds(
                     base_y,
@@ -999,7 +1013,8 @@ pub fn mnVibration_IntroProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 inl_mnVibration_JObjSetTranslateY(ctx, cursor_jobj, base_y, dirty_jobj);
             }
             {
-                let mut position_jobj_3: HSD_JObj<'a> = (data3).jobjs().at(17_i32).get();
+                let mut position_jobj_3: HSD_JObj<'a> = null(ctx);
+                position_jobj_3 = (data3).jobjs().at(17_i32).get();
                 temp_z = inl_mnVibration_JObjGetTranslationZ(ctx, position_jobj_3);
                 inl_mnVibration_JObjSetTranslateZ(ctx, cursor_jobj, temp_z);
             }
@@ -1264,6 +1279,10 @@ fn inl_mnVibration_AnimatePortPanel<'a>(ctx: &'a Ctx, data: MnVibrationData<'a>,
     let mut state: u8 = 0;
     let mut frame: u16 = 0;
     state = ((((data).x0().at(port.wrapping_add(2_i32)).get() as i32) & 255_i32) as u8);
+    if ((!(!Handle::is_null(fns::mnVibration_804D6C28(ctx).get())))
+        && (!(!Handle::is_null(fns::mnVibration_804D6C28(ctx).get()))))
+        && (!(!Handle::is_null(fns::mnVibration_804D6C28(ctx).get())))
+    {}
     jobj =
         (Handle::cast::<MnVibrationData<'a>>((fns::mnVibration_804D6C28(ctx).get()).user_data()))
             .jobjs()
@@ -1379,7 +1398,8 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
 fn inl_setCursorTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
     let mut jobj = jobj;
     let mut x = x;
-    let mut dirty_jobj: HSD_JObj<'a> = jobj;
+    let mut dirty_jobj: HSD_JObj<'a> = null(ctx);
+    dirty_jobj = jobj;
     (if !Handle::is_null(jobj) {
         ({ () })
     } else {
@@ -1663,7 +1683,8 @@ fn inl_mnVibration_JObjGetTranslationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> 
 fn inl_mnVibration_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
     let mut jobj = jobj;
     let mut x = x;
-    let mut temp: HSD_JObj<'a> = jobj;
+    let mut temp: HSD_JObj<'a> = null(ctx);
+    temp = jobj;
     (if !Handle::is_null(jobj) {
         ({ () })
     } else {
@@ -1723,7 +1744,8 @@ fn inl_mnVibration_JObjGetTranslationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> 
 fn inl_mnVibration_JObjSetTranslateZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
     let mut jobj = jobj;
     let mut z = z;
-    let mut temp: HSD_JObj<'a> = jobj;
+    let mut temp: HSD_JObj<'a> = null(ctx);
+    temp = jobj;
     (if !Handle::is_null(jobj) {
         ({ () })
     } else {

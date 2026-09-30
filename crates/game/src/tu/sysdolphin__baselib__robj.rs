@@ -240,7 +240,7 @@ pub fn HSD_RObjGetGlobalPosition<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x803b9580),
-                                (224_i32 as u32),
+                                (0x1f2_i32 as u32),
                                 cstr(ctx, 0x803b9580),
                             )
                         });
@@ -421,7 +421,7 @@ pub fn resolveCnsOrientation<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b9580),
-            (0x163_i32 as u32),
+            (0x276_i32 as u32),
             cstr(ctx, 0x803b9580),
         )
     });
@@ -566,7 +566,7 @@ pub fn resolveLimits<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>, obj: Addr<'a>, update
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b9580),
-            (0x1be_i32 as u32),
+            (0x2e1_i32 as u32),
             cstr(ctx, 0x803b9580),
         )
     });
@@ -886,7 +886,7 @@ pub fn HSD_RObjAlloc<'a>(ctx: &'a Ctx) -> HSD_RObj<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b9580),
-            (0x2a3_i32 as u32),
+            (0x408_i32 as u32),
             cstr(ctx, 0x803b9580),
         )
     });
@@ -982,7 +982,7 @@ pub fn expEvaluate<'a>(
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803b9580),
-                        (0x2d8_i32 as u32),
+                        (0x467_i32 as u32),
                         cstr(ctx, 0x803b9580),
                     )
                 });
@@ -1327,7 +1327,7 @@ pub fn HSD_RObjSetConstraintObj<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>, o: Addr<'a
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803b9580),
-                    (0x3a3_i32 as u32),
+                    (0x560_i32 as u32),
                     cstr(ctx, 0x803b9580),
                 )
             });
@@ -1460,7 +1460,7 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b9580),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803b9580),
         )
     });
@@ -1568,7 +1568,7 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b9580),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803b9580),
         )
     });
@@ -1597,7 +1597,7 @@ fn inl_HSD_JObjGetMtxPtr<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'a, F32, 
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b9580),
-            (0x2bb_i32 as u32),
+            (0x478_i32 as u32),
             cstr(ctx, 0x803b9580),
         )
     });
@@ -1681,7 +1681,7 @@ fn inl_iref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b9580),
-            (118_i32 as u32),
+            (158_i32 as u32),
             cstr(ctx, 0x803b9580),
         )
     });
@@ -1719,7 +1719,7 @@ fn inl_HSD_RObjResolveRefs_unfused<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>, desc: H
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803b9580),
-                        (0x241_i32 as u32),
+                        (0x373_i32 as u32),
                         cstr(ctx, 0x803b9580),
                     )
                 });
@@ -1880,7 +1880,7 @@ fn inl_HSD_RvalueAlloc_unfused<'a>(ctx: &'a Ctx) -> HSD_Rvalue<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b9580),
-            (0x333_i32 as u32),
+            (0x4c8_i32 as u32),
             cstr(ctx, 0x803b9580),
         )
     });
@@ -1932,7 +1932,7 @@ fn inl_HSD_RvalueResolveRefs_unfused<'a>(
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b9580),
-                (0x37f_i32 as u32),
+                (0x535_i32 as u32),
                 cstr(ctx, 0x803b9580),
             )
         });

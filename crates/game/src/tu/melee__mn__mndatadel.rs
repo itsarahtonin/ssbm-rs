@@ -1061,7 +1061,7 @@ pub fn mnDataDel_8024FE4C<'a>(ctx: &'a Ctx, arg0: u8) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803ef870),
-                (0x367_i32 as u32),
+                (0x402_i32 as u32),
                 cstr(ctx, 0x803ef870),
             )
         })
@@ -1418,7 +1418,7 @@ fn inl_HSD_JObjGetTranslationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> 
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ef870),
-            (0x246_i32 as u32),
+            (0x3e1_i32 as u32),
             cstr(ctx, 0x803ef870),
         )
     });
@@ -1434,7 +1434,7 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ef870),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803ef870),
         )
     });
@@ -1456,7 +1456,7 @@ fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f6
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ef870),
-            (0x201_i32 as u32),
+            (0x3a4_i32 as u32),
             cstr(ctx, 0x803ef870),
         )
     });

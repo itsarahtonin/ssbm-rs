@@ -376,7 +376,7 @@ pub fn HSD_LObjSetupSpecularInit<'a>(ctx: &'a Ctx, pmtx: ArrV<'a, F32, 4>) {
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x803b94a0),
-                                (0x14f_i32 as u32),
+                                (0x269_i32 as u32),
                                 cstr(ctx, 0x803b94a0),
                             )
                         });
@@ -408,7 +408,11 @@ pub fn setup_spec_lightobj<'a>(
     if spec_id != 0_i32 {
         fns::GXInitLightColor(ctx, (lobj).spec_lightobj(), (lobj).color());
         (lobj).set_shininess(50.0);
-        x = (lobj).shininess();
+        x = {
+            let __t1 = (lobj).shininess();
+            x = __t1;
+            __t1
+        };
         x = fp::fmuls(x, 0.5);
         fns::GXInitLightAttn(
             ctx,
@@ -445,7 +449,7 @@ pub fn setup_spec_lightobj<'a>(
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803b94a0),
-                        (0x18e_i32 as u32),
+                        (0x2a8_i32 as u32),
                         cstr(ctx, 0x803b94a0),
                     )
                 });
@@ -556,7 +560,7 @@ pub fn HSD_LObjSetupInit<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) {
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803b94a0),
-                        (0x1f5_i32 as u32),
+                        (0x334_i32 as u32),
                         cstr(ctx, 0x803b94a0),
                     )
                 });
@@ -654,7 +658,7 @@ pub fn HSD_LObjSetupInit<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803b94a0),
-                            (0x230_i32 as u32),
+                            (0x372_i32 as u32),
                             cstr(ctx, 0x803b94a0),
                         )
                     });
@@ -925,7 +929,7 @@ pub fn HSD_LightID2Index<'a>(ctx: &'a Ctx, id: i32) -> u32 {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803b94a0),
-                    (0x2f0_i32 as u32),
+                    (0x492_i32 as u32),
                     cstr(ctx, 0x803b94a0),
                 )
             });
@@ -1050,7 +1054,7 @@ pub fn HSD_LObjSetPosition<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, position: Vec<'
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b94a0),
-            (0x35b_i32 as u32),
+            (0x559_i32 as u32),
             cstr(ctx, 0x803b94a0),
         )
     });
@@ -1062,7 +1066,7 @@ pub fn HSD_LObjSetPosition<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, position: Vec<'
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b94a0),
-                (0x35e_i32 as u32),
+                (0x55c_i32 as u32),
                 cstr(ctx, 0x803b94a0),
             )
         });
@@ -1091,7 +1095,7 @@ pub fn HSD_LObjSetInterest<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, interest: Vec<'
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b94a0),
-            (0x36e_i32 as u32),
+            (0x57d_i32 as u32),
             cstr(ctx, 0x803b94a0),
         )
     });
@@ -1103,7 +1107,7 @@ pub fn HSD_LObjSetInterest<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, interest: Vec<'
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b94a0),
-                (0x371_i32 as u32),
+                (0x580_i32 as u32),
                 cstr(ctx, 0x803b94a0),
             )
         });
@@ -1276,7 +1280,7 @@ pub fn HSD_LObjLoadDesc<'a>(ctx: &'a Ctx, ldesc: HSD_LightDesc<'a>) -> HSD_LObj<
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803b94a0),
-                            (0x3f2_i32 as u32),
+                            (0x66c_i32 as u32),
                             cstr(ctx, 0x803b94a0),
                         )
                     });
@@ -1548,7 +1552,7 @@ fn inl_setup_diffuse_lightobj_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>) {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803b94a0),
-                    (0x168_i32 as u32),
+                    (0x282_i32 as u32),
                     cstr(ctx, 0x803b94a0),
                 )
             });
@@ -1587,7 +1591,7 @@ fn inl_ref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803b94a0),
-                (87_i32 as u32),
+                (93_i32 as u32),
                 cstr(ctx, 0x803b94a0),
             )
         });
@@ -1602,7 +1606,7 @@ fn inl_HSD_LObjGetPriority_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>) -> u8 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b94a0),
-            (113_i32 as u32),
+            (0x16f_i32 as u32),
             cstr(ctx, 0x803b94a0),
         )
     });
@@ -1860,7 +1864,7 @@ fn inl_HSD_LObjAlloc_unfused<'a>(ctx: &'a Ctx) -> HSD_LObj<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b94a0),
-            (0x38f_i32 as u32),
+            (0x5c6_i32 as u32),
             cstr(ctx, 0x803b94a0),
         )
     });

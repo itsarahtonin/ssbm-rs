@@ -783,6 +783,21 @@ pub fn fn_803B6820<'a>(
     }
 }
 
+pub fn hsd_803B6BE4<'a>(ctx: &'a Ctx, src: Val<'a, i8>, size: i32, dst: Addr<'a>) -> i32 {
+    let __frame = ctx.stack_frame(0x88);
+    let unused: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x0);
+    let mut src = src;
+    let mut size = size;
+    let mut dst = dst;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    return inl_hsd_803B6BE4_inline_unfused(ctx, src, size, dst);
+}
+
 fn inl_jpeg_clamp<'a>(ctx: &'a Ctx, value: f64) -> i32 {
     let mut value = value;
     let mut result: i32 = 0;
@@ -852,6 +867,814 @@ fn inl_jpeg_store_rgb565<'a>(
     );
 }
 
+fn inl_hsd_803B6BE4_inline_unfused<'a>(
+    ctx: &'a Ctx,
+    src: Val<'a, i8>,
+    size: i32,
+    dst: Addr<'a>,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x20);
+    let state: hsd_803B6BE4_inline_state<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut src = src;
+    let mut size = size;
+    let mut dst = dst;
+    let mut cr_coeff7: i32 = 0;
+    let mut luma_coeff7: i32 = 0;
+    let mut cb_coeff7: i32 = 0;
+    let mut y: i32 = 0;
+    let mut x: i32 = 0;
+    let mut zigzag: Val<'a, u8> = null(ctx);
+    let mut i: i32 = 0;
+    let mut quant_byte: u8 = 0;
+    let mut quant0: u8 = 0;
+    let mut cr_quant0: u8 = 0;
+    let mut cb_quant0: u8 = 0;
+    let mut src_byte0: Val<'a, u8> = null(ctx);
+    let mut src_byte9: Val<'a, u8> = null(ctx);
+    let mut src_byte10: Val<'a, u8> = null(ctx);
+    let mut src_byte11: Val<'a, u8> = null(ctx);
+    let mut src_byte12: Val<'a, u8> = null(ctx);
+    let mut src_byte13: Val<'a, u8> = null(ctx);
+    let mut src_byte14: Val<'a, u8> = null(ctx);
+    let mut src_byte15: Val<'a, u8> = null(ctx);
+    let mut src_byte1: Val<'a, u8> = null(ctx);
+    let mut src_byte2: Val<'a, u8> = null(ctx);
+    let mut src_byte3: Val<'a, u8> = null(ctx);
+    let mut src_byte4: Val<'a, u8> = null(ctx);
+    let mut src_byte5: Val<'a, u8> = null(ctx);
+    let mut src_byte6: Val<'a, u8> = null(ctx);
+    let mut src_byte7: Val<'a, u8> = null(ctx);
+    let mut src_byte8: Val<'a, u8> = null(ctx);
+    let mut luma_block: i32 = 0;
+    let mut luma: Val<'a, i32> = null(ctx);
+    let mut coefficients: Val<'a, i32> = null(ctx);
+    state.set_base(Handle::cast::<Val<'a, u8>>(fns::hsd_804D2E70(ctx)));
+    state.set_work(Handle::cast::<JpegState<'a>>(state.base()));
+    fns::hsd_804D79C0(ctx).set(size);
+    state.set_quant_table(Handle::cast::<JpegQuantTables<'a>>(
+        fns::lbl_80431090(ctx).at(0),
+    ));
+    fns::hsd_804D79B8(ctx).set(Handle::cast::<Val<'a, u8>>(src));
+    fns::hsd_804D79BC(ctx).set(Handle::cast::<Val<'a, u8>>(src));
+    (state.work()).work().prev_dc().at(0_i32).set({
+        let __t2 = {
+            let __t1 = 0_i32;
+            (state.work()).work().prev_dc().at(2_i32).set(__t1);
+            __t1
+        };
+        (state.work()).work().prev_dc().at(1_i32).set(__t2);
+        __t2
+    });
+    fns::hsd_804D79C4(ctx).set(0_i32);
+    let __t3 = ctx.setjmp_with(Handle::addr((state.work()).jmp()), || -> i32 {
+        src_byte0 = (Handle::add(fns::hsd_804D79BC(ctx).get(), fns::hsd_804D79C0(ctx).get()));
+        'back_find_luma_quant: loop {
+            if ((Handle::cast::<Val<'a, u16>>(fns::hsd_804D79B8(ctx).get())).get() as i32)
+                == 0xffdb_i32
+            {
+                let mut zigzag_2: Val<'a, u8> = null(ctx);
+                let mut i_2: i32 = 0;
+                fns::hsd_804D79B8(ctx).set(Handle::add(fns::hsd_804D79B8(ctx).get(), 5_i32));
+                zigzag_2 = fns::lbl_80431638(ctx).at(0);
+                {
+                    i_2 = 0_i32;
+                    'l1: while i_2 < 64_i32 {
+                        'c2: {
+                            src_byte0 = fns::hsd_804D79B8(ctx).get();
+                            fns::hsd_804D79B8(ctx).set(Handle::add(src_byte0, 1_i32));
+                            (state.quant_table())
+                                .luma()
+                                .at(((Handle::add(zigzag_2, 0_i32)).get() as i32))
+                                .set((src_byte0).get());
+                            src_byte1 = fns::hsd_804D79B8(ctx).get();
+                            fns::hsd_804D79B8(ctx).set(Handle::add(src_byte1, 1_i32));
+                            (state.quant_table())
+                                .luma()
+                                .at(((Handle::add(zigzag_2, 1_i32)).get() as i32))
+                                .set((src_byte1).get());
+                            src_byte2 = fns::hsd_804D79B8(ctx).get();
+                            fns::hsd_804D79B8(ctx).set(Handle::add(src_byte2, 1_i32));
+                            (state.quant_table())
+                                .luma()
+                                .at(((Handle::add(zigzag_2, 2_i32)).get() as i32))
+                                .set((src_byte2).get());
+                            src_byte3 = fns::hsd_804D79B8(ctx).get();
+                            fns::hsd_804D79B8(ctx).set(Handle::add(src_byte3, 1_i32));
+                            (state.quant_table())
+                                .luma()
+                                .at(((Handle::add(zigzag_2, 3_i32)).get() as i32))
+                                .set((src_byte3).get());
+                            src_byte4 = fns::hsd_804D79B8(ctx).get();
+                            fns::hsd_804D79B8(ctx).set(Handle::add(src_byte4, 1_i32));
+                            (state.quant_table())
+                                .luma()
+                                .at(((Handle::add(zigzag_2, 4_i32)).get() as i32))
+                                .set((src_byte4).get());
+                            src_byte5 = fns::hsd_804D79B8(ctx).get();
+                            fns::hsd_804D79B8(ctx).set(Handle::add(src_byte5, 1_i32));
+                            (state.quant_table())
+                                .luma()
+                                .at(((Handle::add(zigzag_2, 5_i32)).get() as i32))
+                                .set((src_byte5).get());
+                            src_byte6 = fns::hsd_804D79B8(ctx).get();
+                            fns::hsd_804D79B8(ctx).set(Handle::add(src_byte6, 1_i32));
+                            (state.quant_table())
+                                .luma()
+                                .at(((Handle::add(zigzag_2, 6_i32)).get() as i32))
+                                .set((src_byte6).get());
+                            src_byte7 = fns::hsd_804D79B8(ctx).get();
+                            fns::hsd_804D79B8(ctx).set(Handle::add(src_byte7, 1_i32));
+                            quant_byte = (Handle::add(zigzag_2, 7_i32)).get();
+                            zigzag_2 = Handle::add(zigzag_2, 8_i32);
+                            (state.quant_table())
+                                .luma()
+                                .at((quant_byte as i32))
+                                .set((src_byte7).get());
+                        }
+                        i_2 = i_2.wrapping_add(8_i32);
+                    }
+                }
+            } else {
+                if Handle::addr({
+                    fns::hsd_804D79B8(ctx).set(Handle::add(fns::hsd_804D79B8(ctx).get(), 1));
+                    fns::hsd_804D79B8(ctx).get()
+                }) >= Handle::addr(src_byte0)
+                {
+                    fns::__longjmp(ctx, (state.work()).jmp(), 1_i32);
+                } else {
+                    continue 'back_find_luma_quant;
+                }
+            }
+            src_byte0 = (Handle::add(fns::hsd_804D79BC(ctx).get(), fns::hsd_804D79C0(ctx).get()));
+            'back_find_chroma_quant: loop {
+                if ((Handle::cast::<Val<'a, u16>>(fns::hsd_804D79B8(ctx).get())).get() as i32)
+                    == 0xffdb_i32
+                {
+                    let mut qbyte: u8 = 0;
+                    let mut qptr: Val<'a, u8> = null(ctx);
+                    let mut zigzag_index: i32 = 0;
+                    fns::hsd_804D79B8(ctx).set(Handle::add(fns::hsd_804D79B8(ctx).get(), 5_i32));
+                    zigzag = fns::lbl_80431638(ctx).at(0);
+                    {
+                        i = 0_i32;
+                        'l3: while i < 64_i32 {
+                            'c4: {
+                                src_byte8 = fns::hsd_804D79B8(ctx).get();
+                                fns::hsd_804D79B8(ctx).set(Handle::add(src_byte8, 1_i32));
+                                zigzag_index = ((Handle::add(zigzag, 0_i32)).get() as i32);
+                                qptr =
+                                    Handle::add((state.quant_table()).luma().at(0), zigzag_index);
+                                (Handle::add(qptr, 64_i32)).set({
+                                    let __t4 = (src_byte8).get();
+                                    qbyte = __t4;
+                                    __t4
+                                });
+                                src_byte9 = fns::hsd_804D79B8(ctx).get();
+                                fns::hsd_804D79B8(ctx).set(Handle::add(src_byte9, 1_i32));
+                                zigzag_index = ((Handle::add(zigzag, 1_i32)).get() as i32);
+                                qptr =
+                                    Handle::add((state.quant_table()).luma().at(0), zigzag_index);
+                                (Handle::add(qptr, 64_i32)).set({
+                                    let __t5 = (src_byte9).get();
+                                    qbyte = __t5;
+                                    __t5
+                                });
+                                src_byte10 = fns::hsd_804D79B8(ctx).get();
+                                fns::hsd_804D79B8(ctx).set(Handle::add(src_byte10, 1_i32));
+                                zigzag_index = ((Handle::add(zigzag, 2_i32)).get() as i32);
+                                qptr =
+                                    Handle::add((state.quant_table()).luma().at(0), zigzag_index);
+                                (Handle::add(qptr, 64_i32)).set({
+                                    let __t6 = (src_byte10).get();
+                                    qbyte = __t6;
+                                    __t6
+                                });
+                                src_byte11 = fns::hsd_804D79B8(ctx).get();
+                                fns::hsd_804D79B8(ctx).set(Handle::add(src_byte11, 1_i32));
+                                zigzag_index = ((Handle::add(zigzag, 3_i32)).get() as i32);
+                                qptr =
+                                    Handle::add((state.quant_table()).luma().at(0), zigzag_index);
+                                (Handle::add(qptr, 64_i32)).set({
+                                    let __t7 = (src_byte11).get();
+                                    qbyte = __t7;
+                                    __t7
+                                });
+                                src_byte12 = fns::hsd_804D79B8(ctx).get();
+                                fns::hsd_804D79B8(ctx).set(Handle::add(src_byte12, 1_i32));
+                                zigzag_index = ((Handle::add(zigzag, 4_i32)).get() as i32);
+                                qptr =
+                                    Handle::add((state.quant_table()).luma().at(0), zigzag_index);
+                                (Handle::add(qptr, 64_i32)).set({
+                                    let __t8 = (src_byte12).get();
+                                    qbyte = __t8;
+                                    __t8
+                                });
+                                src_byte13 = fns::hsd_804D79B8(ctx).get();
+                                fns::hsd_804D79B8(ctx).set(Handle::add(src_byte13, 1_i32));
+                                zigzag_index = ((Handle::add(zigzag, 5_i32)).get() as i32);
+                                qptr =
+                                    Handle::add((state.quant_table()).luma().at(0), zigzag_index);
+                                qbyte = {
+                                    let __t9 = (src_byte13).get();
+                                    quant_byte = __t9;
+                                    __t9
+                                };
+                                (Handle::add(qptr, 64_i32)).set(qbyte);
+                                src_byte14 = fns::hsd_804D79B8(ctx).get();
+                                fns::hsd_804D79B8(ctx).set(Handle::add(src_byte14, 1_i32));
+                                zigzag_index = ((Handle::add(zigzag, 6_i32)).get() as i32);
+                                qptr =
+                                    Handle::add((state.quant_table()).luma().at(0), zigzag_index);
+                                (Handle::add(qptr, 64_i32)).set({
+                                    let __t10 = (src_byte14).get();
+                                    qbyte = __t10;
+                                    __t10
+                                });
+                                src_byte15 = fns::hsd_804D79B8(ctx).get();
+                                fns::hsd_804D79B8(ctx).set(Handle::add(src_byte15, 1_i32));
+                                zigzag_index = ((Handle::add(zigzag, 7_i32)).get() as i32);
+                                qptr =
+                                    Handle::add((state.quant_table()).luma().at(0), zigzag_index);
+                                zigzag = Handle::add(zigzag, 8_i32);
+                                (Handle::add(qptr, 64_i32)).set({
+                                    let __t11 = (src_byte15).get();
+                                    qbyte = __t11;
+                                    __t11
+                                });
+                            }
+                            i = i.wrapping_add(8_i32);
+                        }
+                    }
+                } else {
+                    if Handle::addr({
+                        fns::hsd_804D79B8(ctx).set(Handle::add(fns::hsd_804D79B8(ctx).get(), 1));
+                        fns::hsd_804D79B8(ctx).get()
+                    }) >= Handle::addr(src_byte0)
+                    {
+                        fns::__longjmp(ctx, (state.work()).jmp(), 1_i32);
+                    } else {
+                        continue 'back_find_chroma_quant;
+                    }
+                }
+                src_byte0 =
+                    (Handle::add(fns::hsd_804D79BC(ctx).get(), fns::hsd_804D79C0(ctx).get()));
+                'back_find_frame: loop {
+                    if ((Handle::cast::<Val<'a, u16>>(fns::hsd_804D79B8(ctx).get())).get() as i32)
+                        == 0xffc0_i32
+                    {
+                        fns::hsd_804D79B8(ctx)
+                            .set(Handle::add(fns::hsd_804D79B8(ctx).get(), 5_i32));
+                        state.set_height(
+                            ((Handle::cast::<Val<'a, u16>>(fns::hsd_804D79B8(ctx).get())).get()
+                                as i32),
+                        );
+                        fns::hsd_804D79B8(ctx)
+                            .set(Handle::add(fns::hsd_804D79B8(ctx).get(), 2_i32));
+                        state.set_width(
+                            ((Handle::cast::<Val<'a, u16>>(fns::hsd_804D79B8(ctx).get())).get()
+                                as i32),
+                        );
+                        fns::hsd_804D79B8(ctx)
+                            .set(Handle::add(fns::hsd_804D79B8(ctx).get(), 12_i32));
+                    } else {
+                        if Handle::addr({
+                            fns::hsd_804D79B8(ctx)
+                                .set(Handle::add(fns::hsd_804D79B8(ctx).get(), 1));
+                            fns::hsd_804D79B8(ctx).get()
+                        }) >= Handle::addr(src_byte0)
+                        {
+                            fns::__longjmp(ctx, (state.work()).jmp(), 1_i32);
+                        } else {
+                            continue 'back_find_frame;
+                        }
+                    }
+                    src_byte0 =
+                        (Handle::add(fns::hsd_804D79BC(ctx).get(), fns::hsd_804D79C0(ctx).get()));
+                    'back_find_scan: loop {
+                        if ((Handle::cast::<Val<'a, u16>>(fns::hsd_804D79B8(ctx).get())).get()
+                            as i32)
+                            == 0xffda_i32
+                        {
+                            fns::hsd_804D79B8(ctx)
+                                .set(Handle::add(fns::hsd_804D79B8(ctx).get(), 2_i32));
+                            fns::hsd_804D79B8(ctx)
+                                .set(Handle::add(fns::hsd_804D79B8(ctx).get(), 12_i32));
+                        } else {
+                            if Handle::addr({
+                                fns::hsd_804D79B8(ctx)
+                                    .set(Handle::add(fns::hsd_804D79B8(ctx).get(), 1));
+                                fns::hsd_804D79B8(ctx).get()
+                            }) >= Handle::addr(src_byte0)
+                            {
+                                fns::__longjmp(ctx, (state.work()).jmp(), 1_i32);
+                            } else {
+                                continue 'back_find_scan;
+                            }
+                        }
+                        {
+                            y = 0_i32;
+                            'l5: while y < state.height() {
+                                'c6: {
+                                    {
+                                        x = 0_i32;
+                                        'l7: while x < state.width() {
+                                            'c8: {
+                                                luma = (state.work()).work().luma().at(0);
+                                                {
+                                                    luma_block = 0_i32;
+                                                    'l9: while luma_block < 4_i32 {
+                                                        'c10: {
+                                                            let mut luma_quant: Val<'a, u8> =
+                                                                null(ctx);
+                                                            let mut luma_out: Val<'a, i32> =
+                                                                null(ctx);
+                                                            let mut luma_coeff: Val<'a, i32> =
+                                                                null(ctx);
+                                                            let mut luma_index: i32 = 0;
+                                                            fns::hsd_803B5EA0(ctx, 0_i32);
+                                                            luma_out = luma;
+                                                            luma_coeff =
+                                                                (state.work()).work().coeff().at(0);
+                                                            {
+                                                                luma_index = 0_i32;
+                                                                'l11: while luma_index < 64_i32 {
+                                                                    'c12: {
+                                                                        luma_quant = Handle::add(
+                                                                            (state.quant_table())
+                                                                                .luma()
+                                                                                .at(0),
+                                                                            luma_index,
+                                                                        );
+                                                                        quant0 = (Handle::add(
+                                                                            luma_quant, 0_i32,
+                                                                        ))
+                                                                        .get();
+                                                                        (Handle::add(
+                                                                            luma_out, 0_i32,
+                                                                        ))
+                                                                        .set(
+                                                                            ((Handle::add(
+                                                                                luma_coeff, 0_i32,
+                                                                            ))
+                                                                            .get()
+                                                                            .wrapping_mul(
+                                                                                (quant0 as i32),
+                                                                            )),
+                                                                        );
+                                                                        (Handle::add(
+                                                                            luma_out, 1_i32,
+                                                                        ))
+                                                                        .set(
+                                                                            ((Handle::add(
+                                                                                luma_coeff, 1_i32,
+                                                                            ))
+                                                                            .get()
+                                                                            .wrapping_mul(
+                                                                                ((Handle::add(
+                                                                                    luma_quant,
+                                                                                    1_i32,
+                                                                                ))
+                                                                                .get()
+                                                                                    as i32),
+                                                                            )),
+                                                                        );
+                                                                        (Handle::add(
+                                                                            luma_out, 2_i32,
+                                                                        ))
+                                                                        .set(
+                                                                            ((Handle::add(
+                                                                                luma_coeff, 2_i32,
+                                                                            ))
+                                                                            .get()
+                                                                            .wrapping_mul(
+                                                                                ((Handle::add(
+                                                                                    luma_quant,
+                                                                                    2_i32,
+                                                                                ))
+                                                                                .get()
+                                                                                    as i32),
+                                                                            )),
+                                                                        );
+                                                                        (Handle::add(
+                                                                            luma_out, 3_i32,
+                                                                        ))
+                                                                        .set(
+                                                                            ((Handle::add(
+                                                                                luma_coeff, 3_i32,
+                                                                            ))
+                                                                            .get()
+                                                                            .wrapping_mul(
+                                                                                ((Handle::add(
+                                                                                    luma_quant,
+                                                                                    3_i32,
+                                                                                ))
+                                                                                .get()
+                                                                                    as i32),
+                                                                            )),
+                                                                        );
+                                                                        (Handle::add(
+                                                                            luma_out, 4_i32,
+                                                                        ))
+                                                                        .set(
+                                                                            ((Handle::add(
+                                                                                luma_coeff, 4_i32,
+                                                                            ))
+                                                                            .get()
+                                                                            .wrapping_mul(
+                                                                                ((Handle::add(
+                                                                                    luma_quant,
+                                                                                    4_i32,
+                                                                                ))
+                                                                                .get()
+                                                                                    as i32),
+                                                                            )),
+                                                                        );
+                                                                        (Handle::add(
+                                                                            luma_out, 5_i32,
+                                                                        ))
+                                                                        .set(
+                                                                            ((Handle::add(
+                                                                                luma_coeff, 5_i32,
+                                                                            ))
+                                                                            .get()
+                                                                            .wrapping_mul(
+                                                                                ((Handle::add(
+                                                                                    luma_quant,
+                                                                                    5_i32,
+                                                                                ))
+                                                                                .get()
+                                                                                    as i32),
+                                                                            )),
+                                                                        );
+                                                                        (Handle::add(
+                                                                            luma_out, 6_i32,
+                                                                        ))
+                                                                        .set(
+                                                                            ((Handle::add(
+                                                                                luma_coeff, 6_i32,
+                                                                            ))
+                                                                            .get()
+                                                                            .wrapping_mul(
+                                                                                ((Handle::add(
+                                                                                    luma_quant,
+                                                                                    6_i32,
+                                                                                ))
+                                                                                .get()
+                                                                                    as i32),
+                                                                            )),
+                                                                        );
+                                                                        luma_coeff7 = (Handle::add(
+                                                                            luma_coeff, 7_i32,
+                                                                        ))
+                                                                        .get();
+                                                                        luma_coeff = Handle::add(
+                                                                            luma_coeff, 8_i32,
+                                                                        );
+                                                                        (Handle::add(
+                                                                            luma_out, 7_i32,
+                                                                        ))
+                                                                        .set(
+                                                                            (luma_coeff7
+                                                                                .wrapping_mul(
+                                                                                    ((Handle::add(
+                                                                                        luma_quant,
+                                                                                        7_i32,
+                                                                                    ))
+                                                                                    .get()
+                                                                                        as i32),
+                                                                                )),
+                                                                        );
+                                                                        luma_out = Handle::add(
+                                                                            luma_out, 8_i32,
+                                                                        );
+                                                                    }
+                                                                    luma_index = luma_index
+                                                                        .wrapping_add(8_i32);
+                                                                }
+                                                            }
+                                                            fns::fn_803B61B4(ctx, luma);
+                                                            luma = Handle::add(luma, 64_i32);
+                                                        }
+                                                        luma_block = luma_block.wrapping_add(1);
+                                                    }
+                                                }
+                                                fns::hsd_803B5EA0(ctx, 1_i32);
+                                                {
+                                                    let mut cb_quant: Val<'a, u8> = null(ctx);
+                                                    let mut cb_out: Val<'a, i32> = null(ctx);
+                                                    let mut cb_coeff: Val<'a, i32> = null(ctx);
+                                                    let mut cb_index: i32 = 0;
+                                                    let mut quant_chroma: Val<'a, u8> =
+                                                        (state.quant_table()).chroma().at(0);
+                                                    cb_coeff = {
+                                                        let __t12 =
+                                                            (state.work()).work().coeff().at(0);
+                                                        coefficients = __t12;
+                                                        __t12
+                                                    };
+                                                    cb_out = (state.work()).work().cb().at(0);
+                                                    {
+                                                        cb_index = 0_i32;
+                                                        'l13: while cb_index < 64_i32 {
+                                                            'c14: {
+                                                                cb_quant = Handle::add(
+                                                                    quant_chroma,
+                                                                    cb_index,
+                                                                );
+                                                                cb_quant0 =
+                                                                    (Handle::add(cb_quant, 0_i32))
+                                                                        .get();
+                                                                (Handle::add(cb_out, 0_i32)).set(
+                                                                    ((Handle::add(
+                                                                        cb_coeff, 0_i32,
+                                                                    ))
+                                                                    .get()
+                                                                    .wrapping_mul(
+                                                                        (cb_quant0 as i32),
+                                                                    )),
+                                                                );
+                                                                (Handle::add(cb_out, 1_i32)).set(
+                                                                    ((Handle::add(
+                                                                        cb_coeff, 1_i32,
+                                                                    ))
+                                                                    .get()
+                                                                    .wrapping_mul(
+                                                                        ((Handle::add(
+                                                                            cb_quant, 1_i32,
+                                                                        ))
+                                                                        .get()
+                                                                            as i32),
+                                                                    )),
+                                                                );
+                                                                (Handle::add(cb_out, 2_i32)).set(
+                                                                    ((Handle::add(
+                                                                        cb_coeff, 2_i32,
+                                                                    ))
+                                                                    .get()
+                                                                    .wrapping_mul(
+                                                                        ((Handle::add(
+                                                                            cb_quant, 2_i32,
+                                                                        ))
+                                                                        .get()
+                                                                            as i32),
+                                                                    )),
+                                                                );
+                                                                (Handle::add(cb_out, 3_i32)).set(
+                                                                    ((Handle::add(
+                                                                        cb_coeff, 3_i32,
+                                                                    ))
+                                                                    .get()
+                                                                    .wrapping_mul(
+                                                                        ((Handle::add(
+                                                                            cb_quant, 3_i32,
+                                                                        ))
+                                                                        .get()
+                                                                            as i32),
+                                                                    )),
+                                                                );
+                                                                (Handle::add(cb_out, 4_i32)).set(
+                                                                    ((Handle::add(
+                                                                        cb_coeff, 4_i32,
+                                                                    ))
+                                                                    .get()
+                                                                    .wrapping_mul(
+                                                                        ((Handle::add(
+                                                                            cb_quant, 4_i32,
+                                                                        ))
+                                                                        .get()
+                                                                            as i32),
+                                                                    )),
+                                                                );
+                                                                (Handle::add(cb_out, 5_i32)).set(
+                                                                    ((Handle::add(
+                                                                        cb_coeff, 5_i32,
+                                                                    ))
+                                                                    .get()
+                                                                    .wrapping_mul(
+                                                                        ((Handle::add(
+                                                                            cb_quant, 5_i32,
+                                                                        ))
+                                                                        .get()
+                                                                            as i32),
+                                                                    )),
+                                                                );
+                                                                (Handle::add(cb_out, 6_i32)).set(
+                                                                    ((Handle::add(
+                                                                        cb_coeff, 6_i32,
+                                                                    ))
+                                                                    .get()
+                                                                    .wrapping_mul(
+                                                                        ((Handle::add(
+                                                                            cb_quant, 6_i32,
+                                                                        ))
+                                                                        .get()
+                                                                            as i32),
+                                                                    )),
+                                                                );
+                                                                cb_coeff7 =
+                                                                    (Handle::add(cb_coeff, 7_i32))
+                                                                        .get();
+                                                                cb_coeff =
+                                                                    Handle::add(cb_coeff, 8_i32);
+                                                                (Handle::add(cb_out, 7_i32)).set(
+                                                                    (cb_coeff7.wrapping_mul(
+                                                                        ((Handle::add(
+                                                                            cb_quant, 7_i32,
+                                                                        ))
+                                                                        .get()
+                                                                            as i32),
+                                                                    )),
+                                                                );
+                                                                cb_out = Handle::add(cb_out, 8_i32);
+                                                            }
+                                                            cb_index = cb_index.wrapping_add(8_i32);
+                                                        }
+                                                    }
+                                                    fns::fn_803B61B4(
+                                                        ctx,
+                                                        (state.work()).work().cb().at(0),
+                                                    );
+                                                }
+                                                fns::hsd_803B5EA0(ctx, 2_i32);
+                                                {
+                                                    let mut quant_chroma_2: Val<'a, u8> =
+                                                        (state.quant_table()).chroma().at(0);
+                                                    let mut cr_quant: Val<'a, u8> = null(ctx);
+                                                    let mut cr_out: Val<'a, i32> = null(ctx);
+                                                    let mut cr_index: i32 = 0;
+                                                    cr_out = (state.work()).work().cr().at(0);
+                                                    {
+                                                        cr_index = 0_i32;
+                                                        'l15: while cr_index < 64_i32 {
+                                                            'c16: {
+                                                                cr_quant = Handle::add(
+                                                                    quant_chroma_2,
+                                                                    cr_index,
+                                                                );
+                                                                cr_quant0 =
+                                                                    (Handle::add(cr_quant, 0_i32))
+                                                                        .get();
+                                                                (Handle::add(cr_out, 0_i32)).set(
+                                                                    ((Handle::add(
+                                                                        coefficients,
+                                                                        0_i32,
+                                                                    ))
+                                                                    .get()
+                                                                    .wrapping_mul(
+                                                                        (cr_quant0 as i32),
+                                                                    )),
+                                                                );
+                                                                (Handle::add(cr_out, 1_i32)).set(
+                                                                    ((Handle::add(
+                                                                        coefficients,
+                                                                        1_i32,
+                                                                    ))
+                                                                    .get()
+                                                                    .wrapping_mul(
+                                                                        ((Handle::add(
+                                                                            cr_quant, 1_i32,
+                                                                        ))
+                                                                        .get()
+                                                                            as i32),
+                                                                    )),
+                                                                );
+                                                                (Handle::add(cr_out, 2_i32)).set(
+                                                                    ((Handle::add(
+                                                                        coefficients,
+                                                                        2_i32,
+                                                                    ))
+                                                                    .get()
+                                                                    .wrapping_mul(
+                                                                        ((Handle::add(
+                                                                            cr_quant, 2_i32,
+                                                                        ))
+                                                                        .get()
+                                                                            as i32),
+                                                                    )),
+                                                                );
+                                                                (Handle::add(cr_out, 3_i32)).set(
+                                                                    ((Handle::add(
+                                                                        coefficients,
+                                                                        3_i32,
+                                                                    ))
+                                                                    .get()
+                                                                    .wrapping_mul(
+                                                                        ((Handle::add(
+                                                                            cr_quant, 3_i32,
+                                                                        ))
+                                                                        .get()
+                                                                            as i32),
+                                                                    )),
+                                                                );
+                                                                (Handle::add(cr_out, 4_i32)).set(
+                                                                    ((Handle::add(
+                                                                        coefficients,
+                                                                        4_i32,
+                                                                    ))
+                                                                    .get()
+                                                                    .wrapping_mul(
+                                                                        ((Handle::add(
+                                                                            cr_quant, 4_i32,
+                                                                        ))
+                                                                        .get()
+                                                                            as i32),
+                                                                    )),
+                                                                );
+                                                                (Handle::add(cr_out, 5_i32)).set(
+                                                                    ((Handle::add(
+                                                                        coefficients,
+                                                                        5_i32,
+                                                                    ))
+                                                                    .get()
+                                                                    .wrapping_mul(
+                                                                        ((Handle::add(
+                                                                            cr_quant, 5_i32,
+                                                                        ))
+                                                                        .get()
+                                                                            as i32),
+                                                                    )),
+                                                                );
+                                                                (Handle::add(cr_out, 6_i32)).set(
+                                                                    ((Handle::add(
+                                                                        coefficients,
+                                                                        6_i32,
+                                                                    ))
+                                                                    .get()
+                                                                    .wrapping_mul(
+                                                                        ((Handle::add(
+                                                                            cr_quant, 6_i32,
+                                                                        ))
+                                                                        .get()
+                                                                            as i32),
+                                                                    )),
+                                                                );
+                                                                cr_coeff7 = (Handle::add(
+                                                                    coefficients,
+                                                                    7_i32,
+                                                                ))
+                                                                .get();
+                                                                coefficients = Handle::add(
+                                                                    coefficients,
+                                                                    8_i32,
+                                                                );
+                                                                (Handle::add(cr_out, 7_i32)).set(
+                                                                    (cr_coeff7.wrapping_mul(
+                                                                        ((Handle::add(
+                                                                            cr_quant, 7_i32,
+                                                                        ))
+                                                                        .get()
+                                                                            as i32),
+                                                                    )),
+                                                                );
+                                                                cr_out = Handle::add(cr_out, 8_i32);
+                                                            }
+                                                            cr_index = cr_index.wrapping_add(8_i32);
+                                                        }
+                                                    }
+                                                    fns::fn_803B61B4(
+                                                        ctx,
+                                                        (state.work()).work().cr().at(0),
+                                                    );
+                                                }
+                                                statics::sysdolphin__baselib__hsd_3B5C::fn_803B6820(
+                                                    ctx,
+                                                    Handle::cast::<Val<'a, u8>>(dst),
+                                                    x,
+                                                    y,
+                                                    state.width(),
+                                                    state.height(),
+                                                );
+                                            }
+                                            x = x.wrapping_add(16_i32);
+                                        }
+                                    }
+                                }
+                                y = y.wrapping_add(16_i32);
+                            }
+                        }
+                        return state
+                            .width()
+                            .wrapping_mul(state.height())
+                            .wrapping_mul(2_i32);
+                        break;
+                    }
+                    break;
+                }
+                break;
+            }
+            break;
+        }
+        #[allow(unreachable_code)]
+        return 0;
+    });
+    match __t3 {
+        Ok(v) => return v,
+        Err(_) => {
+            return 0_i32;
+        }
+    }
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -893,5 +1716,13 @@ pub fn register(ctx: &Ctx) {
             Ret::put(fn_803B6820(ctx, a0, a1, a2, a3, a4), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x803b6be4,
+        |ctx| {
+            let (a0, a1, a2): (Val<'_, i8>, i32, Addr<'_>) = Args::take_all(ctx);
+            Ret::put(hsd_803B6BE4(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Int,
     );
 }

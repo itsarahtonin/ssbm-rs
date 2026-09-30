@@ -128,7 +128,7 @@ pub fn mpLibLoad<'a>(ctx: &'a Ctx, coll_data: MapCollData<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803bd3ec),
-            (0x389_i32 as u32),
+            (0x19c_i32 as u32),
             cstr(ctx, 0x803bd3ec),
         )
     });
@@ -141,7 +141,7 @@ pub fn mpLibLoad<'a>(ctx: &'a Ctx, coll_data: MapCollData<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803bd3ec),
-            (0x38c_i32 as u32),
+            (0x19d_i32 as u32),
             cstr(ctx, 0x803bd3ec),
         )
     });
@@ -154,7 +154,7 @@ pub fn mpLibLoad<'a>(ctx: &'a Ctx, coll_data: MapCollData<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803bd3ec),
-            (0x38f_i32 as u32),
+            (0x19e_i32 as u32),
             cstr(ctx, 0x803bd3ec),
         )
     });
@@ -636,7 +636,7 @@ pub fn mpLib_8004DD90_Floor<'a>(
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x456_i32 as u32),
+                            (0x306_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -817,7 +817,7 @@ pub fn mpLib_8004E090_Ceiling<'a>(
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x4a4_i32 as u32),
+                            (0x37d_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -995,7 +995,7 @@ pub fn mpLib_8004E398_LeftWall<'a>(
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x4f0_i32 as u32),
+                            (0x3f6_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -1168,7 +1168,7 @@ pub fn mpLib_8004E684_RightWall<'a>(
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x538_i32 as u32),
+                            (0x46e_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -7152,7 +7152,7 @@ pub fn mpLib_80051BA8_Floor<'a>(
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803bd3ec),
-                        (0xcf1_i32 as u32),
+                        (0xeed_i32 as u32),
                         cstr(ctx, 0x803bd3ec),
                     )
                 });
@@ -7965,7 +7965,7 @@ pub fn mpLineNextNonFloor<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0xe86_i32 as u32),
+                            (0x102b_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -8029,7 +8029,7 @@ pub fn mpLinePrevNonFloor<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0xe98_i32 as u32),
+                            (0x1034_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -8093,7 +8093,7 @@ pub fn mpLinePrevNonCeiling<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0xeaa_i32 as u32),
+                            (0x103d_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -8157,7 +8157,7 @@ pub fn mpLineNextNonCeiling<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0xebc_i32 as u32),
+                            (0x1046_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -8221,7 +8221,7 @@ pub fn mpLineNextNonLeftWall<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0xece_i32 as u32),
+                            (0x104f_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -8285,7 +8285,7 @@ pub fn mpLinePrevNonLeftWall<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0xee0_i32 as u32),
+                            (0x1058_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -8349,7 +8349,7 @@ pub fn mpLinePrevNonRightWall<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0xef2_i32 as u32),
+                            (0x1061_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -8413,7 +8413,7 @@ pub fn mpLineNextNonRightWall<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0xf04_i32 as u32),
+                            (0x106a_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -8474,7 +8474,7 @@ pub fn mpLib_80053394_Floor<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0xf29_i32 as u32),
+                            (0x109c_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -8513,7 +8513,7 @@ pub fn mpLib_80053448_Floor<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0xf2f_i32 as u32),
+                            (0x10a5_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -8555,7 +8555,7 @@ pub fn mpLib_800534FC_Floor<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0xf73_i32 as u32),
+                            (0x10b0_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -8584,11 +8584,18 @@ pub fn mpLib_800534FC_Floor<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                 .next_id1() as i32)
             {
                 line_id = new_id;
-                line = (Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id))
-                    .x0();
                 new_id = inl_mpLineGetNextCheckResultFirst_unfused(
                     ctx,
-                    ((line).next_id1() as i32),
+                    (({
+                        let __t1 = (Handle::add(
+                            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                            new_id,
+                        ))
+                        .x0();
+                        line = __t1;
+                        __t1
+                    })
+                    .next_id1() as i32),
                     line,
                 );
                 break 'c4;
@@ -8632,7 +8639,7 @@ pub fn mpLib_800536CC_Floor<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0xfb9_i32 as u32),
+                            (0x10c5_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -8661,11 +8668,18 @@ pub fn mpLib_800536CC_Floor<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                 .prev_id1() as i32)
             {
                 line_id = new_id;
-                line = (Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id))
-                    .x0();
                 new_id = inl_mpLineGetPrevCheckResultFirst_unfused(
                     ctx,
-                    ((line).prev_id1() as i32),
+                    (({
+                        let __t1 = (Handle::add(
+                            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                            new_id,
+                        ))
+                        .x0();
+                        line = __t1;
+                        __t1
+                    })
+                    .prev_id1() as i32),
                     line,
                 );
                 break 'c4;
@@ -8706,7 +8720,7 @@ pub fn mpLib_8005389C_Ceiling<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0xfd5_i32 as u32),
+                            (0x10da_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -8745,7 +8759,7 @@ pub fn mpLib_80053950_Ceiling<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0xfdb_i32 as u32),
+                            (0x10e3_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -8787,7 +8801,7 @@ pub fn mpLib_80053A04_Ceiling<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0xfe4_i32 as u32),
+                            (0x10ee_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -8816,11 +8830,18 @@ pub fn mpLib_80053A04_Ceiling<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                 .prev_id1() as i32)
             {
                 line_id = new_id;
-                line = (Handle::add(statics::melee__mp__mplib::groundCollLine(ctx).get(), new_id))
-                    .x0();
                 new_id = inl_mpLineGetPrevCheckResultFirst_unfused(
                     ctx,
-                    ((line).prev_id1() as i32),
+                    (({
+                        let __t1 = (Handle::add(
+                            statics::melee__mp__mplib::groundCollLine(ctx).get(),
+                            new_id,
+                        ))
+                        .x0();
+                        line = __t1;
+                        __t1
+                    })
+                    .prev_id1() as i32),
                     line,
                 );
                 break 'c4;
@@ -8863,7 +8884,7 @@ pub fn mpLib_80053BD4_Ceiling<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x1002_i32 as u32),
+                            (0x1103_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -8958,7 +8979,7 @@ pub fn mpLib_80053DA4_Floor<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x101b_i32 as u32),
+                            (0x114c_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -9062,7 +9083,7 @@ pub fn mpLib_80053DA4_Floor<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x1026_i32 as u32),
+                            (0x1151_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -9135,7 +9156,7 @@ pub fn mpLib_80053ECC_Floor<'a>(ctx: &'a Ctx, line_id: i32, vec: Vec<'a>) {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x1033_i32 as u32),
+                            (0x1160_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -9239,7 +9260,7 @@ pub fn mpLib_80053ECC_Floor<'a>(ctx: &'a Ctx, line_id: i32, vec: Vec<'a>) {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x103e_i32 as u32),
+                            (0x1165_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -9318,7 +9339,7 @@ pub fn mpFloorGetRight<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x1055_i32 as u32),
+                            (0x1171_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -9465,7 +9486,7 @@ pub fn mpFloorGetLeft<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x107c_i32 as u32),
+                            (0x117a_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -9614,7 +9635,7 @@ pub fn mpCeilingGetRight<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x10a3_i32 as u32),
+                            (0x1183_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -9774,7 +9795,7 @@ pub fn mpCeilingGetLeft<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x10cd_i32 as u32),
+                            (0x118c_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -9934,7 +9955,7 @@ pub fn mpLeftWallGetTop<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x10f7_i32 as u32),
+                            (0x1195_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -10094,7 +10115,7 @@ pub fn mpLeftWallGetBottom<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x1121_i32 as u32),
+                            (0x119e_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -10254,7 +10275,7 @@ pub fn mpRightWallGetTop<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x114b_i32 as u32),
+                            (0x11a7_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -10414,7 +10435,7 @@ pub fn mpRightWallGetBottom<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x1175_i32 as u32),
+                            (0x11b0_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -10541,7 +10562,7 @@ pub fn mpLineGetV1Pos<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x1199_i32 as u32),
+                            (0x11bc_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -10593,7 +10614,7 @@ pub fn mpLineGetV0Pos<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x11a4_i32 as u32),
+                            (0x11cb_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -10643,7 +10664,7 @@ pub fn mpLineGetKind<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x11ad_i32 as u32),
+                            (0x11dd_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -10687,7 +10708,7 @@ pub fn mpLineGetFlags<'a>(ctx: &'a Ctx, line_id: i32) -> u32 {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x11b3_i32 as u32),
+                            (0x11e7_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -10732,7 +10753,7 @@ pub fn mpLib_80054D68<'a>(ctx: &'a Ctx, line_id: i32, flags: u32) {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x11b9_i32 as u32),
+                            (0x11f3_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -10788,7 +10809,7 @@ pub fn mpLineGetNormal<'a>(ctx: &'a Ctx, line_id: i32, normal_out: Vec<'a>) -> V
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x11c6_i32 as u32),
+                            (0x1201_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -10909,7 +10930,7 @@ pub fn mpLinesConnected<'a>(ctx: &'a Ctx, start_id: i32, target_id: i32) -> i32 
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x1216_i32 as u32),
+                            (0x1230_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -10942,7 +10963,7 @@ pub fn mpLinesConnected<'a>(ctx: &'a Ctx, start_id: i32, target_id: i32) -> i32 
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x1217_i32 as u32),
+                            (0x1231_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -11381,7 +11402,7 @@ pub fn mpJointUpdateDynamics<'a>(ctx: &'a Ctx, joint_id: i32) {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x12e9_i32 as u32),
+                            (0x1314_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     });
@@ -11921,7 +11942,7 @@ pub fn mpGetSpeed<'a>(ctx: &'a Ctx, line_id: i32, pos: Vec<'a>, speed: Vec<'a>) 
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803bd3ec),
-                    (0x142c_i32 as u32),
+                    (0x14d6_i32 as u32),
                     cstr(ctx, 0x803bd3ec),
                 )
             });
@@ -11931,7 +11952,7 @@ pub fn mpGetSpeed<'a>(ctx: &'a Ctx, line_id: i32, pos: Vec<'a>, speed: Vec<'a>) 
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803bd3ec),
-                    (0x142d_i32 as u32),
+                    (0x14d7_i32 as u32),
                     cstr(ctx, 0x803bd3ec),
                 )
             });
@@ -12052,7 +12073,7 @@ pub fn mpJointFromLine<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x803bd3ec),
-                                (0x147c_i32 as u32),
+                                (0x1553_i32 as u32),
                                 cstr(ctx, 0x803bd3ec),
                             )
                         })
@@ -13834,7 +13855,7 @@ pub fn mpLib_80058820<'a>(ctx: &'a Ctx) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803bd3ec),
-            (0x1763_i32 as u32),
+            (0x18aa_i32 as u32),
             cstr(ctx, 0x803bd3ec),
         )
     });
@@ -14551,7 +14572,12 @@ pub fn mpLib_DrawSnapping<'a>(ctx: &'a Ctx) {
     }
 }
 
-pub fn mpLib_DrawMatchingLines<'a>(ctx: &'a Ctx, value: i32, flag: i32, color: _GXColor<'a>) {
+pub fn mpLib_DrawMatchingLines<'a>(
+    ctx: &'a Ctx,
+    value: i32,
+    flag: i32,
+    color: _GXColor<'a>,
+) -> i32 {
     let __frame = ctx.stack_frame(0x48);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut value = value;
@@ -14581,7 +14607,7 @@ pub fn mpLib_DrawMatchingLines<'a>(ctx: &'a Ctx, value: i32, flag: i32, color: _
         }
     }
     if count_r28 == 0_i32 {
-        return;
+        return 0;
     }
     line_r31 = statics::melee__mp__mplib::groundCollLine(ctx).get();
     fns::mpLib_SetupDraw(ctx, (color));
@@ -14677,6 +14703,8 @@ pub fn mpLib_DrawMatchingLines<'a>(ctx: &'a Ctx, value: i32, flag: i32, color: _
         }
     }
     inl_GXEnd_unfused(ctx);
+    #[allow(unreachable_code)]
+    return 0;
 }
 
 pub fn mpLib_80059554<'a>(ctx: &'a Ctx) {
@@ -15713,7 +15741,7 @@ pub fn mpLib_80059E60<'a>(ctx: &'a Ctx) {
         'l3: while ((entry).kind() as u32) != (1_i32.wrapping_neg() as u32) {
             'c4: {
                 Handle::copy_from((line_color), (entry).color());
-                statics::melee__mp__mplib::mpLib_DrawMatchingLines(
+                let _ = statics::melee__mp__mplib::mpLib_DrawMatchingLines(
                     ctx,
                     (entry).kind(),
                     255_i32,
@@ -15726,7 +15754,7 @@ pub fn mpLib_80059E60<'a>(ctx: &'a Ctx) {
             sp28.basic_color(),
             statics::melee__mp__mplib::mpLib_804D8100(ctx),
         );
-        statics::melee__mp__mplib::mpLib_DrawMatchingLines(
+        let _ = statics::melee__mp__mplib::mpLib_DrawMatchingLines(
             ctx,
             (enums::mp_Terrain_Basic as i32),
             255_i32,
@@ -15737,7 +15765,7 @@ pub fn mpLib_80059E60<'a>(ctx: &'a Ctx) {
             colors.ledge(),
             statics::melee__mp__mplib::mpLib_804D80F0(ctx),
         );
-        statics::melee__mp__mplib::mpLib_DrawMatchingLines(
+        let _ = statics::melee__mp__mplib::mpLib_DrawMatchingLines(
             ctx,
             (shl_i32(1_i32, (9_i32 as u32))),
             (shl_i32(1_i32, (9_i32 as u32))),
@@ -15747,7 +15775,7 @@ pub fn mpLib_80059E60<'a>(ctx: &'a Ctx) {
             colors.platform(),
             statics::melee__mp__mplib::mpLib_804D80F4(ctx),
         );
-        statics::melee__mp__mplib::mpLib_DrawMatchingLines(
+        let _ = statics::melee__mp__mplib::mpLib_DrawMatchingLines(
             ctx,
             (shl_i32(1_i32, (8_i32 as u32))),
             (shl_i32(1_i32, (8_i32 as u32))),
@@ -15757,7 +15785,7 @@ pub fn mpLib_80059E60<'a>(ctx: &'a Ctx) {
             colors.ledge_platform(),
             statics::melee__mp__mplib::mpLib_804D80F8(ctx),
         );
-        statics::melee__mp__mplib::mpLib_DrawMatchingLines(
+        let _ = statics::melee__mp__mplib::mpLib_DrawMatchingLines(
             ctx,
             ((shl_i32(1_i32, (9_i32 as u32))) | (shl_i32(1_i32, (8_i32 as u32)))),
             ((shl_i32(1_i32, (9_i32 as u32))) | (shl_i32(1_i32, (8_i32 as u32)))),
@@ -15767,7 +15795,7 @@ pub fn mpLib_80059E60<'a>(ctx: &'a Ctx) {
             colors.none(),
             statics::melee__mp__mplib::mpLib_804D80FC(ctx),
         );
-        statics::melee__mp__mplib::mpLib_DrawMatchingLines(
+        let _ = statics::melee__mp__mplib::mpLib_DrawMatchingLines(
             ctx,
             0_i32,
             ((shl_i32(1_i32, (9_i32 as u32))) | (shl_i32(1_i32, (8_i32 as u32)))),
@@ -16959,7 +16987,7 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803bd3ec),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803bd3ec),
         )
     });
@@ -16988,7 +17016,7 @@ fn inl_HSD_JObjGetMtxPtr<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'a, F32, 
         fns::__assert(
             ctx,
             cstr(ctx, 0x803bd3ec),
-            (0x2bb_i32 as u32),
+            (0x478_i32 as u32),
             cstr(ctx, 0x803bd3ec),
         )
     });
@@ -17114,7 +17142,7 @@ fn inl_mpLineGetV1Pos<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x1199_i32 as u32),
+                            (0x11bc_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -17186,7 +17214,7 @@ fn inl_mpLineGetKind<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x11ad_i32 as u32),
+                            (0x11dd_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -17231,7 +17259,7 @@ fn inl_mpLineGetV0Pos<'a>(ctx: &'a Ctx, line_id: i32, pos_out: Vec<'a>) {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x11a4_i32 as u32),
+                            (0x11cb_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -17280,7 +17308,7 @@ fn inl_mpLineGetFlags<'a>(ctx: &'a Ctx, line_id: i32) -> u32 {
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x11b3_i32 as u32),
+                            (0x11e7_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })
@@ -17333,7 +17361,7 @@ fn inl_mpLineGetNormal<'a>(ctx: &'a Ctx, line_id: i32, normal_out: Vec<'a>) -> V
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803bd3ec),
-                            (0x11c6_i32 as u32),
+                            (0x1201_i32 as u32),
                             cstr(ctx, 0x803bd3ec),
                         )
                     })

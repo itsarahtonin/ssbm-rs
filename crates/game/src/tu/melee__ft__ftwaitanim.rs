@@ -186,7 +186,7 @@ fn inl_getAnimID_unfused<'a>(ctx: &'a Ctx, arg1: WaitStruct<'a>) -> i32 {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803c54d0),
-                (59_i32 as u32),
+                (86_i32 as u32),
                 cstr(ctx, 0x803c54d0),
             )
         })

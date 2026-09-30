@@ -38,7 +38,7 @@ pub fn lbFile_8001615C<'a>(ctx: &'a Ctx, dcreq: i32, args: u32, buf: Addr<'a>, c
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ba510),
-            (19_i32 as u32),
+            (71_i32 as u32),
             cstr(ctx, 0x803ba510),
         )
     });
@@ -101,7 +101,7 @@ pub fn lbFileGetFullName<'a>(ctx: &'a Ctx, basename: Val<'a, i8>) -> Val<'a, i8>
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803ba510),
-                        (67_i32 as u32),
+                        (153_i32 as u32),
                         cstr(ctx, 0x803ba510),
                     )
                 });
@@ -200,7 +200,7 @@ pub fn lbFile_8001634C<'a>(ctx: &'a Ctx, fileno: i32) -> u32 {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803ba510),
-                (101_i32 as u32),
+                (216_i32 as u32),
                 cstr(ctx, 0x803ba510),
             )
         });
@@ -232,7 +232,7 @@ pub fn lbFileGetSize<'a>(ctx: &'a Ctx, basename: Val<'a, i8>) -> u32 {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803ba510),
-                (116_i32 as u32),
+                (238_i32 as u32),
                 cstr(ctx, 0x803ba510),
             )
         })
@@ -317,7 +317,7 @@ pub fn lbFile_80016580<'a>(
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803ba510),
-                (138_i32 as u32),
+                (0x11a_i32 as u32),
                 cstr(ctx, 0x803ba510),
             )
         })
@@ -417,7 +417,7 @@ fn inl_lbFile_8001634C_unfused<'a>(ctx: &'a Ctx, fileno: i32) -> u32 {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803ba510),
-                (101_i32 as u32),
+                (216_i32 as u32),
                 cstr(ctx, 0x803ba510),
             )
         });
@@ -542,7 +542,7 @@ fn inl_lbFile_80016580_unfused<'a>(
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803ba510),
-                (138_i32 as u32),
+                (0x11a_i32 as u32),
                 cstr(ctx, 0x803ba510),
             )
         })
@@ -578,7 +578,7 @@ fn inl_lbFileGetSize_unfused<'a>(ctx: &'a Ctx, basename: Val<'a, i8>) -> u32 {
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803ba510),
-                (116_i32 as u32),
+                (238_i32 as u32),
                 cstr(ctx, 0x803ba510),
             )
         })

@@ -37,7 +37,7 @@ pub fn lbMemory_80014E24<'a>(ctx: &'a Ctx, arenaLo: Addr<'a>, arenaHi: Addr<'a>)
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ba324),
-            (48_i32 as u32),
+            (123_i32 as u32),
             cstr(ctx, 0x803ba324),
         )
     });
@@ -50,7 +50,7 @@ pub fn lbMemory_80014E24<'a>(ctx: &'a Ctx, arenaLo: Addr<'a>, arenaHi: Addr<'a>)
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803ba324),
-                (57_i32 as u32),
+                (128_i32 as u32),
                 cstr(ctx, 0x803ba324),
             )
         });
@@ -75,7 +75,7 @@ pub fn lbMemory_80014EEC<'a>(ctx: &'a Ctx, handle: Handle_<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ba324),
-            (74_i32 as u32),
+            (149_i32 as u32),
             cstr(ctx, 0x803ba324),
         )
     });
@@ -143,7 +143,7 @@ pub fn lbMemory_80014FC8<'a>(ctx: &'a Ctx, h: Handle_<'a>, size: u32) -> HSD_All
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ba324),
-            (116_i32 as u32),
+            (204_i32 as u32),
             cstr(ctx, 0x803ba324),
         )
     });
@@ -188,7 +188,7 @@ pub fn lbMemory_80014FC8<'a>(ctx: &'a Ctx, h: Handle_<'a>, size: u32) -> HSD_All
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ba324),
-            (140_i32 as u32),
+            (233_i32 as u32),
             cstr(ctx, 0x803ba324),
         )
     });
@@ -213,6 +213,43 @@ pub fn lbMemory_80014FC8<'a>(ctx: &'a Ctx, h: Handle_<'a>, size: u32) -> HSD_All
     return null(ctx);
 }
 
+pub fn lbMemFreeToHeap<'a>(ctx: &'a Ctx, h: Handle_<'a>, addr: Addr<'a>) {
+    let __frame = ctx.stack_frame(0x8);
+    let mut h = h;
+    let mut addr = addr;
+    let mut block: HSD_AllocEntry<'a> = (h).blocks();
+    let mut link: Ptr<'a, HSD_AllocEntry<'a>> = (h).blocks_ref();
+    'l1: while !Handle::is_null(block) {
+        'c2: {
+            if Handle::addr((block).addr()) == Handle::addr(addr) {
+                (link).set((block).next());
+                (block).set_next((fns::lbMemory_804318B0(ctx).free_mem()));
+                fns::lbMemory_804318B0(ctx).set_free_mem(block);
+                fns::lbMemory_804318B0(ctx)
+                    .set_num_allocs(fns::lbMemory_804318B0(ctx).num_allocs().wrapping_sub(1_i32));
+                return;
+            }
+            link = (block).next_ref();
+            block = (block).next();
+        }
+    }
+    fns::OSReport(
+        ctx,
+        cstr(ctx, 0x803ba344),
+        &[VarArg::Int(Handle::addr(addr) as u32)],
+    );
+    (if ((0_i32) != 0) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803ba324),
+            (0x11b_i32 as u32),
+            cstr(ctx, 0x803ba324),
+        )
+    });
+}
+
 pub fn fn_80015184<'a>(ctx: &'a Ctx, alarm: OSAlarm<'a>, context: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut alarm = alarm;
@@ -228,7 +265,7 @@ pub fn fn_80015184<'a>(ctx: &'a Ctx, alarm: OSAlarm<'a>, context: OSContext<'a>)
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ba324),
-            (190_i32 as u32),
+            (0x127_i32 as u32),
             cstr(ctx, 0x803ba324),
         )
     });
@@ -314,7 +351,7 @@ pub fn lbMemory_80015320<'a>(ctx: &'a Ctx, arg0: i32, arg1: u32, arg2: Addr<'a>,
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ba324),
-            (251_i32 as u32),
+            (0x188_i32 as u32),
             cstr(ctx, 0x803ba324),
         )
     });
@@ -461,7 +498,7 @@ fn inl_start_ram_copy_unfused<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ba324),
-            (232_i32 as u32),
+            (0x14f_i32 as u32),
             cstr(ctx, 0x803ba324),
         )
     });
@@ -514,7 +551,7 @@ fn inl_lbMemory_80015320_unfused<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ba324),
-            (251_i32 as u32),
+            (0x188_i32 as u32),
             cstr(ctx, 0x803ba324),
         )
     });
@@ -582,7 +619,7 @@ fn inl_lbMemory_80014E24_unfused<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ba324),
-            (48_i32 as u32),
+            (123_i32 as u32),
             cstr(ctx, 0x803ba324),
         )
     });
@@ -595,7 +632,7 @@ fn inl_lbMemory_80014E24_unfused<'a>(
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x803ba324),
-                (57_i32 as u32),
+                (128_i32 as u32),
                 cstr(ctx, 0x803ba324),
             )
         });
@@ -619,7 +656,7 @@ fn inl_lbMemory_80014EEC_unfused<'a>(ctx: &'a Ctx, handle: Handle_<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803ba324),
-            (74_i32 as u32),
+            (149_i32 as u32),
             cstr(ctx, 0x803ba324),
         )
     });
@@ -684,6 +721,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(lbMemory_80014FC8(ctx, a0, a1), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x800150f0,
+        |ctx| {
+            let (a0, a1): (Handle_<'_>, Addr<'_>) = Args::take_all(ctx);
+            Ret::put(lbMemFreeToHeap(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x80015184,

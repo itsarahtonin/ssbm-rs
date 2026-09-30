@@ -28,7 +28,7 @@ use crate::support::*;
 use ssbm_rt::cpu as c;
 
 pub fn __copy_longs_aligned<'a>(ctx: &'a Ctx, a0: Addr<'a>, a1: Addr<'a>, a2: u32) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: MWCC-only code.
     (a0, a1, a2).put_regs(ctx);
     asm___copy_longs_aligned(ctx);
 }
@@ -320,7 +320,7 @@ fn asm___copy_longs_aligned(ctx: &Ctx) {
 }
 
 pub fn __copy_longs_rev_aligned<'a>(ctx: &'a Ctx, a0: Addr<'a>, a1: Addr<'a>, a2: u32) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: MWCC-only code.
     (a0, a1, a2).put_regs(ctx);
     asm___copy_longs_rev_aligned(ctx);
 }
@@ -611,7 +611,7 @@ fn asm___copy_longs_rev_aligned(ctx: &Ctx) {
 }
 
 pub fn __copy_longs_unaligned<'a>(ctx: &'a Ctx, a0: Addr<'a>, a1: Addr<'a>, a2: u32) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: MWCC-only code.
     (a0, a1, a2).put_regs(ctx);
     asm___copy_longs_unaligned(ctx);
 }
@@ -933,7 +933,7 @@ fn asm___copy_longs_unaligned(ctx: &Ctx) {
 }
 
 pub fn __copy_longs_rev_unaligned<'a>(ctx: &'a Ctx, a0: Addr<'a>, a1: Addr<'a>, a2: u32) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: MWCC-only code.
     (a0, a1, a2).put_regs(ctx);
     asm___copy_longs_rev_unaligned(ctx);
 }

@@ -482,7 +482,7 @@ pub fn fn_803B376C<'a>(ctx: &'a Ctx, arg0: Val<'a, u8>) {
 }
 
 pub fn hsd_803B3CD8<'a>(ctx: &'a Ctx, a0: i32) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: inline abs: MWCC-only code.
     (a0,).put_regs(ctx);
     asm_hsd_803B3CD8(ctx);
 }
@@ -4297,6 +4297,48 @@ pub fn hsd_803B4D64<'a>(ctx: &'a Ctx, arg0: u32, arg1: u32) {
     fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
 }
 
+pub fn hsd_803B51C8<'a>(
+    ctx: &'a Ctx,
+    arg0: i32,
+    arg1: i32,
+    arg2: i32,
+    arg3: Val<'a, i8>,
+    arg4: i32,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x230);
+    let comment: JpegComment<'a> = frame_at(ctx, &__frame, 0x0);
+    let huff_dc_luma: JpegHuffDc<'a> = frame_at(ctx, &__frame, 0x18);
+    let huff_dc_chroma: JpegHuffDc<'a> = frame_at(ctx, &__frame, 0x34);
+    let huff_ac_luma: JpegHuffAc<'a> = frame_at(ctx, &__frame, 0x50);
+    let huff_ac_chroma: JpegHuffAc<'a> = frame_at(ctx, &__frame, 0x104);
+    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x1b8);
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut arg3 = arg3;
+    let mut arg4 = arg4;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    return inl_hsd_803B51C8_inline_unfused(
+        ctx,
+        arg0,
+        arg2,
+        arg1,
+        arg3,
+        arg4,
+        statics::sysdolphin__baselib__hsd_3B34::lbl_803B9670(ctx),
+        comment,
+        huff_dc_luma,
+        huff_dc_chroma,
+        huff_ac_luma,
+        huff_ac_chroma,
+    );
+}
+
 pub fn hsd_803B5C2C<'a>(ctx: &'a Ctx, arg0: i32) {
     let mut arg0 = arg0;
     statics::sysdolphin__baselib__hsd_3B34::lbl_804D6398(ctx).set(arg0);
@@ -4321,6 +4363,827 @@ fn inl_jpegLumaAddress<'a>(
             (div_u32(offset, (4_i32 as u32)) as i32),
         )),
     );
+}
+
+fn inl_hsd_803B51C8_inline_unfused<'a>(
+    ctx: &'a Ctx,
+    image: i32,
+    image_height: i32,
+    image_width: i32,
+    output: Val<'a, i8>,
+    output_capacity: i32,
+    metadata: JpegMetadata<'a>,
+    comment: JpegComment<'a>,
+    huff_dc_luma: JpegHuffDc<'a>,
+    huff_dc_chroma: JpegHuffDc<'a>,
+    huff_ac_luma: JpegHuffAc<'a>,
+    huff_ac_chroma: JpegHuffAc<'a>,
+) -> i32 {
+    let __frame = ctx.stack_frame(0x18);
+    let state: hsd_803B51C8_inline_state<'a> = frame_at(ctx, &__frame, 0x0);
+    let mut image = image;
+    let mut image_height = image_height;
+    let mut image_width = image_width;
+    let mut output = output;
+    let mut output_capacity = output_capacity;
+    let mut metadata = metadata;
+    let mut comment = comment;
+    let mut huff_dc_luma = huff_dc_luma;
+    let mut huff_dc_chroma = huff_dc_chroma;
+    let mut huff_ac_luma = huff_ac_luma;
+    let mut huff_ac_chroma = huff_ac_chroma;
+    let mut work_r24: i32 = 0;
+    let mut work_r25: i32 = 0;
+    let mut work_r26_2: Val<'a, i32> = null(ctx);
+    let mut scratch_r6_4: i32 = 0;
+    let mut scratch_r6_5: i32 = 0;
+    let mut scratch_r7_2: i32 = 0;
+    let mut scratch_r7_4: i32 = 0;
+    let mut quant_scale: i32 = 0;
+    let mut scratch_r0: u16 = 0;
+    let mut scratch_r6_3: u8 = 0;
+    let mut scratch_r7_3: u8 = 0;
+    let mut scratch_r23: u32 = 0;
+    let mut comment_size: u32 = 0;
+    let mut width: i32 = 0;
+    let mut height: i32 = 0;
+    let mut src: Val<'a, u8> = null(ctx);
+    state.set_base((Handle::cast::<Val<'a, u8>>(fns::hsd_804D2648(ctx))));
+    state.set_work(Handle::cast::<JpegWork<'a>>(state.base()));
+    src = (ptr::<JpegByteBuffer<'a>>(ctx, image as u32)).data().at(0);
+    width = image_width;
+    height = image_height;
+    fns::hsd_804D79A8(ctx).set(output_capacity);
+    fns::hsd_804D79AC(ctx).set(0_i32);
+    fns::hsd_804D79A0(ctx).set((Handle::cast::<JpegByteBuffer<'a>>(output)).data().at(0));
+    fns::hsd_804D79A4(ctx).set((Handle::cast::<JpegByteBuffer<'a>>(output)).data().at(0));
+    state.set_quant_table(statics::sysdolphin__baselib__hsd_3B34::lbl_80430C40(ctx).at(0));
+    (state.work()).prev_dc().at(0_i32).set({
+        let __t2 = {
+            let __t1 = 0_i32;
+            (state.work()).prev_dc().at(2_i32).set(__t1);
+            __t1
+        };
+        (state.work()).prev_dc().at(1_i32).set(__t2);
+        __t2
+    });
+    let __t3 = ctx.setjmp_with(Handle::addr(fns::hsd_804D2648(ctx).buf()), || -> i32 {
+        if Handle::addr(fns::hsd_804D79A0(ctx).get())
+            < Handle::addr(
+                (Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())),
+            )
+        {
+            ({
+                let __t4 = fns::hsd_804D79A0(ctx).get();
+                fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+                __t4
+            })
+            .set((255_i32 as u8));
+        } else {
+            fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+        }
+        if Handle::addr(fns::hsd_804D79A0(ctx).get())
+            < Handle::addr(
+                (Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())),
+            )
+        {
+            ({
+                let __t5 = fns::hsd_804D79A0(ctx).get();
+                fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+                __t5
+            })
+            .set((216_i32 as u8));
+        } else {
+            fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+        }
+        fns::hsd_803B46D4(ctx);
+        Handle::copy_from((comment), (metadata).comment());
+        scratch_r23 = fns::strlen(ctx, (comment).data().at(0)).wrapping_add((1_i32 as u32));
+        fns::hsd_803B3344(ctx, (255_u32 as u8));
+        fns::hsd_803B3344(ctx, (254_u32 as u8));
+        comment_size = scratch_r23.wrapping_add((2_i32 as u32));
+        scratch_r0 = (comment_size as u16);
+        fns::hsd_803B3344(ctx, ((shr_u32(comment_size, 8_u32)) as u8));
+        fns::hsd_803B3344(ctx, (scratch_r0 as u8));
+        fns::hsd_803B3398(
+            ctx,
+            Handle::cast::<Addr<'a>>((comment).data().at(0)),
+            scratch_r23,
+        );
+        fns::hsd_803B4A2C(ctx);
+        Handle::copy_from((huff_dc_luma), (metadata).huff_dc_luma());
+        fns::hsd_803B3344(ctx, (255_u32 as u8));
+        fns::hsd_803B3344(ctx, (196_u32 as u8));
+        fns::hsd_803B3344(ctx, (0_u32 as u8));
+        fns::hsd_803B3344(ctx, (31_u32 as u8));
+        fns::hsd_803B3344(ctx, (0_u32 as u8));
+        fns::hsd_803B3398(
+            ctx,
+            Handle::cast::<Addr<'a>>((huff_dc_luma).data().at(0)),
+            28_u32,
+        );
+        Handle::copy_from((huff_dc_chroma), (metadata).huff_dc_chroma());
+        fns::hsd_803B3344(ctx, (255_u32 as u8));
+        fns::hsd_803B3344(ctx, (196_u32 as u8));
+        fns::hsd_803B3344(ctx, (0_u32 as u8));
+        fns::hsd_803B3344(ctx, (31_u32 as u8));
+        fns::hsd_803B3344(ctx, (1_u32 as u8));
+        fns::hsd_803B3398(
+            ctx,
+            Handle::cast::<Addr<'a>>((huff_dc_chroma).data().at(0)),
+            28_u32,
+        );
+        Handle::copy_from((huff_ac_luma), (metadata).huff_ac_luma());
+        fns::hsd_803B3344(ctx, (255_u32 as u8));
+        fns::hsd_803B3344(ctx, (196_u32 as u8));
+        fns::hsd_803B3344(ctx, (0_u32 as u8));
+        fns::hsd_803B3344(ctx, (181_u32 as u8));
+        fns::hsd_803B3344(ctx, (16_u32 as u8));
+        fns::hsd_803B3398(
+            ctx,
+            Handle::cast::<Addr<'a>>((huff_ac_luma).data().at(0)),
+            178_u32,
+        );
+        Handle::copy_from((huff_ac_chroma), (metadata).huff_ac_chroma());
+        fns::hsd_803B3344(ctx, (255_u32 as u8));
+        fns::hsd_803B3344(ctx, (196_u32 as u8));
+        fns::hsd_803B3344(ctx, (0_u32 as u8));
+        fns::hsd_803B3344(ctx, (181_u32 as u8));
+        fns::hsd_803B3344(ctx, (17_u32 as u8));
+        fns::hsd_803B3398(
+            ctx,
+            Handle::cast::<Addr<'a>>((huff_ac_chroma).data().at(0)),
+            178_u32,
+        );
+        {
+            let mut write_frame_header: FnPtr<'a> = fnptr(ctx, 0x803b4d64);
+            write_frame_header.call::<_, ()>(((width as u32), (height as u32)));
+        }
+        if Handle::addr(fns::hsd_804D79A0(ctx).get())
+            < Handle::addr(
+                (Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())),
+            )
+        {
+            ({
+                let __t6 = fns::hsd_804D79A0(ctx).get();
+                fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+                __t6
+            })
+            .set((255_i32 as u8));
+        } else {
+            fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+        }
+        if Handle::addr(fns::hsd_804D79A0(ctx).get())
+            < Handle::addr(
+                (Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())),
+            )
+        {
+            ({
+                let __t7 = fns::hsd_804D79A0(ctx).get();
+                fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+                __t7
+            })
+            .set((218_i32 as u8));
+        } else {
+            fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+        }
+        if Handle::addr(fns::hsd_804D79A0(ctx).get())
+            < Handle::addr(
+                (Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())),
+            )
+        {
+            ({
+                let __t8 = fns::hsd_804D79A0(ctx).get();
+                fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+                __t8
+            })
+            .set((0_i32 as u8));
+        } else {
+            fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+        }
+        if Handle::addr(fns::hsd_804D79A0(ctx).get())
+            < Handle::addr(
+                (Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())),
+            )
+        {
+            ({
+                let __t9 = fns::hsd_804D79A0(ctx).get();
+                fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+                __t9
+            })
+            .set((12_i32 as u8));
+        } else {
+            fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+        }
+        if Handle::addr(fns::hsd_804D79A0(ctx).get())
+            < Handle::addr(
+                (Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())),
+            )
+        {
+            ({
+                let __t10 = fns::hsd_804D79A0(ctx).get();
+                fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+                __t10
+            })
+            .set((3_i32 as u8));
+        } else {
+            fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+        }
+        if Handle::addr(fns::hsd_804D79A0(ctx).get())
+            < Handle::addr(
+                (Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())),
+            )
+        {
+            ({
+                let __t11 = fns::hsd_804D79A0(ctx).get();
+                fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+                __t11
+            })
+            .set((0_i32 as u8));
+        } else {
+            fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+        }
+        if Handle::addr(fns::hsd_804D79A0(ctx).get())
+            < Handle::addr(
+                (Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())),
+            )
+        {
+            ({
+                let __t12 = fns::hsd_804D79A0(ctx).get();
+                fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+                __t12
+            })
+            .set((0_i32 as u8));
+        } else {
+            fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+        }
+        if Handle::addr(fns::hsd_804D79A0(ctx).get())
+            < Handle::addr(
+                (Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())),
+            )
+        {
+            ({
+                let __t13 = fns::hsd_804D79A0(ctx).get();
+                fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+                __t13
+            })
+            .set((1_i32 as u8));
+        } else {
+            fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+        }
+        if Handle::addr(fns::hsd_804D79A0(ctx).get())
+            < Handle::addr(
+                (Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())),
+            )
+        {
+            ({
+                let __t14 = fns::hsd_804D79A0(ctx).get();
+                fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+                __t14
+            })
+            .set((17_i32 as u8));
+        } else {
+            fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+        }
+        if Handle::addr(fns::hsd_804D79A0(ctx).get())
+            < Handle::addr(
+                (Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())),
+            )
+        {
+            ({
+                let __t15 = fns::hsd_804D79A0(ctx).get();
+                fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+                __t15
+            })
+            .set((2_i32 as u8));
+        } else {
+            fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+        }
+        if Handle::addr(fns::hsd_804D79A0(ctx).get())
+            < Handle::addr(
+                (Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())),
+            )
+        {
+            ({
+                let __t16 = fns::hsd_804D79A0(ctx).get();
+                fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+                __t16
+            })
+            .set((17_i32 as u8));
+        } else {
+            fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+        }
+        if Handle::addr(fns::hsd_804D79A0(ctx).get())
+            < Handle::addr(
+                (Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())),
+            )
+        {
+            ({
+                let __t17 = fns::hsd_804D79A0(ctx).get();
+                fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+                __t17
+            })
+            .set((0_i32 as u8));
+        } else {
+            fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+        }
+        if Handle::addr(fns::hsd_804D79A0(ctx).get())
+            < Handle::addr(
+                (Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())),
+            )
+        {
+            ({
+                let __t18 = fns::hsd_804D79A0(ctx).get();
+                fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+                __t18
+            })
+            .set((63_i32 as u8));
+        } else {
+            fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+        }
+        if Handle::addr(fns::hsd_804D79A0(ctx).get())
+            < Handle::addr(
+                (Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())),
+            )
+        {
+            ({
+                let __t19 = fns::hsd_804D79A0(ctx).get();
+                fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+                __t19
+            })
+            .set((0_i32 as u8));
+        } else {
+            fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+        }
+        {
+            work_r24 = 0_i32;
+            'l1: while work_r24 < height {
+                'c2: {
+                    {
+                        work_r25 = 0_i32;
+                        'l3: while work_r25 < width {
+                            'c4: {
+                                let mut work_r26: i32 = 0;
+                                let mut work_r23: Val<'a, u8> = null(ctx);
+                                fns::hsd_803B3408(ctx, src, work_r25, work_r24, width, height);
+                                work_r23 = Handle::add(
+                                    state.base(),
+                                    (shl_i32(
+                                        ({
+                                            let __t20 = 0_i32;
+                                            work_r26 = __t20;
+                                            __t20
+                                        }),
+                                        (8_i32 as u32),
+                                    )),
+                                );
+                                work_r23 = Handle::add(work_r23, 0x118_i32);
+                                'l5: while work_r26 < 4_i32 {
+                                    'c6: {
+                                        let mut scratch_r6: Val<'a, u8> = null(ctx);
+                                        let mut work_r5_3: Val<'a, i32> = null(ctx);
+                                        let mut work_r4_3: Val<'a, i32> = null(ctx);
+                                        let mut work_r3: i32 = 0;
+                                        statics::sysdolphin__baselib__hsd_3B34::fn_803B376C(
+                                            ctx, work_r23,
+                                        );
+                                        quant_scale =
+                                            statics::sysdolphin__baselib__hsd_3B34::lbl_804D6398(
+                                                ctx,
+                                            )
+                                            .get();
+                                        work_r4_3 = Handle::cast::<Val<'a, i32>>(work_r23);
+                                        work_r5_3 = Handle::cast::<Val<'a, i32>>(
+                                            (Handle::add(state.base(), 0x718_i32)),
+                                        );
+                                        {
+                                            work_r3 = 0_i32;
+                                            'l7: while work_r3 < 64_i32 {
+                                                'c8: {
+                                                    let mut scratch_r7: u8 = 0;
+                                                    scratch_r6 =
+                                                        Handle::add(state.quant_table(), work_r3);
+                                                    scratch_r7 =
+                                                        (Handle::add(scratch_r6, 0_i32)).get();
+                                                    (Handle::add(work_r5_3, 0_i32)).set(
+                                                        (div_i32(
+                                                            (Handle::add(work_r4_3, 0_i32)).get(),
+                                                            (div_i32(
+                                                                (scratch_r7 as i32),
+                                                                quant_scale,
+                                                            )),
+                                                        )),
+                                                    );
+                                                    (Handle::add(work_r5_3, 1_i32)).set(
+                                                        (div_i32(
+                                                            (Handle::add(work_r4_3, 1_i32)).get(),
+                                                            (div_i32(
+                                                                ((Handle::add(scratch_r6, 1_i32))
+                                                                    .get()
+                                                                    as i32),
+                                                                quant_scale,
+                                                            )),
+                                                        )),
+                                                    );
+                                                    (Handle::add(work_r5_3, 2_i32)).set(
+                                                        (div_i32(
+                                                            (Handle::add(work_r4_3, 2_i32)).get(),
+                                                            (div_i32(
+                                                                ((Handle::add(scratch_r6, 2_i32))
+                                                                    .get()
+                                                                    as i32),
+                                                                quant_scale,
+                                                            )),
+                                                        )),
+                                                    );
+                                                    (Handle::add(work_r5_3, 3_i32)).set(
+                                                        (div_i32(
+                                                            (Handle::add(work_r4_3, 3_i32)).get(),
+                                                            (div_i32(
+                                                                ((Handle::add(scratch_r6, 3_i32))
+                                                                    .get()
+                                                                    as i32),
+                                                                quant_scale,
+                                                            )),
+                                                        )),
+                                                    );
+                                                    (Handle::add(work_r5_3, 4_i32)).set(
+                                                        (div_i32(
+                                                            (Handle::add(work_r4_3, 4_i32)).get(),
+                                                            (div_i32(
+                                                                ((Handle::add(scratch_r6, 4_i32))
+                                                                    .get()
+                                                                    as i32),
+                                                                quant_scale,
+                                                            )),
+                                                        )),
+                                                    );
+                                                    (Handle::add(work_r5_3, 5_i32)).set(
+                                                        (div_i32(
+                                                            (Handle::add(work_r4_3, 5_i32)).get(),
+                                                            (div_i32(
+                                                                ((Handle::add(scratch_r6, 5_i32))
+                                                                    .get()
+                                                                    as i32),
+                                                                quant_scale,
+                                                            )),
+                                                        )),
+                                                    );
+                                                    (Handle::add(work_r5_3, 6_i32)).set(
+                                                        (div_i32(
+                                                            (Handle::add(work_r4_3, 6_i32)).get(),
+                                                            (div_i32(
+                                                                ((Handle::add(scratch_r6, 6_i32))
+                                                                    .get()
+                                                                    as i32),
+                                                                quant_scale,
+                                                            )),
+                                                        )),
+                                                    );
+                                                    scratch_r7_2 =
+                                                        (Handle::add(work_r4_3, 7_i32)).get();
+                                                    work_r4_3 = Handle::add(work_r4_3, 8_i32);
+                                                    (Handle::add(work_r5_3, 7_i32)).set(
+                                                        (div_i32(
+                                                            scratch_r7_2,
+                                                            (div_i32(
+                                                                ((Handle::add(scratch_r6, 7_i32))
+                                                                    .get()
+                                                                    as i32),
+                                                                quant_scale,
+                                                            )),
+                                                        )),
+                                                    );
+                                                    work_r5_3 = Handle::add(work_r5_3, 8_i32);
+                                                }
+                                                work_r3 = work_r3.wrapping_add(8_i32);
+                                            }
+                                        }
+                                        fns::hsd_803B3CD8(ctx, 0_i32);
+                                        work_r23 = Handle::add(work_r23, 0x100_i32);
+                                        work_r26 = work_r26.wrapping_add(1);
+                                    }
+                                }
+                                {
+                                    let mut scratch_r6_2: Val<'a, u8> = null(ctx);
+                                    let mut work_r5_4: Val<'a, i32> = null(ctx);
+                                    let mut work_r4_4: Val<'a, i32> = null(ctx);
+                                    let mut work_r3_2: i32 = 0;
+                                    let mut chroma_quant_table: Val<'a, u8> =
+                                        Handle::add(state.quant_table(), 64_i32);
+                                    statics::sysdolphin__baselib__hsd_3B34::fn_803B376C(
+                                        ctx,
+                                        Handle::add(state.base(), 0x518_i32),
+                                    );
+                                    work_r5_4 = {
+                                        let __t21 = Handle::cast::<Val<'a, i32>>(
+                                            (Handle::add(state.base(), 0x718_i32)),
+                                        );
+                                        work_r26_2 = __t21;
+                                        __t21
+                                    };
+                                    quant_scale =
+                                        statics::sysdolphin__baselib__hsd_3B34::lbl_804D6398(ctx)
+                                            .get();
+                                    work_r4_4 = Handle::cast::<Val<'a, i32>>(
+                                        (Handle::add(state.base(), 0x518_i32)),
+                                    );
+                                    {
+                                        work_r3_2 = 0_i32;
+                                        'l9: while work_r3_2 < 64_i32 {
+                                            'c10: {
+                                                scratch_r6_2 =
+                                                    Handle::add(chroma_quant_table, work_r3_2);
+                                                scratch_r7_3 =
+                                                    (Handle::add(scratch_r6_2, 0_i32)).get();
+                                                (Handle::add(work_r5_4, 0_i32)).set(
+                                                    (div_i32(
+                                                        (Handle::add(work_r4_4, 0_i32)).get(),
+                                                        (div_i32(
+                                                            (scratch_r7_3 as i32),
+                                                            quant_scale,
+                                                        )),
+                                                    )),
+                                                );
+                                                (Handle::add(work_r5_4, 1_i32)).set(
+                                                    (div_i32(
+                                                        (Handle::add(work_r4_4, 1_i32)).get(),
+                                                        (div_i32(
+                                                            ((Handle::add(scratch_r6_2, 1_i32))
+                                                                .get()
+                                                                as i32),
+                                                            quant_scale,
+                                                        )),
+                                                    )),
+                                                );
+                                                (Handle::add(work_r5_4, 2_i32)).set(
+                                                    (div_i32(
+                                                        (Handle::add(work_r4_4, 2_i32)).get(),
+                                                        (div_i32(
+                                                            ((Handle::add(scratch_r6_2, 2_i32))
+                                                                .get()
+                                                                as i32),
+                                                            quant_scale,
+                                                        )),
+                                                    )),
+                                                );
+                                                (Handle::add(work_r5_4, 3_i32)).set(
+                                                    (div_i32(
+                                                        (Handle::add(work_r4_4, 3_i32)).get(),
+                                                        (div_i32(
+                                                            ((Handle::add(scratch_r6_2, 3_i32))
+                                                                .get()
+                                                                as i32),
+                                                            quant_scale,
+                                                        )),
+                                                    )),
+                                                );
+                                                (Handle::add(work_r5_4, 4_i32)).set(
+                                                    (div_i32(
+                                                        (Handle::add(work_r4_4, 4_i32)).get(),
+                                                        (div_i32(
+                                                            ((Handle::add(scratch_r6_2, 4_i32))
+                                                                .get()
+                                                                as i32),
+                                                            quant_scale,
+                                                        )),
+                                                    )),
+                                                );
+                                                (Handle::add(work_r5_4, 5_i32)).set(
+                                                    (div_i32(
+                                                        (Handle::add(work_r4_4, 5_i32)).get(),
+                                                        (div_i32(
+                                                            ((Handle::add(scratch_r6_2, 5_i32))
+                                                                .get()
+                                                                as i32),
+                                                            quant_scale,
+                                                        )),
+                                                    )),
+                                                );
+                                                (Handle::add(work_r5_4, 6_i32)).set(
+                                                    (div_i32(
+                                                        (Handle::add(work_r4_4, 6_i32)).get(),
+                                                        (div_i32(
+                                                            ((Handle::add(scratch_r6_2, 6_i32))
+                                                                .get()
+                                                                as i32),
+                                                            quant_scale,
+                                                        )),
+                                                    )),
+                                                );
+                                                scratch_r7_4 =
+                                                    (Handle::add(work_r4_4, 7_i32)).get();
+                                                work_r4_4 = Handle::add(work_r4_4, 8_i32);
+                                                (Handle::add(work_r5_4, 7_i32)).set(
+                                                    (div_i32(
+                                                        scratch_r7_4,
+                                                        (div_i32(
+                                                            ((Handle::add(scratch_r6_2, 7_i32))
+                                                                .get()
+                                                                as i32),
+                                                            quant_scale,
+                                                        )),
+                                                    )),
+                                                );
+                                                work_r5_4 = Handle::add(work_r5_4, 8_i32);
+                                            }
+                                            work_r3_2 = work_r3_2.wrapping_add(8_i32);
+                                        }
+                                    }
+                                    fns::hsd_803B3CD8(ctx, 1_i32);
+                                }
+                                {
+                                    let mut chroma_quant_table_2: Val<'a, u8> =
+                                        Handle::add(state.quant_table(), 64_i32);
+                                    let mut scratch_r5: Val<'a, u8> = null(ctx);
+                                    let mut work_r4_5: Val<'a, i32> = null(ctx);
+                                    let mut work_r3_3: i32 = 0;
+                                    statics::sysdolphin__baselib__hsd_3B34::fn_803B376C(
+                                        ctx,
+                                        Handle::add(state.base(), 0x618_i32),
+                                    );
+                                    quant_scale =
+                                        statics::sysdolphin__baselib__hsd_3B34::lbl_804D6398(ctx)
+                                            .get();
+                                    work_r4_5 = Handle::cast::<Val<'a, i32>>(
+                                        (Handle::add(state.base(), 0x618_i32)),
+                                    );
+                                    {
+                                        work_r3_3 = 0_i32;
+                                        'l11: while work_r3_3 < 64_i32 {
+                                            'c12: {
+                                                scratch_r5 =
+                                                    Handle::add(chroma_quant_table_2, work_r3_3);
+                                                scratch_r6_3 =
+                                                    (Handle::add(scratch_r5, 0_i32)).get();
+                                                (Handle::add(work_r26_2, 0_i32)).set(
+                                                    (div_i32(
+                                                        (Handle::add(work_r4_5, 0_i32)).get(),
+                                                        (div_i32(
+                                                            (scratch_r6_3 as i32),
+                                                            quant_scale,
+                                                        )),
+                                                    )),
+                                                );
+                                                (Handle::add(work_r26_2, 1_i32)).set(
+                                                    (div_i32(
+                                                        (Handle::add(work_r4_5, 1_i32)).get(),
+                                                        (div_i32(
+                                                            ((Handle::add(scratch_r5, 1_i32)).get()
+                                                                as i32),
+                                                            quant_scale,
+                                                        )),
+                                                    )),
+                                                );
+                                                (Handle::add(work_r26_2, 2_i32)).set(
+                                                    (div_i32(
+                                                        (Handle::add(work_r4_5, 2_i32)).get(),
+                                                        (div_i32(
+                                                            ((Handle::add(scratch_r5, 2_i32)).get()
+                                                                as i32),
+                                                            quant_scale,
+                                                        )),
+                                                    )),
+                                                );
+                                                (Handle::add(work_r26_2, 3_i32)).set(
+                                                    (div_i32(
+                                                        (Handle::add(work_r4_5, 3_i32)).get(),
+                                                        (div_i32(
+                                                            ((Handle::add(scratch_r5, 3_i32)).get()
+                                                                as i32),
+                                                            quant_scale,
+                                                        )),
+                                                    )),
+                                                );
+                                                (Handle::add(work_r26_2, 4_i32)).set(
+                                                    (div_i32(
+                                                        (Handle::add(work_r4_5, 4_i32)).get(),
+                                                        (div_i32(
+                                                            ((Handle::add(scratch_r5, 4_i32)).get()
+                                                                as i32),
+                                                            quant_scale,
+                                                        )),
+                                                    )),
+                                                );
+                                                (Handle::add(work_r26_2, 5_i32)).set(
+                                                    (div_i32(
+                                                        (Handle::add(work_r4_5, 5_i32)).get(),
+                                                        (div_i32(
+                                                            ((Handle::add(scratch_r5, 5_i32)).get()
+                                                                as i32),
+                                                            quant_scale,
+                                                        )),
+                                                    )),
+                                                );
+                                                (Handle::add(work_r26_2, 6_i32)).set(
+                                                    (div_i32(
+                                                        (Handle::add(work_r4_5, 6_i32)).get(),
+                                                        (div_i32(
+                                                            ((Handle::add(scratch_r5, 6_i32)).get()
+                                                                as i32),
+                                                            quant_scale,
+                                                        )),
+                                                    )),
+                                                );
+                                                scratch_r6_4 =
+                                                    (Handle::add(work_r4_5, 7_i32)).get();
+                                                work_r4_5 = Handle::add(work_r4_5, 8_i32);
+                                                (Handle::add(work_r26_2, 7_i32)).set(
+                                                    (div_i32(
+                                                        scratch_r6_4,
+                                                        (div_i32(
+                                                            ((Handle::add(scratch_r5, 7_i32)).get()
+                                                                as i32),
+                                                            quant_scale,
+                                                        )),
+                                                    )),
+                                                );
+                                                work_r26_2 = Handle::add(work_r26_2, 8_i32);
+                                            }
+                                            work_r3_3 = work_r3_3.wrapping_add(8_i32);
+                                        }
+                                    }
+                                    fns::hsd_803B3CD8(ctx, 2_i32);
+                                }
+                            }
+                            work_r25 = work_r25.wrapping_add(16_i32);
+                        }
+                    }
+                }
+                work_r24 = work_r24.wrapping_add(16_i32);
+            }
+        }
+        if fns::hsd_804D79AC(ctx).get() != 0_i32 {
+            scratch_r6_5 = 8_i32.wrapping_sub(fns::hsd_804D79AC(ctx).get());
+            fns::hsd_804D79B0(ctx).at(0_i32).set(
+                (shl_i32(
+                    (fns::hsd_804D79B0(ctx).at(0_i32).get() as i32),
+                    (scratch_r6_5 as u32),
+                ) as u8),
+            );
+            scratch_r6_4 = shl_i32(1_i32, (scratch_r6_5 as u32));
+            fns::hsd_804D79B0(ctx).at(0_i32).set(
+                (((fns::hsd_804D79B0(ctx).at(0_i32).get() as i32)
+                    | scratch_r6_4.wrapping_sub(1_i32)) as u8),
+            );
+            scratch_r6_3 = fns::hsd_804D79B0(ctx).at(0_i32).get();
+            if Handle::addr(fns::hsd_804D79A0(ctx).get())
+                < Handle::addr(
+                    (Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())),
+                )
+            {
+                ({
+                    let __t22 = fns::hsd_804D79A0(ctx).get();
+                    fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+                    __t22
+                })
+                .set(scratch_r6_3);
+            } else {
+                fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+            }
+            fns::hsd_804D79B0(ctx).at(0_i32).set((0_i32 as u8));
+            fns::hsd_804D79AC(ctx).set(0_i32);
+        }
+        if Handle::addr(fns::hsd_804D79A0(ctx).get())
+            < Handle::addr(
+                (Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())),
+            )
+        {
+            ({
+                let __t23 = fns::hsd_804D79A0(ctx).get();
+                fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+                __t23
+            })
+            .set((255_i32 as u8));
+        } else {
+            fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+        }
+        if Handle::addr(fns::hsd_804D79A0(ctx).get())
+            < Handle::addr(
+                (Handle::add(fns::hsd_804D79A4(ctx).get(), fns::hsd_804D79A8(ctx).get())),
+            )
+        {
+            ({
+                let __t24 = fns::hsd_804D79A0(ctx).get();
+                fns::hsd_804D79A0(ctx).set(Handle::add(fns::hsd_804D79A0(ctx).get(), 1));
+                __t24
+            })
+            .set((217_i32 as u8));
+        } else {
+            fns::__longjmp(ctx, fns::hsd_804D2648(ctx).buf(), 1_i32);
+        }
+        return ((Handle::addr(fns::hsd_804D79A0(ctx).get())
+            .wrapping_sub(Handle::addr(fns::hsd_804D79A4(ctx).get())) as i32)
+            / 1);
+        #[allow(unreachable_code)]
+        return 0;
+    });
+    match __t3 {
+        Ok(v) => return v,
+        Err(_) => {
+            return 0_i32;
+        }
+    }
 }
 
 /// Registers this unit's ports.
@@ -4370,6 +5233,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(hsd_803B4D64(ctx, a0, a1), ctx);
         },
         Returns::Nothing,
+    );
+    ctx.register_port(
+        0x803b51c8,
+        |ctx| {
+            let (a0, a1, a2, a3, a4): (i32, i32, i32, Val<'_, i8>, i32) = Args::take_all(ctx);
+            Ret::put(hsd_803B51C8(ctx, a0, a1, a2, a3, a4), ctx);
+        },
+        Returns::Int,
     );
     ctx.register_port(
         0x803b5c2c,

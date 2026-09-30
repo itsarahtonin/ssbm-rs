@@ -80,7 +80,7 @@ pub fn HSD_ByteCodeEval<'a>(
                                 fns::__assert(
                                     ctx,
                                     cstr(ctx, 0x80407534),
-                                    (49_i32 as u32),
+                                    (0x119_i32 as u32),
                                     cstr(ctx, 0x80407534),
                                 )
                             });
@@ -145,7 +145,7 @@ pub fn HSD_ByteCodeEval<'a>(
                                 fns::__assert(
                                     ctx,
                                     cstr(ctx, 0x80407534),
-                                    (74_i32 as u32),
+                                    (0x133_i32 as u32),
                                     cstr(ctx, 0x80407534),
                                 )
                             });
@@ -269,7 +269,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (101_i32 as u32),
+                                (0x153_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -303,7 +303,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (124_i32 as u32),
+                                (0x178_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -323,7 +323,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (131_i32 as u32),
+                                (0x17d_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -342,7 +342,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (138_i32 as u32),
+                                (0x183_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -359,7 +359,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (143_i32 as u32),
+                                (0x189_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -377,7 +377,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (148_i32 as u32),
+                                (0x18f_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -392,7 +392,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (152_i32 as u32),
+                                (0x195_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -407,7 +407,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (157_i32 as u32),
+                                (0x19b_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -430,7 +430,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (163_i32 as u32),
+                                (0x1a1_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -453,7 +453,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (169_i32 as u32),
+                                (0x1a7_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -476,7 +476,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (175_i32 as u32),
+                                (0x1ad_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -499,7 +499,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (180_i32 as u32),
+                                (0x1b3_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -522,7 +522,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (185_i32 as u32),
+                                (0x1b9_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -545,7 +545,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (190_i32 as u32),
+                                (0x1bf_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -563,7 +563,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (195_i32 as u32),
+                                (0x1c5_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -581,7 +581,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (200_i32 as u32),
+                                (0x1cb_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -600,7 +600,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (207_i32 as u32),
+                                (0x1d3_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -620,7 +620,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (216_i32 as u32),
+                                (0x1da_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -638,7 +638,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (221_i32 as u32),
+                                (0x1e0_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -655,7 +655,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (225_i32 as u32),
+                                (0x1f5_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -665,7 +665,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (226_i32 as u32),
+                                (0x1f5_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -685,7 +685,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (233_i32 as u32),
+                                (0x1fb_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -695,7 +695,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (234_i32 as u32),
+                                (0x1fb_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -715,7 +715,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (241_i32 as u32),
+                                (0x201_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -725,7 +725,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (242_i32 as u32),
+                                (0x201_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -745,7 +745,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (249_i32 as u32),
+                                (0x207_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -755,7 +755,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (250_i32 as u32),
+                                (0x207_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -775,7 +775,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x101_i32 as u32),
+                                (0x20d_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -785,13 +785,17 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x102_i32 as u32),
+                                (0x20d_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
                         f0.set((Handle::cast::<ByteCodeVal<'a>>((stack).data_ref())).f());
                         stack = fns::HSD_SListRemove(ctx, stack);
-                        f1 = (Handle::cast::<ByteCodeVal<'a>>((stack).data_ref())).f();
+                        f1 = {
+                            let __t2 = (Handle::cast::<ByteCodeVal<'a>>((stack).data_ref())).f();
+                            f1 = __t2;
+                            __t2
+                        };
                         fv.set(inl_fmodf(ctx, f1, f0.get()));
                         (stack).set_data((Handle::cast::<Ptr<'a, Addr<'a>>>(fv)).get());
                         break 's8;
@@ -803,7 +807,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x10e_i32 as u32),
+                                (0x213_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -813,7 +817,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x10f_i32 as u32),
+                                (0x213_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -833,7 +837,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x116_i32 as u32),
+                                (0x218_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -843,7 +847,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x117_i32 as u32),
+                                (0x218_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -863,7 +867,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x11e_i32 as u32),
+                                (0x21d_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -873,7 +877,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x11f_i32 as u32),
+                                (0x21d_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -893,7 +897,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x126_i32 as u32),
+                                (0x222_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -903,7 +907,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x127_i32 as u32),
+                                (0x222_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -924,7 +928,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x12e_i32 as u32),
+                                (0x227_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -934,7 +938,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x12f_i32 as u32),
+                                (0x227_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -952,7 +956,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x136_i32 as u32),
+                                (0x22c_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -962,7 +966,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x137_i32 as u32),
+                                (0x22c_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -983,7 +987,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x13e_i32 as u32),
+                                (0x232_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -993,7 +997,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x13f_i32 as u32),
+                                (0x232_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1011,7 +1015,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x147_i32 as u32),
+                                (0x239_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1021,7 +1025,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x148_i32 as u32),
+                                (0x239_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1039,7 +1043,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x150_i32 as u32),
+                                (0x240_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1049,7 +1053,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x151_i32 as u32),
+                                (0x240_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1067,7 +1071,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x159_i32 as u32),
+                                (0x247_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1077,7 +1081,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x15a_i32 as u32),
+                                (0x247_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1095,7 +1099,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x162_i32 as u32),
+                                (0x24e_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1105,7 +1109,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x163_i32 as u32),
+                                (0x24e_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1129,7 +1133,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x16f_i32 as u32),
+                                (0x25b_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1139,7 +1143,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x170_i32 as u32),
+                                (0x25b_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1157,7 +1161,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x177_i32 as u32),
+                                (0x260_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1167,7 +1171,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x178_i32 as u32),
+                                (0x260_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1185,7 +1189,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x17f_i32 as u32),
+                                (0x265_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1195,7 +1199,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x180_i32 as u32),
+                                (0x265_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1214,7 +1218,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x187_i32 as u32),
+                                (0x26a_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1224,7 +1228,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x188_i32 as u32),
+                                (0x26a_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1242,7 +1246,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x18f_i32 as u32),
+                                (0x26f_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1252,7 +1256,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x190_i32 as u32),
+                                (0x26f_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1270,7 +1274,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x197_i32 as u32),
+                                (0x274_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1280,7 +1284,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x198_i32 as u32),
+                                (0x274_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1298,7 +1302,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x19f_i32 as u32),
+                                (0x279_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1308,7 +1312,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x1a0_i32 as u32),
+                                (0x279_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1327,7 +1331,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x1a7_i32 as u32),
+                                (0x27e_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1337,7 +1341,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x1a8_i32 as u32),
+                                (0x27e_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1356,7 +1360,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x1af_i32 as u32),
+                                (0x283_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1366,7 +1370,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x1b0_i32 as u32),
+                                (0x283_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1385,7 +1389,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x1b7_i32 as u32),
+                                (0x288_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1395,7 +1399,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x1b8_i32 as u32),
+                                (0x288_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1414,7 +1418,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x1bf_i32 as u32),
+                                (0x28d_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1424,7 +1428,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x1c0_i32 as u32),
+                                (0x28d_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1443,7 +1447,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x1c7_i32 as u32),
+                                (0x292_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1453,7 +1457,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x1c8_i32 as u32),
+                                (0x292_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1472,7 +1476,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x1cf_i32 as u32),
+                                (0x297_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1482,7 +1486,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x1d0_i32 as u32),
+                                (0x297_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1505,7 +1509,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x1dd_i32 as u32),
+                                (0x29c_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1515,7 +1519,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x1de_i32 as u32),
+                                (0x29c_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1538,7 +1542,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x1eb_i32 as u32),
+                                (0x2a1_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1548,7 +1552,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x1ec_i32 as u32),
+                                (0x2a1_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1568,7 +1572,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x1f4_i32 as u32),
+                                (0x2a6_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1578,7 +1582,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x1f5_i32 as u32),
+                                (0x2a6_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1597,7 +1601,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x1fb_i32 as u32),
+                                (0x2ab_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1607,7 +1611,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x1fc_i32 as u32),
+                                (0x2ab_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1626,7 +1630,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x202_i32 as u32),
+                                (0x2b0_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1636,7 +1640,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x203_i32 as u32),
+                                (0x2b0_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1655,7 +1659,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x209_i32 as u32),
+                                (0x2b6_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });
@@ -1665,7 +1669,7 @@ pub fn HSD_ByteCodeEval<'a>(
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x80407534),
-                                (0x20a_i32 as u32),
+                                (0x2b6_i32 as u32),
                                 cstr(ctx, 0x80407534),
                             )
                         });

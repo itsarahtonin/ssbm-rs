@@ -141,7 +141,7 @@ pub fn it_802790C0<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, cmd: CommandInfo<'
                     fns::__assert(
                         ctx,
                         cstr(ctx, 0x803f230c),
-                        (93_i32 as u32),
+                        (139_i32 as u32),
                         cstr(ctx, 0x803f230c),
                     )
                 })

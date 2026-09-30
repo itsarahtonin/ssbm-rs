@@ -775,7 +775,7 @@ pub fn ftKb_SpecialN_800EF0E4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, a
                                     fns::__assert(
                                         ctx,
                                         cstr(ctx, 0x803b7548),
-                                        (0xba0_i32 as u32),
+                                        (0x43e_i32 as u32),
                                         cstr(ctx, 0x803b7548),
                                     )
                                 });
@@ -813,7 +813,7 @@ pub fn ftKb_SpecialN_800EF0E4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, a
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x803b7548),
-                            (0xbb0_i32 as u32),
+                            (0x44c_i32 as u32),
                             cstr(ctx, 0x803b7548),
                         )
                     });
@@ -981,7 +981,7 @@ pub fn ftKb_SpecialN_800EF438<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, hat: KirbyHa
                                         fns::__assert(
                                             ctx,
                                             cstr(ctx, 0x803b7548),
-                                            (0xc0c_i32 as u32),
+                                            (0x4b9_i32 as u32),
                                             cstr(ctx, 0x803b7548),
                                         )
                                     });
@@ -1019,7 +1019,7 @@ pub fn ftKb_SpecialN_800EF438<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, hat: KirbyHa
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x803b7548),
-                                (0xc1c_i32 as u32),
+                                (0x4c7_i32 as u32),
                                 cstr(ctx, 0x803b7548),
                             )
                         });
@@ -2700,7 +2700,7 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b7548),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803b7548),
         )
     });
@@ -2729,7 +2729,7 @@ fn inl_HSD_JObjGetMtxPtr_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b7548),
-            (0x2bb_i32 as u32),
+            (0x478_i32 as u32),
             cstr(ctx, 0x803b7548),
         )
     });
@@ -2746,7 +2746,7 @@ fn inl_HSD_JObjCopyMtx_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, mtx: ArrV<'
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b7548),
-            (0x2c2_i32 as u32),
+            (0x492_i32 as u32),
             cstr(ctx, 0x803b7548),
         )
     });
@@ -2756,7 +2756,7 @@ fn inl_HSD_JObjCopyMtx_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, mtx: ArrV<'
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b7548),
-            (0x2c3_i32 as u32),
+            (0x493_i32 as u32),
             cstr(ctx, 0x803b7548),
         )
     });

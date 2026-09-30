@@ -285,6 +285,41 @@ pub fn Player_80031DA8<'a>(ctx: &'a Ctx, param_1: i32, param_2: i32) {
     fns::ftKb_SpecialN_800EED50(ctx, param_1, param_2);
 }
 
+pub fn Player_80031DC8<'a>(ctx: &'a Ctx, func_arg: FnPtr<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut func_arg = func_arg;
+    let mut slot: i32 = 0;
+    {
+        slot = 0_i32;
+        'l1: while slot < 6_i32 {
+            'c2: {
+                inl_Player_CheckSlot_unfused(ctx, slot);
+                if (fns::player_slots(ctx).get(slot).player_state() != 0) {
+                    func_arg.call::<_, ()>((
+                        (fns::ftMapping_list(ctx)
+                            .get(fns::player_slots(ctx).get(slot).ckind())
+                            .internal_id() as i32),
+                        0_i32,
+                    ));
+                    if (inl_hasExtraFighterId_unfused(
+                        ctx,
+                        fns::ftMapping_list(ctx).get(fns::player_slots(ctx).get(slot).ckind()),
+                    ) != 0)
+                    {
+                        func_arg.call::<_, ()>((
+                            (fns::ftMapping_list(ctx)
+                                .get(fns::player_slots(ctx).get(slot).ckind())
+                                .extra_internal_id() as i32),
+                            0_i32,
+                        ));
+                    }
+                }
+            }
+            slot = slot.wrapping_add(1);
+        }
+    }
+}
+
 pub fn Player_80031EBC<'a>(ctx: &'a Ctx, slot: i32) {
     let __frame = ctx.stack_frame(0x20);
     let mut slot = slot;
@@ -2734,7 +2769,7 @@ fn inl_Player_CheckSlot_unfused<'a>(ctx: &'a Ctx, slot: i32) {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803bcdc8),
-                    (89_i32 as u32),
+                    (102_i32 as u32),
                     cstr(ctx, 0x803bcdc8),
                 )
             })
@@ -2848,6 +2883,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (i32, i32) = Args::take_all(ctx);
             Ret::put(Player_80031DA8(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80031dc8,
+        |ctx| {
+            let (a0,): (FnPtr<'_>,) = Args::take_all(ctx);
+            Ret::put(Player_80031DC8(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

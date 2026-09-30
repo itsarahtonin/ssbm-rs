@@ -74,7 +74,7 @@ pub fn hsdInitClassInfo<'a>(
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x80407594),
-                (51_i32 as u32),
+                (94_i32 as u32),
                 cstr(ctx, 0x80407594),
             )
         });
@@ -84,7 +84,7 @@ pub fn hsdInitClassInfo<'a>(
             fns::__assert(
                 ctx,
                 cstr(ctx, 0x80407594),
-                (52_i32 as u32),
+                (95_i32 as u32),
                 cstr(ctx, 0x80407594),
             )
         });
@@ -123,7 +123,7 @@ pub fn GetMemoryEntry<'a>(ctx: &'a Ctx, idx: i32) -> _HSD_MemoryEntry<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80407594),
-            (81_i32 as u32),
+            (171_i32 as u32),
             cstr(ctx, 0x80407594),
         )
     });
@@ -572,7 +572,11 @@ pub fn hsdIsDescendantOf<'a>(ctx: &'a Ctx, info: Addr<'a>, p: Addr<'a>) -> i32 {
     if (Handle::is_null(info)) || (Handle::is_null(p)) {
         return 0_i32;
     }
-    var_r31 = Handle::cast::<_HSD_ClassInfo<'a>>(info);
+    var_r31 = {
+        let __t1 = Handle::cast::<_HSD_ClassInfo<'a>>(info);
+        var_r31 = __t1;
+        __t1
+    };
     if !(((Handle::cast::<_HSD_ClassInfo<'a>>(info)).head().flags() & (1_i32 as u32)) != 0) {
         (var_r31).head().info_init().call::<_, ()>(());
     }
@@ -738,7 +742,7 @@ fn inl_hsdChangeClass_inline_unfused<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x80407594),
-            (0x14e_i32 as u32),
+            (0x249_i32 as u32),
             cstr(ctx, 0x80407594),
         )
     });
@@ -748,7 +752,7 @@ fn inl_hsdChangeClass_inline_unfused<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x80407594),
-            (0x14f_i32 as u32),
+            (0x24a_i32 as u32),
             cstr(ctx, 0x80407594),
         )
     });

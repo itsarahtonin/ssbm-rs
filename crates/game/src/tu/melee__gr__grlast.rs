@@ -65,7 +65,7 @@ pub fn grLast_OnDemoInit<'a>(ctx: &'a Ctx, arg0: i32) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b848c),
-            (133_i32 as u32),
+            (80_i32 as u32),
             cstr(ctx, 0x803b848c),
         )
     });
@@ -76,7 +76,7 @@ pub fn grLast_OnDemoInit<'a>(ctx: &'a Ctx, arg0: i32) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b848c),
-            (136_i32 as u32),
+            (83_i32 as u32),
             cstr(ctx, 0x803b848c),
         )
     });
@@ -87,7 +87,7 @@ pub fn grLast_OnDemoInit<'a>(ctx: &'a Ctx, arg0: i32) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b848c),
-            (139_i32 as u32),
+            (84_i32 as u32),
             cstr(ctx, 0x803b848c),
         )
     });
@@ -874,7 +874,7 @@ pub fn grLast_8021B5C4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803b848c),
-                    (0x2d5_i32 as u32),
+                    (0x3f4_i32 as u32),
                     cstr(ctx, 0x803b848c),
                 )
             });
@@ -1005,7 +1005,7 @@ pub fn grLast_8021B920<'a>(ctx: &'a Ctx, gobj_: HSD_GObj<'a>, arg1: i32) {
                                 fns::__assert(
                                     ctx,
                                     cstr(ctx, 0x803b848c),
-                                    (0x329_i32 as u32),
+                                    (0x44b_i32 as u32),
                                     cstr(ctx, 0x803b848c),
                                 )
                             });
@@ -1307,7 +1307,7 @@ pub fn grLast_8021B920<'a>(ctx: &'a Ctx, gobj_: HSD_GObj<'a>, arg1: i32) {
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x803b848c),
-                    (0x393_i32 as u32),
+                    (0x4d2_i32 as u32),
                     cstr(ctx, 0x803b848c),
                 )
             });
@@ -1366,7 +1366,7 @@ pub fn grLast_8021B920<'a>(ctx: &'a Ctx, gobj_: HSD_GObj<'a>, arg1: i32) {
                             fns::__assert(
                                 ctx,
                                 cstr(ctx, 0x803b848c),
-                                (0x3a8_i32 as u32),
+                                (0x4f0_i32 as u32),
                                 cstr(ctx, 0x803b848c),
                             )
                         });
@@ -1595,7 +1595,7 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b848c),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x803b848c),
         )
     });
@@ -1617,7 +1617,7 @@ fn inl_HSD_JObjSetScale<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b848c),
-            (0x17e_i32 as u32),
+            (0x2f8_i32 as u32),
             cstr(ctx, 0x803b848c),
         )
     });
@@ -1627,7 +1627,7 @@ fn inl_HSD_JObjSetScale<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b848c),
-            (0x17f_i32 as u32),
+            (0x2f9_i32 as u32),
             cstr(ctx, 0x803b848c),
         )
     });
@@ -1649,7 +1649,7 @@ fn inl_HSD_JObjSetRotationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x__a: f64, x__
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b848c),
-            (0x129_i32 as u32),
+            (0x27f_i32 as u32),
             cstr(ctx, 0x803b848c),
         )
     });
@@ -1659,7 +1659,7 @@ fn inl_HSD_JObjSetRotationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x__a: f64, x__
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b848c),
-            (0x12a_i32 as u32),
+            (0x280_i32 as u32),
             cstr(ctx, 0x803b848c),
         )
     });
@@ -1681,7 +1681,7 @@ fn inl_HSD_JObjSetRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a: f64, y__
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b848c),
-            (0x13d_i32 as u32),
+            (0x294_i32 as u32),
             cstr(ctx, 0x803b848c),
         )
     });
@@ -1691,7 +1691,7 @@ fn inl_HSD_JObjSetRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a: f64, y__
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b848c),
-            (0x13e_i32 as u32),
+            (0x295_i32 as u32),
             cstr(ctx, 0x803b848c),
         )
     });

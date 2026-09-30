@@ -178,7 +178,7 @@ fn inl_IDEntryAlloc_unfused<'a>(ctx: &'a Ctx) -> _IDEntry<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x804d5eec),
-            (36_i32 as u32),
+            (67_i32 as u32),
             cstr(ctx, 0x804d5eec),
         )
     });

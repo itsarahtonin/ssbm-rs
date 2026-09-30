@@ -33,7 +33,7 @@ pub fn it_8026B1D4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, itemHitboxUnk: HitCapsu
     let mut ret: f64 = (itemHitboxUnk).damage();
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     if ((ip).xDC8_word().flags().x14() as i32) != 0_i32 {
-        let mut itemSpeed: f64 = inl_sqrtf(
+        let mut itemSpeed: f64 = inl_my_sqrtf(
             ctx,
             fp::fadds(
                 fp::fadds(
@@ -1221,10 +1221,11 @@ pub fn it_8026C42C<'a>(ctx: &'a Ctx) {
     }
 }
 
-fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
+fn inl_my_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     let mut x = x;
-    let mut y: f64 = 0.0;
-    if x > 0.0 {
+    let mut _half: f64 = 0.5;
+    if x > fp::frsp(0_i32 as f64) {
+        let mut y: f64 = 0.0;
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
@@ -1238,7 +1239,7 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
             fp::fmul(0.5, guess),
             (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
         );
-        y = fp::frsp((fp::fmul(x, guess)));
+        y = fp::frsp(fp::fmul(x, guess));
         return y;
     }
     return x;

@@ -491,6 +491,7 @@ pub fn Exception_ReportCodeline<'a>(
         cstr(ctx, 0x8040b474),
         &[VarArg::Int(dsisr as u32), VarArg::Int(dar as u32)],
     );
+    error = error;
     fns::OSReport(
         ctx,
         cstr(ctx, 0x8040b48c),

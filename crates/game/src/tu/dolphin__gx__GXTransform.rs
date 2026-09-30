@@ -270,7 +270,7 @@ pub fn GXGetProjectionv<'a>(ctx: &'a Ctx, ptr_: Val<'a, F32>) {
 }
 
 pub fn WriteMTXPS4x3<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>, a1: Val<'a, F32>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0, a1).put_regs(ctx);
     asm_WriteMTXPS4x3(ctx);
 }
@@ -349,7 +349,7 @@ fn asm_WriteMTXPS4x3(ctx: &Ctx) {
 }
 
 pub fn WriteMTXPS3x3from3x4<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>, a1: Val<'a, F32>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0, a1).put_regs(ctx);
     asm_WriteMTXPS3x3from3x4(ctx);
 }
@@ -428,7 +428,7 @@ fn asm_WriteMTXPS3x3from3x4(ctx: &Ctx) {
 }
 
 pub fn WriteMTXPS4x2<'a>(ctx: &'a Ctx, a0: ArrV<'a, F32, 4>, a1: Val<'a, F32>) {
-    // Transliterated from its machine code, whose source is assembly.
+    // Transliterated from its machine code: its source is assembly.
     (a0, a1).put_regs(ctx);
     asm_WriteMTXPS4x2(ctx);
 }

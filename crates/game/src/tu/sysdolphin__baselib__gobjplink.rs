@@ -66,7 +66,7 @@ pub fn CreateGObj<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x804084ec),
-            (60_i32 as u32),
+            (168_i32 as u32),
             cstr(ctx, 0x804084ec),
         )
     });
@@ -146,7 +146,7 @@ pub fn HSD_GObjFree<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::__assert(
             ctx,
             cstr(ctx, 0x804084ec),
-            (103_i32 as u32),
+            (0x171_i32 as u32),
             cstr(ctx, 0x804084ec),
         )
     });
@@ -213,7 +213,7 @@ pub fn HSD_GObjPLink_ChangeGObjPri_Unk<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x804084ec),
-            (140_i32 as u32),
+            (0x1a3_i32 as u32),
             cstr(ctx, 0x804084ec),
         )
     });

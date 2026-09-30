@@ -295,7 +295,7 @@ pub fn lb_800121FC<'a>(
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b72a8),
-            (0x100_i32 as u32),
+            (41_i32 as u32),
             cstr(ctx, 0x803b72a8),
         )
     });
@@ -1279,7 +1279,7 @@ fn inl_HSD_LObjSetNext_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, next: HSD_L
         fns::__assert(
             ctx,
             cstr(ctx, 0x803b72a8),
-            (194_i32 as u32),
+            (0x136_i32 as u32),
             cstr(ctx, 0x803b72a8),
         )
     });

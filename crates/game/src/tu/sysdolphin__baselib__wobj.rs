@@ -91,7 +91,7 @@ pub fn WObjUpdateFunc<'a>(ctx: &'a Ctx, obj: Addr<'a>, r#type: i32, val: HSD_Obj
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x80406fd4),
-                            (63_i32 as u32),
+                            (148_i32 as u32),
                             cstr(ctx, 0x80406fd4),
                         )
                     });
@@ -102,7 +102,7 @@ pub fn WObjUpdateFunc<'a>(ctx: &'a Ctx, obj: Addr<'a>, r#type: i32, val: HSD_Obj
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x80406fd4),
-                            (65_i32 as u32),
+                            (150_i32 as u32),
                             cstr(ctx, 0x80406fd4),
                         )
                     });
@@ -112,7 +112,7 @@ pub fn WObjUpdateFunc<'a>(ctx: &'a Ctx, obj: Addr<'a>, r#type: i32, val: HSD_Obj
                         fns::__assert(
                             ctx,
                             cstr(ctx, 0x80406fd4),
-                            (66_i32 as u32),
+                            (151_i32 as u32),
                             cstr(ctx, 0x80406fd4),
                         )
                     });
@@ -204,7 +204,7 @@ pub fn HSD_WObjLoadDesc<'a>(ctx: &'a Ctx, desc: HSD_WObjDesc<'a>) -> HSD_WObj<'a
                 fns::__assert(
                     ctx,
                     cstr(ctx, 0x80406fd4),
-                    (142_i32 as u32),
+                    (252_i32 as u32),
                     cstr(ctx, 0x80406fd4),
                 )
             });
@@ -332,7 +332,7 @@ pub fn HSD_WObjAlloc<'a>(ctx: &'a Ctx) -> HSD_WObj<'a> {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406fd4),
-            (237_i32 as u32),
+            (0x24f_i32 as u32),
             cstr(ctx, 0x80406fd4),
         )
     });
@@ -388,7 +388,7 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         fns::__assert(
             ctx,
             cstr(ctx, 0x80406fd4),
-            (228_i32 as u32),
+            (0x234_i32 as u32),
             cstr(ctx, 0x80406fd4),
         )
     });

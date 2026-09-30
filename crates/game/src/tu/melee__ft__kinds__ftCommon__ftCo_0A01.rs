@@ -2285,15 +2285,18 @@ pub fn ftCo_800A3908<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> i32 {
     let __frame = ctx.stack_frame(0x148);
     let island_pos: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x10);
-    let flags0: Val<'a, u32> = frame_at(ctx, &__frame, 0x1c);
-    let line_id0: Val<'a, i32> = frame_at(ctx, &__frame, 0x20);
-    let floor_normal0: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let floor_pos0: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let flags1: Val<'a, u32> = frame_at(ctx, &__frame, 0x3c);
-    let line_id1: Val<'a, i32> = frame_at(ctx, &__frame, 0x40);
-    let floor_normal1: Vec<'a> = frame_at(ctx, &__frame, 0x44);
-    let floor_pos1: Vec<'a> = frame_at(ctx, &__frame, 0x50);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x5c);
+    let sqrt_time_store: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
+    let sqrt_terminal_store: Val<'a, F32> = frame_at(ctx, &__frame, 0x20);
+    let flags0: Val<'a, u32> = frame_at(ctx, &__frame, 0x24);
+    let line_id0: Val<'a, i32> = frame_at(ctx, &__frame, 0x28);
+    let floor_normal0: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let floor_pos0: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let flags1: Val<'a, u32> = frame_at(ctx, &__frame, 0x44);
+    let line_id1: Val<'a, i32> = frame_at(ctx, &__frame, 0x48);
+    let floor_normal1: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let floor_pos1: Vec<'a> = frame_at(ctx, &__frame, 0x58);
+    let sqrt_dist_store: Val<'a, F32> = frame_at(ctx, &__frame, 0x64);
+    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x68);
     let mut fp = fp;
     let mut arg1 = arg1;
     let mut ez: f64 = 0.0;
@@ -2385,20 +2388,18 @@ pub fn ftCo_800A3908<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> i32 {
                             (fp).cur_pos().y(),
                         );
                     } else if t < frames {
-                        let mut sqrt_time_store: f64 = 0.0;
                         dist = fp::frsp(fp::fadd(
                             (fp).cur_pos().y(),
                             (fp::fnmsub(
                                 0.5,
                                 (fp::fmuls(
                                     (fp).co_attrs().gravity(),
-                                    inl_sqrtf(ctx, fp::frsp(t as f64)),
+                                    inl_sqrtf_store(ctx, fp::frsp(t as f64), sqrt_time_store),
                                 )),
                                 fp::fmuls((fp).pos_delta().y(), fp::frsp(t as f64)),
                             )),
                         ));
                     } else {
-                        let mut sqrt_terminal_store: f64 = 0.0;
                         dist = fp::frsp(fp::fadd(
                             (fp).cur_pos().y(),
                             (fp::fsub(
@@ -2406,7 +2407,11 @@ pub fn ftCo_800A3908<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> i32 {
                                     0.5,
                                     (fp::fmuls(
                                         (fp).co_attrs().gravity(),
-                                        inl_sqrtf(ctx, fp::frsp(frames as f64)),
+                                        inl_sqrtf_store(
+                                            ctx,
+                                            fp::frsp(frames as f64),
+                                            sqrt_terminal_store,
+                                        ),
                                     )),
                                     fp::fmuls((fp).pos_delta().y(), fp::frsp(frames as f64)),
                                 )),
@@ -2472,14 +2477,17 @@ pub fn ftCo_800A3908<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> i32 {
                             ok = 0_i32;
                         }
                         if ok != 0_i32 {
-                            let mut sqrt_dist_store: f64 = 0.0;
                             'l5: loop {
                                 'c6: {}
                                 if !(0_i32 != 0) {
                                     break 'l5;
                                 }
                             }
-                            dist = inl_sqrtf(ctx, fp::fmadds(ex, ex, fp::fmuls(ddy, ddy)));
+                            dist = inl_sqrtf_store(
+                                ctx,
+                                fp::fmadds(ex, ex, fp::fmuls(ddy, ddy)),
+                                sqrt_dist_store,
+                            );
                             if (data).x5C() > dist {
                                 inl_ftCo_800A75DC_set_target(
                                     ctx,
@@ -2506,15 +2514,18 @@ pub fn ftCo_800A3908<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> i32 {
 pub fn ftCo_800A4038<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> i32 {
     let __frame = ctx.stack_frame(0x138);
     let island_pos: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x10);
-    let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x14);
-    let floor_normal: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let floor_pos: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let flags_2: Val<'a, u32> = frame_at(ctx, &__frame, 0x30);
-    let line_id_2: Val<'a, i32> = frame_at(ctx, &__frame, 0x34);
-    let floor_normal_2: Vec<'a> = frame_at(ctx, &__frame, 0x38);
-    let floor_pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x44);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x50);
+    let sqrt_time_store: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
+    let sqrt_terminal_store: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
+    let flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x18);
+    let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x1c);
+    let floor_normal: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let floor_pos: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let flags_2: Val<'a, u32> = frame_at(ctx, &__frame, 0x38);
+    let line_id_2: Val<'a, i32> = frame_at(ctx, &__frame, 0x3c);
+    let floor_normal_2: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let floor_pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let sqrt_dist_store: Val<'a, F32> = frame_at(ctx, &__frame, 0x58);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x5c);
     let mut fp = fp;
     let mut arg1 = arg1;
     let mut ez: f64 = 0.0;
@@ -2600,20 +2611,18 @@ pub fn ftCo_800A4038<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> i32 {
                             (fp).cur_pos().y(),
                         );
                     } else if t < frames {
-                        let mut sqrt_time_store: f64 = 0.0;
                         dist = fp::frsp(fp::fadd(
                             (fp).cur_pos().y(),
                             (fp::fnmsub(
                                 0.5,
                                 (fp::fmuls(
                                     (fp).co_attrs().gravity(),
-                                    inl_sqrtf(ctx, fp::frsp(t as f64)),
+                                    inl_sqrtf_store(ctx, fp::frsp(t as f64), sqrt_time_store),
                                 )),
                                 fp::fmuls((fp).pos_delta().y(), fp::frsp(t as f64)),
                             )),
                         ));
                     } else {
-                        let mut sqrt_terminal_store: f64 = 0.0;
                         dist = fp::frsp(fp::fadd(
                             (fp).cur_pos().y(),
                             (fp::fsub(
@@ -2621,7 +2630,11 @@ pub fn ftCo_800A4038<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> i32 {
                                     0.5,
                                     (fp::fmuls(
                                         (fp).co_attrs().gravity(),
-                                        inl_sqrtf(ctx, fp::frsp(frames as f64)),
+                                        inl_sqrtf_store(
+                                            ctx,
+                                            fp::frsp(frames as f64),
+                                            sqrt_terminal_store,
+                                        ),
                                     )),
                                     fp::fmuls((fp).pos_delta().y(), fp::frsp(frames as f64)),
                                 )),
@@ -2687,14 +2700,17 @@ pub fn ftCo_800A4038<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> i32 {
                             ok = 0_i32;
                         }
                         if ok != 0_i32 {
-                            let mut sqrt_dist_store: f64 = 0.0;
                             'l3: loop {
                                 'c4: {}
                                 if !(0_i32 != 0) {
                                     break 'l3;
                                 }
                             }
-                            dist = inl_sqrtf(ctx, fp::fmadds(ex, ex, fp::fmuls(ddy, ddy)));
+                            dist = inl_sqrtf_store(
+                                ctx,
+                                fp::fmadds(ex, ex, fp::fmuls(ddy, ddy)),
+                                sqrt_dist_store,
+                            );
                             if (data).x5C() > dist {
                                 inl_ftCo_800A75DC_set_target(
                                     ctx,
@@ -7088,7 +7104,7 @@ pub fn ftCo_800ABBA8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                 ok = 0_i32;
             }
             if ok == 0_i32 {
-                disc = inl_sqrtf(
+                disc = inl_sqrtf_store(
                     ctx,
                     (if (fp::fmadds(fp::fmuls(2.0, g), h, fp::fmuls(v, v))) < fp::frsp(0_i32 as f64)
                     {
@@ -7096,6 +7112,7 @@ pub fn ftCo_800ABBA8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                     } else {
                         (fp::fmadds(fp::fmuls(2.0, g), h, fp::fmuls(v, v)))
                     }),
+                    sqrt_tmp.at(3_i32),
                 );
                 t = fp::fctiwz(fp::fdivs((fp::fsubs(fp::fneg(disc), v)), g));
             } else {
@@ -7230,7 +7247,7 @@ pub fn ftCo_800ABBA8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     if vf5 <= 0.0 {
         land_y = fp::fmadds((fp).pos_delta().y(), vf0, (fp).cur_pos().y());
     } else if vf0 < vf5 {
-        tmp = inl_sqrtf(ctx, vf0);
+        tmp = inl_sqrtf_store(ctx, vf0, sqrt_tmp.at(1_i32));
         land_y = fp::frsp(fp::fadd(
             (fp).cur_pos().y(),
             (fp::fnmsub(
@@ -7240,7 +7257,7 @@ pub fn ftCo_800ABBA8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             )),
         ));
     } else {
-        tmp = inl_sqrtf(ctx, vf5);
+        tmp = inl_sqrtf_store(ctx, vf5, sqrt_tmp.at(0_i32));
         land_y = fp::frsp(fp::fadd(
             (fp).cur_pos().y(),
             (fp::fsub(
@@ -7371,7 +7388,15 @@ pub fn ftCo_800AC5A0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         let mut kb_x: f64 = (fp).x8c_kb_vel().x();
         let mut kb_y: f64 = (fp).x8c_kb_vel().y();
         let mut kb_mag: f64 = 0.0;
-        kb_mag = fp::fmadds(kb_x, kb_x, (fp::fmuls(kb_y, kb_y)));
+        kb_mag = fp::fmadds(
+            kb_x,
+            kb_x,
+            ({
+                let __t2 = fp::fmuls(kb_y, kb_y);
+                kb_mag = __t2;
+                __t2
+            }),
+        );
         kb_mag = inl_sqrtf(ctx, kb_mag);
         if !(inl_ftCo_IsNearlyZero(ctx, kb_mag) != 0) {
             let mut x: f64 = fp::fmuls(kb_x, (fp::fdivs(1.0, kb_mag)));
@@ -12343,6 +12368,29 @@ fn inl_ftCo_800A2170_it_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, ip: Item<'a>)
         return 1_i32;
     }
     return 0_i32;
+}
+
+fn inl_sqrtf_store<'a>(ctx: &'a Ctx, x: f64, y: Val<'a, F32>) -> f64 {
+    let mut x = x;
+    let mut y = y;
+    if x > 0.0 {
+        let mut guess: f64 = fp::frsqrte(x);
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+        );
+        (y).set(fp::frsp((fp::fmul(x, guess))));
+        return (y).get();
+    }
+    return x;
 }
 
 fn inl_ftCo_GetTerminalVelocity<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> f64 {
