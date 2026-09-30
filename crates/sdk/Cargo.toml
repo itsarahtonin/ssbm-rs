@@ -1,0 +1,17 @@
+[package]
+name = "ssbm-sdk"
+description = "The SDK layer: stand-ins for the hardware-facing parts of Nintendo's GameCube SDK"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+gekko-fp.workspace = true
+ssbm-disc.workspace = true
+ssbm-rt.workspace = true
+ssbm-types.workspace = true
+
+[dev-dependencies]
+ssbm-ppc.workspace = true

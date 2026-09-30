@@ -5,7 +5,7 @@
 //! Reads ISO, RVZ, CISO, GCZ and the other formats nod supports. The constants identify the
 //! retail disc; no game data is embedded here.
 
-use std::io::{self, Read};
+use std::io::{self, Read, Seek, SeekFrom};
 use std::path::Path;
 
 use nod::common::PartitionKind;
@@ -100,6 +100,13 @@ impl Disc {
         let mut data = Vec::with_capacity(node.length() as usize);
         partition.open_file(node)?.read_to_end(&mut data)?;
         Ok(data)
+    }
+
+    /// Reads raw disc bytes at `offset`, as the drive would.
+    pub fn read_at(&mut self, offset: u64, buf: &mut [u8]) -> Result<()> {
+        self.reader.seek(SeekFrom::Start(offset))?;
+        self.reader.read_exact(buf)?;
+        Ok(())
     }
 
     /// SHA-1 of the full image as lowercase hex, reporting `(done, total)` bytes as it reads.

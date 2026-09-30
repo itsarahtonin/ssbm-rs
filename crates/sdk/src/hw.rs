@@ -1,0 +1,512 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Register behavior follows Dolphin's hardware emulation (GPL-2.0-or-later).
+
+//! Hardware registers at `0xCC000000` for the devices whose SDK drivers run as original code:
+//! VI, the DVD interface, ARAM and audio DMA, and the GX FIFO (CP, PE, PI and the write-gather
+//! pipe). Registers without a model keep the last value written.
+
+use std::cell::{Cell, RefCell};
+use std::rc::Rc;
+
+use ssbm_rt::Ctx;
+
+use crate::gp::{Effect, Gp};
+use crate::{Sdk, TB_HZ, irq};
+
+const BASE: u32 = 0xCC00_0000;
+const SIZE: u32 = 0x1_0000;
+const PIPE: u32 = 0xCC00_8000;
+const ARAM_SIZE: usize = 16 << 20;
+
+// Offsets from BASE.
+const CP_STATUS: u32 = 0x0000;
+const CP_CTRL: u32 = 0x0002;
+const CP_FIFO_BASE: u32 = 0x0020;
+const CP_FIFO_END: u32 = 0x0024;
+const CP_FIFO_DISTANCE: u32 = 0x0030;
+const CP_FIFO_WPTR: u32 = 0x0034;
+const CP_FIFO_RPTR: u32 = 0x0038;
+const PE_INTERRUPT: u32 = 0x100A;
+const PE_TOKEN: u32 = 0x100E;
+const VI_DI0: u32 = 0x2030;
+const VI_VCT: u32 = 0x202C;
+const VI_HCT: u32 = 0x202E;
+const PI_INTSR: u32 = 0x3000;
+const PI_FIFO_BASE: u32 = 0x300C;
+const PI_FIFO_END: u32 = 0x3010;
+const PI_FIFO_WPTR: u32 = 0x3014;
+const PI_FLIPPER_REV: u32 = 0x302C;
+const DSP_CSR: u32 = 0x500A;
+const AR_MODE: u32 = 0x5016;
+const AR_DMA_MM: u32 = 0x5020;
+const AR_DMA_AR: u32 = 0x5024;
+const AR_DMA_CNT_H: u32 = 0x5028;
+const AR_DMA_CNT_L: u32 = 0x502A;
+const AI_DMA_START: u32 = 0x5030;
+const AI_DMA_CONTROL: u32 = 0x5036;
+const AI_DMA_LEFT: u32 = 0x503A;
+const DI_SR: u32 = 0x6000;
+const DI_CVR: u32 = 0x6004;
+const DI_CMD: u32 = 0x6008;
+const DI_MAR: u32 = 0x6014;
+const DI_LENGTH: u32 = 0x6018;
+const DI_CR: u32 = 0x601C;
+const DI_IMM: u32 = 0x6020;
+const AI_CR: u32 = 0x6C00;
+const AI_SCNT: u32 = 0x6C08;
+
+// DSP CSR bits.
+const CSR_AIDINT: u16 = 0x08;
+const CSR_AIDINTMSK: u16 = 0x10;
+const CSR_ARINT: u16 = 0x20;
+const CSR_ARINTMSK: u16 = 0x40;
+const CSR_DSPINT: u16 = 0x80;
+
+// PE interrupt register bits.
+const PE_TOKEN_ENABLE: u16 = 1;
+const PE_FINISH_ENABLE: u16 = 2;
+const PE_TOKEN_INT: u16 = 4;
+const PE_FINISH_INT: u16 = 8;
+
+/// Time base ticks that pass per register read.
+const MMIO_READ_STEP: u64 = 8;
+/// Time from starting a DVD command to its interrupt. Slippi runs with fast disc speed.
+const DVD_LATENCY: u64 = TB_HZ / 2000;
+/// NTSC lines per frame, and the half-line width VCT/HCT count in.
+const VI_LINES: u64 = 525;
+const VI_HCT_PER_LINE: u64 = 858;
+
+/// Start of video field `n`: NTSC runs at 60000/1001 fields per second.
+pub fn field_start(n: u64) -> u64 {
+    (u128::from(n) * u128::from(TB_HZ) * 1001 / 60_000) as u64
+}
+
+pub(crate) struct Mmio;
+
+impl ssbm_rt::Mmio for Mmio {
+    fn read(&self, ctx: &Ctx, addr: u32, size: u32) -> u32 {
+        ctx.ext::<Sdk>().hw.read(ctx, addr, size)
+    }
+
+    fn write(&self, ctx: &Ctx, addr: u32, size: u32, value: u32) {
+        let sdk = ctx.ext::<Sdk>();
+        sdk.hw.write(ctx, &sdk, addr, size, value);
+    }
+}
+
+pub struct Hw {
+    regs: RefCell<Vec<u16>>,
+    /// Bytes written to the gather pipe since the last 32-byte burst.
+    pipe: RefCell<Vec<u8>>,
+    gp: RefCell<Gp>,
+    aram: RefCell<Vec<u8>>,
+    /// Bumped to cancel scheduled audio DMA interrupts.
+    ai_generation: Cell<u64>,
+    /// Video fields shown so far, and when the current frame started.
+    pub fields: Cell<u64>,
+    frame_start: Cell<u64>,
+    /// Streaming audio sample counter: its value when the rate or state last changed, and when.
+    ais_base: Cell<u32>,
+    ais_since: Cell<u64>,
+}
+
+impl Default for Hw {
+    fn default() -> Self {
+        let hw = Self {
+            regs: RefCell::new(vec![0; (SIZE / 2) as usize]),
+            pipe: RefCell::default(),
+            gp: RefCell::default(),
+            aram: RefCell::new(vec![0; ARAM_SIZE]),
+            ai_generation: Cell::new(0),
+            fields: Cell::new(0),
+            frame_start: Cell::new(0),
+            ais_base: Cell::new(0),
+            ais_since: Cell::new(0),
+        };
+        hw.set32(PI_FLIPPER_REV, 0x2465_00B1);
+        hw
+    }
+}
+
+impl Hw {
+    fn get16(&self, off: u32) -> u16 {
+        self.regs.borrow()[(off / 2) as usize]
+    }
+
+    fn set16(&self, off: u32, v: u16) {
+        self.regs.borrow_mut()[(off / 2) as usize] = v;
+    }
+
+    fn get32(&self, off: u32) -> u32 {
+        (u32::from(self.get16(off)) << 16) | u32::from(self.get16(off + 2))
+    }
+
+    fn set32(&self, off: u32, v: u32) {
+        self.set16(off, (v >> 16) as u16);
+        self.set16(off + 2, v as u16);
+    }
+
+    /// A GX FIFO pointer register pair (low half first).
+    fn cp_ptr(&self, off: u32) -> u32 {
+        (u32::from(self.get16(off + 2)) << 16) | u32::from(self.get16(off))
+    }
+
+    fn set_cp_ptr(&self, off: u32, v: u32) {
+        self.set16(off, v as u16);
+        self.set16(off + 2, (v >> 16) as u16);
+    }
+
+    /// Commands the GP has run, for diagnostics.
+    pub fn draws(&self) -> u64 {
+        self.gp.borrow().draws
+    }
+
+    /// The top-field framebuffer VI scans out.
+    pub fn xfb(&self) -> u32 {
+        let v = self.get32(0x201C);
+        let addr = (v & 0x00FF_FFFF) << if v & 0x1000_0000 != 0 { 5 } else { 0 };
+        0x8000_0000 | addr
+    }
+
+    fn read(&self, ctx: &Ctx, addr: u32, size: u32) -> u32 {
+        // Time passes between reads, so loops that poll a register finish.
+        ctx.regs.tb.set(ctx.regs.tb.get() + MMIO_READ_STEP);
+        let off = addr - BASE;
+        match (off, size) {
+            (CP_STATUS, 2) => 0x000E, // FIFO empty, reads and commands idle
+            (VI_VCT | VI_HCT, 2) => self.beam(ctx, off),
+            (PI_INTSR, 4) => 0x0001_0000, // reset switch released
+            (AI_DMA_LEFT, 2) => 0,
+            (AR_MODE, 2) => u32::from(self.get16(off)) | 1, // ARAM ready
+            (AI_SCNT, 4) => self.ais_count(ctx),
+            (_, 4) => self.get32(off),
+            (_, 2) => u32::from(self.get16(off)),
+            (_, 1) => u32::from((self.get16(off & !1) >> if off & 1 == 0 { 8 } else { 0 }) as u8),
+            _ => unreachable!(),
+        }
+    }
+
+    /// VI beam position within the current frame.
+    fn beam(&self, ctx: &Ctx, off: u32) -> u32 {
+        let frame = field_start(2) - field_start(0);
+        let t = (Sdk::now(ctx) - self.frame_start.get()).min(frame - 1);
+        let line = frame / VI_LINES;
+        if off == VI_VCT {
+            (1 + t / line) as u32
+        } else {
+            (1 + (t % line) * VI_HCT_PER_LINE / line) as u32
+        }
+    }
+
+    fn write(&self, ctx: &Ctx, sdk: &Rc<Sdk>, addr: u32, size: u32, value: u32) {
+        if (PIPE..PIPE + 8).contains(&addr) {
+            return self.pipe_write(ctx, sdk, size, value);
+        }
+        let off = addr - BASE;
+        // CP, PE, VI, MI and DSP registers are 16-bit; the rest are 32-bit.
+        let narrow = matches!(off >> 12, 0 | 1 | 2 | 4 | 5);
+        match (size, narrow) {
+            (4, true) => {
+                self.write16(ctx, sdk, off, (value >> 16) as u16);
+                self.write16(ctx, sdk, off + 2, value as u16);
+            }
+            (2, true) => self.write16(ctx, sdk, off, value as u16),
+            (4, false) => self.write32(ctx, sdk, off, value),
+            (2, false) => {
+                let word = off & !3;
+                let old = self.get32(word);
+                let shift = if off & 2 == 0 { 16 } else { 0 };
+                let v = (old & !(0xFFFF << shift)) | ((value & 0xFFFF) << shift);
+                self.write32(ctx, sdk, word, v);
+            }
+            _ => {
+                let word = off & !1;
+                let shift = if off & 1 == 0 { 8 } else { 0 };
+                let v = (self.get16(word) & !(0xFF << shift)) | ((value as u16 & 0xFF) << shift);
+                self.set16(word, v);
+            }
+        }
+    }
+
+    fn write16(&self, ctx: &Ctx, sdk: &Rc<Sdk>, off: u32, v: u16) {
+        let old = self.get16(off);
+        self.set16(off, v);
+        match off {
+            PE_INTERRUPT => {
+                // Enables take the written value; pending flags clear when written as 1.
+                let pending = PE_TOKEN_INT | PE_FINISH_INT;
+                let enables = PE_TOKEN_ENABLE | PE_FINISH_ENABLE;
+                self.set16(off, (v & enables) | (old & pending & !v));
+            }
+            DSP_CSR => {
+                // Interrupt flags clear when written as 1.
+                let flags = CSR_AIDINT | CSR_ARINT | CSR_DSPINT;
+                self.set16(off, (v & !flags) | (old & flags & !v));
+            }
+            AR_DMA_CNT_L => self.aram_dma(ctx, sdk),
+            AI_DMA_CONTROL => {
+                let was = old & 0x8000 != 0;
+                let now = v & 0x8000 != 0;
+                if now && !was {
+                    self.ai_schedule(ctx, sdk);
+                } else if !now {
+                    self.ai_generation.set(self.ai_generation.get() + 1);
+                }
+            }
+            _ => {}
+        }
+    }
+
+    fn write32(&self, ctx: &Ctx, sdk: &Rc<Sdk>, off: u32, v: u32) {
+        let old = self.get32(off);
+        self.set32(off, v);
+        match off {
+            DI_SR | DI_CVR => {
+                // DEINT, TCINT, BRKINT (and CVRINT) clear when written as 1.
+                let flags = if off == DI_SR { 0x54 } else { 0x4 };
+                self.set32(off, (v & !flags) | (old & flags & !v));
+            }
+            DI_CR if v & 1 != 0 => self.dvd_command(ctx, sdk),
+            AI_CR => {
+                // Rebase the stream sample counter on the old settings, then apply the new.
+                self.set32(off, old);
+                let count = if v & 0x20 != 0 {
+                    0
+                } else {
+                    self.ais_count(ctx)
+                };
+                self.ais_base.set(count);
+                self.ais_since.set(Sdk::now(ctx));
+                self.set32(off, v & !0x28); // AIINT and SCRESET read as 0
+            }
+            PI_FIFO_WPTR => self.set32(off, v & 0x03FF_FFE0),
+            _ => {}
+        }
+    }
+
+    // Write-gather pipe and GX FIFO.
+
+    fn pipe_write(&self, ctx: &Ctx, sdk: &Rc<Sdk>, size: u32, value: u32) {
+        let mut pipe = self.pipe.borrow_mut();
+        pipe.extend_from_slice(&value.to_be_bytes()[(4 - size) as usize..]);
+        while pipe.len() >= 32 {
+            let burst: Vec<u8> = pipe.drain(..32).collect();
+            self.burst(ctx, sdk, &burst);
+        }
+    }
+
+    /// Writes 32 bytes to the CPU FIFO in memory and, when the GP reads the same FIFO, runs
+    /// the commands.
+    fn burst(&self, ctx: &Ctx, sdk: &Rc<Sdk>, data: &[u8]) {
+        let wptr = self.get32(PI_FIFO_WPTR);
+        let _ = ctx.mem.write_bytes(0x8000_0000 | wptr, data);
+        let next = if wptr == self.get32(PI_FIFO_END) & 0x03FF_FFE0 {
+            self.get32(PI_FIFO_BASE) & 0x03FF_FFE0
+        } else {
+            wptr + 32
+        };
+        self.set32(PI_FIFO_WPTR, next);
+
+        let ctrl = self.get16(CP_CTRL);
+        if ctrl & 0x10 == 0 {
+            return; // GP not linked: the CPU is building a display list
+        }
+        self.set_cp_ptr(CP_FIFO_WPTR, next);
+        if ctrl & 1 == 0 {
+            let d = self.cp_ptr(CP_FIFO_DISTANCE) + 32;
+            self.set_cp_ptr(CP_FIFO_DISTANCE, d);
+            return; // GP reads disabled
+        }
+        // Run from the GP's read pointer up to the write pointer.
+        let mut effects = Vec::new();
+        let (base, end) = (
+            self.cp_ptr(CP_FIFO_BASE) & 0x03FF_FFE0,
+            self.cp_ptr(CP_FIFO_END) & 0x03FF_FFE0,
+        );
+        let mut rptr = self.cp_ptr(CP_FIFO_RPTR) & 0x03FF_FFE0;
+        let mut chunk = [0u8; 32];
+        for _ in 0..(1 << 20) {
+            if rptr == next {
+                break;
+            }
+            let _ = ctx.mem.read_bytes(0x8000_0000 | rptr, &mut chunk);
+            self.gp.borrow_mut().feed(ctx, &chunk, &mut effects);
+            rptr = if rptr == end { base } else { rptr + 32 };
+        }
+        self.set_cp_ptr(CP_FIFO_RPTR, rptr);
+        self.set_cp_ptr(CP_FIFO_DISTANCE, 0);
+        for e in effects {
+            self.pe_effect(sdk, e);
+        }
+    }
+
+    fn pe_effect(&self, sdk: &Sdk, e: Effect) {
+        let int = self.get16(PE_INTERRUPT);
+        match e {
+            Effect::Finish => {
+                if int & PE_FINISH_ENABLE != 0 {
+                    self.set16(PE_INTERRUPT, int | PE_FINISH_INT);
+                    sdk.raise(irq::PI_PE_FINISH);
+                }
+            }
+            Effect::Token { token, interrupt } => {
+                self.set16(PE_TOKEN, token);
+                if interrupt && int & PE_TOKEN_ENABLE != 0 {
+                    self.set16(PE_INTERRUPT, int | PE_TOKEN_INT);
+                    sdk.raise(irq::PI_PE_TOKEN);
+                }
+            }
+        }
+    }
+
+    // DVD interface.
+
+    fn dvd_command(&self, ctx: &Ctx, sdk: &Rc<Sdk>) {
+        let cmd = [
+            self.get32(DI_CMD),
+            self.get32(DI_CMD + 4),
+            self.get32(DI_CMD + 8),
+        ];
+        let mar = self.get32(DI_MAR) & 0x03FF_FFE0;
+        let len = self.get32(DI_LENGTH);
+        sdk.after(ctx, DVD_LATENCY, move |ctx| {
+            let sdk = ctx.ext::<Sdk>();
+            let hw = &sdk.hw;
+            let dma = |data: &[u8]| {
+                let _ = ctx.mem.write_bytes(0x8000_0000 | mar, data);
+                hw.set32(DI_MAR, mar + data.len() as u32);
+                hw.set32(DI_LENGTH, 0);
+            };
+            match cmd[0] >> 24 {
+                0xA8 => {
+                    let offset = if cmd[0] & 0xFF == 0x40 {
+                        0
+                    } else {
+                        u64::from(cmd[1]) << 2
+                    };
+                    let mut data = vec![0; len as usize];
+                    sdk.read_disc(offset, &mut data);
+                    dma(&data);
+                }
+                0x12 => {
+                    // Drive info, as Dolphin reports it.
+                    let mut info = [0u8; 0x20];
+                    info[..8].copy_from_slice(&[0x00, 0x02, 0x00, 0x06, 0x20, 0x02, 0x04, 0x02]);
+                    dma(&info[..len.min(0x20) as usize]);
+                }
+                0xE0 | 0xE2 => hw.set32(DI_IMM, 0),
+                0xAB | 0xE1 | 0xE3 | 0xE4 => {}
+                op => panic!("unsupported DVD command {op:#04X} ({:08X?})", cmd),
+            }
+            hw.set32(DI_CR, hw.get32(DI_CR) & !1);
+            let sr = hw.get32(DI_SR) | 0x10;
+            hw.set32(DI_SR, sr);
+            if sr & 0x08 != 0 {
+                sdk.raise(irq::PI_DI);
+            }
+        });
+    }
+
+    // ARAM and audio DMA.
+
+    fn aram_dma(&self, ctx: &Ctx, sdk: &Rc<Sdk>) {
+        let mm = 0x8000_0000 | (self.get32(AR_DMA_MM) & 0x03FF_FFE0);
+        let ar = (self.get32(AR_DMA_AR) as usize) & (ARAM_SIZE - 1);
+        let cnt_h = self.get16(AR_DMA_CNT_H);
+        let len = ((u32::from(cnt_h & 0x3FF) << 16) | u32::from(self.get16(AR_DMA_CNT_L))) as usize;
+        let mut aram = self.aram.borrow_mut();
+        for i in 0..len {
+            let a = (ar + i) & (ARAM_SIZE - 1);
+            if cnt_h & 0x8000 != 0 {
+                ctx.write_u8(mm + i as u32, aram[a]);
+            } else {
+                aram[a] = ctx.read_u8(mm + i as u32);
+            }
+        }
+        drop(aram);
+        self.set16(AR_DMA_CNT_H, cnt_h & 0x8000);
+        self.set16(AR_DMA_CNT_L, 0);
+        let csr = self.get16(DSP_CSR) | CSR_ARINT;
+        self.set16(DSP_CSR, csr);
+        if csr & CSR_ARINTMSK != 0 {
+            sdk.raise(irq::DSP_ARAM);
+        }
+    }
+
+    /// Schedules the end of the current audio DMA block.
+    fn ai_schedule(&self, ctx: &Ctx, sdk: &Sdk) {
+        let generation = self.ai_generation.get() + 1;
+        self.ai_generation.set(generation);
+        let blocks = u64::from(self.get16(AI_DMA_CONTROL) & 0x7FFF).max(1);
+        // 32-byte blocks of 16-bit stereo at 32 kHz.
+        let ticks = blocks * 32 / 4 * TB_HZ / 32_000;
+        sdk.after(ctx, ticks, move |ctx| {
+            let sdk = ctx.ext::<Sdk>();
+            let hw = &sdk.hw;
+            if hw.ai_generation.get() != generation {
+                return;
+            }
+            let csr = hw.get16(DSP_CSR) | CSR_AIDINT;
+            hw.set16(DSP_CSR, csr);
+            if csr & CSR_AIDINTMSK != 0 {
+                sdk.raise(irq::DSP_AI);
+            }
+            hw.ai_schedule(ctx, &sdk);
+        });
+    }
+
+    /// The streaming audio sample counter, which counts while a stream plays.
+    fn ais_count(&self, ctx: &Ctx) -> u32 {
+        let cr = self.get32(AI_CR);
+        if cr & 1 == 0 {
+            return self.ais_base.get();
+        }
+        let rate = if cr & 2 != 0 { 48_000 } else { 32_000 };
+        let elapsed = Sdk::now(ctx) - self.ais_since.get();
+        self.ais_base
+            .get()
+            .wrapping_add((elapsed * rate / TB_HZ) as u32)
+    }
+
+    /// The audio DMA block most recently started.
+    pub fn ai_dma_start(&self) -> u32 {
+        0x8000_0000 | (self.get32(AI_DMA_START) & 0x03FF_FFE0)
+    }
+
+    // Video.
+
+    /// Starts video field `n` and raises the display interrupts that fall at its start.
+    fn vi_field(&self, sdk: &Sdk, n: u64) {
+        self.fields.set(n + 1);
+        let second_half = n % 2 == 1;
+        if !second_half {
+            self.frame_start.set(field_start(n));
+        }
+        let mut raised = false;
+        for i in 0..4 {
+            let off = VI_DI0 + 4 * i;
+            let di = self.get16(off);
+            let vct = u64::from(di & 0x7FF);
+            if di & 0x1000 != 0 && (vct > VI_LINES / 2) == second_half {
+                self.set16(off, di | 0x8000);
+                raised = true;
+            }
+        }
+        if raised {
+            sdk.raise(irq::PI_VI);
+        }
+        let next = n + 1;
+        sdk.schedule(field_start(next), move |ctx| {
+            let sdk = ctx.ext::<Sdk>();
+            sdk.hw.vi_field(&sdk, next);
+        });
+    }
+}
+
+pub(crate) fn install(ctx: &Ctx) {
+    let sdk = ctx.ext::<Sdk>();
+    sdk.schedule(field_start(1), |ctx| {
+        let sdk = ctx.ext::<Sdk>();
+        sdk.hw.vi_field(&sdk, 1);
+    });
+}

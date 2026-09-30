@@ -9,7 +9,7 @@
 use std::cell::Cell;
 
 use gekko_fp::{self as fp, Ps};
-use ssbm_rt::{Backend, Ctx, FLAG_HOOK, FLAG_NATIVE, Mode, RETURN_SENTINEL};
+use ssbm_rt::{Backend, Ctx, FLAG_HOOK, FLAG_NATIVE, HEARTBEAT, Mode, RETURN_SENTINEL, spr};
 
 mod quant;
 
@@ -31,10 +31,17 @@ impl Backend for Interpreter {
             let w = ctx.read_u32(pc);
             pc = step(ctx, pc, w);
             n += 1;
+            if n.is_multiple_of(HEARTBEAT) {
+                self.executed.set(self.executed.get() + HEARTBEAT);
+                ctx.beat(pc);
+            }
         }
-        self.executed.set(self.executed.get() + n);
+        self.executed.set(self.executed.get() + n % HEARTBEAT);
     }
 }
+
+/// Time base ticks that pass per read of its low word: about 200 CPU cycles.
+pub const TB_READ_STEP: u64 = 16;
 
 const XER_SO: u32 = 1 << 31;
 const XER_OV: u32 = 1 << 30;
@@ -578,6 +585,10 @@ fn op31(ctx: &Ctx, pc: u32, w: u32) {
         339 | 371 => {
             let n = ((w >> 16) & 31) | (((w >> 11) & 31) << 5);
             set_r(ctx, d, ctx.regs.get_spr(n));
+            if n == spr::TBL_R {
+                // Time passes between reads, so loops that wait on the time base finish.
+                ctx.regs.tb.set(ctx.regs.tb.get() + TB_READ_STEP);
+            }
         }
         467 => {
             let n = ((w >> 16) & 31) | (((w >> 11) & 31) << 5);

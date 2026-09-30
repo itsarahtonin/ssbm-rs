@@ -6,6 +6,7 @@
 //! dispatch by original address, so any function can be a Rust port, an SDK stand-in, or (in
 //! dev builds) the original code run by the interpreter.
 
+use std::any::{Any, TypeId};
 use std::cell::{Cell, OnceCell, RefCell};
 use std::collections::HashMap;
 use std::fmt;
@@ -24,6 +25,9 @@ pub use regs::{Regs, RegsSnapshot, spr};
 
 /// Code run when execution reaches an address.
 pub type Hook = Rc<dyn Fn(&Ctx)>;
+
+/// Called with the PC every `HEARTBEAT` interpreted instructions.
+pub type Heartbeat = Rc<dyn Fn(&Ctx, u32)>;
 
 /// A function at the register level: arguments and results are in `ctx.regs`.
 pub type Native = fn(&Ctx);
@@ -96,7 +100,14 @@ pub struct Ctx {
     /// Per MEM1 word: `FLAG_NATIVE` and `FLAG_HOOK`, so the interpreter checks cheaply.
     flags: Box<[Cell<u8>]>,
     pub lockstep: lockstep::State,
+    /// Per-machine state of layers above the runtime, such as the SDK layer, by type.
+    ext: RefCell<HashMap<TypeId, Rc<dyn Any>>>,
+    /// Called by the interpreter every `HEARTBEAT` instructions with the current PC.
+    heartbeat: RefCell<Option<Heartbeat>>,
 }
+
+/// Instructions between heartbeats.
+pub const HEARTBEAT: u64 = 1 << 24;
 
 /// The word starts a function with a native implementation.
 pub const FLAG_NATIVE: u8 = 1;
@@ -122,7 +133,43 @@ impl Ctx {
             hooks: RefCell::default(),
             flags: vec![Cell::new(0); (MEM1_SIZE / 4) as usize].into_boxed_slice(),
             lockstep: lockstep::State::default(),
+            ext: RefCell::default(),
+            heartbeat: RefCell::default(),
         }
+    }
+
+    /// Sets the function the interpreter calls every `HEARTBEAT` instructions, for progress
+    /// reports and stall detection.
+    pub fn set_heartbeat(&self, f: impl Fn(&Ctx, u32) + 'static) {
+        *self.heartbeat.borrow_mut() = Some(Rc::new(f));
+    }
+
+    pub fn beat(&self, pc: u32) {
+        let f = self.heartbeat.borrow().clone();
+        if let Some(f) = f {
+            f(self, pc);
+        }
+    }
+
+    /// Stores state for a layer above the runtime, replacing any of the same type.
+    pub fn set_ext<T: Any>(&self, value: T) -> Rc<T> {
+        let rc = Rc::new(value);
+        self.ext
+            .borrow_mut()
+            .insert(TypeId::of::<T>(), rc.clone() as Rc<dyn Any>);
+        rc
+    }
+
+    /// State stored with `set_ext`, if any.
+    pub fn try_ext<T: Any>(&self) -> Option<Rc<T>> {
+        let any = self.ext.borrow().get(&TypeId::of::<T>())?.clone();
+        any.downcast().ok()
+    }
+
+    /// State stored with `set_ext`. Panics if there is none.
+    pub fn ext<T: Any>(&self) -> Rc<T> {
+        self.try_ext()
+            .unwrap_or_else(|| panic!("no {} in this context", std::any::type_name::<T>()))
     }
 
     /// `FLAG_*` bits for the word at `addr`.
@@ -317,6 +364,12 @@ impl Ctx {
                 mode: Mode::Native,
             },
         );
+    }
+
+    /// Removes the native implementation at `addr`.
+    pub fn unregister(&self, addr: u32) {
+        self.set_flag(addr, FLAG_NATIVE, false);
+        self.dispatch.borrow_mut().remove(&addr);
     }
 
     pub fn set_mode(&self, addr: u32, mode: Mode) {

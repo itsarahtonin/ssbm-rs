@@ -1,0 +1,15 @@
+[package]
+name = "ssbm-run"
+description = "Runs the game headless in the dev runtime and reports progress"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+ssbm-disc.workspace = true
+ssbm-ppc.workspace = true
+ssbm-rt.workspace = true
+ssbm-sdk.workspace = true
+ssbm-types.workspace = true

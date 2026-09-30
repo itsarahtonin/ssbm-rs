@@ -1167,6 +1167,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "ssbm-run"
+version = "0.1.0"
+dependencies = [
+ "ssbm-disc",
+ "ssbm-ppc",
+ "ssbm-rt",
+ "ssbm-sdk",
+ "ssbm-types",
+]
+
+[[package]]
+name = "ssbm-sdk"
+version = "0.1.0"
+dependencies = [
+ "gekko-fp",
+ "ssbm-disc",
+ "ssbm-ppc",
+ "ssbm-rt",
+ "ssbm-types",
+]
+
+[[package]]
 name = "ssbm-types"
 version = "0.1.0"
 dependencies = [

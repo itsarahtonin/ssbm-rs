@@ -38,6 +38,8 @@ pub struct Regs {
     pub fpscr: Cell<u32>,
     pub msr: Cell<u32>,
     pub gqr: [Cell<u32>; 8],
+    /// The time base, which counts at a quarter of the bus clock (40.5 MHz).
+    pub tb: Cell<u64>,
     /// Every other SPR by number, such as HID0, SRR0 or the DMA registers.
     pub spr: RefCell<BTreeMap<u32, u32>>,
 }
@@ -54,6 +56,7 @@ pub struct RegsSnapshot {
     pub fpscr: u32,
     pub msr: u32,
     pub gqr: [u32; 8],
+    pub tb: u64,
     pub spr: BTreeMap<u32, u32>,
 }
 
@@ -88,6 +91,8 @@ impl Regs {
             spr::LR => self.lr.get(),
             spr::CTR => self.ctr.get(),
             912..=919 => self.gqr[(n - spr::GQR0) as usize].get(),
+            spr::TBL_R => self.tb.get() as u32,
+            spr::TBU_R => (self.tb.get() >> 32) as u32,
             _ => self.spr.borrow().get(&n).copied().unwrap_or(0),
         }
     }
@@ -98,6 +103,10 @@ impl Regs {
             spr::LR => self.lr.set(v),
             spr::CTR => self.ctr.set(v),
             912..=919 => self.gqr[(n - spr::GQR0) as usize].set(v),
+            spr::TBL_W => self.tb.set((self.tb.get() & !0xFFFF_FFFF) | u64::from(v)),
+            spr::TBU_W => self
+                .tb
+                .set((self.tb.get() & 0xFFFF_FFFF) | (u64::from(v) << 32)),
             _ => {
                 self.spr.borrow_mut().insert(n, v);
             }
@@ -115,6 +124,7 @@ impl Regs {
             fpscr: self.fpscr.get(),
             msr: self.msr.get(),
             gqr: std::array::from_fn(|i| self.gqr[i].get()),
+            tb: self.tb.get(),
             spr: self.spr.borrow().clone(),
         }
     }
@@ -133,6 +143,7 @@ impl Regs {
         for i in 0..8 {
             self.gqr[i].set(s.gqr[i]);
         }
+        self.tb.set(s.tb);
         *self.spr.borrow_mut() = s.spr.clone();
     }
 }
